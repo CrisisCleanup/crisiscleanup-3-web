@@ -30,10 +30,9 @@
         },
 
         async mounted() {
-            const googleMapApi = await GoogleMapsApiLoader({
+            this.google = await GoogleMapsApiLoader({
                 apiKey: this.apiKey
             });
-            this.google = googleMapApi;
             this.initializeMap();
         },
 

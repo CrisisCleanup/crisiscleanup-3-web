@@ -114,6 +114,7 @@
                     <label>Work Type (check if completed)</label>
                     <template v-for="work_type in this.currentWorksite.work_types">
                         <div :key="work_type.id">
+                            <StatusDropDown class="block" :default-value="work_type.status" :on-select="(value) => {alert(value)}"></StatusDropDown>
                             <a-checkbox :defaultValue="true">{{work_type.work_type_name_t}}</a-checkbox>
                             <div v-for="type in getFieldsForType(work_type.work_type)">
                                 {{type.label_t}}
@@ -133,6 +134,7 @@
     import Worksite from "@/models/Worksite";
     import Incident from "@/models/Incident";
     import { mapState, mapGetters } from "vuex";
+    import StatusDropDown from "@/components/StatusDropDown";
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -209,6 +211,7 @@
 
     export default {
         components: {
+            StatusDropDown,
             CaseForm,
             GmapCustomMarker
         },
