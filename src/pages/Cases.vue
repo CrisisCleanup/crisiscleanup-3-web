@@ -1,5 +1,5 @@
 <template>
-    <div class="flex h-full">
+    <div class="flex h-full overflow-hidden">
         <div class="flex-grow">
             <div class="flex flex-col h-full">
                 <div style="background-color: white" class="p-3 border border-gray-300 card-header">
@@ -43,15 +43,7 @@
                 </div>
                 <div class="flex-grow">
                     <template v-if="showingMap">
-                        <GmapMap
-                                :center="{lat:31.340964, lng:-89.2661959}"
-                                :zoom="6"
-                                style="width: 100%; height: 100%"
-                        >
-                            <GmapCustomMarker :key="m.id" v-for="m in markers" :marker="m.position">
-                                <font-awesome-icon size="3x" icon="tree" :style="{ color: 'red' }"/>
-                            </GmapCustomMarker>
-                        </GmapMap>
+                        <RealtimeMap style="width: 100%; height: 100%" :query="currentQuery"></RealtimeMap>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
@@ -60,8 +52,18 @@
                                 <a-button icon="sync" class="text-gray-600 ml-3 my-3 flex items-center" @click="() => {}">Update Status</a-button>
                                 <a-button class="ml-3 my-3 text-gray-600" @click="() => {}">Display All</a-button>
                             </div>
-                            <a-table size="small" :loading="tableLoading" class="bg-white" :columns="columns" :dataSource="tableData" :customRow="customRow" :rowSelection="rowSelection" >
-
+                            <a-table
+                                    :scroll="{ y: 500 }"
+                                    size="small"
+                                    :loading="tableLoading"
+                                    class="bg-white"
+                                    :columns="columns"
+                                    :dataSource="data"
+                                    :customRow="customRow"
+                                    :pagination="pagination"
+                                    :rowSelection="rowSelection"
+                                    @change="handleTableChange"
+                            >
                             <span slot="work_types_status" slot-scope="work_types">
                                 <div class="badge-holder" :key="work_type.id" v-for="work_type in work_types">
                                     <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status" />
@@ -78,63 +80,45 @@
                 </div>
             </div>
         </div>
-        <div style="width: 375px " class="flex flex-col h-full shadow-2xl">
+        <div style="width: 375px" class="flex flex-col h-full shadow-2xl" v-if="this.currentIncident">
             <div style="background-color: white" class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center">
-                <div class="w-1/2 h-full p-3 flex items-center justify-center" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
-                    <a-icon type="plus-circle"></a-icon>
-                    <span class="px-2">New Case</span>
-                </div>
-                <div v-if="this.currentWorksite && this.currentWorksite.id" class="w-1/2 h-full p-3 flex items-center justify-center" v-bind:class="{ 'tab-active': isEditingWorksite || isViewingWorksite }">
-                    {{this.currentWorksite && `View ${this.currentWorksite.case_number}`}}
+            <div class="w-1/2 h-full p-3 flex items-center justify-center" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
+                <a-icon type="plus-circle"></a-icon>
+                <span class="px-2">New Case</span>
+            </div>
+            <div v-if="this.currentWorksite && this.currentWorksite.id" class="w-1/2 h-full p-3 flex items-center justify-center" v-bind:class="{ 'tab-active': isEditingWorksite || isViewingWorksite }">
+                {{this.currentWorksite && `View ${this.currentWorksite.case_number}`}}
+            </div>
+        </div>
+            <div v-if="this.currentWorksite" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-start">
+                <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
+                <div>
+                    <a-icon class="px-1" type="download" />
+                    <a-icon class="px-1" type="printer" @click="printWorksite" />
+                    <a-icon class="px-1" type="share-alt" />
+                    <a-icon v-if="isViewingWorksite" class="px-1" type="edit" @click="editWorksite" />
                 </div>
             </div>
-            <a-spin class="flex-grow h-full" :spinning="spinning">
-                <div class="text-gray-600 text-lg flex p-2 bg-white justify-between items-start">
-                    <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
-                    <div>
-                        <a-icon class="px-1" type="download" />
-                        <a-icon class="px-1" type="printer" @click="printWorksite" />
-                        <a-icon class="px-1" type="share-alt" />
-                        <a-icon class="px-1" type="edit" />
-                    </div>
-                </div>
-                <div class="" v-if="isEditingWorksite || isNewWorksite">
-                    <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite="this.currentWorksite"/>
-                </div>
-                <div class="bg-white p-3" v-if="isViewingWorksite">
-                    <label>Notes</label>
-                    <div class="bg-gray-200 flex justify-center">
-                        <span>1 day ago: Neighbour will help with cleaning</span>
-                    </div>
-                    <a href="" class="block">+ Add Note</a>
-
-                    <label class="pt-2">Full Address</label>
-                    <div>{{worksiteAddress}}</div>
-
-                    <label>Work Type (check if completed)</label>
-                    <template v-for="work_type in this.currentWorksite.work_types">
-                        <div :key="work_type.id">
-                            <StatusDropDown class="block" :default-value="work_type.status" :on-select="(value) => {alert(value)}"></StatusDropDown>
-                            <a-checkbox :defaultValue="true">{{work_type.work_type_name_t}}</a-checkbox>
-                            <div v-for="type in getFieldsForType(work_type.work_type)">
-                                {{type.label_t}}
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            </a-spin>
+            <a-skeleton class="bg-white h-full p-3 flex-grow" active v-if="spinning"></a-skeleton>
+            <div class="h-full" v-if="!spinning && (isEditingWorksite || isNewWorksite)">
+                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite="currentWorksite" :reloadTable="reloadTable"/>
+            </div>
+            <div class="h-full" v-if="!spinning && isViewingWorksite">
+                <CaseView :worksite="currentWorksite" :incident="currentIncident"/>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { gmapApi } from 'vue2-google-maps'
-    import GmapCustomMarker from 'vue2-gmap-custom-marker';
+    import {gmapApi} from 'vue2-google-maps'
     import CaseForm from "@/components/CaseForm";
     import Worksite from "@/models/Worksite";
+    import User from "@/models/User";
     import Incident from "@/models/Incident";
-    import { mapState, mapGetters } from "vuex";
-    import StatusDropDown from "@/components/StatusDropDown";
+    import {mapState} from "vuex";
+    import CaseView from "@/pages/CaseView";
+    import RealtimeMap from "@/components/RealtimeMap";
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -211,9 +195,9 @@
 
     export default {
         components: {
-            StatusDropDown,
+            CaseView,
             CaseForm,
-            GmapCustomMarker
+            RealtimeMap,
         },
         name: "Cases",
         data() {
@@ -222,8 +206,6 @@
                 isEditing: true,
                 showingMap: false,
                 showingTable: true,
-                rowSelection,
-                columns,
                 isEditingWorksite: false,
                 isViewingWorksite: false,
                 isNewWorksite: false,
@@ -236,9 +218,75 @@
                 searchWorksites: [],
                 searchingWorksites: false,
                 caseFormKey: true,
-        };
+                data: [],
+                pagination: {
+                    pageSize: 10,
+                    page: 1,
+                },
+                rowSelection,
+                columns,
+                currentQuery: {}
+            };
+        },
+        watch: {
+            currentIncident: function () {
+                this.currentWorksite = null;
+                this.isEditingWorksite = false;
+                this.isViewingWorksite = false;
+                this.isNewWorksite = false;
+                this.fetch({
+                    pageSize: this.pagination.pageSize,
+                    page: 1,
+                })
+            }
         },
         methods: {
+            handleTableChange(pagination, filters, sorter) {
+                this.pagination = {
+                    ...this.pagination,
+                    current: pagination.current
+                };
+
+                this.fetch({
+                    pageSize: pagination.pageSize,
+                    page: pagination.current,
+                    sortField: sorter.field,
+                    sortOrder: sorter.order,
+                    ...filters
+                });
+            },
+
+            async fetch(params = {}) {
+                this.tableLoading = true;
+                let query = {
+                    fields: 'id,name,address,case_number,work_types,city,state,county,flags,blurred_location,incident,postal_code',
+                    incident: this.currentIncidentId,
+                };
+                this.currentQuery = query;
+                let response = await this.$http
+                    .get("http://api.staging.crisiscleanup.io/worksites", {
+                        params: {
+                            ...query,
+                            offset: params.pageSize * (params.page - 1),
+                            limit: params.pageSize
+                        }
+                    });
+                this.tableLoading = false;
+                this.data = response.data.results;
+                this.pagination = {
+                    ...this.pagination,
+                    total: response.data.count
+                };
+            },
+
+            async reloadTable() {
+                await this.fetch({
+                    pageSize: this.pagination.pageSize,
+                    page: this.pagination.current,
+                })
+                // this.caseFormKey = !this.caseFormKey;
+            },
+
             customRow(record, index) {
                 return {
                     on: {
@@ -248,36 +296,18 @@
                             this.currentWorksiteId = worksite.entities.worksites[0].id;
                             this.currentWorksite = worksite.entities.worksites[0];
                             this.spinning = false;
-                            this.isViewingWorksite = true;
+                            this.isViewingWorksite = !this.isEditingWorksite;
                             this.isNewWorksite = false;
                             this.caseFormKey = !this.caseFormKey;
                         }
                     }
                 }
             },
-            getFieldsForType(work_type) {
-              if (this.currentIncident) {
-                  let available_fields = this.currentWorksite.form_data.map(data => data.field_key);
-                  return this.currentIncident.form_fields.filter((field)=> {
-                      let parent = this.currentIncident.form_fields.find((element) => {
-                          return element.field_key === field.field_parent_key;
-                      });
-
-                      let if_selected_then_work_type = field.if_selected_then_work_type;
-                      if (parent) {
-                          if_selected_then_work_type = parent.if_selected_then_work_type
-                      }
-
-                      return if_selected_then_work_type === work_type && available_fields.includes(field.field_key)
-                  })
-              }
-              return [];
-            },
             createNewWorksite() {
                 this.isViewingWorksite = false;
                 this.isEditingWorksite = false;
                 this.isNewWorksite = true;
-                this.currentWorksite = new Worksite({form_data: []});
+                this.currentWorksite = new Worksite({incident: this.currentIncidentId, form_data: []});
                 this.caseFormKey = !this.caseFormKey;
             },
             toggleView(view) {
@@ -306,6 +336,11 @@
             },
             handleFilters() {
 
+            },
+            editWorksite() {
+                this.isViewingWorksite = false;
+                this.isNewWorksite = false;
+                this.isEditingWorksite = true;
             },
             async printWorksite() {
                 this.spinning = true;
@@ -350,49 +385,35 @@
                 };
                 return status_dict[status];
             },
+            workTypeIcon(work_type) {
+                const work_type_dict = {
+                    "trees": "tree",
+                    "muck_out":"water",
+                    "tarp":"campground",
+                    "debris":"trash",
+                    "fire":"fire",
+                    "mold_remediation":"recycle",
+                };
+                return work_type_dict[work_type] || 'tree';
+            },
         },
         async mounted() {
-            this.tableLoading = true;
-
             if (this.currentIncidentId) {
-                await Worksite.api().get(`/worksites?fields=id,name,address,case_number,work_types,city,state,county,flags,blurred_location,incident,postal_code&incident=${this.currentIncidentId}`, {
-                    dataKey: 'results'
-                });
+                this.fetch({
+                    pageSize: this.pagination.pageSize,
+                    page: 1,
+                })
             }
-            this.tableLoading = false;
         },
         computed: {
-            worksites() {
-                return Worksite.query()
-                    .where('incident', this.currentIncidentId).get()
-            },
             incidents() {
-                return Incident.all()
+                return Incident.query().orderBy('id', 'desc').get()
             },
             currentIncident() {
                 return Incident.find(this.currentIncidentId)
             },
             currentUser() {
                 return User.query().first()
-            },
-            worksiteAddress() {
-              if (this.currentWorksite) {
-                  let { address, city, state, postal_code} = this.currentWorksite;
-                  return `${address}, ${city}, ${state} ${postal_code}`
-              }
-              return ''
-            },
-            tableData() {
-                if (this.worksites) {
-                    return this.worksites.map((worksite) => {
-                        return {
-                            rowKey: worksite.id,
-                            key: worksite.id,
-                            ...worksite
-                        }
-                    })
-                }
-                return [];
             },
             groupedFormData() {
                 if (this.currentIncident && this.currentIncident.form_fields) {
@@ -404,10 +425,10 @@
                 return [];
             },
             markers () {
-                if (this.worksites) {
-                    return this.worksites.map((worksite) => {
+                if (this.data) {
+                    return this.data.map((worksite) => {
                         return {
-                            id: worksite.id,
+                            ...worksite,
                             position: {
                                 lat: worksite.blurred_location ? worksite.blurred_location.coordinates[1]: 10,
                                 lng: worksite.blurred_location ? worksite.blurred_location.coordinates[0]: 10,
@@ -421,7 +442,9 @@
             ...mapState('incident', [
                 'currentIncidentId',
             ]),
-            ...mapGetters({ worksitesLoading: 'entities/worksites/loading' }),
+            ...mapState('loading', [
+                'worksitesLoading',
+            ])
         },
     }
 </script>
@@ -451,5 +474,21 @@
 
     .tab-active {
         border-bottom: solid 3px #FECE09;
+    }
+
+    .checkbox-round {
+        width: 1.3em;
+        height: 1.3em;
+        background-color: white;
+        border-radius: 50%;
+        vertical-align: middle;
+        border: 1px solid #ddd;
+        -webkit-appearance: none;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .checkbox-round:checked {
+        background-color: gray;
     }
 </style>

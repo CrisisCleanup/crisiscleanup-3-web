@@ -26,6 +26,11 @@ export default class Worksite extends Model {
             fetchById (id) {
                 return this.get(`/worksites/${id}`)
             },
+            claimWorksite (id, work_types) {
+                return this.post(`/worksites/${id}/claim`, {
+                    work_types: work_types
+                }, { save: false })
+            },
             searchWorksites(search) {
                 return this.get(`/worksites?fields=id,name,address,case_number,postal_code&limit=5&search=${search}`, {
                     dataKey: 'results'
