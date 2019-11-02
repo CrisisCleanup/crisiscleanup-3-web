@@ -12,6 +12,9 @@ import * as VueGoogleMaps from 'vue2-google-maps'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import 'pretty-checkbox/dist/pretty-checkbox.css';
+import PrettyCheckbox from 'pretty-checkbox-vue';
+import { ServerTable } from 'vue-tables-2';
 
 
 library.add(fas);
@@ -21,10 +24,12 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
 Vue.use(Antd)
+Vue.use(PrettyCheckbox);
+Vue.use(ServerTable);
 
 Vue.use(VueGoogleMaps, {
   load: {
-    key: 'AIzaSyAHiaoK3SfG5qU-eMKMCqijL5HjdCPs9A0',
+    key: process.env.VUE_APP_GOOGLE_MAPS_API_KEY,
     libraries: 'places', // This is required if you use the Autocomplete plugin
   },
   installComponents: true

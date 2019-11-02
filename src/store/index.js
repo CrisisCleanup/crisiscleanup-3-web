@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './modules/auth'
 import incident from './modules/incident'
+import loading from './modules/loading'
 import VuexORM from '@vuex-orm/core'
 import VuexORMAxios from '@vuex-orm/plugin-axios'
 import database from './database'
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     modules: {
         auth,
         incident,
+        loading,
     },
     plugins: [VuexORM.install(database)],
     strict: debug

@@ -12,12 +12,6 @@
                             <div>Dashboard</div>
                         </router-link>
                     </a-menu-item>
-                    <a-menu-item key="profile">
-                        <router-link to="/profile" class="router-link">
-                            <font-awesome-icon size="lg" icon="user" />
-                            <div>Go to Profile</div>
-                        </router-link>
-                    </a-menu-item>
                     <a-menu-item key="cases">
                         <router-link to="/cases" class="router-link">
                             <font-awesome-icon size="lg" icon="briefcase" />
@@ -32,10 +26,12 @@
                         <a-select v-if="incidents" :defaultValue="this.currentIncident && this.currentIncident.id" class="m-6" style="width: 250px" @change="handleChange">
                             <a-select-option :key="incident.id" v-for="incident in incidents" :value="incident.id">{{incident.name}}</a-select-option>
                         </a-select>
-                        <div>
-                            <a-avatar src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80" />
-                            <span class="p-3">{{name}}</span>
-                        </div>
+                        <router-link to="/profile" class="router-link">
+                            <div>
+                                <a-avatar src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80" />
+                                <span class="p-3">{{name}}</span>
+                            </div>
+                        </router-link>
                     </div>
                 </a-layout-header>
                 <a-layout-content>
@@ -56,18 +52,18 @@
         name: 'app',
         components: {},
         methods: {
-            handleChange(value) {
+            async handleChange(value) {
                 this.setCurrentIncidentId(value)
-                Incident.api().fetchById(value);
-                Worksite.api().get(`/worksites?fields=id,name,address,case_number,work_types,city,state,county,flags,blurred_location,incident,postal_code&incident=${value}`, {
-                    dataKey: 'results'
-                });
+                await Incident.api().fetchById(value);
             },
             ...mapActions('auth', [
                 'login',
             ]),
             ...mapMutations('incident', [
                 'setCurrentIncidentId',
+            ]),
+            ...mapMutations('loading', [
+                'setWorksitesLoading',
             ]),
         },
 
@@ -77,7 +73,7 @@
             await User.api().get('/users', {
                 dataKey: 'results'
             });
-            await Incident.api().get('/incidents?fields=id,name,short_name,geofence&limit=150', {
+            await Incident.api().get('/incidents?fields=id,name,short_name,geofence&limit=150&ordering=-start_at', {
                 dataKey: 'results'
             });
         },
@@ -95,7 +91,7 @@
                 return User.query().first()
             },
             incidents() {
-                return Incident.all()
+                return Incident.query().orderBy('id', 'desc').get()
             },
             currentIncident() {
                 return Incident.find(this.currentIncidentId)

@@ -1,5 +1,5 @@
 <template>
-    <a-select :defaultValue="defaultValue" @change="onSelect">
+    <a-select :defaultValue="defaultValue" @change="onSelect" size="large">
         <a-select-option :key="name" v-for="(value, name) in statuses" :value="name">{{value}}</a-select-option>
     </a-select>
 </template>
@@ -25,7 +25,7 @@
         name: "StatusDropDown",
         props: {
             onSelect: Function,
-            defaultValue: Object,
+            defaultValue: String,
         },
         data() {
             return {
