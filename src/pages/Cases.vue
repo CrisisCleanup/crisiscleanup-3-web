@@ -27,9 +27,9 @@
                                     <a-select-option v-for="item in searchWorksites" :key="item.id">{{item.case_number}}</a-select-option>
                                 </a-select>
 
-                                <a-button icon="filter" class="mr-3 flex items-center" @click="showingFilters = true">Filters</a-button>
-                                <a-modal title="Filters" v-model="showingFilters" @ok="handleFilters">
-                                    <p>Filters</p>
+                                <BaseButton icon="filter" class="mr-3 flex items-center bg-white border p-1 px-4" :action="() => { this.showingFilters = true }" title="Filters"></BaseButton>
+                                <a-modal :closable="false" v-model="showingFilters" @ok="handleFilters" class="filters-modal">
+                                    <WorksiteFilters @updatedFilters="onUpdatedFilters" :incident="this.currentIncident" />
                                 </a-modal>
                             </div>
                         </div>
@@ -43,14 +43,14 @@
                 </div>
                 <div class="flex-grow">
                     <template v-if="showingMap">
-                        <RealtimeMap style="width: 100%; height: 100%" :query="currentQuery"></RealtimeMap>
+                        <RealtimeMap style="width: 100%; height: 100%" :query="currentQuery" :onSelectmarker="displayWorksite" :key="this.currentIncidentId"></RealtimeMap>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
                             <div class="table-operations flex justify-end">
-                                <a-button class="ml-3 my-3 text-gray-600" @click="() => {}">Unclaim</a-button>
-                                <a-button icon="sync" class="text-gray-600 ml-3 my-3 flex items-center" @click="() => {}">Update Status</a-button>
-                                <a-button class="ml-3 my-3 text-gray-600" @click="() => {}">Display All</a-button>
+                                <BaseButton class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white" :action="() => {}" title="Unclaim"></BaseButton>
+                                <BaseButton icon="sync" class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white" @click="() => {}" title="Update Status"></BaseButton>
+                                <BaseButton class="ml-3 my-3 text-gray-600 border p-1 px-4 bg-white" @click="() => {}" title="Display All"></BaseButton>
                             </div>
                             <a-table
                                     :scroll="{ y: 500 }"
@@ -119,6 +119,8 @@
     import {mapState} from "vuex";
     import CaseView from "@/pages/CaseView";
     import RealtimeMap from "@/components/RealtimeMap";
+    import WorksiteFilters from "@/components/WorksiteFilters";
+    import BaseButton from "@/components/BaseButton";
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -195,9 +197,11 @@
 
     export default {
         components: {
+            BaseButton,
             CaseView,
             CaseForm,
             RealtimeMap,
+            WorksiteFilters,
         },
         name: "Cases",
         data() {
@@ -225,7 +229,9 @@
                 },
                 rowSelection,
                 columns,
-                currentQuery: {}
+                currentQuery: {},
+                filters: {},
+                appliedFilters: {},
             };
         },
         watch: {
@@ -256,6 +262,10 @@
                 });
             },
 
+            onUpdatedFilters(filters) {
+                this.filters = filters
+            },
+
             async fetch(params = {}) {
                 this.tableLoading = true;
                 let query = {
@@ -268,7 +278,8 @@
                         params: {
                             ...query,
                             offset: params.pageSize * (params.page - 1),
-                            limit: params.pageSize
+                            limit: params.pageSize,
+                            ...this.appliedFilters
                         }
                     });
                 this.tableLoading = false;
@@ -287,18 +298,21 @@
                 // this.caseFormKey = !this.caseFormKey;
             },
 
+            displayWorksite: async function (record) {
+                this.spinning = true;
+                let worksite = await Worksite.api().fetchById(record.id);
+                this.currentWorksiteId = worksite.entities.worksites[0].id;
+                this.currentWorksite = worksite.entities.worksites[0];
+                this.spinning = false;
+                this.isViewingWorksite = !this.isEditingWorksite;
+                this.isNewWorksite = false;
+                this.caseFormKey = !this.caseFormKey;
+            },
             customRow(record, index) {
                 return {
                     on: {
                         click: async () => {
-                            this.spinning = true;
-                            let worksite = await Worksite.api().fetchById(record.id);
-                            this.currentWorksiteId = worksite.entities.worksites[0].id;
-                            this.currentWorksite = worksite.entities.worksites[0];
-                            this.spinning = false;
-                            this.isViewingWorksite = !this.isEditingWorksite;
-                            this.isNewWorksite = false;
-                            this.caseFormKey = !this.caseFormKey;
+                            await this.displayWorksite(record);
                         }
                     }
                 }
@@ -335,7 +349,21 @@
                 this.caseFormKey = !this.caseFormKey;
             },
             handleFilters() {
-
+                let appliedFilters = {
+                    work_type__work_type__in: ''
+                };
+                const entries = Object.entries(this.filters)
+                for (const [work_type, values] of entries) {
+                    if (values) {
+                        appliedFilters.work_type__work_type__in+=`${work_type},`
+                    }
+                }
+                this.appliedFilters = appliedFilters;
+                this.showingFilters = false;
+                this.fetch({
+                    pageSize: this.pagination.pageSize,
+                    page: this.pagination.current,
+                })
             },
             editWorksite() {
                 this.isViewingWorksite = false;
@@ -490,5 +518,9 @@
 
     .checkbox-round:checked {
         background-color: gray;
+    }
+
+    .filters-modal {
+        width: 750px !important;
     }
 </style>

@@ -6,9 +6,9 @@
                 <div class="bg-gray-200 flex justify-center">
                     <span>1 day ago: Neighbour will help with cleaning</span>
                 </div>
-                <a-button type="link">
-                    + Add Note
-                </a-button>
+                <BaseButton type="link" title="+ Add Note">
+
+                </BaseButton>
             </div>
             <div class="my-2">
                 <label class="my-2 text-xs font-bold">Full Address</label>
@@ -67,7 +67,7 @@
                                     </svg>
                                     {{work_type.work_type_name_t}}
                                 </p-check>
-                                <a-button type="primary" @click="claimWorkType(work_type)">I'll Do it</a-button>
+                                <BaseButton type="primary" :action="() => { return claimWorkType(work_type) }" title="I'll Do it" class="p-1 px-3"></BaseButton>
                             </div>
                             <div class="ml-6" v-for="type in getFieldsForType">
                                 {{type.label_t}}
@@ -78,8 +78,8 @@
             </div>
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between">
-            <a-button size="large" class="flex-grow m-1 text-black">Unclaim All</a-button>
-            <a-button size="large" type="primary" class="flex-grow m-1 text-black">Done</a-button>
+            <BaseButton size="medium" class="flex-grow m-1 text-black p-2 border-2 border-black" title="Unclaim All"></BaseButton>
+            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black p-2" title="Done"></BaseButton>
         </div>
     </div>
 </template>
@@ -88,10 +88,11 @@
     import StatusDropDown from "@/components/StatusDropDown"
     import User from "@/models/User";
     import Worksite from "@/models/Worksite";
+    import BaseButton from "@/components/BaseButton";
 
     export default {
         name: 'CaseView',
-        components: { StatusDropDown },
+        components: {BaseButton, StatusDropDown },
         props: {
             worksite: Object,
         },

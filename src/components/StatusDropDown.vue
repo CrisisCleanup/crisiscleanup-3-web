@@ -1,10 +1,13 @@
 <template>
-    <a-select :defaultValue="defaultValue" @change="onSelect" size="large">
-        <a-select-option :key="name" v-for="(value, name) in statuses" :value="name">{{value}}</a-select-option>
-    </a-select>
+    <BaseSelect :defaultValue="defaultValue" :change="onSelect" size="large">
+        <template v-slot:options>
+            <a-select-option :key="name" v-for="(value, name) in statuses" :value="name">{{value}}</a-select-option>
+        </template>
+    </BaseSelect>
 </template>
 
 <script>
+    import BaseSelect from "@/components/BaseSelect";
     const statuses = {
         "open_unassigned": "open_unassigned",
         "open_assigned": "open_assigned",
@@ -23,6 +26,7 @@
     }
     export default {
         name: "StatusDropDown",
+        components: {BaseSelect},
         props: {
             onSelect: Function,
             defaultValue: String,

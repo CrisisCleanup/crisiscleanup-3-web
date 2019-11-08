@@ -23,9 +23,11 @@
             <a-layout>
                 <a-layout-header style="background: #fff; padding: 0" class="shadow">
                     <div class="flex justify-between h-full items-center">
-                        <a-select v-if="incidents" :defaultValue="this.currentIncident && this.currentIncident.id" class="m-6" style="width: 250px" @change="handleChange">
-                            <a-select-option :key="incident.id" v-for="incident in incidents" :value="incident.id">{{incident.name}}</a-select-option>
-                        </a-select>
+                        <BaseSelect size="large" v-if="incidents" :defaultValue="this.currentIncident && this.currentIncident.id" class="m-6" style="width: 250px" :change="handleChange">
+                            <template v-slot:options>
+                                <a-select-option :key="incident.id" v-for="incident in incidents" :value="incident.id">{{incident.name}}</a-select-option>
+                            </template>
+                        </BaseSelect>
                         <router-link to="/profile" class="router-link">
                             <div>
                                 <a-avatar src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80" />
@@ -47,10 +49,12 @@
     import Incident from "@/models/Incident";
     import Worksite from "@/models/Worksite";
     import { mapActions, mapMutations, mapState } from "vuex";
+    import WorkType from "@/models/WorkType";
+    import BaseSelect from "@/components/BaseSelect";
 
     export default {
         name: 'app',
-        components: {},
+        components: {BaseSelect},
         methods: {
             async handleChange(value) {
                 this.setCurrentIncidentId(value)
@@ -74,6 +78,9 @@
                 dataKey: 'results'
             });
             await Incident.api().get('/incidents?fields=id,name,short_name,geofence&limit=150&ordering=-start_at', {
+                dataKey: 'results'
+            });
+            await WorkType.api().get('/work_types?limit=100', {
                 dataKey: 'results'
             });
         },
@@ -106,7 +113,7 @@
 <style>
     body {
         height: 100vh;
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Nunito Sans', sans-serif;
     }
     #app {
         /*height: 100vh;*/

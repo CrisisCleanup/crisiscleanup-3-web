@@ -36,7 +36,8 @@
 
     export default {
         props: {
-            query: Array
+            query: Object,
+            onSelectmarker: Function,
         },
         data() {
             return {
@@ -67,15 +68,6 @@
                 this.tileLayer.addTo(this.map);
                 this.pullSites();
             },
-            resumeAutoplay() {
-                this.autoplay = true;
-            },
-            mapIsClicked() {
-                this.autoplay = false;
-            },
-            draggingEnded() {
-                this.autoplay = false;
-            },
             async pullSites(url) {
               let response = await this.$http
                     .get(url || "http://api.staging.crisiscleanup.io/worksites_map", {
@@ -93,12 +85,14 @@
                 });
 
                 var cluster = L.markerClusterGroup({
+                    // disableClusteringAtZoom: 10,
+                    // spiderfyOnMaxZoom: false
                 });
 
                 for (let marker of markers) {
-                    let item = L.marker(marker.position)
+                    let item = L.marker(marker.position);
                     item.on("click", () => {
-                        alert(marker.id)
+                        this.onSelectmarker(marker)
                     });
                     cluster.addLayer(item)
                 }
