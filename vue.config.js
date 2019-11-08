@@ -11,7 +11,7 @@ module.exports = {
                     'link-color': '#FECE09',
                     'text-color': '#000000',
                     'layout-header-background': '#353535',
-                    'font-family': "'Montserrat', sans-serif",
+                    'font-family': "'Nunito Sans', sans-serif",
                 },
                 javascriptEnabled: true
             }

@@ -8,7 +8,7 @@
                 </div>
             </h4>
             <a-form-item>
-                <a-input disabled="" v-model="what3words" size="large" placeholder="name">
+                <a-input disabled="" v-model="worksite.what3words" size="large" placeholder="Location">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -17,12 +17,11 @@
                     </a-tooltip>
                 </a-input>
                 <div class="flex justify-around items-center">
-                    <a-button type="link" size="large" class="text-gray-700" @click="locateMe">
-                        <font-awesome-icon size="lg" class="mx-2" icon="street-view" /> Use my location
-                    </a-button>
-                    <a-button type="link" size="large" class="text-gray-700" @click="locateMe">
-                        <font-awesome-icon size="lg" class="mx-2" icon="map" /> Select on Map
-                    </a-button>
+                    <BaseButton type="link" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe" title="Use my location" />
+                    <BaseButton type="link" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap" title="Select on Map" />
+                    <a-modal :closable="false" title="" v-model="overlayMapVisible" @ok="handleOk">
+                        <OverlayMap @addedMarker="onAddedMarker" />
+                    </a-modal>
                 </div>
             </a-form-item>
             <a-form-item>
@@ -122,6 +121,9 @@
                                 <a-select-option :key="option.value" :value="option.value" v-for="option in field.values">
                                     {{option.name_t}}
                                 </a-select-option>
+                                <template slot="suffixIcon">
+                                    <font-awesome-icon size="sm" icon="sort" />
+                                </template>
                             </a-select>
                         </a-form-item>
                     </template>
@@ -140,6 +142,9 @@
                                 <a-select-option :key="option.value" :value="option.value" v-for="option in field.values">
                                     {{option.name_t}}
                                 </a-select-option>
+                                <template slot="suffixIcon">
+                                    <font-awesome-icon size="sm" icon="sort" />
+                                </template>
                             </a-select>
                         </a-form-item>
                     </template>
@@ -196,15 +201,17 @@
             </template>
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between">
-            <a-button size="large" class="flex-grow m-1" @click="resetForm">Reset</a-button>
-            <a-button size="large" type="primary" class="flex-grow m-1 text-black" @click="saveWorksite">Save</a-button>
-            <a-button size="large" type="primary" class="flex-grow m-1 text-black" @click="claimAndSaveWorksite">Claim & Save</a-button>
+            <BaseButton size="medium" class="flex-grow m-1 border-2 border-black" :action="resetForm" title="Reset"></BaseButton>
+            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black" :action="saveWorksite" title="Save"></BaseButton>
+            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black" :action="claimAndSaveWorksite" title="Claim & Save"></BaseButton>
         </div>
     </a-form>
 </template>
 
 <script>
     import Worksite from "@/models/Worksite";
+    import OverlayMap from "@/components/OverlayMap";
+    import BaseButton from "@/components/BaseButton";
 
     export default {
         props: {
@@ -212,10 +219,38 @@
             worksite: Object,
             reloadTable: Function,
         },
+        components: {
+            BaseButton,
+            OverlayMap
+        },
         name: "CaseForm",
         methods: {
             handleSubmit() {
 
+            },
+            async handleOk() {
+                this.overlayMapVisible = false;
+                if (this.overlayMapLocation) {
+                    this.worksite.location = {
+                        type: "Point",
+                        coordinates: [
+                            this.overlayMapLocation.lng, this.overlayMapLocation.lat
+                        ]
+                    };
+
+                    let response = await this.$http.request({
+                        url: `https://api.what3words.com/v3/convert-to-3wa?coordinates=${this.overlayMapLocation.lat}%2C${this.overlayMapLocation.lng}&key=${process.env.VUE_APP_WHAT_3_WORDS_API_KEY}`,
+                        method: 'GET',
+                        transformRequest: [(data, headers) => {
+                            delete headers.common.Authorization;
+                            return data
+                        }]
+                    });
+                    this.worksite.what3words = response.data.words;
+                }
+            },
+            onAddedMarker(value) {
+                this.overlayMapLocation = value;
             },
             async saveWorksite(reload = true) {
                 if (this.location) {
@@ -227,7 +262,14 @@
                     };
                 }
                 let field_data = this.form.getFieldsValue();
-                this.worksite.form_data = Object.keys(field_data).map(
+
+                const truthy_values = Object.keys(field_data).filter(
+                    (key) => {
+                        return Boolean(field_data[key])
+                    }
+                );
+
+                this.worksite.form_data = truthy_values.map(
                     (key) => {
                         return {
                             field_key: key,
@@ -248,10 +290,15 @@
             },
             async claimAndSaveWorksite() {
                 await this.saveWorksite(false);
-                await Worksite.api().claimWorksite(this.worksite.id, []);
+                try {
+                    let claim_status = await Worksite.api().claimWorksite(this.worksite.id, []);
+                    console.log(claim_status);
+                    this.$message.success('Worksite claimed successfully');
+                } catch (error) {
+                    this.$message.error(error.response.data.errors[0].message[0]);
+                }
                 let worksite = await Worksite.api().fetchById(this.worksite.id);
                 this.worksite = worksite.entities.worksites[0];
-                this.$message.success('Worksite claimed successfully');
                 this.reloadTable()
             },
             resetForm() {
@@ -283,6 +330,9 @@
                 }
                 return false
             },
+            showOverlayMap() {
+                this.overlayMapVisible = true;
+            },
             async getLocation() {
                 return new Promise((resolve, reject) => {
                     if(!("geolocation" in navigator)) {
@@ -309,7 +359,7 @@
                             return data
                         }]
                     });
-                    this.what3words = response.data.words;
+                    this.worksite.what3words = response.data.words;
                 } catch(e) {
                     this.gettingLocation = false;
                     this.errorStr = e.message;
@@ -324,6 +374,8 @@
                 gettingLocation: false,
                 location: null,
                 what3words: null,
+                overlayMapVisible: false,
+                overlayMapLocation: null,
             };
         }
     }
