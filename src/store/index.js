@@ -6,7 +6,7 @@ import loading from './modules/loading'
 import VuexORM from '@vuex-orm/core'
 import VuexORMAxios from '@vuex-orm/plugin-axios'
 import database from './database'
-import {TokenService} from "@/services/storage.service";
+import {AuthService} from "@/services/storage.service";
 import axios from 'axios'
 
 VuexORM.use(VuexORMAxios, {
@@ -14,7 +14,7 @@ VuexORM.use(VuexORMAxios, {
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${TokenService.getToken()}`
+        'Authorization': `Bearer ${AuthService.getToken()}`
     },
     baseURL: 'http://api.staging.crisiscleanup.io',
 })
