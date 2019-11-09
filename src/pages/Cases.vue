@@ -5,8 +5,8 @@
                 <div style="background-color: white" class="p-3 border border-gray-300 card-header">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <font-awesome-icon size="lg" class="mr-4" :style="showingMap ? { color: '#FECE09' } : { color: '#718096' }" icon="map" @click="toggleView('showingMap')" />
-                            <font-awesome-icon size="lg" class="mr-4" :style="showingTable ? { color: '#FECE09' } : { color: '#718096' }" icon="columns" @click="toggleView('showingTable')" />
+                            <font-awesome-icon size="lg" class="mr-4 cursor-pointer" :style="showingMap ? { color: '#FECE09' } : { color: '#718096' }" icon="map" @click="toggleView('showingMap')" />
+                            <font-awesome-icon size="lg" class="mr-4 cursor-pointer" :style="showingTable ? { color: '#FECE09' } : { color: '#718096' }" icon="columns" @click="toggleView('showingTable')" />
                             <div class="flex justify-start w-auto">
                                 <a-select
                                         showSearch
@@ -27,16 +27,18 @@
                                     <a-select-option v-for="item in searchWorksites" :key="item.id">{{item.case_number}}</a-select-option>
                                 </a-select>
 
-                                <BaseButton icon="filter" class="mr-3 flex items-center bg-white border p-1 px-4" :action="() => { this.showingFilters = true }" title="Filters"></BaseButton>
+                                <div class="mr-3 flex items-center bg-white border p-1 px-4 cursor-pointer" @click="() => { this.showingFilters = true }">
+                                    Filters <font-awesome-icon icon="sort" class="ml-20"></font-awesome-icon>
+                                </div>
                                 <a-modal :closable="false" v-model="showingFilters" @ok="handleFilters" class="filters-modal">
                                     <WorksiteFilters @updatedFilters="onUpdatedFilters" :incident="this.currentIncident" />
                                 </a-modal>
                             </div>
                         </div>
                         <div class="flex worksite-actions text-gray-600">
-                            <a-icon type="download" />
-                            <a-icon type="printer" />
-                            <a-icon type="share-alt" />
+                            <ccu-icon size="medium" class="mx-2" type="download" />
+                            <ccu-icon size="medium" class="mx-2" type="share" />
+                            <ccu-icon size="medium" class="mx-2" type="print" />
                         </div>
 
                     </div>
@@ -82,8 +84,8 @@
         </div>
         <div style="width: 375px" class="flex flex-col h-full shadow-2xl" v-if="this.currentIncident">
             <div style="background-color: white" class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center">
-            <div class="w-1/2 h-full p-3 flex items-center justify-center" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
-                <a-icon type="plus-circle"></a-icon>
+            <div class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
+                <ccu-icon type="active" size="small"></ccu-icon>
                 <span class="px-2">New Case</span>
             </div>
             <div v-if="this.currentWorksite && this.currentWorksite.id" class="w-1/2 h-full p-3 flex items-center justify-center" v-bind:class="{ 'tab-active': isEditingWorksite || isViewingWorksite }">

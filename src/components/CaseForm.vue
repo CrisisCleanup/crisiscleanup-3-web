@@ -43,6 +43,14 @@
                         <a-icon type="question-circle-o"/>
                     </a-tooltip>
                 </a-input>
+<!--                <a-auto-complete-->
+<!--                        :dataSource="[]"-->
+<!--                        style="width: 200px"-->
+<!--                        @select="onSelect"-->
+<!--                        @search="geocoderSearch"-->
+<!--                        placeholder="input here"-->
+<!--                        v-model="worksite.address"-->
+<!--                />-->
             </a-form-item>
             <a-form-item>
                 <a-input v-model="worksite.city" size="large" placeholder="city">
@@ -212,6 +220,7 @@
     import Worksite from "@/models/Worksite";
     import OverlayMap from "@/components/OverlayMap";
     import BaseButton from "@/components/BaseButton";
+    import GeocoderService from "@/services/geocoder.service"
 
     export default {
         props: {
@@ -224,9 +233,25 @@
             OverlayMap
         },
         name: "CaseForm",
+        data() {
+            return {
+                form: this.$form.createForm(this),
+                showAllFields: true,
+                spinning: false,
+                gettingLocation: false,
+                location: null,
+                what3words: null,
+                overlayMapVisible: false,
+                overlayMapLocation: null,
+                geocoderResults: []
+            };
+        },
         methods: {
             handleSubmit() {
 
+            },
+            async geocoderSearch(value) {
+                this.geocoderResults = await GeocoderService.getMatchingAddresses(value, 'US');
             },
             async handleOk() {
                 this.overlayMapVisible = false;
@@ -365,18 +390,6 @@
                     this.errorStr = e.message;
                 }
             }
-        },
-        data() {
-            return {
-                form: this.$form.createForm(this),
-                showAllFields: true,
-                spinning: false,
-                gettingLocation: false,
-                location: null,
-                what3words: null,
-                overlayMapVisible: false,
-                overlayMapLocation: null,
-            };
         }
     }
 </script>

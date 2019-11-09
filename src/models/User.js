@@ -16,7 +16,7 @@ export default class User extends Model {
 
     static apiConfig = {
         actions: {
-            login(email='tobi@tobiabiodun.com', password='admin123') {
+            login(email, password) {
                 return this.post(`/api-token-auth`, {
                     email,
                     password

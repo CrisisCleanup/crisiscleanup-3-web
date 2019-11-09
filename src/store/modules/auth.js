@@ -1,30 +1,36 @@
 import User from "@/models/User";
-import { TokenService } from "@/services/storage.service";
+import { AuthService } from "@/services/storage.service";
 
-
-// initial state
-// shape: [{ id, quantity }]
 const state = {
-    accessToken: null
+    user: AuthService.getUser()
 };
 
 // getters
-const getters = {};
+const getters = {
+    isLoggedIn: state => Boolean(state.user && state.user.access_token)
+};
 
 // actions
 const actions = {
-    async login ({ commit }) {
-        let data = await User.api().login();
-        let { access_token } = data.response.data;
-        commit('setAccessToken', access_token);
+    async login ({ commit }, email='tobi@tobiabiodun.com', password='admin123') {
+        let data = await User.api().login(email, password);
+        commit('setUser', data.response.data);
+    },
+
+    logout ({ commit }) {
+        commit('setUser', null);
     }
 };
 
 // mutations
 const mutations = {
-    setAccessToken (state, token) {
-        state.accessToken = token;
-        TokenService.saveToken(token);
+    setUser (state, user) {
+        state.user = user;
+        if (!user) {
+            AuthService.removeUser()
+        } else {
+            AuthService.saveUser(user);
+        }
     }
 };
 
