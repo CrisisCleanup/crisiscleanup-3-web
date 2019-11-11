@@ -12,11 +12,12 @@ const AuthService = {
         return null;
     },
     saveUser(user) {
-        localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('user', JSON.stringify(user));
+        axios.defaults.headers.common["Authorization"] = `Bearer ${user.access_token}`;
     },
     removeUser() {
         localStorage.removeItem('user')
-        axios.defaults.headers.common["Authorization"] = `Bearer ${AuthService.getToken()}`
+        axios.defaults.headers.common["Authorization"] = null
     }
 };
 

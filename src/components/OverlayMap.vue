@@ -15,6 +15,9 @@
     import * as L from 'leaflet';
 
     export default {
+        props: {
+          initialLocation: Object
+        },
         data() {
             return {
                 selected: {},
@@ -33,10 +36,20 @@
                 preferCanvas: true
             };
             try {
-                let location = await this.getLocation();
-                if (location.coords) {
-                    options.center = L.latLng(location.coords.latitude, location.coords.longitude)
+                if (this.initialLocation) {
+                    let { coordinates } = this.initialLocation;
+                    this.markers.clearLayers();
+                    let latLng = L.latLng(coordinates[1], coordinates[0]);
+                    options.center = latLng
+                    new L.marker(latLng).addTo(this.markers);
+                } else {
+                    let location = await this.getLocation();
+                    if (location.coords) {
+                        options.center = L.latLng(location.coords.latitude, location.coords.longitude)
+                    }
                 }
+
+
             } catch (e) {
                 console.log(e)
             }

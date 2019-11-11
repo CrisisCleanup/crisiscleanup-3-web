@@ -84,7 +84,7 @@
                     }
                 });
 
-                var cluster = L.markerClusterGroup({
+                let cluster = L.markerClusterGroup({
                     // disableClusteringAtZoom: 10,
                     // spiderfyOnMaxZoom: false
                 });

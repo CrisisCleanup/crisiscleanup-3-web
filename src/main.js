@@ -7,7 +7,7 @@ import 'ant-design-vue/dist/antd.less'
 import '@/assets/css/tailwind.css'
 import router from './router'
 import store from './store/index';
-import { AuthService } from "@/services/storage.service";
+import { AuthService } from "@/services/auth.service";
 import * as VueGoogleMaps from 'vue2-google-maps'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -45,6 +45,16 @@ Vue.use(VueGoogleMaps, {
 if (AuthService.getUser()) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${AuthService.getToken()}`
 }
+
+axios.interceptors.response.use(function (response) {
+  return response
+}, function (error) {
+  if (error.response.status === 401) {
+    store.dispatch('auth/logout');
+    router.push('/login');
+  }
+  return Promise.reject(error)
+});
 
 new Vue({
   render: h => h(App),

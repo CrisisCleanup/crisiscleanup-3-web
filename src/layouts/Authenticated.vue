@@ -43,15 +43,26 @@
 </template>
 
 <script>
-    import User from "@/models/User";
     import Incident from "@/models/Incident";
+    import User from "@/models/User";
+    import WorkType from "@/models/WorkType";
     import { mapActions, mapMutations, mapState } from "vuex";
     import BaseSelect from "@/components/BaseSelect";
-    import BaseIcon from "@/components/BaseIcon";
 
     export default {
         name: 'Authenticated',
-        components: {BaseIcon, BaseSelect},
+        components: { BaseSelect },
+        async mounted() {
+            await User.api().get('/users', {
+                dataKey: 'results'
+            });
+            await Incident.api().get('/incidents?fields=id,name,short_name,geofence&limit=150&ordering=-start_at', {
+                dataKey: 'results'
+            });
+            await WorkType.api().get('/work_types?limit=100', {
+                dataKey: 'results'
+            });
+        },
         methods: {
             async handleChange(value) {
                 this.setCurrentIncidentId(value)
@@ -78,7 +89,7 @@
                 return [this.$route.name]
             },
             currentUser() {
-                return User.query().first()
+                return this.user.user_claims
             },
             incidents() {
                 return Incident.query().orderBy('id', 'desc').get()
@@ -88,6 +99,9 @@
             },
             ...mapState('incident', [
                 'currentIncidentId',
+            ]),
+            ...mapState('auth', [
+                'user',
             ]),
         },
     }

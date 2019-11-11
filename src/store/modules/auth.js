@@ -1,5 +1,5 @@
 import User from "@/models/User";
-import { AuthService } from "@/services/storage.service";
+import { AuthService } from "@/services/auth.service";
 
 const state = {
     user: AuthService.getUser()
@@ -15,6 +15,7 @@ const actions = {
     async login ({ commit }, email='tobi@tobiabiodun.com', password='admin123') {
         let data = await User.api().login(email, password);
         commit('setUser', data.response.data);
+        return data.response;
     },
 
     logout ({ commit }) {

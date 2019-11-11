@@ -94,16 +94,16 @@
         </div>
             <div v-if="this.currentWorksite" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-start">
                 <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
-                <div>
-                    <a-icon class="px-1" type="download" />
-                    <a-icon class="px-1" type="printer" @click="printWorksite" />
-                    <a-icon class="px-1" type="share-alt" />
-                    <a-icon v-if="isViewingWorksite" class="px-1" type="edit" @click="editWorksite" />
+                <div class="flex items-center">
+                    <ccu-icon size="small" class="m-1" type="download" />
+                    <ccu-icon size="small" class="m-1" type="share" />
+                    <ccu-icon size="small" class="m-1" type="print" @click.native="printWorksite"/>
+                    <ccu-icon v-if="isViewingWorksite" class="m-1" size="small" type="edit" @click.native="editWorksite" />
                 </div>
             </div>
             <a-skeleton class="bg-white h-full p-3 flex-grow" active v-if="spinning"></a-skeleton>
             <div class="h-full" v-if="!spinning && (isEditingWorksite || isNewWorksite)">
-                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite="currentWorksite" :reloadTable="reloadTable"/>
+                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite="currentWorksite" :reloadTable="reloadTable" :incident="this.currentIncident"/>
             </div>
             <div class="h-full" v-if="!spinning && isViewingWorksite">
                 <CaseView :worksite="currentWorksite" :incident="currentIncident"/>
