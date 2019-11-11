@@ -20,7 +20,7 @@
                     <BaseButton type="link" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe" title="Use my location" />
                     <BaseButton type="link" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap" title="Select on Map" />
                     <a-modal :closable="false" title="" v-model="overlayMapVisible" @ok="handleOk">
-                        <OverlayMap @addedMarker="onAddedMarker" />
+                        <OverlayMap @addedMarker="onAddedMarker" :initial-location="this.worksite.location" />
                     </a-modal>
                 </div>
             </a-form-item>
@@ -35,35 +35,27 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.address" size="large" placeholder="address">
-                    <a-tooltip slot="addonAfter">
-                        <template slot="title">
-                            <span v-html=""></span>
-                        </template>
-                        <a-icon type="question-circle-o"/>
-                    </a-tooltip>
-                </a-input>
-<!--                <a-auto-complete-->
-<!--                        :dataSource="[]"-->
-<!--                        style="width: 200px"-->
-<!--                        @select="onSelect"-->
-<!--                        @search="geocoderSearch"-->
-<!--                        placeholder="input here"-->
-<!--                        v-model="worksite.address"-->
-<!--                />-->
+            <a-auto-complete
+                    @select="onGeocodeSelect"
+                    @search="geocoderSearch"
+                    v-model="worksite.address"
+                    size="large"
+                    placeholder="address"
+                    @change="findPotentialGeocode"
+            >
+                <a-tooltip slot="suffix">
+                    <template slot="title">
+                        <span v-html=""></span>
+                    </template>
+                    <a-icon type="question-circle-o"/>
+                </a-tooltip>
+                <template slot="dataSource">
+                    <a-select-option v-for="result in geocoderResults" :key="result.description">{{result.description}}</a-select-option>
+                </template>
+            </a-auto-complete>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.city" size="large" placeholder="city">
-                    <a-tooltip slot="addonAfter">
-                        <template slot="title">
-                            <span v-html=""></span>
-                        </template>
-                        <a-icon type="question-circle-o"/>
-                    </a-tooltip>
-                </a-input>
-            </a-form-item>
-            <a-form-item>
-                <a-input v-model="worksite.county" size="large" placeholder="county">
+                <a-input v-model="worksite.city" size="large" placeholder="city" @change="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -73,7 +65,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.state" size="large" placeholder="state">
+                <a-input v-model="worksite.county" size="large" placeholder="county" @change="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -83,7 +75,17 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.postal_code" size="large" placeholder="postal_code">
+                <a-input v-model="worksite.state" size="large" placeholder="state" @change="findPotentialGeocode">
+                    <a-tooltip slot="addonAfter">
+                        <template slot="title">
+                            <span v-html=""></span>
+                        </template>
+                        <a-icon type="question-circle-o"/>
+                    </a-tooltip>
+                </a-input>
+            </a-form-item>
+            <a-form-item>
+                <a-input v-model="worksite.postal_code" size="large" placeholder="postal_code" @change="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -221,12 +223,14 @@
     import OverlayMap from "@/components/OverlayMap";
     import BaseButton from "@/components/BaseButton";
     import GeocoderService from "@/services/geocoder.service"
+    import { What3wordsService } from "@/services/what3words.service";
 
     export default {
         props: {
             fields: Array,
             worksite: Object,
-            reloadTable: Function,
+            reloadTable: Function, //TODO: replace with action
+            incident: Object,
         },
         components: {
             BaseButton,
@@ -250,8 +254,40 @@
             handleSubmit() {
 
             },
+            async findPotentialGeocode() {
+                let geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
+                let nonEmptyKeys = geocodeKeys.filter(key => Boolean(this.worksite[key]))
+                if (nonEmptyKeys.length > 1) {
+                    let values = nonEmptyKeys.map(key => this.worksite[key]);
+                    let address = values.join(', ')
+                    let geocode = await GeocoderService.getPlaceDetails(address);
+                    const { lat, lng } = geocode.location;
+                    this.worksite.location = {
+                        type: "Point",
+                        coordinates: [
+                            lng, lat
+                        ]
+                    };
+                    this.worksite.what3words = await What3wordsService.getWords(lat, lng);
+                }
+            },
+            async onGeocodeSelect(value) {
+                let geocode = await GeocoderService.getPlaceDetails(value);
+                this.worksite = {
+                    ...this.worksite,
+                    ...geocode.address_components
+                };
+                const { lat, lng } = geocode.location;
+                this.worksite.location = {
+                    type: "Point",
+                    coordinates: [
+                        lng, lat
+                    ]
+                };
+                this.worksite.what3words = await What3wordsService.getWords(lat, lng);
+            },
             async geocoderSearch(value) {
-                this.geocoderResults = await GeocoderService.getMatchingAddresses(value, 'US');
+                this.geocoderResults = await GeocoderService.getMatchingAddressesGoogle(value);
             },
             async handleOk() {
                 this.overlayMapVisible = false;
@@ -263,15 +299,8 @@
                         ]
                     };
 
-                    let response = await this.$http.request({
-                        url: `https://api.what3words.com/v3/convert-to-3wa?coordinates=${this.overlayMapLocation.lat}%2C${this.overlayMapLocation.lng}&key=${process.env.VUE_APP_WHAT_3_WORDS_API_KEY}`,
-                        method: 'GET',
-                        transformRequest: [(data, headers) => {
-                            delete headers.common.Authorization;
-                            return data
-                        }]
-                    });
-                    this.worksite.what3words = response.data.words;
+                    let { lat, lng } = this.overlayMapLocation;
+                    this.worksite.what3words = await What3wordsService.getWords(lat, lng);
                 }
             },
             onAddedMarker(value) {
@@ -308,7 +337,7 @@
                     let worksite = await Worksite.api().post('/worksites', {...this.worksite, skip_duplicate_check: true})
                     this.worksite = worksite.entities.worksites[0];
                 }
-                this.$message.success('Worksite saved successfully');
+                await this.$message.success('Worksite saved successfully');
                 if (reload) {
                     this.reloadTable()
                 }
@@ -316,18 +345,17 @@
             async claimAndSaveWorksite() {
                 await this.saveWorksite(false);
                 try {
-                    let claim_status = await Worksite.api().claimWorksite(this.worksite.id, []);
-                    console.log(claim_status);
-                    this.$message.success('Worksite claimed successfully');
+                    await Worksite.api().claimWorksite(this.worksite.id, []);
+                    await this.$message.success('Worksite claimed successfully');
                 } catch (error) {
-                    this.$message.error(error.response.data.errors[0].message[0]);
+                    await this.$message.error(error.response.data.errors[0].message[0]);
                 }
                 let worksite = await Worksite.api().fetchById(this.worksite.id);
                 this.worksite = worksite.entities.worksites[0];
                 this.reloadTable()
             },
             resetForm() {
-                console.log(this.form.getFieldsValue())
+                this.worksite = new Worksite({incident: this.incident.id, form_data: []});
             },
             getValue(field_key) {
                 if (!this.worksite) {
@@ -376,15 +404,10 @@
                     this.gettingLocation = false;
                     this.location = await this.getLocation();
 
-                    let response = await this.$http.request({
-                        url: `https://api.what3words.com/v3/convert-to-3wa?coordinates=${this.location.coords.latitude}%2C${this.location.coords.longitude}&key=${process.env.VUE_APP_WHAT_3_WORDS_API_KEY}`,
-                        method: 'GET',
-                        transformRequest: [(data, headers) => {
-                            delete headers.common.Authorization;
-                            return data
-                        }]
-                    });
-                    this.worksite.what3words = response.data.words;
+                    this.worksite.what3words = await What3wordsService.getWords(
+                        this.location.coords.latitude,
+                        this.location.coords.longitude
+                    );
                 } catch(e) {
                     this.gettingLocation = false;
                     this.errorStr = e.message;

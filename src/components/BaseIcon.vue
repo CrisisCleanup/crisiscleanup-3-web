@@ -6,10 +6,11 @@
     const iconMap = {
         dashboard: require('@/assets/icons/dashboard.svg'),
         cases: require('@/assets/icons/cases.svg'),
-        print: require('@/assets/icons/share-big.svg'),
-        share: require('@/assets/icons/print-big.svg'),
+        print: require('@/assets/icons/print-big.svg'),
+        share: require('@/assets/icons/share-big.svg'),
         download: require('@/assets/icons/download.svg'),
         active: require('@/assets/icons/active.svg'),
+        edit: require('@/assets/icons/edit.svg'),
     };
     export default {
         name: "BaseIcon",
@@ -42,7 +43,7 @@
         width: 20px;
     }
     .ccu-icon.small {
-        height: 15px;
-        width: 15px;
+        height: 16px;
+        width: 16px;
     }
 </style>
