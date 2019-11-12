@@ -41,7 +41,7 @@
                     v-model="worksite.address"
                     size="large"
                     placeholder="address"
-                    @change="findPotentialGeocode"
+                    @blur="findPotentialGeocode"
             >
                 <a-tooltip slot="suffix">
                     <template slot="title">
@@ -55,7 +55,7 @@
             </a-auto-complete>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.city" size="large" placeholder="city" @change="findPotentialGeocode">
+                <a-input v-model="worksite.city" size="large" placeholder="city" @blur="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -65,7 +65,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.county" size="large" placeholder="county" @change="findPotentialGeocode">
+                <a-input v-model="worksite.county" size="large" placeholder="county" @blur="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -75,7 +75,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.state" size="large" placeholder="state" @change="findPotentialGeocode">
+                <a-input v-model="worksite.state" size="large" placeholder="state" @blur="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -85,7 +85,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.postal_code" size="large" placeholder="postal_code" @change="findPotentialGeocode">
+                <a-input v-model="worksite.postal_code" size="large" placeholder="postal_code" @blur="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -259,8 +259,12 @@
                 let nonEmptyKeys = geocodeKeys.filter(key => Boolean(this.worksite[key]))
                 if (nonEmptyKeys.length > 1) {
                     let values = nonEmptyKeys.map(key => this.worksite[key]);
-                    let address = values.join(', ')
+                    let address = values.join(', ');
                     let geocode = await GeocoderService.getPlaceDetails(address);
+                    // this.worksite = {
+                    //     ...this.worksite,
+                    //     ...geocode.address_components
+                    // };
                     const { lat, lng } = geocode.location;
                     this.worksite.location = {
                         type: "Point",

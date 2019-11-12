@@ -23,6 +23,8 @@
     import 'leaflet-loading';
     import 'leaflet.gridlayer.googlemutant';
     import 'leaflet.markercluster'
+    import 'leaflet.heat'
+    import { PruneCluster, PruneClusterForLeaflet } from 'exports-loader?PruneCluster,PruneClusterForLeaflet!prunecluster/dist/PruneCluster.js'
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -50,6 +52,13 @@
                     maxZoom: 18,
                     attribution: '<a class="leaflet-attribution" target="_blank" href="http://www.openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>',
                 }),
+                // tileLayer: L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+                //     "attribution": "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors, &copy; <a href=\"http://cartodb.com/attributions\">CartoDB</a>",
+                //     "detectRetina": false,
+                //     "maxZoom": 18,
+                //     "noWrap": false,
+                //     "subdomains": "abc"
+                // }),
             };
         },
         mounted() {
@@ -84,19 +93,43 @@
                     }
                 });
 
-                let cluster = L.markerClusterGroup({
-                    // disableClusteringAtZoom: 10,
-                    // spiderfyOnMaxZoom: false
-                });
+                let positions = markers.map(marker => [marker.position.lat, marker.position.lng]);
+
+                L.heatLayer(positions, {
+                        minOpacity: 0.5,
+                        maxZoom: 18,
+                        max: 1.0,
+                        radius: 8,
+                        blur: 5,
+                        gradient: null
+                    }
+                ).addTo(this.map);
+
+                // let cluster = L.markerClusterGroup({
+                //     // disableClusteringAtZoom: 10,
+                //     // spiderfyOnMaxZoom: false
+                // });
+                //
+                // for (let marker of markers) {
+                //     let item = L.marker(marker.position);
+                //     item.on("click", () => {
+                //         this.onSelectmarker(marker)
+                //     });
+                //     cluster.addLayer(item)
+                // }
+                // this.map.addLayer(cluster)
+
+                var pruneCluster = new PruneClusterForLeaflet();
+                pruneCluster.Cluster.Size = 10;
 
                 for (let marker of markers) {
-                    let item = L.marker(marker.position);
-                    item.on("click", () => {
-                        this.onSelectmarker(marker)
-                    });
-                    cluster.addLayer(item)
+                    let item = new PruneCluster.Marker(marker.position.lat, marker.position.lng);
+                    item.data = marker;
+                    pruneCluster.RegisterMarker(item);
                 }
-                this.map.addLayer(cluster)
+
+                this.map.addLayer(pruneCluster);
+
             }
         },
     };
