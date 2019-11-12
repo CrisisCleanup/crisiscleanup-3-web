@@ -32,8 +32,8 @@ export default class Worksite extends Model {
                     work_types: work_types
                 }, { save: false })
             },
-            searchWorksites(search) {
-                return this.get(`/worksites?fields=id,name,address,case_number,postal_code&limit=5&search=${search}`, {
+            searchWorksites(search, incident) {
+                return this.get(`/worksites?fields=id,name,address,case_number,postal_code,city,state,incident&limit=5&search=${search}&incident=${incident}`, {
                     dataKey: 'results'
                 });
             },

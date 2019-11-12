@@ -11,6 +11,7 @@
         download: require('@/assets/icons/download.svg'),
         active: require('@/assets/icons/active.svg'),
         edit: require('@/assets/icons/edit.svg'),
+        search: require('@/assets/icons/search.svg'),
     };
     export default {
         name: "BaseIcon",

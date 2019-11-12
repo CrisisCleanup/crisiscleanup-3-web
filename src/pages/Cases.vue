@@ -8,24 +8,27 @@
                             <font-awesome-icon size="lg" class="mr-4 cursor-pointer" :style="showingMap ? { color: '#FECE09' } : { color: '#718096' }" icon="map" @click="toggleView('showingMap')" />
                             <font-awesome-icon size="lg" class="mr-4 cursor-pointer" :style="showingTable ? { color: '#FECE09' } : { color: '#718096' }" icon="columns" @click="toggleView('showingTable')" />
                             <div class="flex justify-start w-auto">
-                                <a-select
-                                        showSearch
-                                        :value="searchValue"
-                                        placeholder="input search text"
-                                        style="width: 200px"
-                                        :defaultActiveFirstOption="false"
-                                        :filterOption="false"
+                                <a-auto-complete
+                                        @select="handleChange"
                                         @search="onSearch"
-                                        @change="handleChange"
-                                        :notFoundContent="null"
+                                        style="width: 300px"
+                                        placeholder="Search worksites"
+                                        :disabled="!this.currentIncident"
                                         class="mr-3"
                                 >
-                                    <template slot="suffixIcon">
-                                        <a-icon v-if="searchingWorksites" type="loading" />
-                                        <a-icon v-else type="search" />
+                                    <template slot="dataSource">
+                                        <a-select-option v-for="item in searchWorksites" :key="item.id">
+                                            {{item.case_number}}
+                                            <br>
+                                            {{item.name}}
+                                            <br>
+                                            {{item.address}}, {{item.city}}, {{item.state}} {{item.postal_code}}
+                                        </a-select-option>
                                     </template>
-                                    <a-select-option v-for="item in searchWorksites" :key="item.id">{{item.case_number}}</a-select-option>
-                                </a-select>
+                                    <a-input>
+                                        <ccu-icon slot="suffix" type="search" size="small"></ccu-icon>
+                                    </a-input>
+                                </a-auto-complete>
 
                                 <div class="mr-3 flex items-center bg-white border p-1 px-4 cursor-pointer" @click="() => { this.showingFilters = true }">
                                     Filters <font-awesome-icon icon="sort" class="ml-20"></font-awesome-icon>
@@ -45,7 +48,7 @@
                 </div>
                 <div class="flex-grow">
                     <template v-if="showingMap">
-                        <RealtimeMap style="width: 100%; height: 100%" :query="currentQuery" :onSelectmarker="displayWorksite" :key="this.currentIncidentId"></RealtimeMap>
+                        <RealtimeMapFull style="width: 100%; height: 100%" :query="currentQuery" :onSelectmarker="displayWorksite" :key="this.currentIncidentId"></RealtimeMapFull>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
@@ -121,6 +124,7 @@
     import {mapState} from "vuex";
     import CaseView from "@/pages/CaseView";
     import RealtimeMap from "@/components/RealtimeMap";
+    import RealtimeMapFull from "@/components/RealtimeMapFull";
     import WorksiteFilters from "@/components/WorksiteFilters";
     import BaseButton from "@/components/BaseButton";
 
@@ -203,6 +207,7 @@
             CaseView,
             CaseForm,
             RealtimeMap,
+            RealtimeMapFull,
             WorksiteFilters,
         },
         name: "Cases",
@@ -226,7 +231,7 @@
                 caseFormKey: true,
                 data: [],
                 pagination: {
-                    pageSize: 10,
+                    pageSize: 100,
                     page: 1,
                 },
                 rowSelection,
@@ -333,22 +338,20 @@
             },
             async onSearch(search) {
                 this.searchingWorksites = true;
-                let searchWorksites = await Worksite.api().searchWorksites(search);
+                let searchWorksites = await Worksite.api().searchWorksites(search, this.currentIncidentId);
                 this.searchWorksites = searchWorksites.entities.worksites;
                 this.searchingWorksites = false;
             },
             async handleChange(value) {
                 this.spinning = true;
-                this.searchValue = value;
                 let worksite = await Worksite.api().fetchById(value);
-                let incident = await Incident.api().fetchById(worksite.entities.worksites[0].incident);
-                this.currentIncidentId = incident.entities.incidents[0].id;
                 this.currentWorksiteId = worksite.entities.worksites[0].id;
                 this.currentWorksite = worksite.entities.worksites[0];
                 this.spinning = false;
                 this.isNewWorksite = false;
                 this.isViewingWorksite = true;
                 this.caseFormKey = !this.caseFormKey;
+                this.searchValue = '';
             },
             handleFilters() {
                 let appliedFilters = {
