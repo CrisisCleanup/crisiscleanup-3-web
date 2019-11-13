@@ -26,7 +26,6 @@
     import 'leaflet-pixi-overlay'
     import 'leaflet.heat'
     import { solveCollision } from '@/utils/easing'
-    import { scaleLinear } from 'd3-scale'
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -40,7 +39,8 @@
 
     export default {
         props: {
-            query: Array
+            query: Object,
+            onSelectmarker: Function,
         },
         data() {
             return {
@@ -109,40 +109,85 @@
                     'debris': 'garbage',
                     'fire': 'fire'
                 };
+                let self = this;
                 loader.load(function(loader, resources) {
-                    var textures = [resources.fire.texture, resources.marker.texture, resources.garbage.texture, resources.boot.texture, resources.tent.texture, resources.tree.texture];
-                    var pixiLayer = (function() {
-                        var firstDraw = true;
-                        var prevZoom;
-                        var markerSprites = [];
-                        var frame = null;
-                        var pixiContainer = new Container();
-                        var doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                    let textures = [resources.fire.texture, resources.marker.texture, resources.garbage.texture, resources.boot.texture, resources.tent.texture, resources.tree.texture];
+                    let pixiLayer = (function() {
+                        let firstDraw = true;
+                        let prevZoom;
+                        let markerSprites = [];
+                        let frame = null;
+                        let pixiContainer = new Container();
+                        let doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
                         return L.pixiOverlay(function(utils) {
-                            var zoom = utils.getMap().getZoom();
+                            let zoom = utils.getMap().getZoom();
                             if (frame) {
                                 cancelAnimationFrame(frame);
                                 frame = null;
                             }
-                            var container = utils.getContainer();
-                            var renderer = utils.getRenderer();
-                            var project = utils.latLngToLayerPoint;
-                            var scale = utils.getScale();
-                            var invScale = 1 / scale;
+                            let container = utils.getContainer();
+                            let renderer = utils.getRenderer();
+                            let project = utils.latLngToLayerPoint;
+                            let scale = utils.getScale();
+                            let invScale = 1 / scale;
                             if (firstDraw) {
                                 prevZoom = zoom;
                                 markers.forEach(function(marker) {
-                                    var coords = project([marker.position.lat, marker.position.lng]);
-                                    var index = Math.floor(Math.random() * textures.length);
-                                    var markerSprite = new Sprite(textures[index]);
+                                    let coords = project([marker.position.lat, marker.position.lng]);
+                                    let index = Math.floor(Math.random() * textures.length);
+                                    let markerSprite = new Sprite(textures[index]);
                                     markerSprite.textureIndex = index;
                                     markerSprite.x = coords.x;
                                     markerSprite.y = coords.y;
+                                    markerSprite.x0 = coords.x;
+                                    markerSprite.y0 = coords.y;
                                     markerSprite.anchor.set(0.5, 0.5);
                                     container.addChild(markerSprite);
                                     markerSprites.push(markerSprite);
                                     markerSprite.legend = marker.city || marker.label;
+                                    markerSprite.data = marker;
                                 });
+
+                                let quadTrees = {};
+                                for (let z = map.getMinZoom(); z <= map.getMaxZoom(); z++) {
+                                    let rInit = ((z <= 7) ? 16 : 24) / utils.getScale(z);
+                                    quadTrees[z] = solveCollision(markerSprites, {r0: rInit, zoom: z});
+                                }
+                                const findMarker = (ll) => {
+                                    let layerPoint = project(ll);
+                                    let quadTree = quadTrees[utils.getMap().getZoom()];
+                                    let marker;
+                                    let rMax = quadTree.rMax;
+                                    let found = false;
+                                    quadTree.visit(function(quad, x1, y1, x2, y2) {
+                                        if (!quad.length) {
+                                            let dx = quad.data.x - layerPoint.x;
+                                            let dy = quad.data.y - layerPoint.y;
+                                            let r = quad.data.scale.x * 16;
+                                            if (dx * dx + dy * dy <= r * r) {
+                                                marker = quad.data;
+                                                found = true;
+                                            }
+                                        }
+                                        return found || x1 > layerPoint.x + rMax || x2 + rMax < layerPoint.x || y1 > layerPoint.y + rMax || y2 + rMax < layerPoint.y;
+                                    });
+                                    return marker;
+                                };
+                                map.on('click', function(e) {
+                                    let marker = findMarker(e.latlng);
+                                    if (marker) {
+                                        self.onSelectmarker(marker.data)
+                                    }
+                                });
+                                map.on('mousemove', L.Util.throttle((e) => {
+                                    let marker = findMarker(e.latlng);
+                                    if (marker) {
+                                        L.DomUtil.addClass(this._container, 'cursor-pointer');
+                                    } else {
+                                        L.DomUtil.removeClass(this._container, 'cursor-pointer');
+                                    }
+                                }, 32));
+
                             }
                             if (firstDraw || prevZoom !== zoom) {
                                 markerSprites.forEach(function(markerSprite) {
@@ -155,13 +200,13 @@
                                 });
                             }
 
-                            var start = null;
-                            var delta = 250;
+                            let start = null;
+                            let delta = 250;
                             function animate(timestamp) {
-                                var progress;
+                                let progress;
                                 if (start === null) start = timestamp;
                                 progress = timestamp - start;
-                                var lambda = progress / delta;
+                                let lambda = progress / delta;
                                 if (lambda > 1) lambda = 1;
                                 lambda = lambda * (0.4 + lambda * (2.2 + lambda * -1.6));
                                 markerSprites.forEach(function(markerSprite) {
