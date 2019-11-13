@@ -105,30 +105,30 @@
                     }
                 ).addTo(this.map);
 
-                // let cluster = L.markerClusterGroup({
-                //     // disableClusteringAtZoom: 10,
-                //     // spiderfyOnMaxZoom: false
-                // });
-                //
-                // for (let marker of markers) {
-                //     let item = L.marker(marker.position);
-                //     item.on("click", () => {
-                //         this.onSelectmarker(marker)
-                //     });
-                //     cluster.addLayer(item)
-                // }
-                // this.map.addLayer(cluster)
-
-                var pruneCluster = new PruneClusterForLeaflet();
-                pruneCluster.Cluster.Size = 10;
+                let cluster = L.markerClusterGroup({
+                    // disableClusteringAtZoom: 10,
+                    // spiderfyOnMaxZoom: false
+                });
 
                 for (let marker of markers) {
-                    let item = new PruneCluster.Marker(marker.position.lat, marker.position.lng);
-                    item.data = marker;
-                    pruneCluster.RegisterMarker(item);
+                    let item = L.marker(marker.position);
+                    item.on("click", () => {
+                        this.onSelectmarker(marker)
+                    });
+                    cluster.addLayer(item)
                 }
+                this.map.addLayer(cluster)
 
-                this.map.addLayer(pruneCluster);
+                // var pruneCluster = new PruneClusterForLeaflet();
+                // pruneCluster.Cluster.Size = 10;
+                //
+                // for (let marker of markers) {
+                //     let item = new PruneCluster.Marker(marker.position.lat, marker.position.lng);
+                //     item.data = marker;
+                //     pruneCluster.RegisterMarker(item);
+                // }
+                //
+                // this.map.addLayer(pruneCluster);
 
             }
         },
