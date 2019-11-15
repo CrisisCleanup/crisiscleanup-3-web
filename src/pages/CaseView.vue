@@ -1,85 +1,56 @@
 <template>
     <div class="bg-white flex flex-col h-full">
         <div class="p-3 flex-grow intake-view">
-            <div class="my-2">
-                <label class="my-2 text-xs font-bold">Notes</label>
+            <div class="my-4">
+                <label class="my-1 text-xs font-bold text-gray-600 block">Notes</label>
                 <div class="bg-gray-200 flex justify-center">
                     <span>1 day ago: Neighbour will help with cleaning</span>
                 </div>
-                <BaseButton type="link" title="+ Add Note">
-
-                </BaseButton>
+                <BaseButton class="my-1" type="link" title="+ Add Note"></BaseButton>
             </div>
-            <div class="my-2">
-                <label class="my-2 text-xs font-bold">Full Address</label>
+            <div class="my-4">
+                <label class="my-1 text-xs font-bold text-gray-600 block">Full Address</label>
                 <div>{{worksiteAddress}}</div>
             </div>
-            <div class="my-2 border-t">
-                <div v-if="workTypesClaimedByOthers.length > 0" class="my-2">
-                    <label class="my-2 text-xs font-bold">Work Type Claimed By Another Organization</label>
+            <div class="my-4 border-t">
+                <div v-if="workTypesClaimedByOthers.length > 0" class="my-4">
+                    <label class="my-4 text-xs font-bold text-gray-600">Claimed By Another Organization</label>
                     <template v-for="work_type in workTypesClaimedByOthers">
-                        <div :key="work_type.id" class="border-b py-4">
-                            <StatusDropDown class="block mb-2" :default-value="work_type.status"
-                                            :on-select="(value) => {alert(value)}"></StatusDropDown>
-                            <p-check class="p-svg p-round p-bigger text-base my-2" color="warning">
-                                <svg slot="extra" class="svg svg-icon" viewBox="0 0 20 20">
-                                    <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                                          style="stroke: white;fill:white"></path>
-                                </svg>
-                                {{work_type.work_type_name_t}}
-                            </p-check>
-                            <div class="ml-6" v-for="type in getFieldsForType">
-                                {{type.label_t}}
-                            </div>
+                        <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
+                            {{getWorkTypeName(work_type.work_type)}}
+                            <StatusDropDown class="block" :default-value="work_type.status"
+                                            :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
                         </div>
                     </template>
                 </div>
-                <div v-if="workTypesClaimedByOrganization.length > 0" class="my-2">
-                    <label class="my-2 text-xs font-bold">Work Type Claimed By My Organization</label>
+                <div v-if="workTypesClaimedByOrganization.length > 0" class="my-4">
+                    <label class="my-4 text-xs font-bold text-gray-600">Claimed By My Organization</label>
                     <template v-for="work_type in workTypesClaimedByOrganization">
-                        <div :key="work_type.id" class="border-b py-4">
-                            <StatusDropDown class="block mb-2" :default-value="work_type.status"
-                                            :on-select="(value) => {alert(value)}"></StatusDropDown>
-                            <p-check class="p-svg p-round p-bigger text-base my-2" color="warning">
-                                <svg slot="extra" class="svg svg-icon" viewBox="0 0 20 20">
-                                    <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                                          style="stroke: white;fill:white"></path>
-                                </svg>
-                                {{work_type.work_type_name_t}}
-                            </p-check>
-                            <div class="ml-6" v-for="type in getFieldsForType">
-                                {{type.label_t}}
-                            </div>
+                        <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
+                            {{getWorkTypeName(work_type.work_type)}}
+                            <StatusDropDown class="block" :default-value="work_type.status"
+                                            :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
                         </div>
                     </template>
                 </div>
-                <div v-if="workTypesUnclaimed.length > 0" class="my-2">
-                    <label class="my-2 text-xs font-bold">Work Type Unclaimed</label>
+                <div v-if="workTypesUnclaimed.length > 0" class="my-4">
+                    <label class="my-4 text-xs font-bold text-gray-600">Unclaimed Work Types</label>
                     <template v-for="work_type in workTypesUnclaimed">
-                        <div :key="work_type.id" class="border-b py-4">
-                            <StatusDropDown class="block mb-2" :default-value="work_type.status"
-                                            :on-select="(value) => {alert(value)}"></StatusDropDown>
-                            <div class="flex justify-between">
-                                <p-check class="p-svg p-round p-bigger text-base my-2" color="warning">
-                                    <svg slot="extra" class="svg svg-icon" viewBox="0 0 20 20">
-                                        <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                                              style="stroke: white;fill:white"></path>
-                                    </svg>
-                                    {{work_type.work_type_name_t}}
-                                </p-check>
-                                <BaseButton type="primary" :action="() => { return claimWorkType(work_type) }" title="I'll Do it" class="p-1 px-3"></BaseButton>
-                            </div>
-                            <div class="ml-6" v-for="type in getFieldsForType">
-                                {{type.label_t}}
-                            </div>
+                        <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
+                            {{getWorkTypeName(work_type.work_type)}}
+                            <StatusDropDown class="block" :default-value="work_type.status"
+                                            :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
+<!--                            <div class="flex justify-between">-->
+<!--                                <BaseButton type="primary" :action="() => { return claimWorkType(work_type) }" title="I'll Do it" class="p-1 px-3"></BaseButton>-->
+<!--                            </div>-->
                         </div>
                     </template>
                 </div>
             </div>
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between">
-            <BaseButton size="medium" class="flex-grow m-1 text-black p-2 border-2 border-black" title="Unclaim All"></BaseButton>
-            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black p-2" title="Done"></BaseButton>
+            <BaseButton size="medium" class="flex-grow m-1 text-black p-2 border-2 border-black" title="Unclaim"></BaseButton>
+            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black p-2" title="Claim"></BaseButton>
         </div>
     </div>
 </template>
@@ -88,6 +59,7 @@
     import StatusDropDown from "@/components/StatusDropDown"
     import User from "@/models/User";
     import Worksite from "@/models/Worksite";
+    import WorkType from "@/models/WorkType";
     import BaseButton from "@/components/BaseButton";
 
     export default {
@@ -123,10 +95,18 @@
                 let worksite = await Worksite.api().fetchById(this.worksite.id);
                 this.worksite = worksite.entities.worksites[0];
             },
+            getWorkTypeName(work_type) {
+                let work_types = WorkType.query().where('key', work_type).get();
+                return work_types[0].name_t
+            },
+            statusValueChange(value, work_type) {
+                alert(value + JSON.stringify(work_type))
+            },
+
             getFieldsForType(work_type) {
                 if (this.incident) {
                     let available_fields = this.worksite.form_data.map(data => data.field_key);
-                    return this.incident.form_fields.filter((field)=> {
+                    let fields = this.incident.form_fields.filter((field)=> {
                         let parent = this.incident.form_fields.find((element) => {
                             return element.field_key === field.field_parent_key;
                         });
@@ -137,7 +117,8 @@
                         }
 
                         return if_selected_then_work_type === work_type && available_fields.includes(field.field_key) && field.html_type === 'checkbox';
-                    })
+                    });
+                    return fields
                 }
                 return [];
             },

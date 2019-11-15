@@ -41,7 +41,7 @@
                     v-model="worksite.address"
                     size="large"
                     placeholder="address"
-                    @blur="findPotentialGeocode"
+                    @change="findPotentialGeocode"
             >
                 <a-tooltip slot="suffix">
                     <template slot="title">
@@ -55,7 +55,7 @@
             </a-auto-complete>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.city" size="large" placeholder="city" @blur="findPotentialGeocode">
+                <a-input v-model="worksite.city" size="large" placeholder="city" @change="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -65,7 +65,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.county" size="large" placeholder="county" @blur="findPotentialGeocode">
+                <a-input v-model="worksite.county" size="large" placeholder="county" @change="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -75,7 +75,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.state" size="large" placeholder="state" @blur="findPotentialGeocode">
+                <a-input v-model="worksite.state" size="large" placeholder="state" @change="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -85,7 +85,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.postal_code" size="large" placeholder="postal_code" @blur="findPotentialGeocode">
+                <a-input v-model="worksite.postal_code" size="large" placeholder="postal_code" @change="findPotentialGeocode">
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -228,7 +228,7 @@
     export default {
         props: {
             fields: Array,
-            worksite: Object,
+            worksiteId: String,
             reloadTable: Function, //TODO: replace with action
             incident: Object,
         },
@@ -237,6 +237,16 @@
             OverlayMap
         },
         name: "CaseForm",
+        mounted() {
+            if (this.worksiteId) {
+                this.worksite = Worksite.find(this.worksiteId)
+            } else {
+                this.worksite = new Worksite({
+                    incident: this.incident.id,
+                    form_data: []
+                })
+            }
+        },
         data() {
             return {
                 form: this.$form.createForm(this),
@@ -247,7 +257,8 @@
                 what3words: null,
                 overlayMapVisible: false,
                 overlayMapLocation: null,
-                geocoderResults: []
+                geocoderResults: [],
+                worksite: {}
             };
         },
         methods: {
@@ -273,6 +284,7 @@
                         ]
                     };
                     this.worksite.what3words = await What3wordsService.getWords(lat, lng);
+                    this.$emit('geocoded', geocode.location)
                 }
             },
             async onGeocodeSelect(value) {
@@ -289,6 +301,7 @@
                     ]
                 };
                 this.worksite.what3words = await What3wordsService.getWords(lat, lng);
+                this.$emit('geocoded', geocode.location)
             },
             async geocoderSearch(value) {
                 this.geocoderResults = await GeocoderService.getMatchingAddressesGoogle(value);

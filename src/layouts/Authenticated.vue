@@ -46,6 +46,7 @@
     import Incident from "@/models/Incident";
     import User from "@/models/User";
     import WorkType from "@/models/WorkType";
+    import Status from "@/models/Status";
     import { mapActions, mapMutations, mapState } from "vuex";
     import BaseSelect from "@/components/BaseSelect";
 
@@ -53,15 +54,20 @@
         name: 'Authenticated',
         components: { BaseSelect },
         async mounted() {
-            await User.api().get('/users', {
-                dataKey: 'results'
-            });
-            await Incident.api().get('/incidents?fields=id,name,short_name,geofence&limit=150&ordering=-start_at', {
-                dataKey: 'results'
-            });
-            await WorkType.api().get('/work_types?limit=100', {
-                dataKey: 'results'
-            });
+            await Promise.all([
+                User.api().get('/users', {
+                    dataKey: 'results'
+                }),
+                Incident.api().get('/incidents?fields=id,name,short_name,geofence&limit=150&ordering=-start_at', {
+                    dataKey: 'results'
+                }),
+                WorkType.api().get('/work_types?limit=100', {
+                    dataKey: 'results'
+                }),
+                Status.api().get('/statuses?limit=100', {
+                    dataKey: 'results'
+                })
+            ]);
         },
         methods: {
             async handleChange(value) {

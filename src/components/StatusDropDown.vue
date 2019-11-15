@@ -1,29 +1,19 @@
 <template>
-    <BaseSelect :defaultValue="defaultValue" :change="onSelect" size="large">
+    <BaseSelect :defaultValue="defaultValue" :change="onSelect" size="small">
         <template v-slot:options>
-            <a-select-option :key="name" v-for="(value, name) in statuses" :value="name">{{value}}</a-select-option>
+            <a-select-option :key="status.status" v-for="status in statuses" :value="status.status">
+                <div class="badge-holder flex items-center">
+                    <a-badge :status="getStatusBadge(status.status)" />
+                    {{status.status_name_t}}
+                </div>
+            </a-select-option>
         </template>
     </BaseSelect>
 </template>
 
 <script>
     import BaseSelect from "@/components/BaseSelect";
-    const statuses = {
-        "open_unassigned": "open_unassigned",
-        "open_assigned": "open_assigned",
-        "open_partially-completed": "open_partially-completed",
-        "open_needs-follow-up": "open_needs-follow-up",
-        "open_unresponsive": "open_unresponsive",
-        "closed_completed": "closed_completed",
-        "closed_partially-completed": "closed_partially-completed",
-        "closed_incomplete": "closed_incomplete",
-        "closed_out-of-scope": "closed_out-of-scope",
-        "closed_done-by-others": "closed_done-by-others",
-        "closed_no-help-wanted": "closed_no-help-wanted",
-        "closed_rejected": "closed_rejected",
-        "closed_duplicate": "closed_duplicate",
-        "closed_marked-for-deletion": "closed_marked-for-deletion"
-    }
+    import Status from "@/models/Status";
     export default {
         name: "StatusDropDown",
         components: {BaseSelect},
@@ -31,10 +21,31 @@
             onSelect: Function,
             defaultValue: String,
         },
-        data() {
-            return {
-                statuses
+        computed: {
+            statuses () {
+                return Status.all()
             }
+        },
+        methods: {
+            getStatusBadge(status) {
+                const status_dict = {
+                    "open_unassigned": "error",
+                    "open_assigned":"processing",
+                    "open_partially-completed":"processing",
+                    "open_needs-follow-up":"processing",
+                    "open_unresponsive":"default",
+                    "closed_completed":"success",
+                    "closed_partially-completed":"success",
+                    "closed_incomplete":"default",
+                    "closed_out-of-scope":"default",
+                    "closed_done-by-others":"success",
+                    "closed_no-help-wanted":"default",
+                    "closed_rejected":"default",
+                    "closed_duplicate":"default",
+                    "closed_marked-for-deletion":"default"
+                };
+                return status_dict[status];
+            },
         }
     }
 </script>

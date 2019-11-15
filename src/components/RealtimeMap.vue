@@ -19,12 +19,13 @@
 
 <script>
 
+    import {Container, Loader, Sprite} from 'pixi.js'
     import * as L from 'leaflet';
     import 'leaflet-loading';
     import 'leaflet.gridlayer.googlemutant';
-    import 'leaflet.markercluster'
+    import 'leaflet-pixi-overlay'
     import 'leaflet.heat'
-    import { PruneCluster, PruneClusterForLeaflet } from 'exports-loader?PruneCluster,PruneClusterForLeaflet!prunecluster/dist/PruneCluster.js'
+    import {solveCollision} from '@/utils/easing'
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -40,6 +41,7 @@
         props: {
             query: Object,
             onSelectmarker: Function,
+            newMarker: Function,
         },
         data() {
             return {
@@ -52,14 +54,9 @@
                     maxZoom: 18,
                     attribution: '<a class="leaflet-attribution" target="_blank" href="http://www.openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>',
                 }),
-                // tileLayer: L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-                //     "attribution": "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors, &copy; <a href=\"http://cartodb.com/attributions\">CartoDB</a>",
-                //     "detectRetina": false,
-                //     "maxZoom": 18,
-                //     "noWrap": false,
-                //     "subdomains": "abc"
-                // }),
-            };
+                markerLayer: L.layerGroup(),
+                markers: [],
+            }
         },
         mounted() {
             const options = {
@@ -75,63 +72,149 @@
             initMap(options) {
                 this.map = L.map(this.$refs.map, options);
                 this.tileLayer.addTo(this.map);
+                this.markerLayer.addTo(this.map);
                 this.pullSites();
             },
+            addWorksite(location) {
+                this.markerLayer.clearLayers();
+                new L.marker(location).addTo(this.markerLayer);
+                this.map.setView([location.lat, location.lng], 15);
+            },
+            loadMarkersOnMap: function (markers) {
+                let loader = new Loader();
+                let map = this.map;
+                loader.add('marker', 'marker-icon.png');
+                loader.add('fire', 'flame.png');
+                loader.add('garbage', 'garbage.png');
+                loader.add('boot', 'rubber.png');
+                loader.add('tent', 'tent.png');
+                loader.add('tree', 'tree.png');
+                let mapping = {
+                    'muck_out': 'boot',
+                    'trees': 'tree',
+                    'tarp': 'tent',
+                    'debris': 'garbage',
+                    'fire': 'fire'
+                };
+                let self = this;
+                loader.load(function (loader, resources) {
+                    let textures = [resources.fire.texture, resources.marker.texture, resources.garbage.texture, resources.boot.texture, resources.tent.texture, resources.tree.texture];
+                    let pixiLayer = (function () {
+                        let firstDraw = true;
+                        let prevZoom;
+                        let markerSprites = [];
+                        let frame = null;
+                        let pixiContainer = new Container();
+                        let doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                        return L.pixiOverlay(function (utils) {
+                            let zoom = utils.getMap().getZoom();
+                            if (frame) {
+                                cancelAnimationFrame(frame);
+                                frame = null;
+                            }
+                            let container = utils.getContainer();
+                            let renderer = utils.getRenderer();
+                            let project = utils.latLngToLayerPoint;
+                            let scale = utils.getScale();
+                            let invScale = 1 / scale;
+                            if (firstDraw) {
+                                prevZoom = zoom;
+                                let popup = L.popup({className: 'pixi-popup'})
+                                markers.forEach(function (marker) {
+                                    let coords = project([marker.position.lat, marker.position.lng]);
+                                    let index = Math.floor(Math.random() * textures.length);
+                                    let markerSprite = new Sprite(textures[index]);
+                                    markerSprite.interactive = true;
+                                    markerSprite.cursor = 'pointer';
+                                    markerSprite.name = marker.case_number;
+                                    markerSprite.on('click', () => {
+                                        self.onSelectmarker(marker);
+                                        popup.setContent(`<b>${marker.case_number}</b>`).openOn(utils.getMap());
+                                    });
+                                    markerSprite.textureIndex = index;
+                                    markerSprite.x = coords.x;
+                                    markerSprite.y = coords.y;
+                                    markerSprite.x0 = coords.x;
+                                    markerSprite.y0 = coords.y;
+                                    markerSprite.anchor.set(0.5, 0.5);
+                                    container.addChild(markerSprite);
+                                    markerSprites.push(markerSprite);
+                                    markerSprite.legend = marker.city || marker.label;
+                                    markerSprite.data = marker;
+                                });
+                            }
+                            if (firstDraw || prevZoom !== zoom) {
+                                markerSprites.forEach(function (markerSprite) {
+                                    if (firstDraw) {
+                                        markerSprite.scale.set(invScale);
+                                    } else {
+                                        markerSprite.currentScale = markerSprite.scale.x;
+                                        markerSprite.targetScale = invScale;
+                                    }
+                                });
+                            }
+
+                            let start = null;
+                            let delta = 250;
+
+                            function animate(timestamp) {
+                                let progress;
+                                if (start === null) start = timestamp;
+                                progress = timestamp - start;
+                                let lambda = progress / delta;
+                                if (lambda > 1) lambda = 1;
+                                lambda = lambda * (0.4 + lambda * (2.2 + lambda * -1.6));
+                                markerSprites.forEach(function (markerSprite) {
+                                    markerSprite.scale.set(markerSprite.currentScale + lambda * (markerSprite.targetScale - markerSprite.currentScale));
+                                });
+                                renderer.render(container);
+                                if (progress < delta) {
+                                    frame = requestAnimationFrame(animate);
+                                }
+                            }
+
+                            if (!firstDraw && prevZoom !== zoom) {
+                                frame = requestAnimationFrame(animate);
+                            }
+                            firstDraw = false;
+                            prevZoom = zoom;
+                            renderer.render(container);
+
+
+                        }, pixiContainer, {
+                            doubleBuffering: doubleBuffering,
+                            reloadOnAdd: true
+                        });
+                    })();
+                    pixiLayer.addTo(map);
+                });
+            },
             async pullSites(url) {
-              let response = await this.$http
+                let response = await this.$http
                     .get(url || "http://api.staging.crisiscleanup.io/worksites_map", {
                         params: url ? {} : {...this.query, limit: 5000, fields: 'id,location'}
                     });
 
-                let markers = response.data.map((worksite) => {
+                this.markers = response.data.map((worksite) => {
                     return {
                         ...worksite,
                         position: {
-                            lat: worksite.location ? worksite.location.coordinates[1]: 10,
-                            lng: worksite.location ? worksite.location.coordinates[0]: 10,
+                            lat: worksite.location ? worksite.location.coordinates[1] : 10,
+                            lng: worksite.location ? worksite.location.coordinates[0] : 10,
                         }
                     }
                 });
 
-                let positions = markers.map(marker => [marker.position.lat, marker.position.lng]);
+                console.log(`Loading ${this.markers.length} markers`)
 
-                L.heatLayer(positions, {
-                        minOpacity: 0.5,
-                        maxZoom: 18,
-                        max: 1.0,
-                        radius: 8,
-                        blur: 5,
-                        gradient: null
-                    }
-                ).addTo(this.map);
-
-                let cluster = L.markerClusterGroup({
-                    // disableClusteringAtZoom: 10,
-                    // spiderfyOnMaxZoom: false
-                });
-
-                for (let marker of markers) {
-                    let item = L.marker(marker.position);
-                    item.on("click", () => {
-                        this.onSelectmarker(marker)
-                    });
-                    cluster.addLayer(item)
-                }
-                this.map.addLayer(cluster)
-
-                // var pruneCluster = new PruneClusterForLeaflet();
-                // pruneCluster.Cluster.Size = 10;
-                //
-                // for (let marker of markers) {
-                //     let item = new PruneCluster.Marker(marker.position.lat, marker.position.lng);
-                //     item.data = marker;
-                //     pruneCluster.RegisterMarker(item);
-                // }
-                //
-                // this.map.addLayer(pruneCluster);
-
+                this.loadMarkersOnMap(this.markers);
             }
         },
+        watch: {
+            newMarker() {
+                this.addWorksite(this.newMarker)
+            }
+        }
     };
 </script>
 

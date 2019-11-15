@@ -48,7 +48,7 @@
                 </div>
                 <div class="flex-grow">
                     <template v-if="showingMap">
-                        <RealtimeMapFull style="width: 100%; height: 100%" :query="currentQuery" :onSelectmarker="displayWorksite" :key="this.currentIncidentId"></RealtimeMapFull>
+                        <RealtimeMapFull style="width: 100%; height: 100%" :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker" :key="this.currentIncidentId"></RealtimeMapFull>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
@@ -69,16 +69,12 @@
                                     :rowSelection="rowSelection"
                                     @change="handleTableChange"
                             >
-                            <span slot="work_types_status" slot-scope="work_types">
-                                <div class="badge-holder" :key="work_type.id" v-for="work_type in work_types">
-                                    <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status" />
-                                </div>
-                            </span>
                                 <span slot="work_types" slot-scope="work_types">
-                                <div  class="mt-1" :key="work_type.id" v-for="work_type in work_types">
-                                    {{work_type.work_type_name_t}}
-                                </div>
-                            </span>
+                                    <div class="badge-holder flex items-center" :key="work_type.id" v-for="work_type in work_types">
+                                        <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status" />
+                                        {{getWorkTypeName(work_type.work_type)}}
+                                    </div>
+                                </span>
                             </a-table>
                         </div>
                     </template>
@@ -95,18 +91,18 @@
                 {{this.currentWorksite && `View ${this.currentWorksite.case_number}`}}
             </div>
         </div>
-            <div v-if="this.currentWorksite" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-start">
+            <div v-if="this.currentWorksite" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b">
                 <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
                 <div class="flex items-center">
                     <ccu-icon size="small" class="m-1" type="download" />
                     <ccu-icon size="small" class="m-1" type="share" />
                     <ccu-icon size="small" class="m-1" type="print" @click.native="printWorksite"/>
-                    <ccu-icon v-if="isViewingWorksite" class="m-1" size="small" type="edit" @click.native="editWorksite" />
+                    <ccu-icon v-if="isViewingWorksite" style="background-color: #fece09" class="border p-2" size="small" type="edit" @click.native="editWorksite" />
                 </div>
             </div>
             <a-skeleton class="bg-white h-full p-3 flex-grow" active v-if="spinning"></a-skeleton>
             <div class="h-full" v-if="!spinning && (isEditingWorksite || isNewWorksite)">
-                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite="currentWorksite" :reloadTable="reloadTable" :incident="this.currentIncident"/>
+                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId" @geocoded="addMarkerToMap" :reloadTable="reloadTable" :incident="this.currentIncident"/>
             </div>
             <div class="h-full" v-if="!spinning && isViewingWorksite">
                 <CaseView :worksite="currentWorksite" :incident="currentIncident"/>
@@ -127,6 +123,7 @@
     import RealtimeMapFull from "@/components/RealtimeMapFull";
     import WorksiteFilters from "@/components/WorksiteFilters";
     import BaseButton from "@/components/BaseButton";
+    import WorkType from "@/models/WorkType";
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -148,18 +145,11 @@
             width: '5%',
         },
         {
-            title: 'Status',
-            dataIndex: 'work_types',
-            key: 'work_types_status',
-            scopedSlots: { customRender: 'work_types_status' },
-            width: '5%',
-        },
-        {
             title: 'Work type',
             dataIndex: 'work_types',
             key: 'work_types',
             scopedSlots: { customRender: 'work_types' },
-            width: '15%',
+            width: '20%',
         },
         {
             title: 'Name',
@@ -239,6 +229,7 @@
                 currentQuery: {},
                 filters: {},
                 appliedFilters: {},
+                newMarker: null
             };
         },
         watch: {
@@ -328,8 +319,10 @@
                 this.isViewingWorksite = false;
                 this.isEditingWorksite = false;
                 this.isNewWorksite = true;
+                this.currentWorksiteId = null;
                 this.currentWorksite = new Worksite({incident: this.currentIncidentId, form_data: []});
                 this.caseFormKey = !this.caseFormKey;
+                this.toggleView('showingMap');
             },
             toggleView(view) {
                 this.showingMap = false;
@@ -357,12 +350,32 @@
                 let appliedFilters = {
                     work_type__work_type__in: ''
                 };
-                const entries = Object.entries(this.filters)
+                const entries = Object.entries(this.filters.fields)
                 for (const [work_type, values] of entries) {
                     if (values) {
                         appliedFilters.work_type__work_type__in+=`${work_type},`
                     }
                 }
+
+                if (this.filters.statuses.unclaimed) {
+                    appliedFilters.work_type__claimed_by__isnull = true;
+                }
+
+                if (this.filters.statuses.claimed_by_org) {
+                    appliedFilters.work_type__claimed_by = this.currentUser.organization.id;
+                }
+
+                if (this.filters.statuses.reported_by_org) {
+                    appliedFilters.reported_by = this.currentUser.organization.id;
+                }
+
+                if (this.filters.statuses.open) {
+
+                }
+
+                if (this.filters.statuses.closed) {
+                }
+
                 this.appliedFilters = appliedFilters;
                 this.showingFilters = false;
                 this.fetch({
@@ -399,6 +412,10 @@
                 link.remove();
                 window.URL.revokeObjectURL(url);
             },
+            getWorkTypeName(work_type) {
+                let work_types = WorkType.query().where('key', work_type).get();
+                return work_types[0].name_t
+            },
             getStatusBadge(status) {
                 const status_dict = {
                     "open_unassigned": "error",
@@ -429,6 +446,10 @@
                 };
                 return work_type_dict[work_type] || 'tree';
             },
+            addMarkerToMap(location) {
+                this.newMarker = location;
+                this.toggleView('showingMap');
+            }
         },
         async mounted() {
             if (this.currentIncidentId) {
