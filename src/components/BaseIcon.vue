@@ -1,5 +1,7 @@
 <template>
-    <img v-bind:class="styles" :src="iconMap[type]"/>
+    <div>
+        <img v-bind:class="styles" :src="iconMap[type]"/>
+    </div>
 </template>
 
 <script>

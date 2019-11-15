@@ -6,7 +6,6 @@ import loading from './modules/loading'
 import VuexORM from '@vuex-orm/core'
 import VuexORMAxios from '@vuex-orm/plugin-axios'
 import database from './database'
-import {AuthService} from "@/services/auth.service";
 import axios from 'axios'
 
 VuexORM.use(VuexORMAxios, {

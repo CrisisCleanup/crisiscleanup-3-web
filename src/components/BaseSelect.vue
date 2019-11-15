@@ -1,5 +1,5 @@
 <template>
-    <a-select v-bind="$attrs" @change="change" v-decorator="decorator">
+    <a-select v-bind="$attrs" @change="change" v-decorator="decorator" :size="size">
         <slot name="options"></slot>
         <template slot="suffixIcon">
             <font-awesome-icon size="sm" :icon="icon || 'sort'" />
@@ -17,7 +17,11 @@
                 },
             },
             icon: String,
-            decorator: Array
+            decorator: Array,
+            size: {
+                type: String,
+                default: 'large'
+            },
         },
     }
 </script>

@@ -19,13 +19,13 @@
 
 <script>
 
-    import { Loader, Container, Sprite } from 'pixi.js'
+    import {Container, Loader, Sprite} from 'pixi.js'
     import * as L from 'leaflet';
     import 'leaflet-loading';
     import 'leaflet.gridlayer.googlemutant';
     import 'leaflet-pixi-overlay'
     import 'leaflet.heat'
-    import { solveCollision } from '@/utils/easing'
+    import {solveCollision} from '@/utils/easing'
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -37,10 +37,28 @@
         shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
 
+    const colors_dict = {
+        "open_unassigned": 0xbc0000,
+        "open_assigned": 0xd02417,
+        "open_partially-completed": 0x22516,
+        "open_needs-follow-up": 0xd52417,
+        "open_unresponsive": 0x787878,
+        "closed_completed": 0x52c41a,
+        "closed_partially-completed": 0xFF0000,
+        "closed_incomplete": 0x1c1c1c,
+        "closed_out-of-scope": 0x767676,
+        "closed_done-by-others": 0x008200,
+        "closed_no-help-wanted": 0xFF0000,
+        "closed_rejected": 0xFF0000,
+        "closed_duplicate": 0xFF0000,
+        "closed_marked-for-deletion": 0xFF0000
+    };
+
     export default {
         props: {
             query: Object,
             onSelectmarker: Function,
+            newMarker: Function,
         },
         data() {
             return {
@@ -60,6 +78,9 @@
                     "noWrap": false,
                     "subdomains": "abc"
                 }),
+
+                markerLayer: L.layerGroup(),
+                markers: [],
             }
         },
         mounted() {
@@ -76,50 +97,43 @@
             initMap(options) {
                 this.map = L.map(this.$refs.map, options);
                 this.tileLayer.addTo(this.map);
+                this.markerLayer.addTo(this.map);
                 this.pullSites();
             },
-            async pullSites(url) {
-                let response = await this.$http
-                    .get(url || "http://api.staging.crisiscleanup.io/worksites_map", {
-                        params: url ? {} : {...this.query, limit: 5000, fields: 'id,location'}
-                    });
-
-                let markers = response.data.map((worksite) => {
-                    return {
-                        ...worksite,
-                        position: {
-                            lat: worksite.location ? worksite.location.coordinates[1]: 10,
-                            lng: worksite.location ? worksite.location.coordinates[0]: 10,
-                        }
-                    }
-                });
-
+            addWorksite(location) {
+                this.markerLayer.clearLayers();
+                new L.marker(location).addTo(this.markerLayer);
+                this.map.setView([location.lat, location.lng], 15);
+            },
+            loadMarkersOnMap: function (markers) {
                 let loader = new Loader();
                 let map = this.map;
                 loader.add('marker', 'marker-icon.png');
-                loader.add('fire', 'flame.png');
-                loader.add('garbage', 'garbage.png');
-                loader.add('boot', 'rubber.png');
-                loader.add('tent', 'tent.png');
-                loader.add('tree', 'tree.png');
-                let mapping = {
-                    'muck_out': 'boot',
-                    'trees': 'tree',
-                    'tarp': 'tent',
-                    'debris': 'garbage',
-                    'fire': 'fire'
-                };
+                loader.add('fire', 'flammable-32.png');
+                loader.add('garbage', 'trash-6-32.png');
+                loader.add('boot', 'boots-32.png');
+                loader.add('tent', 'tent-32.png');
+                loader.add('tree', 'tree-32.gif');
                 let self = this;
-                loader.load(function(loader, resources) {
-                    let textures = [resources.fire.texture, resources.marker.texture, resources.garbage.texture, resources.boot.texture, resources.tent.texture, resources.tree.texture];
-                    let pixiLayer = (function() {
+                loader.load(function (loader, resources) {
+                    let mapping = {
+                        'muck_out': resources.tree.texture,
+                        'trees': resources.tent.texture,
+                        'tarp': resources.boot.texture,
+                        'debris': resources.garbage.texture,
+                        'fire': resources.fire.texture,
+                        'mold_remediation': resources.tree.texture,
+                        'rebuild': resources.tree.texture,
+                        // 'fire': resources.fire.texture
+                    };
+                    let pixiLayer = (function () {
                         let firstDraw = true;
                         let prevZoom;
                         let markerSprites = [];
                         let frame = null;
                         let pixiContainer = new Container();
                         let doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                        return L.pixiOverlay(function(utils) {
+                        return L.pixiOverlay(function (utils) {
                             let zoom = utils.getMap().getZoom();
                             if (frame) {
                                 cancelAnimationFrame(frame);
@@ -132,11 +146,10 @@
                             let invScale = 1 / scale;
                             if (firstDraw) {
                                 prevZoom = zoom;
-                                markers.forEach(function(marker) {
+                                markers.forEach(function (marker) {
                                     let coords = project([marker.position.lat, marker.position.lng]);
-                                    let index = Math.floor(Math.random() * textures.length);
-                                    let markerSprite = new Sprite(textures[index]);
-                                    markerSprite.textureIndex = index;
+                                    let markerSprite = new Sprite(mapping[marker.work_types[0].work_type] || resources.marker.texture);
+                                    markerSprite.tint = colors_dict[marker.work_types[0].status];
                                     markerSprite.x = coords.x;
                                     markerSprite.y = coords.y;
                                     markerSprite.x0 = coords.x;
@@ -146,20 +159,30 @@
                                     markerSprites.push(markerSprite);
                                     markerSprite.legend = marker.city || marker.label;
                                     markerSprite.data = marker;
+
+                                    markerSprite.interactive = true;
+                                    markerSprite.cursor = 'pointer';
+                                    markerSprite.name = marker.case_number;
+                                    markerSprite.on('click', () => {
+                                        self.onSelectmarker(marker);
+                                    });
                                 });
 
-                                let quadTrees = {};
-                                for (let z = map.getMinZoom(); z <= map.getMaxZoom(); z++) {
-                                    let rInit = ((z <= 7) ? 16 : 24) / utils.getScale(z);
-                                    quadTrees[z] = solveCollision(markerSprites, {r0: rInit, zoom: z});
-                                }
+                                // let quadTrees = {};
+                                // for (let z = 9; z <= map.getMaxZoom(); z++) {
+                                //     let rInit = ((z <= 7) ? 16 : 24) / utils.getScale(z);
+                                //     quadTrees[z] = solveCollision(markerSprites, {r0: rInit, zoom: z});
+                                // }
                                 const findMarker = (ll) => {
+                                    if (utils.getMap().getZoom() < 9) {
+                                        return null;
+                                    }
                                     let layerPoint = project(ll);
                                     let quadTree = quadTrees[utils.getMap().getZoom()];
                                     let marker;
                                     let rMax = quadTree.rMax;
                                     let found = false;
-                                    quadTree.visit(function(quad, x1, y1, x2, y2) {
+                                    quadTree.visit(function (quad, x1, y1, x2, y2) {
                                         if (!quad.length) {
                                             let dx = quad.data.x - layerPoint.x;
                                             let dy = quad.data.y - layerPoint.y;
@@ -173,24 +196,32 @@
                                     });
                                     return marker;
                                 };
-                                map.on('click', function(e) {
-                                    let marker = findMarker(e.latlng);
-                                    if (marker) {
-                                        self.onSelectmarker(marker.data)
-                                    }
-                                });
-                                map.on('mousemove', L.Util.throttle((e) => {
-                                    let marker = findMarker(e.latlng);
-                                    if (marker) {
-                                        L.DomUtil.addClass(this._container, 'cursor-pointer');
-                                    } else {
-                                        L.DomUtil.removeClass(this._container, 'cursor-pointer');
-                                    }
-                                }, 32));
+
+                                // let popup = L.popup({className: 'pixi-popup'})
+                                //
+                                // map.on('click', function (e) {
+                                //     let marker = findMarker(e.latlng);
+                                //     if (marker) {
+                                //         self.onSelectmarker(marker.data)
+                                //         popup.setLatLng(e.latlng)
+                                //             .setContent(`<b>${marker.data.case_number}</b>`).openOn(map);
+                                //     } else {
+                                //         map.closePopup();
+                                //     }
+                                // });
+                                //
+                                // map.on('mousemove', L.Util.throttle((e) => {
+                                //     let marker = findMarker(e.latlng);
+                                //     if (marker) {
+                                //         L.DomUtil.addClass(this._container, 'cursor-pointer');
+                                //     } else {
+                                //         L.DomUtil.removeClass(this._container, 'cursor-pointer');
+                                //     }
+                                // }, 32));
 
                             }
                             if (firstDraw || prevZoom !== zoom) {
-                                markerSprites.forEach(function(markerSprite) {
+                                markerSprites.forEach(function (markerSprite) {
                                     if (firstDraw) {
                                         markerSprite.scale.set(invScale);
                                     } else {
@@ -202,6 +233,7 @@
 
                             let start = null;
                             let delta = 250;
+
                             function animate(timestamp) {
                                 let progress;
                                 if (start === null) start = timestamp;
@@ -209,7 +241,7 @@
                                 let lambda = progress / delta;
                                 if (lambda > 1) lambda = 1;
                                 lambda = lambda * (0.4 + lambda * (2.2 + lambda * -1.6));
-                                markerSprites.forEach(function(markerSprite) {
+                                markerSprites.forEach(function (markerSprite) {
                                     markerSprite.scale.set(markerSprite.currentScale + lambda * (markerSprite.targetScale - markerSprite.currentScale));
                                 });
                                 renderer.render(container);
@@ -217,6 +249,7 @@
                                     frame = requestAnimationFrame(animate);
                                 }
                             }
+
                             if (!firstDraw && prevZoom !== zoom) {
                                 frame = requestAnimationFrame(animate);
                             }
@@ -226,13 +259,39 @@
 
 
                         }, pixiContainer, {
-                            doubleBuffering: doubleBuffering
+                            doubleBuffering: doubleBuffering,
+                            reloadOnAdd: true
                         });
                     })();
                     pixiLayer.addTo(map);
                 });
+            },
+            async pullSites(url) {
+                let response = await this.$http
+                    .get(url || "http://api.staging.crisiscleanup.io/worksites_map", {
+                        params: url ? {} : {...this.query, limit: 5000, fields: 'id,location'}
+                    });
+
+                this.markers = response.data.map((worksite) => {
+                    return {
+                        ...worksite,
+                        position: {
+                            lat: worksite.location ? worksite.location.coordinates[1] : 10,
+                            lng: worksite.location ? worksite.location.coordinates[0] : 10,
+                        }
+                    }
+                });
+
+                console.log(`Loading ${this.markers.length} markers`)
+
+                this.loadMarkersOnMap(this.markers);
             }
         },
+        watch: {
+            newMarker() {
+                this.addWorksite(this.newMarker)
+            }
+        }
     };
 </script>
 

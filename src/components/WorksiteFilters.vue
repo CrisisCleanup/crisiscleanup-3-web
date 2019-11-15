@@ -5,6 +5,13 @@
         </div>
         <div class="flex">
             <div class="w-full">
+                <div>
+                    <a-checkbox class="block" v-model="statuses['unclaimed']" @change="updateFilters">Unclaimed</a-checkbox>
+                    <a-checkbox class="block" v-model="statuses['claimed_by_org']" @change="updateFilters">Claimed By My Organization</a-checkbox>
+                    <a-checkbox class="block" v-model="statuses['reported_by_org']" @change="updateFilters">Reported By My Organization</a-checkbox>
+                    <a-checkbox class="block" v-model="statuses['open']" @change="updateFilters">Open</a-checkbox>
+                    <a-checkbox class="block" v-model="statuses['closed']" @change="updateFilters">Closed</a-checkbox>
+                </div>
                 <div :header="f.name_t" :key="f.key" v-for="f in incidentTypes" class="p-4 my-2 border">
                     <div class="flex items-center justify-between">
                         <a-checkbox v-model="fields[f.key]" @change="updateFilters">{{f.name_t}}</a-checkbox>
@@ -82,6 +89,9 @@
               fields: {
 
               },
+              statuses: {
+
+              },
               sub_fields: {
 
               },
@@ -92,7 +102,10 @@
         },
         methods: {
             updateFilters() {
-                this.$emit('updatedFilters', { ...this.fields })
+                this.$emit('updatedFilters', {
+                    fields: { ...this.fields },
+                    statuses: { ...this.statuses }
+                })
             },
             expandSection(key) {
                 this.expanded[key] = !this.expanded[key];
