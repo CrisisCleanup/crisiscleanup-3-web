@@ -10,13 +10,6 @@ pipeline {
                 echo "Running Tests: ${env.BUILD_ID} on ${env.JENKINS_URL}"
             }
         }
-        stage('Build') {
-            steps {
-                script {
-                    sh 'vue-cli-service build --mode staging'
-                }
-            }
-        }
         stage('Deploy') {
             when {
               branch 'master'
