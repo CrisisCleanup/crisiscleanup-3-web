@@ -18,6 +18,7 @@ import { ServerTable } from 'vue-tables-2';
 import Authenticated from "@/layouts/Authenticated";
 import Unauthenticated from "@/layouts/Unauthenticated";
 import BaseIcon from "@/components/BaseIcon";
+import VueLog from '@dreipol/vue-log';
 
 
 library.add(fas);
@@ -33,6 +34,8 @@ Vue.use(VueAxios, axios);
 Vue.use(Antd)
 Vue.use(PrettyCheckbox);
 Vue.use(ServerTable);
+
+Vue.use(VueLog);
 
 Vue.use(VueGoogleMaps, {
   load: {

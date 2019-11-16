@@ -25,7 +25,6 @@
     import 'leaflet.gridlayer.googlemutant';
     import 'leaflet-pixi-overlay'
     import 'leaflet.heat'
-    import {solveCollision} from '@/utils/easing'
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -89,13 +88,6 @@
                 loader.add('boot', 'rubber.png');
                 loader.add('tent', 'tent.png');
                 loader.add('tree', 'tree.png');
-                let mapping = {
-                    'muck_out': 'boot',
-                    'trees': 'tree',
-                    'tarp': 'tent',
-                    'debris': 'garbage',
-                    'fire': 'fire'
-                };
                 let self = this;
                 loader.load(function (loader, resources) {
                     let textures = [resources.fire.texture, resources.marker.texture, resources.garbage.texture, resources.boot.texture, resources.tent.texture, resources.tree.texture];
@@ -205,7 +197,7 @@
                     }
                 });
 
-                console.log(`Loading ${this.markers.length} markers`)
+                this.$log.debug(`Loading ${this.markers.length} markers`)
 
                 this.loadMarkersOnMap(this.markers);
             }

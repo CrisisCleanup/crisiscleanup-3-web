@@ -30,7 +30,7 @@
                 'login',
             ]),
             async userLogin() {
-                const result = await this.login(this.email, this.password);
+                await this.login(this.email, this.password);
                 await this.$router.push('/cases')
             }
         }
