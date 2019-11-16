@@ -16,5 +16,25 @@ module.exports = {
                 javascriptEnabled: true
             }
         }
+    },
+  pluginOptions: {
+    s3Deploy: {
+      registry: undefined,
+      awsProfile: 'default',
+      region: 'us-east-2',
+      bucket: 'crisiscleanup-staging',
+      createBucket: true,
+      staticHosting: true,
+      staticIndexPage: 'index.html',
+      staticErrorPage: 'error.html',
+      assetPath: 'dist',
+      assetMatch: '**',
+      deployPath: '/',
+      acl: 'public-read',
+      pwa: false,
+      enableCloudfront: false,
+      uploadConcurrency: 5,
+      pluginVersion: '3.0.0'
     }
+  }
 };
