@@ -1,7 +1,6 @@
 /*global google */
 
 const GEOCODER_BASE_URL = 'https://api.pitneybowes.com';
-const GOOGLE_GEOCODER_BASE_URL = 'https://maps.googleapis.com/maps/api';
 
 export default {
     getOauthToken() {

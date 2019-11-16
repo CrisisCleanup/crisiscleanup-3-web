@@ -9,6 +9,7 @@
     "deploy-staging": "vue-cli-service build --mode staging && vue-cli-service s3-deploy"
   },
   "dependencies": {
+    "@dreipol/vue-log": "0.0.8",
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",

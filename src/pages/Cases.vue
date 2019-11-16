@@ -118,18 +118,6 @@
     import WorkType from "@/models/WorkType";
     import Status from "@/models/Status";
 
-    const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        onSelect: (record, selected, selectedRows) => {
-            // console.log(record, selected, selectedRows);
-        },
-        onSelectAll: (selected, selectedRows, changeRows) => {
-            // console.log(selected, selectedRows, changeRows);
-        },
-    };
-
     const columns = [
         {
             title: 'No',
@@ -189,7 +177,6 @@
             BaseButton,
             CaseView,
             CaseForm,
-            RealtimeMap,
             RealtimeMapFull,
             WorksiteFilters,
             Table,
@@ -219,7 +206,6 @@
                     page: 1,
                     current: 1,
                 },
-                rowSelection,
                 columns,
                 currentQuery: {},
                 filters: {},

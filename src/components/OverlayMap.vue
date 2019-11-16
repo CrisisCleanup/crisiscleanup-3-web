@@ -51,7 +51,7 @@
 
 
             } catch (e) {
-                console.log(e)
+                this.$log.debug(e)
             }
             this.initMap(options);
         },

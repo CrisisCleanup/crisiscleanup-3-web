@@ -25,7 +25,6 @@
     import 'leaflet.gridlayer.googlemutant';
     import 'leaflet-pixi-overlay'
     import 'leaflet.heat'
-    import {solveCollision} from '@/utils/easing'
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -282,7 +281,7 @@
                     }
                 });
 
-                console.log(`Loading ${this.markers.length} markers`)
+                this.$log.debug(`Loading ${this.markers.length} markers`)
 
                 this.loadMarkersOnMap(this.markers);
             }
