@@ -18,8 +18,12 @@
                     <template v-for="work_type in workTypesClaimedByOthers">
                         <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
                             {{getWorkTypeName(work_type.work_type)}}
-                            <StatusDropDown class="block" :default-value="work_type.status"
-                                            :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
+                            <div class="flex items-center">
+                                <StatusDropDown class="block" :default-value="work_type.status"
+                                                    :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
+                                    <BaseButton type="link" :action="() => { return requestWorkType(work_type) }"
+                                                title="Request" class="ml-2 p-1 px-2"></BaseButton>
+                            </div>
                         </div>
                     </template>
                 </div>
@@ -28,8 +32,12 @@
                     <template v-for="work_type in workTypesClaimedByOrganization">
                         <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
                             {{getWorkTypeName(work_type.work_type)}}
-                            <StatusDropDown class="block" :default-value="work_type.status"
-                                            :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
+                            <div class="flex items-center">
+                                <StatusDropDown class="block" :default-value="work_type.status"
+                                                    :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
+                                    <BaseButton type="primary" :action="() => { return unclaimWorkType(work_type) }"
+                                                title="Unclaim" class="ml-2 p-1 px-2"></BaseButton>
+                            </div>
                         </div>
                     </template>
                 </div>
@@ -38,19 +46,20 @@
                     <template v-for="work_type in workTypesUnclaimed">
                         <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
                             {{getWorkTypeName(work_type.work_type)}}
-                            <StatusDropDown class="block" :default-value="work_type.status"
-                                            :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
-<!--                            <div class="flex justify-between">-->
-<!--                                <BaseButton type="primary" :action="() => { return claimWorkType(work_type) }" title="I'll Do it" class="p-1 px-3"></BaseButton>-->
-<!--                            </div>-->
+                            <div class="flex items-center">
+                                <StatusDropDown class="block" :default-value="work_type.status"
+                                                :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
+                                <BaseButton type="primary" :action="() => { return claimWorkType(work_type) }"
+                                            title="Claim" class="ml-2 p-1 px-2"></BaseButton>
+                            </div>
                         </div>
                     </template>
                 </div>
             </div>
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between">
-            <BaseButton size="medium" class="flex-grow m-1 text-black p-2 border-2 border-black" title="Unclaim"></BaseButton>
-            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black p-2" title="Claim"></BaseButton>
+            <BaseButton size="medium" class="flex-grow m-1 text-black p-2 border-2 border-black" title="Unclaim" :action="() => { return unclaimWorkType() }"></BaseButton>
+            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black p-2" title="Claims" :action="() => { return claimWorkType() }"></BaseButton>
         </div>
     </div>
 </template>
@@ -91,9 +100,43 @@
         },
         methods: {
             async claimWorkType(work_type) {
-                await Worksite.api().claimWorksite(this.worksite.id, [work_type.work_type]);
-                let worksite = await Worksite.api().fetchById(this.worksite.id);
-                this.worksite = worksite.entities.worksites[0];
+                try {
+                    let work_types = [];
+                    if (work_type) {
+                        work_types.push(work_type.work_type)
+                    }
+                    await Worksite.api().claimWorksite(this.worksite.id, work_types);
+                    let worksite = await Worksite.api().fetchById(this.worksite.id);
+                    this.worksite = worksite.entities.worksites[0];
+                } catch (error) {
+                    await this.$message.error(error.response.data.errors[0].message[0]);
+                }
+            },
+            async unclaimWorkType(work_type) {
+                try {
+                    let work_types = [];
+                    if (work_type) {
+                        work_types.push(work_type.work_type)
+                    }
+                    await Worksite.api().unclaimWorksite(this.worksite.id, work_types);
+                    let worksite = await Worksite.api().fetchById(this.worksite.id);
+                    this.worksite = worksite.entities.worksites[0];
+                } catch (error) {
+                    await this.$message.error(error.response.data.errors[0].message[0]);
+                }
+            },
+            async requestWorkType(work_type) {
+                try {
+                    let work_types = [];
+                    if (work_type) {
+                        work_types.push(work_type.work_type)
+                    }
+                    await Worksite.api().requestWorksite(this.worksite.id, work_types);
+                    let worksite = await Worksite.api().fetchById(this.worksite.id);
+                    this.worksite = worksite.entities.worksites[0];
+                } catch (error) {
+                    await this.$message.error(error.response.data.errors[0].message[0]);
+                }
             },
             getWorkTypeName(work_type) {
                 let work_types = WorkType.query().where('key', work_type).get();

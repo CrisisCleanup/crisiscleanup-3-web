@@ -24,6 +24,11 @@
         computed: {
             statuses () {
                 return Status.all()
+            },
+            dropdownStyle() {
+                return {
+                   'background-color': 'red'
+                }
             }
         },
         methods: {

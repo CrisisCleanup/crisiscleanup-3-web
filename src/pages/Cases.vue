@@ -1,6 +1,6 @@
 <template>
     <div class="flex h-full overflow-hidden">
-        <div class="flex-grow">
+        <div class="w-full">
             <div class="flex flex-col h-full">
                 <div style="background-color: white" class="p-3 border border-gray-300 card-header">
                     <div class="flex items-center justify-between">
@@ -57,31 +57,22 @@
                                 <BaseButton icon="sync" class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white" @click="() => {}" title="Update Status"></BaseButton>
                                 <BaseButton class="ml-3 my-3 text-gray-600 border p-1 px-4 bg-white" @click="() => {}" title="Display All"></BaseButton>
                             </div>
-                            <a-table
-                                    :scroll="{ y: 500 }"
-                                    size="small"
-                                    :loading="tableLoading"
-                                    class="bg-white"
-                                    :columns="columns"
-                                    :dataSource="data"
-                                    :customRow="customRow"
-                                    :pagination="pagination"
-                                    :rowSelection="rowSelection"
-                                    @change="handleTableChange"
-                            >
-                                <span slot="work_types" slot-scope="work_types">
-                                    <div class="badge-holder flex items-center" :key="work_type.id" v-for="work_type in work_types">
-                                        <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status" />
-                                        {{getWorkTypeName(work_type.work_type)}}
-                                    </div>
-                                </span>
-                            </a-table>
+                                <Table :data="data" :columns="columns" :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
+                                    <template #work_types="slotProps">
+                                        <div class="flex flex-col">
+                                            <div class="badge-holder flex items-center" :key="work_type.id" v-for="work_type in slotProps.item.work_types">
+                                                <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status" />
+                                                {{getWorkTypeName(work_type.work_type)}}
+                                            </div>
+                                        </div>
+                                    </template>
+                                </Table>
                         </div>
                     </template>
                 </div>
             </div>
         </div>
-        <div style="width: 375px" class="flex flex-col h-full shadow-2xl" v-if="this.currentIncident">
+        <div style="width: 450px" class="flex flex-col h-full shadow-2xl" v-if="this.currentIncident">
             <div style="background-color: white" class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center">
             <div class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
                 <ccu-icon type="active" size="small"></ccu-icon>
@@ -120,10 +111,12 @@
     import {mapState} from "vuex";
     import CaseView from "@/pages/CaseView";
     import RealtimeMap from "@/components/RealtimeMap";
+    import Table from "@/components/Table";
     import RealtimeMapFull from "@/components/RealtimeMapFull";
     import WorksiteFilters from "@/components/WorksiteFilters";
     import BaseButton from "@/components/BaseButton";
     import WorkType from "@/models/WorkType";
+    import Status from "@/models/Status";
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -142,20 +135,20 @@
             title: 'No',
             dataIndex: 'case_number',
             key: 'case_number',
-            width: '5%',
+            width: '0.5fr',
         },
         {
             title: 'Work type',
             dataIndex: 'work_types',
             key: 'work_types',
             scopedSlots: { customRender: 'work_types' },
-            width: '20%',
+            width: '1.5fr',
         },
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            width: '20%',
+            width: '1.5fr',
         },
         {
             title: 'Full Address',
@@ -199,6 +192,7 @@
             RealtimeMap,
             RealtimeMapFull,
             WorksiteFilters,
+            Table,
         },
         name: "Cases",
         data() {
@@ -223,6 +217,7 @@
                 pagination: {
                     pageSize: 100,
                     page: 1,
+                    current: 1,
                 },
                 rowSelection,
                 columns,
@@ -245,12 +240,7 @@
             }
         },
         methods: {
-            handleTableChange(pagination, filters, sorter) {
-                this.pagination = {
-                    ...this.pagination,
-                    current: pagination.current
-                };
-
+            handleTableChange({ pagination, filters, sorter }) {
                 this.fetch({
                     pageSize: pagination.pageSize,
                     page: pagination.current,
@@ -283,7 +273,9 @@
                 this.tableLoading = false;
                 this.data = response.data.results;
                 this.pagination = {
-                    ...this.pagination,
+                    page: params.page,
+                    current: params.page,
+                    pageSize: params.pageSize,
                     total: response.data.count
                 };
             },
@@ -305,15 +297,6 @@
                 this.isViewingWorksite = !this.isEditingWorksite;
                 this.isNewWorksite = false;
                 this.caseFormKey = !this.caseFormKey;
-            },
-            customRow(record, index) {
-                return {
-                    on: {
-                        click: async () => {
-                            await this.displayWorksite(record);
-                        }
-                    }
-                }
             },
             createNewWorksite() {
                 this.isViewingWorksite = false;
@@ -370,10 +353,12 @@
                 }
 
                 if (this.filters.statuses.open) {
-
+                    let openStatuses = Status.query().where('primary_state', 'open').get()
+                    appliedFilters.work_type__status__in = openStatuses.map(status => status.status).join(',');
                 }
 
                 if (this.filters.statuses.closed) {
+                    let closedStatuses = Status.query().where('primary_state', 'open').get()
                 }
 
                 this.appliedFilters = appliedFilters;

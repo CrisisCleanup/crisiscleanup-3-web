@@ -1,6 +1,6 @@
 <template>
     <button v-bind:class="styles" @click="performAction" :disabled="disabled" :type="type" :size="size">
-        <font-awesome-icon v-if="loading" size="sm" icon="spinner" spin /> <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" /> {{title}}
+        <font-awesome-icon v-if="loading" size="sm" icon="spinner" spin /> <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" /> {{title}} <font-awesome-icon v-if="suffixIcon" class="mx-1" :icon="suffixIcon" />
     </button>
 </template>
 
@@ -20,6 +20,9 @@
                     danger: this.type === 'danger',
                     warning: this.type === 'warning',
                     link: this.type === 'link',
+                    flex: true,
+                    'items-center': true,
+                    'justify-center': true,
                 }
             };
         },
@@ -33,6 +36,7 @@
             type: String,
             size: String,
             icon: String,
+            suffixIcon: String,
         },
         methods: {
             async performAction() {
@@ -58,5 +62,8 @@
     }
     .primary {
         background-color: #fece09
+    }
+    .link {
+        color: #f79820;
     }
 </style>
