@@ -12,18 +12,18 @@ const routes = [
     {
         path: '/dashboard',
         component: Dashboard,
-        name: 'dashboard',
+        name: 'Dashboard',
         meta: { layout: "authenticated" }
     },
     {
         path: '/profile',
-        component: Profile, name: 'profile',
+        component: Profile, name: 'Profile',
         meta: { layout: "authenticated" }
     },
     {
         path: '/cases',
         component: Cases,
-        name: 'cases',
+        name: 'Cases',
         meta: { layout: "authenticated" }
     },
     {

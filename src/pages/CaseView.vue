@@ -2,9 +2,9 @@
     <div class="bg-white flex flex-col h-full">
         <div class="p-3 flex-grow intake-view">
             <div class="my-4">
-                <label v-if="worksite.notes.length > 0" class="my-1 text-xs font-bold text-gray-400 block">Notes</label>
-                <div :key="note.id" v-for="note in worksite.notes" class="bg-gray-200 my-1 p-1">
-                    <span>{{ note.created_at | moment("from", "now") }}: {{note.note}}</span>
+                <label v-if="worksite.notes.length > 0" class="my-1 text-xs font-bold text-gray-600 block">Notes</label>
+                <div :key="note.id" v-for="note in worksite.notes" class="bg-gray-100 my-1 p-1 flex items-center">
+                    <span class="text-gray-600 mr-3">{{ note.created_at | moment("from", "now") }}:</span><span>{{note.note}}</span>
                 </div>
                 <BaseButton v-if="!addingNotes" class="my-1" type="link" title="+ Add Note" :action="() => { this.addingNotes = true }"></BaseButton>
                 <div v-if="addingNotes">
@@ -19,6 +19,10 @@
             <div class="my-4">
                 <label class="my-1 text-xs font-bold text-gray-600 block">Full Address</label>
                 <div>{{worksiteAddress}}</div>
+            </div>
+            <div class="my-4" v-if="Object.keys(workTypesClaimedByOthers).length > 0">
+                <label class="my-1 text-xs font-bold text-gray-600 block">Claimed By</label>
+                <div v-for="organization in Object.keys(workTypesClaimedByOthers)" class="my-1">{{getOrganizationName(organization)}}</div>
             </div>
 
             <div class="my-4 border-t">
@@ -69,15 +73,16 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between">
-            <BaseButton size="medium" class="flex-grow m-1 text-black p-2 border-2 border-black" title="Unclaim" :action="() => { return unclaimWorkType() }"></BaseButton>
-            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black p-2" title="Claim" :action="() => { return claimWorkType() }"></BaseButton>
+        <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-center items-center">
+            <BaseButton v-if="workTypesClaimedByOrganization.length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Unclaim" :action="() => { return unclaimWorkType() }"></BaseButton>
+            <BaseButton v-if="workTypesUnclaimed.length > 0" size="medium" type="primary" class="m-1 text-black p-3 px-4" title="Claim" :action="() => { return claimWorkType() }"></BaseButton>
+            <BaseButton v-if="Object.keys(workTypesClaimedByOthers).length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Request" :action="() => { return requestWorkType() }"></BaseButton>
         </div>
     </div>
 </template>
 
-<script>var addingNotes;
-
+<script>
+import {getErrorMessage} from "@/utils/errors";
 import StatusDropDown from "@/components/StatusDropDown"
 import User from "@/models/User";
 import Worksite from "@/models/Worksite";
@@ -132,7 +137,7 @@ export default {
                 await Worksite.api().fetchById(this.worksite.id);
                 this.worksite = Worksite.find(this.worksite.id);
             } catch (error) {
-                await this.$message.error(error.response.data.errors[0].message[0]);
+                await this.$message.error(getErrorMessage(error));
             }
         },
         async unclaimWorkType(work_type) {
@@ -145,7 +150,7 @@ export default {
                 await Worksite.api().fetchById(this.worksite.id);
                 this.worksite = Worksite.find(this.worksite.id);
             } catch (error) {
-                await this.$message.error(error.response.data.errors[0].message[0]);
+                await this.$message.error(getErrorMessage(error));
             }
         },
         async requestWorkType(work_type) {
@@ -158,7 +163,7 @@ export default {
                 await Worksite.api().fetchById(this.worksite.id);
                 this.worksite = Worksite.find(this.worksite.id);
             } catch (error) {
-                await this.$message.error(error.response.data.errors[0].message[0]);
+                await this.$message.error(getErrorMessage(error));
             }
         },
         async saveNote() {
@@ -169,7 +174,7 @@ export default {
                 this.addingNotes = false;
                 this.currentNote = '';
             } catch (error) {
-                await this.$message.error(error.response.data.errors[0].message[0]);
+                await this.$message.error(getErrorMessage(error));
             }
         },
         cancelNote() {
@@ -184,8 +189,14 @@ export default {
             let organization = Organization.find(id);
             return organization.name
         },
-        statusValueChange(value, work_type) {
-            alert(value + JSON.stringify(work_type))
+        async statusValueChange(value, work_type) {
+            try {
+                await Worksite.api().updateWorkTypeStatus(work_type.id, value);
+            } catch (error) {
+                await this.$message.error(getErrorMessage(error));
+            } finally {
+                this.$emit('changed')
+            }
         },
 
         getFieldsForType(work_type) {
