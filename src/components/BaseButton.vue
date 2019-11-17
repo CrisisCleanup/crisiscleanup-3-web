@@ -1,5 +1,5 @@
 <template>
-    <button v-bind:class="styles" @click="performAction" :disabled="disabled" :type="type" :size="size">
+    <button v-bind:class="styles" @click="performAction" :disabled="disabled" type="submit" :size="size">
         <font-awesome-icon v-if="loading" size="sm" icon="spinner" spin /> <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" /> {{title}} <font-awesome-icon v-if="suffixIcon" class="mx-1" :icon="suffixIcon" />
     </button>
 </template>

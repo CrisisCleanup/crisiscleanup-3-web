@@ -1,12 +1,12 @@
 <template>
     <div class="flex h-full overflow-hidden">
-        <div class="w-full">
+        <div :class="{'w-4/5': currentIncident, 'w-full': !currentIncident}">
             <div class="flex flex-col h-full">
                 <div style="background-color: white" class="p-3 border border-gray-300 card-header">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <font-awesome-icon size="lg" class="mr-4 cursor-pointer" :style="showingMap ? { color: '#FECE09' } : { color: '#718096' }" icon="map" @click="toggleView('showingMap')" />
-                            <font-awesome-icon size="lg" class="mr-4 cursor-pointer" :style="showingTable ? { color: '#FECE09' } : { color: '#718096' }" icon="columns" @click="toggleView('showingTable')" />
+                            <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingMap ? 'filter-yellow' : 'filter-gray'" type="map" @click.native="toggleView('showingMap')" />
+                            <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingTable ? 'filter-yellow' : 'filter-gray'" type="table" @click.native="toggleView('showingTable')" />
                             <div class="flex justify-start w-auto">
                                 <a-auto-complete
                                         @select="handleChange"
@@ -46,16 +46,23 @@
 
                     </div>
                 </div>
-                <div class="flex-grow">
+                <div class="flex-grow bg-gray-100">
                     <template v-if="showingMap">
                         <RealtimeMapFull style="width: 100%; height: 100%" :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker" :key="this.currentIncidentId"></RealtimeMapFull>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
-                            <div class="table-operations flex justify-end">
-                                <BaseButton class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white" :action="() => {}" title="Unclaim"></BaseButton>
-                                <BaseButton icon="sync" class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white" @click="() => {}" title="Update Status"></BaseButton>
-                                <BaseButton class="ml-3 my-3 text-gray-600 border p-1 px-4 bg-white" @click="() => {}" title="Display All"></BaseButton>
+                            <div class="table-operations flex justify-between items-center">
+                                <span class="text-gray-600 text-base font-bold">{{pagination.total}} Cases</span>
+                                <div class="flex">
+                                    <BaseButton class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white"
+                                                :action="() => {}" title="Unclaim"></BaseButton>
+                                    <BaseButton icon="sync"
+                                                class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
+                                                @click="() => {}" title="Update Status"></BaseButton>
+                                    <BaseButton class="ml-3 my-3 text-gray-600 border p-1 px-4 bg-white"
+                                                @click="() => {}" title="Display All"></BaseButton>
+                                </div>
                             </div>
                                 <Table :data="data" :columns="columns" :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
                                     <template #work_types="slotProps">
@@ -72,7 +79,7 @@
                 </div>
             </div>
         </div>
-        <div style="width: 450px" class="flex flex-col h-full shadow-2xl" v-if="this.currentIncident">
+        <div class="flex flex-col h-full shadow-2xl w-1/5" v-if="this.currentIncident">
             <div style="background-color: white" class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center">
             <div class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
                 <ccu-icon type="active" size="small"></ccu-icon>
@@ -96,7 +103,7 @@
                 <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId" @geocoded="addMarkerToMap" :reloadTable="reloadTable" :incident="this.currentIncident"/>
             </div>
             <div class="h-full" v-if="!spinning && isViewingWorksite">
-                <CaseView :worksite="currentWorksite" :incident="currentIncident"/>
+                <CaseView :worksite="currentWorksite" :incident="currentIncident" @changed="onWorksiteChanged"/>
             </div>
         </div>
     </div>
@@ -110,7 +117,6 @@
     import Incident from "@/models/Incident";
     import {mapState} from "vuex";
     import CaseView from "@/pages/CaseView";
-    import RealtimeMap from "@/components/RealtimeMap";
     import Table from "@/components/Table";
     import RealtimeMapFull from "@/components/RealtimeMapFull";
     import WorksiteFilters from "@/components/WorksiteFilters";
@@ -208,7 +214,11 @@
                 },
                 columns,
                 currentQuery: {},
-                filters: {},
+                filters: {
+                    fields: {
+
+                    }
+                },
                 appliedFilters: {},
                 newMarker: null
             };
@@ -272,6 +282,12 @@
                     page: this.pagination.current,
                 })
                 // this.caseFormKey = !this.caseFormKey;
+            },
+
+            async onWorksiteChanged() {
+                await Worksite.api().fetchById(this.currentWorksiteId);
+                this.currentWorksite = Worksite.find(this.currentWorksiteId);
+                this.reloadTable();
             },
 
             displayWorksite: async function (record) {
@@ -346,7 +362,8 @@
                 }
 
                 if (this.filters.statuses.closed) {
-                    let closedStatuses = Status.query().where('primary_state', 'open').get()
+                    let closedStatuses = Status.query().where('primary_state', 'closed').get()
+                    appliedFilters.work_type__status__in = closedStatuses.map(status => status.status).join(',');
                 }
 
                 this.appliedFilters = appliedFilters;

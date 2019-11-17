@@ -1,5 +1,5 @@
 <template>
-    <a-form :form="form" @submit="handleSubmit" layout="vertical" class="bg-white flex flex-col h-full">
+    <form ref="form" @submit.prevent="handleSubmit" layout="vertical" class="bg-white flex flex-col h-full">
         <div class="intake-form p-3 flex-grow">
             <h4 class="py-3 m-1 border-t border-b flex items-center justify-between">
                 <div class="flex items-center">
@@ -8,7 +8,7 @@
                 </div>
             </h4>
             <a-form-item>
-                <a-input disabled="" v-model="worksite.what3words" size="large" placeholder="Location">
+                <a-input disabled="" v-model="worksite.what3words" size="large" placeholder="Location" required>
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -25,7 +25,7 @@
                 </div>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.name" size="large" placeholder="name">
+                <a-input v-model="worksite.name" size="large" placeholder="name" required>
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -42,6 +42,7 @@
                     size="large"
                     placeholder="address"
                     @change="findPotentialGeocode"
+                    required
             >
                 <a-tooltip slot="suffix">
                     <template slot="title">
@@ -55,7 +56,7 @@
             </a-auto-complete>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.city" size="large" placeholder="city" @change="findPotentialGeocode">
+                <a-input v-model="worksite.city" size="large" placeholder="city" @change="findPotentialGeocode" required>
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -65,7 +66,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.county" size="large" placeholder="county" @change="findPotentialGeocode">
+                <a-input v-model="worksite.county" size="large" placeholder="county" @change="findPotentialGeocode" required>
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -75,7 +76,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.state" size="large" placeholder="state" @change="findPotentialGeocode">
+                <a-input v-model="worksite.state" size="large" placeholder="state" @change="findPotentialGeocode" required>
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -85,7 +86,7 @@
                 </a-input>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.postal_code" size="large" placeholder="postal_code" @change="findPotentialGeocode">
+                <a-input v-model="worksite.postal_code" size="large" placeholder="postal_code" @change="findPotentialGeocode" required>
                     <a-tooltip slot="addonAfter">
                         <template slot="title">
                             <span v-html=""></span>
@@ -127,7 +128,7 @@
                               <a-icon type="question-circle-o"/>
                             </a-tooltip>
                           </span>
-                            <a-select v-decorator="[`${field.field_key}`, {initialValue: getValue(field.field_key)}]" size="large">
+                            <a-select :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]" size="large">
                                 <a-select-option :key="option.value" :value="option.value" v-for="option in field.values">
                                     {{option.name_t}}
                                 </a-select-option>
@@ -148,7 +149,7 @@
                       <a-icon type="question-circle-o"/>
                     </a-tooltip>
                   </span>
-                            <a-select v-decorator="[`${field.field_key}`, {initialValue: getValue(field.field_key)}]" mode="multiple" size="large">
+                            <a-select :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]" mode="multiple" size="large">
                                 <a-select-option :key="option.value" :value="option.value" v-for="option in field.values">
                                     {{option.name_t}}
                                 </a-select-option>
@@ -160,7 +161,7 @@
                     </template>
                     <template v-if="field.html_type === 'text'">
                         <a-form-item :key="field.field_key">
-                            <a-input v-decorator="[`${field.field_key}`, {initialValue: getValue(field.field_key)}]" size="large" :placeholder="field.placeholder_t">
+                            <a-input :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]" size="large" :placeholder="field.placeholder_t">
                                 <a-tooltip slot="addonAfter">
                                     <template slot="title">
                                         <span v-html="field.help_t"></span>
@@ -172,7 +173,7 @@
                     </template>
                     <template v-if="field.html_type === 'suggest'">
                         <a-form-item :key="field.field_key">
-                            <a-auto-complete :placeholder="field.placeholder_t" v-decorator="[`${field.field_key}`, {initialValue: getValue(field.field_key)}]">
+                            <a-auto-complete :placeholder="field.placeholder_t" :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]">
                                 <a-tooltip slot="addonAfter">
                                     <template slot="title">
                                         <span v-html="field.help_t"></span>
@@ -193,12 +194,12 @@
                       <a-icon type="question-circle-o"/>
                     </a-tooltip>
                   </span>
-                            <a-textarea :placeholder="field.placeholder_t" rows="4" v-decorator="[`${field.field_key}`, {initialValue: getValue(field.field_key)}]"/>
+                            <a-textarea :placeholder="field.placeholder_t" rows="4" :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]"/>
                         </a-form-item>
                     </template>
                     <template v-if="field.html_type === 'checkbox'">
                         <a-form-item :key="field.field_key">
-                            <a-checkbox v-decorator="[`${field.field_key}`, { initialValue: getBooleanValue(field.field_key), valuePropName: 'checked' }]">{{field.label_t}}</a-checkbox>
+                            <a-checkbox :defaultValue="getBooleanValue(field.field_key)" v-model="dynamicFields[field.field_key]">{{field.label_t}}</a-checkbox>
                             <a-tooltip>
                                 <template slot="title">
                                     <span v-html="field.help_t"></span>
@@ -211,11 +212,11 @@
             </template>
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between">
-            <BaseButton size="medium" class="flex-grow m-1 border-2 border-black" :action="resetForm" title="Reset"></BaseButton>
-            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black" :action="saveWorksite" title="Save"></BaseButton>
-            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black" :action="claimAndSaveWorksite" title="Claim & Save"></BaseButton>
+            <base-button size="medium" class="flex-grow m-1 border-2 border-black" :action="resetForm" title="Reset"></base-button>
+            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="saveWorksite" title="Save"></base-button>
+            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="claimAndSaveWorksite" title="Claim & Save"></base-button>
         </div>
-    </a-form>
+    </form>
 </template>
 
 <script>
@@ -224,6 +225,7 @@
     import BaseButton from "@/components/BaseButton";
     import GeocoderService from "@/services/geocoder.service"
     import { What3wordsService } from "@/services/what3words.service";
+    import {getErrorMessage} from "@/utils/errors";
 
     export default {
         props: {
@@ -246,6 +248,8 @@
                     form_data: []
                 })
             }
+
+            this.dynamicFields = Object.assign({}, ...this.worksite.form_data.map(s => ({[s.field_key]: s.field_value})));
         },
         data() {
             return {
@@ -258,8 +262,16 @@
                 overlayMapVisible: false,
                 overlayMapLocation: null,
                 geocoderResults: [],
-                worksite: {}
+                worksite: {},
+                dynamicFields: {
+
+                }
             };
+        },
+        computed: {
+          fieldsArray() {
+              return  this.fields.map(field => field.field_key);
+          }
         },
         methods: {
             handleSubmit() {
@@ -324,6 +336,11 @@
                 this.overlayMapLocation = value;
             },
             async saveWorksite(reload = true) {
+                let isValid = this.$refs.form.reportValidity();
+                if (!isValid) {
+                    return;
+                }
+
                 if (this.location) {
                     this.worksite.location = {
                         type: "Point",
@@ -332,11 +349,11 @@
                         ]
                     };
                 }
-                let field_data = this.form.getFieldsValue();
+                let field_data = this.dynamicFields;
 
                 const truthy_values = Object.keys(field_data).filter(
                     (key) => {
-                        return Boolean(field_data[key])
+                        return Boolean(field_data[key]) && this.fieldsArray.includes(key)
                     }
                 );
 
@@ -348,24 +365,35 @@
                         }
                     }
                 )
-                if (this.worksite.id) {
-                    await Worksite.api().put(`/worksites/${this.worksite.id}`, {...this.worksite, skip_duplicate_check: true})
-                } else {
-                    await Worksite.api().post('/worksites', {...this.worksite, skip_duplicate_check: true})
-                    this.worksite = Worksite.find(this.worksite.id);
-                }
-                await this.$message.success('Worksite saved successfully');
-                if (reload) {
-                    this.reloadTable()
+                try {
+                    if (this.worksite.id) {
+                        await Worksite.api().put(`/worksites/${this.worksite.id}`, {
+                            ...this.worksite,
+                            skip_duplicate_check: true
+                        })
+                    } else {
+                        await Worksite.api().post('/worksites', {...this.worksite, skip_duplicate_check: true})
+                        this.worksite = Worksite.find(this.worksite.id);
+                    }
+                    await this.$message.success('Worksite saved successfully');
+                    if (reload) {
+                        this.reloadTable()
+                    }
+                } catch (error) {
+                    await this.$message.error(getErrorMessage(error));
                 }
             },
             async claimAndSaveWorksite() {
                 await this.saveWorksite(false);
+                let isValid = this.$refs.form.reportValidity();
+                if (!isValid) {
+                    return;
+                }
                 try {
                     await Worksite.api().claimWorksite(this.worksite.id, []);
                     await this.$message.success('Worksite claimed successfully');
                 } catch (error) {
-                    await this.$message.error(error.response.data.errors[0].message[0]);
+                    await this.$message.error(getErrorMessage(error));
                 }
                 await Worksite.api().fetchById(this.worksite.id);
                 this.worksite = Worksite.find(this.worksite.id);
@@ -375,7 +403,7 @@
                 this.worksite = new Worksite({incident: this.incident.id, form_data: []});
             },
             getValue(field_key) {
-                if (!this.worksite) {
+                if (!this.worksite || !this.worksite.form_data) {
                     return ''
                 }
 
@@ -388,8 +416,8 @@
                 return ''
             },
             getBooleanValue(field_key) {
-                if (!this.worksite) {
-                    return false
+                if (!this.worksite || !this.worksite.form_data) {
+                    return ''
                 }
 
                 let key = this.worksite.form_data.find((element) => {

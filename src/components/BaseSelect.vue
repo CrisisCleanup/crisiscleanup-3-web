@@ -2,7 +2,7 @@
     <a-select v-bind="$attrs" @change="change" v-decorator="decorator" :size="size">
         <slot name="options"></slot>
         <template slot="suffixIcon">
-            <font-awesome-icon size="sm" :icon="icon || 'sort'" />
+            <font-awesome-icon :size="iconSize || 'sm'" :icon="icon || 'sort'"/>
         </template>
     </a-select>
 </template>
@@ -17,7 +17,9 @@
                 },
             },
             icon: String,
+            iconSize: String,
             decorator: Array,
+            placeholder: String,
             size: {
                 type: String,
                 default: 'large'

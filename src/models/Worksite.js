@@ -59,6 +59,11 @@ export default class Worksite extends Model {
                     dataKey: 'results'
                 });
             },
+            updateWorkTypeStatus(work_type_id, status) {
+                return this.patch(`/worksite_work_types/${work_type_id}`, {
+                    status: status
+                }, { save: false })
+            },
             printWorksite(id) {
                 try {
                     return this.request({

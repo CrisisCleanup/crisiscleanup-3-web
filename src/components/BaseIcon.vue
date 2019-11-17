@@ -14,6 +14,8 @@
         active: require('@/assets/icons/active.svg'),
         edit: require('@/assets/icons/edit.svg'),
         search: require('@/assets/icons/search.svg'),
+        table: require('@/assets/icons/table.svg'),
+        map: require('@/assets/icons/notactive.svg'),
     };
     export default {
         name: "BaseIcon",
@@ -48,5 +50,11 @@
     .ccu-icon.small {
         height: 16px;
         width: 16px;
+    }
+    .filter-gray {
+        filter: invert(84%) sepia(0%) saturate(30%) hue-rotate(209deg) brightness(107%) contrast(90%);
+    }
+    .filter-yellow {
+        filter: invert(92%) sepia(21%) saturate(3995%) hue-rotate(346deg) brightness(98%) contrast(106%);
     }
 </style>

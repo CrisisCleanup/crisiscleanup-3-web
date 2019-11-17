@@ -1,8 +1,8 @@
 <template>
-    <a-layout id="components-layout-demo-custom-trigger">
-        <a-layout-sider width="110">
-            <div class="logo">
-                <img src="@/assets/crisiscleanup_logo.png">
+    <div class="flex layout">
+        <div class="w-32 bg-gray-800 sidebar">
+            <div class="logo flex justify-center p-1">
+                <img class="w-24" src="@/assets/crisiscleanup_logo.png">
             </div>
             <div class="menu">
                 <router-link to="/dashboard" class="menu-item router-link p-2 border-b border-t border-gray-800">
@@ -18,15 +18,35 @@
                     </div>
                 </router-link>
             </div>
-        </a-layout-sider>
-        <a-layout>
-            <a-layout-header style="background: #fff; padding: 0" class="shadow">
+        </div>
+        <div class="flex flex-col w-full">
+            <div class="shadow p-1 bg-white">
                 <div class="flex justify-between h-full items-center">
-                    <BaseSelect size="large" v-if="incidents" :defaultValue="this.currentIncident && this.currentIncident.id" class="m-6" style="width: 250px" :change="handleChange">
-                        <template v-slot:options>
-                            <a-select-option :key="incident.id" v-for="incident in incidents" :value="incident.id">{{incident.name}}</a-select-option>
-                        </template>
-                    </BaseSelect>
+                    <div class="flex items-center ml-2">
+                        <div class="h-10 w-10 rounded-full bg-blue-500">
+
+                        </div>
+                        <div class="flex flex-col ml-2">
+                            <BaseSelect
+                                    placeholder="Select an Incident"
+                                    icon="caret-down"
+                                    size="middle"
+                                    v-if="incidents"
+                                    :defaultValue="this.currentIncident && this.currentIncident.id"
+                                    class="incident-select"
+                                    :class="{ 'border-0': true }"
+                                    style="width: 250px"
+                                    :change="handleChange"
+                            >
+                                <template v-slot:options>
+                                    <a-select-option :key="incident.id" v-for="incident in incidents" :value="incident.id">{{incident.name}}</a-select-option>
+                                </template>
+                            </BaseSelect>
+                            <div class="flex ml-3 font-bold">
+                                <span>{{selectedRoute}}</span>
+                            </div>
+                        </div>
+                    </div>
                     <router-link to="/profile" class="router-link">
                         <div>
                             <a-avatar src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80" />
@@ -34,14 +54,12 @@
                         </div>
                     </router-link>
                 </div>
-            </a-layout-header>
-            <a-layout-content>
-                <a-spin class="h-full" tip="Loading..." :spinning="loading">
-                    <slot />
-                </a-spin>
-            </a-layout-content>
-        </a-layout>
-    </a-layout>
+            </div>
+            <div class="h-full flex-grow content">
+                <slot />
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -103,7 +121,7 @@
                 return ''
             },
             selectedRoute() {
-                return [this.$route.name]
+                return this.$route.name
             },
             currentUser() {
                 return this.user.user_claims
@@ -126,19 +144,15 @@
 
 <style>
     body {
-        height: 100vh;
         font-family: 'Nunito Sans', sans-serif;
     }
-    #app {
-        /*height: 100vh;*/
-    }
 
-    .ant-layout {
+    .layout {
         height: 100vh;
     }
 
-    .ant-layout-content {
-        height: 100%;
+    .sidebar {
+        background-color: #2d2d2d;
     }
 
     #app .router-link {
@@ -146,42 +160,6 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-    }
-
-    .ant-menu-item {
-        margin: 0 !important;
-    }
-
-    .ant-menu-item-selected .anticon {
-        color: #FECE09 !important;
-    }
-
-    #app .ant-menu-item {
-        width: 100px;
-        height: 50px;
-    }
-
-    #app .ant-menu-item-selected {
-        width: 100px;
-        background-color: transparent;
-        border-left: solid 3px #FECE09;
-    }
-
-    #components-layout-demo-custom-trigger .trigger {
-        font-size: 18px;
-        line-height: 64px;
-        padding: 0 24px;
-        cursor: pointer;
-        transition: color .3s;
-    }
-
-    #components-layout-demo-custom-trigger .trigger:hover {
-        color: #1890ff;
-    }
-
-    #components-layout-demo-custom-trigger .logo {
-        height: 32px;
-        margin: 10px 20px 20px;
     }
 
     .menu-text {
@@ -205,5 +183,10 @@
     .router-link-active.menu-item {
         background-color: transparent;
         border-left: solid 3px #FECE09;
+    }
+
+    .incident-select .ant-select-selection {
+        border: 0;
+        box-shadow: none;
     }
 </style>
