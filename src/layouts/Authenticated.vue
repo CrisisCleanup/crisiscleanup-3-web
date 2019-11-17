@@ -36,7 +36,9 @@
                 </div>
             </a-layout-header>
             <a-layout-content>
-                <slot />
+                <a-spin class="h-full" tip="Loading..." :spinning="loading">
+                    <slot />
+                </a-spin>
             </a-layout-content>
         </a-layout>
     </a-layout>
@@ -46,6 +48,7 @@
     import Incident from "@/models/Incident";
     import User from "@/models/User";
     import WorkType from "@/models/WorkType";
+    import Organization from "@/models/Organization";
     import Status from "@/models/Status";
     import { mapActions, mapMutations, mapState } from "vuex";
     import BaseSelect from "@/components/BaseSelect";
@@ -53,7 +56,13 @@
     export default {
         name: 'Authenticated',
         components: { BaseSelect },
+        data() {
+          return {
+              loading: false
+          }
+        },
         async mounted() {
+            this.loading = true;
             await Promise.all([
                 User.api().get('/users', {
                     dataKey: 'results'
@@ -66,8 +75,10 @@
                 }),
                 Status.api().get('/statuses?limit=100', {
                     dataKey: 'results'
-                })
+                }),
+                Organization.api().get(`/organizations/${this.user.user_claims.organization.id}`)
             ]);
+            this.loading = false;
         },
         methods: {
             async handleChange(value) {

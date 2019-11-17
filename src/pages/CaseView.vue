@@ -12,20 +12,24 @@
                 <label class="my-1 text-xs font-bold text-gray-600 block">Full Address</label>
                 <div>{{worksiteAddress}}</div>
             </div>
+
             <div class="my-4 border-t">
-                <div v-if="workTypesClaimedByOthers.length > 0" class="my-4">
-                    <label class="my-4 text-xs font-bold text-gray-600">Claimed By Another Organization</label>
-                    <template v-for="work_type in workTypesClaimedByOthers">
-                        <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
-                            {{getWorkTypeName(work_type.work_type)}}
-                            <div class="flex items-center">
-                                <StatusDropDown class="block" :default-value="work_type.status"
-                                                    :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
-                                    <BaseButton type="link" :action="() => { return requestWorkType(work_type) }"
-                                                title="Request" class="ml-2 p-1 px-2"></BaseButton>
+                <div v-if="Object.keys(workTypesClaimedByOthers).length > 0" class="my-4">
+                    <div v-for="(work_types, organization) in workTypesClaimedByOthers">
+                    <label class="my-4 text-xs font-bold text-gray-600">Claimed By {{getOrganizationName(organization)}}</label>
+                        <template v-for="work_type in work_types">
+                            <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
+                                {{getWorkTypeName(work_type.work_type)}}
+                                <div class="flex items-center">
+                                    <StatusDropDown class="block" :default-value="work_type.status"
+                                                        :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
+                                        <BaseButton type="link" :action="() => { return requestWorkType(work_type) }"
+                                                    title="Request" class="ml-2 p-1 px-2"></BaseButton>
+                                </div>
                             </div>
-                        </div>
-                    </template>
+                        </template>
+
+                    </div>
                 </div>
                 <div v-if="workTypesClaimedByOrganization.length > 0" class="my-4">
                     <label class="my-4 text-xs font-bold text-gray-600">Claimed By My Organization</label>
@@ -59,7 +63,7 @@
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between">
             <BaseButton size="medium" class="flex-grow m-1 text-black p-2 border-2 border-black" title="Unclaim" :action="() => { return unclaimWorkType() }"></BaseButton>
-            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black p-2" title="Claims" :action="() => { return claimWorkType() }"></BaseButton>
+            <BaseButton size="medium" type="primary" class="flex-grow m-1 text-black p-2" title="Claim" :action="() => { return claimWorkType() }"></BaseButton>
         </div>
     </div>
 </template>
@@ -70,6 +74,8 @@
     import Worksite from "@/models/Worksite";
     import WorkType from "@/models/WorkType";
     import BaseButton from "@/components/BaseButton";
+    import { groupBy } from "@/utils/array";
+    import Organization from "@/models/Organization";
 
     export default {
         name: 'CaseView',
@@ -82,7 +88,9 @@
                 return this.worksite.work_types.filter(type => type.claimed_by === this.currentUser.organization.id)
             },
             workTypesClaimedByOthers() {
-                return this.worksite.work_types.filter(type => type.claimed_by && type.claimed_by !== this.currentUser.organization.id)
+                let list = this.worksite.work_types.filter(type => type.claimed_by && type.claimed_by !== this.currentUser.organization.id);
+                let group = groupBy(list, 'claimed_by');
+                return group
             },
             workTypesUnclaimed() {
                 return this.worksite.work_types.filter(type => type.claimed_by === null)
@@ -141,6 +149,10 @@
             getWorkTypeName(work_type) {
                 let work_types = WorkType.query().where('key', work_type).get();
                 return work_types[0].name_t
+            },
+            getOrganizationName(id) {
+                let organization = Organization.find(id);
+                return organization.name
             },
             statusValueChange(value, work_type) {
                 alert(value + JSON.stringify(work_type))

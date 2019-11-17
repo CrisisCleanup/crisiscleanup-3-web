@@ -276,9 +276,10 @@
 
             displayWorksite: async function (record) {
                 this.spinning = true;
-                let worksite = await Worksite.api().fetchById(record.id);
-                this.currentWorksiteId = worksite.entities.worksites[0].id;
-                this.currentWorksite = worksite.entities.worksites[0];
+                await Worksite.api().fetchById(record.id);
+                let worksite = Worksite.find(record.id);
+                this.currentWorksiteId = worksite.id;
+                this.currentWorksite = worksite;
                 this.spinning = false;
                 this.isViewingWorksite = !this.isEditingWorksite;
                 this.isNewWorksite = false;
@@ -306,9 +307,10 @@
             },
             async handleChange(value) {
                 this.spinning = true;
-                let worksite = await Worksite.api().fetchById(value);
-                this.currentWorksiteId = worksite.entities.worksites[0].id;
-                this.currentWorksite = worksite.entities.worksites[0];
+                await Worksite.api().fetchById(value);
+                let worksite = Worksite.find(value);
+                this.currentWorksiteId = worksite.id;
+                this.currentWorksite = worksite;
                 this.spinning = false;
                 this.isNewWorksite = false;
                 this.isViewingWorksite = true;

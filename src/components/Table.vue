@@ -1,6 +1,6 @@
 <template>
-    <div class="table bg-white w-full">
-        <div class="header text-gray-600" :style="gridStyleHeader">
+    <div class="table w-full">
+        <div class="header text-gray-600 bg-white" :style="gridStyleHeader">
             <div class="flex items-center p-2 border-b">
                 <a-checkbox></a-checkbox>
             </div>
@@ -15,7 +15,7 @@
             </div>
         </div>
         <a-spin tip="Loading..." :spinning="loading">
-            <div class="body" :style="gridStyleBody">
+            <div class="body bg-white" :style="gridStyleBody">
                 <template v-for="item of data">
                     <div class="flex items-center p-2 border-b">
                         <a-checkbox></a-checkbox>
@@ -25,16 +25,16 @@
                             {{item[column.key]}}
                         </slot>
                     </div>
-                    <div class="flex items-center p-2 border-b">
+                    <div class="flex items-center p-2 border-b actions">
 
                     </div>
                 </template>
             </div>
         </a-spin>
-        <div class="footer flex items-center justify-between p-2">
+        <div class="footer flex items-center justify-between p-4">
             <div>
                 Number per page
-                <BaseSelect :defaultValue="pagination.pageSize" :change="onSelectPageSize" size="small">
+                <BaseSelect :defaultValue="pagination.pageSize" :change="onSelectPageSize" class="ml-1">
                     <template v-slot:options>
                         <a-select-option :key="size" v-for="size in pageSizes" :value="size">
                             {{size}}
@@ -43,26 +43,27 @@
                 </BaseSelect>
             </div>
             <div>
-                <div class="flex">
+                <div class="flex items-center">
                     <BaseButton
                             :disabled="isPreviousButtonDisabled"
                             :action="() => { pageChangeHandle('previous') }"
-                            title="Prev"
+                            title="PREV"
                             icon="caret-left"
-                            class="mx-2"
+                            class="mr-3 text-base"
                     >
 
                     </BaseButton>
                     <div>
-                        <span :key="trigger" class="cursor-pointer px-2" v-for="trigger in paginationTriggers" @click="() => { pageChangeHandle(trigger) }">
-                            {{ trigger }}
-                        </span>
+                        <template v-for="trigger in paginationTriggers">
+                            <span :key="trigger" :class="{ 'rounded-full border px-3 py-1 bg-white shadow-inner': trigger === pagination.current }" class="cursor-pointer mx-4 text-base" @click="() => { pageChangeHandle(trigger) }">{{ trigger }}</span>
+                        </template>
                     </div>
                     <BaseButton
                             :disabled="isNextButtonDisabled"
                             :action="() => { pageChangeHandle('next') }"
-                            title="Next"
+                            title="NEXT"
                             suffixIcon="caret-right"
+                            class="text-base"
                     >
                     </BaseButton>
 
@@ -89,7 +90,7 @@
         },
         data() {
             return {
-                pageSizes: [5, 10, 20, 100, 1000],
+                pageSizes: [5, 10, 20, 100, 500, 1000],
                 visiblePagesCount: 5
             }
         },
@@ -98,11 +99,11 @@
                 let newPage;
                 switch (value) {
                     case 'next':
-                        newPage = this.pagination.current + 1
-                        break
+                        newPage = this.pagination.current + 1;
+                        break;
                     case 'previous':
-                        newPage = this.pagination.current -= 1
-                        break
+                        newPage = this.pagination.current -= 1;
+                        break;
                     default:
                         newPage = value
                 }
@@ -111,13 +112,13 @@
                     ...this.pagination,
                     current: newPage,
                     page: newPage,
-                }
+                };
                 let filter = {
 
-                }
+                };
                 let sorter = {
 
-                }
+                };
                 this.$emit('change', { pagination, filter, sorter})
             },
             onSelectPageSize(pageSize) {
@@ -125,13 +126,13 @@
                     ...this.pagination,
                     current: 1,
                     pageSize
-                }
+                };
                 let filter = {
                     
-                }
+                };
                 let sorter = {
                     
-                }
+                };
                 this.$emit('change', { pagination, filter, sorter})
             },
             rowClick(item) {
@@ -151,24 +152,24 @@
                 return this.pagination.current === this.pageCount
             },
             paginationTriggers() {
-                const currentPage = this.pagination.current
-                const pageCount = this.pageCount
-                const visiblePagesCount = this.visiblePagesCount
-                const visiblePagesThreshold = (visiblePagesCount - 1) / 2
-                const pagintationTriggersArray = Array(this.visiblePagesCount - 1).fill(0)
+                const currentPage = this.pagination.current;
+                const pageCount = this.pageCount;
+                const visiblePagesCount = this.visiblePagesCount;
+                const visiblePagesThreshold = (visiblePagesCount - 1) / 2;
+                const pagintationTriggersArray = Array(this.visiblePagesCount - 1).fill(0);
 
                 if (pageCount < visiblePagesCount) {
                     return Array(pageCount).fill(0).map((_, index) => index + 1)
                 }
 
                 if (currentPage <= visiblePagesThreshold + 1) {
-                    pagintationTriggersArray[0] = 1
+                    pagintationTriggersArray[0] = 1;
                     const pagintationTriggers = pagintationTriggersArray.map(
                         (paginationTrigger, index) => {
                             return pagintationTriggersArray[0] + index
                         }
-                    )
-                    pagintationTriggers.push(pageCount)
+                    );
+                    pagintationTriggers.push(pageCount);
                     return pagintationTriggers
                 }
 
@@ -177,19 +178,19 @@
                         (paginationTrigger, index) => {
                             return pageCount - index
                         }
-                    )
-                    pagintationTriggers.reverse().unshift(1)
+                    );
+                    pagintationTriggers.reverse().unshift(1);
                     return pagintationTriggers
                 }
 
-                pagintationTriggersArray[0] = currentPage - visiblePagesThreshold + 1
+                pagintationTriggersArray[0] = currentPage - visiblePagesThreshold + 1;
                 const pagintationTriggers = pagintationTriggersArray.map(
                     (paginationTrigger, index) => {
                         return pagintationTriggersArray[0] + index
                     }
-                )
+                );
                 pagintationTriggers.unshift(1);
-                pagintationTriggers[pagintationTriggers.length - 1] = pageCount
+                pagintationTriggers[pagintationTriggers.length - 1] = pageCount;
                 return pagintationTriggers
             },
             gridTemplate() {
@@ -208,7 +209,7 @@
                 return {
                     display: 'grid',
                     'grid-template-columns': this.gridTemplate,
-                    'max-height': '500px',
+                    'max-height': '600px',
                     overflow: 'auto'
                 }
             }
