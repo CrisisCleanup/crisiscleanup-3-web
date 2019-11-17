@@ -34,6 +34,7 @@ Vue.use(VueAxios, axios);
 Vue.use(Antd)
 Vue.use(PrettyCheckbox);
 Vue.use(ServerTable);
+Vue.use(require('vue-moment'));
 
 Vue.use(VueLog);
 
