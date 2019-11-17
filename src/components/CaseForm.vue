@@ -17,8 +17,8 @@
                     </a-tooltip>
                 </a-input>
                 <div class="flex justify-around items-center">
-                    <BaseButton type="link" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe" title="Use my location" />
-                    <BaseButton type="link" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap" title="Select on Map" />
+                    <BaseButton type="bare" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe" title="Use my location" />
+                    <BaseButton type="bare" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap" title="Select on Map" />
                     <a-modal :closable="false" title="" v-model="overlayMapVisible" @ok="handleOk">
                         <OverlayMap @addedMarker="onAddedMarker" :initial-location="this.worksite.location" />
                     </a-modal>

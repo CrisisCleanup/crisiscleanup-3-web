@@ -20,6 +20,7 @@
                     danger: this.type === 'danger',
                     warning: this.type === 'warning',
                     link: this.type === 'link',
+                    bare: this.type === 'bare',
                     flex: true,
                     'items-center': true,
                     'justify-center': true,

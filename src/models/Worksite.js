@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+import Organization from "@/models/Organization";
 
 export default class Worksite extends Model {
     static entity = 'worksites';
@@ -24,8 +25,13 @@ export default class Worksite extends Model {
 
     static apiConfig = {
         actions: {
-            fetchById (id) {
-                return this.get(`/worksites/${id}`)
+            async fetchById (id) {
+                let worksite = await this.get(`/worksites/${id}`);
+                let organizations = worksite.response.data.work_types.filter(work_type => Boolean(work_type.claimed_by)).map(work_type => work_type.claimed_by);
+                await Organization.api().get(`/organizations?id__in=${organizations.join(',')}`, {
+                    dataKey: 'results'
+                });
+                return worksite
             },
             claimWorksite (id, work_types) {
                 return this.post(`/worksites/${id}/claim`, {
