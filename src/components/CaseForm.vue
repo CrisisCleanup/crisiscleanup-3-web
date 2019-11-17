@@ -351,8 +351,8 @@
                 if (this.worksite.id) {
                     await Worksite.api().put(`/worksites/${this.worksite.id}`, {...this.worksite, skip_duplicate_check: true})
                 } else {
-                    let worksite = await Worksite.api().post('/worksites', {...this.worksite, skip_duplicate_check: true})
-                    this.worksite = worksite.entities.worksites[0];
+                    await Worksite.api().post('/worksites', {...this.worksite, skip_duplicate_check: true})
+                    this.worksite = Worksite.find(this.worksite.id);
                 }
                 await this.$message.success('Worksite saved successfully');
                 if (reload) {
@@ -367,8 +367,8 @@
                 } catch (error) {
                     await this.$message.error(error.response.data.errors[0].message[0]);
                 }
-                let worksite = await Worksite.api().fetchById(this.worksite.id);
-                this.worksite = worksite.entities.worksites[0];
+                await Worksite.api().fetchById(this.worksite.id);
+                this.worksite = Worksite.find(this.worksite.id);
                 this.reloadTable()
             },
             resetForm() {

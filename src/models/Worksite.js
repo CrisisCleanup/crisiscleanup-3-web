@@ -20,6 +20,7 @@ export default class Worksite extends Model {
             state: this.attr(null),
             work_types: this.attr(null),
             what3words: this.attr(null),
+            notes: this.attr(null),
         }
     }
 
@@ -46,6 +47,11 @@ export default class Worksite extends Model {
             requestWorksite (id, work_types) {
                 return this.post(`/worksites/${id}/request_take`, {
                     work_types: work_types
+                }, { save: false })
+            },
+            addNote (id, note) {
+                return this.post(`/worksites/${id}/notes`, {
+                    note: note
                 }, { save: false })
             },
             searchWorksites(search, incident) {

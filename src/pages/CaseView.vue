@@ -2,11 +2,19 @@
     <div class="bg-white flex flex-col h-full">
         <div class="p-3 flex-grow intake-view">
             <div class="my-4">
-                <label class="my-1 text-xs font-bold text-gray-600 block">Notes</label>
-                <div class="bg-gray-200 flex justify-center">
-                    <span>1 day ago: Neighbour will help with cleaning</span>
+                <label v-if="worksite.notes.length > 0" class="my-1 text-xs font-bold text-gray-400 block">Notes</label>
+                <div :key="note.id" v-for="note in worksite.notes" class="bg-gray-200 my-1 p-1">
+                    <span>{{ note.created_at | moment("from", "now") }}: {{note.note}}</span>
                 </div>
-                <BaseButton class="my-1" type="link" title="+ Add Note"></BaseButton>
+                <BaseButton v-if="!addingNotes" class="my-1" type="link" title="+ Add Note" :action="() => { this.addingNotes = true }"></BaseButton>
+                <div v-if="addingNotes">
+                    Note
+                    <a-textarea rows="4" v-model="currentNote"/>
+                    <div class="flex items-center justify-between">
+                        <BaseButton class="my-1" type="bare" title="Cancel" :action="cancelNote"></BaseButton>
+                        <BaseButton class="my-1" type="link" title="Save" :action="saveNote"></BaseButton>
+                    </div>
+                </div>
             </div>
             <div class="my-4">
                 <label class="my-1 text-xs font-bold text-gray-600 block">Full Address</label>
@@ -68,117 +76,139 @@
     </div>
 </template>
 
-<script>
-    import StatusDropDown from "@/components/StatusDropDown"
-    import User from "@/models/User";
-    import Worksite from "@/models/Worksite";
-    import WorkType from "@/models/WorkType";
-    import BaseButton from "@/components/BaseButton";
-    import { groupBy } from "@/utils/array";
-    import Organization from "@/models/Organization";
+<script>var addingNotes;
 
-    export default {
-        name: 'CaseView',
-        components: {BaseButton, StatusDropDown },
-        props: {
-            worksite: Object,
-        },
-        computed: {
-            workTypesClaimedByOrganization() {
-                return this.worksite.work_types.filter(type => type.claimed_by === this.currentUser.organization.id)
-            },
-            workTypesClaimedByOthers() {
-                let list = this.worksite.work_types.filter(type => type.claimed_by && type.claimed_by !== this.currentUser.organization.id);
-                let group = groupBy(list, 'claimed_by');
-                return group
-            },
-            workTypesUnclaimed() {
-                return this.worksite.work_types.filter(type => type.claimed_by === null)
-            },
-            worksiteAddress() {
-                if (this.worksite) {
-                    let { address, city, state, postal_code} = this.worksite;
-                    return `${address}, ${city}, ${state} ${postal_code}`
-                }
-                return ''
-            },
-            currentUser() {
-                return User.query().first()
-            },
-        },
-        methods: {
-            async claimWorkType(work_type) {
-                try {
-                    let work_types = [];
-                    if (work_type) {
-                        work_types.push(work_type.work_type)
-                    }
-                    await Worksite.api().claimWorksite(this.worksite.id, work_types);
-                    let worksite = await Worksite.api().fetchById(this.worksite.id);
-                    this.worksite = worksite.entities.worksites[0];
-                } catch (error) {
-                    await this.$message.error(error.response.data.errors[0].message[0]);
-                }
-            },
-            async unclaimWorkType(work_type) {
-                try {
-                    let work_types = [];
-                    if (work_type) {
-                        work_types.push(work_type.work_type)
-                    }
-                    await Worksite.api().unclaimWorksite(this.worksite.id, work_types);
-                    let worksite = await Worksite.api().fetchById(this.worksite.id);
-                    this.worksite = worksite.entities.worksites[0];
-                } catch (error) {
-                    await this.$message.error(error.response.data.errors[0].message[0]);
-                }
-            },
-            async requestWorkType(work_type) {
-                try {
-                    let work_types = [];
-                    if (work_type) {
-                        work_types.push(work_type.work_type)
-                    }
-                    await Worksite.api().requestWorksite(this.worksite.id, work_types);
-                    let worksite = await Worksite.api().fetchById(this.worksite.id);
-                    this.worksite = worksite.entities.worksites[0];
-                } catch (error) {
-                    await this.$message.error(error.response.data.errors[0].message[0]);
-                }
-            },
-            getWorkTypeName(work_type) {
-                let work_types = WorkType.query().where('key', work_type).get();
-                return work_types[0].name_t
-            },
-            getOrganizationName(id) {
-                let organization = Organization.find(id);
-                return organization.name
-            },
-            statusValueChange(value, work_type) {
-                alert(value + JSON.stringify(work_type))
-            },
+import StatusDropDown from "@/components/StatusDropDown"
+import User from "@/models/User";
+import Worksite from "@/models/Worksite";
+import WorkType from "@/models/WorkType";
+import BaseButton from "@/components/BaseButton";
+import {groupBy} from "@/utils/array";
+import Organization from "@/models/Organization";
 
-            getFieldsForType(work_type) {
-                if (this.incident) {
-                    let available_fields = this.worksite.form_data.map(data => data.field_key);
-                    let fields = this.incident.form_fields.filter((field)=> {
-                        let parent = this.incident.form_fields.find((element) => {
-                            return element.field_key === field.field_parent_key;
-                        });
-
-                        let if_selected_then_work_type = field.if_selected_then_work_type;
-                        if (parent) {
-                            if_selected_then_work_type = parent.if_selected_then_work_type
-                        }
-
-                        return if_selected_then_work_type === work_type && available_fields.includes(field.field_key) && field.html_type === 'checkbox';
-                    });
-                    return fields
-                }
-                return [];
-            },
+export default {
+    name: 'CaseView',
+    components: {BaseButton, StatusDropDown},
+    props: {
+        worksite: Object,
+    },
+    data() {
+        return {
+            addingNotes: false,
+            currentNote: ''
         }
+    },
+    computed: {
+        workTypesClaimedByOrganization() {
+            return this.worksite.work_types.filter(type => type.claimed_by === this.currentUser.organization.id)
+        },
+        workTypesClaimedByOthers() {
+            let list = this.worksite.work_types.filter(type => type.claimed_by && type.claimed_by !== this.currentUser.organization.id);
+            let group = groupBy(list, 'claimed_by');
+            return group
+        },
+        workTypesUnclaimed() {
+            return this.worksite.work_types.filter(type => type.claimed_by === null)
+        },
+        worksiteAddress() {
+            if (this.worksite) {
+                let {address, city, state, postal_code} = this.worksite;
+                return `${address}, ${city}, ${state} ${postal_code}`
+            }
+            return ''
+        },
+        currentUser() {
+            return User.query().first()
+        },
+    },
+    methods: {
+        async claimWorkType(work_type) {
+            try {
+                let work_types = [];
+                if (work_type) {
+                    work_types.push(work_type.work_type)
+                }
+                await Worksite.api().claimWorksite(this.worksite.id, work_types);
+                await Worksite.api().fetchById(this.worksite.id);
+                this.worksite = Worksite.find(this.worksite.id);
+            } catch (error) {
+                await this.$message.error(error.response.data.errors[0].message[0]);
+            }
+        },
+        async unclaimWorkType(work_type) {
+            try {
+                let work_types = [];
+                if (work_type) {
+                    work_types.push(work_type.work_type)
+                }
+                await Worksite.api().unclaimWorksite(this.worksite.id, work_types);
+                await Worksite.api().fetchById(this.worksite.id);
+                this.worksite = Worksite.find(this.worksite.id);
+            } catch (error) {
+                await this.$message.error(error.response.data.errors[0].message[0]);
+            }
+        },
+        async requestWorkType(work_type) {
+            try {
+                let work_types = [];
+                if (work_type) {
+                    work_types.push(work_type.work_type)
+                }
+                await Worksite.api().requestWorksite(this.worksite.id, work_types);
+                await Worksite.api().fetchById(this.worksite.id);
+                this.worksite = Worksite.find(this.worksite.id);
+            } catch (error) {
+                await this.$message.error(error.response.data.errors[0].message[0]);
+            }
+        },
+        async saveNote() {
+            try {
+                await Worksite.api().addNote(this.worksite.id, this.currentNote);
+                await Worksite.api().fetchById(this.worksite.id);
+                this.worksite = Worksite.find(this.worksite.id);
+                this.addingNotes = false;
+                this.currentNote = '';
+            } catch (error) {
+                await this.$message.error(error.response.data.errors[0].message[0]);
+            }
+        },
+        cancelNote() {
+            this.addingNotes = false;
+            this.currentNote = '';
+        },
+        getWorkTypeName(work_type) {
+            let work_types = WorkType.query().where('key', work_type).get();
+            return work_types[0].name_t
+        },
+        getOrganizationName(id) {
+            let organization = Organization.find(id);
+            return organization.name
+        },
+        statusValueChange(value, work_type) {
+            alert(value + JSON.stringify(work_type))
+        },
+
+        getFieldsForType(work_type) {
+            if (this.incident) {
+                let available_fields = this.worksite.form_data.map(data => data.field_key);
+                let fields = this.incident.form_fields.filter((field) => {
+                    let parent = this.incident.form_fields.find((element) => {
+                        return element.field_key === field.field_parent_key;
+                    });
+
+                    let if_selected_then_work_type = field.if_selected_then_work_type;
+                    if (parent) {
+                        if_selected_then_work_type = parent.if_selected_then_work_type
+                    }
+
+                    return if_selected_then_work_type === work_type && available_fields.includes(field.field_key) && field.html_type === 'checkbox';
+                });
+                return fields
+            }
+            return [];
+        },
     }
+}
 </script>
 
 <style scoped>
