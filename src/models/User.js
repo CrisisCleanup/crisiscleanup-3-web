@@ -21,6 +21,11 @@ export default class User extends Model {
                     email,
                     password
                 }, { save: false});
+            },
+            inviteUser(email) {
+                return this.post(`/invitations`, {
+                    invitee_email: email,
+                }, { save: false});
             }
         }
     }

@@ -31,7 +31,7 @@
                     <label class="my-4 text-xs font-bold text-gray-600">Claimed By {{getOrganizationName(organization)}}</label>
                         <template v-for="work_type in work_types">
                             <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
-                                {{getWorkTypeName(work_type.work_type)}}
+                                {{work_type.work_type | getWorkTypeName}}
                                 <div class="flex items-center">
                                     <StatusDropDown class="block" :default-value="work_type.status"
                                                         :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
@@ -47,7 +47,7 @@
                     <label class="my-4 text-xs font-bold text-gray-600">Claimed By My Organization</label>
                     <template v-for="work_type in workTypesClaimedByOrganization">
                         <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
-                            {{getWorkTypeName(work_type.work_type)}}
+                            {{work_type.work_type | getWorkTypeName}}
                             <div class="flex items-center">
                                 <StatusDropDown class="block" :default-value="work_type.status"
                                                     :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
@@ -61,7 +61,7 @@
                     <label class="my-4 text-xs font-bold text-gray-600">Unclaimed Work Types</label>
                     <template v-for="work_type in workTypesUnclaimed">
                         <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
-                            {{getWorkTypeName(work_type.work_type)}}
+                            {{work_type.work_type | getWorkTypeName}}
                             <div class="flex items-center">
                                 <StatusDropDown class="block" :default-value="work_type.status"
                                                 :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
@@ -180,10 +180,6 @@ export default {
         cancelNote() {
             this.addingNotes = false;
             this.currentNote = '';
-        },
-        getWorkTypeName(work_type) {
-            let work_types = WorkType.query().where('key', work_type).get();
-            return work_types[0].name_t
         },
         getOrganizationName(id) {
             let organization = Organization.find(id);

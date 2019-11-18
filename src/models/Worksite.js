@@ -21,6 +21,7 @@ export default class Worksite extends Model {
             work_types: this.attr(null),
             what3words: this.attr(null),
             notes: this.attr(null),
+            reported_by: this.attr(null),
         }
     }
 

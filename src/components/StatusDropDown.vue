@@ -14,12 +14,18 @@
 <script>
     import BaseSelect from "@/components/BaseSelect";
     import Status from "@/models/Status";
+    import { getStatusBadge } from '@/filters';
     export default {
         name: "StatusDropDown",
         components: {BaseSelect},
         props: {
             onSelect: Function,
             defaultValue: String,
+        },
+        data() {
+          return {
+              getStatusBadge
+          }
         },
         computed: {
             statuses () {
@@ -30,27 +36,6 @@
                    'background-color': 'red'
                 }
             }
-        },
-        methods: {
-            getStatusBadge(status) {
-                const status_dict = {
-                    "open_unassigned": "error",
-                    "open_assigned":"processing",
-                    "open_partially-completed":"processing",
-                    "open_needs-follow-up":"processing",
-                    "open_unresponsive":"default",
-                    "closed_completed":"success",
-                    "closed_partially-completed":"success",
-                    "closed_incomplete":"default",
-                    "closed_out-of-scope":"default",
-                    "closed_done-by-others":"success",
-                    "closed_no-help-wanted":"default",
-                    "closed_rejected":"default",
-                    "closed_duplicate":"default",
-                    "closed_marked-for-deletion":"default"
-                };
-                return status_dict[status];
-            },
         }
     }
 </script>

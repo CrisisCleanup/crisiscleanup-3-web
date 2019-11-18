@@ -19,7 +19,8 @@ import Authenticated from "@/layouts/Authenticated";
 import Unauthenticated from "@/layouts/Unauthenticated";
 import BaseIcon from "@/components/BaseIcon";
 import VueLog from '@dreipol/vue-log';
-
+import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import { getWorkTypeName } from "@/filters";
 
 library.add(fas);
 
@@ -45,6 +46,9 @@ Vue.use(VueGoogleMaps, {
   },
   installComponents: true
 });
+
+Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
+Vue.filter('getWorkTypeName', getWorkTypeName);
 
 if (AuthService.getUser()) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${AuthService.getToken()}`

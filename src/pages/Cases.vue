@@ -69,7 +69,7 @@
                                         <div class="flex flex-col">
                                             <div class="badge-holder flex items-center" :key="work_type.id" v-for="work_type in slotProps.item.work_types">
                                                 <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status" />
-                                                {{getWorkTypeName(work_type.work_type)}}
+                                                {{work_type.work_type | getWorkTypeName}}
                                             </div>
                                         </div>
                                     </template>
@@ -79,7 +79,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col h-full shadow-2xl w-1/5" v-if="this.currentIncident">
+        <div class="flex flex-col h-full shadow-2xl w-1/5" style="min-width: 360px" v-if="this.currentIncident">
             <div style="background-color: white" class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center">
             <div class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
                 <ccu-icon type="active" size="small"></ccu-icon>
@@ -121,8 +121,8 @@
     import RealtimeMapFull from "@/components/RealtimeMapFull";
     import WorksiteFilters from "@/components/WorksiteFilters";
     import BaseButton from "@/components/BaseButton";
-    import WorkType from "@/models/WorkType";
     import Status from "@/models/Status";
+    import { getStatusBadge } from '@/filters';
 
     const columns = [
         {
@@ -220,7 +220,8 @@
                     }
                 },
                 appliedFilters: {},
-                newMarker: null
+                newMarker: null,
+                getStatusBadge
             };
         },
         watch: {
@@ -401,29 +402,6 @@
                 link.click();
                 link.remove();
                 window.URL.revokeObjectURL(url);
-            },
-            getWorkTypeName(work_type) {
-                let work_types = WorkType.query().where('key', work_type).get();
-                return work_types[0].name_t
-            },
-            getStatusBadge(status) {
-                const status_dict = {
-                    "open_unassigned": "error",
-                    "open_assigned":"processing",
-                    "open_partially-completed":"processing",
-                    "open_needs-follow-up":"processing",
-                    "open_unresponsive":"default",
-                    "closed_completed":"success",
-                    "closed_partially-completed":"success",
-                    "closed_incomplete":"default",
-                    "closed_out-of-scope":"default",
-                    "closed_done-by-others":"success",
-                    "closed_no-help-wanted":"default",
-                    "closed_rejected":"default",
-                    "closed_duplicate":"default",
-                    "closed_marked-for-deletion":"default"
-                };
-                return status_dict[status];
             },
             workTypeIcon(work_type) {
                 const work_type_dict = {
