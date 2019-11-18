@@ -1,5 +1,5 @@
 <template>
-    <div class="flex layout">
+    <div class="flex layout overflow-hidden">
         <div class="w-32 bg-gray-800 sidebar">
             <div class="logo flex justify-center p-1">
                 <img class="w-24" src="@/assets/crisiscleanup_logo.png">
@@ -156,6 +156,10 @@
 
     .layout {
         height: 100vh;
+    }
+
+    .content {
+        max-height: 100%;
     }
 
     .sidebar {

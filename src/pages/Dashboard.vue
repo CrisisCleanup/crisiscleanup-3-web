@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6 bg-gray-100 h-full">
+    <div class="p-6 bg-gray-100 h-full overflow-auto">
         <div v-if="!loading">
             <div class="flex">
                 <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
