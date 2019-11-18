@@ -8,14 +8,7 @@
                 </div>
             </h4>
             <a-form-item>
-                <a-input disabled="" v-model="worksite.what3words" size="large" placeholder="Location" required>
-                    <a-tooltip slot="addonAfter">
-                        <template slot="title">
-                            <span v-html=""></span>
-                        </template>
-                        <a-icon type="question-circle-o"/>
-                    </a-tooltip>
-                </a-input>
+                <base-input v-model="worksite.what3words" icon="info" size="large" placeholder="Location" required disabled></base-input>
                 <div class="flex justify-around items-center">
                     <BaseButton type="bare" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe" title="Use my location" />
                     <BaseButton type="bare" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap" title="Select on Map" />
@@ -25,14 +18,7 @@
                 </div>
             </a-form-item>
             <a-form-item>
-                <a-input v-model="worksite.name" size="large" placeholder="name" required>
-                    <a-tooltip slot="addonAfter">
-                        <template slot="title">
-                            <span v-html=""></span>
-                        </template>
-                        <a-icon type="question-circle-o"/>
-                    </a-tooltip>
-                </a-input>
+                <base-input v-model="worksite.name" icon="info" size="large" placeholder="Name" required></base-input>
             </a-form-item>
             <a-form-item>
             <a-auto-complete
@@ -226,6 +212,7 @@
     import GeocoderService from "@/services/geocoder.service"
     import { What3wordsService } from "@/services/what3words.service";
     import {getErrorMessage} from "@/utils/errors";
+    import BaseInput from "@/components/BaseInput";
 
     export default {
         props: {
@@ -235,6 +222,7 @@
             incident: Object,
         },
         components: {
+            BaseInput,
             BaseButton,
             OverlayMap
         },

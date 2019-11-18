@@ -16,6 +16,7 @@
         search: require('@/assets/icons/search.svg'),
         table: require('@/assets/icons/table.svg'),
         map: require('@/assets/icons/notactive.svg'),
+        info: require('@/assets/icons/inform.svg'),
     };
     export default {
         name: "BaseIcon",
