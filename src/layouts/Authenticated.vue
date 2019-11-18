@@ -32,7 +32,7 @@
                                     icon="caret-down"
                                     size="middle"
                                     v-if="incidents"
-                                    :defaultValue="this.currentIncident && this.currentIncident.id"
+                                    v-model="this.currentIncidentId"
                                     class="incident-select"
                                     :class="{ 'border-0': true }"
                                     style="width: 250px"
@@ -55,8 +55,11 @@
                     </router-link>
                 </div>
             </div>
-            <div class="h-full flex-grow content">
+            <div v-if="this.ready" class="h-full flex-grow content">
                 <slot />
+            </div>
+            <div v-else class="h-full flex-grow flex items-center justify-center">
+                <a-spin tip="Loading..."></a-spin>
             </div>
         </div>
     </div>
@@ -76,7 +79,8 @@
         components: { BaseSelect },
         data() {
           return {
-              loading: false
+              loading: false,
+              ready: false
           }
         },
         async mounted() {
@@ -96,7 +100,10 @@
                 }),
                 Organization.api().get(`/organizations/${this.user.user_claims.organization.id}`)
             ]);
+            this.setCurrentIncidentId(Incident.query().orderBy('id', 'desc').first().id);
+            await Incident.api().fetchById(Incident.query().orderBy('id', 'desc').first().id);
             this.loading = false;
+            this.ready = true;
         },
         methods: {
             async handleChange(value) {
