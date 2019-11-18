@@ -59,6 +59,16 @@
                     </div>
                 </div>
             </div>
+            <div class="flex">
+                <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
+                    <div class="py-4 px-4 text-gray-500 border-b">CASES COMPLETION</div>
+                    <div class="p-4">
+                        <div class="small">
+                            <line-chart :chart-data="datacollection" :options="options"></line-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <a-spin tip="Loading..." v-if="loading" :spinning="loading" class="p-6 bg-gray-100 h-full w-full flex flex-col items-center justify-center" />
     </div>
@@ -74,10 +84,12 @@
     import { getStatusBadge } from '@/filters';
     import BaseButton from "@/components/BaseButton";
     import { getErrorMessage } from "@/utils/errors";
+    import LineChart from "@/components/charts/LineChart";
+    import {rand} from "@/utils/charts";
 
     export default {
         name: "Dashboard",
-        components: {BaseButton},
+        components: { BaseButton, LineChart },
         data() {
             return {
                 usersToInvite: '',
@@ -87,11 +99,48 @@
                 totalInProgess: 0,
                 loading: false,
                 getStatusBadge,
+                datacollection: null,
+                options: {
+                    responsive: true,
+                    hoverMode: 'index',
+                    stacked: false,
+                    title: {
+                        display: true,
+                    },
+                    legend: {
+                        align: 'end'
+                    },
+                    scales: {
+                        yAxes: [{
+                            type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                            display: true,
+                            position: 'left',
+                            ticks: {
+                                beginAtZero: true,
+                                stepSize: 50
+                            },
+                            scaleLabel: {
+                                labelString: 'Cases',
+                                display: true
+                            },
+                        }],
+                        xAxes: [{
+                            gridLines: {
+                                display:false
+                            },
+                            scaleLabel: {
+                                labelString: 'Date',
+                                display: true
+                            },
+                        }],
+                    }
+                }
             }
         },
         async mounted() {
             this.loading = true;
             await this.reloadDashBoard();
+            this.fillData()
             this.loading = false;
         },
         methods: {
@@ -185,6 +234,45 @@
                         }
                     });
                 this.totalClosed = response.data.count;
+            },
+            fillData () {
+                var date = new Date();
+                let chckDates = [];
+                for (let i = 0; i < 30; i++) {
+                    date.setDate(date.getDate() + 1);
+                    let dmy = date.getDate()
+                    chckDates.push(dmy);
+                }
+                this.datacollection = {
+                    labels: chckDates,
+                    datasets: [{
+                        label: 'Total Claimed',
+                        borderColor: '#00bbe7',
+                        borderWidth: '2',
+                        pointRadius: 0,
+                        backgroundColor: 'rgba(0, 187, 230, 0.1)',
+                        fill: true,
+                        data: chckDates.map(date => this.randomScalingFactor(150, 250)),
+                    }, {
+                        label: 'Total Reported',
+                        borderColor: '#13e768',
+                        borderWidth: '2',
+                        pointRadius: 0,
+                        fill: false,
+                        data: chckDates.map(date => this.randomScalingFactor(100, 170)),
+                    }, {
+                        label: 'What is this?',
+                        borderColor: 'red',
+                        borderWidth: '1',
+                        borderDash: [5, 5],
+                        pointRadius: 0,
+                        fill: false,
+                        data: chckDates.map(date => 60),
+                    }]
+                }
+            },
+            randomScalingFactor(x, y) {
+                return Math.round(rand(x, y));
             }
         },
         computed: {
