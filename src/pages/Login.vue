@@ -31,7 +31,7 @@
             ]),
             async userLogin() {
                 await this.login(this.email, this.password);
-                await this.$router.push('/cases')
+                await this.$router.push('/dashboard')
             }
         }
     }

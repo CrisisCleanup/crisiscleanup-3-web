@@ -86,10 +86,11 @@
     import { getErrorMessage } from "@/utils/errors";
     import LineChart from "@/components/charts/LineChart";
     import {rand} from "@/utils/charts";
+    import BaseInput from "@/components/BaseInput";
 
     export default {
         name: "Dashboard",
-        components: { BaseButton, LineChart },
+        components: {BaseInput, BaseButton, LineChart },
         data() {
             return {
                 usersToInvite: '',
@@ -238,7 +239,7 @@
             fillData () {
                 var date = new Date();
                 let chckDates = [];
-                for (let i = 0; i < 30; i++) {
+                for (let i = 0; i < 45; i++) {
                     date.setDate(date.getDate() + 1);
                     let dmy = date.getDate()
                     chckDates.push(dmy);
@@ -252,7 +253,7 @@
                         pointRadius: 0,
                         backgroundColor: 'rgba(0, 187, 230, 0.1)',
                         fill: true,
-                        data: chckDates.map(date => this.randomScalingFactor(150, 250)),
+                        data: chckDates.map(date => this.randomScalingFactor(150, 230)),
                     }, {
                         label: 'Total Reported',
                         borderColor: '#13e768',
@@ -284,7 +285,7 @@
             ]),
             claimedWorksites() {
                 return Worksite.query().where((worksite) => {
-                    return worksite.work_types.find(work_type => work_type.claimed_by === this.currentUser.organization.id)
+                    return worksite.work_types.find(work_type => work_type.claimed_by === this.currentUser.organization.id && this.currentIncidentId === worksite.incident)
                 }).get()
             }
         },
