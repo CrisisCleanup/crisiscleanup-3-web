@@ -12,7 +12,7 @@ const getters = {
 
 // actions
 const actions = {
-    async login ({ commit }, email='tobi@tobiabiodun.com', password='admin123') {
+    async login ({ commit }, { email, password }) {
         let data = await User.api().login(email, password);
         commit('setUser', data.response.data);
         return data.response;
