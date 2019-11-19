@@ -75,7 +75,6 @@
                     "detectRetina": false,
                     "maxZoom": 18,
                     "noWrap": false,
-                    "subdomains": "abc"
                 }),
 
                 markerLayer: L.layerGroup(),
