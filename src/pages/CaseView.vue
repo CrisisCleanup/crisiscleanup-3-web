@@ -77,6 +77,7 @@
             <BaseButton v-if="workTypesClaimedByOrganization.length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Unclaim" :action="() => { return unclaimWorkType() }"></BaseButton>
             <BaseButton v-if="workTypesUnclaimed.length > 0" size="medium" type="primary" class="m-1 text-black p-3 px-4" title="Claim" :action="() => { return claimWorkType() }"></BaseButton>
             <BaseButton v-if="Object.keys(workTypesClaimedByOthers).length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Request" :action="() => { return requestWorkType() }"></BaseButton>
+            <BaseButton size="medium" type="primary" class="m-1 text-black p-3 px-4" title="Done" :action="() => { $emit('closeWorksite') }"></BaseButton>
         </div>
     </div>
 </template>

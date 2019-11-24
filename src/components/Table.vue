@@ -2,7 +2,7 @@
     <div class="table w-full">
         <div class="header text-gray-600 bg-white" :style="gridStyleHeader">
             <div class="flex items-center p-2 border-b">
-                <a-checkbox></a-checkbox>
+                <base-checkbox @input="setCheckedAllChecked" class="mb-5"></base-checkbox>
             </div>
             <div class="p-2 border-b flex items-center" v-for="column of columns" :key="column.title">{{column.title}}</div>
             <div class="flex items-center p-2 border-b">
@@ -16,9 +16,9 @@
         </div>
         <a-spin tip="Loading..." :spinning="loading">
             <div class="body bg-white" :style="gridStyleBody">
-                <template v-for="item of data">
+                <div v-for="item of data" :style="gridStyleRow" class="hover:bg-gray-100" :class="{ 'bg-gray-100': selectedItems.has(item.id)}">
                     <div class="flex items-center p-2 border-b">
-                        <a-checkbox></a-checkbox>
+                        <base-checkbox :value="selectedItems.has(item.id)" @input="(value) => { setChecked(item, value)}" class="mb-5"></base-checkbox>
                     </div>
                     <div class="flex items-center p-2 border-b cursor-pointer" v-for="column of columns" @click="rowClick(item)">
                         <slot :name="column.key" v-bind:item="item">
@@ -28,7 +28,7 @@
                     <div class="flex items-center p-2 border-b actions">
 
                     </div>
-                </template>
+                </div>
             </div>
         </a-spin>
         <div class="footer flex items-center justify-between p-4">
@@ -76,9 +76,10 @@
 <script>
     import BaseSelect from "@/components/BaseSelect";
     import BaseButton from "@/components/BaseButton";
+    import BaseCheckbox from "@/components/BaseCheckbox";
     export default {
         name: "Table",
-        components: {BaseSelect, BaseButton},
+        components: {BaseSelect, BaseButton, BaseCheckbox},
         props: {
             columns: Array,
             data: Array,
@@ -91,10 +92,28 @@
         data() {
             return {
                 pageSizes: [5, 10, 20, 100, 500, 1000],
-                visiblePagesCount: 5
+                visiblePagesCount: 5,
+                selectedItems: new Set([])
             }
         },
         methods: {
+            setChecked(item, value) {
+                if (value) {
+                    this.selectedItems.add(item.id)
+                } else {
+                    this.selectedItems.delete(item.id)
+                }
+                this.selectedItems = new Set(this.selectedItems);
+                this.$emit('selectionChanged', this.selectedItems)
+            },
+            setCheckedAllChecked(value) {
+                if (value) {
+                    this.selectedItems = new Set(this.data.map(item => item.id));
+                } else {
+                    this.selectedItems = new Set();
+                }
+                this.$emit('selectionChanged', this.selectedItems)
+            },
             pageChangeHandle(value) {
                 let newPage;
                 switch (value) {
@@ -207,10 +226,14 @@
             },
             gridStyleBody() {
                 return {
-                    display: 'grid',
-                    'grid-template-columns': this.gridTemplate,
                     'max-height': '600px',
                     overflow: 'auto'
+                }
+            },
+            gridStyleRow() {
+                return {
+                    display: 'grid',
+                    'grid-template-columns': this.gridTemplate,
                 }
             }
         }

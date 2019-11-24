@@ -14,10 +14,10 @@ VuexORM.use(VuexORMAxios, {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     },
-    baseURL: 'http://api.staging.crisiscleanup.io',
-})
+    baseURL: `${process.env.VUE_APP_API_BASE_URL}`,
+});
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const debug = process.env.NODE_ENV !== 'production';
 

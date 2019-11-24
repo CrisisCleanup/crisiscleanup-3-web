@@ -20,6 +20,7 @@ import Unauthenticated from "@/layouts/Unauthenticated";
 import BaseIcon from "@/components/BaseIcon";
 import VueLog from '@dreipol/vue-log';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import VueAutosuggest from "vue-autosuggest";
 import { getWorkTypeName } from "@/filters";
 
 library.add(fas);
@@ -29,6 +30,7 @@ Vue.component('ccu-icon', BaseIcon);
 Vue.component('authenticated-layout', Authenticated);
 Vue.component('authenticated-layout', Authenticated);
 Vue.component('unauthenticated-layout', Unauthenticated);
+Vue.use(VueAutosuggest);
 
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
