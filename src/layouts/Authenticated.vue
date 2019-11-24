@@ -100,8 +100,9 @@
                 }),
                 Organization.api().get(`/organizations/${this.user.user_claims.organization.id}`)
             ]);
-            this.setCurrentIncidentId(Incident.query().orderBy('id', 'desc').first().id);
-            await Incident.api().fetchById(Incident.query().orderBy('id', 'desc').first().id);
+            let incidentId = this.currentUser.states.incident || Incident.query().orderBy('id', 'desc').first().id;
+            this.setCurrentIncidentId(incidentId);
+            await Incident.api().fetchById(incidentId);
             this.loading = false;
             this.ready = true;
         },
@@ -109,6 +110,9 @@
             async handleChange(value) {
                 this.setCurrentIncidentId(value)
                 await Incident.api().fetchById(value);
+                User.api().updateUserState({
+                    incident: value
+                })
             },
             ...mapActions('auth', [
                 'login',
@@ -131,7 +135,7 @@
                 return this.$route.name
             },
             currentUser() {
-                return this.user.user_claims
+                return User.query().first()
             },
             incidents() {
                 return Incident.query().orderBy('id', 'desc').get()

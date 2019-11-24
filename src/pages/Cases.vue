@@ -1,6 +1,6 @@
 <template>
     <div class="flex h-full overflow-hidden">
-        <div :class="{'w-4/5': currentIncident, 'w-full': !currentIncident}">
+        <div :class="{'w-4/5': currentIncident && currentWorksite, 'w-full': !currentWorksite}">
             <div class="flex flex-col h-full">
                 <div style="background-color: white" class="p-3 border border-gray-300 card-header">
                     <div class="flex items-center justify-between">
@@ -8,34 +8,36 @@
                             <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingMap ? 'filter-yellow' : 'filter-gray'" type="map" @click.native="toggleView('showingMap')" />
                             <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingTable ? 'filter-yellow' : 'filter-gray'" type="table" @click.native="toggleView('showingTable')" />
                             <div class="flex justify-start w-auto">
-                                <a-auto-complete
-                                        @select="handleChange"
+                                <autocomplete
+                                        @selected="handleChange"
                                         @search="onSearch"
-                                        style="width: 300px"
-                                        placeholder="Search worksites"
-                                        :disabled="!this.currentIncident"
-                                        class="mr-3"
-                                >
-                                    <template slot="dataSource">
-                                        <a-select-option v-for="item in searchWorksites" :key="item.id">
-                                            {{item.case_number}}
+                                        icon="search"
+                                        :suggestions="searchWorksites"
+                                        display-property="case_number"
+                                        placeholder="Search"
+                                        full="true"
+                                        class="mx-2"
+                                        :disabled="!this.currentIncident">
+                                    <template #result="slotProps">
+                                        <div class="flex flex-col">
+                                            {{slotProps.suggestion.item.case_number}}
                                             <br>
-                                            {{item.name}}
+                                            {{slotProps.suggestion.item.name}}
                                             <br>
-                                            {{item.address}}, {{item.city}}, {{item.state}} {{item.postal_code}}
-                                        </a-select-option>
+                                            {{slotProps.suggestion.item.address}}, {{slotProps.suggestion.item.city}}, {{slotProps.suggestion.item.state}} {{slotProps.suggestion.item.postal_code}}
+                                        </div>
                                     </template>
-                                    <a-input>
-                                        <ccu-icon slot="suffix" type="search" size="small"></ccu-icon>
-                                    </a-input>
-                                </a-auto-complete>
-
+                                </autocomplete>
                                 <div class="mr-3 flex items-center bg-white border p-1 px-4 cursor-pointer" @click="() => { this.showingFilters = true }">
                                     Filters <font-awesome-icon icon="sort" class="ml-20"></font-awesome-icon>
                                 </div>
-                                <a-modal :closable="false" v-model="showingFilters" @ok="handleFilters" class="filters-modal">
-                                    <WorksiteFilters @updatedFilters="onUpdatedFilters" :incident="this.currentIncident" />
-                                </a-modal>
+                                <modal v-if="showingFilters" @close="showingFilters = false" modal-classes="bg-white w-1/3 shadow" modal-style="min-height: 60%">
+                                    <WorksiteFilters :filters="filters" @updatedFilters="onUpdatedFilters" :incident="this.currentIncident"/>
+                                    <div slot="footer" class="flex items-center justify-center p-2 bg-white border-t">
+                                        <base-button title="Cancel" size="medium" class="m-1 border-2 border-black px-6 py-2" :action="() => { this.showingFilters = false }"></base-button>
+                                        <base-button title="Apply Filters" size="medium" class="m-1 p-3 px-6" type="primary" :action="handleFilters"></base-button>
+                                    </div>
+                                </modal>
                             </div>
                         </div>
                         <div class="flex worksite-actions text-gray-600">
@@ -48,7 +50,7 @@
                 </div>
                 <div class="flex-grow bg-gray-100">
                     <template v-if="showingMap">
-                        <RealtimeMapFull style="width: 100%; height: 100%" :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker" :key="this.currentIncidentId"></RealtimeMapFull>
+                        <RealtimeMapFull style="width: 100%; height: 100%" @mapMoved="onMapMoved" :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker" :key="JSON.stringify(currentQuery)"></RealtimeMapFull>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
@@ -79,7 +81,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col h-full shadow-2xl w-1/5" style="min-width: 360px" v-if="this.currentIncident">
+        <div class="flex flex-col h-full shadow-2xl w-1/5" style="min-width: 360px" v-if="this.currentIncident && this.currentWorksite">
             <div style="background-color: white" class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center">
             <div class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
                 <ccu-icon type="active" size="small"></ccu-icon>
@@ -100,10 +102,10 @@
             </div>
             <a-skeleton class="bg-white h-full p-3 flex-grow" active v-if="spinning"></a-skeleton>
             <div class="h-full" v-if="!spinning && (isEditingWorksite || isNewWorksite)">
-                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId" @geocoded="addMarkerToMap" :reloadTable="reloadTable" :incident="this.currentIncident"/>
+                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite" :reloadTable="reloadTable" :incident="this.currentIncident"/>
             </div>
             <div class="h-full" v-if="!spinning && isViewingWorksite">
-                <CaseView :worksite="currentWorksite" :incident="currentIncident" @changed="onWorksiteChanged"/>
+                <CaseView :worksite="currentWorksite" :incident="currentIncident" @changed="loadWorksite" @closeWorksite="closeWorksite"/>
             </div>
         </div>
     </div>
@@ -120,9 +122,11 @@
     import Table from "@/components/Table";
     import RealtimeMapFull from "@/components/RealtimeMapFull";
     import WorksiteFilters from "@/components/WorksiteFilters";
+    import Modal from "@/components/Modal";
     import BaseButton from "@/components/BaseButton";
     import Status from "@/models/Status";
     import { getStatusBadge } from '@/filters';
+    import Autocomplete from "@/components/Autocomplete";
 
     const columns = [
         {
@@ -180,12 +184,14 @@
 
     export default {
         components: {
+            Autocomplete,
             BaseButton,
             CaseView,
             CaseForm,
             RealtimeMapFull,
             WorksiteFilters,
             Table,
+            Modal,
         },
         name: "Cases",
         data() {
@@ -215,14 +221,40 @@
                 columns,
                 currentQuery: {},
                 filters: {
-                    fields: {
-
-                    }
+                    fields: {},
+                    statuses: {},
+                    sub_fields: {},
                 },
                 appliedFilters: {},
                 newMarker: null,
                 getStatusBadge
             };
+        },
+        created() {
+            // setInterval(function () {
+            //     this.$log.debug('polling');
+            //     this.updateUserState();
+            // }.bind(this), 100000);
+        },
+        async mounted() {
+            if (this.currentUser.states) {
+                if (this.currentUser.states.showingMap) {
+                    this.showingMap = true;
+                    this.showingTable = false;
+                }
+                if (this.currentUser.states.appliedFilters) {
+                    this.appliedFilters = this.currentUser.states.appliedFilters;
+                }
+                if (this.currentUser.states.filters) {
+                    this.filters = this.currentUser.states.filters;
+                }
+            }
+            if (this.currentIncidentId) {
+                this.fetch({
+                    pageSize: this.pagination.pageSize,
+                    page: 1,
+                })
+            }
         },
         watch: {
             currentIncident: function () {
@@ -247,8 +279,28 @@
                 });
             },
 
+            updateUserState(data) {
+                if (!data) {
+                    data = {}
+                }
+                User.api().updateUserState({
+                    incident: this.currentIncidentId,
+                    appliedFilters: this.appliedFilters,
+                    filters: this.filters,
+                    showingMap: this.showingMap,
+                    showingTable: this.showingTable,
+                    ...data
+                })
+            },
+
             onUpdatedFilters(filters) {
-                this.filters = filters
+                this.filters = filters;
+            },
+
+            onMapMoved(bounds) {
+                this.updateUserState({
+                    mapViewPort: bounds
+                })
             },
 
             async fetch(params = {}) {
@@ -257,9 +309,9 @@
                     fields: 'id,name,address,case_number,work_types,city,state,county,flags,blurred_location,incident,postal_code',
                     incident: this.currentIncidentId,
                 };
-                this.currentQuery = query;
+                this.currentQuery = { ...query, ...this.appliedFilters };
                 let response = await this.$http
-                    .get("http://api.staging.crisiscleanup.io/worksites", {
+                    .get(`${process.env.VUE_APP_API_BASE_URL}/worksites`, {
                         params: {
                             ...query,
                             offset: params.pageSize * (params.page - 1),
@@ -285,10 +337,21 @@
                 // this.caseFormKey = !this.caseFormKey;
             },
 
-            async onWorksiteChanged() {
+            async loadWorksite(worksiteId) {
+                if (worksiteId) {
+                    this.currentWorksiteId = worksiteId;
+                    this.isViewingWorksite = true;
+                    this.isEditingWorksite = false;
+                    this.isNewWorksite = false;
+                }
                 await Worksite.api().fetchById(this.currentWorksiteId);
                 this.currentWorksite = Worksite.find(this.currentWorksiteId);
                 this.reloadTable();
+            },
+
+            async closeWorksite() {
+                this.currentWorksiteId = null;
+                this.currentWorksite = null;
             },
 
             displayWorksite: async function (record) {
@@ -315,6 +378,7 @@
                 this.showingMap = false;
                 this.showingTable = false;
                 this[view] = true;
+                this.updateUserState()
             },
             async onSearch(search) {
                 this.searchingWorksites = true;
@@ -324,8 +388,8 @@
             },
             async handleChange(value) {
                 this.spinning = true;
-                await Worksite.api().fetchById(value);
-                let worksite = Worksite.find(value);
+                await Worksite.api().fetchById(value.id);
+                let worksite = Worksite.find(value.id);
                 this.currentWorksiteId = worksite.id;
                 this.currentWorksite = worksite;
                 this.spinning = false;
@@ -373,6 +437,7 @@
                     pageSize: this.pagination.pageSize,
                     page: this.pagination.current,
                 })
+                this.updateUserState()
             },
             editWorksite() {
                 this.isViewingWorksite = false;
@@ -417,14 +482,6 @@
             addMarkerToMap(location) {
                 this.newMarker = location;
                 this.toggleView('showingMap');
-            }
-        },
-        async mounted() {
-            if (this.currentIncidentId) {
-                this.fetch({
-                    pageSize: this.pagination.pageSize,
-                    page: 1,
-                })
             }
         },
         computed: {

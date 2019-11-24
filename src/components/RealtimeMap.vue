@@ -183,7 +183,7 @@
             },
             async pullSites(url) {
                 let response = await this.$http
-                    .get(url || "http://api.staging.crisiscleanup.io/worksites_map", {
+                    .get(url || `${process.env.VUE_APP_API_BASE_URL}/worksites_map`, {
                         params: url ? {} : {...this.query, limit: 5000, fields: 'id,location'}
                     });
 

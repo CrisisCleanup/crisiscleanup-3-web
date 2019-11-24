@@ -188,7 +188,7 @@
             },
             async getWorksiteCount() {
                 let response = await this.$http
-                    .get("http://api.staging.crisiscleanup.io/worksites", {
+                    .get(`${process.env.VUE_APP_API_BASE_URL}/worksites`, {
                         params: {
                             incident: this.currentIncidentId,
                             limit: 1,
@@ -198,7 +198,7 @@
             },
             async getClaimedCount() {
                 let response = await this.$http
-                    .get("http://api.staging.crisiscleanup.io/worksites", {
+                    .get(`${process.env.VUE_APP_API_BASE_URL}/worksites`, {
                         params: {
                             incident: this.currentIncidentId,
                             limit: 1,
@@ -212,7 +212,7 @@
                 let openStatuses = Status.query().where('primary_state', 'open').get()
 
                 let response = await this.$http
-                    .get("http://api.staging.crisiscleanup.io/worksites", {
+                    .get(`${process.env.VUE_APP_API_BASE_URL}/worksites`, {
                         params: {
                             incident: this.currentIncidentId,
                             limit: 1,
@@ -226,7 +226,7 @@
                 let closedStatuses = Status.query().where('primary_state', 'closed').get()
 
                 let response = await this.$http
-                    .get("http://api.staging.crisiscleanup.io/worksites", {
+                    .get(`${process.env.VUE_APP_API_BASE_URL}/worksites`, {
                         params: {
                             incident: this.currentIncidentId,
                             limit: 1,

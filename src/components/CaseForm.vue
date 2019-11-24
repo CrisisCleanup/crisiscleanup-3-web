@@ -7,80 +7,38 @@
                     Basic Information
                 </div>
             </h4>
-            <a-form-item>
-                <base-input v-model="worksite.what3words" icon="info" size="large" placeholder="Location" required disabled></base-input>
+            <div class="py-1">
+                <base-input :value="worksite.what3words" @input="(value) => { updateWorksite(value,'what3words') }" tooltip="info" size="large" placeholder="Location" required disabled></base-input>
+
                 <div class="flex justify-around items-center">
                     <BaseButton type="bare" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe" title="Use my location" />
                     <BaseButton type="bare" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap" title="Select on Map" />
-                    <a-modal :closable="false" title="" v-model="overlayMapVisible" @ok="handleOk">
+                    <modal v-if="overlayMapVisible" @close="overlayMapVisible = false" modal-classes="bg-white w-1/3 shadow" modal-style="height: 60%">
                         <OverlayMap @addedMarker="onAddedMarker" :initial-location="this.worksite.location" />
-                    </a-modal>
+                        <div slot="footer" class="flex items-center justify-center p-2 bg-white">
+                            <base-button title="Save" size="medium" class="m-1 p-1 px-6" type="primary" :action="handleOk"></base-button>
+                        </div>
+                    </modal>
                 </div>
-            </a-form-item>
-            <a-form-item>
-                <base-input v-model="worksite.name" icon="info" size="large" placeholder="Name" required></base-input>
-            </a-form-item>
-            <a-form-item>
-            <a-auto-complete
-                    @select="onGeocodeSelect"
-                    @search="geocoderSearch"
-                    v-model="worksite.address"
-                    size="large"
-                    placeholder="address"
-                    @change="findPotentialGeocode"
-                    required
-            >
-                <a-tooltip slot="suffix">
-                    <template slot="title">
-                        <span v-html=""></span>
-                    </template>
-                    <a-icon type="question-circle-o"/>
-                </a-tooltip>
-                <template slot="dataSource">
-                    <a-select-option v-for="result in geocoderResults" :key="result.description">{{result.description}}</a-select-option>
-                </template>
-            </a-auto-complete>
-            </a-form-item>
-            <a-form-item>
-                <a-input v-model="worksite.city" size="large" placeholder="city" @change="findPotentialGeocode" required>
-                    <a-tooltip slot="addonAfter">
-                        <template slot="title">
-                            <span v-html=""></span>
-                        </template>
-                        <a-icon type="question-circle-o"/>
-                    </a-tooltip>
-                </a-input>
-            </a-form-item>
-            <a-form-item>
-                <a-input v-model="worksite.county" size="large" placeholder="county" @change="findPotentialGeocode" required>
-                    <a-tooltip slot="addonAfter">
-                        <template slot="title">
-                            <span v-html=""></span>
-                        </template>
-                        <a-icon type="question-circle-o"/>
-                    </a-tooltip>
-                </a-input>
-            </a-form-item>
-            <a-form-item>
-                <a-input v-model="worksite.state" size="large" placeholder="state" @change="findPotentialGeocode" required>
-                    <a-tooltip slot="addonAfter">
-                        <template slot="title">
-                            <span v-html=""></span>
-                        </template>
-                        <a-icon type="question-circle-o"/>
-                    </a-tooltip>
-                </a-input>
-            </a-form-item>
-            <a-form-item>
-                <a-input v-model="worksite.postal_code" size="large" placeholder="postal_code" @change="findPotentialGeocode" required>
-                    <a-tooltip slot="addonAfter">
-                        <template slot="title">
-                            <span v-html=""></span>
-                        </template>
-                        <a-icon type="question-circle-o"/>
-                    </a-tooltip>
-                </a-input>
-            </a-form-item>
+            </div>
+            <div class="py-1">
+                <base-input :value="worksite.name" @input="(value) => { updateWorksite(value,'name') }" tooltip="info" size="large" placeholder="Name" required></base-input>
+            </div>
+            <div class="py-1">
+                <autocomplete :value="worksite.address" @input="(value) => { updateWorksite(value,'address') }" @selected="onGeocodeSelect"  @search="geocoderSearch" tooltip="info" :suggestions="geocoderResults" display-property="description" placeholder="Address" size="large" required></autocomplete>
+            </div>
+            <div class="py-1">
+                <base-input :value="worksite.city" @input="(value) => { updateWorksite(value,'city') }" tooltip="info" size="large" placeholder="City" required @change="findPotentialGeocode"></base-input>
+            </div>
+            <div class="py-1">
+                <base-input :value="worksite.county" @input="(value) => { updateWorksite(value,'county') }" tooltip="info" size="large" placeholder="County" required @change="findPotentialGeocode"></base-input>
+            </div>
+            <div class="py-1">
+                <base-input :value="worksite.state" @input="(value) => { updateWorksite(value,'state') }" tooltip="info" size="large" placeholder="State" required @change="findPotentialGeocode"></base-input>
+            </div>
+            <div class="py-1">
+                <base-input :value="worksite.postal_code" tooltip="info" size="large" placeholder="Postal Code" required @change="findPotentialGeocode"></base-input>
+            </div>
             <template v-for="field in this.fields">
                 <div :key="field.field_key" v-if="showAllFields || getValue(field.field_key)">
                     <template v-if="['h4'].includes(field.html_type)">
@@ -104,10 +62,10 @@
                         </component>
                     </template>
                     <template v-if="field.html_type === 'select'">
-                        <a-form-item :key="field.field_key">
-                          <span slot="label">
-                            {{field.label_t}}
-                            <a-tooltip>
+                        <div class="py-1" :key="field.field_key">
+                          <span slot="label" class="flex items-center">
+                            <span>{{field.label_t}}</span>
+                            <a-tooltip class="px-1">
                                 <template slot="title">
                                     <span v-html="field.help_t"></span>
                                 </template>
@@ -122,13 +80,13 @@
                                     <font-awesome-icon size="sm" icon="sort" />
                                 </template>
                             </a-select>
-                        </a-form-item>
+                        </div>
                     </template>
                     <template v-if="field.html_type === 'multiselect'">
-                        <a-form-item :key="field.field_key">
-                  <span slot="label">
-                    {{field.label_t}}
-                    <a-tooltip>
+                        <div class="py-1" :key="field.field_key">
+                          <span slot="label" class="flex items-center">
+                    <span>{{field.label_t}}</span>
+                            <a-tooltip class="px-1">
                         <template slot="title">
                             <span v-html="field.help_t"></span>
                         </template>
@@ -143,37 +101,23 @@
                                     <font-awesome-icon size="sm" icon="sort" />
                                 </template>
                             </a-select>
-                        </a-form-item>
+                        </div>
                     </template>
                     <template v-if="field.html_type === 'text'">
-                        <a-form-item :key="field.field_key">
-                            <a-input :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]" size="large" :placeholder="field.placeholder_t">
-                                <a-tooltip slot="addonAfter">
-                                    <template slot="title">
-                                        <span v-html="field.help_t"></span>
-                                    </template>
-                                    <a-icon type="question-circle-o"/>
-                                </a-tooltip>
-                            </a-input>
-                        </a-form-item>
+                        <div class="py-1" :key="field.field_key">
+                            <base-input :value="getValue(field.field_key)" v-model="dynamicFields[field.field_key]" tooltip="info" size="large" :placeholder="field.placeholder_t"></base-input>
+                        </div>
                     </template>
                     <template v-if="field.html_type === 'suggest'">
-                        <a-form-item :key="field.field_key">
-                            <a-auto-complete :placeholder="field.placeholder_t" :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]">
-                                <a-tooltip slot="addonAfter">
-                                    <template slot="title">
-                                        <span v-html="field.help_t"></span>
-                                    </template>
-                                    <a-icon type="question-circle-o"/>
-                                </a-tooltip>
-                            </a-auto-complete>
-                        </a-form-item>
+                        <div class="py-1" :key="field.field_key">
+                            <autocomplete :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]" tooltip="info" :suggestions="geocoderResults" display-property="description" :placeholder="field.placeholder_t"></autocomplete>
+                        </div>
                     </template>
                     <template v-if="field.html_type === 'textarea'">
-                        <a-form-item :key="field.field_key">
-                  <span slot="label">
-                    {{field.label_t}}
-                    <a-tooltip>
+                        <div class="py-1" :key="field.field_key">
+                            <span slot="label" class="flex items-center">
+                    <span>{{field.label_t}}</span>
+                            <a-tooltip class="px-1">
                         <template slot="title">
                             <span v-html="field.help_t"></span>
                         </template>
@@ -181,18 +125,18 @@
                     </a-tooltip>
                   </span>
                             <a-textarea :placeholder="field.placeholder_t" rows="4" :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]"/>
-                        </a-form-item>
+                        </div>
                     </template>
                     <template v-if="field.html_type === 'checkbox'">
-                        <a-form-item :key="field.field_key">
-                            <a-checkbox :defaultValue="getBooleanValue(field.field_key)" v-model="dynamicFields[field.field_key]">{{field.label_t}}</a-checkbox>
-                            <a-tooltip>
+                        <div class="py-1 flex items-center" :key="field.field_key">
+                            <base-checkbox :value="getBooleanValue(field.field_key)" v-model="dynamicFields[field.field_key]">{{field.label_t}}</base-checkbox>
+                            <a-tooltip class="px-1">
                                 <template slot="title">
                                     <span v-html="field.help_t"></span>
                                 </template>
                                 <a-icon type="question-circle-o"/>
                             </a-tooltip>
-                        </a-form-item>
+                        </div>
                     </template>
                 </div>
             </template>
@@ -208,11 +152,14 @@
 <script>
     import Worksite from "@/models/Worksite";
     import OverlayMap from "@/components/OverlayMap";
+    import Modal from "@/components/Modal";
     import BaseButton from "@/components/BaseButton";
+    import BaseCheckbox from "@/components/BaseCheckbox";
     import GeocoderService from "@/services/geocoder.service"
     import { What3wordsService } from "@/services/what3words.service";
     import {getErrorMessage} from "@/utils/errors";
     import BaseInput from "@/components/BaseInput";
+    import Autocomplete from "@/components/Autocomplete";
 
     export default {
         props: {
@@ -222,8 +169,11 @@
             incident: Object,
         },
         components: {
+            Autocomplete,
             BaseInput,
             BaseButton,
+            BaseCheckbox,
+            Modal,
             OverlayMap
         },
         name: "CaseForm",
@@ -231,12 +181,11 @@
             if (this.worksiteId) {
                 this.worksite = Worksite.find(this.worksiteId)
             } else {
-                this.worksite = new Worksite({
+                this.worksite = {
                     incident: this.incident.id,
                     form_data: []
-                })
+                }
             }
-
             this.dynamicFields = Object.assign({}, ...this.worksite.form_data.map(s => ({[s.field_key]: s.field_value})));
         },
         data() {
@@ -265,42 +214,53 @@
             handleSubmit() {
 
             },
+            updateWorksite(value, key) {
+                if (this.worksiteId) {
+                    Worksite.update({
+                        where: this.worksite.id,
+                        data: {
+                            [key]: value
+                        },
+                    });
+                    this.worksite = Worksite.find(this.worksite.id);
+                } else {
+                    this.worksite[key] = value;
+                    this.worksite = { ...this.worksite };
+                }
+            },
             async findPotentialGeocode() {
                 let geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-                let nonEmptyKeys = geocodeKeys.filter(key => Boolean(this.worksite[key]))
+                let nonEmptyKeys = geocodeKeys.filter(key => Boolean(this.worksite[key]));
                 if (nonEmptyKeys.length > 1) {
                     let values = nonEmptyKeys.map(key => this.worksite[key]);
                     let address = values.join(', ');
                     let geocode = await GeocoderService.getPlaceDetails(address);
-                    // this.worksite = {
-                    //     ...this.worksite,
-                    //     ...geocode.address_components
-                    // };
+                    geocodeKeys.forEach((key) => this.updateWorksite(geocode.address_components[key], key));
                     const { lat, lng } = geocode.location;
-                    this.worksite.location = {
+                    this.updateWorksite({
                         type: "Point",
                         coordinates: [
                             lng, lat
                         ]
-                    };
-                    this.worksite.what3words = await What3wordsService.getWords(lat, lng);
+                    }, 'location');
+                    const what3words = await What3wordsService.getWords(lat, lng);
+                    this.updateWorksite(what3words, 'what3words');
                     this.$emit('geocoded', geocode.location)
                 }
             },
             async onGeocodeSelect(value) {
-                let geocode = await GeocoderService.getPlaceDetails(value);
-                this.worksite = {
-                    ...this.worksite,
-                    ...geocode.address_components
-                };
+                let geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
+                let geocode = await GeocoderService.getPlaceDetails(value.description);
+                geocodeKeys.forEach((key) => this.updateWorksite(geocode.address_components[key], key));
                 const { lat, lng } = geocode.location;
-                this.worksite.location = {
+                this.updateWorksite({
                     type: "Point",
                     coordinates: [
                         lng, lat
                     ]
-                };
-                this.worksite.what3words = await What3wordsService.getWords(lat, lng);
+                }, 'location');
+                const what3words = await What3wordsService.getWords(lat, lng);
+                this.updateWorksite(what3words, 'what3words');
                 this.$emit('geocoded', geocode.location)
             },
             async geocoderSearch(value) {
@@ -309,15 +269,15 @@
             async handleOk() {
                 this.overlayMapVisible = false;
                 if (this.overlayMapLocation) {
-                    this.worksite.location = {
+                    let { lat, lng } = this.overlayMapLocation;
+                    this.updateWorksite({
                         type: "Point",
                         coordinates: [
-                            this.overlayMapLocation.lng, this.overlayMapLocation.lat
+                            lng, lat
                         ]
-                    };
-
-                    let { lat, lng } = this.overlayMapLocation;
-                    this.worksite.what3words = await What3wordsService.getWords(lat, lng);
+                    }, 'location');
+                    const what3words = await What3wordsService.getWords(lat, lng);
+                    this.updateWorksite(what3words, 'what3words');
                 }
             },
             onAddedMarker(value) {
@@ -330,12 +290,15 @@
                 }
 
                 if (this.location) {
-                    this.worksite.location = {
+                    this.updateWorksite({
                         type: "Point",
                         coordinates: [
                             this.location.coords.longitude, this.location.coords.latitude
                         ]
-                    };
+                    }, 'location');
+
+                    const what3words = await What3wordsService.getWords(this.location.coords.latitude, this.location.coords.longitude);
+                    this.updateWorksite(what3words, 'what3words');
                 }
                 let field_data = this.dynamicFields;
 
@@ -345,14 +308,17 @@
                     }
                 );
 
-                this.worksite.form_data = truthy_values.map(
+                const form_data = truthy_values.map(
                     (key) => {
                         return {
                             field_key: key,
                             field_value: field_data[key]
                         }
                     }
-                )
+                );
+
+                this.updateWorksite(form_data, 'form_data');
+
                 try {
                     if (this.worksite.id) {
                         await Worksite.api().put(`/worksites/${this.worksite.id}`, {
@@ -360,12 +326,13 @@
                             skip_duplicate_check: true
                         })
                     } else {
-                        await Worksite.api().post('/worksites', {...this.worksite, skip_duplicate_check: true})
-                        this.worksite = Worksite.find(this.worksite.id);
+                        let savedWorksite = await Worksite.api().post('/worksites', {...this.worksite, skip_duplicate_check: true});
+                        this.worksite = Worksite.find(savedWorksite.entities.worksites[0].id);
                     }
                     await this.$message.success('Worksite saved successfully');
                     if (reload) {
                         this.reloadTable()
+                        this.$emit('savedWorksite', this.worksite.id)
                     }
                 } catch (error) {
                     await this.$message.error(getErrorMessage(error));
@@ -386,6 +353,7 @@
                 await Worksite.api().fetchById(this.worksite.id);
                 this.worksite = Worksite.find(this.worksite.id);
                 this.reloadTable()
+                this.$emit('savedWorksite', this.worksite.id)
             },
             resetForm() {
                 this.worksite = new Worksite({incident: this.incident.id, form_data: []});
@@ -418,6 +386,7 @@
             },
             showOverlayMap() {
                 this.overlayMapVisible = true;
+                return false;
             },
             async getLocation() {
                 return new Promise((resolve, reject) => {
@@ -436,11 +405,8 @@
                 try {
                     this.gettingLocation = false;
                     this.location = await this.getLocation();
-
-                    this.worksite.what3words = await What3wordsService.getWords(
-                        this.location.coords.latitude,
-                        this.location.coords.longitude
-                    );
+                    const what3words = await What3wordsService.getWords(this.location.coords.latitude, this.location.coords.longitude);
+                    this.updateWorksite(what3words, 'what3words');
                 } catch(e) {
                     this.gettingLocation = false;
                     this.errorStr = e.message;
@@ -478,7 +444,7 @@
     }
 
     h5 {
-        font-size: 12px;
+        font-size: 14px;
         font-weight: bold;
     }
 </style>

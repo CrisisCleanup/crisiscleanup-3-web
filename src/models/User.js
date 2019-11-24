@@ -11,6 +11,7 @@ export default class User extends Model {
             email: this.string(''),
             roles: this.attr(null),
             organization: this.attr(null),
+            states: this.attr(null),
         }
     }
 
@@ -26,6 +27,22 @@ export default class User extends Model {
                 return this.post(`/invitations`, {
                     invitee_email: email,
                 }, { save: false});
+            },
+            async updateUserState(states) {
+                let currentUser = User.query().first();
+                let newStates = {
+                    ...currentUser.states,
+                    ...states
+                };
+                await this.patch(`/users/${currentUser.id}`, {
+                    states: newStates
+                }, { save: false});
+                await User.update({
+                    where: currentUser.id,
+                    data: {
+                        states: newStates
+                    },
+                })
             }
         }
     }

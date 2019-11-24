@@ -1,8 +1,8 @@
 <template>
-    <div class="fullsize-map" style="position: relative;">
+    <a-spin :spinning="mapLoading" class="fullsize-map" style="position: relative;">
         <div class="home-map" ref="map">
         </div>
-    </div>
+    </a-spin>
 </template>
 <style>
 
@@ -25,6 +25,8 @@
     import 'leaflet.gridlayer.googlemutant';
     import 'leaflet-pixi-overlay'
     import 'leaflet.heat'
+    import { solveCollision } from '@/utils/easing';
+    import User from "@/models/User";
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -76,9 +78,14 @@
                     "maxZoom": 18,
                     "noWrap": false,
                 }),
-
+                mapLoading: false,
                 markerLayer: L.layerGroup(),
                 markers: [],
+            }
+        },
+        computed: {
+            currentUser() {
+                return User.query().first()
             }
         },
         mounted() {
@@ -94,6 +101,16 @@
         methods: {
             initMap(options) {
                 this.map = L.map(this.$refs.map, options);
+                this.map.on('moveend', () => {
+                    this.$emit('mapMoved', this.map.getBounds());
+                });
+                if (this.currentUser.states.mapViewPort) {
+                    let { _northEast, _southWest } = this.currentUser.states.mapViewPort;
+                    this.map.fitBounds([
+                        [_northEast.lat, _northEast.lng],
+                        [_southWest.lat, _southWest.lng]
+                    ]);
+                }
                 this.tileLayer.addTo(this.map);
                 this.markerLayer.addTo(this.map);
                 this.pullSites();
@@ -107,22 +124,27 @@
                 let loader = new Loader();
                 let map = this.map;
                 loader.add('marker', 'marker-icon.png');
-                loader.add('fire', 'flammable-32.png');
-                loader.add('garbage', 'trash-6-32.png');
-                loader.add('boot', 'boots-32.png');
+                loader.add('fire', 'fire.svg');
+                loader.add('garbage', 'trash.svg');
+                loader.add('landslide', 'landslide.svg');
+                loader.add('boot', 'boot.svg');
                 loader.add('tent', 'tent-32.png');
-                loader.add('tree', 'tree-32.gif');
+                loader.add('tree', 'tree.svg');
+                loader.add('fan', 'fan.svg');
+                loader.add('broom', 'broom.svg');
+                loader.add('dot', 'white-circle.svg');
                 let self = this;
                 loader.load(function (loader, resources) {
                     let mapping = {
-                        'muck_out': resources.tree.texture,
-                        'trees': resources.tent.texture,
-                        'tarp': resources.boot.texture,
+                        'muck_out': resources.boot.texture,
+                        'trees': resources.tree.texture,
+                        'tarp': resources.tent.texture,
                         'debris': resources.garbage.texture,
                         'fire': resources.fire.texture,
-                        'mold_remediation': resources.tree.texture,
+                        'mold_remediation': resources.fire.texture,
                         'rebuild': resources.tree.texture,
-                        // 'fire': resources.fire.texture
+                        'landslide': resources.landslide.texture,
+                        'ash': resources.broom.texture,
                     };
                     let pixiLayer = (function () {
                         let firstDraw = true;
@@ -146,7 +168,14 @@
                                 prevZoom = zoom;
                                 markers.forEach(function (marker) {
                                     let coords = project([marker.position.lat, marker.position.lng]);
-                                    let markerSprite = new Sprite(mapping[marker.work_types[0].work_type] || resources.marker.texture);
+                                    // let markerSprite = new Sprite(mapping[marker.work_types[0].work_type] || resources.marker.texture);
+                                    let markerSprite = new Sprite();
+                                    let work_type = marker.work_types[0].work_type;
+                                    if (work_type && mapping[work_type]) {
+                                        markerSprite.texture = mapping[marker.work_types[0].work_type];
+                                    } else {
+                                        markerSprite.texture = resources.marker.texture;
+                                    }
                                     markerSprite.tint = colors_dict[marker.work_types[0].status];
                                     markerSprite.x = coords.x;
                                     markerSprite.y = coords.y;
@@ -158,21 +187,21 @@
                                     markerSprite.legend = marker.city || marker.label;
                                     markerSprite.data = marker;
 
-                                    markerSprite.interactive = true;
-                                    markerSprite.cursor = 'pointer';
-                                    markerSprite.name = marker.case_number;
-                                    markerSprite.on('click', () => {
-                                        self.onSelectmarker(marker);
-                                    });
+                                    // markerSprite.interactive = true;
+                                    // markerSprite.cursor = 'pointer';
+                                    // markerSprite.name = marker.case_number;
+                                    // markerSprite.on('click', () => {
+                                    //     self.onSelectmarker(marker);
+                                    // });
                                 });
 
-                                // let quadTrees = {};
-                                // for (let z = 9; z <= map.getMaxZoom(); z++) {
-                                //     let rInit = ((z <= 7) ? 16 : 24) / utils.getScale(z);
-                                //     quadTrees[z] = solveCollision(markerSprites, {r0: rInit, zoom: z});
-                                // }
+                                let quadTrees = {};
+                                for (let z = 12; z <= map.getMaxZoom(); z++) {
+                                    let rInit = ((z <= 7) ? 16 : 24) / utils.getScale(z);
+                                    quadTrees[z] = solveCollision(markerSprites, {r0: rInit, zoom: z});
+                                }
                                 const findMarker = (ll) => {
-                                    if (utils.getMap().getZoom() < 9) {
+                                    if (utils.getMap().getZoom() < 12) {
                                         return null;
                                     }
                                     let layerPoint = project(ll);
@@ -196,30 +225,39 @@
                                 };
 
                                 // let popup = L.popup({className: 'pixi-popup'})
-                                //
-                                // map.on('click', function (e) {
-                                //     let marker = findMarker(e.latlng);
-                                //     if (marker) {
-                                //         self.onSelectmarker(marker.data)
-                                //         popup.setLatLng(e.latlng)
-                                //             .setContent(`<b>${marker.data.case_number}</b>`).openOn(map);
-                                //     } else {
-                                //         map.closePopup();
-                                //     }
-                                // });
-                                //
-                                // map.on('mousemove', L.Util.throttle((e) => {
-                                //     let marker = findMarker(e.latlng);
-                                //     if (marker) {
-                                //         L.DomUtil.addClass(this._container, 'cursor-pointer');
-                                //     } else {
-                                //         L.DomUtil.removeClass(this._container, 'cursor-pointer');
-                                //     }
-                                // }, 32));
 
+                                map.on('click', function (e) {
+                                    let marker = findMarker(e.latlng);
+                                    if (marker) {
+                                        self.onSelectmarker(marker.data)
+                                        // popup.setLatLng(e.latlng)
+                                        //     .setContent(`<b>${marker.data.case_number}</b>`).openOn(map);
+                                    } else {
+                                        map.closePopup();
+                                    }
+                                });
+
+                                map.on('mousemove', L.Util.throttle((e) => {
+                                    let marker = findMarker(e.latlng);
+                                    if (marker) {
+                                        L.DomUtil.addClass(this._container, 'cursor-pointer');
+                                    } else {
+                                        L.DomUtil.removeClass(this._container, 'cursor-pointer');
+                                    }
+                                }, 32));
                             }
                             if (firstDraw || prevZoom !== zoom) {
                                 markerSprites.forEach(function (markerSprite) {
+                                    if (zoom < 12) {
+                                        markerSprite.texture = resources.dot.texture
+                                    } else {
+                                        let work_type = markerSprite.data.work_types[0].work_type;
+                                        if (work_type && mapping[work_type]) {
+                                            markerSprite.texture = mapping[markerSprite.data.work_types[0].work_type];
+                                        } else {
+                                            markerSprite.texture = resources.marker.texture;
+                                        }
+                                    }
                                     if (firstDraw) {
                                         markerSprite.scale.set(invScale);
                                     } else {
@@ -265,12 +303,13 @@
                 });
             },
             async pullSites(url) {
+                this.mapLoading = true;
                 let response = await this.$http
-                    .get(url || "http://api.staging.crisiscleanup.io/worksites_map", {
-                        params: url ? {} : {...this.query, limit: 5000, fields: 'id,location'}
+                    .get(url || `${process.env.VUE_APP_API_BASE_URL}/worksites_all`, {
+                        params: url ? {} : { ...this.query }
                     });
 
-                this.markers = response.data.map((worksite) => {
+                this.markers = response.data.results.map((worksite) => {
                     return {
                         ...worksite,
                         position: {
@@ -281,8 +320,8 @@
                 });
 
                 this.$log.debug(`Loading ${this.markers.length} markers`)
-
                 this.loadMarkersOnMap(this.markers);
+                this.mapLoading = false;
             }
         },
         watch: {
