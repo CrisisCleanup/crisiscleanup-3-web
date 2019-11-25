@@ -104,7 +104,10 @@
                 }),
                 Organization.api().get(`/organizations/${this.user.user_claims.organization.id}`)
             ]);
-            let incidentId = this.currentUser.states.incident || Incident.query().orderBy('id', 'desc').first().id;
+            let incidentId = Incident.query().orderBy('id', 'desc').first().id;
+            if(this.currentUser.states && this.currentUser.states.incident) {
+                incidentId = this.currentUser.states.incident;
+            }
             this.setCurrentIncidentId(incidentId);
             await Incident.api().fetchById(incidentId);
             this.loading = false;
