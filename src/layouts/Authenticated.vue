@@ -19,7 +19,7 @@
                 </router-link>
                 <router-link to="/organization" class="menu-item router-link p-2 border-b border-gray-800">
                     <div key="organization" class="flex flex-col items-center">
-                        <ccu-icon type="cases"/>
+                        <ccu-icon type="organization" size="large"/>
                         <div class="menu-text mt-1">My Organization</div>
                     </div>
                 </router-link>

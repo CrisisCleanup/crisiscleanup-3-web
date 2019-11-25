@@ -1,43 +1,60 @@
 <template>
-    <div class="flex h-full items-center justify-center">
-        <div class="p-12">
-            <div class="flex justify-between my-6">
+    <div class="flex h-full w-3/4 m-auto">
+        <div class="p-12 w-full">
+            <div class="flex justify-between items-center my-6">
                 <div>
                     <div class="text-base">Current Requests</div>
                     <div class="text-xs">Sub sections</div>
                 </div>
                 <div class="flex">
-                    <base-button size="small" title="Download" class="mx-2 shadow bg-white px-3 text-xs" icon="download"></base-button>
-                    <base-button size="small" title="Print" class="mx-2 shadow bg-white px-3 text-xs" icon="print"></base-button>
+                    <base-button size="small" title="Download" class="mx-2 shadow bg-white px-4 p-2 text-xs"
+                                 icon="download"/>
+                    <base-button size="small" title="Print" class="mx-2 shadow bg-white px-4 p-2 text-xs" icon="print"/>
                 </div>
             </div>
             <Table class="border text-xs" :data="invitationRequests" :columns="currentRequestsColumns" :loading="false">
                 <template #actions="slotProps">
                     <div class="flex mr-2">
                         <base-button size="small" class="flex-grow m-1 mx-2 text-xs px-3" :action="() => {}"
-                                     title="Ignore"></base-button>
+                                     title="Ignore"/>
                         <base-button size="small" type="bare"
                                      class="flex-grow m-1 mx-2 border-2 border-black text-black text- px-3"
                                      :action="() => { rejectInvitationRequest(slotProps.item) }"
-                                     title="Reject"></base-button>
+                                     title="Reject"/>
                         <base-button size="small" type="primary" class="flex-grow m-1 mx-2 text-black text-xs px-3"
                                      :action="() => { acceptInvitationRequest(slotProps.item) }"
-                                     title="Accept"></base-button>
+                                     title="Accept"/>
                     </div>
                 </template>
             </Table>
 
+
+            <div class="flex justify-between items-center my-6">
+                <div class="flex items-center">
+                    <div class="text-base">Incomplete Invitations</div>
+                    <div class="mx-5 flex items-center bg-white border p-1 px-4 cursor-pointer" @click="() => { }">
+                        Filters
+                        <font-awesome-icon icon="sort" class="ml-20"/>
+                    </div>
+                </div>
+                <div class="flex">
+                    <base-button size="small" title="Download" class="mx-2 shadow bg-white px-4 p-2 text-xs"
+                                 icon="download"/>
+                    <base-button size="small" title="Print" class="mx-2 shadow bg-white px-4 p-2 text-xs" icon="print"/>
+                    <base-button size="small" title="Delete Expired" class="mx-2 shadow bg-white px-4 p-2 text-xs" icon="trash"/>
+                </div>
+            </div>
             <Table class="border text-xs mt-4" :data="invitations" :columns="invitationsColumns" :loading="false">
                 <template #actions="slotProps">
                     <div class="flex mr-2">
                         <base-button size="small" type="primary" class="flex-grow m-1 mx-2 text-black text-xs px-3"
                                      :action="() => { resendInvitation(slotProps.item) }"
-                                     title="Re-Invite"></base-button>
+                                     title="Re-Invite"/>
                     </div>
                 </template>
                 <template #delete="slotProps">
                     <div class="flex mr-2">
-                        <ccu-icon type="trash" size="small" @click.native="() => { deleteInvitation(slotProps.item) }"></ccu-icon>
+                        <ccu-icon type="trash" size="small" @click.native="() => { deleteInvitation(slotProps.item) }"/>
                     </div>
                 </template>
             </Table>
@@ -110,8 +127,10 @@
             }
         },
         async mounted() {
-            await this.loadAllInvitationRequests()
-            await this.loadAllInvitations()
+            await Promise.all([
+                this.loadAllInvitationRequests(),
+                this.loadAllInvitations()
+            ])
         },
         methods: {
             async loadAllInvitationRequests() {
@@ -125,20 +144,25 @@
                 });
             },
             async acceptInvitationRequest(request) {
-                await InvitationRequest.api().acceptInvitationRequest(request)
-                await this.loadAllInvitationRequests()
-                await this.$message.success('Invitation Accepted');
+                await InvitationRequest.api().acceptInvitationRequest(request);
+                await this.loadAllInvitationRequests();
+                await this.$message.success('Invitation Request Accepted');
             },
             async rejectInvitationRequest(request) {
-                await InvitationRequest.api().rejectInvitationRequest(request)
-                await this.loadAllInvitationRequests()
-                await this.$message.success('Invitation Rejected');
+                await InvitationRequest.api().rejectInvitationRequest(request);
+                await this.loadAllInvitationRequests();
+                await this.$message.success('Invitation Request Rejected');
             },
             async resendInvitation(invitation) {
-
+                await Invitation.api().resendInvitation(invitation);
+                await this.loadAllInvitations();
+                await this.$message.success('Invitation Resent');
             },
             async deleteInvitation(invitation) {
-
+                await Invitation.api().delete(`/invitations/${invitation.id}`, {
+                    delete: invitation.id
+                });
+                await this.$message.success('Invitation Deleted');
             }
         },
         computed: {
