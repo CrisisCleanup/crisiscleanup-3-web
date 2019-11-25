@@ -61,6 +61,7 @@
     button {
         outline: 0;
     }
+    button:focus {outline:0;}
     .primary {
         background-color: #fece09
     }

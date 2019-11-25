@@ -1,6 +1,6 @@
 <template>
     <div class="flex layout overflow-hidden">
-        <div class="w-32 bg-gray-800 sidebar">
+        <div class="w-32 sidebar">
             <div class="logo flex justify-center p-1">
                 <img class="w-24" src="@/assets/crisiscleanup_logo.png">
             </div>
@@ -17,6 +17,12 @@
                         <div class="menu-text mt-1">Cases</div>
                     </div>
                 </router-link>
+                <router-link to="/organization" class="menu-item router-link p-2 border-b border-gray-800">
+                    <div key="organization" class="flex flex-col items-center">
+                        <ccu-icon type="cases"/>
+                        <div class="menu-text mt-1">My Organization</div>
+                    </div>
+                </router-link>
             </div>
         </div>
         <div class="flex flex-col w-full">
@@ -27,7 +33,7 @@
 
                         </div>
                         <div class="flex flex-col ml-2">
-                            <BaseSelect
+                            <base-select
                                     placeholder="Select an Incident"
                                     icon="caret-down"
                                     size="middle"
@@ -41,7 +47,7 @@
                                 <template v-slot:options>
                                     <a-select-option :key="incident.id" v-for="incident in incidents" :value="incident.id">{{incident.name}}</a-select-option>
                                 </template>
-                            </BaseSelect>
+                            </base-select>
                             <div class="flex ml-3 font-bold">
                                 <span>{{selectedRoute}}</span>
                             </div>
@@ -72,11 +78,9 @@
     import Organization from "@/models/Organization";
     import Status from "@/models/Status";
     import { mapActions, mapMutations, mapState } from "vuex";
-    import BaseSelect from "@/components/BaseSelect";
 
     export default {
         name: 'Authenticated',
-        components: { BaseSelect },
         data() {
           return {
               loading: false,

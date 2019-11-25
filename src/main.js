@@ -1,57 +1,72 @@
 import Vue from 'vue'
-import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import Antd from 'ant-design-vue'
-import 'ant-design-vue/dist/antd.less'
-import '@/assets/css/tailwind.css'
+
+import App from './App.vue'
 import router from './router'
 import store from './store/index';
+
 import { AuthService } from "@/services/auth.service";
-import * as VueGoogleMaps from 'vue2-google-maps'
+
+import Antd from 'ant-design-vue'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas);
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import 'pretty-checkbox/dist/pretty-checkbox.css';
-import PrettyCheckbox from 'pretty-checkbox-vue';
-import { ServerTable } from 'vue-tables-2';
+
 import Authenticated from "@/layouts/Authenticated";
 import Unauthenticated from "@/layouts/Unauthenticated";
+
 import BaseIcon from "@/components/BaseIcon";
+import BaseCheckbox from "@/components/BaseCheckbox";
+import BaseButton from "@/components/BaseButton";
+import BaseInput from "@/components/BaseInput";
+import BaseSelect from "@/components/BaseSelect";
+import Modal from "@/components/Modal";
+import Autocomplete from "@/components/Autocomplete";
+import Tag from "@/components/Tag";
+
 import VueLog from '@dreipol/vue-log';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueAutosuggest from "vue-autosuggest";
 import { getWorkTypeName } from "@/filters";
 
-library.add(fas);
+import 'ant-design-vue/dist/antd.less'
+import '@/assets/css/tailwind.css'
+import 'pretty-checkbox/dist/pretty-checkbox.css';
 
+// Base Components
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('ccu-icon', BaseIcon);
+Vue.component('base-checkbox', BaseCheckbox);
+Vue.component('base-button', BaseButton);
+Vue.component('base-input', BaseInput);
+Vue.component('base-select', BaseSelect);
+Vue.component('modal', Modal);
+Vue.component('autocomplete', Autocomplete);
+Vue.component('tag', Tag);
+
+// Layouts
 Vue.component('authenticated-layout', Authenticated);
 Vue.component('authenticated-layout', Authenticated);
 Vue.component('unauthenticated-layout', Unauthenticated);
-Vue.use(VueAutosuggest);
 
 Vue.config.productionTip = false;
+
+// 3rd Party Libraries
+Vue.use(VueAutosuggest);
 Vue.use(VueAxios, axios);
 Vue.use(Antd)
-Vue.use(PrettyCheckbox);
-Vue.use(ServerTable);
 Vue.use(require('vue-moment'));
-
 Vue.use(VueLog);
 
-Vue.use(VueGoogleMaps, {
-  load: {
-    key: process.env.VUE_APP_GOOGLE_MAPS_API_KEY,
-    libraries: 'places', // This is required if you use the Autocomplete plugin
-  },
-  installComponents: true
-});
-
+// Filters
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.filter('getWorkTypeName', getWorkTypeName);
 
+
+// API & Auth
 if (AuthService.getUser()) {
   axios.defaults.headers.common["Authorization"] = `Bearer ${AuthService.getToken()}`
 }

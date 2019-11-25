@@ -6,13 +6,13 @@
                 <div :key="note.id" v-for="note in worksite.notes" class="bg-gray-100 my-1 p-1 flex items-center">
                     <span class="text-gray-600 mr-3">{{ note.created_at | moment("from", "now") }}:</span><span>{{note.note}}</span>
                 </div>
-                <BaseButton v-if="!addingNotes" class="my-1" type="link" title="+ Add Note" :action="() => { this.addingNotes = true }"></BaseButton>
+                <base-button v-if="!addingNotes" class="my-1" type="link" title="+ Add Note" :action="() => { this.addingNotes = true }"></base-button>
                 <div v-if="addingNotes">
                     Note
                     <a-textarea rows="4" v-model="currentNote"/>
                     <div class="flex items-center justify-between">
-                        <BaseButton class="my-1" type="bare" title="Cancel" :action="cancelNote"></BaseButton>
-                        <BaseButton class="my-1" type="link" title="Save" :action="saveNote"></BaseButton>
+                        <base-button class="my-1" type="bare" title="Cancel" :action="cancelNote"></base-button>
+                        <base-button class="my-1" type="link" title="Save" :action="saveNote"></base-button>
                     </div>
                 </div>
             </div>
@@ -35,8 +35,8 @@
                                 <div class="flex items-center">
                                     <StatusDropDown class="block" :default-value="work_type.status"
                                                         :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
-                                        <BaseButton type="link" :action="() => { return requestWorkType(work_type) }"
-                                                    title="Request" class="ml-2 p-1 px-2"></BaseButton>
+                                        <base-button type="link" :action="() => { return requestWorkType(work_type) }"
+                                                    title="Request" class="ml-2 p-1 px-2"></base-button>
                                 </div>
                             </div>
                         </template>
@@ -51,8 +51,8 @@
                             <div class="flex items-center">
                                 <StatusDropDown class="block" :default-value="work_type.status"
                                                     :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
-                                    <BaseButton type="primary" :action="() => { return unclaimWorkType(work_type) }"
-                                                title="Unclaim" class="ml-2 p-1 px-2"></BaseButton>
+                                    <base-button type="primary" :action="() => { return unclaimWorkType(work_type) }"
+                                                title="Unclaim" class="ml-2 p-1 px-2"></base-button>
                             </div>
                         </div>
                     </template>
@@ -65,8 +65,8 @@
                             <div class="flex items-center">
                                 <StatusDropDown class="block" :default-value="work_type.status"
                                                 :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
-                                <BaseButton type="primary" :action="() => { return claimWorkType(work_type) }"
-                                            title="Claim" class="ml-2 p-1 px-2"></BaseButton>
+                                <base-button type="primary" :action="() => { return claimWorkType(work_type) }"
+                                            title="Claim" class="ml-2 p-1 px-2"></base-button>
                             </div>
                         </div>
                     </template>
@@ -74,10 +74,10 @@
             </div>
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-center items-center">
-            <BaseButton v-if="workTypesClaimedByOrganization.length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Unclaim" :action="() => { return unclaimWorkType() }"></BaseButton>
-            <BaseButton v-if="workTypesUnclaimed.length > 0" size="medium" type="primary" class="m-1 text-black p-3 px-4" title="Claim" :action="() => { return claimWorkType() }"></BaseButton>
-            <BaseButton v-if="Object.keys(workTypesClaimedByOthers).length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Request" :action="() => { return requestWorkType() }"></BaseButton>
-            <BaseButton size="medium" type="primary" class="m-1 text-black p-3 px-4" title="Done" :action="() => { $emit('closeWorksite') }"></BaseButton>
+            <base-button v-if="workTypesClaimedByOrganization.length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Unclaim" :action="() => { return unclaimWorkType() }"></base-button>
+            <base-button v-if="workTypesUnclaimed.length > 0" size="medium" type="primary" class="m-1 text-black p-3 px-4" title="Claim" :action="() => { return claimWorkType() }"></base-button>
+            <base-button v-if="Object.keys(workTypesClaimedByOthers).length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Request" :action="() => { return requestWorkType() }"></base-button>
+            <base-button size="medium" type="primary" class="m-1 text-black p-3 px-4" title="Done" :action="() => { $emit('closeWorksite') }"></base-button>
         </div>
     </div>
 </template>
@@ -87,14 +87,12 @@ import {getErrorMessage} from "@/utils/errors";
 import StatusDropDown from "@/components/StatusDropDown"
 import User from "@/models/User";
 import Worksite from "@/models/Worksite";
-import WorkType from "@/models/WorkType";
-import BaseButton from "@/components/BaseButton";
 import {groupBy} from "@/utils/array";
 import Organization from "@/models/Organization";
 
 export default {
     name: 'CaseView',
-    components: {BaseButton, StatusDropDown},
+    components: {StatusDropDown},
     props: {
         worksite: Object,
     },
