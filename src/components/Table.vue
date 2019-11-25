@@ -4,7 +4,7 @@
             <div v-if="enableSelection" class="flex items-center p-2 border-b">
                 <base-checkbox @input="setAllChecked" class="mb-5"></base-checkbox>
             </div>
-            <div class="p-2 border-b flex items-center" v-for="column of columns" :key="column.title">{{column.title}}</div>
+            <div class="p-2 border-b flex items-center" v-for="column of columns" :key="column.key">{{column.title}}</div>
         </div>
         <a-spin tip="Loading..." :spinning="loading">
             <div class="body bg-white" :style="gridStyleBody">

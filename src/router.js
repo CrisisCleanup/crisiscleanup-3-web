@@ -39,8 +39,13 @@ const routes = [
         component: Organization,
         name: 'Organization',
         children: [{
+            path: '',
+            component: Invitations,
+            name: 'Invitations',
+        },{
             path: 'invitations',
-            component: Invitations
+            component: Invitations,
+            name: 'Invitations',
         }],
         meta: {layout: "authenticated"}
     },

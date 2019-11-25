@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col h-full">
-        <div class="h-10 bg-white mx-5 border-t flex">
-            <router-link to="/organization/invitations" class="flex w-40 justify-center mx-2 cursor-pointer" tag="div">
+        <div class="h-10 bg-white mx-5 border-t flex justify-center">
+            <router-link to="/organization/invitations" class="flex w-40 justify-center mx-2 cursor-pointer" tag="div" :class="{ 'router-link-active': isInvitationsActive }">
                 <span class="pt-2">Invitation Management</span>
             </router-link>
 
@@ -33,7 +33,12 @@
 
 <script>
     export default {
-        name: "Organization"
+        name: "Organization",
+        computed: {
+            isInvitationsActive() {
+                return this.$route.name === 'Invitations';
+            }
+        }
     }
 </script>
 
