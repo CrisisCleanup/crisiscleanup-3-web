@@ -82,15 +82,13 @@
     import { mapState } from "vuex";
     import { getQueryString } from "@/utils/urls";
     import { getStatusBadge } from '@/filters';
-    import BaseButton from "@/components/BaseButton";
     import { getErrorMessage } from "@/utils/errors";
     import LineChart from "@/components/charts/LineChart";
     import {rand} from "@/utils/charts";
-    import BaseInput from "@/components/BaseInput";
 
     export default {
         name: "Dashboard",
-        components: {BaseInput, BaseButton, LineChart },
+        components: {LineChart },
         data() {
             return {
                 usersToInvite: '',

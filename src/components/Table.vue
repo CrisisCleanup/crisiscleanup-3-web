@@ -1,50 +1,39 @@
 <template>
     <div class="table w-full">
         <div class="header text-gray-600 bg-white" :style="gridStyleHeader">
-            <div class="flex items-center p-2 border-b">
-                <base-checkbox @input="setCheckedAllChecked" class="mb-5"></base-checkbox>
+            <div v-if="enableSelection" class="flex items-center p-2 border-b">
+                <base-checkbox @input="setAllChecked" class="mb-5"></base-checkbox>
             </div>
             <div class="p-2 border-b flex items-center" v-for="column of columns" :key="column.title">{{column.title}}</div>
-            <div class="flex items-center p-2 border-b">
-                <div class="flex items-center justify-center mx-1" style="width: 27px; height: 27px;background-color: #f5f5f5;">
-                    <font-awesome-icon class="cursor-pointer" icon="caret-left"/>
-                </div>
-                <div class="flex items-center justify-center mx-1" style="width: 27px; height: 27px;background-color: #f5f5f5;">
-                    <font-awesome-icon class="cursor-pointer" icon="caret-right"/>
-                </div>
-            </div>
         </div>
         <a-spin tip="Loading..." :spinning="loading">
             <div class="body bg-white" :style="gridStyleBody">
-                <div v-for="item of data" :style="gridStyleRow" class="hover:bg-gray-100" :class="{ 'bg-gray-100': selectedItems.has(item.id)}">
-                    <div class="flex items-center p-2 border-b">
+                <div v-for="item of data" :style="gridStyleRow" class="hover:bg-gray-100" :class="{ 'bg-gray-100': selectedItems.has(item.id)}" @click="rowClick(item)">
+                    <div v-if="enableSelection" class="flex items-center p-2 border-b">
                         <base-checkbox :value="selectedItems.has(item.id)" @input="(value) => { setChecked(item, value)}" class="mb-5"></base-checkbox>
                     </div>
-                    <div class="flex items-center p-2 border-b cursor-pointer" v-for="column of columns" @click="rowClick(item)">
+                    <div class="flex items-center p-2 border-b cursor-pointer" v-for="column of columns">
                         <slot :name="column.key" v-bind:item="item">
                             {{item[column.key]}}
                         </slot>
                     </div>
-                    <div class="flex items-center p-2 border-b actions">
-
-                    </div>
                 </div>
             </div>
         </a-spin>
-        <div class="footer flex items-center justify-between p-4">
+        <div class="footer flex items-center justify-between p-4" v-if="enablePagniation">
             <div>
                 Number per page
-                <BaseSelect :defaultValue="pagination.pageSize" :change="onSelectPageSize" class="ml-1">
+                <base-select :defaultValue="pagination.pageSize" :change="onSelectPageSize" class="ml-1">
                     <template v-slot:options>
                         <a-select-option :key="size" v-for="size in pageSizes" :value="size">
                             {{size}}
                         </a-select-option>
                     </template>
-                </BaseSelect>
+                </base-select>
             </div>
             <div>
                 <div class="flex items-center">
-                    <BaseButton
+                    <base-button
                             :disabled="isPreviousButtonDisabled"
                             :action="() => { pageChangeHandle('previous') }"
                             title="PREV"
@@ -52,20 +41,20 @@
                             class="mr-3 text-base"
                     >
 
-                    </BaseButton>
+                    </base-button>
                     <div>
                         <template v-for="trigger in paginationTriggers">
                             <span :key="trigger" :class="{ 'rounded-full border px-3 py-1 bg-white shadow-inner': trigger === pagination.current }" class="cursor-pointer mx-4 text-base" @click="() => { pageChangeHandle(trigger) }">{{ trigger }}</span>
                         </template>
                     </div>
-                    <BaseButton
+                    <base-button
                             :disabled="isNextButtonDisabled"
                             :action="() => { pageChangeHandle('next') }"
                             title="NEXT"
                             suffixIcon="caret-right"
                             class="text-base"
                     >
-                    </BaseButton>
+                    </base-button>
 
                 </div>
             </div>
@@ -74,17 +63,15 @@
 </template>
 
 <script>
-    import BaseSelect from "@/components/BaseSelect";
-    import BaseButton from "@/components/BaseButton";
-    import BaseCheckbox from "@/components/BaseCheckbox";
     export default {
         name: "Table",
-        components: {BaseSelect, BaseButton, BaseCheckbox},
         props: {
             columns: Array,
             data: Array,
             pagination: Object,
             loading: Boolean,
+            enableSelection: Boolean,
+            enablePagniation: Boolean,
         },
         mounted() {
 
@@ -106,11 +93,13 @@
                 this.selectedItems = new Set(this.selectedItems);
                 this.$emit('selectionChanged', this.selectedItems)
             },
-            setCheckedAllChecked(value) {
+            setAllChecked(value) {
                 if (value) {
                     this.selectedItems = new Set(this.data.map(item => item.id));
+                    this.$emit('allSelected', this.selectedItems)
                 } else {
                     this.selectedItems = new Set();
+                    this.$emit('allDeselected', this.selectedItems)
                 }
                 this.$emit('selectionChanged', this.selectedItems)
             },
@@ -214,8 +203,9 @@
             },
             gridTemplate() {
                 let columnWidths = this.columns.map(column => column.width || '1fr');
-                columnWidths.unshift('35px');
-                columnWidths.push('90px');
+                if (this.enableSelection) {
+                    columnWidths.unshift('35px');
+                }
                 return columnWidths.join(' ')
             },
             gridStyleHeader() {

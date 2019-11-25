@@ -15,10 +15,8 @@
 
 <script>
     import { mapActions } from "vuex";
-    import BaseButton from "@/components/BaseButton";
 
     export default {
-        components: { BaseButton },
         data(){
             return {
                 email : "",

@@ -11,8 +11,8 @@
                 <base-input :value="worksite.what3words" @input="(value) => { updateWorksite(value,'what3words') }" tooltip="info" size="large" placeholder="Location" required disabled></base-input>
 
                 <div class="flex justify-around items-center">
-                    <BaseButton type="bare" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe" title="Use my location" />
-                    <BaseButton type="bare" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap" title="Select on Map" />
+                    <base-button type="bare" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe" title="Use my location" />
+                    <base-button type="bare" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap" title="Select on Map" />
                     <modal v-if="overlayMapVisible" @close="overlayMapVisible = false" modal-classes="bg-white w-1/3 shadow" modal-style="height: 60%">
                         <OverlayMap @addedMarker="onAddedMarker" :initial-location="this.worksite.location" />
                         <div slot="footer" class="flex items-center justify-center p-2 bg-white">
@@ -152,14 +152,9 @@
 <script>
     import Worksite from "@/models/Worksite";
     import OverlayMap from "@/components/OverlayMap";
-    import Modal from "@/components/Modal";
-    import BaseButton from "@/components/BaseButton";
-    import BaseCheckbox from "@/components/BaseCheckbox";
     import GeocoderService from "@/services/geocoder.service"
     import { What3wordsService } from "@/services/what3words.service";
     import {getErrorMessage} from "@/utils/errors";
-    import BaseInput from "@/components/BaseInput";
-    import Autocomplete from "@/components/Autocomplete";
 
     export default {
         props: {
@@ -169,11 +164,6 @@
             incident: Object,
         },
         components: {
-            Autocomplete,
-            BaseInput,
-            BaseButton,
-            BaseCheckbox,
-            Modal,
             OverlayMap
         },
         name: "CaseForm",

@@ -85,12 +85,9 @@
 
 <script>
     import WorkType from "@/models/WorkType";
-    import BaseCheckbox from "@/components/BaseCheckbox";
-    import Tag from "@/components/Tag";
 
     export default {
         name: "WorksiteFilters",
-        components: {Tag, BaseCheckbox},
         props: {
             incident: Object,
             filters: Object

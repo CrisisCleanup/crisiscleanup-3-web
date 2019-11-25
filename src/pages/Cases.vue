@@ -57,16 +57,16 @@
                             <div class="table-operations flex justify-between items-center">
                                 <span class="text-gray-600 text-base font-bold">{{pagination.total}} Cases</span>
                                 <div class="flex">
-                                    <BaseButton class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white"
-                                                :action="() => {}" title="Unclaim"></BaseButton>
-                                    <BaseButton icon="sync"
+                                    <base-button class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white"
+                                                :action="() => {}" title="Unclaim"></base-button>
+                                    <base-button icon="sync"
                                                 class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
-                                                @click="() => {}" title="Update Status"></BaseButton>
-                                    <BaseButton class="ml-3 my-3 text-gray-600 border p-1 px-4 bg-white"
-                                                @click="() => {}" title="Display All"></BaseButton>
+                                                @click="() => {}" title="Update Status"></base-button>
+                                    <base-button class="ml-3 my-3 text-gray-600 border p-1 px-4 bg-white"
+                                                @click="() => {}" title="Display All"></base-button>
                                 </div>
                             </div>
-                                <Table :data="data" :columns="columns" :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
+                                <Table class="border" :data="data" :columns="columns" enable-selection enable-pagniation :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
                                     <template #work_types="slotProps">
                                         <div class="flex flex-col">
                                             <div class="badge-holder flex items-center" :key="work_type.id" v-for="work_type in slotProps.item.work_types">
@@ -122,8 +122,6 @@
     import Table from "@/components/Table";
     import RealtimeMapFull from "@/components/RealtimeMapFull";
     import WorksiteFilters from "@/components/WorksiteFilters";
-    import Modal from "@/components/Modal";
-    import BaseButton from "@/components/BaseButton";
     import Status from "@/models/Status";
     import { getStatusBadge } from '@/filters';
     import Autocomplete from "@/components/Autocomplete";
@@ -185,13 +183,11 @@
     export default {
         components: {
             Autocomplete,
-            BaseButton,
             CaseView,
             CaseForm,
             RealtimeMapFull,
             WorksiteFilters,
             Table,
-            Modal,
         },
         name: "Cases",
         data() {

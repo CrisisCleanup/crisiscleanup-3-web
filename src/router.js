@@ -5,10 +5,18 @@ import Cases from "@/pages/Cases";
 import Dashboard from "@/pages/Dashboard";
 import Login from "@/pages/Login";
 import store from '@/store/index';
+import Organization from "@/pages/organization/Index";
+import Invitations from "@/pages/organization/Invitations";
 
 Vue.use(VueRouter);
 
 const routes = [
+    {
+        path: '/',
+        component: Dashboard,
+        name: 'Dashboard',
+        meta: { layout: "authenticated" }
+    },
     {
         path: '/dashboard',
         component: Dashboard,
@@ -25,6 +33,16 @@ const routes = [
         component: Cases,
         name: 'Cases',
         meta: { layout: "authenticated" }
+    },
+    {
+        path: '/organization',
+        component: Organization,
+        name: 'Organization',
+        children: [{
+            path: 'invitations',
+            component: Invitations
+        }],
+        meta: {layout: "authenticated"}
     },
     {
         path: '/login',
