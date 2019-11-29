@@ -7,6 +7,7 @@ import WorkType from "@/models/WorkType";
 import Status from "@/models/Status";
 import InvitationRequest from "@/models/InvitationRequest";
 import Invitation from "@/models/Invitation";
+import Location from "@/models/Location";
 
 const database = new Database();
 
@@ -18,5 +19,6 @@ database.register(Status, {});
 database.register(Organization, {});
 database.register(InvitationRequest, {});
 database.register(Invitation, {});
+database.register(Location, {});
 
 export default database

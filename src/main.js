@@ -32,6 +32,7 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueAutosuggest from "vue-autosuggest";
 import VTooltip from 'v-tooltip'
 import { getWorkTypeName } from "@/filters";
+import Popover from 'vue-js-popover'
 
 import 'ant-design-vue/dist/antd.less'
 import '@/assets/css/tailwind.css'
@@ -63,6 +64,7 @@ Vue.use(VueAxios, axios);
 Vue.use(Antd)
 Vue.use(require('vue-moment'));
 Vue.use(VueLog);
+Vue.use(Popover)
 
 // Filters
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });

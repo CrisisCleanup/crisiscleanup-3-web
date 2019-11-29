@@ -137,11 +137,12 @@
         methods: {
             initMap(options) {
                 this.map = L.map(this.$refs.map, options);
+                this.$emit('initMap', this.map);
                 this.map.on('moveend', () => {
                     this.$emit('mapMoved', this.map.getBounds());
                     this.showInteractivePopover = false;
                 });
-                if (this.currentUser.states.mapViewPort) {
+                if (this.currentUser.states && this.currentUser.states.mapViewPort) {
                     let {_northEast, _southWest} = this.currentUser.states.mapViewPort;
                     this.map.fitBounds([
                         [_northEast.lat, _northEast.lng],
