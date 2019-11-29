@@ -1,5 +1,5 @@
 <template>
-    <base-button :defaultValue="defaultValue" :change="onSelect" size="small">
+    <base-select :defaultValue="defaultValue" :change="onSelect" size="small">
         <template v-slot:options>
             <a-select-option :key="status.status" v-for="status in statuses" :value="status.status">
                 <div class="badge-holder flex items-center">
@@ -8,7 +8,7 @@
                 </div>
             </a-select-option>
         </template>
-    </base-button>
+    </base-select>
 </template>
 
 <script>

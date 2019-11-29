@@ -21,6 +21,7 @@ export default class Worksite extends Model {
             work_types: this.attr(null),
             what3words: this.attr(null),
             notes: this.attr(null),
+            events: this.attr(null),
             reported_by: this.attr(null),
         }
     }
@@ -70,8 +71,21 @@ export default class Worksite extends Model {
                     return this.request({
                         url: `/worksites/${id}/download`,
                         method: 'POST',
-                        responseType: 'blob', // important
+                        responseType: 'blob',
                         headers: { Accept: "application/pdf" },
+                        save: false
+                    });
+                } catch (e) {
+                    // console.error(e)
+                }
+            },
+            downloadWorksite(id) {
+                try {
+                    return this.request({
+                        url: `/worksites/${id}`,
+                        method: 'GET',
+                        responseType: 'blob',
+                        headers: { Accept: "text/csv" },
                         save: false
                     });
                 } catch (e) {

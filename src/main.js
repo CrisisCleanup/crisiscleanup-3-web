@@ -30,11 +30,13 @@ import Tag from "@/components/Tag";
 import VueLog from '@dreipol/vue-log';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueAutosuggest from "vue-autosuggest";
+import VTooltip from 'v-tooltip'
 import { getWorkTypeName } from "@/filters";
 
 import 'ant-design-vue/dist/antd.less'
 import '@/assets/css/tailwind.css'
 import 'pretty-checkbox/dist/pretty-checkbox.css';
+
 
 // Base Components
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -56,6 +58,7 @@ Vue.config.productionTip = false;
 
 // 3rd Party Libraries
 Vue.use(VueAutosuggest);
+Vue.use(VTooltip)
 Vue.use(VueAxios, axios);
 Vue.use(Antd)
 Vue.use(require('vue-moment'));

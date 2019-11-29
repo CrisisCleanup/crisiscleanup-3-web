@@ -7,23 +7,23 @@
                     <div class="text-xs">Sub sections</div>
                 </div>
                 <div class="flex">
-                    <base-button size="small" title="Download" class="mx-2 shadow bg-white px-4 p-2 text-xs"
+                    <base-button size="small" text="Download" class="mx-2 shadow bg-white px-4 p-2 text-xs"
                                  icon="download"/>
-                    <base-button size="small" title="Print" class="mx-2 shadow bg-white px-4 p-2 text-xs" icon="print"/>
+                    <base-button size="small" text="Print" class="mx-2 shadow bg-white px-4 p-2 text-xs" icon="print"/>
                 </div>
             </div>
             <Table class="border text-xs" :data="invitationRequests" :columns="currentRequestsColumns" :loading="false">
                 <template #actions="slotProps">
                     <div class="flex mr-2">
                         <base-button size="small" class="flex-grow m-1 mx-2 text-xs px-3" :action="() => {}"
-                                     title="Ignore"/>
+                                     text="Ignore"/>
                         <base-button size="small" type="bare"
                                      class="flex-grow m-1 mx-2 border-2 border-black text-black text- px-3"
                                      :action="() => { rejectInvitationRequest(slotProps.item) }"
-                                     title="Reject"/>
+                                     text="Reject"/>
                         <base-button size="small" type="primary" class="flex-grow m-1 mx-2 text-black text-xs px-3"
                                      :action="() => { acceptInvitationRequest(slotProps.item) }"
-                                     title="Accept"/>
+                                     text="Accept"/>
                     </div>
                 </template>
             </Table>
@@ -38,10 +38,10 @@
                     </div>
                 </div>
                 <div class="flex">
-                    <base-button size="small" title="Download" class="mx-2 shadow bg-white px-4 p-2 text-xs"
+                    <base-button size="small" text="Download" class="mx-2 shadow bg-white px-4 p-2 text-xs"
                                  icon="download"/>
-                    <base-button size="small" title="Print" class="mx-2 shadow bg-white px-4 p-2 text-xs" icon="print"/>
-                    <base-button size="small" title="Delete Expired" class="mx-2 shadow bg-white px-4 p-2 text-xs" icon="trash"/>
+                    <base-button size="small" text="Print" class="mx-2 shadow bg-white px-4 p-2 text-xs" icon="print"/>
+                    <base-button size="small" text="Delete Expired" class="mx-2 shadow bg-white px-4 p-2 text-xs" icon="trash"/>
                 </div>
             </div>
             <Table class="border text-xs mt-4" :data="invitations" :columns="invitationsColumns" :loading="false">
@@ -49,7 +49,7 @@
                     <div class="flex mr-2">
                         <base-button size="small" type="primary" class="flex-grow m-1 mx-2 text-black text-xs px-3"
                                      :action="() => { resendInvitation(slotProps.item) }"
-                                     title="Re-Invite"/>
+                                     text="Re-Invite"/>
                     </div>
                 </template>
                 <template #delete="slotProps">

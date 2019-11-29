@@ -36,7 +36,7 @@
                     <base-button
                             :disabled="isPreviousButtonDisabled"
                             :action="() => { pageChangeHandle('previous') }"
-                            title="PREV"
+                            text="PREV"
                             icon="caret-left"
                             class="mr-3 text-base"
                     >
@@ -50,7 +50,7 @@
                     <base-button
                             :disabled="isNextButtonDisabled"
                             :action="() => { pageChangeHandle('next') }"
-                            title="NEXT"
+                            text="NEXT"
                             suffixIcon="caret-right"
                             class="text-base"
                     >

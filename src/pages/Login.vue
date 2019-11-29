@@ -8,7 +8,7 @@
             <h1 class="text-3xl text-center">Sign in</h1>
             <a-input size="large" class="my-2" required v-model="email" type="email" placeholder="Email" autocomplete="email"/>
             <a-input size="large" class="my-2" required v-model="password" type="password" placeholder="Password" autocomplete="password"/>
-            <base-button size="medium" class="px-5 py-2 m-1" type="primary" title="Login"></base-button>
+            <base-button size="medium" class="px-5 py-2 m-1" type="primary" text="Login"></base-button>
         </form>
     </div>
 </template>

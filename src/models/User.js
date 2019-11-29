@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core'
+import { AuthService } from "@/services/auth.service";
 
 export default class User extends Model {
     static entity = 'users';
@@ -29,7 +30,7 @@ export default class User extends Model {
                 }, { save: false});
             },
             async updateUserState(states) {
-                let currentUser = User.query().first();
+                let currentUser = User.find(AuthService.getUser().user_claims.id);
                 let newStates = {
                     ...currentUser.states,
                     ...states

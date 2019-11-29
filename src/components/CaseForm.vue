@@ -11,12 +11,14 @@
                 <base-input :value="worksite.what3words" @input="(value) => { updateWorksite(value,'what3words') }" tooltip="info" size="large" placeholder="Location" required disabled></base-input>
 
                 <div class="flex justify-around items-center">
-                    <base-button type="bare" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe" title="Use my location" />
-                    <base-button type="bare" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap" title="Select on Map" />
+                    <base-button type="bare" size="large" icon="street-view" class="text-gray-700 pt-2" :action="locateMe"
+                                 text="Use my location"/>
+                    <base-button type="bare" size="large" icon="map" class="text-gray-700 pt-2" :action="showOverlayMap"
+                                 text="Select on Map"/>
                     <modal v-if="overlayMapVisible" @close="overlayMapVisible = false" modal-classes="bg-white w-1/3 shadow" modal-style="height: 60%">
                         <OverlayMap @addedMarker="onAddedMarker" :initial-location="this.worksite.location" />
                         <div slot="footer" class="flex items-center justify-center p-2 bg-white">
-                            <base-button title="Save" size="medium" class="m-1 p-1 px-6" type="primary" :action="handleOk"></base-button>
+                            <base-button text="Save" size="medium" class="m-1 p-1 px-6" type="primary" :action="handleOk"></base-button>
                         </div>
                     </modal>
                 </div>
@@ -142,9 +144,11 @@
             </template>
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between">
-            <base-button size="medium" class="flex-grow m-1 border-2 border-black" :action="resetForm" title="Reset"></base-button>
-            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="saveWorksite" title="Save"></base-button>
-            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="claimAndSaveWorksite" title="Claim & Save"></base-button>
+            <base-button size="medium" class="flex-grow m-1 border-2 border-black" :action="resetForm" text="Reset"></base-button>
+            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="saveWorksite"
+                         text="Save"></base-button>
+            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="claimAndSaveWorksite"
+                         text="Claim & Save"></base-button>
         </div>
     </form>
 </template>
