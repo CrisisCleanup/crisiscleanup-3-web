@@ -44,7 +44,7 @@
                         </div>
                         <div class="flex worksite-actions" style="color: #4c4c4d">
                             <base-button class="text-base font-thin mx-4" text="Filters" icon="sliders-h" :action="() => { this.showingFilters = true }"/>
-                            <base-button class="text-base font-thin mx-4" text="Layers" icon="layer-group" :action="() => { this.showingFilters = true }"/>
+                            <base-button v-popover:layers class="text-base font-thin mx-4" text="Layers" icon="layer-group"/>
                             <ccu-icon type="search" size="small" class="text-base font-thin mx-4 mt-1"/>
                             <base-button class="text-base font-thin mx-4" text="" icon="ellipsis-h" :action="() => { this.showingFilters = true }"/>
                             <modal v-if="showingFilters" @close="showingFilters = false" modal-classes="bg-white w-1/3 shadow" modal-style="min-height: 60%">
@@ -54,13 +54,19 @@
                                     <base-button text="Apply Filters" size="medium" class="m-1 p-3 px-6" type="primary" :action="handleFilters"/>
                                 </div>
                             </modal>
+
+                            <popover name="layers" class="w-64 h-64 overflow-auto">
+                                <div v-for="state in usStates">
+                                    <base-checkbox @input="(value) => { applyLayer(state.id, value) }">{{state.name}}</base-checkbox>
+                                </div> 🎉
+                            </popover>
                         </div>
 
                     </div>
                 </div>
                 <div class="flex-grow bg-gray-100">
                     <template v-if="showingMap">
-                        <RealtimeMapFull style="width: 100%; height: 100%" @mapMoved="onMapMoved" :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker" :key="JSON.stringify(currentQuery)"></RealtimeMapFull>
+                        <RealtimeMapFull style="width: 100%; height: 100%" @mapMoved="onMapMoved" @initMap="onInitMap" :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker" :key="JSON.stringify(currentQuery)"></RealtimeMapFull>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
@@ -130,6 +136,7 @@
     import Worksite from "@/models/Worksite";
     import User from "@/models/User";
     import Incident from "@/models/Incident";
+    import Location from "@/models/Location";
     import {mapMutations, mapState} from "vuex";
     import CaseView from "@/pages/CaseView";
     import Table from "@/components/Table";
@@ -141,6 +148,7 @@
     import Highlighter from 'vue-highlight-words'
     import { throttle } from 'lodash';
     import CaseHistory from "@/components/CaseHistory";
+    import {getQueryString} from "@/utils/urls";
 
     const columns = [
         {
@@ -238,6 +246,7 @@
                 },
                 appliedFilters: {},
                 newMarker: null,
+                map: null,
                 currentSearch: '',
                 currentCaseView: '',
                 getStatusBadge
@@ -250,6 +259,14 @@
             // }.bind(this), 100000);
         },
         async mounted() {
+            let locationParams = {
+              limit: 100,
+              type: 'US_STATES',
+              fields: 'id,name,type'
+            };
+            await Location.api().get(`/locations?${getQueryString(locationParams)}`, {
+                dataKey: 'results'
+            });
             if (this.currentUser.states) {
                 if (this.currentUser.states.showingMap) {
                     this.showingMap = true;
@@ -321,6 +338,34 @@
                 this.updateUserState({
                     mapViewPort: bounds
                 })
+            },
+
+            onInitMap(map) {
+                this.map = map;
+            },
+
+            async applyLayer(location_id, value) {
+                if (value && this.map) {
+                    await Location.api().fetchById(location_id);
+                    const location = Location.find(location_id);
+                    var geojsonFeature = {
+                        "type": "Feature",
+                        "properties": location.attr,
+                        "geometry": location.poly || location.geom || location.point
+                    };
+                    L.geoJSON(geojsonFeature, {
+                        onEachFeature: function (feature, layer) {
+                            layer.location_id = location_id
+                        }
+
+                    }).addTo(this.map);
+                } else {
+                    this.map.eachLayer((layer) => {
+                        if (layer.location_id &&  layer.location_id === location_id) {
+                            this.map.removeLayer(layer)
+                        }
+                    });
+                }
             },
 
             async fetch(params = {}) {
@@ -510,6 +555,10 @@
             ]),
         },
         computed: {
+            usStates() {
+                let states = Location.query().where('type', 'US_STATES').get();
+                return states
+            },
             isEditingWorksite() {
               return this.currentCaseView === 'edit';
             },
