@@ -139,7 +139,7 @@
                 return this.$route.name
             },
             currentUser() {
-                return User.query().first()
+                return User.find(this.$store.getters['auth/userId'])
             },
             incidents() {
                 return Incident.query().orderBy('id', 'desc').get()

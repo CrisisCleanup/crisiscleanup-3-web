@@ -103,6 +103,7 @@
             <div v-if="this.currentWorksite" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b">
                 <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
                 <div class="flex items-center">
+                    <ccu-icon size="small" class="m-1" type="history" @click.native="currentCaseView = 'history'"/>
                     <ccu-icon size="small" class="m-1" type="download" @click.native="downloadWorksite"/>
                     <ccu-icon size="small" class="m-1" type="share" />
                     <ccu-icon size="small" class="m-1" type="print" @click.native="printWorksite"/>
@@ -115,6 +116,9 @@
             </div>
             <div class="h-full" v-if="!spinning && isViewingWorksite">
                 <CaseView :worksite="currentWorksite" :incident="currentIncident" @changed="loadWorksite" @closeWorksite="closeWorksite"/>
+            </div>
+            <div class="h-full" v-if="!spinning && isViewingWorksiteHistory">
+                <CaseHistory :worksite="currentWorksite" @closeWorksite="closeWorksite"/>
             </div>
         </div>
     </div>
@@ -136,6 +140,7 @@
     import Autocomplete from "@/components/Autocomplete";
     import Highlighter from 'vue-highlight-words'
     import { throttle } from 'lodash';
+    import CaseHistory from "@/components/CaseHistory";
 
     const columns = [
         {
@@ -193,6 +198,7 @@
 
     export default {
         components: {
+            CaseHistory,
             Autocomplete,
             CaseView,
             CaseForm,
@@ -208,9 +214,6 @@
                 isEditing: true,
                 showingMap: false,
                 showingTable: true,
-                isEditingWorksite: false,
-                isViewingWorksite: false,
-                isNewWorksite: false,
                 showingFilters: false,
                 spinning: false,
                 tableLoading: false,
@@ -236,6 +239,7 @@
                 appliedFilters: {},
                 newMarker: null,
                 currentSearch: '',
+                currentCaseView: '',
                 getStatusBadge
             };
         },
@@ -267,16 +271,17 @@
             //TODO: Better way to do this
             if (this.$route.query.worksite) {
                 await this.loadWorksite(this.$route.query.worksite);
-                this.setCurrentIncidentId(this.currentWorksite.incident);
-                await this.loadWorksite(this.$route.query.worksite)
+                if (this.currentIncident.id !== this.currentWorksite.incident) {
+                    this.setCurrentIncidentId(this.currentWorksite.incident);
+                    await Incident.api().fetchById(this.currentWorksite.incident);
+                    await this.loadWorksite(this.$route.query.worksite);
+                }
             }
         },
         watch: {
             currentIncident: function () {
                 this.currentWorksite = null;
-                this.isEditingWorksite = false;
-                this.isViewingWorksite = false;
-                this.isNewWorksite = false;
+                this.currentCaseView = '';
                 this.fetch({
                     pageSize: this.pagination.pageSize,
                     page: 1,
@@ -357,9 +362,7 @@
                 }
                 await Worksite.api().fetchById(this.currentWorksiteId);
                 this.currentWorksite = Worksite.find(this.currentWorksiteId);
-                this.isViewingWorksite = true;
-                this.isEditingWorksite = false;
-                this.isNewWorksite = false;
+                this.currentCaseView = 'view';
                 this.caseFormKey = !this.caseFormKey;
                 this.reloadTable();
             },
@@ -376,14 +379,11 @@
                 this.currentWorksiteId = worksite.id;
                 this.currentWorksite = worksite;
                 this.spinning = false;
-                this.isViewingWorksite = !this.isEditingWorksite;
-                this.isNewWorksite = false;
+                this.currentCaseView = 'view';
                 this.caseFormKey = !this.caseFormKey;
             },
             createNewWorksite() {
-                this.isViewingWorksite = false;
-                this.isEditingWorksite = false;
-                this.isNewWorksite = true;
+                this.currentCaseView = 'new';
                 this.currentWorksiteId = null;
                 this.currentWorksite = new Worksite({incident: this.currentIncidentId, form_data: []});
                 this.caseFormKey = !this.caseFormKey;
@@ -408,9 +408,7 @@
                 let worksite = Worksite.find(value.id);
                 this.currentWorksiteId = worksite.id;
                 this.currentWorksite = worksite;
-                this.spinning = false;
-                this.isNewWorksite = false;
-                this.isViewingWorksite = true;
+                this.currentCaseView = 'view';
                 this.caseFormKey = !this.caseFormKey;
                 this.searchValue = '';
             },
@@ -460,9 +458,7 @@
                 this.updateUserState()
             },
             editWorksite() {
-                this.isViewingWorksite = false;
-                this.isNewWorksite = false;
-                this.isEditingWorksite = true;
+                this.currentCaseView = 'edit';
             },
             async printWorksite() {
                 this.spinning = true;
@@ -514,6 +510,18 @@
             ]),
         },
         computed: {
+            isEditingWorksite() {
+              return this.currentCaseView === 'edit';
+            },
+            isViewingWorksite() {
+              return this.currentCaseView === 'view';
+            },
+            isViewingWorksiteHistory() {
+              return this.currentCaseView === 'history';
+            },
+            isNewWorksite() {
+                return this.currentCaseView === 'new';
+            },
             incidents() {
                 return Incident.query().orderBy('id', 'desc').get()
             },
@@ -521,7 +529,7 @@
                 return Incident.find(this.currentIncidentId)
             },
             currentUser() {
-                return User.query().first()
+                return User.find(this.$store.getters['auth/userId'])
             },
             groupedFormData() {
                 if (this.currentIncident && this.currentIncident.form_fields) {
