@@ -226,7 +226,7 @@
                 return '';
             },
             currentUser() {
-                return User.query().first()
+                return User.find(this.$store.getters['auth/userId'])
             },
 
         },

@@ -86,14 +86,14 @@
 </template>
 
 <script>
-import {getErrorMessage} from "@/utils/errors";
-import StatusDropDown from "@/components/StatusDropDown"
-import User from "@/models/User";
-import Worksite from "@/models/Worksite";
-import {groupBy} from "@/utils/array";
-import Organization from "@/models/Organization";
+    import {getErrorMessage} from "@/utils/errors";
+    import StatusDropDown from "@/components/StatusDropDown"
+    import User from "@/models/User";
+    import Worksite from "@/models/Worksite";
+    import {groupBy} from "@/utils/array";
+    import Organization from "@/models/Organization";
 
-export default {
+    export default {
     name: 'CaseView',
     components: {StatusDropDown},
     props: {
@@ -111,8 +111,7 @@ export default {
         },
         workTypesClaimedByOthers() {
             let list = this.worksite.work_types.filter(type => type.claimed_by && type.claimed_by !== this.currentUser.organization.id);
-            let group = groupBy(list, 'claimed_by');
-            return group
+            return groupBy(list, 'claimed_by')
         },
         workTypesUnclaimed() {
             return this.worksite.work_types.filter(type => type.claimed_by === null)
@@ -125,7 +124,7 @@ export default {
             return ''
         },
         currentUser() {
-            return User.query().first()
+            return User.find(this.$store.getters['auth/userId'])
         },
     },
     methods: {

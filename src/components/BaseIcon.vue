@@ -19,6 +19,7 @@
         info: require('@/assets/icons/inform.svg'),
         trash: require('@/assets/icons/delete.svg'),
         organization: require('@/assets/icons/my-organization.svg'),
+        history: require('@/assets/icons/history.svg'),
     };
     export default {
         name: "BaseIcon",

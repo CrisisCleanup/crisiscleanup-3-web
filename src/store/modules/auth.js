@@ -8,7 +8,7 @@ const state = {
 // getters
 const getters = {
     isLoggedIn: state => Boolean(state.user && state.user.access_token),
-    userId: state => Boolean(state.user && state.user.user_claims.id)
+    userId: state => state.user ? state.user.user_claims.id : null
 };
 
 // actions

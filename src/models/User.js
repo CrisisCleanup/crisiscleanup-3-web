@@ -16,6 +16,10 @@ export default class User extends Model {
         }
     }
 
+    get full_name() {
+        return `${this.first_name} ${this.last_name}`
+    }
+
     static apiConfig = {
         actions: {
             login(email, password) {
