@@ -1,6 +1,6 @@
 <template>
-    <button v-bind:class="styles" @click="performAction" :disabled="disabled" type="submit" :size="size">
-        <font-awesome-icon v-if="loading" size="sm" icon="spinner" spin /> <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" /> {{title}} <font-awesome-icon v-if="suffixIcon" class="mx-1" :icon="suffixIcon" />
+    <button v-bind:class="styles" @click="performAction" :disabled="disabled" type="submit" :size="size" :title="title">
+        <font-awesome-icon v-if="loading" size="sm" icon="spinner" spin /> <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" /> {{text}} <font-awesome-icon v-if="suffixIcon" class="mx-1" :icon="suffixIcon" />
     </button>
 </template>
 
@@ -33,6 +33,7 @@
                 default: () => {
                 },
             },
+            text: String,
             title: String,
             type: String,
             size: String,

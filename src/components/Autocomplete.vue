@@ -16,7 +16,10 @@
                 </slot>
             </template>
         </vue-autosuggest>
-        <div class="icon-container flex items-center justify-center" v-if="icon || tooltip" :class="iconClasses">
+        <div v-if="loading" class="icon-container flex items-center justify-center" :class="iconClasses">
+            <font-awesome-icon icon="spinner" spin />
+        </div>
+        <div class="icon-container flex items-center justify-center" v-if="(icon || tooltip) && !loading" :class="iconClasses">
             <ccu-icon :type="tooltip ? 'info': icon" size="small"></ccu-icon>
         </div>
     </div>
@@ -25,7 +28,7 @@
 <script>
     export default {
         name: "autocomplete",
-        props: ['suggestions', 'displayProperty', 'icon', 'placeholder', 'required', 'size', 'tooltip', 'full'],
+        props: ['suggestions', 'displayProperty', 'icon', 'placeholder', 'required', 'size', 'tooltip', 'full', 'loading'],
         data() {
             return {
                 selected: '',
@@ -39,6 +42,7 @@
                     'flex-grow': true,
                     'relative': true,
                     'text-base': true,
+                    'font-light': true,
                     'large': this.size === 'large',
                     'base': this.size !== 'large',
                     'has-icon': Boolean(this.icon),
@@ -104,7 +108,7 @@
         border-bottom-right-radius: 4px;
         background: white;
         padding: 0px;
-        overflow: scroll;
+        overflow: auto;
         max-height: 200px;
     }
 

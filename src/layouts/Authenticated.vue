@@ -36,7 +36,6 @@
                             <base-select
                                     placeholder="Select an Incident"
                                     icon="caret-down"
-                                    size="middle"
                                     v-if="incidents"
                                     v-model="this.currentIncidentId"
                                     class="incident-select"
@@ -90,9 +89,7 @@
         async mounted() {
             this.loading = true;
             await Promise.all([
-                User.api().get('/users', {
-                    dataKey: 'results'
-                }),
+                User.api().get('/users/me', {}),
                 Incident.api().get('/incidents?fields=id,name,short_name,geofence&limit=150&ordering=-start_at', {
                     dataKey: 'results'
                 }),
@@ -115,7 +112,7 @@
         },
         methods: {
             async handleChange(value) {
-                this.setCurrentIncidentId(value)
+                this.setCurrentIncidentId(value);
                 await Incident.api().fetchById(value);
                 User.api().updateUserState({
                     incident: value

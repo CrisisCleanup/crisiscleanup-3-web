@@ -7,6 +7,7 @@
                         <div class="flex items-center">
                             <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingMap ? 'filter-yellow' : 'filter-gray'" type="map" @click.native="toggleView('showingMap')" />
                             <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingTable ? 'filter-yellow' : 'filter-gray'" type="table" @click.native="toggleView('showingTable')" />
+                            <span class="font-thin">Number of Cases: {{pagination.total}}</span>
                             <div class="flex justify-start w-auto">
                                 <autocomplete
                                         @selected="handleChange"
@@ -17,33 +18,42 @@
                                         placeholder="Search"
                                         full="true"
                                         class="mx-2"
+                                        :loading="searchingWorksites"
                                         :disabled="!this.currentIncident">
                                     <template #result="slotProps">
-                                        <div class="flex flex-col">
-                                            {{slotProps.suggestion.item.case_number}}
-                                            <br>
-                                            {{slotProps.suggestion.item.name}}
-                                            <br>
-                                            {{slotProps.suggestion.item.address}}, {{slotProps.suggestion.item.city}}, {{slotProps.suggestion.item.state}} {{slotProps.suggestion.item.postal_code}}
+                                        <div class="flex flex-col text-sm p-2 cursor-pointer hover:bg-gray-100 border-b">
+                                            <Highlighter
+                                                         highlightClassName="highlight"
+                                                         :searchWords="[currentSearch]"
+                                                         :autoEscape="true"
+                                                         :textToHighlight="slotProps.suggestion.item.name"/>
+                                            <Highlighter
+                                                    highlightClassName="highlight"
+                                                    :searchWords="[currentSearch]"
+                                                    :autoEscape="true"
+                                                    :textToHighlight="slotProps.suggestion.item.case_number"/>
+                                            <Highlighter
+                                                         highlightClassName="highlight"
+                                                         :searchWords="[currentSearch]"
+                                                         :autoEscape="true"
+                                                         :textToHighlight="`${slotProps.suggestion.item.address}, ${slotProps.suggestion.item.city}, ${slotProps.suggestion.item.state} ${slotProps.suggestion.item.postal_code}`"/>
                                         </div>
                                     </template>
                                 </autocomplete>
-                                <div class="mr-3 flex items-center bg-white border p-1 px-4 cursor-pointer" @click="() => { this.showingFilters = true }">
-                                    Filters <font-awesome-icon icon="sort" class="ml-20"></font-awesome-icon>
-                                </div>
-                                <modal v-if="showingFilters" @close="showingFilters = false" modal-classes="bg-white w-1/3 shadow" modal-style="min-height: 60%">
-                                    <WorksiteFilters :filters="filters" @updatedFilters="onUpdatedFilters" :incident="this.currentIncident"/>
-                                    <div slot="footer" class="flex items-center justify-center p-2 bg-white border-t">
-                                        <base-button title="Cancel" size="medium" class="m-1 border-2 border-black px-6 py-2" :action="() => { this.showingFilters = false }"></base-button>
-                                        <base-button title="Apply Filters" size="medium" class="m-1 p-3 px-6" type="primary" :action="handleFilters"></base-button>
-                                    </div>
-                                </modal>
                             </div>
                         </div>
-                        <div class="flex worksite-actions text-gray-600">
-                            <ccu-icon size="medium" class="mx-2" type="download" />
-                            <ccu-icon size="medium" class="mx-2" type="share" />
-                            <ccu-icon size="medium" class="mx-2" type="print" />
+                        <div class="flex worksite-actions" style="color: #4c4c4d">
+                            <base-button class="text-base font-thin mx-4" text="Filters" icon="sliders-h" :action="() => { this.showingFilters = true }"/>
+                            <base-button class="text-base font-thin mx-4" text="Layers" icon="layer-group" :action="() => { this.showingFilters = true }"/>
+                            <ccu-icon type="search" size="small" class="text-base font-thin mx-4 mt-1"/>
+                            <base-button class="text-base font-thin mx-4" text="" icon="ellipsis-h" :action="() => { this.showingFilters = true }"/>
+                            <modal v-if="showingFilters" @close="showingFilters = false" modal-classes="bg-white w-1/3 shadow" modal-style="min-height: 60%">
+                                <WorksiteFilters :filters="filters" @updatedFilters="onUpdatedFilters" :incident="this.currentIncident"/>
+                                <div slot="footer" class="flex items-center justify-center p-2 bg-white border-t">
+                                    <base-button text="Cancel" size="medium" class="m-1 border-2 border-black px-6 py-2" :action="() => { this.showingFilters = false }"/>
+                                    <base-button text="Apply Filters" size="medium" class="m-1 p-3 px-6" type="primary" :action="handleFilters"/>
+                                </div>
+                            </modal>
                         </div>
 
                     </div>
@@ -54,16 +64,15 @@
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
-                            <div class="table-operations flex justify-between items-center">
-                                <span class="text-gray-600 text-base font-bold">{{pagination.total}} Cases</span>
+                            <div class="table-operations flex justify-end items-center">
                                 <div class="flex">
                                     <base-button class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white"
-                                                :action="() => {}" title="Unclaim"></base-button>
+                                                 :action="() => {}" text="Unclaim"></base-button>
                                     <base-button icon="sync"
-                                                class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
-                                                @click="() => {}" title="Update Status"></base-button>
+                                                 class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
+                                                 @click="() => {}" text="Update Status"></base-button>
                                     <base-button class="ml-3 my-3 text-gray-600 border p-1 px-4 bg-white"
-                                                @click="() => {}" title="Display All"></base-button>
+                                                 @click="() => {}" text="Display All"></base-button>
                                 </div>
                             </div>
                                 <Table class="border" :data="data" :columns="columns" enable-selection enable-pagniation :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
@@ -94,7 +103,7 @@
             <div v-if="this.currentWorksite" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b">
                 <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
                 <div class="flex items-center">
-                    <ccu-icon size="small" class="m-1" type="download" />
+                    <ccu-icon size="small" class="m-1" type="download" @click.native="downloadWorksite"/>
                     <ccu-icon size="small" class="m-1" type="share" />
                     <ccu-icon size="small" class="m-1" type="print" @click.native="printWorksite"/>
                     <ccu-icon v-if="isViewingWorksite" style="background-color: #fece09" class="border p-2" size="small" type="edit" @click.native="editWorksite" />
@@ -117,7 +126,7 @@
     import Worksite from "@/models/Worksite";
     import User from "@/models/User";
     import Incident from "@/models/Incident";
-    import {mapState} from "vuex";
+    import {mapMutations, mapState} from "vuex";
     import CaseView from "@/pages/CaseView";
     import Table from "@/components/Table";
     import RealtimeMapFull from "@/components/RealtimeMapFull";
@@ -125,6 +134,8 @@
     import Status from "@/models/Status";
     import { getStatusBadge } from '@/filters';
     import Autocomplete from "@/components/Autocomplete";
+    import Highlighter from 'vue-highlight-words'
+    import { throttle } from 'lodash';
 
     const columns = [
         {
@@ -188,6 +199,7 @@
             RealtimeMapFull,
             WorksiteFilters,
             Table,
+            Highlighter,
         },
         name: "Cases",
         data() {
@@ -223,6 +235,7 @@
                 },
                 appliedFilters: {},
                 newMarker: null,
+                currentSearch: '',
                 getStatusBadge
             };
         },
@@ -250,6 +263,12 @@
                     pageSize: this.pagination.pageSize,
                     page: 1,
                 })
+            }
+            //TODO: Better way to do this
+            if (this.$route.query.worksite) {
+                await this.loadWorksite(this.$route.query.worksite);
+                this.setCurrentIncidentId(this.currentWorksite.incident);
+                await this.loadWorksite(this.$route.query.worksite)
             }
         },
         watch: {
@@ -330,18 +349,18 @@
                     pageSize: this.pagination.pageSize,
                     page: this.pagination.current,
                 })
-                // this.caseFormKey = !this.caseFormKey;
             },
 
             async loadWorksite(worksiteId) {
                 if (worksiteId) {
                     this.currentWorksiteId = worksiteId;
-                    this.isViewingWorksite = true;
-                    this.isEditingWorksite = false;
-                    this.isNewWorksite = false;
                 }
                 await Worksite.api().fetchById(this.currentWorksiteId);
                 this.currentWorksite = Worksite.find(this.currentWorksiteId);
+                this.isViewingWorksite = true;
+                this.isEditingWorksite = false;
+                this.isNewWorksite = false;
+                this.caseFormKey = !this.caseFormKey;
                 this.reloadTable();
             },
 
@@ -376,12 +395,13 @@
                 this[view] = true;
                 this.updateUserState()
             },
-            async onSearch(search) {
+            onSearch: throttle(async function(search) {
+                this.currentSearch = search;
                 this.searchingWorksites = true;
                 let searchWorksites = await Worksite.api().searchWorksites(search, this.currentIncidentId);
                 this.searchWorksites = searchWorksites.entities.worksites;
                 this.searchingWorksites = false;
-            },
+            }, 1000),
             async handleChange(value) {
                 this.spinning = true;
                 await Worksite.api().fetchById(value.id);
@@ -403,6 +423,10 @@
                     if (values) {
                         appliedFilters.work_type__work_type__in+=`${work_type},`
                     }
+                }
+
+                if (!Object.values(this.filters.fields).some(value => Boolean(value))) {
+                    delete appliedFilters.work_type__work_type__in;
                 }
 
                 if (this.filters.statuses.unclaimed) {
@@ -446,6 +470,12 @@
                 this.forceFileDownload(pdf.response);
                 this.spinning = false;
             },
+            async downloadWorksite() {
+                this.spinning = true;
+                let csv = await Worksite.api().downloadWorksite(this.currentWorksite.id);
+                this.forceFileDownload(csv.response);
+                this.spinning = false;
+            },
             forceFileDownload(response){
                 const blob = new Blob([response.data], {type: response.data.type});
                 const url = window.URL.createObjectURL(blob);
@@ -478,7 +508,10 @@
             addMarkerToMap(location) {
                 this.newMarker = location;
                 this.toggleView('showingMap');
-            }
+            },
+            ...mapMutations('incident', [
+                'setCurrentIncidentId',
+            ]),
         },
         computed: {
             incidents() {
@@ -569,5 +602,10 @@
 
     .filters-modal {
         width: 750px !important;
+    }
+    .highlight {
+        font-weight: bold;
+        background-color: white;
+        padding: 0;
     }
 </style>

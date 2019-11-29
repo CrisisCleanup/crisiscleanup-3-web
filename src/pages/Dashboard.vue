@@ -54,7 +54,7 @@
                             </div>
                             <a-input v-model="usersToInvite" size="large" class="flex-grow my-3"></a-input>
                         </div>
-                        <base-button title="Send Invites" type="primary" class="px-8 py-3"
+                        <base-button text="Send Invites" type="primary" class="px-8 py-3"
                                      :action="inviteUsers"></base-button>
                     </div>
                 </div>

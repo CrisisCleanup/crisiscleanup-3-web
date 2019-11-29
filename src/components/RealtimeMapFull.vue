@@ -1,6 +1,19 @@
 <template>
     <a-spin :spinning="mapLoading" class="fullsize-map" style="position: relative;">
         <div class="home-map" ref="map">
+            <div class="flex flex-col" style="z-index: 1001; position: absolute; top: 90px; left: 10px">
+                <!-- Use 401 to be between map and controls -->
+                <base-button text="" title="Go to Incident" :action="goToIncidentCenter" icon="search-minus" class="w-8 h-8 border-2 my-1 bg-white"/>
+                <base-button v-tooltip="{
+                            content: 'Zoom to make icons interactive',
+                            show: showInteractivePopover,
+                            trigger: 'manual',
+                            autoHide: true,
+                            placement: 'right-start',
+                          }" text="" title="Go to Interactive" icon="search-plus" :action="goToInteractive"
+                             class="w-8 h-8 border-2 my-1 bg-white"/>
+                <base-button text="" icon="search-location" :action="goToLocal" class="w-8 h-8 border-2 my-1 bg-white"/>
+            </div>
         </div>
     </a-spin>
 </template>
@@ -25,8 +38,11 @@
     import 'leaflet.gridlayer.googlemutant';
     import 'leaflet-pixi-overlay'
     import 'leaflet.heat'
-    import { solveCollision } from '@/utils/easing';
+    import {solveCollision} from '@/utils/easing';
     import User from "@/models/User";
+    import { averageGeolocation } from "@/utils/map";
+    import { OutlineFilter } from '@pixi/filter-outline'
+    import * as moment from 'moment';
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -55,6 +71,25 @@
         "closed_marked-for-deletion": 0xFF0000
     };
 
+    const getOpacity = (date) => {
+        // let opacity_buckets = [100, 75, 60, 35, 20, 10]
+        // let opacity_buckets = [100, 85, 70, 45, 30, 20]
+        // const today = moment();
+        // const sixty_days_ago = moment().subtract(60, 'days');
+        //
+        // let currentDate = moment(date)
+        // if (currentDate.isBefore(sixty_days_ago)) {
+        //     return 0.1;
+        // }
+        //
+        // let spread = today.unix() - sixty_days_ago.unix();
+        // let percentage = ((currentDate.unix() - sixty_days_ago.unix()) / spread * 100.0)
+        //
+        // const closestOpacity = opacity_buckets.reduce((prev, curr) => Math.abs(curr - percentage) < Math.abs(prev - percentage) ? curr : prev);
+        // return closestOpacity / 100;
+        return 1;
+    };
+
     export default {
         props: {
             query: Object,
@@ -81,6 +116,7 @@
                 mapLoading: false,
                 markerLayer: L.layerGroup(),
                 markers: [],
+                showInteractivePopover: false
             }
         },
         computed: {
@@ -103,9 +139,10 @@
                 this.map = L.map(this.$refs.map, options);
                 this.map.on('moveend', () => {
                     this.$emit('mapMoved', this.map.getBounds());
+                    this.showInteractivePopover = false;
                 });
                 if (this.currentUser.states.mapViewPort) {
-                    let { _northEast, _southWest } = this.currentUser.states.mapViewPort;
+                    let {_northEast, _southWest} = this.currentUser.states.mapViewPort;
                     this.map.fitBounds([
                         [_northEast.lat, _northEast.lng],
                         [_southWest.lat, _southWest.lng]
@@ -114,6 +151,18 @@
                 this.tileLayer.addTo(this.map);
                 this.markerLayer.addTo(this.map);
                 this.pullSites();
+            },
+            goToIncidentCenter() {
+                let center = averageGeolocation(this.markers.map(marker => [marker.position.lat, marker.position.lng]))
+                this.map.setView([center.latitude, center.longitude], 6);
+            },
+            goToInteractive() {
+                let center = averageGeolocation(this.markers.map(marker => [marker.position.lat, marker.position.lng]))
+                this.map.setView([center.latitude, center.longitude], 12);
+            },
+            goToLocal() {
+                let center = averageGeolocation(this.markers.map(marker => [marker.position.lat, marker.position.lng]))
+                this.map.setView([center.latitude, center.longitude], 15);
             },
             addWorksite(location) {
                 this.markerLayer.clearLayers();
@@ -182,11 +231,11 @@
                                     markerSprite.x0 = coords.x;
                                     markerSprite.y0 = coords.y;
                                     markerSprite.anchor.set(0.5, 0.5);
+                                    markerSprite.alpha = getOpacity(marker.updated_at);
                                     container.addChild(markerSprite);
                                     markerSprites.push(markerSprite);
                                     markerSprite.legend = marker.city || marker.label;
                                     markerSprite.data = marker;
-
                                     // markerSprite.interactive = true;
                                     // markerSprite.cursor = 'pointer';
                                     // markerSprite.name = marker.case_number;
@@ -234,6 +283,10 @@
                                         //     .setContent(`<b>${marker.data.case_number}</b>`).openOn(map);
                                     } else {
                                         map.closePopup();
+                                    }
+
+                                    if (utils.getMap().getZoom() < 12) {
+                                        self.showInteractivePopover = true;
                                     }
                                 });
 
@@ -306,7 +359,7 @@
                 this.mapLoading = true;
                 let response = await this.$http
                     .get(url || `${process.env.VUE_APP_API_BASE_URL}/worksites_all`, {
-                        params: url ? {} : { ...this.query }
+                        params: url ? {} : {...this.query}
                     });
 
                 this.markers = response.data.results.map((worksite) => {
@@ -341,7 +394,114 @@
     .home-map {
         height: 100%;
     }
+
     .leaflet-pane {
         z-index: 5;
+    }
+
+    .tooltip {
+        display: block !important;
+        z-index: 10000;
+    }
+
+    .tooltip .tooltip-inner {
+        background: black;
+        color: white;
+        border-radius: 16px;
+        padding: 5px 10px 4px;
+    }
+
+    .tooltip .tooltip-arrow {
+        width: 0;
+        height: 0;
+        border-style: solid;
+        position: absolute;
+        margin: 5px;
+        border-color: black;
+        z-index: 1;
+    }
+
+    .tooltip[x-placement^="top"] {
+        margin-bottom: 5px;
+    }
+
+    .tooltip[x-placement^="top"] .tooltip-arrow {
+        border-width: 5px 5px 0 5px;
+        border-left-color: transparent !important;
+        border-right-color: transparent !important;
+        border-bottom-color: transparent !important;
+        bottom: -5px;
+        left: calc(50% - 5px);
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .tooltip[x-placement^="bottom"] {
+        margin-top: 5px;
+    }
+
+    .tooltip[x-placement^="bottom"] .tooltip-arrow {
+        border-width: 0 5px 5px 5px;
+        border-left-color: transparent !important;
+        border-right-color: transparent !important;
+        border-top-color: transparent !important;
+        top: -5px;
+        left: calc(50% - 5px);
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .tooltip[x-placement^="right"] {
+        margin-left: 5px;
+    }
+
+    .tooltip[x-placement^="right"] .tooltip-arrow {
+        border-width: 5px 5px 5px 0;
+        border-left-color: transparent !important;
+        border-top-color: transparent !important;
+        border-bottom-color: transparent !important;
+        left: -5px;
+        top: calc(50% - 5px);
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .tooltip[x-placement^="left"] {
+        margin-right: 5px;
+    }
+
+    .tooltip[x-placement^="left"] .tooltip-arrow {
+        border-width: 5px 0 5px 5px;
+        border-top-color: transparent !important;
+        border-right-color: transparent !important;
+        border-bottom-color: transparent !important;
+        right: -5px;
+        top: calc(50% - 5px);
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .tooltip.popover .popover-inner {
+        background: #f9f9f9;
+        color: black;
+        padding: 24px;
+        border-radius: 5px;
+        box-shadow: 0 5px 30px rgba(black, 0.1);
+    }
+
+    .tooltip.popover .popover-arrow {
+        border-color: #f9f9f9;
+    }
+
+    .tooltip[aria-hidden='true'] {
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity .15s, visibility .15s;
+    }
+
+    .tooltip[aria-hidden='false'] {
+        visibility: visible;
+        opacity: 1;
+        transition: opacity .15s;
     }
 </style>

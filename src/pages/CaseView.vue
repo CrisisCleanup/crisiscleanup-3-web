@@ -6,13 +6,13 @@
                 <div :key="note.id" v-for="note in worksite.notes" class="bg-gray-100 my-1 p-1 flex items-center">
                     <span class="text-gray-600 mr-3">{{ note.created_at | moment("from", "now") }}:</span><span>{{note.note}}</span>
                 </div>
-                <base-button v-if="!addingNotes" class="my-1" type="link" title="+ Add Note" :action="() => { this.addingNotes = true }"></base-button>
+                <base-button v-if="!addingNotes" class="my-1" type="link" text="+ Add Note" :action="() => { this.addingNotes = true }"></base-button>
                 <div v-if="addingNotes">
                     Note
                     <a-textarea rows="4" v-model="currentNote"/>
                     <div class="flex items-center justify-between">
-                        <base-button class="my-1" type="bare" title="Cancel" :action="cancelNote"></base-button>
-                        <base-button class="my-1" type="link" title="Save" :action="saveNote"></base-button>
+                        <base-button class="my-1" type="bare" text="Cancel" :action="cancelNote"></base-button>
+                        <base-button class="my-1" type="link" text="Save" :action="saveNote"></base-button>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                                     <StatusDropDown class="block" :default-value="work_type.status"
                                                         :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
                                         <base-button type="link" :action="() => { return requestWorkType(work_type) }"
-                                                    title="Request" class="ml-2 p-1 px-2"></base-button>
+                                                     text="Request" class="ml-2 p-1 px-2"></base-button>
                                 </div>
                             </div>
                         </template>
@@ -52,7 +52,7 @@
                                 <StatusDropDown class="block" :default-value="work_type.status"
                                                     :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
                                     <base-button type="primary" :action="() => { return unclaimWorkType(work_type) }"
-                                                title="Unclaim" class="ml-2 p-1 px-2"></base-button>
+                                                 text="Unclaim" class="ml-2 p-1 px-2"></base-button>
                             </div>
                         </div>
                     </template>
@@ -66,7 +66,7 @@
                                 <StatusDropDown class="block" :default-value="work_type.status"
                                                 :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
                                 <base-button type="primary" :action="() => { return claimWorkType(work_type) }"
-                                            title="Claim" class="ml-2 p-1 px-2"></base-button>
+                                             text="Claim" class="ml-2 p-1 px-2"></base-button>
                             </div>
                         </div>
                     </template>
@@ -74,10 +74,13 @@
             </div>
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-center items-center">
-            <base-button v-if="workTypesClaimedByOrganization.length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Unclaim" :action="() => { return unclaimWorkType() }"></base-button>
-            <base-button v-if="workTypesUnclaimed.length > 0" size="medium" type="primary" class="m-1 text-black p-3 px-4" title="Claim" :action="() => { return claimWorkType() }"></base-button>
-            <base-button v-if="Object.keys(workTypesClaimedByOthers).length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black" title="Request" :action="() => { return requestWorkType() }"></base-button>
-            <base-button size="medium" type="primary" class="m-1 text-black p-3 px-4" title="Done" :action="() => { $emit('closeWorksite') }"></base-button>
+            <base-button v-if="workTypesClaimedByOrganization.length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black"
+                         text="Unclaim" :action="() => { return unclaimWorkType() }"></base-button>
+            <base-button v-if="workTypesUnclaimed.length > 0" size="medium" type="primary" class="m-1 text-black p-3 px-4"
+                         text="Claim" :action="() => { return claimWorkType() }"></base-button>
+            <base-button v-if="Object.keys(workTypesClaimedByOthers).length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black"
+                         text="Request" :action="() => { return requestWorkType() }"></base-button>
+            <base-button size="medium" type="primary" class="m-1 text-black p-3 px-4" text="Done" :action="() => { $emit('closeWorksite') }"></base-button>
         </div>
     </div>
 </template>
