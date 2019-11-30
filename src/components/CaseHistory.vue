@@ -5,11 +5,11 @@
                 <label class="my-1 text-xs font-bold text-gray-600 block">Claimed By</label>
                 <div v-for="work_type in worksite.work_types.filter(work_type => Boolean(work_type.claimed_by))" class="my-1">{{getOrganizationName(work_type.claimed_by)}}</div>
             </div>
-            <div class="text-xs">
+            <div class="">
                 <div v-for="(events, user) in users" class="py-1">
-                    {{getUserName(user)}} made {{events.length}} edits
+                    <span class="text-yellow-600">{{getUserName(user)}}</span> made {{events.length}} edits
                     <div v-for="event in events">
-                        {{ event.created_at | moment("MM/DD/YYYY, h:mm:ss A") }}: {{event.event_key}}
+                        {{ event.created_at | moment("MM/DD/YYYY, h:mm:ss A") }}: {{event.event.event_name_t}}
                     </div>
                 </div>
             </div>
