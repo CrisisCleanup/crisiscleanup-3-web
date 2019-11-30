@@ -367,7 +367,6 @@
                     });
                 }
             },
-
             async fetch(params = {}) {
                 this.tableLoading = true;
                 let query = {
