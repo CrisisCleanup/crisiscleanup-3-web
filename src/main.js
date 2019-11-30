@@ -36,7 +36,6 @@ import Popover from 'vue-js-popover'
 
 import 'ant-design-vue/dist/antd.less'
 import '@/assets/css/tailwind.css'
-import 'pretty-checkbox/dist/pretty-checkbox.css';
 
 
 // Base Components
