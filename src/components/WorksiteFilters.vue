@@ -4,14 +4,26 @@
             <div class="p-2 px-4">
                 Filters <span class="rounded-full px-1 bg-yellow-500 text-xs" v-if="filtersCount > 0">{{filtersCount}}</span>
             </div>
-            <div class="applied-filters flex flex-wrap justify-start bg-gray-100 p-1 px-2">
-                <template v-for="(value, key) in filters.fields">
-                    <tag :closeable="true" v-if="value" class="m-1" @closed="removeField(key)">{{key}}: {{value}}</tag>
-                </template>
-                <template v-for="(value, key) in filters.statuses">
-                    <tag :closeable="true" v-if="value" class="m-1" @closed="removeStatus(key)">{{key}}: {{value}}</tag>
-                </template>
+            <div class="flex items-center justify-between bg-gray-100 p-1 px-2">
+                <div class="applied-filters flex flex-wrap justify-start bg-gray-100">
+                    <template v-for="(value, key) in filters.fields">
+                        <tag :key="key" :closeable="true" v-if="value" class="m-1" @closed="removeField(key)">
+                            Work Type: {{key | getWorkTypeName}}
+                        </tag>
+                    </template>
+                    <template v-for="(value, key) in filters.statuses">
+                        <tag :key="key" :closeable="true" v-if="value" class="m-1" @closed="removeStatus(key)">
+                            Status: {{key | snakeToTitleCase}}
+                        </tag>
+                    </template>
+                </div>
+                <div v-if="filtersCount > 0">
+                    <base-button type="bare" class="text-yellow-500 text-underline w-32" :action="clearAllFilters">
+                        Clear all filters
+                    </base-button>
+                </div>
             </div>
+
             <div class="flex flex-grow h-full">
                 <div class="w-1/4 border-r">
                     <div @click="currentSection = 'general'" class="p-3 px-4 border-b cursor-pointer" :class="{'border-l-8 border-l-black': currentSection === 'general'}">
@@ -114,7 +126,8 @@
         created() {
             this.filters = {
                 fields: { ...this.currentFilters.fields },
-                statuses: { ...this.currentFilters.statuses }
+                statuses: { ...this.currentFilters.statuses },
+                sub_fields: {},
             }
         },
         mounted() {
@@ -176,6 +189,13 @@
             },
             removeStatus(key) {
                 delete this.filters.statuses[key];
+            },
+            clearAllFilters() {
+                this.filters = {
+                    fields: {},
+                    statuses: {},
+                    sub_fields: {},
+                }
             }
         },
         computed: {
