@@ -43,22 +43,17 @@
                             </div>
                         </div>
                         <div class="flex worksite-actions" style="color: #4c4c4d">
-                            <base-button class="text-base font-thin mx-4" text="Filters" icon="sliders-h" :action="() => { this.showingFilters = true }"/>
+                            <base-button class="text-base font-thin mx-4" icon="sliders-h" :action="() => { this.showingFilters = true }">
+                                Filters <span class="rounded-full mx-2 px-1 bg-yellow-500 text-xs" v-if="filtersCount > 0">{{filtersCount}}</span>
+                            </base-button>
                             <base-button v-popover:layers class="text-base font-thin mx-4" text="Layers" icon="layer-group"/>
                             <ccu-icon type="search" size="small" class="text-base font-thin mx-4 mt-1"/>
                             <base-button class="text-base font-thin mx-4" text="" icon="ellipsis-h" :action="() => { this.showingFilters = true }"/>
-                            <modal v-if="showingFilters" @close="showingFilters = false" modal-classes="bg-white w-1/3 shadow" modal-style="min-height: 60%">
-                                <WorksiteFilters :filters="filters" @updatedFilters="onUpdatedFilters" :incident="this.currentIncident"/>
-                                <div slot="footer" class="flex items-center justify-center p-2 bg-white border-t">
-                                    <base-button text="Cancel" size="medium" class="m-1 border-2 border-black px-6 py-2" :action="() => { this.showingFilters = false }"/>
-                                    <base-button text="Apply Filters" size="medium" class="m-1 p-3 px-6" type="primary" :action="handleFilters"/>
-                                </div>
-                            </modal>
-
+                            <WorksiteFilters v-if="showingFilters" :current-filters="filters" @closedFilters="showingFilters = false" @updatedFilters="onUpdatedFilters" :incident="this.currentIncident"/>
                             <popover name="layers" class="w-64 h-64 overflow-auto">
                                 <div v-for="state in usStates">
                                     <base-checkbox @input="(value) => { applyLayer(state.id, value) }">{{state.name}}</base-checkbox>
-                                </div> 🎉
+                                </div>
                             </popover>
                         </div>
 
@@ -332,6 +327,7 @@
 
             onUpdatedFilters(filters) {
                 this.filters = filters;
+                this.handleFilters();
             },
 
             onMapMoved(bounds) {
@@ -601,6 +597,9 @@
                     })
                 }
                 return [];
+            },
+            filtersCount() {
+                return Object.values(this.filters.statuses).filter(field => Boolean(field)).length + Object.values(this.filters.fields).filter(field => Boolean(field)).length
             },
             google: gmapApi,
             ...mapState('incident', [

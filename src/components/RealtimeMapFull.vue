@@ -1,20 +1,19 @@
 <template>
     <a-spin :spinning="mapLoading" class="fullsize-map" style="position: relative;">
-        <div class="home-map" ref="map">
-            <div class="flex flex-col" style="z-index: 1001; position: absolute; top: 90px; left: 10px">
-                <!-- Use 401 to be between map and controls -->
-                <base-button text="" title="Go to Incident" :action="goToIncidentCenter" icon="search-minus" class="w-8 h-8 border-2 my-1 bg-white"/>
-                <base-button v-tooltip="{
+        <div class="flex flex-col" style="z-index: 1001; position: absolute; top: 90px; left: 10px">
+            <!-- Use 401 to be between map and controls -->
+            <base-button text="" title="Go to Incident" :action="goToIncidentCenter" icon="search-minus" class="w-8 h-8 border-2 my-1 bg-white"/>
+            <base-button v-tooltip="{
                             content: 'Zoom to make icons interactive',
                             show: showInteractivePopover,
                             trigger: 'manual',
                             autoHide: true,
                             placement: 'right-start',
                           }" text="" title="Go to Interactive" icon="search-plus" :action="goToInteractive"
-                             class="w-8 h-8 border-2 my-1 bg-white"/>
-                <base-button text="" icon="search-location" :action="goToLocal" class="w-8 h-8 border-2 my-1 bg-white"/>
-            </div>
+                         class="w-8 h-8 border-2 my-1 bg-white"/>
+            <base-button text="" icon="search-location" :action="goToLocal" class="w-8 h-8 border-2 my-1 bg-white"/>
         </div>
+        <div class="home-map" ref="map"></div>
     </a-spin>
 </template>
 <style>
@@ -156,14 +155,17 @@
             goToIncidentCenter() {
                 let center = averageGeolocation(this.markers.map(marker => [marker.position.lat, marker.position.lng]))
                 this.map.setView([center.latitude, center.longitude], 6);
+                this.showInteractivePopover = false;
             },
             goToInteractive() {
                 let center = averageGeolocation(this.markers.map(marker => [marker.position.lat, marker.position.lng]))
                 this.map.setView([center.latitude, center.longitude], 12);
+                this.showInteractivePopover = false;
             },
             goToLocal() {
                 let center = averageGeolocation(this.markers.map(marker => [marker.position.lat, marker.position.lng]))
                 this.map.setView([center.latitude, center.longitude], 15);
+                this.showInteractivePopover = false;
             },
             addWorksite(location) {
                 this.markerLayer.clearLayers();
