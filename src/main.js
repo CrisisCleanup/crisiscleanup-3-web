@@ -31,7 +31,7 @@ import VueLog from '@dreipol/vue-log';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueAutosuggest from "vue-autosuggest";
 import VTooltip from 'v-tooltip'
-import { getWorkTypeName } from "@/filters";
+import { getWorkTypeName, snakeToTitleCase } from "@/filters";
 import Popover from 'vue-js-popover'
 
 import 'ant-design-vue/dist/antd.less'
@@ -68,6 +68,7 @@ Vue.use(Popover)
 // Filters
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.filter('getWorkTypeName', getWorkTypeName);
+Vue.filter('snakeToTitleCase', snakeToTitleCase);
 
 
 // API & Auth
