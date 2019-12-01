@@ -7,6 +7,8 @@ import Login from "@/pages/Login";
 import store from '@/store/index';
 import Organization from "@/pages/organization/Index";
 import Invitations from "@/pages/organization/Invitations";
+import Users from "@/pages/organization/Users";
+import Layers from "@/pages/organization/Layers";
 
 Vue.use(VueRouter);
 
@@ -46,6 +48,14 @@ const routes = [
             path: 'invitations',
             component: Invitations,
             name: 'Invitations',
+        },{
+            path: 'users',
+            component: Users,
+            name: 'Users',
+        },{
+            path: 'layers',
+            component: Layers,
+            name: 'Layers',
         }],
         meta: {layout: "authenticated"}
     },

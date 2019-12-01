@@ -4,7 +4,7 @@
             <div class="p-2 px-4">
                 Filters <span class="rounded-full px-1 bg-yellow-500 text-xs" v-if="filtersCount > 0">{{filtersCount}}</span>
             </div>
-            <div class="flex items-center justify-between bg-gray-100 p-1 px-2">
+            <div class="flex items-center justify-between bg-gray-100 p-1 px-2" v-if="filtersCount > 0">
                 <div class="applied-filters flex flex-wrap justify-start bg-gray-100">
                     <template v-for="(value, key) in filters.fields">
                         <tag :key="key" :closeable="true" v-if="value" class="m-1" @closed="removeField(key)">
@@ -17,7 +17,7 @@
                         </tag>
                     </template>
                 </div>
-                <div v-if="filtersCount > 0">
+                <div>
                     <base-button type="bare" class="text-yellow-500 text-underline w-32" :action="clearAllFilters">
                         Clear all filters
                     </base-button>

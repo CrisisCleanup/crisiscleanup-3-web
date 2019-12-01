@@ -8,6 +8,7 @@ import Status from "@/models/Status";
 import InvitationRequest from "@/models/InvitationRequest";
 import Invitation from "@/models/Invitation";
 import Location from "@/models/Location";
+import Layer from "@/models/Layer";
 
 const database = new Database();
 
@@ -20,5 +21,6 @@ database.register(Organization, {});
 database.register(InvitationRequest, {});
 database.register(Invitation, {});
 database.register(Location, {});
+database.register(Layer, {});
 
 export default database

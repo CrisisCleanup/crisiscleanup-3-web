@@ -39,6 +39,7 @@
     "marker-clusterer-plus": "^2.1.4",
     "pixi-filters": "^3.0.3",
     "pixi.js": "^5.1.5",
+    "shpjs": "^3.4.3",
     "spin.js": "^4.1.0",
     "v-tooltip": "^2.0.2",
     "vue": "^2.6.10",
