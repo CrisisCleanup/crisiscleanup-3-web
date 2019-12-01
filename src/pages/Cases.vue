@@ -76,16 +76,16 @@
                                                  @click="() => {}" text="Display All"></base-button>
                                 </div>
                             </div>
-                                <Table class="border" :data="data" :columns="columns" enable-selection enable-pagniation :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
-                                    <template #work_types="slotProps">
-                                        <div class="flex flex-col">
-                                            <div class="badge-holder flex items-center" :key="work_type.id" v-for="work_type in slotProps.item.work_types">
-                                                <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status" />
-                                                {{work_type.work_type | getWorkTypeName}}
-                                            </div>
+                            <Table class="border" :data="data" :columns="columns" enable-selection enable-pagniation :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
+                                <template #work_types="slotProps">
+                                    <div class="flex flex-col">
+                                        <div class="badge-holder flex items-center" :key="work_type.id" v-for="work_type in slotProps.item.work_types">
+                                            <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status" />
+                                            {{work_type.work_type | getWorkTypeName}}
                                         </div>
-                                    </template>
-                                </Table>
+                                    </div>
+                                </template>
+                            </Table>
                         </div>
                     </template>
                 </div>
