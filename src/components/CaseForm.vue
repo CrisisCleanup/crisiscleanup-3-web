@@ -29,7 +29,7 @@
             <div class="py-1">
                 <AddressGeocoder :value="worksite.address" @input="(value) => { updateWorksite(value,'address') }"
                               @selectedExisting="onWorksiteSelect" @selectedGeocode="onGeocodeSelect" @search="geocoderSearch" tooltip="info"
-                              :suggestions="[{name:'worksites', data: searchWorksitesResults, key: 'address' }, {name:'geocoder', data: geocoderResults, key: 'description' }]"
+                              :suggestions="[{name:'worksites', data: searchWorksitesResults || [], key: 'address' }, {name:'geocoder', data: geocoderResults || [], key: 'description' }]"
                               display-property="description" placeholder="Address" size="large" required/>
             </div>
             <div class="py-1">
