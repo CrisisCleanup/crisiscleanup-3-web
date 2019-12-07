@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <img v-bind:class="styles" :src="iconMap[type]"/>
+    <div class="flex items-center">
+        <img v-bind:class="styles" :src="iconMap[type]"/> <slot></slot>
     </div>
 </template>
 
@@ -20,6 +20,7 @@
         trash: require('@/assets/icons/delete.svg'),
         organization: require('@/assets/icons/my-organization.svg'),
         history: require('@/assets/icons/history.svg'),
+        cancel: require('@/assets/icons/big.svg'),
     };
     export default {
         name: "BaseIcon",

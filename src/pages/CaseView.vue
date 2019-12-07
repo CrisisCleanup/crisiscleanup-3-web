@@ -3,8 +3,8 @@
         <div class="p-3 flex-grow intake-view">
             <div class="my-4">
                 <label v-if="worksite.notes.length > 0" class="my-1 text-xs font-bold text-gray-600 block">Notes</label>
-                <div :key="note.id" v-for="note in worksite.notes" class="bg-gray-100 my-1 p-1 flex items-center">
-                    <span class="text-gray-600 mr-3">{{ note.created_at | moment("from", "now") }}:</span><span>{{note.note}}</span>
+                <div :key="note.id" v-for="note in worksite.notes" class="notes my-1 p-1 flex items-center">
+                    <span class="text-gray-600 mr-3 notes-time">{{ note.created_at | moment("from", "now") }}:</span><span class="font-hairline">{{note.note}}</span>
                 </div>
                 <base-button v-if="!addingNotes" class="my-1" type="link" text="+ Add Note" :action="() => { this.addingNotes = true }"></base-button>
                 <div v-if="addingNotes">
@@ -135,8 +135,7 @@
                     work_types.push(work_type.work_type)
                 }
                 await Worksite.api().claimWorksite(this.worksite.id, work_types);
-                await Worksite.api().fetchById(this.worksite.id);
-                this.worksite = Worksite.find(this.worksite.id);
+                this.$emit('changed')
             } catch (error) {
                 await this.$message.error(getErrorMessage(error));
             }
@@ -148,8 +147,7 @@
                     work_types.push(work_type.work_type)
                 }
                 await Worksite.api().unclaimWorksite(this.worksite.id, work_types);
-                await Worksite.api().fetchById(this.worksite.id);
-                this.worksite = Worksite.find(this.worksite.id);
+                this.$emit('changed')
             } catch (error) {
                 await this.$message.error(getErrorMessage(error));
             }
@@ -161,8 +159,7 @@
                     work_types.push(work_type.work_type)
                 }
                 await Worksite.api().requestWorksite(this.worksite.id, work_types);
-                await Worksite.api().fetchById(this.worksite.id);
-                this.worksite = Worksite.find(this.worksite.id);
+                this.$emit('changed')
             } catch (error) {
                 await this.$message.error(getErrorMessage(error));
             }
@@ -174,6 +171,7 @@
                 this.worksite = Worksite.find(this.worksite.id);
                 this.addingNotes = false;
                 this.currentNote = '';
+                this.$emit('changed')
             } catch (error) {
                 await this.$message.error(getErrorMessage(error));
             }
@@ -230,5 +228,12 @@
     .intake-view::-webkit-scrollbar { /* WebKit */
         width: 0;
         height: 0;
+    }
+
+    .notes {
+        background-color: rgba(216, 216, 216, 0.15);
+    }
+    .notes-time {
+        color: #848F99;
     }
 </style>

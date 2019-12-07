@@ -10,6 +10,7 @@ export default class User extends Model {
             first_name: this.string(''),
             last_name: this.string(''),
             email: this.string(''),
+            mobile: this.string(''),
             roles: this.attr(null),
             organization: this.attr(null),
             states: this.attr(null),

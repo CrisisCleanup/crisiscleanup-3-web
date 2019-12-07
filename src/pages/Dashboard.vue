@@ -283,7 +283,10 @@
             ]),
             claimedWorksites() {
                 return Worksite.query().where((worksite) => {
-                    return worksite.work_types.find(work_type => work_type.claimed_by === this.currentUser.organization.id && this.currentIncidentId === worksite.incident)
+                    if (worksite.work_types) {
+                        return worksite.work_types.find(work_type => work_type.claimed_by === this.currentUser.organization.id && this.currentIncidentId === worksite.incident)
+                    }
+                    return false;
                 }).get()
             }
         },

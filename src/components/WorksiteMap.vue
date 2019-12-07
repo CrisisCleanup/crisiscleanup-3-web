@@ -1,13 +1,13 @@
 <template>
     <a-spin :spinning="mapLoading" class="fullsize-map" style="position: relative;">
         <div class="flex flex-col" style="z-index: 1001; position: absolute; top: 90px; left: 10px">
-            <!-- Use 401 to be between map and controls -->
             <base-button text="" title="Go to Incident" :action="goToIncidentCenter" icon="search-minus" class="w-8 h-8 border-2 my-1 bg-white"/>
             <base-button v-tooltip="{
                             content: 'Zoom to make icons interactive',
                             show: showInteractivePopover,
                             trigger: 'manual',
                             autoHide: true,
+                            classes: 'interactive-tooltip',
                             placement: 'right-start',
                           }" text="" title="Go to Interactive" icon="search-plus" :action="goToInteractive"
                          class="w-8 h-8 border-2 my-1 bg-white"/>
@@ -31,7 +31,8 @@
 
 <script>
 
-    import {Container, Loader, Sprite} from 'pixi.js'
+    import {Container, Loader, Sprite, Texture} from 'pixi.js'
+    import * as PIXI from 'pixi.js'
     import * as L from 'leaflet';
     import 'leaflet-loading';
     import 'leaflet.gridlayer.googlemutant';
@@ -40,8 +41,9 @@
     import {solveCollision} from '@/utils/easing';
     import User from "@/models/User";
     import { averageGeolocation } from "@/utils/map";
-    import { OutlineFilter } from '@pixi/filter-outline'
     import * as moment from 'moment';
+    import WorkType from '@/models/WorkType';
+    import Status from '@/models/Status';
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -72,19 +74,19 @@
 
     const getOpacity = (date) => {
         // let opacity_buckets = [100, 75, 60, 35, 20, 10]
-        // let opacity_buckets = [100, 85, 70, 45, 30, 20]
-        // const today = moment();
-        // const sixty_days_ago = moment().subtract(60, 'days');
-        //
-        // let currentDate = moment(date)
+        let opacity_buckets = [100, 85, 70, 45, 30, 20]
+        const today = moment();
+        const sixty_days_ago = moment().subtract(60, 'days');
+
+        let currentDate = moment(date)
         // if (currentDate.isBefore(sixty_days_ago)) {
         //     return 0.1;
         // }
-        //
-        // let spread = today.unix() - sixty_days_ago.unix();
-        // let percentage = ((currentDate.unix() - sixty_days_ago.unix()) / spread * 100.0)
-        //
-        // const closestOpacity = opacity_buckets.reduce((prev, curr) => Math.abs(curr - percentage) < Math.abs(prev - percentage) ? curr : prev);
+
+        let spread = today.unix() - sixty_days_ago.unix();
+        let percentage = ((currentDate.unix() - sixty_days_ago.unix()) / spread * 100.0)
+
+        const closestOpacity = opacity_buckets.reduce((prev, curr) => Math.abs(curr - percentage) < Math.abs(prev - percentage) ? curr : prev);
         // return closestOpacity / 100;
         return 1;
     };
@@ -115,12 +117,30 @@
                 mapLoading: false,
                 markerLayer: L.layerGroup(),
                 markers: [],
-                showInteractivePopover: false
+                showInteractivePopover: false,
+                loader: new Loader()
             }
         },
         computed: {
             currentUser() {
                 return User.find(this.$store.getters['auth/userId'])
+            },
+            workTypeList() {
+                return WorkType.all().map(type =>type.key)
+            },
+            statusList() {
+                return Status.all().map(status => status.status)
+            },
+            iconsList() {
+                let iconsList = [];
+                for (let work_type of this.workTypeList) {
+                    for (let status of this.statusList) {
+                        for (let claimed_status of ['claimed', 'unclaimed']) {
+                            iconsList.push(`${work_type}_${status}_${claimed_status}`);
+                        }
+                    }
+                }
+                return iconsList;
             }
         },
         mounted() {
@@ -173,8 +193,9 @@
                 this.map.setView([location.lat, location.lng], 15);
             },
             loadMarkersOnMap: function (markers) {
-                let loader = new Loader();
+                this.mapLoading = true;
                 let map = this.map;
+                let loader = this.loader;
                 loader.add('marker', 'marker-icon.png');
                 loader.add('fire', 'fire.svg');
                 loader.add('garbage', 'trash.svg');
@@ -185,6 +206,9 @@
                 loader.add('fan', 'fan.svg');
                 loader.add('broom', 'broom.svg');
                 loader.add('dot', 'white-circle.svg');
+                // for (let icon of this.iconsList.filter(i => !PIXI.utils.TextureCache[`map_icons/${i}.svg`])) {
+                //     loader.add(icon, `map_icons/${icon}.svg`);
+                // }
                 let self = this;
                 loader.load(function (loader, resources) {
                     let mapping = {
@@ -215,18 +239,23 @@
                             let renderer = utils.getRenderer();
                             let project = utils.latLngToLayerPoint;
                             let scale = utils.getScale();
-                            let invScale = 1 / scale;
+                            let invScale = 0.65 / scale;
                             if (firstDraw) {
                                 prevZoom = zoom;
                                 markers.forEach(function (marker) {
                                     let coords = project([marker.position.lat, marker.position.lng]);
                                     // let markerSprite = new Sprite(mapping[marker.work_types[0].work_type] || resources.marker.texture);
                                     let markerSprite = new Sprite();
-                                    let work_type = marker.work_types[0].work_type;
-                                    if (work_type && mapping[work_type]) {
-                                        markerSprite.texture = mapping[marker.work_types[0].work_type];
+                                    let work_type = marker.work_types[0];
+                                    const textureKey = `${work_type.work_type}_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                                    let texture = PIXI.utils.TextureCache[`map_icons/${textureKey}.svg`];
+                                    if (!texture) {
+                                        texture = Texture.from(`map_icons/${textureKey}.svg`)
+                                    }
+                                    if (work_type && texture) {
+                                        markerSprite.texture = texture;
                                     } else {
-                                        markerSprite.texture = resources.marker.texture;
+                                        markerSprite.texture = PIXI.utils.TextureCache[`unknown_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`];
                                     }
                                     markerSprite.tint = colors_dict[marker.work_types[0].status];
                                     markerSprite.x = coords.x;
@@ -307,11 +336,16 @@
                                     if (zoom < 12) {
                                         markerSprite.texture = resources.dot.texture
                                     } else {
-                                        let work_type = markerSprite.data.work_types[0].work_type;
-                                        if (work_type && mapping[work_type]) {
-                                            markerSprite.texture = mapping[markerSprite.data.work_types[0].work_type];
+                                        let work_type = markerSprite.data.work_types[0];
+                                        const textureKey = `${work_type.work_type}_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                                        let texture = PIXI.utils.TextureCache[`map_icons/${textureKey}.svg`];
+                                        if (!texture) {
+                                            texture = Texture.from(`map_icons/${textureKey}.svg`)
+                                        }
+                                        if (work_type && texture) {
+                                            markerSprite.texture = texture;
                                         } else {
-                                            markerSprite.texture = resources.marker.texture;
+                                            markerSprite.texture = Texture.from[`map_icons/unknown_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}.svg`];
                                         }
                                     }
                                     if (firstDraw) {
@@ -384,7 +418,7 @@
             newMarker() {
                 this.addWorksite(this.newMarker)
             }
-        }
+        },
     };
 </script>
 
@@ -402,19 +436,19 @@
         z-index: 5;
     }
 
-    .tooltip {
+    .interactive-tooltip {
         display: block !important;
         z-index: 10000;
     }
 
-    .tooltip .tooltip-inner {
+    .interactive-tooltip .tooltip-inner {
         background: black;
         color: white;
         border-radius: 16px;
         padding: 5px 10px 4px;
     }
 
-    .tooltip .tooltip-arrow {
+    .interactive-tooltip .tooltip-arrow {
         width: 0;
         height: 0;
         border-style: solid;
@@ -424,11 +458,11 @@
         z-index: 1;
     }
 
-    .tooltip[x-placement^="top"] {
+    .interactive-tooltip[x-placement^="top"] {
         margin-bottom: 5px;
     }
 
-    .tooltip[x-placement^="top"] .tooltip-arrow {
+    .interactive-tooltip[x-placement^="top"] .tooltip-arrow {
         border-width: 5px 5px 0 5px;
         border-left-color: transparent !important;
         border-right-color: transparent !important;
@@ -439,11 +473,11 @@
         margin-bottom: 0;
     }
 
-    .tooltip[x-placement^="bottom"] {
+    .interactive-tooltip[x-placement^="bottom"] {
         margin-top: 5px;
     }
 
-    .tooltip[x-placement^="bottom"] .tooltip-arrow {
+    .interactive-tooltip[x-placement^="bottom"] .tooltip-arrow {
         border-width: 0 5px 5px 5px;
         border-left-color: transparent !important;
         border-right-color: transparent !important;
@@ -454,11 +488,11 @@
         margin-bottom: 0;
     }
 
-    .tooltip[x-placement^="right"] {
+    .interactive-tooltip[x-placement^="right"] {
         margin-left: 5px;
     }
 
-    .tooltip[x-placement^="right"] .tooltip-arrow {
+    .interactive-tooltip[x-placement^="right"] .tooltip-arrow {
         border-width: 5px 5px 5px 0;
         border-left-color: transparent !important;
         border-top-color: transparent !important;
@@ -469,11 +503,11 @@
         margin-right: 0;
     }
 
-    .tooltip[x-placement^="left"] {
+    .interactive-tooltip[x-placement^="left"] {
         margin-right: 5px;
     }
 
-    .tooltip[x-placement^="left"] .tooltip-arrow {
+    .interactive-tooltip[x-placement^="left"] .tooltip-arrow {
         border-width: 5px 0 5px 5px;
         border-top-color: transparent !important;
         border-right-color: transparent !important;
@@ -484,7 +518,7 @@
         margin-right: 0;
     }
 
-    .tooltip.popover .popover-inner {
+    .interactive-tooltip.popover .popover-inner {
         background: #f9f9f9;
         color: black;
         padding: 24px;
@@ -492,17 +526,17 @@
         box-shadow: 0 5px 30px rgba(black, 0.1);
     }
 
-    .tooltip.popover .popover-arrow {
+    .interactive-tooltip.popover .popover-arrow {
         border-color: #f9f9f9;
     }
 
-    .tooltip[aria-hidden='true'] {
+    .interactive-tooltip[aria-hidden='true'] {
         visibility: hidden;
         opacity: 0;
         transition: opacity .15s, visibility .15s;
     }
 
-    .tooltip[aria-hidden='false'] {
+    .interactive-tooltip[aria-hidden='false'] {
         visibility: visible;
         opacity: 1;
         transition: opacity .15s;
