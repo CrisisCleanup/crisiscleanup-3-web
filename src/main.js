@@ -33,6 +33,7 @@ import VueAutosuggest from "vue-autosuggest";
 import VTooltip from 'v-tooltip'
 import { getWorkTypeName, snakeToTitleCase } from "@/filters";
 import Popover from 'vue-js-popover'
+import Dropdown from 'bp-vuejs-dropdown';
 
 import 'ant-design-vue/dist/antd.less'
 import '@/assets/css/tailwind.css'
@@ -51,7 +52,6 @@ Vue.component('tag', Tag);
 
 // Layouts
 Vue.component('authenticated-layout', Authenticated);
-Vue.component('authenticated-layout', Authenticated);
 Vue.component('unauthenticated-layout', Unauthenticated);
 
 Vue.config.productionTip = false;
@@ -64,6 +64,8 @@ Vue.use(Antd)
 Vue.use(require('vue-moment'));
 Vue.use(VueLog);
 Vue.use(Popover)
+Vue.component('base-dropdown', Dropdown)
+
 
 // Filters
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });

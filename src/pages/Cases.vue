@@ -43,37 +43,75 @@
                             </div>
                         </div>
                         <div class="flex worksite-actions" style="color: #4c4c4d">
+                            <base-dropdown class-name="layers-dropdown">
+                                <base-button slot="btn" class="text-base font-thin mx-4" text="Layers" icon="layer-group"/>
+                                <template slot="body">
+                                    <ul class="text-base">
+<!--                                        <li class="py-2">-->
+<!--                                            <base-checkbox @input="(value) => { applyLayers(value, floodZone, 'flood') }">Flood Damage</base-checkbox>-->
+<!--                                        </li>-->
+<!--                                        <li class="py-2">-->
+<!--                                            <base-checkbox @input="(value) => { applyLocation(81828, value) }">Incident Extent</base-checkbox>-->
+<!--                                        </li>-->
+<!--                                        <li class="py-2">-->
+<!--                                            <base-checkbox @input="(value) => { applyLocation(81829, value) }">Track of Tornado</base-checkbox>-->
+<!--                                        </li>-->
+<!--                                        <hr>-->
+                                        Standard Layers
+                                        <li class="py-2">
+                                            <base-dropdown :trigger="'hover'" :role="'sublist'" :align="'right'">
+                                                <template slot="btn">US States</template>
+                                                <template slot="body">
+                                                    <ul class="h-64 overflow-auto">
+                                                        <li v-for="state in usStates">
+                                                            <base-checkbox @input="(value) => { applyLocation(state.id, value) }" :value="appliedLocations.has(state.id)">{{state.name}}</base-checkbox>
+                                                        </li>
+                                                    </ul>
+                                                </template>
+                                            </base-dropdown>
+                                        </li>
+                                        <li class="py-2">
+                                            <base-dropdown :trigger="'hover'" :role="'sublist'" :align="'right'">
+                                                <template slot="btn">Congressional Districts</template>
+                                                <template slot="body">
+                                                    <ul class="h-64 overflow-auto">
+                                                        <li v-for="district in districts">
+                                                            <base-checkbox @input="(value) => { applyLocation(district.id, value) }" :value="appliedLocations.has(district.id)">{{district.name}}</base-checkbox>
+                                                        </li>
+                                                    </ul>
+                                                </template>
+                                            </base-dropdown>
+                                        </li>
+                                    </ul>
+                                </template>
+                            </base-dropdown>
                             <base-button class="text-base font-thin mx-4" icon="sliders-h" :action="() => { this.showingFilters = true }">
                                 Filters <span class="rounded-full mx-2 px-1 bg-yellow-500 text-xs" v-if="filtersCount > 0">{{filtersCount}}</span>
                             </base-button>
-                            <base-button v-popover:layers class="text-base font-thin mx-4" text="Layers" icon="layer-group"/>
                             <ccu-icon type="search" size="small" class="text-base font-thin mx-4 mt-1"/>
                             <base-button class="text-base font-thin mx-4" text="" icon="ellipsis-h" :action="() => { this.showingFilters = true }"/>
                             <WorksiteFilters v-if="showingFilters" :current-filters="filters" @closedFilters="showingFilters = false" @updatedFilters="onUpdatedFilters" :incident="this.currentIncident"/>
-                            <popover name="layers" class="w-64 h-64 overflow-auto">
-                                <div v-for="state in usStates">
-                                    <base-checkbox @input="(value) => { applyLayer(state.id, value) }">{{state.name}}</base-checkbox>
-                                </div>
-                            </popover>
                         </div>
 
                     </div>
                 </div>
                 <div class="flex-grow bg-gray-100">
                     <template v-if="showingMap">
-                        <RealtimeMapFull style="width: 100%; height: 100%" @mapMoved="onMapMoved" @initMap="onInitMap" :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker" :key="JSON.stringify(currentQuery)"></RealtimeMapFull>
+                        <WorksiteMap class="w-full h-full" @mapMoved="onMapMoved" @initMap="onInitMap"
+                                     :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker"
+                                     :key="JSON.stringify(currentQuery)"/>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
                             <div class="table-operations flex justify-end items-center">
                                 <div class="flex">
                                     <base-button class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white"
-                                                 :action="() => {}" text="Unclaim"></base-button>
+                                                 :action="() => {}" text="Unclaim"/>
                                     <base-button icon="sync"
                                                  class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
-                                                 @click="() => {}" text="Update Status"></base-button>
+                                                 @click="() => {}" text="Update Status"/>
                                     <base-button class="ml-3 my-3 text-gray-600 border p-1 px-4 bg-white"
-                                                 @click="() => {}" text="Display All"></base-button>
+                                                 @click="() => {}" text="Display All"/>
                                 </div>
                             </div>
                             <Table class="border" :data="data" :columns="columns" enable-selection enable-pagniation :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
@@ -91,27 +129,36 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col h-full shadow-2xl w-1/5" style="min-width: 360px" v-if="this.currentIncident && this.currentWorksite">
+        <div class="flex flex-col h-full shadow-2xl w-1/5" style="min-width: 360px" v-if="this.currentIncident && this.currentWorksiteId">
             <div style="background-color: white" class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center">
-            <div class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
-                <ccu-icon type="active" size="small"></ccu-icon>
-                <span class="px-2">New Case</span>
-            </div>
-            <div v-if="this.currentWorksite && this.currentWorksite.id" class="w-1/2 h-full p-3 flex items-center justify-center" v-bind:class="{ 'tab-active': isEditingWorksite || isViewingWorksite }">
-                {{this.currentWorksite && `View ${this.currentWorksite.case_number}`}}
-            </div>
-        </div>
-            <div v-if="this.currentWorksite" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b">
-                <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
-                <div class="flex items-center">
-                    <ccu-icon size="small" class="m-1" type="history" @click.native="currentCaseView = 'history'"/>
-                    <ccu-icon size="small" class="m-1" type="download" @click.native="downloadWorksite"/>
-                    <ccu-icon size="small" class="m-1" type="share" />
-                    <ccu-icon size="small" class="m-1" type="print" @click.native="printWorksite"/>
-                    <ccu-icon v-if="isViewingWorksite" style="background-color: #fece09" class="border p-2" size="small" type="edit" @click.native="editWorksite" />
+                <div class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
+                    <ccu-icon type="active" size="small"/>
+                    <span class="px-2">New Case</span>
+                </div>
+                <div v-if="this.currentWorksite && this.currentWorksite.id" class="w-1/2 h-full p-3 flex items-center justify-center" v-bind:class="{ 'tab-active': isEditingWorksite || isViewingWorksite || isViewingWorksiteHistory }">
+                    {{this.currentWorksite && `View ${this.currentWorksite.case_number}`}}
                 </div>
             </div>
-            <a-skeleton class="bg-white h-full p-3 flex-grow" active v-if="spinning"></a-skeleton>
+            <div v-if="this.currentWorksite" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b">
+                <template v-if="isViewingWorksiteHistory">
+                    <ccu-icon size="medium" class="text-black mb-1" type="history">
+                        <span class="ml-1 mt-1">{{this.currentWorksite.case_number}} History</span>
+                    </ccu-icon>
+                    <ccu-icon size="small" type="cancel" @click.native="closeHistory"/>
+                </template>
+                <template v-else>
+                    <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
+                    <div class="flex items-center">
+                        <ccu-icon size="small" class="p-1 py-2" type="history" @click.native="currentCaseView = 'history'"/>
+                        <ccu-icon size="small" class="p-1 py-2" type="download" @click.native="downloadWorksite"/>
+                        <ccu-icon size="small" class="p-1 py-2" type="share"/>
+                        <ccu-icon size="small" class="p-1 py-2" type="print" @click.native="printWorksite"/>
+                        <ccu-icon v-if="isViewingWorksite" style="background-color: #fece09" class="border p-2"
+                                  size="small" type="edit" @click.native="editWorksite"/>
+                    </div>
+                </template>
+            </div>
+            <a-skeleton class="bg-white h-full p-3 flex-grow" active v-if="spinning"/>
             <div class="h-full" v-if="!spinning && (isEditingWorksite || isNewWorksite)">
                 <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite" :reloadTable="reloadTable" :incident="this.currentIncident"/>
             </div>
@@ -119,7 +166,7 @@
                 <CaseView :worksite="currentWorksite" :incident="currentIncident" @changed="loadWorksite" @closeWorksite="closeWorksite"/>
             </div>
             <div class="h-full" v-if="!spinning && isViewingWorksiteHistory">
-                <CaseHistory :worksite="currentWorksite" @closeWorksite="closeWorksite"/>
+                <CaseHistory :worksite="currentWorksite"/>
             </div>
         </div>
     </div>
@@ -135,15 +182,16 @@
     import {mapMutations, mapState} from "vuex";
     import CaseView from "@/pages/CaseView";
     import Table from "@/components/Table";
-    import RealtimeMapFull from "@/components/RealtimeMapFull";
+    import WorksiteMap from "@/components/WorksiteMap";
     import WorksiteFilters from "@/components/WorksiteFilters";
     import Status from "@/models/Status";
-    import { getStatusBadge } from '@/filters';
+    import {getStatusBadge} from '@/filters';
     import Autocomplete from "@/components/Autocomplete";
     import Highlighter from 'vue-highlight-words'
-    import { throttle } from 'lodash';
+    import {throttle} from 'lodash';
     import CaseHistory from "@/components/CaseHistory";
     import {getQueryString} from "@/utils/urls";
+    import * as L from 'leaflet';
 
     const columns = [
         {
@@ -205,7 +253,7 @@
             Autocomplete,
             CaseView,
             CaseForm,
-            RealtimeMapFull,
+            WorksiteMap,
             WorksiteFilters,
             Table,
             Highlighter,
@@ -244,7 +292,8 @@
                 map: null,
                 currentSearch: '',
                 currentCaseView: '',
-                getStatusBadge
+                getStatusBadge,
+                appliedLocations: new Set()
             };
         },
         created() {
@@ -254,14 +303,6 @@
             // }.bind(this), 100000);
         },
         async mounted() {
-            let locationParams = {
-              limit: 100,
-              type: 'US_STATES',
-              fields: 'id,name,type'
-            };
-            await Location.api().get(`/locations?${getQueryString(locationParams)}`, {
-                dataKey: 'results'
-            });
             if (this.currentUser.states) {
                 if (this.currentUser.states.showingMap) {
                     this.showingMap = true;
@@ -289,6 +330,17 @@
                     await this.loadWorksite(this.$route.query.worksite);
                 }
             }
+            let locationParams = {
+                limit: 1000,
+                type__in: 'US_STATE,CONGRESSIONAL_DISTRICT,',
+                fields: 'id,name,type'
+            };
+            await Location.api().get(`/locations?${getQueryString(locationParams)}`, {
+                dataKey: 'results'
+            });
+            Location.api().get(`/locations?type=FLOOD&limit=10000`, {
+                dataKey: 'results'
+            });
         },
         watch: {
             currentIncident: function () {
@@ -340,7 +392,31 @@
                 this.map = map;
             },
 
-            async applyLayer(location_id, value) {
+            applyLayers(value, layerList, key) {
+                if (value && this.map) {
+                    for (let location of layerList) {
+                        var geojsonFeature = {
+                            "type": "Feature",
+                            "properties": location.attr,
+                            "geometry": location.poly || location.geom || location.point
+                        };
+                        L.geoJSON(geojsonFeature, {
+                            onEachFeature: function (feature, layer) {
+                                layer.key = key
+                            }
+
+                        }).addTo(this.map);
+                    }
+                } else {
+                    this.map.eachLayer((layer) => {
+                        if (layer.key &&  layer.key === key) {
+                            this.map.removeLayer(layer)
+                        }
+                    });
+                }
+            },
+
+            async applyLocation(location_id, value) {
                 if (value && this.map) {
                     await Location.api().fetchById(location_id);
                     const location = Location.find(location_id);
@@ -355,12 +431,14 @@
                         }
 
                     }).addTo(this.map);
+                    this.appliedLocations.add(location_id)
                 } else {
                     this.map.eachLayer((layer) => {
                         if (layer.location_id &&  layer.location_id === location_id) {
                             this.map.removeLayer(layer)
                         }
                     });
+                    this.appliedLocations.delete(location_id)
                 }
             },
             async fetch(params = {}) {
@@ -412,14 +490,17 @@
                 this.currentWorksite = null;
             },
 
-            displayWorksite: async function (record) {
-                this.spinning = true;
-                await Worksite.api().fetchById(record.id);
-                let worksite = Worksite.find(record.id);
-                this.currentWorksiteId = worksite.id;
-                this.currentWorksite = worksite;
-                this.spinning = false;
+            async closeHistory() {
                 this.currentCaseView = 'view';
+            },
+
+            displayWorksite: async function (record) {
+                this.currentCaseView = 'view';
+                this.spinning = true;
+                this.currentWorksiteId = record.id;
+                await Worksite.api().fetchById(record.id);
+                this.currentWorksite = Worksite.find(record.id);
+                this.spinning = false;
                 this.caseFormKey = !this.caseFormKey;
             },
             createNewWorksite() {
@@ -551,7 +632,15 @@
         },
         computed: {
             usStates() {
-                let states = Location.query().where('type', 'US_STATES').get();
+                let states = Location.query().where('type', 'US_STATE').get();
+                return states
+            },
+            districts() {
+                let states = Location.query().where('type', 'CONGRESSIONAL_DISTRICT').get();
+                return states
+            },
+            floodZone() {
+                let states = Location.query().where('type', 'FLOOD').get();
                 return states
             },
             isEditingWorksite() {
@@ -662,5 +751,9 @@
         font-weight: bold;
         background-color: white;
         padding: 0;
+    }
+
+    .bp-dropdown__btn.layers-dropdown-bp__btn {
+        @apply border-0
     }
 </style>

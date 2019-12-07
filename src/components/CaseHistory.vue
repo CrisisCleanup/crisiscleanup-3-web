@@ -1,7 +1,6 @@
 <template>
     <div class="bg-white flex flex-col h-full">
         <div class="p-3 flex-grow intake-view">
-
             <div class="my-4 pb-6 border-b">
                 <span>
                     <strong>WARNING: DO NOT SHARE THIS INFORMATION WITH SURVIVORS (This has already been a problem).</strong>
@@ -14,16 +13,24 @@
             </div>
             <div class="">
                 <div v-for="(events, user) in users" class="py-5 border-b">
-                    <span class="text-yellow-600">{{getUserName(user)}}</span> made {{events.length}} edits
+                    <v-popover popoverClass="user-popover" placement="top-start">
+                        <span class="text-yellow-600 tooltip-target cursor-pointer">{{getUser(user).full_name}}</span> made {{events.length}} edits
+                        <div slot="popover">
+                            <div class="text-base">{{getUser(user).full_name}}</div>
+                            <div class="text-xs">{{getUser(user).organization.name}}</div>
+                            <div class="mt-2">
+                                <font-awesome-icon icon="envelope" /> <a :href="`mailto:${getUser(user).email}`" class="ml-1">{{getUser(user).email}}</a>
+                            </div>
+                            <div v-if="getUser(user).mobile">
+                                <font-awesome-icon icon="phone" /> <a :href="`tel:${getUser(user).email}`" class="ml-1">{{getUser(user).mobile}}</a>
+                            </div>
+                        </div>
+                    </v-popover>
                     <div v-for="event in events">
                         {{ event.created_at | moment("MM/DD/YYYY, h:mm:ss A") }}: {{event.event.event_name_t}}
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-center items-center">
-            <base-button size="medium" type="primary" class="m-1 text-black p-3 px-4" text="Done"
-                         :action="() => { $emit('closeWorksite') }"/>
         </div>
     </div>
 </template>
@@ -61,13 +68,22 @@ export default {
             let organization = Organization.find(id);
             return organization.name
         },
-        getUserName(id) {
+        getUser(id) {
             let user = User.find(id);
-            return user.full_name;
+            return user;
         },
     }
 }
 </script>
+
+<style>
+    .user-popover {
+        @apply bg-black text-white p-3 outline-none;
+        width: 230px;
+        left: 0.75rem !important;
+        z-index: 100;
+    }
+</style>
 
 <style scoped>
     .intake-view {

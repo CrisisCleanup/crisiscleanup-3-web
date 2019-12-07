@@ -15,4 +15,6 @@ RUN npm install
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
 
+RUN npm run compile-icons
+
 CMD [ "npm", "run", "deploy-staging"]

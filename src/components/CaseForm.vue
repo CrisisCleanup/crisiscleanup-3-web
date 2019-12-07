@@ -27,7 +27,10 @@
                 <base-input :value="worksite.name" @input="(value) => { updateWorksite(value,'name') }" tooltip="info" size="large" placeholder="Name" required></base-input>
             </div>
             <div class="py-1">
-                <autocomplete :value="worksite.address" @input="(value) => { updateWorksite(value,'address') }" @selected="onGeocodeSelect"  @search="geocoderSearch" tooltip="info" :suggestions="geocoderResults" display-property="description" placeholder="Address" size="large" required></autocomplete>
+                <AddressGeocoder :value="worksite.address" @input="(value) => { updateWorksite(value,'address') }"
+                              @selectedExisting="onWorksiteSelect" @selectedGeocode="onGeocodeSelect" @search="geocoderSearch" tooltip="info"
+                              :suggestions="[{name:'worksites', data: searchWorksitesResults, key: 'address' }, {name:'geocoder', data: geocoderResults, key: 'description' }]"
+                              display-property="description" placeholder="Address" size="large" required/>
             </div>
             <div class="py-1">
                 <base-input :value="worksite.city" @input="(value) => { updateWorksite(value,'city') }" tooltip="info" size="large" placeholder="City" required @change="findPotentialGeocode"></base-input>
@@ -112,7 +115,7 @@
                     </template>
                     <template v-if="field.html_type === 'suggest'">
                         <div class="py-1" :key="field.field_key">
-                            <autocomplete :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]" tooltip="info" :suggestions="geocoderResults" display-property="description" :placeholder="field.placeholder_t"></autocomplete>
+                            <autocomplete :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]" tooltip="info" display-property="description" :placeholder="field.placeholder_t"></autocomplete>
                         </div>
                     </template>
                     <template v-if="field.html_type === 'textarea'">
@@ -159,6 +162,7 @@
     import GeocoderService from "@/services/geocoder.service"
     import { What3wordsService } from "@/services/what3words.service";
     import {getErrorMessage} from "@/utils/errors";
+    import AddressGeocoder from "@/components/AddressGeocoder";
 
     export default {
         props: {
@@ -168,7 +172,8 @@
             incident: Object,
         },
         components: {
-            OverlayMap
+            OverlayMap,
+            AddressGeocoder
         },
         name: "CaseForm",
         mounted() {
@@ -193,6 +198,7 @@
                 overlayMapVisible: false,
                 overlayMapLocation: null,
                 geocoderResults: [],
+                searchWorksitesResults: [],
                 worksite: {},
                 dynamicFields: {
 
@@ -257,8 +263,13 @@
                 this.updateWorksite(what3words, 'what3words');
                 this.$emit('geocoded', geocode.location)
             },
+            async onWorksiteSelect(value) {
+                this.$emit('savedWorksite', value.id)
+            },
             async geocoderSearch(value) {
                 this.geocoderResults = await GeocoderService.getMatchingAddressesGoogle(value);
+                let searchWorksites = await Worksite.api().searchWorksites(value, this.incident.id);
+                this.searchWorksitesResults = searchWorksites.entities.worksites;
             },
             async handleOk() {
                 this.overlayMapVisible = false;

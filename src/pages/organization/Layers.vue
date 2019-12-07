@@ -19,8 +19,8 @@
             <div v-if="shapefileStructure">
                 <Table class="border text-xs mt-4" :data="tableData" :columns="columns" :loading="this.loading">
                     <template #fields="slotProps">
-                        <div class="flex mr-2">
-                            <base-select v-if="!loading" :defaultValue="slotProps.item.fields[0]" :change="onSelectShapefileKey" class="w-full">
+                        <div class="flex w-full">
+                            <base-select v-if="!loading" :change="onSelectShapefileKey" placeholder="Select a key for this shapefile" class="w-full">
                                 <template v-slot:options>
                                     <a-select-option :key="key" v-for="key in slotProps.item.fields" :value="key">
                                         {{key}}
@@ -30,8 +30,8 @@
                         </div>
                     </template>
                     <template #types="{slotProps}">
-                        <div class="flex mr-2">
-                            <base-select v-if="!loading" :defaultValue="locationTypes[0]" :change="onSelectShapefileType" class="w-full">
+                        <div class="flex w-full">
+                            <base-select v-if="!loading" :defaultValue="shapefileType" :change="onSelectShapefileType" class="w-full">
                                 <template v-slot:options>
                                     <a-select-option :key="key" v-for="key in locationTypes" :value="key">
                                         {{key}}
@@ -44,8 +44,10 @@
                         <div class="flex mr-2">
                             <base-button text="See Sample" type="trash" size="small" :action="() => { showingSampleModal = true }"/>
                             <modal v-if="showingSampleModal" @close="showingSampleModal = false" modal-classes="bg-white max-w-lg shadow">
-                                <div v-for="(value, key) in slotProps.item.sample">
-                                    {{key}}: {{value}}
+                                <div class="h-64 overflow-auto p-4">
+                                    <div v-for="(value, key) in slotProps.item.sample">
+                                        {{key}}: {{value}}
+                                    </div>
                                 </div>
                             </modal>
                         </div>
@@ -116,11 +118,11 @@
                 shapefileStructure: null,
                 fileList: [],
                 shapefileKey: '',
-                shapefileType: '',
+                shapefileType: 'COUNTY',
                 columns,
                 showingSampleModal: false,
                 loading: false,
-                locationTypes: ['US_STATE', 'COUNTY', 'CENSUS_TRACT', 'SVI']
+                locationTypes: ['US_STATE', 'COUNTY', 'CENSUS_TRACT', 'SVI', 'SVI_COUNTY', 'CONGRESSIONAL_DISTRICT', 'INCIDENT_TRACK', 'INCIDENT_AREA', 'FLOOD']
             }
         },
         methods: {
@@ -151,22 +153,25 @@
                 })
                 this.loading = false;
                 this.shapefileStructure = result.data
-                console.log(this.shapefileStructure)
             },
             async uploadShapefile() {
                 var formData = new FormData();
                 formData.append("file", this.fileList[0].originFileObj);
                 formData.append("key", this.shapefileKey || 'NAME');
                 formData.append("note_key", this.shapefileKey || 'NAME');
-                formData.append("type", this.shapefileType || 'US_STATES');
+                formData.append("type", this.shapefileType || 'US_STATE');
 
-                let result = await this.$http.post(`${process.env.VUE_APP_API_BASE_URL}/upload_shapefile`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        'Accept': 'application/json'
-                    }
-                })
-    
+                try {
+                    await this.$http.post(`${process.env.VUE_APP_API_BASE_URL}/upload_shapefile`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                            'Accept': 'application/json'
+                        }
+                    })
+                    await this.$message.success('Successfully updated shapefile');
+                } catch (e) {
+
+                }
             },
         },
         computed: {
