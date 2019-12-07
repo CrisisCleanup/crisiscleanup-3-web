@@ -79,7 +79,7 @@ let colors = {
 const fs = require('fs')
 
 try {
-    const path = './icon_templates';
+    const path = `${__dirname}/icon_templates`;
     const files = fs.readdirSync(path);
 
     for (let file of files) {
@@ -87,7 +87,7 @@ try {
         const template = Handlebars.compile(data)
         for (let [key, value] of Object.entries(colors)) {
             let svg = template({fillColor: value.fillColor, strokeColor: value.strokeColor});
-            fs.writeFile(`./public/map_icons/${file.replace('.hbs', '')}_${key}.svg`, svg, (err) => {
+            fs.writeFile(`${__dirname}/public/map_icons/${file.replace('.hbs', '')}_${key}.svg`, svg, (err) => {
                 if (err) throw err;
             });
         }
