@@ -28,6 +28,8 @@
             return {
                 selected: '',
                 filteredOptions: [],
+                timeout: null,
+                debounceMilliseconds: 50,
                 inputProps: {
                     id: "autosuggest__input",
                     onInputChange: this.onInputChange,
@@ -100,10 +102,13 @@
                 }
             },
             onInputChange(text) {
-                if (text === '' || text === undefined) {
-                    return;
-                }
-                this.$emit('search', text);
+                clearTimeout(this.timeout);
+                this.timeout = setTimeout(() => {
+                    if (text === '' || text === undefined) {
+                        return;
+                    }
+                    this.$emit('search', text);
+                }, this.debounceMilliseconds);
             }
         }
     };
