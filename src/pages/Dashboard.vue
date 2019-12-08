@@ -171,7 +171,7 @@
                 const params = {
                     incident: this.currentIncidentId,
                     work_type__claimed_by: this.currentUser.organization.id,
-                    fields: 'id,name,address,case_number,work_types,city,state,county,flags,blurred_location,incident,postal_code,reported_by',
+                    fields: 'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by',
                 };
 
                 Worksite.api().get(`/worksites?${getQueryString(params)}`, {
@@ -182,7 +182,7 @@
                 const params = {
                     incident: this.currentIncidentId,
                     reported_by: this.currentUser.organization.id,
-                    fields: 'id,name,address,case_number,work_types,city,state,county,flags,blurred_location,incident,postal_code,reported_by',
+                    fields: 'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by',
                 };
 
                 Worksite.api().get(`/worksites?${getQueryString(params)}`, {

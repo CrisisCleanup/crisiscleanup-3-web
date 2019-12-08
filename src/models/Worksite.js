@@ -9,7 +9,7 @@ export default class Worksite extends Model {
         return {
             id: this.string(),
             address: this.string(''),
-            blurred_location: this.attr(null),
+            location: this.attr(null),
             case_number: this.attr(null),
             city: this.attr(null),
             county: this.attr(null),
@@ -28,11 +28,11 @@ export default class Worksite extends Model {
     }
 
     get latitude() {
-        return this.blurred_location ? this.blurred_location.coordinates[1]: 10
+        return this.location ? this.location.coordinates[1]: 10
     }
 
     get longitude() {
-        return this.blurred_location ? this.blurred_location.coordinates[0]: 10
+        return this.location ? this.location.coordinates[0]: 10
     }
 
     static apiConfig = {
