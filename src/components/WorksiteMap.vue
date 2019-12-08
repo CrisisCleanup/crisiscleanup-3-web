@@ -55,23 +55,6 @@
         shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
 
-    const colors_dict = {
-        "open_unassigned": 0xbc0000,
-        "open_assigned": 0xd02417,
-        "open_partially-completed": 0x22516,
-        "open_needs-follow-up": 0xd52417,
-        "open_unresponsive": 0x787878,
-        "closed_completed": 0x52c41a,
-        "closed_partially-completed": 0xFF0000,
-        "closed_incomplete": 0x1c1c1c,
-        "closed_out-of-scope": 0x767676,
-        "closed_done-by-others": 0x008200,
-        "closed_no-help-wanted": 0xFF0000,
-        "closed_rejected": 0xFF0000,
-        "closed_duplicate": 0xFF0000,
-        "closed_marked-for-deletion": 0xFF0000
-    };
-
     const getOpacity = (date) => {
         // let opacity_buckets = [100, 75, 60, 35, 20, 10]
         let opacity_buckets = [100, 85, 70, 45, 30, 20]
@@ -257,7 +240,6 @@
                                     } else {
                                         markerSprite.texture = PIXI.utils.TextureCache[`unknown_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`];
                                     }
-                                    markerSprite.tint = colors_dict[marker.work_types[0].status];
                                     markerSprite.x = coords.x;
                                     markerSprite.y = coords.y;
                                     markerSprite.x0 = coords.x;

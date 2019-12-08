@@ -2,6 +2,8 @@
 node_modules
 /dist
 
+/public/map_icons/*.svg
+
 # local env files
 .env.local
 .env.*.local
