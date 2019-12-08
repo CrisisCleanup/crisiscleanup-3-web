@@ -148,7 +148,7 @@
                 </template>
                 <template v-else>
                     <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
-                    <div class="flex items-center">
+                    <div class="flex items-center" v-if="!isNewWorksite">
                         <ccu-icon size="small" class="p-1 py-2" type="go-case" @click.native="jumpToCase"/>
                         <ccu-icon size="small" class="p-1 py-2" type="history" @click.native="currentCaseView = 'history'"/>
                         <ccu-icon size="small" class="p-1 py-2" type="download" @click.native="downloadWorksite"/>
@@ -447,7 +447,7 @@
             async fetch(params = {}) {
                 this.tableLoading = true;
                 let query = {
-                    fields: 'id,name,address,case_number,work_types,city,state,county,flags,blurred_location,incident,postal_code',
+                    fields: 'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code',
                     incident: this.currentIncidentId,
                 };
                 this.currentQuery = { ...query, ...this.appliedFilters };
