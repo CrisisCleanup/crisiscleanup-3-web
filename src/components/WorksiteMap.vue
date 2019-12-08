@@ -222,7 +222,7 @@
                             let renderer = utils.getRenderer();
                             let project = utils.latLngToLayerPoint;
                             let scale = utils.getScale();
-                            let invScale = 0.65 / scale;
+                            let invScale = 0.75 / scale;
                             if (firstDraw) {
                                 prevZoom = zoom;
                                 markers.forEach(function (marker) {
@@ -315,20 +315,19 @@
                             }
                             if (firstDraw || prevZoom !== zoom) {
                                 markerSprites.forEach(function (markerSprite) {
+                                    let work_type = markerSprite.data.work_types[0];
+                                    let textureKey = `${work_type.work_type}_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
                                     if (zoom < 12) {
-                                        markerSprite.texture = resources.dot.texture
+                                        textureKey = `circle_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                                    }
+                                    let texture = PIXI.utils.TextureCache[`map_icons/${textureKey}.svg`];
+                                    if (!texture) {
+                                        texture = Texture.from(`map_icons/${textureKey}.svg`)
+                                    }
+                                    if (work_type && texture) {
+                                        markerSprite.texture = texture;
                                     } else {
-                                        let work_type = markerSprite.data.work_types[0];
-                                        const textureKey = `${work_type.work_type}_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
-                                        let texture = PIXI.utils.TextureCache[`map_icons/${textureKey}.svg`];
-                                        if (!texture) {
-                                            texture = Texture.from(`map_icons/${textureKey}.svg`)
-                                        }
-                                        if (work_type && texture) {
-                                            markerSprite.texture = texture;
-                                        } else {
-                                            markerSprite.texture = Texture.from[`map_icons/unknown_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}.svg`];
-                                        }
+                                        markerSprite.texture = Texture.from[`map_icons/unknown_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}.svg`];
                                     }
                                     if (firstDraw) {
                                         markerSprite.scale.set(invScale);
