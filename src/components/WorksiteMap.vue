@@ -28,9 +28,7 @@
 </style>
 
 <script>
-
     import {Container, Loader, Sprite, Texture} from 'pixi.js'
-    import * as PIXI from 'pixi.js'
     import * as L from 'leaflet';
     import 'leaflet-loading';
     import 'leaflet.gridlayer.googlemutant';
@@ -38,10 +36,9 @@
     import 'leaflet.heat'
     import {solveCollision} from '@/utils/easing';
     import User from "@/models/User";
-    import { averageGeolocation } from "@/utils/map";
+    import {averageGeolocation} from "@/utils/map";
     import * as moment from 'moment';
-    import WorkType from '@/models/WorkType';
-    import Status from '@/models/Status';
+    import {colors, templates} from '@/icons/icons_templates'
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -99,34 +96,14 @@
                 markerLayer: L.layerGroup(),
                 markers: [],
                 showInteractivePopover: false,
-                loader: new Loader()
+                loader: new Loader(),
+                colors,
+                templates
             }
         },
         computed: {
             currentUser() {
                 return User.find(this.$store.getters['auth/userId'])
-            },
-            workTypeList() {
-                return WorkType.all().map(type =>type.key)
-            },
-            statusList() {
-                return Status.all().map(status => status.status)
-            },
-            iconsList() {
-                let iconsList = [];
-                for (let work_type of this.workTypeList) {
-                    for (let status of this.statusList) {
-                        for (let claimed_status of ['claimed', 'unclaimed']) {
-                            iconsList.push(`${work_type}_${status}_${claimed_status}`);
-                        }
-                    }
-                }
-                for (let status of this.statusList) {
-                    for (let claimed_status of ['claimed', 'unclaimed']) {
-                        iconsList.push(`circle_${status}_${claimed_status}`);
-                    }
-                }
-                return iconsList;
             }
         },
         mounted() {
@@ -141,6 +118,12 @@
         },
         methods: {
             async initMap(options) {
+                if (this.map) {
+                    this.map.off();
+                    this.map.remove();
+                    this.map = null;
+                }
+
                 this.map = L.map(this.$refs.map, options);
                 this.$emit('initMap', this.map);
                 this.map.on('moveend', () => {
@@ -181,9 +164,6 @@
             loadMarkersOnMap: function (markers) {
                 let map = this.map;
                 let loader = this.loader;
-                for (let icon of this.iconsList.filter(i => !PIXI.utils.TextureCache[`map_icons/${i}.svg`])) {
-                    loader.add(icon, `map_icons/${icon}.svg`);
-                }
                 loader.once('complete', () => {
                     this.mapLoading = false;
                     this.map.invalidateSize(true)
@@ -213,18 +193,16 @@
                                 prevZoom = zoom;
                                 markers.forEach(function (marker) {
                                     let coords = project([marker.position.lat, marker.position.lng]);
-                                    // let markerSprite = new Sprite(mapping[marker.work_types[0].work_type] || resources.marker.texture);
                                     let markerSprite = new Sprite();
                                     let work_type = marker.work_types[0];
-                                    const textureKey = `${work_type.work_type}_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
-                                    let texture = PIXI.utils.TextureCache[`map_icons/${textureKey}.svg`];
-                                    if (!texture) {
-                                        texture = Texture.from(`map_icons/${textureKey}.svg`)
-                                    }
-                                    if (work_type && texture) {
-                                        markerSprite.texture = texture;
-                                    } else {
-                                        markerSprite.texture = PIXI.utils.TextureCache[`unknown_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`];
+
+                                    let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                                    let worksiteTemplate = zoom < 12 ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
+                                    let colors = self.colors[colorsKey];
+
+                                    if (colors) {
+                                        let svg = worksiteTemplate.replace('{{fillColor}}', colors.fillColor).replace('{{strokeColor}}', colors.strokeColor);
+                                        markerSprite.texture = Texture.from(svg);
                                     }
                                     markerSprite.x = coords.x;
                                     markerSprite.y = coords.y;
@@ -299,19 +277,16 @@
                             if (firstDraw || prevZoom !== zoom) {
                                 markerSprites.forEach(function (markerSprite) {
                                     let work_type = markerSprite.data.work_types[0];
-                                    let textureKey = `${work_type.work_type}_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
-                                    if (zoom < 12) {
-                                        textureKey = `circle_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+
+                                    let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                                    let worksiteTemplate = zoom < 12 ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
+                                    let colors = self.colors[colorsKey];
+
+                                    if (colors) {
+                                        let svg = worksiteTemplate.replace('{{fillColor}}', colors.fillColor).replace('{{strokeColor}}', colors.strokeColor);
+                                        markerSprite.texture = Texture.from(svg);
                                     }
-                                    let texture = PIXI.utils.TextureCache[`map_icons/${textureKey}.svg`];
-                                    if (!texture) {
-                                        texture = Texture.from(`map_icons/${textureKey}.svg`)
-                                    }
-                                    if (work_type && texture) {
-                                        markerSprite.texture = texture;
-                                    } else {
-                                        markerSprite.texture = Texture.from[`map_icons/unknown_${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}.svg`];
-                                    }
+
                                     if (firstDraw) {
                                         markerSprite.scale.set(invScale);
                                     } else {

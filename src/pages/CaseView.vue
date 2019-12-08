@@ -6,13 +6,13 @@
                 <div :key="note.id" v-for="note in worksite.notes" class="notes my-1 p-1 flex items-center">
                     <span class="text-gray-600 mr-3 notes-time">{{ note.created_at | moment("from", "now") }}:</span><span class="font-hairline">{{note.note}}</span>
                 </div>
-                <base-button v-if="!addingNotes" class="my-1" type="link" text="+ Add Note" :action="() => { this.addingNotes = true }"></base-button>
+                <base-button v-if="!addingNotes" class="my-1" type="link" text="+ Add Note" :action="() => { this.addingNotes = true }"/>
                 <div v-if="addingNotes">
                     Note
                     <a-textarea rows="4" v-model="currentNote"/>
                     <div class="flex items-center justify-between">
-                        <base-button class="my-1" type="bare" text="Cancel" :action="cancelNote"></base-button>
-                        <base-button class="my-1" type="link" text="Save" :action="saveNote"></base-button>
+                        <base-button class="my-1" type="bare" text="Cancel" :action="cancelNote"/>
+                        <base-button class="my-1" type="link" text="Save" :action="saveNote"/>
                     </div>
                 </div>
             </div>
@@ -64,12 +64,12 @@
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-center items-center">
             <base-button v-if="workTypesClaimedByOrganization.length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black"
-                         text="Unclaim" :action="() => { return unclaimWorkType() }"></base-button>
+                         text="Unclaim" :action="() => { return unclaimWorkType() }"/>
             <base-button v-if="workTypesUnclaimed.length > 0" size="medium" type="primary" class="m-1 text-black p-3 px-4"
-                         text="Claim" :action="() => { return claimWorkType() }"></base-button>
+                         text="Claim" :action="() => { return claimWorkType() }"/>
             <base-button v-if="Object.keys(workTypesClaimedByOthers).length > 0" size="medium" class="m-1 text-black p-3 px-4 border-2 border-black"
-                         text="Request" :action="() => { return requestWorkType() }"></base-button>
-            <base-button size="medium" type="primary" class="m-1 text-black p-3 px-4" text="Done" :action="() => { $emit('closeWorksite') }"></base-button>
+                         text="Request" :action="() => { return requestWorkType() }"/>
+            <base-button size="medium" type="primary" class="m-1 text-black p-3 px-4" text="Done" :action="() => { $emit('closeWorksite') }"/>
         </div>
     </div>
 </template>
@@ -125,6 +125,7 @@
                 }
                 await Worksite.api().claimWorksite(this.worksite.id, work_types);
                 this.$emit('changed')
+                this.$emit('reloadMap')
             } catch (error) {
                 await this.$message.error(getErrorMessage(error));
             }
@@ -137,6 +138,7 @@
                 }
                 await Worksite.api().unclaimWorksite(this.worksite.id, work_types);
                 this.$emit('changed')
+                this.$emit('reloadMap')
             } catch (error) {
                 await this.$message.error(getErrorMessage(error));
             }
@@ -149,6 +151,7 @@
                 }
                 await Worksite.api().requestWorksite(this.worksite.id, work_types);
                 this.$emit('changed')
+                this.$emit('reloadMap')
             } catch (error) {
                 await this.$message.error(getErrorMessage(error));
             }
@@ -180,6 +183,7 @@
                 await this.$message.error(getErrorMessage(error));
             } finally {
                 this.$emit('changed')
+                this.$emit('reloadMap')
             }
         },
 
