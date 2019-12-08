@@ -99,7 +99,7 @@
                     <template v-if="showingMap">
                         <WorksiteMap class="w-full h-full" @mapMoved="onMapMoved" @initMap="onInitMap"
                                      :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker"
-                                     :key="JSON.stringify(currentQuery)"/>
+                                     :key="JSON.stringify(currentQuery)" ref="workstiteMap"/>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
@@ -149,6 +149,7 @@
                 <template v-else>
                     <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
                     <div class="flex items-center">
+                        <ccu-icon size="small" class="p-1 py-2" type="go-case" @click.native="jumpToCase"/>
                         <ccu-icon size="small" class="p-1 py-2" type="history" @click.native="currentCaseView = 'history'"/>
                         <ccu-icon size="small" class="p-1 py-2" type="download" @click.native="downloadWorksite"/>
                         <ccu-icon size="small" class="p-1 py-2" type="share"/>
@@ -595,6 +596,22 @@
                 this.forceFileDownload(csv.response);
                 this.spinning = false;
             },
+            async jumpToCase() {
+                this.toggleView('showingMap');
+
+                const waitForMap = () => {
+                    if (this.$refs.workstiteMap && !this.$refs.workstiteMap.mapLoading) {
+                        this.$refs.workstiteMap.map.setView([this.currentWorksite.latitude, this.currentWorksite.longitude], 18);
+                        let popup = L.popup({className: 'pixi-popup'})
+                        popup.setLatLng([this.currentWorksite.latitude, this.currentWorksite.longitude])
+                            .setContent(`<b>${this.currentWorksite.case_number}</b>`).openOn(this.$refs.workstiteMap.map);
+
+                    } else {
+                        setTimeout(waitForMap, 50);
+                    }
+                };
+                waitForMap();
+            },
             forceFileDownload(response){
                 const blob = new Blob([response.data], {type: response.data.type});
                 const url = window.URL.createObjectURL(blob);
@@ -681,8 +698,8 @@
                         return {
                             ...worksite,
                             position: {
-                                lat: worksite.blurred_location ? worksite.blurred_location.coordinates[1]: 10,
-                                lng: worksite.blurred_location ? worksite.blurred_location.coordinates[0]: 10,
+                                lat: worksite.latitude,
+                                lng: worksite.longitude,
                             }
                         }
                     })

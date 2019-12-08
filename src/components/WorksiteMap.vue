@@ -273,14 +273,11 @@
                                     return marker;
                                 };
 
-                                // let popup = L.popup({className: 'pixi-popup'})
 
                                 map.on('click', function (e) {
                                     let marker = findMarker(e.latlng);
                                     if (marker) {
                                         self.onSelectmarker(marker.data)
-                                        // popup.setLatLng(e.latlng)
-                                        //     .setContent(`<b>${marker.data.case_number}</b>`).openOn(map);
                                     } else {
                                         map.closePopup();
                                     }
