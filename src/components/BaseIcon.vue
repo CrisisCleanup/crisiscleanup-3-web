@@ -21,6 +21,7 @@
         organization: require('@/assets/icons/my-organization.svg'),
         history: require('@/assets/icons/history.svg'),
         cancel: require('@/assets/icons/big.svg'),
+        'go-case': require('@/assets/icons/replace-case.svg'),
     };
     export default {
         name: "BaseIcon",

@@ -27,6 +27,14 @@ export default class Worksite extends Model {
         }
     }
 
+    get latitude() {
+        return this.blurred_location ? this.blurred_location.coordinates[1]: 10
+    }
+
+    get longitude() {
+        return this.blurred_location ? this.blurred_location.coordinates[0]: 10
+    }
+
     static apiConfig = {
         actions: {
             async fetchById (id) {
