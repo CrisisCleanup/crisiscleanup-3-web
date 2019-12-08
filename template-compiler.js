@@ -26,11 +26,11 @@ let colors = {
         fillColor: '#0054bb',
         strokeColor: '#0054bb'
     },
-    'open_partially-needs-follow-up_unclaimed': {
+    'open_needs-follow-up_unclaimed': {
         fillColor: '#d0021b',
         strokeColor: '#e30001'
     },
-    'open_partially-needs-follow-up_claimed': {
+    'open_needs-follow-up_claimed': {
         fillColor: '#ea51eb',
         strokeColor: '#e018e1'
     },

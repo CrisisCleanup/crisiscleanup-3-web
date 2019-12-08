@@ -30,14 +30,10 @@
                     <div v-for="(work_types, organization) in workTypesClaimedByOthers">
                     <label class="my-4 text-xs font-bold text-gray-600">Claimed By {{getOrganizationName(organization)}}</label>
                         <template v-for="work_type in work_types">
-                            <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
-                                {{work_type.work_type | getWorkTypeName}}
-                                <div class="flex items-center">
-                                    <StatusDropDown class="block" :default-value="work_type.status"
-                                                        :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
-                                        <base-button type="link" :action="() => { return requestWorkType(work_type) }"
-                                                     text="Request" class="ml-2 p-1 px-2"></base-button>
-                                </div>
+                            <div :key="work_type.id" class="work_type_section">
+                                <span class="text-sm">{{work_type.work_type | getWorkTypeName}}</span>
+                                <StatusDropDown class="block" :default-value="work_type.status" :on-select="(value) => {statusValueChange(value, work_type)}"/>
+                                <base-button type="link" :action="() => { return requestWorkType(work_type) }" text="Request" class="ml-2 p-1 px-3 text-xs"/>
                             </div>
                         </template>
 
@@ -46,28 +42,21 @@
                 <div v-if="workTypesClaimedByOrganization.length > 0" class="my-4">
                     <label class="my-4 text-xs font-bold text-gray-600">Claimed By My Organization</label>
                     <template v-for="work_type in workTypesClaimedByOrganization">
-                        <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
-                            {{work_type.work_type | getWorkTypeName}}
-                            <div class="flex items-center">
-                                <StatusDropDown class="block" :default-value="work_type.status"
-                                                    :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
-                                    <base-button type="primary" :action="() => { return unclaimWorkType(work_type) }"
-                                                 text="Unclaim" class="ml-2 p-1 px-2"></base-button>
-                            </div>
+                        <div :key="work_type.id" class="work_type_section">
+                            <span class="text-sm">{{work_type.work_type | getWorkTypeName}}</span>
+                            <StatusDropDown class="block" :default-value="work_type.status" :on-select="(value) => {statusValueChange(value, work_type)}" />
+                            <base-button type="primary" :action="() => { return unclaimWorkType(work_type) }" text="Unclaim" class="ml-2 p-1 px-3 text-xs"/>
                         </div>
                     </template>
                 </div>
                 <div v-if="workTypesUnclaimed.length > 0" class="my-4">
                     <label class="my-4 text-xs font-bold text-gray-600">Unclaimed Work Types</label>
                     <template v-for="work_type in workTypesUnclaimed">
-                        <div :key="work_type.id" class="border-b py-4 flex justify-between items-center">
-                            {{work_type.work_type | getWorkTypeName}}
-                            <div class="flex items-center">
-                                <StatusDropDown class="block" :default-value="work_type.status"
-                                                :on-select="(value) => {statusValueChange(value, work_type)}"></StatusDropDown>
-                                <base-button type="primary" :action="() => { return claimWorkType(work_type) }"
-                                             text="Claim" class="ml-2 p-1 px-2"></base-button>
-                            </div>
+                        <div :key="work_type.id" class="work_type_section">
+                            <span class="text-sm">{{work_type.work_type | getWorkTypeName}}</span>
+                            <StatusDropDown class="block" :default-value="work_type.status" :on-select="(value) => {statusValueChange(value, work_type)}" />
+                            <base-button type="primary" :action="() => { return claimWorkType(work_type) }" text="Claim" class="ml-2 p-1 px-3 text-xs" />
+
                         </div>
                     </template>
                 </div>
@@ -235,5 +224,13 @@
     }
     .notes-time {
         color: #848F99;
+    }
+
+    .work_type_section {
+        @apply border-b py-4;
+        display: grid;
+        grid-template-columns: 1fr 2fr 0.5fr;
+        justify-items: start;
+        align-items: center;
     }
 </style>

@@ -1,5 +1,8 @@
 <template>
-    <a-spin :spinning="mapLoading" class="fullsize-map" style="position: relative;">
+    <div class="fullsize-map" style="position: relative;">
+        <div v-if="mapLoading" style="z-index: 1001;" class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center">
+            <spinner/>
+        </div>
         <div class="flex flex-col" style="z-index: 1001; position: absolute; top: 90px; left: 10px">
             <base-button text="" title="Go to Incident" :action="goToIncidentCenter" icon="search-minus" class="w-8 h-8 border-2 my-1 bg-white"/>
             <base-button v-tooltip="{
@@ -14,14 +17,9 @@
             <base-button text="" icon="search-location" :action="goToLocal" class="w-8 h-8 border-2 my-1 bg-white"/>
         </div>
         <div class="home-map" ref="map"></div>
-    </a-spin>
+    </div>
 </template>
 <style>
-
-    html, body {
-        height: 100%;
-        width: 100%;
-    }
 
     .fullsize-map {
         height: 100vh;
@@ -123,6 +121,11 @@
                         }
                     }
                 }
+                for (let status of this.statusList) {
+                    for (let claimed_status of ['claimed', 'unclaimed']) {
+                        iconsList.push(`circle_${status}_${claimed_status}`);
+                    }
+                }
                 return iconsList;
             }
         },
@@ -137,7 +140,7 @@
             this.ready = true;
         },
         methods: {
-            initMap(options) {
+            async initMap(options) {
                 this.map = L.map(this.$refs.map, options);
                 this.$emit('initMap', this.map);
                 this.map.on('moveend', () => {
@@ -153,7 +156,7 @@
                 }
                 this.tileLayer.addTo(this.map);
                 this.markerLayer.addTo(this.map);
-                this.pullSites();
+                await this.pullSites();
             },
             goToIncidentCenter() {
                 let center = averageGeolocation(this.markers.map(marker => [marker.position.lat, marker.position.lng]))
@@ -176,35 +179,18 @@
                 this.map.setView([location.lat, location.lng], 15);
             },
             loadMarkersOnMap: function (markers) {
-                this.mapLoading = true;
                 let map = this.map;
                 let loader = this.loader;
-                loader.add('marker', 'marker-icon.png');
-                loader.add('fire', 'fire.svg');
-                loader.add('garbage', 'trash.svg');
-                loader.add('landslide', 'landslide.svg');
-                loader.add('boot', 'boot.svg');
-                loader.add('tent', 'tent-32.png');
-                loader.add('tree', 'tree.svg');
-                loader.add('fan', 'fan.svg');
-                loader.add('broom', 'broom.svg');
-                loader.add('dot', 'white-circle.svg');
-                // for (let icon of this.iconsList.filter(i => !PIXI.utils.TextureCache[`map_icons/${i}.svg`])) {
-                //     loader.add(icon, `map_icons/${icon}.svg`);
-                // }
+                for (let icon of this.iconsList.filter(i => !PIXI.utils.TextureCache[`map_icons/${i}.svg`])) {
+                    loader.add(icon, `map_icons/${icon}.svg`);
+                }
+                loader.once('complete', () => {
+                    this.mapLoading = false;
+                    this.map.invalidateSize(true)
+                });
+
                 let self = this;
                 loader.load(function (loader, resources) {
-                    let mapping = {
-                        'muck_out': resources.boot.texture,
-                        'trees': resources.tree.texture,
-                        'tarp': resources.tent.texture,
-                        'debris': resources.garbage.texture,
-                        'fire': resources.fire.texture,
-                        'mold_remediation': resources.fire.texture,
-                        'rebuild': resources.tree.texture,
-                        'landslide': resources.landslide.texture,
-                        'ash': resources.broom.texture,
-                    };
                     let pixiLayer = (function () {
                         let firstDraw = true;
                         let prevZoom;
@@ -392,7 +378,6 @@
 
                 this.$log.debug(`Loading ${this.markers.length} markers`)
                 this.loadMarkersOnMap(this.markers);
-                this.mapLoading = false;
             }
         },
         watch: {
@@ -400,6 +385,10 @@
                 this.addWorksite(this.newMarker)
             }
         },
+        beforeDestroy() {
+            this.map.off();
+            this.map.remove();
+        }
     };
 </script>
 
@@ -409,9 +398,9 @@
     @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
     @import "~leaflet.markercluster/dist/MarkerCluster.css";
 
-    .home-map {
-        height: 100%;
-    }
+    /*.home-map {*/
+    /*    height: 100%;*/
+    /*}*/
 
     .leaflet-pane {
         z-index: 5;
