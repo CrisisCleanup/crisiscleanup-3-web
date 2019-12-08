@@ -164,7 +164,7 @@
                 <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite" :reloadTable="reloadTable" :incident="this.currentIncident"/>
             </div>
             <div class="h-full" v-if="!spinning && isViewingWorksite">
-                <CaseView :worksite="currentWorksite" :incident="currentIncident" @changed="loadWorksite" @closeWorksite="closeWorksite"/>
+                <CaseView :worksite="currentWorksite" :incident="currentIncident" @changed="loadWorksite" @reloadMap="reloadMap" @closeWorksite="closeWorksite"/>
             </div>
             <div class="h-full" v-if="!spinning && isViewingWorksiteHistory">
                 <CaseHistory :worksite="currentWorksite"/>
@@ -475,6 +475,10 @@
                     pageSize: this.pagination.pageSize,
                     page: this.pagination.current,
                 })
+            },
+
+            reloadMap() {
+                this.$refs.workstiteMap.initMap();
             },
 
             async loadWorksite(worksiteId) {
