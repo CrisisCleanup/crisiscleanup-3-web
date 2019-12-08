@@ -2,7 +2,7 @@
     <div class="flex layout overflow-hidden">
         <div class="w-32 sidebar">
             <div class="logo flex justify-center p-1">
-                <img class="w-24" src="@/assets/crisiscleanup_logo.png">
+                <img class="w-24 h-16" src="@/assets/crisiscleanup_logo.png">
             </div>
             <div class="menu">
                 <router-link to="/dashboard" class="menu-item router-link p-2 border-b border-t border-gray-800">
@@ -63,8 +63,10 @@
             <div v-if="this.ready" class="h-full flex-grow content">
                 <slot />
             </div>
-            <div v-else class="h-full flex-grow flex items-center justify-center">
-                <a-spin tip="Loading..."></a-spin>
+            <div v-else style="z-index: 1001;" class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center">
+                <div class="flex flex-col items-center">
+                    <spinner message="Loading..."/>
+                </div>
             </div>
         </div>
     </div>

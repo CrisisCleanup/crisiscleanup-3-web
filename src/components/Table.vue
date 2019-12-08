@@ -7,7 +7,9 @@
             <div class="p-2 border-b flex items-center" v-for="column of columns" :key="column.key">{{column.title}}</div>
         </div>
         <div class="body bg-white relative" :style="gridStyleBody">
-            <div v-if="loading" class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100"></div>
+            <div v-if="loading" class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center">
+                <spinner/>
+            </div>
             <div v-for="item of data" :style="gridStyleRow" class="hover:bg-gray-100" :class="{ 'bg-gray-100': selectedItems.has(item.id)}" @click="rowClick(item)">
                 <div v-if="enableSelection" class="flex items-center p-2 border-b">
                     <base-checkbox :value="selectedItems.has(item.id)" @input="(value) => { setChecked(item, value)}" class="mb-5"></base-checkbox>

@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6 bg-gray-100 h-full overflow-auto">
+    <div class="p-6 bg-gray-100 h-full overflow-auto relative">
         <div v-if="!loading">
             <div class="flex">
                 <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
@@ -34,7 +34,7 @@
                                 <div :key="work_type.id" class="flex items-center border-b last:border-b-0 py-2"
                                      v-if="work_type.claimed_by === currentUser.organization.id">
                                     <div class="badge-holder flex items-center w-32">
-                                        <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status"/>
+                                        <badge class="mx-1" :color="getColorForStatus(work_type.status)"/>
                                         {{worksite.case_number}}
                                     </div>
                                     <span class="w-48 font-bold">{{work_type.work_type | getWorkTypeName}}</span>
@@ -70,7 +70,11 @@
                 </div>
             </div>
         </div>
-        <a-spin tip="Loading..." v-if="loading" :spinning="loading" class="p-6 bg-gray-100 h-full w-full flex flex-col items-center justify-center" />
+        <div v-if="loading" style="z-index: 1001;" class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center">
+            <div class="flex flex-col items-center">
+                <spinner message="Loading..."/>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -81,10 +85,11 @@
     import Status from "@/models/Status";
     import { mapState } from "vuex";
     import { getQueryString } from "@/utils/urls";
-    import { getStatusBadge } from '@/filters';
     import { getErrorMessage } from "@/utils/errors";
     import LineChart from "@/components/charts/LineChart";
     import {rand} from "@/utils/charts";
+    import { getColorForStatus } from "@/filters";
+
 
     export default {
         name: "Dashboard",
@@ -97,7 +102,7 @@
                 totalClosed: 0,
                 totalInProgess: 0,
                 loading: false,
-                getStatusBadge,
+                getColorForStatus,
                 datacollection: null,
                 options: {
                     responsive: true,

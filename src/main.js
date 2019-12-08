@@ -26,17 +26,19 @@ import BaseSelect from "@/components/BaseSelect";
 import Modal from "@/components/Modal";
 import Autocomplete from "@/components/Autocomplete";
 import Tag from "@/components/Tag";
+import Spinner from "@/components/Spinner";
 
 import VueLog from '@dreipol/vue-log';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueAutosuggest from "vue-autosuggest";
 import VTooltip from 'v-tooltip'
-import { getWorkTypeName, snakeToTitleCase } from "@/filters";
+import { getWorkTypeName, snakeToTitleCase, getStatusName } from "@/filters";
 import Popover from 'vue-js-popover'
 import Dropdown from 'bp-vuejs-dropdown';
 
 import 'ant-design-vue/dist/antd.less'
 import '@/assets/css/tailwind.css'
+import Badge from "@/components/Badge";
 
 
 // Base Components
@@ -49,6 +51,8 @@ Vue.component('base-select', BaseSelect);
 Vue.component('modal', Modal);
 Vue.component('autocomplete', Autocomplete);
 Vue.component('tag', Tag);
+Vue.component('spinner', Spinner);
+Vue.component('badge', Badge);
 
 // Layouts
 Vue.component('authenticated-layout', Authenticated);
@@ -70,6 +74,7 @@ Vue.component('base-dropdown', Dropdown)
 // Filters
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.filter('getWorkTypeName', getWorkTypeName);
+Vue.filter('getStatusName', getStatusName);
 Vue.filter('snakeToTitleCase', snakeToTitleCase);
 
 

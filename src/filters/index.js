@@ -1,4 +1,6 @@
 import WorkType from "@/models/WorkType";
+import Status from "@/models/Status";
+import { colors } from "@/utils/colors";
 
 export function snakeToTitleCase(value) {
     if (!value) return '';
@@ -11,6 +13,11 @@ export function snakeToTitleCase(value) {
 export function getWorkTypeName(work_type) {
     let work_types = WorkType.query().where('key', work_type).get();
     return work_types[0].name_t
+}
+
+export function getStatusName(statusKey) {
+    let status = Status.query().where('status', statusKey).get();
+    return status[0].status_name_t
 }
 
 export function getStatusBadge(status) {
@@ -32,3 +39,11 @@ export function getStatusBadge(status) {
     };
     return status_dict[status];
 }
+
+export const getColorForStatus = (status) => {
+    let color = colors[status];
+    if (color) {
+        return color.color
+    }
+    return '#ffffff';
+};

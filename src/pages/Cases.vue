@@ -95,7 +95,7 @@
 
                     </div>
                 </div>
-                <div class="flex-grow bg-gray-100">
+                <div class="flex-grow bg-gray-100" style="display: grid">
                     <template v-if="showingMap">
                         <WorksiteMap class="w-full h-full" @mapMoved="onMapMoved" @initMap="onInitMap"
                                      :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker"
@@ -110,15 +110,15 @@
                                     <base-button icon="sync"
                                                  class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
                                                  @click="() => {}" text="Update Status"/>
-                                    <base-button class="ml-3 my-3 text-gray-600 border p-1 px-4 bg-white"
-                                                 @click="() => {}" text="Display All"/>
+                                    <base-button icon="plus" type="primary" class="ml-3 my-3 border p-1 px-4 bg-white"
+                                                 :action="createNewWorksite" text="Create New Case"/>
                                 </div>
                             </div>
                             <Table class="border" :data="data" :columns="columns" enable-selection enable-pagniation :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
                                 <template #work_types="slotProps">
                                     <div class="flex flex-col">
                                         <div class="badge-holder flex items-center" :key="work_type.id" v-for="work_type in slotProps.item.work_types">
-                                            <a-badge :status="getStatusBadge(work_type.status)" :title="work_type.status" />
+                                            <badge class="mx-1" :color="getColorForStatus(work_type.status)"/>
                                             {{work_type.work_type | getWorkTypeName}}
                                         </div>
                                     </div>
@@ -192,6 +192,7 @@
     import CaseHistory from "@/components/CaseHistory";
     import {getQueryString} from "@/utils/urls";
     import * as L from 'leaflet';
+    import { getColorForStatus } from "@/filters";
 
     const columns = [
         {
@@ -293,6 +294,7 @@
                 currentSearch: '',
                 currentCaseView: '',
                 getStatusBadge,
+                getColorForStatus,
                 appliedLocations: new Set()
             };
         },
