@@ -53,7 +53,7 @@
                 },
                 sectionConfigs: {
                     worksites: {
-                        limit: 6,
+                        limit: 5,
                         label: "Existing Cases",
                         type: '',
                         onSelected: selected => {
@@ -62,7 +62,7 @@
                         }
                     },
                     geocoder: {
-                        limit: 6,
+                        limit: 10,
                         label: "Geocoder",
                         type: '',
                         onSelected: selected => {
