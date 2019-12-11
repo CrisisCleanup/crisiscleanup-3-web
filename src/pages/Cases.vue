@@ -99,7 +99,7 @@
                     <template v-if="showingMap">
                         <WorksiteMap class="w-full h-full" @mapMoved="onMapMoved" @initMap="onInitMap"
                                      :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker"
-                                     :key="JSON.stringify(currentQuery)" ref="workstiteMap"/>
+                                     :key="JSON.stringify(currentQuery)" :current-filters="filters" ref="workstiteMap"/>
                     </template>
                     <template v-if="showingTable">
                         <div class="p-3">
@@ -161,7 +161,7 @@
             </div>
             <a-skeleton class="bg-white h-full p-3 flex-grow" active v-if="spinning"/>
             <div class="h-full" v-if="!spinning && (isEditingWorksite || isNewWorksite)">
-                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite" :reloadTable="reloadTable" :incident="this.currentIncident"/>
+                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId" @closeWorksite="closeWorksite" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite" :reloadTable="reloadTable" :incident="this.currentIncident"/>
             </div>
             <div class="h-full" v-if="!spinning && isViewingWorksite">
                 <CaseView :worksite="currentWorksite" :incident="currentIncident" @changed="loadWorksite" @reloadMap="reloadMap" @closeWorksite="closeWorksite"/>

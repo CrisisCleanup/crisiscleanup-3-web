@@ -147,11 +147,9 @@
             </template>
         </div>
         <div class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between">
-            <base-button size="medium" class="flex-grow m-1 border-2 border-black" :action="resetForm" text="Reset"></base-button>
-            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="saveWorksite"
-                         text="Save"></base-button>
-            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="claimAndSaveWorksite"
-                         text="Claim & Save"></base-button>
+            <base-button size="medium" class="flex-grow m-1 border-2 border-black" :action="() => { $emit('closeWorksite') }" text="Cancel"/>
+            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="saveWorksite" text="Save"/>
+            <base-button size="medium" type="primary" class="flex-grow m-1 text-black" :action="claimAndSaveWorksite" text="Claim & Save"/>
         </div>
     </form>
 </template>
