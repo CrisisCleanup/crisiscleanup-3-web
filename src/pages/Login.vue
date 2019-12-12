@@ -4,6 +4,8 @@
             <img src="@/assets/ccu-logo-black-500w.png">
         </div>
 
+        <span v-if="acceptedInvite"> You acccepted an invitation, please login</span>
+
         <form class="flex flex-col w-1/5" @submit.prevent="userLogin" ref="form">
             <h1 class="text-3xl text-center">Sign in</h1>
             <a-input size="large" class="my-2" required v-model="email" type="email" placeholder="Email" autocomplete="email"/>
@@ -20,7 +22,8 @@
         data(){
             return {
                 email : "",
-                password : ""
+                password : "",
+                acceptedInvite: Boolean(this.$route.query.accepted)
             }
         },
         methods: {

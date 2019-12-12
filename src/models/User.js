@@ -34,6 +34,15 @@ export default class User extends Model {
                     invitee_email: email,
                 }, { save: false});
             },
+            acceptInvite({token, first_name, last_name, password, mobile}) {
+                return this.post(`/invitations/accept`, {
+                    invitation_token: token,
+                    first_name,
+                    last_name,
+                    password,
+                    mobile
+                }, { save: false});
+            },
             async updateUserState(states) {
                 let currentUser = User.find(AuthService.getUser().user_claims.id);
                 let newStates = {

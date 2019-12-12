@@ -22,7 +22,7 @@ module.exports = {
       registry: undefined,
       awsProfile: 'default',
       region: 'us-east-2',
-      bucket: 'crisiscleanup-staging',
+      bucket: 'app.staging.crisiscleanup.io',
       createBucket: true,
       staticHosting: true,
       staticIndexPage: 'index.html',
