@@ -9,6 +9,7 @@ import Organization from "@/pages/organization/Index";
 import Invitations from "@/pages/organization/Invitations";
 import Users from "@/pages/organization/Users";
 import Layers from "@/pages/organization/Layers";
+import InvitationSignup from "@/pages/unauthenticated/InvitationSignup";
 
 Vue.use(VueRouter);
 
@@ -63,6 +64,12 @@ const routes = [
         path: '/login',
         component: Login,
         name: 'login',
+        meta: { layout: "unauthenticated", noAuth: true }
+    },
+    {
+        path: '/invitation_token/:token',
+        component: InvitationSignup,
+        name: 'invitation_token',
         meta: { layout: "unauthenticated", noAuth: true }
     },
 ];

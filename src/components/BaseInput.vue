@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center justify-start">
-        <input v-bind:class="classes" type="search" ref="input" :value="value"
+        <input v-bind:class="classes" :type="type || 'search'" ref="input" :value="value"
                @input="update" @change="change" :disabled="disabled" :placeholder="placeholder" :required="required" autocomplete="off"/>
         <div class="icon-container flex items-center justify-center" v-if="icon || tooltip" :class="iconClasses">
             <ccu-icon :type="tooltip ? 'info': icon" size="small"></ccu-icon>
@@ -11,7 +11,7 @@
 <script>
     export default {
         name: "BaseInput",
-        props: ['size', 'icon', 'value', 'disabled', 'placeholder', 'required', 'tooltip'],
+        props: ['size', 'icon', 'value', 'disabled', 'placeholder', 'required', 'tooltip', 'type'],
         data() {
             return {
                 classes: {
