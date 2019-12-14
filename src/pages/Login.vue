@@ -6,7 +6,7 @@
 
         <span v-if="acceptedInvite"> You acccepted an invitation, please login</span>
 
-        <form class="flex flex-col w-1/5" @submit.prevent="userLogin" ref="form">
+        <form class="flex flex-col login-form" @submit.prevent="userLogin" ref="form">
             <h1 class="text-3xl text-center">Sign in</h1>
             <a-input size="large" class="my-2" required v-model="email" type="email" placeholder="Email" autocomplete="email"/>
             <a-input size="large" class="my-2" required v-model="password" type="password" placeholder="Password" autocomplete="password"/>
@@ -44,5 +44,8 @@
     }
     .logo img {
         height: 150px;
+    }
+    .login-form {
+        width: 24rem;
     }
 </style>

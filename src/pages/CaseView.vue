@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white flex flex-col h-full">
+    <div class="bg-white flex flex-col">
         <div class="p-3 flex-grow intake-view">
             <div class="my-4">
                 <label v-if="worksite.notes.length > 0" class="my-1 text-xs font-bold text-gray-600 block">Notes</label>

@@ -98,7 +98,7 @@
                 <div class="flex-grow bg-gray-100" style="display: grid">
                     <template v-if="showingMap">
                         <WorksiteMap class="w-full h-full" @mapMoved="onMapMoved" @initMap="onInitMap"
-                                     :query="currentQuery" :onSelectmarker="displayWorksite" :new-marker="newMarker"
+                                     :query="currentQuery" @onSelectmarker="displayWorksite" :new-marker="newMarker"
                                      :key="JSON.stringify(currentQuery)" :current-filters="filters" ref="workstiteMap"/>
                     </template>
                     <template v-if="showingTable">
@@ -129,7 +129,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex flex-col h-full shadow-2xl w-1/5" style="min-width: 360px" v-if="this.currentIncident && this.currentWorksite">
+        <div class="flex flex-col h-full shadow-2xl w-1/5" style="min-width: 360px" v-if="this.currentIncident && (isEditingWorksite || isViewingWorksite || isViewingWorksiteHistory || isNewWorksite)">
             <div style="background-color: white" class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center">
                 <div class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
                     <ccu-icon type="active" size="small"/>
@@ -139,36 +139,39 @@
                     {{this.currentWorksite && `View ${this.currentWorksite.case_number}`}}
                 </div>
             </div>
-            <div v-if="this.currentWorksite" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b">
+            <div v-if="(isEditingWorksite || isViewingWorksite || isViewingWorksiteHistory || isNewWorksite)" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b">
                 <template v-if="isViewingWorksiteHistory">
                     <ccu-icon size="medium" class="text-black mb-1" type="history">
                         <span class="ml-1 mt-1">{{this.currentWorksite.case_number}} History</span>
                     </ccu-icon>
-                    <ccu-icon size="small" type="cancel" @click.native="closeHistory"/>
+                    <ccu-icon size="small" type="cancel" @click.native="backToWorksite"/>
+                </template>
+                <template v-else-if="isNewWorksite">
+                    <div class="text-left text-black">New Case</div>
+                    <ccu-icon size="small" type="cancel" @click.native="closeWorksite"/>
                 </template>
                 <template v-else>
                     <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
                     <div class="flex items-center" v-if="!isNewWorksite">
                         <ccu-icon size="small" class="p-1 py-2" type="go-case" @click.native="jumpToCase"/>
-                        <ccu-icon size="small" class="p-1 py-2" type="history" @click.native="currentCaseView = 'history'"/>
+
+                        <router-link :to="`/cases/${currentWorksiteId}/history`">
+                            <ccu-icon size="small" class="p-1 py-2" type="history"/>
+                        </router-link>
                         <ccu-icon size="small" class="p-1 py-2" type="download" @click.native="downloadWorksite"/>
                         <ccu-icon size="small" class="p-1 py-2" type="share"/>
                         <ccu-icon size="small" class="p-1 py-2" type="print" @click.native="printWorksite"/>
-                        <ccu-icon v-if="isViewingWorksite" style="background-color: #fece09" class="border p-2"
-                                  size="small" type="edit" @click.native="editWorksite"/>
+                        <router-link v-if="isViewingWorksite" :to="`/cases/${currentWorksiteId}/edit`">
+                            <ccu-icon style="background-color: #fece09" class="border p-2"
+                                      size="small" type="edit"/>
+                        </router-link>
                     </div>
                 </template>
             </div>
             <a-skeleton class="bg-white h-full p-3 flex-grow" active v-if="spinning"/>
-            <div class="h-full" v-if="!spinning && (isEditingWorksite || isNewWorksite)">
-                <CaseForm :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId" @closeWorksite="closeWorksite" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite" :reloadTable="reloadTable" :incident="this.currentIncident"/>
-            </div>
-            <div class="h-full" v-if="!spinning && isViewingWorksite">
-                <CaseView :worksite="currentWorksite" :incident="currentIncident" @changed="loadWorksite" @reloadMap="reloadMap" @closeWorksite="closeWorksite"/>
-            </div>
-            <div class="h-full" v-if="!spinning && isViewingWorksiteHistory">
-                <CaseHistory :worksite="currentWorksite"/>
-            </div>
+            <router-view v-if="!spinning" :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId"
+                         @closeWorksite="closeWorksite" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite"
+                         :reloadTable="reloadTable" :incident="currentIncident" :worksite="currentWorksite" @changed="loadWorksite" @reloadMap="reloadMap"/>
         </div>
     </div>
 </template>
@@ -325,13 +328,15 @@
                 })
             }
             //TODO: Better way to do this
-            if (this.$route.query.worksite) {
-                await this.loadWorksite(this.$route.query.worksite);
+            if (this.$route.params.id) {
+                this.spinning = true;
+                await this.loadWorksite(this.$route.params.id);
                 if (this.currentIncident.id !== this.currentWorksite.incident) {
                     this.setCurrentIncidentId(this.currentWorksite.incident);
                     await Incident.api().fetchById(this.currentWorksite.incident);
-                    await this.loadWorksite(this.$route.query.worksite);
+                    await this.loadWorksite(this.$route.params.id);
                 }
+                this.spinning = false;
             }
             let locationParams = {
                 limit: 1000,
@@ -348,7 +353,7 @@
         watch: {
             currentIncident: function () {
                 this.currentWorksite = null;
-                this.currentCaseView = '';
+                this.$router.push('/cases');
                 this.fetch({
                     pageSize: this.pagination.pageSize,
                     page: 1,
@@ -487,7 +492,7 @@
                 }
                 await Worksite.api().fetchById(this.currentWorksiteId);
                 this.currentWorksite = Worksite.find(this.currentWorksiteId);
-                this.currentCaseView = 'view';
+                // await this.$router.push({ name: `/cases/${this.currentWorksiteId}` });
                 this.caseFormKey = !this.caseFormKey;
                 this.reloadTable();
             },
@@ -495,27 +500,29 @@
             async closeWorksite() {
                 this.currentWorksiteId = null;
                 this.currentWorksite = null;
+                await this.$router.push(`/cases`);
             },
 
-            async closeHistory() {
-                this.currentCaseView = 'view';
+            async backToWorksite() {
+                await this.$router.push(`/cases/${this.currentWorksiteId}`)
             },
 
             displayWorksite: async function (record) {
-                this.currentCaseView = 'view';
                 this.spinning = true;
+                await this.$router.replace(`/cases/${record.id}`)
                 this.currentWorksiteId = record.id;
                 await Worksite.api().fetchById(record.id);
                 this.currentWorksite = Worksite.find(record.id);
                 this.spinning = false;
-                this.caseFormKey = !this.caseFormKey;
+                // this.caseFormKey = !this.caseFormKey;
             },
-            createNewWorksite() {
-                this.currentCaseView = 'new';
+            async createNewWorksite() {
+                await this.$router.push(`/cases/new`);
                 this.currentWorksiteId = null;
                 this.currentWorksite = new Worksite({incident: this.currentIncidentId, form_data: []});
                 this.caseFormKey = !this.caseFormKey;
                 this.toggleView('showingMap');
+                this.spinning = false;
             },
             toggleView(view) {
                 this.showingMap = false;
@@ -536,7 +543,7 @@
                 let worksite = Worksite.find(value.id);
                 this.currentWorksiteId = worksite.id;
                 this.currentWorksite = worksite;
-                this.currentCaseView = 'view';
+                await this.$router.push(`/cases/${this.currentWorksiteId}`)
                 this.caseFormKey = !this.caseFormKey;
                 this.searchValue = '';
             },
@@ -584,9 +591,6 @@
                     page: this.pagination.current,
                 })
                 this.updateUserState()
-            },
-            editWorksite() {
-                this.currentCaseView = 'edit';
             },
             async printWorksite() {
                 this.spinning = true;
@@ -667,16 +671,16 @@
                 return states
             },
             isEditingWorksite() {
-              return this.currentCaseView === 'edit';
+              return this.$route.name === 'CaseForm'
             },
             isViewingWorksite() {
-              return this.currentCaseView === 'view';
+              return this.$route.name === 'CaseView'
             },
             isViewingWorksiteHistory() {
-              return this.currentCaseView === 'history';
+                return this.$route.name === 'CaseHistory'
             },
             isNewWorksite() {
-                return this.currentCaseView === 'new';
+                return this.$route.name === 'CaseForm' && !this.currentWorksiteId
             },
             incidents() {
                 return Incident.query().orderBy('id', 'desc').get()

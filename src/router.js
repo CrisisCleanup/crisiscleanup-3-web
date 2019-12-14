@@ -10,6 +10,9 @@ import Invitations from "@/pages/organization/Invitations";
 import Users from "@/pages/organization/Users";
 import Layers from "@/pages/organization/Layers";
 import InvitationSignup from "@/pages/unauthenticated/InvitationSignup";
+import CaseView from "@/pages/CaseView";
+import CaseForm from "@/components/CaseForm";
+import CaseHistory from "@/components/CaseHistory";
 
 Vue.use(VueRouter);
 
@@ -35,7 +38,24 @@ const routes = [
         path: '/cases',
         component: Cases,
         name: 'Cases',
-        meta: { layout: "authenticated" }
+        meta: { layout: "authenticated" },
+        children: [{
+            path: 'new',
+            component: CaseForm,
+            name: 'CaseForm',
+        },{
+            path: ':id',
+            component: CaseView,
+            name: 'CaseView',
+        },{
+            path: ':id/edit',
+            component: CaseForm,
+            name: 'CaseForm',
+        },{
+            path: ':id/history',
+            component: CaseHistory,
+            name: 'CaseHistory',
+        }],
     },
     {
         path: '/organization',
