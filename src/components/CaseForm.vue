@@ -1,5 +1,5 @@
 <template>
-    <form ref="form" @submit.prevent="handleSubmit" layout="vertical" class="bg-white flex flex-col h-full">
+    <form ref="form" @submit.prevent="handleSubmit" layout="vertical" class="bg-white flex flex-col">
         <div class="intake-form p-3 flex-grow">
             <h4 class="py-3 m-1 border-t border-b flex items-center justify-between">
                 <div class="flex items-center">

@@ -35,6 +35,19 @@ export default class Worksite extends Model {
         return this.location ? this.location.coordinates[0]: 10
     }
 
+    get form_fields() {
+        if (!this.form_data) {
+            return {};
+        }
+
+        return this.form_data.reduce((obj, item) => {
+            return {
+                ...obj,
+                [item['field_key']]: item['field_value'],
+            };
+        }, {});
+    }
+
     static apiConfig = {
         actions: {
             async fetchById (id) {

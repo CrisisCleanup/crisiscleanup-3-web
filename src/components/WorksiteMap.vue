@@ -75,8 +75,7 @@
         props: {
             query: Object,
             currentFilters: Object,
-            onSelectmarker: Function,
-            newMarker: Function,
+            newMarker: Object,
         },
         data() {
             return {
@@ -320,7 +319,7 @@
                                 map.on('click', function (e) {
                                     let marker = findMarker(e.latlng);
                                     if (marker) {
-                                        self.onSelectmarker(marker.data)
+                                        self.$emit('onSelectmarker', marker.data)
                                     } else {
                                         map.closePopup();
                                     }
