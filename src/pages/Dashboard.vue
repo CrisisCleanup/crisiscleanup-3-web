@@ -3,24 +3,24 @@
         <div v-if="!loading">
             <div class="flex">
                 <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
-                    <div>My Claimed Cases</div>
-                    <div class="font-bold">{{claimedWorksites.length}}</div>
+                    <div>My Claimed Cases ({{this.currentIncident.name}})</div>
+                    <div class="font-bold">{{claimedWorksites.length | numeral('0,0')}}</div>
                 </div>
                 <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-                    <div>Total Claimed</div>
-                    <div class="font-bold">{{totalClaimed}} ({{totalClaimed/totalWorksites | numeral('0%')}})</div>
+                    <div>Total Claimed ({{this.currentIncident.name}})</div>
+                    <div class="font-bold">{{totalClaimed| numeral('0,0')}} ({{totalClaimed/totalWorksites | numeral('0%')}} of Total)</div>
                     <div class="bottom-0 left-0 absolute border-b-4 border-blue-600"
                          :style="{width: `${(totalClaimed/totalWorksites) * 100}%`}"></div>
                 </div>
                 <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-                    <div>In Progress</div>
-                    <div class="font-bold">{{totalInProgess}} ({{totalInProgess/totalWorksites | numeral('0%')}})</div>
+                    <div>In Progress ({{this.currentIncident.name}})</div>
+                    <div class="font-bold">{{totalInProgess| numeral('0,0')}} ({{totalInProgess/totalWorksites | numeral('0%')}} of Claimed)</div>
                     <div class="bottom-0 left-0 absolute border-b-4 border-blue-600"
                          :style="{width: `${(totalInProgess/totalWorksites) * 100}%`}"></div>
                 </div>
                 <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-                    <div>Closed</div>
-                    <div class="font-bold">{{totalClosed}} ({{totalClosed/totalWorksites | numeral('0%')}})</div>
+                    <div>Closed ({{this.currentIncident.name}})</div>
+                    <div class="font-bold">{{totalClosed| numeral('0,0')}} ({{totalClosed/totalWorksites | numeral('0%')}} of Claimed)</div>
                     <div class="bottom-0 left-0 absolute border-b-4 border-green-600"
                          :style="{width: `${(totalClosed/totalWorksites) * 100}%`}"></div>
                 </div>
@@ -95,6 +95,7 @@
     import LineChart from "@/components/charts/LineChart";
     import {rand} from "@/utils/charts";
     import { colors } from '@/icons/icons_templates'
+    import Incident from "@/models/Incident";
 
 
     export default {
@@ -296,6 +297,9 @@
         computed: {
             currentUser() {
                 return User.find(this.$store.getters['auth/userId'])
+            },
+            currentIncident() {
+                return Incident.find(this.currentIncidentId)
             },
             ...mapState('incident', [
                 'currentIncidentId',
