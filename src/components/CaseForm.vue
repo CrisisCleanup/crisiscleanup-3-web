@@ -3,7 +3,7 @@
         <div class="intake-form p-3 flex-grow">
             <h4 class="py-3 m-1 border-t border-b flex items-center justify-between">
                 <div class="flex items-center">
-                    <a-badge :count="1" class="mr-2 bg-primary-light text-black"/>
+                    <badge width="20px" height="20px" class="mr-2 bg-primary-light text-black">1</badge>
                     Basic Information
                 </div>
             </h4>
@@ -50,7 +50,7 @@
                         <component :is="field.html_type" :key="field.field_key"
                                    class="py-3 m-1 border-t border-b flex items-center justify-between">
                             <div class="flex items-center">
-                                <a-badge :count="field.list_order" class="mr-2 bg-primary-light text-black"/>
+                                <badge class="mr-2 bg-primary-light text-black" width="20px" height="20px">{{field.list_order}}</badge>
                                 {{field.label_t}}
                             </div>
                             <a-tooltip>

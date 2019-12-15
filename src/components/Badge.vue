@@ -1,11 +1,15 @@
 <template>
-    <div class="badge" :style="{'backgroundColor': color}" />
+    <div class="badge flex items-center justify-center rounded-full" :style="{'backgroundColor': color, width: width || '10px', height: height || '10px'}">
+        <div>
+            <slot/>
+        </div>
+    </div>
 </template>
 
 <script>
     export default {
         name: "Badge",
-        props: ['color']
+        props: ['color', 'width', 'height']
     }
 </script>
 
@@ -13,10 +17,5 @@
     .badge {
         width: 10px;
         height: 10px;
-        display: inline-block;
-        border-radius: 50%;
-        vertical-align: middle;
-        position: relative;
-        top: -1px;
     }
 </style>
