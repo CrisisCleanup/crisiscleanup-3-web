@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white flex flex-col">
+    <div class="bg-white flex flex-col flex-grow">
         <div class="p-3 flex-grow intake-view">
             <div class="my-4 pb-6 border-b">
                 <span>

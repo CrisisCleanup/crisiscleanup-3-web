@@ -7,7 +7,7 @@
                         <div class="flex items-center">
                             <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingMap ? 'filter-yellow' : 'filter-gray'" type="map" @click.native="toggleView('showingMap')" />
                             <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingTable ? 'filter-yellow' : 'filter-gray'" type="table" @click.native="toggleView('showingTable')" />
-                            <span class="font-thin">Number of Cases: {{pagination.total}}</span>
+                            <span class="font-thin">Number of Cases: {{pagination.total | numeral('0,0')}}</span>
                             <div class="flex justify-start w-auto">
                                 <autocomplete
                                         @selected="handleChange"
@@ -88,7 +88,6 @@
                             <base-button class="text-base font-thin mx-4" icon="sliders-h" :action="() => { this.showingFilters = true }">
                                 Filters <span class="rounded-full mx-2 px-1 bg-yellow-500 text-xs" v-if="filtersCount > 0">{{filtersCount}}</span>
                             </base-button>
-                            <ccu-icon type="search" size="small" class="text-base font-thin mx-4 mt-1"/>
                             <base-button class="text-base font-thin mx-4" text="" icon="ellipsis-h" :action="() => { this.showingFilters = true }"/>
                             <WorksiteFilters v-if="showingFilters" :current-filters="filters" @closedFilters="showingFilters = false" @updatedFilters="onUpdatedFilters" :incident="this.currentIncident"/>
                         </div>
@@ -162,7 +161,7 @@
                         <ccu-icon size="small" class="p-1 py-2" type="share"/>
                         <ccu-icon size="small" class="p-1 py-2" type="print" @click.native="printWorksite"/>
                         <router-link v-if="isViewingWorksite" :to="`/cases/${currentWorksiteId}/edit`">
-                            <ccu-icon style="background-color: #fece09" class="border p-2"
+                            <ccu-icon class="border p-2 bg-primary-light"
                                       size="small" type="edit"/>
                         </router-link>
                     </div>
@@ -178,13 +177,11 @@
 
 <script>
     import {gmapApi} from 'vue2-google-maps'
-    import CaseForm from "@/components/CaseForm";
     import Worksite from "@/models/Worksite";
     import User from "@/models/User";
     import Incident from "@/models/Incident";
     import Location from "@/models/Location";
     import {mapMutations, mapState} from "vuex";
-    import CaseView from "@/pages/CaseView";
     import Table from "@/components/Table";
     import WorksiteMap from "@/components/WorksiteMap";
     import WorksiteFilters from "@/components/WorksiteFilters";
@@ -193,7 +190,6 @@
     import Autocomplete from "@/components/Autocomplete";
     import Highlighter from 'vue-highlight-words'
     import {throttle} from 'lodash';
-    import CaseHistory from "@/components/CaseHistory";
     import {getQueryString} from "@/utils/urls";
     import * as L from 'leaflet';
     import { getColorForStatus } from "@/filters";
@@ -254,10 +250,7 @@
 
     export default {
         components: {
-            CaseHistory,
             Autocomplete,
-            CaseView,
-            CaseForm,
             WorksiteMap,
             WorksiteFilters,
             Table,
@@ -336,6 +329,9 @@
                     await Incident.api().fetchById(this.currentWorksite.incident);
                     await this.loadWorksite(this.$route.params.id);
                 }
+                if (this.$route.query.showOnMap) {
+                    this.jumpToCase()
+                }
                 this.spinning = false;
             }
             let locationParams = {
@@ -353,6 +349,7 @@
         watch: {
             currentIncident: function () {
                 this.currentWorksite = null;
+                this.currentWorksiteId = null;
                 this.$router.push('/cases');
                 this.fetch({
                     pageSize: this.pagination.pageSize,
@@ -493,7 +490,7 @@
                 await Worksite.api().fetchById(this.currentWorksiteId);
                 this.currentWorksite = Worksite.find(this.currentWorksiteId);
                 // await this.$router.push({ name: `/cases/${this.currentWorksiteId}` });
-                this.caseFormKey = !this.caseFormKey;
+                // this.caseFormKey = !this.caseFormKey;
                 this.reloadTable();
             },
 
@@ -541,10 +538,12 @@
                 this.spinning = true;
                 await Worksite.api().fetchById(value.id);
                 let worksite = Worksite.find(value.id);
+                if (this.currentWorksiteId !== value.id) {
+                    await this.$router.push(`/cases/${this.currentWorksiteId}`);
+                }
                 this.currentWorksiteId = worksite.id;
                 this.currentWorksite = worksite;
-                await this.$router.push(`/cases/${this.currentWorksiteId}`)
-                this.caseFormKey = !this.caseFormKey;
+                this.spinning = false;
                 this.searchValue = '';
             },
             handleFilters() {
@@ -752,7 +751,7 @@
     }
 
     .tab-active {
-        border-bottom: solid 3px #FECE09;
+        border-bottom: solid 3px theme('colors.primary.light');
     }
 
     .checkbox-round {

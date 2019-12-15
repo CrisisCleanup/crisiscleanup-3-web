@@ -13,4 +13,8 @@ export default class WorkType extends Model {
             commercial_value: this.attr(null),
         }
     }
+
+    static commercialValues() {
+        return Object.assign({}, ...this.all().map(s => ({[s.key]: s.commercial_value})));
+    }
 }

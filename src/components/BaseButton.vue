@@ -66,9 +66,9 @@
     }
     button:focus {outline:0;}
     .primary {
-        background-color: #fece09
+        @apply bg-primary-light
     }
     .link {
-        color: #f79820;
+        @apply text-primary-dark
     }
 </style>

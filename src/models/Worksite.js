@@ -1,6 +1,7 @@
 import { Model } from '@vuex-orm/core'
 import Organization from "@/models/Organization";
 import User from "@/models/User";
+import WorkType from "@/models/WorkType";
 
 export default class Worksite extends Model {
     static entity = 'worksites';
@@ -46,6 +47,64 @@ export default class Worksite extends Model {
                 [item['field_key']]: item['field_value'],
             };
         }, {});
+    }
+
+    static getWorkType(work_types, filters, organization) {
+        // TODO: Unit Test
+        let currentFilteredTypes = [];
+        if (filters) {
+            let { fields } = filters;
+            currentFilteredTypes = Object.keys(fields).filter(field_key => Boolean(fields[field_key]));
+        }
+
+        const filterByClaimedOrg = (array) => {
+            return array.filter(type => type.claimed_by === organization.id).sort((a, b) => {
+                return WorkType.commercialValues[b.work_type] - WorkType.commercialValues[a.work_type];
+            })
+        };
+
+        const filterByUnclaimed = (array) => {
+            return array.filter(type => type.claimed_by === null).sort((a, b) => {
+                return WorkType.commercialValues[b.work_type] - WorkType.commercialValues[a.work_type];
+            })
+        };
+
+        let allWorkTypes = [...work_types].sort((a, b) => {
+            return WorkType.commercialValues[b.work_type] - WorkType.commercialValues[a.work_type];
+        });
+        let workTypesInFilter = [...work_types].filter(type => currentFilteredTypes.includes(type.work_type)).sort((a, b) => {
+            return WorkType.commercialValues[b.work_type] - WorkType.commercialValues[a.work_type];
+        });
+
+        if (allWorkTypes.length === 1) {
+            return allWorkTypes[0]
+        } else {
+            if (workTypesInFilter.length === 1) {
+                return workTypesInFilter[0]
+            } else if (workTypesInFilter > 1) {
+                if ((filterByClaimedOrg(workTypesInFilter).length)) {
+                    return filterByClaimedOrg(workTypesInFilter)[0]
+                }
+
+                if ((filterByUnclaimed(workTypesInFilter).length)) {
+                    return filterByUnclaimed(workTypesInFilter)[0]
+                }
+                return workTypesInFilter[0]
+            } else {
+                if ((filterByClaimedOrg(allWorkTypes).length)) {
+                    return filterByClaimedOrg(allWorkTypes)[0]
+                }
+
+                if ((filterByUnclaimed(allWorkTypes).length)) {
+                    return filterByUnclaimed(allWorkTypes)[0]
+                }
+                return allWorkTypes[0]
+            }
+        }
+    }
+
+    get priority_work_type() {
+
     }
 
     static apiConfig = {

@@ -1,8 +1,8 @@
 <template>
-    <div class="bg-white flex flex-col">
+    <div class="bg-white flex flex-col flex-grow">
         <div class="p-3 flex-grow intake-view">
             <div class="my-4">
-                <label v-if="worksite.notes.length > 0" class="my-1 text-xs font-bold text-gray-600 block">Notes</label>
+                <label v-if="worksite && worksite.notes.length > 0" class="my-1 text-xs font-bold text-gray-600 block">Notes</label>
                 <div :key="note.id" v-for="note in worksite.notes" class="notes my-1 p-1 flex items-center">
                     <span class="text-gray-600 mr-3 notes-time">{{ note.created_at | moment("from", "now") }}:</span><span class="font-hairline">{{note.note}}</span>
                 </div>

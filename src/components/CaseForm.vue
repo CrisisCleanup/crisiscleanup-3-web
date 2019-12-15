@@ -1,9 +1,9 @@
 <template>
-    <form ref="form" @submit.prevent="handleSubmit" layout="vertical" class="bg-white flex flex-col">
+    <form ref="form" @submit.prevent="handleSubmit" layout="vertical" class="bg-white flex flex-col flex-grow">
         <div class="intake-form p-3 flex-grow">
             <h4 class="py-3 m-1 border-t border-b flex items-center justify-between">
                 <div class="flex items-center">
-                    <a-badge :count="1" :numberStyle="{backgroundColor: '#FECE09', color: '#000000'}" class="mr-2"/>
+                    <a-badge :count="1" class="mr-2 bg-primary-light text-black"/>
                     Basic Information
                 </div>
             </h4>
@@ -50,7 +50,7 @@
                         <component :is="field.html_type" :key="field.field_key"
                                    class="py-3 m-1 border-t border-b flex items-center justify-between">
                             <div class="flex items-center">
-                                <a-badge :count="field.list_order" :numberStyle="{backgroundColor: '#FECE09', color: '#000000'}" class="mr-2"/>
+                                <a-badge :count="field.list_order" class="mr-2 bg-primary-light text-black"/>
                                 {{field.label_t}}
                             </div>
                             <a-tooltip>
