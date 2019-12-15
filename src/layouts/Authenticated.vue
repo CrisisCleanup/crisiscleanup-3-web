@@ -203,7 +203,7 @@
 
     .router-link-active.menu-item {
         background-color: transparent;
-        border-left: solid 3px #FECE09;
+        border-left: solid 3px theme('colors.primary.light');
     }
 
     .incident-select .ant-select-selection {

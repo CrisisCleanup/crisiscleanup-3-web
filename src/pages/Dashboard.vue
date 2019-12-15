@@ -26,26 +26,32 @@
                 </div>
             </div>
             <div class="flex">
-                <div class="w-1/2 m-4 pt-2 shadow bg-white flex-shrink">
+                <div class="w-3/5 m-4 pt-2 shadow bg-white flex-shrink">
                     <div class="py-4 px-4 text-gray-500 border-b">MY CASES</div>
                     <div class="p-4">
                         <template v-for="worksite in claimedWorksites">
-                            <template v-for="work_type in worksite.work_types">
-                                <div :key="work_type.id" class="flex items-center border-b last:border-b-0 py-2"
-                                     v-if="work_type.claimed_by === currentUser.organization.id">
-                                    <div class="badge-holder flex items-center w-32">
-                                        <badge class="mx-1" :color="getColorForStatus(work_type.status)"/>
+                            <template>
+                                <div class="flex justify-between items-center border-b last:border-b-0 py-2">
+                                    <div class="badge-holder flex items-center w-1/12">
+                                        <badge class="mx-1" :color="getColorForStatus(getPrimaryWorkType(worksite.work_types))"/>
                                         {{worksite.case_number}}
                                     </div>
-                                    <span class="w-48 font-bold">{{work_type.work_type | getWorkTypeName}}</span>
-                                    <span>{{worksite.name}}</span>
-                                    <span>{{worksite.form_fields.phone1}}</span>
+                                    <div class="w-4/12">
+                                        <template v-for="(work_type, index) in worksite.work_types" v-if="work_type.claimed_by === currentUser.organization.id">
+                                            {{work_type.work_type | getWorkTypeName}}<span v-if="index !== worksite.work_types.length - 1">,</span>
+                                        </template>
+                                    </div>
+                                    <span class="w-3/12">{{worksite.name}}</span>
+                                    <span class="w-3/12">{{worksite.form_fields.phone1}}</span>
+                                    <router-link class="w-1/12 self-end" :to="`/cases/${worksite.id}/edit?showOnMap=true`" tag="div">
+                                        <ccu-icon size="medium" class="p-1 py-2" type="go-case"/>
+                                    </router-link>
                                 </div>
                             </template>
                         </template>
                     </div>
                 </div>
-                <div class="w-1/2 m-4 p-6 shadow bg-white">
+                <div class="w-2/5 m-4 p-6 shadow bg-white">
                     <div class="flex flex-col items-center justify-around">
                         <div class="text-center text-2xl w-2/3 my-3">Invite Additional Members to Crisiscleanup</div>
                         <div class="text-justify w-5/6 my-3">
@@ -89,7 +95,7 @@
     import { getErrorMessage } from "@/utils/errors";
     import LineChart from "@/components/charts/LineChart";
     import {rand} from "@/utils/charts";
-    import { getColorForStatus } from "@/filters";
+    import { colors } from '@/icons/icons_templates'
 
 
     export default {
@@ -103,8 +109,8 @@
                 totalClosed: 0,
                 totalInProgess: 0,
                 loading: false,
-                getColorForStatus,
                 datacollection: null,
+                colors,
                 options: {
                     responsive: true,
                     hoverMode: 'index',
@@ -239,6 +245,14 @@
                         }
                     });
                 this.totalClosed = response.data.count;
+            },
+            getPrimaryWorkType(work_types) {
+                return Worksite.getWorkType(work_types, null, this.currentUser.organization)
+            },
+            getColorForStatus(work_type) {
+                let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                let colors = this.colors[colorsKey];
+                return colors.fillColor;
             },
             fillData () {
                 var date = new Date();

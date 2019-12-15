@@ -53,6 +53,6 @@
 
     .router-link-active {
         background-color: transparent;
-        border-bottom: solid 3px #FECE09;
+        border-bottom: solid 3px theme('colors.primary.light');
     }
 </style>

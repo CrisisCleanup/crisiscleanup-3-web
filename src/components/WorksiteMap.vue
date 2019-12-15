@@ -41,6 +41,7 @@
     import {colors, templates} from '@/icons/icons_templates'
     import {groupBy} from "@/utils/array";
     import WorkType from "@/models/WorkType";
+    import Worksite from "@/models/Worksite";
 
     L.Icon.Default.imagePath = '.';
     // OR
@@ -106,9 +107,6 @@
         computed: {
             currentUser() {
                 return User.find(this.$store.getters['auth/userId'])
-            },
-            workTypeCommercialValues() {
-                return Object.assign({}, ...WorkType.all().map(s => ({[s.key]: s.commercial_value})));
             }
         },
         mounted() {
@@ -176,57 +174,7 @@
             workTypesUnclaimed() {
                 return this.worksite.work_types.filter(type => type.claimed_by === null)
             },
-            getWorkType(work_types) {
-                // TODO: Unit Test
-                let { fields } = this.currentFilters;
-                let currentFilteredTypes = Object.keys(fields).filter(field_key => Boolean(fields[field_key]));
-
-                const filterByClaimedOrg = (array) => {
-                    return array.filter(type => type.claimed_by === this.currentUser.organization.id).sort((a, b) => {
-                        return this.workTypeCommercialValues[b.work_type] - this.workTypeCommercialValues[a.work_type];
-                    })
-                };
-
-                const filterByUnclaimed = (array) => {
-                    return array.filter(type => type.claimed_by === null).sort((a, b) => {
-                        return this.workTypeCommercialValues[b.work_type] - this.workTypeCommercialValues[a.work_type];
-                    })
-                };
-
-                let allWorkTypes = work_types.sort((a, b) => {
-                    return this.workTypeCommercialValues[b.work_type] - this.workTypeCommercialValues[a.work_type];
-                });
-                let workTypesInFilter = work_types.filter(type => currentFilteredTypes.includes(type.work_type)).sort((a, b) => {
-                    return this.workTypeCommercialValues[b.work_type] - this.workTypeCommercialValues[a.work_type];
-                });
-
-                if (allWorkTypes.length === 1) {
-                    return allWorkTypes[0]
-                } else {
-                    if (workTypesInFilter.length === 1) {
-                        return workTypesInFilter[0]
-                    } else if (workTypesInFilter > 1) {
-                        if ((filterByClaimedOrg(workTypesInFilter).length)) {
-                            return filterByClaimedOrg(workTypesInFilter)[0]
-                        }
-
-                        if ((filterByUnclaimed(workTypesInFilter).length)) {
-                            return filterByUnclaimed(workTypesInFilter)[0]
-                        }
-                        return workTypesInFilter[0]
-                    } else {
-                        if ((filterByClaimedOrg(allWorkTypes).length)) {
-                            return filterByClaimedOrg(allWorkTypes)[0]
-                        }
-
-                        if ((filterByUnclaimed(allWorkTypes).length)) {
-                            return filterByUnclaimed(allWorkTypes)[0]
-                        }
-                        return allWorkTypes[0]
-                    }
-                }
-            },
-            loadMarkersOnMap: function (markers) {
+            loadMarkersOnMap(markers) {
                 let map = this.map;
                 let loader = this.loader;
                 loader.once('complete', () => {
@@ -259,7 +207,7 @@
                                 markers.forEach(function (marker) {
                                     let coords = project([marker.position.lat, marker.position.lng]);
                                     let markerSprite = new Sprite();
-                                    let work_type = self.getWorkType(marker.work_types);
+                                    let work_type = Worksite.getWorkType(marker.work_types, self.currentFilters, self.currentUser.organization);
 
                                     let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
                                     let worksiteTemplate = zoom < 12 ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
@@ -340,7 +288,7 @@
                             }
                             if (firstDraw || prevZoom !== zoom) {
                                 markerSprites.forEach(function (markerSprite) {
-                                    let work_type = self.getWorkType(markerSprite.data.work_types);
+                                    let work_type = Worksite.getWorkType(markerSprite.data.work_types, self.currentFilters, self.currentUser.organization);
 
                                     let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
                                     let worksiteTemplate = zoom < 12 ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
