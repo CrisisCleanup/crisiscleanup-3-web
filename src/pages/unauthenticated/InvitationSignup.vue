@@ -5,9 +5,9 @@
         </div>
 
         <form class="form" @submit.prevent="acceptInvite" ref="form">
-            <base-input class="input" v-model="first_name" size="large" placeholder="First Name" required/>
-            <base-input class="input" v-model="last_name" size="large" placeholder="Last Name" required/>
-            <base-input class="input" v-model="mobile" size="large" placeholder="Mobile" required/>
+            <base-input type="text" class="input" v-model="first_name" size="large" placeholder="First Name" required/>
+            <base-input type="text" class="input" v-model="last_name" size="large" placeholder="Last Name" required/>
+            <base-input type="text" class="input" v-model="mobile" size="large" placeholder="Mobile" required/>
             <base-input type="password" class="input" v-model="password" size="large" placeholder="Password" required/>
             <base-input type="password" ref="confirm_password" class="input" v-model="confirmPassword" size="large" placeholder="Confirm Password" required/>
             <base-button size="medium" class="px-5 py-2 m-1 flex-grow" type="primary" text="Accept Invite"/>
