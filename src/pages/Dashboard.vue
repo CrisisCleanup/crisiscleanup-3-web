@@ -59,10 +59,9 @@
                                 address entered here will
                                 receive and email with instructions to create a new account and join your organization
                             </div>
-                            <a-input v-model="usersToInvite" size="large" class="flex-grow my-3"></a-input>
+                            <base-input v-model="usersToInvite" size="large" class="flex-grow my-3" placeholder="Emails"/>
                         </div>
-                        <base-button text="Send Invites" type="primary" class="px-8 py-3"
-                                     :action="inviteUsers"></base-button>
+                        <base-button text="Send Invites" type="primary" class="px-8 py-3" :action="inviteUsers"/>
                     </div>
                 </div>
             </div>
@@ -71,7 +70,7 @@
                     <div class="py-4 px-4 text-gray-500 border-b">CASES COMPLETION</div>
                     <div class="p-4">
                         <div class="small">
-                            <line-chart :chart-data="datacollection" :options="options"></line-chart>
+                            <line-chart :chart-data="datacollection" :options="options"/>
                         </div>
                     </div>
                 </div>
