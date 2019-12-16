@@ -214,7 +214,10 @@
                                     let colors = self.colors[colorsKey];
 
                                     if (colors) {
-                                        let svg = worksiteTemplate.replace('{{fillColor}}', colors.fillColor).replace('{{strokeColor}}', colors.strokeColor);
+                                        let svg = worksiteTemplate
+                                            .replace('{{fillColor}}', colors.fillColor)
+                                            .replace('{{strokeColor}}', colors.strokeColor)
+                                            .replace('{{multple}}', marker.work_types.length > 1 ? self.templates['plus']: '');
                                         markerSprite.texture = Texture.from(svg);
                                     }
                                     markerSprite.x = coords.x;
@@ -295,7 +298,10 @@
                                     let colors = self.colors[colorsKey];
 
                                     if (colors) {
-                                        let svg = worksiteTemplate.replace('{{fillColor}}', colors.fillColor).replace('{{strokeColor}}', colors.strokeColor);
+                                        let svg = worksiteTemplate
+                                            .replace('{{fillColor}}', colors.fillColor)
+                                            .replace('{{strokeColor}}', colors.strokeColor)
+                                            .replace('{{multiple}}', markerSprite.data.work_types.length > 1 ? self.templates['plus']: '');
                                         markerSprite.texture = Texture.from(svg);
                                     }
 
