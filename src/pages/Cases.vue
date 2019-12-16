@@ -154,23 +154,22 @@
                     <div class="flex items-center" v-if="!isNewWorksite">
                         <ccu-icon size="small" class="p-1 py-2" type="go-case" @click.native="jumpToCase"/>
 
-                        <router-link :to="`/cases/${currentWorksiteId}/history`">
+                        <router-link :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/history`">
                             <ccu-icon size="small" class="p-1 py-2" type="history"/>
                         </router-link>
                         <ccu-icon size="small" class="p-1 py-2" type="download" @click.native="downloadWorksite"/>
                         <ccu-icon size="small" class="p-1 py-2" type="share"/>
                         <ccu-icon size="small" class="p-1 py-2" type="print" @click.native="printWorksite"/>
-                        <router-link v-if="isViewingWorksite" :to="`/cases/${currentWorksiteId}/edit`">
+                        <router-link v-if="isViewingWorksite" :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/edit`">
                             <ccu-icon class="border p-2 bg-primary-light"
                                       size="small" type="edit"/>
                         </router-link>
                     </div>
                 </template>
             </div>
-            <a-skeleton class="bg-white h-full p-3 flex-grow" active v-if="spinning"/>
-            <router-view v-if="!spinning" :key="caseFormKey" :fields="this.groupedFormData" :worksite-id="currentWorksiteId"
-                         @closeWorksite="closeWorksite" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite"
-                         :reloadTable="reloadTable" :incident="currentIncident" :worksite="currentWorksite" @changed="loadWorksite" @reloadMap="reloadMap"/>
+            <router-view v-if="!spinning" :key="$route.params.id"
+                         @closeWorksite="closeWorksite" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite" @navigateToWorksite="(id) => { $router.push(`/incident/${this.$route.params.incident_id}/cases/${id}/edit`) }"
+                         @reloadTable="reloadTable" :incident="currentIncident" @changed="loadWorksite" @reloadMap="reloadMap" @jumpToCase="jumpToCase"/>
         </div>
     </div>
 </template>
@@ -181,16 +180,15 @@
     import User from "@/models/User";
     import Incident from "@/models/Incident";
     import Location from "@/models/Location";
-    import {mapMutations, mapState} from "vuex";
+    import { mapState } from "vuex";
     import Table from "@/components/Table";
     import WorksiteMap from "@/components/WorksiteMap";
     import WorksiteFilters from "@/components/WorksiteFilters";
     import Status from "@/models/Status";
-    import {getStatusBadge} from '@/filters';
     import Autocomplete from "@/components/Autocomplete";
     import Highlighter from 'vue-highlight-words'
-    import {throttle} from 'lodash';
-    import {getQueryString} from "@/utils/urls";
+    import { throttle } from 'lodash';
+    import { getQueryString } from "@/utils/urls";
     import * as L from 'leaflet';
     import { getColorForStatus } from "@/filters";
 
@@ -230,23 +228,6 @@
             key: 'county',
         }
     ];
-    const groupBy = key => array =>
-        array.reduce((objectsByKeyValue, obj) => {
-            const value = obj[key];
-            objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
-            return objectsByKeyValue;
-        }, {});
-
-    const buildForm = (key, dict, array) => {
-        for (let item of dict[key]) {
-            if (item.label_t) {
-                array.push(item)
-            }
-            if (item['field_key'] in dict) {
-                buildForm(item['field_key'], dict, array)
-            }
-        }
-    };
 
     export default {
         components: {
@@ -267,11 +248,8 @@
                 spinning: false,
                 tableLoading: false,
                 searchValue: null,
-                currentWorksiteId: null,
-                currentWorksite: null,
                 searchWorksites: [],
                 searchingWorksites: false,
-                caseFormKey: true,
                 data: [],
                 pagination: {
                     pageSize: 100,
@@ -290,7 +268,6 @@
                 map: null,
                 currentSearch: '',
                 currentCaseView: '',
-                getStatusBadge,
                 getColorForStatus,
                 appliedLocations: new Set()
             };
@@ -314,25 +291,11 @@
                     this.filters = this.currentUser.states.filters;
                 }
             }
-            if (this.currentIncidentId) {
+            if (this.$route.params.incident_id) {
                 this.fetch({
                     pageSize: this.pagination.pageSize,
                     page: 1,
                 })
-            }
-            //TODO: Better way to do this
-            if (this.$route.params.id) {
-                this.spinning = true;
-                await this.loadWorksite(this.$route.params.id);
-                if (this.currentIncident.id !== this.currentWorksite.incident) {
-                    this.setCurrentIncidentId(this.currentWorksite.incident);
-                    await Incident.api().fetchById(this.currentWorksite.incident);
-                    await this.loadWorksite(this.$route.params.id);
-                }
-                if (this.$route.query.showOnMap) {
-                    this.jumpToCase()
-                }
-                this.spinning = false;
             }
             let locationParams = {
                 limit: 1000,
@@ -348,9 +311,6 @@
         },
         watch: {
             currentIncident: function () {
-                this.currentWorksite = null;
-                this.currentWorksiteId = null;
-                this.$router.push('/cases');
                 this.fetch({
                     pageSize: this.pagination.pageSize,
                     page: 1,
@@ -373,7 +333,7 @@
                     data = {}
                 }
                 User.api().updateUserState({
-                    incident: this.currentIncidentId,
+                    incident: this.$route.params.incident_id,
                     appliedFilters: this.appliedFilters,
                     filters: this.filters,
                     showingMap: this.showingMap,
@@ -450,7 +410,7 @@
                 this.tableLoading = true;
                 let query = {
                     fields: 'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code',
-                    incident: this.currentIncidentId,
+                    incident: this.$route.params.incident_id,
                 };
                 this.currentQuery = { ...query, ...this.appliedFilters };
                 let response = await this.$http
@@ -483,41 +443,23 @@
                 this.$refs.workstiteMap.initMap();
             },
 
-            async loadWorksite(worksiteId) {
-                if (worksiteId) {
-                    this.currentWorksiteId = worksiteId;
-                }
-                await Worksite.api().fetchById(this.currentWorksiteId);
-                this.currentWorksite = Worksite.find(this.currentWorksiteId);
-                // await this.$router.push({ name: `/cases/${this.currentWorksiteId}` });
-                // this.caseFormKey = !this.caseFormKey;
+            async loadWorksite() {
                 this.reloadTable();
             },
 
             async closeWorksite() {
-                this.currentWorksiteId = null;
-                this.currentWorksite = null;
-                await this.$router.push(`/cases`);
+                await this.$router.push(`/incident/${this.$route.params.incident_id}/cases`);
             },
 
             async backToWorksite() {
-                await this.$router.push(`/cases/${this.currentWorksiteId}`)
+                await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}`)
             },
 
             displayWorksite: async function (record) {
-                this.spinning = true;
-                await this.$router.replace(`/cases/${record.id}`)
-                this.currentWorksiteId = record.id;
-                await Worksite.api().fetchById(record.id);
-                this.currentWorksite = Worksite.find(record.id);
-                this.spinning = false;
-                // this.caseFormKey = !this.caseFormKey;
+                await this.$router.replace(`/incident/${this.$route.params.incident_id}/cases/${record.id}`)
             },
             async createNewWorksite() {
-                await this.$router.push(`/cases/new`);
-                this.currentWorksiteId = null;
-                this.currentWorksite = new Worksite({incident: this.currentIncidentId, form_data: []});
-                this.caseFormKey = !this.caseFormKey;
+                await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/new`);
                 this.toggleView('showingMap');
                 this.spinning = false;
             },
@@ -530,20 +472,13 @@
             onSearch: throttle(async function(search) {
                 this.currentSearch = search;
                 this.searchingWorksites = true;
-                let searchWorksites = await Worksite.api().searchWorksites(search, this.currentIncidentId);
+                let searchWorksites = await Worksite.api().searchWorksites(search, this.$route.params.incident_id);
                 this.searchWorksites = searchWorksites.entities.worksites;
                 this.searchingWorksites = false;
             }, 1000),
             async handleChange(value) {
                 this.spinning = true;
-                await Worksite.api().fetchById(value.id);
-                let worksite = Worksite.find(value.id);
-                if (this.currentWorksiteId !== value.id) {
-                    await this.$router.push(`/cases/${this.currentWorksiteId}`);
-                }
-                this.currentWorksiteId = worksite.id;
-                this.currentWorksite = worksite;
-                this.spinning = false;
+                await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/${value.id}`);
                 this.searchValue = '';
             },
             handleFilters() {
@@ -603,7 +538,7 @@
                 this.forceFileDownload(csv.response);
                 this.spinning = false;
             },
-            async jumpToCase() {
+            async jumpToCase(id) {
                 this.toggleView('showingMap');
 
                 const waitForMap = () => {
@@ -651,12 +586,12 @@
             addMarkerToMap(location) {
                 this.newMarker = location;
                 this.toggleView('showingMap');
-            },
-            ...mapMutations('incident', [
-                'setCurrentIncidentId',
-            ]),
+            }
         },
         computed: {
+            currentWorksite() {
+              return Worksite.find(this.$route.params.id)
+            },
             usStates() {
                 let states = Location.query().where('type', 'US_STATE').get();
                 return states
@@ -670,34 +605,25 @@
                 return states
             },
             isEditingWorksite() {
-              return this.$route.name === 'CaseForm'
+              return this.$route.name === 'IncidentCaseForm'
             },
             isViewingWorksite() {
-              return this.$route.name === 'CaseView'
+              return this.$route.name === 'IncidentCaseView'
             },
             isViewingWorksiteHistory() {
-                return this.$route.name === 'CaseHistory'
+                return this.$route.name === 'IncidentCaseHistory'
             },
             isNewWorksite() {
-                return this.$route.name === 'CaseForm' && !this.currentWorksiteId
+                return this.$route.name === 'IncidentCaseForm' && !this.$route.params.id
             },
             incidents() {
                 return Incident.query().orderBy('id', 'desc').get()
             },
             currentIncident() {
-                return Incident.find(this.currentIncidentId)
+                return Incident.find(this.$route.params.incident_id)
             },
             currentUser() {
                 return User.find(this.$store.getters['auth/userId'])
-            },
-            groupedFormData() {
-                if (this.currentIncident && this.currentIncident.form_fields) {
-                    let formFields = this.currentIncident.form_fields;
-                    let returnArray = [];
-                    buildForm(null, groupBy('field_parent_key')(formFields), returnArray);
-                    return returnArray
-                }
-                return [];
             },
             markers () {
                 if (this.data) {
@@ -717,9 +643,6 @@
                 return Object.values(this.filters.statuses).filter(field => Boolean(field)).length + Object.values(this.filters.fields).filter(field => Boolean(field)).length
             },
             google: gmapApi,
-            ...mapState('incident', [
-                'currentIncidentId',
-            ]),
             ...mapState('loading', [
                 'worksitesLoading',
             ])

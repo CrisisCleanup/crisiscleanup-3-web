@@ -39,15 +39,24 @@
 import User from "@/models/User";
 import Organization from "@/models/Organization";
 import {groupBy} from "@/utils/array";
+import Worksite from "@/models/Worksite";
 
 export default {
     name: 'CaseHistory',
-    props: {
-        worksite: Object,
-    },
     data() {
         return {
-
+            worksite: {}
+        }
+    },
+    async mounted() {
+        try {
+            await Worksite.api().fetch(this.$route.params.id, this.$route.params.incident_id);
+        } catch (e) {
+            await this.$router.push(`/incident/${this.$route.params.incident_id}/cases`);
+        }
+        this.worksite = Worksite.find(this.$route.params.id);
+        if (this.$route.query.showOnMap) {
+            this.$emit('jumpToCase', this.$route.params.id)
         }
     },
     computed: {

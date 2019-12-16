@@ -20,11 +20,11 @@ const routes = [
     {
         path: '/',
         component: Dashboard,
-        name: 'Dashboard',
+        name: 'Home',
         meta: { layout: "authenticated" }
     },
     {
-        path: '/dashboard',
+        path: '/incident/:incident_id/dashboard',
         component: Dashboard,
         name: 'Dashboard',
         meta: { layout: "authenticated" }
@@ -35,26 +35,26 @@ const routes = [
         meta: { layout: "authenticated" }
     },
     {
-        path: '/cases',
+        path: '/incident/:incident_id/cases',
         component: Cases,
         name: 'Cases',
         meta: { layout: "authenticated" },
         children: [{
             path: 'new',
             component: CaseForm,
-            name: 'CaseForm',
+            name: 'IncidentCaseForm',
         },{
             path: ':id',
             component: CaseView,
-            name: 'CaseView',
+            name: 'IncidentCaseView',
         },{
             path: ':id/edit',
             component: CaseForm,
-            name: 'CaseForm',
+            name: 'IncidentCaseForm',
         },{
             path: ':id/history',
             component: CaseHistory,
-            name: 'CaseHistory',
+            name: 'IncidentCaseHistory',
         }],
     },
     {

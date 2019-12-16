@@ -32,7 +32,7 @@
             ]),
             async userLogin() {
                 await this.login({email: this.email, password: this.password});
-                await this.$router.push('/dashboard')
+                await this.$router.push('/')
             }
         }
     }

@@ -2,6 +2,8 @@ import { Model } from '@vuex-orm/core'
 import Organization from "@/models/Organization";
 import User from "@/models/User";
 import WorkType from "@/models/WorkType";
+import Location from "@/models/Location";
+import {getQueryString} from "@/utils/urls";
 
 export default class Worksite extends Model {
     static entity = 'worksites';
@@ -109,8 +111,12 @@ export default class Worksite extends Model {
 
     static apiConfig = {
         actions: {
-            async fetchById (id) {
-                let worksite = await this.get(`/worksites/${id}`);
+            async fetch (id, incident=null) {
+                let worksiteParams = {};
+                if (incident) {
+                    worksiteParams.incident = incident;
+                }
+                let worksite = await this.get(`/worksites/${id}?${getQueryString(worksiteParams)}`);
                 let organizations = worksite.response.data.work_types.filter(work_type => Boolean(work_type.claimed_by)).map(work_type => work_type.claimed_by);
                 await Organization.api().get(`/organizations?id__in=${organizations.join(',')}`, {
                     dataKey: 'results'

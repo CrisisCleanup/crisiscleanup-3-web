@@ -5,13 +5,13 @@
                 <img class="w-24 h-16" src="@/assets/crisiscleanup_logo.png">
             </div>
             <div class="menu">
-                <router-link to="/dashboard" class="menu-item router-link p-2 border-b border-t border-gray-800">
+                <router-link :to="`/incident/${currentIncidentId}/dashboard`" class="menu-item router-link p-2 border-b border-t border-gray-800">
                     <div key="dashboard" class="flex flex-col items-center">
                         <ccu-icon type="dashboard"/>
                         <div class="menu-text mt-1">Dashboard</div>
                     </div>
                 </router-link>
-                <router-link to="/cases" class="menu-item router-link p-2 border-b border-gray-800">
+                <router-link :to="`/incident/${currentIncidentId}/cases`" class="menu-item router-link p-2 border-b border-gray-800">
                     <div key="cases" class="flex flex-col items-center">
                         <ccu-icon type="cases"/>
                         <div class="menu-text mt-1">Cases</div>
@@ -37,7 +37,7 @@
                                     placeholder="Select an Incident"
                                     icon="caret-down"
                                     v-if="incidents"
-                                    v-model="this.currentIncidentId"
+                                    v-model="currentIncident.name"
                                     class="incident-select"
                                     :class="{ 'border-0': true }"
                                     style="width: 250px"
@@ -103,7 +103,7 @@
                 }),
                 Organization.api().get(`/organizations/${this.user.user_claims.organization.id}`)
             ]);
-            let incidentId = Incident.query().orderBy('id', 'desc').first().id;
+            let incidentId = this.$route.params.incident_id || Incident.query().orderBy('id', 'desc').first().id;
             if(this.currentUser.states && this.currentUser.states.incident) {
                 incidentId = this.currentUser.states.incident;
             }
@@ -115,10 +115,11 @@
         methods: {
             async handleChange(value) {
                 this.setCurrentIncidentId(value);
+                await this.$router.push({ name: this.$route.name, params: {...this.$route.params, incident_id: value} });
                 await Incident.api().fetchById(value);
                 User.api().updateUserState({
                     incident: value
-                })
+                });
             },
             ...mapActions('auth', [
                 'login',
