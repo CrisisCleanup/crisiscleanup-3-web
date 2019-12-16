@@ -441,6 +441,7 @@
 
             reloadMap() {
                 this.$refs.workstiteMap.initMap();
+                this.$refs.workstiteMap.markerLayer.clearLayers();
             },
 
             async loadWorksite() {

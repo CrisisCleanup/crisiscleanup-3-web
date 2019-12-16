@@ -53,7 +53,7 @@
         shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
 
-    const INTERACTIVE_ZOOM_LEVEL = 20;
+    const INTERACTIVE_ZOOM_LEVEL = 12;
 
     const getOpacity = (date) => {
         // let opacity_buckets = [100, 75, 60, 35, 20, 10]
