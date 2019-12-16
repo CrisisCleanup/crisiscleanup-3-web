@@ -43,7 +43,7 @@
                                     </div>
                                     <span class="w-3/12">{{worksite.name}}</span>
                                     <span class="w-3/12">{{worksite.form_fields.phone1}}</span>
-                                    <router-link class="w-1/12 self-end" :to="`/cases/${worksite.id}/edit?showOnMap=true`" tag="div">
+                                    <router-link class="w-1/12 self-end" :to="`/incident/${$route.params.incident_id}/cases/${worksite.id}/edit?showOnMap=true`" tag="div">
                                         <ccu-icon size="medium" class="p-1 py-2" type="go-case"/>
                                     </router-link>
                                 </div>

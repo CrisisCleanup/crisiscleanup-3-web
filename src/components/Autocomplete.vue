@@ -86,7 +86,6 @@
         border-radius: 0;
         border: solid 1px #dadada;
         padding: 10px;
-        position: relative;
     }
 
     .large #autosuggest__input {
