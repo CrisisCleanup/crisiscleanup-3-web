@@ -108,6 +108,7 @@
                         return;
                     }
                     this.$emit('search', text);
+                    this.$emit('input', text);
                 }, this.debounceMilliseconds);
             }
         }

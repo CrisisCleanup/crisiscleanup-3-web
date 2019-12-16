@@ -53,6 +53,8 @@
         shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
     });
 
+    const INTERACTIVE_ZOOM_LEVEL = 20;
+
     const getOpacity = (date) => {
         // let opacity_buckets = [100, 75, 60, 35, 20, 10]
         let opacity_buckets = [100, 85, 70, 45, 30, 20]
@@ -151,7 +153,7 @@
             },
             goToInteractive() {
                 let center = averageGeolocation(this.markers.map(marker => [marker.position.lat, marker.position.lng]))
-                this.map.setView([center.latitude, center.longitude], 12);
+                this.map.setView([center.latitude, center.longitude], INTERACTIVE_ZOOM_LEVEL);
                 this.showInteractivePopover = false;
             },
             goToLocal() {
@@ -210,7 +212,7 @@
                                     let work_type = Worksite.getWorkType(marker.work_types, self.currentFilters, self.currentUser.organization);
 
                                     let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
-                                    let worksiteTemplate = zoom < 12 ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
+                                    let worksiteTemplate = zoom < INTERACTIVE_ZOOM_LEVEL ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
                                     let colors = self.colors[colorsKey];
 
                                     if (colors) {
@@ -239,12 +241,12 @@
                                 });
 
                                 let quadTrees = {};
-                                for (let z = 12; z <= map.getMaxZoom(); z++) {
+                                for (let z = INTERACTIVE_ZOOM_LEVEL; z <= map.getMaxZoom(); z++) {
                                     let rInit = ((z <= 7) ? 16 : 24) / utils.getScale(z);
                                     quadTrees[z] = solveCollision(markerSprites, {r0: rInit, zoom: z});
                                 }
                                 const findMarker = (ll) => {
-                                    if (utils.getMap().getZoom() < 12) {
+                                    if (utils.getMap().getZoom() < INTERACTIVE_ZOOM_LEVEL) {
                                         return null;
                                     }
                                     let layerPoint = project(ll);
@@ -275,7 +277,7 @@
                                         map.closePopup();
                                     }
 
-                                    if (utils.getMap().getZoom() < 12) {
+                                    if (utils.getMap().getZoom() < INTERACTIVE_ZOOM_LEVEL) {
                                         self.showInteractivePopover = true;
                                     }
                                 });
@@ -294,7 +296,7 @@
                                     let work_type = Worksite.getWorkType(markerSprite.data.work_types, self.currentFilters, self.currentUser.organization);
 
                                     let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
-                                    let worksiteTemplate = zoom < 12 ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
+                                    let worksiteTemplate = zoom < INTERACTIVE_ZOOM_LEVEL ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
                                     let colors = self.colors[colorsKey];
 
                                     if (colors) {

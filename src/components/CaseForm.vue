@@ -29,10 +29,10 @@
             </div>
             <div class="py-1">
                 <AddressGeocoder :value="worksite.name" @input="(value) => { updateWorksite(value,'name') }"
-                                 @selectedExisting="onWorksiteSelect" @selectedGeocode="onGeocodeSelect"
+                                 @selectedExisting="onWorksiteSelect"
                                  @search="worksitesSearch" tooltip="info"
-                                 :suggestions="[{name:'worksites', data: searchWorksitesResults || [], key: 'address' }]"
-                                 display-property="description" placeholder="Name" size="large" required/>
+                                 :suggestions="[{name:'worksites', data: searchWorksitesNameResults || [], key: 'name' }]"
+                                 display-property="name" placeholder="Name" size="large" required/>
             </div>
             <div class="py-1">
                 <AddressGeocoder :value="worksite.address" @input="(value) => { updateWorksite(value,'address') }"
@@ -232,6 +232,7 @@
                 overlayMapLocation: null,
                 geocoderResults: [],
                 searchWorksitesResults: [],
+                searchWorksitesNameResults: [],
                 worksite: {},
                 dynamicFields: {}
             };
@@ -258,7 +259,7 @@
 
             },
             updateWorksite(value, key) {
-                if (this.worksiteId) {
+                if (this.worksite.id) {
                     Worksite.update({
                         where: this.worksite.id,
                         data: {
@@ -316,7 +317,7 @@
             },
             async worksitesSearch(value) {
                 let searchWorksites = await Worksite.api().searchWorksites(value, this.$route.params.incident_id);
-                this.searchWorksitesResults = searchWorksites.entities.worksites;
+                this.searchWorksitesNameResults = searchWorksites.entities.worksites;
             },
             async handleOk() {
                 this.overlayMapVisible = false;
@@ -386,8 +387,9 @@
                     }
                     await this.$message.success('Worksite saved successfully');
                     if (reload) {
-                        this.$emit('savedWorksite', this.worksite.id)
                         this.$emit('reloadTable')
+                        this.$emit('reloadMap')
+                        await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/${this.worksite.id}`)
                     }
                 } catch (error) {
                     await this.$message.error(getErrorMessage(error));
@@ -407,8 +409,9 @@
                 }
                 await Worksite.api().fetch(this.worksite.id);
                 this.worksite = Worksite.find(this.worksite.id);
-                this.$emit('savedWorksite', this.worksite.id)
                 this.$emit('reloadTable')
+                this.$emit('reloadMap')
+                await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/${this.worksite.id}`)
             },
             resetForm() {
                 this.worksite = new Worksite({incident: this.$route.params.incident_id, form_data: []});
