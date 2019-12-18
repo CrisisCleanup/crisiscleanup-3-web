@@ -21,8 +21,7 @@
                            modal-classes="bg-white w-1/3 shadow" modal-style="height: 60%">
                         <OverlayMap @addedMarker="onAddedMarker" :initial-location="this.worksite.location"/>
                         <div slot="footer" class="flex items-center justify-center p-2 bg-white">
-                            <base-button text="Save" size="medium" class="m-1 p-1 px-6" type="primary"
-                                         :action="handleOk"></base-button>
+                            <base-button text="Save" size="medium" class="m-1 p-1 px-6" type="primary" :action="handleOk"/>
                         </div>
                     </modal>
                 </div>

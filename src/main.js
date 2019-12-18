@@ -32,7 +32,7 @@ import VueLog from '@dreipol/vue-log';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueAutosuggest from "vue-autosuggest";
 import VTooltip from 'v-tooltip'
-import { getWorkTypeName, snakeToTitleCase, getStatusName } from "@/filters";
+import {getWorkTypeName, snakeToTitleCase, getStatusName, getColorForWorkType} from "@/filters";
 import Popover from 'vue-js-popover'
 import Dropdown from 'bp-vuejs-dropdown';
 
@@ -76,6 +76,7 @@ Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.filter('getWorkTypeName', getWorkTypeName);
 Vue.filter('getStatusName', getStatusName);
 Vue.filter('snakeToTitleCase', snakeToTitleCase);
+Vue.filter('getColorForWorkType', getColorForWorkType);
 
 
 // API & Auth

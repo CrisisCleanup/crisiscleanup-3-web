@@ -54,7 +54,7 @@
                 </template>
                 <template #delete="slotProps">
                     <div class="flex mr-2">
-                        <ccu-icon type="trash" size="small" @click.native="() => { deleteInvitation(slotProps.item) }"/>
+                        <ccu-icon alt="Delete Invitation" type="trash" size="small" @click.native="() => { deleteInvitation(slotProps.item) }"/>
                     </div>
                 </template>
             </Table>

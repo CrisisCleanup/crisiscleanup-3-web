@@ -17,7 +17,7 @@
                     <div class="modal-footer flex-shrink">
                         <slot name="footer">
                             <div class="flex items-center justify-center py-3 border-t">
-                                <base-button type="primary" class="px-6 p-3" :action="() => { $emit('close') }">
+                                <base-button alt="OK" type="primary" class="px-6 p-3" :action="() => { $emit('close') }">
                                     OK
                                 </base-button>
                             </div>

@@ -40,9 +40,7 @@
                             text="PREV"
                             icon="caret-left"
                             class="mr-3 text-base"
-                    >
-
-                    </base-button>
+                    />
                     <div>
                         <template v-for="trigger in paginationTriggers">
                             <span :key="trigger" :class="{ 'rounded-full border px-3 py-1 bg-white shadow-inner': trigger === pagination.current }" class="cursor-pointer mx-4 text-base" @click="() => { pageChangeHandle(trigger) }">{{ trigger }}</span>
@@ -54,8 +52,7 @@
                             text="NEXT"
                             suffixIcon="caret-right"
                             class="text-base"
-                    >
-                    </base-button>
+                    />
 
                 </div>
             </div>

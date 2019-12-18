@@ -105,10 +105,6 @@ export default class Worksite extends Model {
         }
     }
 
-    get priority_work_type() {
-
-    }
-
     static apiConfig = {
         actions: {
             async fetch (id, incident=null) {
@@ -148,7 +144,7 @@ export default class Worksite extends Model {
                 }, { save: false })
             },
             searchWorksites(search, incident) {
-                return this.get(`/worksites?fields=id,name,address,case_number,postal_code,city,state,incident&limit=5&search=${search}&incident=${incident}`, {
+                return this.get(`/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`, {
                     dataKey: 'results'
                 }, { save: false });
             },

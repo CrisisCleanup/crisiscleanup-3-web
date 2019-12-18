@@ -7,19 +7,19 @@
             <div class="menu">
                 <router-link :to="`/incident/${currentIncidentId}/dashboard`" class="menu-item router-link p-2 border-b border-t border-gray-800">
                     <div key="dashboard" class="flex flex-col items-center">
-                        <ccu-icon type="dashboard"/>
+                        <ccu-icon alt="Dashboard" type="dashboard"/>
                         <div class="menu-text mt-1">Dashboard</div>
                     </div>
                 </router-link>
-                <router-link :to="`/incident/${currentIncidentId}/cases`" class="menu-item router-link p-2 border-b border-gray-800">
+                <router-link :to="`/incident/${currentIncidentId}/cases/new`" class="menu-item router-link p-2 border-b border-gray-800">
                     <div key="cases" class="flex flex-col items-center">
-                        <ccu-icon type="cases"/>
+                        <ccu-icon alt="Cases" type="cases"/>
                         <div class="menu-text mt-1">Cases</div>
                     </div>
                 </router-link>
                 <router-link to="/organization" class="menu-item router-link p-2 border-b border-gray-800">
                     <div key="organization" class="flex flex-col items-center">
-                        <ccu-icon type="organization" size="large"/>
+                        <ccu-icon alt="My Organization" type="organization" size="large"/>
                         <div class="menu-text mt-1">My Organization</div>
                     </div>
                 </router-link>
@@ -37,7 +37,7 @@
                                     placeholder="Select an Incident"
                                     icon="caret-down"
                                     v-if="incidents"
-                                    v-model="currentIncident.name"
+                                    v-model="currentIncident && currentIncident.name"
                                     class="incident-select"
                                     :class="{ 'border-0': true }"
                                     style="width: 250px"
@@ -115,8 +115,10 @@
         methods: {
             async handleChange(value) {
                 this.setCurrentIncidentId(value);
-                await this.$router.push({ name: this.$route.name, params: {...this.$route.params, incident_id: value} });
+                this.ready = false;
                 await Incident.api().fetchById(value);
+                this.ready = true;
+                await this.$router.push({ name: this.$route.name, params: {...this.$route.params, incident_id: value} });
                 User.api().updateUserState({
                     incident: value
                 });

@@ -7,7 +7,7 @@
                     <span class="text-gray-600 mr-3 notes-time">{{ note.created_at | moment("from", "now") }}:</span><span
                         class="font-hairline">{{note.note}}</span>
                 </div>
-                <base-button v-if="!addingNotes" class="my-1" type="link" text="+ Add Note"
+                <base-button v-if="!addingNotes" class="my-1" type="link" text="+ Add Note" alt="Add Note"
                              :action="() => { this.addingNotes = true }"/>
                 <div v-if="addingNotes">
                     Note
@@ -37,7 +37,7 @@
                         <template v-for="work_type in work_types">
                             <div :key="work_type.id" class="work_type_section">
                                 <span class="text-sm">{{work_type.work_type | getWorkTypeName}}</span>
-                                <StatusDropDown class="block" :default-value="work_type.status"
+                                <StatusDropDown class="block" :current-work-type="work_type"
                                                 :on-select="(value) => {statusValueChange(value, work_type)}"/>
                                 <base-button type="link" :action="() => { return requestWorkType(work_type) }"
                                              text="Request" class="ml-2 p-1 px-3 text-xs"/>
@@ -51,7 +51,7 @@
                     <template v-for="work_type in workTypesClaimedByOrganization">
                         <div :key="work_type.id" class="work_type_section">
                             <span class="text-sm">{{work_type.work_type | getWorkTypeName}}</span>
-                            <StatusDropDown class="block" :default-value="work_type.status"
+                            <StatusDropDown class="block" :current-work-type="work_type"
                                             :on-select="(value) => {statusValueChange(value, work_type)}"/>
                             <base-button type="primary" :action="() => { return unclaimWorkType(work_type) }"
                                          text="Unclaim" class="ml-2 p-1 px-3 text-xs"/>
@@ -63,7 +63,7 @@
                     <template v-for="work_type in workTypesUnclaimed">
                         <div :key="work_type.id" class="work_type_section">
                             <span class="text-sm">{{work_type.work_type | getWorkTypeName}}</span>
-                            <StatusDropDown class="block" :default-value="work_type.status"
+                            <StatusDropDown class="block" :current-work-type="work_type"
                                             :on-select="(value) => {statusValueChange(value, work_type)}"/>
                             <base-button type="primary" :action="() => { return claimWorkType(work_type) }" text="Claim"
                                          class="ml-2 p-1 px-3 text-xs"/>
@@ -160,8 +160,8 @@
                     }
                     await Worksite.api().claimWorksite(this.worksite.id, work_types);
                     await Worksite.api().fetch(this.worksite.id);
-                    this.worksite = Worksite.find(this.worksite.id);
                     this.$emit('reloadMap')
+                    this.$emit('reloadTable')
                 } catch (error) {
                     await this.$message.error(getErrorMessage(error));
                 }
@@ -174,8 +174,8 @@
                     }
                     await Worksite.api().unclaimWorksite(this.worksite.id, work_types);
                     await Worksite.api().fetch(this.worksite.id);
-                    this.worksite = Worksite.find(this.worksite.id);
                     this.$emit('reloadMap')
+                    this.$emit('reloadTable')
                 } catch (error) {
                     await this.$message.error(getErrorMessage(error));
                 }
@@ -188,8 +188,8 @@
                     }
                     await Worksite.api().requestWorksite(this.worksite.id, work_types);
                     await Worksite.api().fetch(this.worksite.id);
-                    this.worksite = Worksite.find(this.worksite.id);
                     this.$emit('reloadMap')
+                    this.$emit('reloadTable')
                 } catch (error) {
                     await this.$message.error(getErrorMessage(error));
                 }
@@ -200,7 +200,6 @@
                     this.addingNotes = false;
                     this.currentNote = '';
                     await Worksite.api().fetch(this.worksite.id);
-                    this.worksite = Worksite.find(this.worksite.id);
                 } catch (error) {
                     await this.$message.error(getErrorMessage(error));
                 }
@@ -223,9 +222,8 @@
                     await this.$message.error(getErrorMessage(error));
                 } finally {
                     await Worksite.api().fetch(this.worksite.id);
-                    this.worksite = Worksite.find(this.worksite.id);
-
                     this.$emit('reloadMap')
+                    this.$emit('reloadTable')
                 }
             },
 
