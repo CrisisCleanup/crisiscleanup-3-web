@@ -16,37 +16,10 @@
                                 </span>
                             </span>
                             <div class="flex justify-start w-auto">
-                                <autocomplete
-                                        @selected="handleChange"
-                                        @search="onSearch"
-                                        icon="search"
-                                        :suggestions="searchWorksites"
-                                        display-property="case_number"
-                                        placeholder="Search"
-                                        full="true"
-                                        class="mx-2"
-                                        :loading="searchingWorksites"
-                                        :disabled="!this.currentIncident">
-                                    <template #result="slotProps">
-                                        <div class="flex flex-col text-sm p-2 cursor-pointer hover:bg-gray-100 border-b">
-                                            <Highlighter
-                                                         highlightClassName="highlight"
-                                                         :searchWords="[currentSearch]"
-                                                         :autoEscape="true"
-                                                         :textToHighlight="slotProps.suggestion.item.name"/>
-                                            <Highlighter
-                                                    highlightClassName="highlight"
-                                                    :searchWords="[currentSearch]"
-                                                    :autoEscape="true"
-                                                    :textToHighlight="slotProps.suggestion.item.case_number"/>
-                                            <Highlighter
-                                                         highlightClassName="highlight"
-                                                         :searchWords="[currentSearch]"
-                                                         :autoEscape="true"
-                                                         :textToHighlight="`${slotProps.suggestion.item.address}, ${slotProps.suggestion.item.city}, ${slotProps.suggestion.item.state} ${slotProps.suggestion.item.postal_code}`"/>
-                                        </div>
-                                    </template>
-                                </autocomplete>
+                                <WorksiteSearchInput @selectedExisting="handleChange" width="300px"
+                                                 @search="onSearch" icon="search"
+                                                 :suggestions="[{name:'worksites', data: searchWorksites || [], key: 'name' }]"
+                                                 display-property="name" placeholder="Search" size="medium" class="mx-2"/>
                             </div>
                         </div>
                         <div class="flex worksite-actions" style="color: #4c4c4d">
@@ -175,7 +148,7 @@
                 </template>
             </div>
             <router-view v-if="!spinning" :key="$route.params.id"
-                         @closeWorksite="closeWorksite" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite" @navigateToWorksite="(id) => { $router.push(`/incident/${this.$route.params.incident_id}/cases/${id}/edit`) }"
+                         @closeWorksite="closeWorksite" @geocoded="addMarkerToMap" @savedWorksite="loadWorksite" @navigateToWorksite="(id) => { $router.push(`/incident/${this.$route.params.incident_id}/cases/${id}/edit?showOnMap=true`) }"
                          @reloadTable="reloadTable" :incident="currentIncident" @changed="loadWorksite" @reloadMap="reloadMap" @jumpToCase="jumpToCase"/>
         </div>
     </div>
@@ -198,6 +171,7 @@
     import { getQueryString } from "@/utils/urls";
     import * as L from 'leaflet';
     import { getColorForStatus } from "@/filters";
+    import WorksiteSearchInput from "@/components/WorksiteSearchInput";
 
     const columns = [
         {
@@ -238,7 +212,7 @@
 
     export default {
         components: {
-            Autocomplete,
+            WorksiteSearchInput,
             WorksiteMap,
             WorksiteFilters,
             Table,
@@ -503,9 +477,9 @@
                 this.searchWorksites = searchWorksites.entities.worksites;
                 this.searchingWorksites = false;
             }, 1000),
+
             async handleChange(value) {
-                this.spinning = true;
-                await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/${value.id}`);
+                await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/${value.id}?showOnMap=true`);
                 this.searchValue = '';
             },
             handleFilters() {
