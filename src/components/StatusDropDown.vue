@@ -1,7 +1,7 @@
 <template>
     <v-popover popoverClass="status-dropdown" placement="bottom-end" class="text-xs">
         <div class="badge-holder rounded-lg px-2" :style="dropdownStyle">
-            <div>{{defaultValue | getStatusName}}</div>
+            <div>{{currentWorkType.status | getStatusName}}</div>
             <font-awesome-icon class="mx-1" size='sm' icon='chevron-down'/>
         </div>
         <div slot="popover" class="bg-white border outline-none h-64 overflow-auto" @keyup='nextItem'>
@@ -22,7 +22,7 @@
         name: "StatusDropDown",
         props: {
             onSelect: Function,
-            defaultValue: String,
+            currentWorkType: Object,
         },
         mounted() {
             document.addEventListener("keyup", this.nextItem);
@@ -53,8 +53,8 @@
             },
             dropdownStyle() {
                 return {
-                    color: getColorForStatus(this.defaultValue),
-                    backgroundColor: `${getColorForStatus(this.defaultValue)}3D`,
+                    color: getColorForStatus(this.currentWorkType.status, Boolean(this.currentWorkType.claimed_by)),
+                    backgroundColor: `${getColorForStatus(this.currentWorkType.status, Boolean(this.currentWorkType.claimed_by))}3D`,
                 }
             }
         }

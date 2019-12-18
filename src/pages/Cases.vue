@@ -5,9 +5,16 @@
                 <div style="background-color: white" class="p-3 border border-gray-300 card-header">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center">
-                            <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingMap ? 'filter-yellow' : 'filter-gray'" type="map" @click.native="toggleView('showingMap')" />
-                            <ccu-icon size="medium" class="mr-4 cursor-pointer" :class="showingTable ? 'filter-yellow' : 'filter-gray'" type="table" @click.native="toggleView('showingTable')" />
-                            <span class="font-thin">Number of Cases: {{pagination.total | numeral('0,0')}}</span>
+                            <ccu-icon alt="Toggle Map View" size="medium" class="mr-4 cursor-pointer" :class="showingMap ? 'filter-yellow' : 'filter-gray'" type="map" @click.native="toggleView('showingMap')" />
+                            <ccu-icon alt="Toggle Table View" size="medium" class="mr-4 cursor-pointer" :class="showingTable ? 'filter-yellow' : 'filter-gray'" type="table" @click.native="toggleView('showingTable')" />
+                            <span class="font-thin" v-if="totalWorksites">
+                                <span v-if="pagination.total === totalWorksites">
+                                    Cases: {{pagination.total | numeral('0,0')}}
+                                </span>
+                                <span v-else>
+                                    Cases: {{pagination.total | numeral('0,0')}} of {{totalWorksites| numeral('0,0')}}
+                                </span>
+                            </span>
                             <div class="flex justify-start w-auto">
                                 <autocomplete
                                         @selected="handleChange"
@@ -85,7 +92,7 @@
                                     </ul>
                                 </template>
                             </base-dropdown>
-                            <base-button class="text-base font-thin mx-4" icon="sliders-h" :action="() => { this.showingFilters = true }">
+                            <base-button class="text-base font-thin mx-4" icon="sliders-h" alt="Filters" :action="() => { this.showingFilters = true }">
                                 Filters <span class="rounded-full mx-2 px-1 bg-yellow-500 text-xs" v-if="filtersCount > 0">{{filtersCount}}</span>
                             </base-button>
                             <base-button class="text-base font-thin mx-4" text="" icon="ellipsis-h" :action="() => { this.showingFilters = true }"/>
@@ -117,7 +124,7 @@
                                 <template #work_types="slotProps">
                                     <div class="flex flex-col">
                                         <div class="badge-holder flex items-center" :key="work_type.id" v-for="work_type in slotProps.item.work_types">
-                                            <badge class="mx-1" :color="getColorForStatus(work_type.status)"/>
+                                            <badge class="mx-1" :color="getColorForStatus(work_type.status, Boolean(work_type.claimed_by))"/>
                                             {{work_type.work_type | getWorkTypeName}}
                                         </div>
                                     </div>
@@ -131,7 +138,7 @@
         <div class="flex flex-col h-full shadow-2xl w-1/5" style="min-width: 360px" v-if="this.currentIncident && (isEditingWorksite || isViewingWorksite || isViewingWorksiteHistory || isNewWorksite)">
             <div style="background-color: white" class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center">
                 <div class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer" @click="createNewWorksite" v-bind:class="{ 'tab-active': isNewWorksite }">
-                    <ccu-icon type="active" size="small"/>
+                    <ccu-icon alt="New Case" type="active" size="small"/>
                     <span class="px-2">New Case</span>
                 </div>
                 <div v-if="this.currentWorksite && this.currentWorksite.id" class="w-1/2 h-full p-3 flex items-center justify-center" v-bind:class="{ 'tab-active': isEditingWorksite || isViewingWorksite || isViewingWorksiteHistory }">
@@ -140,28 +147,28 @@
             </div>
             <div v-if="(isEditingWorksite || isViewingWorksite || isViewingWorksiteHistory || isNewWorksite)" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b">
                 <template v-if="isViewingWorksiteHistory">
-                    <ccu-icon size="medium" class="text-black mb-1" type="history">
+                    <ccu-icon alt="Case History" size="medium" class="text-black mb-1" type="history">
                         <span class="ml-1 mt-1">{{this.currentWorksite.case_number}} History</span>
                     </ccu-icon>
-                    <ccu-icon size="small" type="cancel" @click.native="backToWorksite"/>
+                    <ccu-icon alt="Cancel" size="small" type="cancel" @click.native="backToWorksite"/>
                 </template>
                 <template v-else-if="isNewWorksite">
                     <div class="text-left text-black">New Case</div>
-                    <ccu-icon size="small" type="cancel" @click.native="closeWorksite"/>
+                    <ccu-icon alt="Cancel" size="small" type="cancel" @click.native="closeWorksite"/>
                 </template>
                 <template v-else>
                     <div class="text-left text-black">{{this.currentWorksite && this.currentWorksite.case_number}}</div>
                     <div class="flex items-center" v-if="!isNewWorksite">
-                        <ccu-icon size="small" class="p-1 py-2" type="go-case" @click.native="jumpToCase"/>
+                        <ccu-icon alt="Jump To Case" size="small" class="p-1 py-2" type="go-case" @click.native="jumpToCase"/>
 
                         <router-link :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/history`">
-                            <ccu-icon size="small" class="p-1 py-2" type="history"/>
+                            <ccu-icon alt="Case History" size="small" class="p-1 py-2" type="history"/>
                         </router-link>
-                        <ccu-icon size="small" class="p-1 py-2" type="download" @click.native="downloadWorksite"/>
-                        <ccu-icon size="small" class="p-1 py-2" type="share"/>
-                        <ccu-icon size="small" class="p-1 py-2" type="print" @click.native="printWorksite"/>
+                        <ccu-icon alt="Download Worksite Data" size="small" class="p-1 py-2" type="download" @click.native="downloadWorksite"/>
+                        <ccu-icon alt="Share Worksite" size="small" class="p-1 py-2" type="share"/>
+                        <ccu-icon alt="Print Work Order" size="small" class="p-1 py-2" type="print" @click.native="printWorksite"/>
                         <router-link v-if="isViewingWorksite" :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/edit`">
-                            <ccu-icon class="border p-2 bg-primary-light"
+                            <ccu-icon alt="Edit Worksite" class="border p-2 bg-primary-light"
                                       size="small" type="edit"/>
                         </router-link>
                     </div>
@@ -242,13 +249,14 @@
             return {
                 formLayout: 'inline',
                 isEditing: true,
-                showingMap: false,
-                showingTable: true,
+                showingMap: true,
+                showingTable: false,
                 showingFilters: false,
                 spinning: false,
                 tableLoading: false,
                 searchValue: null,
                 searchWorksites: [],
+                totalWorksites: 0,
                 searchingWorksites: false,
                 data: [],
                 pagination: {
@@ -430,6 +438,18 @@
                     pageSize: params.pageSize,
                     total: response.data.count
                 };
+                this.getWorksiteCount()
+            },
+
+            async getWorksiteCount() {
+                let response = await this.$http
+                    .get(`${process.env.VUE_APP_API_BASE_URL}/worksites`, {
+                        params: {
+                            incident: this.$route.params.incident_id,
+                            limit: 1,
+                        }
+                    });
+                this.totalWorksites = response.data.count;
             },
 
             async reloadTable() {
@@ -440,8 +460,10 @@
             },
 
             reloadMap() {
-                this.$refs.workstiteMap.initMap();
-                this.$refs.workstiteMap.markerLayer.clearLayers();
+                if (this.$refs.workstiteMap) {
+                    this.$refs.workstiteMap.initMap();
+                    this.$refs.workstiteMap.markerLayer.clearLayers();
+                }
             },
 
             async loadWorksite() {
@@ -449,7 +471,11 @@
             },
 
             async closeWorksite() {
-                await this.$router.push(`/incident/${this.$route.params.incident_id}/cases`);
+                if (this.isNewWorksite) {
+                    await this.$router.push(`/incident/${this.$route.params.incident_id}/cases`);
+                } else {
+                    await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/new`);
+                }
             },
 
             async backToWorksite() {
@@ -547,7 +573,8 @@
                         this.$refs.workstiteMap.map.setView([this.currentWorksite.latitude, this.currentWorksite.longitude], 18);
                         let popup = L.popup({className: 'pixi-popup'})
                         popup.setLatLng([this.currentWorksite.latitude, this.currentWorksite.longitude])
-                            .setContent(`<b>${this.currentWorksite.case_number}</b>`).openOn(this.$refs.workstiteMap.map);
+                            .setContent(`<b>${this.currentWorksite.name} (${this.currentWorksite.case_number}</b>)`).openOn(this.$refs.workstiteMap.map);
+                        setTimeout(() => {this.$refs.workstiteMap.map.closePopup()}, 5000);
 
                     } else {
                         setTimeout(waitForMap, 50);

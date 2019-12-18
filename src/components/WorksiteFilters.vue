@@ -18,9 +18,7 @@
                     </template>
                 </div>
                 <div>
-                    <base-button type="bare" class="text-yellow-500 text-underline w-32" :action="clearAllFilters">
-                        Clear all filters
-                    </base-button>
+                    <base-button type="bare" text="Clear all filters" class="text-yellow-500 text-underline w-32" :action="clearAllFilters"/>
                 </div>
             </div>
 
@@ -41,8 +39,8 @@
                         <base-checkbox class="block my-1" v-model="filters.statuses['unclaimed']">Unclaimed</base-checkbox>
                         <base-checkbox class="block my-1" v-model="filters.statuses['claimed_by_org']">Claimed By My Organization</base-checkbox>
                         <base-checkbox class="block my-1" v-model="filters.statuses['reported_by_org']">Reported By My Organization</base-checkbox>
-                        <base-checkbox class="block my-1" v-model="filters.statuses['open']">Open</base-checkbox>
-                        <base-checkbox class="block my-1" v-model="filters.statuses['closed']">Closed</base-checkbox>
+                        <base-checkbox class="block my-1" :value="filters.statuses['open']" @input="(value) => { setOpenClosed(value, 'open') }">Open</base-checkbox>
+                        <base-checkbox class="block my-1" :value="filters.statuses['closed']" @input="(value) => { setOpenClosed(value, 'closed') }">Closed</base-checkbox>
                     </div>
                     <template v-if="currentSection === 'work'">
                         <div :header="f.name_t" :key="f.key" v-for="f in incidentTypes"
@@ -159,6 +157,13 @@
                     if (!value) {
                         this.expanded[key] = false;
                     }
+                }
+            },
+            setOpenClosed(value, status) {
+                this.filters.statuses['open'] = false;
+                this.filters.statuses['closed'] = false;
+                if (value) {
+                    this.filters.statuses[status] = value;
                 }
             },
             expandSection(key) {

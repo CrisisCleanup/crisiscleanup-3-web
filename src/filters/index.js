@@ -1,6 +1,7 @@
 import WorkType from "@/models/WorkType";
 import Status from "@/models/Status";
 import { colors } from "@/utils/colors";
+import { colors as iconColors } from "@/icons/icons_templates";
 
 export function snakeToTitleCase(value) {
     if (!value) return '';
@@ -40,10 +41,20 @@ export function getStatusBadge(status) {
     return status_dict[status];
 }
 
-export const getColorForStatus = (status) => {
-    let color = colors[status];
-    if (color) {
-        return color.color
+export const getColorForWorkType = (work_type) => {
+    let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+    let colors = iconColors[colorsKey];
+    return colors.fillColor;
+};
+
+export const getColorForStatus = (status, claimed = true) => {
+    let colorsKey = `${status}_${claimed ? 'claimed': 'unclaimed'}`;
+    let colors = iconColors[colorsKey];
+
+    if (!colors) {
+        colorsKey = `open_unassigned_${claimed ? 'claimed': 'unclaimed'}`;
+        colors = iconColors[colorsKey];
     }
-    return '#ffffff';
+
+    return colors.fillColor;
 };

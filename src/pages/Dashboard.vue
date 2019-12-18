@@ -33,7 +33,7 @@
                             <template>
                                 <div class="flex justify-between items-center border-b last:border-b-0 py-2">
                                     <div class="badge-holder flex items-center w-1/12">
-                                        <badge class="mx-1" :color="getColorForStatus(getPrimaryWorkType(worksite.work_types))"/>
+                                        <badge class="mx-1" :color="(getPrimaryWorkType(worksite.work_types)) | getColorForWorkType"/>
                                         {{worksite.case_number}}
                                     </div>
                                     <div class="w-4/12">
@@ -44,7 +44,7 @@
                                     <span class="w-3/12">{{worksite.name}}</span>
                                     <span class="w-3/12">{{worksite.form_fields.phone1}}</span>
                                     <router-link class="w-1/12 self-end" :to="`/incident/${$route.params.incident_id}/cases/${worksite.id}/edit?showOnMap=true`" tag="div">
-                                        <ccu-icon size="medium" class="p-1 py-2" type="go-case"/>
+                                        <ccu-icon alt="Jump to Case" size="medium" class="p-1 py-2" type="go-case"/>
                                     </router-link>
                                 </div>
                             </template>
@@ -248,11 +248,6 @@
             },
             getPrimaryWorkType(work_types) {
                 return Worksite.getWorkType(work_types, null, this.currentUser.organization)
-            },
-            getColorForStatus(work_type) {
-                let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
-                let colors = this.colors[colorsKey];
-                return colors.fillColor;
             },
             fillData () {
                 var date = new Date();

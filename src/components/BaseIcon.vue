@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center">
-        <img v-bind:class="styles" :src="iconMap[type]"/> <slot></slot>
+        <img v-bind:class="styles" :src="iconMap[type]" :alt="alt"/> <slot></slot>
     </div>
 </template>
 
@@ -27,6 +27,7 @@
         name: "BaseIcon",
         props: {
             type: String,
+            alt: String,
             size: String
         },
         data() {

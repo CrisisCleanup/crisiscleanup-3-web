@@ -4,7 +4,7 @@
             <spinner/>
         </div>
         <div class="flex flex-col" style="z-index: 1001; position: absolute; top: 90px; left: 10px">
-            <base-button text="" title="Go to Incident" :action="goToIncidentCenter" icon="search-minus" class="w-8 h-8 border-2 my-1 bg-white"/>
+            <base-button text="" title="Go to Incident" alt="Go to Incident" :action="goToIncidentCenter" icon="search-minus" class="w-8 h-8 border-2 my-1 bg-white"/>
             <base-button v-tooltip="{
                             content: 'Zoom to make icons interactive',
                             show: showInteractivePopover,
@@ -12,9 +12,9 @@
                             autoHide: true,
                             classes: 'interactive-tooltip',
                             placement: 'right-start',
-                          }" text="" title="Go to Interactive" icon="search-plus" :action="goToInteractive"
+                          }" text="" title="Go to Interactive" alt="Go to Interactive" icon="search-plus" :action="goToInteractive"
                          class="w-8 h-8 border-2 my-1 bg-white"/>
-            <base-button text="" icon="search-location" :action="goToLocal" class="w-8 h-8 border-2 my-1 bg-white"/>
+            <base-button text="" alt="Go To Local" title="Go To Local" icon="search-location" :action="goToLocal" class="w-8 h-8 border-2 my-1 bg-white"/>
         </div>
         <div class="home-map" ref="map"></div>
     </div>
@@ -181,7 +181,6 @@
                 let loader = this.loader;
                 loader.once('complete', () => {
                     this.mapLoading = false;
-                    this.map.invalidateSize(true)
                 });
 
                 let self = this;

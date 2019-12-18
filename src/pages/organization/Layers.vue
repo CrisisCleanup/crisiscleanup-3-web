@@ -54,9 +54,8 @@
                     </template>
                 </Table>
                 <div class="my-3">
-                    <base-button :action="() => { return this.uploadShapefile() }" class="px-6 p-3 m-auto" type="primary">
-                        Upload
-                    </base-button>
+                    <base-button text="Upload" :action="() => { return this.uploadShapefile() }" class="px-6 p-3 m-auto"
+                                 type="primary"/>
                 </div>
             </div>
         </div>

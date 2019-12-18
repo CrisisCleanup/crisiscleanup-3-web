@@ -15,12 +15,16 @@
             <font-awesome-icon icon="spinner" spin />
         </div>
         <div class="icon-container flex items-center justify-center" v-if="(icon || tooltip) && !loading" :class="iconClasses">
-            <ccu-icon :type="tooltip ? 'info': icon" size="small"></ccu-icon>
+            <ccu-icon :type="tooltip ? 'info': icon" size="small"/>
         </div>
     </div>
 </template>
 
 <script>
+    import Worksite from "@/models/Worksite";
+    import {colors, templates} from '@/icons/icons_templates'
+    import User from "@/models/User";
+
     export default {
         name: "AddressGeocoder",
         props: ['suggestions', 'displayProperty', 'icon', 'placeholder', 'required', 'size', 'tooltip', 'full', 'loading'],
@@ -73,6 +77,11 @@
                 }
             };
         },
+        computed: {
+            currentUser() {
+                return User.find(this.$store.getters['auth/userId'])
+            }
+        },
         methods: {
             shouldRenderSuggestions (size, loading) {
                 return size > 0 && !loading
@@ -86,10 +95,12 @@
                     );
                 } else {
                     return (
-                        <div class="flex flex-col text-sm p-1 cursor-pointer hover:bg-gray-100 border-b">
-                            <div>{suggestion.item.name}</div>
-                            <div>{suggestion.item.address}</div>
-                            <div>{suggestion.item.case_number}</div>
+                        <div class="flex items-center p-1 cursor-pointer hover:bg-gray-100 border-b">
+                            <span>{this.getWorkTypeImage(suggestion.item.work_types)}</span>
+                            <div className="flex flex-col text-sm">
+                                <div>{suggestion.item.name}, {suggestion.item.case_number}</div>
+                                <div>{suggestion.item.address}</div>
+                            </div>
                         </div>
                     );
                 }
@@ -100,6 +111,30 @@
                 } else {
                     return suggestion.item['name'];
                 }
+            },
+            getWorkTypeImage(work_types) {
+                let work_type = Worksite.getWorkType(work_types, null, this.currentUser.organization);
+
+                let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                let worksiteTemplate = templates[work_type.work_type] || templates['unknown'];
+                let svgColors = colors[colorsKey];
+
+                if (colors) {
+                    let svg = worksiteTemplate
+                        .replace('{{fillColor}}', svgColors.fillColor)
+                        .replace('{{strokeColor}}', svgColors.strokeColor)
+                        .replace('{{multple}}', work_types.length > 1 ? templates['plus']: '');
+                    return this.$createElement('div', {
+                        domProps: {
+                            innerHTML: svg
+                        },
+                        class: {
+                            'case-svg-container': true,
+                            'mr-1': true
+                        }
+                    })
+                }
+                return ''
             },
             onInputChange(text) {
                 clearTimeout(this.timeout);
@@ -116,6 +151,11 @@
 </script>
 
 <style>
+    .case-svg-container svg {
+        width: 30px;
+        height: 30px;
+    }
+
     #autosuggest__input {
         outline: none;
         width: 300px;
@@ -141,7 +181,8 @@
 
     .autosuggest__results {
         font-weight: 300;
-        /*width: 100%;*/
+        min-width: 120%;
+        max-width: 100vw;
         position: absolute;
         z-index: 10000001;
         border: 1px solid #e0e0e0;
