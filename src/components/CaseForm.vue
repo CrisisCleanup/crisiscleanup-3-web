@@ -27,14 +27,14 @@
                 </div>
             </div>
             <div class="py-1">
-                <AddressGeocoder :value="worksite.name" @input="(value) => { updateWorksite(value,'name') }"
+                <WorksiteSearchInput :value="worksite.name" @input="(value) => { updateWorksite(value,'name') }"
                                  @selectedExisting="onWorksiteSelect"
                                  @search="worksitesSearch" tooltip="info"
                                  :suggestions="[{name:'worksites', data: searchWorksitesNameResults || [], key: 'name' }]"
                                  display-property="name" placeholder="Name" size="large" required/>
             </div>
             <div class="py-1">
-                <AddressGeocoder :value="worksite.address" @input="(value) => { updateWorksite(value,'address') }"
+                <WorksiteSearchInput :value="worksite.address" @input="(value) => { updateWorksite(value,'address') }"
                                  @selectedExisting="onWorksiteSelect" @selectedGeocode="onGeocodeSelect"
                                  @search="geocoderSearch" tooltip="info"
                                  :suggestions="[{name:'worksites', data: searchWorksitesResults || [], key: 'address' }, {name:'geocoder', data: geocoderResults || [], key: 'description' }]"
@@ -190,14 +190,14 @@
     import GeocoderService from "@/services/geocoder.service"
     import {What3wordsService} from "@/services/what3words.service";
     import {getErrorMessage} from "@/utils/errors";
-    import AddressGeocoder from "@/components/AddressGeocoder";
+    import WorksiteSearchInput from "@/components/WorksiteSearchInput";
     import Incident from "@/models/Incident";
     import {buildForm, groupBy} from "@/utils/form";
 
     export default {
         components: {
             OverlayMap,
-            AddressGeocoder
+            WorksiteSearchInput
         },
         name: "CaseForm",
         async mounted() {

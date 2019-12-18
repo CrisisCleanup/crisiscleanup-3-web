@@ -42,6 +42,10 @@ export function getStatusBadge(status) {
 }
 
 export const getColorForWorkType = (work_type) => {
+    if (!work_type) {
+        return '';
+    }
+
     let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
     let colors = iconColors[colorsKey];
     return colors.fillColor;

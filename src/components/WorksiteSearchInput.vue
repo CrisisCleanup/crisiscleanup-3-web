@@ -24,10 +24,11 @@
     import Worksite from "@/models/Worksite";
     import {colors, templates} from '@/icons/icons_templates'
     import User from "@/models/User";
+    import Highlighter from 'vue-highlight-words'
 
     export default {
-        name: "AddressGeocoder",
-        props: ['suggestions', 'displayProperty', 'icon', 'placeholder', 'required', 'size', 'tooltip', 'full', 'loading'],
+        name: "WorksiteSearchInput",
+        props: ['suggestions', 'displayProperty', 'icon', 'placeholder', 'required', 'size', 'tooltip', 'full', 'loading', 'width'],
         data() {
             return {
                 selected: '',
@@ -55,6 +56,7 @@
                     'base': this.size !== 'large',
                     'has-tooltip': Boolean(this.tooltip),
                 },
+                text: '',
                 sectionConfigs: {
                     worksites: {
                         limit: 5,
@@ -97,9 +99,18 @@
                     return (
                         <div class="flex items-center p-1 cursor-pointer hover:bg-gray-100 border-b">
                             <span>{this.getWorkTypeImage(suggestion.item.work_types)}</span>
-                            <div className="flex flex-col text-sm">
-                                <div>{suggestion.item.name}, {suggestion.item.case_number}</div>
-                                <div>{suggestion.item.address}</div>
+                            <div className="flex flex-col text-sm" style={{width: this.width || 'auto'}}>
+                                <Highlighter
+                                    highlightClassName="highlight"
+                                    searchWords={[this.text]}
+                                    autoEscape={true}
+                                    textToHighlight={`${suggestion.item.name}, ${suggestion.item.case_number}`}/>
+                                    <br/>
+                                <Highlighter
+                                    highlightClassName="highlight"
+                                    searchWords={[this.text]}
+                                    autoEscape={true}
+                                    textToHighlight={`${suggestion.item.address}, ${suggestion.item.city}, ${suggestion.item.state}`}/>
                             </div>
                         </div>
                     );
@@ -114,6 +125,10 @@
             },
             getWorkTypeImage(work_types) {
                 let work_type = Worksite.getWorkType(work_types, null, this.currentUser.organization);
+
+                if (!work_type) {
+                    return '';
+                }
 
                 let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
                 let worksiteTemplate = templates[work_type.work_type] || templates['unknown'];
@@ -144,6 +159,7 @@
                     }
                     this.$emit('search', text);
                     this.$emit('input', text);
+                    this.text = text;
                 }, this.debounceMilliseconds);
             }
         }
@@ -217,37 +233,5 @@
     .autosuggest__results-before {
         @apply text-gray-400 text-sm font-bold px-1
     }
-
-    /*.autosuggest__results ul {*/
-    /*    list-style: none;*/
-    /*    padding-left: 0;*/
-    /*    margin: 0;*/
-    /*    display: flex;*/
-    /*    flex-direction: column;*/
-    /*}*/
-
-    /*.autosuggest__results .autosuggest__results_item {*/
-    /*    cursor: pointer;*/
-    /*    padding: 15px;*/
-    /*}*/
-
-    /*#autosuggest ul:nth-child(1) > .autosuggest__results_title {*/
-    /*    border-top: none;*/
-    /*}*/
-
-    /*.autosuggest__results .autosuggest__results_title {*/
-    /*    color: gray;*/
-    /*    font-size: 11px;*/
-    /*    margin-left: 0;*/
-    /*    padding: 15px 13px 5px;*/
-    /*    border-top: 1px solid lightgray;*/
-    /*}*/
-
-    /*.autosuggest__results .autosuggest__results_item:active,*/
-    /*.autosuggest__results .autosuggest__results_item:hover,*/
-    /*.autosuggest__results .autosuggest__results_item:focus,*/
-    /*.autosuggest__results .autosuggest__results_item.autosuggest__results_item-highlighted {*/
-    /*    background-color: red;*/
-    /*}*/
 
 </style>
