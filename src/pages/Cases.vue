@@ -607,7 +607,7 @@
                 return states
             },
             isEditingWorksite() {
-              return this.$route.name === 'IncidentCaseForm'
+              return this.$route.name === 'IncidentEditForm'
             },
             isViewingWorksite() {
               return this.$route.name === 'IncidentCaseView'
@@ -616,7 +616,7 @@
                 return this.$route.name === 'IncidentCaseHistory'
             },
             isNewWorksite() {
-                return this.$route.name === 'IncidentCaseForm' && !this.$route.params.id
+                return this.$route.name === 'IncidentNewForm'
             },
             incidents() {
                 return Incident.query().orderBy('id', 'desc').get()

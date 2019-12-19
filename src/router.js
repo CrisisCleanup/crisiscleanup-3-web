@@ -42,7 +42,7 @@ const routes = [
         children: [{
             path: 'new',
             component: CaseForm,
-            name: 'IncidentCaseForm',
+            name: 'IncidentNewForm',
         },{
             path: ':id',
             component: CaseView,
@@ -50,7 +50,7 @@ const routes = [
         },{
             path: ':id/edit',
             component: CaseForm,
-            name: 'IncidentCaseForm',
+            name: 'IncidentEditForm',
         },{
             path: ':id/history',
             component: CaseHistory,
@@ -95,6 +95,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
+    mode: 'history',
     routes
 });
 
