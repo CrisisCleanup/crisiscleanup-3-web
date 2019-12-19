@@ -115,7 +115,7 @@
                     <span class="px-2">New Case</span>
                 </div>
                 <div v-if="this.currentWorksite && this.currentWorksite.id" class="w-1/2 h-full p-3 flex items-center justify-center" v-bind:class="{ 'tab-active': isEditingWorksite || isViewingWorksite || isViewingWorksiteHistory }">
-                    {{this.currentWorksite && `View ${this.currentWorksite.case_number}`}}
+                    {{this.currentWorksite && isEditingWorksite ? `Edit ${this.currentWorksite.case_number}` : `View ${this.currentWorksite.case_number}`}}
                 </div>
             </div>
             <div v-if="(isEditingWorksite || isViewingWorksite || isViewingWorksiteHistory || isNewWorksite)" class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b">
