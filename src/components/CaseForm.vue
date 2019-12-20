@@ -130,7 +130,7 @@
                     <template v-if="field.html_type === 'text'">
                         <div class="py-1" :key="field.field_key">
                             <base-input :value="getValue(field.field_key)" v-model="dynamicFields[field.field_key]"
-                                        tooltip="info" size="large" :placeholder="field.placeholder_t"></base-input>
+                                        tooltip="info" size="large" :placeholder="field.placeholder_t || field.label_t"></base-input>
                         </div>
                     </template>
                     <template v-if="field.html_type === 'suggest'">
@@ -138,7 +138,7 @@
                             <autocomplete :defaultValue="getValue(field.field_key)"
                                           v-model="dynamicFields[field.field_key]" tooltip="info"
                                           display-property="description"
-                                          :placeholder="field.placeholder_t"></autocomplete>
+                                          :placeholder="field.placeholder_t || field.label_t"></autocomplete>
                         </div>
                     </template>
                     <template v-if="field.html_type === 'textarea'">
@@ -152,7 +152,7 @@
                       <a-icon type="question-circle-o"/>
                     </a-tooltip>
                   </span>
-                            <a-textarea :placeholder="field.placeholder_t" rows="4"
+                            <a-textarea :placeholder="field.placeholder_t || field.label_t" rows="4"
                                         :defaultValue="getValue(field.field_key)"
                                         v-model="dynamicFields[field.field_key]"/>
                         </div>
