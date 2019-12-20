@@ -26,7 +26,7 @@ module.exports = {
       createBucket: true,
       staticHosting: true,
       staticIndexPage: 'index.html',
-      staticErrorPage: 'error.html',
+      staticErrorPage: 'index.html',
       assetPath: 'dist',
       assetMatch: '**',
       deployPath: '/',

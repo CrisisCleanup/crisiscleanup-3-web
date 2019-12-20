@@ -4,7 +4,7 @@
             <div>{{currentWorkType.status | getStatusName}}</div>
             <font-awesome-icon class="mx-1" size='sm' icon='chevron-down'/>
         </div>
-        <div slot="popover" class="bg-white border outline-none h-64 overflow-auto" @keyup='nextItem'>
+        <div slot="popover" class="bg-white border outline-none h-96 overflow-auto" @keyup='nextItem'>
             <div :key="status.id" v-for="status in statuses" :value="status.status" class="cursor-pointer py-1 hover:bg-gray-100" :class='{"selected": currentItem === status.selectionKey}'>
                 <div class="badge-holder text-xs" @click="() => { onSelect(status.status) }">
                     <badge class="mx-1" :color="getColorForStatus(status.status)"/>
