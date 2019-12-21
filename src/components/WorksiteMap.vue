@@ -350,20 +350,24 @@
             },
             async pullSites(url) {
                 this.mapLoading = true;
-                let response = await this.$http
-                    .get(url || `${process.env.VUE_APP_API_BASE_URL}/worksites_all`, {
-                        params: url ? {} : {...this.query}
-                    });
+                try {
+                    let response = await this.$http
+                        .get(url || `${process.env.VUE_APP_API_BASE_URL}/worksites_all`, {
+                            params: url ? {} : {...this.query}
+                        });
 
-                this.markers = response.data.results.map((worksite) => {
-                    return {
-                        ...worksite,
-                        position: {
-                            lat: worksite.location ? worksite.location.coordinates[1] : 10,
-                            lng: worksite.location ? worksite.location.coordinates[0] : 10,
+                    this.markers = response.data.results.map((worksite) => {
+                        return {
+                            ...worksite,
+                            position: {
+                                lat: worksite.location ? worksite.location.coordinates[1] : 10,
+                                lng: worksite.location ? worksite.location.coordinates[0] : 10,
+                            }
                         }
-                    }
-                });
+                    });
+                } catch (e) {
+                    this.markers = [];
+                }
 
                 this.$log.debug(`Loading ${this.markers.length} markers`)
                 await this.loadMarkersOnMap(this.markers);
