@@ -103,12 +103,32 @@
                 }),
                 Organization.api().get(`/organizations/${this.user.user_claims.organization.id}`)
             ]);
-            let incidentId = this.$route.params.incident_id || Incident.query().orderBy('id', 'desc').first().id;
-            if(this.currentUser.states && this.currentUser.states.incident) {
+            let incidentId = this.$route.params.incident_id;
+            if (!incidentId) {
+                let incident = Incident.query().orderBy('id', 'desc').first()
+                if (incident) {
+                    incidentId = incident.id
+                }
+            }
+
+            if (this.currentUser.states && this.currentUser.states.incident) {
                 incidentId = this.currentUser.states.incident;
             }
-            this.setCurrentIncidentId(incidentId);
-            await Incident.api().fetchById(incidentId);
+
+            if (incidentId) {
+                this.setCurrentIncidentId(incidentId);
+            }
+
+            try {
+                await Incident.api().fetchById(incidentId);
+            } catch (e) {
+                this.setCurrentIncidentId(null);
+                User.api().updateUserState({
+                    incident: null
+                });
+                await this.$router.push(`/dashboard`);
+            }
+
             this.loading = false;
             this.ready = true;
         },

@@ -294,7 +294,11 @@
                 return User.find(this.$store.getters['auth/userId'])
             },
             currentIncident() {
-                return Incident.find(this.currentIncidentId)
+                let incident = Incident.find(this.currentIncidentId)
+                if (incident) {
+                    return incident;
+                }
+                return {};
             },
             ...mapState('incident', [
                 'currentIncidentId',
