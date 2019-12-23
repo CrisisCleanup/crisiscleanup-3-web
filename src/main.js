@@ -33,6 +33,7 @@ import Autocomplete from '@/components/Autocomplete';
 import Tag from '@/components/Tag';
 import Spinner from '@/components/Spinner';
 import FormSelect from '@/components/FormSelect';
+import BaseRadio from '@/components/BaseRadio';
 
 import {
   getColorForWorkType,
@@ -52,6 +53,7 @@ library.add(fas);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('ccu-icon', BaseIcon);
 Vue.component('base-checkbox', BaseCheckbox);
+Vue.component('base-radio', BaseRadio);
 Vue.component('base-button', BaseButton);
 Vue.component('base-input', BaseInput);
 Vue.component('form-select', FormSelect);
