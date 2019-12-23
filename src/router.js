@@ -13,6 +13,7 @@ import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
 import CaseView from '@/pages/CaseView';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
+import Layer from '@/pages/Layer';
 
 Vue.use(VueRouter);
 
@@ -89,6 +90,18 @@ const routes = [
         name: 'Layers',
       },
     ],
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/layers/new',
+    component: Layer,
+    name: 'NewLayer',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/layers/:id',
+    component: Layer,
+    name: 'EditLayer',
     meta: { layout: 'authenticated' },
   },
   {
