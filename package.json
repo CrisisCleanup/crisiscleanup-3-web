@@ -65,13 +65,18 @@
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-eslint": "^3.11.0",
     "@vue/cli-service": "^3.11.0",
+    "@vue/test-utils": "^1.0.0-beta.30",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^24.9.0",
+    "babel-preset-env": "^1.7.0",
     "bp-vuejs-dropdown": "^2.1.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "jest": "^24.9.0",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
     "tailwindcss": "^1.1.2",
+    "vue-jest": "^3.0.5",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
