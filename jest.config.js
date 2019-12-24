@@ -10,5 +10,6 @@ module.exports = {
     ".*\\.(vue)$": "vue-jest",
     // *.js => babel
     "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
-  }
+  },
+  snapshotSerializers: ["jest-serializer-vue"]
 };
