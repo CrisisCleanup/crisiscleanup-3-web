@@ -380,7 +380,7 @@
                     await this.$message.success('Worksite saved successfully');
                     if (reload) {
                         this.$emit('reloadTable')
-                        this.$emit('reloadMap')
+                        this.$emit('reloadMap', this.worksite.id)
                         await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/${this.worksite.id}`)
                     }
                 } catch (error) {
@@ -402,7 +402,7 @@
                 await Worksite.api().fetch(this.worksite.id);
                 this.worksite = Worksite.find(this.worksite.id);
                 this.$emit('reloadTable')
-                this.$emit('reloadMap')
+                this.$emit('reloadMap', this.worksite.id)
                 await this.$router.push(`/incident/${this.$route.params.incident_id}/cases/${this.worksite.id}`)
             },
             resetForm() {

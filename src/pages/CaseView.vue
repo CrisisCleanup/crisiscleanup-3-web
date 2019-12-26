@@ -160,7 +160,7 @@
                     }
                     await Worksite.api().claimWorksite(this.worksite.id, work_types);
                     await Worksite.api().fetch(this.worksite.id);
-                    this.$emit('reloadMap')
+                    this.$emit('reloadMap', this.worksite.id)
                     this.$emit('reloadTable')
                 } catch (error) {
                     await this.$message.error(getErrorMessage(error));
@@ -174,7 +174,7 @@
                     }
                     await Worksite.api().unclaimWorksite(this.worksite.id, work_types);
                     await Worksite.api().fetch(this.worksite.id);
-                    this.$emit('reloadMap')
+                    this.$emit('reloadMap', this.worksite.id)
                     this.$emit('reloadTable')
                 } catch (error) {
                     await this.$message.error(getErrorMessage(error));
@@ -188,7 +188,7 @@
                     }
                     await Worksite.api().requestWorksite(this.worksite.id, work_types);
                     await Worksite.api().fetch(this.worksite.id);
-                    this.$emit('reloadMap')
+                    this.$emit('reloadMap', this.worksite.id)
                     this.$emit('reloadTable')
                 } catch (error) {
                     await this.$message.error(getErrorMessage(error));
@@ -222,7 +222,7 @@
                     await this.$message.error(getErrorMessage(error));
                 } finally {
                     await Worksite.api().fetch(this.worksite.id);
-                    this.$emit('reloadMap')
+                    this.$emit('reloadMap', this.worksite.id)
                     this.$emit('reloadTable')
                 }
             },
