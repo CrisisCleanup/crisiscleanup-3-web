@@ -27,6 +27,7 @@ import Modal from "@/components/Modal";
 import Autocomplete from "@/components/Autocomplete";
 import Tag from "@/components/Tag";
 import Spinner from "@/components/Spinner";
+import FormSelect from "@/components/FormSelect";
 
 import VueLog from '@dreipol/vue-log';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
@@ -35,6 +36,7 @@ import VTooltip from 'v-tooltip'
 import {getWorkTypeName, snakeToTitleCase, getStatusName, getColorForWorkType} from "@/filters";
 import Popover from 'vue-js-popover'
 import Dropdown from 'bp-vuejs-dropdown';
+import vSelect from 'vue-select'
 
 import 'ant-design-vue/dist/antd.less'
 import '@/assets/css/tailwind.css'
@@ -48,6 +50,7 @@ Vue.component('base-checkbox', BaseCheckbox);
 Vue.component('base-button', BaseButton);
 Vue.component('base-input', BaseInput);
 Vue.component('base-select', BaseSelect);
+Vue.component('form-select', FormSelect);
 Vue.component('modal', Modal);
 Vue.component('autocomplete', Autocomplete);
 Vue.component('tag', Tag);
@@ -69,6 +72,8 @@ Vue.use(require('vue-moment'));
 Vue.use(VueLog);
 Vue.use(Popover)
 Vue.component('base-dropdown', Dropdown)
+Vue.component('v-select', vSelect)
+
 
 
 // Filters

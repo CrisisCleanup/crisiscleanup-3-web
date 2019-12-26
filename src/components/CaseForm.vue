@@ -92,16 +92,7 @@
                               <a-icon type="question-circle-o"/>
                             </a-tooltip>
                           </span>
-                            <a-select :defaultValue="getValue(field.field_key)" v-model="dynamicFields[field.field_key]"
-                                      size="large">
-                                <a-select-option :key="option.value" :value="option.value"
-                                                 v-for="option in field.values">
-                                    {{option.name_t}}
-                                </a-select-option>
-                                <template slot="suffixIcon">
-                                    <font-awesome-icon size="sm" icon="sort"/>
-                                </template>
-                            </a-select>
+                          <FormSelect :value="field.values.find(val => getValue(field.field_key))" v-model="dynamicFields[field.field_key]" :options="field.values" itemKey="value" label="name_t"/>
                         </div>
                     </template>
                     <template v-if="field.html_type === 'multiselect'">
@@ -193,9 +184,11 @@
     import WorksiteSearchInput from "@/components/WorksiteSearchInput";
     import Incident from "@/models/Incident";
     import {buildForm, groupBy} from "@/utils/form";
+    import FormSelect from "@/components/FormSelect";
 
     export default {
         components: {
+            FormSelect,
             OverlayMap,
             WorksiteSearchInput
         },
@@ -425,6 +418,25 @@
                 });
                 if (key) {
                     return key['field_value']
+                }
+                return ''
+            },
+            getSelectValue(field_key) {
+                if (!this.worksite || !this.worksite.form_data) {
+                    return ''
+                }
+
+                let key = this.worksite.form_data.find((element) => {
+                    return element.field_key === field_key;
+                });
+                if (key) {
+                    let currentField = this.fields.find((field) => {
+                        return field.field_key === field_key;
+                    });
+
+                    return currentField.values.find((field) => {
+                        return field.value === key['field_value'];
+                    });
                 }
                 return ''
             },
