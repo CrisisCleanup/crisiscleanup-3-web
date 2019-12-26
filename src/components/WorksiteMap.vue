@@ -38,10 +38,8 @@
     import User from "@/models/User";
     import {averageGeolocation} from "@/utils/map";
     import * as moment from 'moment';
-    import * as PIXI from 'pixi.js';
     import {colors, templates} from '@/icons/icons_templates'
     import {groupBy} from "@/utils/array";
-    import WorkType from "@/models/WorkType";
     import Worksite from "@/models/Worksite";
 
     L.Icon.Default.imagePath = '.';
@@ -104,7 +102,8 @@
                 showInteractivePopover: false,
                 loader: new Loader(),
                 colors,
-                templates
+                templates,
+                pixiContainer: new Container()
             }
         },
         computed: {
@@ -147,6 +146,33 @@
                 this.markerLayer.addTo(this.map);
                 await this.pullSites();
             },
+            async updateMap(worksite_id) {
+                if (!worksite_id) {
+                    this.initMap()
+                } else {
+                    let markerSprite = this.pixiContainer.children.find(markerSprite => parseInt(markerSprite.data.id) === parseInt(worksite_id));
+                    markerSprite.data = Worksite.find(worksite_id);
+
+                    let work_type = Worksite.getWorkType(markerSprite.data.work_types, this.currentFilters, this.currentUser.organization);
+
+                    let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                    let worksiteTemplate = this.map.getZoom() < INTERACTIVE_ZOOM_LEVEL ? this.templates['circle'] : this.templates[work_type.work_type] || this.templates['unknown'];
+                    let colors = this.colors[colorsKey];
+
+                    if (colors) {
+                        let svg = worksiteTemplate
+                            .replace('{{fillColor}}', colors.fillColor)
+                            .replace('{{strokeColor}}', colors.strokeColor)
+                            .replace('{{multiple}}', markerSprite.data.work_types.length > 1 ? this.templates['plus']: '');
+                        markerSprite.texture = Texture.from(svg);
+                    }
+
+                    this.$nextTick(() => {
+                        //Add this slight pan to re-render map
+                        this.map.panBy([1, 0]);
+                    });
+                }
+            },
             goToIncidentCenter() {
                 let center = averageGeolocation(this.markers.map(marker => [marker.position.lat, marker.position.lng]))
                 this.map.setView([center.latitude, center.longitude], 6);
@@ -178,177 +204,180 @@
                 return this.worksite.work_types.filter(type => type.claimed_by === null)
             },
             loadMarkersOnMap(markers) {
-                return new Promise((resolve, reject) => {
-                    let map = this.map;
-                    let self = this;
-                    let pixiLayer = (function () {
-                        let firstDraw = true;
-                        let prevZoom;
-                        let markerSprites = [];
-                        let frame = null;
-                        let pixiContainer = new Container();
-                        let doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-                        return L.pixiOverlay(function (utils) {
-                            let zoom = utils.getMap().getZoom();
-                            if (frame) {
-                                cancelAnimationFrame(frame);
-                                frame = null;
-                            }
-                            let container = utils.getContainer();
-                            let renderer = utils.getRenderer();
-                            let project = utils.latLngToLayerPoint;
-                            let scale = utils.getScale();
-                            let invScale = 0.75 / scale;
-                            if (firstDraw) {
-                                prevZoom = zoom;
-                                markers.forEach(function (marker) {
-                                    let coords = project([marker.position.lat, marker.position.lng]);
-                                    let markerSprite = new Sprite();
-                                    let work_type = Worksite.getWorkType(marker.work_types, self.currentFilters, self.currentUser.organization);
+                for (var i = this.pixiContainer.children.length - 1; i >= 0; i--) {	this.pixiContainer.removeChild(this.pixiContainer.children[i]);};
+                this.pixiContainer.destroy({children:true, texture:true, baseTexture:true});
 
-                                    let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
-                                    let worksiteTemplate = zoom < INTERACTIVE_ZOOM_LEVEL ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
-                                    let colors = self.colors[colorsKey];
+                this.pixiContainer = new Container()
 
-                                    if (colors) {
-                                        let svg = worksiteTemplate
-                                            .replace('{{fillColor}}', colors.fillColor)
-                                            .replace('{{strokeColor}}', colors.strokeColor)
-                                            .replace('{{multple}}', marker.work_types.length > 1 ? self.templates['plus']: '');
-                                        markerSprite.texture = Texture.from(svg);
-                                    }
-                                    markerSprite.x = coords.x;
-                                    markerSprite.y = coords.y;
-                                    markerSprite.x0 = coords.x;
-                                    markerSprite.y0 = coords.y;
-                                    markerSprite.anchor.set(0.5, 0.5);
-                                    markerSprite.alpha = getOpacity(marker.updated_at);
-                                    container.addChild(markerSprite);
-                                    markerSprites.push(markerSprite);
-                                    markerSprite.legend = marker.city || marker.label;
-                                    markerSprite.data = marker;
-                                    // markerSprite.interactive = true;
-                                    // markerSprite.cursor = 'pointer';
-                                    // markerSprite.name = marker.case_number;
-                                    // markerSprite.on('click', () => {
-                                    //     self.onSelectmarker(marker);
-                                    // });
-                                });
+                let map = this.map;
+                let self = this;
+                let pixiLayer = (function () {
+                    let firstDraw = true;
+                    let prevZoom;
+                    let markerSprites = [];
+                    let frame = null;
+                    let doubleBuffering = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                    return L.pixiOverlay(function (utils) {
+                        let zoom = utils.getMap().getZoom();
+                        if (frame) {
+                            cancelAnimationFrame(frame);
+                            frame = null;
+                        }
+                        let container = utils.getContainer();
+                        let renderer = utils.getRenderer();
+                        let project = utils.latLngToLayerPoint;
+                        let scale = utils.getScale();
+                        let invScale = 0.75 / scale;
+                        if (firstDraw) {
+                            prevZoom = zoom;
+                            markers.forEach(function (marker) {
+                                let coords = project([marker.position.lat, marker.position.lng]);
+                                let markerSprite = new Sprite();
+                                let work_type = Worksite.getWorkType(marker.work_types, self.currentFilters, self.currentUser.organization);
 
-                                resolve();
+                                let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                                let worksiteTemplate = zoom < INTERACTIVE_ZOOM_LEVEL ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
+                                let colors = self.colors[colorsKey];
 
-                                let quadTrees = {};
-                                for (let z = INTERACTIVE_ZOOM_LEVEL; z <= map.getMaxZoom(); z++) {
-                                    let rInit = ((z <= 7) ? 16 : 24) / utils.getScale(z);
-                                    quadTrees[z] = solveCollision(markerSprites, {r0: rInit, zoom: z});
+                                if (colors) {
+                                    let svg = worksiteTemplate
+                                        .replace('{{fillColor}}', colors.fillColor)
+                                        .replace('{{strokeColor}}', colors.strokeColor)
+                                        .replace('{{multple}}', marker.work_types.length > 1 ? self.templates['plus']: '');
+                                    markerSprite.texture = Texture.from(svg);
                                 }
-                                const findMarker = (ll) => {
-                                    if (utils.getMap().getZoom() < INTERACTIVE_ZOOM_LEVEL) {
-                                        return null;
-                                    }
-                                    let layerPoint = project(ll);
-                                    let quadTree = quadTrees[utils.getMap().getZoom()];
-                                    let marker;
-                                    let rMax = quadTree.rMax;
-                                    let found = false;
-                                    quadTree.visit(function (quad, x1, y1, x2, y2) {
-                                        if (!quad.length) {
-                                            let dx = quad.data.x - layerPoint.x;
-                                            let dy = quad.data.y - layerPoint.y;
-                                            let r = quad.data.scale.x * 16;
-                                            if (dx * dx + dy * dy <= r * r) {
-                                                marker = quad.data;
-                                                found = true;
-                                            }
+                                markerSprite.x = coords.x;
+                                markerSprite.y = coords.y;
+                                markerSprite.x0 = coords.x;
+                                markerSprite.y0 = coords.y;
+                                markerSprite.anchor.set(0.5, 0.5);
+                                markerSprite.alpha = getOpacity(marker.updated_at);
+                                container.addChild(markerSprite);
+                                markerSprites.push(markerSprite);
+                                markerSprite.legend = marker.city || marker.label;
+                                markerSprite.data = marker;
+                                // markerSprite.interactive = true;
+                                // markerSprite.cursor = 'pointer';
+                                // markerSprite.name = marker.case_number;
+                                // markerSprite.on('click', () => {
+                                //     self.onSelectmarker(marker);
+                                // });
+                            });
+
+                            let quadTrees = {};
+                            for (let z = INTERACTIVE_ZOOM_LEVEL; z <= map.getMaxZoom(); z++) {
+                                let rInit = ((z <= 7) ? 16 : 24) / utils.getScale(z);
+                                quadTrees[z] = solveCollision(markerSprites, {r0: rInit, zoom: z});
+                            }
+                            const findMarker = (ll) => {
+                                if (utils.getMap().getZoom() < INTERACTIVE_ZOOM_LEVEL) {
+                                    return null;
+                                }
+                                let layerPoint = project(ll);
+                                let quadTree = quadTrees[utils.getMap().getZoom()];
+                                let marker;
+                                let rMax = quadTree.rMax;
+                                let found = false;
+                                quadTree.visit(function (quad, x1, y1, x2, y2) {
+                                    if (!quad.length) {
+                                        let dx = quad.data.x - layerPoint.x;
+                                        let dy = quad.data.y - layerPoint.y;
+                                        let r = quad.data.scale.x * 16;
+                                        if (dx * dx + dy * dy <= r * r) {
+                                            marker = quad.data;
+                                            found = true;
                                         }
-                                        return found || x1 > layerPoint.x + rMax || x2 + rMax < layerPoint.x || y1 > layerPoint.y + rMax || y2 + rMax < layerPoint.y;
-                                    });
-                                    return marker;
-                                };
-
-                                map.on('click', function (e) {
-                                    let marker = findMarker(e.latlng);
-                                    if (marker) {
-                                        self.$emit('onSelectmarker', marker.data)
-                                    } else {
-                                        map.closePopup();
                                     }
-
-                                    if (utils.getMap().getZoom() < INTERACTIVE_ZOOM_LEVEL) {
-                                        self.showInteractivePopover = true;
-                                    }
+                                    return found || x1 > layerPoint.x + rMax || x2 + rMax < layerPoint.x || y1 > layerPoint.y + rMax || y2 + rMax < layerPoint.y;
                                 });
+                                return marker;
+                            };
 
-                                map.on('mousemove', L.Util.throttle((e) => {
-                                    let marker = findMarker(e.latlng);
-                                    if (marker) {
-                                        L.DomUtil.addClass(this._container, 'cursor-pointer');
-                                    } else {
-                                        L.DomUtil.removeClass(this._container, 'cursor-pointer');
-                                    }
-                                }, 32));
-                            }
-                            if (firstDraw || prevZoom !== zoom) {
-                                markerSprites.forEach(function (markerSprite) {
-                                    let work_type = Worksite.getWorkType(markerSprite.data.work_types, self.currentFilters, self.currentUser.organization);
-
-                                    let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
-                                    let worksiteTemplate = zoom < INTERACTIVE_ZOOM_LEVEL ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
-                                    let colors = self.colors[colorsKey];
-
-                                    if (colors) {
-                                        let svg = worksiteTemplate
-                                            .replace('{{fillColor}}', colors.fillColor)
-                                            .replace('{{strokeColor}}', colors.strokeColor)
-                                            .replace('{{multiple}}', markerSprite.data.work_types.length > 1 ? self.templates['plus']: '');
-                                        markerSprite.texture = Texture.from(svg);
-                                    }
-
-                                    if (firstDraw) {
-                                        markerSprite.scale.set(invScale);
-                                    } else {
-                                        markerSprite.currentScale = markerSprite.scale.x;
-                                        markerSprite.targetScale = invScale;
-                                    }
-                                });
-                            }
-
-                            let start = null;
-                            let delta = 250;
-
-                            function animate(timestamp) {
-                                let progress;
-                                if (start === null) start = timestamp;
-                                progress = timestamp - start;
-                                let lambda = progress / delta;
-                                if (lambda > 1) lambda = 1;
-                                lambda = lambda * (0.4 + lambda * (2.2 + lambda * -1.6));
-                                markerSprites.forEach(function (markerSprite) {
-                                    markerSprite.scale.set(markerSprite.currentScale + lambda * (markerSprite.targetScale - markerSprite.currentScale));
-                                });
-                                renderer.render(container);
-                                if (progress < delta) {
-                                    frame = requestAnimationFrame(animate);
+                            map.on('click', function (e) {
+                                let marker = findMarker(e.latlng);
+                                if (marker) {
+                                    self.$emit('onSelectmarker', marker.data)
+                                } else {
+                                    map.closePopup();
                                 }
-                            }
 
-                            if (!firstDraw && prevZoom !== zoom) {
+                                if (utils.getMap().getZoom() < INTERACTIVE_ZOOM_LEVEL) {
+                                    self.showInteractivePopover = true;
+                                }
+                            });
+
+                            map.on('mousemove', L.Util.throttle((e) => {
+                                let marker = findMarker(e.latlng);
+                                if (marker) {
+                                    L.DomUtil.addClass(this._container, 'cursor-pointer');
+                                } else {
+                                    L.DomUtil.removeClass(this._container, 'cursor-pointer');
+                                }
+                            }, 32));
+                        }
+                        if (firstDraw || prevZoom !== zoom) {
+                            markerSprites.forEach(function (markerSprite) {
+                                let work_type = Worksite.getWorkType(markerSprite.data.work_types, self.currentFilters, self.currentUser.organization);
+
+                                let colorsKey = `${work_type.status}_${work_type.claimed_by ? 'claimed': 'unclaimed'}`;
+                                let worksiteTemplate = zoom < INTERACTIVE_ZOOM_LEVEL ? self.templates['circle'] : self.templates[work_type.work_type] || self.templates['unknown'];
+                                let colors = self.colors[colorsKey];
+
+                                if (colors) {
+                                    let svg = worksiteTemplate
+                                        .replace('{{fillColor}}', colors.fillColor)
+                                        .replace('{{strokeColor}}', colors.strokeColor)
+                                        .replace('{{multiple}}', markerSprite.data.work_types.length > 1 ? self.templates['plus']: '');
+                                    markerSprite.texture = Texture.from(svg);
+                                }
+
+                                if (firstDraw) {
+                                    markerSprite.scale.set(invScale);
+                                } else {
+                                    markerSprite.currentScale = markerSprite.scale.x;
+                                    markerSprite.targetScale = invScale;
+                                }
+                            });
+                        }
+
+                        let start = null;
+                        let delta = 250;
+
+                        function animate(timestamp) {
+                            let progress;
+                            if (start === null) start = timestamp;
+                            progress = timestamp - start;
+                            let lambda = progress / delta;
+                            if (lambda > 1) lambda = 1;
+                            lambda = lambda * (0.4 + lambda * (2.2 + lambda * -1.6));
+                            markerSprites.forEach(function (markerSprite) {
+                                markerSprite.scale.set(markerSprite.currentScale + lambda * (markerSprite.targetScale - markerSprite.currentScale));
+                            });
+                            renderer.render(container);
+                            if (progress < delta) {
                                 frame = requestAnimationFrame(animate);
                             }
-                            firstDraw = false;
-                            prevZoom = zoom;
-                            renderer.render(container);
+                        }
+
+                        if (!firstDraw && prevZoom !== zoom) {
+                            frame = requestAnimationFrame(animate);
+                        }
+                        firstDraw = false;
+                        prevZoom = zoom;
+                        renderer.render(container);
 
 
-                        }, pixiContainer, {
-                            doubleBuffering: doubleBuffering,
-                            reloadOnAdd: true
-                        });
-                    })();
-                    pixiLayer.addTo(map);
-                });
+                    }, self.pixiContainer, {
+                        doubleBuffering: doubleBuffering,
+                        reloadOnAdd: true
+                    });
+                })();
+                pixiLayer.addTo(map);
             },
             async pullSites(url) {
+                if (!this.query.incident) {
+                    return
+                }
                 this.mapLoading = true;
                 try {
                     let response = await this.$http

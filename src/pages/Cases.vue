@@ -433,9 +433,9 @@
                 })
             },
 
-            reloadMap() {
+            reloadMap(worksite_id) {
                 if (this.$refs.workstiteMap) {
-                    this.$refs.workstiteMap.initMap();
+                    this.$refs.workstiteMap.updateMap(worksite_id);
                     this.$refs.workstiteMap.markerLayer.clearLayers();
                 }
             },
