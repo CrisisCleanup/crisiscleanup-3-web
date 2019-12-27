@@ -1,8 +1,12 @@
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ["**/*.{js,vue}", "!**/node_modules/**"],
+  collectCoverageFrom: [
+    "src/**/*.{js,vue}",
+    "!**/node_modules/**",
+    "!**/*.test.js"
+  ],
   // TODO: integrate coveralls or something similiar
-
+  moduleDirectories: ["src", "node_modules"],
   moduleFileExtensions: ["js", "json", "vue"],
   transform: {
     // compile any *.vue files with vue-jest
