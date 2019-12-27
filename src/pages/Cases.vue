@@ -89,8 +89,6 @@
                                     <base-button icon="sync"
                                                  class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
                                                  @click="() => {}" text="Update Status"/>
-                                    <base-button icon="plus" type="primary" class="ml-3 my-3 border p-1 px-4 bg-white"
-                                                 :action="createNewWorksite" text="Create New Case"/>
                                 </div>
                             </div>
                             <Table class="border" :data="data" :columns="columns" enable-selection enable-pagniation :pagination="pagination" @change="handleTableChange" :loading="tableLoading" @rowClick="displayWorksite">
