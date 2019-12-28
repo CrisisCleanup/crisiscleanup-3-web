@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve --mode local",
     "serve-dev": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
+    "lint": "vue-cli-service lint src/**/*.{js,vue}",
+    "prettify": "prettier --write ./**/*.{js,vue}",
     "deploy-staging": "vue-cli-service build --mode staging && vue-cli-service s3-deploy",
     "compile-icons": "./template-compiler.js"
   },
@@ -68,25 +69,18 @@
     "babel-eslint": "^10.0.1",
     "bp-vuejs-dropdown": "^2.1.1",
     "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.9.0",
+    "eslint-import-resolver-webpack": "^0.12.0",
+    "eslint-plugin-babel": "^5.3.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-vue": "^6.1.1",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
+    "prettier": "^1.19.1",
     "tailwindcss": "^1.1.2",
     "vue-template-compiler": "^2.6.10"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
   },
   "browserslist": [
     "> 1%",
