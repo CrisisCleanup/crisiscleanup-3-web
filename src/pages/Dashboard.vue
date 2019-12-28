@@ -342,12 +342,11 @@ export default {
     },
     fillData() {
       const date = new Date();
-      const chckDates = [];
-      for (let i = 0; i < 45; i++) {
-        date.setDate(date.getDate() + 1);
-        const dmy = date.getDate();
-        chckDates.push(dmy);
-      }
+      let chckDates = Array(44).fill(1);
+      chckDates = chckDates.map(i => {
+        date.setDate(date.getDate() + i);
+        return date.getDate();
+      });
       this.datacollection = {
         labels: chckDates,
         datasets: [
@@ -358,7 +357,7 @@ export default {
             pointRadius: 0,
             backgroundColor: 'rgba(0, 187, 230, 0.1)',
             fill: true,
-            data: chckDates.map(date => this.randomScalingFactor(150, 230)),
+            data: chckDates.map(() => this.randomScalingFactor(150, 230)),
           },
           {
             label: 'Total Reported',
@@ -366,7 +365,7 @@ export default {
             borderWidth: '2',
             pointRadius: 0,
             fill: false,
-            data: chckDates.map(date => this.randomScalingFactor(100, 170)),
+            data: chckDates.map(() => this.randomScalingFactor(100, 170)),
           },
           {
             label: 'What is this?',
@@ -375,7 +374,7 @@ export default {
             borderDash: [5, 5],
             pointRadius: 0,
             fill: false,
-            data: chckDates.map(date => 60),
+            data: chckDates.map(() => 60),
           },
         ],
       };

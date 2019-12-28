@@ -42,6 +42,7 @@ module.exports = {
     'import/prefer-default-export': 0,
     'prettier/prettier': ['error', prettierOptions],
     'vue/require-v-for-key': 1,
+    'vue/no-use-v-if-with-v-for': 1,
     // TODO: mitigate in the future
     'no-param-reassign': ['error', { props: false }],
     camelcase: 1,
