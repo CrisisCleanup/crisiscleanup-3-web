@@ -1,14 +1,14 @@
-import { Database } from '@vuex-orm/core'
-import User from '@/models/User'
-import Worksite from "@/models/Worksite";
-import Organization from "@/models/Organization";
-import Incident from "@/models/Incident";
-import WorkType from "@/models/WorkType";
-import Status from "@/models/Status";
-import InvitationRequest from "@/models/InvitationRequest";
-import Invitation from "@/models/Invitation";
-import Location from "@/models/Location";
-import Layer from "@/models/Layer";
+import { Database } from '@vuex-orm/core';
+import User from '@/models/User';
+import Worksite from '@/models/Worksite';
+import Organization from '@/models/Organization';
+import Incident from '@/models/Incident';
+import WorkType from '@/models/WorkType';
+import Status from '@/models/Status';
+import InvitationRequest from '@/models/InvitationRequest';
+import Invitation from '@/models/Invitation';
+import Location from '@/models/Location';
+import Layer from '@/models/Layer';
 
 const database = new Database();
 
@@ -23,4 +23,4 @@ database.register(Invitation, {});
 database.register(Location, {});
 database.register(Layer, {});
 
-export default database
+export default database;
