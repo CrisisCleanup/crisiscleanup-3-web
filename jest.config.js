@@ -18,5 +18,6 @@ module.exports = {
     // *.js => babel
     "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
   },
+  setupFiles: ["jest-canvas-mock"],
   snapshotSerializers: ["jest-serializer-vue"]
 };

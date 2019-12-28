@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LineChart should match snapshot with props 1`] = `
+<div
+  class="chart-container"
+  color="red"
+  height="20px"
+  width="20px"
+>
+  <canvas
+    class="chartjs-render-monitor"
+    height="0"
+    style="display: block;"
+    width="0"
+  />
+</div>
+`;
+
+exports[`LineChart should render correctly and match snapshot 1`] = `
+<div
+  class="chart-container"
+>
+  <canvas
+    class="chartjs-render-monitor"
+    height="0"
+    style="display: block;"
+    width="0"
+  />
+</div>
+`;
