@@ -1,12 +1,12 @@
-import { Model } from '@vuex-orm/core'
+import { Model } from '@vuex-orm/core';
 
 export default class Organization extends Model {
-    static entity = 'organizations';
+  static entity = 'organizations';
 
-    static fields () {
-        return {
-            id: this.increment(),
-            name: this.string(''),
-        }
-    }
+  static fields() {
+    return {
+      id: this.increment(),
+      name: this.string(''),
+    };
+  }
 }

@@ -5,35 +5,35 @@
  * @url http://stackoverflow.com/a/14231286/538646
  */
 export function averageGeolocation(coords) {
-    if (coords.length === 1) {
-        return coords[0];
-    }
+  if (coords.length === 1) {
+    return coords[0];
+  }
 
-    let x = 0.0;
-    let y = 0.0;
-    let z = 0.0;
+  let x = 0.0;
+  let y = 0.0;
+  let z = 0.0;
 
-    for (let coord of coords) {
-        let latitude = coord[0] * Math.PI / 180;
-        let longitude = coord[1] * Math.PI / 180;
+  for (const coord of coords) {
+    const latitude = (coord[0] * Math.PI) / 180;
+    const longitude = (coord[1] * Math.PI) / 180;
 
-        x += Math.cos(latitude) * Math.cos(longitude);
-        y += Math.cos(latitude) * Math.sin(longitude);
-        z += Math.sin(latitude);
-    }
+    x += Math.cos(latitude) * Math.cos(longitude);
+    y += Math.cos(latitude) * Math.sin(longitude);
+    z += Math.sin(latitude);
+  }
 
-    let total = coords.length;
+  const total = coords.length;
 
-    x = x / total;
-    y = y / total;
-    z = z / total;
+  x /= total;
+  y /= total;
+  z /= total;
 
-    let centralLongitude = Math.atan2(y, x);
-    let centralSquareRoot = Math.sqrt(x * x + y * y);
-    let centralLatitude = Math.atan2(z, centralSquareRoot);
+  const centralLongitude = Math.atan2(y, x);
+  const centralSquareRoot = Math.sqrt(x * x + y * y);
+  const centralLatitude = Math.atan2(z, centralSquareRoot);
 
-    return {
-        latitude: centralLatitude * 180 / Math.PI,
-        longitude: centralLongitude * 180 / Math.PI
-    };
+  return {
+    latitude: (centralLatitude * 180) / Math.PI,
+    longitude: (centralLongitude * 180) / Math.PI,
+  };
 }

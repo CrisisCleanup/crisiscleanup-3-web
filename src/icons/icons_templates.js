@@ -1,83 +1,83 @@
-let colors = {
-    'open_unassigned_unclaimed': {
-        fillColor: '#d0021b',
-        strokeColor: '#e30001'
-    },
-    'open_unassigned_claimed': {
-        fillColor: '#fab92e',
-        strokeColor: '#f79820'
-    },
-    'open_assigned_unclaimed': {
-        fillColor: '#d0021b',
-        strokeColor: '#e30001'
-    },
-    'open_assigned_claimed': {
-        fillColor: '#f0f032',
-        strokeColor: '#85863f'
-    },
-    'open_partially-completed_unclaimed': {
-        fillColor: '#d0021b',
-        strokeColor: '#e30001'
-    },
-    'open_partially-completed_claimed': {
-        fillColor: '#0054bb',
-        strokeColor: '#0054bb'
-    },
-    'open_needs-follow-up_unclaimed': {
-        fillColor: '#d0021b',
-        strokeColor: '#e30001'
-    },
-    'open_needs-follow-up_claimed': {
-        fillColor: '#ea51eb',
-        strokeColor: '#e018e1'
-    },
-    'open_unresponsive_unclaimed': {
-        fillColor: '#787878',
-        strokeColor: '#5d5d5d'
-    },
-    'open_unresponsive_claimed': {
-        fillColor: '#787878',
-        strokeColor: '#5d5d5d'
-    },
-    'closed_completed_unclaimed': {
-        fillColor: '#82d78c',
-        strokeColor: '#51ac7c'
-    },
-    'closed_completed_claimed': {
-        fillColor: '#82d78c',
-        strokeColor: '#51ac7c'
-    },
-    'closed_incomplete_unclaimed': {
-        fillColor: '#1d1d1d',
-        strokeColor: '#1d1d1d'
-    },
-    'closed_incomplete_claimed': {
-        fillColor: '#1d1d1d',
-        strokeColor: '#1d1d1d'
-    },
-    'closed_out-of-scope_unclaimed': {
-        fillColor: '#787878',
-        strokeColor: '#787878'
-    },
-    'closed_out-of-scope_claimed': {
-        fillColor: '#787878',
-        strokeColor: '#787878'
-    },
-    'closed_done-by-others_unclaimed': {
-        fillColor: '#0fa355',
-        strokeColor: '#0fa355'
-    },
-    'closed_done-by-others_claimed': {
-        fillColor: '#0fa355',
-        strokeColor: '#0fa355'
-    },
+const colors = {
+  open_unassigned_unclaimed: {
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
+  },
+  open_unassigned_claimed: {
+    fillColor: '#fab92e',
+    strokeColor: '#f79820',
+  },
+  open_assigned_unclaimed: {
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
+  },
+  open_assigned_claimed: {
+    fillColor: '#f0f032',
+    strokeColor: '#85863f',
+  },
+  'open_partially-completed_unclaimed': {
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
+  },
+  'open_partially-completed_claimed': {
+    fillColor: '#0054bb',
+    strokeColor: '#0054bb',
+  },
+  'open_needs-follow-up_unclaimed': {
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
+  },
+  'open_needs-follow-up_claimed': {
+    fillColor: '#ea51eb',
+    strokeColor: '#e018e1',
+  },
+  open_unresponsive_unclaimed: {
+    fillColor: '#787878',
+    strokeColor: '#5d5d5d',
+  },
+  open_unresponsive_claimed: {
+    fillColor: '#787878',
+    strokeColor: '#5d5d5d',
+  },
+  closed_completed_unclaimed: {
+    fillColor: '#82d78c',
+    strokeColor: '#51ac7c',
+  },
+  closed_completed_claimed: {
+    fillColor: '#82d78c',
+    strokeColor: '#51ac7c',
+  },
+  closed_incomplete_unclaimed: {
+    fillColor: '#1d1d1d',
+    strokeColor: '#1d1d1d',
+  },
+  closed_incomplete_claimed: {
+    fillColor: '#1d1d1d',
+    strokeColor: '#1d1d1d',
+  },
+  'closed_out-of-scope_unclaimed': {
+    fillColor: '#787878',
+    strokeColor: '#787878',
+  },
+  'closed_out-of-scope_claimed': {
+    fillColor: '#787878',
+    strokeColor: '#787878',
+  },
+  'closed_done-by-others_unclaimed': {
+    fillColor: '#0fa355',
+    strokeColor: '#0fa355',
+  },
+  'closed_done-by-others_claimed': {
+    fillColor: '#0fa355',
+    strokeColor: '#0fa355',
+  },
 };
 
-let circle = `<svg xmlns="http://www.w3.org/2000/svg" height="18" width="18">
+const circle = `<svg xmlns="http://www.w3.org/2000/svg" height="18" width="18">
                 <circle cx="9" cy="9" r="9" stroke="white" stroke-width="1.5" fill="{{fillColor}}" />
               </svg>`;
 
-let plus = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="30" y="30">
+const plus = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="30" y="30">
         <defs>
             <rect id="b" width="16" height="16" rx="2"/>
             <filter id="a" width="187.5%" height="187.5%" x="-43.8%" y="-31.2%" filterUnits="objectBoundingBox">
@@ -97,7 +97,7 @@ let plus = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.o
         </g>
     </svg>`;
 
-let construction_consultation = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49" height="53" viewBox="0 0 49 53">
+const construction_consultation = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49" height="53" viewBox="0 0 49 53">
                                     <defs>
                                         <path id="b" d="M86.54 74.17v2.187c7.156 1.794 11.642 3.8 13.458 6.016 1.816 2.217 2.396 5.093 1.742 8.627H61.27c-.65-3.078-.131-5.859 1.557-8.34 1.687-2.483 6.566-4.443 14.636-5.881v-2.545c1.65.647 3.16.971 4.528.971 1.368 0 2.884-.345 4.549-1.036zm4.691-14.07v4.861a9 9 0 0 1-9 9h-.497a9 9 0 0 1-9-9v-4.86H91.23zM82.647 46a1 1 0 0 1 1 1v8.18h9.676a1 1 0 0 1 1 1v1.54a1 1 0 0 1-1 1H70.468a1 1 0 0 1-1-1v-1.54a1 1 0 0 1 1-1h9.676V47a1 1 0 0 1 1-1h1.503zm-3.785.863v7h-7.276c.395-1.416 1.258-2.823 2.588-4.217 1.33-1.395 2.893-2.323 4.688-2.783zm6.067 0c1.722.46 3.285 1.388 4.689 2.782 1.403 1.395 2.258 2.8 2.563 4.218h-7.252v-7z"/>
                                         <filter id="a" width="134.1%" height="131.1%" x="-17.1%" y="-11.1%" filterUnits="objectBoundingBox">
@@ -115,7 +115,7 @@ let construction_consultation = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:x
                                 </svg>
                                 `;
 
-let core_relief_items = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="61" height="42" viewBox="0 0 61 42">
+const core_relief_items = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="61" height="42" viewBox="0 0 61 42">
     <defs>
         <path id="b" d="M185.395 59.287l4.01 14.958H193a1 1 0 0 1 1 1v8.72a1 1 0 0 1-1 1h-3.22c.017.168.027.338.027.512 0 2.498-1.927 4.523-4.304 4.523-2.377 0-4.304-2.025-4.304-4.523 0-.174.009-.344.027-.513h-26.764c.018.169.027.34.027.513 0 2.498-1.927 4.523-4.304 4.523-2.377 0-4.304-2.025-4.304-4.523 0-.174.01-.344.028-.513H142a1 1 0 0 1-1-1v-2.258a1 1 0 0 1 1-1h33.977a2 2 0 0 0 2-2V59.287h7.418zM174.32 71.861a1 1 0 0 1 1 1v4.44a1 1 0 0 1-1 1h-8.387a1 1 0 0 1-1-1v-4.44a1 1 0 0 1 1-1h8.387zm-11.966 0a1 1 0 0 1 1 1v4.44a1 1 0 0 1-1 1h-8.387a1 1 0 0 1-1-1v-4.44a1 1 0 0 1 1-1h8.387zm-11.967 0a1 1 0 0 1 1 1v4.44a1 1 0 0 1-1 1H142a1 1 0 0 1-1-1v-4.44a1 1 0 0 1 1-1h8.387zm23.933-7.93a1 1 0 0 1 1 1v4.44a1 1 0 0 1-1 1h-8.387a1 1 0 0 1-1-1v-4.44a1 1 0 0 1 1-1h8.387zm-11.966 0a1 1 0 0 1 1 1v4.44a1 1 0 0 1-1 1h-8.387a1 1 0 0 1-1-1v-4.44a1 1 0 0 1 1-1h8.387zm-11.967 0a1 1 0 0 1 1 1v4.44a1 1 0 0 1-1 1H142a1 1 0 0 1-1-1v-4.44a1 1 0 0 1 1-1h8.387zM174.32 56a1 1 0 0 1 1 1v4.44a1 1 0 0 1-1 1h-8.387a1 1 0 0 1-1-1V57a1 1 0 0 1 1-1h8.387zm-11.966 0a1 1 0 0 1 1 1v4.44a1 1 0 0 1-1 1h-8.387a1 1 0 0 1-1-1V57a1 1 0 0 1 1-1h8.387z"/>
         <filter id="a" width="126.4%" height="141.2%" x="-13.2%" y="-14.7%" filterUnits="objectBoundingBox">
@@ -132,7 +132,7 @@ let core_relief_items = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="ht
     </g>{{multiple}}
 </svg>`;
 
-let debris = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="39" height="53" viewBox="0 0 39 53">
+const debris = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="39" height="53" viewBox="0 0 39 53">
     <defs>
         <path id="b" d="M261.532 47.58l.004.01 1.076 2.338a1 1 0 0 1-.481 1.322l-21.556 10.184H265v3.94h-2.742a4.08 4.08 0 0 1-.01.337l-1.757 25.358a1 1 0 0 1-.998.931h-19.065a1 1 0 0 1-.998-.924l-1.923-25.34a4.05 4.05 0 0 1-.011-.362h-2.77l-.001-3.457-.635-1.382a1 1 0 0 1 .48-1.322l25.63-12.11a1 1 0 0 1 1.332.477z"/>
         <filter id="a" width="145.2%" height="131.1%" x="-22.6%" y="-11.1%" filterUnits="objectBoundingBox">
@@ -149,7 +149,7 @@ let debris = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3
     </g>{{multiple}}
 </svg>`;
 
-let deferred_maintenance = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="52" viewBox="0 0 56 52">
+const deferred_maintenance = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="52" viewBox="0 0 56 52">
     <defs>
         <path id="b" d="M417.994 47l7.092 13.135a4.52 4.52 0 0 0-1.265 3.14c0 1.73.97 3.233 2.397 4.002a5.514 5.514 0 0 0-1.437 3.72c0 2.587 1.778 4.762 4.185 5.381a10.709 10.709 0 0 0-.61 3.575c0 4.561 2.84 8.462 6.857 10.048L395 89.999 417.994 47zm18.94 28.114c3.35 0 6.066 2.702 6.066 6.035 0 3.332-2.716 6.034-6.066 6.034-3.35 0-6.065-2.702-6.065-6.034 0-3.333 2.716-6.035 6.065-6.035zm-5.433-8.124c2.05 0 3.71 1.652 3.71 3.691 0 2.039-1.66 3.691-3.71 3.691-2.049 0-3.71-1.652-3.71-3.691 0-2.039 1.661-3.691 3.71-3.691zm-2.712-6.732a2.705 2.705 0 0 1 2.712 2.698 2.705 2.705 0 0 1-2.712 2.698 2.705 2.705 0 0 1-2.713-2.698 2.705 2.705 0 0 1 2.713-2.698z"/>
         <filter id="a" width="129.2%" height="132.8%" x="-14.6%" y="-11.9%" filterUnits="objectBoundingBox">
@@ -166,7 +166,7 @@ let deferred_maintenance = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink=
     </g>{{multiple}}
 </svg>`;
 
-let erosion = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="52" viewBox="0 0 56 52">
+const erosion = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="52" viewBox="0 0 56 52">
     <defs>
         <path id="b" d="M417.994 47l7.092 13.135a4.52 4.52 0 0 0-1.265 3.14c0 1.73.97 3.233 2.397 4.002a5.514 5.514 0 0 0-1.437 3.72c0 2.587 1.778 4.762 4.185 5.381a10.709 10.709 0 0 0-.61 3.575c0 4.561 2.84 8.462 6.857 10.048L395 89.999 417.994 47zm18.94 28.114c3.35 0 6.066 2.702 6.066 6.035 0 3.332-2.716 6.034-6.066 6.034-3.35 0-6.065-2.702-6.065-6.034 0-3.333 2.716-6.035 6.065-6.035zm-5.433-8.124c2.05 0 3.71 1.652 3.71 3.691 0 2.039-1.66 3.691-3.71 3.691-2.049 0-3.71-1.652-3.71-3.691 0-2.039 1.661-3.691 3.71-3.691zm-2.712-6.732a2.705 2.705 0 0 1 2.712 2.698 2.705 2.705 0 0 1-2.712 2.698 2.705 2.705 0 0 1-2.713-2.698 2.705 2.705 0 0 1 2.713-2.698z"/>
         <filter id="a" width="129.2%" height="132.8%" x="-14.6%" y="-11.9%" filterUnits="objectBoundingBox">
@@ -183,8 +183,7 @@ let erosion = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w
     </g>{{multiple}}
 </svg>`;
 
-
-let escort = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49" height="52" viewBox="0 0 49 52">
+const escort = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49" height="52" viewBox="0 0 49 52">
     <defs>
         <path id="b" d="M518.203 79.923c2.08 1.056 3.457 2.606 4.134 4.65.676 2.044.835 4.187.477 6.427H506.29l11.914-11.077zm-6.858-2.711c1.13.34 2.029.608 2.697.805.668.198 1.628.576 2.88 1.136L503.984 91h-8.33zm-3.803-3.294v2.012l2.272.788L493.447 91H482.18c-.567-3.587.204-6.603 2.314-9.046 2.109-2.443 6.785-4.351 14.028-5.724v-2.312c1.439.548 2.932.823 4.48.823a12.96 12.96 0 0 0 4.54-.823zm4.752-14.263l.002.203v4.44a9.295 9.295 0 1 1-18.59 0v-4.44l.003-.203h18.585zM502.951 47l10.425 3.734-1.126 7.368h-18.598l-1.025-7.368L502.95 47z"/>
         <filter id="a" width="134.1%" height="131.8%" x="-17.1%" y="-11.4%" filterUnits="objectBoundingBox">
@@ -201,7 +200,7 @@ let escort = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3
     </g>{{multiple}}
 </svg>`;
 
-let fence = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="53" height="53" viewBox="0 0 53 53">
+const fence = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="53" height="53" viewBox="0 0 53 53">
     <defs>
         <path id="b" d="M599.21 46l4.19 5.148v6.897h3.6a1 1 0 0 1 1 1v2.76a1 1 0 0 1-1 1l-3.6-.001v10.398h3.6a1 1 0 0 1 1 1v2.759a1 1 0 0 1-1 1l-3.6-.001V90a1 1 0 0 1-1 1h-6.382a1 1 0 0 1-1-1l-.001-12.04h-5.326V90a1 1 0 0 1-1 1h-6.382a1 1 0 0 1-1-1l-.001-12.04h-5.326V90a1 1 0 0 1-1 1H568.6a1 1 0 0 1-1-1V77.96H564a1 1 0 0 1-1-1v-2.758a1 1 0 0 1 1-1h3.599V62.804H564a1 1 0 0 1-1-1v-2.758a1 1 0 0 1 1-1l3.599-.001v-6.897L571.791 46l4.191 5.148v6.897h5.326v-6.897L585.5 46l4.191 5.148v6.897h5.326v-6.897L599.21 46zm-4.193 27.202V62.804h-5.326v10.398h5.326zm-13.709-10.398h-5.326v10.398h5.326V62.804z"/>
         <filter id="a" width="131.1%" height="131.1%" x="-15.6%" y="-11.1%" filterUnits="objectBoundingBox">
@@ -218,7 +217,7 @@ let fence = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
     </g>{{multiple}}
 </svg>`;
 
-let fire = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="41" height="56" viewBox="0 0 41 56">
+const fire = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="41" height="56" viewBox="0 0 41 56">
     <defs>
         <path id="b" d="M673.994 64.377c-1.343-1.125-2.625-2.33-3.685-3.73C664.275 52.685 667.4 46 667.4 46c-11.2 4.764-13.751 12.325-13.873 17.956l.006.06s.102 3.333 1.598 6.949c.477 1.153-.305 2.45-1.527 2.628a1.927 1.927 0 0 1-2.034-1.125c-.642-1.414-1.49-3.664-1.247-5.25a16.81 16.81 0 0 0-3.282 8.883c-.592 8.309 5.099 15.908 13.155 17.56 9.442 1.935 18.382-4.624 19.652-14.143a16.818 16.818 0 0 0-5.855-15.141z"/>
         <filter id="a" width="142.4%" height="129.2%" x="-21.2%" y="-10.4%" filterUnits="objectBoundingBox">
@@ -235,7 +234,7 @@ let fire = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.o
     </g>{{multiple}}
 </svg>`;
 
-let food = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="51" height="47" viewBox="0 0 51 47">
+const food = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="51" height="47" viewBox="0 0 51 47">
     <defs>
         <path id="b" d="M763 71.296C762.427 81.723 753.814 90 743.273 90c-10.54 0-19.153-8.277-19.726-18.704H763zm-17.115-20.089c.66 1.194.95 2.322.873 3.374a6.342 6.342 0 0 0-1.686 1.84c-.206.343-.4.746-.55 1.202l.978 1.769a4.455 4.455 0 0 1 .652-2.141 5.196 5.196 0 0 1 1.737-1.742c.158-.088.368-.011.468.17.66 1.195.95 2.323.874 3.374a6.346 6.346 0 0 0-1.686 1.84c-.207.344-.4.747-.55 1.203l.978 1.769a4.455 4.455 0 0 1 .651-2.141 5.196 5.196 0 0 1 1.738-1.742c.157-.088.367-.011.467.17 1.1 1.99 1.178 3.798.23 5.374a5.298 5.298 0 0 1-1.349 1.482 415.09 415.09 0 0 0 1.801 3.312h-2.103l-1.33-2.405a5.273 5.273 0 0 1-1.967.362c-1.835-.03-3.322-1.053-4.422-3.044-.1-.181-.055-.4.103-.488l.045-.023a5.23 5.23 0 0 1 2.349-.531 4.425 4.425 0 0 1 2.155.58l-.977-1.768a5.839 5.839 0 0 0-1.309-.17 6.318 6.318 0 0 0-2.449.459c-.93-.493-1.73-1.337-2.39-2.531-.1-.182-.054-.4.103-.488a5.177 5.177 0 0 1 2.394-.555 4.424 4.424 0 0 1 2.155.58l-.977-1.768a5.855 5.855 0 0 0-1.308-.17 6.314 6.314 0 0 0-2.45.459c-.93-.492-1.73-1.337-2.39-2.531-.1-.182-.053-.4.104-.488a5.177 5.177 0 0 1 2.394-.555 4.425 4.425 0 0 1 2.155.58l-.898-1.624c-.287-.52-.155-1.144.295-1.395.45-.25 1.05-.032 1.337.488l.898 1.625a4.456 4.456 0 0 1 .652-2.14 5.193 5.193 0 0 1 1.737-1.743c.157-.087.367-.01.468.171zm-19.156 1.21c1.058.859 1.748 1.795 2.07 2.8a6.36 6.36 0 0 0-.876 2.338 5.911 5.911 0 0 0-.06 1.322l1.567 1.273a4.458 4.458 0 0 1-.196-2.23 5.21 5.21 0 0 1 .96-2.268c.114-.14.337-.148.498-.017 1.058.859 1.748 1.796 2.07 2.8a6.364 6.364 0 0 0-.876 2.339 5.907 5.907 0 0 0-.06 1.322l1.567 1.272a4.458 4.458 0 0 1-.195-2.23 5.21 5.21 0 0 1 .96-2.268c.113-.14.336-.147.497-.017 1.763 1.432 2.51 3.08 2.221 4.896a5.313 5.313 0 0 1-.697 1.881l5.693 4.623-2.946.016-3.922-3.185a5.285 5.285 0 0 1-1.69 1.074c-1.71.662-3.473.272-5.236-1.16-.161-.13-.2-.351-.087-.491.03-.038.76-.93 2.013-1.414a4.423 4.423 0 0 1 2.214-.271l-1.566-1.272a5.841 5.841 0 0 0-1.276.333 6.331 6.331 0 0 0-2.1 1.345c-1.046-.106-2.104-.59-3.161-1.448-.161-.13-.2-.351-.087-.492.03-.037.76-.929 2.013-1.413a4.422 4.422 0 0 1 2.214-.272l-1.566-1.272a5.858 5.858 0 0 0-1.276.334 6.327 6.327 0 0 0-2.1 1.345c-1.046-.107-2.104-.59-3.162-1.449-.16-.13-.2-.35-.086-.49l.033-.04c.157-.182.859-.941 1.98-1.374a4.423 4.423 0 0 1 2.214-.272l-1.44-1.169c-.46-.374-.57-1.003-.246-1.404.324-.402.96-.424 1.42-.05l1.44 1.17a4.459 4.459 0 0 1-.195-2.23c.212-1.33.93-2.23.96-2.268.114-.14.337-.148.498-.017z"/>
         <filter id="a" width="132.6%" height="135.9%" x="-16.3%" y="-12.8%" filterUnits="objectBoundingBox">
@@ -252,7 +251,7 @@ let food = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.o
     </g>{{multiple}}
 </svg>`;
 
-let landslide = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="57" height="53" viewBox="0 0 57 53">
+const landslide = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="57" height="53" viewBox="0 0 57 53">
     <defs>
         <path id="b" d="M98.762 169.042a4 4 0 0 1 3.945 3.336l.498 2.96a3 3 0 0 1 2.795 2.993v1.387a3 3 0 0 1-2.638 2.979c.109.252.168.53.168.822v.368a2.113 2.113 0 0 1-4.226 0v-.368c0-.284.056-.554.157-.801h-8.982c.101.247.157.517.157.8v.37a2.113 2.113 0 0 1-4.226 0v-.37c0-.326.075-.635.207-.911a3 3 0 0 1-2.188-2.889v-1.387a3 3 0 0 1 2.657-2.98l.402-2.864a4 4 0 0 1 3.96-3.445h7.314zM57 143l7.303 11.572a4.982 4.982 0 0 0-1.982 3.977c0 2.622 2.03 4.772 4.614 4.983a7.42 7.42 0 0 0-.962 3.664c0 4.143 3.379 7.5 7.546 7.5l.097-.002a5.978 5.978 0 0 0-.187 1.486c0 3.314 2.703 6 6.037 6a6.06 6.06 0 0 0 2.04-.35l2.612 4.14H57V143zm22.49 30.686c1.39 0 2.516 1.12 2.516 2.5s-1.126 2.5-2.516 2.5a2.508 2.508 0 0 1-2.515-2.5c0-1.38 1.126-2.5 2.515-2.5zm-4.53-11.627c2.5 0 4.528 2.015 4.528 4.5s-2.027 4.5-4.528 4.5c-2.5 0-4.528-2.015-4.528-4.5s2.027-4.5 4.528-4.5zm-7.69-5.915c1.39 0 2.516 1.12 2.516 2.5 0 1.381-1.126 2.5-2.515 2.5a2.508 2.508 0 0 1-2.516-2.5c0-1.38 1.126-2.5 2.516-2.5z"/>
         <filter id="a" width="128.6%" height="135.9%" x="-14.3%" y="-15%" filterUnits="objectBoundingBox">
@@ -269,7 +268,7 @@ let landslide = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www
     </g>{{multiple}}
 </svg>`;
 
-let leak = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="53" height="54" viewBox="0 0 53 54">
+const leak = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="53" height="54" viewBox="0 0 53 54">
     <defs>
         <path id="b" d="M671.48 272.363l.07.093 2.044 3.049c.391.53.692 1.14.79 1.814.353 2.433-1.643 4.044-3.67 4.044-2.026 0-4.045-1.611-3.668-4.044.104-.673.408-1.283.8-1.813l2.043-3.05a1 1 0 0 1 1.591-.093zM652.676 235a1 1 0 0 1 1 1v1.1h9.618c.333-.38.707-.57 1.123-.57.623 0 1.593.395 1.593 1.662s-.97 1.662-1.593 1.662c-.416 0-.79-.19-1.123-.571l-9.618.001v3.536h5.052a1 1 0 0 1 1 .991l.016 1.939 10.133.044a8 8 0 0 1 7.965 8v11.016H680a1 1 0 0 1 1 1v1.794a1 1 0 0 1-1 1h-16.762a1 1 0 0 1-1-1v-1.794a1 1 0 0 1 1-1h2.368l-.01-6.093a2 2 0 0 0-2-1.997H637a1 1 0 0 1-1-1v-8.97a1 1 0 0 1 1-1h8.098l.015-1.938a1 1 0 0 1 1-.992h4.704v-3.536l-9.812-.001c-.326.248-.652.372-.98.372-.853 0-1.555-.63-1.555-1.463 0-.833.614-1.537 1.556-1.537.367 0 .693.149.98.446h9.81V236a1 1 0 0 1 1-1h.86z"/>
         <filter id="a" width="131.1%" height="130.2%" x="-15.6%" y="-10.8%" filterUnits="objectBoundingBox">
@@ -286,7 +285,7 @@ let leak = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.o
     </g>{{multiple}}
 </svg>`;
 
-let mold_remediation = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="51" viewBox="0 0 54 51">
+const mold_remediation = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="51" viewBox="0 0 54 51">
     <defs>
         <path id="b" d="M237.86 143.01c7.21.378 1.026 7.965 5.432 12.48 1.327 1.359 2.221 2.656 2.683 3.891H246c.13 0 .258.005.385.016-.051-5.87 2.172-10.338 6.668-13.406 8.197-5.593 17.479 5.571 15.733 12.604-1.745 7.032-9.391-.487-14.647 2.992-1.282.85-2.426 1.468-3.431 1.856.021.13.036.263.045.397 5.381-.789 9.877.678 13.485 4.402 6.911 7.132-2.43 18.246-9.633 17.741-7.203-.504-1.153-9.368-5.48-13.959-1.077-1.144-1.895-2.187-2.451-3.129a4.648 4.648 0 0 1-1.06.033c.075 5.913-2.148 10.411-6.667 13.494-8.197 5.594-17.479-5.57-15.733-12.603 1.745-7.033 9.391.487 14.647-2.993 1.288-.852 2.436-1.473 3.444-1.86a3.92 3.92 0 0 1-.046-.339c-5.401.7-9.954-.798-13.659-4.49-7.034-7.01 3.05-17.505 10.26-17.127zM246 162.58c-1 0-1.811.814-1.811 1.818s.81 1.818 1.811 1.818c1 0 1.811-.814 1.811-1.818s-.81-1.818-1.811-1.818z"/>
         <filter id="a" width="130.4%" height="132.6%" x="-15.2%" y="-11.6%" filterUnits="objectBoundingBox">
@@ -303,7 +302,7 @@ let mold_remediation = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="htt
     </g>{{multiple}}
 </svg>`;
 
-let muck_out = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="51" height="54" viewBox="0 0 51 54">
+const muck_out = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="51" height="54" viewBox="0 0 51 54">
     <defs>
         <path id="b" d="M346.567 183.688v2.587c0 .953-.81 1.725-1.808 1.725h-10.843c0-.953-.81-1.725-1.807-1.725h-4.674c-.479 0-.939.182-1.278.505L324.88 188h-18.073c-.998 0-1.807-.772-1.807-1.725v-2.588h41.567zm0-31.724v30.286H305v-3.45c0-3.81 3.237-6.9 7.229-6.9H326.5v-19.936h20.067zM347 142a1 1 0 0 1 1 1v6.625a1 1 0 0 1-1 1h-20.933a1 1 0 0 1-1-1V143a1 1 0 0 1 1-1H347z"/>
         <filter id="a" width="132.6%" height="130.4%" x="-16.3%" y="-10.9%" filterUnits="objectBoundingBox">
@@ -320,7 +319,7 @@ let muck_out = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.
     </g>{{multiple}}
 </svg>`;
 
-let other = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="52" height="52" viewBox="0 0 52 52">
+const other = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="52" height="52" viewBox="0 0 52 52">
     <defs>
         <path id="b" d="M406 143c12.15 0 22 9.85 22 22s-9.85 22-22 22-22-9.85-22-22 9.85-22 22-22zm.018 18.944a3.049 3.049 0 0 0-3.056 3.056c0 1.694 1.326 3.056 2.983 3.056 1.693 0 3.093-1.362 3.093-3.056s-1.363-3.056-3.02-3.056zm10.658 0A3.049 3.049 0 0 0 413.62 165c0 1.694 1.325 3.056 2.982 3.056 1.694 0 3.093-1.362 3.093-3.056s-1.363-3.056-3.02-3.056zm-21.315 0a3.049 3.049 0 0 0-3.056 3.056c0 1.694 1.326 3.056 2.983 3.056 1.693 0 3.092-1.362 3.092-3.056s-1.362-3.056-3.019-3.056z"/>
         <filter id="a" width="131.8%" height="131.8%" x="-15.9%" y="-11.4%" filterUnits="objectBoundingBox">
@@ -337,7 +336,7 @@ let other = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
     </g>{{multiple}}
 </svg>`;
 
-let rebuild_total = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="59" height="58" viewBox="0 0 59 58">
+const rebuild_total = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="59" height="58" viewBox="0 0 59 58">
     <defs>
         <path id="b" d="M553.009 166.628l8.79 6.191-3.295.946c3.419 5.912 9.98 10.131 17.544 10.131 9.02 0 16.425-6.024 18.967-13.584l.109-.334 5.075 1.097-.107.368C597.023 181.699 587.225 189 576.048 189c-9.741 0-18.384-5.591-22.475-13.821l-3.56 1.02 2.996-9.57zm22.97-14.559l12.083 9.715v3.482l-2.362-1.923v9.607a1 1 0 0 1-.883.994l-.117.006h-17.44a1 1 0 0 1-.993-.883l-.007-.117v-9.538l-2.258 1.854v-3.482l11.978-9.715zm.053-13.069c9.893 0 18.64 5.753 22.647 14.191l3.304-.485-1.927 4.123.036.123-.104.022-2.216 4.745-7.605-7.276 3.165-.465c-3.364-5.562-9.851-9.866-17.3-9.866-8.907 0-16.595 5.963-19.016 13.592l-.102.333-4.943-1.068.107-.367c3.07-10.257 12.777-17.602 23.954-17.602z"/>
         <filter id="a" width="126.9%" height="128%" x="-13.4%" filterUnits="objectBoundingBox">
@@ -354,7 +353,7 @@ let rebuild_total = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:/
     </g>{{multiple}}
 </svg>`;
 
-let rebuild = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="57" height="52" viewBox="0 0 57 52">
+const rebuild = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="57" height="52" viewBox="0 0 57 52">
     <defs>
         <path id="b" d="M489.394 142L514 161.536v7.001l-4.811-3.866V185a1 1 0 0 1-.883.993l-.117.007h-16.788v-20.934h2.439v.903a1 1 0 0 0 .883.994l.117.006h1.686a1 1 0 0 0 .993-.883l.007-.117v-5.807a1 1 0 0 0-.884-.993l-.116-.007h-1.686a1 1 0 0 0-.993.883l-.007.117v.628h-4.912l-.243.003a7.666 7.666 0 0 0-7.418 7.414l-.004.248v.46c1.69-1.754 3.41-2.908 5.157-3.464l.328-.097V186h-16.15a1 1 0 0 1-.992-.883l-.007-.117-.001-20.19-4.598 3.727v-7.001L489.394 142z"/>
         <filter id="a" width="128.6%" height="131.8%" x="-14.3%" y="-11.4%" filterUnits="objectBoundingBox">
@@ -371,7 +370,7 @@ let rebuild = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w
     </g>{{multiple}}
 </svg>`;
 
-let reject = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="52" height="52" viewBox="0 0 52 52">
+const reject = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="52" height="52" viewBox="0 0 52 52">
     <defs>
         <path id="b" d="M743 240c12.15 0 22 9.85 22 22s-9.85 22-22 22-22-9.85-22-22 9.85-22 22-22zm-7.214 11.968a2 2 0 0 0-2.7 2.946l7.085 7.085-7.086 7.087-.117.128a2 2 0 0 0 2.818 2.818l.128-.117 7.085-7.087 7.087 7.087.128.117a2 2 0 0 0 2.7-2.946L745.829 262l7.087-7.085.117-.128a2 2 0 0 0-2.818-2.818l-.128.117-7.087 7.086-7.085-7.086z"/>
         <filter id="a" width="131.8%" height="131.8%" x="-15.9%" y="-11.4%" filterUnits="objectBoundingBox">
@@ -388,7 +387,7 @@ let reject = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3
     </g>{{multiple}}
 </svg>`;
 
-let retardant_cleanup = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="59" viewBox="0 0 56 59">
+const retardant_cleanup = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="59" viewBox="0 0 56 59">
     <defs>
         <path id="b" d="M652.838 169.891a3.914 3.914 0 0 1 4.637-3.023 3.914 3.914 0 0 1 3.006 4.648 3.912 3.912 0 0 1-1.265 2.149 8.468 8.468 0 0 1 1.96 7.406c-.974 4.576-5.458 7.5-10.018 6.53l-.247-.056-.056-.015a2.985 2.985 0 0 1-3.555 2.405 2.964 2.964 0 0 1-2.003-1.507 5.733 5.733 0 0 1-2.736.082c-3.119-.663-5.108-3.738-4.443-6.869.651-3.062 3.601-5.043 6.648-4.507a8.465 8.465 0 0 1 7.987-6.286c-.01-.315.017-.635.085-.957zm6.723-6.738a2.487 2.487 0 0 1 2.947-1.92 2.487 2.487 0 0 1 1.91 2.953 2.487 2.487 0 0 1-2.947 1.92 2.487 2.487 0 0 1-1.91-2.953zm-6.567-23.925l15.85 12.405 12.86-.707a4.073 4.073 0 0 1 4.296 4.069 4.307 4.307 0 0 1-4.307 4.305H666.78a2.116 2.116 0 0 1-2.265 1.002 2.106 2.106 0 0 1-1.385-1.002h-18.606l-5.407-6.753a1 1 0 0 1 1.203-1.532l4.204 1.956 12.754-.702-5.798-11.813a1 1 0 0 1 1.514-1.228z"/>
         <filter id="a" width="129.2%" height="127.4%" x="-14.6%" y="-9.8%" filterUnits="objectBoundingBox">
@@ -405,7 +404,7 @@ let retardant_cleanup = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="ht
     </g>{{multiple}}
 </svg>`;
 
-let shelter = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="58" height="52" viewBox="0 0 58 52">
+const shelter = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="58" height="52" viewBox="0 0 58 52">
     <defs>
         <path id="b" d="M747 143l25 19.415v7.134l-4.444-3.461V185a2 2 0 0 1-2 2h-6.746c.201-2.855-.223-5.148-1.272-6.88-1.154-1.905-3.555-3.477-7.201-4.715v-1.866a6.32 6.32 0 0 0 2.928-5.336v-1.997a6.324 6.324 0 1 0-12.648 0v1.997a6.318 6.318 0 0 0 2.832 5.273l.001 1.93-.4.138c-3.422 1.216-5.69 2.741-6.802 4.577-1.049 1.73-1.472 4.024-1.271 6.879h-6.533a2 2 0 0 1-2-2v-18.912L722 169.549v-7.134L747 143z"/>
         <filter id="a" width="128%" height="131.8%" x="-14%" y="-11.4%" filterUnits="objectBoundingBox">
@@ -422,7 +421,7 @@ let shelter = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w
     </g>{{multiple}}
 </svg>`;
 
-let snow_ground = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49" height="56" viewBox="0 0 49 56">
+const snow_ground = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="49" height="56" viewBox="0 0 49 56">
     <defs>
         <path id="b" d="M74.603 267.206c2.756-.502 6.1.011 8.602 3.129.916 1.081 1.541 2.526 1.875 4.334 3.298-.555 6.161.248 8.59 2.41 2.673 2.37 3.6 6.093 3.106 8.921H61c.028-2.077.683-3.908 1.965-5.494 1.283-1.586 2.94-2.598 4.972-3.036a8.545 8.545 0 0 1 .56-5.221c1.304-2.976 3.657-4.455 6.106-5.043zm16.394-29.192l4.162.506c.94.114 1.622.95 1.545 1.895a1.703 1.703 0 0 1-1.83 1.558l-.5-.039-2.398 19.647 8.281 1.07a2 2 0 0 1 1.73 2.22c-1.108 9.319-1.721 14.269-1.838 14.85a2.079 2.079 0 0 1-.837 1.047c-.69-2.896-2.1-5.168-4.232-6.818-2.131-1.65-4.7-2.452-7.705-2.406-.708-2.3-1.942-4.092-3.703-5.374-1.76-1.282-3.734-1.93-5.92-1.942l.287-2.363a2 2 0 0 1 2.238-1.743l8.273 1.052 2.403-19.66-.526-.09a1.692 1.692 0 0 1-1.386-1.948 1.767 1.767 0 0 1 1.956-1.462z"/>
         <filter id="a" width="134.1%" height="129.2%" x="-17.1%" y="-10.4%" filterUnits="objectBoundingBox">
@@ -439,7 +438,7 @@ let snow_ground = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://w
     </g>{{multiple}}
 </svg>`;
 
-let snow_roof = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="53" viewBox="0 0 54 53">
+const snow_roof = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="53" viewBox="0 0 54 53">
     <defs>
         <path id="b" d="M164.045 247.977l22.28 15.895v5.84l-3.961-2.833V282a2 2 0 0 1-2 2h-32.637a2 2 0 0 1-2-2v-15.121l-3.961 2.834v-5.84l22.28-15.896zm-.766-8.894c1.807-.337 3.224.352 4.253 2.068 1.503-.198 2.768.078 3.797.828 1.028.75 1.57 1.716 1.628 2.9 1.004.11 1.811.41 2.423.9.611.49 1.029 1.177 1.251 2.063 2.052-.202 3.667.356 4.847 1.676 1.18 1.32 1.563 2.816 1.149 4.49.926.284 1.621.746 2.086 1.383.465.638.67 1.361.615 2.168.407.176.808.52 1.2 1.034.393.513.54 1.154.443 1.925l-22.96-16.31-22.527 16.31a2.545 2.545 0 0 1 0-.863 3.39 3.39 0 0 1 .282-.84c-1.123-1.96-1.011-3.785.336-5.479 1.347-1.693 3.291-2.311 5.832-1.855.253-.21.498-.378.734-.505.237-.127.518-.242.844-.343-.725-1.883-.417-3.5.923-4.854s3.188-1.794 5.545-1.321c.256-.763.787-1.367 1.59-1.812.804-.445 1.722-.57 2.753-.378.163-1.786 1.149-2.848 2.956-3.185z"/>
         <filter id="a" width="130.4%" height="131.1%" x="-15.2%" y="-11.1%" filterUnits="objectBoundingBox">
@@ -456,7 +455,7 @@ let snow_roof = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www
     </g>{{multiple}}
 </svg>`;
 
-let structure = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="41" height="55" viewBox="0 0 41 55">
+const structure = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="41" height="55" viewBox="0 0 41 55">
     <defs>
         <path id="b" d="M241.102 239.759h10.446l-.01-.746a1 1 0 0 1 1-1.013H258a1 1 0 0 1 1 1v9.14a1 1 0 0 1-1 1h-5.476a1 1 0 0 1-1-1v-.644h-4.71V284a1 1 0 0 1-1 1h-5.983a1 1 0 0 1-1-1v-36.305c-2.909.453-7.186 2.842-12.831 7.166 0-8.34 6.762-15.102 15.102-15.102z"/>
         <filter id="a" width="142.4%" height="129.8%" x="-21.2%" y="-10.6%" filterUnits="objectBoundingBox">
@@ -473,7 +472,7 @@ let structure = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www
     </g>{{multiple}}
 </svg>`;
 
-let temporary_housing = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="51" height="53" viewBox="0 0 51 53">
+const temporary_housing = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="51" height="53" viewBox="0 0 51 53">
     <defs>
         <path id="b" d="M319.367 239L298 261.315l.067 21.688a1 1 0 0 0 1 .997h10.093a1 1 0 0 0 .577-.184c3.101-2.194 5.308-5.012 6.62-8.454 1.35-3.538 2.214-6.89 2.594-10.054a.477.477 0 0 1 .944-.05l.01.05c.772 3.451.444 4.755 2.35 10.054 1.256 3.496 3.535 6.32 6.835 8.475a1 1 0 0 0 .546.163h10.36a1 1 0 0 0 1-1.005l-.105-21.68L319.367 239z"/>
         <filter id="a" width="132.5%" height="131.1%" x="-16.3%" y="-11.1%" filterUnits="objectBoundingBox">
@@ -490,7 +489,7 @@ let temporary_housing = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="ht
     </g>{{multiple}}
 </svg>`;
 
-let trees_heavy_equipment = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="57" height="46" viewBox="0 0 57 46">
+const trees_heavy_equipment = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="57" height="46" viewBox="0 0 57 46">
     <defs>
         <path id="b" d="M493.503 274.517a3.241 3.241 0 0 1 0 6.483H473.55a3.241 3.241 0 1 1 0-6.483h19.954zm13.095-30.185a4 4 0 0 1 .74 1.227l6.794 17.924c1.545 4.346 1.027 7.756-1.554 10.23-2.58 2.473-6.395 2.577-11.444.313l9.689-8.58-5.245-15.703a2 2 0 0 0-3.501-.561l-10.652 14.301v7.388a1 1 0 0 1-1 1H467a1 1 0 0 1-1-1v-6.388a1 1 0 0 1 1-1h10.514v-5.108a1 1 0 0 1 1-1h7.246l15.192-13.398a4 4 0 0 1 5.646.355z"/>
         <filter id="a" width="128.6%" height="136.9%" x="-14.3%" y="-13.2%" filterUnits="objectBoundingBox">
@@ -507,7 +506,7 @@ let trees_heavy_equipment = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink
     </g>{{multiple}}
 </svg>`;
 
-let trees = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="48" viewBox="0 0 54 48">
+const trees = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="54" height="48" viewBox="0 0 54 48">
     <defs>
         <path id="b" d="M403 242l13.788 14.398h-7.337l11.949 12.48-7.965-.001L426 282h-46l12.356-13.124H384.6l11.751-12.479h-7.139L403 242z"/>
         <filter id="a" width="130.4%" height="135%" x="-15.2%" y="-12.5%" filterUnits="objectBoundingBox">
@@ -524,7 +523,7 @@ let trees = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.
     </g>{{multiple}}
 </svg>`;
 
-let unknown = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="52" height="52" viewBox="0 0 52 52">
+const unknown = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="52" height="52" viewBox="0 0 52 52">
     <defs>
         <path id="b" d="M576 240c12.15 0 22 9.85 22 22s-9.85 22-22 22-22-9.85-22-22 9.85-22 22-22zm-.663 29.106a3.049 3.049 0 0 0-3.056 3.056c0 1.694 1.326 3.056 2.983 3.056 1.693 0 3.092-1.362 3.092-3.056 0-1.693-1.362-3.056-3.019-3.056zm.737-20.324c-3.793 0-6.223 1.84-7.143 2.798l2.246 3.166c.662-.515 1.914-1.693 3.976-1.693 1.62 0 3.02.736 3.02 2.54 0 1.51-1.4 2.246-2.43 2.983-2.725 1.951-3.83 4.087-3.24 7.07l.183.956h4.234a14.293 14.293 0 0 1-.073-1.288c.037-1.547.589-3.35 2.835-4.787 1.326-.847 3.387-2.209 3.387-5.596 0-3.867-3.24-6.15-6.995-6.15z"/>
         <filter id="a" width="131.8%" height="131.8%" x="-15.9%" y="-11.4%" filterUnits="objectBoundingBox">
@@ -541,38 +540,35 @@ let unknown = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w
     </g>{{multiple}}
 </svg>`;
 
-let templates = {
-    circle,
-    plus,
-    construction_consultation,
-    core_relief_items,
-    debris,
-    deferred_maintenance,
-    erosion,
-    escort,
-    fence,
-    fire,
-    food,
-    landslide,
-    leak,
-    mold_remediation,
-    muck_out,
-    other,
-    rebuild_total,
-    rebuild,
-    reject,
-    retardant_cleanup,
-    shelter,
-    snow_ground,
-    snow_roof,
-    structure,
-    temporary_housing,
-    trees_heavy_equipment,
-    trees,
-    unknown
+const templates = {
+  circle,
+  plus,
+  construction_consultation,
+  core_relief_items,
+  debris,
+  deferred_maintenance,
+  erosion,
+  escort,
+  fence,
+  fire,
+  food,
+  landslide,
+  leak,
+  mold_remediation,
+  muck_out,
+  other,
+  rebuild_total,
+  rebuild,
+  reject,
+  retardant_cleanup,
+  shelter,
+  snow_ground,
+  snow_roof,
+  structure,
+  temporary_housing,
+  trees_heavy_equipment,
+  trees,
+  unknown,
 };
 
-export {
-    templates,
-    colors
-};
+export { templates, colors };

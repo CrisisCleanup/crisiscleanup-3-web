@@ -1,5 +1,5 @@
 const state = {
-    worksitesLoading: false,
+  worksitesLoading: false,
 };
 
 // getters
@@ -10,15 +10,15 @@ const actions = {};
 
 // mutations
 const mutations = {
-    setWorksitesLoading (state, worksitesLoading) {
-        state.worksitesLoading = worksitesLoading
-    }
+  setWorksitesLoading(state, worksitesLoading) {
+    state.worksitesLoading = worksitesLoading;
+  },
 };
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations
-}
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations,
+};
