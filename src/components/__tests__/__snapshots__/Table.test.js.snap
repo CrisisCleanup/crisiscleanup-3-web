@@ -1,0 +1,247 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Table should handle page change 1`] = `
+Object {
+  "current": 1,
+  "page": 1,
+  "pageSize": 5,
+}
+`;
+
+exports[`Table should handle page change 2`] = `
+Object {
+  "current": 0,
+  "page": 1,
+  "pageSize": 5,
+}
+`;
+
+exports[`Table should handle page change 3`] = `
+Object {
+  "current": 0,
+  "page": 1,
+  "pageSize": 5,
+}
+`;
+
+exports[`Table should handle page size change 1`] = `
+Object {
+  "current": 1,
+  "page": 1,
+  "pageSize": 5,
+}
+`;
+
+exports[`Table should handle page size change 2`] = `
+Object {
+  "current": 1,
+  "page": 1,
+  "pageSize": 5,
+}
+`;
+
+exports[`Table should render correctly and match snapshot 1`] = `
+<div
+  class="table w-full"
+>
+  <div
+    class="header text-gray-600 bg-white"
+    style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
+  >
+    <!---->
+     
+    <div
+      class="p-2 border-b flex items-center"
+    >
+      One
+    </div>
+    <div
+      class="p-2 border-b flex items-center"
+    >
+      Two
+    </div>
+  </div>
+   
+  <div
+    class="body bg-white relative"
+    style="max-height: 600px; overflow: auto;"
+  >
+    <!---->
+     
+    <div
+      class="hover:bg-gray-100"
+      style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
+    >
+      <!---->
+       
+      <div
+        class="flex items-center p-2 border-b cursor-pointer"
+      >
+        
+                    
+                
+      </div>
+      <div
+        class="flex items-center p-2 border-b cursor-pointer"
+      >
+        
+                    
+                
+      </div>
+    </div>
+    <div
+      class="hover:bg-gray-100"
+      style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
+    >
+      <!---->
+       
+      <div
+        class="flex items-center p-2 border-b cursor-pointer"
+      >
+        
+                    
+                
+      </div>
+      <div
+        class="flex items-center p-2 border-b cursor-pointer"
+      >
+        
+                    
+                
+      </div>
+    </div>
+  </div>
+   
+  <!---->
+</div>
+`;
+
+exports[`Table should render correctly with selection and pagination 1`] = `
+<div
+  class="table w-full"
+  enablepagination="true"
+>
+  <div
+    class="header text-gray-600 bg-white"
+    style="display: grid; grid-template-columns: 35px 0.5fr 1.5fr;"
+  >
+    <div
+      class="flex items-center p-2 border-b"
+    >
+      <label
+        class="checkbox-container mb-5"
+      >
+         
+        <input
+          type="checkbox"
+        />
+         
+        <span
+          class="checkmark"
+        />
+      </label>
+    </div>
+     
+    <div
+      class="p-2 border-b flex items-center"
+    >
+      One
+    </div>
+    <div
+      class="p-2 border-b flex items-center"
+    >
+      Two
+    </div>
+  </div>
+   
+  <div
+    class="body bg-white relative"
+    style="max-height: 600px; overflow: auto;"
+  >
+    <!---->
+     
+    <div
+      class="hover:bg-gray-100"
+      style="display: grid; grid-template-columns: 35px 0.5fr 1.5fr;"
+    >
+      <div
+        class="flex items-center p-2 border-b"
+      >
+        <label
+          class="checkbox-container mb-5"
+        >
+           
+          <input
+            type="checkbox"
+          />
+           
+          <span
+            class="checkmark"
+          />
+        </label>
+      </div>
+       
+      <div
+        class="flex items-center p-2 border-b cursor-pointer"
+      >
+        
+                    
+                
+      </div>
+      <div
+        class="flex items-center p-2 border-b cursor-pointer"
+      >
+        
+                    
+                
+      </div>
+    </div>
+    <div
+      class="hover:bg-gray-100"
+      style="display: grid; grid-template-columns: 35px 0.5fr 1.5fr;"
+    >
+      <div
+        class="flex items-center p-2 border-b"
+      >
+        <label
+          class="checkbox-container mb-5"
+        >
+           
+          <input
+            type="checkbox"
+          />
+           
+          <span
+            class="checkmark"
+          />
+        </label>
+      </div>
+       
+      <div
+        class="flex items-center p-2 border-b cursor-pointer"
+      >
+        
+                    
+                
+      </div>
+      <div
+        class="flex items-center p-2 border-b cursor-pointer"
+      >
+        
+                    
+                
+      </div>
+    </div>
+  </div>
+   
+  <!---->
+</div>
+`;
+
+exports[`Table should update selected items 1`] = `
+Set {
+  "one_index",
+}
+`;
+
+exports[`Table should update selected items 2`] = `Set {}`;
