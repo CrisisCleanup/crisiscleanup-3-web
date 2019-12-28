@@ -22,39 +22,73 @@
                   <a-form-item class="input-container m-1 mb-3">
                     <label>First Name</label>
                     <a-input
-                      v-decorator="['first_name', {initialValue: this.currentUser.first_name, rules: [{ required: true, message: 'First name is required' }]}]"
-                      size="small"
-                                                 style="border: 0;"/>
+                      v-decorator="[
+                        'first_name',
+                        {
+                          initialValue: this.currentUser.first_name,
+                          rules: [
+                            {
+                              required: true,
+                              message: 'First name is required',
+                            },
+                          ],
+                        },
                       ]"
+                      size="small"
+                      style="border: 0;"
                     />
+                    ]" />
                   </a-form-item>
                   <a-form-item class="input-container m-1 mb-3">
                     <label>Phone Number</label>
                     <a-input
-                      v-decorator="['phone_number', {initialValue: this.currentUser.mobile}]"
-                                                 size="small"/>
+                      v-decorator="[
+                        'phone_number',
+                        { initialValue: this.currentUser.mobile },
                       ]"
+                      size="small"
                     />
+                    ]" />
                   </a-form-item>
                 </div>
                 <div class="flex">
                   <a-form-item class="input-container m-1 mb-3">
                     <label>Last Name</label>
                     <a-input
-                      v-decorator="['last_name', {initialValue: this.currentUser.last_name, rules: [{ required: true, message: 'Last name is required' }]}]"
-                                                 size="small"/>
+                      v-decorator="[
+                        'last_name',
+                        {
+                          initialValue: this.currentUser.last_name,
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Last name is required',
+                            },
+                          ],
+                        },
                       ]"
+                      size="small"
                     />
+                    ]" />
                   </a-form-item>
                   <a-form-item class="input-container m-1 mb-3">
                     <label>Email</label>
                     <a-input
-                      v-decorator="['email', {initialValue: this.currentUser.email, rules: [{ required: true, message: 'Email address is required' }]}]"
-                                                 size="small"/>
+                      v-decorator="[
+                        'email',
+                        {
+                          initialValue: this.currentUser.email,
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Email address is required',
+                            },
                           ],
                         },
                       ]"
+                      size="small"
                     />
+                    ], }, ]" />
                   </a-form-item>
                 </div>
               </div>
@@ -63,10 +97,18 @@
                 <div class="p-1 flex-grow">
                   <a-form-item label="">
                     <a-select
-                      v-decorator="['role', {rules: [{ required: true, message: 'Please select your role!' }]}]"
-                                                size="large"
+                      v-decorator="[
+                        'role',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Please select your role!',
+                            },
+                          ],
                         },
                       ]"
+                      size="large"
                       placeholder="Role"
                       @change="handleSelectChange"
                     >
@@ -119,11 +161,21 @@
                     <label class="pr-3">Facebook</label>
                   </div>
                   <a-input
-                    v-decorator="['email', {rules: [{ required: true, message: 'Please input your note!' }]}]"
-                    size="medium"
-                                             class="w-1/2"/>
+                    v-decorator="[
+                      'email',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please input your note!',
+                          },
+                        ],
+                      },
                     ]"
+                    size="medium"
+                    class="w-1/2"
                   />
+                  ]" />
                 </div>
                 <div class="flex py-3 items-center">
                   <div class="w-1/5 flex items-center">
@@ -134,14 +186,21 @@
                     <label class="pr-3">Twitter</label>
                   </div>
                   <a-input
-                    v-decorator="['email', {rules: [{ required: true, message: 'Please input your note!' }]}]"
-                    size="medium"
-                                             class="w-1/2"/>
+                    v-decorator="[
+                      'email',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Please input your note!',
                           },
                         ],
                       },
                     ]"
+                    size="medium"
+                    class="w-1/2"
                   />
+                  }, ], }, ]" />
                 </div>
               </div>
               <hr class="p-4 m-auto" />
