@@ -398,7 +398,6 @@
 <script>
 import { gmapApi } from 'vue2-google-maps';
 import { mapState } from 'vuex';
-import Highlighter from 'vue-highlight-words';
 import { throttle } from 'lodash';
 import * as L from 'leaflet';
 import Worksite from '@/models/Worksite';
@@ -409,7 +408,6 @@ import Table from '@/components/Table';
 import WorksiteMap from '@/components/WorksiteMap';
 import WorksiteFilters from '@/components/WorksiteFilters';
 import Status from '@/models/Status';
-import Autocomplete from '@/components/Autocomplete';
 import { getQueryString } from '@/utils/urls';
 import { getColorForStatus } from '@/filters';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';
@@ -458,7 +456,6 @@ export default {
     WorksiteMap,
     WorksiteFilters,
     Table,
-    Highlighter,
   },
   data() {
     return {
@@ -551,7 +548,8 @@ export default {
       });
     },
 
-    updateUserState(data) {
+    updateUserState(incomingData) {
+      let data = incomingData;
       if (!data) {
         data = {};
       }
@@ -582,6 +580,8 @@ export default {
 
     applyLayers(value, layerList, key) {
       if (value && this.map) {
+        // TODO: Refactor to abide with code style
+        // eslint-disable-next-line no-restricted-syntax
         for (const location of layerList) {
           const geojsonFeature = {
             type: 'Feature',
@@ -746,12 +746,11 @@ export default {
         work_type__work_type__in: '',
       };
       const entries = Object.entries(this.filters.fields);
-      for (const [work_type, values] of entries) {
+      entries.forEach(([work_type, values]) => {
         if (values) {
           appliedFilters.work_type__work_type__in += `${work_type},`;
         }
-      }
-
+      });
       if (!Object.values(this.filters.fields).some(value => Boolean(value))) {
         delete appliedFilters.work_type__work_type__in;
       }
@@ -808,6 +807,8 @@ export default {
       this.forceFileDownload(csv.response);
       this.spinning = false;
     },
+    // TODO: refactor, id param is unused
+    // eslint-disable-next-line no-unused-vars
     async jumpToCase(id) {
       this.toggleView('showingMap');
 
@@ -845,7 +846,9 @@ export default {
       let fileName = 'unknown';
       if (contentDisposition) {
         const fileNameMatch = contentDisposition.match(/filename=(.+)/);
-        if (fileNameMatch.length === 2) fileName = fileNameMatch[1];
+        if (fileNameMatch.length === 2) {
+          [fileName] = fileNameMatch;
+        }
       }
       link.setAttribute('download', fileName);
       document.body.appendChild(link);
