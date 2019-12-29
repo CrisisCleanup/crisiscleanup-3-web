@@ -1,7 +1,6 @@
-import WorkType from '@/models/WorkType';
-import Status from '@/models/Status';
-import { colors } from '@/utils/colors';
 import { colors as iconColors } from '@/icons/icons_templates';
+import Status from '@/models/Status';
+import WorkType from '@/models/WorkType';
 
 export function snakeToTitleCase(value) {
   if (!value) return '';
@@ -14,11 +13,11 @@ export function snakeToTitleCase(value) {
     .join(' ');
 }
 
-export function getWorkTypeName(work_type) {
-  const work_types = WorkType.query()
-    .where('key', work_type)
+export function getWorkTypeName(workType) {
+  const workTypes = WorkType.query()
+    .where('key', workType)
     .get();
-  return work_types[0].name_t;
+  return workTypes[0].name_t;
 }
 
 export function getStatusName(statusKey) {
@@ -29,7 +28,7 @@ export function getStatusName(statusKey) {
 }
 
 export function getStatusBadge(status) {
-  const status_dict = {
+  const statusDict = {
     open_unassigned: 'error',
     open_assigned: 'processing',
     'open_partially-completed': 'processing',
@@ -45,16 +44,16 @@ export function getStatusBadge(status) {
     closed_duplicate: 'default',
     'closed_marked-for-deletion': 'default',
   };
-  return status_dict[status];
+  return statusDict[status];
 }
 
-export const getColorForWorkType = work_type => {
-  if (!work_type) {
+export const getColorForWorkType = workType => {
+  if (!workType) {
     return '';
   }
 
-  const colorsKey = `${work_type.status}_${
-    work_type.claimed_by ? 'claimed' : 'unclaimed'
+  const colorsKey = `${workType.status}_${
+    workType.claimed_by ? 'claimed' : 'unclaimed'
   }`;
   const colors = iconColors[colorsKey];
   return colors.fillColor;

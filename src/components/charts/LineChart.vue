@@ -11,7 +11,7 @@ export default {
   props: ['chartData', 'options'],
   mounted() {
     const ctx = this.$refs.chart;
-    new Chart(ctx, {
+    return new Chart(ctx, {
       type: 'line',
       data: this.chartData,
       options: this.options,
