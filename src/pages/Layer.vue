@@ -1,6 +1,13 @@
 <template>
-  <div class="flex h-full">
-    <div class="w-84 mx-2 flex flex-col">
+  <div class="flex h-full relative">
+    <div
+      v-if="loading"
+      style="z-index: 1001;"
+      class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center"
+    >
+      <spinner />
+    </div>
+    <div v-else class="w-84 mx-2 flex flex-col">
       <div class="h-16 flex items-center justify-between">
         <div class="font-bold">New Layer</div>
         <div class="flex">
@@ -34,6 +41,7 @@
         </div>
       </div>
       <form
+        v-if="currentLayer"
         ref="form"
         class="form flex-grow flex flex-col justify-between"
         @submit.prevent="saveLayer"
@@ -46,7 +54,7 @@
             size="large"
             placeholder="Layer Name"
           />
-          <FormSelect
+          <form-select
             v-model="currentLayer.type"
             :options="layerTypes"
             placeholder="Layer Type"
@@ -89,6 +97,7 @@
     <div class="flex-grow flex flex-col">
       <CustomLayersTool
         v-if="currentLayer"
+        ref="layerTool"
         class="h-full"
         :locations="currentLayer.locations"
       />
@@ -97,16 +106,19 @@
 </template>
 
 <script>
+import * as circleToPolygon from 'circle-to-polygon'
+import * as L from 'leaflet';
 import CustomLayersTool from '@/components/CustomLayersTool';
-import FormSelect from '@/components/FormSelect';
 import Layer from '@/models/Layer';
+import Location from "@/models/Location";
 
 export default {
   name: 'Layer',
-  components: { FormSelect, CustomLayersTool },
+  components: { CustomLayersTool },
   data() {
     return {
       currentLayer: null,
+      loading: false,
       layerName: '',
       layerDescription: '',
       layerType: '',
@@ -115,6 +127,7 @@ export default {
     };
   },
   async mounted() {
+    this.loading = true;
     if (this.$route.params.layer_id) {
       try {
         await Layer.api().fetchById(this.$route.params.layer_id);
@@ -122,13 +135,59 @@ export default {
       } catch (e) {
         this.currentLayer = new Layer();
         await this.$router.replace(`/layers/new`);
+      } finally {
+        this.loading = false;
       }
     } else {
       this.currentLayer = new Layer();
     }
+    this.loading = false;
   },
   methods: {
-    saveLayer() {},
+    async saveLayer() {
+      this.loading = true;
+      const locationPromises = [];
+
+      this.$refs.layerTool.drawnItems.getLayers().forEach(location => {
+        const data = {
+
+        };
+        this.$log.debug(location.toGeoJSON());
+        let { geometry } = location.toGeoJSON();
+        if (location instanceof L.Circle) {
+          const radius = location.getRadius();
+          const { coordinates } = geometry;
+          const numberOfEdges = 32;
+
+          geometry = circleToPolygon(coordinates, radius, numberOfEdges);
+        }
+        if (geometry.type === 'Point') {
+          data.point = geometry
+        } else if (geometry.type === 'Polygon') {
+          data.poly = geometry
+        }
+        locationPromises.push(Location.api().post('/locations', data));
+      });
+
+      try {
+        const locationResults = await Promise.all(locationPromises);
+        const locations = locationResults.map(result => {
+          return result.entities.locations[0].id
+        });
+
+        const layerResult = await Layer.api().post('/layers', {
+          ...this.currentLayer,
+          locations,
+        });
+        this.$log.debug(layerResult.entities.layers[0].id);
+        await this.$router.push(`/layers/${layerResult.entities.layers[0].id}`);
+
+      } catch (e) {
+        this.$log.error(e);
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 };
 </script>
@@ -138,3 +197,4 @@ export default {
   @apply my-2;
 }
 </style>
+</style

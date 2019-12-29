@@ -99,7 +99,7 @@ const routes = [
     meta: { layout: 'authenticated' },
   },
   {
-    path: '/layers/:id',
+    path: '/layers/:layer_id',
     component: Layer,
     name: 'EditLayer',
     meta: { layout: 'authenticated' },

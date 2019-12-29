@@ -7,7 +7,8 @@ export default class Layer extends Model {
     return {
       id: this.increment(),
       title: this.string(''),
-      descripton: this.string(''),
+      type: this.string(''),
+      description: this.string(''),
       locations: this.attr([]),
       available_to: this.attr([]),
     };
