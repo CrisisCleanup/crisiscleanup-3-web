@@ -1,4 +1,4 @@
-const state = {
+const AppState = {
   currentIncidentId: null,
 };
 
@@ -17,7 +17,7 @@ const mutations = {
 
 export default {
   namespaced: true,
-  state,
+  state: AppState,
   getters,
   actions,
   mutations,

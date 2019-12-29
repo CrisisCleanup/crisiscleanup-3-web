@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable  */
 const Handlebars = require('handlebars');
 
 const colors = {
