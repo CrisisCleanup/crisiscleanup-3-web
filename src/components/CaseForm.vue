@@ -438,7 +438,7 @@ export default {
     };
   },
   methods: {
-    handleSubmit ()  {},
+    handleSubmit() {},
     updateWorksite(value, key) {
       if (this.worksite.id) {
         Worksite.update({
