@@ -288,6 +288,8 @@ export default {
     };
   },
   mounted() {
+    /* eslint-disable no-restricted-syntax */
+    /* TODO: refactor after unit tests are complete */
     for (const type of this.incidentTypes) {
       this.filters.sub_fields[type.key] = {};
     }
@@ -305,6 +307,7 @@ export default {
         }
       }
     },
+    /* eslint-enable no-restricted-syntax */
     setOpenClosed(value, status) {
       this.filters.statuses.open = false;
       this.filters.statuses.closed = false;

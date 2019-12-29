@@ -6,6 +6,8 @@ export const groupBy = key => array =>
   }, {});
 
 export const buildForm = (key, dict, array) => {
+  // TODO: refactor after writing unit tests
+  // eslint-disable-next-line no-restricted-syntax
   for (const item of dict[key]) {
     if (item.label_t) {
       array.push(item);

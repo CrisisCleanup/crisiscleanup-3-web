@@ -4,6 +4,7 @@
  *
  * @url http://stackoverflow.com/a/14231286/538646
  */
+/* eslint-disable no-restricted-syntax */
 export function averageGeolocation(coords) {
   if (coords.length === 1) {
     return coords[0];
