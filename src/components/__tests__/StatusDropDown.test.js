@@ -5,14 +5,10 @@
  * Components
  */
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
 import { createLocalVue, shallowMount } from "@vue/test-utils";
 import Vuex from "vuex";
 import StatusDropDown from "../StatusDropDown";
 jest.mock("@/models/Status");
-
-library.add(fas);
 
 const localVue = createLocalVue();
 
