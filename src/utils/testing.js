@@ -5,6 +5,39 @@
  * utils
  */
 
+export const MockOrganizations = [
+  {
+    id: 1,
+    name: "Test Organization",
+    url: null,
+    is_active: null,
+    org_verified: null,
+    created_at: "2019-12-25T18:24:05Z",
+    updated_at: "2019-12-25T18:24:05Z"
+  }
+];
+
+export const MockUsers = [
+  {
+    id: 1,
+    first_name: "First",
+    last_name: "Last",
+    organization: {
+      id: 1,
+      name: "Test Organization"
+    }
+  },
+  {
+    id: 2,
+    first_name: "Test",
+    last_name: "Last",
+    organization: {
+      id: 1,
+      name: "Test Organization"
+    }
+  }
+];
+
 export const MockWorkTypes = [
   {
     id: 1,
@@ -110,3 +143,34 @@ export const MockWorksites = [
     ]
   }
 ];
+
+export const MockIncident = {
+  id: 99,
+  name: "Texas Flooding, Oct 2018",
+  case_label: "A",
+  start_at: "2018-10-17T00:00:00Z",
+  form_fields: [
+    {
+      label_t: "formLabels.phone1",
+      html_type: "text",
+      data_sensitivity: "verySensitive",
+      data_group: "personalInfo",
+      help_t: "formLabels.phone1_help",
+      placeholder_t: "formLabels.phone1_placeholder",
+      is_required_default: true,
+      is_read_only_default: false,
+      read_only_break_glass: false,
+      values_default: null,
+      validation: "string",
+      values: null,
+      is_required: null,
+      is_read_only: null,
+      list_order: 11,
+      replaced_at: null,
+      field_key: "phone1",
+      field_parent_key: "property_info",
+      if_selected_then_work_type: null,
+      phase: 4
+    }
+  ]
+};

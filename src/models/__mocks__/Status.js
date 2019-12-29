@@ -30,5 +30,10 @@ export const MockStatus = [
 ];
 
 export default {
-  all: jest.fn(() => MockStatus)
+  all: jest.fn(() => MockStatus),
+  query: () => ({
+    where: () => ({
+      get: () => MockStatus
+    })
+  })
 };
