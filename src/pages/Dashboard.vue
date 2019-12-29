@@ -3,13 +3,13 @@
     <div v-if="!loading">
       <div class="flex">
         <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
-          <div>My Claimed Cases ({{ this.currentIncident.name }})</div>
+          <div>My Claimed Cases ({{ currentIncident.name }})</div>
           <div class="font-bold">
             {{ claimedWorksites.length | numeral('0,0') }}
           </div>
         </div>
         <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-          <div>Total Claimed ({{ this.currentIncident.name }})</div>
+          <div>Total Claimed ({{ currentIncident.name }})</div>
           <div class="font-bold">
             {{ totalClaimed | numeral('0,0') }} ({{
               (totalClaimed / totalWorksites) | numeral('0%')
@@ -22,7 +22,7 @@
           ></div>
         </div>
         <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-          <div>In Progress ({{ this.currentIncident.name }})</div>
+          <div>In Progress ({{ currentIncident.name }})</div>
           <div class="font-bold">
             {{ totalInProgess | numeral('0,0') }} ({{
               (totalInProgess / totalWorksites) | numeral('0%')
@@ -35,7 +35,7 @@
           ></div>
         </div>
         <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-          <div>Closed ({{ this.currentIncident.name }})</div>
+          <div>Closed ({{ currentIncident.name }})</div>
           <div class="font-bold">
             {{ totalClosed | numeral('0,0') }} ({{
               (totalClosed / totalWorksites) | numeral('0%')
@@ -55,9 +55,10 @@
             <template v-for="worksite in claimedWorksites">
               <template>
                 <div
+                  :key="worksite.id"
                   class="flex justify-between items-center border-b last:border-b-0 py-2"
                 >
-                  <div class="badge-holder flex items-center w-1/12">
+                  <div class="badge-holder flex items-center w-20">
                     <badge
                       class="mx-1"
                       :color="
@@ -68,20 +69,23 @@
                     {{ worksite.case_number }}
                   </div>
                   <div class="w-4/12">
-                    <template
-                      v-for="(work_type, index) in worksite.work_types"
-                      v-if="
-                        work_type.claimed_by === currentUser.organization.id
-                      "
-                    >
-                      {{ work_type.work_type | getWorkTypeName
-                      }}<span v-if="index !== worksite.work_types.length - 1"
-                        >,</span
+                    <template v-for="(work_type, index) in worksite.work_types">
+                      <span
+                        v-if="
+                          work_type.claimed_by === currentUser.organization.id
+                        "
+                        :key="work_type.id"
+                        >{{ work_type.work_type | getWorkTypeName }}
+                        <span v-if="index !== worksite.work_types.length - 1"
+                          >,</span
+                        ></span
                       >
                     </template>
                   </div>
                   <span class="w-3/12">{{ worksite.name }}</span>
-                  <span class="w-3/12">{{ worksite.form_fields.phone1 }}</span>
+                  <span class="w-3/12">{{
+                    worksite.form_fields && worksite.form_fields.phone1
+                  }}</span>
                   <router-link
                     class="w-1/12 self-end"
                     :to="
@@ -216,6 +220,43 @@ export default {
         },
       },
     };
+  },
+  computed: {
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
+    },
+    currentIncident() {
+      const incident = Incident.find(this.currentIncidentId);
+      if (incident) {
+        return incident;
+      }
+      return {};
+    },
+    ...mapState('incident', ['currentIncidentId']),
+    claimedWorksites() {
+      return Worksite.query()
+        .where(worksite => {
+          if (
+            worksite.work_types &&
+            this.currentIncidentId === worksite.incident
+          ) {
+            return worksite.work_types.find(
+              work_type =>
+                work_type.claimed_by === this.currentUser.organization.id,
+            );
+          }
+          return false;
+        })
+        .get();
+    },
+  },
+  watch: {
+    async currentIncidentId() {
+      await Worksite.deleteAll();
+      this.loading = true;
+      await this.reloadDashBoard();
+      this.loading = false;
+    },
   },
   async mounted() {
     this.loading = true;
@@ -381,43 +422,6 @@ export default {
     },
     randomScalingFactor(x, y) {
       return Math.round(rand(x, y));
-    },
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    currentIncident() {
-      const incident = Incident.find(this.currentIncidentId);
-      if (incident) {
-        return incident;
-      }
-      return {};
-    },
-    ...mapState('incident', ['currentIncidentId']),
-    claimedWorksites() {
-      return Worksite.query()
-        .where(worksite => {
-          if (
-            worksite.work_types &&
-            this.currentIncidentId === worksite.incident
-          ) {
-            return worksite.work_types.find(
-              work_type =>
-                work_type.claimed_by === this.currentUser.organization.id,
-            );
-          }
-          return false;
-        })
-        .get();
-    },
-  },
-  watch: {
-    async currentIncidentId() {
-      await Worksite.deleteAll();
-      this.loading = true;
-      await this.reloadDashBoard();
-      this.loading = false;
     },
   },
 };
