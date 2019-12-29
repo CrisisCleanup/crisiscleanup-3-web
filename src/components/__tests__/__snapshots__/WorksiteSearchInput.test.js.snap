@@ -41,5 +41,9 @@ Object {
   "first_name": "First",
   "id": 1,
   "last_name": "Last",
+  "organization": Object {
+    "id": 1,
+    "name": "Test Organization",
+  },
 }
 `;
