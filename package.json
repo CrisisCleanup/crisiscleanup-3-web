@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve --mode local",
     "serve-dev": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint --ignore-path .gitignore .",
+    "lint-fix": "vue-cli-service lint --ignore-path .gitignore .",
+    "lint": "vue-cli-service lint --no-fix --ignore-path .gitignore .",
     "prettify": "prettier --write ./**/*.{js,vue}",
     "deploy-staging": "vue-cli-service build --mode staging && vue-cli-service s3-deploy",
     "compile-icons": "./template-compiler.js"

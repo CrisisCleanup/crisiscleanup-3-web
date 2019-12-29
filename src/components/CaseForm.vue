@@ -30,7 +30,7 @@
               updateWorksite(value, 'what3words');
             }
           "
-        ></base-input>
+        />
 
         <div class="flex justify-around items-center">
           <base-button
@@ -142,7 +142,7 @@
             }
           "
           @change="findPotentialGeocode"
-        ></base-input>
+        />
       </div>
       <div class="py-1">
         <base-input
@@ -157,7 +157,7 @@
             }
           "
           @change="findPotentialGeocode"
-        ></base-input>
+        />
       </div>
       <div class="py-1">
         <base-input
@@ -172,7 +172,7 @@
             }
           "
           @change="findPotentialGeocode"
-        ></base-input>
+        />
       </div>
       <div class="py-1">
         <base-input
@@ -182,7 +182,7 @@
           placeholder="Postal Code"
           required
           @change="findPotentialGeocode"
-        ></base-input>
+        />
       </div>
       <template v-for="field in this.fields">
         <div
@@ -433,10 +433,9 @@ export default {
         form_data: [],
       };
     }
-    this.dynamicFields = Object.assign(
-      {},
+    this.dynamicFields = {
       ...this.worksite.form_data.map(s => ({ [s.field_key]: s.field_value })),
-    );
+    };
   },
   methods: {
     handleSubmit() {},
