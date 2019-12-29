@@ -96,6 +96,8 @@ const getOpacity = date => {
   const percentage =
     ((currentDate.unix() - sixty_days_ago.unix()) / spread) * 100.0;
 
+  // TODO: refactor
+  // eslint-disable-next-line no-unused-vars
   const closestOpacity = opacity_buckets.reduce((prev, curr) =>
     Math.abs(curr - percentage) < Math.abs(prev - percentage) ? curr : prev,
   );
@@ -194,8 +196,7 @@ export default {
         this.initMap();
       } else {
         const markerSprite = this.pixiContainer.children.find(
-          markerSprite =>
-            parseInt(markerSprite.data.id) === parseInt(worksite_id),
+          ms => parseInt(ms.data.id) === parseInt(worksite_id),
         );
         markerSprite.data = Worksite.find(worksite_id);
 
@@ -212,12 +213,12 @@ export default {
           this.map.getZoom() < INTERACTIVE_ZOOM_LEVEL
             ? this.templates.circle
             : this.templates[work_type.work_type] || this.templates.unknown;
-        const colors = this.colors[colorsKey];
+        const spriteColors = this.colors[colorsKey];
 
-        if (colors) {
+        if (spriteColors) {
           const svg = worksiteTemplate
-            .replace('{{fillColor}}', colors.fillColor)
-            .replace('{{strokeColor}}', colors.strokeColor)
+            .replace('{{fillColor}}', spriteColors.fillColor)
+            .replace('{{strokeColor}}', spriteColors.strokeColor)
             .replace(
               '{{multiple}}',
               markerSprite.data.work_types.length > 1
@@ -333,12 +334,12 @@ export default {
                     ? self.templates.circle
                     : self.templates[work_type.work_type] ||
                       self.templates.unknown;
-                const colors = self.colors[colorsKey];
+                const spriteColors = self.colors[colorsKey];
 
-                if (colors) {
+                if (spriteColors) {
                   const svg = worksiteTemplate
-                    .replace('{{fillColor}}', colors.fillColor)
-                    .replace('{{strokeColor}}', colors.strokeColor)
+                    .replace('{{fillColor}}', spriteColors.fillColor)
+                    .replace('{{strokeColor}}', spriteColors.strokeColor)
                     .replace(
                       '{{multple}}',
                       marker.work_types.length > 1 ? self.templates.plus : '',
@@ -442,12 +443,12 @@ export default {
                     ? self.templates.circle
                     : self.templates[work_type.work_type] ||
                       self.templates.unknown;
-                const colors = self.colors[colorsKey];
+                const spriteColors = self.colors[colorsKey];
 
-                if (colors) {
+                if (spriteColors) {
                   const svg = worksiteTemplate
-                    .replace('{{fillColor}}', colors.fillColor)
-                    .replace('{{strokeColor}}', colors.strokeColor)
+                    .replace('{{fillColor}}', spriteColors.fillColor)
+                    .replace('{{strokeColor}}', spriteColors.strokeColor)
                     .replace(
                       '{{multiple}}',
                       markerSprite.data.work_types.length > 1
@@ -470,9 +471,8 @@ export default {
             const delta = 250;
 
             function animate(timestamp) {
-              let progress;
               if (start === null) start = timestamp;
-              progress = timestamp - start;
+              const progress = timestamp - start;
               let lambda = progress / delta;
               if (lambda > 1) lambda = 1;
               lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
