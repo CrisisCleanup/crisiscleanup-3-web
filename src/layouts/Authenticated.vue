@@ -40,6 +40,8 @@
           <div class="flex items-center ml-2">
             <div class="h-10 w-10 rounded-full bg-blue-500"></div>
             <div class="flex flex-col ml-2">
+              <!-- eslint-disable vue/valid-v-model -->
+              <!-- TODO: refactor v-model -->
               <base-select
                 v-if="incidents"
                 v-model="currentIncident && currentIncident.name"
@@ -50,6 +52,7 @@
                 style="width: 250px"
                 :change="handleChange"
               >
+                <!-- eslint-enable vue/valid-v-model -->
                 <template v-slot:options>
                   <a-select-option
                     v-for="incident in incidents"
