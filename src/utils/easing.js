@@ -1,8 +1,8 @@
 import { quadtree } from 'd3-quadtree';
 import { Sprite } from 'pixi.js';
 
-export function solveCollision(circles, opts) {
-  opts = opts || {};
+export function solveCollision(circles, options) {
+  const opts = options || {};
   const tree = quadtree()
     .x(function(d) {
       return d.xp;
@@ -83,7 +83,7 @@ export function solveCollision(circles, opts) {
         if (!quad.length) {
           do {
             if (
-              quad.data != d &&
+              quad.data !== d &&
               d.xMax > quad.data.xMin &&
               d.xMin < quad.data.xMax &&
               d.yMax > quad.data.yMin &&
@@ -91,7 +91,7 @@ export function solveCollision(circles, opts) {
             ) {
               fixCollision(quad.data);
             }
-          } while ((quad = quad.next));
+          } while (quad === quad.next);
         }
         return (
           x1 > d.xMax + rMax ||
@@ -162,13 +162,13 @@ export function findMarker(layerPoint, quad, zoom) {
   const maxR = quadTree.rMax;
   let marker;
   let found = false;
-  quadTree.visit((quad, x1, y1, x2, y2) => {
-    if (!quad.length) {
-      const dx = quad.data.x - layerPoint.x;
-      const dy = quad.data.y - layerPoint.y;
-      const r = quad.data.scale.x * 8; // 16;
+  quadTree.visit((qd, x1, y1, x2, y2) => {
+    if (!qd.length) {
+      const dx = qd.data.x - layerPoint.x;
+      const dy = qd.data.y - layerPoint.y;
+      const r = qd.data.scale.x * 8; // 16;
       if (dx * dx + dy * dy <= r * r) {
-        marker = quad.data;
+        marker = qd.data;
         found = true;
       }
     }
