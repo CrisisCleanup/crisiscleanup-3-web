@@ -1,29 +1,28 @@
 <template>
-    <div class="chart-container">
-        <canvas ref="chart"></canvas>
-    </div>
+  <div class="chart-container">
+    <canvas ref="chart"></canvas>
+  </div>
 </template>
 
 <script>
-    import Chart from 'chart.js';
+import Chart from 'chart.js';
 
-    export default {
-        props: ['chartData', 'options'],
-        mounted () {
-            let ctx = this.$refs.chart;
-            new Chart(ctx, {
-                type: 'line',
-                data: this.chartData,
-                options: this.options
-            });
-
-        }
-    }
+export default {
+  props: ['chartData', 'options'],
+  mounted() {
+    const ctx = this.$refs.chart;
+    return new Chart(ctx, {
+      type: 'line',
+      data: this.chartData,
+      options: this.options,
+    });
+  },
+};
 </script>
 
 <style>
-    .chart-container {
-        width: 900px;
-        margin: auto;
-    }
+.chart-container {
+  width: 900px;
+  margin: auto;
+}
 </style>

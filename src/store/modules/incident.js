@@ -1,5 +1,5 @@
-const state = {
-    currentIncidentId: null,
+const AppState = {
+  currentIncidentId: null,
 };
 
 // getters
@@ -10,15 +10,15 @@ const actions = {};
 
 // mutations
 const mutations = {
-    setCurrentIncidentId (state, currentIncidentId) {
-        state.currentIncidentId = currentIncidentId
-    }
+  setCurrentIncidentId(state, currentIncidentId) {
+    state.currentIncidentId = currentIncidentId;
+  },
 };
 
 export default {
-    namespaced: true,
-    state,
-    getters,
-    actions,
-    mutations
-}
+  namespaced: true,
+  state: AppState,
+  getters,
+  actions,
+  mutations,
+};
