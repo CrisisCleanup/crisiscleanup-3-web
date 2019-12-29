@@ -245,7 +245,7 @@ export default {
           newPage = this.pagination.current + 1;
           break;
         case 'previous':
-          newPage = this.pagination.current -= 1;
+          newPage = this.pagination.current - 1;
           break;
         default:
           newPage = value;

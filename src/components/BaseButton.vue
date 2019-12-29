@@ -59,6 +59,7 @@ export default {
       try {
         await this.action();
       } catch (e) {
+        // TODO: expose method for handling button exceptions
       } finally {
         this.disabled = false;
         this.loading = false;

@@ -43,6 +43,10 @@ module.exports = {
     'prettier/prettier': ['error', prettierOptions],
     'vue/require-v-for-key': 1,
     'vue/no-use-v-if-with-v-for': 1,
+    'new-cap': 0,
+    'no-underscore-dangle': 0,
+    'no-plusplus': 0,
+    radix: 0,
     // TODO: mitigate in the future
     'no-param-reassign': ['error', { props: false }],
     camelcase: 1,

@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       OpenIndicator: {
-        render(h) {
+        render() {
           return (
             <font-awesome-icon
               size="sm"

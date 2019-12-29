@@ -80,9 +80,9 @@ export default {
   methods: {
     nextItem(e) {
       if (e.keyCode === 38 && this.currentItem > 1) {
-        this.currentItem--;
+        this.currentItem -= 1;
       } else if (e.keyCode === 40 && this.currentItem < this.statuses.length) {
-        this.currentItem++;
+        this.currentItem += 1;
       }
     },
   },
