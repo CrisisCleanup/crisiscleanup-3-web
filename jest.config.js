@@ -3,7 +3,8 @@ module.exports = {
   collectCoverageFrom: [
     "src/**/*.{js,vue}",
     "!**/node_modules/**",
-    "!**/*.test.js"
+    "!**/*.test.js",
+    "!src/services/*.js"
   ],
   // TODO: integrate coveralls or something similiar
   moduleDirectories: ["src", "node_modules"],
