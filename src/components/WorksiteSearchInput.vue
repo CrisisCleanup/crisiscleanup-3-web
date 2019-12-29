@@ -134,7 +134,7 @@
                 let worksiteTemplate = templates[work_type.work_type] || templates['unknown'];
                 let svgColors = colors[colorsKey];
 
-                if (colors) {
+                if (svgColors) {
                     let svg = worksiteTemplate
                         .replace('{{fillColor}}', svgColors.fillColor)
                         .replace('{{strokeColor}}', svgColors.strokeColor)
