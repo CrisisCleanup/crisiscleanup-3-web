@@ -2,7 +2,6 @@ import { Model } from '@vuex-orm/core';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
 import WorkType from '@/models/WorkType';
-import Location from '@/models/Location';
 import { getQueryString } from '@/utils/urls';
 
 export default class Worksite extends Model {
@@ -38,7 +37,7 @@ export default class Worksite extends Model {
     return this.location ? this.location.coordinates[0] : 10;
   }
 
-  get form_fields() {
+  get formFields() {
     if (!this.form_data) {
       return {};
     }
@@ -51,13 +50,13 @@ export default class Worksite extends Model {
     }, {});
   }
 
-  static getWorkType(work_types, filters, organization) {
+  static getWorkType(workTypes, filters, organization) {
     // TODO: Unit Test
     let currentFilteredTypes = [];
     if (filters) {
       const { fields } = filters;
-      currentFilteredTypes = Object.keys(fields).filter(field_key =>
-        Boolean(fields[field_key]),
+      currentFilteredTypes = Object.keys(fields).filter(fieldKey =>
+        Boolean(fields[fieldKey]),
       );
     }
 
@@ -83,13 +82,13 @@ export default class Worksite extends Model {
         });
     };
 
-    const allWorkTypes = [...work_types].sort((a, b) => {
+    const allWorkTypes = [...workTypes].sort((a, b) => {
       return (
         WorkType.commercialValues[b.work_type] -
         WorkType.commercialValues[a.work_type]
       );
     });
-    const workTypesInFilter = [...work_types]
+    const workTypesInFilter = [...workTypes]
       .filter(type => currentFilteredTypes.includes(type.work_type))
       .sort((a, b) => {
         return (
@@ -135,8 +134,8 @@ export default class Worksite extends Model {
           `/worksites/${id}?${getQueryString(worksiteParams)}`,
         );
         const organizations = worksite.response.data.work_types
-          .filter(work_type => Boolean(work_type.claimed_by))
-          .map(work_type => work_type.claimed_by);
+          .filter(workType => Boolean(workType.claimed_by))
+          .map(workType => workType.claimed_by);
         await Organization.api().get(
           `/organizations?id__in=${organizations.join(',')}`,
           {
@@ -149,29 +148,29 @@ export default class Worksite extends Model {
         });
         return worksite;
       },
-      claimWorksite(id, work_types) {
+      claimWorksite(id, workTypes) {
         return this.post(
           `/worksites/${id}/claim`,
           {
-            work_types,
+            work_types: workTypes,
           },
           { save: false },
         );
       },
-      unclaimWorksite(id, work_types) {
+      unclaimWorksite(id, workTypes) {
         return this.post(
           `/worksites/${id}/unclaim`,
           {
-            work_types,
+            work_types: workTypes,
           },
           { save: false },
         );
       },
-      requestWorksite(id, work_types) {
+      requestWorksite(id, workTypes) {
         return this.post(
           `/worksites/${id}/request_take`,
           {
-            work_types,
+            work_types: workTypes,
           },
           { save: false },
         );
@@ -194,15 +193,17 @@ export default class Worksite extends Model {
           { save: false },
         );
       },
-      updateWorkTypeStatus(work_type_id, status) {
+      updateWorkTypeStatus(workTypeID, status) {
         return this.patch(
-          `/worksite_work_types/${work_type_id}`,
+          `/worksite_work_types/${workTypeID}`,
           {
             status,
           },
           { save: false },
         );
       },
+      // TODO: handle exceptions and ensure a value is returned
+      // eslint-disable-next-line consistent-return
       printWorksite(id) {
         try {
           return this.request({
@@ -216,6 +217,8 @@ export default class Worksite extends Model {
           // console.error(e)
         }
       },
+      // TODO: handle exceptions and ensure a value is returned
+      // eslint-disable-next-line consistent-return
       downloadWorksite(id) {
         try {
           return this.request({

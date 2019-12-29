@@ -51,6 +51,7 @@ module.exports = {
     'no-param-reassign': ['error', { props: false }],
     camelcase: 1,
     'global-require': 1,
+    'func-names': 0,
     // ----
   },
   settings: {

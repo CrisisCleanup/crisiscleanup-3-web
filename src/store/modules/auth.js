@@ -1,7 +1,7 @@
 import User from '@/models/User';
 import { AuthService } from '@/services/auth.service';
 
-const state = {
+const AuthState = {
   user: AuthService.getUser(),
 };
 
@@ -38,7 +38,7 @@ const mutations = {
 
 export default {
   namespaced: true,
-  state,
+  state: AuthState,
   getters,
   actions,
   mutations,
