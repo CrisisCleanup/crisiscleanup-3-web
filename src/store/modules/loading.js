@@ -1,4 +1,4 @@
-const state = {
+const AppState = {
   worksitesLoading: false,
 };
 
@@ -17,7 +17,7 @@ const mutations = {
 
 export default {
   namespaced: true,
-  state,
+  state: AppState,
   getters,
   actions,
   mutations,

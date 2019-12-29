@@ -43,6 +43,8 @@
               </base-select>
             </div>
           </template>
+          <!-- TODO: refactor after unit tests -->
+          <!-- eslint-disable-next-line vue/no-unused-vars -->
           <template #types="{slotProps}">
             <div class="flex w-full">
               <base-select
@@ -107,10 +109,10 @@
 </template>
 
 <script>
-import shp from 'shpjs';
 import Layer from '@/models/Layer';
 import Table from '@/components/Table';
-
+// TODO: refactor after unit tests
+// eslint-disable-next-line no-unused-vars
 const fileToArrayBuffer = file =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -248,7 +250,9 @@ export default {
           },
         );
         await this.$message.success('Successfully updated shapefile');
-      } catch (e) {}
+      } catch (e) {
+        // TODO: handle exception
+      }
     },
   },
 };
