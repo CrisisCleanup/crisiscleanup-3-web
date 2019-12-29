@@ -77,10 +77,17 @@ export default {
       });
       this.map.setView([30.126124, -83.916503], 5);
       this.tileLayer.addTo(this.map);
-      this.map.addLayer(this.drawnItems);
 
-      this.map.on('draw:created', e => {
+      this.map.on('pm:create', e => {
         this.drawnItems.addLayer(e.layer);
+      });
+
+      this.map.on('pm:remove', e => {
+        this.drawnItems.getLayers().forEach(location => {
+          if (location.toGeoJSON === e.layer.toGeoJSON) {
+            this.drawnItems.removeLayer(location);
+          }
+        });
       });
 
       this.map.addLayer(this.drawnItems);
@@ -104,7 +111,7 @@ export default {
       };
       const geojsonLayer = L.geoJSON(geojsonFeature);
       geojsonLayer.eachLayer(l => {
-        l.layerID = selected.id;
+        l.locationID = selected.id;
         this.drawnItems.addLayer(l);
       });
     },

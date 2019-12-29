@@ -229,7 +229,7 @@
                   <a-icon type="question-circle-o" />
                 </a-tooltip>
               </span>
-              <FormSelect
+              <form-select
                 v-model="dynamicFields[field.field_key]"
                 :value="field.values.find(val => getValue(field.field_key))"
                 :options="field.values"
@@ -368,12 +368,10 @@ import { getErrorMessage } from '@/utils/errors';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import Incident from '@/models/Incident';
 import { buildForm, groupBy } from '@/utils/form';
-import FormSelect from '@/components/FormSelect';
 
 export default {
   name: 'CaseForm',
   components: {
-    FormSelect,
     OverlayMap,
     WorksiteSearchInput,
   },
