@@ -10,7 +10,7 @@ Object {
 
 exports[`Table should handle page change 2`] = `
 Object {
-  "current": 0,
+  "current": 1,
   "page": 1,
   "pageSize": 5,
 }
@@ -18,7 +18,7 @@ Object {
 
 exports[`Table should handle page change 3`] = `
 Object {
-  "current": 0,
+  "current": 1,
   "page": 1,
   "pageSize": 5,
 }
@@ -53,12 +53,16 @@ exports[`Table should render correctly and match snapshot 1`] = `
     <div
       class="p-2 border-b flex items-center"
     >
+      
       One
+    
     </div>
     <div
       class="p-2 border-b flex items-center"
     >
+      
       Two
+    
     </div>
   </div>
    
@@ -78,15 +82,15 @@ exports[`Table should render correctly and match snapshot 1`] = `
         class="flex items-center p-2 border-b cursor-pointer"
       >
         
-                    
-                
+          
+        
       </div>
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
         
-                    
-                
+          
+        
       </div>
     </div>
     <div
@@ -99,15 +103,15 @@ exports[`Table should render correctly and match snapshot 1`] = `
         class="flex items-center p-2 border-b cursor-pointer"
       >
         
-                    
-                
+          
+        
       </div>
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
         
-                    
-                
+          
+        
       </div>
     </div>
   </div>
@@ -145,12 +149,16 @@ exports[`Table should render correctly with selection and pagination 1`] = `
     <div
       class="p-2 border-b flex items-center"
     >
+      
       One
+    
     </div>
     <div
       class="p-2 border-b flex items-center"
     >
+      
       Two
+    
     </div>
   </div>
    
@@ -185,15 +193,15 @@ exports[`Table should render correctly with selection and pagination 1`] = `
         class="flex items-center p-2 border-b cursor-pointer"
       >
         
-                    
-                
+          
+        
       </div>
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
         
-                    
-                
+          
+        
       </div>
     </div>
     <div
@@ -221,15 +229,15 @@ exports[`Table should render correctly with selection and pagination 1`] = `
         class="flex items-center p-2 border-b cursor-pointer"
       >
         
-                    
-                
+          
+        
       </div>
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
         
-                    
-                
+          
+        
       </div>
     </div>
   </div>

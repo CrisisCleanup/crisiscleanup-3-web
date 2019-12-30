@@ -4,7 +4,7 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
 <v-popover-stub
   class="text-xs"
   placement="bottom-end"
-  popoverclass="status-dropdown"
+  popover-class="status-dropdown"
 >
   <div
     class="badge-holder rounded-lg px-2"
