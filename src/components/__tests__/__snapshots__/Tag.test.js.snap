@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tag should render correctly and match snapshot 1`] = `
+<div
+  class="tag flex items-center px-1 pr-3 justify-center text-xs"
+>
+  <!---->
+   
+</div>
+`;

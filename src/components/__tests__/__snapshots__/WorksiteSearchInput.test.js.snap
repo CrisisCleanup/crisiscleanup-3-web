@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WorksiteSearchInput should render correctly and match snapshot 1`] = `
+<div
+  class="flex items-center justify-start w-full autocomplete"
+>
+  <vue-autosuggest-stub
+    class="flex-grow relative text-base font-light base"
+    get-suggestion-value="function () { [native code] }"
+    input-props="[object Object]"
+    render-suggestion="function () { [native code] }"
+    section-configs="[object Object]"
+    should-render-suggestions="function () { [native code] }"
+    suggestions="[object Object]"
+  />
+   
+  <!---->
+   
+  <!---->
+</div>
+`;
+
+exports[`WorksiteSearchInput should render geocoder suggestion 1`] = `
+<div class="flex items-center justify-start w-full autocomplete">
+  <vue-autosuggest-stub suggestions="[object Object]" input-props="[object Object]" section-configs="[object Object]" render-suggestion="function () { [native code] }" get-suggestion-value="function () { [native code] }" should-render-suggestions="function () { [native code] }" class="flex-grow relative text-base font-light base"></vue-autosuggest-stub>
+  <!---->
+  <!---->
+</div>
+`;
+
+exports[`WorksiteSearchInput should render suggestion 1`] = `
+<div class="flex items-center justify-start w-full autocomplete">
+  <vue-autosuggest-stub suggestions="[object Object]" input-props="[object Object]" section-configs="[object Object]" render-suggestion="function () { [native code] }" get-suggestion-value="function () { [native code] }" should-render-suggestions="function () { [native code] }" class="flex-grow relative text-base font-light base"></vue-autosuggest-stub>
+  <!---->
+  <!---->
+</div>
+`;
+
+exports[`WorksiteSearchInput should retrieve current user 1`] = `
+Object {
+  "first_name": "First",
+  "id": 1,
+  "last_name": "Last",
+  "organization": Object {
+    "id": 1,
+    "name": "Test Organization",
+  },
+}
+`;

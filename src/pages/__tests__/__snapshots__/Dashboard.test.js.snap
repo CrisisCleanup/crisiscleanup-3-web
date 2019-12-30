@@ -1,0 +1,447 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard should render correctly and match snapshot 1`] = `
+<div
+  class="p-6 bg-gray-100 h-full overflow-auto relative"
+>
+  <div>
+    <div
+      class="flex"
+    >
+      <div
+        class="w-1/4 m-4 p-6 shadow text-base bg-white"
+      >
+        <div>
+          My Claimed Cases (Texas Flooding, Oct 2018)
+        </div>
+         
+        <div
+          class="font-bold"
+        >
+          
+          
+        
+        </div>
+      </div>
+       
+      <div
+        class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
+      >
+        <div>
+          Total Claimed (Texas Flooding, Oct 2018)
+        </div>
+         
+        <div
+          class="font-bold"
+        >
+          
+          0 (NaN
+          of Total)
+        
+        </div>
+         
+        <div
+          class="bottom-0 left-0 absolute border-b-4 border-blue-600"
+        />
+      </div>
+       
+      <div
+        class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
+      >
+        <div>
+          In Progress (Texas Flooding, Oct 2018)
+        </div>
+         
+        <div
+          class="font-bold"
+        >
+          
+          0 (NaN
+          of Claimed)
+        
+        </div>
+         
+        <div
+          class="bottom-0 left-0 absolute border-b-4 border-blue-600"
+        />
+      </div>
+       
+      <div
+        class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
+      >
+        <div>
+          Closed (Texas Flooding, Oct 2018)
+        </div>
+         
+        <div
+          class="font-bold"
+        >
+          
+          0 (NaN
+          of Claimed)
+        
+        </div>
+         
+        <div
+          class="bottom-0 left-0 absolute border-b-4 border-green-600"
+        />
+      </div>
+    </div>
+     
+    <div
+      class="flex"
+    >
+      <div
+        class="w-3/5 m-4 pt-2 shadow bg-white flex-shrink"
+      >
+        <div
+          class="py-4 px-4 text-gray-500 border-b"
+        >
+          MY CASES
+        </div>
+         
+        <div
+          class="p-4"
+        >
+          <div
+            class="flex justify-between items-center border-b last:border-b-0 py-2"
+          >
+            <div
+              class="badge-holder flex items-center w-20"
+            >
+              <badge-stub
+                class="mx-1"
+                color="#ffffff"
+              />
+              
+                  
+                
+            </div>
+             
+            <div
+              class="w-4/12"
+            />
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <router-link-stub
+              class="w-1/12 self-end"
+              tag="div"
+              to="/incident/99/cases/undefined/edit?showOnMap=true"
+            >
+              <ccu-icon-stub
+                alt="Jump to Case"
+                class="p-1 py-2"
+                size="medium"
+                type="go-case"
+              />
+            </router-link-stub>
+          </div>
+          <div
+            class="flex justify-between items-center border-b last:border-b-0 py-2"
+          >
+            <div
+              class="badge-holder flex items-center w-20"
+            >
+              <badge-stub
+                class="mx-1"
+                color="#ffffff"
+              />
+              
+                  
+                
+            </div>
+             
+            <div
+              class="w-4/12"
+            />
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <router-link-stub
+              class="w-1/12 self-end"
+              tag="div"
+              to="/incident/99/cases/undefined/edit?showOnMap=true"
+            >
+              <ccu-icon-stub
+                alt="Jump to Case"
+                class="p-1 py-2"
+                size="medium"
+                type="go-case"
+              />
+            </router-link-stub>
+          </div>
+          <div
+            class="flex justify-between items-center border-b last:border-b-0 py-2"
+          >
+            <div
+              class="badge-holder flex items-center w-20"
+            >
+              <badge-stub
+                class="mx-1"
+                color="#ffffff"
+              />
+              
+                  
+                
+            </div>
+             
+            <div
+              class="w-4/12"
+            />
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <router-link-stub
+              class="w-1/12 self-end"
+              tag="div"
+              to="/incident/99/cases/undefined/edit?showOnMap=true"
+            >
+              <ccu-icon-stub
+                alt="Jump to Case"
+                class="p-1 py-2"
+                size="medium"
+                type="go-case"
+              />
+            </router-link-stub>
+          </div>
+          <div
+            class="flex justify-between items-center border-b last:border-b-0 py-2"
+          >
+            <div
+              class="badge-holder flex items-center w-20"
+            >
+              <badge-stub
+                class="mx-1"
+                color="#ffffff"
+              />
+              
+                  
+                
+            </div>
+             
+            <div
+              class="w-4/12"
+            />
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <router-link-stub
+              class="w-1/12 self-end"
+              tag="div"
+              to="/incident/99/cases/undefined/edit?showOnMap=true"
+            >
+              <ccu-icon-stub
+                alt="Jump to Case"
+                class="p-1 py-2"
+                size="medium"
+                type="go-case"
+              />
+            </router-link-stub>
+          </div>
+          <div
+            class="flex justify-between items-center border-b last:border-b-0 py-2"
+          >
+            <div
+              class="badge-holder flex items-center w-20"
+            >
+              <badge-stub
+                class="mx-1"
+                color="#ffffff"
+              />
+              
+                  
+                
+            </div>
+             
+            <div
+              class="w-4/12"
+            />
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <router-link-stub
+              class="w-1/12 self-end"
+              tag="div"
+              to="/incident/99/cases/undefined/edit?showOnMap=true"
+            >
+              <ccu-icon-stub
+                alt="Jump to Case"
+                class="p-1 py-2"
+                size="medium"
+                type="go-case"
+              />
+            </router-link-stub>
+          </div>
+          <div
+            class="flex justify-between items-center border-b last:border-b-0 py-2"
+          >
+            <div
+              class="badge-holder flex items-center w-20"
+            >
+              <badge-stub
+                class="mx-1"
+                color="#ffffff"
+              />
+              
+                  
+                
+            </div>
+             
+            <div
+              class="w-4/12"
+            />
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <span
+              class="w-3/12"
+            >
+              
+            </span>
+             
+            <router-link-stub
+              class="w-1/12 self-end"
+              tag="div"
+              to="/incident/99/cases/undefined/edit?showOnMap=true"
+            >
+              <ccu-icon-stub
+                alt="Jump to Case"
+                class="p-1 py-2"
+                size="medium"
+                type="go-case"
+              />
+            </router-link-stub>
+          </div>
+        </div>
+      </div>
+       
+      <div
+        class="w-2/5 m-4 p-6 shadow bg-white"
+      >
+        <div
+          class="flex flex-col items-center justify-around"
+        >
+          <div
+            class="text-center text-2xl w-2/3 my-3"
+          >
+            
+            Invite Additional Members to Crisiscleanup
+          
+          </div>
+           
+          <div
+            class="text-justify w-5/6 my-3"
+          >
+            <div
+              class="my-3"
+            >
+              
+              Enter a comma-seperated list of email addresses to invite. Each
+              email address entered here will receive and email with
+              instructions to create a new account and join your organization
+            
+            </div>
+             
+            <base-input-stub
+              class="flex-grow my-3"
+              placeholder="Emails"
+              size="large"
+              value=""
+            />
+          </div>
+           
+          <base-button-stub
+            action="function () { [native code] }"
+            class="px-8 py-3"
+            text="Send Invites"
+            type="primary"
+          />
+        </div>
+      </div>
+    </div>
+     
+    <div
+      class="flex"
+    >
+      <div
+        class="w-full m-4 pt-2 shadow bg-white flex-shrink"
+      >
+        <div
+          class="py-4 px-4 text-gray-500 border-b"
+        >
+          CASES COMPLETION
+        </div>
+         
+        <div
+          class="p-4"
+        >
+          <div
+            class="small"
+          >
+            <line-chart-stub
+              options="[object Object]"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+   
+  <!---->
+</div>
+`;
