@@ -1,22 +1,22 @@
 module.exports = {
   presets: [
-    ["@babel/preset-env", { modules: false }],
+    ['@babel/preset-env', { modules: false }],
     [
-      "@vue/babel-preset-jsx",
+      '@vue/babel-preset-jsx',
       {
-        injectH: false
-      }
+        injectH: false,
+      },
     ],
     [
-      "@vue/app",
+      '@vue/app',
       {
-        useBuiltIns: "entry"
-      }
-    ]
+        useBuiltIns: 'entry',
+      },
+    ],
   ],
   env: {
     test: {
-      presets: [["@babel/preset-env", { targets: { node: "current" } }]]
-    }
-  }
+      presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
+    },
+  },
 };
