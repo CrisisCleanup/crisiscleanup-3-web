@@ -48,7 +48,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       class="p-2 px-4"
     >
       
-            Filters 
+      Filters
+      
       <span
         class="rounded-full px-1 bg-yellow-500 text-xs"
       >
@@ -67,8 +68,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           closeable="true"
         >
           
-                        Work Type: workType.ash
-                    
+            Work Type: workType.ash
+          
         </tag-stub>
          
         <tag-stub
@@ -76,8 +77,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           closeable="true"
         >
           
-                        Status: Open
-                    
+            Status: Open
+          
         </tag-stub>
         <!---->
       </div>
@@ -102,7 +103,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           class="p-3 px-4 border-b cursor-pointer border-l-8 border-l-black"
         >
           
-                    General 
+          General
+          
           <span
             class="rounded-full px-1 bg-black text-white text-xs"
           >
@@ -114,15 +116,16 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           class="p-3 px-4 border-b cursor-pointer"
         >
           
-                    Personal Info
-                
+          Personal Info
+        
         </div>
          
         <div
           class="p-3 px-4 border-b cursor-pointer"
         >
           
-                    Work 
+          Work
+          
           <span
             class="rounded-full px-1 bg-black text-white text-xs"
           >

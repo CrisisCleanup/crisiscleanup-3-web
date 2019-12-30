@@ -19,6 +19,8 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="font-bold"
         >
           
+          
+        
         </div>
       </div>
        
@@ -32,7 +34,10 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         <div
           class="font-bold"
         >
-          0 (NaN of Total)
+          
+          0 (NaN
+          of Total)
+        
         </div>
          
         <div
@@ -50,7 +55,10 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         <div
           class="font-bold"
         >
-          0 (NaN of Claimed)
+          
+          0 (NaN
+          of Claimed)
+        
         </div>
          
         <div
@@ -68,7 +76,10 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         <div
           class="font-bold"
         >
-          0 (NaN of Claimed)
+          
+          0 (NaN
+          of Claimed)
+        
         </div>
          
         <div
@@ -96,15 +107,15 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="flex justify-between items-center border-b last:border-b-0 py-2"
           >
             <div
-              class="badge-holder flex items-center w-1/12"
+              class="badge-holder flex items-center w-20"
             >
               <badge-stub
                 class="mx-1"
                 color="#ffffff"
               />
               
-                                    
-                                
+                  
+                
             </div>
              
             <div
@@ -140,15 +151,15 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="flex justify-between items-center border-b last:border-b-0 py-2"
           >
             <div
-              class="badge-holder flex items-center w-1/12"
+              class="badge-holder flex items-center w-20"
             >
               <badge-stub
                 class="mx-1"
                 color="#ffffff"
               />
               
-                                    
-                                
+                  
+                
             </div>
              
             <div
@@ -184,15 +195,15 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="flex justify-between items-center border-b last:border-b-0 py-2"
           >
             <div
-              class="badge-holder flex items-center w-1/12"
+              class="badge-holder flex items-center w-20"
             >
               <badge-stub
                 class="mx-1"
                 color="#ffffff"
               />
               
-                                    
-                                
+                  
+                
             </div>
              
             <div
@@ -228,15 +239,15 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="flex justify-between items-center border-b last:border-b-0 py-2"
           >
             <div
-              class="badge-holder flex items-center w-1/12"
+              class="badge-holder flex items-center w-20"
             >
               <badge-stub
                 class="mx-1"
                 color="#ffffff"
               />
               
-                                    
-                                
+                  
+                
             </div>
              
             <div
@@ -272,15 +283,15 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="flex justify-between items-center border-b last:border-b-0 py-2"
           >
             <div
-              class="badge-holder flex items-center w-1/12"
+              class="badge-holder flex items-center w-20"
             >
               <badge-stub
                 class="mx-1"
                 color="#ffffff"
               />
               
-                                    
-                                
+                  
+                
             </div>
              
             <div
@@ -316,15 +327,15 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="flex justify-between items-center border-b last:border-b-0 py-2"
           >
             <div
-              class="badge-holder flex items-center w-1/12"
+              class="badge-holder flex items-center w-20"
             >
               <badge-stub
                 class="mx-1"
                 color="#ffffff"
               />
               
-                                    
-                                
+                  
+                
             </div>
              
             <div
@@ -368,7 +379,9 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           <div
             class="text-center text-2xl w-2/3 my-3"
           >
+            
             Invite Additional Members to Crisiscleanup
+          
           </div>
            
           <div
@@ -377,10 +390,11 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             <div
               class="my-3"
             >
-              Enter a comma-seperated list of email addresses to invite. Each email
-                            address entered here will
-                            receive and email with instructions to create a new account and join your organization
-                        
+              
+              Enter a comma-seperated list of email addresses to invite. Each
+              email address entered here will receive and email with
+              instructions to create a new account and join your organization
+            
             </div>
              
             <base-input-stub
