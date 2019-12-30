@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseInput should emit value on input 1`] = `
+Array [
+  Array [
+    "new value",
+  ],
+]
+`;
+
+exports[`BaseInput should render correctly and match snapshot 1`] = `
+<div
+  class="flex items-center justify-start"
+>
+  <input
+    autocomplete="off"
+    class="flex-grow text-base large"
+    type="search"
+  />
+   
+  <!---->
+</div>
+`;

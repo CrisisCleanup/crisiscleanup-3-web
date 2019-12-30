@@ -1,0 +1,244 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WorksiteFilters should remove field 1`] = `
+Object {
+  "fields": Object {
+    "muck_out": true,
+  },
+  "statuses": Object {
+    "closed": false,
+    "open": true,
+  },
+  "sub_fields": Object {},
+}
+`;
+
+exports[`WorksiteFilters should remove field 2`] = `
+Object {
+  "fields": Object {},
+  "statuses": Object {
+    "closed": false,
+    "open": true,
+  },
+  "sub_fields": Object {},
+}
+`;
+
+exports[`WorksiteFilters should remove status 1`] = `
+Object {
+  "fields": Object {
+    "muck_out": true,
+  },
+  "statuses": Object {
+    "closed": false,
+  },
+  "sub_fields": Object {},
+}
+`;
+
+exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
+<modal-stub
+  modal-classes="bg-white max-w-2xl shadow"
+  modal-style="min-height: 60%"
+>
+  <div
+    class="flex flex-col h-full"
+  >
+    <div
+      class="p-2 px-4"
+    >
+      
+      Filters
+      
+      <span
+        class="rounded-full px-1 bg-yellow-500 text-xs"
+      >
+        2
+      </span>
+    </div>
+     
+    <div
+      class="flex items-center justify-between bg-gray-100 p-1 px-2"
+    >
+      <div
+        class="applied-filters flex flex-wrap justify-start bg-gray-100"
+      >
+        <tag-stub
+          class="m-1"
+          closeable="true"
+        >
+          
+            Work Type: workType.ash
+          
+        </tag-stub>
+         
+        <tag-stub
+          class="m-1"
+          closeable="true"
+        >
+          
+            Status: Open
+          
+        </tag-stub>
+        <!---->
+      </div>
+       
+      <div>
+        <base-button-stub
+          action="function () { [native code] }"
+          class="text-yellow-500 text-underline w-32"
+          text="Clear all filters"
+          type="bare"
+        />
+      </div>
+    </div>
+     
+    <div
+      class="flex flex-grow h-full"
+    >
+      <div
+        class="w-1/4 border-r"
+      >
+        <div
+          class="p-3 px-4 border-b cursor-pointer border-l-8 border-l-black"
+        >
+          
+          General
+          
+          <span
+            class="rounded-full px-1 bg-black text-white text-xs"
+          >
+            1
+          </span>
+        </div>
+         
+        <div
+          class="p-3 px-4 border-b cursor-pointer"
+        >
+          
+          Personal Info
+        
+        </div>
+         
+        <div
+          class="p-3 px-4 border-b cursor-pointer"
+        >
+          
+          Work
+          
+          <span
+            class="rounded-full px-1 bg-black text-white text-xs"
+          >
+            1
+          </span>
+        </div>
+      </div>
+       
+      <div
+        class="w-3/4 ml-4 mt-2 flex-grow"
+        style="height: 450px; overflow: auto;"
+      >
+        <div
+          class="flex flex-col"
+        >
+          <base-checkbox-stub
+            class="block my-1"
+          >
+            Unclaimed
+          </base-checkbox-stub>
+           
+          <base-checkbox-stub
+            class="block my-1"
+          >
+            Claimed By My Organization
+          </base-checkbox-stub>
+           
+          <base-checkbox-stub
+            class="block my-1"
+          >
+            Reported By My Organization
+          </base-checkbox-stub>
+           
+          <base-checkbox-stub
+            class="block my-1"
+            value="true"
+          >
+            Open
+          </base-checkbox-stub>
+           
+          <base-checkbox-stub
+            class="block my-1"
+          >
+            Closed
+          </base-checkbox-stub>
+        </div>
+         
+        <!---->
+      </div>
+    </div>
+  </div>
+   
+  <div
+    class="flex items-center justify-center p-2 bg-white border-t"
+  >
+    <base-button-stub
+      action="function () {
+        /* istanbul ignore next */
+        cov_1ozkfu98nt.f[51]++;
+        cov_1ozkfu98nt.s[136]++;
+
+        _vm.$emit('closedFilters');
+      }"
+      class="m-1 border-2 border-black px-6 py-2"
+      size="medium"
+      text="Cancel"
+    />
+     
+    <base-button-stub
+      action="function () { [native code] }"
+      class="m-1 p-3 px-6"
+      size="medium"
+      text="Apply Filters"
+      type="primary"
+    />
+  </div>
+</modal-stub>
+`;
+
+exports[`WorksiteFilters should set status open/closed 1`] = `
+Object {
+  "fields": Object {
+    "muck_out": true,
+  },
+  "statuses": Object {
+    "closed": false,
+    "open": true,
+  },
+  "sub_fields": Object {},
+}
+`;
+
+exports[`WorksiteFilters should set status open/closed 2`] = `
+Object {
+  "fields": Object {
+    "muck_out": true,
+  },
+  "statuses": Object {
+    "closed": false,
+    "open": false,
+  },
+  "sub_fields": Object {},
+}
+`;
+
+exports[`WorksiteFilters should update filters 1`] = `
+Object {
+  "fields": Object {
+    "muck_out": true,
+  },
+  "statuses": Object {
+    "closed": false,
+    "open": true,
+  },
+}
+`;

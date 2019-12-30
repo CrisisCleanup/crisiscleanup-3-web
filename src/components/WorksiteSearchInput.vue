@@ -169,7 +169,7 @@ export default {
         templates[work_type.work_type] || templates.unknown;
       const svgColors = colors[colorsKey];
 
-      if (colors) {
+      if (svgColors) {
         const svg = worksiteTemplate
           .replace('{{fillColor}}', svgColors.fillColor)
           .replace('{{strokeColor}}', svgColors.strokeColor)
