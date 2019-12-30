@@ -5,45 +5,45 @@
  * Components
  */
 
-import { MockWorksites } from "@/utils/testing";
-import { createLocalVue, shallowMount } from "@vue/test-utils";
-import Vuex from "vuex";
-import WorksiteSearchInput from "../WorksiteSearchInput";
+import { createLocalVue, shallowMount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { MockWorksites } from '@/utils/testing';
+import WorksiteSearchInput from '../WorksiteSearchInput';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-jest.mock("@/models/Worksite");
-jest.mock("@/models/User");
+jest.mock('@/models/Worksite');
+jest.mock('@/models/User');
 
 const mountWithOptions = store =>
   shallowMount(WorksiteSearchInput, {
-    stubs: ["vue-autosuggest", "font-awesome-icon"],
+    stubs: ['vue-autosuggest', 'font-awesome-icon'],
     propsData: {
-      suggestions: [{ name: "worksites", data: [], key: "name" }]
+      suggestions: [{ name: 'worksites', data: [], key: 'name' }],
     },
     localVue,
-    store
+    store,
   });
 
-describe("WorksiteSearchInput", () => {
+describe('WorksiteSearchInput', () => {
   let store;
 
   beforeEach(() => {
     store = new Vuex.Store();
   });
-  it("should not log any errors", () => {
-    const spy = jest.spyOn(global.console, "error");
+  it('should not log any errors', () => {
+    const spy = jest.spyOn(global.console, 'error');
     mountWithOptions(store);
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it("should retrieve current user", () => {
+  it('should retrieve current user', () => {
     const wrapper = mountWithOptions(store);
     expect(wrapper.vm.currentUser).toMatchSnapshot();
   });
 
-  it("should determine if it should render suggestions", () => {
+  it('should determine if it should render suggestions', () => {
     const wrapper = mountWithOptions(store);
     expect(wrapper.vm.shouldRenderSuggestions(0, false)).toBe(false);
     expect(wrapper.vm.shouldRenderSuggestions(0, true)).toBe(false);
@@ -51,30 +51,30 @@ describe("WorksiteSearchInput", () => {
     expect(wrapper.vm.shouldRenderSuggestions(1, false)).toBe(true);
   });
 
-  it("should render geocoder suggestion", () => {
+  it('should render geocoder suggestion', () => {
     const wrapper = mountWithOptions(store);
     const suggestion = wrapper.vm.renderSuggestion({
-      name: "geocoder",
+      name: 'geocoder',
       item: {
-        description: "mock description"
-      }
+        description: 'mock description',
+      },
     });
     expect(suggestion.children[0].context.$el.outerHTML).toMatchSnapshot();
   });
 
-  it("should render suggestion", () => {
+  it('should render suggestion', () => {
     const wrapper = mountWithOptions(store);
     const suggestion = wrapper.vm.renderSuggestion({
-      name: "notgeocoder",
+      name: 'notgeocoder',
       item: {
-        description: "mock description",
-        ...MockWorksites[0]
-      }
+        description: 'mock description',
+        ...MockWorksites[0],
+      },
     });
     expect(suggestion.children[0].context.$el.outerHTML).toMatchSnapshot();
   });
 
-  it("should render correctly and match snapshot", () => {
+  it('should render correctly and match snapshot', () => {
     const wrapper = mountWithOptions(store);
     expect(wrapper.element).toMatchSnapshot();
   });

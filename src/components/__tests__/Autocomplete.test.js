@@ -5,9 +5,9 @@
  * Components
  */
 
-import { createLocalVue, shallowMount } from "@vue/test-utils";
-import VueAutosuggest from "vue-autosuggest";
-import Autocomplete from "../Autocomplete";
+import { createLocalVue, shallowMount } from '@vue/test-utils';
+import VueAutosuggest from 'vue-autosuggest';
+import Autocomplete from '../Autocomplete';
 
 const localVue = createLocalVue();
 localVue.use(VueAutosuggest);
@@ -15,56 +15,56 @@ localVue.use(VueAutosuggest);
 const mountWithOptions = options =>
   shallowMount(Autocomplete, {
     propsData: {
-      suggestions: [{ data: ["One", "Two"] }]
+      suggestions: [{ data: ['One', 'Two'] }],
     },
     ...options,
-    localVue
+    localVue,
   });
 
-describe("Autocomplete", () => {
-  it("should not log any errors", () => {
-    const spy = jest.spyOn(global.console, "error");
+describe('Autocomplete', () => {
+  it('should not log any errors', () => {
+    const spy = jest.spyOn(global.console, 'error');
     mountWithOptions();
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it("should emit option when selected", () => {
+  it('should emit option when selected', () => {
     const wrapper = mountWithOptions();
-    wrapper.vm.onSelected({ item: "selected" });
-    expect(wrapper.emitted().selected[0][0]).toBe("selected");
+    wrapper.vm.onSelected({ item: 'selected' });
+    expect(wrapper.emitted().selected[0][0]).toBe('selected');
   });
 
-  it("should retrieve suggestion value", () => {
+  it('should retrieve suggestion value', () => {
     const wrapper = mountWithOptions({
       propsData: {
-        displayProperty: "test"
-      }
+        displayProperty: 'test',
+      },
     });
     const testSuggestion = {
       item: {
-        test: "result"
-      }
+        test: 'result',
+      },
     };
-    expect(wrapper.vm.getSuggestionValue(testSuggestion)).toBe("result");
+    expect(wrapper.vm.getSuggestionValue(testSuggestion)).toBe('result');
   });
 
-  it("should emit text on input", () => {
+  it('should emit text on input', () => {
     const wrapper = mountWithOptions();
-    wrapper.vm.onInputChange("one");
-    expect(wrapper.emitted().search[0][0]).toBe("one");
-    wrapper.vm.onInputChange("");
+    wrapper.vm.onInputChange('one');
+    expect(wrapper.emitted().search[0][0]).toBe('one');
+    wrapper.vm.onInputChange('');
     wrapper.vm.onInputChange(undefined);
     expect(wrapper.emitted().search.length).toBe(1);
   });
 
-  it("should render suggestions", () => {
+  it('should render suggestions', () => {
     const wrapper = mountWithOptions();
     expect(wrapper.vm.shouldRenderSuggestions(1, false)).toBeTruthy();
     expect(wrapper.vm.shouldRenderSuggestions(1, true)).toBeFalsy();
     expect(wrapper.vm.shouldRenderSuggestions(0, true)).toBeFalsy();
   });
 
-  it("should render correctly and match snapshot", () => {
+  it('should render correctly and match snapshot', () => {
     const wrapper = mountWithOptions();
     expect(wrapper.element).toMatchSnapshot();
   });

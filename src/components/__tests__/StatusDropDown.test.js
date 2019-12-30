@@ -5,57 +5,57 @@
  * Components
  */
 
-import { createLocalVue, shallowMount } from "@vue/test-utils";
-import Vuex from "vuex";
-import StatusDropDown from "../StatusDropDown";
-jest.mock("@/models/Status");
+import { createLocalVue, shallowMount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import StatusDropDown from '../StatusDropDown';
+jest.mock('@/models/Status');
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 // mock filter
 localVue.filter(
-  "getStatusName",
-  jest.fn(() => "status.open_unassigned")
+  'getStatusName',
+  jest.fn(() => 'status.open_unassigned'),
 );
 
 const mockWorkType = {
   id: 1,
-  name_t: "workType.ash",
-  description_t: "workTypeDescription.ash",
-  key: "ash",
-  file_prefix: "Ash"
+  name_t: 'workType.ash',
+  description_t: 'workTypeDescription.ash',
+  key: 'ash',
+  file_prefix: 'Ash',
 };
 
 const mountWithOptions = store =>
   shallowMount(StatusDropDown, {
     stubs: {
-      "font-awesome-icon": true,
-      "a-select": "<input type='select'>",
-      "v-popover": true,
-      badge: true
+      'font-awesome-icon': true,
+      'a-select': "<input type='select'>",
+      'v-popover': true,
+      badge: true,
     },
     propsData: {
-      currentWorkType: mockWorkType
+      currentWorkType: mockWorkType,
     },
     localVue,
-    store
+    store,
   });
 
-describe("StatusDropDown", () => {
+describe('StatusDropDown', () => {
   let store;
 
   beforeEach(() => {
     store = new Vuex.Store();
   });
 
-  it("should not log any errors", () => {
-    const spy = jest.spyOn(global.console, "error");
+  it('should not log any errors', () => {
+    const spy = jest.spyOn(global.console, 'error');
     mountWithOptions(store);
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it("should change current item on keypress", () => {
+  it('should change current item on keypress', () => {
     const wrapper = mountWithOptions(store);
     // mock sanity check
     expect(wrapper.vm.statuses.length).toBe(2);
@@ -68,7 +68,7 @@ describe("StatusDropDown", () => {
     expect(wrapper.vm.currentItem).toBe(1);
   });
 
-  it("should render correctly and match snapshot", () => {
+  it('should render correctly and match snapshot', () => {
     const wrapper = mountWithOptions(store);
     expect(wrapper.element).toMatchSnapshot();
   });
