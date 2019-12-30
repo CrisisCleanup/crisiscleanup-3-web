@@ -1,29 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`BaseButton should match snapshot with props 1`] = `
-<button
-  alt="alternate text"
-  class="text-lg primary flex items-center justify-center"
-  size="large"
-  type="submit"
->
-  <!---->
-   
-  <!---->
-   Button Text 
-  <!---->
-</button>
-`;
-
 exports[`BaseButton should render correctly and match snapshot 1`] = `
 <button
-  class="flex items-center justify-center"
+  alt="alt-text"
+  class="primary flex items-center justify-center"
+  title="btntitle"
   type="submit"
 >
   <!---->
    
-  <!---->
-    
-  <!---->
+  <font-awesome-icon-stub
+    class="mx-1"
+    icon="dashboard"
+  />
+   button 
+  <font-awesome-icon-stub
+    class="mx-1"
+    icon="dashboard"
+  />
 </button>
 `;
