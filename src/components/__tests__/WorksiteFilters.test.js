@@ -5,85 +5,85 @@
  * Components
  */
 
-import { snakeToTitleCase } from "@/filters";
-import { createLocalVue, shallowMount } from "@vue/test-utils";
-import Vuex from "vuex";
-import WorksiteFilters from "../WorksiteFilters";
+import { createLocalVue, shallowMount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { snakeToTitleCase } from '@/filters';
+import WorksiteFilters from '../WorksiteFilters';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
-localVue.filter("getWorkTypeName", () => "workType.ash");
-localVue.filter("snakeToTitleCase", snakeToTitleCase);
+localVue.filter('getWorkTypeName', () => 'workType.ash');
+localVue.filter('snakeToTitleCase', snakeToTitleCase);
 
-jest.mock("@/models/Worksite");
+jest.mock('@/models/Worksite');
 
 const MockFilters = {
   fields: {
-    muck_out: true
+    muck_out: true,
   },
   statuses: {
     open: true,
-    closed: false
+    closed: false,
   },
-  sub_fields: {}
+  sub_fields: {},
 };
 
 const mountWithOptions = () =>
   shallowMount(WorksiteFilters, {
-    stubs: ["base-button", "base-checkbox", "modal", "tag"],
+    stubs: ['base-button', 'base-checkbox', 'modal', 'tag'],
     propsData: {
-      currentFilters: MockFilters
+      currentFilters: MockFilters,
     },
-    localVue
+    localVue,
   });
 
-describe("WorksiteFilters", () => {
-  it("should not log any errors", () => {
-    const spy = jest.spyOn(global.console, "error");
+describe('WorksiteFilters', () => {
+  it('should not log any errors', () => {
+    const spy = jest.spyOn(global.console, 'error');
     mountWithOptions();
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it("should set status open/closed", () => {
+  it('should set status open/closed', () => {
     const wrapper = mountWithOptions();
-    wrapper.vm.setOpenClosed(true, "open");
+    wrapper.vm.setOpenClosed(true, 'open');
     expect(wrapper.vm.filters).toMatchSnapshot();
     wrapper.vm.setOpenClosed();
     expect(wrapper.vm.filters).toMatchSnapshot();
   });
 
-  it("should remove field", () => {
+  it('should remove field', () => {
     const wrapper = mountWithOptions();
     expect(wrapper.vm.filters).toMatchSnapshot(MockFilters);
-    wrapper.vm.removeField("muck_out");
+    wrapper.vm.removeField('muck_out');
     expect(wrapper.vm.filters).toMatchSnapshot({
       ...MockFilters,
-      fields: {}
+      fields: {},
     });
   });
 
-  it("should remove status", () => {
+  it('should remove status', () => {
     const wrapper = mountWithOptions();
-    wrapper.vm.removeStatus("open");
+    wrapper.vm.removeStatus('open');
     expect(wrapper.vm.filters).toMatchSnapshot({
       ...MockFilters,
       statuses: {
-        closed: false
-      }
+        closed: false,
+      },
     });
   });
 
-  it("should update filters", () => {
+  it('should update filters', () => {
     const wrapper = mountWithOptions();
     wrapper.vm.updateFilters();
-    let expectFilters = MockFilters;
-    delete expectFilters["sub_fields"];
+    const expectFilters = MockFilters;
+    delete expectFilters.sub_fields;
     expect(wrapper.emitted().updatedFilters[0][0]).toMatchSnapshot(
-      expectFilters
+      expectFilters,
     );
   });
 
-  it("should render correctly and match snapshot", () => {
+  it('should render correctly and match snapshot', () => {
     const wrapper = mountWithOptions();
     expect(wrapper.element).toMatchSnapshot();
   });

@@ -1,5 +1,5 @@
-import { MockOrganizations } from '@/utils/testing'
+import { MockOrganizations } from '@/utils/testing';
 
 export default {
-    all: () => MockOrganizations,
-}
+  all: () => MockOrganizations,
+};

@@ -1,4 +1,4 @@
-import { MockWorksites, MockWorkTypes } from "@/utils/testing";
+import { MockWorksites, MockWorkTypes } from '@/utils/testing';
 
 // const Worksite = jest.genMockFromModule("@/models/Worksite");
 
@@ -7,13 +7,13 @@ const ResolvedWorksite = {
   work_types: [
     {
       ...MockWorkTypes[0],
-      phone1: "123"
+      phone1: '123',
     },
     {
       ...MockWorkTypes[1],
-      phone1: "123"
-    }
-  ]
+      phone1: '123',
+    },
+  ],
 };
 
 export default {
@@ -21,10 +21,10 @@ export default {
   getWorkType: jest.fn(() => MockWorkTypes[0]),
   query: () => ({
     where: () => ({
-      get: () => MockWorksites[0]
-    })
+      get: () => MockWorksites[0],
+    }),
   }),
   api: () => ({
-    get: () => MockWorksites[0]
-  })
+    get: () => MockWorksites[0],
+  }),
 };
