@@ -1,6 +1,6 @@
 module.exports = {
   theme: {
-    extend: {}
+    extend: {},
   },
   colors: {
     primary: {
@@ -9,5 +9,5 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: []
-}
+  plugins: [],
+};

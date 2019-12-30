@@ -1,18 +1,14 @@
 <template>
-    <div>
-        <slot />
-    </div>
+  <div>
+    <slot />
+  </div>
 </template>
 
 <script>
-    export default {
-        methods: {
-        },
-        computed: {
-
-        },
-    }
+export default {
+  computed: {},
+  methods: {},
+};
 </script>
 
-<style>
-</style>
+<style></style>
