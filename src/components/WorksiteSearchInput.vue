@@ -269,5 +269,3 @@ export default {
   @apply text-gray-400 text-sm font-bold px-1;
 }
 </style>
-
-</style>
