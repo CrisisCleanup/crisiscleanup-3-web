@@ -49,7 +49,8 @@
       </div>
       <div class="my-4">
         <label class="my-1 text-xs font-bold text-gray-600 block">{{
-          >{{ $t('formLabels.address') }}</label>
+          $t('formLabels.address')
+        }}</label>
         <div>{{ worksiteAddress }}</div>
       </div>
       <div v-if="Object.keys(workTypesClaimedByOthers).length > 0" class="my-4">
@@ -103,9 +104,9 @@
           </div>
         </div>
         <div v-if="workTypesClaimedByOrganization.length > 0" class="my-4">
-          <label class="my-4 text-xs font-bold text-gray-600"
-            >{{ $t('Claimed By My Organization') }}</label
-          >
+          <label class="my-4 text-xs font-bold text-gray-600">{{
+            $t('Claimed By My Organization')
+          }}</label>
           <template v-for="work_type in workTypesClaimedByOrganization">
             <div :key="work_type.id" class="work_type_section">
               <span class="text-sm">{{
@@ -134,9 +135,7 @@
           </template>
         </div>
         <div v-if="workTypesUnclaimed.length > 0" class="my-4">
-          <label class="my-4 text-xs font-bold text-gray-600"
-            >{{ $t('Unclaimed Work Types') }}</label
-          >
+          <label class="my-4 text-xs font-bold text-gray-600">{{ $t('Unclaimed Work Types') }}</label>
           <template v-for="work_type in workTypesUnclaimed">
             <div :key="work_type.id" class="work_type_section">
               <span class="text-sm">{{
