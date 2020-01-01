@@ -11,7 +11,7 @@
         >
           <div key="dashboard" class="flex flex-col items-center">
             <ccu-icon alt="Dashboard" type="dashboard" />
-            <div class="menu-text mt-1">Dashboard</div>
+            <div class="menu-text mt-1">{{ $t('nav.dashboard') }}</div>
           </div>
         </router-link>
         <router-link
@@ -20,7 +20,7 @@
         >
           <div key="cases" class="flex flex-col items-center">
             <ccu-icon alt="Cases" type="cases" />
-            <div class="menu-text mt-1">Cases</div>
+            <div class="menu-text mt-1">{{ $t('nav.my_work_orders') }}</div>
           </div>
         </router-link>
         <router-link
@@ -29,7 +29,7 @@
         >
           <div key="organization" class="flex flex-col items-center">
             <ccu-icon alt="My Organization" type="organization" size="large" />
-            <div class="menu-text mt-1">My Organization</div>
+            <div class="menu-text mt-1">{{$t('nav.my_organization')}}</div>
           </div>
         </router-link>
       </div>
@@ -45,7 +45,7 @@
               <base-select
                 v-if="incidents"
                 v-model="currentIncident && currentIncident.name"
-                placeholder="Select an Incident"
+                :placeholder="$t('Select an Incident')"
                 icon="caret-down"
                 class="incident-select"
                 :class="{ 'border-0': true }"
@@ -86,7 +86,7 @@
         class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center"
       >
         <div class="flex flex-col items-center">
-          <spinner message="Loading..." />
+          <spinner :message="$t('Loading...')" />
         </div>
       </div>
     </div>
@@ -129,6 +129,25 @@ export default {
         `/organizations/${this.user.user_claims.organization.id}`,
       ),
     ]);
+
+    if (this.currentUser.primary_language !== 'en-US') {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/languages/${this.currentUser.primary_language}`,
+      );
+      const { translations } = response.data;
+      this.$i18n.setLocaleMessage(
+        this.currentUser.primary_language,
+        translations,
+      );
+      this.$i18n.locale = this.currentUser.primary_language;
+      this.$http.defaults.headers.common[
+        'Accept-Language'
+      ] = this.currentUser.primary_language;
+      document
+        .querySelector('html')
+        .setAttribute('lang', this.currentUser.primary_language);
+    }
+
     let incidentId = this.$route.params.incident_id;
     if (!incidentId) {
       const incident = Incident.query()
