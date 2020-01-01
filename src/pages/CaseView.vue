@@ -5,7 +5,7 @@
         <label
           v-if="worksite.notes && worksite.notes.length > 0"
           class="my-1 text-xs font-bold text-gray-600 block"
-          >Notes</label
+          >{{ $t('formLabels.notes') }}</label
         >
         <div
           v-for="note in worksite.notes"
@@ -20,8 +20,8 @@
           v-if="!addingNotes"
           class="my-1"
           type="link"
-          text="+ Add Note"
-          alt="Add Note"
+          :text="$t('+ Add Note')"
+          :alt="$t('Add Note')"
           :action="
             () => {
               this.addingNotes = true;
@@ -35,28 +35,27 @@
             <base-button
               class="my-1"
               type="bare"
-              text="Cancel"
+              :text="$t('actions.cancel')"
               :action="cancelNote"
             />
             <base-button
               class="my-1"
               type="link"
-              text="Save"
+              :alt="$t('actions.save')"
               :action="saveNote"
             />
           </div>
         </div>
       </div>
       <div class="my-4">
-        <label class="my-1 text-xs font-bold text-gray-600 block"
-          >Full Address</label
-        >
+        <label class="my-1 text-xs font-bold text-gray-600 block">{{
+          >{{ $t('formLabels.address') }}</label>
         <div>{{ worksiteAddress }}</div>
       </div>
       <div v-if="Object.keys(workTypesClaimedByOthers).length > 0" class="my-4">
-        <label class="my-1 text-xs font-bold text-gray-600 block"
-          >Claimed By</label
-        >
+        <label class="my-1 text-xs font-bold text-gray-600 block">{{
+          $t('searchFilterAside.claimed_by')
+        }}</label>
         <div
           v-for="organization in Object.keys(workTypesClaimedByOthers)"
           class="my-1"
@@ -72,7 +71,8 @@
         >
           <div v-for="(work_types, organization) in workTypesClaimedByOthers">
             <label class="my-4 text-xs font-bold text-gray-600"
-              >Claimed By {{ getOrganizationName(organization) }}</label
+              >{{ $t('searchFilterAside.claimed_by') }}
+              {{ getOrganizationName(organization) }}</label
             >
             <template v-for="work_type in work_types">
               <div :key="work_type.id" class="work_type_section">
@@ -104,7 +104,7 @@
         </div>
         <div v-if="workTypesClaimedByOrganization.length > 0" class="my-4">
           <label class="my-4 text-xs font-bold text-gray-600"
-            >Claimed By My Organization</label
+            >{{ $t('Claimed By My Organization') }}</label
           >
           <template v-for="work_type in workTypesClaimedByOrganization">
             <div :key="work_type.id" class="work_type_section">
@@ -127,7 +127,7 @@
                     return unclaimWorkType(work_type);
                   }
                 "
-                text="Unclaim"
+                :text="$t('actions.unclaim')"
                 class="ml-2 p-1 px-3 text-xs"
               />
             </div>
@@ -135,7 +135,7 @@
         </div>
         <div v-if="workTypesUnclaimed.length > 0" class="my-4">
           <label class="my-4 text-xs font-bold text-gray-600"
-            >Unclaimed Work Types</label
+            >{{ $t('Unclaimed Work Types') }}</label
           >
           <template v-for="work_type in workTypesUnclaimed">
             <div :key="work_type.id" class="work_type_section">
@@ -158,7 +158,7 @@
                     return claimWorkType(work_type);
                   }
                 "
-                text="Claim"
+                :text="$t('actions.claim')"
                 class="ml-2 p-1 px-3 text-xs"
               />
             </div>
@@ -173,7 +173,7 @@
         v-if="workTypesClaimedByOrganization.length > 0"
         size="medium"
         class="m-1 text-black p-3 px-4 border-2 border-black"
-        text="Unclaim"
+        :text="$t('actions.unclaim')"
         :action="
           () => {
             return unclaimWorkType();
@@ -196,7 +196,7 @@
         v-if="Object.keys(workTypesClaimedByOthers).length > 0"
         size="medium"
         class="m-1 text-black p-3 px-4 border-2 border-black"
-        text="Request"
+        :text="$t('actions.request')"
         :action="
           () => {
             return requestWorkType();
@@ -207,7 +207,7 @@
         size="medium"
         type="primary"
         class="m-1 text-black p-3 px-4"
-        text="Done"
+        :text="$t('actions.done')"
         :action="
           () => {
             $emit('closeWorksite');
