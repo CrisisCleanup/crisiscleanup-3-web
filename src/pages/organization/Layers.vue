@@ -123,34 +123,6 @@ const fileToArrayBuffer = file =>
     reader.readAsArrayBuffer(file);
   });
 
-const columns = [
-  {
-    title: this.$t('Filename'),
-    dataIndex: 'filename',
-    key: 'filename',
-  },
-  {
-    title: this.$t('Count'),
-    dataIndex: 'count',
-    key: 'count',
-  },
-  {
-    title: this.$t('Data Key'),
-    dataIndex: 'fields',
-    key: 'fields',
-  },
-  {
-    title: this.$t('Location Type'),
-    dataIndex: 'types',
-    key: 'types',
-  },
-  {
-    title: '',
-    dataIndex: 'sample',
-    key: 'sample',
-  },
-];
-
 export default {
   name: 'Layers',
   components: { Table },
@@ -161,7 +133,33 @@ export default {
       fileList: [],
       shapefileKey: '',
       shapefileType: 'COUNTY',
-      columns,
+      columns: [
+        {
+          title: this.$t('Filename'),
+          dataIndex: 'filename',
+          key: 'filename',
+        },
+        {
+          title: this.$t('Count'),
+          dataIndex: 'count',
+          key: 'count',
+        },
+        {
+          title: this.$t('Data Key'),
+          dataIndex: 'fields',
+          key: 'fields',
+        },
+        {
+          title: this.$t('Location Type'),
+          dataIndex: 'types',
+          key: 'types',
+        },
+        {
+          title: '',
+          dataIndex: 'sample',
+          key: 'sample',
+        },
+      ],
       showingSampleModal: false,
       loading: false,
       locationTypes: [

@@ -109,7 +109,9 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">Congressional Districts</template>
+                        <template slot="btn">{{
+                          $t('Congressional Districts')
+                        }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
                             <li v-for="district in districts">
@@ -188,12 +190,12 @@
                   <base-button
                     class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white"
                     :action="() => {}"
-                    text="Unclaim"
+                    :text="$t('actions.unclaim')"
                   />
                   <base-button
                     icon="sync"
                     class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
-                    text="Update Status"
+                    :text="$t('actions.update_status')"
                     @click="() => {}"
                   />
                 </div>
@@ -286,26 +288,27 @@
       >
         <template v-if="isViewingWorksiteHistory">
           <ccu-icon
-            alt="Case History"
+            :alt="$t('actions.history')"
             size="medium"
             class="text-black mb-1"
             type="history"
           >
             <span class="ml-1 mt-1"
-              >{{ this.currentWorksite.case_number }} History</span
+              >{{ currentWorksite.case_number }}
+              {{ $t('actions.history') }}</span
             >
           </ccu-icon>
           <ccu-icon
-            alt="Cancel"
+            :alt="$t('actions.cancel')"
             size="small"
             type="cancel"
             @click.native="backToWorksite"
           />
         </template>
         <template v-else-if="isNewWorksite">
-          <div class="text-left text-black">New Case</div>
+          <div class="text-left text-black">{{ $t('New Case') }}</div>
           <ccu-icon
-            alt="Cancel"
+            :alt="$t('actions.cancel')"
             size="small"
             type="cancel"
             @click.native="closeWorksite"
@@ -317,7 +320,7 @@
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">
             <ccu-icon
-              alt="Jump To Case"
+              :alt="$t('actions.jump_to_case')"
               size="small"
               class="p-1 py-2"
               type="go-case"
@@ -330,27 +333,27 @@
               "
             >
               <ccu-icon
-                alt="Case History"
+                :alt="$t('actions.history')"
                 size="small"
                 class="p-1 py-2"
                 type="history"
               />
             </router-link>
             <ccu-icon
-              alt="Download Worksite Data"
+              :alt="$t('actions.download')"
               size="small"
               class="p-1 py-2"
               type="download"
               @click.native="downloadWorksite"
             />
             <ccu-icon
-              alt="Share Worksite"
+              :alt="$t('actions.share')"
               size="small"
               class="p-1 py-2"
               type="share"
             />
             <ccu-icon
-              alt="Print Work Order"
+              :alt="$t('actions.print')"
               size="small"
               class="p-1 py-2"
               type="print"
@@ -363,7 +366,7 @@
               "
             >
               <ccu-icon
-                alt="Edit Worksite"
+                :alt="$t('actions.edit')"
                 class="border p-2 bg-primary-light"
                 size="small"
                 type="edit"
@@ -396,60 +399,23 @@
 </template>
 
 <script>
-import { gmapApi } from 'vue2-google-maps';
-import { mapState } from 'vuex';
-import { throttle } from 'lodash';
-import * as L from 'leaflet';
-import Worksite from '@/models/Worksite';
-import User from '@/models/User';
-import Incident from '@/models/Incident';
-import Location from '@/models/Location';
-import Table from '@/components/Table';
-import WorksiteMap from '@/components/WorksiteMap';
-import WorksiteFilters from '@/components/WorksiteFilters';
-import Status from '@/models/Status';
-import { getQueryString } from '@/utils/urls';
-import { getColorForStatus } from '@/filters';
-import WorksiteSearchInput from '@/components/WorksiteSearchInput';
+  import {gmapApi} from 'vue2-google-maps';
+  import {mapState} from 'vuex';
+  import {throttle} from 'lodash';
+  import * as L from 'leaflet';
+  import Worksite from '@/models/Worksite';
+  import User from '@/models/User';
+  import Incident from '@/models/Incident';
+  import Location from '@/models/Location';
+  import Table from '@/components/Table';
+  import WorksiteMap from '@/components/WorksiteMap';
+  import WorksiteFilters from '@/components/WorksiteFilters';
+  import Status from '@/models/Status';
+  import {getQueryString} from '@/utils/urls';
+  import {getColorForStatus} from '@/filters';
+  import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 
-const columns = [
-  {
-    title: 'No',
-    dataIndex: 'case_number',
-    key: 'case_number',
-    width: '0.5fr',
-  },
-  {
-    title: 'Work type',
-    dataIndex: 'work_types',
-    key: 'work_types',
-    scopedSlots: { customRender: 'work_types' },
-    width: '1.5fr',
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    width: '1.5fr',
-  },
-  {
-    title: 'Full Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'City',
-    dataIndex: 'city',
-    key: 'city',
-  },
-  {
-    title: 'County',
-    dataIndex: 'county',
-    key: 'county',
-  },
-];
-
-export default {
+  export default {
   name: 'Cases',
   components: {
     WorksiteSearchInput,
@@ -476,7 +442,6 @@ export default {
         page: 1,
         current: 1,
       },
-      columns,
       currentQuery: {},
       filters: {
         fields: {},
@@ -856,43 +821,67 @@ export default {
       link.remove();
       window.URL.revokeObjectURL(url);
     },
-    workTypeIcon(work_type) {
-      const work_type_dict = {
-        trees: 'tree',
-        muck_out: 'water',
-        tarp: 'campground',
-        debris: 'trash',
-        fire: 'fire',
-        mold_remediation: 'recycle',
-      };
-      return work_type_dict[work_type] || 'tree';
-    },
     addMarkerToMap(location) {
       this.newMarker = location;
       this.toggleView('showingMap');
     },
   },
   computed: {
+    columns() {
+      return [
+        {
+          title: this.$t('No'),
+          dataIndex: 'case_number',
+          key: 'case_number',
+          width: '0.5fr',
+        },
+        {
+          title: this.$t('Work type'),
+          dataIndex: 'work_types',
+          key: 'work_types',
+          scopedSlots: { customRender: 'work_types' },
+          width: '1.5fr',
+        },
+        {
+          title: this.$t('Name'),
+          dataIndex: 'name',
+          key: 'name',
+          width: '1.5fr',
+        },
+        {
+          title: this.$t('Full Address'),
+          dataIndex: 'address',
+          key: 'address',
+        },
+        {
+          title: this.$t('City'),
+          dataIndex: 'city',
+          key: 'city',
+        },
+        {
+          title: this.$t('County'),
+          dataIndex: 'county',
+          key: 'county',
+        },
+      ];
+    },
     currentWorksite() {
       return Worksite.find(this.$route.params.id);
     },
     usStates() {
-      const states = Location.query()
+      return Location.query()
         .where('type', 'US_STATE')
         .get();
-      return states;
     },
     districts() {
-      const states = Location.query()
+      return Location.query()
         .where('type', 'CONGRESSIONAL_DISTRICT')
         .get();
-      return states;
     },
     floodZone() {
-      const states = Location.query()
+      return Location.query()
         .where('type', 'FLOOD')
         .get();
-      return states;
     },
     isEditingWorksite() {
       return this.$route.name === 'IncidentEditForm';
