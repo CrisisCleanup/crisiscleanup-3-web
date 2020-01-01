@@ -14,6 +14,7 @@ export default class User extends Model {
       roles: this.attr(null),
       organization: this.attr(null),
       states: this.attr(null),
+      primary_language: this.string('')
     };
   }
 
