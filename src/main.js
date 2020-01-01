@@ -7,6 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueLog from '@dreipol/vue-log';
+import VueI18n from 'vue-i18n';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueAutosuggest from 'vue-autosuggest';
 import VTooltip from 'v-tooltip';
@@ -73,6 +74,7 @@ Vue.use(VueAxios, axios);
 Vue.use(Antd);
 Vue.use(require('vue-moment'));
 
+Vue.use(VueI18n);
 Vue.use(VueLog);
 Vue.use(Popover);
 Vue.component('base-dropdown', Dropdown);
@@ -103,9 +105,24 @@ axios.interceptors.response.use(
   },
 );
 
-new Vue({
-  components: { App },
-  render: h => h(App),
-  router,
-  store,
-}).$mount('#app');
+axios
+  .get(`${process.env.VUE_APP_API_BASE_URL}/languages/en-US`)
+  .then(response => {
+    const locale = response.data.subtag;
+    const messages = {
+      [locale]: response.data.translations,
+    };
+
+    const i18n = new VueI18n({
+      locale,
+      messages,
+    });
+
+    new Vue({
+      i18n,
+      components: { App },
+      render: h => h(App),
+      router,
+      store,
+    }).$mount('#app');
+  });
