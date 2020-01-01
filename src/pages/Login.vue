@@ -5,7 +5,7 @@
     </div>
 
     <span v-if="acceptedInvite">
-      You acccepted an invitation, please login</span
+      {{ $t('login.accepted_invite') }}</span
     >
 
     <form
@@ -13,14 +13,14 @@
       class="flex flex-col login-form"
       @submit.prevent="userLogin"
     >
-      <h1 class="text-3xl text-center">Sign in</h1>
+      <h1 class="text-3xl text-center">{{ $t('login.sign_in_msg') }}</h1>
       <a-input
         v-model="email"
         size="large"
         class="my-2"
         required
         type="email"
-        placeholder="Email"
+        :placeholder="$t('login.email_placeholder')"
         autocomplete="email"
       />
       <a-input
@@ -29,14 +29,14 @@
         class="my-2"
         required
         type="password"
-        placeholder="Password"
+        :placeholder="$t('login.password_placeholder')"
         autocomplete="password"
       />
       <base-button
         size="medium"
         class="px-5 py-2 m-1"
         type="primary"
-        text="Login"
+        :placeholder="$t('login.log_in_button')"
       />
     </form>
   </div>
@@ -56,8 +56,12 @@ export default {
   methods: {
     ...mapActions('auth', ['login']),
     async userLogin() {
-      await this.login({ email: this.email, password: this.password });
-      await this.$router.push('/');
+      try {
+        await this.login({ email: this.email, password: this.password });
+        await this.$router.push('/');
+      } catch (e) {
+        await this.$message.error(this.$t('login.invalid_credentials_msg'));
+      }
     },
   },
 };
