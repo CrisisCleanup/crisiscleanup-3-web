@@ -12,7 +12,7 @@
           <p class="ant-upload-drag-icon">
             <a-icon type="inbox" />
           </p>
-          <p class="ant-upload-text">Upload Shapefile</p>
+          <p class="ant-upload-text">{{ $t('Upload Shapefile') }}</p>
         </a-upload-dragger>
       </div>
 
@@ -28,7 +28,7 @@
               <base-select
                 v-if="!loading"
                 :change="onSelectShapefileKey"
-                placeholder="Select a key for this shapefile"
+                :placeholder="$t('Select a key for this shapefile')"
                 class="w-full"
               >
                 <template v-slot:options>
@@ -125,22 +125,22 @@ const fileToArrayBuffer = file =>
 
 const columns = [
   {
-    title: 'Filename',
+    title: this.$t('Filename'),
     dataIndex: 'filename',
     key: 'filename',
   },
   {
-    title: 'Count',
+    title: this.$t('Count'),
     dataIndex: 'count',
     key: 'count',
   },
   {
-    title: 'Data Key',
+    title: this.$t('Data Key'),
     dataIndex: 'fields',
     key: 'fields',
   },
   {
-    title: 'Location Type',
+    title: this.$t('Location Type'),
     dataIndex: 'types',
     key: 'types',
   },
@@ -249,7 +249,7 @@ export default {
             },
           },
         );
-        await this.$message.success('Successfully updated shapefile');
+        await this.$message.success(this.$t('Successfully updated shapefile'));
       } catch (e) {
         // TODO: handle exception
       }
