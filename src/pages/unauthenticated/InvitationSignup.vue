@@ -10,7 +10,7 @@
         type="text"
         class="input"
         size="large"
-        placeholder="First Name"
+        :placeholder="this.$t('activate.first_name_placeholder')"
         required
       />
       <base-input
@@ -18,7 +18,7 @@
         type="text"
         class="input"
         size="large"
-        placeholder="Last Name"
+        :placeholder="this.$t('activate.last_name_placeholder')"
         required
       />
       <base-input
@@ -26,7 +26,7 @@
         type="text"
         class="input"
         size="large"
-        placeholder="Mobile"
+        :placeholder="this.$t('activate.mobile_placeholder')"
         required
       />
       <base-input
@@ -34,7 +34,7 @@
         type="password"
         class="input"
         size="large"
-        placeholder="Password"
+        :placeholder="this.$t('activate.pw1_placeholder')"
         required
       />
       <base-input
@@ -43,14 +43,14 @@
         type="password"
         class="input"
         size="large"
-        placeholder="Confirm Password"
+        :placeholder="this.$t('activate.pw2_placeholder')"
         required
       />
       <base-button
         size="medium"
         class="px-5 py-2 m-1 flex-grow"
         type="primary"
-        text="Accept Invite"
+        :text="this.$t('Accept Invite')"
       />
     </form>
   </div>
@@ -84,13 +84,13 @@ export default {
           });
           await this.$router.push('/login?accepted=true');
         } catch (e) {
-          await this.$message.error('Error accepting invite');
+          await this.$message.error(this.$t('Error accepting invite'));
         }
       }
     },
     validatePassword() {
       if (this.password !== this.confirmPassword) {
-        this.$message.error('Passwords dont match');
+        this.$message.error(this.$t('activate.password_match_error'));
         return false;
       }
       return true;
