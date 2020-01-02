@@ -11,8 +11,8 @@ import Users from '@/pages/organization/Users';
 import Layers from '@/pages/organization/Layers';
 import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
 import CaseView from '@/pages/CaseView';
-import CaseForm from '@/components/CaseForm';
-import CaseHistory from '@/components/CaseHistory';
+import CaseForm from '@/pages/CaseForm';
+import CaseHistory from '@/pages/CaseHistory';
 
 Vue.use(VueRouter);
 
