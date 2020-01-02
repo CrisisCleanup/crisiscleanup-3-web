@@ -33,7 +33,7 @@
               type="organization"
               size="large"
             />
-            <div class="menu-text mt-1">{{ $t('nav.my_organization' )}}</div>
+            <div class="menu-text mt-1">{{ $t('nav.my_organization') }}</div>
           </div>
         </router-link>
       </div>

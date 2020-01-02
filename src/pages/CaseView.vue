@@ -135,7 +135,9 @@
           </template>
         </div>
         <div v-if="workTypesUnclaimed.length > 0" class="my-4">
-          <label class="my-4 text-xs font-bold text-gray-600">{{ $t('Unclaimed Work Types') }}</label>
+          <label class="my-4 text-xs font-bold text-gray-600">{{
+            $t('Unclaimed Work Types')
+          }}</label>
           <template v-for="work_type in workTypesUnclaimed">
             <div :key="work_type.id" class="work_type_section">
               <span class="text-sm">{{
