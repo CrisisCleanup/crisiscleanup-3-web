@@ -399,23 +399,23 @@
 </template>
 
 <script>
-  import {gmapApi} from 'vue2-google-maps';
-  import {mapState} from 'vuex';
-  import {throttle} from 'lodash';
-  import * as L from 'leaflet';
-  import Worksite from '@/models/Worksite';
-  import User from '@/models/User';
-  import Incident from '@/models/Incident';
-  import Location from '@/models/Location';
-  import Table from '@/components/Table';
-  import WorksiteMap from '@/components/WorksiteMap';
-  import WorksiteFilters from '@/components/WorksiteFilters';
-  import Status from '@/models/Status';
-  import {getQueryString} from '@/utils/urls';
-  import {getColorForStatus} from '@/filters';
-  import WorksiteSearchInput from '@/components/WorksiteSearchInput';
+import { gmapApi } from 'vue2-google-maps';
+import { mapState } from 'vuex';
+import { throttle } from 'lodash';
+import * as L from 'leaflet';
+import Worksite from '@/models/Worksite';
+import User from '@/models/User';
+import Incident from '@/models/Incident';
+import Location from '@/models/Location';
+import Table from '@/components/Table';
+import WorksiteMap from '@/components/WorksiteMap';
+import WorksiteFilters from '@/components/WorksiteFilters';
+import Status from '@/models/Status';
+import { getQueryString } from '@/utils/urls';
+import { getColorForStatus } from '@/filters';
+import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 
-  export default {
+export default {
   name: 'Cases',
   components: {
     WorksiteSearchInput,

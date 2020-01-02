@@ -4,9 +4,7 @@
       <img src="@/assets/ccu-logo-black-500w.png" />
     </div>
 
-    <span v-if="acceptedInvite">
-      {{ $t('login.accepted_invite') }}</span
-    >
+    <span v-if="acceptedInvite"> {{ $t('login.accepted_invite') }}</span>
 
     <form
       ref="form"

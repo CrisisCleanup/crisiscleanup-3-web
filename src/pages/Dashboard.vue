@@ -287,7 +287,9 @@ export default {
       try {
         const emails = this.usersToInvite.split(',');
         await Promise.all(emails.map(email => User.api().inviteUser(email)));
-        await this.$message.success(this.$t('inviteTeammates.invites_sent_success'));
+        await this.$message.success(
+          this.$t('inviteTeammates.invites_sent_success'),
+        );
       } catch (error) {
         await this.$message.error(getErrorMessage(error));
       }
