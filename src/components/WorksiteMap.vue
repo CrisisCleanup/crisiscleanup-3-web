@@ -44,6 +44,36 @@
         class="w-8 h-8 border-2 my-1 bg-white"
       />
     </div>
+    <div
+      v-if="!mapLoading"
+      style="z-index: 1001;"
+      class="legend absolute left-0 bottom-0 h-96 w-72 bg-white border p-2"
+    >
+      <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
+      <div class="flex flex-wrap justify-between">
+        <div
+          v-for="entry in displayedWorkTypeSvgs"
+          class="flex items-center w-1/2 mb-1"
+        >
+          <div class="map-svg-container" v-html="entry.svg"></div>
+          <span class="text-xs ml-1">{{ entry.key | getWorkTypeName }}</span>
+        </div>
+      </div>
+      <div class="text-base font-bold my-1">
+        {{ $t('Work Order/Claim Status') }}
+      </div>
+      <div class="flex flex-wrap">
+        <div
+          v-for="(value, key) in legendColors"
+          class="flex items-center w-1/2 mb-1"
+        >
+          <span class="w-4">
+            <badge class="mx-1" :color="value" />
+          </span>
+          <div class="text-xs ml-1">{{ key }}</div>
+        </div>
+      </div>
+    </div>
     <div ref="map" class="home-map"></div>
   </div>
 </template>
@@ -140,6 +170,27 @@ export default {
       colors,
       templates,
       pixiContainer: new Container(),
+      displayedWorkTypes: {},
+      displayedWorkTypeSvgs: [],
+      legendColors: {
+        [this.$t('Unclaimed')]: colors.open_unassigned_unclaimed.fillColor,
+        [this.$t('Claimed, not started')]: colors.open_unassigned_claimed
+          .fillColor,
+        [this.$t('In progress')]: colors.open_assigned_claimed.fillColor,
+        [this.$t('Partially completed')]: colors[
+          'open_partially-completed_claimed'
+        ].fillColor,
+        [this.$t('Needs follow-up')]: colors['open_needs-follow-up_claimed']
+          .fillColor,
+        [this.$t('Completed')]: colors.closed_completed_claimed.fillColor,
+        [this.$t(
+          'Done by others, no help wanted, or partially completed',
+        )]: colors['closed_done-by-others_unclaimed'].fillColor,
+        [this.$t('Duplicate or Unresponsive')]: colors
+          .open_unresponsive_unclaimed.fillColor,
+        [this.$t('Out of scope')]: colors['closed_out-of-scope_unclaimed']
+          .fillColor,
+      },
     };
   },
   computed: {
@@ -150,6 +201,22 @@ export default {
   watch: {
     newMarker() {
       this.addWorksite(this.newMarker);
+    },
+    displayedWorkTypes: {
+      handler(val) {
+        this.displayedWorkTypeSvgs = Object.keys(val).map(workType => {
+          const template = this.templates[workType] || this.templates.unknown;
+          const svg = template
+            .replace('{{fillColor}}', 'black')
+            .replace('{{strokeColor}}', 'black')
+            .replace('{{multple}}', '');
+          return {
+            svg,
+            key: workType,
+          };
+        });
+      },
+      deep: true,
     },
   },
   mounted() {
@@ -282,6 +349,7 @@ export default {
     loadMarkersOnMap(markers) {
       for (let i = this.pixiContainer.children.length - 1; i >= 0; i--) {
         this.pixiContainer.removeChild(this.pixiContainer.children[i]);
+        this.displayedWorkTypes = {};
       }
       this.pixiContainer.destroy({
         children: true,
@@ -325,6 +393,9 @@ export default {
                   self.currentFilters,
                   self.currentUser.organization,
                 );
+
+                self.displayedWorkTypes[work_type.work_type] = true;
+                self.displayedWorkTypes = { ...self.displayedWorkTypes };
 
                 const colorsKey = `${work_type.status}_${
                   work_type.claimed_by ? 'claimed' : 'unclaimed'
@@ -552,6 +623,11 @@ export default {
 /*.home-map {*/
 /*    height: 100%;*/
 /*}*/
+
+.map-svg-container svg {
+  width: 25px;
+  height: 25px;
+}
 
 .leaflet-pane {
   z-index: 5;
