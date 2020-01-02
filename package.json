@@ -7,6 +7,7 @@
     "serve-dev": "vue-cli-service serve --mode development",
     "build": "vue-cli-service build",
     "lint-fix": "vue-cli-service lint --ignore-path .gitignore .",
+    "lint-staged": "lint-staged",
     "lint": "vue-cli-service lint --no-fix --ignore-path .gitignore .",
     "prettify": "prettier --write ./**/*.{js,vue}",
     "deploy-staging": "vue-cli-service build --mode staging && vue-cli-service s3-deploy",
@@ -49,6 +50,7 @@
     "marker-clusterer-plus": "^2.1.4",
     "pixi-filters": "^3.0.3",
     "pixi.js": "^5.1.5",
+    "pre-commit": "^1.2.2",
     "shpjs": "^3.4.3",
     "spin.js": "^4.1.0",
     "v-tooltip": "^2.0.2",
@@ -90,6 +92,7 @@
     "jest-serializer-vue": "^2.0.2",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
+    "lint-staged": "^9.5.0",
     "prettier": "^1.19.1",
     "tailwindcss": "^1.1.2",
     "vue-jest": "^3.0.5",
@@ -99,5 +102,16 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "lint-staged": {
+    "*.{js,vue}": [
+      "npm run lint-fix",
+      "git add --force"
+    ],
+    "*.json": [
+      "prettier --write",
+      "git add --force"
+    ]
+  },
+  "pre-commit": "lint-staged"
 }
