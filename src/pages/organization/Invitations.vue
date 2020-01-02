@@ -3,19 +3,19 @@
     <div class="p-12 w-full">
       <div class="flex justify-between items-center my-6">
         <div>
-          <div class="text-base">Current Requests</div>
-          <div class="text-xs">Sub sections</div>
+          <div class="text-base">{{ $t('Current Requests') }}</div>
+          <div class="text-xs">{{ $t('Sub sections') }}</div>
         </div>
         <div class="flex">
           <base-button
             size="small"
-            text="Download"
+            :text="$t('actions.downloads')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="download"
           />
           <base-button
             size="small"
-            text="Print"
+            :text="$t('actions.print')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="print"
           />
@@ -33,7 +33,7 @@
               size="small"
               class="flex-grow m-1 mx-2 text-xs px-3"
               :action="() => {}"
-              text="Ignore"
+              :text="$t('actions.ignore')"
             />
             <base-button
               size="small"
@@ -44,7 +44,7 @@
                   rejectInvitationRequest(slotProps.item);
                 }
               "
-              text="Reject"
+              :text="$t('actions.reject')"
             />
             <base-button
               size="small"
@@ -55,7 +55,7 @@
                   acceptInvitationRequest(slotProps.item);
                 }
               "
-              text="Accept"
+              :text="$t('actions.accept')"
             />
           </div>
         </template>
@@ -63,7 +63,7 @@
 
       <div class="flex justify-between items-center my-6">
         <div class="flex items-center">
-          <div class="text-base">Incomplete Invitations</div>
+          <div class="text-base">{{ $t('Incomplete Invitations') }}</div>
           <div
             class="mx-5 flex items-center bg-white border p-1 px-4 cursor-pointer"
             @click="() => {}"
@@ -75,19 +75,19 @@
         <div class="flex">
           <base-button
             size="small"
-            text="Download"
+            :text="$t('actions.download')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="download"
           />
           <base-button
             size="small"
-            text="Print"
+            :text="$t('actions.print')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="print"
           />
           <base-button
             size="small"
-            text="Delete Expired"
+            :text="$t('actions.delete_expired')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="trash"
           />
@@ -110,14 +110,14 @@
                   resendInvitation(slotProps.item);
                 }
               "
-              text="Re-Invite"
+              :text="$t('actions.re_invite')"
             />
           </div>
         </template>
         <template #delete="slotProps">
           <div class="flex mr-2">
             <ccu-icon
-              alt="Delete Invitation"
+              :alt="$t('actions.delete_invitation')"
               type="trash"
               size="small"
               @click.native="
@@ -145,19 +145,19 @@ export default {
     return {
       currentRequestsColumns: [
         {
-          title: 'Requestor',
+          title: this.$t('Requestor'),
           dataIndex: 'requestor',
           key: 'full_name',
           width: '2fr',
         },
         {
-          title: 'Phone',
+          title: this.$t('Phone'),
           dataIndex: 'phone',
           key: 'mobile',
           width: '2fr',
         },
         {
-          title: 'Request Date',
+          title: this.$t('Request Date'),
           dataIndex: 'requested_at_moment',
           key: 'requested_at_moment',
           width: '2fr',
@@ -171,25 +171,25 @@ export default {
       ],
       invitationsColumns: [
         {
-          title: 'Email',
+          title: this.$t('formLabels.email'),
           dataIndex: 'email',
           key: 'invitee_email',
           width: '250px',
         },
         {
-          title: 'Invited By',
+          title: this.$t('Invited By'),
           dataIndex: 'invited_by',
           key: 'invited_by',
           width: '1fr',
         },
         {
-          title: 'Status',
+          title: this.$t('Status'),
           dataIndex: 'status',
           key: 'status',
           width: '1fr',
         },
         {
-          title: 'Invitation Date',
+          title: this.$t('Invitation Date'),
           dataIndex: 'invitation_date',
           key: 'invitation_date',
           width: '1fr',
@@ -240,23 +240,23 @@ export default {
     async acceptInvitationRequest(request) {
       await InvitationRequest.api().acceptInvitationRequest(request);
       await this.loadAllInvitationRequests();
-      await this.$message.success('Invitation Request Accepted');
+      await this.$message.success(this.$t('Invitation Request Accepted'));
     },
     async rejectInvitationRequest(request) {
       await InvitationRequest.api().rejectInvitationRequest(request);
       await this.loadAllInvitationRequests();
-      await this.$message.success('Invitation Request Rejected');
+      await this.$message.success(this.$t('Invitation Request Rejected'));
     },
     async resendInvitation(invitation) {
       await Invitation.api().resendInvitation(invitation);
       await this.loadAllInvitations();
-      await this.$message.success('Invitation Resent');
+      await this.$message.success(this.$t('Invitation Resent'));
     },
     async deleteInvitation(invitation) {
       await Invitation.api().delete(`/invitations/${invitation.id}`, {
         delete: invitation.id,
       });
-      await this.$message.success('Invitation Deleted');
+      await this.$message.success(this.$t('Invitation Deleted'));
     },
   },
 };

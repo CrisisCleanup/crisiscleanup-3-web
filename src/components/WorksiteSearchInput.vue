@@ -85,7 +85,7 @@ export default {
       sectionConfigs: {
         worksites: {
           limit: 5,
-          label: 'Existing Cases',
+          label: this.$t('Existing Cases'),
           type: '',
           onSelected: selected => {
             this.selected = selected.item;
@@ -94,7 +94,7 @@ export default {
         },
         geocoder: {
           limit: 10,
-          label: 'Geocoder',
+          label: this.$t('Geocoder'),
           type: '',
           onSelected: selected => {
             this.selected = selected.item;

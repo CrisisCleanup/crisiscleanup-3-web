@@ -3,13 +3,17 @@
     <div v-if="!loading">
       <div class="flex">
         <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
-          <div>My Claimed Cases ({{ currentIncident.name }})</div>
+          <div>
+            {{ $t('dashboard.my_claimed_cases') }} ({{ currentIncident.name }})
+          </div>
           <div class="font-bold">
             {{ claimedWorksites.length | numeral('0,0') }}
           </div>
         </div>
         <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-          <div>Total Claimed ({{ currentIncident.name }})</div>
+          <div>
+            {{ $t('dashboard.total_claimed') }} ({{ currentIncident.name }})
+          </div>
           <div class="font-bold">
             {{ totalClaimed | numeral('0,0') }} ({{
               (totalClaimed / totalWorksites) | numeral('0%')
@@ -22,7 +26,9 @@
           ></div>
         </div>
         <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-          <div>In Progress ({{ currentIncident.name }})</div>
+          <div>
+            {{ $t('dashboard.in_progress') }} ({{ currentIncident.name }})
+          </div>
           <div class="font-bold">
             {{ totalInProgess | numeral('0,0') }} ({{
               (totalInProgess / totalWorksites) | numeral('0%')
@@ -35,12 +41,12 @@
           ></div>
         </div>
         <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-          <div>Closed ({{ currentIncident.name }})</div>
+          <div>{{ $t('dashboard.closed') }} ({{ currentIncident.name }})</div>
           <div class="font-bold">
             {{ totalClosed | numeral('0,0') }} ({{
               (totalClosed / totalWorksites) | numeral('0%')
             }}
-            of Claimed)
+            {{ $t('of Claimed') }})
           </div>
           <div
             class="bottom-0 left-0 absolute border-b-4 border-green-600"
@@ -50,7 +56,9 @@
       </div>
       <div class="flex">
         <div class="w-3/5 m-4 pt-2 shadow bg-white flex-shrink">
-          <div class="py-4 px-4 text-gray-500 border-b">MY CASES</div>
+          <div class="py-4 px-4 text-gray-500 border-b">
+            {{ $t('MY CASES') }}
+          </div>
           <div class="p-4">
             <template v-for="worksite in claimedWorksites">
               <template>
@@ -94,7 +102,7 @@
                     tag="div"
                   >
                     <ccu-icon
-                      alt="Jump to Case"
+                      :alt="$t('actions.jump_to_case')"
                       size="medium"
                       class="p-1 py-2"
                       type="go-case"
@@ -108,23 +116,21 @@
         <div class="w-2/5 m-4 p-6 shadow bg-white">
           <div class="flex flex-col items-center justify-around">
             <div class="text-center text-2xl w-2/3 my-3">
-              Invite Additional Members to Crisiscleanup
+              {{ $t('dashboard.invite_teammates') }}
             </div>
             <div class="text-justify w-5/6 my-3">
               <div class="my-3">
-                Enter a comma-seperated list of email addresses to invite. Each
-                email address entered here will receive and email with
-                instructions to create a new account and join your organization
+                {{ $t('inviteTeammates.invite_teammates_instructions') }}
               </div>
               <base-input
                 v-model="usersToInvite"
                 size="large"
                 class="flex-grow my-3"
-                placeholder="Emails"
+                :placeholder="$t('Emails')"
               />
             </div>
             <base-button
-              text="Send Invites"
+              :text="$t('inviteTeammates.send_invites')"
               type="primary"
               class="px-8 py-3"
               :action="inviteUsers"
@@ -134,7 +140,9 @@
       </div>
       <div class="flex">
         <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
-          <div class="py-4 px-4 text-gray-500 border-b">CASES COMPLETION</div>
+          <div class="py-4 px-4 text-gray-500 border-b">
+            {{ $t('dashboard.worksite_completion') }}
+          </div>
           <div class="p-4">
             <div class="small">
               <line-chart :chart-data="datacollection" :options="options" />
@@ -149,7 +157,7 @@
       class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center"
     >
       <div class="flex flex-col items-center">
-        <spinner message="Loading..." />
+        <spinner :message="$t('Loading...')" />
       </div>
     </div>
   </div>
@@ -279,7 +287,9 @@ export default {
       try {
         const emails = this.usersToInvite.split(',');
         await Promise.all(emails.map(email => User.api().inviteUser(email)));
-        await this.$message.success('Invitations sent');
+        await this.$message.success(
+          this.$t('inviteTeammates.invites_sent_success'),
+        );
       } catch (error) {
         await this.$message.error(getErrorMessage(error));
       }
@@ -392,7 +402,7 @@ export default {
         labels: chckDates,
         datasets: [
           {
-            label: 'Total Claimed',
+            label: this.$t('dashboard.total_claimed'),
             borderColor: '#00bbe7',
             borderWidth: '2',
             pointRadius: 0,
@@ -401,7 +411,7 @@ export default {
             data: chckDates.map(() => this.randomScalingFactor(150, 230)),
           },
           {
-            label: 'Total Reported',
+            label: this.$t('dashboard.total_reported'),
             borderColor: '#13e768',
             borderWidth: '2',
             pointRadius: 0,
@@ -409,7 +419,7 @@ export default {
             data: chckDates.map(() => this.randomScalingFactor(100, 170)),
           },
           {
-            label: 'What is this?',
+            label: this.$t('dashboard.what_is_this'),
             borderColor: 'red',
             borderWidth: '1',
             borderDash: [5, 5],

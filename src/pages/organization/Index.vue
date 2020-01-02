@@ -7,7 +7,7 @@
         tag="div"
         :class="{ 'router-link-active': isInvitationsActive }"
       >
-        <span class="pt-2">Invitation Management</span>
+        <span class="pt-2">{{ $t('Invitation Management') }}</span>
       </router-link>
 
       <router-link
@@ -15,7 +15,7 @@
         class="flex w-40 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">User Management</span>
+        <span class="pt-2">{{ $t('User Management') }}</span>
       </router-link>
 
       <router-link
@@ -23,7 +23,7 @@
         class="flex w-40 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">Team Management</span>
+        <span class="pt-2">{{ $t('Team Management') }}</span>
       </router-link>
 
       <router-link
@@ -31,7 +31,7 @@
         class="flex w-40 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">Organization Profile</span>
+        <span class="pt-2">{{ $t('Organization Profile') }}</span>
       </router-link>
 
       <router-link
@@ -39,7 +39,7 @@
         class="flex w-40 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">Affiliate Organization</span>
+        <span class="pt-2">{{ $t('dashboard.affiliated_orgs') }}</span>
       </router-link>
 
       <router-link
@@ -47,7 +47,7 @@
         class="flex w-40 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">Layer Library</span>
+        <span class="pt-2">{{ $t('Layer Library') }}</span>
       </router-link>
     </div>
     <div class="flex-grow bg-gray-100">

@@ -57,6 +57,7 @@ const mocks = {
       },
     }),
   },
+  $t: key => key,
 };
 
 const mountWithOptions = () =>

@@ -5,6 +5,8 @@
     :label="label"
     :components="{ OpenIndicator }"
     :searchable="searchable"
+    :multiple="multiple"
+    :disabled="disabled"
     class="base-input text-base"
     :placeholder="placeholder"
     :reduce="item => (itemKey ? item[itemKey] : item)"
@@ -18,6 +20,14 @@ export default {
   name: 'FormSelect',
   props: {
     searchable: {
+      type: Boolean,
+      default: false,
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },

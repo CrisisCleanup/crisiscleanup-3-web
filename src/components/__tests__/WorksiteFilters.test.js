@@ -29,6 +29,10 @@ const MockFilters = {
   sub_fields: {},
 };
 
+const mocks = {
+  $t: key => key,
+};
+
 const mountWithOptions = () =>
   shallowMount(WorksiteFilters, {
     stubs: {
@@ -41,6 +45,7 @@ const mountWithOptions = () =>
       currentFilters: MockFilters,
     },
     localVue,
+    mocks,
   });
 
 describe('WorksiteFilters', () => {

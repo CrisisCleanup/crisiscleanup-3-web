@@ -85,14 +85,14 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
        
       <div>
         <button
-          alt="Clear all filters"
+          alt="actions.clear_filters"
           class="text-yellow-500 text-underline w-32 bare flex items-center justify-center"
           type="submit"
         >
           <!---->
            
           <!---->
-           Clear all filters 
+           actions.clear_filters 
           <!---->
         </button>
       </div>
@@ -149,32 +149,32 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           <base-checkbox-stub
             class="block my-1"
           >
-            Unclaimed
+            searchFilterAside.unclaimed
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
           >
-            Claimed By My Organization
+            searchFilterAside.claimed_by_my_org
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
           >
-            Reported By My Organization
+            searchFilterAside.reported_by_my_org
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
             value="true"
           >
-            Open
+            searchFilterAside.open
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
           >
-            Closed
+            searchFilterAside.closed
           </base-checkbox-stub>
         </div>
          
@@ -187,7 +187,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
     class="flex items-center justify-center p-2 bg-white border-t"
   >
     <button
-      alt="Cancel"
+      alt="actions.cancel"
       class="m-1 border-2 border-black px-6 py-2 text-base flex items-center justify-center"
       size="medium"
       type="submit"
@@ -195,12 +195,12 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       <!---->
        
       <!---->
-       Cancel 
+       actions.cancel 
       <!---->
     </button>
      
     <button
-      alt="Apply Filters"
+      alt="actions.apply_filters"
       class="m-1 p-3 px-6 text-base primary flex items-center justify-center"
       size="medium"
       type="submit"
@@ -208,7 +208,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       <!---->
        
       <!---->
-       Apply Filters 
+       actions.apply_filters 
       <!---->
     </button>
   </div>
