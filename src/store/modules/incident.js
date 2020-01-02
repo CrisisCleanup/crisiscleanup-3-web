@@ -11,7 +11,9 @@ const actions = {};
 // mutations
 const mutations = {
   setCurrentIncidentId(state, currentIncidentId) {
-    state.currentIncidentId = currentIncidentId;
+    state.currentIncidentId = currentIncidentId
+      ? parseInt(currentIncidentId)
+      : currentIncidentId;
   },
 };
 
