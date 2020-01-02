@@ -84,17 +84,12 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       </div>
        
       <div>
-        <button
-          alt="Clear all filters"
-          class="text-yellow-500 text-underline w-32 bare flex items-center justify-center"
-          type="submit"
-        >
-          <!---->
-           
-          <!---->
-           Clear all filters 
-          <!---->
-        </button>
+        <base-button-stub
+          action="function () { [native code] }"
+          class="text-yellow-500 text-underline w-32"
+          text="Clear all filters"
+          type="bare"
+        />
       </div>
     </div>
      
@@ -186,31 +181,26 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
   <div
     class="flex items-center justify-center p-2 bg-white border-t"
   >
-    <button
-      alt="Cancel"
-      class="m-1 border-2 border-black px-6 py-2 text-base flex items-center justify-center"
+    <base-button-stub
+      action="function () {
+        /* istanbul ignore next */
+        cov_10ow1s4icn.f[51]++;
+        cov_10ow1s4icn.s[136]++;
+
+        _vm.$emit('closedFilters');
+      }"
+      class="m-1 border-2 border-black px-6 py-2"
       size="medium"
-      type="submit"
-    >
-      <!---->
-       
-      <!---->
-       Cancel 
-      <!---->
-    </button>
+      text="Cancel"
+    />
      
-    <button
-      alt="Apply Filters"
-      class="m-1 p-3 px-6 text-base primary flex items-center justify-center"
+    <base-button-stub
+      action="function () { [native code] }"
+      class="m-1 p-3 px-6"
       size="medium"
-      type="submit"
-    >
-      <!---->
-       
-      <!---->
-       Apply Filters 
-      <!---->
-    </button>
+      text="Apply Filters"
+      type="primary"
+    />
   </div>
 </modal-stub>
 `;

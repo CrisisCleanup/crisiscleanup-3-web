@@ -12,7 +12,9 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         class="w-1/4 m-4 p-6 shadow text-base bg-white"
       >
         <div>
-          My Claimed Cases (Texas Flooding, Oct 2018)
+          
+          dashboard.my_claimed_cases (Texas Flooding, Oct 2018)
+        
         </div>
          
         <div
@@ -28,7 +30,9 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
       >
         <div>
-          Total Claimed (Texas Flooding, Oct 2018)
+          
+          dashboard.total_claimed (Texas Flooding, Oct 2018)
+        
         </div>
          
         <div
@@ -49,7 +53,9 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
       >
         <div>
-          In Progress (Texas Flooding, Oct 2018)
+          
+          dashboard.in_progress (Texas Flooding, Oct 2018)
+        
         </div>
          
         <div
@@ -70,7 +76,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
       >
         <div>
-          Closed (Texas Flooding, Oct 2018)
+          dashboard.closed (Texas Flooding, Oct 2018)
         </div>
          
         <div
@@ -97,7 +103,9 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         <div
           class="py-4 px-4 text-gray-500 border-b"
         >
+          
           MY CASES
+        
         </div>
          
         <div
@@ -380,7 +388,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="text-center text-2xl w-2/3 my-3"
           >
             
-            Invite Additional Members to Crisiscleanup
+            dashboard.invite_teammates
           
           </div>
            
@@ -391,9 +399,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               class="my-3"
             >
               
-              Enter a comma-seperated list of email addresses to invite. Each
-              email address entered here will receive and email with
-              instructions to create a new account and join your organization
+              inviteTeammates.invite_teammates_instructions
             
             </div>
              
@@ -408,7 +414,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           <base-button-stub
             action="function () { [native code] }"
             class="px-8 py-3"
-            text="Send Invites"
+            text="inviteTeammates.send_invites"
             type="primary"
           />
         </div>
@@ -424,7 +430,9 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         <div
           class="py-4 px-4 text-gray-500 border-b"
         >
-          CASES COMPLETION
+          
+          dashboard.worksite_completion
+        
         </div>
          
         <div
