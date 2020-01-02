@@ -13,15 +13,15 @@
     >
       <base-button
         text=""
-        title="Go to Incident"
-        alt="Go to Incident"
+        :title="$t('Go to Incident')"
+        :alt="$t('Go to Incident')"
         :action="goToIncidentCenter"
         icon="search-minus"
         class="w-8 h-8 border-2 my-1 bg-white"
       />
       <base-button
         v-tooltip="{
-          content: 'Zoom to make icons interactive',
+          content: this.$t('Zoom to make icons interactive'),
           show: showInteractivePopover,
           trigger: 'manual',
           autoHide: true,
@@ -29,16 +29,16 @@
           placement: 'right-start',
         }"
         text=""
-        title="Go to Interactive"
-        alt="Go to Interactive"
+        :title="$t('Go to Interactive')"
+        :alt="$t('Go to Interactive')"
         icon="search-plus"
         :action="goToInteractive"
         class="w-8 h-8 border-2 my-1 bg-white"
       />
       <base-button
         text=""
-        alt="Go To Local"
-        title="Go To Local"
+        :title="$t('Go to Local')"
+        :alt="$t('Go to Local')"
         icon="search-location"
         :action="goToLocal"
         class="w-8 h-8 border-2 my-1 bg-white"

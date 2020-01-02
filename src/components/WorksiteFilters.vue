@@ -26,7 +26,7 @@
               class="m-1"
               @closed="removeField(key)"
             >
-              Work Type: {{ key | getWorkTypeName }}
+              {{ $t('Work Type') }}: {{ key | getWorkTypeName }}
             </tag>
           </template>
           <template v-for="(value, key) in filters.statuses">
@@ -37,7 +37,7 @@
               class="m-1"
               @closed="removeStatus(key)"
             >
-              Status: {{ key | snakeToTitleCase }}
+              {{ $t('Status') }}: {{ key | snakeToTitleCase }}
             </tag>
           </template>
         </div>
@@ -60,7 +60,7 @@
             }"
             @click="currentSection = 'general'"
           >
-            General
+            {{ $t('General') }}
             <span
               v-if="statusCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
@@ -68,14 +68,14 @@
             >
           </div>
           <div class="p-3 px-4 border-b cursor-pointer">
-            Personal Info
+            {{ $t('Personal Info') }}
           </div>
           <div
             class="p-3 px-4 border-b cursor-pointer"
             :class="{ 'border-l-8 border-l-black': currentSection === 'work' }"
             @click="currentSection = 'work'"
           >
-            Work
+            {{ $t('Work') }}
             <span
               v-if="fieldsCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
@@ -91,17 +91,17 @@
             <base-checkbox
               v-model="filters.statuses['unclaimed']"
               class="block my-1"
-              >Unclaimed</base-checkbox
+              >{{ $t('searchFilterAside.unclaimed') }}</base-checkbox
             >
             <base-checkbox
               v-model="filters.statuses['claimed_by_org']"
               class="block my-1"
-              >Claimed By My Organization</base-checkbox
+              >{{ $t('searchFilterAside.claimed_by_my_org') }}</base-checkbox
             >
             <base-checkbox
               v-model="filters.statuses['reported_by_org']"
               class="block my-1"
-              >Reported By My Organization</base-checkbox
+              >{{ $t('searchFilterAside.reported_by_my_org') }}</base-checkbox
             >
             <base-checkbox
               class="block my-1"
@@ -111,7 +111,7 @@
                   setOpenClosed(value, 'open');
                 }
               "
-              >Open</base-checkbox
+              >{{ $t('searchFilterAside.open') }}</base-checkbox
             >
             <base-checkbox
               class="block my-1"
@@ -121,7 +121,7 @@
                   setOpenClosed(value, 'closed');
                 }
               "
-              >Closed</base-checkbox
+              >{{ $t('searchFilterAside.closed') }}</base-checkbox
             >
           </div>
           <template v-if="currentSection === 'work'">

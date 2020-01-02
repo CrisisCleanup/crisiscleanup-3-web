@@ -28,7 +28,7 @@
                     }
                   "
                 >
-                  OK
+                  {{ $t('actions.ok') }}
                 </base-button>
               </div>
             </slot>
