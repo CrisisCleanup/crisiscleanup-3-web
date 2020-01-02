@@ -5,9 +5,10 @@
  * Components
  */
 
+import BaseButton from '@/components/BaseButton';
+import { snakeToTitleCase } from '@/filters';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import { snakeToTitleCase } from '@/filters';
 import WorksiteFilters from '../WorksiteFilters';
 
 const localVue = createLocalVue();
@@ -30,7 +31,12 @@ const MockFilters = {
 
 const mountWithOptions = () =>
   shallowMount(WorksiteFilters, {
-    stubs: ['base-button', 'base-checkbox', 'modal', 'tag'],
+    stubs: {
+      'base-button': BaseButton,
+      'base-checkbox': true,
+      modal: true,
+      tag: true,
+    },
     propsData: {
       currentFilters: MockFilters,
     },
