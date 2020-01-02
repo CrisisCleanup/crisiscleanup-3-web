@@ -267,6 +267,11 @@ export default {
     },
   },
   async mounted() {
+    if (this.currentIncidentId && !this.$route.params.incident_id) {
+      await this.$router.replace(
+        `/incident/${this.currentIncidentId}/dashboard`,
+      );
+    }
     this.loading = true;
     await this.reloadDashBoard();
     this.fillData();
