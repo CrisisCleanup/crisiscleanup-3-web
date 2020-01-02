@@ -5,10 +5,10 @@
  * Components
  */
 
-import BaseButton from '@/components/BaseButton';
-import { snakeToTitleCase } from '@/filters';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
+import BaseButton from '@/components/BaseButton';
+import { snakeToTitleCase } from '@/filters';
 import WorksiteFilters from '../WorksiteFilters';
 
 const localVue = createLocalVue();
