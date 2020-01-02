@@ -16,6 +16,10 @@ localVue.use(Vuex);
 jest.mock('@/models/Worksite');
 jest.mock('@/models/User');
 
+const mocks = {
+  $t: key => key,
+};
+
 const mountWithOptions = store =>
   shallowMount(WorksiteSearchInput, {
     stubs: ['vue-autosuggest', 'font-awesome-icon'],
@@ -24,6 +28,7 @@ const mountWithOptions = store =>
     },
     localVue,
     store,
+    mocks,
   });
 
 describe('WorksiteSearchInput', () => {

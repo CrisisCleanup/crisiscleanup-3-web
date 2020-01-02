@@ -14,7 +14,7 @@
             class="mr-2 bg-primary-light text-black"
             >1</badge
           >
-          Basic Information
+          {{ $t('Basic Information') }}
         </div>
       </h4>
       <div class="py-1">
@@ -22,7 +22,7 @@
           :value="worksite.what3words"
           tooltip="info"
           size="large"
-          placeholder="Location"
+          :placeholder="$t('formLabels.location')"
           required
           disabled
           @input="
@@ -39,7 +39,7 @@
             icon="street-view"
             class="text-gray-700 pt-2"
             :action="locateMe"
-            text="Use my location"
+            :text="$t('formLabels.use_my_location')"
           />
           <base-button
             type="bare"
@@ -47,7 +47,7 @@
             icon="map"
             class="text-gray-700 pt-2"
             :action="showOverlayMap"
-            text="Select on Map"
+            :text="$t('formLabels.select_on_map')"
           />
           <modal
             v-if="overlayMapVisible"
@@ -65,7 +65,7 @@
               class="flex items-center justify-center p-2 bg-white"
             >
               <base-button
-                text="Save"
+                :text="$t('actions.save')"
                 size="medium"
                 class="m-1 p-1 px-6"
                 type="primary"
@@ -87,7 +87,7 @@
             },
           ]"
           display-property="name"
-          placeholder="Name"
+          :placeholder="$t('formLabels.name')"
           size="large"
           required
           @input="
@@ -116,7 +116,7 @@
             },
           ]"
           display-property="description"
-          placeholder="Address"
+          :placeholder="$t('formLabels.address')"
           size="large"
           required
           @input="
@@ -134,7 +134,7 @@
           :value="worksite.city"
           tooltip="info"
           size="large"
-          placeholder="City"
+          :placeholder="$t('formLabels.city')"
           required
           @input="
             value => {
@@ -149,7 +149,7 @@
           :value="worksite.county"
           tooltip="info"
           size="large"
-          placeholder="County"
+          :placeholder="$t('formLabels.county')"
           required
           @input="
             value => {
@@ -164,7 +164,7 @@
           :value="worksite.state"
           tooltip="info"
           size="large"
-          placeholder="State"
+          :placeholder="$t('formLabels.state')"
           required
           @input="
             value => {
@@ -179,7 +179,7 @@
           :value="worksite.postal_code"
           tooltip="info"
           size="large"
-          placeholder="Postal Code"
+          :placeholder="$t('formLabels.postal_code')"
           required
           @change="findPotentialGeocode"
         />
@@ -229,7 +229,7 @@
                   <a-icon type="question-circle-o" />
                 </a-tooltip>
               </span>
-              <FormSelect
+              <form-select
                 v-model="dynamicFields[field.field_key]"
                 :value="field.values.find(val => getValue(field.field_key))"
                 :options="field.values"
@@ -339,21 +339,21 @@
             $emit('closeWorksite');
           }
         "
-        text="Cancel"
+        :text="$t('actions.cancel')"
       />
       <base-button
         size="medium"
         type="primary"
         class="flex-grow m-1 text-black"
         :action="saveWorksite"
-        text="Save"
+        :text="$t('actions.save')"
       />
       <base-button
         size="medium"
         type="primary"
         class="flex-grow m-1 text-black"
         :action="claimAndSaveWorksite"
-        text="Claim & Save"
+        :text="$t('actions.save_claim')"
       />
     </div>
   </form>
@@ -586,7 +586,7 @@ export default {
           });
           this.worksite = Worksite.find(savedWorksite.entities.worksites[0].id);
         }
-        await this.$message.success('Worksite saved successfully');
+        await this.$message.success(this.$t('Worksite saved successfully'));
         if (reload) {
           this.$emit('reloadTable');
           this.$emit('reloadMap', this.worksite.id);
@@ -606,7 +606,7 @@ export default {
       }
       try {
         await Worksite.api().claimWorksite(this.worksite.id, []);
-        await this.$message.success('Worksite claimed successfully');
+        await this.$message.success(this.$t('Worksite claimed successfully'));
       } catch (error) {
         await this.$message.error(getErrorMessage(error));
       }

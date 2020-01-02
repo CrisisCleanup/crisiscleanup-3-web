@@ -52,7 +52,7 @@
       class="footer flex items-center justify-between p-4"
     >
       <div>
-        Number per page
+        {{ $t('table.per_page') }}
         <base-select
           :default-value="pagination.pageSize"
           :change="onSelectPageSize"

@@ -1,181 +1,137 @@
 <template>
   <div class="flex items-center justify-center" :style="{ padding: '24px' }">
     <div>
-      <a-card v-if="isEditing" :title="name">
-        <a-form :form="form" layout="vertical" @submit="handleSubmit">
+      <div v-if="isEditing" class="border">
+        <div class="h-16 flex items-center justify-between px-4 py-4 border-b">
+          <span class="text-base">{{ name }}</span>
+          <ccu-icon
+            :alt="$t('actions.cancel')"
+            size="small"
+            class="p-1 py-2"
+            type="cancel"
+            @click.native="mode = 'view'"
+          />
+        </div>
+        <form @submit.prevent="handleSubmit">
           <div class="flex m-auto p-3 justify-start">
             <div class="flex flex-col p-8">
               <img
                 class="rounded-full mx-auto p-1"
                 src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
               />
-              <a href="https://google.com" class="text-center pb-4"
-                >Change Photo</a
-              >
-              <a-button type="primary" class="flex-grow-0"
-                >View ID Badge</a-button
-              >
+              <a href="https://google.com" class="text-center pb-4">{{
+                $t('Change Photo')
+              }}</a>
+              <base-button type="primary">{{
+                $t('View ID Badge')
+              }}</base-button>
             </div>
-            <div style="min-width: 700px;" class="p-8 w-1/2">
+            <div class="p-8 w-108">
               <div class="user-details">
                 <div class="flex">
-                  <a-form-item class="input-container m-1 mb-3">
-                    <label>First Name</label>
-                    <a-input
-                      v-decorator="[
-                        'first_name',
-                        {
-                          initialValue: this.currentUser.first_name,
-                          rules: [
-                            {
-                              required: true,
-                              message: 'First name is required',
-                            },
-                          ],
-                        },
-                      ]"
-                      size="small"
-                      style="border: 0;"
+                  <div class="input-container m-1 mb-3">
+                    <base-input
+                      :value="currentUser.first_name"
+                      size="large"
+                      :placeholder="$t('activate.first_name_placeholder')"
+                      required
+                      @input="
+                        value => {
+                          updateUser(value, 'first_name');
+                        }
+                      "
                     />
-                    ]" />
-                  </a-form-item>
-                  <a-form-item class="input-container m-1 mb-3">
-                    <label>Phone Number</label>
-                    <a-input
-                      v-decorator="[
-                        'phone_number',
-                        { initialValue: this.currentUser.mobile },
-                      ]"
-                      size="small"
+                  </div>
+                  <div class="input-container m-1 mb-3">
+                    <base-input
+                      :value="currentUser.mobile"
+                      size="large"
+                      :placeholder="$t('activate.mobile_placeholder')"
+                      required
+                      @input="
+                        value => {
+                          updateUser(value, 'mobile');
+                        }
+                      "
                     />
-                    ]" />
-                  </a-form-item>
+                  </div>
                 </div>
                 <div class="flex">
-                  <a-form-item class="input-container m-1 mb-3">
-                    <label>Last Name</label>
-                    <a-input
-                      v-decorator="[
-                        'last_name',
-                        {
-                          initialValue: this.currentUser.last_name,
-                          rules: [
-                            {
-                              required: true,
-                              message: 'Last name is required',
-                            },
-                          ],
-                        },
-                      ]"
-                      size="small"
+                  <div class="input-container m-1 mb-3">
+                    <base-input
+                      :value="currentUser.last_name"
+                      size="large"
+                      :placeholder="$t('activate.last_name_placeholder')"
+                      required
+                      @input="
+                        value => {
+                          updateUser(value, 'last_name');
+                        }
+                      "
                     />
-                    ]" />
-                  </a-form-item>
-                  <a-form-item class="input-container m-1 mb-3">
-                    <label>Email</label>
-                    <a-input
-                      v-decorator="[
-                        'email',
-                        {
-                          initialValue: this.currentUser.email,
-                          rules: [
-                            {
-                              required: true,
-                              message: 'Email address is required',
-                            },
-                          ],
-                        },
-                      ]"
-                      size="small"
+                  </div>
+                  <div class="input-container m-1 mb-3">
+                    <base-input
+                      :value="currentUser.email"
+                      size="large"
+                      :placeholder="$t('activate.email_placeholder ')"
+                      required
+                      @input="
+                        value => {
+                          updateUser(value, 'email');
+                        }
+                      "
                     />
-                    ], }, ]" />
-                  </a-form-item>
+                  </div>
                 </div>
               </div>
               <hr class="p-2 m-auto" />
               <div class="flex">
                 <div class="p-1 flex-grow">
-                  <a-form-item label="">
-                    <a-select
-                      v-decorator="[
-                        'role',
-                        {
-                          rules: [
-                            {
-                              required: true,
-                              message: 'Please select your role!',
-                            },
-                          ],
-                        },
-                      ]"
-                      size="large"
-                      placeholder="Role"
-                      @change="handleSelectChange"
-                    >
-                      <a-select-option value="male">
-                        male
-                      </a-select-option>
-                      <a-select-option value="female">
-                        female
-                      </a-select-option>
-                    </a-select>
-                  </a-form-item>
+                  <div label="">
+                    <form-select
+                      v-model="currentUser.roles"
+                      :value="currentUser.roles"
+                      multiple
+                      :options="[]"
+                      item-key="value"
+                      label="name_t"
+                    />
+                  </div>
                 </div>
                 <div class="p-1 flex-grow">
-                  <a-form-item label="">
-                    <a-select
-                      v-decorator="[
-                        'equipment',
-                        {
-                          rules: [
-                            {
-                              required: true,
-                              message: 'Please select your equipment!',
-                            },
-                          ],
-                        },
-                      ]"
-                      size="large"
-                      placeholder="Equipment"
-                      mode="tags"
-                      @change="handleSelectChange"
-                    >
-                      <a-select-option value="male">
-                        male
-                      </a-select-option>
-                      <a-select-option value="female">
-                        female
-                      </a-select-option>
-                    </a-select>
-                  </a-form-item>
+                  <div label="">
+                    <form-select
+                      v-model="currentUser.equipment"
+                      :value="currentUser.equipment"
+                      :options="[]"
+                      item-key="value"
+                      label="name_t"
+                    />
+                  </div>
                 </div>
               </div>
               <div>
-                <h3>Linked Account</h3>
+                <h3>{{ $t('Linked Account') }}</h3>
                 <div class="flex py-3 items-center">
                   <div class="w-1/5 flex items-center">
                     <img
                       src="https://simpleicons.org/icons/facebook.svg"
                       class="w-8 mr-2"
                     />
-                    <label class="pr-3">Facebook</label>
+                    <label class="pr-3">{{ $t('Facebook') }}</label>
                   </div>
-                  <a-input
-                    v-decorator="[
-                      'email',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input your note!',
-                          },
-                        ],
-                      },
-                    ]"
-                    size="medium"
-                    class="w-1/2"
+                  <base-input
+                    :value="currentUser.facebook"
+                    size="large"
+                    :placeholder="$t('activate.email_placeholder ')"
+                    required
+                    @input="
+                      value => {
+                        updateUser(value, 'facebook');
+                      }
+                    "
                   />
-                  ]" />
                 </div>
                 <div class="flex py-3 items-center">
                   <div class="w-1/5 flex items-center">
@@ -183,105 +139,68 @@
                       src="https://simpleicons.org/icons/twitter.svg"
                       class="w-8 mr-2"
                     />
-                    <label class="pr-3">Twitter</label>
+                    <label class="pr-3">{{ $t('Twitter') }}</label>
                   </div>
-                  <a-input
-                    v-decorator="[
-                      'email',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Please input your note!',
-                          },
-                        ],
-                      },
-                    ]"
-                    size="medium"
-                    class="w-1/2"
+                  <base-input
+                    :value="currentUser.twitter"
+                    size="large"
+                    :placeholder="$t('activate.email_placeholder ')"
+                    required
+                    @input="
+                      value => {
+                        updateUser(value, 'twitter');
+                      }
+                    "
                   />
-                  }, ], }, ]" />
                 </div>
               </div>
               <hr class="p-4 m-auto" />
               <div>
-                <h3>Organization</h3>
-                <div class="py-3">
-                  <a-avatar size="medium" />
+                <h3>{{ $t('dashboard.org_label') }}</h3>
+                <div class="py-3 flex items-center">
+                  <div class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300" />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
-                <a-form-item>
-                  <a-button type="primary">
-                    Change Organization
-                  </a-button>
-                </a-form-item>
+                <div>
+                  <base-button type="primary" class="px-4">
+                    {{ $t('Change Organization') }}
+                  </base-button>
+                </div>
               </div>
             </div>
           </div>
-          <div>
-            <h2>Saved Reports</h2>
-            <div class="flex flex-wrap py-3 w-3/4">
-              <a-card style="width: 300px" class="m-2">
-                <p>Card content</p>
-                <p>Card content</p>
-                <p>Card content</p>
-              </a-card>
-              <a-card style="width: 300px" class="m-2">
-                <p>Card content</p>
-                <p>Card content</p>
-                <p>Card content</p>
-              </a-card>
-            </div>
-          </div>
+        </form>
+      </div>
+      <div v-else class="border">
+        <div class="h-16 flex items-center justify-between px-4 py-4 border-b">
+          <span class="text-base">{{ name }}</span>
           <div class="flex">
-            <h2 class="w-10">Settings</h2>
-            <div class="mx-20">
-              <div class="pb-4">
-                <a-switch
-                  class="mr-6"
-                  checked-children="ON"
-                  un-checked-children="OFF"
-                />
-                <span>Share Location while logged in</span>
-              </div>
-              <div class="pb-4">
-                <a-switch
-                  class="mr-6"
-                  checked-children="ON"
-                  un-checked-children="OFF"
-                />
-                <span>Reminders</span>
-              </div>
-            </div>
+            <ccu-icon
+              :alt="$t('actions.edit')"
+              size="small"
+              class="p-1 py-2"
+              type="edit"
+              @click.native="startEditing"
+            />
+            <ccu-icon
+              :alt="$t('actions.share')"
+              size="small"
+              class="p-1 py-2"
+              type="share"
+            />
+            <ccu-icon
+              :alt="$t('actions.print')"
+              size="small"
+              class="p-1 py-2"
+              type="print"
+            />
+            <ccu-icon
+              :alt="$t('actions.delete')"
+              size="small"
+              class="p-1 py-2"
+              type="trash"
+            />
           </div>
-          <div class="flex">
-            <h2 class="w-10">Notification</h2>
-            <div class="mx-20">
-              <a-radio-group v-model="value" @change="onChange">
-                <a-radio :style="radioStyle" :value="1"
-                  >Notification on</a-radio
-                >
-                <a-radio :style="radioStyle" :value="2"
-                  >Notification off</a-radio
-                >
-                <a-radio :style="radioStyle" :value="4">
-                  Restrict to time intervals
-                  <a-input
-                    v-if="value === 4"
-                    :style="{ width: 100, marginLeft: 10 }"
-                  />
-                </a-radio>
-              </a-radio-group>
-            </div>
-          </div>
-        </a-form>
-      </a-card>
-      <a-card v-else>
-        <div slot="extra" class="flex profile-actions text-gray-500">
-          <a-icon type="edit" @click="startEditing" />
-          <a-icon type="share-alt" />
-          <a-icon type="printer" />
-          <a-icon type="delete" />
         </div>
         <div class="flex m-auto p-3 justify-start">
           <div class="flex flex-col p-8">
@@ -289,12 +208,10 @@
               class="rounded-full mx-auto p-1"
               src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
             />
-            <a href="https://google.com" class="text-center pb-4"
-              >Change Photo</a
-            >
-            <a-button type="primary" class="flex-grow-0"
-              >View ID Badge</a-button
-            >
+            <a href="https://google.com" class="text-center pb-4">{{
+              $t('Change Photo')
+            }}</a>
+            <base-button type="primary">{{ $t('View ID Badge') }}</base-button>
           </div>
           <div style="min-width: 700px;" class="p-8 w-1/2">
             <h1 class="text-2xl">{{ name }}</h1>
@@ -320,24 +237,24 @@
               </div>
             </div>
             <div class="mt-4">
-              <h3>Assets</h3>
-              <div class="mt-2">
-                <a-tag>Van</a-tag>
-                <a-tag>Trailer</a-tag>
-                <a-tag>Compressor</a-tag>
-                <a-tag>Bulldozer</a-tag>
+              <h3>{{ $t('Assets') }}</h3>
+              <div class="mt-2 flex">
+                <tag class="mx-1">Van</tag>
+                <tag class="mx-1">Trailer</tag>
+                <tag class="mx-1">Compressor</tag>
+                <tag class="mx-1">Bulldozer</tag>
               </div>
             </div>
             <div class="mt-8">
-              <h3>Organization</h3>
-              <div class="py-3">
-                <a-avatar size="medium" />
+              <h3>{{ $t('Organization') }}</h3>
+              <div class="py-3 flex items-center">
+                <div class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300" />
                 <span class="px-4">{{ currentUser.organization.name }}</span>
               </div>
             </div>
           </div>
         </div>
-      </a-card>
+      </div>
     </div>
   </div>
 </template>
@@ -349,15 +266,7 @@ export default {
   name: 'Profile',
   data() {
     return {
-      formLayout: 'inline',
-      form: this.$form.createForm(this),
-      value: 1,
-      radioStyle: {
-        display: 'block',
-        height: '30px',
-        lineHeight: '30px',
-      },
-      isEditing: false,
+      mode: 'view',
     };
   },
   computed: {
@@ -370,23 +279,24 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
+    isEditing() {
+      return this.mode === 'edit';
+    },
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          this.$log.debug('Received values of form: ', values);
-        }
-      });
-    },
-    handleSelectChange(value) {
-      this.form.setFieldsValue({
-        note: `Hi, ${value === 'male' ? 'man' : 'lady'}!`,
-      });
     },
     startEditing() {
-      this.isEditing = true;
+      this.mode = 'edit';
+    },
+    updateUser(value, key) {
+      User.update({
+        where: this.currentUser.id,
+        data: {
+          [key]: value,
+        },
+      });
     },
   },
 };
@@ -401,9 +311,6 @@ export default {
   color: black;
 }
 .user-details .input-container {
-  border: 1px solid lightgray;
-  padding: 0 8px;
-  width: 50%;
 }
 .user-details label {
   color: #a0a0a0;
