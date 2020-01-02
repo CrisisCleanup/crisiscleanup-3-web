@@ -102,7 +102,7 @@
                     tag="div"
                   >
                     <ccu-icon
-                      alt="Jump to Case"
+                      :alt="$t('actions.jump_to_case')"
                       size="medium"
                       class="p-1 py-2"
                       type="go-case"

@@ -19,7 +19,7 @@
             <slot name="footer">
               <div class="flex items-center justify-center py-3 border-t">
                 <base-button
-                  alt="OK"
+                  :alt="$t('actions.ok')"
                   type="primary"
                   class="px-6 p-3"
                   :action="

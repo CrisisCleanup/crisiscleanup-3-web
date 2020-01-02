@@ -148,7 +148,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               to="/incident/99/cases/undefined/edit?showOnMap=true"
             >
               <ccu-icon-stub
-                alt="Jump to Case"
+                alt="actions.jump_to_case"
                 class="p-1 py-2"
                 size="medium"
                 type="go-case"
@@ -192,7 +192,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               to="/incident/99/cases/undefined/edit?showOnMap=true"
             >
               <ccu-icon-stub
-                alt="Jump to Case"
+                alt="actions.jump_to_case"
                 class="p-1 py-2"
                 size="medium"
                 type="go-case"
@@ -236,7 +236,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               to="/incident/99/cases/undefined/edit?showOnMap=true"
             >
               <ccu-icon-stub
-                alt="Jump to Case"
+                alt="actions.jump_to_case"
                 class="p-1 py-2"
                 size="medium"
                 type="go-case"
@@ -280,7 +280,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               to="/incident/99/cases/undefined/edit?showOnMap=true"
             >
               <ccu-icon-stub
-                alt="Jump to Case"
+                alt="actions.jump_to_case"
                 class="p-1 py-2"
                 size="medium"
                 type="go-case"
@@ -324,7 +324,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               to="/incident/99/cases/undefined/edit?showOnMap=true"
             >
               <ccu-icon-stub
-                alt="Jump to Case"
+                alt="actions.jump_to_case"
                 class="p-1 py-2"
                 size="medium"
                 type="go-case"
@@ -368,7 +368,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               to="/incident/99/cases/undefined/edit?showOnMap=true"
             >
               <ccu-icon-stub
-                alt="Jump to Case"
+                alt="actions.jump_to_case"
                 class="p-1 py-2"
                 size="medium"
                 type="go-case"

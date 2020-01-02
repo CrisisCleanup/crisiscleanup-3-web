@@ -68,7 +68,7 @@
           <template #sample="slotProps">
             <div class="flex mr-2">
               <base-button
-                text="See Sample"
+                :text="$t('actions.see_sample')"
                 type="trash"
                 size="small"
                 :action="
@@ -93,7 +93,7 @@
         </Table>
         <div class="my-3">
           <base-button
-            text="Upload"
+            :text="$t('actions.upload')"
             :action="
               () => {
                 return this.uploadShapefile();

@@ -14,7 +14,7 @@
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <ccu-icon
-                alt="Toggle Map View"
+                :alt="$t('Toggle Map View')"
                 size="medium"
                 class="mr-4 cursor-pointer"
                 :class="showingMap ? 'filter-yellow' : 'filter-gray'"
@@ -22,7 +22,7 @@
                 @click.native="toggleView('showingMap')"
               />
               <ccu-icon
-                alt="Toggle Table View"
+                :alt="$t('Toggle Tablr View')"
                 size="medium"
                 class="mr-4 cursor-pointer"
                 :class="showingTable ? 'filter-yellow' : 'filter-gray'"
@@ -63,7 +63,7 @@
                 <base-button
                   slot="btn"
                   class="text-base font-thin mx-4"
-                  text="Layers"
+                  :text="$t('Layers')"
                   icon="layer-group"
                 />
                 <template slot="body">
@@ -257,8 +257,8 @@
           :class="{ 'tab-active': isNewWorksite }"
           @click="createNewWorksite"
         >
-          <ccu-icon alt="New Case" type="active" size="small" />
-          <span class="px-2">New Case</span>
+          <ccu-icon :alt="$t('New Case')" type="active" size="small" />
+          <span class="px-2">{{ $t('New Case') }}</span>
         </div>
         <div
           v-if="this.currentWorksite && this.currentWorksite.id"
