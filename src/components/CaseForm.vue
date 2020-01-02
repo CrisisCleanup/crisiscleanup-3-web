@@ -229,7 +229,7 @@
                   <a-icon type="question-circle-o" />
                 </a-tooltip>
               </span>
-              <FormSelect
+              <form-select
                 v-model="dynamicFields[field.field_key]"
                 :value="field.values.find(val => getValue(field.field_key))"
                 :options="field.values"

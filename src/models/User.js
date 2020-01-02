@@ -14,12 +14,29 @@ export default class User extends Model {
       roles: this.attr(null),
       organization: this.attr(null),
       states: this.attr(null),
-      primary_language: this.string('')
+      primary_language: this.string(''),
+      social: this.string({}),
     };
   }
 
   get full_name() {
     return `${this.first_name} ${this.last_name}`;
+  }
+
+  get facebook() {
+    return this.social.facebook;
+  }
+
+  get twitter() {
+    return this.social.twitter;
+  }
+
+  set facebook(value) {
+    this.social.facebook = value;
+  }
+
+  set twitter(value) {
+    this.social.twitter = value;
   }
 
   static apiConfig = {

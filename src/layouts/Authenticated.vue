@@ -20,7 +20,7 @@
         >
           <div key="cases" class="flex flex-col items-center">
             <ccu-icon alt="Cases" type="cases" />
-            <div class="menu-text mt-1">{{ $t('nav.my_work_orders') }}</div>
+            <div class="menu-text mt-1">{{ $t('nav.work_orders') }}</div>
           </div>
         </router-link>
         <router-link

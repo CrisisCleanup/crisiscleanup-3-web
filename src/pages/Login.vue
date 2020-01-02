@@ -36,7 +36,7 @@
         size="medium"
         class="px-5 py-2 m-1"
         type="primary"
-        :placeholder="$t('login.log_in_button')"
+        :text="$t('login.log_in_button')"
       />
     </form>
   </div>
