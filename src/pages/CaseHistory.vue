@@ -3,15 +3,16 @@
     <div class="p-3 flex-grow intake-view">
       <div class="my-4 pb-6 border-b">
         <span>
-          <strong
-            >WARNING: DO NOT SHARE THIS INFORMATION WITH SURVIVORS (This has
-            already been a problem).</strong
-          >
-          This information is for internal coordination use only. If you are not
-          a member of a volunteers organization, you may not tell them what to
-          do, or when to deploy. If you don‘t follow these instructions, we will
-          have to take away your nice things and use paper plates instead of
-          china.
+          <strong>{{
+            $t(
+              'WARNING: DO NOT SHARE THIS INFORMATION WITH SURVIVORS (This hasalready been a problem).',
+            )
+          }}</strong
+          >{{
+            $t(
+              'This information is for internal coordination use only. If you are nota member of a volunteers organization, you may not tell them what todo, or when to deploy. If you don‘t follow these instructions, we willhave to take away your nice things and use paper plates instead of china.',
+            )
+          }}
         </span>
       </div>
       <div
@@ -22,7 +23,7 @@
         class="my-4"
       >
         <label class="my-1 text-xs font-bold text-gray-600 block"
-          >Claimed By</label
+          >{{ $t('searchFilterAside.claimed_by') }}</label
         >
         <div v-for="org in organizationsWithClaims" class="my-1">
           {{ getOrganizationName(org) }}
