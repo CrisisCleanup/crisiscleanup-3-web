@@ -144,32 +144,32 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           <base-checkbox-stub
             class="block my-1"
           >
-            Unclaimed
+            searchFilterAside.unclaimed
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
           >
-            Claimed By My Organization
+            searchFilterAside.claimed_by_my_org
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
           >
-            Reported By My Organization
+            searchFilterAside.reported_by_my_org
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
             value="true"
           >
-            Open
+            searchFilterAside.open
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
           >
-            Closed
+            searchFilterAside.closed
           </base-checkbox-stub>
         </div>
          
