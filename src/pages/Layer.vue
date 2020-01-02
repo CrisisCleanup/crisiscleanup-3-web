@@ -106,11 +106,11 @@
 </template>
 
 <script>
-import * as circleToPolygon from 'circle-to-polygon'
+import * as circleToPolygon from 'circle-to-polygon';
 import * as L from 'leaflet';
 import CustomLayersTool from '@/components/CustomLayersTool';
 import Layer from '@/models/Layer';
-import Location from "@/models/Location";
+import Location from '@/models/Location';
 
 export default {
   name: 'Layer',
@@ -149,9 +149,7 @@ export default {
       const locationPromises = [];
 
       this.$refs.layerTool.drawnItems.getLayers().forEach(location => {
-        const data = {
-
-        };
+        const data = {};
         this.$log.debug(location.toGeoJSON());
         let { geometry } = location.toGeoJSON();
         if (location instanceof L.Circle) {
@@ -162,9 +160,9 @@ export default {
           geometry = circleToPolygon(coordinates, radius, numberOfEdges);
         }
         if (geometry.type === 'Point') {
-          data.point = geometry
+          data.point = geometry;
         } else if (geometry.type === 'Polygon') {
-          data.poly = geometry
+          data.poly = geometry;
         }
         locationPromises.push(Location.api().post('/locations', data));
       });
@@ -172,7 +170,7 @@ export default {
       try {
         const locationResults = await Promise.all(locationPromises);
         const locations = locationResults.map(result => {
-          return result.entities.locations[0].id
+          return result.entities.locations[0].id;
         });
 
         const layerResult = await Layer.api().post('/layers', {
@@ -181,7 +179,6 @@ export default {
         });
         this.$log.debug(layerResult.entities.layers[0].id);
         await this.$router.push(`/layers/${layerResult.entities.layers[0].id}`);
-
       } catch (e) {
         this.$log.error(e);
       } finally {
@@ -197,4 +194,3 @@ export default {
   @apply my-2;
 }
 </style>
-</style
