@@ -9,13 +9,13 @@
         <div class="flex">
           <base-button
             size="small"
-            text="Download"
+            :text="$t('actions.downloads')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="download"
           />
           <base-button
             size="small"
-            text="Print"
+            :text="$t('actions.print')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="print"
           />
@@ -33,7 +33,7 @@
               size="small"
               class="flex-grow m-1 mx-2 text-xs px-3"
               :action="() => {}"
-              text="Ignore"
+              :text="$t('actions.ignore')"
             />
             <base-button
               size="small"
@@ -44,7 +44,7 @@
                   rejectInvitationRequest(slotProps.item);
                 }
               "
-              text="Reject"
+              :text="$t('actions.reject')"
             />
             <base-button
               size="small"
@@ -55,7 +55,7 @@
                   acceptInvitationRequest(slotProps.item);
                 }
               "
-              text="Accept"
+              :text="$t('actions.accept')"
             />
           </div>
         </template>
@@ -75,19 +75,19 @@
         <div class="flex">
           <base-button
             size="small"
-            text="Download"
+            :text="$t('actions.download')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="download"
           />
           <base-button
             size="small"
-            text="Print"
+            :text="$t('actions.print')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="print"
           />
           <base-button
             size="small"
-            text="Delete Expired"
+            :text="$t('actions.delete_expired')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="trash"
           />
@@ -110,14 +110,14 @@
                   resendInvitation(slotProps.item);
                 }
               "
-              text="Re-Invite"
+              :text="$t('actions.re_invite')"
             />
           </div>
         </template>
         <template #delete="slotProps">
           <div class="flex mr-2">
             <ccu-icon
-              alt="Delete Invitation"
+              :alt="$t('actions.delete_invitation')"
               type="trash"
               size="small"
               @click.native="

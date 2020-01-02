@@ -96,7 +96,7 @@
                       return requestWorkType(work_type);
                     }
                   "
-                  text="Request"
+                  :text="$t('actions.request')"
                   class="ml-2 p-1 px-3 text-xs"
                 />
               </div>
@@ -184,7 +184,7 @@
         size="medium"
         type="primary"
         class="m-1 text-black p-3 px-4"
-        text="Claim"
+        :text="$t('actions.claim')"
         :action="
           () => {
             return claimWorkType();

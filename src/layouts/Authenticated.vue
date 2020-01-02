@@ -10,7 +10,7 @@
           class="menu-item router-link p-2 border-b border-t border-gray-800"
         >
           <div key="dashboard" class="flex flex-col items-center">
-            <ccu-icon alt="Dashboard" type="dashboard" />
+            <ccu-icon :alt="$t('nav.dashboard')" type="dashboard" />
             <div class="menu-text mt-1">{{ $t('nav.dashboard') }}</div>
           </div>
         </router-link>
@@ -19,7 +19,7 @@
           class="menu-item router-link p-2 border-b border-gray-800"
         >
           <div key="cases" class="flex flex-col items-center">
-            <ccu-icon alt="Cases" type="cases" />
+            <ccu-icon :alt="$t('nav.work_orders')" type="cases" />
             <div class="menu-text mt-1">{{ $t('nav.work_orders') }}</div>
           </div>
         </router-link>
@@ -28,8 +28,12 @@
           class="menu-item router-link p-2 border-b border-gray-800"
         >
           <div key="organization" class="flex flex-col items-center">
-            <ccu-icon alt="My Organization" type="organization" size="large" />
-            <div class="menu-text mt-1">{{$t('nav.my_organization')}}</div>
+            <ccu-icon
+              :alt="$t('nav.my_organization')"
+              type="organization"
+              size="large"
+            />
+            <div class="menu-text mt-1">{{ $t('nav.my_organization' )}}</div>
           </div>
         </router-link>
       </div>

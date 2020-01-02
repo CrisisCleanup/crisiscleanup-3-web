@@ -87,7 +87,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
         <base-button-stub
           action="function () { [native code] }"
           class="text-yellow-500 text-underline w-32"
-          text="Clear all filters"
+          text="actions.clear_filters"
           type="bare"
         />
       </div>
@@ -191,14 +191,14 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       }"
       class="m-1 border-2 border-black px-6 py-2"
       size="medium"
-      text="Cancel"
+      text="actions.cancel"
     />
      
     <base-button-stub
       action="function () { [native code] }"
       class="m-1 p-3 px-6"
       size="medium"
-      text="Apply Filters"
+      text="actions.apply_filters"
       type="primary"
     />
   </div>
