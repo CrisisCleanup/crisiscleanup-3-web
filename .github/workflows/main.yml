@@ -42,7 +42,6 @@ jobs:
       #   with:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
-
   lint:
     name: Run Linter
     runs-on: ubuntu-latest
@@ -66,7 +65,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Tests
+      - name: Run Linter
         run: npm run lint
 
   build:
@@ -92,5 +91,5 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Run Tests
+      - name: Build Site
         run: npm build
