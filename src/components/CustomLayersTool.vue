@@ -82,9 +82,14 @@ export default {
         this.drawnItems.addLayer(e.layer);
       });
 
+      this.map.on('pm:cut', e => {
+        this.drawnItems.addLayer(e.layer);
+        this.drawnItems.removeLayer(e.originalLayer);
+      });
+
       this.map.on('pm:remove', e => {
         this.drawnItems.getLayers().forEach(location => {
-          if (location.toGeoJSON === e.layer.toGeoJSON) {
+          if (location.toGeoJSON().geometry === e.layer.toGeoJSON().geometry) {
             this.drawnItems.removeLayer(location);
           }
         });

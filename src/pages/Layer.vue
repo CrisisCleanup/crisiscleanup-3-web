@@ -152,6 +152,11 @@ export default {
         const data = {};
         this.$log.debug(location.toGeoJSON());
         let { geometry } = location.toGeoJSON();
+        const { type, features } = location.toGeoJSON();
+        if (type === 'FeatureCollection') {
+          const [feature] = features;
+          geometry = feature.geometry;
+        }
         if (location instanceof L.Circle) {
           const radius = location.getRadius();
           const { coordinates } = geometry;
