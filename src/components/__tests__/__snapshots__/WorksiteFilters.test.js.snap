@@ -184,8 +184,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
     <base-button-stub
       action="function () {
         /* istanbul ignore next */
-        cov_1muxidm62e.f[51]++;
-        cov_1muxidm62e.s[136]++;
+        cov_1ozkfu98nt.f[51]++;
+        cov_1ozkfu98nt.s[136]++;
 
         _vm.$emit('closedFilters');
       }"
