@@ -99,7 +99,7 @@ export default {
       );
     } catch (e) {
       await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases`,
+        `/incident/${this.$route.params.incident_id}/cases/new`,
       );
     }
     this.worksite = Worksite.find(this.$route.params.id);

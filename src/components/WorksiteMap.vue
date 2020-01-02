@@ -8,8 +8,8 @@
       <spinner />
     </div>
     <div
-      class="flex flex-col"
-      style="z-index: 1001; position: absolute; top: 90px; left: 10px"
+      class="flex flex-col absolute"
+      style="z-index: 1001; top: 110px; left: 10px"
     >
       <base-button
         text=""
