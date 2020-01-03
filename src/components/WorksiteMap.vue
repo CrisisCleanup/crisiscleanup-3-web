@@ -85,7 +85,14 @@
 </style>
 
 <script>
-import { Container, Loader, Sprite, Texture } from 'pixi.js';
+import {
+  Container,
+  Loader,
+  Sprite,
+  Texture,
+  settings as PixiSettings,
+} from 'pixi.js';
+
 import * as L from 'leaflet';
 import 'leaflet-loading';
 import 'leaflet.gridlayer.googlemutant';
@@ -98,6 +105,11 @@ import { averageGeolocation } from '@/utils/map';
 import { colors, templates } from '@/icons/icons_templates';
 import { groupBy } from '@/utils/array';
 import Worksite from '@/models/Worksite';
+
+PixiSettings.SPRITE_MAX_TEXTURES = Math.min(
+  PixiSettings.SPRITE_MAX_TEXTURES,
+  16,
+);
 
 L.Icon.Default.imagePath = '.';
 // OR
