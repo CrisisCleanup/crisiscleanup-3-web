@@ -15,7 +15,7 @@ export default class Worksite extends Model {
       case_number: this.attr(null),
       city: this.attr(null),
       county: this.attr(null),
-      form_data: this.attr(null),
+      form_data: this.attr([]),
       postal_code: this.attr(null),
       map_location: this.attr(null),
       incident: this.attr(null),
