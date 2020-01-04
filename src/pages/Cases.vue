@@ -179,7 +179,6 @@
               :new-marker="newMarker"
               :current-filters="filters"
               @mapMoved="onMapMoved"
-              @initMap="onInitMap"
               @onSelectmarker="displayWorksite"
             />
           </template>
@@ -539,12 +538,8 @@ export default {
       });
     },
 
-    onInitMap(map) {
-      this.map = map;
-    },
-
     applyLayers(value, layerList, key) {
-      if (value && this.map) {
+      if (value && this.$refs.workstiteMap.map) {
         // TODO: Refactor to abide with code style
         // eslint-disable-next-line no-restricted-syntax
         for (const location of layerList) {
@@ -557,19 +552,19 @@ export default {
             onEachFeature(feature, layer) {
               layer.key = key;
             },
-          }).addTo(this.map);
+          }).addTo(this.$refs.workstiteMap.map);
         }
       } else {
-        this.map.eachLayer(layer => {
+        this.$refs.workstiteMap.map.eachLayer(layer => {
           if (layer.key && layer.key === key) {
-            this.map.removeLayer(layer);
+            this.$refs.workstiteMap.map.removeLayer(layer);
           }
         });
       }
     },
 
     async applyLocation(location_id, value) {
-      if (value && this.map) {
+      if (value && this.$refs.workstiteMap.map) {
         await Location.api().fetchById(location_id);
         const location = Location.find(location_id);
         const geojsonFeature = {
@@ -581,12 +576,12 @@ export default {
           onEachFeature(feature, layer) {
             layer.location_id = location_id;
           },
-        }).addTo(this.map);
+        }).addTo(this.$refs.workstiteMap.map);
         this.appliedLocations.add(location_id);
       } else {
-        this.map.eachLayer(layer => {
+        this.$refs.workstiteMap.map.eachLayer(layer => {
           if (layer.location_id && layer.location_id === location_id) {
-            this.map.removeLayer(layer);
+            this.$refs.workstiteMap.map.removeLayer(layer);
           }
         });
         this.appliedLocations.delete(location_id);
@@ -822,7 +817,9 @@ export default {
       window.URL.revokeObjectURL(url);
     },
     addMarkerToMap(location) {
-      this.newMarker = location;
+      this.$refs.workstiteMap.markerLayer.clearLayers();
+      new L.marker(location).addTo(this.$refs.workstiteMap.markerLayer);
+      this.$refs.workstiteMap.map.setView([location.lat, location.lng], 15);
       this.toggleView('showingMap');
     },
   },
