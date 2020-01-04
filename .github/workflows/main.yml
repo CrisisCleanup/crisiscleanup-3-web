@@ -98,7 +98,7 @@ jobs:
     name: Deploy Staging
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
-    needs: build
+    needs: [test, lint, build]
     steps:
       - uses: actions/checkout@v2
 
