@@ -2,7 +2,7 @@
 
 exports[`FormSelect should match snapshot with props 1`] = `
 <div
-  class="v-select base-input text-base vs--single vs--searchable"
+  class="v-select form-select text-base vs--single vs--searchable"
   dir="auto"
 >
   <div
@@ -74,7 +74,7 @@ exports[`FormSelect should match snapshot with props 1`] = `
 
 exports[`FormSelect should render correctly and match snapshot 1`] = `
 <div
-  class="v-select base-input text-base vs--single vs--searchable"
+  class="v-select form-select text-base vs--single vs--searchable"
   dir="auto"
 >
   <div

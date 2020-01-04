@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white flex flex-col flex-grow">
+  <div v-if="ready" class="bg-white flex flex-col flex-grow">
     <div class="p-3 flex-grow intake-view">
       <div class="my-4 pb-6 border-b">
         <span>
@@ -61,6 +61,9 @@
       </div>
     </div>
   </div>
+  <div v-else class="flex items-center justify-center h-full">
+    <spinner />
+  </div>
 </template>
 
 <script>
@@ -74,6 +77,7 @@ export default {
   data() {
     return {
       worksite: {},
+      ready: false,
     };
   },
   computed: {
@@ -92,6 +96,7 @@ export default {
     },
   },
   async mounted() {
+    this.ready = false;
     try {
       await Worksite.api().fetch(
         this.$route.params.id,
@@ -101,6 +106,8 @@ export default {
       await this.$router.push(
         `/incident/${this.$route.params.incident_id}/cases/new`,
       );
+    } finally {
+      this.ready = true;
     }
     this.worksite = Worksite.find(this.$route.params.id);
     if (this.$route.query.showOnMap) {

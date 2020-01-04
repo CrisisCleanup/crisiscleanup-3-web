@@ -151,8 +151,8 @@
                         {{ field.label_t }}
                       </div>
                       <div>
-                        <a-row>
-                          <a-col
+                        <div>
+                          <div
                             v-for="option in field.values"
                             v-if="Boolean(option.value)"
                             :key="option.value"
@@ -161,8 +161,8 @@
                             <base-checkbox :value="option.value">
                               {{ option.name_t }}
                             </base-checkbox>
-                          </a-col>
-                        </a-row>
+                          </div>
+                        </div>
                       </div>
                     </template>
                     <template v-if="field.html_type === 'multiselect'">
@@ -170,8 +170,8 @@
                         {{ field.label_t }}
                       </div>
                       <div>
-                        <a-row>
-                          <a-col
+                        <div>
+                          <div
                             v-for="option in field.values"
                             v-if="Boolean(option.value)"
                             :key="option.value"
@@ -180,8 +180,8 @@
                             <base-checkbox :value="option.value">
                               {{ option.name_t }}
                             </base-checkbox>
-                          </a-col>
-                        </a-row>
+                          </div>
+                        </div>
                       </div>
                     </template>
                     <template v-if="field.html_type === 'checkbox'">

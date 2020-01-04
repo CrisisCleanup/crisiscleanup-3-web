@@ -6,8 +6,10 @@
     :components="{ OpenIndicator }"
     :searchable="searchable"
     :multiple="multiple"
+    :clearable="clearable"
     :disabled="disabled"
-    class="base-input text-base"
+    class="form-select text-base"
+    :class="selectClasses"
     :placeholder="placeholder"
     :reduce="item => (itemKey ? item[itemKey] : item)"
     @input="$emit('input', $event)"
@@ -30,6 +32,14 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
+    },
+    clearable: {
+      type: Boolean,
+      default: true,
+    },
+    selectClasses: {
+      type: String,
+      default: '',
     },
     options: Array,
     placeholder: String,
@@ -65,15 +75,15 @@ export default {
 
 <style>
 @import '~vue-select/dist/vue-select.css';
-.base-input .vs__dropdown-menu {
+.form-select .vs__dropdown-menu {
   border-radius: 0;
 }
-.base-input .vs__dropdown-toggle {
-  height: 50px;
+.form-select .vs__dropdown-toggle {
+  height: 100%;
   border-radius: 0;
-  border: solid 1px #dadada;
+  border: none;
 }
-.base-input .vs__search::placeholder {
+.form-select .vs__search::placeholder {
   color: darkGray;
 }
 </style>

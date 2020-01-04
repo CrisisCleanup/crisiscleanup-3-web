@@ -3,7 +3,7 @@
     <div class="h-10 bg-white mx-5 border-t flex justify-center">
       <router-link
         to="/organization/invitations"
-        class="flex w-40 justify-center mx-2 cursor-pointer"
+        class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
         :class="{ 'router-link-active': isInvitationsActive }"
       >
@@ -12,7 +12,7 @@
 
       <router-link
         to="/organization/users"
-        class="flex w-40 justify-center mx-2 cursor-pointer"
+        class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
         <span class="pt-2">{{ $t('User Management') }}</span>
@@ -20,7 +20,7 @@
 
       <router-link
         to="/organization/team"
-        class="flex w-40 justify-center mx-2 cursor-pointer"
+        class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
         <span class="pt-2">{{ $t('Team Management') }}</span>
@@ -28,7 +28,7 @@
 
       <router-link
         to="/organization/profile"
-        class="flex w-40 justify-center mx-2 cursor-pointer"
+        class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
         <span class="pt-2">{{ $t('Organization Profile') }}</span>
@@ -36,7 +36,7 @@
 
       <router-link
         to="/organization/affiliate"
-        class="flex w-40 justify-center mx-2 cursor-pointer"
+        class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
         <span class="pt-2">{{ $t('dashboard.affiliated_orgs') }}</span>
@@ -44,7 +44,7 @@
 
       <router-link
         to="/organization/layers"
-        class="flex w-40 justify-center mx-2 cursor-pointer"
+        class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
         <span class="pt-2">{{ $t('Layer Library') }}</span>

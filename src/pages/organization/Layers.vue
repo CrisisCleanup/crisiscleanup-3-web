@@ -2,18 +2,7 @@
   <div class="flex h-full w-3/4 m-auto">
     <div class="p-12 w-full">
       <div class="container">
-        <a-upload-dragger
-          name="file"
-          :multiple="false"
-          :before-upload="() => false"
-          :file-list="fileList"
-          @change="handleFileUpload"
-        >
-          <p class="ant-upload-drag-icon">
-            <a-icon type="inbox" />
-          </p>
-          <p class="ant-upload-text">{{ $t('Upload Shapefile') }}</p>
-        </a-upload-dragger>
+        <DragDrop @files="handleFileUpload"></DragDrop>
       </div>
 
       <div v-if="shapefileStructure">
@@ -21,48 +10,30 @@
           class="border text-xs mt-4"
           :data="tableData"
           :columns="columns"
-          :loading="this.loading"
+          :loading="loading"
+          :body-style="{ overflow: 'visible' }"
         >
           <template #fields="slotProps">
             <div class="flex w-full">
-              <base-select
+              <form-select
                 v-if="!loading"
-                :change="onSelectShapefileKey"
+                v-model="shapefileKey"
+                :options="slotProps.item.fields"
                 :placeholder="$t('Select a key for this shapefile')"
-                class="w-full"
-              >
-                <template v-slot:options>
-                  <a-select-option
-                    v-for="key in slotProps.item.fields"
-                    :key="key"
-                    :value="key"
-                  >
-                    {{ key }}
-                  </a-select-option>
-                </template>
-              </base-select>
+                select-classes="bg-white border w-full"
+              />
             </div>
           </template>
           <!-- TODO: refactor after unit tests -->
           <!-- eslint-disable-next-line vue/no-unused-vars -->
           <template #types="{slotProps}">
             <div class="flex w-full">
-              <base-select
+              <form-select
                 v-if="!loading"
-                :default-value="shapefileType"
-                :change="onSelectShapefileType"
-                class="w-full"
-              >
-                <template v-slot:options>
-                  <a-select-option
-                    v-for="key in locationTypes"
-                    :key="key"
-                    :value="key"
-                  >
-                    {{ key }}
-                  </a-select-option>
-                </template>
-              </base-select>
+                v-model="shapefileType"
+                :options="locationTypes"
+                select-classes="bg-white border w-full"
+              />
             </div>
           </template>
           <template #sample="slotProps">
@@ -111,6 +82,7 @@
 <script>
 import Layer from '@/models/Layer';
 import Table from '@/components/Table';
+import DragDrop from '@/components/DragDrop';
 // TODO: refactor after unit tests
 // eslint-disable-next-line no-unused-vars
 const fileToArrayBuffer = file =>
@@ -125,7 +97,7 @@ const fileToArrayBuffer = file =>
 
 export default {
   name: 'Layers',
-  components: { Table },
+  components: { DragDrop, Table },
   data() {
     return {
       file: '',
@@ -197,15 +169,8 @@ export default {
     });
   },
   methods: {
-    onSelectShapefileKey(value) {
-      this.shapefileKey = value;
-    },
-    onSelectShapefileType(value) {
-      this.shapefileType = value;
-    },
-    async handleFileUpload(info) {
-      const fileList = [...info.fileList];
-      this.fileList = fileList.slice(-1);
+    async handleFileUpload(fileList) {
+      this.fileList = fileList;
 
       if (this.fileList.length === 0) {
         return;
@@ -214,7 +179,7 @@ export default {
       // let buffer = await fileToArrayBuffer(this.file)
       // let shape = await shp(buffer)
       const formData = new FormData();
-      formData.append('file', this.fileList[0].originFileObj);
+      formData.append('file', this.fileList[0]);
       this.loading = true;
       const result = await this.$http.post(
         `${process.env.VUE_APP_API_BASE_URL}/inspect_shapefile`,
@@ -231,7 +196,7 @@ export default {
     },
     async uploadShapefile() {
       const formData = new FormData();
-      formData.append('file', this.fileList[0].originFileObj);
+      formData.append('file', this.fileList[0]);
       formData.append('key', this.shapefileKey || 'NAME');
       formData.append('note_key', this.shapefileKey || 'NAME');
       formData.append('type', this.shapefileType || 'US_STATE');
@@ -247,7 +212,7 @@ export default {
             },
           },
         );
-        await this.$message.success(this.$t('Successfully updated shapefile'));
+        await this.$toasted.success(this.$t('Successfully updated shapefile'));
       } catch (e) {
         // TODO: handle exception
       }
