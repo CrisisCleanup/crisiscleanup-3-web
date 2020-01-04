@@ -469,6 +469,7 @@ export default {
       this.worksite = {
         incident: this.$route.params.incident_id,
         form_data: [],
+        formFields: {},
       };
     }
     this.dynamicFields = {
