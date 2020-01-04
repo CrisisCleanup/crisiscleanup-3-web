@@ -96,6 +96,7 @@
           tooltip="info"
           size="large"
           :placeholder="$t('formLabels.county')"
+          :break-glass="true"
           required
           @input="
             value => {
@@ -280,8 +281,9 @@
                 :value="getValue(field.field_key)"
                 tooltip="info"
                 size="large"
+                :break-glass="field.read_only_break_glass"
                 :placeholder="field.placeholder_t || field.label_t"
-              ></base-input>
+              />
             </div>
           </template>
           <template v-if="field.html_type === 'suggest'">
@@ -292,7 +294,7 @@
                 tooltip="info"
                 display-property="description"
                 :placeholder="field.placeholder_t || field.label_t"
-              ></autocomplete>
+              />
             </div>
           </template>
           <template v-if="field.html_type === 'textarea'">
