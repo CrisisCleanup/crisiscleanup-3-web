@@ -128,6 +128,50 @@ describe('Table', () => {
     expect(wrapper.vm.pagination).toMatchSnapshot();
   });
 
+  it('should handle sort correctly from cold', () => {
+    const wrapper = mountWithOptions({
+      props: {
+        sorter: {
+          key: null,
+          direction: null,
+        },
+        pagination: {
+          pageSize: 5,
+          page: 1,
+          current: 1,
+        },
+      },
+    });
+    wrapper.vm.sort('id');
+    expect(wrapper.vm.pagination).toMatchSnapshot();
+    expect(wrapper.emitted().change[0][0].sorter).toEqual({
+      key: 'id',
+      direction: 'asc',
+    });
+  });
+
+  it('should handle sort correctly with existing sort', () => {
+    const wrapper = mountWithOptions({
+      props: {
+        sorter: {
+          key: 'id',
+          direction: 'asc',
+        },
+        pagination: {
+          pageSize: 5,
+          page: 1,
+          current: 1,
+        },
+      },
+    });
+    wrapper.vm.sort('id');
+    expect(wrapper.vm.pagination).toMatchSnapshot();
+    expect(wrapper.emitted().change[0][0].sorter).toEqual({
+      key: 'id',
+      direction: 'desc',
+    });
+  });
+
   it('should render correctly and match snapshot', () => {
     const wrapper = mountWithOptions();
     expect(wrapper.element).toMatchSnapshot();

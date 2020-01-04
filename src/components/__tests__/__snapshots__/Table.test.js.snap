@@ -40,6 +40,22 @@ Object {
 }
 `;
 
+exports[`Table should handle sort correctly from cold 1`] = `
+Object {
+  "current": 1,
+  "page": 1,
+  "pageSize": 5,
+}
+`;
+
+exports[`Table should handle sort correctly with existing sort 1`] = `
+Object {
+  "current": 1,
+  "page": 1,
+  "pageSize": 5,
+}
+`;
+
 exports[`Table should render correctly and match snapshot 1`] = `
 <div
   class="table w-full"
@@ -51,18 +67,20 @@ exports[`Table should render correctly and match snapshot 1`] = `
     <!---->
      
     <div
-      class="p-2 border-b flex items-center"
+      class="p-2 border-b flex items-center cursor-pointer"
     >
       
       One
-    
+      
+      <!---->
     </div>
     <div
-      class="p-2 border-b flex items-center"
+      class="p-2 border-b flex items-center cursor-pointer"
     >
       
       Two
-    
+      
+      <!---->
     </div>
   </div>
    
@@ -147,18 +165,20 @@ exports[`Table should render correctly with selection and pagination 1`] = `
     </div>
      
     <div
-      class="p-2 border-b flex items-center"
+      class="p-2 border-b flex items-center cursor-pointer"
     >
       
       One
-    
+      
+      <!---->
     </div>
     <div
-      class="p-2 border-b flex items-center"
+      class="p-2 border-b flex items-center cursor-pointer"
     >
       
       Two
-    
+      
+      <!---->
     </div>
   </div>
    
