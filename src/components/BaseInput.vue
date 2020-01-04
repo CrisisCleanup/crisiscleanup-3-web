@@ -5,13 +5,21 @@
       :class="classes"
       :type="type || 'search'"
       :value="value"
-      :disabled="disabled"
+      :disabled="disabled || (breakGlass && !glassBroken)"
       :placeholder="placeholder"
       :required="required"
       autocomplete="off"
       @input="update"
       @change="change"
     />
+    <div
+      v-if="breakGlass && !glassBroken"
+      class="icon-container flex items-center justify-center"
+      :class="iconClasses"
+      @click="glassBroken = true"
+    >
+      <ccu-icon type="edit" size="small"></ccu-icon>
+    </div>
     <div
       v-if="icon || tooltip"
       class="icon-container flex items-center justify-center"
@@ -34,6 +42,7 @@ export default {
     'required',
     'tooltip',
     'type',
+    'breakGlass',
   ],
   data() {
     return {
@@ -50,6 +59,7 @@ export default {
         base: this.size !== 'large',
         'has-tooltip': Boolean(this.tooltip),
       },
+      glassBroken: false,
     };
   },
   methods: {
