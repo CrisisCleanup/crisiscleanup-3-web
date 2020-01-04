@@ -96,6 +96,7 @@
                       :options="[]"
                       item-key="value"
                       label="name_t"
+                      select-classes="bg-white border"
                     />
                   </div>
                 </div>
@@ -107,6 +108,7 @@
                       :options="[]"
                       item-key="value"
                       label="name_t"
+                      select-classes="bg-white border"
                     />
                   </div>
                 </div>

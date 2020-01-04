@@ -2,7 +2,6 @@ import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 
-import Antd from 'ant-design-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -11,6 +10,7 @@ import VueI18n from 'vue-i18n';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueAutosuggest from 'vue-autosuggest';
 import VTooltip from 'v-tooltip';
+import Toasted from 'vue-toasted';
 import Popover from 'vue-js-popover';
 import Dropdown from 'bp-vuejs-dropdown';
 import vSelect from 'vue-select';
@@ -27,7 +27,6 @@ import BaseIcon from '@/components/BaseIcon';
 import BaseCheckbox from '@/components/BaseCheckbox';
 import BaseButton from '@/components/BaseButton';
 import BaseInput from '@/components/BaseInput';
-import BaseSelect from '@/components/BaseSelect';
 import Modal from '@/components/Modal';
 import Autocomplete from '@/components/Autocomplete';
 import Tag from '@/components/Tag';
@@ -41,7 +40,6 @@ import {
   getColorForWorkType,
 } from '@/filters';
 
-import 'ant-design-vue/dist/antd.less';
 import '@/assets/css/tailwind.css';
 import Badge from '@/components/Badge';
 
@@ -53,7 +51,6 @@ Vue.component('ccu-icon', BaseIcon);
 Vue.component('base-checkbox', BaseCheckbox);
 Vue.component('base-button', BaseButton);
 Vue.component('base-input', BaseInput);
-Vue.component('base-select', BaseSelect);
 Vue.component('form-select', FormSelect);
 Vue.component('modal', Modal);
 Vue.component('autocomplete', Autocomplete);
@@ -71,8 +68,12 @@ Vue.config.productionTip = false;
 Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
 Vue.use(VueAxios, axios);
-Vue.use(Antd);
 Vue.use(require('vue-moment'));
+Vue.use(Toasted, {
+  position: 'top-center',
+  duration: 2000,
+  theme: 'outline',
+});
 
 Vue.use(VueI18n);
 Vue.use(VueLog);

@@ -51,23 +51,15 @@
       v-if="enablePagniation"
       class="footer flex items-center justify-between p-4"
     >
-      <div>
-        {{ $t('table.per_page') }}
-        <base-select
-          :default-value="pagination.pageSize"
-          :change="onSelectPageSize"
-          class="ml-1"
-        >
-          <template v-slot:options>
-            <a-select-option
-              v-for="size in pageSizes"
-              :key="size"
-              :value="size"
-            >
-              {{ size }}
-            </a-select-option>
-          </template>
-        </base-select>
+      <div class="flex items-center">
+        <span class="mr-2">{{ $t('table.per_page') }}</span>
+        <form-select
+          :value="pagination.pageSize"
+          :options="pageSizes"
+          :clearable="false"
+          select-classes="w-24 bg-white border"
+          @input="onSelectPageSize"
+        />
       </div>
       <div>
         <div class="flex items-center">
@@ -127,6 +119,7 @@ export default {
     loading: Boolean,
     enableSelection: Boolean,
     enablePagniation: Boolean,
+    bodyStyle: Object,
   },
   data() {
     return {
@@ -208,6 +201,7 @@ export default {
       return {
         'max-height': '600px',
         overflow: 'auto',
+        ...this.bodyStyle,
       };
     },
     gridStyleRow() {
