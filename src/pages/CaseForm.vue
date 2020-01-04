@@ -239,12 +239,16 @@
                 />
               </span>
               <form-select
-                v-model="dynamicFields[field.field_key]"
-                :value="field.values.find(val => getValue(field.field_key))"
+                :value="worksite.formFields[field.field_key]"
                 :options="field.values"
                 item-key="value"
                 label="name_t"
                 select-classes="h-12 border"
+                @input="
+                  value => {
+                    dynamicFields[field.field_key] = value;
+                  }
+                "
               />
             </div>
           </template>
@@ -264,25 +268,33 @@
                 />
               </span>
               <form-select
-                v-model="dynamicFields[field.field_key]"
-                :value="field.values.find(val => getValue(field.field_key))"
+                :value="worksite.formFields[field.field_key]"
+                multiple
                 :options="field.values"
                 item-key="value"
                 label="name_t"
-                multiple
                 select-classes="h-12 border"
+                @input="
+                  value => {
+                    dynamicFields[field.field_key] = value;
+                  }
+                "
               />
             </div>
           </template>
           <template v-if="field.html_type === 'text'">
             <div :key="field.field_key" class="py-1">
               <base-input
-                v-model="dynamicFields[field.field_key]"
-                :value="getValue(field.field_key)"
+                :value="worksite.formFields[field.field_key]"
                 tooltip="info"
                 size="large"
                 :break-glass="field.read_only_break_glass"
                 :placeholder="field.placeholder_t || field.label_t"
+                @input="
+                  value => {
+                    dynamicFields[field.field_key] = value;
+                  }
+                "
               />
             </div>
           </template>
@@ -316,9 +328,7 @@
                 class="block w-full border outline-none"
                 :placeholder="field.placeholder_t || field.label_t"
                 rows="4"
-                :value="
-                  dynamicFields[field.field_key] || getValue(field.field_key)
-                "
+                :value="worksite.formFields[field.field_key]"
                 @input="
                   e => {
                     dynamicFields[field.field_key] = e.target.value;
@@ -330,8 +340,12 @@
           <template v-if="field.html_type === 'checkbox'">
             <div :key="field.field_key" class="py-1 flex items-center">
               <base-checkbox
-                v-model="dynamicFields[field.field_key]"
-                :value="getBooleanValue(field.field_key)"
+                :value="worksite.formFields[field.field_key]"
+                @input="
+                  value => {
+                    dynamicFields[field.field_key] = value;
+                  }
+                "
                 >{{ field.label_t }}
               </base-checkbox>
               <ccu-icon
@@ -658,6 +672,8 @@ export default {
         return element.field_key === field_key;
       });
       if (key) {
+        this.$log.debug(`${field_key}:${key.field_value}`);
+
         return key.field_value;
       }
       return '';
