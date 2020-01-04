@@ -881,7 +881,7 @@ export default {
         .get();
     },
     isEditingWorksite() {
-      return this.$route.name === 'IncidentEditForm';
+      return this.$route.name === 'IncidentEditCaseForm';
     },
     isViewingWorksite() {
       return this.$route.name === 'IncidentCaseView';
@@ -890,7 +890,7 @@ export default {
       return this.$route.name === 'IncidentCaseHistory';
     },
     isNewWorksite() {
-      return this.$route.name === 'IncidentNewForm';
+      return this.$route.name === 'IncidentNewCaseForm';
     },
     incidents() {
       return Incident.query()
