@@ -47,7 +47,7 @@
     <div
       v-if="!mapLoading"
       style="z-index: 1001;"
-      class="legend absolute left-0 bottom-0 h-96 w-72 bg-white border p-2"
+      class="legend absolute left-0 bottom-0 w-72 bg-white border-2 p-2"
     >
       <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
       <div class="flex flex-wrap justify-between">
@@ -71,6 +71,10 @@
             <badge class="mx-1" :color="value" />
           </span>
           <div class="text-xs ml-1">{{ key }}</div>
+        </div>
+        <div class="flex items-center w-1/2 mb-1">
+          <span class="w-5 h-5" v-html="templates.plus" />
+          <div class="text-xs ml-1">{{ $t('Multiple work types') }}</div>
         </div>
       </div>
     </div>
@@ -163,16 +167,15 @@ export default {
         [this.$t(
           'Done by others, no help wanted, or partially completed',
         )]: colors['closed_done-by-others_unclaimed'].fillColor,
-        [this.$t('Duplicate or Unresponsive')]: colors
+        [this.$t('Out of scope, Duplicate or Unresponsive')]: colors
           .open_unresponsive_unclaimed.fillColor,
-        [this.$t('Out of scope')]: colors['closed_out-of-scope_unclaimed']
-          .fillColor,
       },
       mapLoading: false,
       markerLayer: L.layerGroup(),
       markers: [],
       markerSprites: [],
       showInteractivePopover: false,
+      templates,
     };
   },
   computed: {
