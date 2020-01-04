@@ -12,7 +12,7 @@
       @submit.prevent="userLogin"
     >
       <h1 class="text-3xl text-center">{{ $t('login.sign_in_msg') }}</h1>
-      <a-input
+      <base-input
         v-model="email"
         size="large"
         class="my-2"
@@ -21,7 +21,7 @@
         :placeholder="$t('login.email_placeholder')"
         autocomplete="email"
       />
-      <a-input
+      <base-input
         v-model="password"
         size="large"
         class="my-2"
@@ -32,7 +32,7 @@
       />
       <base-button
         size="medium"
-        class="px-5 py-2 m-1"
+        class="px-5 py-2 my-3 w-full"
         type="primary"
         :text="$t('login.log_in_button')"
       />
@@ -58,7 +58,7 @@ export default {
         await this.login({ email: this.email, password: this.password });
         await this.$router.push('/');
       } catch (e) {
-        await this.$message.error(this.$t('login.invalid_credentials_msg'));
+        await this.$toasted.error(this.$t('login.invalid_credentials_msg'));
       }
     },
   },

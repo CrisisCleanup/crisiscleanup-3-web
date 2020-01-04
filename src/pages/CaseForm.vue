@@ -1,12 +1,13 @@
 <template>
   <form
-    ref="form"
-    layout="vertical"
-    class="bg-white flex flex-col flex-grow"
+    v-if="ready"
+    class="bg-white flex flex-col flex-grow w-full"
     @submit.prevent="handleSubmit"
   >
     <div class="intake-form p-3 flex-grow">
-      <h4 class="py-3 m-1 border-t border-b flex items-center justify-between">
+      <div
+        class="py-3 m-1 border-t border-b flex items-center justify-between text-base font-semibold"
+      >
         <div class="flex items-center">
           <badge
             width="20px"
@@ -16,7 +17,7 @@
           >
           {{ $t('Basic Information') }}
         </div>
-      </h4>
+      </div>
       <div class="py-1">
         <base-input
           :value="worksite.what3words"
@@ -190,10 +191,8 @@
           :key="field.field_key"
         >
           <template v-if="['h4'].includes(field.html_type)">
-            <component
-              :is="field.html_type"
-              :key="field.field_key"
-              class="py-3 m-1 border-t border-b flex items-center justify-between"
+            <div
+              class="py-3 m-1 border-t border-b flex items-center justify-between text-base font-semibold"
             >
               <div class="flex items-center">
                 <badge
@@ -205,29 +204,37 @@
                 </badge>
                 {{ field.label_t }}
               </div>
-              <a-tooltip>
-                <template slot="title">
-                  <span v-html="field.help_t"></span>
-                </template>
-                <a-icon type="question-circle-o" />
-              </a-tooltip>
-            </component>
+              <ccu-icon
+                v-tooltip="{
+                  content: field.help_t,
+                  trigger: 'hover',
+                  classes: 'interactive-tooltip w-72',
+                }"
+                :alt="$t('help')"
+                type="help"
+                size="large"
+              />
+            </div>
           </template>
           <template v-if="['h5'].includes(field.html_type)">
-            <component :is="field.html_type" :key="field.field_key">
+            <div class="text-base font-semibold my-1">
               {{ field.label_t }}
-            </component>
+            </div>
           </template>
           <template v-if="field.html_type === 'select'">
             <div :key="field.field_key" class="py-1">
               <span slot="label" class="flex items-center">
                 <span>{{ field.label_t }}</span>
-                <a-tooltip class="px-1">
-                  <template slot="title">
-                    <span v-html="field.help_t"></span>
-                  </template>
-                  <a-icon type="question-circle-o" />
-                </a-tooltip>
+                <ccu-icon
+                  v-tooltip="{
+                    content: field.help_t,
+                    trigger: 'hover',
+                    classes: 'interactive-tooltip w-72',
+                  }"
+                  :alt="$t('help')"
+                  type="help"
+                  size="large"
+                />
               </span>
               <form-select
                 v-model="dynamicFields[field.field_key]"
@@ -235,6 +242,7 @@
                 :options="field.values"
                 item-key="value"
                 label="name_t"
+                select-classes="h-12 border"
               />
             </div>
           </template>
@@ -242,31 +250,26 @@
             <div :key="field.field_key" class="py-1">
               <span slot="label" class="flex items-center">
                 <span>{{ field.label_t }}</span>
-                <a-tooltip class="px-1">
-                  <template slot="title">
-                    <span v-html="field.help_t"></span>
-                  </template>
-                  <a-icon type="question-circle-o" />
-                </a-tooltip>
+                <ccu-icon
+                  v-tooltip="{
+                    content: field.help_t,
+                    trigger: 'hover',
+                    classes: 'interactive-tooltip w-72',
+                  }"
+                  :alt="$t('help')"
+                  type="help"
+                  size="large"
+                />
               </span>
-              <a-select
+              <form-select
                 v-model="dynamicFields[field.field_key]"
-                :default-value="getValue(field.field_key)"
-                mode="multiple"
-                size="large"
-              >
-                <a-select-option
-                  v-for="option in field.values"
-                  :key="option.value"
-                  :value="option.value"
-                >
-                  >
-                  {{ option.name_t }}
-                </a-select-option>
-                <template slot="suffixIcon">
-                  <font-awesome-icon size="sm" icon="sort" />
-                </template>
-              </a-select>
+                :value="field.values.find(val => getValue(field.field_key))"
+                :options="field.values"
+                item-key="value"
+                label="name_t"
+                multiple
+                select-classes="h-12 border"
+              />
             </div>
           </template>
           <template v-if="field.html_type === 'text'">
@@ -295,18 +298,29 @@
             <div :key="field.field_key" class="py-1">
               <span slot="label" class="flex items-center">
                 <span>{{ field.label_t }}</span>
-                <a-tooltip class="px-1">
-                  <template slot="title">
-                    <span v-html="field.help_t"></span>
-                  </template>
-                  <a-icon type="question-circle-o" />
-                </a-tooltip>
+                <ccu-icon
+                  v-tooltip="{
+                    content: field.help_t,
+                    trigger: 'hover',
+                    classes: 'interactive-tooltip w-72',
+                  }"
+                  :alt="$t('help')"
+                  type="help"
+                  size="large"
+                />
               </span>
-              <a-textarea
-                v-model="dynamicFields[field.field_key]"
+              <textarea
+                class="block w-full border outline-none"
                 :placeholder="field.placeholder_t || field.label_t"
                 rows="4"
-                :default-value="getValue(field.field_key)"
+                :value="
+                  dynamicFields[field.field_key] || getValue(field.field_key)
+                "
+                @input="
+                  e => {
+                    dynamicFields[field.field_key] = e.target.value;
+                  }
+                "
               />
             </div>
           </template>
@@ -317,12 +331,16 @@
                 :value="getBooleanValue(field.field_key)"
                 >{{ field.label_t }}
               </base-checkbox>
-              <a-tooltip class="px-1">
-                <template slot="title">
-                  <span v-html="field.help_t"></span>
-                </template>
-                <a-icon type="question-circle-o" />
-              </a-tooltip>
+              <ccu-icon
+                v-tooltip="{
+                  content: field.help_t,
+                  trigger: 'hover',
+                  classes: 'interactive-tooltip w-72',
+                }"
+                :alt="$t('help')"
+                type="help"
+                size="large"
+              />
             </div>
           </template>
         </div>
@@ -357,6 +375,9 @@
       />
     </div>
   </form>
+  <div v-else class="flex items-center justify-center h-full">
+    <spinner />
+  </div>
 </template>
 
 <script>
@@ -379,9 +400,8 @@ export default {
   },
   data() {
     return {
-      form: this.$form.createForm(this),
       showAllFields: true,
-      spinning: false,
+      ready: false,
       gettingLocation: false,
       location: null,
       what3words: null,
@@ -412,6 +432,7 @@ export default {
     },
   },
   async mounted() {
+    this.ready = false;
     if (this.$route.params.id) {
       try {
         await Worksite.api().fetch(
@@ -436,6 +457,7 @@ export default {
     this.dynamicFields = {
       ...this.worksite.form_data.map(s => ({ [s.field_key]: s.field_value })),
     };
+    this.ready = true;
   },
   methods: {
     handleSubmit() {},
@@ -586,7 +608,7 @@ export default {
           });
           this.worksite = Worksite.find(savedWorksite.entities.worksites[0].id);
         }
-        await this.$message.success(this.$t('Worksite saved successfully'));
+        await this.$toasted.success(this.$t('Worksite saved successfully'));
         if (reload) {
           this.$emit('reloadTable');
           this.$emit('reloadMap', this.worksite.id);
@@ -595,7 +617,7 @@ export default {
           );
         }
       } catch (error) {
-        await this.$message.error(getErrorMessage(error));
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
     async claimAndSaveWorksite() {
@@ -606,9 +628,9 @@ export default {
       }
       try {
         await Worksite.api().claimWorksite(this.worksite.id, []);
-        await this.$message.success(this.$t('Worksite claimed successfully'));
+        await this.$toasted.success(this.$t('Worksite claimed successfully'));
       } catch (error) {
-        await this.$message.error(getErrorMessage(error));
+        await this.$toasted.error(getErrorMessage(error));
       }
       await Worksite.api().fetch(this.worksite.id);
       this.worksite = Worksite.find(this.worksite.id);

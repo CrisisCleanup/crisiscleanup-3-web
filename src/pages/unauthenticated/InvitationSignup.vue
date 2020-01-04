@@ -84,13 +84,13 @@ export default {
           });
           await this.$router.push('/login?accepted=true');
         } catch (e) {
-          await this.$message.error(this.$t('Error accepting invite'));
+          await this.$toasted.error(this.$t('Error accepting invite'));
         }
       }
     },
     validatePassword() {
       if (this.password !== this.confirmPassword) {
-        this.$message.error(this.$t('activate.password_match_error'));
+        this.$toasted.error(this.$t('activate.password_match_error'));
         return false;
       }
       return true;

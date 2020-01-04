@@ -34,7 +34,7 @@ const mountWithOptions = ({ props } = {}) =>
   shallowMount(Table, {
     stubs: {
       'base-checkbox': BaseCheckbox,
-      'base-select': "<input type='select'>",
+      'form-select': "<input type='select'>",
       'base-button': '<button />',
     },
     propsData: {
