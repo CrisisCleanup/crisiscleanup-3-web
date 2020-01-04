@@ -19,64 +19,6 @@
         </div>
       </div>
       <div class="py-1">
-        <base-input
-          :value="worksite.what3words"
-          tooltip="info"
-          size="large"
-          :placeholder="$t('formLabels.location')"
-          required
-          disabled
-          @input="
-            value => {
-              updateWorksite(value, 'what3words');
-            }
-          "
-        />
-
-        <div class="flex justify-around items-center">
-          <base-button
-            type="bare"
-            size="large"
-            icon="street-view"
-            class="text-gray-700 pt-2"
-            :action="locateMe"
-            :text="$t('formLabels.use_my_location')"
-          />
-          <base-button
-            type="bare"
-            size="large"
-            icon="map"
-            class="text-gray-700 pt-2"
-            :action="showOverlayMap"
-            :text="$t('formLabels.select_on_map')"
-          />
-          <modal
-            v-if="overlayMapVisible"
-            modal-classes="bg-white w-1/3 shadow"
-            modal-style="height: 60%"
-            @close="overlayMapVisible = false"
-          >
-            >
-            <OverlayMap
-              :initial-location="this.worksite.location"
-              @addedMarker="onAddedMarker"
-            />
-            <div
-              slot="footer"
-              class="flex items-center justify-center p-2 bg-white"
-            >
-              <base-button
-                :text="$t('actions.save')"
-                size="medium"
-                class="m-1 p-1 px-6"
-                type="primary"
-                :action="handleOk"
-              />
-            </div>
-          </modal>
-        </div>
-      </div>
-      <div class="py-1">
         <WorksiteSearchInput
           :value="worksite.name"
           tooltip="info"
@@ -99,6 +41,9 @@
           @selectedExisting="onWorksiteSelect"
           @search="worksitesSearch"
         />
+      </div>
+      <div class="text-base font-semibold my-1">
+        {{ $t('Location') }}
       </div>
       <div class="py-1">
         <WorksiteSearchInput
@@ -184,6 +129,62 @@
           required
           @change="findPotentialGeocode"
         />
+      </div>
+      <div class="py-1">
+        <base-input
+          :value="worksite.what3words"
+          tooltip="info"
+          size="large"
+          :placeholder="$t('formLabels.location')"
+          required
+          disabled
+          @input="
+            value => {
+              updateWorksite(value, 'what3words');
+            }
+          "
+        />
+
+        <div class="flex justify-around items-center">
+          <base-button
+            type="bare"
+            icon="street-view"
+            class="text-gray-700 pt-2"
+            :action="locateMe"
+            :text="$t('formLabels.use_my_location')"
+          />
+          <base-button
+            type="bare"
+            icon="map"
+            class="text-gray-700 pt-2"
+            :action="showOverlayMap"
+            :text="$t('formLabels.select_on_map')"
+          />
+          <modal
+            v-if="overlayMapVisible"
+            modal-classes="bg-white w-1/3 shadow"
+            modal-style="height: 60%"
+            @close="overlayMapVisible = false"
+          >
+            >
+            <OverlayMap
+              :initial-location="this.worksite.location"
+              @addedMarker="onAddedMarker"
+            />
+            <div
+              slot="footer"
+              class="flex items-center justify-center p-2 bg-white"
+            >
+              <base-button
+                :text="$t('actions.save')"
+                size="medium"
+                class="m-1 p-1 px-6"
+                type="primary"
+                :action="handleOk"
+              />
+            </div>
+          </modal>
+        </div>
       </div>
       <template v-for="field in this.fields">
         <div
