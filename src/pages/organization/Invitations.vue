@@ -240,23 +240,23 @@ export default {
     async acceptInvitationRequest(request) {
       await InvitationRequest.api().acceptInvitationRequest(request);
       await this.loadAllInvitationRequests();
-      await this.$message.success(this.$t('Invitation Request Accepted'));
+      await this.$toasted.success(this.$t('Invitation Request Accepted'));
     },
     async rejectInvitationRequest(request) {
       await InvitationRequest.api().rejectInvitationRequest(request);
       await this.loadAllInvitationRequests();
-      await this.$message.success(this.$t('Invitation Request Rejected'));
+      await this.$toasted.success(this.$t('Invitation Request Rejected'));
     },
     async resendInvitation(invitation) {
       await Invitation.api().resendInvitation(invitation);
       await this.loadAllInvitations();
-      await this.$message.success(this.$t('Invitation Resent'));
+      await this.$toasted.success(this.$t('Invitation Resent'));
     },
     async deleteInvitation(invitation) {
       await Invitation.api().delete(`/invitations/${invitation.id}`, {
         delete: invitation.id,
       });
-      await this.$message.success(this.$t('Invitation Deleted'));
+      await this.$toasted.success(this.$t('Invitation Deleted'));
     },
   },
 };

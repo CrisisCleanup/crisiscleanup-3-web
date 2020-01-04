@@ -43,38 +43,26 @@
         <div class="flex justify-between h-full items-center">
           <div class="flex items-center ml-2">
             <div class="h-10 w-10 rounded-full bg-blue-500"></div>
-            <div class="flex flex-col ml-2">
-              <!-- eslint-disable vue/valid-v-model -->
-              <!-- TODO: refactor v-model -->
-              <base-select
-                v-if="incidents"
-                v-model="currentIncident && currentIncident.name"
-                :placeholder="$t('Select an Incident')"
-                icon="caret-down"
-                class="incident-select"
-                :class="{ 'border-0': true }"
-                style="width: 250px"
-                :change="handleChange"
-              >
-                <!-- eslint-enable vue/valid-v-model -->
-                <template v-slot:options>
-                  <a-select-option
-                    v-for="incident in incidents"
-                    :key="incident.id"
-                    :value="incident.id"
-                    >{{ incident.name }}</a-select-option
-                  >
-                </template>
-              </base-select>
-              <div class="flex ml-3 font-bold">
+            <div class="flex flex-col ml-2 w-84">
+              <form-select
+                :value="currentIncident"
+                :options="incidents"
+                :clearable="false"
+                select-classes="h-12"
+                item-key="id"
+                label="name"
+                @input="handleChange"
+              />
+              <div class="flex ml-2 font-bold">
                 <span>{{ selectedRoute }}</span>
               </div>
             </div>
           </div>
           <router-link to="/profile" class="router-link">
-            <div>
-              <a-avatar
+            <div class="flex items-center">
+              <img
                 src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
+                class="rounded-full w-10 h-10"
               />
               <span class="p-3">{{ name }}</span>
             </div>

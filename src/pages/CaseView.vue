@@ -30,7 +30,11 @@
         />
         <div v-if="addingNotes">
           Note
-          <a-textarea v-model="currentNote" rows="4" />
+          <textarea
+            v-model="currentNote"
+            rows="4"
+            class="block w-full border outline-none"
+          />
           <div class="flex items-center justify-between">
             <base-button
               class="my-1"
@@ -41,7 +45,7 @@
             <base-button
               class="my-1"
               type="link"
-              :alt="$t('actions.save')"
+              :text="$t('actions.save')"
               :action="saveNote"
             />
           </div>
@@ -217,7 +221,9 @@
       />
     </div>
   </div>
-  <a-skeleton v-else class="bg-white h-full p-3 flex-grow" active />
+  <div v-else class="flex items-center justify-center h-full">
+    <spinner />
+  </div>
 </template>
 
 <script>
@@ -306,7 +312,7 @@ export default {
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
       } catch (error) {
-        await this.$message.error(getErrorMessage(error));
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
     async unclaimWorkType(work_type) {
@@ -320,7 +326,7 @@ export default {
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
       } catch (error) {
-        await this.$message.error(getErrorMessage(error));
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
     async requestWorkType(work_type) {
@@ -334,7 +340,7 @@ export default {
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
       } catch (error) {
-        await this.$message.error(getErrorMessage(error));
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
     async saveNote() {
@@ -344,7 +350,7 @@ export default {
         this.currentNote = '';
         await Worksite.api().fetch(this.worksite.id);
       } catch (error) {
-        await this.$message.error(getErrorMessage(error));
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
     cancelNote() {
@@ -362,7 +368,7 @@ export default {
       try {
         await Worksite.api().updateWorkTypeStatus(work_type.id, value);
       } catch (error) {
-        await this.$message.error(getErrorMessage(error));
+        await this.$toasted.error(getErrorMessage(error));
       } finally {
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
