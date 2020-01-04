@@ -7,9 +7,36 @@
       <div
         v-for="column of columns"
         :key="column.key"
-        class="p-2 border-b flex items-center"
+        class="p-2 border-b flex items-center cursor-pointer"
+        @click="
+          () => {
+            if (column.sortable) {
+              sort(column.key);
+            }
+          }
+        "
       >
         {{ column.title }}
+        <div v-if="column.sortable">
+          <ccu-icon
+            v-if="sorter.key === column.key && sorter.direction === 'asc'"
+            :alt="$t('actions.sort_ascending')"
+            size="small"
+            type="up"
+          />
+          <ccu-icon
+            v-else-if="sorter.key === column.key && sorter.direction === 'desc'"
+            :alt="$t('actions.sort_descending')"
+            size="small"
+            type="down"
+          />
+          <ccu-icon
+            v-else
+            :alt="$t('actions.sortable')"
+            size="small"
+            type="updown"
+          />
+        </div>
       </div>
     </div>
     <div class="body bg-white relative" :style="gridStyleBody">
@@ -116,6 +143,12 @@ export default {
     columns: Array,
     data: Array,
     pagination: Object,
+    sorter: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
     loading: Boolean,
     enableSelection: Boolean,
     enablePagniation: Boolean,
@@ -251,7 +284,9 @@ export default {
         page: newPage,
       };
       const filter = {};
-      const sorter = {};
+      const sorter = {
+        ...this.sorter,
+      };
       this.$emit('change', { pagination, filter, sorter });
     },
     onSelectPageSize(pageSize) {
@@ -261,7 +296,24 @@ export default {
         pageSize,
       };
       const filter = {};
-      const sorter = {};
+      const sorter = {
+        ...this.sorter,
+      };
+      this.$emit('change', { pagination, filter, sorter });
+    },
+    sort(key) {
+      const sorter = { ...this.sorter };
+      sorter.key = key;
+      if (sorter.direction === 'asc') {
+        sorter.direction = 'desc';
+      } else {
+        sorter.direction = 'asc';
+      }
+
+      const pagination = {
+        ...this.pagination,
+      };
+      const filter = {};
       this.$emit('change', { pagination, filter, sorter });
     },
     rowClick(item) {

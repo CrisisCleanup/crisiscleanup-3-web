@@ -206,6 +206,7 @@
                 enable-selection
                 enable-pagniation
                 :pagination="pagination"
+                :sorter="sorter"
                 :loading="tableLoading"
                 @change="handleTableChange"
                 @rowClick="displayWorksite"
@@ -441,6 +442,10 @@ export default {
         page: 1,
         current: 1,
       },
+      sorter: {
+        key: null,
+        direction: null,
+      },
       currentQuery: {},
       filters: {
         fields: {},
@@ -506,8 +511,8 @@ export default {
       this.fetch({
         pageSize: pagination.pageSize,
         page: pagination.current,
-        sortField: sorter.field,
-        sortOrder: sorter.order,
+        sortKey: sorter.key,
+        sortDirection: sorter.direction,
         ...filters,
       });
     },
@@ -595,25 +600,60 @@ export default {
         incident: this.$route.params.incident_id,
       };
       this.currentQuery = { ...query, ...this.appliedFilters };
+      const queryParams = {
+        ...query,
+        offset: params.pageSize * (params.page - 1),
+        limit: params.pageSize,
+        ...this.appliedFilters,
+      };
+      if (params.sortKey) {
+        queryParams.sort = `${params.sortDirection === 'desc' ? '-' : ''}${
+          params.sortKey
+        }`;
+      }
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksites`,
         {
-          params: {
-            ...query,
-            offset: params.pageSize * (params.page - 1),
-            limit: params.pageSize,
-            ...this.appliedFilters,
-          },
+          params: queryParams,
         },
       );
       this.tableLoading = false;
-      this.data = response.data.results;
+
+      this.data = response.data.results.map(result => {
+        let { form_data } = result;
+        if (!form_data) {
+          form_data = [];
+        }
+
+        result.items = form_data.reduce((obj, item) => {
+          return {
+            ...obj,
+            [item.field_key]: item.field_value,
+          };
+        }, {});
+        // Proxy allows us to treat dynamic form data fields as static properties
+        return new Proxy(result, {
+          get(target, name, receiver) {
+            const rv = Reflect.get(target, name, receiver);
+            if (!rv) {
+              return target.items[name];
+            }
+            return rv;
+          },
+        });
+      });
       this.pagination = {
         page: params.page,
         current: params.page,
         pageSize: params.pageSize,
         total: response.data.count,
       };
+      if (params.sortKey) {
+        this.sorter = {
+          key: params.sortKey,
+          direction: params.sortDirection,
+        };
+      }
       this.getWorksiteCount();
     },
 
@@ -844,6 +884,7 @@ export default {
           dataIndex: 'name',
           key: 'name',
           width: '1.5fr',
+          sortable: true,
         },
         {
           title: this.$t('Full Address'),
@@ -854,11 +895,13 @@ export default {
           title: this.$t('City'),
           dataIndex: 'city',
           key: 'city',
+          sortable: true,
         },
         {
           title: this.$t('County'),
           dataIndex: 'county',
           key: 'county',
+          sortable: true,
         },
       ];
     },

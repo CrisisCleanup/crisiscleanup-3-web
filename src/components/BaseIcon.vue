@@ -22,6 +22,9 @@ const iconMap = {
   history: require('@/assets/icons/history.svg'),
   cancel: require('@/assets/icons/big.svg'),
   help: require('@/assets/icons/help.svg'),
+  up: require('@/assets/icons/up.svg'),
+  down: require('@/assets/icons/down.svg'),
+  updown: require('@/assets/icons/updown.svg'),
   'go-case': require('@/assets/icons/replace-case.svg'),
 };
 export default {
