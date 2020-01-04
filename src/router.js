@@ -44,7 +44,7 @@ const routes = [
       {
         path: 'new',
         component: CaseForm,
-        name: 'IncidentNewForm',
+        name: 'IncidentNewCaseForm',
       },
       {
         path: ':id',
@@ -54,7 +54,7 @@ const routes = [
       {
         path: ':id/edit',
         component: CaseForm,
-        name: 'IncidentEditForm',
+        name: 'IncidentEditCaseForm',
       },
       {
         path: ':id/history',

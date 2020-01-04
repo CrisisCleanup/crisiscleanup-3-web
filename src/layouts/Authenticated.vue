@@ -17,6 +17,7 @@
         <router-link
           :to="`/incident/${currentIncidentId}/cases/new`"
           class="menu-item router-link p-2 border-b border-gray-800"
+          :class="{ 'router-link-active': selectedRoute.includes('Case') }"
         >
           <div key="cases" class="flex flex-col items-center">
             <ccu-icon :alt="$t('nav.work_orders')" type="cases" />
