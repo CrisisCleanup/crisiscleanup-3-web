@@ -37,6 +37,7 @@ import FormSelect from '@/components/FormSelect';
 import {
   getColorForWorkType,
   getStatusName,
+  getWorkTypeImage,
   getWorkTypeName,
   snakeToTitleCase,
 } from '@/filters';
@@ -88,6 +89,7 @@ Vue.filter('getWorkTypeName', getWorkTypeName);
 Vue.filter('getStatusName', getStatusName);
 Vue.filter('snakeToTitleCase', snakeToTitleCase);
 Vue.filter('getColorForWorkType', getColorForWorkType);
+Vue.filter('getWorkTypeImage', getWorkTypeImage);
 
 // API & Auth
 if (AuthService.getUser()) {
