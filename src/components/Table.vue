@@ -318,8 +318,9 @@ export default {
     },
     rowClick(item, event) {
       if (
-        event.target.className === 'checkmark' ||
-        event.target.className === 'checkmark-input'
+        event &&
+        (event.target.className === 'checkmark' ||
+          event.target.className === 'checkmark-input')
       ) {
         return;
       }
