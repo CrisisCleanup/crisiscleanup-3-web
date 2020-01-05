@@ -27,7 +27,7 @@ const mockWorkType = {
   file_prefix: 'Ash',
 };
 
-const mountWithOptions = store =>
+const mountWithOptions = (store, props = {}) =>
   shallowMount(StatusDropDown, {
     stubs: {
       'font-awesome-icon': true,
@@ -37,6 +37,7 @@ const mountWithOptions = store =>
     },
     propsData: {
       currentWorkType: mockWorkType,
+      ...props,
     },
     localVue,
     store,
@@ -70,6 +71,11 @@ describe('StatusDropDown', () => {
 
   it('should render correctly and match snapshot', () => {
     const wrapper = mountWithOptions(store);
+    expect(wrapper.element).toMatchSnapshot();
+  });
+
+  it('should render correctly and match snapshot when using icons', () => {
+    const wrapper = mountWithOptions(store, { useIcon: true });
     expect(wrapper.element).toMatchSnapshot();
   });
 });

@@ -37,8 +37,8 @@
 <script>
 import Highlighter from 'vue-highlight-words';
 import Worksite from '@/models/Worksite';
-import { colors, templates } from '@/icons/icons_templates';
 import User from '@/models/User';
+import { getWorkTypeImage } from '@/filters';
 
 export default {
   name: 'WorksiteSearchInput',
@@ -123,7 +123,7 @@ export default {
       }
       return (
         <div class="flex items-center p-1 cursor-pointer hover:bg-gray-100 border-b">
-          <span>{this.getWorkTypeImage(suggestion.item.work_types)}</span>
+          <span>{this.getWorkImage(suggestion.item.work_types)}</span>
           <div
             className="flex flex-col text-sm"
             style={{ width: this.width || 'auto' }}
@@ -151,7 +151,7 @@ export default {
       }
       return suggestion.item.name;
     },
-    getWorkTypeImage(work_types) {
+    getWorkImage(work_types) {
       const work_type = Worksite.getWorkType(
         work_types,
         null,
@@ -162,29 +162,17 @@ export default {
         return '';
       }
 
-      const colorsKey = `${work_type.status}_${
-        work_type.claimed_by ? 'claimed' : 'unclaimed'
-      }`;
-      const worksiteTemplate =
-        templates[work_type.work_type] || templates.unknown;
-      const svgColors = colors[colorsKey];
+      const svg = getWorkTypeImage(work_type);
 
-      if (svgColors) {
-        const svg = worksiteTemplate
-          .replace('{{fillColor}}', svgColors.fillColor)
-          .replace('{{strokeColor}}', svgColors.strokeColor)
-          .replace('{{multple}}', work_types.length > 1 ? templates.plus : '');
-        return this.$createElement('div', {
-          domProps: {
-            innerHTML: svg,
-          },
-          class: {
-            'case-svg-container': true,
-            'mr-1': true,
-          },
-        });
-      }
-      return '';
+      return this.$createElement('div', {
+        domProps: {
+          innerHTML: svg,
+        },
+        class: {
+          'case-svg-container': true,
+          'mr-1': true,
+        },
+      });
     },
     onInputChange(text) {
       clearTimeout(this.timeout);

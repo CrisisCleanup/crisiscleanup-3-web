@@ -1,4 +1,4 @@
-import { colors as iconColors } from '@/icons/icons_templates';
+import { colors as iconColors, templates } from '@/icons/icons_templates';
 import Status from '@/models/Status';
 import WorkType from '@/models/WorkType';
 
@@ -69,4 +69,20 @@ export const getColorForStatus = (status, claimed = true) => {
   }
 
   return colors.fillColor;
+};
+
+export const getWorkTypeImage = work_type => {
+  const colorsKey = `${work_type.status}_${
+    work_type.claimed_by ? 'claimed' : 'unclaimed'
+  }`;
+  const worksiteTemplate = templates[work_type.work_type] || templates.unknown;
+  const svgColors = iconColors[colorsKey];
+
+  if (svgColors) {
+    return worksiteTemplate
+      .replace('{{fillColor}}', svgColors.fillColor)
+      .replace('{{strokeColor}}', svgColors.strokeColor)
+      .replace('{{multple}}', '');
+  }
+  return '';
 };

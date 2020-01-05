@@ -5,7 +5,12 @@
     class="text-xs"
   >
     <div class="badge-holder rounded-lg px-2" :style="dropdownStyle">
-      <div>{{ currentWorkType.status | getStatusName }}</div>
+      <div
+        v-if="useIcon"
+        class="case-svg-container mr-1"
+        v-html="getWorkTypeImage(currentWorkType)"
+      ></div>
+      <div v-else>{{ currentWorkType.status | getStatusName }}</div>
       <font-awesome-icon class="mx-1" size="sm" icon="chevron-down" />
     </div>
     <div
@@ -38,17 +43,22 @@
 
 <script>
 import Status from '@/models/Status';
-import { getColorForStatus } from '@/filters';
+import { getColorForStatus, getWorkTypeImage } from '@/filters';
 
 export default {
   name: 'StatusDropDown',
   props: {
     onSelect: Function,
     currentWorkType: Object,
+    useIcon: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       getColorForStatus,
+      getWorkTypeImage,
       currentItem: 1,
     };
   },
