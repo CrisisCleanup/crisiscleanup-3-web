@@ -2,7 +2,6 @@
   <div id="map" ref="map" style="height: 100%; width: 100%;" class="relative">
     <div
       v-if="mapLoading"
-      style="z-index: 1001;"
       class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center"
     >
       <spinner />
