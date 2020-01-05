@@ -14,6 +14,7 @@ import Toasted from 'vue-toasted';
 import Popover from 'vue-js-popover';
 import Dropdown from 'bp-vuejs-dropdown';
 import vSelect from 'vue-select';
+import detectBrowserLanguage from 'detect-browser-language';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -34,10 +35,10 @@ import Spinner from '@/components/Spinner';
 import FormSelect from '@/components/FormSelect';
 
 import {
+  getColorForWorkType,
+  getStatusName,
   getWorkTypeName,
   snakeToTitleCase,
-  getStatusName,
-  getColorForWorkType,
 } from '@/filters';
 
 import '@/assets/css/tailwind.css';
@@ -106,24 +107,41 @@ axios.interceptors.response.use(
   },
 );
 
-axios
-  .get(`${process.env.VUE_APP_API_BASE_URL}/languages/en-US`)
-  .then(response => {
-    const locale = response.data.subtag;
-    const messages = {
-      [locale]: response.data.translations,
-    };
+const getLanguages = async tags => {
+  const messages = {};
 
-    const i18n = new VueI18n({
-      locale,
-      messages,
-    });
+  // eslint-disable-next-line no-restricted-syntax
+  for (const tag of tags) {
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const response = await axios.get(
+        `${process.env.VUE_APP_API_BASE_URL}/languages/${tag}`,
+      );
+      const { subtag, translations } = response.data;
 
-    new Vue({
-      i18n,
-      components: { App },
-      render: h => h(App),
-      router,
-      store,
-    }).$mount('#app');
+      // Only install locales that actually have translations
+      if (Object.keys(translations).length > 0) {
+        messages[subtag] = translations;
+      }
+    } catch (e) {
+      VueLog.error(e);
+    }
+  }
+
+  const locale = Object.keys(messages).pop();
+  axios.defaults.headers.common['Accept-Language'] = locale;
+  return new VueI18n({
+    locale,
+    messages,
   });
+};
+
+getLanguages(['en-US', detectBrowserLanguage()]).then(i18n => {
+  new Vue({
+    i18n,
+    components: { App },
+    render: h => h(App),
+    router,
+    store,
+  }).$mount('#app');
+});

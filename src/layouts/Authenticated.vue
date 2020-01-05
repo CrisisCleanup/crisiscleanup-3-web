@@ -52,7 +52,6 @@
                 select-classes="h-12"
                 item-key="id"
                 label="name"
-                searchable
                 @input="handleChange"
               />
               <div class="flex ml-2 font-bold">
@@ -89,6 +88,7 @@
 
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
+import detectBrowserLanguage from 'detect-browser-language';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
 import WorkType from '@/models/WorkType';
@@ -124,22 +124,25 @@ export default {
       ),
     ]);
 
-    if (this.currentUser.primary_language !== 'en-US') {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/languages/${this.currentUser.primary_language}`,
-      );
-      const { translations } = response.data;
-      this.$i18n.setLocaleMessage(
-        this.currentUser.primary_language,
-        translations,
-      );
-      this.$i18n.locale = this.currentUser.primary_language;
-      this.$http.defaults.headers.common[
-        'Accept-Language'
-      ] = this.currentUser.primary_language;
-      document
-        .querySelector('html')
-        .setAttribute('lang', this.currentUser.primary_language);
+    const currentLanguage =
+      this.currentUser.primary_language || detectBrowserLanguage();
+    if (currentLanguage !== this.$i18n.locale) {
+      try {
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/languages/${currentLanguage}`,
+        );
+        const { translations } = response.data;
+        if (Object.keys(translations).length === 0) {
+          return;
+        }
+
+        this.$i18n.setLocaleMessage(currentLanguage, translations);
+        this.$i18n.locale = currentLanguage;
+        this.$http.defaults.headers.common['Accept-Language'] = currentLanguage;
+        document.querySelector('html').setAttribute('lang', currentLanguage);
+      } catch (e) {
+        this.$log.error(e);
+      }
     }
 
     let incidentId = this.$route.params.incident_id;

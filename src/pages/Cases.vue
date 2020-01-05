@@ -22,7 +22,7 @@
                 @click.native="toggleView('showingMap')"
               />
               <ccu-icon
-                :alt="$t('Toggle Tablr View')"
+                :alt="$t('Toggle Table View')"
                 size="medium"
                 class="mr-4 cursor-pointer"
                 :class="showingTable ? 'filter-yellow' : 'filter-gray'"
@@ -219,8 +219,9 @@
                     </div>
                     <div class="p-3 flex flex-col">
                       <span class="text-base pb-3">{{
-                        $t(`You are claiming ${selectedTableItems.length} cases. What status would you like to
-                        assign the cases:`)
+                        $t(
+                          `You are claiming ${selectedTableItems.length} cases. What status would you like to assign the cases:`,
+                        )
                       }}</span>
                       <base-checkbox
                         class="mb-5"
