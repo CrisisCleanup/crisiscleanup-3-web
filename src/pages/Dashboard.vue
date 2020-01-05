@@ -248,10 +248,11 @@ export default {
             worksite.work_types &&
             this.currentIncidentId === worksite.incident
           ) {
-            return worksite.work_types.find(
+            const claimed = worksite.work_types.find(
               work_type =>
                 work_type.claimed_by === this.currentUser.organization.id,
             );
+            return Boolean(claimed);
           }
           return false;
         })

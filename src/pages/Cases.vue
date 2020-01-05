@@ -279,6 +279,7 @@
                 :pagination="pagination"
                 :sorter="sorter"
                 :loading="tableLoading"
+                :body-style="{ height: '60vh' }"
                 @change="handleTableChange"
                 @rowClick="displayWorksite"
                 @selectionChanged="
