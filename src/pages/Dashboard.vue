@@ -60,57 +60,68 @@
             {{ $t('MY CASES') }}
           </div>
           <div class="p-4">
-            <template v-for="worksite in claimedWorksites">
-              <template>
-                <div
-                  :key="worksite.id"
-                  class="flex justify-between items-center border-b last:border-b-0 py-2"
-                >
-                  <div class="badge-holder flex items-center w-20">
-                    <badge
-                      class="mx-1"
-                      :color="
-                        getPrimaryWorkType(worksite.work_types)
-                          | getColorForWorkType
+            <Table
+              class=""
+              :data="claimedWorksites"
+              :columns="columns"
+              :sorter="sorter"
+              :loading="loading"
+              :body-style="{ height: '300px' }"
+              @change="handleTableChange"
+            >
+              <template #work_types="slotProps">
+                <div class="flex flex-col">
+                  <div
+                    v-for="work_type in slotProps.item.work_types"
+                    :key="work_type.id"
+                  >
+                    <StatusDropDown
+                      class="block"
+                      :current-work-type="work_type"
+                      use-icon
+                      :on-select="
+                        value => {
+                          statusValueChange(
+                            value,
+                            work_type,
+                            slotProps.item.id,
+                          );
+                        }
                       "
                     />
-                    {{ worksite.case_number }}
                   </div>
-                  <div class="w-4/12">
-                    <template v-for="(work_type, index) in worksite.work_types">
-                      <span
-                        v-if="
-                          work_type.claimed_by === currentUser.organization.id
-                        "
-                        :key="work_type.id"
-                        >{{ work_type.work_type | getWorkTypeName }}
-                        <span v-if="index !== worksite.work_types.length - 1"
-                          >,</span
-                        ></span
-                      >
-                    </template>
-                  </div>
-                  <span class="w-3/12">{{ worksite.name }}</span>
-                  <span class="w-3/12">{{
-                    worksite.formFields && worksite.formFields.phone1
-                  }}</span>
+                </div>
+              </template>
+              <template #actions="slotProps">
+                <div class="flex">
                   <router-link
-                    class="w-1/12 self-end"
+                    class=""
                     :to="
-                      `/incident/${$route.params.incident_id}/cases/${worksite.id}/edit?showOnMap=true`
+                      `/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`
                     "
                     tag="div"
                   >
                     <ccu-icon
                       :alt="$t('actions.jump_to_case')"
                       size="medium"
-                      class="p-1 py-2"
+                      class="p-1 py-2 w-8"
                       type="go-case"
                     />
                   </router-link>
+                  <ccu-icon
+                    :alt="$t('actions.print')"
+                    size="medium"
+                    class="p-1 py-2 w-8"
+                    type="print"
+                    @click.native="
+                      () => {
+                        printWorksite(slotProps.item.id);
+                      }
+                    "
+                  />
                 </div>
               </template>
-            </template>
+            </Table>
           </div>
         </div>
         <div class="w-2/5 m-4 p-6 shadow bg-white">
@@ -174,10 +185,14 @@ import LineChart from '@/components/charts/LineChart';
 import { rand } from '@/utils/charts';
 import { colors } from '@/icons/icons_templates';
 import Incident from '@/models/Incident';
+import Table from '@/components/Table';
+import { getColorForStatus } from '@/filters';
+import StatusDropDown from '@/components/StatusDropDown';
+import { forceFileDownload } from '@/utils/downloads';
 
 export default {
   name: 'Dashboard',
-  components: { LineChart },
+  components: { LineChart, Table, StatusDropDown },
   data() {
     return {
       usersToInvite: '',
@@ -188,6 +203,11 @@ export default {
       loading: false,
       datacollection: null,
       colors,
+      sorter: {
+        key: null,
+        direction: null,
+      },
+      getColorForStatus,
       options: {
         responsive: true,
         hoverMode: 'index',
@@ -230,6 +250,49 @@ export default {
     };
   },
   computed: {
+    columns() {
+      return [
+        {
+          title: this.$t('No'),
+          dataIndex: 'case_number',
+          key: 'case_number',
+          width: '0.5fr',
+          sortable: true,
+        },
+        {
+          title: this.$t('Work type'),
+          dataIndex: 'work_types',
+          key: 'work_types',
+          scopedSlots: { customRender: 'work_types' },
+          width: '1fr',
+        },
+        {
+          title: this.$t('Name'),
+          dataIndex: 'name',
+          key: 'name',
+          width: '1fr',
+          sortable: true,
+        },
+        {
+          title: this.$t('Full Address'),
+          dataIndex: 'address',
+          key: 'address',
+        },
+        {
+          title: this.$t('Phone'),
+          dataIndex: 'phone1',
+          key: 'formFields',
+          subKey: 'phone1',
+          sortable: false,
+        },
+        {
+          title: '',
+          dataIndex: 'actions',
+          key: 'actions',
+          sortable: false,
+        },
+      ];
+    },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
@@ -242,21 +305,27 @@ export default {
     },
     ...mapState('incident', ['currentIncidentId']),
     claimedWorksites() {
-      return Worksite.query()
-        .where(worksite => {
-          if (
-            worksite.work_types &&
-            this.currentIncidentId === worksite.incident
-          ) {
-            const claimed = worksite.work_types.find(
-              work_type =>
-                work_type.claimed_by === this.currentUser.organization.id,
-            );
-            return Boolean(claimed);
-          }
-          return false;
-        })
-        .get();
+      const query = Worksite.query().where(worksite => {
+        if (
+          worksite.work_types &&
+          this.currentIncidentId === worksite.incident
+        ) {
+          const claimed = worksite.work_types.find(
+            work_type =>
+              work_type.claimed_by === this.currentUser.organization.id,
+          );
+          return Boolean(claimed);
+        }
+        return false;
+      });
+      if (this.sorter.key) {
+        let { key } = this.sorter;
+        if (key === 'case_number') {
+          key = 'id';
+        }
+        query.orderBy(this.sorter.key, this.sorter.direction);
+      }
+      return query.get();
     },
   },
   watch: {
@@ -288,6 +357,24 @@ export default {
         this.getInProgessCount(),
         this.getClosedCount(),
       ]);
+    },
+    async statusValueChange(value, work_type, worksite_id) {
+      try {
+        await Worksite.api().updateWorkTypeStatus(work_type.id, value);
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        await Worksite.api().fetch(worksite_id);
+      }
+    },
+    handleTableChange({ sorter }) {
+      this.sorter = { ...sorter };
+    },
+    async printWorksite(worksite_id) {
+      this.spinning = true;
+      const pdf = await Worksite.api().printWorksite(worksite_id);
+      forceFileDownload(pdf.response);
+      this.spinning = false;
     },
     async inviteUsers() {
       try {

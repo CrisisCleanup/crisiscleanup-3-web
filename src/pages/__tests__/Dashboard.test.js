@@ -9,6 +9,7 @@ import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { Store } from 'vuex-mock-store';
 import Dashboard from '../Dashboard';
+import Table from '@/components/Table';
 
 jest.mock('@/models/User');
 jest.mock('@/models/Status');
@@ -51,25 +52,29 @@ const mocks = {
   $route,
   $store: store,
   $http: {
-    get: () => ({
-      data: {
-        count: 2,
-      },
-    }),
+    get: () => {
+      return {
+        data: {
+          count: 2,
+          results: [],
+        },
+      };
+    },
   },
   $t: key => key,
 };
 
 const mountWithOptions = () =>
   shallowMount(Dashboard, {
-    stubs: [
-      'base-button',
-      'base-input',
-      'ccu-icon',
-      'badge',
-      'spinner',
-      'router-link',
-    ],
+    stubs: {
+      'base-button': true,
+      'base-input': true,
+      'ccu-icon': true,
+      badge: true,
+      spinner: true,
+      'router-link': true,
+      table: Table,
+    },
     mocks,
     localVue,
   });
