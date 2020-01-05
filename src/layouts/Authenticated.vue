@@ -39,7 +39,7 @@
         </router-link>
       </div>
     </div>
-    <div class="flex flex-col w-full">
+    <div class="flex flex-col w-full overflow-hidden">
       <div class="shadow p-1 bg-white">
         <div class="flex justify-between h-full items-center">
           <div class="flex items-center ml-2">
@@ -59,15 +59,36 @@
               </div>
             </div>
           </div>
-          <router-link to="/profile" class="router-link">
-            <div class="flex items-center">
-              <img
-                src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
-                class="rounded-full w-10 h-10"
-              />
-              <span class="p-3">{{ name }}</span>
-            </div>
-          </router-link>
+          <div class="flex items-center overflow-hidden">
+            <v-popover popover-class="menu-popover" placement="bottom-end">
+              <div class="flex cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
+                  class="rounded-full w-10 h-10"
+                />
+                <span class="p-3">{{ name }}</span>
+              </div>
+              <div slot="popover" class="flex flex-col">
+                <router-link
+                  to="/profile"
+                  class="router-link text-base p-2 hover:bg-gray-100"
+                >
+                  Profile
+                </router-link>
+                <div
+                  class="text-base p-2 hover:bg-gray-100 cursor-pointer"
+                  @click="
+                    () => {
+                      $store.dispatch('auth/logout');
+                      $router.push('/login');
+                    }
+                  "
+                >
+                  Logout
+                </div>
+              </div>
+            </v-popover>
+          </div>
         </div>
       </div>
       <div v-if="this.ready" class="h-full flex-grow content">
@@ -224,6 +245,7 @@ export default {
 <style>
 body {
   font-family: 'Nunito Sans', sans-serif;
+  overflow: hidden;
 }
 
 .layout {
@@ -271,5 +293,11 @@ body {
 .incident-select .ant-select-selection {
   border: 0;
   box-shadow: none;
+}
+
+.menu-popover {
+  @apply bg-white text-black outline-none w-full border mt-4 shadow w-48;
+  left: 0.75rem !important;
+  z-index: 100;
 }
 </style>
