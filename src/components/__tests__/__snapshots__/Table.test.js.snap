@@ -99,16 +99,12 @@ exports[`Table should render correctly and match snapshot 1`] = `
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
-        
-          
-        
+        <!---->
       </div>
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
-        
-          
-        
+        <!---->
       </div>
     </div>
     <div
@@ -120,16 +116,12 @@ exports[`Table should render correctly and match snapshot 1`] = `
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
-        
-          
-        
+        <!---->
       </div>
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
-        
-          
-        
+        <!---->
       </div>
     </div>
   </div>
@@ -214,16 +206,12 @@ exports[`Table should render correctly with selection and pagination 1`] = `
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
-        
-          
-        
+        <!---->
       </div>
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
-        
-          
-        
+        <!---->
       </div>
     </div>
     <div
@@ -251,16 +239,12 @@ exports[`Table should render correctly with selection and pagination 1`] = `
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
-        
-          
-        
+        <!---->
       </div>
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
-        
-          
-        
+        <!---->
       </div>
     </div>
   </div>

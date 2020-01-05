@@ -112,268 +112,445 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="p-4"
         >
           <div
-            class="flex justify-between items-center border-b last:border-b-0 py-2"
+            class="table w-full"
           >
             <div
-              class="badge-holder flex items-center w-20"
+              class="header text-gray-600 bg-white"
+              style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
             >
-              <badge-stub
-                class="mx-1"
-                color="#ffffff"
-              />
-              
-                  
+              <!---->
+               
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
                 
+      No
+      
+                <div>
+                  <ccu-icon-stub
+                    alt="actions.sortable"
+                    size="small"
+                    type="updown"
+                  />
+                </div>
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      Work type
+      
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      Name
+      
+                <div>
+                  <ccu-icon-stub
+                    alt="actions.sortable"
+                    size="small"
+                    type="updown"
+                  />
+                </div>
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      Full Address
+      
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      Phone
+      
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      
+      
+                <!---->
+              </div>
             </div>
              
             <div
-              class="w-4/12"
-            />
-             
-            <span
-              class="w-3/12"
+              class="body bg-white relative"
+              style="max-height: 600px; overflow: auto; height: 300px;"
             >
-              
-            </span>
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <router-link-stub
-              class="w-1/12 self-end"
-              tag="div"
-              to="/incident/99/cases/undefined/edit?showOnMap=true"
-            >
-              <ccu-icon-stub
-                alt="actions.jump_to_case"
-                class="p-1 py-2"
-                size="medium"
-                type="go-case"
-              />
-            </router-link-stub>
-          </div>
-          <div
-            class="flex justify-between items-center border-b last:border-b-0 py-2"
-          >
-            <div
-              class="badge-holder flex items-center w-20"
-            >
-              <badge-stub
-                class="mx-1"
-                color="#ffffff"
-              />
-              
-                  
-                
+              <!---->
+               
+              <div
+                class="hover:bg-gray-100"
+                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-col"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="hover:bg-gray-100"
+                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-col"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="hover:bg-gray-100"
+                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-col"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="hover:bg-gray-100"
+                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-col"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="hover:bg-gray-100"
+                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-col"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div
+                class="hover:bg-gray-100"
+                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-col"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
              
-            <div
-              class="w-4/12"
-            />
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <router-link-stub
-              class="w-1/12 self-end"
-              tag="div"
-              to="/incident/99/cases/undefined/edit?showOnMap=true"
-            >
-              <ccu-icon-stub
-                alt="actions.jump_to_case"
-                class="p-1 py-2"
-                size="medium"
-                type="go-case"
-              />
-            </router-link-stub>
-          </div>
-          <div
-            class="flex justify-between items-center border-b last:border-b-0 py-2"
-          >
-            <div
-              class="badge-holder flex items-center w-20"
-            >
-              <badge-stub
-                class="mx-1"
-                color="#ffffff"
-              />
-              
-                  
-                
-            </div>
-             
-            <div
-              class="w-4/12"
-            />
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <router-link-stub
-              class="w-1/12 self-end"
-              tag="div"
-              to="/incident/99/cases/undefined/edit?showOnMap=true"
-            >
-              <ccu-icon-stub
-                alt="actions.jump_to_case"
-                class="p-1 py-2"
-                size="medium"
-                type="go-case"
-              />
-            </router-link-stub>
-          </div>
-          <div
-            class="flex justify-between items-center border-b last:border-b-0 py-2"
-          >
-            <div
-              class="badge-holder flex items-center w-20"
-            >
-              <badge-stub
-                class="mx-1"
-                color="#ffffff"
-              />
-              
-                  
-                
-            </div>
-             
-            <div
-              class="w-4/12"
-            />
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <router-link-stub
-              class="w-1/12 self-end"
-              tag="div"
-              to="/incident/99/cases/undefined/edit?showOnMap=true"
-            >
-              <ccu-icon-stub
-                alt="actions.jump_to_case"
-                class="p-1 py-2"
-                size="medium"
-                type="go-case"
-              />
-            </router-link-stub>
-          </div>
-          <div
-            class="flex justify-between items-center border-b last:border-b-0 py-2"
-          >
-            <div
-              class="badge-holder flex items-center w-20"
-            >
-              <badge-stub
-                class="mx-1"
-                color="#ffffff"
-              />
-              
-                  
-                
-            </div>
-             
-            <div
-              class="w-4/12"
-            />
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <router-link-stub
-              class="w-1/12 self-end"
-              tag="div"
-              to="/incident/99/cases/undefined/edit?showOnMap=true"
-            >
-              <ccu-icon-stub
-                alt="actions.jump_to_case"
-                class="p-1 py-2"
-                size="medium"
-                type="go-case"
-              />
-            </router-link-stub>
-          </div>
-          <div
-            class="flex justify-between items-center border-b last:border-b-0 py-2"
-          >
-            <div
-              class="badge-holder flex items-center w-20"
-            >
-              <badge-stub
-                class="mx-1"
-                color="#ffffff"
-              />
-              
-                  
-                
-            </div>
-             
-            <div
-              class="w-4/12"
-            />
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <span
-              class="w-3/12"
-            >
-              
-            </span>
-             
-            <router-link-stub
-              class="w-1/12 self-end"
-              tag="div"
-              to="/incident/99/cases/undefined/edit?showOnMap=true"
-            >
-              <ccu-icon-stub
-                alt="actions.jump_to_case"
-                class="p-1 py-2"
-                size="medium"
-                type="go-case"
-              />
-            </router-link-stub>
+            <!---->
           </div>
         </div>
       </div>

@@ -491,6 +491,7 @@ import Status from '@/models/Status';
 import { getQueryString } from '@/utils/urls';
 import { getColorForStatus } from '@/filters';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';
+import { forceFileDownload } from '@/utils/downloads';
 
 export default {
   name: 'Cases',
@@ -904,7 +905,7 @@ export default {
     async printWorksite() {
       this.spinning = true;
       const pdf = await Worksite.api().printWorksite(this.currentWorksite.id);
-      this.forceFileDownload(pdf.response);
+      forceFileDownload(pdf.response);
       this.spinning = false;
     },
     async downloadWorksite() {
@@ -912,7 +913,7 @@ export default {
       const csv = await Worksite.api().downloadWorksite(
         this.currentWorksite.id,
       );
-      this.forceFileDownload(csv.response);
+      forceFileDownload(csv.response);
       this.spinning = false;
     },
     // TODO: refactor, id param is unused
@@ -944,25 +945,6 @@ export default {
         }
       };
       waitForMap();
-    },
-    forceFileDownload(response) {
-      const blob = new Blob([response.data], { type: response.data.type });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      const contentDisposition = response.headers['content-disposition'];
-      let fileName = 'unknown';
-      if (contentDisposition) {
-        const fileNameMatch = contentDisposition.match(/filename=(.+)/);
-        if (fileNameMatch.length === 2) {
-          [fileName] = fileNameMatch;
-        }
-      }
-      link.setAttribute('download', fileName);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
     },
     addMarkerToMap(location) {
       this.$refs.workstiteMap.markerLayer.clearLayers();

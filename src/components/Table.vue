@@ -2,7 +2,7 @@
   <div class="table w-full">
     <div class="header text-gray-600 bg-white" :style="gridStyleHeader">
       <div v-if="enableSelection" class="flex items-center p-2 border-b">
-        <base-checkbox class="mb-5" @input="setAllChecked"></base-checkbox>
+        <base-checkbox class="mb-5" @input="setAllChecked" />
       </div>
       <div
         v-for="column of columns"
@@ -69,7 +69,9 @@
           class="flex items-center p-2 border-b cursor-pointer"
         >
           <slot :name="column.key" :item="item">
-            {{ item[column.key] }}
+            <template v-if="item[column.key]">{{
+              column.subKey ? item[column.key][column.subKey] : item[column.key]
+            }}</template>
           </slot>
         </div>
       </div>
@@ -141,7 +143,7 @@ export default {
   name: 'Table',
   props: {
     columns: Array,
-    data: Array,
+    data: null,
     pagination: Object,
     sorter: {
       type: Object,
