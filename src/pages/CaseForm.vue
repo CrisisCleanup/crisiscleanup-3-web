@@ -4,21 +4,18 @@
     class="bg-white flex flex-col flex-grow w-full"
     @submit.prevent="handleSubmit"
   >
-    <div class="intake-form p-3 flex-grow">
+    <div class="intake-form flex-grow">
       <div
-        class="py-3 m-1 border-t border-b flex items-center justify-between text-base font-semibold"
+        class="py-3 px-3 bg-gray-200 flex items-center justify-between text-base font-semibold"
       >
         <div class="flex items-center">
-          <badge
-            width="20px"
-            height="20px"
-            class="mr-2 bg-primary-light text-black"
+          <badge width="22px" height="22px" class="mr-2 bg-black text-white"
             >1</badge
           >
           {{ $t('Basic Information') }}
         </div>
       </div>
-      <div class="py-1">
+      <div class="form-field">
         <WorksiteSearchInput
           :value="worksite.name"
           tooltip="info"
@@ -42,10 +39,10 @@
           @search="worksitesSearch"
         />
       </div>
-      <div class="text-base font-semibold my-1">
+      <div class="text-base font-semibold my-1 mx-3">
         {{ $t('Location') }}
       </div>
-      <div class="py-1">
+      <div class="form-field">
         <WorksiteSearchInput
           :value="worksite.address"
           tooltip="info"
@@ -75,7 +72,7 @@
           @search="geocoderSearch"
         />
       </div>
-      <div class="py-1">
+      <div class="form-field">
         <base-input
           :value="worksite.city"
           tooltip="info"
@@ -90,7 +87,7 @@
           @change="findPotentialGeocode"
         />
       </div>
-      <div class="py-1">
+      <div class="form-field">
         <base-input
           :value="worksite.county"
           tooltip="info"
@@ -106,7 +103,7 @@
           @change="findPotentialGeocode"
         />
       </div>
-      <div class="py-1">
+      <div class="form-field">
         <base-input
           :value="worksite.state"
           tooltip="info"
@@ -121,7 +118,7 @@
           @change="findPotentialGeocode"
         />
       </div>
-      <div class="py-1">
+      <div class="form-field">
         <base-input
           :value="worksite.postal_code"
           tooltip="info"
@@ -131,7 +128,7 @@
           @change="findPotentialGeocode"
         />
       </div>
-      <div class="py-1">
+      <div class="form-field">
         <base-input
           :value="worksite.what3words"
           tooltip="info"
@@ -194,15 +191,15 @@
         >
           <template v-if="['h4'].includes(field.html_type)">
             <div
-              class="py-3 m-1 border-t border-b flex items-center justify-between text-base font-semibold"
+              class="py-3 px-3 bg-gray-200 flex items-center justify-between text-base font-semibold"
             >
               <div class="flex items-center">
                 <badge
-                  class="mr-2 bg-primary-light text-black"
-                  width="20px"
-                  height="20px"
+                  class="mr-2 bg-black text-white"
+                  width="22px"
+                  height="22px"
                 >
-                  {{ field.list_order }}
+                  {{ sectionCounter++ }}
                 </badge>
                 {{ field.label_t }}
               </div>
@@ -219,12 +216,12 @@
             </div>
           </template>
           <template v-if="['h5'].includes(field.html_type)">
-            <div class="text-base font-semibold my-1">
+            <div class="text-base font-semibold my-1 mx-3">
               {{ field.label_t }}
             </div>
           </template>
           <template v-if="field.html_type === 'select'">
-            <div :key="field.field_key" class="py-1">
+            <div :key="field.field_key" class="form-field">
               <span slot="label" class="flex items-center">
                 <span>{{ field.label_t }}</span>
                 <ccu-icon
@@ -253,7 +250,7 @@
             </div>
           </template>
           <template v-if="field.html_type === 'multiselect'">
-            <div :key="field.field_key" class="py-1">
+            <div :key="field.field_key" class="form-field">
               <span slot="label" class="flex items-center">
                 <span>{{ field.label_t }}</span>
                 <ccu-icon
@@ -283,7 +280,7 @@
             </div>
           </template>
           <template v-if="field.html_type === 'text'">
-            <div :key="field.field_key" class="py-1">
+            <div :key="field.field_key" class="form-field">
               <base-input
                 :value="worksite.formFields[field.field_key]"
                 tooltip="info"
@@ -299,7 +296,7 @@
             </div>
           </template>
           <template v-if="field.html_type === 'suggest'">
-            <div :key="field.field_key" class="py-1">
+            <div :key="field.field_key" class="form-field">
               <autocomplete
                 v-model="dynamicFields[field.field_key]"
                 :default-value="getValue(field.field_key)"
@@ -310,7 +307,7 @@
             </div>
           </template>
           <template v-if="field.html_type === 'textarea'">
-            <div :key="field.field_key" class="py-1">
+            <div :key="field.field_key" class="form-field">
               <span slot="label" class="flex items-center">
                 <span>{{ field.label_t }}</span>
                 <ccu-icon
@@ -338,7 +335,7 @@
             </div>
           </template>
           <template v-if="field.html_type === 'checkbox'">
-            <div :key="field.field_key" class="py-1 flex items-center">
+            <div :key="field.field_key" class="form-field flex items-center">
               <base-checkbox
                 :value="worksite.formFields[field.field_key]"
                 @input="
@@ -429,6 +426,7 @@ export default {
       searchWorksitesNameResults: [],
       worksite: {},
       dynamicFields: {},
+      sectionCounter: 2,
     };
   },
   computed: {
@@ -770,6 +768,10 @@ export default {
 
 .card-footer {
   min-height: 80px;
+}
+
+.form-field {
+  @apply py-1 mx-3;
 }
 
 h4 {
