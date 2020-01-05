@@ -64,9 +64,9 @@
       <div class="flex flex-wrap">
         <div
           v-for="(value, key) in legendColors"
-          class="flex items-center w-1/2 mb-1"
+          class="flex items-start w-1/2 mb-1"
         >
-          <span class="w-4">
+          <span class="w-4 mt-1">
             <badge class="mx-1" :color="value" />
           </span>
           <div class="text-xs ml-1">{{ key }}</div>
