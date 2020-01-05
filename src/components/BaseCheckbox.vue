@@ -4,6 +4,7 @@
     <input
       type="checkbox"
       :checked="value"
+      class="checkmark-input"
       @input="$emit('input', $event.target.checked)"
       @change="$emit('change', $event.target.checked)"
     />

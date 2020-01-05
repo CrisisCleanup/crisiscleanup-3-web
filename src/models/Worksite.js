@@ -157,14 +157,14 @@ export default class Worksite extends Model {
           { save: false },
         );
       },
-      unclaimWorksite(id, workTypes) {
-        return this.post(
-          `/worksites/${id}/unclaim`,
-          {
-            work_types: workTypes,
-          },
-          { save: false },
-        );
+      unclaimWorksite(id, workTypes, status = null) {
+        const data = {
+          work_types: workTypes,
+        };
+        if (status) {
+          data.status = status;
+        }
+        return this.post(`/worksites/${id}/unclaim`, data, { save: false });
       },
       requestWorksite(id, workTypes) {
         return this.post(

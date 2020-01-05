@@ -51,7 +51,7 @@
         :style="gridStyleRow"
         class="hover:bg-gray-100"
         :class="{ 'bg-gray-100': selectedItems.has(item.id) }"
-        @click="rowClick(item)"
+        @click="rowClick(item, $event)"
       >
         <div v-if="enableSelection" class="flex items-center p-2 border-b">
           <base-checkbox
@@ -62,7 +62,7 @@
                 setChecked(item, value);
               }
             "
-          ></base-checkbox>
+          />
         </div>
         <div
           v-for="column of columns"
@@ -316,7 +316,13 @@ export default {
       const filter = {};
       this.$emit('change', { pagination, filter, sorter });
     },
-    rowClick(item) {
+    rowClick(item, event) {
+      if (
+        event.target.className === 'checkmark' ||
+        event.target.className === 'checkmark-input'
+      ) {
+        return;
+      }
       this.$emit('rowClick', item);
     },
   },

@@ -52,6 +52,7 @@
                 select-classes="h-12"
                 item-key="id"
                 label="name"
+                searchable
                 @input="handleChange"
               />
               <div class="flex ml-2 font-bold">
