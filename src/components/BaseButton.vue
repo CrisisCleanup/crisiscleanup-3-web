@@ -23,6 +23,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
     text: String,
     alt: String,
     title: String,
@@ -33,7 +37,6 @@ export default {
   },
   data() {
     return {
-      disabled: false,
       loading: false,
       styles: {
         'text-lg': this.size === 'large',
@@ -53,7 +56,6 @@ export default {
   },
   methods: {
     async performAction() {
-      this.disabled = true;
       this.loading = true;
 
       try {
@@ -61,7 +63,6 @@ export default {
       } catch (e) {
         // TODO: expose method for handling button exceptions
       } finally {
-        this.disabled = false;
         this.loading = false;
       }
     },

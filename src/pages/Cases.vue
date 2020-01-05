@@ -71,9 +71,16 @@
                     <!--                                        <li class="py-2">-->
                     <!--                                            <base-checkbox @input="(value) => { applyLayers(value, floodZone, 'flood') }">Flood Damage</base-checkbox>-->
                     <!--                                        </li>-->
-                    <!--                                        <li class="py-2">-->
-                    <!--                                            <base-checkbox @input="(value) => { applyLocation(81828, value) }">Incident Extent</base-checkbox>-->
-                    <!--                                        </li>-->
+                    <!--                    <li class="py-2">-->
+                    <!--                      <base-checkbox-->
+                    <!--                        @input="-->
+                    <!--                          value => {-->
+                    <!--                            applyGeoJSON(currentIncident.extent, value);-->
+                    <!--                          }-->
+                    <!--                        "-->
+                    <!--                        >Incident Extent</base-checkbox-->
+                    <!--                      >-->
+                    <!--                    </li>-->
                     <!--                                        <li class="py-2">-->
                     <!--                                            <base-checkbox @input="(value) => { applyLocation(81829, value) }">Track of Tornado</base-checkbox>-->
                     <!--                                        </li>-->
@@ -188,15 +195,78 @@
                 <div class="flex">
                   <base-button
                     class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white"
-                    :action="() => {}"
+                    :disabled="selectedTableItems.length === 0"
+                    :action="
+                      () => {
+                        showingUnclaimModal = true;
+                      }
+                    "
                     :text="$t('actions.unclaim')"
-                  />
+                  >
+                  </base-button>
                   <base-button
                     icon="sync"
                     class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
                     :text="$t('actions.update_status')"
                     @click="() => {}"
                   />
+                  <modal
+                    v-if="showingUnclaimModal"
+                    modal-classes="bg-white max-w-lg shadow"
+                  >
+                    <div slot="header" class="text-lg border-b p-3">
+                      {{ $t('Unclaim Cases') }}
+                    </div>
+                    <div class="p-3 flex flex-col">
+                      <span class="text-base pb-3">{{
+                        $t(`You are claiming ${selectedTableItems.length} cases. What status would you like to
+                        assign the cases:`)
+                      }}</span>
+                      <base-checkbox
+                        class="mb-5"
+                        :value="unchangedStatusOnUnclaim"
+                        @input="
+                          () => {
+                            unchangedStatusOnUnclaim = !unchangedStatusOnUnclaim;
+                            updateStatusOnUnclaim = !unchangedStatusOnUnclaim;
+                          }
+                        "
+                        >{{ $t('No change') }}</base-checkbox
+                      >
+                      <base-checkbox
+                        class="mb-5"
+                        :value="updateStatusOnUnclaim"
+                        @input="
+                          () => {
+                            updateStatusOnUnclaim = !updateStatusOnUnclaim;
+                            unchangedStatusOnUnclaim = !updateStatusOnUnclaim;
+                          }
+                        "
+                        >{{ $t('status.open_unassigned') }}</base-checkbox
+                      >
+                    </div>
+                    <div
+                      slot="footer"
+                      class="flex items-center justify-center p-2 bg-white border-t"
+                    >
+                      <base-button
+                        type="primary"
+                        class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
+                        :action="unclaimSelected"
+                        :text="$t('actions.ok')"
+                      />
+                      <base-button
+                        type="bare"
+                        class="border border-black mx-2 text-base p-2 px-4 text-black"
+                        :action="
+                          () => {
+                            showingUnclaimModal = false;
+                          }
+                        "
+                        :text="$t('actions.cancel')"
+                      />
+                    </div>
+                  </modal>
                 </div>
               </div>
               <Table
@@ -210,6 +280,11 @@
                 :loading="tableLoading"
                 @change="handleTableChange"
                 @rowClick="displayWorksite"
+                @selectionChanged="
+                  selectedItems => {
+                    selectedTableItems = selectedItems;
+                  }
+                "
               >
                 <template #work_types="slotProps">
                   <div class="flex flex-col">
@@ -261,7 +336,7 @@
           <span class="px-2">{{ $t('New Case') }}</span>
         </div>
         <div
-          v-if="this.currentWorksite && this.currentWorksite.id"
+          v-if="currentWorksite && currentWorksite.id"
           class="w-1/2 h-full p-3 flex items-center justify-center"
           :class="{
             'tab-active':
@@ -271,9 +346,9 @@
           }"
         >
           {{
-            this.currentWorksite && isEditingWorksite
-              ? `Edit ${this.currentWorksite.case_number}`
-              : `View ${this.currentWorksite.case_number}`
+            currentWorksite && isEditingWorksite
+              ? `Edit ${currentWorksite.case_number}`
+              : `View ${currentWorksite.case_number}`
           }}
         </div>
       </div>
@@ -434,6 +509,7 @@ export default {
       tableLoading: false,
       searchValue: null,
       searchWorksites: [],
+      selectedTableItems: [],
       totalWorksites: 0,
       searchingWorksites: false,
       data: [],
@@ -459,6 +535,9 @@ export default {
       currentCaseView: '',
       getColorForStatus,
       appliedLocations: new Set(),
+      showingUnclaimModal: false,
+      unchangedStatusOnUnclaim: true,
+      updateStatusOnUnclaim: false,
     };
   },
   watch: {
@@ -562,6 +641,31 @@ export default {
       } else {
         this.$refs.workstiteMap.map.eachLayer(layer => {
           if (layer.key && layer.key === key) {
+            this.$refs.workstiteMap.map.removeLayer(layer);
+          }
+        });
+      }
+    },
+
+    applyGeoJSON(geometry, value) {
+      if (value && this.$refs.workstiteMap.map) {
+        const geojsonFeature = {
+          type: 'Feature',
+          properties: {},
+          geometry,
+        };
+        const incidentId = this.currentIncident.id;
+        L.geoJSON(geojsonFeature, {
+          onEachFeature(feature, layer) {
+            layer.location_id = incidentId;
+          },
+        }).addTo(this.$refs.workstiteMap.map);
+      } else {
+        this.$refs.workstiteMap.map.eachLayer(layer => {
+          if (
+            layer.location_id &&
+            layer.location_id === this.currentIncident.id
+          ) {
             this.$refs.workstiteMap.map.removeLayer(layer);
           }
         });
@@ -674,6 +778,8 @@ export default {
       await this.fetch({
         pageSize: this.pagination.pageSize,
         page: this.pagination.current,
+        sortKey: this.sorter.key,
+        sortDirection: this.sorter.direction,
       });
     },
 
@@ -861,6 +967,24 @@ export default {
       new L.marker(location).addTo(this.$refs.workstiteMap.markerLayer);
       this.$refs.workstiteMap.map.setView([location.lat, location.lng], 15);
       this.toggleView('showingMap');
+    },
+    async unclaimSelected() {
+      this.spinning = true;
+      const promises = [];
+      this.selectedTableItems.forEach(worksite_id => {
+        promises.push(
+          Worksite.api().unclaimWorksite(
+            worksite_id,
+            [],
+            this.updateStatusOnUnclaim ? 'open_unassigned' : null,
+          ),
+        );
+      });
+      const results = await Promise.allSettled(promises);
+      results.forEach(result => this.$log.debug(result));
+      this.spinning = false;
+      this.showingUnclaimModal = false;
+      this.reloadTable();
     },
   },
   computed: {
