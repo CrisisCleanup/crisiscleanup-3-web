@@ -155,6 +155,7 @@ exports[`Table should render correctly with selection and pagination 1`] = `
       >
          
         <input
+          class="checkmark-input"
           type="checkbox"
         />
          
@@ -200,6 +201,7 @@ exports[`Table should render correctly with selection and pagination 1`] = `
         >
            
           <input
+            class="checkmark-input"
             type="checkbox"
           />
            
@@ -236,6 +238,7 @@ exports[`Table should render correctly with selection and pagination 1`] = `
         >
            
           <input
+            class="checkmark-input"
             type="checkbox"
           />
            

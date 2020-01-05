@@ -6,6 +6,7 @@ exports[`BaseCheckbox should match snapshot with props 1`] = `
 >
    
   <input
+    class="checkmark-input"
     type="checkbox"
   />
    
@@ -21,6 +22,7 @@ exports[`BaseCheckbox should render correctly and match snapshot 1`] = `
 >
    
   <input
+    class="checkmark-input"
     type="checkbox"
   />
    
