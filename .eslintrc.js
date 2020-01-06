@@ -23,7 +23,7 @@ module.exports = {
     'plugin:cypress/recommended',
   ],
   globals: {
-    // Atomics: 'readonly',
+    Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
   parserOptions: {
