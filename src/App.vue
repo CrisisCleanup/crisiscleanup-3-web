@@ -118,7 +118,7 @@ body {
   color: black;
   padding: 24px;
   border-radius: 5px;
-  box-shadow: 0 5px 30px rgba(black, 0.1);
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
 }
 
 .interactive-tooltip.popover .popover-arrow {

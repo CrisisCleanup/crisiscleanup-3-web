@@ -35,7 +35,7 @@ const mountWithOptions = ({ props } = {}) =>
     stubs: {
       'base-checkbox': BaseCheckbox,
       'form-select': "<input type='select'>",
-      'base-button': '<button />',
+      'base-button': '<button></button>',
     },
     propsData: {
       columns: TestColumns,

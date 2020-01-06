@@ -18,7 +18,7 @@ const mountWithOptions = () =>
     stubs: {
       table: Table,
       'form-select': "<input type='select'>",
-      'base-button': '<button />',
+      'base-button': '<button></button>',
     },
     mocks,
   });

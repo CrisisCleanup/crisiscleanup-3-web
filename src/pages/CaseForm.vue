@@ -29,7 +29,7 @@
           display-property="name"
           :placeholder="$t('formLabels.name')"
           size="large"
-          required
+          :required="true"
           @input="
             value => {
               updateWorksite(value, 'name');
@@ -61,7 +61,7 @@
           display-property="description"
           :placeholder="$t('formLabels.address')"
           size="large"
-          required
+          :required="true"
           @input="
             value => {
               updateWorksite(value, 'address');
