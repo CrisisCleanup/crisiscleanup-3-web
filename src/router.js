@@ -118,7 +118,8 @@ router.beforeEach((to, from, next) => {
       next();
       return;
     }
-    next('/login');
+    const loginpath = window.location.pathname;
+    next({ name: 'login', query: { from: loginpath } });
   }
 });
 
