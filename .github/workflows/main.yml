@@ -42,6 +42,27 @@ jobs:
       #   with:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
+  cypress:
+    name: Visual Tests / ${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        browser: [chrome, firefox]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v1
+        with:
+          record: true
+          start: npm run serve
+          wait-on: 'http://localhost:8080'
+          browser: ${{ matrix.browser }}
+          group: ${{ matrix.browser }}
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+
   lint:
     name: Run Linter
     runs-on: ubuntu-latest
