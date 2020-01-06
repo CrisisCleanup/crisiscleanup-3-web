@@ -144,9 +144,20 @@
 export default {
   name: 'Table',
   props: {
-    columns: Array,
-    data: null,
-    pagination: Object,
+    columns: {
+      type: Array,
+      default: () => [],
+    },
+    data: {
+      type: null,
+      default: null,
+    },
+    pagination: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
     sorter: {
       type: Object,
       default: () => {
@@ -156,7 +167,12 @@ export default {
     loading: Boolean,
     enableSelection: Boolean,
     enablePagniation: Boolean,
-    bodyStyle: Object,
+    bodyStyle: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {

@@ -1,6 +1,7 @@
 <template>
   <form
     v-if="ready"
+    ref="form"
     class="bg-white flex flex-col flex-grow w-full"
     @submit.prevent="handleSubmit"
   >
@@ -134,7 +135,7 @@
           tooltip="info"
           size="large"
           :placeholder="$t('formLabels.location')"
-          required
+          :required="!worksite.location"
           disabled
           @input="
             value => {

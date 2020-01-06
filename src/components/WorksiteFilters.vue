@@ -235,8 +235,18 @@ import WorkType from '@/models/WorkType';
 export default {
   name: 'WorksiteFilters',
   props: {
-    incident: Object,
-    currentFilters: Object,
+    incident: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+    currentFilters: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {
