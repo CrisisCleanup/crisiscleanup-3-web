@@ -5,6 +5,7 @@
 </template>
 
 <script>
+/* eslint-disable global-require */
 const iconMap = {
   dashboard: require('@/assets/icons/dashboard.svg'),
   cases: require('@/assets/icons/cases.svg'),
@@ -27,12 +28,23 @@ const iconMap = {
   updown: require('@/assets/icons/updown.svg'),
   'go-case': require('@/assets/icons/replace-case.svg'),
 };
+/* eslint-enable global-require */
+
 export default {
   name: 'BaseIcon',
   props: {
-    type: String,
-    alt: String,
-    size: String,
+    type: {
+      type: String,
+      default: '',
+    },
+    alt: {
+      type: String,
+      default: '',
+    },
+    size: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {

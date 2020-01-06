@@ -311,8 +311,8 @@ export default {
           this.currentIncidentId === worksite.incident
         ) {
           const claimed = worksite.work_types.find(
-            work_type =>
-              work_type.claimed_by === this.currentUser.organization.id,
+            workType =>
+              workType.claimed_by === this.currentUser.organization.id,
           );
           return Boolean(claimed);
         }
@@ -358,21 +358,21 @@ export default {
         this.getClosedCount(),
       ]);
     },
-    async statusValueChange(value, work_type, worksite_id) {
+    async statusValueChange(value, workType, worksiteId) {
       try {
-        await Worksite.api().updateWorkTypeStatus(work_type.id, value);
+        await Worksite.api().updateWorkTypeStatus(workType.id, value);
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
-        await Worksite.api().fetch(worksite_id);
+        await Worksite.api().fetch(worksiteId);
       }
     },
     handleTableChange({ sorter }) {
       this.sorter = { ...sorter };
     },
-    async printWorksite(worksite_id) {
+    async printWorksite(worksiteId) {
       this.spinning = true;
-      const pdf = await Worksite.api().printWorksite(worksite_id);
+      const pdf = await Worksite.api().printWorksite(worksiteId);
       forceFileDownload(pdf.response);
       this.spinning = false;
     },
@@ -477,9 +477,9 @@ export default {
       );
       this.totalClosed = response.data.count;
     },
-    getPrimaryWorkType(work_types) {
+    getPrimaryWorkType(workTypes) {
       return Worksite.getWorkType(
-        work_types,
+        workTypes,
         null,
         this.currentUser.organization,
       );

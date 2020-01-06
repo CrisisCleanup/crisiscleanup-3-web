@@ -42,7 +42,16 @@
 <script>
 export default {
   name: 'Modal',
-  props: ['modalClasses', 'modalStyle'],
+  props: {
+    modalClasses: {
+      type: null,
+      default: null,
+    },
+    modalStyle: {
+      type: null,
+      default: null,
+    },
+  },
 };
 </script>
 
@@ -65,7 +74,7 @@ export default {
 }
 
 .modal-container {
-  margin: 0px auto;
+  margin: 0 auto;
   transition: all 0.3s ease;
 }
 
