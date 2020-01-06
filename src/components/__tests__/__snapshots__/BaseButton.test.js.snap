@@ -4,6 +4,7 @@ exports[`BaseButton should render correctly and match snapshot 1`] = `
 <button
   alt="alt-text"
   class="primary flex items-center justify-center"
+  size=""
   title="btntitle"
   type="submit"
 >
