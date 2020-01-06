@@ -134,7 +134,7 @@ export default {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   background: white;
-  padding: 0px;
+  padding: 0;
   overflow: auto;
   max-height: 200px;
 }

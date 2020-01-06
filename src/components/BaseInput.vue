@@ -57,6 +57,7 @@ export default {
   },
   data() {
     return {
+      id: null,
       classes: {
         'flex-grow': true,
         'text-base': true,
@@ -72,6 +73,9 @@ export default {
       },
       glassBroken: false,
     };
+  },
+  mounted() {
+    this.id = this._uid;
   },
   methods: {
     update(e) {
