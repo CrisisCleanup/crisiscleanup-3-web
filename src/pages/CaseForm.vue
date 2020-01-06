@@ -184,7 +184,7 @@
           </modal>
         </div>
       </div>
-      <template v-for="field in this.fields">
+      <template v-for="field in fields">
         <div
           v-if="showAllFields || getValue(field.field_key)"
           :key="field.field_key"
@@ -199,7 +199,7 @@
                   width="22px"
                   height="22px"
                 >
-                  {{ sectionCounter++ }}
+                  {{ getSectionCount(field) }}
                 </badge>
                 {{ field.label_t }}
               </div>
@@ -477,6 +477,19 @@ export default {
   },
   methods: {
     handleSubmit() {},
+    getSectionCount(currentField) {
+      let sectionNumber = 1;
+      for (let i = 0; i < this.fields.length; i++) {
+        const field = this.fields[i];
+        if (field.html_type === 'h4') {
+          sectionNumber++;
+        }
+        if (currentField === field) {
+          break;
+        }
+      }
+      return sectionNumber;
+    },
     updateWorksite(value, key) {
       if (this.worksite.id) {
         Worksite.update({

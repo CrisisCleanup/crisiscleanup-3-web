@@ -33,17 +33,28 @@
 <script>
 export default {
   name: 'BaseInput',
-  props: [
-    'size',
-    'icon',
-    'value',
-    'disabled',
-    'placeholder',
-    'required',
-    'tooltip',
-    'type',
-    'breakGlass',
-  ],
+  props: {
+    size: String,
+    icon: String,
+    value: {
+      type: null,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    placeholder: String,
+    required: {
+      type: Boolean,
+      default: false,
+    },
+    tooltip: String,
+    type: String,
+    breakGlass: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       classes: {
