@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <component :is="layout">
-      <router-view></router-view>
+      <router-view />
     </component>
   </div>
 </template>
@@ -9,17 +9,17 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 
-const default_layout = 'authenticated';
+const defaultLayout = 'authenticated';
 export default {
   name: 'App',
+  computed: {
+    layout() {
+      return `${this.$route.meta.layout || defaultLayout}-layout`;
+    },
+  },
   methods: {
     ...mapActions('auth', ['login', 'logout']),
     ...mapGetters('auth', ['isLoggedIn']),
-  },
-  computed: {
-    layout() {
-      return `${this.$route.meta.layout || default_layout}-layout`;
-    },
   },
 };
 </script>
@@ -118,7 +118,7 @@ body {
   color: black;
   padding: 24px;
   border-radius: 5px;
-  box-shadow: 0 5px 30px rgba(black, 0.1);
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
 }
 
 .interactive-tooltip.popover .popover-arrow {

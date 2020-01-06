@@ -42,18 +42,39 @@ import { getWorkTypeImage } from '@/filters';
 
 export default {
   name: 'WorksiteSearchInput',
-  props: [
-    'suggestions',
-    'displayProperty',
-    'icon',
-    'placeholder',
-    'required',
-    'size',
-    'tooltip',
-    'full',
-    'loading',
-    'width',
-  ],
+  props: {
+    suggestions: {
+      type: Array,
+      default: () => [],
+    },
+    displayProperty: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    required: Boolean,
+    size: {
+      type: String,
+      default: '',
+    },
+    tooltip: {
+      type: String,
+      default: '',
+    },
+    full: Boolean,
+    loading: Boolean,
+    width: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       selected: '',
@@ -151,18 +172,18 @@ export default {
       }
       return suggestion.item.name;
     },
-    getWorkImage(work_types) {
-      const work_type = Worksite.getWorkType(
-        work_types,
+    getWorkImage(workTypes) {
+      const workType = Worksite.getWorkType(
+        workTypes,
         null,
         this.currentUser.organization,
       );
 
-      if (!work_type) {
+      if (!workType) {
         return '';
       }
 
-      const svg = getWorkTypeImage(work_type);
+      const svg = getWorkTypeImage(workType);
 
       return this.$createElement('div', {
         domProps: {
@@ -228,7 +249,7 @@ export default {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   background: white;
-  padding: 0px;
+  padding: 0;
   overflow: auto;
   max-height: 200px;
 }

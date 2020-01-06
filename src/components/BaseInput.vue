@@ -18,14 +18,14 @@
       :class="iconClasses"
       @click="glassBroken = true"
     >
-      <ccu-icon type="edit" size="small"></ccu-icon>
+      <ccu-icon type="edit" size="small" />
     </div>
     <div
       v-if="icon || tooltip"
       class="icon-container flex items-center justify-center"
       :class="iconClasses"
     >
-      <ccu-icon :type="tooltip ? 'info' : icon" size="small"></ccu-icon>
+      <ccu-icon :type="tooltip ? 'info' : icon" size="small" />
     </div>
   </div>
 </template>
@@ -34,22 +34,38 @@
 export default {
   name: 'BaseInput',
   props: {
-    size: String,
-    icon: String,
+    size: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
     value: {
       type: null,
+      default: null,
     },
     disabled: {
       type: Boolean,
       default: false,
     },
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: '',
+    },
     required: {
       type: Boolean,
       default: false,
     },
-    tooltip: String,
-    type: String,
+    tooltip: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
     breakGlass: {
       type: Boolean,
       default: false,
@@ -57,6 +73,7 @@ export default {
   },
   data() {
     return {
+      id: null,
       classes: {
         'flex-grow': true,
         'text-base': true,
@@ -72,6 +89,9 @@ export default {
       },
       glassBroken: false,
     };
+  },
+  mounted() {
+    this.id = this._uid;
   },
   methods: {
     update(e) {

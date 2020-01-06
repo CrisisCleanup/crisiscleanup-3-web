@@ -14,7 +14,12 @@
 <script>
 export default {
   name: 'BaseCheckbox',
-  props: ['value'],
+  props: {
+    value: {
+      type: Boolean,
+      default: false,
+    },
+  },
 };
 </script>
 

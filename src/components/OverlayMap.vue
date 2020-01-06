@@ -15,7 +15,12 @@ import * as L from 'leaflet';
 
 export default {
   props: {
-    initialLocation: Object,
+    initialLocation: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {
