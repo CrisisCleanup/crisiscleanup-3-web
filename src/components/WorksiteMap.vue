@@ -147,8 +147,18 @@ const getOpacity = date => {
 
 export default {
   props: {
-    query: Object,
-    currentFilters: Object,
+    query: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+    currentFilters: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {

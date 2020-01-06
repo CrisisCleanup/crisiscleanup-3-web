@@ -1,3 +1,4 @@
+/* eslint-disable */
 const colors = {
   open_unassigned_unclaimed: {
     fillColor: '#d0021b',

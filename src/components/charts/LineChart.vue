@@ -9,8 +9,14 @@ import Chart from 'chart.js';
 
 export default {
   props: {
-    chartData: null,
-    options: null,
+    chartData: {
+      type: null,
+      default: null,
+    },
+    options: {
+      type: null,
+      default: null,
+    },
   },
   mounted() {
     const ctx = this.$refs.chart;

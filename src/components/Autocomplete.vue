@@ -44,13 +44,31 @@
 export default {
   name: 'Autocomplete',
   props: {
-    suggestions: Array,
-    displayProperty: String,
-    icon: String,
-    placeholder: String,
+    suggestions: {
+      type: Array,
+      default: () => [],
+    },
+    displayProperty: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
     required: Boolean,
-    size: String,
-    tooltip: String,
+    size: {
+      type: String,
+      default: '',
+    },
+    tooltip: {
+      type: String,
+      default: '',
+    },
     full: Boolean,
     loading: Boolean,
   },

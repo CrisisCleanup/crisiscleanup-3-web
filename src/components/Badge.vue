@@ -17,9 +17,18 @@
 export default {
   name: 'Badge',
   props: {
-    color: String,
-    width: String,
-    height: String,
+    color: {
+      type: String,
+      default: '',
+    },
+    width: {
+      type: String,
+      default: '',
+    },
+    height: {
+      type: String,
+      default: '',
+    },
   },
 };
 </script>

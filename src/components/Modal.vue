@@ -43,8 +43,14 @@
 export default {
   name: 'Modal',
   props: {
-    modalClasses: null,
-    modalStyle: null,
+    modalClasses: {
+      type: null,
+      default: null,
+    },
+    modalStyle: {
+      type: null,
+      default: null,
+    },
   },
 };
 </script>

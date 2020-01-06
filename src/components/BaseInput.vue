@@ -34,22 +34,38 @@
 export default {
   name: 'BaseInput',
   props: {
-    size: String,
-    icon: String,
+    size: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
     value: {
       type: null,
+      default: null,
     },
     disabled: {
       type: Boolean,
       default: false,
     },
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: '',
+    },
     required: {
       type: Boolean,
       default: false,
     },
-    tooltip: String,
-    type: String,
+    tooltip: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
     breakGlass: {
       type: Boolean,
       default: false,

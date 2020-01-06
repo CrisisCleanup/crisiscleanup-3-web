@@ -42,18 +42,39 @@ import { getWorkTypeImage } from '@/filters';
 
 export default {
   name: 'WorksiteSearchInput',
-  props: [
-    'suggestions',
-    'displayProperty',
-    'icon',
-    'placeholder',
-    'required',
-    'size',
-    'tooltip',
-    'full',
-    'loading',
-    'width',
-  ],
+  props: {
+    suggestions: {
+      type: Array,
+      default: () => [],
+    },
+    displayProperty: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    required: Boolean,
+    size: {
+      type: String,
+      default: '',
+    },
+    tooltip: {
+      type: String,
+      default: '',
+    },
+    full: Boolean,
+    loading: Boolean,
+    width: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return {
       selected: '',
