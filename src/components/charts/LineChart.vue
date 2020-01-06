@@ -8,7 +8,10 @@
 import Chart from 'chart.js';
 
 export default {
-  props: ['chartData', 'options'],
+  props: {
+    chartData: null,
+    options: null,
+  },
   mounted() {
     const ctx = this.$refs.chart;
     return new Chart(ctx, {

@@ -25,12 +25,16 @@
         <label class="my-1 text-xs font-bold text-gray-600 block">{{
           $t('searchFilterAside.claimed_by')
         }}</label>
-        <div v-for="org in organizationsWithClaims" class="my-1">
+        <div v-for="org in organizationsWithClaims" :key="org.id" class="my-1">
           {{ getOrganizationName(org) }}
         </div>
       </div>
       <div class="">
-        <div v-for="(events, user) in users" class="py-5 border-b">
+        <div
+          v-for="(events, user) in users"
+          :key="user.id"
+          class="py-5 border-b"
+        >
           <v-popover popover-class="user-popover" placement="top-start">
             <span class="text-yellow-600 tooltip-target cursor-pointer">{{
               getUser(user).full_name
@@ -53,7 +57,7 @@
               </div>
             </div>
           </v-popover>
-          <div v-for="event in events">
+          <div v-for="event in events" :key="event.id">
             {{ event.created_at | moment('MM/DD/YYYY, h:mm:ss A') }}:
             {{ event.event.event_name_t }}
           </div>
@@ -88,11 +92,11 @@ export default {
       return groupBy(this.worksite.events, 'user');
     },
     organizationsWithClaims() {
-      const claimed_ids = this.worksite.work_types
-        .filter(work_type => Boolean(work_type.claimed_by))
-        .map(work_type => work_type.claimed_by);
-      const id_set = new Set(claimed_ids);
-      return Array.from(id_set);
+      const claimedIds = this.worksite.work_types
+        .filter(workType => Boolean(workType.claimed_by))
+        .map(workType => workType.claimed_by);
+      const idSet = new Set(claimedIds);
+      return Array.from(idSet);
     },
   },
   async mounted() {
@@ -120,8 +124,7 @@ export default {
       return organization.name;
     },
     getUser(id) {
-      const user = User.find(id);
-      return user;
+      return User.find(id);
     },
   },
 };

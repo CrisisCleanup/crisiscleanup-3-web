@@ -18,14 +18,14 @@
       :class="iconClasses"
       @click="glassBroken = true"
     >
-      <ccu-icon type="edit" size="small"></ccu-icon>
+      <ccu-icon type="edit" size="small" />
     </div>
     <div
       v-if="icon || tooltip"
       class="icon-container flex items-center justify-center"
       :class="iconClasses"
     >
-      <ccu-icon :type="tooltip ? 'info' : icon" size="small"></ccu-icon>
+      <ccu-icon :type="tooltip ? 'info' : icon" size="small" />
     </div>
   </div>
 </template>

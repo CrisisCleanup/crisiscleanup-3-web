@@ -91,7 +91,7 @@
           </div>
         </div>
       </div>
-      <div v-if="this.ready" class="h-full flex-grow content">
+      <div v-if="ready" class="h-full flex-grow content">
         <slot />
       </div>
       <div
@@ -123,6 +123,30 @@ export default {
       loading: false,
       ready: false,
     };
+  },
+  computed: {
+    name() {
+      if (this.currentUser) {
+        return `${this.currentUser.first_name} ${this.currentUser.last_name}`;
+      }
+      return '';
+    },
+    selectedRoute() {
+      return this.$route.name;
+    },
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
+    },
+    incidents() {
+      return Incident.query()
+        .orderBy('id', 'desc')
+        .get();
+    },
+    currentIncident() {
+      return Incident.find(this.currentIncidentId);
+    },
+    ...mapState('incident', ['currentIncidentId']),
+    ...mapState('auth', ['user']),
   },
   async mounted() {
     this.loading = true;
@@ -214,30 +238,6 @@ export default {
     ...mapActions('auth', ['login']),
     ...mapMutations('incident', ['setCurrentIncidentId']),
     ...mapMutations('loading', ['setWorksitesLoading']),
-  },
-  computed: {
-    name() {
-      if (this.currentUser) {
-        return `${this.currentUser.first_name} ${this.currentUser.last_name}`;
-      }
-      return '';
-    },
-    selectedRoute() {
-      return this.$route.name;
-    },
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    incidents() {
-      return Incident.query()
-        .orderBy('id', 'desc')
-        .get();
-    },
-    currentIncident() {
-      return Incident.find(this.currentIncidentId);
-    },
-    ...mapState('incident', ['currentIncidentId']),
-    ...mapState('auth', ['user']),
   },
 };
 </script>
