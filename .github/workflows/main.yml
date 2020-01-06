@@ -43,12 +43,8 @@ jobs:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
 
   cypress:
-    name: Run Visual Tests / ${{ matrix.browser }}
+    name: Run Visual Tests
     runs-on: ubuntu-latest
-    container: cypress/browsers:node12.13.0-chrome78-ff70
-    strategy:
-      matrix:
-        browser: [chrome, firefox]
 
     steps:
       - uses: actions/checkout@v2
@@ -59,8 +55,8 @@ jobs:
           record: true
           start: npm run serve
           wait-on: 'http://localhost:8080'
-          browser: ${{ matrix.browser }}
-          group: ${{ matrix.browser }}
+          group: Chrome
+          browser: chrome
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
