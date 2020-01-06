@@ -42,7 +42,10 @@
 <script>
 export default {
   name: 'Modal',
-  props: ['modalClasses', 'modalStyle'],
+  props: {
+    modalClasses: null,
+    modalStyle: null,
+  },
 };
 </script>
 

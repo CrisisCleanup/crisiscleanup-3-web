@@ -151,18 +151,18 @@ export default {
       }
       return suggestion.item.name;
     },
-    getWorkImage(work_types) {
-      const work_type = Worksite.getWorkType(
-        work_types,
+    getWorkImage(workTypes) {
+      const workType = Worksite.getWorkType(
+        workTypes,
         null,
         this.currentUser.organization,
       );
 
-      if (!work_type) {
+      if (!workType) {
         return '';
       }
 
-      const svg = getWorkTypeImage(work_type);
+      const svg = getWorkTypeImage(workType);
 
       return this.$createElement('div', {
         domProps: {

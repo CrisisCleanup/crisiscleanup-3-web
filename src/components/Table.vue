@@ -48,6 +48,7 @@
       </div>
       <div
         v-for="item of data"
+        :key="item.id"
         :style="gridStyleRow"
         class="hover:bg-gray-100"
         :class="{ 'bg-gray-100': selectedItems.has(item.id) }"
@@ -66,6 +67,7 @@
         </div>
         <div
           v-for="column of columns"
+          :key="column.key"
           class="flex items-center p-2 border-b cursor-pointer"
         >
           <slot :name="column.key" :item="item">

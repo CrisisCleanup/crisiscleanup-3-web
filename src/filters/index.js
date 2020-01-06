@@ -71,11 +71,11 @@ export const getColorForStatus = (status, claimed = true) => {
   return colors.fillColor;
 };
 
-export const getWorkTypeImage = work_type => {
-  const colorsKey = `${work_type.status}_${
-    work_type.claimed_by ? 'claimed' : 'unclaimed'
+export const getWorkTypeImage = workType => {
+  const colorsKey = `${workType.status}_${
+    workType.claimed_by ? 'claimed' : 'unclaimed'
   }`;
-  const worksiteTemplate = templates[work_type.work_type] || templates.unknown;
+  const worksiteTemplate = templates[workType.work_type] || templates.unknown;
   const svgColors = iconColors[colorsKey];
 
   if (svgColors) {

@@ -258,10 +258,10 @@ export default {
 
         return new Set(
           fieldsWithTypes.map(field => {
-            const work_types = WorkType.query()
+            const workTypes = WorkType.query()
               .where('key', field.if_selected_then_work_type)
               .get();
-            return work_types[0];
+            return workTypes[0];
           }),
         );
       }
@@ -319,21 +319,22 @@ export default {
       this.expanded[key] = !this.expanded[key];
       this.expanded = { ...this.expanded };
     },
-    setSubFields(work_type, field, values) {
-      this.sub_fields[work_type][field] = values;
+    setSubFields(workType, field, values) {
+      this.sub_fields[workType][field] = values;
     },
-    getFieldsForType(work_type) {
+    getFieldsForType(workType) {
       if (this.incident && this.incident.form_fields) {
         return this.incident.form_fields.filter(field => {
           const parent = this.incident.form_fields.find(element => {
             return element.field_key === field.field_parent_key;
           });
 
+          // eslint-disable-next-line camelcase
           let { if_selected_then_work_type } = field;
           if (parent) {
             if_selected_then_work_type = parent.if_selected_then_work_type;
           }
-          return if_selected_then_work_type === work_type;
+          return if_selected_then_work_type === workType;
         });
       }
       return [];

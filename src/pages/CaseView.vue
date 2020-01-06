@@ -24,7 +24,7 @@
           :alt="$t('Add Note')"
           :action="
             () => {
-              this.addingNotes = true;
+              addingNotes = true;
             }
           "
         />
@@ -63,6 +63,7 @@
         }}</label>
         <div
           v-for="organization in Object.keys(workTypesClaimedByOthers)"
+          :key="organization.id"
           class="my-1"
         >
           {{ getOrganizationName(organization) }}
@@ -74,7 +75,10 @@
           v-if="Object.keys(workTypesClaimedByOthers).length > 0"
           class="my-4"
         >
-          <div v-for="(work_types, organization) in workTypesClaimedByOthers">
+          <div
+            v-for="(work_types, organization) in workTypesClaimedByOthers"
+            :key="organization.id"
+          >
             <label class="my-4 text-xs font-bold text-gray-600"
               >{{ $t('searchFilterAside.claimed_by') }}
               {{ getOrganizationName(organization) }}</label
@@ -276,6 +280,7 @@ export default {
     },
     worksiteAddress() {
       if (this.worksite) {
+        // eslint-disable-next-line camelcase
         const { address, city, state, postal_code } = this.worksite;
         return `${address}, ${city}, ${state} ${postal_code}`;
       }
@@ -301,13 +306,13 @@ export default {
     }
   },
   methods: {
-    async claimWorkType(work_type) {
+    async claimWorkType(workType) {
       try {
-        const work_types = [];
-        if (work_type) {
-          work_types.push(work_type.work_type);
+        const workTypes = [];
+        if (workType) {
+          workTypes.push(workType.work_type);
         }
-        await Worksite.api().claimWorksite(this.worksite.id, work_types);
+        await Worksite.api().claimWorksite(this.worksite.id, workTypes);
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
@@ -315,13 +320,13 @@ export default {
         await this.$toasted.error(getErrorMessage(error));
       }
     },
-    async unclaimWorkType(work_type) {
+    async unclaimWorkType(workType) {
       try {
-        const work_types = [];
-        if (work_type) {
-          work_types.push(work_type.work_type);
+        const workTypes = [];
+        if (workType) {
+          workTypes.push(workType.work_type);
         }
-        await Worksite.api().unclaimWorksite(this.worksite.id, work_types);
+        await Worksite.api().unclaimWorksite(this.worksite.id, workTypes);
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
@@ -329,13 +334,13 @@ export default {
         await this.$toasted.error(getErrorMessage(error));
       }
     },
-    async requestWorkType(work_type) {
+    async requestWorkType(workType) {
       try {
-        const work_types = [];
-        if (work_type) {
-          work_types.push(work_type.work_type);
+        const workTypes = [];
+        if (workType) {
+          workTypes.push(workType.work_type);
         }
-        await Worksite.api().requestWorksite(this.worksite.id, work_types);
+        await Worksite.api().requestWorksite(this.worksite.id, workTypes);
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
@@ -364,9 +369,9 @@ export default {
       }
       return '';
     },
-    async statusValueChange(value, work_type) {
+    async statusValueChange(value, workType) {
       try {
-        await Worksite.api().updateWorkTypeStatus(work_type.id, value);
+        await Worksite.api().updateWorkTypeStatus(workType.id, value);
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
@@ -376,28 +381,28 @@ export default {
       }
     },
 
-    getFieldsForType(work_type) {
+    getFieldsForType(workType) {
       if (this.incident) {
-        const available_fields = this.worksite.form_data.map(
+        const availableFields = this.worksite.form_data.map(
           data => data.field_key,
         );
-        const fields = this.incident.form_fields.filter(field => {
+        return this.incident.form_fields.filter(field => {
           const parent = this.incident.form_fields.find(element => {
             return element.field_key === field.field_parent_key;
           });
 
+          // eslint-disable-next-line camelcase
           let { if_selected_then_work_type } = field;
           if (parent) {
             if_selected_then_work_type = parent.if_selected_then_work_type;
           }
 
           return (
-            if_selected_then_work_type === work_type &&
-            available_fields.includes(field.field_key) &&
+            if_selected_then_work_type === workType &&
+            availableFields.includes(field.field_key) &&
             field.html_type === 'checkbox'
           );
         });
-        return fields;
       }
       return [];
     },
