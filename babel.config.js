@@ -16,6 +16,7 @@ module.exports = {
   ],
   env: {
     test: {
+      plugins: ['istanbul'],
       presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
     },
   },
