@@ -11,7 +11,7 @@
         @click="
           () => {
             if (column.sortable) {
-              sort(column.key);
+              sort(column.sortKey || column.key);
             }
           }
         "
@@ -19,13 +19,19 @@
         {{ column.title }}
         <div v-if="column.sortable">
           <ccu-icon
-            v-if="sorter.key === column.key && sorter.direction === 'asc'"
+            v-if="
+              sorter.key === (column.sortKey || column.key) &&
+                sorter.direction === 'asc'
+            "
             :alt="$t('actions.sort_ascending')"
             size="small"
             type="up"
           />
           <ccu-icon
-            v-else-if="sorter.key === column.key && sorter.direction === 'desc'"
+            v-else-if="
+              sorter.key === (column.sortKey || column.key) &&
+                sorter.direction === 'desc'
+            "
             :alt="$t('actions.sort_descending')"
             size="small"
             type="down"

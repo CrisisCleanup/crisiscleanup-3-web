@@ -553,7 +553,9 @@ export default {
           title: this.$t('No'),
           dataIndex: 'case_number',
           key: 'case_number',
+          sortKey: 'id',
           width: '0.5fr',
+          sortable: true,
         },
         {
           title: this.$t('Work type'),
