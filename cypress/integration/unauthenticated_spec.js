@@ -13,6 +13,7 @@ describe('The Login Page', () => {
   it('successfully redirects', () => {
     cy.visit('/');
     cy.url().should('match', /login/);
+    cy.contains('Sign in to your account');
   });
 
   it('should match image snapshot', () => {
