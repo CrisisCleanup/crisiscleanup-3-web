@@ -12,8 +12,11 @@
     "prettify": "prettier --write ./**/*.{js,vue}",
     "deploy-staging": "vue-cli-service build --mode staging && vue-cli-service s3-deploy",
     "compile-icons": "./template-compiler.js",
-    "test": "cross-env NODE_ENV=test jest --coverage",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
+    "test:e2e": "cross-env NODE_ENV=test cypress run",
+    "test:cy": "cross-env NODE_ENV=test cypress run --browser chrome",
     "cy:open": "cross-env NODE_ENV=test cypress open"
   },
   "dependencies": {
