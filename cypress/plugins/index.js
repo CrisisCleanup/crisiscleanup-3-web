@@ -21,12 +21,15 @@ module.exports = (on, config) => {
   on(
     'file:preprocessor',
     webpack({
-      webpackOptions: require('@vue/cli-service/webpack.config'),
+      webpackOptions: require('../../node_modules/@vue/cli-service/webpack.config.js'),
       watchOptions: {},
     }),
   );
   on('task', require('@cypress/code-coverage/task'));
-  on('file:preprocessor', require('@cypress/code-coverage/use-babelrc'));
+  on(
+    'file:preprocessor',
+    require('@cypress/code-coverage/use-browserify-istanbul'),
+  );
   initPlugin(on, config);
   return config;
 };
