@@ -2,11 +2,16 @@ name: CrisisCleanup
 
 on:
   pull_request:
+    paths:
+      - '**/**.js'
+      - '**/**.vue'
+      - '**/**.js.snap'
+      - '.github/workflows/*'
   push:
     paths:
-      - '**.js'
-      - '**.vue'
-      - '**.js.snap'
+      - '**/**.js'
+      - '**/**.vue'
+      - '**/**.js.snap'
       - '.github/workflows/*'
 
 jobs:
@@ -34,13 +39,31 @@ jobs:
         run: npm install
 
       - name: Run Tests
-        run: npm test
+        run: npm run test:unit
 
       # TODO: Coverage integration
       # - name: Upload Coverage
       #   uses: coverallsapp/github-action@master
       #   with:
       #     github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  cypress:
+    name: Run Visual Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v1.16.1
+        with:
+          record: true
+          start: npm run serve
+          wait-on: 'http://localhost:8080'
+          group: Chrome
+          browser: chrome
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
   lint:
     name: Run Linter
