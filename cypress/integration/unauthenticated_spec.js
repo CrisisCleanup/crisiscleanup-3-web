@@ -19,4 +19,12 @@ describe('The Login Page', () => {
   it('should match image snapshot', () => {
     cy.visit('/login').then(() => cy.get('div.login').toMatchImageSnapshot());
   });
+
+  it('should login', () => {
+    cy.visit('/login');
+    cy.get('input[type="email"]').type('***REMOVED***');
+    cy.get('input[type="password"]').type('***REMOVED***');
+    cy.get('button').click();
+    cy.url().should('match', /login/);
+  });
 });
