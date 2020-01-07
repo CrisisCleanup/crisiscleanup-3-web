@@ -41,18 +41,29 @@ export default {
       type: String,
       default: '',
     },
-    options: Array,
-    placeholder: String,
-    label: String,
+    options: {
+      type: Array,
+      default: () => [],
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    label: {
+      type: String,
+      default: '',
+    },
     size: {
       type: String,
       default: 'large',
     },
     value: {
       type: null,
+      default: null,
     },
     itemKey: {
       type: null,
+      default: null,
     },
   },
   data() {

@@ -52,6 +52,7 @@
       <div class="flex flex-wrap justify-between">
         <div
           v-for="entry in displayedWorkTypeSvgs"
+          :key="entry.key"
           class="flex items-center w-1/2 mb-1"
         >
           <div class="map-svg-container" v-html="entry.svg"></div>
@@ -64,6 +65,7 @@
       <div class="flex flex-wrap">
         <div
           v-for="(value, key) in legendColors"
+          :key="key"
           class="flex items-start w-1/2 mb-1"
         >
           <span class="w-4 mt-1">
@@ -120,23 +122,23 @@ L.Icon.Default.mergeOptions({
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
 const getOpacity = date => {
-  // let opacity_buckets = [100, 75, 60, 35, 20, 10]
-  const opacity_buckets = [100, 85, 70, 45, 30, 20];
+  // let opacityBuckets = [100, 75, 60, 35, 20, 10]
+  const opacityBuckets = [100, 85, 70, 45, 30, 20];
   const today = moment();
-  const sixty_days_ago = moment().subtract(60, 'days');
+  const sixtyDaysAgo = moment().subtract(60, 'days');
 
   const currentDate = moment(date);
-  // if (currentDate.isBefore(sixty_days_ago)) {
+  // if (currentDate.isBefore(sixtyDaysAgo)) {
   //     return 0.1;
   // }
 
-  const spread = today.unix() - sixty_days_ago.unix();
+  const spread = today.unix() - sixtyDaysAgo.unix();
   const percentage =
-    ((currentDate.unix() - sixty_days_ago.unix()) / spread) * 100.0;
+    ((currentDate.unix() - sixtyDaysAgo.unix()) / spread) * 100.0;
 
   // TODO: refactor
   // eslint-disable-next-line no-unused-vars
-  const closestOpacity = opacity_buckets.reduce((prev, curr) =>
+  const closestOpacity = opacityBuckets.reduce((prev, curr) =>
     Math.abs(curr - percentage) < Math.abs(prev - percentage) ? curr : prev,
   );
   // return closestOpacity / 100;
@@ -145,8 +147,18 @@ const getOpacity = date => {
 
 export default {
   props: {
-    query: Object,
-    currentFilters: Object,
+    query: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+    currentFilters: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {
@@ -286,17 +298,17 @@ export default {
                     ]);
 
                     const markerSprite = new Sprite();
-                    const work_type = Worksite.getWorkType(
+                    const workType = Worksite.getWorkType(
                       marker.work_types,
                       self.currentFilters,
                       self.currentUser.organization,
                     );
 
-                    self.displayedWorkTypes[work_type.work_type] = true;
+                    self.displayedWorkTypes[workType.work_type] = true;
                     self.displayedWorkTypes = { ...self.displayedWorkTypes };
 
-                    const colorsKey = `${work_type.status}_${
-                      work_type.claimed_by ? 'claimed' : 'unclaimed'
+                    const colorsKey = `${workType.status}_${
+                      workType.claimed_by ? 'claimed' : 'unclaimed'
                     }`;
                     const worksiteTemplate = templates.circle;
                     const spriteColors = colors[colorsKey];
@@ -322,7 +334,7 @@ export default {
                     markerSprite.legend = marker.city || marker.label;
                     markerSprite.location = marker.location;
                     markerSprite.work_types = marker.work_types;
-                    markerSprite.active_work_type = work_type;
+                    markerSprite.active_work_type = workType;
                     markerSprite.colorsKey = colorsKey;
                     markerSprite.id = marker.id;
                     markerSprite.alpha = getOpacity(marker.updated_at);
@@ -411,20 +423,20 @@ export default {
                             markerSprite.location.coordinates[0],
                           ])
                       ) {
-                        const work_type = Worksite.getWorkType(
+                        const workType = Worksite.getWorkType(
                           markerSprite.work_types,
                           self.currentFilters,
                           self.currentUser.organization,
                         );
 
-                        const colorsKey = `${work_type.status}_${
-                          work_type.claimed_by ? 'claimed' : 'unclaimed'
+                        const colorsKey = `${workType.status}_${
+                          workType.claimed_by ? 'claimed' : 'unclaimed'
                         }`;
 
                         const spriteColors = colors[colorsKey];
                         if (spriteColors) {
                           const template =
-                            templates[work_type.work_type] || templates.unknown;
+                            templates[workType.work_type] || templates.unknown;
                           const typeSvg = template
                             .replace('{{fillColor}}', spriteColors.fillColor)
                             .replace(
@@ -512,32 +524,32 @@ export default {
         });
       });
     },
-    async updateMap(worksite_id) {
-      if (!worksite_id) {
+    async updateMap(worksiteId) {
+      if (!worksiteId) {
         this.initMap();
       } else {
         const markerSprite = this.pixiContainer.children.find(
-          ms => parseInt(ms.id) === parseInt(worksite_id),
+          ms => parseInt(ms.id) === parseInt(worksiteId),
         );
-        const worksite = Worksite.find(worksite_id);
+        const worksite = Worksite.find(worksiteId);
 
-        const work_type = Worksite.getWorkType(
+        const workType = Worksite.getWorkType(
           worksite.work_types,
           this.currentFilters,
           this.currentUser.organization,
         );
 
-        const colorsKey = `${work_type.status}_${
-          work_type.claimed_by ? 'claimed' : 'unclaimed'
+        const colorsKey = `${workType.status}_${
+          workType.claimed_by ? 'claimed' : 'unclaimed'
         }`;
-        markerSprite.active_work_type = work_type;
+        markerSprite.active_work_type = workType;
         markerSprite.work_types = worksite.work_types;
         markerSprite.colorsKey = colorsKey;
 
         const worksiteTemplate =
           this.map.getZoom() < INTERACTIVE_ZOOM_LEVEL
             ? templates.circle
-            : templates[work_type.work_type] || templates.unknown;
+            : templates[workType.work_type] || templates.unknown;
         const spriteColors = colors[colorsKey];
 
         if (spriteColors) {

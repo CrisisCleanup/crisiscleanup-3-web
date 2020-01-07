@@ -72,6 +72,7 @@ export default {
   },
   methods: {
     async acceptInvite() {
+      // eslint-disable-next-line camelcase
       const { first_name, last_name, password, mobile } = this;
       if (this.validatePassword()) {
         try {

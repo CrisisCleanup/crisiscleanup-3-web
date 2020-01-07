@@ -95,7 +95,7 @@
                         <template slot="btn">US States</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
-                            <li v-for="state in usStates">
+                            <li v-for="state in usStates" :key="state.id">
                               <base-checkbox
                                 :value="appliedLocations.has(state.id)"
                                 @input="
@@ -121,7 +121,10 @@
                         }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
-                            <li v-for="district in districts">
+                            <li
+                              v-for="district in districts"
+                              :key="district.id"
+                            >
                               <base-checkbox
                                 :value="appliedLocations.has(district.id)"
                                 @input="
@@ -145,7 +148,7 @@
                 alt="Filters"
                 :action="
                   () => {
-                    this.showingFilters = true;
+                    showingFilters = true;
                   }
                 "
               >
@@ -162,14 +165,14 @@
                 icon="ellipsis-h"
                 :action="
                   () => {
-                    this.showingFilters = true;
+                    showingFilters = true;
                   }
                 "
               />
               <WorksiteFilters
                 v-if="showingFilters"
                 :current-filters="filters"
-                :incident="this.currentIncident"
+                :incident="currentIncident"
                 @closedFilters="showingFilters = false"
                 @updatedFilters="onUpdatedFilters"
               />
@@ -316,7 +319,7 @@
     </div>
     <div
       v-if="
-        this.currentIncident &&
+        currentIncident &&
           (isEditingWorksite ||
             isViewingWorksite ||
             isViewingWorksiteHistory ||
@@ -393,7 +396,7 @@
         </template>
         <template v-else>
           <div class="text-left text-black">
-            {{ this.currentWorksite && this.currentWorksite.case_number }}
+            {{ currentWorksite && currentWorksite.case_number }}
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">
             <ccu-icon
@@ -543,6 +546,116 @@ export default {
       updateStatusOnUnclaim: false,
     };
   },
+  computed: {
+    columns() {
+      return [
+        {
+          title: this.$t('No'),
+          dataIndex: 'case_number',
+          key: 'case_number',
+          sortKey: 'id',
+          width: '0.5fr',
+          sortable: true,
+        },
+        {
+          title: this.$t('Work type'),
+          dataIndex: 'work_types',
+          key: 'work_types',
+          scopedSlots: { customRender: 'work_types' },
+          width: '1.5fr',
+        },
+        {
+          title: this.$t('Name'),
+          dataIndex: 'name',
+          key: 'name',
+          width: '1.5fr',
+          sortable: true,
+        },
+        {
+          title: this.$t('Full Address'),
+          dataIndex: 'address',
+          key: 'address',
+        },
+        {
+          title: this.$t('City'),
+          dataIndex: 'city',
+          key: 'city',
+          sortable: true,
+        },
+        {
+          title: this.$t('County'),
+          dataIndex: 'county',
+          key: 'county',
+          sortable: true,
+        },
+      ];
+    },
+    currentWorksite() {
+      return Worksite.find(this.$route.params.id);
+    },
+    usStates() {
+      return Location.query()
+        .where('type', 'US_STATE')
+        .get();
+    },
+    districts() {
+      return Location.query()
+        .where('type', 'CONGRESSIONAL_DISTRICT')
+        .get();
+    },
+    floodZone() {
+      return Location.query()
+        .where('type', 'FLOOD')
+        .get();
+    },
+    isEditingWorksite() {
+      return this.$route.name === 'IncidentEditCaseForm';
+    },
+    isViewingWorksite() {
+      return this.$route.name === 'IncidentCaseView';
+    },
+    isViewingWorksiteHistory() {
+      return this.$route.name === 'IncidentCaseHistory';
+    },
+    isNewWorksite() {
+      return this.$route.name === 'IncidentNewCaseForm';
+    },
+    incidents() {
+      return Incident.query()
+        .orderBy('id', 'desc')
+        .get();
+    },
+    currentIncident() {
+      return Incident.find(this.$route.params.incident_id);
+    },
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
+    },
+    markers() {
+      if (this.data) {
+        return this.data.map(worksite => {
+          return {
+            ...worksite,
+            position: {
+              lat: worksite.latitude,
+              lng: worksite.longitude,
+            },
+          };
+        });
+      }
+      return [];
+    },
+    filtersCount() {
+      return (
+        Object.values(this.filters.statuses).filter(field => Boolean(field))
+          .length +
+        Object.values(this.filters.fields).filter(field => Boolean(field))
+          .length
+      );
+    },
+    google: gmapApi,
+    ...mapState('loading', ['worksitesLoading']),
+  },
   watch: {
     currentIncident() {
       this.fetch({
@@ -675,10 +788,10 @@ export default {
       }
     },
 
-    async applyLocation(location_id, value) {
+    async applyLocation(locationId, value) {
       if (value && this.$refs.workstiteMap.map) {
-        await Location.api().fetchById(location_id);
-        const location = Location.find(location_id);
+        await Location.api().fetchById(locationId);
+        const location = Location.find(locationId);
         const geojsonFeature = {
           type: 'Feature',
           properties: location.attr,
@@ -686,17 +799,17 @@ export default {
         };
         L.geoJSON(geojsonFeature, {
           onEachFeature(feature, layer) {
-            layer.location_id = location_id;
+            layer.location_id = locationId;
           },
         }).addTo(this.$refs.workstiteMap.map);
-        this.appliedLocations.add(location_id);
+        this.appliedLocations.add(locationId);
       } else {
         this.$refs.workstiteMap.map.eachLayer(layer => {
-          if (layer.location_id && layer.location_id === location_id) {
+          if (layer.location_id && layer.location_id === locationId) {
             this.$refs.workstiteMap.map.removeLayer(layer);
           }
         });
-        this.appliedLocations.delete(location_id);
+        this.appliedLocations.delete(locationId);
       }
     },
     async fetch(params = {}) {
@@ -727,6 +840,7 @@ export default {
       this.tableLoading = false;
 
       this.data = response.data.results.map(result => {
+        // eslint-disable-next-line camelcase
         let { form_data } = result;
         if (!form_data) {
           form_data = [];
@@ -786,9 +900,9 @@ export default {
       });
     },
 
-    reloadMap(worksite_id) {
+    reloadMap(worksiteId) {
       if (this.$refs.workstiteMap) {
-        this.$refs.workstiteMap.updateMap(worksite_id);
+        this.$refs.workstiteMap.updateMap(worksiteId);
         this.$refs.workstiteMap.markerLayer.clearLayers();
       }
     },
@@ -855,9 +969,9 @@ export default {
         work_type__work_type__in: '',
       };
       const entries = Object.entries(this.filters.fields);
-      entries.forEach(([work_type, values]) => {
+      entries.forEach(([workType, values]) => {
         if (values) {
-          appliedFilters.work_type__work_type__in += `${work_type},`;
+          appliedFilters.work_type__work_type__in += `${workType},`;
         }
       });
       if (!Object.values(this.filters.fields).some(value => Boolean(value))) {
@@ -955,10 +1069,10 @@ export default {
     async unclaimSelected() {
       this.spinning = true;
       const promises = [];
-      this.selectedTableItems.forEach(worksite_id => {
+      this.selectedTableItems.forEach(worksiteId => {
         promises.push(
           Worksite.api().unclaimWorksite(
-            worksite_id,
+            worksiteId,
             [],
             this.updateStatusOnUnclaim ? 'open_unassigned' : null,
           ),
@@ -970,114 +1084,6 @@ export default {
       this.showingUnclaimModal = false;
       this.reloadTable();
     },
-  },
-  computed: {
-    columns() {
-      return [
-        {
-          title: this.$t('No'),
-          dataIndex: 'case_number',
-          key: 'case_number',
-          width: '0.5fr',
-        },
-        {
-          title: this.$t('Work type'),
-          dataIndex: 'work_types',
-          key: 'work_types',
-          scopedSlots: { customRender: 'work_types' },
-          width: '1.5fr',
-        },
-        {
-          title: this.$t('Name'),
-          dataIndex: 'name',
-          key: 'name',
-          width: '1.5fr',
-          sortable: true,
-        },
-        {
-          title: this.$t('Full Address'),
-          dataIndex: 'address',
-          key: 'address',
-        },
-        {
-          title: this.$t('City'),
-          dataIndex: 'city',
-          key: 'city',
-          sortable: true,
-        },
-        {
-          title: this.$t('County'),
-          dataIndex: 'county',
-          key: 'county',
-          sortable: true,
-        },
-      ];
-    },
-    currentWorksite() {
-      return Worksite.find(this.$route.params.id);
-    },
-    usStates() {
-      return Location.query()
-        .where('type', 'US_STATE')
-        .get();
-    },
-    districts() {
-      return Location.query()
-        .where('type', 'CONGRESSIONAL_DISTRICT')
-        .get();
-    },
-    floodZone() {
-      return Location.query()
-        .where('type', 'FLOOD')
-        .get();
-    },
-    isEditingWorksite() {
-      return this.$route.name === 'IncidentEditCaseForm';
-    },
-    isViewingWorksite() {
-      return this.$route.name === 'IncidentCaseView';
-    },
-    isViewingWorksiteHistory() {
-      return this.$route.name === 'IncidentCaseHistory';
-    },
-    isNewWorksite() {
-      return this.$route.name === 'IncidentNewCaseForm';
-    },
-    incidents() {
-      return Incident.query()
-        .orderBy('id', 'desc')
-        .get();
-    },
-    currentIncident() {
-      return Incident.find(this.$route.params.incident_id);
-    },
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    markers() {
-      if (this.data) {
-        return this.data.map(worksite => {
-          return {
-            ...worksite,
-            position: {
-              lat: worksite.latitude,
-              lng: worksite.longitude,
-            },
-          };
-        });
-      }
-      return [];
-    },
-    filtersCount() {
-      return (
-        Object.values(this.filters.statuses).filter(field => Boolean(field))
-          .length +
-        Object.values(this.filters.fields).filter(field => Boolean(field))
-          .length
-      );
-    },
-    google: gmapApi,
-    ...mapState('loading', ['worksitesLoading']),
   },
 };
 </script>

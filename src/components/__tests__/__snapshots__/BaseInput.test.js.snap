@@ -15,6 +15,7 @@ exports[`BaseInput should render correctly and match snapshot 1`] = `
   <input
     autocomplete="off"
     class="flex-grow text-base large"
+    placeholder=""
     type="search"
   />
    

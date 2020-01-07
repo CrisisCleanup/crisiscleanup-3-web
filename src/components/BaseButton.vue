@@ -27,13 +27,34 @@ export default {
       type: Boolean,
       default: false,
     },
-    text: String,
-    alt: String,
-    title: String,
-    type: String,
-    size: String,
-    icon: String,
-    suffixIcon: String,
+    text: {
+      type: String,
+      default: '',
+    },
+    alt: {
+      type: String,
+      default: '',
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+    size: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    suffixIcon: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {

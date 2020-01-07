@@ -48,8 +48,16 @@ import { getColorForStatus, getWorkTypeImage } from '@/filters';
 export default {
   name: 'StatusDropDown',
   props: {
-    onSelect: Function,
-    currentWorkType: Object,
+    onSelect: {
+      type: Function,
+      default: () => {},
+    },
+    currentWorkType: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
     useIcon: {
       type: Boolean,
       default: false,

@@ -1,3 +1,4 @@
+/* eslint-disable */
 const colors = {
   open_unassigned_unclaimed: {
     fillColor: '#d0021b',
@@ -32,44 +33,76 @@ const colors = {
     strokeColor: '#e018e1',
   },
   open_unresponsive_unclaimed: {
-    fillColor: '#787878',
+    fillColor: '#7F7F7F',
     strokeColor: '#5d5d5d',
   },
   open_unresponsive_claimed: {
-    fillColor: '#787878',
+    fillColor: '#7F7F7F',
     strokeColor: '#5d5d5d',
   },
   closed_completed_unclaimed: {
-    fillColor: '#82d78c',
-    strokeColor: '#51ac7c',
+    fillColor: '#0FA355',
+    strokeColor: '#09a34f',
   },
   closed_completed_claimed: {
-    fillColor: '#82d78c',
-    strokeColor: '#51ac7c',
+    fillColor: '#0FA355',
+    strokeColor: '#09a34f',
   },
   closed_incomplete_unclaimed: {
-    fillColor: '#1d1d1d',
-    strokeColor: '#1d1d1d',
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
   closed_incomplete_claimed: {
-    fillColor: '#1d1d1d',
-    strokeColor: '#1d1d1d',
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
   'closed_out-of-scope_unclaimed': {
-    fillColor: '#787878',
-    strokeColor: '#787878',
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
   },
   'closed_out-of-scope_claimed': {
-    fillColor: '#787878',
-    strokeColor: '#787878',
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
   },
   'closed_done-by-others_unclaimed': {
-    fillColor: '#0fa355',
-    strokeColor: '#0fa355',
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
   },
   'closed_done-by-others_claimed': {
-    fillColor: '#0fa355',
-    strokeColor: '#0fa355',
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
+  },
+  'closed_no-help-wanted_unclaimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
+  },
+  'closed_no-help-wanted_claimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
+  },
+  'closed_partially-completed_unclaimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
+  },
+  'closed_partially-completed_claimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
+  },
+  'closed_duplicate_unclaimed': {
+    fillColor: '#7F7F7F',
+    strokeColor: '#7F7F7F',
+  },
+  'closed_duplicate_claimed': {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
+  },
+  'closed_marked-for-deletion_unclaimed': {
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
+  },
+  'closed_marked-for-deletion_claimed': {
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
   },
 };
 

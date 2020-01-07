@@ -1,6 +1,7 @@
 <template>
   <form
     v-if="ready"
+    ref="form"
     class="bg-white flex flex-col flex-grow w-full"
     @submit.prevent="handleSubmit"
   >
@@ -29,7 +30,7 @@
           display-property="name"
           :placeholder="$t('formLabels.name')"
           size="large"
-          required
+          :required="true"
           @input="
             value => {
               updateWorksite(value, 'name');
@@ -61,7 +62,7 @@
           display-property="description"
           :placeholder="$t('formLabels.address')"
           size="large"
-          required
+          :required="true"
           @input="
             value => {
               updateWorksite(value, 'address');
@@ -134,7 +135,7 @@
           tooltip="info"
           size="large"
           :placeholder="$t('formLabels.location')"
-          required
+          :required="!worksite.location"
           disabled
           @input="
             value => {
@@ -166,7 +167,7 @@
           >
             >
             <OverlayMap
-              :initial-location="this.worksite.location"
+              :initial-location="worksite.location"
               @addedMarker="onAddedMarker"
             />
             <div
@@ -184,7 +185,7 @@
           </modal>
         </div>
       </div>
-      <template v-for="field in this.fields">
+      <template v-for="field in fields">
         <div
           v-if="showAllFields || getValue(field.field_key)"
           :key="field.field_key"
@@ -199,7 +200,7 @@
                   width="22px"
                   height="22px"
                 >
-                  {{ sectionCounter++ }}
+                  {{ getSectionCount(field) }}
                 </badge>
                 {{ field.label_t }}
               </div>
@@ -477,6 +478,19 @@ export default {
   },
   methods: {
     handleSubmit() {},
+    getSectionCount(currentField) {
+      let sectionNumber = 1;
+      for (let i = 0; i < this.fields.length; i++) {
+        const field = this.fields[i];
+        if (field.html_type === 'h4') {
+          sectionNumber++;
+        }
+        if (currentField === field) {
+          break;
+        }
+      }
+      return sectionNumber;
+    },
     updateWorksite(value, key) {
       if (this.worksite.id) {
         Worksite.update({
@@ -596,20 +610,20 @@ export default {
         );
         this.updateWorksite(what3words, 'what3words');
       }
-      const field_data = this.dynamicFields;
+      const fieldData = this.dynamicFields;
 
-      const truthy_values = Object.keys(field_data).filter(key => {
-        return Boolean(field_data[key]) && this.fieldsArray.includes(key);
+      const truthyValues = Object.keys(fieldData).filter(key => {
+        return Boolean(fieldData[key]) && this.fieldsArray.includes(key);
       });
 
-      const form_data = truthy_values.map(key => {
+      const formData = truthyValues.map(key => {
         return {
           field_key: key,
-          field_value: field_data[key],
+          field_value: fieldData[key],
         };
       });
 
-      this.updateWorksite(form_data, 'form_data');
+      this.updateWorksite(formData, 'form_data');
 
       try {
         if (this.worksite.id) {
@@ -662,32 +676,32 @@ export default {
         form_data: [],
       });
     },
-    getValue(field_key) {
+    getValue(fieldKey) {
       if (!this.worksite || !this.worksite.form_data) {
         return '';
       }
 
       const key = this.worksite.form_data.find(element => {
-        return element.field_key === field_key;
+        return element.field_key === fieldKey;
       });
       if (key) {
-        this.$log.debug(`${field_key}:${key.field_value}`);
+        this.$log.debug(`${fieldKey}:${key.field_value}`);
 
         return key.field_value;
       }
       return '';
     },
-    getSelectValue(field_key) {
+    getSelectValue(fieldKey) {
       if (!this.worksite || !this.worksite.form_data) {
         return '';
       }
 
       const key = this.worksite.form_data.find(element => {
-        return element.field_key === field_key;
+        return element.field_key === fieldKey;
       });
       if (key) {
         const currentField = this.fields.find(field => {
-          return field.field_key === field_key;
+          return field.field_key === fieldKey;
         });
 
         return currentField.values.find(field => {
@@ -696,13 +710,13 @@ export default {
       }
       return '';
     },
-    getBooleanValue(field_key) {
+    getBooleanValue(fieldKey) {
       if (!this.worksite || !this.worksite.form_data) {
         return '';
       }
 
       const key = this.worksite.form_data.find(element => {
-        return element.field_key === field_key;
+        return element.field_key === fieldKey;
       });
       if (key) {
         return key.field_value;
