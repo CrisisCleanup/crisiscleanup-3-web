@@ -24,3 +24,6 @@ yarn-error.log*
 
 # Testing
 coverage
+.nyc_output/
+cypress/screenshots
+cypress/videos

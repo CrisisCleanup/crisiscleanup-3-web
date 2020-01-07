@@ -12,6 +12,7 @@ module.exports = {
     browser: true,
     es6: true,
     node: true,
+    'cypress/globals': true,
   },
   extends: [
     'airbnb-base',
@@ -19,6 +20,7 @@ module.exports = {
     'plugin:prettier/recommended',
     'prettier/babel',
     'prettier/vue',
+    'plugin:cypress/recommended',
   ],
   globals: {
     Atomics: 'readonly',
@@ -31,6 +33,7 @@ module.exports = {
   },
   plugins: ['babel', 'vue', 'prettier', 'import'],
   rules: {
+    'spaced-comment': 0,
     'import/imports-first': 0,
     'import/extensions': 0,
     'import/newline-after-import': 0,
@@ -50,7 +53,7 @@ module.exports = {
     // TODO: mitigate in the future
     'no-param-reassign': ['error', { props: false }],
     camelcase: 1,
-    'global-require': 1,
+    'global-require': 0,
     'func-names': 0,
     // ----
   },
