@@ -8,7 +8,12 @@
 <script>
 export default {
   name: 'Tag',
-  props: ['closeable'],
+  props: {
+    closeable: {
+      type: Boolean,
+      default: false,
+    },
+  },
   methods: {
     onClose() {
       this.$emit('closed');

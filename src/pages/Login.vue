@@ -56,7 +56,11 @@ export default {
     async userLogin() {
       try {
         await this.login({ email: this.email, password: this.password });
-        await this.$router.push('/');
+        if (this.$route.query.from) {
+          await this.$router.replace(this.$route.query.from);
+        } else {
+          await this.$router.push('/');
+        }
       } catch (e) {
         await this.$toasted.error(this.$t('login.invalid_credentials_msg'));
       }

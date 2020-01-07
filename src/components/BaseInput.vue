@@ -18,14 +18,14 @@
       :class="iconClasses"
       @click="glassBroken = true"
     >
-      <ccu-icon type="edit" size="small"></ccu-icon>
+      <ccu-icon type="edit" size="small" />
     </div>
     <div
       v-if="icon || tooltip"
       class="icon-container flex items-center justify-center"
       :class="iconClasses"
     >
-      <ccu-icon :type="tooltip ? 'info' : icon" size="small"></ccu-icon>
+      <ccu-icon :type="tooltip ? 'info' : icon" size="small" />
     </div>
   </div>
 </template>
@@ -33,19 +33,47 @@
 <script>
 export default {
   name: 'BaseInput',
-  props: [
-    'size',
-    'icon',
-    'value',
-    'disabled',
-    'placeholder',
-    'required',
-    'tooltip',
-    'type',
-    'breakGlass',
-  ],
+  props: {
+    size: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    value: {
+      type: null,
+      default: null,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+    tooltip: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+    breakGlass: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
+      id: null,
       classes: {
         'flex-grow': true,
         'text-base': true,
@@ -61,6 +89,9 @@ export default {
       },
       glassBroken: false,
     };
+  },
+  mounted() {
+    this.id = this._uid;
   },
   methods: {
     update(e) {

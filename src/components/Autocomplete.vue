@@ -17,7 +17,7 @@
       @selected="onSelected"
     >
       <template slot-scope="{ suggestion }">
-        <span class="my-suggestion-item"></span>
+        <span class="my-suggestion-item" />
         <slot name="result" :suggestion="suggestion">
           {{ suggestion.item[displayProperty] }}
         </slot>
@@ -35,7 +35,7 @@
       class="icon-container flex items-center justify-center"
       :class="iconClasses"
     >
-      <ccu-icon :type="tooltip ? 'info' : icon" size="small"></ccu-icon>
+      <ccu-icon :type="tooltip ? 'info' : icon" size="small" />
     </div>
   </div>
 </template>
@@ -43,17 +43,35 @@
 <script>
 export default {
   name: 'Autocomplete',
-  props: [
-    'suggestions',
-    'displayProperty',
-    'icon',
-    'placeholder',
-    'required',
-    'size',
-    'tooltip',
-    'full',
-    'loading',
-  ],
+  props: {
+    suggestions: {
+      type: Array,
+      default: () => [],
+    },
+    displayProperty: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    required: Boolean,
+    size: {
+      type: String,
+      default: '',
+    },
+    tooltip: {
+      type: String,
+      default: '',
+    },
+    full: Boolean,
+    loading: Boolean,
+  },
   data() {
     return {
       selected: '',
@@ -134,7 +152,7 @@ export default {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   background: white;
-  padding: 0px;
+  padding: 0;
   overflow: auto;
   max-height: 200px;
 }

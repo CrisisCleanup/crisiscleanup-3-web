@@ -50,6 +50,7 @@ export default {
     },
     message: {
       type: String,
+      default: '',
     },
   },
 };

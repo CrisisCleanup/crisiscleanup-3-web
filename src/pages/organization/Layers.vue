@@ -54,7 +54,7 @@
                 @close="showingSampleModal = false"
               >
                 <div class="h-64 overflow-auto p-4">
-                  <div v-for="(value, key) in slotProps.item.sample">
+                  <div v-for="(value, key) in slotProps.item.sample" :key="key">
                     {{ key }}: {{ value }}
                   </div>
                 </div>
@@ -67,7 +67,7 @@
             :text="$t('actions.upload')"
             :action="
               () => {
-                return this.uploadShapefile();
+                return uploadShapefile();
               }
             "
             class="px-6 p-3 m-auto"
