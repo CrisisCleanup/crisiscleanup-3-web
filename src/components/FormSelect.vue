@@ -97,4 +97,9 @@ export default {
 .form-select .vs__search::placeholder {
   color: darkGray;
 }
+
+.vue-select-up.form-select .vs__dropdown-menu {
+  top: auto !important;
+  bottom: calc(100% - 3px);
+}
 </style>
