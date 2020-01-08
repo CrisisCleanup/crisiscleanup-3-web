@@ -94,7 +94,7 @@
           :value="pagination.pageSize"
           :options="pageSizes"
           :clearable="false"
-          select-classes="w-24 bg-white border"
+          select-classes="w-24 bg-white border vue-select-up"
           @input="onSelectPageSize"
         />
       </div>
