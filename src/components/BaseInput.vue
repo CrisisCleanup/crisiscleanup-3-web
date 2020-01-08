@@ -22,6 +22,11 @@
     </div>
     <div
       v-if="icon || tooltip"
+      v-tooltip="{
+        content: tooltip,
+        trigger: 'hover',
+        classes: 'interactive-tooltip w-72',
+      }"
       class="icon-container flex items-center justify-center"
       :class="iconClasses"
     >

@@ -19,7 +19,6 @@
       <div class="form-field">
         <WorksiteSearchInput
           :value="worksite.name"
-          tooltip="info"
           :suggestions="[
             {
               name: 'worksites',
@@ -46,7 +45,6 @@
       <div class="form-field">
         <WorksiteSearchInput
           :value="worksite.address"
-          tooltip="info"
           :suggestions="[
             {
               name: 'worksites',
@@ -76,7 +74,6 @@
       <div class="form-field">
         <base-input
           :value="worksite.city"
-          tooltip="info"
           size="large"
           :placeholder="$t('formLabels.city')"
           required
@@ -91,7 +88,6 @@
       <div class="form-field">
         <base-input
           :value="worksite.county"
-          tooltip="info"
           size="large"
           :placeholder="$t('formLabels.county')"
           :break-glass="true"
@@ -107,7 +103,6 @@
       <div class="form-field">
         <base-input
           :value="worksite.state"
-          tooltip="info"
           size="large"
           :placeholder="$t('formLabels.state')"
           required
@@ -122,7 +117,6 @@
       <div class="form-field">
         <base-input
           :value="worksite.postal_code"
-          tooltip="info"
           size="large"
           :placeholder="$t('formLabels.postal_code')"
           required
@@ -132,7 +126,6 @@
       <div class="form-field">
         <base-input
           :value="worksite.what3words"
-          tooltip="info"
           size="large"
           :placeholder="$t('formLabels.location')"
           :required="!worksite.location"
@@ -205,6 +198,7 @@
                 {{ field.label_t }}
               </div>
               <ccu-icon
+                v-if="field.help_t"
                 v-tooltip="{
                   content: field.help_t,
                   trigger: 'hover',
@@ -226,6 +220,7 @@
               <span slot="label" class="flex items-center">
                 <span>{{ field.label_t }}</span>
                 <ccu-icon
+                  v-if="field.help_t"
                   v-tooltip="{
                     content: field.help_t,
                     trigger: 'hover',
@@ -255,6 +250,7 @@
               <span slot="label" class="flex items-center">
                 <span>{{ field.label_t }}</span>
                 <ccu-icon
+                  v-if="field.help_t"
                   v-tooltip="{
                     content: field.help_t,
                     trigger: 'hover',
@@ -284,7 +280,7 @@
             <div :key="field.field_key" class="form-field">
               <base-input
                 :value="worksite.formFields[field.field_key]"
-                tooltip="info"
+                :tooltip="field.help_t"
                 size="large"
                 :break-glass="field.read_only_break_glass"
                 :placeholder="field.placeholder_t || field.label_t"
@@ -312,6 +308,7 @@
               <span slot="label" class="flex items-center">
                 <span>{{ field.label_t }}</span>
                 <ccu-icon
+                  v-if="field.help_t"
                   v-tooltip="{
                     content: field.help_t,
                     trigger: 'hover',
@@ -347,6 +344,7 @@
                 >{{ field.label_t }}
               </base-checkbox>
               <ccu-icon
+                v-if="field.help_t"
                 v-tooltip="{
                   content: field.help_t,
                   trigger: 'hover',

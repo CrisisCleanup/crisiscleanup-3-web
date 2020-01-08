@@ -218,7 +218,7 @@ export default {
 
 #autosuggest__input {
   outline: none;
-  width: 300px;
+  width: 100%;
   height: 32px;
   border-radius: 0;
   border: solid 1px #dadada;
