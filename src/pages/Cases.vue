@@ -350,11 +350,7 @@
               isViewingWorksiteHistory,
           }"
         >
-          {{
-            currentWorksite && isEditingWorksite
-              ? `Edit ${currentWorksite.case_number}`
-              : `View ${currentWorksite.case_number}`
-          }}
+          {{ `Edit ${currentWorksite.case_number}` }}
         </div>
       </div>
       <div
