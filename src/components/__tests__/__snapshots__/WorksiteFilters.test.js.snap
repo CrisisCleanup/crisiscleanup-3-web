@@ -15,7 +15,9 @@ Object {
 
 exports[`WorksiteFilters should remove field 2`] = `
 Object {
-  "fields": Object {},
+  "fields": Object {
+    "muck_out": undefined,
+  },
   "statuses": Object {
     "closed": false,
     "open": true,
@@ -31,6 +33,7 @@ Object {
   },
   "statuses": Object {
     "closed": false,
+    "open": undefined,
   },
   "sub_fields": Object {},
 }
@@ -65,7 +68,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       >
         <tag-stub
           class="m-1"
-          closeable="true"
+          closeable=""
         >
           
             Work Type: workType.ash
@@ -74,7 +77,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
          
         <tag-stub
           class="m-1"
-          closeable="true"
+          closeable=""
         >
           
             Status: Open
