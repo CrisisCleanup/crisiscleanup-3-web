@@ -1,4 +1,5 @@
-import User from '@/models/User';
+import moment from 'moment';
+import axios from 'axios';
 import { AuthService } from '@/services/auth.service';
 
 const AuthState = {
@@ -7,16 +8,24 @@ const AuthState = {
 
 // getters
 const getters = {
-  isLoggedIn: state => Boolean(state.user && state.user.access_token),
+  isLoggedIn: state => {
+    return state.user && AuthService.getExpiry().isAfter(moment());
+  },
   userId: state => (state.user ? state.user.user_claims.id : null),
 };
 
 // actions
 const actions = {
   async login({ commit }, { email, password }) {
-    const data = await User.api().login(email, password);
-    commit('setUser', data.response.data);
-    return data.response;
+    const response = await axios.post(
+      `${process.env.VUE_APP_API_BASE_URL}/api-token-auth`,
+      {
+        email,
+        password,
+      },
+    );
+    commit('setUser', response.data);
+    return response;
   },
 
   logout({ commit }) {
