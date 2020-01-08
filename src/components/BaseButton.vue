@@ -59,10 +59,15 @@ export default {
   data() {
     return {
       loading: false,
-      styles: {
+    };
+  },
+  computed: {
+    styles() {
+      return {
         'text-lg': this.size === 'large',
         'text-base': this.size === 'medium',
         small: this.size === 'small',
+        'text-crisiscleanup-grey-900': this.disabled,
 
         primary: this.type === 'primary',
         danger: this.type === 'danger',
@@ -72,8 +77,8 @@ export default {
         flex: true,
         'items-center': true,
         'justify-center': true,
-      },
-    };
+      };
+    },
   },
   methods: {
     async performAction() {
