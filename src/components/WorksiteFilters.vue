@@ -22,7 +22,7 @@
             <tag
               v-if="value"
               :key="key"
-              :closeable="true"
+              closeable
               class="m-1"
               @closed="removeField(key)"
             >
@@ -33,7 +33,7 @@
             <tag
               v-if="value"
               :key="key"
-              :closeable="true"
+              closeable
               class="m-1"
               @closed="removeStatus(key)"
             >
@@ -350,10 +350,10 @@ export default {
       return [];
     },
     removeField(key) {
-      delete this.filters.fields[key];
+      this.filters.fields[key] = undefined;
     },
     removeStatus(key) {
-      delete this.filters.statuses[key];
+      this.filters.statuses[key] = undefined;
     },
     clearAllFilters() {
       this.filters = {
