@@ -1,8 +1,8 @@
 <template>
   <div class="flex layout overflow-hidden">
     <div class="w-32 sidebar">
-      <div class="logo flex justify-center p-1">
-        <img class="w-24 h-16" src="@/assets/crisiscleanup_logo.png" />
+      <div class="logo flex justify-center p-3">
+        <img src="@/assets/crisiscleanup_logo.png" />
       </div>
       <div class="menu">
         <router-link
