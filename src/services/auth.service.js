@@ -1,4 +1,6 @@
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
+import moment from 'moment';
 
 const AuthService = {
   getUser() {
@@ -10,6 +12,14 @@ const AuthService = {
       return JSON.parse(user).access_token;
     }
     return null;
+  },
+  getExpiry() {
+    const user = localStorage.getItem('user');
+    if (user) {
+      const decoded = jwt_decode(JSON.parse(user).access_token);
+      return moment.unix(decoded.exp);
+    }
+    return moment();
   },
   saveUser(user) {
     localStorage.setItem('user', JSON.stringify(user));

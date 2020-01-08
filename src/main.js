@@ -44,6 +44,7 @@ import {
 
 import '@/assets/css/tailwind.css';
 import Badge from '@/components/Badge';
+import { i18nService } from '@/services/i18n.service';
 
 library.add(fas);
 
@@ -116,10 +117,8 @@ const getLanguages = async tags => {
   for (const tag of tags) {
     try {
       // eslint-disable-next-line no-await-in-loop
-      const response = await axios.get(
-        `${process.env.VUE_APP_API_BASE_URL}/languages/${tag}`,
-      );
-      const { subtag, translations } = response.data;
+      const data = await i18nService.getLanguage(tag);
+      const { subtag, translations } = data;
 
       // Only install locales that actually have translations
       if (Object.keys(translations).length > 0) {

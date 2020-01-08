@@ -6,11 +6,7 @@
 
     <span v-if="acceptedInvite"> {{ $t('login.accepted_invite') }}</span>
 
-    <form
-      ref="form"
-      class="flex flex-col login-form"
-      @submit.prevent="userLogin"
-    >
+    <form ref="form" class="flex flex-col login-form" @submit.prevent>
       <h1 class="text-3xl text-center">{{ $t('login.sign_in_msg') }}</h1>
       <base-input
         v-model="email"
@@ -35,6 +31,7 @@
         class="px-5 py-2 my-3 w-full"
         type="primary"
         :text="$t('login.log_in_button')"
+        :action="userLogin"
       />
     </form>
   </div>

@@ -115,6 +115,7 @@ import User from '@/models/User';
 import WorkType from '@/models/WorkType';
 import Organization from '@/models/Organization';
 import Status from '@/models/Status';
+import { i18nService } from '@/services/i18n.service';
 
 export default {
   name: 'Authenticated',
@@ -173,10 +174,8 @@ export default {
       this.currentUser.primary_language || detectBrowserLanguage();
     if (currentLanguage !== this.$i18n.locale) {
       try {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/languages/${currentLanguage}`,
-        );
-        const { translations } = response.data;
+        const data = await i18nService.getLanguage(currentLanguage);
+        const { translations } = data;
         if (Object.keys(translations).length === 0) {
           return;
         }
