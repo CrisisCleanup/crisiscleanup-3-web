@@ -8,7 +8,20 @@
           :style="modalStyle"
         >
           <div class="modal-header flex-shrink">
-            <slot name="header"> </slot>
+            <slot name="header">
+              <div
+                v-if="title"
+                class="title p-3 flex items-center justify-between border-b"
+              >
+                <span class="text-base font-bold">{{ title }}</span>
+                <ccu-icon
+                  :alt="$t('actions.cancel')"
+                  size="xs"
+                  type="cancel"
+                  @click.native="$emit('close')"
+                />
+              </div>
+            </slot>
           </div>
 
           <div class="modal-body flex-grow">
@@ -17,7 +30,7 @@
 
           <div class="modal-footer flex-shrink">
             <slot name="footer">
-              <div class="flex items-center justify-center py-3 border-t">
+              <div class="flex items-center justify-center py-2 border-t">
                 <base-button
                   :alt="$t('actions.ok')"
                   type="primary"
@@ -50,6 +63,10 @@ export default {
     modalStyle: {
       type: null,
       default: null,
+    },
+    title: {
+      type: String,
+      default: '',
     },
   },
 };
