@@ -13,6 +13,7 @@
     :placeholder="placeholder"
     :reduce="item => (itemKey ? item[itemKey] : item)"
     @input="$emit('input', $event)"
+    @search:focus="open"
   >
   </v-select>
 </template>
@@ -80,6 +81,29 @@ export default {
         },
       },
     };
+  },
+  methods: {
+    open() {
+      this.$nextTick(() => {
+        const items = [].slice.call(
+          document.querySelectorAll('.vs__dropdown-option'),
+        );
+
+        items.forEach(item => {
+          item.classList.remove('vs__dropdown-option--highlight');
+        });
+
+        const selected = items.find(item => {
+          const currentLabel = this.label ? this.value[this.label] : this.value;
+          return item.textContent.trim() === currentLabel;
+        });
+
+        if (selected) {
+          selected.classList.add('vs__dropdown-option--highlight');
+          selected.scrollIntoView();
+        }
+      });
+    },
   },
 };
 </script>

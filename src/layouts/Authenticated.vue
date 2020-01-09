@@ -2,7 +2,7 @@
   <div class="flex layout overflow-hidden">
     <div class="w-32 sidebar">
       <div class="logo flex justify-center p-3">
-        <img src="@/assets/crisiscleanup_logo.png" />
+        <img src="@/assets/crisiscleanup_logo.png" style="height: 53px" />
       </div>
       <div class="menu">
         <router-link
@@ -49,6 +49,7 @@
                 :value="currentIncident"
                 :options="incidents"
                 :clearable="false"
+                searchable
                 select-classes="h-12"
                 item-key="id"
                 label="name"
@@ -110,6 +111,7 @@
 <script>
 import { mapActions, mapMutations, mapState } from 'vuex';
 import detectBrowserLanguage from 'detect-browser-language';
+import { size } from 'lodash';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
 import WorkType from '@/models/WorkType';
@@ -176,7 +178,7 @@ export default {
       try {
         const data = await i18nService.getLanguage(currentLanguage);
         const { translations } = data;
-        if (Object.keys(translations).length === 0) {
+        if (size(translations) === 0) {
           return;
         }
 
