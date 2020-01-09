@@ -48,7 +48,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
     class="flex flex-col h-full"
   >
     <div
-      class="p-2 px-4"
+      class="p-3"
     >
       
       Filters
