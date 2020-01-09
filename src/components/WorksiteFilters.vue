@@ -5,8 +5,8 @@
     modal-style="min-height: 60%"
   >
     <div class="flex flex-col h-full">
-      <div class="p-2 px-4">
-        Filters
+      <div class="p-3">
+        {{ $t('Filters') }}
         <span
           v-if="filtersCount > 0"
           class="rounded-full px-1 bg-yellow-500 text-xs"

@@ -55,6 +55,7 @@ export default {
         large: this.size === 'large',
         medium: this.size === 'medium',
         small: this.size === 'small',
+        xs: this.size === 'xs',
       },
     };
   },
@@ -73,6 +74,10 @@ export default {
 .ccu-icon.small {
   height: 16px;
   width: 16px;
+}
+.ccu-icon.xs {
+  height: 10px;
+  width: 10px;
 }
 .filter-gray {
   filter: invert(84%) sepia(0%) saturate(30%) hue-rotate(209deg)

@@ -101,7 +101,8 @@
                   type="link"
                   :action="
                     () => {
-                      return requestWorkType(work_type);
+                      requestingWorkTypes = true;
+                      initialWorkTypeRequestSelection = [work_type.work_type];
                     }
                   "
                   :text="$t('actions.request')"
@@ -109,6 +110,13 @@
                 />
               </div>
             </template>
+            <WorkTypeRequestModal
+              v-if="requestingWorkTypes"
+              :work_types="work_types"
+              :initial-selection="initialWorkTypeRequestSelection"
+              @onRequest="requestWorkTypes"
+              @onCancel="requestingWorkTypes = false"
+            />
           </div>
         </div>
         <div v-if="workTypesClaimedByOrganization.length > 0" class="my-4">
@@ -208,7 +216,8 @@
         :text="$t('actions.request')"
         :action="
           () => {
-            return requestWorkType();
+            requestingWorkTypes = true;
+            initialWorkTypeRequestSelection = [];
           }
         "
       />
@@ -237,13 +246,16 @@ import User from '@/models/User';
 import Worksite from '@/models/Worksite';
 import { groupBy } from '@/utils/array';
 import Organization from '@/models/Organization';
+import WorkTypeRequestModal from '@/pages/WorkTypeRequestModal';
 
 export default {
   name: 'CaseView',
-  components: { StatusDropDown },
+  components: { WorkTypeRequestModal, StatusDropDown },
   data() {
     return {
       addingNotes: false,
+      requestingWorkTypes: false,
+      initialWorkTypeRequestSelection: [],
       currentNote: '',
     };
   },
@@ -334,12 +346,9 @@ export default {
         await this.$toasted.error(getErrorMessage(error));
       }
     },
-    async requestWorkType(workType) {
+    async requestWorkTypes(workTypes) {
       try {
-        const workTypes = [];
-        if (workType) {
-          workTypes.push(workType.work_type);
-        }
+        this.requestingWorkTypes = false;
         await Worksite.api().requestWorksite(this.worksite.id, workTypes);
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
