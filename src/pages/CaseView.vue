@@ -112,7 +112,7 @@
             </template>
             <WorkTypeRequestModal
               v-if="requestingWorkTypes"
-              :work_types="work_types"
+              :work-types="work_types"
               :initial-selection="initialWorkTypeRequestSelection"
               @onRequest="requestWorkTypes"
               @onCancel="requestingWorkTypes = false"
@@ -246,7 +246,7 @@ import User from '@/models/User';
 import Worksite from '@/models/Worksite';
 import { groupBy } from '@/utils/array';
 import Organization from '@/models/Organization';
-import WorkTypeRequestModal from '@/pages/WorkTypeRequestModal';
+import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
 
 export default {
   name: 'CaseView',
@@ -353,6 +353,9 @@ export default {
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
+        await this.$toasted.success(
+          this.$t('Successfully requested work types'),
+        );
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

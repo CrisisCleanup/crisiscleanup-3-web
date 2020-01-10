@@ -5,14 +5,14 @@
     @close="$emit('onCancel')"
   >
     <div class="px-6 py-3">
-      <div>
+      <div class="font-xs my-2">
         {{
           $t('Choose work type you would like to claim for your organization')
         }}
       </div>
       <div v-for="work_type_to_request in work_types">
         <base-checkbox
-          class="mb-5"
+          class="mb-3"
           :value="requestedWorkTypes.has(work_type_to_request.work_type)"
           @input="
             value => {
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <div slot="footer">
+    <div slot="footer" class="p-3">
       <base-button
         type="primary"
         :action="
@@ -36,7 +36,7 @@
           }
         "
         :text="$t('actions.request')"
-        class="ml-2 p-1 px-3 text-xs"
+        class="ml-2 p-3 px-6 text-xs"
       />
     </div>
   </modal>
@@ -45,7 +45,7 @@
 export default {
   name: 'WorkTypeRequestModal',
   props: {
-    work_types: {
+    workTypes: {
       type: Array,
       default: () => [],
     },
