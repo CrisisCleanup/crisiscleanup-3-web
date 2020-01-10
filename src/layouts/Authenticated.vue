@@ -20,8 +20,8 @@
           :class="{ 'router-link-active': selectedRoute.includes('Case') }"
         >
           <div key="cases" class="flex flex-col items-center">
-            <ccu-icon :alt="$t('nav.work_orders')" type="cases" />
-            <div class="menu-text mt-1">{{ $t('nav.work_orders') }}</div>
+            <ccu-icon :alt="$t('nav.cases')" type="cases" />
+            <div class="menu-text mt-1">{{ $t('nav.cases') }}</div>
           </div>
         </router-link>
         <router-link
@@ -101,7 +101,7 @@
         class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center"
       >
         <div class="flex flex-col items-center">
-          <spinner :message="$t('Loading...')" />
+          <spinner :message="$t('info.loading')" />
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@
                 v-if="!loading"
                 v-model="shapefileKey"
                 :options="slotProps.item.fields"
-                :placeholder="$t('Select a key for this shapefile')"
+                :placeholder="$t('layersVue.select_key_shapefile')"
                 select-classes="bg-white border w-full"
               />
             </div>
@@ -107,22 +107,22 @@ export default {
       shapefileType: 'COUNTY',
       columns: [
         {
-          title: this.$t('Filename'),
+          title: this.$t('layersVue.filename'),
           dataIndex: 'filename',
           key: 'filename',
         },
         {
-          title: this.$t('Count'),
+          title: this.$t('layersVue.count'),
           dataIndex: 'count',
           key: 'count',
         },
         {
-          title: this.$t('Data Key'),
+          title: this.$t('layersVue.data_key'),
           dataIndex: 'fields',
           key: 'fields',
         },
         {
-          title: this.$t('Location Type'),
+          title: this.$t('layersVue.Location Type'),
           dataIndex: 'types',
           key: 'types',
         },
@@ -135,15 +135,33 @@ export default {
       showingSampleModal: false,
       loading: false,
       locationTypes: [
-        'US_STATE',
-        'COUNTY',
-        'CENSUS_TRACT',
-        'SVI',
-        'SVI_COUNTY',
-        'CONGRESSIONAL_DISTRICT',
-        'INCIDENT_TRACK',
-        'INCIDENT_AREA',
-        'FLOOD',
+        'locationTypes.org_primary_response_area',
+        'locationTypes.org_secondary_response_area',
+        'locationTypes.incident_primary_damaged_area',
+        'locationTypes.incident_storm_track',
+        'locationTypes.incident_furthest_damaged_area',
+        'locationTypes.incident_damage',
+        'locationTypes.boundary_ecclesiastical',
+        'locationTypes.boundary_organizational',
+        'locationTypes.resource',
+        'locationTypes.boundary_political_us_state',
+        'locationTypes.boundary_political_us_county',
+        'locationTypes.boundary_political_us_city',
+        'locationTypes.boundary_political_us_neighborhood',
+        'locationTypes.boundary_political_us_zip_code',
+        'locationTypes.boundary_political_us_fire_district',
+        'locationTypes.boundary_political_us_census_tract',
+        'locationTypes.boundary_political_us_congress',
+        'locationTypes.boundary_political_us_region',
+        'locationTypes.boundary_political_us_fema_region',
+        'locationTypes.boundary_political_country',
+        'locationTypes.boundary_political_intl_primary_division',
+        'locationTypes.boundary_political_intl_local_division',
+        'locationTypes.boundary_political_intl_city',
+        'locationTypes.boundary_political_intl_postal_code',
+        'locationTypes.boundary_political_other',
+        'locationTypes.attribute_property',
+        'locationTypes.attribute_social'
       ],
     };
   },
@@ -212,7 +230,7 @@ export default {
             },
           },
         );
-        await this.$toasted.success(this.$t('Successfully updated shapefile'));
+        await this.$toasted.success(this.$t('layersVue.successful_upload'));
       } catch (e) {
         // TODO: handle exception
       }

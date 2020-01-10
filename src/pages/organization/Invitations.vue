@@ -3,13 +3,13 @@
     <div class="p-12 w-full">
       <div class="flex justify-between items-center my-6">
         <div>
-          <div class="text-base">{{ $t('Current Requests') }}</div>
-          <div class="text-xs">{{ $t('Sub sections') }}</div>
+          <div class="text-base">{{ $t('invitationsVue.current_requests') }}</div>
+          <div class="text-xs">{{ $t('invitationsVue.sub_sections') }}</div>
         </div>
         <div class="flex">
           <base-button
             size="small"
-            :text="$t('actions.downloads')"
+            :text="$t('actions.download')"
             class="mx-2 shadow bg-white px-4 p-2 text-xs"
             icon="download"
           />
@@ -63,7 +63,7 @@
 
       <div class="flex justify-between items-center my-6">
         <div class="flex items-center">
-          <div class="text-base">{{ $t('Incomplete Invitations') }}</div>
+          <div class="text-base">{{ $t('invitationsVue.incomplete_invitations') }}</div>
           <div
             class="mx-5 flex items-center bg-white border p-1 px-4 cursor-pointer"
             @click="() => {}"
@@ -145,19 +145,19 @@ export default {
     return {
       currentRequestsColumns: [
         {
-          title: this.$t('Requestor'),
+          title: this.$t('invitationsVue.requestor'),
           dataIndex: 'requestor',
           key: 'full_name',
           width: '2fr',
         },
         {
-          title: this.$t('Phone'),
+          title: this.$t('invitationsVue.phone'),
           dataIndex: 'phone',
           key: 'mobile',
           width: '2fr',
         },
         {
-          title: this.$t('Request Date'),
+          title: this.$t('invitationsVue.request_date'),
           dataIndex: 'requested_at_moment',
           key: 'requested_at_moment',
           width: '2fr',
@@ -171,25 +171,25 @@ export default {
       ],
       invitationsColumns: [
         {
-          title: this.$t('formLabels.email'),
+          title: this.$t('invitationsVue.email'),
           dataIndex: 'email',
           key: 'invitee_email',
           width: '250px',
         },
         {
-          title: this.$t('Invited By'),
+          title: this.$t('invitationsVue.invited_by'),
           dataIndex: 'invited_by',
           key: 'invited_by',
           width: '1fr',
         },
         {
-          title: this.$t('Status'),
+          title: this.$t('invitationsVue.status'),
           dataIndex: 'status',
           key: 'status',
           width: '1fr',
         },
         {
-          title: this.$t('Invitation Date'),
+          title: this.$t('invitationsVue.invitation_date'),
           dataIndex: 'invitation_date',
           key: 'invitation_date',
           width: '1fr',
@@ -240,23 +240,23 @@ export default {
     async acceptInvitationRequest(request) {
       await InvitationRequest.api().acceptInvitationRequest(request);
       await this.loadAllInvitationRequests();
-      await this.$toasted.success(this.$t('Invitation Request Accepted'));
+      await this.$toasted.success(this.$t('invitationsVue.invitation_request_accepted'));
     },
     async rejectInvitationRequest(request) {
       await InvitationRequest.api().rejectInvitationRequest(request);
       await this.loadAllInvitationRequests();
-      await this.$toasted.success(this.$t('Invitation Request Rejected'));
+      await this.$toasted.success(this.$t('invitationsVue.invitation_request_declined'));
     },
     async resendInvitation(invitation) {
       await Invitation.api().resendInvitation(invitation);
       await this.loadAllInvitations();
-      await this.$toasted.success(this.$t('Invitation Resent'));
+      await this.$toasted.success(this.$t('invitationsVue.invitation_resent'));
     },
     async deleteInvitation(invitation) {
       await Invitation.api().delete(`/invitations/${invitation.id}`, {
         delete: invitation.id,
       });
-      await this.$toasted.success(this.$t('Invitation Deleted'));
+      await this.$toasted.success(this.$t('invitationsVue.invitation_deleted'));
     },
   },
 };

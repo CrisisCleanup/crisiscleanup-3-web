@@ -20,10 +20,10 @@
                 src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
               />
               <a href="https://google.com" class="text-center pb-4">{{
-                $t('Change Photo')
+                $t('actions.change_photo')
               }}</a>
               <base-button type="primary">{{
-                $t('View ID Badge')
+                $t('actions.view_id_badge')
               }}</base-button>
             </div>
             <div class="p-8 w-108">
@@ -114,14 +114,14 @@
                 </div>
               </div>
               <div>
-                <h3>{{ $t('Linked Account') }}</h3>
+                <h3>{{ $t('profileVue.linkedin') }}</h3>
                 <div class="flex py-3 items-center">
                   <div class="w-1/5 flex items-center">
                     <img
                       src="https://simpleicons.org/icons/facebook.svg"
                       class="w-8 mr-2"
                     />
-                    <label class="pr-3">{{ $t('Facebook') }}</label>
+                    <label class="pr-3">{{ $t('profileVue.facebook') }}</label>
                   </div>
                   <base-input
                     :value="currentUser.facebook"
@@ -141,7 +141,7 @@
                       src="https://simpleicons.org/icons/twitter.svg"
                       class="w-8 mr-2"
                     />
-                    <label class="pr-3">{{ $t('Twitter') }}</label>
+                    <label class="pr-3">{{ $t('profileVue.twitter') }}</label>
                   </div>
                   <base-input
                     :value="currentUser.twitter"
@@ -158,14 +158,14 @@
               </div>
               <hr class="p-4 m-auto" />
               <div>
-                <h3>{{ $t('dashboard.org_label') }}</h3>
+                <h3>{{ $t('profileVue.your_organization') }}</h3>
                 <div class="py-3 flex items-center">
                   <div class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300" />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
                 <div>
                   <base-button type="primary" class="px-4">
-                    {{ $t('Change Organization') }}
+                    {{ $t('profileVue.change_organization') }}
                   </base-button>
                 </div>
               </div>
@@ -178,26 +178,26 @@
           <span class="text-base">{{ name }}</span>
           <div class="flex">
             <ccu-icon
-              :alt="$t('actions.edit')"
+              :alt="$t('actions.edit_alt')"
               size="small"
               class="p-1 py-2"
               type="edit"
               @click.native="startEditing"
             />
             <ccu-icon
-              :alt="$t('actions.share')"
+              :alt="$t('actions.share_alt')"
               size="small"
               class="p-1 py-2"
               type="share"
             />
             <ccu-icon
-              :alt="$t('actions.print')"
+              :alt="$t('actions.print_alt')"
               size="small"
               class="p-1 py-2"
               type="print"
             />
             <ccu-icon
-              :alt="$t('actions.delete')"
+              :alt="$t('actions.delete_alt')"
               size="small"
               class="p-1 py-2"
               type="trash"
@@ -211,9 +211,9 @@
               src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
             />
             <a href="https://google.com" class="text-center pb-4">{{
-              $t('Change Photo')
+              $t('profileVue.change_photo')
             }}</a>
-            <base-button type="primary">{{ $t('View ID Badge') }}</base-button>
+            <base-button type="primary">{{ $t('profileVue.view_id_badge') }}</base-button>
           </div>
           <div style="min-width: 700px;" class="p-8 w-1/2">
             <h1 class="text-2xl">{{ name }}</h1>
@@ -239,7 +239,7 @@
               </div>
             </div>
             <div class="mt-4">
-              <h3>{{ $t('Assets') }}</h3>
+              <h3>{{ $t('profileVue.assets') }}</h3>
               <div class="mt-2 flex">
                 <tag class="mx-1">Van</tag>
                 <tag class="mx-1">Trailer</tag>
@@ -248,7 +248,7 @@
               </div>
             </div>
             <div class="mt-8">
-              <h3>{{ $t('Organization') }}</h3>
+              <h3>{{ $t('profileVue.organization') }}</h3>
               <div class="py-3 flex items-center">
                 <div class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300" />
                 <span class="px-4">{{ currentUser.organization.name }}</span>

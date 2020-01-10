@@ -13,7 +13,7 @@
           <badge width="22px" height="22px" class="mr-2 bg-black text-white"
             >1</badge
           >
-          {{ $t('Basic Information') }}
+          {{ $t('caseForm.property_information') }}
         </div>
       </div>
       <div class="form-field">
@@ -40,7 +40,7 @@
         />
       </div>
       <div class="text-base font-semibold my-1 mx-3">
-        {{ $t('Location') }}
+        {{ $t('formLabels.location') }}
       </div>
       <div class="form-field">
         <WorksiteSearchInput
@@ -127,7 +127,7 @@
         <base-input
           :value="worksite.what3words"
           size="large"
-          :placeholder="$t('formLabels.location')"
+          :placeholder="$t('formLabels.what3words')"
           :required="!worksite.location"
           disabled
           @input="
@@ -143,14 +143,14 @@
             icon="street-view"
             class="text-gray-700 pt-2"
             :action="locateMe"
-            :text="$t('formLabels.use_my_location')"
+            :text="$t('caseForm.use_my_location')"
           />
           <base-button
             type="bare"
             icon="map"
             class="text-gray-700 pt-2"
             :action="showOverlayMap"
-            :text="$t('formLabels.select_on_map')"
+            :text="$t('caseForm.select_on_map')"
           />
           <modal
             v-if="overlayMapVisible"
@@ -204,7 +204,7 @@
                   trigger: 'hover',
                   classes: 'interactive-tooltip w-72',
                 }"
-                :alt="$t('help')"
+                :alt="$t('actions.help_alt')"
                 type="help"
                 size="large"
               />
@@ -226,7 +226,7 @@
                     trigger: 'hover',
                     classes: 'interactive-tooltip w-72',
                   }"
-                  :alt="$t('help')"
+                  :alt="$t('actions.help_alt')"
                   type="help"
                   size="large"
                 />
@@ -256,7 +256,7 @@
                     trigger: 'hover',
                     classes: 'interactive-tooltip w-72',
                   }"
-                  :alt="$t('help')"
+                  :alt="$t('actions.help_alt')"
                   type="help"
                   size="large"
                 />
@@ -314,7 +314,7 @@
                     trigger: 'hover',
                     classes: 'interactive-tooltip w-72',
                   }"
-                  :alt="$t('help')"
+                  :alt="$t('actions.help_alt')"
                   type="help"
                   size="large"
                 />
@@ -350,7 +350,7 @@
                   trigger: 'hover',
                   classes: 'interactive-tooltip w-72',
                 }"
-                :alt="$t('help')"
+                :alt="$t('actions.help_alt')"
                 type="help"
                 size="large"
               />
@@ -636,7 +636,7 @@ export default {
           });
           this.worksite = Worksite.find(savedWorksite.entities.worksites[0].id);
         }
-        await this.$toasted.success(this.$t('Worksite saved successfully'));
+        await this.$toasted.success(this.$t('caseForm.new_case_success'));
         if (reload) {
           this.$emit('reloadTable');
           this.$emit('reloadMap', this.worksite.id);
@@ -656,7 +656,7 @@ export default {
       }
       try {
         await Worksite.api().claimWorksite(this.worksite.id, []);
-        await this.$toasted.success(this.$t('Worksite claimed successfully'));
+        await this.$toasted.success(this.$t('caseForm.claim_success'));
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

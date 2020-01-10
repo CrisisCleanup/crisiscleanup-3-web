@@ -57,7 +57,7 @@
       <div class="flex">
         <div class="w-3/5 m-4 pt-2 shadow bg-white flex-shrink">
           <div class="py-4 px-4 text-gray-500 border-b">
-            {{ $t('MY CASES') }}
+            {{ $t('dashboard.my_cases') }}
           </div>
           <div class="p-4">
             <Table
@@ -168,7 +168,7 @@
       class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center"
     >
       <div class="flex flex-col items-center">
-        <spinner :message="$t('Loading...')" />
+        <spinner :message="$t('info.loading')" />
       </div>
     </div>
   </div>
@@ -253,33 +253,33 @@ export default {
     columns() {
       return [
         {
-          title: this.$t('No'),
+          title: this.$t('dashboard.no'),
           dataIndex: 'case_number',
           key: 'case_number',
           width: '0.5fr',
           sortable: true,
         },
         {
-          title: this.$t('Work type'),
+          title: this.$t('dashboard.work_type'),
           dataIndex: 'work_types',
           key: 'work_types',
           scopedSlots: { customRender: 'work_types' },
           width: '1fr',
         },
         {
-          title: this.$t('Name'),
+          title: this.$t('dashboard.name'),
           dataIndex: 'name',
           key: 'name',
           width: '1fr',
           sortable: true,
         },
         {
-          title: this.$t('Full Address'),
+          title: this.$t('dashboard.full_address'),
           dataIndex: 'address',
           key: 'address',
         },
         {
-          title: this.$t('Phone'),
+          title: this.$t('dashboard.phone'),
           dataIndex: 'phone1',
           key: 'formFields',
           subKey: 'phone1',
@@ -512,7 +512,7 @@ export default {
             data: chckDates.map(() => this.randomScalingFactor(100, 170)),
           },
           {
-            label: this.$t('dashboard.what_is_this'),
+            label: this.$t('dashboard.closed'),
             borderColor: 'red',
             borderWidth: '1',
             borderDash: [5, 5],

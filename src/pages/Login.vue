@@ -30,7 +30,7 @@
         size="medium"
         class="px-5 py-2 my-3 w-full"
         type="primary"
-        :text="$t('login.log_in_button')"
+        :text="$t('actions.login')"
         :action="userLogin"
       />
     </form>

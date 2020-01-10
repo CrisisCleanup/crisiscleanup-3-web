@@ -14,7 +14,7 @@
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <ccu-icon
-                :alt="$t('Toggle Map View')"
+                :alt="$t('casesVue.map_view')"
                 size="medium"
                 class="mr-4 cursor-pointer"
                 :class="showingMap ? 'filter-yellow' : 'filter-gray'"
@@ -22,7 +22,7 @@
                 @click.native="toggleView('showingMap')"
               />
               <ccu-icon
-                :alt="$t('Toggle Table View')"
+                :alt="$t('casesVue.table_view')"
                 size="medium"
                 class="mr-4 cursor-pointer"
                 :class="showingTable ? 'filter-yellow' : 'filter-gray'"
@@ -63,13 +63,13 @@
                 <base-button
                   slot="btn"
                   class="text-base font-thin mx-4"
-                  :text="$t('Layers')"
+                  :text="$t('casesVue.layers')"
                   icon="layer-group"
                 />
                 <template slot="body">
                   <ul class="text-base">
                     <!--                                        <li class="py-2">-->
-                    <!--                                            <base-checkbox @input="(value) => { applyLayers(value, floodZone, 'flood') }">Flood Damage</base-checkbox>-->
+                    <!--                                            <base-checkbox @input="(value) => { applyLayers(value, floodZone, 'flood') }">{{ $t('casesVue.flood_extent') }}</base-checkbox>-->
                     <!--                                        </li>-->
                     <!--                    <li class="py-2">-->
                     <!--                      <base-checkbox-->
@@ -78,11 +78,11 @@
                     <!--                            applyGeoJSON(currentIncident.extent, value);-->
                     <!--                          }-->
                     <!--                        "-->
-                    <!--                        >Incident Extent</base-checkbox-->
+                    <!--                        >{{ $t('casesVue.incident_extent') }}</base-checkbox-->
                     <!--                      >-->
                     <!--                    </li>-->
                     <!--                                        <li class="py-2">-->
-                    <!--                                            <base-checkbox @input="(value) => { applyLocation(81829, value) }">Track of Tornado</base-checkbox>-->
+                    <!--                                            <base-checkbox @input="(value) => { applyLocation(81829, value) }">{{ $t('casesVue.tornado_track') }}</base-checkbox>-->
                     <!--                                        </li>-->
                     <!--                                        <hr>-->
                     Standard Layers
@@ -92,7 +92,7 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">US States</template>
+                        <template slot="btn">{{ $t('casesVue.us_states') }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
                             <li v-for="state in usStates" :key="state.id">
@@ -117,7 +117,7 @@
                         :align="'right'"
                       >
                         <template slot="btn">{{
-                          $t('Congressional Districts')
+                          $t('casesVue.congressional_districts')
                         }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
@@ -218,14 +218,12 @@
                     modal-classes="bg-white max-w-lg shadow"
                   >
                     <div slot="header" class="text-lg border-b p-3">
-                      {{ $t('Unclaim Cases') }}
+                      {{ $t('actions.unclaim_cases') }}
                     </div>
                     <div class="p-3 flex flex-col">
-                      <span class="text-base pb-3">{{
-                        $t(
-                          `You are claiming ${selectedTableItems.length} cases. What status would you like to assign the cases:`,
-                        )
-                      }}</span>
+                      <span class="text-base pb-3">
+                        {{ $t('casesVue.bulk_unclaim_reassign_status', {'selectedTableItems.length': ${selectedTableItems.length} } ) }}
+                      </span>
                       <base-checkbox
                         class="mb-5"
                         :value="unchangedStatusOnUnclaim"
@@ -235,7 +233,7 @@
                             updateStatusOnUnclaim = !unchangedStatusOnUnclaim;
                           }
                         "
-                        >{{ $t('No change') }}</base-checkbox
+                        >{{ $t('casesVue.no_change') }}</base-checkbox
                       >
                       <base-checkbox
                         class="mb-5"
@@ -337,8 +335,8 @@
           :class="{ 'tab-active': isNewWorksite }"
           @click="createNewWorksite"
         >
-          <ccu-icon :alt="$t('New Case')" type="active" size="small" />
-          <span class="px-2">{{ $t('New Case') }}</span>
+          <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
+          <span class="px-2">{{ $t('casesVue.new_case') }}</span>
         </div>
         <div
           v-if="currentWorksite && currentWorksite.id"
@@ -382,7 +380,7 @@
           />
         </template>
         <template v-else-if="isNewWorksite">
-          <div class="text-left text-black">{{ $t('New Case') }}</div>
+          <div class="text-left text-black">{{ $t('casesVue.new_case') }}</div>
           <ccu-icon
             :alt="$t('actions.cancel')"
             size="small"
@@ -546,7 +544,7 @@ export default {
     columns() {
       return [
         {
-          title: this.$t('No'),
+          title: this.$t('casesVue.number_abbrev'),
           dataIndex: 'case_number',
           key: 'case_number',
           sortKey: 'id',
@@ -554,32 +552,32 @@ export default {
           sortable: true,
         },
         {
-          title: this.$t('Work type'),
+          title: this.$t('casesVue.work_type'),
           dataIndex: 'work_types',
           key: 'work_types',
           scopedSlots: { customRender: 'work_types' },
           width: '1.5fr',
         },
         {
-          title: this.$t('Name'),
+          title: this.$t('casesVue.name'),
           dataIndex: 'name',
           key: 'name',
           width: '1.5fr',
           sortable: true,
         },
         {
-          title: this.$t('Full Address'),
+          title: this.$t('casesVue.full_address'),
           dataIndex: 'address',
           key: 'address',
         },
         {
-          title: this.$t('City'),
+          title: this.$t('casesVue.city'),
           dataIndex: 'city',
           key: 'city',
           sortable: true,
         },
         {
-          title: this.$t('County'),
+          title: this.$t('casesVue.county_parish'),
           dataIndex: 'county',
           key: 'county',
           sortable: true,
@@ -591,17 +589,17 @@ export default {
     },
     usStates() {
       return Location.query()
-        .where('type', 'US_STATE')
+        .where('type', 'casesVue.us_states')
         .get();
     },
     districts() {
       return Location.query()
-        .where('type', 'CONGRESSIONAL_DISTRICT')
+        .where('type', 'casesVue.boundary_political_us_congress')
         .get();
     },
     floodZone() {
       return Location.query()
-        .where('type', 'FLOOD')
+        .where('type', 'casesVue.flood_extent')
         .get();
     },
     isEditingWorksite() {
@@ -687,13 +685,13 @@ export default {
     }
     const locationParams = {
       limit: 1000,
-      type__in: 'US_STATE,CONGRESSIONAL_DISTRICT,',
+      type__in: 'casesVue.us_states,casesVue.boundary_political_us_congress,',
       fields: 'id,name,type',
     };
     await Location.api().get(`/locations?${getQueryString(locationParams)}`, {
       dataKey: 'results',
     });
-    Location.api().get(`/locations?type=FLOOD&limit=10000`, {
+    Location.api().get(`/locations?type=casesVue.flood_extent&limit=10000`, {
       dataKey: 'results',
     });
   },

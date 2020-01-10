@@ -5,12 +5,12 @@
         <span>
           <strong>{{
             $t(
-              'WARNING: DO NOT SHARE THIS INFORMATION WITH SURVIVORS (This hasalready been a problem).',
+              'caseHistory.do_not_share_contact_warning',
             )
           }}</strong
           >{{
             $t(
-              'This information is for internal coordination use only. If you are nota member of a volunteers organization, you may not tell them what todo, or when to deploy. If you don‘t follow these instructions, we willhave to take away your nice things and use paper plates instead of china.',
+              'caseHistory.do_not_share_contact_explanation',
             )
           }}
         </span>
