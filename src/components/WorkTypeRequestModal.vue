@@ -10,7 +10,7 @@
           $t('Choose work type you would like to claim for your organization')
         }}
       </div>
-      <div v-for="work_type_to_request in work_types">
+      <div v-for="work_type_to_request in workTypes">
         <base-checkbox
           class="mb-3"
           :value="requestedWorkTypes.has(work_type_to_request.work_type)"
