@@ -50,7 +50,7 @@
         size="medium"
         class="px-5 py-2 m-1 flex-grow"
         type="primary"
-        :text="this.$t('Accept Invite')"
+        :text="this.$t('actions.accept_invite')"
       />
     </form>
   </div>

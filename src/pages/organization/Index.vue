@@ -7,7 +7,7 @@
         tag="div"
         :class="{ 'router-link-active': isInvitationsActive }"
       >
-        <span class="pt-2">{{ $t('Invitation Management') }}</span>
+        <span class="pt-2">{{ $t('orgIndex.invitation_management') }}</span>
       </router-link>
 
       <router-link
@@ -15,7 +15,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('User Management') }}</span>
+        <span class="pt-2">{{ $t('orgIndex.user_management') }}</span>
       </router-link>
 
       <router-link
@@ -23,7 +23,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('Team Management') }}</span>
+        <span class="pt-2">{{ $t('orgIndex.team_management') }}</span>
       </router-link>
 
       <router-link
@@ -31,7 +31,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('Organization Profile') }}</span>
+        <span class="pt-2">{{ $t('orgIndex.organization_profile') }}</span>
       </router-link>
 
       <router-link
@@ -39,7 +39,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('dashboard.affiliated_orgs') }}</span>
+        <span class="pt-2">{{ $t('orgIndex.affiliated_orgs') }}</span>
       </router-link>
 
       <router-link
@@ -47,7 +47,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('Layer Library') }}</span>
+        <span class="pt-2">{{ $t('orgIndex.layer_library') }}</span>
       </router-link>
     </div>
     <div class="flex-grow bg-gray-100">
