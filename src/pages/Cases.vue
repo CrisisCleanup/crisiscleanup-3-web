@@ -531,6 +531,7 @@ export default {
       currentQuery: {},
       filters: {
         fields: {},
+        statusGroups: {},
         statuses: {},
         sub_fields: {},
       },
@@ -647,9 +648,11 @@ export default {
     },
     filtersCount() {
       return (
-        Object.values(this.filters.statuses).filter(field => Boolean(field))
+        Object.values(this.filters.statusGroups).filter(field => Boolean(field))
           .length +
         Object.values(this.filters.fields).filter(field => Boolean(field))
+          .length +
+        Object.values(this.filters.statuses).filter(field => Boolean(field))
           .length
       );
     },
@@ -680,7 +683,10 @@ export default {
         this.appliedFilters = this.currentUser.states.appliedFilters;
       }
       if (this.currentUser.states.filters) {
-        this.filters = this.currentUser.states.filters;
+        this.filters = {
+          ...this.filters,
+          ...this.currentUser.states.filters,
+        };
       }
     }
     if (this.$route.params.incident_id) {
@@ -978,19 +984,19 @@ export default {
         delete appliedFilters.work_type__work_type__in;
       }
 
-      if (this.filters.statuses.unclaimed) {
+      if (this.filters.statusGroups.unclaimed) {
         appliedFilters.work_type__claimed_by__isnull = true;
       }
 
-      if (this.filters.statuses.claimed_by_org) {
+      if (this.filters.statusGroups.claimed_by_org) {
         appliedFilters.work_type__claimed_by = this.currentUser.organization.id;
       }
 
-      if (this.filters.statuses.reported_by_org) {
+      if (this.filters.statusGroups.reported_by_org) {
         appliedFilters.reported_by = this.currentUser.organization.id;
       }
 
-      if (this.filters.statuses.open) {
+      if (this.filters.statusGroups.open) {
         const openStatuses = Status.query()
           .where('primary_state', 'open')
           .get();
@@ -999,13 +1005,29 @@ export default {
           .join(',');
       }
 
-      if (this.filters.statuses.closed) {
+      if (this.filters.statusGroups.closed) {
         const closedStatuses = Status.query()
           .where('primary_state', 'closed')
           .get();
         appliedFilters.work_type__status__in = closedStatuses
           .map(status => status.status)
           .join(',');
+      }
+
+      const filteredStatuses = Object.entries(
+        this.filters.statuses,
+      ).filter(item => Boolean(item[1]));
+
+      if (filteredStatuses.length) {
+        const workTypeStatusIn = filteredStatuses
+          .map(item => item[0])
+          .join(',');
+
+        if (!appliedFilters.work_type__status__in) {
+          appliedFilters.work_type__status__in = workTypeStatusIn;
+        } else {
+          appliedFilters.work_type__status__in = `${appliedFilters.work_type__status__in},${workTypeStatusIn}`;
+        }
       }
 
       this.appliedFilters = appliedFilters;

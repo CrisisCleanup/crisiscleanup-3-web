@@ -29,7 +29,7 @@
               {{ $t('worksiteFilters.work_type') }}: {{ key | getWorkTypeName }}
             </tag>
           </template>
-          <template v-for="(value, key) in filters.statuses">
+          <template v-for="(value, key) in filters.statusGroups">
             <tag
               v-if="value"
               :key="key"
@@ -38,6 +38,17 @@
               @closed="removeStatus(key)"
             >
               {{ $t('worksiteFilters.status') }}: {{ key | snakeToTitleCase }}
+            </tag>
+          </template>
+          <template v-for="(value, key) in filters.statuses">
+            <tag
+              v-if="value"
+              :key="key"
+              closeable
+              class="m-1"
+              @closed="removeStatus(key)"
+            >
+              {{ $t('worksiteFilters.status') }}: {{ key | getStatusName }}
             </tag>
           </template>
         </div>
@@ -62,9 +73,9 @@
           >
             {{ $t('General') }}
             <span
-              v-if="statusCount > 0"
+              v-if="statusCount + statusGroupCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
-              >{{ statusCount }}</span
+              >{{ statusCount + statusGroupCount }}</span
             >
           </div>
           <div class="p-3 px-4 border-b cursor-pointer">
@@ -88,41 +99,70 @@
           style="height: 450px; overflow:auto"
         >
           <div v-if="currentSection === 'general'" class="flex flex-col">
-            <base-checkbox
-              v-model="filters.statuses['unclaimed']"
-              class="block my-1"
-              >{{ $t('worksiteFilters.unclaimed') }}</base-checkbox
-            >
-            <base-checkbox
-              v-model="filters.statuses['claimed_by_org']"
-              class="block my-1"
-              >{{ $t('worksiteFilters.claimed_by_my_org') }}</base-checkbox
-            >
-            <base-checkbox
-              v-model="filters.statuses['reported_by_org']"
-              class="block my-1"
-              >{{ $t('worksiteFilters.reported_by_my_org') }}</base-checkbox
-            >
-            <base-checkbox
-              class="block my-1"
-              :value="filters.statuses['open']"
-              @input="
-                value => {
-                  setOpenClosed(value, 'open');
-                }
-              "
-              >{{ $t('worksiteFilters.open') }}</base-checkbox
-            >
-            <base-checkbox
-              class="block my-1"
-              :value="filters.statuses['closed']"
-              @input="
-                value => {
-                  setOpenClosed(value, 'closed');
-                }
-              "
-              >{{ $t('worksiteFilters.closed') }}</base-checkbox
-            >
+            <div class="claim-status mb-2">
+              <div class="my-1 text-base">{{ $t('~~Claim Status') }}</div>
+              <base-checkbox
+                v-model="filters.statusGroups['unclaimed']"
+                class="block my-1"
+                >{{ $t('worksiteFilters.unclaimed') }}
+              </base-checkbox>
+              <base-checkbox
+                v-model="filters.statusGroups['claimed_by_org']"
+                class="block my-1"
+                >{{ $t('worksiteFilters.claimed_by_my_org') }}
+              </base-checkbox>
+              <base-checkbox
+                v-model="filters.statusGroups['reported_by_org']"
+                class="block my-1"
+                >{{ $t('worksiteFilters.reported_by_my_org') }}
+              </base-checkbox>
+            </div>
+            <div class="status-group mb-2">
+              <div class="my-1 text-base">{{ $t('~~Status Group') }}</div>
+              <base-checkbox
+                class="block my-1"
+                :value="filters.statusGroups['open']"
+                @input="
+                  value => {
+                    setOpenClosed(value, 'open');
+                  }
+                "
+                >{{ $t('worksiteFilters.open') }}
+              </base-checkbox>
+              <base-checkbox
+                class="block my-1"
+                :value="filters.statusGroups['closed']"
+                @input="
+                  value => {
+                    setOpenClosed(value, 'closed');
+                  }
+                "
+                >{{ $t('worksiteFilters.closed') }}
+              </base-checkbox>
+            </div>
+
+            <div class="statuses mb-2">
+              <div class="my-1 text-base">{{ $t('~~Status') }}</div>
+              <div
+                v-for="status in allStatuses"
+                :key="status.id"
+                :value="status.status"
+              >
+                <base-checkbox
+                  class="block my-1"
+                  :value="filters.statuses[status.status]"
+                  @input="
+                    value => {
+                      filters.statuses[status.status] = value;
+                      filters.statuses = {
+                        ...filters.statuses,
+                      };
+                    }
+                  "
+                  >{{ status.status | getStatusName }}
+                </base-checkbox>
+              </div>
+            </div>
           </div>
           <template v-if="currentSection === 'work'">
             <div
@@ -237,6 +277,7 @@
 
 <script>
 import WorkType from '@/models/WorkType';
+import Status from '@/models/Status';
 
 export default {
   name: 'WorksiteFilters',
@@ -259,6 +300,7 @@ export default {
       filters: {
         fields: {},
         statuses: {},
+        statusGroups: {},
         sub_fields: {},
       },
       currentSection: 'general',
@@ -292,13 +334,27 @@ export default {
         Boolean(field),
       ).length;
     },
+    statusGroupCount() {
+      return Object.values(this.filters.statusGroups).filter(field =>
+        Boolean(field),
+      ).length;
+    },
     filtersCount() {
-      return this.fieldsCount + this.statusCount;
+      return this.fieldsCount + this.statusCount + this.statusGroupCount;
+    },
+    allStatuses() {
+      return Status.all().map((status, index) => {
+        return {
+          ...status,
+          selectionKey: index + 1,
+        };
+      });
     },
   },
   created() {
     this.filters = {
       fields: { ...this.currentFilters.fields },
+      statusGroups: { ...this.currentFilters.statusGroups },
       statuses: { ...this.currentFilters.statuses },
       sub_fields: {},
     };
@@ -314,6 +370,7 @@ export default {
     updateFilters() {
       this.$emit('updatedFilters', {
         fields: { ...this.filters.fields },
+        statusGroups: { ...this.filters.statusGroups },
         statuses: { ...this.filters.statuses },
       });
 
@@ -325,11 +382,14 @@ export default {
     },
     /* eslint-enable no-restricted-syntax */
     setOpenClosed(value, status) {
-      this.filters.statuses.open = false;
-      this.filters.statuses.closed = false;
+      this.filters.statusGroups.open = false;
+      this.filters.statusGroups.closed = false;
       if (value) {
-        this.filters.statuses[status] = value;
+        this.filters.statusGroups[status] = value;
       }
+      this.filters.statusGroups = {
+        ...this.filters.statusGroups,
+      };
     },
     expandSection(key) {
       this.expanded[key] = !this.expanded[key];
@@ -359,12 +419,14 @@ export default {
       this.filters.fields[key] = undefined;
     },
     removeStatus(key) {
+      this.filters.statusGroups[key] = undefined;
       this.filters.statuses[key] = undefined;
     },
     clearAllFilters() {
       this.filters = {
         fields: {},
         statuses: {},
+        statusGroups: {},
         sub_fields: {},
       };
     },
