@@ -3,16 +3,8 @@
     <div class="p-3 flex-grow intake-view">
       <div class="my-4 pb-6 border-b">
         <span>
-          <strong>{{
-            $t(
-              'caseHistory.do_not_share_contact_warning',
-            )
-          }}</strong
-          >{{
-            $t(
-              'caseHistory.do_not_share_contact_explanation',
-            )
-          }}
+          <strong>{{ $t('caseHistory.do_not_share_contact_warning') }}</strong
+          >{{ $t('caseHistory.do_not_share_contact_explanation') }}
         </span>
       </div>
       <div

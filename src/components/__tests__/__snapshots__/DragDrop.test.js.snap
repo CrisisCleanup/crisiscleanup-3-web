@@ -14,13 +14,13 @@ exports[`DragDrop should render correctly and match snapshot 1`] = `
       <span
         class="fake-btn"
       >
-        Choose files
+        dragDrop.choose_files
       </span>
        
       <span
         class="file-msg"
       >
-        or drag and drop files here
+        dragDrop.or_drag_drop
       </span>
        
       <input

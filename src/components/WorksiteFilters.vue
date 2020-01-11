@@ -190,9 +190,15 @@
                           {{ field.label_t }}
                         </span>
                         <div class="flex justify-around w-1/2">
-                          <base-checkbox>{{ $t('worksiteFilters.yes') }}</base-checkbox>
-                          <base-checkbox>{{ $t('worksiteFilters.no') }}</base-checkbox>
-                          <base-checkbox>{{ $t('worksiteFilters.maybe') }}</base-checkbox>
+                          <base-checkbox>{{
+                            $t('worksiteFilters.yes')
+                          }}</base-checkbox>
+                          <base-checkbox>{{
+                            $t('worksiteFilters.no')
+                          }}</base-checkbox>
+                          <base-checkbox>{{
+                            $t('worksiteFilters.maybe')
+                          }}</base-checkbox>
                         </div>
                       </div>
                     </template>

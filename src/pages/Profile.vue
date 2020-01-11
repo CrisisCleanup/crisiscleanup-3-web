@@ -213,7 +213,9 @@
             <a href="https://google.com" class="text-center pb-4">{{
               $t('profileVue.change_photo')
             }}</a>
-            <base-button type="primary">{{ $t('profileVue.view_id_badge') }}</base-button>
+            <base-button type="primary">{{
+              $t('profileVue.view_id_badge')
+            }}</base-button>
           </div>
           <div style="min-width: 700px;" class="p-8 w-1/2">
             <h1 class="text-2xl">{{ name }}</h1>
