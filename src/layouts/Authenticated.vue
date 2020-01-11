@@ -43,7 +43,12 @@
       <div class="shadow p-1 bg-white">
         <div class="flex justify-between h-full items-center">
           <div class="flex items-center ml-2">
-            <div class="h-10 w-10 rounded-full bg-blue-500"></div>
+            <div class="h-10 w-10 flex items-center">
+              <DisasterIcon
+                v-if="currentIncident && currentIncident.incidentImage"
+                :current-incident="currentIncident"
+              />
+            </div>
             <div class="flex flex-col ml-2 w-84">
               <form-select
                 :value="currentIncident"
@@ -118,9 +123,11 @@ import WorkType from '@/models/WorkType';
 import Organization from '@/models/Organization';
 import Status from '@/models/Status';
 import { i18nService } from '@/services/i18n.service';
+import DisasterIcon from '../components/DisasterIcon';
 
 export default {
   name: 'Authenticated',
+  components: { DisasterIcon },
   data() {
     return {
       loading: false,
