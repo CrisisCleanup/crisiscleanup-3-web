@@ -138,7 +138,7 @@ const getLanguages = async tags => {
 };
 
 getLanguages(['en-US', detectBrowserLanguage()]).then(i18n => {
-  new Vue({
+  window.vue = new Vue({
     i18n,
     components: { App },
     render: h => h(App),

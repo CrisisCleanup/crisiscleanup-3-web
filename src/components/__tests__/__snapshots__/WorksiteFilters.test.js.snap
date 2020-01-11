@@ -71,7 +71,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           closeable=""
         >
           
-            Work Type: workType.ash
+            worksiteFilters.work_type: workType.ash
           
         </tag-stub>
          
@@ -80,7 +80,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           closeable=""
         >
           
-            Status: Open
+            worksiteFilters.status: Open
           
         </tag-stub>
         <!---->
@@ -154,32 +154,32 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           <base-checkbox-stub
             class="block my-1"
           >
-            searchFilterAside.unclaimed
+            worksiteFilters.unclaimed
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
           >
-            searchFilterAside.claimed_by_my_org
+            worksiteFilters.claimed_by_my_org
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
           >
-            searchFilterAside.reported_by_my_org
+            worksiteFilters.reported_by_my_org
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
             value="true"
           >
-            searchFilterAside.open
+            worksiteFilters.open
           </base-checkbox-stub>
            
           <base-checkbox-stub
             class="block my-1"
           >
-            searchFilterAside.closed
+            worksiteFilters.closed
           </base-checkbox-stub>
         </div>
          

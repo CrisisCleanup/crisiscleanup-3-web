@@ -12,15 +12,15 @@
     >
       <base-button
         text=""
-        :title="$t('Go to Incident')"
-        :alt="$t('Go to Incident')"
+        :title="$t('worksiteMap.zoom_to_incident')"
+        :alt="$t('worksiteMap.zoom_to_incident')"
         :action="goToIncidentCenter"
         icon="search-minus"
         class="w-8 h-8 border-2 my-1 bg-white"
       />
       <base-button
         v-tooltip="{
-          content: this.$t('Zoom to make icons interactive'),
+          content: this.$t('worksiteMap.zoom_to_make_interactive'),
           show: showInteractivePopover,
           trigger: 'manual',
           autoHide: true,
@@ -28,16 +28,16 @@
           placement: 'right-start',
         }"
         text=""
-        :title="$t('Go to Interactive')"
-        :alt="$t('Go to Interactive')"
+        :title="$t('worksiteMap.zoom_to_interactive')"
+        :alt="$t('worksiteMap.zoom_to_interactive')"
         icon="search-plus"
         :action="goToInteractive"
         class="w-8 h-8 border-2 my-1 bg-white"
       />
       <base-button
         text=""
-        :title="$t('Go to Local')"
-        :alt="$t('Go to Local')"
+        :title="$t('worksiteMap.zoom_to_local')"
+        :alt="$t('worksiteMap.zoom_to_local')"
         icon="search-location"
         :action="goToLocal"
         class="w-8 h-8 border-2 my-1 bg-white"
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="text-base font-bold my-1">
-        {{ $t('Work Order/Claim Status') }}
+        {{ $t('worksiteMap.case_status') }}
       </div>
       <div class="flex flex-wrap">
         <div
@@ -75,7 +75,9 @@
         </div>
         <div class="flex items-center w-1/2 mb-1">
           <span class="w-5 h-5" v-html="templates.plus" />
-          <div class="text-xs ml-1">{{ $t('Multiple work types') }}</div>
+          <div class="text-xs ml-1">
+            {{ $t('worksiteMap.multiple_work_types') }}
+          </div>
         </div>
       </div>
     </div>
@@ -165,20 +167,24 @@ export default {
       displayedWorkTypes: {},
       displayedWorkTypeSvgs: [],
       legendColors: {
-        [this.$t('Unclaimed')]: colors.open_unassigned_unclaimed.fillColor,
-        [this.$t('Claimed, not started')]: colors.open_unassigned_claimed
+        [this.$t('worksiteMap.unclaimed')]: colors.open_unassigned_unclaimed
           .fillColor,
-        [this.$t('In progress')]: colors.open_assigned_claimed.fillColor,
-        [this.$t('Partially completed')]: colors[
+        [this.$t('worksiteMap.claimed_not_started')]: colors
+          .open_unassigned_claimed.fillColor,
+        [this.$t('worksiteMap.in_progress')]: colors.open_assigned_claimed
+          .fillColor,
+        [this.$t('worksiteMap.partially_completed')]: colors[
           'open_partially-completed_claimed'
         ].fillColor,
-        [this.$t('Needs follow-up')]: colors['open_needs-follow-up_claimed']
+        [this.$t('worksiteMap.needs_follow_up')]: colors[
+          'open_needs-follow-up_claimed'
+        ].fillColor,
+        [this.$t('worksiteMap.completed')]: colors.closed_completed_claimed
           .fillColor,
-        [this.$t('Completed')]: colors.closed_completed_claimed.fillColor,
-        [this.$t(
-          'Done by others, no help wanted, or partially completed',
-        )]: colors['closed_done-by-others_unclaimed'].fillColor,
-        [this.$t('Out of scope, Duplicate or Unresponsive')]: colors
+        [this.$t('worksiteMap.done_by_others_no_help_wanted')]: colors[
+          'closed_done-by-others_unclaimed'
+        ].fillColor,
+        [this.$t('worksiteMap.out_of_scope_duplicate_unresponsive')]: colors
           .open_unresponsive_unclaimed.fillColor,
       },
       mapLoading: false,

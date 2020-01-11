@@ -89,7 +89,7 @@
       class="footer flex items-center justify-between p-4"
     >
       <div class="flex items-center">
-        <span class="mr-2">{{ $t('table.per_page') }}</span>
+        <span class="mr-2">{{ $t('tableVue.per_page') }}</span>
         <form-select
           :value="pagination.pageSize"
           :options="pageSizes"
@@ -107,7 +107,7 @@
                 pageChangeHandle('previous');
               }
             "
-            text="PREV"
+            text="$t('tableVue.prev')"
             icon="caret-left"
             class="mr-3 text-base"
           />
@@ -136,7 +136,7 @@
                 pageChangeHandle('next');
               }
             "
-            text="NEXT"
+            text="$t('tableVue.next')"
             suffix-icon="caret-right"
             class="text-base"
           />

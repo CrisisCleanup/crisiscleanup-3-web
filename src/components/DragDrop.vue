@@ -2,8 +2,8 @@
   <div id="file-drag-drop" class="flex flex-col items-center justify-center">
     <form ref="fileform" class="flex flex-col items-center justify-center">
       <div class="file-drop-area">
-        <span class="fake-btn">Choose files</span>
-        <span class="file-msg">or drag and drop files here</span>
+        <span class="fake-btn">{{ $t('dragDrop.choose_files') }}</span>
+        <span class="file-msg">{{ $t('dragDrop.or_drag_drop') }}</span>
         <input ref="fileinput" class="file-input" type="file" multiple />
       </div>
     </form>

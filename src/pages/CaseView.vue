@@ -20,8 +20,8 @@
           v-if="!addingNotes"
           class="my-1"
           type="link"
-          :text="$t('+ Add Note')"
-          :alt="$t('Add Note')"
+          :text="$t('caseView.add_note')"
+          :alt="$t('caseView.add_note_alt')"
           :action="
             () => {
               addingNotes = true;
@@ -59,7 +59,7 @@
       </div>
       <div v-if="Object.keys(workTypesClaimedByOthers).length > 0" class="my-4">
         <label class="my-1 text-xs font-bold text-gray-600 block">{{
-          $t('searchFilterAside.claimed_by')
+          $t('caseView.claimed_by')
         }}</label>
         <div
           v-for="organization in Object.keys(workTypesClaimedByOthers)"
@@ -80,7 +80,7 @@
             :key="organization.id"
           >
             <label class="my-4 text-xs font-bold text-gray-600"
-              >{{ $t('searchFilterAside.claimed_by') }}
+              >{{ $t('caseView.claimed_by') }}
               {{ getOrganizationName(organization) }}</label
             >
             <template v-for="work_type in work_types">
@@ -125,7 +125,7 @@
         </div>
         <div v-if="workTypesClaimedByOrganization.length > 0" class="my-4">
           <label class="my-4 text-xs font-bold text-gray-600">{{
-            $t('Claimed By My Organization')
+            $t('caseView.claimed_by_my_org')
           }}</label>
           <template v-for="work_type in workTypesClaimedByOrganization">
             <div :key="work_type.id" class="work_type_section">
@@ -156,7 +156,7 @@
         </div>
         <div v-if="workTypesUnclaimed.length > 0" class="my-4">
           <label class="my-4 text-xs font-bold text-gray-600">{{
-            $t('Unclaimed Work Types')
+            $t('caseView.unclaimed_work_types')
           }}</label>
           <template v-for="work_type in workTypesUnclaimed">
             <div :key="work_type.id" class="work_type_section">
