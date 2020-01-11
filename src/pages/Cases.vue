@@ -92,7 +92,9 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{ $t('casesVue.us_states') }}</template>
+                        <template slot="btn">{{
+                          $t('casesVue.us_states')
+                        }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
                             <li v-for="state in usStates" :key="state.id">
@@ -222,7 +224,11 @@
                     </div>
                     <div class="p-3 flex flex-col">
                       <span class="text-base pb-3">
-                        {{ $t('casesVue.bulk_unclaim_reassign_status', {'selectedTableItems.length': ${selectedTableItems.length} } ) }}
+                        {{
+                          $t('casesVue.bulk_unclaim_reassign_status', {
+                            length: selectedTableItems.length,
+                          })
+                        }}
                       </span>
                       <base-checkbox
                         class="mb-5"

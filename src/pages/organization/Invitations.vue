@@ -3,7 +3,9 @@
     <div class="p-12 w-full">
       <div class="flex justify-between items-center my-6">
         <div>
-          <div class="text-base">{{ $t('invitationsVue.current_requests') }}</div>
+          <div class="text-base">
+            {{ $t('invitationsVue.current_requests') }}
+          </div>
           <div class="text-xs">{{ $t('invitationsVue.sub_sections') }}</div>
         </div>
         <div class="flex">
@@ -63,7 +65,9 @@
 
       <div class="flex justify-between items-center my-6">
         <div class="flex items-center">
-          <div class="text-base">{{ $t('invitationsVue.incomplete_invitations') }}</div>
+          <div class="text-base">
+            {{ $t('invitationsVue.incomplete_invitations') }}
+          </div>
           <div
             class="mx-5 flex items-center bg-white border p-1 px-4 cursor-pointer"
             @click="() => {}"
@@ -240,12 +244,16 @@ export default {
     async acceptInvitationRequest(request) {
       await InvitationRequest.api().acceptInvitationRequest(request);
       await this.loadAllInvitationRequests();
-      await this.$toasted.success(this.$t('invitationsVue.invitation_request_accepted'));
+      await this.$toasted.success(
+        this.$t('invitationsVue.invitation_request_accepted'),
+      );
     },
     async rejectInvitationRequest(request) {
       await InvitationRequest.api().rejectInvitationRequest(request);
       await this.loadAllInvitationRequests();
-      await this.$toasted.success(this.$t('invitationsVue.invitation_request_declined'));
+      await this.$toasted.success(
+        this.$t('invitationsVue.invitation_request_declined'),
+      );
     },
     async resendInvitation(invitation) {
       await Invitation.api().resendInvitation(invitation);

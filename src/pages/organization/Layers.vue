@@ -161,7 +161,7 @@ export default {
         'locationTypes.boundary_political_intl_postal_code',
         'locationTypes.boundary_political_other',
         'locationTypes.attribute_property',
-        'locationTypes.attribute_social'
+        'locationTypes.attribute_social',
       ],
     };
   },
