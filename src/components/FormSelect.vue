@@ -100,7 +100,8 @@ export default {
 
         if (selected) {
           selected.classList.add('vs__dropdown-option--highlight');
-          selected.scrollIntoView();
+          document.querySelector('.vs__dropdown-menu').scrollTop =
+            selected.offsetTop;
         }
       });
     },
