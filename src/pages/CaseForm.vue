@@ -469,9 +469,11 @@ export default {
         formFields: {},
       };
     }
-    this.dynamicFields = {
-      ...this.worksite.form_data.map(s => ({ [s.field_key]: s.field_value })),
-    };
+    this.dynamicFields = this.worksite.form_data.reduce(function(map, obj) {
+      map[obj.field_key] = obj.field_value;
+      return map;
+    }, {});
+
     this.ready = true;
   },
   methods: {
