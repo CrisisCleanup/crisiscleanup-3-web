@@ -26,7 +26,7 @@
               class="m-1"
               @closed="removeField(key)"
             >
-              {{ $t('Work Type') }}: {{ key | getWorkTypeName }}
+              {{ $t('worksiteFilters.work_type') }}: {{ key | getWorkTypeName }}
             </tag>
           </template>
           <template v-for="(value, key) in filters.statuses">
@@ -37,7 +37,7 @@
               class="m-1"
               @closed="removeStatus(key)"
             >
-              {{ $t('Status') }}: {{ key | snakeToTitleCase }}
+              {{ $t('worksiteFilters.status') }}: {{ key | snakeToTitleCase }}
             </tag>
           </template>
         </div>
@@ -91,17 +91,17 @@
             <base-checkbox
               v-model="filters.statuses['unclaimed']"
               class="block my-1"
-              >{{ $t('searchFilterAside.unclaimed') }}</base-checkbox
+              >{{ $t('worksiteFilters.unclaimed') }}</base-checkbox
             >
             <base-checkbox
               v-model="filters.statuses['claimed_by_org']"
               class="block my-1"
-              >{{ $t('searchFilterAside.claimed_by_my_org') }}</base-checkbox
+              >{{ $t('worksiteFilters.claimed_by_my_org') }}</base-checkbox
             >
             <base-checkbox
               v-model="filters.statuses['reported_by_org']"
               class="block my-1"
-              >{{ $t('searchFilterAside.reported_by_my_org') }}</base-checkbox
+              >{{ $t('worksiteFilters.reported_by_my_org') }}</base-checkbox
             >
             <base-checkbox
               class="block my-1"
@@ -111,7 +111,7 @@
                   setOpenClosed(value, 'open');
                 }
               "
-              >{{ $t('searchFilterAside.open') }}</base-checkbox
+              >{{ $t('worksiteFilters.open') }}</base-checkbox
             >
             <base-checkbox
               class="block my-1"
@@ -121,7 +121,7 @@
                   setOpenClosed(value, 'closed');
                 }
               "
-              >{{ $t('searchFilterAside.closed') }}</base-checkbox
+              >{{ $t('worksiteFilters.closed') }}</base-checkbox
             >
           </div>
           <template v-if="currentSection === 'work'">
@@ -190,9 +190,15 @@
                           {{ field.label_t }}
                         </span>
                         <div class="flex justify-around w-1/2">
-                          <base-checkbox>Yes</base-checkbox>
-                          <base-checkbox>No</base-checkbox>
-                          <base-checkbox>Maybe</base-checkbox>
+                          <base-checkbox>{{
+                            $t('worksiteFilters.yes')
+                          }}</base-checkbox>
+                          <base-checkbox>{{
+                            $t('worksiteFilters.no')
+                          }}</base-checkbox>
+                          <base-checkbox>{{
+                            $t('worksiteFilters.maybe')
+                          }}</base-checkbox>
                         </div>
                       </div>
                     </template>

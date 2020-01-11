@@ -106,7 +106,7 @@ export default {
       sectionConfigs: {
         worksites: {
           limit: 5,
-          label: this.$t('Existing Cases'),
+          label: this.$t('worksiteSearchInput.existing_cases'),
           type: '',
           onSelected: selected => {
             this.selected = selected.item;
@@ -115,7 +115,7 @@ export default {
         },
         geocoder: {
           limit: 10,
-          label: this.$t('Geocoder'),
+          label: this.$t('worksiteSearchInput.geocoder'),
           type: '',
           onSelected: selected => {
             this.selected = selected.item;

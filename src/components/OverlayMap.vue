@@ -79,7 +79,7 @@ export default {
     async getLocation() {
       return new Promise((resolve, reject) => {
         if (!('geolocation' in navigator)) {
-          reject(new Error('Geolocation is not available.'));
+          reject(new Error(this.$t('overlayMap.no_geolocation')));
         }
         navigator.geolocation.getCurrentPosition(
           pos => {
