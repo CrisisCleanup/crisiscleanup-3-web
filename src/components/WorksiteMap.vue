@@ -23,7 +23,6 @@
           content: this.$t('worksiteMap.zoom_to_make_interactive'),
           show: showInteractivePopover,
           trigger: 'manual',
-          autoHide: true,
           classes: 'interactive-tooltip',
           placement: 'right-start',
         }"
@@ -33,6 +32,7 @@
         icon="search-plus"
         :action="goToInteractive"
         class="w-8 h-8 border-2 my-1 bg-white"
+        @mouseenter.native="enableInteractiveTooltip"
       />
       <base-button
         text=""
@@ -166,6 +166,7 @@ export default {
     return {
       displayedWorkTypes: {},
       displayedWorkTypeSvgs: [],
+      timeout: null,
       legendColors: {
         [this.$t('worksiteMap.unclaimed')]: colors.open_unassigned_unclaimed
           .fillColor,
@@ -397,7 +398,7 @@ export default {
                     }
 
                     if (utils.getMap().getZoom() < INTERACTIVE_ZOOM_LEVEL) {
-                      self.showInteractivePopover = true;
+                      self.enableInteractiveTooltip();
                     }
                   });
 
@@ -574,6 +575,13 @@ export default {
           this.map.panBy([1, 0]);
         });
       }
+    },
+    enableInteractiveTooltip() {
+      this.showInteractivePopover = true;
+      clearTimeout(this.timeout);
+      this.timeout = setTimeout(() => {
+        this.showInteractivePopover = false;
+      }, 5000);
     },
     goToIncidentCenter() {
       const center = averageGeolocation(
