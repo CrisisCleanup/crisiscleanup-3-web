@@ -3,7 +3,7 @@
     v-if="ready"
     ref="form"
     class="bg-white flex flex-col flex-grow w-full"
-    @submit.prevent="handleSubmit"
+    @submit.prevent
   >
     <div class="intake-form flex-grow">
       <div
@@ -477,7 +477,6 @@ export default {
     this.ready = true;
   },
   methods: {
-    handleSubmit() {},
     getSectionCount(currentField) {
       let sectionNumber = 1;
       for (let i = 0; i < this.fields.length; i++) {
