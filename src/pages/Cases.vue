@@ -13,22 +13,24 @@
         >
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <ccu-icon
-                :alt="$t('casesVue.map_view')"
-                size="medium"
-                class="mr-4 cursor-pointer"
-                :class="showingMap ? 'filter-yellow' : 'filter-gray'"
-                type="map"
-                @click.native="toggleView('showingMap')"
-              />
-              <ccu-icon
-                :alt="$t('casesVue.table_view')"
-                size="medium"
-                class="mr-4 cursor-pointer"
-                :class="showingTable ? 'filter-yellow' : 'filter-gray'"
-                type="table"
-                @click.native="toggleView('showingTable')"
-              />
+              <div class="flex" style="min-width: 80px">
+                <ccu-icon
+                  :alt="$t('casesVue.map_view')"
+                  size="medium"
+                  class="mr-4 cursor-pointer"
+                  :class="showingMap ? 'filter-yellow' : 'filter-gray'"
+                  type="map"
+                  @click.native="toggleView('showingMap')"
+                />
+                <ccu-icon
+                  :alt="$t('casesVue.table_view')"
+                  size="medium"
+                  class="mr-4 cursor-pointer"
+                  :class="showingTable ? 'filter-yellow' : 'filter-gray'"
+                  type="table"
+                  @click.native="toggleView('showingTable')"
+                />
+              </div>
               <span v-if="totalWorksites" class="font-thin">
                 <span v-if="pagination.total === totalWorksites">
                   Cases: {{ pagination.total | numeral('0,0') }}
