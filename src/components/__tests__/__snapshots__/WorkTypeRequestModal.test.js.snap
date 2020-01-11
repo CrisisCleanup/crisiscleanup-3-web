@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WorkTypeRequestModal show modal with options 1`] = `
+<modal-stub
+  modal-classes="w-96"
+  title="Work Type Request"
+>
+  <div
+    class="px-6 py-3"
+  >
+    <div
+      class="font-xs my-2"
+    >
+      
+      Choose work type you would like to claim for your organization
+    
+    </div>
+     
+  </div>
+   
+  <div
+    class="p-3"
+  >
+    <button
+      alt="actions.request"
+      class="ml-2 p-3 px-6 text-xs primary flex items-center justify-center"
+      size=""
+      title=""
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       actions.request 
+      <!---->
+    </button>
+  </div>
+</modal-stub>
+`;
+
+exports[`WorkTypeRequestModal show modal with options 2`] = `Set {}`;
+
+exports[`WorkTypeRequestModal show modal with options and initial selection 1`] = `
+Set {
+  "muck_out",
+}
+`;
+
+exports[`WorkTypeRequestModal show modal with options and multi initial selection 1`] = `
+Set {
+  "muck_out",
+  "tarp",
+}
+`;

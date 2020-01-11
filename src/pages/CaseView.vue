@@ -98,17 +98,29 @@
                   "
                 />
                 <base-button
+                  v-if="!worksiteRequestWorkTypeIds.has(work_type.id)"
                   type="link"
                   :action="
                     () => {
-                      return requestWorkType(work_type);
+                      requestingWorkTypes = true;
+                      initialWorkTypeRequestSelection = [work_type.work_type];
                     }
                   "
                   :text="$t('actions.request')"
                   class="ml-2 p-1 px-3 text-xs"
                 />
+                <div v-else class="ml-2 p-1 px-3 text-xs">
+                  {{ $t('Requested') }}
+                </div>
               </div>
             </template>
+            <WorkTypeRequestModal
+              v-if="requestingWorkTypes"
+              :work-types="workTypesClaimedByOthersUnrequested"
+              :initial-selection="initialWorkTypeRequestSelection"
+              @onRequest="requestWorkTypes"
+              @onCancel="requestingWorkTypes = false"
+            />
           </div>
         </div>
         <div v-if="workTypesClaimedByOrganization.length > 0" class="my-4">
@@ -202,13 +214,14 @@
         "
       />
       <base-button
-        v-if="Object.keys(workTypesClaimedByOthers).length > 0"
+        v-if="workTypesClaimedByOthersUnrequested.length > 0"
         size="medium"
         class="m-1 text-black p-3 px-4 border-2 border-black"
         :text="$t('actions.request')"
         :action="
           () => {
-            return requestWorkType();
+            requestingWorkTypes = true;
+            initialWorkTypeRequestSelection = [];
           }
         "
       />
@@ -235,15 +248,20 @@ import { getErrorMessage } from '@/utils/errors';
 import StatusDropDown from '@/components/StatusDropDown';
 import User from '@/models/User';
 import Worksite from '@/models/Worksite';
+import WorksiteRequest from '@/models/WorksiteRequest';
 import { groupBy } from '@/utils/array';
 import Organization from '@/models/Organization';
+import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
+import { getQueryString } from '@/utils/urls';
 
 export default {
   name: 'CaseView',
-  components: { StatusDropDown },
+  components: { WorkTypeRequestModal, StatusDropDown },
   data() {
     return {
       addingNotes: false,
+      requestingWorkTypes: false,
+      initialWorkTypeRequestSelection: [],
       currentNote: '',
     };
   },
@@ -270,6 +288,14 @@ export default {
       }
       return [];
     },
+    workTypesClaimedByOthersUnrequested() {
+      return this.worksite.work_types.filter(
+        type =>
+          type.claimed_by &&
+          type.claimed_by !== this.currentUser.organization.id &&
+          !this.worksiteRequestWorkTypeIds.has(type.id),
+      );
+    },
     workTypesUnclaimed() {
       if (this.worksite) {
         return this.worksite.work_types.filter(
@@ -289,6 +315,16 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
+    worksiteRequests() {
+      return WorksiteRequest.query()
+        .where('worksite', parseInt(this.$route.params.id))
+        .get();
+    },
+    worksiteRequestWorkTypeIds() {
+      return new Set(
+        this.worksiteRequests.map(request => request.worksite_work_type),
+      );
+    },
   },
   async mounted() {
     try {
@@ -296,6 +332,8 @@ export default {
         this.$route.params.id,
         this.$route.params.incident_id,
       );
+
+      await this.getWorksiteRequests();
     } catch (e) {
       await this.$router.push(
         `/incident/${this.$route.params.incident_id}/cases/new`,
@@ -306,6 +344,18 @@ export default {
     }
   },
   methods: {
+    async getWorksiteRequests() {
+      const worksiteRequestParams = {
+        worksite_work_type__worksite: this.$route.params.id,
+      };
+
+      await WorksiteRequest.api().get(
+        `/worksite_requests?${getQueryString(worksiteRequestParams)}`,
+        {
+          dataKey: 'results',
+        },
+      );
+    },
     async claimWorkType(workType) {
       try {
         const workTypes = [];
@@ -334,16 +384,17 @@ export default {
         await this.$toasted.error(getErrorMessage(error));
       }
     },
-    async requestWorkType(workType) {
+    async requestWorkTypes(workTypes) {
       try {
-        const workTypes = [];
-        if (workType) {
-          workTypes.push(workType.work_type);
-        }
+        this.requestingWorkTypes = false;
         await Worksite.api().requestWorksite(this.worksite.id, workTypes);
         await Worksite.api().fetch(this.worksite.id);
+        await this.getWorksiteRequests();
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
+        await this.$toasted.success(
+          this.$t('Successfully requested work types'),
+        );
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
