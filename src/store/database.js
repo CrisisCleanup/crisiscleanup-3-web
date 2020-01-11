@@ -2,6 +2,7 @@ import { Database } from '@vuex-orm/core';
 import User from '@/models/User';
 import Worksite from '@/models/Worksite';
 import Organization from '@/models/Organization';
+import WorksiteRequest from '@/models/WorksiteRequest';
 import Incident from '@/models/Incident';
 import WorkType from '@/models/WorkType';
 import Status from '@/models/Status';
@@ -22,5 +23,6 @@ database.register(InvitationRequest, {});
 database.register(Invitation, {});
 database.register(Location, {});
 database.register(Layer, {});
+database.register(WorksiteRequest, {});
 
 export default database;
