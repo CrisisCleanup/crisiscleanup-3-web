@@ -6,7 +6,7 @@
     type="submit"
     :size="size"
     :title="title"
-    @click="performAction"
+    @click.prevent="performAction"
   >
     <font-awesome-icon v-if="loading" size="sm" icon="spinner" spin />
     <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" :size="iconSize" />
