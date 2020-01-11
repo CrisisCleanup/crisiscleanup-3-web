@@ -14,18 +14,21 @@ import WorksiteFilters from '../WorksiteFilters';
 const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.filter('getWorkTypeName', () => 'workType.ash');
+localVue.filter('getStatusName', () => 'Open, unassigned');
 localVue.filter('snakeToTitleCase', snakeToTitleCase);
 
 jest.mock('@/models/Worksite');
+jest.mock('@/models/Status');
 
 const MockFilters = {
   fields: {
     muck_out: true,
   },
-  statuses: {
+  statusGroups: {
     open: true,
     closed: false,
   },
+  statuses: {},
   sub_fields: {},
 };
 
@@ -78,7 +81,7 @@ describe('WorksiteFilters', () => {
     wrapper.vm.removeStatus('open');
     expect(wrapper.vm.filters).toMatchSnapshot({
       ...MockFilters,
-      statuses: {
+      statusGroups: {
         closed: false,
       },
     });

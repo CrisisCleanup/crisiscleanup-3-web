@@ -5,10 +5,11 @@ Object {
   "fields": Object {
     "muck_out": true,
   },
-  "statuses": Object {
+  "statusGroups": Object {
     "closed": false,
     "open": true,
   },
+  "statuses": Object {},
   "sub_fields": Object {},
 }
 `;
@@ -18,10 +19,11 @@ Object {
   "fields": Object {
     "muck_out": undefined,
   },
-  "statuses": Object {
+  "statusGroups": Object {
     "closed": false,
     "open": true,
   },
+  "statuses": Object {},
   "sub_fields": Object {},
 }
 `;
@@ -31,8 +33,11 @@ Object {
   "fields": Object {
     "muck_out": true,
   },
-  "statuses": Object {
+  "statusGroups": Object {
     "closed": false,
+    "open": undefined,
+  },
+  "statuses": Object {
     "open": undefined,
   },
   "sub_fields": Object {},
@@ -84,6 +89,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           
         </tag-stub>
         <!---->
+         
       </div>
        
       <div>
@@ -151,36 +157,92 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
         <div
           class="flex flex-col"
         >
-          <base-checkbox-stub
-            class="block my-1"
+          <div
+            class="claim-status mb-2"
           >
-            worksiteFilters.unclaimed
-          </base-checkbox-stub>
+            <div
+              class="my-1 text-base"
+            >
+              ~~Claim Status
+            </div>
+             
+            <base-checkbox-stub
+              class="block my-1"
+            >
+              worksiteFilters.unclaimed
+            
+            </base-checkbox-stub>
+             
+            <base-checkbox-stub
+              class="block my-1"
+            >
+              worksiteFilters.claimed_by_my_org
+            
+            </base-checkbox-stub>
+             
+            <base-checkbox-stub
+              class="block my-1"
+            >
+              worksiteFilters.reported_by_my_org
+            
+            </base-checkbox-stub>
+          </div>
            
-          <base-checkbox-stub
-            class="block my-1"
+          <div
+            class="status-group mb-2"
           >
-            worksiteFilters.claimed_by_my_org
-          </base-checkbox-stub>
+            <div
+              class="my-1 text-base"
+            >
+              ~~Status Group
+            </div>
+             
+            <base-checkbox-stub
+              class="block my-1"
+              value="true"
+            >
+              worksiteFilters.open
+            
+            </base-checkbox-stub>
+             
+            <base-checkbox-stub
+              class="block my-1"
+            >
+              worksiteFilters.closed
+            
+            </base-checkbox-stub>
+          </div>
            
-          <base-checkbox-stub
-            class="block my-1"
+          <div
+            class="statuses mb-2"
           >
-            worksiteFilters.reported_by_my_org
-          </base-checkbox-stub>
-           
-          <base-checkbox-stub
-            class="block my-1"
-            value="true"
-          >
-            worksiteFilters.open
-          </base-checkbox-stub>
-           
-          <base-checkbox-stub
-            class="block my-1"
-          >
-            worksiteFilters.closed
-          </base-checkbox-stub>
+            <div
+              class="my-1 text-base"
+            >
+              ~~Status
+            </div>
+             
+            <div
+              value="open_unassigned"
+            >
+              <base-checkbox-stub
+                class="block my-1"
+              >
+                Open, unassigned
+              
+              </base-checkbox-stub>
+            </div>
+            <div
+              value="open_assigned"
+            >
+              <base-checkbox-stub
+                class="block my-1"
+              >
+                Open, unassigned
+              
+              </base-checkbox-stub>
+            </div>
+          </div>
         </div>
          
         <!---->
@@ -227,10 +289,11 @@ Object {
   "fields": Object {
     "muck_out": true,
   },
-  "statuses": Object {
+  "statusGroups": Object {
     "closed": false,
     "open": true,
   },
+  "statuses": Object {},
   "sub_fields": Object {},
 }
 `;
@@ -240,10 +303,11 @@ Object {
   "fields": Object {
     "muck_out": true,
   },
-  "statuses": Object {
+  "statusGroups": Object {
     "closed": false,
     "open": false,
   },
+  "statuses": Object {},
   "sub_fields": Object {},
 }
 `;
@@ -253,9 +317,10 @@ Object {
   "fields": Object {
     "muck_out": true,
   },
-  "statuses": Object {
+  "statusGroups": Object {
     "closed": false,
     "open": true,
   },
+  "statuses": Object {},
 }
 `;
