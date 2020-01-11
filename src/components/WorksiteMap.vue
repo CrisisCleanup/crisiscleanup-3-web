@@ -8,15 +8,44 @@
     </div>
     <div
       class="flex flex-col absolute"
-      style="z-index: 1001; top: 110px; left: 10px"
+      style="z-index: 1001; top: 10px; left: 10px"
     >
+      <div class="zoom-control flex flex-col mb-5">
+        <base-button
+          text=""
+          icon="plus"
+          icon-size="xs"
+          :title="$t('worksiteMap.zoom_in')"
+          :alt="$t('worksiteMap.zoom_in')"
+          :action="
+            () => {
+              map.zoomIn();
+            }
+          "
+          class="w-8 h-8 border-crisiscleanup-dark-100 border-t border-l border-r bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
+        />
+        <base-button
+          text=""
+          icon="minus"
+          icon-size="xs"
+          :title="$t('worksiteMap.zoom_out')"
+          :alt="$t('worksiteMap.zoom_out')"
+          :action="
+            () => {
+              map.zoomOut();
+            }
+          "
+          class="w-8 h-8 border border-crisiscleanup-dark-100 bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
+        />
+      </div>
       <base-button
         text=""
         :title="$t('worksiteMap.zoom_to_incident')"
         :alt="$t('worksiteMap.zoom_to_incident')"
         :action="goToIncidentCenter"
-        icon="search-minus"
-        class="w-8 h-8 border-2 my-1 bg-white"
+        icon="tree"
+        icon-size="lg"
+        class="w-8 h-8 border my-1 border-crisiscleanup-dark-100 bg-white shadow-xl text-crisiscleanup-dark-400"
       />
       <base-button
         v-tooltip="{
@@ -29,18 +58,11 @@
         text=""
         :title="$t('worksiteMap.zoom_to_interactive')"
         :alt="$t('worksiteMap.zoom_to_interactive')"
-        icon="search-plus"
+        icon="search-minus"
+        icon-size="lg"
         :action="goToInteractive"
-        class="w-8 h-8 border-2 my-1 bg-white"
+        class="w-8 h-8 border border-crisiscleanup-dark-100 my-1 bg-white shadow-xl text-crisiscleanup-dark-400"
         @mouseenter.native="enableInteractiveTooltip"
-      />
-      <base-button
-        text=""
-        :title="$t('worksiteMap.zoom_to_local')"
-        :alt="$t('worksiteMap.zoom_to_local')"
-        icon="search-location"
-        :action="goToLocal"
-        class="w-8 h-8 border-2 my-1 bg-white"
       />
     </div>
     <div
@@ -247,7 +269,10 @@ export default {
         const loader = new Loader();
         loader.add('circle', '/circle.svg');
         loader.load(() => {
-          this.map = L.map('map').setView([31.0, -100.0], 12);
+          this.map = L.map('map', { zoomControl: false }).setView(
+            [31.0, -100.0],
+            12,
+          );
           const { map } = this;
           if (this.currentUser.states && this.currentUser.states.mapViewPort) {
             const {

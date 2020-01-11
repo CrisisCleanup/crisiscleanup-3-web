@@ -13,6 +13,7 @@ exports[`BaseButton should render correctly and match snapshot 1`] = `
   <font-awesome-icon-stub
     class="mx-1"
     icon="dashboard"
+    size="sm"
   />
    button 
   <font-awesome-icon-stub

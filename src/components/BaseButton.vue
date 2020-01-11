@@ -9,7 +9,7 @@
     @click="performAction"
   >
     <font-awesome-icon v-if="loading" size="sm" icon="spinner" spin />
-    <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" />
+    <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" :size="iconSize" />
     <slot>{{ text }}</slot>
     <font-awesome-icon v-if="suffixIcon" class="mx-1" :icon="suffixIcon" />
   </button>
@@ -50,6 +50,10 @@ export default {
     icon: {
       type: String,
       default: '',
+    },
+    iconSize: {
+      type: String,
+      default: 'sm',
     },
     suffixIcon: {
       type: String,
