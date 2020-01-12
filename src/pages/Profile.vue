@@ -6,7 +6,7 @@
           <span class="text-base">{{ name }}</span>
           <ccu-icon
             :alt="$t('actions.cancel')"
-            size="small"
+            size="xs"
             class="p-1 py-2"
             type="cancel"
             @click.native="mode = 'view'"

@@ -1,89 +1,144 @@
 <template>
   <div v-if="worksite" class="bg-white flex flex-col flex-grow">
-    <div class="p-3 flex-grow intake-view">
-      <div class="my-4">
-        <label
-          v-if="worksite.notes && worksite.notes.length > 0"
-          class="my-1 text-xs font-bold text-gray-600 block"
-          >{{ $t('formLabels.notes') }}</label
-        >
-        <div
-          v-for="note in worksite.notes"
-          :key="note.id"
-          class="notes my-1 p-1 flex items-center"
-        >
-          <span class="text-gray-600 mr-3 notes-time"
-            >{{ note.created_at | moment('from', 'now') }}:</span
-          ><span class="font-hairline">{{ note.note }}</span>
-        </div>
-        <base-button
-          v-if="!addingNotes"
-          class="my-1"
-          type="link"
-          :text="$t('caseView.add_note')"
-          :alt="$t('caseView.add_note_alt')"
-          :action="
-            () => {
-              addingNotes = true;
-            }
-          "
-        />
-        <div v-if="addingNotes">
-          Note
-          <textarea
-            v-model="currentNote"
-            rows="4"
-            class="block w-full border outline-none"
+    <div class="flex-grow intake-view">
+      <SectionHeading :count="1" class="mb-3">{{
+        $t('caseForm.property_information')
+      }}</SectionHeading>
+      <div class="px-3 pb-3">
+        <div>
+          <label
+            v-if="worksite.notes && worksite.notes.length > 0"
+            class="my-1 text-xs font-bold text-gray-600 block"
+            >{{ $t('formLabels.notes') }}</label
+          >
+          <div
+            v-for="note in worksite.notes"
+            :key="note.id"
+            class="notes my-1 p-1 flex items-center"
+          >
+            <span class="text-gray-600 mr-3 notes-time"
+              >{{ note.created_at | moment('from', 'now') }}:</span
+            ><span class="font-hairline">{{ note.note }}</span>
+          </div>
+          <base-button
+            v-if="!addingNotes"
+            class="my-1"
+            type="link"
+            :text="$t('caseView.add_note')"
+            :alt="$t('caseView.add_note_alt')"
+            :action="
+              () => {
+                addingNotes = true;
+              }
+            "
           />
-          <div class="flex items-center justify-between">
-            <base-button
-              class="my-1"
-              type="bare"
-              :text="$t('actions.cancel')"
-              :action="cancelNote"
+          <div v-if="addingNotes">
+            Note
+            <textarea
+              v-model="currentNote"
+              rows="4"
+              class="block w-full border outline-none"
             />
-            <base-button
-              class="my-1"
-              type="link"
-              :text="$t('actions.save')"
-              :action="saveNote"
-            />
+            <div class="flex items-center justify-between">
+              <base-button
+                class="my-1"
+                type="bare"
+                :text="$t('actions.cancel')"
+                :action="cancelNote"
+              />
+              <base-button
+                class="my-1"
+                type="link"
+                :text="$t('actions.save')"
+                :action="saveNote"
+              />
+            </div>
           </div>
         </div>
-      </div>
-      <div class="my-4">
-        <label class="my-1 text-xs font-bold text-gray-600 block">{{
-          $t('formLabels.address')
-        }}</label>
-        <div>{{ worksiteAddress }}</div>
-      </div>
-      <div v-if="Object.keys(workTypesClaimedByOthers).length > 0" class="my-4">
-        <label class="my-1 text-xs font-bold text-gray-600 block">{{
-          $t('caseView.claimed_by')
-        }}</label>
-        <div
-          v-for="organization in Object.keys(workTypesClaimedByOthers)"
-          :key="organization.id"
-          class="my-1"
-        >
-          {{ getOrganizationName(organization) }}
+        <div>
+          <label class="my-1 text-xs font-bold text-gray-600 block">{{
+            $t('formLabels.address')
+          }}</label>
+          <div>{{ worksiteAddress }}</div>
+        </div>
+        <div>
+          <label class="my-1 text-xs font-bold text-gray-600 block">{{
+            $t('formLabels.phone1')
+          }}</label>
+          <div>{{ worksite.formFields.phone1 }}</div>
         </div>
       </div>
-
-      <div class="my-4 border-t">
-        <div
-          v-if="Object.keys(workTypesClaimedByOthers).length > 0"
-          class="my-4"
-        >
+      <SectionHeading :count="2" class="mb-3">{{
+        $t('caseForm.work')
+      }}</SectionHeading>
+      <div class="px-3 pb-3">
+        <div v-if="Object.keys(workTypesClaimedByOthers).length > 0">
+          <label class="my-1 text-xs font-bold text-gray-600 block">{{
+            $t('caseView.claimed_by')
+          }}</label>
           <div
-            v-for="(work_types, organization) in workTypesClaimedByOthers"
+            v-for="organization in Object.keys(workTypesClaimedByOthers)"
             :key="organization.id"
+            class="my-1"
           >
-            <label class="my-4 text-xs font-bold text-gray-600"
-              >{{ $t('caseView.claimed_by') }}
-              {{ getOrganizationName(organization) }}</label
+            {{ getOrganizationName(organization) }}
+          </div>
+        </div>
+        <div>
+          <div v-if="Object.keys(workTypesClaimedByOthers).length > 0">
+            <div
+              v-for="(work_types, organization) in workTypesClaimedByOthers"
+              :key="organization.id"
             >
-            <template v-for="work_type in work_types">
+              <label class="text-xs font-bold text-gray-600"
+                >{{ $t('caseView.claimed_by') }}
+                {{ getOrganizationName(organization) }}</label
+              >
+              <template v-for="work_type in work_types">
+                <div :key="work_type.id" class="work_type_section">
+                  <span class="text-sm">{{
+                    work_type.work_type | getWorkTypeName
+                  }}</span>
+                  <StatusDropDown
+                    class="block"
+                    :current-work-type="work_type"
+                    :on-select="
+                      value => {
+                        statusValueChange(value, work_type);
+                      }
+                    "
+                  />
+                  <base-button
+                    v-if="!worksiteRequestWorkTypeIds.has(work_type.id)"
+                    type="link"
+                    :action="
+                      () => {
+                        requestingWorkTypes = true;
+                        initialWorkTypeRequestSelection = [work_type.work_type];
+                      }
+                    "
+                    :text="$t('actions.request')"
+                    class="ml-2 p-1 px-3 text-xs"
+                  />
+                  <div v-else class="ml-2 p-1 px-3 text-xs">
+                    {{ $t('Requested') }}
+                  </div>
+                </div>
+              </template>
+              <WorkTypeRequestModal
+                v-if="requestingWorkTypes"
+                :work-types="workTypesClaimedByOthersUnrequested"
+                :initial-selection="initialWorkTypeRequestSelection"
+                @onRequest="requestWorkTypes"
+                @onCancel="requestingWorkTypes = false"
+              />
+            </div>
+          </div>
+          <div v-if="workTypesClaimedByOrganization.length > 0">
+            <label class="text-xs font-bold text-gray-600">{{
+              $t('caseView.claimed_by_my_org')
+            }}</label>
+            <template v-for="work_type in workTypesClaimedByOrganization">
               <div :key="work_type.id" class="work_type_section">
                 <span class="text-sm">{{
                   work_type.work_type | getWorkTypeName
@@ -98,92 +153,49 @@
                   "
                 />
                 <base-button
-                  v-if="!worksiteRequestWorkTypeIds.has(work_type.id)"
-                  type="link"
+                  type="primary"
                   :action="
                     () => {
-                      requestingWorkTypes = true;
-                      initialWorkTypeRequestSelection = [work_type.work_type];
+                      return unclaimWorkType(work_type);
                     }
                   "
-                  :text="$t('actions.request')"
+                  :text="$t('actions.unclaim')"
                   class="ml-2 p-1 px-3 text-xs"
                 />
-                <div v-else class="ml-2 p-1 px-3 text-xs">
-                  {{ $t('Requested') }}
-                </div>
               </div>
             </template>
-            <WorkTypeRequestModal
-              v-if="requestingWorkTypes"
-              :work-types="workTypesClaimedByOthersUnrequested"
-              :initial-selection="initialWorkTypeRequestSelection"
-              @onRequest="requestWorkTypes"
-              @onCancel="requestingWorkTypes = false"
-            />
           </div>
-        </div>
-        <div v-if="workTypesClaimedByOrganization.length > 0" class="my-4">
-          <label class="my-4 text-xs font-bold text-gray-600">{{
-            $t('caseView.claimed_by_my_org')
-          }}</label>
-          <template v-for="work_type in workTypesClaimedByOrganization">
-            <div :key="work_type.id" class="work_type_section">
-              <span class="text-sm">{{
-                work_type.work_type | getWorkTypeName
-              }}</span>
-              <StatusDropDown
-                class="block"
-                :current-work-type="work_type"
-                :on-select="
-                  value => {
-                    statusValueChange(value, work_type);
-                  }
-                "
-              />
-              <base-button
-                type="primary"
-                :action="
-                  () => {
-                    return unclaimWorkType(work_type);
-                  }
-                "
-                :text="$t('actions.unclaim')"
-                class="ml-2 p-1 px-3 text-xs"
-              />
-            </div>
-          </template>
-        </div>
-        <div v-if="workTypesUnclaimed.length > 0" class="my-4">
-          <label class="my-4 text-xs font-bold text-gray-600">{{
-            $t('caseView.unclaimed_work_types')
-          }}</label>
-          <template v-for="work_type in workTypesUnclaimed">
-            <div :key="work_type.id" class="work_type_section">
-              <span class="text-sm">{{
-                work_type.work_type | getWorkTypeName
-              }}</span>
-              <StatusDropDown
-                class="block"
-                :current-work-type="work_type"
-                :on-select="
-                  value => {
-                    statusValueChange(value, work_type);
-                  }
-                "
-              />
-              <base-button
-                type="primary"
-                :action="
-                  () => {
-                    return claimWorkType(work_type);
-                  }
-                "
-                :text="$t('actions.claim')"
-                class="ml-2 p-1 px-3 text-xs"
-              />
-            </div>
-          </template>
+          <div v-if="workTypesUnclaimed.length > 0" class="mt-3">
+            <label class="text-xs font-bold text-gray-600">{{
+              $t('caseView.unclaimed_work_types')
+            }}</label>
+            <template v-for="work_type in workTypesUnclaimed">
+              <div :key="work_type.id" class="work_type_section">
+                <span class="text-sm">{{
+                  work_type.work_type | getWorkTypeName
+                }}</span>
+                <StatusDropDown
+                  class="block"
+                  :current-work-type="work_type"
+                  :on-select="
+                    value => {
+                      statusValueChange(value, work_type);
+                    }
+                  "
+                />
+                <base-button
+                  type="primary"
+                  :action="
+                    () => {
+                      return claimWorkType(work_type);
+                    }
+                  "
+                  :text="$t('actions.claim')"
+                  class="ml-2 p-1 px-3 text-xs"
+                />
+              </div>
+            </template>
+          </div>
         </div>
       </div>
     </div>
@@ -253,10 +265,11 @@ import { groupBy } from '@/utils/array';
 import Organization from '@/models/Organization';
 import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
 import { getQueryString } from '@/utils/urls';
+import SectionHeading from '../components/SectionHeading';
 
 export default {
   name: 'CaseView',
-  components: { WorkTypeRequestModal, StatusDropDown },
+  components: { SectionHeading, WorkTypeRequestModal, StatusDropDown },
   data() {
     return {
       addingNotes: false,
