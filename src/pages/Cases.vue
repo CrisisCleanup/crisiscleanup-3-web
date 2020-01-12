@@ -386,7 +386,7 @@
           </ccu-icon>
           <ccu-icon
             :alt="$t('actions.cancel')"
-            size="small"
+            size="xs"
             type="cancel"
             @click.native="backToWorksite"
           />
@@ -395,7 +395,7 @@
           <div class="text-left text-black">{{ $t('casesVue.new_case') }}</div>
           <ccu-icon
             :alt="$t('actions.cancel')"
-            size="small"
+            size="xs"
             type="cancel"
             @click.native="closeWorksite"
           />

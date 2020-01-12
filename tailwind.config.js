@@ -71,6 +71,7 @@ module.exports = {
         'crisiscleanup-teal': '#4fbdb0',
         'crisiscleanup-dark-red': '#ed4747',
         'crisiscleanup-dark-blue': '#009bff',
+        'crisiscleanup-light-grey': '#f9f9f9',
       },
       spacing: {
         '72': '18rem',

@@ -6,16 +6,9 @@
     @submit.prevent
   >
     <div class="intake-form flex-grow">
-      <div
-        class="py-3 px-3 bg-gray-200 flex items-center justify-between text-base font-semibold"
-      >
-        <div class="flex items-center">
-          <badge width="22px" height="22px" class="mr-2 bg-black text-white"
-            >1</badge
-          >
-          {{ $t('caseForm.property_information') }}
-        </div>
-      </div>
+      <SectionHeading :count="1" class="mb-3">{{
+        $t('caseForm.property_information')
+      }}</SectionHeading>
       <div class="form-field">
         <WorksiteSearchInput
           :value="worksite.name"
@@ -184,31 +177,12 @@
           :key="field.field_key"
         >
           <template v-if="['h4'].includes(field.html_type)">
-            <div
-              class="py-3 px-3 bg-gray-200 flex items-center justify-between text-base font-semibold"
+            <SectionHeading
+              :count="getSectionCount(field)"
+              :tooltip="field.help_t"
+              class="mb-3"
+              >{{ field.label_t }}</SectionHeading
             >
-              <div class="flex items-center">
-                <badge
-                  class="mr-2 bg-black text-white"
-                  width="22px"
-                  height="22px"
-                >
-                  {{ getSectionCount(field) }}
-                </badge>
-                {{ field.label_t }}
-              </div>
-              <ccu-icon
-                v-if="field.help_t"
-                v-tooltip="{
-                  content: field.help_t,
-                  trigger: 'hover',
-                  classes: 'interactive-tooltip w-72',
-                }"
-                :alt="$t('actions.help_alt')"
-                type="help"
-                size="large"
-              />
-            </div>
           </template>
           <template v-if="['h5'].includes(field.html_type)">
             <div class="text-base font-semibold my-1 mx-3">
@@ -403,10 +377,12 @@ import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import Incident from '@/models/Incident';
 import { buildForm, groupBy } from '@/utils/form';
 import FormSelect from '@/components/FormSelect';
+import SectionHeading from '../components/SectionHeading';
 
 export default {
   name: 'CaseForm',
   components: {
+    SectionHeading,
     FormSelect,
     OverlayMap,
     WorksiteSearchInput,
