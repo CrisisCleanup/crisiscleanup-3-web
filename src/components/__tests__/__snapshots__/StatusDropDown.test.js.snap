@@ -22,7 +22,7 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
   </div>
    
   <div
-    class="bg-white border outline-none h-96 overflow-auto"
+    class="bg-white border outline-none h-96 w-56 overflow-auto"
   >
     <div
       class="cursor-pointer py-1 hover:bg-gray-100 selected"
@@ -84,7 +84,7 @@ exports[`StatusDropDown should render correctly and match snapshot when using ic
   </div>
    
   <div
-    class="bg-white border outline-none h-96 overflow-auto"
+    class="bg-white border outline-none h-96 w-56 overflow-auto"
   >
     <div
       class="cursor-pointer py-1 hover:bg-gray-100 selected"

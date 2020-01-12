@@ -15,7 +15,7 @@
     </div>
     <div
       slot="popover"
-      class="bg-white border outline-none h-96 overflow-auto"
+      class="bg-white border outline-none h-96 w-56 overflow-auto"
       @keyup="nextItem"
     >
       <div
@@ -72,12 +72,15 @@ export default {
   },
   computed: {
     statuses() {
-      return Status.all().map((status, index) => {
-        return {
-          ...status,
-          selectionKey: index + 1,
-        };
-      });
+      return Status.query()
+        .orderBy('list_order')
+        .get()
+        .map((status, index) => {
+          return {
+            ...status,
+            selectionKey: index + 1,
+          };
+        });
     },
     dropdownStyle() {
       return {

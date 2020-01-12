@@ -12,6 +12,7 @@ export default class WorkType extends Model {
       description_t: this.attr(null),
       primary_state: this.attr(null),
       substatus: this.attr(null),
+      list_order: this.attr(null),
     };
   }
 }
