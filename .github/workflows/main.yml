@@ -154,9 +154,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Invalidate Cache
-        uses: actions/aws/cli@master
+      - uses: chrislennon/action-aws-cli@v1.1
+      - run: aws cloudfront create-invalidation --distribution-id E3DNZ4GD3WPDPE --paths "/index.html"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           AWS_DEFAULT_REGION: ${{ secrets.aws_default_region }}
-        run: aws cloudfront create-invalidation --distribution-id E3DNZ4GD3WPDPE --paths "/index.html"
