@@ -185,14 +185,14 @@ export default {
       try {
         const data = await i18nService.getLanguage(currentLanguage);
         const { translations } = data;
-        if (size(translations) === 0) {
-          return;
+        if (size(translations) > 0) {
+          this.$i18n.setLocaleMessage(currentLanguage, translations);
+          this.$i18n.locale = currentLanguage;
+          this.$http.defaults.headers.common[
+            'Accept-Language'
+          ] = currentLanguage;
+          document.querySelector('html').setAttribute('lang', currentLanguage);
         }
-
-        this.$i18n.setLocaleMessage(currentLanguage, translations);
-        this.$i18n.locale = currentLanguage;
-        this.$http.defaults.headers.common['Accept-Language'] = currentLanguage;
-        document.querySelector('html').setAttribute('lang', currentLanguage);
       } catch (e) {
         this.$log.error(e);
       }
