@@ -97,7 +97,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           alt="actions.clear_filters"
           class="text-yellow-500 text-underline w-32 bare flex items-center justify-center"
           size=""
-          title=""
+          title="actions.clear_filters"
           type="submit"
         >
           <!---->
@@ -257,7 +257,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       alt="actions.cancel"
       class="m-1 border-2 border-black px-6 py-2 text-base flex items-center justify-center"
       size="medium"
-      title=""
+      title="actions.cancel"
       type="submit"
     >
       <!---->
@@ -271,7 +271,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       alt="actions.apply_filters"
       class="m-1 p-3 px-6 text-base primary flex items-center justify-center"
       size="medium"
-      title=""
+      title="actions.apply_filters"
       type="submit"
     >
       <!---->

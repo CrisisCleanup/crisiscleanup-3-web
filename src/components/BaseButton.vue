@@ -5,7 +5,7 @@
     :disabled="disabled || loading"
     type="submit"
     :size="size"
-    :title="title"
+    :title="title || alt || text"
     @click.prevent="performAction"
   >
     <font-awesome-icon v-if="loading" size="sm" icon="spinner" spin />

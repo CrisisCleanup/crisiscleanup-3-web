@@ -25,7 +25,7 @@ exports[`WorkTypeRequestModal show modal with options 1`] = `
       alt="actions.request"
       class="ml-2 p-3 px-6 text-xs primary flex items-center justify-center"
       size=""
-      title=""
+      title="actions.request"
       type="submit"
     >
       <!---->
