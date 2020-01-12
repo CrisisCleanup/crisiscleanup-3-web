@@ -219,7 +219,7 @@ const demolition = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://
 </svg>
 `;
 
-const debris = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="39" height="53" viewBox="0 0 39 53">
+const debris = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="50" height="53" viewBox="5 0 50 53">
     <defs>
         <path id="b" d="M261.532 47.58l.004.01 1.076 2.338a1 1 0 0 1-.481 1.322l-21.556 10.184H265v3.94h-2.742a4.08 4.08 0 0 1-.01.337l-1.757 25.358a1 1 0 0 1-.998.931h-19.065a1 1 0 0 1-.998-.924l-1.923-25.34a4.05 4.05 0 0 1-.011-.362h-2.77l-.001-3.457-.635-1.382a1 1 0 0 1 .48-1.322l25.63-12.11a1 1 0 0 1 1.332.477z"/>
         <filter id="a" width="145.2%" height="131.1%" x="-22.6%" y="-11.1%" filterUnits="objectBoundingBox">
@@ -229,12 +229,13 @@ const debris = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.
             <feColorMatrix in="shadowBlurOuter1" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.523601399 0"/>
         </filter>
     </defs>
-    <g fill="none" fill-rule="evenodd" transform="translate(-230 -45)">
+    <g fill="none" fill-rule="evenodd" transform="translate(-220 -45)">
         <use fill="#000" filter="url(#a)" xlink:href="#b"/>
         <path fill="{{fillColor}}" stroke="{{strokeColor}}" stroke-linejoin="square" stroke-width=".5" d="M234.976 65.124h2.773l-.003.253c-.002.113.002.227.01.341l1.924 25.339a.75.75 0 0 0 .748.693h19.065a.75.75 0 0 0 .748-.698L262 65.694a3.75 3.75 0 0 0 .01-.26l-.001-.057-.004-.253h2.746v-3.44h-25.29l22.564-10.66a.75.75 0 0 0 .36-.992l-1.075-2.338-.004-.007a.75.75 0 0 0-.998-.358l-25.63 12.11a.75.75 0 0 0-.36.992l.635 1.382.023.104v3.207z"/>
         <path stroke="#FFF" d="M242.804 60.934H265.5v4.94h-2.761l-1.75 25.23a1.5 1.5 0 0 1-1.496 1.396h-19.065a1.5 1.5 0 0 1-1.496-1.386l-1.916-25.24h-2.79l-.001-3.848-.59-1.282a1.5 1.5 0 0 1 .722-1.983l25.63-12.11a1.5 1.5 0 0 1 2.003.73l1.076 2.338a1.5 1.5 0 0 1-.722 1.983l-19.54 9.232z"/>
     </g>{{multiple}}
-</svg>`;
+</svg>
+`;
 
 const deferred_maintenance = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="56" height="52" viewBox="0 0 56 52">
     <defs>
