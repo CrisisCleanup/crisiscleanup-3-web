@@ -35,5 +35,8 @@ export default {
     where: () => ({
       get: () => MockStatus,
     }),
+    orderBy: () => ({
+      get: () => MockStatus,
+    }),
   }),
 };
