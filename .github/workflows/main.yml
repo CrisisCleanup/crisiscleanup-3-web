@@ -153,9 +153,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Invalidate Cache
       - uses: chrislennon/action-aws-cli@v1.1
-      - run: aws cloudfront create-invalidation --distribution-id E3DNZ4GD3WPDPE --paths "/index.html"
+      - name: Invalidate Cache
+        run: aws cloudfront create-invalidation --distribution-id E3DNZ4GD3WPDPE --paths "/index.html"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
