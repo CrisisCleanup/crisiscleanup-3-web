@@ -150,6 +150,8 @@ jobs:
 
   invalidate-cache:
     name: Invalidate Cache
+    if: github.ref == 'refs/heads/master'
+    needs: [deploy]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
