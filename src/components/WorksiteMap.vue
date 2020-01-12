@@ -39,15 +39,6 @@
         />
       </div>
       <base-button
-        text=""
-        :title="$t('worksiteMap.zoom_to_incident')"
-        :alt="$t('worksiteMap.zoom_to_incident')"
-        :action="goToIncidentCenter"
-        icon="tree"
-        icon-size="lg"
-        class="w-8 h-8 border my-1 border-crisiscleanup-dark-100 bg-white shadow-xl text-crisiscleanup-dark-400"
-      />
-      <base-button
         v-tooltip="{
           content: this.$t('worksiteMap.zoom_to_make_interactive'),
           show: showInteractivePopover,
@@ -58,11 +49,20 @@
         text=""
         :title="$t('worksiteMap.zoom_to_interactive')"
         :alt="$t('worksiteMap.zoom_to_interactive')"
+        :action="goToInteractive"
+        icon="tree"
+        icon-size="lg"
+        class="w-8 h-8 border my-1 border-crisiscleanup-dark-100 bg-white shadow-xl text-crisiscleanup-dark-400"
+        @mouseenter.native="enableInteractiveTooltip"
+      />
+      <base-button
+        text=""
+        :title="$t('worksiteMap.zoom_to_incident')"
+        :alt="$t('worksiteMap.zoom_to_incident')"
         icon="search-minus"
         icon-size="lg"
-        :action="goToInteractive"
+        :action="goToIncidentCenter"
         class="w-8 h-8 border border-crisiscleanup-dark-100 my-1 bg-white shadow-xl text-crisiscleanup-dark-400"
-        @mouseenter.native="enableInteractiveTooltip"
       />
     </div>
     <div
