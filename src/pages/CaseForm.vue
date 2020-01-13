@@ -151,7 +151,6 @@
             modal-style="height: 60%"
             @close="overlayMapVisible = false"
           >
-            >
             <OverlayMap
               :initial-location="worksite.location"
               @addedMarker="onAddedMarker"

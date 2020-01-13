@@ -18,7 +18,7 @@ export default {
     initialLocation: {
       type: Object,
       default: () => {
-        return {};
+        return null;
       },
     },
   },
@@ -26,12 +26,13 @@ export default {
     return {
       selected: {},
       tileLayer: L.tileLayer(
-        'https://api.pitneybowes.com/location-intelligence/geomap/v1/tile/osm/{z}/{x}/{y}.png?api_key={api_key}',
+        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
         {
-          api_key: process.env.VUE_APP_PITNEYBOWES_API_KEY,
-          maxZoom: 18,
           attribution:
-            '<a class="leaflet-attribution" target="_blank" href="http://www.openstreetmap.org/copyright">&copy; OpenStreetMap contributors</a>',
+            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+          detectRetina: false,
+          maxZoom: 18,
+          noWrap: false,
         },
       ),
       markers: L.layerGroup(),
