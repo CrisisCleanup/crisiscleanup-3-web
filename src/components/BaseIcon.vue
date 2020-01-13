@@ -1,6 +1,7 @@
 <template>
   <div class="flex items-center">
-    <img :class="styles" :src="iconMap[type]" :alt="alt" /> <slot></slot>
+    <img :class="styles" :src="iconMap[type]" :alt="alt" :title="alt" />
+    <slot></slot>
   </div>
 </template>
 
