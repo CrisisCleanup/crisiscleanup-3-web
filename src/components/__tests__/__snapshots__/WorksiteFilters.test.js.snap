@@ -163,7 +163,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
             <div
               class="my-1 text-base"
             >
-              ~~Claim Status
+              Claimed or Reported by
             </div>
              
             <base-checkbox-stub
@@ -194,7 +194,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
             <div
               class="my-1 text-base"
             >
-              ~~Status Group
+              Over-all Status
             </div>
              
             <base-checkbox-stub
@@ -219,7 +219,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
             <div
               class="my-1 text-base"
             >
-              ~~Status
+              Detailed Status
             </div>
              
             <div
