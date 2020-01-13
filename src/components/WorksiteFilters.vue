@@ -100,7 +100,7 @@
         >
           <div v-if="currentSection === 'general'" class="flex flex-col">
             <div class="claim-status mb-2">
-              <div class="my-1 text-base">{{ $t('~~Claim Status') }}</div>
+              <div class="my-1 text-base">{{ $t('worksiteFilters.claim_reported_by') }}</div>
               <base-checkbox
                 v-model="filters.statusGroups['unclaimed']"
                 class="block my-1"
@@ -118,7 +118,7 @@
               </base-checkbox>
             </div>
             <div class="status-group mb-2">
-              <div class="my-1 text-base">{{ $t('~~Status Group') }}</div>
+              <div class="my-1 text-base">{{ $t('worksiteFilters.over_all_status') }}</div>
               <base-checkbox
                 class="block my-1"
                 :value="filters.statusGroups['open']"
@@ -142,7 +142,7 @@
             </div>
 
             <div class="statuses mb-2">
-              <div class="my-1 text-base">{{ $t('~~Status') }}</div>
+              <div class="my-1 text-base">{{ $t('worksiteFilters.detailed_status') }}</div>
               <div
                 v-for="status in allStatuses"
                 :key="status.id"
