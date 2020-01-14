@@ -104,6 +104,14 @@ const colors = {
     fillColor: '#1D1D1D',
     strokeColor: '#1D1D1D',
   },
+  'closed_rejected_unclaimed': {
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
+  },
+  'closed_rejected_claimed': {
+    fillColor: '#1D1D1D',
+    strokeColor: '#1D1D1D',
+  },
 };
 
 const circle = `<svg xmlns="http://www.w3.org/2000/svg" height="18" width="18">
