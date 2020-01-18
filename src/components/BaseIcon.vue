@@ -28,6 +28,13 @@ const iconMap = {
   down: require('@/assets/icons/down.svg'),
   updown: require('@/assets/icons/updown.svg'),
   'go-case': require('@/assets/icons/replace-case.svg'),
+  'map-buffer': require('@/assets/icons/map-buffer.svg'),
+  'map-circle': require('@/assets/icons/map-circle.svg'),
+  'map-poly': require('@/assets/icons/map-poly.svg'),
+  'map-rect': require('@/assets/icons/map-rect.svg'),
+  'map-sweep': require('@/assets/icons/map-sweep.svg'),
+  'map-undo': require('@/assets/icons/map-undo.svg'),
+  'map-redo': require('@/assets/icons/map-redo.svg'),
 };
 /* eslint-enable global-require */
 
@@ -57,6 +64,7 @@ export default {
         medium: this.size === 'medium',
         small: this.size === 'small',
         xs: this.size === 'xs',
+        xl: this.size === 'xl',
       },
     };
   },
@@ -71,6 +79,10 @@ export default {
 .ccu-icon.medium {
   height: 20px;
   width: 20px;
+}
+.ccu-icon.xl {
+  height: 35px;
+  width: 35px;
 }
 .ccu-icon.small {
   height: 16px;

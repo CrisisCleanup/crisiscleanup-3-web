@@ -152,7 +152,9 @@ export default {
   props: {
     columns: {
       type: Array,
-      default: () => [],
+      default: () => {
+        return [];
+      },
     },
     data: {
       type: null,

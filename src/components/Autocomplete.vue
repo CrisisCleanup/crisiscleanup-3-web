@@ -46,7 +46,9 @@ export default {
   props: {
     suggestions: {
       type: Array,
-      default: () => [],
+      default: () => {
+        return [];
+      },
     },
     displayProperty: {
       type: String,

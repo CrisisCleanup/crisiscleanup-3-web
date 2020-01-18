@@ -47,11 +47,15 @@ export default {
   props: {
     workTypes: {
       type: Array,
-      default: () => [],
+      default: () => {
+        return [];
+      },
     },
     initialSelection: {
       type: Array,
-      default: () => [],
+      default: () => {
+        return [];
+      },
     },
   },
   data() {

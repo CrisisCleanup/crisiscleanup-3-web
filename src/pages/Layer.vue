@@ -7,9 +7,9 @@
     >
       <spinner />
     </div>
-    <div v-else class="w-84 mx-2 flex flex-col">
+    <div v-else class="mx-2 flex flex-col">
       <div class="h-16 flex items-center justify-between">
-        <div class="font-bold">New Layer</div>
+        <div class="font-bold">{{ $t('~~New Layer') }}</div>
         <div class="flex">
           <ccu-icon
             alt="Edit Layer"
@@ -43,7 +43,7 @@
       <form
         v-if="currentLayer"
         ref="form"
-        class="form flex-grow flex flex-col justify-between"
+        class="form flex-grow flex flex-col justify-between w-84"
         @submit.prevent="saveLayer"
       >
         <div class="flex flex-col">
@@ -58,6 +58,7 @@
             v-model="currentLayer.type"
             :options="layerTypes"
             placeholder="Layer Type"
+            select-classes="bg-white border w-full h-12"
           />
           <textarea
             v-model="currentLayer.description"
@@ -66,7 +67,7 @@
             placeholder="Description"
           />
           <div>
-            <div class="mt-8 text-base">Access</div>
+            <div class="mt-8 text-base">{{ $t('~~Access') }}</div>
             <div class="flex mt-2">
               <base-radio
                 class="mr-6"
@@ -90,34 +91,38 @@
             text="Reset"
             class="border-2 border-black mx-2 p-2 px-4"
           />
-          <base-button text="Save Layer" class="mx-2 p-2 px-4" type="primary" />
+          <base-button
+            text="Save Layer"
+            class="mx-2 p-2 px-4"
+            type="primary"
+            :action="saveLayer"
+          />
         </div>
       </form>
     </div>
     <div class="flex-grow flex flex-col">
-      <CustomLayersTool
+      <LayerTool
         v-if="currentLayer"
-        ref="layerTool"
         class="h-full"
         :locations="currentLayer.locations"
+        @changed="setCurrentLocation"
       />
     </div>
   </div>
 </template>
 
 <script>
-import * as circleToPolygon from 'circle-to-polygon';
-import * as L from 'leaflet';
-import CustomLayersTool from '@/components/CustomLayersTool';
 import Layer from '@/models/Layer';
 import Location from '@/models/Location';
+import LayerTool from '../components/LayerTool';
 
 export default {
   name: 'Layer',
-  components: { CustomLayersTool },
+  components: { LayerTool },
   data() {
     return {
       currentLayer: null,
+      currentLocation: null,
       loading: false,
       layerName: '',
       layerDescription: '',
@@ -144,45 +149,51 @@ export default {
     this.loading = false;
   },
   methods: {
+    setCurrentLocation(location) {
+      this.currentLocation = location;
+    },
     async saveLayer() {
       this.loading = true;
       const locationPromises = [];
 
-      this.$refs.layerTool.drawnItems.getLayers().forEach(location => {
-        const data = {};
-        this.$log.debug(location.toGeoJSON());
-        let { geometry } = location.toGeoJSON();
-        const { type, features } = location.toGeoJSON();
-        if (type === 'FeatureCollection') {
-          const [feature] = features;
-          geometry = feature.geometry;
-        }
-        if (location instanceof L.Circle) {
-          const radius = location.getRadius();
-          const { coordinates } = geometry;
-          const numberOfEdges = 32;
+      const data = {};
+      let { geometry } = this.currentLocation.toGeoJSON();
+      const { type, features } = this.currentLocation.toGeoJSON();
+      if (type === 'FeatureCollection') {
+        const [feature] = features;
+        geometry = feature.geometry;
+      }
 
-          geometry = circleToPolygon(coordinates, radius, numberOfEdges);
-        }
-        if (geometry.type === 'Point') {
-          data.point = geometry;
-        } else if (geometry.type === 'Polygon') {
-          data.poly = geometry;
-        }
-        locationPromises.push(Location.api().post('/locations', data));
-      });
+      if (geometry.type === 'Point') {
+        data.point = geometry;
+      } else if (geometry.type === 'Polygon') {
+        data.poly = geometry;
+      } else if (geometry.type === 'MultiPolygon') {
+        data.geom = geometry;
+      }
+
+      locationPromises.push(Location.api().post('/locations', data));
 
       try {
         const locationResults = await Promise.all(locationPromises);
         const locations = locationResults.map(result => {
           return result.entities.locations[0].id;
         });
-
-        const layerResult = await Layer.api().post('/layers', {
-          ...this.currentLayer,
-          locations,
-        });
-        this.$log.debug(layerResult.entities.layers[0].id);
+        let layerResult;
+        if (this.currentLayer.id) {
+          layerResult = await Layer.api().put(
+            `/layers/${this.currentLayer.id}`,
+            {
+              ...this.currentLayer,
+              locations,
+            },
+          );
+        } else {
+          layerResult = await Layer.api().post('/layers', {
+            ...this.currentLayer,
+            locations,
+          });
+        }
         await this.$router.push(`/layers/${layerResult.entities.layers[0].id}`);
       } catch (e) {
         this.$log.error(e);
