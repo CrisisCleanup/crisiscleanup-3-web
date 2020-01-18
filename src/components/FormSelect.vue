@@ -44,7 +44,9 @@ export default {
     },
     options: {
       type: Array,
-      default: () => [],
+      default: () => {
+        return [];
+      },
     },
     placeholder: {
       type: String,

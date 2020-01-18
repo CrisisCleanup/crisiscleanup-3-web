@@ -1,0 +1,76 @@
+<template>
+  <v-popover
+    :auto-hide="false"
+    popover-class="layer-action-popover"
+    placement="bottom-end"
+    :disabled="disabled"
+  >
+    <ccu-icon
+      :alt="buttonText"
+      :class="buttonClass"
+      :type="icon"
+      size="xl"
+      @click.native="$emit('click')"
+    />
+    <div
+      v-if="actions.length"
+      slot="popover"
+      class="flex text-primary-dark"
+      style="z-index: 1001;"
+    >
+      <base-button
+        v-for="action in actions"
+        :key="action.id"
+        :text="action.text"
+        :action="
+          () => {
+            $emit('changed', action.id);
+          }
+        "
+        type="bare"
+        class="p-1 px-2 border-r text-xs"
+      />
+    </div>
+  </v-popover>
+</template>
+<script>
+export default {
+  name: 'MapButton',
+  props: {
+    buttonClass: {
+      type: String,
+      default: '',
+    },
+    buttonText: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    selected: {
+      type: Boolean,
+      default: false,
+    },
+    actions: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
+  },
+};
+</script>
+
+<style>
+.layer-action-popover {
+  @apply bg-white text-crisiscleanup-dark-100 outline-none w-full border w-auto;
+  left: 1px !important;
+  z-index: 100;
+}
+</style>

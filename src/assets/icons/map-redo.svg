@@ -1,0 +1,14 @@
+<svg width="128" height="132" xmlns="http://www.w3.org/2000/svg" stroke="null" style="vector-effect: non-scaling-stroke;" preserveAspectRatio="xMidYMid meet">
+  <metadata stroke="null" style="vector-effect: non-scaling-stroke;">Created by potrace 1.15, written by Peter Selinger 2001-2017</metadata>
+
+  <g stroke="null">
+    <title stroke="null">background</title>
+    <rect stroke="null" fill="none" id="canvas_background" height="402" width="582" y="-1" x="-1"/>
+  </g>
+  <g stroke="null">
+    <title stroke="null">Layer 1</title>
+    <g transform="translate(0,132) scale(0.10000000149011612,-0.10000000149011612) " id="svg_1" fill="#586673">
+      <path stroke="null" id="svg_2" d="m811.016028,879c74.234348,-50 133.983945,-94 133.983945,-98c0,-7 -244.430169,-178 -267.967889,-188c-9.958266,-4 -12.674157,6 -12.674157,42l0,48l-31.685392,-6c-35.30658,-6 -75.139645,-37 -92.340286,-70c-28.064205,-55 -0.905297,-150 57.939003,-207c17.200642,-17 28.969502,-34 26.253611,-38c-10.863563,-11 -103.203849,30 -146.658102,67c-62.465488,52 -96.866771,117 -96.866771,184c0,64 16.295345,102 66.991972,151c42.548955,43 99.582662,74 166.574634,90l45.264846,11l2.715891,53c1.810594,28 5.431782,52 9.052969,52c3.621188,0 66.086675,-41 139.415726,-91z"/>
+    </g>
+  </g>
+</svg>
