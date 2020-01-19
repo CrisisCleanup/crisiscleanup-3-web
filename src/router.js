@@ -13,6 +13,7 @@ import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
 import CaseView from '@/pages/CaseView';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
+import CaseFlag from '@/pages/CaseFlag';
 import Layer from '@/pages/Layer';
 
 Vue.use(VueRouter);
@@ -61,6 +62,11 @@ const routes = [
         path: ':id/history',
         component: CaseHistory,
         name: 'IncidentCaseHistory',
+      },
+      {
+        path: ':id/flag',
+        component: CaseFlag,
+        name: 'IncidentCaseFlag',
       },
     ],
   },

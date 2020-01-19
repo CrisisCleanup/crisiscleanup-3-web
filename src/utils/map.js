@@ -12,6 +12,18 @@ import Worksite from '@/models/Worksite';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
+export const getGoogleMapsLocation = url => {
+  const regex = new RegExp('@(.*),(.*),');
+  const match = url.match(regex);
+  const latitude = Number(match[1]);
+  const longitude = Number(match[2]);
+
+  return {
+    longitude,
+    latitude,
+  };
+};
+
 const getOpacity = date => {
   // let opacityBuckets = [100, 75, 60, 35, 20, 10]
   const opacityBuckets = [100, 85, 70, 45, 30, 20];

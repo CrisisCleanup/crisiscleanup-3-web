@@ -73,6 +73,7 @@ export default {
     },
     full: Boolean,
     loading: Boolean,
+    clearOnSelected: Boolean,
   },
   data() {
     return {
@@ -105,6 +106,9 @@ export default {
     onSelected(option) {
       this.selected = option.item;
       this.$emit('selected', option.item);
+      if (this.clearOnSelected) {
+        this.selected = '';
+      }
     },
     getSuggestionValue(suggestion) {
       return suggestion.item[this.displayProperty];

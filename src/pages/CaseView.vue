@@ -1,5 +1,12 @@
 <template>
   <div v-if="worksite" class="bg-white flex flex-col flex-grow">
+    <div class="flex p-1">
+      <flag
+        v-for="flag in worksite.flags"
+        :key="flag.reason_t"
+        :flag-reason="flag.reason_t"
+      />
+    </div>
     <div class="flex-grow intake-view">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
@@ -266,10 +273,11 @@ import Organization from '@/models/Organization';
 import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
 import { getQueryString } from '@/utils/urls';
 import SectionHeading from '../components/SectionHeading';
+import Flag from './Flag';
 
 export default {
   name: 'CaseView',
-  components: { SectionHeading, WorkTypeRequestModal, StatusDropDown },
+  components: { Flag, SectionHeading, WorkTypeRequestModal, StatusDropDown },
   data() {
     return {
       addingNotes: false,
