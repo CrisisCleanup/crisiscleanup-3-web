@@ -1,5 +1,5 @@
 <template>
-  <div class="tag flex items-center px-1 pr-3 justify-center text-xs">
+  <div class="tag flex items-center px-1 justify-center text-xs">
     <div v-if="closeable" class="close px-1" @click="onClose"></div>
     <slot></slot>
   </div>
@@ -24,9 +24,7 @@ export default {
 
 <style scoped>
 .tag {
-  border-radius: 2px;
-  border: solid 1px #e1e1e1;
-  background-color: #ffffff;
+  @apply border bg-white;
   font-weight: lighter;
 }
 

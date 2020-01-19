@@ -111,6 +111,48 @@ export default {
     });
   },
 
+  getLocationDetails({longitude, latitude }) {
+    const latlng = {lat: latitude, lng: longitude}
+    return new Promise((resolve, reject) => {
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          const location = results[0];
+          const { address_components } = location;
+          resolve({
+            address_components: {
+              address: `${this.extractFromAddress(
+                address_components,
+                'street_number',
+              )} ${this.extractFromAddress(address_components, 'route')}`,
+              city: `${this.extractFromAddress(
+                address_components,
+                'locality',
+              )}`,
+              county: `${this.extractFromAddress(
+                address_components,
+                'administrative_area_level_2',
+              )}`,
+              state: `${this.extractFromAddress(
+                address_components,
+                'administrative_area_level_1',
+              )}`,
+              postal_code: `${this.extractFromAddress(
+                address_components,
+                'postal_code',
+              )}`,
+            },
+            location: {
+              lat: location.geometry.location.lat(),
+              lng: location.geometry.location.lng(),
+            },
+          });
+        } else {
+          reject(`Can't find location: ${status}`);
+        }
+      });
+    });
+  },
   /**
    * Get the value for a given key in address_components
    *

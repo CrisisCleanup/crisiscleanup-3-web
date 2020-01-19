@@ -15,6 +15,7 @@ const iconMap = {
   download: require('@/assets/icons/download.svg'),
   active: require('@/assets/icons/active.svg'),
   edit: require('@/assets/icons/edit.svg'),
+  flag: require('@/assets/icons/flag.svg'),
   search: require('@/assets/icons/search.svg'),
   table: require('@/assets/icons/table.svg'),
   map: require('@/assets/icons/notactive.svg'),

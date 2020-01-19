@@ -24,6 +24,7 @@ export default class Worksite extends Model {
       work_types: this.attr(null),
       what3words: this.attr(null),
       notes: this.attr(null),
+      flags: this.attr(null),
       events: this.attr(null),
       reported_by: this.attr(null),
     };
@@ -183,6 +184,9 @@ export default class Worksite extends Model {
           },
           { save: false },
         );
+      },
+      addFlag(id, flag) {
+        return this.post(`/worksites/${id}/flags`, flag, { save: false });
       },
       searchWorksites(search, incident) {
         return this.get(

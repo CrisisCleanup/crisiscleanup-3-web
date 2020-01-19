@@ -329,6 +329,7 @@
           (isEditingWorksite ||
             isViewingWorksite ||
             isViewingWorksiteHistory ||
+            isViewingWorksiteFlag ||
             isNewWorksite)
       "
       class="flex flex-col h-full shadow-2xl w-1/5"
@@ -353,6 +354,7 @@
             'tab-active':
               isEditingWorksite ||
               isViewingWorksite ||
+              isViewingWorksiteFlag ||
               isViewingWorksiteHistory,
           }"
         >
@@ -368,6 +370,7 @@
           isEditingWorksite ||
             isViewingWorksite ||
             isViewingWorksiteHistory ||
+            isViewingWorksiteFlag ||
             isNewWorksite
         "
         class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b"
@@ -382,6 +385,24 @@
             <span class="ml-1 mt-1"
               >{{ currentWorksite.case_number }}
               {{ $t('actions.history') }}</span
+            >
+          </ccu-icon>
+          <ccu-icon
+            :alt="$t('actions.cancel')"
+            size="xs"
+            type="cancel"
+            @click.native="backToWorksite"
+          />
+        </template>
+        <template v-if="isViewingWorksiteFlag">
+          <ccu-icon
+            :alt="$t('~~actions.flag')"
+            size="medium"
+            class="text-black mb-1"
+            type="flag"
+          >
+            <span v-if="currentWorksite" class="ml-1 mt-1"
+              >{{ currentWorksite.case_number }} {{ $t('actions.flag') }}</span
             >
           </ccu-icon>
           <ccu-icon
@@ -412,7 +433,18 @@
               type="go-case"
               @click.native="jumpToCase"
             />
-
+            <router-link
+              :to="
+                `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/flag`
+              "
+            >
+              <ccu-icon
+                :alt="$t('~~actions.flag')"
+                size="small"
+                class="p-1 py-2"
+                type="flag"
+              />
+            </router-link>
             <router-link
               :to="
                 `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/history`
@@ -623,6 +655,9 @@ export default {
     },
     isViewingWorksiteHistory() {
       return this.$route.name === 'IncidentCaseHistory';
+    },
+    isViewingWorksiteFlag() {
+      return this.$route.name === 'IncidentCaseFlag';
     },
     isNewWorksite() {
       return this.$route.name === 'IncidentNewCaseForm';
