@@ -32,6 +32,8 @@
                 v-if="!loading"
                 v-model="shapefileType"
                 :options="locationTypes"
+                item-key="id"
+                label="name_t"
                 select-classes="bg-white border w-full"
               />
             </div>
@@ -83,6 +85,7 @@
 import Layer from '@/models/Layer';
 import Table from '@/components/Table';
 import DragDrop from '@/components/DragDrop';
+import LocationType from '../../models/LocationType';
 // TODO: refactor after unit tests
 // eslint-disable-next-line no-unused-vars
 const fileToArrayBuffer = file =>
@@ -104,7 +107,7 @@ export default {
       shapefileStructure: null,
       fileList: [],
       shapefileKey: '',
-      shapefileType: 'COUNTY',
+      shapefileType: null,
       columns: [
         {
           title: this.$t('layersVue.filename'),
@@ -134,38 +137,12 @@ export default {
       ],
       showingSampleModal: false,
       loading: false,
-      locationTypes: [
-        'locationTypes.org_primary_response_area',
-        'locationTypes.org_secondary_response_area',
-        'locationTypes.incident_primary_damaged_area',
-        'locationTypes.incident_storm_track',
-        'locationTypes.incident_furthest_damaged_area',
-        'locationTypes.incident_damage',
-        'locationTypes.boundary_ecclesiastical',
-        'locationTypes.boundary_organizational',
-        'locationTypes.resource',
-        'locationTypes.boundary_political_us_state',
-        'locationTypes.boundary_political_us_county',
-        'locationTypes.boundary_political_us_city',
-        'locationTypes.boundary_political_us_neighborhood',
-        'locationTypes.boundary_political_us_zip_code',
-        'locationTypes.boundary_political_us_fire_district',
-        'locationTypes.boundary_political_us_census_tract',
-        'locationTypes.boundary_political_us_congress',
-        'locationTypes.boundary_political_us_region',
-        'locationTypes.boundary_political_us_fema_region',
-        'locationTypes.boundary_political_country',
-        'locationTypes.boundary_political_intl_primary_division',
-        'locationTypes.boundary_political_intl_local_division',
-        'locationTypes.boundary_political_intl_city',
-        'locationTypes.boundary_political_intl_postal_code',
-        'locationTypes.boundary_political_other',
-        'locationTypes.attribute_property',
-        'locationTypes.attribute_social',
-      ],
     };
   },
   computed: {
+    locationTypes() {
+      return LocationType.all();
+    },
     tableData() {
       if (!this.shapefileStructure) {
         return [];
@@ -182,6 +159,9 @@ export default {
     },
   },
   async mounted() {
+    await LocationType.api().get('/location_types', {
+      dataKey: 'results',
+    });
     await Layer.api().get('/layers', {
       dataKey: 'results',
     });

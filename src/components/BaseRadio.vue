@@ -16,7 +16,20 @@
 <script>
 export default {
   name: 'BaseRadio',
-  props: ['name', 'value', 'label'],
+  props: {
+    name: {
+      type: String,
+      default: '',
+    },
+    value: {
+      type: String,
+      default: '',
+    },
+    label: {
+      type: String,
+      default: '',
+    },
+  },
   computed: {
     radioButtonValue: {
       get() {

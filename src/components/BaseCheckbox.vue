@@ -5,6 +5,7 @@
       type="checkbox"
       :checked="value"
       class="checkmark-input"
+      :disabled="disabled"
       @input="$emit('input', $event.target.checked)"
       @change="$emit('change', $event.target.checked)"
     />
@@ -16,6 +17,10 @@ export default {
   name: 'BaseCheckbox',
   props: {
     value: {
+      type: Boolean,
+      default: false,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },

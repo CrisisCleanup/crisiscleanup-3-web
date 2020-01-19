@@ -10,6 +10,7 @@ import InvitationRequest from '@/models/InvitationRequest';
 import Invitation from '@/models/Invitation';
 import Location from '@/models/Location';
 import Layer from '@/models/Layer';
+import LocationType from '@/models/LocationType';
 
 const database = new Database();
 
@@ -24,5 +25,6 @@ database.register(Invitation, {});
 database.register(Location, {});
 database.register(Layer, {});
 database.register(WorksiteRequest, {});
+database.register(LocationType, {});
 
 export default database;
