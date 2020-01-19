@@ -50,7 +50,7 @@
               { id: 'cancel', text: 'Cancel' },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Rectangle'"
-            :selected="Boolean(currentDraw)"
+            :selected="Boolean(currentDraw) && currentDraw === 'Rectangle'"
             @changed="
               event => {
                 handleMapEvent(event, 'Rectangle');
@@ -67,7 +67,7 @@
               { id: 'cancel', text: 'Cancel' },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Polygon'"
-            :selected="Boolean(currentDraw)"
+            :selected="Boolean(currentDraw) && currentDraw === 'Polygon'"
             @changed="
               event => {
                 handleMapEvent(event, 'Polygon');
@@ -84,7 +84,7 @@
               { id: 'cancel', text: 'Cancel' },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
-            :selected="Boolean(currentDraw)"
+            :selected="Boolean(currentDraw) && currentDraw === 'Circle'"
             @changed="
               event => {
                 handleMapEvent(event, 'Circle');
@@ -101,7 +101,7 @@
               { id: 'cancel', text: 'Cancel' },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Buffer'"
-            :selected="Boolean(currentDraw)"
+            :selected="Boolean(currentDraw) && currentDraw === 'Buffer'"
             @changed="
               event => {
                 handleMapEvent(event, 'Buffer');
@@ -238,7 +238,6 @@ export default {
     checkpointData() {
       return {
         currentPolygon: this.currentPolygon && this.currentPolygon.toGeoJSON(),
-        // bufferedLayer: this.bufferedLayer && this.bufferedLayer.toGeoJSON(),
       };
     },
     ...mapState('incident', ['currentIncidentId']),

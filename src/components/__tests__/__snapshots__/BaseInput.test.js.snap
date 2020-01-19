@@ -22,5 +22,6 @@ exports[`BaseInput should render correctly and match snapshot 1`] = `
   <!---->
    
   <!---->
+   
 </div>
 `;

@@ -7,7 +7,7 @@
   >
     <ccu-icon
       :alt="buttonText"
-      :class="buttonClass"
+      :class="['map-button', buttonClass, selected ? 'selected' : '']"
       :type="icon"
       size="xl"
       @click.native="$emit('click')"
@@ -72,5 +72,9 @@ export default {
   @apply bg-white text-crisiscleanup-dark-100 outline-none w-full border w-auto;
   left: 1px !important;
   z-index: 100;
+}
+
+.map-button.selected {
+  @apply bg-gray-300;
 }
 </style>
