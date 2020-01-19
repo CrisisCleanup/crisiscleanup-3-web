@@ -118,6 +118,7 @@
     "tailwindcss": "^1.1.2",
     "vue-jest": "^3.0.5",
     "vue-template-compiler": "^2.6.10",
+    "vue-undo-redo-stack": "^1.0.0",
     "vuex-mock-store": "0.0.8"
   },
   "browserslist": [

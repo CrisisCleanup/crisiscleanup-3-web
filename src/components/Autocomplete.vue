@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-start w-full autocomplete">
+  <div class="flex items-center justify-start autocomplete">
     <vue-autosuggest
       v-bind="$attrs"
       :suggestions="[{ data: suggestions }]"

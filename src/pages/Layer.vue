@@ -55,9 +55,11 @@
             placeholder="Layer Name"
           />
           <form-select
+            v-if="!loading"
             v-model="currentLayer.type"
-            :options="layerTypes"
-            placeholder="Layer Type"
+            :options="locationTypes"
+            item-key="id"
+            label="name_t"
             select-classes="bg-white border w-full h-12"
           />
           <textarea
@@ -114,6 +116,7 @@
 <script>
 import Layer from '@/models/Layer';
 import Location from '@/models/Location';
+import LocationType from '@/models/LocationType';
 import LayerTool from '../components/LayerTool';
 
 export default {
@@ -131,8 +134,16 @@ export default {
       layerTypes: ['Primary Response Area', 'Incident Extent'],
     };
   },
+  computed: {
+    locationTypes() {
+      return LocationType.all();
+    },
+  },
   async mounted() {
     this.loading = true;
+    await LocationType.api().get('/location_types', {
+      dataKey: 'results',
+    });
     if (this.$route.params.layer_id) {
       try {
         await Layer.api().fetchById(this.$route.params.layer_id);

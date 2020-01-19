@@ -3,6 +3,7 @@
     <input
       ref="input"
       :class="classes"
+      :style="inputStyle"
       :type="type || 'search'"
       :value="value"
       :disabled="disabled || (breakGlass && !glassBroken)"
@@ -32,6 +33,7 @@
     >
       <ccu-icon :type="tooltip ? 'info' : icon" size="small" />
     </div>
+    <slot></slot>
   </div>
 </template>
 
@@ -68,6 +70,10 @@ export default {
       default: '',
     },
     type: {
+      type: String,
+      default: '',
+    },
+    inputStyle: {
       type: String,
       default: '',
     },
