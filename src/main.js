@@ -74,6 +74,7 @@ Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'));
+
 Vue.use(Toasted, {
   position: 'top-center',
   duration: 2000,

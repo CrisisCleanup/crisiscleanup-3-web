@@ -297,14 +297,21 @@
                   }
                 "
               >
-                <template #flags>
-                  <div>
-                    <ccu-icon
-                      :alt="$t('~~actions.flag')"
-                      size="medium"
-                      class="text-black mb-1 w-5"
-                      type="flag"
-                    />
+                <template #flags="slotProps">
+                  <div class="case-flag w-8">
+                    <router-link
+                      v-if="slotProps.item.flags.length > 0"
+                      :to="
+                        `/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/flag`
+                      "
+                    >
+                      <ccu-icon
+                        :alt="$t('~~actions.flag')"
+                        size="medium"
+                        class="p-1 py-2"
+                        type="flag-filled"
+                      />
+                    </router-link>
                   </div>
                 </template>
                 <template #work_types="slotProps">
@@ -373,6 +380,15 @@
               ? `Edit ${currentWorksite.case_number}`
               : `View ${currentWorksite.case_number}`
           }}
+          <ccu-icon
+            :alt="$t('actions.cancel')"
+            size="xs"
+            type="cancel"
+            class="ml-2"
+            @click.native="
+              $router.push(`/incident/${$route.params.incident_id}/cases/new`)
+            "
+          />
         </div>
       </div>
       <div
@@ -433,13 +449,6 @@
         </template>
         <template v-else>
           <div class="text-left text-black flex items-center">
-            <ccu-icon
-              v-if="currentWorksite && currentWorksite.flags.length > 0"
-              :alt="$t('~~actions.flagged')"
-              size="medium"
-              class="p-1 py-2"
-              type="flag-filled"
-            />
             {{ currentWorksite && currentWorksite.case_number }}
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">

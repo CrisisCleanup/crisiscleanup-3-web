@@ -130,6 +130,13 @@
                   <div v-else class="ml-2 p-1 px-3 text-xs">
                     {{ $t('Requested') }}
                   </div>
+                  <div class="work-list">
+                    {{
+                      getFieldsForType(work_type.work_type)
+                        .map(_ => _.label_t)
+                        .join(', ')
+                    }}
+                  </div>
                 </div>
               </template>
               <WorkTypeRequestModal
@@ -169,6 +176,13 @@
                   :text="$t('actions.unclaim')"
                   class="ml-2 p-1 px-3 text-xs"
                 />
+                <div class="work-list">
+                  {{
+                    getFieldsForType(work_type.work_type)
+                      .map(_ => _.label_t)
+                      .join(', ')
+                  }}
+                </div>
               </div>
             </template>
           </div>
@@ -200,6 +214,13 @@
                   :text="$t('actions.claim')"
                   class="ml-2 p-1 px-3 text-xs"
                 />
+                <div class="work-list">
+                  {{
+                    getFieldsForType(work_type.work_type)
+                      .map(_ => _.label_t)
+                      .join(', ')
+                  }}
+                </div>
               </div>
             </template>
           </div>
@@ -267,6 +288,7 @@ import { getErrorMessage } from '@/utils/errors';
 import StatusDropDown from '@/components/StatusDropDown';
 import User from '@/models/User';
 import Worksite from '@/models/Worksite';
+import Incident from '@/models/Incident';
 import WorksiteRequest from '@/models/WorksiteRequest';
 import { groupBy } from '@/utils/array';
 import Organization from '@/models/Organization';
@@ -289,6 +311,9 @@ export default {
   computed: {
     worksite() {
       return Worksite.find(this.$route.params.id);
+    },
+    incident() {
+      return Incident.find(this.$route.params.incident_id);
     },
     workTypesClaimedByOrganization() {
       if (this.worksite) {
@@ -510,5 +535,11 @@ export default {
   grid-template-columns: 1fr 2fr 0.5fr;
   justify-items: start;
   align-items: center;
+}
+.work-list {
+  @apply mt-1 text-crisiscleanup-grey-900;
+  grid-row-start: row2-start;
+  grid-column-start: 1;
+  grid-column-end: 3;
 }
 </style>
