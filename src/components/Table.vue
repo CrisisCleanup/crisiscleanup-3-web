@@ -347,8 +347,9 @@ export default {
     rowClick(item, event) {
       if (
         event &&
-        (event.target.className === 'checkmark' ||
-          event.target.className === 'checkmark-input')
+        ['base-icon', 'checkmark', 'checkmark-input'].includes(
+          event.target.className,
+        )
       ) {
         return;
       }

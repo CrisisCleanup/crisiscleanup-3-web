@@ -18,7 +18,12 @@
                   :alt="$t('actions.cancel')"
                   size="xs"
                   type="cancel"
-                  @click.native="$emit('close')"
+                  @click.native="
+                    () => {
+                      $emit('close');
+                      $emit('cancel');
+                    }
+                  "
                 />
               </div>
             </slot>
@@ -38,6 +43,7 @@
                   :action="
                     () => {
                       $emit('close');
+                      $emit('ok');
                     }
                   "
                 >

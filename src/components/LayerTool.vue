@@ -114,7 +114,27 @@
           class="bg-white p-1 border ml-5 flex items-center justify-center px-2 text-crisiscleanup-lightblue-900"
           style="height: 37px"
           :text="$t('+ Upload Layer')"
+          :action="
+            () => {
+              showingUploadModal = true;
+            }
+          "
         />
+        <modal
+          v-if="showingUploadModal"
+          modal-classes="bg-white w-3/4 shadow"
+          :title="$t('~~Upload Layer')"
+          @ok="applyCurrentLayerUpload"
+          @cancel="showingUploadModal = false"
+        >
+          <LayerUploadTool
+            @addedLayer="
+              layer => {
+                currentLayerUpload = layer;
+              }
+            "
+          />
+        </modal>
         <div
           class="bg-white p-1 border ml-5 flex items-center justify-center"
           style="height: 37px"
@@ -192,10 +212,11 @@ import MapButton from './MapButton';
 import LocationType from '@/models/LocationType';
 import User from '@/models/User';
 import { getWorksiteLayer } from '@/utils/map';
+import LayerUploadTool from '@/components/LayerUploadTool';
 
 export default {
   name: 'LayerTool',
-  components: { MapButton },
+  components: { LayerUploadTool, MapButton },
   mixins: [vueUndoRedo],
   props: {
     locations: {
@@ -208,6 +229,8 @@ export default {
   data() {
     return {
       currentPolygon: null,
+      currentLayerUpload: null,
+      showingUploadModal: false,
       locationSearch: '',
       currentDraw: null,
       bufferedLayer: null,
@@ -372,6 +395,11 @@ export default {
       }
       this.checkpoint();
     },
+    applyCurrentLayerUpload() {
+      this.showingUploadModal = false;
+      this.onLocationSelected({ id: this.currentLayerUpload[0].id }, true);
+      this.checkpoint();
+    },
     enableBuffer() {
       this.drawBuffer();
       this.showPopup();
@@ -485,7 +513,7 @@ export default {
         .setContent(this.$refs.popup)
         .openOn(this.map);
     },
-    async onLocationSelected(selected) {
+    async onLocationSelected(selected, fit = false) {
       await Location.api().fetchById(selected.id);
       const location = Location.find(selected.id);
       const geojsonFeature = {
@@ -497,6 +525,9 @@ export default {
       [this.bufferedLayer] = geojsonLayer.getLayers();
       this.bufferedLayer.name = location.name;
       this.bufferedLayer.addTo(this.map);
+      if (fit) {
+        this.map.fitBounds(this.bufferedLayer.getBounds());
+      }
       this.showPopup();
     },
 

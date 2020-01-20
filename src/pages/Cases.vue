@@ -297,6 +297,16 @@
                   }
                 "
               >
+                <template #flags>
+                  <div>
+                    <ccu-icon
+                      :alt="$t('~~actions.flag')"
+                      size="medium"
+                      class="text-black mb-1 w-5"
+                      type="flag"
+                    />
+                  </div>
+                </template>
                 <template #work_types="slotProps">
                   <div class="flex flex-col">
                     <div
@@ -595,6 +605,12 @@ export default {
           sortKey: 'id',
           width: '0.5fr',
           sortable: true,
+        },
+        {
+          title: '',
+          dataIndex: 'flags',
+          key: 'flags',
+          width: '0.25fr',
         },
         {
           title: this.$t('casesVue.work_type'),
