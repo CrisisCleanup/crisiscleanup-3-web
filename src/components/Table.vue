@@ -347,7 +347,7 @@ export default {
     rowClick(item, event) {
       if (
         event &&
-        ['base-icon', 'checkmark', 'checkmark-input'].includes(
+        ['case-flag', 'checkmark', 'checkmark-input'].includes(
           event.target.className,
         )
       ) {

@@ -67,12 +67,19 @@
           </div>
           <div class="flex items-center overflow-hidden">
             <v-popover popover-class="menu-popover" placement="bottom-end">
-              <div class="flex cursor-pointer">
+              <div class="flex cursor-pointer items-center">
                 <img
                   src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
                   class="rounded-full w-10 h-10"
                 />
-                <span class="p-3">{{ name }}</span>
+                <span class="p-3">
+                  {{ name }}
+                  <font-awesome-icon
+                    class="cursor-pointer"
+                    size="md"
+                    icon="caret-down"
+                  />
+                </span>
               </div>
               <div slot="popover" class="flex flex-col">
                 <router-link
@@ -124,6 +131,9 @@ import Organization from '@/models/Organization';
 import Status from '@/models/Status';
 import { i18nService } from '@/services/i18n.service';
 import DisasterIcon from '../components/DisasterIcon';
+import 'moment/src/locale/fr-ca';
+import 'moment/src/locale/en-ca';
+import 'moment/src/locale/es';
 
 export default {
   name: 'Authenticated',
@@ -197,6 +207,8 @@ export default {
         this.$log.error(e);
       }
     }
+
+    this.$moment.locale(currentLanguage.split('-')[0]);
 
     let incidentId = this.$route.params.incident_id;
     if (!incidentId) {

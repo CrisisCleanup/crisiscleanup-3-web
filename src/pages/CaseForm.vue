@@ -601,8 +601,10 @@ export default {
 
       try {
         if (this.worksite.id) {
+          const data = { ...this.worksite };
+          delete data.flags;
           await Worksite.api().put(`/worksites/${this.worksite.id}`, {
-            ...this.worksite,
+            ...data,
             skip_duplicate_check: true,
           });
         } else {
