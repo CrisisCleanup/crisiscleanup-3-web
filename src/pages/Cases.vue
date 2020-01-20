@@ -432,17 +432,17 @@
           />
         </template>
         <template v-else>
-          <div class="text-left text-black">
+          <div class="text-left text-black flex items-center">
+            <ccu-icon
+              v-if="currentWorksite && currentWorksite.flags.length > 0"
+              :alt="$t('~~actions.flagged')"
+              size="medium"
+              class="p-1 py-2"
+              type="flag-filled"
+            />
             {{ currentWorksite && currentWorksite.case_number }}
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">
-            <ccu-icon
-              :alt="$t('actions.jump_to_case')"
-              size="small"
-              class="p-1 py-2"
-              type="go-case"
-              @click.native="jumpToCase"
-            />
             <router-link
               :to="
                 `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/flag`
@@ -455,6 +455,13 @@
                 type="flag"
               />
             </router-link>
+            <ccu-icon
+              :alt="$t('actions.jump_to_case')"
+              size="small"
+              class="p-1 py-2"
+              type="go-case"
+              @click.native="jumpToCase"
+            />
             <router-link
               :to="
                 `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/history`
