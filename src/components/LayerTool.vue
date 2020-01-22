@@ -6,7 +6,7 @@
         :suggestions="locationResults"
         display-property="name"
         size="large"
-        placeholder="Search by state, city, county and zipcode"
+        placeholder="$t('layerTool.search_several_area_types')"
         class="w-1/3"
         @selected="onLocationSelected"
         @search="onLocationSearch"
@@ -45,9 +45,9 @@
             button-class="border bg-white"
             icon="map-rect"
             :actions="[
-              { id: 'add', text: 'Add' },
-              { id: 'exclude', text: 'Exclude' },
-              { id: 'cancel', text: 'Cancel' },
+              { id: 'add', text: $t('actions.add') },
+              { id: 'exclude', text: $t('actions.subtract') },
+              { id: 'cancel', text: $t('actions.cancel') },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Rectangle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Rectangle'"
@@ -62,9 +62,9 @@
             button-class="border bg-white"
             icon="map-poly"
             :actions="[
-              { id: 'add', text: 'Add' },
-              { id: 'exclude', text: 'Exclude' },
-              { id: 'cancel', text: 'Cancel' },
+              { id: 'add', text: $t('actions.add') },
+              { id: 'exclude', text: $t('actions.subtract') },
+              { id: 'cancel', text: $t('actions.cancel') },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Polygon'"
             :selected="Boolean(currentDraw) && currentDraw === 'Polygon'"
@@ -79,9 +79,9 @@
             button-class="border bg-white"
             icon="map-circle"
             :actions="[
-              { id: 'add', text: 'Add' },
-              { id: 'exclude', text: 'Exclude' },
-              { id: 'cancel', text: 'Cancel' },
+              { id: 'add', text: $t('actions.add') },
+              { id: 'exclude', text: $t('actions.subtract') },
+              { id: 'cancel', text: '$t('actions.cancel')' },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Circle'"
@@ -97,8 +97,8 @@
             button-class="border bg-white"
             icon="map-buffer"
             :actions="[
-              { id: 'buffer', text: 'Add' },
-              { id: 'cancel', text: 'Cancel' },
+              { id: 'buffer', text: $t('actions.add') },
+              { id: 'cancel', text: $t('actions.cancel') },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Buffer'"
             :selected="Boolean(currentDraw) && currentDraw === 'Buffer'"
@@ -113,7 +113,7 @@
         <base-button
           class="bg-white p-1 border ml-5 flex items-center justify-center px-2 text-crisiscleanup-lightblue-900"
           style="height: 37px"
-          :text="$t('+ Upload Layer')"
+          :text="$t('layerTool.upload_layer_plus')"
           :action="
             () => {
               showingUploadModal = true;
@@ -123,7 +123,7 @@
         <modal
           v-if="showingUploadModal"
           modal-classes="bg-white w-3/4 shadow"
-          :title="$t('~~Upload Layer')"
+          :title="$t('layerTool.upload_layer')"
           @ok="applyCurrentLayerUpload"
           @cancel="showingUploadModal = false"
         >
@@ -140,7 +140,7 @@
           style="height: 37px"
         >
           <base-checkbox :disabled="worksitesLoading" @input="toggleWorksites">
-            {{ $t('~~Show Cases') }}
+            {{ $t('layerTool.show_cases') }}
           </base-checkbox>
         </div>
       </div>
@@ -155,13 +155,13 @@
         v-if="currentDraw === 'Buffer'"
         class="flex flex-col items-center justify-center"
       >
-        {{ $t('~~Add or Exclude Distance') }}
+        {{ $t('layerTool.expand_or_contract') }}
         <div class="my-1 border">
           <base-input
             v-model="currentBufferDistance"
             input-style="width: 100%; height: 30px; border: 0"
           >
-            <div class="pr-2">{{ $t('~~Miles') }}</div>
+            <div class="pr-2">{{ $t('layerTool.miles') }}</div>
           </base-input>
         </div>
         <base-button

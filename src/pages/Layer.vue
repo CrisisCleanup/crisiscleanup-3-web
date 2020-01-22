@@ -9,30 +9,30 @@
     </div>
     <div v-else class="mx-2 flex flex-col">
       <div class="h-16 flex items-center justify-between">
-        <div class="font-bold">{{ $t('~~New Layer') }}</div>
+        <div class="font-bold">{{ $t('actions.new_layer') }}</div>
         <div class="flex">
           <ccu-icon
-            alt="Edit Layer"
+            alt="$t('actions.edit_layer')"
             size="small"
             class="p-1 py-2"
             type="edit"
             @click.native="() => {}"
           />
           <ccu-icon
-            alt="Download Layer as Shapefile"
+            alt="$t('layerVue.download_as_shapefile')"
             size="small"
             class="p-1 py-2"
             type="download"
             @click.native="() => {}"
           />
           <ccu-icon
-            alt="Share Layer"
+            alt="$t('actions.share_layer')"
             size="small"
             class="p-1 py-2"
             type="share"
           />
           <ccu-icon
-            alt="Delete"
+            alt="$t('actions.delete')"
             size="small"
             class="p-1 py-2"
             type="trash"
@@ -52,7 +52,7 @@
             type="text"
             class="input form-field"
             size="large"
-            placeholder="Layer Name"
+            placeholder="$t('layerVue.layer_name')"
           />
           <form-select
             v-if="!loading"
@@ -69,7 +69,7 @@
             placeholder="Description"
           />
           <div>
-            <div class="mt-8 text-base">{{ $t('~~Access') }}</div>
+            <div class="mt-8 text-base">{{ $t('layerVue.access') }}</div>
             <div class="flex mt-2">
               <base-radio
                 class="mr-6"
@@ -90,11 +90,11 @@
         </div>
         <div class="flex items-center justify-end h-16">
           <base-button
-            text="Reset"
+            text="$t('actions.reset')"
             class="border-2 border-black mx-2 p-2 px-4"
           />
           <base-button
-            text="Save Layer"
+            text="$t('actions.save_layer')"
             class="mx-2 p-2 px-4"
             type="primary"
             :action="saveLayer"
@@ -131,7 +131,7 @@ export default {
       layerDescription: '',
       layerType: '',
       layerAccess: 'Private',
-      layerTypes: ['Primary Response Area', 'Incident Extent'],
+      layerTypes: [$t('locationTypes.org_primary_response_area'), $t('locationTypes.incident_primary_damaged_area')],
     };
   },
   computed: {
