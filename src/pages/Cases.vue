@@ -306,7 +306,7 @@
                       "
                     >
                       <ccu-icon
-                        :alt="$t('~~actions.flag')"
+                        :alt="$t('actions.flag')"
                         size="medium"
                         class="p-1 py-2"
                         type="flag-filled"
@@ -422,7 +422,7 @@
         </template>
         <template v-if="isViewingWorksiteFlag">
           <ccu-icon
-            :alt="$t('~~actions.flag')"
+            :alt="$t('actions.flag')"
             size="medium"
             class="text-black mb-1"
             type="flag"
@@ -458,7 +458,7 @@
               "
             >
               <ccu-icon
-                :alt="$t('~~actions.flag')"
+                :alt="$t('actions.flag')"
                 size="small"
                 class="p-1 py-2"
                 type="flag"
