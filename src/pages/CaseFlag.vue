@@ -7,7 +7,7 @@
       <form-select
         v-model="currentFlag.reason_t"
         :options="flagTypes"
-        :placeholder="$t('~~Choose Problem')"
+        :placeholder="$t('flag.choose_problem')"
         select-classes="bg-white border w-full h-12"
         item-key="key"
         label="label"
@@ -18,14 +18,14 @@
             v-model="currentFlag.is_high_priority"
             class="text-crisiscleanup-red-700"
           >
-            {{ $t('~~Flag as high priority') }}
+            {{ $t('flag.flag_high_priority') }}
           </base-checkbox>
         </div>
         <div>
           <p class="my-3">
             {{
               $t(
-                '~~Please describe why this client needs urgent or immediate help',
+                'flag.please_describe_why_high_priority',
               )
             }}
           </p>
@@ -39,7 +39,7 @@
       <div v-if="currentFlag.reason_t === 'flag.worksite_wrong_incident'">
         <div>
           <p class="my-3">
-            {{ $t('~~Choose correct incident') }}
+            {{ $t('flag.choose_correct_incident') }}
           </p>
           <form-select
             v-model="currentFlag.requested_action"
@@ -53,35 +53,35 @@
             v-model="currentFlag.notes"
             class="text-crisiscleanup-red-700"
           >
-            {{ $t("~~Incident that I'm looking for is not listed") }}
+            {{ $t("flag.incident_not_listed") }}
           </base-checkbox>
         </div>
       </div>
       <div v-if="currentFlag.reason_t === 'flag.worksite_wrong_location'">
         <div class="text-sm">
           <p class="mt-5 font-semibold">
-            {{ $t('~~Move Worksite Pin') }}
+            {{ $t('flag.move_case_pin') }}
           </p>
           <div>
             <ol class="mt-2 mb-5 list-decimal ml-4">
-              <li>{{ $t('~~Find the correct location on Google Maps') }}</li>
-              <li>{{ $t('~~Zoom all the way in') }}</li>
-              <li>{{ $t('~~Copy the URL and paste it here') }}</li>
+              <li>{{ $t('flag.find_correct_google_maps') }}</li>
+              <li>{{ $t('flag.zoom_in_completely') }}</li>
+              <li>{{ $t('flag.copy_paste_url') }}</li>
             </ol>
           </div>
           <base-input
             v-model="currentFlag.requested_action"
-            :placeholder="$t('Google Map URL')"
+            :placeholder="$t('flag.google_map_url')"
           />
           <p class="mt-5 mb-3">
             {{
               $t(
-                '~~If you do not know the correct location, click Location Unknown',
+                'flag.click_if_location_unknown',
               )
             }}
           </p>
           <base-button class="text-white bg-black w-full p-2">{{
-            $t('~~Location Unknown')
+            $t('flag.location_unknown')
           }}</base-button>
         </div>
       </div>
@@ -90,7 +90,7 @@
           <p class="my-3">
             {{
               $t(
-                '~~Please explain why the client is upset. Some reasons might be missed expectations, slow service, bad behaviour from a relief organization, etc.',
+                'flag.explain_why_client_upset',
               )
             }}
           </p>
@@ -102,7 +102,7 @@
         </div>
         <div class="border-b py-5">
           <div>
-            <p>{{ $t('~~Does this issue involve your organization?') }}</p>
+            <p>{{ $t('flag.does_issue_involve_you') }}</p>
             <div class="flex mt-2">
               <base-radio
                 class="mr-10"
@@ -125,7 +125,7 @@
           <p class="mb-2">
             {{
               $t(
-                '~~If other organizations are involved, please indicate which ones',
+                'flag.please_share_other_orgs',
               )
             }}
           </p>
@@ -158,7 +158,7 @@
       <div v-if="currentFlag.reason_t === 'flag.worksite_abuse'">
         <div class="mt-8">
           <p class="my-3">
-            {{ $t('~~Which organization are you complaining about') }}
+            {{ $t('flag.organizations_complaining_about') }}
           </p>
           <autocomplete
             icon="search"
@@ -177,11 +177,11 @@
           <p class="my-3">
             {{
               $t(
-                '~~If another organization is behaving poorly, you must contact the organization first, prior to flagging them. View contact information by clicking "Other Organizations"',
+                'flag.must_contact_org_first',
               )
             }}
           </p>
-          <p class="my-3">{{ $t('~~Have you contacted the organization?') }}</p>
+          <p class="my-3">{{ $t('flag.have_you_contacted_org') }}</p>
           <div class="flex mt-2">
             <base-radio
               class="mr-10"
@@ -199,14 +199,14 @@
             />
           </div>
           <p class="my-3">
-            {{ $t('~~What was the outcome of that contact?') }}
+            {{ $t('flag.outcome_of_contact') }}
           </p>
           <textarea rows="4" class="block w-full border outline-none" />
 
           <p class="my-3">
             {{
               $t(
-                '~~Please describe the problem. Be as specific as possible. Give names, locations, specific examples, or any other evidence that supports your complaint',
+                'flag.describe_problem',
               )
             }}
           </p>
@@ -216,7 +216,7 @@
             class="block w-full border outline-none"
           />
 
-          <p class="my-3">{{ $t('~~What do you think should be done?') }}</p>
+          <p class="my-3">{{ $t('flag.suggested_outcome') }}</p>
           <textarea
             v-model="currentFlag.requested_action"
             rows="4"
@@ -226,7 +226,7 @@
           <p class="my-3">
             {{
               $t(
-                '~~Please remember that 95% of most issues are best solved between you and the organization directly, or your local VOAD. Crisis Cleanup can only take action if an organization is violating the Crisis Cleanup terms of service, and cannot force anyone to do anything.',
+                'flag.warning_ccu_cannot_do_much',
               )
             }}
           </p>
