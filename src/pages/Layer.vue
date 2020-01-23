@@ -175,6 +175,8 @@ export default {
         geometry = feature.geometry;
       }
 
+      data.name = this.currentLayer.title;
+      data.type = this.currentLayer.type;
       if (geometry.type === 'Point') {
         data.point = geometry;
       } else if (geometry.type === 'Polygon') {
