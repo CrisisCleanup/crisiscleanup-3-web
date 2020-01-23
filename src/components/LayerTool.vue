@@ -100,6 +100,16 @@
             :selected="Boolean(currentDraw) && currentDraw === 'Buffer'"
             @click="enableBuffer"
           />
+          <MapButton
+            button-class="border bg-white"
+            icon="map-sweep"
+            @click="
+              () => {
+                currentPolygon = null;
+                applyCurrentLayer();
+              }
+            "
+          />
         </div>
         <base-button
           class="bg-white p-1 border ml-5 flex items-center justify-center px-2 text-crisiscleanup-lightblue-900"

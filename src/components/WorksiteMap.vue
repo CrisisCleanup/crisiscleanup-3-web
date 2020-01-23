@@ -241,10 +241,12 @@ export default {
         const loader = new Loader();
         loader.add('circle', '/circle.svg');
         loader.load(() => {
-          this.map = L.map('map', { zoomControl: false }).setView(
-            [31.0, -100.0],
-            12,
-          );
+          if (!this.map) {
+            this.map = L.map('map', { zoomControl: false }).setView(
+              [31.0, -100.0],
+              12,
+            );
+          }
           const { map } = this;
           if (this.currentUser.states && this.currentUser.states.mapViewPort) {
             const {
@@ -276,49 +278,45 @@ export default {
       });
     },
     async updateMap(worksiteId) {
-      if (!worksiteId) {
-        this.initMap();
-      } else {
-        const markerSprite = this.pixiContainer.children.find(
-          ms => parseInt(ms.id) === parseInt(worksiteId),
-        );
-        const worksite = Worksite.find(worksiteId);
+      const markerSprite = this.pixiContainer.children.find(
+        ms => parseInt(ms.id) === parseInt(worksiteId),
+      );
+      const worksite = Worksite.find(worksiteId);
 
-        const workType = Worksite.getWorkType(
-          worksite.work_types,
-          this.currentFilters,
-          this.currentUser.organization,
-        );
+      const workType = Worksite.getWorkType(
+        worksite.work_types,
+        this.currentFilters,
+        this.currentUser.organization,
+      );
 
-        const colorsKey = `${workType.status}_${
-          workType.claimed_by ? 'claimed' : 'unclaimed'
-        }`;
-        markerSprite.active_work_type = workType;
-        markerSprite.work_types = worksite.work_types;
-        markerSprite.colorsKey = colorsKey;
+      const colorsKey = `${workType.status}_${
+        workType.claimed_by ? 'claimed' : 'unclaimed'
+      }`;
+      markerSprite.active_work_type = workType;
+      markerSprite.work_types = worksite.work_types;
+      markerSprite.colorsKey = colorsKey;
 
-        const worksiteTemplate =
-          this.map.getZoom() < INTERACTIVE_ZOOM_LEVEL
-            ? templates.circle
-            : templates[workType.work_type] || templates.unknown;
-        const spriteColors = colors[colorsKey];
+      const worksiteTemplate =
+        this.map.getZoom() < INTERACTIVE_ZOOM_LEVEL
+          ? templates.circle
+          : templates[workType.work_type] || templates.unknown;
+      const spriteColors = colors[colorsKey];
 
-        if (spriteColors) {
-          const svg = worksiteTemplate
-            .replace('{{fillColor}}', spriteColors.fillColor)
-            .replace('{{strokeColor}}', spriteColors.strokeColor)
-            .replace(
-              '{{multiple}}',
-              markerSprite.work_types.length > 1 ? templates.plus : '',
-            );
-          markerSprite.texture = Texture.from(svg);
-        }
-
-        this.$nextTick(() => {
-          // Add this slight pan to re-render map
-          this.map.panBy([1, 0]);
-        });
+      if (spriteColors) {
+        const svg = worksiteTemplate
+          .replace('{{fillColor}}', spriteColors.fillColor)
+          .replace('{{strokeColor}}', spriteColors.strokeColor)
+          .replace(
+            '{{multiple}}',
+            markerSprite.work_types.length > 1 ? templates.plus : '',
+          );
+        markerSprite.texture = Texture.from(svg);
       }
+
+      this.$nextTick(() => {
+        // Add this slight pan to re-render map
+        this.map.panBy([1, 0]);
+      });
     },
     enableInteractiveTooltip() {
       this.showInteractivePopover = true;

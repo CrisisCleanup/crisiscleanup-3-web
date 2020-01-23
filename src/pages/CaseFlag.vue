@@ -42,7 +42,7 @@
             {{ $t('flag.choose_correct_incident') }}
           </p>
           <form-select
-            v-model="currentFlag.requested_action"
+            v-model="newIncident"
             :options="incidents"
             searchable
             select-classes="bg-white border w-full h-12 mb-3"
@@ -50,7 +50,7 @@
             label="name"
           />
           <base-checkbox
-            v-model="currentFlag.notes"
+            v-model="incidentNotFound"
             class="text-crisiscleanup-red-700"
           >
             {{ $t("flag.incident_not_listed") }}
@@ -80,9 +80,11 @@
               )
             }}
           </p>
-          <base-button class="text-white bg-black w-full p-2">{{
-            $t('flag.location_unknown')
-          }}</base-button>
+          <base-button
+            class="text-white bg-black w-full p-2"
+            :action="flagWorksite"
+            >{{ $t('flag.location_unknown') }}</base-button
+          >
         </div>
       </div>
       <div v-if="currentFlag.reason_t === 'flag.worksite_upset_client'">
@@ -291,6 +293,8 @@ export default {
       },
       flagType: null,
       radioValue: null,
+      newIncident: null,
+      incidentNotFound: false,
       flagTypes: [
         'flag.worksite_high_priority',
         'flag.worksite_upset_client',
@@ -344,6 +348,20 @@ export default {
       this.organizationResults = results.entities.organizations;
     },
     async flagWorksite() {
+      if (
+        this.currentFlag.reason_t === 'flag.worksite_wrong_incident' &&
+        this.newIncident
+      ) {
+        await Worksite.api().patch(`/worksites/${this.$route.params.id}`, {
+          incident: this.newIncident,
+          skip_duplicate_check: true,
+        });
+        await this.$router.replace(
+          `/incident/${this.newIncident}/cases/${this.$route.params.id}`,
+        );
+        return;
+      }
+
       await Worksite.api().addFlag(this.$route.params.id, this.currentFlag);
       await this.$router.push(
         `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}`,
@@ -359,12 +377,8 @@ export default {
       this.worksite = Worksite.find(this.$route.params.id);
     },
     async updateWorksiteLocation() {
-      const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
       const latLng = getGoogleMapsLocation(this.currentFlag.requested_action);
       const geocode = await GeocoderService.getLocationDetails(latLng);
-      geocodeKeys.forEach(key =>
-        this.updateWorksite(geocode.address_components[key], key),
-      );
       const { lat, lng } = geocode.location;
       this.updateWorksite(
         {
@@ -374,25 +388,14 @@ export default {
         'location',
       );
       const what3words = await What3wordsService.getWords(lat, lng);
-      await this.flagWorksite();
-      const {
-        address,
-        city,
-        county,
-        state,
-        postal_code,
-        location,
-      } = this.worksite;
+      const { location } = this.worksite;
+      this.$emit('jumpToCase', this.$route.params.id);
       await Worksite.api().patch(`/worksites/${this.$route.params.id}`, {
-        address,
-        city,
-        county,
-        state,
-        postal_code,
         location,
         what3words,
         skip_duplicate_check: true,
       });
+      this.$emit('reloadMap');
       await this.$router.push(
         `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}`,
       );
