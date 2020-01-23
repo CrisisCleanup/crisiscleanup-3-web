@@ -96,17 +96,8 @@
             v-if="currentPolygon"
             button-class="border bg-white"
             icon="map-buffer"
-            :actions="[
-              { id: 'buffer', text: $t('actions.add') },
-              { id: 'cancel', text: $t('actions.cancel') },
-            ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Buffer'"
             :selected="Boolean(currentDraw) && currentDraw === 'Buffer'"
-            @changed="
-              event => {
-                handleMapEvent(event, 'Buffer');
-              }
-            "
             @click="enableBuffer"
           />
         </div>
@@ -156,19 +147,27 @@
         class="flex flex-col items-center justify-center"
       >
         {{ $t('layerTool.expand_or_contract') }}
-        <div class="my-1 border">
-          <base-input
+        <div class="my-1 flex flex-col items-center">
+          <input
             v-model="currentBufferDistance"
-            input-style="width: 100%; height: 30px; border: 0"
-          >
-            <div class="pr-2">{{ $t('layerTool.miles') }}</div>
-          </base-input>
+            type="range"
+            min="-100"
+            max="100"
+            step="10"
+          />
+          <div class="pr-2">
+            {{ currentBufferDistance }} {{ $t('layerTool.miles') }}
+          </div>
         </div>
         <base-button
           text="Save"
           type="primary"
           class="flex-grow px-3 py-1 my-1"
-          :action="enableBuffer"
+          :action="
+            () => {
+              handleMapEvent('buffer', 'Buffer');
+            }
+          "
         />
       </div>
       <div v-else>
@@ -249,7 +248,7 @@ export default {
         weight: '1',
       },
       map: null,
-      currentBufferDistance: -31,
+      currentBufferDistance: 0,
       markers: [],
       worksitesLoading: false,
     };
@@ -260,7 +259,7 @@ export default {
     },
     checkpointData() {
       return {
-        currentPolygon: this.currentPolygon && this.currentPolygon.toGeoJSON(),
+        currentPolygon: this.currentPolygon,
       };
     },
     ...mapState('incident', ['currentIncidentId']),
@@ -268,6 +267,9 @@ export default {
   watch: {
     currentPolygon(polygon) {
       this.$emit('changed', polygon);
+    },
+    currentBufferDistance() {
+      this.drawBuffer();
     },
   },
   async mounted() {
@@ -329,6 +331,7 @@ export default {
     });
 
     this.getWorksites();
+    this.checkpoint();
   },
   methods: {
     restoreCheckpoint(checkpointData) {
@@ -339,20 +342,14 @@ export default {
         this.map.removeLayer(layer);
       });
 
-      this.currentPolygon = checkpointData.currentPolygon;
-
-      if (this.currentPolygon) {
-        const newLayer = L.geoJSON(this.currentPolygon, this.completedOptions);
-        [this.currentPolygon] = newLayer.getLayers();
-        this.currentPolygon.addTo(this.map);
+      if (checkpointData.currentPolygon) {
+        const [currentPolygonLayer] = checkpointData.currentPolygon.getLayers();
+        const currentPolygon = currentPolygonLayer.toGeoJSON();
+        this.currentPolygon = L.geoJson(currentPolygon, this.completedOptions);
+        this.applyCurrentLayer();
+      } else {
+        this.currentPolygon = null;
       }
-
-      // this.bufferedLayer = checkpointData.bufferedLayer;
-      // if (this.bufferedLayer) {
-      //   const newLayer = L.geoJSON(this.bufferedLayer, this.bufferedOptions);
-      //   [this.bufferedLayer] = newLayer.getLayers();
-      //   this.bufferedLayer.addTo(this.map);
-      // }
     },
     toggleWorksites(val) {
       if (val) {
@@ -393,19 +390,20 @@ export default {
       if (this.currentPolygon) {
         this.map.addLayer(this.currentPolygon);
       }
-      this.checkpoint();
     },
     applyCurrentLayerUpload() {
       this.showingUploadModal = false;
       this.onLocationSelected({ id: this.currentLayerUpload[0].id }, true);
-      this.checkpoint();
+      // this.checkpoint();
     },
     enableBuffer() {
       this.drawBuffer();
       this.showPopup();
     },
     drawBuffer() {
-      this.applyCurrentLayer();
+      if (this.bufferedLayer) {
+        this.bufferedLayer.removeFrom(this.map);
+      }
       this.currentDraw = 'Buffer';
       const [currentPolygonLayer] = this.currentPolygon.getLayers();
       const currentPolygon = currentPolygonLayer.toGeoJSON();
@@ -429,12 +427,18 @@ export default {
         this.map.pm.disableDraw(type);
         this.currentDraw = null;
         if (!this.bufferedLayer) return;
+        this.checkpoint();
         if (this.currentPolygon) {
-          const [currentPolygonLayer] = this.currentPolygon.getLayers();
+          const layers = this.currentPolygon.getLayers();
+          const [currentPolygonLayer] = layers;
           const currentPolygon = currentPolygonLayer.toGeoJSON();
           const newPolygon = this.bufferedLayer.toGeoJSON();
           const newPoly = turf.union(currentPolygon, newPolygon);
-          this.currentPolygon = L.geoJson(newPoly, this.completedOptions);
+          if (newPoly) {
+            this.currentPolygon = L.geoJson(newPoly, this.completedOptions);
+          } else {
+            this.currentPolygon = null;
+          }
         } else {
           this.currentPolygon = L.geoJson(
             this.bufferedLayer.toGeoJSON(),
@@ -448,12 +452,17 @@ export default {
         this.map.pm.disableDraw(type);
         this.currentDraw = null;
         if (!this.bufferedLayer) return;
+        this.checkpoint();
         if (this.currentPolygon) {
           const [currentPolygonLayer] = this.currentPolygon.getLayers();
           const currentPolygon = currentPolygonLayer.toGeoJSON();
           const newPolygon = this.bufferedLayer.toGeoJSON();
           const newPoly = turf.difference(currentPolygon, newPolygon);
-          this.currentPolygon = L.geoJson(newPoly, this.completedOptions);
+          if (newPoly) {
+            this.currentPolygon = L.geoJson(newPoly, this.completedOptions);
+          } else {
+            this.currentPolygon = null;
+          }
         } else {
           this.currentPolygon = L.geoJson(
             this.bufferedLayer.toGeoJSON(),
@@ -467,6 +476,7 @@ export default {
         this.map.pm.disableDraw(type);
         this.currentDraw = null;
         if (!this.bufferedLayer) return;
+        this.checkpoint();
         this.currentPolygon = L.geoJSON(
           this.bufferedLayer.toGeoJSON(),
           this.completedOptions,
