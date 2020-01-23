@@ -168,6 +168,17 @@ export default {
     ...mapState('incident', ['currentIncidentId']),
     ...mapState('auth', ['user']),
   },
+  watch: {
+    '$route.params.incident_id': {
+      handler(value) {
+        if (value && this.currentIncidentId !== Number(value)) {
+          this.handleChange(value);
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   async mounted() {
     this.loading = true;
     await Promise.all([

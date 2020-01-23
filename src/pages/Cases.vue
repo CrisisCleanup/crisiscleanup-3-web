@@ -981,8 +981,12 @@ export default {
 
     reloadMap(worksiteId) {
       if (this.$refs.workstiteMap) {
-        this.$refs.workstiteMap.updateMap(worksiteId);
-        this.$refs.workstiteMap.markerLayer.clearLayers();
+        if (worksiteId) {
+          this.$refs.workstiteMap.updateMap(worksiteId);
+          this.$refs.workstiteMap.markerLayer.clearLayers();
+        } else {
+          this.$refs.workstiteMap.$forceUpdate();
+        }
       }
     },
 
