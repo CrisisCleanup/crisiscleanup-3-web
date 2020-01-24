@@ -19,6 +19,7 @@
       type="help"
       size="large"
     />
+    <slot name="action"></slot>
   </div>
 </template>
 <script>

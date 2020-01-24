@@ -13,20 +13,46 @@
       }}</SectionHeading>
       <div class="px-3 pb-3">
         <div>
-          <label
-            v-if="worksite.notes && worksite.notes.length > 0"
-            class="my-1 text-xs font-bold text-gray-600 block"
-            >{{ $t('formLabels.notes') }}</label
-          >
-          <div
-            v-for="note in worksite.notes"
-            :key="note.id"
-            class="notes my-1 p-1 flex items-center"
-          >
-            <span class="text-gray-600 mr-3 notes-time"
-              >{{ note.created_at | moment('from', 'now') }}:</span
-            ><span class="font-hairline">{{ note.note }}</span>
+          <div class="flex items-center justify-between">
+            <label
+              v-if="worksite.notes && worksite.notes.length > 0"
+              class="my-1 text-xs font-bold text-gray-600 block"
+              >{{ $t('formLabels.notes') }}</label
+            >
+
+            <base-button
+              v-if="worksite.notes.length"
+              icon="caret-down"
+              type="link"
+              :text="showingAllNotes ? $t('~~Some Notes') : $t('~~All Notes')"
+              :action="
+                () => {
+                  showingAllNotes = !showingAllNotes;
+                }
+              "
+            />
           </div>
+          <template v-for="(note, index) in worksite.notes">
+            <div
+              v-if="index < 4 || showingAllNotes"
+              :key="note.id"
+              class="notes my-1 p-1 flex items-start"
+              @click="
+                () => {
+                  expandedNotes[note.id] = !expandedNotes[note.id];
+                  expandedNotes = { ...expandedNotes };
+                }
+              "
+            >
+              <span class="text-gray-600 mr-3 notes-time w-32"
+                >{{ note.created_at | moment('from', 'now') }}:</span
+              ><span
+                class="font-hairline w-64 cursor-pointer"
+                :class="expandedNotes[note.id] ? '' : 'max-lines'"
+                >{{ note.note }}</span
+              >
+            </div>
+          </template>
           <base-button
             v-if="!addingNotes"
             class="my-1"
@@ -75,9 +101,33 @@
           <div>{{ worksite.formFields.phone1 }}</div>
         </div>
       </div>
-      <SectionHeading :count="2" class="mb-3">{{
-        $t('caseForm.work')
-      }}</SectionHeading>
+      <SectionHeading :count="2" class="mb-3"
+        >{{ $t('caseForm.work') }}
+        <template #action>
+          <base-button
+            v-if="workTypesUnclaimed.length > 0"
+            class="ml-2 p-1 px-3 text-xs"
+            type="primary"
+            :text="$t('~~Claim All')"
+            :action="
+              () => {
+                return claimWorkType();
+              }
+            "
+          />
+          <base-button
+            v-if="workTypesClaimedByOthersUnrequested.length > 0"
+            class="ml-2 p-1 px-3 border-black border-2 border-black text-xs"
+            :text="$t('~~Request All')"
+            :action="
+              () => {
+                requestingWorkTypes = true;
+                initialWorkTypeRequestSelection = [];
+              }
+            "
+          />
+        </template>
+      </SectionHeading>
       <div class="px-3 pb-3">
         <div v-if="Object.keys(workTypesClaimedByOthers).length > 0">
           <label class="my-1 text-xs font-bold text-gray-600 block">{{
@@ -303,6 +353,8 @@ export default {
   data() {
     return {
       addingNotes: false,
+      expandedNotes: {},
+      showingAllNotes: false,
       requestingWorkTypes: false,
       initialWorkTypeRequestSelection: [],
       currentNote: '',
@@ -541,5 +593,13 @@ export default {
   grid-row-start: row2-start;
   grid-column-start: 1;
   grid-column-end: 3;
+}
+
+.max-lines {
+  display: block; /* or inline-block */
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow: hidden;
+  max-height: 5em;
 }
 </style>
