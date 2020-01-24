@@ -23,11 +23,7 @@
         </div>
         <div>
           <p class="my-3">
-            {{
-              $t(
-                'flag.please_describe_why_high_priority',
-              )
-            }}
+            {{ $t('flag.please_describe_why_high_priority') }}
           </p>
           <textarea
             v-model="currentFlag.notes"
@@ -53,7 +49,7 @@
             v-model="incidentNotFound"
             class="text-crisiscleanup-red-700"
           >
-            {{ $t("flag.incident_not_listed") }}
+            {{ $t('flag.incident_not_listed') }}
           </base-checkbox>
         </div>
       </div>
@@ -74,11 +70,7 @@
             :placeholder="$t('flag.google_map_url')"
           />
           <p class="mt-5 mb-3">
-            {{
-              $t(
-                'flag.click_if_location_unknown',
-              )
-            }}
+            {{ $t('flag.click_if_location_unknown') }}
           </p>
           <base-button
             class="text-white bg-black w-full p-2"
@@ -90,11 +82,7 @@
       <div v-if="currentFlag.reason_t === 'flag.worksite_upset_client'">
         <div class="border-b py-5">
           <p class="my-3">
-            {{
-              $t(
-                'flag.explain_why_client_upset',
-              )
-            }}
+            {{ $t('flag.explain_why_client_upset') }}
           </p>
           <textarea
             v-model="currentFlag.notes"
@@ -125,11 +113,7 @@
         </div>
         <div class="py-5">
           <p class="mb-2">
-            {{
-              $t(
-                'flag.please_share_other_orgs',
-              )
-            }}
+            {{ $t('flag.please_share_other_orgs') }}
           </p>
           <autocomplete
             icon="search"
@@ -177,11 +161,7 @@
             @search="onOrganizationSearch"
           />
           <p class="my-3">
-            {{
-              $t(
-                'flag.must_contact_org_first',
-              )
-            }}
+            {{ $t('flag.must_contact_org_first') }}
           </p>
           <p class="my-3">{{ $t('flag.have_you_contacted_org') }}</p>
           <div class="flex mt-2">
@@ -206,11 +186,7 @@
           <textarea rows="4" class="block w-full border outline-none" />
 
           <p class="my-3">
-            {{
-              $t(
-                'flag.describe_problem',
-              )
-            }}
+            {{ $t('flag.describe_problem') }}
           </p>
           <textarea
             v-model="currentFlag.notes"
@@ -226,11 +202,7 @@
           />
 
           <p class="my-3">
-            {{
-              $t(
-                'flag.warning_ccu_cannot_do_much',
-              )
-            }}
+            {{ $t('flag.warning_ccu_cannot_do_much') }}
           </p>
         </div>
       </div>

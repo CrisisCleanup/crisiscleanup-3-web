@@ -81,7 +81,7 @@
             :actions="[
               { id: 'add', text: $t('actions.add') },
               { id: 'exclude', text: $t('actions.subtract') },
-              { id: 'cancel', text: '$t('actions.cancel')' },
+              { id: 'cancel', text: $t('actions.cancel') },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Circle'"

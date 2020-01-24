@@ -131,7 +131,10 @@ export default {
       layerDescription: '',
       layerType: '',
       layerAccess: 'Private',
-      layerTypes: [$t('locationTypes.org_primary_response_area'), $t('locationTypes.incident_primary_damaged_area')],
+      layerTypes: [
+        this.$t('locationTypes.org_primary_response_area'),
+        this.$t('locationTypes.incident_primary_damaged_area'),
+      ],
     };
   },
   computed: {
