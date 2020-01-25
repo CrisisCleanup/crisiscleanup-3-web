@@ -596,6 +596,7 @@ export default {
       filters: {
         fields: {},
         statusGroups: {},
+        flags: {},
         statuses: {},
         sub_fields: {},
       },
@@ -722,6 +723,8 @@ export default {
     filtersCount() {
       return (
         Object.values(this.filters.statusGroups).filter(field => Boolean(field))
+          .length +
+        Object.values(this.filters.flags).filter(field => Boolean(field))
           .length +
         Object.values(this.filters.fields).filter(field => Boolean(field))
           .length +
@@ -1050,11 +1053,18 @@ export default {
     handleFilters() {
       const appliedFilters = {
         work_type__work_type__in: '',
+        flags: '',
       };
-      const entries = Object.entries(this.filters.fields);
-      entries.forEach(([workType, values]) => {
+      const workTypeEntries = Object.entries(this.filters.fields);
+      workTypeEntries.forEach(([workType, values]) => {
         if (values) {
           appliedFilters.work_type__work_type__in += `${workType},`;
+        }
+      });
+      const flagEntries = Object.entries(this.filters.flags);
+      flagEntries.forEach(([flag, value]) => {
+        if (value) {
+          appliedFilters.flags += `${flag},`;
         }
       });
       if (!Object.values(this.filters.fields).some(value => Boolean(value))) {

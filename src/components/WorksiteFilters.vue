@@ -35,9 +35,20 @@
               :key="key"
               closeable
               class="m-1"
-              @closed="removeStatus(key)"
+              @closed="removeFilter(key)"
             >
               {{ $t('worksiteFilters.status') }}: {{ key | snakeToTitleCase }}
+            </tag>
+          </template>
+          <template v-for="(value, key) in filters.flags">
+            <tag
+              v-if="value"
+              :key="key"
+              closeable
+              class="m-1"
+              @closed="removeFilter(key)"
+            >
+              {{ $t('worksiteFilters.flag') }}: {{ $t(key) }}
             </tag>
           </template>
           <template v-for="(value, key) in filters.statuses">
@@ -46,7 +57,7 @@
               :key="key"
               closeable
               class="m-1"
-              @closed="removeStatus(key)"
+              @closed="removeFilter(key)"
             >
               {{ $t('worksiteFilters.status') }}: {{ key | getStatusName }}
             </tag>
@@ -80,6 +91,20 @@
           </div>
           <div class="p-3 px-4 border-b cursor-pointer">
             {{ $t('Personal Info') }}
+          </div>
+          <div
+            class="p-3 px-4 border-b cursor-pointer"
+            :class="{
+              'border-l-8 border-l-black': currentSection === 'flags',
+            }"
+            @click="currentSection = 'flags'"
+          >
+            {{ $t('~~Flags') }}
+            <span
+              v-if="flagsCount > 0"
+              class="rounded-full px-1 bg-black text-white text-xs"
+              >{{ flagsCount }}</span
+            >
           </div>
           <div
             class="p-3 px-4 border-b cursor-pointer"
@@ -168,6 +193,26 @@
                   >{{ status.status | getStatusName }}
                 </base-checkbox>
               </div>
+            </div>
+          </div>
+          <div v-if="currentSection === 'flags'" class="flex flex-col">
+            <div class="status-group mb-2">
+              <div class="my-1 text-base">
+                {{ $t('worksiteFilters.flags') }}
+              </div>
+              <base-checkbox
+                v-for="flag in flagTypes"
+                :key="flag"
+                class="block my-1"
+                :value="filters.flags[flag]"
+                @input="
+                  value => {
+                    filters.flags[flag] = value;
+                    filters.flags = { ...filters.flags };
+                  }
+                "
+                >{{ $t(flag) }}
+              </base-checkbox>
             </div>
           </div>
           <template v-if="currentSection === 'work'">
@@ -307,10 +352,20 @@ export default {
         fields: {},
         statuses: {},
         statusGroups: {},
+        flags: {},
         sub_fields: {},
       },
       currentSection: 'general',
       expanded: {},
+      flagTypes: [
+        'flag.worksite_high_priority',
+        'flag.worksite_upset_client',
+        'flag.worksite_mark_for_deletion',
+        'flag.worksite_abuse',
+        'flag.duplicate',
+        'flag.worksite_wrong_location',
+        'flag.worksite_wrong_incident',
+      ],
     };
   },
   computed: {
@@ -345,8 +400,17 @@ export default {
         Boolean(field),
       ).length;
     },
+    flagsCount() {
+      return Object.values(this.filters.flags).filter(field => Boolean(field))
+        .length;
+    },
     filtersCount() {
-      return this.fieldsCount + this.statusCount + this.statusGroupCount;
+      return (
+        this.fieldsCount +
+        this.statusCount +
+        this.statusGroupCount +
+        this.flagsCount
+      );
     },
     allStatuses() {
       return Status.all().map((status, index) => {
@@ -361,6 +425,7 @@ export default {
     this.filters = {
       fields: { ...this.currentFilters.fields },
       statusGroups: { ...this.currentFilters.statusGroups },
+      flags: { ...this.currentFilters.flags },
       statuses: { ...this.currentFilters.statuses },
       sub_fields: {},
     };
@@ -377,6 +442,7 @@ export default {
       this.$emit('updatedFilters', {
         fields: { ...this.filters.fields },
         statusGroups: { ...this.filters.statusGroups },
+        flags: { ...this.filters.flags },
         statuses: { ...this.filters.statuses },
       });
 
@@ -424,8 +490,9 @@ export default {
     removeField(key) {
       this.filters.fields[key] = undefined;
     },
-    removeStatus(key) {
+    removeFilter(key) {
       this.filters.statusGroups[key] = undefined;
+      this.filters.flags[key] = undefined;
       this.filters.statuses[key] = undefined;
     },
     clearAllFilters() {
@@ -433,6 +500,7 @@ export default {
         fields: {},
         statuses: {},
         statusGroups: {},
+        flags: {},
         sub_fields: {},
       };
     },
