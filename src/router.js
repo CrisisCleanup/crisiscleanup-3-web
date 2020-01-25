@@ -95,12 +95,12 @@ const routes = [
       {
         path: 'users',
         component: Users,
-        name: 'nav.organization_users',
+        name: '~~nav.organization_users',
       },
       {
         path: 'layers',
         component: Layers,
-        name: 'nav.organization_layers',
+        name: '~~nav.organization_layers',
       },
     ],
     meta: { layout: 'authenticated' },
@@ -108,25 +108,25 @@ const routes = [
   {
     path: '/layers/new',
     component: Layer,
-    name: 'nav.new_layer',
+    name: '~~nav.new_layer',
     meta: { layout: 'authenticated' },
   },
   {
     path: '/layers/:layer_id',
     component: Layer,
-    name: 'nav.edit_layer',
+    name: '~~nav.edit_layer',
     meta: { layout: 'authenticated' },
   },
   {
     path: '/login',
     component: Login,
-    name: 'nav.login',
+    name: '~~nav.login',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
     path: '/invitation_token/:token',
     component: InvitationSignup,
-    name: 'nav.invitation_token',
+    name: '~~nav.invitation_token',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];
