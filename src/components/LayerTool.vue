@@ -561,6 +561,7 @@ export default {
       };
       this.currentPolygon = L.geoJSON(geojsonFeature, this.completedOptions);
       this.currentPolygon.addTo(this.map);
+      this.map.fitBounds(this.currentPolygon.getBounds());
     },
   },
 };
