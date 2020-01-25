@@ -4,10 +4,9 @@ node_modules
 
 /public/map_icons/*.svg
 
-# local env files
-.env.local
-.env.*.local
-.envrc
+# Environment Files
+.env*
+!.env.sample
 
 # Log files
 npm-debug.log*
