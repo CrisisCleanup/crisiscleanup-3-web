@@ -3,12 +3,14 @@ name: CrisisCleanup
 on:
   pull_request:
     paths:
+      - '**/**.json'
       - '**/**.js'
       - '**/**.vue'
       - '**/**.js.snap'
       - '.github/workflows/*'
   push:
     paths:
+      - '**/**.json'
       - '**/**.js'
       - '**/**.vue'
       - '**/**.js.snap'
