@@ -1,4 +1,4 @@
-name: CrisisCleanup 
+name: Cypress
 
 on:
   pull_request:
@@ -21,6 +21,8 @@ jobs:
     # allows for:
     # 1.) Parallel Builds
     # 2.) Multiple builds per commit hash (think PR & Branch)
+    name: Generate Unique Build ID
+    runs-on: ubuntu-latest
     steps:
       - name: Set Build ID
         id: build_id
@@ -35,10 +37,12 @@ jobs:
 
       - name: Save Build ID
         run: |
-          mkdir -p .build-id
-          echo $BUILD_ID > .build_id/id
+          mkdir -p "$BUILD_DIR"
+          echo "$BUILD_ID" > "$BUILD_PATH"
         env:
           BUILD_ID: ${{ steps.build_id.outputs.id }}
+          BUILD_DIR: ${{ github.workspace }}/.build-id
+          BUILD_PATH: ${{ github.workspace }}/.build-id/id
 
   cypress:
     name: Run Visual Tests
