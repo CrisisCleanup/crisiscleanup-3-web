@@ -6,6 +6,7 @@ import axios from 'axios';
 import auth from './modules/auth';
 import incident from './modules/incident';
 import loading from './modules/loading';
+import locale from './modules/locale';
 import database from './database';
 
 VuexORM.use(VuexORMAxios, {
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     auth,
     incident,
     loading,
+    locale,
   },
   plugins: [VuexORM.install(database)],
   strict: debug,

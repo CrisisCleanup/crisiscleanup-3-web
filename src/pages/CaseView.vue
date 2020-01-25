@@ -32,7 +32,7 @@
               "
             />
           </div>
-          <template v-for="(note, index) in worksite.notes">
+          <template v-for="(note, index) in sortedNotes">
             <div
               v-if="index < 4 || showingAllNotes"
               :key="note.id"
@@ -44,7 +44,7 @@
                 }
               "
             >
-              <span class="text-gray-600 mr-3 notes-time w-32"
+              <span class="text-gray-600 mr-3 notes-time w-40"
                 >{{ note.created_at | moment('from', 'now') }}:</span
               ><span
                 class="font-hairline w-64 cursor-pointer"
@@ -334,6 +334,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import { getErrorMessage } from '@/utils/errors';
 import StatusDropDown from '@/components/StatusDropDown';
 import User from '@/models/User';
@@ -346,10 +347,12 @@ import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
 import { getQueryString } from '@/utils/urls';
 import SectionHeading from '../components/SectionHeading';
 import Flag from './Flag';
+import { LocaleMixin } from '@/mixins/locale';
 
 export default {
   name: 'CaseView',
   components: { Flag, SectionHeading, WorkTypeRequestModal, StatusDropDown },
+  mixins: [LocaleMixin],
   data() {
     return {
       addingNotes: false,
@@ -363,6 +366,11 @@ export default {
   computed: {
     worksite() {
       return Worksite.find(this.$route.params.id);
+    },
+    sortedNotes() {
+      return [...this.worksite.notes].sort((a, b) => {
+        return moment(b.created_at).unix() - moment(a.created_at).unix();
+      });
     },
     incident() {
       return Incident.find(this.$route.params.incident_id);

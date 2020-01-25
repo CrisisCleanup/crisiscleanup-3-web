@@ -131,9 +131,6 @@ import Organization from '@/models/Organization';
 import Status from '@/models/Status';
 import { i18nService } from '@/services/i18n.service';
 import DisasterIcon from '../components/DisasterIcon';
-import 'moment/src/locale/fr-ca';
-import 'moment/src/locale/en-ca';
-import 'moment/src/locale/es';
 
 export default {
   name: 'Authenticated',
@@ -202,6 +199,8 @@ export default {
 
     const currentLanguage =
       this.currentUser.primary_language || detectBrowserLanguage();
+
+    this.setLanguage(currentLanguage);
     if (currentLanguage !== this.$i18n.locale) {
       try {
         const data = await i18nService.getLanguage(currentLanguage);
@@ -269,6 +268,7 @@ export default {
     ...mapActions('auth', ['login']),
     ...mapMutations('incident', ['setCurrentIncidentId']),
     ...mapMutations('loading', ['setWorksitesLoading']),
+    ...mapMutations('locale', ['setLanguage']),
   },
 };
 </script>

@@ -15,9 +15,11 @@ import Popover from 'vue-js-popover';
 import Dropdown from 'bp-vuejs-dropdown';
 import vSelect from 'vue-select';
 import detectBrowserLanguage from 'detect-browser-language';
+import moment from 'moment';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
+import 'moment/min/locales';
 
 import { AuthService } from '@/services/auth.service';
 
@@ -73,7 +75,7 @@ Vue.config.productionTip = false;
 Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
 Vue.use(VueAxios, axios);
-Vue.use(require('vue-moment'));
+Vue.use(require('vue-moment'), { moment });
 
 Vue.use(Toasted, {
   position: 'top-center',
