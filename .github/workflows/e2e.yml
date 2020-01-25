@@ -1,0 +1,80 @@
+name: CrisisCleanup 
+
+on:
+  pull_request:
+    paths:
+      - '**/**.json'
+      - '**/**.js'
+      - '**/**.vue'
+      - '**/**.js.snap'
+      - '.github/workflows/e2e.yml'
+  push:
+    paths:
+      - '**/**.json'
+      - '**/**.js'
+      - '**/**.vue'
+      - '**/**.js.snap'
+      - '.github/workflows/e2e.yml'
+
+jobs:
+  build_id:
+    # allows for:
+    # 1.) Parallel Builds
+    # 2.) Multiple builds per commit hash (think PR & Branch)
+    steps:
+      - name: Set Build ID
+        id: build_id
+        run: echo "::set-output name=id::$(date +%s)"
+
+      - name: Cache Build ID
+        uses: actions/cache@v1.0.3
+        with:
+          path: ${{ github.workspace }}/.build-id
+          # use build id for unique cache
+          key: ${{ runner.os }}-build-id-${{ github.head_ref }}-${{ github.sha }}-${{ steps.build_id.outputs.id }}
+
+      - name: Save Build ID
+        run: |
+          mkdir -p .build-id
+          echo $BUILD_ID > .build_id/id
+        env:
+          BUILD_ID: ${{ steps.build_id.outputs.id }}
+
+  cypress:
+    name: Run Visual Tests
+    runs-on: ubuntu-latest
+    needs: build_id
+    strategy:
+      matrix:
+        # run cypress in parallel
+        container: [1, 2]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Cache Build ID
+        uses: actions/cache@v1.0.3
+        with:
+          path: ${{ github.workspace }}/.build-id
+          # unique build ID
+          key: ${{ runner.os }}-build-id-${{ github.head_ref }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-id-${{ github.head_ref }}-${{ github.sha }}
+
+      - name: Set Build ID
+        id: build_id
+        run: echo "::set-output name=id::$(cat .build-id/id)"
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v1.20.0
+        with:
+          record: true
+          start: npm run serve
+          wait-on: 'http://localhost:8080'
+          group: Chrome
+          headless: true
+          browser: chrome
+          parallel: true
+          ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
