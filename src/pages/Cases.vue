@@ -681,19 +681,19 @@ export default {
         .get();
     },
     isEditingWorksite() {
-      return this.$route.name === 'IncidentEditCaseForm';
+      return this.$route.meta.id === 'case_edit';
     },
     isViewingWorksite() {
-      return this.$route.name === 'IncidentCaseView';
+      return this.$route.meta.id === 'case_view';
     },
     isViewingWorksiteHistory() {
-      return this.$route.name === 'IncidentCaseHistory';
+      return this.$route.meta.id === 'case_history';
     },
     isViewingWorksiteFlag() {
-      return this.$route.name === 'IncidentCaseFlag';
+      return this.$route.meta.id === 'case_flag';
     },
     isNewWorksite() {
-      return this.$route.name === 'IncidentNewCaseForm';
+      return this.$route.meta.id === 'case_new';
     },
     incidents() {
       return Incident.query()

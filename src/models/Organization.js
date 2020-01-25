@@ -7,6 +7,7 @@ export default class Organization extends Model {
     return {
       id: this.increment(),
       name: this.string(''),
+      affiliates: this.attr([]),
     };
   }
 }

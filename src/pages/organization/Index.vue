@@ -61,7 +61,7 @@ export default {
   name: 'Organization',
   computed: {
     isInvitationsActive() {
-      return this.$route.name === 'Invitations';
+      return this.$route.meta.id === 'invitations';
     },
   },
 };

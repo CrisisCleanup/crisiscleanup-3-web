@@ -150,7 +150,7 @@ export default {
       return '';
     },
     selectedRoute() {
-      return this.$route.name;
+      return this.$t(this.$route.name);
     },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
