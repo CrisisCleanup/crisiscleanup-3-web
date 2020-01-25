@@ -39,6 +39,15 @@ export default class Incident extends Model {
           `/incidents/${id}?fields=id,case_label,form_fields,geofence,short_name,name,start_at,uuid,incident_type,color`,
         );
       },
+      addLocation(id, location) {
+        return this.post(
+          `/incidents/${id}/locations`,
+          {
+            location,
+          },
+          { save: false },
+        );
+      },
     },
   };
 }

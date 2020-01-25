@@ -420,7 +420,7 @@
             @click.native="backToWorksite"
           />
         </template>
-        <template v-if="isViewingWorksiteFlag">
+        <template v-else-if="isViewingWorksiteFlag">
           <ccu-icon
             :alt="$t('actions.flag')"
             size="medium"

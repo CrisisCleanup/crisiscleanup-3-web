@@ -56,12 +56,47 @@
           />
           <form-select
             v-if="!loading"
-            v-model="currentLayer.type"
+            :value="currentLayer.type"
             :options="locationTypes"
             item-key="id"
             label="name_t"
+            placeholder="~Layer Type"
             select-classes="bg-white border w-full h-12"
+            @input="currentLayer.type = $event"
           />
+
+          <div v-if="!currentLayer.id" class="extra-actions">
+            <div v-if="isPrimaryResponseArea || isSecondaryResponseArea">
+              <autocomplete
+                class="form-field"
+                icon="search"
+                :suggestions="organizationResults"
+                display-property="name"
+                size="large"
+                placeholder="~~Search for Organization"
+                clear-on-selected
+                @selected="
+                  value => {
+                    selectedOrganization = value;
+                  }
+                "
+                @search="onOrganizationSearch"
+              />
+            </div>
+            <div v-if="isIncidentRelated">
+              <form-select
+                v-model="selectedIncident"
+                class="form-field"
+                :options="incidents"
+                searchable
+                select-classes="bg-white border w-full h-12 mb-3"
+                item-key="id"
+                label="name"
+                placeholder="~Select an Incident"
+              />
+            </div>
+          </div>
+
           <textarea
             v-model="currentLayer.description"
             class="text-base form-field border outline-none p-2 resize-none"
@@ -117,7 +152,9 @@
 import Layer from '@/models/Layer';
 import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
-import LayerTool from '../components/LayerTool';
+import Organization from '@/models/Organization';
+import Incident from '@/models/Incident';
+import LayerTool from '@/components/LayerTool';
 
 export default {
   name: 'Layer',
@@ -135,11 +172,48 @@ export default {
         this.$t('locationTypes.org_primary_response_area'),
         this.$t('locationTypes.incident_primary_damaged_area'),
       ],
+      organizationResults: [],
+      selectedOrganization: null,
+      selectedIncident: null,
     };
   },
   computed: {
     locationTypes() {
       return LocationType.all();
+    },
+    incidents() {
+      return Incident.query()
+        .orderBy('id', 'desc')
+        .get();
+    },
+    isPrimaryResponseArea() {
+      return (
+        LocationType.query()
+          .where('key', 'org_primary_response_area')
+          .get()[0].id === this.currentLayer.type
+      );
+    },
+    isSecondaryResponseArea() {
+      return (
+        LocationType.query()
+          .where('key', 'org_secondary_response_area')
+          .get()[0].id === this.currentLayer.type
+      );
+    },
+    isIncidentRelated() {
+      const incidentRelatedTypes = LocationType.query()
+        .where('key', key =>
+          [
+            'incident_primary_damaged_area',
+            'incident_storm_track',
+            'incident_furthest_damaged_area',
+            'incident_damage',
+          ].includes(key),
+        )
+        .get();
+      return incidentRelatedTypes.some(
+        key => key.id === this.currentLayer.type,
+      );
     },
   },
   async mounted() {
@@ -165,6 +239,15 @@ export default {
   methods: {
     setCurrentLocation(location) {
       this.currentLocation = location;
+    },
+    async onOrganizationSearch(value) {
+      const results = await Organization.api().get(
+        `/organizations?search=${value}&limit=10&fields=id,name`,
+        {
+          dataKey: 'results',
+        },
+      );
+      this.organizationResults = results.entities.organizations;
     },
     async saveLayer() {
       this.loading = true;
@@ -209,7 +292,33 @@ export default {
             ...this.currentLayer,
             locations,
           });
+
+          if (this.isPrimaryResponseArea) {
+            await Organization.api().patch(
+              `/organizations/${this.selectedOrganization.id}`,
+              {
+                primary_location: locations[0],
+              },
+            );
+          }
+
+          if (this.isSecondaryResponseArea) {
+            await Organization.api().patch(
+              `/organizations/${this.selectedOrganization.id}`,
+              {
+                secondary_location: locations[0],
+              },
+            );
+          }
+
+          if (this.isIncidentRelated) {
+            await Incident.api().addLocation(
+              this.selectedIncident,
+              locations[0],
+            );
+          }
         }
+
         await this.$router.push(`/layers/${layerResult.entities.layers[0].id}`);
       } catch (e) {
         this.$log.error(e);

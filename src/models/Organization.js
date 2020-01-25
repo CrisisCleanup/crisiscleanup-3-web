@@ -8,6 +8,8 @@ export default class Organization extends Model {
       id: this.increment(),
       name: this.string(''),
       affiliates: this.attr([]),
+      primary_location: this.attr(null),
+      secondary_location: this.attr(null),
     };
   }
 }
