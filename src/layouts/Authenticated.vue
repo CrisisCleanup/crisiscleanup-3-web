@@ -168,7 +168,7 @@ export default {
   watch: {
     '$route.params.incident_id': {
       handler(value) {
-        if (value && this.currentIncidentId !== Number(value)) {
+        if (value && Number(this.currentIncidentId) !== Number(value)) {
           this.handleChange(value);
         }
       },

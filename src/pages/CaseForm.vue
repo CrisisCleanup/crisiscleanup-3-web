@@ -723,6 +723,28 @@ export default {
       try {
         this.gettingLocation = false;
         this.location = await this.getLocation();
+        const { latitude, longitude } = this.location.coords;
+        const geocode = await GeocoderService.getLocationDetails({
+          latitude,
+          longitude,
+        });
+        const geocodeKeys = [
+          'address',
+          'city',
+          'county',
+          'state',
+          'postal_code',
+        ];
+        geocodeKeys.forEach(key =>
+          this.updateWorksite(geocode.address_components[key], key),
+        );
+        this.updateWorksite(
+          {
+            type: 'Point',
+            coordinates: [longitude, latitude],
+          },
+          'location',
+        );
         const what3words = await What3wordsService.getWords(
           this.location.coords.latitude,
           this.location.coords.longitude,
