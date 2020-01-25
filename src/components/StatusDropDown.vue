@@ -15,7 +15,7 @@
     </div>
     <div
       slot="popover"
-      class="bg-white border outline-none h-96 w-56 overflow-auto"
+      class="bg-white border outline-none h-84 w-56 overflow-auto"
       @keyup="nextItem"
     >
       <div

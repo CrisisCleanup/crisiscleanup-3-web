@@ -51,6 +51,7 @@
             </div>
             <div class="flex flex-col ml-2 w-84">
               <form-select
+                :key="currentIncidentId"
                 :value="currentIncident"
                 :options="incidents"
                 :clearable="false"
@@ -253,16 +254,16 @@ export default {
   },
   methods: {
     async handleChange(value) {
-      this.setCurrentIncidentId(value);
       this.ready = false;
       await Incident.api().fetchById(value);
       this.ready = true;
+      User.api().updateUserState({
+        incident: value,
+      });
+      this.setCurrentIncidentId(value);
       await this.$router.push({
         name: this.$route.name,
         params: { ...this.$route.params, incident_id: value },
-      });
-      User.api().updateUserState({
-        incident: value,
       });
     },
     ...mapActions('auth', ['login']),
