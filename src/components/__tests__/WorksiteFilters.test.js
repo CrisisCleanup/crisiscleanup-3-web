@@ -29,6 +29,7 @@ const MockFilters = {
     closed: false,
   },
   statuses: {},
+  flags: {},
   sub_fields: {},
 };
 
@@ -78,7 +79,7 @@ describe('WorksiteFilters', () => {
 
   it('should remove status', () => {
     const wrapper = mountWithOptions();
-    wrapper.vm.removeStatus('open');
+    wrapper.vm.removeFilter('open');
     expect(wrapper.vm.filters).toMatchSnapshot({
       ...MockFilters,
       statusGroups: {

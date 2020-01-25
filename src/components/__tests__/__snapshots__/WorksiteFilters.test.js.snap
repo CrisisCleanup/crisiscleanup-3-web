@@ -5,6 +5,7 @@ Object {
   "fields": Object {
     "muck_out": true,
   },
+  "flags": Object {},
   "statusGroups": Object {
     "closed": false,
     "open": true,
@@ -19,6 +20,7 @@ Object {
   "fields": Object {
     "muck_out": undefined,
   },
+  "flags": Object {},
   "statusGroups": Object {
     "closed": false,
     "open": true,
@@ -32,6 +34,9 @@ exports[`WorksiteFilters should remove status 1`] = `
 Object {
   "fields": Object {
     "muck_out": true,
+  },
+  "flags": Object {
+    "open": undefined,
   },
   "statusGroups": Object {
     "closed": false,
@@ -89,7 +94,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           
         </tag-stub>
         <!---->
-         
+          
       </div>
        
       <div>
@@ -134,6 +139,15 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           
           Personal Info
         
+        </div>
+         
+        <div
+          class="p-3 px-4 border-b cursor-pointer"
+        >
+          
+          ~~Flags
+          
+          <!---->
         </div>
          
         <div
@@ -252,6 +266,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
         </div>
          
         <!---->
+         
+        <!---->
       </div>
     </div>
   </div>
@@ -295,6 +311,7 @@ Object {
   "fields": Object {
     "muck_out": true,
   },
+  "flags": Object {},
   "statusGroups": Object {
     "closed": false,
     "open": true,
@@ -309,6 +326,7 @@ Object {
   "fields": Object {
     "muck_out": true,
   },
+  "flags": Object {},
   "statusGroups": Object {
     "closed": false,
     "open": false,
@@ -323,6 +341,7 @@ Object {
   "fields": Object {
     "muck_out": true,
   },
+  "flags": Object {},
   "statusGroups": Object {
     "closed": false,
     "open": true,
