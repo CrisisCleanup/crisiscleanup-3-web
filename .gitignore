@@ -7,6 +7,7 @@ node_modules
 # local env files
 .env.local
 .env.*.local
+.envrc
 
 # Log files
 npm-debug.log*
@@ -27,3 +28,6 @@ coverage
 .nyc_output/
 cypress/screenshots
 cypress/videos
+
+# Misc
+.sync-exclude.lst
