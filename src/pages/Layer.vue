@@ -60,7 +60,7 @@
             :options="locationTypes"
             item-key="id"
             label="name_t"
-            placeholder="~Layer Type"
+            placeholder="~~Layer Type"
             select-classes="bg-white border w-full h-12"
             @input="currentLayer.type = $event"
           />
