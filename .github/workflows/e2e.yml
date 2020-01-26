@@ -16,6 +16,12 @@ on:
       - '**/**.js.snap'
       - '.github/workflows/e2e.yml'
 
+env:
+  VUE_APP_WHAT_3_WORDS_API_KEY: ${{ secrets.VUE_APP_WHAT_3_WORDS_API_KEY }}
+  VUE_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_API_KEY }}
+  VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
+  VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
+
 jobs:
   build_id:
     # allows for:
