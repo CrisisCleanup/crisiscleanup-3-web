@@ -367,6 +367,8 @@
 </template>
 
 <script>
+import * as turf from '@turf/turf';
+import * as moment from 'moment';
 import Worksite from '@/models/Worksite';
 import OverlayMap from '@/components/OverlayMap';
 import GeocoderService from '@/services/geocoder.service';
@@ -504,13 +506,56 @@ export default {
         this.$emit('geocoded', geocode.location);
       }
     },
+    checkGeocodeLocation({ lat, lng }) {
+      if (!this.currentIncident.locationModels.length) {
+        return true;
+      }
+      let isWithinBounds = false;
+
+      this.currentIncident.locationModels.forEach(location => {
+        const geojsonFeature = {
+          type: 'Feature',
+          properties: location.attr,
+          geometry: location.poly || location.geom || location.point,
+        };
+        const locationFeature = {
+          type: 'Feature',
+          properties: {},
+          geometry: {
+            type: 'Point',
+            coordinates: [lng, lat],
+          },
+        };
+        const intersects = turf.booleanPointInPolygon(
+          locationFeature,
+          geojsonFeature,
+        );
+        if (intersects) {
+          isWithinBounds = true;
+        }
+      });
+      return isWithinBounds;
+    },
+    async getPotentialIncidents({ lat, lng }) {
+      const sixtyDaysAgo = moment().subtract(560, 'days');
+
+      const response = await Incident.api().get(
+        `/incidents?fields=id,name&location=${lat},${lng}&start_at__gt=${sixtyDaysAgo.toISOString()}`,
+        {
+          save: false,
+        },
+      );
+      const incidents = response.response.data.results;
+      this.$log.debug(incidents);
+    },
     async onGeocodeSelect(value) {
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
       const geocode = await GeocoderService.getPlaceDetails(value.description);
+      const { lat, lng } = geocode.location;
       geocodeKeys.forEach(key =>
         this.updateWorksite(geocode.address_components[key], key),
       );
-      const { lat, lng } = geocode.location;
+
       this.updateWorksite(
         {
           type: 'Point',
@@ -521,6 +566,10 @@ export default {
       const what3words = await What3wordsService.getWords(lat, lng);
       this.updateWorksite(what3words, 'what3words');
       this.$emit('geocoded', geocode.location);
+      const isWithinCurrentIncident = this.checkGeocodeLocation({ lat, lng });
+      if (!isWithinCurrentIncident) {
+        await this.getPotentialIncidents({ lat, lng });
+      }
     },
     async onWorksiteSelect(value) {
       this.$emit('navigateToWorksite', value.id);
