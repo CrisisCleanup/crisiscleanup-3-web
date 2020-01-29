@@ -75,11 +75,7 @@
                 />
                 <span class="p-3">
                   {{ name }}
-                  <font-awesome-icon
-                    class="cursor-pointer"
-                    size="md"
-                    icon="caret-down"
-                  />
+                  <font-awesome-icon class="cursor-pointer" icon="caret-down" />
                 </span>
               </div>
               <div slot="popover" class="flex flex-col">

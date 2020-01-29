@@ -3,6 +3,7 @@
     <component :is="layout">
       <router-view />
     </component>
+    <dialogs-wrapper />
   </div>
 </template>
 

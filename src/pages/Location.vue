@@ -9,24 +9,24 @@
     </div>
     <div v-else class="mx-2 flex flex-col">
       <div class="h-16 flex items-center justify-between">
-        <div class="font-bold">{{ $t('actions.new_layer') }}</div>
+        <div class="font-bold">{{ $t('actions.new_location') }}</div>
         <div class="flex">
           <ccu-icon
-            alt="$t('actions.edit_layer')"
+            alt="$t('actions.edit_location')"
             size="small"
             class="p-1 py-2"
             type="edit"
             @click.native="() => {}"
           />
           <ccu-icon
-            alt="$t('layerVue.download_as_shapefile')"
+            alt="$t('locationVue.download_as_shapefile')"
             size="small"
             class="p-1 py-2"
             type="download"
             @click.native="() => {}"
           />
           <ccu-icon
-            alt="$t('actions.share_layer')"
+            alt="$t('actions.share_location')"
             size="small"
             class="p-1 py-2"
             type="share"
@@ -41,31 +41,31 @@
         </div>
       </div>
       <form
-        v-if="currentLayer"
+        v-if="currentLocation"
         ref="form"
         class="form flex-grow flex flex-col justify-between w-84"
-        @submit.prevent="saveLayer"
+        @submit.prevent="saveLocation"
       >
         <div class="flex flex-col">
           <base-input
-            v-model="currentLayer.title"
+            v-model="currentLocation.name"
             type="text"
             class="input form-field"
             size="large"
-            placeholder="$t('layerVue.layer_name')"
+            placeholder="$t('locationVue.location_name')"
           />
           <form-select
             v-if="!loading"
-            :value="currentLayer.type"
+            :value="currentLocation.type"
             :options="locationTypes"
             item-key="id"
             label="name_t"
-            placeholder="~~Layer Type"
+            placeholder="~~Location Type"
             select-classes="bg-white border w-full h-12"
-            @input="currentLayer.type = $event"
+            @input="currentLocation.type = $event"
           />
 
-          <div v-if="!currentLayer.id" class="extra-actions">
+          <div v-if="!currentLocation.id" class="extra-actions">
             <div v-if="isPrimaryResponseArea || isSecondaryResponseArea">
               <autocomplete
                 class="form-field"
@@ -98,50 +98,50 @@
           </div>
 
           <textarea
-            v-model="currentLayer.description"
+            v-model="currentLocation.notes"
             class="text-base form-field border outline-none p-2 resize-none"
             rows="4"
-            placeholder="Description"
+            placeholder="~~Notes"
           />
           <div>
-            <div class="mt-8 text-base">{{ $t('layerVue.access') }}</div>
+            <div class="mt-8 text-base">{{ $t('locationVue.access') }}</div>
             <div class="flex mt-2">
               <base-radio
                 class="mr-6"
                 name="Private"
                 label="Private"
-                :value="layerAccess"
-                @change="layerAccess = $event"
+                :value="locationAccess"
+                @change="locationAccess = $event"
               />
               <base-radio
                 class="mr-6"
                 name="Public"
                 label="Public"
-                :value="layerAccess"
-                @change="layerAccess = $event"
+                :value="locationAccess"
+                @change="locationAccess = $event"
               />
             </div>
           </div>
         </div>
         <div class="flex items-center justify-end h-16">
           <base-button
-            text="$t('actions.reset')"
+            :text="$t('actions.reset')"
             class="border-2 border-black mx-2 p-2 px-4"
           />
           <base-button
-            text="$t('actions.save_layer')"
+            :text="$t('actions.save_location')"
             class="mx-2 p-2 px-4"
             type="primary"
-            :action="saveLayer"
+            :action="saveLocation"
           />
         </div>
       </form>
     </div>
     <div class="flex-grow flex flex-col">
-      <LayerTool
-        v-if="currentLayer"
+      <LocationTool
+        v-if="currentLocation"
         class="h-full"
-        :locations="currentLayer.locations"
+        :locations="currentLocation.id ? [currentLocation.id] : []"
         @changed="setCurrentLocation"
       />
     </div>
@@ -149,29 +149,20 @@
 </template>
 
 <script>
-import Layer from '@/models/Layer';
 import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import Organization from '@/models/Organization';
 import Incident from '@/models/Incident';
-import LayerTool from '@/components/LayerTool';
+import LocationTool from '@/components/LocationTool';
 
 export default {
-  name: 'Layer',
-  components: { LayerTool },
+  name: 'Location',
+  components: { LocationTool },
   data() {
     return {
-      currentLayer: null,
       currentLocation: null,
       loading: false,
-      layerName: '',
-      layerDescription: '',
-      layerType: '',
-      layerAccess: 'Private',
-      layerTypes: [
-        this.$t('locationTypes.org_primary_response_area'),
-        this.$t('locationTypes.incident_primary_damaged_area'),
-      ],
+      locationAccess: 'Private',
       organizationResults: [],
       selectedOrganization: null,
       selectedIncident: null,
@@ -190,14 +181,14 @@ export default {
       return (
         LocationType.query()
           .where('key', 'org_primary_response_area')
-          .get()[0].id === this.currentLayer.type
+          .get()[0].id === this.currentLocation.type
       );
     },
     isSecondaryResponseArea() {
       return (
         LocationType.query()
           .where('key', 'org_secondary_response_area')
-          .get()[0].id === this.currentLayer.type
+          .get()[0].id === this.currentLocation.type
       );
     },
     isIncidentRelated() {
@@ -212,7 +203,7 @@ export default {
         )
         .get();
       return incidentRelatedTypes.some(
-        key => key.id === this.currentLayer.type,
+        key => key.id === this.currentLocation.type,
       );
     },
   },
@@ -221,24 +212,24 @@ export default {
     await LocationType.api().get('/location_types', {
       dataKey: 'results',
     });
-    if (this.$route.params.layer_id) {
+    if (this.$route.params.location_id) {
       try {
-        await Layer.api().fetchById(this.$route.params.layer_id);
-        this.currentLayer = Layer.find(this.$route.params.layer_id);
+        await Location.api().fetchById(this.$route.params.location_id);
+        this.currentLocation = Location.find(this.$route.params.location_id);
       } catch (e) {
-        this.currentLayer = new Layer();
-        await this.$router.replace(`/layers/new`);
+        this.currentLocation = new Location();
+        await this.$router.replace(`/locations/new`);
       } finally {
         this.loading = false;
       }
     } else {
-      this.currentLayer = new Layer();
+      this.currentLocation = new Location();
     }
     this.loading = false;
   },
   methods: {
     setCurrentLocation(location) {
-      this.currentLocation = location;
+      this.currentPolygon = location;
     },
     async onOrganizationSearch(value) {
       const results = await Organization.api().get(
@@ -249,55 +240,40 @@ export default {
       );
       this.organizationResults = results.entities.organizations;
     },
-    async saveLayer() {
+    async saveLocation() {
       this.loading = true;
-      const locationPromises = [];
-
-      const data = {};
-      let { geometry } = this.currentLocation.toGeoJSON();
-      const { type, features } = this.currentLocation.toGeoJSON();
+      let { geometry } = this.currentPolygon.toGeoJSON();
+      const { type, features } = this.currentPolygon.toGeoJSON();
       if (type === 'FeatureCollection') {
         const [feature] = features;
         geometry = feature.geometry;
       }
 
-      data.name = this.currentLayer.title;
-      data.type = this.currentLayer.type;
       if (geometry.type === 'Point') {
-        data.point = geometry;
+        this.currentLocation.point = geometry;
       } else if (geometry.type === 'Polygon') {
-        data.poly = geometry;
+        this.currentLocation.poly = geometry;
       } else if (geometry.type === 'MultiPolygon') {
-        data.geom = geometry;
+        this.currentLocation.geom = geometry;
       }
 
-      locationPromises.push(Location.api().post('/locations', data));
-
       try {
-        const locationResults = await Promise.all(locationPromises);
-        const locations = locationResults.map(result => {
-          return result.entities.locations[0].id;
-        });
-        let layerResult;
-        if (this.currentLayer.id) {
-          layerResult = await Layer.api().put(
-            `/layers/${this.currentLayer.id}`,
-            {
-              ...this.currentLayer,
-              locations,
-            },
+        let response;
+        if (this.currentLocation.id) {
+          response = await Location.api().put(
+            `/locations/${this.currentLocation.id}`,
+            this.currentLocation,
           );
         } else {
-          layerResult = await Layer.api().post('/layers', {
-            ...this.currentLayer,
-            locations,
-          });
-
+          response = await Location.api().post(
+            '/locations',
+            this.currentLocation,
+          );
           if (this.isPrimaryResponseArea) {
             await Organization.api().patch(
               `/organizations/${this.selectedOrganization.id}`,
               {
-                primary_location: locations[0],
+                primary_location: response.response.data.id,
               },
             );
           }
@@ -306,7 +282,7 @@ export default {
             await Organization.api().patch(
               `/organizations/${this.selectedOrganization.id}`,
               {
-                secondary_location: locations[0],
+                secondary_location: response.response.data.id,
               },
             );
           }
@@ -314,12 +290,14 @@ export default {
           if (this.isIncidentRelated) {
             await Incident.api().addLocation(
               this.selectedIncident,
-              locations[0],
+              response.response.data.id,
             );
           }
         }
-
-        await this.$router.push(`/layers/${layerResult.entities.layers[0].id}`);
+        const locationId = response.response.data.id;
+        await Location.api().fetchById(locationId);
+        this.currentLocation = Location.find(locationId);
+        await this.$router.push(`/locations/${locationId}/edit`);
       } catch (e) {
         this.$log.error(e);
       } finally {

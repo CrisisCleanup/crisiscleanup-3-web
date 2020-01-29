@@ -14,6 +14,7 @@ import Toasted from 'vue-toasted';
 import Popover from 'vue-js-popover';
 import Dropdown from 'bp-vuejs-dropdown';
 import vSelect from 'vue-select';
+import * as ModalDialogs from 'vue-modal-dialogs';
 import detectBrowserLanguage from 'detect-browser-language';
 import moment from 'moment';
 import App from './App.vue';
@@ -74,6 +75,7 @@ Vue.config.productionTip = false;
 // 3rd Party Libraries
 Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
+Vue.use(ModalDialogs);
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'), { moment });
 

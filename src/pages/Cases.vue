@@ -70,23 +70,6 @@
                 />
                 <template slot="body">
                   <ul class="text-base">
-                    <!--                                        <li class="py-2">-->
-                    <!--                                            <base-checkbox @input="(value) => { applyLayers(value, floodZone, 'flood') }">{{ $t('casesVue.flood_extent') }}</base-checkbox>-->
-                    <!--                                        </li>-->
-                    <!--                    <li class="py-2">-->
-                    <!--                      <base-checkbox-->
-                    <!--                        @input="-->
-                    <!--                          value => {-->
-                    <!--                            applyGeoJSON(currentIncident.extent, value);-->
-                    <!--                          }-->
-                    <!--                        "-->
-                    <!--                        >{{ $t('casesVue.incident_extent') }}</base-checkbox-->
-                    <!--                      >-->
-                    <!--                    </li>-->
-                    <!--                                        <li class="py-2">-->
-                    <!--                                            <base-checkbox @input="(value) => { applyLocation(81829, value) }">{{ $t('casesVue.tornado_track') }}</base-checkbox>-->
-                    <!--                                        </li>-->
-                    <!--                                        <hr>-->
                     Standard Layers
                     <li class="py-2">
                       <base-dropdown
@@ -137,6 +120,35 @@
                                   }
                                 "
                                 >{{ district.name }}</base-checkbox
+                              >
+                            </li>
+                          </ul>
+                        </template>
+                      </base-dropdown>
+                    </li>
+                    <li class="py-2">
+                      <base-dropdown
+                        :trigger="'hover'"
+                        :role="'sublist'"
+                        :align="'right'"
+                      >
+                        <template slot="btn">{{
+                          $t('casesVue.incident')
+                        }}</template>
+                        <template slot="body">
+                          <ul class="h-64 overflow-auto">
+                            <li
+                              v-for="location in currentIncident.locationModels"
+                              :key="location.id"
+                            >
+                              <base-checkbox
+                                :value="appliedLocations.has(location.id)"
+                                @input="
+                                  value => {
+                                    applyLocation(location.id, value);
+                                  }
+                                "
+                                >{{ location.name }}</base-checkbox
                               >
                             </li>
                           </ul>
@@ -667,17 +679,12 @@ export default {
     },
     usStates() {
       return Location.query()
-        .where('type', 'casesVue.us_states')
+        .where('type', 'boundary_political_us_state')
         .get();
     },
     districts() {
       return Location.query()
-        .where('type', 'casesVue.boundary_political_us_congress')
-        .get();
-    },
-    floodZone() {
-      return Location.query()
-        .where('type', 'casesVue.flood_extent')
+        .where('type', 'boundary_political_us_congress')
         .get();
     },
     isEditingWorksite() {
@@ -773,13 +780,10 @@ export default {
     }
     const locationParams = {
       limit: 1000,
-      type__in: 'casesVue.us_states,casesVue.boundary_political_us_congress,',
+      type__in: 'boundary_political_us_congress,boundary_political_us_state,',
       fields: 'id,name,type',
     };
     await Location.api().get(`/locations?${getQueryString(locationParams)}`, {
-      dataKey: 'results',
-    });
-    Location.api().get(`/locations?type=casesVue.flood_extent&limit=10000`, {
       dataKey: 'results',
     });
   },

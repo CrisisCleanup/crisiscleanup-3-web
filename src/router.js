@@ -14,7 +14,7 @@ import CaseView from '@/pages/CaseView';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
 import CaseFlag from '@/pages/CaseFlag';
-import Layer from '@/pages/Layer';
+import Location from '@/pages/Location';
 
 Vue.use(VueRouter);
 
@@ -106,15 +106,15 @@ const routes = [
     meta: { layout: 'authenticated' },
   },
   {
-    path: '/layers/new',
-    component: Layer,
-    name: 'nav.new_layer',
+    path: '/locations/new',
+    component: Location,
+    name: 'nav.new_location',
     meta: { layout: 'authenticated' },
   },
   {
-    path: '/layers/:layer_id',
-    component: Layer,
-    name: 'nav.edit_layer',
+    path: '/locations/:location_id/edit',
+    component: Location,
+    name: 'nav.edit_location',
     meta: { layout: 'authenticated' },
   },
   {

@@ -369,6 +369,7 @@
 <script>
 import * as turf from '@turf/turf';
 import * as moment from 'moment';
+import { create } from 'vue-modal-dialogs';
 import Worksite from '@/models/Worksite';
 import OverlayMap from '@/components/OverlayMap';
 import GeocoderService from '@/services/geocoder.service';
@@ -379,6 +380,9 @@ import Incident from '@/models/Incident';
 import { buildForm, groupBy } from '@/utils/form';
 import FormSelect from '@/components/FormSelect';
 import SectionHeading from '../components/SectionHeading';
+import MessageBox from '@/components/dialogs/MessageBox';
+
+const messageBox = create(MessageBox);
 
 export default {
   name: 'CaseForm',
@@ -402,6 +406,7 @@ export default {
       searchWorksitesNameResults: [],
       worksite: {},
       dynamicFields: {},
+      potentialIncidents: [],
       sectionCounter: 2,
     };
   },
@@ -537,7 +542,7 @@ export default {
       return isWithinBounds;
     },
     async getPotentialIncidents({ lat, lng }) {
-      const sixtyDaysAgo = moment().subtract(560, 'days');
+      const sixtyDaysAgo = moment().subtract(60, 'days');
 
       const response = await Incident.api().get(
         `/incidents?fields=id,name&location=${lat},${lng}&start_at__gt=${sixtyDaysAgo.toISOString()}`,
@@ -546,12 +551,58 @@ export default {
         },
       );
       const incidents = response.response.data.results;
-      this.$log.debug(incidents);
+      let result;
+      if (incidents.length > 0) {
+        result = await messageBox({
+          title: this.$t('~~Incorrect Location'),
+          content: this.$t(
+            '~~This location seems to be part of incident {incident}. Is this correct?',
+            {
+              incident: incidents[0].name,
+            },
+          ),
+          actions: {
+            switchIncident: {
+              text: '~~Yes',
+              type: 'primary',
+            },
+            keep: {
+              text: '~~No',
+              type: 'bare',
+              buttonClass: 'border border-black',
+            },
+          },
+        });
+      } else {
+        result = await messageBox({
+          title: 'Location Outside Incident',
+          content: this.$t(
+            '~~Warning: This location is outside of the known boundaries of {incident}. Is this correct?',
+            {
+              incident: this.currentIncident.name,
+            },
+          ),
+          actions: {
+            continue: {
+              text: '~~Continue Anyway',
+              type: 'primary',
+            },
+            retry: {
+              text: '~~Retry',
+              type: 'bare',
+              buttonClass: 'border border-black',
+            },
+          },
+        });
+      }
+
+      this.potentialIncidents = incidents;
+
+      return result;
     },
-    async onGeocodeSelect(value) {
-      const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-      const geocode = await GeocoderService.getPlaceDetails(value.description);
+    async updateWorksiteFields(geocode) {
       const { lat, lng } = geocode.location;
+      const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
       geocodeKeys.forEach(key =>
         this.updateWorksite(geocode.address_components[key], key),
       );
@@ -566,10 +617,32 @@ export default {
       const what3words = await What3wordsService.getWords(lat, lng);
       this.updateWorksite(what3words, 'what3words');
       this.$emit('geocoded', geocode.location);
+    },
+
+    async onGeocodeSelect(value) {
+      const geocode = await GeocoderService.getPlaceDetails(value.description);
+      const { lat, lng } = geocode.location;
       const isWithinCurrentIncident = this.checkGeocodeLocation({ lat, lng });
       if (!isWithinCurrentIncident) {
-        await this.getPotentialIncidents({ lat, lng });
+        const incidentResult = await this.getPotentialIncidents({ lat, lng });
+
+        if (incidentResult === 'retry' || incidentResult === 'cancel') {
+          this.updateWorksite('', 'address');
+          return;
+        }
+        if (incidentResult === 'switchIncident') {
+          this.updateWorksite(this.potentialIncidents[0].id, 'incident');
+          await this.updateWorksiteFields(geocode);
+          await this.saveWorksite(false);
+          this.$emit('reloadTable');
+          this.$emit('reloadMap', this.worksite.id);
+          await this.$router.push(
+            `/incident/${this.potentialIncidents[0].id}/cases/${this.worksite.id}/edit`,
+          );
+          return;
+        }
       }
+      await this.updateWorksiteFields(geocode);
     },
     async onWorksiteSelect(value) {
       this.$emit('navigateToWorksite', value.id);

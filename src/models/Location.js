@@ -8,7 +8,7 @@ export default class Location extends Model {
       id: this.increment(),
       name: this.string(''),
       notes: this.string(''),
-      type: this.string(''),
+      type: this.attr(null),
       geom: this.attr(null),
       poly: this.attr(null),
       attr: this.attr(null),
