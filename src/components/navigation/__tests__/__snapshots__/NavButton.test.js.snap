@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavButton should render correctly and match snapshot 1`] = `
+<router-link-stub
+  class="menu-item router-link p-2 border-b border-t border-gray-800 router-link-active"
+  to="/mockroute"
+>
+  <div
+    class="flex flex-col items-center"
+  >
+    <ccu-icon-stub
+      alt="nav.mockroute"
+      size="small"
+      type="mock"
+    />
+     
+    <div
+      class="menu-text mt-1"
+    >
+      nav.mockroute
+    </div>
+  </div>
+</router-link-stub>
+`;
