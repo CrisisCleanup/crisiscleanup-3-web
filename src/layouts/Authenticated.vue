@@ -125,7 +125,6 @@ export default {
       return [
         {
           key: 'dashboard',
-          text: this.$t('nav.dashboard'),
           to: `/incident/${this.currentIncidentId}/dashboard`,
         },
         {
