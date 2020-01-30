@@ -1,44 +1,6 @@
 <template>
   <div class="flex layout overflow-hidden">
-    <div class="w-32 sidebar">
-      <div class="logo flex justify-center p-3">
-        <img src="@/assets/crisiscleanup_logo.png" style="height: 53px" />
-      </div>
-      <div class="menu">
-        <router-link
-          :to="`/incident/${currentIncidentId}/dashboard`"
-          class="menu-item router-link p-2 border-b border-t border-gray-800"
-        >
-          <div key="dashboard" class="flex flex-col items-center">
-            <ccu-icon :alt="$t('nav.dashboard')" type="dashboard" />
-            <div class="menu-text mt-1">{{ $t('nav.dashboard') }}</div>
-          </div>
-        </router-link>
-        <router-link
-          :to="`/incident/${currentIncidentId}/cases/new`"
-          class="menu-item router-link p-2 border-b border-gray-800"
-          :class="{ 'router-link-active': selectedRoute.includes('Case') }"
-        >
-          <div key="cases" class="flex flex-col items-center">
-            <ccu-icon :alt="$t('nav.cases')" type="cases" />
-            <div class="menu-text mt-1">{{ $t('nav.cases') }}</div>
-          </div>
-        </router-link>
-        <router-link
-          to="/organization"
-          class="menu-item router-link p-2 border-b border-gray-800"
-        >
-          <div key="organization" class="flex flex-col items-center">
-            <ccu-icon
-              :alt="$t('nav.my_organization')"
-              type="organization"
-              size="large"
-            />
-            <div class="menu-text mt-1">{{ $t('nav.my_organization') }}</div>
-          </div>
-        </router-link>
-      </div>
-    </div>
+    <NavMenu :routes="routes" />
     <div class="flex flex-col w-full overflow-hidden">
       <div class="shadow p-1 bg-white">
         <div class="flex justify-between h-full items-center">
@@ -82,9 +44,8 @@
                 <router-link
                   to="/profile"
                   class="router-link text-base p-2 hover:bg-gray-100"
+                  >Profile</router-link
                 >
-                  Profile
-                </router-link>
                 <div
                   class="text-base p-2 hover:bg-gray-100 cursor-pointer"
                   @click="
@@ -128,10 +89,11 @@ import Organization from '@/models/Organization';
 import Status from '@/models/Status';
 import { i18nService } from '@/services/i18n.service';
 import DisasterIcon from '../components/DisasterIcon';
+import NavMenu from '@/components/navigation/NavMenu';
 
 export default {
   name: 'Authenticated',
-  components: { DisasterIcon },
+  components: { DisasterIcon, NavMenu },
   data() {
     return {
       loading: false,
@@ -158,6 +120,25 @@ export default {
     },
     currentIncident() {
       return Incident.find(this.currentIncidentId);
+    },
+    routes() {
+      return [
+        {
+          key: 'dashboard',
+          text: this.$t('nav.dashboard'),
+          to: `/incident/${this.currentIncidentId}/dashboard`,
+        },
+        {
+          key: 'cases',
+          to: `/incident/${this.currentIncidentId}/cases/new`,
+        },
+        {
+          key: 'my_organization',
+          icon: 'organization',
+          iconSize: 'large',
+          to: '/organization',
+        },
+      ];
     },
     ...mapState('incident', ['currentIncidentId']),
     ...mapState('auth', ['user']),
@@ -284,21 +265,11 @@ body {
   max-height: 100%;
 }
 
-.sidebar {
-  background-color: #2d2d2d;
-}
-
 #app .router-link {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-}
-
-.menu-text {
-  line-height: 15px;
-  color: white;
-  text-decoration: none !important;
 }
 
 .router-link:hover {
@@ -311,11 +282,6 @@ body {
 
 .router-link {
   text-decoration: none !important;
-}
-
-.router-link-active.menu-item {
-  background-color: transparent;
-  border-left: solid 3px theme('colors.primary.light');
 }
 
 .incident-select .ant-select-selection {
