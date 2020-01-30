@@ -12,7 +12,7 @@
     "prettify": "prettier --write ./**/*.{js,vue}",
     "deploy-staging": "vue-cli-service build --mode staging && vue-cli-service s3-deploy",
     "compile-icons": "./template-compiler.js",
-    "test": "npm run test:unit && npm run test:e2e",
+    "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "test:e2e": "cross-env NODE_ENV=test cypress run",
@@ -129,7 +129,7 @@
   ],
   "lint-staged": {
     "*.{js,vue}": [
-      "npm run lint-fix",
+      "yarn lint-fix",
       "git add --force"
     ],
     "*.json": [
