@@ -40,7 +40,18 @@ a:focus {
 }
 .router-link-active.menu-item {
   background-color: transparent;
-  border-left: solid 3px theme('colors.primary.light');
+  position: relative;
+}
+
+.router-link-active.menu-item::before {
+  content: '';
+  width: 3px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  display: block;
+  position: absolute;
+  background-color: theme('colors.primary.light');
 }
 
 .menu-text {
