@@ -33,6 +33,11 @@ export default {
 </script>
 
 <style scoped>
+a:hover,
+a:active,
+a:focus {
+  outline: 0;
+}
 .router-link-active.menu-item {
   background-color: transparent;
   border-left: solid 3px theme('colors.primary.light');
