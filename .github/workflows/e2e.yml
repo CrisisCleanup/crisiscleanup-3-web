@@ -80,7 +80,7 @@ jobs:
         uses: cypress-io/github-action@v1.20.0
         with:
           record: true
-          start: npm run serve
+          start: yarn serve
           wait-on: 'http://localhost:8080'
           group: Chrome
           headless: true

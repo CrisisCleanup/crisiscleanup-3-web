@@ -31,13 +31,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache NPM
+      - name: Determine Yarn Cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Node Modules
         uses: actions/cache@v1.0.3
         with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            npm-
+            yarn-
 
       - name: Setup Node.js 12
         uses: actions/setup-node@v1.2.0
@@ -45,10 +49,10 @@ jobs:
           node-version: '12'
 
       - name: Install Dependencies
-        run: npm install
+        run: yarn install
 
       - name: Run Tests
-        run: npm run test:unit
+        run: yarn test:unit
 
       # TODO: Coverage integration
       # - name: Upload Coverage
@@ -63,13 +67,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache NPM
+      - name: Determine Yarn Cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Node Modules
         uses: actions/cache@v1.0.3
         with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            npm-
+            yarn-
 
       - name: Setup Node.js 12
         uses: actions/setup-node@v1.2.0
@@ -77,10 +85,10 @@ jobs:
           node-version: '12'
 
       - name: Install Dependencies
-        run: npm install
+        run: yarn install
 
       - name: Run Linter
-        run: npm run lint
+        run: yarn lint
 
   build:
     name: Build Site
@@ -89,13 +97,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache NPM
+      - name: Determine Yarn Cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Node Modules
         uses: actions/cache@v1.0.3
         with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            npm-
+            yarn-
 
       - name: Setup Node.js 12
         uses: actions/setup-node@v1.2.0
@@ -103,10 +115,10 @@ jobs:
           node-version: '12'
 
       - name: Install Dependencies
-        run: npm install
+        run: yarn install
 
       - name: Build Site
-        run: npm build
+        run: yarn build
 
   deploy:
     name: Deploy Staging
@@ -116,13 +128,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Cache NPM
+      - name: Determine Yarn Cache
+        id: yarn-cache
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Node Modules
         uses: actions/cache@v1.0.3
         with:
-          path: ~/.npm
-          key: npm-${{ hashFiles('**/package-lock.json') }}
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
-            npm-
+            yarn-
 
       - name: Setup Node.js 12
         uses: actions/setup-node@v1.2.0
@@ -130,14 +146,14 @@ jobs:
           node-version: '12'
 
       - name: Install Dependencies
-        run: npm install
+        run: yarn install
 
       - name: Deploy Staging
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           AWS_DEFAULT_REGION: ${{ secrets.aws_default_region }}
-        run: npm run deploy-staging
+        run: yarn deploy-staging
 
   invalidate-cache:
     name: Invalidate Cache
