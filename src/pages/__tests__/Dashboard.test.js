@@ -16,6 +16,7 @@ jest.mock('@/models/Status');
 jest.mock('@/models/Worksite');
 jest.mock('@/models/Incident');
 jest.mock('@/models/Organization');
+jest.mock('@/models/WorksiteRequest');
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -51,6 +52,7 @@ const store = new Store({
 const mocks = {
   $route,
   $store: store,
+  $can: () => true,
   $http: {
     get: () => {
       return {

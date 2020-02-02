@@ -116,7 +116,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           >
             <div
               class="header text-gray-600 bg-white"
-              style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+              style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
             >
               <!---->
                
@@ -190,7 +190,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                
               <div
                 class="hover:bg-gray-100"
-                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -203,7 +203,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
                   <div
-                    class="flex flex-col"
+                    class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
@@ -250,7 +250,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-gray-100"
-                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -263,7 +263,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
                   <div
-                    class="flex flex-col"
+                    class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
@@ -310,7 +310,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-gray-100"
-                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -323,7 +323,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
                   <div
-                    class="flex flex-col"
+                    class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
@@ -370,7 +370,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-gray-100"
-                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -383,7 +383,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
                   <div
-                    class="flex flex-col"
+                    class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
@@ -430,7 +430,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-gray-100"
-                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -443,7 +443,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
                   <div
-                    class="flex flex-col"
+                    class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
@@ -490,7 +490,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-gray-100"
-                style="display: grid; grid-template-columns: 0.5fr 1fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -503,7 +503,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
                   <div
-                    class="flex flex-col"
+                    class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
@@ -594,6 +594,129 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             text="inviteTeammates.send_invites"
             type="primary"
           />
+        </div>
+      </div>
+    </div>
+     
+    <div
+      class="flex"
+    >
+      <div
+        class="w-full m-4 pt-2 shadow bg-white flex-shrink"
+      >
+        <div
+          class="py-4 px-4 text-gray-500 border-b"
+        >
+          
+          dashboard.pending_cases
+        
+        </div>
+         
+        <div
+          class="py-4 px-4 border-b flex items-center"
+        >
+          <base-button-stub
+            class="mr-2 border-r pr-2"
+            text="Inbound Requests"
+          />
+           
+          <base-button-stub
+            class="mr-2 border-r pr-2 text-primary-dark"
+            text="Outbound Requests"
+          />
+           
+          <base-button-stub
+            class="mr-2 text-primary-dark"
+            text="Archived Requests"
+          />
+        </div>
+         
+        <div
+          class="p-4"
+        >
+          <div
+            class="table w-full"
+          >
+            <div
+              class="header text-gray-600 bg-white"
+              style="display: grid; grid-template-columns: 80px 10% 0.5fr 1fr 1fr 1fr 1fr;"
+            >
+              <!---->
+               
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      dashboard.no
+      
+                <div>
+                  <ccu-icon-stub
+                    alt="actions.sortable"
+                    size="small"
+                    type="updown"
+                  />
+                </div>
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      dashboard.work_type
+      
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      ~~status
+      
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      ~~organization
+      
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      ~~last_action
+      
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      ~~next_action
+      
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer"
+              >
+                
+      
+      
+                <!---->
+              </div>
+            </div>
+             
+            <div
+              class="body bg-white relative"
+              style="max-height: 600px; overflow: auto; height: 300px;"
+            >
+              <!---->
+               
+            </div>
+             
+            <!---->
+          </div>
         </div>
       </div>
     </div>
