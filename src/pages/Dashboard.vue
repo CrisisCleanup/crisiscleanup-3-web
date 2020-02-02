@@ -187,7 +187,7 @@
               :data="worksiteRequests"
               :columns="pendingCasesColumns"
               :sorter="pendingSorter"
-              :loading="loading"
+              :loading="pendingViewLoading"
               :body-style="{ height: '300px' }"
               @change="handlePendingTableChange"
             >
@@ -323,6 +323,7 @@ export default {
       totalInProgess: 0,
       loading: false,
       datacollection: null,
+      pendingViewLoading: false,
       pendingView:
         this.$can('approve_work_type_transfers') ||
         this.$can('receive_work_type_transfer_requests')
@@ -666,9 +667,11 @@ export default {
     },
     async getWorksiteRequests() {
       WorksiteRequest.deleteAll();
+      this.pendingViewLoading = true;
       await WorksiteRequest.api().get(`/worksite_requests`, {
         dataKey: 'results',
       });
+      this.pendingViewLoading = false;
     },
     async getWorksiteCount() {
       const response = await this.$http.get(
