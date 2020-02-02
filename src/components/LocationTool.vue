@@ -137,6 +137,7 @@
           />
         </modal>
         <div
+          v-if="incident"
           class="bg-white p-1 border ml-5 flex items-center justify-center"
           style="height: 37px"
         >
@@ -234,6 +235,10 @@ export default {
         return [];
       },
     },
+    incident: {
+      type: Number,
+      default: null,
+    },
   },
   data() {
     return {
@@ -280,6 +285,12 @@ export default {
     },
     currentBufferDistance() {
       this.drawBuffer();
+    },
+    incident(value) {
+      if (value) {
+        this.getWorksites(value);
+      }
+      this.toggleWorksites(false);
     },
   },
   async mounted() {
@@ -340,7 +351,9 @@ export default {
       dataKey: 'results',
     });
 
-    this.getWorksites();
+    if (this.incident) {
+      this.getWorksites(this.incident);
+    }
     this.checkpoint();
   },
   methods: {
@@ -371,13 +384,13 @@ export default {
         this.map.removeLayer(this.worksiteLayer);
       }
     },
-    async getWorksites() {
+    async getWorksites(incident) {
       this.worksitesLoading = true;
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
         {
           params: {
-            incident: this.currentIncidentId,
+            incident,
           },
         },
       );

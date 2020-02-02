@@ -62,7 +62,13 @@
             label="name_t"
             placeholder="~~Location Type"
             select-classes="bg-white border w-full h-12"
-            @input="currentLocation.type = $event"
+            @input="
+              type => {
+                currentLocation.type = type;
+                selectedIncident = null;
+                selectedOrganization = null;
+              }
+            "
           />
 
           <div v-if="!currentLocation.id" class="extra-actions">
@@ -140,6 +146,7 @@
     <div class="flex-grow flex flex-col">
       <LocationTool
         v-if="currentLocation"
+        :incident="selectedIncident"
         class="h-full"
         :locations="currentLocation.id ? [currentLocation.id] : []"
         @changed="setCurrentLocation"
