@@ -46,6 +46,7 @@
                   class="router-link text-base p-2 hover:bg-gray-100"
                   >Profile</router-link
                 >
+<!--                <button v-can="['update_portal_settings']">New</button>-->
                 <div
                   class="text-base p-2 hover:bg-gray-100 cursor-pointer"
                   @click="

@@ -70,10 +70,11 @@
               @change="handleTableChange"
             >
               <template #work_types="slotProps">
-                <div class="flex flex-col">
+                <div class="flex flex-wrap w-full">
                   <div
                     v-for="work_type in slotProps.item.work_types"
                     :key="work_type.id"
+                    class="mx-1"
                   >
                     <StatusDropDown
                       class="block"
@@ -152,6 +153,121 @@
       <div class="flex">
         <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
           <div class="py-4 px-4 text-gray-500 border-b">
+            {{ $t('dashboard.pending_cases') }}
+          </div>
+          <div class="py-4 px-4 border-b flex items-center">
+            <base-button
+              v-if="
+                $can('approve_work_type_transfers') ||
+                  $can('receive_work_type_transfer_requests')
+              "
+              class="mr-2 border-r pr-2"
+              text="Inbound Requests"
+              :class="[pendingView === 'inbound' ? '' : 'text-primary-dark']"
+              @click.native="pendingView = 'inbound'"
+            />
+
+            <base-button
+              class="mr-2 border-r pr-2"
+              text="Outbound Requests"
+              :class="[pendingView === 'outbound' ? '' : 'text-primary-dark']"
+              @click.native="pendingView = 'outbound'"
+            />
+
+            <base-button
+              class="mr-2"
+              text="Archived Requests"
+              :class="[pendingView === 'archived' ? '' : 'text-primary-dark']"
+              @click.native="pendingView = 'archived'"
+            />
+          </div>
+          <div class="p-4">
+            <Table
+              class=""
+              :data="worksiteRequests"
+              :columns="pendingCasesColumns"
+              :sorter="pendingSorter"
+              :loading="loading"
+              :body-style="{ height: '300px' }"
+              @change="handlePendingTableChange"
+            >
+              <template #worksite_work_type="slotProps">
+                <div class="flex items-center w-full">
+                  <div
+                    class="flex p-1 items-center justify-center"
+                    :style="{
+                      backgroundColor: `${getColorForStatus(
+                        slotProps.item.worksite_work_type.status,
+                        Boolean(slotProps.item.worksite_work_type.claimed_by),
+                      )}3D`,
+                    }"
+                  >
+                    <div
+                      class="case-svg-container"
+                      v-html="
+                        getWorkTypeImage(slotProps.item.worksite_work_type)
+                      "
+                    ></div>
+                  </div>
+                </div>
+              </template>
+              <template #organization="slotProps">
+                <div class="flex flex-col">
+                  {{ slotProps.item.requested_to_org.name }}
+                </div>
+              </template>
+              <template #work_type="slotProps">
+                <div class="flex flex-col">
+                  {{ slotProps.item.worksite_work_type }}
+                </div>
+              </template>
+              <template #actions="slotProps">
+                <div class="flex items-center justify-start">
+                  <div
+                    v-if="pendingView === 'inbound'"
+                    class="flex items-center justify-start"
+                  >
+                    <base-button
+                      class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
+                      :text="$t('~~Accept')"
+                      :action="() => acceptRequest(slotProps.item.id)"
+                    />
+                    <base-button
+                      class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
+                      :text="$t('~~Reject')"
+                      :action="() => rejectRequest(slotProps.item.id)"
+                    />
+                  </div>
+                  <div v-if="pendingView === 'outbound'">
+                    <base-button
+                      class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
+                      :text="$t('~~Cancel')"
+                      :action="() => cancelRequest(slotProps.item.id)"
+                    />
+                  </div>
+                  <div v-if="pendingView !== 'archived'">
+                    <base-button
+                      class="px-2 py-1 mx-2 border-black border"
+                      :text="$t('~~Ignore')"
+                      :action="() => archiveRequest(slotProps.item.id)"
+                    />
+                  </div>
+                  <div v-if="pendingView === 'archived'">
+                    <base-button
+                      class="px-2 py-1 mx-2"
+                      type="primary"
+                      :text="$t('~~History')"
+                    />
+                  </div>
+                </div>
+              </template>
+            </Table>
+          </div>
+        </div>
+      </div>
+      <div class="flex">
+        <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
+          <div class="py-4 px-4 text-gray-500 border-b">
             {{ $t('dashboard.worksite_completion') }}
           </div>
           <div class="p-4">
@@ -176,6 +292,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { create } from 'vue-modal-dialogs';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
 import Status from '@/models/Status';
@@ -185,10 +302,14 @@ import LineChart from '@/components/charts/LineChart';
 import { rand } from '@/utils/charts';
 import { colors } from '@/icons/icons_templates';
 import Incident from '@/models/Incident';
+import WorksiteRequest from '@/models/WorksiteRequest';
 import Table from '@/components/Table';
-import { getColorForStatus } from '@/filters';
+import { getColorForStatus, getWorkTypeImage } from '@/filters';
 import StatusDropDown from '@/components/StatusDropDown';
 import { forceFileDownload } from '@/utils/downloads';
+import RequestBox from '@/components/dialogs/RequestBox';
+
+const requestBox = create(RequestBox);
 
 export default {
   name: 'Dashboard',
@@ -202,12 +323,22 @@ export default {
       totalInProgess: 0,
       loading: false,
       datacollection: null,
+      pendingView:
+        this.$can('approve_work_type_transfers') ||
+        this.$can('receive_work_type_transfer_requests')
+          ? 'inbound'
+          : 'outbound',
       colors,
       sorter: {
         key: null,
         direction: null,
       },
+      pendingSorter: {
+        key: null,
+        direction: null,
+      },
       getColorForStatus,
+      getWorkTypeImage,
       options: {
         responsive: true,
         hoverMode: 'index',
@@ -247,6 +378,47 @@ export default {
           ],
         },
       },
+      pendingCasesColumns: [
+        {
+          title: this.$t('dashboard.no'),
+          dataIndex: 'case_number',
+          key: 'case_number',
+          width: '80px',
+          sortable: true,
+        },
+        {
+          title: this.$t('dashboard.work_type'),
+          dataIndex: 'worksite_work_type',
+          key: 'worksite_work_type',
+          width: '10%',
+        },
+        {
+          title: this.$t('~~status'),
+          dataIndex: 'status',
+          key: 'status',
+          width: '0.5fr',
+        },
+        {
+          title: this.$t('~~organization'),
+          dataIndex: 'organization',
+          key: 'organization',
+        },
+        {
+          title: this.$t('~~last_action'),
+          dataIndex: 'last_action',
+          key: 'last_action',
+        },
+        {
+          title: this.$t('~~next_action'),
+          dataIndex: 'next_action',
+          key: 'next_action',
+        },
+        {
+          title: '',
+          dataIndex: 'actions',
+          key: 'actions',
+        },
+      ],
     };
   },
   computed: {
@@ -264,7 +436,7 @@ export default {
           dataIndex: 'work_types',
           key: 'work_types',
           scopedSlots: { customRender: 'work_types' },
-          width: '1fr',
+          width: '2fr',
         },
         {
           title: this.$t('dashboard.name'),
@@ -302,6 +474,47 @@ export default {
         return incident;
       }
       return {};
+    },
+    worksiteRequests() {
+      const preferences = this.currentUser.preferences || {};
+      const archivedRequests = preferences.archived_worksite_requests || [];
+      const query = WorksiteRequest.query();
+      if (this.pendingSorter.key) {
+        let { key } = this.pendingSorter;
+        if (key === 'case_number') {
+          key = 'id';
+        }
+        query.orderBy(this.pendingSorter.key, this.pendingSorter.direction);
+      }
+      if (this.pendingView === 'inbound') {
+        return query
+          .where(
+            request =>
+              Number(request.requested_to_org.id) ===
+                Number(this.currentUser.organization.id) &&
+              !archivedRequests.includes(request.id) &&
+              !request.has_response,
+          )
+          .get();
+      }
+      if (this.pendingView === 'outbound') {
+        return query
+          .where(
+            request =>
+              Number(request.requested_by_org.id) ===
+                Number(this.currentUser.organization.id) &&
+              !archivedRequests.includes(request.id) &&
+              !request.has_response,
+          )
+          .get();
+      }
+      if (this.pendingView === 'archived') {
+        return query
+          .whereIdIn(archivedRequests)
+          .orWhere('has_response', true)
+          .get();
+      }
+      return [];
     },
     ...mapState('incident', ['currentIncidentId']),
     claimedWorksites() {
@@ -352,6 +565,7 @@ export default {
       await Promise.all([
         this.getClaimedWorksites(),
         this.getReportedWorkSites(),
+        this.getWorksiteRequests(),
         this.getWorksiteCount(),
         this.getClaimedCount(),
         this.getInProgessCount(),
@@ -370,6 +584,9 @@ export default {
     handleTableChange({ sorter }) {
       this.sorter = { ...sorter };
     },
+    handlePendingTableChange({ sorter }) {
+      this.pendingSorter = { ...sorter };
+    },
     async printWorksite(worksiteId) {
       this.spinning = true;
       const pdf = await Worksite.api().printWorksite(worksiteId);
@@ -386,6 +603,42 @@ export default {
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
+    },
+    async archiveRequest(id) {
+      const preferences = this.currentUser.preferences || {};
+      const archivedRequests = preferences.archived_worksite_requests || [];
+      User.api().updateUserPreferences({
+        archived_worksite_requests: [id, ...archivedRequests],
+      });
+      await this.getWorksiteRequests();
+    },
+    async acceptRequest(id) {
+      const result = await requestBox({
+        title: this.$t('~~Approve Worksite Request'),
+        content: this.$t(
+          '~~Please provide a reason for approving this request',
+        ),
+      });
+      if (result) {
+        await WorksiteRequest.api().acceptRequest(id, result);
+        await this.getWorksiteRequests();
+      }
+    },
+    async rejectRequest(id) {
+      const result = await requestBox({
+        title: this.$t('~~Reject Worksite Request'),
+        content: this.$t(
+          '~~Please provide a reason for rejecting this request',
+        ),
+      });
+      if (result) {
+        await WorksiteRequest.api().rejectRequest(id, result);
+        await this.getWorksiteRequests();
+      }
+    },
+    async cancelRequest(id) {
+      await WorksiteRequest.api().cancelRequest(id);
+      await this.getWorksiteRequests();
     },
     async getClaimedWorksites() {
       const params = {
@@ -408,6 +661,12 @@ export default {
       };
 
       Worksite.api().get(`/worksites?${getQueryString(params)}`, {
+        dataKey: 'results',
+      });
+    },
+    async getWorksiteRequests() {
+      WorksiteRequest.deleteAll();
+      await WorksiteRequest.api().get(`/worksite_requests`, {
         dataKey: 'results',
       });
     },

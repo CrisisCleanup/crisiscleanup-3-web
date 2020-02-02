@@ -17,6 +17,7 @@ import vSelect from 'vue-select';
 import * as ModalDialogs from 'vue-modal-dialogs';
 import detectBrowserLanguage from 'detect-browser-language';
 import moment from 'moment';
+import Acl from 'vue-browser-acl';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -143,6 +144,21 @@ const getLanguages = async tags => {
     messages,
   });
 };
+
+const user = () => AuthService.getUser();
+
+Vue.use(Acl, user, acl => {
+  const currentUser = store.state.auth.user;
+  if (currentUser) {
+    const { permissions } = currentUser.user_claims;
+    Object.keys(permissions).forEach(permissionKey => {
+      acl.rule(
+        permissionKey,
+        currentUser.user_claims.permissions[permissionKey],
+      );
+    });
+  }
+});
 
 getLanguages(['en-US', detectBrowserLanguage()]).then(i18n => {
   window.vue = new Vue({

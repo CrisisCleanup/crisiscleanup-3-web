@@ -428,7 +428,7 @@ export default {
     },
     worksiteRequestWorkTypeIds() {
       return new Set(
-        this.worksiteRequests.map(request => request.worksite_work_type),
+        this.worksiteRequests.map(request => request.worksite_work_type.id),
       );
     },
   },

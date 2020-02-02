@@ -13,7 +13,8 @@ export default class User extends Model {
       mobile: this.string(''),
       roles: this.attr(null),
       organization: this.attr(null),
-      states: this.attr(null),
+      states: this.attr({}),
+      preferences: this.attr({}),
       primary_language: this.string(''),
       social: this.string({}),
     };
@@ -90,6 +91,26 @@ export default class User extends Model {
           where: currentUser.id,
           data: {
             states: newStates,
+          },
+        });
+      },
+      async updateUserPreferences(preferences) {
+        const currentUser = User.find(AuthService.getUser().user_claims.id);
+        const newPreferences = {
+          ...currentUser.preferences,
+          ...preferences,
+        };
+        await this.patch(
+          `/users/${currentUser.id}`,
+          {
+            preferences: newPreferences,
+          },
+          { save: false },
+        );
+        await User.update({
+          where: currentUser.id,
+          data: {
+            preferences: newPreferences,
           },
         });
       },
