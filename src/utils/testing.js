@@ -144,9 +144,7 @@ export const MockWorksites = [
   },
 ];
 
-export const MockWorksiteRequest = {
-
-};
+export const MockWorksiteRequest = {};
 
 export const MockIncident = {
   id: 99,
