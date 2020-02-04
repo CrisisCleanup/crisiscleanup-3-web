@@ -60,7 +60,7 @@
             :options="locationTypes"
             item-key="id"
             label="name_t"
-            placeholder="~~Location Type"
+            placeholder="$t('locationVue.location_type')"
             select-classes="bg-white border w-full h-12"
             @input="
               type => {
@@ -79,7 +79,7 @@
                 :suggestions="organizationResults"
                 display-property="name"
                 size="large"
-                placeholder="~~Search for Organization"
+                placeholder="$t('locationVue.search_for_organization')"
                 clear-on-selected
                 @selected="
                   value => {
@@ -98,7 +98,7 @@
                 select-classes="bg-white border w-full h-12 mb-3"
                 item-key="id"
                 label="name"
-                placeholder="~Select an Incident"
+                placeholder="$t('locationVue.select_incident')"
               />
             </div>
           </div>
@@ -107,7 +107,7 @@
             v-model="currentLocation.notes"
             class="text-base form-field border outline-none p-2 resize-none"
             rows="4"
-            placeholder="~~Notes"
+            placeholder="$t('locationVue.notes')"
           />
           <div>
             <div class="mt-8 text-base">{{ $t('locationVue.access') }}</div>
