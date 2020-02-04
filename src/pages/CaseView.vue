@@ -24,7 +24,7 @@
               v-if="worksite.notes.length"
               icon="caret-down"
               type="link"
-              :text="showingAllNotes ? $t('~~Some Notes') : $t('~~All Notes')"
+              :text="showingAllNotes ? $t('actions.some_notes') : $t('actions.all_notes')"
               :action="
                 () => {
                   showingAllNotes = !showingAllNotes;
@@ -108,7 +108,7 @@
             v-if="workTypesUnclaimed.length > 0"
             class="ml-2 p-1 px-3 text-xs"
             type="primary"
-            :text="$t('~~Claim All')"
+            :text="$t('actions.claim_all_alt')"
             :action="
               () => {
                 return claimWorkType();
@@ -118,7 +118,7 @@
           <base-button
             v-if="workTypesClaimedByOthersUnrequested.length > 0"
             class="ml-2 p-1 px-3 border-black border-2 border-black text-xs"
-            :text="$t('~~Request All')"
+            :text="$t('actions.request_all')"
             :action="
               () => {
                 requestingWorkTypes = true;
