@@ -99,7 +99,7 @@
             }"
             @click="currentSection = 'flags'"
           >
-            {{ $t('~~Flags') }}
+            {{ $t('worksiteFilters.flags') }}
             <span
               v-if="flagsCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
