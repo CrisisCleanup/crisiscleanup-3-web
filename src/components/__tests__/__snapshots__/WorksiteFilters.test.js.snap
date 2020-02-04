@@ -145,7 +145,7 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           class="p-3 px-4 border-b cursor-pointer"
         >
           
-          ~~Flags
+          Flags
           
           <!---->
         </div>
