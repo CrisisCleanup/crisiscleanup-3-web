@@ -554,20 +554,20 @@ export default {
       let result;
       if (incidents.length > 0) {
         result = await messageBox({
-          title: this.$t('~~Incorrect Location'),
+          title: this.$t('caseForm.incorrect_location'),
           content: this.$t(
-            '~~This location seems to be part of incident {incident}. Is this correct?',
+            'caseForm.suggested_incident',
             {
               incident: incidents[0].name,
             },
           ),
           actions: {
             switchIncident: {
-              text: '~~Yes',
+              text: this.$t('caseForm.yes'),
               type: 'primary',
             },
             keep: {
-              text: '~~No',
+              text: this.$t('caseForm.no'),
               type: 'bare',
               buttonClass: 'border border-black',
             },
@@ -575,20 +575,20 @@ export default {
         });
       } else {
         result = await messageBox({
-          title: 'Location Outside Incident',
+          title: this.$t('caseForm.case_outside_incident'),
           content: this.$t(
-            '~~Warning: This location is outside of the known boundaries of {incident}. Is this correct?',
+            'caseForm.warning_case_outside_incident',
             {
               incident: this.currentIncident.name,
             },
           ),
           actions: {
             continue: {
-              text: '~~Continue Anyway',
+              text: this.$t('actions.continue_anyway'),
               type: 'primary',
             },
             retry: {
-              text: '~~Retry',
+              text: this.$t('actions.retry'),
               type: 'bare',
               buttonClass: 'border border-black',
             },
