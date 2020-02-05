@@ -24,7 +24,11 @@
               v-if="worksite.notes.length"
               icon="caret-down"
               type="link"
-              :text="showingAllNotes ? $t('actions.some_notes') : $t('actions.all_notes')"
+              :text="
+                showingAllNotes
+                  ? $t('actions.some_notes')
+                  : $t('actions.all_notes')
+              "
               :action="
                 () => {
                   showingAllNotes = !showingAllNotes;

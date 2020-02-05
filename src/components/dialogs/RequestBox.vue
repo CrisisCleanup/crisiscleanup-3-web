@@ -27,7 +27,7 @@
               {{ content }}
             </div>
             <div>
-              <base-input class="my-2" v-model="response" />
+              <base-input v-model="response" class="my-2" />
             </div>
           </div>
 

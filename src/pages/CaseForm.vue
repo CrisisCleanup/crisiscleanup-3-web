@@ -555,12 +555,9 @@ export default {
       if (incidents.length > 0) {
         result = await messageBox({
           title: this.$t('caseForm.incorrect_location'),
-          content: this.$t(
-            'caseForm.suggested_incident',
-            {
-              incident: incidents[0].name,
-            },
-          ),
+          content: this.$t('caseForm.suggested_incident', {
+            incident: incidents[0].name,
+          }),
           actions: {
             switchIncident: {
               text: this.$t('caseForm.yes'),
@@ -576,12 +573,9 @@ export default {
       } else {
         result = await messageBox({
           title: this.$t('caseForm.case_outside_incident'),
-          content: this.$t(
-            'caseForm.warning_case_outside_incident',
-            {
-              incident: this.currentIncident.name,
-            },
-          ),
+          content: this.$t('caseForm.warning_case_outside_incident', {
+            incident: this.currentIncident.name,
+          }),
           actions: {
             continue: {
               text: this.$t('actions.continue_anyway'),
