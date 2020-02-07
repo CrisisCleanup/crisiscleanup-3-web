@@ -229,26 +229,26 @@
                   >
                     <base-button
                       class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
-                      :text="$t('~~Accept')"
+                      :text="$t('actions.accept')"
                       :action="() => acceptRequest(slotProps.item.id)"
                     />
                     <base-button
                       class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
-                      :text="$t('~~Reject')"
+                      :text="$t('actions.reject')"
                       :action="() => rejectRequest(slotProps.item.id)"
                     />
                   </div>
                   <div v-if="pendingView === 'outbound'">
                     <base-button
                       class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
-                      :text="$t('~~Cancel')"
+                      :text="$t('actions.cancel')"
                       :action="() => cancelRequest(slotProps.item.id)"
                     />
                   </div>
                   <div v-if="pendingView !== 'archived'">
                     <base-button
                       class="px-2 py-1 mx-2 border-black border"
-                      :text="$t('~~Ignore')"
+                      :text="$t('actions.ignore')"
                       :action="() => archiveRequest(slotProps.item.id)"
                     />
                   </div>
@@ -256,7 +256,7 @@
                     <base-button
                       class="px-2 py-1 mx-2"
                       type="primary"
-                      :text="$t('~~History')"
+                      :text="$t('actions.history')"
                     />
                   </div>
                 </div>
@@ -394,23 +394,23 @@ export default {
           width: '10%',
         },
         {
-          title: this.$t('~~status'),
+          title: this.$t('dashboard.status'),
           dataIndex: 'status',
           key: 'status',
           width: '0.5fr',
         },
         {
-          title: this.$t('~~organization'),
+          title: this.$t('dashboard.org_label'),
           dataIndex: 'organization',
           key: 'organization',
         },
         {
-          title: this.$t('~~last_action'),
+          title: this.$t('dashboard.last_action'),
           dataIndex: 'last_action',
           key: 'last_action',
         },
         {
-          title: this.$t('~~next_action'),
+          title: this.$t('dashboard.next_action'),
           dataIndex: 'next_action',
           key: 'next_action',
         },
@@ -615,10 +615,8 @@ export default {
     },
     async acceptRequest(id) {
       const result = await requestBox({
-        title: this.$t('~~Approve Worksite Request'),
-        content: this.$t(
-          '~~Please provide a reason for approving this request',
-        ),
+        title: this.$t('actions.approve_worksite_request'),
+        content: this.$t('dashboard.approve_worksite_request_reason',),
       });
       if (result) {
         await WorksiteRequest.api().acceptRequest(id, result);
@@ -627,10 +625,8 @@ export default {
     },
     async rejectRequest(id) {
       const result = await requestBox({
-        title: this.$t('~~Reject Worksite Request'),
-        content: this.$t(
-          '~~Please provide a reason for rejecting this request',
-        ),
+        title: this.$t('actions.reject_worksite_request'),
+        content: this.$t('dashboard.reject_worksite_request_reason',),
       });
       if (result) {
         await WorksiteRequest.api().rejectRequest(id, result);
