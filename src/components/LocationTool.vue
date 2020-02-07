@@ -137,7 +137,7 @@
           />
         </modal>
         <div
-          v-if="incident"
+          v-if="incident || organization"
           class="bg-white p-1 border ml-5 flex items-center justify-center"
           style="height: 37px"
         >
@@ -239,6 +239,10 @@ export default {
       type: Number,
       default: null,
     },
+    organization: {
+      type: Number,
+      default: null,
+    },
   },
   data() {
     return {
@@ -288,7 +292,13 @@ export default {
     },
     incident(value) {
       if (value) {
-        this.getWorksites(value);
+        this.getWorksites({ organization: null, incident: value });
+      }
+      this.toggleWorksites(false);
+    },
+    organization(value) {
+      if (value) {
+        this.getWorksites({ organization: value, incident: null });
       }
       this.toggleWorksites(false);
     },
@@ -352,7 +362,9 @@ export default {
     });
 
     if (this.incident) {
-      this.getWorksites(this.incident);
+      this.getWorksites({ organization: null, incident: this.incident });
+    } else if (this.organization) {
+      this.getWorksites({ organization: this.organizationn, incident: null });
     }
     this.checkpoint();
   },
@@ -384,13 +396,14 @@ export default {
         this.map.removeLayer(this.worksiteLayer);
       }
     },
-    async getWorksites(incident) {
+    async getWorksites({ organization, incident }) {
       this.worksitesLoading = true;
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
         {
           params: {
             incident,
+            work_type__claimed_by: organization,
           },
         },
       );

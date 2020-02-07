@@ -147,6 +147,7 @@
       <LocationTool
         v-if="currentLocation"
         :incident="selectedIncident"
+        :organization="selectedOrganization && selectedOrganization.id"
         class="h-full"
         :locations="currentLocation.id ? [currentLocation.id] : []"
         @changed="setCurrentLocation"
