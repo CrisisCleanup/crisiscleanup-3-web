@@ -616,7 +616,7 @@ export default {
     async acceptRequest(id) {
       const result = await requestBox({
         title: this.$t('actions.approve_worksite_request'),
-        content: this.$t('dashboard.approve_worksite_request_reason',),
+        content: this.$t('dashboard.approve_worksite_request_reason'),
       });
       if (result) {
         await WorksiteRequest.api().acceptRequest(id, result);
@@ -626,7 +626,7 @@ export default {
     async rejectRequest(id) {
       const result = await requestBox({
         title: this.$t('actions.reject_worksite_request'),
-        content: this.$t('dashboard.reject_worksite_request_reason',),
+        content: this.$t('dashboard.reject_worksite_request_reason'),
       });
       if (result) {
         await WorksiteRequest.api().rejectRequest(id, result);
