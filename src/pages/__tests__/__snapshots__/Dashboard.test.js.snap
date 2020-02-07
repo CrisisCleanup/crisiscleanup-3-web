@@ -669,7 +669,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 class="p-2 border-b flex items-center cursor-pointer"
               >
                 
-      ~~status
+      dashboard.status
       
                 <!---->
               </div>
@@ -677,7 +677,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 class="p-2 border-b flex items-center cursor-pointer"
               >
                 
-      ~~organization
+      dashboard.org_label
       
                 <!---->
               </div>
@@ -685,7 +685,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 class="p-2 border-b flex items-center cursor-pointer"
               >
                 
-      ~~last_action
+      dashboard.last_action
       
                 <!---->
               </div>
@@ -693,7 +693,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 class="p-2 border-b flex items-center cursor-pointer"
               >
                 
-      ~~next_action
+      dashboard.next_action
       
                 <!---->
               </div>
