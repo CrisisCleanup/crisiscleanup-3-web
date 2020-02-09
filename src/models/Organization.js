@@ -10,6 +10,8 @@ export default class Organization extends Model {
       affiliates: this.attr([]),
       primary_location: this.attr(null),
       secondary_location: this.attr(null),
+      type_t: this.attr(null),
+      user_count: this.attr(null),
     };
   }
 }

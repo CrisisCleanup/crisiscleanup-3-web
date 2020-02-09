@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core';
+import Organization from './Organization';
 
 export default class Affiliate extends Model {
   static entity = 'organization_affiliate_requests';
@@ -11,6 +12,10 @@ export default class Affiliate extends Model {
       approved_by: this.attr(null),
       rejected_by: this.attr(null),
     };
+  }
+
+  get affiliate_organization() {
+    return Organization.find(this.affiliate);
   }
 
   static apiConfig = {
