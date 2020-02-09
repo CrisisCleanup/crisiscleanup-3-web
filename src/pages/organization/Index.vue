@@ -35,7 +35,7 @@
       </router-link>
 
       <router-link
-        to="/organization/affiliate"
+        to="/organization/affiliates"
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >

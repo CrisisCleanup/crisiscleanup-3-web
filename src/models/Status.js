@@ -1,6 +1,6 @@
 import { Model } from '@vuex-orm/core';
 
-export default class WorkType extends Model {
+export default class Status extends Model {
   static entity = 'statuses';
 
   static fields() {

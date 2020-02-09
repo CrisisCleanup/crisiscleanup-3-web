@@ -7,6 +7,7 @@ import Login from '@/pages/Login';
 import store from '@/store/index';
 import Organization from '@/pages/organization/Index';
 import Invitations from '@/pages/organization/Invitations';
+import Affiliates from '@/pages/organization/Affiliates';
 import Users from '@/pages/organization/Users';
 import Layers from '@/pages/organization/Layers';
 import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
@@ -96,6 +97,11 @@ const routes = [
         path: 'users',
         component: Users,
         name: 'nav.organization_users',
+      },
+      {
+        path: 'affiliates',
+        component: Affiliates,
+        name: 'nav.organization_affiliates',
       },
       {
         path: 'layers',
