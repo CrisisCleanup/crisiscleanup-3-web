@@ -18,6 +18,10 @@ export default class Affiliate extends Model {
     return Organization.find(this.affiliate);
   }
 
+  get status() {
+    return this.approved_by ? 'Affiliated' : 'Pending';
+  }
+
   static apiConfig = {
     actions: {
       acceptRequest(request) {
