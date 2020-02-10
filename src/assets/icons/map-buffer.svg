@@ -1,16 +1,1 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
-  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-     width="146.000000pt" height="132.000000pt" viewBox="0 0 146.000000 132.000000"
-     preserveAspectRatio="xMidYMid meet">
-  <metadata>
-    Created by potrace 1.15, written by Peter Selinger 2001-2017
-  </metadata>
-  <g transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)"
-     fill="#586673" stroke="green">
-    <path d="M561 860 c-6 -28 -11 -58 -11 -66 0 -18 209 -324 222 -324 4 0 8 11
-8 24 0 12 5 37 11 55 9 25 15 30 30 26 10 -4 19 -3 19 2 1 4 11 71 24 148 13
-77 21 143 17 146 -7 8 -232 39 -278 39 -30 0 -32 -3 -42 -50z"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="194.667" height="176" preserveAspectRatio="xMidYMid meet" version="1.0" viewBox="0 0 146 132"><metadata>Created by potrace 1.15, written by Peter Selinger 2001-2017</metadata><g fill="#586673" stroke="green"><path d="M561 860 c-6 -28 -11 -58 -11 -66 0 -18 209 -324 222 -324 4 0 8 11 8 24 0 12 5 37 11 55 9 25 15 30 30 26 10 -4 19 -3 19 2 1 4 11 71 24 148 13 77 21 143 17 146 -7 8 -232 39 -278 39 -30 0 -32 -3 -42 -50z" transform="translate(0.000000,132.000000) scale(0.100000,-0.100000)"/></g></svg>
