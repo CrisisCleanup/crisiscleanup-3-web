@@ -61,7 +61,7 @@
               </div>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d">
-              <base-dropdown class-name="layers-dropdown">
+              <base-dropdown class-name="borderless">
                 <base-button
                   slot="btn"
                   class="text-base font-thin mx-4"
@@ -175,17 +175,43 @@
                   >{{ filtersCount }}</span
                 >
               </base-button>
-              <base-button
+              <base-dropdown
                 v-if="showingTable"
-                class="text-base font-thin mx-4"
-                text=""
-                icon="ellipsis-h"
-                :action="
-                  () => {
-                    showingFilters = true;
-                  }
-                "
-              />
+                class-name="borderless"
+                class="flex justify-center"
+              >
+                <template slot="icon">
+                  <base-button
+                    slot="btn"
+                    class="text-base font-thin mx-2"
+                    icon="ellipsis-h"
+                  />
+                </template>
+                <template slot="body">
+                  <ul class="text-base">
+                    <li class="py-1">
+                      <base-button
+                        class="text-base font-thin mx-4"
+                        :text="$t('actions.download')"
+                        :action="downloadWorksite"
+                      />
+                    </li>
+                    <li class="py-1">
+                      <base-button
+                        class="text-base font-thin mx-4"
+                        :text="$t('actions.print')"
+                        :action="printWorksite"
+                      />
+                    </li>
+                    <li class="py-1">
+                      <base-button
+                        class="text-base font-thin mx-4"
+                        :text="$t('actions.share')"
+                      />
+                    </li>
+                  </ul>
+                </template>
+              </base-dropdown>
               <WorksiteFilters
                 v-if="showingFilters"
                 :current-filters="filters"
@@ -1205,7 +1231,7 @@ export default {
   padding: 0;
 }
 
-.bp-dropdown__btn.layers-dropdown-bp__btn {
+.borderless-bp__btn {
   @apply border-0;
 }
 </style>
