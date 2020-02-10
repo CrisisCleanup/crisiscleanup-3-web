@@ -176,6 +176,7 @@
                 >
               </base-button>
               <base-button
+                v-if="showingTable"
                 class="text-base font-thin mx-4"
                 text=""
                 icon="ellipsis-h"
