@@ -115,14 +115,14 @@
               <base-radio
                 class="mr-6"
                 name="Private"
-                label="Private"
+                label="$t('locationVue.private')"
                 :value="locationAccess"
                 @change="locationAccess = $event"
               />
               <base-radio
                 class="mr-6"
                 name="Public"
-                label="Public"
+                label="$t('locationVue.share')"
                 :value="locationAccess"
                 @change="locationAccess = $event"
               />

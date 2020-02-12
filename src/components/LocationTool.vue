@@ -195,7 +195,7 @@
             class="text-xs p-1"
           />
           <base-button
-            text="Exclude"
+            text="$t('actions.subtract')"
             :action="
               () => {
                 handleMapEvent('exclude', 'Location');
