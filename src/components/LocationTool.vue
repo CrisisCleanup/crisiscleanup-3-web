@@ -44,9 +44,7 @@
           <MapButton
             button-class="border bg-white"
             icon="map-rect"
-            :actions="[
-              { id: 'cancel', text: $t('actions.cancel') },
-            ]"
+            :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Rectangle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Rectangle'"
             @changed="
@@ -59,9 +57,7 @@
           <MapButton
             button-class="border bg-white"
             icon="map-poly"
-            :actions="[
-              { id: 'cancel', text: $t('actions.cancel') },
-            ]"
+            :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Polygon'"
             :selected="Boolean(currentDraw) && currentDraw === 'Polygon'"
             @changed="
@@ -74,9 +70,7 @@
           <MapButton
             button-class="border bg-white"
             icon="map-circle"
-            :actions="[
-              { id: 'cancel', text: $t('actions.cancel') },
-            ]"
+            :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Circle'"
             @changed="
@@ -342,7 +336,8 @@ export default {
     map.on('pm:drawstart', ({ workingLayer }) => {
       this.workingLayer = workingLayer;
       workingLayer.on('pm:snap', () => {
-        document.querySelector('.leaflet-tooltip').style.backgroundColor = '#13E768';
+        document.querySelector('.leaflet-tooltip').style.backgroundColor =
+          '#13E768';
       });
 
       workingLayer.on('pm:unsnap', () => {
