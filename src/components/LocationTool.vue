@@ -95,6 +95,8 @@
               () => {
                 currentPolygon = null;
                 applyCurrentLayer();
+                map.pm.disableDraw();
+                currentDraw = null;
               }
             "
           />
