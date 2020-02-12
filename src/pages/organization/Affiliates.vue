@@ -93,14 +93,14 @@
           </div>
         </template>
         <template #actions="slotProps">
-          <div class="flex mr-2">
+          <div class="flex mr-2 items-center justify-center w-full">
             <base-button
               v-if="
                 slotProps.item.approved_by ||
                   slotProps.item.organization === currentUser.organization.id
               "
               size="small"
-              class="flex-grow m-1 mx-2 text-xs px-3 border border-black"
+              class="m-1 mx-2 text-xs px-3 border border-black"
               :action="
                 () => {
                   removeAffiliation(slotProps.item);

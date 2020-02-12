@@ -45,8 +45,6 @@
             button-class="border bg-white"
             icon="map-rect"
             :actions="[
-              { id: 'add', text: $t('actions.add') },
-              { id: 'exclude', text: $t('actions.subtract') },
               { id: 'cancel', text: $t('actions.cancel') },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Rectangle'"
@@ -62,8 +60,6 @@
             button-class="border bg-white"
             icon="map-poly"
             :actions="[
-              { id: 'add', text: $t('actions.add') },
-              { id: 'exclude', text: $t('actions.subtract') },
               { id: 'cancel', text: $t('actions.cancel') },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Polygon'"
@@ -79,8 +75,6 @@
             button-class="border bg-white"
             icon="map-circle"
             :actions="[
-              { id: 'add', text: $t('actions.add') },
-              { id: 'exclude', text: $t('actions.subtract') },
               { id: 'cancel', text: $t('actions.cancel') },
             ]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
@@ -253,6 +247,7 @@ export default {
       currentDraw: null,
       bufferedLayer: null,
       worksiteLayer: null,
+      workingLayer: null,
       showingPopup: false,
       locationResults: [],
       completedOptions: {
@@ -328,6 +323,33 @@ export default {
       L.DomEvent.stopPropagation(ev);
     });
 
+    map.on('keydown', e => {
+      if (e.originalEvent.keyCode === 13) {
+        const newPoly = turf.lineToPolygon(this.workingLayer.toGeoJSON());
+        this.$log.debug(newPoly);
+        this.currentPolygon = L.geoJson(newPoly, this.completedOptions);
+        this.applyCurrentLayer();
+        this.map.pm.disableDraw();
+        this.currentDraw = null;
+      }
+      if (e.originalEvent.keyCode === 27) {
+        this.applyCurrentLayer(false);
+        this.map.pm.disableDraw();
+        this.currentDraw = null;
+      }
+    });
+
+    map.on('pm:drawstart', ({ workingLayer }) => {
+      this.workingLayer = workingLayer;
+      workingLayer.on('pm:snap', () => {
+        document.querySelector('.leaflet-tooltip').style.backgroundColor = '#13E768';
+      });
+
+      workingLayer.on('pm:unsnap', () => {
+        document.querySelector('.leaflet-tooltip').style.backgroundColor = '';
+      });
+    });
+
     map.on('pm:create', e => {
       const { layer } = e;
       let newLayer = L.geoJSON(layer.toGeoJSON());
@@ -346,6 +368,9 @@ export default {
       }
 
       [this.bufferedLayer] = newLayer.getLayers();
+      this.$nextTick(() => {
+        this.showPopup(layer.getBounds().getCenter());
+      });
     });
 
     this.map = map;
@@ -416,8 +441,12 @@ export default {
       );
       this.worksitesLoading = false;
     },
-    applyCurrentLayer() {
+    applyCurrentLayer(closePopup = true) {
       this.map.eachLayer(layer => {
+        if (layer instanceof L.Popup && !closePopup) {
+          return;
+        }
+
         if (layer instanceof L.TileLayer || layer === this.worksiteLayer) {
           return;
         }
@@ -526,7 +555,7 @@ export default {
       this.applyCurrentLayer();
 
       const options = {
-        snappable: false,
+        snappable: true,
         templineStyle: this.bufferedOptions,
 
         hintlineStyle: this.bufferedOptions,
@@ -549,15 +578,20 @@ export default {
       );
       this.locationResults = results.entities.locations;
     },
-    showPopup() {
+    showPopup(center) {
       const popup = L.popup({
         maxWidth: 'auto',
       });
       this.showingPopup = true;
       popup
-        .setLatLng(this.bufferedLayer.getCenter())
+        .setLatLng(center || this.bufferedLayer.getBounds().getCenter())
         .setContent(this.$refs.popup)
         .openOn(this.map);
+      this.map.on('popupclose', () => {
+        this.applyCurrentLayer(false);
+        this.map.pm.disableDraw();
+        this.currentDraw = null;
+      });
     },
     async onLocationSelected(selected, fit = false) {
       await Location.api().fetchById(selected.id);
