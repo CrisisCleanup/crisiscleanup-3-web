@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full">
-    <div class="h-10 bg-white mx-5 border-t flex justify-center">
+    <div class="h-10 bg-white mx-5 border-t flex justify-center text-crisiscleanup-grey-700">
       <router-link
         to="/organization/invitations"
         class="flex w-48 justify-center mx-2 cursor-pointer"
@@ -50,7 +50,7 @@
         <span class="pt-2">{{ $t('orgIndex.layer_library') }}</span>
       </router-link>
     </div>
-    <div class="flex-grow bg-gray-100">
+    <div class="flex-grow overflow-auto bg-gray-100">
       <router-view></router-view>
     </div>
   </div>

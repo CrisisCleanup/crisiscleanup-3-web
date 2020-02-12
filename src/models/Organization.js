@@ -7,6 +7,9 @@ export default class Organization extends Model {
     return {
       id: this.increment(),
       name: this.string(''),
+      url: this.string(''),
+      facebook: this.string(''),
+      twitter: this.string(''),
       affiliates: this.attr([]),
       primary_location: this.attr(null),
       secondary_location: this.attr(null),

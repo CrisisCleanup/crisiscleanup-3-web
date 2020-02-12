@@ -139,7 +139,7 @@ export default {
   border: none;
 }
 .form-select .vs__search::placeholder {
-  color: darkGray;
+  @apply text-crisiscleanup-dark-200;
 }
 
 .vue-select-up.form-select .vs__dropdown-menu {

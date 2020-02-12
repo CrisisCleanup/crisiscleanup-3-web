@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
+import OrganizationProfile from '@/pages/organization/Profile';
 import Cases from '@/pages/Cases';
 import CaseView from '@/pages/CaseView';
 import Dashboard from '@/pages/Dashboard';
@@ -102,6 +103,11 @@ const routes = [
         path: 'affiliates',
         component: Affiliates,
         name: 'nav.organization_affiliates',
+      },
+      {
+        path: 'profile',
+        component: OrganizationProfile,
+        name: 'nav.organization_profile',
       },
       {
         path: 'layers',

@@ -1,9 +1,12 @@
 <template>
-  <div id="file-drag-drop" class="flex flex-col items-center justify-center">
-    <form ref="fileform" class="flex flex-col items-center justify-center">
-      <div class="file-drop-area">
-        <span class="fake-btn">{{ $t('dragDrop.choose_files') }}</span>
-        <span class="file-msg">{{ $t('dragDrop.or_drag_drop') }}</span>
+  <div class="border border-dashed flex items-center justify-center">
+    <form ref="fileform" class="w-full h-full">
+      <div class="relative w-full h-full flex flex-col items-center justify-center">
+        <slot>
+          <div class="p-2 text-crisiscleanup-grey-700">{{ dragTitle }}</div>
+          <div>{{ $t('or') }}</div>
+          <div class="p-2 underline text-primary-dark">{{ chooseTitle }}</div>
+        </slot>
         <input ref="fileinput" class="file-input" type="file" multiple />
       </div>
     </form>
@@ -13,6 +16,16 @@
 <script>
 export default {
   name: 'DragDrop',
+  props: {
+    chooseTitle: {
+      type: String,
+      default: ''
+    },
+    dragTitle: {
+      type: String,
+      default: ''
+    },
+  },
   data() {
     return {
       dragAndDropCapable: false,
@@ -145,6 +158,6 @@ form {
 }
 
 .is-dragover {
-  background-color: theme('colors.primary.dark');
+  background-color: theme('colors.crisiscleanup-grey.200');
 }
 </style>

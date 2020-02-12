@@ -71,7 +71,7 @@ export default {
 .layer-action-popover {
   @apply bg-white text-crisiscleanup-dark-100 outline-none w-full border w-auto;
   left: 1px !important;
-  z-index: 100;
+  z-index: 50000;
 }
 
 .map-button.selected {

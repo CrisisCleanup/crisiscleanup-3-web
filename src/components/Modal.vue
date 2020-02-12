@@ -42,8 +42,8 @@
                   class="px-6 p-3"
                   :action="
                     () => {
-                      $emit('close');
                       $emit('ok');
+                      $emit('close');
                     }
                   "
                 >

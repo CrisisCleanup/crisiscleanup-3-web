@@ -2,7 +2,11 @@
   <div class="flex h-full m-auto">
     <div class="p-12 w-full">
       <div class="container">
-        <DragDrop @files="handleFileUpload"></DragDrop>
+        <DragDrop
+          :choose-title="$t('dragDrop.choose_files')"
+          :drag-title="$t('~~Drag and Drop files here')"
+          @files="handleFileUpload"
+        ></DragDrop>
       </div>
 
       <div v-if="shapefileStructure">
