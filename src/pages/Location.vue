@@ -140,16 +140,26 @@
             </div>
           </div>
         </div>
-        <div class="flex items-center justify-end h-16">
+        <div class="flex items-center justify-around h-16">
           <base-button
             :text="$t('actions.reset')"
-            class="border-2 border-black mx-2 p-2 px-4"
+            class="border border-black p-2"
           />
           <base-button
             :text="$t('actions.save_location')"
-            class="mx-2 p-2 px-4"
+            class="p-2"
             type="primary"
             :action="saveLocation"
+          />
+          <base-button
+            :text="$t('~~Save and New')"
+            class="p-2"
+            type="primary"
+            :action="
+              () => {
+                saveLocation(true);
+              }
+            "
           />
         </div>
       </form>
@@ -157,6 +167,7 @@
     <div class="flex-grow flex flex-col">
       <LocationTool
         v-if="currentLocation"
+        ref="locationTool"
         :incident="selectedIncident"
         :organization="selectedOrganization && selectedOrganization.id"
         class="h-full"
@@ -278,7 +289,7 @@ export default {
       );
       this.organizationResults = results.entities.organizations;
     },
-    async saveLocation() {
+    async saveLocation(goToNew) {
       const isValid = this.$refs.form.reportValidity();
       if (!isValid) {
         return;
@@ -342,10 +353,18 @@ export default {
             );
           }
         }
-        const locationId = response.response.data.id;
-        await Location.api().fetchById(locationId);
-        this.currentLocation = Location.find(locationId);
-        await this.$router.push(`/locations/${locationId}/edit`);
+        await this.$toasted.success(this.$t('~~Location Saved'));
+
+        if (goToNew) {
+          this.currentLocation = new Location();
+          this.currentPolygon = null;
+          this.$refs.locationTool.clearAll();
+        } else {
+          const locationId = response.response.data.id;
+          await Location.api().fetchById(locationId);
+          this.currentLocation = Location.find(locationId);
+          await this.$router.push(`/locations/${locationId}/edit`);
+        }
       } catch (e) {
         this.$log.error(e);
       } finally {

@@ -91,14 +91,7 @@
           <MapButton
             button-class="border bg-white"
             icon="map-sweep"
-            @click="
-              () => {
-                currentPolygon = null;
-                applyCurrentLayer();
-                map.pm.disableDraw();
-                currentDraw = null;
-              }
-            "
+            @click="clearAll"
           />
         </div>
         <base-button
@@ -391,6 +384,12 @@ export default {
     this.checkpoint();
   },
   methods: {
+    clearAll() {
+      this.currentPolygon = null;
+      this.applyCurrentLayer();
+      this.map.pm.disableDraw();
+      this.currentDraw = null;
+    },
     restoreCheckpoint(checkpointData) {
       this.map.eachLayer(layer => {
         if (layer instanceof L.TileLayer || layer === this.worksiteLayer) {
@@ -415,7 +414,9 @@ export default {
           this.map.panBy([1, 0]);
         });
       } else {
-        this.map.removeLayer(this.worksiteLayer);
+        if (this.worksiteLayer) {
+          this.map.removeLayer(this.worksiteLayer);
+        }
       }
     },
     async getWorksites({ organization, incident }) {
