@@ -154,7 +154,7 @@
             type="range"
             min="-100"
             max="100"
-            step="10"
+            step="1"
           />
           <div class="pr-2">
             {{ currentBufferDistance }} {{ $t('layerTool.miles') }}
@@ -525,11 +525,6 @@ export default {
           } else {
             this.currentPolygon = null;
           }
-        } else {
-          this.currentPolygon = L.geoJson(
-            this.bufferedLayer.toGeoJSON(),
-            this.completedOptions,
-          );
         }
         this.applyCurrentLayer();
       }

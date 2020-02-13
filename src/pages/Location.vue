@@ -54,7 +54,6 @@
         v-if="currentLocation"
         ref="form"
         class="form flex-grow flex flex-col justify-between w-84"
-        @submit.prevent="saveLocation"
       >
         <div class="flex flex-col">
           <base-input
@@ -62,6 +61,7 @@
             type="text"
             class="input form-field"
             size="large"
+            required
             :placeholder="$t('locationVue.location_name')"
           />
           <form-select
@@ -70,6 +70,7 @@
             :options="locationTypes"
             item-key="id"
             label="name_t"
+            :required="true"
             :placeholder="$t('locationVue.location_type')"
             select-classes="bg-white border w-full h-12"
             @input="
@@ -278,6 +279,16 @@ export default {
       this.organizationResults = results.entities.organizations;
     },
     async saveLocation() {
+      const isValid = this.$refs.form.reportValidity();
+      if (!isValid) {
+        return;
+      }
+
+      if (!this.currentPolygon) {
+        this.$toasted.error('~~No valid drawing found');
+        return;
+      }
+
       this.loading = true;
       let { geometry } = this.currentPolygon.toGeoJSON();
       const { type, features } = this.currentPolygon.toGeoJSON();

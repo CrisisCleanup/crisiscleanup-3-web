@@ -15,6 +15,14 @@
     @input="$emit('input', $event)"
     @search:focus="open"
   >
+    <template v-if="required" #search="{attributes, events}">
+      <input
+        class="vs__search"
+        :required="!value"
+        v-bind="attributes"
+        v-on="events"
+      />
+    </template>
   </v-select>
 </template>
 
@@ -31,6 +39,10 @@ export default {
       default: false,
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    required: {
       type: Boolean,
       default: false,
     },
@@ -96,8 +108,13 @@ export default {
         });
 
         const selected = items.find(item => {
-          const currentLabel = this.label ? this.value[this.label] : this.value;
-          return item.textContent.trim() === currentLabel;
+          if (this.value) {
+            const currentLabel = this.label
+              ? this.value[this.label]
+              : this.value;
+            return item.textContent.trim() === currentLabel;
+          }
+          return false;
         });
 
         if (selected) {
