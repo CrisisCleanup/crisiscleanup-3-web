@@ -413,10 +413,8 @@ export default {
         this.$nextTick(() => {
           this.map.panBy([1, 0]);
         });
-      } else {
-        if (this.worksiteLayer) {
-          this.map.removeLayer(this.worksiteLayer);
-        }
+      } else if (this.worksiteLayer) {
+        this.map.removeLayer(this.worksiteLayer);
       }
     },
     async getWorksites({ organization, incident }) {
