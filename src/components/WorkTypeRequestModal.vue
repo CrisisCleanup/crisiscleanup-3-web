@@ -1,13 +1,13 @@
 <template>
   <modal
-    :title="$t('Work Type Request')"
+    :title="$t('workTypeRequestModal.work_type_request')"
     modal-classes="w-96"
     @close="$emit('onCancel')"
   >
     <div class="px-6 py-3">
       <div class="font-xs my-2">
         {{
-          $t('Choose work type you would like to claim for your organization')
+          $t('workTypeRequestModal.choose_work_types')
         }}
       </div>
       <div v-for="work_type_to_request in workTypes">
