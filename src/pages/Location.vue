@@ -9,34 +9,44 @@
     </div>
     <div v-else class="mx-2 flex flex-col">
       <div class="h-16 flex items-center justify-between">
-        <div class="font-bold">{{ $t('actions.new_location') }}</div>
+        <div v-if="isNew" class="font-bold">
+          {{ $t('actions.new_location') }}
+        </div>
+        <div v-else class="font-bold">
+          {{ $t('actions.edit') }} {{ currentLocation.name }}
+        </div>
         <div class="flex">
           <ccu-icon
-            alt="$t('actions.edit_location')"
+            v-show="false"
+            :alt="$t('actions.edit_location')"
             size="small"
             class="p-1 py-2"
             type="edit"
             @click.native="() => {}"
           />
           <ccu-icon
-            alt="$t('locationVue.download_as_shapefile')"
+            v-if="!isNew"
+            :alt="$t('locationVue.download_as_shapefile')"
             size="small"
             class="p-1 py-2"
             type="download"
-            @click.native="() => {}"
+            @click.native="downloadCurrentLocation"
           />
           <ccu-icon
-            alt="$t('actions.share_location')"
+            v-show="false"
+            v-if="!isNew"
+            :alt="$t('actions.share_location')"
             size="small"
             class="p-1 py-2"
             type="share"
           />
           <ccu-icon
-            alt="$t('actions.delete')"
+            v-if="!isNew"
+            :alt="$t('actions.delete')"
             size="small"
             class="p-1 py-2"
             type="trash"
-            @click.native="() => {}"
+            @click.native="deleteCurrentLocation"
           />
         </div>
       </div>
@@ -52,7 +62,7 @@
             type="text"
             class="input form-field"
             size="large"
-            placeholder="$t('locationVue.location_name')"
+            :placeholder="$t('locationVue.location_name')"
           />
           <form-select
             v-if="!loading"
@@ -60,7 +70,7 @@
             :options="locationTypes"
             item-key="id"
             label="name_t"
-            placeholder="$t('locationVue.location_type')"
+            :placeholder="$t('locationVue.location_type')"
             select-classes="bg-white border w-full h-12"
             @input="
               type => {
@@ -79,7 +89,7 @@
                 :suggestions="organizationResults"
                 display-property="name"
                 size="large"
-                placeholder="$t('locationVue.search_for_organization')"
+                :placeholder="$t('locationVue.search_for_organization')"
                 clear-on-selected
                 @selected="
                   value => {
@@ -98,7 +108,7 @@
                 select-classes="bg-white border w-full h-12 mb-3"
                 item-key="id"
                 label="name"
-                placeholder="$t('locationVue.select_incident')"
+                :placeholder="$t('locationVue.select_incident')"
               />
             </div>
           </div>
@@ -107,22 +117,22 @@
             v-model="currentLocation.notes"
             class="text-base form-field border outline-none p-2 resize-none"
             rows="4"
-            placeholder="$t('locationVue.notes')"
+            :placeholder="$t('locationVue.notes')"
           />
           <div>
             <div class="mt-8 text-base">{{ $t('locationVue.access') }}</div>
             <div class="flex mt-2">
               <base-radio
                 class="mr-6"
-                name="Private"
-                label="$t('locationVue.private')"
+                label="Private"
+                :name="$t('locationVue.private')"
                 :value="locationAccess"
                 @change="locationAccess = $event"
               />
               <base-radio
                 class="mr-6"
-                name="Public"
-                label="$t('locationVue.share')"
+                label="Public"
+                :name="$t('locationVue.share')"
                 :value="locationAccess"
                 @change="locationAccess = $event"
               />
@@ -162,6 +172,7 @@ import LocationType from '@/models/LocationType';
 import Organization from '@/models/Organization';
 import Incident from '@/models/Incident';
 import LocationTool from '@/components/LocationTool';
+import { forceFileDownload } from '@/utils/downloads';
 
 export default {
   name: 'Location',
@@ -170,13 +181,16 @@ export default {
     return {
       currentLocation: null,
       loading: false,
-      locationAccess: 'Private',
+      locationAccess: 'Public',
       organizationResults: [],
       selectedOrganization: null,
       selectedIncident: null,
     };
   },
   computed: {
+    isNew() {
+      return !this.$route.params.location_id;
+    },
     locationTypes() {
       return LocationType.all();
     },
@@ -236,6 +250,21 @@ export default {
     this.loading = false;
   },
   methods: {
+    async downloadCurrentLocation() {
+      this.loading = true;
+      const shapefile = await Location.api().download(this.currentLocation.id);
+      forceFileDownload(shapefile.response);
+      this.loading = false;
+    },
+    async deleteCurrentLocation() {
+      this.loading = true;
+      await Location.api().delete(`/locations/${this.currentLocation.id}`, {
+        delete: this.currentLocation.id,
+      });
+      this.loading = false;
+      await this.$toasted.success(this.$t('~~Location Deleted'));
+      await this.$router.push('/locations/new');
+    },
     setCurrentLocation(location) {
       this.currentPolygon = location;
     },

@@ -8,7 +8,7 @@
       :class="{ checked: label === value }"
     />
     <span>
-      {{ label }}
+      {{ name }}
     </span>
   </label>
 </template>

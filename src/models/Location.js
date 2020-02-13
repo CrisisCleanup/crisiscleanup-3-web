@@ -21,6 +21,14 @@ export default class Location extends Model {
       fetchById(id) {
         return this.get(`/locations/${id}`);
       },
+      download(id) {
+        return this.request({
+          url: `/locations/${id}/download`,
+          method: 'GET',
+          responseType: 'blob',
+          save: false,
+        });
+      },
     },
   };
 }
