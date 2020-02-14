@@ -9,7 +9,7 @@
     "lint-fix": "vue-cli-service lint --ignore-path .gitignore .",
     "lint-staged": "lint-staged",
     "lint": "vue-cli-service lint --no-fix --ignore-path .gitignore .",
-    "prettify": "prettier --write ./**/*.{js,vue}",
+    "prettify": "prettier --write {.,**}/*.{js,vue}",
     "deploy-staging": "vue-cli-service build --mode staging && vue-cli-service s3-deploy",
     "compile-icons": "./template-compiler.js",
     "test": "yarn test:unit && yarn test:e2e",
@@ -132,6 +132,7 @@
   "lint-staged": {
     "*.{js,vue}": [
       "yarn lint-fix",
+      "yarn prettify",
       "git add --force"
     ],
     "*.json": [

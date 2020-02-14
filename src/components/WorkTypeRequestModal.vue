@@ -6,9 +6,7 @@
   >
     <div class="px-6 py-3">
       <div class="font-xs my-2">
-        {{
-          $t('workTypeRequestModal.choose_work_types')
-        }}
+        {{ $t('workTypeRequestModal.choose_work_types') }}
       </div>
       <div v-for="work_type_to_request in workTypes">
         <base-checkbox
