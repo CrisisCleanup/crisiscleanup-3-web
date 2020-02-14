@@ -3,7 +3,7 @@
 exports[`WorkTypeRequestModal show modal with options 1`] = `
 <modal-stub
   modal-classes="w-96"
-  title="Work Type Request"
+  title="workTypeRequestModal.work_type_request"
 >
   <div
     class="px-6 py-3"
@@ -12,7 +12,7 @@ exports[`WorkTypeRequestModal show modal with options 1`] = `
       class="font-xs my-2"
     >
       
-      Choose work type you would like to claim for your organization
+      workTypeRequestModal.choose_work_types
     
     </div>
      
