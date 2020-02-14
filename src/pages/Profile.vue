@@ -211,10 +211,10 @@
               src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
             />
             <a href="https://google.com" class="text-center pb-4">{{
-              $t('profileVue.change_photo')
+              $t('actions.change_photo')
             }}</a>
             <base-button type="primary">{{
-              $t('profileVue.view_id_badge')
+              $t('actions.view_id_badge')
             }}</base-button>
           </div>
           <div style="min-width: 700px;" class="p-8 w-1/2">
