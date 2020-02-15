@@ -3,7 +3,10 @@
   "baseUrl": "http://localhost:8080",
   "env": {
     "NODE_ENV": "test",
-    "VUE_APP_API_BASE_URL": "http://localhost:5000"
+    "VUE_APP_API_BASE_URL": "http://localhost:5000",
+    "cypress-plugin-snapshots": {
+      "threshold": 0.01
+    }
   },
   "ignoreTestFiles": ["**/__snapshots__/*", "**/__image_snapshots__/*"],
   "projectId": "xyprfc"
