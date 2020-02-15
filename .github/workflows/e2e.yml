@@ -93,7 +93,6 @@ jobs:
           group: Chrome
           headless: true
           browser: chrome
-          parallel: true
           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
         env:
           VUE_APP_API_BASE_URL: 'http://localhost:5000'
