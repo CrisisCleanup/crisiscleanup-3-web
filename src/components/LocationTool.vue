@@ -379,7 +379,7 @@ export default {
     if (this.incident) {
       this.getWorksites({ organization: null, incident: this.incident });
     } else if (this.organization) {
-      this.getWorksites({ organization: this.organizationn, incident: null });
+      this.getWorksites({ organization: this.organization, incident: null });
     }
     this.checkpoint();
   },

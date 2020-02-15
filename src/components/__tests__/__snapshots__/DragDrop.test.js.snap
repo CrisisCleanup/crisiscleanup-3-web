@@ -2,26 +2,29 @@
 
 exports[`DragDrop should render correctly and match snapshot 1`] = `
 <div
-  class="flex flex-col items-center justify-center"
-  id="file-drag-drop"
+  class="border border-dashed flex items-center justify-center"
 >
   <form
-    class="flex flex-col items-center justify-center"
+    class="w-full h-full"
   >
     <div
-      class="file-drop-area"
+      class="relative w-full h-full flex flex-col items-center justify-center"
     >
-      <span
-        class="fake-btn"
+      <div
+        class="p-2 text-crisiscleanup-grey-700"
       >
-        dragDrop.choose_files
-      </span>
+        
+      </div>
        
-      <span
-        class="file-msg"
+      <div>
+        or
+      </div>
+       
+      <div
+        class="p-2 underline text-primary-dark"
       >
-        dragDrop.or_drag_drop
-      </span>
+        
+      </div>
        
       <input
         class="file-input"

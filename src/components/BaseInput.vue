@@ -120,12 +120,20 @@ input:disabled {
   background-color: #f7f7f7;
 }
 
+input::placeholder {
+  @apply text-crisiscleanup-dark-200;
+}
+
+input:invalid {
+  @apply border border-crisiscleanup-red-100;
+}
+
 input {
   outline: none;
   width: 300px;
   height: 40px;
   border-radius: 0;
-  border: solid 1px #dadada;
+  @apply border border-crisiscleanup-dark-100;
   padding: 10px;
 }
 
@@ -136,7 +144,7 @@ input.large {
 .icon-container {
   width: 40px;
   height: 40px;
-  border: solid 1px #dadada;
+  @apply border border-crisiscleanup-dark-100;
   border-left: 0;
 }
 
