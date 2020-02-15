@@ -5,7 +5,7 @@
     "NODE_ENV": "test",
     "VUE_APP_API_BASE_URL": "http://localhost:5000",
     "cypress-plugin-snapshots": {
-      "threshold": 0.01
+      "threshold": 0.05
     }
   },
   "ignoreTestFiles": ["**/__snapshots__/*", "**/__image_snapshots__/*"],
