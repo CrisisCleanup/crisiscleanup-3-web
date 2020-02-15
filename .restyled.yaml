@@ -1,9 +1,16 @@
 # Patterns to exclude from all Restylers
 exclude:
-  - "**/node_modules/**/*"
-  - "**/vendor/**/*"
-  - ".github/workflows/**/*" # https://github.com/restyled-io/restyler/issues/73
-  - "**/**/*.svg" # allow imgbot to optimize
+  - '**/node_modules/**/*'
+  - '**/vendor/**/*'
+  - '.github/workflows/**/*' # https://github.com/restyled-io/restyler/issues/73
+  - '**/**/*.svg' # allow imgbot to optimize
+
+# Download remote files before restyling
+remote_files:
+  - url: https://raw.githubusercontent.com/CrisisCleanup/crisiscleanup-3-web/master/.prettierrc
+    path: .prettierrc
+  - url: https://raw.githubusercontent.com/CrisisCleanup/crisiscleanup-3-web/master/.editorconfig
+    path: .editorconfig
 
 # Leave comments on the original PR linking to the Restyle PR?
 comments: true

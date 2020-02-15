@@ -1,3 +1,5 @@
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
@@ -14,8 +16,6 @@ import Users from '@/pages/organization/Users';
 import Profile from '@/pages/Profile';
 import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
 import store from '@/store/index';
-import Vue from 'vue';
-import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
