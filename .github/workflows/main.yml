@@ -17,6 +17,7 @@ on:
       - '**/**.vue'
       - '**/**.js.snap'
       - '.github/workflows/*'
+      - 'vue.config.js'
 
 env:
   VUE_APP_WHAT_3_WORDS_API_KEY: ${{ secrets.VUE_APP_WHAT_3_WORDS_API_KEY }}
