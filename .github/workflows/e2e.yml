@@ -82,16 +82,15 @@ jobs:
       - name: Spin up Api
         run: |
           cd "$GITHUB_WORKSPACE/cc3api"
-          docker-compose --verbose up -d app
+          docker-compose up -d app
 
       - name: Run Cypress
         uses: cypress-io/github-action@v1.20.0
         with:
           record: true
-          start: yarn serve
+          start: yarn serve-dev
           wait-on: 'http://localhost:8080'
           group: Chrome
-          headless: true
           browser: chrome
           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
         env:
