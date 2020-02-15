@@ -32,8 +32,6 @@ module.exports = {
       deployPath: '/',
       acl: 'public-read',
       pwa: false,
-      enableCloudfront: true,
-      cloudfrontId: 'E3DNZ4GD3WPDPE',
       uploadConcurrency: 5,
       pluginVersion: '3.0.0',
       cacheControl: 'max-age=86400',
