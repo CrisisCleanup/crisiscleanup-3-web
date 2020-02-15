@@ -15,6 +15,8 @@
 const webpack = require('@cypress/webpack-preprocessor');
 const { initPlugin } = require('cypress-plugin-snapshots/plugin');
 const percyHealthCheck = require('@percy/cypress/task');
+const coverageTask = require('@cypress/code-coverage/task');
+const bwInstanbul = require('@cypress/code-coverage/use-browserify-istanbul');
 
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
@@ -27,15 +29,8 @@ module.exports = (on, config) => {
     }),
   );
   on('task', percyHealthCheck);
-  /**
-   * @todo Investigate hasBinary issue
-   * @body Seems to be consuming CPU resources and causing actions to fail
-   */
-  // on('task', require('@cypress/code-coverage/task'));
-  // on(
-  //   'file:preprocessor',
-  //   require('@cypress/code-coverage/use-browserify-istanbul'),
-  // );
+  on('task', coverageTask);
+  on('file:preprocessor', bwInstanbul);
   initPlugin(on, config);
   return config;
 };
