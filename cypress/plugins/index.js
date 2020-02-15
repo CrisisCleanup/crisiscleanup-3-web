@@ -25,11 +25,15 @@ module.exports = (on, config) => {
       watchOptions: {},
     }),
   );
-  on('task', require('@cypress/code-coverage/task'));
-  on(
-    'file:preprocessor',
-    require('@cypress/code-coverage/use-browserify-istanbul'),
-  );
+  /**
+   * @todo Investigate hasBinary issue
+   * @body Seems to be consuming CPU resources and causing actions to fail
+   */
+  // on('task', require('@cypress/code-coverage/task'));
+  // on(
+  //   'file:preprocessor',
+  //   require('@cypress/code-coverage/use-browserify-istanbul'),
+  // );
   initPlugin(on, config);
   return config;
 };
