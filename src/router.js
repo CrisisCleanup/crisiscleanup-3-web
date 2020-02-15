@@ -1,21 +1,21 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Profile from '@/pages/Profile';
-import Cases from '@/pages/Cases';
-import Dashboard from '@/pages/Dashboard';
-import Login from '@/pages/Login';
-import store from '@/store/index';
-import Organization from '@/pages/organization/Index';
-import Invitations from '@/pages/organization/Invitations';
-import Affiliates from '@/pages/organization/Affiliates';
-import Users from '@/pages/organization/Users';
-import Layers from '@/pages/organization/Layers';
-import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
-import CaseView from '@/pages/CaseView';
+import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
-import CaseFlag from '@/pages/CaseFlag';
+import Cases from '@/pages/Cases';
+import CaseView from '@/pages/CaseView';
+import Dashboard from '@/pages/Dashboard';
 import Location from '@/pages/Location';
+import Login from '@/pages/Login';
+import Affiliates from '@/pages/organization/Affiliates';
+import Organization from '@/pages/organization/Index';
+import Invitations from '@/pages/organization/Invitations';
+import Layers from '@/pages/organization/Layers';
+import Users from '@/pages/organization/Users';
+import Profile from '@/pages/Profile';
+import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
+import store from '@/store/index';
 
 Vue.use(VueRouter);
 
@@ -151,7 +151,7 @@ router.beforeEach((to, from, next) => {
       return;
     }
     const loginpath = window.location.pathname;
-    next({ name: 'login', query: { from: loginpath } });
+    next({ name: 'nav.login', query: { from: loginpath } });
   }
 });
 
