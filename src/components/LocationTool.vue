@@ -309,10 +309,10 @@ export default {
     },
   },
   async mounted() {
-    const map = L.map('map', { zoomControl: false, preferCanvas: true}).setView(
-      [35.7465122599185, -96.41150963125656],
-      5,
-    );
+    const map = L.map('map', {
+      zoomControl: false,
+      preferCanvas: true,
+    }).setView([35.7465122599185, -96.41150963125656], 5);
 
     L.tileLayer(
       'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
