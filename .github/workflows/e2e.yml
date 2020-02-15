@@ -55,10 +55,6 @@ jobs:
     name: Run Visual Tests
     runs-on: ubuntu-latest
     needs: build_id
-    strategy:
-      matrix:
-        # run cypress in parallel
-        container: [1, 2]
 
     steps:
       - uses: actions/checkout@v2
