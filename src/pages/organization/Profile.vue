@@ -1,8 +1,16 @@
 <template>
   <div class="flex flex-col w-3/4 m-auto">
     <div class="w-full bg-white shadow mt-6">
-      <div class="border-b px-8 py-4 font-semibold">
+      <div
+        class="border-b px-4 py-2 font-semibold flex justify-between items-center"
+      >
         {{ $t('~~General Information') }}
+        <base-button
+          type="primary"
+          class="px-4 py-2"
+          :text="$t('actions.save')"
+          :action="saveOrganization"
+        />
       </div>
       <div class="px-8 pb-6 mt-2">
         <div class="flex">
@@ -21,12 +29,13 @@
           </div>
         </div>
         <div class="divider" />
-        <form class="org-form">
+        <form class="org-form" ref="form">
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
               :placeholder="$t('~Organization Name')"
               :value="currentOrganization.name"
+              required
               @input="
                 value => {
                   updateOrganization(value, 'name');
@@ -35,7 +44,7 @@
             ></base-input>
             <form-select
               :placeholder="$t('~Organization Type')"
-              class="mr-2 w-1/2 flex-grow border border-crisiscleanup-dark-100"
+              class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
               :options="organizationTypes"
               :value="currentOrganization.type_t"
               item-key="key"
@@ -239,6 +248,7 @@ import Location from '@/models/Location';
 import User from '@/models/User';
 import DragDrop from '../../components/DragDrop';
 import LocationTool from '../../components/LocationTool';
+import { getErrorMessage } from '@/utils/errors';
 
 export default {
   name: 'Profile',
@@ -335,6 +345,23 @@ export default {
         L.geoJSON(geojsonFeature, this.bufferedOptions).addTo(
           this.secondaryLocationMap,
         );
+      }
+    },
+    async saveOrganization() {
+      const isValid = this.$refs.form.reportValidity();
+      if (!isValid) {
+        return;
+      }
+      try {
+        await Organization.api().patch(
+          `/organizations/${this.currentOrganization.id}`,
+          this.currentOrganization.$toJson(),
+        );
+        await this.$toasted.success(
+          this.$t('~~Successfully Saved Organization'),
+        );
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
     async saveCurrentLocation() {

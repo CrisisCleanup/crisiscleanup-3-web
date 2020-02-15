@@ -124,6 +124,10 @@ input::placeholder {
   @apply text-crisiscleanup-dark-200;
 }
 
+input:invalid {
+  @apply border border-crisiscleanup-red-100;
+}
+
 input {
   outline: none;
   width: 300px;
