@@ -6,7 +6,10 @@
  */
 
 describe('Authenticated Layout', () => {
-  beforeEach(() => cy.login());
+  beforeEach(() => {
+    cy.fixSpec(__filename);
+    cy.login();
+  });
 
   it('successfully loads', () => {
     cy.visit('/');
@@ -21,7 +24,8 @@ describe('Authenticated Layout', () => {
           cy.contains('Loading')
             .should('not.be.visible')
             .then(() => {
-              cy.get('div#app').toMatchImageSnapshot();
+              // eslint-disable-next-line cypress/no-unnecessary-waiting
+              cy.wait(1000).then(() => cy.document().toMatchImageSnapshot());
               cy.url().should('match', /dashboard/);
             });
         }),
