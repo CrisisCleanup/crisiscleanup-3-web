@@ -85,7 +85,7 @@ jobs:
           docker-compose up -d app
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v1.20.0
+        uses: cypress-io/github-action@v1.21.0
         with:
           record: true
           start: yarn serve-dev
