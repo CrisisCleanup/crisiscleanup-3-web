@@ -1,7 +1,9 @@
 <template>
   <div class="border border-dashed flex items-center justify-center">
     <form ref="fileform" class="w-full h-full">
-      <div class="relative w-full h-full flex flex-col items-center justify-center">
+      <div
+        class="relative w-full h-full flex flex-col items-center justify-center"
+      >
         <slot>
           <div class="p-2 text-crisiscleanup-grey-700">{{ dragTitle }}</div>
           <div>{{ $t('or') }}</div>
@@ -19,11 +21,11 @@ export default {
   props: {
     chooseTitle: {
       type: String,
-      default: ''
+      default: '',
     },
     dragTitle: {
       type: String,
-      default: ''
+      default: '',
     },
   },
   data() {

@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="divider" />
-        <form class="org-form" ref="form">
+        <form ref="form" class="org-form">
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"

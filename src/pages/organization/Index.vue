@@ -1,6 +1,8 @@
 <template>
   <div class="flex flex-col h-full">
-    <div class="h-10 bg-white mx-5 border-t flex justify-center text-crisiscleanup-grey-700">
+    <div
+      class="h-10 bg-white mx-5 border-t flex justify-center text-crisiscleanup-grey-700"
+    >
       <router-link
         to="/organization/invitations"
         class="flex w-48 justify-center mx-2 cursor-pointer"
