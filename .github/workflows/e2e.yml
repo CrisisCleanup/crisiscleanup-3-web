@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - '**/**.json'
+      - '**/**.lock'
       - '**/**.js'
       - '**/**.vue'
       - '**/**.js.snap'
@@ -11,6 +12,7 @@ on:
   push:
     paths:
       - '**/**.json'
+      - '**/**.lock'
       - '**/**.js'
       - '**/**.vue'
       - '**/**.js.snap'
