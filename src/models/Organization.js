@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core';
+import Incident from '@/models/Incident';
 
 export default class Organization extends Model {
   static entity = 'organizations';
@@ -15,6 +16,13 @@ export default class Organization extends Model {
       secondary_location: this.attr(null),
       type_t: this.attr(null),
       user_count: this.attr(null),
+      incidents: this.attr(null),
     };
+  }
+
+  get incident_list() {
+    return Incident.query()
+      .whereIdIn(this.incidents)
+      .get();
   }
 }

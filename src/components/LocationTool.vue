@@ -7,7 +7,7 @@
         display-property="name"
         size="large"
         placeholder="$t('layerTool.search_several_area_types')"
-        class="w-1/3"
+        class="w-2/5"
         @selected="onLocationSelected"
         @search="onLocationSearch"
       >
@@ -16,6 +16,9 @@
             class="flex justify-between text-sm p-2 cursor-pointer hover:bg-gray-100 border-b"
           >
             <span>{{ slotProps.suggestion.item.name }}</span>
+            <span class="text-crisiscleanup-grey-700">{{
+              slotProps.suggestion.item.location_type.name_t
+            }}</span>
           </div>
         </template>
       </autocomplete>
@@ -128,6 +131,15 @@
             {{ $t('layerTool.show_cases') }}
           </base-checkbox>
         </div>
+        <div
+          v-if="organization"
+          class="bg-white p-1 border ml-5 flex items-center justify-center"
+          style="height: 37px"
+        >
+          <base-checkbox @input="toggleIncidents">
+            {{ $t('layerTool.show_incidents') }}
+          </base-checkbox>
+        </div>
       </div>
       <div id="map" class="h-full"></div>
     </div>
@@ -201,6 +213,7 @@ import * as turf from '@turf/turf';
 import { mapState } from 'vuex';
 import vueUndoRedo from 'vue-undo-redo-stack';
 import Location from '@/models/Location';
+import Organization from '@/models/Organization';
 import MapButton from './MapButton';
 import LocationType from '@/models/LocationType';
 import User from '@/models/User';
@@ -236,6 +249,7 @@ export default {
       currentDraw: null,
       bufferedLayer: null,
       worksiteLayer: null,
+      incidentLayer: new L.LayerGroup(),
       workingLayer: null,
       showingPopup: false,
       locationResults: [],
@@ -247,6 +261,10 @@ export default {
       bufferedOptions: {
         color: 'orange',
         fillColor: 'orange',
+        dashArray: [5, 5],
+        weight: '1',
+      },
+      incidentOptions: {
         dashArray: [5, 5],
         weight: '1',
       },
@@ -284,19 +302,17 @@ export default {
       if (value) {
         this.getWorksites({ organization: value, incident: null });
       }
+      const incidents = Organization.find(this.organization).incident_list;
+      this.getIncidentLocations(incidents);
+
       this.toggleWorksites(false);
     },
   },
   async mounted() {
     const map = L.map('map', { zoomControl: false }).setView(
-      [30.126124, -83.916503],
+      [35.7465122599185, -96.41150963125656],
       5,
     );
-
-    map.fitBounds([
-      [47.47266286861342, -116.76269531250001],
-      [34.542762387234845, -84.94628906250001],
-    ]);
 
     L.tileLayer(
       'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
@@ -380,6 +396,8 @@ export default {
       this.getWorksites({ organization: null, incident: this.incident });
     } else if (this.organization) {
       this.getWorksites({ organization: this.organization, incident: null });
+      const incidents = Organization.find(this.organization).incident_list;
+      this.getIncidentLocations(incidents);
     }
     this.checkpoint();
   },
@@ -417,6 +435,42 @@ export default {
         this.map.removeLayer(this.worksiteLayer);
       }
     },
+    toggleIncidents(val) {
+      if (val) {
+        this.incidentLayer.addTo(this.map);
+        this.$nextTick(() => {
+          this.map.panBy([1, 0]);
+        });
+      } else if (this.incidentLayer) {
+        this.map.removeLayer(this.incidentLayer);
+      }
+    },
+    async getIncidentLocations(incidents) {
+      // this.incidentLayer = new L.LayerGroup();
+      const incidentLocations = [];
+      incidents.forEach(incident => {
+        incident.locations.forEach(item => {
+          incidentLocations.push(item.location);
+        });
+      });
+      const results = await Location.api().get(
+        `/locations?id__in=${incidentLocations.join(',')}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      const { locations } = results.entities;
+      locations.forEach(location => {
+        const geojsonFeature = {
+          type: 'Feature',
+          properties: location.attr,
+          geometry: location.poly || location.geom || location.point,
+        };
+        const geojsonLayer = L.geoJSON(geojsonFeature, this.incidentOptions);
+        const [layer] = geojsonLayer.getLayers();
+        layer.addTo(this.incidentLayer);
+      });
+    },
     async getWorksites({ organization, incident }) {
       this.worksitesLoading = true;
       const response = await this.$http.get(
@@ -443,7 +497,11 @@ export default {
           return;
         }
 
-        if (layer instanceof L.TileLayer || layer === this.worksiteLayer) {
+        if (
+          layer instanceof L.TileLayer ||
+          layer === this.worksiteLayer ||
+          layer === this.incidentLayer
+        ) {
           return;
         }
         this.map.removeLayer(layer);

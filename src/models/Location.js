@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core';
+import LocationType from '@/models/LocationType';
 
 export default class Location extends Model {
   static entity = 'locations';
@@ -8,12 +9,17 @@ export default class Location extends Model {
       id: this.increment(),
       name: this.string(''),
       notes: this.string(''),
+      shared: this.string('shared'),
       type: this.attr(null),
       geom: this.attr(null),
       poly: this.attr(null),
       attr: this.attr(null),
       point: this.attr(null),
     };
+  }
+
+  get location_type() {
+    return LocationType.find(this.type);
   }
 
   static apiConfig = {

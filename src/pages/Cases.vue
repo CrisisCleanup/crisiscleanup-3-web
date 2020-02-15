@@ -824,56 +824,6 @@ export default {
       });
     },
 
-    applyLayers(value, layerList, key) {
-      if (value && this.$refs.workstiteMap.map) {
-        // TODO: Refactor to abide with code style
-        // eslint-disable-next-line no-restricted-syntax
-        for (const location of layerList) {
-          const geojsonFeature = {
-            type: 'Feature',
-            properties: location.attr,
-            geometry: location.poly || location.geom || location.point,
-          };
-          L.geoJSON(geojsonFeature, {
-            onEachFeature(feature, layer) {
-              layer.key = key;
-            },
-          }).addTo(this.$refs.workstiteMap.map);
-        }
-      } else {
-        this.$refs.workstiteMap.map.eachLayer(layer => {
-          if (layer.key && layer.key === key) {
-            this.$refs.workstiteMap.map.removeLayer(layer);
-          }
-        });
-      }
-    },
-
-    applyGeoJSON(geometry, value) {
-      if (value && this.$refs.workstiteMap.map) {
-        const geojsonFeature = {
-          type: 'Feature',
-          properties: {},
-          geometry,
-        };
-        const incidentId = this.currentIncident.id;
-        L.geoJSON(geojsonFeature, {
-          onEachFeature(feature, layer) {
-            layer.location_id = incidentId;
-          },
-        }).addTo(this.$refs.workstiteMap.map);
-      } else {
-        this.$refs.workstiteMap.map.eachLayer(layer => {
-          if (
-            layer.location_id &&
-            layer.location_id === this.currentIncident.id
-          ) {
-            this.$refs.workstiteMap.map.removeLayer(layer);
-          }
-        });
-      }
-    },
-
     async applyLocation(locationId, value) {
       if (value && this.$refs.workstiteMap.map) {
         await Location.api().fetchById(locationId);
@@ -884,6 +834,7 @@ export default {
           geometry: location.poly || location.geom || location.point,
         };
         L.geoJSON(geojsonFeature, {
+          weight: '1',
           onEachFeature(feature, layer) {
             layer.location_id = locationId;
           },

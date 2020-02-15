@@ -76,7 +76,7 @@
             @input="
               type => {
                 currentLocation.type = type;
-                selectedIncident = null;
+                selectedIncidentId = null;
                 selectedOrganization = null;
               }
             "
@@ -95,6 +95,9 @@
                 @selected="
                   value => {
                     selectedOrganization = value;
+                    if (!currentLocation.name) {
+                      currentLocation.name = `${selectedOrganization.name} ${currentLocation.location_type.name_t}`;
+                    }
                   }
                 "
                 @search="onOrganizationSearch"
@@ -102,7 +105,7 @@
             </div>
             <div v-if="isIncidentRelated">
               <form-select
-                v-model="selectedIncident"
+                :value="selectedIncidentId"
                 class="form-field"
                 :options="incidents"
                 searchable
@@ -110,6 +113,14 @@
                 item-key="id"
                 label="name"
                 :placeholder="$t('locationVue.select_incident')"
+                @input="
+                  value => {
+                    selectedIncidentId = value;
+                    if (!currentLocation.name) {
+                      currentLocation.name = `${selectedIncident.name} ${currentLocation.location_type.name_t}`;
+                    }
+                  }
+                "
               />
             </div>
           </div>
@@ -122,36 +133,52 @@
           />
           <div>
             <div class="mt-8 text-base">{{ $t('locationVue.access') }}</div>
-            <div class="flex mt-2">
+            <div class="flex flex-wrap mt-2">
               <base-radio
-                class="mr-6"
-                label="Private"
-                :name="$t('locationVue.private')"
-                :value="locationAccess"
-                @change="locationAccess = $event"
+                class="mr-4"
+                label="shared"
+                :name="$t('locationVue.shared')"
+                :value="currentLocation.shared"
+                @change="currentLocation.shared = $event"
               />
               <base-radio
-                class="mr-6"
-                label="Public"
-                :name="$t('locationVue.share')"
-                :value="locationAccess"
-                @change="locationAccess = $event"
+                class="mr-4"
+                label="private"
+                :name="$t('locationVue.private')"
+                :value="currentLocation.shared"
+                @change="currentLocation.shared = $event"
+              />
+              <base-radio
+                class="mr-4"
+                label="publix"
+                :name="$t('locationVue.public')"
+                :value="currentLocation.shared"
+                @change="currentLocation.shared = $event"
               />
             </div>
           </div>
         </div>
-        <div class="flex items-center justify-around h-16">
+        <div v-if="selectedOrganization">
+          <div class="text-base">{{ $t('~~Organization Incidents') }}</div>
+          <div class="h-48 overflow-auto">
+            <div v-for="incident in selectedOrganization.incident_list">
+              {{ incident.name }}
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-end h-16">
           <base-button
             :text="$t('actions.reset')"
-            class="border border-black p-2"
+            class="border border-black p-2 mr-1"
           />
           <base-button
             :text="$t('actions.save_location')"
-            class="p-2"
+            class="p-2 mr-1"
             type="primary"
             :action="saveLocation"
           />
           <base-button
+            v-if="isNew"
             :text="$t('~~Save and New')"
             class="p-2"
             type="primary"
@@ -168,7 +195,7 @@
       <LocationTool
         v-if="currentLocation"
         ref="locationTool"
-        :incident="selectedIncident"
+        :incident="selectedIncidentId"
         :organization="selectedOrganization && selectedOrganization.id"
         class="h-full"
         :locations="currentLocation.id ? [currentLocation.id] : []"
@@ -196,7 +223,7 @@ export default {
       locationAccess: 'Public',
       organizationResults: [],
       selectedOrganization: null,
-      selectedIncident: null,
+      selectedIncidentId: null,
     };
   },
   computed: {
@@ -205,6 +232,12 @@ export default {
     },
     locationTypes() {
       return LocationType.all();
+    },
+    selectedIncident() {
+      if (this.selectedIncidentId) {
+        return Incident.find(this.selectedIncidentId);
+      }
+      return null;
     },
     incidents() {
       return Incident.query()
@@ -348,7 +381,7 @@ export default {
 
           if (this.isIncidentRelated) {
             await Incident.api().addLocation(
-              this.selectedIncident,
+              this.selectedIncidentId,
               response.response.data.id,
             );
           }
