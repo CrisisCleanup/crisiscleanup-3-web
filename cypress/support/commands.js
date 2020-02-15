@@ -25,3 +25,24 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import 'cypress-plugin-snapshots/commands';
+
+// Login Helper
+Cypress.Commands.add(
+  'login',
+  (
+    { email, password, win } = {
+      email: Cypress.env('WEB_USER'),
+      password: Cypress.env('WEB_PASS'),
+      win: window,
+    },
+  ) => {
+    cy.request('POST', `${Cypress.env('API_URL')}/api-token-auth`, {
+      email,
+      password,
+    })
+      .its('body')
+      .then(res => {
+        win.localStorage.setItem('user', JSON.stringify(res));
+      });
+  },
+);
