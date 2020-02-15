@@ -34,12 +34,14 @@
             button-class="border bg-white"
             icon="map-undo"
             :disabled="!canUndo"
+            :title="$t('~~layerTool.undo')"
             @click="undo"
           />
           <MapButton
             button-class="border bg-white"
             icon="map-redo"
             :disabled="!canRedo"
+            :title="$t('~~layerTool.redo')"
             @click="redo"
           />
         </div>
@@ -47,6 +49,7 @@
           <MapButton
             button-class="border bg-white"
             icon="map-rect"
+            :title="$t('~~layerTool.draw_rectangle')"
             :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Rectangle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Rectangle'"
@@ -59,6 +62,7 @@
           />
           <MapButton
             button-class="border bg-white"
+            :title="$t('~~layerTool.draw_polygon')"
             icon="map-poly"
             :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Polygon'"
@@ -72,6 +76,7 @@
           />
           <MapButton
             button-class="border bg-white"
+            :title="$t('~~layerTool.draw_circle')"
             icon="map-circle"
             :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
@@ -86,6 +91,7 @@
           <MapButton
             v-if="currentPolygon"
             button-class="border bg-white"
+            :title="$t('~~layerTool.draw_buffer')"
             icon="map-buffer"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Buffer'"
             :selected="Boolean(currentDraw) && currentDraw === 'Buffer'"
@@ -95,6 +101,7 @@
             button-class="border bg-white"
             icon="map-sweep"
             @click="clearAll"
+            :title="$t('~~layerTool.clear_drawing')"
           />
         </div>
         <base-button

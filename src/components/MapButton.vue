@@ -6,7 +6,7 @@
     :disabled="disabled"
   >
     <ccu-icon
-      :alt="buttonText"
+      :alt="title || buttonText"
       :class="['map-button', buttonClass, selected ? 'selected' : '']"
       :type="icon"
       size="xl"
@@ -42,6 +42,10 @@ export default {
       default: '',
     },
     buttonText: {
+      type: String,
+      default: '',
+    },
+    title: {
       type: String,
       default: '',
     },
