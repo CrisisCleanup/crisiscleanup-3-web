@@ -637,6 +637,7 @@ export default {
     },
     showPopup(center) {
       const popup = L.popup({
+        closeOnClick: false,
         maxWidth: 'auto',
       });
       this.showingPopup = true;
