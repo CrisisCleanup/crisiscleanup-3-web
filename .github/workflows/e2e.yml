@@ -84,7 +84,9 @@ jobs:
           token: ${{ secrets.GITHUB_PAT }}
 
       - name: Spin up Api
-        run: docker-compose --verbose --project-directory cc3api up app -d
+        run: |
+          cd "$GITHUB_WORKSPACE/cc3api"
+          docker-compose --verbose up -d app
 
       - name: Run Cypress
         uses: cypress-io/github-action@v1.20.0
