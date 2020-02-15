@@ -311,7 +311,6 @@ export default {
   async mounted() {
     const map = L.map('map', {
       zoomControl: false,
-      preferCanvas: true,
     }).setView([35.7465122599185, -96.41150963125656], 5);
 
     L.tileLayer(
@@ -506,7 +505,7 @@ export default {
 
         if (
           layer instanceof L.TileLayer ||
-          layer instanceof L.Canvas ||
+          layer instanceof L.SVG ||
           layer === this.worksiteLayer ||
           layer === this.incidentLayer ||
           this.incidentLayer.hasLayer(layer)
