@@ -76,6 +76,16 @@ jobs:
         id: build_id
         run: echo "::set-output name=id::$(cat .build-id/id)"
 
+      - name: Checkout Api
+        uses: actions/checkout@v2
+        with:
+          repository: 'CrisisCleanup/crisiscleanup-3-api'
+          path: 'cc3api'
+          token: ${{ secrets.GITHUB_PAT }}
+
+      - name: Spin up Api
+        run: docker-compose --verbose --project-directory cc3api up app -d
+
       - name: Run Cypress
         uses: cypress-io/github-action@v1.20.0
         with:
@@ -89,3 +99,6 @@ jobs:
           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_WEB_USER: ${{ secrets.CYPRESS_WEB_USER }}
+          CYPRESS_WEB_PASS: ${{ secrets.CYPRESS_WEB_PASS }}
+          CYPRESS_API_URL: 'http://localhost:5000'
