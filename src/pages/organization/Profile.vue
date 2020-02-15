@@ -324,9 +324,9 @@ export default {
           properties: location.attr,
           geometry: location.poly || location.geom || location.point,
         };
-        L.geoJSON(geojsonFeature, this.bufferedOptions).addTo(
-          this.primaryLocationMap,
-        );
+        L.geoJSON(geojsonFeature, {
+          weight: '1',
+        }).addTo(this.primaryLocationMap);
       }
       if (secondary_location) {
         this.secondaryLocationMap.eachLayer(layer => {
@@ -342,9 +342,9 @@ export default {
           properties: location.attr,
           geometry: location.poly || location.geom || location.point,
         };
-        L.geoJSON(geojsonFeature, this.bufferedOptions).addTo(
-          this.secondaryLocationMap,
-        );
+        L.geoJSON(geojsonFeature, {
+          weight: '1',
+        }).addTo(this.secondaryLocationMap);
       }
     },
     async saveOrganization() {

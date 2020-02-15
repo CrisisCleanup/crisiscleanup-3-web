@@ -48,10 +48,17 @@ export default class Incident extends Model {
           `/incidents/${id}?fields=id,case_label,form_fields,geofence,short_name,name,start_at,uuid,incident_type,color,locations`,
         );
 
-        const locationPromises = incident.response.data.locations.map(
-          location => Location.api().fetchById(location.location),
-        );
-        await Promise.all(locationPromises);
+        if (incident.response.data.locations.length) {
+          const locationIds = incident.response.data.locations.map(
+            location => location.location,
+          );
+          await Location.api().get(
+            `/locations?id__in=${locationIds.join(',')}`,
+            {
+              dataKey: 'results',
+            },
+          );
+        }
         return incident;
       },
       addLocation(id, location) {

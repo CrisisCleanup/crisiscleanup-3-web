@@ -160,7 +160,7 @@ export default {
     await Promise.all([
       User.api().get('/users/me', {}),
       Incident.api().get(
-        '/incidents?fields=id,name,short_name,geofence&limit=150&ordering=-start_at',
+        '/incidents?fields=id,name,short_name,geofence,locations&limit=150&ordering=-start_at',
         {
           dataKey: 'results',
         },
