@@ -309,7 +309,7 @@ export default {
     },
   },
   async mounted() {
-    const map = L.map('map', { zoomControl: false }).setView(
+    const map = L.map('map', { zoomControl: false, preferCanvas: true}).setView(
       [35.7465122599185, -96.41150963125656],
       5,
     );
@@ -410,7 +410,13 @@ export default {
     },
     restoreCheckpoint(checkpointData) {
       this.map.eachLayer(layer => {
-        if (layer instanceof L.TileLayer || layer === this.worksiteLayer) {
+        if (
+          layer instanceof L.TileLayer ||
+          layer instanceof L.SVG ||
+          layer === this.worksiteLayer ||
+          layer === this.incidentLayer ||
+          this.incidentLayer.hasLayer(layer)
+        ) {
           return;
         }
         this.map.removeLayer(layer);
@@ -468,6 +474,7 @@ export default {
         };
         const geojsonLayer = L.geoJSON(geojsonFeature, this.incidentOptions);
         const [layer] = geojsonLayer.getLayers();
+        layer.type = 'Incident';
         layer.addTo(this.incidentLayer);
       });
     },
@@ -499,8 +506,10 @@ export default {
 
         if (
           layer instanceof L.TileLayer ||
+          layer instanceof L.Canvas ||
           layer === this.worksiteLayer ||
-          layer === this.incidentLayer
+          layer === this.incidentLayer ||
+          this.incidentLayer.hasLayer(layer)
         ) {
           return;
         }
