@@ -5,6 +5,10 @@
  * Cypress
  */
 
+import { fixCypressSpec } from '../support';
+
+beforeEach(fixCypressSpec(__filename));
+
 describe('unAuthenticated Layout', () => {
   it('successfully loads', () => {
     cy.visit('/');

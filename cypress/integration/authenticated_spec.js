@@ -5,9 +5,12 @@
  * Cypress
  */
 
+import { fixCypressSpec } from '../support';
+
+beforeEach(fixCypressSpec(__filename));
+
 describe('Authenticated Layout', () => {
   beforeEach(() => {
-    cy.fixSpec(__filename);
     cy.login();
   });
 
