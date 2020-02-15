@@ -5,10 +5,6 @@
  * Cypress
  */
 
-import { fixCypressSpec } from '../support';
-
-beforeEach(fixCypressSpec(__filename));
-
 describe('Authenticated Layout', () => {
   beforeEach(() => {
     cy.login();
@@ -27,8 +23,7 @@ describe('Authenticated Layout', () => {
           cy.contains('Loading')
             .should('not.be.visible')
             .then(() => {
-              // eslint-disable-next-line cypress/no-unnecessary-waiting
-              cy.wait(1000).then(() => cy.document().toMatchImageSnapshot());
+              cy.percySnapshot('dashboard');
               cy.url().should('match', /dashboard/);
             });
         }),

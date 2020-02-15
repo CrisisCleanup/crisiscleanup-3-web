@@ -14,6 +14,7 @@
 
 const webpack = require('@cypress/webpack-preprocessor');
 const { initPlugin } = require('cypress-plugin-snapshots/plugin');
+const percyHealthCheck = require('@percy/cypress/task');
 
 module.exports = (on, config) => {
   // `on` is used to hook into various events Cypress emits
@@ -25,6 +26,7 @@ module.exports = (on, config) => {
       watchOptions: {},
     }),
   );
+  on('task', percyHealthCheck);
   /**
    * @todo Investigate hasBinary issue
    * @body Seems to be consuming CPU resources and causing actions to fail

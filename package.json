@@ -18,6 +18,7 @@
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "test:e2e": "cross-env NODE_ENV=test cypress run",
     "test:cy": "cross-env NODE_ENV=test cypress run --browser chrome",
+    "test:percy": "cross-env NODE_ENV=test percy exec -- yarn run test:cy",
     "cy:open": "cross-env NODE_ENV=test cypress open"
   },
   "dependencies": {
@@ -88,6 +89,7 @@
     "@babel/core": "^7.7.7",
     "@cypress/code-coverage": "^1.12.2",
     "@cypress/webpack-preprocessor": "^4.1.1",
+    "@percy/cypress": "^2.3.0",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-e2e-cypress": "^4.2.2",
     "@vue/cli-plugin-eslint": "^4.2.2",

@@ -5,10 +5,6 @@
  * Cypress
  */
 
-import { fixCypressSpec } from '../support';
-
-beforeEach(fixCypressSpec(__filename));
-
 describe('unAuthenticated Layout', () => {
   it('successfully loads', () => {
     cy.visit('/');
@@ -21,7 +17,8 @@ describe('unAuthenticated Layout', () => {
   });
 
   it('should match image snapshot', () => {
-    cy.visit('/login').then(() => cy.get('div.login').toMatchImageSnapshot());
+    cy.visit('/');
+    cy.percySnapshot('login page');
   });
 
   it('should authenticate and redirect', () => {

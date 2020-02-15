@@ -90,7 +90,7 @@ jobs:
         uses: cypress-io/github-action@v1.21.0
         with:
           record: true
-          start: yarn serve-dev
+          start: yarn serve
           wait-on: 'http://localhost:8080'
           group: Chrome
           browser: chrome
