@@ -96,6 +96,7 @@ jobs:
           parallel: true
           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
         env:
+          VUE_APP_API_BASE_URL: 'http://localhost:5000'
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           CYPRESS_WEB_USER: ${{ secrets.CYPRESS_WEB_USER }}
           CYPRESS_WEB_PASS: ${{ secrets.CYPRESS_WEB_PASS }}
