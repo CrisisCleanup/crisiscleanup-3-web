@@ -7,5 +7,7 @@
     "API_URL": "http://localhost:5000"
   },
   "ignoreTestFiles": ["**/__snapshots__/*", "**/__image_snapshots__/*"],
-  "projectId": "xyprfc"
+  "projectId": "xyprfc",
+  "viewportHeight": 900,
+  "viewportWidth": 1400
 }

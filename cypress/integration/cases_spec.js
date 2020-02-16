@@ -22,7 +22,15 @@ describe('Cases Page', () => {
     cy.wait('@apiIncident');
     cy.contains('Cases:').should('be.visible');
   });
+  beforeEach(() => {
+    cy.get('.ccu-icon[title="Table View"]').as('TableView');
+  });
   it('successfully loads and matches snapshot', () => {
-    cy.percySnapshot();
+    cy.percySnapshot('cases - map view');
+    cy.get('@TableView').click();
+    cy.get('.table-operations').should('be.visible');
+    // context btn action should only be available on table view
+    cy.get('svg[data-icon="ellipsis-h"]').should('be.visible');
+    cy.percySnapshot('cases - table view');
   });
 });
