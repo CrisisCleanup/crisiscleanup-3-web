@@ -28,3 +28,116 @@ exports[`BaseInput should render correctly and match snapshot 1`] = `
    
 </div>
 `;
+
+exports[`BaseInput should render correctly and match snapshot when required and not provided 1`] = `
+<div
+  class="flex justify-start items-center"
+>
+  <!---->
+   
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    pattern=""
+    placeholder=""
+    required="required"
+    type="search"
+  />
+   
+  <!---->
+   
+  <!---->
+   
+</div>
+`;
+
+exports[`BaseInput should render correctly and match snapshot when required and not provided 2`] = `
+<div
+  class="flex justify-start items-center"
+>
+  <!---->
+   
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    pattern=""
+    placeholder=""
+    required="required"
+    type="search"
+  />
+   
+  <!---->
+   
+  <!---->
+   
+</div>
+`;
+
+exports[`BaseInput should render correctly and match snapshot when required and provided 1`] = `
+<div
+  class="flex justify-start items-center"
+>
+  <!---->
+   
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    pattern=""
+    placeholder=""
+    required="required"
+    type="search"
+  />
+   
+  <!---->
+   
+  <!---->
+   
+</div>
+`;
+
+exports[`BaseInput should render correctly and match snapshot when required and provided 2`] = `
+<div
+  class="flex justify-start items-center"
+>
+  <!---->
+   
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    pattern=""
+    placeholder=""
+    required="required"
+    type="search"
+  />
+   
+  <!---->
+   
+  <!---->
+   
+</div>
+`;
+
+exports[`BaseInput should render correctly and match snapshot with label 1`] = `
+<div
+  class="flex justify-start flex-col items-start border"
+>
+  <label
+    class="text-xs px-1 text-crisiscleanup-dark-300"
+  >
+    Top Label
+  </label>
+   
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large border-none"
+    pattern=""
+    placeholder=""
+    type="search"
+  />
+   
+  <!---->
+   
+  <!---->
+   
+</div>
+`;

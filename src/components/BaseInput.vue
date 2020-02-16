@@ -141,15 +141,11 @@ export default {
   methods: {
     update(e) {
       this.$emit('input', e.target.value);
-      if (this.$refs.input.checkValidity()) {
-        this.isInvalid = false;
-      }
+      this.isInvalid = !this.$refs.input.checkValidity();
     },
     change(e) {
       this.$emit('change', e.target.value);
-      if (this.$refs.input.checkValidity()) {
-        this.isInvalid = false;
-      }
+      this.isInvalid = !this.$refs.input.checkValidity();
     },
   },
 };

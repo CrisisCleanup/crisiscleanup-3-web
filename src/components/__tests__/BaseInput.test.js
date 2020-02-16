@@ -39,4 +39,52 @@ describe('BaseInput', () => {
     const wrapper = mount(BaseInput, testProps);
     expect(wrapper.element).toMatchSnapshot();
   });
+
+  it('should render correctly and match snapshot with label', () => {
+    const testProps = {
+      propsData: {
+        size: 'large',
+        topLabel: 'Top Label',
+      },
+    };
+    const wrapper = mount(BaseInput, testProps);
+    expect(wrapper.element).toMatchSnapshot();
+  });
+
+  it('should render correctly and match snapshot when required and not provided', () => {
+    const testProps = {
+      propsData: {
+        size: 'large',
+        required: true,
+      },
+    };
+    const wrapper = mount(BaseInput, testProps);
+    expect(wrapper.element).toMatchSnapshot();
+    wrapper.vm.update({
+      target: {
+        value: '',
+      },
+    });
+    expect(wrapper.element).toMatchSnapshot();
+    expect(wrapper.vm.isInvalid).toBe(true);
+  });
+
+  it('should render correctly and match snapshot when required and provided', () => {
+    const testProps = {
+      propsData: {
+        size: 'large',
+        required: true,
+        value: 'Test',
+      },
+    };
+    const wrapper = mount(BaseInput, testProps);
+    expect(wrapper.element).toMatchSnapshot();
+    wrapper.vm.update({
+      target: {
+        value: 'Test',
+      },
+    });
+    expect(wrapper.element).toMatchSnapshot();
+    expect(wrapper.vm.isInvalid).toBe(false);
+  });
 });
