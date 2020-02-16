@@ -17,8 +17,8 @@ describe('unAuthenticated Layout', () => {
   });
 
   it('should match image snapshot', () => {
-    cy.visit('/');
-    cy.percySnapshot('login page');
+    cy.visit('/login');
+    cy.contains('Sign in').then(() => cy.percySnapshot('login page'));
   });
 
   it('should authenticate and redirect', () => {
