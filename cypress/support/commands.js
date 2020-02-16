@@ -30,10 +30,9 @@ import '@percy/cypress';
 Cypress.Commands.add(
   'login',
   (
-    { email, password, win } = {
+    { email, password } = {
       email: Cypress.env('WEB_USER'),
       password: Cypress.env('WEB_PASS'),
-      win: window,
     },
   ) => {
     cy.request('POST', `${Cypress.env('API_URL')}/api-token-auth`, {
@@ -42,7 +41,7 @@ Cypress.Commands.add(
     })
       .its('body')
       .then(res => {
-        win.localStorage.setItem('user', JSON.stringify(res));
+        window.localStorage.setItem('user', JSON.stringify(res));
       });
   },
 );
