@@ -92,11 +92,12 @@ jobs:
           record: true
           start: yarn serve
           wait-on: 'http://localhost:8080'
-          group: Chrome
           browser: chrome
+          headless: true
+          cache-key: yarn-${{ hashFiles('**/yarn.lock') }}
           command-prefix: 'percy exec -- npx'
           ci-build-id: '${{ github.sha }}-${{ github.workflow }}-${{ github.event_name }}'
-          env: WEB_USER=${{ secrets.CYPRESS_WEB_USER }},WEB_PASS=${{ secrets.CYPRESS_WEB_PASS }},API_URL=${{ secrets.CYPRESS_API_URL }}
+          env: WEB_USER=${{ secrets.CYPRESS_WEB_USER }},WEB_PASS=${{ secrets.CYPRESS_WEB_PASS }},API_URL=http://localhost:5000
         env:
           VUE_APP_API_BASE_URL: 'http://localhost:5000'
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
