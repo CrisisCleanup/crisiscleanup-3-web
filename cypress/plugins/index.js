@@ -13,9 +13,8 @@
 // the project's config changing)
 
 const webpack = require('@cypress/webpack-preprocessor');
-const { initPlugin } = require('cypress-plugin-snapshots/plugin');
 const percyHealthCheck = require('@percy/cypress/task');
-const coverageTask = require('@cypress/code-coverage/task');
+// const coverageTask = require('@cypress/code-coverage/task');
 const bwInstanbul = require('@cypress/code-coverage/use-browserify-istanbul');
 
 module.exports = (on, config) => {
@@ -29,8 +28,8 @@ module.exports = (on, config) => {
     }),
   );
   on('task', percyHealthCheck);
-  on('task', coverageTask);
+  // @TODO: Performance issues causing CI to fail
+  // on('task', coverageTask);
   on('file:preprocessor', bwInstanbul);
-  initPlugin(on, config);
   return config;
 };
