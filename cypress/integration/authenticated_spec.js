@@ -6,15 +6,8 @@
  */
 
 describe('Authenticated Layout', () => {
-  beforeEach(() => {
-    cy.login();
-  });
-
-  it('successfully loads', () => {
-    cy.visit('/');
-  });
-
-  it('should match image snapshot', () => {
+  beforeEach(cy.login);
+  it('successfully loads and matches snapshot', () => {
     cy.visit('/').then(() =>
       cy
         .contains('MY CASES')

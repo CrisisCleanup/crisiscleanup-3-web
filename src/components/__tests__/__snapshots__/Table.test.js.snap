@@ -190,6 +190,7 @@ exports[`Table should render correctly with selection and pagination 1`] = `
       >
         <label
           class="checkbox-container mb-5"
+          data-cy="tableview_actionSelect"
         >
            
           <input
@@ -223,6 +224,7 @@ exports[`Table should render correctly with selection and pagination 1`] = `
       >
         <label
           class="checkbox-container mb-5"
+          data-cy="tableview_actionSelect"
         >
            
           <input

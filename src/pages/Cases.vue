@@ -61,7 +61,7 @@
               </div>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d">
-              <base-dropdown class-name="layers-dropdown">
+              <base-dropdown class-name="borderless">
                 <base-button
                   slot="btn"
                   class="text-base font-thin mx-4"
@@ -175,16 +175,46 @@
                   >{{ filtersCount }}</span
                 >
               </base-button>
-              <base-button
-                class="text-base font-thin mx-4"
-                text=""
-                icon="ellipsis-h"
-                :action="
-                  () => {
-                    showingFilters = true;
-                  }
-                "
-              />
+              <base-dropdown
+                v-if="showingTable"
+                class-name="borderless"
+                class="flex justify-center"
+              >
+                <template slot="icon">
+                  <base-button
+                    slot="btn"
+                    class="text-base font-thin mx-2"
+                    icon="ellipsis-h"
+                    data-cy="worksiteview_actionContext"
+                  />
+                </template>
+                <template slot="body">
+                  <ul class="text-base">
+                    <li class="py-1">
+                      <base-button
+                        class="text-base font-thin mx-4"
+                        :text="$t('actions.download')"
+                        :action="() => batchAction(downloadWorksite)"
+                        data-cy="worksiteview_actionBatchDownload"
+                      />
+                    </li>
+                    <li class="py-1">
+                      <base-button
+                        class="text-base font-thin mx-4"
+                        :text="$t('actions.print')"
+                        :action="() => batchAction(printWorksite)"
+                        data-cy="worksiteview_actionBatchPrint"
+                      />
+                    </li>
+                    <li class="py-1">
+                      <base-button
+                        class="text-base font-thin mx-4"
+                        :text="$t('actions.share')"
+                      />
+                    </li>
+                  </ul>
+                </template>
+              </base-dropdown>
               <WorksiteFilters
                 v-if="showingFilters"
                 :current-filters="filters"
@@ -363,6 +393,7 @@
       "
       class="flex flex-col h-full shadow-2xl w-1/5"
       style="min-width: 360px"
+      data-cy="worksiteview"
     >
       <div
         style="background-color: white"
@@ -412,6 +443,7 @@
             isNewWorksite
         "
         class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b"
+        data-cy="worksiteview_actions"
       >
         <template v-if="isViewingWorksiteHistory">
           <ccu-icon
@@ -1080,16 +1112,18 @@ export default {
       });
       this.updateUserState();
     },
-    async printWorksite() {
+    async printWorksite(e, siteId) {
       this.spinning = true;
-      const pdf = await Worksite.api().printWorksite(this.currentWorksite.id);
+      const pdf = await Worksite.api().printWorksite(
+        siteId || this.currentWorksite.id,
+      );
       forceFileDownload(pdf.response);
       this.spinning = false;
     },
-    async downloadWorksite() {
+    async downloadWorksite(e, siteId) {
       this.spinning = true;
       const csv = await Worksite.api().downloadWorksite(
-        this.currentWorksite.id,
+        siteId || this.currentWorksite.id,
       );
       forceFileDownload(csv.response);
       this.spinning = false;
@@ -1148,6 +1182,12 @@ export default {
       this.showingUnclaimModal = false;
       this.reloadTable();
     },
+    async batchAction(action) {
+      this.spinning = true;
+      await this.selectedTableItems.forEach(i => action(null, i));
+      this.spinning = false;
+      this.reloadTable();
+    },
   },
 };
 </script>
@@ -1204,7 +1244,7 @@ export default {
   padding: 0;
 }
 
-.bp-dropdown__btn.layers-dropdown-bp__btn {
+.borderless-bp__btn {
   @apply border-0;
 }
 </style>

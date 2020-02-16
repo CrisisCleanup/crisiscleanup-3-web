@@ -64,6 +64,7 @@
           <base-checkbox
             :value="selectedItems.has(item.id)"
             class="mb-5"
+            data-cy="tableview_actionSelect"
             @input="
               value => {
                 setChecked(item, value);

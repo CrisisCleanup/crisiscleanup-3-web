@@ -1,0 +1,92 @@
+/**
+ *
+ * Tests for Cases Page
+ *
+ * Cypress
+ */
+
+describe('Cases Page', () => {
+  beforeEach(cy.login);
+  beforeEach(() => {
+    cy.on('uncaught:exception', () => {
+      return false;
+    });
+
+    cy.server();
+    cy.route({
+      method: 'GET',
+      url: `${Cypress.env('API_URL')}/worksites?incident=*`,
+    }).as('apiIncident');
+    cy.route({
+      method: 'GET',
+      url: `${Cypress.env('API_URL')}/worksites/*`,
+    }).as('getWorksite');
+    cy.route({
+      method: 'POST',
+      url: `${Cypress.env('API_URL')}/worksites/*/download`,
+    }).as('printWorksite');
+
+    cy.visit('/incident/158/cases/new');
+    cy.wait('@apiIncident');
+    cy.contains('Cases:').should('be.visible');
+  });
+  beforeEach(() => {
+    cy.get('.ccu-icon[title="Table View"]').as('TableView');
+    cy.get('div[data-cy="worksiteview"]').as('WorksiteView');
+    cy.get('div[data-cy="worksiteview_actions"]').as('WorksiteView_Actions');
+  });
+  it('successfully loads and matches snapshot', () => {
+    cy.percySnapshot('cases - map view');
+    cy.get('@TableView').click();
+    cy.get('.table-operations').should('be.visible');
+    // context btn action should only be available on table view
+    cy.get('svg[data-icon="ellipsis-h"]').should('be.visible');
+    cy.percySnapshot('cases - table view');
+  });
+
+  it('performs worksite actions', () => {
+    cy.visit('/incident/158/cases/141324');
+    cy.wrap('@WorksiteView_Actions')
+      .get('.ccu-icon[title="Download"]')
+      .parent()
+      .click();
+    cy.wait('@getWorksite');
+    // printing functionality
+    cy.wrap('@WorksiteView_Actions')
+      .get('.ccu-icon[title="Print"]')
+      .parent()
+      .click();
+    cy.wait('@printWorksite');
+  });
+
+  it('performs worksite batch actions', () => {
+    cy.visit('/incident/158/cases/141324');
+    // batch actions
+    cy.get('@TableView')
+      .click()
+      .then(() => {
+        // Select Items
+        cy.get('.table')
+          .find('[data-cy="tableview_actionSelect"]')
+          .first()
+          .find('input')
+          .check({ force: true });
+        cy.get('button[data-cy="worksiteview_actionContext"]').click();
+        cy.get('button[data-cy="worksiteview_actionBatchDownload"]').as(
+          'BatchDownloadBtn',
+        );
+        cy.get('button[data-cy="worksiteview_actionBatchPrint"]').as(
+          'BatchPrintBtn',
+        );
+        // Batch Download
+        cy.get('@BatchDownloadBtn')
+          .should('be.visible')
+          .click();
+        cy.wait('@getWorksite');
+        cy.get('@BatchPrintBtn')
+          .should('be.visible')
+          .click();
+        cy.wait('@printWorksite');
+      });
+  });
+});
