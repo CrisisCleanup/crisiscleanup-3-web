@@ -280,6 +280,76 @@
           </div>
         </div>
       </div>
+      <SectionHeading :count="3" class="mb-3">{{
+        $t('caseForm.report')
+      }}</SectionHeading>
+      <div class="px-3 pb-3">
+        <div class="flex items-center justify-between">
+          <div>
+            {{ $t('Volunteers') }}
+            <div>{{ worksite.total_volunteers }}</div>
+          </div>
+          <div>
+            {{ $t('Total Hours') }}
+            <div>
+              {{ worksite.total_time }}
+            </div>
+          </div>
+          <div>
+            <base-button
+              v-if="!addingTime"
+              icon="plus"
+              type="primary"
+              class="p-3"
+              :alt="$t('~~Adding Time')"
+              :action="
+                () => {
+                  addingTime = true;
+                }
+              "
+            />
+            <base-button
+              v-if="addingTime"
+              class="my-1 cursor-pointer"
+              type="link"
+              :text="$t('actions.cancel')"
+              :action="
+                () => {
+                  addingTime = false;
+                }
+              "
+            />
+          </div>
+        </div>
+        <form
+          v-if="addingTime"
+          ref="timeForm"
+          class="flex items-center justify-between w-full"
+        >
+          <base-input
+            v-model="volunteersToAdd"
+            placeholder="0"
+            input-style="width: 100px; height: 20px"
+            :top-label="$t('~~Volunteers')"
+            required
+            pattern="\d*"
+          />
+          <base-input
+            v-model="hoursPerVolunteer"
+            placeholder="0h"
+            input-style="width: 100px; height: 20px"
+            :top-label="$t('~~Hours per Volunteer')"
+            required
+            pattern="\d*"
+          />
+          <base-button
+            :text="$t('actions.add')"
+            type="primary"
+            class="p-3"
+            :action="addTime"
+          />
+        </form>
+      </div>
     </div>
     <div
       class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-center items-center"
@@ -360,11 +430,14 @@ export default {
   data() {
     return {
       addingNotes: false,
+      addingTime: false,
       expandedNotes: {},
       showingAllNotes: false,
       requestingWorkTypes: false,
       initialWorkTypeRequestSelection: [],
       currentNote: '',
+      volunteersToAdd: '',
+      hoursPerVolunteer: '',
     };
   },
   computed: {
@@ -454,6 +527,27 @@ export default {
     }
   },
   methods: {
+    async addTime() {
+      try {
+        const isValid = this.$refs.timeForm.reportValidity();
+        if (!isValid) {
+          return;
+        }
+        await Worksite.api().addTime(
+          this.worksite.id,
+          this.$moment
+            .duration(Number(this.hoursPerVolunteer), 'hours')
+            .asSeconds(),
+          this.volunteersToAdd,
+        );
+        this.addingTime = false;
+        this.volunteersToAdd = '';
+        this.hoursPerVolunteer = '';
+        await Worksite.api().fetch(this.worksite.id);
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
+    },
     async getWorksiteRequests() {
       const worksiteRequestParams = {
         worksite_work_type__worksite: this.$route.params.id,

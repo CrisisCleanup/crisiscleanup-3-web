@@ -4,6 +4,16 @@ import User from '@/models/User';
 import WorkType from '@/models/WorkType';
 import { getQueryString } from '@/utils/urls';
 
+function secondsToHm(seconds) {
+  const d = Number(seconds);
+  const h = Math.floor(d / 3600);
+  const m = Math.floor((d % 3600) / 60);
+
+  const hDisplay = `${h}h `;
+  const mDisplay = `${m}m`;
+  return hDisplay + mDisplay;
+}
+
 export default class Worksite extends Model {
   static entity = 'worksites';
 
@@ -24,6 +34,7 @@ export default class Worksite extends Model {
       work_types: this.attr(null),
       what3words: this.attr(null),
       notes: this.attr(null),
+      time: this.attr(null),
       flags: this.attr(null),
       events: this.attr(null),
       reported_by: this.attr(null),
@@ -36,6 +47,19 @@ export default class Worksite extends Model {
 
   get longitude() {
     return this.location ? this.location.coordinates[0] : 10;
+  }
+
+  get total_volunteers() {
+    return this.time.reduce((total, obj) => {
+      return total + obj.volunteers;
+    }, 0);
+  }
+
+  get total_time() {
+    const seconds = this.time.reduce((total, obj) => {
+      return total + obj.seconds;
+    }, 0);
+    return secondsToHm(seconds);
   }
 
   get formFields() {
@@ -181,6 +205,17 @@ export default class Worksite extends Model {
           `/worksites/${id}/notes`,
           {
             note,
+          },
+          { save: false },
+        );
+      },
+      addTime(id, seconds, volunteers) {
+        return this.post(
+          `/time`,
+          {
+            worksite: id,
+            seconds,
+            volunteers,
           },
           { save: false },
         );

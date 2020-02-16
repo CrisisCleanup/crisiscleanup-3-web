@@ -10,11 +10,14 @@ Array [
 
 exports[`BaseInput should render correctly and match snapshot 1`] = `
 <div
-  class="flex items-center justify-start"
+  class="flex justify-start items-center"
 >
+  <!---->
+   
   <input
     autocomplete="off"
-    class="flex-grow text-base large"
+    class="flex-grow p-1 text-base large"
+    pattern=""
     placeholder=""
     type="search"
   />

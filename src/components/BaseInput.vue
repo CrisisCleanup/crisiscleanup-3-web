@@ -1,14 +1,18 @@
 <template>
-  <div class="flex items-center justify-start">
+  <div class="flex justify-start" :class="classes">
+    <label v-if="topLabel" class="text-xs px-1 text-crisiscleanup-dark-300">{{
+      topLabel
+    }}</label>
     <input
       ref="input"
-      :class="[classes, isInvalid ? 'invalid' : '']"
+      :class="inputClasses"
       :style="inputStyle"
       :type="type || 'search'"
       :value="value"
       :disabled="disabled || (breakGlass && !glassBroken)"
       :placeholder="placeholder"
       :required="required"
+      :pattern="pattern"
       autocomplete="off"
       @input="update"
       @change="change"
@@ -61,11 +65,19 @@ export default {
       type: String,
       default: '',
     },
+    pattern: {
+      type: String,
+      default: '',
+    },
     required: {
       type: Boolean,
       default: false,
     },
     tooltip: {
+      type: String,
+      default: '',
+    },
+    topLabel: {
       type: String,
       default: '',
     },
@@ -86,14 +98,6 @@ export default {
     return {
       id: null,
       isInvalid: false,
-      classes: {
-        'flex-grow': true,
-        'text-base': true,
-        large: this.size === 'large',
-        base: this.size !== 'large',
-        'has-icon': Boolean(this.icon),
-        'has-tooltip': Boolean(this.tooltip),
-      },
       iconClasses: {
         large: this.size === 'large',
         base: this.size !== 'large',
@@ -101,6 +105,28 @@ export default {
       },
       glassBroken: false,
     };
+  },
+  computed: {
+    classes() {
+      return {
+        'border-crisiscleanup-red-100': this.topLabel && this.isInvalid,
+        'flex-col items-start border': Boolean(this.topLabel),
+        'items-center': !this.topLabel,
+      };
+    },
+    inputClasses() {
+      return {
+        'flex-grow': true,
+        'p-1': true,
+        'text-base': true,
+        large: this.size === 'large',
+        base: this.size !== 'large',
+        'has-icon': Boolean(this.icon),
+        'has-tooltip': Boolean(this.tooltip),
+        invalid: Boolean(this.isInvalid),
+        'border-none': Boolean(this.topLabel),
+      };
+    },
   },
   mounted() {
     this.id = this._uid;
@@ -148,7 +174,6 @@ input {
   height: 40px;
   border-radius: 0;
   @apply border border-crisiscleanup-dark-100;
-  padding: 10px;
 }
 
 input.large {
