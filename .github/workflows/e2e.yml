@@ -89,7 +89,7 @@ jobs:
       - name: Run Cypress
         uses: cypress-io/github-action@v1.21.0
         with:
-          record: true
+          record: false
           start: yarn serve
           wait-on: 'http://localhost:8080'
           browser: chrome
