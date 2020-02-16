@@ -2,7 +2,9 @@
   "$schema": "https://on.cypress.io/cypress.schema.json",
   "baseUrl": "http://localhost:8080",
   "env": {
-    "NODE_ENV": "test"
+    "NODE_ENV": "test",
+    "VUE_APP_API_BASE_URL": "http://localhost:5000",
+    "API_URL": "http://localhost:5000"
   },
   "ignoreTestFiles": ["**/__snapshots__/*", "**/__image_snapshots__/*"],
   "projectId": "xyprfc"

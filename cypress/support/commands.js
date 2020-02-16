@@ -24,4 +24,25 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
-import 'cypress-plugin-snapshots/commands';
+import '@percy/cypress';
+
+// Login Helper
+Cypress.Commands.add(
+  'login',
+  (
+    { email, password, win } = {
+      email: Cypress.env('WEB_USER'),
+      password: Cypress.env('WEB_PASS'),
+      win: window,
+    },
+  ) => {
+    cy.request('POST', `${Cypress.env('API_URL')}/api-token-auth`, {
+      email,
+      password,
+    })
+      .its('body')
+      .then(res => {
+        win.localStorage.setItem('user', JSON.stringify(res));
+      });
+  },
+);
