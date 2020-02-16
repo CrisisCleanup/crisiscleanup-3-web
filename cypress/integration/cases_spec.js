@@ -5,9 +5,8 @@
  * Cypress
  */
 
-beforeEach(cy.login);
-
 describe('Cases Page', () => {
+  beforeEach(cy.login);
   beforeEach(() => {
     cy.on('uncaught:exception', () => {
       return false;

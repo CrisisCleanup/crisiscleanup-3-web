@@ -5,9 +5,8 @@
  * Cypress
  */
 
-beforeEach(cy.login);
-
 describe('Authenticated Layout', () => {
+  beforeEach(cy.login);
   it('successfully loads and matches snapshot', () => {
     cy.visit('/').then(() =>
       cy
