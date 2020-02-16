@@ -9,16 +9,18 @@
     :clearable="clearable"
     :disabled="disabled"
     class="form-select text-base"
-    :class="selectClasses"
+    :class="[selectClasses, isInvalid && !value ? 'invalid' : '']"
     :placeholder="placeholder"
     :reduce="item => (itemKey ? item[itemKey] : item)"
-    @input="$emit('input', $event)"
+    @input="onInput"
     @search:focus="open"
   >
     <template v-if="required" #search="{attributes, events}">
       <input
+        ref="input"
         class="vs__search"
         :required="!value"
+        :readonly="false"
         v-bind="attributes"
         v-on="events"
       />
@@ -83,6 +85,7 @@ export default {
   },
   data() {
     return {
+      isInvalid: false,
       OpenIndicator: {
         render() {
           return (
@@ -96,7 +99,27 @@ export default {
       },
     };
   },
+  mounted() {
+    this.id = this._uid;
+    if (this.required) {
+      this.$refs.input.addEventListener(
+        'invalid',
+        () => {
+          this.isInvalid = true;
+        },
+        true,
+      );
+    }
+  },
   methods: {
+    onInput(value) {
+      this.$emit('input', value);
+      if (this.required) {
+        if (this.$refs.input.checkValidity()) {
+          this.isInvalid = false;
+        }
+      }
+    },
     open() {
       this.$nextTick(() => {
         const items = [].slice.call(
@@ -140,6 +163,10 @@ export default {
 }
 .form-select .vs__search::placeholder {
   @apply text-crisiscleanup-dark-200;
+}
+
+.form-select.invalid {
+  @apply border border-crisiscleanup-red-100;
 }
 
 .vue-select-up.form-select .vs__dropdown-menu {

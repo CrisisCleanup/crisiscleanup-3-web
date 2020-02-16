@@ -2,7 +2,7 @@
   <div class="flex items-center justify-start">
     <input
       ref="input"
-      :class="classes"
+      :class="[classes, isInvalid ? 'invalid' : '']"
       :style="inputStyle"
       :type="type || 'search'"
       :value="value"
@@ -85,6 +85,7 @@ export default {
   data() {
     return {
       id: null,
+      isInvalid: false,
       classes: {
         'flex-grow': true,
         'text-base': true,
@@ -103,13 +104,26 @@ export default {
   },
   mounted() {
     this.id = this._uid;
+    this.$refs.input.addEventListener(
+      'invalid',
+      () => {
+        this.isInvalid = true;
+      },
+      true,
+    );
   },
   methods: {
     update(e) {
       this.$emit('input', e.target.value);
+      if (this.$refs.input.checkValidity()) {
+        this.isInvalid = false;
+      }
     },
     change(e) {
       this.$emit('change', e.target.value);
+      if (this.$refs.input.checkValidity()) {
+        this.isInvalid = false;
+      }
     },
   },
 };
@@ -124,7 +138,7 @@ input::placeholder {
   @apply text-crisiscleanup-dark-200;
 }
 
-input:invalid {
+input.invalid {
   @apply border border-crisiscleanup-red-100;
 }
 

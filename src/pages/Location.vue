@@ -72,7 +72,7 @@
             label="name_t"
             :required="true"
             :placeholder="$t('locationVue.location_type')"
-            select-classes="bg-white border w-full h-12"
+            select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
             @input="
               type => {
                 currentLocation.type = type;
@@ -109,7 +109,7 @@
                 class="form-field"
                 :options="incidents"
                 searchable
-                select-classes="bg-white border w-full h-12 mb-3"
+                select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12 mb-3"
                 item-key="id"
                 label="name"
                 :placeholder="$t('locationVue.select_incident')"
@@ -127,7 +127,7 @@
 
           <textarea
             v-model="currentLocation.notes"
-            class="text-base form-field border outline-none p-2 resize-none"
+            class="text-base form-field border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
             rows="4"
             :placeholder="$t('locationVue.notes')"
           />
@@ -391,6 +391,8 @@ export default {
         if (goToNew) {
           this.currentLocation = new Location();
           this.currentPolygon = null;
+          this.selectedIncidentId = null;
+          this.selectedOrganization = null;
           this.$refs.locationTool.clearAll();
         } else {
           const locationId = response.response.data.id;

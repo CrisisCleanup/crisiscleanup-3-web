@@ -100,8 +100,8 @@
           <MapButton
             button-class="border bg-white"
             icon="map-sweep"
-            @click="clearAll"
             :title="$t('~~layerTool.clear_drawing')"
+            @click="clearAll"
           />
         </div>
         <base-button
@@ -311,8 +311,9 @@ export default {
       }
       const incidents = Organization.find(this.organization).incident_list;
       this.getIncidentLocations(incidents);
-
       this.toggleWorksites(false);
+      this.toggleIncidents(false);
+      this.incidentLayer = new L.LayerGroup();
     },
   },
   async mounted() {
@@ -465,24 +466,26 @@ export default {
           incidentLocations.push(item.location);
         });
       });
-      const results = await Location.api().get(
-        `/locations?id__in=${incidentLocations.join(',')}`,
-        {
-          dataKey: 'results',
-        },
-      );
-      const { locations } = results.entities;
-      locations.forEach(location => {
-        const geojsonFeature = {
-          type: 'Feature',
-          properties: location.attr,
-          geometry: location.poly || location.geom || location.point,
-        };
-        const geojsonLayer = L.geoJSON(geojsonFeature, this.incidentOptions);
-        const [layer] = geojsonLayer.getLayers();
-        layer.type = 'Incident';
-        layer.addTo(this.incidentLayer);
-      });
+      if (incidentLocations.length) {
+        const results = await Location.api().get(
+          `/locations?id__in=${incidentLocations.join(',')}`,
+          {
+            dataKey: 'results',
+          },
+        );
+        const { locations } = results.entities;
+        locations.forEach(location => {
+          const geojsonFeature = {
+            type: 'Feature',
+            properties: location.attr,
+            geometry: location.poly || location.geom || location.point,
+          };
+          const geojsonLayer = L.geoJSON(geojsonFeature, this.incidentOptions);
+          const [layer] = geojsonLayer.getLayers();
+          layer.type = 'Incident';
+          layer.addTo(this.incidentLayer);
+        });
+      }
     },
     async getWorksites({ organization, incident }) {
       this.worksitesLoading = true;

@@ -19,7 +19,11 @@
       <template slot-scope="{ suggestion }">
         <span class="my-suggestion-item" />
         <slot name="result" :suggestion="suggestion">
-          {{ suggestion.item[displayProperty] }}
+          <div
+            class="flex justify-between text-sm p-2 cursor-pointer hover:bg-gray-100 border-b"
+          >
+            {{ suggestion.item[displayProperty] }}
+          </div>
         </slot>
       </template>
     </vue-autosuggest>
