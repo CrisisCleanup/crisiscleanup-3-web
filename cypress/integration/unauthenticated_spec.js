@@ -53,16 +53,11 @@ describe('unAuthenticated Layout', () => {
 
   it('should not have access to protected resource', () => {
     cy.request({
-      url: `${Cypress.env('API_BASE_URL')}/organizations/12`,
+      url: `${Cypress.env('API_URL')}/organizations/12`,
       failOnStatusCode: false,
     })
       .its('status')
-      /**
-       * @todo Return appropriate HTTP Response for unauthorized resource
-       * @body Should be returning status 401 (https://httpstatuses.com/401)
-       */
-      .should('equal', 200);
-    // .should('equal', 401);
+      .should('equal', 401);
   });
 
   it('should not allow a bad login', () => {
