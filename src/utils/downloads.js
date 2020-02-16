@@ -1,6 +1,5 @@
 export function forceFileDownload(response) {
-  const blob = new Blob([response.data], { type: response.data.type });
-  const url = window.URL.createObjectURL(blob);
+  const url = window.URL.createObjectURL(response.data);
   const link = document.createElement('a');
   link.href = url;
   const contentDisposition = response.headers['content-disposition'];
@@ -8,11 +7,13 @@ export function forceFileDownload(response) {
   if (contentDisposition) {
     const fileNameMatch = contentDisposition.match(/filename=(.+)/);
     if (fileNameMatch.length === 2) {
-      [fileName] = fileNameMatch;
+      [, fileName] = fileNameMatch;
     }
   }
   link.setAttribute('download', fileName);
   document.body.appendChild(link);
+  link.href = url;
+  link.target = '_blank';
   link.click();
   link.remove();
   window.URL.revokeObjectURL(url);
