@@ -32,8 +32,8 @@ describe('Cases Page', () => {
   });
   beforeEach(() => {
     cy.get('.ccu-icon[title="Table View"]').as('TableView');
-    cy.get('div[data-cy="worksiteview"]').as('CaseView');
-    cy.get('div[data-cy="worksiteview_actions"]').as('CaseView_Actions');
+    cy.get('div[data-cy="worksiteview"]').as('WorksiteView');
+    cy.get('div[data-cy="worksiteview_actions"]').as('WorksiteView_Actions');
   });
   it('successfully loads and matches snapshot', () => {
     cy.percySnapshot('cases - map view');
@@ -46,16 +46,47 @@ describe('Cases Page', () => {
 
   it('performs worksite actions', () => {
     cy.visit('/incident/158/cases/141324');
-    cy.wrap('@CaseView_Actions')
+    cy.wrap('@WorksiteView_Actions')
       .get('.ccu-icon[title="Download"]')
       .parent()
       .click();
     cy.wait('@getWorksite');
     // printing functionality
-    cy.wrap('@CaseView_Actions')
+    cy.wrap('@WorksiteView_Actions')
       .get('.ccu-icon[title="Print"]')
       .parent()
       .click();
     cy.wait('@printWorksite');
+  });
+
+  it('performs worksite batch actions', () => {
+    cy.visit('/incident/158/cases/141324');
+    // batch actions
+    cy.get('@TableView')
+      .click()
+      .then(() => {
+        // Select Items
+        cy.get('.table')
+          .find('[data-cy="tableview_actionSelect"]')
+          .first()
+          .find('input')
+          .check({ force: true });
+        cy.get('button[data-cy="worksiteview_actionContext"]').click();
+        cy.get('button[data-cy="worksiteview_actionBatchDownload"]').as(
+          'BatchDownloadBtn',
+        );
+        cy.get('button[data-cy="worksiteview_actionBatchPrint"]').as(
+          'BatchPrintBtn',
+        );
+        // Batch Download
+        cy.get('@BatchDownloadBtn')
+          .should('be.visible')
+          .click();
+        cy.wait('@getWorksite');
+        cy.get('@BatchPrintBtn')
+          .should('be.visible')
+          .click();
+        cy.wait('@printWorksite');
+      });
   });
 });

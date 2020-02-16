@@ -185,6 +185,7 @@
                     slot="btn"
                     class="text-base font-thin mx-2"
                     icon="ellipsis-h"
+                    data-cy="worksiteview_actionContext"
                   />
                 </template>
                 <template slot="body">
@@ -194,6 +195,7 @@
                         class="text-base font-thin mx-4"
                         :text="$t('actions.download')"
                         :action="() => batchAction(downloadWorksite)"
+                        data-cy="worksiteview_actionBatchDownload"
                       />
                     </li>
                     <li class="py-1">
@@ -201,6 +203,7 @@
                         class="text-base font-thin mx-4"
                         :text="$t('actions.print')"
                         :action="() => batchAction(printWorksite)"
+                        data-cy="worksiteview_actionBatchPrint"
                       />
                     </li>
                     <li class="py-1">
