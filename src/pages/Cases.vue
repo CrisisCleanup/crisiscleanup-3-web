@@ -193,14 +193,14 @@
                       <base-button
                         class="text-base font-thin mx-4"
                         :text="$t('actions.download')"
-                        :action="downloadWorksite"
+                        :action="() => batchAction(downloadWorksite)"
                       />
                     </li>
                     <li class="py-1">
                       <base-button
                         class="text-base font-thin mx-4"
                         :text="$t('actions.print')"
-                        :action="printWorksite"
+                        :action="() => batchAction(printWorksite)"
                       />
                     </li>
                     <li class="py-1">
@@ -1107,16 +1107,18 @@ export default {
       });
       this.updateUserState();
     },
-    async printWorksite() {
+    async printWorksite(e, siteId) {
       this.spinning = true;
-      const pdf = await Worksite.api().printWorksite(this.currentWorksite.id);
+      const pdf = await Worksite.api().printWorksite(
+        siteId || this.currentWorksite.id,
+      );
       forceFileDownload(pdf.response);
       this.spinning = false;
     },
-    async downloadWorksite() {
+    async downloadWorksite(e, siteId) {
       this.spinning = true;
       const csv = await Worksite.api().downloadWorksite(
-        this.currentWorksite.id,
+        siteId || this.currentWorksite.id,
       );
       forceFileDownload(csv.response);
       this.spinning = false;
@@ -1173,6 +1175,12 @@ export default {
       results.forEach(result => this.$log.debug(result));
       this.spinning = false;
       this.showingUnclaimModal = false;
+      this.reloadTable();
+    },
+    async batchAction(action) {
+      this.spinning = true;
+      await this.selectedTableItems.forEach(i => action(null, i));
+      this.spinning = false;
       this.reloadTable();
     },
   },
