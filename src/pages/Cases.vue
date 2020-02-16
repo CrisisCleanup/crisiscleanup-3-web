@@ -390,6 +390,7 @@
       "
       class="flex flex-col h-full shadow-2xl w-1/5"
       style="min-width: 360px"
+      data-cy="worksiteview"
     >
       <div
         style="background-color: white"
@@ -439,6 +440,7 @@
             isNewWorksite
         "
         class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b"
+        data-cy="worksiteview_actions"
       >
         <template v-if="isViewingWorksiteHistory">
           <ccu-icon
