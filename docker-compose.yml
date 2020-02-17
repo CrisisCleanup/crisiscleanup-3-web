@@ -1,14 +1,15 @@
 version: '3'
 services:
   dev:
+    image: docker.pkg.github.com/crisiscleanup-3-web/cc3web-dev:latest
     build:
       context: .
       dockerfile: dev.Dockerfile
     volumes:
       - .:/app
     ports:
-      - "8080:8080"
+      - '8080:8080'
   production:
     build: .
     ports:
-      - "8080:8080"
+      - '8080:8080'
