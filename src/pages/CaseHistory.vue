@@ -14,9 +14,10 @@
         "
         class="my-4"
       >
-        <label class="my-1 text-xs font-bold text-gray-600 block">{{
-          $t('searchFilterAside.claimed_by')
-        }}</label>
+        <label
+          class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
+          >{{ $t('searchFilterAside.claimed_by') }}</label
+        >
         <div v-for="org in organizationsWithClaims" :key="org.id" class="my-1">
           {{ getOrganizationName(org) }}
         </div>

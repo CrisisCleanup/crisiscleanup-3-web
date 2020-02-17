@@ -243,7 +243,7 @@
               <div class="table-operations flex justify-end items-center">
                 <div class="flex">
                   <base-button
-                    class="ml-3 my-3 border p-1 px-4 text-gray-600 bg-white"
+                    class="ml-3 my-3 border p-1 px-4 text-crisiscleanup-grey-700 bg-white"
                     :disabled="selectedTableItems.length === 0"
                     :action="
                       () => {
@@ -255,7 +255,7 @@
                   </base-button>
                   <base-button
                     icon="sync"
-                    class="border p-1 px-4 text-gray-600 ml-3 my-3 flex items-center bg-white"
+                    class="border p-1 px-4 text-crisiscleanup-grey-700 ml-3 my-3 flex items-center bg-white"
                     :text="$t('actions.update_status')"
                     @click="() => {}"
                   />
@@ -442,7 +442,7 @@
             isViewingWorksiteFlag ||
             isNewWorksite
         "
-        class="text-gray-600 text-lg flex p-2 bg-white justify-between items-center border-b"
+        class="text-crisiscleanup-grey-700 text-lg flex p-2 bg-white justify-between items-center border-b"
         data-cy="worksiteview_actions"
       >
         <template v-if="isViewingWorksiteHistory">

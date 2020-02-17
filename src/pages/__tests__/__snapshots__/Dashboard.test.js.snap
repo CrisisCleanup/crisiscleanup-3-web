@@ -115,7 +115,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="table w-full"
           >
             <div
-              class="header text-gray-600 bg-white"
+              class="header text-crisiscleanup-grey-700 bg-white"
               style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
             >
               <!---->
@@ -638,7 +638,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="table w-full"
           >
             <div
-              class="header text-gray-600 bg-white"
+              class="header text-crisiscleanup-grey-700 bg-white"
               style="display: grid; grid-template-columns: 80px 10% 0.5fr 1fr 1fr 1fr 1fr;"
             >
               <!---->

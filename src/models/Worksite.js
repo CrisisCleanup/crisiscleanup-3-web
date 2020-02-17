@@ -3,16 +3,7 @@ import Organization from '@/models/Organization';
 import User from '@/models/User';
 import WorkType from '@/models/WorkType';
 import { getQueryString } from '@/utils/urls';
-
-function secondsToHm(seconds) {
-  const d = Number(seconds);
-  const h = Math.floor(d / 3600);
-  const m = Math.floor((d % 3600) / 60);
-
-  const hDisplay = `${h}h `;
-  const mDisplay = `${m}m`;
-  return hDisplay + mDisplay;
-}
+import { secondsToHm } from '@/filters';
 
 export default class Worksite extends Model {
   static entity = 'worksites';
@@ -59,7 +50,7 @@ export default class Worksite extends Model {
     const seconds = this.time.reduce((total, obj) => {
       return total + obj.seconds;
     }, 0);
-    return secondsToHm(seconds);
+    return secondsToHm(seconds * this.total_volunteers);
   }
 
   get formFields() {

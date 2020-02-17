@@ -1,6 +1,9 @@
 <template>
   <div class="table w-full">
-    <div class="header text-gray-600 bg-white" :style="gridStyleHeader">
+    <div
+      class="header text-crisiscleanup-grey-700 bg-white"
+      :style="gridStyleHeader"
+    >
       <div v-if="enableSelection" class="flex items-center p-2 border-b">
         <base-checkbox class="mb-5" @input="setAllChecked" />
       </div>

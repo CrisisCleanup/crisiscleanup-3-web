@@ -16,7 +16,7 @@
           <div class="flex items-center justify-between">
             <label
               v-if="worksite.notes && worksite.notes.length > 0"
-              class="my-1 text-xs font-bold text-gray-600 block"
+              class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
               >{{ $t('formLabels.notes') }}</label
             >
 
@@ -48,7 +48,7 @@
                 }
               "
             >
-              <span class="text-gray-600 mr-3 notes-time w-40"
+              <span class="text-crisiscleanup-grey-700 mr-3 notes-time w-40"
                 >{{ note.created_at | moment('from', 'now') }}:</span
               ><span
                 class="font-hairline w-64 cursor-pointer"
@@ -93,15 +93,17 @@
           </div>
         </div>
         <div>
-          <label class="my-1 text-xs font-bold text-gray-600 block">{{
-            $t('formLabels.address')
-          }}</label>
+          <label
+            class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
+            >{{ $t('formLabels.address') }}</label
+          >
           <div>{{ worksiteAddress }}</div>
         </div>
         <div>
-          <label class="my-1 text-xs font-bold text-gray-600 block">{{
-            $t('formLabels.phone1')
-          }}</label>
+          <label
+            class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
+            >{{ $t('formLabels.phone1') }}</label
+          >
           <div>{{ worksite.formFields.phone1 }}</div>
         </div>
       </div>
@@ -134,9 +136,10 @@
       </SectionHeading>
       <div class="px-3 pb-3">
         <div v-if="Object.keys(workTypesClaimedByOthers).length > 0">
-          <label class="my-1 text-xs font-bold text-gray-600 block">{{
-            $t('caseView.claimed_by')
-          }}</label>
+          <label
+            class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
+            >{{ $t('caseView.claimed_by') }}</label
+          >
           <div
             v-for="organization in Object.keys(workTypesClaimedByOthers)"
             :key="organization.id"
@@ -151,7 +154,7 @@
               v-for="(work_types, organization) in workTypesClaimedByOthers"
               :key="organization.id"
             >
-              <label class="text-xs font-bold text-gray-600"
+              <label class="text-xs font-bold text-crisiscleanup-grey-700"
                 >{{ $t('caseView.claimed_by') }}
                 {{ getOrganizationName(organization) }}</label
               >
@@ -203,7 +206,7 @@
             </div>
           </div>
           <div v-if="workTypesClaimedByOrganization.length > 0">
-            <label class="text-xs font-bold text-gray-600">{{
+            <label class="text-xs font-bold text-crisiscleanup-grey-700">{{
               $t('caseView.claimed_by_my_org')
             }}</label>
             <template v-for="work_type in workTypesClaimedByOrganization">
@@ -241,7 +244,7 @@
             </template>
           </div>
           <div v-if="workTypesUnclaimed.length > 0" class="mt-3">
-            <label class="text-xs font-bold text-gray-600">{{
+            <label class="text-xs font-bold text-crisiscleanup-grey-700">{{
               $t('caseView.unclaimed_work_types')
             }}</label>
             <template v-for="work_type in workTypesUnclaimed">
@@ -284,48 +287,7 @@
         $t('caseForm.report')
       }}</SectionHeading>
       <div class="px-3 pb-3">
-        <div class="flex items-center justify-between">
-          <div>
-            {{ $t('Volunteers') }}
-            <div>{{ worksite.total_volunteers }}</div>
-          </div>
-          <div>
-            {{ $t('Total Hours') }}
-            <div>
-              {{ worksite.total_time }}
-            </div>
-          </div>
-          <div>
-            <base-button
-              v-if="!addingTime"
-              icon="plus"
-              type="primary"
-              class="p-3"
-              :alt="$t('~~Adding Time')"
-              :action="
-                () => {
-                  addingTime = true;
-                }
-              "
-            />
-            <base-button
-              v-if="addingTime"
-              class="my-1 cursor-pointer"
-              type="link"
-              :text="$t('actions.cancel')"
-              :action="
-                () => {
-                  addingTime = false;
-                }
-              "
-            />
-          </div>
-        </div>
-        <form
-          v-if="addingTime"
-          ref="timeForm"
-          class="flex items-center justify-between w-full"
-        >
+        <form ref="timeForm" class="flex items-center justify-between w-full">
           <base-input
             v-model="volunteersToAdd"
             placeholder="0"
@@ -349,6 +311,49 @@
             :action="addTime"
           />
         </form>
+        <div class="my-2">
+          <div class="my-1">{{ $t('~~History of Reports') }}</div>
+          <table class="table-auto text-xs w-full">
+            <thead>
+              <tr>
+                <th class="text-left border p-1">{{ $t('~~Entered By') }}</th>
+                <th class="border p-1">{{ $t('~~Volunteers') }}</th>
+                <th class="border p-1">{{ $t('~~Hours Per Volunteer') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="entry in timeEnteredByMyOrganization">
+                <td class="text-left border p-1">
+                  {{ entry.created_by_name }}
+                </td>
+                <td class="text-right border p-1">{{ entry.volunteers }}</td>
+                <td class="text-right border p-1">
+                  {{ entry.seconds | secondsToHm }}
+                </td>
+              </tr>
+              <tr v-if="timeEnteredByOtherOrganizations.volunteers">
+                <td class="text-left border p-1">
+                  {{ timeEnteredByOtherOrganizations.created_by_name }}
+                </td>
+                <td class="text-right border p-1">
+                  {{ timeEnteredByOtherOrganizations.volunteers }}
+                </td>
+                <td class="text-right border p-1">
+                  {{ timeEnteredByOtherOrganizations.seconds | secondsToHm }}
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td></td>
+                <td></td>
+                <td class="border p-1 text-right">
+                  {{ $t('~~Total Time') }} {{ worksite.total_time }}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
     <div
@@ -507,6 +512,35 @@ export default {
       return new Set(
         this.worksiteRequests.map(request => request.worksite_work_type.id),
       );
+    },
+    timeEnteredByMyOrganization() {
+      if (this.worksite) {
+        return this.worksite.time.filter(
+          type => type.created_by_org === this.currentUser.organization.id,
+        );
+      }
+      return [];
+    },
+    timeEnteredByOtherOrganizations() {
+      let time = [];
+      if (this.worksite) {
+        time = this.worksite.time.filter(
+          type => type.created_by_org !== this.currentUser.organization.id,
+        );
+      }
+      const volunteers = time.reduce((total, obj) => {
+        return total + obj.volunteers;
+      }, 0);
+
+      const seconds = time.reduce((total, obj) => {
+        return total + obj.seconds;
+      }, 0);
+
+      return {
+        created_by_name: this.$t('Other Organizations'),
+        seconds,
+        volunteers,
+      };
     },
   },
   async mounted() {

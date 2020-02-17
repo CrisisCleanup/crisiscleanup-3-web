@@ -44,6 +44,7 @@ import {
   getStatusName,
   getWorkTypeImage,
   getWorkTypeName,
+  secondsToHm,
   snakeToTitleCase,
 } from '@/filters';
 
@@ -99,6 +100,7 @@ Vue.filter('getStatusName', getStatusName);
 Vue.filter('snakeToTitleCase', snakeToTitleCase);
 Vue.filter('getColorForWorkType', getColorForWorkType);
 Vue.filter('getWorkTypeImage', getWorkTypeImage);
+Vue.filter('secondsToHm', secondsToHm);
 
 // API & Auth
 if (AuthService.getUser()) {
