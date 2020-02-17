@@ -141,6 +141,13 @@ export default {
           iconSize: 'large',
           to: '/organization',
         },
+        {
+          key: 'phone',
+          icon: 'phone',
+          text: '~~Phone',
+          iconSize: 'large',
+          to: '/phone',
+        },
       ];
     },
     ...mapState('incident', ['currentIncidentId']),
