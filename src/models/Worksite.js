@@ -48,9 +48,9 @@ export default class Worksite extends Model {
 
   get total_time() {
     const seconds = this.time.reduce((total, obj) => {
-      return total + obj.seconds;
+      return total + obj.seconds * obj.volunteers;
     }, 0);
-    return secondsToHm(seconds * this.total_volunteers);
+    return secondsToHm(seconds);
   }
 
   get formFields() {
