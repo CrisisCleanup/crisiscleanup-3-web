@@ -221,6 +221,15 @@ export default class Worksite extends Model {
           { save: false },
         );
       },
+      deleteFile(id, file) {
+        return this.delete(
+          `/worksites/${id}/files`,
+          {
+            data: { file },
+          },
+          { save: false },
+        );
+      },
       addFlag(id, flag) {
         return this.post(`/worksites/${id}/flags`, flag, { save: false });
       },

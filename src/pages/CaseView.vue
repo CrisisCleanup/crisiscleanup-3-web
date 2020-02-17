@@ -368,15 +368,27 @@
           </div>
         </DragDrop>
 
-        <div class="flex w-64 overflow-scroll">
-          <img
+        <div class="flex w-64 overflow-x-auto">
+          <div
             v-for="file in worksite.files"
-            class="w-20 h-20 mx-2"
-            :src="file.url"
-            :alt="file.filename_original"
-            :title="file.filename_original"
-            @click="viewingImage = file"
-          />
+            class="relative image-container"
+            style="min-width: 90px"
+          >
+            <img
+              class="image-box w-20 h-20 mx-2 cursor-pointer"
+              :src="file.url"
+              :alt="file.filename_original"
+              :title="file.filename_original"
+              @click="viewingImage = file"
+            />
+            <ccu-icon
+              :alt="$t('actions.delete')"
+              size="xs"
+              type="trash"
+              class="absolute right-0 top-0 m-1 mr-3 p-1 image-close bg-white"
+              @click.native="deleteFile(file.file)"
+            />
+          </div>
         </div>
         <modal
           v-if="viewingImage"
@@ -769,6 +781,10 @@ export default {
         this.uploading = false;
       }
     },
+    async deleteFile(fileId) {
+      await Worksite.api().deleteFile(this.worksite.id, fileId);
+      await Worksite.api().fetch(this.worksite.id);
+    },
   },
 };
 </script>
@@ -815,5 +831,13 @@ export default {
   word-wrap: break-word;
   overflow: hidden;
   max-height: 5em;
+}
+
+.image-container:hover .image-close {
+  display: flex;
+}
+
+.image-close {
+  display: none;
 }
 </style>
