@@ -11,7 +11,7 @@
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
-      <div class="px-3 pb-3">
+      <section class="px-3 pb-3">
         <div>
           <div class="flex items-center justify-between">
             <label
@@ -106,7 +106,7 @@
           >
           <div>{{ worksite.formFields.phone1 }}</div>
         </div>
-      </div>
+      </section>
       <SectionHeading :count="2" class="mb-3"
         >{{ $t('caseForm.work') }}
         <template #action>
@@ -134,7 +134,7 @@
           />
         </template>
       </SectionHeading>
-      <div class="px-3 pb-3">
+      <section class="px-3 pb-3">
         <div v-if="Object.keys(workTypesClaimedByOthers).length > 0">
           <label
             class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
@@ -282,11 +282,11 @@
             </template>
           </div>
         </div>
-      </div>
+      </section>
       <SectionHeading :count="3" class="mb-3">{{
         $t('caseForm.report')
       }}</SectionHeading>
-      <div class="px-3 pb-3">
+      <section class="px-3 pb-3">
         <form ref="timeForm" class="flex items-center justify-between w-full">
           <base-input
             v-model="volunteersToAdd"
@@ -311,7 +311,7 @@
             :action="addTime"
           />
         </form>
-        <div class="my-2">
+        <div v-if="worksite.total_volunteers" class="my-2">
           <div class="my-1">{{ $t('~~History of Reports') }}</div>
           <table class="table-auto text-xs w-full">
             <thead>
@@ -345,16 +345,53 @@
             </tbody>
             <tfoot>
               <tr>
-                <td></td>
-                <td></td>
-                <td class="border p-1 text-right">
+                <td colspan="3" class="border p-1 text-right font-bold">
                   {{ $t('~~Total Time') }} {{ worksite.total_time }}
                 </td>
               </tr>
             </tfoot>
           </table>
         </div>
-      </div>
+      </section>
+      <SectionHeading :count="4" class="mb-3">{{
+        $t('caseForm.photos')
+      }}</SectionHeading>
+      <section class="px-3 pb-3 flex">
+        <DragDrop
+          class="w-20 h-20 border-solid border-2"
+          :disabled="uploading"
+          @files="handleFileUpload"
+        >
+          <div class="flex items-center justify-center">
+            <font-awesome-icon v-if="uploading" size="lg" icon="spinner" spin />
+            <font-awesome-icon v-else size="lg" icon="camera" />
+          </div>
+        </DragDrop>
+
+        <div class="flex w-64 overflow-scroll">
+          <img
+            v-for="file in worksite.files"
+            class="w-20 h-20 mx-2"
+            :src="file.url"
+            :alt="file.filename_original"
+            :title="file.filename_original"
+            @click="viewingImage = file"
+          />
+        </div>
+        <modal
+          v-if="viewingImage"
+          modal-classes="bg-white w-1/3 shadow"
+          closeable
+          @close="viewingImage = null"
+        >
+          <img
+            :src="viewingImage.url"
+            :alt="viewingImage.filename_original"
+            :title="viewingImage.filename_original"
+          />
+          <div slot="footer"></div>
+        </modal>
+      </section>
     </div>
     <div
       class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-center items-center"
@@ -423,6 +460,7 @@ import WorksiteRequest from '@/models/WorksiteRequest';
 import { groupBy } from '@/utils/array';
 import Organization from '@/models/Organization';
 import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
+import DragDrop from '@/components/DragDrop';
 import { getQueryString } from '@/utils/urls';
 import SectionHeading from '../components/SectionHeading';
 import Flag from './Flag';
@@ -430,7 +468,13 @@ import { LocaleMixin } from '@/mixins/locale';
 
 export default {
   name: 'CaseView',
-  components: { Flag, SectionHeading, WorkTypeRequestModal, StatusDropDown },
+  components: {
+    Flag,
+    SectionHeading,
+    WorkTypeRequestModal,
+    StatusDropDown,
+    DragDrop,
+  },
   mixins: [LocaleMixin],
   data() {
     return {
@@ -443,6 +487,8 @@ export default {
       currentNote: '',
       volunteersToAdd: '',
       hoursPerVolunteer: '',
+      uploading: false,
+      viewingImage: null,
     };
   },
   computed: {
@@ -694,6 +740,34 @@ export default {
         });
       }
       return [];
+    },
+    async handleFileUpload(fileList) {
+      if (fileList.length === 0) {
+        this.uploading = false;
+        return;
+      }
+      const formData = new FormData();
+      formData.append('upload', fileList[0]);
+      this.uploading = true;
+      try {
+        const result = await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/files`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            },
+          },
+        );
+        const file = result.data.id;
+        await Worksite.api().addFile(this.worksite.id, file);
+        await Worksite.api().fetch(this.worksite.id);
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.uploading = false;
+      }
     },
   },
 };

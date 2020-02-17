@@ -25,6 +25,7 @@ export default class Worksite extends Model {
       work_types: this.attr(null),
       what3words: this.attr(null),
       notes: this.attr(null),
+      files: this.attr(null),
       time: this.attr(null),
       flags: this.attr(null),
       events: this.attr(null),
@@ -207,6 +208,15 @@ export default class Worksite extends Model {
             worksite: id,
             seconds,
             volunteers,
+          },
+          { save: false },
+        );
+      },
+      addFile(id, file) {
+        return this.post(
+          `/worksites/${id}/files`,
+          {
+            file,
           },
           { save: false },
         );

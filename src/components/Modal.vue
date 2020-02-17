@@ -29,7 +29,20 @@
             </slot>
           </div>
 
-          <div class="modal-body flex-grow">
+          <div class="modal-body flex-grow relative">
+            <ccu-icon
+              v-if="closeable && !title"
+              :alt="$t('actions.cancel')"
+              size="xs"
+              type="cancel"
+              class="absolute right-0 p-2"
+              @click.native="
+                () => {
+                  $emit('close');
+                  $emit('cancel');
+                }
+              "
+            />
             <slot></slot>
           </div>
 
@@ -73,6 +86,10 @@ export default {
     title: {
       type: String,
       default: '',
+    },
+    closeable: {
+      type: Boolean,
+      default: false,
     },
   },
 };

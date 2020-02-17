@@ -15,7 +15,7 @@
       <div class="px-8 pb-6 mt-2">
         <div class="flex">
           <DragDrop
-            class="w-48 h-32 text-center mr-6"
+            class="w-48 h-32 text-center mr-6 border border-dashed"
             :choose-title="$t('profileVue.upload_org_logo')"
             :drag-title="$t('profileVue.logo_specs')"
             @files="handleFileUpload"

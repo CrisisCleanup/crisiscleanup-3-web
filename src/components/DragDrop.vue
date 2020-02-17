@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-dashed flex items-center justify-center">
+  <div class="flex items-center justify-center">
     <form ref="fileform" class="w-full h-full">
       <div
         class="relative w-full h-full flex flex-col items-center justify-center"
@@ -9,7 +9,13 @@
           <div>{{ $t('or') }}</div>
           <div class="p-2 underline text-primary-dark">{{ chooseTitle }}</div>
         </slot>
-        <input ref="fileinput" class="file-input" type="file" multiple />
+        <input
+          ref="fileinput"
+          class="file-input"
+          type="file"
+          :multiple="multiple"
+          :disabled="disabled"
+        />
       </div>
     </form>
   </div>
@@ -26,6 +32,14 @@ export default {
     dragTitle: {
       type: String,
       default: '',
+    },
+    multiple: {
+      type: Boolean,
+      default: true,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
