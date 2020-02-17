@@ -3,7 +3,6 @@ import VueRouter from 'vue-router';
 import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
-import OrganizationProfile from '@/pages/organization/Profile';
 import Cases from '@/pages/Cases';
 import CaseView from '@/pages/CaseView';
 import Dashboard from '@/pages/Dashboard';
@@ -13,7 +12,9 @@ import Affiliates from '@/pages/organization/Affiliates';
 import Organization from '@/pages/organization/Index';
 import Invitations from '@/pages/organization/Invitations';
 import Layers from '@/pages/organization/Layers';
+import OrganizationProfile from '@/pages/organization/Profile';
 import Users from '@/pages/organization/Users';
+import PhoneDashboard from '@/pages/phone/Index';
 import Profile from '@/pages/Profile';
 import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
 import store from '@/store/index';
@@ -115,6 +116,12 @@ const routes = [
         name: 'nav.organization_layers',
       },
     ],
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/phone',
+    component: PhoneDashboard,
+    name: 'nav.phone',
     meta: { layout: 'authenticated' },
   },
   {

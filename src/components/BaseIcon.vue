@@ -11,6 +11,7 @@ const iconMap = {
   dashboard: require('@/assets/icons/dashboard.svg'),
   cases: require('@/assets/icons/cases.svg'),
   print: require('@/assets/icons/print-big.svg'),
+  phone: require('@/assets/icons/phone.svg'),
   share: require('@/assets/icons/share-big.svg'),
   download: require('@/assets/icons/download.svg'),
   active: require('@/assets/icons/active.svg'),
