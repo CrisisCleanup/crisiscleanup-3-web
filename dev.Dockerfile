@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
 # install simple http server for serving static content
-RUN npm install -g http-server
+RUN yarn global install http-server
 
 # make the 'app' folder the current working directory
 WORKDIR /app
@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # install project dependencies leaving out dev dependencies
-RUN npm install
+RUN yarn install
 
 EXPOSE 8080
-CMD [ "npm", "run", "serve"]
+CMD [ "yarn", "run", "serve"]
