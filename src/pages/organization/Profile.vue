@@ -106,7 +106,7 @@
           <div class="divider" />
           <div class="pb-2">Linked Account</div>
           <div class="form-row">
-            <div class="w-1/5 flex items-center">
+            <div class="w-32 flex items-center">
               <img
                 src="https://simpleicons.org/icons/facebook.svg"
                 class="w-8 mr-2"
@@ -124,7 +124,7 @@
             />
           </div>
           <div class="form-row">
-            <div class="w-1/5 flex items-center">
+            <div class="w-32 flex items-center">
               <img
                 src="https://simpleicons.org/icons/twitter.svg"
                 class="w-8 mr-2"

@@ -92,7 +92,7 @@ export default {
             <font-awesome-icon
               size="sm"
               icon="sort"
-              class="mx-1 text-gray-500"
+              class="mx-1 text-crisiscleanup-dark-400"
             />
           );
         },

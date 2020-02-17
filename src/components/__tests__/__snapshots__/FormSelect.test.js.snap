@@ -44,7 +44,7 @@ exports[`FormSelect should match snapshot with props 1`] = `
        
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-sort fa-w-10 fa-sm mx-1 text-gray-500 vs__open-indicator"
+        class="svg-inline--fa fa-sort fa-w-10 fa-sm mx-1 text-crisiscleanup-dark-400 vs__open-indicator"
         data-icon="sort"
         data-prefix="fas"
         focusable="false"
@@ -116,7 +116,7 @@ exports[`FormSelect should render correctly and match snapshot 1`] = `
        
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-sort fa-w-10 fa-sm mx-1 text-gray-500 vs__open-indicator"
+        class="svg-inline--fa fa-sort fa-w-10 fa-sm mx-1 text-crisiscleanup-dark-400 vs__open-indicator"
         data-icon="sort"
         data-prefix="fas"
         focusable="false"

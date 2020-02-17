@@ -67,7 +67,7 @@ export default {
     },
     pattern: {
       type: String,
-      default: '',
+      default: '.*',
     },
     required: {
       type: Boolean,

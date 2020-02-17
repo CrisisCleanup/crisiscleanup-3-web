@@ -17,7 +17,7 @@ exports[`BaseInput should render correctly and match snapshot 1`] = `
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large"
-    pattern=""
+    pattern=".*"
     placeholder=""
     type="search"
   />
@@ -38,7 +38,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large"
-    pattern=""
+    pattern=".*"
     placeholder=""
     required="required"
     type="search"
@@ -60,7 +60,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large"
-    pattern=""
+    pattern=".*"
     placeholder=""
     required="required"
     type="search"
@@ -82,7 +82,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large"
-    pattern=""
+    pattern=".*"
     placeholder=""
     required="required"
     type="search"
@@ -104,7 +104,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large"
-    pattern=""
+    pattern=".*"
     placeholder=""
     required="required"
     type="search"
@@ -130,7 +130,7 @@ exports[`BaseInput should render correctly and match snapshot with label 1`] = `
   <input
     autocomplete="off"
     class="flex-grow p-1 text-base large border-none"
-    pattern=""
+    pattern=".*"
     placeholder=""
     type="search"
   />

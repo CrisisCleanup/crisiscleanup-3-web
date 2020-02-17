@@ -107,12 +107,6 @@ export default {
 </script>
 
 <style>
-form {
-  background: white;
-  color: black;
-  width: 500px;
-}
-
 .file-drop-area {
   position: relative;
   display: flex;
