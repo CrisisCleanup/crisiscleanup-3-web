@@ -139,6 +139,11 @@ export default {
           iconSize: 'large',
           to: '/organization',
         },
+        {
+          key: 'phone',
+          text: this.$t('nav.phone'),
+          to: `/phone`,
+        },
       ];
     },
     ...mapState('incident', ['currentIncidentId']),
