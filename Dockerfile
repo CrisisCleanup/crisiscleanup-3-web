@@ -1,5 +1,8 @@
 FROM node:lts-alpine
 
+# setup env
+ENV CYPRESS_INSTALL_BINARY 0
+
 # make the 'app' folder the current working directory
 WORKDIR /app
 

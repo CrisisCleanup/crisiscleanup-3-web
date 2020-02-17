@@ -1,7 +1,7 @@
 FROM node:lts-alpine
 
 # install simple http server for serving static content
-RUN yarn global install http-server
+RUN yarn global add http-server
 
 # make the 'app' folder the current working directory
 WORKDIR /app
