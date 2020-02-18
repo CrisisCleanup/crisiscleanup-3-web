@@ -1,18 +1,8 @@
 name: Cypress
 
 on:
-  pull_request:
-    paths:
-      - '**/**.json'
-      - '**/**.lock'
-      - '**/**.js'
-      - '**/**.vue'
-      - '**/**.js.snap'
-      - '.github/workflows/e2e.yml'
   push:
     paths:
-      - '**/**.json'
-      - '**/**.lock'
       - '**/**.js'
       - '**/**.vue'
       - '**/**.js.snap'
@@ -31,7 +21,7 @@ jobs:
     # 1.) Parallel Builds
     # 2.) Multiple builds per commit hash (think PR & Branch)
     name: Generate Unique Build ID
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
     steps:
       - name: Set Build ID
         id: build_id
@@ -55,7 +45,7 @@ jobs:
 
   cypress:
     name: Run Visual Tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-16.04
     needs: build_id
 
     steps:
