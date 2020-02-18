@@ -228,7 +228,7 @@ import { getWorksiteLayer } from '@/utils/map';
 import LayerUploadTool from '@/components/LayerUploadTool';
 
 export default {
-  name: 'locationTool',
+  name: 'LocationTool',
   components: { LayerUploadTool, MapButton },
   mixins: [vueUndoRedo],
   props: {

@@ -159,7 +159,9 @@
           </div>
         </div>
         <div v-if="selectedOrganization">
-          <div class="text-base">{{ $t('locationVue.organization_incidents') }}</div>
+          <div class="text-base">
+            {{ $t('locationVue.organization_incidents') }}
+          </div>
           <div class="h-48 overflow-auto">
             <div v-for="incident in selectedOrganization.incident_list">
               {{ incident.name }}

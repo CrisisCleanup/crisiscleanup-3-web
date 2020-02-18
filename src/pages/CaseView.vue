@@ -316,9 +316,13 @@
           <table class="table-auto text-xs w-full">
             <thead>
               <tr>
-                <th class="text-left border p-1">{{ $t('caseView.entered_by') }}</th>
+                <th class="text-left border p-1">
+                  {{ $t('caseView.entered_by') }}
+                </th>
                 <th class="border p-1">{{ $t('caseView.volunteers') }}</th>
-                <th class="border p-1">{{ $t('caseView.hours_per_volunteer') }}</th>
+                <th class="border p-1">
+                  {{ $t('caseView.hours_per_volunteer') }}
+                </th>
               </tr>
             </thead>
             <tbody>
