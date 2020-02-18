@@ -185,7 +185,7 @@
                     class="ml-2 p-1 px-3 text-xs"
                   />
                   <div v-else class="ml-2 p-1 px-3 text-xs">
-                    {{ $t('Requested') }}
+                    {{ $t('caseView.requested') }}
                   </div>
                   <div class="work-list">
                     {{
@@ -292,13 +292,13 @@
             v-model="volunteersToAdd"
             input-style="width: 6rem"
             input-classes="text-xs"
-            :placeholder="$t('~~Volunteers')"
+            :placeholder="$t('caseView.volunteers')"
             required
             pattern="\d*"
           />
           <base-input
             v-model="hoursPerVolunteer"
-            :placeholder="$t('~~Hours per Volunteer')"
+            :placeholder="$t('caseView.hours_per_volunteer')"
             input-classes="text-xs"
             input-style="width: 11rem;"
             required
@@ -312,13 +312,13 @@
           />
         </form>
         <div v-if="worksite.total_volunteers" class="my-2">
-          <div class="my-1">{{ $t('~~History of Reports') }}</div>
+          <div class="my-1">{{ $t('caseView.volunteer_hour_reports') }}</div>
           <table class="table-auto text-xs w-full">
             <thead>
               <tr>
-                <th class="text-left border p-1">{{ $t('~~Entered By') }}</th>
-                <th class="border p-1">{{ $t('~~Volunteers') }}</th>
-                <th class="border p-1">{{ $t('~~Hours Per Volunteer') }}</th>
+                <th class="text-left border p-1">{{ $t('caseView.entered_by') }}</th>
+                <th class="border p-1">{{ $t('caseView.volunteers') }}</th>
+                <th class="border p-1">{{ $t('caseView.hours_per_volunteer') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -346,7 +346,7 @@
             <tfoot>
               <tr>
                 <td colspan="3" class="border p-1 text-right font-bold">
-                  {{ $t('~~Total Time') }} {{ worksite.total_time }}
+                  {{ $t('caseView.total_time') }} {{ worksite.total_time }}
                 </td>
               </tr>
             </tfoot>
