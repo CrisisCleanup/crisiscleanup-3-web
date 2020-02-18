@@ -6,7 +6,7 @@
         :suggestions="locationResults"
         display-property="name"
         size="large"
-        placeholder="$t('layerTool.search_several_area_types')"
+        placeholder="$t('locationTool.search_several_area_types')"
         class="w-2/5"
         @selected="onLocationSelected"
         @search="onLocationSearch"
@@ -34,14 +34,14 @@
             button-class="border bg-white"
             icon="map-undo"
             :disabled="!canUndo"
-            :title="$t('~~layerTool.undo')"
+            :title="$t('actions.undo')"
             @click="undo"
           />
           <MapButton
             button-class="border bg-white"
             icon="map-redo"
             :disabled="!canRedo"
-            :title="$t('~~layerTool.redo')"
+            :title="$t('actions.redo')"
             @click="redo"
           />
         </div>
@@ -49,7 +49,7 @@
           <MapButton
             button-class="border bg-white"
             icon="map-rect"
-            :title="$t('~~layerTool.draw_rectangle')"
+            :title="$t('locationTool.draw_rectangle')"
             :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Rectangle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Rectangle'"
@@ -62,7 +62,7 @@
           />
           <MapButton
             button-class="border bg-white"
-            :title="$t('~~layerTool.draw_polygon')"
+            :title="$t('locationTool.draw_polygon')"
             icon="map-poly"
             :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Polygon'"
@@ -76,7 +76,7 @@
           />
           <MapButton
             button-class="border bg-white"
-            :title="$t('~~layerTool.draw_circle')"
+            :title="$t('locationTool.draw_circle')"
             icon="map-circle"
             :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
@@ -91,7 +91,7 @@
           <MapButton
             v-if="currentPolygon"
             button-class="border bg-white"
-            :title="$t('~~layerTool.draw_buffer')"
+            :title="$t('locationTool.grow_shrink')"
             icon="map-buffer"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Buffer'"
             :selected="Boolean(currentDraw) && currentDraw === 'Buffer'"
@@ -100,14 +100,14 @@
           <MapButton
             button-class="border bg-white"
             icon="map-sweep"
-            :title="$t('~~layerTool.clear_drawing')"
+            :title="$t('locationTool.clear_drawing')"
             @click="clearAll"
           />
         </div>
         <base-button
           class="bg-white p-1 border ml-5 flex items-center justify-center px-2 text-crisiscleanup-lightblue-900"
           style="height: 37px"
-          :text="$t('layerTool.upload_layer_plus')"
+          :text="$t('locationTool.upload_layer_plus')"
           :action="
             () => {
               showingUploadModal = true;
@@ -117,7 +117,7 @@
         <modal
           v-if="showingUploadModal"
           modal-classes="bg-white w-3/4 shadow"
-          :title="$t('layerTool.upload_layer')"
+          :title="$t('locationTool.upload_layer')"
           @ok="applyCurrentLayerUpload"
           @cancel="showingUploadModal = false"
         >
@@ -135,7 +135,7 @@
           style="height: 37px"
         >
           <base-checkbox :disabled="worksitesLoading" @input="toggleWorksites">
-            {{ $t('layerTool.show_cases') }}
+            {{ $t('locationTool.show_cases') }}
           </base-checkbox>
         </div>
         <div
@@ -144,7 +144,7 @@
           style="height: 37px"
         >
           <base-checkbox @input="toggleIncidents">
-            {{ $t('layerTool.show_incidents') }}
+            {{ $t('locationTool.show_incidents') }}
           </base-checkbox>
         </div>
       </div>
@@ -159,7 +159,7 @@
         v-if="currentDraw === 'Buffer'"
         class="flex flex-col items-center justify-center"
       >
-        {{ $t('layerTool.expand_or_contract') }}
+        {{ $t('locationTool.expand_or_contract') }}
         <div class="my-1 flex flex-col items-center">
           <input
             v-model="currentBufferDistance"
@@ -169,7 +169,7 @@
             step="1"
           />
           <div class="pr-2">
-            {{ currentBufferDistance }} {{ $t('layerTool.miles') }}
+            {{ currentBufferDistance }} {{ $t('locationTool.miles') }}
           </div>
         </div>
         <base-button
@@ -228,7 +228,7 @@ import { getWorksiteLayer } from '@/utils/map';
 import LayerUploadTool from '@/components/LayerUploadTool';
 
 export default {
-  name: 'LayerTool',
+  name: 'locationTool',
   components: { LayerUploadTool, MapButton },
   mixins: [vueUndoRedo],
   props: {
