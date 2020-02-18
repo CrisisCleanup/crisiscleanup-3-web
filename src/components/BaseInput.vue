@@ -5,7 +5,7 @@
     }}</label>
     <input
       ref="input"
-      :class="inputClasses"
+      :class="[inputClasses, defaultInputClasses]"
       :style="inputStyle"
       :type="type || 'search'"
       :value="value"
@@ -89,6 +89,10 @@ export default {
       type: String,
       default: '',
     },
+    inputClasses: {
+      type: String,
+      default: '',
+    },
     breakGlass: {
       type: Boolean,
       default: false,
@@ -114,11 +118,11 @@ export default {
         'items-center': !this.topLabel,
       };
     },
-    inputClasses() {
+    defaultInputClasses() {
       return {
         'flex-grow': true,
         'p-1': true,
-        'text-base': true,
+        'text-base': !this.inputClasses,
         large: this.size === 'large',
         base: this.size !== 'large',
         'has-icon': Boolean(this.icon),

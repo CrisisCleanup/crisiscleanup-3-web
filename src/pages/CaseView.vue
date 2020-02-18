@@ -290,17 +290,17 @@
         <form ref="timeForm" class="flex items-center justify-between w-full">
           <base-input
             v-model="volunteersToAdd"
-            placeholder="0"
-            input-style="width: 100px; height: 20px"
-            :top-label="$t('~~Volunteers')"
+            input-style="width: 6rem"
+            input-classes="text-xs"
+            :placeholder="$t('~~Volunteers')"
             required
             pattern="\d*"
           />
           <base-input
             v-model="hoursPerVolunteer"
-            placeholder="0h"
-            input-style="width: 100px; height: 20px"
-            :top-label="$t('~~Hours per Volunteer')"
+            :placeholder="$t('~~Hours per Volunteer')"
+            input-classes="text-xs"
+            input-style="width: 11rem;"
             required
             pattern="\d*"
           />
