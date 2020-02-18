@@ -5,7 +5,7 @@
         <DragDrop
           class="border border-dashed"
           :choose-title="$t('dragDrop.choose_files')"
-          :drag-title="$t('~~Drag and Drop files here')"
+          :drag-title="$t('actions.drag_drop_files')"
           @files="handleFileUpload"
         ></DragDrop>
       </div>
