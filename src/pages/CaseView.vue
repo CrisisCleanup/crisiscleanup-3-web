@@ -284,7 +284,7 @@
         </div>
       </section>
       <SectionHeading :count="3" class="mb-3">{{
-        $t('caseForm.report')
+        $t('caseView.report')
       }}</SectionHeading>
       <section class="px-3 pb-3">
         <form ref="timeForm" class="flex items-center justify-between w-full">
