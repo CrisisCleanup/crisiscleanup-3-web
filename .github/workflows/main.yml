@@ -3,16 +3,16 @@ name: CrisisCleanup
 on:
   pull_request:
     paths:
-      - '**/**.json'
-      - '**/**.lock'
+      - '*.json'
+      - 'yarn.lock'
       - '**/**.js'
       - '**/**.vue'
       - '**/**.js.snap'
       - '.github/workflows/*'
   push:
     paths:
-      - '**/**.json'
-      - '**/**.lock'
+      - '*.json'
+      - 'yarn.lock'
       - '**/**.js'
       - '**/**.vue'
       - '**/**.js.snap'
@@ -158,4 +158,3 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           AWS_DEFAULT_REGION: ${{ secrets.aws_default_region }}
         run: yarn deploy-staging
-
