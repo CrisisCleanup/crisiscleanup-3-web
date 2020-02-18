@@ -55,7 +55,7 @@
     "leaflet-draw": "^1.0.4",
     "leaflet-loading": "^0.1.24",
     "leaflet-pixi-overlay": "^1.8.1",
-    "leaflet.gridlayer.googlemutant": "^0.6.4",
+    "leaflet.gridlayer.googlemutant": "^0.8.0",
     "leaflet.heat": "^0.2.0",
     "leaflet.markercluster": "^1.4.1",
     "lodash": "^4.17.15",
