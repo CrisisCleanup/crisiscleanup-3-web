@@ -113,7 +113,7 @@
                 </div>
                 <base-input
                   size="small"
-                  :placeholder="$t('~~Facebook')"
+                  :placeholder="$t('profileVue.facebook')"
                   @input="
                     value => {
                       updateUser(value, 'facebook');
@@ -131,7 +131,7 @@
                 </div>
                 <base-input
                   size="small"
-                  :placeholder="$t('~~Twitter')"
+                  :placeholder="$t('profileVue.twitter')"
                   @input="
                     value => {
                       updateUser(value, 'twitter');
@@ -208,7 +208,7 @@ export default {
           preferences: { ...this.currentUser.preferences, ...{} },
           states: { ...this.currentUser.states, ...{} },
         });
-        await this.$toasted.success(this.$t('~~Successfully Saved User'));
+        await this.$toasted.success(this.$t('profileVue.save_user_success'));
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

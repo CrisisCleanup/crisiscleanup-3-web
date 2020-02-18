@@ -4,7 +4,7 @@
       <div
         class="border-b px-4 py-2 font-semibold flex justify-between items-center"
       >
-        {{ $t('~~General Information') }}
+        {{ $t('profileVue.general_information') }}
         <base-button
           type="primary"
           class="px-4 py-2"
@@ -16,15 +16,15 @@
         <div class="flex">
           <DragDrop
             class="w-48 h-32 text-center mr-6"
-            :choose-title="$t('~~Upload Logo')"
-            :drag-title="$t('~~Drag images PNG, SVG 30KB max')"
+            :choose-title="$t('profileVue.upload_org_logo')"
+            :drag-title="$t('profileVue.logo_specs')"
             @files="handleFileUpload"
           ></DragDrop>
 
           <div class="mt-4">
             <div class="py-1">{{ $t('~~Provide Logo') }}</div>
             <div class="text-xs py-1 text-crisiscleanup-grey-700">
-              {{ $t('~~Please provide you current organization logo') }}
+              {{ $t('profileVue.logo_customizes_website') }}
             </div>
           </div>
         </div>
@@ -33,7 +33,7 @@
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('~Organization Name')"
+              :placeholder="$t('profileVue.organization_name')"
               :value="currentOrganization.name"
               required
               @input="
@@ -43,7 +43,7 @@
               "
             ></base-input>
             <form-select
-              :placeholder="$t('~Organization Type')"
+              :placeholder="$t('profileVue.organization_type')"
               class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
               :options="organizationTypes"
               :value="currentOrganization.type_t"
@@ -59,7 +59,7 @@
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('~Address')"
+              :placeholder="$t('profileVue.address')"
               :value="currentOrganization.address"
               @input="
                 value => {
@@ -69,7 +69,7 @@
             ></base-input>
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('~URL')"
+              :placeholder="$t('profileVue.url')"
               :value="currentOrganization.url"
               @input="
                 value => {
@@ -81,7 +81,7 @@
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('~Email')"
+              :placeholder="$t('profileVue.email')"
               :value="currentOrganization.email"
               @input="
                 value => {
@@ -94,7 +94,7 @@
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('~Phone')"
+              :placeholder="$t('profileVue.phone')"
               :value="currentOrganization.phone"
               @input="
                 value => {
@@ -104,7 +104,7 @@
             ></base-input>
           </div>
           <div class="divider" />
-          <div class="pb-2">Linked Account</div>
+          <div class="pb-2">{{ $t('profileVue.linkedin') }}</div>
           <div class="form-row">
             <div class="w-32 flex items-center">
               <img
@@ -115,7 +115,7 @@
             </div>
             <base-input
               size="small"
-              :placeholder="$t('~~Facebook')"
+              :placeholder="$t('profileVue.facebook')"
               @input="
                 value => {
                   updateOrganization(value, 'facebook');
@@ -133,7 +133,7 @@
             </div>
             <base-input
               size="small"
-              :placeholder="$t('~~Twitter')"
+              :placeholder="$t('profileVue.twitter')"
               @input="
                 value => {
                   updateOrganization(value, 'twitter');
@@ -145,7 +145,7 @@
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('~Primary Contact')"
+              :placeholder="$t('profileVue.primary_contact')"
               :value="currentOrganization.primary_contact"
               @input="
                 value => {
@@ -160,12 +160,12 @@
     <div class="flex mb-32">
       <div class="w-1/2 bg-white shadow mt-6 mr-3">
         <div class="border-b px-8 py-4 font-semibold">
-          {{ $t('~~Primary Response Territory') }}
+          {{ $t('profileVue.primary_response_area') }}
         </div>
         <div class="py-2 flex items-center justify-center">
           <base-button
             v-if="currentOrganization.primary_location"
-            text="Edit Response Area"
+            text="$t('profileVue.edit_response_area')"
             type="primary"
             class="px-2 py-1"
             :action="
@@ -179,7 +179,7 @@
             v-else
             class="px-2 py-1"
             type="primary"
-            text="Add Response Area"
+            text="$t('profileVue.add_response_area')"
             :action="
               () => {
                 showingLocationModal = true;
@@ -192,12 +192,12 @@
       </div>
       <div class="w-1/2 bg-white shadow mt-6 mr-3">
         <div class="border-b px-8 py-4 font-semibold">
-          {{ $t('~~Secondary Response Territory') }}
+          {{ $t('profileVue.secondary_response_area') }}
         </div>
         <div class="py-2 flex items-center justify-center">
           <base-button
             v-if="currentOrganization.secondary_location"
-            text="Edit Response Area"
+            text="$t('profileVue.edit_response_area')"
             type="primary"
             class="px-2 py-1"
             :action="
@@ -211,7 +211,7 @@
             v-else
             class="px-2 py-1"
             type="primary"
-            text="Add Response Area"
+            text="$t('profileVue.add_response_area')"
             :action="
               () => {
                 showingLocationModal = true;
@@ -224,7 +224,7 @@
       </div>
       <modal
         v-if="showingLocationModal"
-        :title="$t('Select Location')"
+        :title="$t('profileVue.select_location')"
         modal-style="height: 70%"
         modal-classes="w-3/5"
         @close="showingLocationModal = false"
