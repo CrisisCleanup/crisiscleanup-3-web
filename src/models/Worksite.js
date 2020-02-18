@@ -268,10 +268,13 @@ export default class Worksite extends Model {
       },
       // TODO: handle exceptions and ensure a value is returned
       // eslint-disable-next-line consistent-return
-      downloadWorksite(id) {
+      downloadWorksite(ids) {
+        if (!ids.length) {
+          throw Error('Ids are required');
+        }
         try {
           return this.request({
-            url: `/worksites/${id}`,
+            url: `/worksites?id__in=${ids.join(',')}`,
             method: 'GET',
             responseType: 'blob',
             headers: { Accept: 'text/csv' },

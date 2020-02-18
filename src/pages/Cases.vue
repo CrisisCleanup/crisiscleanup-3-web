@@ -194,7 +194,11 @@
                       <base-button
                         class="text-base font-thin mx-4"
                         :text="$t('actions.download')"
-                        :action="() => batchAction(downloadWorksite)"
+                        :action="
+                          () => {
+                            downloadSelectedWorksites();
+                          }
+                        "
                         data-cy="worksiteview_actionBatchDownload"
                       />
                     </li>
@@ -1125,8 +1129,16 @@ export default {
     },
     async downloadWorksite(e, siteId) {
       this.spinning = true;
-      const csv = await Worksite.api().downloadWorksite(
+      const csv = await Worksite.api().downloadWorksite([
         siteId || this.currentWorksite.id,
+      ]);
+      forceFileDownload(csv.response);
+      this.spinning = false;
+    },
+    async downloadSelectedWorksites() {
+      this.spinning = true;
+      const csv = await Worksite.api().downloadWorksite(
+        Array.from(this.selectedTableItems),
       );
       forceFileDownload(csv.response);
       this.spinning = false;
