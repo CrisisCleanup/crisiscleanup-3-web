@@ -2,20 +2,20 @@
   <div class="flex w-3/4 m-auto">
     <div class="mt-6 px-12 pb-6 w-full bg-white shadow">
       <div class="flex justify-between my-4">
-        {{ $t('usersVue.affiliates') }}
+        {{ $t('affiliatesVue.affiliates') }}
         <base-button
           :action="
             () => {
               showingAffiliateModal = true;
             }
           "
-          :text="$t('~~Add Affiliate')"
+          :text="$t('affiliatesVue.add_affiliate')"
           type="primary"
           class="px-2 py-1"
         />
         <modal
           v-if="showingAffiliateModal"
-          :title="$t('~~Request to be affiliated')"
+          :title="$t('affiliatesVue.request_affiliate')"
           modal-classes="w-1/2"
           @close="
             selectedAffiliate = null;
@@ -24,7 +24,7 @@
         >
           <div class="px-6 py-3">
             <div class="font-xs my-2">
-              {{ $t('Request to be affiliated') }}
+              {{ $t('affiliatesVue.request_affiliate') }}
             </div>
             <autocomplete
               class="form-field"
@@ -32,7 +32,7 @@
               :suggestions="organizationResults"
               display-property="name"
               size="large"
-              placeholder="$t('locationVue.search_for_organization')"
+              placeholder="$t('affiliatesVue.search_for_organization')"
               clear-on-selected
               @selected="
                 value => {
@@ -43,7 +43,7 @@
             />
             <div class="my-3">
               <div class="font-xs my-2">
-                {{ $t('Reason for requesting affiliation') }}
+                {{ $t('affiliatesVue.request_reason') }}
               </div>
               <textarea rows="4" class="block w-full border outline-none" />
             </div>
