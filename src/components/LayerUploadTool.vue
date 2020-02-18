@@ -3,6 +3,7 @@
     <div class="p-12 w-full">
       <div class="container">
         <DragDrop
+          class="border border-dashed"
           :choose-title="$t('dragDrop.choose_files')"
           :drag-title="$t('~~Drag and Drop files here')"
           @files="handleFileUpload"

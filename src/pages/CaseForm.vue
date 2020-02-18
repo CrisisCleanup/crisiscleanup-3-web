@@ -9,7 +9,7 @@
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
-      <div class="form-field">
+      <section class="form-field">
         <WorksiteSearchInput
           :value="worksite.name"
           :suggestions="[
@@ -31,7 +31,7 @@
           @selectedExisting="onWorksiteSelect"
           @search="worksitesSearch"
         />
-      </div>
+      </section>
       <div class="text-base font-semibold my-1 mx-3">
         {{ $t('formLabels.location') }}
       </div>

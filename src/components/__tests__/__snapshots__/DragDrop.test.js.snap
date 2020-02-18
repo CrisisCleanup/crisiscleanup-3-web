@@ -2,7 +2,7 @@
 
 exports[`DragDrop should render correctly and match snapshot 1`] = `
 <div
-  class="border border-dashed flex items-center justify-center"
+  class="flex items-center justify-center"
 >
   <form
     class="w-full h-full"
