@@ -13,7 +13,7 @@
       >
         <template #result="slotProps">
           <div
-            class="flex justify-between text-sm p-2 cursor-pointer hover:bg-gray-100 border-b"
+            class="flex justify-between text-sm p-2 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
           >
             <span>{{ slotProps.suggestion.item.name }}</span>
             <span class="text-crisiscleanup-grey-700">{{

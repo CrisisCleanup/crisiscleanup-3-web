@@ -15,9 +15,9 @@
       </div>
       <div
         v-if="filtersCount > 0"
-        class="flex items-center justify-between bg-gray-100 p-1 px-2"
+        class="flex items-center justify-between bg-crisiscleanup-light-grey p-1 px-2"
       >
-        <div class="applied-filters flex flex-wrap justify-start bg-gray-100">
+        <div class="applied-filters flex flex-wrap justify-start bg-crisiscleanup-light-grey">
           <template v-for="(value, key) in filters.fields">
             <tag
               v-if="value"
@@ -220,7 +220,7 @@
               v-for="f in incidentTypes"
               :key="f.key"
               :header="f.name_t"
-              class="p-2 px-4 mb-2 bg-gray-100"
+              class="p-2 px-4 mb-2 bg-crisiscleanup-light-grey"
             >
               <div class="flex items-center justify-between">
                 <base-checkbox v-model="filters.fields[f.key]">{{

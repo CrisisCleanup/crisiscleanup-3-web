@@ -139,13 +139,13 @@ export default {
     renderSuggestion(suggestion) {
       if (suggestion.name === 'geocoder') {
         return (
-          <div class="flex flex-col text-sm p-1 cursor-pointer hover:bg-gray-100 border-b">
+          <div class="flex flex-col text-sm p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b">
             <div>{suggestion.item.description}</div>
           </div>
         );
       }
       return (
-        <div class="flex items-center p-1 cursor-pointer hover:bg-gray-100 border-b">
+        <div class="flex items-center p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b">
           <span>{this.getWorkImage(suggestion.item.work_types)}</span>
           <div
             className="flex flex-col text-sm"
@@ -239,6 +239,10 @@ export default {
 
 .has-tooltip #autosuggest__input {
   width: 100%;
+}
+
+#autosuggest__input::placeholder {
+  @apply text-crisiscleanup-dark-200;
 }
 
 .autosuggest__results {

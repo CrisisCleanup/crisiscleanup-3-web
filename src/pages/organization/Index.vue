@@ -52,7 +52,7 @@
         <span class="pt-2">{{ $t('orgIndex.layer_library') }}</span>
       </router-link>
     </div>
-    <div class="flex-grow overflow-auto bg-gray-100">
+    <div class="flex-grow overflow-auto bg-crisiscleanup-light-grey">
       <router-view></router-view>
     </div>
   </div>

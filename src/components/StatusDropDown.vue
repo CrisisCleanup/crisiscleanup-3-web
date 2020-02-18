@@ -22,7 +22,7 @@
         v-for="status in statuses"
         :key="status.id"
         :value="status.status"
-        class="cursor-pointer py-1 hover:bg-gray-100"
+        class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey"
         :class="{ selected: currentItem === status.selectionKey }"
       >
         <div

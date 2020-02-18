@@ -13,19 +13,19 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
     <div>
       status.open_unassigned
     </div>
-     
+
     <font-awesome-icon-stub
       class="mx-1"
       icon="chevron-down"
       size="sm"
     />
   </div>
-   
+
   <div
     class="bg-white border outline-none h-84 w-56 overflow-auto"
   >
     <div
-      class="cursor-pointer py-1 hover:bg-gray-100 selected"
+      class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey selected"
       value="open_unassigned"
     >
       <div
@@ -35,14 +35,14 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
           class="mx-1"
           color="#fab92e"
         />
-         
+
         <div>
           status.open_unassigned
         </div>
       </div>
     </div>
     <div
-      class="cursor-pointer py-1 hover:bg-gray-100"
+      class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey"
       value="open_assigned"
     >
       <div
@@ -52,7 +52,7 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
           class="mx-1"
           color="#f0f032"
         />
-         
+
         <div>
           status.open_assigned
         </div>
@@ -75,19 +75,19 @@ exports[`StatusDropDown should render correctly and match snapshot when using ic
     <div
       class="case-svg-container mr-1"
     />
-     
+
     <font-awesome-icon-stub
       class="mx-1"
       icon="chevron-down"
       size="sm"
     />
   </div>
-   
+
   <div
     class="bg-white border outline-none h-84 w-56 overflow-auto"
   >
     <div
-      class="cursor-pointer py-1 hover:bg-gray-100 selected"
+      class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey selected"
       value="open_unassigned"
     >
       <div
@@ -97,14 +97,14 @@ exports[`StatusDropDown should render correctly and match snapshot when using ic
           class="mx-1"
           color="#fab92e"
         />
-         
+
         <div>
           status.open_unassigned
         </div>
       </div>
     </div>
     <div
-      class="cursor-pointer py-1 hover:bg-gray-100"
+      class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey"
       value="open_assigned"
     >
       <div
@@ -114,7 +114,7 @@ exports[`StatusDropDown should render correctly and match snapshot when using ic
           class="mx-1"
           color="#f0f032"
         />
-         
+
         <div>
           status.open_assigned
         </div>

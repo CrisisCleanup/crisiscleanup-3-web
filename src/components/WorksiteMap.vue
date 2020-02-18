@@ -7,7 +7,7 @@
     ></div>
     <div
       v-if="mapLoading"
-      class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center"
+      class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
     >
       <spinner />
     </div>

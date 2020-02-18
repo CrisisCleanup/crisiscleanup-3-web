@@ -2,7 +2,7 @@
 
 exports[`Dashboard should render correctly and match snapshot 1`] = `
 <div
-  class="p-6 bg-gray-100 h-full overflow-auto relative"
+  class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto relative"
 >
   <div>
     <div
@@ -12,88 +12,88 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         class="w-1/4 m-4 p-6 shadow text-base bg-white"
       >
         <div>
-          
+
           dashboard.my_claimed_cases (Texas Flooding, Oct 2018)
-        
+
         </div>
-         
+
         <div
           class="font-bold"
         >
-          
-          
-        
+
+
+
         </div>
       </div>
-       
+
       <div
         class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
       >
         <div>
-          
+
           dashboard.total_claimed (Texas Flooding, Oct 2018)
-        
+
         </div>
-         
+
         <div
           class="font-bold"
         >
-          
+
           0 (NaN
           of Total)
-        
+
         </div>
-         
+
         <div
           class="bottom-0 left-0 absolute border-b-4 border-blue-600"
         />
       </div>
-       
+
       <div
         class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
       >
         <div>
-          
+
           dashboard.in_progress (Texas Flooding, Oct 2018)
-        
+
         </div>
-         
+
         <div
           class="font-bold"
         >
-          
+
           0 (NaN
           of Claimed)
-        
+
         </div>
-         
+
         <div
           class="bottom-0 left-0 absolute border-b-4 border-blue-600"
         />
       </div>
-       
+
       <div
         class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
       >
         <div>
           dashboard.closed (Texas Flooding, Oct 2018)
         </div>
-         
+
         <div
           class="font-bold"
         >
-          
+
           0 (NaN
           of Claimed)
-        
+
         </div>
-         
+
         <div
           class="bottom-0 left-0 absolute border-b-4 border-green-600"
         />
       </div>
     </div>
-     
+
     <div
       class="flex"
     >
@@ -103,11 +103,11 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         <div
           class="py-4 px-4 text-gray-500 border-b"
         >
-          
+
           dashboard.my_cases
-        
+
         </div>
-         
+
         <div
           class="p-4"
         >
@@ -119,13 +119,13 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
             >
               <!---->
-               
+
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.no
-      
+
                 <div>
                   <ccu-icon-stub
                     alt="actions.sortable"
@@ -137,17 +137,17 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.work_type
-      
+
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.name
-      
+
                 <div>
                   <ccu-icon-stub
                     alt="actions.sortable"
@@ -159,41 +159,41 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.full_address
-      
+
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.phone
-      
+
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      
-      
+
+
+
                 <!---->
               </div>
             </div>
-             
+
             <div
               class="body bg-white relative"
               style="max-height: 600px; overflow: auto; height: 300px;"
             >
               <!---->
-               
+
               <div
-                class="hover:bg-gray-100"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
-                 
+
                 <div
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
@@ -238,7 +238,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                         type="go-case"
                       />
                     </router-link-stub>
-                     
+
                     <ccu-icon-stub
                       alt="actions.print"
                       class="p-1 py-2 w-8"
@@ -249,11 +249,11 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-gray-100"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
-                 
+
                 <div
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
@@ -298,7 +298,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                         type="go-case"
                       />
                     </router-link-stub>
-                     
+
                     <ccu-icon-stub
                       alt="actions.print"
                       class="p-1 py-2 w-8"
@@ -309,11 +309,11 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-gray-100"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
-                 
+
                 <div
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
@@ -358,7 +358,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                         type="go-case"
                       />
                     </router-link-stub>
-                     
+
                     <ccu-icon-stub
                       alt="actions.print"
                       class="p-1 py-2 w-8"
@@ -369,11 +369,11 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-gray-100"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
-                 
+
                 <div
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
@@ -418,7 +418,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                         type="go-case"
                       />
                     </router-link-stub>
-                     
+
                     <ccu-icon-stub
                       alt="actions.print"
                       class="p-1 py-2 w-8"
@@ -429,11 +429,11 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-gray-100"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
-                 
+
                 <div
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
@@ -478,7 +478,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                         type="go-case"
                       />
                     </router-link-stub>
-                     
+
                     <ccu-icon-stub
                       alt="actions.print"
                       class="p-1 py-2 w-8"
@@ -489,11 +489,11 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-gray-100"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
-                 
+
                 <div
                   class="flex items-center p-2 border-b cursor-pointer"
                 >
@@ -538,7 +538,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                         type="go-case"
                       />
                     </router-link-stub>
-                     
+
                     <ccu-icon-stub
                       alt="actions.print"
                       class="p-1 py-2 w-8"
@@ -549,12 +549,12 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
             </div>
-             
+
             <!---->
           </div>
         </div>
       </div>
-       
+
       <div
         class="w-2/5 m-4 p-6 shadow bg-white"
       >
@@ -564,22 +564,22 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           <div
             class="text-center text-2xl w-2/3 my-3"
           >
-            
+
             dashboard.invite_teammates
-          
+
           </div>
-           
+
           <div
             class="text-justify w-5/6 my-3"
           >
             <div
               class="my-3"
             >
-              
+
               inviteTeammates.invite_teammates_instructions
-            
+
             </div>
-             
+
             <base-input-stub
               class="flex-grow my-3"
               placeholder="Emails"
@@ -587,7 +587,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               value=""
             />
           </div>
-           
+
           <base-button-stub
             action="function () { [native code] }"
             class="px-8 py-3"
@@ -597,7 +597,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         </div>
       </div>
     </div>
-     
+
     <div
       class="flex"
     >
@@ -607,11 +607,11 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         <div
           class="py-4 px-4 text-gray-500 border-b"
         >
-          
+
           dashboard.pending_cases
-        
+
         </div>
-         
+
         <div
           class="py-4 px-4 border-b flex items-center"
         >
@@ -619,18 +619,18 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="mr-2 border-r pr-2"
             text="Inbound Requests"
           />
-           
+
           <base-button-stub
             class="mr-2 border-r pr-2 text-primary-dark"
             text="Outbound Requests"
           />
-           
+
           <base-button-stub
             class="mr-2 text-primary-dark"
             text="Archived Requests"
           />
         </div>
-         
+
         <div
           class="p-4"
         >
@@ -642,13 +642,13 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               style="display: grid; grid-template-columns: 80px 10% 0.5fr 1fr 1fr 1fr 1fr;"
             >
               <!---->
-               
+
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.no
-      
+
                 <div>
                   <ccu-icon-stub
                     alt="actions.sortable"
@@ -660,67 +660,67 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.work_type
-      
+
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.status
-      
+
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.org_label
-      
+
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.last_action
-      
+
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
+
       dashboard.next_action
-      
+
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      
-      
+
+
+
                 <!---->
               </div>
             </div>
-             
+
             <div
               class="body bg-white relative"
               style="max-height: 600px; overflow: auto; height: 300px;"
             >
               <!---->
-               
+
             </div>
-             
+
             <!---->
           </div>
         </div>
       </div>
     </div>
-     
+
     <div
       class="flex"
     >
@@ -730,11 +730,11 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         <div
           class="py-4 px-4 text-gray-500 border-b"
         >
-          
+
           dashboard.worksite_completion
-        
+
         </div>
-         
+
         <div
           class="p-4"
         >
@@ -749,7 +749,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       </div>
     </div>
   </div>
-   
+
   <!---->
 </div>
 `;

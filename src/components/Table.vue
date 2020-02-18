@@ -51,7 +51,7 @@
     <div class="body bg-white relative" :style="gridStyleBody">
       <div
         v-if="loading"
-        class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center"
+        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
       >
         <spinner />
       </div>
@@ -59,8 +59,8 @@
         v-for="item of data"
         :key="item.id"
         :style="gridStyleRow"
-        class="hover:bg-gray-100"
-        :class="{ 'bg-gray-100': selectedItems.has(item.id) }"
+        class="hover:bg-crisiscleanup-light-grey"
+        :class="{ 'bg-crisiscleanup-light-grey': selectedItems.has(item.id) }"
         @click="rowClick(item, $event)"
       >
         <div v-if="enableSelection" class="flex items-center p-2 border-b">

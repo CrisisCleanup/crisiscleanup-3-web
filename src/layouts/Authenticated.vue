@@ -43,12 +43,12 @@
               <div slot="popover" class="flex flex-col">
                 <router-link
                   to="/profile"
-                  class="router-link text-base p-2 hover:bg-gray-100"
+                  class="router-link text-base p-2 hover:bg-crisiscleanup-light-grey"
                   >Profile</router-link
                 >
                 <!--                <button v-can="['update_portal_settings']">New</button>-->
                 <div
-                  class="text-base p-2 hover:bg-gray-100 cursor-pointer"
+                  class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
                   @click="
                     () => {
                       $store.dispatch('auth/logout');
@@ -69,7 +69,7 @@
       <div
         v-else
         style="z-index: 1001;"
-        class="absolute bottom-0 left-0 right-0 top-0 bg-gray-100 opacity-75 flex items-center justify-center"
+        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
       >
         <div class="flex flex-col items-center">
           <spinner :message="$t('info.loading')" />
