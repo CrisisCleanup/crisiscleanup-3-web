@@ -225,7 +225,10 @@
             </div>
           </div>
         </div>
-        <div class="flex-grow bg-crisiscleanup-light-grey" style="display: grid">
+        <div
+          class="flex-grow bg-crisiscleanup-light-grey"
+          style="display: grid"
+        >
           <template v-if="showingMap">
             <WorksiteMap
               :key="JSON.stringify(currentQuery)"

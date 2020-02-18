@@ -17,7 +17,9 @@
         v-if="filtersCount > 0"
         class="flex items-center justify-between bg-crisiscleanup-light-grey p-1 px-2"
       >
-        <div class="applied-filters flex flex-wrap justify-start bg-crisiscleanup-light-grey">
+        <div
+          class="applied-filters flex flex-wrap justify-start bg-crisiscleanup-light-grey"
+        >
           <template v-for="(value, key) in filters.fields">
             <tag
               v-if="value"

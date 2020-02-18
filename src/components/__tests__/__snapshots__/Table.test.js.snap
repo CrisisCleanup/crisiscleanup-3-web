@@ -65,37 +65,37 @@ exports[`Table should render correctly and match snapshot 1`] = `
     style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
   >
     <!---->
-
+     
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
-
+      
       One
-
+      
       <!---->
     </div>
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
-
+      
       Two
-
+      
       <!---->
     </div>
   </div>
-
+   
   <div
     class="body bg-white relative"
     style="max-height: 600px; overflow: auto;"
   >
     <!---->
-
+     
     <div
       class="hover:bg-crisiscleanup-light-grey"
       style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
     >
       <!---->
-
+       
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
@@ -112,7 +112,7 @@ exports[`Table should render correctly and match snapshot 1`] = `
       style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
     >
       <!---->
-
+       
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
@@ -125,7 +125,7 @@ exports[`Table should render correctly and match snapshot 1`] = `
       </div>
     </div>
   </div>
-
+   
   <!---->
 </div>
 `;
@@ -145,42 +145,42 @@ exports[`Table should render correctly with selection and pagination 1`] = `
       <label
         class="checkbox-container mb-5"
       >
-
+         
         <input
           class="checkmark-input"
           type="checkbox"
         />
-
+         
         <span
           class="checkmark"
         />
       </label>
     </div>
-
+     
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
-
+      
       One
-
+      
       <!---->
     </div>
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
-
+      
       Two
-
+      
       <!---->
     </div>
   </div>
-
+   
   <div
     class="body bg-white relative"
     style="max-height: 600px; overflow: auto;"
   >
     <!---->
-
+     
     <div
       class="hover:bg-crisiscleanup-light-grey"
       style="display: grid; grid-template-columns: 35px 0.5fr 1.5fr;"
@@ -192,18 +192,18 @@ exports[`Table should render correctly with selection and pagination 1`] = `
           class="checkbox-container mb-5"
           data-cy="tableview_actionSelect"
         >
-
+           
           <input
             class="checkmark-input"
             type="checkbox"
           />
-
+           
           <span
             class="checkmark"
           />
         </label>
       </div>
-
+       
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
@@ -226,18 +226,18 @@ exports[`Table should render correctly with selection and pagination 1`] = `
           class="checkbox-container mb-5"
           data-cy="tableview_actionSelect"
         >
-
+           
           <input
             class="checkmark-input"
             type="checkbox"
           />
-
+           
           <span
             class="checkmark"
           />
         </label>
       </div>
-
+       
       <div
         class="flex items-center p-2 border-b cursor-pointer"
       >
@@ -250,7 +250,7 @@ exports[`Table should render correctly with selection and pagination 1`] = `
       </div>
     </div>
   </div>
-
+   
   <!---->
 </div>
 `;
