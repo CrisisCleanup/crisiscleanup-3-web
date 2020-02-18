@@ -241,6 +241,11 @@ export default {
         const loader = new Loader();
         loader.add('circle', '/circle.svg');
         loader.load(() => {
+          const container = L.DomUtil.get('map');
+          if (container !== null) {
+            container._leaflet_id = null;
+          }
+
           if (!this.map) {
             this.map = L.map('map', { zoomControl: false }).setView(
               [31.0, -100.0],
