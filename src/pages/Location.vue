@@ -159,7 +159,7 @@
           </div>
         </div>
         <div v-if="selectedOrganization">
-          <div class="text-base">{{ $t('~~Organization Incidents') }}</div>
+          <div class="text-base">{{ $t('locationVue.organization_incidents') }}</div>
           <div class="h-48 overflow-auto">
             <div v-for="incident in selectedOrganization.incident_list">
               {{ incident.name }}
@@ -179,7 +179,7 @@
           />
           <base-button
             v-if="isNew"
-            :text="$t('~~Save and New')"
+            :text="$t('actions.save_and_new')"
             class="p-2"
             type="primary"
             :action="
@@ -307,7 +307,7 @@ export default {
         delete: this.currentLocation.id,
       });
       this.loading = false;
-      await this.$toasted.success(this.$t('~~Location Deleted'));
+      await this.$toasted.success(this.$t('locationVue.location_deleted'));
       await this.$router.push('/locations/new');
     },
     setCurrentLocation(location) {
@@ -329,7 +329,7 @@ export default {
       }
 
       if (!this.currentPolygon) {
-        this.$toasted.error('~~No valid drawing found');
+        this.$toasted.error('locationVue.no_valid_drawing_found');
         return;
       }
 
@@ -386,7 +386,7 @@ export default {
             );
           }
         }
-        await this.$toasted.success(this.$t('~~Location Saved'));
+        await this.$toasted.success(this.$t('locationVue.location_saved'));
 
         if (goToNew) {
           this.currentLocation = new Location();
