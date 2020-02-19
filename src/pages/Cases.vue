@@ -206,7 +206,11 @@
                       <base-button
                         class="text-base font-thin mx-4"
                         :text="$t('actions.print')"
-                        :action="() => batchAction(printWorksite)"
+                        :action="
+                          e => {
+                            printWorksite(e, selectedTableItems);
+                          }
+                        "
                         data-cy="worksiteview_actionBatchPrint"
                       />
                     </li>
@@ -589,6 +593,11 @@
         @reloadMap="reloadMap"
         @jumpToCase="jumpToCase"
       />
+      <div v-else class="h-full w-full items-center justify-center">
+        <div class="flex flex-col items-center">
+          <spinner />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -1121,11 +1130,17 @@ export default {
     },
     async printWorksite(e, siteId) {
       this.spinning = true;
-      const pdf = await Worksite.api().printWorksite(
-        siteId || this.currentWorksite.id,
+      const siteIds =
+        typeof siteId === 'object'
+          ? Array.from(siteId)
+          : [this.currentWorksite.id];
+      const file = await Worksite.api().downloadWorksite(
+        siteIds,
+        'application/pdf',
       );
-      forceFileDownload(pdf.response);
+      forceFileDownload(file.response);
       this.spinning = false;
+      this.reloadTable();
     },
     async downloadWorksite(e, siteId) {
       this.spinning = true;
@@ -1133,8 +1148,8 @@ export default {
         typeof siteId === 'object'
           ? Array.from(siteId)
           : [this.currentWorksite.id];
-      const csv = await Worksite.api().downloadWorksite(siteIds);
-      forceFileDownload(csv.response);
+      const file = await Worksite.api().downloadWorksite(siteIds);
+      forceFileDownload(file.response);
       this.spinning = false;
       this.reloadTable();
     },
