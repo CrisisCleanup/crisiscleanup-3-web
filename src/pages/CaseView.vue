@@ -319,7 +319,9 @@
                 <th class="text-left border p-1 break-all">
                   {{ $t('caseView.entered_by') }}
                 </th>
-                <th class="border p-1 break-all">{{ $t('caseView.volunteers') }}</th>
+                <th class="border p-1 break-all">
+                  {{ $t('caseView.volunteers') }}
+                </th>
                 <th class="border p-1 break-all">
                   {{ $t('caseView.hours_per_volunteer') }}
                 </th>
