@@ -619,6 +619,7 @@ import { getQueryString } from '@/utils/urls';
 import { getColorForStatus } from '@/filters';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import { forceFileDownload } from '@/utils/downloads';
+import { getErrorMessage } from '../utils/errors';
 
 export default {
   name: 'Cases',
@@ -1134,13 +1135,18 @@ export default {
         typeof siteId === 'object'
           ? Array.from(siteId)
           : [this.currentWorksite.id];
-      const file = await Worksite.api().downloadWorksite(
-        siteIds,
-        'application/pdf',
-      );
-      forceFileDownload(file.response);
-      this.spinning = false;
-      this.reloadTable();
+      try {
+        const file = await Worksite.api().downloadWorksite(
+          siteIds,
+          'application/pdf',
+        );
+        forceFileDownload(file.response);
+        this.reloadTable();
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.spinning = false;
+      }
     },
     async downloadWorksite(e, siteId) {
       this.spinning = true;
@@ -1148,10 +1154,15 @@ export default {
         typeof siteId === 'object'
           ? Array.from(siteId)
           : [this.currentWorksite.id];
-      const file = await Worksite.api().downloadWorksite(siteIds);
-      forceFileDownload(file.response);
-      this.spinning = false;
-      this.reloadTable();
+      try {
+        const file = await Worksite.api().downloadWorksite(siteIds);
+        forceFileDownload(file.response);
+        this.reloadTable();
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.spinning = false;
+      }
     },
     // TODO: refactor, id param is unused
     // eslint-disable-next-line no-unused-vars
