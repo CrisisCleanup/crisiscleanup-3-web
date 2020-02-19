@@ -195,8 +195,8 @@
                         class="text-base font-thin mx-4"
                         :text="$t('actions.download')"
                         :action="
-                          () => {
-                            downloadSelectedWorksites();
+                          e => {
+                            downloadWorksite(e, selectedTableItems);
                           }
                         "
                         data-cy="worksiteview_actionBatchDownload"
@@ -1129,19 +1129,14 @@ export default {
     },
     async downloadWorksite(e, siteId) {
       this.spinning = true;
-      const csv = await Worksite.api().downloadWorksite([
-        siteId || this.currentWorksite.id,
-      ]);
+      const siteIds =
+        typeof siteId === 'object'
+          ? Array.from(siteId)
+          : [this.currentWorksite.id];
+      const csv = await Worksite.api().downloadWorksite(siteIds);
       forceFileDownload(csv.response);
       this.spinning = false;
-    },
-    async downloadSelectedWorksites() {
-      this.spinning = true;
-      const csv = await Worksite.api().downloadWorksite(
-        Array.from(this.selectedTableItems),
-      );
-      forceFileDownload(csv.response);
-      this.spinning = false;
+      this.reloadTable();
     },
     // TODO: refactor, id param is unused
     // eslint-disable-next-line no-unused-vars
