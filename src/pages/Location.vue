@@ -13,7 +13,7 @@
           {{ $t('actions.new_location') }}
         </div>
         <div v-else class="font-bold">
-          {{ $t('actions.edit') }} {{ currentLocation.name }}
+          {{ $t('actions.edit') }} {{ currentLocation && currentLocation.name }}
         </div>
         <div class="flex">
           <ccu-icon
@@ -214,6 +214,7 @@ import Organization from '@/models/Organization';
 import Incident from '@/models/Incident';
 import LocationTool from '@/components/LocationTool';
 import { forceFileDownload } from '@/utils/downloads';
+import { getErrorMessage } from '@/utils/errors';
 
 export default {
   name: 'Location',
@@ -292,11 +293,20 @@ export default {
         this.loading = false;
       }
     } else {
-      this.currentLocation = new Location();
+      this.reset();
     }
     this.loading = false;
   },
   methods: {
+    reset() {
+      this.currentLocation = new Location();
+      this.currentPolygon = null;
+      this.selectedIncidentId = null;
+      this.selectedOrganization = null;
+      if (this.$refs.locationTool) {
+        this.$refs.locationTool.clearAll();
+      }
+    },
     async downloadCurrentLocation() {
       this.loading = true;
       const shapefile = await Location.api().download(this.currentLocation.id);
@@ -305,12 +315,18 @@ export default {
     },
     async deleteCurrentLocation() {
       this.loading = true;
-      await Location.api().delete(`/locations/${this.currentLocation.id}`, {
-        delete: this.currentLocation.id,
-      });
-      this.loading = false;
-      await this.$toasted.success(this.$t('locationVue.location_deleted'));
-      await this.$router.push('/locations/new');
+      try {
+        await Location.api().delete(`/locations/${this.currentLocation.id}`, {
+          delete: this.currentLocation.id,
+        });
+        await this.$toasted.success(this.$t('locationVue.location_deleted'));
+        this.reset();
+        await this.$router.push('/locations/new');
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.loading = false;
+      }
     },
     setCurrentLocation(location) {
       this.currentPolygon = location;
@@ -391,11 +407,7 @@ export default {
         await this.$toasted.success(this.$t('locationVue.location_saved'));
 
         if (goToNew) {
-          this.currentLocation = new Location();
-          this.currentPolygon = null;
-          this.selectedIncidentId = null;
-          this.selectedOrganization = null;
-          this.$refs.locationTool.clearAll();
+          this.reset();
         } else {
           const locationId = response.response.data.id;
           await Location.api().fetchById(locationId);

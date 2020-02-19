@@ -619,7 +619,7 @@ import { getQueryString } from '@/utils/urls';
 import { getColorForStatus } from '@/filters';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import { forceFileDownload } from '@/utils/downloads';
-import { getErrorMessage } from '../utils/errors';
+import { getErrorMessage } from '@/utils/errors';
 
 export default {
   name: 'Cases',
