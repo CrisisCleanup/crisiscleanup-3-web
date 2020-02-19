@@ -22,8 +22,8 @@ describe('Cases Page', () => {
       url: `${Cypress.env('API_URL')}/worksites/*`,
     }).as('getWorksite');
     cy.route({
-      method: 'POST',
-      url: `${Cypress.env('API_URL')}/worksites/*/download`,
+      method: 'GET',
+      url: `${Cypress.env('API_URL')}/worksites?id__in=*`,
     }).as('printWorksite');
 
     cy.visit('/incident/158/cases/new');
