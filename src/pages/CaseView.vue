@@ -313,21 +313,21 @@
         </form>
         <div v-if="worksite.total_volunteers" class="my-2">
           <div class="my-1">{{ $t('caseView.volunteer_hour_reports') }}</div>
-          <table class="table-auto text-xs w-full">
+          <table class="table-fixed text-xs w-full">
             <thead>
               <tr>
-                <th class="text-left border p-1">
+                <th class="text-left border p-1 break-all">
                   {{ $t('caseView.entered_by') }}
                 </th>
-                <th class="border p-1">{{ $t('caseView.volunteers') }}</th>
-                <th class="border p-1">
+                <th class="border p-1 break-all">{{ $t('caseView.volunteers') }}</th>
+                <th class="border p-1 break-all">
                   {{ $t('caseView.hours_per_volunteer') }}
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="entry in timeEnteredByMyOrganization">
-                <td class="text-left border p-1">
+                <td class="text-left border p-1 break-all">
                   {{ entry.created_by_name }}
                 </td>
                 <td class="text-right border p-1">{{ entry.volunteers }}</td>
