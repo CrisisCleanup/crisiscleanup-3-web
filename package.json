@@ -43,7 +43,7 @@
     "d3-array": "^1.2.4",
     "d3-color": "^1.2.3",
     "d3-interpolate": "^1.4.0",
-    "d3-quadtree": "^1.0.5",
+    "d3-quadtree": "^1.0.7",
     "d3-scale": "^3.2.1",
     "detect-browser-language": "0.0.2",
     "es6-promise": "^4.2.8",
