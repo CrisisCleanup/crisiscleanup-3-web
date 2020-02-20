@@ -686,10 +686,14 @@ export default {
         await this.$toasted.error(getErrorMessage(error));
       }
     },
-    async requestWorkTypes(workTypes) {
+    async requestWorkTypes({ workTypes, reason }) {
       try {
         this.requestingWorkTypes = false;
-        await Worksite.api().requestWorksite(this.worksite.id, workTypes);
+        await Worksite.api().requestWorksite(
+          this.worksite.id,
+          workTypes,
+          reason,
+        );
         await Worksite.api().fetch(this.worksite.id);
         await this.getWorksiteRequests();
         this.$emit('reloadMap', this.worksite.id);

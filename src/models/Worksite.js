@@ -183,11 +183,12 @@ export default class Worksite extends Model {
         }
         return this.post(`/worksites/${id}/unclaim`, data, { save: false });
       },
-      requestWorksite(id, workTypes) {
+      requestWorksite(id, workTypes, reason) {
         return this.post(
           `/worksites/${id}/request_take`,
           {
             work_types: workTypes,
+            requested_reason: reason,
           },
           { save: false },
         );
