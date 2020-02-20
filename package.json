@@ -37,7 +37,7 @@
     "@vuex-orm/plugin-axios": "^0.9.1",
     "axios": "^0.19.0",
     "chart.js": "^2.9.3",
-    "circle-to-polygon": "^1.0.2",
+    "circle-to-polygon": "^2.0.1",
     "concaveman": "^1.1.1",
     "core-js": "^2.6.5",
     "d3-array": "^1.2.4",
