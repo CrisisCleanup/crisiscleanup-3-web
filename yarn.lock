@@ -13281,9 +13281,10 @@ vue-undo-redo-stack@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/vue-undo-redo-stack/-/vue-undo-redo-stack-1.0.0.tgz#76e3d57cb1bc21462d23d2a9eea7ad8f27d55ac6"
 
-vue2-gmap-custom-marker@^5.5.4:
-  version "5.5.4"
-  resolved "https://registry.yarnpkg.com/vue2-gmap-custom-marker/-/vue2-gmap-custom-marker-5.5.4.tgz#31873937fa5bbfb57cfcaa4f226de8272ea462c4"
+vue2-gmap-custom-marker@^5.5.10:
+  version "5.5.10"
+  resolved "https://registry.yarnpkg.com/vue2-gmap-custom-marker/-/vue2-gmap-custom-marker-5.5.10.tgz#d14eba235f06a336c1d1153e8299eb3b9b0ca475"
+  integrity sha512-/FQpIi/hDrME/ePhWmUgyfJk+mpY2i3ZQ/Z7XUJoHD4PKndRwYnKiy/Y0xltxmbPJqSNJTzzpGqPMzzZH/guBQ==
   dependencies:
     vue "^2.5.17"
     vue2-google-maps "^0.10.2"
@@ -13295,14 +13296,10 @@ vue2-google-maps@^0.10.2, vue2-google-maps@^0.10.7:
     babel-runtime "^6.26.0"
     marker-clusterer-plus "^2.1.4"
 
-vue@2.6.11:
+vue@2.6.11, vue@^2.5.13, vue@^2.5.17:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
-
-vue@^2.5.13, vue@^2.5.17:
-  version "2.6.10"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
 
 vuex-mock-store@0.0.8:
   version "0.0.8"
