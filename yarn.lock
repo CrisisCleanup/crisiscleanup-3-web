@@ -3367,13 +3367,6 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@vue/web-component-wrapper/-/web-component-wrapper-1.2.0.tgz#bb0e46f1585a7e289b4ee6067dcc5a6ae62f1dd1"
 
-"@vuex-orm/core@^0.32.4":
-  version "0.32.4"
-  resolved "https://registry.yarnpkg.com/@vuex-orm/core/-/core-0.32.4.tgz#440bd0fa13dc45d4373ce5eaa900e9691132f6ad"
-  dependencies:
-    normalizr "^3.4.1"
-    vuex "^3.1.1"
-
 "@vuex-orm/core@^0.33.0":
   version "0.33.0"
   resolved "https://registry.yarnpkg.com/@vuex-orm/core/-/core-0.33.0.tgz#8daa56114bc3fc22d707d228923ad2ba8b51c425"
@@ -3381,6 +3374,13 @@
   dependencies:
     normalizr "^3.4.1"
     vuex "^3.1.1"
+
+"@vuex-orm/core@^0.35.2":
+  version "0.35.2"
+  resolved "https://registry.yarnpkg.com/@vuex-orm/core/-/core-0.35.2.tgz#02b16dba2439e4dd42b472f55b216f874b86ad49"
+  integrity sha512-19/O9rtrhGYSXXIu1mGcZuO2zLYqEUogEXNkp6sEScyi8xJnF8J14DhuYKlmcS1EOTtYmjlaDha2fJ+0W2Jcgg==
+  dependencies:
+    normalizr "3.4.1"
 
 "@vuex-orm/plugin-axios@^0.9.1":
   version "0.9.1"
@@ -9820,7 +9820,7 @@ normalize.css@^8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/normalize.css/-/normalize.css-8.0.1.tgz#9b98a208738b9cc2634caacbc42d131c97487bf3"
 
-normalizr@^3.4.1:
+normalizr@3.4.1, normalizr@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/normalizr/-/normalizr-3.4.1.tgz#cf4f8ac7a4a0dd7fe504b77cbe9dd533cb3e45b5"
 
