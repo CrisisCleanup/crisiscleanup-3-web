@@ -46,7 +46,9 @@
       </div>
       <template v-for="organization in organizations">
         <div v-for="contact in organization.incident_primary_contacts">
-          {{ contact.first_name }} {{ contact.last_name }} ({{ organization.name }}) {{ contact.email }} {{ contact.mobile }}
+          {{ contact.first_name }} {{ contact.last_name }} ({{
+            organization.name
+          }}) {{ contact.email }} {{ contact.mobile }}
         </div>
       </template>
       <div class="font-xs my-2 font-bold">
