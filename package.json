@@ -65,7 +65,7 @@
     "pre-commit": "^1.2.2",
     "shpjs": "^3.4.3",
     "spin.js": "^4.1.0",
-    "v-tooltip": "^2.0.2",
+    "v-tooltip": "^2.0.3",
     "vue": "2.6.11",
     "vue-autosuggest": "^2.0.4",
     "vue-axios": "^2.1.5",
