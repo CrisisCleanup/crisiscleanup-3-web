@@ -27,7 +27,7 @@
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
-    "@fortawesome/vue-fontawesome": "^0.1.7",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
     "@geoman-io/leaflet-geoman-free": "^2.3.0",
     "@pixi/filter-outline": "^3.0.3",
     "@turf/turf": "^5.1.6",
