@@ -44,7 +44,7 @@
     "d3-color": "^1.2.3",
     "d3-interpolate": "^1.4.0",
     "d3-quadtree": "^1.0.5",
-    "d3-scale": "^2.1.2",
+    "d3-scale": "^3.2.1",
     "detect-browser-language": "0.0.2",
     "es6-promise": "^4.2.8",
     "exports-loader": "^0.7.0",
