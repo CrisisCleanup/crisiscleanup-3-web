@@ -12,6 +12,7 @@
     :class="[selectClasses, isInvalid && !value ? 'invalid' : '']"
     :placeholder="placeholder"
     :reduce="item => (itemKey ? item[itemKey] : item)"
+    :selectable="() => multiple && limit > 0 && value.length < limit"
     @input="onInput"
     @search:focus="open"
   >
@@ -61,6 +62,10 @@ export default {
       default: () => {
         return [];
       },
+    },
+    limit: {
+      type: Number,
+      default: 0,
     },
     placeholder: {
       type: String,

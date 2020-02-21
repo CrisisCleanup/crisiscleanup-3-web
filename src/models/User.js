@@ -1,5 +1,6 @@
 import { Model } from '@vuex-orm/core';
 import { AuthService } from '@/services/auth.service';
+import Language from '@/models/Language';
 
 export default class User extends Model {
   static entity = 'users';
@@ -15,9 +16,25 @@ export default class User extends Model {
       organization: this.attr(null),
       states: this.attr({}),
       preferences: this.attr({}),
-      primary_language: this.string(''),
+      primary_language: this.number(null),
+      secondary_language: this.number(null),
       social: this.string({}),
     };
+  }
+
+  get languages() {
+    const langugageList = [];
+    if (this.primary_language) {
+      langugageList.push(Language.find(this.primary_language));
+    }
+    if (this.secondary_language) {
+      langugageList.push(Language.find(this.secondary_language));
+    }
+    return langugageList;
+  }
+
+  set languages(value) {
+    [this.primary_language, this.secondary_language] = value;
   }
 
   get full_name() {

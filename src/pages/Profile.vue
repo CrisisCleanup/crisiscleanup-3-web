@@ -2,19 +2,57 @@
   <div class="flex flex-col w-3/4 m-auto">
     <div class="w-full bg-white shadow mt-6">
       <div
-        class="border-b px-4 py-2 font-semibold flex justify-between items-center"
+        class="border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
       >
         {{ currentUser.full_name }}
-        <base-button
-          type="primary"
-          class="px-4 py-2"
-          :text="$t('actions.save')"
-          :action="saveUser"
-        />
+        <div v-if="isEditing" class="flex justify-end">
+          <base-button
+            class="px-4 py-2 border border-black mr-1"
+            :text="$t('actions.cancel')"
+            :action="
+              () => {
+                mode = 'view';
+              }
+            "
+          />
+          <base-button
+            type="primary"
+            class="px-4 py-2"
+            :text="$t('actions.save')"
+            :action="saveUser"
+          />
+        </div>
+        <div v-else class="flex">
+          <ccu-icon
+            :alt="$t('actions.edit')"
+            size="small"
+            class="p-1 py-2"
+            type="edit"
+            @click.native="mode = 'edit'"
+          />
+          <ccu-icon
+            :alt="$t('actions.print')"
+            size="small"
+            class="p-1 py-2"
+            type="print"
+          />
+          <ccu-icon
+            :alt="$t('actions.share')"
+            size="small"
+            class="p-1 py-2"
+            type="share"
+          />
+          <ccu-icon
+            :alt="$t('actions.trash')"
+            size="small"
+            class="p-1 py-2"
+            type="trash"
+          />
+        </div>
       </div>
-      <form ref="form" class="user-form mt-6" @submit.prevent="handleSubmit">
+      <div>
         <div class="flex">
-          <div class="flex flex-col p-8 w-1/4">
+          <div class="flex flex-col p-8 w-64">
             <img
               class="rounded-full mx-auto p-1"
               src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
@@ -26,122 +64,177 @@
               $t('actions.view_id_badge')
             }}</base-button>
           </div>
-          <div class="p-8 w-3/4">
-            <div class="user-details">
-              <div class="flex pb-4">
-                <base-input
-                  class="mr-2 w-1/2"
-                  :value="currentUser.first_name"
-                  :placeholder="$t('activate.first_name_placeholder')"
-                  required
-                  @input="
-                    value => {
-                      updateUser(value, 'first_name');
-                    }
-                  "
-                />
-                <base-input
-                  class="mr-2 w-1/2"
-                  :value="currentUser.mobile"
-                  :placeholder="$t('activate.mobile_placeholder')"
-                  required
-                  @input="
-                    value => {
-                      updateUser(value, 'mobile');
-                    }
-                  "
-                />
-              </div>
-              <div class="flex pb-4">
-                <base-input
-                  class="mr-2 w-1/2"
-                  :value="currentUser.last_name"
-                  :placeholder="$t('activate.last_name_placeholder')"
-                  required
-                  @input="
-                    value => {
-                      updateUser(value, 'last_name');
-                    }
-                  "
-                />
-                <base-input
-                  class="mr-2 w-1/2"
-                  :value="currentUser.email"
-                  :placeholder="$t('activate.email_placeholder ')"
-                  required
-                  @input="
-                    value => {
-                      updateUser(value, 'email');
-                    }
-                  "
-                />
-              </div>
-            </div>
-            <hr class="p-2 m-auto" />
-            <div class="flex pb-4">
-              <form-select
-                v-model="currentUser.roles"
-                class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
-                :value="currentUser.roles"
-                multiple
-                :options="[]"
-                item-key="value"
-                label="name_t"
-                size="large"
-                select-classes="bg-white border text-xs"
-              />
-              <form-select
-                v-model="currentUser.equipment"
-                class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
-                :value="currentUser.equipment"
-                :options="[]"
-                item-key="value"
-                label="name_t"
-                size="large"
-                select-classes="bg-white border text-xs"
-              />
-            </div>
-            <div class="mt-3">
-              <h3 class="text-base">{{ $t('profileVue.linkedin') }}</h3>
-              <div class="flex pb-4">
-                <div class="w-32 flex items-center">
-                  <img
-                    src="https://simpleicons.org/icons/facebook.svg"
-                    class="w-8 mr-4"
+          <div class="user-form p-8">
+            <form v-if="isEditing" ref="form" @submit.prevent="handleSubmit">
+              <div class="user-details">
+                <div class="flex pb-4">
+                  <base-input
+                    class="mr-2 w-1/2"
+                    size="large"
+                    :value="currentUser.first_name"
+                    :placeholder="$t('activate.first_name_placeholder')"
+                    required
+                    @input="
+                      value => {
+                        updateUser(value, 'first_name');
+                      }
+                    "
                   />
-                  <label class="pr-3">{{ $t('profileVue.facebook') }}</label>
+                  <base-input
+                    class="w-1/2"
+                    size="large"
+                    :value="currentUser.mobile"
+                    :placeholder="$t('activate.mobile_placeholder')"
+                    required
+                    @input="
+                      value => {
+                        updateUser(value, 'mobile');
+                      }
+                    "
+                  />
                 </div>
-                <base-input
-                  size="small"
-                  :placeholder="$t('profileVue.facebook')"
-                  @input="
-                    value => {
-                      updateUser(value, 'facebook');
-                    }
-                  "
+                <div class="flex pb-4">
+                  <base-input
+                    class="mr-2 w-1/2"
+                    size="large"
+                    :value="currentUser.last_name"
+                    :placeholder="$t('activate.last_name_placeholder')"
+                    required
+                    @input="
+                      value => {
+                        updateUser(value, 'last_name');
+                      }
+                    "
+                  />
+                  <base-input
+                    class="w-1/2"
+                    :value="currentUser.email"
+                    size="large"
+                    :placeholder="$t('activate.email_placeholder ')"
+                    required
+                    @input="
+                      value => {
+                        updateUser(value, 'email');
+                      }
+                    "
+                  />
+                </div>
+              </div>
+              <hr class="p-2 m-auto" />
+              <div class="flex pb-4">
+                <form-select
+                  v-model="currentUser.roles"
+                  class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
+                  :value="currentUser.roles"
+                  multiple
+                  :options="[]"
+                  item-key="value"
+                  label="name_t"
+                  size="large"
+                  select-classes="bg-white border text-xs h-12"
+                />
+                <form-select
+                  v-model="currentUser.equipment"
+                  class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
+                  :value="currentUser.equipment"
+                  :options="[]"
+                  item-key="value"
+                  label="name_t"
+                  size="large"
+                  select-classes="bg-white border text-xs h-12"
                 />
               </div>
               <div class="flex pb-4">
-                <div class="w-32 flex items-center">
-                  <img
-                    src="https://simpleicons.org/icons/twitter.svg"
-                    class="w-8 mr-2"
-                  />
-                  <label class="pr-3">{{ $t('profileVue.twitter') }}</label>
-                </div>
-                <base-input
-                  size="small"
-                  :placeholder="$t('profileVue.twitter')"
+                <form-select
+                  class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
+                  :value="currentUser.languages"
+                  multiple
+                  :options="languages"
+                  item-key="id"
+                  label="name_t"
+                  size="large"
+                  select-classes="bg-white border text-xs h-12"
+                  :limit="2"
                   @input="
                     value => {
-                      updateUser(value, 'twitter');
+                      // This needs to be done directly because it uses a custom setter/getter to fake the way primary and secondary languages work
+                      currentUser.languages = value;
                     }
                   "
                 />
               </div>
+              <div class="mt-3">
+                <h3 class="text-base">{{ $t('profileVue.linkedin') }}</h3>
+                <div class="flex pb-4">
+                  <div class="w-32 flex items-center">
+                    <img
+                      src="https://simpleicons.org/icons/facebook.svg"
+                      class="w-8 mr-4"
+                    />
+                    <label class="pr-3">{{ $t('profileVue.facebook') }}</label>
+                  </div>
+                  <base-input
+                    size="small"
+                    :placeholder="$t('profileVue.facebook')"
+                    @input="
+                      value => {
+                        updateUser(value, 'facebook');
+                      }
+                    "
+                  />
+                </div>
+                <div class="flex pb-4">
+                  <div class="w-32 flex items-center">
+                    <img
+                      src="https://simpleicons.org/icons/twitter.svg"
+                      class="w-8 mr-2"
+                    />
+                    <label class="pr-3">{{ $t('profileVue.twitter') }}</label>
+                  </div>
+                  <base-input
+                    size="small"
+                    :placeholder="$t('profileVue.twitter')"
+                    @input="
+                      value => {
+                        updateUser(value, 'twitter');
+                      }
+                    "
+                  />
+                </div>
+              </div>
+              <hr class="my-3 m-auto" />
+            </form>
+            <div v-else>
+              <h1 class="text-2xl">{{ name }}</h1>
+              <div class="text-crisiscleanup-grey-700">
+                {{ currentUser.roles[0].name_t }}
+              </div>
+              <div class="flex mt-4">
+                <img
+                  src="https://simpleicons.org/icons/facebook.svg"
+                  class="w-8 mr-2"
+                />
+                <img
+                  src="https://simpleicons.org/icons/twitter.svg"
+                  class="w-8 mr-2"
+                />
+              </div>
+              <div class="mt-4 text-crisiscleanup-dark-400">
+                <div class="py-1">
+                  <font-awesome-icon size="lg" class="mr-3" icon="phone-alt" />
+                  <a :href="`tel:${currentUser.mobile}`">{{
+                    currentUser.mobile
+                  }}</a>
+                </div>
+                <div class="py-1">
+                  <font-awesome-icon size="lg" class="mr-3" icon="envelope" />
+                  <a :href="`mailto:${currentUser.email}`">{{
+                    currentUser.email
+                  }}</a>
+                </div>
+              </div>
             </div>
-            <hr class="p-4 m-auto" />
-            <div>
+            <div class="mt-6">
               <h3>{{ $t('profileVue.your_organization') }}</h3>
               <div class="py-3 flex items-center">
                 <div
@@ -149,7 +242,7 @@
                 />
                 <span class="px-4">{{ currentUser.organization.name }}</span>
               </div>
-              <div>
+              <div class="my-2">
                 <base-button type="primary" class="px-4 py-1">
                   {{ $t('profileVue.change_organization') }}
                 </base-button>
@@ -157,7 +250,7 @@
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -165,11 +258,14 @@
 <script>
 import User from '@/models/User';
 import { getErrorMessage } from '../utils/errors';
+import Language from '@/models/Language';
 
 export default {
   name: 'Profile',
   data() {
-    return {};
+    return {
+      mode: 'view',
+    };
   },
   computed: {
     name() {
@@ -183,6 +279,9 @@ export default {
     },
     isEditing() {
       return this.mode === 'edit';
+    },
+    languages() {
+      return Language.all();
     },
   },
   methods: {
@@ -209,6 +308,7 @@ export default {
           states: { ...this.currentUser.states, ...{} },
         });
         await this.$toasted.success(this.$t('profileVue.save_user_success'));
+        this.mode = 'view';
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -219,6 +319,6 @@ export default {
 
 <style scoped>
 .user-form {
-  width: 56rem;
+  width: 48rem;
 }
 </style>

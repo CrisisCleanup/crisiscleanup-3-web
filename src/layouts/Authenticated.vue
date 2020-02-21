@@ -88,6 +88,7 @@ import User from '@/models/User';
 import WorkType from '@/models/WorkType';
 import Organization from '@/models/Organization';
 import Status from '@/models/Status';
+import Language from '@/models/Language';
 import { i18nService } from '@/services/i18n.service';
 import DisasterIcon from '../components/DisasterIcon';
 import NavMenu from '@/components/navigation/NavMenu';
@@ -174,10 +175,18 @@ export default {
       Organization.api().get(
         `/organizations/${this.user.user_claims.organization.id}`,
       ),
+      Language.api().get('/languages', {
+        dataKey: 'results',
+      }),
     ]);
 
-    const currentLanguage =
-      this.currentUser.primary_language || detectBrowserLanguage();
+    let currentLanguage = detectBrowserLanguage();
+    const userLanguage =
+      Language.find(this.currentUser.primary_language) ||
+      Language.find(this.currentUser.secondary_language);
+    if (userLanguage) {
+      currentLanguage = userLanguage.subtag;
+    }
 
     this.setLanguage(currentLanguage);
     if (currentLanguage !== this.$i18n.locale) {

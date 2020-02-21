@@ -12,6 +12,7 @@ import Location from '@/models/Location';
 import Layer from '@/models/Layer';
 import LocationType from '@/models/LocationType';
 import Affiliate from '@/models/Affiliate';
+import Language from '@/models/Language';
 
 const database = new Database();
 
@@ -28,5 +29,6 @@ database.register(Layer, {});
 database.register(WorksiteRequest, {});
 database.register(LocationType, {});
 database.register(Affiliate, {});
+database.register(Language, {});
 
 export default database;
