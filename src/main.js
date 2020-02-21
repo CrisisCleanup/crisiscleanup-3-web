@@ -51,6 +51,7 @@ import {
 import '@/assets/css/tailwind.css';
 import Badge from '@/components/Badge';
 import { i18nService } from '@/services/i18n.service';
+import { getErrorMessage } from '@/utils/errors';
 
 library.add(fas);
 
@@ -135,7 +136,8 @@ const getLanguages = async tags => {
         messages[subtag] = translations;
       }
     } catch (e) {
-      VueLog.error(e);
+      // eslint-disable-next-line no-console
+      console.error(e);
     }
   }
 

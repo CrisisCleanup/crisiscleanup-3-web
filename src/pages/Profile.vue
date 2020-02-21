@@ -157,8 +157,15 @@
                   :limit="2"
                   @input="
                     value => {
-                      // This needs to be done directly because it uses a custom setter/getter to fake the way primary and secondary languages work
-                      currentUser.languages = value;
+                      const [primary_language, secondary_language] = value;
+                      updateUser(primary_language, 'primary_language');
+                      updateUser(secondary_language, 'secondary_language');
+                      if (!primary_language) {
+                        updateUser(null, 'primary_language');
+                      }
+                      if (!secondary_language) {
+                        updateUser(null, 'secondary_language');
+                      }
                     }
                   "
                 />
@@ -256,9 +263,13 @@
 </template>
 
 <script>
+import { size } from 'lodash';
+import { mapMutations } from 'vuex';
+import detectBrowserLanguage from 'detect-browser-language';
 import User from '@/models/User';
 import { getErrorMessage } from '../utils/errors';
 import Language from '@/models/Language';
+import { i18nService } from '@/services/i18n.service';
 
 export default {
   name: 'Profile',
@@ -296,6 +307,37 @@ export default {
         },
       });
     },
+    async updateUserLanguage() {
+      let currentLanguage = detectBrowserLanguage();
+      const userLanguage =
+        Language.find(this.currentUser.primary_language) ||
+        Language.find(this.currentUser.secondary_language);
+      if (userLanguage) {
+        currentLanguage = userLanguage.subtag;
+      }
+
+      this.setLanguage(currentLanguage);
+
+      if (currentLanguage !== this.$i18n.locale) {
+        try {
+          const data = await i18nService.getLanguage(currentLanguage);
+          const { translations } = data;
+          if (size(translations) > 0) {
+            this.$i18n.setLocaleMessage(currentLanguage, translations);
+            this.$i18n.locale = currentLanguage;
+            this.$http.defaults.headers.common[
+              'Accept-Language'
+            ] = currentLanguage;
+            document
+              .querySelector('html')
+              .setAttribute('lang', currentLanguage);
+          }
+        } catch (e) {
+          this.$log.error(e);
+        }
+      }
+    },
+    ...mapMutations('locale', ['setLanguage']),
     async saveUser() {
       const isValid = this.$refs.form.reportValidity();
       if (!isValid) {
@@ -309,6 +351,7 @@ export default {
         });
         await this.$toasted.success(this.$t('profileVue.save_user_success'));
         this.mode = 'view';
+        this.updateUserLanguage();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
