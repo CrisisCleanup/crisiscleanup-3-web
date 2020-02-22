@@ -19,7 +19,7 @@ export default class User extends Model {
       preferences: this.attr({}),
       primary_language: this.attr(null),
       secondary_language: this.attr(null),
-      social: this.string({}),
+      social: this.attr({}),
     };
   }
 
@@ -44,14 +44,6 @@ export default class User extends Model {
 
   get twitter() {
     return this.social.twitter;
-  }
-
-  set facebook(value) {
-    this.social.facebook = value;
-  }
-
-  set twitter(value) {
-    this.social.twitter = value;
   }
 
   static apiConfig = {

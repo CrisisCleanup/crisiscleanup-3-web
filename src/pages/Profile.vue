@@ -192,11 +192,16 @@
                     <label class="pr-3">{{ $t('profileVue.facebook') }}</label>
                   </div>
                   <base-input
+                    :value="currentUser.facebook"
                     size="small"
                     :placeholder="$t('profileVue.facebook')"
                     @input="
                       value => {
-                        updateUser(value, 'facebook');
+                        const social = {
+                          ...currentUser.social,
+                          facebook: value,
+                        };
+                        updateUser(social, 'social');
                       }
                     "
                   />
@@ -210,11 +215,16 @@
                     <label class="pr-3">{{ $t('profileVue.twitter') }}</label>
                   </div>
                   <base-input
+                    :value="currentUser.twitter"
                     size="small"
                     :placeholder="$t('profileVue.twitter')"
                     @input="
                       value => {
-                        updateUser(value, 'twitter');
+                        const social = {
+                          ...currentUser.social,
+                          twitter: value,
+                        };
+                        updateUser(social, 'social');
                       }
                     "
                   />
@@ -410,7 +420,7 @@ export default {
       }
       try {
         await User.api().patch(`/users/${this.currentUser.id}`, {
-          ...this.currentUser,
+          ...this.currentUser.$toJson(),
           preferences: { ...this.currentUser.preferences, ...{} },
           states: { ...this.currentUser.states, ...{} },
         });
