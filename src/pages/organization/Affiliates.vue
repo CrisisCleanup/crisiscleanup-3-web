@@ -206,15 +206,11 @@ export default {
   methods: {
     async getAffiliateRequests() {
       this.loading = true;
-      const results = await Affiliate.api().get(
-        '/organization_affiliate_requests',
-        {
-          dataKey: 'results',
-        },
-      );
-      const { organization_affiliate_requests } = results.entities;
+      await Affiliate.api().get('/organization_affiliate_requests', {
+        dataKey: 'results',
+      });
       await Organization.api().get(
-        `/organizations?id__in=${organization_affiliate_requests
+        `/organizations?id__in=${Affiliate.all()
           .map(org => org.affiliate)
           .join(',')}`,
         {
