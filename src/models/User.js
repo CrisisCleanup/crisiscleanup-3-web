@@ -13,6 +13,7 @@ export default class User extends Model {
       email: this.string(''),
       mobile: this.string(''),
       roles: this.attr(null),
+      files: this.attr(null),
       organization: this.attr(null),
       states: this.attr({}),
       preferences: this.attr({}),
@@ -83,6 +84,25 @@ export default class User extends Model {
             last_name,
             password,
             mobile,
+          },
+          { save: false },
+        );
+      },
+      addFile(id, file, type) {
+        return this.post(
+          `/users/${id}/files`,
+          {
+            file,
+            type_t: type,
+          },
+          { save: false },
+        );
+      },
+      deleteFile(id, file) {
+        return this.delete(
+          `/users/${id}/files`,
+          {
+            data: { file },
           },
           { save: false },
         );

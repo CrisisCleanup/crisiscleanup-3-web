@@ -12,7 +12,9 @@
     :class="[selectClasses, isInvalid && !value ? 'invalid' : '']"
     :placeholder="placeholder"
     :reduce="item => (itemKey ? item[itemKey] : item)"
-    :selectable="() => multiple && limit > 0 && value.length < limit"
+    :selectable="
+      () => !multiple || (multiple && limit > 0 && value.length < limit)
+    "
     @input="onInput"
     @search:focus="open"
   >

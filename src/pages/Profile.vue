@@ -52,15 +52,26 @@
       </div>
       <div>
         <div class="flex">
-          <div class="flex flex-col p-8 w-64">
+          <div class="flex flex-col p-8 w-64 items-center">
             <img
-              class="rounded-full mx-auto p-1"
-              src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
+              class="rounded-full p-1 profile-image"
+              :src="profilePictureUrl"
+              :alt="$t('Profile Picture')"
             />
-            <a href="https://google.com" class="text-center pb-4">{{
-              $t('actions.change_photo')
-            }}</a>
-            <base-button type="primary" class="py-1">{{
+            <DragDrop
+              class="text-primary-dark cursor-pointer"
+              :disabled="uploading"
+              @files="handleProfilePictureUpload"
+            >
+              <base-button
+                class="text-center pb-4 cursor-pointer"
+                :show-spinner="uploading"
+                :disabled="uploading"
+                >{{ $t('actions.change_photo') }}</base-button
+              >
+            </DragDrop>
+
+            <base-button type="primary" class="py-2 px-4">{{
               $t('actions.view_id_badge')
             }}</base-button>
           </div>
@@ -270,12 +281,15 @@ import User from '@/models/User';
 import { getErrorMessage } from '../utils/errors';
 import Language from '@/models/Language';
 import { i18nService } from '@/services/i18n.service';
+import DragDrop from '@/components/DragDrop';
 
 export default {
   name: 'Profile',
+  components: { DragDrop },
   data() {
     return {
       mode: 'view',
+      uploading: false,
     };
   },
   computed: {
@@ -288,6 +302,17 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
+    profilePictureUrl() {
+      if (this.currentUser.files.length) {
+        const profilePictures = this.currentUser.files.filter(
+          file => file.file_type_t === 'fileTypes.user_profile_picture',
+        );
+        if (profilePictures.length) {
+          return profilePictures[0].url;
+        }
+      }
+      return '';
+    },
     isEditing() {
       return this.mode === 'edit';
     },
@@ -299,6 +324,46 @@ export default {
     handleSubmit(e) {
       e.preventDefault();
     },
+    async handleProfilePictureUpload(fileList) {
+      if (fileList.length === 0) {
+        this.uploading = false;
+        return;
+      }
+      const formData = new FormData();
+      formData.append('upload', fileList[0]);
+      formData.append('type_t', 'fileTypes.user_profile_picture');
+      this.uploading = true;
+      try {
+        const result = await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/files`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            },
+          },
+        );
+        const file = result.data.id;
+
+        const profilePictures = this.currentUser.files.filter(
+          picture => picture.file_type_t === 'fileTypes.user_profile_picture',
+        );
+
+        const oldImages = profilePictures.map(picture =>
+          User.api().deleteFile(this.currentUser.id, picture.id),
+        );
+        await Promise.all(oldImages);
+
+        await User.api().addFile(this.currentUser.id, file);
+        await User.api().get('/users/me', {});
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.uploading = false;
+      }
+    },
+
     updateUser(value, key) {
       User.update({
         where: this.currentUser.id,
@@ -363,5 +428,9 @@ export default {
 <style scoped>
 .user-form {
   width: 48rem;
+}
+.profile-image {
+  height: 175px;
+  width: 175px;
 }
 </style>

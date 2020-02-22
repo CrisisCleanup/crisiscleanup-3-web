@@ -8,7 +8,12 @@
     :title="title || text || alt"
     @click.prevent="performAction"
   >
-    <font-awesome-icon v-if="loading" size="sm" icon="spinner" spin />
+    <font-awesome-icon
+      v-if="loading || showSpinner"
+      size="sm"
+      icon="spinner"
+      spin
+    />
     <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" :size="iconSize" />
     <slot>{{ text }}</slot>
     <font-awesome-icon v-if="suffixIcon" class="mx-1" :icon="suffixIcon" />
@@ -24,6 +29,10 @@ export default {
       default: () => {},
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    showSpinner: {
       type: Boolean,
       default: false,
     },
