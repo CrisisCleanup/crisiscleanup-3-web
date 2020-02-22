@@ -1,279 +1,327 @@
 <template>
-  <div class="flex flex-col w-3/4 m-auto">
-    <div class="w-full bg-white shadow mt-6">
-      <div
-        class="border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
-      >
-        {{ currentUser.full_name }}
-        <div v-if="isEditing" class="flex justify-end">
-          <base-button
-            class="px-4 py-2 border border-black mr-1"
-            :text="$t('actions.cancel')"
-            :action="
-              () => {
-                mode = 'view';
-              }
-            "
-          />
-          <base-button
-            type="primary"
-            class="px-4 py-2"
-            :text="$t('actions.save')"
-            :action="saveUser"
-          />
-        </div>
-        <div v-else class="flex">
-          <ccu-icon
-            :alt="$t('actions.edit')"
-            size="small"
-            class="p-1 py-2"
-            type="edit"
-            @click.native="mode = 'edit'"
-          />
-          <ccu-icon
-            :alt="$t('actions.print')"
-            size="small"
-            class="p-1 py-2"
-            type="print"
-          />
-          <ccu-icon
-            :alt="$t('actions.share')"
-            size="small"
-            class="p-1 py-2"
-            type="share"
-          />
-          <ccu-icon
-            :alt="$t('actions.trash')"
-            size="small"
-            class="p-1 py-2"
-            type="trash"
-          />
-        </div>
-      </div>
-      <div>
-        <div class="flex">
-          <div class="flex flex-col p-8 w-64 items-center">
-            <img
-              class="rounded-full p-1 profile-image"
-              :src="profilePictureUrl"
-              :alt="$t('Profile Picture')"
+  <div style="height: 85%" class="h-full flex justify-center">
+    <div class="h-full flex flex-col w-3/4 shadow my-6">
+      <div class="h-full w-full bg-white flex flex-col">
+        <div
+          class="border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
+        >
+          {{ currentUser.full_name }}
+          <div v-if="isEditing" class="flex justify-end">
+            <base-button
+              class="px-4 py-2 border border-black mr-1"
+              :text="$t('actions.cancel')"
+              :action="
+                () => {
+                  mode = 'view';
+                }
+              "
             />
-            <DragDrop
-              class="text-primary-dark cursor-pointer"
-              :disabled="uploading"
-              @files="handleProfilePictureUpload"
-            >
-              <base-button
-                class="text-center pb-4 cursor-pointer"
-                :show-spinner="uploading"
-                :disabled="uploading"
-                >{{ $t('actions.change_photo') }}</base-button
-              >
-            </DragDrop>
-
-            <base-button type="primary" class="py-2 px-4">{{
-              $t('actions.view_id_badge')
-            }}</base-button>
+            <base-button
+              type="primary"
+              class="px-4 py-2"
+              :text="$t('actions.save')"
+              :action="saveUser"
+            />
           </div>
-          <div class="user-form p-8">
-            <form v-if="isEditing" ref="form" @submit.prevent="handleSubmit">
-              <div class="user-details">
-                <div class="flex pb-4">
-                  <base-input
-                    class="mr-2 w-1/2"
-                    size="large"
-                    :value="currentUser.first_name"
-                    :placeholder="$t('activate.first_name_placeholder')"
-                    required
-                    @input="
-                      value => {
-                        updateUser(value, 'first_name');
-                      }
-                    "
-                  />
-                  <base-input
-                    class="w-1/2"
-                    size="large"
-                    :value="currentUser.mobile"
-                    :placeholder="$t('activate.mobile_placeholder')"
-                    required
-                    @input="
-                      value => {
-                        updateUser(value, 'mobile');
-                      }
-                    "
-                  />
-                </div>
-                <div class="flex pb-4">
-                  <base-input
-                    class="mr-2 w-1/2"
-                    size="large"
-                    :value="currentUser.last_name"
-                    :placeholder="$t('activate.last_name_placeholder')"
-                    required
-                    @input="
-                      value => {
-                        updateUser(value, 'last_name');
-                      }
-                    "
-                  />
-                  <base-input
-                    class="w-1/2"
-                    :value="currentUser.email"
-                    size="large"
-                    :placeholder="$t('activate.email_placeholder ')"
-                    required
-                    @input="
-                      value => {
-                        updateUser(value, 'email');
-                      }
-                    "
-                  />
-                </div>
-              </div>
-              <hr class="p-2 m-auto" />
-              <div class="flex pb-4">
-                <form-select
-                  v-model="currentUser.roles"
-                  class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
-                  :value="currentUser.roles"
-                  multiple
-                  :options="[]"
-                  item-key="value"
-                  label="name_t"
-                  size="large"
-                  select-classes="bg-white border text-xs h-12"
-                />
-                <form-select
-                  v-model="currentUser.equipment"
-                  class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
-                  :value="currentUser.equipment"
-                  :options="[]"
-                  item-key="value"
-                  label="name_t"
-                  size="large"
-                  select-classes="bg-white border text-xs h-12"
-                />
-              </div>
-              <div class="flex pb-4">
-                <form-select
-                  class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
-                  :value="currentUser.languages"
-                  multiple
-                  :options="languages"
-                  item-key="id"
-                  label="name_t"
-                  size="large"
-                  select-classes="bg-white border text-xs h-12"
-                  :limit="2"
-                  @input="
-                    value => {
-                      const [primary_language, secondary_language] = value;
-                      updateUser(primary_language, 'primary_language');
-                      updateUser(secondary_language, 'secondary_language');
-                      if (!primary_language) {
-                        updateUser(null, 'primary_language');
-                      }
-                      if (!secondary_language) {
-                        updateUser(null, 'secondary_language');
-                      }
-                    }
-                  "
-                />
-              </div>
-              <div class="mt-3">
-                <h3 class="text-base">{{ $t('profileVue.linkedin') }}</h3>
-                <div class="flex pb-4">
-                  <div class="w-32 flex items-center">
-                    <img
-                      src="https://simpleicons.org/icons/facebook.svg"
-                      class="w-8 mr-4"
-                    />
-                    <label class="pr-3">{{ $t('profileVue.facebook') }}</label>
-                  </div>
-                  <base-input
-                    :value="currentUser.facebook"
-                    size="small"
-                    :placeholder="$t('profileVue.facebook')"
-                    @input="
-                      value => {
-                        const social = {
-                          ...currentUser.social,
-                          facebook: value,
-                        };
-                        updateUser(social, 'social');
-                      }
-                    "
-                  />
-                </div>
-                <div class="flex pb-4">
-                  <div class="w-32 flex items-center">
-                    <img
-                      src="https://simpleicons.org/icons/twitter.svg"
-                      class="w-8 mr-2"
-                    />
-                    <label class="pr-3">{{ $t('profileVue.twitter') }}</label>
-                  </div>
-                  <base-input
-                    :value="currentUser.twitter"
-                    size="small"
-                    :placeholder="$t('profileVue.twitter')"
-                    @input="
-                      value => {
-                        const social = {
-                          ...currentUser.social,
-                          twitter: value,
-                        };
-                        updateUser(social, 'social');
-                      }
-                    "
-                  />
-                </div>
-              </div>
-              <hr class="my-3 m-auto" />
-            </form>
-            <div v-else>
-              <h1 class="text-2xl">{{ name }}</h1>
-              <div class="text-crisiscleanup-grey-700">
-                {{ currentUser.roles[0].name_t }}
-              </div>
-              <div class="flex mt-4">
-                <img
-                  src="https://simpleicons.org/icons/facebook.svg"
-                  class="w-8 mr-2"
-                />
-                <img
-                  src="https://simpleicons.org/icons/twitter.svg"
-                  class="w-8 mr-2"
-                />
-              </div>
-              <div class="mt-4 text-crisiscleanup-dark-400">
-                <div class="py-1">
-                  <font-awesome-icon size="lg" class="mr-3" icon="phone-alt" />
-                  <a :href="`tel:${currentUser.mobile}`">{{
-                    currentUser.mobile
-                  }}</a>
-                </div>
-                <div class="py-1">
-                  <font-awesome-icon size="lg" class="mr-3" icon="envelope" />
-                  <a :href="`mailto:${currentUser.email}`">{{
-                    currentUser.email
-                  }}</a>
-                </div>
-              </div>
-            </div>
-            <div class="mt-6">
-              <h3>{{ $t('profileVue.your_organization') }}</h3>
-              <div class="py-3 flex items-center">
-                <div
-                  class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300 border border-black"
-                />
-                <span class="px-4">{{ currentUser.organization.name }}</span>
-              </div>
-              <div class="my-2">
-                <base-button type="primary" class="px-4 py-1">
-                  {{ $t('profileVue.change_organization') }}
+          <div v-else class="flex">
+            <ccu-icon
+              :alt="$t('actions.edit')"
+              size="small"
+              class="p-1 py-2"
+              type="edit"
+              @click.native="mode = 'edit'"
+            />
+            <ccu-icon
+              :alt="$t('actions.print')"
+              size="small"
+              class="p-1 py-2"
+              type="print"
+            />
+            <ccu-icon
+              :alt="$t('actions.share')"
+              size="small"
+              class="p-1 py-2"
+              type="share"
+            />
+            <ccu-icon
+              :alt="$t('actions.trash')"
+              size="small"
+              class="p-1 py-2"
+              type="trash"
+            />
+          </div>
+        </div>
+        <div class="overflow-auto">
+          <div class="flex">
+            <div class="flex flex-col p-8 w-64 items-center">
+              <img
+                class="rounded-full p-1 profile-image"
+                :src="profilePictureUrl"
+                :alt="$t('Profile Picture')"
+              />
+              <DragDrop
+                class="text-primary-dark cursor-pointer"
+                :disabled="uploading"
+                @files="handleProfilePictureUpload"
+              >
+                <base-button
+                  class="text-center pb-4 cursor-pointer"
+                  :show-spinner="uploading"
+                  :disabled="uploading"
+                  >{{ $t('actions.change_photo') }}
                 </base-button>
+              </DragDrop>
+
+              <base-button type="primary" class="py-2 px-4"
+                >{{ $t('actions.view_id_badge') }}
+              </base-button>
+            </div>
+            <div class="user-form p-8">
+              <form v-if="isEditing" ref="form" @submit.prevent="handleSubmit">
+                <div class="user-details">
+                  <div class="flex pb-4">
+                    <base-input
+                      class="mr-2 w-1/2"
+                      size="large"
+                      :value="currentUser.first_name"
+                      :placeholder="$t('activate.first_name_placeholder')"
+                      required
+                      @input="
+                        value => {
+                          updateUser(value, 'first_name');
+                        }
+                      "
+                    />
+                    <base-input
+                      class="w-1/2"
+                      size="large"
+                      :value="currentUser.mobile"
+                      :placeholder="$t('activate.mobile_placeholder')"
+                      required
+                      @input="
+                        value => {
+                          updateUser(value, 'mobile');
+                        }
+                      "
+                    />
+                  </div>
+                  <div class="flex pb-4">
+                    <base-input
+                      class="mr-2 w-1/2"
+                      size="large"
+                      :value="currentUser.last_name"
+                      :placeholder="$t('activate.last_name_placeholder')"
+                      required
+                      @input="
+                        value => {
+                          updateUser(value, 'last_name');
+                        }
+                      "
+                    />
+                    <base-input
+                      class="w-1/2"
+                      :value="currentUser.email"
+                      size="large"
+                      :placeholder="$t('activate.email_placeholder ')"
+                      required
+                      @input="
+                        value => {
+                          updateUser(value, 'email');
+                        }
+                      "
+                    />
+                  </div>
+                </div>
+                <hr class="p-2 m-auto" />
+                <div class="flex pb-4">
+                  <form-select
+                    v-model="currentUser.roles"
+                    class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
+                    :value="currentUser.roles"
+                    multiple
+                    :options="[]"
+                    item-key="value"
+                    label="name_t"
+                    size="large"
+                    select-classes="bg-white border text-xs h-12"
+                  />
+                  <form-select
+                    v-model="currentUser.equipment"
+                    class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
+                    :value="currentUser.equipment"
+                    :options="[]"
+                    item-key="value"
+                    label="name_t"
+                    size="large"
+                    select-classes="bg-white border text-xs h-12"
+                  />
+                </div>
+                <div class="flex pb-4">
+                  <form-select
+                    class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
+                    :value="currentUser.languages"
+                    multiple
+                    :options="languages"
+                    item-key="id"
+                    label="name_t"
+                    size="large"
+                    select-classes="bg-white border text-xs h-12"
+                    :limit="2"
+                    @input="
+                      value => {
+                        const [primary_language, secondary_language] = value;
+                        updateUser(primary_language, 'primary_language');
+                        updateUser(secondary_language, 'secondary_language');
+                        if (!primary_language) {
+                          updateUser(null, 'primary_language');
+                        }
+                        if (!secondary_language) {
+                          updateUser(null, 'secondary_language');
+                        }
+                      }
+                    "
+                  />
+                </div>
+                <div class="mt-3">
+                  <h3 class="text-base">{{ $t('profileVue.linkedin') }}</h3>
+                  <div class="flex pb-4">
+                    <div class="w-32 flex items-center">
+                      <img
+                        src="https://simpleicons.org/icons/facebook.svg"
+                        class="w-8 mr-4"
+                      />
+                      <label class="pr-3">{{
+                        $t('profileVue.facebook')
+                      }}</label>
+                    </div>
+                    <base-input
+                      :value="currentUser.facebook"
+                      size="small"
+                      :placeholder="$t('profileVue.facebook')"
+                      @input="
+                        value => {
+                          const social = {
+                            ...currentUser.social,
+                            facebook: value,
+                          };
+                          updateUser(social, 'social');
+                        }
+                      "
+                    />
+                  </div>
+                  <div class="flex pb-4">
+                    <div class="w-32 flex items-center">
+                      <img
+                        src="https://simpleicons.org/icons/twitter.svg"
+                        class="w-8 mr-2"
+                      />
+                      <label class="pr-3">{{ $t('profileVue.twitter') }}</label>
+                    </div>
+                    <base-input
+                      :value="currentUser.twitter"
+                      size="small"
+                      :placeholder="$t('profileVue.twitter')"
+                      @input="
+                        value => {
+                          const social = {
+                            ...currentUser.social,
+                            twitter: value,
+                          };
+                          updateUser(social, 'social');
+                        }
+                      "
+                    />
+                  </div>
+                </div>
+                <hr class="my-3 m-auto" />
+              </form>
+              <div v-else>
+                <h1 class="text-2xl">{{ name }}</h1>
+                <div class="text-crisiscleanup-grey-700">
+                  {{ currentUser.roles[0].name_t }}
+                </div>
+                <div class="flex mt-4">
+                  <img
+                    src="https://simpleicons.org/icons/facebook.svg"
+                    class="w-8 mr-2"
+                  />
+                  <img
+                    src="https://simpleicons.org/icons/twitter.svg"
+                    class="w-8 mr-2"
+                  />
+                </div>
+                <div class="mt-4 text-crisiscleanup-dark-400">
+                  <div class="py-1">
+                    <font-awesome-icon
+                      size="lg"
+                      class="mr-3"
+                      icon="phone-alt"
+                    />
+                    <a :href="`tel:${currentUser.mobile}`">{{
+                      currentUser.mobile
+                    }}</a>
+                  </div>
+                  <div class="py-1">
+                    <font-awesome-icon size="lg" class="mr-3" icon="envelope" />
+                    <a :href="`mailto:${currentUser.email}`">{{
+                      currentUser.email
+                    }}</a>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6">
+                <h3>{{ $t('profileVue.your_organization') }}</h3>
+                <div class="py-3 flex items-center">
+                  <div
+                    class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300 border border-black"
+                  />
+                  <span class="px-4">{{ currentUser.organization.name }}</span>
+                </div>
+                <div class="my-2">
+                  <base-button type="primary" class="px-4 py-1">
+                    {{ $t('profileVue.change_organization') }}
+                  </base-button>
+                </div>
+              </div>
+              <div v-if="isEditing" class="mt-6">
+                <h3>{{ $t('profileVue.notification_settings') }}</h3>
+                <div class="flex flex-col py-3">
+                  <base-radio
+                    class="mb-2"
+                    name="Yes"
+                    type="boolean"
+                    :value="currentUser.notificationSettings.has_notifications"
+                    @click.native="
+                      () => setNotifications('has_notifications', true)
+                    "
+                  />
+                  <base-radio
+                    class="mb-2"
+                    name="No"
+                    type="boolean"
+                    :value="!currentUser.notificationSettings.has_notifications"
+                    @click.native="
+                      () => setNotifications('has_notifications', false)
+                    "
+                  />
+                  <div
+                    v-if="currentUser.notificationSettings.has_notifications"
+                    class="flex justify-between flex-wrap"
+                  >
+                    <div
+                      v-for="(value, key) in notifications"
+                      class="flex w-1/2"
+                    >
+                      <base-checkbox
+                        class="mr-1"
+                        :value="currentUser.notificationSettings[key]"
+                        @input="value => setNotifications(key, value)"
+                      >
+                      </base-checkbox>
+                      {{ value }}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -300,6 +348,22 @@ export default {
     return {
       mode: 'view',
       uploading: false,
+      notifications: {
+        new_incident: '~~New Incident Notifications',
+        request_work_type: '~~Request Work Type Notifications',
+        new_or_move_user: '~~New or Moving User Requests',
+        affiliate_requests: '~~Affiliate Requests',
+        periodic_reports: '~~Periodic Reports',
+        custom_reports: '~~Custom Reports',
+        organization_registration: '~~Organization Registration Notifications',
+        location_approval: '~~Location Approval Notifications',
+        move_user_to_organization:
+          '~~Moving Users to New Organizations Notifications',
+        incident_access_approval: '~~Incident Access Approvals',
+        user_role_approval: '~~User Roles Approvals',
+        organization_role_approval: '~~Organization Role Approvals',
+        phone_volunteer_needs: '~~Phone volunteer needs',
+      },
     };
   },
   computed: {
@@ -333,6 +397,27 @@ export default {
   methods: {
     handleSubmit(e) {
       e.preventDefault();
+    },
+    setNotifications(key, value) {
+      if (this.currentUser.preferences) {
+        const preferences = {
+          ...this.currentUser.preferences,
+          notification_settings: {
+            ...this.currentUser.preferences.notification_settings,
+            [key]: value,
+          },
+        };
+        this.updateUser(preferences, 'preferences');
+      } else {
+        this.updateUser(
+          {
+            notification_settings: {
+              [key]: value,
+            },
+          },
+          'preferences',
+        );
+      }
     },
     async handleProfilePictureUpload(fileList) {
       if (fileList.length === 0) {

@@ -5,7 +5,7 @@
       type="radio"
       :value="label"
       :name="name"
-      :class="{ checked: label === value }"
+      :class="{ checked: type === 'boolean' ? value : label === value }"
     />
     <span>
       {{ name }}
@@ -22,12 +22,16 @@ export default {
       default: '',
     },
     value: {
-      type: String,
+      type: null,
       default: '',
     },
     label: {
       type: String,
       default: '',
+    },
+    type: {
+      type: String,
+      default: 'text',
     },
   },
   computed: {

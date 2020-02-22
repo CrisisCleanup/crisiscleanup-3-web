@@ -34,6 +34,16 @@ export default class User extends Model {
     return langugageList;
   }
 
+  get notificationSettings() {
+    const settings = {
+      has_notifications: false,
+    };
+    if (this.preferences && this.preferences.notification_settings) {
+      return this.preferences.notification_settings;
+    }
+    return settings;
+  }
+
   get full_name() {
     return `${this.first_name} ${this.last_name}`;
   }
