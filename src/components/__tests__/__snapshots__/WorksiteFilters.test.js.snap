@@ -108,6 +108,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
           <!---->
            
           <!---->
+           
+          <!---->
            actions.clear_filters 
           <!---->
         </button>
@@ -285,6 +287,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       <!---->
        
       <!---->
+       
+      <!---->
        actions.cancel 
       <!---->
     </button>
@@ -296,6 +300,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       title="actions.apply_filters"
       type="submit"
     >
+      <!---->
+       
       <!---->
        
       <!---->

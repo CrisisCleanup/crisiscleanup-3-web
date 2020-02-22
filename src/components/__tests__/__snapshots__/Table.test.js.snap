@@ -124,6 +124,8 @@ exports[`Table should render correctly and match snapshot 1`] = `
         <!---->
       </div>
     </div>
+     
+    <!---->
   </div>
    
   <!---->
@@ -249,6 +251,8 @@ exports[`Table should render correctly with selection and pagination 1`] = `
         <!---->
       </div>
     </div>
+     
+    <!---->
   </div>
    
   <!---->

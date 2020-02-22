@@ -87,6 +87,9 @@
           </slot>
         </div>
       </div>
+      <div v-if="!data.length" class="p-2 text-crisiscleanup-grey-700 italic">
+        No Items found
+      </div>
     </div>
     <div
       v-if="enablePagniation"

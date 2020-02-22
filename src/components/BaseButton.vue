@@ -15,6 +15,7 @@
       spin
     />
     <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" :size="iconSize" />
+    <ccu-icon v-if="ccuIcon" class="mx-1" :type="ccuIcon" :size="iconSize" />
     <slot>{{ text }}</slot>
     <font-awesome-icon v-if="suffixIcon" class="mx-1" :icon="suffixIcon" />
   </button>
@@ -57,6 +58,10 @@ export default {
       default: '',
     },
     icon: {
+      type: String,
+      default: '',
+    },
+    ccuIcon: {
       type: String,
       default: '',
     },

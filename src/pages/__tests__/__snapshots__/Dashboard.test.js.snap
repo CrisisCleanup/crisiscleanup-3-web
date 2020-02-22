@@ -548,6 +548,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   </div>
                 </div>
               </div>
+               
+              <div
+                class="p-2 text-crisiscleanup-grey-700 italic"
+              >
+                
+      No Items found
+    
+              </div>
             </div>
              
             <!---->
@@ -712,7 +720,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               style="max-height: 600px; overflow: auto; height: 300px;"
             >
               <!---->
-               
+                
+              <div
+                class="p-2 text-crisiscleanup-grey-700 italic"
+              >
+                
+      No Items found
+    
+              </div>
             </div>
              
             <!---->

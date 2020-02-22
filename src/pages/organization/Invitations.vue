@@ -1,25 +1,29 @@
 <template>
   <div class="flex h-full w-3/4 m-auto">
-    <div class="p-12 w-full">
+    <div class="mt-6 w-full">
       <div class="flex justify-between items-center my-6">
         <div>
           <div class="text-base">
             {{ $t('invitationsVue.current_requests') }}
           </div>
-          <div class="text-xs">{{ $t('invitationsVue.sub_sections') }}</div>
+          <div class="text-xs text-crisiscleanup-dark-300">
+            {{ $t('invitationsVue.sub_sections') }}
+          </div>
         </div>
         <div class="flex">
           <base-button
             size="small"
             :text="$t('actions.download')"
-            class="mx-2 shadow bg-white px-4 p-2 text-xs"
-            icon="download"
+            class="table-action-button"
+            ccu-icon="download"
+            icon-size="small"
           />
           <base-button
             size="small"
             :text="$t('actions.print')"
-            class="mx-2 shadow bg-white px-4 p-2 text-xs"
-            icon="print"
+            class="table-action-button"
+            ccu-icon="print"
+            icon-size="small"
           />
         </div>
       </div>
@@ -30,17 +34,17 @@
         :loading="false"
       >
         <template #actions="slotProps">
-          <div class="flex mr-2">
+          <div class="flex mr-2 justify-end w-full">
             <base-button
               size="small"
-              class="flex-grow m-1 mx-2 text-xs px-3"
+              class="m-1 mx-2 text-xs px-3 py-1"
               :action="() => {}"
               :text="$t('actions.ignore')"
             />
             <base-button
               size="small"
               type="bare"
-              class="flex-grow m-1 mx-2 border-2 border-black text-black text- px-3"
+              class="m-1 mx-2 border-2 border-black text-black px-3 py-1"
               :action="
                 () => {
                   rejectInvitationRequest(slotProps.item);
@@ -51,7 +55,7 @@
             <base-button
               size="small"
               type="primary"
-              class="flex-grow m-1 mx-2 text-black text-xs px-3"
+              class="m-1 mx-2 text-black text-xs px-3 py-1"
               :action="
                 () => {
                   acceptInvitationRequest(slotProps.item);
@@ -80,20 +84,23 @@
           <base-button
             size="small"
             :text="$t('actions.download')"
-            class="mx-2 shadow bg-white px-4 p-2 text-xs"
-            icon="download"
+            class="table-action-button"
+            ccu-icon="download"
+            icon-size="small"
           />
           <base-button
             size="small"
             :text="$t('actions.print')"
-            class="mx-2 shadow bg-white px-4 p-2 text-xs"
-            icon="print"
+            class="table-action-button"
+            ccu-icon="print"
+            icon-size="small"
           />
           <base-button
             size="small"
             :text="$t('actions.delete_expired')"
-            class="mx-2 shadow bg-white px-4 p-2 text-xs"
-            icon="trash"
+            class="table-action-button"
+            ccu-icon="trash"
+            icon-size="small"
           />
         </div>
       </div>
@@ -104,11 +111,11 @@
         :loading="false"
       >
         <template #actions="slotProps">
-          <div class="flex mr-2">
+          <div class="flex mr-2 justify-center w-full">
             <base-button
               size="small"
               type="primary"
-              class="flex-grow m-1 mx-2 text-black text-xs px-3"
+              class="m-1 mx-2 text-black text-xs py-1 px-3"
               :action="
                 () => {
                   resendInvitation(slotProps.item);
@@ -119,7 +126,7 @@
           </div>
         </template>
         <template #delete="slotProps">
-          <div class="flex mr-2">
+          <div class="flex mr-2 justify-center">
             <ccu-icon
               :alt="$t('actions.delete_invitation')"
               type="trash"
@@ -170,7 +177,7 @@ export default {
           title: '',
           dataIndex: 'actions',
           key: 'actions',
-          width: '3fr',
+          width: '2.5fr',
         },
       ],
       invitationsColumns: [
@@ -270,4 +277,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.table-action-button {
+  @apply mx-2 shadow bg-white px-4 p-2 text-xs text-crisiscleanup-dark-400;
+}
+</style>
