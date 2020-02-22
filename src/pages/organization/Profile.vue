@@ -14,18 +14,39 @@
       </div>
       <div class="px-8 pb-6 mt-2">
         <div class="flex">
-          <DragDrop
-            class="w-48 h-32 text-center mr-6 border border-dashed"
-            :choose-title="$t('profileVue.upload_org_logo')"
-            :drag-title="$t('profileVue.logo_specs')"
-            @files="handleFileUpload"
-          ></DragDrop>
+          <div v-if="!logoUrl" class="flex">
+            <DragDrop
+              class="w-48 h-32 text-center mr-6 border border-dashed"
+              :choose-title="$t('profileVue.upload_org_logo')"
+              :drag-title="$t('profileVue.logo_specs')"
+              @files="handleLogoUpload"
+            ></DragDrop>
 
-          <div class="mt-4">
-            <div class="py-1">{{ $t('~~Provide Logo') }}</div>
-            <div class="text-xs py-1 text-crisiscleanup-grey-700">
-              {{ $t('profileVue.logo_customizes_website') }}
+            <div class="mt-4">
+              <div class="py-1">{{ $t('~~Provide Logo') }}</div>
+              <div class="text-xs py-1 text-crisiscleanup-grey-700">
+                {{ $t('profileVue.logo_customizes_website') }}
+              </div>
             </div>
+          </div>
+          <div v-else>
+            <img
+              class="w-48 h-32"
+              :src="logoUrl"
+              :alt="$t('Organization Logo')"
+            />
+            <DragDrop
+              class="text-primary-dark cursor-pointer"
+              :disabled="uploading"
+              @files="handleLogoUpload"
+            >
+              <base-button
+                class="text-center pb-4 cursor-pointer"
+                :show-spinner="uploading"
+                :disabled="uploading"
+                >{{ $t('actions.change_logo') }}
+              </base-button>
+            </DragDrop>
           </div>
         </div>
         <div class="divider" />
@@ -115,6 +136,7 @@
             </div>
             <base-input
               size="small"
+              :value="currentOrganization.facebook"
               :placeholder="$t('profileVue.facebook')"
               @input="
                 value => {
@@ -133,6 +155,7 @@
             </div>
             <base-input
               size="small"
+              :value="currentOrganization.twitter"
               :placeholder="$t('profileVue.twitter')"
               @input="
                 value => {
@@ -143,16 +166,16 @@
           </div>
           <div class="divider" />
           <div class="form-row">
-            <base-input
-              class="mr-2 w-1/2"
+            <autocomplete
+              class="form-field"
+              icon="search"
+              :suggestions="userResults"
+              display-property="full_name"
+              size="large"
               :placeholder="$t('profileVue.primary_contact')"
-              :value="currentOrganization.primary_contact"
-              @input="
-                value => {
-                  updateOrganization(value, 'primary_contact');
-                }
-              "
-            ></base-input>
+              clear-on-selected
+              @search="onUserSearch"
+            />
           </div>
         </form>
       </div>
@@ -260,6 +283,7 @@ export default {
       primaryLocationMap: null,
       secondaryLocationMap: null,
       settingLocation: '',
+      userResults: [],
       organizationTypes: [
         'orgType.voad',
         'orgType.coad',
@@ -268,6 +292,7 @@ export default {
       ].map(key => {
         return { key, label: this.$t(key) };
       }),
+      uploading: false,
     };
   },
   computed: {
@@ -290,6 +315,17 @@ export default {
           : [];
       }
       return [];
+    },
+    logoUrl() {
+      if (this.currentOrganization.files.length) {
+        const logos = this.currentOrganization.files.filter(
+          file => file.file_type_t === 'fileTypes.logo',
+        );
+        if (logos.length) {
+          return logos[0].url;
+        }
+      }
+      return '';
     },
   },
   async mounted() {
@@ -420,30 +456,58 @@ export default {
         },
       });
     },
-    async handleFileUpload(fileList) {
-      this.fileList = fileList;
-
-      if (this.fileList.length === 0) {
+    async handleLogoUpload(fileList) {
+      if (fileList.length === 0) {
+        this.uploading = false;
         return;
       }
-      this.file = this.fileList[0].originFileObj;
-      // let buffer = await fileToArrayBuffer(this.file)
-      // let shape = await shp(buffer)
       const formData = new FormData();
-      formData.append('file', this.fileList[0]);
-      this.loading = true;
-      // const result = await this.$http.post(
-      //   `${process.env.VUE_APP_API_BASE_URL}/inspect_shapefile`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data',
-      //       Accept: 'application/json',
-      //     },
-      //   },
-      // );
-      // this.loading = false;
-      // this.shapefileStructure = result.data;
+      formData.append('upload', fileList[0]);
+      formData.append('type_t', 'fileTypes.logo');
+      this.uploading = true;
+      try {
+        const result = await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/files`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            },
+          },
+        );
+        const file = result.data.id;
+
+        const logos = this.currentOrganization.files.filter(
+          picture => picture.file_type_t === 'fileTypes.logo',
+        );
+
+        const oldImages = logos.map(picture =>
+          Organization.api().deleteFile(
+            this.currentOrganization.id,
+            picture.id,
+          ),
+        );
+        await Promise.all(oldImages);
+
+        await Organization.api().addFile(this.currentOrganization.id, file);
+        await Organization.api().get(
+          `/organizations/${this.currentOrganization.id}`,
+        );
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.uploading = false;
+      }
+    },
+    async onUserSearch(value) {
+      const results = await User.api().get(
+        `/users?search=${value}&limit=10&fields=id,name&organization=${this.currentOrganization.id}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      this.userResults = results.entities.users;
     },
   },
 };

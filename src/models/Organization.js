@@ -18,6 +18,8 @@ export default class Organization extends Model {
       user_count: this.attr(null),
       incidents: this.attr(null),
       incident_primary_contacts: this.attr(null),
+      primary_contacts: this.attr(null),
+      files: this.attr(null),
     };
   }
 
@@ -26,4 +28,28 @@ export default class Organization extends Model {
       .whereIdIn(this.incidents)
       .get();
   }
+
+  static apiConfig = {
+    actions: {
+      addFile(id, file, type) {
+        return this.post(
+          `/organizations/${id}/files`,
+          {
+            file,
+            type_t: type,
+          },
+          { save: false },
+        );
+      },
+      deleteFile(id, file) {
+        return this.delete(
+          `/organizations/${id}/files`,
+          {
+            data: { file },
+          },
+          { save: false },
+        );
+      },
+    },
+  };
 }
