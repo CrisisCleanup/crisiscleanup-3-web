@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col h-full">
     <div
-      class="h-10 bg-white mx-5 border-t flex justify-center text-crisiscleanup-grey-700"
+      class="h-12 bg-white mx-5 border-t flex justify-center text-crisiscleanup-grey-700"
     >
       <router-link
         to="/organization/invitations"
@@ -9,7 +9,7 @@
         tag="div"
         :class="{ 'router-link-active': isInvitationsActive }"
       >
-        <span class="pt-2">{{ $t('orgIndex.invitation_management') }}</span>
+        <span class="p-3">{{ $t('orgIndex.invitation_management') }}</span>
       </router-link>
 
       <router-link
@@ -17,7 +17,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('orgIndex.user_management') }}</span>
+        <span class="p-3">{{ $t('orgIndex.user_management') }}</span>
       </router-link>
 
       <router-link
@@ -25,7 +25,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('orgIndex.team_management') }}</span>
+        <span class="p-3">{{ $t('orgIndex.team_management') }}</span>
       </router-link>
 
       <router-link
@@ -33,7 +33,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('orgIndex.organization_profile') }}</span>
+        <span class="p-3">{{ $t('orgIndex.organization_profile') }}</span>
       </router-link>
 
       <router-link
@@ -41,7 +41,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('orgIndex.affiliated_orgs') }}</span>
+        <span class="p-3">{{ $t('orgIndex.affiliated_orgs') }}</span>
       </router-link>
 
       <router-link
@@ -49,7 +49,7 @@
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
       >
-        <span class="pt-2">{{ $t('orgIndex.layer_library') }}</span>
+        <span class="p-3">{{ $t('orgIndex.layer_library') }}</span>
       </router-link>
     </div>
     <div class="flex-grow overflow-auto bg-crisiscleanup-light-grey">
@@ -81,5 +81,6 @@ export default {
 .router-link-active {
   background-color: transparent;
   border-bottom: solid 3px theme('colors.primary.light');
+  @apply text-black;
 }
 </style>

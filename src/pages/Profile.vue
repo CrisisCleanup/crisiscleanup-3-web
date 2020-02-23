@@ -56,7 +56,7 @@
             <div class="flex flex-col p-8 w-64 items-center">
               <img
                 class="rounded-full p-1 profile-image"
-                :src="profilePictureUrl"
+                :src="currentUser.profilePictureUrl"
                 :alt="$t('Profile Picture')"
               />
               <DragDrop
@@ -139,11 +139,11 @@
                     class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
                     :value="currentUser.roles"
                     multiple
-                    :options="[]"
-                    item-key="value"
+                    :options="roles"
+                    item-key="id"
                     label="name_t"
                     size="large"
-                    select-classes="bg-white border text-xs h-12"
+                    select-classes="bg-white border text-xs"
                   />
                   <form-select
                     v-model="currentUser.equipment"
@@ -153,7 +153,7 @@
                     item-key="value"
                     label="name_t"
                     size="large"
-                    select-classes="bg-white border text-xs h-12"
+                    select-classes="bg-white border text-xs"
                   />
                 </div>
                 <div class="flex pb-4">
@@ -238,7 +238,7 @@
               <div v-else>
                 <h1 class="text-2xl">{{ name }}</h1>
                 <div class="text-crisiscleanup-grey-700">
-                  {{ currentUser.roles[0].name_t }}
+                  {{ userRoles[0].name_t }}
                 </div>
                 <div class="flex mt-4">
                   <img
@@ -336,6 +336,7 @@ import { size } from 'lodash';
 import { mapMutations } from 'vuex';
 import detectBrowserLanguage from 'detect-browser-language';
 import User from '@/models/User';
+import Role from '@/models/Role';
 import { getErrorMessage } from '../utils/errors';
 import Language from '@/models/Language';
 import { i18nService } from '@/services/i18n.service';
@@ -373,19 +374,16 @@ export default {
       }
       return '';
     },
+    roles() {
+      return Role.all();
+    },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
-    profilePictureUrl() {
-      if (this.currentUser.files.length) {
-        const profilePictures = this.currentUser.files.filter(
-          file => file.file_type_t === 'fileTypes.user_profile_picture',
-        );
-        if (profilePictures.length) {
-          return profilePictures[0].url;
-        }
-      }
-      return '';
+    userRoles() {
+      return Role.query()
+        .whereIdIn(this.currentUser.roles)
+        .get();
     },
     isEditing() {
       return this.mode === 'edit';

@@ -13,7 +13,8 @@
     :placeholder="placeholder"
     :reduce="item => (itemKey ? item[itemKey] : item)"
     :selectable="
-      () => !multiple || (multiple && limit > 0 && value.length < limit)
+      () =>
+        !multiple || !limit || (multiple && limit > 0 && value.length < limit)
     "
     @input="onInput"
     @search:focus="open"

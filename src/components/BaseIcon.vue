@@ -10,7 +10,10 @@
 const iconMap = {
   dashboard: require('@/assets/icons/dashboard.svg'),
   cases: require('@/assets/icons/cases.svg'),
+  call: require('@/assets/icons/call.svg'),
+  chat: require('@/assets/icons/chat.svg'),
   print: require('@/assets/icons/print-big.svg'),
+  pin: require('@/assets/icons/pin.svg'),
   share: require('@/assets/icons/share-big.svg'),
   download: require('@/assets/icons/download.svg'),
   active: require('@/assets/icons/active.svg'),

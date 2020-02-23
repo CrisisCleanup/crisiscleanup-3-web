@@ -89,6 +89,7 @@ import WorkType from '@/models/WorkType';
 import Organization from '@/models/Organization';
 import Status from '@/models/Status';
 import Language from '@/models/Language';
+import Role from '@/models/Role';
 import { i18nService } from '@/services/i18n.service';
 import DisasterIcon from '../components/DisasterIcon';
 import NavMenu from '@/components/navigation/NavMenu';
@@ -176,6 +177,9 @@ export default {
         `/organizations/${this.user.user_claims.organization.id}`,
       ),
       Language.api().get('/languages', {
+        dataKey: 'results',
+      }),
+      Role.api().get('/roles', {
         dataKey: 'results',
       }),
     ]);

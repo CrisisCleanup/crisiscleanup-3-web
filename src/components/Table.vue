@@ -1,6 +1,7 @@
 <template>
   <div class="table w-full">
     <div
+      v-if="!hideHeader"
       class="header text-crisiscleanup-grey-700 bg-white"
       :style="gridStyleHeader"
     >
@@ -162,6 +163,9 @@ export default {
       default: () => {
         return [];
       },
+    },
+    hideHeader: {
+      type: Boolean,
     },
     data: {
       type: null,

@@ -1,6 +1,7 @@
 import { Model } from '@vuex-orm/core';
 import { AuthService } from '@/services/auth.service';
 import Language from '@/models/Language';
+import Role from '@/models/Role';
 
 export default class User extends Model {
   static entity = 'users';
@@ -21,6 +22,24 @@ export default class User extends Model {
       secondary_language: this.attr(null),
       social: this.attr({}),
     };
+  }
+
+  get profilePictureUrl() {
+    if (this.files.length) {
+      const profilePictures = this.files.filter(
+        file => file.file_type_t === 'fileTypes.user_profile_picture',
+      );
+      if (profilePictures.length) {
+        return profilePictures[0].url;
+      }
+    }
+    return `https://api.adorable.io/avatars/285/ccu-user-${this.id}.png`;
+  }
+
+  get currentRole() {
+    return Role.query()
+      .whereIdIn(this.roles)
+      .get()[0];
   }
 
   get languages() {
@@ -49,11 +68,11 @@ export default class User extends Model {
   }
 
   get facebook() {
-    return this.social.facebook;
+    return this.social && this.social.facebook;
   }
 
   get twitter() {
-    return this.social.twitter;
+    return this.social && this.social.twitter;
   }
 
   static apiConfig = {

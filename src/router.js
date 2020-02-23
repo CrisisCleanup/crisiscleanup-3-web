@@ -17,6 +17,7 @@ import Users from '@/pages/organization/Users';
 import Profile from '@/pages/Profile';
 import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
 import store from '@/store/index';
+import UserView from '@/pages/organization/UserView';
 
 Vue.use(VueRouter);
 
@@ -98,6 +99,14 @@ const routes = [
         path: 'users',
         component: Users,
         name: 'nav.organization_users',
+        children: [
+          {
+            path: ':user_id',
+            component: UserView,
+            name: 'nav.organization_users',
+            meta: { id: 'user_detail' },
+          },
+        ],
       },
       {
         path: 'affiliates',
