@@ -1,6 +1,6 @@
 <template>
   <div class="flex h-full p-8 m-auto">
-    <div class="w-full">
+    <div class="w-full flex flex-col">
       <div class="flex items-center justify-between w-full">
         <div class="flex py-2">
           <base-input
@@ -118,7 +118,7 @@
           </div>
         </modal>
       </div>
-      <div class="flex">
+      <div class="flex flex-grow">
         <div class="w-96">
           <Table
             class="border text-xs"
