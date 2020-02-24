@@ -5,7 +5,8 @@
     }}</label>
     <input
       ref="input"
-      :class="[inputClasses, defaultInputClasses]"
+      :class="[inputClasses, defaultInputClasses, selector]"
+      :data-cy="selector"
       :style="inputStyle"
       :type="type || 'search'"
       :value="value"
@@ -23,7 +24,12 @@
       :class="iconClasses"
       @click="glassBroken = true"
     >
-      <ccu-icon type="edit" size="small" />
+      <ccu-icon
+        data-cy="js-break-glass"
+        type="edit"
+        size="small"
+        class="js-break-glass"
+      />
     </div>
     <div
       v-if="icon || tooltip"
@@ -96,6 +102,10 @@ export default {
     breakGlass: {
       type: Boolean,
       default: false,
+    },
+    selector: {
+      type: String,
+      default: '',
     },
   },
   data() {

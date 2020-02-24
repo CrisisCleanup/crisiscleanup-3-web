@@ -3,7 +3,8 @@
 exports[`BaseButton should render correctly and match snapshot 1`] = `
 <button
   alt="alt-text"
-  class="primary flex items-center justify-center"
+  class="primary flex items-center justify-center js-btntitle"
+  data-cy="js-btntitle"
   size=""
   title="btntitle"
   type="submit"

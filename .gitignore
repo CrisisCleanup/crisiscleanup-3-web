@@ -27,6 +27,7 @@ coverage
 .nyc_output/
 cypress/screenshots
 cypress/videos
+cypress.env.json
 
 # Misc
 .sync-exclude.lst

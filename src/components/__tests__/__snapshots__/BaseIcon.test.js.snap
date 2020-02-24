@@ -2,7 +2,7 @@
 
 exports[`BaseIcon should render correctly and match snapshot 1`] = `
 <div
-  class="flex items-center base-icon"
+  class="flex items-center base-icon js-"
 >
   <img
     alt=""

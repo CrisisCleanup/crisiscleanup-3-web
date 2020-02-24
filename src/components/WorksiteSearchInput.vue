@@ -5,6 +5,8 @@
       :suggestions="suggestions"
       :input-props="{
         id: 'autosuggest__input',
+        class: `js-worksite-search ${selector}`,
+        'data-cy': selector,
         placeholder,
         required,
         autocomplete: 'off',
@@ -73,6 +75,10 @@ export default {
     full: Boolean,
     loading: Boolean,
     width: {
+      type: String,
+      default: '',
+    },
+    selector: {
       type: String,
       default: '',
     },
