@@ -100,7 +100,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
       <div>
         <button
           alt="actions.clear_filters"
-          class="text-yellow-500 text-underline w-32 bare flex items-center justify-center"
+          class="text-yellow-500 text-underline w-32 bare flex items-center justify-center js-actions-clear-filters"
+          data-cy="js-actions-clear-filters"
           size=""
           title="actions.clear_filters"
           type="submit"
@@ -279,7 +280,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
   >
     <button
       alt="actions.cancel"
-      class="m-1 border-2 border-black px-6 py-2 text-base flex items-center justify-center"
+      class="m-1 border-2 border-black px-6 py-2 text-base flex items-center justify-center js-actions-cancel"
+      data-cy="js-actions-cancel"
       size="medium"
       title="actions.cancel"
       type="submit"
@@ -295,7 +297,8 @@ exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
      
     <button
       alt="actions.apply_filters"
-      class="m-1 p-3 px-6 text-base primary flex items-center justify-center"
+      class="m-1 p-3 px-6 text-base primary flex items-center justify-center js-actions-apply-filters"
+      data-cy="js-actions-apply-filters"
       size="medium"
       title="actions.apply_filters"
       type="submit"

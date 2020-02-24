@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center base-icon">
+  <div class="flex items-center base-icon" :class="iconSelector">
     <img :class="styles" :src="iconMap[type]" :alt="alt" :title="alt" />
     <slot></slot>
   </div>
@@ -7,6 +7,8 @@
 
 <script>
 /* eslint-disable global-require */
+import { kebabCase } from 'lodash';
+
 const iconMap = {
   dashboard: require('@/assets/icons/dashboard.svg'),
   cases: require('@/assets/icons/cases.svg'),
@@ -58,6 +60,10 @@ export default {
       type: String,
       default: '',
     },
+    selector: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -72,6 +78,11 @@ export default {
         xl: this.size === 'xl',
       },
     };
+  },
+  computed: {
+    iconSelector() {
+      return this.selector || `js-${kebabCase(this.alt)}`;
+    },
   },
 };
 </script>

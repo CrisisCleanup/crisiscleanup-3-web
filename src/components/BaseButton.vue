@@ -1,11 +1,12 @@
 <template>
   <button
-    :class="styles"
+    :class="[styles, buttonSelector]"
     :alt="alt || text"
     :disabled="disabled || loading"
     type="submit"
     :size="size"
-    :title="title || text || alt"
+    :title="buttonTitle"
+    :data-cy="buttonSelector"
     @click.prevent="performAction"
   >
     <font-awesome-icon
@@ -22,6 +23,8 @@
 </template>
 
 <script>
+import { kebabCase } from 'lodash';
+
 export default {
   name: 'BaseButton',
   props: {
@@ -73,6 +76,10 @@ export default {
       type: String,
       default: '',
     },
+    selector: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -80,6 +87,12 @@ export default {
     };
   },
   computed: {
+    buttonSelector() {
+      return this.selector || `js-${kebabCase(this.buttonTitle)}`;
+    },
+    buttonTitle() {
+      return this.title || this.text || this.alt;
+    },
     styles() {
       return {
         'text-lg': this.size === 'large',

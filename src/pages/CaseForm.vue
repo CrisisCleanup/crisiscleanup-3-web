@@ -12,6 +12,7 @@
       <section class="form-field">
         <WorksiteSearchInput
           :value="worksite.name"
+          selector="js-worksite-name"
           :suggestions="[
             {
               name: 'worksites',
@@ -38,6 +39,7 @@
       <div class="form-field">
         <WorksiteSearchInput
           :value="worksite.address"
+          selector="js-worksite-address"
           :suggestions="[
             {
               name: 'worksites',
@@ -67,6 +69,7 @@
       <div class="form-field">
         <base-input
           :value="worksite.city"
+          selector="js-worksite-city"
           size="large"
           :placeholder="$t('formLabels.city')"
           required
@@ -81,6 +84,7 @@
       <div class="form-field">
         <base-input
           :value="worksite.county"
+          selector="js-worksite-county"
           size="large"
           :placeholder="$t('formLabels.county')"
           :break-glass="true"
@@ -96,6 +100,7 @@
       <div class="form-field">
         <base-input
           :value="worksite.state"
+          selector="js-worksite-state"
           size="large"
           :placeholder="$t('formLabels.state')"
           required
@@ -110,6 +115,7 @@
       <div class="form-field">
         <base-input
           :value="worksite.postal_code"
+          selector="js-worksite-postal-code"
           size="large"
           :placeholder="$t('formLabels.postal_code')"
           required
