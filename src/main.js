@@ -11,6 +11,7 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import VueAutosuggest from 'vue-autosuggest';
 import VTooltip from 'v-tooltip';
 import Toasted from 'vue-toasted';
+import VueTagsInput from '@johmun/vue-tags-input';
 import Popover from 'vue-js-popover';
 import Dropdown from 'bp-vuejs-dropdown';
 import vSelect from 'vue-select';
@@ -67,6 +68,7 @@ Vue.component('autocomplete', Autocomplete);
 Vue.component('tag', Tag);
 Vue.component('spinner', Spinner);
 Vue.component('badge', Badge);
+Vue.component('tag-input', VueTagsInput);
 
 // Layouts
 Vue.component('authenticated-layout', Authenticated);

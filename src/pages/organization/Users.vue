@@ -66,7 +66,57 @@
           :text="$t('~~Invite New User')"
           type="primary"
           class="px-3 py-1"
+          :action="
+            () => {
+              showInviteModal = true;
+            }
+          "
         />
+        <modal
+          v-if="showInviteModal"
+          modal-classes="bg-white max-w-2xl shadow"
+          :title="$t('~~Invite User')"
+          closeable
+          @close="
+            () => {
+              usersToInvite = [];
+              showInviteModal = false;
+            }
+          "
+        >
+          <div class="text-justify flex flex-col p-3 justify-center">
+            <div class="my-3">
+              {{ $t('inviteTeammates.invite_teammates_instructions') }}
+            </div>
+            <div>
+              <tag-input
+                v-model="emails"
+                :tags="usersToInvite"
+                :placeholder="$t('~~Emails')"
+                :validation="emailValidation"
+                :add-on-key="[13, ',']"
+                @tags-changed="newTags => (usersToInvite = newTags)"
+              />
+            </div>
+          </div>
+          <div slot="footer" class="p-3 flex justify-end">
+            <base-button
+              :text="$t('actions.cancel')"
+              class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
+              :action="
+                () => {
+                  showInviteModal = false;
+                }
+              "
+            />
+            <base-button
+              type="primary"
+              :action="inviteUsers"
+              :text="$t('~~Invite Users')"
+              class="ml-2 p-3 px-6 text-xs"
+            />
+          </div>
+        </modal>
       </div>
       <div class="flex">
         <div class="w-96">
@@ -74,7 +124,7 @@
             class="border text-xs"
             :data="users"
             :columns="columns"
-            :loading="false"
+            :loading="usersLoading"
             hide-header
             @rowClick="
               user => {
@@ -141,6 +191,8 @@ import User from '@/models/User';
 import Role from '@/models/Role';
 import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
+import { getErrorMessage } from '../../utils/errors';
+import { emailRegex } from '../../utils/form';
 
 export default {
   name: 'Users',
@@ -150,10 +202,21 @@ export default {
       currentFilterSection: 'role',
       currentSearch: '',
       currentFilter: '',
+      emails: '',
+      usersToInvite: [],
+      showInviteModal: false,
       filters: {
         roles: {},
       },
+      usersLoading: false,
       users: [],
+      emailValidation: [
+        {
+          classes: 'min-length',
+          rule: emailRegex,
+          disableAdd: true,
+        },
+      ],
       columns: [
         {
           title: '',
@@ -193,13 +256,15 @@ export default {
         search,
         organization: this.currentUser.organization.id,
       };
+      this.usersLoading = true;
       const results = await User.api().get(
         `/users?${getQueryString(queryParams)}`,
         {
           dataKey: 'results',
         },
       );
-      this.users = results.entities.users;
+      this.users = results.entities.users || [];
+      this.usersLoading = false;
     }, 300),
     async onFilter() {
       this.currentFilter = {};
@@ -222,32 +287,42 @@ export default {
       if (this.currentSearch) {
         queryParams.search = this.currentSearch;
       }
-
+      this.usersLoading = true;
       const results = await User.api().get(
         `/users?${getQueryString(queryParams)}`,
         {
           dataKey: 'results',
         },
       );
-      this.users = results.entities.users;
+      this.users = results.entities.users || [];
+      this.usersLoading = false;
+    },
+    async inviteUsers() {
+      try {
+        const emails = this.usersToInvite.map(value => value.text);
+        await Promise.all(emails.map(email => User.api().inviteUser(email)));
+        await this.$toasted.success(
+          this.$t('inviteTeammates.invites_sent_success'),
+        );
+        this.showInviteModal = false;
+        this.usersToInvite = [];
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-.layer-action-popover {
-  @apply bg-white text-crisiscleanup-dark-100 outline-none w-full border w-auto;
-  left: 1px !important;
-  z-index: 50000;
-}
-
-.map-button.selected {
-  @apply bg-gray-300;
-}
-
 .user-image {
   width: 50px;
   height: 50px;
+}
+</style>
+
+<style>
+.vue-tags-input .ti-tag {
+  @apply relative bg-crisiscleanup-grey-100 text-black;
 }
 </style>
