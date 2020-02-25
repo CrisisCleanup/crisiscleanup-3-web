@@ -111,8 +111,8 @@ export default {
     });
   },
 
-  getLocationDetails({longitude, latitude }) {
-    const latlng = {lat: latitude, lng: longitude}
+  getLocationDetails({ longitude, latitude }) {
+    const latlng = { lat: latitude, lng: longitude };
     return new Promise((resolve, reject) => {
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({ location: latlng }, (results, status) => {
