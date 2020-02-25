@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="name-mobile-position">
-    <!------Name------>
-    <div class="user_name"><h1>full name</h1></div>
-    <!---Mobile--->
-    <div class="mobile-number">(601) 123-4567</div>
+      <!------Name------>
+      <div class="user_name"><h1>full name</h1></div>
+      <!---Mobile--->
+      <div class="mobile-number">(601) 123-4567</div>
     </div>
     <!---Profile Photo--->
     <div class="profile-photo">
