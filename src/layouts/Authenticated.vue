@@ -141,8 +141,7 @@ export default {
         {
           key: 'phone',
           icon: 'phone',
-          text: '~~Phone',
-          iconSize: 'large',
+          text: this.$t('dashboard.phone'),
           to: '/phone',
         },
       ];
