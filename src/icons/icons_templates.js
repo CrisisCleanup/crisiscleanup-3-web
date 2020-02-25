@@ -88,11 +88,11 @@ const colors = {
     fillColor: '#82D78C',
     strokeColor: '#82D78C',
   },
-  'closed_duplicate_unclaimed': {
+  closed_duplicate_unclaimed: {
     fillColor: '#7F7F7F',
     strokeColor: '#7F7F7F',
   },
-  'closed_duplicate_claimed': {
+  closed_duplicate_claimed: {
     fillColor: '#82D78C',
     strokeColor: '#82D78C',
   },
@@ -104,11 +104,11 @@ const colors = {
     fillColor: '#1D1D1D',
     strokeColor: '#1D1D1D',
   },
-  'closed_rejected_unclaimed': {
+  closed_rejected_unclaimed: {
     fillColor: '#1D1D1D',
     strokeColor: '#1D1D1D',
   },
-  'closed_rejected_claimed': {
+  closed_rejected_claimed: {
     fillColor: '#1D1D1D',
     strokeColor: '#1D1D1D',
   },
