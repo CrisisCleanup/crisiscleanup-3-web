@@ -17,7 +17,9 @@ exports[`NavButton should render correctly and match snapshot 1`] = `
     <div
       class="menu-text mt-1"
     >
+      
       nav.mockroute
+    
     </div>
   </div>
 </router-link-stub>
