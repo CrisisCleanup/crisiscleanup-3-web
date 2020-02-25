@@ -10,7 +10,9 @@
         :type="route.icon || route.key"
         :size="route.iconSize"
       />
-      <div class="menu-text mt-1">{{ $t(`nav.${route.key}`) }}</div>
+      <div class="menu-text mt-1">
+        {{ route.text || $t(`nav.${route.key}`) }}
+      </div>
     </div>
   </router-link>
 </template>
