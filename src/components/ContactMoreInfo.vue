@@ -22,12 +22,12 @@
     <hr class="line" />
     <!---Buttons--->
     <div class="btnplacement">
-    <div class="availabilitybtn">
-      <button>Unavailable</button>
-    </div>
-    <div class="dialer-btn">
-      <button>DP</button>
-    </div>
+      <div class="availabilitybtn">
+        <button>Unavailable</button>
+      </div>
+      <div class="dialer-btn">
+        <button>DP</button>
+      </div>
     </div>
   </div>
 </template>
@@ -63,14 +63,14 @@
   padding-left: 10px;
 }
 .line {
-  background-color: #DCDCDC;
-  color: #DCDCDC;
+  background-color: #dcdcdc;
+  color: #dcdcdc;
 }
 .btnplacement {
   padding-top: 10px;
 }
 .availabilitybtn {
-  background-color: #DC143C;
+  background-color: #dc143c;
   color: white;
   text-align: center;
   float: left;
