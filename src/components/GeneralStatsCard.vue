@@ -1,6 +1,5 @@
 <template>
    <div class='flex-wrap m-3 p-3'>
-
     <div class='flex flex-row'>
     <div class='flex-col '>
     <font-awesome-icon class='content-center mx-1 phone-icon' icon='phone-alt'/>
@@ -13,7 +12,6 @@
     <p class='justify-center'>Number of People waiting</p>
     </div>
     </div>
-
      <div class='flex flex-row row-span-3 justify-between my-3'>
      <div class='text-base'>
      <p class="justify-start">Remaining Calls</p>
