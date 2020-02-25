@@ -8,23 +8,35 @@
     </div>
     <!---Profile Photo--->
     <div class="profile-photo">
-      <img src="" alt="Profile Photo" />
+      <img src="" alt="PFP" />
     </div>
-    <!---Buttons--->
-    <div class="take-callsbtn">
-      <button>Take Calls</button>
+    <!---More Info--->
+    <div class="more-infobtn">
+      <button onclick="myFunction()">more info</button>
     </div>
-    <div class="return-callsbtn">
-      <button>Return Calls</button>
+    <!---info card--->
+    <div id="info-card">
+      <more-info></more-info>
     </div>
   </div>
 </template>
 
 <script>
+import ContactMoreInfo from './ContactMoreInfo.vue';
+
 export default {
   name: 'CallerCard',
+  components: {
+    'more-info': ContactMoreInfo,
+  }
 };
+
 </script>
+
+<script
+  src="http://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
 
 <style>
 .name-mobile-position {
@@ -44,29 +56,8 @@ export default {
   float: left;
   padding-bottom: 20px;
 }
-.take-callsbtn {
-  background-color: #ffd700;
-  color: #000;
-  text-align: center;
-  float: left;
-  border: none;
-  padding: 10px 15px;
-  display: grid;
-  font-size: 16px;
-}
-:hover .take-callsbtn {
-  opacity: 0.7;
-}
-.return-callsbtn {
-  display: grid;
-  background-color: #404040;
-  color: #fefefe;
-  text-align: center;
-  float: right;
-  padding: 10px 15px;
-  font-size: 16px;
-}
-:hover .return-callsbtn {
-  opacity: 0.7;
+.more-infobtn {
+  color: blue;
+  padding-left: 50px;
 }
 </style>
