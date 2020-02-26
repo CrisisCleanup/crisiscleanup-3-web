@@ -3,7 +3,7 @@
     :value="value"
     :options="options"
     :label="label"
-    :components="{ OpenIndicator }"
+    :components="{ OpenIndicator, Deselect }"
     :searchable="searchable"
     :multiple="multiple"
     :clearable="clearable"
@@ -94,6 +94,11 @@ export default {
   data() {
     return {
       isInvalid: false,
+      Deselect: {
+        render() {
+          return <ccu-icon size="xxs" class="mx-1" type="cancel" />;
+        },
+      },
       OpenIndicator: {
         render() {
           return (

@@ -19,21 +19,45 @@
               class="flex items-center bg-white border p-1 px-4 cursor-pointer mr-64 h-10"
               @click="() => {}"
             >
-              Filters
+              <div>
+                {{ $t('~~Filters') }}
+                <span
+                  v-if="filterCount > 0"
+                  class="rounded-full px-1 bg-black text-white text-xs"
+                  >{{ filterCount }}</span
+                >
+              </div>
               <font-awesome-icon icon="sort" class="ml-20" />
             </div>
             <div
               slot="popover"
-              class="bg-white shadow w-96"
+              class="bg-white shadow w-108"
               style="z-index: 1001;"
             >
               <div
-                class="flex items-center justify-between bg-crisiscleanup-light-grey p-1 px-2 h-8 w-full"
+                class="flex items-center bg-crisiscleanup-light-grey p-1 px-2 w-full flex-wrap"
               >
-                Tags
+                {{ $t('~~Filters') }}
+                <template v-for="(filter, key) in filters">
+                  <template v-for="(label, identifier) in filter.labels">
+                    <tag
+                      :key="key + identifier"
+                      closeable
+                      class="m-1"
+                      @closed="
+                        () => {
+                          filter.removeField(identifier);
+                          onFilter();
+                        }
+                      "
+                    >
+                      {{ label }}
+                    </tag>
+                  </template>
+                </template>
               </div>
-              <div class="flex">
-                <div class="w-2/5">
+              <div class="flex h-64">
+                <div class="w-40 border-r">
                   <div
                     class="p-3 px-4 cursor-pointer"
                     :class="{
@@ -42,19 +66,58 @@
                     }"
                     @click="currentFilterSection = 'role'"
                   >
-                    {{ $t('Role') }}
+                    {{ $t('~~Role') }}
+                    <span
+                      v-if="filters.roles.count > 0"
+                      class="rounded-full px-1 bg-black text-white text-xs"
+                      >{{ filters.roles.count }}</span
+                    >
+                  </div>
+                  <div
+                    class="p-3 px-4 cursor-pointer"
+                    :class="{
+                      'border-l-2 border-l-black':
+                        currentFilterSection === 'invited_by',
+                    }"
+                    @click="currentFilterSection = 'invited_by'"
+                  >
+                    {{ $t('~~Invited By') }}
+                    <span
+                      v-if="filters.invitedBy.count > 0"
+                      class="rounded-full px-1 bg-black text-white text-xs"
+                      >{{ filters.invitedBy.count }}</span
+                    >
                   </div>
                 </div>
-                <div class="w-3/5">
+                <div class="w-64 p-2">
                   <div v-if="currentFilterSection === 'role'">
                     Role
                     <div v-for="role in roles">
                       <base-checkbox
-                        v-model="filters.roles[role.id]"
+                        v-model="filters.roles.data[role.id]"
                         class="block my-1"
                         @input="onFilter"
                         >{{ role.name_t }}
                       </base-checkbox>
+                    </div>
+                  </div>
+                  <div v-if="currentFilterSection === 'invited_by'">
+                    Invited By
+                    <UserSearchInput
+                      :placeholder="$t('~~Search Users')"
+                      class="my-1"
+                      @selectedUser="
+                        user => {
+                          filters.invitedBy.data = new Set(
+                            filters.invitedBy.data.add(user),
+                          );
+                          this.onFilter();
+                        }
+                      "
+                    />
+
+                    <div v-for="user in filters.invitedBy.data" :key="user.id">
+                      {{ user.full_name }}
                     </div>
                   </div>
                 </div>
@@ -119,9 +182,9 @@
         </modal>
       </div>
       <div class="flex flex-grow">
-        <div class="w-96">
+        <div class="w-96 flex flex-col">
           <Table
-            class="border text-xs"
+            class="border text-xs flex-grow"
             :data="users"
             :columns="columns"
             :loading="usersLoading"
@@ -191,12 +254,15 @@ import User from '@/models/User';
 import Role from '@/models/Role';
 import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
-import { getErrorMessage } from '../../utils/errors';
-import { emailRegex } from '../../utils/form';
+import { getErrorMessage } from '@/utils/errors';
+import { emailRegex } from '@/utils/form';
+import UserSearchInput from '@/components/UserSearchInput';
+import UserRoleFilter from '@/utils/data_filters/UserRoleFilter';
+import UserInvitedByFilter from '@/utils/data_filters/UserInvitedByFilter';
 
 export default {
   name: 'Users',
-  components: { Table },
+  components: { Table, UserSearchInput },
   data() {
     return {
       currentFilterSection: 'role',
@@ -206,7 +272,8 @@ export default {
       usersToInvite: [],
       showInviteModal: false,
       filters: {
-        roles: {},
+        roles: new UserRoleFilter('roles', {}),
+        invitedBy: new UserInvitedByFilter('invitedBy', new Set([])),
       },
       usersLoading: false,
       users: [],
@@ -240,6 +307,11 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
+    filterCount() {
+      return Object.values(this.filters).reduce((total, obj) => {
+        return total + obj.count;
+      }, 0);
+    },
   },
   async mounted() {
     const results = await User.api().get(
@@ -268,16 +340,12 @@ export default {
     }, 300),
     async onFilter() {
       this.currentFilter = {};
-      const filteredRoles = Object.entries(this.filters.roles).filter(
-        ([, value]) => {
-          return Boolean(value);
-        },
-      );
-      if (filteredRoles.length) {
-        this.currentFilter.roles__id__in = filteredRoles
-          .map(([roleId]) => roleId)
-          .join(',');
-      }
+      Object.values(this.filters).forEach(filter => {
+        this.currentFilter = {
+          ...this.currentFilter,
+          ...filter.packFunction(),
+        };
+      });
 
       const queryParams = {
         organization: this.currentUser.organization.id,

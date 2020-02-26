@@ -91,7 +91,7 @@
               item-key="id"
               label="name_t"
               size="large"
-              select-classes="bg-white border text-xs"
+              select-classes="bg-white border text-xs role-select p-1"
             />
           </div>
         </div>
@@ -119,5 +119,10 @@ export default {
 .profile-image {
   height: 175px;
   width: 175px;
+}
+</style>
+<style>
+.role-select .vs__selected {
+  @apply text-xs bg-white !important;
 }
 </style>

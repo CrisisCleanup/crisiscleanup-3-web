@@ -166,16 +166,7 @@
           </div>
           <div class="divider" />
           <div class="form-row">
-            <autocomplete
-              class="form-field"
-              icon="search"
-              :suggestions="userResults"
-              display-property="full_name"
-              size="large"
-              :placeholder="$t('profileVue.primary_contact')"
-              clear-on-selected
-              @search="onUserSearch"
-            />
+            <UserSearchInput :placeholder="$t('profileVue.primary_contact')" />
           </div>
         </form>
       </div>
@@ -272,10 +263,11 @@ import User from '@/models/User';
 import DragDrop from '../../components/DragDrop';
 import LocationTool from '../../components/LocationTool';
 import { getErrorMessage } from '@/utils/errors';
+import UserSearchInput from '@/components/UserSearchInput';
 
 export default {
   name: 'Profile',
-  components: { DragDrop, LocationTool },
+  components: { UserSearchInput, DragDrop, LocationTool },
   data() {
     return {
       showingLocationModal: false,
@@ -283,7 +275,6 @@ export default {
       primaryLocationMap: null,
       secondaryLocationMap: null,
       settingLocation: '',
-      userResults: [],
       organizationTypes: [
         'orgType.voad',
         'orgType.coad',
@@ -499,15 +490,6 @@ export default {
       } finally {
         this.uploading = false;
       }
-    },
-    async onUserSearch(value) {
-      const results = await User.api().get(
-        `/users?search=${value}&limit=10&fields=id,name&organization=${this.currentOrganization.id}`,
-        {
-          dataKey: 'results',
-        },
-      );
-      this.userResults = results.entities.users;
     },
   },
 };

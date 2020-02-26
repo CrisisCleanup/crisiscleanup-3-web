@@ -43,6 +43,7 @@ module.exports = {
     'import/no-unresolved': 2,
     'import/no-webpack-loader-syntax': 0,
     'import/prefer-default-export': 0,
+    'class-methods-use-this': 0,
     'prettier/prettier': ['error', prettierOptions],
     'vue/require-v-for-key': 1,
     'vue/no-use-v-if-with-v-for': 1,

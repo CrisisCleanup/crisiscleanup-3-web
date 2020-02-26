@@ -143,7 +143,7 @@
                     item-key="id"
                     label="name_t"
                     size="large"
-                    select-classes="bg-white border text-xs"
+                    select-classes="bg-white border text-xs profile-select p-1"
                   />
                   <form-select
                     v-model="currentUser.equipment"
@@ -165,7 +165,7 @@
                     item-key="id"
                     label="name_t"
                     size="large"
-                    select-classes="bg-white border text-xs h-12"
+                    select-classes="bg-white border text-xs p-1 profile-select"
                     :limit="2"
                     @input="
                       value => {
@@ -525,5 +525,11 @@ export default {
 .profile-image {
   height: 175px;
   width: 175px;
+}
+</style>
+
+<style>
+.profile-select .vs__selected {
+  @apply text-xs bg-white !important;
 }
 </style>

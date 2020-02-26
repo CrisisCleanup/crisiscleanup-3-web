@@ -112,6 +112,7 @@ export default {
       this.$emit('selected', option.item);
       if (this.clearOnSelected) {
         this.selected = '';
+        this.value = '';
       }
     },
     getSuggestionValue(suggestion) {
