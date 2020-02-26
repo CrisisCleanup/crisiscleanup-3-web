@@ -1,329 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`WorksiteFilters should remove field 1`] = `
-Object {
-  "fields": Object {
-    "muck_out": true,
-  },
-  "flags": Object {},
-  "statusGroups": Object {
-    "closed": false,
-    "open": true,
-  },
-  "statuses": Object {},
-  "sub_fields": Object {},
-}
-`;
-
-exports[`WorksiteFilters should remove field 2`] = `
-Object {
-  "fields": Object {
-    "muck_out": undefined,
-  },
-  "flags": Object {},
-  "statusGroups": Object {
-    "closed": false,
-    "open": true,
-  },
-  "statuses": Object {},
-  "sub_fields": Object {},
-}
-`;
-
-exports[`WorksiteFilters should remove status 1`] = `
-Object {
-  "fields": Object {
-    "muck_out": true,
-  },
-  "flags": Object {
-    "open": undefined,
-  },
-  "statusGroups": Object {
-    "closed": false,
-    "open": undefined,
-  },
-  "statuses": Object {
-    "open": undefined,
-  },
-  "sub_fields": Object {},
-}
-`;
-
-exports[`WorksiteFilters should render correctly and match snapshot 1`] = `
-<modal-stub
-  modal-classes="bg-white max-w-2xl shadow"
-  modal-style="min-height: 60%"
->
-  <div
-    class="flex flex-col h-full"
-  >
-    <div
-      class="p-3"
-    >
-      
-      Filters
-      
-      <span
-        class="rounded-full px-1 bg-yellow-500 text-xs"
-      >
-        2
-      </span>
-    </div>
-     
-    <div
-      class="flex items-center justify-between bg-crisiscleanup-light-grey p-1 px-2"
-    >
-      <div
-        class="applied-filters flex flex-wrap justify-start bg-crisiscleanup-light-grey"
-      >
-        <tag-stub
-          class="m-1"
-          closeable=""
-        >
-          
-            worksiteFilters.work_type: workType.ash
-          
-        </tag-stub>
-         
-        <tag-stub
-          class="m-1"
-          closeable=""
-        >
-          
-            worksiteFilters.status: Open
-          
-        </tag-stub>
-        <!---->
-          
-      </div>
-       
-      <div>
-        <button
-          alt="actions.clear_filters"
-          class="text-yellow-500 text-underline w-32 bare flex items-center justify-center js-actions-clear-filters"
-          data-cy="js-actions-clear-filters"
-          size=""
-          title="actions.clear_filters"
-          type="submit"
-        >
-          <!---->
-           
-          <!---->
-           
-          <!---->
-           actions.clear_filters 
-          <!---->
-        </button>
-      </div>
-    </div>
-     
-    <div
-      class="flex flex-grow h-full"
-    >
-      <div
-        class="w-1/4 border-r"
-      >
-        <div
-          class="p-3 px-4 border-b cursor-pointer border-l-8 border-l-black"
-        >
-          
-          General
-          
-          <span
-            class="rounded-full px-1 bg-black text-white text-xs"
-          >
-            1
-          </span>
-        </div>
-         
-        <div
-          class="p-3 px-4 border-b cursor-pointer"
-        >
-          
-          Personal Info
-        
-        </div>
-         
-        <div
-          class="p-3 px-4 border-b cursor-pointer"
-        >
-          
-          worksiteFilters.flags
-          
-          <!---->
-        </div>
-         
-        <div
-          class="p-3 px-4 border-b cursor-pointer"
-        >
-          
-          Work
-          
-          <span
-            class="rounded-full px-1 bg-black text-white text-xs"
-          >
-            1
-          </span>
-        </div>
-      </div>
-       
-      <div
-        class="w-3/4 ml-4 mt-2 flex-grow"
-        style="height: 450px; overflow: auto;"
-      >
-        <div
-          class="flex flex-col"
-        >
-          <div
-            class="claim-status mb-2"
-          >
-            <div
-              class="my-1 text-base"
-            >
-              
-              worksiteFilters.claim_reported_by
-            
-            </div>
-             
-            <base-checkbox-stub
-              class="block my-1"
-            >
-              worksiteFilters.unclaimed
-            
-            </base-checkbox-stub>
-             
-            <base-checkbox-stub
-              class="block my-1"
-            >
-              worksiteFilters.claimed_by_my_org
-            
-            </base-checkbox-stub>
-             
-            <base-checkbox-stub
-              class="block my-1"
-            >
-              worksiteFilters.reported_by_my_org
-            
-            </base-checkbox-stub>
-          </div>
-           
-          <div
-            class="status-group mb-2"
-          >
-            <div
-              class="my-1 text-base"
-            >
-              
-              worksiteFilters.over_all_status
-            
-            </div>
-             
-            <base-checkbox-stub
-              class="block my-1"
-              value="true"
-            >
-              worksiteFilters.open
-            
-            </base-checkbox-stub>
-             
-            <base-checkbox-stub
-              class="block my-1"
-            >
-              worksiteFilters.closed
-            
-            </base-checkbox-stub>
-          </div>
-           
-          <div
-            class="statuses mb-2"
-          >
-            <div
-              class="my-1 text-base"
-            >
-              
-              worksiteFilters.detailed_status
-            
-            </div>
-             
-            <div
-              value="open_unassigned"
-            >
-              <base-checkbox-stub
-                class="block my-1"
-              >
-                Open, unassigned
-              
-              </base-checkbox-stub>
-            </div>
-            <div
-              value="open_assigned"
-            >
-              <base-checkbox-stub
-                class="block my-1"
-              >
-                Open, unassigned
-              
-              </base-checkbox-stub>
-            </div>
-          </div>
-        </div>
-         
-        <!---->
-         
-        <!---->
-      </div>
-    </div>
-  </div>
-   
-  <div
-    class="flex items-center justify-center p-2 bg-white border-t"
-  >
-    <button
-      alt="actions.cancel"
-      class="m-1 border-2 border-black px-6 py-2 text-base flex items-center justify-center js-actions-cancel"
-      data-cy="js-actions-cancel"
-      size="medium"
-      title="actions.cancel"
-      type="submit"
-    >
-      <!---->
-       
-      <!---->
-       
-      <!---->
-       actions.cancel 
-      <!---->
-    </button>
-     
-    <button
-      alt="actions.apply_filters"
-      class="m-1 p-3 px-6 text-base primary flex items-center justify-center js-actions-apply-filters"
-      data-cy="js-actions-apply-filters"
-      size="medium"
-      title="actions.apply_filters"
-      type="submit"
-    >
-      <!---->
-       
-      <!---->
-       
-      <!---->
-       actions.apply_filters 
-      <!---->
-    </button>
-  </div>
-</modal-stub>
-`;
+exports[`WorksiteFilters should render correctly and match snapshot 1`] = `<!---->`;
 
 exports[`WorksiteFilters should set status open/closed 1`] = `
 Object {
   "fields": Object {
-    "muck_out": true,
+    "data": Object {
+      "muck_out": true,
+    },
   },
   "flags": Object {},
   "statusGroups": Object {
-    "closed": false,
-    "open": true,
+    "data": Object {
+      "closed": false,
+      "open": true,
+    },
   },
   "statuses": Object {},
   "sub_fields": Object {},
@@ -333,12 +24,16 @@ Object {
 exports[`WorksiteFilters should set status open/closed 2`] = `
 Object {
   "fields": Object {
-    "muck_out": true,
+    "data": Object {
+      "muck_out": true,
+    },
   },
   "flags": Object {},
   "statusGroups": Object {
-    "closed": false,
-    "open": false,
+    "data": Object {
+      "closed": false,
+      "open": false,
+    },
   },
   "statuses": Object {},
   "sub_fields": Object {},
@@ -348,13 +43,18 @@ Object {
 exports[`WorksiteFilters should update filters 1`] = `
 Object {
   "fields": Object {
-    "muck_out": true,
+    "data": Object {
+      "muck_out": true,
+    },
   },
   "flags": Object {},
   "statusGroups": Object {
-    "closed": false,
-    "open": true,
+    "data": Object {
+      "closed": false,
+      "open": false,
+    },
   },
   "statuses": Object {},
+  "sub_fields": Object {},
 }
 `;

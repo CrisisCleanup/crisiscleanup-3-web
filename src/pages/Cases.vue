@@ -224,11 +224,12 @@
                 </template>
               </base-dropdown>
               <WorksiteFilters
-                v-if="showingFilters"
+                :show="showingFilters"
                 :current-filters="filters"
                 :incident="currentIncident"
                 @closedFilters="showingFilters = false"
                 @updatedFilters="onUpdatedFilters"
+                ref="worksiteFilter"
               />
             </div>
           </div>
@@ -654,13 +655,7 @@ export default {
         direction: null,
       },
       currentQuery: {},
-      filters: {
-        fields: {},
-        statusGroups: {},
-        flags: {},
-        statuses: {},
-        sub_fields: {},
-      },
+      filters: {},
       appliedFilters: {},
       newMarker: null,
       map: null,
@@ -671,6 +666,7 @@ export default {
       showingUnclaimModal: false,
       unchangedStatusOnUnclaim: true,
       updateStatusOnUnclaim: false,
+      isMounted: false,
     };
   },
   computed: {
@@ -777,16 +773,15 @@ export default {
       return [];
     },
     filtersCount() {
-      return (
-        Object.values(this.filters.statusGroups).filter(field => Boolean(field))
-          .length +
-        Object.values(this.filters.flags).filter(field => Boolean(field))
-          .length +
-        Object.values(this.filters.fields).filter(field => Boolean(field))
-          .length +
-        Object.values(this.filters.statuses).filter(field => Boolean(field))
-          .length
-      );
+      if (this.isMounted && this.$refs.worksiteFilter) {
+        return Object.values(this.$refs.worksiteFilter.filters).reduce(
+          (total, obj) => {
+            return total + obj.count;
+          },
+          0,
+        );
+      }
+      return 0;
     },
     google: gmapApi,
     ...mapState('loading', ['worksitesLoading']),
@@ -816,7 +811,6 @@ export default {
       }
       if (this.currentUser.states.filters) {
         this.filters = {
-          ...this.filters,
           ...this.currentUser.states.filters,
         };
       }
@@ -835,6 +829,7 @@ export default {
     await Location.api().get(`/locations?${getQueryString(locationParams)}`, {
       dataKey: 'results',
     });
+    this.isMounted = true;
   },
   methods: {
     handleTableChange({ pagination, filters, sorter }) {
@@ -863,8 +858,7 @@ export default {
     },
 
     onUpdatedFilters(filters) {
-      this.filters = filters;
-      this.handleFilters();
+      this.handleFilters(filters);
     },
 
     onMapMoved(bounds) {
@@ -1054,74 +1048,15 @@ export default {
       );
       this.searchValue = '';
     },
-    handleFilters() {
-      const appliedFilters = {
-        work_type__work_type__in: '',
-        flags: '',
-      };
-      const workTypeEntries = Object.entries(this.filters.fields);
-      workTypeEntries.forEach(([workType, values]) => {
-        if (values) {
-          appliedFilters.work_type__work_type__in += `${workType},`;
-        }
+    handleFilters(filters) {
+      this.appliedFilters = {};
+      Object.values(filters).forEach(filter => {
+        this.appliedFilters = {
+          ...this.appliedFilters,
+          ...filter.packFunction(),
+        };
       });
-      const flagEntries = Object.entries(this.filters.flags);
-      flagEntries.forEach(([flag, value]) => {
-        if (value) {
-          appliedFilters.flags += `${flag},`;
-        }
-      });
-      if (!Object.values(this.filters.fields).some(value => Boolean(value))) {
-        delete appliedFilters.work_type__work_type__in;
-      }
 
-      if (this.filters.statusGroups.unclaimed) {
-        appliedFilters.work_type__claimed_by__isnull = true;
-      }
-
-      if (this.filters.statusGroups.claimed_by_org) {
-        appliedFilters.work_type__claimed_by = this.currentUser.organization.id;
-      }
-
-      if (this.filters.statusGroups.reported_by_org) {
-        appliedFilters.reported_by = this.currentUser.organization.id;
-      }
-
-      if (this.filters.statusGroups.open) {
-        const openStatuses = Status.query()
-          .where('primary_state', 'open')
-          .get();
-        appliedFilters.work_type__status__in = openStatuses
-          .map(status => status.status)
-          .join(',');
-      }
-
-      if (this.filters.statusGroups.closed) {
-        const closedStatuses = Status.query()
-          .where('primary_state', 'closed')
-          .get();
-        appliedFilters.work_type__status__in = closedStatuses
-          .map(status => status.status)
-          .join(',');
-      }
-
-      const filteredStatuses = Object.entries(
-        this.filters.statuses,
-      ).filter(item => Boolean(item[1]));
-
-      if (filteredStatuses.length) {
-        const workTypeStatusIn = filteredStatuses
-          .map(item => item[0])
-          .join(',');
-
-        if (!appliedFilters.work_type__status__in) {
-          appliedFilters.work_type__status__in = workTypeStatusIn;
-        } else {
-          appliedFilters.work_type__status__in = `${appliedFilters.work_type__status__in},${workTypeStatusIn}`;
-        }
-      }
-
-      this.appliedFilters = appliedFilters;
       this.showingFilters = false;
       this.fetch({
         pageSize: this.pagination.pageSize,

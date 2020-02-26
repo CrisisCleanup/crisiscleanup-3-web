@@ -22,11 +22,15 @@ jest.mock('@/models/Status');
 
 const MockFilters = {
   fields: {
-    muck_out: true,
+    data: {
+      muck_out: true,
+    },
   },
   statusGroups: {
-    open: true,
-    closed: false,
+    data: {
+      open: true,
+      closed: false,
+    },
   },
   statuses: {},
   flags: {},
@@ -61,38 +65,18 @@ describe('WorksiteFilters', () => {
 
   it('should set status open/closed', () => {
     const wrapper = mountWithOptions();
+    wrapper.vm.filters = MockFilters;
     wrapper.vm.setOpenClosed(true, 'open');
     expect(wrapper.vm.filters).toMatchSnapshot();
     wrapper.vm.setOpenClosed();
     expect(wrapper.vm.filters).toMatchSnapshot();
   });
 
-  it('should remove field', () => {
-    const wrapper = mountWithOptions();
-    expect(wrapper.vm.filters).toMatchSnapshot(MockFilters);
-    wrapper.vm.removeField('muck_out');
-    expect(wrapper.vm.filters).toMatchSnapshot({
-      ...MockFilters,
-      fields: {},
-    });
-  });
-
-  it('should remove status', () => {
-    const wrapper = mountWithOptions();
-    wrapper.vm.removeFilter('open');
-    expect(wrapper.vm.filters).toMatchSnapshot({
-      ...MockFilters,
-      statusGroups: {
-        closed: false,
-      },
-    });
-  });
-
   it('should update filters', () => {
     const wrapper = mountWithOptions();
+    wrapper.vm.filters = MockFilters;
     wrapper.vm.updateFilters();
     const expectFilters = MockFilters;
-    delete expectFilters.sub_fields;
     expect(wrapper.emitted().updatedFilters[0][0]).toMatchSnapshot(
       expectFilters,
     );

@@ -1,6 +1,6 @@
 <template>
   <modal
-    v-if="true"
+    v-if="show"
     modal-classes="bg-white max-w-2xl shadow"
     modal-style="min-height: 60%"
   >
@@ -20,49 +20,21 @@
         <div
           class="applied-filters flex flex-wrap justify-start bg-crisiscleanup-light-grey"
         >
-          <template v-for="(value, key) in filters.fields">
-            <tag
-              v-if="value"
-              :key="key"
-              closeable
-              class="m-1"
-              @closed="removeField(key)"
-            >
-              {{ $t('worksiteFilters.work_type') }}: {{ key | getWorkTypeName }}
-            </tag>
-          </template>
-          <template v-for="(value, key) in filters.statusGroups">
-            <tag
-              v-if="value"
-              :key="key"
-              closeable
-              class="m-1"
-              @closed="removeFilter(key)"
-            >
-              {{ $t('worksiteFilters.status') }}: {{ key | snakeToTitleCase }}
-            </tag>
-          </template>
-          <template v-for="(value, key) in filters.flags">
-            <tag
-              v-if="value"
-              :key="key"
-              closeable
-              class="m-1"
-              @closed="removeFilter(key)"
-            >
-              {{ $t('worksiteFilters.flag') }}: {{ $t(key) }}
-            </tag>
-          </template>
-          <template v-for="(value, key) in filters.statuses">
-            <tag
-              v-if="value"
-              :key="key"
-              closeable
-              class="m-1"
-              @closed="removeFilter(key)"
-            >
-              {{ $t('worksiteFilters.status') }}: {{ key | getStatusName }}
-            </tag>
+          <template v-for="(filter, key) in filters">
+            <template v-for="(label, identifier) in filter.labels">
+              <tag
+                :key="key + identifier"
+                closeable
+                class="m-1"
+                @closed="
+                  () => {
+                    filter.removeField(identifier);
+                  }
+                "
+              >
+                {{ label }}
+              </tag>
+            </template>
           </template>
         </div>
         <div>
@@ -131,17 +103,17 @@
                 {{ $t('worksiteFilters.claim_reported_by') }}
               </div>
               <base-checkbox
-                v-model="filters.statusGroups['unclaimed']"
+                v-model="filters.statusGroups.data['unclaimed']"
                 class="block my-1"
                 >{{ $t('worksiteFilters.unclaimed') }}
               </base-checkbox>
               <base-checkbox
-                v-model="filters.statusGroups['claimed_by_org']"
+                v-model="filters.statusGroups.data['claimed_by_org']"
                 class="block my-1"
                 >{{ $t('worksiteFilters.claimed_by_my_org') }}
               </base-checkbox>
               <base-checkbox
-                v-model="filters.statusGroups['reported_by_org']"
+                v-model="filters.statusGroups.data['reported_by_org']"
                 class="block my-1"
                 >{{ $t('worksiteFilters.reported_by_my_org') }}
               </base-checkbox>
@@ -152,7 +124,7 @@
               </div>
               <base-checkbox
                 class="block my-1"
-                :value="filters.statusGroups['open']"
+                :value="filters.statusGroups.data['open']"
                 @input="
                   value => {
                     setOpenClosed(value, 'open');
@@ -162,7 +134,7 @@
               </base-checkbox>
               <base-checkbox
                 class="block my-1"
-                :value="filters.statusGroups['closed']"
+                :value="filters.statusGroups.data['closed']"
                 @input="
                   value => {
                     setOpenClosed(value, 'closed');
@@ -183,12 +155,12 @@
               >
                 <base-checkbox
                   class="block my-1"
-                  :value="filters.statuses[status.status]"
+                  :value="filters.statuses.data[status.status]"
                   @input="
                     value => {
-                      filters.statuses[status.status] = value;
-                      filters.statuses = {
-                        ...filters.statuses,
+                      filters.statuses.data[status.status] = value;
+                      filters.statuses.data = {
+                        ...filters.statuses.data,
                       };
                     }
                   "
@@ -206,11 +178,11 @@
                 v-for="flag in flagTypes"
                 :key="flag"
                 class="block my-1"
-                :value="filters.flags[flag]"
+                :value="filters.flags.data[flag]"
                 @input="
                   value => {
-                    filters.flags[flag] = value;
-                    filters.flags = { ...filters.flags };
+                    filters.flags.data[flag] = value;
+                    filters.flags.data = { ...filters.flags.data };
                   }
                 "
                 >{{ $t(flag) }}
@@ -225,11 +197,11 @@
               class="p-2 px-4 mb-2 bg-crisiscleanup-light-grey"
             >
               <div class="flex items-center justify-between">
-                <base-checkbox v-model="filters.fields[f.key]">{{
+                <base-checkbox v-model="filters.fields.data[f.key]">{{
                   f.name_t
                 }}</base-checkbox>
                 <font-awesome-icon
-                  v-if="filters.fields[f.key]"
+                  v-if="filters.fields.data[f.key]"
                   class="cursor-pointer"
                   size="md"
                   :icon="expanded[f.key] ? 'caret-up' : 'caret-down'"
@@ -331,6 +303,10 @@
 <script>
 import WorkType from '@/models/WorkType';
 import Status from '@/models/Status';
+import WorksiteFieldsFilter from '../utils/data_filters/WorksiteFieldsFilter';
+import WorksiteFlagsFilter from '../utils/data_filters/WorksiteFlagsFilter';
+import WorksiteStatusGroupFilter from '../utils/data_filters/WorksiteStatusGroupFilter';
+import WorksiteStatusFilter from '../utils/data_filters/WorksiteStatusFilter';
 
 export default {
   name: 'WorksiteFilters',
@@ -346,6 +322,9 @@ export default {
       default: () => {
         return {};
       },
+    },
+    show: {
+      type: Boolean,
     },
   },
   data() {
@@ -389,22 +368,16 @@ export default {
       return [];
     },
     fieldsCount() {
-      return Object.values(this.filters.fields).filter(field => Boolean(field))
-        .length;
+      return this.filters.fields.count;
     },
     statusCount() {
-      return Object.values(this.filters.statuses).filter(field =>
-        Boolean(field),
-      ).length;
+      return this.filters.statuses.count;
     },
     statusGroupCount() {
-      return Object.values(this.filters.statusGroups).filter(field =>
-        Boolean(field),
-      ).length;
+      return this.filters.statusGroups.count;
     },
     flagsCount() {
-      return Object.values(this.filters.flags).filter(field => Boolean(field))
-        .length;
+      return this.filters.flags.count;
     },
     filtersCount() {
       return (
@@ -423,32 +396,35 @@ export default {
       });
     },
   },
-  created() {
-    this.filters = {
-      fields: { ...this.currentFilters.fields },
-      statusGroups: { ...this.currentFilters.statusGroups },
-      flags: { ...this.currentFilters.flags },
-      statuses: { ...this.currentFilters.statuses },
-      sub_fields: {},
-    };
-  },
-  mounted() {
-    /* eslint-disable no-restricted-syntax */
-    /* TODO: refactor after unit tests are complete */
-    for (const type of this.incidentTypes) {
-      this.filters.sub_fields[type.key] = {};
-    }
+  watch: {
+    currentFilters() {
+      this.filters = {
+        fields: new WorksiteFieldsFilter(
+          'fields',
+          this.currentFilters.fields.data || {},
+        ),
+        statusGroups: new WorksiteStatusGroupFilter(
+          'statusGroups',
+          this.currentFilters.statusGroups.data || {},
+        ),
+        flags: new WorksiteFlagsFilter(
+          'flags',
+          this.currentFilters.flags.data || {},
+        ),
+        statuses: new WorksiteStatusFilter(
+          'statuses',
+          this.currentFilters.statuses.data || {},
+        ),
+      };
+    },
   },
   methods: {
     updateFilters() {
       this.$emit('updatedFilters', {
-        fields: { ...this.filters.fields },
-        statusGroups: { ...this.filters.statusGroups },
-        flags: { ...this.filters.flags },
-        statuses: { ...this.filters.statuses },
+        ...this.filters,
       });
 
-      for (const [key, value] of Object.entries(this.filters.fields)) {
+      for (const [key, value] of Object.entries(this.filters.fields.data)) {
         if (!value) {
           this.expanded[key] = false;
         }
@@ -456,13 +432,13 @@ export default {
     },
     /* eslint-enable no-restricted-syntax */
     setOpenClosed(value, status) {
-      this.filters.statusGroups.open = false;
-      this.filters.statusGroups.closed = false;
+      this.filters.statusGroups.data.open = false;
+      this.filters.statusGroups.data.closed = false;
       if (value) {
-        this.filters.statusGroups[status] = value;
+        this.filters.statusGroups.data[status] = value;
       }
-      this.filters.statusGroups = {
-        ...this.filters.statusGroups,
+      this.filters.statusGroups.data = {
+        ...this.filters.statusGroups.data,
       };
     },
     expandSection(key) {
@@ -489,21 +465,12 @@ export default {
       }
       return [];
     },
-    removeField(key) {
-      this.filters.fields[key] = undefined;
-    },
-    removeFilter(key) {
-      this.filters.statusGroups[key] = undefined;
-      this.filters.flags[key] = undefined;
-      this.filters.statuses[key] = undefined;
-    },
     clearAllFilters() {
       this.filters = {
-        fields: {},
-        statuses: {},
-        statusGroups: {},
-        flags: {},
-        sub_fields: {},
+        fields: new WorksiteFieldsFilter('fields', {}),
+        statusGroups: new WorksiteStatusGroupFilter('statusGroups', {}),
+        flags: new WorksiteFlagsFilter('flags', {}),
+        statuses: new WorksiteStatusFilter('statuses', {}),
       };
     },
   },
