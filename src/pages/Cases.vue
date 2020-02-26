@@ -224,12 +224,12 @@
                 </template>
               </base-dropdown>
               <WorksiteFilters
+                ref="worksiteFilter"
                 :show="showingFilters"
                 :current-filters="filters"
                 :incident="currentIncident"
                 @closedFilters="showingFilters = false"
                 @updatedFilters="onUpdatedFilters"
-                ref="worksiteFilter"
               />
             </div>
           </div>
@@ -615,7 +615,6 @@ import Location from '@/models/Location';
 import Table from '@/components/Table';
 import WorksiteMap from '@/components/WorksiteMap';
 import WorksiteFilters from '@/components/WorksiteFilters';
-import Status from '@/models/Status';
 import { getQueryString } from '@/utils/urls';
 import { getColorForStatus } from '@/filters';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';

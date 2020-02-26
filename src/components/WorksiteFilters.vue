@@ -424,6 +424,7 @@ export default {
         ...this.filters,
       });
 
+      // eslint-disable-next-line no-restricted-syntax
       for (const [key, value] of Object.entries(this.filters.fields.data)) {
         if (!value) {
           this.expanded[key] = false;
