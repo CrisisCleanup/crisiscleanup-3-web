@@ -50,8 +50,7 @@ export default {
   data() {
     return {
       dragAndDropCapable: false,
-      defaultClasses:
-        'items-center justify-center',
+      defaultClasses: 'items-center justify-center',
     };
   },
   mounted() {

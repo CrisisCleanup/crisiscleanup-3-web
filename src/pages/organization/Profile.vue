@@ -324,7 +324,7 @@
           />
         </DragDrop>
       </div>
-      <hr>
+      <hr />
       <div class="px-8 pb-6 mt-4">
         <div class="my-1">{{ $t('~~Upload Custom Liability Waiver') }}</div>
         <div class="flex items-center">
