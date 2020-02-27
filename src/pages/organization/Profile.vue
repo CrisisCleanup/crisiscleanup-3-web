@@ -19,7 +19,12 @@
               class="w-48 h-32 text-center mr-6 border border-dashed"
               :choose-title="$t('profileVue.upload_org_logo')"
               :drag-title="$t('profileVue.logo_specs')"
-              @files="handleLogoUpload"
+              :multiple="false"
+              @files="
+                files => {
+                  handleFileUpload(files, 'fileTypes.logo');
+                }
+              "
             ></DragDrop>
 
             <div class="mt-4">
@@ -38,7 +43,12 @@
             <DragDrop
               class="text-primary-dark cursor-pointer"
               :disabled="uploading"
-              @files="handleLogoUpload"
+              :multiple="false"
+              @files="
+                files => {
+                  handleFileUpload(files, 'fileTypes.logo');
+                }
+              "
             >
               <base-button
                 class="text-center pb-4 cursor-pointer"
@@ -171,7 +181,15 @@
         </form>
       </div>
     </div>
-    <div class="flex mb-32">
+    <div class="w-full bg-white shadow mt-6">
+      <div
+        class="border-b px-4 py-2 font-semibold flex justify-between items-center"
+      >
+        {{ $t('profileVue.incident_information') }}
+      </div>
+      <div class="px-8 pb-6 mt-2"></div>
+    </div>
+    <div class="flex">
       <div class="w-1/2 bg-white shadow mt-6 mr-3">
         <div class="border-b px-8 py-4 font-semibold">
           {{ $t('profileVue.primary_response_area') }}
@@ -204,14 +222,14 @@
         </div>
         <div id="primary-location" class="w-full h-64"></div>
       </div>
-      <div class="w-1/2 bg-white shadow mt-6 mr-3">
+      <div class="w-1/2 bg-white shadow mt-6">
         <div class="border-b px-8 py-4 font-semibold">
           {{ $t('profileVue.secondary_response_area') }}
         </div>
         <div class="py-2 flex items-center justify-center">
           <base-button
             v-if="currentOrganization.secondary_location"
-            text="$t('profileVue.edit_response_area')"
+            :text="$t('profileVue.edit_response_area')"
             type="primary"
             class="px-2 py-1"
             :action="
@@ -225,7 +243,7 @@
             v-else
             class="px-2 py-1"
             type="primary"
-            text="$t('profileVue.add_response_area')"
+            :text="$t('profileVue.add_response_area')"
             :action="
               () => {
                 showingLocationModal = true;
@@ -251,6 +269,110 @@
           @changed="setCurrentLocation"
         />
       </modal>
+    </div>
+    <div class="w-full bg-white shadow mt-6 mb-32">
+      <div
+        class="border-b px-4 py-2 font-semibold flex justify-between items-center"
+      >
+        {{ $t('profileVue.documents_and_materials') }}
+      </div>
+      <div class="px-8 pb-6 mt-4">
+        <div class="my-1">{{ $t('~~Upload Custom Terms For Users') }}</div>
+        <div class="flex items-center">
+          <font-awesome-icon
+            class="mx-1 text-crisiscleanup-dark-400 mr-2"
+            size="lg"
+            icon="file"
+          />
+          <base-input
+            size="small"
+            class="w-64 mr-2"
+            input-classes="text-xs"
+            disabled
+            :value="termsOfService ? termsOfService.filename_original : ''"
+          ></base-input>
+          <ccu-icon
+            v-if="termsOfService"
+            :alt="$t('actions.trash')"
+            size="small"
+            class="p-1 py-2"
+            type="trash"
+            @click.native="
+              () => {
+                deleteFile(termsOfService.file);
+              }
+            "
+          />
+        </div>
+        <DragDrop
+          class="cursor-pointer w-64 py-2"
+          container-class="items-start"
+          :disabled="uploading"
+          :multiple="false"
+          @files="
+            files => {
+              handleFileUpload(files, 'fileTypes.terms_of_service');
+            }
+          "
+        >
+          <base-button
+            class="cursor-pointer px-3 py-1"
+            type="primary"
+            :text="$t('actions.upload_terms')"
+            :show-spinner="uploading"
+            :disabled="uploading"
+          />
+        </DragDrop>
+      </div>
+      <hr>
+      <div class="px-8 pb-6 mt-4">
+        <div class="my-1">{{ $t('~~Upload Custom Liability Waiver') }}</div>
+        <div class="flex items-center">
+          <font-awesome-icon
+            class="mx-1 text-crisiscleanup-dark-400 mr-2"
+            size="lg"
+            icon="file"
+          />
+          <base-input
+            size="small"
+            class="w-64 mr-2"
+            input-classes="text-xs"
+            disabled
+            :value="liabilityWaiver ? liabilityWaiver.filename_original : ''"
+          ></base-input>
+          <ccu-icon
+            v-if="liabilityWaiver"
+            :alt="$t('actions.trash')"
+            size="small"
+            class="p-1 py-2"
+            type="trash"
+            @click.native="
+              () => {
+                deleteFile(liabilityWaiver.file);
+              }
+            "
+          />
+        </div>
+        <DragDrop
+          class="cursor-pointer w-64 py-2"
+          container-class="items-start"
+          :disabled="uploading"
+          :multiple="false"
+          @files="
+            files => {
+              handleFileUpload(files, 'fileTypes.liability_waiver');
+            }
+          "
+        >
+          <base-button
+            class="cursor-pointer px-3 py-1"
+            type="primary"
+            :text="$t('actions.liability_waiver')"
+            :show-spinner="uploading"
+            :disabled="uploading"
+          />
+        </DragDrop>
+      </div>
     </div>
   </div>
 </template>
@@ -317,6 +439,22 @@ export default {
         }
       }
       return '';
+    },
+    termsOfService() {
+      if (this.currentOrganization.files.length) {
+        return this.currentOrganization.files.find(
+          file => file.file_type_t === 'fileTypes.terms_of_service',
+        );
+      }
+      return null;
+    },
+    liabilityWaiver() {
+      if (this.currentOrganization.files.length) {
+        return this.currentOrganization.files.find(
+          file => file.file_type_t === 'fileTypes.liability_waiver',
+        );
+      }
+      return null;
     },
   },
   async mounted() {
@@ -433,9 +571,6 @@ export default {
         'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
         {
           maxZoom: 19,
-          attribution:
-            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-          id: 'openStreetMap',
         },
       );
     },
@@ -447,14 +582,20 @@ export default {
         },
       });
     },
-    async handleLogoUpload(fileList) {
+    async deleteFile(file) {
+      await Organization.api().deleteFile(this.currentOrganization.id, file);
+      await Organization.api().get(
+        `/organizations/${this.currentOrganization.id}`,
+      );
+    },
+    async handleFileUpload(fileList, type, deleteOldFiles = true) {
       if (fileList.length === 0) {
         this.uploading = false;
         return;
       }
       const formData = new FormData();
-      formData.append('upload', fileList[0]);
-      formData.append('type_t', 'fileTypes.logo');
+      formData.append('upload', fileList[fileList.length - 1]);
+      formData.append('type_t', type);
       this.uploading = true;
       try {
         const result = await this.$http.post(
@@ -469,19 +610,25 @@ export default {
         );
         const file = result.data.id;
 
-        const logos = this.currentOrganization.files.filter(
-          picture => picture.file_type_t === 'fileTypes.logo',
+        const files = this.currentOrganization.files.filter(
+          picture => picture.file_type_t === type,
         );
 
-        const oldImages = logos.map(picture =>
-          Organization.api().deleteFile(
-            this.currentOrganization.id,
-            picture.id,
-          ),
-        );
-        await Promise.all(oldImages);
+        if (deleteOldFiles) {
+          const oldFiles = files.map(picture =>
+            Organization.api().deleteFile(
+              this.currentOrganization.id,
+              picture.file,
+            ),
+          );
+          await Promise.all(oldFiles);
+        }
 
-        await Organization.api().addFile(this.currentOrganization.id, file);
+        await Organization.api().addFile(
+          this.currentOrganization.id,
+          file,
+          type,
+        );
         await Organization.api().get(
           `/organizations/${this.currentOrganization.id}`,
         );

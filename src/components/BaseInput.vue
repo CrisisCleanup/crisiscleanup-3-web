@@ -134,7 +134,8 @@ export default {
         'p-1': true,
         'text-base': !this.inputClasses,
         large: this.size === 'large',
-        base: this.size !== 'large',
+        small: this.size === 'small',
+        base: !this.size,
         'has-icon': Boolean(this.icon),
         'has-tooltip': Boolean(this.tooltip),
         invalid: Boolean(this.isInvalid),
@@ -188,6 +189,10 @@ input {
 
 input.large {
   height: 50px;
+}
+
+input.small {
+  height: 30px;
 }
 
 .icon-container {

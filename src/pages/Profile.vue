@@ -444,7 +444,7 @@ export default {
         );
 
         const oldImages = profilePictures.map(picture =>
-          User.api().deleteFile(this.currentUser.id, picture.id),
+          User.api().deleteFile(this.currentUser.id, picture.file),
         );
         await Promise.all(oldImages);
 

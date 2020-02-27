@@ -2,7 +2,8 @@
   <div class="flex items-center justify-center">
     <form ref="fileform" class="w-full h-full">
       <div
-        class="relative w-full h-full flex flex-col items-center justify-center"
+        class="relative w-full h-full flex flex-col"
+        :class="containerClass || defaultClasses"
       >
         <slot>
           <div class="p-2 text-crisiscleanup-grey-700">{{ dragTitle }}</div>
@@ -33,6 +34,10 @@ export default {
       type: String,
       default: '',
     },
+    containerClass: {
+      type: String,
+      default: '',
+    },
     multiple: {
       type: Boolean,
       default: true,
@@ -45,6 +50,8 @@ export default {
   data() {
     return {
       dragAndDropCapable: false,
+      defaultClasses:
+        'items-center justify-center',
     };
   },
   mounted() {
