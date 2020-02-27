@@ -19,7 +19,9 @@
     "test:e2e": "cross-env NODE_ENV=test cypress run",
     "test:cy": "cross-env NODE_ENV=test cypress run --browser chrome",
     "test:percy": "cross-env NODE_ENV=test percy exec -- yarn run test:cy",
-    "cy:open": "cross-env NODE_ENV=test cypress open"
+    "cy:open": "cross-env NODE_ENV=test cypress open",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",
@@ -92,6 +94,11 @@
     "@cypress/code-coverage": "^1.12.2",
     "@cypress/webpack-preprocessor": "^4.1.1",
     "@percy/cypress": "^2.3.0",
+    "@storybook/addon-actions": "^5.3.14",
+    "@storybook/addon-centered": "^5.3.14",
+    "@storybook/addon-links": "^5.3.14",
+    "@storybook/addons": "^5.3.14",
+    "@storybook/vue": "^5.3.14",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-e2e-cypress": "^4.2.2",
     "@vue/cli-plugin-eslint": "^4.2.2",
@@ -100,6 +107,8 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.6",
+    "babel-preset-vue": "^2.0.2",
     "bp-vuejs-dropdown": "^2.1.1",
     "cross-env": "^7.0.0",
     "cypress": "^4.0.2",
