@@ -10,6 +10,7 @@
     "lint-staged": "lint-staged",
     "lint": "vue-cli-service lint --no-fix --ignore-path .gitignore .",
     "prettify": "prettier --write {.,**}/*.{js,vue}",
+    "format": "yarn lint-fix && yarn prettify",
     "deploy-staging": "vue-cli-service build --mode staging && vue-cli-service s3-deploy",
     "compile-icons": "./template-compiler.js",
     "test": "yarn test:unit && yarn test:e2e",
@@ -64,7 +65,6 @@
     "marker-clusterer-plus": "^2.1.4",
     "pixi-filters": "^3.0.3",
     "pixi.js": "^5.1.5",
-    "pre-commit": "^1.2.2",
     "shpjs": "^3.4.3",
     "spin.js": "^4.1.0",
     "v-tooltip": "^2.0.3",
@@ -113,13 +113,14 @@
     "eslint-plugin-import": "^2.19.1",
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-vue": "^6.1.1",
+    "husky": "^4.2.3",
     "istanbul-lib-coverage": "^3.0.0",
     "jest": "^24.9.0",
     "jest-canvas-mock": "^2.2.0",
     "jest-serializer-vue": "^2.0.2",
     "less": "^3.10.3",
     "less-loader": "^5.0.0",
-    "lint-staged": "^9.5.0",
+    "lint-staged": "^10.0.8",
     "nyc": "^15.0.0",
     "prettier": "^1.19.1",
     "tailwindcss": "^1.1.2",
@@ -134,8 +135,7 @@
   ],
   "lint-staged": {
     "*.{js,vue}": [
-      "yarn lint-fix",
-      "yarn prettify",
+      "yarn format",
       "git add --force"
     ],
     "*.json": [
@@ -143,5 +143,10 @@
       "git add --force"
     ]
   },
-  "pre-commit": "lint-staged"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "lint-staged && yarn test:unit"
+    }
+  }
 }
