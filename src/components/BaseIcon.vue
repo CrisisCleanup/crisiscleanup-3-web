@@ -57,7 +57,7 @@ export default {
   props: {
     type: VueTypes.oneOf(Object.keys(ICONS)),
     alt: VueTypes.string,
-    size: VueTypes.oneOf(ICON_SIZES).def('small'),
+    size: VueTypes.oneOf(ICON_SIZES).def('large'),
     selector: VueTypes.string,
   },
   data() {
