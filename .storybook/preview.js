@@ -1,4 +1,5 @@
 import { configure, addDecorator } from '@storybook/vue';
+import { withA11y } from '@storybook/addon-a11y';
 import centered from '@storybook/addon-centered/vue';
 
 import Vue from 'vue';
@@ -111,5 +112,6 @@ Vue.use(Vuex);
 
 // Decorators
 addDecorator(centered);
+addDecorator(withA11y);
 
 configure(require.context('../src', true, /\.stories\.js$/), module);

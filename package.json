@@ -95,6 +95,7 @@
     "@cypress/code-coverage": "^1.12.2",
     "@cypress/webpack-preprocessor": "^4.1.1",
     "@percy/cypress": "^2.3.0",
+    "@storybook/addon-a11y": "^5.3.14",
     "@storybook/addon-actions": "^5.3.14",
     "@storybook/addon-centered": "^5.3.14",
     "@storybook/addon-links": "^5.3.14",
