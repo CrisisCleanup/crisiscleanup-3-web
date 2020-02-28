@@ -123,7 +123,7 @@
     "lint-staged": "^10.0.8",
     "nyc": "^15.0.0",
     "prettier": "^1.19.1",
-    "tailwindcss": "^1.1.2",
+    "tailwindcss": "^1.2.0",
     "vue-jest": "^3.0.5",
     "vue-template-compiler": "2.6.11",
     "vue-undo-redo-stack": "^1.0.0",
