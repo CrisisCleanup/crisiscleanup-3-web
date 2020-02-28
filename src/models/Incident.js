@@ -7,7 +7,7 @@ export default class Incident extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       case_label: this.string(''),
       form_fields: this.attr(null),
       geofence: this.attr(null),

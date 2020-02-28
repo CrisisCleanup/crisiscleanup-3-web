@@ -93,7 +93,7 @@
       </div>
     </div>
     <div
-      v-if="enablePagniation"
+      v-if="enablePagination"
       class="footer flex items-center justify-between p-4"
     >
       <div class="flex items-center">
@@ -185,7 +185,7 @@ export default {
     },
     loading: Boolean,
     enableSelection: Boolean,
-    enablePagniation: Boolean,
+    enablePagination: Boolean,
     bodyStyle: {
       type: Object,
       default: () => {

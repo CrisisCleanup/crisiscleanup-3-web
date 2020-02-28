@@ -6,7 +6,7 @@ export default class Organization extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       name: this.string(''),
       url: this.string(''),
       facebook: this.string(''),

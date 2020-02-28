@@ -6,7 +6,7 @@ export default class Location extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       name: this.string(''),
       notes: this.string(''),
       shared: this.string('shared'),

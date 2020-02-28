@@ -6,7 +6,7 @@ export default class WorksiteRequest extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       worksite_work_type: this.attr(null),
       worksite: this.attr(null),
       case_number: this.attr(null),

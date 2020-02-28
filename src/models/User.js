@@ -8,7 +8,7 @@ export default class User extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       first_name: this.string(''),
       last_name: this.string(''),
       email: this.string(''),

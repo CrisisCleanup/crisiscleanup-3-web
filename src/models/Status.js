@@ -5,7 +5,7 @@ export default class Status extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       status: this.string(''),
       status_name_t: this.string(''),
       substatus_name_t: this.attr(null),

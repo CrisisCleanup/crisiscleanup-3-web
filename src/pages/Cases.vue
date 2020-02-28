@@ -338,7 +338,7 @@
                 :data="data"
                 :columns="columns"
                 enable-selection
-                enable-pagniation
+                enable-pagination
                 :pagination="pagination"
                 :sorter="sorter"
                 :loading="tableLoading"

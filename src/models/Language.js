@@ -5,7 +5,7 @@ export default class Language extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       subtag: this.attr(null),
       name_t: this.attr(null),
     };

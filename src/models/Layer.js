@@ -5,7 +5,7 @@ export default class Layer extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       title: this.string(''),
       type: this.attr(null),
       description: this.string(''),

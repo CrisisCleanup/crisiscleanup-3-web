@@ -5,7 +5,7 @@ export default class WorkType extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       key: this.string(''),
       file_prefix: this.attr(null),
       name_t: this.attr(null),

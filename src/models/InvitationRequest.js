@@ -6,7 +6,7 @@ export default class InvitationRequest extends Model {
 
   static fields() {
     return {
-      id: this.increment(),
+      id: this.attr(),
       email: this.string(''),
       first_name: this.string(''),
       last_name: this.string(''),
