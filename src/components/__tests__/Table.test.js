@@ -71,10 +71,9 @@ describe('Table', () => {
     expect(wrapper.vm.selectedItems).toEqual(new Set([]));
   });
 
-  it('should render correctly with selection and pagination', () => {
+  it('should render correctly with selection', () => {
     const wrapper = mountWithOptions({
       props: {
-        enablePagination: true,
         enableSelection: true,
       },
     });
