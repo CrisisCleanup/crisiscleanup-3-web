@@ -4,7 +4,7 @@
       <div
         class="border-b px-4 py-2 font-semibold flex justify-between items-center"
       >
-        {{ $t('profileVue.general_information') }}
+        {{ $t('profileOrg.general_information') }}
         <base-button
           type="primary"
           class="px-4 py-2"
@@ -17,8 +17,8 @@
           <div v-if="!logoUrl" class="flex">
             <DragDrop
               class="w-48 h-32 text-center mr-6 border border-dashed"
-              :choose-title="$t('profileVue.upload_org_logo')"
-              :drag-title="$t('profileVue.logo_specs')"
+              :choose-title="$t('profileOrg.upload_org_logo')"
+              :drag-title="$t('profileOrg.logo_specs')"
               :multiple="false"
               @files="
                 files => {
@@ -28,9 +28,9 @@
             ></DragDrop>
 
             <div class="mt-4">
-              <div class="py-1">{{ $t('~~Provide Logo') }}</div>
+              <div class="py-1">{{ $t('profileOrg.provide_logo') }}</div>
               <div class="text-xs py-1 text-crisiscleanup-grey-700">
-                {{ $t('profileVue.logo_customizes_website') }}
+                {{ $t('profileOrg.logo_customizes_website') }}
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('profileVue.organization_name')"
+              :placeholder="$t('profileOrg.organization_name')"
               :value="currentOrganization.name"
               required
               @input="
@@ -74,7 +74,7 @@
               "
             ></base-input>
             <form-select
-              :placeholder="$t('profileVue.organization_type')"
+              :placeholder="$t('profileOrg.organization_type')"
               class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
               :options="organizationTypes"
               :value="currentOrganization.type_t"
@@ -90,7 +90,7 @@
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('profileVue.address')"
+              :placeholder="$t('profileOrg.address')"
               :value="currentOrganization.address"
               @input="
                 value => {
@@ -100,7 +100,7 @@
             ></base-input>
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('profileVue.url')"
+              :placeholder="$t('profileOrg.url')"
               :value="currentOrganization.url"
               @input="
                 value => {
@@ -112,7 +112,7 @@
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('profileVue.email')"
+              :placeholder="$t('profileOrg.email')"
               :value="currentOrganization.email"
               @input="
                 value => {
@@ -125,7 +125,7 @@
           <div class="form-row">
             <base-input
               class="mr-2 w-1/2"
-              :placeholder="$t('profileVue.phone')"
+              :placeholder="$t('profileOrg.phone')"
               :value="currentOrganization.phone"
               @input="
                 value => {
@@ -135,19 +135,19 @@
             ></base-input>
           </div>
           <div class="divider" />
-          <div class="pb-2">{{ $t('profileVue.linkedin') }}</div>
+          <div class="pb-2">{{ $t('profileOrg.linkedin') }}</div>
           <div class="form-row">
             <div class="w-32 flex items-center">
               <img
                 src="https://simpleicons.org/icons/facebook.svg"
                 class="w-8 mr-2"
               />
-              <label class="pr-3">{{ $t('profileVue.facebook') }}</label>
+              <label class="pr-3">{{ $t('profileOrg.facebook') }}</label>
             </div>
             <base-input
               size="small"
               :value="currentOrganization.facebook"
-              :placeholder="$t('profileVue.facebook')"
+              :placeholder="$t('profileOrg.facebook')"
               @input="
                 value => {
                   updateOrganization(value, 'facebook');
@@ -161,12 +161,12 @@
                 src="https://simpleicons.org/icons/twitter.svg"
                 class="w-8 mr-2"
               />
-              <label class="pr-3">{{ $t('profileVue.twitter') }}</label>
+              <label class="pr-3">{{ $t('profileOrg.twitter') }}</label>
             </div>
             <base-input
               size="small"
               :value="currentOrganization.twitter"
-              :placeholder="$t('profileVue.twitter')"
+              :placeholder="$t('profileOrg.twitter')"
               @input="
                 value => {
                   updateOrganization(value, 'twitter');
@@ -176,7 +176,7 @@
           </div>
           <div class="divider" />
           <div class="form-row">
-            <UserSearchInput :placeholder="$t('profileVue.primary_contact')" />
+            <UserSearchInput :placeholder="$t('profileOrg.primary_contact')" />
           </div>
         </form>
       </div>
@@ -185,19 +185,19 @@
       <div
         class="border-b px-4 py-2 font-semibold flex justify-between items-center"
       >
-        {{ $t('profileVue.incident_information') }}
+        {{ $t('profileOrg.incident_information') }}
       </div>
       <div class="px-8 pb-6 mt-2"></div>
     </div>
     <div class="flex">
       <div class="w-1/2 bg-white shadow mt-6 mr-3">
         <div class="border-b px-8 py-4 font-semibold">
-          {{ $t('profileVue.primary_response_area') }}
+          {{ $t('profileOrg.primary_response_area') }}
         </div>
         <div class="py-2 flex items-center justify-center">
           <base-button
             v-if="currentOrganization.primary_location"
-            text="$t('profileVue.edit_response_area')"
+            text="$t('profileOrg.edit_response_area')"
             type="primary"
             class="px-2 py-1"
             :action="
@@ -211,7 +211,7 @@
             v-else
             class="px-2 py-1"
             type="primary"
-            text="$t('profileVue.add_response_area')"
+            text="$t('profileOrg.add_response_area')"
             :action="
               () => {
                 showingLocationModal = true;
@@ -224,12 +224,12 @@
       </div>
       <div class="w-1/2 bg-white shadow mt-6">
         <div class="border-b px-8 py-4 font-semibold">
-          {{ $t('profileVue.secondary_response_area') }}
+          {{ $t('profileOrg.secondary_response_area') }}
         </div>
         <div class="py-2 flex items-center justify-center">
           <base-button
             v-if="currentOrganization.secondary_location"
-            :text="$t('profileVue.edit_response_area')"
+            :text="$t('profileOrg.edit_response_area')"
             type="primary"
             class="px-2 py-1"
             :action="
@@ -243,7 +243,7 @@
             v-else
             class="px-2 py-1"
             type="primary"
-            :text="$t('profileVue.add_response_area')"
+            :text="$t('profileOrg.add_response_area')"
             :action="
               () => {
                 showingLocationModal = true;
@@ -256,7 +256,7 @@
       </div>
       <modal
         v-if="showingLocationModal"
-        :title="$t('profileVue.select_location')"
+        :title="$t('profileOrg.select_location')"
         modal-style="height: 70%"
         modal-classes="w-3/5"
         @close="showingLocationModal = false"
@@ -274,10 +274,10 @@
       <div
         class="border-b px-4 py-2 font-semibold flex justify-between items-center"
       >
-        {{ $t('profileVue.documents_and_materials') }}
+        {{ $t('profileOrg.documents_and_materials') }}
       </div>
       <div class="px-8 pb-6 mt-4">
-        <div class="my-1">{{ $t('~~Upload Custom Terms For Users') }}</div>
+        <div class="my-1">{{ $t('profileOrg.add_custom_tos') }}</div>
         <div class="flex items-center">
           <font-awesome-icon
             class="mx-1 text-crisiscleanup-dark-400 mr-2"
@@ -326,7 +326,7 @@
       </div>
       <hr />
       <div class="px-8 pb-6 mt-4">
-        <div class="my-1">{{ $t('~~Upload Custom Liability Waiver') }}</div>
+        <div class="my-1">{{ $t('profileOrg.add_custom_liability') }}</div>
         <div class="flex items-center">
           <font-awesome-icon
             class="mx-1 text-crisiscleanup-dark-400 mr-2"
@@ -523,7 +523,7 @@ export default {
           this.currentOrganization.$toJson(),
         );
         await this.$toasted.success(
-          this.$t('~~Successfully Saved Organization'),
+          this.$t('profileOrg.sucessfully_saved_organization'),
         );
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));

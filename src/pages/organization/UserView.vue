@@ -42,21 +42,21 @@
         <img
           class="rounded-full profile-image mr-16"
           :src="selectedUser.profilePictureUrl"
-          :alt="$t('~~Profile Picture')"
+          :alt="$t('userView.profile_picture')"
         />
         <div class="w-full">
           <div class="flex items-center justify-start mb-6">
             <div class="flex flex-col w-48">
               <div class="text-xs text-crisiscleanup-grey-700">
-                {{ $t('~~Phone Number') }}
+                {{ $t('userView.phone_number') }}
               </div>
               <div class="py-2 text-base">
-                {{ selectedUser.mobile || $t('~~Not Set') }}
+                {{ selectedUser.mobile || $t('userView.mobile_not_set') }}
               </div>
             </div>
             <div class="flex flex-col">
               <div class="text-xs text-crisiscleanup-grey-700">
-                {{ $t('~~Email') }}
+                {{ $t('userView.email') }}
               </div>
               <div class="py-2 text-base">
                 {{ selectedUser.email }}
@@ -66,15 +66,15 @@
           <div class="flex items-center justify-start mb-6">
             <div class="flex flex-col w-48">
               <div class="text-xs text-crisiscleanup-grey-700">
-                {{ $t('~~Team') }}
+                {{ $t('userView.team') }}
               </div>
               <div class="py-2 text-base">
-                {{ selectedUser.mobile || $t('~~Not Set') }}
+                {{ selectedUser.mobile || $t('userView.mobile_not_set') }}
               </div>
             </div>
             <div class="flex flex-col">
               <div class="text-xs text-crisiscleanup-grey-700">
-                {{ $t('~~Invited By') }}
+                {{ $t('userView.invited_by') }}
               </div>
               <div class="py-2 text-base">
                 {{ selectedUser.email }}

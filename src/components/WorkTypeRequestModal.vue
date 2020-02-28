@@ -6,38 +6,17 @@
   >
     <div class="px-6 py-3">
       <div class="font-xs my-2">
-        {{
-          $t(`~~You are requesting that {organizations} assign one or more work types to {my_organization} for case {case_number}. This is an opportunity for you to develop a relationship with {organizations}. Please be nice, respectful, and assume that the other organization is acting with the best intentions.
-        We encourage you to call them directly. A phone conversation can speed up the process and minimize misunderstandings. Each of the people below will receive an email alerting them of the request, and encouraging to contact you with questions.`)
-        }}
-        {{ $t('~~They will be able to take one of three actions:') }}
-        <ul class="my-2 list-disc list-inside">
-          <li>{{ $t('~~Approve your Request') }}</li>
-          <li>{{ $t('~~Deny your Request') }}</li>
-          <li>{{ $t('~~Take No Action') }}</li>
-        </ul>
-        {{
-          $t(`~~If they approve your request, you will receive another alert, and your organization will immediately be listed as claiming the work type. If they deny your request, you will receive an alert, and the request will be cancelled. If this happens, please be nice, respectful, and assume the best intentions of the other organization. Please also reach out directly to the person who denied the request if you need any clarification.
-        If they take no action, the request will automatically be approved after 36 hours, and you will receive an alert.
-        Add a note explaining why you are requesting to do this case. Please be respectful. Examples might include:`)
-        }}
+        {{ $t('workTypeRequestModal.request_modal_instructions') }}
+        {{ $t('workTypeRequestModal.please_add_respectful_note') }}
         <ul class="my-2 list-disc list-inside">
           <li>
-            {{ $t("'~~This person is a member of our faith community.'") }}
+            {{ $t('workTypeRequestModal.reason_member_of_faith_community') }}
           </li>
           <li>
-            {{
-              $t(
-                "'~~We are working next door, and can help this person immediately.'",
-              )
-            }}
+            {{ $t('workTypeRequestModal.reason_working_next_door') }}
           </li>
           <li>
-            {{
-              $t(
-                `'~~You marked the case "Closed, done by others." We are the organization that did the work.'`,
-              )
-            }}
+            {{ $t('workTypeRequestModal.reason_we_did_the_work') }}
           </li>
         </ul>
       </div>
@@ -70,7 +49,7 @@
         </base-checkbox>
       </div>
       <div class="font-xs my-2 font-bold">
-        {{ $t('~~workTypeRequestModal.reason_requested') }}
+        {{ $t('workTypeRequestModal.reason_requested') }}
       </div>
       <textarea
         v-model="reason"

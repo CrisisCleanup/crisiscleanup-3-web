@@ -57,7 +57,7 @@
               <img
                 class="rounded-full p-1 profile-image"
                 :src="currentUser.profilePictureUrl"
-                :alt="$t('Profile Picture')"
+                :alt="$t('profileUser.profile_picture')"
               />
               <DragDrop
                 class="text-primary-dark cursor-pointer"
@@ -84,7 +84,7 @@
                       class="mr-2 w-1/2"
                       size="large"
                       :value="currentUser.first_name"
-                      :placeholder="$t('activate.first_name_placeholder')"
+                      :placeholder="$t('profileUser.first_name_placeholder')"
                       required
                       @input="
                         value => {
@@ -96,7 +96,7 @@
                       class="w-1/2"
                       size="large"
                       :value="currentUser.mobile"
-                      :placeholder="$t('activate.mobile_placeholder')"
+                      :placeholder="$t('profileUser.mobile_placeholder')"
                       required
                       @input="
                         value => {
@@ -110,7 +110,7 @@
                       class="mr-2 w-1/2"
                       size="large"
                       :value="currentUser.last_name"
-                      :placeholder="$t('activate.last_name_placeholder')"
+                      :placeholder="$t('profileUser.last_name_placeholder')"
                       required
                       @input="
                         value => {
@@ -122,7 +122,7 @@
                       class="w-1/2"
                       :value="currentUser.email"
                       size="large"
-                      :placeholder="$t('activate.email_placeholder ')"
+                      :placeholder="$t('profileUser.email_placeholder ')"
                       required
                       @input="
                         value => {
@@ -183,7 +183,7 @@
                   />
                 </div>
                 <div class="mt-3">
-                  <h3 class="text-base">{{ $t('profileVue.linkedin') }}</h3>
+                  <h3 class="text-base">{{ $t('profileUser.linkedin') }}</h3>
                   <div class="flex pb-4">
                     <div class="w-32 flex items-center">
                       <img
@@ -191,13 +191,13 @@
                         class="w-8 mr-4"
                       />
                       <label class="pr-3">{{
-                        $t('profileVue.facebook')
+                        $t('profileUser.facebook')
                       }}</label>
                     </div>
                     <base-input
                       :value="currentUser.facebook"
                       size="small"
-                      :placeholder="$t('profileVue.facebook')"
+                      :placeholder="$t('profileUser.facebook')"
                       @input="
                         value => {
                           const social = {
@@ -215,12 +215,12 @@
                         src="https://simpleicons.org/icons/twitter.svg"
                         class="w-8 mr-2"
                       />
-                      <label class="pr-3">{{ $t('profileVue.twitter') }}</label>
+                      <label class="pr-3">{{ $t('profileUser.twitter') }}</label>
                     </div>
                     <base-input
                       :value="currentUser.twitter"
                       size="small"
-                      :placeholder="$t('profileVue.twitter')"
+                      :placeholder="$t('profileUser.twitter')"
                       @input="
                         value => {
                           const social = {
@@ -270,7 +270,7 @@
                 </div>
               </div>
               <div class="mt-6">
-                <h3>{{ $t('profileVue.your_organization') }}</h3>
+                <h3>{{ $t('profileUser.your_organization') }}</h3>
                 <div class="py-3 flex items-center">
                   <div
                     class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300 border border-black"
@@ -279,12 +279,12 @@
                 </div>
                 <div class="my-2">
                   <base-button type="primary" class="px-4 py-1">
-                    {{ $t('profileVue.change_organization') }}
+                    {{ $t('profileUser.change_organization') }}
                   </base-button>
                 </div>
               </div>
               <div v-if="isEditing" class="mt-6">
-                <h3>{{ $t('profileVue.notification_settings') }}</h3>
+                <h3>{{ $t('profileUser.notification_settings') }}</h3>
                 <div class="flex flex-col py-3">
                   <base-radio
                     class="mb-2"
@@ -350,20 +350,20 @@ export default {
       mode: 'view',
       uploading: false,
       notifications: {
-        new_incident: '~~New Incident Notifications',
-        request_work_type: '~~Request Work Type Notifications',
-        new_or_move_user: '~~New or Moving User Requests',
-        affiliate_requests: '~~Affiliate Requests',
-        periodic_reports: '~~Periodic Reports',
-        custom_reports: '~~Custom Reports',
-        organization_registration: '~~Organization Registration Notifications',
-        location_approval: '~~Location Approval Notifications',
+        new_incident: this.$t('profileUser.notification_new_incident'),
+        request_work_type: this.$t('profileUser.notification_request_work'),
+        new_or_move_user: this.$t('profileUser.notification_new_moving_user'),
+        affiliate_requests: this.$t('profileUser.notification_affiliate'),
+        periodic_reports: this.$t('profileUser.notification_periodic_reports'),
+        custom_reports: this.$t('profileUser.notification_custom_reports'),
+        organization_registration: this.$t('profileUser.notification_org_registration'),
+        location_approval: this.$t('profileUser.notification_location_approval'),
         move_user_to_organization:
-          '~~Moving Users to New Organizations Notifications',
-        incident_access_approval: '~~Incident Access Approvals',
-        user_role_approval: '~~User Roles Approvals',
-        organization_role_approval: '~~Organization Role Approvals',
-        phone_volunteer_needs: '~~Phone volunteer needs',
+          this.$t('profileUser.notification_moving_users'),
+        incident_access_approval: this.$t('profileUser.notification_incident_access'),
+        user_role_approval: this.$t('profileUser.notification_user_roles'),
+        organization_role_approval: this.$t('profileUser.notification_org_roles'),
+        phone_volunteer_needs: this.$t('profileUser.notification_phone_needs'),
       },
     };
   },
@@ -507,7 +507,7 @@ export default {
           preferences: { ...this.currentUser.preferences, ...{} },
           states: { ...this.currentUser.states, ...{} },
         });
-        await this.$toasted.success(this.$t('profileVue.save_user_success'));
+        await this.$toasted.success(this.$t('profileUser.save_user_success'));
         this.mode = 'view';
         this.updateUserLanguage();
       } catch (error) {

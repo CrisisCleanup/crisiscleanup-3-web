@@ -18,7 +18,7 @@ export default class UserInvitedByFilter extends Filter {
     const labels = {};
     Array.from(this.data).forEach(user => {
       const { id, full_name } = user;
-      labels[id] = window.vue.$i18n.t('~~Invited By: {full_name}', {
+      labels[id] = window.vue.$i18n.t('userInvitedBy.invited_by', {
         full_name,
       });
     });

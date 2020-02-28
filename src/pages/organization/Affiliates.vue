@@ -160,25 +160,25 @@ export default {
       loading: false,
       currentRequestsColumns: [
         {
-          title: this.$t('~~Affiliate'),
+          title: this.$t('affiliatesVue.affiliate'),
           dataIndex: 'affiliate_organization',
           key: 'name',
           width: '2fr',
         },
         {
-          title: this.$t('~~Type'),
+          title: this.$t('affiliatesVue.type'),
           dataIndex: 'type_t',
           key: 'type_t',
           width: '1fr',
         },
         {
-          title: this.$t('~~Status'),
+          title: this.$t('affiliatesVue.status'),
           dataIndex: 'status',
           key: 'status',
           width: '1fr',
         },
         {
-          title: this.$t('~~Members'),
+          title: this.$t('affiliatesVue.members'),
           dataIndex: 'user_count',
           key: 'user_count',
           width: '1fr',

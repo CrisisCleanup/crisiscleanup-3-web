@@ -20,7 +20,7 @@
               @click="() => {}"
             >
               <div>
-                {{ $t('~~Filters') }}
+                {{ $t('usersVue.filters') }}
                 <span
                   v-if="filterCount > 0"
                   class="rounded-full px-1 bg-black text-white text-xs"
@@ -37,7 +37,7 @@
               <div
                 class="flex items-center bg-crisiscleanup-light-grey p-1 px-2 w-full flex-wrap"
               >
-                {{ $t('~~Filters') }}
+                {{ $t('usersVue.filters') }}
                 <template v-for="(filter, key) in filters">
                   <template v-for="(label, identifier) in filter.labels">
                     <tag
@@ -66,7 +66,7 @@
                     }"
                     @click="currentFilterSection = 'role'"
                   >
-                    {{ $t('~~Role') }}
+                    {{ $t('usersVue.role') }}
                     <span
                       v-if="filters.roles.count > 0"
                       class="rounded-full px-1 bg-black text-white text-xs"
@@ -81,7 +81,7 @@
                     }"
                     @click="currentFilterSection = 'invited_by'"
                   >
-                    {{ $t('~~Invited By') }}
+                    {{ $t('usersVue.invited_by') }}
                     <span
                       v-if="filters.invitedBy.count > 0"
                       class="rounded-full px-1 bg-black text-white text-xs"
@@ -104,7 +104,7 @@
                   <div v-if="currentFilterSection === 'invited_by'">
                     Invited By
                     <UserSearchInput
-                      :placeholder="$t('~~Search Users')"
+                      :placeholder="$t('usersVue.search_users')"
                       class="my-1"
                       @selectedUser="
                         user => {
@@ -126,7 +126,7 @@
           </v-popover>
         </div>
         <base-button
-          :text="$t('~~Invite New User')"
+          :text="$t('usersVue.invite_new_user')"
           type="primary"
           class="px-3 py-1"
           :action="
@@ -138,7 +138,7 @@
         <modal
           v-if="showInviteModal"
           modal-classes="bg-white max-w-2xl shadow"
-          :title="$t('~~Invite User')"
+          :title="$t('usersVue.invite_user')"
           closeable
           @close="
             () => {
@@ -155,7 +155,7 @@
               <tag-input
                 v-model="emails"
                 :tags="usersToInvite"
-                :placeholder="$t('~~Emails')"
+                :placeholder="$t('usersVue.emails')"
                 :validation="emailValidation"
                 :add-on-key="[13, ',']"
                 @tags-changed="newTags => (usersToInvite = newTags)"
@@ -175,7 +175,7 @@
             <base-button
               type="primary"
               :action="inviteUsers"
-              :text="$t('~~Invite Users')"
+              :text="$t('usersVue.invite_users')"
               class="ml-2 p-3 px-6 text-xs"
             />
           </div>
