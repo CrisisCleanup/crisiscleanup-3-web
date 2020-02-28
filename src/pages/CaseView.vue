@@ -200,6 +200,7 @@
                 v-if="requestingWorkTypes"
                 :work-types="workTypesClaimedByOthersUnrequested"
                 :initial-selection="initialWorkTypeRequestSelection"
+                :my-organization="currentUser.organization"
                 @onRequest="requestWorkTypes"
                 @onCancel="requestingWorkTypes = false"
               />

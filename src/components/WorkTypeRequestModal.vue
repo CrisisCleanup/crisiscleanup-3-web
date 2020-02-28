@@ -8,9 +8,9 @@
       <div class="font-xs my-2">
         {{
           $t('workTypeRequestModal.request_modal_instructions', {
-            organizations: organizations.map(org => org.id).join(','),
-            my_organization: currentUser.organization.name,
-            case_number: currentWorksite.case_number,
+            organizations: organizations.map(org => org.name).join(','),
+            my_organization: myOrganization.name,
+            case_number: '',
           })
         }}
         {{ $t('workTypeRequestModal.please_add_respectful_note') }}
@@ -92,7 +92,6 @@
 </template>
 <script>
 import Organization from '@/models/Organization';
-import User from '@/models/User';
 
 export default {
   name: 'WorkTypeRequestModal',
@@ -109,10 +108,11 @@ export default {
         return [];
       },
     },
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
+    myOrganization: {
+      type: Object,
+      default: () => {
+        return {};
+      },
     },
   },
   data() {

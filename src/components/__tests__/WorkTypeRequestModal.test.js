@@ -17,6 +17,7 @@ localVue.use(Vuex);
 
 const mocks = {
   $t: key => key,
+  $store: new Vuex.Store(),
 };
 
 const mountWithOptions = props =>
@@ -31,6 +32,7 @@ const mountWithOptions = props =>
       initialSelection: [],
       ...props,
     },
+    store: mocks.$store,
     localVue,
     mocks,
   });
