@@ -115,7 +115,7 @@
                 pageChangeHandle('previous');
               }
             "
-            text="$t('tableVue.prev')"
+            :text="$t('tableVue.prev')"
             icon="caret-left"
             class="mr-3 text-base"
           />
@@ -144,7 +144,7 @@
                 pageChangeHandle('next');
               }
             "
-            text="$t('tableVue.next')"
+            :text="$t('tableVue.next')"
             suffix-icon="caret-right"
             class="text-base"
           />
