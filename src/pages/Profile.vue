@@ -215,7 +215,9 @@
                         src="https://simpleicons.org/icons/twitter.svg"
                         class="w-8 mr-2"
                       />
-                      <label class="pr-3">{{ $t('profileUser.twitter') }}</label>
+                      <label class="pr-3">{{
+                        $t('profileUser.twitter')
+                      }}</label>
                     </div>
                     <base-input
                       :value="currentUser.twitter"
@@ -356,13 +358,22 @@ export default {
         affiliate_requests: this.$t('profileUser.notification_affiliate'),
         periodic_reports: this.$t('profileUser.notification_periodic_reports'),
         custom_reports: this.$t('profileUser.notification_custom_reports'),
-        organization_registration: this.$t('profileUser.notification_org_registration'),
-        location_approval: this.$t('profileUser.notification_location_approval'),
-        move_user_to_organization:
-          this.$t('profileUser.notification_moving_users'),
-        incident_access_approval: this.$t('profileUser.notification_incident_access'),
+        organization_registration: this.$t(
+          'profileUser.notification_org_registration',
+        ),
+        location_approval: this.$t(
+          'profileUser.notification_location_approval',
+        ),
+        move_user_to_organization: this.$t(
+          'profileUser.notification_moving_users',
+        ),
+        incident_access_approval: this.$t(
+          'profileUser.notification_incident_access',
+        ),
         user_role_approval: this.$t('profileUser.notification_user_roles'),
-        organization_role_approval: this.$t('profileUser.notification_org_roles'),
+        organization_role_approval: this.$t(
+          'profileUser.notification_org_roles',
+        ),
         phone_volunteer_needs: this.$t('profileUser.notification_phone_needs'),
       },
     };
