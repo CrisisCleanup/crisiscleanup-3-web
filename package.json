@@ -45,7 +45,7 @@
     "circle-to-polygon": "^2.0.1",
     "concaveman": "^1.1.1",
     "core-js": "^3.6.4",
-    "d3-array": "^1.2.4",
+    "d3-array": "^2.4.0",
     "d3-color": "^1.2.3",
     "d3-interpolate": "^1.4.0",
     "d3-quadtree": "^1.0.7",
