@@ -16,11 +16,12 @@ module.exports = {
   },
   extends: [
     'airbnb-base',
-    'plugin:vue/recommended',
+    'plugin:vue/strongly-recommended',
     'plugin:prettier/recommended',
     'prettier/babel',
     'prettier/vue',
     'plugin:cypress/recommended',
+    'plugin:vue-types/strongly-recommended',
   ],
   globals: {
     Atomics: 'readonly',
@@ -31,7 +32,6 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['babel', 'vue', 'prettier', 'import'],
   rules: {
     'spaced-comment': 0,
     'import/imports-first': 0,
