@@ -10,7 +10,7 @@
         type="text"
         class="input"
         size="large"
-        :placeholder="this.$t('activate.first_name_placeholder')"
+        :placeholder="this.$t('invitationSignup.first_name_placeholder')"
         required
       />
       <base-input
@@ -18,7 +18,7 @@
         type="text"
         class="input"
         size="large"
-        :placeholder="this.$t('activate.last_name_placeholder')"
+        :placeholder="this.$t('invitationSignup.last_name_placeholder')"
         required
       />
       <base-input
@@ -26,7 +26,7 @@
         type="text"
         class="input"
         size="large"
-        :placeholder="this.$t('activate.mobile_placeholder')"
+        :placeholder="this.$t('invitationSignup.mobile_placeholder')"
         required
       />
       <base-input
@@ -34,7 +34,7 @@
         type="password"
         class="input"
         size="large"
-        :placeholder="this.$t('activate.pw1_placeholder')"
+        :placeholder="this.$t('invitationSignup.pw1_placeholder')"
         required
       />
       <base-input
@@ -43,7 +43,7 @@
         type="password"
         class="input"
         size="large"
-        :placeholder="this.$t('activate.pw2_placeholder')"
+        :placeholder="this.$t('invitationSignup.pw2_placeholder')"
         required
       />
       <base-button
@@ -92,7 +92,7 @@ export default {
     },
     validatePassword() {
       if (this.password !== this.confirmPassword) {
-        this.$toasted.error(this.$t('activate.password_match_error'));
+        this.$toasted.error(this.$t('invitationSignup.password_match_error'));
         return false;
       }
       return true;
