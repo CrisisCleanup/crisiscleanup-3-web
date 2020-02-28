@@ -1,6 +1,12 @@
 <template>
   <div class="tag flex items-center px-1 justify-center text-xs">
-    <div v-if="closeable" class="close px-1" @click="onClose"></div>
+    <ccu-icon
+      v-if="closeable"
+      size="xxs"
+      class="mx-1"
+      type="cancel"
+      @click.native="onClose"
+    />
     <slot></slot>
   </div>
 </template>
