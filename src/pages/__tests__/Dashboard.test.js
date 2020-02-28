@@ -8,8 +8,8 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { Store } from 'vuex-mock-store';
-import Dashboard from '../Dashboard';
 import Table from '@/components/Table';
+import Dashboard from '../Dashboard';
 
 jest.mock('@/models/User');
 jest.mock('@/models/Status');

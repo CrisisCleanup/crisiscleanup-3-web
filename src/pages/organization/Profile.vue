@@ -382,10 +382,10 @@ import * as L from 'leaflet';
 import Organization from '@/models/Organization';
 import Location from '@/models/Location';
 import User from '@/models/User';
-import DragDrop from '../../components/DragDrop';
-import LocationTool from '../../components/LocationTool';
 import { getErrorMessage } from '@/utils/errors';
 import UserSearchInput from '@/components/UserSearchInput';
+import DragDrop from '../../components/DragDrop';
+import LocationTool from '../../components/LocationTool';
 
 export default {
   name: 'Profile',

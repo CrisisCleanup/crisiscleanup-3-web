@@ -481,9 +481,9 @@ import Organization from '@/models/Organization';
 import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
 import DragDrop from '@/components/DragDrop';
 import { getQueryString } from '@/utils/urls';
+import { LocaleMixin } from '@/mixins/locale';
 import SectionHeading from '../components/SectionHeading';
 import Flag from './Flag';
-import { LocaleMixin } from '@/mixins/locale';
 
 export default {
   name: 'CaseView',

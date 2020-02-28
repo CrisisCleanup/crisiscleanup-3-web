@@ -385,8 +385,8 @@ import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import Incident from '@/models/Incident';
 import { buildForm, groupBy } from '@/utils/form';
 import FormSelect from '@/components/FormSelect';
-import SectionHeading from '../components/SectionHeading';
 import MessageBox from '@/components/dialogs/MessageBox';
+import SectionHeading from '../components/SectionHeading';
 
 const messageBox = create(MessageBox);
 
