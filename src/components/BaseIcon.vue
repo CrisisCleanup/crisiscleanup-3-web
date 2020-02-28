@@ -7,7 +7,8 @@
 
 <script>
 /* eslint-disable global-require */
-import { kebabCase } from 'lodash';
+import { kebabCase, snakeCase } from 'lodash';
+import VueTypes from 'vue-types';
 
 const iconMap = {
   dashboard: require('@/assets/icons/dashboard.svg'),
@@ -45,25 +46,19 @@ const iconMap = {
 };
 /* eslint-enable global-require */
 
+export const ICONS = Object.fromEntries(
+  Object.entries(iconMap).map(([key]) => [snakeCase(key), key]),
+);
+
+export const ICON_SIZES = ['xxs', 'xs', 'small', 'medium', 'large', 'xl'];
+
 export default {
   name: 'BaseIcon',
   props: {
-    type: {
-      type: String,
-      default: '',
-    },
-    alt: {
-      type: String,
-      default: '',
-    },
-    size: {
-      type: String,
-      default: '',
-    },
-    selector: {
-      type: String,
-      default: '',
-    },
+    type: VueTypes.oneOf(Object.keys(ICONS)),
+    alt: VueTypes.string,
+    size: VueTypes.oneOf(ICON_SIZES).def('small'),
+    selector: VueTypes.string,
   },
   data() {
     return {

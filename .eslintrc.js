@@ -32,7 +32,6 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['babel', 'vue', 'prettier', 'import'],
   rules: {
     'spaced-comment': 0,
     'import/imports-first': 0,
