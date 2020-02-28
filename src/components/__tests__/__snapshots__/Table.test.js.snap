@@ -135,7 +135,6 @@ exports[`Table should render correctly and match snapshot 1`] = `
 exports[`Table should render correctly with selection and pagination 1`] = `
 <div
   class="table w-full"
-  enablepagination="true"
 >
   <div
     class="header text-crisiscleanup-grey-700 bg-white"
@@ -255,7 +254,85 @@ exports[`Table should render correctly with selection and pagination 1`] = `
     <!---->
   </div>
    
-  <!---->
+  <div
+    class="footer flex items-center justify-between p-4"
+  >
+    <div
+      class="flex items-center"
+    >
+      <span
+        class="mr-2"
+      >
+        tableVue.per_page
+      </span>
+       
+      <input
+        options="5,10,20,100,500,1000"
+        select-classes="w-24 bg-white border vue-select-up"
+        type="select"
+      />
+    </div>
+     
+    <div>
+      <div
+        class="flex items-center"
+      >
+        <button
+          action="function () {
+        /* istanbul ignore next */
+        cov_19khyyxiw1.f[40]++;
+        cov_19khyyxiw1.s[120]++;
+
+        _vm.pageChangeHandle('previous');
+      }"
+          class="mr-3 text-base"
+          icon="caret-left"
+          text="$t('tableVue.prev')"
+        />
+         
+        <div>
+          <span
+            class="cursor-pointer mx-4 text-base"
+          >
+            1
+          </span>
+          <span
+            class="cursor-pointer mx-4 text-base"
+          >
+            NaN
+          </span>
+          <span
+            class="cursor-pointer mx-4 text-base"
+          >
+            NaN
+          </span>
+          <span
+            class="cursor-pointer mx-4 text-base"
+          >
+            NaN
+          </span>
+          <span
+            class="cursor-pointer mx-4 text-base"
+          >
+            NaN
+          </span>
+        </div>
+         
+        <button
+          action="function () {
+        /* istanbul ignore next */
+        cov_19khyyxiw1.f[43]++;
+        cov_19khyyxiw1.s[123]++;
+
+        _vm.pageChangeHandle('next');
+      }"
+          class="text-base"
+          suffix-icon="caret-right"
+          text="$t('tableVue.next')"
+        />
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
