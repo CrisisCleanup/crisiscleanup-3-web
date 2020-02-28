@@ -6,7 +6,13 @@
   >
     <div class="px-6 py-3">
       <div class="font-xs my-2">
-        {{ $t('workTypeRequestModal.request_modal_instructions') }}
+        {{
+          $t('workTypeRequestModal.request_modal_instructions', {
+            organizations: organization.name,
+            my_organization: ***,
+            case_number: currentWorksite.case_number,
+          })
+        }}
         {{ $t('workTypeRequestModal.please_add_respectful_note') }}
         <ul class="my-2 list-disc list-inside">
           <li>
