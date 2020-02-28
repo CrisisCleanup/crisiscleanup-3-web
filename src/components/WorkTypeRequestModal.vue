@@ -8,8 +8,8 @@
       <div class="font-xs my-2">
         {{
           $t('workTypeRequestModal.request_modal_instructions', {
-            organizations: organization.name,
-            my_organization: ***,
+            organizations: organizations.map(org => org.id).join(','),
+            my_organization: currentUser.organization.name,
             case_number: currentWorksite.case_number,
           })
         }}
@@ -92,6 +92,7 @@
 </template>
 <script>
 import Organization from '@/models/Organization';
+import User from '@/models/User';
 
 export default {
   name: 'WorkTypeRequestModal',
@@ -107,6 +108,11 @@ export default {
       default: () => {
         return [];
       },
+    },
+  },
+  computed: {
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
     },
   },
   data() {
