@@ -221,11 +221,11 @@ import { mapState } from 'vuex';
 import vueUndoRedo from 'vue-undo-redo-stack';
 import Location from '@/models/Location';
 import Organization from '@/models/Organization';
-import MapButton from './MapButton';
 import LocationType from '@/models/LocationType';
 import User from '@/models/User';
 import { getWorksiteLayer } from '@/utils/map';
 import LayerUploadTool from '@/components/LayerUploadTool';
+import MapButton from './MapButton';
 
 export default {
   name: 'LocationTool',

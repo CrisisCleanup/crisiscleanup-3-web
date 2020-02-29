@@ -91,8 +91,8 @@ import Status from '@/models/Status';
 import Language from '@/models/Language';
 import Role from '@/models/Role';
 import { i18nService } from '@/services/i18n.service';
-import DisasterIcon from '../components/DisasterIcon';
 import NavMenu from '@/components/navigation/NavMenu';
+import DisasterIcon from '../components/DisasterIcon';
 
 export default {
   name: 'Authenticated',

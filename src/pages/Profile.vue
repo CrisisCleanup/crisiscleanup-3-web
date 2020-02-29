@@ -339,10 +339,10 @@ import { mapMutations } from 'vuex';
 import detectBrowserLanguage from 'detect-browser-language';
 import User from '@/models/User';
 import Role from '@/models/Role';
-import { getErrorMessage } from '../utils/errors';
 import Language from '@/models/Language';
 import { i18nService } from '@/services/i18n.service';
 import DragDrop from '@/components/DragDrop';
+import { getErrorMessage } from '../utils/errors';
 
 export default {
   name: 'Profile',

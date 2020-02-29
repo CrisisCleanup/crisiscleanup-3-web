@@ -6,8 +6,8 @@
  */
 
 import { shallowMount } from '@vue/test-utils';
-import Table from '../Table';
 import DragDrop from '@/components/DragDrop';
+import Table from '../Table';
 
 const mocks = {
   $t: key => key,

@@ -1,45 +1,15 @@
-import Vue from 'vue';
-import axios from 'axios';
-import VueAxios from 'vue-axios';
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import VueLog from '@dreipol/vue-log';
-import VueI18n from 'vue-i18n';
-import vueNumeralFilterInstaller from 'vue-numeral-filter';
-import VueAutosuggest from 'vue-autosuggest';
-import VTooltip from 'v-tooltip';
-import Toasted from 'vue-toasted';
-import VueTagsInput from '@johmun/vue-tags-input';
-import Popover from 'vue-js-popover';
-import Dropdown from 'bp-vuejs-dropdown';
-import vSelect from 'vue-select';
-import * as ModalDialogs from 'vue-modal-dialogs';
-import detectBrowserLanguage from 'detect-browser-language';
-import moment from 'moment';
-import Acl from 'vue-browser-acl';
-import App from './App.vue';
-import router from './router';
-import store from './store/index';
-import 'moment/min/locales';
-
-import { AuthService } from '@/services/auth.service';
-
-import Authenticated from '@/layouts/Authenticated';
-import Unauthenticated from '@/layouts/Unauthenticated';
-
-import BaseIcon from '@/components/BaseIcon';
-import BaseCheckbox from '@/components/BaseCheckbox';
-import BaseButton from '@/components/BaseButton';
-import BaseInput from '@/components/BaseInput';
-import Modal from '@/components/Modal';
+import '@/assets/css/tailwind.css';
 import Autocomplete from '@/components/Autocomplete';
-import Tag from '@/components/Tag';
-import Spinner from '@/components/Spinner';
-import FormSelect from '@/components/FormSelect';
+import Badge from '@/components/Badge';
+import BaseButton from '@/components/BaseButton';
+import BaseCheckbox from '@/components/BaseCheckbox';
+import BaseIcon from '@/components/BaseIcon';
+import BaseInput from '@/components/BaseInput';
 import BaseRadio from '@/components/BaseRadio';
-
+import FormSelect from '@/components/FormSelect';
+import Modal from '@/components/Modal';
+import Spinner from '@/components/Spinner';
+import Tag from '@/components/Tag';
 import {
   getColorForWorkType,
   getStatusName,
@@ -48,10 +18,34 @@ import {
   secondsToHm,
   snakeToTitleCase,
 } from '@/filters';
-
-import '@/assets/css/tailwind.css';
-import Badge from '@/components/Badge';
+import Authenticated from '@/layouts/Authenticated';
+import Unauthenticated from '@/layouts/Unauthenticated';
+import { AuthService } from '@/services/auth.service';
 import { i18nService } from '@/services/i18n.service';
+import VueLog from '@dreipol/vue-log';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueTagsInput from '@johmun/vue-tags-input';
+import axios from 'axios';
+import Dropdown from 'bp-vuejs-dropdown';
+import detectBrowserLanguage from 'detect-browser-language';
+import moment from 'moment';
+import 'moment/min/locales';
+import VTooltip from 'v-tooltip';
+import Vue from 'vue';
+import VueAutosuggest from 'vue-autosuggest';
+import VueAxios from 'vue-axios';
+import Acl from 'vue-browser-acl';
+import VueI18n from 'vue-i18n';
+import Popover from 'vue-js-popover';
+import * as ModalDialogs from 'vue-modal-dialogs';
+import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import vSelect from 'vue-select';
+import Toasted from 'vue-toasted';
+import App from './App.vue';
+import router from './router';
+import store from './store/index';
 
 library.add(fas);
 

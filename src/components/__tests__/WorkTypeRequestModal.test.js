@@ -7,9 +7,9 @@
 
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import WorkTypeRequestModal from '../WorkTypeRequestModal';
 import BaseButton from '@/components/BaseButton';
 import BaseCheckbox from '@/components/BaseCheckbox';
+import WorkTypeRequestModal from '../WorkTypeRequestModal';
 
 const localVue = createLocalVue();
 localVue.filter('getWorkTypeName', () => 'workType.ash');
