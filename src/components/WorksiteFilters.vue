@@ -401,19 +401,22 @@ export default {
       this.filters = {
         fields: new WorksiteFieldsFilter(
           'fields',
-          this.currentFilters.fields.data || {},
+          (this.currentFilters.fields && this.currentFilters.fields.data) || {},
         ),
         statusGroups: new WorksiteStatusGroupFilter(
           'statusGroups',
-          this.currentFilters.statusGroups.data || {},
+          (this.currentFilters.statusGroups &&
+            this.currentFilters.statusGroups.data) ||
+            {},
         ),
         flags: new WorksiteFlagsFilter(
           'flags',
-          this.currentFilters.flags.data || {},
+          (this.currentFilters.flags && this.currentFilters.flags.data) || {},
         ),
         statuses: new WorksiteStatusFilter(
           'statuses',
-          this.currentFilters.statuses.data || {},
+          (this.currentFilters.statuses && this.currentFilters.statuses.data) ||
+            {},
         ),
       };
     },
