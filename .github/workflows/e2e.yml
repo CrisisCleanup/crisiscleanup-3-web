@@ -78,7 +78,7 @@ jobs:
           docker-compose up -d app
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v1.21.0
+        uses: cypress-io/github-action@v1.23.0
         with:
           record: false
           start: yarn serve-dev
@@ -96,4 +96,3 @@ jobs:
           CYPRESS_WEB_PASS: ${{ secrets.CYPRESS_WEB_PASS }}
           CYPRESS_API_URL: 'http://localhost:5000'
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-          CHILD_CONCURRENCY: 1
