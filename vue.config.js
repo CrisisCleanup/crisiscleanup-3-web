@@ -36,7 +36,7 @@ module.exports = {
       cloudfrontId: 'E3DNZ4GD3WPDPE',
       cloudfrontMatchers: '/*',
       uploadConcurrency: 5,
-      pluginVersion: '3.0.0',
+      pluginVersion: '4.0.0-rc3',
       cacheControl: 'max-age=86400',
       pwaFiles: 'index.html,app.js',
     },
