@@ -25,6 +25,7 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import '@percy/cypress';
+import 'cypress-localstorage-commands';
 
 // Login Helper
 Cypress.Commands.add(
@@ -40,8 +41,6 @@ Cypress.Commands.add(
       password,
     })
       .its('body')
-      .then(res => {
-        window.localStorage.setItem('user', JSON.stringify(res));
-      });
+      .then(res => cy.setLocalStorage('user', JSON.stringify(res)));
   },
 );
