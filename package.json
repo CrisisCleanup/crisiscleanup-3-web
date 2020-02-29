@@ -22,7 +22,7 @@
     "test:percy": "cross-env NODE_ENV=test percy exec -- yarn run test:cy",
     "cy:open": "cross-env NODE_ENV=test cypress open",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "cross-env NODE_ENV=test build-storybook"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.8.3",
