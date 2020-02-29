@@ -83,6 +83,13 @@ export default {
       default: '',
     },
   },
+  created() {
+    window.addEventListener('keydown', e => {
+      if (e.key === 'Escape' || e.key === 'Tab') {
+        this.$emit('clearSuggestions');
+      }
+    });
+  },
   data() {
     return {
       selected: '',

@@ -20,6 +20,7 @@
               key: 'name',
             },
           ]"
+          @clearSuggestions="searchWorksitesNameResults = []"
           display-property="name"
           :placeholder="$t('formLabels.name')"
           size="large"
@@ -52,6 +53,12 @@
               key: 'description',
             },
           ]"
+          @clearSuggestions="
+            () => {
+              searchWorksitesResults = [];
+              geocoderResults = [];
+            }
+          "
           display-property="description"
           :placeholder="$t('formLabels.address')"
           size="large"
