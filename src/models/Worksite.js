@@ -80,10 +80,9 @@ export default class Worksite extends Model {
   static getWorkType(workTypes, filters, organization) {
     // TODO: Unit Test
     let currentFilteredTypes = [];
-    if (filters) {
-      const { fields } = filters;
-      currentFilteredTypes = Object.keys(fields).filter(fieldKey =>
-        Boolean(fields[fieldKey]),
+    if (filters && filters.fields) {
+      currentFilteredTypes = Object.keys(filters.fields).filter(fieldKey =>
+        Boolean(filters.fields[fieldKey]),
       );
     }
 
