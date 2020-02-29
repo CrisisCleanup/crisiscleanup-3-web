@@ -1,79 +1,96 @@
 <template>
-  <div class="login flex flex-col items-center justify-start">
-    <div class="logo m-20">
+  <div class="container">
+    <div class="backdrop bg-crisiscleanup-light-grey" />
+    <div class="logo my-8">
       <img src="@/assets/ccu-logo-black-500w.png" />
     </div>
-
-    <span v-if="acceptedInvite"> {{ $t('login.accepted_invite') }}</span>
-
-    <form ref="form" class="flex flex-col login-form" @submit.prevent>
-      <h1 class="text-3xl text-center">{{ $t('login.sign_in_msg') }}</h1>
-      <base-input
-        v-model="email"
-        size="large"
-        class="my-2"
-        required
-        type="email"
-        :placeholder="$t('login.email_placeholder')"
-        autocomplete="email"
-      />
-      <base-input
-        v-model="password"
-        size="large"
-        class="my-2"
-        required
-        type="password"
-        :placeholder="$t('login.password_placeholder')"
-        autocomplete="password"
-      />
+    <div class="nav--container my-8 py-10 flex flex-col justify-around">
+      <a
+        v-for="item in navigation"
+        :key="item.text"
+        :href="item.route || '#'"
+        class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
+      >
+        {{ item.text }}
+      </a>
+    </div>
+    <div class="actions--container my-16 mr-8 flex flex-col justify-center">
+      <p class="font-display text-h1 font-body text-crisiscleanup-dark-400">
+        Relief Organizations Only
+      </p>
       <base-button
-        size="medium"
-        variant="solid"
-        class="px-5 py-2 my-3 w-full"
-        :text="$t('actions.login')"
-        :action="userLogin"
+        text="Register"
+        type="primary"
+        class="px-6 py-3 font-h1 text-h1 text-crisiscleanup-dark-500"
       />
-    </form>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+export const HomeNavigation = [
+  {
+    text: 'Home',
+  },
+  {
+    text: 'About Us',
+  },
+  {
+    text: 'Blog',
+  },
+  {
+    text: 'Map',
+  },
+  {
+    text: 'Training',
+  },
+  {
+    text: 'Contact',
+  },
+];
 
 export default {
+  name: 'LoginPage',
   data() {
     return {
-      email: '',
-      password: '',
-      acceptedInvite: Boolean(this.$route.query.accepted),
+      navigation: HomeNavigation,
     };
-  },
-  methods: {
-    ...mapActions('auth', ['login']),
-    async userLogin() {
-      try {
-        await this.login({ email: this.email, password: this.password });
-        if (this.$route.query.from) {
-          await this.$router.replace(this.$route.query.from);
-        } else {
-          await this.$router.push('/');
-        }
-      } catch (e) {
-        await this.$toasted.error(this.$t('login.invalid_credentials_msg'));
-      }
-    },
   },
 };
 </script>
 
 <style scoped>
-.login {
-  height: 100vh;
+.container {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr 1fr 1.5fr;
+  grid-template-rows: 1fr 2fr 1fr;
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
-.logo img {
-  height: 150px;
+.backdrop {
+  grid-column-start: 1;
+  grid-column-end: 4;
+  grid-row: 1 / 4;
 }
-.login-form {
-  width: 24rem;
+
+.logo {
+  justify-self: start;
+  max-width: 200px;
+  grid-row: 1 / 1;
+  grid-column: 2;
+}
+
+.nav--container {
+  grid-row: 2;
+  grid-column: 2;
+}
+
+.actions--container {
+  grid-row: 3;
+  grid-column: 2;
+  justify-content: space-around;
 }
 </style>
