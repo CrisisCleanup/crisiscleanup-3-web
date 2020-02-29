@@ -288,34 +288,39 @@ export default {
       );
       const worksite = Worksite.find(worksiteId);
 
-      const workType = Worksite.getWorkType(
-        worksite.work_types,
-        this.currentFilters,
-        this.currentUser.organization,
-      );
+      if (!markerSprite) {
+        this.markers.push(worksite);
+        await this.loadMap(this.markers);
+      } else {
+        const workType = Worksite.getWorkType(
+          worksite.work_types,
+          this.currentFilters,
+          this.currentUser.organization,
+        );
 
-      const colorsKey = `${workType.status}_${
-        workType.claimed_by ? 'claimed' : 'unclaimed'
-      }`;
-      markerSprite.active_work_type = workType;
-      markerSprite.work_types = worksite.work_types;
-      markerSprite.colorsKey = colorsKey;
+        const colorsKey = `${workType.status}_${
+          workType.claimed_by ? 'claimed' : 'unclaimed'
+        }`;
+        markerSprite.active_work_type = workType;
+        markerSprite.work_types = worksite.work_types;
+        markerSprite.colorsKey = colorsKey;
 
-      const worksiteTemplate =
-        this.map.getZoom() < INTERACTIVE_ZOOM_LEVEL
-          ? templates.circle
-          : templates[workType.work_type] || templates.unknown;
-      const spriteColors = colors[colorsKey];
+        const worksiteTemplate =
+          this.map.getZoom() < INTERACTIVE_ZOOM_LEVEL
+            ? templates.circle
+            : templates[workType.work_type] || templates.unknown;
+        const spriteColors = colors[colorsKey];
 
-      if (spriteColors) {
-        const svg = worksiteTemplate
-          .replace('{{fillColor}}', spriteColors.fillColor)
-          .replace('{{strokeColor}}', spriteColors.strokeColor)
-          .replace(
-            '{{multiple}}',
-            markerSprite.work_types.length > 1 ? templates.plus : '',
-          );
-        markerSprite.texture = Texture.from(svg);
+        if (spriteColors) {
+          const svg = worksiteTemplate
+            .replace('{{fillColor}}', spriteColors.fillColor)
+            .replace('{{strokeColor}}', spriteColors.strokeColor)
+            .replace(
+              '{{multiple}}',
+              markerSprite.work_types.length > 1 ? templates.plus : '',
+            );
+          markerSprite.texture = Texture.from(svg);
+        }
       }
 
       this.$nextTick(() => {
