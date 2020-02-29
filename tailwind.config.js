@@ -1,6 +1,26 @@
 module.exports = {
   theme: {
     extend: {
+      fontFamily: {
+        body: ['Nunito Sans', 'sans-serif'],
+        display: ['Montserrat', 'sans-serif'],
+      },
+      fontSize: {
+        h1: '1.25rem', //         ~18px
+        h2: '1rem', //            ~16px
+        h3: '0.875rem', //        ~14px
+        h4: '.75rem', //          ~12px
+        body: '.9375rem', //      ~15px
+        bodysm: '.75rem', //      ~12px
+      },
+      fontWeight: {
+        h1: '600',
+        h2: '700',
+        h3: '700',
+        h4: '700',
+        body: '400',
+        bodysm: '700',
+      },
       colors: {
         primary: {
           light: '#fece09',
