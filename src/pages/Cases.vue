@@ -620,6 +620,7 @@ import { getColorForStatus } from '@/filters';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
+import { EventBus } from '../event-bus';
 
 export default {
   name: 'Cases',
@@ -1130,7 +1131,12 @@ export default {
     },
     addMarkerToMap(location) {
       this.$refs.workstiteMap.markerLayer.clearLayers();
-      new L.marker(location).addTo(this.$refs.workstiteMap.markerLayer);
+      const marker = new L.marker(location, { draggable: 'true' }).addTo(
+        this.$refs.workstiteMap.markerLayer,
+      );
+      marker.on('dragend', function(event) {
+        EventBus.$emit('updatedWorksiteLocation', event.target.getLatLng());
+      });
       this.$refs.workstiteMap.map.setView([location.lat, location.lng], 15);
       this.toggleView('showingMap');
     },

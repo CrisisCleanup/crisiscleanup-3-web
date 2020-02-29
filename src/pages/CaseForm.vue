@@ -387,6 +387,7 @@ import { buildForm, groupBy } from '@/utils/form';
 import FormSelect from '@/components/FormSelect';
 import MessageBox from '@/components/dialogs/MessageBox';
 import SectionHeading from '../components/SectionHeading';
+import { EventBus } from '../event-bus';
 
 const messageBox = create(MessageBox);
 
@@ -397,6 +398,11 @@ export default {
     FormSelect,
     OverlayMap,
     WorksiteSearchInput,
+  },
+  created() {
+    EventBus.$on('updatedWorksiteLocation', latLng => {
+      this.geocodeWorksite(latLng.lat, latLng.lng);
+    });
   },
   data() {
     return {
@@ -840,38 +846,34 @@ export default {
         );
       });
     },
+    async geocodeWorksite(latitude, longitude) {
+      const geocode = await GeocoderService.getLocationDetails({
+        latitude,
+        longitude,
+      });
+      const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
+      geocodeKeys.forEach(key =>
+        this.updateWorksite(geocode.address_components[key], key),
+      );
+      this.updateWorksite(
+        {
+          type: 'Point',
+          coordinates: [longitude, latitude],
+        },
+        'location',
+      );
+      const what3words = await What3wordsService.getWords(latitude, longitude);
+      this.updateWorksite(what3words, 'what3words');
+      return geocode;
+    },
     async locateMe() {
       this.gettingLocation = true;
       try {
         this.gettingLocation = false;
         this.location = await this.getLocation();
         const { latitude, longitude } = this.location.coords;
-        const geocode = await GeocoderService.getLocationDetails({
-          latitude,
-          longitude,
-        });
-        const geocodeKeys = [
-          'address',
-          'city',
-          'county',
-          'state',
-          'postal_code',
-        ];
-        geocodeKeys.forEach(key =>
-          this.updateWorksite(geocode.address_components[key], key),
-        );
-        this.updateWorksite(
-          {
-            type: 'Point',
-            coordinates: [longitude, latitude],
-          },
-          'location',
-        );
-        const what3words = await What3wordsService.getWords(
-          this.location.coords.latitude,
-          this.location.coords.longitude,
-        );
-        this.updateWorksite(what3words, 'what3words');
+        const geocode = await this.geocodeWorksite(latitude, longitude);
+        this.$emit('geocoded', geocode.location);
       } catch (e) {
         this.gettingLocation = false;
         this.errorStr = e.message;
