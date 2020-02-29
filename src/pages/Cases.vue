@@ -1130,14 +1130,32 @@ export default {
       waitForMap();
     },
     addMarkerToMap(location) {
+      let markerLocation = location;
+      if (!markerLocation) {
+        markerLocation = this.$refs.workstiteMap.map.getCenter();
+      }
+
       this.$refs.workstiteMap.markerLayer.clearLayers();
-      const marker = new L.marker(location, { draggable: 'true' }).addTo(
+      const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
         this.$refs.workstiteMap.markerLayer,
       );
       marker.on('dragend', function(event) {
         EventBus.$emit('updatedWorksiteLocation', event.target.getLatLng());
       });
-      this.$refs.workstiteMap.map.setView([location.lat, location.lng], 15);
+      this.$refs.workstiteMap.map.setView(
+        [markerLocation.lat, markerLocation.lng],
+        15,
+      );
+      marker
+        .bindTooltip(
+          this.$t(
+            '~~Drag pin to the correct location. Zoom and pan as necessary.',
+          ),
+          {
+            direction: 'top',
+          },
+        )
+        .openTooltip();
       this.toggleView('showingMap');
     },
     async unclaimSelected() {

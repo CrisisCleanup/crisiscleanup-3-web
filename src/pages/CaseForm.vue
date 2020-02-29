@@ -155,32 +155,9 @@
             type="bare"
             icon="map"
             class="text-gray-700 pt-2"
-            :action="showOverlayMap"
+            :action="selectOnMap"
             :text="$t('caseForm.select_on_map')"
           />
-          <modal
-            v-if="overlayMapVisible"
-            modal-classes="bg-white w-1/3 shadow"
-            modal-style="height: 60%"
-            @close="overlayMapVisible = false"
-          >
-            <OverlayMap
-              :initial-location="worksite.location"
-              @addedMarker="onAddedMarker"
-            />
-            <div
-              slot="footer"
-              class="flex items-center justify-center p-2 bg-white"
-            >
-              <base-button
-                :text="$t('actions.save')"
-                size="medium"
-                class="m-1 p-1 px-6"
-                type="primary"
-                :action="handleOk"
-              />
-            </div>
-          </modal>
         </div>
       </div>
       <template v-for="field in fields">
@@ -384,7 +361,6 @@ import * as turf from '@turf/turf';
 import * as moment from 'moment';
 import { create } from 'vue-modal-dialogs';
 import Worksite from '@/models/Worksite';
-import OverlayMap from '@/components/OverlayMap';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
 import { getErrorMessage } from '@/utils/errors';
@@ -403,7 +379,6 @@ export default {
   components: {
     SectionHeading,
     FormSelect,
-    OverlayMap,
     WorksiteSearchInput,
   },
   created() {
@@ -872,6 +847,9 @@ export default {
       const what3words = await What3wordsService.getWords(latitude, longitude);
       this.updateWorksite(what3words, 'what3words');
       return geocode;
+    },
+    async selectOnMap() {
+      this.$emit('geocoded', null);
     },
     async locateMe() {
       this.gettingLocation = true;
