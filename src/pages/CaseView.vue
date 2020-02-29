@@ -92,19 +92,30 @@
             </div>
           </div>
         </div>
+
+        <div class="flex flex-row ">
+          <div class="flex-1">
+            <label
+              class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
+              >{{ $t('formLabels.name') }}</label
+            >
+            <div>{{ worksite.name }}</div>
+          </div>
+          <div class="flex-1">
+            <label
+              class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
+              >{{ $t('formLabels.phone1') }}</label
+            >
+            <div>{{ worksite.formFields.phone1 }}</div>
+          </div>
+        </div>
+
         <div>
           <label
             class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
             >{{ $t('formLabels.address') }}</label
           >
           <div>{{ worksiteAddress }}</div>
-        </div>
-        <div>
-          <label
-            class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
-            >{{ $t('formLabels.phone1') }}</label
-          >
-          <div>{{ worksite.formFields.phone1 }}</div>
         </div>
       </section>
       <SectionHeading :count="2" class="mb-3"
