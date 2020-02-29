@@ -448,8 +448,8 @@ export default {
         },
         {
           title: this.$t('dashboard.full_address'),
-          dataIndex: 'address',
-          key: 'address',
+          dataIndex: 'short_address',
+          key: 'short_address',
         },
         {
           title: this.$t('dashboard.phone'),

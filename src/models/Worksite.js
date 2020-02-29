@@ -33,6 +33,16 @@ export default class Worksite extends Model {
     };
   }
 
+  get full_address() {
+    const { address, city, state, postal_code } = this;
+    return `${address}, ${city}, ${state} ${postal_code}`;
+  }
+
+  get short_address() {
+    const { address, city } = this;
+    return `${address}, ${city}`;
+  }
+
   get latitude() {
     return this.location ? this.location.coordinates[1] : 10;
   }
