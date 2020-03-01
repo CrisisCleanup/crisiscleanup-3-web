@@ -239,7 +239,10 @@
               </form>
               <div v-else>
                 <h1 class="text-2xl">{{ name }}</h1>
-                <div class="text-crisiscleanup-grey-700">
+                <div
+                  v-if="userRoles.length"
+                  class="text-crisiscleanup-grey-700"
+                >
                   {{ userRoles[0].name_t }}
                 </div>
                 <div class="flex mt-4">

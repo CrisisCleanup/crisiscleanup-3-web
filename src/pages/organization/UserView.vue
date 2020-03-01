@@ -10,6 +10,7 @@
           type="edit"
           class="mx-2"
           size="small"
+          @click.native="isEditing = true"
         />
         <ccu-icon
           :alt="$t('actions.location')"
@@ -59,7 +60,7 @@
                 {{ $t('userView.email') }}
               </div>
               <div class="py-2 text-base">
-                {{ selectedUser.email }}
+                {{ selectedUser.email || $t('userView.email_not_set') }}
               </div>
             </div>
           </div>
@@ -69,7 +70,7 @@
                 {{ $t('userView.team') }}
               </div>
               <div class="py-2 text-base">
-                {{ selectedUser.mobile || $t('userView.mobile_not_set') }}
+                {{ selectedUser.team || $t('userView.mobile_not_set') }}
               </div>
             </div>
             <div class="flex flex-col">
@@ -77,7 +78,23 @@
                 {{ $t('userView.invited_by') }}
               </div>
               <div class="py-2 text-base">
-                {{ selectedUser.email }}
+                <div
+                  class="text-primary-dark cursor-pointer"
+                  v-if="selectedUser.referringUser"
+                  @click="
+                    $router.push(
+                      `/organization/users/${selectedUser.referringUser.id}`,
+                    )
+                  "
+                >
+                  {{
+                    selectedUser.referringUser &&
+                      selectedUser.referringUser.full_name
+                  }}
+                </div>
+                <span v-else>
+                  {{ $t('userView.mobile_not_set') }}
+                </span>
               </div>
             </div>
           </div>
@@ -97,20 +114,47 @@
         </div>
       </div>
     </div>
+    <UserEditModal
+      v-if="isEditing"
+      :user="selectedUser"
+      @close="isEditing = false"
+      @save="saveUser"
+    />
   </div>
 </template>
 <script>
 import User from '@/models/User';
 import Role from '@/models/Role';
+import UserEditModal from './UserEditModal';
+import { getErrorMessage } from '../../utils/errors';
 
 export default {
   name: 'UserView',
+  components: { UserEditModal },
+  data() {
+    return {
+      isEditing: false,
+    };
+  },
   computed: {
     roles() {
       return Role.all();
     },
     selectedUser() {
       return User.find(this.$route.params.user_id);
+    },
+  },
+  methods: {
+    async saveUser() {
+      try {
+        await User.api().patch(`/users/${this.selectedUser.id}`, {
+          ...this.selectedUser.$toJson(),
+        });
+        await this.$toasted.success(this.$t('profileUser.save_user_success'));
+        this.isEditing = false;
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
     },
   },
 };

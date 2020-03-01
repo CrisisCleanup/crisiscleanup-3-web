@@ -21,6 +21,7 @@ export default class User extends Model {
       primary_language: this.attr(null),
       secondary_language: this.attr(null),
       social: this.attr({}),
+      referring_user: this.attr({}),
     };
   }
 
@@ -40,6 +41,10 @@ export default class User extends Model {
     return Role.query()
       .whereIdIn(this.roles)
       .get()[0];
+  }
+
+  get referringUser() {
+    return User.find(this.referring_user);
   }
 
   get languages() {
