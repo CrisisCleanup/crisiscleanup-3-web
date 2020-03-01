@@ -25,7 +25,7 @@ export default class User extends Model {
   }
 
   get profilePictureUrl() {
-    if (this.files.length) {
+    if (this.files && this.files.length) {
       const profilePictures = this.files.filter(
         file => file.file_type_t === 'fileTypes.user_profile_picture',
       );

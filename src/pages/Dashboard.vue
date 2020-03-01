@@ -676,6 +676,7 @@ export default {
           params: {
             incident: this.currentIncidentId,
             limit: 1,
+            fields: 'id',
           },
         },
       );

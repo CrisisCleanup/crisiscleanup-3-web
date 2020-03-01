@@ -205,7 +205,10 @@
                 <div>
                   {{ slotProps.item.full_name }}
                   <div class="text-crisiscleanup-grey-700">
-                    {{ slotProps.item.currentRole.name_t }}
+                    {{
+                      slotProps.item.currentRole &&
+                        slotProps.item.currentRole.name_t
+                    }}
                   </div>
                 </div>
               </div>

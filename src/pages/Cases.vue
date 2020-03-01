@@ -822,14 +822,16 @@ export default {
       });
     }
     const locationParams = {
-      limit: 1000,
-      type__in: 'boundary_political_us_congress,boundary_political_us_state,',
+      limit: 100,
+      type__key__in:
+        'boundary_political_us_congress,boundary_political_us_state,',
       fields: 'id,name,type',
     };
-    await Location.api().get(`/locations?${getQueryString(locationParams)}`, {
+    const queryString = getQueryString(locationParams);
+    await Location.api().get(`/locations?${queryString}`, {
       dataKey: 'results',
     });
-    this.isMounted = true;
+    this.isMounted = queryString;
   },
   methods: {
     handleTableChange({ pagination, filters, sorter }) {
@@ -964,7 +966,8 @@ export default {
         {
           params: {
             incident: this.$route.params.incident_id,
-            limit: 1,
+            limit: 2,
+            fields: 'id',
           },
         },
       );
