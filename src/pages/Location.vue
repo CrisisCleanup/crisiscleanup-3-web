@@ -7,12 +7,12 @@
     >
       <spinner />
     </div>
-    <div v-else class="mx-2 flex flex-col">
-      <div class="h-16 flex items-center justify-between">
+    <div v-else class="mx-2 flex flex-col pt-2 w-84">
+      <div class="flex items-center justify-between">
         <div v-if="isNew" class="font-bold">
           {{ $t('actions.new_location') }}
         </div>
-        <div v-else class="font-bold">
+        <div v-else class="font-bold w-4/5">
           {{ $t('actions.edit') }} {{ currentLocation && currentLocation.name }}
         </div>
         <div class="flex">
@@ -53,7 +53,7 @@
       <form
         v-if="currentLocation"
         ref="form"
-        class="form flex-grow flex flex-col justify-between w-84"
+        class="form flex-grow flex flex-col justify-between"
       >
         <div class="flex flex-col">
           <base-input
@@ -92,14 +92,7 @@
                 size="large"
                 :placeholder="$t('locationVue.search_for_organization')"
                 clear-on-selected
-                @selected="
-                  value => {
-                    selectedOrganization = value;
-                    if (!currentLocation.name) {
-                      currentLocation.name = `${selectedOrganization.name} ${currentLocation.location_type.name_t}`;
-                    }
-                  }
-                "
+                @selected="onSelectOrganization"
                 @search="onOrganizationSearch"
               />
             </div>
@@ -113,14 +106,7 @@
                 item-key="id"
                 label="name"
                 :placeholder="$t('locationVue.select_incident')"
-                @input="
-                  value => {
-                    selectedIncidentId = value;
-                    if (!currentLocation.name) {
-                      currentLocation.name = `${selectedIncident.name} ${currentLocation.location_type.name_t}`;
-                    }
-                  }
-                "
+                @input="onSelectIncident"
               />
             </div>
           </div>
@@ -197,10 +183,13 @@
       <LocationTool
         v-if="currentLocation"
         ref="locationTool"
+        :key="$route.params.location_id"
         :incident="selectedIncidentId"
         :organization="selectedOrganization && selectedOrganization.id"
         class="h-full"
-        :locations="currentLocation.id ? [currentLocation.id] : []"
+        :locations="
+          $route.params.location_id ? [$route.params.location_id] : []
+        "
         @changed="setCurrentLocation"
       />
     </div>
@@ -215,6 +204,9 @@ import Incident from '@/models/Incident';
 import LocationTool from '@/components/LocationTool';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
+import { create } from 'vue-modal-dialogs';
+import MessageBox from '@/components/dialogs/MessageBox';
+const messageBox = create(MessageBox);
 
 export default {
   name: 'Location',
@@ -278,47 +270,55 @@ export default {
     },
   },
   async mounted() {
-    this.loading = true;
-    await LocationType.api().get('/location_types', {
-      dataKey: 'results',
-    });
-    if (this.$route.params.location_id) {
-      try {
-        await Location.api().fetchById(this.$route.params.location_id);
-        this.currentLocation = Location.find(this.$route.params.location_id);
-      } catch (e) {
-        this.currentLocation = new Location();
-        await this.$router.replace(`/locations/new`);
-      } finally {
-        this.loading = false;
-      }
-    } else {
-      this.reset();
-    }
-    this.loading = false;
+    await this.loadLocation();
   },
   methods: {
+    async loadLocation() {
+      this.loading = true;
+      await LocationType.api().get('/location_types', {
+        dataKey: 'results',
+      });
+      if (this.$route.params.location_id) {
+        try {
+          await Location.api().fetchById(this.$route.params.location_id);
+          this.currentLocation = Location.find(this.$route.params.location_id);
+        } catch (e) {
+          this.currentLocation = new Location();
+          await this.$router.replace(`/locations/new`);
+        } finally {
+          this.loading = false;
+        }
+      } else {
+        this.reset();
+      }
+      this.loading = false;
+    },
     reset() {
       this.currentLocation = new Location();
       this.currentPolygon = null;
       this.selectedIncidentId = null;
       this.selectedOrganization = null;
       if (this.$refs.locationTool) {
-        this.$refs.locationTool.clearAll();
+        this.$refs.locationTool.reset();
       }
     },
     async downloadCurrentLocation() {
       this.loading = true;
-      const shapefile = await Location.api().download(this.currentLocation.id);
+      const shapefile = await Location.api().download(
+        this.$route.params.location_id,
+      );
       forceFileDownload(shapefile.response);
       this.loading = false;
     },
     async deleteCurrentLocation() {
       this.loading = true;
       try {
-        await Location.api().delete(`/locations/${this.currentLocation.id}`, {
-          delete: this.currentLocation.id,
-        });
+        await Location.api().delete(
+          `/locations/${this.$route.params.location_id}`,
+          {
+            delete: this.$route.params.location_id,
+          },
+        );
         await this.$toasted.success(this.$t('locationVue.location_deleted'));
         this.reset();
         await this.$router.push('/locations/new');
@@ -330,6 +330,81 @@ export default {
     },
     setCurrentLocation(location) {
       this.currentPolygon = location;
+    },
+    async onSelectOrganization(value) {
+      this.selectedOrganization = value;
+      if (!this.currentLocation.name) {
+        this.currentLocation.name = `${this.selectedOrganization.name} ${this.currentLocation.location_type.name_t}`;
+      }
+      if (this.isPrimaryResponseArea && value.primary_location) {
+        const result = await messageBox({
+          title: this.$t('locationVue.existing_location'),
+          content: this.$t(
+            '~~A similar location currently exists for {organization}. Do you want to continue creating a new one, or edit the existing one?',
+            {
+              organization: value.name,
+            },
+          ),
+          actions: {
+            continue: {
+              text: this.$t('~~Continue Creating'),
+              type: 'bare',
+              buttonClass: 'border border-black',
+            },
+            edit: {
+              text: this.$t('~~Edit Existing'),
+              type: 'bare',
+              buttonClass: 'border border-black',
+            },
+          },
+        });
+
+        if (result === 'edit') {
+          await this.$router.push(`/locations/${value.primary_location}/edit`);
+        }
+      }
+    },
+
+    async onSelectIncident(value) {
+      this.selectedIncidentId = value;
+      let incident = Incident.find(value);
+      if (!this.currentLocation.name) {
+        this.currentLocation.name = `${this.currentLocation.name} ${this.currentLocation.location_type.name_t}`;
+      }
+      if (this.isIncidentRelated && incident.locations.length) {
+        await Incident.api().fetchById(value);
+        incident = Incident.find(value);
+        const existingLocation = incident.locationModels.find(
+          location => location.type === this.currentLocation.type,
+        );
+        if (existingLocation) {
+          const result = await messageBox({
+            title: this.$t('locationVue.existing_location'),
+            content: this.$t(
+              '~~A similar location currently exists for {incident}. Do you want to continue creating a new one, or edit the existing one?',
+              {
+                incident: incident.name,
+              },
+            ),
+            actions: {
+              continue: {
+                text: this.$t('~~Continue Creating'),
+                type: 'bare',
+                buttonClass: 'border border-black',
+              },
+              edit: {
+                text: this.$t('~~Edit Existing'),
+                type: 'bare',
+                buttonClass: 'border border-black',
+              },
+            },
+          });
+
+          if (result === 'edit') {
+            await this.$router.push(`/locations/${existingLocation.id}/edit`);
+          }
+        }
+      }
     },
     async onOrganizationSearch(value) {
       const results = await Organization.api().get(
@@ -369,9 +444,9 @@ export default {
 
       try {
         let response;
-        if (this.currentLocation.id) {
+        if (this.$route.params.location_id) {
           response = await Location.api().put(
-            `/locations/${this.currentLocation.id}`,
+            `/locations/${this.$route.params.location_id}`,
             this.currentLocation,
           );
         } else {

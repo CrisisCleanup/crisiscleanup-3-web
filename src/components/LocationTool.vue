@@ -416,6 +416,11 @@ export default {
       this.map.pm.disableDraw();
       this.currentDraw = null;
     },
+    reset() {
+      this.clearAll();
+      this.toggleWorksites(false);
+      this.toggleIncidents(false);
+    },
     restoreCheckpoint(checkpointData) {
       this.map.eachLayer(layer => {
         if (
