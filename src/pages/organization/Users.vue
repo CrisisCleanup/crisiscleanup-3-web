@@ -156,8 +156,21 @@
                 v-model="emails"
                 :tags="usersToInvite"
                 :placeholder="$t('usersVue.emails')"
-                :validation="emailValidation"
                 :add-on-key="[13, ',']"
+                @before-adding-tag="
+                  obj => {
+                    let emailMatch = obj.tag.text
+                      .toLowerCase()
+                      .match(
+                        /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*/,
+                      );
+                    if (emailMatch) {
+                      obj.tag.text = emailMatch[0];
+                      obj.addTag();
+                    }
+                  }
+                "
+                :separators="[';', ',', ', ']"
                 @tags-changed="newTags => (usersToInvite = newTags)"
               />
             </div>
@@ -258,7 +271,6 @@ import Role from '@/models/Role';
 import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
 import { getErrorMessage } from '@/utils/errors';
-import { emailRegex } from '@/utils/form';
 import UserSearchInput from '@/components/UserSearchInput';
 import UserRoleFilter from '@/utils/data_filters/UserRoleFilter';
 import UserInvitedByFilter from '@/utils/data_filters/UserInvitedByFilter';
@@ -280,13 +292,6 @@ export default {
       },
       usersLoading: false,
       users: [],
-      emailValidation: [
-        {
-          classes: 'min-length',
-          rule: emailRegex,
-          disableAdd: true,
-        },
-      ],
       columns: [
         {
           title: '',
