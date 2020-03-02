@@ -133,6 +133,7 @@ export default {
         'flex-grow': true,
         'p-1': true,
         'text-base': !this.inputClasses,
+        xlarge: this.size === 'xlarge',
         large: this.size === 'large',
         small: this.size === 'small',
         base: !this.size,
@@ -185,6 +186,10 @@ input {
   height: 40px;
   border-radius: 0;
   @apply border border-crisiscleanup-dark-100;
+}
+
+input.xlarge {
+  height: 60px;
 }
 
 input.large {
