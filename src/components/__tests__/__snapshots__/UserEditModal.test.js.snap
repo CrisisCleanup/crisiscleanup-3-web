@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UserEditModal show modal with options 1`] = `
+<modal-stub
+  closeable=""
+  modal-classes="w-1/3"
+  title="~~Edit User"
+>
+  <div
+    class="flex px-10 py-5"
+  >
+    <div
+      class="w-1/2 flex items-start justify-center"
+    >
+      <img
+        alt="userView.profile_picture"
+        class="rounded-full profile-image mr-16 w-40"
+      />
+    </div>
+     
+    <div
+      class="w-1/2 flex flex-col"
+    >
+      <input
+        class="m-2"
+        placeholder="profileUser.first_name_placeholder"
+        required="required"
+        size="large"
+        value="First"
+      />
+       
+      <input
+        class="m-2"
+        placeholder="profileUser.last_name_placeholder"
+        required="required"
+        size="large"
+        value="Last"
+      />
+       
+      <input
+        class="m-2"
+        placeholder="profileUser.mobile_placeholder"
+        required="required"
+        size="large"
+      />
+       
+      <input
+        class="m-2"
+        disabled="disabled"
+        placeholder="profileUser.email_placeholder "
+        size="large"
+      />
+       
+      <input
+        class="flex-grow m-2 border border-crisiscleanup-dark-100"
+        item-key="id"
+        label="name_t"
+        multiple="multiple"
+        options="[object Object],[object Object]"
+        select-classes="bg-white border text-xs profile-select p-1"
+        size="large"
+        type="select"
+      />
+    </div>
+  </div>
+   
+  <div
+    class="p-3 flex justify-end"
+  >
+    <button
+      action="function () {
+        _vm.$emit('close');
+      }"
+      class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
+      text="actions.cancel"
+    />
+     
+    <button
+      action="function () { [native code] }"
+      class="ml-2 p-3 px-6 text-xs"
+      text="actions.save"
+      type="primary"
+    />
+  </div>
+</modal-stub>
+`;
