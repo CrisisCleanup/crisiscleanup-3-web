@@ -2,7 +2,14 @@
   <div class="w-3/4 m-auto">
     <LayerUploadTool />
     <div>
-      <div class="flex justify-end">
+      <div class="flex justify-between">
+        <base-input
+          v-model="currentSearch"
+          icon="search"
+          class="w-84 mr-4"
+          :placeholder="$t('actions.search')"
+          @input="getLocations"
+        ></base-input>
         <base-button
           text="~~Create Location"
           type="primary"
@@ -36,6 +43,7 @@ export default {
   data() {
     return {
       locations: [],
+      currentSearch: '',
       locationsLoading: false,
       locationsMeta: {
         pagination: {
@@ -65,6 +73,9 @@ export default {
           (this.locationsMeta.pagination.page - 1),
         limit: this.locationsMeta.pagination.pageSize,
       };
+      if (this.currentSearch) {
+        params.search = this.currentSearch;
+      }
       const results = await Location.api().get(
         `/locations?${getQueryString(params)}`,
         {
