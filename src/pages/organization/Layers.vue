@@ -68,6 +68,7 @@ export default {
       this.locationsLoading = true;
       const params = {
         created_by__organization: this.currentUser.organization.id,
+        type__isnull: false,
         offset:
           this.locationsMeta.pagination.pageSize *
           (this.locationsMeta.pagination.page - 1),
