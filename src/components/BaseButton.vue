@@ -15,10 +15,10 @@
       icon="spinner"
       spin
     />
-    <font-awesome-icon v-if="icon" class="mx-1" :icon="icon" :size="iconSize" />
-    <ccu-icon v-if="ccuIcon" class="mx-1" :type="ccuIcon" :size="iconSize" />
+    <font-awesome-icon v-if="icon" class="m-1" :icon="icon" :size="iconSize" />
+    <ccu-icon v-if="ccuIcon" class="m-1" :type="ccuIcon" :size="iconSize" />
     <slot>{{ text }}</slot>
-    <font-awesome-icon v-if="suffixIcon" class="mx-1" :icon="suffixIcon" />
+    <font-awesome-icon v-if="suffixIcon" class="m-1" :icon="suffixIcon" />
   </button>
 </template>
 
@@ -39,7 +39,7 @@ export default {
     text: VueTypes.string.def('Button'),
     alt: VueTypes.string.def('button'),
     title: VueTypes.string.def('Button'),
-    size: VueTypes.oneOf(['small', 'medium', 'large']).def('small'),
+    size: VueTypes.oneOf(['small', 'medium', 'large']).def('large'),
     icon: VueTypes.string,
     ccuIcon: VueTypes.oneOf(Object.values(ICONS)),
     iconSize: VueTypes.oneOf(['sm', 'md', 'lg']),
@@ -61,9 +61,9 @@ export default {
     },
     styles() {
       const styles = {
-        'text-lg large': this.size === 'large',
-        'text-base medium': this.size === 'medium',
-        small: this.size === 'small',
+        'large text-h3 font-h3': this.size === 'large',
+        'medium text-sans text-h4 font-h4': this.size === 'medium',
+        'small text-bodysm font-bodysm': this.size === 'small',
         'text-crisiscleanup-grey-900': this.disabled,
         // **** DEPRECATED ****
         primary: this.type === 'primary',
@@ -98,7 +98,11 @@ export default {
 
 <style scoped>
 button {
+  @apply font-sans;
+  @apply text-gray-900;
+  cursor: pointer;
   outline: 0;
+  transition: all 300ms ease;
 }
 button:focus {
   outline: 0;
@@ -117,15 +121,27 @@ button.solid {
   @apply bg-primary-light;
 }
 
+button.solid:hover {
+  @apply bg-crisiscleanup-yellow-100;
+}
+
 button.outline {
-  @apply text-primary-dark;
   background-color: transparent;
   border: 1px solid black;
+}
+
+button.outline:hover {
+  @apply bg-crisiscleanup-dark-500;
+  @apply text-gray-100;
 }
 
 button.text {
   border: none;
   background-color: transparent;
+}
+
+button.text:hover {
+  @apply bg-crisiscleanup-dark-100;
 }
 
 button.small {
