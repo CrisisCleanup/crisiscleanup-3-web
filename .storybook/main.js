@@ -7,6 +7,7 @@ module.exports = {
     '@storybook/addon-a11y/register',
     '@storybook/addon-links',
     '@storybook/addon-storysource',
+    '@storybook/addon-backgrounds/register'
   ],
   webpackFinal: config => {
     return {
