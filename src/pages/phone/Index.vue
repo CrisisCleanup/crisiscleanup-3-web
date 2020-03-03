@@ -2,7 +2,9 @@
   <div class="py-4 px-6 bg-gray-100 h-full overflow-auto relative">
     <div v-if="!loading">
       <div class="flex">
-        <div class="w-1/4 m-35 p-6 shadow text-base bg-white relative">
+        <div
+          class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
+        >
           <contact-card />
         </div>
       </div>
