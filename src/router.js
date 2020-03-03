@@ -162,6 +162,12 @@ router.beforeEach((to, from, next) => {
     next();
   } else {
     if (store.getters['auth/isLoggedIn']) {
+      //Orphaned Users can't really login this will navigate to a public landing page once it is built
+      if (store.getters['auth/isOrphan']) {
+        next({ name: 'nav.login' });
+        return;
+      }
+
       next();
       return;
     }

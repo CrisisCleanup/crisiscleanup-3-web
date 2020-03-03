@@ -11,6 +11,9 @@ const getters = {
   isLoggedIn: state => {
     return state.user && AuthService.getExpiry().isAfter(moment());
   },
+  isOrphan: state => {
+    return state.user && !state.user.user_claims.organization;
+  },
   userId: state => (state.user ? state.user.user_claims.id : null),
 };
 
