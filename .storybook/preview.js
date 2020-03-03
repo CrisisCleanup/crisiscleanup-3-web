@@ -4,6 +4,10 @@ import centered from '@storybook/addon-centered/vue';
 
 import Vue from 'vue';
 
+// Fonts
+import 'typeface-montserrat';
+import 'typeface-nunito-sans';
+
 // Import Vue plugins
 import Vuex from 'vuex';
 
@@ -108,7 +112,6 @@ Vue.filter('secondsToHm', secondsToHm);
 
 // Install Vue plugins.
 Vue.use(Vuex);
-
 
 // Decorators
 addDecorator(centered);
