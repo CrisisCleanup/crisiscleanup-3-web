@@ -6,11 +6,21 @@ module.exports = {
     '@storybook/addon-actions',
     '@storybook/addon-a11y/register',
     '@storybook/addon-links',
+    '@storybook/addon-storysource',
   ],
   webpackFinal: config => {
     return {
       ...config,
-      module: { ...config.module, rules: webpackConfig.module.rules },
+      module: {
+        ...config.module,
+        rules: webpackConfig.module.rules.concat([
+          {
+            test: /\.stories\.jsx?$/,
+            loaders: [require.resolve('@storybook/source-loader')],
+            enforce: 'pre',
+          },
+        ]),
+      },
       resolve: {
         ...config.resolve,
         alias: {
