@@ -1,15 +1,13 @@
 export default { title: 'Basics|BaseButton' };
 
 export const withText = () =>
-  "<base-button type='primary' text='Button' ></base-button>";
-
-export const withNoStyling = () => "<base-button text='Button' ></base-button>";
+  "<base-button variant='solid' text='Button' ></base-button>";
 
 export const withIcon = () =>
-  "<base-button type='primary' text='Button' icon='file'></base-button>";
+  "<base-button type='solid' text='Button' icon='file'></base-button>";
 
 export const withCustomIcon = () =>
-  "<base-button type='primary' text='Button' ccu-icon='trash'></base-button>";
+  "<base-button variant='solid' text='Button' ccu-icon='trash'></base-button>";
 
 export const withSizes = () => ({
   data() {
@@ -19,7 +17,9 @@ export const withSizes = () => ({
   },
   template: `
     <div>
-      <base-button :size="s" v-for="s in sizes" :key="s" :type="primary">{{s}}</base-button>
+      <div class="m-4" v-for="s in sizes">
+        <base-button :size="s" :key="s" :type="primary">{{s}}</base-button>
+      </div>
     </div>
   `,
 });
@@ -32,7 +32,9 @@ export const withVariants = () => ({
   },
   template: `
     <div>
-      <base-button size="large" v-for="v in variants" :variant="v" />
+      <div class="m-4" v-for="v in variants">
+        <base-button size="large" :variant="v" />
+      </div>
     </div>
   `,
 });
