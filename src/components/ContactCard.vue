@@ -1,27 +1,52 @@
 <template>
   <div>
-    <div class="name-mobile-position">
-      <!------Name------>
-      <div class="user_name"><h1>full name</h1></div>
-      <!---Mobile--->
-      <div class="mobile-number">(601) 123-4567</div>
-    </div>
-    <!---Profile Photo--->
-    <div class="profile-photo">
-      <img src="" alt="PFP" />
-    </div>
-    <!---More Info--->
-    <div class="more-infobtn">
-      <button onclick="myFunction()">more info</button>
+    <!--edit button
+      <div class="editbtn">
+        <button
+          size="small"
+          title="edit"
+          class="table-action-button flex items-center justify-center js-download"
+          img="../assets/icons/edit.svg"
+        ></button>
+      </div>-->
+    <div class="flex flex-row justify-between">
+      <div class="flex-col m-3">
+        <img src="" alt="PFP" />
+      </div>
+      <div class="flex-col justify-between m-3">
+        <p class="text-lg justify-between">full name</p>
+        <p class="text-md justify-between float-right">(601) 123-4567</p>
+        <div id="moreinfobtn" class="more-infobtn">
+          <base-button
+            class="text-crisiscleanup-dark-blue align-right"
+            @click="moreinfobtn = true"
+            >more info
+          </base-button>
+        </div>
+        </div>
     </div>
     <!---info card--->
     <div id="info-card">
-      <more-info></more-info>
+      <more-info />
+    </div>
+    <!---Buttons--->
+    <div class="items-center">
+      <base-button
+        class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 float-left font-bold text-white py-2 px-4 m-3"
+      >
+        Unavailable
+      </base-button>
+      <base-button
+        class="bg-crisiscleanup-dark-500 hover:bg-crisiscleanup-dark-400 float-right font-bold text-white py-2 px-3 m-3"
+      >
+        DP
+      </base-button>
     </div>
   </div>
 </template>
 
 <script>
+// import indexOfFrom from '../../cypress/types/lodash/fp/indexOfFrom.vue';
 import ContactMoreInfo from './ContactMoreInfo.vue';
 
 export default {
@@ -29,29 +54,15 @@ export default {
   components: {
     'more-info': ContactMoreInfo,
   },
+  data() {
+    return {
+      visible: true,
+    };
+  },
+  methods: {},
 };
 </script>
 
 <style>
-.name-mobile-position {
-  float: right;
-  padding-bottom: 20px;
-}
-.user_name {
-  font-size: 20px;
-  font-weight: bold;
-  text-align: left;
-}
-.mobile-number {
-  font-size: 18px;
-  text-align: left;
-}
-.profile-photo {
-  float: left;
-  padding-bottom: 20px;
-}
-.more-infobtn {
-  color: blue;
-  padding-left: 50px;
-}
+
 </style>
