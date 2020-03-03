@@ -1,14 +1,5 @@
 <template>
   <div>
-    <!--edit button
-      <div class="editbtn">
-        <button
-          size="small"
-          title="edit"
-          class="table-action-button flex items-center justify-center js-download"
-          img="../assets/icons/edit.svg"
-        ></button>
-      </div>-->
     <div class="flex flex-row justify-between">
       <div class="flex-col m-3">
         <img src="" alt="PFP" />
@@ -62,6 +53,4 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style></style>
