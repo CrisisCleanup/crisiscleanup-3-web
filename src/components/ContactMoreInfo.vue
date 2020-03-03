@@ -23,15 +23,18 @@
     </div>
     <!--line-->
     <hr class="bg-white" />
-    </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'Info',
-    props: ['toggleOpen'],
-  };
+import VueTypes from 'vue-types';
+
+export default {
+  name: 'Info',
+  props: {
+    toggleOpen: VueTypes.bool.def(false),
+  },
+};
 </script>
 
 <style>
