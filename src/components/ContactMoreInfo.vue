@@ -27,6 +27,13 @@
   </div>
 </template>
 
+<script>
+  export default {
+    name: 'Info',
+    props: ['toggleOpen'],
+  };
+</script>
+
 <style>
 .show-btn {
   color: #f79820;
