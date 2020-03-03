@@ -3,13 +3,25 @@
     <LayerUploadTool />
     <div>
       <div class="flex justify-between">
-        <base-input
-          v-model="currentSearch"
-          icon="search"
-          class="w-84 mr-4"
-          :placeholder="$t('actions.search')"
-          @input="getLocations"
-        ></base-input>
+        <div class="flex items-center">
+          <base-input
+            v-model="currentSearch"
+            icon="search"
+            class="w-72 mr-4"
+            :placeholder="$t('actions.search')"
+            @input="getLocations"
+          ></base-input>
+          <form-select
+            v-model="locationTypeFilter"
+            :options="locationTypes"
+            class="w-64 border border-crisiscleanup-dark-100"
+            item-key="id"
+            label="name_t"
+            :placeholder="$t('locationVue.location_type')"
+            select-classes="bg-white border text-xs location-select p-1"
+            @input="getLocations"
+          />
+        </div>
         <base-button
           text="~~Create Location"
           type="primary"
@@ -36,6 +48,7 @@ import LayerUploadTool from '@/components/LayerUploadTool';
 import LocationTable from '../../components/LocationTable';
 import User from '../../models/User';
 import Location from '../../models/Location';
+import LocationType from '../../models/LocationType';
 import { getQueryString } from '../../utils/urls';
 export default {
   name: 'Layers',
@@ -43,6 +56,7 @@ export default {
   data() {
     return {
       locations: [],
+      locationTypeFilter: null,
       currentSearch: '',
       locationsLoading: false,
       locationsMeta: {
@@ -57,6 +71,9 @@ export default {
   computed: {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
+    },
+    locationTypes() {
+      return LocationType.all();
     },
   },
   methods: {
@@ -76,6 +93,9 @@ export default {
       };
       if (this.currentSearch) {
         params.search = this.currentSearch;
+      }
+      if (this.locationTypeFilter) {
+        params.type = this.locationTypeFilter;
       }
       const results = await Location.api().get(
         `/locations?${getQueryString(params)}`,
@@ -97,4 +117,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.location-select .vs__selected {
+  @apply text-xs bg-white !important;
+}
+</style>
