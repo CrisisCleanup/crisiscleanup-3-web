@@ -3,24 +3,23 @@
 exports[`BaseButton should render correctly and match snapshot 1`] = `
 <button
   alt="alt-text"
-  class="primary flex items-center justify-center js-btntitle"
+  class="large text-h3 font-h3 flex items-center justify-center solid js-btntitle"
   data-cy="js-btntitle"
-  size=""
+  size="large"
   title="btntitle"
-  type="submit"
+  type="primary"
 >
   <!---->
    
   <font-awesome-icon-stub
-    class="mx-1"
+    class="m-1"
     icon="dashboard"
-    size="sm"
   />
    
   <!---->
    button 
   <font-awesome-icon-stub
-    class="mx-1"
+    class="m-1"
     icon="dashboard"
   />
 </button>
