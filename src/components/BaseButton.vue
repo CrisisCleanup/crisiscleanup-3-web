@@ -24,62 +24,28 @@
 
 <script>
 import { kebabCase } from 'lodash';
+import VueTypes from 'vue-types';
+import { ICONS } from '@/components/BaseIcon';
+
+export const STYLES = ['primary', 'danger', 'warning', 'link', 'bare'];
+export const VARIANTS = ['solid', 'outline', 'text'];
 
 export default {
   name: 'BaseButton',
   props: {
-    action: {
-      type: Function,
-      default: () => {},
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
-    showSpinner: {
-      type: Boolean,
-      default: false,
-    },
-    text: {
-      type: String,
-      default: '',
-    },
-    alt: {
-      type: String,
-      default: '',
-    },
-    title: {
-      type: String,
-      default: '',
-    },
-    type: {
-      type: String,
-      default: '',
-    },
-    size: {
-      type: String,
-      default: '',
-    },
-    icon: {
-      type: String,
-      default: '',
-    },
-    ccuIcon: {
-      type: String,
-      default: '',
-    },
-    iconSize: {
-      type: String,
-      default: 'sm',
-    },
-    suffixIcon: {
-      type: String,
-      default: '',
-    },
-    selector: {
-      type: String,
-      default: '',
-    },
+    action: VueTypes.func,
+    disabled: VueTypes.bool.def(false),
+    showSpinner: VueTypes.bool.def(false),
+    text: VueTypes.string.def('Button'),
+    alt: VueTypes.string.def('button'),
+    title: VueTypes.string.def('Button'),
+    size: VueTypes.oneOf(['small', 'medium', 'large']).def('small'),
+    icon: VueTypes.string,
+    ccuIcon: VueTypes.oneOf(Object.values(ICONS)),
+    iconSize: VueTypes.oneOf(['sm', 'md', 'lg']),
+    suffixIcon: VueTypes.oneOf(Object.values(ICONS)),
+    selector: VueTypes.string,
+    variant: VueTypes.oneOf(VARIANTS).def('solid'),
   },
   data() {
     return {
@@ -94,21 +60,24 @@ export default {
       return this.title || this.text || this.alt;
     },
     styles() {
-      return {
-        'text-lg': this.size === 'large',
-        'text-base': this.size === 'medium',
+      const styles = {
+        'text-lg large': this.size === 'large',
+        'text-base medium': this.size === 'medium',
         small: this.size === 'small',
         'text-crisiscleanup-grey-900': this.disabled,
-
+        // **** DEPRECATED ****
         primary: this.type === 'primary',
         danger: this.type === 'danger',
         warning: this.type === 'warning',
         link: this.type === 'link',
         bare: this.type === 'bare',
+        // **************
         flex: true,
         'items-center': true,
         'justify-center': true,
       };
+      styles[this.variant] = true;
+      return styles;
     },
   },
   methods: {
@@ -134,10 +103,46 @@ button {
 button:focus {
   outline: 0;
 }
+
+/** ----- DEPRECATED ----- */
 .primary {
   @apply bg-primary-light;
 }
 .link {
   @apply text-primary-dark;
+}
+/** ----- DEPRECATED ----- */
+
+button.solid {
+  @apply bg-primary-light;
+}
+
+button.outline {
+  @apply text-primary-dark;
+  background-color: transparent;
+  border: 1px solid black;
+}
+
+button.text {
+  border: none;
+  background-color: transparent;
+}
+
+button.small {
+  min-height: 24px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+button.medium {
+  min-height: 32px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+button.large {
+  min-height: 50px;
+  padding-left: 34px;
+  padding-right: 34px;
 }
 </style>
