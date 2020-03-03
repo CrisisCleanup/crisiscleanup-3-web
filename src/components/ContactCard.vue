@@ -19,15 +19,15 @@
         <div id="moreinfobtn" class="more-infobtn">
           <base-button
             class="text-crisiscleanup-dark-blue align-right"
-            @click="moreinfobtn = true"
-            >more info
+            :action="() => (toggleOpen = !toggleOpen)"
+            >{{ !toggleOpen ? 'more' : 'less' }} info
           </base-button>
         </div>
-        </div>
+      </div>
     </div>
     <!---info card--->
-    <div id="info-card">
-      <more-info />
+    <div class="info-card">
+      <more-info v-if="toggleOpen" />
     </div>
     <!---Buttons--->
     <div class="items-center">
@@ -56,10 +56,9 @@ export default {
   },
   data() {
     return {
-      visible: true,
+      toggleOpen: false,
     };
   },
-  methods: {},
 };
 </script>
 
