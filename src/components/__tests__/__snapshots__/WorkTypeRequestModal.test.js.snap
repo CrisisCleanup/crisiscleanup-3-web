@@ -73,9 +73,8 @@ exports[`WorkTypeRequestModal show modal with options 1`] = `
   >
     <button
       alt="button"
-      class="ml-2 p-3 px-6 mr-1 text-xs border border-black large text-h3 font-h3 flex items-center justify-center solid js-button"
+      class="ml-2 p-3 px-6 mr-1 text-xs border border-black flex items-center justify-center undefined js-button"
       data-cy="js-button"
-      size="large"
       title="Button"
       type="submit"
     >
@@ -90,9 +89,8 @@ exports[`WorkTypeRequestModal show modal with options 1`] = `
      
     <button
       alt="button"
-      class="ml-2 p-3 px-6 text-xs large text-h3 font-h3 flex items-center justify-center solid js-button"
+      class="ml-2 p-3 px-6 text-xs flex items-center justify-center undefined js-button"
       data-cy="js-button"
-      size="large"
       title="Button"
       type="primary"
     >
