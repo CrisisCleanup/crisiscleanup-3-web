@@ -22,6 +22,13 @@
       >
         <operatorstats />
       </div>
+    </div>
+    <div
+      class="my-4 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
+    >
+      <stories-card />
+    </div>
+  </div>
     </template>
   </Loader>
 </template>
@@ -33,10 +40,12 @@ import Loader from '@/components/Loader';
 import genstatscard from '../../components/GeneralStatsCard.vue';
 import operatorstats from '../../components/OperatorStatisticsCard';
 import ContactCard from '../../components/ContactCard';
+import PeopleStoriesCard from '../../components/PeopleStoriesCard'
 
 export default {
   name: 'Phone',
   components: {
+      'stories-card': PeopleStoriesCard,
     genstatscard,
     operatorstats,
     'contact-card': ContactCard,
