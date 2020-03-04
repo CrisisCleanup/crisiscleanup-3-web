@@ -1,4 +1,5 @@
 <template>
+</template>
   <div>
     <div class="flex flex-row justify-between">
       <div class="flex-col m-3">
@@ -33,7 +34,6 @@
         DP
       </base-button>
   </div>
-</template>
 
 <script>
 import VueTypes from 'vue-types';
