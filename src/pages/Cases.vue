@@ -66,7 +66,8 @@
                   slot="btn"
                   class="text-base font-thin mx-4"
                   :text="$t('casesVue.layers')"
-                  icon="layer-group"
+                  ccu-icon="layers"
+                  icon-size="medium"
                 />
                 <template slot="body">
                   <ul class="text-base">
@@ -160,7 +161,8 @@
               </base-dropdown>
               <base-button
                 class="text-base font-thin mx-4"
-                icon="sliders-h"
+                ccu-icon="filters"
+                icon-size="medium"
                 alt="Filters"
                 :action="
                   () => {
