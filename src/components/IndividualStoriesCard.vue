@@ -7,15 +7,18 @@
       </div>
       <!---story--->
       <div class="flex-col justify-between m-3">
-        <p class="text-lg justify-between">Jane Smith Story</p>
+        <!---name--->
+        <p class="text-lg justify-between font-bold">Jane Smith Story</p>
+        <!---Date--->
+        <p class="text-sm justify-between">
+          On Friday, December 3rd, you talked with Jane Smith (W5832). Team
+          Rubicon helped Jane Smith yesterday.
+        </p>
+        <!---body blurb--->
         <p class="text-sm justify-between">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum
+          minim veniam, quis
         </p>
         <!---Read Full Story Button--->
         <div id="moreinfobtn" class="more-infobtn">
