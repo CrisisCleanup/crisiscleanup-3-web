@@ -1,7 +1,9 @@
 <template>
   <div>
     <!--Header-->
-    <p class="text-lg text-crisiscleanup-dark-400 justify-between">
+    <p
+      class="text-lg text-crisiscleanup-dark-400 justify-between font-weight-bold"
+    >
       Stories from people you helped
     </p>
     <!--line-->
