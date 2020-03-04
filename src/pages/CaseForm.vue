@@ -328,6 +328,7 @@
       <base-button
         size="medium"
         class="flex-grow m-1 border-2 border-black"
+        variant="text"
         :action="
           () => {
             $emit('closeWorksite');
@@ -337,14 +338,15 @@
       />
       <base-button
         size="medium"
-        type="primary"
+        variant="solid"
+        data-cy="worksite-formaction-save"
         class="flex-grow m-1 text-black"
         :action="saveWorksite"
         :text="$t('actions.save')"
       />
       <base-button
         size="medium"
-        type="primary"
+        variant="solid"
         class="flex-grow m-1 text-black"
         :action="claimAndSaveWorksite"
         :text="$t('actions.save_claim')"

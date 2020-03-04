@@ -3,10 +3,12 @@
     <div
       id="map"
       ref="map"
+      data-cy="worksitemap-map"
       class="absolute top-0 left-0 right-0 bottom-0"
     ></div>
     <div
       v-if="mapLoading"
+      data-cy="worksitemap-loader"
       class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
     >
       <spinner />

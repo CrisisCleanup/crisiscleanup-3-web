@@ -64,6 +64,7 @@
               <base-dropdown class-name="borderless">
                 <base-button
                   slot="btn"
+                  variant="text"
                   class="text-base font-thin mx-4"
                   :text="$t('casesVue.layers')"
                   ccu-icon="layers"

@@ -8,6 +8,7 @@
   },
   "ignoreTestFiles": ["**/__snapshots__/*", "**/__image_snapshots__/*"],
   "projectId": "xyprfc",
+  "video": false,
   "viewportHeight": 900,
   "viewportWidth": 1400
 }

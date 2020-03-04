@@ -465,6 +465,7 @@
         size="medium"
         type="primary"
         class="m-1 text-black p-3 px-4"
+        data-cy="caseview-actions-done"
         :text="$t('actions.done')"
         :action="
           () => {

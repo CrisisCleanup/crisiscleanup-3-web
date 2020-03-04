@@ -598,9 +598,9 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
            
           <base-button-stub
             action="function () { [native code] }"
-            class="px-8 py-3"
+            size="large"
             text="inviteTeammates.send_invites"
-            type="primary"
+            variant="solid"
           />
         </div>
       </div>
@@ -624,18 +624,24 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="py-4 px-4 border-b flex items-center"
         >
           <base-button-stub
-            class="mr-2 border-r pr-2"
-            text="Inbound Requests"
-          />
-           
-          <base-button-stub
             class="mr-2 border-r pr-2 text-primary-dark"
-            text="Outbound Requests"
+            size="medium"
+            text="Inbound Requests"
+            variant="text"
           />
            
           <base-button-stub
-            class="mr-2 text-primary-dark"
+            class="mr-2 border-r pr-2"
+            size="medium"
+            text="Outbound Requests"
+            variant="text"
+          />
+           
+          <base-button-stub
+            class="mr-2"
+            size="medium"
             text="Archived Requests"
+            variant="text"
           />
         </div>
          
