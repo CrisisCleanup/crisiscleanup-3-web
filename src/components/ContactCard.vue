@@ -7,9 +7,7 @@
       </div>
       <div class="flex-col justify-between m-3">
         <!---Edit Button--->
-        <base-buton>
         <BaseIcon class="float-right" />
-        </base-button>
         <!---Contact Info--->
         <p class="text-lg justify-between">full name</p>
         <p class="text-md justify-between float-right">(601) 123-4567</p>
@@ -39,16 +37,14 @@
       >
         DP
       </base-button>
-    </div>
   </div>
 </template>
 
 <script>
 // import indexOfFrom from '../../cypress/types/lodash/fp/indexOfFrom.vue';
-import BaseIcon, { ICONS, ICON_SIZES } from '@/components/BaseIcon';
+import BaseIcon /*,{ ICONS, ICON_SIZES }*/ from '@/components/BaseIcon';
 import BaseButton from '@/components/BaseButton.vue';
 import ContactMoreInfo from './ContactMoreInfo.vue';
-
 
 export default {
   name: 'CallerCard',
