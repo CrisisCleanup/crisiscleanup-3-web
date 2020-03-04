@@ -369,7 +369,7 @@ export default {
       this.selectedIncidentId = value;
       let incident = Incident.find(value);
       if (!this.currentLocation.name) {
-        this.currentLocation.name = `${this.currentLocation.name} ${this.currentLocation.location_type.name_t}`;
+        this.currentLocation.name = `${incident.name} ${this.currentLocation.location_type.name_t}`;
       }
       if (this.isIncidentRelated && incident.locations.length) {
         await Incident.api().fetchById(value);
