@@ -24,7 +24,7 @@
       </div>
     </div>
     <div
-      class="my-4 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
+      class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
     >
       <stories-card />
     </div>
@@ -45,7 +45,7 @@ import PeopleStoriesCard from '../../components/PeopleStoriesCard'
 export default {
   name: 'Phone',
   components: {
-      'stories-card': PeopleStoriesCard,
+    'stories-card': PeopleStoriesCard,
     genstatscard,
     operatorstats,
     'contact-card': ContactCard,
