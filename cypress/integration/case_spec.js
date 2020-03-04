@@ -44,13 +44,14 @@ describe('New Case', () => {
     );
     cy.get('.js-worksite-state').as('WorksiteState');
     cy.get('.js-worksite-postal-code').as('WorksitePostalCode');
-    cy.get('.js-save').as('WorksiteSave');
+    cy.get('[data-cy="worksite-formaction-save"]').as('WorksiteSave');
+    cy.get('[data-cy="worksitemap-loader"]').as('WorksiteMapLoader');
   });
 
   it('Creates new case successfully', () => {
-    cy.get('@WorksiteName').type('Test Person');
-    cy.get('@WorksiteAddress').type('455 N Rexford Drive');
-    cy.get('@WorksiteCity').type('Beverly Hills');
+    cy.get('@WorksiteName').type('Test Person', { force: true });
+    cy.get('@WorksiteAddress').type('455 N Rexford Drive', { force: true });
+    cy.get('@WorksiteCity').type('Beverly Hills', { force: true });
     cy.get('@WorksiteCountyBreakGlass').click();
     cy.get('@WorksiteCounty').should('have.value', 'Los Angeles County');
     cy.get('@WorksiteState').should('have.value', 'California');
@@ -58,6 +59,6 @@ describe('New Case', () => {
     cy.get('@WorksiteSave').click();
     cy.wait('@createWorksite');
     cy.url().should('include', '/incident/158/cases');
-    cy.get('.js-actions-done').should('be.visible');
+    cy.get('[data-cy="caseview-actions-done"]').should('be.visible');
   });
 });
