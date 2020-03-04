@@ -18,11 +18,11 @@
       >
         <operatorstats />
       </div>
-    </div>
-    <div
-      class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
-    >
-      <stories-card />
+      <div
+        class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
+      >
+        <stories-card />
+      </div>
     </div>
   </div>
 </template>
