@@ -40,10 +40,13 @@
 import VueTypes from 'vue-types';
 import ContactMoreInfo from './ContactMoreInfo.vue';
 
+
 export default {
   name: 'CallerCard',
   components: {
     'more-info': ContactMoreInfo,
+    BaseIcon,
+    BaseButton,
   },
   props: {
     name: VueTypes.string,
