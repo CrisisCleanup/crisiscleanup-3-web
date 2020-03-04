@@ -1,7 +1,8 @@
-import { ICONS, ICON_SIZES } from '@/components/BaseIcon';
+import BaseIcon, { ICONS, ICON_SIZES } from '@/components/BaseIcon';
 
 export default {
   title: 'Basics|BaseIcon',
+  component: BaseIcon,
 };
 
 export const simpleIcon = () => '<ccu-icon type="edit" />';

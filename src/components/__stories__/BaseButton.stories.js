@@ -1,15 +1,18 @@
 import BaseButton from '@/components/BaseButton.vue';
 
-export default { title: 'Basics|BaseButton', component: BaseButton };
+export default {
+  title: 'Basics|BaseButton',
+  component: BaseButton,
+};
 
 export const withText = () =>
   "<base-button variant='solid' text='Button' ></base-button>";
 
 export const withIcon = () =>
-  "<base-button type='solid' text='Button' icon='file'></base-button>";
+  "<base-button variant='solid' text='Button' icon='file'></base-button>";
 
 export const withCustomIcon = () =>
-  "<base-button variant='solid' text='Button' ccu-icon='trash'></base-button>";
+  "<base-button text='Button' ccu-icon='trash'></base-button>";
 
 export const withSizes = () => ({
   data() {
@@ -20,7 +23,7 @@ export const withSizes = () => ({
   template: `
     <div>
       <div class="m-4" v-for="s in sizes">
-        <base-button :size="s" :key="s" :type="primary">{{s}}</base-button>
+        <base-button :size="s" :key="s" :variant="solid">{{s}}</base-button>
       </div>
     </div>
   `,
@@ -43,7 +46,7 @@ export const withVariants = () => ({
 
 export const withAsyncAction = () => ({
   template:
-    '<base-button type="primary" :action="doAsync">Load for 1 second</base-button>',
+    '<base-button variant="solid" :action="doAsync">Load for 1 second</base-button>',
   methods: {
     async doAsync() {
       await new Promise(resolve => setTimeout(resolve, 1000));
