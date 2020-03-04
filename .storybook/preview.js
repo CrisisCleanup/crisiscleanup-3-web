@@ -1,52 +1,16 @@
-import { configure, addDecorator, addParameters } from '@storybook/vue';
-import { withA11y } from '@storybook/addon-a11y';
-import centered from '@storybook/addon-centered/vue';
-import { withInfo } from 'storybook-addon-vue-info';
-
-import Vue from 'vue';
-
-// Fonts
-import 'typeface-montserrat';
-import 'typeface-nunito-sans';
-
-// Import Vue plugins
-import Vuex from 'vuex';
-
-// Import your global components.
-import axios from 'axios';
-import VueAxios from 'vue-axios';
-
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import VueLog from '@dreipol/vue-log';
-import VueI18n from 'vue-i18n';
-import vueNumeralFilterInstaller from 'vue-numeral-filter';
-import VueAutosuggest from 'vue-autosuggest';
-import VTooltip from 'v-tooltip';
-import Toasted from 'vue-toasted';
-import VueTagsInput from '@johmun/vue-tags-input';
-import Popover from 'vue-js-popover';
-import Dropdown from 'bp-vuejs-dropdown';
-import vSelect from 'vue-select';
-import * as ModalDialogs from 'vue-modal-dialogs';
-import moment from 'moment';
-import 'moment/min/locales';
-
-import Authenticated from '@/layouts/Authenticated';
-import Unauthenticated from '@/layouts/Unauthenticated';
-
-import BaseIcon from '@/components/BaseIcon';
-import BaseCheckbox from '@/components/BaseCheckbox';
-import BaseButton from '@/components/BaseButton';
-import BaseInput from '@/components/BaseInput';
-import Modal from '@/components/Modal';
+import '@/assets/css/tailwind.css';
 import Autocomplete from '@/components/Autocomplete';
-import Tag from '@/components/Tag';
-import Spinner from '@/components/Spinner';
-import FormSelect from '@/components/FormSelect';
+import Badge from '@/components/Badge';
+import BaseButton from '@/components/BaseButton';
+import BaseCheckbox from '@/components/BaseCheckbox';
+import BaseIcon from '@/components/BaseIcon';
+import BaseInput from '@/components/BaseInput';
 import BaseRadio from '@/components/BaseRadio';
-
+import BaseText from '@/components/BaseText';
+import FormSelect from '@/components/FormSelect';
+import Modal from '@/components/Modal';
+import Spinner from '@/components/Spinner';
+import Tag from '@/components/Tag';
 import {
   getColorForWorkType,
   getStatusName,
@@ -55,10 +19,37 @@ import {
   secondsToHm,
   snakeToTitleCase,
 } from '@/filters';
-
-import '@/assets/css/tailwind.css';
-import Badge from '@/components/Badge';
-import { i18nService } from '@/services/i18n.service';
+import Authenticated from '@/layouts/Authenticated';
+import Unauthenticated from '@/layouts/Unauthenticated';
+import VueLog from '@dreipol/vue-log';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueTagsInput from '@johmun/vue-tags-input';
+import { withA11y } from '@storybook/addon-a11y';
+import centered from '@storybook/addon-centered/vue';
+import { addDecorator, addParameters, configure } from '@storybook/vue';
+// Import your global components.
+import axios from 'axios';
+import Dropdown from 'bp-vuejs-dropdown';
+import moment from 'moment';
+import 'moment/min/locales';
+import { withInfo } from 'storybook-addon-vue-info';
+// Fonts
+import 'typeface-montserrat';
+import 'typeface-nunito-sans';
+import VTooltip from 'v-tooltip';
+import Vue from 'vue';
+import VueAutosuggest from 'vue-autosuggest';
+import VueAxios from 'vue-axios';
+import VueI18n from 'vue-i18n';
+import Popover from 'vue-js-popover';
+import * as ModalDialogs from 'vue-modal-dialogs';
+import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import vSelect from 'vue-select';
+import Toasted from 'vue-toasted';
+// Import Vue plugins
+import Vuex from 'vuex';
 
 library.add(fas);
 
@@ -69,6 +60,7 @@ Vue.component('base-checkbox', BaseCheckbox);
 Vue.component('base-radio', BaseRadio);
 Vue.component('base-button', BaseButton);
 Vue.component('base-input', BaseInput);
+Vue.component('base-text', BaseText);
 Vue.component('form-select', FormSelect);
 Vue.component('modal', Modal);
 Vue.component('autocomplete', Autocomplete);
