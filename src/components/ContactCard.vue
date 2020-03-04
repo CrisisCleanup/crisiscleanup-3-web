@@ -32,14 +32,12 @@
       >
         DP
       </base-button>
-    </div>
   </div>
 </template>
 
 <script>
 import VueTypes from 'vue-types';
 import ContactMoreInfo from './ContactMoreInfo.vue';
-
 
 export default {
   name: 'CallerCard',
