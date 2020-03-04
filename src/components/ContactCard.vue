@@ -1,5 +1,4 @@
 <template>
-</template>
   <div>
     <div class="flex flex-row justify-between">
       <div class="flex-col m-3">
@@ -39,6 +38,7 @@
         DP
       </base-button>
   </div>
+</template>
 
 <script>
 // import indexOfFrom from '../../cypress/types/lodash/fp/indexOfFrom.vue';
