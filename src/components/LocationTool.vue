@@ -668,6 +668,7 @@ export default {
       });
     },
     async onLocationSelected(selected, fit = false) {
+      this.applyCurrentLayer();
       await Location.api().fetchById(selected.id);
       const location = Location.find(selected.id);
       const geojsonFeature = {
