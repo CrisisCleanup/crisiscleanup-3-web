@@ -6,13 +6,13 @@ export default {
 };
 
 export const withText = () =>
-  "<base-button variant='solid' text='Button' ></base-button>";
+  "<base-button variant='solid' size='large' text='Button' ></base-button>";
 
 export const withIcon = () =>
-  "<base-button variant='solid' text='Button' icon='file'></base-button>";
+  "<base-button variant='solid' size='large' text='Button' icon='file'></base-button>";
 
 export const withCustomIcon = () =>
-  "<base-button text='Button' ccu-icon='trash'></base-button>";
+  "<base-button text='Button' size='large' variant='outline' ccu-icon='trash'></base-button>";
 
 export const withSizes = () => ({
   data() {
@@ -23,7 +23,7 @@ export const withSizes = () => ({
   template: `
     <div>
       <div class="m-4" v-for="s in sizes">
-        <base-button :size="s" :key="s" :variant="solid">{{s}}</base-button>
+        <base-button :size="s" :key="s" variant="solid">{{s}}</base-button>
       </div>
     </div>
   `,

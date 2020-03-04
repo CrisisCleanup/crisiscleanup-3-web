@@ -39,13 +39,13 @@ export default {
     text: VueTypes.string.def('Button'),
     alt: VueTypes.string.def('button'),
     title: VueTypes.string.def('Button'),
-    size: VueTypes.oneOf(['small', 'medium', 'large']).def('large'),
+    size: VueTypes.oneOf(['small', 'medium', 'large']),
     icon: VueTypes.string,
     ccuIcon: VueTypes.oneOf(Object.values(ICONS)),
-    iconSize: VueTypes.oneOf(['sm', 'md', 'lg']),
+    iconSize: VueTypes.oneOf(['sm', 'md', 'lg']).def('sm'),
     suffixIcon: VueTypes.oneOf(Object.values(ICONS)),
     selector: VueTypes.string,
-    variant: VueTypes.oneOf(VARIANTS).def('solid'),
+    variant: VueTypes.oneOf(VARIANTS),
   },
   data() {
     return {
@@ -76,6 +76,9 @@ export default {
         'items-center': true,
         'justify-center': true,
       };
+      if (this.variant) {
+        styles[this.variant] = true;
+      }
       styles[this.variant] = true;
       return styles;
     },
@@ -99,7 +102,6 @@ export default {
 <style scoped>
 button {
   @apply font-sans;
-  @apply text-gray-900;
   cursor: pointer;
   outline: 0;
   transition: all 300ms ease;
@@ -136,7 +138,6 @@ button.outline:hover {
 }
 
 button.text {
-  border: none;
   background-color: transparent;
 }
 

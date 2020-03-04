@@ -143,8 +143,8 @@
             </div>
             <base-button
               :text="$t('inviteTeammates.send_invites')"
-              type="primary"
-              class="px-8 py-3"
+              size="large"
+              variant="solid"
               :action="inviteUsers"
             />
           </div>
@@ -162,23 +162,29 @@
                   $can('receive_work_type_transfer_requests')
               "
               class="mr-2 border-r pr-2"
+              size="medium"
               text="Inbound Requests"
-              :class="[pendingView === 'inbound' ? '' : 'text-primary-dark']"
+              :class="[pendingView === 'inbound' ? 'text-primary-dark' : '']"
               @click.native="pendingView = 'inbound'"
+              variant="text"
             />
 
             <base-button
               class="mr-2 border-r pr-2"
+              size="medium"
               text="Outbound Requests"
-              :class="[pendingView === 'outbound' ? '' : 'text-primary-dark']"
+              :class="[pendingView === 'outbound' ? 'text-primary-dark' : '']"
               @click.native="pendingView = 'outbound'"
+              variant="text"
             />
 
             <base-button
               class="mr-2"
+              size="medium"
               text="Archived Requests"
-              :class="[pendingView === 'archived' ? '' : 'text-primary-dark']"
+              :class="[pendingView === 'archived' ? 'text-primary-dark' : '']"
               @click.native="pendingView = 'archived'"
+              variant="text"
             />
           </div>
           <div class="p-4">
