@@ -1,13 +1,13 @@
 <template>
-<div>
+  <div>
+    <!--Header-->
+    <p class="text-lg text-crisiscleanup-dark-400 justify-between">Stories from people you helped</p>
     <!--line-->
     <hr class="bg-white" />
     <!--Individual Stories Card-->
-    <div class="info">
+    <div class="stories">
       <i-story />
     </div>
-    <!--line-->
-    <hr class="bg-white" />
     </div>
   </div>
 </template>
@@ -21,7 +21,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
