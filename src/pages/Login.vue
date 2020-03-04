@@ -28,8 +28,8 @@
       />
       <base-button
         size="medium"
+        variant="solid"
         class="px-5 py-2 my-3 w-full"
-        type="primary"
         :text="$t('actions.login')"
         :action="userLogin"
       />
