@@ -1,4 +1,6 @@
-export default { title: 'Basics|BaseButton' };
+import BaseButton from '@/components/BaseButton.vue';
+
+export default { title: 'Basics|BaseButton', component: BaseButton };
 
 export const withText = () =>
   "<base-button variant='solid' text='Button' ></base-button>";

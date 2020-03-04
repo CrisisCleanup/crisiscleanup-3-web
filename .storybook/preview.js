@@ -1,6 +1,7 @@
 import { configure, addDecorator, addParameters } from '@storybook/vue';
 import { withA11y } from '@storybook/addon-a11y';
 import centered from '@storybook/addon-centered/vue';
+import { withInfo } from 'storybook-addon-vue-info';
 
 import Vue from 'vue';
 
@@ -116,13 +117,13 @@ Vue.use(Vuex);
 // Decorators
 addDecorator(centered);
 addDecorator(withA11y);
-
+addDecorator(withInfo);
 
 // Global Params
 addParameters({
   backgrounds: [
-    { name: 'CrisisCleanup Gray', value: '#f9f9f9', default: true }
-  ]
-})
+    { name: 'CrisisCleanup Gray', value: '#f9f9f9', default: true },
+  ],
+});
 
 configure(require.context('../src', true, /\.stories\.js$/), module);
