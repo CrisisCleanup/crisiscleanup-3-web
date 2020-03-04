@@ -36,7 +36,7 @@ export default {
     action: VueTypes.func,
     disabled: VueTypes.bool.def(false),
     showSpinner: VueTypes.bool.def(false),
-    text: VueTypes.string.def('Button'),
+    text: VueTypes.string,
     alt: VueTypes.string.def('button'),
     title: VueTypes.string.def('Button'),
     size: VueTypes.oneOf(['small', 'medium', 'large']),
