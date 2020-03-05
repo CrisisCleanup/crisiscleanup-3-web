@@ -199,6 +199,7 @@ export default {
       formData.append('note_key', this.shapefileKey);
       formData.append('type', this.shapefileType);
       formData.append('shared', this.shapefileAccess || 'shared');
+      formData.append('name_template', this.shapefileCustomName || null);
 
       try {
         const results = await this.$http.post(
