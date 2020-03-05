@@ -95,12 +95,12 @@
             </div>
           </div>
         </div>
-        <div class="my-3">
+        <div class="my-3 flex justify-center">
           <base-button
             :text="$t('actions.upload')"
             :action="uploadShapefile"
-            class="px-6 p-1 m-auto"
-            type="primary"
+            variant="solid"
+            size="medium"
           />
         </div>
       </div>

@@ -2,7 +2,7 @@
   <div class="w-3/4 m-auto">
     <LayerUploadTool @addedLayer="getLocations" />
     <div class="mb-24">
-      <div class="flex justify-between">
+      <div class="flex justify-between mb-2">
         <div class="flex items-center">
           <base-input
             v-model="currentSearch"
@@ -24,8 +24,8 @@
         </div>
         <base-button
           text="~~Create Location"
-          type="primary"
-          class="px-3 py-1 my-3"
+          variant="solid"
+          size="small"
           :action="
             () => {
               $router.push('/locations/new');
