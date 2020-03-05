@@ -52,6 +52,7 @@ import Location from '../../models/Location';
 import LocationType from '../../models/LocationType';
 import { getQueryString } from '../../utils/urls';
 import { getErrorMessage } from '../../utils/errors';
+
 export default {
   name: 'Layers',
   components: { LocationTable, LayerUploadTool },
@@ -117,10 +118,10 @@ export default {
         `/locations?${getQueryString(params)}`,
         {
           dataKey: 'results',
+          save: false,
         },
       );
-      const { locations } = results.entities;
-      this.locations = locations;
+      this.locations = results.response.data.results;
 
       this.locationsMeta.pagination.total = results.response.data.count;
       this.locationsMeta.pagination = { ...this.locationsMeta.pagination };

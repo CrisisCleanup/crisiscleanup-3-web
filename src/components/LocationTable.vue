@@ -8,6 +8,9 @@
     :loading="loading"
     @change="$emit('change', $event)"
   >
+    <template #type="slotProps">
+      {{ getLocationType(slotProps.item.type) }}
+    </template>
     <template #actions="slotProps">
       <div class="flex mr-2 justify-center w-full">
         <ccu-icon
@@ -37,6 +40,7 @@
 
 <script>
 import Table from '@/components/Table';
+import LocationType from '@/models/LocationType';
 
 export default {
   name: 'LocationTable',
@@ -54,6 +58,11 @@ export default {
     },
     loading: Boolean,
   },
+  methods: {
+    getLocationType(type) {
+      return LocationType.find(type).name_t;
+    },
+  },
   data() {
     return {
       columns: [
@@ -65,9 +74,8 @@ export default {
         },
         {
           title: this.$t('~~Type'),
-          dataIndex: 'location_type',
-          key: 'location_type',
-          subKey: 'name_t',
+          dataIndex: 'type',
+          key: 'type',
           width: '1.5fr',
         },
         {
