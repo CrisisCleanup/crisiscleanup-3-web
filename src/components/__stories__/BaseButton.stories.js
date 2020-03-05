@@ -6,13 +6,13 @@ export default {
 };
 
 export const withText = () =>
-  "<base-button variant='solid' size='large' text='Button' ></base-button>";
+  "<base-button variant='solid' size='large'>Button</base-button>";
 
 export const withIcon = () =>
-  "<base-button variant='solid' size='large' text='Button' icon='file'></base-button>";
+  "<base-button variant='solid' size='large' icon='file'>Button</base-button>";
 
 export const withCustomIcon = () =>
-  "<base-button text='Button' size='large' variant='outline' ccu-icon='trash'></base-button>";
+  "<base-button size='large' variant='outline' ccu-icon='trash'>Button</base-button>";
 
 export const withSizes = () => ({
   data() {
@@ -23,7 +23,7 @@ export const withSizes = () => ({
   template: `
     <div>
       <div class="m-4" v-for="s in sizes">
-        <base-button :size="s" :key="s" variant="solid">{{s}}</base-button>
+        <base-button :size="s" :key="s" variant="solid">{{s.charAt(0).toUpperCase() + s.slice(1)}}</base-button>
       </div>
     </div>
   `,
@@ -38,7 +38,7 @@ export const withVariants = () => ({
   template: `
     <div>
       <div class="m-4" v-for="v in variants">
-        <base-button size="large" :variant="v" />
+        <base-button size="large" :variant="v">{{v.charAt(0).toUpperCase() + v.slice(1)}}</base-button>
       </div>
     </div>
   `,
@@ -46,7 +46,7 @@ export const withVariants = () => ({
 
 export const withAsyncAction = () => ({
   template:
-    '<base-button variant="solid" :action="doAsync">Load for 1 second</base-button>',
+    '<base-button size="large" variant="solid" :action="doAsync">Load for 1 Second</base-button>',
   methods: {
     async doAsync() {
       await new Promise(resolve => setTimeout(resolve, 1000));
