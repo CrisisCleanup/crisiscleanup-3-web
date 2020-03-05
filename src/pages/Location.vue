@@ -136,7 +136,7 @@
               />
               <base-radio
                 class="mr-4"
-                label="publix"
+                label="public"
                 :name="$t('locationVue.public')"
                 :value="currentLocation.shared"
                 @change="currentLocation.shared = $event"

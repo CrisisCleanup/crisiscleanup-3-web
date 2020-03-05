@@ -456,17 +456,7 @@ export default {
   },
   methods: {
     getSectionCount(currentField) {
-      let sectionNumber = 1;
-      for (let i = 0; i < this.fields.length; i++) {
-        const field = this.fields[i];
-        if (field.html_type === 'h4') {
-          sectionNumber++;
-        }
-        if (currentField === field) {
-          break;
-        }
-      }
-      return sectionNumber;
+      return currentField.order_label;
     },
     updateWorksite(value, key) {
       if (this.worksite.id) {

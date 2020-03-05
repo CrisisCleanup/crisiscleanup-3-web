@@ -1,7 +1,7 @@
 <template>
   <div class="w-3/4 m-auto">
-    <LayerUploadTool />
-    <div>
+    <LayerUploadTool @addedLayer="getLocations" />
+    <div class="mb-24">
       <div class="flex justify-between">
         <div class="flex items-center">
           <base-input
@@ -38,6 +38,7 @@
         :meta="locationsMeta"
         :loading="locationsLoading"
         @change="handleTableChange"
+        @deleteLocation="deleteLocation"
       />
     </div>
   </div>
@@ -50,6 +51,7 @@ import User from '../../models/User';
 import Location from '../../models/Location';
 import LocationType from '../../models/LocationType';
 import { getQueryString } from '../../utils/urls';
+import { getErrorMessage } from '../../utils/errors';
 export default {
   name: 'Layers',
   components: { LocationTable, LayerUploadTool },
@@ -80,6 +82,20 @@ export default {
     async handleTableChange({ pagination }) {
       this.locationsMeta.pagination = { ...pagination };
       await this.getLocations();
+    },
+    async deleteLocation(locationId) {
+      this.locationsLoading = true;
+      try {
+        await Location.api().delete(`/locations/${locationId}`, {
+          delete: locationId,
+        });
+        await this.$toasted.success(this.$t('locationVue.location_deleted'));
+        await this.getLocations();
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.locationsLoading = false;
+      }
     },
     async getLocations() {
       this.locationsLoading = true;

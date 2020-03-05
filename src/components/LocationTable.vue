@@ -13,9 +13,20 @@
         <ccu-icon
           size="small"
           type="edit"
+          class="mx-2"
           @click.native="
             () => {
               $router.push(`/locations/${slotProps.item.id}/edit`);
+            }
+          "
+        />
+        <ccu-icon
+          size="small"
+          type="trash"
+          class="mx-2"
+          @click.native="
+            () => {
+              $emit('deleteLocation', slotProps.item.id);
             }
           "
         />
@@ -74,7 +85,7 @@ export default {
           title: '',
           dataIndex: 'actions',
           key: 'actions',
-          width: '0.25fr',
+          width: '0.5fr',
         },
       ],
     };

@@ -121,13 +121,16 @@
           @ok="applyCurrentLayerUpload"
           @cancel="showingUploadModal = false"
         >
-          <LayerUploadTool
-            @addedLayer="
-              layer => {
-                currentLayerUpload = layer;
-              }
-            "
-          />
+          <div class="flex items-center justify-center w-full">
+            <LayerUploadTool
+              class="flex w-full justify-center items-center"
+              @addedLayer="
+                layer => {
+                  currentLayerUpload = layer;
+                }
+              "
+            />
+          </div>
         </modal>
         <div
           v-if="incident || organization"
