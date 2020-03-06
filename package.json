@@ -21,7 +21,7 @@
     "test:cy": "cross-env NODE_ENV=test cypress run --browser chrome",
     "test:percy": "cross-env NODE_ENV=test percy exec -- yarn run test:cy",
     "cy:open": "cross-env NODE_ENV=test cypress open",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "cross-env NODE_ENV=development start-storybook -p 6006",
     "build-storybook": "cross-env NODE_ENV=test build-storybook"
   },
   "dependencies": {
