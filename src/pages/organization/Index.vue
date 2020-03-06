@@ -1,55 +1,20 @@
 <template>
-  <div class="flex flex-col h-full">
+  <div class="flex flex-col h-full" data-cy="myorg-dashboard">
     <div
       class="h-12 bg-white mx-5 border-t flex justify-center text-crisiscleanup-grey-700"
     >
       <router-link
-        to="/organization/invitations"
+        v-for="r in routes"
+        :to="`/organization/${r.name}`"
         class="flex w-48 justify-center mx-2 cursor-pointer"
         tag="div"
-        :class="{ 'router-link-active': isInvitationsActive }"
+        :data-cy="`myorg-nav-${r.name}`"
+        :key="`myorg-nav-${r.name}`"
+        :class="r.class ? r.class : null"
       >
-        <span class="p-3">{{ $t('orgIndex.invitation_management') }}</span>
-      </router-link>
-
-      <router-link
-        to="/organization/users"
-        class="flex w-48 justify-center mx-2 cursor-pointer"
-        tag="div"
-      >
-        <span class="p-3">{{ $t('orgIndex.user_management') }}</span>
-      </router-link>
-
-      <router-link
-        to="/organization/team"
-        class="flex w-48 justify-center mx-2 cursor-pointer"
-        tag="div"
-      >
-        <span class="p-3">{{ $t('orgIndex.team_management') }}</span>
-      </router-link>
-
-      <router-link
-        to="/organization/profile"
-        class="flex w-48 justify-center mx-2 cursor-pointer"
-        tag="div"
-      >
-        <span class="p-3">{{ $t('orgIndex.organization_profile') }}</span>
-      </router-link>
-
-      <router-link
-        to="/organization/affiliates"
-        class="flex w-48 justify-center mx-2 cursor-pointer"
-        tag="div"
-      >
-        <span class="p-3">{{ $t('orgIndex.affiliated_orgs') }}</span>
-      </router-link>
-
-      <router-link
-        to="/organization/layers"
-        class="flex w-48 justify-center mx-2 cursor-pointer"
-        tag="div"
-      >
-        <span class="p-3">{{ $t('orgIndex.layer_library') }}</span>
+        <span class="p-3">
+          {{ $t(`orgIndex.${r.key}`) }}
+        </span>
       </router-link>
     </div>
     <div class="flex-grow overflow-auto bg-crisiscleanup-light-grey">
@@ -61,6 +26,37 @@
 <script>
 export default {
   name: 'Organization',
+  data() {
+    return {
+      routes: [
+        {
+          name: 'invitations',
+          key: 'invitation_management',
+          class: { 'router-link-active': this.isInvitationsActive },
+        },
+        {
+          name: 'users',
+          key: 'user_management',
+        },
+        {
+          name: 'team',
+          key: 'team_management',
+        },
+        {
+          name: 'profile',
+          key: 'organization_profile',
+        },
+        {
+          name: 'affiliates',
+          key: 'affiliated_orgs',
+        },
+        {
+          name: 'layers',
+          key: 'layer_library',
+        },
+      ],
+    };
+  },
   computed: {
     isInvitationsActive() {
       return this.$route.meta.id === 'invitations';
