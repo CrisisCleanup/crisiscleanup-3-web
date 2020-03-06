@@ -23,11 +23,39 @@
 </template>
 
 <script>
+import Agent from '@/models/Agent';
+import User from '@/models/User';
 import genstatscard from '../../components/GeneralStatsCard.vue';
 import operatorstats from '../../components/OperatorStatisticsCard';
 import ContactCard from '../../components/ContactCard';
+
 export default {
   name: 'Phone',
   components: { genstatscard, operatorstats, 'contact-card': ContactCard },
+  data() {
+    return {
+      loading: false,
+    };
+  },
+  computed: {
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
+    },
+  },
+  async mounted() {
+    this.loading = true;
+    try {
+      await Agent.api().get('/agents/me', {});
+    } catch {
+      console.warn('CREATING AGENT');
+      await Agent.api().post('/agents', {
+        user: {
+          id: this.currentUser.id,
+          email: this.currentUser.email,
+        },
+      });
+    }
+    this.loading = false;
+  },
 };
 </script>
