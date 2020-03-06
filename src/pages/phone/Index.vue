@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import Agent from '@/models/Agent';
 import User from '@/models/User';
+import { mapActions, mapState } from 'vuex';
 import genstatscard from '../../components/GeneralStatsCard.vue';
 import operatorstats from '../../components/OperatorStatisticsCard';
 import ContactCard from '../../components/ContactCard';
@@ -41,19 +41,26 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
+    ...mapState('phone', ['agent']),
   },
-  async mounted() {
-    this.loading = true;
-    try {
-      await Agent.api().get('/agents/me', {});
-    } catch {
-      console.warn('CREATING AGENT');
-      await Agent.api().post('/agents', {
+  methods: {
+    ...mapActions('phone', ['fetchAgent']),
+    async getAgent() {
+      const userAgent = {
         user: {
           id: this.currentUser.id,
           email: this.currentUser.email,
         },
-      });
+      };
+      await this.fetchAgent(userAgent);
+    },
+  },
+  async mounted() {
+    this.loading = true;
+    const agentId = this.$store.getters['phone/agentId'];
+    if (agentId === null) {
+      this.$log.info('fetching user phone agent...');
+      await this.getAgent();
     }
     this.loading = false;
   },
