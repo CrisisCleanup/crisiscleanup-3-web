@@ -5,7 +5,11 @@
         <div
           class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
         >
-          <contact-card />
+          <contact-card
+            :name="currentUser.full_name"
+            :mobile="currentUser.mobile"
+            :profile-src="currentUser.profilePictureUrl"
+          />
         </div>
       </div>
       <div

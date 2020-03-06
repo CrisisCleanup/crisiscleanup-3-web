@@ -2,11 +2,11 @@
   <div>
     <div class="flex flex-row justify-between">
       <div class="flex-col m-3">
-        <img src="" alt="PFP" />
+        <img :src="profileSrc" alt="PFP" />
       </div>
       <div class="flex-col justify-between m-3">
-        <p class="text-lg justify-between">full name</p>
-        <p class="text-md justify-between float-right">(601) 123-4567</p>
+        <p class="text-lg justify-between">{{ name }}</p>
+        <p class="text-md justify-between float-right">{{ mobile }}</p>
         <div id="moreinfobtn" class="more-infobtn">
           <base-button
             class="text-crisiscleanup-dark-blue align-right"
@@ -37,13 +37,18 @@
 </template>
 
 <script>
-// import indexOfFrom from '../../cypress/types/lodash/fp/indexOfFrom.vue';
+import VueTypes from 'vue-types';
 import ContactMoreInfo from './ContactMoreInfo.vue';
 
 export default {
   name: 'CallerCard',
   components: {
     'more-info': ContactMoreInfo,
+  },
+  props: {
+    name: VueTypes.string,
+    mobile: VueTypes.string,
+    profileSrc: VueTypes.string,
   },
   data() {
     return {
