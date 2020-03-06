@@ -32,11 +32,11 @@ exports[`FormSelect should match snapshot with props 1`] = `
         type="button"
       >
         <div
-          class="flex items-center base-icon js- mx-1"
+          class="flex items-center base-icon js- mx-1 opacity-50"
         >
           <img
             alt=""
-            class="ccu-icon cursor-pointer xxs"
+            class="ccu-icon cursor-pointer medium"
             src="IMAGE_MOCK"
             title=""
           />
@@ -106,11 +106,11 @@ exports[`FormSelect should render correctly and match snapshot 1`] = `
         type="button"
       >
         <div
-          class="flex items-center base-icon js- mx-1"
+          class="flex items-center base-icon js- mx-1 opacity-50"
         >
           <img
             alt=""
-            class="ccu-icon cursor-pointer xxs"
+            class="ccu-icon cursor-pointer medium"
             src="IMAGE_MOCK"
             title=""
           />

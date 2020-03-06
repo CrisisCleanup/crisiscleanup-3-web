@@ -92,11 +92,14 @@ export default {
     },
   },
   data() {
+    const iconSize = this.multiple ? 'xxs' : 'medium';
     return {
       isInvalid: false,
       Deselect: {
         render() {
-          return <ccu-icon size="xxs" class="mx-1" type="cancel" />;
+          return (
+            <ccu-icon size={iconSize} class="mx-1 opacity-50" type="cancel" />
+          );
         },
       },
       OpenIndicator: {
