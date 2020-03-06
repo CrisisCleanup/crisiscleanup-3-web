@@ -7523,6 +7523,11 @@ cypress-vue-unit-test@^1.11.7:
     "@kazupon/vue-i18n-loader" "0.5.0"
     common-tags "1.8.0"
 
+cypress-wait-until@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/cypress-wait-until/-/cypress-wait-until-1.6.1.tgz#2554191e5ecdc9ff21a045e09289e5a1ee76f6b7"
+  integrity sha512-bI4p9Pou6EoIU0v9RyjPOoKH6aiNXg1TIVXyGmlpjcOhdIbg1OVSs3fmMQLxnQAm6xVY4rLWWQg3gbIzuToxTw==
+
 cypress@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/cypress/-/cypress-3.8.3.tgz#e921f5482f1cbe5814891c878f26e704bbffd8f4"

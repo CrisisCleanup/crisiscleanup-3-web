@@ -26,6 +26,7 @@
 
 import '@percy/cypress';
 import 'cypress-localstorage-commands';
+import 'cypress-wait-until';
 
 // Login Helper
 Cypress.Commands.add(
