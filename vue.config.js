@@ -1,10 +1,15 @@
 module.exports = {
   runtimeCompiler: true,
-  configureWebpack: {
-    devtool: 'inline-source-map',
-    devServer: {
-      hot: true,
-    },
+  configureWebpack: () => {
+    if (!process.env.NODE_ENV === 'production') {
+      return {
+        devtool: 'inline-source-map',
+        devServer: {
+          hot: true,
+        },
+      };
+    }
+    return {};
   },
   css: {
     loaderOptions: {
