@@ -18491,10 +18491,10 @@ vue-router@^3.1.6:
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.1.6.tgz#45f5a3a3843e31702c061dd829393554e4328f89"
   integrity sha512-GYhn2ynaZlysZMkFE5oCHRUTqE8BWs/a9YbKpNLi0i7xD6KG1EzDqpHQmv1F5gXjr8kL5iIVS8EOtRaVUEXTqA==
 
-vue-select@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.4.0.tgz#e56b0612845d13d10162cd8df81bfb46af2083ac"
-  integrity sha512-UHd0fiUjPgRmHIGhI6yUKtnJsHOdvzD00QUGUtD+FaxWWZRWF2AAb7KPZRj0j/egVfZQvey6M6woHn78GbTogA==
+vue-select@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.6.0.tgz#627ef8a6b788158992ad1e8786867fe236bae66e"
+  integrity sha512-c8pmKxHkP9pmzpBFj8mcf5vJwNehp3+GLqpJZkG0Z4EvBtT1FX1PvcEhti9Ym5nzO6wooUQcuyV6iyYfg0g4Rw==
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.2"
