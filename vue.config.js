@@ -1,7 +1,10 @@
 module.exports = {
   runtimeCompiler: true,
   configureWebpack: {
-    devtool: 'source-map',
+    devtool: 'inline-source-map',
+    devServer: {
+      hot: true,
+    },
   },
   css: {
     loaderOptions: {
