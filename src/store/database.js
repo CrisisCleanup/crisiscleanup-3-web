@@ -14,6 +14,7 @@ import LocationType from '@/models/LocationType';
 import Affiliate from '@/models/Affiliate';
 import Role from '@/models/Role';
 import Language from '@/models/Language';
+import Agent from '@/models/Agent';
 
 const database = new Database();
 
@@ -32,5 +33,6 @@ database.register(LocationType, {});
 database.register(Affiliate, {});
 database.register(Language, {});
 database.register(Role, {});
+database.register(Agent, {});
 
 export default database;
