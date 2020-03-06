@@ -123,7 +123,7 @@
     "cross-env": "^7.0.2",
     "cypress": "^4.1.0",
     "cypress-localstorage-commands": "^1.1.6",
-    "cypress-vue-unit-test": "^1.11.6",
+    "cypress-vue-unit-test": "^1.11.7",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.10.0",

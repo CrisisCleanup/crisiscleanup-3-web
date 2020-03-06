@@ -1131,19 +1131,7 @@
     date-fns "^1.27.2"
     figures "^1.7.0"
 
-"@cypress/webpack-preprocessor@4.1.2":
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/@cypress/webpack-preprocessor/-/webpack-preprocessor-4.1.2.tgz#de734bc54ab9e9f5370d6be1bb7eab5e0fe55465"
-  integrity sha512-WhqwENr8XN6i4I0Hfil8MI/jCfXkFj2gU7zXhKMjXynAX7c9fSoneMDTobpYbd5Cgw5uA5f5vDXO8NM+hL3Pjw==
-  dependencies:
-    bluebird "3.7.1"
-    debug "4.1.1"
-  optionalDependencies:
-    "@babel/core" "^7.0.1"
-    "@babel/preset-env" "^7.0.0"
-    babel-loader "^8.0.2"
-
-"@cypress/webpack-preprocessor@^4.1.3":
+"@cypress/webpack-preprocessor@4.1.3", "@cypress/webpack-preprocessor@^4.1.3":
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/@cypress/webpack-preprocessor/-/webpack-preprocessor-4.1.3.tgz#d5fad767a304c16ec05ca08034827c601f1c9c0c"
   integrity sha512-VtTzStrKtwyftLkcgopwCHzgjefK3uHHL6FgbAQP1o5N1pa/zYUb0g7hH2skrMAlKOmLGdbySlISkUl18Y3wHg==
@@ -7598,12 +7586,12 @@ cypress-localstorage-commands@^1.1.6:
   resolved "https://registry.yarnpkg.com/cypress-localstorage-commands/-/cypress-localstorage-commands-1.1.6.tgz#55604b122dac4944eac813be7882d51ef3939d7b"
   integrity sha512-cqTRrY3vAIoaMHs+aPU1ijSoKl21Pw+mkRG8LL0Oi72B/GD6GPeJVKFiX9+F0bBrALqegrhzFeYXOeWcIeTz+w==
 
-cypress-vue-unit-test@^1.11.6:
-  version "1.11.6"
-  resolved "https://registry.yarnpkg.com/cypress-vue-unit-test/-/cypress-vue-unit-test-1.11.6.tgz#4febca770869388b66deb2bbf3ffcfeb0932ceaa"
-  integrity sha512-JPpOnvbvL9P4teEYdWQbZCc9SLEVX7p+l+FFc5zBeNKeXF/BthstnudUSNR/isnINNcJnP9+93O60jOFAhWqHg==
+cypress-vue-unit-test@^1.11.7:
+  version "1.11.7"
+  resolved "https://registry.yarnpkg.com/cypress-vue-unit-test/-/cypress-vue-unit-test-1.11.7.tgz#19ca82533fd4e47a2103d83fbd0f299fc173d59f"
+  integrity sha512-of0ZV675BmMTgUhpu/8lmJLilr3UZ0Cxx30TQjMPgziVwv/c/8vggQPsZmX4/P+Bub5w24LUm3xCU3dx/BHUyA==
   dependencies:
-    "@cypress/webpack-preprocessor" "4.1.2"
+    "@cypress/webpack-preprocessor" "4.1.3"
     "@kazupon/vue-i18n-loader" "0.5.0"
     common-tags "1.8.0"
 
