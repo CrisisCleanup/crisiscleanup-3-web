@@ -19,7 +19,6 @@ jobs:
   cypress:
     name: Run Visual Tests
     runs-on: ubuntu-16.04
-    needs: build_id
     strategy:
       fail-fast: false
       matrix:
@@ -42,13 +41,27 @@ jobs:
           docker-compose build --pull
           docker-compose up -d app
 
-      - name: Run Cypress
-        uses: cypress-io/github-action@v1.23.0
+      - name: Install Dependencies
+        uses: cypress-io/github-action@v1.23.1
         with:
+          # will install node deps & cypress
+          runTests: false
+
+      - name: Patch Cypress Director
+        env:
+          SORRY_CYP_API_URL: ${{ secrets.SORRY_CYP_API_URL }}
+        run: yarn cy:patch
+
+      - name: Run Cypress
+        uses: cypress-io/github-action@v1.23.1
+        with:
+          # skip install now
+          install: false
           record: true
           parallel: true
-          start: 'yarn cy:patch && yarn serve'
+          start: yarn serve
           wait-on: 'http://localhost:8080'
+          wait-on-timeout: 120
           browser: chrome
           headless: true
           cache-key: yarn-${{ hashFiles('**/yarn.lock') }}
