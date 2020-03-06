@@ -1,7 +1,9 @@
+/* eslint-disable no-constant-condition */
+/* eslint-disable no-await-in-loop */
 import Loader from '@/components/Loader';
 
 export default {
-  title: 'Elements|Loader',
+  title: 'Layouts|Loader',
   component: Loader,
 };
 
@@ -19,4 +21,28 @@ export const withCustomSpinner = () => ({
       </template>
     </Loader>
   `,
+});
+
+export const withLayout = () => ({
+  components: { Loader },
+  data() {
+    return {
+      loading: true,
+    };
+  },
+  template: `
+    <Loader :loading="loading">
+      <template #content>
+        <div>
+          <p>Finished loading!</p>
+        </div>
+      </template>
+    </Loader>
+  `,
+  async mounted() {
+    while (true) {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      this.loading = !this.loading;
+    }
+  },
 });
