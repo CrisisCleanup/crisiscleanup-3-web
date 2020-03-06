@@ -81,7 +81,7 @@ jobs:
         uses: cypress-io/github-action@v1.23.0
         with:
           record: true
-          start: yarn cy:patch && yarn serve
+          start: 'yarn cy:patch && yarn serve'
           wait-on: 'http://localhost:8080'
           browser: chrome
           headless: true
@@ -97,3 +97,4 @@ jobs:
           CYPRESS_API_URL: 'http://localhost:5000'
           SORRY_CYP_API_URL: ${{ secrets.SORRY_CYP_API_URL }}
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
