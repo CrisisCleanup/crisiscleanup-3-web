@@ -222,7 +222,7 @@
       <base-button
         v-if="currentFlag.reason_t === 'flag.worksite_wrong_location'"
         size="medium"
-        type="primary"
+        variant="solid"
         class="m-1 text-black p-3 px-4 border-2 border-primary-light"
         :text="$t('actions.update_location')"
         :action="updateWorksiteLocation"
@@ -230,7 +230,7 @@
       <base-button
         v-else
         size="medium"
-        type="primary"
+        variant="solid"
         class="m-1 text-black p-3 px-4 border-2 border-primary-light"
         :text="$t('actions.submit')"
         :action="flagWorksite"

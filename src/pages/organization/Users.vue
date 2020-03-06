@@ -127,7 +127,7 @@
         </div>
         <base-button
           :text="$t('usersVue.invite_new_user')"
-          type="primary"
+          variant="solid"
           class="px-3 py-1"
           :action="
             () => {
@@ -186,7 +186,7 @@
               "
             />
             <base-button
-              type="primary"
+              variant="solid"
               :action="inviteUsers"
               :text="$t('usersVue.invite_users')"
               class="ml-2 p-3 px-6 text-xs"

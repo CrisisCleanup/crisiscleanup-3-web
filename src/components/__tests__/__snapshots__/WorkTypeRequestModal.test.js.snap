@@ -89,10 +89,10 @@ exports[`WorkTypeRequestModal show modal with options 1`] = `
      
     <button
       alt="button"
-      class="ml-2 p-3 px-6 text-xs flex items-center justify-center undefined js-button"
+      class="ml-2 p-3 px-6 text-xs flex items-center justify-center solid js-button"
       data-cy="js-button"
       title="Button"
-      type="primary"
+      type="submit"
     >
       <!---->
        

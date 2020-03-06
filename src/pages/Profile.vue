@@ -17,7 +17,7 @@
               "
             />
             <base-button
-              type="primary"
+              variant="solid"
               class="px-4 py-2"
               :text="$t('actions.save')"
               :action="saveUser"
@@ -72,7 +72,7 @@
                 </base-button>
               </DragDrop>
 
-              <base-button type="primary" class="py-2 px-4"
+              <base-button variant="solid" class="py-2 px-4"
                 >{{ $t('actions.view_id_badge') }}
               </base-button>
             </div>
@@ -283,7 +283,7 @@
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
                 <div class="my-2">
-                  <base-button type="primary" class="px-4 py-1">
+                  <base-button variant="solid" class="px-4 py-1">
                     {{ $t('profileUser.change_organization') }}
                   </base-button>
                 </div>

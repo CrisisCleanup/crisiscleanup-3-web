@@ -75,7 +75,7 @@
         "
       />
       <base-button
-        type="primary"
+        variant="solid"
         :action="
           () => {
             $emit('onRequest', {

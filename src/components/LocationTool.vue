@@ -177,7 +177,7 @@
         </div>
         <base-button
           text="Save"
-          type="primary"
+          variant="solid"
           class="flex-grow px-3 py-1 my-1"
           :action="
             () => {

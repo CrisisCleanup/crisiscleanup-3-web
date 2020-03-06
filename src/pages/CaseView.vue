@@ -124,7 +124,7 @@
           <base-button
             v-if="workTypesUnclaimed.length > 0"
             class="ml-2 p-1 px-3 text-xs"
-            type="primary"
+            variant="solid"
             :text="$t('actions.claim_all_alt')"
             :action="
               () => {
@@ -236,7 +236,7 @@
                   "
                 />
                 <base-button
-                  type="primary"
+                  variant="solid"
                   :action="
                     () => {
                       return unclaimWorkType(work_type);
@@ -274,7 +274,7 @@
                   "
                 />
                 <base-button
-                  type="primary"
+                  variant="solid"
                   :action="
                     () => {
                       return claimWorkType(work_type);
@@ -318,7 +318,7 @@
           />
           <base-button
             :text="$t('actions.add')"
-            type="primary"
+            variant="solid"
             class="p-3"
             :action="addTime"
           />
@@ -440,7 +440,7 @@
       <base-button
         v-if="workTypesUnclaimed.length > 0"
         size="medium"
-        type="primary"
+        variant="solid"
         class="m-1 text-black p-3 px-4"
         :text="$t('actions.claim')"
         :action="
@@ -463,7 +463,7 @@
       />
       <base-button
         size="medium"
-        type="primary"
+        variant="solid"
         class="m-1 text-black p-3 px-4"
         data-cy="caseview-actions-done"
         :text="$t('actions.done')"

@@ -54,7 +54,7 @@
             />
             <base-button
               size="small"
-              type="primary"
+              variant="solid"
               class="m-1 mx-2 text-black text-xs px-3 py-1"
               :action="
                 () => {
@@ -114,7 +114,7 @@
           <div class="flex mr-2 justify-center w-full">
             <base-button
               size="small"
-              type="primary"
+              variant="solid"
               class="m-1 mx-2 text-black text-xs py-1 px-3"
               :action="
                 () => {

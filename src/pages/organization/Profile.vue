@@ -6,7 +6,7 @@
       >
         {{ $t('profileOrg.general_information') }}
         <base-button
-          type="primary"
+          variant="solid"
           class="px-4 py-2"
           :text="$t('actions.save')"
           :action="saveOrganization"
@@ -198,7 +198,7 @@
           <base-button
             v-if="currentOrganization.primary_location"
             text="$t('profileOrg.edit_response_area')"
-            type="primary"
+            variant="solid"
             class="px-2 py-1"
             :action="
               () => {
@@ -210,7 +210,7 @@
           <base-button
             v-else
             class="px-2 py-1"
-            type="primary"
+            variant="solid"
             text="$t('profileOrg.add_response_area')"
             :action="
               () => {
@@ -230,7 +230,7 @@
           <base-button
             v-if="currentOrganization.secondary_location"
             :text="$t('profileOrg.edit_response_area')"
-            type="primary"
+            variant="solid"
             class="px-2 py-1"
             :action="
               () => {
@@ -242,7 +242,7 @@
           <base-button
             v-else
             class="px-2 py-1"
-            type="primary"
+            variant="solid"
             :text="$t('profileOrg.add_response_area')"
             :action="
               () => {
@@ -317,7 +317,7 @@
         >
           <base-button
             class="cursor-pointer px-3 py-1"
-            type="primary"
+            variant="solid"
             :text="$t('actions.upload_terms')"
             :show-spinner="uploading"
             :disabled="uploading"
@@ -366,7 +366,7 @@
         >
           <base-button
             class="cursor-pointer px-3 py-1"
-            type="primary"
+            variant="solid"
             :text="$t('actions.liability_waiver')"
             :show-spinner="uploading"
             :disabled="uploading"

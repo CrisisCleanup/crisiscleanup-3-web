@@ -10,7 +10,7 @@
             }
           "
           :text="$t('affiliatesVue.add_affiliate')"
-          type="primary"
+          variant="solid"
           class="px-2 py-1"
         />
         <modal
@@ -61,7 +61,7 @@
               class="ml-2 p-3 px-6 text-xs border border-black"
             />
             <base-button
-              type="primary"
+              variant="solid"
               :action="
                 () => {
                   sendAffiliateRequest(selectedAffiliate);

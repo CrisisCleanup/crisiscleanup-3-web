@@ -317,7 +317,7 @@
                       class="flex items-center justify-center p-2 bg-white border-t"
                     >
                       <base-button
-                        type="primary"
+                        variant="solid"
                         class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
                         :action="unclaimSelected"
                         :text="$t('actions.ok')"

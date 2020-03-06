@@ -293,7 +293,7 @@
         :text="$t('actions.apply_filters')"
         size="medium"
         class="m-1 p-3 px-6"
-        type="primary"
+        variant="solid"
         :action="updateFilters"
       />
     </div>

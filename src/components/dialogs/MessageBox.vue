@@ -33,7 +33,7 @@
               <base-button
                 v-if="Object.keys(actions).length === 0"
                 :alt="$t('actions.ok')"
-                type="primary"
+                variant="solid"
                 class="px-6 p-3"
                 :action="
                   () => {

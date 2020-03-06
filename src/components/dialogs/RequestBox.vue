@@ -35,7 +35,7 @@
             <div class="flex items-center justify-center py-2 border-t">
               <base-button
                 :alt="$t('actions.ok')"
-                type="primary"
+                variant="solid"
                 class="px-6 p-3 mx-2"
                 :action="
                   () => {

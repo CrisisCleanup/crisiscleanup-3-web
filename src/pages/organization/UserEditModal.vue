@@ -81,7 +81,7 @@
         "
       />
       <base-button
-        type="primary"
+        variant="solid"
         :action="saveUser"
         :text="$t('actions.save')"
         class="ml-2 p-3 px-6 text-xs"

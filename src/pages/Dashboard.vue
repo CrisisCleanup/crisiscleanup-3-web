@@ -261,7 +261,7 @@
                   <div v-if="pendingView === 'archived'">
                     <base-button
                       class="px-2 py-1 mx-2"
-                      type="primary"
+                      variant="solid"
                       :text="$t('actions.history')"
                     />
                   </div>

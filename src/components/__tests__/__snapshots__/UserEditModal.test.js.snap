@@ -79,7 +79,7 @@ exports[`UserEditModal show modal with options 1`] = `
       action="function () { [native code] }"
       class="ml-2 p-3 px-6 text-xs"
       text="actions.save"
-      type="primary"
+      variant="solid"
     />
   </div>
 </modal-stub>

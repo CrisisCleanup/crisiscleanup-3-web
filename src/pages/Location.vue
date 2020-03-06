@@ -162,14 +162,14 @@
           <base-button
             :text="$t('actions.save_location')"
             class="p-2 mr-1"
-            type="primary"
+            variant="solid"
             :action="saveLocation"
           />
           <base-button
             v-if="isNew"
             :text="$t('actions.save_and_new')"
             class="p-2"
-            type="primary"
+            variant="solid"
             :action="
               () => {
                 saveLocation(true);
