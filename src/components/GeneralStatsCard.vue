@@ -9,7 +9,7 @@
       </div>
       <div class="flex-col">
         <div class="justify-between flex flex-row">
-          <div class="" :peoplewaiting="peoplewaiting">{{ peoplewaiting }}</div>
+          <div class="">{{ stats.contactsInQueue }}</div>
           <button class="text-sm">show all</button>
         </div>
         <p class="justify-center">Number of People waiting</p>
@@ -20,32 +20,32 @@
         <p class="justify-start">Remaining Calls</p>
       </div>
       <div class="text-base font-semibold">
-        <div class="justify-end" :Callbacks="remainingCallbacks">
+        <div class="justify-end">
           {{ remainingCallbacks }}
         </div>
       </div>
     </div>
     <div class="flex flex-row justify-between my-3">
       <p class="justify-start">Remaining Calldowns</p>
-      <div class="text-base font-semibold" :Calldowns="remainingCalldowns">
+      <div class="text-base font-semibold">
         {{ remainingCalldowns }}
       </div>
     </div>
     <div class="flex flex-row justify-between my-3">
       <p class="justify-start">On the phone now</p>
-      <div class="text-base font-semibold" :onPhone="onPhone">
-        {{ onPhone }}
+      <div class="text-base font-semibold">
+        {{ stats.agentsOnContact }}
       </div>
     </div>
     <div class="flex flex-row justify-between my-3">
       <p class="justify-start">Volunteers Available</p>
-      <div class="text-base font-semibold" :Available="volunteersAvailable">
-        {{ volunteersAvailable }}
+      <div class="text-base font-semibold">
+        {{ stats.agentsAvailable }}
       </div>
     </div>
     <div class="flex flex-row justify-between my-3">
       <p class="justify-start">Volunteers Needed</p>
-      <div class="text-base font-semibold" :Needed="volunteersNeeded">
+      <div class="text-base font-semibold">
         {{ volunteersNeeded }}
       </div>
     </div>
@@ -64,33 +64,16 @@
   </div>
 </template>
 <script>
+import VueTypes from 'vue-types';
+
 export default {
   name: 'StatsCard',
   props: {
-    peoplewaiting: {
-      type: Number,
-      default: 144,
-    },
-    remainingCallbacks: {
-      type: Number,
-      default: 32,
-    },
-    remainingCalldowns: {
-      type: Number,
-      default: 14,
-    },
-    onPhone: {
-      type: Number,
-      default: 12,
-    },
-    volunteersAvailable: {
-      type: Number,
-      default: 12,
-    },
-    volunteersNeeded: {
-      type: Number,
-      default: 40,
-    },
+    stats: VueTypes.shape({
+      agentsAvailable: VueTypes.integer,
+      agentsOnContact: VueTypes.integer,
+      contactsInQueue: VueTypes.integer,
+    }),
   },
 };
 </script>

@@ -15,7 +15,7 @@
       <div
         class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
       >
-        <genstatscard />
+        <genstatscard :stats="metrics ? metrics : null" />
       </div>
       <div
         class="my-4 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
@@ -51,10 +51,10 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
-    ...mapState('phone', ['agent']),
+    ...mapState('phone', ['agent', 'metrics']),
   },
   methods: {
-    ...mapActions('phone', ['fetchAgent']),
+    ...mapActions('phone', ['fetchAgent', 'getRealtimeMetrics']),
     async getAgent() {
       const userAgent = {
         user: {
@@ -72,6 +72,7 @@ export default {
       this.$log.info('fetching user phone agent...');
       await this.getAgent();
     }
+    await this.getRealtimeMetrics();
     this.loading = false;
   },
 };
