@@ -1,3 +1,5 @@
+<img src=".github/img/ccu-ballons.png" align="right" width="20%"  />
+
 # Crisis Cleanup
 
 Crisis Cleanup is a collaboration platform that connects disaster recovery organization volunteers with people who need help after a disaster. The Crisis Cleanup platform has been used to connected 621,810 volunteers from 1,691 organizations with 80,727 households in 48 states/provinces and 142 disasters in 7 countries; a new disaster every two weeks.
@@ -21,30 +23,86 @@ Other Project Stats (As of 2020-03-03)
  - $154: Return on investment to survivors, for every $1 invested in Crisis Cleanup.
 How we calculate these statistics: http://blog.crisiscleanup.org/2017/10/how-we-calculate-value-of-services.html
 
-## Project setup
-```
-yarn install
+# Getting Started
+
+## Project Setup
+
+Clone the repository to your machine and install the dependencies via:
+
+```sh
+ $ git clone https://github.com/CrisisCleanup/crisiscleanup-3-web.git
+ $ cd ./crisiscleanup-3-web
+ $ yarn install
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn run serve
+## Configuration
+
+To enable all of Crisis Cleanup's features, you must create and populate a `.env` file.
+
+A sample of what this should look like can be found [here](.env.sample).
+
+## Running Locally
+
+When modifying Crisis Cleanup, you can begin serving it via:
+
+```sh
+  $ yarn serve-dev
+  $ sensible-browser http://localhost:8080 # defaults to port 8080
 ```
 
-### Compiles and minifies for production
-```
-yarn run build
+This will enable hot module reloading among other developer tools to aid you.
+
+To preview a production build locally, execute:
+```sh
+ $ yarn serve
+ $ sensible-browser http://localhost:8080 # default port
 ```
 
-### Run your tests
-```
-yarn run test
+This will enable the code optimizations that would be present in a live environment.
+
+Finally, you can compile a production-ready, minified version via:
+```sh
+  $ yarn build
+  $ npx http-server ./dist
+  $ sensible-browser http://localhost:8080
 ```
 
-### Lints and fixes files
-```
-yarn run lint
+### Testing
+
+For unit tests, Crisis Cleanup uses [Jest](https://jestjs.io/). You can run the full test suite via:
+
+```sh
+  $ yarn test:unit
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+For end-to-end testing, Cypress is utilized. You can all e2e specs via:
+
+```sh
+  $ yarn serve
+  $ yarn test:e2e  # or test:e2e:hl to run headlessly
+```
+
+Any recorded e2e test sessions can be found at: http://cypress.crisiscleanup.io
+
+### Linting
+
+Utilizing [prettier](https://prettier.io/) and [ESLint](https://eslint.org/), CrisisCleanup enforces strict code style guidelines.
+
+You can automagically format your code to comply with:
+
+```sh
+  $ yarn format  # executes eslint --fix and prettier --write
+```
+
+### Storybook
+
+We use [Storybook](https://storybook.js.org/) for building our components in isolation and for documentation.
+
+You can run our storybook locally and add additional ones via:
+
+```sh
+  $ yarn storybook
+  $ sensible-browser http://localhost:6006 # port defaults to 6006
+```
+
+The live storybook can be found at: https://storybook.crisiscleanup.io
