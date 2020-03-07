@@ -18,6 +18,7 @@
     "test:unit-fix": "cross-env NODE_ENV=test jest -u",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "test:e2e": "cross-env NODE_ENV=test cypress run",
+    "test:e2e:hl": "yarn run test:e2e --headless",
     "test:cy": "cross-env NODE_ENV=test cypress run --browser chrome",
     "test:percy": "cross-env NODE_ENV=test percy exec -- yarn run test:cy",
     "cy:open": "cross-env NODE_ENV=test cypress open",
