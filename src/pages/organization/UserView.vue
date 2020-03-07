@@ -4,7 +4,7 @@
       <div class="font-semibold flex justify-between items-center h-16">
         {{ selectedUser.full_name }}
       </div>
-      <div class="flex items-center justify-end">
+      <div class="flex flex-wrap items-center justify-end">
         <ccu-icon
           :alt="$t('actions.edit')"
           type="edit"
@@ -35,6 +35,7 @@
           type="trash"
           class="mx-2"
           size="small"
+          @click.native="orphanUser"
         />
       </div>
     </div>
@@ -46,7 +47,7 @@
           :alt="$t('userView.profile_picture')"
         />
         <div class="w-full">
-          <div class="flex items-center justify-start mb-6">
+          <div class="flex flex-wrap items-center justify-start mb-6">
             <div class="flex flex-col w-48">
               <div class="text-xs text-crisiscleanup-grey-700">
                 {{ $t('userView.phone_number') }}
@@ -64,7 +65,7 @@
               </div>
             </div>
           </div>
-          <div class="flex items-center justify-start mb-6">
+          <div class="flex flex-wrap items-center justify-start mb-6">
             <div class="flex flex-col w-48">
               <div class="text-xs text-crisiscleanup-grey-700">
                 {{ $t('userView.team') }}
@@ -123,10 +124,14 @@
   </div>
 </template>
 <script>
+import { create } from 'vue-modal-dialogs';
 import User from '@/models/User';
 import Role from '@/models/Role';
+import MessageBox from '@/components/dialogs/MessageBox';
 import UserEditModal from './UserEditModal';
 import { getErrorMessage } from '../../utils/errors';
+
+const messageBox = create(MessageBox);
 
 export default {
   name: 'UserView',
@@ -154,6 +159,28 @@ export default {
         this.isEditing = false;
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
+      }
+    },
+    async orphanUser() {
+      const result = await messageBox({
+        title: this.$t('~~Remove User'),
+        content: this.$t(
+          '~~This user will be permanently deleted from your organization, Are you sure you want to continue?',
+        ),
+        actions: {
+          cancel: {
+            text: this.$t('actions.cancel'),
+            buttonClass: 'px-2 py-1 mx-2 border border-black',
+          },
+          delete: {
+            text: this.$t('actions.delete'),
+            buttonClass: 'px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white',
+          },
+        },
+      });
+      if (result === 'delete') {
+        await User.api().orphan(this.selectedUser.id);
+        await this.$router.push(`/organization/users`);
       }
     },
   },

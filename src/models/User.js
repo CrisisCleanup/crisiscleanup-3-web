@@ -114,6 +114,9 @@ export default class User extends Model {
           { save: false },
         );
       },
+      orphan(id) {
+        return this.patch(`/users/${id}/orphan`);
+      },
       addFile(id, file, type) {
         return this.post(
           `/users/${id}/files`,
