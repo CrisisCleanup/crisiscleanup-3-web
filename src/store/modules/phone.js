@@ -1,8 +1,10 @@
-import { AgentApi } from '@/utils/api';
+import { AgentApi, PhoneApi } from '@/utils/api';
 import axios from 'axios';
+import { camelCase } from 'lodash';
 
 const PhoneState = {
   agent: null,
+  metrics: null,
 };
 
 // getters
@@ -22,12 +24,25 @@ const actions = {
     commit('setAgent', resp.data);
     return resp;
   },
+  async getRealtimeMetrics({ commit }) {
+    const resp = await axios.get(PhoneApi('metrics'));
+    commit('setMetrics', resp.data.results);
+    return resp;
+  },
 };
 
 // mutations
 const mutations = {
   setAgent(state, agent) {
     state.agent = agent;
+  },
+  setMetrics(state, metrics) {
+    const newState = {};
+    metrics.map(({ name, value }) => {
+      newState[camelCase(name)] = parseFloat(value);
+      return newState;
+    });
+    state.metrics = newState;
   },
 };
 

@@ -13,3 +13,4 @@ const getApiUrl = path => {
 };
 
 export const AgentApi = endpoint => getApiUrl('agents/')(endpoint);
+export const PhoneApi = endpoint => getApiUrl('phone/')(endpoint);
