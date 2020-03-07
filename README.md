@@ -50,6 +50,12 @@ When modifying Crisis Cleanup, you can begin serving it via:
   $ sensible-browser http://localhost:8080 # defaults to port 8080
 ```
 
+> You can also serve the site via a docker service:
+> ```sh
+>  $ docker-compose build
+>  $ docker-compose up dev # or prod for production
+> ```
+
 This will enable hot module reloading among other developer tools to aid you.
 
 To preview a production build locally, execute:
@@ -75,7 +81,7 @@ For unit tests, Crisis Cleanup uses [Jest](https://jestjs.io/). You can run the 
   $ yarn test:unit
 ```
 
-For end-to-end testing, Cypress is utilized. You can all e2e specs via:
+For end-to-end testing, Cypress is utilized. You can run all e2e specs via:
 
 ```sh
   $ yarn serve
