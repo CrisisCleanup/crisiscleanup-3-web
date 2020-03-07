@@ -20,6 +20,9 @@ export default class Organization extends Model {
       incident_primary_contacts: this.attr(null),
       primary_contacts: this.attr(null),
       files: this.attr(null),
+      custom_ops_message: this.attr(null),
+      custom_legal_tos: this.attr(null),
+      custom_legal_survivor_waiver: this.attr(null),
     };
   }
 

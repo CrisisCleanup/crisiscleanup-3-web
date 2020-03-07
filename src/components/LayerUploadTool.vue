@@ -12,7 +12,7 @@
           :drag-title="
             (shapefileData && shapefileData.filename) ||
               $t(
-                '~~Upload SHP or KML files. You will be able to preview the content of the files and choose some options before uploading',
+                '~~Drag and drop SHP or KML files. You will be able to preview the content of the files and choose some options before uploading',
               )
           "
           @files="handleFileUpload"
@@ -95,6 +95,7 @@
             </div>
           </div>
         </div>
+        <code v-if="shapefileCustomName">{{ customSample }}</code>
         <div class="my-3 flex justify-center">
           <base-button
             :text="$t('actions.upload')"
@@ -154,6 +155,24 @@ export default {
         return shapeFileData;
       }
       return null;
+    },
+    customSample() {
+      let returnString = this.shapefileCustomName;
+      const matches = this.shapefileCustomName.match(/{.+?}/g);
+      if (matches) {
+        const replaceArray = matches.map(match =>
+          match.replace('{', '').replace('}', ''),
+        );
+        for (let i = 0; i <= replaceArray.length - 1; i++) {
+          if (this.shapefileData.sample[replaceArray[i]]) {
+            returnString = returnString.replace(
+              `{${replaceArray[i]}}`,
+              this.shapefileData.sample[replaceArray[i]],
+            );
+          }
+        }
+      }
+      return returnString;
     },
   },
   async mounted() {
@@ -222,18 +241,10 @@ export default {
       }
     },
     validateUpload() {
-      if (this.shapefileCustomName) {
-        const [shapeFileData] = this.tableData;
-        const hasFieldInTemplate = shapeFileData.fields.some(field =>
-          this.shapefileCustomName.includes(`{${field}}`),
-        );
-        if (hasFieldInTemplate) {
-          return true;
-        }
-
+      if (!this.shapefileCustomName && !this.shapefileKey) {
         this.$toasted.error(
           this.$t(
-            '~~You need at least one valid field in the template for a custom name',
+            '~~You need to provide a field or a custom name for this upload',
           ),
         );
         return false;

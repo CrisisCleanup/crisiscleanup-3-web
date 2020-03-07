@@ -1,6 +1,6 @@
 <template>
   <div class="w-3/4 m-auto">
-    <LayerUploadTool @addedLayer="getLocations" />
+    <LayerUploadTool :key="locations" @addedLayer="getLocations" />
     <div class="mb-24">
       <div class="flex justify-between mb-2">
         <div class="flex items-center">

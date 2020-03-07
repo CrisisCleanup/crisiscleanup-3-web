@@ -118,17 +118,38 @@
           v-if="showingUploadModal"
           modal-classes="bg-white w-3/4 shadow"
           :title="$t('locationTool.upload_layer')"
-          @ok="applyCurrentLayerUpload"
           @cancel="showingUploadModal = false"
         >
           <div class="flex items-center justify-center w-full">
             <LayerUploadTool
+              :key="currentLayerUpload"
               class="flex w-full justify-center items-center"
               @addedLayer="
                 layer => {
                   currentLayerUpload = layer;
                 }
               "
+            />
+          </div>
+          <div class="text-center" v-if="currentLayerUpload">
+            {{ $t('Selected Location:') }} {{ currentLayerUpload[0].name }}
+          </div>
+          <div slot="footer" class="p-3 flex items-center justify-center">
+            <base-button
+              :action="
+                () => {
+                  showingUploadModal = false;
+                }
+              "
+              :text="$t('actions.cancel')"
+              variant="outline"
+              class="ml-2 p-3 px-6 text-xs"
+            />
+            <base-button
+              variant="solid"
+              :action="applyCurrentLayerUpload"
+              :text="$t('actions.apply')"
+              class="ml-2 p-3 px-6 text-xs"
             />
           </div>
         </modal>

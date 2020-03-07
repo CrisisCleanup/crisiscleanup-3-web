@@ -275,7 +275,28 @@
         class="border-b px-4 py-2 font-semibold flex justify-between items-center"
       >
         {{ $t('profileOrg.documents_and_materials') }}
+        <base-button
+          variant="solid"
+          class="px-4 py-2"
+          :text="$t('actions.save')"
+          :action="saveOrganization"
+        />
       </div>
+      <div class="px-8 pb-6 mt-4">
+        <div class="my-1">{{ $t('~~Work Order Instructions') }}</div>
+        <textarea
+          :value="currentOrganization.custom_ops_message"
+          @input="
+            event => {
+              updateOrganization(event.target.value, 'custom_ops_message');
+            }
+          "
+          :placeholder="$t('~~Add Work Order Instructions')"
+          rows="4"
+          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-72"
+        />
+      </div>
+      <hr />
       <div class="px-8 pb-6 mt-4">
         <div class="my-1">{{ $t('profileOrg.add_custom_tos') }}</div>
         <div class="flex items-center">
@@ -323,6 +344,17 @@
             :disabled="uploading"
           />
         </DragDrop>
+        <textarea
+          :value="currentOrganization.custom_legal_tos"
+          @input="
+            event => {
+              updateOrganization(event.target.value, 'custom_legal_tos');
+            }
+          "
+          :placeholder="$t('~~Add Terms of Service Text')"
+          rows="4"
+          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-72"
+        />
       </div>
       <hr />
       <div class="px-8 pb-6 mt-4">
@@ -372,6 +404,20 @@
             :disabled="uploading"
           />
         </DragDrop>
+        <textarea
+          :value="currentOrganization.custom_legal_survivor_waiver"
+          @input="
+            event => {
+              updateOrganization(
+                event.target.value,
+                'custom_legal_survivor_waiver',
+              );
+            }
+          "
+          :placeholder="$t('~~Add Waiver Text')"
+          rows="4"
+          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-72"
+        />
       </div>
     </div>
   </div>
