@@ -139,7 +139,7 @@ export default {
           key: 'my_organization',
           icon: 'organization',
           iconSize: 'large',
-          to: '/organization',
+          to: '/organization/invitations',
         },
       ];
     },
