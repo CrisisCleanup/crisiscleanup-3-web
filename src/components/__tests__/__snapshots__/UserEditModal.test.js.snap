@@ -67,7 +67,7 @@ exports[`UserEditModal show modal with options 1`] = `
   <div
     class="p-3 flex justify-end"
   >
-    <button
+    <base-button-stub
       action="function () {
         /* istanbul ignore next */
         cov_2d0a79ltb7.f[12]++;
@@ -79,7 +79,7 @@ exports[`UserEditModal show modal with options 1`] = `
       text="actions.cancel"
     />
      
-    <button
+    <base-button-stub
       action="function () { [native code] }"
       class="ml-2 p-3 px-6 text-xs"
       text="actions.save"

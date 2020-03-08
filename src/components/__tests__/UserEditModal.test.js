@@ -5,10 +5,10 @@
  * Components
  */
 
+import User from '@/models/__mocks__/User';
+import UserEditModal from '@/pages/organization/UserEditModal';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import UserEditModal from '@/pages/organization/UserEditModal';
-import User from '@/models/__mocks__/User';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -26,7 +26,7 @@ const mountWithOptions = props =>
       modal: true,
       'base-input': '<input />',
       'form-select': "<input type='select'>",
-      'base-button': '<button></button>',
+      'base-button': true,
     },
     propsData: {
       ...props,

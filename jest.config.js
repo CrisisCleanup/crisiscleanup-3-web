@@ -2,6 +2,7 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,vue}',
+    '!src/**/*.stories.js',
     '!**/node_modules/**',
     '!**/*.test.js',
     '!src/services/*.js',
@@ -15,11 +16,19 @@ module.exports = {
     '@/(.*)$': '<rootDir>/src/$1',
   },
   transform: {
-    // compile any *.vue files with vue-jest
-    '.*\\.(vue)$': 'vue-jest',
     // *.js => babel
-    '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
+    '^.+\\.js$': 'babel-jest',
+    // compile any *.vue files with vue-jest
+    '^.+\\.vue$': 'vue-jest',
   },
+  transformIgnorePatterns: ['/node_modules/'],
   setupFiles: ['jest-canvas-mock'],
   snapshotSerializers: ['jest-serializer-vue'],
+  globals: {
+    'vue-jest': {
+      babelConfig: {
+        configFile: './babel.config.js',
+      },
+    },
+  },
 };
