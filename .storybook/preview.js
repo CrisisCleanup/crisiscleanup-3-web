@@ -118,6 +118,7 @@ addDecorator(() => ({
 addParameters({
   backgrounds: [
     { name: 'CrisisCleanup Gray', value: '#f9f9f9', default: true },
+    { name: 'White', value: '#fff' },
     { name: 'Dark', value: '#4a4a4a' },
   ],
 });
