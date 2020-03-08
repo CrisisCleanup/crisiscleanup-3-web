@@ -109,6 +109,7 @@ addDecorator(withA11y);
 addParameters({
   backgrounds: [
     { name: 'CrisisCleanup Gray', value: '#f9f9f9', default: true },
+    { name: 'Dark', value: '#4a4a4a' },
   ],
 });
 
