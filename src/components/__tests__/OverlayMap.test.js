@@ -12,6 +12,7 @@ const mountWithOptions = () =>
   shallowMount(OverlayMap, {
     mocks: {
       $log: global.console,
+      $t: key => key,
     },
   });
 

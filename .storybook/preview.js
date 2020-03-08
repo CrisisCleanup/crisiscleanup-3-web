@@ -31,13 +31,11 @@ import centered from '@storybook/addon-centered/vue';
 import { addDecorator, addParameters, configure } from '@storybook/vue';
 // Import your global components.
 import axios from 'axios';
-import Dropdown from 'bp-vuejs-dropdown';
 import moment from 'moment';
 import 'moment/min/locales';
-import { withInfo } from 'storybook-addon-vue-info';
 // Fonts
-import 'typeface-montserrat';
-import 'typeface-nunito-sans';
+import 'typeface-montserrat/index.css';
+import 'typeface-nunito-sans/index.css';
 import VTooltip from 'v-tooltip';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
@@ -45,7 +43,6 @@ import VueAxios from 'vue-axios';
 import VueI18n from 'vue-i18n';
 import Popover from 'vue-js-popover';
 import * as ModalDialogs from 'vue-modal-dialogs';
-import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 // Import Vue plugins
@@ -91,11 +88,9 @@ Vue.use(Toasted, {
 Vue.use(VueI18n);
 Vue.use(VueLog);
 Vue.use(Popover);
-Vue.component('base-dropdown', Dropdown);
 Vue.component('v-select', vSelect);
 
 // Filters
-Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.filter('getWorkTypeName', getWorkTypeName);
 Vue.filter('getStatusName', getStatusName);
 Vue.filter('snakeToTitleCase', snakeToTitleCase);
@@ -109,7 +104,6 @@ Vue.use(Vuex);
 // Decorators
 addDecorator(centered);
 addDecorator(withA11y);
-addDecorator(withInfo);
 
 // Global Params
 addParameters({

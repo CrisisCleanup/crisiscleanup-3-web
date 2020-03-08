@@ -1,0 +1,1168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Basics|BaseButton With Async Action 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <button
+      alt="button"
+      class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+      data-cy="js-button"
+      size="large"
+      title="Button"
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       Load for 1 Second 
+      <!---->
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseButton With Custom Icon 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <button
+      alt="button"
+      class="large text-h3 font-h3 flex items-center justify-center outline js-button"
+      data-cy="js-button"
+      size="large"
+      title="Button"
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <div
+        class="flex items-center base-icon m-1 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+       Button 
+      <!---->
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseButton With Icon 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <button
+      alt="button"
+      class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+      data-cy="js-button"
+      size="large"
+      title="Button"
+      type="submit"
+    >
+      <!---->
+       
+      <svg
+        aria-hidden="true"
+        class="m-1 svg-inline--fa fa-file fa-w-12 fa-sm"
+        data-icon="file"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 384 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          class=""
+          d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"
+          fill="currentColor"
+        />
+      </svg>
+       
+      <!---->
+       Button 
+      <!---->
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseButton With Sizes 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <div
+        class="m-4"
+      >
+        <button
+          alt="button"
+          class="small text-bodysm font-bodysm flex items-center justify-center solid js-button"
+          data-cy="js-button"
+          size="small"
+          title="Button"
+          type="submit"
+        >
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           Small 
+          <!---->
+        </button>
+      </div>
+      <div
+        class="m-4"
+      >
+        <button
+          alt="button"
+          class="medium text-sans text-h4 font-h4 flex items-center justify-center solid js-button"
+          data-cy="js-button"
+          size="medium"
+          title="Button"
+          type="submit"
+        >
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           Medium 
+          <!---->
+        </button>
+      </div>
+      <div
+        class="m-4"
+      >
+        <button
+          alt="button"
+          class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+          data-cy="js-button"
+          size="large"
+          title="Button"
+          type="submit"
+        >
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           Large 
+          <!---->
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseButton With Text 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <button
+      alt="button"
+      class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+      data-cy="js-button"
+      size="large"
+      title="Button"
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       Button 
+      <!---->
+    </button>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseButton With Variants 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <div
+        class="m-4"
+      >
+        <button
+          alt="button"
+          class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+          data-cy="js-button"
+          size="large"
+          title="Button"
+          type="submit"
+        >
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           Solid 
+          <!---->
+        </button>
+      </div>
+      <div
+        class="m-4"
+      >
+        <button
+          alt="button"
+          class="large text-h3 font-h3 flex items-center justify-center outline js-button"
+          data-cy="js-button"
+          size="large"
+          title="Button"
+          type="submit"
+        >
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           Outline 
+          <!---->
+        </button>
+      </div>
+      <div
+        class="m-4"
+      >
+        <button
+          alt="button"
+          class="large text-h3 font-h3 flex items-center justify-center text js-button"
+          data-cy="js-button"
+          size="large"
+          title="Button"
+          type="submit"
+        >
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           Text 
+          <!---->
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseCheckbox Disabled 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <label
+      class="checkbox-container"
+    >
+      Disabled 
+      <input
+        class="checkmark-input"
+        disabled="disabled"
+        type="checkbox"
+      />
+       
+      <span
+        class="checkmark"
+      />
+    </label>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseCheckbox With Text 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <label
+      class="checkbox-container"
+    >
+      Check Me 
+      <input
+        class="checkmark-input"
+        type="checkbox"
+      />
+       
+      <span
+        class="checkmark"
+      />
+    </label>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex flex-wrap mx-96"
+    >
+      <div
+        class="flex items-center base-icon js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xxs"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xs"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer small"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer medium"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer large"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex flex-wrap mx-96"
+    >
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+      <div
+        class="flex items-center base-icon m-4 w-16 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xl"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseIcon Simple Icon 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex items-center base-icon js-"
+    >
+      <img
+        alt=""
+        class="ccu-icon cursor-pointer large"
+        src="IMAGE_MOCK"
+        title=""
+      />
+       
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseText With Custom Styles 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <p
+      class="text-white bg-black text-h1 font-h1 font-sans"
+    >
+      Sample Text
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseText With Defaults 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <p
+      class="text-body font-body font-sans"
+    >
+      Sample Text
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseText With Fonts 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h1 font-h1 font-sans"
+        >
+          Sample Text - (sans)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h1 font-h1 font-display"
+        >
+          Sample Text - (display)
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseText With Variants 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h1 font-h1 font-sans"
+        >
+          Sample Text - (h1)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h2 font-h2 font-sans"
+        >
+          Sample Text - (h2)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h3 font-h3 font-sans"
+        >
+          Sample Text - (h3)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h4 font-h4 font-sans"
+        >
+          Sample Text - (h4)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-body font-body font-sans"
+        >
+          Sample Text - (body)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-bodysm font-bodysm font-sans"
+        >
+          Sample Text - (bodysm)
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements|Tag Closeable Tag 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="tag flex items-center px-1 justify-center text-xs"
+    >
+      <div
+        class="flex items-center base-icon mx-1 js-"
+      >
+        <img
+          alt=""
+          class="ccu-icon cursor-pointer xxs"
+          src="IMAGE_MOCK"
+          title=""
+        />
+         
+      </div>
+       Close me
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements|Tag Simple Tag 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="tag flex items-center px-1 justify-center text-xs"
+    >
+      <!---->
+       Do something
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layouts|Loader With Custom Spinner 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="relative"
+    >
+      <div
+        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+        data-cy="worksitemap-loader"
+      >
+        <div
+          class="loader loader--style3 flex flex-col items-center"
+          title="2"
+        >
+          <svg
+            height="40px"
+            id="loader-1"
+            style="enable-background: new 0 0 50 50;"
+            version="1.1"
+            viewBox="0 0 50 50"
+            width="40px"
+            x="0px"
+            xml:space="preserve"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            y="0px"
+          >
+            <path
+              d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
+              fill="red"
+            >
+              <animatetransform
+                attributeName="transform"
+                attributeType="xml"
+                dur="0.6s"
+                from="0 25 25"
+                repeatCount="indefinite"
+                to="360 25 25"
+                type="rotate"
+              />
+            </path>
+          </svg>
+           
+          <span>
+            Custom Loader
+          </span>
+        </div>
+      </div>
+       
+      <!---->
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layouts|Loader With Defaults 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="relative"
+    >
+      <div
+        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+        data-cy="worksitemap-loader"
+      >
+        <div
+          class="loader loader--style3 flex flex-col items-center"
+          title="2"
+        >
+          <svg
+            height="40px"
+            id="loader-1"
+            style="enable-background: new 0 0 50 50;"
+            version="1.1"
+            viewBox="0 0 50 50"
+            width="40px"
+            x="0px"
+            xml:space="preserve"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            y="0px"
+          >
+            <path
+              d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
+              fill="#000"
+            >
+              <animatetransform
+                attributeName="transform"
+                attributeType="xml"
+                dur="0.6s"
+                from="0 25 25"
+                repeatCount="indefinite"
+                to="360 25 25"
+                type="rotate"
+              />
+            </path>
+          </svg>
+           
+          <!---->
+        </div>
+      </div>
+       
+      <!---->
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layouts|Loader With Layout 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="relative"
+    >
+      <div
+        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+        data-cy="worksitemap-loader"
+      >
+        <div
+          class="loader loader--style3 flex flex-col items-center"
+          title="2"
+        >
+          <svg
+            height="40px"
+            id="loader-1"
+            style="enable-background: new 0 0 50 50;"
+            version="1.1"
+            viewBox="0 0 50 50"
+            width="40px"
+            x="0px"
+            xml:space="preserve"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            y="0px"
+          >
+            <path
+              d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
+              fill="#000"
+            >
+              <animatetransform
+                attributeName="transform"
+                attributeType="xml"
+                dur="0.6s"
+                from="0 25 25"
+                repeatCount="indefinite"
+                to="360 25 25"
+                type="rotate"
+              />
+            </path>
+          </svg>
+           
+          <!---->
+        </div>
+      </div>
+       
+      <!---->
+    </div>
+  </div>
+</div>
+`;

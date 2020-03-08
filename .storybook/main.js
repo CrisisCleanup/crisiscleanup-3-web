@@ -4,7 +4,6 @@ module.exports = {
   stories: ['../src/**/*.stories.(js|mdx)'],
   addons: [
     '@storybook/addon-storysource',
-    'storybook-addon-vue-info/lib/register',
     '@storybook/addon-actions',
     '@storybook/addon-a11y/register',
     '@storybook/addon-links',
