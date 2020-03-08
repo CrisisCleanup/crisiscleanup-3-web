@@ -15,8 +15,11 @@ export const allIconSizes = () => ({
     };
   },
   template: `
-  <div class="flex flex-wrap mx-96">
-    <ccu-icon v-for="size in sizes" :key="size" :size="size" :type="icons.trash"/>
+  <div class="flex flex-wrap">
+    <div v-for="size in sizes" class="flex flex-col border-2 text-center justify-end">
+      <ccu-icon class="m-6" :key="size" :size="size" :type="icons.trash"/>
+      <p>{{ size }}</p>
+    </div>
   </div>
   `,
 });

@@ -29,7 +29,7 @@ const mountWithOptions = ({ props } = {}) =>
         to: '/mockroute',
         key: 'mockroute',
         icon: 'mock',
-        iconSize: 'small',
+        iconSize: 'sm',
         ...props,
       },
     },

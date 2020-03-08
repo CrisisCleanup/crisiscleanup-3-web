@@ -25,7 +25,7 @@
 <script>
 import { kebabCase } from 'lodash';
 import VueTypes from 'vue-types';
-import { ICONS } from '@/components/BaseIcon';
+import { ICONS, ICON_SIZES } from '@/components/BaseIcon';
 
 export const STYLES = ['primary', 'danger', 'warning', 'link', 'bare'];
 export const VARIANTS = ['solid', 'outline', 'text'];
@@ -42,7 +42,7 @@ export default {
     size: VueTypes.oneOf(['small', 'medium', 'large']),
     icon: VueTypes.string,
     ccuIcon: VueTypes.oneOf(Object.values(ICONS)),
-    iconSize: VueTypes.oneOf(['sm', 'md', 'lg']).def('sm'),
+    iconSize: VueTypes.oneOf(ICON_SIZES).def('sm'),
     suffixIcon: VueTypes.oneOf(Object.values(ICONS)),
     selector: VueTypes.string,
     variant: VueTypes.oneOf(VARIANTS),

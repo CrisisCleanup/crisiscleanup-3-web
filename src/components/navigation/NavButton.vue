@@ -3,6 +3,7 @@
     :to="route.to"
     class="menu-item router-link p-2 border-b border-t border-gray-800"
     :class="{ 'router-link-active': isActive }"
+    :data-cy="`navigation.${route.key}`"
   >
     <div :key="route.key" class="flex flex-col items-center">
       <ccu-icon

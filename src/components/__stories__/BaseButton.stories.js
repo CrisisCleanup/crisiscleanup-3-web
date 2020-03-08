@@ -13,7 +13,7 @@ export const withIcon = () =>
   "<base-button variant='solid' size='large' icon='file'>Button</base-button>";
 
 export const withCustomIcon = () =>
-  "<base-button size='large' variant='outline' ccu-icon='trash'>Button</base-button>";
+  "<base-button icon-size='md' size='large' variant='outline' ccu-icon='trash'>Button</base-button>";
 
 export const withSizes = () => ({
   data() {

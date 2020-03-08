@@ -17,7 +17,7 @@ const shallowMountWithOptions = () =>
           to: '/mockroute',
           key: 'mockroute',
           icon: 'mock',
-          iconSize: 'small',
+          iconSize: 'sm',
         },
       ],
     },

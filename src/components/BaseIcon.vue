@@ -52,7 +52,17 @@ export const ICONS = Object.fromEntries(
   Object.entries(iconMap).map(([key]) => [snakeCase(key), key]),
 );
 
-export const ICON_SIZES = ['xxs', 'xs', 'small', 'medium', 'large', 'xl'];
+export const ICON_SIZES = [
+  'xxs',
+  'xs',
+  'sm',
+  'small',
+  'md',
+  'medium',
+  'lg',
+  'large',
+  'xl',
+];
 
 export default {
   name: 'BaseIcon',
@@ -68,9 +78,9 @@ export default {
       styles: {
         'ccu-icon': true,
         'cursor-pointer': true,
-        large: this.size === 'large',
-        medium: this.size === 'medium',
-        small: this.size === 'small',
+        large: ['lg', 'large'].includes(this.size),
+        medium: ['md', 'medium'].includes(this.size),
+        small: ['sm', 'small'].includes(this.size),
         xs: this.size === 'xs',
         xxs: this.size === 'xxs',
         xl: this.size === 'xl',
