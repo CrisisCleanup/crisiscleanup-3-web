@@ -1,5 +1,6 @@
 module.exports = {
   runtimeCompiler: true,
+  lintOnSave: false,
   configureWebpack: () => {
     if (!process.env.NODE_ENV === 'production') {
       return {
