@@ -298,130 +298,11 @@
       <SectionHeading :count="3" class="mb-3">{{
         $t('caseView.report')
       }}</SectionHeading>
-      <section class="px-3 pb-3">
-        <form ref="timeForm" class="flex items-center justify-between w-full">
-          <base-input
-            v-model="volunteersToAdd"
-            input-style="width: 6rem"
-            input-classes="text-xs"
-            :placeholder="$t('caseView.volunteers')"
-            required
-            pattern="\d*"
-          />
-          <base-input
-            v-model="hoursPerVolunteer"
-            :placeholder="$t('caseView.hours_per_volunteer')"
-            input-classes="text-xs"
-            input-style="width: 11rem;"
-            required
-            pattern="\d*"
-          />
-          <base-button
-            :text="$t('actions.add')"
-            variant="solid"
-            class="p-3"
-            :action="addTime"
-          />
-        </form>
-        <div v-if="worksite.total_volunteers" class="my-2">
-          <div class="my-1">{{ $t('caseView.volunteer_hour_reports') }}</div>
-          <table class="table-fixed text-xs w-full">
-            <thead>
-              <tr>
-                <th class="text-left border p-1 break-all">
-                  {{ $t('caseView.entered_by') }}
-                </th>
-                <th class="border p-1 break-all">
-                  {{ $t('caseView.volunteers') }}
-                </th>
-                <th class="border p-1 break-all">
-                  {{ $t('caseView.hours_per_volunteer') }}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="entry in timeEnteredByMyOrganization">
-                <td class="text-left border p-1 break-all">
-                  {{ entry.created_by_name }}
-                </td>
-                <td class="text-right border p-1">{{ entry.volunteers }}</td>
-                <td class="text-right border p-1">
-                  {{ entry.seconds | secondsToHm }}
-                </td>
-              </tr>
-              <tr v-if="timeEnteredByOtherOrganizations.volunteers">
-                <td class="text-left border p-1">
-                  {{ timeEnteredByOtherOrganizations.created_by_name }}
-                </td>
-                <td class="text-right border p-1">
-                  {{ timeEnteredByOtherOrganizations.volunteers }}
-                </td>
-                <td class="text-right border p-1">
-                  {{ timeEnteredByOtherOrganizations.seconds | secondsToHm }}
-                </td>
-              </tr>
-            </tbody>
-            <tfoot>
-              <tr>
-                <td colspan="3" class="border p-1 text-right font-bold">
-                  {{ $t('caseView.total_time') }} {{ worksite.total_time }}
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </section>
+      <WorksiteReportSection :worksite="worksite" />
       <SectionHeading :count="4" class="mb-3">{{
         $t('caseForm.photos')
       }}</SectionHeading>
-      <section class="px-3 pb-3 flex">
-        <DragDrop
-          class="w-20 h-20 border-solid border-2"
-          :disabled="uploading"
-          @files="handleFileUpload"
-        >
-          <div class="flex items-center justify-center">
-            <font-awesome-icon v-if="uploading" size="lg" icon="spinner" spin />
-            <font-awesome-icon v-else size="lg" icon="camera" />
-          </div>
-        </DragDrop>
-
-        <div class="flex w-64 overflow-x-auto">
-          <div
-            v-for="file in worksite.files"
-            class="relative image-container"
-            style="min-width: 90px"
-          >
-            <img
-              class="image-box w-20 h-20 mx-2 cursor-pointer"
-              :src="file.url"
-              :alt="file.filename_original"
-              :title="file.filename_original"
-              @click="viewingImage = file"
-            />
-            <ccu-icon
-              :alt="$t('actions.delete')"
-              size="xs"
-              type="trash"
-              class="absolute right-0 top-0 m-1 mr-3 p-1 image-close bg-white"
-              @click.native="deleteFile(file.file)"
-            />
-          </div>
-        </div>
-        <modal
-          v-if="viewingImage"
-          modal-classes="bg-white w-1/3 shadow"
-          closeable
-          @close="viewingImage = null"
-        >
-          <img
-            :src="viewingImage.url"
-            :alt="viewingImage.filename_original"
-            :title="viewingImage.filename_original"
-          />
-          <div slot="footer"></div>
-        </modal>
-      </section>
+      <WorksiteImageSection :worksite="worksite" />
     </div>
     <div
       class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-center items-center"
@@ -491,20 +372,22 @@ import WorksiteRequest from '@/models/WorksiteRequest';
 import { groupBy } from '@/utils/array';
 import Organization from '@/models/Organization';
 import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
-import DragDrop from '@/components/DragDrop';
 import { getQueryString } from '@/utils/urls';
 import { LocaleMixin } from '@/mixins/locale';
 import SectionHeading from '../components/SectionHeading';
 import Flag from './Flag';
+import WorksiteImageSection from './WorksiteImageSection';
+import WorksiteReportSection from './WorksiteReportSection';
 
 export default {
   name: 'CaseView',
   components: {
+    WorksiteReportSection,
+    WorksiteImageSection,
     Flag,
     SectionHeading,
     WorkTypeRequestModal,
     StatusDropDown,
-    DragDrop,
   },
   mixins: [LocaleMixin],
   data() {
@@ -516,8 +399,6 @@ export default {
       requestingWorkTypes: false,
       initialWorkTypeRequestSelection: [],
       currentNote: '',
-      volunteersToAdd: '',
-      hoursPerVolunteer: '',
       uploading: false,
       viewingImage: null,
     };
@@ -590,35 +471,6 @@ export default {
         this.worksiteRequests.map(request => request.worksite_work_type.id),
       );
     },
-    timeEnteredByMyOrganization() {
-      if (this.worksite) {
-        return this.worksite.time.filter(
-          type => type.created_by_org === this.currentUser.organization.id,
-        );
-      }
-      return [];
-    },
-    timeEnteredByOtherOrganizations() {
-      let time = [];
-      if (this.worksite) {
-        time = this.worksite.time.filter(
-          type => type.created_by_org !== this.currentUser.organization.id,
-        );
-      }
-      const volunteers = time.reduce((total, obj) => {
-        return total + obj.volunteers;
-      }, 0);
-
-      const seconds = time.reduce((total, obj) => {
-        return total + obj.seconds;
-      }, 0);
-
-      return {
-        created_by_name: this.$t('Other Organizations'),
-        seconds,
-        volunteers,
-      };
-    },
   },
   async mounted() {
     try {
@@ -638,27 +490,6 @@ export default {
     }
   },
   methods: {
-    async addTime() {
-      try {
-        const isValid = this.$refs.timeForm.reportValidity();
-        if (!isValid) {
-          return;
-        }
-        await Worksite.api().addTime(
-          this.worksite.id,
-          this.$moment
-            .duration(Number(this.hoursPerVolunteer), 'hours')
-            .asSeconds(),
-          this.volunteersToAdd,
-        );
-        this.addingTime = false;
-        this.volunteersToAdd = '';
-        this.hoursPerVolunteer = '';
-        await Worksite.api().fetch(this.worksite.id);
-      } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
-      }
-    },
     async getWorksiteRequests() {
       const worksiteRequestParams = {
         worksite_work_type__worksite: this.$route.params.id,
@@ -776,38 +607,6 @@ export default {
       }
       return [];
     },
-    async handleFileUpload(fileList) {
-      if (fileList.length === 0) {
-        this.uploading = false;
-        return;
-      }
-      const formData = new FormData();
-      formData.append('upload', fileList[0]);
-      this.uploading = true;
-      try {
-        const result = await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/files`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Accept: 'application/json',
-            },
-          },
-        );
-        const file = result.data.id;
-        await Worksite.api().addFile(this.worksite.id, file);
-        await Worksite.api().fetch(this.worksite.id);
-      } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
-      } finally {
-        this.uploading = false;
-      }
-    },
-    async deleteFile(fileId) {
-      await Worksite.api().deleteFile(this.worksite.id, fileId);
-      await Worksite.api().fetch(this.worksite.id);
-    },
   },
 };
 </script>
@@ -854,13 +653,5 @@ export default {
   word-wrap: break-word;
   overflow: hidden;
   max-height: 5em;
-}
-
-.image-container:hover .image-close {
-  display: flex;
-}
-
-.image-close {
-  display: none;
 }
 </style>
