@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <slot />
   </div>
 </template>
@@ -11,4 +11,19 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+html,
+body,
+.wrapper,
+#app {
+  @apply w-full h-full;
+}
+
+a:hover,
+a:active,
+a:focus {
+  outline: 0;
+  cursor: pointer;
+  user-select: none;
+}
+</style>

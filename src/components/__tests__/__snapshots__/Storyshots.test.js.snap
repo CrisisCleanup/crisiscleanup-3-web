@@ -1904,6 +1904,223 @@ exports[`Storyshots Elements|Tag Simple Tag 1`] = `
 </div>
 `;
 
+exports[`Storyshots Layouts|HomeLayout With All 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="homegrid grid-container"
+    >
+      <div
+        class="grid--overlay homegrid-backdrop"
+      />
+       
+      <div
+        class="grid--logo logo my-8"
+      >
+        <img
+          alt="CrisisCleanup"
+          src="@/assets/ccu-logo-black-500w.png"
+        />
+      </div>
+       
+      <div
+        class="grid--survivors"
+      >
+        <div
+          class="homegrid-survivors"
+        >
+          <p
+            class="text-h1 font-h1 font-display"
+          >
+            Survivors Call
+          </p>
+           
+          <p
+            class="text-h2 font-h2 font-display"
+          >
+            1 (800) 451 1954
+          </p>
+        </div>
+      </div>
+       
+      <div
+        class="grid--nav border-2"
+      >
+        <h1>
+          I am in grid--nav
+        </h1>
+      </div>
+       
+      <div
+        class="grid--actions border-2"
+      >
+        <h1>
+          I am in grid--actions
+        </h1>
+      </div>
+       
+      <div
+        class="grid--main h-screen border-2"
+      >
+        <h1>
+          I am in grid--main
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layouts|HomeLayout With Basic Content 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="homegrid grid-container"
+    >
+       
+      <div
+        class="grid--logo logo my-8"
+      >
+        <img
+          alt="CrisisCleanup"
+          src="@/assets/ccu-logo-black-500w.png"
+        />
+      </div>
+       
+      <div
+        class="grid--survivors"
+      >
+        <div
+          class="homegrid-survivors"
+        >
+          <p
+            class="text-h1 font-h1 font-display"
+          >
+            Survivors Call
+          </p>
+           
+          <p
+            class="text-h2 font-h2 font-display"
+          >
+            1 (800) 451 1954
+          </p>
+        </div>
+      </div>
+       
+      <div
+        class="grid--main h-screen"
+      >
+        <h1>
+          I am in a HomeLayout
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layouts|HomeLayout With Default Override 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="homegrid grid-container"
+    >
+       
+      <div
+        class="grid--logo border-2"
+      >
+        <p>
+          This is grid--logo
+        </p>
+      </div>
+       
+      <div
+        class="grid--survivors border-2"
+      >
+        <p>
+          This is grid--survivors
+        </p>
+      </div>
+       
+      <div
+        class="grid--main w-screen h-screen border-2"
+      >
+        <p>
+          This is grid--main
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Layouts|HomeLayout With Overlay 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="homegrid grid-container"
+    >
+      <div
+        class="grid--overlay homegrid-backdrop"
+      />
+       
+      <div
+        class="grid--logo logo my-8"
+      >
+        <img
+          alt="CrisisCleanup"
+          src="@/assets/ccu-logo-black-500w.png"
+        />
+      </div>
+       
+      <div
+        class="grid--survivors"
+      >
+        <div
+          class="homegrid-survivors"
+        >
+          <p
+            class="text-h1 font-h1 font-display"
+          >
+            Survivors Call
+          </p>
+           
+          <p
+            class="text-h2 font-h2 font-display"
+          >
+            1 (800) 451 1954
+          </p>
+        </div>
+      </div>
+       
+      <div
+        class="grid--main h-screen"
+      >
+        <h1>
+          Home Container!
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Layouts|Loader With Custom Spinner 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
