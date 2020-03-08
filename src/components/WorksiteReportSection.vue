@@ -109,6 +109,7 @@ export default {
         this.volunteersToAdd = '';
         this.hoursPerVolunteer = '';
         await Worksite.api().fetch(this.worksite.id);
+        this.$emit('timeAdded');
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

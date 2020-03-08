@@ -60,6 +60,7 @@ export default {
   data() {
     return {
       uploading: false,
+      viewingImage: null,
     };
   },
   props: {
@@ -88,6 +89,7 @@ export default {
         const file = result.data.id;
         await Worksite.api().addFile(this.worksite.id, file);
         await Worksite.api().fetch(this.worksite.id);
+        this.$emit('photosChanged');
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
@@ -97,6 +99,7 @@ export default {
     async deleteFile(fileId) {
       await Worksite.api().deleteFile(this.worksite.id, fileId);
       await Worksite.api().fetch(this.worksite.id);
+      this.$emit('photosChanged');
     },
   },
 };

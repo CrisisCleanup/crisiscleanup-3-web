@@ -321,6 +321,24 @@
           </template>
         </div>
       </template>
+      <template v-if="isEditingWorksite">
+        <SectionHeading :count="5" class="mb-3"
+          >{{ $t('caseView.report') }}
+        </SectionHeading>
+        <WorksiteReportSection
+          :worksite="worksite"
+          :key="worksite.total_time"
+          @timeAdded="reloadWorksite"
+        />
+        <SectionHeading :count="6" class="mb-3"
+          >{{ $t('caseForm.photos') }}
+        </SectionHeading>
+        <WorksiteImageSection
+          :worksite="worksite"
+          :key="worksite.files"
+          @photosChanged="reloadWorksite"
+        />
+      </template>
     </div>
     <div
       class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between"
@@ -371,6 +389,8 @@ import Incident from '@/models/Incident';
 import { buildForm, groupBy } from '@/utils/form';
 import FormSelect from '@/components/FormSelect';
 import MessageBox from '@/components/dialogs/MessageBox';
+import WorksiteImageSection from '@/components/WorksiteImageSection';
+import WorksiteReportSection from '@/components/WorksiteReportSection';
 import SectionHeading from '../components/SectionHeading';
 import { EventBus } from '../event-bus';
 
@@ -382,6 +402,8 @@ export default {
     SectionHeading,
     FormSelect,
     WorksiteSearchInput,
+    WorksiteReportSection,
+    WorksiteImageSection,
   },
   created() {
     EventBus.$on('updatedWorksiteLocation', latLng => {
@@ -421,6 +443,9 @@ export default {
     },
     fieldsArray() {
       return this.fields.map(field => field.field_key);
+    },
+    isEditingWorksite() {
+      return this.$route.meta.id === 'case_edit';
     },
   },
   async mounted() {
@@ -471,6 +496,9 @@ export default {
         this.worksite[key] = value;
         this.worksite = { ...this.worksite };
       }
+    },
+    reloadWorksite() {
+      this.worksite = Worksite.find(this.worksite.id);
     },
     async findPotentialGeocode() {
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];

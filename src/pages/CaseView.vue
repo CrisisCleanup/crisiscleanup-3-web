@@ -118,7 +118,7 @@
           <div>{{ worksiteAddress }}</div>
         </div>
       </section>
-      <SectionHeading :count="2" class="mb-3"
+      <SectionHeading :count="3" class="mb-3"
         >{{ $t('caseForm.work') }}
         <template #action>
           <base-button
@@ -295,14 +295,14 @@
           </div>
         </div>
       </section>
-      <SectionHeading :count="3" class="mb-3">{{
+      <SectionHeading :count="5" class="mb-3">{{
         $t('caseView.report')
       }}</SectionHeading>
-      <WorksiteReportSection :worksite="worksite" />
-      <SectionHeading :count="4" class="mb-3">{{
+      <WorksiteReportSection :worksite="worksite" :key="worksite.total_time" />
+      <SectionHeading :count="6" class="mb-3">{{
         $t('caseForm.photos')
       }}</SectionHeading>
-      <WorksiteImageSection :worksite="worksite" />
+      <WorksiteImageSection :worksite="worksite" :key="worksite.files" />
     </div>
     <div
       class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-center items-center"
@@ -374,10 +374,10 @@ import Organization from '@/models/Organization';
 import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
 import { getQueryString } from '@/utils/urls';
 import { LocaleMixin } from '@/mixins/locale';
-import SectionHeading from '../components/SectionHeading';
+import SectionHeading from '@/components/SectionHeading';
+import WorksiteImageSection from '@/components/WorksiteImageSection';
+import WorksiteReportSection from '@/components/WorksiteReportSection';
 import Flag from './Flag';
-import WorksiteImageSection from './WorksiteImageSection';
-import WorksiteReportSection from './WorksiteReportSection';
 
 export default {
   name: 'CaseView',
@@ -400,7 +400,6 @@ export default {
       initialWorkTypeRequestSelection: [],
       currentNote: '',
       uploading: false,
-      viewingImage: null,
     };
   },
   computed: {
