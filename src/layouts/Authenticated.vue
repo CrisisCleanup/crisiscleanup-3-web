@@ -32,7 +32,7 @@
             <v-popover popover-class="menu-popover" placement="bottom-end">
               <div class="flex cursor-pointer items-center">
                 <img
-                  src="https://images.unsplash.com/photo-1569466896818-335b1bedfcce?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=150&q=80"
+                  :src="currentUser && currentUser.profilePictureUrl"
                   class="rounded-full w-10 h-10"
                 />
                 <span class="p-3">
