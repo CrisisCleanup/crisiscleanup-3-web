@@ -101,9 +101,18 @@ Vue.filter('secondsToHm', secondsToHm);
 // Install Vue plugins.
 Vue.use(Vuex);
 
+const i18n = new VueI18n({
+  locale: 'en-US',
+  messages: {},
+});
+
 // Decorators
 addDecorator(centered);
 addDecorator(withA11y);
+addDecorator(() => ({
+  template: '<story/>',
+  i18n,
+}));
 
 // Global Params
 addParameters({
