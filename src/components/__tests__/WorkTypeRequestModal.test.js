@@ -5,11 +5,20 @@
  * Components
  */
 
-import { createLocalVue, shallowMount } from '@vue/test-utils';
-import Vuex from 'vuex';
 import BaseButton from '@/components/BaseButton';
 import BaseCheckbox from '@/components/BaseCheckbox';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
+import Vuex from 'vuex';
+import { Store } from 'vuex-mock-store';
 import WorkTypeRequestModal from '../WorkTypeRequestModal';
+
+jest.mock('@/models/User');
+jest.mock('@/models/Status');
+jest.mock('@/models/Worksite');
+jest.mock('@/models/Incident');
+jest.mock('@/models/Organization');
+jest.mock('@/models/WorksiteRequest');
+jest.mock('@/models/WorkType');
 
 const localVue = createLocalVue();
 localVue.filter('getWorkTypeName', () => 'workType.ash');
@@ -17,7 +26,7 @@ localVue.use(Vuex);
 
 const mocks = {
   $t: key => key,
-  $store: new Vuex.Store(),
+  $store: new Store({}),
 };
 
 const mountWithOptions = props =>

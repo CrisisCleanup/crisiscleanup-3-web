@@ -14,4 +14,7 @@ export default {
       get: () => MockWorksiteRequest,
     }),
   }),
+  api: () => ({
+    get: () => MockWorksiteRequest,
+  }),
 };
