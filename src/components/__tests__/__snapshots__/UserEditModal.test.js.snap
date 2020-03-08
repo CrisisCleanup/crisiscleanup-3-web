@@ -69,6 +69,10 @@ exports[`UserEditModal show modal with options 1`] = `
   >
     <button
       action="function () {
+        /* istanbul ignore next */
+        cov_2d0a79ltb7.f[12]++;
+        cov_2d0a79ltb7.s[27]++;
+
         _vm.$emit('close');
       }"
       class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
