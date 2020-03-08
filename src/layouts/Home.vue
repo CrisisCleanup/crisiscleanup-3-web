@@ -1,8 +1,8 @@
 <template>
-  <div class="grid-container">
+  <div class="grid-home grid-container">
     <slot name="grid-overlay" />
     <slot name="grid-logo">
-      <div class="logo my-8">
+      <div class="grid--logo logo my-8">
         <img src="@/assets/ccu-logo-black-500w.png" alt="CrisisCleanup" />
       </div>
     </slot>
@@ -44,15 +44,39 @@ export default {
   margin-right: auto;
 }
 
-.logo {
+.grid--logo {
   grid-area: logo;
+}
+
+.logo {
   max-width: 200px;
   margin-left: 2.8rem;
+}
+
+.grid--main {
+  grid-area: main;
+}
+
+.grid--nav {
+  grid-area: nav;
+}
+
+.grid--actions {
+  grid-area: actions;
 }
 
 .grid--survivors {
   grid-area: survivors;
   @apply mx-6 my-4;
+}
+
+.grid--overlay {
+  grid-row: 1 / span 4;
+  grid-column: 1 / span 3;
+}
+
+.homegrid-backdrop {
+  @apply bg-crisiscleanup-light-grey;
 }
 
 .survivors-container {
