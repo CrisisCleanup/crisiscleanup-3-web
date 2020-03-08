@@ -43,13 +43,6 @@ describe('UserEditModal', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('show modal with options', () => {
-    const wrapper = mountWithOptions({
-      user: User.find(1),
-    });
-    expect(wrapper.element).toMatchSnapshot();
-  });
-
   it('should emit save correctly', () => {
     const wrapper = mountWithOptions({
       user: User.find(1),
