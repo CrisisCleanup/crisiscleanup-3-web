@@ -1569,7 +1569,7 @@ exports[`Storyshots Layouts|Loader With Custom Spinner 1`] = `
     >
       <div
         class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
-        data-cy="worksitemap-loader"
+        data-cy="overlay.loader"
       >
         <div
           class="loader loader--style3 flex flex-col items-center"
@@ -1628,7 +1628,7 @@ exports[`Storyshots Layouts|Loader With Defaults 1`] = `
     >
       <div
         class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
-        data-cy="worksitemap-loader"
+        data-cy="overlay.loader"
       >
         <div
           class="loader loader--style3 flex flex-col items-center"
@@ -1685,7 +1685,7 @@ exports[`Storyshots Layouts|Loader With Layout 1`] = `
     >
       <div
         class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
-        data-cy="worksitemap-loader"
+        data-cy="overlay.loader"
       >
         <div
           class="loader loader--style3 flex flex-col items-center"

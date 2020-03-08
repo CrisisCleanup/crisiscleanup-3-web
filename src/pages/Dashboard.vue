@@ -1,299 +1,297 @@
 <template>
-  <div class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto relative">
-    <div v-if="!loading">
-      <div class="flex">
-        <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
-          <div>
-            {{ $t('dashboard.my_claimed_cases') }} ({{ currentIncident.name }})
+  <Loader
+    :loading="loading"
+    class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto"
+  >
+    <template #content>
+      <div>
+        <div class="flex">
+          <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
+            <div>
+              {{ $t('dashboard.my_claimed_cases') }} ({{
+                currentIncident.name
+              }})
+            </div>
+            <div class="font-bold">
+              {{ claimedWorksites.length | numeral('0,0') }}
+            </div>
           </div>
-          <div class="font-bold">
-            {{ claimedWorksites.length | numeral('0,0') }}
+          <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
+            <div>
+              {{ $t('dashboard.total_claimed') }} ({{ currentIncident.name }})
+            </div>
+            <div class="font-bold">
+              {{ totalClaimed | numeral('0,0') }} ({{
+                (totalClaimed / totalWorksites) | numeral('0%')
+              }}
+              of Total)
+            </div>
+            <div
+              class="bottom-0 left-0 absolute border-b-4 border-blue-600"
+              :style="{ width: `${(totalClaimed / totalWorksites) * 100}%` }"
+            ></div>
+          </div>
+          <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
+            <div>
+              {{ $t('dashboard.in_progress') }} ({{ currentIncident.name }})
+            </div>
+            <div class="font-bold">
+              {{ totalInProgess | numeral('0,0') }} ({{
+                (totalInProgess / totalWorksites) | numeral('0%')
+              }}
+              of Claimed)
+            </div>
+            <div
+              class="bottom-0 left-0 absolute border-b-4 border-blue-600"
+              :style="{ width: `${(totalInProgess / totalWorksites) * 100}%` }"
+            ></div>
+          </div>
+          <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
+            <div>{{ $t('dashboard.closed') }} ({{ currentIncident.name }})</div>
+            <div class="font-bold">
+              {{ totalClosed | numeral('0,0') }} ({{
+                (totalClosed / totalWorksites) | numeral('0%')
+              }}
+              {{ $t('of Claimed') }})
+            </div>
+            <div
+              class="bottom-0 left-0 absolute border-b-4 border-green-600"
+              :style="{ width: `${(totalClosed / totalWorksites) * 100}%` }"
+            ></div>
           </div>
         </div>
-        <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-          <div>
-            {{ $t('dashboard.total_claimed') }} ({{ currentIncident.name }})
-          </div>
-          <div class="font-bold">
-            {{ totalClaimed | numeral('0,0') }} ({{
-              (totalClaimed / totalWorksites) | numeral('0%')
-            }}
-            of Total)
-          </div>
-          <div
-            class="bottom-0 left-0 absolute border-b-4 border-blue-600"
-            :style="{ width: `${(totalClaimed / totalWorksites) * 100}%` }"
-          ></div>
-        </div>
-        <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-          <div>
-            {{ $t('dashboard.in_progress') }} ({{ currentIncident.name }})
-          </div>
-          <div class="font-bold">
-            {{ totalInProgess | numeral('0,0') }} ({{
-              (totalInProgess / totalWorksites) | numeral('0%')
-            }}
-            of Claimed)
-          </div>
-          <div
-            class="bottom-0 left-0 absolute border-b-4 border-blue-600"
-            :style="{ width: `${(totalInProgess / totalWorksites) * 100}%` }"
-          ></div>
-        </div>
-        <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-          <div>{{ $t('dashboard.closed') }} ({{ currentIncident.name }})</div>
-          <div class="font-bold">
-            {{ totalClosed | numeral('0,0') }} ({{
-              (totalClosed / totalWorksites) | numeral('0%')
-            }}
-            {{ $t('of Claimed') }})
-          </div>
-          <div
-            class="bottom-0 left-0 absolute border-b-4 border-green-600"
-            :style="{ width: `${(totalClosed / totalWorksites) * 100}%` }"
-          ></div>
-        </div>
-      </div>
-      <div class="flex">
-        <div class="w-3/5 m-4 pt-2 shadow bg-white flex-shrink">
-          <div class="py-4 px-4 text-gray-500 border-b">
-            {{ $t('dashboard.my_cases') }}
-          </div>
-          <div class="p-4">
-            <Table
-              class=""
-              :data="claimedWorksites"
-              :columns="columns"
-              :sorter="sorter"
-              :loading="loading"
-              :body-style="{ height: '300px' }"
-              @change="handleTableChange"
-            >
-              <template #work_types="slotProps">
-                <div class="flex flex-wrap w-full">
-                  <div
-                    v-for="work_type in slotProps.item.work_types"
-                    :key="work_type.id"
-                    class="mx-1"
-                  >
-                    <StatusDropDown
-                      class="block"
-                      :current-work-type="work_type"
-                      use-icon
-                      :on-select="
-                        value => {
-                          statusValueChange(
-                            value,
-                            work_type,
-                            slotProps.item.id,
-                          );
+        <div class="flex">
+          <div class="w-3/5 m-4 pt-2 shadow bg-white flex-shrink">
+            <div class="py-4 px-4 text-gray-500 border-b">
+              {{ $t('dashboard.my_cases') }}
+            </div>
+            <div class="p-4">
+              <Table
+                class=""
+                :data="claimedWorksites"
+                :columns="columns"
+                :sorter="sorter"
+                :loading="loading"
+                :body-style="{ height: '300px' }"
+                @change="handleTableChange"
+              >
+                <template #work_types="slotProps">
+                  <div class="flex flex-wrap w-full">
+                    <div
+                      v-for="work_type in slotProps.item.work_types"
+                      :key="work_type.id"
+                      class="mx-1"
+                    >
+                      <StatusDropDown
+                        class="block"
+                        :current-work-type="work_type"
+                        use-icon
+                        :on-select="
+                          value => {
+                            statusValueChange(
+                              value,
+                              work_type,
+                              slotProps.item.id,
+                            );
+                          }
+                        "
+                      />
+                    </div>
+                  </div>
+                </template>
+                <template #actions="slotProps">
+                  <div class="flex">
+                    <router-link
+                      class=""
+                      :to="
+                        `/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`
+                      "
+                      tag="div"
+                    >
+                      <ccu-icon
+                        :alt="$t('actions.jump_to_case')"
+                        size="medium"
+                        class="p-1 py-2 w-8"
+                        type="go-case"
+                      />
+                    </router-link>
+                    <ccu-icon
+                      :alt="$t('actions.print')"
+                      size="medium"
+                      class="p-1 py-2 w-8"
+                      type="print"
+                      @click.native="
+                        () => {
+                          printWorksite(slotProps.item.id);
                         }
                       "
                     />
                   </div>
-                </div>
-              </template>
-              <template #actions="slotProps">
-                <div class="flex">
-                  <router-link
-                    class=""
-                    :to="
-                      `/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`
-                    "
-                    tag="div"
-                  >
-                    <ccu-icon
-                      :alt="$t('actions.jump_to_case')"
-                      size="medium"
-                      class="p-1 py-2 w-8"
-                      type="go-case"
-                    />
-                  </router-link>
-                  <ccu-icon
-                    :alt="$t('actions.print')"
-                    size="medium"
-                    class="p-1 py-2 w-8"
-                    type="print"
-                    @click.native="
-                      () => {
-                        printWorksite(slotProps.item.id);
-                      }
-                    "
-                  />
-                </div>
-              </template>
-            </Table>
-          </div>
-        </div>
-        <div class="w-2/5 m-4 p-6 shadow bg-white">
-          <div class="flex flex-col items-center justify-around">
-            <div class="text-center text-2xl w-2/3 my-3">
-              {{ $t('dashboard.invite_teammates') }}
+                </template>
+              </Table>
             </div>
-            <div class="text-justify w-5/6 my-3">
-              <div class="my-3">
-                {{ $t('inviteTeammates.invite_teammates_instructions') }}
+          </div>
+          <div class="w-2/5 m-4 p-6 shadow bg-white">
+            <div class="flex flex-col items-center justify-around">
+              <div class="text-center text-2xl w-2/3 my-3">
+                {{ $t('dashboard.invite_teammates') }}
               </div>
-              <base-input
-                v-model="usersToInvite"
+              <div class="text-justify w-5/6 my-3">
+                <div class="my-3">
+                  {{ $t('inviteTeammates.invite_teammates_instructions') }}
+                </div>
+                <base-input
+                  v-model="usersToInvite"
+                  size="large"
+                  class="flex-grow my-3"
+                  :placeholder="$t('Emails')"
+                />
+              </div>
+              <base-button
+                :text="$t('inviteTeammates.send_invites')"
                 size="large"
-                class="flex-grow my-3"
-                :placeholder="$t('Emails')"
+                variant="solid"
+                :action="inviteUsers"
               />
             </div>
-            <base-button
-              :text="$t('inviteTeammates.send_invites')"
-              size="large"
-              variant="solid"
-              :action="inviteUsers"
-            />
           </div>
         </div>
-      </div>
-      <div class="flex">
-        <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
-          <div class="py-4 px-4 text-gray-500 border-b">
-            {{ $t('dashboard.pending_cases') }}
-          </div>
-          <div class="py-4 px-4 border-b flex items-center">
-            <base-button
-              v-if="
-                $can('approve_work_type_transfers') ||
-                  $can('receive_work_type_transfer_requests')
-              "
-              class="mr-2 border-r pr-2"
-              size="medium"
-              text="Inbound Requests"
-              :class="[pendingView === 'inbound' ? 'text-primary-dark' : '']"
-              @click.native="pendingView = 'inbound'"
-              variant="text"
-            />
+        <div class="flex">
+          <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
+            <div class="py-4 px-4 text-gray-500 border-b">
+              {{ $t('dashboard.pending_cases') }}
+            </div>
+            <div class="py-4 px-4 border-b flex items-center">
+              <base-button
+                v-if="
+                  $can('approve_work_type_transfers') ||
+                    $can('receive_work_type_transfer_requests')
+                "
+                class="mr-2 border-r pr-2"
+                size="medium"
+                text="Inbound Requests"
+                :class="[pendingView === 'inbound' ? 'text-primary-dark' : '']"
+                @click.native="pendingView = 'inbound'"
+                variant="text"
+              />
 
-            <base-button
-              class="mr-2 border-r pr-2"
-              size="medium"
-              text="Outbound Requests"
-              :class="[pendingView === 'outbound' ? 'text-primary-dark' : '']"
-              @click.native="pendingView = 'outbound'"
-              variant="text"
-            />
+              <base-button
+                class="mr-2 border-r pr-2"
+                size="medium"
+                text="Outbound Requests"
+                :class="[pendingView === 'outbound' ? 'text-primary-dark' : '']"
+                @click.native="pendingView = 'outbound'"
+                variant="text"
+              />
 
-            <base-button
-              class="mr-2"
-              size="medium"
-              text="Archived Requests"
-              :class="[pendingView === 'archived' ? 'text-primary-dark' : '']"
-              @click.native="pendingView = 'archived'"
-              variant="text"
-            />
-          </div>
-          <div class="p-4">
-            <Table
-              class=""
-              :data="worksiteRequests"
-              :columns="pendingCasesColumns"
-              :sorter="pendingSorter"
-              :loading="pendingViewLoading"
-              :body-style="{ height: '300px' }"
-              @change="handlePendingTableChange"
-            >
-              <template #worksite_work_type="slotProps">
-                <div class="flex items-center w-full">
-                  <div
-                    class="flex p-1 items-center justify-center"
-                    :style="{
-                      backgroundColor: `${getColorForStatus(
-                        slotProps.item.worksite_work_type.status,
-                        Boolean(slotProps.item.worksite_work_type.claimed_by),
-                      )}3D`,
-                    }"
-                  >
+              <base-button
+                class="mr-2"
+                size="medium"
+                text="Archived Requests"
+                :class="[pendingView === 'archived' ? 'text-primary-dark' : '']"
+                @click.native="pendingView = 'archived'"
+                variant="text"
+              />
+            </div>
+            <div class="p-4">
+              <Table
+                class=""
+                :data="worksiteRequests"
+                :columns="pendingCasesColumns"
+                :sorter="pendingSorter"
+                :loading="pendingViewLoading"
+                :body-style="{ height: '300px' }"
+                @change="handlePendingTableChange"
+              >
+                <template #worksite_work_type="slotProps">
+                  <div class="flex items-center w-full">
                     <div
-                      class="case-svg-container"
-                      v-html="
-                        getWorkTypeImage(slotProps.item.worksite_work_type)
-                      "
-                    ></div>
+                      class="flex p-1 items-center justify-center"
+                      :style="{
+                        backgroundColor: `${getColorForStatus(
+                          slotProps.item.worksite_work_type.status,
+                          Boolean(slotProps.item.worksite_work_type.claimed_by),
+                        )}3D`,
+                      }"
+                    >
+                      <div
+                        class="case-svg-container"
+                        v-html="
+                          getWorkTypeImage(slotProps.item.worksite_work_type)
+                        "
+                      ></div>
+                    </div>
                   </div>
-                </div>
-              </template>
-              <template #organization="slotProps">
-                <div class="flex flex-col">
-                  {{ slotProps.item.requested_to_org.name }}
-                </div>
-              </template>
-              <template #work_type="slotProps">
-                <div class="flex flex-col">
-                  {{ slotProps.item.worksite_work_type }}
-                </div>
-              </template>
-              <template #actions="slotProps">
-                <div class="flex items-center justify-start">
-                  <div
-                    v-if="pendingView === 'inbound'"
-                    class="flex items-center justify-start"
-                  >
-                    <base-button
-                      class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
-                      :text="$t('actions.accept')"
-                      :action="() => acceptRequest(slotProps.item.id)"
-                    />
-                    <base-button
-                      class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
-                      :text="$t('actions.reject')"
-                      :action="() => rejectRequest(slotProps.item.id)"
-                    />
+                </template>
+                <template #organization="slotProps">
+                  <div class="flex flex-col">
+                    {{ slotProps.item.requested_to_org.name }}
                   </div>
-                  <div v-if="pendingView === 'outbound'">
-                    <base-button
-                      class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
-                      :text="$t('actions.cancel')"
-                      :action="() => cancelRequest(slotProps.item.id)"
-                    />
+                </template>
+                <template #work_type="slotProps">
+                  <div class="flex flex-col">
+                    {{ slotProps.item.worksite_work_type }}
                   </div>
-                  <div v-if="pendingView !== 'archived'">
-                    <base-button
-                      class="px-2 py-1 mx-2 border-black border"
-                      :text="$t('actions.ignore')"
-                      :action="() => archiveRequest(slotProps.item.id)"
-                    />
+                </template>
+                <template #actions="slotProps">
+                  <div class="flex items-center justify-start">
+                    <div
+                      v-if="pendingView === 'inbound'"
+                      class="flex items-center justify-start"
+                    >
+                      <base-button
+                        class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
+                        :text="$t('actions.accept')"
+                        :action="() => acceptRequest(slotProps.item.id)"
+                      />
+                      <base-button
+                        class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
+                        :text="$t('actions.reject')"
+                        :action="() => rejectRequest(slotProps.item.id)"
+                      />
+                    </div>
+                    <div v-if="pendingView === 'outbound'">
+                      <base-button
+                        class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
+                        :text="$t('actions.cancel')"
+                        :action="() => cancelRequest(slotProps.item.id)"
+                      />
+                    </div>
+                    <div v-if="pendingView !== 'archived'">
+                      <base-button
+                        class="px-2 py-1 mx-2 border-black border"
+                        :text="$t('actions.ignore')"
+                        :action="() => archiveRequest(slotProps.item.id)"
+                      />
+                    </div>
+                    <div v-if="pendingView === 'archived'">
+                      <base-button
+                        class="px-2 py-1 mx-2"
+                        variant="solid"
+                        :text="$t('actions.history')"
+                      />
+                    </div>
                   </div>
-                  <div v-if="pendingView === 'archived'">
-                    <base-button
-                      class="px-2 py-1 mx-2"
-                      variant="solid"
-                      :text="$t('actions.history')"
-                    />
-                  </div>
-                </div>
-              </template>
-            </Table>
+                </template>
+              </Table>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="flex">
-        <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
-          <div class="py-4 px-4 text-gray-500 border-b">
-            {{ $t('dashboard.worksite_completion') }}
-          </div>
-          <div class="p-4">
-            <div class="small">
-              <line-chart :chart-data="datacollection" :options="options" />
+        <div class="flex">
+          <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
+            <div class="py-4 px-4 text-gray-500 border-b">
+              {{ $t('dashboard.worksite_completion') }}
+            </div>
+            <div class="p-4">
+              <div class="small">
+                <line-chart :chart-data="datacollection" :options="options" />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div
-      v-if="loading"
-      style="z-index: 1001;"
-      class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
-    >
-      <div class="flex flex-col items-center">
-        <spinner :message="$t('info.loading')" />
-      </div>
-    </div>
-  </div>
+    </template>
+  </Loader>
 </template>
 
 <script>
@@ -314,12 +312,13 @@ import { getColorForStatus, getWorkTypeImage } from '@/filters';
 import StatusDropDown from '@/components/StatusDropDown';
 import { forceFileDownload } from '@/utils/downloads';
 import RequestBox from '@/components/dialogs/RequestBox';
+import Loader from '@/components/Loader';
 
 const requestBox = create(RequestBox);
 
 export default {
   name: 'Dashboard',
-  components: { LineChart, Table, StatusDropDown },
+  components: { LineChart, Table, StatusDropDown, Loader },
   data() {
     return {
       usersToInvite: '',

@@ -1,82 +1,80 @@
 <template>
-  <div class="flex layout overflow-hidden">
-    <NavMenu :routes="routes" />
-    <div class="flex flex-col w-full overflow-hidden">
-      <div class="shadow p-1 bg-white">
-        <div class="flex justify-between h-full items-center">
-          <div class="flex items-center ml-2">
-            <div class="h-10 w-10 flex items-center">
-              <DisasterIcon
-                v-if="currentIncident && currentIncident.incidentImage"
-                :current-incident="currentIncident"
-              />
-            </div>
-            <div class="flex flex-col ml-2 w-84">
-              <form-select
-                :key="currentIncidentId"
-                :value="currentIncident"
-                :options="incidents"
-                :clearable="false"
-                searchable
-                select-classes="h-12"
-                item-key="id"
-                label="name"
-                @input="handleChange"
-              />
-              <div class="flex ml-2 font-bold">
-                <span>{{ selectedRoute }}</span>
-              </div>
-            </div>
-          </div>
-          <div class="flex items-center overflow-hidden">
-            <v-popover popover-class="menu-popover" placement="bottom-end">
-              <div class="flex cursor-pointer items-center">
-                <img
-                  :src="currentUser && currentUser.profilePictureUrl"
-                  class="rounded-full w-10 h-10"
-                />
-                <span class="p-3">
-                  {{ name }}
-                  <font-awesome-icon class="cursor-pointer" icon="caret-down" />
-                </span>
-              </div>
-              <div slot="popover" class="flex flex-col">
-                <router-link
-                  to="/profile"
-                  class="router-link text-base p-2 hover:bg-crisiscleanup-light-grey"
-                  >Profile</router-link
-                >
-                <!--                <button v-can="['update_portal_settings']">New</button>-->
-                <div
-                  class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-                  @click="
-                    () => {
-                      $store.dispatch('auth/logout');
-                      $router.push('/login');
-                    }
-                  "
-                >
-                  Logout
+  <Loader :loading="loading" :class="loading && 'flex layout h-full'">
+    <template #content>
+      <div class="flex layout overflow-hidden">
+        <NavMenu :routes="routes" />
+        <div class="flex flex-col w-full overflow-hidden">
+          <div class="shadow p-1 bg-white">
+            <div class="flex justify-between h-full items-center">
+              <div class="flex items-center ml-2">
+                <div class="h-10 w-10 flex items-center">
+                  <DisasterIcon
+                    v-if="currentIncident && currentIncident.incidentImage"
+                    :current-incident="currentIncident"
+                  />
+                </div>
+                <div class="flex flex-col ml-2 w-84">
+                  <form-select
+                    :key="currentIncidentId"
+                    :value="currentIncident"
+                    :options="incidents"
+                    :clearable="false"
+                    searchable
+                    select-classes="h-12"
+                    item-key="id"
+                    label="name"
+                    @input="handleChange"
+                  />
+                  <div class="flex ml-2 font-bold">
+                    <span>{{ selectedRoute }}</span>
+                  </div>
                 </div>
               </div>
-            </v-popover>
+              <div class="flex items-center overflow-hidden">
+                <v-popover popover-class="menu-popover" placement="bottom-end">
+                  <div class="flex cursor-pointer items-center">
+                    <img
+                      :src="currentUser && currentUser.profilePictureUrl"
+                      class="rounded-full w-10 h-10"
+                    />
+                    <span class="p-3">
+                      {{ name }}
+                      <font-awesome-icon
+                        class="cursor-pointer"
+                        icon="caret-down"
+                      />
+                    </span>
+                  </div>
+                  <div slot="popover" class="flex flex-col">
+                    <router-link
+                      to="/profile"
+                      class="router-link text-base p-2 hover:bg-crisiscleanup-light-grey"
+                      >Profile</router-link
+                    >
+                    <!--                <button v-can="['update_portal_settings']">New</button>-->
+                    <div
+                      class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
+                      @click="
+                        () => {
+                          $store.dispatch('auth/logout');
+                          $router.push('/login');
+                        }
+                      "
+                    >
+                      Logout
+                    </div>
+                  </div>
+                </v-popover>
+              </div>
+            </div>
+          </div>
+          <div v-if="ready" class="h-full flex-grow content">
+            <slot />
           </div>
         </div>
       </div>
-      <div v-if="ready" class="h-full flex-grow content">
-        <slot />
-      </div>
-      <div
-        v-else
-        style="z-index: 1001;"
-        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
-      >
-        <div class="flex flex-col items-center">
-          <spinner :message="$t('info.loading')" />
-        </div>
-      </div>
-    </div>
-  </div>
+    </template>
+  </Loader>
 </template>
 
 <script>
@@ -92,11 +90,12 @@ import Language from '@/models/Language';
 import Role from '@/models/Role';
 import { i18nService } from '@/services/i18n.service';
 import NavMenu from '@/components/navigation/NavMenu';
+import Loader from '@/components/Loader';
 import DisasterIcon from '../components/DisasterIcon';
 
 export default {
   name: 'Authenticated',
-  components: { DisasterIcon, NavMenu },
+  components: { DisasterIcon, NavMenu, Loader },
   data() {
     return {
       loading: false,

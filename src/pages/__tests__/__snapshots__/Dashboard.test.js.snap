@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Dashboard should render correctly and match snapshot 1`] = `
-<div
-  class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto relative"
+<loader-stub
+  class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto"
 >
   <div>
     <div
@@ -13,16 +13,16 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       >
         <div>
           
-          dashboard.my_claimed_cases (Texas Flooding, Oct 2018)
-        
+            dashboard.my_claimed_cases (Texas Flooding, Oct 2018)
+          
         </div>
          
         <div
           class="font-bold"
         >
           
+            
           
-        
         </div>
       </div>
        
@@ -31,17 +31,17 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       >
         <div>
           
-          dashboard.total_claimed (Texas Flooding, Oct 2018)
-        
+            dashboard.total_claimed (Texas Flooding, Oct 2018)
+          
         </div>
          
         <div
           class="font-bold"
         >
           
-          0 (NaN
-          of Total)
-        
+            0 (NaN
+            of Total)
+          
         </div>
          
         <div
@@ -54,17 +54,17 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       >
         <div>
           
-          dashboard.in_progress (Texas Flooding, Oct 2018)
-        
+            dashboard.in_progress (Texas Flooding, Oct 2018)
+          
         </div>
          
         <div
           class="font-bold"
         >
           
-          0 (NaN
-          of Claimed)
-        
+            0 (NaN
+            of Claimed)
+          
         </div>
          
         <div
@@ -83,9 +83,9 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="font-bold"
         >
           
-          0 (NaN
-          of Claimed)
-        
+            0 (NaN
+            of Claimed)
+          
         </div>
          
         <div
@@ -104,8 +104,8 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="py-4 px-4 text-gray-500 border-b"
         >
           
-          dashboard.my_cases
-        
+            dashboard.my_cases
+          
         </div>
          
         <div
@@ -573,8 +573,8 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
             class="text-center text-2xl w-2/3 my-3"
           >
             
-            dashboard.invite_teammates
-          
+              dashboard.invite_teammates
+            
           </div>
            
           <div
@@ -584,8 +584,8 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               class="my-3"
             >
               
-              inviteTeammates.invite_teammates_instructions
-            
+                inviteTeammates.invite_teammates_instructions
+              
             </div>
              
             <base-input-stub
@@ -616,8 +616,8 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="py-4 px-4 text-gray-500 border-b"
         >
           
-          dashboard.pending_cases
-        
+            dashboard.pending_cases
+          
         </div>
          
         <div
@@ -752,8 +752,8 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="py-4 px-4 text-gray-500 border-b"
         >
           
-          dashboard.worksite_completion
-        
+            dashboard.worksite_completion
+          
         </div>
          
         <div
@@ -770,7 +770,5 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       </div>
     </div>
   </div>
-   
-  <!---->
-</div>
+</loader-stub>
 `;
