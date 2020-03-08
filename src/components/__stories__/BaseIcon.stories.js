@@ -29,8 +29,11 @@ export const allIcons = () => ({
   },
   template: `
 
-  <div class="flex flex-wrap mx-96">
-    <ccu-icon class="m-4 w-16" v-for="icon in icons" :key="icon" :type="icon" size="xl" />
+  <div class="flex flex-wrap">
+    <div v-for="icon in icons" class="flex flex-col border-2 text-center">
+      <ccu-icon class="m-8 align-self-center" :key="icon" :type="icon" size="xl" />
+      <p>{{icon}}</p>
+    </div>
   </div>
 
   `,

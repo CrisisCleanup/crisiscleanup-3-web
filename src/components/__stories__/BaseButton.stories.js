@@ -1,4 +1,5 @@
 import BaseButton from '@/components/BaseButton.vue';
+import { action } from '@storybook/addon-actions';
 
 export default {
   title: 'Basics|BaseButton',
@@ -42,6 +43,15 @@ export const withVariants = () => ({
       </div>
     </div>
   `,
+});
+
+export const withAction = () => ({
+  data() {
+    return {
+      action: action('button-click', 'Ah you clicked me!'),
+    };
+  },
+  template: `<base-button size="large" variant="solid" :action="action">Click Me</base-button>`,
 });
 
 export const withAsyncAction = () => ({

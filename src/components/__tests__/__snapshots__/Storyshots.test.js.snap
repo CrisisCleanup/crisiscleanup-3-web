@@ -1,5 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots Basics|BaseButton With Action 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <button
+      alt="button"
+      class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+      data-cy="js-button"
+      size="large"
+      title="Button"
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       Click Me 
+      <!---->
+    </button>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Basics|BaseButton With Async Action 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
@@ -417,381 +444,653 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="flex flex-wrap mx-96"
+      class="flex flex-wrap"
     >
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          dashboard
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          cases
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          call
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          chat
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          print
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          pin
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          share
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          download
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          active
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          edit
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          flag
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          filters
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          flag-filled
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          search
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          table
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          map
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          layers
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          info
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          trash
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          organization
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          history
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          cancel
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          help
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          up
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          down
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          updown
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          go-case
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          map-buffer
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          map-circle
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          map-poly
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          map-rect
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          map-sweep
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          map-undo
+        </p>
       </div>
       <div
-        class="flex items-center base-icon m-4 w-16 js-"
+        class="flex flex-col border-2 text-center"
       >
-        <img
-          alt=""
-          class="ccu-icon cursor-pointer xl"
-          src="IMAGE_MOCK"
-          title=""
-        />
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
          
+        <p>
+          map-redo
+        </p>
       </div>
     </div>
   </div>
@@ -816,6 +1115,33 @@ exports[`Storyshots Basics|BaseIcon Simple Icon 1`] = `
       />
        
     </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseRadio With Basics 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <label
+      class="z-50"
+    >
+      <input
+        class=""
+        name="My Radio"
+        type="radio"
+        value="radio1"
+      />
+       
+      <span>
+        
+    My Radio
+  
+      </span>
+    </label>
   </div>
 </div>
 `;
@@ -983,6 +1309,100 @@ exports[`Storyshots Elements|Badge With Props 1`] = `
       <div>
         25
       </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements|Spinner With Defaults 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="loader loader--style3 flex flex-col items-center"
+      title="2"
+    >
+      <svg
+        height="40px"
+        id="loader-1"
+        style="enable-background: new 0 0 50 50;"
+        version="1.1"
+        viewBox="0 0 50 50"
+        width="40px"
+        x="0px"
+        xml:space="preserve"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        y="0px"
+      >
+        <path
+          d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
+          fill="#000"
+        >
+          <animatetransform
+            attributeName="transform"
+            attributeType="xml"
+            dur="0.6s"
+            from="0 25 25"
+            repeatCount="indefinite"
+            to="360 25 25"
+            type="rotate"
+          />
+        </path>
+      </svg>
+       
+      <!---->
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements|Spinner With Dynamic Props 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="loader loader--style3 flex flex-col items-center"
+      title="2"
+    >
+      <svg
+        height="40px"
+        id="loader-1"
+        style="enable-background: new 0 0 50 50;"
+        version="1.1"
+        viewBox="0 0 50 50"
+        width="40px"
+        x="0px"
+        xml:space="preserve"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        y="0px"
+      >
+        <path
+          d="M43.935,25.145c0-10.318-8.364-18.683-18.683-18.683c-10.318,0-18.683,8.365-18.683,18.683h4.068c0-8.071,6.543-14.615,14.615-14.615c8.072,0,14.615,6.543,14.615,14.615H43.935z"
+          fill="#000"
+        >
+          <animatetransform
+            attributeName="transform"
+            attributeType="xml"
+            dur="0.6s"
+            from="0 25 25"
+            repeatCount="indefinite"
+            to="360 25 25"
+            type="rotate"
+          />
+        </path>
+      </svg>
+       
+      <span>
+        Loading
+      </span>
     </div>
   </div>
 </div>

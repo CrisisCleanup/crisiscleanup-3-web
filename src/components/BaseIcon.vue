@@ -57,7 +57,7 @@ export const ICON_SIZES = ['xxs', 'xs', 'small', 'medium', 'large', 'xl'];
 export default {
   name: 'BaseIcon',
   props: {
-    type: VueTypes.oneOf(Object.keys(ICONS)),
+    type: VueTypes.oneOf(Object.values(ICONS)),
     alt: VueTypes.string,
     size: VueTypes.oneOf(ICON_SIZES).def('large'),
     selector: VueTypes.string,
