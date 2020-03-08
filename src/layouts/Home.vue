@@ -1,5 +1,5 @@
 <template>
-  <div class="grid-home grid-container">
+  <div class="homegrid grid-container">
     <slot name="grid-overlay" />
     <slot name="grid-logo">
       <div class="grid--logo logo my-8">
@@ -8,7 +8,7 @@
     </slot>
     <slot name="grid-survivors">
       <div class="grid--survivors">
-        <div class="survivors-container">
+        <div class="homegrid-survivors">
           <base-text font="display" variant="h1">Survivors Call</base-text>
           <base-text font="display" variant="h2">1 (800) 451 1954</base-text>
         </div>
@@ -26,75 +26,68 @@ export default {
 };
 </script>
 
-<style scoped>
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-rows: 20% auto;
-  grid-template-areas:
-    'logo . . . . survivors'
-    'nav . main main . .'
-    'nav . main main . .'
-    'actions actions . . . .';
+<style scoped lang="scss">
+$areas: main nav logo actions overlay survivors;
 
-  height: 100%;
-  width: 100%;
-  max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-}
+.homegrid {
+  &.grid-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 20% auto;
+    grid-template-areas:
+      'logo . . . . survivors'
+      'nav . main main . .'
+      'nav . main main . .'
+      'actions actions . . . .';
 
-.grid--logo {
-  grid-area: logo;
-}
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 
-.logo {
-  max-width: 200px;
-  margin-left: 2.8rem;
-}
+    .grid {
+      @each $area in $areas {
+        &--#{$area} {
+          grid-area: $area;
+        }
+      }
 
-.grid--main {
-  grid-area: main;
-}
+      &--logo.logo {
+        max-width: 200px;
+        margin-left: 2.8rem;
+      }
 
-.grid--nav {
-  grid-area: nav;
-}
+      &--overlay {
+        grid-row: 1 / span 4;
+        grid-column: 1 / span 3;
+      }
 
-.grid--actions {
-  grid-area: actions;
-}
+      &--survivors {
+        @apply mx-6 my-4;
+      }
+    }
 
-.grid--survivors {
-  grid-area: survivors;
-  @apply mx-6 my-4;
-}
+    .homegrid {
+      &-backdrop {
+        @apply bg-crisiscleanup-light-grey;
+      }
+      &-survivors {
+        @apply bg-crisiscleanup-yellow-700 my-4 text-center p-4;
+        min-width: 205px;
 
-.grid--overlay {
-  grid-row: 1 / span 4;
-  grid-column: 1 / span 3;
-}
-
-.homegrid-backdrop {
-  @apply bg-crisiscleanup-light-grey;
-}
-
-.survivors-container {
-  @apply bg-crisiscleanup-yellow-700 my-4 text-center p-4;
-  min-width: 205px;
-}
-
-.survivors-container > p {
-  letter-spacing: 0.35px;
-  @apply text-gray-900;
-}
-
-.survivors-container > p:first-child {
-  font-weight: 700;
-  @apply text-2xl;
-}
-
-.survivors-container > p:last-child {
-  font-weight: 600;
+        p {
+          letter-spacing: 0.35px;
+          &:first-child {
+            font-weight: 700;
+            @apply text-2xl;
+          }
+          &:last-child {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
 }
 </style>
