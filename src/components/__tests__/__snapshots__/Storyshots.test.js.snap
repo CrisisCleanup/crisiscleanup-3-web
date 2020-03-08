@@ -1224,6 +1224,293 @@ exports[`Storyshots Basics|BaseIcon Simple Icon 1`] = `
 </div>
 `;
 
+exports[`Storyshots Basics|BaseInput Disabled 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex justify-start items-center"
+    >
+      <!---->
+       
+      <input
+        autocomplete="off"
+        class="flex-grow p-1 text-base large"
+        data-cy=""
+        disabled="disabled"
+        pattern=".*"
+        placeholder=""
+        type="search"
+      />
+       
+      <!---->
+       
+      <!---->
+       
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex justify-start items-center"
+    >
+      <!---->
+       
+      <input
+        autocomplete="off"
+        class="flex-grow p-1 text-base large"
+        data-cy=""
+        disabled="disabled"
+        pattern=".*"
+        placeholder=""
+        type="search"
+      />
+       
+      <div
+        class="icon-container flex items-center justify-center large"
+      >
+        <div
+          class="flex items-center base-icon js-break-glass js-"
+          data-cy="js-break-glass"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer small"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
+      </div>
+       
+      <!---->
+       
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseInput Simple 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex justify-start items-center"
+    >
+      <!---->
+       
+      <input
+        autocomplete="off"
+        class="flex-grow p-1 text-base large"
+        data-cy=""
+        pattern=".*"
+        placeholder=""
+        type="search"
+      />
+       
+      <!---->
+       
+      <!---->
+       
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseInput With Icon 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex justify-start items-center"
+    >
+      <!---->
+       
+      <input
+        autocomplete="off"
+        class="flex-grow p-1 text-base large has-icon"
+        data-cy=""
+        pattern=".*"
+        placeholder=""
+        type="search"
+      />
+       
+      <!---->
+       
+      <div
+        class="icon-container flex items-center justify-center large"
+      >
+        <div
+          class="flex items-center base-icon js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer small"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
+      </div>
+       
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseInput With Placeholder 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex justify-start items-center"
+    >
+      <!---->
+       
+      <input
+        autocomplete="off"
+        class="flex-grow p-1 text-base large"
+        data-cy=""
+        pattern=".*"
+        placeholder="Some placeholder"
+        type="search"
+      />
+       
+      <!---->
+       
+      <!---->
+       
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <div
+        class="m-4"
+      >
+        <div
+          class="flex justify-start items-center"
+        >
+          <!---->
+           
+          <input
+            autocomplete="off"
+            class="flex-grow p-1 text-base"
+            data-cy=""
+            disabled="disabled"
+            pattern=".*"
+            placeholder=""
+            type="search"
+          />
+           
+          <!---->
+           
+          <!---->
+           
+        </div>
+      </div>
+      <div
+        class="m-4"
+      >
+        <div
+          class="flex justify-start items-center"
+        >
+          <!---->
+           
+          <input
+            autocomplete="off"
+            class="flex-grow p-1 text-base large"
+            data-cy=""
+            disabled="disabled"
+            pattern=".*"
+            placeholder=""
+            type="search"
+          />
+           
+          <!---->
+           
+          <!---->
+           
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex justify-start items-center"
+    >
+      <!---->
+       
+      <input
+        autocomplete="off"
+        class="flex-grow p-1 text-base large has-tooltip"
+        data-cy=""
+        pattern=".*"
+        placeholder=""
+        type="search"
+      />
+       
+      <!---->
+       
+      <div
+        class="icon-container flex items-center justify-center large has-tooltip"
+        data-original-title="null"
+      >
+        <div
+          class="flex items-center base-icon js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer small"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
+      </div>
+       
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Basics|BaseRadio With Basics 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
@@ -1376,6 +1663,66 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
           Sample Text - (bodysm)
         </p>
       </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|Modal Basic Modal 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <button
+        alt="button"
+        class="flex items-center justify-center outline js-button"
+        data-cy="js-button"
+        title="Button"
+        type="submit"
+      >
+        <!---->
+         
+        <!---->
+         
+        <!---->
+         Show Modal 
+        <!---->
+      </button>
+       
+      <!---->
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|Modal Modal With Custom Header And Footer 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <button
+        alt="button"
+        class="flex items-center justify-center outline js-button"
+        data-cy="js-button"
+        title="Button"
+        type="submit"
+      >
+        <!---->
+         
+        <!---->
+         
+        <!---->
+         Show Modal 
+        <!---->
+      </button>
+       
+      <!---->
     </div>
   </div>
 </div>
