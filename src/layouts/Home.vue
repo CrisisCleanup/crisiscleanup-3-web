@@ -40,9 +40,7 @@ $areas: main nav logo actions overlay survivors;
       'nav . main main . .'
       'actions actions . . . .';
 
-    height: 100%;
-    width: 100%;
-    max-width: 100%;
+    @apply w-full h-full;
     margin-left: auto;
     margin-right: auto;
 

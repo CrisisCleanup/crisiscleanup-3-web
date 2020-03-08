@@ -16,8 +16,7 @@ html,
 body,
 .wrapper,
 #app {
-  height: 100%;
-  width: 100%;
+  @apply w-full h-full;
 }
 
 a:hover,
