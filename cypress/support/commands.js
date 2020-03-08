@@ -25,8 +25,12 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 import '@percy/cypress';
+import setup from 'cypress-cy-select';
 import 'cypress-localstorage-commands';
 import 'cypress-wait-until';
+
+// Cy Select
+setup();
 
 // Login Helper
 Cypress.Commands.add(
@@ -45,3 +49,17 @@ Cypress.Commands.add(
       .then(res => cy.setLocalStorage('user', JSON.stringify(res)));
   },
 );
+
+// Wait until an element exists and then does not
+Cypress.Commands.add('waitTillHidden', selector => {
+  cy.waitUntil(() =>
+    cy
+      .get(selector)
+      .as('El')
+      .should('be.visible'),
+  );
+  cy.get('@El').should('not.be.visible');
+});
+
+// Wait until finished loader
+Cypress.Commands.add('waitLoader', () => cy.waitTillHidden('svg#loader-1'));
