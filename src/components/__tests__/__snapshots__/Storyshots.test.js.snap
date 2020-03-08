@@ -950,6 +950,44 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
 </div>
 `;
 
+exports[`Storyshots Elements|Badge With Defaults 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="badge flex items-center justify-center rounded-full"
+      style="width: 10px; height: 10px;"
+    >
+      <div>
+        15
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements|Badge With Props 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="badge flex items-center justify-center rounded-full text-white bg-red-600"
+      style="width: 33px; height: 33px;"
+    >
+      <div>
+        25
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Elements|Tag Closeable Tag 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
