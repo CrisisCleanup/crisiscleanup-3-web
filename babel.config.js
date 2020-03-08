@@ -19,6 +19,9 @@ module.exports = {
     ['@babel/plugin-transform-runtime', { corejs: 3 }],
   ],
   env: {
+    storybook: {
+      presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
+    },
     test: {
       plugins: ['require-context-hook'],
       presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
