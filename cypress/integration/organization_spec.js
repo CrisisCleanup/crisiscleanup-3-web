@@ -16,8 +16,8 @@ describe('My Organization', () => {
     }).as('ApiUserOrg');
 
     cy.visit('/organization');
-    cy.get('[data-cy="myorg-dashboard"]').as('OrgDashboard');
-    cy.get('[data-cy="myorg-nav-users"]').as('OrgNavUsers');
+    cy.get('cy|myorg-dashboard').as('OrgDashboard');
+    cy.get('cy|myorg-nav-users').as('OrgNavUsers');
     cy.waitUntil(() => cy.get('@OrgDashboard').should('be.visible'));
   });
 
