@@ -23,15 +23,14 @@
     </div>
     <!--line-->
     <hr class="bg-white" />
-    </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'Info',
-    props: ['toggleOpen'],
-  };
+export default {
+  name: 'Info',
+  props: ['toggleOpen'],
+};
 </script>
 
 <style>
