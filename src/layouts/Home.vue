@@ -9,7 +9,7 @@
     <slot name="grid-survivors">
       <div class="grid--survivors">
         <div class="homegrid-survivors">
-          <base-text font="display" variant="h1">{{ $t('homeVue.survivors_call') }}</base-text>
+          <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
           <base-text font="display" variant="h2">1 (800) 451 1954</base-text>
         </div>
       </div>

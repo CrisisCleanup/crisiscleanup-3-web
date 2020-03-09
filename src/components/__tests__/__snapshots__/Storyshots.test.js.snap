@@ -2086,7 +2086,7 @@ exports[`Storyshots Layouts|HomeLayout With All 1`] = `
           <p
             class="text-h1 font-h1 font-display"
           >
-            Survivors Call
+            homeVue.survivors_call
           </p>
            
           <p
@@ -2154,7 +2154,7 @@ exports[`Storyshots Layouts|HomeLayout With Basic Content 1`] = `
           <p
             class="text-h1 font-h1 font-display"
           >
-            Survivors Call
+            homeVue.survivors_call
           </p>
            
           <p
@@ -2248,7 +2248,7 @@ exports[`Storyshots Layouts|HomeLayout With Overlay 1`] = `
           <p
             class="text-h1 font-h1 font-display"
           >
-            Survivors Call
+            homeVue.survivors_call
           </p>
            
           <p
@@ -2473,7 +2473,7 @@ exports[`Storyshots Pages|NotFound With Defaults 1`] = `
           <p
             class="text-h1 font-h1 font-display"
           >
-            Survivors Call
+            homeVue.survivors_call
           </p>
            
           <p
