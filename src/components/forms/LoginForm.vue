@@ -19,16 +19,35 @@
       </base-text>
     </div>
     <div class="grid--email">
-      <base-input :placeholder="lang.email" size="xlarge" type="email" />
+      <base-input
+        v-model="email"
+        required
+        autocomplete="email"
+        :placeholder="lang.email"
+        size="xlarge"
+        type="email"
+      />
     </div>
     <div class="grid--password">
-      <base-input :placeholder="lang.password" size="xlarge" type="password" />
+      <base-input
+        v-model="password"
+        required
+        autocomplete="password"
+        :placeholder="lang.password"
+        size="xlarge"
+        type="password"
+      />
     </div>
     <div class="grid--forgot">
       <base-link to="nav.forgot" text-variant="h2">{{ lang.forgot }}</base-link>
     </div>
     <div class="grid--login">
-      <base-button variant="solid" size="large" class="w-full">
+      <base-button
+        variant="solid"
+        size="large"
+        class="w-full"
+        :action="userLogin"
+      >
         {{ lang.login }}
       </base-button>
     </div>
@@ -41,6 +60,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
   name: 'LoginForm',
   data() {
@@ -56,8 +77,27 @@ export default {
         request: 'Request Access',
         email: this.$t('login.email_placeholder'),
         password: this.$t('login.password_placeholder'),
+        invalidCreds: this.$t('login.invalid_credentials_msg'),
       },
+      email: '',
+      password: '',
+      acceptedInvite: Boolean(this.$route.query.accepted),
     };
+  },
+  methods: {
+    ...mapActions('auth', ['login']),
+    async userLogin() {
+      try {
+        await this.login({ email: this.email, password: this.password });
+        if (this.$route.query.from) {
+          await this.$router.replace(this.$route.query.from);
+        } else {
+          await this.$router.push('/');
+        }
+      } catch (e) {
+        await this.$toasted.error(this.lang.invalidCreds);
+      }
+    },
   },
 };
 </script>
