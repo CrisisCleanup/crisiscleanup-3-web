@@ -19,9 +19,6 @@ export default {
 <style scoped lang="scss">
 .homegrid {
   &.grid-container {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: 20% auto;
     grid-template-areas:
       'logo . . . . survivors'
       'main main main main main main'
