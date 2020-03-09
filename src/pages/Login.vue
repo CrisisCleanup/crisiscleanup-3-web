@@ -148,11 +148,6 @@ export default {
           }
         }
       }
-      &--actions {
-        button {
-          @apply text-h1;
-        }
-      }
       &--globe {
         justify-self: center;
       }

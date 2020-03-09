@@ -45,9 +45,9 @@ $areas: main nav logo actions overlay survivors globe footer;
     grid-template-rows: 20% auto;
     grid-template-areas:
       'logo . . . . survivors'
-      'nav . main main . .'
-      'nav . main main . .'
-      'actions actions . . . .';
+      'nav . main main main main'
+      'nav . main main main main'
+      'actions actions main main main main';
 
     @apply w-full h-full;
     margin-left: auto;
@@ -82,6 +82,9 @@ $areas: main nav logo actions overlay survivors globe footer;
       }
 
       &--actions {
+        button {
+          @apply text-h1;
+        }
         display: inline-grid;
         margin-left: 2.8rem;
         align-content: center;
