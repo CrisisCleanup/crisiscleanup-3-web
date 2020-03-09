@@ -1,76 +1,74 @@
 <template>
   <Loader :loading="loading" :class="loading && 'flex layout h-full'">
     <template #content>
-      <div class="flex layout overflow-hidden">
-        <NavMenu :routes="routes" />
-        <div class="flex flex-col w-full overflow-hidden">
-          <div class="shadow p-1 bg-white">
-            <div class="flex justify-between h-full items-center">
-              <div class="flex items-center ml-2">
-                <div class="h-10 w-10 flex items-center">
-                  <DisasterIcon
-                    v-if="currentIncident && currentIncident.incidentImage"
-                    :current-incident="currentIncident"
-                  />
-                </div>
-                <div class="flex flex-col ml-2 w-84">
-                  <form-select
-                    :key="currentIncidentId"
-                    :value="currentIncident"
-                    :options="incidents"
-                    :clearable="false"
-                    searchable
-                    select-classes="h-12"
-                    item-key="id"
-                    label="name"
-                    @input="handleChange"
-                  />
-                  <div class="flex ml-2 font-bold">
-                    <span>{{ selectedRoute }}</span>
-                  </div>
-                </div>
+      <div class="layout">
+        <NavMenu :routes="routes" class="sidebar--grid" />
+        <div class="shadow header--grid bg-white">
+          <div class="flex justify-between h-full items-center">
+            <div class="flex items-center ml-2">
+              <div class="h-10 w-10 flex items-center">
+                <DisasterIcon
+                  v-if="currentIncident && currentIncident.incidentImage"
+                  :current-incident="currentIncident"
+                />
               </div>
-              <div class="flex items-center overflow-hidden">
-                <v-popover popover-class="menu-popover" placement="bottom-end">
-                  <div class="flex cursor-pointer items-center">
-                    <img
-                      :src="currentUser && currentUser.profilePictureUrl"
-                      class="rounded-full w-10 h-10"
-                    />
-                    <span class="p-3">
-                      {{ name }}
-                      <font-awesome-icon
-                        class="cursor-pointer"
-                        icon="caret-down"
-                      />
-                    </span>
-                  </div>
-                  <div slot="popover" class="flex flex-col">
-                    <router-link
-                      to="/profile"
-                      class="router-link text-base p-2 hover:bg-crisiscleanup-light-grey"
-                      >Profile</router-link
-                    >
-                    <!--                <button v-can="['update_portal_settings']">New</button>-->
-                    <div
-                      class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-                      @click="
-                        () => {
-                          $store.dispatch('auth/logout');
-                          $router.push('/login');
-                        }
-                      "
-                    >
-                      Logout
-                    </div>
-                  </div>
-                </v-popover>
+              <div class="flex flex-col ml-2 w-84">
+                <form-select
+                  :key="currentIncidentId"
+                  :value="currentIncident"
+                  :options="incidents"
+                  :clearable="false"
+                  searchable
+                  select-classes="h-12"
+                  item-key="id"
+                  label="name"
+                  @input="handleChange"
+                />
+                <div class="flex ml-2 font-bold">
+                  <span>{{ selectedRoute }}</span>
+                </div>
               </div>
             </div>
+            <div class="flex items-center overflow-hidden">
+              <v-popover popover-class="menu-popover" placement="bottom-end">
+                <div class="flex cursor-pointer items-center">
+                  <img
+                    :src="currentUser && currentUser.profilePictureUrl"
+                    class="rounded-full w-10 h-10"
+                  />
+                  <span class="p-3">
+                    {{ name }}
+                    <font-awesome-icon
+                      class="cursor-pointer"
+                      icon="caret-down"
+                    />
+                  </span>
+                </div>
+                <div slot="popover" class="flex flex-col">
+                  <router-link
+                    to="/profile"
+                    class="router-link text-base p-2 hover:bg-crisiscleanup-light-grey"
+                    >Profile</router-link
+                  >
+                  <!--                <button v-can="['update_portal_settings']">New</button>-->
+                  <div
+                    class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
+                    @click="
+                      () => {
+                        $store.dispatch('auth/logout');
+                        $router.push('/login');
+                      }
+                    "
+                  >
+                    Logout
+                  </div>
+                </div>
+              </v-popover>
+            </div>
           </div>
-          <div v-if="ready" class="h-full flex-grow content">
-            <slot />
-          </div>
+        </div>
+        <div v-if="ready" class="main--grid overflow-auto">
+          <slot />
         </div>
       </div>
     </template>
@@ -270,10 +268,6 @@ body {
   overflow: hidden;
 }
 
-.layout {
-  height: 100vh;
-}
-
 .content {
   max-height: 100%;
 }
@@ -306,5 +300,27 @@ body {
   @apply bg-white text-black outline-none w-full border mt-4 shadow w-48;
   left: 0.75rem !important;
   z-index: 100;
+}
+
+.layout {
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 8rem auto;
+  grid-template-rows: 4.5rem auto;
+  grid-template-areas:
+    'sidebar header'
+    'sidebar main';
+}
+
+.sidebar--grid {
+  grid-area: sidebar;
+}
+
+.header--grid {
+  grid-area: header;
+}
+
+.main--grid {
+  grid-area: main;
 }
 </style>

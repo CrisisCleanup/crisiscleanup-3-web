@@ -6,11 +6,8 @@
         'w-full': !currentWorksite,
       }"
     >
-      <div class="flex flex-col h-full">
-        <div
-          style="background-color: white"
-          class="p-3 border border-gray-300 card-header"
-        >
+      <div class="cases-grid">
+        <div class="p-3 border border-gray-300 card-header bg-white">
           <div class="flex items-center justify-between">
             <div class="flex items-center">
               <div class="flex" style="min-width: 80px">
@@ -239,7 +236,7 @@
         </div>
         <div
           class="flex-grow bg-crisiscleanup-light-grey"
-          style="display: grid"
+          style="display: grid;"
         >
           <template v-if="showingMap">
             <WorksiteMap
@@ -1246,5 +1243,11 @@ export default {
 
 .borderless-bp__btn {
   @apply border-0;
+}
+
+.cases-grid {
+  display: grid;
+  grid-auto-rows: 3.5rem auto;
+  @apply h-full;
 }
 </style>

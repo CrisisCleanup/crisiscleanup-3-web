@@ -1,5 +1,5 @@
 <template>
-  <div class="w-32 sidebar">
+  <div class="sidebar">
     <div class="logo flex justify-center p-3">
       <img src="@/assets/crisiscleanup_logo.png" style="height: 53px" />
     </div>
