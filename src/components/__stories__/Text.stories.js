@@ -23,6 +23,21 @@ export const withVariants = () => ({
   `,
 });
 
+export const withFontWeights = () => ({
+  data() {
+    return {
+      weights: [300, 400, 500, 600, 700],
+    };
+  },
+  template: `
+    <div>
+      <div class="m-4" v-for="w in weights">
+        <base-text :weight="w" variant="h1">Sample Text - ({{w}})</base-text>
+      </div>
+    </div>
+  `,
+});
+
 export const withFonts = () => ({
   data() {
     return {
