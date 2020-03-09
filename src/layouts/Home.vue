@@ -36,7 +36,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$areas: main nav logo actions overlay survivors;
+$areas: main nav logo actions overlay survivors globe footer;
 
 .homegrid {
   &.grid-container {
@@ -82,7 +82,7 @@ $areas: main nav logo actions overlay survivors;
       }
 
       &--actions {
-        display: grid;
+        display: inline-grid;
         margin-left: 2.8rem;
         align-content: center;
         letter-spacing: 0.35px;

@@ -7,11 +7,11 @@
       <div class="grid--nav">
         <router-link
           v-for="item in navigation"
-          :key="item.text"
+          :key="item.key"
           :to="item.route || '#'"
           class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
         >
-          {{ item.text }}
+          {{ lang.nav[item.key] }}
         </router-link>
       </div>
       <div class="grid--actions">
@@ -34,6 +34,16 @@
           <img src="@/assets/globe.png" alt="globe" />
         </div>
       </div>
+      <div class="grid--footer self-center">
+        <router-link
+          v-for="item in footer"
+          :key="item.key"
+          :to="item.route || '#'"
+          class="font-body font-display text-h3 text-crisiscleanup-dark-300"
+        >
+          {{ lang.footer[item.key] }}
+        </router-link>
+      </div>
     </template>
   </HomeLayout>
 </template>
@@ -42,24 +52,42 @@
 import HomeLayout from '@/layouts/Home';
 import LoginForm from '@/components/forms/LoginForm';
 
-const HomeNavigation = [
+export const HomeNavigation = [
   {
-    text: 'Home',
+    key: 'home',
   },
   {
-    text: 'About Us',
+    key: 'aboutUs',
   },
   {
-    text: 'Blog',
+    key: 'blog',
   },
   {
-    text: 'Map',
+    key: 'map',
   },
   {
-    text: 'Training',
+    key: 'training',
   },
   {
-    text: 'Contact',
+    key: 'contact',
+  },
+];
+
+export const FooterNavigation = [
+  {
+    key: 'demo',
+  },
+  {
+    key: 'contact',
+  },
+  {
+    key: 'terms',
+  },
+  {
+    key: 'privacy',
+  },
+  {
+    key: 'policy',
   },
 ];
 
@@ -75,8 +103,24 @@ export default {
       lang: {
         register: this.$t('actions.register'),
         relief_org: 'Relief Organizations Only',
+        nav: {
+          home: 'Home',
+          aboutUs: 'About Us',
+          blog: 'Blog',
+          map: 'Map',
+          training: 'Training',
+          contact: 'Contact',
+        },
+        footer: {
+          demo: 'Demo',
+          contact: 'Contact',
+          terms: 'Terms',
+          privacy: 'Privacy',
+          policy: 'Policy',
+        },
       },
       navigation: HomeNavigation,
+      footer: FooterNavigation,
     };
   },
 };
@@ -89,7 +133,7 @@ export default {
       [r1] 'logo . . . . . survivors' 20% [r1end]
       [r2] 'nav . main main globe globe globe' [r2end]
       [r3] 'nav . main main globe globe globe' [r3end]
-      [r4] 'actions . . . . . .' [r4end]
+      [r4] 'actions . . . footer footer footer' [r4end]
       / auto;
     .grid {
       &--main {
@@ -110,8 +154,17 @@ export default {
         }
       }
       &--globe {
-        grid-area: globe;
         justify-self: center;
+      }
+      &--footer {
+        @apply mr-24 h-full;
+        display: inline-grid;
+        align-content: center;
+        justify-content: space-between;
+        grid-auto-flow: column;
+        a {
+          @apply px-4;
+        }
       }
     }
   }
