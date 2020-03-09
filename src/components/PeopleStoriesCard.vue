@@ -1,11 +1,11 @@
 <template>
   <div>
     <!--Header-->
-    <p
+    <base-text
       class="text-md text-crisiscleanup-dark-400 justify-between font-bold m-1 p-3"
     >
       Stories from people you helped
-    </p>
+    </base-text>
     <!--line-->
     <hr class="bg-white" />
     <!--Individual Stories Card-->
