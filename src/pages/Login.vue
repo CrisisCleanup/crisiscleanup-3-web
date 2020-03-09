@@ -86,37 +86,29 @@ export const FooterNavigation = [
   {
     key: 'privacy',
   },
-  {
-    key: 'policy',
-  },
 ];
 
 export default {
   name: 'LoginPage',
   components: { HomeLayout, LoginForm },
   data() {
-    /**
-     * @todo Login Translations
-     * @body Add translations to LoginPage component.
-     */
     return {
       lang: {
         register: this.$t('actions.register'),
-        relief_org: 'Relief Organizations Only',
+        relief_org: this.$t('publicNav.relief_orgs_only'),
         nav: {
-          home: 'Home',
-          aboutUs: 'About Us',
-          blog: 'Blog',
-          map: 'Map',
-          training: 'Training',
-          contact: 'Contact',
+          home: this.$t('publicNav.home'),
+          aboutUs: this.$t('publicNav.about_us'),
+          blog: this.$t('publicNav.blog'),
+          map: this.$t('publicNav.map'),
+          training: this.$t('publicNav.training'),
+          contact: this.$t('publicNav.contact'),
         },
         footer: {
-          demo: 'Demo',
-          contact: 'Contact',
-          terms: 'Terms',
-          privacy: 'Privacy',
-          policy: 'Policy',
+          demo: this.$t('publicNav.demo'),
+          contact: this.$t('publicNav.contact'),
+          terms: this.$t('publicNav.terms'),
+          privacy: this.$t('publicNav.privacy'),
         },
       },
       navigation: HomeNavigation,

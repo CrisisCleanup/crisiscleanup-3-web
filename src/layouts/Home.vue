@@ -9,7 +9,7 @@
     <slot name="grid-survivors">
       <div class="grid--survivors">
         <div class="homegrid-survivors">
-          <base-text font="display" variant="h1">Survivors Call</base-text>
+          <base-text font="display" variant="h1">{{ $t('homeVue.survivors_call') }}</base-text>
           <base-text font="display" variant="h2">1 (800) 451 1954</base-text>
         </div>
       </div>
@@ -23,12 +23,8 @@ export default {
   name: 'HomeLayout',
   data() {
     return {
-      /**
-       * @todo HomeLayout Translations
-       * @body Translate text in HomeLayout
-       */
       lang: {
-        survive: 'Survivors Call',
+        survive: this.$t('homeVue.survivors_call'),
       },
     };
   },
