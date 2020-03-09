@@ -26,6 +26,7 @@
         :placeholder="lang.email"
         size="xlarge"
         type="email"
+        data-cy="loginForm.email"
       />
     </div>
     <div class="grid--password">
@@ -36,6 +37,7 @@
         :placeholder="lang.password"
         size="xlarge"
         type="password"
+        data-cy="loginForm.password"
       />
     </div>
     <div class="grid--forgot">
@@ -46,6 +48,7 @@
         variant="solid"
         size="large"
         class="w-full"
+        data-cy="loginForm.login"
         :action="userLogin"
       >
         {{ lang.login }}

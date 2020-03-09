@@ -6,8 +6,11 @@
  */
 
 describe('unAuthenticated Layout', () => {
-  it('successfully loads', () => {
+  beforeEach(() => {
     cy.visit('/');
+    cy.get('cy|loginForm.email').as('LoginEmail');
+    cy.get('cy|loginForm.password').as('LoginPassword');
+    cy.get('cy|loginForm.login').as('LoginBtn');
   });
 
   it('successfully redirects', () => {
@@ -23,11 +26,9 @@ describe('unAuthenticated Layout', () => {
 
   it('should authenticate and redirect', () => {
     cy.visit('/').then(() => {
-      cy.get('input[type=email]').type(Cypress.env('WEB_USER'));
-      cy.get('input[type=password]').type(Cypress.env('WEB_PASS'));
-      cy.get('div.login')
-        .find('button')
-        .click();
+      cy.get('@LoginEmail').type(Cypress.env('WEB_USER'));
+      cy.get('@LoginPassword').type(Cypress.env('WEB_PASS'));
+      cy.get('@LoginBtn').click();
       cy.url().should('match', /dashboard/);
       // ensure user session gets stored in local storage
       cy.contains('Dashboard')
@@ -61,10 +62,10 @@ describe('unAuthenticated Layout', () => {
   });
 
   it('should not allow a bad login', () => {
-    cy.visit('/');
     cy.url().should('match', /login/);
-    cy.get('input[type=email]').type('user');
-    cy.get('input[type=password]').type('pass{enter}');
+    cy.get('@LoginEmail').type('user');
+    cy.get('@LoginPassword').type('pass{enter}');
+    cy.get('@LoginBtn').click();
     // should have toast error and remain on login page
     cy.url().should('match', /login/);
     cy.contains('Invalid email').should('be.visible');

@@ -32,6 +32,11 @@ import 'cypress-wait-until';
 // Cy Select
 setup();
 
+// Prevent exceptions from failing tests
+Cypress.on('uncaught:exception', () => {
+  return false;
+});
+
 // Login Helper
 Cypress.Commands.add(
   'login',
