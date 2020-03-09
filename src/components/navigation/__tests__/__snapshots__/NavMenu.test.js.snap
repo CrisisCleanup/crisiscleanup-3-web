@@ -2,7 +2,7 @@
 
 exports[`NavMenu should render correctly and match snapshot 1`] = `
 <div
-  class="w-32 sidebar"
+  class="sidebar"
 >
   <div
     class="logo flex justify-center p-3"
