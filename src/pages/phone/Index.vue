@@ -35,10 +35,10 @@
 import User from '@/models/User';
 import { mapActions, mapState } from 'vuex';
 import Loader from '@/components/Loader';
-import genstatscard from '../../components/GeneralStatsCard.vue';
-import operatorstats from '../../components/OperatorStatisticsCard';
-import ContactCard from '../../components/ContactCard';
-import PeopleStoriesCard from '../../components/PeopleStoriesCard';
+import PeopleStoriesCard from '@/components/PeopleStoriesCard';
+import ContactCard from '@/components/ContactCard';
+import genstatscard from '@/components/GeneralStatsCard.vue';
+import operatorstats from '@/components/OperatorStatisticsCard';
 
 export default {
   name: 'Phone',
