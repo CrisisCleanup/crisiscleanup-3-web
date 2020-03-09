@@ -1,0 +1,122 @@
+<template>
+  <div class="logingrid grid-container">
+    <div class="grid--title">
+      <base-text
+        font="display"
+        variant="h1"
+        class="text-crisiscleanup-dark-500"
+        >{{ lang.login }}</base-text
+      >
+    </div>
+    <div class="grid--sub">
+      <base-text
+        variant="h1"
+        :weight="300"
+        font="display"
+        class="text-crisiscleanup-dark-500"
+      >
+        {{ lang.signIn }}
+      </base-text>
+    </div>
+    <div class="grid--email">
+      <base-input :placeholder="lang.email" size="xlarge" type="email" />
+    </div>
+    <div class="grid--password">
+      <base-input :placeholder="lang.password" size="xlarge" type="password" />
+    </div>
+    <div class="grid--forgot">
+      <base-link to="nav.forgot" text-variant="h2">{{ lang.forgot }}</base-link>
+    </div>
+    <div class="grid--login">
+      <base-button variant="solid" size="large" class="w-full">
+        {{ lang.login }}
+      </base-button>
+    </div>
+    <div class="grid--request">
+      <base-button variant="outline" size="large" class="w-full">
+        {{ lang.request }}
+      </base-button>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'LoginForm',
+  data() {
+    /**
+     * @todo LoginForm Translations
+     * @body Add translations to LoginForm component.
+     */
+    return {
+      lang: {
+        login: this.$t('actions.login'),
+        signIn: this.$t('login.sign_in_msg'),
+        forgot: this.$t('actions.forgot_password'),
+        request: 'Request Access',
+        email: this.$t('login.email_placeholder'),
+        password: this.$t('login.password_placeholder'),
+      },
+    };
+  },
+};
+</script>
+
+<style scoped lang="scss">
+$loginareas: title sub email password forgot login request;
+
+.logingrid {
+  @apply h-full w-full;
+  &.grid-container {
+    display: inline-grid;
+    justify-content: space-between;
+    grid:
+      [row1-start] 'title title' 1fr [row1-end]
+      [row2-start] 'sub sub' 1fr [row2-end]
+      [row3-start] 'email email' 0.75fr [row3-end]
+      [row4-start] 'password password' 0.75fr [row4-end]
+      [row5-start] '. forgot' 0.4fr [row5-end]
+      [row6-start] 'login login' 1fr [row6-end]
+      [row7-start] 'request request' 1fr [row7-end]
+      / auto;
+
+    .grid {
+      @each $area in $loginareas {
+        &--#{$area} {
+          grid-area: $area;
+        }
+      }
+
+      &--title {
+        align-self: end;
+        p {
+          @apply text-5xl;
+        }
+      }
+      &--sub {
+        p {
+          @apply text-3xl;
+        }
+      }
+      &--forgot {
+        a {
+          @apply text-right;
+        }
+      }
+      &--email,
+      &--password {
+        align-self: center;
+      }
+      &--login {
+        align-self: center;
+      }
+      &--login,
+      &--request {
+        button {
+          @apply text-h1;
+        }
+      }
+    }
+  }
+}
+</style>
