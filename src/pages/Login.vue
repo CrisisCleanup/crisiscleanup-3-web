@@ -4,42 +4,34 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
-      <div class="nav--container py-16 my-20">
-        <a
+      <div class="grid--nav">
+        <router-link
           v-for="item in navigation"
           :key="item.text"
-          :href="item.route || '#'"
+          :to="item.route || '#'"
           class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
         >
           {{ item.text }}
-        </a>
+        </router-link>
       </div>
-      <div class="actions--container">
-        <p
-          class="font-display text-h2 font-weight-light text-crisiscleanup-dark-500"
+      <div class="grid--actions">
+        <base-text
+          font="display"
+          variant="h2"
+          :weight="300"
+          class="text-crisiscleanup-dark-500"
+          >{{ lang.relief_org }}</base-text
         >
-          Relief Organizations Only
-        </p>
-        <base-button
-          text="Register"
-          type="primary"
-          class="px-6 py-3 font-h2 text-h1 font-display text-crisiscleanup-dark-500"
-        />
+        <base-button variant="solid" size="large">
+          {{ lang.register }}
+        </base-button>
       </div>
       <div class="grid--main">
-        <div>
-          <p class="font-display font-h1 text-5xl text-crisiscleanup-dark-500">
-            Login
-          </p>
-          <p
-            class="font-display font-weight-light text-2xl text-crisiscleanup-dark-500"
-          >
-            Sign in to your account
-          </p>
-        </div>
-        <div class="main-inputs">
-          <base-input placeholder="Email" size="xlarge" type="email" />
-          <base-input placeholder="Password" size="xlarge" type="password" />
+        <LoginForm />
+      </div>
+      <div class="grid--globe self-center">
+        <div class="homegrid-globe">
+          <img src="@/assets/globe.png" alt="globe" />
         </div>
       </div>
     </template>
@@ -48,8 +40,9 @@
 
 <script>
 import HomeLayout from '@/layouts/Home';
+import LoginForm from '@/components/forms/LoginForm';
 
-export const HomeNavigation = [
+const HomeNavigation = [
   {
     text: 'Home',
   },
@@ -72,44 +65,55 @@ export const HomeNavigation = [
 
 export default {
   name: 'LoginPage',
-  components: { HomeLayout },
+  components: { HomeLayout, LoginForm },
   data() {
+    /**
+     * @todo Login Translations
+     * @body Add translations to LoginPage component.
+     */
     return {
+      lang: {
+        register: this.$t('actions.register'),
+        relief_org: 'Relief Organizations Only',
+      },
       navigation: HomeNavigation,
     };
   },
 };
 </script>
 
-<style scoped>
-.nav--container {
-  grid-area: nav;
-  display: grid;
-  align-items: center;
-  margin-left: 2.8rem;
-}
-
-.actions--container {
-  display: grid;
-  grid-area: actions;
-  margin-left: 2.8rem;
-  align-content: center;
-  letter-spacing: 0.35px;
-  justify-content: start;
-  grid-gap: 1rem;
-}
-
-.grid--main {
-  grid-area: main;
-  display: grid;
-  grid-gap: 4rem;
-}
-
-.grid--main:last-child {
-  align-self: start;
-}
-
-.main-inputs > div {
-  margin-top: 1rem;
+<style scoped lang="scss">
+.homegrid {
+  &.grid-container {
+    grid:
+      [r1] 'logo . . . . . survivors' 20% [r1end]
+      [r2] 'nav . main main globe globe globe' [r2end]
+      [r3] 'nav . main main globe globe globe' [r3end]
+      [r4] 'actions . . . . . .' [r4end]
+      / auto;
+    .grid {
+      &--main {
+        align-self: center;
+        @apply mx-10 h-full;
+      }
+      &--nav {
+        a {
+          transition: color 250ms ease;
+          &:hover {
+            @apply text-crisiscleanup-dark-300;
+          }
+        }
+      }
+      &--actions {
+        button {
+          @apply text-h1;
+        }
+      }
+      &--globe {
+        grid-area: globe;
+        justify-self: center;
+      }
+    }
+  }
 }
 </style>
