@@ -5,8 +5,8 @@
         <img :src="profileSrc" alt="PFP" />
       </div>
       <div class="flex-col justify-between m-3">
-        <base-text class="text-lg justify-between">{{ name }}</base-text>
-        <base-text class="text-md justify-between float-right">{{ mobile }}</base-test>
+        <base-text :variant="h1" class="justify-between">{{ name }}</base-text>
+        <base-text :variant="h2" class="justify-between float-right">{{ mobile }}</base-test>
         <div id="moreinfobtn" class="more-infobtn">
           <base-button
             class="text-crisiscleanup-dark-blue align-right"
