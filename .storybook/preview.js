@@ -5,6 +5,7 @@ import BaseButton from '@/components/BaseButton';
 import BaseCheckbox from '@/components/BaseCheckbox';
 import BaseIcon from '@/components/BaseIcon';
 import BaseInput from '@/components/BaseInput';
+import BaseLink from '@/components/BaseLink';
 import BaseRadio from '@/components/BaseRadio';
 import BaseText from '@/components/BaseText';
 import FormSelect from '@/components/FormSelect';
@@ -65,6 +66,7 @@ Vue.component('tag', Tag);
 Vue.component('spinner', Spinner);
 Vue.component('badge', Badge);
 Vue.component('tag-input', VueTagsInput);
+Vue.component('base-link', BaseLink);
 
 // Layouts
 Vue.component('authenticated-layout', Authenticated);
