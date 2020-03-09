@@ -1511,6 +1511,93 @@ exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
 </div>
 `;
 
+exports[`Storyshots Basics|BaseLink As Anchor 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <a
+      class="link"
+      href="www.google.com"
+      to=""
+    >
+      <p
+        class="text-body font-body font-sans"
+      >
+        As Anchor
+      </p>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseLink As Router Link 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <a
+      class="link router-link-exact-active router-link-active"
+      href=""
+    >
+      <p
+        class="text-body font-body font-sans"
+      >
+        As router-link
+      </p>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseLink With Defaults 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <a
+      class="link"
+      href=""
+      to=""
+    >
+      <p
+        class="text-body font-body font-sans"
+      >
+        Link
+      </p>
+    </a>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseLink With Text Variant 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <a
+      class="link"
+      href=""
+      to=""
+    >
+      <p
+        class="text-h1 font-h1 font-sans"
+      >
+        H1 Link
+      </p>
+    </a>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Basics|BaseRadio With Basics 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
@@ -1566,6 +1653,69 @@ exports[`Storyshots Basics|BaseText With Defaults 1`] = `
     >
       Sample Text
     </p>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Basics|BaseText With Font Weights 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h1 font-h1 font-sans"
+          style="font-weight: 300;"
+        >
+          Sample Text - (300)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h1 font-h1 font-sans"
+          style="font-weight: 400;"
+        >
+          Sample Text - (400)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h1 font-h1 font-sans"
+          style="font-weight: 500;"
+        >
+          Sample Text - (500)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h1 font-h1 font-sans"
+          style="font-weight: 600;"
+        >
+          Sample Text - (600)
+        </p>
+      </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-h1 font-h1 font-sans"
+          style="font-weight: 700;"
+        >
+          Sample Text - (700)
+        </p>
+      </div>
+    </div>
   </div>
 </div>
 `;
