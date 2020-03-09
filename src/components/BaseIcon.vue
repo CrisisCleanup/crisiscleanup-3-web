@@ -17,6 +17,7 @@ const iconMap = {
   chat: require('@/assets/icons/chat.svg'),
   print: require('@/assets/icons/print-big.svg'),
   pin: require('@/assets/icons/pin.svg'),
+  phone: require('@/assets/icons/phone.svg'),
   share: require('@/assets/icons/share-big.svg'),
   download: require('@/assets/icons/download.svg'),
   active: require('@/assets/icons/active.svg'),

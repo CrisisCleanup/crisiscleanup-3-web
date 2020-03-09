@@ -138,6 +138,12 @@ export default {
           iconSize: 'large',
           to: '/organization/invitations',
         },
+        {
+          key: 'phone',
+          icon: 'phone',
+          text: this.$t('dashboard.phone'),
+          to: '/phone',
+        },
       ];
     },
     ...mapState('incident', ['currentIncidentId']),
