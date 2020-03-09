@@ -2293,3 +2293,55 @@ exports[`Storyshots Layouts|Loader With Layout 1`] = `
   </div>
 </div>
 `;
+
+exports[`Storyshots Pages|NotFound With Defaults 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="homegrid grid-container"
+    >
+       
+      <div
+        class="grid--logo logo my-8"
+      >
+        <img
+          alt="CrisisCleanup"
+          src="@/assets/ccu-logo-black-500w.png"
+        />
+      </div>
+       
+      <div
+        class="grid--survivors"
+      >
+        <div
+          class="homegrid-survivors"
+        >
+          <p
+            class="text-h1 font-h1 font-display"
+          >
+            Survivors Call
+          </p>
+           
+          <p
+            class="text-h2 font-h2 font-display"
+          >
+            1 (800) 451 1954
+          </p>
+        </div>
+      </div>
+       
+      <div
+        class="grid--main h-screen"
+      >
+        <div
+          class="cover-image"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;
