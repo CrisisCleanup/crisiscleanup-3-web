@@ -1,5 +1,5 @@
 <template>
-  <p :class="[styles]">
+  <p :class="[styles]" :style="weight && { fontWeight: weight }">
     <slot>BaseText</slot>
   </p>
 </template>
@@ -14,6 +14,7 @@ export default {
   props: {
     variant: VueTypes.oneOf(VARIANTS).def('body'),
     font: VueTypes.oneOf(['sans', 'display']).def('sans'),
+    weight: VueTypes.oneOf([300, 400, 500, 600, 700]),
   },
   computed: {
     styles() {

@@ -8,10 +8,6 @@
 describe('Cases Page', () => {
   beforeEach(cy.login);
   beforeEach(() => {
-    cy.on('uncaught:exception', () => {
-      return false;
-    });
-
     cy.server();
     cy.route({
       method: 'GET',

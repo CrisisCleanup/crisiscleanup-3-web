@@ -21,13 +21,22 @@
 <script>
 export default {
   name: 'HomeLayout',
-  computed: {},
-  methods: {},
+  data() {
+    return {
+      /**
+       * @todo HomeLayout Translations
+       * @body Translate text in HomeLayout
+       */
+      lang: {
+        survive: 'Survivors Call',
+      },
+    };
+  },
 };
 </script>
 
 <style scoped lang="scss">
-$areas: main nav logo actions overlay survivors;
+$areas: main nav logo actions overlay survivors globe footer;
 
 .homegrid {
   &.grid-container {
@@ -36,9 +45,9 @@ $areas: main nav logo actions overlay survivors;
     grid-template-rows: 20% auto;
     grid-template-areas:
       'logo . . . . survivors'
-      'nav . main main . .'
-      'nav . main main . .'
-      'actions actions . . . .';
+      'nav . main main main main'
+      'nav . main main main main'
+      'actions actions main main main main';
 
     @apply w-full h-full;
     margin-left: auto;
@@ -63,6 +72,25 @@ $areas: main nav logo actions overlay survivors;
 
       &--survivors {
         @apply mx-6 my-4;
+      }
+
+      &--nav {
+        display: grid;
+        align-items: center;
+        margin-left: 2.8rem;
+        @apply py-16 my-20;
+      }
+
+      &--actions {
+        button {
+          @apply text-h1;
+        }
+        display: inline-grid;
+        margin-left: 2.8rem;
+        align-content: center;
+        letter-spacing: 0.35px;
+        justify-content: start;
+        grid-gap: 1rem;
       }
     }
 

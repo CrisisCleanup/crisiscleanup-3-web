@@ -5,6 +5,7 @@ import BaseButton from '@/components/BaseButton';
 import BaseCheckbox from '@/components/BaseCheckbox';
 import BaseIcon from '@/components/BaseIcon';
 import BaseInput from '@/components/BaseInput';
+import BaseLink from '@/components/BaseLink';
 import BaseRadio from '@/components/BaseRadio';
 import BaseText from '@/components/BaseText';
 import FormSelect from '@/components/FormSelect';
@@ -51,6 +52,7 @@ import store from './store/index';
 library.add(fas);
 
 // Base Components
+Vue.component('base-link', BaseLink);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.component('ccu-icon', BaseIcon);
 Vue.component('base-checkbox', BaseCheckbox);
