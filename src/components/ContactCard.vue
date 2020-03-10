@@ -18,11 +18,11 @@
         </div>
       </div>
     </div>
-    <!---info card--->
+    <!--- info card --->
     <div class="info-card">
       <more-info v-if="toggleOpen" />
     </div>
-    <!---Buttons--->
+    <!--- Buttons --->
     <div class="items-center">
       <base-button
         class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 float-left font-bold text-white py-2 px-4 m-3"

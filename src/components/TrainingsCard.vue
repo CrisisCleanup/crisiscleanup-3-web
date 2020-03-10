@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!---media/picture--->
+    <!--- media/picture --->
     <div class="flex-col m-3">
       <img src="" alt="PFP" />
     </div>
-    <!---body blurb--->
+    <!--- body blurb --->
     <base-text variant="bodysm" class="justify-between">
       Then go and tempor incididunt ut labore et dolore magna aliqua.
     </base-text>
@@ -17,7 +17,7 @@
         Start
       </base-button>
     </div>
-    <!---Date--->
+    <!--- Date --->
     <base-text
       variant="bodysm"
       class="justify-between text-crisiscleanup-grey-500 alight-left"
