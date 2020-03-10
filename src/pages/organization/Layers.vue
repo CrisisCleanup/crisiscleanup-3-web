@@ -23,7 +23,7 @@
           />
         </div>
         <base-button
-          text="~~Create Location"
+          text="{{ $t('actions.create_location') }}"
           variant="solid"
           size="small"
           :action="

@@ -86,7 +86,7 @@ export default {
           });
           await this.$router.push('/login?accepted=true');
         } catch (e) {
-          await this.$toasted.error(this.$t('~~Error accepting invite'));
+          await this.$toasted.error(this.$t('invitationSignup.invitation_accept_error'));
         }
       }
     },

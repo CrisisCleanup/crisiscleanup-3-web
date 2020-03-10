@@ -38,7 +38,7 @@
             <img
               class="w-48 h-32"
               :src="logoUrl"
-              :alt="$t('Organization Logo')"
+              :alt="$t('profileOrg.organization_logo')"
             />
             <DragDrop
               class="text-primary-dark cursor-pointer"
@@ -54,7 +54,7 @@
                 class="text-center pb-4 cursor-pointer"
                 :show-spinner="uploading"
                 :disabled="uploading"
-                >{{ $t('actions.change_logo') }}
+                >{{ $t('actions.update_logo') }}
               </base-button>
             </DragDrop>
           </div>
@@ -274,7 +274,8 @@
       <div
         class="border-b px-4 py-2 font-semibold flex justify-between items-center"
       >
-        {{ $t('profileOrg.documents_and_materials') }}
+        {{ $t('profileOrg.custom_terms_waivers') }}
+        {{ $t('profileOrg.custom_terms_waivers_description') }}
         <base-button
           variant="solid"
           class="px-4 py-2"
@@ -283,7 +284,7 @@
         />
       </div>
       <div class="px-8 pb-6 mt-4">
-        <div class="my-1">{{ $t('~~Work Order Instructions') }}</div>
+        <div class="my-1">{{ $t('profileOrg.custom_work_order_instructions') }}</div>
         <textarea
           :value="currentOrganization.custom_ops_message"
           @input="
@@ -291,7 +292,7 @@
               updateOrganization(event.target.value, 'custom_ops_message');
             }
           "
-          :placeholder="$t('~~Add Work Order Instructions')"
+          :placeholder="$t('profileOrg.add_work_order_instructions')"
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-72"
         />
@@ -314,7 +315,7 @@
           ></base-input>
           <ccu-icon
             v-if="termsOfService"
-            :alt="$t('actions.trash')"
+            :alt="$t('actions.delete')"
             size="small"
             class="p-1 py-2"
             type="trash"
@@ -339,7 +340,7 @@
           <base-button
             class="cursor-pointer px-3 py-1"
             variant="solid"
-            :text="$t('actions.upload_terms')"
+            :text="$t('actions.add_terms')"
             :show-spinner="uploading"
             :disabled="uploading"
           />
@@ -351,7 +352,7 @@
               updateOrganization(event.target.value, 'custom_legal_tos');
             }
           "
-          :placeholder="$t('~~Add Terms of Service Text')"
+          :placeholder="$t('profileOrg.add_tos_text')"
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-72"
         />
@@ -374,7 +375,7 @@
           ></base-input>
           <ccu-icon
             v-if="liabilityWaiver"
-            :alt="$t('actions.trash')"
+            :alt="$t('actions.delete')"
             size="small"
             class="p-1 py-2"
             type="trash"
@@ -399,7 +400,7 @@
           <base-button
             class="cursor-pointer px-3 py-1"
             variant="solid"
-            :text="$t('actions.liability_waiver')"
+            :text="$t('profileOrg.custom_survivor_waiver')"
             :show-spinner="uploading"
             :disabled="uploading"
           />
@@ -414,7 +415,7 @@
               );
             }
           "
-          :placeholder="$t('~~Add Waiver Text')"
+          :placeholder="$t('profileOrg.add_survivor_waiver_text')"
           rows="4"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-72"
         />
@@ -448,6 +449,7 @@ export default {
         'orgType.coad',
         'orgType.government',
         'orgType.ltr',
+        'orgType.cleanup',
       ].map(key => {
         return { key, label: this.$t(key) };
       }),

@@ -6,14 +6,17 @@
   >
     <div class="px-6 py-3">
       <div class="font-xs my-2">
-        {{
-          $t('workTypeRequestModal.request_modal_instructions', {
-            organizations: organizations.map(org => org.name).join(','),
-            my_organization: myOrganization.name,
-            case_number: '',
-          })
-        }}
-        {{ $t('workTypeRequestModal.please_add_respectful_note') }}
+        <span
+          v-html="
+            $t('workTypeRequestModal.request_modal_instructions', {
+              organizations: organizations.map(org => org.name).join(','),
+              my_organization: myOrganization.name,
+              case_number: '',
+            })
+          "
+        ></span>
+        {{ $t('') }}
+        <span v-html="$t('workTypeRequestModal.please_add_respectful_note')"></span>
         <ul class="my-2 list-disc list-inside">
           <li>
             {{ $t('workTypeRequestModal.reason_member_of_faith_community') }}

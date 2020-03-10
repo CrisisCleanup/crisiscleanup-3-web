@@ -77,7 +77,7 @@
                         :align="'right'"
                       >
                         <template slot="btn">{{
-                          $t('casesVue.us_states')
+                          $t('locationTypes.boundary_political_us_state')
                         }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
@@ -103,7 +103,7 @@
                         :align="'right'"
                       >
                         <template slot="btn">{{
-                          $t('casesVue.congressional_districts')
+                          $t('locationTypes.boundary_political_us_congress')
                         }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
@@ -1151,9 +1151,7 @@ export default {
       );
       marker
         .bindTooltip(
-          this.$t(
-            '~~Drag pin to the correct location. Zoom and pan as necessary.',
-          ),
+          this.$t('casesVue.drag_pin_to_correct_location'),
           {
             direction: 'top',
           },

@@ -11,9 +11,7 @@
           "
           :drag-title="
             (shapefileData && shapefileData.filename) ||
-              $t(
-                '~~Drag and drop SHP or KML files. You will be able to preview the content of the files and choose some options before uploading',
-              )
+              $t('layersVue.drag_drop_shp_kml')
           "
           @files="handleFileUpload"
         ></DragDrop>
@@ -63,7 +61,7 @@
 
             <textarea
               v-model="shapefileCustomName"
-              :placeholder="$t('~~Custom Name Template')"
+              :placeholder="$t('layersVue.custom_name_template')"
               rows="4"
               class="form-field text-base w-full border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none"
             />
@@ -77,7 +75,7 @@
                 item-key="id"
                 label="name_t"
                 select-classes="bg-white border w-full"
-                :placeholder="$t('~~Select a location type')"
+                :placeholder="$t('layersVue.location_type')"
                 class="form-field"
               />
             </div>
@@ -89,7 +87,7 @@
                 item-key="id"
                 label="name_t"
                 select-classes="bg-white border w-full"
-                :placeholder="$t('~~Select access level for uploaded files')"
+                :placeholder="$t('layersVue.degree_of_sharing')"
                 class="form-field"
               />
             </div>
@@ -244,7 +242,7 @@ export default {
       if (!this.shapefileCustomName && !this.shapefileKey) {
         this.$toasted.error(
           this.$t(
-            '~~You need to provide a field or a custom name for this upload',
+            'layersVue.please_provide_name',
           ),
         );
         return false;

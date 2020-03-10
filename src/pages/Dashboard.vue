@@ -134,7 +134,7 @@
           <div class="w-2/5 m-4 p-6 shadow bg-white">
             <div class="flex flex-col items-center justify-around">
               <div class="text-center text-2xl w-2/3 my-3">
-                {{ $t('dashboard.invite_teammates') }}
+                <span v-html="$t('dashboard.invite_teammates')"></span>
               </div>
               <div class="text-justify w-5/6 my-3">
                 <div class="my-3">

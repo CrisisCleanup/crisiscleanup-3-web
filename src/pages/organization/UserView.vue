@@ -163,10 +163,8 @@ export default {
     },
     async orphanUser() {
       const result = await messageBox({
-        title: this.$t('~~Remove User'),
-        content: this.$t(
-          '~~This user will be permanently deleted from your organization, Are you sure you want to continue?',
-        ),
+        title: this.$t('actions.remove_user'),
+        content: this.$t('userView.remove_user_warning'),
         actions: {
           cancel: {
             text: this.$t('actions.cancel'),

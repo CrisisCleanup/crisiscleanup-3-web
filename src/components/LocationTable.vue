@@ -67,19 +67,19 @@ export default {
     return {
       columns: [
         {
-          title: this.$t('~~Name'),
+          title: this.$t('locationTable.name'),
           dataIndex: 'name',
           key: 'name',
           width: '1.5fr',
         },
         {
-          title: this.$t('~~Type'),
+          title: this.$t('locationTable.type'),
           dataIndex: 'type',
           key: 'type',
           width: '1.5fr',
         },
         {
-          title: this.$t('~~Shared'),
+          title: this.$t('locationTable.shared'),
           dataIndex: 'shared',
           key: 'shared',
         },

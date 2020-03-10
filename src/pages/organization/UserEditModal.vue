@@ -1,7 +1,7 @@
 <template>
   <modal
     modal-classes="w-1/3"
-    :title="$t('~~Edit User')"
+    :title="$t('profileUser.edit_user')"
     closeable
     @close="$emit('close')"
   >

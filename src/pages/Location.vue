@@ -347,12 +347,12 @@ export default {
           ),
           actions: {
             continue: {
-              text: this.$t('~~Continue Creating'),
+              text: this.$t('actions.create_new'),
               type: 'bare',
               buttonClass: 'border border-black',
             },
             edit: {
-              text: this.$t('~~Edit Existing'),
+              text: this.$t('actions.edit_existing'),
               type: 'bare',
               buttonClass: 'border border-black',
             },
@@ -381,19 +381,19 @@ export default {
           const result = await messageBox({
             title: this.$t('locationVue.existing_location'),
             content: this.$t(
-              '~~A similar location currently exists for {incident}. Do you want to continue creating a new one, or edit the existing one?',
+              'locationVue.location_already_exists',
               {
                 incident: incident.name,
               },
             ),
             actions: {
               continue: {
-                text: this.$t('~~Continue Creating'),
+                text: this.$t('actions.create_new'),
                 type: 'bare',
                 buttonClass: 'border border-black',
               },
               edit: {
-                text: this.$t('~~Edit Existing'),
+                text: this.$t('actions.edit_existing'),
                 type: 'bare',
                 buttonClass: 'border border-black',
               },
