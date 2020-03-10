@@ -4,7 +4,8 @@
     class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto"
   >
     <template #content>
-      <div>
+      <div class="flex flex-col">
+        <InviteUsers class="mx-4 self-end" />
         <div class="flex">
           <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
             <div>
@@ -61,7 +62,7 @@
           </div>
         </div>
         <div class="flex">
-          <div class="w-3/5 m-4 pt-2 shadow bg-white flex-shrink">
+          <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
               {{ $t('dashboard.my_cases') }}
             </div>
@@ -129,30 +130,6 @@
                   </div>
                 </template>
               </Table>
-            </div>
-          </div>
-          <div class="w-2/5 m-4 p-6 shadow bg-white">
-            <div class="flex flex-col items-center justify-around">
-              <div class="text-center text-2xl w-2/3 my-3">
-                <span v-html="$t('dashboard.invite_teammates')"></span>
-              </div>
-              <div class="text-justify w-5/6 my-3">
-                <div class="my-3">
-                  {{ $t('inviteTeammates.invite_teammates_instructions') }}
-                </div>
-                <base-input
-                  v-model="usersToInvite"
-                  size="large"
-                  class="flex-grow my-3"
-                  :placeholder="$t('Emails')"
-                />
-              </div>
-              <base-button
-                :text="$t('inviteTeammates.send_invites')"
-                size="large"
-                variant="solid"
-                :action="inviteUsers"
-              />
             </div>
           </div>
         </div>
@@ -313,12 +290,13 @@ import StatusDropDown from '@/components/StatusDropDown';
 import { forceFileDownload } from '@/utils/downloads';
 import RequestBox from '@/components/dialogs/RequestBox';
 import Loader from '@/components/Loader';
+import InviteUsers from './organization/InviteUsers';
 
 const requestBox = create(RequestBox);
 
 export default {
   name: 'Dashboard',
-  components: { LineChart, Table, StatusDropDown, Loader },
+  components: { InviteUsers, LineChart, Table, StatusDropDown, Loader },
   data() {
     return {
       usersToInvite: '',

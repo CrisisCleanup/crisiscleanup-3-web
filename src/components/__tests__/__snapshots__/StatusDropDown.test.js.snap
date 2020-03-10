@@ -10,6 +10,8 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
     class="badge-holder rounded-lg px-2"
     style="color: rgb(208, 2, 27);"
   >
+    <!---->
+     
     <div>
       status.open_unassigned
     </div>
@@ -75,6 +77,10 @@ exports[`StatusDropDown should render correctly and match snapshot when using ic
     <div
       class="case-svg-container mr-1"
     />
+     
+    <div>
+      status.open_unassigned
+    </div>
      
     <font-awesome-icon-stub
       class="mx-1"

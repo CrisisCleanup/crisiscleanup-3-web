@@ -10,7 +10,7 @@
         class="case-svg-container mr-1"
         v-html="getWorkTypeImage(currentWorkType)"
       ></div>
-      <div v-else>{{ currentWorkType.status | getStatusName }}</div>
+      <div>{{ currentWorkType.status | getStatusName }}</div>
       <font-awesome-icon class="mx-1" size="sm" icon="chevron-down" />
     </div>
     <div

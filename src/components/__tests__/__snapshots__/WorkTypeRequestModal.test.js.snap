@@ -11,8 +11,10 @@ exports[`WorkTypeRequestModal show modal with options 1`] = `
     <div
       class="font-xs my-2"
     >
+      <span>
+        workTypeRequestModal.request_modal_instructions
+      </span>
       
-      workTypeRequestModal.request_modal_instructions
       workTypeRequestModal.please_add_respectful_note
       
       <ul

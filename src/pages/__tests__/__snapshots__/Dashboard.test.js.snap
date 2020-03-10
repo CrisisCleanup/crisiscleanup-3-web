@@ -4,7 +4,13 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
 <loader-stub
   class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto"
 >
-  <div>
+  <div
+    class="flex flex-col"
+  >
+    <inviteusers-stub
+      class="mx-4 self-end"
+    />
+     
     <div
       class="flex"
     >
@@ -98,7 +104,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       class="flex"
     >
       <div
-        class="w-3/5 m-4 pt-2 shadow bg-white flex-shrink"
+        class="m-4 pt-2 shadow bg-white w-full"
       >
         <div
           class="py-4 px-4 text-gray-500 border-b"
@@ -560,48 +566,6 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
              
             <!---->
           </div>
-        </div>
-      </div>
-       
-      <div
-        class="w-2/5 m-4 p-6 shadow bg-white"
-      >
-        <div
-          class="flex flex-col items-center justify-around"
-        >
-          <div
-            class="text-center text-2xl w-2/3 my-3"
-          >
-            
-              dashboard.invite_teammates
-            
-          </div>
-           
-          <div
-            class="text-justify w-5/6 my-3"
-          >
-            <div
-              class="my-3"
-            >
-              
-                inviteTeammates.invite_teammates_instructions
-              
-            </div>
-             
-            <base-input-stub
-              class="flex-grow my-3"
-              placeholder="Emails"
-              size="large"
-              value=""
-            />
-          </div>
-           
-          <base-button-stub
-            action="function () { [native code] }"
-            size="large"
-            text="inviteTeammates.send_invites"
-            variant="solid"
-          />
         </div>
       </div>
     </div>

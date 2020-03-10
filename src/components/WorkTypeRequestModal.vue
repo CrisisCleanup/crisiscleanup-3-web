@@ -15,7 +15,6 @@
             })
           "
         ></span>
-        {{ $t('') }}
         <span v-html="$t('workTypeRequestModal.please_add_respectful_note')"></span>
         <ul class="my-2 list-disc list-inside">
           <li>
