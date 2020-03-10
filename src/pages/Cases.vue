@@ -49,7 +49,7 @@
                     },
                   ]"
                   display-property="name"
-                  placeholder="Search"
+                  :placeholder="$t('actions.search')"
                   size="medium"
                   class="mx-2"
                   @selectedExisting="handleChange"

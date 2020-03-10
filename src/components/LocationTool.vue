@@ -6,7 +6,7 @@
         :suggestions="locationResults"
         display-property="name"
         size="large"
-        placeholder="$t('locationTool.search_several_area_types')"
+        :placeholder="$t('locationTool.search_several_area_types')"
         class="w-2/5"
         @selected="onLocationSelected"
         @search="onLocationSearch"
@@ -221,7 +221,7 @@
             class="text-xs p-1"
           />
           <base-button
-            text="$t('actions.subtract')"
+            :text="$t('actions.subtract')"
             :action="
               () => {
                 handleMapEvent('exclude', 'Location');
