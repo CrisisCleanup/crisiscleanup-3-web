@@ -2,6 +2,7 @@
   <Loader :loading="loading" class="h-full overflow-auto py-4 px-6 bg-gray-100">
     <template #content>
       <div class="flex">
+        <!-- Contact Card -->
         <div
           class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
         >
@@ -12,6 +13,7 @@
           />
         </div>
       </div>
+      <!-- Stats Cards -->
       <div
         class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
       >
@@ -22,10 +24,14 @@
       >
         <operatorstats />
       </div>
-      <div
-        class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
-      >
-        <stories-card />
+      <!--- Grid Main --->
+      <div class="grid--main h-screen border-2">
+        <!-- Stories Card -->
+        <div
+          class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
+        >
+          <stories-card />
+        </div>
       </div>
     </template>
   </Loader>
