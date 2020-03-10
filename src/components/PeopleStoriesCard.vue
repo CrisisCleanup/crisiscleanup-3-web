@@ -1,15 +1,15 @@
 <template>
   <div>
-    <!--Header-->
+    <!-- Header -->
     <base-text
       variant="h1"
       class="text-crisiscleanup-dark-400 justify-between font-bold m-1 p-3"
     >
       Stories from people you helped
     </base-text>
-    <!--line-->
+    <!-- line -->
     <hr class="bg-white" />
-    <!--Individual Stories Card-->
+    <!-- Individual Stories Card -->
     <div class="stories">
       <i-story />
     </div>

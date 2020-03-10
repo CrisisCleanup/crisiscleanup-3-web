@@ -24,7 +24,7 @@
         </b-tab>
       </b-tabs>
     </b-card>
-    <!--line-->
+    <!-- line -->
     <hr class="bg-white" />
   </div>
 </template>
