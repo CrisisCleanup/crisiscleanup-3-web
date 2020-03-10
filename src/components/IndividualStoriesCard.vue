@@ -8,16 +8,16 @@
       <!---story--->
       <div class="flex-col justify-between m-3">
         <!---name--->
-        <base-text :variant="h2" class="justify-between font-bold"
+        <base-text variant="h2" class="justify-between font-bold"
           >Jane Smith Story</base-text
         >
         <!---Date--->
-        <base-text :variant="bodysm" class="justify-between">
+        <base-text variant="bodysm" class="justify-between">
           On Friday, December 3rd, you talked with Jane Smith (W5832). Team
           Rubicon helped Jane Smith yesterday.
         </base-text>
         <!---body blurb--->
-        <base-text :variant="bodysm" class="justify-between">
+        <base-text variant="bodysm" class="justify-between">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
           eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
           minim veniam, quis

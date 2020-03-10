@@ -2,7 +2,7 @@
   <div>
     <!--Header-->
     <base-text
-      :variant="h1"
+      variant="h1"
       class="text-crisiscleanup-dark-400 justify-between font-bold m-1 p-3"
     >
       Stories from people you helped
