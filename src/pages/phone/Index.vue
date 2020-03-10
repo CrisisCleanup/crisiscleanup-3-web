@@ -32,6 +32,12 @@
         >
           <stories-card />
         </div>
+        <!-- Training Card -->
+        <div
+          class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
+        >
+          <training-card />
+        </div>
       </div>
     </template>
   </Loader>
@@ -45,14 +51,16 @@ import PeopleStoriesCard from '@/components/PeopleStoriesCard';
 import ContactCard from '@/components/ContactCard';
 import genstatscard from '@/components/GeneralStatsCard.vue';
 import operatorstats from '@/components/OperatorStatisticsCard';
+import TrainingCard from '@/components/TrainingCard';
 
 export default {
   name: 'Phone',
   components: {
-    'stories-card': PeopleStoriesCard,
     genstatscard,
     operatorstats,
     'contact-card': ContactCard,
+    'stories-card': PeopleStoriesCard,
+    'training-card': TrainingCard,
     Loader,
   },
   data() {
