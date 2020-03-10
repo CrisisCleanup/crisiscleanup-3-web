@@ -51,7 +51,7 @@ import PeopleStoriesCard from '@/components/PeopleStoriesCard';
 import ContactCard from '@/components/ContactCard';
 import genstatscard from '@/components/GeneralStatsCard.vue';
 import operatorstats from '@/components/OperatorStatisticsCard';
-import TrainingCard from '@/components/TrainingCard';
+import NewsTrainingCard from '@/components/NewsTrainingCard';
 
 export default {
   name: 'Phone',
@@ -60,7 +60,7 @@ export default {
     operatorstats,
     'contact-card': ContactCard,
     'stories-card': PeopleStoriesCard,
-    'training-card': TrainingCard,
+    'training-card': NewsTrainingCard,
     Loader,
   },
   data() {
