@@ -380,12 +380,9 @@ export default {
         if (existingLocation) {
           const result = await messageBox({
             title: this.$t('locationVue.existing_location'),
-            content: this.$t(
-              'locationVue.location_already_exists',
-              {
-                incident: incident.name,
-              },
-            ),
+            content: this.$t('locationVue.location_already_exists', {
+              incident: incident.name,
+            }),
             actions: {
               continue: {
                 text: this.$t('actions.create_new'),

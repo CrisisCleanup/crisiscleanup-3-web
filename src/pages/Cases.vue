@@ -1150,12 +1150,9 @@ export default {
         15,
       );
       marker
-        .bindTooltip(
-          this.$t('casesVue.drag_pin_to_correct_location'),
-          {
-            direction: 'top',
-          },
-        )
+        .bindTooltip(this.$t('casesVue.drag_pin_to_correct_location'), {
+          direction: 'top',
+        })
         .openTooltip();
       this.toggleView('showingMap');
     },

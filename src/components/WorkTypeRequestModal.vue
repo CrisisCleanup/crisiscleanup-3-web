@@ -15,7 +15,9 @@
             })
           "
         ></span>
-        <span v-html="$t('workTypeRequestModal.please_add_respectful_note')"></span>
+        <span
+          v-html="$t('workTypeRequestModal.please_add_respectful_note')"
+        ></span>
         <ul class="my-2 list-disc list-inside">
           <li>
             {{ $t('workTypeRequestModal.reason_member_of_faith_community') }}

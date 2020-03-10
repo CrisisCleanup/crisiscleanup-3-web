@@ -240,11 +240,7 @@ export default {
     },
     validateUpload() {
       if (!this.shapefileCustomName && !this.shapefileKey) {
-        this.$toasted.error(
-          this.$t(
-            'layersVue.please_provide_name',
-          ),
-        );
+        this.$toasted.error(this.$t('layersVue.please_provide_name'));
         return false;
       }
 

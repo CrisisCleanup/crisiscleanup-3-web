@@ -284,7 +284,9 @@
         />
       </div>
       <div class="px-8 pb-6 mt-4">
-        <div class="my-1">{{ $t('profileOrg.custom_work_order_instructions') }}</div>
+        <div class="my-1">
+          {{ $t('profileOrg.custom_work_order_instructions') }}
+        </div>
         <textarea
           :value="currentOrganization.custom_ops_message"
           @input="

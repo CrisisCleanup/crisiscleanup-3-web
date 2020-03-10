@@ -14,9 +14,11 @@ exports[`WorkTypeRequestModal show modal with options 1`] = `
       <span>
         workTypeRequestModal.request_modal_instructions
       </span>
-      
-      workTypeRequestModal.please_add_respectful_note
-      
+       
+      <span>
+        workTypeRequestModal.please_add_respectful_note
+      </span>
+       
       <ul
         class="my-2 list-disc list-inside"
       >
