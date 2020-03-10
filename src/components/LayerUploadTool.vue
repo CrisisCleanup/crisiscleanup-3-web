@@ -283,7 +283,7 @@ export default {
     },
     validateUpload(filename) {
       if (
-        !this.shapefileInfo[filename].shapefileCustomName ||
+        !this.shapefileInfo[filename].shapefileCustomName &&
         !this.shapefileInfo[filename].shapefileKey
       ) {
         this.$toasted.error(this.$t('layersVue.please_provide_name'));
