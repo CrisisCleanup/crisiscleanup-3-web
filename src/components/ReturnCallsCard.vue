@@ -4,7 +4,7 @@
       <b-tabs pills card>
         <!--- Current Call --->
         <b-tab title="Current Call" class="current-call-tab" active>
-          Current Call
+          <CurrentCallCard />
           <!--- See All Button --->
           <div id="See-All-btn">
             <base-button class="text-crisis-cleanup-yellow-900 align-right">
@@ -28,12 +28,12 @@
 </template>
 
 <script>
-//import NewsCard from './NewsCard';
+import CurrentCallCard from './CurrentCallCard';
 //import TrainingsCard from './TrainingsCard';
 export default {
   name: 'ReturnCallsCard',
   components: {
-    //NewsCard,
+    CurrentCallCard,
     //TrainingsCard,
   },
 };
