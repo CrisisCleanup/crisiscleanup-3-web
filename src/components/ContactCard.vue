@@ -5,6 +5,13 @@
         <img :src="profileSrc" alt="PFP" />
       </div>
       <div class="flex-col justify-between m-3">
+        <base-button
+          icon-size="md"
+          size="md"
+          variant="solid"
+          ccu-icon="edit"
+          class="float-right"
+        />
         <base-text variant="h1" class="justify-between">{{ name }}</base-text>
         <base-text variant="h2" class="justify-between float-right">{{
           mobile
