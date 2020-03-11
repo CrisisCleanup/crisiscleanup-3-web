@@ -22,14 +22,20 @@
       </div>
       <!--- Name / Language --->
       <div class="flex-col justify-between m-3">
-        <base-text variant="h1" class="justify-between">{{ name }}</base-text>
-        <base-text variant="h2" class="justify-between">English</base-text>
+        <base-text variant="body" class="justify-between">{{ name }}</base-text>
+        <base-text variant="body" class="justify-between">English</base-text>
       </div>
       <!--- Action Buttons --->
       <div class="flex-row justify-between m-3">
         <!--- Convert to Buttons !!!!! --->
         <base-text variant="h1" class="justify-between">mic</base-text>
-        <base-text variant="h2" class="justify-between">Add</base-text>
+        <!--- add friend button --->
+        <base-button
+          icon-size="md"
+          size="md"
+          variant="solid"
+          ccu-icon="active"
+        />
         <base-text variant="h2" class="justify-between">End</base-text>
       </div>
     </div>
@@ -37,18 +43,11 @@
     <div class="info-card">
       <more-info v-if="toggleOpen" />
     </div>
-    <!--- Buttons --->
-    <div class="items-center">
-      <base-button
-        class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 float-left font-bold text-white py-2 px-4 m-3"
-      >
-        Unavailable
-      </base-button>
-      <base-button
-        class="bg-crisiscleanup-dark-500 hover:bg-crisiscleanup-dark-400 float-right font-bold text-white py-2 px-3 m-3"
-      >
-        DP
-      </base-button>
+    <!--- Notes --->
+    <div class="flex-col justify-between m-3">
+      <base-text variant="h2" class="justify-between">Notes</base-text>
+      <!--- spanner thingy --->
+      <base-input placeholder="Issues Resolved" size="base" />
     </div>
   </div>
 </template>
