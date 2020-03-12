@@ -706,6 +706,8 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       </div>
     </div>
      
+    <ccp-embed-stub />
+     
     <div
       class="flex"
     >
