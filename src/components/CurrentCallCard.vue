@@ -22,13 +22,21 @@
       </div>
       <!--- Name / Language --->
       <div class="flex-col justify-between m-3">
-        <base-text variant="body" class="justify-between">{{ name }}</base-text>
-        <base-text variant="body" class="justify-between">English</base-text>
+        <base-text
+          variant="body"
+          class="justify-between justify-between text-crisiscleanup-grey-400"
+          >{{ name }}</base-text
+        >
+        <base-text
+          variant="body"
+          class="justify-between text-crisicleanup-grey-400"
+          >English</base-text
+        >
       </div>
       <!--- Action Buttons --->
       <div class="flex-row justify-between m-3">
         <!--- Convert to Buttons !!!!! --->
-        <base-text variant="h1" class="justify-between">mic</base-text>
+        <base-text variant="h1">mic</base-text>
         <!--- add friend button --->
         <base-button
           icon-size="md"
