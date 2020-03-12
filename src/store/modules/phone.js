@@ -1,17 +1,32 @@
 import * as ConnectService from '@/services/acs.service';
 import { AgentApi, PhoneApi } from '@/utils/api';
+import VueLog from '@dreipol/vue-log';
 import axios from 'axios';
 import { camelCase } from 'lodash';
+import Vue from 'vue';
+
+Vue.use(VueLog, {
+  name: 'phone.store',
+  middlewares: [
+    result => {
+      result.unshift('[phone.store] ');
+      return result;
+    },
+  ],
+});
+const Log = Vue.log();
 
 const PhoneState = {
   agent: null,
   metrics: null,
-  streams: {},
+  connectRunning: false,
+  streams: null,
 };
 
 // getters
 const getters = {
   agentId: state => (state.agent ? state.agent.agent_id : null),
+  connectRunning: state => state.connectRunning,
 };
 
 // actions
@@ -32,12 +47,12 @@ const actions = {
     return resp;
   },
   async initConnect({ commit }, htmlEl) {
+    commit('setConnectState', true);
     ConnectService.initConnect({
       htmlEl,
-      onAuth: () =>
-        ConnectService.initAgent({
-          onRefresh: agent => commit('setClient', agent),
-        }),
+    });
+    ConnectService.initAgent({
+      onRefresh: agent => commit('setAgentState', agent),
     });
   },
 };
@@ -55,9 +70,14 @@ const mutations = {
     });
     state.metrics = newState;
   },
-  setClient(state, agent) {
-    const newState = { ...state.streams, ...agent.getState() };
+  setAgentState(state, agent) {
+    const agentState = agent.getState();
+    const newState = { ...state.streams, ...agentState };
+    Log.info('new state inbound:', newState);
     state.streams = newState;
+  },
+  setConnectState(state, running) {
+    state.connectRunning = running;
   },
 };
 
