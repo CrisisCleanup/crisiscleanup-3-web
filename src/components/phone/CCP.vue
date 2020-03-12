@@ -1,6 +1,7 @@
 <template>
   <div>
     <div id="ccp-embed" />
+    <audio id="remote-audio" autoplay></audio>
   </div>
 </template>
 
@@ -13,16 +14,19 @@ export default {
     ...mapActions('phone', ['initConnect']),
   },
   computed: {
-    ...mapState('phone', ['streams']),
+    ...mapState('phone', ['streams', 'connectRunning']),
   },
   async mounted() {
-    const htmlEl = document.getElementById('ccp-embed');
-    this.initConnect(htmlEl);
+    if (!this.connectRunning) {
+      this.$log.debug('CCP embed connecting...');
+      const htmlEl = document.getElementById('ccp-embed');
+      await this.initConnect(htmlEl);
+    }
   },
 };
 </script>
 
-<style scoped>
+<style>
 .ccp-embed {
   display: none;
 }
