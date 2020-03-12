@@ -69,7 +69,7 @@
     "leaflet.markercluster": "^1.4.1",
     "lodash": "^4.17.15",
     "marker-clusterer-plus": "^2.1.4",
-    "pixi-filters": "^3.1.0",
+    "pixi-filters": "^3.1.1",
     "pixi.js": "^5.2.1",
     "shpjs": "^3.4.3",
     "spin.js": "^4.1.0",
