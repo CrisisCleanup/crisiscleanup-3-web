@@ -13,7 +13,7 @@
     @rowClick="displayWorksite"
     @selectionChanged="
       selectedItems => {
-        $emit('selectionChanged', selectedTableItems);
+        $emit('selectionChanged', selectedItems);
       }
     "
   >
