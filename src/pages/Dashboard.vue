@@ -254,6 +254,7 @@
             </div>
           </div>
         </div>
+        <ccp-embed />
         <div class="flex">
           <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
             <div class="py-4 px-4 text-gray-500 border-b">
@@ -290,13 +291,21 @@ import StatusDropDown from '@/components/StatusDropDown';
 import { forceFileDownload } from '@/utils/downloads';
 import RequestBox from '@/components/dialogs/RequestBox';
 import Loader from '@/components/Loader';
+import CCP from '@/components/phone/CCP';
 import InviteUsers from './organization/InviteUsers';
 
 const requestBox = create(RequestBox);
 
 export default {
   name: 'Dashboard',
-  components: { InviteUsers, LineChart, Table, StatusDropDown, Loader },
+  components: {
+    InviteUsers,
+    LineChart,
+    Table,
+    StatusDropDown,
+    Loader,
+    'ccp-embed': CCP,
+  },
   data() {
     return {
       usersToInvite: '',
