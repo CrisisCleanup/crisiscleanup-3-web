@@ -1,3 +1,4 @@
+import * as ConnectService from '@/services/acs.service';
 import { AgentApi, PhoneApi } from '@/utils/api';
 import axios from 'axios';
 import { camelCase } from 'lodash';
@@ -5,6 +6,7 @@ import { camelCase } from 'lodash';
 const PhoneState = {
   agent: null,
   metrics: null,
+  streams: {},
 };
 
 // getters
@@ -29,6 +31,15 @@ const actions = {
     commit('setMetrics', resp.data.results);
     return resp;
   },
+  async initConnect({ commit }, htmlEl) {
+    ConnectService.initConnect({
+      htmlEl,
+      onAuth: () =>
+        ConnectService.initAgent({
+          onRefresh: agent => commit('setClient', agent),
+        }),
+    });
+  },
 };
 
 // mutations
@@ -43,6 +54,10 @@ const mutations = {
       return newState;
     });
     state.metrics = newState;
+  },
+  setClient(state, agent) {
+    const newState = { ...state.streams, ...agent.getState() };
+    state.streams = newState;
   },
 };
 
