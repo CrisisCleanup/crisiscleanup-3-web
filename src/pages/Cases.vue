@@ -1053,6 +1053,7 @@ export default {
     },
     handleFilters(filters) {
       this.appliedFilters = {};
+      this.filters = filters;
       Object.values(filters).forEach(filter => {
         this.appliedFilters = {
           ...this.appliedFilters,

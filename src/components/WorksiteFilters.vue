@@ -356,14 +356,16 @@ export default {
           return Boolean(field.if_selected_then_work_type);
         });
 
-        return new Set(
-          fieldsWithTypes.map(field => {
-            const workTypes = WorkType.query()
-              .where('key', field.if_selected_then_work_type)
-              .get();
-            return workTypes[0];
-          }),
+        const types = new Set(
+          fieldsWithTypes.map(t => t.if_selected_then_work_type),
         );
+
+        return Array.from(types).map(type => {
+          const workTypes = WorkType.query()
+            .where('key', type)
+            .get();
+          return workTypes[0];
+        });
       }
       return [];
     },
