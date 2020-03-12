@@ -333,62 +333,20 @@
                   </modal>
                 </div>
               </div>
-              <Table
-                class="border"
-                :data="data"
+              <WorksiteTable
                 :columns="columns"
-                enable-selection
-                enable-pagination
+                :worksites="data"
+                @displayWorksite="displayWorksite"
+                @handleTableChange="handleTableChange"
                 :pagination="pagination"
                 :sorter="sorter"
-                :loading="tableLoading"
-                :body-style="{ height: '60vh' }"
-                @change="handleTableChange"
-                @rowClick="displayWorksite"
                 @selectionChanged="
                   selectedItems => {
                     selectedTableItems = selectedItems;
                   }
                 "
-              >
-                <template #flags="slotProps">
-                  <div class="case-flag w-8">
-                    <router-link
-                      v-if="slotProps.item.flags.length > 0"
-                      :to="
-                        `/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/flag`
-                      "
-                    >
-                      <ccu-icon
-                        :alt="$t('actions.flag')"
-                        size="medium"
-                        class="p-1 py-2"
-                        type="flag-filled"
-                      />
-                    </router-link>
-                  </div>
-                </template>
-                <template #work_types="slotProps">
-                  <div class="flex flex-col">
-                    <div
-                      v-for="work_type in slotProps.item.work_types"
-                      :key="work_type.id"
-                      class="badge-holder flex items-center"
-                    >
-                      <badge
-                        class="mx-1"
-                        :color="
-                          getColorForStatus(
-                            work_type.status,
-                            Boolean(work_type.claimed_by),
-                          )
-                        "
-                      />
-                      {{ work_type.work_type | getWorkTypeName }}
-                    </div>
-                  </div>
-                </template>
-              </Table>
+                :table-loading="tableLoading"
+              />
             </div>
           </template>
         </div>
@@ -612,7 +570,6 @@ import Worksite from '@/models/Worksite';
 import User from '@/models/User';
 import Incident from '@/models/Incident';
 import Location from '@/models/Location';
-import Table from '@/components/Table';
 import WorksiteMap from '@/components/WorksiteMap';
 import WorksiteFilters from '@/components/WorksiteFilters';
 import { getQueryString } from '@/utils/urls';
@@ -621,14 +578,15 @@ import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
 import { EventBus } from '../event-bus';
+import WorksiteTable from './WorksiteTable';
 
 export default {
   name: 'Cases',
   components: {
+    WorksiteTable,
     WorksiteSearchInput,
     WorksiteMap,
     WorksiteFilters,
-    Table,
   },
   data() {
     return {

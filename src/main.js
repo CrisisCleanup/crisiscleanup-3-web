@@ -13,6 +13,7 @@ import Modal from '@/components/Modal';
 import Spinner from '@/components/Spinner';
 import Tag from '@/components/Tag';
 import {
+  getColorForStatus,
   getColorForWorkType,
   getStatusName,
   getWorkTypeImage,
@@ -101,6 +102,7 @@ Vue.filter('snakeToTitleCase', snakeToTitleCase);
 Vue.filter('getColorForWorkType', getColorForWorkType);
 Vue.filter('getWorkTypeImage', getWorkTypeImage);
 Vue.filter('secondsToHm', secondsToHm);
+Vue.filter('getColorForStatus', getColorForStatus);
 
 // API & Auth
 if (AuthService.getUser()) {
