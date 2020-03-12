@@ -2118,10 +2118,10 @@
   resolved "https://registry.yarnpkg.com/@pixi/filter-old-film/-/filter-old-film-3.1.0.tgz#58301bc0da927fcbcc96a22f2e2ce73592ffb7c4"
   integrity sha512-0yKDfU31c+XAOLwKpy+LSTCmQqanqYJBrrDFTrrFNuP0CgKMXg+33faxrPje5E7MKeHHEImRQIV9oOqUKSJ8Cg==
 
-"@pixi/filter-outline@^3.0.3", "@pixi/filter-outline@^3.1.0":
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/@pixi/filter-outline/-/filter-outline-3.1.0.tgz#15c94370ad46d79962f89fb98521013997884be6"
-  integrity sha512-frJVBgJDHW/HLpDOSHx9BzWP7+TeHgOqVa66cHM6acvBrh55V7a5mgVw1TwZ/wrRXa0iujE+J7zJ55kBWRy0Dg==
+"@pixi/filter-outline@^3.1.0", "@pixi/filter-outline@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@pixi/filter-outline/-/filter-outline-3.1.1.tgz#e14614313e52ae1ada2da97ceea3225ee9429f41"
+  integrity sha512-yhmElQoXl0QBU3DNes8zvbbNtpD5ajAKrkPCP/pevxTg4toqtc4mJjp/h3yr1bFEfXAfcpPB4llxreWhM3OmCg==
 
 "@pixi/filter-pixelate@^3.1.0":
   version "3.1.0"
