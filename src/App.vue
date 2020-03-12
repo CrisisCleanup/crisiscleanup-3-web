@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import 'amazon-connect-streams';
 import { mapActions, mapGetters } from 'vuex';
 
 const defaultLayout = 'authenticated';
