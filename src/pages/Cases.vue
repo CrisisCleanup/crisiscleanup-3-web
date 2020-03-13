@@ -539,6 +539,7 @@
         :incident="currentIncident"
         @closeWorksite="closeWorksite"
         @geocoded="addMarkerToMap"
+        @clearMarkers="removeMarkerFromMap"
         @savedWorksite="loadWorksite"
         @navigateToWorksite="
           id => {
@@ -1115,6 +1116,10 @@ export default {
         .openTooltip();
       this.toggleView('showingMap');
     },
+    removeMarkerFromMap() {
+      this.$refs.workstiteMap.markerLayer.clearLayers();
+    },
+
     async unclaimSelected() {
       this.spinning = true;
       const promises = [];

@@ -34,8 +34,16 @@
           @search="worksitesSearch"
         />
       </section>
-      <div class="text-base font-semibold my-1 mx-3">
+      <div
+        class="text-base font-semibold my-1 mx-3 flex justify-between items-center"
+      >
         {{ $t('formLabels.location') }}
+        <ccu-icon
+          type="trash"
+          size="small"
+          :alt="$t('~Clear Location')"
+          @click.native="clearLocationFields"
+        />
       </div>
       <div class="form-field">
         <WorksiteSearchInput
@@ -575,11 +583,11 @@ export default {
           actions: {
             switchIncident: {
               text: this.$t('caseForm.yes'),
-              type: 'primary',
+              type: 'solid',
             },
             keep: {
               text: this.$t('caseForm.no'),
-              type: 'bare',
+              type: 'outline',
               buttonClass: 'border border-black',
             },
           },
@@ -593,11 +601,11 @@ export default {
           actions: {
             continue: {
               text: this.$t('actions.continue_anyway'),
-              type: 'primary',
+              type: 'solid',
             },
             retry: {
               text: this.$t('actions.retry'),
-              type: 'bare',
+              type: 'outline',
               buttonClass: 'border border-black',
             },
           },
@@ -625,6 +633,20 @@ export default {
       const what3words = await What3wordsService.getWords(lat, lng);
       this.updateWorksite(what3words, 'what3words');
       this.$emit('geocoded', geocode.location);
+    },
+
+    clearLocationFields() {
+      const geocodeKeys = [
+        'address',
+        'city',
+        'county',
+        'state',
+        'postal_code',
+        'location',
+        'what3words',
+      ];
+      geocodeKeys.forEach(key => this.updateWorksite(null, key));
+      this.$emit('clearMarkers');
     },
 
     async onGeocodeSelect(value) {

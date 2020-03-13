@@ -348,12 +348,12 @@ export default {
           actions: {
             continue: {
               text: this.$t('actions.create_new'),
-              type: 'bare',
+              type: 'outline',
               buttonClass: 'border border-black',
             },
             edit: {
               text: this.$t('actions.edit_existing'),
-              type: 'bare',
+              type: 'solid',
               buttonClass: 'border border-black',
             },
           },
@@ -386,12 +386,12 @@ export default {
             actions: {
               continue: {
                 text: this.$t('actions.create_new'),
-                type: 'bare',
+                type: 'outline',
                 buttonClass: 'border border-black',
               },
               edit: {
                 text: this.$t('actions.edit_existing'),
-                type: 'bare',
+                type: 'outline',
                 buttonClass: 'border border-black',
               },
             },

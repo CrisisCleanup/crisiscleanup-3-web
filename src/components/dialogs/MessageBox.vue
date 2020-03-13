@@ -49,7 +49,7 @@
                   v-for="(value, key) in actions"
                   :key="key"
                   :alt="value.text"
-                  :type="value.type"
+                  :variant="value.type"
                   class="px-6 p-3 mx-2"
                   :class="value.buttonClass"
                   :action="
