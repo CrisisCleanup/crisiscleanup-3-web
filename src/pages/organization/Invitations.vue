@@ -115,7 +115,7 @@
             <base-button
               size="small"
               variant="solid"
-              class="m-1 mx-2 text-black text-xs py-1 px-3"
+              class="m-1 mx-2 text-black font-light text-xs py-1 px-3"
               :action="
                 () => {
                   resendInvitation(slotProps.item);
@@ -279,6 +279,6 @@ export default {
 
 <style scoped>
 .table-action-button {
-  @apply mx-2 shadow bg-white px-4 p-2 text-xs text-crisiscleanup-dark-400;
+  @apply mx-2 shadow bg-white px-3 p-1 text-xs text-crisiscleanup-dark-300 font-light;
 }
 </style>

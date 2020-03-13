@@ -14,7 +14,7 @@
       :placeholder="placeholder"
       :required="required"
       :pattern="pattern"
-      autocomplete="off"
+      :autocomplete="autocomplete"
       @input="update"
       @change="change"
     />
@@ -106,6 +106,10 @@ export default {
     selector: {
       type: String,
       default: '',
+    },
+    autocomplete: {
+      type: String,
+      default: 'off',
     },
   },
   data() {

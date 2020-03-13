@@ -20,6 +20,7 @@ import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
 import store from '@/store/index';
 import UserView from '@/pages/organization/UserView';
 import NotFound from '@/pages/NotFound';
+import RequestAccess from '@/pages/RequestAccess';
 
 Vue.use(VueRouter);
 
@@ -156,6 +157,12 @@ const routes = [
     path: '/invitation_token/:token',
     component: InvitationSignup,
     name: 'nav.invitation_token',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/request_access',
+    component: RequestAccess,
+    name: 'nav.request_access',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {

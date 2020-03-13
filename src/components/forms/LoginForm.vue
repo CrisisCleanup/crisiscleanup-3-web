@@ -55,7 +55,16 @@
       </base-button>
     </div>
     <div class="grid--request">
-      <base-button variant="outline" size="large" class="w-full">
+      <base-button
+        variant="outline"
+        size="large"
+        class="w-full"
+        :action="
+          () => {
+            $router.push('/request_access');
+          }
+        "
+      >
         {{ lang.request }}
       </base-button>
     </div>

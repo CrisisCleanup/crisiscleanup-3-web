@@ -52,7 +52,7 @@
           <div
             class="p-3 px-4 border-b cursor-pointer"
             :class="{
-              'border-l-8 border-l-black': currentSection === 'general',
+              'border-l-4 border-l-black': currentSection === 'general',
             }"
             @click="currentSection = 'general'"
           >
@@ -69,7 +69,7 @@
           <div
             class="p-3 px-4 border-b cursor-pointer"
             :class="{
-              'border-l-8 border-l-black': currentSection === 'flags',
+              'border-l-4 border-l-black': currentSection === 'flags',
             }"
             @click="currentSection = 'flags'"
           >
@@ -82,7 +82,7 @@
           </div>
           <div
             class="p-3 px-4 border-b cursor-pointer"
-            :class="{ 'border-l-8 border-l-black': currentSection === 'work' }"
+            :class="{ 'border-l-4 border-l-black': currentSection === 'work' }"
             @click="currentSection = 'work'"
           >
             {{ $t('Work') }}
