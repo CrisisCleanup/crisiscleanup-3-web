@@ -169,9 +169,9 @@ export default {
   &.grid-container {
     grid-template-areas:
       'logo . . . . survivors'
-      '. . main main main main'
-      '. . main main main main'
-      '. . main main main main';
+      '. main main main main main'
+      '. main main main main main'
+      '. main main main main main';
   }
 }
 
