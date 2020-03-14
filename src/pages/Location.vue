@@ -111,6 +111,56 @@
             </div>
           </div>
 
+          <div v-else>
+            <div
+              v-if="
+                (isPrimaryResponseArea || isSecondaryResponseArea) &&
+                  relatedOrganizations.length
+              "
+            >
+              <base-text :weight="400">{{
+                $t('~~Related Organizations')
+              }}</base-text>
+              <div
+                v-for="organization in relatedOrganizations"
+                class="my-1 flex items-center justify-between"
+              >
+                {{ organization.name }}
+                <ccu-icon
+                  type="trash"
+                  size="small"
+                  :alt="$t('~Clear Location')"
+                  @click.native="
+                    () => {
+                      detachLocationFromOrganization(organization);
+                    }
+                  "
+                />
+              </div>
+            </div>
+            <div v-if="isIncidentRelated && relatedIncidents.length">
+              <base-text :weight="400">{{
+                $t('~~Related Incidents')
+              }}</base-text>
+              <div
+                v-for="incident in relatedIncidents"
+                class="my-1 flex items-center justify-between"
+              >
+                {{ incident.name }}
+                <ccu-icon
+                  type="trash"
+                  size="small"
+                  :alt="$t('~Clear Location')"
+                  @click.native="
+                    () => {
+                      detachLocationFromIncident(incident);
+                    }
+                  "
+                />
+              </div>
+            </div>
+          </div>
+
           <textarea
             v-model="currentLocation.notes"
             class="text-base form-field border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
@@ -219,6 +269,8 @@ export default {
       organizationResults: [],
       selectedOrganization: null,
       selectedIncidentId: null,
+      relatedOrganizations: [],
+      relatedIncidents: [],
     };
   },
   computed: {
@@ -282,6 +334,7 @@ export default {
         try {
           await Location.api().fetchById(this.$route.params.location_id);
           this.currentLocation = Location.find(this.$route.params.location_id);
+          this.loadRelatedEntities();
         } catch (e) {
           this.currentLocation = new Location();
           await this.$router.replace(`/locations/new`);
@@ -482,15 +535,60 @@ export default {
           this.reset();
         } else {
           const locationId = response.response.data.id;
-          await Location.api().fetchById(locationId);
-          this.currentLocation = Location.find(locationId);
           await this.$router.push(`/locations/${locationId}/edit`);
+          await this.loadLocation();
         }
       } catch (e) {
         this.$log.error(e);
       } finally {
         this.loading = false;
       }
+    },
+    async loadRelatedEntities() {
+      this.relatedOrganizations = [];
+      this.relatedIncidents = [];
+      if (this.isPrimaryResponseArea) {
+        const results = await Organization.api().get(
+          `/organizations?primary_location=${this.$route.params.location_id}&fields=id,name`,
+          {
+            dataKey: 'results',
+          },
+        );
+        this.relatedOrganizations = [...results.entities.organizations];
+      }
+      if (this.isSecondaryResponseArea) {
+        const results = await Organization.api().get(
+          `/organizations?secondary_location=${this.$route.params.location_id}&fields=id,name`,
+          {
+            dataKey: 'results',
+          },
+        );
+        this.relatedOrganizations = [...results.entities.organizations];
+      }
+      if (this.isIncidentRelated) {
+        const incidentIds = this.currentLocation.joins.map(
+          join => join.object_id,
+        );
+        const incidents = Incident.query()
+          .whereIdIn(incidentIds)
+          .get();
+        this.relatedIncidents = [...incidents];
+      }
+    },
+    async detachLocationFromOrganization(organization) {
+      const data = {};
+      if (this.isPrimaryResponseArea) {
+        data.primary_location = null;
+      }
+      if (this.isSecondaryResponseArea) {
+        data.secondary_location = null;
+      }
+      await Organization.api().patch(`/organizations/${organization.id}`, data);
+      await this.loadLocation();
+    },
+    async detachLocationFromIncident(incident) {
+      await Incident.api().removeLocation(incident.id, this.currentLocation.id);
+      await this.loadLocation();
     },
   },
 };

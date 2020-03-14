@@ -15,6 +15,7 @@ export default class Location extends Model {
       poly: this.attr(null),
       attr: this.attr(null),
       point: this.attr(null),
+      joins: this.attr(null),
     };
   }
 

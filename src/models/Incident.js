@@ -70,6 +70,17 @@ export default class Incident extends Model {
           { save: false },
         );
       },
+      removeLocation(id, location) {
+        return this.delete(
+          `/incidents/${id}/locations`,
+          {
+            data: {
+              location,
+            },
+          },
+          { save: false },
+        );
+      },
     },
   };
 }

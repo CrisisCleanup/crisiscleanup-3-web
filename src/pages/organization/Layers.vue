@@ -103,6 +103,7 @@ export default {
       const params = {
         created_by__organization: this.currentUser.organization.id,
         type__isnull: false,
+        fields: 'id,name,type,shared',
         offset:
           this.locationsMeta.pagination.pageSize *
           (this.locationsMeta.pagination.page - 1),
