@@ -417,6 +417,13 @@ export default {
     EventBus.$on('updatedWorksiteLocation', latLng => {
       this.geocodeWorksite(latLng.lat, latLng.lng);
     });
+    EventBus.$on('clearWorksite', () => {
+      this.worksite = {
+        incident: this.$route.params.incident_id,
+        form_data: [],
+        formFields: {},
+      };
+    });
   },
   data() {
     return {

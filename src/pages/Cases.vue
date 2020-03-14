@@ -458,7 +458,7 @@
             :alt="$t('actions.cancel')"
             size="xs"
             type="cancel"
-            @click.native="closeWorksite"
+            @click.native="clearWorksite"
           />
         </template>
         <template v-else>
@@ -1143,6 +1143,12 @@ export default {
       await this.selectedTableItems.forEach(i => action(null, i));
       this.spinning = false;
       this.reloadTable();
+    },
+    clearWorksite() {
+      this.$router.push(
+        `/incident/${this.$route.params.incident_id}/cases/new`,
+      );
+      EventBus.$emit('clearWorksite');
     },
   },
 };
