@@ -23,6 +23,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Clear Cypress Cache
+        run: rm -rf ~/.cache/Cypress || true
+
       - name: Checkout Api
         uses: actions/checkout@v2
         with:
