@@ -32,7 +32,7 @@ jobs:
 
       - name: Spin up Api
         run: |
-          echo ${{ secrets.GITHUB_PAT }} || docker login docker.pkg.github.com -u ${{ secrets.GITHUB_PAT_USER }} --password-stdin
+          echo ${{ secrets.GITHUB_PAT }} | docker login docker.pkg.github.com -u ${{ secrets.GITHUB_PAT_USER }} --password-stdin
           cd "$GITHUB_WORKSPACE/cc3api"
           docker-compose build --pull
           docker-compose up -d app
