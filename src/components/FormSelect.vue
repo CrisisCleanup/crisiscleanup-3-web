@@ -19,6 +19,12 @@
     @input="onInput"
     @search:focus="open"
   >
+    <template #selected-option="option">
+      <slot name="selected-option" :option="option" />
+    </template>
+    <template #option="option">
+      <slot name="option" :option="option" />
+    </template>
     <template v-if="required" #search="{attributes, events}">
       <input
         ref="input"
@@ -33,6 +39,7 @@
 </template>
 
 <script>
+import { xor } from 'lodash';
 export default {
   name: 'FormSelect',
   props: {
@@ -130,6 +137,15 @@ export default {
   methods: {
     onInput(value) {
       this.$emit('input', value);
+      if (this.multiple) {
+        this.$emit(
+          'changed',
+          xor(
+            value,
+            this.value.map(item => (this.itemKey ? item[this.itemKey] : item)),
+          ),
+        );
+      }
       if (this.required) {
         if (this.$refs.input.checkValidity()) {
           this.isInvalid = false;

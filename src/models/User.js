@@ -14,6 +14,7 @@ export default class User extends Model {
       email: this.string(''),
       mobile: this.string(''),
       roles: this.attr(null),
+      active_roles: this.attr(null),
       files: this.attr(null),
       organization: this.attr(null),
       states: this.attr({}),
@@ -39,7 +40,7 @@ export default class User extends Model {
 
   get currentRole() {
     return Role.query()
-      .whereIdIn(this.roles)
+      .whereIdIn(this.active_roles)
       .get()[0];
   }
 

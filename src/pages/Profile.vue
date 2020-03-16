@@ -134,16 +134,9 @@
                 </div>
                 <hr class="p-2 m-auto" />
                 <div class="flex pb-4">
-                  <form-select
-                    v-model="currentUser.roles"
+                  <UserRolesSelect
                     class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
-                    :value="currentUser.roles"
-                    multiple
-                    :options="roles"
-                    item-key="id"
-                    label="name_t"
-                    size="large"
-                    select-classes="bg-white border text-xs profile-select p-1"
+                    :user="currentUser"
                   />
                   <form-select
                     v-model="currentUser.equipment"
@@ -345,11 +338,12 @@ import Role from '@/models/Role';
 import Language from '@/models/Language';
 import { i18nService } from '@/services/i18n.service';
 import DragDrop from '@/components/DragDrop';
+import UserRolesSelect from '@/components/UserRolesSelect';
 import { getErrorMessage } from '../utils/errors';
 
 export default {
   name: 'Profile',
-  components: { DragDrop },
+  components: { DragDrop, UserRolesSelect },
   data() {
     return {
       mode: 'view',

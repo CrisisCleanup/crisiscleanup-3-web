@@ -100,17 +100,7 @@
             </div>
           </div>
           <div>
-            <form-select
-              v-model="selectedUser.roles"
-              class="w-64 border border-crisiscleanup-dark-100"
-              :value="selectedUser.roles"
-              multiple
-              :options="roles"
-              item-key="id"
-              label="name_t"
-              size="large"
-              select-classes="bg-white border text-xs role-select p-1"
-            />
+            <UserRolesSelect :user="selectedUser" />
           </div>
         </div>
       </div>
@@ -130,12 +120,13 @@ import Role from '@/models/Role';
 import MessageBox from '@/components/dialogs/MessageBox';
 import UserEditModal from './UserEditModal';
 import { getErrorMessage } from '../../utils/errors';
+import UserRolesSelect from '../../components/UserRolesSelect';
 
 const messageBox = create(MessageBox);
 
 export default {
   name: 'UserView',
-  components: { UserEditModal },
+  components: { UserEditModal, UserRolesSelect },
   data() {
     return {
       isEditing: false,

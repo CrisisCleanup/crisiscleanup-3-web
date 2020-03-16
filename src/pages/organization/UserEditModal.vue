@@ -57,17 +57,7 @@
           :placeholder="$t('profileUser.email_placeholder ')"
           disabled
         />
-        <form-select
-          v-model="user.roles"
-          class="flex-grow m-2 border border-crisiscleanup-dark-100"
-          :value="user.roles"
-          multiple
-          :options="roles"
-          item-key="id"
-          label="name_t"
-          size="large"
-          select-classes="bg-white border text-xs profile-select p-1"
-        />
+        <UserRolesSelect :user="user" />
       </div>
     </div>
     <div slot="footer" class="p-3 flex justify-end">
@@ -93,8 +83,11 @@
 <script>
 import User from '@/models/User';
 import Role from '@/models/Role';
+import UserRolesSelect from '@/components/UserRolesSelect';
+
 export default {
   name: 'UserEditModal',
+  components: { UserRolesSelect },
   props: {
     user: {
       type: Object,
