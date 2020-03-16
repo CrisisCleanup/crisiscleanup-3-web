@@ -59,7 +59,6 @@ jobs:
           wait-on-timeout: 120
           browser: chrome
           headless: true
-          cache-key: yarn-${{ hashFiles('**/yarn.lock') }}
           command-prefix: 'percy exec -- npx'
           env: WEB_USER=${{ secrets.CYPRESS_WEB_USER }},WEB_PASS=${{ secrets.CYPRESS_WEB_PASS }},API_URL=http://localhost:5000
         env:
