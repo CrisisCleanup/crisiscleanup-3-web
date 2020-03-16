@@ -112,7 +112,7 @@
     "@storybook/addon-storyshots": "^5.3.14",
     "@storybook/addon-storysource": "^5.3.17",
     "@storybook/addons": "^5.3.14",
-    "@storybook/vue": "^5.3.14",
+    "@storybook/vue": "^5.3.17",
     "@vue/cli-plugin-babel": "^4.2.3",
     "@vue/cli-plugin-e2e-cypress": "^4.2.3",
     "@vue/cli-plugin-eslint": "^4.2.3",
