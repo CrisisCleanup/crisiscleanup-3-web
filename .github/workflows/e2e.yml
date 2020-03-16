@@ -14,6 +14,7 @@ env:
   VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
   VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
   VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
+  CYPRESS_INSTALL_BINARY: 'https://cdn.cypress.io/desktop/4.1.0/linux-x64/cypress.zip'
 
 jobs:
   cypress:
@@ -41,10 +42,11 @@ jobs:
           docker-compose up -d app
 
       - name: Install Dependencies
-        uses: cypress-io/github-action@v1.23.1
+        uses: cypress-io/github-action@v1.23.2
         with:
           # will install node deps & cypress
           runTests: false
+          env: CYPRESS_INSTALL_BINARY=${{ env.CYPRESS_INSTALL_BINARY }}
 
       - name: Patch Cypress Director
         env:
