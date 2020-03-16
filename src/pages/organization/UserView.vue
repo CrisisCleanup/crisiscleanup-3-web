@@ -13,24 +13,6 @@
           @click.native="isEditing = true"
         />
         <ccu-icon
-          :alt="$t('actions.location')"
-          type="pin"
-          class="mx-2"
-          size="small"
-        />
-        <ccu-icon
-          :alt="$t('actions.print')"
-          type="print"
-          class="mx-2"
-          size="small"
-        />
-        <ccu-icon
-          :alt="$t('actions.chat')"
-          type="chat"
-          class="mx-2"
-          size="large"
-        />
-        <ccu-icon
           :alt="$t('actions.delete')"
           type="trash"
           class="mx-2"

@@ -177,12 +177,6 @@
                     size="small"
                   />
                 </a>
-                <ccu-icon
-                  :alt="$t('actions.find')"
-                  type="pin"
-                  class="mx-1"
-                  size="small"
-                />
               </div>
             </template>
           </Table>
