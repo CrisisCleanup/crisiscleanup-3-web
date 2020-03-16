@@ -177,7 +177,7 @@
                   <StatusDropDown
                     class="block"
                     :current-work-type="work_type"
-                    :on-select="
+                    @input="
                       value => {
                         statusValueChange(value, work_type);
                       }
@@ -229,7 +229,7 @@
                 <StatusDropDown
                   class="block"
                   :current-work-type="work_type"
-                  :on-select="
+                  @input="
                     value => {
                       statusValueChange(value, work_type);
                     }
@@ -267,7 +267,7 @@
                 <StatusDropDown
                   class="block"
                   :current-work-type="work_type"
-                  :on-select="
+                  @input="
                     value => {
                       statusValueChange(value, work_type);
                     }

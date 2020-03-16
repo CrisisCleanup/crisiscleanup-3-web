@@ -127,8 +127,8 @@
         </div>
         <InviteUsers />
       </div>
-      <div class="flex flex-grow">
-        <div class="w-96 flex flex-col">
+      <div class="user-grid">
+        <div class="w-96 flex flex-col h-full">
           <Table
             class="border text-xs flex-grow"
             :data="users"
@@ -311,5 +311,11 @@ export default {
 <style>
 .vue-tags-input .ti-tag {
   @apply relative bg-crisiscleanup-grey-100 text-black;
+}
+
+.user-grid {
+  @apply flex-grow;
+  display: grid;
+  grid-template-columns: auto 5fr;
 }
 </style>

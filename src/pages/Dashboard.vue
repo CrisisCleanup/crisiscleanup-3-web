@@ -87,7 +87,7 @@
                         class="block"
                         :current-work-type="work_type"
                         use-icon
-                        :on-select="
+                        @input="
                           value => {
                             statusValueChange(
                               value,

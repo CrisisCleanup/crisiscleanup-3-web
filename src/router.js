@@ -21,6 +21,7 @@ import store from '@/store/index';
 import UserView from '@/pages/organization/UserView';
 import NotFound from '@/pages/NotFound';
 import RequestAccess from '@/pages/RequestAccess';
+import PrintToken from '@/pages/unauthenticated/PrintToken';
 
 Vue.use(VueRouter);
 
@@ -157,6 +158,12 @@ const routes = [
     path: '/invitation_token/:token',
     component: InvitationSignup,
     name: 'nav.invitation_token',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/print_token/:token',
+    component: PrintToken,
+    name: 'nav.print_token',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {

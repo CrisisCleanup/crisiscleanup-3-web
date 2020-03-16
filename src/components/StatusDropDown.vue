@@ -29,7 +29,7 @@
           class="badge-holder text-xs"
           @click="
             () => {
-              onSelect(status.status);
+              $emit('input', status.status);
             }
           "
         >
@@ -48,10 +48,6 @@ import { getColorForStatus, getWorkTypeImage } from '@/filters';
 export default {
   name: 'StatusDropDown',
   props: {
-    onSelect: {
-      type: Function,
-      default: () => {},
-    },
     currentWorkType: {
       type: Object,
       default: () => {
