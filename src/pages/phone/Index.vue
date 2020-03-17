@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     ...mapActions('phone', ['fetchAgent', 'getRealtimeMetrics']),
-    async getAgent() {
+    /*async getAgent() {
       const userAgent = {
         user: {
           id: this.currentUser.id,
@@ -81,9 +81,9 @@ export default {
         },
       };
       await this.fetchAgent(userAgent);
-    },
+    },*/
   },
-  async mounted() {
+  /*async mounted() {
     this.loading = true;
     const agentId = this.$store.getters['phone/agentId'];
     if (agentId === null) {
@@ -92,6 +92,6 @@ export default {
     }
     await this.getRealtimeMetrics();
     this.loading = false;
-  },
+  },*/
 };
 </script>
