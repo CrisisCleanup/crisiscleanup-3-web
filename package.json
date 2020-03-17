@@ -104,7 +104,7 @@
     "@percy/cypress": "^2.3.1",
     "@storybook/addon-a11y": "^5.3.17",
     "@storybook/addon-actions": "^5.3.17",
-    "@storybook/addon-backgrounds": "^5.3.14",
+    "@storybook/addon-backgrounds": "^5.3.17",
     "@storybook/addon-centered": "^5.3.14",
     "@storybook/addon-docs": "^5.3.17",
     "@storybook/addon-knobs": "^5.3.14",
