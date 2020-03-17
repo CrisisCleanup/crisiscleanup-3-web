@@ -24,20 +24,17 @@
       >
         <operatorstats />
       </div>
-      <!--- Grid Main --->
-      <div class="grid--main h-screen border-2">
-        <!-- Stories Card -->
-        <div
-          class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
-        >
-          <stories-card />
-        </div>
-        <!-- Training Card -->
-        <div
-          class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
-        >
-          <training-card />
-        </div>
+      <!-- Stories Card -->
+      <div
+        class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
+      >
+        <stories-card />
+      </div>
+      <!-- Training Card -->
+      <div
+        class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
+      >
+        <training-card />
       </div>
     </template>
   </Loader>
