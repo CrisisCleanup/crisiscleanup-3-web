@@ -1,17 +1,30 @@
 <template>
   <div>
-    <base-button
+    <!--- Tabs --->
+    <button
       v-for="tab in tabs"
       :key="tab"
       @click="selected = tab"
-      :class="['border-2 cursor-pointer -my-1', { active: selected === tab }]"
+      :class="['tab-btn', { active: selected === tab }]"
+      class="m-1"
     >
       {{ tab }}
-    </base-button>
-
-    <component :is="selected" />
+    </button>
     <!-- line -->
     <hr class="bg-white" />
+    <!--- Content --->
+    <component :is="selected" class="tab"></component>
+    <!-- line -->
+    <hr class="bg-white" />
+    <!--- See All Button --->
+    <div class="m-3 pb-2">
+      <base-link
+        variant="bodysm"
+        class="bg-crisis-cleanup-yellow-900 text-black align-right"
+      >
+        See All
+      </base-link>
+    </div>
   </div>
 </template>
 
@@ -22,20 +35,27 @@ export default {
   name: 'NewsTrainingCard',
   data() {
     return {
-      tabs: ['NewsCard', 'TrainingsCard'],
-      selected: 'NewsCard',
+      tabs: ['News', 'Trainings'],
+      selected: 'News',
     };
   },
   components: {
-    NewsCard,
-    TrainingsCard,
+    News: NewsCard,
+    Trainings: TrainingsCard,
   },
 };
 </script>
 
 <style scoped>
 /* tab selection colors */
+.tab-btn {
+  padding: 6px 10px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  border: 2px;
+  outline: none;
+}
 .active {
-  border-bottom: 3px #f79820;
+  border-bottom: 3px solid #ffb92f;
 }
 </style>
