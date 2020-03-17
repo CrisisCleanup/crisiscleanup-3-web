@@ -12,6 +12,7 @@
     "prettify": "prettier --write {.,**}/*.{js,vue}",
     "format": "yarn lint-fix && yarn prettify",
     "deploy-staging": "vue-cli-service build --mode staging && vue-cli-service s3-deploy",
+    "deploy-development": "vue-cli-service build --mode development && vue-cli-service s3-deploy",
     "compile-icons": "./template-compiler.js",
     "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "cross-env VUE_CLI_BABEL_TARGET_NODE=true VUE_CLI_BABEL_TRANSPILE_MODULES=true NODE_ENV=test vue-cli-service test:unit --coverage",

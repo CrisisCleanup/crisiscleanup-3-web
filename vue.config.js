@@ -2,7 +2,7 @@ module.exports = {
   runtimeCompiler: true,
   lintOnSave: false,
   configureWebpack: () => {
-    if (!process.env.NODE_ENV === 'production') {
+    if (!(process.env.NODE_ENV === 'production')) {
       return {
         devtool: 'inline-source-map',
         devServer: {
@@ -31,7 +31,7 @@ module.exports = {
       registry: undefined,
       awsProfile: 'default',
       region: 'us-east-2',
-      bucket: 'app.staging.crisiscleanup.io',
+      bucket: 'app.dev.crisiscleanup.io',
       createBucket: true,
       staticHosting: true,
       staticIndexPage: 'index.html',
@@ -42,7 +42,7 @@ module.exports = {
       acl: 'public-read',
       pwa: true,
       enableCloudfront: true,
-      cloudfrontId: 'E3DNZ4GD3WPDPE',
+      cloudfrontId: 'E30EMJPSSZIB2U',
       cloudfrontMatchers: '/*',
       uploadConcurrency: 5,
       pluginVersion: '4.0.0-rc3',

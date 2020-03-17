@@ -24,7 +24,9 @@ env:
   VUE_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_API_KEY }}
   VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
   VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
-  VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
+  VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
+  VUE_APP_S3D_BUCKET: 'app.dev.crisiscleanup.io'
+  VUE_APP_S3D_CLOUDFRONT_ID: 'E30EMJPSSZIB2U'
   CYPRESS_INSTALL_BINARY: 0
 
 jobs:
@@ -152,9 +154,9 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
-      - name: Deploy Staging
+      - name: Deploy Development
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
           AWS_DEFAULT_REGION: ${{ secrets.aws_default_region }}
-        run: yarn deploy-staging
+        run: yarn deploy-development
