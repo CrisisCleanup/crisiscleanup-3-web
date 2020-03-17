@@ -1,29 +1,15 @@
 <template>
   <div>
-    <b-card>
-      <b-tabs pills card>
-        <b-tab title="News" class="news-tab" active>
-          <NewsCard />
-          <NewsCard />
-          <!--- See All Button --->
-          <div id="See-All-btn">
-            <base-button class="text-crisis-cleanup-yellow-900 align-right">
-              See All
-            </base-button>
-          </div>
-        </b-tab>
-        <b-tab title="Training" class="training-tab" active>
-          <TrainingsCard />
-          <TrainingsCard />
-          <!--- See All Button --->
-          <div id="See-All-btn">
-            <base-button class="text-crisis-cleanup-yellow-900 align-right">
-              See All
-            </base-button>
-          </div>
-        </b-tab>
-      </b-tabs>
-    </b-card>
+    <base-button
+      v-for="tab in tabs"
+      :key="tab"
+      @click="selected = tab"
+      :class="['border-2 cursor-pointer -my-1', { active: selected === tab }]"
+    >
+      {{ tab }}
+    </base-button>
+
+    <component :is="selected" />
     <!-- line -->
     <hr class="bg-white" />
   </div>
@@ -34,6 +20,12 @@ import NewsCard from './NewsCard';
 import TrainingsCard from './TrainingsCard';
 export default {
   name: 'NewsTrainingCard',
+  data() {
+    return {
+      tabs: ['NewsCard', 'TrainingsCard'],
+      selected: 'NewsCard',
+    };
+  },
   components: {
     NewsCard,
     TrainingsCard,
@@ -43,18 +35,7 @@ export default {
 
 <style scoped>
 /* tab selection colors */
-.news-tab {
-  border-width: thick;
-}
-.news-tab:focus {
-  border-bottom: #f79820;
-  border-width: thick;
-}
-.training-tab {
-  border-width: thick;
-}
-.training-tab:focus {
-  border-bottom: #f79820;
-  border-width: thick;
+.active {
+  border-bottom: 3px #f79820;
 }
 </style>
