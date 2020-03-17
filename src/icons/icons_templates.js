@@ -112,6 +112,30 @@ const colors = {
     fillColor: '#1D1D1D',
     strokeColor: '#1D1D1D',
   },
+  need_unfilled_unclaimed: {
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
+  },
+  need_unfilled_claimed: {
+    fillColor: '#fab92e',
+    strokeColor: '#f79820',
+  },
+  need_filled_unclaimed: {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
+  },
+  need_filled_claimed: {
+    fillColor: '#82D78C',
+    strokeColor: '#82D78C',
+  },
+  need_overdue_unclaimed: {
+    fillColor: '#d0021b',
+    strokeColor: '#e30001',
+  },
+  need_overdue_claimed: {
+    fillColor: '#ea51eb',
+    strokeColor: '#e018e1',
+  },
 };
 
 const circle = `<svg xmlns="http://www.w3.org/2000/svg" height="18" width="18">
