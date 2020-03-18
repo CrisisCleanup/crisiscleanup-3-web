@@ -9,6 +9,7 @@ on:
       - '.github/workflows/e2e.yml'
 
 env:
+  CI: 'true'
   VUE_APP_WHAT_3_WORDS_API_KEY: ${{ secrets.VUE_APP_WHAT_3_WORDS_API_KEY }}
   VUE_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_API_KEY }}
   VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
@@ -79,10 +80,7 @@ jobs:
           docker-compose up -d app
 
       - name: Install Dependencies
-        uses: cypress-io/github-action@v1
-        with:
-          # will install node deps & cypress
-          runTests: false
+        run: yarn --frozen-lockfile --ignore-engines --ignore-optional --non-interactive --production=false
 
       - name: Patch Cypress Director
         env:
