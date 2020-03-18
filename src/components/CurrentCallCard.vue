@@ -1,61 +1,83 @@
 <template>
   <div>
     <div class="flex flex-row justify-between">
-      <div class="flex-col m-3">
-        <img :src="profileSrc" alt="PFP" />
-      </div>
-      <!--- Mobile / Calls / Days --->
+      <!--- Survivor Phone # --->
       <div class="flex-col justify-between m-3">
-        <base-text variant="h1" class="justify-between">{{ mobile }}</base-text>
-        <base-text variant="h2" class="justify-between"
+        <base-text
+          variant="h2"
+          class="justify-between text-crisiscleanup-dark-400"
+          >(601) 123-7897</base-text
+        >
+        <!--- Survivor Contact Rate --->
+        <base-text
+          variant="bodysm"
+          class="justify-between text-crisiscleanup-dark-400"
           >2 calls | 8 days</base-text
         >
-        <!---
-        <div id="moreinfobtn" class="more-infobtn">
-          <base-button
-            class="text-crisiscleanup-dark-blue align-right"
-            :action="() => (toggleOpen = !toggleOpen)"
-            >{{ !toggleOpen ? 'more' : 'less' }} info
-          </base-button>
-        </div>
-        --->
       </div>
-      <!--- Name / Language --->
+      <!--- Survivor Name --->
       <div class="flex-col justify-between m-3">
         <base-text
           variant="body"
           class="justify-between justify-between text-crisiscleanup-grey-400"
-          >{{ name }}</base-text
+          >Julie Smith</base-text
         >
+        <!--- Language --->
         <base-text
           variant="body"
-          class="justify-between text-crisicleanup-grey-400"
+          class="justify-between text-crisiscleanup-grey-400"
           >English</base-text
         >
       </div>
       <!--- Action Buttons --->
-      <div class="flex-row justify-between m-3">
-        <!--- Convert to Buttons !!!!! --->
-        <base-text variant="h1">mic</base-text>
-        <!--- add friend button --->
-        <base-button
-          icon-size="md"
-          size="md"
-          variant="solid"
-          ccu-icon="active"
-        />
-        <base-text variant="h2" class="justify-between">End</base-text>
+      <div class="flex flex-row justify-between m-3">
+        <div class="flex-col">
+          <!--- Convert to Buttons !!!!! --->
+          <base-button variant="h1" class="px-1">mic</base-button>
+        </div>
+        <div class="flex-col">
+          <!--- add friend button --->
+          <div class="px-1">
+            <base-button
+              icon-size="md"
+              size="md"
+              ccu-icon="active"
+              class="px-1 py-1"
+            />
+          </div>
+        </div>
+        <div class="flex-col">
+          <base-button variant="h2" class="justify-between px-1"
+            >End</base-button
+          >
+        </div>
       </div>
     </div>
     <!--- info card --->
     <div class="info-card">
       <more-info v-if="toggleOpen" />
     </div>
-    <!--- Notes --->
+    <!--- Notes Section --->
     <div class="flex-col justify-between m-3">
-      <base-text variant="h2" class="justify-between">Notes</base-text>
-      <!--- spanner thingy --->
-      <base-input placeholder="Issues Resolved" size="base" />
+      <!--- Title --->
+      <base-text variant="h2" class="justify-between py-2">Notes</base-text>
+      <!--- Dropdown --->
+      <base-button
+        icon-size="md"
+        size="md"
+        variant="outline"
+        ccu-icon="updown"
+        class="px-5 py-2"
+        @click="toggle"
+        >Call Status*</base-button
+      >
+      <ul>
+        <li>Call Status*</li>
+        <li>Placeholder</li>
+        <li>Hold-Placer</li>
+      </ul>
+      <!--- Input Field --->
+      <base-input placeholder="Issues Resolved" size="large" class="py-2" />
     </div>
   </div>
 </template>
@@ -63,8 +85,15 @@
 <script>
 export default {
   Name: 'CurrentCallCard',
-  Components: {
-    //call
+  data() {
+    return {
+      isOpen: false,
+    };
+  },
+  methods: {
+    toggle() {
+      this.isOpen = !this.isOpen;
+    },
   },
 };
 </script>

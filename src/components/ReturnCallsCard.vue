@@ -22,7 +22,7 @@ export default {
   name: 'ReturnCallsCard',
   data() {
     return {
-      tabs: ['Current Call', 'Scripts'],
+      tabs: ['Current Call', 'Scripts', 'Resources', 'Live Help'],
       selected: 'Current Call',
     };
   },
