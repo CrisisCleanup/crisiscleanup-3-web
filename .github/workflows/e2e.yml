@@ -13,13 +13,18 @@ env:
   VUE_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_API_KEY }}
   VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
   VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
-  VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
+  VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
   CYPRESS_INSTALL_BINARY: 'https://cdn.cypress.io/desktop/4.1.0/linux-x64/cypress.zip'
 
 jobs:
   cypress:
     name: Run Visual Tests
     runs-on: ubuntu-16.04
+    strategy:
+      fail-fast: false
+      matrix:
+        # run 3 instances of cypress in parallel
+        containers: [1, 2, 3]
 
     steps:
       - uses: actions/checkout@v2
@@ -59,6 +64,7 @@ jobs:
           # skip install now
           install: false
           record: true
+          parallel: true
           start: yarn serve
           wait-on: 'http://localhost:8080'
           wait-on-timeout: 120

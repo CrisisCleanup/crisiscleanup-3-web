@@ -1,6 +1,8 @@
 name: CrisisCleanup
 
 on:
+  release:
+    types: [published, created]
   pull_request:
     paths:
       - '*.json'
@@ -40,7 +42,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Cache Node Modules
-        uses: actions/cache@v1.0.3
+        uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: yarn-${{ hashFiles('**/yarn.lock') }}
@@ -76,7 +78,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Cache Node Modules
-        uses: actions/cache@v1.0.3
+        uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: yarn-${{ hashFiles('**/yarn.lock') }}
@@ -106,7 +108,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Cache Node Modules
-        uses: actions/cache@v1.0.3
+        uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: yarn-${{ hashFiles('**/yarn.lock') }}
@@ -125,10 +127,14 @@ jobs:
         run: yarn build
 
   deploy:
-    name: Deploy Staging
+    name: Deploy Site
     runs-on: ubuntu-latest
     if: "github.ref == 'refs/heads/master' && !contains(github.event.head_commit.message, 'ci-skip-deploy')"
     needs: [test, lint, build]
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
+      AWS_DEFAULT_REGION: ${{ secrets.aws_default_region }}
     steps:
       - uses: actions/checkout@v2
 
@@ -137,7 +143,7 @@ jobs:
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Cache Node Modules
-        uses: actions/cache@v1.0.3
+        uses: actions/cache@v1
         with:
           path: ${{ steps.yarn-cache.outputs.dir }}
           key: yarn-${{ hashFiles('**/yarn.lock') }}
@@ -153,8 +159,16 @@ jobs:
         run: yarn install
 
       - name: Deploy Development
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
-          AWS_DEFAULT_REGION: ${{ secrets.aws_default_region }}
         run: yarn deploy-development
+
+      - name: Deploy Staging
+        if: "github.event.action == 'created'"
+        env:
+          VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
+        run: yarn deploy-staging
+
+      - name: Deploy Production
+        if: "github.event.action == 'published'"
+        env:
+          VUE_APP_API_BASE_URL: 'https://api.crisiscleanup.io'
+        run: yarn deploy-production

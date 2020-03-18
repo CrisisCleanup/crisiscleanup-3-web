@@ -36,6 +36,10 @@ module.exports = {
         bucket: 'app.dev.crisiscleanup.io',
         cloudfrontId: 'E3NVMNFXV1CDMX',
       },
+      production: {
+        bucket: 'app.crisiscleanup.io',
+        cloudfrontId: 'E2HGQQP0CRG0WI',
+      },
     };
     return {
       s3Deploy: {
