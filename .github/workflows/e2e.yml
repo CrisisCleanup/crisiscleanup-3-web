@@ -88,6 +88,9 @@ jobs:
           SORRY_CYP_API_URL: ${{ secrets.SORRY_CYP_API_URL }}
         run: yarn cy:patch
 
+      - name: Wait for Api
+        run: 'yarn test:e2e:wait'
+
       - name: Run Cypress
         uses: cypress-io/github-action@v1
         with:
