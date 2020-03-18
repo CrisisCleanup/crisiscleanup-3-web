@@ -79,6 +79,8 @@ jobs:
           docker-compose up -d app
 
       - name: Install Dependencies
+        env:
+          CHILD_CONCURRENCY: 1
         run: yarn --frozen-lockfile --ignore-engines --ignore-optional --non-interactive --production=false
 
       - name: Patch Cypress Director
@@ -111,3 +113,4 @@ jobs:
           SORRY_CYP_API_URL: ${{ secrets.SORRY_CYP_API_URL }}
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHILD_CONCURRENCY: 1
