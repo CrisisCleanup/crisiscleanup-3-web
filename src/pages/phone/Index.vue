@@ -2,6 +2,7 @@
   <Loader :loading="loading" class="h-full overflow-auto py-4 px-6 bg-gray-100">
     <template #content>
       <div class="flex">
+        <!-- Contact Card -->
         <div
           class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
         >
@@ -12,6 +13,7 @@
           />
         </div>
       </div>
+      <!-- Stats Cards -->
       <div
         class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
       >
@@ -22,10 +24,17 @@
       >
         <operatorstats />
       </div>
+      <!-- Stories Card -->
       <div
         class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
       >
         <stories-card />
+      </div>
+      <!-- Training Card -->
+      <div
+        class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
+      >
+        <training-card />
       </div>
     </template>
   </Loader>
@@ -39,14 +48,16 @@ import PeopleStoriesCard from '@/components/PeopleStoriesCard';
 import ContactCard from '@/components/ContactCard';
 import genstatscard from '@/components/GeneralStatsCard.vue';
 import operatorstats from '@/components/OperatorStatisticsCard';
+import NewsTrainingCard from '@/components/NewsTrainingCard';
 
 export default {
   name: 'Phone',
   components: {
-    'stories-card': PeopleStoriesCard,
     genstatscard,
     operatorstats,
     'contact-card': ContactCard,
+    'stories-card': PeopleStoriesCard,
+    'training-card': NewsTrainingCard,
     Loader,
   },
   data() {
