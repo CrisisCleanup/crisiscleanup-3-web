@@ -63,19 +63,21 @@
       <base-text variant="h2" class="justify-between py-2">Notes</base-text>
       <!--- Dropdown --->
       <base-button
-        icon-size="md"
-        size="md"
         variant="outline"
         ccu-icon="updown"
-        class="px-5 py-2"
+        icon-size="md"
         @click="toggle"
+        class="py-2 px-5 width-full"
+        :action="() => (isOpen = !isOpen)"
         >Call Status*</base-button
       >
-      <ul>
-        <li>Call Status*</li>
-        <li>Placeholder</li>
-        <li>Hold-Placer</li>
-      </ul>
+      <div v-show="isOpen === true" class="content">
+        <ul class="list py-1">
+          <li>Call Status*</li>
+          <li>placeholder</li>
+          <li>hold-placer</li>
+        </ul>
+      </div>
       <!--- Input Field --->
       <base-input placeholder="Issues Resolved" size="large" class="py-2" />
     </div>
