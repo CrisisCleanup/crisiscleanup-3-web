@@ -26,28 +26,39 @@ module.exports = {
       },
     },
   },
-  pluginOptions: {
-    s3Deploy: {
-      registry: undefined,
-      awsProfile: 'default',
-      region: 'us-east-2',
-      bucket: 'app.dev.crisiscleanup.io',
-      createBucket: true,
-      staticHosting: true,
-      staticIndexPage: 'index.html',
-      staticErrorPage: 'index.html',
-      assetPath: 'dist',
-      assetMatch: '**',
-      deployPath: '/',
-      acl: 'public-read',
-      pwa: true,
-      enableCloudfront: true,
-      cloudfrontId: 'E30EMJPSSZIB2U',
-      cloudfrontMatchers: '/*',
-      uploadConcurrency: 5,
-      pluginVersion: '4.0.0-rc3',
-      cacheControl: 'max-age=86400',
-      pwaFiles: 'index.html,app.js',
-    },
-  },
+  pluginOptions: (() => {
+    const stages = {
+      staging: {
+        bucket: 'app.staging.crisiscleanup.io',
+        cloudfrontId: 'E3DNZ4GD3WPDPE',
+      },
+      development: {
+        bucket: 'app.dev.crisiscleanup.io',
+        cloudfrontId: 'E3NVMNFXV1CDMX',
+      },
+    };
+    return {
+      s3Deploy: {
+        registry: undefined,
+        awsProfile: 'default',
+        region: 'us-east-2',
+        createBucket: true,
+        staticHosting: true,
+        staticIndexPage: 'index.html',
+        staticErrorPage: 'index.html',
+        assetPath: 'dist',
+        assetMatch: '**',
+        deployPath: '/',
+        acl: 'public-read',
+        pwa: true,
+        enableCloudfront: true,
+        cloudfrontMatchers: '/*',
+        uploadConcurrency: 5,
+        pluginVersion: '4.0.0-rc3',
+        cacheControl: 'max-age=86400',
+        pwaFiles: 'index.html,app.js',
+        ...stages[process.env.NODE_ENV || 'development'],
+      },
+    };
+  })(),
 };
