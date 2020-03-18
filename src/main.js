@@ -31,6 +31,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTagsInput from '@johmun/vue-tags-input';
+import * as Sentry from '@sentry/browser';
+import * as SentryIntegrations from '@sentry/integrations';
 import axios from 'axios';
 import Dropdown from 'bp-vuejs-dropdown';
 import detectBrowserLanguage from 'detect-browser-language';
@@ -113,6 +115,18 @@ Vue.filter('getRecurrenceString', getRecurrenceString);
 if (AuthService.getUser()) {
   axios.defaults.headers.common.Authorization = `Bearer ${AuthService.getToken()}`;
 }
+
+// Sentry Logging
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  integrations: [
+    new SentryIntegrations.Vue({
+      Vue,
+      attachProps: true,
+      logErrors: process.env.NODE_ENV !== 'production',
+    }),
+  ],
+});
 
 axios.interceptors.response.use(
   function(response) {
