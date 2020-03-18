@@ -44,11 +44,6 @@ jobs:
   cypress:
     name: E2E // Cypress
     runs-on: ubuntu-16.04
-    strategy:
-      fail-fast: false
-      matrix:
-        # run 3 instances of cypress in parallel
-        containers: [1, 2, 3]
     steps:
       - uses: actions/checkout@v2
 
@@ -97,7 +92,6 @@ jobs:
           # skip install now
           install: false
           record: true
-          parallel: true
           start: yarn serve
           wait-on: 'http://localhost:8080'
           wait-on-timeout: 120
