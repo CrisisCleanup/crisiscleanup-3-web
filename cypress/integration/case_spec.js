@@ -31,8 +31,9 @@ describe('New Case', () => {
     }).as('printWorksite');
 
     cy.visit('/incident/158/cases/new');
-    cy.wait('@apiIncident');
-    cy.contains('New Case').should('be.visible');
+    cy.waitUntil(() => cy.contains('New Case').should('be.visible'), {
+      timeout: 10000,
+    });
   });
   beforeEach(() => {
     cy.get('.js-worksite-name').as('WorksiteName');

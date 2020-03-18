@@ -23,8 +23,9 @@ describe('Cases Page', () => {
     }).as('printWorksite');
 
     cy.visit('/incident/158/cases/new');
-    cy.wait('@apiIncident');
-    cy.contains('Cases:').should('be.visible');
+    cy.waitUntil(() => cy.contains('New Case').should('be.visible'), {
+      timeout: 10000,
+    });
   });
   beforeEach(() => {
     cy.get('.ccu-icon[title="Table View"]').as('TableView');
