@@ -57,7 +57,7 @@ module.exports = {
         pluginVersion: '4.0.0-rc3',
         cacheControl: 'max-age=86400',
         pwaFiles: 'index.html,app.js',
-        ...stages[process.env.NODE_ENV || 'development'],
+        ...stages[process.env.VUE_APP_STAGE || 'development'],
       },
     };
   })(),
