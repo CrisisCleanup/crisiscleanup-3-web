@@ -129,7 +129,7 @@
     "babel-preset-vue": "^2.0.2",
     "bp-vuejs-dropdown": "^2.1.1",
     "cross-env": "^7.0.2",
-    "cypress": "^4.2.0",
+    "cypress": "3.8.0",
     "cypress-cy-select": "^0.2.0",
     "cypress-localstorage-commands": "^1.1.6",
     "cypress-vue-unit-test": "^1.11.7",
