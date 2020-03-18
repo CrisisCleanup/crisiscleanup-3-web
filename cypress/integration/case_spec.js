@@ -8,10 +8,6 @@
 describe('New Case', () => {
   beforeEach(cy.login);
   beforeEach(() => {
-    cy.on('uncaught:exception', () => {
-      return false;
-    });
-
     cy.server();
     cy.route({
       method: 'GET',
@@ -29,13 +25,9 @@ describe('New Case', () => {
       method: 'GET',
       url: `${Cypress.env('API_URL')}/worksites?id__in=*`,
     }).as('printWorksite');
-
-    cy.visit('/incident/158/cases/new');
-    cy.waitUntil(() => cy.contains('New Case').should('be.visible'), {
-      timeout: 10000,
-    });
   });
   beforeEach(() => {
+    cy.visit('/incident/158/cases/new');
     cy.get('.js-worksite-name').as('WorksiteName');
     cy.get('.js-worksite-address').as('WorksiteAddress');
     cy.get('.js-worksite-city').as('WorksiteCity');
@@ -50,6 +42,7 @@ describe('New Case', () => {
   });
 
   it('Creates new case successfully', () => {
+    cy.waitLoader();
     cy.get('@WorksiteName').type('Test Person', { force: true });
     cy.get('@WorksiteAddress').type('455 N Rexford Drive', { force: true });
     cy.get('@WorksiteCity').type('Beverly Hills', { force: true });

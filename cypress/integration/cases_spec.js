@@ -21,18 +21,15 @@ describe('Cases Page', () => {
       method: 'GET',
       url: `${Cypress.env('API_URL')}/worksites?id__in=*`,
     }).as('printWorksite');
-
-    cy.visit('/incident/158/cases/new');
-    cy.waitUntil(() => cy.contains('New Case').should('be.visible'), {
-      timeout: 10000,
-    });
   });
   beforeEach(() => {
+    cy.visit('/incident/158/cases/new');
     cy.get('.ccu-icon[title="Table View"]').as('TableView');
     cy.get('div[data-cy="worksiteview"]').as('WorksiteView');
     cy.get('div[data-cy="worksiteview_actions"]').as('WorksiteView_Actions');
   });
   it('successfully loads and matches snapshot', () => {
+    cy.waitLoader();
     cy.percySnapshot('cases - map view');
     cy.get('@TableView').click();
     cy.get('.table-operations').should('be.visible');

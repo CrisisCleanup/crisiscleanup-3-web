@@ -57,14 +57,26 @@ Cypress.Commands.add(
 
 // Wait until an element exists and then does not
 Cypress.Commands.add('waitTillHidden', selector => {
-  cy.waitUntil(() =>
-    cy
-      .get(selector)
-      .as('El')
-      .should('be.visible'),
-  );
-  cy.get('@El').should('not.be.visible');
+  cy.get('body')
+    .then($body => {
+      if ($body.find(selector).length) {
+        return selector;
+      }
+      return false;
+    })
+    .then(element => {
+      if (element) {
+        cy.waitUntil(() =>
+          cy
+            .get(element)
+            .parent()
+            .should('not.be.visible'),
+        );
+      }
+    });
 });
 
 // Wait until finished loader
-Cypress.Commands.add('waitLoader', () => cy.waitTillHidden('svg#loader-1'));
+Cypress.Commands.add('waitLoader', () =>
+  cy.waitTillHidden('[data-cy="overlay.loader"]'),
+);
