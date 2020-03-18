@@ -14,23 +14,55 @@ env:
   VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
   VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
   VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
-  CYPRESS_INSTALL_BINARY: 'https://cdn.cypress.io/desktop/4.1.0/linux-x64/cypress.zip'
 
 jobs:
+  build_id:
+    name: E2E // Build ID
+    runs-on: ubuntu-16.04
+    steps:
+      - name: Set Build ID
+        id: build_id
+        run: echo "::set-output name=id::$(date +%s)"
+
+      - name: Cache Build ID
+        uses: actions/cache@v1
+        with:
+          path: ${{ github.workspace }}/.build-id
+          # use build id for unique cache
+          key: ${{ runner.os }}-build-id-${{ github.head_ref }}-${{ github.sha }}-${{ steps.build_id.outputs.id }}
+
+      - name: Save Build ID
+        run: |
+          mkdir -p "$BUILD_DIR"
+          echo "$BUILD_ID" > "$BUILD_PATH"
+        env:
+          BUILD_ID: ${{ steps.build_id.outputs.id }}
+          BUILD_DIR: ${{ github.workspace }}/.build-id
+          BUILD_PATH: ${{ github.workspace }}/.build-id/id
+
   cypress:
-    name: Run Visual Tests
+    name: E2E // Cypress
     runs-on: ubuntu-16.04
     strategy:
       fail-fast: false
       matrix:
         # run 3 instances of cypress in parallel
         containers: [1, 2, 3]
-
     steps:
       - uses: actions/checkout@v2
 
-      - name: Clear Cypress Cache
-        run: rm -rf ~/.cache/Cypress || true
+      - name: Cache Build ID
+        uses: actions/cache@v1
+        with:
+          path: ${{ github.workspace }}/.build-id
+          # unique build ID
+          key: ${{ runner.os }}-build-id-${{ github.head_ref }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-id-${{ github.head_ref }}-${{ github.sha }}
+
+      - name: Set Build ID
+        id: build_id
+        run: echo "::set-output name=id::$(cat .build-id/id)"
 
       - name: Checkout Api
         uses: actions/checkout@v2
@@ -47,11 +79,10 @@ jobs:
           docker-compose up -d app
 
       - name: Install Dependencies
-        uses: cypress-io/github-action@v1.23.2
+        uses: cypress-io/github-action@v1
         with:
           # will install node deps & cypress
           runTests: false
-          env: CYPRESS_INSTALL_BINARY=${{ env.CYPRESS_INSTALL_BINARY }}
 
       - name: Patch Cypress Director
         env:
@@ -59,7 +90,7 @@ jobs:
         run: yarn cy:patch
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v1.23.1
+        uses: cypress-io/github-action@v1
         with:
           # skip install now
           install: false
@@ -69,7 +100,9 @@ jobs:
           wait-on: 'http://localhost:8080'
           wait-on-timeout: 120
           browser: chrome
+          group: 'CI Chrome'
           headless: true
+          ci-build-id: ${{ steps.build_id.outputs.id }}
           command-prefix: 'percy exec -- npx'
           env: WEB_USER=${{ secrets.CYPRESS_WEB_USER }},WEB_PASS=${{ secrets.CYPRESS_WEB_PASS }},API_URL=http://localhost:5000
         env:
