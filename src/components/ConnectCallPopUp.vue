@@ -17,7 +17,8 @@
       @ok="isShowingModal = false"
       @close="isShowingModal = false"
     >
-      <div class="flex flex-row justify-content">
+      <!--- name + language --->
+      <div class="flex flex-row justify-content m-3">
         <div class="flex flex-row">
           <img
             src="../../.storybook/littleperson.jpg"
@@ -43,6 +44,19 @@
             class="justify-between justify-between text-crisiscleanup-grey-400"
             >English</base-text
           >
+        </div>
+      </div>
+      <!--- phone # + rate of contact --->
+      <div class="flex flex-row justify-content m-3">
+        <!--- Survivor Phone # --->
+        <base-text
+          variant="h2"
+          class="justify-between text-crisiscleanup-dark-400"
+          >(601) 123-7897</base-text
+        >
+        <!--- Survivor Contact Rate --->
+        <div class="px-2">
+          <tag variant="bodysm" class="justify-between">2 calls | 8 days</tag>
         </div>
       </div>
     </modal>
