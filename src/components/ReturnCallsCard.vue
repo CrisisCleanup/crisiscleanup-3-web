@@ -2,7 +2,6 @@
   <div>
     <base-button
       variant="outline"
-      class="m-3 px-5 py-2"
       :action="
         () => {
           isShowingModal = true;
@@ -12,6 +11,7 @@
     ></base-button>
     <modal
       v-if="isShowingModal"
+      title="Basic Modal"
       modal-classes="w-108"
       @ok="isShowingModal = false"
       @close="isShowingModal = false"
