@@ -17,6 +17,14 @@
       @ok="isShowingModal = false"
       @close="isShowingModal = false"
     >
+      <!--- Modal Header --->
+      <div slot="header" class="flex p-1 justify-center m-3">
+        <base-text variant="h1" weight="700"
+          >You have a live
+          <span class="text-crisiscleanup-green-400">incoming</span> call
+          from:</base-text
+        >
+      </div>
       <!--- name + language --->
       <div class="flex flex-row justify-content m-5">
         <div class="flex flex-row">
@@ -59,7 +67,7 @@
           <tag class="justify-between">2 calls | 8 days</tag>
         </div>
       </div>
-      <div class="flex flex-col m-5">
+      <div class="flex flex-col m-5 py-2">
         <!--- # of existing cases --->
         <base-text><b>3 cases</b> are assigned to this number</base-text>
         <!--- cases themselves --->
@@ -71,8 +79,10 @@
           <base-text>Case #3</base-text>
         </div>
         <!--- Script --->
-        <base-text variant="h1">A sample script would be:</base-text>
-        <base-text variant="body"
+        <base-text variant="h1" class="py-2"
+          >A sample script would be:</base-text
+        >
+        <base-text variant="body" class="py-2"
           >"Crisis Cleanup Hotline, My name is Carl {{ name }}. How may I help
           you?"</base-text
         >
