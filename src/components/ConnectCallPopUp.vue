@@ -7,7 +7,7 @@
           isShowingModal = true;
         }
       "
-      class="m-3 px-5 py-2"
+      class="m-5 px-5 py-2"
       text="incoming call"
     ></base-button>
     <modal
@@ -18,7 +18,7 @@
       @close="isShowingModal = false"
     >
       <!--- name + language --->
-      <div class="flex flex-row justify-content m-3">
+      <div class="flex flex-row justify-content m-5">
         <div class="flex flex-row">
           <img
             src="../../.storybook/littleperson.jpg"
@@ -28,7 +28,7 @@
           <!--- Survivor Name --->
           <base-text
             variant="body"
-            class="justify-between justify-between text-crisiscleanup-grey-400"
+            class="justify-between justify-between text-crisiscleanup-grey-500"
             >Julie Smith</base-text
           >
         </div>
@@ -41,13 +41,13 @@
           <!--- Survivor Language --->
           <base-text
             variant="body"
-            class="justify-between justify-between text-crisiscleanup-grey-400"
+            class="justify-between justify-between text-crisiscleanup-grey-500"
             >English</base-text
           >
         </div>
       </div>
       <!--- phone # + rate of contact --->
-      <div class="flex flex-row justify-content m-3">
+      <div class="flex flex-row justify-content m-5">
         <!--- Survivor Phone # --->
         <base-text
           variant="h2"
@@ -56,9 +56,38 @@
         >
         <!--- Survivor Contact Rate --->
         <div class="px-2">
-          <tag variant="bodysm" class="justify-between">2 calls | 8 days</tag>
+          <tag class="justify-between">2 calls | 8 days</tag>
         </div>
       </div>
+      <div class="flex flex-col m-5">
+        <!--- # of existing cases --->
+        <base-text><b>3 cases</b> are assigned to this number</base-text>
+        <!--- cases themselves --->
+        <div
+          class="align-center content-center justify-center items-center m-3"
+        >
+          <base-text>Case #1</base-text>
+          <base-text>Case #2</base-text>
+          <base-text>Case #3</base-text>
+        </div>
+        <!--- Script --->
+        <base-text variant="h1">A sample script would be:</base-text>
+        <base-text variant="body"
+          >"Crisis Cleanup Hotline, My name is Carl {{ name }}. How may I help
+          you?"</base-text
+        >
+        <div class="flex flex-row justify-between">
+          <base-button
+            class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 font-bold text-white w-6/12 m-2 py-3"
+            >Decline</base-button
+          >
+          <base-button
+            class="bg-crisiscleanup-green-900 hover:bg-crisiscleanup-green-500 font-bold text-white w-6/12 m-2 py-3"
+            >Accept</base-button
+          >
+        </div>
+      </div>
+      <div slot="footer" class="flex p-1 justify-center" />
     </modal>
   </div>
 </template>
