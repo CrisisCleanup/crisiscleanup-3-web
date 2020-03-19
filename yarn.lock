@@ -7937,6 +7937,13 @@ cypress-localstorage-commands@^1.1.6:
   resolved "https://registry.yarnpkg.com/cypress-localstorage-commands/-/cypress-localstorage-commands-1.1.6.tgz#55604b122dac4944eac813be7882d51ef3939d7b"
   integrity sha512-cqTRrY3vAIoaMHs+aPU1ijSoKl21Pw+mkRG8LL0Oi72B/GD6GPeJVKFiX9+F0bBrALqegrhzFeYXOeWcIeTz+w==
 
+cypress-plugin-retries@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/cypress-plugin-retries/-/cypress-plugin-retries-1.5.2.tgz#21d5247cd77013b95bbfdd914f2de66f91f76a2e"
+  integrity sha512-o1xVIGtv4WvNVxoVJ2X08eAuvditPHrePRzHqhwwHbMKu3C2rtxCdanRCZdO5fjh8ww+q4v4V0e9GmysbOvu3A==
+  dependencies:
+    chalk "^3.0.0"
+
 cypress-vue-unit-test@^1.11.7:
   version "1.11.7"
   resolved "https://registry.yarnpkg.com/cypress-vue-unit-test/-/cypress-vue-unit-test-1.11.7.tgz#19ca82533fd4e47a2103d83fbd0f299fc173d59f"
@@ -16924,7 +16931,7 @@ request@2.88.0:
     tunnel-agent "^0.6.0"
     uuid "^3.3.2"
 
-"request@github:cypress-io/request#b5af0d1fa47eec97ba980cde90a13e69a2afcd16":
+request@cypress-io/request#b5af0d1fa47eec97ba980cde90a13e69a2afcd16:
   version "2.88.1"
   resolved "https://codeload.github.com/cypress-io/request/tar.gz/b5af0d1fa47eec97ba980cde90a13e69a2afcd16"
   dependencies:

@@ -37,6 +37,14 @@ Cypress.on('uncaught:exception', () => {
   return false;
 });
 
+// Small delay between retries
+// eslint-disable-next-line consistent-return
+Cypress.on('test:before:run:async', () => {
+  if (Cypress.currentTest.currentRetry() > 0) {
+    return new Promise(resolve => setTimeout(resolve, 2000));
+  }
+});
+
 // Login Helper
 Cypress.Commands.add(
   'login',

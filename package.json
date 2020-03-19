@@ -133,6 +133,7 @@
     "cypress": "^4.2.0",
     "cypress-cy-select": "^0.2.0",
     "cypress-localstorage-commands": "^1.1.6",
+    "cypress-plugin-retries": "^1.5.2",
     "cypress-vue-unit-test": "^1.11.7",
     "cypress-wait-until": "^1.6.1",
     "eslint": "^6.8.0",
