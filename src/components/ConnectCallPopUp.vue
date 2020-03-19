@@ -79,13 +79,8 @@
           <base-text>Case #3</base-text>
         </div>
         <!--- Script --->
-        <base-text variant="h1" class="py-2"
-          >A sample script would be:</base-text
-        >
-        <base-text variant="body" class="py-2"
-          >"Crisis Cleanup Hotline, My name is Carl {{ name }}. How may I help
-          you?"</base-text
-        >
+        <SampleScript />
+        <!--- Accept / Decline Buttons --->
         <div class="flex flex-row justify-between">
           <base-button
             class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 font-bold text-white w-6/12 m-2 py-3"
@@ -103,8 +98,12 @@
 </template>
 
 <script>
+import SampleScript from './SampleScriptCard';
 export default {
   name: 'ConnectCallPopUp',
+  components: {
+    SampleScript,
+  },
   data() {
     return {
       isShowingModal: false,
