@@ -76,8 +76,6 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_PAT }} | docker login docker.pkg.github.com -u ${{ secrets.GITHUB_PAT_USER }} --password-stdin
           cd "$GITHUB_WORKSPACE/cc3api"
-          docker pull docker.pkg.github.com/crisiscleanup/crisiscleanup-3-api/python-base:latest
-          docker pull docker.pkg.github.com/crisiscleanup/crisiscleanup-3-api/cc3api-dev:latest
           docker-compose up -d app
 
       - name: Install Dependencies
@@ -90,11 +88,13 @@ jobs:
           SORRY_CYP_API_URL: ${{ secrets.SORRY_CYP_API_URL }}
         run: yarn cy:patch
 
+      - uses: zcong1993/setup-dockerize@v1.2.0
+
       - name: Wait for Api
-        run: 'yarn test:e2e:wait'
+        run: 'dockerize -wait-retry-interval 5s -timeout 240s -wait http://localhost:5000/health'
 
       - name: Run Cypress
-        uses: cypress-io/github-action@v1
+        uses: cypress-io/github-action@v1.23.2
         with:
           # skip install now
           install: false
