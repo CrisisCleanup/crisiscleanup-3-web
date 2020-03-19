@@ -4,11 +4,11 @@
       <!--- Inbound Call Button --->
       <base-button
         variant="text"
-        class="w-full py-3 font-bold"
+        class="w-full py-3 font-bold text-crisiscleanup-dark-400"
         :action="() => (toggleInbound = !toggleInbound)"
+        :ccu-icon="[toggleInbound ? 'up' : 'down']"
       >
         Inbound Call
-        {{ !toggleInbound ? 'down' : 'up' }}
       </base-button>
       <!--- Inbound Call Card --->
       <div class="info-card">
@@ -17,11 +17,11 @@
       <!--- Confirm Help Button --->
       <base-button
         variant="text"
-        class="w-full py-3 font-bold"
+        class="w-full py-3 font-bold text-left text-crisiscleanup-dark-400"
         :action="() => (toggleHelp = !toggleHelp)"
+        :ccu-icon="[toggleHelp ? 'up' : 'down']"
       >
         Confirm they still need help call
-        {{ !toggleHelp ? (variant = 'down') : (variant = 'up') }}
       </base-button>
       <!--- Confirm Help Card --->
       <div class="info-card">
