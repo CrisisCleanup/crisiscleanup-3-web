@@ -40,7 +40,7 @@
             >Julie Smith</base-text
           >
         </div>
-        <div class="flex flex-row">
+        <div class="flex flex-row px-2">
           <img
             src="../../.storybook/greyglobe.jpg"
             alt="globe icon"
@@ -64,7 +64,11 @@
         >
         <!--- Survivor Contact Rate --->
         <div class="px-2">
-          <tag class="justify-between">2 calls | 8 days</tag>
+          <tag
+            class="justify-between bg-#F79820 rounded-full px-3 bg-primary-dark"
+          >
+            2 calls | 8 days
+          </tag>
         </div>
       </div>
       <div class="flex flex-col m-5 py-2">
