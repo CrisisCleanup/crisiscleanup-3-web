@@ -53,6 +53,18 @@
         </div>
       </div>
     </div>
+    <!--- Existing Cases --->
+    <div class="flex flex-row justify-between">
+      <div class="flex-col m-3">
+        existing case 1
+      </div>
+      <div class="flex-col m-3">
+        existing case 2
+      </div>
+      <div class="flex-col m-3">
+        existing case 3
+      </div>
+    </div>
     <!--- info card --->
     <div class="info-card">
       <more-info v-if="toggleOpen" />
@@ -67,7 +79,7 @@
         ccu-icon="updown"
         icon-size="md"
         @click="toggle"
-        class="py-2 px-5 width-full"
+        class="w-full py-1"
         :action="() => (isOpen = !isOpen)"
         >Call Status*</base-button
       >
