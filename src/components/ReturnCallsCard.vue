@@ -17,7 +17,7 @@
 
 <script>
 import CurrentCallCard from './CurrentCallCard';
-//import CallScriptsCard from './CallScriptsCard';
+import CallScriptsCard from './CallScriptsCard';
 export default {
   name: 'ReturnCallsCard',
   data() {
@@ -28,7 +28,7 @@ export default {
   },
   components: {
     'Current Call': CurrentCallCard,
-    //'Scripts': CallScriptsCard,
+    Scripts: CallScriptsCard,
   },
 };
 </script>
