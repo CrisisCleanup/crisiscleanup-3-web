@@ -1,17 +1,34 @@
 <template>
   <div>
-    <!--- Tabs --->
-    <button
-      v-for="tab in tabs"
-      :key="tab"
-      @click="selected = tab"
-      :class="['tab-btn', { active: selected === tab }]"
-      class="m-1"
+    <base-button
+      variant="outline"
+      :action="
+        () => {
+          isShowingModal = true;
+        }
+      "
+      text="Return Calls"
+    ></base-button>
+    <modal
+      v-if="isShowingModal"
+      title="Basic Modal"
+      modal-classes="w-108"
+      @ok="isShowingModal = false"
+      @close="isShowingModal = false"
     >
-      {{ tab }}
-    </button>
-    <!--- Content --->
-    <component :is="selected" class="tab"></component>
+      <!--- Tabs --->
+      <button
+        v-for="tab in tabs"
+        :key="tab"
+        @click="selected = tab"
+        :class="['tab-btn', { active: selected === tab }]"
+        class="m-1"
+      >
+        {{ tab }}
+      </button>
+      <!--- Content --->
+      <component :is="selected" class="tab"></component>
+    </modal>
   </div>
 </template>
 
@@ -24,6 +41,7 @@ export default {
     return {
       tabs: ['Current Call', 'Scripts', 'Resources', 'Live Help'],
       selected: 'Current Call',
+      isShowingModal: false,
     };
   },
   components: {
