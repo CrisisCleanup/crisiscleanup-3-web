@@ -76,6 +76,8 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_PAT }} | docker login docker.pkg.github.com -u ${{ secrets.GITHUB_PAT_USER }} --password-stdin
           cd "$GITHUB_WORKSPACE/cc3api"
+          docker pull docker.pkg.github.com/crisiscleanup/crisiscleanup-3-api/python-base:latest
+          docker pull docker.pkg.github.com/crisiscleanup/crisiscleanup-3-api/cc3api-dev:latest
           docker-compose up -d app
 
       - name: Install Dependencies
