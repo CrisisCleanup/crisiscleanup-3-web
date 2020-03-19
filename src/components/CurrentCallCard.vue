@@ -15,41 +15,73 @@
           >2 calls | 8 days</base-text
         >
       </div>
-      <!--- Survivor Name --->
-      <div class="flex-col justify-between m-3">
-        <base-text
-          variant="body"
-          class="justify-between justify-between text-crisiscleanup-grey-400"
-          >Julie Smith</base-text
-        >
-        <!--- Language --->
-        <base-text
-          variant="body"
-          class="justify-between text-crisiscleanup-grey-400"
-          >English</base-text
-        >
+      <div class="flex flex-col justify-between m-3">
+        <div class="flex flex-row">
+          <div class="flex-col">
+            <img
+              src="../../.storybook/littleperson.jpg"
+              alt="person icon"
+              class="px-1 h-4"
+            />
+          </div>
+          <!--- Survivor Name --->
+          <div class="flex-col">
+            <base-text
+              variant="body"
+              class="justify-between justify-between text-crisiscleanup-grey-400"
+              >Julie Smith</base-text
+            >
+          </div>
+        </div>
+        <div class="flex flex-row">
+          <div class="flex-col">
+            <img
+              src="../../.storybook/greyglobe.jpg"
+              alt="globe icon"
+              class="px-1 h-4"
+            />
+          </div>
+          <!--- Survivor Language --->
+          <div class="flex-col">
+            <base-text
+              variant="body"
+              class="justify-between justify-between text-crisiscleanup-grey-400"
+              >English</base-text
+            >
+          </div>
+        </div>
       </div>
       <!--- Action Buttons --->
       <div class="flex flex-row justify-between m-3">
         <div class="flex-col">
-          <!--- Convert to Buttons !!!!! --->
-          <base-button variant="h1" class="px-1">mic</base-button>
-        </div>
-        <div class="flex-col">
-          <!--- add friend button --->
-          <div class="px-1">
-            <base-button
-              icon-size="md"
-              size="md"
-              ccu-icon="active"
-              class="px-1 py-1"
+          <!--- Mute Mic --->
+          <base-button variant="h1" class="px-1">
+            <img
+              src="../../.storybook/mutemic.jpg"
+              alt="mute mic"
+              class="px-1 h-8"
             />
-          </div>
+          </base-button>
         </div>
         <div class="flex-col">
-          <base-button variant="h2" class="justify-between px-1"
-            >End</base-button
-          >
+          <!--- Add Button --->
+          <base-button variant="h1" class="px-1">
+            <img
+              src="../../.storybook/addfriend.jpg"
+              alt="add"
+              class="px-1 h-8"
+            />
+          </base-button>
+        </div>
+        <div class="flex-col">
+          <!--- Add Button --->
+          <base-button variant="h1" class="px-1">
+            <img
+              src="../../.storybook/endcall.jpg"
+              alt="end call"
+              class="px-1 h-8"
+            />
+          </base-button>
         </div>
       </div>
     </div>
