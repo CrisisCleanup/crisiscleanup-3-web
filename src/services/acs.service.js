@@ -25,25 +25,52 @@ export const ConnectConfig = {
   loginPopup: false,
 };
 
-export const initConnect = ({ htmlEl, config, onAuth, onTerminate }) => {
+export const initConnect = ({
+  htmlEl,
+  config,
+  onAuth,
+  onTerminate,
+  onTimeout,
+}) => {
   // Bind and initialize connect
   const finalConf = { ...ConnectConfig, ...config };
-  Log.info('initializing ACS service with config:');
-  Log.info(finalConf);
+  Log.debug('initializing ACS service with config:');
+  Log.debug(finalConf);
   connect.core.initCCP(htmlEl, finalConf);
-  connect.core.initSoftphoneManager();
+  connect.core.initSoftphoneManager({ allowFramedSoftphone: true });
   const eventBus = connect.core.getEventBus();
+  const upstream = connect.core.getUpstream();
   if (onAuth) {
-    eventBus.subscribe(connect.EventType.INIT, () => {
-      // Bind handler to auth event
-      Log.info(`got authentication event [handler: ${onAuth}]`);
+    const handleOnAuth = e => {
+      Log.debug(`got authentication event: ${e}`);
       return onAuth();
-    });
+    };
+    eventBus.subscribe(connect.EventType.INIT, () =>
+      handleOnAuth(connect.EventType.INIT),
+    );
+    eventBus.subscribe(connect.EventType.ACKNOWLEDGE, () =>
+      handleOnAuth(connect.EventType.ACKNOWLEDGE),
+    );
+    eventBus.subscribe(connect.AgentEvents.INIT, () =>
+      handleOnAuth(connect.AgentEvents.INIT),
+    );
+    upstream.onUpstream(connect.EventType.ACKNOWLEDGE, () =>
+      handleOnAuth(connect.EventType.ACKNOWLEDGE),
+    );
   }
   if (onTerminate) {
     // Bind handler to session terminiation
-    Log.info('session has terminated!');
-    eventBus.subscribe(connect.EventType.TERMINATED, onTerminate);
+    eventBus.subscribe(connect.EventType.TERMINATED, () => {
+      Log.info('session has terminated!');
+      return onTerminate();
+    });
+  }
+  if (onTimeout) {
+    // Bind handler to ACK timeout (need login refresh)
+    eventBus.subscribe(connect.EventType.ACK_TIMEOUT, () => {
+      Log.info('ACK timeout!');
+      return onTimeout();
+    });
   }
 };
 
