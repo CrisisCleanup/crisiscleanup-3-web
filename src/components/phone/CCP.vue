@@ -1,26 +1,40 @@
 <template>
   <div>
-    <div id="ccp-embed" />
-    <audio id="remote-audio" autoplay></audio>
+    <div id="ccp-embed"></div>
+    <!-- <audio id="remote-audio" autoplay></audio> -->
   </div>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
+import { EventBus } from '../../event-bus';
 
 export default {
   name: 'CCP',
   methods: {
-    ...mapActions('phone', ['initConnect']),
+    ...mapActions('phone', ['initConnect', 'setPopup']),
   },
   computed: {
-    ...mapState('phone', ['streams', 'connectRunning']),
+    ...mapState('phone', ['streams', 'connectRunning', 'connectAuthed']),
+    ...mapGetters('auth', ['isLoggedIn']),
+  },
+  created() {
+    EventBus.$on('acs:requestAgent', () => {
+      if (!this.connectAuthed) {
+        this.$log.info('setting popup!');
+        Promise.resolve(this.setPopup(true));
+      }
+    });
   },
   async mounted() {
     if (!this.connectRunning) {
       this.$log.debug('CCP embed connecting...');
       const htmlEl = document.getElementById('ccp-embed');
-      await this.initConnect(htmlEl);
+      try {
+        await this.initConnect(htmlEl);
+      } catch (e) {
+        this.$log.error(e);
+      }
     }
   },
 };
