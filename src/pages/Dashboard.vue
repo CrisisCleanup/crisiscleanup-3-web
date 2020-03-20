@@ -296,7 +296,13 @@ const requestBox = create(RequestBox);
 
 export default {
   name: 'Dashboard',
-  components: { InviteUsers, LineChart, Table, StatusDropDown, Loader },
+  components: {
+    InviteUsers,
+    LineChart,
+    Table,
+    StatusDropDown,
+    Loader,
+  },
   data() {
     return {
       usersToInvite: '',

@@ -1089,6 +1089,14 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@crisiscleanup/connect-rtc@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@crisiscleanup/connect-rtc/-/connect-rtc-1.1.4.tgz#f69f2d6995fa216292c5261f41a40b8dcff868f7"
+  integrity sha512-haGaQGCIh6qrqZQ4slYcxjvQfJKZq+DjmXSPakzsMBUFQ+vTxqaGZI3CASuN+OvNlAAFSvqlg9S6tLN+zvsQbw==
+  dependencies:
+    uuid "^3.0.1"
+    webrtc-adapter "^6.4.0"
+
 "@cypress/browserify-preprocessor@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@cypress/browserify-preprocessor/-/browserify-preprocessor-2.1.4.tgz#31f3e35969b591da0298eb801d6905c64c7151cf"
@@ -5110,6 +5118,11 @@ alphanum-sort@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
+
+amazon-connect-streams@^1.4.5:
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/amazon-connect-streams/-/amazon-connect-streams-1.4.5.tgz#8589fcaa2702fe6cb1708a85107e6e9de8655801"
+  integrity sha512-AlDAMjb/ot6omE69X3ULcUesnjKW+6YDM7lrESPYvoo6yZldu1nv3DmwEbmrDnZMgzsj2Pl3gnB4w8N6NdA6rw==
 
 amdefine@>=0.0.4:
   version "1.0.1"
@@ -17158,6 +17171,13 @@ rsvp@^4.8.4:
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-4.8.5.tgz#c8f155311d167f68f21e168df71ec5b083113734"
   integrity sha512-nfMOlASu9OnRJo1mbEk2cz0D56a1MBNrJ7orjRZQG10XDyuvwksKbuXNp6qa+kbn839HwjwhBzhFmdsaEAfauA==
 
+rtcpeerconnection-shim@^1.2.14:
+  version "1.2.15"
+  resolved "https://registry.yarnpkg.com/rtcpeerconnection-shim/-/rtcpeerconnection-shim-1.2.15.tgz#e7cc189a81b435324c4949aa3dfb51888684b243"
+  integrity sha512-C6DxhXt7bssQ1nHb154lqeL0SXz5Dx4RczXZu2Aa/L1NJFnEVDxFwCBo3fqtuljhHIGceg5JKBV4XJ0gW5JKyw==
+  dependencies:
+    sdp "^2.6.0"
+
 run-async@^2.2.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/run-async/-/run-async-2.4.0.tgz#e59054a5b86876cfae07f431d18cbaddc594f1e8"
@@ -17303,6 +17323,11 @@ scss-tokenizer@^0.2.3:
   dependencies:
     js-base64 "^2.1.8"
     source-map "^0.4.2"
+
+sdp@^2.6.0, sdp@^2.9.0:
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/sdp/-/sdp-2.12.0.tgz#338a106af7560c86e4523f858349680350d53b22"
+  integrity sha512-jhXqQAQVM+8Xj5EjJGVweuEzgtGWb3tmEEpl3CLP3cStInSbVHSg0QWOGQzNq8pSID4JkpeV2mPqlMDLrm0/Vw==
 
 select-hose@^2.0.0:
   version "2.0.0"
@@ -19981,6 +20006,14 @@ webpack@^4.0.0, webpack@^4.33.0, webpack@^4.38.0:
     terser-webpack-plugin "^1.4.3"
     watchpack "^1.6.0"
     webpack-sources "^1.4.1"
+
+webrtc-adapter@^6.4.0:
+  version "6.4.8"
+  resolved "https://registry.yarnpkg.com/webrtc-adapter/-/webrtc-adapter-6.4.8.tgz#eeca3f0d5b40c0e629b865ef2a936a0b658274de"
+  integrity sha512-YM8yl545c/JhYcjGHgaCoA7jRK/KZuMwEDFeP2AcP0Auv5awEd+gZE0hXy9z7Ed3p9HvAXp8jdbe+4ESb1zxAw==
+  dependencies:
+    rtcpeerconnection-shim "^1.2.14"
+    sdp "^2.9.0"
 
 websocket-driver@>=0.5.1:
   version "0.7.3"

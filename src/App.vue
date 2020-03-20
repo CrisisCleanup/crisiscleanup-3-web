@@ -3,16 +3,21 @@
     <component :is="layout">
       <router-view />
     </component>
+    <CCP />
     <dialogs-wrapper />
   </div>
 </template>
 
 <script>
+import 'amazon-connect-streams';
+import '@crisiscleanup/connect-rtc';
 import { mapActions, mapGetters } from 'vuex';
+import CCP from '@/components/phone/CCP';
 
 const defaultLayout = 'authenticated';
 export default {
   name: 'App',
+  components: { CCP },
   computed: {
     layout() {
       return `${this.$route.meta.layout || defaultLayout}-layout`;

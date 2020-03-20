@@ -1,15 +1,36 @@
+import * as ConnectService from '@/services/acs.service';
 import { AgentApi, PhoneApi } from '@/utils/api';
+import VueLog from '@dreipol/vue-log';
 import axios from 'axios';
 import { camelCase } from 'lodash';
+import Vue from 'vue';
+
+Vue.use(VueLog, {
+  name: 'phone.store',
+  middlewares: [
+    result => {
+      result.unshift('[phone.store] ');
+      return result;
+    },
+  ],
+});
+const Log = Vue.log();
 
 const PhoneState = {
   agent: null,
   metrics: null,
+  connectRunning: false,
+  connectAuthed: false,
+  streams: null,
+  popupOpen: false,
 };
 
 // getters
 const getters = {
   agentId: state => (state.agent ? state.agent.agent_id : null),
+  connectRunning: state => state.connectRunning, // is connect initialized?
+  connectReady: state => !!state.streams, // is connect done w/ init and auth?
+  popupOpen: state => state.popupOpen,
 };
 
 // actions
@@ -29,6 +50,34 @@ const actions = {
     commit('setMetrics', resp.data.results);
     return resp;
   },
+  async initConnect({ commit }, htmlEl) {
+    try {
+      ConnectService.initConnect({
+        htmlEl,
+        onAuth: () =>
+          commit('setConnectState', { running: true, authed: true }),
+        // refresh session
+        onTimeout: () => this.setPopup(true),
+      });
+    } catch (e) {
+      /**
+       * @todo Debug Hidden ValueError on ACS Init
+       * @body aws-connect-streams consistently raises a ValueError on startup.
+       *       Seems to be harmless...
+       */
+      Log.error(e);
+    }
+    ConnectService.initAgent({
+      onRefresh: agent => commit('setAgentState', agent),
+      onAuth: () => commit('setConnectState', { running: true, authed: true }),
+    });
+  },
+  async setPopup({ commit }, state) {
+    const newState = state || true;
+    Log.debug('setting popup:', newState);
+    ConnectService.setPopup({ open: newState });
+    commit('setPopupState', newState);
+  },
 };
 
 // mutations
@@ -43,6 +92,19 @@ const mutations = {
       return newState;
     });
     state.metrics = newState;
+  },
+  setAgentState(state, agent) {
+    const agentState = agent.getState();
+    const newState = { ...state.streams, ...agentState };
+    Log.debug('new state inbound:', newState);
+    state.streams = newState;
+  },
+  setConnectState(state, { running, authed }) {
+    state.connectRunning = running;
+    state.connectAuthed = authed;
+  },
+  setPopupState(state, newState) {
+    state.popupOpen = newState;
   },
 };
 
