@@ -47,14 +47,15 @@ export const initConnect = ({ htmlEl, config, onAuth, onTerminate }) => {
   }
 };
 
-export const initAgent = ({ onRefresh }) => {
+export const initAgent = ({ onRefresh, onAuth }) => {
   Log.info('waiting on agent... ');
   connect.agent(agent => {
     Log.info('agent initialized!');
     agent.onRefresh(onRefresh);
-    Log.info('trying to get agent config...');
+    agent.onRoutable(onAuth);
+    Log.debug('trying to get agent config...');
     const agentStates = agent.getConfiguration();
-    Log.info(agentStates);
+    Log.debug(agentStates);
   });
 };
 
