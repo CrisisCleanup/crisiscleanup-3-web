@@ -42,13 +42,14 @@
 
 <script>
 import User from '@/models/User';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import Loader from '@/components/Loader';
 import PeopleStoriesCard from '@/components/PeopleStoriesCard';
 import ContactCard from '@/components/ContactCard';
 import genstatscard from '@/components/GeneralStatsCard.vue';
 import operatorstats from '@/components/OperatorStatisticsCard';
 import NewsTrainingCard from '@/components/NewsTrainingCard';
+import { EventBus } from '../../event-bus';
 
 export default {
   name: 'Phone',
@@ -62,7 +63,7 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
     };
   },
   computed: {
@@ -70,6 +71,7 @@ export default {
       return User.find(this.$store.getters['auth/userId']);
     },
     ...mapState('phone', ['agent', 'metrics']),
+    ...mapGetters('phone', ['connectReady']),
   },
   methods: {
     ...mapActions('phone', ['fetchAgent', 'getRealtimeMetrics']),
@@ -82,15 +84,27 @@ export default {
       };
       await this.fetchAgent(userAgent);
     },
+    async resolveAgent() {
+      // await this.getAgent();
+      // await this.getRealtimeMetrics();
+      this.loading = false;
+    },
   },
-  async mounted() {
+  created() {
     this.loading = true;
-    const agentId = this.$store.getters['phone/agentId'];
-    if (agentId === null) {
-      this.$log.info('fetching user phone agent...');
-      await this.getAgent();
+    if (!this.connectReady) {
+      EventBus.$emit('acs:requestAgent');
+      // will be called every ~1m and update the agent state and stats
+      this.$store.subscribe(mutation => {
+        switch (mutation.type) {
+          case 'phone/setAgentState':
+            Promise.resolve(this.resolveAgent());
+            break;
+          default:
+            break;
+        }
+      });
     }
-    await this.getRealtimeMetrics();
     this.loading = false;
   },
 };
