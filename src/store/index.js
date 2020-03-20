@@ -1,14 +1,14 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
 import VuexORM from '@vuex-orm/core';
 import VuexORMAxios from '@vuex-orm/plugin-axios';
 import axios from 'axios';
+import Vue from 'vue';
+import Vuex from 'vuex';
+import database from './database';
 import auth from './modules/auth';
 import incident from './modules/incident';
 import loading from './modules/loading';
 import locale from './modules/locale';
 import phone from './modules/phone';
-import database from './database';
 
 VuexORM.use(VuexORMAxios, {
   axios,

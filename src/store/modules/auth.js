@@ -1,6 +1,6 @@
-import moment from 'moment';
-import axios from 'axios';
 import { AuthService } from '@/services/auth.service';
+import axios from 'axios';
+import moment from 'moment';
 
 const AuthState = {
   user: AuthService.getUser(),

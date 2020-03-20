@@ -59,11 +59,7 @@
         variant="outline"
         size="large"
         class="w-full"
-        :action="
-          () => {
-            $router.push('/request_access');
-          }
-        "
+        :action="() => $router.push('/request_access')"
       >
         {{ lang.request }}
       </base-button>
