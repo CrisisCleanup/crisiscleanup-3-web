@@ -57,3 +57,18 @@ export const initAgent = ({ onRefresh }) => {
     Log.info(agentStates);
   });
 };
+
+export const setPopup = ({ open } = { open: true }) => {
+  const loginUrl = `https://cchotline.awsapps.com/auth?client_id=06919f4fd8ed324e&redirect_uri=${global.encodeURIComponent(
+    'https://cchotline.awsapps.com/connect/auth/code',
+  )}`;
+  if (!open) {
+    // clear state (kept in localStorage)
+    Log.debug('closing popup manager...');
+    connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
+    return connect.core.getPopManager().close();
+  }
+  return connect.core
+    .getPopupManager()
+    .open(loginUrl, connect.MasterTopics.LOGIN_POPUP);
+};
