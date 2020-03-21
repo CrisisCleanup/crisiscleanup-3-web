@@ -573,7 +573,9 @@ export default {
           dataKey: 'results',
         },
       );
-      this.organizations = [...results.entities.organizations];
+      if (results.entities) {
+        this.organizations = [...results.entities.organizations];
+      }
     },
     async statusValueChange(value, workType, worksiteId) {
       try {

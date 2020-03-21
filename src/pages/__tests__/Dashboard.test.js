@@ -22,6 +22,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.filter('numeral', n => n);
 localVue.filter('getColorForWorkType', () => '#ffffff');
+localVue.directive('can', () => false);
 
 const $route = {
   path: '/incident/99/dashboard',
