@@ -254,15 +254,16 @@
             </div>
           </div>
         </div>
-        <div class="flex">
-          <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
+        <div class="flex" v-can="['approve_orgs_full']">
+          <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('dashboard.worksite_completion') }}
+              {{ $t('~~Organizations for Approval') }}
             </div>
             <div class="p-4">
-              <div class="small">
-                <line-chart :chart-data="datacollection" :options="options" />
-              </div>
+              <OrganizationApprovalTable
+                :organizations="organizations"
+                @reload="getOrganizationsForApproval"
+              ></OrganizationApprovalTable>
             </div>
           </div>
         </div>
@@ -275,11 +276,11 @@
 import { mapState } from 'vuex';
 import { create } from 'vue-modal-dialogs';
 import Worksite from '@/models/Worksite';
+import Organization from '@/models/Organization';
 import User from '@/models/User';
 import Status from '@/models/Status';
 import { getQueryString } from '@/utils/urls';
 import { getErrorMessage } from '@/utils/errors';
-import LineChart from '@/components/charts/LineChart';
 import { rand } from '@/utils/charts';
 import { colors } from '@/icons/icons_templates';
 import Incident from '@/models/Incident';
@@ -291,14 +292,15 @@ import { forceFileDownload } from '@/utils/downloads';
 import RequestBox from '@/components/dialogs/RequestBox';
 import Loader from '@/components/Loader';
 import InviteUsers from './organization/InviteUsers';
+import OrganizationApprovalTable from '../components/OrganizationApprovalTable';
 
 const requestBox = create(RequestBox);
 
 export default {
   name: 'Dashboard',
   components: {
+    OrganizationApprovalTable,
     InviteUsers,
-    LineChart,
     Table,
     StatusDropDown,
     Loader,
@@ -310,6 +312,7 @@ export default {
       totalClaimed: 0,
       totalClosed: 0,
       totalInProgess: 0,
+      organizations: [],
       loading: false,
       datacollection: null,
       pendingViewLoading: false,
@@ -560,7 +563,17 @@ export default {
         this.getClaimedCount(),
         this.getInProgessCount(),
         this.getClosedCount(),
+        this.getOrganizationsForApproval(),
       ]);
+    },
+    async getOrganizationsForApproval() {
+      const results = await Organization.api().get(
+        `/organizations?approved_by__isnull=true`,
+        {
+          dataKey: 'results',
+        },
+      );
+      this.organizations = [...results.entities.organizations];
     },
     async statusValueChange(value, workType, worksiteId) {
       try {

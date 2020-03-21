@@ -56,7 +56,6 @@
                     @click="
                       () => {
                         $store.dispatch('auth/logout');
-                        $router.push('/login');
                       }
                     "
                   >
@@ -89,6 +88,8 @@ import Role from '@/models/Role';
 import { i18nService } from '@/services/i18n.service';
 import NavMenu from '@/components/navigation/NavMenu';
 import Loader from '@/components/Loader';
+import Vue from 'vue';
+import Acl from 'vue-browser-acl';
 import DisasterIcon from '../components/DisasterIcon';
 
 export default {
@@ -186,34 +187,8 @@ export default {
         dataKey: 'results',
       }),
     ]);
-
-    let currentLanguage = detectBrowserLanguage();
-    const userLanguage =
-      Language.find(this.currentUser.primary_language) ||
-      Language.find(this.currentUser.secondary_language);
-    if (userLanguage) {
-      currentLanguage = userLanguage.subtag;
-    }
-
-    this.setLanguage(currentLanguage);
-    if (currentLanguage !== this.$i18n.locale) {
-      try {
-        const data = await i18nService.getLanguage(currentLanguage);
-        const { translations } = data;
-        if (size(translations) > 0) {
-          this.$i18n.setLocaleMessage(currentLanguage, translations);
-          this.$i18n.locale = currentLanguage;
-          this.$http.defaults.headers.common[
-            'Accept-Language'
-          ] = currentLanguage;
-          document.querySelector('html').setAttribute('lang', currentLanguage);
-        }
-      } catch (e) {
-        this.$log.error(e);
-      }
-    }
-
-    this.$moment.locale(currentLanguage.split('-')[0]);
+    await this.setupLanguage();
+    this.setupAcl();
 
     let incidentId = this.$route.params.incident_id;
     if (!incidentId) {
@@ -258,6 +233,48 @@ export default {
       await this.$router.push({
         name: this.$route.name,
         params: { ...this.$route.params, incident_id: value },
+      });
+    },
+    async setupLanguage() {
+      let currentLanguage = detectBrowserLanguage();
+      const userLanguage =
+        Language.find(this.currentUser.primary_language) ||
+        Language.find(this.currentUser.secondary_language);
+      if (userLanguage) {
+        currentLanguage = userLanguage.subtag;
+      }
+
+      this.setLanguage(currentLanguage);
+      if (currentLanguage !== this.$i18n.locale) {
+        try {
+          const data = await i18nService.getLanguage(currentLanguage);
+          const { translations } = data;
+          if (size(translations) > 0) {
+            this.$i18n.setLocaleMessage(currentLanguage, translations);
+            this.$i18n.locale = currentLanguage;
+            this.$http.defaults.headers.common[
+              'Accept-Language'
+            ] = currentLanguage;
+            document
+              .querySelector('html')
+              .setAttribute('lang', currentLanguage);
+          }
+        } catch (e) {
+          this.$log.error(e);
+        }
+      }
+
+      this.$moment.locale(currentLanguage.split('-')[0]);
+    },
+    setupAcl() {
+      Vue.use(Acl, this.user, acl => {
+        const { permissions } = this.user.user_claims;
+        Object.keys(permissions).forEach(permissionKey => {
+          acl.rule(
+            permissionKey,
+            this.user.user_claims.permissions[permissionKey],
+          );
+        });
       });
     },
     ...mapActions('auth', ['login']),

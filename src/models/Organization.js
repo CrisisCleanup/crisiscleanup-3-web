@@ -53,6 +53,13 @@ export default class Organization extends Model {
           { save: false },
         );
       },
+      approve(id) {
+        return this.post(`/organizations/${id}/approve`, {}, { save: false });
+      },
+
+      reject(id) {
+        return this.post(`/organizations/${id}/reject`, {}, { save: false });
+      },
     },
   };
 }

@@ -33,6 +33,7 @@ const actions = {
 
   logout({ commit }) {
     commit('setUser', null);
+    window.location.reload();
   },
 };
 
