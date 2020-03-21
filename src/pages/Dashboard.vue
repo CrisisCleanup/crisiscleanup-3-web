@@ -567,8 +567,14 @@ export default {
       ]);
     },
     async getOrganizationsForApproval() {
+      const params = {
+        approved_by__isnull: true,
+        rejected_by__isnull: true,
+      };
+      const queryString = getQueryString(params);
+
       const results = await Organization.api().get(
-        `/organizations?approved_by__isnull=true`,
+        `/organizations?${queryString}`,
         {
           dataKey: 'results',
         },

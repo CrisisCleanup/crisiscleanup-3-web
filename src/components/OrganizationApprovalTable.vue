@@ -39,6 +39,9 @@
 <script>
 import Table from '@/components/Table';
 import Organization from '@/models/Organization';
+import RequestBox from '@/components/dialogs/RequestBox';
+import { create } from 'vue-modal-dialogs';
+const requestBox = create(RequestBox);
 
 export default {
   name: 'OrganizationApprovalTable',
@@ -58,12 +61,28 @@ export default {
   },
   methods: {
     async approveOrganization(organizationId) {
-      await Organization.api().approve(organizationId);
-      this.$emit('reload');
+      const result = await requestBox({
+        title: this.$t('~~Approve Organization'),
+        content: this.$t(
+          '~~Please provide a reason for approving this organization',
+        ),
+      });
+      if (result) {
+        await Organization.api().approve(organizationId, result);
+        this.$emit('reload');
+      }
     },
     async rejectOrganization(organizationId) {
-      await Organization.api().reject(organizationId);
-      this.$emit('reload');
+      const result = await requestBox({
+        title: this.$t('~~Reject Organization'),
+        content: this.$t(
+          '~~Please provide a reason for rejecting this organization',
+        ),
+      });
+      if (result) {
+        await Organization.api().reject(organizationId, result);
+        this.$emit('reload');
+      }
     },
   },
   data() {
