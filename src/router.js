@@ -23,6 +23,7 @@ import NotFound from '@/pages/NotFound';
 import RequestAccess from '@/pages/RequestAccess';
 import PrintToken from '@/pages/unauthenticated/PrintToken';
 import RegisterOrganization from '@/pages/unauthenticated/RegisterOrganization';
+import PreliminaryAssessment from '@/pages/PreliminaryAssessment';
 
 Vue.use(VueRouter);
 
@@ -177,6 +178,12 @@ const routes = [
     path: '/register',
     component: RegisterOrganization,
     name: 'nav.register',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/assessment',
+    component: PreliminaryAssessment,
+    name: 'nav.assessment',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {

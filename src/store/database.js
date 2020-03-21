@@ -16,6 +16,7 @@ import Role from '@/models/Role';
 import Language from '@/models/Language';
 import Agent from '@/models/Agent';
 import UserRole from '@/models/UserRole';
+import Pda from '@/models/Pda';
 
 const database = new Database();
 
@@ -36,5 +37,6 @@ database.register(Language, {});
 database.register(Role, {});
 database.register(Agent, {});
 database.register(UserRole, {});
+database.register(Pda, {});
 
 export default database;
