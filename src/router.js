@@ -22,6 +22,7 @@ import UserView from '@/pages/organization/UserView';
 import NotFound from '@/pages/NotFound';
 import RequestAccess from '@/pages/RequestAccess';
 import PrintToken from '@/pages/unauthenticated/PrintToken';
+import RegisterOrganization from '@/pages/unauthenticated/RegisterOrganization';
 
 Vue.use(VueRouter);
 
@@ -170,6 +171,12 @@ const routes = [
     path: '/request_access',
     component: RequestAccess,
     name: 'nav.request_access',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/register',
+    component: RegisterOrganization,
+    name: 'nav.register',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {

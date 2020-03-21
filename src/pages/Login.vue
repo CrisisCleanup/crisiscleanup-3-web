@@ -22,7 +22,15 @@
           class="text-crisiscleanup-dark-500"
           >{{ lang.relief_org }}</base-text
         >
-        <base-button variant="solid" size="large">
+        <base-button
+          variant="solid"
+          size="large"
+          :action="
+            () => {
+              $router.push('/register');
+            }
+          "
+        >
           {{ lang.register }}
         </base-button>
       </div>

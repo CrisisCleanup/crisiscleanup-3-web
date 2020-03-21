@@ -4,10 +4,13 @@
     <input
       type="checkbox"
       :checked="value"
+      ref="input"
       class="checkmark-input"
+      :class="isInvalid ? 'checkmark-input-invalid' : ''"
       :disabled="disabled"
-      @input="$emit('input', $event.target.checked)"
-      @change="$emit('change', $event.target.checked)"
+      @input="update"
+      @change="change"
+      :required="required"
     />
     <span class="checkmark"></span>
   </label>
@@ -15,6 +18,21 @@
 <script>
 export default {
   name: 'BaseCheckbox',
+  data() {
+    return {
+      isInvalid: false,
+    };
+  },
+  mounted() {
+    this.id = this._uid;
+    this.$refs.input.addEventListener(
+      'invalid',
+      () => {
+        this.isInvalid = true;
+      },
+      true,
+    );
+  },
   props: {
     value: {
       type: Boolean,
@@ -23,6 +41,20 @@ export default {
     disabled: {
       type: Boolean,
       default: false,
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  methods: {
+    update(e) {
+      this.$emit('input', e.target.checked);
+      this.isInvalid = !this.$refs.input.checkValidity();
+    },
+    change(e) {
+      this.$emit('change', e.target.checked);
+      this.isInvalid = !this.$refs.input.checkValidity();
     },
   },
 };
@@ -62,12 +94,16 @@ export default {
 }
 
 /* When the checkbox is checked, add a blue background */
-.checkbox-container input:checked ~ .checkmark {
+.checkbox-container .checkmark-input:checked ~ .checkmark {
   background-color: #000000;
 }
 
-.checkbox-container input:disabled ~ .checkmark {
+.checkbox-container .checkmark-input:disabled ~ .checkmark {
   background-color: #e4e5e7;
+}
+
+.checkbox-container .checkmark-input-invalid ~ .checkmark {
+  @apply border-crisiscleanup-red-100;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
