@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="scriptCordion">
+    <div class="scripts-accordion">
       <!--- Inbound Call Button --->
       <base-button
         variant="text"
         class="w-full py-3 font-bold text-crisiscleanup-dark-400"
         :action="() => (toggleInbound = !toggleInbound)"
-        :ccu-icon="[toggleInbound ? 'up' : 'down']"
+        :ccu-icon="toggleInbound ? 'up' : 'down'"
       >
         Inbound Call
       </base-button>
@@ -19,7 +19,7 @@
         variant="text"
         class="w-full py-3 font-bold text-left text-crisiscleanup-dark-400"
         :action="() => (toggleHelp = !toggleHelp)"
-        :ccu-icon="[toggleHelp ? 'up' : 'down']"
+        :ccu-icon="toggleHelp ? 'up' : 'down'"
       >
         Confirm they still need help call
       </base-button>

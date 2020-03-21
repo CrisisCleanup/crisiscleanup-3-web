@@ -19,7 +19,7 @@
         <div class="flex flex-row">
           <div class="flex-col">
             <img
-              src="../../.storybook/littleperson.jpg"
+              src="../../src/assets/littleperson.jpg"
               alt="person icon"
               class="px-1 h-4"
             />
@@ -36,7 +36,7 @@
         <div class="flex flex-row">
           <div class="flex-col">
             <img
-              src="../../.storybook/greyglobe.jpg"
+              src="../../src/assets/greyglobe.jpg"
               alt="globe icon"
               class="px-1 h-4"
             />
@@ -57,7 +57,7 @@
           <!--- Mute Mic --->
           <base-button variant="h1" class="px-1">
             <img
-              src="../../.storybook/mutemic.jpg"
+              src="../../src/assets/mutemic.jpg"
               alt="mute mic"
               class="px-1 h-8"
             />
@@ -67,7 +67,7 @@
           <!--- Add Button --->
           <base-button variant="h1" class="px-1">
             <img
-              src="../../.storybook/addfriend.jpg"
+              src="../../src/assets/addfriend.jpg"
               alt="add"
               class="px-1 h-8"
             />
@@ -77,7 +77,7 @@
           <!--- Add Button --->
           <base-button variant="h1" class="px-1">
             <img
-              src="../../.storybook/endcall.jpg"
+              src="../../src/assets/endcall.jpg"
               alt="end call"
               class="px-1 h-8"
             />
