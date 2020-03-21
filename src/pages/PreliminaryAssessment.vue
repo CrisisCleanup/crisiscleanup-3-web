@@ -2,7 +2,7 @@
   <form
     v-if="ready"
     ref="form"
-    class="bg-white flex flex-col flex-grow w-full h-full"
+    class="bg-white flex flex-col flex-grow w-full h-full border"
     @submit.prevent
   >
     {{ $t('~~Choose A Disaster') }}
@@ -342,7 +342,7 @@
       </template>
     </div>
     <div
-      class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between"
+      class="bg-white p-3 border-t border-gray-300 card-footer flex justify-between"
     >
       <base-button
         size="medium"
