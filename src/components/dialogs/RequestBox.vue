@@ -15,7 +15,7 @@
                 type="cancel"
                 @click.native="
                   () => {
-                    $close('cancel');
+                    $close(false);
                   }
                 "
               />
@@ -27,7 +27,11 @@
               {{ content }}
             </div>
             <div>
-              <base-input v-model="response" class="my-2" />
+              <textarea
+                v-model="response"
+                class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
+                rows="4"
+              />
             </div>
           </div>
 
@@ -36,7 +40,7 @@
               <base-button
                 :alt="$t('actions.ok')"
                 variant="solid"
-                class="px-6 p-3 mx-2"
+                class="px-4 p-2 mx-2"
                 :action="
                   () => {
                     $close(response);
@@ -47,7 +51,7 @@
               </base-button>
               <base-button
                 :alt="$t('actions.cancel')"
-                class="px-6 p-3 border border-black mx-2"
+                class="px-4 p-2 border border-black mx-2"
                 :action="
                   () => {
                     $close(false);
