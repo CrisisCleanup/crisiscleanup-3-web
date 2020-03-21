@@ -34,6 +34,57 @@
           @search="worksitesSearch"
         />
       </section>
+      <div class="form-field">
+        <base-input
+          :value="worksite.phone1"
+          selector="js-worksite-phone1"
+          size="large"
+          :placeholder="$t('formLabels.phone1')"
+          @input="
+            value => {
+              updateWorksite(value, 'phone1');
+            }
+          "
+        />
+      </div>
+      <div class="form-field" v-if="worksite.phone2 || addAdditionalPhone">
+        <base-input
+          :value="worksite.phone2"
+          selector="js-worksite-phone2"
+          size="large"
+          :placeholder="$t('formLabels.phone2')"
+          @input="
+            value => {
+              updateWorksite(value, 'phone2');
+            }
+          "
+        />
+      </div>
+      <base-button
+        v-else
+        class="mx-3 text-primary-dark"
+        type="link"
+        :text="$t('caseView.add_phone')"
+        :alt="$t('caseView.add_phone')"
+        :action="
+          () => {
+            addAdditionalPhone = true;
+          }
+        "
+      />
+      <div class="form-field">
+        <base-input
+          :value="worksite.email"
+          selector="js-worksite-email"
+          size="large"
+          :placeholder="$t('formLabels.email')"
+          @input="
+            value => {
+              updateWorksite(value, 'email');
+            }
+          "
+        />
+      </div>
       <div
         class="text-base font-semibold my-1 mx-3 flex justify-between items-center"
       >
@@ -441,6 +492,7 @@ export default {
       dynamicFields: {},
       potentialIncidents: [],
       sectionCounter: 2,
+      addAdditionalPhone: false,
     };
   },
   computed: {

@@ -30,6 +30,9 @@ export default class Worksite extends Model {
       flags: this.attr(null),
       events: this.attr(null),
       reported_by: this.attr(null),
+      phone1: this.attr(null),
+      phone2: this.attr(null),
+      email: this.attr(null),
     };
   }
 

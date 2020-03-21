@@ -106,7 +106,7 @@
               class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
               >{{ $t('formLabels.phone1') }}</label
             >
-            <div>{{ worksite.formFields.phone1 }}</div>
+            <div>{{ worksite.phone1 }}</div>
           </div>
         </div>
 

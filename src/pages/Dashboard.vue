@@ -446,8 +446,7 @@ export default {
         {
           title: this.$t('dashboard.phone'),
           dataIndex: 'phone1',
-          key: 'formFields',
-          subKey: 'phone1',
+          key: 'phone1',
           sortable: false,
         },
         {
