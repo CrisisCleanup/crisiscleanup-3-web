@@ -29,7 +29,7 @@
       <div class="flex flex-row justify-content m-5">
         <div class="flex flex-row">
           <img
-            src="../../.storybook/littleperson.jpg"
+            src="../../src/assets/littleperson.jpg"
             alt="person icon"
             class="px-1 h-4"
           />
@@ -42,7 +42,7 @@
         </div>
         <div class="flex flex-row px-2">
           <img
-            src="../../.storybook/greyglobe.jpg"
+            src="../../src/assets/greyglobe.jpg"
             alt="globe icon"
             class="px-1 h-4"
           />
@@ -64,9 +64,7 @@
         >
         <!--- Survivor Contact Rate --->
         <div class="px-2">
-          <tag
-            class="justify-between bg-#F79820 rounded-full px-3 bg-primary-dark"
-          >
+          <tag class="justify-between bg-#F79820 rounded-full px-3">
             2 calls | 8 days
           </tag>
         </div>
