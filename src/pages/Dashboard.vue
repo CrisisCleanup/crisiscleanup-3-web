@@ -289,12 +289,12 @@ import Table from '@/components/Table';
 import { getColorForStatus, getWorkTypeImage } from '@/filters';
 import StatusDropDown from '@/components/StatusDropDown';
 import { forceFileDownload } from '@/utils/downloads';
-import RequestBox from '@/components/dialogs/RequestBox';
+import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
 import Loader from '@/components/Loader';
 import InviteUsers from './organization/InviteUsers';
 import OrganizationApprovalTable from '../components/OrganizationApprovalTable';
 
-const requestBox = create(RequestBox);
+const responseDialog = create(MessageResponseDialog);
 
 export default {
   name: 'Dashboard',
@@ -624,7 +624,7 @@ export default {
       await this.getWorksiteRequests();
     },
     async acceptRequest(id) {
-      const result = await requestBox({
+      const result = await responseDialog({
         title: this.$t('actions.approve_worksite_request'),
         content: this.$t('dashboard.approve_worksite_request_reason'),
       });
@@ -634,7 +634,7 @@ export default {
       }
     },
     async rejectRequest(id) {
-      const result = await requestBox({
+      const result = await responseDialog({
         title: this.$t('actions.reject_worksite_request'),
         content: this.$t('dashboard.reject_worksite_request_reason'),
       });

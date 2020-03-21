@@ -70,7 +70,7 @@
 
 <script>
 export default {
-  name: 'RequestBox',
+  name: 'MessageResponseDialog',
   props: {
     title: {
       type: String,

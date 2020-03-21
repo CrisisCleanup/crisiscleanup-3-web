@@ -710,26 +710,23 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       class="flex"
     >
       <div
-        class="w-full m-4 pt-2 shadow bg-white flex-shrink"
+        class="m-4 pt-2 shadow bg-white w-full"
       >
         <div
           class="py-4 px-4 text-gray-500 border-b"
         >
           
-            dashboard.worksite_completion
+            ~~Organizations for Approval
           
         </div>
          
         <div
           class="p-4"
         >
-          <div
-            class="small"
-          >
-            <line-chart-stub
-              options="[object Object]"
-            />
-          </div>
+          <organizationapprovaltable-stub
+            meta="[object Object]"
+            organizations=""
+          />
         </div>
       </div>
     </div>
