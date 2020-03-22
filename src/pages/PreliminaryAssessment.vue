@@ -7,7 +7,7 @@
   >
     {{ $t('~~Choose A Disaster') }}
     <form-select
-      :value="incident"
+      :value="pda.incident"
       class="form-field"
       :options="incidents"
       searchable
@@ -15,7 +15,7 @@
       item-key="id"
       label="name"
       :placeholder="$t('~~Disaster')"
-      @input="incident = $event"
+      @input="pda.incident = $event"
     />
     <div class="intake-form flex-grow">
       <SectionHeading :count="1" class="mb-3">{{
@@ -427,7 +427,7 @@ export default {
       return [];
     },
     currentIncident() {
-      return Incident.find(this.incident);
+      return Incident.find(this.pda.incident);
     },
     fieldsArray() {
       return this.fields.map(field => field.field_key);

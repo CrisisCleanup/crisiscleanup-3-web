@@ -436,14 +436,10 @@ export default {
       }
 
       try {
-        const result = await Organization.api().post('/organizations', {
+        await Organization.api().post('/organizations', {
           ...this.organization,
+          contact: { ...this.user },
         });
-        const organizationId = result.entities.organizations[0].id;
-        await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/ghost_users`,
-          { ...this.user, organization: organizationId },
-        );
         this.$toasted.success(
           this.$t(
             '~~Successfully registered organization. If your organization is approved, you will recieve an email with further instructions.',
