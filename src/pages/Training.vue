@@ -12,32 +12,39 @@
       <div class="grid--actions border-2">
         <h1>I am in grid--actions</h1>
       </div>
-      <div class="grid--main h-screen border-2">
+      <div class="grid--main h-screen">
         <!--- Title --->
-        <base-text weight="700" class="">Training</base-text>
-        <!--- Description --->
-        <base-text variant="h2" weight="500">
-          Please take a minute to see our trainings. It will help you when a
-          disaster happens.
-        </base-text>
+        <div class="flex flex-col m-5 pb-8">
+          <h1 class="text-5xl px-0.5 text-crisiscleanup-dark-500 font-bold">
+            Training
+          </h1>
+          <!--- Description --->
+          <p class="text-xl px-0.5">
+            Please take a minute to see our trainings. It will help you when a
+            you when a disaster happens.
+          </p>
+        </div>
         <!--- Content --->
-        <div class="flex flex-col justify-content">
-          <div class="flex flex-row">
-            <!--- Training Video --->
-            <div class="flex flex-col">
-              <video
-                src="https://www.youtube.com/watch?v=3wumEh8wcak&feature=youtu.be"
-              />
-            </div>
-            <!--- Training Video Description --->
-            <div class="flex flex-col">
-              <base-text weight="500" class="h-7"
-                >Mandatory Crisis Cleanup Training Video</base-text
-              >
-              <base-text
-                >Please Take a Minute to Complete a Short Training</base-text
-              >
-            </div>
+        <div class="flex flex-row m-5 align-left">
+          <!--- Training Video --->
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/3wumEh8wcak"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+          <!--- Training Video Description --->
+          <div class="flex-col">
+            <h1
+              class="h-7 px-10 text-4xl font-bold text-crisiscleanup-dark-500 py-5"
+            >
+              Mandatory Crisis Cleanup Training Video
+            </h1>
+            <p class="px-10 py-5 text-xl text-crisiscleanup-dark-400">
+              Please Take a Minute to Complete a Short Training
+            </p>
           </div>
         </div>
       </div>
