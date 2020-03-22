@@ -28,6 +28,7 @@ import RegisterOrganization from '@/pages/unauthenticated/RegisterOrganization';
 import PreliminaryAssessment from '@/pages/PreliminaryAssessment';
 import Terms from '@/pages/unauthenticated/Terms';
 import Privacy from '@/pages/unauthenticated/Privacy';
+import TrainingPage from '@/pages/Training';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -234,6 +235,12 @@ const routes = [
     path: '*',
     name: 'NotFound',
     component: NotFound,
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/training',
+    component: TrainingPage,
+    name: 'nav.training',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];
