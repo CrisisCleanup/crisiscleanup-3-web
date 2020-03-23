@@ -2,17 +2,40 @@ module.exports = {
   runtimeCompiler: true,
   lintOnSave: false,
   configureWebpack: () => {
+    const common = {
+      node: {
+        fs: 'empty',
+      },
+      resolve: {
+        alias: {
+          ejs: 'ejs/ejs.min.js',
+          fs: '@/utils/virtual-fs.js',
+        },
+      },
+      module: {
+        rules: [
+          {
+            test: /\.(xml|xsd)$/i,
+            use: 'raw-loader',
+          },
+        ],
+      },
+    };
     if (!(process.env.NODE_ENV === 'production')) {
       return {
-        devtool: 'inline-source-map',
+        devtool: 'source-map',
         devServer: {
           hot: true,
           compress: true,
         },
+        ...common,
       };
     }
-    return {};
+    return {
+      ...common,
+    };
   },
+
   css: {
     loaderOptions: {
       less: {
