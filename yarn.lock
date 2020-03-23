@@ -1359,10 +1359,10 @@
   resolved "https://registry.yarnpkg.com/@fortawesome/vue-fontawesome/-/vue-fontawesome-0.1.9.tgz#d3af6d4e50f337327de90447fe35fa1e117a2fbe"
   integrity sha512-h/emhmZz+DfB2zOGLWawNwXq82UYhn9waTfUjLLmeaIqtnIyNt6kYlpQT/vzJjLZRDRvY2IEJAh1di5qKpKVpA==
 
-"@geoman-io/leaflet-geoman-free@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@geoman-io/leaflet-geoman-free/-/leaflet-geoman-free-2.4.0.tgz#f1876460e9a01fafe70a719d0490119dc6b321b3"
-  integrity sha512-RsmvUFytBXE9B06LlrU5WFA6ZlyrG/ZaxNqqR0M1hiWpFUYfmKllXGV66Ci5czA1Ek/1WoR+2BYCX3AnllZnVA==
+"@geoman-io/leaflet-geoman-free@^2.5.0":
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/@geoman-io/leaflet-geoman-free/-/leaflet-geoman-free-2.5.0.tgz#0f8fb8945f9edffa697382aa24e60c7dddc3cdcd"
+  integrity sha512-Zq/gOGPpsRurTrW3d3qiXlvEPHZfU/PZ7jr02jtweaN0kXyHo/WqkihMS9h5yUySjJBXdUC9Xuuo4/ZzHqEH4g==
   dependencies:
     "@turf/difference" "^6.0.2"
     "@turf/intersect" "^6.1.3"
