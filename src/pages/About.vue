@@ -22,24 +22,24 @@
       <div class="grid--main h-screen">
         <!--- Title --->
         <div class="flex flex-col m-5">
-          <div class="pb-15">
-            <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold">
-              About Crisis Cleanup
-            </h1>
-          </div>
+          <h1
+            class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold pb-8"
+          >
+            About Crisis Cleanup
+          </h1>
           <!--- Description --->
-          <p class="text-xl px-0.5">
+          <p class="text-xl px-0.5 pb-5">
             Crisis Cleanup is not a technology. It's a philosophy.
           </p>
-          <p class="text-xl px-o.5">
-            <span class="text-bold">Mission:</span>
+          <p class="text-xl px-o.5 pb-8">
+            <span class="font-bold">Mission:</span>
             To help voluntary relief organizations help more more people by
             enabling collaborative disaster recovery.
           </p>
         </div>
         <!--- Content --->
         <!--- About Us Video --->
-        <div class="flex-col w-screen h-screen">
+        <div class="flex-col w-4/5 h-screen m-5">
           <div class="video-container">
             <iframe
               class="resp-video"
@@ -53,8 +53,20 @@
           </div>
         </div>
         <!--- About Us Cards --->
-        <div class="flex-col w-1/2">
-          <h1>hello</h1>
+        <div class="flex flex-col w-1/2">
+          <div class="flex flex-row">
+            <div class="flex-col w-1/2">
+              <base-text variant="body">
+                <span class="text-bold">Crisis Cleanup</span>
+                is a collaborative
+                <span class="font-bold">disaster work order</span>
+                management platform that improves coordination, reduces
+                duplication of efforts, imporves efficiency and improves
+                volunteers' experience.
+              </base-text>
+            </div>
+            <div class="flex-col w-1/2"></div>
+          </div>
         </div>
       </div>
     </template>
@@ -129,5 +141,6 @@ export default {
   position: relative;
   overflow: hidden;
   padding-top: 56.25%;
+  justify-content: right;
 }
 </style>
