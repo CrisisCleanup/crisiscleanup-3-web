@@ -146,6 +146,86 @@
             </base-text>
           </div>
         </div>
+        <!-- Info Card w/ Sketch -->
+        <div
+          class="my-2 mx-3 bg-white shadow w-70 h-auto content-center flex-wrap"
+        >
+          <div class="flex flex-row">
+            <div class="flex-col">
+              <base-text variant="h1" weight="300"
+                >Crisis Cleanup embraces and supports the interests of disaster
+                survivors by providing transparent, collaborative, and
+                privacy-enhancing open source technology to assist those who
+                directly interact with and help survivors.
+              </base-text>
+            </div>
+            <div class="flex-col">
+              <img src="../assets/aboutussketchss.jpg" />
+            </div>
+          </div>
+        </div>
+        <!-- Foundational Philosophies -->
+        <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold pb-8">
+          Foundational Philosophies
+        </h1>
+        <div class="flex flex-row">
+          <div class="flex flex-col">
+            <img src="../assets/foundationalphilosophiessketchss.jpg" />
+          </div>
+          <div class="flex flex-col">
+            <ul>
+              <li>
+                Technology should enhance, not replace, inter-organization
+                relationships.
+              </li>
+              <li>
+                There is no pyramid, and you're not on top. Voluntary
+                organizations are co-equal, sovereign and interdependent; no
+                single organization is in charge.
+              </li>
+              <li>
+                Collaboration and communication should be not only convenient,
+                but required
+              </li>
+              <li>
+                There is no such thing as the "One App to Rule them All." The
+                system should not try to do things it was not intended to do.
+              </li>
+              <li>
+                The system tracks property, not people. Consequently, strict
+                personal information minimization policies are in place.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- Info Card w/ Sketch pt2 -->
+        <div
+          class="my-2 mx-3 bg-white shadow w-70 h-auto content-center flex-wrap"
+        >
+          <div class="flex flex-row">
+            <div class="flex-col">
+              <img src="../assets/supportteamsketchss.jpg" />
+            </div>
+            <div class="flex-col">
+              <base-text variant="h1" weight="300"
+                >Crisis Cleanup's real innovation is the ability to coordinate
+                tens of thousands of volunteers from hundreds of organizations
+                to thousands of sites after a disaster in a non-heirarchial
+                collaborative environment.
+              </base-text>
+            </div>
+          </div>
+        </div>
+        <!-- Testimonials [not added yet]
+        <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold pb-8">
+          Testimonials
+        </h1>
+        -->
+        <!-- Helpful Links [not added yet, no links]
+        <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold pb-8">
+          Helpful Links
+        </h1>
+         -->
       </div>
     </template>
   </HomeLayout>
