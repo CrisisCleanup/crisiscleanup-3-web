@@ -1,5 +1,5 @@
 <template>
-  <HomeLayout>
+  <HomeLayout class="overflow-auto">
     <template #grid-overlay>
       <div class="grid--overlay homegrid-backdrop" />
     </template>
@@ -17,7 +17,9 @@
       </div>
       <!--- Footer --->
       <div class="grid--actions border-2">
-        <h1>I am in grid--actions</h1>
+        <h1>Relief Organizations Only</h1>
+        <base-button variant="solid">Register</base-button>
+        <base-button variant="outline">Login</base-button>
       </div>
       <div class="grid--main h-screen">
         <!--- Title --->
@@ -287,18 +289,16 @@ export default {
 </script>
 
 <style scoped>
-.resp-video {
+/* .resp-video {
   position: absolute;
   top: 0;
   left: 0;
   border: 0;
-  width: 100%;
-  height: 100%;
 }
 .video-container {
   position: relative;
   overflow: hidden;
   padding-top: 56.25%;
   justify-content: right;
-}
+} */
 </style>
