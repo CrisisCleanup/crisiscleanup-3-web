@@ -24,6 +24,8 @@ import RequestAccess from '@/pages/RequestAccess';
 import PrintToken from '@/pages/unauthenticated/PrintToken';
 import RegisterOrganization from '@/pages/unauthenticated/RegisterOrganization';
 import PreliminaryAssessment from '@/pages/PreliminaryAssessment';
+import Terms from '@/pages/unauthenticated/Terms';
+import Privacy from '@/pages/unauthenticated/Privacy';
 
 Vue.use(VueRouter);
 
@@ -184,6 +186,18 @@ const routes = [
     path: '/assessment',
     component: PreliminaryAssessment,
     name: 'nav.assessment',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/terms',
+    component: Terms,
+    name: 'nav.terms',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/privacy',
+    component: Privacy,
+    name: 'nav.privacy',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
