@@ -39,7 +39,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/vue-fontawesome": "^0.1.9",
-    "@geoman-io/leaflet-geoman-free": "^2.4.0",
+    "@geoman-io/leaflet-geoman-free": "^2.5.0",
     "@johmun/vue-tags-input": "^2.1.0",
     "@pixi/filter-outline": "^3.1.1",
     "@turf/turf": "^5.1.6",
