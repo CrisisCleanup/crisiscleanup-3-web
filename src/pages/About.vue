@@ -38,34 +38,95 @@
           </p>
         </div>
         <!--- Content --->
-        <!--- About Us Video --->
-        <div class="flex-col w-4/5 h-screen m-5">
-          <div class="video-container">
-            <iframe
-              class="resp-video"
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/kc_T2giyg9Q"
-              frameborder="0"
-              allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-            />
-          </div>
+        <!--- About Us Video
+        <div class="video-container">
+          <iframe
+            class="resp-video"
+            width="100%"
+            height="100%"
+            src="https://www.youtube.com/embed/kc_T2giyg9Q"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
         </div>
+        --->
         <!--- About Us Cards --->
-        <div class="flex flex-col w-1/2">
-          <div class="flex flex-row">
-            <div class="flex-col w-1/2">
-              <base-text variant="body">
-                <span class="text-bold">Crisis Cleanup</span>
-                is a collaborative
-                <span class="font-bold">disaster work order</span>
-                management platform that improves coordination, reduces
-                duplication of efforts, imporves efficiency and improves
-                volunteers' experience.
-              </base-text>
+        <div class="flex flex-col m-5">
+          <!-- Top Row Info Cards -->
+          <div class="flex flex-row justify-between">
+            <!-- Top Left Info Card -->
+            <div class="flex-col pb-5">
+              <div class="flex flex-row">
+                <img
+                  src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                  class="w-7 h-6"
+                />
+                <base-text variant="body" class="pt-2">
+                  <span class="font-bold">Crisis Cleanup</span>
+                  is a collaborative
+                  <span class="font-bold">disaster work order</span>
+                  management platform that improves coordination, reduces
+                  duplication of efforts, imporves efficiency and improves
+                  volunteers' experience.
+                </base-text>
+              </div>
             </div>
-            <div class="flex-col w-1/2"></div>
+            <!-- Top Right Info Card -->
+            <div class="flex-col pb-5">
+              <div class="flex flex-row">
+                <img
+                  src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                  class="w-7 h-6"
+                />
+                <base-text variant="body" class="pt-2">
+                  <span class="font-bold">Crisis Cleaning</span>
+                  works best when a large number of volunteer organizations with
+                  many volunteers work together
+                  <span class="font-bold">
+                    to large numbers of people in a large area, all at the same
+                    time
+                  </span>
+                </base-text>
+              </div>
+            </div>
+          </div>
+          <!-- Bottom Row Info Cards -->
+          <div class="flex flex-row justify-between">
+            <!-- Bottom Left Info Card -->
+            <div class="flex-col">
+              <div class="flex flex-row">
+                <img
+                  src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                  class="w-7 h-6"
+                />
+                <base-text variant="body" class="pt-2">
+                  <span class="font-bold">Crisis Cleanup</span>
+                  helps with the
+                  <span class="font-bold">4 "C"s of disaster recovery:</span>
+                  Communication, Coordination, Collaboration, and Cooperation
+                  (as well as the fifth silent "C" of Competition)
+                </base-text>
+              </div>
+            </div>
+            <!-- Bottom Right Info Card -->
+            <div class="flex-col">
+              <div class="flex flex-row">
+                <img
+                  src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                  class="w-7 h-6"
+                />
+                <base-text variant="body" class="pt-2">
+                  <span class="font-bold"
+                    >Crisis Cleanup does not create the 4 "R"s of disaster
+                    recovery:</span
+                  >
+                  Relationships, Resources, Roles, and Responsibilites. It
+                  cannot fix relationships, create resources, or dictate who
+                  does what.
+                </base-text>
+              </div>
+            </div>
           </div>
         </div>
       </div>
