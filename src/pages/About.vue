@@ -53,11 +53,11 @@
         --->
         <!--- About Us Cards --->
         <div class="flex flex-col m-5">
-          <!-- Top Row Info Cards -->
+          <!-- Left Side Info Cards -->
           <div class="flex flex-row justify-between">
             <!-- Top Left Info Card -->
-            <div class="flex-col pb-5">
-              <div class="flex flex-row">
+            <div class="flex-col">
+              <div class="flex flex-row m-3">
                 <img
                   src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
                   class="w-7 h-6"
@@ -71,10 +71,27 @@
                   volunteers' experience.
                 </base-text>
               </div>
+              <!-- Bottom Left Info Card -->
+              <div class="flex-col">
+                <div class="flex flex-row m-3">
+                  <img
+                    src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                    class="w-7 h-6"
+                  />
+                  <base-text variant="body" class="pt-2">
+                    <span class="font-bold">Crisis Cleanup</span>
+                    helps with the
+                    <span class="font-bold">4 "C"s of disaster recovery:</span>
+                    Communication, Coordination, Collaboration, and Cooperation
+                    (as well as the fifth silent "C" of Competition)
+                  </base-text>
+                </div>
+              </div>
             </div>
-            <!-- Top Right Info Card -->
-            <div class="flex-col pb-5">
-              <div class="flex flex-row">
+            <!-- Right Side Info Cards -->
+            <div class="flex-col">
+              <!-- Top Right Info Card -->
+              <div class="flex flex-row m-3">
                 <img
                   src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
                   class="w-7 h-6"
@@ -89,44 +106,44 @@
                   </span>
                 </base-text>
               </div>
+              <!-- Bottom Right Info Card -->
+              <div class="flex flex-col">
+                <div class="flex flex-row m-3">
+                  <img
+                    src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                    class="w-7 h-6"
+                  />
+                  <base-text variant="body" class="pt-2">
+                    <span class="font-bold"
+                      >Crisis Cleanup does not create the 4 "R"s of disaster
+                      recovery:</span
+                    >
+                    Relationships, Resources, Roles, and Responsibilites. It
+                    cannot fix relationships, create resources, or dictate who
+                    does what.
+                  </base-text>
+                </div>
+              </div>
             </div>
           </div>
-          <!-- Bottom Row Info Cards -->
-          <div class="flex flex-row justify-between">
-            <!-- Bottom Left Info Card -->
-            <div class="flex-col">
-              <div class="flex flex-row">
-                <img
-                  src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
-                  class="w-7 h-6"
-                />
-                <base-text variant="body" class="pt-2">
-                  <span class="font-bold">Crisis Cleanup</span>
-                  helps with the
-                  <span class="font-bold">4 "C"s of disaster recovery:</span>
-                  Communication, Coordination, Collaboration, and Cooperation
-                  (as well as the fifth silent "C" of Competition)
-                </base-text>
-              </div>
-            </div>
-            <!-- Bottom Right Info Card -->
-            <div class="flex-col">
-              <div class="flex flex-row">
-                <img
-                  src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
-                  class="w-7 h-6"
-                />
-                <base-text variant="body" class="pt-2">
-                  <span class="font-bold"
-                    >Crisis Cleanup does not create the 4 "R"s of disaster
-                    recovery:</span
-                  >
-                  Relationships, Resources, Roles, and Responsibilites. It
-                  cannot fix relationships, create resources, or dictate who
-                  does what.
-                </base-text>
-              </div>
-            </div>
+        </div>
+        <!-- Stats -->
+        <div class="flex flex-row justify-between">
+          <div class="flex flex-col">
+            <h1 class="text-xl font-bold">1700+</h1>
+            <base-text weight="300" variant="h1">Organizations</base-text>
+          </div>
+          <div class="flex flex-col">
+            <h1 class="text-xl font-bold">80,905+</h1>
+            <base-text weight="300" variant="h1"
+              >Homes and Businesses Cleaned and Recovered
+            </base-text>
+          </div>
+          <div class="flex flex-col">
+            <h1 class="text-xl font-bold">$46,929</h1>
+            <base-text weight="300" variant="h1">
+              Saved for disaster survivors each day
+            </base-text>
           </div>
         </div>
       </div>
