@@ -255,7 +255,9 @@
               </span>
               <form-select
                 :value="worksite.formFields[field.field_key]"
-                :options="field.values"
+                :options="
+                  field.values || getSelectValuesList(field.values_default_t)
+                "
                 item-key="value"
                 label="name_t"
                 select-classes="h-12 border"
@@ -896,6 +898,14 @@ export default {
         });
       }
       return '';
+    },
+    getSelectValuesList(defaultValues) {
+      return Object.keys(defaultValues).map(key => {
+        return {
+          value: key,
+          name_t: this.$t(defaultValues[key]),
+        };
+      });
     },
     getBooleanValue(fieldKey) {
       if (!this.worksite || !this.worksite.form_data) {

@@ -1,5 +1,4 @@
 import { Model } from '@vuex-orm/core';
-import VueLog from '@dreipol/vue-log';
 import Location from '@/models/Location';
 
 export default class Incident extends Model {
@@ -28,7 +27,7 @@ export default class Incident extends Model {
         const incidentKey = this.incident_type.replace('_', '-');
         return require(`@/assets/disaster_icons/${incidentKey}.svg`);
       } catch (e) {
-        VueLog.error(e);
+        window.vue.$log.error(e);
       }
     }
     return null;

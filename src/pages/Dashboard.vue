@@ -578,7 +578,7 @@ export default {
           dataKey: 'results',
         },
       );
-      if (results.entities) {
+      if (results.entities.organizations) {
         this.organizations = [...results.entities.organizations];
       }
     },
