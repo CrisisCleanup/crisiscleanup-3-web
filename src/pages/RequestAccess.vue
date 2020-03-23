@@ -7,15 +7,27 @@
       <div class="grid--main">
         <div class="w-2/3">
           <div class="text-5xl">{{ $t('~~Join Organization') }}</div>
+
           <div class="text-2xl font-light">
             {{
               $t(
-                '~~To join an organization, you should be invited by an existing member. You can also use this form to request access from an existing user by their email',
+                '~~To join an organization, you should be invited by an existing member. You can use this form to request access from an existing member by entering their email here:',
               )
             }}
           </div>
         </div>
         <form class="w-108 flex flex-col" autocomplete="off" ref="form">
+          <base-input
+            size="large"
+            class="input"
+            type="search"
+            v-model="requestedTo"
+            placeholder="Crisis Cleanup Member Email"
+            required
+          ></base-input>
+          <base-text class="font-bold" variant="h4" weight="500">
+            {{ $t('~~Now fill out your information, and request access') }}
+          </base-text>
           <base-input
             v-model="email"
             type="search"
@@ -67,14 +79,6 @@
             :placeholder="$t('invitationSignup.pw2_placeholder')"
             required
           />
-          <base-input
-            size="large"
-            class="input"
-            type="search"
-            v-model="requestedTo"
-            placeholder="Crisis Cleanup Member Email"
-            required
-          ></base-input>
 
           <base-button
             size="large"
