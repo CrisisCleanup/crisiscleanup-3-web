@@ -7,9 +7,15 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
   <div
     class="flex flex-col"
   >
-    <inviteusers-stub
-      class="mx-4 self-end"
-    />
+    <div
+      class="flex self-end mr-4"
+    >
+      <redeployrequest-stub />
+       
+      <inviteusers-stub
+        class="mx-1"
+      />
+    </div>
      
     <div
       class="flex"
