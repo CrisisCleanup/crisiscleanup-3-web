@@ -6,7 +6,7 @@
 import AWSSPMetadata from '@/assets/saml/aws-metadata.xml';
 import { AuthService } from '@/services/auth.service';
 import { IDPApi } from '@/utils/api';
-import * as validator from '@authenio/samlify-validate-with-xmllint';
+import * as validator from '@authenio/samlify-xsd-schema-validator';
 import VueLog from '@dreipol/vue-log';
 import AWS from 'aws-sdk';
 import axios from 'axios';

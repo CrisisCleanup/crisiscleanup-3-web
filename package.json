@@ -29,8 +29,6 @@
     "build-storybook": "cross-env NODE_ENV=storybook build-storybook"
   },
   "dependencies": {
-    "@authenio/samlify-node-xmllint": "^1.0.2",
-    "@authenio/samlify-validate-with-xmllint": "^1.0.2",
     "@authenio/samlify-xsd-schema-validator": "^1.0.3",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.9.0",
