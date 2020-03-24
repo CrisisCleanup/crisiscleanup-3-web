@@ -95,9 +95,14 @@ export const setPopup = ({ open } = { open: true }) => {
     // clear state (kept in localStorage)
     Log.debug('closing popup manager...');
     connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
+    if (connect.core.loginWindow) {
+      connect.core.loginWindow.close();
+      connect.core.loginWindow = null;
+    }
     return connect.core.getPopManager().close();
   }
-  return connect.core
+  connect.core.loginWindow = connect.core
     .getPopupManager()
     .open(loginUrl, connect.MasterTopics.LOGIN_POPUP);
+  return true;
 };

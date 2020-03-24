@@ -76,11 +76,10 @@ const actions = {
       onAuth: () => commit('setConnectState', { running: true, authed: true }),
     });
   },
-  async setPopup({ commit }, state) {
-    const newState = state || true;
-    Log.debug('setting popup:', newState);
-    ConnectService.setPopup({ open: newState });
-    commit('setPopupState', newState);
+  async setPopup({ commit }, state = true) {
+    Log.debug('setting popup:', state);
+    ConnectService.setPopup({ open: state });
+    commit('setPopupState', state);
   },
 };
 
