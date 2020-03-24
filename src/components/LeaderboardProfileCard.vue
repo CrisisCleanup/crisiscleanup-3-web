@@ -3,7 +3,7 @@
     <div class="flex flex-row m-5 justify-between">
       <!-- PFP -->
       <div class="flex flex-col w-1/7">
-        <img src="../assets/LeaderboardPFPss.jpg" />
+        <img src="../assets/LeaderboardPFPss.jpg" class="h-8" />
       </div>
       <!-- Name / Status / Affiliation -->
       <div class="flex flex-col w-3/7">
@@ -15,7 +15,7 @@
             </span>
           </base-text>
         </div>
-        <base-text variant="body" class="text-crisiscleanup-grey-400">
+        <base-text variant="body" class="text-crisiscleanup-grey-500">
           Frozen Titanium Simpletons
         </base-text>
       </div>
