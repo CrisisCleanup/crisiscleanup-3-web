@@ -9,15 +9,23 @@
       <div class="flex flex-col w-3/7">
         <div class="flex flex-row">
           <base-text variant="h3">Calvin Baker</base-text>
-          <ul class="color-crisiscleanup-green-300">
-            <li>Online</li>
-          </ul>
+          <base-text variant="h3" class="px-2">
+            <span class="text-crisiscleanup-green-300">
+              &#8226; Online
+            </span>
+          </base-text>
         </div>
-        <base-text variant="body" class="text-crisiscleanup-grey-300">
+        <base-text variant="body" class="text-crisiscleanup-grey-400">
           Frozen Titanium Simpletons
         </base-text>
       </div>
       <!-- # of Calls -->
+      <div class="flex flex-col w-1/7">
+        <base-text variant="h1" class="text-crisiscleanup-dark-500"
+          >56</base-text
+        >
+      </div>
+      <!-- Phone -->
       <div class="flex flex-col w-1/7">
         <ccu-icon type="call" />
       </div>
