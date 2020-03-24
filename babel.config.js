@@ -1,6 +1,6 @@
 module.exports = {
   presets: [
-    ['@babel/preset-env', { modules: false }],
+    ['@babel/preset-env'],
     [
       '@vue/babel-preset-jsx',
       {
@@ -10,7 +10,7 @@ module.exports = {
     [
       '@vue/app',
       {
-        useBuiltIns: 'entry',
+        useBuiltIns: 'usage',
       },
     ],
   ],
