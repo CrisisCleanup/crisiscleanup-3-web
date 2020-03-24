@@ -27,8 +27,12 @@ env:
   VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
   VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
   VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
+  VUE_APP_BASE_URL: 'https://app.dev.crisiscleanup.io'
+  VUE_APP_AWS_CCP_REGION: 'us-east-1'
+  VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccudev'
+  VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUDevConnectRole'
+  VUE_APP_CCP_INSTANCE: 89c1729b-4547-4548-9508-9365b71e586b
   VUE_APP_AWS_CCP_URL: https://cchotline.awsapps.com/connect/ccp#
-  VUE_APP_AWS_CCP_REGION: us-east-1
   CYPRESS_INSTALL_BINARY: 0
 
 jobs:
@@ -167,10 +171,16 @@ jobs:
         if: "github.event.action == 'created'"
         env:
           VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
+          VUE_APP_BASE_URL: 'https://app.staging.crisiscleanup.io'
+          VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccustaging'
+          VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUStagingConnectRole'
         run: yarn deploy-staging
 
       - name: Deploy Production
         if: "github.event.action == 'published'"
         env:
           VUE_APP_API_BASE_URL: 'https://api.crisiscleanup.io'
+          VUE_APP_BASE_URL: 'https://app.crisiscleanup.io'
+          VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccuproduction'
+          VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUProductionConnectRole'
         run: yarn deploy-production
