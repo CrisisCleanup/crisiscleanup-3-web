@@ -270,12 +270,6 @@
             </div>
           </div>
         </div>
-        <!-- Agent Analytics Card -->
-        <div
-          class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
-        >
-          <AgentAnalyticsCard />
-        </div>
       </div>
     </template>
   </Loader>
@@ -300,7 +294,6 @@ import StatusDropDown from '@/components/StatusDropDown';
 import { forceFileDownload } from '@/utils/downloads';
 import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
 import Loader from '@/components/Loader';
-import AgentAnalyticsCard from '@/components/AgentAnalyticsCard';
 import InviteUsers from './organization/InviteUsers';
 import OrganizationApprovalTable from '../components/OrganizationApprovalTable';
 import RedeployRequest from './RedeployRequest';
@@ -316,7 +309,6 @@ export default {
     Table,
     StatusDropDown,
     Loader,
-    AgentAnalyticsCard,
   },
   data() {
     return {
