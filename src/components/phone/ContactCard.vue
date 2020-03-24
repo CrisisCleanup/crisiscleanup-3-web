@@ -37,8 +37,9 @@
       <div class="flex-col m-3">
         <base-button
           class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 font-bold text-white py-2 px-4 m-3"
+          :action="onToggle"
         >
-          Unavailable
+          {{ available ? 'Available' : 'Offline' }}
         </base-button>
       </div>
       <div class="flex-col m-3">
@@ -65,6 +66,8 @@ export default {
     name: VueTypes.string,
     mobile: VueTypes.string,
     profileSrc: VueTypes.string,
+    available: VueTypes.bool,
+    onToggle: VueTypes.func,
   },
   data() {
     return {

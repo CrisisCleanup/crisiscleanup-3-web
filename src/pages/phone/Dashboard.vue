@@ -10,6 +10,8 @@
             :name="currentUser.full_name"
             :mobile="currentUser.mobile"
             :profile-src="currentUser.profilePictureUrl"
+            :available="agentAvailable"
+            :on-toggle="toggleAvailable"
           />
         </div>
       </div>
@@ -56,6 +58,7 @@ import genstatscard from '@/components/phone/GeneralStatsCard.vue';
 import operatorstats from '@/components/phone/OperatorStatisticsCard.vue';
 import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
 import AgentAnalyticsCard from '@/components/phone/AgentAnalyticsCard.vue';
+import { STATES as AgentStates } from '@/services/acs.service';
 
 export default {
   name: 'Phone',
@@ -78,23 +81,15 @@ export default {
       return User.find(this.$store.getters['auth/userId']);
     },
     ...mapState('phone', ['agent', 'metrics']),
-    ...mapGetters('phone', ['connectReady']),
+    ...mapGetters('phone', ['connectReady', 'agentAvailable']),
   },
   methods: {
-    ...mapActions('phone', ['fetchAgent', 'getRealtimeMetrics']),
-    async getAgent() {
-      const userAgent = {
-        user: {
-          id: this.currentUser.id,
-          email: this.currentUser.email,
-        },
-      };
-      await this.fetchAgent(userAgent);
-    },
-    async resolveAgent() {
-      // await this.getAgent();
-      // await this.getRealtimeMetrics();
-      this.loading = false;
+    ...mapActions('phone', ['getRealtimeMetrics', 'setAgentState']),
+    async toggleAvailable() {
+      if (this.agentAvailable) {
+        return this.setAgentState(AgentStates.OFFLINE);
+      }
+      return this.setAgentState(AgentStates.AVAILABLE);
     },
   },
 };

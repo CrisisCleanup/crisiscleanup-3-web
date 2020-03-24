@@ -117,7 +117,6 @@ export const getAgent = () => new connect.Agent();
 export const setAgentState = state => {
   const agent = getAgent();
   const stateDef = agent.getAgentStates().find(s => s.type === state);
-  console.log('setting state: ', stateDef);
   agent.setState(stateDef);
   return state;
 };
@@ -127,6 +126,7 @@ export const parseAgentState = stateEvent => {
     if (val === stateEvent.type) {
       return key;
     }
+    return false;
   });
   return state[0];
 };

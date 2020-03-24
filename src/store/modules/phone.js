@@ -1,6 +1,6 @@
 import * as ConnectService from '@/services/acs.service';
 import * as SSO from '@/services/sso.service';
-import { AgentApi, PhoneApi } from '@/utils/api';
+import { PhoneApi } from '@/utils/api';
 import VueLog from '@dreipol/vue-log';
 import axios from 'axios';
 import { camelCase } from 'lodash';
@@ -19,6 +19,7 @@ const Log = Vue.log();
 
 const PhoneState = {
   agent: null,
+  agentState: ConnectService.STATES.OFFLINE,
   metrics: null,
   connectRunning: false,
   connectAuthed: false,
@@ -34,20 +35,11 @@ const getters = {
   connectReady: state => !!state.streams, // is connect done w/ init and auth?
   popupOpen: state => state.popupOpen,
   authToken: state => (state.credentials ? state.credentials.AccessToken : ''),
+  agentAvailable: state => state.agentState === ConnectService.STATES.AVAILABLE,
 };
 
 // actions
 const actions = {
-  async fetchAgent({ commit }, { user }) {
-    let resp;
-    try {
-      resp = await axios.get(AgentApi('me'));
-    } catch {
-      resp = await axios.post(AgentApi(), { user });
-    }
-    commit('setAgent', resp.data);
-    return resp;
-  },
   async getRealtimeMetrics({ commit }) {
     const resp = await axios.get(PhoneApi('metrics'));
     commit('setMetrics', resp.data.results);
@@ -72,7 +64,7 @@ const actions = {
       Log.error(e);
     }
     ConnectService.initAgent({
-      onRefresh: agent => commit('setAgentState', agent),
+      onRefresh: agent => commit('setAgentState', { newState: null, agent }),
       onAuth: () => commit('setConnectState', { running: true, authed: true }),
     });
   },
@@ -80,6 +72,10 @@ const actions = {
     Log.debug('setting popup:', state);
     ConnectService.setPopup({ open: state });
     commit('setPopupState', state);
+  },
+  async setAgentState({ commit }, state) {
+    ConnectService.setAgentState(state);
+    commit('setAgentState', { newState: state });
   },
 };
 
@@ -96,11 +92,14 @@ const mutations = {
     });
     state.metrics = newState;
   },
-  setAgentState(state, agent) {
-    const agentState = agent.getState();
-    const newState = { ...state.streams, ...agentState };
-    Log.debug('new state inbound:', newState);
-    state.streams = newState;
+  setAgentState(state, { newState, agent }) {
+    let agentState = newState;
+    if (agent) {
+      agentState = agent.getState();
+      agentState = ConnectService.parseAgentState(agentState);
+    }
+    Log.debug('new state inbound:', agentState);
+    state.agentState = agentState;
   },
   setConnectState(state, { running, authed }) {
     state.connectRunning = running;
