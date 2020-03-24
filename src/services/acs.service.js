@@ -23,6 +23,7 @@ export const ConnectConfig = {
   region: process.env.VUE_APP_AWS_CCP_REGION,
   allowFramedSoftphone: false,
   loginPopup: false,
+  loginUrl: `${process.env.VUE_APP_BASE_URL}/sp/acs`,
 };
 
 export const initConnect = ({
