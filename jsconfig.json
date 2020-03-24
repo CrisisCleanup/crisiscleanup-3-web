@@ -2,8 +2,7 @@
   "include": ["./src/**/*", "./node_modules/cypress", "cypress/**/*.js"],
   "compilerOptions": {
     "module": "commonjs",
-    "target": "esnext",
-    "sourceMap": true,
+    "target": "es2015",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
