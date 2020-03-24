@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2021-03-23T09:24:03Z" cacheDuration="PT604800S" entityID="https://app.crisiscleanup.io/sp/metadata.xml" ID="pfx7c0a00ab-b2cf-09ce-bb3d-d928456c7994">
+<md:EntityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" validUntil="2021-03-23T09:24:03Z" cacheDuration="PT604800S" entityID="https://localhost:8080/sp/metadata.xml" ID="pfx7c0a00ab-b2cf-09ce-bb3d-d928456c7994">
   <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
     <ds:SignedInfo>
       <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
@@ -36,6 +36,6 @@
       </ds:KeyInfo>
     </md:KeyDescriptor>
     <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
-    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://app.crisiscleanup.io/sp/acs" index="1"/>
+    <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://signin.aws.amazon.com/saml" index="1"/>
   </md:SPSSODescriptor>
 </md:EntityDescriptor>

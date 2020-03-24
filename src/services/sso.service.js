@@ -15,7 +15,7 @@ import Vue from 'vue';
 import SPMetadata from '../../public/sp/metadata.xml';
 
 Vue.use(VueLog, {
-  name: 'acs.service',
+  name: 'sso.service',
   middlewares: [
     result => {
       result.unshift('[SSO] ');
@@ -42,15 +42,16 @@ export const AWS_SP = saml.ServiceProvider({
   metadata: AWSSPMetadata,
 });
 
-export const fetchMetadata = () => {
-  const content = Promise.resolve(axios.get(IDPApi('metadata/')));
+export const fetchMetadata = async () => {
+  const content = await axios.get(IDPApi('metadata/'));
   Log.debug('fetched IDP metadata: ', content);
-  return content;
+  return content.data;
 };
 
-export const IDP = saml.IdentityProvider({
-  metadata: fetchMetadata(),
-});
+export const IDP = metadata =>
+  saml.IdentityProvider({
+    metadata,
+  });
 
 export const consume = async SAMLResponse => {
   const sts = new AWS.STS();
@@ -74,6 +75,8 @@ export const consume = async SAMLResponse => {
       InstanceId: process.env.VUE_APP_CCP_INSTANCE,
     })
     .promise();
+  axios.defaults.headers.common['X-Amz-Security-Token'] =
+    awsCreds.Credentials.SessionToken;
   return tokenCreds.Credentials;
 };
 
@@ -90,7 +93,9 @@ export const authenticate = async () => {
   if (cached) {
     return cached;
   }
-  const { context } = await SP.createLoginRequest(IDP, 'redirect');
+  const metadata = await fetchMetadata();
+  const idp = IDP(metadata);
+  const { context } = await SP.createLoginRequest(idp, 'redirect');
   Log.debug(context);
   const resp = await axios({
     method: 'get',
