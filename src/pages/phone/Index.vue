@@ -50,12 +50,12 @@
 import User from '@/models/User';
 import { mapActions, mapState, mapGetters } from 'vuex';
 import Loader from '@/components/Loader';
-import PeopleStoriesCard from '@/components/PeopleStoriesCard';
-import ContactCard from '@/components/ContactCard';
-import genstatscard from '@/components/GeneralStatsCard.vue';
-import operatorstats from '@/components/OperatorStatisticsCard';
-import NewsTrainingCard from '@/components/NewsTrainingCard';
-import AgentAnalyticsCard from '@/components/AgentAnalyticsCard';
+import PeopleStoriesCard from '@/components/phone/PeopleStoriesCard';
+import ContactCard from '@/components/phone/ContactCard';
+import genstatscard from '@/components/phone/GeneralStatsCard.vue';
+import operatorstats from '@/components/phone/OperatorStatisticsCard';
+import NewsTrainingCard from '@/components/phone/NewsTrainingCard';
+import AgentAnalyticsCard from '@/components/phone/AgentAnalyticsCard';
 import { EventBus } from '../../event-bus';
 
 export default {

@@ -25,7 +25,7 @@
     <hr />
     <div class="flex flex-row justify-between m-2">
       <div class="flex flex-col w-1/8">
-        <img src="../assets/peoplewaitingss.jpg" class="h-8" />
+        <img src="@/assets/peoplewaitingss.jpg" class="h-8" />
       </div>
       <base-text variant="h3" weight="300">Number of People Waiting</base-text>
       <base-text variant="h1" class="text-crisiscleanup-red-700">144</base-text>
