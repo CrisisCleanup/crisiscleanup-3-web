@@ -8026,10 +8026,10 @@ cypress-cy-select@^0.2.0:
   resolved "https://registry.yarnpkg.com/cypress-cy-select/-/cypress-cy-select-0.2.0.tgz#3e89263e444b8706a0be64a7d0787df78761b287"
   integrity sha512-dgsWHn1F2BYDKiz+YJJ+1E2vIT1XnsgS4bLvSSRiYh8zjmjRyhMIY9ucEBSCaNiZWJAEJdyITrPk7226m7G0WQ==
 
-cypress-localstorage-commands@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/cypress-localstorage-commands/-/cypress-localstorage-commands-1.1.6.tgz#55604b122dac4944eac813be7882d51ef3939d7b"
-  integrity sha512-cqTRrY3vAIoaMHs+aPU1ijSoKl21Pw+mkRG8LL0Oi72B/GD6GPeJVKFiX9+F0bBrALqegrhzFeYXOeWcIeTz+w==
+cypress-localstorage-commands@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/cypress-localstorage-commands/-/cypress-localstorage-commands-1.1.7.tgz#a1572f62972aae08fc9d5ca5f7be4a1c08881cb9"
+  integrity sha512-k758Zhr1/4fwQEVdv/4HjoRi69p65Jq+pgqRSmjkXtbcyqxn2Hta93onQ/wZ+Y7A3yQX4YvhxkXv+W27jgk9Ow==
 
 cypress-plugin-retries@^1.5.2:
   version "1.5.2"
