@@ -12,7 +12,7 @@
 import 'amazon-connect-streams';
 import '@crisiscleanup/connect-rtc';
 import { mapActions, mapGetters } from 'vuex';
-import CCP from '@/components/phone/CCP';
+import CCP from '@/components/phone/CCP.vue';
 
 const defaultLayout = 'authenticated';
 export default {
