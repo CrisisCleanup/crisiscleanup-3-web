@@ -99,10 +99,34 @@ export const setPopup = ({ open } = { open: true }) => {
       connect.core.loginWindow.close();
       connect.core.loginWindow = null;
     }
-    return connect.core.getPopManager().close();
+    return false;
   }
   connect.core.loginWindow = connect.core
     .getPopupManager()
     .open(loginUrl, connect.MasterTopics.LOGIN_POPUP);
   return true;
+};
+
+export const STATES = {
+  AVAILABLE: connect.AgentStateType.ROUTABLE,
+  OFFLINE: connect.AgentStateType.OFFLINE,
+};
+
+export const getAgent = () => new connect.Agent();
+
+export const setAgentState = state => {
+  const agent = getAgent();
+  const stateDef = agent.getAgentStates().find(s => s.type === state);
+  console.log('setting state: ', stateDef);
+  agent.setState(stateDef);
+  return state;
+};
+
+export const parseAgentState = stateEvent => {
+  const state = Object.entries(STATES).map((key, val) => {
+    if (val === stateEvent.type) {
+      return key;
+    }
+  });
+  return state[0];
 };

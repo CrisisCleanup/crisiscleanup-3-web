@@ -93,7 +93,6 @@ export default {
       const agent = Agent.query()
         .where('user_id', this.currentUser.id)
         .first();
-      console.log(agent);
       return agent;
     },
     authenticate() {
