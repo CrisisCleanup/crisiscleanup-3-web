@@ -38,7 +38,7 @@
     "@dreipol/vue-log": "0.0.8",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
-    "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "@geoman-io/leaflet-geoman-free": "^2.5.0",
     "@johmun/vue-tags-input": "^2.1.0",
