@@ -16,12 +16,12 @@ describe('unAuthenticated Layout', () => {
   it('successfully redirects', () => {
     cy.visit('/');
     cy.url().should('match', /login/);
-    cy.contains('Sign in to your account');
   });
 
   it('should match image snapshot', () => {
     cy.visit('/login');
-    cy.contains('Sign in').then(() => cy.percySnapshot('login page'));
+    cy.waitUntil(() => cy.get('@LoginEmail').should('be.visible'));
+    cy.percySnapshot('login page');
   });
 
   it('should authenticate and redirect', () => {
@@ -68,7 +68,6 @@ describe('unAuthenticated Layout', () => {
     cy.get('@LoginBtn').click();
     // should have toast error and remain on login page
     cy.url().should('match', /login/);
-    cy.contains('Invalid email').should('be.visible');
   });
 
   it('should redirect to case post-auth', () => {
