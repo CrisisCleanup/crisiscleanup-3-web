@@ -14,21 +14,21 @@ import Layers from '@/pages/organization/Layers';
 import OrganizationProfile from '@/pages/organization/Profile';
 import Users from '@/pages/organization/Users';
 import UserView from '@/pages/organization/UserView';
-import PhoneDashboard from '@/pages/phone/Index';
+import PhoneRoutes from '@/pages/phone/routes';
+import PreliminaryAssessment from '@/pages/PreliminaryAssessment';
 import Profile from '@/pages/Profile';
 import RequestAccess from '@/pages/RequestAccess';
+import TrainingPage from '@/pages/Training';
 import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
 import PrintToken from '@/pages/unauthenticated/PrintToken';
+import Privacy from '@/pages/unauthenticated/Privacy';
+import RegisterOrganization from '@/pages/unauthenticated/RegisterOrganization';
+import Terms from '@/pages/unauthenticated/Terms';
 import * as SSO from '@/services/sso.service';
 import store from '@/store/index';
 import Vue from 'vue';
 import VueCookies from 'vue-cookies';
 import VueRouter from 'vue-router';
-import RegisterOrganization from '@/pages/unauthenticated/RegisterOrganization';
-import PreliminaryAssessment from '@/pages/PreliminaryAssessment';
-import Terms from '@/pages/unauthenticated/Terms';
-import Privacy from '@/pages/unauthenticated/Privacy';
-import TrainingPage from '@/pages/Training';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -139,12 +139,6 @@ const routes = [
     meta: { layout: 'authenticated' },
   },
   {
-    path: '/phone',
-    component: PhoneDashboard,
-    name: 'nav.phone',
-    meta: { layout: 'authenticated' },
-  },
-  {
     path: '/locations/new',
     component: Location,
     name: 'nav.new_location',
@@ -232,15 +226,16 @@ const routes = [
     },
   },
   {
-    path: '*',
-    name: 'NotFound',
-    component: NotFound,
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
     path: '/training',
     component: TrainingPage,
     name: 'nav.training',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  ...PhoneRoutes,
+  {
+    path: '*',
+    name: 'NotFound',
+    component: NotFound,
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];
