@@ -29,7 +29,7 @@
       <div class="flex flex-row justify-content m-5">
         <div class="flex flex-row">
           <img
-            src="../../src/assets/littleperson.jpg"
+            src="@/assets/littleperson.jpg"
             alt="person icon"
             class="px-1 h-4"
           />
@@ -41,11 +41,7 @@
           >
         </div>
         <div class="flex flex-row px-2">
-          <img
-            src="../../src/assets/greyglobe.jpg"
-            alt="globe icon"
-            class="px-1 h-4"
-          />
+          <img src="@/assets/greyglobe.jpg" alt="globe icon" class="px-1 h-4" />
           <!--- Survivor Language --->
           <base-text
             variant="body"
@@ -100,7 +96,7 @@
 </template>
 
 <script>
-import SampleScript from './SampleScriptCard';
+import SampleScript from './SampleScriptCard.vue';
 export default {
   name: 'ConnectCallPopUp',
   components: {

@@ -49,13 +49,13 @@
 <script>
 import User from '@/models/User';
 import { mapActions, mapState, mapGetters } from 'vuex';
-import Loader from '@/components/Loader';
-import PeopleStoriesCard from '@/components/phone/PeopleStoriesCard';
-import ContactCard from '@/components/phone/ContactCard';
+import Loader from '@/components/Loader.vue';
+import PeopleStoriesCard from '@/components/phone/PeopleStoriesCard.vue';
+import ContactCard from '@/components/phone/ContactCard.vue';
 import genstatscard from '@/components/phone/GeneralStatsCard.vue';
-import operatorstats from '@/components/phone/OperatorStatisticsCard';
-import NewsTrainingCard from '@/components/phone/NewsTrainingCard';
-import AgentAnalyticsCard from '@/components/phone/AgentAnalyticsCard';
+import operatorstats from '@/components/phone/OperatorStatisticsCard.vue';
+import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
+import AgentAnalyticsCard from '@/components/phone/AgentAnalyticsCard.vue';
 import { EventBus } from '../../event-bus';
 
 export default {
