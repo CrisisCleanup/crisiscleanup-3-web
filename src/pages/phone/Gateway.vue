@@ -1,17 +1,29 @@
 <template>
-  <Loader :loading="loading" class="h-full overflow-auto">
+  <Loader :loading="loading" class="h-full w-full overflow-auto">
     <template #content>
-      <div class="gateway--container">
+      <div
+        class="gateway--container h-full w-full overflow-auto flex flex-col p-16"
+      >
         <div class="step">
           <base-text class="title" variant="h1">{{ lang.title }}</base-text>
-          <base-text>{{ lang.detail }}</base-text>
+          <base-text class="text-center">{{ lang.detail }}</base-text>
         </div>
         <div v-for="s in lang.steps" :key="`step_${s.title}`" class="step">
           <base-text variant="h1">{{ s.title }}</base-text>
           <base-text>{{ s.body }}</base-text>
         </div>
-        <div class="action">
-          <base-text variant="h2">{{ lang.action.title }}</base-text>
+        <div class="action my-6">
+          <div class="input inline-flex align-items-baseline">
+            <base-text variant="h2">{{ lang.action.user_id }}</base-text>
+            <base-input :value="agent ? agent.user_id : ''" />
+          </div>
+          <div class="input inline-flex align-items-baseline">
+            <base-text variant="h2">{{ lang.action.password }}</base-text>
+            <base-input :value="agent ? agent.password : ''" />
+          </div>
+          <base-text variant="h2" class="pt-4">{{
+            lang.action.title
+          }}</base-text>
           <base-button variant="outline" size="large" :action="authenticate">{{
             lang.action.button
           }}</base-button>
@@ -34,7 +46,8 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
+      agent: {},
     };
   },
   computed: {
@@ -51,10 +64,16 @@ export default {
             title: this.$t('~~Step 2: Do another thing!'),
             body: this.$t('a more detailed explanation!'),
           },
+          {
+            title: this.$t('~~Step 3: Do another thing!'),
+            body: this.$t('a more detailed explanation!'),
+          },
         ],
         action: {
           title: this.$t('~~Ready?'),
           button: this.$t('~~Lets Do it!'),
+          user_id: this.$t('~~Username: '),
+          password: this.$t('~~Password: '),
         },
       };
     },
@@ -91,39 +110,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.gateway {
+div.gateway {
   &--container {
-    @apply h-full pb-16;
+    @apply h-full w-full;
     display: flex;
     flex-direction: column;
-    flex: 1;
-    align-items: center;
 
     p.title {
       @apply text-3xl;
+      text-align: center;
     }
 
     .step {
       @apply my-8;
       display: flex;
-      flex-grow: 1;
-      width: 80%;
       flex-direction: column;
+      align-self: center;
+      text-align: center;
       p {
         @apply py-2;
-        &:last-child {
-          text-align: center;
-          align-self: center;
-        }
       }
     }
 
     .action {
+      display: flex;
+      flex-direction: column;
       p {
         text-align: center;
         @apply pb-4;
       }
-      justify-self: flex-end;
+      justify-content: center;
+      align-items: center;
+      .input {
+        align-items: baseline;
+        p {
+          @apply pr-4;
+        }
+      }
     }
   }
 }
