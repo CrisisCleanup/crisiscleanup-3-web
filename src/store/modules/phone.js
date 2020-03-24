@@ -1,4 +1,5 @@
 import * as ConnectService from '@/services/acs.service';
+import * as SSO from '@/services/sso.service';
 import { AgentApi, PhoneApi } from '@/utils/api';
 import VueLog from '@dreipol/vue-log';
 import axios from 'axios';
@@ -23,6 +24,7 @@ const PhoneState = {
   connectAuthed: false,
   streams: null,
   popupOpen: false,
+  credentials: SSO.retrieveCredentials(),
 };
 
 // getters
@@ -31,6 +33,7 @@ const getters = {
   connectRunning: state => state.connectRunning, // is connect initialized?
   connectReady: state => !!state.streams, // is connect done w/ init and auth?
   popupOpen: state => state.popupOpen,
+  authToken: state => (state.credentials ? state.credentials.AccessToken : ''),
 };
 
 // actions
@@ -54,6 +57,7 @@ const actions = {
     try {
       ConnectService.initConnect({
         htmlEl,
+        config: { authToken: getters.authToken(PhoneState) },
         onAuth: () =>
           commit('setConnectState', { running: true, authed: true }),
         // refresh session

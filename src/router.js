@@ -1,5 +1,3 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
 import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
@@ -8,26 +6,31 @@ import CaseView from '@/pages/CaseView';
 import Dashboard from '@/pages/Dashboard';
 import Location from '@/pages/Location';
 import Login from '@/pages/Login';
+import NotFound from '@/pages/NotFound';
 import Affiliates from '@/pages/organization/Affiliates';
 import Organization from '@/pages/organization/Index';
 import Invitations from '@/pages/organization/Invitations';
 import Layers from '@/pages/organization/Layers';
 import OrganizationProfile from '@/pages/organization/Profile';
 import Users from '@/pages/organization/Users';
+import UserView from '@/pages/organization/UserView';
 import PhoneDashboard from '@/pages/phone/Index';
 import Profile from '@/pages/Profile';
-import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
-import store from '@/store/index';
-import UserView from '@/pages/organization/UserView';
-import NotFound from '@/pages/NotFound';
 import RequestAccess from '@/pages/RequestAccess';
+import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
 import PrintToken from '@/pages/unauthenticated/PrintToken';
+import * as SSO from '@/services/sso.service';
+import store from '@/store/index';
+import Vue from 'vue';
+import VueCookies from 'vue-cookies';
+import VueRouter from 'vue-router';
 import RegisterOrganization from '@/pages/unauthenticated/RegisterOrganization';
 import PreliminaryAssessment from '@/pages/PreliminaryAssessment';
 import Terms from '@/pages/unauthenticated/Terms';
 import Privacy from '@/pages/unauthenticated/Privacy';
 
 Vue.use(VueRouter);
+Vue.use(VueCookies);
 
 const routes = [
   {
@@ -199,6 +202,33 @@ const routes = [
     component: Privacy,
     name: 'nav.privacy',
     meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/sp/login',
+    name: 'SSOLogin',
+    beforeEnter: async (to, from, next) => {
+      if (store.getters['auth/isLoggedIn']) {
+        const creds = await SSO.authenticate();
+        // Store AWS Connect Auth Cookies
+        Vue.$cookies.set(
+          'lily-auth-prod-iad',
+          creds.AccessToken,
+          '/',
+          creds.AccessTokenExpiration,
+          'crisiscleanup3.awsapps.com',
+          true,
+        );
+        Vue.$cookies.set(
+          'lily-auth-refresh-prod-iad',
+          creds.RefreshToken,
+          '/connect/auth',
+          creds.RefreshTokenExpiration,
+          'crisiscleanup3.awsapps.com',
+          true,
+        );
+      }
+      next({ name: 'nav.dashboard' });
+    },
   },
   {
     path: '*',
