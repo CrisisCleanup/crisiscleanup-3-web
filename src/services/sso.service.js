@@ -4,9 +4,9 @@
  */
 
 import AWSSPMetadata from '@/assets/saml/aws-metadata.xml';
+import IDPMetadata from '@/assets/saml/ccu-metadata.xml';
 import { AuthService } from '@/services/auth.service';
 import { IDPApi } from '@/utils/api';
-import * as validator from '@authenio/samlify-xsd-schema-validator';
 import VueLog from '@dreipol/vue-log';
 import AWS from 'aws-sdk';
 import axios from 'axios';
@@ -25,7 +25,11 @@ Vue.use(VueLog, {
 });
 const Log = Vue.log();
 
-saml.setSchemaValidator(validator);
+// When SAML is revisited, setup the validator
+// saml.setSchemaValidator(validator);
+saml.setSchemaValidator({
+  validate: () => new Promise(),
+});
 
 export const SP = saml.ServiceProvider({
   metadata: SPMetadata,
@@ -93,7 +97,13 @@ export const authenticate = async () => {
   if (cached) {
     return cached;
   }
-  const metadata = await fetchMetadata();
+  let metadata;
+  try {
+    metadata = await fetchMetadata();
+  } catch (e) {
+    Log.warn('failed to fetch metadata, using local...', e);
+    metadata = IDPMetadata;
+  }
   const idp = IDP(metadata);
   const { context } = await SP.createLoginRequest(idp, 'redirect');
   Log.debug(context);
