@@ -338,17 +338,6 @@
     >
       <base-button
         size="medium"
-        class="flex-grow m-1 border-2 border-black"
-        variant="text"
-        :action="
-          () => {
-            $emit('closeWorksite');
-          }
-        "
-        :text="$t('actions.cancel')"
-      />
-      <base-button
-        size="medium"
         variant="solid"
         data-cy="worksite-formaction-save"
         class="flex-grow m-1 text-black"

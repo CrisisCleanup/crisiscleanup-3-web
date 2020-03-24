@@ -5,7 +5,10 @@
   >
     <template #content>
       <div class="flex flex-col">
-        <InviteUsers class="mx-4 self-end" />
+        <div class="flex self-end mr-4">
+          <RedeployRequest />
+          <InviteUsers class="mx-1" />
+        </div>
         <div class="flex">
           <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
             <div>
@@ -293,12 +296,14 @@ import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
 import Loader from '@/components/Loader';
 import InviteUsers from './organization/InviteUsers';
 import OrganizationApprovalTable from '../components/OrganizationApprovalTable';
+import RedeployRequest from './RedeployRequest';
 
 const responseDialog = create(MessageResponseDialog);
 
 export default {
   name: 'Dashboard',
   components: {
+    RedeployRequest,
     OrganizationApprovalTable,
     InviteUsers,
     Table,
@@ -797,5 +802,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
