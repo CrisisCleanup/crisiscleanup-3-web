@@ -6,7 +6,7 @@
           <base-text class="title" variant="h1">{{ lang.title }}</base-text>
           <base-text>{{ lang.detail }}</base-text>
         </div>
-        <div v-for="s in lang.steps" :key="`step_${s}`" class="step">
+        <div v-for="s in lang.steps" :key="`step_${s.title}`" class="step">
           <base-text variant="h1">{{ s.title }}</base-text>
           <base-text>{{ s.body }}</base-text>
         </div>
