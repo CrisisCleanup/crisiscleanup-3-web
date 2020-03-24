@@ -135,7 +135,7 @@ jobs:
   deploy:
     name: Deploy Site
     runs-on: ubuntu-latest
-    if: "(github.event.action == 'created' || github.event.action == 'published') && !contains(github.event.head_commit.message, 'ci-skip-deploy')"
+    if: "(github.event.action == 'created' || github.event.action == 'published' || github.ref == 'refs/heads/master' ) && !contains(github.event.head_commit.message, 'ci-skip-deploy')"
     needs: [test, lint, build]
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
