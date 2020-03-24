@@ -24,6 +24,8 @@
 <script>
 import { EventBus } from '@/event-bus';
 import Loader from '@/components/Loader.vue';
+import Agent from '@/models/Agent';
+import User from '@/models/User';
 
 export default {
   name: 'PhoneGateway',
@@ -56,12 +58,34 @@ export default {
         },
       };
     },
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
+    },
   },
   methods: {
+    async getAgent() {
+      const userAgent = {
+        user: {
+          id: this.currentUser.id,
+          email: this.currentUser.email,
+        },
+      };
+      await Agent.api().fetch(userAgent);
+      const agent = Agent.query()
+        .where('user_id', this.currentUser.id)
+        .first();
+      console.log(agent);
+      return agent;
+    },
     authenticate() {
       this.loading = true;
       EventBus.$emit('acs:requestAgent');
     },
+  },
+  async mounted() {
+    this.loading = true;
+    this.agent = await this.getAgent();
+    this.loading = false;
   },
 };
 </script>

@@ -17,5 +17,17 @@ export default class Agent extends Model {
     };
   }
 
-  static apiConfig = {};
+  static apiConfig = {
+    actions: {
+      async fetch(user) {
+        let agent;
+        try {
+          agent = await this.get('/agents/me');
+        } catch {
+          agent = await this.post('/agents', user);
+        }
+        return agent;
+      },
+    },
+  };
 }
