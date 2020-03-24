@@ -36,6 +36,12 @@
       >
         <training-card />
       </div>
+      <!-- Agent Analytics Card -->
+      <div
+        class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
+      >
+        <AgentAnalyticsCard />
+      </div>
     </template>
   </Loader>
 </template>
@@ -49,6 +55,7 @@ import ContactCard from '@/components/ContactCard';
 import genstatscard from '@/components/GeneralStatsCard.vue';
 import operatorstats from '@/components/OperatorStatisticsCard';
 import NewsTrainingCard from '@/components/NewsTrainingCard';
+import AgentAnalyticsCard from '@/components/AgentAnalyticsCard';
 import { EventBus } from '../../event-bus';
 
 export default {
@@ -60,6 +67,7 @@ export default {
     'stories-card': PeopleStoriesCard,
     'training-card': NewsTrainingCard,
     Loader,
+    AgentAnalyticsCard,
   },
   data() {
     return {
