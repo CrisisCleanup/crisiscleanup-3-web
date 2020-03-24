@@ -6,6 +6,7 @@
     :pagination="meta.pagination"
     :loading="loading"
     @change="$emit('change', $event)"
+    @rowClick="showContacts"
   >
     <template #actions="slotProps">
       <div class="flex mr-2 justify-end w-full">
@@ -41,6 +42,9 @@ import Table from '@/components/Table';
 import Organization from '@/models/Organization';
 import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
 import { create } from 'vue-modal-dialogs';
+import MessageBox from '@/components/dialogs/MessageBox';
+
+const messageBox = create(MessageBox);
 const responseDialog = create(MessageResponseDialog);
 
 export default {
@@ -60,6 +64,26 @@ export default {
     loading: Boolean,
   },
   methods: {
+    async getOrganizationContacts(organizationId) {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/ghost_users?organization=${organizationId}`,
+      );
+      return response.data.results;
+    },
+    async showContacts(organization) {
+      const contacts = await this.getOrganizationContacts(organization.id);
+      const contact = contacts.length ? contacts[0] : null;
+      await messageBox({
+        title: this.$t('~~Organization Contact'),
+        content: `
+          <div>${contact.first_name} ${contact.last_name}</div>
+          <div>${contact.title ? contact.title : ''}</div>
+          <div>${contact.email}</div>
+          <div>${contact.mobile}</div>
+          </p>
+        `,
+      });
+    },
     async approveOrganization(organizationId) {
       const result = await responseDialog({
         title: this.$t('~~Approve Organization'),

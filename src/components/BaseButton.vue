@@ -75,6 +75,7 @@ export default {
         flex: true,
         'items-center': true,
         'justify-center': true,
+        'base-button': true,
       };
       if (this.variant) {
         styles[this.variant] = true;

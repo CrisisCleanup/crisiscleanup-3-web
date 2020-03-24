@@ -110,7 +110,7 @@ export default {
 .modal-container {
   margin: 0 auto;
   transition: all 0.3s ease;
-  @apply w-96;
+  @apply max-w-lg;
 }
 
 .modal-default-button {

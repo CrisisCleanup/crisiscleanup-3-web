@@ -24,27 +24,34 @@
 
           <div class="modal-body flex-grow p-3">
             <div>
-              {{ content }}
+              <div v-html="content"></div>
             </div>
           </div>
 
           <div class="modal-footer flex-shrink">
             <div class="flex items-center justify-center py-2 border-t">
-              <base-button
+              <div
+                class="flex flex-col items-center justify-center"
                 v-if="Object.keys(actions).length === 0"
-                :alt="$t('actions.ok')"
-                variant="solid"
-                class="px-6 p-3"
-                :action="
-                  () => {
-                    $close('ok');
-                  }
-                "
               >
-                {{ $t('actions.ok') }}
-              </base-button>
+                <base-button
+                  :alt="$t('actions.ok')"
+                  variant="solid"
+                  class="px-6 p-3"
+                  :action="
+                    () => {
+                      $close('ok');
+                    }
+                  "
+                >
+                  {{ $t('actions.ok') }}
+                </base-button>
+              </div>
 
-              <div class="flex items-center justify-end w-full">
+              <div
+                class="flex items-center justify-end w-full"
+                v-if="Object.keys(actions).length > 0"
+              >
                 <base-button
                   v-for="(value, key) in actions"
                   :key="key"
@@ -112,7 +119,7 @@ export default {
 .modal-container {
   margin: 0 auto;
   transition: all 0.3s ease;
-  @apply w-96;
+  @apply max-w-lg;
 }
 
 .modal-default-button {

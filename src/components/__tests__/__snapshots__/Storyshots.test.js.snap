@@ -9,7 +9,7 @@ exports[`Storyshots Basics|BaseButton With Action 1`] = `
   >
     <button
       alt="button"
-      class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+      class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
       data-cy="js-button"
       size="large"
       title="Button"
@@ -36,7 +36,7 @@ exports[`Storyshots Basics|BaseButton With Async Action 1`] = `
   >
     <button
       alt="button"
-      class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+      class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
       data-cy="js-button"
       size="large"
       title="Button"
@@ -63,7 +63,7 @@ exports[`Storyshots Basics|BaseButton With Custom Icon 1`] = `
   >
     <button
       alt="button"
-      class="large text-h3 font-h3 flex items-center justify-center outline js-button"
+      class="large text-h3 font-h3 flex items-center justify-center base-button outline js-button"
       data-cy="js-button"
       size="large"
       title="Button"
@@ -100,7 +100,7 @@ exports[`Storyshots Basics|BaseButton With Icon 1`] = `
   >
     <button
       alt="button"
-      class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+      class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
       data-cy="js-button"
       size="large"
       title="Button"
@@ -146,7 +146,7 @@ exports[`Storyshots Basics|BaseButton With Sizes 1`] = `
       >
         <button
           alt="button"
-          class="small text-bodysm font-bodysm flex items-center justify-center solid js-button"
+          class="small text-bodysm font-bodysm flex items-center justify-center base-button solid js-button"
           data-cy="js-button"
           size="small"
           title="Button"
@@ -166,7 +166,7 @@ exports[`Storyshots Basics|BaseButton With Sizes 1`] = `
       >
         <button
           alt="button"
-          class="medium text-sans text-h4 font-h4 flex items-center justify-center solid js-button"
+          class="medium text-sans text-h4 font-h4 flex items-center justify-center base-button solid js-button"
           data-cy="js-button"
           size="medium"
           title="Button"
@@ -186,7 +186,7 @@ exports[`Storyshots Basics|BaseButton With Sizes 1`] = `
       >
         <button
           alt="button"
-          class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+          class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
           data-cy="js-button"
           size="large"
           title="Button"
@@ -215,7 +215,7 @@ exports[`Storyshots Basics|BaseButton With Text 1`] = `
   >
     <button
       alt="button"
-      class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+      class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
       data-cy="js-button"
       size="large"
       title="Button"
@@ -246,7 +246,7 @@ exports[`Storyshots Basics|BaseButton With Variants 1`] = `
       >
         <button
           alt="button"
-          class="large text-h3 font-h3 flex items-center justify-center solid js-button"
+          class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
           data-cy="js-button"
           size="large"
           title="Button"
@@ -266,7 +266,7 @@ exports[`Storyshots Basics|BaseButton With Variants 1`] = `
       >
         <button
           alt="button"
-          class="large text-h3 font-h3 flex items-center justify-center outline js-button"
+          class="large text-h3 font-h3 flex items-center justify-center base-button outline js-button"
           data-cy="js-button"
           size="large"
           title="Button"
@@ -286,7 +286,7 @@ exports[`Storyshots Basics|BaseButton With Variants 1`] = `
       >
         <button
           alt="button"
-          class="large text-h3 font-h3 flex items-center justify-center text js-button"
+          class="large text-h3 font-h3 flex items-center justify-center base-button text js-button"
           data-cy="js-button"
           size="large"
           title="Button"
@@ -1847,7 +1847,7 @@ exports[`Storyshots Basics|Modal Basic Modal 1`] = `
     <div>
       <button
         alt="button"
-        class="flex items-center justify-center outline js-button"
+        class="flex items-center justify-center base-button outline js-button"
         data-cy="js-button"
         title="Button"
         type="submit"
@@ -1877,7 +1877,7 @@ exports[`Storyshots Basics|Modal Modal With Custom Header And Footer 1`] = `
     <div>
       <button
         alt="button"
-        class="flex items-center justify-center outline js-button"
+        class="flex items-center justify-center base-button outline js-button"
         data-cy="js-button"
         title="Button"
         type="submit"
