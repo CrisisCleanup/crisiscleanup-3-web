@@ -64,8 +64,8 @@
         v-else
         class="mx-3 text-primary-dark"
         type="link"
-        :text="$t('caseView.add_phone')"
-        :alt="$t('caseView.add_phone')"
+        :text="$t('~~caseView.add_phone')"
+        :alt="$t('~~caseView.add_phone')"
         :action="
           () => {
             addAdditionalPhone = true;

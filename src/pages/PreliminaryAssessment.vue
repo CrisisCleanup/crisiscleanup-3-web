@@ -5,18 +5,6 @@
     class="bg-white flex flex-col flex-grow w-full h-full border"
     @submit.prevent
   >
-    {{ $t('~~Choose A Disaster') }}
-    <form-select
-      :value="pda.incident"
-      class="form-field"
-      :options="incidents"
-      searchable
-      select-classes="bg-white border border-crisiscleanup-dark-100 h-12 mb-3"
-      item-key="id"
-      label="name"
-      :placeholder="$t('~~Disaster')"
-      @input="pda.incident = $event"
-    />
     <div class="intake-form flex-grow">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
@@ -65,8 +53,8 @@
         v-else
         class="mx-3 text-primary-dark"
         type="link"
-        :text="$t('caseView.add_phone')"
-        :alt="$t('caseView.add_phone')"
+        :text="$t('~~caseView.add_phone')"
+        :alt="$t('~~caseView.add_phone')"
         :action="
           () => {
             addAdditionalPhone = true;
@@ -215,7 +203,9 @@
               </span>
               <form-select
                 :value="pda.formFields[field.field_key]"
-                :options="field.values"
+                :options="
+                  field.values || getSelectValuesList(field.values_default_t)
+                "
                 item-key="value"
                 label="name_t"
                 select-classes="h-12 border"
@@ -246,7 +236,9 @@
               <form-select
                 :value="pda.formFields[field.field_key]"
                 multiple
-                :options="field.values"
+                :options="
+                  field.values || getSelectValuesList(field.values_default_t)
+                "
                 item-key="value"
                 label="name_t"
                 select-classes="h-12 border"
@@ -391,9 +383,7 @@ export default {
   },
   async mounted() {
     this.ready = false;
-    await Incident.api().get('/incidents', {
-      dataKey: 'results',
-    });
+    await Incident.api().fetchById(this.$route.params.incident_id);
     this.ready = true;
   },
   data() {
@@ -412,11 +402,6 @@ export default {
     };
   },
   computed: {
-    incidents() {
-      return Incident.query()
-        .orderBy('id', 'desc')
-        .get();
-    },
     fields() {
       if (this.currentIncident && this.currentIncident.form_fields) {
         const formFields = this.currentIncident.form_fields;
@@ -427,7 +412,7 @@ export default {
       return [];
     },
     currentIncident() {
-      return Incident.find(this.pda.incident);
+      return Incident.find(this.$route.params.incident_id);
     },
     fieldsArray() {
       return this.fields.map(field => field.field_key);
@@ -570,6 +555,7 @@ export default {
       try {
         await Pda.api().post('/pdas', {
           ...this.pda,
+          incident: this.currentIncident.id,
         });
         await this.$toasted.success(this.$t('caseForm.new_case_success'));
       } catch (error) {
@@ -612,6 +598,14 @@ export default {
         });
       }
       return '';
+    },
+    getSelectValuesList(defaultValues) {
+      return Object.keys(defaultValues).map(key => {
+        return {
+          value: key,
+          name_t: this.$t(defaultValues[key]),
+        };
+      });
     },
     getBooleanValue(fieldKey) {
       if (!this.pda || !this.pda.form_data) {

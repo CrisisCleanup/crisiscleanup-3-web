@@ -183,7 +183,7 @@ const routes = [
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
-    path: '/assessment',
+    path: '/assessment/:incident_id',
     component: PreliminaryAssessment,
     name: 'nav.assessment',
     meta: { layout: 'unauthenticated', noAuth: true },
