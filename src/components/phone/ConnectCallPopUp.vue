@@ -1,15 +1,5 @@
 <template>
   <div>
-    <base-button
-      variant="outline"
-      :action="
-        () => {
-          isShowingModal = true;
-        }
-      "
-      class="m-5 px-5 py-2"
-      text="incoming call"
-    ></base-button>
     <modal
       v-if="isShowingModal"
       title="You have a live incoming call from:"
@@ -96,16 +86,16 @@
 </template>
 
 <script>
+import VueTypes from 'vue-types';
 import SampleScript from './SampleScriptCard.vue';
+
 export default {
   name: 'ConnectCallPopUp',
   components: {
     SampleScript,
   },
-  data() {
-    return {
-      isShowingModal: false,
-    };
+  props: {
+    isShowingModal: VueTypes.bool.def(false),
   },
 };
 </script>

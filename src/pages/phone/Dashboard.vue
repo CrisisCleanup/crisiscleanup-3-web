@@ -44,6 +44,7 @@
       >
         <AgentAnalyticsCard />
       </div>
+      <cc-popup :is-showing-modal="callPopupActive" />
     </template>
   </Loader>
 </template>
@@ -58,7 +59,8 @@ import genstatscard from '@/components/phone/GeneralStatsCard.vue';
 import operatorstats from '@/components/phone/OperatorStatisticsCard.vue';
 import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
 import AgentAnalyticsCard from '@/components/phone/AgentAnalyticsCard.vue';
-import { STATES as AgentStates } from '@/services/acs.service';
+import ConnectCallPopUp from '@/components/phone/ConnectCallPopUp.vue';
+import { STATES as CCState } from '@/services/acs.service';
 
 export default {
   name: 'Phone',
@@ -69,6 +71,7 @@ export default {
     'stories-card': PeopleStoriesCard,
     'training-card': NewsTrainingCard,
     Loader,
+    'cc-popup': ConnectCallPopUp,
     AgentAnalyticsCard,
   },
   data() {
@@ -81,15 +84,18 @@ export default {
       return User.find(this.$store.getters['auth/userId']);
     },
     ...mapState('phone', ['agent', 'metrics']),
-    ...mapGetters('phone', ['connectReady', 'agentAvailable']),
+    ...mapGetters('phone', ['connectReady', 'agentAvailable', 'contactState']),
+    callPopupActive() {
+      return [CCState.INCOMING, CCState.CONNECTING].includes(this.contactState);
+    },
   },
   methods: {
     ...mapActions('phone', ['getRealtimeMetrics', 'setAgentState']),
     async toggleAvailable() {
       if (this.agentAvailable) {
-        return this.setAgentState(AgentStates.OFFLINE);
+        return this.setAgentState(CCState.OFFLINE);
       }
-      return this.setAgentState(AgentStates.ROUTABLE);
+      return this.setAgentState(CCState.ROUTABLE);
     },
   },
 };
