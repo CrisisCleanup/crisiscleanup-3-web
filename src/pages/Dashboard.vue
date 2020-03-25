@@ -260,7 +260,7 @@
         <div class="flex" v-can="['approve_orgs_full']">
           <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('~~Organizations for Approval') }}
+              {{ $t('dashboard.pending_affiliates') }}
             </div>
             <div class="p-4">
               <OrganizationApprovalTable

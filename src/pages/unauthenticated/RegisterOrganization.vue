@@ -27,18 +27,12 @@
         </base-button>
       </div>
       <div class="grid--main">
-        <div class="text-4xl">{{ $t('~~Register Your Organization') }}</div>
-        <div class="text-2xl w-3/4">
-          {{
-            $t(
-              '~~Please fill in information about your volunteer organization to create your own profile, and help us coordinate you properly.',
-            )
-          }}
-        </div>
+        <div class="text-4xl">{{ $t('registerOrg.register_org') }}</div>
+        <div class="text-2xl w-3/4">{{ $t('registerOrg.please_create_profile') }}</div>
         <form ref="form" class="form w-4/5 mt-6" @submit.prevent="register">
           <ol class="list-decimal">
             <li class="text-xl form-item">
-              {{ $t('~~Choose A Disaster') }}
+              {{ $t('registerOrg.choose_a_disaster') }}
               <form-select
                 :value="organization.incident"
                 class="form-field"
@@ -47,27 +41,21 @@
                 select-classes="bg-white border border-crisiscleanup-dark-100 h-12 mb-3"
                 item-key="id"
                 label="name"
-                :placeholder="$t('~~Disaster')"
+                :placeholder="$t('registerOrg.disaster')"
                 @input="organization.incident = $event"
               />
             </li>
 
             <li class="text-xl form-item">
-              {{ $t('~~Organization Info') }}
-              <div class="text-base w-3/5">
-                {{
-                  $t(
-                    '~~Please use your local team name E.g. "American Red Cross-TX Chapter" or "LDS Church-Plainview Stake" NOT "American Red Cross" or "LDS Church"',
-                  )
-                }}
-              </div>
+              {{ $t('registerOrg.org_info') }}
+              <div class="text-base w-3/5">{{ $t('registerOrg.use_local_org_name_msg') }}</div>
               <div class="flex flex-wrap">
                 <base-input
                   v-model="organization.name"
                   type="text"
                   class="form-field"
                   size="large"
-                  :placeholder="$t('~~Organization Name')"
+                  :placeholder="$t('registerOrg.organization_name')"
                   required
                 />
                 <base-input
@@ -75,40 +63,40 @@
                   type="text"
                   class="form-field"
                   size="large"
-                  :placeholder="$t('~~Website Address')"
+                  :placeholder="$t('registerOrg.website')"
                   required
                 />
                 <base-input
                   v-model="organization.facebook"
                   class="form-field"
                   size="large"
-                  :placeholder="$t('~~Facebook Url')"
+                  :placeholder="$t('registerOrg.facebook')"
                 />
                 <base-input
                   v-model="organization.twitter"
                   class="form-field"
                   size="large"
-                  :placeholder="$t('~~Twitter Url')"
+                  :placeholder="$t('registerOrg.twitter')"
                 />
               </div>
               <textarea
                 v-model="organization.referral"
                 class="text-base w-4/5 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none m-3 p-2 resize-none"
                 rows="4"
-                :placeholder="$t('~~How did you learn about Crisiscleanup?')"
+                :placeholder="$t('registerOrg.referral')"
                 required
               />
             </li>
 
             <li class="text-xl form-item">
-              {{ $t('~~Primary Contact') }}
+              {{ $t('registerOrg.primary_contact') }}
               <div class="flex flex-wrap">
                 <base-input
                   v-model="user.first_name"
                   type="text"
                   class="form-field"
                   size="large"
-                  :placeholder="$t('~~First Name')"
+                  :placeholder="$t('registerOrg.first_name')"
                   required
                 />
                 <base-input
@@ -116,7 +104,7 @@
                   type="text"
                   class="form-field"
                   size="large"
-                  :placeholder="$t('~~Last Name')"
+                  :placeholder="$t('registerOrg.last_name')"
                   required
                 />
                 <base-input
@@ -124,34 +112,30 @@
                   type="email"
                   class="form-field"
                   size="large"
-                  :placeholder="$t('~~Email')"
+                  :placeholder="$t('registerOrg.email')"
                   required
                 />
                 <base-input
                   v-model="user.mobile"
                   class="form-field"
                   size="large"
-                  :placeholder="$t('~~Phone Number')"
+                  :placeholder="$t('registerOrg.cell_phone_number')"
                   required
                 />
               </div>
             </li>
 
             <li class="text-xl form-item">
-              {{ $t('~~What Roles does your organization fill') }}
+              {{ $t('registerOrg.org_roles') }}
               <base-checkbox
                 v-model="organization.review_other_organizations"
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Review & Approve Participating Organizations') }}
+                  {{ $t('registerOrg.review_approve') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'You are willing to take a leadership role, reviewing and approving organizations to participate in crisiscleanup',
-                    )
-                  }}
+                  {{ $t('registerOrg.review_approve_msg') }}
                 </div>
               </base-checkbox>
 
@@ -160,14 +144,10 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Damage Assessments') }}
+                  {{ $t('registerOrg.damage_assessment') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'Your organization interacts directly with survivors via call-center, door-to-door, in a MARC, etc.',
-                    )
-                  }}
+                  {{ $t('registerOrg.damage_assessment_msg') }}
                 </div>
               </base-checkbox>
 
@@ -176,14 +156,10 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Cleanup') }}
+                  {{ $t('registerOrg.cleanup') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'Your organization interacts directly with survivors to do muck-outs, debris removal, tree cutting, etc.',
-                    )
-                  }}
+                  {{ $t('registerOrg.cleanup_msg') }}
                 </div>
               </base-checkbox>
 
@@ -192,14 +168,10 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Follow Up') }}
+                  {{ $t('registerOrg.follow_up') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'Your organization contacts survivors to ensure all clients have been assisted via phone or in-person visits.',
-                    )
-                  }}
+                  {{ $t('registerOrg.follow_up_msg') }}
                 </div>
               </base-checkbox>
 
@@ -208,14 +180,10 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Minor Repairs') }}
+                  {{ $t('registerOrg.minor_repairs') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'Your organization visits survivors to replace drywall, flooring, or other repairs.',
-                    )
-                  }}
+                  {{ $t('registerOrg.minor_repairs_msg') }}
                 </div>
               </base-checkbox>
 
@@ -224,14 +192,10 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Rebuilding') }}
+                  {{ $t('registerOrg.rebuilding') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'Long Term Recovery Groups, Unmet Needs Committees, or organizations that do long-term or major rebuilding.',
-                    )
-                  }}
+                  {{ $t('registerOrg.rebuilding_msg') }}
                 </div>
               </base-checkbox>
 
@@ -240,14 +204,10 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Coordination') }}
+                  {{ $t('registerOrg.coordination') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'Your organization does NOT interact directly with survivors, but oversees or coordinates organizations that do.',
-                    )
-                  }}
+                  {{ $t('registerOrg.coordination_msg') }}
                 </div>
               </base-checkbox>
 
@@ -256,14 +216,10 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Government') }}
+                  {{ $t('registerOrg.government') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'You represent a governmental entity, such as municipal, state, tribal or federal government, emergency management, agency, etc.',
-                    )
-                  }}
+                  {{ $t('registerOrg.government_msg') }}
                 </div>
               </base-checkbox>
 
@@ -272,14 +228,10 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Other Activity') }}
+                  {{ $t('registerOrg.other_activity') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'Your organization does other disaster-related activity, such as donations management, case management, logistics, for-profit contracting, etc.',
-                    )
-                  }}
+                  {{ $t('registerOrg.other_activity_msg') }}
                 </div>
               </base-checkbox>
 
@@ -288,14 +240,10 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Not An Organization') }}
+                  {{ $t('registerOrg.not_organization') }}
                 </div>
                 <div>
-                  {{
-                    $t(
-                      'Individuals, unaffiliated volunteers, meetup groups, clubs, etc.',
-                    )
-                  }}
+                  {{ $t('registerOrg.not_organization_msg') }}
                 </div>
               </base-checkbox>
 
@@ -303,7 +251,7 @@
                 v-model="organization.where_are_you_working"
                 class="text-base w-4/5 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none m-3 p-2 resize-none"
                 rows="4"
-                :placeholder="$t('~~Where are you working?')"
+                :placeholder="$t('registerOrg.where_working')"
                 required
               />
 
@@ -312,7 +260,7 @@
                 class="text-base activities-checkbox"
               >
                 <div>
-                  {{ $t('Publicly publish organization profile?') }}
+                  {{ $t('registerOrg.publish_profile') }}
                 </div>
               </base-checkbox>
 
@@ -321,11 +269,7 @@
                 class="text-base activities-checkbox"
                 required
               >
-                <div>
-                  {{
-                    $t('I agree to the Terms of Service and Priviacy Policy')
-                  }}
-                </div>
+                <div v-html="registerOrg.tos_priv_agree" ></div>
               </base-checkbox>
             </li>
           </ol>
@@ -333,7 +277,7 @@
             size="large"
             class="px-5 py-2 m-1 flex-grow"
             variant="solid"
-            :text="$t('~~Sign Up')"
+            :text="$t('actions.sign_up')"
             :action="register"
           />
         </form>

@@ -10,7 +10,7 @@
       <div class="grid--survivors">
         <div class="homegrid-survivors">
           <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
-          <base-text font="display" variant="h2">1 (800) 451 1954</base-text>
+          <base-text font="display" variant="h2"><a href="https://www.coronacommunity.org">coronacommunity.org</a></base-text>
         </div>
       </div>
     </slot>

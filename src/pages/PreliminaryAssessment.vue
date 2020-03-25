@@ -39,6 +39,31 @@
           "
         />
       </div>
+      <div class="form-field" v-if="pda.phone2 || addAdditionalPhone">
+        <base-input
+          :value="pda.phone2"
+          selector="js-worksite-phone2"
+          size="large"
+          :placeholder="$t('formLabels.phone2')"
+          @input="
+            value => {
+              updatePda(value, 'phone2');
+            }
+          "
+        />
+      </div>
+      <base-button
+        v-else
+        class="mx-3 text-primary-dark"
+        type="link"
+        :text="$t('caseView.add_phone')"
+        :alt="$t('caseView.add_phone')"
+        :action="
+          () => {
+            addAdditionalPhone = true;
+          }
+        "
+      />
       <div class="form-field">
         <label>{{ $t('formLabels.email') }}</label>
         <input
@@ -52,6 +77,17 @@
               updatePda(e.target.value, 'email');
             }
           "
+        />
+      </div>
+      <div
+        class="text-base font-semibold my-1 mx-3 flex justify-between items-center"
+      >
+        {{ $t('formLabels.location') }}
+        <ccu-icon
+          type="trash"
+          size="small"
+          :alt="$t('caseView.clear_location')"
+          @click.native="clearLocationFields"
         />
       </div>
       <div class="form-field">

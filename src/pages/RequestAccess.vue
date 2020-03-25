@@ -6,22 +6,27 @@
     <template #grid-content>
       <div class="grid--main">
         <div class="w-2/3">
-          <div class="text-5xl">{{ $t('~~Join Organization') }}</div>
+          <div class="text-5xl">{{ $t('requestAccess.join_organization') }}</div>
           <div class="text-2xl font-light">
-            {{
-              $t(
-                '~~To join an organization, you should be invited by an existing member. You can also use this form to request access from an existing user by their email',
-              )
-            }}
+            {{ $t('requestAccess.enter_existing_user_email_msg') }}
           </div>
         </div>
         <form class="w-108 flex flex-col" autocomplete="off" ref="form">
+          <base-input
+            size="large"
+            class="input"
+            type="search"
+            v-model="requestedTo"
+            :placeholder="$t('requestAccess.existing_member_email')"
+            required
+          ></base-input>
+
           <base-input
             v-model="email"
             type="search"
             class="input"
             size="large"
-            :placeholder="$t('~~Email')"
+            :placeholder="$t('requestAccess.your_email')"
             required
           />
           <base-input
@@ -67,20 +72,12 @@
             :placeholder="$t('invitationSignup.pw2_placeholder')"
             required
           />
-          <base-input
-            size="large"
-            class="input"
-            type="search"
-            v-model="requestedTo"
-            placeholder="Crisis Cleanup Member Email"
-            required
-          ></base-input>
 
           <base-button
             size="large"
             class="px-5 py-2 m-1 flex-grow"
             variant="solid"
-            :text="$t('~~Request Access')"
+            :text="$t('actions.request_access')"
             :action="requestAccess"
           />
         </form>
@@ -93,15 +90,18 @@
           <div class="flex flex-col items-center justify-center mt-32">
             <img src="" />
             <base-text variant="h1" class="mb-6">{{
-              $t('~~Success')
+              $t('info.success')
             }}</base-text>
-            <base-text class="w-3/4 text-center" variant="body" wieght="300">{{
-              $t(
-                '~~Your request has been sent to {requested_to} at {organization} please please contact this person directly and encourage them to approve access quickly',
-              )
-            }}</base-text>
+            <base-text class="w-3/4 text-center" variant="body" wieght="300">
+              {{
+               $t('requestAccess.request_sent_to_org', {
+                organization: organization,
+                requested_to: requested_to,
+                })
+              }}"
+            </base-text>
             <base-button
-              :text="$t('~~Got It')"
+              :text="$t('actions.got_it')"
               size="large"
               variant="solid"
               class="mt-10"
