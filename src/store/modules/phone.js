@@ -20,6 +20,11 @@ const Log = Vue.log();
 const PhoneState = {
   agent: null,
   agentState: ConnectService.STATES.OFFLINE,
+  contact: {
+    id: null,
+    duration: null,
+    state: null,
+  },
   agentConfig: null,
   metrics: null,
   connectRunning: false,
@@ -37,6 +42,8 @@ const getters = {
   popupOpen: state => state.popupOpen,
   authToken: state => (state.credentials ? state.credentials.AccessToken : ''),
   agentAvailable: state => state.agentState === ConnectService.STATES.ROUTABLE,
+  contactState: state =>
+    state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
 };
 
 // actions
@@ -81,6 +88,19 @@ const actions = {
       onStateChange: ({ agent, newState }) =>
         commit('setAgentState', { newState, agent }),
     });
+    ConnectService.bindContactEvents({
+      onRefresh: contact => {
+        const contactId = contact.getContactId();
+        const contactState = contact.getStatus();
+        const duration = contact.getStatusDuration();
+        Log.debug('contact refresh: ', contactState);
+        commit('setContact', {
+          id: contactId,
+          duration,
+          state: contactState.type,
+        });
+      },
+    });
   },
   async setPopup({ commit }, state = true) {
     Log.debug('setting popup:', state);
@@ -124,6 +144,9 @@ const mutations = {
   },
   setPopupState(state, newState) {
     state.popupOpen = newState;
+  },
+  setContact(state, newState) {
+    state.contact = { ...state, ...newState };
   },
 };
 
