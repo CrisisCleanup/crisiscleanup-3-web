@@ -9,7 +9,7 @@ on:
       - '.github/workflows/e2e.yml'
 
 env:
-  CI: 'true'
+  CI: 1
   VUE_APP_WHAT_3_WORDS_API_KEY: ${{ secrets.VUE_APP_WHAT_3_WORDS_API_KEY }}
   VUE_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_API_KEY }}
   VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
@@ -76,7 +76,8 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_PAT }} | docker login docker.pkg.github.com -u ${{ secrets.GITHUB_PAT_USER }} --password-stdin
           cd "$GITHUB_WORKSPACE/cc3api"
-          docker-compose up -d app
+          echo "CI=1" >> "$GITHUB_WORKSPACE/cc3api/compose/envs/.env-dev"
+          docker-compose up -d --build app
 
       - name: Install Dependencies
         env:
