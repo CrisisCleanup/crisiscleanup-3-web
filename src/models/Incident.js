@@ -40,6 +40,13 @@ export default class Incident extends Model {
       .get();
   }
 
+  get phase() {
+    if (this.form_fields) {
+      return this.form_fields[0].phase;
+    }
+    return null;
+  }
+
   static apiConfig = {
     actions: {
       async fetchById(id) {

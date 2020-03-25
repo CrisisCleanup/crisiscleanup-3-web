@@ -13,6 +13,7 @@ export default class Status extends Model {
       primary_state: this.attr(null),
       substatus: this.attr(null),
       list_order: this.attr(null),
+      phases: this.attr(null),
     };
   }
 }

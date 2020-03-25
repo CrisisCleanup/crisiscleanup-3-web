@@ -176,6 +176,7 @@
                   }}</span>
                   <StatusDropDown
                     class="block"
+                    :phase="incident.phase"
                     :current-work-type="work_type"
                     @input="
                       value => {
@@ -228,6 +229,7 @@
                 }}</span>
                 <StatusDropDown
                   class="block"
+                  :phase="incident.phase"
                   :current-work-type="work_type"
                   @input="
                     value => {
@@ -266,6 +268,7 @@
                 }}</span>
                 <StatusDropDown
                   class="block"
+                  :phase="incident.phase"
                   :current-work-type="work_type"
                   @input="
                     value => {

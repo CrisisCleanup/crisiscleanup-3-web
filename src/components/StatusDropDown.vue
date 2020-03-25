@@ -58,6 +58,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    phase: {
+      type: Number,
+      default: null,
+    },
   },
   data() {
     return {
@@ -70,6 +74,9 @@ export default {
     statuses() {
       return Status.query()
         .orderBy('list_order')
+        .where(status => {
+          return this.phase ? status.phases.includes(this.phase) : true;
+        })
         .get()
         .map((status, index) => {
           return {
