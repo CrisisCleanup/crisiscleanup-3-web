@@ -9,7 +9,7 @@
             <base-text class="title" variant="h1">{{ lang.title }}</base-text>
             <base-text class="ml-6">{{ lang.detail }}</base-text>
           </div>
-          <div v-for="s in lang.steps" :key="`step_${s.title}`" class="step">
+          <div v-for="(s, idx) in lang.steps" :key="`step_${idx}`" class="step">
             <base-text class="ml-6">{{ s.body }}</base-text>
           </div>
           <div class="action my-6">
@@ -17,14 +17,43 @@
               class="input inline-flex align-items-center flex items-center justify-center"
             >
               <base-text variant="h2">{{ lang.action.user_id }}</base-text>
-              <base-input disabled="true" :value="agent ? agent.user_id : ''" />
+              <base-input
+                disabled="disabled"
+                :value="agent ? agent.user_id : ''"
+              />
+              <input id="username" class="hidden" :value="agent.user_id" />
+              <base-button
+                variant="outline"
+                class="ml-2 px-6 text-xs"
+                size="medium"
+                :action="
+                  () => {
+                    copyText('username');
+                  }
+                "
+              >
+                {{ lang.copy.button }}
+              </base-button>
             </div>
             <div class="input inline-flex align-items-baseline">
               <base-text variant="h2">{{ lang.action.password }}</base-text>
               <base-input
-                disabled="true"
+                disabled="disabled"
                 :value="agent ? agent.password : ''"
               />
+              <input id="password" class="hidden" :value="agent.password" />
+              <base-button
+                variant="outline"
+                class="ml-2 px-6 text-xs"
+                size="medium"
+                :action="
+                  () => {
+                    copyText('password');
+                  }
+                "
+              >
+                {{ lang.copy.button }}
+              </base-button>
             </div>
             <base-text variant="h2" class="pt-4">{{
               lang.action.title
@@ -61,6 +90,7 @@ export default {
   data() {
     return {
       loading: true,
+      disabled: false,
       agent: {},
     };
   },
@@ -93,6 +123,10 @@ export default {
           user_id: this.$t('~~Username: '),
           password: this.$t('~~Password: '),
         },
+        copy: {
+          button: this.$t('~~Copy'),
+          successMessage: this.$t('~~Copied!'),
+        },
         linkNote: this.$t(
           '~~Note, if this does not work, copy this link and go to it in a new browser.',
         ),
@@ -119,6 +153,13 @@ export default {
     authenticate() {
       this.loading = true;
       EventBus.$emit('acs:requestAgent');
+    },
+    copyText(id) {
+      const copyText = document.getElementById(id);
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // used for mobile phone
+      document.execCommand('copy');
+      this.$toasted.success(this.lang.copy.successMessage);
     },
   },
   async mounted() {
