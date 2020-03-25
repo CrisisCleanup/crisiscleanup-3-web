@@ -1,3 +1,5 @@
+contact card
+
 <template>
   <div>
     <div class="flex flex-row justify-between">
@@ -7,7 +9,7 @@
       <div class="flex-col justify-between m-3">
         <div class="flex flex-row justify-between">
           <div class="flex flex-col justify-between">
-            <base-text variant="h1" class="mr-auto">{{ name }}</base-text>
+            <base-text variant="h2" class="mr-auto">{{ name }}</base-text>
           </div>
           <div class="flex-col">
             <base-button
@@ -18,7 +20,9 @@
             />
           </div>
         </div>
-        <base-text variant="h2" class="justify-between">{{ mobile }}</base-text>
+        <base-text variant="h2" weight="300" class="justify-between">{{
+          mobile
+        }}</base-text>
         <div id="moreinfobtn" class="more-infobtn">
           <base-button
             class="text-crisiscleanup-dark-blue align-right"
@@ -33,21 +37,18 @@
       <more-info v-if="toggleOpen" />
     </div>
     <!--- Buttons --->
-    <div class="flex flex-row justify-content">
-      <div class="flex-col m-3">
+    <div class="flex flex-row justify-around m-3">
+      <div class="flex-col">
         <base-button
-          class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 font-bold text-white py-2 px-4 m-3"
-          :action="onToggle"
+          class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 font-bold text-white py-2 px-12"
         >
-          {{ available ? 'Available' : 'Offline' }}
+          Unavailable
         </base-button>
       </div>
-      <div class="flex-col m-3">
-        <base-button
-          class="bg-crisiscleanup-dark-500 hover:bg-crisiscleanup-dark-400 font-bold text-white py-2 px-3 m-3"
-        >
-          DP
-        </base-button>
+      <div class="flex-col">
+        <base-button class="hover:bg-crisiscleanup-grey-100"
+          ><img src="@/assets/dialpadss.png"
+        /></base-button>
       </div>
     </div>
   </div>
@@ -66,8 +67,6 @@ export default {
     name: VueTypes.string,
     mobile: VueTypes.string,
     profileSrc: VueTypes.string,
-    available: VueTypes.bool,
-    onToggle: VueTypes.func,
   },
   data() {
     return {
@@ -76,5 +75,3 @@ export default {
   },
 };
 </script>
-
-<style></style>
