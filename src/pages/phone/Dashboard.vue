@@ -89,7 +89,7 @@ export default {
       if (this.agentAvailable) {
         return this.setAgentState(AgentStates.OFFLINE);
       }
-      return this.setAgentState(AgentStates.AVAILABLE);
+      return this.setAgentState(AgentStates.ROUTABLE);
     },
   },
 };

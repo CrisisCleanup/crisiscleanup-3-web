@@ -75,14 +75,15 @@ export const initConnect = ({
   }
 };
 
-export const initAgent = ({ onRefresh, onAuth }) => {
+export const initAgent = ({ onRefresh, onAuth, onStateChange }) => {
   Log.info('waiting on agent... ');
   connect.agent(agent => {
     Log.info('agent initialized!');
     agent.onRefresh(onRefresh);
-    agent.onRoutable(onAuth);
+    agent.onStateChange(onStateChange);
     Log.debug('trying to get agent config...');
     const agentStates = agent.getConfiguration();
+    onAuth(agent, agentStates);
     Log.debug(agentStates);
   });
 };
@@ -108,8 +109,10 @@ export const setPopup = ({ open } = { open: true }) => {
 };
 
 export const STATES = {
-  AVAILABLE: connect.AgentStateType.ROUTABLE,
+  AVAILABLE: connect.AgentStateType.AVAILABLE,
   OFFLINE: connect.AgentStateType.OFFLINE,
+  ROUTABLE: connect.AgentStateType.ROUTABLE,
+  NOT_ROUTABLE: connect.AgentStateType.NOT_ROUTABLE,
 };
 
 export const getAgent = () => new connect.Agent();
@@ -123,10 +126,11 @@ export const setAgentState = state => {
 
 export const parseAgentState = stateEvent => {
   const state = Object.entries(STATES).map((key, val) => {
-    if (val === stateEvent.type) {
-      return key;
+    let stateType = stateEvent;
+    if (typeof stateEvent === 'object') {
+      stateType = stateEvent.type;
     }
-    return false;
+    return val === stateType.toLowerCase() ? val : null;
   });
-  return state[0];
+  return state.length >= 1 ? state[0] : null;
 };

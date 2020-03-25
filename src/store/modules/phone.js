@@ -20,6 +20,7 @@ const Log = Vue.log();
 const PhoneState = {
   agent: null,
   agentState: ConnectService.STATES.OFFLINE,
+  agentConfig: null,
   metrics: null,
   connectRunning: false,
   connectAuthed: false,
@@ -32,10 +33,10 @@ const PhoneState = {
 const getters = {
   agentId: state => (state.agent ? state.agent.agent_id : null),
   connectRunning: state => state.connectRunning, // is connect initialized?
-  connectReady: state => !!state.streams, // is connect done w/ init and auth?
+  connectReady: state => state.connectRunning && state.agentConfig !== null, // is connect done w/ init and auth?
   popupOpen: state => state.popupOpen,
   authToken: state => (state.credentials ? state.credentials.AccessToken : ''),
-  agentAvailable: state => state.agentState === ConnectService.STATES.AVAILABLE,
+  agentAvailable: state => state.agentState === ConnectService.STATES.ROUTABLE,
 };
 
 // actions
@@ -64,8 +65,21 @@ const actions = {
       Log.error(e);
     }
     ConnectService.initAgent({
-      onRefresh: agent => commit('setAgentState', { newState: null, agent }),
-      onAuth: () => commit('setConnectState', { running: true, authed: true }),
+      onRefresh: agent => {
+        if (!getters.connectReady) {
+          Log.debug('got initial agent agent!');
+          commit('setConnectState', { running: true, authed: true });
+        }
+        commit('setAgentState', { newState: null, agent });
+      },
+      onAuth: (ag, agentConf) =>
+        commit('setConnectState', {
+          running: true,
+          authed: true,
+          config: agentConf,
+        }),
+      onStateChange: ({ agent, newState }) =>
+        commit('setAgentState', { newState, agent }),
     });
   },
   async setPopup({ commit }, state = true) {
@@ -95,15 +109,18 @@ const mutations = {
   setAgentState(state, { newState, agent }) {
     let agentState = newState;
     if (agent) {
-      agentState = agent.getState();
+      agentState = agentState || agent.getState();
       agentState = ConnectService.parseAgentState(agentState);
     }
-    Log.debug('new state inbound:', agentState);
-    state.agentState = agentState;
+    if (agentState !== null) {
+      Log.debug('new state inbound:', agentState);
+      state.agentState = agentState;
+    }
   },
-  setConnectState(state, { running, authed }) {
+  setConnectState(state, { running, authed, config }) {
     state.connectRunning = running;
     state.connectAuthed = authed;
+    state.agentConfig = config;
   },
   setPopupState(state, newState) {
     state.popupOpen = newState;
