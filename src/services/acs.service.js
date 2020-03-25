@@ -113,6 +113,10 @@ export const STATES = {
   OFFLINE: connect.AgentStateType.OFFLINE,
   ROUTABLE: connect.AgentStateType.ROUTABLE,
   NOT_ROUTABLE: connect.AgentStateType.NOT_ROUTABLE,
+  INCOMING: connect.ContactStateType.INCOMING,
+  CONNECTING: connect.ContactStateType.CONNECTING,
+  CONNECTED: connect.ContactStateType.CONNECTED,
+  POLLING: 'polling',
 };
 
 export const getAgent = () => new connect.Agent();
@@ -133,4 +137,10 @@ export const parseAgentState = stateEvent => {
     return val === stateType.toLowerCase() ? val : null;
   });
   return state.length >= 1 ? state[0] : null;
+};
+
+export const bindContactEvents = handler => {
+  connect.contact(contact => {
+    contact.onRefresh(connect.hitch(handler, handler.onRefresh));
+  });
 };
