@@ -8,13 +8,17 @@
         <Loader :loading="loading">
           <template #content>
             <div class="w-2/3">
-              <div class="text-5xl">{{ $t('printToken.thank_you_for_helping') }}</div>
+              <div class="text-5xl">
+                {{ $t('printToken.thank_you_for_helping') }}
+              </div>
               <div class="text-2xl font-light">
                 <div>
-                  {{ $t('printToken.case_number') }}: {{ printToken.case_number }}
+                  {{ $t('printToken.case_number') }}:
+                  {{ printToken.case_number }}
                 </div>
                 <div>
-                  {{ $t('printToken.resident_name') }}: {{ printToken.case_name }}
+                  {{ $t('printToken.resident_name') }}:
+                  {{ printToken.case_name }}
                 </div>
                 <div>{{ $t('printToken.address') }}: {{ fullAddress }}</div>
               </div>
@@ -43,13 +47,17 @@
                   class="text-base form-field border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
                 />
 
-                <span class="text-sm">{{ $t('printToken.num_volunteers') }}</span>
+                <span class="text-sm">{{
+                  $t('printToken.num_volunteers')
+                }}</span>
                 <base-input
                   type="number"
                   v-model="printToken.number_of_volunteers"
                 />
 
-                <span class="text-sm">{{ $t('printToken.hours_per_volunteer') }}</span>
+                <span class="text-sm">{{
+                  $t('printToken.hours_per_volunteer')
+                }}</span>
                 <base-input
                   type="number"
                   v-model="printToken.hours_per_volunteer"
@@ -119,7 +127,9 @@ export default {
           `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
           data,
         );
-        await this.$toasted.success(this.$t('~~Successfully updated case. You rock!'));
+        await this.$toasted.success(
+          this.$t('~~Successfully updated case. You rock!'),
+        );
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

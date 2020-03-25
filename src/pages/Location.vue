@@ -392,12 +392,9 @@ export default {
       if (this.isPrimaryResponseArea && value.primary_location) {
         const result = await messageBox({
           title: this.$t('locationVue.existing_location'),
-          content: this.$t(
-            'locationVue.location_already_exists_organization',
-            {
-              organization: value.name,
-            },
-          ),
+          content: this.$t('locationVue.location_already_exists_organization', {
+            organization: value.name,
+          }),
           actions: {
             continue: {
               text: this.$t('actions.create_new'),

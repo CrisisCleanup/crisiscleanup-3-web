@@ -8,7 +8,7 @@
       <div
         v-if="useIcon"
         class="case-svg-container mr-1"
-        v-html="getWorkTypeImage(currentWorkType)"
+        v-html="workTypeImage"
       ></div>
       <div>{{ currentWorkType.status | getStatusName }}</div>
       <font-awesome-icon class="mx-1" size="sm" icon="chevron-down" />
@@ -84,6 +84,9 @@ export default {
             selectionKey: index + 1,
           };
         });
+    },
+    workTypeImage() {
+      return this.getWorkTypeImage(this.currentWorkType);
     },
     dropdownStyle() {
       return {

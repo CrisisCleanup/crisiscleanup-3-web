@@ -6,7 +6,9 @@
     <template #grid-content>
       <div class="grid--main">
         <div class="w-2/3">
-          <div class="text-5xl">{{ $t('requestAccess.join_organization') }}</div>
+          <div class="text-5xl">
+            {{ $t('requestAccess.join_organization') }}
+          </div>
           <div class="text-2xl font-light">
             {{ $t('requestAccess.enter_existing_user_email_msg') }}
           </div>
@@ -94,9 +96,9 @@
             }}</base-text>
             <base-text class="w-3/4 text-center" variant="body" wieght="300">
               {{
-               $t('requestAccess.request_sent_to_org', {
-                organization: organization,
-                requested_to: requested_to,
+                $t('requestAccess.request_sent_to_org', {
+                  organization: organization,
+                  requested_to: requested_to,
                 })
               }}"
             </base-text>

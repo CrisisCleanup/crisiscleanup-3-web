@@ -722,7 +722,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="py-4 px-4 text-gray-500 border-b"
         >
           
-            ~~Organizations for Approval
+            dashboard.pending_affiliates
           
         </div>
          

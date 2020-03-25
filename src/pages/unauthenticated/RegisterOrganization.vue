@@ -28,7 +28,9 @@
       </div>
       <div class="grid--main">
         <div class="text-4xl">{{ $t('registerOrg.register_org') }}</div>
-        <div class="text-2xl w-3/4">{{ $t('registerOrg.please_create_profile') }}</div>
+        <div class="text-2xl w-3/4">
+          {{ $t('registerOrg.please_create_profile') }}
+        </div>
         <form ref="form" class="form w-4/5 mt-6" @submit.prevent="register">
           <ol class="list-decimal">
             <li class="text-xl form-item">
@@ -48,7 +50,9 @@
 
             <li class="text-xl form-item">
               {{ $t('registerOrg.org_info') }}
-              <div class="text-base w-3/5">{{ $t('registerOrg.use_local_org_name_msg') }}</div>
+              <div class="text-base w-3/5">
+                {{ $t('registerOrg.use_local_org_name_msg') }}
+              </div>
               <div class="flex flex-wrap">
                 <base-input
                   v-model="organization.name"
@@ -269,7 +273,7 @@
                 class="text-base activities-checkbox"
                 required
               >
-                <div v-html="registerOrg.tos_priv_agree" ></div>
+                <div v-html="registerOrg.tos_priv_agree"></div>
               </base-checkbox>
             </li>
           </ol>
