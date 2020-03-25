@@ -189,8 +189,8 @@ export default {
         },
         {
           title: this.$t('invitationsVue.invited_by'),
-          dataIndex: 'invited_by',
-          key: 'invited_by',
+          dataIndex: 'inviter',
+          key: 'inviter',
           width: '1fr',
         },
         {

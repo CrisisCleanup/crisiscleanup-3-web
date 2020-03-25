@@ -102,7 +102,7 @@ export default class User extends Model {
           { save: false },
         );
       },
-      acceptInvite({ token, first_name, last_name, password, mobile }) {
+      acceptInvite({ token, first_name, last_name, password, mobile, title }) {
         return this.post(
           `/invitations/accept`,
           {
@@ -111,6 +111,7 @@ export default class User extends Model {
             last_name,
             password,
             mobile,
+            title,
           },
           { save: false },
         );

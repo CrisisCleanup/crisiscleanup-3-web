@@ -22,6 +22,10 @@ export default class Invitation extends Model {
     return '';
   }
 
+  get inviter() {
+    return `${this.invited_by.first_name} ${this.invited_by.last_name}`;
+  }
+
   get status() {
     if (moment(this.expires_at).isBefore(moment())) {
       return 'Expired';
@@ -37,6 +41,9 @@ export default class Invitation extends Model {
           {},
           { save: false },
         );
+      },
+      fetchById(id) {
+        return this.get(`/invitations/${id}`);
       },
     },
   };

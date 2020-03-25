@@ -1,67 +1,91 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-full form-container">
-    <div class="w-32 m-6">
-      <img src="@/assets/ccu-logo-black-500w.png" />
-    </div>
-
-    <form ref="form" class="form" @submit.prevent="acceptInvite">
-      <base-input
-        v-model="first_name"
-        type="text"
-        class="input"
-        size="large"
-        :placeholder="this.$t('invitationSignup.first_name_placeholder')"
-        required
-      />
-      <base-input
-        v-model="last_name"
-        type="text"
-        class="input"
-        size="large"
-        :placeholder="this.$t('invitationSignup.last_name_placeholder')"
-        required
-      />
-      <base-input
-        v-model="mobile"
-        type="text"
-        class="input"
-        size="large"
-        :placeholder="this.$t('invitationSignup.mobile_placeholder')"
-        required
-      />
-      <base-input
-        v-model="password"
-        type="password"
-        class="input"
-        size="large"
-        :placeholder="this.$t('invitationSignup.pw1_placeholder')"
-        required
-      />
-      <base-input
-        ref="confirm_password"
-        v-model="confirmPassword"
-        type="password"
-        class="input"
-        size="large"
-        :placeholder="this.$t('invitationSignup.pw2_placeholder')"
-        required
-      />
-      <base-button
-        size="medium"
-        class="px-5 py-2 m-1 flex-grow"
-        variant="solid"
-        :text="this.$t('actions.accept_invite')"
-        :action="acceptInvite"
-      />
-    </form>
-  </div>
+  <HomeLayout>
+    <template #grid-overlay>
+      <div class="grid--overlay homegrid-backdrop" />
+    </template>
+    <template #grid-content>
+      <div class="grid--main">
+        <form
+          ref="form"
+          class="form w-108 flex flex-col"
+          @submit.prevent="acceptInvite"
+        >
+          <div class="text-2xl font-light">
+            {{
+              $t('~~{user} has invited you to join Crisiscleanup', {
+                user: invitation.inviter,
+              })
+            }}
+          </div>
+          <base-input
+            v-model="first_name"
+            type="text"
+            class="input"
+            size="large"
+            :placeholder="$t('invitationSignup.first_name_placeholder')"
+            required
+          />
+          <base-input
+            v-model="last_name"
+            type="text"
+            class="input"
+            size="large"
+            :placeholder="$t('invitationSignup.last_name_placeholder')"
+            required
+          />
+          <base-input
+            v-model="title"
+            type="text"
+            class="input"
+            size="large"
+            :placeholder="$t('~~invitationSignup.title_placeholder')"
+          />
+          <base-input
+            v-model="mobile"
+            type="text"
+            class="input"
+            size="large"
+            :placeholder="$t('invitationSignup.mobile_placeholder')"
+            required
+          />
+          <base-input
+            v-model="password"
+            type="password"
+            class="input"
+            size="large"
+            :placeholder="$t('invitationSignup.pw1_placeholder')"
+            required
+          />
+          <base-input
+            ref="confirm_password"
+            v-model="confirmPassword"
+            type="password"
+            class="input"
+            size="large"
+            :placeholder="$t('invitationSignup.pw2_placeholder')"
+            required
+          />
+          <base-button
+            size="large"
+            class="px-5 py-2 m-2 flex-grow"
+            variant="solid"
+            :text="$t('actions.accept_invite')"
+            :action="acceptInvite"
+          />
+        </form>
+      </div>
+    </template>
+  </HomeLayout>
 </template>
 
 <script>
 import User from '@/models/User';
+import Invitation from '../../models/Invitation';
+import HomeLayout from '../../layouts/Home';
 
 export default {
   name: 'InvitationSignup',
+  components: { HomeLayout },
   data() {
     return {
       first_name: '',
@@ -69,12 +93,27 @@ export default {
       password: '',
       confirmPassword: '',
       mobile: '',
+      title: '',
+      invitation: null,
     };
+  },
+  async mounted() {
+    try {
+      const results = await Invitation.api().fetchById(
+        this.$route.params.token,
+      );
+      [this.invitation] = results.entities.invitations;
+    } catch (error) {
+      await this.$toasted.error(
+        this.$t('~~This invitation could not be found or has expired'),
+      );
+      this.$router.push('/login');
+    }
   },
   methods: {
     async acceptInvite() {
       // eslint-disable-next-line camelcase
-      const { first_name, last_name, password, mobile } = this;
+      const { first_name, last_name, password, mobile, title } = this;
       if (this.validatePassword()) {
         try {
           await User.api().acceptInvite({
@@ -83,6 +122,7 @@ export default {
             last_name,
             password,
             mobile,
+            title,
           });
           await this.$router.push('/login?accepted=true');
         } catch (e) {
@@ -103,17 +143,18 @@ export default {
 };
 </script>
 
-<style scoped>
-.form-container {
-  height: 100vh;
-}
-
-.form {
-  width: 24rem;
-  @apply flex flex-col;
+<style scoped lang="scss">
+.homegrid {
+  &.grid-container {
+    grid-template-areas:
+      'logo . . . . survivors'
+      '. main main main main main'
+      '. main main main main main'
+      '. main main main main main';
+  }
 }
 
 .input {
-  @apply m-1;
+  @apply m-2;
 }
 </style>
