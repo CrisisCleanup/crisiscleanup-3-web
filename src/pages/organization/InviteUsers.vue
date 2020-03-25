@@ -34,13 +34,9 @@
             :add-on-key="[13, ',']"
             @before-adding-tag="
               obj => {
-                let emailMatch = obj.tag.text
-                  .toLowerCase()
-                  .match(
-                    /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*/,
-                  );
+                let emailMatch = getEmailMatch(obj.tag.text);
                 if (emailMatch) {
-                  obj.tag.text = emailMatch[0];
+                  obj.tag.text = emailMatch;
                   obj.addTag();
                 }
               }
@@ -72,6 +68,7 @@
 </template>
 <script>
 import User from '@/models/User';
+import { createTag } from '@johmun/vue-tags-input';
 import { getErrorMessage } from '../../utils/errors';
 
 export default {
@@ -84,8 +81,25 @@ export default {
     };
   },
   methods: {
+    getEmailMatch(text) {
+      const emailMatch = text
+        .toLowerCase()
+        .match(
+          /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*/,
+        );
+      if (emailMatch) {
+        return emailMatch[0];
+      }
+      return null;
+    },
     async inviteUsers() {
       try {
+        if (this.emails) {
+          const email = createTag(this.getEmailMatch(this.emails));
+          if (email) {
+            this.usersToInvite.push(email);
+          }
+        }
         const emails = this.usersToInvite.map(value => value.text);
         await Promise.all(emails.map(email => User.api().inviteUser(email)));
         await this.$toasted.success(
