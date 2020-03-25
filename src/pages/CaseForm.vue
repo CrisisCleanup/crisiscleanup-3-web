@@ -316,6 +316,16 @@
               />
             </div>
           </template>
+          <template v-if="field.html_type === 'cronselect'">
+            <div class="form-field">
+              <div class="mb-1">{{ field.label_t }}</div>
+              <RecurringSchedule
+                class="p-2 border"
+                :value="worksite.formFields[field.field_key]"
+                @input="dynamicFields[field.field_key] = $event"
+              />
+            </div>
+          </template>
           <template v-if="field.html_type === 'suggest'">
             <div :key="field.field_key" class="form-field">
               <autocomplete
@@ -454,12 +464,14 @@ import WorksiteImageSection from '@/components/WorksiteImageSection';
 import WorksiteReportSection from '@/components/WorksiteReportSection';
 import SectionHeading from '../components/SectionHeading';
 import { EventBus } from '../event-bus';
+import RecurringSchedule from '../components/RecurringSchedule';
 
 const messageBox = create(MessageBox);
 
 export default {
   name: 'CaseForm',
   components: {
+    RecurringSchedule,
     SectionHeading,
     FormSelect,
     WorksiteSearchInput,
@@ -495,6 +507,7 @@ export default {
       potentialIncidents: [],
       sectionCounter: 2,
       addAdditionalPhone: false,
+      cronExpression: '*/1 * * * *',
     };
   },
   computed: {

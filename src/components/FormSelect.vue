@@ -97,9 +97,14 @@ export default {
       type: null,
       default: null,
     },
+    indicatorIcon: {
+      type: String,
+      default: 'sort',
+    },
   },
   data() {
     const iconSize = this.multiple ? 'xxs' : 'medium';
+    const { indicatorIcon } = this;
     return {
       isInvalid: false,
       Deselect: {
@@ -114,7 +119,7 @@ export default {
           return (
             <font-awesome-icon
               size="sm"
-              icon="sort"
+              icon={indicatorIcon}
               class="mx-1 text-crisiscleanup-dark-400"
             />
           );

@@ -44,6 +44,7 @@ import Popover from 'vue-js-popover';
 import * as ModalDialogs from 'vue-modal-dialogs';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import vSelect from 'vue-select';
+import Datepicker from 'vuejs-datepicker';
 import Toasted from 'vue-toasted';
 import App from './App.vue';
 import router from './router';
@@ -67,6 +68,7 @@ Vue.component('tag', Tag);
 Vue.component('spinner', Spinner);
 Vue.component('badge', Badge);
 Vue.component('tag-input', VueTagsInput);
+Vue.component('datepicker', Datepicker);
 
 // Layouts
 Vue.component('authenticated-layout', Authenticated);

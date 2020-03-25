@@ -13,6 +13,7 @@ import VueTypes from 'vue-types';
 const iconMap = {
   dashboard: require('@/assets/icons/dashboard.svg'),
   cases: require('@/assets/icons/cases.svg'),
+  calendar: require('@/assets/icons/calendar.svg'),
   call: require('@/assets/icons/call.svg'),
   chat: require('@/assets/icons/chat.svg'),
   print: require('@/assets/icons/print-big.svg'),

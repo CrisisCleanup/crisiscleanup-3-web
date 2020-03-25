@@ -1,5 +1,5 @@
 <template>
-  <label class="z-50">
+  <label class="z-50 flex items-center">
     <input
       v-model="radioButtonValue"
       type="radio"
@@ -8,7 +8,9 @@
       :class="{ checked: type === 'boolean' ? value : label === value }"
     />
     <span>
-      {{ name }}
+      <slot>
+        {{ name }}
+      </slot>
     </span>
   </label>
 </template>

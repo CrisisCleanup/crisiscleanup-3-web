@@ -1,11 +1,11 @@
 <template>
-  <div class="flex h-full overflow-hidden">
-    <div
-      :class="{
-        'w-4/5': currentIncident && currentWorksite,
-        'w-full': !currentWorksite,
-      }"
-    >
+  <div
+    class="flex h-full overflow-hidden cases-container-grid"
+    :class="{
+      'cases-container-grid--full': !currentWorksite,
+    }"
+  >
+    <div>
       <div class="cases-grid">
         <div class="p-3 border border-gray-300 card-header bg-white">
           <div class="flex items-center justify-between">
@@ -361,8 +361,7 @@
             isViewingWorksiteFlag ||
             isNewWorksite)
       "
-      class="flex flex-col h-full shadow-2xl w-1/5"
-      style="min-width: 360px"
+      class="flex flex-col h-full shadow-2xl"
       data-cy="worksiteview"
     >
       <div
@@ -1210,6 +1209,15 @@ export default {
   @apply border-0;
 }
 
+.cases-container-grid {
+  display: grid;
+  grid-template-columns: 4fr minmax(360px, 1fr);
+}
+
+.cases-container-grid--full {
+  display: grid;
+  grid-template-columns: 4fr auto;
+}
 .cases-grid {
   display: grid;
   grid-auto-rows: 3.5rem auto;

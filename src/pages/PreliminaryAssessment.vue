@@ -2,90 +2,60 @@
   <form
     v-if="ready"
     ref="form"
-    class="bg-white flex flex-col flex-grow w-full h-full border"
+    class="bg-gray-100 flex flex-col flex-grow w-full h-full border max-w-md self-center"
     @submit.prevent
   >
     <div class="intake-form flex-grow">
-      <SectionHeading :count="1" class="mb-3">{{
-        $t('caseForm.property_information')
-      }}</SectionHeading>
-      <section class="form-field">
-        <base-input
+      <div class="form-field text-lg font-semibold">
+        {{ $t('~~Personal Information') }}
+      </div>
+      <div class="form-field">
+        <label>{{ $t('formLabels.name') }}</label>
+        <input
           :value="pda.name"
-          selector="js-pda-name"
-          :placeholder="$t('formLabels.name')"
+          class="js-pda-name input"
           size="large"
+          type="text"
           :required="true"
           @input="
-            value => {
-              updatePda(value, 'name');
+            e => {
+              updatePda(e.target.value, 'name');
             }
           "
         />
-      </section>
+      </div>
       <div class="form-field">
-        <base-input
+        <label>{{ $t('formLabels.phone1') }}</label>
+        <input
           :value="pda.phone1"
-          selector="js-worksite-phone1"
+          class="js-pda-phone1 input"
           size="large"
-          :placeholder="$t('formLabels.phone1')"
+          type="text"
+          :required="true"
           @input="
-            value => {
-              updatePda(value, 'phone1');
+            e => {
+              updatePda(e.target.value, 'phone1');
             }
           "
         />
       </div>
-      <div class="form-field" v-if="pda.phone2 || addAdditionalPhone">
-        <base-input
-          :value="pda.phone2"
-          selector="js-worksite-phone2"
-          size="large"
-          :placeholder="$t('formLabels.phone2')"
-          @input="
-            value => {
-              updatePda(value, 'phone2');
-            }
-          "
-        />
-      </div>
-      <base-button
-        v-else
-        class="mx-3 text-primary-dark"
-        type="link"
-        :text="$t('~~caseView.add_phone')"
-        :alt="$t('~~caseView.add_phone')"
-        :action="
-          () => {
-            addAdditionalPhone = true;
-          }
-        "
-      />
       <div class="form-field">
-        <base-input
+        <label>{{ $t('formLabels.email') }}</label>
+        <input
           :value="pda.email"
-          selector="js-worksite-email"
+          class="js-pda-email input"
           size="large"
-          :placeholder="$t('formLabels.email')"
+          type="text"
+          :required="true"
           @input="
-            value => {
-              updatePda(value, 'email');
+            e => {
+              updatePda(e.target.value, 'email');
             }
           "
         />
       </div>
-      <div
-        class="text-base font-semibold my-1 mx-3 flex justify-between items-center"
-      >
-        {{ $t('formLabels.location') }}
-        <ccu-icon
-          type="trash"
-          size="small"
-          :alt="$t('~Clear Location')"
-          @click.native="clearLocationFields"
-        />
-      </div>
       <div class="form-field">
+        <label>{{ $t('formLabels.address') }}</label>
         <WorksiteSearchInput
           :value="pda.address"
           selector="js-worksite-address"
@@ -102,8 +72,6 @@
             }
           "
           display-property="description"
-          :placeholder="$t('formLabels.address')"
-          size="large"
           :required="true"
           @input="
             value => {
@@ -115,70 +83,71 @@
         />
       </div>
       <div class="form-field">
-        <base-input
+        <label>{{ $t('formLabels.city') }}</label>
+        <input
           :value="pda.city"
-          selector="js-worksite-city"
+          class="js-pda-city input"
           size="large"
-          :placeholder="$t('formLabels.city')"
-          required
+          type="text"
+          :required="true"
           @input="
-            value => {
-              updatePda(value, 'city');
+            e => {
+              updatePda(e.target.value, 'city');
             }
           "
-          @change="findPotentialGeocode"
         />
       </div>
       <div class="form-field">
-        <base-input
+        <label>{{ $t('formLabels.county') }}</label>
+        <input
           :value="pda.county"
-          selector="js-worksite-county"
+          class="js-pda-county input"
           size="large"
-          :placeholder="$t('formLabels.county')"
-          :break-glass="true"
-          required
+          type="text"
+          :required="true"
           @input="
-            value => {
-              updatePda(value, 'county');
+            e => {
+              updatePda(e.target.value, 'county');
             }
           "
-          @change="findPotentialGeocode"
         />
       </div>
       <div class="form-field">
-        <base-input
+        <label>{{ $t('formLabels.state') }}</label>
+        <input
           :value="pda.state"
-          selector="js-worksite-state"
+          class="js-pda-state input"
           size="large"
-          :placeholder="$t('formLabels.state')"
-          required
+          type="text"
+          :required="true"
           @input="
-            value => {
-              updatePda(value, 'state');
+            e => {
+              updatePda(e.target.value, 'state');
             }
           "
-          @change="findPotentialGeocode"
         />
       </div>
       <div class="form-field">
-        <base-input
+        <label>{{ $t('formLabels.postal_code') }}</label>
+        <input
           :value="pda.postal_code"
-          selector="js-worksite-postal-code"
+          class="js-pda-postal_code input"
           size="large"
-          :placeholder="$t('formLabels.postal_code')"
-          required
-          @change="findPotentialGeocode"
+          type="text"
+          :required="true"
+          @input="
+            e => {
+              updatePda(e.target.value, 'postal_code');
+            }
+          "
         />
       </div>
       <template v-for="field in fields">
         <div :key="field.field_key">
           <template v-if="['h4'].includes(field.html_type)">
-            <SectionHeading
-              :count="getSectionCount(field)"
-              :tooltip="field.help_t"
-              class="mb-3"
-              >{{ field.label_t }}</SectionHeading
-            >
+            <div class="form-field text-lg font-semibold">
+              {{ field.label_t }}
+            </div>
           </template>
           <template v-if="['h5'].includes(field.html_type)">
             <div class="text-base font-semibold my-1 mx-3">
@@ -187,28 +156,16 @@
           </template>
           <template v-if="field.html_type === 'select'">
             <div :key="field.field_key" class="form-field">
-              <span slot="label" class="flex items-center">
-                <span>{{ field.label_t }}</span>
-                <ccu-icon
-                  v-if="field.help_t"
-                  v-tooltip="{
-                    content: field.help_t,
-                    trigger: 'hover',
-                    classes: 'interactive-tooltip w-72',
-                  }"
-                  :alt="$t('actions.help_alt')"
-                  type="help"
-                  size="large"
-                />
-              </span>
+              <span>{{ field.label_t }}</span>
               <form-select
                 :value="pda.formFields[field.field_key]"
                 :options="
                   field.values || getSelectValuesList(field.values_default_t)
                 "
+                indicator-icon="caret-down"
                 item-key="value"
                 label="name_t"
-                select-classes="h-12 border"
+                select-classes="h-10 border bg-white"
                 @input="
                   value => {
                     dynamicFields[field.field_key] = value;
@@ -217,31 +174,29 @@
               />
             </div>
           </template>
+          <template v-if="field.html_type === 'cronselect'">
+            <div key="field.field_key" class="form-field">
+              <span>{{ field.label_t }}</span>
+              <RecurringSchedule
+                class="bg-white p-4"
+                :value="pda.formFields[field.field_key]"
+                @input="dynamicFields[field.field_key] = $event"
+              />
+            </div>
+          </template>
           <template v-if="field.html_type === 'multiselect'">
             <div :key="field.field_key" class="form-field">
-              <span slot="label" class="flex items-center">
-                <span>{{ field.label_t }}</span>
-                <ccu-icon
-                  v-if="field.help_t"
-                  v-tooltip="{
-                    content: field.help_t,
-                    trigger: 'hover',
-                    classes: 'interactive-tooltip w-72',
-                  }"
-                  :alt="$t('actions.help_alt')"
-                  type="help"
-                  size="large"
-                />
-              </span>
+              <span>{{ field.label_t }}</span>
               <form-select
                 :value="pda.formFields[field.field_key]"
-                multiple
                 :options="
                   field.values || getSelectValuesList(field.values_default_t)
                 "
+                multiple
+                indicator-icon="caret-down"
                 item-key="value"
                 label="name_t"
-                select-classes="h-12 border"
+                select-classes="h-10 border"
                 @input="
                   value => {
                     dynamicFields[field.field_key] = value;
@@ -252,51 +207,26 @@
           </template>
           <template v-if="field.html_type === 'text'">
             <div :key="field.field_key" class="form-field">
-              <base-input
+              <label>{{ field.placeholder_t || field.label_t }}</label>
+              <input
                 :value="pda.formFields[field.field_key]"
-                :tooltip="field.help_t"
+                class="js-pda-postal_code input"
                 size="large"
-                :break-glass="field.read_only_break_glass"
-                :placeholder="field.placeholder_t || field.label_t"
+                type="text"
                 @input="
-                  value => {
-                    dynamicFields[field.field_key] = value;
+                  e => {
+                    dynamicFields[field.field_key] = e.target.value;
                   }
                 "
               />
             </div>
           </template>
-          <template v-if="field.html_type === 'suggest'">
-            <div :key="field.field_key" class="form-field">
-              <autocomplete
-                v-model="dynamicFields[field.field_key]"
-                :default-value="getValue(field.field_key)"
-                tooltip="info"
-                display-property="description"
-                :placeholder="field.placeholder_t || field.label_t"
-              />
-            </div>
-          </template>
           <template v-if="field.html_type === 'textarea'">
             <div :key="field.field_key" class="form-field">
-              <span slot="label" class="flex items-center">
-                <span>{{ field.label_t }}</span>
-                <ccu-icon
-                  v-if="field.help_t"
-                  v-tooltip="{
-                    content: field.help_t,
-                    trigger: 'hover',
-                    classes: 'interactive-tooltip w-72',
-                  }"
-                  :alt="$t('actions.help_alt')"
-                  type="help"
-                  size="large"
-                />
-              </span>
+              <label>{{ field.placeholder_t || field.label_t }}</label>
               <textarea
                 class="block w-full border outline-none"
-                :placeholder="field.placeholder_t || field.label_t"
-                rows="4"
+                rows="3"
                 :value="pda.formFields[field.field_key]"
                 @input="
                   e => {
@@ -307,27 +237,20 @@
             </div>
           </template>
           <template v-if="field.html_type === 'checkbox'">
-            <div :key="field.field_key" class="form-field flex items-center">
-              <base-checkbox
+            <div :key="field.field_key" class="py-1 mx-5">
+              <input
+                type="checkbox"
+                :id="field.field_key"
                 :value="pda.formFields[field.field_key]"
                 @input="
-                  value => {
-                    dynamicFields[field.field_key] = value;
+                  e => {
+                    dynamicFields[field.field_key] = e.target.checked;
                   }
                 "
-                >{{ field.label_t }}
-              </base-checkbox>
-              <ccu-icon
-                v-if="field.help_t"
-                v-tooltip="{
-                  content: field.help_t,
-                  trigger: 'hover',
-                  classes: 'interactive-tooltip w-72',
-                }"
-                :alt="$t('actions.help_alt')"
-                type="help"
-                size="large"
               />
+              <label :for="field.field_key" class="px-2">{{
+                field.placeholder_t || field.label_t
+              }}</label>
             </div>
           </template>
         </div>
@@ -338,11 +261,10 @@
     >
       <base-button
         size="medium"
-        variant="solid"
         data-cy="worksite-formaction-save"
-        class="flex-grow m-1 text-black"
+        class="flex-grow m-1 text-black bg-purple-700 text-white"
         :action="savePda"
-        :text="$t('actions.save')"
+        :text="$t('~~Submit Request')"
       />
     </div>
   </form>
@@ -357,17 +279,17 @@ import Pda from '@/models/Pda';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
 import { getErrorMessage } from '@/utils/errors';
+import RecurringSchedule from '@/components/RecurringSchedule';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import Incident from '@/models/Incident';
 import { buildForm, groupBy } from '@/utils/form';
 import FormSelect from '@/components/FormSelect';
-import SectionHeading from '../components/SectionHeading';
 
 export default {
   name: 'PreliminaryAssessment',
   components: {
-    SectionHeading,
     FormSelect,
+    RecurringSchedule,
     WorksiteSearchInput,
   },
   async mounted() {
@@ -392,8 +314,14 @@ export default {
   },
   computed: {
     fields() {
+      const excludeSections = ['claim_status_report_info'];
       if (this.currentIncident && this.currentIncident.form_fields) {
-        const formFields = this.currentIncident.form_fields;
+        const formFields = this.currentIncident.form_fields.filter(field => {
+          return (
+            !excludeSections.includes(field.field_parent_key) &&
+            !excludeSections.includes(field.field_key)
+          );
+        });
         const returnArray = [];
         buildForm(null, groupBy('field_parent_key')(formFields), returnArray);
         return returnArray;
@@ -652,7 +580,15 @@ export default {
 }
 
 .form-field {
-  @apply py-1 mx-3;
+  @apply py-1 mx-5 flex flex-col;
+}
+
+.form-field-row {
+  @apply py-1 mx-3 flex flex-row;
+}
+
+.form-field > .input {
+  @apply h-10 p-1 border outline-none;
 }
 
 h4 {

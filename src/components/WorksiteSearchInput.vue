@@ -234,15 +234,17 @@ export default {
 #autosuggest__input {
   outline: none;
   width: 100%;
-  height: 32px;
+  height: 40px;
   border-radius: 0;
   border: solid 1px #dadada;
   padding: 10px;
   position: relative;
+  @apply text-sm;
 }
 
 .large #autosuggest__input {
   height: 50px;
+  @apply text-base;
 }
 
 .has-icon #autosuggest__input {

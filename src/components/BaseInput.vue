@@ -15,6 +15,7 @@
       :required="required"
       :pattern="pattern"
       :autocomplete="autocomplete"
+      :readonly="readonly"
       @input="update"
       @change="change"
     />
@@ -41,7 +42,7 @@
       class="icon-container flex items-center justify-center"
       :class="iconClasses"
     >
-      <ccu-icon :type="tooltip ? 'info' : icon" size="small" />
+      <ccu-icon :type="tooltip ? 'info' : icon" :size="iconSize" />
     </div>
     <slot></slot>
   </div>
@@ -58,6 +59,10 @@ export default {
     icon: {
       type: String,
       default: '',
+    },
+    iconSize: {
+      type: String,
+      default: 'small',
     },
     value: {
       type: null,
@@ -100,6 +105,10 @@ export default {
       default: '',
     },
     breakGlass: {
+      type: Boolean,
+      default: false,
+    },
+    readonly: {
       type: Boolean,
       default: false,
     },
