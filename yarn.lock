@@ -19692,6 +19692,18 @@ vue-cli-plugin-s3-deploy@^4.0.0-rc3:
     lodash "^4.17.11"
     mime-types "^2.1.18"
 
+vue-clipboard2@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/vue-clipboard2/-/vue-clipboard2-0.3.1.tgz#6e551fb7bd384889b28b0da3b12289ed6bca4894"
+  integrity sha512-H5S/agEDj0kXjUb5GP2c0hCzIXWRBygaWLN3NEFsaI9I3uWin778SFEMt8QRXiPG+7anyjqWiw2lqcxWUSfkYg==
+  dependencies:
+    clipboard "^2.0.0"
+
+vue-cookies@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.7.0.tgz#dd8f147ff1579e0cbd5f352dc5dff2696d8760b8"
+  integrity sha512-vuEUm6wYMMrFAHFCrkzIUAy8+MgPAbBGmYXnk2M6X6O2KHbMT1wuDD2izacmsSUp6ZM02e23MJRtPRobl88VMg==
+
 vue-cron-editor-buefy@^0.1.13:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/vue-cron-editor-buefy/-/vue-cron-editor-buefy-0.1.13.tgz#465e5bb18940bfad60449e1fd224c8be9a42c668"
@@ -19700,11 +19712,6 @@ vue-cron-editor-buefy@^0.1.13:
     buefy "^0.8.9"
     core-js "^3.3.2"
     vue "^2.6.10"
-
-vue-cookies@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.7.0.tgz#dd8f147ff1579e0cbd5f352dc5dff2696d8760b8"
-  integrity sha512-vuEUm6wYMMrFAHFCrkzIUAy8+MgPAbBGmYXnk2M6X6O2KHbMT1wuDD2izacmsSUp6ZM02e23MJRtPRobl88VMg==
 
 vue-docgen-api@^3.11.4:
   version "3.26.0"

@@ -26,11 +26,7 @@
                 variant="outline"
                 class="ml-2 px-6 text-xs"
                 size="medium"
-                :action="
-                  () => {
-                    copyText('username');
-                  }
-                "
+                :action="() => copyText(agent.user_id)"
               >
                 {{ lang.copy.button }}
               </base-button>
@@ -46,11 +42,7 @@
                 variant="outline"
                 class="ml-2 px-6 text-xs"
                 size="medium"
-                :action="
-                  () => {
-                    copyText('password');
-                  }
-                "
+                :action="() => copyText(agent.password)"
               >
                 {{ lang.copy.button }}
               </base-button>
@@ -154,11 +146,8 @@ export default {
       this.loading = true;
       EventBus.$emit('acs:requestAgent');
     },
-    copyText(id) {
-      const copyText = document.getElementById(id);
-      copyText.select();
-      copyText.setSelectionRange(0, 99999); // used for mobile phone
-      document.execCommand('copy');
+    async copyText(text) {
+      await this.$copyText(text);
       this.$toasted.success(this.lang.copy.successMessage);
     },
   },

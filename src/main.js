@@ -46,6 +46,7 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import vSelect from 'vue-select';
 import Datepicker from 'vuejs-datepicker';
 import Toasted from 'vue-toasted';
+import VueClipboard from 'vue-clipboard2';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -80,6 +81,7 @@ Vue.config.productionTip = false;
 Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
 Vue.use(ModalDialogs);
+Vue.use(VueClipboard);
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'), { moment });
 
