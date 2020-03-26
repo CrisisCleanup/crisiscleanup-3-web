@@ -29,6 +29,7 @@ import store from '@/store/index';
 import Vue from 'vue';
 import VueCookies from 'vue-cookies';
 import VueRouter from 'vue-router';
+import Map from '@/pages/unauthenticated/Map';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -195,6 +196,12 @@ const routes = [
   {
     path: '/privacy',
     component: Privacy,
+    name: 'nav.privacy',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/map',
+    component: Map,
     name: 'nav.privacy',
     meta: { layout: 'unauthenticated', noAuth: true },
   },

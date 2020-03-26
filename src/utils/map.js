@@ -98,7 +98,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
   const pixiContainer = new Container();
   context.pixiContainer = pixiContainer;
 
-  return (function() {
+  const layer = (function() {
     let firstDraw = true;
     let prevZoom;
     let prevCenter;
@@ -132,7 +132,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             const workType = Worksite.getWorkType(
               marker.work_types,
               context.currentFilters,
-              context.currentUser.organization,
+              context.currentUser && context.currentUser.organization,
             );
 
             if (context.displayedWorkTypes) {
@@ -166,6 +166,8 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             markerSprites.push(markerSprite);
             markerSprite.legend = marker.city || marker.label;
             markerSprite.location = marker.location;
+            markerSprite.name = marker.name;
+            markerSprite.case_number = marker.case_number;
             markerSprite.work_types = marker.work_types;
             markerSprite.active_work_type = workType;
             markerSprite.colorsKey = colorsKey;
@@ -184,14 +186,12 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             }
           }
           const findMarker = ll => {
-            if (
-              utils.getMap().getZoom() < INTERACTIVE_ZOOM_LEVEL ||
-              !interactive
-            ) {
+            const currentMap = utils.getMap() || context.map;
+            if (currentMap.getZoom() < INTERACTIVE_ZOOM_LEVEL || !interactive) {
               return null;
             }
             const layerPoint = project(ll);
-            const quadTree = quadTrees[utils.getMap().getZoom()];
+            const quadTree = quadTrees[currentMap.getZoom()];
             let marker;
             const { rMax } = quadTree;
             let found = false;
@@ -218,6 +218,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
 
           if (interactive) {
             map.on('click', function(e) {
+              const currentMap = utils.getMap() || context.map;
               const marker = findMarker(e.latlng);
               if (marker) {
                 context.$emit('onSelectmarker', marker);
@@ -225,7 +226,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
                 map.closePopup();
               }
 
-              if (utils.getMap().getZoom() < INTERACTIVE_ZOOM_LEVEL) {
+              if (currentMap.getZoom() < INTERACTIVE_ZOOM_LEVEL) {
                 if (context.enableInteractiveTooltip) {
                   context.enableInteractiveTooltip();
                 }
@@ -261,7 +262,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
                 const workType = Worksite.getWorkType(
                   markerSprite.work_types,
                   context.currentFilters,
-                  context.currentUser.organization,
+                  context.currentUser && context.currentUser.organization,
                 );
 
                 const colorsKey = `${workType.status}_${
@@ -344,4 +345,6 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
       },
     );
   })();
+  layer.key = 'worksite_layer';
+  return layer;
 }
