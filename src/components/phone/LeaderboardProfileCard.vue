@@ -3,7 +3,7 @@
     <div class="flex flex-row m-5 justify-between">
       <!-- PFP -->
       <div class="flex flex-col w-1/7">
-        <img src="../assets/LeaderboardPFPss.jpg" class="h-8" />
+        <img src="@/assets/LeaderboardPFPss.jpg" class="h-8" />
       </div>
       <!-- Name / Status / Affiliation -->
       <div class="flex flex-col w-3/7">
