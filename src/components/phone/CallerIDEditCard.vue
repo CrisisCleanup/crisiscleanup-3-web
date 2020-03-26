@@ -2,11 +2,7 @@
   <div>
     <base-button
       variant="outline"
-      :action="
-        () => {
-          isShowingModal = true;
-        }
-      "
+      :action="() => (isShowingModal = true)"
       text="Edit Caller ID"
       class="px-3 py-2"
     ></base-button>
@@ -91,11 +87,7 @@
         <base-button
           variant="solid"
           class="px-3 py-2"
-          :action="
-            () => {
-              isShowingModal = false;
-            }
-          "
+          :action="() => (isShowingModal = false)"
           text="Confirm"
         ></base-button>
       </div>
