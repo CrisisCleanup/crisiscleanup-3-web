@@ -23,7 +23,7 @@
     </div>
     <hr />
     <div class="flex flex-row justify-end">
-      <div class="flex flex-col mx-24 pr-8 mt-2">
+      <div class="flex flex-col mx-20 pr-6 mt-2">
         <base-text variant="body" weight="300">Calls</base-text>
       </div>
     </div>
