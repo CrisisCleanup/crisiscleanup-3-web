@@ -13,7 +13,7 @@
     "format": "yarn lint-fix && yarn prettify",
     "deploy-development": "vue-cli-service build --mode development && cross-env VUE_APP_STAGE=development vue-cli-service s3-deploy",
     "deploy-staging": "vue-cli-service build --mode production && cross-env VUE_APP_STAGE=staging vue-cli-service s3-deploy",
-    "deploy-production": "vue-cli-service build --mode production && vue-cli-service s3-deploy",
+    "deploy-production": "vue-cli-service build --mode production && cross-env VUE_APP_STAGE=production vue-cli-service s3-deploy",
     "compile-icons": "./template-compiler.js",
     "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "cross-env VUE_CLI_BABEL_TARGET_NODE=true VUE_CLI_BABEL_TRANSPILE_MODULES=true NODE_ENV=test vue-cli-service test:unit --coverage",
