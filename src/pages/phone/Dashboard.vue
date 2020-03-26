@@ -30,25 +30,25 @@
           </div>
         </div>
         <!-- Second Column -->
-        <div class="flex flex=col w-2/3">
+        <div class="flex=col justify-between">
           <!-- Graph PLZ ADD IT-->
-          <!-- Leaderboard -->
-          <div class="flex flex-col w-1/2">
+          <div class="flex flex-row w-full justify-between">
+            <!-- Leaderboard -->
             <div
-              class="my-4 mx-3 bg-white shadow w-2/5 h-auto content-center flex-wrap "
+              class="my-4 mx-3 bg-white shadow w-2/3 h-auto content-center flex-wrap "
             >
               <Leaderboard />
             </div>
-          </div>
-          <!-- News / Training Card -->
-          <div class="flex flex-col w-1/2">
-            <div
-              class="my-4 mx-3 bg-white shadow w-2/5 h-auto content-center flex-wrap "
-            >
-              <training-card />
+            <!-- News / Training Card -->
+            <div class="flex-col">
+              <div
+                class="my-4 mx-3 bg-white shadow  h-auto content-center flex-wrap "
+              >
+                <training-card />
+              </div>
             </div>
           </div>
-          <div class="flex flex-col">
+          <div class="flex flex-row justify-between">
             <!-- Stories Card -->
             <div
               class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
