@@ -76,12 +76,12 @@ export default {
     return {
       lang: {
         login: this.$t('actions.login'),
-        signIn: this.$t('login.sign_in_msg'),
+        signIn: this.$t('loginForm.sign_in_msg'),
         forgot: this.$t('actions.forgot_password'),
         request: this.$t('actions.request_access'),
-        email: this.$t('login.email_placeholder'),
-        password: this.$t('login.password_placeholder'),
-        invalidCreds: this.$t('login.invalid_credentials_msg'),
+        email: this.$t('loginForm.email_placeholder'),
+        password: this.$t('loginForm.password_placeholder'),
+        invalidCreds: this.$t('loginForm.invalid_credentials_msg'),
       },
       email: '',
       password: '',
