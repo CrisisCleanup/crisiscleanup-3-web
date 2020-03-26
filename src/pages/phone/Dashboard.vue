@@ -1,48 +1,68 @@
 <template>
   <Loader :loading="loading" class="h-full overflow-auto py-4 px-6 bg-gray-100">
     <template #content>
-      <div class="flex">
-        <!-- Contact Card -->
-        <div
-          class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
-        >
-          <contact-card
-            :name="currentUser.full_name"
-            :mobile="currentUser.mobile"
-            :profile-src="currentUser.profilePictureUrl"
-            :available="agentAvailable"
-            :on-toggle="toggleAvailable"
-          />
+      <div class="flex flex-row justify-between">
+        <!-- Left Column -->
+        <div class="flex flex-col w-1/3">
+          <!-- Contact Card -->
+          <div
+            class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
+          >
+            <contact-card
+              :name="currentUser.full_name"
+              :mobile="currentUser.mobile"
+              :profile-src="currentUser.profilePictureUrl"
+              :available="agentAvailable"
+              :on-toggle="toggleAvailable"
+            />
+          </div>
+          <!-- Agent Analytics Card -->
+          <div
+            class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
+          >
+            <AgentAnalyticsCard />
+          </div>
+          <!-- Stats Cards -->
+          <div
+            class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
+          >
+            <genstatscard :stats="metrics ? metrics : null" />
+          </div>
+        </div>
+        <!-- Second Column -->
+        <div class="flex flex=col w-2/3">
+          <!-- Graph PLZ ADD IT-->
+          <!-- Leaderboard -->
+          <div class="flex flex-col w-1/2">
+            <div
+              class="my-4 mx-3 bg-white shadow w-2/5 h-auto content-center flex-wrap "
+            >
+              <Leaderboard />
+            </div>
+          </div>
+          <!-- News / Training Card -->
+          <div class="flex flex-col w-1/2">
+            <div
+              class="my-4 mx-3 bg-white shadow w-2/5 h-auto content-center flex-wrap "
+            >
+              <training-card />
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <!-- Stories Card -->
+            <div
+              class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
+            >
+              <stories-card />
+            </div>
+          </div>
         </div>
       </div>
-      <!-- Stats Cards -->
-      <div
-        class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
-      >
-        <genstatscard :stats="metrics ? metrics : null" />
-      </div>
+      <!--  -->
       <div
         class="my-4 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
       >
         <operatorstats />
-      </div>
-      <!-- Stories Card -->
-      <div
-        class="my-2 mx-3 bg-white shadow w-80 h-auto content-center flex-wrap "
-      >
-        <stories-card />
-      </div>
-      <!-- Training Card -->
-      <div
-        class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
-      >
-        <training-card />
-      </div>
-      <!-- Agent Analytics Card -->
-      <div
-        class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
-      >
-        <AgentAnalyticsCard />
       </div>
       <cc-popup :is-showing-modal="callPopupActive" />
     </template>
@@ -60,6 +80,7 @@ import operatorstats from '@/components/phone/OperatorStatisticsCard.vue';
 import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
 import AgentAnalyticsCard from '@/components/phone/AgentAnalyticsCard.vue';
 import ConnectCallPopUp from '@/components/phone/ConnectCallPopUp.vue';
+import Leaderboard from '@/components/phone/Leaderboard.vue';
 import { STATES as CCState } from '@/services/acs.service';
 
 export default {
@@ -73,6 +94,7 @@ export default {
     Loader,
     'cc-popup': ConnectCallPopUp,
     AgentAnalyticsCard,
+    Leaderboard,
   },
   data() {
     return {
