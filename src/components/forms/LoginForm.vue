@@ -41,7 +41,9 @@
       />
     </div>
     <div class="grid--forgot">
-      <base-link to="nav.forgot" text-variant="h2">{{ lang.forgot }}</base-link>
+      <base-link :to="nav.request_password_reset" text-variant="h2">{{
+        lang.forgot
+      }}</base-link>
     </div>
     <div class="grid--login">
       <base-button
@@ -82,6 +84,9 @@ export default {
         email: this.$t('loginForm.email_placeholder'),
         password: this.$t('loginForm.password_placeholder'),
         invalidCreds: this.$t('loginForm.invalid_credentials_msg'),
+      },
+      nav: {
+        request_password_reset: '/password/new',
       },
       email: '',
       password: '',
