@@ -142,12 +142,28 @@ button.outline:hover {
   @apply text-gray-100;
 }
 
+button.outline.disabled {
+  @apply text-crisiscleanup-grey-900;
+}
+
+button.outline.disabled:hover {
+  @apply text-crisiscleanup-grey-900;
+}
+
 button.text {
   background-color: transparent;
 }
 
 button.text:hover {
-  @apply bg-crisiscleanup-dark-100;
+  @apply bg-crisiscleanup-grey-100;
+}
+
+button.text.disabled {
+  @apply text-crisiscleanup-grey-900;
+}
+
+button.text.disabled:hover {
+  @apply text-crisiscleanup-grey-900;
 }
 
 button.small {
