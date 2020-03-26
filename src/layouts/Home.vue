@@ -11,7 +11,7 @@
         <div class="homegrid-survivors">
           <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
           <base-text font="display" variant="h2">
-            <span v-html="$t('homeVue.phone_or_website')" ></span>
+            <span v-html="$t('homeVue.phone_or_website')"></span>
           </base-text>
         </div>
       </div>
