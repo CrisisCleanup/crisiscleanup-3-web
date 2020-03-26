@@ -128,6 +128,16 @@ export const STATES = {
   PAUSED: 'AfterCallWork',
 };
 
+export const METRICS = {
+  ONLINE: 'agentsOnline',
+  STAFFED: 'agentsStaffed',
+  CONTACTS_QUEUED: 'contactsInQueue',
+  AGENTS_ON_CONTACT: 'agentsOnContact',
+  AVAILABLE: 'agentsAvailable',
+  AGENTS_ON_CALL: 'agentsOnCall',
+  NEEDED: 'agentsNeeded',
+};
+
 export const getAgent = () => new connect.Agent();
 
 export const setAgentState = state => {
