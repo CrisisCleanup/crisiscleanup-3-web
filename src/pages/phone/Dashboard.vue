@@ -12,8 +12,6 @@
               :name="currentUser.full_name"
               :mobile="currentUser.mobile"
               :profile-src="currentUser.profilePictureUrl"
-              :available="agentAvailable"
-              :on-toggle="toggleAvailable"
             />
           </div>
           <!-- Agent Analytics Card -->
@@ -58,14 +56,14 @@
           </div>
         </div>
       </div>
-      <cc-popup :is-showing-modal="callPopupActive" />
+      <cc-popup :is-showing-modal="callIncoming" />
     </template>
   </Loader>
 </template>
 
 <script>
 import User from '@/models/User';
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import Loader from '@/components/Loader.vue';
 import PeopleStoriesCard from '@/components/phone/PeopleStoriesCard.vue';
 import ContactCard from '@/components/phone/ContactCard.vue';
@@ -74,7 +72,6 @@ import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
 import AgentAnalyticsCard from '@/components/phone/AgentAnalyticsCard.vue';
 import ConnectCallPopUp from '@/components/phone/ConnectCallPopUp.vue';
 import Leaderboard from '@/components/phone/Leaderboard.vue';
-import { STATES as CCState } from '@/services/acs.service';
 
 export default {
   name: 'Phone',
@@ -97,20 +94,15 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
-    ...mapState('phone', ['agent', 'metrics']),
-    ...mapGetters('phone', ['connectReady', 'agentAvailable', 'contactState']),
-    callPopupActive() {
-      return [CCState.INCOMING, CCState.CONNECTING].includes(this.contactState);
-    },
+    ...mapGetters('phone', [
+      'connectReady',
+      'agentState',
+      'contactState',
+      'callIncoming',
+    ]),
   },
   methods: {
-    ...mapActions('phone', ['getRealtimeMetrics', 'setAgentState']),
-    async toggleAvailable() {
-      if (this.agentAvailable) {
-        return this.setAgentState(CCState.OFFLINE);
-      }
-      return this.setAgentState(CCState.ROUTABLE);
-    },
+    ...mapActions('phone', ['getRealtimeMetrics']),
   },
 };
 </script>
