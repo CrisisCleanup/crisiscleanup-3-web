@@ -63,6 +63,7 @@ import LoginForm from '@/components/forms/LoginForm';
 export const HomeNavigation = [
   {
     key: 'home',
+    route: '/login',
   },
   {
     key: 'aboutUs',
@@ -72,6 +73,7 @@ export const HomeNavigation = [
   },
   {
     key: 'map',
+    route: '/map',
   },
   {
     key: 'training',
@@ -90,9 +92,11 @@ export const FooterNavigation = [
   },
   {
     key: 'terms',
+    route: '/terms',
   },
   {
     key: 'privacy',
+    route: '/privacy',
   },
 ];
 

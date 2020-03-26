@@ -16,6 +16,7 @@ module.exports = {
         h4: '.75rem', //          ~12px
         body: '.9375rem', //      ~15px
         bodysm: '.75rem', //      ~12px
+        bodyxsm: '.65rem', //      ~10px
       },
       fontWeight: {
         h1: '600',

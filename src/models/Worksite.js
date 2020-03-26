@@ -91,7 +91,7 @@ export default class Worksite extends Model {
 
     const filterByClaimedOrg = array => {
       return array
-        .filter(type => type.claimed_by === organization.id)
+        .filter(type => type.claimed_by === (organization && organization.id))
         .sort((a, b) => {
           return (
             WorkType.commercialValues[b.work_type] -

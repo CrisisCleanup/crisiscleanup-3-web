@@ -102,6 +102,7 @@
     "vue-range-slider": "^0.6.0",
     "vue-router": "^3.1.6",
     "vue-select": "^3.4.0",
+    "vue-timers": "^2.0.4",
     "vue-toasted": "^1.1.28",
     "vue-types": "^1.7.0",
     "vue2-gmap-custom-marker": "^5.5.10",

@@ -55,7 +55,7 @@ export default {
         ur => ur.user_role === option.id,
       );
       if (currentUserRole && !currentUserRole.isApproved) {
-        text = `${text} (${this.$t('~~Pending')})`;
+        text = `${text} (${this.$t('userRolesSelect.pending')})`;
       }
       return text;
     },

@@ -1,5 +1,3 @@
-contact card
-
 <template>
   <div>
     <div class="flex flex-row justify-between">

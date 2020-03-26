@@ -3,13 +3,13 @@
     <base-button
       variant="outline"
       class="mx-1 px-3 py-1"
-      :text="$t('~~Request Redeploy')"
+      :text="$t('requestRedeploy.request_redeploy')"
       @click.native="showRedeployModal = true"
     ></base-button>
     <modal
       v-if="showRedeployModal"
       modal-classes="bg-white max-w-lg shadow"
-      :title="$t('~~Request Redeploy')"
+      :title="$t('requestRedeploy.request_redeploy')"
       closeable
       @close="
         () => {
@@ -19,11 +19,7 @@
     >
       <div class="text-justify flex flex-col p-3 justify-center">
         <div class="my-3">
-          {{
-            $t(
-              '~~Need access to another incident? Choose below, and we will review the request and either give you access or contact you. You should receive an email once access is granted. The process usually takes a few hours.',
-            )
-          }}
+          {{ $t('requestRedeploy.choose_an_incident') }}
         </div>
         <form-select
           :value="selectedIncidentId"
@@ -50,7 +46,7 @@
         <base-button
           variant="solid"
           :action="requestIncident"
-          :text="$t('~~Submit')"
+          :text="$t('actions.submit')"
           class="ml-2 p-3 px-6 text-xs"
         />
       </div>

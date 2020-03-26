@@ -26,7 +26,7 @@ const PhoneState = {
     state: null,
   },
   agentConfig: null,
-  metrics: null,
+  metrics: {},
   connectRunning: false,
   connectAuthed: false,
   streams: null,
@@ -58,7 +58,17 @@ const getters = {
 const actions = {
   async getRealtimeMetrics({ commit }) {
     const resp = await axios.get(PhoneApi('metrics'));
-    commit('setMetrics', resp.data.results);
+    const newState = {};
+    resp.data.results.map(({ name, value }) => {
+      newState[camelCase(name)] = parseFloat(value);
+      return newState;
+    });
+    // custom metrics
+    const metric = ConnectService.METRICS;
+    const needed =
+      newState[metric.CONTACTS_QUEUED] - newState[metric.AVAILABLE];
+    newState[metric.NEEDED] = needed >= 0 ? needed : 0;
+    commit('setMetrics', newState);
     return resp;
   },
   async initConnect({ commit }, htmlEl) {
@@ -126,12 +136,7 @@ const mutations = {
   setAgent(state, agent) {
     state.agent = agent;
   },
-  setMetrics(state, metrics) {
-    const newState = {};
-    metrics.map(({ name, value }) => {
-      newState[camelCase(name)] = parseFloat(value);
-      return newState;
-    });
+  setMetrics(state, newState) {
     state.metrics = newState;
   },
   setAgentState(state, { newState, agent }) {

@@ -260,13 +260,26 @@
         <div class="flex" v-can="['approve_orgs_full']">
           <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('~~Organizations for Approval') }}
+              {{ $t('dashboard.pending_affiliates') }}
             </div>
             <div class="p-4">
               <OrganizationApprovalTable
                 :organizations="organizations"
                 @reload="getOrganizationsForApproval"
               ></OrganizationApprovalTable>
+            </div>
+          </div>
+        </div>
+        <div class="flex" v-can="['move_orgs']">
+          <div class="m-4 pt-2 shadow bg-white w-full">
+            <div class="py-4 px-4 text-gray-500 border-b">
+              {{ $t('~~Redeploy Requests') }}
+            </div>
+            <div class="p-4">
+              <IncidentApprovalTable
+                :requests="incident_requests"
+                @reload="getIncidentRequests"
+              ></IncidentApprovalTable>
             </div>
           </div>
         </div>
@@ -297,12 +310,14 @@ import Loader from '@/components/Loader';
 import InviteUsers from './organization/InviteUsers';
 import OrganizationApprovalTable from '../components/OrganizationApprovalTable';
 import RedeployRequest from './RedeployRequest';
+import IncidentApprovalTable from '../components/IncidentApprovalTable';
 
 const responseDialog = create(MessageResponseDialog);
 
 export default {
   name: 'Dashboard',
   components: {
+    IncidentApprovalTable,
     RedeployRequest,
     OrganizationApprovalTable,
     InviteUsers,
@@ -318,6 +333,7 @@ export default {
       totalClosed: 0,
       totalInProgess: 0,
       organizations: [],
+      incident_requests: [],
       loading: false,
       datacollection: null,
       pendingViewLoading: false,
@@ -568,6 +584,7 @@ export default {
         this.getInProgessCount(),
         this.getClosedCount(),
         this.getOrganizationsForApproval(),
+        this.getIncidentRequests(),
       ]);
     },
     async getOrganizationsForApproval() {
@@ -585,6 +602,14 @@ export default {
       );
       if (results.entities.organizations) {
         this.organizations = [...results.entities.organizations];
+      }
+    },
+    async getIncidentRequests() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
+      );
+      if (response.data) {
+        this.incident_requests = [...response.data.results];
       }
     },
     async statusValueChange(value, workType, worksiteId) {

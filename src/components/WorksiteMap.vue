@@ -222,7 +222,7 @@ export default {
     }
     this.mapLoading = true;
     const response = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
+      `${process.env.VUE_APP_API_BASE_URL}/worksites_public`,
       {
         params: { ...this.query },
       },
