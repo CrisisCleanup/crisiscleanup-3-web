@@ -60,9 +60,10 @@
           </div>
         </div>
       </div>
-      <!-- Divider -->
+      <!-- Divider
       <hr />
-      <!-- States -->
+      -->
+      <!-- States
       <div class="flex flex-col justify-around ml-12 mt-4 mb-4 mr-12">
         <base-text
           variant="bodysm"
@@ -81,6 +82,7 @@
           <tag closeable>Missouri</tag>
         </base-button>
       </div>
+      -->
       <!-- Footer -->
       <div class="flex justify-around"></div>
       <div slot="footer" class="flex p-1 justify-center mb-3">
