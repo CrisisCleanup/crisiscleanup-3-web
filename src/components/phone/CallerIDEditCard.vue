@@ -7,72 +7,87 @@
           isShowingModal = true;
         }
       "
-      text="Show Modal"
+      text="Edit Caller ID"
+      class="px-3 py-2"
     ></base-button>
     <modal
       v-if="isShowingModal"
-      title="Basic Modal"
       modal-classes="w-108"
       @ok="isShowingModal = false"
       @close="isShowingModal = false"
     >
-      <div class="flex justify-around">
+      <div class="flex flex-col justify-around ml-12 mr-12 mt-8">
         <!-- Greeting -->
-        <base-text variant="h1" class="text-crisiscleanup-dark-500">
+        <base-text
+          variant="body"
+          weight="700"
+          class="text-crisiscleanup-dark-500 text-center pb-3"
+        >
           Welcome back John!
         </base-text>
         <base-text
-          variant="h1"
+          variant="body"
           weight="300"
-          class="text-crisiscleanup-dark-200"
+          class="text-crisiscleanup-dark-300 text-center pb-3"
         >
-          Please confirm the number you would like to use today. <br />
-          Don't worry, we will hide it on all inbound and outbond <br />
-          calls for your protection
+          Please confirm the number you would like to use today. Don't worry, we
+          will hide it on all inbound and outbond calls for your protection
         </base-text>
         <div class="flex flex-col justify-around">
           <!-- Phone # -->
           <base-button
             variant="outline"
             size="medium"
-            :icon="togglePhone ? 'updown' : 'up'"
+            :ccu-icon="togglePhone ? 'updown' : 'up'"
             :action="() => (togglePhone = !togglePhone)"
+            class="pb-3 px-5 text-left"
             >Phone Number</base-button
           >
           <!-- Languages -->
-          <base-text
-            variant="h1"
-            weight="300"
-            class="text-crisiscleanup-dark-200"
-          >
-            Choose the languages you work weight
-          </base-text>
-          <base-button
-            variant="outline"
-            size="medium"
-            :icon="toggleLang ? 'updown' : 'up'"
-            :action="() => (toggleLang = !toggleLang)"
-          >
-            <tag closeable>English</tag> <tag closeable>Spanish</tag>
-          </base-button>
+          <div class="flex flex-col justify-start pb-3 m-1 pt-3">
+            <base-text
+              variant="bodysm"
+              weight="300"
+              class="text-crisiscleanup-dark-300 pb-3"
+            >
+              Choose the languages you work with
+            </base-text>
+            <base-button
+              variant="outline"
+              size="medium"
+              :ccu-icon="toggleLang ? 'updown' : 'up'"
+              :action="() => (toggleLang = !toggleLang)"
+              class="pt-1 pb-2 px-5"
+            >
+              <tag closeable>English</tag> <tag closeable>Spanish</tag>
+            </base-button>
+          </div>
         </div>
       </div>
       <!-- Divider -->
       <hr />
-      <div class="flex flex-col justify-around">
-        <!-- States -->
+      <!-- States -->
+      <div class="flex flex-col justify-around ml-12 mt-4 mb-4 mr-12">
+        <base-text
+          variant="bodysm"
+          weight="300"
+          class="text-crisiscleanup-dark-300 pb-3"
+        >
+          Also confirm the states you will make calls to
+        </base-text>
         <base-button
           variant="outline"
           size="medium"
-          :icon="toggleStates ? 'updown' : 'up'"
+          :ccu-icon="toggleStates ? 'updown' : 'up'"
           :action="() => (toggleStates = !toggleStates)"
+          class="pb-2 px-5 pt-2"
         >
           <tag closeable>Missouri</tag>
         </base-button>
       </div>
       <!-- Footer -->
       <div class="flex justify-around"></div>
-      <div slot="footer" class="flex p-1 justify-center">
+      <div slot="footer" class="flex p-1 justify-center mb-3">
         <base-button
           variant="solid"
           class="px-3 py-2"
@@ -89,6 +104,8 @@
 </template>
 
 <script>
+import VueTypes from 'vue-types';
+
 export default {
   name: 'EditCallerID',
   data() {
@@ -97,6 +114,9 @@ export default {
       toggleLang: false,
       toggleStates: false,
     };
+  },
+  props: {
+    isShowingModal: VueTypes.bool.def(false),
   },
 };
 </script>
