@@ -98,6 +98,7 @@ export default {
       incidents: [],
       locations: [],
       workTypeMap: {},
+      statusMap: {},
       selectedIncident: null,
       lang: {
         register: this.$t('actions.register'),
@@ -123,10 +124,13 @@ export default {
   },
   async mounted() {
     const incidentsResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations&limit=150`,
+      `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations&limit=150?sort=-start_at`,
     );
     const workTypesResponse = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/work_types`,
+    );
+    const statusResponse = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/statuses`,
     );
     this.incidents = incidentsResponse.data.results;
     this.workTypeMap = workTypesResponse.data.results.reduce(function(
@@ -137,6 +141,10 @@ export default {
       return map;
     },
     {});
+    this.statusMap = statusResponse.data.results.reduce(function(map, obj) {
+      map[obj.status] = obj.status_name_t;
+      return map;
+    }, {});
     this.selectedIncident = this.incidents[this.incidents.length - 1].id;
     await this.setLocations(this.incidents[this.incidents.length - 1].id);
   },
@@ -157,10 +165,12 @@ export default {
     },
     displayWorksite(worksite) {
       const popup = L.popup({ className: 'pixi-popup' });
-      let popupContent = `<b>${worksite.name} (${worksite.case_number}</b>)`;
+      let popupContent = `<b>${worksite.address} (${worksite.case_number}</b>)`;
 
       worksite.work_types.forEach(worktype => {
-        popupContent += `<div>${this.workTypeMap[worktype.work_type]}</div>`;
+        popupContent += `<div>${this.workTypeMap[worktype.work_type]}(${
+          this.statusMap[worktype.status]
+        })</div>`;
       });
 
       popup

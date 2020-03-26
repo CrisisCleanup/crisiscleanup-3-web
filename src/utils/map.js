@@ -167,6 +167,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             markerSprite.legend = marker.city || marker.label;
             markerSprite.location = marker.location;
             markerSprite.name = marker.name;
+            markerSprite.address = marker.address;
             markerSprite.case_number = marker.case_number;
             markerSprite.work_types = marker.work_types;
             markerSprite.active_work_type = workType;
