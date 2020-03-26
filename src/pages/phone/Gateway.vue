@@ -54,6 +54,7 @@
               variant="solid"
               class="ml-2 p-3 px-6 text-xs"
               size="large"
+              :show-spinner="popupOpen"
               :action="authenticate"
             >
               {{ lang.action.button }}
@@ -73,6 +74,7 @@ import { EventBus } from '@/event-bus';
 import Loader from '@/components/Loader.vue';
 import Agent from '@/models/Agent';
 import User from '@/models/User';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'PhoneGateway',
@@ -87,6 +89,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('phone', ['popupOpen']),
     lang() {
       return {
         title: this.$t('~~Welcome to Crisis Cleanup Phone Center'),
@@ -143,7 +146,6 @@ export default {
       return agent;
     },
     authenticate() {
-      this.loading = true;
       EventBus.$emit('acs:requestAgent');
     },
     async copyText(text) {

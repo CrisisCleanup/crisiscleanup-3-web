@@ -19,10 +19,16 @@ Vue.use(VueLog, {
 const Log = Vue.log();
 
 export const ConnectConfig = {
+  // reference @crisiscleanup/amazon-connect-streams
+  // for custom options
   ccpUrl: process.env.VUE_APP_AWS_CCP_URL,
   region: process.env.VUE_APP_AWS_CCP_REGION,
   allowFramedSoftphone: false,
-  loginPopup: false,
+  loginPopup: {
+    autoOpen: false,
+    autoClose: true,
+    forceWindow: true,
+  },
   loginUrl: `${process.env.VUE_APP_BASE_URL}/sp/acs`,
 };
 
@@ -105,7 +111,7 @@ export const setPopup = ({ open } = { open: true }) => {
   connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
   connect.core.loginWindow = connect.core
     .getPopupManager()
-    .open(loginUrl, connect.MasterTopics.LOGIN_POPUP);
+    .open(loginUrl, connect.MasterTopics.LOGIN_POPUP, ConnectConfig.loginPopup);
   return true;
 };
 

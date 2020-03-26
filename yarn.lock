@@ -1155,6 +1155,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@crisiscleanup/amazon-connect-streams@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@crisiscleanup/amazon-connect-streams/-/amazon-connect-streams-1.5.1.tgz#a9f3f5dced541ad8c144a2d95cc9410a884a61f4"
+  integrity sha512-WZaEVvtTZaHBRdqDonE2bp8Fr7g+PnzDBXT4ISXTc04eiNnH/231E9I4Nm3Jt883EH5AOFjGRGRzEXzJD9riIA==
+
 "@crisiscleanup/connect-rtc@^1.1.4":
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/@crisiscleanup/connect-rtc/-/connect-rtc-1.1.4.tgz#f69f2d6995fa216292c5261f41a40b8dcff868f7"
@@ -5184,11 +5189,6 @@ alphanum-sort@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
-
-amazon-connect-streams@^1.4.5:
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/amazon-connect-streams/-/amazon-connect-streams-1.4.5.tgz#8589fcaa2702fe6cb1708a85107e6e9de8655801"
-  integrity sha512-AlDAMjb/ot6omE69X3ULcUesnjKW+6YDM7lrESPYvoo6yZldu1nv3DmwEbmrDnZMgzsj2Pl3gnB4w8N6NdA6rw==
 
 amdefine@>=0.0.4:
   version "1.0.1"
