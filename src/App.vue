@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import 'amazon-connect-streams';
+import '@crisiscleanup/amazon-connect-streams';
 import '@crisiscleanup/connect-rtc';
 import { mapActions, mapGetters } from 'vuex';
 import CCP from '@/components/phone/CCP.vue';
