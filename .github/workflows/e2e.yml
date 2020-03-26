@@ -100,6 +100,9 @@ jobs:
       - name: Wait for Api
         run: 'dockerize -wait-retry-interval 5s -timeout 240s -wait http://localhost:5000/health'
 
+      - name: Dump Api Logs
+        run: docker-compose logs
+
       - name: Run Cypress
         uses: cypress-io/github-action@v1.23.2
         with:
