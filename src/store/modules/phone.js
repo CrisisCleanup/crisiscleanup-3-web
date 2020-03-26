@@ -37,11 +37,19 @@ const PhoneState = {
 // getters
 const getters = {
   agentId: state => (state.agent ? state.agent.agent_id : null),
+  agentState: state =>
+    state.agentState !== null
+      ? state.agentState
+      : ConnectService.STATES.OFFLINE,
   connectRunning: state => state.connectRunning, // is connect initialized?
   connectReady: state => state.connectRunning && state.agentConfig !== null, // is connect done w/ init and auth?
   popupOpen: state => state.popupOpen,
   authToken: state => (state.credentials ? state.credentials.AccessToken : ''),
   agentAvailable: state => state.agentState === ConnectService.STATES.ROUTABLE,
+  callIncoming: state =>
+    [ConnectService.STATES.INCOMING, ConnectService.STATES.CONNECTING].includes(
+      state.contact ? state.contact.state : null,
+    ),
   contactState: state =>
     state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
 };
