@@ -12,6 +12,7 @@
     <!-- Individual Stories Card -->
     <div class="stories">
       <i-story />
+      <i-story />
     </div>
   </div>
 </template>
