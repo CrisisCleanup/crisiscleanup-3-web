@@ -33,6 +33,7 @@
             </div>
           </div>
         </div>
+        <!---
         <div class="justify-between flex flex-row m-3">
           <div class="flex flex-col w-1/2">
             <base-text
@@ -46,6 +47,7 @@
             <base-text class="text-sm">Texas, Louisiana</base-text>
           </div>
         </div>
+        -->
         <div class="flex flex-row m-3">
           <div class="flex flex-col w-1/2">
             <base-text
