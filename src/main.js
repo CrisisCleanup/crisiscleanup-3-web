@@ -42,14 +42,14 @@ import VTooltip from 'v-tooltip';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 import VueAxios from 'vue-axios';
+import VueClipboard from 'vue-clipboard2';
 import VueI18n from 'vue-i18n';
 import Popover from 'vue-js-popover';
 import * as ModalDialogs from 'vue-modal-dialogs';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import vSelect from 'vue-select';
-import Datepicker from 'vuejs-datepicker';
 import Toasted from 'vue-toasted';
-import VueClipboard from 'vue-clipboard2';
+import Datepicker from 'vuejs-datepicker';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -123,6 +123,9 @@ Sentry.init({
     new SentryIntegrations.Vue({
       Vue,
       attachProps: true,
+      // sets whether to log errors in sentry
+      // AND with the standard web log,
+      // not errors overall
       logErrors: process.env.NODE_ENV !== 'production',
     }),
   ],
