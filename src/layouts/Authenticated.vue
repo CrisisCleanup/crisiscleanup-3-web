@@ -30,7 +30,11 @@
               </div>
             </div>
             <div class="flex items-center overflow-hidden">
-              <v-popover popover-class="menu-popover" placement="bottom-end">
+              <v-popover
+                popover-class="menu-popover"
+                placement="bottom-end"
+                data-cy="auth.userprofile"
+              >
                 <div class="flex cursor-pointer items-center">
                   <img
                     :src="currentUser && currentUser.profilePictureUrl"
@@ -52,6 +56,7 @@
                   >
                   <!--                <button v-can="['update_portal_settings']">New</button>-->
                   <div
+                    data-cy="auth.userprofile.logout"
                     class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
                     @click="
                       () => {

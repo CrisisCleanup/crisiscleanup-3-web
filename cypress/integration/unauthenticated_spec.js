@@ -46,9 +46,9 @@ describe('unAuthenticated Layout', () => {
           expect(user.access_token).to.be.a('string');
         });
       // logout
-      cy.contains('Demo User').click();
-      cy.contains('Logout').click();
-      cy.url().should('match', /login/);
+      cy.get('cy|auth.userprofile').click();
+      cy.get('cy|auth.userprofile.logout').as('UserProfile.Logout');
+      cy.get('@UserProfile.Logout').should('be.visible');
     });
   });
 
