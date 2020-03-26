@@ -3,7 +3,7 @@
     <div class="flex flex-row justify-between">
       <!--- media/picture --->
       <div class="flex-col m-3">
-        <img src="" alt="PFP" />
+        <img src="@/assets/newstrainingss.jpg" alt="PFP" />
       </div>
       <div class="flex-col m-3">
         <!--- body blurb --->
