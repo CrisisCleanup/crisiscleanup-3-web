@@ -60,29 +60,6 @@
           </div>
         </div>
       </div>
-      <!-- Divider
-      <hr />
-      -->
-      <!-- States
-      <div class="flex flex-col justify-around ml-12 mt-4 mb-4 mr-12">
-        <base-text
-          variant="bodysm"
-          weight="300"
-          class="text-crisiscleanup-dark-300 pb-3"
-        >
-          Also confirm the states you will make calls to
-        </base-text>
-        <base-button
-          variant="outline"
-          size="medium"
-          :ccu-icon="toggleStates ? 'updown' : 'up'"
-          :action="() => (toggleStates = !toggleStates)"
-          class="pb-2 px-5 pt-2"
-        >
-          <tag closeable>Missouri</tag>
-        </base-button>
-      </div>
-      -->
       <!-- Footer -->
       <div class="flex justify-around"></div>
       <div slot="footer" class="flex p-1 justify-center mb-3">

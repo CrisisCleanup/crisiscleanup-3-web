@@ -37,12 +37,16 @@ contact card
       <more-info v-if="toggleOpen" />
     </div>
     <!--- Buttons --->
-    <div class="flex flex-row justify-around m-3">
+    <div class="flex flex-row justify-around items-center m-3">
       <div class="flex-col">
         <base-button
-          class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 font-bold text-white py-2 px-12"
+          class="py-2 px-12"
+          size="large"
+          variant="solid"
+          :action="toggleAvailable"
+          :disabled="!currentState.enabled"
         >
-          {{ available ? 'Available' : 'Offline' }}
+          {{ lang.action.text }}
         </base-button>
       </div>
       <div class="flex-col">
@@ -56,6 +60,8 @@ contact card
 
 <script>
 import VueTypes from 'vue-types';
+import { mapGetters, mapActions } from 'vuex';
+import { STATES as CCState } from '@/services/acs.service';
 import ContactMoreInfo from './ContactMoreInfo.vue';
 
 export default {
@@ -67,13 +73,55 @@ export default {
     name: VueTypes.string,
     mobile: VueTypes.string,
     profileSrc: VueTypes.string,
-    available: VueTypes.bool,
-    onToggle: VueTypes.func,
   },
   data() {
     return {
       toggleOpen: false,
     };
+  },
+  methods: {
+    ...mapActions('phone', ['setAgentState']),
+    async toggleAvailable() {
+      if (this.agentAvailable) {
+        return this.setAgentState(CCState.OFFLINE);
+      }
+      return this.setAgentState(CCState.ROUTABLE);
+    },
+  },
+  computed: {
+    ...mapGetters('phone', ['agentState', 'agentAvailable']),
+    currentState() {
+      const state = {
+        text: '~~Start Taking Calls',
+        enabled: true,
+      };
+      switch (this.agentState) {
+        case CCState.ROUTABLE:
+          state.text = '~~Stop Taking Calls';
+          break;
+        case CCState.PENDING:
+        case CCState.ON_CALL:
+        case CCState.CONNECTING:
+        case CCState.CONNECTED:
+          state.text = '~~Ready for Next Call';
+          state.enabled = false;
+          break;
+        case CCState.PAUSED:
+          state.text = '~~Ready for Next Call';
+          break;
+        default:
+          break;
+      }
+      state.text = this.$t(state.text);
+      return state;
+    },
+    lang() {
+      return {
+        action: {
+          text: this.currentState.text,
+        },
+      };
+    },
   },
 };
 </script>
