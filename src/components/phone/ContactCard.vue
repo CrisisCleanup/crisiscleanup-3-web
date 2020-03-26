@@ -42,7 +42,7 @@ contact card
         <base-button
           class="bg-crisiscleanup-dark-red hover:bg-crisiscleanup-red-100 font-bold text-white py-2 px-12"
         >
-          Unavailable
+          {{ available ? 'Available' : 'Offline' }}
         </base-button>
       </div>
       <div class="flex-col">
@@ -67,6 +67,8 @@ export default {
     name: VueTypes.string,
     mobile: VueTypes.string,
     profileSrc: VueTypes.string,
+    available: VueTypes.bool,
+    onToggle: VueTypes.func,
   },
   data() {
     return {
