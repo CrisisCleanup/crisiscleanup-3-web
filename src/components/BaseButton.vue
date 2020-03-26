@@ -64,7 +64,7 @@ export default {
         'large text-h3 font-h3': this.size === 'large',
         'medium text-sans text-h4 font-h4': this.size === 'medium',
         'small text-bodysm font-bodysm': this.size === 'small',
-        'text-crisiscleanup-grey-900': this.disabled,
+        disabled: this.disabled,
         // **** DEPRECATED ****
         primary: this.type === 'primary',
         danger: this.type === 'danger',
@@ -126,6 +126,10 @@ button.solid {
 
 button.solid:hover {
   @apply bg-crisiscleanup-yellow-100;
+}
+
+button.solid.disabled {
+  @apply bg-crisiscleanup-dark-200 text-gray-100;
 }
 
 button.outline {
