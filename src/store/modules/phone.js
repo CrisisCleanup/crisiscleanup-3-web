@@ -128,14 +128,12 @@ const mutations = {
   },
   setAgentState(state, { newState, agent }) {
     let agentState = newState;
-    if (agent) {
-      agentState = agentState || agent.getState();
+    if (agent && newState === null) {
+      agentState = agent.getState();
       agentState = ConnectService.parseAgentState(agentState);
     }
-    if (agentState !== null) {
-      Log.debug('new state inbound:', agentState);
-      state.agentState = agentState;
-    }
+    Log.debug('new state inbound:', agentState);
+    state.agentState = agentState;
   },
   setConnectState(state, { running, authed, config }) {
     state.connectRunning = running;
@@ -146,7 +144,7 @@ const mutations = {
     state.popupOpen = newState;
   },
   setContact(state, newState) {
-    state.contact = { ...state, ...newState };
+    state.contact = { ...state.contact, ...newState };
   },
 };
 

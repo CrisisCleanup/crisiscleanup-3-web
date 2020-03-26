@@ -116,7 +116,6 @@ export const setPopup = ({ open } = { open: true }) => {
 };
 
 export const STATES = {
-  AVAILABLE: connect.AgentStateType.AVAILABLE,
   OFFLINE: connect.AgentStateType.OFFLINE,
   ROUTABLE: connect.AgentStateType.ROUTABLE,
   NOT_ROUTABLE: connect.AgentStateType.NOT_ROUTABLE,
@@ -124,6 +123,9 @@ export const STATES = {
   CONNECTING: connect.ContactStateType.CONNECTING,
   CONNECTED: connect.ContactStateType.CONNECTED,
   POLLING: 'polling',
+  ON_CALL: 'Busy',
+  PENDING: 'PendingBusy',
+  PAUSED: 'AfterCallWork',
 };
 
 export const getAgent = () => new connect.Agent();
@@ -136,12 +138,15 @@ export const setAgentState = state => {
 };
 
 export const parseAgentState = stateEvent => {
-  const state = Object.entries(STATES).map((key, val) => {
+  const state = Object.values(STATES).filter(val => {
     let stateType = stateEvent;
     if (typeof stateEvent === 'object') {
       stateType = stateEvent.type;
+      if (stateType.toLowerCase() === 'system') {
+        stateType = stateEvent.name;
+      }
     }
-    return val === stateType.toLowerCase() ? val : null;
+    return val.toLowerCase() === stateType.toLowerCase();
   });
   return state.length >= 1 ? state[0] : null;
 };
