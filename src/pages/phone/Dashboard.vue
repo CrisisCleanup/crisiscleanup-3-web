@@ -3,7 +3,7 @@
     <template #content>
       <div class="flex flex-row justify-between">
         <!-- Left Column -->
-        <div class="flex flex-col w-1/3">
+        <div class="flex flex-col">
           <!-- Contact Card -->
           <div
             class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
@@ -22,11 +22,11 @@
           >
             <AgentAnalyticsCard />
           </div>
-          <!-- Stats Cards -->
+          <!-- Operator Stats -->
           <div
-            class="my-2 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap"
+            class="my-4 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
           >
-            <genstatscard :stats="metrics ? metrics : null" />
+            <operatorstats />
           </div>
         </div>
         <!-- Second Column -->
@@ -58,12 +58,6 @@
           </div>
         </div>
       </div>
-      <!--  -->
-      <div
-        class="my-4 mx-3 bg-white shadow w-64 h-auto content-center flex-wrap "
-      >
-        <operatorstats />
-      </div>
       <cc-popup :is-showing-modal="callPopupActive" />
     </template>
   </Loader>
@@ -75,7 +69,6 @@ import { mapActions, mapState, mapGetters } from 'vuex';
 import Loader from '@/components/Loader.vue';
 import PeopleStoriesCard from '@/components/phone/PeopleStoriesCard.vue';
 import ContactCard from '@/components/phone/ContactCard.vue';
-import genstatscard from '@/components/phone/GeneralStatsCard.vue';
 import operatorstats from '@/components/phone/OperatorStatisticsCard.vue';
 import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
 import AgentAnalyticsCard from '@/components/phone/AgentAnalyticsCard.vue';
@@ -86,7 +79,6 @@ import { STATES as CCState } from '@/services/acs.service';
 export default {
   name: 'Phone',
   components: {
-    genstatscard,
     operatorstats,
     'contact-card': ContactCard,
     'stories-card': PeopleStoriesCard,
