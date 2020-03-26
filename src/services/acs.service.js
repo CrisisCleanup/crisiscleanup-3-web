@@ -102,6 +102,7 @@ export const setPopup = ({ open } = { open: true }) => {
     }
     return false;
   }
+  connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
   connect.core.loginWindow = connect.core
     .getPopupManager()
     .open(loginUrl, connect.MasterTopics.LOGIN_POPUP);
