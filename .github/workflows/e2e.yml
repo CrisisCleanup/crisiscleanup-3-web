@@ -14,7 +14,13 @@ env:
   VUE_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_API_KEY }}
   VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
   VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
-  VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
+  VUE_APP_AWS_CCP_REGION: 'us-east-1'
+  VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccudev'
+  VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUDevConnectRole'
+  VUE_APP_CCP_INSTANCE: 89c1729b-4547-4548-9508-9365b71e586b
+  VUE_APP_AWS_CCP_URL: https://cchotline.awsapps.com/connect/ccp#
+  VUE_APP_API_BASE_URL: 'http://localhost:5000'
+  VUE_APP_BASE_URL: 'http://localhost:8080'
 
 jobs:
   build_id:
@@ -120,3 +126,8 @@ jobs:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CHILD_CONCURRENCY: 1
+          VUE_APP_AWS_CCP_REGION: 'us-east-1'
+          VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccudev'
+          VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUDevConnectRole'
+          VUE_APP_CCP_INSTANCE: 89c1729b-4547-4548-9508-9365b71e586b
+          VUE_APP_AWS_CCP_URL: https://cchotline.awsapps.com/connect/ccp#

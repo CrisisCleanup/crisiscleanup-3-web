@@ -17,16 +17,16 @@ describe('Dashboard', () => {
   });
 
   it('Loads and matches snapshots', () => {
-    cy.url().should('include', '/incident/158/dashboard');
+    cy.url().should('include', 'dashboard');
     cy.get('@NavDashboard').should('have.class', 'router-link-active');
     cy.percySnapshot('Dashboard');
   });
 
   it('Navigates to the correct routes', () => {
     cy.get('@NavDashboard').click();
-    cy.url().should('include', '/incident/158/dashboard');
+    cy.url().should('include', 'dashboard');
     cy.get('@NavCases').click();
-    cy.url().should('include', '/incident/158/cases/new');
+    cy.url().should('include', 'cases/new');
     cy.get('@NavMyOrg').click();
     cy.url().should('include', '/organization/invitations');
   });
