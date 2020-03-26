@@ -2130,7 +2130,11 @@ exports[`Storyshots Layouts|HomeLayout With All 1`] = `
           <p
             class="text-h2 font-h2 font-display"
           >
-            1 (800) 451 1954
+            <a
+              href="https://www.coronacommunity.org"
+            >
+              coronacommunity.org
+            </a>
           </p>
         </div>
       </div>
@@ -2198,7 +2202,11 @@ exports[`Storyshots Layouts|HomeLayout With Basic Content 1`] = `
           <p
             class="text-h2 font-h2 font-display"
           >
-            1 (800) 451 1954
+            <a
+              href="https://www.coronacommunity.org"
+            >
+              coronacommunity.org
+            </a>
           </p>
         </div>
       </div>
@@ -2292,7 +2300,11 @@ exports[`Storyshots Layouts|HomeLayout With Overlay 1`] = `
           <p
             class="text-h2 font-h2 font-display"
           >
-            1 (800) 451 1954
+            <a
+              href="https://www.coronacommunity.org"
+            >
+              coronacommunity.org
+            </a>
           </p>
         </div>
       </div>
@@ -2517,7 +2529,11 @@ exports[`Storyshots Pages|NotFound With Defaults 1`] = `
           <p
             class="text-h2 font-h2 font-display"
           >
-            1 (800) 451 1954
+            <a
+              href="https://www.coronacommunity.org"
+            >
+              coronacommunity.org
+            </a>
           </p>
         </div>
       </div>

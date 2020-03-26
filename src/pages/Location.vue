@@ -119,7 +119,7 @@
               "
             >
               <base-text :weight="400">{{
-                $t('~~Related Organizations')
+                $t('locationVue.related_organizations')
               }}</base-text>
               <div
                 v-for="organization in relatedOrganizations"
@@ -140,7 +140,7 @@
             </div>
             <div v-if="isIncidentRelated && relatedIncidents.length">
               <base-text :weight="400">{{
-                $t('~~Related Incidents')
+                $t('locationVue.related_incidents')
               }}</base-text>
               <div
                 v-for="incident in relatedIncidents"
@@ -392,12 +392,9 @@ export default {
       if (this.isPrimaryResponseArea && value.primary_location) {
         const result = await messageBox({
           title: this.$t('locationVue.existing_location'),
-          content: this.$t(
-            '~~A similar location currently exists for {organization}. Do you want to continue creating a new one, or edit the existing one?',
-            {
-              organization: value.name,
-            },
-          ),
+          content: this.$t('locationVue.location_already_exists_organization', {
+            organization: value.name,
+          }),
           actions: {
             continue: {
               text: this.$t('actions.create_new'),
@@ -433,7 +430,7 @@ export default {
         if (existingLocation) {
           const result = await messageBox({
             title: this.$t('locationVue.existing_location'),
-            content: this.$t('locationVue.location_already_exists', {
+            content: this.$t('locationVue.location_already_exists_incident', {
               incident: incident.name,
             }),
             actions: {
