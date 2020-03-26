@@ -104,5 +104,10 @@ export default {
   methods: {
     ...mapActions('phone', ['getRealtimeMetrics']),
   },
+  async mounted() {
+    this.loading = true;
+    await this.getRealtimeMetrics();
+    this.loading = false;
+  },
 };
 </script>
