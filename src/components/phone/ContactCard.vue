@@ -4,7 +4,7 @@ contact card
   <div>
     <div class="flex flex-row justify-between">
       <div class="flex-col m-3">
-        <img :src="profileSrc" alt="PFP" />
+        <img :src="profileSrc" alt="PFP" class="rounded-full" />
       </div>
       <div class="flex-col justify-between m-3">
         <div class="flex flex-row justify-between">
