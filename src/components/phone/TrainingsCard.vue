@@ -2,13 +2,13 @@
   <div>
     <div class="flex flex-row justify-between">
       <!--- media/picture --->
-      <div class="flex-col m-3">
-        <img src="" alt="PFP" />
+      <div class="w-1/6 m-3">
+        <img :src="imagePath" alt="Video Preview" />
       </div>
-      <div class="flex-col m-3">
+      <div class="w-4/6 my-4">
         <!--- body blurb --->
         <base-text variant="bodysm" class="justify-between">
-          Excepteur sint occaecat cupidatat non proident, sunt mollit anim id.
+          {{ description }}
         </base-text>
         <div class="flex flex-row justify-between">
           <div class="flex-col">
@@ -17,21 +17,19 @@
               variant="bodysm"
               class="justify-between text-crisiscleanup-grey-800 alight-left"
             >
-              10 Minutes
+              {{ timeToComplete }}
             </base-text>
           </div>
-          <div class="flex-col">
-            <!--- Training Start Button --->
-            <div id="Trainingbtn" class="ml-auto m-1">
-              <base-button
-                class="bg-crisiscleanup-yellow-300 hover:bg-crisiscleanup-yellow-100 text-black align-right py-1 px-5"
-                href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
-              >
-                Start
-              </base-button>
-            </div>
-          </div>
         </div>
+      </div>
+      <div class="flex w-1/6 items-center">
+        <!--- Training Start Button --->
+        <base-button
+          class="bg-crisiscleanup-yellow-300 hover:bg-crisiscleanup-yellow-100 text-black px-4 py-1"
+          href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
+        >
+          Start
+        </base-button>
       </div>
     </div>
     <!-- line -->
@@ -40,7 +38,39 @@
 </template>
 
 <script>
+import VueTypes from 'vue-types';
+
 export default {
   name: 'TrainingsCard',
+  props: {
+    imagePath: VueTypes.string,
+    description: VueTypes.string,
+    timeToComplete: VueTypes.string,
+  },
+  data() {
+    return {
+      isShowingTrainingModal: false,
+    };
+  },
+  computed: {
+    lang() {
+      return {
+        actions: {
+          cancel: {
+            text: this.$t('~~Cancel'),
+          },
+          complete: {
+            text: this.$t('~~Complete'),
+          },
+        },
+        header: {
+          text: this.$t('~~Great to see you are ready to start working!'),
+          secondaryText: this.$t(
+            '~~You must complete the following trainings and read some news before starting.',
+          ),
+        },
+      };
+    },
+  },
 };
 </script>
