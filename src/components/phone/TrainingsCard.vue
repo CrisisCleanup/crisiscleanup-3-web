@@ -25,7 +25,6 @@
       <div class="flex w-1/6 items-center">
         <!--- Training Start Button --->
         <base-button
-          :disabled="completed"
           class="bg-crisiscleanup-yellow-300 hover:bg-crisiscleanup-yellow-100 text-black px-4 py-1"
           href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
           :action="
