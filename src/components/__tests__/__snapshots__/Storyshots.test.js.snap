@@ -1559,6 +1559,7 @@ exports[`Storyshots Basics|BaseLink As Anchor 1`] = `
     <a
       class="link"
       href="www.google.com"
+      target=""
       to=""
     >
       <p
@@ -1581,6 +1582,7 @@ exports[`Storyshots Basics|BaseLink As Router Link 1`] = `
     <a
       class="link router-link-exact-active router-link-active"
       href=""
+      target=""
     >
       <p
         class="text-body font-body font-sans"
@@ -1602,6 +1604,7 @@ exports[`Storyshots Basics|BaseLink With Defaults 1`] = `
     <a
       class="link"
       href=""
+      target=""
       to=""
     >
       <p
@@ -1624,6 +1627,7 @@ exports[`Storyshots Basics|BaseLink With Text Variant 1`] = `
     <a
       class="link"
       href=""
+      target=""
       to=""
     >
       <p
