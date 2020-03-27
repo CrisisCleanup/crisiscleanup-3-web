@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="bg-white shadow-xl ">
     <!-- SET CARD WIDTH TO 2/5 -->
-    <div class="flex flex-row m-5 justify-between pt-3">
+    <div class="flex flex-row p-3 justify-between items-center pt-3">
       <base-text variant="h3">Leaderboard</base-text>
       <!-- all time -->
       <div class="flex flex-col">
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import LeaderboardProfileCard from './LeaderboardProfileCard';
+import LeaderboardProfileCard from './LeaderboardProfileCard.vue';
 export default {
   name: 'Leaderboard',
   components: {
