@@ -117,7 +117,6 @@ jobs:
           group: 'CI Chrome'
           headless: true
           ci-build-id: ${{ steps.build_id.outputs.id }}
-          command-prefix: 'percy exec -- npx'
           env: WEB_USER=${{ secrets.CYPRESS_WEB_USER }},WEB_PASS=${{ secrets.CYPRESS_WEB_PASS }},API_URL=http://localhost:5000
         env:
           VUE_APP_API_BASE_URL: 'http://localhost:5000'
