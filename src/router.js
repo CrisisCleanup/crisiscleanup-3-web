@@ -4,8 +4,8 @@ import CaseHistory from '@/pages/CaseHistory';
 import Cases from '@/pages/Cases';
 import CaseView from '@/pages/CaseView';
 import Dashboard from '@/pages/Dashboard';
+import HomeRoutes from '@/pages/home/routes';
 import Location from '@/pages/Location';
-import Login from '@/pages/Login';
 import NotFound from '@/pages/NotFound';
 import Affiliates from '@/pages/organization/Affiliates';
 import Organization from '@/pages/organization/Index';
@@ -15,21 +15,12 @@ import OrganizationProfile from '@/pages/organization/Profile';
 import Users from '@/pages/organization/Users';
 import UserView from '@/pages/organization/UserView';
 import PhoneRoutes from '@/pages/phone/routes';
-import PreliminaryAssessment from '@/pages/PreliminaryAssessment';
 import Profile from '@/pages/Profile';
-import RequestAccess from '@/pages/RequestAccess';
-import TrainingPage from '@/pages/Training';
-import InvitationSignup from '@/pages/unauthenticated/InvitationSignup';
-import PrintToken from '@/pages/unauthenticated/PrintToken';
-import Privacy from '@/pages/unauthenticated/Privacy';
-import RegisterOrganization from '@/pages/unauthenticated/RegisterOrganization';
-import Terms from '@/pages/unauthenticated/Terms';
-import * as SSO from '@/services/sso.service';
+import unAuthedRoutes from '@/pages/unauthenticated/routes';
 import store from '@/store/index';
 import Vue from 'vue';
 import VueCookies from 'vue-cookies';
 import VueRouter from 'vue-router';
-import Map from '@/pages/unauthenticated/Map';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -151,94 +142,9 @@ const routes = [
     name: 'nav.edit_location',
     meta: { layout: 'authenticated' },
   },
-  {
-    path: '/login',
-    component: Login,
-    name: 'nav.login',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
-    path: '/invitation_token/:token',
-    component: InvitationSignup,
-    name: 'nav.invitation_token',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
-    path: '/print_token/:token',
-    component: PrintToken,
-    name: 'nav.print_token',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
-    path: '/request_access',
-    component: RequestAccess,
-    name: 'nav.request_access',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
-    path: '/register',
-    component: RegisterOrganization,
-    name: 'nav.register',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
-    path: '/assessment/:incident_id',
-    component: PreliminaryAssessment,
-    name: 'nav.assessment',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
-    path: '/terms',
-    component: Terms,
-    name: 'nav.terms',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
-    path: '/privacy',
-    component: Privacy,
-    name: 'nav.privacy',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
-    path: '/map',
-    component: Map,
-    name: 'nav.privacy',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
-  {
-    path: '/sp/login',
-    name: 'SSOLogin',
-    beforeEnter: async (to, from, next) => {
-      if (store.getters['auth/isLoggedIn']) {
-        const creds = await SSO.authenticate();
-        // Store AWS Connect Auth Cookies
-        Vue.$cookies.set(
-          'lily-auth-prod-iad',
-          creds.AccessToken,
-          '/',
-          creds.AccessTokenExpiration,
-          'crisiscleanup3.awsapps.com',
-          true,
-        );
-        Vue.$cookies.set(
-          'lily-auth-refresh-prod-iad',
-          creds.RefreshToken,
-          '/connect/auth',
-          creds.RefreshTokenExpiration,
-          'crisiscleanup3.awsapps.com',
-          true,
-        );
-      }
-      next({ name: 'nav.dashboard' });
-    },
-  },
-  {
-    path: '/training',
-    component: TrainingPage,
-    name: 'nav.training',
-    meta: { layout: 'unauthenticated', noAuth: true },
-  },
   ...PhoneRoutes,
+  ...HomeRoutes,
+  ...unAuthedRoutes,
   {
     path: '*',
     name: 'NotFound',
