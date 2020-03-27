@@ -45,6 +45,7 @@ import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 import VueAxios from 'vue-axios';
 import VueClipboard from 'vue-clipboard2';
+import VueGtag from 'vue-gtag';
 import VueI18n from 'vue-i18n';
 import Popover from 'vue-js-popover';
 import * as ModalDialogs from 'vue-modal-dialogs';
@@ -133,6 +134,13 @@ Sentry.init({
       logErrors: process.env.NODE_ENV !== 'production',
     }),
   ],
+});
+
+// Google GTag
+Vue.use(VueGtag, {
+  config: {
+    id: 'UA-42924421-1',
+  },
 });
 
 axios.interceptors.response.use(
