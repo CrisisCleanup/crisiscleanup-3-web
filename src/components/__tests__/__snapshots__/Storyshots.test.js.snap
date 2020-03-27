@@ -2130,11 +2130,9 @@ exports[`Storyshots Layouts|HomeLayout With All 1`] = `
           <p
             class="text-h2 font-h2 font-display"
           >
-            <a
-              href="https://www.coronacommunity.org"
-            >
-              coronacommunity.org
-            </a>
+            <span>
+              homeVue.phone_or_website
+            </span>
           </p>
         </div>
       </div>
@@ -2202,11 +2200,9 @@ exports[`Storyshots Layouts|HomeLayout With Basic Content 1`] = `
           <p
             class="text-h2 font-h2 font-display"
           >
-            <a
-              href="https://www.coronacommunity.org"
-            >
-              coronacommunity.org
-            </a>
+            <span>
+              homeVue.phone_or_website
+            </span>
           </p>
         </div>
       </div>
@@ -2300,11 +2296,9 @@ exports[`Storyshots Layouts|HomeLayout With Overlay 1`] = `
           <p
             class="text-h2 font-h2 font-display"
           >
-            <a
-              href="https://www.coronacommunity.org"
-            >
-              coronacommunity.org
-            </a>
+            <span>
+              homeVue.phone_or_website
+            </span>
           </p>
         </div>
       </div>
@@ -2529,11 +2523,9 @@ exports[`Storyshots Pages|NotFound With Defaults 1`] = `
           <p
             class="text-h2 font-h2 font-display"
           >
-            <a
-              href="https://www.coronacommunity.org"
-            >
-              coronacommunity.org
-            </a>
+            <span>
+              homeVue.phone_or_website
+            </span>
           </p>
         </div>
       </div>

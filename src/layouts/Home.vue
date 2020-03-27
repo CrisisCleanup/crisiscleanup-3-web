@@ -10,11 +10,9 @@
       <div class="grid--survivors">
         <div class="homegrid-survivors">
           <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
-          <base-text font="display" variant="h2"
-            ><a href="https://www.coronacommunity.org"
-              >coronacommunity.org</a
-            ></base-text
-          >
+          <base-text font="display" variant="h2">
+            <span v-html="$t('homeVue.phone_or_website')"></span>
+          </base-text>
         </div>
       </div>
     </slot>
