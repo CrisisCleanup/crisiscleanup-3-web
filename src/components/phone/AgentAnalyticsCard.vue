@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-crisiscleanup-light-grey">
+  <div class="bg-white shadow-xl">
     <div class="flex justify-around bg-white">
       <base-text variant="h2" weight="600" class="m-5"
         >Virtual Call Center Status</base-text
@@ -21,10 +21,11 @@
 import { mapState, mapActions } from 'vuex';
 import { mixin as VueTimers } from 'vue-timers';
 import { METRICS } from '@/services/acs.service';
+import { LangMixin } from '@/mixins';
 
 export default {
   name: 'AgentAnalyticsCard',
-  mixins: [VueTimers],
+  mixins: [VueTimers, LangMixin],
   timers: {
     fetchMetrics: {
       // AWS refreshes metrics every
@@ -41,6 +42,14 @@ export default {
     statistics() {
       return this.analytics.filter(a => a.title);
     },
+    lang() {
+      const metricLang = {};
+      metricLang[METRICS.AGENTS_ON_CALL] = '~~On the Phone Right Now';
+      metricLang[METRICS.ONLINE] = '~~Volunteers Online';
+      metricLang[METRICS.CONTACTS_QUEUED] = '~~Peopled in Queue';
+      metricLang[METRICS.NEEDED] = '~~Volunteers Needed';
+      return this.getLang(metricLang);
+    },
   },
   data() {
     return {
@@ -56,23 +65,7 @@ export default {
           value: this.metrics[name],
           title: '',
         };
-        switch (name) {
-          case METRICS.AGENTS_ON_CALL:
-            metric.title = '~~On the Phone Right Now';
-            break;
-          case METRICS.ONLINE:
-            metric.title = '~~Volunteers Online';
-            break;
-          case METRICS.CONTACTS_QUEUED:
-            metric.title = '~~People in Queue';
-            break;
-          case METRICS.NEEDED:
-            metric.title = '~~Volunteers Needed';
-            break;
-          default:
-            break;
-        }
-        metric.title = this.$t(metric.title);
+        metric.title = this.lang[name];
         return metric;
       });
     },
