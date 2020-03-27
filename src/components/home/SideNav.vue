@@ -47,6 +47,7 @@ export default {
         route: VueTypes.string,
       }),
     ).def(HomeNavigation),
+    translations: VueTypes.objectOf(VueTypes.string),
   },
   computed: {
     lang() {
@@ -58,6 +59,7 @@ export default {
           map: this.$t('publicNav.map'),
           training: this.$t('publicNav.training'),
           contact: this.$t('publicNav.contact'),
+          ...this.translations,
         },
       };
     },
@@ -66,16 +68,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.grid {
-  &--nav {
-    display: grid;
-    align-items: center;
-    margin-left: 2.8rem;
-    @apply py-16 my-20;
-    a {
-      transition: color 250ms ease;
-      &:hover {
-        @apply text-crisiscleanup-dark-300;
+.homegrid {
+  &.grid-container {
+    .grid {
+      &--nav {
+        display: inline-grid;
+        align-items: center;
+        margin-left: 2.8rem;
+        @apply py-16 my-20;
+        a {
+          transition: color 250ms ease;
+          &:hover {
+            @apply text-crisiscleanup-dark-300;
+          }
+        }
       }
     }
   }
