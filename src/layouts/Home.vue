@@ -30,7 +30,8 @@ export default {
       },
     };
   },
-};
+}
+
 </script>
 
 <style scoped lang="scss">
@@ -70,13 +71,6 @@ $areas: main nav logo actions overlay survivors globe footer;
 
       &--survivors {
         @apply mx-6 my-4;
-      }
-
-      &--nav {
-        display: grid;
-        align-items: center;
-        margin-left: 2.8rem;
-        @apply py-16 my-20;
       }
 
       &--actions {

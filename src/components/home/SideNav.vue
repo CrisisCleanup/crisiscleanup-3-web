@@ -1,0 +1,83 @@
+<template>
+  <div class="grid--nav">
+    <router-link
+      v-for="item in routes"
+      :key="item.key"
+      :to="item.route || '#'"
+      class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
+    >
+      {{ lang.nav[item.key] }}
+    </router-link>
+  </div>
+</template>
+
+<script>
+import VueTypes from 'vue-types';
+
+export const HomeNavigation = [
+  {
+    key: 'home',
+    route: '/login',
+  },
+  {
+    key: 'aboutUs',
+  },
+  {
+    key: 'blog',
+  },
+  {
+    key: 'map',
+    route: '/map',
+  },
+  {
+    key: 'training',
+  },
+  {
+    key: 'contact',
+  },
+];
+
+// This component is designed for usage in layouts/Home
+export default {
+  name: 'SideNav',
+  props: {
+    routes: VueTypes.arrayOf(
+      VueTypes.shape({
+        key: VueTypes.string,
+        route: VueTypes.string,
+      }),
+    ).def(HomeNavigation),
+  },
+  computed: {
+    lang() {
+      return {
+        nav: {
+          home: this.$t('publicNav.home'),
+          aboutUs: this.$t('publicNav.about_us'),
+          blog: this.$t('publicNav.blog'),
+          map: this.$t('publicNav.map'),
+          training: this.$t('publicNav.training'),
+          contact: this.$t('publicNav.contact'),
+        },
+      };
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.grid {
+  &--nav {
+    display: grid;
+    align-items: center;
+    margin-left: 2.8rem;
+    @apply py-16 my-20;
+    a {
+      transition: color 250ms ease;
+      &:hover {
+        @apply text-crisiscleanup-dark-300;
+      }
+    }
+  }
+}
+</style>

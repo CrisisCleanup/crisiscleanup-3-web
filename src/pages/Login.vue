@@ -4,16 +4,7 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
-      <div class="grid--nav">
-        <router-link
-          v-for="item in navigation"
-          :key="item.key"
-          :to="item.route || '#'"
-          class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
-        >
-          {{ lang.nav[item.key] }}
-        </router-link>
-      </div>
+      <side-nav />
       <div class="grid--actions">
         <base-text
           font="display"
@@ -57,31 +48,9 @@
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home';
-import LoginForm from '@/components/forms/LoginForm';
-
-export const HomeNavigation = [
-  {
-    key: 'home',
-    route: '/login',
-  },
-  {
-    key: 'aboutUs',
-  },
-  {
-    key: 'blog',
-  },
-  {
-    key: 'map',
-    route: '/map',
-  },
-  {
-    key: 'training',
-  },
-  {
-    key: 'contact',
-  },
-];
+import HomeLayout from '@/layouts/Home.vue';
+import LoginForm from '@/components/forms/LoginForm.vue';
+import SideNav from '@/components/home/SideNav.vue';
 
 export const FooterNavigation = [
   {
@@ -102,20 +71,12 @@ export const FooterNavigation = [
 
 export default {
   name: 'LoginPage',
-  components: { HomeLayout, LoginForm },
+  components: { HomeLayout, LoginForm, SideNav },
   data() {
     return {
       lang: {
         register: this.$t('actions.register'),
         relief_org: this.$t('publicNav.relief_orgs_only'),
-        nav: {
-          home: this.$t('publicNav.home'),
-          aboutUs: this.$t('publicNav.about_us'),
-          blog: this.$t('publicNav.blog'),
-          map: this.$t('publicNav.map'),
-          training: this.$t('publicNav.training'),
-          contact: this.$t('publicNav.contact'),
-        },
         footer: {
           demo: this.$t('publicNav.demo'),
           contact: this.$t('publicNav.contact'),
@@ -123,7 +84,6 @@ export default {
           privacy: this.$t('publicNav.privacy'),
         },
       },
-      navigation: HomeNavigation,
       footer: FooterNavigation,
     };
   },
@@ -143,14 +103,6 @@ export default {
       &--main {
         align-self: center;
         @apply mx-10 h-full;
-      }
-      &--nav {
-        a {
-          transition: color 250ms ease;
-          &:hover {
-            @apply text-crisiscleanup-dark-300;
-          }
-        }
       }
       &--globe {
         justify-self: center;
