@@ -1,3 +1,4 @@
+import EmbedMap from '@/pages/unauthenticated/EmbedMap';
 import InvitationSignup from './InvitationSignup.vue';
 import PreliminaryAssessment from './PreliminaryAssessment.vue';
 import PrintToken from './PrintToken.vue';
@@ -19,6 +20,12 @@ export default [
     path: '/assessment/:incident_id',
     component: PreliminaryAssessment,
     name: 'nav.assessment',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/map/embed/:incident_id',
+    component: EmbedMap,
+    name: 'nav.map_embed',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];

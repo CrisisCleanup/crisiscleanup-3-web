@@ -8,7 +8,7 @@
       class="absolute top-0 left-0 right-0 bottom-0"
     ></div>
     <div
-      v-if="!mapLoading"
+      v-if="!mapLoading && !hideLegend"
       style="z-index: 1001;"
       class="legend absolute right-0 bottom-0 w-64 bg-white border-2 p-1"
     >
@@ -71,6 +71,9 @@ export default {
       default: () => {
         return [];
       },
+    },
+    hideLegend: {
+      type: Boolean,
     },
   },
   data() {
