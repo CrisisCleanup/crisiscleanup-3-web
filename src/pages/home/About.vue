@@ -45,7 +45,7 @@
             <div class="flex-col">
               <div class="flex flex-row m-3 py-5">
                 <img
-                  src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                  src="@/assets/tinycrisiscleanuplogoscreenshot.jpg"
                   class="w-7 h-6"
                 />
                 <base-text variant="body" class="pt-2">
@@ -61,7 +61,7 @@
               <div class="flex-col px-2">
                 <div class="flex flex-row m-3 py-5">
                   <img
-                    src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                    src="@/assets/tinycrisiscleanuplogoscreenshot.jpg"
                     class="w-7 h-6"
                   />
                   <base-text variant="body" class="pt-2">
@@ -79,7 +79,7 @@
               <!-- Top Right Info Card -->
               <div class="flex flex-row m-3 py-5">
                 <img
-                  src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                  src="@/assets/tinycrisiscleanuplogoscreenshot.jpg"
                   class="w-7 h-6"
                 />
                 <base-text variant="body" class="pt-2">
@@ -96,7 +96,7 @@
               <div class="flex flex-col py-5">
                 <div class="flex flex-row m-3">
                   <img
-                    src="../assets/tinycrisiscleanuplogoscreenshot.jpg"
+                    src="@/assets/tinycrisiscleanuplogoscreenshot.jpg"
                     class="w-7 h-6"
                   />
                   <base-text variant="body" class="pt-2">
@@ -170,7 +170,7 @@
               </div>
             </div>
             <div class="flex-col m-5 w-1/4">
-              <img src="../assets/aboutussketchss.jpg" class="h-1/2" />
+              <img src="@/assets/aboutussketchss.jpg" class="h-1/2" />
             </div>
           </div>
         </div>
@@ -180,7 +180,7 @@
         </h1>
         <div class="flex flex-row">
           <div class="flex flex-col">
-            <img src="../assets/foundationalphilosophiessketchss.jpg" />
+            <img src="@/assets/foundationalphilosophiessketchss.jpg" />
           </div>
           <div class="flex flex-col m-5">
             <ul class="text-xl text-crisiscleanup-dark-400 font-hairline">
@@ -218,7 +218,7 @@
         >
           <div class="flex flex-row justify-around">
             <div class="flex-col w-1/4">
-              <img src="../assets/supportteamsketchss.jpg" class="m-5" />
+              <img src="@/assets/supportteamsketchss.jpg" class="m-5" />
             </div>
             <div class="flex-col w-3/4 m-7">
               <h1
