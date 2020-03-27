@@ -14,7 +14,12 @@
                 <leaderboard />
               </div>
               <div class="grid--train">
-                <training-card />
+                <training-card
+                  :image-path="training.imagePath"
+                  :description="training.description"
+                  :time-to-complete="training.timeToComplete"
+                >
+                </training-card>
               </div>
               <div class="grid--story">
                 <stories-card />
@@ -54,6 +59,12 @@ export default {
   data() {
     return {
       loading: false,
+      training: {
+        imagePath: require('@/assets/newstrainingss.jpg'),
+        description:
+          'Then go and tempor incididunt ut labore et dolore magna aliqua.',
+        timeToComplete: '10 minutes',
+      },
     };
   },
   computed: {

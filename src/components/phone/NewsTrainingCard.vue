@@ -13,7 +13,18 @@
     <!-- line -->
     <hr class="bg-white" />
     <!--- Content --->
-    <component :is="selected" class="tab"></component>
+    <div v-if="selected !== 'Trainings'">
+      <component :is="selected" class="tab"></component>
+    </div>
+    <div v-if="selected === 'Trainings'">
+      <Trainings
+        v-for="(training, idx) in trainings"
+        :key="idx"
+        :image-path="training.imagePath"
+        :description="training.description"
+        :time-to-complete="training.timeToComplete"
+      ></Trainings>
+    </div>
     <!-- line -->
     <hr class="bg-white" />
     <!--- See All Button --->
@@ -37,6 +48,20 @@ export default {
     return {
       tabs: ['News', 'Trainings'],
       selected: 'News',
+      trainings: [
+        {
+          imagePath: require('@/assets/newstrainingss.jpg'),
+          description:
+            'Then go and tempor incididunt ut labore et dolore magna aliqua.',
+          timeToComplete: '10 minutes',
+        },
+        {
+          imagePath: require('@/assets/newstrainingss.jpg'),
+          description:
+            'Then go and tempor incididunt ut labore et dolore magna aliqua.',
+          timeToComplete: '15 minutes',
+        },
+      ],
     };
   },
   components: {
