@@ -144,18 +144,20 @@ export default {
   &.grid-container {
     grid-template-areas:
       'logo . . . . survivors'
-      'nav main main main main .'
-      'nav main main main main .'
-      'nav main main main main .'
+      'nav main main main main main'
+      'nav main main main main main'
+      'nav main main main main main'
       'actions . . . . .'
       '. . . . . .'
       '. . . . footer footer';
-  }
 
-  .grid {
-    &--overlay {
-      grid-row: 1 / span 7 !important;
-      grid-column: 1 / span 2 !important;
+    .grid {
+      &--main {
+        @apply mx-16;
+      }
+      &--overlay {
+        grid-row: 1 / span 7;
+      }
     }
   }
 }
