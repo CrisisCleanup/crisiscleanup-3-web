@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="more-info">
     <!--line-->
     <hr class="bg-white" />
     <!--Info Card-->
@@ -71,6 +71,7 @@
 import VueTypes from 'vue-types';
 import { mapGetters } from 'vuex';
 import { STATES as CCState } from '@/services/acs.service';
+import { EventBus } from '@/event-bus';
 
 export default {
   name: 'Info',
@@ -88,17 +89,21 @@ export default {
         case CCState.ROUTABLE:
           msg.state = 'available';
           msg.text = '~~Available';
+          EventBus.$emit('acs:status:available');
           break;
         case CCState.ON_CALL:
         case CCState.PENDING:
           msg.state = 'oncall';
           msg.text = '~~On Call';
+          EventBus.$emit('acs:status:oncall');
           break;
         case CCState.PAUSED:
           msg.state = 'paused';
           msg.text = '~~Paused';
+          EventBus.$emit('acs:status:paused');
           break;
         default:
+          EventBus.$emit('acs:status:offcall');
           break;
       }
       msg.text = this.$t(msg.text);
