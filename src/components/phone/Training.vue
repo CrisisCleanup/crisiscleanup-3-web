@@ -115,7 +115,7 @@
         variant="outline"
         class="px-3 ml-3"
         size="medium"
-        :action="() => close()"
+        :action="() => cancel()"
       >
         {{ lang.actions.cancel.text }}
       </base-button>
