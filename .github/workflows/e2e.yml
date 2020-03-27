@@ -21,6 +21,7 @@ env:
   VUE_APP_AWS_CCP_URL: https://cchotline.awsapps.com/connect/ccp#
   VUE_APP_API_BASE_URL: 'http://localhost:5000'
   VUE_APP_BASE_URL: 'http://localhost:8080'
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
 jobs:
   build_id:
