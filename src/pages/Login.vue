@@ -4,7 +4,7 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
-      <side-nav />
+      <home-nav />
       <div class="grid--actions">
         <base-text
           font="display"
@@ -16,11 +16,7 @@
         <base-button
           variant="solid"
           size="large"
-          :action="
-            () => {
-              $router.push('/register');
-            }
-          "
+          :action="() => $router.push('/register')"
         >
           {{ lang.register }}
         </base-button>
@@ -33,58 +29,24 @@
           <img src="@/assets/globe.png" alt="globe" />
         </div>
       </div>
-      <div class="grid--footer self-center">
-        <router-link
-          v-for="item in footer"
-          :key="item.key"
-          :to="item.route || '#'"
-          class="font-body font-display text-h3 text-crisiscleanup-dark-300"
-        >
-          {{ lang.footer[item.key] }}
-        </router-link>
-      </div>
+      <home-footer />
     </template>
   </HomeLayout>
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home.vue';
+import HomeLayout, { HomeNav, HomeFooter } from '@/layouts/Home.vue';
 import LoginForm from '@/components/forms/LoginForm.vue';
-import SideNav from '@/components/home/SideNav.vue';
-
-export const FooterNavigation = [
-  {
-    key: 'demo',
-  },
-  {
-    key: 'contact',
-  },
-  {
-    key: 'terms',
-    route: '/terms',
-  },
-  {
-    key: 'privacy',
-    route: '/privacy',
-  },
-];
 
 export default {
   name: 'LoginPage',
-  components: { HomeLayout, LoginForm, SideNav },
+  components: { HomeLayout, LoginForm, HomeNav, HomeFooter },
   data() {
     return {
       lang: {
         register: this.$t('actions.register'),
         relief_org: this.$t('publicNav.relief_orgs_only'),
-        footer: {
-          demo: this.$t('publicNav.demo'),
-          contact: this.$t('publicNav.contact'),
-          terms: this.$t('publicNav.terms'),
-          privacy: this.$t('publicNav.privacy'),
-        },
       },
-      footer: FooterNavigation,
     };
   },
 };
@@ -106,16 +68,6 @@ export default {
       }
       &--globe {
         justify-self: center;
-      }
-      &--footer {
-        @apply mr-24 h-full;
-        display: inline-grid;
-        align-content: center;
-        justify-content: space-between;
-        grid-auto-flow: column;
-        a {
-          @apply px-4;
-        }
       }
     }
   }

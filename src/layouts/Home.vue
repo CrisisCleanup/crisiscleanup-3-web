@@ -21,6 +21,12 @@
 </template>
 
 <script>
+import SideNav from '@/components/home/SideNav.vue';
+import Footer from '@/components/home/Footer.vue';
+
+export const HomeNav = SideNav;
+export const HomeFooter = Footer;
+
 export default {
   name: 'HomeLayout',
   data() {
@@ -30,8 +36,7 @@ export default {
       },
     };
   },
-}
-
+};
 </script>
 
 <style scoped lang="scss">
