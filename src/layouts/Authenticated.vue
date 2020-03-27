@@ -96,6 +96,7 @@ import Loader from '@/components/Loader';
 import Vue from 'vue';
 import Acl from 'vue-browser-acl';
 import DisasterIcon from '../components/DisasterIcon';
+import PhoneStatus from '../models/PhoneStatus';
 
 export default {
   name: 'Authenticated',
@@ -189,6 +190,9 @@ export default {
         dataKey: 'results',
       }),
       Role.api().get('/roles', {
+        dataKey: 'results',
+      }),
+      PhoneStatus.api().get('/phone_statuses', {
         dataKey: 'results',
       }),
     ]);
