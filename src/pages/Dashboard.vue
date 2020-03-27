@@ -588,28 +588,32 @@ export default {
       ]);
     },
     async getOrganizationsForApproval() {
-      const params = {
-        approved_by__isnull: true,
-        rejected_by__isnull: true,
-      };
-      const queryString = getQueryString(params);
+      if (this.$can('approve_orgs_full')) {
+        const params = {
+          approved_by__isnull: true,
+          rejected_by__isnull: true,
+        };
+        const queryString = getQueryString(params);
 
-      const results = await Organization.api().get(
-        `/organizations?${queryString}`,
-        {
-          dataKey: 'results',
-        },
-      );
-      if (results.entities.organizations) {
-        this.organizations = [...results.entities.organizations];
+        const results = await Organization.api().get(
+          `/organizations?${queryString}`,
+          {
+            dataKey: 'results',
+          },
+        );
+        if (results.entities.organizations) {
+          this.organizations = [...results.entities.organizations];
+        }
       }
     },
     async getIncidentRequests() {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
-      );
-      if (response.data) {
-        this.incident_requests = [...response.data.results];
+      if (this.$can('move_orgs')) {
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
+        );
+        if (response.data) {
+          this.incident_requests = [...response.data.results];
+        }
       }
     },
     async statusValueChange(value, workType, worksiteId) {
