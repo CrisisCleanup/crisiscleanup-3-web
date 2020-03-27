@@ -4,28 +4,8 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
-      <div class="grid--nav">
-        <router-link
-          v-for="item in navigation"
-          :key="item.key"
-          :to="item.route || '#'"
-          class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
-        >
-          {{ lang.nav[item.key] }}
-        </router-link>
-      </div>
-      <div class="grid--actions">
-        <base-text
-          font="display"
-          variant="h2"
-          :weight="300"
-          class="text-crisiscleanup-dark-500"
-          >{{ lang.relief_org }}</base-text
-        >
-        <base-button variant="solid" size="large">
-          {{ lang.register }}
-        </base-button>
-      </div>
+      <home-nav />
+      <home-actions />
       <div class="grid--main">
         <div class="text-4xl">{{ $t('registerOrg.register_org') }}</div>
         <div class="text-2xl w-3/4">
@@ -273,7 +253,9 @@
                 class="text-base activities-checkbox"
                 required
               >
-                <div v-html="registerOrg.tos_priv_agree"></div>
+                <div
+                  v-html="registerOrg ? registerOrg.tos_priv_agree : ''"
+                ></div>
               </base-checkbox>
             </li>
           </ol>
@@ -293,13 +275,12 @@
 <script>
 import Organization from '@/models/Organization';
 import Incident from '@/models/Incident';
-import HomeLayout from '@/layouts/Home';
+import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
 import { getErrorMessage } from '../../utils/errors';
-import { HomeNavigation } from '../Login';
 
 export default {
   name: 'InvitationSignup',
-  components: { HomeLayout },
+  components: { HomeLayout, HomeNav, HomeActions },
 
   mounted() {
     Incident.api().get('/incidents', {
@@ -309,24 +290,6 @@ export default {
 
   data() {
     return {
-      lang: {
-        register: this.$t('actions.register'),
-        relief_org: this.$t('publicNav.relief_orgs_only'),
-        nav: {
-          home: this.$t('publicNav.home'),
-          aboutUs: this.$t('publicNav.about_us'),
-          blog: this.$t('publicNav.blog'),
-          map: this.$t('publicNav.map'),
-          training: this.$t('publicNav.training'),
-          contact: this.$t('publicNav.contact'),
-        },
-        footer: {
-          demo: this.$t('publicNav.demo'),
-          contact: this.$t('publicNav.contact'),
-          terms: this.$t('publicNav.terms'),
-          privacy: this.$t('publicNav.privacy'),
-        },
-      },
       organization: {
         name: '',
         url: '',
@@ -357,7 +320,6 @@ export default {
         mobile: '',
       },
       selectedIncidentId: null,
-      navigation: HomeNavigation,
       organizationTypes: [
         'orgType.voad',
         'orgType.coad',

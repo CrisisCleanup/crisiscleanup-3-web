@@ -4,28 +4,8 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
-      <div class="grid--nav">
-        <router-link
-          v-for="item in navigation"
-          :key="item.key"
-          :to="item.route || '#'"
-          class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
-        >
-          {{ lang.nav[item.key] }}
-        </router-link>
-      </div>
-      <div class="grid--actions">
-        <base-text
-          font="display"
-          variant="h2"
-          :weight="300"
-          class="text-crisiscleanup-dark-500"
-          >{{ lang.relief_org }}</base-text
-        >
-        <base-button variant="solid" size="large">
-          {{ lang.register }}
-        </base-button>
-      </div>
+      <home-nav />
+      <home-actions />
       <div class="grid--main">
         <div class="text-4xl">
           {{ $t('~~Visualize the Disaster in Real Time') }}
@@ -70,29 +50,23 @@
           }}
         </div>
       </div>
-      <div class="grid--footer self-center text-right">
-        <router-link
-          v-for="item in footer"
-          :key="item.key"
-          :to="item.route || '#'"
-          class="font-body font-display text-h2 text-crisiscleanup-dark-300 mx-3"
-        >
-          {{ lang.footer[item.key] }}
-        </router-link>
-      </div>
+      <home-footer />
     </template>
   </HomeLayout>
 </template>
 
 <script>
 import * as L from 'leaflet';
-import HomeLayout from '@/layouts/Home';
-import PublicMap from '../../components/PublicMap';
-import { FooterNavigation, HomeNavigation } from '../Login';
+import HomeLayout, {
+  HomeNav,
+  HomeFooter,
+  HomeActions,
+} from '@/layouts/Home.vue';
+import PublicMap from '@/components/PublicMap.vue';
 
 export default {
   name: 'Map',
-  components: { PublicMap, HomeLayout },
+  components: { PublicMap, HomeLayout, HomeNav, HomeFooter, HomeActions },
   data() {
     return {
       incidents: [],
@@ -100,26 +74,6 @@ export default {
       workTypeMap: {},
       statusMap: {},
       selectedIncident: null,
-      lang: {
-        register: this.$t('actions.register'),
-        relief_org: this.$t('publicNav.relief_orgs_only'),
-        nav: {
-          home: this.$t('publicNav.home'),
-          aboutUs: this.$t('publicNav.about_us'),
-          blog: this.$t('publicNav.blog'),
-          map: this.$t('publicNav.map'),
-          training: this.$t('publicNav.training'),
-          contact: this.$t('publicNav.contact'),
-        },
-        footer: {
-          demo: this.$t('publicNav.demo'),
-          contact: this.$t('publicNav.contact'),
-          terms: this.$t('publicNav.terms'),
-          privacy: this.$t('publicNav.privacy'),
-        },
-      },
-      navigation: HomeNavigation,
-      footer: FooterNavigation,
     };
   },
   async mounted() {

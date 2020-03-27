@@ -4,28 +4,8 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
-      <div class="grid--nav">
-        <router-link
-          v-for="item in navigation"
-          :key="item.key"
-          :to="item.route || '#'"
-          class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
-        >
-          {{ lang.nav[item.key] }}
-        </router-link>
-      </div>
-      <div class="grid--actions">
-        <base-text
-          font="display"
-          variant="h2"
-          :weight="300"
-          class="text-crisiscleanup-dark-500"
-          >{{ lang.relief_org }}</base-text
-        >
-        <base-button variant="solid" size="large">
-          {{ lang.register }}
-        </base-button>
-      </div>
+      <home-nav />
+      <home-actions />
       <div class="grid--main">
         <h1 class="text-4xl" v-html="terms.terms_and_conditions"></h1>
         <div class="row mb-6">
@@ -190,12 +170,11 @@
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home';
-import { HomeNavigation } from '../Login';
+import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
 
 export default {
   name: 'Terms',
-  components: { HomeLayout },
+  components: { HomeLayout, HomeNav, HomeActions },
   data() {
     return {
       terms: {
@@ -288,31 +267,6 @@ export default {
         entire_agreement: this.$t('terms.entire_agreement'),
         updated: this.$t('terms.updated'),
       },
-      lang: {
-        register: this.$t('actions.register'),
-        relief_org: this.$t('publicNav.relief_orgs_only'),
-        nav: {
-          home: this.$t('publicNav.home'),
-          aboutUs: this.$t('publicNav.about_us'),
-          blog: this.$t('publicNav.blog'),
-          map: this.$t('publicNav.map'),
-          training: this.$t('publicNav.training'),
-          contact: this.$t('publicNav.contact'),
-        },
-        footer: {
-          demo: this.$t('publicNav.demo'),
-          contact: this.$t('publicNav.contact'),
-          terms: this.$t('publicNav.terms'),
-          privacy: this.$t('publicNav.privacy'),
-        },
-      },
-      footer: {
-        demo: this.$t('publicNav.demo'),
-        contact: this.$t('publicNav.contact'),
-        terms: this.$t('publicNav.terms'),
-        privacy: this.$t('publicNav.privacy'),
-      },
-      navigation: HomeNavigation,
     };
   },
 };

@@ -4,28 +4,8 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
-      <div class="grid--nav">
-        <router-link
-          v-for="item in navigation"
-          :key="item.key"
-          :to="item.route || '#'"
-          class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
-        >
-          {{ lang.nav[item.key] }}
-        </router-link>
-      </div>
-      <div class="grid--actions">
-        <base-text
-          font="display"
-          variant="h2"
-          :weight="300"
-          class="text-crisiscleanup-dark-500"
-          >{{ lang.relief_org }}</base-text
-        >
-        <base-button variant="solid" size="large">
-          {{ lang.register }}
-        </base-button>
-      </div>
+      <home-nav />
+      <home-actions />
       <div class="grid--main">
         <div class="text-4xl">
           {{ $t('privacy.privacy_and_security_policy') }}
@@ -173,41 +153,11 @@
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home';
-import { HomeNavigation } from '../Login';
+import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
 
 export default {
   name: 'Privacy',
-  components: { HomeLayout },
-  data() {
-    return {
-      footer: {
-        demo: this.$t('publicNav.demo'),
-        contact: this.$t('publicNav.contact'),
-        terms: this.$t('publicNav.terms'),
-        privacy: this.$t('publicNav.privacy'),
-      },
-      lang: {
-        register: this.$t('actions.register'),
-        relief_org: this.$t('publicNav.relief_orgs_only'),
-        nav: {
-          home: this.$t('publicNav.home'),
-          aboutUs: this.$t('publicNav.about_us'),
-          blog: this.$t('publicNav.blog'),
-          map: this.$t('publicNav.map'),
-          training: this.$t('publicNav.training'),
-          contact: this.$t('publicNav.contact'),
-        },
-        footer: {
-          demo: this.$t('publicNav.demo'),
-          contact: this.$t('publicNav.contact'),
-          terms: this.$t('publicNav.terms'),
-          privacy: this.$t('publicNav.privacy'),
-        },
-      },
-      navigation: HomeNavigation,
-    };
-  },
+  components: { HomeLayout, HomeNav, HomeActions },
 };
 </script>
 
