@@ -23,7 +23,7 @@ module.exports = {
     };
     if (!(process.env.NODE_ENV === 'production')) {
       return {
-        devtool: 'source-map',
+        devtool: 'inline-source-map',
         devServer: {
           hot: true,
           compress: true,

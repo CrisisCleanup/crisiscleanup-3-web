@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode production",
-    "serve-dev": "vue-cli-service serve --mode development",
+    "serve-dev": "cross-env NODE_ENV=development vue-cli-service serve --mode development",
     "build": "vue-cli-service build",
     "lint-fix": "vue-cli-service lint --ignore-path .gitignore .",
     "lint-staged": "lint-staged",
