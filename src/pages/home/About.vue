@@ -4,25 +4,8 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
-      <!--- Navigation --->
-      <div class="grid--nav">
-        <router-link
-          v-for="item in navigation"
-          :key="item.key"
-          :to="item.route || '#'"
-          class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
-        >
-          {{ lang.nav[item.key] }}
-        </router-link>
-      </div>
-      <!--- Footer --->
-      <div class="grid--actions">
-        <base-text variant="h1" weight="300"
-          >Relief Organizations Only
-        </base-text>
-        <base-button variant="solid" class="py-2">Register</base-button>
-        <base-button variant="outline" class="py-2">Login</base-button>
-      </div>
+      <home-nav />
+      <home-actions />
       <div class="grid--main h-screen">
         <!--- Title --->
         <div class="flex flex-col m-5">
@@ -249,72 +232,20 @@
             </div>
           </div>
         </div>
-        <!-- Testimonials [not added yet]
-        <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold pb-8">
-          Testimonials
-        </h1>
-        -->
-        <!-- Helpful Links [not added yet, no links]
-        <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold pb-8">
-          Helpful Links
-        </h1>
-         -->
       </div>
     </template>
   </HomeLayout>
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home';
-
-export const HomeNavigation = [
-  {
-    key: 'home',
-  },
-  {
-    key: 'aboutUs',
-  },
-  {
-    key: 'blog',
-  },
-  {
-    key: 'map',
-  },
-  {
-    key: 'training',
-  },
-  {
-    key: 'contact',
-  },
-];
+import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
 
 export default {
   name: 'AboutPage',
   components: {
     HomeLayout,
-  },
-  data() {
-    return {
-      lang: {
-        register: this.$t('actions.register'),
-        relief_org: this.$t('publicNav.relief_orgs_only'),
-        nav: {
-          home: this.$t('publicNav.home'),
-          aboutUs: this.$t('publicNav.about_us'),
-          blog: this.$t('publicNav.blog'),
-          map: this.$t('publicNav.map'),
-          training: this.$t('publicNav.training'),
-          contact: this.$t('publicNav.contact'),
-        },
-        footer: {
-          demo: this.$t('publicNav.demo'),
-          contact: this.$t('publicNav.contact'),
-          terms: this.$t('publicNav.terms'),
-          privacy: this.$t('publicNav.privacy'),
-        },
-      },
-      navigation: HomeNavigation,
-    };
+    HomeNav,
+    HomeActions,
   },
 };
 </script>
