@@ -61,8 +61,8 @@ module.exports = {
         cloudfrontId: 'E3NVMNFXV1CDMX',
       },
       production: {
-        bucket: 'app.crisiscleanup.io',
-        cloudfrontId: 'E2HGQQP0CRG0WI',
+        bucket: 'crisiscleanup.org',
+        cloudfrontId: 'E2U3CWNPC4HAN7',
       },
     };
     return {

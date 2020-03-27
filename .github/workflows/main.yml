@@ -180,7 +180,7 @@ jobs:
         if: "github.event.action == 'published'"
         env:
           VUE_APP_API_BASE_URL: 'https://api.crisiscleanup.org'
-          VUE_APP_BASE_URL: 'https://app.crisiscleanup.io'
+          VUE_APP_BASE_URL: 'https://crisiscleanup.org'
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccuproduction'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUProductionConnectRole'
         run: yarn deploy-production
