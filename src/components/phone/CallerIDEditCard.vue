@@ -1,63 +1,35 @@
 <template>
   <div>
-    <base-button
-      variant="outline"
-      :action="() => (isShowingModal = true)"
-      text="Edit Caller ID"
-      class="px-3 py-2"
-    ></base-button>
     <modal
-      v-if="isShowingModal"
+      v-if="active"
       modal-classes="w-108"
-      @ok="isShowingModal = false"
-      @close="isShowingModal = false"
+      @ok="active = false"
+      @close="active = false"
     >
       <div class="flex flex-col justify-around ml-12 mr-12 mt-8">
         <!-- Greeting -->
         <base-text
           variant="body"
-          weight="700"
+          :weight="700"
           class="text-crisiscleanup-dark-500 text-center pb-3"
         >
-          Welcome back John!
+          {{ lang.title }}
         </base-text>
         <base-text
           variant="body"
-          weight="300"
+          :weight="300"
           class="text-crisiscleanup-dark-300 text-center pb-3"
         >
-          Please confirm the number you would like to use today. Don't worry, we
-          will hide it on all inbound and outbond calls for your protection
+          {{ lang.body }}
         </base-text>
         <div class="flex flex-col justify-around">
           <!-- Phone # -->
-          <base-button
-            variant="outline"
-            size="medium"
-            :ccu-icon="togglePhone ? 'updown' : 'up'"
-            :action="() => (togglePhone = !togglePhone)"
-            class="pb-3 px-5 text-left"
-            >Phone Number</base-button
-          >
-          <!-- Languages -->
-          <div class="flex flex-col justify-start pb-3 m-1 pt-3">
-            <base-text
-              variant="bodysm"
-              weight="300"
-              class="text-crisiscleanup-dark-300 pb-3"
-            >
-              Choose the languages you work with
-            </base-text>
-            <base-button
-              variant="outline"
-              size="medium"
-              :ccu-icon="toggleLang ? 'updown' : 'up'"
-              :action="() => (toggleLang = !toggleLang)"
-              class="pt-1 pb-2 px-5"
-            >
-              <tag closeable>English</tag> <tag closeable>Spanish</tag>
-            </base-button>
-          </div>
+          <base-input
+            v-model="inputNumber"
+            size="large"
+            :action="() => {}"
+            placeholder="+1 (123) 456-7890"
+          />
         </div>
       </div>
       <!-- Footer -->
@@ -66,9 +38,9 @@
         <base-button
           variant="solid"
           class="px-3 py-2"
-          :action="() => (isShowingModal = false)"
-          text="Confirm"
-        ></base-button>
+          :action="() => updateUserMobile()"
+          >{{ lang.confirm }}</base-button
+        >
       </div>
     </modal>
   </div>
@@ -76,18 +48,50 @@
 
 <script>
 import VueTypes from 'vue-types';
+import { LangMixin, UserMixin } from '@/mixins';
+import User from '@/models/User';
 
 export default {
   name: 'EditCallerID',
+  mixins: [UserMixin, LangMixin],
   data() {
     return {
       togglePhone: false,
       toggleLang: false,
       toggleStates: false,
+      inputNumber: '',
     };
   },
   props: {
-    isShowingModal: VueTypes.bool.def(false),
+    active: VueTypes.bool.def(false),
+  },
+  methods: {
+    validateNumber(number) {
+      /**
+       * @todo Create API endpoint to validate phone number
+       * @body Functionality already exists in API, so prob should just use it.
+       */
+      return number;
+    },
+    async updateUserMobile() {
+      if (this.validateNumber(this.inputNumber)) {
+        await User.update({
+          where: this.currentUser.id,
+          data: {
+            mobile: this.inputNumber,
+          },
+        });
+      }
+    },
+  },
+  computed: {
+    lang() {
+      return this.getLang({
+        title: `~~Welcome ${this.currentUser.first_name}`,
+        body: `~~To become a member of the Crisis Cleanup Virtual Call Center, please provide a valid phone number to receive calls at. Don't worry, your number will remain masked for any inbound or outbound calls.`,
+        confirm: '~~Confirm',
+      });
+    },
   },
 };
 </script>
