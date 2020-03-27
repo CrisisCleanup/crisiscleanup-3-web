@@ -3,7 +3,8 @@
     <label v-if="topLabel" class="text-xs px-1 text-crisiscleanup-dark-300">{{
       topLabel
     }}</label>
-    <input
+    <component
+      :is="textArea ? 'textarea' : 'input'"
       ref="input"
       :class="[inputClasses, defaultInputClasses, selector]"
       :data-cy="selector"
@@ -120,6 +121,10 @@ export default {
       type: String,
       default: 'off',
     },
+    textArea: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -211,6 +216,10 @@ input.large {
 
 input.small {
   height: 30px;
+}
+
+textarea.large {
+  height: 150px;
 }
 
 .icon-container {
