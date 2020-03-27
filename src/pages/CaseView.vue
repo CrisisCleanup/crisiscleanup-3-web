@@ -206,6 +206,15 @@
                         .join(', ')
                     }}
                   </div>
+                  <div class="recurrence" v-if="work_type.recur">
+                    {{ work_type.recur | getRecurrenceString }}
+                    <br />
+                    {{ $t('~~Next:') }}
+                    {{
+                      work_type.next_recur_at
+                        | moment('ddd MMMM Do YYYY [at] h:mm:ss A')
+                    }}
+                  </div>
                 </div>
               </template>
               <WorkTypeRequestModal
@@ -254,6 +263,15 @@
                       .join(', ')
                   }}
                 </div>
+                <div class="recurrence" v-if="work_type.recur">
+                  {{ work_type.recur | getRecurrenceString }}
+                  <br />
+                  {{ $t('~~Next:') }}
+                  {{
+                    work_type.next_recur_at
+                      | moment('ddd MMMM Do YYYY [at] h:mm:ss A')
+                  }}
+                </div>
               </div>
             </template>
           </div>
@@ -291,6 +309,15 @@
                     getFieldsForType(work_type.work_type)
                       .map(_ => _.label_t)
                       .join(', ')
+                  }}
+                </div>
+                <div class="recurrence" v-if="work_type.recur">
+                  {{ work_type.recur | getRecurrenceString }}
+                  <br />
+                  {{ $t('~~Next:') }}
+                  {{
+                    work_type.next_recur_at
+                      | moment('ddd MMMM Do YYYY [at] h:mm A')
                   }}
                 </div>
               </div>
@@ -644,9 +671,14 @@ export default {
 }
 .work-list {
   @apply mt-1 text-crisiscleanup-grey-900;
-  grid-row-start: row2-start;
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 4;
+}
+
+.recurrence {
+  @apply mt-1 text-crisiscleanup-grey-900 flex flex-col;
+  grid-column-start: 1;
+  grid-column-end: 4;
 }
 
 .max-lines {

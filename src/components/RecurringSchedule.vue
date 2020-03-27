@@ -109,6 +109,7 @@ export default {
           freq: RRule.WEEKLY,
           interval: this.weekInterval,
           until: this.endDate,
+          byhour: [11],
           byweekday: Object.keys(this.selectedDays)
             .filter(day => Boolean(this.selectedDays[day]))
             .map(day => this.daysOfWeek[day]),
@@ -119,6 +120,7 @@ export default {
           freq: RRule.DAILY,
           interval: this.dayInterval,
           until: this.endDate,
+          byhour: [11],
           byweekday:
             this.dailyOption === 'Every Weekday'
               ? [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]

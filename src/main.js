@@ -15,6 +15,7 @@ import Tag from '@/components/Tag';
 import {
   getColorForStatus,
   getColorForWorkType,
+  getRecurrenceString,
   getStatusName,
   getWorkTypeImage,
   getWorkTypeName,
@@ -106,6 +107,7 @@ Vue.filter('getColorForWorkType', getColorForWorkType);
 Vue.filter('getWorkTypeImage', getWorkTypeImage);
 Vue.filter('secondsToHm', secondsToHm);
 Vue.filter('getColorForStatus', getColorForStatus);
+Vue.filter('getRecurrenceString', getRecurrenceString);
 
 // API & Auth
 if (AuthService.getUser()) {

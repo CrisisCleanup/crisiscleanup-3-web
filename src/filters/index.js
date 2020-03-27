@@ -1,6 +1,7 @@
 import { colors as iconColors, templates } from '@/icons/icons_templates';
 import Status from '@/models/Status';
 import WorkType from '@/models/WorkType';
+import { RRule } from 'rrule';
 
 export function snakeToTitleCase(value) {
   if (!value) return '';
@@ -25,6 +26,10 @@ export function getStatusName(statusKey) {
     .where('status', statusKey)
     .get();
   return status[0].status_name_t;
+}
+
+export function getRecurrenceString(rule) {
+  return RRule.fromString(rule).toText();
 }
 
 export function getStatusBadge(status) {
