@@ -1,6 +1,12 @@
 import User from '@/models/User';
 import { Model } from '@vuex-orm/core';
 
+export const ERRORS = {
+  AGENT_NOT_FOUND: 'AGENT_NOT_FOUND',
+  MOBILE_NOT_FOUND: 'MOBILE_NOT_FOUND',
+  MOBILE_INVALID: 'MOBILE_INVALID',
+};
+
 export default class Agent extends Model {
   static entity = 'agents';
 
@@ -24,7 +30,21 @@ export default class Agent extends Model {
         try {
           agent = await this.get('/agents/me');
         } catch {
-          agent = await this.post('/agents', user);
+          try {
+            agent = await this.post('/agents', user);
+          } catch (e) {
+            const {
+              response: {
+                data: { data },
+              },
+            } = e;
+            let errorType = data.error_type ? data.error_type : null;
+            errorType = ERRORS[errorType];
+            if (errorType) {
+              throw errorType;
+            }
+            throw e;
+          }
         }
         return agent;
       },

@@ -65,6 +65,7 @@
           </div>
         </div>
       </div>
+      <caller-edit-card :active="!agentValid" />
     </template>
   </Loader>
 </template>
@@ -72,19 +73,22 @@
 <script>
 import { EventBus } from '@/event-bus';
 import Loader from '@/components/Loader.vue';
-import Agent from '@/models/Agent';
+import Agent, { ERRORS as AgentErrors } from '@/models/Agent';
 import User from '@/models/User';
 import { mapGetters } from 'vuex';
+import CallerEditCard from '@/components/phone/CallerIDEditCard.vue';
 
 export default {
   name: 'PhoneGateway',
   components: {
     Loader,
+    CallerEditCard,
   },
   data() {
     return {
       loading: true,
       disabled: false,
+      agentValid: true,
       agent: {},
     };
   },
@@ -155,7 +159,13 @@ export default {
   },
   async mounted() {
     this.loading = true;
-    this.agent = await this.getAgent();
+    try {
+      this.agent = await this.getAgent();
+    } catch (e) {
+      if (e === AgentErrors.MOBILE_INVALID) {
+        this.agentValid = false;
+      }
+    }
     this.loading = false;
   },
 };
