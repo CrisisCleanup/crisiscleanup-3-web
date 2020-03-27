@@ -9,3 +9,15 @@ export const LocaleMixin = {
     ...mapState('locale', ['language']),
   },
 };
+
+export const LangMixin = {
+  methods: {
+    getLang(defs) {
+      const lang = {};
+      Object.keys(defs).forEach(k => {
+        lang[k] = this.$t(defs[k]);
+      });
+      return lang;
+    },
+  },
+};
