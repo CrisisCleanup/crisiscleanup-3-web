@@ -4,8 +4,10 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import { EventBus } from '@/event-bus';
 import Gateway from './Gateway.vue';
 import Dashboard from './Dashboard.vue';
+import Controller from './Controller.vue';
 
 export default {
   name: 'PhoneLayout',
@@ -15,12 +17,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('phone', ['connectReady']),
+    ...mapGetters('phone', ['connectReady', 'agentState']),
   },
   methods: {
     ...mapActions('phone', ['setPopup']),
   },
   created() {
+    EventBus.$on('acs:status:oncall', () => {
+      this.page = Controller;
+    });
+    EventBus.$on('acs:status:offcall', () => {
+      this.page = Dashboard;
+    });
     if (!this.connectReady) {
       this.unsub = this.$store.subscribe(mutation => {
         switch (mutation.type) {
