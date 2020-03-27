@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-white shadow-xl">
     <!--- Tabs --->
     <button
       v-for="tab in tabs"
