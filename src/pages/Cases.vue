@@ -535,11 +535,15 @@
       <router-view
         v-if="!spinning"
         :key="$route.params.id"
+        :incident-id="$route.params.incident_id"
+        :worksite-id="$route.params.id"
         :incident="currentIncident"
+        :is-editing="isEditingWorksite"
         @closeWorksite="closeWorksite"
         @geocoded="addMarkerToMap"
         @clearMarkers="removeMarkerFromMap"
-        @savedWorksite="loadWorksite"
+        @savedWorksite="savedWorksite"
+        @switchIncident="switchIncident"
         @navigateToWorksite="
           id => {
             $router.push(
@@ -1148,6 +1152,16 @@ export default {
         `/incident/${this.$route.params.incident_id}/cases/new`,
       );
       EventBus.$emit('clearWorksite');
+    },
+    async savedWorksite(worksite) {
+      await this.$router.push(
+        `/incident/${worksite.incident}/cases/${worksite.id}`,
+      );
+    },
+    async switchIncident(data) {
+      await this.$router.push(
+        `/incident/${data.incident}/cases/${data.worksite.id}/edit`,
+      );
     },
   },
 };

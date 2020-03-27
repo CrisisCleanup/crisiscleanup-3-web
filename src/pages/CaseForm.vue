@@ -434,6 +434,7 @@
         :text="$t('actions.save')"
       />
       <base-button
+        v-if="!disableClaimAndSave"
         size="medium"
         variant="solid"
         class="flex-grow m-1 text-black"
@@ -484,11 +485,31 @@ export default {
     });
     EventBus.$on('clearWorksite', () => {
       this.worksite = {
-        incident: this.$route.params.incident_id,
+        incident: this.incidentId,
         form_data: [],
         formFields: {},
       };
     });
+  },
+  props: {
+    worksiteId: {
+      type: String,
+      default: null,
+    },
+    incidentId: {
+      type: String,
+      default: null,
+    },
+    pdaId: {
+      type: String,
+      default: null,
+    },
+    isEditing: {
+      type: Boolean,
+    },
+    disableClaimAndSave: {
+      type: Boolean,
+    },
   },
   data() {
     return {
@@ -521,38 +542,37 @@ export default {
       return [];
     },
     currentIncident() {
-      return Incident.find(this.$route.params.incident_id);
+      return Incident.find(this.incidentId);
     },
     fieldsArray() {
       return this.fields.map(field => field.field_key);
     },
-    isEditingWorksite() {
-      return this.$route.meta.id === 'case_edit';
-    },
   },
   async mounted() {
     this.ready = false;
-    if (this.$route.params.id) {
+    if (this.worksiteId) {
       try {
-        await Worksite.api().fetch(
-          this.$route.params.id,
-          this.$route.params.incident_id,
-        );
+        await Worksite.api().fetch(this.worksiteId, this.incidentId);
       } catch (e) {
-        await this.$router.push(
-          `/incident/${this.$route.params.incident_id}/cases/new`,
-        );
+        this.$emit('clearWorksite');
       }
-      this.worksite = Worksite.find(this.$route.params.id);
+      this.worksite = Worksite.find(this.worksiteId);
       if (this.$route.query.showOnMap) {
-        this.$emit('jumpToCase', this.$route.params.id);
+        this.$emit('jumpToCase', this.worksiteId);
       }
     } else {
       this.worksite = {
-        incident: this.$route.params.incident_id,
+        incident: this.incidentId,
         form_data: [],
         formFields: {},
       };
+      if (this.pdaId) {
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/pdas/${this.pdaId}`,
+        );
+        this.worksite = new Worksite(response.data);
+        delete this.worksite.id;
+      }
     }
     this.dynamicFields = this.worksite.form_data.reduce(function(map, obj) {
       map[obj.field_key] = obj.field_value;
@@ -740,9 +760,10 @@ export default {
           await this.saveWorksite(false);
           this.$emit('reloadTable');
           this.$emit('reloadMap', this.worksite.id);
-          await this.$router.push(
-            `/incident/${this.potentialIncidents[0].id}/cases/${this.worksite.id}/edit`,
-          );
+          this.$emit('switchIncident', {
+            incident: this.potentialIncidents[0].id,
+            worksite: this.worksite,
+          });
           return;
         }
       }
@@ -757,14 +778,14 @@ export default {
       );
       const searchWorksites = await Worksite.api().searchWorksites(
         value,
-        this.$route.params.incident_id,
+        this.incidentId,
       );
       this.searchWorksitesResults = searchWorksites.entities.worksites;
     },
     async worksitesSearch(value) {
       const searchWorksites = await Worksite.api().searchWorksites(
         value,
-        this.$route.params.incident_id,
+        this.incidentId,
       );
       this.searchWorksitesNameResults = searchWorksites.entities.worksites;
     },
@@ -844,9 +865,7 @@ export default {
         if (reload) {
           this.$emit('reloadTable');
           this.$emit('reloadMap', this.worksite.id);
-          await this.$router.push(
-            `/incident/${this.$route.params.incident_id}/cases/${this.worksite.id}`,
-          );
+          this.$emit('savedWorksite', this.worksite);
         }
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -868,13 +887,11 @@ export default {
       this.worksite = Worksite.find(this.worksite.id);
       this.$emit('reloadTable');
       this.$emit('reloadMap', this.worksite.id);
-      await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/${this.worksite.id}`,
-      );
+      this.$emit('savedWorksite', this.worksite);
     },
     resetForm() {
       this.worksite = new Worksite({
-        incident: this.$route.params.incident_id,
+        incident: this.incidentId,
         form_data: [],
       });
     },
