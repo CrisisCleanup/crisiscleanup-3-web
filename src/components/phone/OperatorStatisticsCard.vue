@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <div class="bg-gray text-base font-semibold content-center m-2 p-2 h-8">
+  <div class="shadow-xl bg-white">
+    <div class="bg-white text-base font-semibold content-center m-2 p-2 h-8">
       <header>My Statistics</header>
     </div>
-    <div class="h-0 w-auto border shadow" />
+    <div class="h-0 w-auto border" />
     <div class="flex-col p-2">
       <div class="justify-between flex flex-row my-2">
         <p class="text-sm">Calls I have received</p>
@@ -11,21 +11,21 @@
           {{ callsReceived }}
         </div>
       </div>
-      <div class="h-0 w-auto border shadow" />
+      <div class="h-0 w-auto border" />
       <div class="justify-between flex flex-row my-2">
         <p class="text-sm">Calls I have made</p>
         <div class="font-semifold" :callsMade="callsMade">
           {{ callsMade }}
         </div>
       </div>
-      <div class="h-0 w-auto border shadow" />
+      <div class="h-0 w-auto border " />
       <div class="justify-between flex flex-row my-2">
         <p class="text-sm">Total Login Time this week</p>
         <div class="font-semibold" :totalLoggedTime="totalLoggedTime">
           {{ totalLoggedTime }}
         </div>
       </div>
-      <div class="h-0 w-auto border shadow" />
+      <div class="h-0 w-auto border" />
       <div class="justify-between flex flex-row my-2">
         <p class="text-sm">Total Talk Time this week</p>
         <div
