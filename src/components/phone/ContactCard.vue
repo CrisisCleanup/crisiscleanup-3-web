@@ -76,7 +76,6 @@
       @onClose="isShowingTrainingModal = false"
       @onComplete="completedTraining = true"
     ></trainings-modal>
-    <!-- <trainings-modal :visible="true"></trainings-modal> -->
   </div>
 </template>
 
