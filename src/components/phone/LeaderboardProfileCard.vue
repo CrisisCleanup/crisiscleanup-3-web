@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex flex-row m-5 justify-between">
+    <div class="flex flex-row p-3 justify-between">
       <!-- PFP -->
       <div class="flex flex-col w-1/7">
         <img src="@/assets/LeaderboardPFPss.jpg" class="h-8" />
