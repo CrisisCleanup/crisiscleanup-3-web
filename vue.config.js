@@ -33,6 +33,12 @@ module.exports = {
     }
     return {
       ...common,
+      resolve: {
+        alias: {
+          ...common.resolve.alias,
+          'vue-types': require.resolve('vue-types/es/shim.js'),
+        },
+      },
     };
   },
 
