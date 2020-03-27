@@ -4,6 +4,7 @@
     class="menu-item router-link p-2 border-b border-t border-gray-800"
     :class="{ 'router-link-active': isActive }"
     :data-cy="`navigation.${route.key}`"
+    v-if="!route.disabled"
   >
     <div :key="route.key" class="flex flex-col items-center">
       <ccu-icon
@@ -19,13 +20,19 @@
 </template>
 
 <script>
+import VueTypes from 'vue-types';
+
 export default {
   name: 'NavButton',
   props: {
-    route: {
-      type: Object,
-      required: true,
-    },
+    route: VueTypes.shape({
+      key: VueTypes.string,
+      text: VueTypes.string,
+      to: VueTypes.string,
+      icon: VueTypes.string,
+      iconSize: VueTypes.string,
+      disabled: VueTypes.bool,
+    }),
   },
   computed: {
     isActive() {

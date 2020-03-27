@@ -159,6 +159,7 @@ export default {
           icon: 'phone',
           text: this.$t('dashboard.phone'),
           to: '/phone',
+          disabled: process.env.NODE_ENV === 'production',
         },
       ];
     },

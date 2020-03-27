@@ -10,16 +10,23 @@
 </template>
 
 <script>
+import VueTypes from 'vue-types';
 import NavButton from './NavButton';
 
 export default {
   name: 'NavMenu',
   components: { NavButton },
   props: {
-    routes: {
-      type: Array,
-      required: true,
-    },
+    routes: VueTypes.arrayOf(
+      VueTypes.shape({
+        key: VueTypes.string,
+        text: VueTypes.string,
+        to: VueTypes.string,
+        icon: VueTypes.string,
+        iconSize: VueTypes.string,
+        disabled: VueTypes.bool,
+      }),
+    ),
   },
 };
 </script>
