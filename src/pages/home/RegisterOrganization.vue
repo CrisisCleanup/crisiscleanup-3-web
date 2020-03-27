@@ -283,7 +283,7 @@ export default {
   components: { HomeLayout, HomeNav, HomeActions },
 
   mounted() {
-    Incident.api().get('/incidents', {
+    Incident.api().get('/incidents_list', {
       dataKey: 'results',
     });
   },
