@@ -13,6 +13,7 @@ import Modal from '@/components/Modal';
 import Spinner from '@/components/Spinner';
 import Tag from '@/components/Tag';
 import {
+  capitalize,
   getColorForStatus,
   getColorForWorkType,
   getRecurrenceString,
@@ -21,6 +22,7 @@ import {
   getWorkTypeName,
   secondsToHm,
   snakeToTitleCase,
+  toUpper,
 } from '@/filters';
 import Authenticated from '@/layouts/Authenticated';
 import Unauthenticated from '@/layouts/Unauthenticated';
@@ -110,6 +112,8 @@ Vue.filter('getWorkTypeImage', getWorkTypeImage);
 Vue.filter('secondsToHm', secondsToHm);
 Vue.filter('getColorForStatus', getColorForStatus);
 Vue.filter('getRecurrenceString', getRecurrenceString);
+Vue.filter('upper', toUpper);
+Vue.filter('capitalize', capitalize);
 
 // API & Auth
 if (AuthService.getUser()) {

@@ -101,3 +101,15 @@ export const secondsToHm = seconds => {
   const mDisplay = `${m}m`;
   return hDisplay + mDisplay;
 };
+
+export const capitalize = value => {
+  if (!value) return '';
+  let capped = value.toString();
+  capped = capped.charAt(0).toUpperCase() + capped.slice(1);
+  return capped;
+};
+
+export const toUpper = value => {
+  if (!value) return '';
+  return value.toUpperCase();
+};
