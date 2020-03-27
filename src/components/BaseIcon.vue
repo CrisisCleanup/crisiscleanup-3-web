@@ -19,6 +19,9 @@ const iconMap = {
   print: require('@/assets/icons/print-big.svg'),
   pin: require('@/assets/icons/pin.svg'),
   phone: require('@/assets/icons/phone.svg'),
+  'phone-user': require('@/assets/icons/phone-user.svg'),
+  'phone-hangup': require('@/assets/icons/phone-hangup.svg'),
+  'earth-globe': require('@/assets/icons/earth-globe.svg'),
   share: require('@/assets/icons/share-big.svg'),
   download: require('@/assets/icons/download.svg'),
   active: require('@/assets/icons/active.svg'),
@@ -73,6 +76,7 @@ export default {
     alt: VueTypes.string,
     size: VueTypes.oneOf(ICON_SIZES).def('large'),
     selector: VueTypes.string,
+    withText: VueTypes.bool.def(false),
   },
   data() {
     return {
@@ -86,6 +90,7 @@ export default {
         xs: this.size === 'xs',
         xxs: this.size === 'xxs',
         xl: this.size === 'xl',
+        text: this.withText === true,
       },
     };
   },
@@ -123,6 +128,11 @@ export default {
   height: 7px;
   width: 7px;
 }
+
+.ccu-icon.text {
+  @apply pr-2;
+}
+
 .filter-gray {
   filter: invert(84%) sepia(0%) saturate(30%) hue-rotate(209deg)
     brightness(107%) contrast(90%);
