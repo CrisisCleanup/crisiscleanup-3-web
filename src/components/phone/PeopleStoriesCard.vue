@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-white shadow-xl">
     <!-- Header -->
     <base-text
       variant="h3"
