@@ -3,6 +3,7 @@
     <component :is="layout">
       <router-view />
     </component>
+    <Version />
     <CCP />
     <dialogs-wrapper />
   </div>
@@ -13,11 +14,12 @@ import '@crisiscleanup/amazon-connect-streams';
 import '@crisiscleanup/connect-rtc';
 import { mapActions, mapGetters } from 'vuex';
 import CCP from '@/components/phone/CCP.vue';
+import Version from '@/components/Version.vue';
 
 const defaultLayout = 'authenticated';
 export default {
   name: 'App',
-  components: { CCP },
+  components: { CCP, Version },
   computed: {
     layout() {
       return `${this.$route.meta.layout || defaultLayout}-layout`;

@@ -1,0 +1,43 @@
+<template>
+  <div class="container">
+    <base-text variant="h2" :weight="600">
+      {{ text | upper }}
+    </base-text>
+  </div>
+</template>
+
+<script>
+import { LangMixin } from '@/mixins';
+import { version } from '@/../package.json';
+
+export default {
+  name: 'Version',
+  mixins: [LangMixin],
+  computed: {
+    text() {
+      return `${this.lang.text} - v${version}`;
+    },
+    lang() {
+      return this.getLang({
+        text: '~~Crisis Cleanup (Preview)',
+      });
+    },
+  },
+};
+</script>
+
+<style scoped lang="scss">
+.container {
+  bottom: 0;
+  @apply px-3 py-1;
+  z-index: 99999;
+  position: fixed;
+  p {
+    @apply text-gray-700;
+    opacity: 0.4;
+    z-index: 99999;
+    width: 100vw;
+    text-align: center;
+  }
+}
+</style>
