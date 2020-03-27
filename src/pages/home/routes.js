@@ -1,6 +1,7 @@
 import * as SSO from '@/services/sso.service';
 import store from '@/store/index';
 import Vue from 'vue';
+import About from './About.vue';
 import Login from './Login.vue';
 import Map from './Map.vue';
 import Privacy from './Privacy.vue';
@@ -51,6 +52,12 @@ export default [
     path: '/training',
     component: Training,
     name: 'nav.training',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/about',
+    component: About,
+    name: 'nav.about',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
