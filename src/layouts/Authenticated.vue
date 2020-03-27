@@ -54,7 +54,6 @@
                     class="router-link text-base p-2 hover:bg-crisiscleanup-light-grey"
                     >Profile</router-link
                   >
-                  <!--                <button v-can="['update_portal_settings']">New</button>-->
                   <div
                     data-cy="auth.userprofile.logout"
                     class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
@@ -73,6 +72,9 @@
         </div>
         <div v-if="ready" class="main--grid overflow-auto">
           <slot />
+        </div>
+        <div v-if="showAcceptTermsModal">
+          <TermsandConditionsModal @acceptedTerms="acceptTermsAndConditions" />
         </div>
       </div>
     </template>
@@ -93,18 +95,22 @@ import Role from '@/models/Role';
 import { i18nService } from '@/services/i18n.service';
 import NavMenu from '@/components/navigation/NavMenu';
 import Loader from '@/components/Loader';
+import TermsandConditionsModal from '@/components/TermsandConditionsModal';
 import Vue from 'vue';
 import Acl from 'vue-browser-acl';
 import DisasterIcon from '../components/DisasterIcon';
 import PhoneStatus from '../models/PhoneStatus';
 
+const VERSION_3_LAUNCH_DATE = '2020-03-25';
+
 export default {
   name: 'Authenticated',
-  components: { DisasterIcon, NavMenu, Loader },
+  components: { DisasterIcon, NavMenu, Loader, TermsandConditionsModal },
   data() {
     return {
       loading: false,
       ready: false,
+      showAcceptTermsModal: false,
     };
   },
   computed: {
@@ -217,6 +223,15 @@ export default {
       this.setCurrentIncidentId(incidentId);
     }
 
+    if (
+      !this.currentUser.accepted_terms_timestamp ||
+      this.$moment(VERSION_3_LAUNCH_DATE).isAfter(
+        this.$moment(this.currentUser.accepted_terms_timestamp),
+      )
+    ) {
+      this.showAcceptTermsModal = true;
+    }
+
     try {
       await Incident.api().fetchById(incidentId);
     } catch (e) {
@@ -290,6 +305,10 @@ export default {
     ...mapMutations('incident', ['setCurrentIncidentId']),
     ...mapMutations('loading', ['setWorksitesLoading']),
     ...mapMutations('locale', ['setLanguage']),
+    async acceptTermsAndConditions() {
+      await User.api().acceptTerms();
+      this.showAcceptTermsModal = false;
+    },
   },
 };
 </script>

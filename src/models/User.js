@@ -2,6 +2,7 @@ import { Model } from '@vuex-orm/core';
 import { AuthService } from '@/services/auth.service';
 import Language from '@/models/Language';
 import Role from '@/models/Role';
+import moment from 'moment';
 
 export default class User extends Model {
   static entity = 'users';
@@ -21,6 +22,8 @@ export default class User extends Model {
       preferences: this.attr({}),
       primary_language: this.attr(null),
       secondary_language: this.attr(null),
+      accepted_terms_timestamp: this.attr(null),
+      accepted_terms: this.attr(null),
       social: this.attr({}),
       referring_user: this.attr({}),
     };
@@ -151,12 +154,6 @@ export default class User extends Model {
           },
           { save: false },
         );
-        await User.update({
-          where: currentUser.id,
-          data: {
-            states: newStates,
-          },
-        });
       },
       async updateUserPreferences(preferences) {
         const currentUser = User.find(AuthService.getUser().user_claims.id);
@@ -171,11 +168,12 @@ export default class User extends Model {
           },
           { save: false },
         );
-        await User.update({
-          where: currentUser.id,
-          data: {
-            preferences: newPreferences,
-          },
+      },
+      async acceptTerms() {
+        const currentUser = User.find(AuthService.getUser().user_claims.id);
+        await this.patch(`/users/${currentUser.id}`, {
+          accepted_terms: true,
+          accepted_terms_timestamp: moment().toISOString(),
         });
       },
     },

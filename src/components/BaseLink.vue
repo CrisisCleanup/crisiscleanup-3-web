@@ -1,5 +1,11 @@
 <template>
-  <component :is="linkComponent" :to="to" :href="href" class="link">
+  <component
+    :is="linkComponent"
+    :to="to"
+    :href="href"
+    class="link"
+    :target="target"
+  >
     <base-text :variant="textVariant">
       <slot />
     </base-text>
@@ -16,6 +22,7 @@ export default {
     href: VueTypes.string,
     textVariant: VueTypes.oneOf(TextVariants).def('body'),
     to: VueTypes.string,
+    target: VueTypes.string,
   },
   computed: {
     linkComponent() {
