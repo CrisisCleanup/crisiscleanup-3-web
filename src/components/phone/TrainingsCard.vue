@@ -28,7 +28,7 @@
           class="bg-crisiscleanup-yellow-300 hover:bg-crisiscleanup-yellow-100 text-black px-4 py-1"
           href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
         >
-          Start
+          {{ lang.actions.start.text }}
         </base-button>
       </div>
     </div>
@@ -56,18 +56,9 @@ export default {
     lang() {
       return {
         actions: {
-          cancel: {
-            text: this.$t('~~Cancel'),
+          start: {
+            text: this.$t('~~Start'),
           },
-          complete: {
-            text: this.$t('~~Complete'),
-          },
-        },
-        header: {
-          text: this.$t('~~Great to see you are ready to start working!'),
-          secondaryText: this.$t(
-            '~~You must complete the following trainings and read some news before starting.',
-          ),
         },
       };
     },
