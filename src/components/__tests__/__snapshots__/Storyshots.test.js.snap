@@ -719,6 +719,63 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         </div>
          
         <p>
+          phone-user
+        </p>
+      </div>
+      <div
+        class="flex flex-col border-2 text-center"
+      >
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
+         
+        <p>
+          phone-hangup
+        </p>
+      </div>
+      <div
+        class="flex flex-col border-2 text-center"
+      >
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
+         
+        <p>
+          earth-globe
+        </p>
+      </div>
+      <div
+        class="flex flex-col border-2 text-center"
+      >
+        <div
+          class="flex items-center base-icon m-8 align-self-center js-"
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
+         
+        <p>
           share
         </p>
       </div>
@@ -1282,6 +1339,7 @@ exports[`Storyshots Basics|BaseInput Disabled 1`] = `
         pattern=".*"
         placeholder=""
         type="search"
+        value="text"
       />
        
       <!---->
@@ -1313,6 +1371,7 @@ exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
         pattern=".*"
         placeholder=""
         type="search"
+        value="text"
       />
        
       <div
@@ -1358,6 +1417,7 @@ exports[`Storyshots Basics|BaseInput Simple 1`] = `
         pattern=".*"
         placeholder=""
         type="search"
+        value="text"
       />
        
       <!---->
@@ -1388,6 +1448,7 @@ exports[`Storyshots Basics|BaseInput With Icon 1`] = `
         pattern=".*"
         placeholder=""
         type="search"
+        value="text"
       />
        
       <!---->
@@ -1467,6 +1528,7 @@ exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
             pattern=".*"
             placeholder=""
             type="search"
+            value="base"
           />
            
           <!---->
@@ -1491,6 +1553,7 @@ exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
             pattern=".*"
             placeholder=""
             type="search"
+            value="large"
           />
            
           <!---->
@@ -1523,6 +1586,7 @@ exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
         pattern=".*"
         placeholder=""
         type="search"
+        value="text"
       />
        
       <!---->

@@ -90,6 +90,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     placeholder=""
     required="required"
     type="search"
+    value="Test"
   />
    
   <!---->
@@ -113,6 +114,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     placeholder=""
     required="required"
     type="search"
+    value="Test"
   />
    
   <!---->
