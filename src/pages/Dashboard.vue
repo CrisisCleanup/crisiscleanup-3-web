@@ -608,11 +608,15 @@ export default {
     },
     async getIncidentRequests() {
       if (this.$can('move_orgs')) {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
-        );
-        if (response.data) {
-          this.incident_requests = [...response.data.results];
+        try {
+          const response = await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
+          );
+          if (response.data) {
+            this.incident_requests = [...response.data.results];
+          }
+        } catch (e) {
+          this.$log.debug(e);
         }
       }
     },
