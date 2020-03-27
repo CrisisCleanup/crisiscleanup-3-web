@@ -15,10 +15,6 @@ export default class PhoneStatus extends Model {
       completion: this.number(1),
       try_again_delay: this.number(0),
       list_order: this.number(0),
-      created_at: this.attr(),
-      updated_at: this.attr(),
-      created_by: this.attr(),
-      updated_by: this.attr(),
     };
   }
 }

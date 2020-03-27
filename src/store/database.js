@@ -17,6 +17,8 @@ import Language from '@/models/Language';
 import Agent from '@/models/Agent';
 import UserRole from '@/models/UserRole';
 import Pda from '@/models/Pda';
+import PhoneOutbound from '@/models/PhoneOutbound';
+import PhoneStatus from '@/models/PhoneStatus';
 
 const database = new Database();
 
@@ -38,5 +40,7 @@ database.register(Role, {});
 database.register(Agent, {});
 database.register(UserRole, {});
 database.register(Pda, {});
+database.register(PhoneStatus, {});
+database.register(PhoneOutbound, {});
 
 export default database;
