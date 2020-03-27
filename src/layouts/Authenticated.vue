@@ -126,6 +126,9 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
+    currentOrganization() {
+      return Organization.find(this.currentUser.organization.id);
+    },
     incidents() {
       return Incident.query()
         .orderBy('id', 'desc')
@@ -175,6 +178,7 @@ export default {
   },
   async mounted() {
     this.loading = true;
+    this.setCurrentIncidentId(null);
     await Promise.all([
       User.api().get('/users/me', {}),
       Incident.api().get(
@@ -239,7 +243,7 @@ export default {
       User.api().updateUserState({
         incident: null,
       });
-      await this.$router.push(`/dashboard`);
+      await this.$router.push(`/`);
     }
 
     this.loading = false;

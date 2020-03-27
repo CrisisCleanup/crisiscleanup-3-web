@@ -99,8 +99,8 @@ export default {
       map[obj.status] = obj.status_name_t;
       return map;
     }, {});
-    this.selectedIncident = this.incidents[this.incidents.length - 1].id;
-    await this.setLocations(this.incidents[this.incidents.length - 1].id);
+    this.selectedIncident = this.incidents[0].id;
+    await this.setLocations(this.incidents[0].id);
   },
   methods: {
     async setLocations(incidentId) {
