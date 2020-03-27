@@ -23,9 +23,11 @@
 <script>
 import SideNav from '@/components/home/SideNav.vue';
 import Footer from '@/components/home/Footer.vue';
+import Actions from '@/components/home/Actions.vue';
 
 export const HomeNav = SideNav;
 export const HomeFooter = Footer;
+export const HomeActions = Actions;
 
 export default {
   name: 'HomeLayout',
