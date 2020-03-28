@@ -13,12 +13,10 @@ import { Store } from 'vuex-mock-store';
 import WorkTypeRequestModal from '../WorkTypeRequestModal';
 
 jest.mock('@/models/User');
-jest.mock('@/models/Status');
 jest.mock('@/models/Worksite');
 jest.mock('@/models/Incident');
 jest.mock('@/models/Organization');
 jest.mock('@/models/WorksiteRequest');
-jest.mock('@/models/WorkType');
 
 const localVue = createLocalVue();
 localVue.filter('getWorkTypeName', () => 'workType.ash');

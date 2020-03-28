@@ -18,7 +18,6 @@ localVue.filter('getStatusName', () => 'Open, unassigned');
 localVue.filter('snakeToTitleCase', snakeToTitleCase);
 
 jest.mock('@/models/Worksite');
-jest.mock('@/models/Status');
 
 const MockFilters = {
   fields: {

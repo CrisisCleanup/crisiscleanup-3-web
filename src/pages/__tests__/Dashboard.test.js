@@ -12,7 +12,6 @@ import Table from '@/components/Table';
 import Dashboard from '../Dashboard';
 
 jest.mock('@/models/User');
-jest.mock('@/models/Status');
 jest.mock('@/models/Worksite');
 jest.mock('@/models/Incident');
 jest.mock('@/models/Organization');
