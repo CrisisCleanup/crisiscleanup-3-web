@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="ccu-version-overlay">
     <base-text variant="h2" :weight="600">
       {{ text | upper }}
     </base-text>
@@ -26,8 +26,8 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.container {
+<style lang="scss">
+.ccu-version-overlay {
   bottom: 0;
   @apply px-3 py-1;
   z-index: 99999;

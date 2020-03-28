@@ -636,4 +636,13 @@ h5 {
   font-size: 14px;
   font-weight: bold;
 }
+
+.ccu-version-overlay {
+  padding: 0 !important;
+  bottom: -3px !important;
+}
+
+.ccu-version-overlay p {
+  text-align: left !important;
+}
 </style>
