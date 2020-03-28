@@ -555,6 +555,7 @@ export default {
         await Worksite.api().fetch(this.worksiteId, this.incidentId);
       } catch (e) {
         this.$emit('clearWorksite');
+        return;
       }
       this.worksite = Worksite.find(this.worksiteId);
       if (this.$route.query.showOnMap) {

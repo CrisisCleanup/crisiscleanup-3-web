@@ -534,6 +534,7 @@
         :incident="currentIncident"
         :is-editing="isEditingWorksite"
         @closeWorksite="closeWorksite"
+        @clearWorksite="clearWorksite"
         @geocoded="addMarkerToMap"
         @clearMarkers="removeMarkerFromMap"
         @savedWorksite="savedWorksite"
