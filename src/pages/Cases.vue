@@ -10,7 +10,7 @@
         <div class="p-3 border border-gray-300 card-header bg-white">
           <div class="flex items-center justify-between">
             <div class="flex items-center">
-              <div class="flex" style="min-width: 80px">
+              <div class="flex" style="min-width: 80px;">
                 <ccu-icon
                   :alt="$t('casesVue.map_view')"
                   size="medium"
@@ -57,7 +57,7 @@
                 />
               </div>
             </div>
-            <div class="flex worksite-actions" style="color: #4c4c4d">
+            <div class="flex worksite-actions" style="color: #4c4c4d;">
               <base-dropdown class-name="borderless">
                 <base-button
                   slot="btn"
@@ -85,7 +85,7 @@
                               <base-checkbox
                                 :value="appliedLocations.has(state.id)"
                                 @input="
-                                  value => {
+                                  (value) => {
                                     applyLocation(state.id, value);
                                   }
                                 "
@@ -114,7 +114,7 @@
                               <base-checkbox
                                 :value="appliedLocations.has(district.id)"
                                 @input="
-                                  value => {
+                                  (value) => {
                                     applyLocation(district.id, value);
                                   }
                                 "
@@ -143,7 +143,7 @@
                               <base-checkbox
                                 :value="appliedLocations.has(location.id)"
                                 @input="
-                                  value => {
+                                  (value) => {
                                     applyLocation(location.id, value);
                                   }
                                 "
@@ -195,7 +195,7 @@
                         class="text-base font-thin mx-4"
                         :text="$t('actions.download')"
                         :action="
-                          e => {
+                          (e) => {
                             downloadWorksite(e, selectedTableItems);
                           }
                         "
@@ -207,7 +207,7 @@
                         class="text-base font-thin mx-4"
                         :text="$t('actions.print')"
                         :action="
-                          e => {
+                          (e) => {
                             printWorksite(e, selectedTableItems);
                           }
                         "
@@ -341,7 +341,7 @@
                 :pagination="pagination"
                 :sorter="sorter"
                 @selectionChanged="
-                  selectedItems => {
+                  (selectedItems) => {
                     selectedTableItems = selectedItems;
                   }
                 "
@@ -355,17 +355,17 @@
     <div
       v-if="
         currentIncident &&
-          (isEditingWorksite ||
-            isViewingWorksite ||
-            isViewingWorksiteHistory ||
-            isViewingWorksiteFlag ||
-            isNewWorksite)
+        (isEditingWorksite ||
+          isViewingWorksite ||
+          isViewingWorksiteHistory ||
+          isViewingWorksiteFlag ||
+          isNewWorksite)
       "
       class="flex flex-col h-full shadow-2xl max-w-sm"
       data-cy="worksiteview"
     >
       <div
-        style="background-color: white"
+        style="background-color: white;"
         class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center"
       >
         <div
@@ -406,10 +406,10 @@
       <div
         v-if="
           isEditingWorksite ||
-            isViewingWorksite ||
-            isViewingWorksiteHistory ||
-            isViewingWorksiteFlag ||
-            isNewWorksite
+          isViewingWorksite ||
+          isViewingWorksiteHistory ||
+          isViewingWorksiteFlag ||
+          isNewWorksite
         "
         class="text-crisiscleanup-grey-700 text-lg flex p-2 bg-white justify-between items-center border-b"
         data-cy="worksiteview_actions"
@@ -466,9 +466,7 @@
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">
             <router-link
-              :to="
-                `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/flag`
-              "
+              :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/flag`"
             >
               <ccu-icon
                 :alt="$t('actions.flag')"
@@ -485,9 +483,7 @@
               @click.native="jumpToCase"
             />
             <router-link
-              :to="
-                `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/history`
-              "
+              :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/history`"
             >
               <ccu-icon
                 :alt="$t('actions.history')"
@@ -518,9 +514,7 @@
             />
             <router-link
               v-if="isViewingWorksite"
-              :to="
-                `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/edit`
-              "
+              :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/edit`"
             >
               <ccu-icon
                 :alt="$t('actions.edit')"
@@ -545,7 +539,7 @@
         @savedWorksite="savedWorksite"
         @switchIncident="switchIncident"
         @navigateToWorksite="
-          id => {
+          (id) => {
             $router.push(
               `/incident/${this.$route.params.incident_id}/cases/${id}/edit?showOnMap=true`,
             );
@@ -710,9 +704,7 @@ export default {
       return this.$route.meta.id === 'case_new';
     },
     incidents() {
-      return Incident.query()
-        .orderBy('id', 'desc')
-        .get();
+      return Incident.query().orderBy('id', 'desc').get();
     },
     currentIncident() {
       return Incident.find(this.$route.params.incident_id);
@@ -722,7 +714,7 @@ export default {
     },
     markers() {
       if (this.data) {
-        return this.data.map(worksite => {
+        return this.data.map((worksite) => {
           return {
             ...worksite,
             position: {
@@ -848,7 +840,7 @@ export default {
         }).addTo(this.$refs.workstiteMap.map);
         this.appliedLocations.add(locationId);
       } else {
-        this.$refs.workstiteMap.map.eachLayer(layer => {
+        this.$refs.workstiteMap.map.eachLayer((layer) => {
           if (layer.location_id && layer.location_id === locationId) {
             this.$refs.workstiteMap.map.removeLayer(layer);
           }
@@ -883,7 +875,7 @@ export default {
       );
       this.tableLoading = false;
 
-      this.data = response.data.results.map(result => {
+      this.data = response.data.results.map((result) => {
         // eslint-disable-next-line camelcase
         let { form_data } = result;
         if (!form_data) {
@@ -996,7 +988,7 @@ export default {
       this[view] = true;
       this.updateUserState();
     },
-    onSearch: throttle(async function(search) {
+    onSearch: throttle(async function (search) {
       this.currentSearch = search;
       this.searchingWorksites = true;
       const searchWorksites = await Worksite.api().searchWorksites(
@@ -1016,7 +1008,7 @@ export default {
     handleFilters(filters) {
       this.appliedFilters = {};
       this.filters = filters;
-      Object.values(filters).forEach(filter => {
+      Object.values(filters).forEach((filter) => {
         this.appliedFilters = {
           ...this.appliedFilters,
           ...filter.packFunction(),
@@ -1105,7 +1097,7 @@ export default {
       const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
         this.$refs.workstiteMap.markerLayer,
       );
-      marker.on('dragend', function(event) {
+      marker.on('dragend', function (event) {
         EventBus.$emit('updatedWorksiteLocation', event.target.getLatLng());
       });
       this.$refs.workstiteMap.map.setView(
@@ -1126,7 +1118,7 @@ export default {
     async unclaimSelected() {
       this.spinning = true;
       const promises = [];
-      this.selectedTableItems.forEach(worksiteId => {
+      this.selectedTableItems.forEach((worksiteId) => {
         promises.push(
           Worksite.api().unclaimWorksite(
             worksiteId,
@@ -1136,14 +1128,14 @@ export default {
         );
       });
       const results = await Promise.allSettled(promises);
-      results.forEach(result => this.$log.debug(result));
+      results.forEach((result) => this.$log.debug(result));
       this.spinning = false;
       this.showingUnclaimModal = false;
       this.reloadTable();
     },
     async batchAction(action) {
       this.spinning = true;
-      await this.selectedTableItems.forEach(i => action(null, i));
+      await this.selectedTableItems.forEach((i) => action(null, i));
       this.spinning = false;
       this.reloadTable();
     },

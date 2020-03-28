@@ -329,7 +329,7 @@ export default {
         'orgType.government',
         'orgType.ltr',
         'orgType.cleanup',
-      ].map(key => {
+      ].map((key) => {
         return { key, label: this.$t(key) };
       }),
     };

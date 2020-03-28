@@ -1,7 +1,7 @@
 <template>
   <div class="flex-wrap m-3 p-3">
     <div class="flex flex-row">
-      <div class="flex-col ">
+      <div class="flex-col">
         <font-awesome-icon
           class="content-center mx-1 phone-icon"
           icon="phone-alt"

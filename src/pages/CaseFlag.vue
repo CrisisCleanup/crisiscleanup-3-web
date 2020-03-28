@@ -3,7 +3,7 @@
     v-if="ready"
     class="bg-white flex flex-col flex-grow justify-between p-3"
   >
-    <div class="flex-grow overflow-auto" style="height: 600px">
+    <div class="flex-grow overflow-auto" style="height: 600px;">
       <form-select
         v-model="currentFlag.reason_t"
         :options="flagTypes"
@@ -123,7 +123,7 @@
             placeholder="Organizations"
             clear-on-selected
             @selected="
-              value => {
+              (value) => {
                 selectedOrganizations = new Set(
                   selectedOrganizations.add(value),
                 );
@@ -154,7 +154,7 @@
             placeholder="Organizations"
             clear-on-selected
             @selected="
-              value => {
+              (value) => {
                 abusingOrganization = value;
               }
             "
@@ -275,7 +275,7 @@ export default {
         'flag.duplicate',
         'flag.worksite_wrong_location',
         'flag.worksite_wrong_incident',
-      ].map(key => {
+      ].map((key) => {
         return { key, label: this.$t(key) };
       }),
     };
@@ -285,9 +285,7 @@ export default {
       return User.find(this.$store.getters['auth/userId']);
     },
     incidents() {
-      return Incident.query()
-        .orderBy('id', 'desc')
-        .get();
+      return Incident.query().orderBy('id', 'desc').get();
     },
   },
   async mounted() {

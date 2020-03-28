@@ -59,7 +59,7 @@ export const withAsyncAction = () => ({
     '<base-button size="large" variant="solid" :action="doAsync">Load for 1 Second</base-button>',
   methods: {
     async doAsync() {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     },
   },
 });

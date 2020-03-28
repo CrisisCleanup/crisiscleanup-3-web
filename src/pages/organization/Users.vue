@@ -107,7 +107,7 @@
                       :placeholder="$t('usersVue.search_users')"
                       class="my-1"
                       @selectedUser="
-                        user => {
+                        (user) => {
                           filters.invitedBy.data = new Set(
                             filters.invitedBy.data.add(user),
                           );
@@ -136,7 +136,7 @@
             :loading="usersLoading"
             hide-header
             @rowClick="
-              user => {
+              (user) => {
                 $router.push(`/organization/users/${user.id}`);
               }
             "
@@ -153,7 +153,7 @@
                   <div class="text-crisiscleanup-grey-700">
                     {{
                       slotProps.item.currentRole &&
-                        slotProps.item.currentRole.name_t
+                      slotProps.item.currentRole.name_t
                     }}
                   </div>
                 </div>
@@ -255,7 +255,7 @@ export default {
     this.users = results.entities.users;
   },
   methods: {
-    onSearch: throttle(async function(search) {
+    onSearch: throttle(async function (search) {
       const queryParams = {
         search,
         organization: this.currentUser.organization.id,
@@ -272,7 +272,7 @@ export default {
     }, 300),
     async onFilter() {
       this.currentFilter = {};
-      Object.values(this.filters).forEach(filter => {
+      Object.values(this.filters).forEach((filter) => {
         this.currentFilter = {
           ...this.currentFilter,
           ...filter.packFunction(),

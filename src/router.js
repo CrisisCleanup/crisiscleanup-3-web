@@ -159,7 +159,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.noAuth)) {
+  if (to.matched.some((record) => record.meta.noAuth)) {
     next();
   } else {
     if (store.getters['auth/isLoggedIn']) {

@@ -100,7 +100,7 @@ const PMButton = L.Control.extend({
       },
     };
 
-    activeActions.forEach(name => {
+    activeActions.forEach((name) => {
       const action = actions[name];
       const actionNode = L.DomUtil.create(
         'a',

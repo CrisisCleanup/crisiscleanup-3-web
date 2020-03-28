@@ -12,7 +12,7 @@
     @change="handleTableChange"
     @rowClick="displayWorksite"
     @selectionChanged="
-      selectedItems => {
+      (selectedItems) => {
         $emit('selectionChanged', selectedItems);
       }
     "
@@ -21,9 +21,7 @@
       <div class="case-flag w-8">
         <router-link
           v-if="slotProps.item.flags.length > 0"
-          :to="
-            `/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/flag`
-          "
+          :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/flag`"
         >
           <ccu-icon
             :alt="$t('actions.flag')"

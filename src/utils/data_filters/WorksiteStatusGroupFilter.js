@@ -20,11 +20,9 @@ export default class WorksiteStatusGroupFilter extends Filter {
     }
 
     if (this.data.open) {
-      const openStatuses = Status.query()
-        .where('primary_state', 'open')
-        .get();
+      const openStatuses = Status.query().where('primary_state', 'open').get();
       packed.work_type__status__in = openStatuses
-        .map(status => status.status)
+        .map((status) => status.status)
         .join(',');
     }
 
@@ -33,7 +31,7 @@ export default class WorksiteStatusGroupFilter extends Filter {
         .where('primary_state', 'closed')
         .get();
       packed.work_type__status__in = closedStatuses
-        .map(status => status.status)
+        .map((status) => status.status)
         .join(',');
     }
     return packed;

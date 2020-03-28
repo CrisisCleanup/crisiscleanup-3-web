@@ -17,7 +17,7 @@ export default class WorkType extends Model {
   static get commercialValues() {
     return Object.assign(
       {},
-      ...this.all().map(s => ({ [s.key]: s.commercial_value })),
+      ...this.all().map((s) => ({ [s.key]: s.commercial_value })),
     );
   }
 }

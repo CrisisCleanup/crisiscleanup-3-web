@@ -84,7 +84,7 @@ export default {
     },
   },
   created() {
-    window.addEventListener('keydown', e => {
+    window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' || e.key === 'Tab') {
         this.$emit('clearSuggestions');
       }
@@ -123,7 +123,7 @@ export default {
           limit: 5,
           label: this.$t('worksiteSearchInput.existing_cases'),
           type: '',
-          onSelected: selected => {
+          onSelected: (selected) => {
             this.selected = selected.item;
             this.$emit('selectedExisting', selected.item);
           },
@@ -132,7 +132,7 @@ export default {
           limit: 10,
           label: this.$t('worksiteSearchInput.geocoder'),
           type: '',
-          onSelected: selected => {
+          onSelected: (selected) => {
             this.selected = selected.item;
             this.$emit('selectedGeocode', selected.item);
           },

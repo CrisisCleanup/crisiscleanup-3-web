@@ -91,7 +91,7 @@
                         :current-work-type="work_type"
                         use-icon
                         @input="
-                          value => {
+                          (value) => {
                             statusValueChange(
                               value,
                               work_type,
@@ -107,9 +107,7 @@
                   <div class="flex">
                     <router-link
                       class=""
-                      :to="
-                        `/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`
-                      "
+                      :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`"
                       tag="div"
                     >
                       <ccu-icon
@@ -145,7 +143,7 @@
               <base-button
                 v-if="
                   $can('approve_work_type_transfers') ||
-                    $can('receive_work_type_transfer_requests')
+                  $can('receive_work_type_transfer_requests')
                 "
                 class="mr-2 border-r pr-2"
                 size="medium"
@@ -502,7 +500,7 @@ export default {
       if (this.pendingView === 'inbound') {
         return query
           .where(
-            request =>
+            (request) =>
               Number(request.requested_to_org.id) ===
                 Number(this.currentUser.organization.id) &&
               !archivedRequests.includes(request.id) &&
@@ -513,7 +511,7 @@ export default {
       if (this.pendingView === 'outbound') {
         return query
           .where(
-            request =>
+            (request) =>
               Number(request.requested_by_org.id) ===
                 Number(this.currentUser.organization.id) &&
               !archivedRequests.includes(request.id) &&
@@ -531,13 +529,13 @@ export default {
     },
     ...mapState('incident', ['currentIncidentId']),
     claimedWorksites() {
-      const query = Worksite.query().where(worksite => {
+      const query = Worksite.query().where((worksite) => {
         if (
           worksite.work_types &&
           this.currentIncidentId === worksite.incident
         ) {
           const claimed = worksite.work_types.find(
-            workType =>
+            (workType) =>
               workType.claimed_by === this.currentUser.organization.id,
           );
           return Boolean(claimed);
@@ -644,7 +642,7 @@ export default {
     async inviteUsers() {
       try {
         const emails = this.usersToInvite.split(',');
-        await Promise.all(emails.map(email => User.api().inviteUser(email)));
+        await Promise.all(emails.map((email) => User.api().inviteUser(email)));
         await this.$toasted.success(
           this.$t('inviteTeammates.invites_sent_success'),
         );
@@ -744,9 +742,7 @@ export default {
       this.totalClaimed = response.data.count;
     },
     async getInProgessCount() {
-      const openStatuses = Status.query()
-        .where('primary_state', 'open')
-        .get();
+      const openStatuses = Status.query().where('primary_state', 'open').get();
 
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksites`,
@@ -755,7 +751,7 @@ export default {
             incident: this.currentIncidentId,
             limit: 1,
             work_type__status__in: openStatuses
-              .map(status => status.status)
+              .map((status) => status.status)
               .join(','),
             fields: 'id',
           },
@@ -775,7 +771,7 @@ export default {
             incident: this.currentIncidentId,
             limit: 1,
             work_type__status__in: closedStatuses
-              .map(status => status.status)
+              .map((status) => status.status)
               .join(','),
             fields: 'id',
           },
@@ -793,7 +789,7 @@ export default {
     fillData() {
       const date = new Date();
       let chckDates = Array(44).fill(1);
-      chckDates = chckDates.map(i => {
+      chckDates = chckDates.map((i) => {
         date.setDate(date.getDate() + i);
         return date.getDate();
       });

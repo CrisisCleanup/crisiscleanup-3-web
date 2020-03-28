@@ -73,13 +73,9 @@ describe('Cases Page', () => {
           'BatchPrintBtn',
         );
         // Batch Download
-        cy.get('@BatchDownloadBtn')
-          .should('be.visible')
-          .click();
+        cy.get('@BatchDownloadBtn').should('be.visible').click();
         cy.wait('@getWorksite');
-        cy.get('@BatchPrintBtn')
-          .should('be.visible')
-          .click();
+        cy.get('@BatchPrintBtn').should('be.visible').click();
         cy.wait('@printWorksite');
       });
   });

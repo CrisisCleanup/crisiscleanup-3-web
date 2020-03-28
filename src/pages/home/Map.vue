@@ -24,7 +24,7 @@
           label="name"
           :placeholder="$t('~~Disaster')"
           @input="
-            value => {
+            (value) => {
               selectedIncident = value;
               setLocations(value);
             }
@@ -87,7 +87,7 @@ export default {
       `${process.env.VUE_APP_API_BASE_URL}/statuses`,
     );
     this.incidents = incidentsResponse.data.results;
-    this.workTypeMap = workTypesResponse.data.results.reduce(function(
+    this.workTypeMap = workTypesResponse.data.results.reduce(function (
       map,
       obj,
     ) {
@@ -95,7 +95,7 @@ export default {
       return map;
     },
     {});
-    this.statusMap = statusResponse.data.results.reduce(function(map, obj) {
+    this.statusMap = statusResponse.data.results.reduce(function (map, obj) {
       map[obj.status] = obj.status_name_t;
       return map;
     }, {});
@@ -104,10 +104,10 @@ export default {
   },
   methods: {
     async setLocations(incidentId) {
-      const incident = this.incidents.find(i => i.id === incidentId);
+      const incident = this.incidents.find((i) => i.id === incidentId);
       if (incident.locations.length) {
         const locationIds = incident.locations.map(
-          location => location.location,
+          (location) => location.location,
         );
         const locationsResponse = await this.$http.get(
           `${
@@ -121,7 +121,7 @@ export default {
       const popup = L.popup({ className: 'pixi-popup' });
       let popupContent = `<b>${worksite.address} (${worksite.case_number}</b>)`;
 
-      worksite.work_types.forEach(worktype => {
+      worksite.work_types.forEach((worktype) => {
         popupContent += `<div>${this.workTypeMap[worktype.work_type]}(${
           this.statusMap[worktype.status]
         })</div>`;

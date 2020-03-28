@@ -11,7 +11,8 @@ export default {
     };
     const URLSearchParams = Object.keys(params)
       .map(
-        key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`,
+        (key) =>
+          `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`,
       )
       .join('&');
     return fetch(tokenUrl, {
@@ -22,8 +23,8 @@ export default {
         Authorization: `Basic ${process.env.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN}`,
       },
     })
-      .then(resp => resp.json())
-      .then(data => data.access_token);
+      .then((resp) => resp.json())
+      .then((data) => data.access_token);
   },
   async getMatchingAddresses(text, country) {
     const geoCoderUrl = new URL(
@@ -34,7 +35,7 @@ export default {
       country,
       maxCands: 5,
     };
-    Object.keys(params).forEach(key =>
+    Object.keys(params).forEach((key) =>
       geoCoderUrl.searchParams.append(key, params[key]),
     );
 
@@ -49,12 +50,12 @@ export default {
         Authorization: `Bearer ${oauthToken}`,
       },
     })
-      .then(resp => resp.json())
-      .then(data => data.candidates);
+      .then((resp) => resp.json())
+      .then((data) => data.candidates);
   },
 
   async getMatchingAddressesGoogle(text) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const sessionToken = new google.maps.places.AutocompleteSessionToken();
 
       // Pass the token to the autocomplete service.
@@ -64,7 +65,7 @@ export default {
           input: text,
           sessionToken,
         },
-        results => resolve(results),
+        (results) => resolve(results),
       );
     });
   },
@@ -163,8 +164,8 @@ export default {
   extractFromAddress(components, type) {
     return (
       components
-        .filter(component => component.types.includes(type))
-        .map(item => item.long_name)
+        .filter((component) => component.types.includes(type))
+        .map((item) => item.long_name)
         .pop() || null
     );
   },

@@ -94,7 +94,7 @@ try {
       fs.writeFile(
         `${__dirname}/public/map_icons/${file.replace('.hbs', '')}_${key}.svg`,
         svg,
-        err => {
+        (err) => {
           if (err) throw err;
         },
       );

@@ -16,11 +16,11 @@ jest.mock('@/models/User');
 jest.mock('@/models/Role');
 
 const mocks = {
-  $t: key => key,
+  $t: (key) => key,
   $store: new Vuex.Store(),
 };
 
-const mountWithOptions = props =>
+const mountWithOptions = (props) =>
   shallowMount(UserEditModal, {
     stubs: {
       modal: true,

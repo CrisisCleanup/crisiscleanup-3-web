@@ -15,7 +15,7 @@
       <div
         v-for="file in worksite.files"
         class="relative image-container"
-        style="min-width: 90px"
+        style="min-width: 90px;"
       >
         <img
           class="image-box w-20 h-20 mx-2 cursor-pointer"

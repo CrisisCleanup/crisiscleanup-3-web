@@ -7,7 +7,7 @@ const What3wordsService = {
       coordinates: `${lat},${lng}`,
       key: process.env.VUE_APP_WHAT_3_WORDS_API_KEY,
     };
-    Object.keys(params).forEach(key =>
+    Object.keys(params).forEach((key) =>
       url.searchParams.append(key, params[key]),
     );
 
@@ -18,8 +18,8 @@ const What3wordsService = {
         Accept: 'application/json',
       },
     })
-      .then(resp => resp.json())
-      .then(data => data.words);
+      .then((resp) => resp.json())
+      .then((data) => data.words);
   },
 };
 

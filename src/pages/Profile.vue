@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 85%" class="h-full flex justify-center">
+  <div style="height: 85%;" class="h-full flex justify-center">
     <div class="h-full flex flex-col w-3/4 shadow my-6">
       <div class="h-full w-full bg-white flex flex-col">
         <div
@@ -87,7 +87,7 @@
                       :placeholder="$t('profileUser.first_name_placeholder')"
                       required
                       @input="
-                        value => {
+                        (value) => {
                           updateUser(value, 'first_name');
                         }
                       "
@@ -99,7 +99,7 @@
                       :placeholder="$t('profileUser.mobile_placeholder')"
                       required
                       @input="
-                        value => {
+                        (value) => {
                           updateUser(value, 'mobile');
                         }
                       "
@@ -113,7 +113,7 @@
                       :placeholder="$t('profileUser.last_name_placeholder')"
                       required
                       @input="
-                        value => {
+                        (value) => {
                           updateUser(value, 'last_name');
                         }
                       "
@@ -125,7 +125,7 @@
                       :placeholder="$t('profileUser.email_placeholder ')"
                       required
                       @input="
-                        value => {
+                        (value) => {
                           updateUser(value, 'email');
                         }
                       "
@@ -161,7 +161,7 @@
                     select-classes="bg-white border text-xs p-1 profile-select"
                     :limit="2"
                     @input="
-                      value => {
+                      (value) => {
                         const [primary_language, secondary_language] = value;
                         updateUser(primary_language, 'primary_language');
                         updateUser(secondary_language, 'secondary_language');
@@ -192,7 +192,7 @@
                       size="small"
                       :placeholder="$t('profileUser.facebook')"
                       @input="
-                        value => {
+                        (value) => {
                           const social = {
                             ...currentUser.social,
                             facebook: value,
@@ -217,7 +217,7 @@
                       size="small"
                       :placeholder="$t('profileUser.twitter')"
                       @input="
-                        value => {
+                        (value) => {
                           const social = {
                             ...currentUser.social,
                             twitter: value,
@@ -313,7 +313,7 @@
                       <base-checkbox
                         class="mr-1"
                         :value="currentUser.notificationSettings[key]"
-                        @input="value => setNotifications(key, value)"
+                        @input="(value) => setNotifications(key, value)"
                       >
                       </base-checkbox>
                       {{ value }}
@@ -389,9 +389,7 @@ export default {
       return User.find(this.$store.getters['auth/userId']);
     },
     userRoles() {
-      return Role.query()
-        .whereIdIn(this.currentUser.roles)
-        .get();
+      return Role.query().whereIdIn(this.currentUser.roles).get();
     },
     isEditing() {
       return this.mode === 'edit';
@@ -448,10 +446,10 @@ export default {
         const file = result.data.id;
 
         const profilePictures = this.currentUser.files.filter(
-          picture => picture.file_type_t === 'fileTypes.user_profile_picture',
+          (picture) => picture.file_type_t === 'fileTypes.user_profile_picture',
         );
 
-        const oldImages = profilePictures.map(picture =>
+        const oldImages = profilePictures.map((picture) =>
           User.api().deleteFile(this.currentUser.id, picture.file),
         );
         await Promise.all(oldImages);

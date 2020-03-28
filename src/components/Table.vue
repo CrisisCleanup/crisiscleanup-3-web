@@ -25,7 +25,7 @@
           <ccu-icon
             v-if="
               sorter.key === (column.sortKey || column.key) &&
-                sorter.direction === 'asc'
+              sorter.direction === 'asc'
             "
             :alt="$t('actions.sort_ascending')"
             size="small"
@@ -34,7 +34,7 @@
           <ccu-icon
             v-else-if="
               sorter.key === (column.sortKey || column.key) &&
-                sorter.direction === 'desc'
+              sorter.direction === 'desc'
             "
             :alt="$t('actions.sort_descending')"
             size="small"
@@ -70,7 +70,7 @@
             class="mb-5"
             data-cy="tableview_actionSelect"
             @input="
-              value => {
+              (value) => {
                 setChecked(item, value);
               }
             "
@@ -257,7 +257,7 @@ export default {
       return pagintationTriggers;
     },
     gridTemplate() {
-      const columnWidths = this.columns.map(column => column.width || '1fr');
+      const columnWidths = this.columns.map((column) => column.width || '1fr');
       if (this.enableSelection) {
         columnWidths.unshift('35px');
       }
@@ -296,7 +296,7 @@ export default {
     },
     setAllChecked(value) {
       if (value) {
-        this.selectedItems = new Set(this.data.map(item => item.id));
+        this.selectedItems = new Set(this.data.map((item) => item.id));
         this.$emit('allSelected', this.selectedItems);
       } else {
         this.selectedItems = new Set();

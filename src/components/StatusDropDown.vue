@@ -74,7 +74,7 @@ export default {
     statuses() {
       return Status.query()
         .orderBy('list_order')
-        .where(status => {
+        .where((status) => {
           return this.phase ? status.phases.includes(this.phase) : true;
         })
         .get()

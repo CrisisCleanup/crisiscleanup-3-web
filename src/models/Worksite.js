@@ -84,14 +84,14 @@ export default class Worksite extends Model {
     // TODO: Unit Test
     let currentFilteredTypes = [];
     if (filters && filters.fields) {
-      currentFilteredTypes = Object.keys(filters.fields).filter(fieldKey =>
+      currentFilteredTypes = Object.keys(filters.fields).filter((fieldKey) =>
         Boolean(filters.fields[fieldKey]),
       );
     }
 
-    const filterByClaimedOrg = array => {
+    const filterByClaimedOrg = (array) => {
       return array
-        .filter(type => type.claimed_by === (organization && organization.id))
+        .filter((type) => type.claimed_by === (organization && organization.id))
         .sort((a, b) => {
           return (
             WorkType.commercialValues[b.work_type] -
@@ -100,9 +100,9 @@ export default class Worksite extends Model {
         });
     };
 
-    const filterByUnclaimed = array => {
+    const filterByUnclaimed = (array) => {
       return array
-        .filter(type => type.claimed_by === null)
+        .filter((type) => type.claimed_by === null)
         .sort((a, b) => {
           return (
             WorkType.commercialValues[b.work_type] -
@@ -118,7 +118,7 @@ export default class Worksite extends Model {
       );
     });
     const workTypesInFilter = [...workTypes]
-      .filter(type => currentFilteredTypes.includes(type.work_type))
+      .filter((type) => currentFilteredTypes.includes(type.work_type))
       .sort((a, b) => {
         return (
           WorkType.commercialValues[b.work_type] -
@@ -163,15 +163,15 @@ export default class Worksite extends Model {
           `/worksites/${id}?${getQueryString(worksiteParams)}`,
         );
         const organizations = worksite.response.data.work_types
-          .filter(workType => Boolean(workType.claimed_by))
-          .map(workType => workType.claimed_by);
+          .filter((workType) => Boolean(workType.claimed_by))
+          .map((workType) => workType.claimed_by);
         await Organization.api().get(
           `/organizations?id__in=${organizations.join(',')}`,
           {
             dataKey: 'results',
           },
         );
-        const users = worksite.response.data.events.map(event => event.user);
+        const users = worksite.response.data.events.map((event) => event.user);
         await User.api().get(`/users?id__in=${users.join(',')}`, {
           dataKey: 'results',
         });

@@ -18,7 +18,7 @@
           {{ callsMade }}
         </div>
       </div>
-      <div class="h-0 w-auto border " />
+      <div class="h-0 w-auto border" />
       <div class="justify-between flex flex-row my-2">
         <p class="text-sm">Total Login Time this week</p>
         <div class="font-semibold" :totalLoggedTime="totalLoggedTime">

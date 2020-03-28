@@ -72,7 +72,7 @@
                 >
                   {{
                     selectedUser.referringUser &&
-                      selectedUser.referringUser.full_name
+                    selectedUser.referringUser.full_name
                   }}
                 </div>
                 <span v-else>

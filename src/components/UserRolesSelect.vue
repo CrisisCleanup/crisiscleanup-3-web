@@ -35,7 +35,7 @@ export default {
       return Role.all();
     },
     selectedRoles() {
-      return this.userRoles.map(userRole => userRole.role);
+      return this.userRoles.map((userRole) => userRole.role);
     },
   },
   methods: {
@@ -52,7 +52,7 @@ export default {
     getRoleText(option) {
       let text = option.name_t;
       const currentUserRole = this.userRoles.find(
-        ur => ur.user_role === option.id,
+        (ur) => ur.user_role === option.id,
       );
       if (currentUserRole && !currentUserRole.isApproved) {
         text = `${text} (${this.$t('userRolesSelect.pending')})`;
@@ -61,7 +61,7 @@ export default {
     },
     async requestUserRole(role) {
       const currentUserRole = this.userRoles.find(
-        ur => ur.user_role === role[0],
+        (ur) => ur.user_role === role[0],
       );
       if (currentUserRole) {
         //This is the deletion_case case

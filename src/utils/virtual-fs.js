@@ -24,7 +24,7 @@ function VirtualFileSystem() {
   this.dataSystem = {};
 }
 
-VirtualFileSystem.prototype.readFileSync = function(filename, options) {
+VirtualFileSystem.prototype.readFileSync = function (filename, options) {
   filename = fixFilename(filename);
 
   const dataContent = this.dataSystem[filename];
@@ -47,11 +47,11 @@ VirtualFileSystem.prototype.readFileSync = function(filename, options) {
   throw `File '${filename}' not found in virtual file system`;
 };
 
-VirtualFileSystem.prototype.writeFileSync = function(filename, content) {
+VirtualFileSystem.prototype.writeFileSync = function (filename, content) {
   this.fileSystem[fixFilename(filename)] = content;
 };
 
-VirtualFileSystem.prototype.bindFS = function(data) {
+VirtualFileSystem.prototype.bindFS = function (data) {
   this.dataSystem = data || {};
 };
 
