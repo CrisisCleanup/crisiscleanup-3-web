@@ -209,7 +209,7 @@
                   <div class="recurrence" v-if="work_type.recur">
                     {{ work_type.recur | getRecurrenceString }}
                     <br />
-                    {{ $t('~~Next:') }}
+                    {{ $t('caseView.next') }}
                     {{
                       work_type.next_recur_at
                         | moment('ddd MMMM Do YYYY [at] h:mm:ss A')
@@ -266,7 +266,7 @@
                 <div class="recurrence" v-if="work_type.recur">
                   {{ work_type.recur | getRecurrenceString }}
                   <br />
-                  {{ $t('~~Next:') }}
+                  {{ $t('caseView.next') }}
                   {{
                     work_type.next_recur_at
                       | moment('ddd MMMM Do YYYY [at] h:mm:ss A')
@@ -314,7 +314,7 @@
                 <div class="recurrence" v-if="work_type.recur">
                   {{ work_type.recur | getRecurrenceString }}
                   <br />
-                  {{ $t('~~Next:') }}
+                  {{ $t('caseView.next') }}
                   {{
                     work_type.next_recur_at
                       | moment('ddd MMMM Do YYYY [at] h:mm A')

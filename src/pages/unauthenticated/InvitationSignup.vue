@@ -12,7 +12,7 @@
         >
           <div class="text-2xl font-light">
             {{
-              $t('~~{user} has invited you to join Crisiscleanup', {
+              $t('invitationSignup.user_invited_join_ccu', {
                 user: invitation.inviter,
               })
             }}
@@ -38,7 +38,7 @@
             type="text"
             class="input"
             size="large"
-            :placeholder="$t('~~invitationSignup.title_placeholder')"
+            :placeholder="$t('invitationSignup.title_placeholder')"
           />
           <base-input
             v-model="mobile"
@@ -105,7 +105,7 @@ export default {
       [this.invitation] = results.entities.invitations;
     } catch (error) {
       await this.$toasted.error(
-        this.$t('~~This invitation could not be found or has expired'),
+        this.$t('invitationSignup.invitation_dead'),
       );
       this.$router.push('/login');
     }

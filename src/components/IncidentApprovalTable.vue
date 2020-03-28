@@ -10,7 +10,7 @@
     <template #actions="slotProps">
       <div class="flex mr-2 justify-end w-full">
         <base-button
-          :text="$t('~~Approve')"
+          :text="$t('actions.approve')"
           variant="solid"
           size="small"
           class="mx-2"
@@ -21,7 +21,7 @@
           "
         />
         <base-button
-          :text="$t('~~Reject')"
+          :text="$t('actions.reject')"
           variant="outline"
           size="small"
           class="mx-2"
@@ -78,17 +78,17 @@ export default {
     return {
       columns: [
         {
-          title: this.$t('~~Organization Name'),
+          title: this.$t('incidentApprovalTable.organization_name'),
           dataIndex: 'organization_name',
           key: 'organization_name',
         },
         {
-          title: this.$t('~~Incident'),
+          title: this.$t('incidentApprovalTable.incident'),
           dataIndex: 'incident_name',
           key: 'incident_name',
         },
         {
-          title: this.$t('~~Requested At'),
+          title: this.$t('incidentApprovalTable.requested_at'),
           dataIndex: 'created_at',
           key: 'created_at',
         },

@@ -8,10 +8,10 @@
       <home-actions />
       <div class="grid--main">
         <div class="text-4xl">
-          {{ $t('~~Visualize the Disaster in Real Time') }}
+          {{ $t('mapVue.visualize_disaster') }}
         </div>
         <div class="text-xl">
-          {{ $t('~~Choose an incident from the drop down to see cases') }}
+          {{ $t('mapVue.choose_incident_dropdown') }}
         </div>
 
         <form-select
@@ -22,7 +22,7 @@
           select-classes="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-72"
           item-key="id"
           label="name"
-          :placeholder="$t('~~Disaster')"
+          :placeholder="$t('mapVue.disaster')"
           @input="
             (value) => {
               selectedIncident = value;
@@ -43,11 +43,7 @@
         </div>
 
         <div class="text-lg my-1">
-          {{
-            $t(
-              '~~Personal information has been hidden, and the location has been blurred to 400 meters',
-            )
-          }}
+          {{ $t('mapVue.personal_info_hidden') }}
         </div>
       </div>
       <home-footer />

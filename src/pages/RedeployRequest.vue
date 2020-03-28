@@ -95,7 +95,7 @@ export default {
         );
         this.showRedeployModal = false;
         await this.$toasted.success(
-          this.$t('~~Successfully Requested Redeploy'),
+          this.$t('requestRedeploy.request_redeploy_success'),
         );
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
