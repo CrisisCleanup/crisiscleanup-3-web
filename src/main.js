@@ -46,6 +46,7 @@ import VueAutosuggest from 'vue-autosuggest';
 import VueAxios from 'vue-axios';
 import VueClipboard from 'vue-clipboard2';
 import VueGtag from 'vue-gtag';
+import Hotjar from 'vue-hotjar';
 import VueI18n from 'vue-i18n';
 import Popover from 'vue-js-popover';
 import * as ModalDialogs from 'vue-modal-dialogs';
@@ -141,6 +142,12 @@ Vue.use(VueGtag, {
   config: {
     id: 'UA-42924421-1',
   },
+});
+
+// Hotjar Analytics
+Vue.use(Hotjar, {
+  id: '1722600',
+  isProduction: process.env.NODE_ENV === 'production',
 });
 
 axios.interceptors.response.use(
