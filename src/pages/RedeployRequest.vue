@@ -62,7 +62,7 @@ export default {
   name: 'RedeployRequest',
   async mounted() {
     const response = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations&limit=150`,
+      `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
     );
     this.incidents = response.data.results;
   },

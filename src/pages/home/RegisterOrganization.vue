@@ -12,15 +12,15 @@
           {{ $t('registerOrg.please_create_profile') }}
         </div>
         <form ref="form" class="form w-4/5 mt-6" @submit.prevent="register">
-          <ol class="list-decimal">
+          <ol class="">
             <li class="text-xl form-item">
               {{ $t('registerOrg.choose_a_disaster') }}
               <form-select
                 :value="organization.incident"
-                class="form-field"
+                class="m-3"
                 :options="incidents"
                 searchable
-                select-classes="bg-white border border-crisiscleanup-dark-100 h-12 mb-3"
+                select-classes="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 max-w-sm"
                 item-key="id"
                 label="name"
                 :placeholder="$t('registerOrg.disaster')"
@@ -254,14 +254,16 @@
                 required
               >
                 <div
-                  v-html="registerOrg ? registerOrg.tos_priv_agree : ''"
+                  v-html="
+                    $t('registerOrg') ? $t('registerOrg.tos_priv_agree') : ''
+                  "
                 ></div>
               </base-checkbox>
             </li>
           </ol>
           <base-button
             size="large"
-            class="px-5 py-2 m-1 flex-grow"
+            class="px-5 py-2 m-1 self-center w-108 m-auto mb-20"
             variant="solid"
             :text="$t('actions.sign_up')"
             :action="register"
@@ -274,7 +276,6 @@
 
 <script>
 import Organization from '@/models/Organization';
-import Incident from '@/models/Incident';
 import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
 import { getErrorMessage } from '../../utils/errors';
 
@@ -282,10 +283,11 @@ export default {
   name: 'InvitationSignup',
   components: { HomeLayout, HomeNav, HomeActions },
 
-  mounted() {
-    Incident.api().get('/incidents_list', {
-      dataKey: 'results',
-    });
+  async mounted() {
+    const incidentsResponse = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name&limit=200&sort=-start_at`,
+    );
+    this.incidents = incidentsResponse.data.results;
   },
 
   data() {
@@ -319,6 +321,7 @@ export default {
         email: '',
         mobile: '',
       },
+      incidents: [],
       selectedIncidentId: null,
       organizationTypes: [
         'orgType.voad',
@@ -330,13 +333,6 @@ export default {
         return { key, label: this.$t(key) };
       }),
     };
-  },
-  computed: {
-    incidents() {
-      return Incident.query()
-        .orderBy('id', 'desc')
-        .get();
-    },
   },
   methods: {
     async register() {

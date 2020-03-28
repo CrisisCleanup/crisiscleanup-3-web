@@ -78,7 +78,7 @@ export default {
   },
   async mounted() {
     const incidentsResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations&limit=150?sort=-start_at`,
+      `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
     );
     const workTypesResponse = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/work_types`,
