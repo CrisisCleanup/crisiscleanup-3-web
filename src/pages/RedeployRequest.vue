@@ -73,7 +73,8 @@ export default {
     incident_list() {
       if (this.incidents) {
         return this.incidents.filter(
-          incident => !this.currentOrganization.incidents.includes(incident.id),
+          (incident) =>
+            !this.currentOrganization.incidents.includes(incident.id),
         );
       }
       return [];

@@ -129,9 +129,7 @@ export default {
       return Organization.find(this.currentUser.organization.id);
     },
     incidents() {
-      return Incident.query()
-        .orderBy('id', 'desc')
-        .get();
+      return Incident.query().orderBy('id', 'desc').get();
     },
     currentIncident() {
       return Incident.find(this.currentIncidentId);
@@ -206,9 +204,7 @@ export default {
 
     let incidentId = this.$route.params.incident_id;
     if (!incidentId) {
-      const incident = Incident.query()
-        .orderBy('id', 'desc')
-        .first();
+      const incident = Incident.query().orderBy('id', 'desc').first();
       if (incident) {
         incidentId = incident.id;
       }
@@ -302,9 +298,9 @@ export default {
       this.$moment.locale(currentLanguage.split('-')[0]);
     },
     setupAcl() {
-      Vue.use(Acl, this.user, acl => {
+      Vue.use(Acl, this.user, (acl) => {
         const { permissions } = this.user.user_claims;
-        Object.keys(permissions).forEach(permissionKey => {
+        Object.keys(permissions).forEach((permissionKey) => {
           acl.rule(
             permissionKey,
             this.user.user_claims.permissions[permissionKey],

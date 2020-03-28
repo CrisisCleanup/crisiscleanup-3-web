@@ -9,7 +9,7 @@
         <span
           v-html="
             $t('workTypeRequestModal.request_modal_instructions', {
-              organizations: organizations.map(org => org.name).join(','),
+              organizations: organizations.map((org) => org.name).join(','),
               my_organization: myOrganization.name,
               case_number: '',
             })
@@ -48,7 +48,7 @@
           class="mb-3"
           :value="requestedWorkTypes.has(work_type_to_request.work_type)"
           @input="
-            value => {
+            (value) => {
               setSelectedWorkTypeRequest(work_type_to_request.work_type, value);
             }
           "
@@ -127,10 +127,8 @@ export default {
     };
   },
   async mounted() {
-    const organizationIds = this.workTypes.map(type => type.claimed_by);
-    this.organizations = Organization.query()
-      .whereIdIn(organizationIds)
-      .get();
+    const organizationIds = this.workTypes.map((type) => type.claimed_by);
+    this.organizations = Organization.query().whereIdIn(organizationIds).get();
   },
   methods: {
     setSelectedWorkTypeRequest(workType, value) {

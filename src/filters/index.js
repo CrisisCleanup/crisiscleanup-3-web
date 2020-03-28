@@ -7,18 +7,18 @@ export function snakeToTitleCase(value) {
   // ref: https://gist.github.com/kkiernan/91298079d34f0f832054
   return value
     .split('_')
-    .map(function(item) {
+    .map(function (item) {
       return item.charAt(0).toUpperCase() + item.substring(1);
     })
     .join(' ');
 }
 
 export function getWorkTypeName(workType) {
-  return enums.state.workTypes.find(type => type.key === workType).name_t;
+  return enums.state.workTypes.find((type) => type.key === workType).name_t;
 }
 
 export function getStatusName(statusKey) {
-  return enums.state.statuses.find(type => type.status === statusKey)
+  return enums.state.statuses.find((type) => type.status === statusKey)
     .status_name_t;
 }
 
@@ -46,7 +46,7 @@ export function getStatusBadge(status) {
   return statusDict[status];
 }
 
-export const getColorForWorkType = workType => {
+export const getColorForWorkType = (workType) => {
   if (!workType) {
     return '';
   }
@@ -70,7 +70,7 @@ export const getColorForStatus = (status, claimed = true) => {
   return colors.fillColor;
 };
 
-export const getWorkTypeImage = workType => {
+export const getWorkTypeImage = (workType) => {
   const colorsKey = `${workType.status}_${
     workType.claimed_by ? 'claimed' : 'unclaimed'
   }`;
@@ -86,7 +86,7 @@ export const getWorkTypeImage = workType => {
   return '';
 };
 
-export const secondsToHm = seconds => {
+export const secondsToHm = (seconds) => {
   const d = Number(seconds);
   const h = Math.floor(d / 3600);
   const m = Math.floor((d % 3600) / 60);
@@ -96,14 +96,14 @@ export const secondsToHm = seconds => {
   return hDisplay + mDisplay;
 };
 
-export const capitalize = value => {
+export const capitalize = (value) => {
   if (!value) return '';
   let capped = value.toString();
   capped = capped.charAt(0).toUpperCase() + capped.slice(1);
   return capped;
 };
 
-export const toUpper = value => {
+export const toUpper = (value) => {
   if (!value) return '';
   return value.toUpperCase();
 };

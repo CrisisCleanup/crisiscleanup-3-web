@@ -126,7 +126,7 @@
                 class="block my-1"
                 :value="filters.statusGroups.data['open']"
                 @input="
-                  value => {
+                  (value) => {
                     setOpenClosed(value, 'open');
                   }
                 "
@@ -136,7 +136,7 @@
                 class="block my-1"
                 :value="filters.statusGroups.data['closed']"
                 @input="
-                  value => {
+                  (value) => {
                     setOpenClosed(value, 'closed');
                   }
                 "
@@ -157,7 +157,7 @@
                   class="block my-1"
                   :value="filters.statuses.data[status.status]"
                   @input="
-                    value => {
+                    (value) => {
                       filters.statuses.data[status.status] = value;
                       filters.statuses.data = {
                         ...filters.statuses.data,
@@ -180,7 +180,7 @@
                 class="block my-1"
                 :value="filters.flags.data[flag]"
                 @input="
-                  value => {
+                  (value) => {
                     filters.flags.data[flag] = value;
                     filters.flags.data = { ...filters.flags.data };
                   }
@@ -351,16 +351,16 @@ export default {
   computed: {
     incidentTypes() {
       if (this.incident && this.incident.form_fields) {
-        const fieldsWithTypes = this.incident.form_fields.filter(field => {
+        const fieldsWithTypes = this.incident.form_fields.filter((field) => {
           return Boolean(field.if_selected_then_work_type);
         });
 
         const types = new Set(
-          fieldsWithTypes.map(t => t.if_selected_then_work_type),
+          fieldsWithTypes.map((t) => t.if_selected_then_work_type),
         );
 
-        return Array.from(types).map(workType => {
-          return this.workTypes.find(type => type.key === workType);
+        return Array.from(types).map((workType) => {
+          return this.workTypes.find((type) => type.key === workType);
         });
       }
       return [];
@@ -453,8 +453,8 @@ export default {
     },
     getFieldsForType(workType) {
       if (this.incident && this.incident.form_fields) {
-        return this.incident.form_fields.filter(field => {
-          const parent = this.incident.form_fields.find(element => {
+        return this.incident.form_fields.filter((field) => {
+          const parent = this.incident.form_fields.find((element) => {
             return element.field_key === field.field_parent_key;
           });
 

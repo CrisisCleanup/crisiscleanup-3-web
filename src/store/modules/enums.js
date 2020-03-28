@@ -5,12 +5,12 @@ const AppState = {
 
 // getters
 const getters = {
-  statuses: state => state.statuses,
-  workTypes: state => state.workTypes,
-  workTypeCommercialValues: state => {
+  statuses: (state) => state.statuses,
+  workTypes: (state) => state.workTypes,
+  workTypeCommercialValues: (state) => {
     return Object.assign(
       {},
-      ...state.workTypes.map(s => ({ [s.key]: s.commercial_value })),
+      ...state.workTypes.map((s) => ({ [s.key]: s.commercial_value })),
     );
   },
 };

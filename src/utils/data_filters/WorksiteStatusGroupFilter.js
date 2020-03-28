@@ -20,21 +20,21 @@ export default class WorksiteStatusGroupFilter extends Filter {
     }
 
     if (this.data.open) {
-      enums.state.statuses.filter(status => status.primary_state === 'open');
+      enums.state.statuses.filter((status) => status.primary_state === 'open');
       const openStatuses = enums.state.statuses.filter(
-        status => status.primary_state === 'open',
+        (status) => status.primary_state === 'open',
       );
       packed.work_type__status__in = openStatuses
-        .map(status => status.status)
+        .map((status) => status.status)
         .join(',');
     }
 
     if (this.data.closed) {
       const closedStatuses = enums.state.statuses.filter(
-        status => status.primary_state === 'closed',
+        (status) => status.primary_state === 'closed',
       );
       packed.work_type__status__in = closedStatuses
-        .map(status => status.status)
+        .map((status) => status.status)
         .join(',');
     }
     return packed;

@@ -40,7 +40,7 @@ export default {
   computed: {
     ...mapState('phone', ['metrics']),
     statistics() {
-      return this.analytics.filter(a => a.title);
+      return this.analytics.filter((a) => a.title);
     },
     lang() {
       const metricLang = {};
@@ -60,7 +60,7 @@ export default {
     ...mapActions('phone', ['getRealtimeMetrics']),
     async fetchMetrics() {
       await this.getRealtimeMetrics();
-      this.analytics = Object.keys(this.metrics).map(name => {
+      this.analytics = Object.keys(this.metrics).map((name) => {
         const metric = {
           value: this.metrics[name],
           title: '',

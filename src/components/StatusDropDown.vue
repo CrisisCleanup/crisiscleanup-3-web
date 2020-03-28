@@ -74,7 +74,7 @@ export default {
     ...mapState('enums', ['statuses']),
     displayStatuses() {
       return this.statuses
-        .filter(status =>
+        .filter((status) =>
           this.phase ? status.phases.includes(this.phase) : true,
         )
         .map((status, index) => {

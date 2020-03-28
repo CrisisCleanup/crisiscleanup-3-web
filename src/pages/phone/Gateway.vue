@@ -144,9 +144,7 @@ export default {
         },
       };
       await Agent.api().fetch(userAgent);
-      const agent = Agent.query()
-        .where('user_id', this.currentUser.id)
-        .first();
+      const agent = Agent.query().where('user_id', this.currentUser.id).first();
       return agent;
     },
     authenticate() {

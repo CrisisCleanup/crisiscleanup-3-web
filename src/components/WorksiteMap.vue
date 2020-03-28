@@ -201,7 +201,7 @@ export default {
   watch: {
     displayedWorkTypes: {
       handler(val) {
-        this.displayedWorkTypeSvgs = Object.keys(val).map(workType => {
+        this.displayedWorkTypeSvgs = Object.keys(val).map((workType) => {
           const template = templates[workType] || templates.unknown;
           const svg = template
             .replace('{{fillColor}}', 'black')
@@ -239,7 +239,7 @@ export default {
   },
   methods: {
     async loadMap(markers) {
-      await new Promise(resolve => {
+      await new Promise((resolve) => {
         const loader = new Loader();
         loader.add('circle', '/circle.svg');
         loader.load(() => {
@@ -286,7 +286,7 @@ export default {
     },
     async updateMap(worksiteId) {
       const markerSprite = this.pixiContainer.children.find(
-        ms => parseInt(ms.id) === parseInt(worksiteId),
+        (ms) => parseInt(ms.id) === parseInt(worksiteId),
       );
       const worksite = Worksite.find(worksiteId);
 
@@ -339,7 +339,7 @@ export default {
     },
     goToIncidentCenter() {
       const center = averageGeolocation(
-        this.markers.map(marker => [
+        this.markers.map((marker) => [
           marker.location.coordinates[1],
           marker.location.coordinates[0],
         ]),
@@ -349,7 +349,7 @@ export default {
     },
     goToInteractive() {
       const center = averageGeolocation(
-        this.markers.map(marker => [
+        this.markers.map((marker) => [
           marker.location.coordinates[1],
           marker.location.coordinates[0],
         ]),
@@ -362,7 +362,7 @@ export default {
     },
     goToLocal() {
       const center = averageGeolocation(
-        this.markers.map(marker => [
+        this.markers.map((marker) => [
           marker.location.coordinates[1],
           marker.location.coordinates[0],
         ]),
@@ -372,19 +372,21 @@ export default {
     },
     workTypesClaimedByOrganization() {
       return this.worksite.work_types.filter(
-        type => type.claimed_by === this.currentUser.organization.id,
+        (type) => type.claimed_by === this.currentUser.organization.id,
       );
     },
     workTypesClaimedByOthers() {
       const list = this.worksite.work_types.filter(
-        type =>
+        (type) =>
           type.claimed_by &&
           type.claimed_by !== this.currentUser.organization.id,
       );
       return groupBy(list, 'claimed_by');
     },
     workTypesUnclaimed() {
-      return this.worksite.work_types.filter(type => type.claimed_by === null);
+      return this.worksite.work_types.filter(
+        (type) => type.claimed_by === null,
+      );
     },
   },
 };

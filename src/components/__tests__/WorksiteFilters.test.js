@@ -37,7 +37,7 @@ const MockFilters = {
 };
 
 const mocks = {
-  $t: key => key,
+  $t: (key) => key,
 };
 
 const mountWithOptions = () =>

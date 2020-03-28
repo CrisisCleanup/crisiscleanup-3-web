@@ -179,7 +179,7 @@
                     :phase="incident.phase"
                     :current-work-type="work_type"
                     @input="
-                      value => {
+                      (value) => {
                         statusValueChange(value, work_type);
                       }
                     "
@@ -202,7 +202,7 @@
                   <div class="work-list">
                     {{
                       getFieldsForType(work_type.work_type)
-                        .map(_ => _.label_t)
+                        .map((_) => _.label_t)
                         .join(', ')
                     }}
                   </div>
@@ -241,7 +241,7 @@
                   :phase="incident.phase"
                   :current-work-type="work_type"
                   @input="
-                    value => {
+                    (value) => {
                       statusValueChange(value, work_type);
                     }
                   "
@@ -259,7 +259,7 @@
                 <div class="work-list">
                   {{
                     getFieldsForType(work_type.work_type)
-                      .map(_ => _.label_t)
+                      .map((_) => _.label_t)
                       .join(', ')
                   }}
                 </div>
@@ -289,7 +289,7 @@
                   :phase="incident.phase"
                   :current-work-type="work_type"
                   @input="
-                    value => {
+                    (value) => {
                       statusValueChange(value, work_type);
                     }
                   "
@@ -307,7 +307,7 @@
                 <div class="work-list">
                   {{
                     getFieldsForType(work_type.work_type)
-                      .map(_ => _.label_t)
+                      .map((_) => _.label_t)
                       .join(', ')
                   }}
                 </div>
@@ -447,7 +447,7 @@ export default {
     workTypesClaimedByOrganization() {
       if (this.worksite) {
         return this.worksite.work_types.filter(
-          type => type.claimed_by === this.currentUser.organization.id,
+          (type) => type.claimed_by === this.currentUser.organization.id,
         );
       }
       return [];
@@ -455,7 +455,7 @@ export default {
     workTypesClaimedByOthers() {
       if (this.worksite) {
         const list = this.worksite.work_types.filter(
-          type =>
+          (type) =>
             type.claimed_by &&
             type.claimed_by !== this.currentUser.organization.id,
         );
@@ -465,7 +465,7 @@ export default {
     },
     workTypesClaimedByOthersUnrequested() {
       return this.worksite.work_types.filter(
-        type =>
+        (type) =>
           type.claimed_by &&
           type.claimed_by !== this.currentUser.organization.id &&
           !this.worksiteRequestWorkTypeIds.has(type.id),
@@ -474,7 +474,7 @@ export default {
     workTypesUnclaimed() {
       if (this.worksite) {
         return this.worksite.work_types.filter(
-          type => type.claimed_by === null,
+          (type) => type.claimed_by === null,
         );
       }
       return [];
@@ -497,7 +497,7 @@ export default {
     },
     worksiteRequestWorkTypeIds() {
       return new Set(
-        this.worksiteRequests.map(request => request.worksite_work_type.id),
+        this.worksiteRequests.map((request) => request.worksite_work_type.id),
       );
     },
   },
@@ -614,10 +614,10 @@ export default {
     getFieldsForType(workType) {
       if (this.incident) {
         const availableFields = this.worksite.form_data.map(
-          data => data.field_key,
+          (data) => data.field_key,
         );
-        return this.incident.form_fields.filter(field => {
-          const parent = this.incident.form_fields.find(element => {
+        return this.incident.form_fields.filter((field) => {
+          const parent = this.incident.form_fields.find((element) => {
             return element.field_key === field.field_parent_key;
           });
 

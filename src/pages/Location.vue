@@ -74,7 +74,7 @@
             :placeholder="$t('locationVue.location_type')"
             select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
             @input="
-              type => {
+              (type) => {
                 currentLocation.type = type;
                 selectedIncidentId = null;
                 selectedOrganization = null;
@@ -115,7 +115,7 @@
             <div
               v-if="
                 (isPrimaryResponseArea || isSecondaryResponseArea) &&
-                  relatedOrganizations.length
+                relatedOrganizations.length
               "
             >
               <base-text :weight="400">{{
@@ -287,15 +287,12 @@ export default {
       return null;
     },
     incidents() {
-      return Incident.query()
-        .orderBy('id', 'desc')
-        .get();
+      return Incident.query().orderBy('id', 'desc').get();
     },
     isPrimaryResponseArea() {
       return (
-        LocationType.query()
-          .where('key', 'org_primary_response_area')
-          .get()[0].id === this.currentLocation.type
+        LocationType.query().where('key', 'org_primary_response_area').get()[0]
+          .id === this.currentLocation.type
       );
     },
     isSecondaryResponseArea() {
@@ -307,7 +304,7 @@ export default {
     },
     isIncidentRelated() {
       const incidentRelatedTypes = LocationType.query()
-        .where('key', key =>
+        .where('key', (key) =>
           [
             'incident_primary_damaged_area',
             'incident_storm_track',
@@ -317,7 +314,7 @@ export default {
         )
         .get();
       return incidentRelatedTypes.some(
-        key => key.id === this.currentLocation.type,
+        (key) => key.id === this.currentLocation.type,
       );
     },
   },
@@ -425,7 +422,7 @@ export default {
         await Incident.api().fetchById(value);
         incident = Incident.find(value);
         const existingLocation = incident.locationModels.find(
-          location => location.type === this.currentLocation.type,
+          (location) => location.type === this.currentLocation.type,
         );
         if (existingLocation) {
           const result = await messageBox({
@@ -564,11 +561,9 @@ export default {
       }
       if (this.isIncidentRelated) {
         const incidentIds = this.currentLocation.joins.map(
-          join => join.object_id,
+          (join) => join.object_id,
         );
-        const incidents = Incident.query()
-          .whereIdIn(incidentIds)
-          .get();
+        const incidents = Incident.query().whereIdIn(incidentIds).get();
         this.relatedIncidents = [...incidents];
       }
     },

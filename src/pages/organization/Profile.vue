@@ -21,7 +21,7 @@
               :drag-title="$t('profileOrg.logo_specs')"
               :multiple="false"
               @files="
-                files => {
+                (files) => {
                   handleFileUpload(files, 'fileTypes.logo');
                 }
               "
@@ -45,7 +45,7 @@
               :disabled="uploading"
               :multiple="false"
               @files="
-                files => {
+                (files) => {
                   handleFileUpload(files, 'fileTypes.logo');
                 }
               "
@@ -68,7 +68,7 @@
               :value="currentOrganization.name"
               required
               @input="
-                value => {
+                (value) => {
                   updateOrganization(value, 'name');
                 }
               "
@@ -81,7 +81,7 @@
               item-key="key"
               label="label"
               @input="
-                value => {
+                (value) => {
                   updateOrganization(value, 'type_t');
                 }
               "
@@ -93,7 +93,7 @@
               :placeholder="$t('profileOrg.address')"
               :value="currentOrganization.address"
               @input="
-                value => {
+                (value) => {
                   updateOrganization(value, 'address');
                 }
               "
@@ -103,7 +103,7 @@
               :placeholder="$t('profileOrg.url')"
               :value="currentOrganization.url"
               @input="
-                value => {
+                (value) => {
                   updateOrganization(value, 'url');
                 }
               "
@@ -115,7 +115,7 @@
               :placeholder="$t('profileOrg.email')"
               :value="currentOrganization.email"
               @input="
-                value => {
+                (value) => {
                   updateOrganization(value, 'email');
                 }
               "
@@ -128,7 +128,7 @@
               :placeholder="$t('profileOrg.phone')"
               :value="currentOrganization.phone"
               @input="
-                value => {
+                (value) => {
                   updateOrganization(value, 'phone');
                 }
               "
@@ -149,7 +149,7 @@
               :value="currentOrganization.facebook"
               :placeholder="$t('profileOrg.facebook')"
               @input="
-                value => {
+                (value) => {
                   updateOrganization(value, 'facebook');
                 }
               "
@@ -168,7 +168,7 @@
               :value="currentOrganization.twitter"
               :placeholder="$t('profileOrg.twitter')"
               @input="
-                value => {
+                (value) => {
                   updateOrganization(value, 'twitter');
                 }
               "
@@ -290,7 +290,7 @@
         <textarea
           :value="currentOrganization.custom_ops_message"
           @input="
-            event => {
+            (event) => {
               updateOrganization(event.target.value, 'custom_ops_message');
             }
           "
@@ -334,7 +334,7 @@
           :disabled="uploading"
           :multiple="false"
           @files="
-            files => {
+            (files) => {
               handleFileUpload(files, 'fileTypes.terms_of_service');
             }
           "
@@ -350,7 +350,7 @@
         <textarea
           :value="currentOrganization.custom_legal_tos"
           @input="
-            event => {
+            (event) => {
               updateOrganization(event.target.value, 'custom_legal_tos');
             }
           "
@@ -394,7 +394,7 @@
           :disabled="uploading"
           :multiple="false"
           @files="
-            files => {
+            (files) => {
               handleFileUpload(files, 'fileTypes.liability_waiver');
             }
           "
@@ -410,7 +410,7 @@
         <textarea
           :value="currentOrganization.custom_legal_survivor_waiver"
           @input="
-            event => {
+            (event) => {
               updateOrganization(
                 event.target.value,
                 'custom_legal_survivor_waiver',
@@ -452,7 +452,7 @@ export default {
         'orgType.government',
         'orgType.ltr',
         'orgType.cleanup',
-      ].map(key => {
+      ].map((key) => {
         return { key, label: this.$t(key) };
       }),
       uploading: false,
@@ -482,7 +482,7 @@ export default {
     logoUrl() {
       if (this.currentOrganization.files.length) {
         const logos = this.currentOrganization.files.filter(
-          file => file.file_type_t === 'fileTypes.logo',
+          (file) => file.file_type_t === 'fileTypes.logo',
         );
         if (logos.length) {
           return logos[0].url;
@@ -493,7 +493,7 @@ export default {
     termsOfService() {
       if (this.currentOrganization.files.length) {
         return this.currentOrganization.files.find(
-          file => file.file_type_t === 'fileTypes.terms_of_service',
+          (file) => file.file_type_t === 'fileTypes.terms_of_service',
         );
       }
       return null;
@@ -501,7 +501,7 @@ export default {
     liabilityWaiver() {
       if (this.currentOrganization.files.length) {
         return this.currentOrganization.files.find(
-          file => file.file_type_t === 'fileTypes.liability_waiver',
+          (file) => file.file_type_t === 'fileTypes.liability_waiver',
         );
       }
       return null;
@@ -526,7 +526,7 @@ export default {
       const { primary_location, secondary_location } = this.currentOrganization;
 
       if (primary_location) {
-        this.primaryLocationMap.eachLayer(layer => {
+        this.primaryLocationMap.eachLayer((layer) => {
           if (layer instanceof L.TileLayer) {
             return;
           }
@@ -544,7 +544,7 @@ export default {
         }).addTo(this.primaryLocationMap);
       }
       if (secondary_location) {
-        this.secondaryLocationMap.eachLayer(layer => {
+        this.secondaryLocationMap.eachLayer((layer) => {
           if (layer instanceof L.TileLayer) {
             return;
           }
@@ -661,11 +661,11 @@ export default {
         const file = result.data.id;
 
         const files = this.currentOrganization.files.filter(
-          picture => picture.file_type_t === type,
+          (picture) => picture.file_type_t === type,
         );
 
         if (deleteOldFiles) {
-          const oldFiles = files.map(picture =>
+          const oldFiles = files.map((picture) =>
             Organization.api().deleteFile(
               this.currentOrganization.id,
               picture.file,

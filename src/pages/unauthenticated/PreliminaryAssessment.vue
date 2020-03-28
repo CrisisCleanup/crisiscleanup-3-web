@@ -17,7 +17,7 @@
           size="large"
           type="text"
           :required="true"
-          @input="e => updatePda(e.target.value, 'name')"
+          @input="(e) => updatePda(e.target.value, 'name')"
         />
       </div>
       <div class="form-field">
@@ -38,7 +38,7 @@
           size="large"
           :placeholder="$t('formLabels.phone2')"
           @input="
-            value => {
+            (value) => {
               updatePda(value, 'phone2');
             }
           "
@@ -65,7 +65,7 @@
           type="text"
           :required="true"
           @input="
-            e => {
+            (e) => {
               updatePda(e.target.value, 'email');
             }
           "
@@ -102,7 +102,7 @@
           display-property="description"
           :required="true"
           @input="
-            value => {
+            (value) => {
               updatePda(value, 'address');
             }
           "
@@ -119,7 +119,7 @@
           type="text"
           :required="true"
           @input="
-            e => {
+            (e) => {
               updatePda(e.target.value, 'city');
             }
           "
@@ -134,7 +134,7 @@
           type="text"
           :required="true"
           @input="
-            e => {
+            (e) => {
               updatePda(e.target.value, 'county');
             }
           "
@@ -149,7 +149,7 @@
           type="text"
           :required="true"
           @input="
-            e => {
+            (e) => {
               updatePda(e.target.value, 'state');
             }
           "
@@ -164,7 +164,7 @@
           type="text"
           :required="true"
           @input="
-            e => {
+            (e) => {
               updatePda(e.target.value, 'postal_code');
             }
           "
@@ -195,7 +195,7 @@
                 label="name_t"
                 select-classes="h-10 border bg-white"
                 @input="
-                  value => {
+                  (value) => {
                     dynamicFields[field.field_key] = value;
                   }
                 "
@@ -226,7 +226,7 @@
                 label="name_t"
                 select-classes="h-10 border"
                 @input="
-                  value => {
+                  (value) => {
                     dynamicFields[field.field_key] = value;
                   }
                 "
@@ -242,7 +242,7 @@
                 size="large"
                 type="text"
                 @input="
-                  e => {
+                  (e) => {
                     dynamicFields[field.field_key] = e.target.value;
                   }
                 "
@@ -257,7 +257,7 @@
                 rows="3"
                 :value="pda.formFields[field.field_key]"
                 @input="
-                  e => {
+                  (e) => {
                     dynamicFields[field.field_key] = e.target.value;
                   }
                 "
@@ -271,7 +271,7 @@
                 :id="field.field_key"
                 :value="pda.formFields[field.field_key]"
                 @input="
-                  e => {
+                  (e) => {
                     dynamicFields[field.field_key] = e.target.checked;
                   }
                 "
@@ -346,7 +346,7 @@ export default {
     fields() {
       const excludeSections = ['claim_status_report_info'];
       if (this.currentIncident && this.currentIncident.form_fields) {
-        const formFields = this.currentIncident.form_fields.filter(field => {
+        const formFields = this.currentIncident.form_fields.filter((field) => {
           return (
             !excludeSections.includes(field.field_parent_key) &&
             !excludeSections.includes(field.field_key)
@@ -362,7 +362,7 @@ export default {
       return Incident.find(this.$route.params.incident_id);
     },
     fieldsArray() {
-      return this.fields.map(field => field.field_key);
+      return this.fields.map((field) => field.field_key);
     },
     lang() {
       return this.getLang({
@@ -381,12 +381,12 @@ export default {
     },
     async findPotentialGeocode() {
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-      const nonEmptyKeys = geocodeKeys.filter(key => Boolean(this.pda[key]));
+      const nonEmptyKeys = geocodeKeys.filter((key) => Boolean(this.pda[key]));
       if (nonEmptyKeys.length > 1) {
-        const values = nonEmptyKeys.map(key => this.pda[key]);
+        const values = nonEmptyKeys.map((key) => this.pda[key]);
         const address = values.join(', ');
         const geocode = await GeocoderService.getPlaceDetails(address);
-        geocodeKeys.forEach(key =>
+        geocodeKeys.forEach((key) =>
           this.updatePda(geocode.address_components[key], key),
         );
         const { lat, lng } = geocode.location;
@@ -406,7 +406,7 @@ export default {
       }
       let isWithinBounds = false;
 
-      this.currentIncident.locationModels.forEach(location => {
+      this.currentIncident.locationModels.forEach((location) => {
         const geojsonFeature = {
           type: 'Feature',
           properties: location.attr,
@@ -433,7 +433,7 @@ export default {
     async updatePdaFields(geocode) {
       const { lat, lng } = geocode.location;
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-      geocodeKeys.forEach(key =>
+      geocodeKeys.forEach((key) =>
         this.updatePda(geocode.address_components[key], key),
       );
 
@@ -459,7 +459,7 @@ export default {
         'location',
         'what3words',
       ];
-      geocodeKeys.forEach(key => this.updatePda(null, key));
+      geocodeKeys.forEach((key) => this.updatePda(null, key));
       this.$emit('clearMarkers');
     },
 
@@ -492,11 +492,11 @@ export default {
       }
       const fieldData = this.dynamicFields;
 
-      const truthyValues = Object.keys(fieldData).filter(key => {
+      const truthyValues = Object.keys(fieldData).filter((key) => {
         return Boolean(fieldData[key]) && this.fieldsArray.includes(key);
       });
 
-      const formData = truthyValues.map(key => {
+      const formData = truthyValues.map((key) => {
         return {
           field_key: key,
           field_value: fieldData[key],
@@ -523,7 +523,7 @@ export default {
         return '';
       }
 
-      const key = this.pda.form_data.find(element => {
+      const key = this.pda.form_data.find((element) => {
         return element.field_key === fieldKey;
       });
       if (key) {
@@ -538,22 +538,22 @@ export default {
         return '';
       }
 
-      const key = this.pda.form_data.find(element => {
+      const key = this.pda.form_data.find((element) => {
         return element.field_key === fieldKey;
       });
       if (key) {
-        const currentField = this.fields.find(field => {
+        const currentField = this.fields.find((field) => {
           return field.field_key === fieldKey;
         });
 
-        return currentField.values.find(field => {
+        return currentField.values.find((field) => {
           return field.value === key.field_value;
         });
       }
       return '';
     },
     getSelectValuesList(defaultValues) {
-      return Object.keys(defaultValues).map(key => {
+      return Object.keys(defaultValues).map((key) => {
         return {
           value: key,
           name_t: this.$t(defaultValues[key]),
@@ -565,7 +565,7 @@ export default {
         return '';
       }
 
-      const key = this.pda.form_data.find(element => {
+      const key = this.pda.form_data.find((element) => {
         return element.field_key === fieldKey;
       });
       if (key) {
@@ -579,10 +579,10 @@ export default {
           reject(new Error('Geolocation is not available.'));
         }
         navigator.geolocation.getCurrentPosition(
-          pos => {
+          (pos) => {
             resolve(pos);
           },
-          err => {
+          (err) => {
             reject(err);
           },
         );

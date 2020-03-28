@@ -32,7 +32,7 @@
                     :current-work-type="work_type"
                     use-icon
                     @input="
-                      value => {
+                      (value) => {
                         work_type.status = value;
                       }
                     "
@@ -122,7 +122,7 @@ export default {
         const data = {
           ...this.printToken,
         };
-        data.work_types.forEach(work_type => {
+        data.work_types.forEach((work_type) => {
           delete work_type.work_type;
         });
         await this.$http.patch(

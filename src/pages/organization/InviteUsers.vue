@@ -33,7 +33,7 @@
             :placeholder="$t('usersVue.emails')"
             :add-on-key="[13, ',']"
             @before-adding-tag="
-              obj => {
+              (obj) => {
                 let emailMatch = getEmailMatch(obj.tag.text);
                 if (emailMatch) {
                   obj.tag.text = emailMatch;
@@ -42,7 +42,7 @@
               }
             "
             :separators="[';', ',', ', ']"
-            @tags-changed="newTags => (usersToInvite = newTags)"
+            @tags-changed="(newTags) => (usersToInvite = newTags)"
           />
         </div>
       </div>
@@ -100,8 +100,8 @@ export default {
             this.usersToInvite.push(email);
           }
         }
-        const emails = this.usersToInvite.map(value => value.text);
-        await Promise.all(emails.map(email => User.api().inviteUser(email)));
+        const emails = this.usersToInvite.map((value) => value.text);
+        await Promise.all(emails.map((email) => User.api().inviteUser(email)));
         await this.$toasted.success(
           this.$t('inviteTeammates.invites_sent_success'),
         );

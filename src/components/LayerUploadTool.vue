@@ -68,7 +68,7 @@
                 v-if="!loading"
                 :value="shapefileInfo[data.filename].shapefileKey"
                 @input="
-                  value => {
+                  (value) => {
                     shapefileInfo[data.filename].shapefileKey = value;
                     shapefileInfo = { ...shapefileInfo };
                   }
@@ -82,7 +82,7 @@
               <textarea
                 :value="shapefileInfo[data.filename].shapefileCustomName"
                 @input="
-                  event => {
+                  (event) => {
                     shapefileInfo[data.filename].shapefileCustomName =
                       event.target.value;
                     shapefileInfo = { ...shapefileInfo };
@@ -99,7 +99,7 @@
                   v-if="!loading"
                   :value="shapefileInfo[data.filename].shapefileType"
                   @input="
-                    value => {
+                    (value) => {
                       shapefileInfo[data.filename].shapefileType = value;
                       shapefileInfo = { ...shapefileInfo };
                     }
@@ -117,7 +117,7 @@
                   v-if="!loading"
                   :value="shapefileInfo[data.filename].shapefileAccess"
                   @input="
-                    value => {
+                    (value) => {
                       shapefileInfo[data.filename].shapefileAccess = value;
                       shapefileInfo = { ...shapefileInfo };
                     }
@@ -179,7 +179,7 @@ export default {
       if (!this.shapefileStructure) {
         return [];
       }
-      return Object.keys(this.shapefileStructure).map(item => {
+      return Object.keys(this.shapefileStructure).map((item) => {
         const { count, fields, sample } = this.shapefileStructure[item];
         return {
           filename: item,
@@ -205,7 +205,7 @@ export default {
         /{.+?}/g,
       );
       if (matches) {
-        const replaceArray = matches.map(match =>
+        const replaceArray = matches.map((match) =>
           match.replace('{', '').replace('}', ''),
         );
         for (let i = 0; i <= replaceArray.length - 1; i++) {
@@ -241,7 +241,7 @@ export default {
       );
       this.loading = false;
       this.shapefileStructure = result.data;
-      Object.keys(this.shapefileStructure).forEach(key => {
+      Object.keys(this.shapefileStructure).forEach((key) => {
         this.shapefileInfo[key] = { showingSampleModal: false };
       });
     },

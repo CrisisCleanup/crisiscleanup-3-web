@@ -91,7 +91,7 @@
                         :current-work-type="work_type"
                         use-icon
                         @input="
-                          value => {
+                          (value) => {
                             statusValueChange(
                               value,
                               work_type,
@@ -107,9 +107,7 @@
                   <div class="flex">
                     <router-link
                       class=""
-                      :to="
-                        `/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`
-                      "
+                      :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`"
                       tag="div"
                     >
                       <ccu-icon
@@ -145,7 +143,7 @@
               <base-button
                 v-if="
                   $can('approve_work_type_transfers') ||
-                    $can('receive_work_type_transfer_requests')
+                  $can('receive_work_type_transfer_requests')
                 "
                 class="mr-2 border-r pr-2"
                 size="medium"
@@ -500,7 +498,7 @@ export default {
       if (this.pendingView === 'inbound') {
         return query
           .where(
-            request =>
+            (request) =>
               Number(request.requested_to_org.id) ===
                 Number(this.currentUser.organization.id) &&
               !archivedRequests.includes(request.id) &&
@@ -511,7 +509,7 @@ export default {
       if (this.pendingView === 'outbound') {
         return query
           .where(
-            request =>
+            (request) =>
               Number(request.requested_by_org.id) ===
                 Number(this.currentUser.organization.id) &&
               !archivedRequests.includes(request.id) &&
@@ -530,13 +528,13 @@ export default {
     ...mapState('incident', ['currentIncidentId']),
     ...mapState('enums', ['statuses']),
     claimedWorksites() {
-      const query = Worksite.query().where(worksite => {
+      const query = Worksite.query().where((worksite) => {
         if (
           worksite.work_types &&
           this.currentIncidentId === worksite.incident
         ) {
           const claimed = worksite.work_types.find(
-            workType =>
+            (workType) =>
               workType.claimed_by === this.currentUser.organization.id,
           );
           return Boolean(claimed);
@@ -642,7 +640,7 @@ export default {
     async inviteUsers() {
       try {
         const emails = this.usersToInvite.split(',');
-        await Promise.all(emails.map(email => User.api().inviteUser(email)));
+        await Promise.all(emails.map((email) => User.api().inviteUser(email)));
         await this.$toasted.success(
           this.$t('inviteTeammates.invites_sent_success'),
         );
@@ -743,7 +741,7 @@ export default {
     },
     async getInProgessCount() {
       const openStatuses = this.statuses.filter(
-        status => status.primary_state === 'open',
+        (status) => status.primary_state === 'open',
       );
 
       const response = await this.$http.get(
@@ -753,7 +751,7 @@ export default {
             incident: this.currentIncidentId,
             limit: 1,
             work_type__status__in: openStatuses
-              .map(status => status.status)
+              .map((status) => status.status)
               .join(','),
             fields: 'id',
           },
@@ -763,7 +761,7 @@ export default {
     },
     async getClosedCount() {
       const closedStatuses = this.statuses.filter(
-        status => status.primary_state === 'closed',
+        (status) => status.primary_state === 'closed',
       );
 
       const response = await this.$http.get(
@@ -773,7 +771,7 @@ export default {
             incident: this.currentIncidentId,
             limit: 1,
             work_type__status__in: closedStatuses
-              .map(status => status.status)
+              .map((status) => status.status)
               .join(','),
             fields: 'id',
           },

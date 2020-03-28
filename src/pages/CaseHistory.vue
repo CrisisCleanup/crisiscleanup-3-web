@@ -9,8 +9,9 @@
       </div>
       <div
         v-if="
-          worksite.work_types.filter(work_type => Boolean(work_type.claimed_by))
-            .length > 0
+          worksite.work_types.filter((work_type) =>
+            Boolean(work_type.claimed_by),
+          ).length > 0
         "
         class="my-4"
       >
@@ -86,8 +87,8 @@ export default {
     },
     organizationsWithClaims() {
       const claimedIds = this.worksite.work_types
-        .filter(workType => Boolean(workType.claimed_by))
-        .map(workType => workType.claimed_by);
+        .filter((workType) => Boolean(workType.claimed_by))
+        .map((workType) => workType.claimed_by);
       const idSet = new Set(claimedIds);
       return Array.from(idSet);
     },

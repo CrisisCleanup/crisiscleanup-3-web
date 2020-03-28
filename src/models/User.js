@@ -32,7 +32,7 @@ export default class User extends Model {
   get profilePictureUrl() {
     if (this.files && this.files.length) {
       const profilePictures = this.files.filter(
-        file => file.file_type_t === 'fileTypes.user_profile_picture',
+        (file) => file.file_type_t === 'fileTypes.user_profile_picture',
       );
       if (profilePictures.length) {
         return profilePictures[0].url;
@@ -42,9 +42,7 @@ export default class User extends Model {
   }
 
   get currentRole() {
-    return Role.query()
-      .whereIdIn(this.active_roles)
-      .get()[0];
+    return Role.query().whereIdIn(this.active_roles).get()[0];
   }
 
   get referringUser() {
