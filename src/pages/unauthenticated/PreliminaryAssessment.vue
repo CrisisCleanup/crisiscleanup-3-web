@@ -636,7 +636,9 @@ h5 {
   font-size: 14px;
   font-weight: bold;
 }
+</style>
 
+<style>
 .ccu-version-overlay {
   padding: 0 !important;
   bottom: -3px !important;
