@@ -392,7 +392,7 @@
           </template>
         </div>
       </template>
-      <template v-if="isEditingWorksite">
+      <template v-if="isEditing">
         <SectionHeading :count="5" class="mb-3"
           >{{ $t('caseView.report') }}
         </SectionHeading>
