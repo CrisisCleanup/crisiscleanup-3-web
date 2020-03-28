@@ -2,6 +2,7 @@ import EmbedMap from '@/pages/unauthenticated/EmbedMap';
 import InvitationSignup from './InvitationSignup.vue';
 import PreliminaryAssessment from './PreliminaryAssessment.vue';
 import PrintToken from './PrintToken.vue';
+import ResetPassword from './ResetPassword';
 
 export default [
   {
@@ -26,6 +27,12 @@ export default [
     path: '/map/embed/:incident_id',
     component: EmbedMap,
     name: 'nav.map_embed',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/password/reset/:token',
+    component: ResetPassword,
+    name: 'nav.reset_password',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];
