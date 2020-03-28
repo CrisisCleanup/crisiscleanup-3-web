@@ -11,7 +11,7 @@ module.exports = {
     '@storybook/addon-backgrounds/register',
     '@storybook/addon-docs',
   ],
-  webpackFinal: config => {
+  webpackFinal: (config) => {
     return {
       ...config,
       module: {
