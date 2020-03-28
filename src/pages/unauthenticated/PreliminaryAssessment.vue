@@ -7,7 +7,7 @@
   >
     <div class="intake-form flex-grow">
       <div class="form-field text-lg font-semibold">
-        {{ $t('~~Personal Information') }}
+        {{ lang.personalInfo }}
       </div>
       <div class="form-field">
         <label>{{ $t('formLabels.name') }}</label>
@@ -17,11 +17,7 @@
           size="large"
           type="text"
           :required="true"
-          @input="
-            e => {
-              updatePda(e.target.value, 'name');
-            }
-          "
+          @input="e => updatePda(e.target.value, 'name')"
         />
       </div>
       <div class="form-field">
@@ -32,11 +28,7 @@
           size="large"
           type="text"
           :required="true"
-          @input="
-            e => {
-              updatePda(e.target.value, 'phone1');
-            }
-          "
+          @input="updatePda(e.target.value, 'phone1')"
         />
       </div>
       <div class="form-field" v-if="pda.phone2 || addAdditionalPhone">
@@ -300,7 +292,7 @@
         data-cy="worksite-formaction-save"
         class="flex-grow m-1 text-black bg-purple-700 text-white"
         :action="savePda"
-        :text="$t('~~Submit Request')"
+        :text="lang.submitRequest"
       />
     </div>
   </form>
@@ -320,9 +312,11 @@ import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import Incident from '@/models/Incident';
 import { buildForm, groupBy } from '@/utils/form';
 import FormSelect from '@/components/FormSelect';
+import { LangMixin } from '@/mixins';
 
 export default {
   name: 'PreliminaryAssessment',
+  mixins: [LangMixin],
   components: {
     FormSelect,
     RecurringSchedule,
@@ -369,6 +363,12 @@ export default {
     },
     fieldsArray() {
       return this.fields.map(field => field.field_key);
+    },
+    lang() {
+      return this.getLang({
+        personalInfo: '~~Personal Information',
+        submitRequest: '~~Submit Request',
+      });
     },
   },
   methods: {
