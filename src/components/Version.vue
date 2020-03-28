@@ -19,7 +19,7 @@ export default {
     },
     lang() {
       return this.getLang({
-        text: '~~Crisis Cleanup (Preview)',
+        text: 'version.crisis_cleanup_preview',
       });
     },
   },

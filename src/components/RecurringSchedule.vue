@@ -107,12 +107,12 @@ export default {
     if (this.currentRRule) {
       const rule = RRule.fromString(this.currentRRule);
       if (rule.origOptions.freq === RRule.DAILY) {
-        this.frequency = 'Daily';
+        this.frequency = '~~Daily';
         this.dayInterval = rule.origOptions.interval;
         this.endDate = rule.origOptions.until;
       }
       if (rule.origOptions.freq === RRule.WEEKLY) {
-        this.frequency = 'Weekly';
+        this.frequency = '~~Weekly';
         this.weekInterval = rule.origOptions.interval;
         this.endDate = rule.origOptions.until;
       }
@@ -123,7 +123,7 @@ export default {
       return this.$moment(date).format('ddd MMMM Do YYYY');
     },
     logChange() {
-      if (this.frequency === 'Weekly') {
+      if (this.frequency === '~~Weekly') {
         this.currentRRule = new RRule({
           freq: RRule.WEEKLY,
           interval: this.weekInterval,
@@ -134,14 +134,14 @@ export default {
             .map((day) => this.daysOfWeek[day]),
         }).toString();
       }
-      if (this.frequency === 'Daily') {
+      if (this.frequency === '~~Daily') {
         this.currentRRule = new RRule({
           freq: RRule.DAILY,
           interval: this.dayInterval,
           until: this.endDate,
           byhour: [11],
           byweekday:
-            this.dailyOption === 'Every Weekday'
+            this.dailyOption === '~~Every Weekday'
               ? [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
               : [],
         }).toString();
@@ -167,8 +167,8 @@ export default {
   },
   data() {
     return {
-      frequency: 'Daily',
-      dailyOption: 'Days',
+      frequency: '~~Daily',
+      dailyOption: '~~Days',
       selectedDays: {},
       dayInterval: 1,
       weekInterval: 1,
@@ -176,13 +176,13 @@ export default {
       endDate: null,
       showSchedule: false,
       daysOfWeek: {
-        [this.$t('~~Sun')]: RRule.SU,
-        [this.$t('~~Mon')]: RRule.MO,
-        [this.$t('~~Tue')]: RRule.TU,
-        [this.$t('~~Wed')]: RRule.WE,
-        [this.$t('~~Thu')]: RRule.TH,
-        [this.$t('~~Fri')]: RRule.FR,
-        [this.$t('~~Sat')]: RRule.SA,
+        [this.$t('recurringSchedule.sun')]: RRule.SU,
+        [this.$t('recurringSchedule.mon')]: RRule.MO,
+        [this.$t('recurringSchedule.tue')]: RRule.TU,
+        [this.$t('recurringSchedule.wed')]: RRule.WE,
+        [this.$t('recurringSchedule.thu')]: RRule.TH,
+        [this.$t('recurringSchedule.fri')]: RRule.FR,
+        [this.$t('recurringSchedule.sat')]: RRule.SA,
       },
     };
   },

@@ -352,9 +352,7 @@ export default {
           contact: { ...this.user },
         });
         this.$toasted.success(
-          this.$t(
-            '~~Successfully registered organization. If your organization is approved, you will recieve an email with further instructions.',
-          ),
+          this.$t('registerOrg.org_registration_success'),
           {
             duration: 7000,
           },
