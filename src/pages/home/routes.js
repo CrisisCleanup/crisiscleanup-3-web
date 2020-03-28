@@ -8,6 +8,7 @@ import RegisterOrganization from './RegisterOrganization.vue';
 import RequestAccess from './RequestAccess.vue';
 import Terms from './Terms.vue';
 import Training from './Training.vue';
+import RequestPasswordReset from './RequestPasswordReset';
 
 export default [
   {
@@ -79,5 +80,11 @@ export default [
       }
       next({ name: 'nav.dashboard' });
     },
+  },
+  {
+    path: '/password/new',
+    component: RequestPasswordReset,
+    name: 'nav.request_password_reset',
+    meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];
