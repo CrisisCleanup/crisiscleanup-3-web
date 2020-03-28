@@ -122,7 +122,7 @@ export default {
     timeEnteredByMyOrganization() {
       if (this.worksite) {
         return this.worksite.time.filter(
-          (type) => type.created_by_org === this.currentUser.organization.id,
+          type => type.created_by_org === this.currentUser.organization.id,
         );
       }
       return [];
@@ -131,7 +131,7 @@ export default {
       let time = [];
       if (this.worksite) {
         time = this.worksite.time.filter(
-          (type) => type.created_by_org !== this.currentUser.organization.id,
+          type => type.created_by_org !== this.currentUser.organization.id,
         );
       }
       const volunteers = time.reduce((total, obj) => {

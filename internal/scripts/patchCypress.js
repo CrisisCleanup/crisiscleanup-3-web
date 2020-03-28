@@ -8,7 +8,7 @@
 const shelljs = require('shelljs');
 const path = require('path');
 
-const getConfigPath = (cypBin) => {
+const getConfigPath = cypBin => {
   shelljs.env.DEBUG = 'cypress:*';
   const output = shelljs.exec(`${cypBin} version`, {
     silent: true,

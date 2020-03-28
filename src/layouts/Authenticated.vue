@@ -87,9 +87,7 @@ import detectBrowserLanguage from 'detect-browser-language';
 import { size } from 'lodash';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
-import WorkType from '@/models/WorkType';
 import Organization from '@/models/Organization';
-import Status from '@/models/Status';
 import Language from '@/models/Language';
 import Role from '@/models/Role';
 import { i18nService } from '@/services/i18n.service';
@@ -100,6 +98,7 @@ import Vue from 'vue';
 import Acl from 'vue-browser-acl';
 import DisasterIcon from '../components/DisasterIcon';
 import PhoneStatus from '../models/PhoneStatus';
+import { hash } from '../utils/promise';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
@@ -130,7 +129,9 @@ export default {
       return Organization.find(this.currentUser.organization.id);
     },
     incidents() {
-      return Incident.query().orderBy('id', 'desc').get();
+      return Incident.query()
+        .orderBy('id', 'desc')
+        .get();
     },
     currentIncident() {
       return Incident.find(this.currentIncidentId);
@@ -186,12 +187,6 @@ export default {
           dataKey: 'results',
         },
       ),
-      WorkType.api().get('/work_types?limit=100', {
-        dataKey: 'results',
-      }),
-      Status.api().get('/statuses?limit=100', {
-        dataKey: 'results',
-      }),
       Organization.api().get(
         `/organizations/${this.user.user_claims.organization.id}`,
       ),
@@ -204,13 +199,16 @@ export default {
       PhoneStatus.api().get('/phone_statuses', {
         dataKey: 'results',
       }),
+      this.getEnums(),
     ]);
     await this.setupLanguage();
     this.setupAcl();
 
     let incidentId = this.$route.params.incident_id;
     if (!incidentId) {
-      const incident = Incident.query().orderBy('id', 'desc').first();
+      const incident = Incident.query()
+        .orderBy('id', 'desc')
+        .first();
       if (incident) {
         incidentId = incident.id;
       }
@@ -247,6 +245,18 @@ export default {
     this.ready = true;
   },
   methods: {
+    async getEnums() {
+      const enums = await hash({
+        statuses: this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/statuses`,
+        ),
+        workTypes: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/work_types`,
+        ),
+      });
+      this.setStatuses(enums.statuses.data.results);
+      this.setWorkTypes(enums.workTypes.data.results);
+    },
     async handleChange(value) {
       this.ready = false;
       await Incident.api().fetchById(value);
@@ -292,9 +302,9 @@ export default {
       this.$moment.locale(currentLanguage.split('-')[0]);
     },
     setupAcl() {
-      Vue.use(Acl, this.user, (acl) => {
+      Vue.use(Acl, this.user, acl => {
         const { permissions } = this.user.user_claims;
-        Object.keys(permissions).forEach((permissionKey) => {
+        Object.keys(permissions).forEach(permissionKey => {
           acl.rule(
             permissionKey,
             this.user.user_claims.permissions[permissionKey],
@@ -306,6 +316,7 @@ export default {
     ...mapMutations('incident', ['setCurrentIncidentId']),
     ...mapMutations('loading', ['setWorksitesLoading']),
     ...mapMutations('locale', ['setLanguage']),
+    ...mapMutations('enums', ['setStatuses', 'setWorkTypes']),
     async acceptTermsAndConditions() {
       await User.api().acceptTerms();
       this.showAcceptTermsModal = false;

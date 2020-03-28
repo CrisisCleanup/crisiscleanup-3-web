@@ -12,7 +12,7 @@ import Autocomplete from '../Autocomplete';
 const localVue = createLocalVue();
 localVue.use(VueAutosuggest);
 
-const mountWithOptions = (options) =>
+const mountWithOptions = options =>
   shallowMount(Autocomplete, {
     propsData: {
       suggestions: [{ data: ['One', 'Two'] }],

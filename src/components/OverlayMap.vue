@@ -83,10 +83,10 @@ export default {
           reject(new Error(this.$t('overlayMap.no_geolocation')));
         }
         navigator.geolocation.getCurrentPosition(
-          (pos) => {
+          pos => {
             resolve(pos);
           },
-          (err) => {
+          err => {
             reject(err);
           },
         );

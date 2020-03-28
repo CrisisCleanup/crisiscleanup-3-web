@@ -41,7 +41,7 @@ export const withLayout = () => ({
   `,
   async mounted() {
     while (true) {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 2000));
       this.loading = !this.loading;
     }
   },

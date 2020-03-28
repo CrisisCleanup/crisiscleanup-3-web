@@ -64,10 +64,10 @@ export default {
         'dragenter',
         'dragleave',
         'drop',
-      ].forEach((evt) => {
+      ].forEach(evt => {
         this.$refs.fileform.addEventListener(
           evt,
-          (e) => {
+          e => {
             e.preventDefault();
             e.stopPropagation();
           },
@@ -83,14 +83,14 @@ export default {
         this.$refs.fileform.classList.remove('is-dragover');
       };
 
-      this.$refs.fileform.addEventListener('drop', (e) => {
+      this.$refs.fileform.addEventListener('drop', e => {
         for (let i = 0; i < e.dataTransfer.files.length; i++) {
           this.$emit('files', e.dataTransfer.files);
         }
         removeDragOverClass();
       });
 
-      this.$refs.fileinput.addEventListener('change', (e) => {
+      this.$refs.fileinput.addEventListener('change', e => {
         for (let i = 0; i < e.target.files.length; i++) {
           this.$emit('files', e.target.files);
         }

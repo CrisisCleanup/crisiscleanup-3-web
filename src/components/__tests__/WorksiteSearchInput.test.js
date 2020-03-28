@@ -17,10 +17,10 @@ jest.mock('@/models/Worksite');
 jest.mock('@/models/User');
 
 const mocks = {
-  $t: (key) => key,
+  $t: key => key,
 };
 
-const mountWithOptions = (store) =>
+const mountWithOptions = store =>
   shallowMount(WorksiteSearchInput, {
     stubs: ['vue-autosuggest', 'font-awesome-icon'],
     propsData: {

@@ -30,7 +30,7 @@ export default {
       this.page = Dashboard;
     });
     if (!this.connectReady) {
-      this.unsub = this.$store.subscribe((mutation) => {
+      this.unsub = this.$store.subscribe(mutation => {
         switch (mutation.type) {
           case 'phone/setAgentState':
             this.$toasted.success('Success!');

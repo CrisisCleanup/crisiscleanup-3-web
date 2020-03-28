@@ -25,11 +25,11 @@ localVue.filter('getWorkTypeName', () => 'workType.ash');
 localVue.use(Vuex);
 
 const mocks = {
-  $t: (key) => key,
+  $t: key => key,
   $store: new Store({}),
 };
 
-const mountWithOptions = (props) =>
+const mountWithOptions = props =>
   shallowMount(WorkTypeRequestModal, {
     stubs: {
       'base-button': BaseButton,

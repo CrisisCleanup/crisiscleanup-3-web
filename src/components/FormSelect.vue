@@ -11,7 +11,7 @@
     class="form-select text-base"
     :class="[selectClasses, isInvalid && !value ? 'invalid' : '']"
     :placeholder="placeholder"
-    :reduce="(item) => (itemKey ? item[itemKey] : item)"
+    :reduce="item => (itemKey ? item[itemKey] : item)"
     :selectable="
       () =>
         !multiple || !limit || (multiple && limit > 0 && value.length < limit)
@@ -147,9 +147,7 @@ export default {
           'changed',
           xor(
             value,
-            this.value.map((item) =>
-              this.itemKey ? item[this.itemKey] : item,
-            ),
+            this.value.map(item => (this.itemKey ? item[this.itemKey] : item)),
           ),
         );
       }
@@ -165,11 +163,11 @@ export default {
           document.querySelectorAll('.vs__dropdown-option'),
         );
 
-        items.forEach((item) => {
+        items.forEach(item => {
           item.classList.remove('vs__dropdown-option--highlight');
         });
 
-        const selected = items.find((item) => {
+        const selected = items.find(item => {
           if (this.value) {
             const currentLabel = this.label
               ? this.value[this.label]

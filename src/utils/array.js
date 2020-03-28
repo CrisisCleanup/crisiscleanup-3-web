@@ -1,6 +1,6 @@
 export function groupBy(array, key) {
   const result = {};
-  array.forEach((item) => {
+  array.forEach(item => {
     if (!result[item[key]]) {
       result[item[key]] = [];
     }

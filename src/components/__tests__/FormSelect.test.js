@@ -14,7 +14,7 @@ import BaseIcon from '@/components/BaseIcon';
 import FormSelect from '../FormSelect';
 library.add(fas);
 
-const mountWithOptions = (options) =>
+const mountWithOptions = options =>
   mount(FormSelect, {
     stubs: {
       'v-select': vSelect,

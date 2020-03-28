@@ -10,7 +10,7 @@ import DragDrop from '@/components/DragDrop';
 import Table from '../Table';
 
 const mocks = {
-  $t: (key) => key,
+  $t: key => key,
 };
 
 const mountWithOptions = () =>

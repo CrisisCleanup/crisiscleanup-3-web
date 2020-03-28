@@ -12,7 +12,7 @@ import Worksite from '@/models/Worksite';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
-export const getGoogleMapsLocation = (url) => {
+export const getGoogleMapsLocation = url => {
   const regex = new RegExp('@(.*),(.*),');
   const match = url.match(regex);
   const latitude = Number(match[1]);
@@ -24,7 +24,7 @@ export const getGoogleMapsLocation = (url) => {
   };
 };
 
-const getOpacity = (date) => {
+const getOpacity = date => {
   // let opacityBuckets = [100, 75, 60, 35, 20, 10]
   const opacityBuckets = [100, 85, 70, 45, 30, 20];
   const today = moment();
@@ -98,7 +98,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
   const pixiContainer = new Container();
   context.pixiContainer = pixiContainer;
 
-  const layer = (function () {
+  const layer = (function() {
     let firstDraw = true;
     let prevZoom;
     let prevCenter;
@@ -107,7 +107,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
     const doubleBuffering =
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     return L.pixiOverlay(
-      function (utils) {
+      function(utils) {
         const zoom = utils.getMap().getZoom();
         const center = utils.getMap().getCenter();
         if (frame) {
@@ -122,7 +122,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
         if (firstDraw) {
           prevZoom = zoom;
           prevCenter = center;
-          worksites.forEach(function (marker) {
+          worksites.forEach(function(marker) {
             const coords = project([
               marker.location.coordinates[1],
               marker.location.coordinates[0],
@@ -186,7 +186,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
               });
             }
           }
-          const findMarker = (ll) => {
+          const findMarker = ll => {
             const currentMap = utils.getMap() || context.map;
             if (currentMap.getZoom() < INTERACTIVE_ZOOM_LEVEL || !interactive) {
               return null;
@@ -196,7 +196,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             let marker;
             const { rMax } = quadTree;
             let found = false;
-            quadTree.visit(function (quad, x1, y1, x2, y2) {
+            quadTree.visit(function(quad, x1, y1, x2, y2) {
               if (!quad.length) {
                 const dx = quad.data.x - layerPoint.x;
                 const dy = quad.data.y - layerPoint.y;
@@ -218,7 +218,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
           };
 
           if (interactive) {
-            map.on('click', function (e) {
+            map.on('click', function(e) {
               const currentMap = utils.getMap() || context.map;
               const marker = findMarker(e.latlng);
               if (marker) {
@@ -236,7 +236,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
 
             map.on(
               'mousemove',
-              L.Util.throttle((e) => {
+              L.Util.throttle(e => {
                 const marker = findMarker(e.latlng);
                 if (marker) {
                   L.DomUtil.addClass(this._container, 'cursor-pointer');
@@ -249,7 +249,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
         }
         if (firstDraw || prevZoom !== zoom || prevCenter !== center) {
           context.$emit('mapMoved', map.getBounds());
-          markerSprites.forEach(function (markerSprite) {
+          markerSprites.forEach(function(markerSprite) {
             if (zoom >= INTERACTIVE_ZOOM_LEVEL && interactive) {
               if (
                 utils
@@ -319,7 +319,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
           let lambda = progress / delta;
           if (lambda > 1) lambda = 1;
           lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
-          markerSprites.forEach(function (markerSprite) {
+          markerSprites.forEach(function(markerSprite) {
             markerSprite.scale.set(
               markerSprite.currentScale +
                 lambda * (markerSprite.targetScale - markerSprite.currentScale),

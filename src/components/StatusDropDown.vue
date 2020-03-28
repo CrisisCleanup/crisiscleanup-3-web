@@ -19,7 +19,7 @@
       @keyup="nextItem"
     >
       <div
-        v-for="status in statuses"
+        v-for="status in displayStatuses"
         :key="status.id"
         :value="status.status"
         class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey"
@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import Status from '@/models/Status';
 import { getColorForStatus, getWorkTypeImage } from '@/filters';
+import { mapState } from 'vuex';
 
 export default {
   name: 'StatusDropDown',
@@ -71,13 +71,12 @@ export default {
     };
   },
   computed: {
-    statuses() {
-      return Status.query()
-        .orderBy('list_order')
-        .where((status) => {
-          return this.phase ? status.phases.includes(this.phase) : true;
-        })
-        .get()
+    ...mapState('enums', ['statuses']),
+    displayStatuses() {
+      return this.statuses
+        .filter(status =>
+          this.phase ? status.phases.includes(this.phase) : true,
+        )
         .map((status, index) => {
           return {
             ...status,
@@ -108,7 +107,10 @@ export default {
     nextItem(e) {
       if (e.keyCode === 38 && this.currentItem > 1) {
         this.currentItem -= 1;
-      } else if (e.keyCode === 40 && this.currentItem < this.statuses.length) {
+      } else if (
+        e.keyCode === 40 &&
+        this.currentItem < this.displayStatuses.length
+      ) {
         this.currentItem += 1;
       }
     },

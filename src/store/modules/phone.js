@@ -9,7 +9,7 @@ import Vue from 'vue';
 Vue.use(VueLog, {
   name: 'phone.store',
   middlewares: [
-    (result) => {
+    result => {
       result.unshift('[phone.store] ');
       return result;
     },
@@ -36,23 +36,21 @@ const PhoneState = {
 
 // getters
 const getters = {
-  agentId: (state) => (state.agent ? state.agent.agent_id : null),
-  agentState: (state) =>
+  agentId: state => (state.agent ? state.agent.agent_id : null),
+  agentState: state =>
     state.agentState !== null
       ? state.agentState
       : ConnectService.STATES.OFFLINE,
-  connectRunning: (state) => state.connectRunning, // is connect initialized?
-  connectReady: (state) => state.connectRunning && state.agentConfig !== null, // is connect done w/ init and auth?
-  popupOpen: (state) => state.popupOpen,
-  authToken: (state) =>
-    state.credentials ? state.credentials.AccessToken : '',
-  agentAvailable: (state) =>
-    state.agentState === ConnectService.STATES.ROUTABLE,
-  callIncoming: (state) =>
+  connectRunning: state => state.connectRunning, // is connect initialized?
+  connectReady: state => state.connectRunning && state.agentConfig !== null, // is connect done w/ init and auth?
+  popupOpen: state => state.popupOpen,
+  authToken: state => (state.credentials ? state.credentials.AccessToken : ''),
+  agentAvailable: state => state.agentState === ConnectService.STATES.ROUTABLE,
+  callIncoming: state =>
     [ConnectService.STATES.INCOMING, ConnectService.STATES.CONNECTING].includes(
       state.contact ? state.contact.state : null,
     ),
-  contactState: (state) =>
+  contactState: state =>
     state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
 };
 
@@ -92,7 +90,7 @@ const actions = {
       Log.error(e);
     }
     ConnectService.initAgent({
-      onRefresh: (agent) => {
+      onRefresh: agent => {
         if (!getters.connectReady) {
           Log.debug('got initial agent agent!');
           commit('setConnectState', { running: true, authed: true });
@@ -109,7 +107,7 @@ const actions = {
         commit('setAgentState', { newState, agent }),
     });
     ConnectService.bindContactEvents({
-      onRefresh: (contact) => {
+      onRefresh: contact => {
         const contactId = contact.getContactId();
         const contactState = contact.getStatus();
         const duration = contact.getStatusDuration();

@@ -41,7 +41,7 @@ Cypress.on('uncaught:exception', () => {
 // eslint-disable-next-line consistent-return
 Cypress.on('test:before:run:async', () => {
   if (Cypress.currentTest.currentRetry() > 0) {
-    return new Promise((resolve) => setTimeout(resolve, 2000));
+    return new Promise(resolve => setTimeout(resolve, 2000));
   }
 });
 
@@ -59,22 +59,27 @@ Cypress.Commands.add(
       password,
     })
       .its('body')
-      .then((res) => cy.setLocalStorage('user', JSON.stringify(res)));
+      .then(res => cy.setLocalStorage('user', JSON.stringify(res)));
   },
 );
 
 // Wait until an element exists and then does not
-Cypress.Commands.add('waitTillHidden', (selector) => {
+Cypress.Commands.add('waitTillHidden', selector => {
   cy.get('body')
-    .then(($body) => {
+    .then($body => {
       if ($body.find(selector).length) {
         return selector;
       }
       return false;
     })
-    .then((element) => {
+    .then(element => {
       if (element) {
-        cy.waitUntil(() => cy.get(element).parent().should('not.be.visible'));
+        cy.waitUntil(() =>
+          cy
+            .get(element)
+            .parent()
+            .should('not.be.visible'),
+        );
       }
     });
 });

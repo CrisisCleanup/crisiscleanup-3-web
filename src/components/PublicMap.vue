@@ -115,12 +115,12 @@ export default {
     incident(value) {
       if (value) {
         if (this.map) {
-          this.map.eachLayer((layer) => {
+          this.map.eachLayer(layer => {
             if (layer.location_id) {
               this.map.removeLayer(layer);
             }
           });
-          this.map.eachLayer((layer) => {
+          this.map.eachLayer(layer => {
             if (layer.key === 'worksite_layer') {
               this.map.removeLayer(layer);
             }
@@ -131,7 +131,7 @@ export default {
     },
     displayedWorkTypes: {
       handler(val) {
-        this.displayedWorkTypeSvgs = Object.keys(val).map((workType) => {
+        this.displayedWorkTypeSvgs = Object.keys(val).map(workType => {
           const template = templates[workType] || templates.unknown;
           const svg = template
             .replace('{{fillColor}}', 'black')
@@ -166,7 +166,7 @@ export default {
         polygon.addTo(this.map);
         this.map.fitBounds(polygon.getBounds());
       } else {
-        this.$refs.workstiteMap.map.eachLayer((layer) => {
+        this.$refs.workstiteMap.map.eachLayer(layer => {
           if (layer.location_id && layer.location_id === location.id) {
             this.$refs.workstiteMap.map.removeLayer(layer);
           }
@@ -191,14 +191,14 @@ export default {
         this.map.panBy([1, 0]);
       });
 
-      this.locations.forEach((location) => {
+      this.locations.forEach(location => {
         this.applyLocation(location, true);
       });
 
       this.mapLoading = false;
     },
     async renderMap(markers) {
-      await new Promise((resolve) => {
+      await new Promise(resolve => {
         const loader = new Loader();
         loader.add('circle', '/circle.svg');
         loader.load(() => {

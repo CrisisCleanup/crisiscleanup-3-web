@@ -91,7 +91,7 @@
                         :current-work-type="work_type"
                         use-icon
                         @input="
-                          (value) => {
+                          value => {
                             statusValueChange(
                               value,
                               work_type,
@@ -107,7 +107,9 @@
                   <div class="flex">
                     <router-link
                       class=""
-                      :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`"
+                      :to="
+                        `/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`
+                      "
                       tag="div"
                     >
                       <ccu-icon
@@ -143,7 +145,7 @@
               <base-button
                 v-if="
                   $can('approve_work_type_transfers') ||
-                  $can('receive_work_type_transfer_requests')
+                    $can('receive_work_type_transfer_requests')
                 "
                 class="mr-2 border-r pr-2"
                 size="medium"
@@ -292,10 +294,8 @@ import { create } from 'vue-modal-dialogs';
 import Worksite from '@/models/Worksite';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
-import Status from '@/models/Status';
 import { getQueryString } from '@/utils/urls';
 import { getErrorMessage } from '@/utils/errors';
-import { rand } from '@/utils/charts';
 import { colors } from '@/icons/icons_templates';
 import Incident from '@/models/Incident';
 import WorksiteRequest from '@/models/WorksiteRequest';
@@ -500,7 +500,7 @@ export default {
       if (this.pendingView === 'inbound') {
         return query
           .where(
-            (request) =>
+            request =>
               Number(request.requested_to_org.id) ===
                 Number(this.currentUser.organization.id) &&
               !archivedRequests.includes(request.id) &&
@@ -511,7 +511,7 @@ export default {
       if (this.pendingView === 'outbound') {
         return query
           .where(
-            (request) =>
+            request =>
               Number(request.requested_by_org.id) ===
                 Number(this.currentUser.organization.id) &&
               !archivedRequests.includes(request.id) &&
@@ -528,14 +528,15 @@ export default {
       return [];
     },
     ...mapState('incident', ['currentIncidentId']),
+    ...mapState('enums', ['statuses']),
     claimedWorksites() {
-      const query = Worksite.query().where((worksite) => {
+      const query = Worksite.query().where(worksite => {
         if (
           worksite.work_types &&
           this.currentIncidentId === worksite.incident
         ) {
           const claimed = worksite.work_types.find(
-            (workType) =>
+            workType =>
               workType.claimed_by === this.currentUser.organization.id,
           );
           return Boolean(claimed);
@@ -568,7 +569,6 @@ export default {
     }
     this.loading = true;
     await this.reloadDashBoard();
-    this.fillData();
     this.loading = false;
   },
   methods: {
@@ -642,7 +642,7 @@ export default {
     async inviteUsers() {
       try {
         const emails = this.usersToInvite.split(',');
-        await Promise.all(emails.map((email) => User.api().inviteUser(email)));
+        await Promise.all(emails.map(email => User.api().inviteUser(email)));
         await this.$toasted.success(
           this.$t('inviteTeammates.invites_sent_success'),
         );
@@ -742,7 +742,9 @@ export default {
       this.totalClaimed = response.data.count;
     },
     async getInProgessCount() {
-      const openStatuses = Status.query().where('primary_state', 'open').get();
+      const openStatuses = this.statuses.filter(
+        status => status.primary_state === 'open',
+      );
 
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksites`,
@@ -751,7 +753,7 @@ export default {
             incident: this.currentIncidentId,
             limit: 1,
             work_type__status__in: openStatuses
-              .map((status) => status.status)
+              .map(status => status.status)
               .join(','),
             fields: 'id',
           },
@@ -760,9 +762,9 @@ export default {
       this.totalInProgess = response.data.count;
     },
     async getClosedCount() {
-      const closedStatuses = Status.query()
-        .where('primary_state', 'closed')
-        .get();
+      const closedStatuses = this.statuses.filter(
+        status => status.primary_state === 'closed',
+      );
 
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksites`,
@@ -771,62 +773,13 @@ export default {
             incident: this.currentIncidentId,
             limit: 1,
             work_type__status__in: closedStatuses
-              .map((status) => status.status)
+              .map(status => status.status)
               .join(','),
             fields: 'id',
           },
         },
       );
       this.totalClosed = response.data.count;
-    },
-    getPrimaryWorkType(workTypes) {
-      return Worksite.getWorkType(
-        workTypes,
-        null,
-        this.currentUser.organization,
-      );
-    },
-    fillData() {
-      const date = new Date();
-      let chckDates = Array(44).fill(1);
-      chckDates = chckDates.map((i) => {
-        date.setDate(date.getDate() + i);
-        return date.getDate();
-      });
-      this.datacollection = {
-        labels: chckDates,
-        datasets: [
-          {
-            label: this.$t('dashboard.total_claimed'),
-            borderColor: '#00bbe7',
-            borderWidth: '2',
-            pointRadius: 0,
-            backgroundColor: 'rgba(0, 187, 230, 0.1)',
-            fill: true,
-            data: chckDates.map(() => this.randomScalingFactor(150, 230)),
-          },
-          {
-            label: this.$t('dashboard.total_reported'),
-            borderColor: '#13e768',
-            borderWidth: '2',
-            pointRadius: 0,
-            fill: false,
-            data: chckDates.map(() => this.randomScalingFactor(100, 170)),
-          },
-          {
-            label: this.$t('dashboard.closed'),
-            borderColor: 'red',
-            borderWidth: '1',
-            borderDash: [5, 5],
-            pointRadius: 0,
-            fill: false,
-            data: chckDates.map(() => 60),
-          },
-        ],
-      };
-    },
-    randomScalingFactor(x, y) {
-      return Math.round(rand(x, y));
     },
   },
 };

@@ -21,7 +21,7 @@
           :placeholder="$t('profileUser.first_name_placeholder')"
           required
           @input="
-            (value) => {
+            value => {
               updateUser(value, 'first_name');
             }
           "
@@ -33,7 +33,7 @@
           :placeholder="$t('profileUser.last_name_placeholder')"
           required
           @input="
-            (value) => {
+            value => {
               updateUser(value, 'last_name');
             }
           "
@@ -45,7 +45,7 @@
           :placeholder="$t('profileUser.mobile_placeholder')"
           required
           @input="
-            (value) => {
+            value => {
               updateUser(value, 'mobile');
             }
           "
@@ -115,7 +115,9 @@ export default {
       return Role.all();
     },
     userRoles() {
-      return Role.query().whereIdIn(this.user.roles).get();
+      return Role.query()
+        .whereIdIn(this.user.roles)
+        .get();
     },
   },
 };

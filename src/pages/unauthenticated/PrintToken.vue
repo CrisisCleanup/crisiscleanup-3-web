@@ -32,7 +32,7 @@
                     :current-work-type="work_type"
                     use-icon
                     @input="
-                      (value) => {
+                      value => {
                         work_type.status = value;
                       }
                     "
@@ -83,8 +83,7 @@
 
 <script>
 import HomeLayout from '@/layouts/Home';
-import WorkType from '@/models/WorkType';
-import Status from '@/models/Status';
+import { mapMutations } from 'vuex';
 import StatusDropDown from '../../components/StatusDropDown';
 import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
@@ -94,14 +93,16 @@ export default {
   name: 'PrintToken',
   async mounted() {
     this.loading = true;
-    await Promise.all([
-      WorkType.api().get('/work_types?limit=100', {
-        dataKey: 'results',
-      }),
-      Status.api().get('/statuses?limit=100', {
-        dataKey: 'results',
-      }),
-    ]);
+    const workTypesResponse = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/work_types`,
+    );
+    const statusResponse = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/statuses`,
+    );
+
+    this.setStatuses(statusResponse.data.results);
+    this.setWorkTypes(workTypesResponse.data.results);
+
     const response = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
     );
@@ -113,6 +114,7 @@ export default {
       const { address, city, state, postal_code } = this.printToken;
       return `${address}, ${city}, ${state} ${postal_code}`;
     },
+    ...mapMutations('enums', ['setStatuses', 'setWorkTypes']),
   },
   methods: {
     async save() {
@@ -120,7 +122,7 @@ export default {
         const data = {
           ...this.printToken,
         };
-        data.work_types.forEach((work_type) => {
+        data.work_types.forEach(work_type => {
           delete work_type.work_type;
         });
         await this.$http.patch(

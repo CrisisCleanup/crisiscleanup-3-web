@@ -34,8 +34,10 @@ export default class Incident extends Model {
   }
 
   get locationModels() {
-    const locationIds = this.locations.map((location) => location.location);
-    return Location.query().whereIdIn(locationIds).get();
+    const locationIds = this.locations.map(location => location.location);
+    return Location.query()
+      .whereIdIn(locationIds)
+      .get();
   }
 
   get phase() {
@@ -54,7 +56,7 @@ export default class Incident extends Model {
 
         if (incident.response.data.locations.length) {
           const locationIds = incident.response.data.locations.map(
-            (location) => location.location,
+            location => location.location,
           );
           await Location.api().get(
             `/locations?id__in=${locationIds.join(',')}`,

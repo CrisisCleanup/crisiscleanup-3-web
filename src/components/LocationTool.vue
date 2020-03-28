@@ -54,7 +54,7 @@
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Rectangle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Rectangle'"
             @changed="
-              (event) => {
+              event => {
                 handleMapEvent(event, 'Rectangle');
               }
             "
@@ -68,7 +68,7 @@
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Polygon'"
             :selected="Boolean(currentDraw) && currentDraw === 'Polygon'"
             @changed="
-              (event) => {
+              event => {
                 handleMapEvent(event, 'Polygon');
               }
             "
@@ -82,7 +82,7 @@
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Circle'"
             @changed="
-              (event) => {
+              event => {
                 handleMapEvent(event, 'Circle');
               }
             "
@@ -125,7 +125,7 @@
               :key="currentLayerUpload"
               class="flex w-full justify-center items-center"
               @addedLayer="
-                (layer) => {
+                layer => {
                   currentLayerUpload = layer;
                 }
               "
@@ -356,11 +356,11 @@ export default {
       },
     ).addTo(map);
 
-    L.DomEvent.on(this.$refs.buttons, 'click', function (ev) {
+    L.DomEvent.on(this.$refs.buttons, 'click', function(ev) {
       L.DomEvent.stopPropagation(ev);
     });
 
-    map.on('keydown', (e) => {
+    map.on('keydown', e => {
       if (e.originalEvent.keyCode === 13) {
         const newPoly = turf.lineToPolygon(this.workingLayer.toGeoJSON());
         this.$log.debug(newPoly);
@@ -388,7 +388,7 @@ export default {
       });
     });
 
-    map.on('pm:create', (e) => {
+    map.on('pm:create', e => {
       const { layer } = e;
       let newLayer = L.geoJSON(layer.toGeoJSON());
 
@@ -415,7 +415,7 @@ export default {
 
     if (this.locations && this.locations.length) {
       const locationPromises = [];
-      this.locations.forEach((location) => {
+      this.locations.forEach(location => {
         locationPromises.push(this.onLocationLoaded(location));
       });
       await Promise.all(locationPromises);
@@ -446,7 +446,7 @@ export default {
       this.toggleIncidents(false);
     },
     restoreCheckpoint(checkpointData) {
-      this.map.eachLayer((layer) => {
+      this.map.eachLayer(layer => {
         if (
           layer instanceof L.TileLayer ||
           layer instanceof L.SVG ||
@@ -491,8 +491,8 @@ export default {
     async getIncidentLocations(incidents) {
       // this.incidentLayer = new L.LayerGroup();
       const incidentLocations = [];
-      incidents.forEach((incident) => {
-        incident.locations.forEach((item) => {
+      incidents.forEach(incident => {
+        incident.locations.forEach(item => {
           incidentLocations.push(item.location);
         });
       });
@@ -504,7 +504,7 @@ export default {
           },
         );
         const { locations } = results.entities;
-        locations.forEach((location) => {
+        locations.forEach(location => {
           const geojsonFeature = {
             type: 'Feature',
             properties: location.attr,
@@ -538,7 +538,7 @@ export default {
       this.worksitesLoading = false;
     },
     applyCurrentLayer(closePopup = true) {
-      this.map.eachLayer((layer) => {
+      this.map.eachLayer(layer => {
         if (layer instanceof L.Popup && !closePopup) {
           return;
         }

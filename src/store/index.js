@@ -9,6 +9,7 @@ import incident from './modules/incident';
 import loading from './modules/loading';
 import locale from './modules/locale';
 import phone from './modules/phone';
+import enums from './modules/enums';
 
 VuexORM.use(VuexORMAxios, {
   axios,
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     loading,
     locale,
     phone,
+    enums,
   },
   plugins: [VuexORM.install(database)],
   strict: debug,

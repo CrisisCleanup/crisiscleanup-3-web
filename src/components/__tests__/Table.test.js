@@ -25,7 +25,7 @@ const TestColumns = [
 ];
 
 const mocks = {
-  $t: (key) => key,
+  $t: key => key,
 };
 
 const TestData = [{ id: 'one_index' }, { id: 'two_index' }];

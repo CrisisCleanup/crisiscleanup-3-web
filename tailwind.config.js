@@ -109,7 +109,7 @@ module.exports = {
   },
   variants: {},
   plugins: [
-    function ({ addUtilities, e, theme, variants }) {
+    function({ addUtilities, e, theme, variants }) {
       const colors = flattenColorPalette(theme('borderColor'));
 
       const utilities = _.flatMap(

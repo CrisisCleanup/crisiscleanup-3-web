@@ -17,7 +17,7 @@ import SPMetadata from '../../public/sp/metadata.xml';
 Vue.use(VueLog, {
   name: 'sso.service',
   middlewares: [
-    (result) => {
+    result => {
       result.unshift('[SSO] ');
       return result;
     },
@@ -52,12 +52,12 @@ export const fetchMetadata = async () => {
   return content.data;
 };
 
-export const IDP = (metadata) =>
+export const IDP = metadata =>
   saml.IdentityProvider({
     metadata,
   });
 
-export const consume = async (SAMLResponse) => {
+export const consume = async SAMLResponse => {
   const sts = new AWS.STS();
   const awsCreds = await sts
     .assumeRoleWithSAML({

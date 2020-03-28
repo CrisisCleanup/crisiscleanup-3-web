@@ -151,10 +151,10 @@ Vue.use(Hotjar, {
 });
 
 axios.interceptors.response.use(
-  function (response) {
+  function(response) {
     return response;
   },
-  function (error) {
+  function(error) {
     if (error.response.status === 401) {
       store.dispatch('auth/logout');
       router.push('/login');
@@ -163,7 +163,7 @@ axios.interceptors.response.use(
   },
 );
 
-const getLanguages = async (tags) => {
+const getLanguages = async tags => {
   const messages = {};
 
   // eslint-disable-next-line no-restricted-syntax
@@ -191,11 +191,11 @@ const getLanguages = async (tags) => {
   });
 };
 
-getLanguages(['en-US', detectBrowserLanguage()]).then((i18n) => {
+getLanguages(['en-US', detectBrowserLanguage()]).then(i18n => {
   window.vue = new Vue({
     i18n,
     components: { App },
-    render: (h) => h(App),
+    render: h => h(App),
     router,
     store,
   }).$mount('#app');

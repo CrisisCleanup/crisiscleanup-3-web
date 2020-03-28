@@ -1,6 +1,6 @@
 import Filter from '@/utils/data_filters/Filter';
 import { snakeToTitleCase } from '@/filters';
-import Status from '@/models/Status';
+import enums from '@/store/modules/enums';
 import User from '@/models/User';
 
 export default class WorksiteStatusGroupFilter extends Filter {
@@ -20,18 +20,21 @@ export default class WorksiteStatusGroupFilter extends Filter {
     }
 
     if (this.data.open) {
-      const openStatuses = Status.query().where('primary_state', 'open').get();
+      enums.state.statuses.filter(status => status.primary_state === 'open');
+      const openStatuses = enums.state.statuses.filter(
+        status => status.primary_state === 'open',
+      );
       packed.work_type__status__in = openStatuses
-        .map((status) => status.status)
+        .map(status => status.status)
         .join(',');
     }
 
     if (this.data.closed) {
-      const closedStatuses = Status.query()
-        .where('primary_state', 'closed')
-        .get();
+      const closedStatuses = enums.state.statuses.filter(
+        status => status.primary_state === 'closed',
+      );
       packed.work_type__status__in = closedStatuses
-        .map((status) => status.status)
+        .map(status => status.status)
         .join(',');
     }
     return packed;

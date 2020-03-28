@@ -35,7 +35,7 @@
               placeholder="$t('affiliatesVue.search_for_organization')"
               clear-on-selected
               @selected="
-                (value) => {
+                value => {
                   selectedAffiliate = value;
                 }
               "
@@ -97,7 +97,7 @@
             <base-button
               v-if="
                 slotProps.item.approved_by ||
-                slotProps.item.organization === currentUser.organization.id
+                  slotProps.item.organization === currentUser.organization.id
               "
               size="small"
               class="m-1 mx-2 text-xs px-3 border border-black"
@@ -111,7 +111,7 @@
             <base-button
               v-if="
                 !slotProps.item.approved_by &&
-                slotProps.item.affiliate === currentUser.organization.id
+                  slotProps.item.affiliate === currentUser.organization.id
               "
               size="small"
               class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
@@ -125,7 +125,7 @@
             <base-button
               v-if="
                 !slotProps.item.approved_by &&
-                slotProps.item.affiliate === currentUser.organization.id
+                  slotProps.item.affiliate === currentUser.organization.id
               "
               size="small"
               type="bare"
@@ -211,7 +211,7 @@ export default {
       });
       await Organization.api().get(
         `/organizations?id__in=${Affiliate.all()
-          .map((org) => org.affiliate)
+          .map(org => org.affiliate)
           .join(',')}`,
         {
           dataKey: 'results',

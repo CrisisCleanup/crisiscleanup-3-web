@@ -10,7 +10,7 @@ import Vue from 'vue';
 Vue.use(VueLog, {
   name: 'acs.service',
   middlewares: [
-    (result) => {
+    result => {
       result.unshift('[ACS] ');
       return result;
     },
@@ -48,7 +48,7 @@ export const initConnect = ({
   const eventBus = connect.core.getEventBus();
   const upstream = connect.core.getUpstream();
   if (onAuth) {
-    const handleOnAuth = (e) => {
+    const handleOnAuth = e => {
       Log.debug(`got authentication event: ${e}`);
       return onAuth();
     };
@@ -83,7 +83,7 @@ export const initConnect = ({
 
 export const initAgent = ({ onRefresh, onAuth, onStateChange }) => {
   Log.info('waiting on agent... ');
-  connect.agent((agent) => {
+  connect.agent(agent => {
     Log.info('agent initialized!');
     agent.onRefresh(onRefresh);
     agent.onStateChange(onStateChange);
@@ -140,15 +140,15 @@ export const METRICS = {
 
 export const getAgent = () => new connect.Agent();
 
-export const setAgentState = (state) => {
+export const setAgentState = state => {
   const agent = getAgent();
-  const stateDef = agent.getAgentStates().find((s) => s.type === state);
+  const stateDef = agent.getAgentStates().find(s => s.type === state);
   agent.setState(stateDef);
   return state;
 };
 
-export const parseAgentState = (stateEvent) => {
-  const state = Object.values(STATES).filter((val) => {
+export const parseAgentState = stateEvent => {
+  const state = Object.values(STATES).filter(val => {
     let stateType = stateEvent;
     if (typeof stateEvent === 'object') {
       stateType = stateEvent.type;
@@ -161,8 +161,8 @@ export const parseAgentState = (stateEvent) => {
   return state.length >= 1 ? state[0] : null;
 };
 
-export const bindContactEvents = (handler) => {
-  connect.contact((contact) => {
+export const bindContactEvents = handler => {
+  connect.contact(contact => {
     contact.onRefresh(connect.hitch(handler, handler.onRefresh));
   });
 };

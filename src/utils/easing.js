@@ -4,15 +4,15 @@ import { Sprite } from 'pixi.js';
 export function solveCollision(circles, options) {
   const opts = options || {};
   const tree = quadtree()
-    .x(function (d) {
+    .x(function(d) {
       return d.xp;
     })
-    .y(function (d) {
+    .y(function(d) {
       return d.yp;
     });
   if (opts.extent !== undefined) tree.extent(opts.extent);
   let rMax = 0;
-  circles.forEach(function (circle) {
+  circles.forEach(function(circle) {
     circle.xp = circle.x0;
     circle.yp = circle.y0;
     if (opts.r0 !== undefined) circle.r0 = opts.r0;
@@ -79,7 +79,7 @@ export function solveCollision(circles, options) {
           c2.yMax = c2.yp + c2.r;
         }
       }
-      return function (quad, x1, y1, x2, y2) {
+      return function(quad, x1, y1, x2, y2) {
         if (!quad.length) {
           do {
             if (
@@ -106,7 +106,7 @@ export function solveCollision(circles, options) {
     tree.add(circle);
   });
   if (opts.zoom !== undefined) {
-    circles.forEach(function (circle) {
+    circles.forEach(function(circle) {
       circle.cache = circle.cache || {};
       circle.cache[opts.zoom] = {
         x: circle.xp,
@@ -116,14 +116,14 @@ export function solveCollision(circles, options) {
     });
   }
   const ret = quadtree()
-    .x(function (d) {
+    .x(function(d) {
       return d.xp;
     })
-    .y(function (d) {
+    .y(function(d) {
       return d.yp;
     });
   let rMax2 = 0;
-  circles.forEach(function (circle) {
+  circles.forEach(function(circle) {
     ret.add(circle);
     rMax2 = Math.max(rMax2, circle.r);
   });

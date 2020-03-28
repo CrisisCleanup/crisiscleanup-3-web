@@ -20,7 +20,7 @@ jest.mock('@/models/WorksiteRequest');
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
-localVue.filter('numeral', (n) => n);
+localVue.filter('numeral', n => n);
 localVue.filter('getColorForWorkType', () => '#ffffff');
 localVue.directive('can', () => false);
 
@@ -64,7 +64,7 @@ const mocks = {
       };
     },
   },
-  $t: (key) => key,
+  $t: key => key,
 };
 
 const mountWithOptions = () =>

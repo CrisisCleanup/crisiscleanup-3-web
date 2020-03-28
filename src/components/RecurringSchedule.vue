@@ -111,8 +111,8 @@ export default {
           until: this.endDate,
           byhour: [11],
           byweekday: Object.keys(this.selectedDays)
-            .filter((day) => Boolean(this.selectedDays[day]))
-            .map((day) => this.daysOfWeek[day]),
+            .filter(day => Boolean(this.selectedDays[day]))
+            .map(day => this.daysOfWeek[day]),
         }).toString();
       }
       if (this.frequency === 'Daily') {

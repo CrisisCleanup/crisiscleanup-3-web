@@ -27,7 +27,9 @@ export default class Organization extends Model {
   }
 
   get incident_list() {
-    return Incident.query().whereIdIn(this.incidents).get();
+    return Incident.query()
+      .whereIdIn(this.incidents)
+      .get();
   }
 
   static apiConfig = {

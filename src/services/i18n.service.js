@@ -11,8 +11,8 @@ const i18nService = {
         Accept: 'application/json',
       },
     })
-      .then((resp) => resp.json())
-      .then((data) => data);
+      .then(resp => resp.json())
+      .then(data => data);
   },
 };
 

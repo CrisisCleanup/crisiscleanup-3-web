@@ -73,7 +73,7 @@ describe('unAuthenticated Layout', () => {
   it('should redirect to case post-auth', () => {
     // @see - CrisisCleanup/crisiscleanup-3-web#64
     cy.visit('/incident/158/cases/142359').then(() => {
-      cy.location().should((loc) => {
+      cy.location().should(loc => {
         expect(loc.search).to.eq('?from=%2Fincident%2F158%2Fcases%2F142359');
       });
     });

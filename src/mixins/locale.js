@@ -14,7 +14,7 @@ export const LangMixin = {
   methods: {
     getLang(defs) {
       const lang = {};
-      Object.keys(defs).forEach((k) => {
+      Object.keys(defs).forEach(k => {
         switch (typeof defs[k]) {
           case 'function':
             lang[k] = (...args) => {

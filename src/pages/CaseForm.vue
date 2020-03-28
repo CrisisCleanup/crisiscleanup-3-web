@@ -26,7 +26,7 @@
           size="large"
           :required="true"
           @input="
-            (value) => {
+            value => {
               updateWorksite(value, 'name');
             }
           "
@@ -41,7 +41,7 @@
           size="large"
           :placeholder="$t('formLabels.phone1')"
           @input="
-            (value) => {
+            value => {
               updateWorksite(value, 'phone1');
             }
           "
@@ -54,7 +54,7 @@
           size="large"
           :placeholder="$t('formLabels.phone2')"
           @input="
-            (value) => {
+            value => {
               updateWorksite(value, 'phone2');
             }
           "
@@ -79,7 +79,7 @@
           size="large"
           :placeholder="$t('formLabels.email')"
           @input="
-            (value) => {
+            value => {
               updateWorksite(value, 'email');
             }
           "
@@ -123,7 +123,7 @@
           size="large"
           :required="true"
           @input="
-            (value) => {
+            value => {
               updateWorksite(value, 'address');
             }
           "
@@ -140,7 +140,7 @@
           :placeholder="$t('formLabels.city')"
           required
           @input="
-            (value) => {
+            value => {
               updateWorksite(value, 'city');
             }
           "
@@ -156,7 +156,7 @@
           :break-glass="true"
           required
           @input="
-            (value) => {
+            value => {
               updateWorksite(value, 'county');
             }
           "
@@ -171,7 +171,7 @@
           :placeholder="$t('formLabels.state')"
           required
           @input="
-            (value) => {
+            value => {
               updateWorksite(value, 'state');
             }
           "
@@ -196,7 +196,7 @@
           :required="!worksite.location"
           disabled
           @input="
-            (value) => {
+            value => {
               updateWorksite(value, 'what3words');
             }
           "
@@ -262,7 +262,7 @@
                 label="name_t"
                 select-classes="h-12 border"
                 @input="
-                  (value) => {
+                  value => {
                     dynamicFields[field.field_key] = value;
                   }
                 "
@@ -293,7 +293,7 @@
                 label="name_t"
                 select-classes="h-12 border"
                 @input="
-                  (value) => {
+                  value => {
                     dynamicFields[field.field_key] = value;
                   }
                 "
@@ -309,7 +309,7 @@
                 :break-glass="field.read_only_break_glass"
                 :placeholder="field.placeholder_t || field.label_t"
                 @input="
-                  (value) => {
+                  value => {
                     dynamicFields[field.field_key] = value;
                   }
                 "
@@ -359,7 +359,7 @@
                 rows="4"
                 :value="worksite.formFields[field.field_key]"
                 @input="
-                  (e) => {
+                  e => {
                     dynamicFields[field.field_key] = e.target.value;
                   }
                 "
@@ -371,7 +371,7 @@
               <base-checkbox
                 :value="worksite.formFields[field.field_key]"
                 @input="
-                  (value) => {
+                  value => {
                     dynamicFields[field.field_key] = value;
                   }
                 "
@@ -480,7 +480,7 @@ export default {
     WorksiteImageSection,
   },
   created() {
-    EventBus.$on('updatedWorksiteLocation', (latLng) => {
+    EventBus.$on('updatedWorksiteLocation', latLng => {
       this.geocodeWorksite(latLng.lat, latLng.lng);
     });
     EventBus.$on('clearWorksite', () => {
@@ -545,7 +545,7 @@ export default {
       return Incident.find(this.incidentId);
     },
     fieldsArray() {
-      return this.fields.map((field) => field.field_key);
+      return this.fields.map(field => field.field_key);
     },
   },
   async mounted() {
@@ -574,7 +574,7 @@ export default {
         delete this.worksite.id;
       }
     }
-    this.dynamicFields = this.worksite.form_data.reduce(function (map, obj) {
+    this.dynamicFields = this.worksite.form_data.reduce(function(map, obj) {
       map[obj.field_key] = obj.field_value;
       return map;
     }, {});
@@ -604,14 +604,14 @@ export default {
     },
     async findPotentialGeocode() {
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-      const nonEmptyKeys = geocodeKeys.filter((key) =>
+      const nonEmptyKeys = geocodeKeys.filter(key =>
         Boolean(this.worksite[key]),
       );
       if (nonEmptyKeys.length > 1) {
-        const values = nonEmptyKeys.map((key) => this.worksite[key]);
+        const values = nonEmptyKeys.map(key => this.worksite[key]);
         const address = values.join(', ');
         const geocode = await GeocoderService.getPlaceDetails(address);
-        geocodeKeys.forEach((key) =>
+        geocodeKeys.forEach(key =>
           this.updateWorksite(geocode.address_components[key], key),
         );
         const { lat, lng } = geocode.location;
@@ -633,7 +633,7 @@ export default {
       }
       let isWithinBounds = false;
 
-      this.currentIncident.locationModels.forEach((location) => {
+      this.currentIncident.locationModels.forEach(location => {
         const geojsonFeature = {
           type: 'Feature',
           properties: location.attr,
@@ -713,7 +713,7 @@ export default {
     async updateWorksiteFields(geocode) {
       const { lat, lng } = geocode.location;
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-      geocodeKeys.forEach((key) =>
+      geocodeKeys.forEach(key =>
         this.updateWorksite(geocode.address_components[key], key),
       );
 
@@ -739,7 +739,7 @@ export default {
         'location',
         'what3words',
       ];
-      geocodeKeys.forEach((key) => this.updateWorksite(null, key));
+      geocodeKeys.forEach(key => this.updateWorksite(null, key));
       this.$emit('clearMarkers');
     },
 
@@ -833,11 +833,11 @@ export default {
       }
       const fieldData = this.dynamicFields;
 
-      const truthyValues = Object.keys(fieldData).filter((key) => {
+      const truthyValues = Object.keys(fieldData).filter(key => {
         return Boolean(fieldData[key]) && this.fieldsArray.includes(key);
       });
 
-      const formData = truthyValues.map((key) => {
+      const formData = truthyValues.map(key => {
         return {
           field_key: key,
           field_value: fieldData[key],
@@ -900,7 +900,7 @@ export default {
         return '';
       }
 
-      const key = this.worksite.form_data.find((element) => {
+      const key = this.worksite.form_data.find(element => {
         return element.field_key === fieldKey;
       });
       if (key) {
@@ -915,22 +915,22 @@ export default {
         return '';
       }
 
-      const key = this.worksite.form_data.find((element) => {
+      const key = this.worksite.form_data.find(element => {
         return element.field_key === fieldKey;
       });
       if (key) {
-        const currentField = this.fields.find((field) => {
+        const currentField = this.fields.find(field => {
           return field.field_key === fieldKey;
         });
 
-        return currentField.values.find((field) => {
+        return currentField.values.find(field => {
           return field.value === key.field_value;
         });
       }
       return '';
     },
     getSelectValuesList(defaultValues) {
-      return Object.keys(defaultValues).map((key) => {
+      return Object.keys(defaultValues).map(key => {
         return {
           value: key,
           name_t: this.$t(defaultValues[key]),
@@ -942,7 +942,7 @@ export default {
         return '';
       }
 
-      const key = this.worksite.form_data.find((element) => {
+      const key = this.worksite.form_data.find(element => {
         return element.field_key === fieldKey;
       });
       if (key) {
@@ -960,10 +960,10 @@ export default {
           reject(new Error('Geolocation is not available.'));
         }
         navigator.geolocation.getCurrentPosition(
-          (pos) => {
+          pos => {
             resolve(pos);
           },
-          (err) => {
+          err => {
             reject(err);
           },
         );
@@ -975,7 +975,7 @@ export default {
         longitude,
       });
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-      geocodeKeys.forEach((key) =>
+      geocodeKeys.forEach(key =>
         this.updateWorksite(geocode.address_components[key], key),
       );
       this.updateWorksite(

@@ -3,7 +3,7 @@ import Filter from '@/utils/data_filters/Filter';
 export default class UserInvitedByFilter extends Filter {
   packFunction() {
     const packed = {};
-    const invitedByIds = Array.from(this.data).map((user) => user.id);
+    const invitedByIds = Array.from(this.data).map(user => user.id);
     if (invitedByIds.length) {
       packed.referring_user__in = invitedByIds.join(',');
     }
@@ -16,7 +16,7 @@ export default class UserInvitedByFilter extends Filter {
 
   getFilterLabels() {
     const labels = {};
-    Array.from(this.data).forEach((user) => {
+    Array.from(this.data).forEach(user => {
       const { id, full_name } = user;
       labels[id] = window.vue.$i18n.t('userInvitedBy.invited_by', {
         full_name,
@@ -26,7 +26,7 @@ export default class UserInvitedByFilter extends Filter {
   }
 
   removeField(identifier) {
-    Array.from(this.data).forEach((x) => {
+    Array.from(this.data).forEach(x => {
       if (Number(x.id) === Number(identifier)) {
         this.data.delete(x);
       }
