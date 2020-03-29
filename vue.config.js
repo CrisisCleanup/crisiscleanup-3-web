@@ -1,5 +1,6 @@
 const threadLoader = require('thread-loader');
 const LodashPlugin = require('lodash-webpack-plugin');
+const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 const basicPool = {
   workerParallelJobs: 200,
   name: 'basicPool',
@@ -85,6 +86,14 @@ module.exports = {
     useBasicTPool(jsRule, 'babel-loader');
     useBasicTPool(vueRule, 'vue-loader');
     config.plugin('lodash').use(LodashPlugin);
+    config.plugin('sentry').use(SentryWebpackPlugin, [
+      {
+        include: '.',
+        ignoreFile: '.gitignore',
+        ignore: ['node_modules', 'vue.config.js'],
+        configFile: 'sentry.properties',
+      },
+    ]);
   },
   css: {
     loaderOptions: {
