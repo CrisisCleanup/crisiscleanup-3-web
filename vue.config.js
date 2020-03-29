@@ -86,14 +86,16 @@ module.exports = {
     useBasicTPool(jsRule, 'babel-loader');
     useBasicTPool(vueRule, 'vue-loader');
     config.plugin('lodash').use(LodashPlugin);
-    config.plugin('sentry').use(SentryWebpackPlugin, [
-      {
-        include: '.',
-        ignoreFile: '.gitignore',
-        ignore: ['node_modules', 'vue.config.js'],
-        configFile: 'sentry.properties',
-      },
-    ]);
+    if (['staging', 'production'].includes(process.env.VUE_APP_STAGE)) {
+      config.plugin('sentry').use(SentryWebpackPlugin, [
+        {
+          include: '.',
+          ignoreFile: '.gitignore',
+          ignore: ['node_modules', 'vue.config.js'],
+          configFile: 'sentry.properties',
+        },
+      ]);
+    }
   },
   css: {
     loaderOptions: {
