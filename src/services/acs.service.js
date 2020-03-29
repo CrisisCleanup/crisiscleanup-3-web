@@ -4,10 +4,9 @@
  *
  */
 
-import VueLog from '@dreipol/vue-log';
 import Vue from 'vue';
 
-Vue.use(VueLog, {
+const Log = Vue.log({
   name: 'acs.service',
   middlewares: [
     (result) => {
@@ -16,7 +15,6 @@ Vue.use(VueLog, {
     },
   ],
 });
-const Log = Vue.log();
 
 export const EVENTS = (() => {
   const ev = (e) => `acs:${e}`;

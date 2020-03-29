@@ -1,12 +1,11 @@
 import * as ConnectService from '@/services/acs.service';
 import * as SSO from '@/services/sso.service';
 import { PhoneApi } from '@/utils/api';
-import VueLog from '@dreipol/vue-log';
 import axios from 'axios';
 import { camelCase } from 'lodash';
 import Vue from 'vue';
 
-Vue.use(VueLog, {
+const Log = Vue.log({
   name: 'phone.store',
   middlewares: [
     (result) => {
@@ -15,7 +14,6 @@ Vue.use(VueLog, {
     },
   ],
 });
-const Log = Vue.log();
 
 const PhoneState = {
   agent: null,

@@ -7,14 +7,13 @@ import AWSSPMetadata from '@/assets/saml/aws-metadata.xml';
 import IDPMetadata from '@/assets/saml/ccu-metadata.xml';
 import { AuthService } from '@/services/auth.service';
 import { IDPApi } from '@/utils/api';
-import VueLog from '@dreipol/vue-log';
 import AWS from 'aws-sdk';
 import axios from 'axios';
 import * as saml from 'samlify';
 import Vue from 'vue';
 import SPMetadata from '../../public/sp/metadata.xml';
 
-Vue.use(VueLog, {
+const Log = Vue.log({
   name: 'sso.service',
   middlewares: [
     (result) => {
@@ -23,7 +22,6 @@ Vue.use(VueLog, {
     },
   ],
 });
-const Log = Vue.log();
 
 // When SAML is revisited, setup the validator
 // saml.setSchemaValidator(validator);
