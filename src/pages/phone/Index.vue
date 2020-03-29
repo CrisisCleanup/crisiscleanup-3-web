@@ -5,6 +5,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { EventBus } from '@/event-bus';
+import { EVENTS as CCEvent } from '@/services/acs.service';
 import Gateway from './Gateway.vue';
 import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
@@ -23,10 +24,10 @@ export default {
     ...mapActions('phone', ['setPopup']),
   },
   created() {
-    EventBus.$on('acs:status:oncall', () => {
+    EventBus.$on(CCEvent.ON_CALL, () => {
       this.page = Controller;
     });
-    EventBus.$on('acs:status:offcall', () => {
+    EventBus.$on(CCEvent.OFF_CALL, () => {
       this.page = Dashboard;
     });
     if (!this.connectReady) {

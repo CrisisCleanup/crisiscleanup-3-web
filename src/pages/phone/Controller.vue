@@ -12,7 +12,13 @@
     </template>
     <template #grid-end>
       <div class="grid-end flex">
-        <case-form class="shadow-xl" />
+        <case-form
+          class="shadow-xl"
+          incident-id="99"
+          disable-claim-and-save
+          @savedWorksite="savedWorksite"
+          @closeWorksite="closeWorksite"
+        />
       </div>
     </template>
   </phone-layout>
@@ -21,8 +27,10 @@
 <script>
 import PhoneLayout from '@/layouts/Phone.vue';
 import AgentBlock from '@/components/phone/blocks/Agent.vue';
-import CaseForm from '@/pages/CaseForm';
+import CaseForm from '@/pages/CaseForm.vue';
 import AgentBoard from '@/components/phone/AgentBoard/Board.vue';
+import { EVENTS as CCEvent } from '@/services/acs.service';
+import { EventBus } from '@/event-bus';
 
 export default {
   name: 'Controller',
@@ -31,6 +39,19 @@ export default {
     CaseForm,
     AgentBlock,
     AgentBoard,
+  },
+  data() {
+    return {
+      worksite: {},
+    };
+  },
+  methods: {
+    closeWorksite() {
+      EventBus.$emit(CCEvent.OFF_CALL);
+    },
+    savedWorksite(worksite) {
+      this.worksite = worksite;
+    },
   },
 };
 </script>
