@@ -34,27 +34,12 @@
     </div>
     <div class="action">
       <base-button
-        v-if="completedTraining"
         :disabled="!currentState.enabled"
         :action="toggleAvailable"
         variant="solid"
         size="large"
       >
         {{ currentState.text }}
-      </base-button>
-      <base-button
-        v-if="!completedTraining"
-        class="py-2 px-12"
-        size="large"
-        variant="solid"
-        :action="
-          () => {
-            isShowingTrainingModal = true;
-          }
-        "
-        :disabled="!currentState.enabled"
-      >
-        {{ lang.trainingAction.text }}
       </base-button>
     </div>
     <trainings-modal
@@ -69,22 +54,27 @@
 import { IconsMixin, UserMixin, LangMixin } from '@/mixins';
 import { mapActions, mapGetters } from 'vuex';
 import { STATES as CCState } from '@/services/acs.service';
-import ContactMoreInfo from './ContactMoreInfo.vue';
+import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
+import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 
 export default {
   name: 'AgentCard',
   mixins: [IconsMixin, LangMixin, UserMixin],
-  components: { moreInfo: ContactMoreInfo },
+  components: { moreInfo: ContactMoreInfo, TrainingsModal },
   data() {
     return {
       toggleOpen: false,
-      completedTraining: Boolean,
+      completedTraining: false,
       isShowingTrainingModal: false,
     };
   },
   methods: {
     ...mapActions('phone', ['setAgentState']),
     async toggleAvailable() {
+      if (!this.completedTraining) {
+        this.isShowingTrainingModal = true;
+        return this.isShowingTrainingModal;
+      }
       if (this.agentAvailable) {
         return this.setAgentState(CCState.OFFLINE);
       }
@@ -98,12 +88,16 @@ export default {
         start: '~~Start Taking Calls',
         ready: '~~Ready for Next Call',
         stop: '~~Stop Taking Calls',
-        trainingAction: {
-          text: this.$t('~~Start Training'),
-        },
+        train: '~~Start Training',
       });
     },
     currentState() {
+      if (!this.completedTraining) {
+        return {
+          enabled: true,
+          text: this.lang.train,
+        };
+      }
       const state = {
         enabled: true,
         key: 'start',
