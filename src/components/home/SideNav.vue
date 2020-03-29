@@ -48,6 +48,8 @@ export const HomeNavigation = [
   // },
   {
     key: 'contact',
+    route: 'https://crisiscleanup.zendesk.com/hc/en-us/requests/new',
+    external: true,
   },
 ];
 
