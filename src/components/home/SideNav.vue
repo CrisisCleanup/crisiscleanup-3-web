@@ -1,13 +1,23 @@
 <template>
   <div class="grid--nav">
-    <router-link
-      v-for="item in routes"
-      :key="item.key"
-      :to="item.route || '#'"
-      class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
-    >
-      {{ lang.nav[item.key] }}
-    </router-link>
+    <span v-for="item in routes">
+      <a
+        v-if="item.external"
+        :href="item.route"
+        class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
+        target="_blank"
+      >
+        {{ lang.nav[item.key] }}
+      </a>
+      <router-link
+        v-if="!item.external"
+        :key="item.key"
+        :to="item.route || '#'"
+        class="font-h1 font-display text-h1 text-crisiscleanup-dark-500"
+      >
+        {{ lang.nav[item.key] }}
+      </router-link>
+    </span>
   </div>
 </template>
 
@@ -24,6 +34,8 @@ export const HomeNavigation = [
   },
   {
     key: 'blog',
+    route: 'http://blog.crisiscleanup.org',
+    external: true,
   },
   {
     key: 'map',
@@ -45,6 +57,7 @@ export default {
       VueTypes.shape({
         key: VueTypes.string,
         route: VueTypes.string,
+        external: VueTypes.bool.def(false),
       }),
     ).def(HomeNavigation),
     translations: VueTypes.objectOf(VueTypes.string),
