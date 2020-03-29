@@ -101,16 +101,13 @@ export default {
   },
   data() {
     return {
-      firstName: '',
-      lastName: '',
       email: '',
-      password: '',
-      confirmPassword: '',
-      mobile: '',
-      requestedTo: '',
       showSuccessModal: false,
     };
   },
+  mounted() {
+    this.email = this.$route.query.email || '';
+  }
 };
 </script>
 
