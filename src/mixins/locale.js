@@ -14,16 +14,23 @@ export const LangMixin = {
   methods: {
     getLang(defs) {
       const lang = {};
+      const getTrans = (key) => this.$t(key.replace('~~', ''));
       Object.keys(defs).forEach((k) => {
         switch (typeof defs[k]) {
           case 'function':
             lang[k] = (...args) => {
               const result = defs[k](...args);
-              return this.$t(result.replace('~~', ''));
+              return getTrans(result);
             };
             break;
+          case 'array':
+            lang[k] = defs[k].map(this.getLang);
+            break;
+          case 'object':
+            lang[k] = this.getLang(defs[k]);
+            break;
           default:
-            lang[k] = this.$t(defs[k].replace('~~', ''));
+            lang[k] = getTrans(defs[k]);
             break;
         }
       });
