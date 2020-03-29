@@ -17,6 +17,7 @@ $areas: start main end;
 
 .phonegrid {
   @apply bg-crisiscleanup-light-grey;
+  @apply w-full h-full;
   &.grid-container {
     display: inline-grid;
     grid-column-gap: 2rem;
