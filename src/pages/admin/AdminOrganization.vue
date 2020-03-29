@@ -407,6 +407,7 @@ export default {
           this.organization.approve_reject_reason_t,
         );
         await this.$toasted.success(this.$t('~~Approved'));
+        await this.loadPageData();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -418,6 +419,7 @@ export default {
           this.organization.approve_reject_reason_t,
         );
         await this.$toasted.success(this.$t('~~Rejected'));
+        await this.loadPageData();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
