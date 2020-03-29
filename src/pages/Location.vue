@@ -478,6 +478,10 @@ export default {
         geometry = feature.geometry;
       }
 
+      this.currentLocation.point = null;
+      this.currentLocation.poly = null;
+      this.currentLocation.geom = null;
+
       if (geometry.type === 'Point') {
         this.currentLocation.point = geometry;
       } else if (geometry.type === 'Polygon') {
@@ -532,8 +536,8 @@ export default {
           await this.$router.push(`/locations/${locationId}/edit`);
           await this.loadLocation();
         }
-      } catch (e) {
-        this.$log.error(e);
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
       } finally {
         this.loading = false;
       }
