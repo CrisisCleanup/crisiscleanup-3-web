@@ -9,7 +9,7 @@
           {{ organization.id }}: {{ organization.name | upper }}
           <base-link
             target="_blank"
-            :href="`${apiUrl}/ccadmin/organizations/organization/${organization.id}/change`"
+            :href="`${apiUrl}/ccadmin/organizations/organization/${organization.id}/change/`"
             >See in Django Admin</base-link
           >
         </base-text>
@@ -62,21 +62,18 @@
               class="input text-sm"
               size="large"
               :placeholder="$t('Name')"
-              required
             />
             <textarea
               v-model="organization.admin_notes"
               class="border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none resize-none w-full"
               rows="4"
               :placeholder="$t('Admin Notes')"
-              required
             />
-            <textarea
+            <base-input
               v-model="organization.automatically_approve_user_domain"
-              class="border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none resize-none w-full"
-              rows="4"
               :placeholder="$t('Automatically Approve User Domain')"
-              required
+              class="input text-sm"
+              size="large"
             />
             <base-checkbox v-model="organization.is_active">
               Is Active
@@ -222,6 +219,66 @@
           label="name_t"
         ></form-select>
       </div>
+      <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
+        <base-text variant="h2" :weight="600">
+          Capabilities
+        </base-text>
+        <base-link
+          target="_blank"
+          :href="`${apiUrl}/ccadmin/capabilities/organizationorganizationscapabilities/?organization__id__exact=${organization.id}`"
+          >See in Django Admin</base-link
+        >
+        <div class="flex item-start">
+          <div>
+            <div class="flex items-center justify-start">
+              <form-select
+                :placeholder="$t('Capability')"
+                :value="capabilityToAdd"
+                class="w-auto border border-crisiscleanup-dark-100 multi-select mr-1"
+                select-classes="h-full"
+                :options="selectableCapabilities"
+                multiple
+                item-key="id"
+                label="name_t"
+                @input="
+                  (value) => {
+                    capabilityToAdd = value;
+                  }
+                "
+              ></form-select>
+              <base-button
+                :text="$t('Add')"
+                size="large"
+                variant="solid"
+                :action="
+                  () => {
+                    newCapabilities = [...newCapabilities, ...capabilityToAdd];
+                    capabilityToAdd = null;
+                  }
+                "
+              />
+            </div>
+            <base-text variant="h3">New Capabilties</base-text>
+            <div v-for="capability in newCapabilities">
+              {{ capability | getCapabilityName(capabilities) }}
+            </div>
+          </div>
+          <div class="mx-3">
+            <base-text variant="h3">Current Capabilties</base-text>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: max-content max-content max-content max-content;
+                grid-column-gap: 10px;
+              "
+            >
+              <div class="pr-3" v-for="capability in organization.capabilities">
+                {{ capability | getCapabilityName(capabilities) }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="flex">
         <div class="w-1/2 bg-white shadow mt-6 mr-3">
           <div class="border-b px-8 py-4 font-semibold">
@@ -330,6 +387,11 @@ import { hash } from '../../utils/promise';
 export default {
   name: 'AdminOrganization',
   components: { IncidentApprovalTable, Loader, LocationTool },
+  filters: {
+    getCapabilityName(value, capabilities) {
+      return capabilities && capabilities.find((c) => c.id === value).name_t;
+    },
+  },
   computed: {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
@@ -345,6 +407,17 @@ export default {
         return this.organization.secondary_location
           ? [this.organization.secondary_location]
           : [];
+      }
+      return [];
+    },
+    selectableCapabilities() {
+      if (this.organization) {
+        return this.capabilities.filter((capability) => {
+          return (
+            !this.organization.capabilities.includes(capability.id) &&
+            !this.newCapabilities.includes(capability.id)
+          );
+        });
       }
       return [];
     },
@@ -375,6 +448,9 @@ export default {
         roles: await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
         ),
+        capabilities: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities`,
+        ),
         roleRequests: await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests?organization=${this.$route.params.organization_id}`,
         ),
@@ -387,6 +463,7 @@ export default {
         ghostUsers: await this.getGhostUsers(),
       });
       this.organization = pageData.organization.data;
+      this.capabilities = pageData.capabilities.data.results;
       this.roles = pageData.roles.data.results;
       this.roleRequests = pageData.roleRequests.data.results;
       this.incidentRequests = pageData.incidentRequests.data.results;
@@ -516,6 +593,26 @@ export default {
         );
       }
     },
+    async saveCapabilities() {
+      if (this.newCapabilities.length) {
+        try {
+          await Promise.all(
+            this.newCapabilities.map((id) =>
+              this.$http.post(
+                `${process.env.VUE_APP_API_BASE_URL}/admins/organization_organizations_capabilities`,
+                {
+                  organization: this.organization.id,
+                  capability: id,
+                },
+              ),
+            ),
+          );
+          this.newCapabilities = [];
+        } catch (error) {
+          await this.$toasted.error(getErrorMessage(error));
+        }
+      }
+    },
     async saveOrganization() {
       try {
         await this.$http.put(
@@ -525,6 +622,7 @@ export default {
           },
         );
         await this.saveRole();
+        await this.saveCapabilities();
         await this.$toasted.success(
           this.$t('~~Successfully Saved Organization'),
         );
@@ -540,6 +638,7 @@ export default {
       loading: false,
       organization: null,
       roleToAdd: null,
+      capabilityToAdd: null,
       showingLocationModal: false,
       currentPolygon: null,
       primaryLocationMap: null,
@@ -550,6 +649,8 @@ export default {
       roleRequests: [],
       users: [],
       ghostUsers: [],
+      capabilities: [],
+      newCapabilities: [],
       organizationTypes: [
         'orgType.voad',
         'orgType.coad',
@@ -598,5 +699,9 @@ textarea {
 }
 .select {
   @apply w-120 my-2 h-12 text-sm;
+}
+.multi-select {
+  @apply w-120 my-2 text-sm;
+  min-height: 3rem;
 }
 </style>
