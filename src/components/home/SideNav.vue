@@ -31,6 +31,7 @@ export const HomeNavigation = [
   },
   {
     key: 'aboutUs',
+    route: '/about',
   },
   {
     key: 'blog',
