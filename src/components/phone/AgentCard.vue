@@ -23,7 +23,7 @@
           class="more-info"
           :action="() => (toggleOpen = !toggleOpen)"
         >
-          More Info
+          {{ toggleOpen ? lang.toggle.less : lang.toggle.more }}
         </base-button>
       </div>
     </div>
@@ -33,6 +33,12 @@
       </transition>
     </div>
     <div class="action">
+      <div class="inline-flex status">
+        <span :class="`dot ${currentState.state}`" />
+        <base-text :weight="600" variant="body">{{
+          currentState.statusText
+        }}</base-text>
+      </div>
       <base-button
         :disabled="!currentState.enabled"
         :action="toggleAvailable"
@@ -53,9 +59,10 @@
 <script>
 import { IconsMixin, UserMixin, LangMixin } from '@/mixins';
 import { mapActions, mapGetters } from 'vuex';
-import { STATES as CCState } from '@/services/acs.service';
+import { STATES as CCState, EVENTS as CCEvent } from '@/services/acs.service';
 import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
 import TrainingsModal from '@/components/phone/TrainingsModal.vue';
+import { EventBus } from '@/event-bus';
 
 export default {
   name: 'AgentCard',
@@ -98,6 +105,15 @@ export default {
         ready: '~~Ready for Next Call',
         stop: '~~Stop Taking Calls',
         train: '~~Start Training',
+        toggle: {
+          more: '~~More Info',
+          less: '~~Less Info',
+        },
+        status: {
+          start: '~~Offline',
+          ready: '~~Available',
+          stop: '~~On Call',
+        },
       });
     },
     currentState() {
@@ -105,30 +121,41 @@ export default {
         return {
           enabled: true,
           text: this.lang.train,
+          statusText: this.lang.status.start,
+          state: '',
         };
       }
       const state = {
         enabled: true,
         key: 'start',
+        state: '',
       };
       switch (this.agentState) {
         case CCState.ROUTABLE:
           state.key = 'stop';
+          state.state = 'available';
+          EventBus.$emit(CCEvent.AVAILABLE);
           break;
         case CCState.PENDING:
         case CCState.ON_CALL:
         case CCState.CONNECTING:
         case CCState.CONNECTED:
           state.key = 'ready';
+          state.state = 'oncall';
           state.enabled = false;
+          EventBus.$emit(CCEvent.ON_CALL);
           break;
         case CCState.PAUSED:
           state.key = 'ready';
+          state.state = 'paused';
+          EventBus.$emit(CCEvent.PAUSED);
           break;
         default:
+          EventBus.$emit(CCEvent.OFF_CALL);
           break;
       }
       state.text = this.lang[state.key];
+      state.statusText = this.lang.status[state.key];
       return state;
     },
   },
@@ -171,11 +198,34 @@ export default {
     }
   }
   .action {
-    @apply pt-6;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: bottom;
+    align-items: center;
     flex-grow: 1;
+
+    .status {
+      align-items: center;
+      @apply pb-2;
+    }
+
+    .dot {
+      @apply shadow-sm;
+      height: 0.75rem;
+      width: 0.75rem;
+      border-radius: 50%;
+      display: inline-block;
+      @apply mr-2 bg-crisiscleanup-red-500;
+      &.available {
+        @apply bg-crisiscleanup-green-300;
+      }
+      &.oncall {
+        @apply bg-crisiscleanup-dark-blue;
+      }
+      &.paused {
+        @apply bg-crisiscleanup-yellow-500;
+      }
+    }
   }
 }
 </style>
