@@ -138,13 +138,9 @@ export default {
         `/password_reset_requests/${this.$route.params.token}`,
       );
       resetRequest = response.response.data;
+      this.tokenValid = resetRequest && resetRequest.is_valid;
     } catch (error) {
-      await this.$toasted.error(getErrorMessage(error));
-    }
-    if (!resetRequest || resetRequest.is_expired) {
       this.tokenValid = false;
-    } else {
-      this.tokenValid = true;
     }
   },
   data() {
