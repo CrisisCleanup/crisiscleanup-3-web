@@ -84,13 +84,17 @@ export default {
           return;
         }
 
-        const response = await PasswordResetRequest.api().post(`/password_reset_requests`, {
-          email: this.email,
-        });
+        const response = await PasswordResetRequest.api().post(
+          `/password_reset_requests`,
+          {
+            email: this.email,
+          },
+        );
 
-        const reset_request = response.response && response.response.data ?
-          response.response.data :
-          null;
+        const reset_request =
+          response.response && response.response.data
+            ? response.response.data
+            : null;
         if (reset_request && reset_request.invalid_message) {
           await this.$toasted.error(reset_request.invalid_message);
           return;
