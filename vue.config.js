@@ -1,3 +1,12 @@
+const threadLoader = require('thread-loader');
+const LodashPlugin = require('lodash-webpack-plugin');
+const basicPool = {
+  workerParallelJobs: 200,
+  name: 'basicPool',
+};
+if (!['test', 'storybook'].includes(process.env.NODE_ENV)) {
+  threadLoader.warmup(basicPool, ['babel-loader', 'vue-loader']);
+}
 module.exports = {
   runtimeCompiler: true,
   lintOnSave: false,
@@ -7,6 +16,7 @@ module.exports = {
         fs: 'empty',
       },
       resolve: {
+        symlinks: false,
         alias: {
           ejs: 'ejs/ejs.min.js',
           fs: '@/utils/virtual-fs.js',
@@ -23,10 +33,21 @@ module.exports = {
     };
     if (!(process.env.NODE_ENV === 'production')) {
       return {
-        devtool: 'inline-source-map',
+        devtool: 'cheap-module-eval-source-map',
+        output: {
+          pathinfo: false,
+        },
         devServer: {
           hot: true,
           compress: true,
+        },
+        optimization: {
+          removeAvailableModules: false,
+          removeEmptyChunks: false,
+          splitChunks: false,
+        },
+        stats: {
+          colors: true,
         },
         ...common,
       };
@@ -41,7 +62,30 @@ module.exports = {
       },
     };
   },
+  chainWebpack: (config) => {
+    const vueRule = config.module.rule('vue');
+    const jsRule = config.module.rule('js');
 
+    const useBasicTPool = (rule, loader) => {
+      rule.uses.clear();
+      rule
+        .use('cache-loader')
+        .loader('cache-loader')
+        .end()
+        .use('thread-loader')
+        .loader('thread-loader')
+        .tap((options) => ({ ...options, ...basicPool }))
+        .end()
+        .use(loader)
+        .loader(loader)
+        .end();
+    };
+
+    jsRule.test(/\.js$/).exclude.add(/node_modules/);
+    useBasicTPool(jsRule, 'babel-loader');
+    useBasicTPool(vueRule, 'vue-loader');
+    config.plugin('lodash').use(LodashPlugin);
+  },
   css: {
     loaderOptions: {
       less: {
