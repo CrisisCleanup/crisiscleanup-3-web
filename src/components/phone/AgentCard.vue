@@ -34,6 +34,7 @@
     </div>
     <div class="action">
       <base-button
+        v-if="completedTraining"
         :disabled="!currentState.enabled"
         :action="toggleAvailable"
         variant="solid"
@@ -41,7 +42,26 @@
       >
         {{ currentState.text }}
       </base-button>
+      <base-button
+        v-if="!completedTraining"
+        class="py-2 px-12"
+        size="large"
+        variant="solid"
+        :action="
+          () => {
+            isShowingTrainingModal = true;
+          }
+        "
+        :disabled="!currentState.enabled"
+      >
+        {{ lang.trainingAction.text }}
+      </base-button>
     </div>
+    <trainings-modal
+      :visible="isShowingTrainingModal"
+      @onClose="isShowingTrainingModal = false"
+      @onComplete="completedTraining = true"
+    ></trainings-modal>
   </div>
 </template>
 
@@ -58,6 +78,8 @@ export default {
   data() {
     return {
       toggleOpen: false,
+      completedTraining: Boolean,
+      isShowingTrainingModal: false,
     };
   },
   methods: {
@@ -76,6 +98,9 @@ export default {
         start: '~~Start Taking Calls',
         ready: '~~Ready for Next Call',
         stop: '~~Stop Taking Calls',
+        trainingAction: {
+          text: this.$t('~~Start Training'),
+        },
       });
     },
     currentState() {
