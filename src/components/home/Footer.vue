@@ -1,13 +1,22 @@
 <template>
   <div class="grid--footer self-center">
-    <router-link
-      v-for="item in routes"
-      :key="item.key"
-      :to="item.route || '#'"
-      class="font-body font-display text-h3 text-crisiscleanup-dark-300"
-    >
-      {{ lang[item.key] }}
-    </router-link>
+    <span v-for="item in routes">
+      <a
+        v-if="item.external"
+        :href="item.route"
+        class="font-body font-display text-h3 text-crisiscleanup-dark-300"
+      >
+        {{ lang[item.key] }}
+      </a>
+      <router-link
+        v-if="!item.external"
+        :key="item.key"
+        :to="item.route || '#'"
+        class="font-body font-display text-h3 text-crisiscleanup-dark-300"
+      >
+        {{ lang[item.key] }}
+      </router-link>
+    </span>
   </div>
 </template>
 
@@ -20,6 +29,8 @@ export const FooterNavigation = [
   // },
   {
     key: 'contact',
+    route: 'https://crisiscleanup.zendesk.com/hc/en-us/requests/new',
+    external: true,
   },
   {
     key: 'terms',
@@ -40,7 +51,7 @@ export default {
         route: VueTypes.string,
         external: VueTypes.bool.def(false),
       }),
-    ).def(HomeNavigation),
+    ).def(FooterNavigation),
     translations: VueTypes.objectOf(VueTypes.string),
   },
   computed: {
