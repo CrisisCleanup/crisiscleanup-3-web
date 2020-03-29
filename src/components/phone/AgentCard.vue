@@ -110,9 +110,10 @@ export default {
           less: '~~Less Info',
         },
         status: {
-          start: '~~Offline',
-          ready: '~~Available',
-          stop: '~~On Call',
+          offline: '~~Offline',
+          available: '~~Available',
+          oncall: '~~On Call',
+          paused: '~~Paused',
         },
       });
     },
@@ -121,14 +122,13 @@ export default {
         return {
           enabled: true,
           text: this.lang.train,
-          statusText: this.lang.status.start,
-          state: '',
+          statusText: this.lang.status.offline,
         };
       }
       const state = {
         enabled: true,
         key: 'start',
-        state: '',
+        state: 'offline',
       };
       switch (this.agentState) {
         case CCState.ROUTABLE:
@@ -155,7 +155,7 @@ export default {
           break;
       }
       state.text = this.lang[state.key];
-      state.statusText = this.lang.status[state.key];
+      state.statusText = this.lang.status[state.state];
       return state;
     },
   },
