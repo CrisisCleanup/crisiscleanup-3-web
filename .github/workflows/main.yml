@@ -169,6 +169,28 @@ jobs:
       - name: Deploy Development
         run: yarn deploy-development
 
+      - name: Notify Staging
+        if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_CHANNEL: 'core'
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
+          SLACK_COLOR: '#fece09'
+          SLACK_TITLE: 'New Release'
+          SLACK_MESSAGE: "Heads up, I'm currently releasing to staging! You can watch my progress as the url above."
+
+      - name: Notify Production
+        if: "github.event_name == 'release'"
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_CHANNEL: 'core'
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
+          SLACK_COLOR: '#fece09'
+          SLACK_TITLE: 'New Release'
+          SLACK_MESSAGE: "Heads up, I'm currently releasing to production! You can watch my progress as the url above."
+
       - name: Deploy Staging
         if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
         env:
@@ -186,3 +208,25 @@ jobs:
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccuproduction'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUProductionConnectRole'
         run: yarn deploy-production
+
+      - name: Notify Staging Done
+        if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_CHANNEL: 'core'
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
+          SLACK_COLOR: '#fece09'
+          SLACK_TITLE: 'Live Release'
+          SLACK_MESSAGE: ':rocket: Staging is live! Check it out at: https://app.staging.crisiscleanup.io'
+
+      - name: Notify Production Done
+        if: "github.event_name == 'release'"
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_CHANNEL: 'core'
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
+          SLACK_COLOR: '#fece09'
+          SLACK_TITLE: 'Live Release'
+          SLACK_MESSAGE: ':rocket: Production is live! Check it out at: https://crisiscleanup.org'
