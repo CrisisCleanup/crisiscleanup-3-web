@@ -301,7 +301,7 @@
               v-else
               class="px-2 py-1"
               variant="solid"
-              text="$t('profileOrg.add_response_area')"
+              :text="$t('profileOrg.add_response_area')"
               :action="
                 () => {
                   showingLocationModal = true;
