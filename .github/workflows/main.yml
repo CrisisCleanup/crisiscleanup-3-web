@@ -1,6 +1,7 @@
 name: CrisisCleanup
 
 on:
+  create: ~
   release:
     types: [published]
   pull_request:
@@ -12,8 +13,6 @@ on:
       - '**/**.js.snap'
       - '.github/workflows/*'
   push:
-    tags:
-      - 'v*'
     paths:
       - '*.json'
       - 'yarn.lock'
@@ -171,7 +170,7 @@ jobs:
         run: yarn deploy-development
 
       - name: Deploy Staging
-        if: "github.event_name == 'create'"
+        if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
         env:
           VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
           VUE_APP_BASE_URL: 'https://app.staging.crisiscleanup.io'
