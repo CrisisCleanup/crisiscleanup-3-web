@@ -208,8 +208,8 @@ export default {
       selectedTraining.completed = true;
       this.selectedTraining = null;
       // Check to see if all trainings are completed.
-      const trainingsCompleted = this.trainings.map(t => t.completed);
-      this.allTrainingCompleted = trainingsCompleted.every(b => b);
+      const trainingsCompleted = this.trainings.map((t) => t.completed);
+      this.allTrainingCompleted = trainingsCompleted.every((b) => b);
     },
     finishTraining() {
       this.$emit('onComplete', true);
