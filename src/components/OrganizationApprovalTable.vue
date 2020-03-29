@@ -53,12 +53,12 @@
 import Table from '@/components/Table';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
-import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
+import OrganizationApprovalDialog from '@/components/dialogs/OrganizationApprovalDialog';
 import { create } from 'vue-modal-dialogs';
 import MessageBox from '@/components/dialogs/MessageBox';
 
 const messageBox = create(MessageBox);
-const responseDialog = create(MessageResponseDialog);
+const responseDialog = create(OrganizationApprovalDialog);
 
 export default {
   name: 'OrganizationApprovalTable',

@@ -96,7 +96,7 @@
               label="label"
             ></form-select>
             <form-select
-              :placeholder="$t('Approval/Rejection Reason')"
+              :placeholder="$t('orgApprovalTable.give_approve_reason')"
               class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
               :options="approveRejectReasons"
               v-model="organization.approve_reject_reason_t"

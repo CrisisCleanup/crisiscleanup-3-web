@@ -96,6 +96,8 @@ export default {
         );
         if (results.entities.organizations) {
           this.organizations = [...results.entities.organizations];
+        } else {
+          this.organizations = [];
         }
       }
     },
