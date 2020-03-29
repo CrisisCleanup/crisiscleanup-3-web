@@ -18,6 +18,18 @@ Vue.use(VueLog, {
 });
 const Log = Vue.log();
 
+export const EVENTS = (() => {
+  const ev = (e) => `acs:${e}`;
+  const st = (e) => `${ev('status')}:${e}`;
+  return {
+    REQUEST: ev('requestAgent'),
+    AVAILABLE: st('available'),
+    ON_CALL: st('oncall'),
+    PAUSED: st('paused'),
+    OFF_CALL: st('offcall'),
+  };
+})();
+
 export const ConnectConfig = {
   // reference @crisiscleanup/amazon-connect-streams
   // for custom options
@@ -122,9 +134,9 @@ export const STATES = {
   INCOMING: connect.ContactStateType.INCOMING,
   CONNECTING: connect.ContactStateType.CONNECTING,
   CONNECTED: connect.ContactStateType.CONNECTED,
+  PENDING: connect.ContactStateType.PENDING,
   POLLING: 'polling',
   ON_CALL: 'Busy',
-  PENDING: 'PendingBusy',
   PAUSED: 'AfterCallWork',
 };
 

@@ -7,7 +7,8 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
-import { EventBus } from '../../event-bus';
+import { EventBus } from '@/event-bus';
+import { EVENTS } from '@/services/acs.service';
 
 export default {
   name: 'CCP',
@@ -19,7 +20,7 @@ export default {
     ...mapGetters('auth', ['isLoggedIn']),
   },
   created() {
-    EventBus.$on('acs:requestAgent', () => {
+    EventBus.$on(EVENTS.REQUEST, () => {
       if (!this.connectAuthed) {
         this.$log.info('setting popup!');
         Promise.resolve(this.setPopup(true));
