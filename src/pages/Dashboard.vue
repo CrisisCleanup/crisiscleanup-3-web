@@ -255,32 +255,6 @@
             </div>
           </div>
         </div>
-        <div class="flex" v-can="['approve_orgs_full']">
-          <div class="m-4 pt-2 shadow bg-white w-full">
-            <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('dashboard.pending_affiliates') }}
-            </div>
-            <div class="p-4">
-              <OrganizationApprovalTable
-                :organizations="organizations"
-                @reload="getOrganizationsForApproval"
-              ></OrganizationApprovalTable>
-            </div>
-          </div>
-        </div>
-        <div class="flex" v-can="['move_orgs']">
-          <div class="m-4 pt-2 shadow bg-white w-full">
-            <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('~~Redeploy Requests') }}
-            </div>
-            <div class="p-4">
-              <IncidentApprovalTable
-                :requests="incident_requests"
-                @reload="getIncidentRequests"
-              ></IncidentApprovalTable>
-            </div>
-          </div>
-        </div>
       </div>
     </template>
   </Loader>
@@ -290,7 +264,6 @@
 import { mapState } from 'vuex';
 import { create } from 'vue-modal-dialogs';
 import Worksite from '@/models/Worksite';
-import Organization from '@/models/Organization';
 import User from '@/models/User';
 import { getQueryString } from '@/utils/urls';
 import { getErrorMessage } from '@/utils/errors';
@@ -304,18 +277,14 @@ import { forceFileDownload } from '@/utils/downloads';
 import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
 import Loader from '@/components/Loader';
 import InviteUsers from './organization/InviteUsers';
-import OrganizationApprovalTable from '../components/OrganizationApprovalTable';
 import RedeployRequest from './RedeployRequest';
-import IncidentApprovalTable from '../components/IncidentApprovalTable';
 
 const responseDialog = create(MessageResponseDialog);
 
 export default {
   name: 'Dashboard',
   components: {
-    IncidentApprovalTable,
     RedeployRequest,
-    OrganizationApprovalTable,
     InviteUsers,
     Table,
     StatusDropDown,
@@ -579,42 +548,7 @@ export default {
         this.getClaimedCount(),
         this.getInProgessCount(),
         this.getClosedCount(),
-        this.getOrganizationsForApproval(),
-        this.getIncidentRequests(),
       ]);
-    },
-    async getOrganizationsForApproval() {
-      if (this.$can('approve_orgs_full')) {
-        const params = {
-          approved_by__isnull: true,
-          rejected_by__isnull: true,
-        };
-        const queryString = getQueryString(params);
-
-        const results = await Organization.api().get(
-          `/organizations?${queryString}`,
-          {
-            dataKey: 'results',
-          },
-        );
-        if (results.entities.organizations) {
-          this.organizations = [...results.entities.organizations];
-        }
-      }
-    },
-    async getIncidentRequests() {
-      if (this.$can('move_orgs')) {
-        try {
-          const response = await this.$http.get(
-            `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
-          );
-          if (response.data) {
-            this.incident_requests = [...response.data.results];
-          }
-        } catch (e) {
-          this.$log.debug(e);
-        }
-      }
     },
     async statusValueChange(value, workType, worksiteId) {
       try {

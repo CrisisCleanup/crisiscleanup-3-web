@@ -45,6 +45,22 @@
             @tags-changed="(newTags) => (usersToInvite = newTags)"
           />
         </div>
+        <div v-if="isAdmin">
+          <autocomplete
+            icon="search"
+            class="w-108"
+            :suggestions="organizationResults"
+            display-property="name"
+            placeholder="Organizations"
+            clear-on-selected
+            @selected="
+              (value) => {
+                selectedOrganization = value.id;
+              }
+            "
+            @search="onOrganizationSearch"
+          />
+        </div>
       </div>
       <div slot="footer" class="p-3 flex justify-end">
         <base-button
@@ -68,16 +84,25 @@
 </template>
 <script>
 import User from '@/models/User';
+import Organization from '@/models/Organization';
 import { createTag } from '@johmun/vue-tags-input';
 import { getErrorMessage } from '../../utils/errors';
 
 export default {
   name: 'InviteUsers',
+  props: {
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       emails: '',
       usersToInvite: [],
       showInviteModal: false,
+      selectedOrganization: null,
+      organizationResults: [],
     };
   },
   methods: {
@@ -92,6 +117,15 @@ export default {
       }
       return null;
     },
+    async onOrganizationSearch(value) {
+      const results = await Organization.api().get(
+        `/organizations?search=${value}&limit=10&fields=id,name`,
+        {
+          dataKey: 'results',
+        },
+      );
+      this.organizationResults = results.entities.organizations;
+    },
     async inviteUsers() {
       try {
         if (this.emails) {
@@ -101,7 +135,11 @@ export default {
           }
         }
         const emails = this.usersToInvite.map((value) => value.text);
-        await Promise.all(emails.map((email) => User.api().inviteUser(email)));
+        await Promise.all(
+          emails.map((email) =>
+            User.api().inviteUser(email, this.selectedOrganization),
+          ),
+        );
         await this.$toasted.success(
           this.$t('inviteTeammates.invites_sent_success'),
         );
@@ -114,3 +152,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.vue-tags-input {
+  @apply h-8 w-108 mb-2;
+}
+
+.vue-tags-input .ti-input {
+  @apply h-8;
+}
+</style>

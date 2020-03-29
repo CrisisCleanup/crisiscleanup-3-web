@@ -15,6 +15,7 @@ import OrganizationProfile from '@/pages/organization/Profile';
 import Users from '@/pages/organization/Users';
 import UserView from '@/pages/organization/UserView';
 import PhoneRoutes from '@/pages/phone/routes';
+import AdminRoutes from '@/pages/admin/routes';
 import Profile from '@/pages/Profile';
 import unAuthedRoutes from '@/pages/unauthenticated/routes';
 import store from '@/store/index';
@@ -143,6 +144,7 @@ const routes = [
     meta: { layout: 'authenticated' },
   },
   ...PhoneRoutes,
+  ...AdminRoutes,
   ...HomeRoutes,
   ...unAuthedRoutes,
   {
@@ -160,6 +162,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.noAuth)) {
+    next();
+  } else if (to.matched.some((record) => record.meta.admin)) {
+    if (!store.getters['auth/isAdmin']) {
+      next({ name: 'nav.dashboard' });
+      return;
+    }
     next();
   } else {
     if (store.getters['auth/isLoggedIn']) {

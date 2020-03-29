@@ -158,6 +158,13 @@ export default {
           to: '/phone',
           disabled: process.env.NODE_ENV === 'production',
         },
+        {
+          key: 'admin',
+          icon: 'history',
+          text: this.$t('nav.admin'),
+          to: '/admin',
+          disabled: !this.currentUser.isAdmin,
+        },
       ];
     },
     ...mapState('incident', ['currentIncidentId']),

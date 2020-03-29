@@ -109,6 +109,11 @@ export default {
     return {
       columns: [
         {
+          title: this.$t('ID'),
+          dataIndex: 'id',
+          key: 'id',
+        },
+        {
           title: this.$t('orgApprovalTable.name'),
           dataIndex: 'name',
           key: 'name',

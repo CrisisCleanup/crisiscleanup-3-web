@@ -82,6 +82,10 @@ export default class User extends Model {
     return this.social && this.social.twitter;
   }
 
+  get isAdmin() {
+    return this.active_roles.includes(1);
+  }
+
   static apiConfig = {
     actions: {
       login(email, password) {
@@ -94,14 +98,14 @@ export default class User extends Model {
           { save: false },
         );
       },
-      inviteUser(email) {
-        return this.post(
-          `/invitations`,
-          {
-            invitee_email: email,
-          },
-          { save: false },
-        );
+      inviteUser(email, organization = null) {
+        const data = {
+          invitee_email: email,
+        };
+        if (organization) {
+          data.organization = organization;
+        }
+        return this.post(`/invitations`, data, { save: false });
       },
       acceptInvite({ token, first_name, last_name, password, mobile, title }) {
         return this.post(

@@ -14,6 +14,9 @@ const getters = {
   isOrphan: (state) => {
     return state.user && !state.user.user_claims.organization;
   },
+  isAdmin: (state) => {
+    return state.user && state.user.user_claims.active_roles.includes(1);
+  },
   userId: (state) => (state.user ? state.user.user_claims.id : null),
 };
 
