@@ -104,41 +104,11 @@ jobs:
       - name: Run Linter
         run: yarn lint
 
-  build:
-    name: Build Site
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Determine Yarn Cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Cache Node Modules
-        uses: actions/cache@v1
-        with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            yarn-
-
-      - name: Setup Node.js 12
-        uses: actions/setup-node@v1.2.0
-        with:
-          node-version: '12'
-
-      - name: Install Dependencies
-        run: yarn install
-
-      - name: Build Site
-        run: yarn build
-
   deploy:
     name: Deploy Site
     runs-on: ubuntu-latest
     if: "(github.event_name == 'create' || github.event_name == 'release' || github.ref == 'refs/heads/master' ) && !contains(github.event.head_commit.message, 'ci-skip-deploy')"
-    needs: [test, lint, build]
+    needs: [test, lint]
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
@@ -173,6 +143,7 @@ jobs:
         if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
         uses: rtCamp/action-slack-notify@v2.0.1
         env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: 'core'
           SLACK_USERNAME: 'CrisisCleanup Bot'
           SLACK_ICON: ${{ secrets.SLACK_ICON }}
@@ -184,6 +155,7 @@ jobs:
         if: "github.event_name == 'release'"
         uses: rtCamp/action-slack-notify@v2.0.1
         env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: 'core'
           SLACK_USERNAME: 'CrisisCleanup Bot'
           SLACK_ICON: ${{ secrets.SLACK_ICON }}
@@ -213,6 +185,7 @@ jobs:
         if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
         uses: rtCamp/action-slack-notify@v2.0.1
         env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: 'core'
           SLACK_USERNAME: 'CrisisCleanup Bot'
           SLACK_ICON: ${{ secrets.SLACK_ICON }}
@@ -224,6 +197,7 @@ jobs:
         if: "github.event_name == 'release'"
         uses: rtCamp/action-slack-notify@v2.0.1
         env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
           SLACK_CHANNEL: 'core'
           SLACK_USERNAME: 'CrisisCleanup Bot'
           SLACK_ICON: ${{ secrets.SLACK_ICON }}
