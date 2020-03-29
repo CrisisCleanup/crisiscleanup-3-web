@@ -32,6 +32,18 @@
             }
           "
         />
+        <base-button
+          v-if="currentUser.isAdmin"
+          :text="$t('actions.edit')"
+          variant="outline"
+          size="small"
+          class="mx-2"
+          :action="
+            () => {
+              $router.push(`/admin/organization/${slotProps.item.id}`);
+            }
+          "
+        />
       </div>
     </template>
   </Table>
@@ -40,6 +52,7 @@
 <script>
 import Table from '@/components/Table';
 import Organization from '@/models/Organization';
+import User from '@/models/User';
 import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
 import { create } from 'vue-modal-dialogs';
 import MessageBox from '@/components/dialogs/MessageBox';
@@ -62,6 +75,11 @@ export default {
       },
     },
     loading: Boolean,
+  },
+  computed: {
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
+    },
   },
   methods: {
     async getOrganizationContacts(organizationId) {

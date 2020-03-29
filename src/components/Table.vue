@@ -356,10 +356,12 @@ export default {
       this.$emit('change', { pagination, filter, sorter });
     },
     rowClick(item, event) {
+      const hasClass = (className) =>
+        event.target.className.includes(className);
       if (
         event &&
-        ['case-flag', 'checkmark', 'checkmark-input', 'base-button'].includes(
-          event.target.className,
+        ['case-flag', 'checkmark', 'checkmark-input', 'base-button'].some(
+          hasClass,
         )
       ) {
         return;

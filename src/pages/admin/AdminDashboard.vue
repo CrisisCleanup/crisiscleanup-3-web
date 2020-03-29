@@ -9,7 +9,7 @@
         <div class="flex">
           <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('dashboard.pending_affiliates') }}
+              {{ $t('Pending Organizations') }}
             </div>
             <div class="p-4">
               <OrganizationApprovalTable

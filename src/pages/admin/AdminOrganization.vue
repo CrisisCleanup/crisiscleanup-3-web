@@ -96,7 +96,7 @@
               label="label"
             ></form-select>
             <form-select
-              :placeholder="$t('profileOrg.organization_type')"
+              :placeholder="$t('Approval/Rejection Reason')"
               class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
               :options="approveRejectReasons"
               v-model="organization.approve_reject_reason_t"
@@ -114,6 +114,25 @@
               "
             >
               <template v-for="contact in organization.primary_contacts">
+                <span class="inline-block"
+                  >{{ contact.first_name }} {{ contact.last_name }}</span
+                >
+                <span class="inline-block">{{
+                  contact.title ? contact.title : ''
+                }}</span>
+                <span class="inline-block">{{ contact.email }}</span>
+                <span class="inline-block">{{ contact.mobile }}</span>
+              </template>
+            </div>
+            <base-text variant="h3">Ghost Users</base-text>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: max-content max-content max-content max-content;
+                grid-column-gap: 10px;
+              "
+            >
+              <template v-for="contact in ghostUsers">
                 <span class="inline-block"
                   >{{ contact.first_name }} {{ contact.last_name }}</span
                 >
@@ -302,14 +321,11 @@ import * as L from 'leaflet';
 import Location from '@/models/Location';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
-import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
-import { create } from 'vue-modal-dialogs';
 import Loader from '../../components/Loader';
 import IncidentApprovalTable from '../../components/IncidentApprovalTable';
 import { getErrorMessage } from '../../utils/errors';
 import LocationTool from '../../components/LocationTool';
-
-const responseDialog = create(MessageResponseDialog);
+import { hash } from '../../utils/promise';
 
 export default {
   name: 'AdminOrganization',
@@ -335,26 +351,7 @@ export default {
   },
   async mounted() {
     this.loading = true;
-    const response = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}`,
-    );
-    const rolesResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
-    );
-    const organizationRoleRequestsResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests?organization=${this.$route.params.organization_id}`,
-    );
-    const incidentRequestsResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/incident_requests?organization=${this.$route.params.organization_id}`,
-    );
-    const usersResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/users?organization=${this.$route.params.organization_id}`,
-    );
-    this.organization = response.data;
-    this.roles = rolesResponse.data.results;
-    this.roleRequests = organizationRoleRequestsResponse.data.results;
-    this.incidentRequests = incidentRequestsResponse.data.results;
-    this.users = usersResponse.data.results;
+    await this.loadPageData();
     this.loading = false;
 
     this.$nextTick(async () => {
@@ -370,24 +367,59 @@ export default {
     });
   },
   methods: {
-    async approveOrganization(organizationId) {
-      const result = await responseDialog({
-        title: this.$t('actions.approve_organization'),
-        content: this.$t('orgApprovalTable.give_approve_reason'),
+    async loadPageData() {
+      const pageData = await hash({
+        organization: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}`,
+        ),
+        roles: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
+        ),
+        roleRequests: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests?organization=${this.$route.params.organization_id}`,
+        ),
+        incidentRequests: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/incident_requests?organization=${this.$route.params.organization_id}`,
+        ),
+        users: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/users?organization=${this.$route.params.organization_id}`,
+        ),
+        ghostUsers: await this.getGhostUsers(),
       });
-      if (result) {
-        await Organization.api().approve(organizationId, result);
+      this.organization = pageData.organization.data;
+      this.roles = pageData.roles.data.results;
+      this.roleRequests = pageData.roleRequests.data.results;
+      this.incidentRequests = pageData.incidentRequests.data.results;
+      this.users = pageData.users.data.results;
+      this.ghostUsers = pageData.ghostUsers;
+    },
+
+    async getGhostUsers() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/ghost_users?organization=${this.$route.params.organization_id}`,
+      );
+      return response.data.results;
+    },
+    async approveOrganization(organizationId) {
+      try {
+        await Organization.api().approve(
+          organizationId,
+          this.organization.approve_reject_reason_t,
+        );
         await this.$toasted.success(this.$t('~~Approved'));
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
     async rejectOrganization(organizationId) {
-      const result = await responseDialog({
-        title: this.$t('actions.reject_organization'),
-        content: this.$t('orgApprovalTable.give_reject_reason'),
-      });
-      if (result) {
-        await Organization.api().reject(organizationId, result);
+      try {
+        await Organization.api().reject(
+          organizationId,
+          this.organization.approve_reject_reason_t,
+        );
         await this.$toasted.success(this.$t('~~Rejected'));
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
     createTileLayer() {
@@ -494,6 +526,7 @@ export default {
         await this.$toasted.success(
           this.$t('~~Successfully Saved Organization'),
         );
+        await this.loadPageData();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -514,6 +547,7 @@ export default {
       roles: [],
       roleRequests: [],
       users: [],
+      ghostUsers: [],
       organizationTypes: [
         'orgType.voad',
         'orgType.coad',

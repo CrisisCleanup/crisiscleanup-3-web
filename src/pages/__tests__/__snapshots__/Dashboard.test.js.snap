@@ -711,56 +711,6 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         </div>
       </div>
     </div>
-     
-    <div
-      class="flex"
-    >
-      <div
-        class="m-4 pt-2 shadow bg-white w-full"
-      >
-        <div
-          class="py-4 px-4 text-gray-500 border-b"
-        >
-          
-            dashboard.pending_affiliates
-          
-        </div>
-         
-        <div
-          class="p-4"
-        >
-          <organizationapprovaltable-stub
-            meta="[object Object]"
-            organizations=""
-          />
-        </div>
-      </div>
-    </div>
-     
-    <div
-      class="flex"
-    >
-      <div
-        class="m-4 pt-2 shadow bg-white w-full"
-      >
-        <div
-          class="py-4 px-4 text-gray-500 border-b"
-        >
-          
-            ~~Redeploy Requests
-          
-        </div>
-         
-        <div
-          class="p-4"
-        >
-          <incidentapprovaltable-stub
-            meta="[object Object]"
-            requests=""
-          />
-        </div>
-      </div>
-    </div>
   </div>
 </loader-stub>
 `;
