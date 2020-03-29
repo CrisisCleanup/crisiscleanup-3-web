@@ -45,7 +45,7 @@
     <trainings-modal
       :visible="isShowingTrainingModal"
       @onClose="isShowingTrainingModal = false"
-      @onComplete="completedTraining = true"
+      @onComplete="onTrainingComplete"
     ></trainings-modal>
   </div>
 </template>
@@ -68,6 +68,11 @@ export default {
       isShowingTrainingModal: false,
     };
   },
+  async mounted() {
+    if (this.$cookies.isKey('training-complete')) {
+      this.completedTraining = true;
+    }
+  },
   methods: {
     ...mapActions('phone', ['setAgentState']),
     async toggleAvailable() {
@@ -79,6 +84,10 @@ export default {
         return this.setAgentState(CCState.OFFLINE);
       }
       return this.setAgentState(CCState.ROUTABLE);
+    },
+    async onTrainingComplete() {
+      this.$cookies.set('training-complete', true);
+      this.completedTraining = true;
     },
   },
   computed: {
