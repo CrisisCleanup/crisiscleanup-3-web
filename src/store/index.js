@@ -1,5 +1,6 @@
 import VuexORM from '@vuex-orm/core';
 import VuexORMAxios from '@vuex-orm/plugin-axios';
+import VueLog from '@dreipol/vue-log';
 import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
@@ -21,6 +22,7 @@ VuexORM.use(VuexORMAxios, {
 });
 
 Vue.use(Vuex);
+Vue.use(VueLog);
 
 const debug = process.env.NODE_ENV !== 'production';
 

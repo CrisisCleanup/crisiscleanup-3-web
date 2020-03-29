@@ -28,7 +28,6 @@ import Authenticated from '@/layouts/Authenticated';
 import Unauthenticated from '@/layouts/Unauthenticated';
 import { AuthService } from '@/services/auth.service';
 import { i18nService } from '@/services/i18n.service';
-import VueLog from '@dreipol/vue-log';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -99,7 +98,6 @@ Vue.use(Toasted, {
 });
 
 Vue.use(VueI18n);
-Vue.use(VueLog);
 Vue.use(Popover);
 Vue.component('base-dropdown', Dropdown);
 Vue.component('v-select', vSelect);

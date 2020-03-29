@@ -7,13 +7,13 @@ import AWSSPMetadata from '@/assets/saml/aws-metadata.xml';
 import IDPMetadata from '@/assets/saml/ccu-metadata.xml';
 import { AuthService } from '@/services/auth.service';
 import { IDPApi } from '@/utils/api';
+import Logger from '@/utils/log';
 import AWS from 'aws-sdk';
 import axios from 'axios';
 import * as saml from 'samlify';
-import Vue from 'vue';
 import SPMetadata from '../../public/sp/metadata.xml';
 
-const Log = Vue.log({
+const Log = Logger({
   name: 'sso.service',
   middlewares: [
     (result) => {

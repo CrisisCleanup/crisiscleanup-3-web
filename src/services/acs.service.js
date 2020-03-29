@@ -4,9 +4,8 @@
  *
  */
 
-import Vue from 'vue';
-
-const Log = Vue.log({
+import Logger from '@/utils/log';
+const Log = Logger({
   name: 'acs.service',
   middlewares: [
     (result) => {

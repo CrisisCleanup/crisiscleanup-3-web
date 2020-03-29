@@ -3,9 +3,9 @@ import * as SSO from '@/services/sso.service';
 import { PhoneApi } from '@/utils/api';
 import axios from 'axios';
 import { camelCase } from 'lodash';
-import Vue from 'vue';
+import Logger from '@/utils/log';
 
-const Log = Vue.log({
+const Log = Logger({
   name: 'phone.store',
   middlewares: [
     (result) => {
