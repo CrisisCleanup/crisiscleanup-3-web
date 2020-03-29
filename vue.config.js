@@ -4,7 +4,7 @@ const basicPool = {
   workerParallelJobs: 200,
   name: 'basicPool',
 };
-if (!['test', 'storybook'].includes(process.env.NODE_ENV)) {
+if (process.env.NODE_ENV === 'development') {
   threadLoader.warmup(basicPool, ['babel-loader', 'vue-loader']);
 }
 module.exports = {

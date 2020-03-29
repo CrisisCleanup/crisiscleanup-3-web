@@ -1,5 +1,5 @@
 <template>
-  <div class="logingrid grid-container">
+  <div @keyup.enter="userLogin" class="logingrid grid-container">
     <div class="grid--title">
       <base-text
         font="display"
