@@ -83,19 +83,21 @@ export default {
         if (!isValid) {
           return;
         }
-        await PasswordResetRequest.api().post(`/password_reset_requests`, {
+
+        const response = await PasswordResetRequest.api().post(`/password_reset_requests`, {
           email: this.email,
         });
+
+        const reset_request = response.response && response.response.data ?
+          response.response.data :
+          null;
+        if (reset_request && reset_request.invalid_message) {
+          await this.$toasted.error(reset_request.invalid_message);
+          return;
+        }
         this.showSuccessModal = true;
       } catch (error) {
-        const errorMessage = getErrorMessage(error);
-        if (errorMessage.indexOf('does not exist') !== -1) {
-          await this.$toasted.error(
-            `~~We couldn't find that email in our system. Check your spelling and try again.`,
-          );
-        } else {
-          await this.$toasted.error(errorMessage);
-        }
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
   },

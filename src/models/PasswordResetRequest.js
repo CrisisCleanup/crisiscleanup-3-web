@@ -11,6 +11,8 @@ export default class PasswordResetRequest extends Model {
       requested_at: this.attr(null),
       expires_at: this.attr(null),
       is_expired: this.attr(null),
+      is_valid: this.attr(null),
+      invalid_message: this.attr(null),
     };
   }
 
