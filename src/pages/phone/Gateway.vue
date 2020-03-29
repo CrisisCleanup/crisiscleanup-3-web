@@ -77,9 +77,11 @@ import Agent, { ERRORS as AgentErrors } from '@/models/Agent';
 import User from '@/models/User';
 import { mapGetters } from 'vuex';
 import CallerEditCard from '@/components/phone/CallerIDEditCard.vue';
+import { LangMixin } from '@/mixins';
 
 export default {
   name: 'PhoneGateway',
+  mixins: [LangMixin],
   components: {
     Loader,
     CallerEditCard,
@@ -95,41 +97,35 @@ export default {
   computed: {
     ...mapGetters('phone', ['popupOpen']),
     lang() {
-      return {
-        title: this.$t('~~Welcome to Crisis Cleanup Phone Center'),
-        detail: this.$t(`
-        ~~Before you can start taking calls, we have a temporary thing we need you to do in order to get logged into the call system.`),
+      return this.getLang({
+        title: '~~Welcome to Crisis Cleanup Phone Center',
+        detail: `
+        ~~Before you can start taking calls, we have a temporary thing we need you to do in order to get logged into the call system.`,
         steps: [
           {
-            body: this.$t(
+            body:
               '~~We are going to pop up a window where you can type in the username and password.',
-            ),
           },
           {
-            body: this.$t(
-              "~~Once you're done, you will be brought back to this page.",
-            ),
+            body: "~~Once you're done, you will be brought back to this page.",
           },
           {
-            body: this.$t(
+            body:
               '~~Grab a piece of paper and write (or copy and paste) this username and password',
-            ),
           },
         ],
         action: {
-          title: this.$t(''),
-          button: this.$t('~~Take me to the pop-up page'),
-          user_id: this.$t('~~Username: '),
-          password: this.$t('~~Password: '),
+          button: '~~Take me to the pop-up page',
+          user_id: '~~Username: ',
+          password: '~~Password: ',
         },
         copy: {
-          button: this.$t('~~Copy'),
-          successMessage: this.$t('~~Copied!'),
+          button: '~~Copy',
+          successMessage: '~~Copied!',
         },
-        linkNote: this.$t(
+        linkNote:
           '~~Note, if this does not work, copy this link and go to it in a new browser.',
-        ),
-      };
+      });
     },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
