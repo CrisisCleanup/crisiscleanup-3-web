@@ -28,7 +28,11 @@
           size="large"
           type="text"
           :required="true"
-          @input="updatePda(e.target.value, 'phone1')"
+          @input="
+            (e) => {
+              updatePda(e.target.value, 'phone1');
+            }
+          "
         />
       </div>
       <div class="form-field" v-if="pda.phone2 || addAdditionalPhone">
