@@ -271,7 +271,11 @@
                 <base-button
                   variant="solid"
                   class="px-4 py-1"
-                  :action="() => { $router.push(`/password/new?email=${currentUser.email}`) }"
+                  :action="
+                    () => {
+                      $router.push(`/password/new?email=${currentUser.email}`);
+                    }
+                  "
                 >
                   {{ $t('actions.change_password') }}
                 </base-button>
