@@ -107,7 +107,7 @@ export default {
   },
   mounted() {
     this.email = this.$route.query.email || '';
-  }
+  },
 };
 </script>
 
