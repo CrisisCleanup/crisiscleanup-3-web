@@ -34,6 +34,8 @@ env:
   VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUDevConnectRole'
   VUE_APP_CCP_INSTANCE: 89c1729b-4547-4548-9508-9365b71e586b
   VUE_APP_AWS_CCP_URL: https://cchotline.awsapps.com/connect/ccp#
+  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+  SENTRY_PROPERTIES: sentry.properties
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
   CYPRESS_INSTALL_BINARY: 0
 
