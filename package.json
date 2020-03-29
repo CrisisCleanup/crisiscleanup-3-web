@@ -119,7 +119,7 @@
     "@cypress/code-coverage": "^1.14.0",
     "@cypress/webpack-preprocessor": "^4.1.3",
     "@percy/cypress": "^2.3.1",
-    "@sentry/browser": "^5.14.2",
+    "@sentry/browser": "^5.15.4",
     "@sentry/integrations": "^5.15.4",
     "@sentry/webpack-plugin": "^1.10.0",
     "@storybook/addon-a11y": "^5.3.17",
