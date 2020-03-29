@@ -90,12 +90,11 @@ export const initConnect = ({
   }
 };
 
-export const initAgent = ({ onRefresh, onAuth, onStateChange }) => {
+export const initAgent = ({ onRefresh, onAuth }) => {
   Log.info('waiting on agent... ');
   connect.agent((agent) => {
     Log.info('agent initialized!');
     agent.onRefresh(onRefresh);
-    agent.onStateChange(onStateChange);
     Log.debug('trying to get agent config...');
     const agentStates = agent.getConfiguration();
     onAuth(agent, agentStates);

@@ -1,9 +1,9 @@
 import * as ConnectService from '@/services/acs.service';
 import * as SSO from '@/services/sso.service';
 import { PhoneApi } from '@/utils/api';
+import Logger from '@/utils/log';
 import axios from 'axios';
 import { camelCase } from 'lodash';
-import Logger from '@/utils/log';
 
 const Log = Logger({
   name: 'phone.store',
@@ -103,8 +103,6 @@ const actions = {
           authed: true,
           config: agentConf,
         }),
-      onStateChange: ({ agent, newState }) =>
-        commit('setAgentState', { newState, agent }),
     });
     ConnectService.bindContactEvents({
       onRefresh: (contact) => {
