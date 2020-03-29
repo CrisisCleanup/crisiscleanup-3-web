@@ -15,9 +15,9 @@
 import VueTypes from 'vue-types';
 
 export const FooterNavigation = [
-  {
-    key: 'demo',
-  },
+  // {
+  //   key: 'demo',
+  // },
   {
     key: 'contact',
   },
@@ -38,8 +38,9 @@ export default {
       VueTypes.shape({
         key: VueTypes.string,
         route: VueTypes.string,
+        external: VueTypes.bool.def(false),
       }),
-    ).def(FooterNavigation),
+    ).def(HomeNavigation),
     translations: VueTypes.objectOf(VueTypes.string),
   },
   computed: {
