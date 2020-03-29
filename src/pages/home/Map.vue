@@ -115,6 +115,8 @@ export default {
           }/locations?id__in=${locationIds.join(',')}`,
         );
         this.locations = locationsResponse.data.results;
+      } else {
+        this.locations = [];
       }
     },
     displayWorksite(worksite) {

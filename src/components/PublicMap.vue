@@ -126,8 +126,10 @@ export default {
             }
           });
         }
-        this.loadMap();
       }
+    },
+    locations() {
+      this.loadMap();
     },
     displayedWorkTypes: {
       handler(val) {
@@ -166,9 +168,9 @@ export default {
         polygon.addTo(this.map);
         this.map.fitBounds(polygon.getBounds());
       } else {
-        this.$refs.workstiteMap.map.eachLayer((layer) => {
+        this.map.eachLayer((layer) => {
           if (layer.location_id && layer.location_id === location.id) {
-            this.$refs.workstiteMap.map.removeLayer(layer);
+            this.map.removeLayer(layer);
           }
         });
       }
