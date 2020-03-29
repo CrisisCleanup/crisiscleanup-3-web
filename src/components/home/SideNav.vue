@@ -42,9 +42,10 @@ export const HomeNavigation = [
     key: 'map',
     route: '/map',
   },
-  {
-    key: 'training',
-  },
+  // {
+  //   key: 'training',
+  //   route: '/traning',
+  // },
   {
     key: 'contact',
   },
