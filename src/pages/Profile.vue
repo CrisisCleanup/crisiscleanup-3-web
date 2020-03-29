@@ -268,10 +268,14 @@
                 </div>
               </div>
               <div class="my-2">
-                  <base-button variant="solid" class="px-4 py-1" :action="() => { $router.push(`/password/new?email=${currentUser.email}`) }">
-                    {{ $t('actions.change_password') }}
-                  </base-button>
-                </div>
+                <base-button
+                  variant="solid"
+                  class="px-4 py-1"
+                  :action="() => { $router.push(`/password/new?email=${currentUser.email}`) }"
+                >
+                  {{ $t('actions.change_password') }}
+                </base-button>
+              </div>
               <div class="mt-6">
                 <h3>{{ $t('profileUser.your_organization') }}</h3>
                 <div class="py-3 flex items-center">
