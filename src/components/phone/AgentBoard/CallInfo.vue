@@ -19,7 +19,7 @@
       </div>
     </div>
     <div lass="contact--actions">
-      <base-text :weight="600" variant="h1">14:32</base-text>
+      <base-text :weight="600" variant="h1">{{ callTimer }}</base-text>
       <base-text :weight="400" variant="h3">{{ lang.calltime }}</base-text>
     </div>
   </div>
@@ -28,12 +28,26 @@
 <script>
 import VueTypes from 'vue-types';
 import { IconsMixin } from '@/mixins';
+import { mapGetters, mapActions } from 'vuex';
+import { mixin as VueTimers } from 'vue-timers';
 
 export default {
   name: 'BoardCallInfo',
-  mixins: [IconsMixin],
+  mixins: [IconsMixin, VueTimers],
+  timers: {
+    syncCallDuration: { time: 1000, autostart: true, repeat: true },
+  },
   props: {
     lang: VueTypes.objectOf(VueTypes.any),
+  },
+  methods: {
+    ...mapActions('phone', ['syncCallDuration']),
+  },
+  computed: {
+    ...mapGetters('phone', ['callerId', 'callDuration']),
+    callTimer() {
+      return this.$moment.duration(this.callDuration, 'ms').format('h:mm:ss');
+    },
   },
 };
 </script>

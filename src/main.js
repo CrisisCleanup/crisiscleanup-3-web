@@ -38,6 +38,7 @@ import axios from 'axios';
 import Dropdown from 'bp-vuejs-dropdown';
 import detectBrowserLanguage from 'detect-browser-language';
 import moment from 'moment';
+import momentWithDurations from 'moment-duration-format';
 import 'moment/min/locales';
 import VTooltip from 'v-tooltip';
 import Vue from 'vue';
@@ -89,6 +90,7 @@ Vue.use(VTooltip);
 Vue.use(ModalDialogs);
 Vue.use(VueClipboard);
 Vue.use(VueAxios, axios);
+momentWithDurations(moment);
 Vue.use(require('vue-moment'), { moment });
 
 Vue.use(Toasted, {

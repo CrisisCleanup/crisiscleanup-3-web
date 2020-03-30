@@ -64,6 +64,7 @@ const getters = {
     state.contact.attributes ? state.contact.attributes.callerId : '',
   caseId: (state) =>
     state.contact.attributes ? state.contact.attributes.caseId : '',
+  callDuration: (state) => (state.contact ? state.contact.duration : 0),
 };
 
 // actions
@@ -148,6 +149,13 @@ const actions = {
   async setAgentState({ commit }, state) {
     ConnectService.setAgentState(state);
     commit('setAgentState', { newState: state });
+  },
+  async syncCallDuration({ commit }) {
+    const agent = ConnectService.getAgent();
+    const [contact] = agent.getContacts();
+    commit('setContact', {
+      duration: contact.getStatusDuration(),
+    });
   },
 };
 
