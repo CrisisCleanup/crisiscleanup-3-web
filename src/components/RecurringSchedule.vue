@@ -1,76 +1,91 @@
 <template>
-  <form style="z-index: 1001;" @change="logChange">
-    <div>
+  <div>
+    <form
+      v-if="showSchedule"
+      style="z-index: 1001;"
+      class="p-2 border"
+      :class="containerClass"
+      @change="logChange"
+    >
       <div>
-        <form-select
-          v-model="frequency"
-          :options="['Daily', 'Weekly']"
-          indicator-icon="caret-down"
-          select-classes="h-10 border bg-white text-sm"
-          @input="logChange"
-        />
-      </div>
-      <div class="daily" v-if="frequency === 'Daily'">
-        <base-radio
-          class="mr-10 pt-4"
-          name="Days"
-          label="Days"
-          :value="dailyOption"
-          @change="dailyOption = $event"
-        >
-          <div class="flex items-center">
-            {{ $t('Every') }}
+        <div>
+          <form-select
+            v-model="frequency"
+            :options="['Daily', 'Weekly']"
+            indicator-icon="caret-down"
+            select-classes="h-10 border bg-white text-sm"
+            @input="logChange"
+          />
+        </div>
+        <div class="daily" v-if="frequency === 'Daily'">
+          <base-radio
+            class="mr-10 pt-4"
+            name="Days"
+            label="Days"
+            :value="dailyOption"
+            @change="dailyOption = $event"
+          >
+            <div class="flex items-center">
+              {{ $t('Every') }}
+              <input
+                class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
+                v-model="dayInterval"
+              />
+              {{ $t('day(s)') }}
+            </div>
+          </base-radio>
+          <base-radio
+            class="mr-10 py-2"
+            name="Every Weekday"
+            label="Every Weekday"
+            :value="dailyOption"
+            @change="dailyOption = $event"
+          />
+        </div>
+
+        <div class="weekly" v-if="frequency === 'Weekly'">
+          <div class="py-2">
+            {{ $t('Recur Every') }}
             <input
               class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
-              v-model="dayInterval"
+              v-model="weekInterval"
             />
-            {{ $t('day(s)') }}
+            {{ $t('weeks(s) on:') }}
           </div>
-        </base-radio>
-        <base-radio
-          class="mr-10 py-2"
-          name="Every Weekday"
-          label="Every Weekday"
-          :value="dailyOption"
-          @change="dailyOption = $event"
-        />
-      </div>
 
-      <div class="weekly" v-if="frequency === 'Weekly'">
-        <div class="py-2">
-          {{ $t('Recur Every') }}
-          <input
-            class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
-            v-model="weekInterval"
+          <div class="flex flex-wrap">
+            <div v-for="(day, key) in daysOfWeek" :key="key" class="p-1 w-24">
+              <base-checkbox v-model="selectedDays[key]">
+                {{ key }}
+              </base-checkbox>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-start border w-full">
+          <ccu-icon
+            class="h-10"
+            type="calendar"
+            size="xl"
+            :alt="$t('calendar')"
           />
-          {{ $t('weeks(s) on:') }}
-        </div>
-
-        <div class="flex flex-wrap">
-          <div v-for="(day, key) in daysOfWeek" :key="key" class="p-1 w-24">
-            <base-checkbox v-model="selectedDays[key]">
-              {{ key }}
-            </base-checkbox>
-          </div>
+          <datepicker
+            input-class="h-10 p-1 outline-none w-full text-sm cursor-pointer"
+            wrapper-class="flex-grow"
+            :format="customFormatter"
+            v-model="endDate"
+            @input="logChange"
+          ></datepicker>
         </div>
       </div>
-      <div class="flex items-center justify-start border w-full">
-        <ccu-icon
-          class="h-10"
-          type="calendar"
-          size="xl"
-          :alt="$t('calendar')"
-        />
-        <datepicker
-          input-class="h-10 p-1 outline-none w-full text-sm cursor-pointer"
-          wrapper-class="flex-grow"
-          :format="customFormatter"
-          v-model="endDate"
-          @input="logChange"
-        ></datepicker>
-      </div>
-    </div>
-  </form>
+    </form>
+    <base-button
+      v-else
+      text-variant="h3"
+      @click.native="showSchedule = true"
+      class="text-primary-dark"
+      >{{ $t('Add schedule') }}</base-button
+    >
+  </div>
 </template>
 
 <script>
@@ -79,6 +94,10 @@ export default {
   name: 'RecurringSchedule',
   props: {
     value: {
+      type: String,
+      default: '',
+    },
+    containerClass: {
       type: String,
       default: '',
     },
@@ -155,6 +174,7 @@ export default {
       weekInterval: 1,
       currentRRule: '',
       endDate: null,
+      showSchedule: false,
       daysOfWeek: {
         [this.$t('~~Sun')]: RRule.SU,
         [this.$t('~~Mon')]: RRule.MO,
