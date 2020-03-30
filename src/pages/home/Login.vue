@@ -39,8 +39,8 @@ export default {
     grid:
       [r1] 'logo . . . . . survivors' 20% [r1end]
       [r2] 'nav . main main globe globe globe' [r2end]
-      [r3] 'nav . main main globe globe globe' [r3end]
-      [r4] 'actions . . . footer footer footer' [r4end]
+      [r3] 'actions . main main globe globe globe' [r3end]
+      [r4] '. . . . footer footer footer' [r4end]
       / auto;
     .grid {
       &--main {
