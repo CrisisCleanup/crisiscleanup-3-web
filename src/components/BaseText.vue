@@ -14,7 +14,22 @@ export default {
   props: {
     variant: VueTypes.oneOf(VARIANTS).def('body'),
     font: VueTypes.oneOf(['sans', 'display']).def('sans'),
-    weight: VueTypes.oneOf([300, 400, 500, 600, 700]),
+    weight: VueTypes.oneOf([
+      100,
+      200,
+      300,
+      400,
+      500,
+      600,
+      700,
+      '100',
+      '200',
+      '300',
+      '400',
+      '500',
+      '600',
+      '700',
+    ]),
   },
   computed: {
     styles() {
