@@ -104,9 +104,7 @@ export default {
       );
       [this.invitation] = results.entities.invitations;
     } catch (error) {
-      await this.$toasted.error(
-        this.$t('invitationSignup.invitation_dead'),
-      );
+      await this.$toasted.error(this.$t('invitationSignup.invitation_dead'));
       this.$router.push('/login');
     }
   },
