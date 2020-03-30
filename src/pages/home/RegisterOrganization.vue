@@ -351,12 +351,9 @@ export default {
           ...this.organization,
           contact: { ...this.user },
         });
-        this.$toasted.success(
-          this.$t('registerOrg.org_registration_success'),
-          {
-            duration: 7000,
-          },
-        );
+        this.$toasted.success(this.$t('registerOrg.org_registration_success'), {
+          duration: 7000,
+        });
         await this.$router.push('/');
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));

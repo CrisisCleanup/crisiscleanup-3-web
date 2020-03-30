@@ -129,9 +129,7 @@ export default {
           `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
           data,
         );
-        await this.$toasted.success(
-          this.$t('printToken.success_update_case'),
-        );
+        await this.$toasted.success(this.$t('printToken.success_update_case'));
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
