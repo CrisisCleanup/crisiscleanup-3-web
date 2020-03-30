@@ -65,7 +65,11 @@
           </div>
         </div>
       </div>
-      <caller-edit-card :active="!agentValid" />
+      <caller-edit-card
+        :active="!agentValid"
+        :request="agentNeeded"
+        @user-updated="() => validateAgent()"
+      />
     </template>
   </Loader>
 </template>
@@ -91,6 +95,10 @@ export default {
       loading: true,
       disabled: false,
       agentValid: true,
+      agentNeeded: {
+        phone: false,
+        lang: false,
+      },
       agent: {},
     };
   },
@@ -143,6 +151,34 @@ export default {
       const agent = Agent.query().where('user_id', this.currentUser.id).first();
       return agent;
     },
+    async validateAgent() {
+      this.loading = true;
+      this.agentValid = true;
+      this.agentNeeded.phone = false;
+      this.agentNeeded.lang = false;
+      try {
+        this.agent = await this.getAgent();
+      } catch (errs) {
+        const {
+          MOBILE_INVALID,
+          MOBILE_NOT_FOUND,
+          LANGUAGE_NOT_FOUND,
+          LANGUAGE_NOT_SUPPORTED,
+        } = AgentErrors;
+        const invalidPhone = (el) =>
+          [MOBILE_INVALID, MOBILE_NOT_FOUND].includes(el);
+        const invalidLang = (el) =>
+          [LANGUAGE_NOT_FOUND, LANGUAGE_NOT_SUPPORTED].includes(el);
+        this.agentValid = false;
+        if (errs.some(invalidPhone)) {
+          this.agentNeeded.phone = true;
+        }
+        if (errs.some(invalidLang)) {
+          this.agentNeeded.lang = true;
+        }
+      }
+      this.loading = false;
+    },
     authenticate() {
       EventBus.$emit('acs:requestAgent');
     },
@@ -152,15 +188,7 @@ export default {
     },
   },
   async mounted() {
-    this.loading = true;
-    try {
-      this.agent = await this.getAgent();
-    } catch (e) {
-      if (e === AgentErrors.MOBILE_INVALID) {
-        this.agentValid = false;
-      }
-    }
-    this.loading = false;
+    await this.validateAgent();
   },
 };
 </script>
