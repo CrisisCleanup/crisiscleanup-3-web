@@ -174,119 +174,17 @@
           "
         />
       </div>
-      <template v-for="field in fields">
-        <div :key="field.field_key">
-          <template v-if="['h4'].includes(field.html_type)">
-            <div class="form-field text-lg font-semibold">
-              {{ field.label_t }}
-            </div>
-          </template>
-          <template v-if="['h5'].includes(field.html_type)">
-            <div class="text-base font-semibold my-1 mx-3">
-              {{ field.label_t }}
-            </div>
-          </template>
-          <template v-if="field.html_type === 'select'">
-            <div :key="field.field_key" class="form-field">
-              <span>{{ field.label_t }}</span>
-              <form-select
-                :value="pda.formFields[field.field_key]"
-                :options="
-                  field.values || getSelectValuesList(field.values_default_t)
-                "
-                indicator-icon="caret-down"
-                item-key="value"
-                label="name_t"
-                select-classes="h-10 border bg-white"
-                @input="
-                  (value) => {
-                    dynamicFields[field.field_key] = value;
-                  }
-                "
-              />
-            </div>
-          </template>
-          <template v-if="field.html_type === 'cronselect'">
-            <div key="field.field_key" class="form-field">
-              <span>{{ field.label_t }}</span>
-              <RecurringSchedule
-                class="bg-white p-4"
-                :value="pda.formFields[field.field_key]"
-                @input="dynamicFields[field.field_key] = $event"
-              />
-            </div>
-          </template>
-          <template v-if="field.html_type === 'multiselect'">
-            <div :key="field.field_key" class="form-field">
-              <span>{{ field.label_t }}</span>
-              <form-select
-                :value="pda.formFields[field.field_key]"
-                :options="
-                  field.values || getSelectValuesList(field.values_default_t)
-                "
-                multiple
-                indicator-icon="caret-down"
-                item-key="value"
-                label="name_t"
-                select-classes="h-10 border"
-                @input="
-                  (value) => {
-                    dynamicFields[field.field_key] = value;
-                  }
-                "
-              />
-            </div>
-          </template>
-          <template v-if="field.html_type === 'text'">
-            <div :key="field.field_key" class="form-field">
-              <label>{{ field.placeholder_t || field.label_t }}</label>
-              <input
-                :value="pda.formFields[field.field_key]"
-                class="js-pda-postal_code input"
-                size="large"
-                type="text"
-                @input="
-                  (e) => {
-                    dynamicFields[field.field_key] = e.target.value;
-                  }
-                "
-              />
-            </div>
-          </template>
-          <template v-if="field.html_type === 'textarea'">
-            <div :key="field.field_key" class="form-field">
-              <label>{{ field.placeholder_t || field.label_t }}</label>
-              <textarea
-                class="block w-full border outline-none"
-                rows="3"
-                :value="pda.formFields[field.field_key]"
-                @input="
-                  (e) => {
-                    dynamicFields[field.field_key] = e.target.value;
-                  }
-                "
-              />
-            </div>
-          </template>
-          <template v-if="field.html_type === 'checkbox'">
-            <div :key="field.field_key" class="py-1 mx-5">
-              <input
-                type="checkbox"
-                :id="field.field_key"
-                :value="pda.formFields[field.field_key]"
-                @input="
-                  (e) => {
-                    dynamicFields[field.field_key] = e.target.checked;
-                  }
-                "
-              />
-              <label :for="field.field_key" class="px-2">{{
-                field.placeholder_t || field.label_t
-              }}</label>
-            </div>
-          </template>
-        </div>
-      </template>
+      <assessment-tree
+        v-for="field in fieldTree"
+        :key="field.field_key"
+        :field="field"
+        :pda="pda"
+        @updateField="
+          ({ key, value }) => {
+            dynamicFields[key] = value;
+          }
+        "
+      ></assessment-tree>
     </div>
     <div
       class="bg-white p-3 border-t border-gray-300 card-footer flex justify-between"
@@ -311,19 +209,15 @@ import Pda from '@/models/Pda';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
 import { getErrorMessage } from '@/utils/errors';
-import RecurringSchedule from '@/components/RecurringSchedule';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import Incident from '@/models/Incident';
-import { buildForm, groupBy } from '@/utils/form';
-import FormSelect from '@/components/FormSelect';
+import { buildForm, groupBy, nest } from '@/utils/form';
 import { LangMixin } from '@/mixins';
 
 export default {
   name: 'PreliminaryAssessment',
   mixins: [LangMixin],
   components: {
-    FormSelect,
-    RecurringSchedule,
     WorksiteSearchInput,
   },
   async mounted() {
@@ -347,6 +241,13 @@ export default {
     };
   },
   computed: {
+    fieldTree() {
+      if (this.currentIncident && this.currentIncident.form_fields) {
+        const formFields = this.currentIncident.form_fields;
+        return nest(formFields);
+      }
+      return {};
+    },
     fields() {
       const excludeSections = ['claim_status_report_info'];
       if (this.currentIncident && this.currentIncident.form_fields) {
