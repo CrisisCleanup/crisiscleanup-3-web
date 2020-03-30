@@ -1,7 +1,5 @@
 <template>
   <div class="more-info">
-    <!--line-->
-    <hr class="bg-white" />
     <!--Info Card-->
     <div class="info">
       <div class="flex flex-col">
@@ -30,8 +28,6 @@
         </div>
       </div>
     </div>
-    <!--line-->
-    <hr class="bg-white" />
   </div>
 </template>
 
@@ -60,6 +56,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.more-info {
+  @apply bg-crisiscleanup-light-grey;
+  margin-left: -24px;
+  margin-right: -24px;
+}
+
 .tags {
   .tag {
     &-container {

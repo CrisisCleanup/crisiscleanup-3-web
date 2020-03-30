@@ -13,7 +13,6 @@
     <template #grid-end>
       <div class="grid-end flex">
         <case-form
-          v-if="caseId"
           class="shadow-xl"
           incident-id="199"
           :pda-id="caseId"

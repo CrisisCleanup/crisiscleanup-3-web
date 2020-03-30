@@ -18,7 +18,7 @@
         </ccu-icon>
       </div>
     </div>
-    <div lass="contact--actions">
+    <div class="contact--actions">
       <base-text :weight="600" variant="h1">{{ callTimer }}</base-text>
       <base-text :weight="400" variant="h3">{{ lang.calltime }}</base-text>
     </div>
@@ -60,10 +60,10 @@ export default {
         .contactbar {
           display: flex;
           flex-direction: row;
-          justify-content: space-around;
+          justify-content: space-evenly;
           align-content: center;
           flex-grow: 1;
-          @apply py-6 px-16;
+          @apply py-6 px-6;
           .contact {
             &--call {
               display: flex;
@@ -101,6 +101,7 @@ export default {
             &--actions {
               display: flex;
               flex-direction: column;
+              @apply pl-3 ml-6;
               p {
                 &:last-child {
                   @apply text-crisiscleanup-dark-300;
