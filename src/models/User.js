@@ -50,14 +50,14 @@ export default class User extends Model {
   }
 
   get languages() {
-    const langugageList = [];
+    const languageList = [];
     if (this.primary_language) {
-      langugageList.push(Language.find(this.primary_language));
+      languageList.push(Language.find(this.primary_language));
     }
     if (this.secondary_language) {
-      langugageList.push(Language.find(this.secondary_language));
+      languageList.push(Language.find(this.secondary_language));
     }
-    return langugageList;
+    return languageList;
   }
 
   get notificationSettings() {
