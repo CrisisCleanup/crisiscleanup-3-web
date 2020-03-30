@@ -19870,10 +19870,10 @@ vue-docgen-api@^3.11.4:
     typescript "^3.2.2"
     vue-template-compiler "^2.0.0"
 
-vue-docgen-api@^4.1.0, vue-docgen-api@^4.14.0:
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/vue-docgen-api/-/vue-docgen-api-4.14.0.tgz#bdd1d79a77be3cd8840d17022606b0e6266d0b75"
-  integrity sha512-X/LbBkDf0iEZgHB/6GsX0TaJpn6N9t9fKwqWjtYfrnPHSpVYGKynXI4klsYk+/hn2d7LHIYuVgorxoctlRKIKA==
+vue-docgen-api@^4.1.0, vue-docgen-api@^4.15.0:
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/vue-docgen-api/-/vue-docgen-api-4.15.0.tgz#927f98441dd88f54eb548b9a2275a7f0b8067574"
+  integrity sha512-VzVTrsKdifm/CIs5HcHDH/uySfHxRKmBpwTE7o4FulPrYdyN9nNfGor28j3nMVaXC3sPByE6J8cZBr5hhI+2lA==
   dependencies:
     "@babel/parser" "^7.6.0"
     "@babel/types" "^7.6.0"
