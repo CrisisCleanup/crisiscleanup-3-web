@@ -5,6 +5,8 @@ export const ERRORS = {
   AGENT_NOT_FOUND: 'AGENT_NOT_FOUND',
   MOBILE_NOT_FOUND: 'MOBILE_NOT_FOUND',
   MOBILE_INVALID: 'MOBILE_INVALID',
+  LANGUAGE_NOT_FOUND: 'LANGUAGE_NOT_FOUND',
+  LANGUAGE_NOT_SUPPORTED: 'LANGUAGE_NOT_SUPPORTED',
 };
 
 export default class Agent extends Model {
@@ -38,10 +40,10 @@ export default class Agent extends Model {
                 data: { data },
               },
             } = e;
-            let errorType = data.error_type ? data.error_type : null;
-            errorType = ERRORS[errorType];
-            if (errorType) {
-              throw errorType;
+            let errors = data.errors ? data.errors : [];
+            errors = errors.map(({ type }) => ERRORS[type]);
+            if (errors) {
+              throw errors;
             }
             throw e;
           }
