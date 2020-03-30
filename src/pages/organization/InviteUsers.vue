@@ -46,19 +46,9 @@
           />
         </div>
         <div v-if="isAdmin">
-          <autocomplete
-            icon="search"
+          <OrganizationSearchInput
+            @selectedOrganization="selectedOrganization = $event.id"
             class="w-108"
-            :suggestions="organizationResults"
-            display-property="name"
-            placeholder="Organizations"
-            clear-on-selected
-            @selected="
-              (value) => {
-                selectedOrganization = value.id;
-              }
-            "
-            @search="onOrganizationSearch"
           />
         </div>
       </div>
@@ -86,10 +76,12 @@
 import User from '@/models/User';
 import Organization from '@/models/Organization';
 import { createTag } from '@johmun/vue-tags-input';
+import OrganizationSearchInput from '@/components/OrganizationSearchInput';
 import { getErrorMessage } from '../../utils/errors';
 
 export default {
   name: 'InviteUsers',
+  components: { OrganizationSearchInput },
   props: {
     isAdmin: {
       type: Boolean,

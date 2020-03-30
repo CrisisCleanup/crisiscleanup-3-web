@@ -115,21 +115,15 @@
           <p class="mb-2">
             {{ $t('flag.please_share_other_orgs') }}
           </p>
-          <autocomplete
-            icon="search"
-            :suggestions="organizationResults"
-            display-property="name"
+          <OrganizationSearchInput
             size="large"
-            placeholder="Organizations"
-            clear-on-selected
-            @selected="
+            @selectedOrganization="
               (value) => {
                 selectedOrganizations = new Set(
                   selectedOrganizations.add(value),
                 );
               }
             "
-            @search="onOrganizationSearch"
           />
           <div class="py-5">
             <div
@@ -242,7 +236,7 @@
 <script>
 import User from '@/models/User';
 import Worksite from '@/models/Worksite';
-import Organization from '@/models/Organization';
+import OrganizationSearchInput from '@/components/OrganizationSearchInput';
 import Incident from '@/models/Incident';
 import { getGoogleMapsLocation } from '@/utils/map';
 import GeocoderService from '@/services/geocoder.service';
@@ -250,11 +244,11 @@ import { What3wordsService } from '@/services/what3words.service';
 
 export default {
   name: 'CaseFlag',
+  components: { OrganizationSearchInput },
   data() {
     return {
       worksite: {},
       ready: false,
-      organizationResults: [],
       selectedOrganizations: new Set(),
       abusingOrganization: null,
       currentFlag: {
@@ -308,15 +302,6 @@ export default {
     }
   },
   methods: {
-    async onOrganizationSearch(value) {
-      const results = await Organization.api().get(
-        `/organizations?search=${value}&limit=10&fields=id,name`,
-        {
-          dataKey: 'results',
-        },
-      );
-      this.organizationResults = results.entities.organizations;
-    },
     async flagWorksite() {
       if (
         this.currentFlag.reason_t === 'flag.worksite_wrong_incident' &&

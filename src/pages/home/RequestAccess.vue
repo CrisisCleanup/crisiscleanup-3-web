@@ -10,7 +10,14 @@
             {{ $t('requestAccess.join_organization') }}
           </div>
           <div class="text-2xl font-light">
-            {{ $t('requestAccess.enter_existing_user_email_msg') }}
+            <div v-if="$route.query.organization">
+              {{
+                $t('requestAccess.org_already_has_account', {
+                  organization: $route.query.organization,
+                })
+              }}
+            </div>
+            <div>{{ $t('requestAccess.enter_existing_user_email_msg') }}</div>
           </div>
         </div>
         <form class="w-108 flex flex-col" autocomplete="off" ref="form">

@@ -34,13 +34,17 @@
                 {{ $t('registerOrg.use_local_org_name_msg') }}
               </div>
               <div class="flex flex-wrap">
-                <base-input
-                  v-model="organization.name"
-                  type="text"
-                  class="form-field"
+                <OrganizationSearchInput
+                  @selectedOrganization="
+                    (organization) => {
+                      $router.push(
+                        `/request_access?organization=${organization.name}`,
+                      );
+                    }
+                  "
+                  @input="organization.name = $event"
                   size="large"
-                  :placeholder="$t('registerOrg.organization_name')"
-                  required
+                  class="form-field"
                 />
                 <base-input
                   v-model="organization.url"
@@ -277,11 +281,12 @@
 <script>
 import Organization from '@/models/Organization';
 import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
-import { getErrorMessage } from '../../utils/errors';
+import { getErrorMessage } from '@/utils/errors';
+import OrganizationSearchInput from '@/components/OrganizationSearchInput';
 
 export default {
-  name: 'InvitationSignup',
-  components: { HomeLayout, HomeNav, HomeActions },
+  name: 'Register',
+  components: { HomeLayout, HomeNav, HomeActions, OrganizationSearchInput },
 
   async mounted() {
     const incidentsResponse = await this.$http.get(

@@ -32,7 +32,7 @@
               :suggestions="organizationResults"
               display-property="name"
               size="large"
-              placeholder="$t('affiliatesVue.search_for_organization')"
+              :placeholder="$t('affiliatesVue.search_for_organization')"
               clear-on-selected
               @selected="
                 (value) => {
