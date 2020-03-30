@@ -13,9 +13,10 @@
     <template #grid-end>
       <div class="grid-end flex">
         <case-form
+          v-if="caseId"
           class="shadow-xl"
           incident-id="199"
-          pda-id="5"
+          :pda-id="caseId"
           disable-claim-and-save
           @savedWorksite="savedWorksite"
           @closeWorksite="closeWorksite"
@@ -32,6 +33,7 @@ import CaseForm from '@/pages/CaseForm.vue';
 import AgentBoard from '@/components/phone/AgentBoard/Board.vue';
 import { EVENTS as CCEvent } from '@/services/acs.service';
 import { EventBus } from '@/event-bus';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Controller',
@@ -43,7 +45,7 @@ export default {
   },
   data() {
     return {
-      worksite: {},
+      worksite: null,
     };
   },
   methods: {
@@ -53,6 +55,9 @@ export default {
     savedWorksite(worksite) {
       this.worksite = worksite;
     },
+  },
+  computed: {
+    ...mapGetters('phone', ['caseId']),
   },
 };
 </script>

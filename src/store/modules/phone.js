@@ -22,7 +22,13 @@ const PhoneState = {
     id: null,
     duration: null,
     state: null,
+    attributes: {
+      caseType: null,
+      caseId: null,
+      callerId: null,
+    },
   },
+  cases: [],
   agentConfig: null,
   metrics: {},
   connectRunning: false,
@@ -52,6 +58,12 @@ const getters = {
     ),
   contactState: (state) =>
     state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
+  contactAttributes: (state) =>
+    state.contact.attributes ? state.contact.attributes : {},
+  callerId: (state) =>
+    state.contact.attributes ? state.contact.attributes.callerId : '',
+  caseId: (state) =>
+    state.contact.attributes ? state.contact.attributes.caseId : '',
 };
 
 // actions
@@ -106,14 +118,24 @@ const actions = {
     });
     ConnectService.bindContactEvents({
       onRefresh: (contact) => {
+        // Keep our contact state
+        // in sync with connect
         const contactId = contact.getContactId();
         const contactState = contact.getStatus();
         const duration = contact.getStatusDuration();
+        const contactAttrs = contact.getAttributes();
+        const { CaseId, CaseType, callerID } = contactAttrs;
+        Log.debug('got contact attributes:', contactAttrs);
         Log.debug('contact refresh: ', contactState);
         commit('setContact', {
           id: contactId,
           duration,
           state: contactState.type,
+          attributes: {
+            caseId: CaseId.value,
+            caseType: CaseType.value,
+            callerId: callerID.value,
+          },
         });
       },
     });

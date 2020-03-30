@@ -3,10 +3,10 @@
     <div class="contact--call">
       <div class="contact-stats">
         <base-text class="mobile" :weight="600" variant="h1">{{
-          `(769) 456-1986`
+          callerId
         }}</base-text>
         <base-text :weight="400" variant="h3">{{
-          lang.callStat(2, 5)
+          `2 ${lang.callStat.calls} | 1 ${lang.callStat.days}`
         }}</base-text>
       </div>
       <div class="contact-caller">

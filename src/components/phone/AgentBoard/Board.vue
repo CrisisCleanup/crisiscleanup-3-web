@@ -48,7 +48,10 @@ export default {
         scripts: '~~Scripts',
         calltime: '~~Call Time',
         english: '~~English',
-        callStat: (calls, days) => `~~${calls} Calls | ${days} Days`,
+        callStat: {
+          calls: '~~Calls',
+          days: '~~Days',
+        },
         notes: '~~Notes',
         callStatus: '~~Call Status *',
         issuesResolved: '~~Issues resolved',
