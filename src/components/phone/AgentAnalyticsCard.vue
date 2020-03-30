@@ -46,7 +46,7 @@ export default {
       const metricLang = {};
       metricLang[METRICS.AGENTS_ON_CALL] = '~~On the Phone Right Now';
       metricLang[METRICS.ONLINE] = '~~Volunteers Online';
-      metricLang[METRICS.CONTACTS_QUEUED] = '~~Peopled in Queue';
+      metricLang[METRICS.CONTACTS_QUEUED] = '~~People in Queue';
       metricLang[METRICS.NEEDED] = '~~Volunteers Needed';
       return this.getLang(metricLang);
     },
