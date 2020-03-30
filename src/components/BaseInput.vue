@@ -153,6 +153,7 @@ export default {
         'text-base': !this.inputClasses,
         xlarge: this.size === 'xlarge',
         large: this.size === 'large',
+        medium: this.size === 'medium',
         small: this.size === 'small',
         base: !this.size,
         'has-icon': Boolean(this.icon),
@@ -212,6 +213,10 @@ input.xlarge {
 
 input.large {
   height: 50px;
+}
+
+input.medium {
+  height: 40px;
 }
 
 input.small {
