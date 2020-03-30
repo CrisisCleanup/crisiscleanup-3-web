@@ -15,7 +15,7 @@
         <case-form
           class="shadow-xl"
           incident-id="199"
-          :pda-id="caseId"
+          :pda-id="pdas ? pdas[0] : null"
           disable-claim-and-save
           @savedWorksite="savedWorksite"
           @closeWorksite="closeWorksite"
@@ -56,7 +56,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('phone', ['caseId']),
+    ...mapGetters('phone', ['pdas', 'worksites']),
   },
 };
 </script>

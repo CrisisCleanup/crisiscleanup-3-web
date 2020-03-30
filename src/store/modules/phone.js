@@ -23,8 +23,8 @@ const PhoneState = {
     duration: null,
     state: null,
     attributes: {
-      caseType: null,
-      caseId: null,
+      pdas: [],
+      worksites: [],
       callerId: null,
     },
   },
@@ -62,8 +62,10 @@ const getters = {
     state.contact.attributes ? state.contact.attributes : {},
   callerId: (state) =>
     state.contact.attributes ? state.contact.attributes.callerId : '',
-  caseId: (state) =>
-    state.contact.attributes ? state.contact.attributes.caseId : '',
+  pdas: (state) =>
+    state.contact.attributes ? state.contact.attributes.pdas : [],
+  workflows: (state) =>
+    state.contact.attributes ? state.contact.attributes.workflows : [],
   callDuration: (state) => (state.contact ? state.contact.duration : 0),
 };
 
@@ -125,7 +127,7 @@ const actions = {
         const contactState = contact.getStatus();
         const duration = contact.getStatusDuration();
         const contactAttrs = contact.getAttributes();
-        const { CaseId, CaseType, callerID } = contactAttrs;
+        const { pdas, worksites, callerID } = contactAttrs;
         Log.debug('got contact attributes:', contactAttrs);
         Log.debug('contact refresh: ', contactState);
         commit('setContact', {
@@ -133,9 +135,9 @@ const actions = {
           duration,
           state: contactState.type,
           attributes: {
-            caseId: CaseId.value,
-            caseType: CaseType.value,
             callerId: callerID.value,
+            worksites: worksites.value.split(','),
+            pdas: pdas.value.split(','),
           },
         });
       },
