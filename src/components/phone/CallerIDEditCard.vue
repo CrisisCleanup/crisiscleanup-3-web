@@ -1,69 +1,97 @@
 <template>
-  <div>
-    <modal
-      v-if="active"
-      modal-classes="w-108"
-      @ok="active = false"
-      @close="active = false"
-    >
-      <div class="flex flex-col justify-around ml-12 mr-12 mt-8">
-        <!-- Greeting -->
-        <base-text
-          variant="body"
-          :weight="700"
-          class="text-crisiscleanup-dark-500 text-center pb-3"
-        >
-          {{ lang.title }}
+  <modal
+    v-if="active"
+    modal-classes="w-1/3 edit-modal shadow-xl"
+    @ok="active = false"
+    @close="active = false"
+  >
+    <div class="flex flex-col justify-around p-12">
+      <!-- Greeting -->
+      <base-text
+        variant="h1"
+        :weight="700"
+        class="text-crisiscleanup-dark-500 text-center pb-3"
+      >
+        {{ `${lang.title} ${currentUser.first_name}!` }}
+      </base-text>
+      <base-text
+        variant="body"
+        :weight="300"
+        class="text-crisiscleanup-dark-300 text-center pb-3"
+      >
+        {{ lang.body }}
+      </base-text>
+      <base-text
+        variant="body"
+        :weight="300"
+        class="text-crisiscleanup-dark-300 text-center pb-3"
+      >
+        {{ lang.bodyPhone }}
+      </base-text>
+      <div v-if="request.phone" class="section flex flex-col justify-around">
+        <!-- Phone # -->
+        <base-text variant="bodysm" :weight="100" class="section-header">
+          {{ lang.inputs.phone }}
         </base-text>
-        <base-text
-          variant="body"
-          :weight="300"
-          class="text-crisiscleanup-dark-300 text-center pb-3"
-        >
-          {{ lang.body }}
+        <base-input
+          v-model="inputNumber"
+          size="medium"
+          :action="() => {}"
+          placeholder="+1 (123) 456-7890"
+          @input="(value) => (number = value)"
+        />
+      </div>
+      <div v-if="request.lang" class="section flex flex-col">
+        <base-text variant="bodysm" :weight="100" class="section-header">
+          {{ lang.inputs.lang }}
         </base-text>
-        <div class="flex flex-col justify-around">
-          <!-- Phone # -->
-          <base-input
-            v-model="inputNumber"
-            size="large"
-            :action="() => {}"
-            placeholder="+1 (123) 456-7890"
-          />
-        </div>
+        <!-- Language -->
+        <form-select
+          class="flex-grow border border-crisiscleanup-dark-100"
+          :value="currentUser.languages"
+          multiple
+          :options="supportedLanguages"
+          item-key="id"
+          label="name_t"
+          size="large"
+          select-classes="bg-white border text-xs p-1 profile-select"
+          :limit="2"
+          @input="(value) => (languages = value)"
+        />
       </div>
-      <!-- Footer -->
-      <div class="flex justify-around"></div>
-      <div slot="footer" class="flex p-1 justify-center mb-3">
-        <base-button
-          variant="solid"
-          class="px-3 py-2"
-          :action="() => updateUserMobile()"
-          >{{ lang.confirm }}</base-button
-        >
-      </div>
-    </modal>
-  </div>
+    </div>
+    <!-- Footer -->
+    <div slot="footer" class="flex p-3 my-6 justify-center mb-3 footer">
+      <base-button
+        variant="solid"
+        size="large"
+        :action="() => updateUserNeeded()"
+        >{{ lang.confirm }}</base-button
+      >
+    </div>
+  </modal>
 </template>
 
 <script>
 import VueTypes from 'vue-types';
 import { LangMixin, UserMixin } from '@/mixins';
-import User from '@/models/User';
+import Language from '@/models/Language';
 
 export default {
   name: 'EditCallerID',
   mixins: [UserMixin, LangMixin],
   data() {
     return {
-      togglePhone: false,
-      toggleLang: false,
-      toggleStates: false,
-      inputNumber: '',
+      number: '',
+      languages: [],
     };
   },
   props: {
     active: VueTypes.bool.def(false),
+    request: VueTypes.shape({
+      phone: VueTypes.bool.def(false),
+      lang: VueTypes.bool.def(false),
+    }),
   },
   methods: {
     validateNumber(number) {
@@ -73,25 +101,63 @@ export default {
        */
       return number;
     },
-    async updateUserMobile() {
-      if (this.validateNumber(this.inputNumber)) {
-        await User.update({
-          where: this.currentUser.id,
-          data: {
-            mobile: this.inputNumber,
-          },
+    async updateUserNeeded() {
+      if (this.number && this.validateNumber(this.number)) {
+        this.updateUser(this.number, 'mobile');
+      }
+      if (this.languages) {
+        this.languages.forEach((lang, idx) => {
+          if (lang) {
+            const field = idx ? 'secondary_language' : 'primary_language';
+            this.updateUser(lang, field);
+          }
         });
+      }
+      try {
+        await this.saveUser();
+        this.$emit('user-updated', this.currentUser);
+      } catch (e) {
+        this.$log.error('Failed to save user', e);
+        this.$toasted.error(e);
       }
     },
   },
   computed: {
     lang() {
       return this.getLang({
-        title: `~~Welcome ${this.currentUser.first_name}`,
-        body: `~~To become a member of the Crisis Cleanup Virtual Call Center, please provide a valid phone number to receive calls at. Don't worry, your number will remain masked for any inbound or outbound calls.`,
+        title: `~~Welcome`,
+        body:
+          '~~Please confirm the following details for usage in the Crisis Cleanup Virtual Call Center.',
+        bodyPhone:
+          "Don't worry, we will hide your phone number on all inbound and outbound calls for your protection.",
         confirm: '~~Confirm',
+        inputs: {
+          phone: '~~Enter a valid phone number',
+          lang: '~~Choose the languages you work with',
+        },
       });
+    },
+    supportedLanguages() {
+      const languages = Language.all();
+      const ids = [2, 7];
+      return languages.filter((l) => ids.includes(l.id));
     },
   },
 };
 </script>
+
+<style scoped lang="scss">
+.edit-modal {
+  .section {
+    @apply py-3;
+    &-header {
+      @apply text-crisiscleanup-dark-400 py-1;
+    }
+  }
+  .footer {
+    @apply shadow-inner;
+    position: relative;
+    margin: 0;
+  }
+}
+</style>
