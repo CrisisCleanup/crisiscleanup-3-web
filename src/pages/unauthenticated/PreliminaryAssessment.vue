@@ -242,9 +242,10 @@ export default {
   },
   computed: {
     fieldTree() {
+      const excludeSections = ['claim_status_report_info'];
       if (this.currentIncident && this.currentIncident.form_fields) {
         const formFields = this.currentIncident.form_fields;
-        return nest(formFields);
+        return nest(formFields, null, 'field_parent_key', excludeSections);
       }
       return {};
     },

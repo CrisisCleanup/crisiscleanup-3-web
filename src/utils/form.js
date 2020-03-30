@@ -18,9 +18,14 @@ export const buildForm = (key, dict, array) => {
   }
 };
 
-export const nest = (items, key = null, link = 'field_parent_key') =>
+export const nest = (
+  items,
+  key = null,
+  link = 'field_parent_key',
+  excluded = [],
+) =>
   items
-    .filter((item) => item[link] === key)
+    .filter((item) => item[link] === key && !excluded.includes(item.field_key))
     .map((item) => ({ ...item, children: nest(items, item.field_key) }));
 
 export const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
