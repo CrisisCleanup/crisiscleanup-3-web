@@ -1,3 +1,6 @@
+import { EventBus } from '@/event-bus';
+import Pda from '@/models/Pda';
+import Worksite from '@/models/Worksite';
 import * as ConnectService from '@/services/acs.service';
 import * as SSO from '@/services/sso.service';
 import { PhoneApi } from '@/utils/api';
@@ -28,7 +31,12 @@ const PhoneState = {
       callerId: null,
     },
   },
-  cases: [],
+  controller: {
+    currentCase: {
+      id: null,
+      type: null,
+    },
+  },
   agentConfig: null,
   metrics: {},
   connectRunning: false,
@@ -64,9 +72,32 @@ const getters = {
     state.contact.attributes ? state.contact.attributes.callerId : '',
   pdas: (state) =>
     state.contact.attributes ? state.contact.attributes.pdas : [],
-  workflows: (state) =>
-    state.contact.attributes ? state.contact.attributes.workflows : [],
+  worksites: (state) =>
+    state.contact.attributes ? state.contact.attributes.worksites : [],
   callDuration: (state) => (state.contact ? state.contact.duration : 0),
+  currentPdaId: (state) => {
+    const {
+      controller: { currentCase },
+    } = state;
+    if (currentCase.type === 'pda') {
+      return currentCase.id;
+    }
+    return null;
+  },
+  currentCase: (state) => {
+    const {
+      controller: {
+        currentCase: { id, type },
+      },
+    } = state;
+    if (id) {
+      if (type === 'pda') {
+        return Pda.find(id);
+      }
+      return Worksite.find(id);
+    }
+    return null;
+  },
 };
 
 // actions
@@ -130,15 +161,19 @@ const actions = {
         const { pdas, worksites, callerID } = contactAttrs;
         Log.debug('got contact attributes:', contactAttrs);
         Log.debug('contact refresh: ', contactState);
+        const workSites = worksites.value.split(',').filter((v) => v !== '');
+        const Pdas = pdas.value.split(',').filter((v) => v !== '');
+        const attributes = {
+          callerId: callerID.value,
+          worksites: workSites,
+          pdas: Pdas,
+        };
+        EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
         commit('setContact', {
           id: contactId,
           duration,
           state: contactState.type,
-          attributes: {
-            callerId: callerID.value,
-            worksites: worksites.value.split(','),
-            pdas: pdas.value.split(','),
-          },
+          attributes,
         });
       },
     });
@@ -158,6 +193,9 @@ const actions = {
     commit('setContact', {
       duration: contact.getStatusDuration(),
     });
+  },
+  async setCurrentCase({ commit }, currentCase) {
+    commit('setCurrentCase', currentCase);
   },
 };
 
@@ -188,6 +226,12 @@ const mutations = {
   },
   setContact(state, newState) {
     state.contact = { ...state.contact, ...newState };
+  },
+  setCurrentCase(state, currentCase) {
+    state.controller.currentCase = {
+      ...state.controller.currentCase,
+      ...currentCase,
+    };
   },
 };
 
