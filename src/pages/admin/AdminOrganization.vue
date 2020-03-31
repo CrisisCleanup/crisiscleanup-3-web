@@ -245,6 +245,7 @@
           @input="roleToAdd = $event"
           item-key="id"
           label="name_t"
+          searchable
         ></form-select>
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
@@ -268,6 +269,7 @@
                 multiple
                 item-key="id"
                 label="name_t"
+                searchable
                 @input="
                   (value) => {
                     capabilityToAdd = value;
@@ -323,6 +325,7 @@
                 multiple
                 item-key="id"
                 label="name"
+                searchable
                 @input="
                   (value) => {
                     incidentToAdd = value;
@@ -346,7 +349,7 @@
               {{ incident | getIncidentName(incidents) }}
             </div>
 
-            <base-text variant="h3">Pending Incidents</base-text>
+            <base-text variant="h3">Pending Requests</base-text>
             <div
               style="
                 display: grid;
@@ -355,7 +358,18 @@
               "
             >
               <template v-for="request in incidentRequests">
-                {{ request.incident | getIncidentName(incidents) }}
+                <div class="flex items-center">
+                  <div
+                    v-tooltip="{
+                      content: getContactView(request),
+                      trigger: 'hover',
+                      classes: 'interactive-tooltip w-72',
+                    }"
+                  >
+                    <ccu-icon type="info" size="small" class="mr-2" />
+                  </div>
+                  {{ request.incident | getIncidentName(incidents) }}
+                </div>
                 <div class="flex">
                   <base-button
                     :text="$t('~~Approve')"
@@ -574,6 +588,16 @@ export default {
     });
   },
   methods: {
+    getContactView(request) {
+      const contact = request.requested_by_contact;
+      return `
+          <div>Requested By</div>
+          <div>${contact.first_name} ${contact.last_name}</div>
+          <div>${contact.email}</div>
+          <div>${contact.mobile}</div>
+          </p>
+        `;
+    },
     async approveIncidentRequest(requestId) {
       await this.$http.post(
         `${process.env.VUE_APP_API_BASE_URL}/incident_requests/${requestId}/respond`,
@@ -607,7 +631,7 @@ export default {
           `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests?organization=${this.$route.params.organization_id}`,
         ),
         incidentRequests: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/incident_requests?organization=${this.$route.params.organization_id}`,
+          `${process.env.VUE_APP_API_BASE_URL}/admins/incident_requests?organization=${this.$route.params.organization_id}`,
         ),
         users: await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/users?organization=${this.$route.params.organization_id}`,
