@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white shadow-xl">
+  <div class="bg-white shadow-crisiscleanup-card">
     <!-- SET CARD WIDTH TO 2/5 -->
     <div class="flex flex-row p-3 justify-between items-center pt-3">
       <base-text variant="h3">Leaderboard</base-text>

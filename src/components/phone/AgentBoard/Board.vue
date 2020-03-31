@@ -1,5 +1,5 @@
 <template>
-  <div class="board board--grid shadow-xl">
+  <div class="board board--grid shadow-crisiscleanup-card">
     <div class="grid--nav">
       <board-nav :routes="headerNav" :lang="lang" :active-key="activeKey" />
     </div>
