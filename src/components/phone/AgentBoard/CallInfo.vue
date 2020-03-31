@@ -11,7 +11,7 @@
       </div>
       <div class="contact-caller">
         <ccu-icon with-text size="md" :type="icons.phone_user">
-          <base-text>Julie Smith</base-text>
+          <base-text>{{ callerName }}</base-text>
         </ccu-icon>
         <ccu-icon with-text size="md" :type="icons.earth_globe">
           <base-text>{{ lang.english }}</base-text>
@@ -44,9 +44,12 @@ export default {
     ...mapActions('phone', ['syncCallDuration']),
   },
   computed: {
-    ...mapGetters('phone', ['callerId', 'callDuration']),
+    ...mapGetters('phone', ['callerId', 'callDuration', 'currentCase']),
     callTimer() {
       return this.$moment.duration(this.callDuration, 'ms').format('h:mm:ss');
+    },
+    callerName() {
+      return this.currentCase.name ? this.currentCase.name : 'Unknown';
     },
   },
 };
