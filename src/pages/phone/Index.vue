@@ -6,6 +6,8 @@
 import { mapGetters, mapActions } from 'vuex';
 import { EventBus } from '@/event-bus';
 import { EVENTS as CCEvent } from '@/services/acs.service';
+import Worksite from '@/models/Worksite';
+import Pda from '@/models/Pda';
 import Gateway from './Gateway.vue';
 import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
@@ -15,15 +17,76 @@ export default {
   data() {
     return {
       page: Gateway,
+      preresolved: false,
     };
   },
   computed: {
-    ...mapGetters('phone', ['connectReady', 'agentState']),
+    ...mapGetters('phone', ['connectReady', 'agentState', 'worksites', 'pdas']),
   },
   methods: {
-    ...mapActions('phone', ['setPopup']),
+    ...mapActions('phone', ['setPopup', 'setCurrentCase']),
+    async fetchCases(caseModel, ids) {
+      const cases = await Promise.all(
+        ids.map(async id => {
+          await caseModel.api().get(`/${caseModel.entity}/${id}`);
+          return caseModel.find(id);
+        }),
+      );
+      return cases;
+    },
+    async resolveCases({ pdas, worksites }) {
+      this.$log.debug('resolving caller cases...');
+      const currentCase = {
+        id: null,
+        type: null,
+      };
+      const worksiteCases = await this.fetchCases(Worksite, worksites);
+      const pdasCases = await this.fetchCases(Pda, pdas);
+      const freshPdas = [];
+      this.$log.debug('caller PDAs:', pdasCases);
+      this.$log.debug('caller Worksites:', worksiteCases);
+
+      await Promise.all(
+        pdasCases.map(async p => {
+          if (p.worksite_id) {
+            const wksite = await Worksite.api().fetch(p.worksite_id);
+            worksiteCases.push(wksite);
+          } else {
+            freshPdas.push(p);
+          }
+        }),
+      );
+
+      if (freshPdas) {
+        this.$log.debug(
+          'this appears to be a non-verified PDA call',
+          freshPdas,
+        );
+        currentCase.type = 'pda';
+        // set the first one to active
+        currentCase.id = freshPdas.shift().id;
+        return this.setCurrentCase(currentCase);
+      }
+      if (worksiteCases) {
+        this.$log.debug(
+          'this call appears to refer to an existing worksite(s)',
+          worksiteCases,
+        );
+        currentCase.type = 'worksite';
+        currentCase.id = worksiteCases.shift().id;
+        return this.setCurrentCase(currentCase);
+      }
+      // no pdas or worksites found
+      return null;
+    },
   },
   created() {
+    EventBus.$on(CCEvent.INBOUND, async attrs => {
+      if (!this.preresolved) {
+        await this.resolveCases(attrs);
+        this.preresolved = true;
+      }
+    });
     EventBus.$on(CCEvent.ON_CALL, () => {
       this.page = Controller;
     });
@@ -31,16 +94,12 @@ export default {
       this.page = Dashboard;
     });
     if (!this.connectReady) {
-      this.unsub = this.$store.subscribe((mutation) => {
-        switch (mutation.type) {
-          case 'phone/setAgentState':
-            this.$toasted.success('Success!');
-            this.page = Dashboard;
-            this.setPopup(false);
-            this.unsub();
-            break;
-          default:
-            break;
+      this.unsub = this.$store.subscribe(mutation => {
+        if (mutation.type === 'phone/setAgentState') {
+          this.$toasted.success('Success!');
+          this.page = Dashboard;
+          this.setPopup(false);
+          this.unsub();
         }
       });
     } else {
