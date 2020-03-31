@@ -3,15 +3,17 @@
     <base-text variant="h3">{{ lang.notes }}</base-text>
     <form-select
       class="select"
-      :options="statuses"
-      :label="status"
+      :options="selectValues"
+      item-key="value"
+      label="name_t"
       :value="status"
+      @input="(value) => setCaseStatus({ id: value })"
     />
     <base-input
       class="notes"
-      v-model="additonalNotes"
       text-area
       size="large"
+      @input="(value) => setCaseStatus({ notes: value })"
       :placeholder="lang.issuesResolved"
     ></base-input>
   </div>
@@ -19,27 +21,34 @@
 
 <script>
 import VueTypes from 'vue-types';
+import PhoneStatus from '@/models/PhoneStatus';
+import { AgentMixin } from '@/mixins';
 
 export default {
   name: 'BoardStatus',
+  mixins: [AgentMixin],
   props: {
     lang: VueTypes.objectOf(VueTypes.any),
   },
   data() {
     return {
-      status: 'One',
-      additonalNotes: '',
-      statuses: [
-        {
-          label: 'One',
-          code: 'one',
-        },
-        {
-          label: 'Two',
-          code: 'two',
-        },
-      ],
+      status: null,
+      notes: '',
     };
+  },
+
+  computed: {
+    statuses() {
+      return PhoneStatus.all();
+    },
+    selectValues() {
+      return Object.values(this.statuses).map(({ id, status_name_t }) => {
+        return {
+          value: id,
+          name_t: status_name_t,
+        };
+      });
+    },
   },
 };
 </script>
