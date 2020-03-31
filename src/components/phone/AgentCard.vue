@@ -84,7 +84,7 @@ export default {
   },
   data() {
     return {
-      toggleOpen: false,
+      toggleOpen: true,
       completedTraining: false,
       isShowingTrainingModal: false,
       editCardActive: false,
