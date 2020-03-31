@@ -27,6 +27,11 @@ export default class Pda extends Model {
     return `${address}, ${city}`;
   }
 
+  get city_state() {
+    const { city, state } = this;
+    return `${city}, ${state}`;
+  }
+
   get latitude() {
     return this.location ? this.location.coordinates[1] : 10;
   }

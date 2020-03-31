@@ -1,9 +1,9 @@
-import { Model } from '@vuex-orm/core';
+import { secondsToHm } from '@/filters';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
-import { getQueryString } from '@/utils/urls';
-import { secondsToHm } from '@/filters';
 import enums from '@/store/modules/enums';
+import { getQueryString } from '@/utils/urls';
+import { Model } from '@vuex-orm/core';
 
 export default class Worksite extends Model {
   static entity = 'worksites';
