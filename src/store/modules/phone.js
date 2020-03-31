@@ -1,5 +1,6 @@
 import { EventBus } from '@/event-bus';
 import Pda from '@/models/Pda';
+import PhoneOutbound from '@/models/PhoneOutbound';
 import Worksite from '@/models/Worksite';
 import * as ConnectService from '@/services/acs.service';
 import * as SSO from '@/services/sso.service';
@@ -28,6 +29,7 @@ const PhoneState = {
     attributes: {
       pdas: [],
       worksites: [],
+      outboundIds: [],
       callerId: null,
     },
   },
@@ -98,6 +100,24 @@ const getters = {
     }
     return null;
   },
+  outboundIds: (state) =>
+    state.contact.attributes ? state.contact.attributes.outboundIds : [],
+  currentOutbound: (state) => {
+    if (state.controller.currentCase) {
+      const caseIdx = state.contact.attributes.pdas.indexOf(
+        state.controller.currentCase.id,
+      );
+      const id = state.contact.attributes.outboundIds.filter((outId, idx) =>
+        idx === caseIdx ? outId : false,
+      );
+      if (id) {
+        return PhoneOutbound.find(id[0]);
+      }
+    }
+    return null;
+  },
+  currentCaseType: (state) =>
+    state.controller.currentCase ? state.controller.currentCase.type : null,
 };
 
 // actions
@@ -158,15 +178,17 @@ const actions = {
         const contactState = contact.getStatus();
         const duration = contact.getStatusDuration();
         const contactAttrs = contact.getAttributes();
-        const { pdas, worksites, callerID } = contactAttrs;
         Log.debug('got contact attributes:', contactAttrs);
+        const { pdas, worksites, callerID, ids } = contactAttrs;
         Log.debug('contact refresh: ', contactState);
         const workSites = worksites.value.split(',').filter((v) => v !== '');
         const Pdas = pdas.value.split(',').filter((v) => v !== '');
+        const outboundIds = ids.value.split(',').filter((v) => v !== '');
         const attributes = {
           callerId: callerID.value,
           worksites: workSites,
           pdas: Pdas,
+          outboundIds,
         };
         EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
         commit('setContact', {
@@ -193,6 +215,7 @@ const actions = {
     commit('setContact', {
       duration: contact.getStatusDuration(),
     });
+    return this.callDuration;
   },
   async setCurrentCase({ commit }, currentCase) {
     commit('setCurrentCase', currentCase);
