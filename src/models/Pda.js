@@ -52,4 +52,14 @@ export default class Pda extends Model {
       };
     }, {});
   }
+
+  static apiConfig = {
+    actions: {
+      async associateWorksite(pdaId, worksite) {
+        await this.patch(`/pdas/${pdaId}`, {
+          worksite,
+        });
+      },
+    },
+  };
 }
