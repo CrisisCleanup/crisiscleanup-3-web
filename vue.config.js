@@ -34,7 +34,7 @@ module.exports = {
     };
     if (!(process.env.NODE_ENV === 'production')) {
       return {
-        devtool: 'cheap-module-eval-source-map',
+        devtool: 'source-map',
         output: {
           pathinfo: false,
         },
