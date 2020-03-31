@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow-xl bg-white">
+  <div class="shadow-crisiscleanup-card bg-white">
     <div class="bg-white text-base font-semibold content-center m-2 p-2 h-8">
       <header>My Statistics</header>
     </div>

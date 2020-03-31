@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white shadow-xl">
+  <div class="bg-white shadow-crisiscleanup-card">
     <div class="flex justify-around bg-white">
       <base-text variant="h2" weight="600" class="m-5"
         >Virtual Call Center Status</base-text

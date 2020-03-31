@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white shadow-xl">
+  <div class="bg-white shadow-crisiscleanup-card">
     <!-- Header -->
     <base-text
       variant="h3"
