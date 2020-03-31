@@ -1,28 +1,32 @@
 <template>
-  <phone-layout>
-    <template #grid-start>
-      <div class="grid-start">
-        <agent-block />
-      </div>
+  <Loader :loading="loading" class="h-full w-full">
+    <template #content>
+      <phone-layout>
+        <template #grid-start>
+          <div class="grid-start">
+            <agent-block />
+          </div>
+        </template>
+        <template #grid-main>
+          <div class="grid-main">
+            <agent-board />
+          </div>
+        </template>
+        <template #grid-end>
+          <div class="grid-end flex">
+            <case-form
+              class="shadow-xl"
+              incident-id="199"
+              :pda-id="pdas ? pdas[0] : null"
+              disable-claim-and-save
+              @savedWorksite="savedWorksite"
+              @closeWorksite="closeWorksite"
+            />
+          </div>
+        </template>
+      </phone-layout>
     </template>
-    <template #grid-main>
-      <div class="grid-main">
-        <agent-board />
-      </div>
-    </template>
-    <template #grid-end>
-      <div class="grid-end flex">
-        <case-form
-          class="shadow-xl"
-          incident-id="199"
-          :pda-id="pdas ? pdas[0] : null"
-          disable-claim-and-save
-          @savedWorksite="savedWorksite"
-          @closeWorksite="closeWorksite"
-        />
-      </div>
-    </template>
-  </phone-layout>
+  </Loader>
 </template>
 
 <script>
@@ -33,6 +37,7 @@ import AgentBoard from '@/components/phone/AgentBoard/Board.vue';
 import { EVENTS as CCEvent } from '@/services/acs.service';
 import { EventBus } from '@/event-bus';
 import { mapGetters } from 'vuex';
+import Loader from '@/components/Loader.vue';
 
 export default {
   name: 'Controller',
@@ -41,10 +46,12 @@ export default {
     CaseForm,
     AgentBlock,
     AgentBoard,
+    Loader,
   },
   data() {
     return {
       worksite: null,
+      loading: false,
     };
   },
   methods: {
@@ -56,7 +63,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('phone', ['pdas', 'worksites']),
+    ...mapGetters('phone', ['pdas', 'worksites', 'currentCase']),
   },
 };
 </script>

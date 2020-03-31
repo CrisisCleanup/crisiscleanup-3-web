@@ -20,6 +20,7 @@ export const EVENTS = (() => {
   const st = (e) => `${ev('status')}:${e}`;
   return {
     REQUEST: ev('requestAgent'),
+    INBOUND: ev('inbound'),
     AVAILABLE: st('available'),
     ON_CALL: st('oncall'),
     PAUSED: st('paused'),
