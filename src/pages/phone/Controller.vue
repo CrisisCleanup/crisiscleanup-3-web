@@ -15,7 +15,7 @@
         <template #grid-end>
           <div class="grid-end flex">
             <case-form
-              class="shadow-xl"
+              class="shadow-crisiscleanup-card"
               incident-id="199"
               :pda-id="pdas ? pdas[0] : null"
               disable-claim-and-save
@@ -36,11 +36,14 @@ import CaseForm from '@/pages/CaseForm.vue';
 import AgentBoard from '@/components/phone/AgentBoard/Board.vue';
 import { EVENTS as CCEvent } from '@/services/acs.service';
 import { EventBus } from '@/event-bus';
-import { mapGetters } from 'vuex';
 import Loader from '@/components/Loader.vue';
+import { AgentMixin } from '@/mixins';
+import PhoneOutbound from '@/models/PhoneOutbound';
+import Pda from '@/models/Pda';
 
 export default {
   name: 'Controller',
+  mixins: [AgentMixin],
   components: {
     PhoneLayout,
     CaseForm,
@@ -58,12 +61,20 @@ export default {
     closeWorksite() {
       EventBus.$emit(CCEvent.OFF_CALL);
     },
-    savedWorksite(worksite) {
+    async savedWorksite(worksite) {
       this.worksite = worksite;
+      this.$log.debug('Saved worksite: ', worksite);
+      if (this.currentCaseType === 'pda') {
+        this.$log.debug('associating worksite to pda...');
+        await Pda.api().associateWorksite(this.currentCase.id, worksite.id);
+      }
+      this.$log.debug('updating outbound status with:', this.caseStatusId);
+
+      await PhoneOutbound.api().updateStatus(
+        this.currentOutbound.id,
+        this.caseStatusId,
+      );
     },
-  },
-  computed: {
-    ...mapGetters('phone', ['pdas', 'worksites', 'currentCase']),
   },
 };
 </script>
