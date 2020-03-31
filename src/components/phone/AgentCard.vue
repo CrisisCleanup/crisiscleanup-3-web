@@ -1,7 +1,11 @@
 <template>
-  <div class="agentcard shadow-xl">
+  <div class="agentcard shadow-crisiscleanup-card">
     <div class="card-edit">
-      <ccu-icon size="md" :type="icons.edit" />
+      <ccu-icon
+        @click.native="() => (editCardActive = !editCardActive)"
+        size="md"
+        :type="icons.edit"
+      />
     </div>
     <div class="profile">
       <div class="profile--img">
@@ -53,6 +57,11 @@
       @onClose="isShowingTrainingModal = false"
       @onComplete="onTrainingComplete"
     ></trainings-modal>
+    <agent-edit-card
+      :active="editCardActive"
+      :request="{ phone: true, lang: true }"
+      @user-updated="() => (editCardActive = false)"
+    />
   </div>
 </template>
 
@@ -63,16 +72,22 @@ import { STATES as CCState, EVENTS as CCEvent } from '@/services/acs.service';
 import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
 import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 import { EventBus } from '@/event-bus';
+import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
 
 export default {
   name: 'AgentCard',
   mixins: [IconsMixin, LangMixin, UserMixin],
-  components: { moreInfo: ContactMoreInfo, TrainingsModal },
+  components: {
+    moreInfo: ContactMoreInfo,
+    'agent-edit-card': CallerIDEditCard,
+    TrainingsModal,
+  },
   data() {
     return {
       toggleOpen: false,
       completedTraining: false,
       isShowingTrainingModal: false,
+      editCardActive: false,
     };
   },
   async mounted() {
