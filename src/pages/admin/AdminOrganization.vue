@@ -109,6 +109,7 @@
                 grid-template-columns: max-content max-content max-content max-content;
                 grid-column-gap: 10px;
               "
+              class="border px-2 py-1"
             >
               <template v-for="contact in organization.primary_contacts">
                 <span class="inline-block"
@@ -128,6 +129,7 @@
                 grid-template-columns: max-content max-content max-content max-content;
                 grid-column-gap: 10px;
               "
+              class="max-h-xl overflow-auto border px-2 py-1"
             >
               <template v-for="contact in ghostUsers">
                 <span class="inline-block"
@@ -138,6 +140,32 @@
                 }}</span>
                 <span class="inline-block">{{ contact.email }}</span>
                 <span class="inline-block">{{ contact.mobile }}</span>
+              </template>
+            </div>
+            <base-text variant="h3">All Users</base-text>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: max-content max-content max-content max-content max-content;
+                grid-column-gap: 10px;
+              "
+              class="max-h-xl overflow-auto border px-2 py-1"
+            >
+              <template v-for="user in users">
+                <span class="inline-block"
+                  >{{ user.first_name }} {{ user.last_name }}</span
+                >
+                <span class="inline-block">{{
+                  user.title ? user.title : ''
+                }}</span>
+                <span class="inline-block">{{ user.email }}</span>
+                <span class="inline-block">{{ user.mobile }}</span>
+                <base-link
+                  :key="user.id"
+                  target="_blank"
+                  :href="`${apiUrl}/ccadmin/users/user/${user.id}/change/`"
+                  >See in Django Admin</base-link
+                >
               </template>
             </div>
             <base-text variant="h3">General Info</base-text>
@@ -279,6 +307,102 @@
           </div>
         </div>
       </div>
+      <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
+        <base-text variant="h2" :weight="600">
+          Incidents
+        </base-text>
+        <div class="flex item-start">
+          <div>
+            <div class="flex items-center justify-start">
+              <form-select
+                :placeholder="$t('Incident')"
+                :value="incidentToAdd"
+                class="w-auto border border-crisiscleanup-dark-100 multi-select mr-1"
+                select-classes="h-full"
+                :options="selectableIncidents"
+                multiple
+                item-key="id"
+                label="name"
+                @input="
+                  (value) => {
+                    incidentToAdd = value;
+                  }
+                "
+              ></form-select>
+              <base-button
+                :text="$t('Add')"
+                size="large"
+                variant="solid"
+                :action="
+                  () => {
+                    newIncidents = [...newIncidents, ...incidentToAdd];
+                    incidentToAdd = null;
+                  }
+                "
+              />
+            </div>
+            <base-text variant="h3">New Incidents</base-text>
+            <div v-for="incident in newIncidents">
+              {{ incident | getIncidentName(incidents) }}
+            </div>
+
+            <base-text variant="h3">Pending Incidents</base-text>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: max-content auto;
+                grid-row-gap: 5px;
+              "
+            >
+              <template v-for="request in incidentRequests">
+                {{ request.incident | getIncidentName(incidents) }}
+                <div class="flex">
+                  <base-button
+                    :text="$t('~~Approve')"
+                    variant="solid"
+                    size="small"
+                    class="mx-2 w-24"
+                    :action="
+                      () => {
+                        approveIncidentRequest(request.id);
+                      }
+                    "
+                  />
+                  <base-button
+                    :text="$t('~~Reject')"
+                    variant="outline"
+                    size="small"
+                    class="mx-2 w-24"
+                    :action="
+                      () => {
+                        rejectIncidentRequest(request.id);
+                      }
+                    "
+                  />
+                </div>
+              </template>
+            </div>
+          </div>
+          <div class="mx-3">
+            <base-text variant="h3">Current Incidents</base-text>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: max-content max-content max-content max-content;
+                grid-column-gap: 10px;
+              "
+            >
+              <div
+                class="pr-3"
+                v-for="incident in organization.approved_incidents"
+              >
+                {{ incident | getIncidentName(incidents) }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="flex">
         <div class="w-1/2 bg-white shadow mt-6 mr-3">
           <div class="border-b px-8 py-4 font-semibold">
@@ -364,11 +488,6 @@
           />
         </modal>
       </div>
-      <IncidentApprovalTable
-        class="my-6"
-        :requests="incidentRequests"
-        @reload="() => {}"
-      ></IncidentApprovalTable>
     </template>
   </Loader>
 </template>
@@ -379,17 +498,21 @@ import Location from '@/models/Location';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
 import Loader from '../../components/Loader';
-import IncidentApprovalTable from '../../components/IncidentApprovalTable';
 import { getErrorMessage } from '../../utils/errors';
 import LocationTool from '../../components/LocationTool';
 import { hash } from '../../utils/promise';
 
 export default {
   name: 'AdminOrganization',
-  components: { IncidentApprovalTable, Loader, LocationTool },
+  components: { Loader, LocationTool },
   filters: {
     getCapabilityName(value, capabilities) {
-      return capabilities && capabilities.find((c) => c.id === value).name_t;
+      return (
+        capabilities.length && capabilities.find((c) => c.id === value).name_t
+      );
+    },
+    getIncidentName(value, incidents) {
+      return incidents.length && incidents.find((c) => c.id === value).name;
     },
   },
   computed: {
@@ -421,6 +544,17 @@ export default {
       }
       return [];
     },
+    selectableIncidents() {
+      if (this.organization) {
+        return this.incidents.filter((incident) => {
+          return (
+            !this.organization.approved_incidents.includes(incident.id) &&
+            !this.newIncidents.includes(incident.id)
+          );
+        });
+      }
+      return [];
+    },
   },
   async mounted() {
     this.loading = true;
@@ -440,6 +574,24 @@ export default {
     });
   },
   methods: {
+    async approveIncidentRequest(requestId) {
+      await this.$http.post(
+        `${process.env.VUE_APP_API_BASE_URL}/incident_requests/${requestId}/respond`,
+        {
+          action: 'approve',
+        },
+      );
+      this.loadPageData();
+    },
+    async rejectIncidentRequest(requestId) {
+      await this.$http.post(
+        `${process.env.VUE_APP_API_BASE_URL}/incident_requests/${requestId}/respond`,
+        {
+          action: 'reject',
+        },
+      );
+      this.loadPageData();
+    },
     async loadPageData() {
       const pageData = await hash({
         organization: await this.$http.get(
@@ -460,6 +612,9 @@ export default {
         users: await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/users?organization=${this.$route.params.organization_id}`,
         ),
+        incidents: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/incidents`,
+        ),
         ghostUsers: await this.getGhostUsers(),
       });
       this.organization = pageData.organization.data;
@@ -468,6 +623,7 @@ export default {
       this.roleRequests = pageData.roleRequests.data.results;
       this.incidentRequests = pageData.incidentRequests.data.results;
       this.users = pageData.users.data.results;
+      this.incidents = pageData.incidents.data.results;
       this.ghostUsers = pageData.ghostUsers;
     },
 
@@ -613,6 +769,29 @@ export default {
         }
       }
     },
+    async saveIncidents() {
+      if (this.newIncidents.length) {
+        try {
+          await Promise.all(
+            this.newIncidents.map((id) =>
+              this.$http.post(
+                `${process.env.VUE_APP_API_BASE_URL}/admins/incident_requests`,
+                {
+                  organization: this.organization.id,
+                  incident: id,
+                  approved_at: this.$moment().toISOString(),
+                  approved_by: this.currentUser.id,
+                  requested_by: this.currentUser.id,
+                },
+              ),
+            ),
+          );
+          this.newIncidents = [];
+        } catch (error) {
+          await this.$toasted.error(getErrorMessage(error));
+        }
+      }
+    },
     async saveOrganization() {
       try {
         await this.$http.put(
@@ -621,12 +800,15 @@ export default {
             ...this.organization,
           },
         );
-        await this.saveRole();
-        await this.saveCapabilities();
+        await Promise.all([
+          this.saveRole(),
+          this.saveCapabilities(),
+          this.saveIncidents(),
+        ]);
+        await this.loadPageData();
         await this.$toasted.success(
           this.$t('~~Successfully Saved Organization'),
         );
-        await this.loadPageData();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -639,6 +821,7 @@ export default {
       organization: null,
       roleToAdd: null,
       capabilityToAdd: null,
+      incidentToAdd: null,
       showingLocationModal: false,
       currentPolygon: null,
       primaryLocationMap: null,
@@ -650,7 +833,9 @@ export default {
       users: [],
       ghostUsers: [],
       capabilities: [],
+      incidents: [],
       newCapabilities: [],
+      newIncidents: [],
       organizationTypes: [
         'orgType.voad',
         'orgType.coad',
