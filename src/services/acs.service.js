@@ -39,7 +39,6 @@ export const ConnectConfig = {
     autoClose: true,
     forceWindow: true,
   },
-  loginUrl: `${process.env.VUE_APP_BASE_URL}/sp/acs`,
 };
 
 export const initConnect = ({
