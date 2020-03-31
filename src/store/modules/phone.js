@@ -38,6 +38,10 @@ const PhoneState = {
       id: null,
       type: null,
     },
+    status: {
+      id: null,
+      notes: '',
+    },
   },
   agentConfig: null,
   metrics: {},
@@ -118,6 +122,8 @@ const getters = {
   },
   currentCaseType: (state) =>
     state.controller.currentCase ? state.controller.currentCase.type : null,
+  caseStatusId: (state) =>
+    state.controller.state ? state.controller.states.id : null,
 };
 
 // actions
@@ -220,6 +226,9 @@ const actions = {
   async setCurrentCase({ commit }, currentCase) {
     commit('setCurrentCase', currentCase);
   },
+  async setCaseStatus({ commit }, status) {
+    commit('setStatus', status);
+  },
 };
 
 // mutations
@@ -254,6 +263,12 @@ const mutations = {
     state.controller.currentCase = {
       ...state.controller.currentCase,
       ...currentCase,
+    };
+  },
+  setStatus(state, newStatus) {
+    state.controller.status = {
+      ...state.controller.status,
+      ...newStatus,
     };
   },
 };
