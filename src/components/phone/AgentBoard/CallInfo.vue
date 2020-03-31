@@ -94,6 +94,11 @@ export default {
   async mounted() {
     await this.createCards();
   },
+  created() {
+    EventBus.$on(CCEvent.PAUSED, () => {
+      this.$timer.stop('syncCallDuration');
+    });
+  },
 };
 </script>
 
