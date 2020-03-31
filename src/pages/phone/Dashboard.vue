@@ -28,7 +28,6 @@
           </div>
         </template>
       </phone-layout>
-      <cc-popup :is-showing-modal="callIncoming" />
     </template>
   </Loader>
 </template>
@@ -39,7 +38,6 @@ import { mapActions, mapGetters } from 'vuex';
 import Loader from '@/components/Loader.vue';
 import PeopleStoriesCard from '@/components/phone/PeopleStoriesCard.vue';
 import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
-import ConnectCallPopUp from '@/components/phone/ConnectCallPopUp.vue';
 import Leaderboard from '@/components/phone/Leaderboard.vue';
 import PhoneLayout from '@/layouts/Phone.vue';
 import AgentBlock from '@/components/phone/blocks/Agent.vue';
@@ -49,11 +47,10 @@ export default {
   components: {
     PhoneLayout,
     AgentBlock,
+    Loader,
 
     'stories-card': PeopleStoriesCard,
     'training-card': NewsTrainingCard,
-    Loader,
-    'cc-popup': ConnectCallPopUp,
     Leaderboard,
   },
   data() {
