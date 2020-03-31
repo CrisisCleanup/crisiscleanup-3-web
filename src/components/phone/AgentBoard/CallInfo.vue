@@ -22,26 +22,65 @@
       <base-text :weight="600" variant="h1">{{ callTimer }}</base-text>
       <base-text :weight="400" variant="h3">{{ lang.calltime }}</base-text>
     </div>
+    <div class="contact--cases">
+      <case-card
+        v-for="c in cards"
+        :key="c.caseNumber"
+        :case-number="c.caseNumber"
+        :state="c.state"
+        :worktype="c.worktype"
+        :full-address="c.fullAddress"
+        :tile="true"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import VueTypes from 'vue-types';
-import { IconsMixin } from '@/mixins';
+import { IconsMixin, AgentMixin } from '@/mixins';
 import { mapGetters, mapActions } from 'vuex';
+import { EVENTS as CCEvent } from '@/services/acs.service';
 import { mixin as VueTimers } from 'vue-timers';
+import { EventBus } from '@/event-bus';
+import CaseCard from '@/components/cards/Case.vue';
+import Pda from '@/models/Pda';
+import Worksite from '@/models/Worksite';
 
 export default {
   name: 'BoardCallInfo',
-  mixins: [IconsMixin, VueTimers],
+  mixins: [IconsMixin, VueTimers, AgentMixin],
+  components: { CaseCard },
   timers: {
     syncCallDuration: { time: 1000, autostart: true, repeat: true },
   },
   props: {
     lang: VueTypes.objectOf(VueTypes.any),
   },
+  data() {
+    return {
+      cards: [],
+    };
+  },
   methods: {
     ...mapActions('phone', ['syncCallDuration']),
+    async createCards() {
+      const wksites = this.fetchCasesByType(Worksite, this.worksites);
+      const pdas = this.fetchCasesByType(Pda, this.pdas);
+      const cases = [...Array.from(wksites), ...Array.from(pdas)];
+
+      this.$log.debug('generating cards from cases:', cases);
+      const cards = cases.map((c) => ({
+        caseNumber: c.case_number ? c.case_number : `COVID-${c.id}`,
+        address: c.short_address,
+        state: c.city_state,
+        worktype: c.getWorkType ? c.getWorkType() : 'wellness_check',
+        fullAddress: c.full_address,
+      }));
+      this.$log.debug('cards:', cards);
+      this.cards = cards;
+      return cards;
+    },
   },
   computed: {
     ...mapGetters('phone', ['callerId', 'callDuration', 'currentCase']),
@@ -51,6 +90,9 @@ export default {
     callerName() {
       return this.currentCase.name ? this.currentCase.name : 'Unknown';
     },
+  },
+  async mounted() {
+    await this.createCards();
   },
 };
 </script>
@@ -119,6 +161,9 @@ export default {
                 left: 0;
                 position: absolute;
               }
+            }
+            &--cases {
+              display: flex;
             }
           }
         }
