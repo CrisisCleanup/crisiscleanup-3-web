@@ -124,7 +124,7 @@
     "@sentry/integrations": "^5.15.4",
     "@sentry/webpack-plugin": "^1.10.0",
     "@storybook/addon-a11y": "^5.3.18",
-    "@storybook/addon-actions": "^5.3.17",
+    "@storybook/addon-actions": "^5.3.18",
     "@storybook/addon-backgrounds": "^5.3.17",
     "@storybook/addon-centered": "^5.3.18",
     "@storybook/addon-docs": "^5.3.17",
