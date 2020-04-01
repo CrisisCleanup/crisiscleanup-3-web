@@ -173,7 +173,7 @@
     "jest-serializer-vue": "^2.0.2",
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
-    "lint-staged": "^10.1.0",
+    "lint-staged": "^10.1.1",
     "lodash-webpack-plugin": "^0.11.5",
     "node-sass": "^4.13.1",
     "nyc": "^15.0.0",
