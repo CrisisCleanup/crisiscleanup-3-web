@@ -50,7 +50,7 @@
     "@vue/babel-preset-jsx": "^1.1.2",
     "@vuex-orm/core": "^0.36.3",
     "@vuex-orm/plugin-axios": "^0.9.2",
-    "aws-sdk": "^2.648.0",
+    "aws-sdk": "^2.650.0",
     "axios": "^0.19.2",
     "chart.js": "^2.9.3",
     "circle-to-polygon": "^2.0.1",
