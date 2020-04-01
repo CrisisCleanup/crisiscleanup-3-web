@@ -645,7 +645,7 @@ export default {
           `${process.env.VUE_APP_API_BASE_URL}/users?organization=${this.$route.params.organization_id}`,
         ),
         incidents: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/incidents`,
+          `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
         ),
         ghostUsers: await this.getGhostUsers(),
       });
