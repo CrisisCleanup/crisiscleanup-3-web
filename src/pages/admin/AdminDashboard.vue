@@ -7,6 +7,11 @@
       <div class="flex flex-col">
         <InviteUsers class="px-3" is-admin />
         <div class="flex">
+          <WorksiteImport
+            class="m-4 pt-2 shadow bg-white w-full"
+          ></WorksiteImport>
+        </div>
+        <div class="flex">
           <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
               {{ $t('Pending Organizations') }}
@@ -46,10 +51,12 @@ import InviteUsers from '../organization/InviteUsers';
 import { getQueryString } from '../../utils/urls';
 import { getErrorMessage } from '../../utils/errors';
 import Loader from '../../components/Loader';
+import WorksiteImport from '../../components/WorksiteImport';
 
 export default {
   name: 'AdminDashboard',
   components: {
+    WorksiteImport,
     IncidentApprovalTable,
     OrganizationApprovalTable,
     InviteUsers,
