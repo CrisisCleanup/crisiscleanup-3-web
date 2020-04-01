@@ -142,7 +142,15 @@
                 <span class="inline-block">{{ contact.mobile }}</span>
               </template>
             </div>
-            <base-text variant="h3">All Users</base-text>
+            <div class="flex items-center justify-between my-1">
+              <base-text variant="h3">All Users</base-text>
+              <base-button
+                :action="copyUsers"
+                text="Copy Users"
+                variant="solid"
+                size="small"
+              ></base-button>
+            </div>
             <div
               style="
                 display: grid;
@@ -836,6 +844,14 @@ export default {
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
+    },
+    async copyUsers() {
+      let text = '';
+      this.users.forEach((user) => {
+        text += `${user.first_name}\t${user.last_name}\t${user.email}\t${user.mobile}\t\n`;
+      });
+      await this.$copyText(text);
+      this.$toasted.success('Copied Users');
     },
   },
   data() {

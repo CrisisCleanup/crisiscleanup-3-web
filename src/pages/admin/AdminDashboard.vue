@@ -39,7 +39,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import Organization from '@/models/Organization';
 import User from '@/models/User';
 import IncidentApprovalTable from '../../components/IncidentApprovalTable';
 import OrganizationApprovalTable from '../../components/OrganizationApprovalTable';
@@ -88,17 +87,10 @@ export default {
         };
         const queryString = getQueryString(params);
 
-        const results = await Organization.api().get(
-          `/organizations?${queryString}`,
-          {
-            dataKey: 'results',
-          },
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/admins/organizations?${queryString}`,
         );
-        if (results.entities.organizations) {
-          this.organizations = [...results.entities.organizations];
-        } else {
-          this.organizations = [];
-        }
+        this.organizations = response.data.results;
       }
     },
     async getIncidentRequests() {

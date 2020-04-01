@@ -24,6 +24,12 @@ module.exports = {
         lg: '6rem',
         xl: '8rem',
       },
+      minHeight: {
+        sm: '2rem',
+        md: '4rem',
+        lg: '6rem',
+        xl: '8rem',
+      },
       fontWeight: {
         h1: '600',
         h2: '700',

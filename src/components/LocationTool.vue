@@ -23,7 +23,10 @@
         </template>
       </autocomplete>
     </div>
-    <div class="layers-tool flex-grow relative" style="position: relative;">
+    <div
+      class="layers-tool flex-grow relative"
+      style="position: relative; min-height: 400px;"
+    >
       <div
         ref="buttons"
         class="absolute w-full h-8 ml-4 mt-4 flex"

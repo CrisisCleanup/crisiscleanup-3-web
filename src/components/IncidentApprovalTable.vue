@@ -8,8 +8,13 @@
     @change="$emit('change', $event)"
     @rowClick="showContacts"
   >
+    <template #created_at="slotProps">
+      <div :title="slotProps.item.created_at">
+        {{ slotProps.item.created_at | moment('from', 'now') }}
+      </div>
+    </template>
     <template #actions="slotProps">
-      <div class="flex mr-2 justify-end w-full">
+      <div class="flex mr-2 justify-end w-full items-center">
         <base-button
           :text="$t('actions.approve')"
           variant="solid"
@@ -32,19 +37,11 @@
             }
           "
         />
-        <base-button
-          :text="$t('~~Edit Organization')"
-          variant="outline"
-          size="small"
-          class="mx-2"
-          :action="
-            () => {
-              $router.push(
-                `/admin/organization/${slotProps.item.organization}`,
-              );
-            }
-          "
-        />
+        <base-link
+          :href="`/admin/organization/${slotProps.item.organization}`"
+          text-variant="bodysm"
+          >{{ $t('~~Edit Organization') }}</base-link
+        >
       </div>
     </template>
   </Table>

@@ -9,7 +9,7 @@
     @rowClick="showContacts"
   >
     <template #actions="slotProps">
-      <div class="flex mr-2 justify-end w-full">
+      <div class="flex mr-2 justify-end w-full items-center">
         <base-button
           :text="$t('actions.approve')"
           variant="solid"
@@ -32,18 +32,13 @@
             }
           "
         />
-        <base-button
+        <base-link
           v-if="currentUser.isAdmin"
-          :text="$t('actions.edit')"
-          variant="outline"
-          size="small"
-          class="mx-2"
-          :action="
-            () => {
-              $router.push(`/admin/organization/${slotProps.item.id}`);
-            }
-          "
-        />
+          :href="`/admin/organization/${slotProps.item.id}`"
+          text-variant="bodysm"
+          class="px-2"
+          >{{ $t('actions.edit') }}</base-link
+        >
       </div>
     </template>
   </Table>
@@ -130,21 +125,31 @@ export default {
           title: this.$t('ID'),
           dataIndex: 'id',
           key: 'id',
+          width: '0.5fr',
         },
         {
           title: this.$t('orgApprovalTable.name'),
           dataIndex: 'name',
           key: 'name',
+          width: '1.5fr',
         },
         {
           title: this.$t('orgApprovalTable.website'),
           dataIndex: 'url',
           key: 'url',
+          width: '1fr',
+        },
+        {
+          title: this.$t('orgApprovalTable.admin_notes'),
+          dataIndex: 'admin_notes',
+          key: 'admin_notes',
+          width: '2fr',
         },
         {
           title: '',
           dataIndex: 'actions',
           key: 'actions',
+          width: '1.5fr',
         },
       ],
     };
