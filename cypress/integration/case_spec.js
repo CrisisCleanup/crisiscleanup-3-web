@@ -32,6 +32,7 @@ describe('New Case', () => {
     cy.get('.js-worksite-address').as('WorksiteAddress');
     cy.get('.js-worksite-city').as('WorksiteCity');
     cy.get('.js-worksite-county').as('WorksiteCounty');
+    cy.get('.js-worksite-phone1').as('WorksitePhone');
     cy.get('.js-worksite-county ~ div .js-break-glass').as(
       'WorksiteCountyBreakGlass',
     );
@@ -46,6 +47,7 @@ describe('New Case', () => {
     cy.get('@WorksiteName').type('Test Person', { force: true });
     cy.get('@WorksiteAddress').type('455 N Rexford Drive', { force: true });
     cy.get('@WorksiteCity').type('Beverly Hills', { force: true });
+    cy.get('@WorksitePhone').type('12345678', { force: true });
     cy.get('@WorksiteCountyBreakGlass').click();
     cy.get('@WorksiteCounty').should('have.value', 'Los Angeles County');
     cy.get('@WorksiteState').should('have.value', 'California');
