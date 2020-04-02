@@ -7,6 +7,7 @@
         container-class="items-center justify-start cursor-pointer"
         :disabled="uploading"
         :multiple="false"
+        :key="imports"
         @files="
           (files) => {
             handleFileUpload(files, 'fileTypes.logo');
@@ -24,12 +25,18 @@
       <base-checkbox v-model="ignoreDuplicates"
         >{{ $t('Ignore duplicates') }}
       </base-checkbox>
+      <form-select
+        v-model="uploadType"
+        :options="['worksite', 'pda']"
+        select-classes="bg-white border w-64 mx-2"
+        :placeholder="$t('Upload Type')"
+      />
     </div>
     <Table :columns="columns" :data="imports" :body-style="{ height: '300px' }">
       <template #actions="slotProps">
         <div class="flex mr-2 justify-end w-full items-center">
           <base-button
-            :text="$t('Download Successful')"
+            :text="`Download Successful (${slotProps.item.success_count})`"
             variant="solid"
             size="small"
             class="mx-2"
@@ -40,7 +47,7 @@
             "
           />
           <base-button
-            :text="$t('Download Failed')"
+            :text="`Download Failed (${slotProps.item.failed_count})`"
             variant="outline"
             size="small"
             class="mx-2"
@@ -67,6 +74,7 @@ export default {
   data() {
     return {
       uploading: false,
+      uploadType: 'worksite',
       imports: [],
       columns: [
         {
@@ -116,6 +124,7 @@ export default {
       this.file = this.fileList[0].originFileObj;
       const formData = new FormData();
       formData.append('file', this.fileList[0]);
+      formData.append('type', this.uploadType);
       if (this.ignoreDuplicates) {
         formData.append('skip_duplicate_check', true);
       }
