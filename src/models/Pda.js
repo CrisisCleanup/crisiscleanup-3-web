@@ -8,6 +8,7 @@ export default class Pda extends Model {
       address: this.string(''),
       location: this.attr(null),
       city: this.attr(null),
+      state: this.attr(null),
       county: this.attr(null),
       postal_code: this.attr(null),
       name: this.attr(null),
