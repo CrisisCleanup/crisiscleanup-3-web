@@ -8,6 +8,7 @@
       label="name_t"
       :value="status"
       @input="(value) => setCaseStatus({ id: value })"
+      placeholder="Call Status "
     />
     <base-input
       class="notes"

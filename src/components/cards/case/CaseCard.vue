@@ -32,6 +32,7 @@ export default {
   &-card {
     display: flex;
     flex-grow: 1;
+    @apply pb-3;
   }
   &--info {
     @apply px-4;
