@@ -346,6 +346,10 @@ export default {
     disableClaimAndSave: {
       type: Boolean,
     },
+    beforeSave: {
+      type: Function,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -654,6 +658,11 @@ export default {
     async saveWorksite(reload = true) {
       const isValid = this.$refs.form.reportValidity();
       if (!isValid) {
+        return;
+      }
+
+      const beforeSaveCheck = await this.beforeSave();
+      if (!beforeSaveCheck) {
         return;
       }
 

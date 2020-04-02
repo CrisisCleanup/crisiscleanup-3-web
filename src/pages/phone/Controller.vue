@@ -15,10 +15,12 @@
         <template #grid-end>
           <div class="grid-end flex">
             <case-form
+              :key="currentCaseId"
               class="shadow-crisiscleanup-card"
               incident-id="199"
-              :pda-id="pdas ? pdas[0] : null"
+              :pda-id="currentCaseType === 'pda' ? currentCaseId : null"
               disable-claim-and-save
+              :before-save="beforeWorksiteSave"
               @savedWorksite="savedWorksite"
               @closeWorksite="closeWorksite"
             />
@@ -73,7 +75,14 @@ export default {
       await PhoneOutbound.api().updateStatus(
         this.currentOutbound.id,
         this.caseStatusId,
+        worksite.id,
       );
+    },
+    async beforeWorksiteSave() {
+      if (!this.caseStatusId) {
+        this.$toasted.error(this.$t('~~You must set a Call Status!'));
+      }
+      return false;
     },
   },
 };
