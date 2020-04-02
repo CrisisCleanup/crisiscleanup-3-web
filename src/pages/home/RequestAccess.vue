@@ -98,7 +98,14 @@
             :placeholder="$t('invitationSignup.pw2_placeholder')"
             required
           />
-
+          <base-button
+            variant="outline"
+            size="large"
+            class="px-5 py-2 m-1 flex-grow"
+            ccu-icon
+          >
+            Primary Language
+          </base-button>
           <base-button
             size="large"
             class="px-5 py-2 m-1 flex-grow"
@@ -188,6 +195,7 @@ export default {
       mobile: '',
       requestedTo: '',
       showSuccessModal: false,
+      toggleOpen: false,
     };
   },
 };
