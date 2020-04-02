@@ -34,7 +34,7 @@
           {{ lang.inputs.phone }}
         </base-text>
         <base-input
-          v-model="inputNumber"
+          v-model="number"
           size="medium"
           :action="() => {}"
           placeholder="+1 (123) 456-7890"
@@ -105,7 +105,7 @@ export default {
       if (this.number && this.validateNumber(this.number)) {
         this.updateUser(this.number, 'mobile');
       }
-      if (this.languages) {
+      if (this.languages.length >= 1) {
         this.languages.forEach((lang, idx) => {
           if (lang) {
             const field = idx ? 'secondary_language' : 'primary_language';
