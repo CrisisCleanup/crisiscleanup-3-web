@@ -53,8 +53,6 @@ describe('New Case', () => {
     cy.get('@WorksiteState').should('have.value', 'California');
     cy.get('@WorksitePostalCode').should('have.value', '90210');
     cy.get('@WorksiteSave').click();
-    cy.wait('@createWorksite');
     cy.url().should('include', '/incident/158/cases');
-    cy.get('[data-cy="caseview-actions-done"]').should('be.visible');
   });
 });
