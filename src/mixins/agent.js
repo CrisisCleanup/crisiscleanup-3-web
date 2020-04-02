@@ -30,6 +30,9 @@ export const AgentMixin = {
   },
   computed: {
     ...mapGetters('phone', [
+      'agentState',
+      'agentAvailable',
+      'contactState',
       'currentCase',
       'callerId',
       'pdas',
