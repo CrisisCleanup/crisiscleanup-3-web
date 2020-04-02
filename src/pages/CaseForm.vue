@@ -348,7 +348,7 @@ export default {
     },
     beforeSave: {
       type: Function,
-      default: () => {},
+      default: () => true,
     },
   },
   data() {
@@ -658,12 +658,16 @@ export default {
     async saveWorksite(reload = true) {
       const isValid = this.$refs.form.reportValidity();
       if (!isValid) {
+        this.$log.debug('worksite failed to save, invalid.');
         return;
       }
 
-      const beforeSaveCheck = await this.beforeSave();
-      if (!beforeSaveCheck) {
-        return;
+      if (this.beforeSave) {
+        const beforeSaveCheck = await this.beforeSave();
+        if (!beforeSaveCheck) {
+          this.$log.debug('worksite failed to save, before save check failed.');
+          return;
+        }
       }
 
       if (this.location) {
