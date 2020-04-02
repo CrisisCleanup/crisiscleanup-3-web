@@ -62,6 +62,16 @@
             required
           />
           <base-input
+            ref="title"
+            v-model="title"
+            type="title"
+            autocomplete="title"
+            class="input"
+            size="large"
+            placeholder="Title"
+            required
+          />
+          <base-input
             v-model="mobile"
             type="search"
             class="input"
