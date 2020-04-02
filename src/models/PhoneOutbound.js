@@ -28,18 +28,21 @@ export default class PhoneOutbound extends Model {
   }
 
   static apiConfig = {
-    async getNextOutbound() {
-      const phoneOutbound = await this.get(`/phone_outbound?next=1`);
-      return phoneOutbound;
-    },
-    async updateStatus(id, statusId) {
-      await this.post(
-        `/phone_outbound/${id}/update_status`,
-        {
-          status: statusId,
-        },
-        { save: false },
-      );
+    actions: {
+      async getNextOutbound() {
+        const phoneOutbound = await this.get(`/phone_outbound?next=1`);
+        return phoneOutbound;
+      },
+      async updateStatus(id, statusId, worksiteId) {
+        await this.post(
+          `/phone_outbound/${id}/update_status`,
+          {
+            status: statusId,
+            worksite: worksiteId,
+          },
+          { save: false },
+        );
+      },
     },
   };
 }
