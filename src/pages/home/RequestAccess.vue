@@ -4,7 +4,7 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
-      <div class="grid--main">
+      <div class="grid--main overflow-auto">
         <div class="w-2/3">
           <div class="text-5xl">
             {{ $t('requestAccess.join_organization') }}
@@ -17,7 +17,12 @@
                 })
               }}
             </div>
-            <div>{{ $t('requestAccess.enter_existing_user_email_msg') }}</div>
+            <base-text variant="body" weight="700" class="mt-4 mb-1">
+              ~~To join an organization, you should be invited by an existing
+              member. You can use this form to <br />
+              request access from an existing user by entering their email here.
+            </base-text>
+            <!-- <div>{{ $t('requestAccess.enter_existing_user_email_msg') }}</div> -->
           </div>
         </div>
         <form class="w-108 flex flex-col" autocomplete="off" ref="form">
@@ -29,7 +34,9 @@
             :placeholder="$t('requestAccess.existing_member_email')"
             required
           ></base-input>
-
+          <base-text variant="body" weight="700" class="mt-4 mb-2 pt-8">
+            ~~Now fill out your information here and request request access
+          </base-text>
           <base-input
             v-model="email"
             type="search"
@@ -90,6 +97,9 @@
             :action="requestAccess"
           />
         </form>
+        <base-text variant="body" weight="700" class="mt-10 mb-8">
+          ~~Your request will be sent to existing members for approval
+        </base-text>
         <modal
           v-if="showSuccessModal"
           modal-classes="bg-white w-1/2 h-108 shadow p-3"
