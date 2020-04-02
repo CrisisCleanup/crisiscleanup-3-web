@@ -202,6 +202,7 @@ export default {
       &-cases {
         @apply my-3 mt-6;
         display: flex;
+        flex-direction: column;
       }
       &-divider {
         @apply bg-crisiscleanup-dark-100 px-8;
