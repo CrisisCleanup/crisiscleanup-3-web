@@ -81,8 +81,9 @@ export default {
     async beforeWorksiteSave() {
       if (!this.caseStatusId) {
         this.$toasted.error(this.$t('~~You must set a Call Status!'));
+        return false;
       }
-      return false;
+      return true;
     },
   },
 };
