@@ -37,6 +37,7 @@ export const AgentMixin = {
       'caseStatusId',
       'currentOutbound',
       'currentCaseType',
+      'currentCaseId',
     ]),
     callerName() {
       return this.currentCase ? this.currentCase.name : 'Unknown';

@@ -90,6 +90,17 @@ const getters = {
     }
     return null;
   },
+  currentCaseId: (state) => {
+    const {
+      controller: {
+        currentCase: { id },
+      },
+    } = state;
+    if (id) {
+      return id;
+    }
+    return null;
+  },
   currentCase: (state) => {
     const {
       controller: {
@@ -123,7 +134,7 @@ const getters = {
   currentCaseType: (state) =>
     state.controller.currentCase ? state.controller.currentCase.type : null,
   caseStatusId: (state) =>
-    state.controller.state ? state.controller.states.id : null,
+    state.controller.status ? state.controller.status.id : null,
 };
 
 // actions

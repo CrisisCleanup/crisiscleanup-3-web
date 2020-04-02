@@ -67,7 +67,7 @@ export default {
         pdas: pdasCases,
       };
 
-      if (freshPdas) {
+      if (freshPdas.length >= 1) {
         this.$log.debug(
           'this appears to be a non-verified PDA call',
           freshPdas,
@@ -77,7 +77,7 @@ export default {
         currentCase.id = freshPdas.shift().id;
         return this.setCurrentCase(currentCase);
       }
-      if (worksiteCases) {
+      if (worksiteCases.length >= 1) {
         this.$log.debug(
           'this call appears to refer to an existing worksite(s)',
           worksiteCases,
