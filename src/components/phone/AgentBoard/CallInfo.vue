@@ -1,36 +1,40 @@
 <template>
   <div class="contactbar">
-    <div class="contact--call">
-      <div class="contact-stats">
-        <base-text class="mobile" :weight="600" variant="h1">{{
-          callerId
-        }}</base-text>
-        <base-text :weight="400" variant="h3">{{
-          `2 ${lang.callStat.calls} | 1 ${lang.callStat.days}`
-        }}</base-text>
+    <div class="contactbar--call">
+      <div class="contact--call">
+        <div class="contact-stats">
+          <base-text class="mobile" :weight="600" variant="h1">{{
+            callerId
+          }}</base-text>
+          <base-text :weight="400" variant="h3">{{
+            `2 ${lang.callStat.calls} | 1 ${lang.callStat.days}`
+          }}</base-text>
+        </div>
+        <div class="contact-caller">
+          <ccu-icon with-text size="md" :type="icons.phone_user">
+            <base-text>{{ callerName }}</base-text>
+          </ccu-icon>
+          <ccu-icon with-text size="md" :type="icons.earth_globe">
+            <base-text>{{ lang.english }}</base-text>
+          </ccu-icon>
+        </div>
       </div>
-      <div class="contact-caller">
-        <ccu-icon with-text size="md" :type="icons.phone_user">
-          <base-text>{{ callerName }}</base-text>
-        </ccu-icon>
-        <ccu-icon with-text size="md" :type="icons.earth_globe">
-          <base-text>{{ lang.english }}</base-text>
-        </ccu-icon>
+      <div class="contact--actions">
+        <base-text :weight="600" variant="h1">{{ callTimer }}</base-text>
+        <base-text :weight="400" variant="h3">{{ lang.calltime }}</base-text>
       </div>
     </div>
-    <div class="contact--actions">
-      <base-text :weight="600" variant="h1">{{ callTimer }}</base-text>
-      <base-text :weight="400" variant="h3">{{ lang.calltime }}</base-text>
-    </div>
-    <div class="contact--cases">
+    <div class="contactbar--cases">
       <case-card
         v-for="c in cards"
         :key="c.caseNumber"
         :case-number="c.caseNumber"
         :state="c.state"
         :worktype="c.worktype"
-        :full-address="c.fullAddress"
+        :address="c.address"
         :tile="true"
+        :active="c.id === currentCaseId"
+        @click.native="setActive(c.id, c.type)"
       />
     </div>
   </div>
@@ -63,23 +67,28 @@ export default {
     };
   },
   methods: {
-    ...mapActions('phone', ['syncCallDuration']),
+    ...mapActions('phone', ['syncCallDuration', 'setCurrentCase']),
     async createCards() {
-      const wksites = this.fetchCasesByType(Worksite, this.worksites);
-      const pdas = this.fetchCasesByType(Pda, this.pdas);
+      const wksites = await this.fetchCasesByType(Worksite, this.worksites);
+      const pdas = await this.fetchCasesByType(Pda, this.pdas);
       const cases = [...Array.from(wksites), ...Array.from(pdas)];
 
       this.$log.debug('generating cards from cases:', cases);
       const cards = cases.map((c) => ({
         caseNumber: c.case_number ? c.case_number : `COVID-${c.id}`,
         address: c.short_address,
-        state: c.city_state,
+        state: c.state,
         worktype: c.getWorkType ? c.getWorkType() : 'wellness_check',
         fullAddress: c.full_address,
+        id: c.id,
+        type: this.pdas.includes(c.id) ? 'pda' : 'worksite',
       }));
       this.$log.debug('cards:', cards);
       this.cards = cards;
       return cards;
+    },
+    async setActive(id, type) {
+      return this.setCurrentCase({ id, type });
     },
   },
   computed: {
@@ -108,68 +117,74 @@ export default {
     .grid {
       &--callinfo {
         .contactbar {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-evenly;
-          align-content: center;
-          flex-grow: 1;
-          @apply py-6 px-6;
-          .contact {
-            &--call {
-              display: flex;
-              align-items: flex-start;
-              flex-grow: 1;
-              .contact {
-                &-stats {
-                  @apply pr-4;
-                  p {
-                    &.mobile {
-                      @apply text-crisiscleanup-dark-500;
+          &--call {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+            align-content: center;
+            flex-grow: 1;
+            @apply py-6 px-6;
+            .contact {
+              &--call {
+                display: flex;
+                align-items: flex-start;
+                flex-grow: 1;
+                .contact {
+                  &-stats {
+                    @apply pr-4;
+                    p {
+                      &.mobile {
+                        @apply text-crisiscleanup-dark-500;
+                      }
+                      &:last-child {
+                        @apply text-crisiscleanup-dark-300;
+                      }
                     }
-                    &:last-child {
+                  }
+                  &-caller {
+                    @apply pl-4;
+                    position: relative;
+                    p {
                       @apply text-crisiscleanup-dark-300;
                     }
+                    &:before {
+                      content: '';
+                      height: 100%;
+                      width: 1px;
+                      @apply bg-crisiscleanup-dark-100;
+                      position: absolute;
+                      left: 0;
+                    }
                   }
                 }
-                &-caller {
-                  @apply pl-4;
-                  position: relative;
-                  p {
+              }
+              &--actions {
+                display: flex;
+                flex-direction: column;
+                @apply pl-3 ml-6;
+                p {
+                  &:last-child {
                     @apply text-crisiscleanup-dark-300;
                   }
-                  &:before {
-                    content: '';
-                    height: 100%;
-                    width: 1px;
-                    @apply bg-crisiscleanup-dark-100;
-                    position: absolute;
-                    left: 0;
-                  }
+                }
+                position: relative;
+                &:before {
+                  content: '';
+                  height: 100%;
+                  width: 1px;
+                  @apply bg-crisiscleanup-dark-100;
+                  left: 0;
+                  position: absolute;
                 }
               }
             }
-            &--actions {
-              display: flex;
-              flex-direction: column;
-              @apply pl-3 ml-6;
-              p {
-                &:last-child {
-                  @apply text-crisiscleanup-dark-300;
-                }
-              }
-              position: relative;
-              &:before {
-                content: '';
-                height: 100%;
-                width: 1px;
-                @apply bg-crisiscleanup-dark-100;
-                left: 0;
-                position: absolute;
-              }
-            }
-            &--cases {
-              display: flex;
-            }
+          }
+          &--cases {
+            display: flex;
+            @apply py-4;
+            justify-content: center;
+            flex-grow: 1;
+            align-items: center;
           }
         }
       }
