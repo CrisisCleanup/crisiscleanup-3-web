@@ -3,10 +3,11 @@
     :is="cardType"
     :case-number="caseNumber"
     :address="address"
-    :full-address="address"
+    :full-address="fullAddress"
     :state="state"
     :worktype="worktype"
     :svg="svg"
+    :active="active"
   />
 </template>
 
@@ -28,19 +29,25 @@ export default {
     this.svg = this.getWorktypeSVG(
       this.worktype,
       this.$t('worksiteMap.unclaimed'),
-      '46',
+      this.svgSize,
     );
   },
   props: {
+    id: VueTypes.string,
     caseNumber: VueTypes.string,
     address: VueTypes.string,
     state: VueTypes.string,
     worktype: VueTypes.string,
+    fullAddress: VueTypes.string,
     tile: VueTypes.bool.def(false),
+    active: VueTypes.bool.def(false),
   },
   computed: {
     cardType() {
       return this.tile ? CaseTile : CaseCard;
+    },
+    svgSize() {
+      return this.tile ? '26' : '46';
     },
   },
 };
