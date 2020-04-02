@@ -102,7 +102,7 @@
             variant="outline"
             size="large"
             class="px-5 py-2 m-1 flex-grow"
-            ccu-icon
+            ccu-icon="down"
           >
             Primary Language
           </base-button>
