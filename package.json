@@ -168,7 +168,7 @@
     "eslint-plugin-vue-types": "^1.0.1",
     "husky": "^4.2.3",
     "istanbul-lib-coverage": "^3.0.0",
-    "jest": "^25.2.4",
+    "jest": "^25.2.7",
     "jest-canvas-mock": "^2.2.0",
     "jest-serializer-vue": "^2.0.2",
     "less": "^3.11.1",
