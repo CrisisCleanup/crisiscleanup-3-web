@@ -113,7 +113,9 @@ export default {
         }
 
         if (this.newPassword !== this.newPasswordConfirm) {
-          await this.$toasted.error('resetPassword.mismatch_passwords_try_again');
+          await this.$toasted.error(
+            'resetPassword.mismatch_passwords_try_again',
+          );
           return;
         }
         await PasswordResetRequest.api().reset(

@@ -10,10 +10,9 @@
           <base-link
             target="_blank"
             :href="`${apiUrl}/ccadmin/organizations/organization/${organization.id}/change/`"
-            >
-              {{ $t('adminOrganization.see_in_django') }}
-            </base-link
           >
+            {{ $t('adminOrganization.see_in_django') }}
+          </base-link>
         </base-text>
         <div class="flex py-1">
           <base-button
@@ -180,10 +179,9 @@
                   :key="user.id"
                   target="_blank"
                   :href="`${apiUrl}/ccadmin/users/user/${user.id}/change/`"
-                  >
-                    {{ $t('adminOrganization.see_in_django') }}
-                  </base-link
                 >
+                  {{ $t('adminOrganization.see_in_django') }}
+                </base-link>
               </template>
             </div>
             <base-text variant="h3">
@@ -273,10 +271,9 @@
         <base-link
           target="_blank"
           :href="`${apiUrl}/ccadmin/capabilities/organizationorganizationscapabilities/?organization__id__exact=${organization.id}`"
-          >
-            {{ $t('adminOrganization.see_in_django') }}
-          </base-link
         >
+          {{ $t('adminOrganization.see_in_django') }}
+        </base-link>
         <div class="flex item-start">
           <div>
             <div class="flex items-center justify-start">
@@ -858,9 +855,7 @@ export default {
           this.saveIncidents(),
         ]);
         await this.loadPageData();
-        await this.$toasted.success(
-          this.$t('info.success_saved_organization'),
-        );
+        await this.$toasted.success(this.$t('info.success_saved_organization'));
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
