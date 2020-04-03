@@ -20,24 +20,24 @@
         <div class="daily" v-if="frequency === '~~Daily'">
           <base-radio
             class="mr-10 pt-4"
-            name="~~Days"
-            label="~~Days"
+            :name="$t('recurringSchedule.days')"
+            :label="$t('recurringSchedule.days')"
             :value="dailyOption"
             @change="dailyOption = $event"
           >
             <div class="flex items-center">
-              {{ $t('Every') }}
+              {{ $t('recurringSchedule.every') }}
               <input
                 class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
                 v-model="dayInterval"
               />
-              {{ $t('day(s)') }}
+              {{ $t('recurringSchedule.day_s') }}
             </div>
           </base-radio>
           <base-radio
             class="mr-10 py-2"
-            name="~~Every Weekday"
-            label="~~Every Weekday"
+            :name="$t('recurringSchedule.every_weekday')"
+            :label="Every Weekday"
             :value="dailyOption"
             @change="dailyOption = $event"
           />
@@ -45,12 +45,12 @@
 
         <div class="weekly" v-if="frequency === '~~Weekly'">
           <div class="py-2">
-            {{ $t('Recur Every') }}
+            {{ $t('recurringSchedule.recur_every') }}
             <input
               class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
               v-model="weekInterval"
             />
-            {{ $t('weeks(s) on:') }}
+            {{ $t('recurringSchedule.weeks_on') }}
           </div>
 
           <div class="flex flex-wrap">
@@ -84,7 +84,7 @@
       text-variant="h3"
       @click.native="showSchedule = true"
       class="text-primary-dark"
-      >{{ $t('Add schedule') }}</base-button
+      >{{ $t('recurringSchedule.add_schedule') }}</base-button
     >
   </div>
 </template>
@@ -108,12 +108,12 @@ export default {
     if (this.currentRRule) {
       const rule = RRule.fromString(this.currentRRule);
       if (rule.origOptions.freq === RRule.DAILY) {
-        this.frequency = '~~Daily';
+        this.frequency = 'Daily';
         this.dayInterval = rule.origOptions.interval;
         this.endDate = rule.origOptions.until;
       }
       if (rule.origOptions.freq === RRule.WEEKLY) {
-        this.frequency = '~~Weekly';
+        this.frequency = 'Weekly';
         this.weekInterval = rule.origOptions.interval;
         this.endDate = rule.origOptions.until;
       }
@@ -124,7 +124,7 @@ export default {
       return this.$moment(date).format('ddd MMMM Do YYYY');
     },
     logChange() {
-      if (this.frequency === '~~Weekly') {
+      if (this.frequency === 'Weekly') {
         this.currentRRule = new RRule({
           freq: RRule.WEEKLY,
           interval: this.weekInterval,
@@ -135,14 +135,14 @@ export default {
             .map((day) => this.daysOfWeek[day]),
         }).toString();
       }
-      if (this.frequency === '~~Daily') {
+      if (this.frequency === 'Daily') {
         this.currentRRule = new RRule({
           freq: RRule.DAILY,
           interval: this.dayInterval,
           until: this.endDate,
           byhour: [11],
           byweekday:
-            this.dailyOption === '~~Every Weekday'
+            this.dailyOption === '$t('recurringSchedule.every_weekday')'
               ? [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
               : [],
         }).toString();
@@ -168,8 +168,8 @@ export default {
   },
   data() {
     return {
-      frequency: '~~Daily',
-      dailyOption: '~~Days',
+      :frequency: $t('recurringSchedule.daily'),
+      :dailyOption: $t('recurringSchedule.days'),
       selectedDays: {},
       dayInterval: 1,
       weekInterval: 1,

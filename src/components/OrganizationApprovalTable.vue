@@ -87,7 +87,7 @@ export default {
       const contacts = await this.getOrganizationContacts(organization.id);
       const contact = contacts.length ? contacts[0] : null;
       await messageBox({
-        title: this.$t('~~Organization Contact'),
+        title: this.$t('adminOrganization.organization_contact'),
         content: `
           <div>${contact.first_name} ${contact.last_name}</div>
           <div>${contact.title ? contact.title : ''}</div>
