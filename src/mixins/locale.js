@@ -38,3 +38,16 @@ export const LangMixin = {
     },
   },
 };
+
+export const LangOverrideMixin = {
+  methods: {
+    _getOverrideLang(...args) {
+      const result = this.$T(...args);
+      return result.replace('~~', '');
+    },
+  },
+  created() {
+    this.$T = this.$t;
+    this.$t = this._getOverrideLang;
+  },
+};

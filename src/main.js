@@ -28,6 +28,7 @@ import {
 } from '@/filters';
 import Authenticated from '@/layouts/Authenticated';
 import Unauthenticated from '@/layouts/Unauthenticated';
+import { LangOverrideMixin } from '@/mixins';
 import { AuthService } from '@/services/auth.service';
 import { i18nService } from '@/services/i18n.service';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -107,6 +108,9 @@ Vue.use(VueI18n);
 Vue.use(Popover);
 Vue.component('base-dropdown', Dropdown);
 Vue.component('v-select', vSelect);
+
+// Mixins
+Vue.mixin(LangOverrideMixin);
 
 // Filters
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
