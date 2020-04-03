@@ -108,10 +108,14 @@ const getters = {
       },
     } = state;
     if (id) {
-      if (type === 'pda') {
-        return Pda.find(id);
+      switch (type) {
+        case 'pda':
+          return Pda.find(id);
+        case 'worksite':
+          return Worksite.find(id);
+        default:
+          return null;
       }
-      return Worksite.find(id);
     }
     return null;
   },

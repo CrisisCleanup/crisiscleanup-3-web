@@ -95,7 +95,11 @@ export default {
         return this.setCurrentCase(currentCase);
       }
       // no pdas or worksites found
-      return null;
+      // must be a new case
+      this.$log.debug('this call appears to refer to a new worksite')
+      currentCase.type = 'new';
+      currentCase.id = -1;
+      return this.setCurrentCase(currentCase);
     },
     async callNextOutbound() {
       if (this.contactState === CCState.POLLING && this.agentAvailable) {
