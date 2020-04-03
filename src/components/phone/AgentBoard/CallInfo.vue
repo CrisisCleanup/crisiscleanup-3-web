@@ -34,6 +34,7 @@
         :address="c.address"
         :tile="true"
         :active="c.id === currentCaseId"
+        :type="c.type"
         @click.native="setActive(c.id, c.type)"
       />
     </div>
@@ -83,6 +84,14 @@ export default {
         id: c.id,
         type: this.pdas.includes(c.id) ? 'pda' : 'worksite',
       }));
+      cards.push({
+        caseNumber: 'New Case',
+        address: '123 Example Street',
+        state: 'NY',
+        worktype: 'unknown',
+        id: -1,
+        type: 'new',
+      });
       this.$log.debug('cards:', cards);
       this.cards = cards;
       return cards;
