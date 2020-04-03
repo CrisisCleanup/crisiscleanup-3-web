@@ -1,5 +1,12 @@
 <template>
-  <div :class="`case-card ${active ? 'active' : ''}`">
+  <div
+    :class="`case-card ${active ? 'active' : ''} ${
+      type === 'new' ? 'new' : ''
+    }`"
+  >
+    <div v-if="type === 'new'" class="case--overlay">
+      <ccu-icon :type="icons.active" size="xl" />
+    </div>
     <div class="case--head">
       <div class="case--svg" v-html="svg" />
       <base-text variant="h3">{{ caseNumber }}</base-text>
@@ -12,9 +19,12 @@
 
 <script>
 import VueTypes from 'vue-types';
+import { IconsMixin } from '@/mixins';
 
 export default {
   name: 'CaseTile',
+  mixins: [IconsMixin],
+
   props: {
     id: VueTypes.string,
     caseNumber: VueTypes.string,
@@ -23,6 +33,7 @@ export default {
     worktype: VueTypes.string,
     svg: VueTypes.string,
     active: VueTypes.bool.def(false),
+    type: VueTypes.string,
   },
 };
 </script>
@@ -45,6 +56,23 @@ export default {
   &.active {
     @apply border-primary-light;
     border-width: 2px;
+  }
+  &.new {
+    position: relative;
+    .case {
+      &--overlay {
+        position: absolute;
+        display: flex;
+        @apply w-full h-full;
+        left: 0;
+        justify-content: center;
+        align-items: center;
+      }
+      &--head,
+      &--body {
+        filter: blur(1.5px);
+      }
+    }
   }
   .case {
     &--head {

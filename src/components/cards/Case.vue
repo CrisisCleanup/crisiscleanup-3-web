@@ -8,6 +8,7 @@
     :worktype="worktype"
     :svg="svg"
     :active="active"
+    :type="type"
   />
 </template>
 
@@ -41,6 +42,7 @@ export default {
     fullAddress: VueTypes.string,
     tile: VueTypes.bool.def(false),
     active: VueTypes.bool.def(false),
+    type: VueTypes.string,
   },
   computed: {
     cardType() {
