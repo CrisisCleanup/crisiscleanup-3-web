@@ -8,8 +8,8 @@ export const WorksitesMixin = {
       const svg = template
         .replace('{{fillColor}}', color)
         .replace('{{strokeColor}}', '#fff')
-        .replace('height="53"', `height="${size}"`)
-        .replace('width="53"', `width="${size}"`);
+        .replace(/(width="[1-99]+")/g, `height="${size}"`)
+        .replace(/(height="[1-99]+")/g, `width="${size}"`);
       return svg;
     },
   },
