@@ -97,7 +97,7 @@ export default {
       return this.$moment.duration(this.callDuration, 'ms').format('h:mm:ss');
     },
     callerName() {
-      return this.currentCase.name ? this.currentCase.name : 'Unknown';
+      return this.currentCase ? this.currentCase.name : 'Unknown';
     },
   },
   async mounted() {
