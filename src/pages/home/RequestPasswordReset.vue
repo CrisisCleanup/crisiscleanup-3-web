@@ -8,11 +8,7 @@
         <div class="w-2/3">
           <div class="text-5xl">{{ $t('Forgot your password?') }}</div>
           <div class="text-2xl font-light">
-            {{
-              $t(
-                '~~Enter your email address below, and instructions will be sent to reset your password.',
-              )
-            }}
+            {{ $t('resetPassword.enter_email_for_reset_instructions') }}
           </div>
         </div>
         <form class="w-108 flex flex-col" autocomplete="off" ref="form">
@@ -21,7 +17,7 @@
             type="email"
             class="input"
             size="large"
-            :placeholder="$t('~~Email')"
+            :placeholder="$t('resetPassword.your_email')"
             required
           />
 
@@ -29,7 +25,7 @@
             size="large"
             class="px-5 py-2 m-1 flex-grow"
             variant="solid"
-            :text="$t('~~Send me reset password instructions')"
+            :text="$t('actions.send_reset_password_instructions')"
             :action="requestPasswordReset"
           />
         </form>
@@ -42,15 +38,13 @@
           <div class="flex flex-col items-center justify-center mt-32">
             <img src="" />
             <base-text variant="h1" class="mb-6">{{
-              $t('~~Success')
+              $t('info.success')
             }}</base-text>
-            <base-text class="w-3/4 text-center" variant="body" wieght="300">{{
-              $t(
-                '~~You will receive an email with instructions for how to confirm your email address in a few minutes.',
-              )
-            }}</base-text>
+            <base-text class="w-3/4 text-center" variant="body" wieght="300">
+              {{ $t('resetPassword.email_arrive_soon_check_junk') }}
+            </base-text>
             <base-button
-              :text="$t('~~Got It')"
+              :text="$t('actions.got_it')"
               size="large"
               variant="solid"
               class="mt-10"

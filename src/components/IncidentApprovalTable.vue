@@ -40,7 +40,9 @@
         <base-link
           :href="`/admin/organization/${slotProps.item.organization}`"
           text-variant="bodysm"
-          >{{ $t('~~Edit Organization') }}</base-link
+          >
+          {{ $t('actions.edit_organization') }}
+        </base-link
         >
       </div>
     </template>
@@ -73,7 +75,7 @@ export default {
     async showContacts(request) {
       const contact = request.requested_by_contact;
       await messageBox({
-        title: this.$t('~~Requester'),
+        title: this.$t('incidentApprovalTable.requester'),
         content: `
           <div>${contact.first_name} ${contact.last_name}</div>
           <div>${contact.email}</div>

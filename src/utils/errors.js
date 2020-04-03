@@ -1,6 +1,6 @@
 export function getErrorMessage(error) {
   if (!error.response || !error.response.status) {
-    return '~~An unknown error has occurred. Try again later.';
+    return window.vue.$i18n.t('info.unknown_error');
   }
   if (error.response.status === 500) {
     return window.vue.$i18n.t('info.error_500');

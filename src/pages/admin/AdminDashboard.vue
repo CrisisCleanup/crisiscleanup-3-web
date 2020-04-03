@@ -27,7 +27,7 @@
         <div class="flex">
           <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('~~Redeploy Requests') }}
+              {{ $t('inviteTeammates.redeploy_requests') }}
             </div>
             <div class="p-4">
               <IncidentApprovalTable

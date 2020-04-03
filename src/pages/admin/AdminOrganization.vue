@@ -10,7 +10,9 @@
           <base-link
             target="_blank"
             :href="`${apiUrl}/ccadmin/organizations/organization/${organization.id}/change/`"
-            >See in Django Admin</base-link
+            >
+              {{ $t('adminOrganization.see_in_django') }}
+            </base-link
           >
         </base-text>
         <div class="flex py-1">
@@ -61,17 +63,17 @@
               type="text"
               class="input text-sm"
               size="large"
-              :placeholder="$t('Name')"
+              :placeholder="$t('adminOrganization.name_org')"
             />
             <textarea
               v-model="organization.admin_notes"
               class="border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none resize-none w-full"
               rows="4"
-              :placeholder="$t('Admin Notes')"
+              :placeholder="$t('adminOrganization.admin_notes')"
             />
             <base-input
               v-model="organization.automatically_approve_user_domain"
-              :placeholder="$t('Automatically Approve User Domain')"
+              :placeholder="$t('adminOrganization.auto_approve_domain')"
               class="input text-sm"
               size="large"
             />
@@ -102,7 +104,9 @@
             ></form-select>
           </div>
           <div class="w-1/2 bg-white p-3 shadow text-sm">
-            <base-text variant="h3">Primary Contacts</base-text>
+            <base-text variant="h3">
+              {{ $t('adminOrganization.primary_contacts') }}
+            </base-text>
             <div
               style="
                 display: grid;
@@ -122,7 +126,9 @@
                 <span class="inline-block">{{ contact.mobile }}</span>
               </template>
             </div>
-            <base-text variant="h3">Ghost Users</base-text>
+            <base-text variant="h3">
+              {{ $t('adminOrganization.ghost_users') }}
+            </base-text>
             <div
               style="
                 display: grid;
@@ -143,10 +149,12 @@
               </template>
             </div>
             <div class="flex items-center justify-between my-1">
-              <base-text variant="h3">All Users</base-text>
+              <base-text variant="h3">
+                {{ $t('adminOrganization.all_users') }}
+              </base-text>
               <base-button
                 :action="copyUsers"
-                text="Copy Users"
+                :text="$t('actions.copy_users')"
                 variant="solid"
                 size="small"
               ></base-button>
@@ -172,11 +180,15 @@
                   :key="user.id"
                   target="_blank"
                   :href="`${apiUrl}/ccadmin/users/user/${user.id}/change/`"
-                  >See in Django Admin</base-link
+                  >
+                    {{ $t('adminOrganization.see_in_django') }}
+                  </base-link
                 >
               </template>
             </div>
-            <base-text variant="h3">General Info</base-text>
+            <base-text variant="h3">
+              {{ $t('adminOrganization.general_info') }}
+            </base-text>
             <base-text> Facebook: {{ organization.facebook }}</base-text>
             <base-text> Twitter: {{ organization.twitter }}</base-text>
             <base-text> Referral: {{ organization.referral }}</base-text>
@@ -187,54 +199,52 @@
             <base-text>
               Accepted At: {{ organization.accepted_terms_at }}</base-text
             >
-            <base-text variant="h3">Activites</base-text>
+            <base-text variant="h3">
+              {{ $t('adminOrganization.activities') }}
+            </base-text>
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
               <div>
-                <span>Damage Assessments:</span>
+                <span>{{ $t('registerOrg.damage_assessment') }}</span>
                 <span>{{ organization.does_damage_assessment }}</span>
               </div>
               <div>
-                <span>Intake Assessments:</span>
+                <span>{{ $t('registerOrg.intake_assessment') }}</span>
                 <span>{{ organization.does_intake_assessment }}</span>
               </div>
               <div>
-                <span>Cleanup:</span>
+                <span>{{ $t('registerOrg.cleanup') }}</span>
                 <span>{{ organization.does_cleanup }}</span>
               </div>
               <div>
-                <span>Follow-up:</span>
+                <span>{{ $t('registerOrg.follow_up') }}</span>
                 <span>{{ organization.does_follow_up }}</span>
               </div>
               <div>
-                <span>Minor Repairs:</span>
+                <span>{{ $t('registerOrg.minor_repairs') }}</span>
                 <span>{{ organization.does_minor_repairs }}</span>
               </div>
               <div>
-                <span>Rebuilding:</span>
+                <span>{{ $t('registerOrg.rebuilding') }}</span>
                 <span>{{ organization.does_rebuilding }}</span>
               </div>
               <div>
-                <span>Coordination:</span>
+                <span>{{ $t('registerOrg.coordination') }}</span>
                 <span>{{ organization.does_coordination }}</span>
               </div>
               <div>
-                <span>Government:</span>
+                <span>{{ $t('registerOrg.government') }}</span>
                 <span>{{ organization.government }}</span>
               </div>
               <div>
-                <span>Review Other Orgs:</span>
+                <span>{{ $t('registerOrg.review_approve') }}</span>
                 <span>{{ organization.review_other_organizations }}</span>
               </div>
               <div>
-                <span>Cleanup:</span>
-                <span>{{ organization.does_cleanup }}</span>
-              </div>
-              <div>
-                <span>Other Activity:</span>
+                <span>{{ $t('registerOrg.other_activity') }}</span>
                 <span>{{ organization.does_other_activity }}</span>
               </div>
               <div>
-                <span>Not an Organization:</span>
+                <span>{{ $t('registerOrg.not_organization') }}</span>
                 <span>{{ organization.not_an_org }}</span>
               </div>
             </div>
@@ -247,7 +257,7 @@
         </base-text>
         <form-select
           :value="organization.roles[0]"
-          :placeholder="$t('Role')"
+          :placeholder="$t('adminOrganization.role')"
           class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
           :options="roles"
           @input="roleToAdd = $event"
@@ -258,18 +268,20 @@
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
         <base-text variant="h2" :weight="600">
-          Capabilities
+          {{ $t('adminOrganization.capabilities') }}
         </base-text>
         <base-link
           target="_blank"
           :href="`${apiUrl}/ccadmin/capabilities/organizationorganizationscapabilities/?organization__id__exact=${organization.id}`"
-          >See in Django Admin</base-link
+          >
+            {{ $t('adminOrganization.see_in_django') }}
+          </base-link
         >
         <div class="flex item-start">
           <div>
             <div class="flex items-center justify-start">
               <form-select
-                :placeholder="$t('Capability')"
+                :placeholder="$t('adminOrganization.capability')"
                 :value="capabilityToAdd"
                 class="w-auto border border-crisiscleanup-dark-100 multi-select mr-1"
                 select-classes="h-full"
@@ -285,7 +297,7 @@
                 "
               ></form-select>
               <base-button
-                :text="$t('Add')"
+                :text="$t('actions.add')"
                 size="large"
                 variant="solid"
                 :action="
@@ -302,7 +314,9 @@
             </div>
           </div>
           <div class="mx-3">
-            <base-text variant="h3">Current Capabilties</base-text>
+            <base-text variant="h3">
+              {{ $t('adminOrganization.current_capabilities') }}
+            </base-text>
             <div
               style="
                 display: grid;
@@ -325,7 +339,7 @@
           <div>
             <div class="flex items-center justify-start">
               <form-select
-                :placeholder="$t('Incident')"
+                :placeholder="$t('adminOrganization.incident')"
                 :value="incidentToAdd"
                 class="w-auto border border-crisiscleanup-dark-100 multi-select mr-1"
                 select-classes="h-full"
@@ -341,7 +355,7 @@
                 "
               ></form-select>
               <base-button
-                :text="$t('Add')"
+                :text="$t('actions.add')"
                 size="large"
                 variant="solid"
                 :action="
@@ -352,12 +366,16 @@
                 "
               />
             </div>
-            <base-text variant="h3">New Incidents</base-text>
+            <base-text variant="h3">
+              {{ $t('adminOrganization.new_incidents') }}
+            </base-text>
             <div v-for="incident in newIncidents">
               {{ incident | getIncidentName(incidents) }}
             </div>
 
-            <base-text variant="h3">Pending Requests</base-text>
+            <base-text variant="h3">
+              {{ $t('adminOrganization.pending_requests') }}
+            </base-text>
             <div
               style="
                 display: grid;
@@ -380,7 +398,7 @@
                 </div>
                 <div class="flex">
                   <base-button
-                    :text="$t('~~Approve')"
+                    :text="$t('actions.approve')"
                     variant="solid"
                     size="small"
                     class="mx-2 w-24"
@@ -391,7 +409,7 @@
                     "
                   />
                   <base-button
-                    :text="$t('~~Reject')"
+                    :text="$t('actions.reject')"
                     variant="outline"
                     size="small"
                     class="mx-2 w-24"
@@ -406,7 +424,9 @@
             </div>
           </div>
           <div class="mx-3">
-            <base-text variant="h3">Current Incidents</base-text>
+            <base-text variant="h3">
+              {{ $t('adminOrganization.current_incidents') }}
+            </base-text>
             <div
               style="
                 display: grid;
@@ -428,7 +448,7 @@
       <div class="flex">
         <div class="w-1/2 bg-white shadow mt-6 mr-3">
           <div class="border-b px-8 py-4 font-semibold">
-            {{ $t('Primary Location') }}
+            {{ $t('adminOrganization.primary_location') }}
           </div>
           <div class="py-2 flex items-center justify-center">
             <base-button
@@ -460,7 +480,7 @@
         </div>
         <div class="w-1/2 bg-white shadow mt-6">
           <div class="border-b px-8 py-4 font-semibold">
-            {{ $t('Secondary Location') }}
+            {{ $t('adminOrganization.secondary_location') }}
           </div>
           <div class="py-2 flex items-center justify-center">
             <base-button
@@ -671,7 +691,7 @@ export default {
           organizationId,
           this.organization.approve_reject_reason_t,
         );
-        await this.$toasted.success(this.$t('~~Approved'));
+        await this.$toasted.success(this.$t('info.approved'));
         await this.loadPageData();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -683,7 +703,7 @@ export default {
           organizationId,
           this.organization.approve_reject_reason_t,
         );
-        await this.$toasted.success(this.$t('~~Rejected'));
+        await this.$toasted.success(this.$t('info.rejected'));
         await this.loadPageData();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -839,7 +859,7 @@ export default {
         ]);
         await this.loadPageData();
         await this.$toasted.success(
-          this.$t('~~Successfully Saved Organization'),
+          this.$t('info.success_saved_organization'),
         );
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -851,7 +871,7 @@ export default {
         text += `${user.first_name}\t${user.last_name}\t${user.email}\t${user.mobile}\t\n`;
       });
       await this.$copyText(text);
-      this.$toasted.success('Copied Users');
+      this.$toasted.success('adminOrganization.users_copied');
     },
   },
   data() {

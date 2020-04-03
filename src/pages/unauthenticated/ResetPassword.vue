@@ -6,23 +6,19 @@
     <template #grid-content>
       <div class="grid--main">
         <div class="w-2/3">
-          <div class="text-5xl">{{ $t('~~Reset your password') }}</div>
+          <div class="text-5xl">{{ $t('resetPassword.reset_password') }}</div>
           <div v-if="tokenValid === true" class="text-2xl font-light">
-            {{ $t('~~Enter your new password below.') }}
+            {{ $t('resetPassword.enter_new_password') }}
           </div>
           <div v-if="tokenValid === null" class="text-2xl font-light">
-            {{ $t('~~Checking link...') }}
+            {{ $t('resetPassword.checking_link') }}
           </div>
           <div v-if="tokenValid === false">
             <div class="text-2xl font-light">
-              {{
-                $t(
-                  '~~This link has expired or is invalid. Please click the "Forgot Password?" link on the login page to try again.',
-                )
-              }}
+              {{ $t('resetPassword.invalid_link_try_again') }}
             </div>
             <base-button
-              :text="$t('~~Go to Login')"
+              :text="$t('resetPassword.go_to_login')"
               size="large"
               variant="solid"
               class="mt-10"
@@ -46,7 +42,7 @@
             class="input"
             size="large"
             autocomplete="new-password"
-            :placeholder="$t('~~Password')"
+            :placeholder="$t('resetPassword.password')"
             required
           />
           <base-input
@@ -55,7 +51,7 @@
             class="input"
             size="large"
             autocomplete="new-password"
-            :placeholder="$t('~~Confirm Password')"
+            :placeholder="$t('resetPassword.confirm_password')"
             required
           />
 
@@ -63,7 +59,7 @@
             size="large"
             class="px-5 py-2 m-1 flex-grow"
             variant="solid"
-            :text="$t('~~Reset')"
+            :text="$t('actions.reset')"
             :action="resetPassword"
           />
         </form>
@@ -76,13 +72,13 @@
           <div class="flex flex-col items-center justify-center mt-32">
             <img src="" />
             <base-text variant="h1" class="mb-6">{{
-              $t('~~Success')
+              $t('info.success')
             }}</base-text>
             <base-text class="w-3/4 text-center" variant="body" wieght="300">{{
-              $t('~~Your password has been reset.')
+              $t('resetPassword.password_reset')
             }}</base-text>
             <base-button
-              :text="$t('~~Go to Login')"
+              :text="$t('resetPassword.go_to_login')"
               size="large"
               variant="solid"
               class="mt-10"
@@ -117,7 +113,7 @@ export default {
         }
 
         if (this.newPassword !== this.newPasswordConfirm) {
-          await this.$toasted.error('~~The passwords do not match. Try again.');
+          await this.$toasted.error('resetPassword.mismatch_passwords_try_again');
           return;
         }
         await PasswordResetRequest.api().reset(

@@ -21,7 +21,7 @@
             <img
               src="@/assets/call_center_people.png"
               width="200px"
-              alt="Call Center Users"
+              alt="~~Call Center Users"
             />
           </div>
           <div class="flex-col m-3 my-8 items-center">
@@ -185,7 +185,7 @@ export default {
       return {
         actions: {
           cancel: {
-            text: this.$t('~~Cancel'),
+            text: this.$t('actions.cancel'),
           },
           complete: {
             text: this.$t('~~Complete'),

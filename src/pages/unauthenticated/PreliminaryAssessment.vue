@@ -291,8 +291,8 @@ export default {
     },
     lang() {
       return this.getLang({
-        personalInfo: '~~Personal Information',
-        submitRequest: '~~Submit Request',
+        personalInfo: 'formLabels.personal_information',
+        submitRequest: 'actions.submit_request',
       });
     },
   },
