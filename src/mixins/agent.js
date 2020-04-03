@@ -5,7 +5,7 @@ import { mapActions, mapGetters } from 'vuex';
 
 export const AgentMixin = {
   methods: {
-    ...mapActions('phone', ['setCaseStatus']),
+    ...mapActions('phone', ['setCaseStatus', 'setContactState']),
     async fetchCasesByType(caseModel, ids) {
       const cases = await Promise.all(
         ids.map(async (id) => {

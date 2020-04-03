@@ -36,7 +36,7 @@ import PhoneLayout from '@/layouts/Phone.vue';
 import AgentBlock from '@/components/phone/blocks/Agent.vue';
 import CaseForm from '@/pages/CaseForm.vue';
 import AgentBoard from '@/components/phone/AgentBoard/Board.vue';
-import { EVENTS as CCEvent } from '@/services/acs.service';
+import { EVENTS as CCEvent, STATES as CCState } from '@/services/acs.service';
 import { EventBus } from '@/event-bus';
 import Loader from '@/components/Loader.vue';
 import { AgentMixin } from '@/mixins';
@@ -62,6 +62,7 @@ export default {
   methods: {
     closeWorksite() {
       EventBus.$emit(CCEvent.OFF_CALL);
+      this.setContactState(CCState.POLLING);
     },
     async savedWorksite(worksite) {
       this.worksite = worksite;
