@@ -37,7 +37,7 @@
           <base-radio
             class="mr-10 py-2"
             :name="$t('recurringSchedule.every_weekday')"
-            :label="Every Weekday"
+            :label="$t('recurringSchedule.every_weekday')"
             :value="dailyOption"
             @change="dailyOption = $event"
           />
@@ -142,7 +142,7 @@ export default {
           until: this.endDate,
           byhour: [11],
           byweekday:
-            this.dailyOption === '$t('recurringSchedule.every_weekday')'
+            this.dailyOption === "$t('recurringSchedule.every_weekday')"
               ? [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
               : [],
         }).toString();
@@ -168,8 +168,8 @@ export default {
   },
   data() {
     return {
-      :frequency: $t('recurringSchedule.daily'),
-      :dailyOption: $t('recurringSchedule.days'),
+      frequency: this.$t('recurringSchedule.daily'),
+      dailyOption: this.$t('recurringSchedule.days'),
       selectedDays: {},
       dayInterval: 1,
       weekInterval: 1,
