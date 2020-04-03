@@ -96,7 +96,7 @@ export default {
       }
       // no pdas or worksites found
       // must be a new case
-      this.$log.debug('this call appears to refer to a new worksite')
+      this.$log.debug('this call appears to refer to a new worksite');
       currentCase.type = 'new';
       currentCase.id = -1;
       return this.setCurrentCase(currentCase);
