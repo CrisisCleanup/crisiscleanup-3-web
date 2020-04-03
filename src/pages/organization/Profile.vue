@@ -197,7 +197,7 @@
         <div class="py-2 flex items-center justify-center">
           <base-button
             v-if="currentOrganization.primary_location"
-            text="$t('profileOrg.edit_response_area')"
+            :text="$t('profileOrg.edit_response_area')"
             variant="solid"
             class="px-2 py-1"
             :action="
