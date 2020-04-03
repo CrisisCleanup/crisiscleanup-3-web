@@ -447,11 +447,12 @@ export default {
       secondaryLocationMap: null,
       settingLocation: '',
       organizationTypes: [
+        'orgType.survivor_client_services',
         'orgType.voad',
         'orgType.coad',
         'orgType.government',
         'orgType.ltr',
-        'orgType.cleanup',
+        'orgType.coalition',
       ].map((key) => {
         return { key, label: this.$t(key) };
       }),
