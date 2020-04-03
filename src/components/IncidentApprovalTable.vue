@@ -40,10 +40,9 @@
         <base-link
           :href="`/admin/organization/${slotProps.item.organization}`"
           text-variant="bodysm"
-          >
-          {{ $t('actions.edit_organization') }}
-        </base-link
         >
+          {{ $t('actions.edit_organization') }}
+        </base-link>
       </div>
     </template>
   </Table>
