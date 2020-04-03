@@ -1,8 +1,26 @@
 <template>
+  <div
+    v-if="completedForm"
+    class="bg-gray-100 flex flex-col flex-grow w-full h-full border max-w-md self-center items-center justify-center"
+  >
+    <font-awesome-icon
+      icon="check-circle"
+      size="4x"
+      class="text-crisiscleanup-green-600 p-3"
+    ></font-awesome-icon>
+    {{ $t('caseForm.new_case_success') }}
+    <base-button
+      size="small"
+      class="my-3 p-1 text-black bg-purple-700 text-white"
+      :action="reloadForm"
+      :text="$t('Enter another case')"
+    />
+  </div>
   <form
-    v-if="ready"
+    v-else-if="ready"
     ref="form"
-    class="bg-gray-100 flex flex-col flex-grow w-full h-full border max-w-md self-center"
+    class="bg-gray-100 flex flex-col w-full h-full border max-w-md self-center"
+    style="display: grid;"
     @submit.prevent
   >
     <div class="intake-form flex-grow">
@@ -238,6 +256,7 @@ export default {
       dynamicFields: {},
       sectionCounter: 2,
       addAdditionalPhone: false,
+      completedForm: false,
     };
   },
   computed: {
@@ -417,6 +436,7 @@ export default {
           incident: this.currentIncident.id,
         });
         await this.$toasted.success(this.$t('caseForm.new_case_success'));
+        this.completedForm = true;
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -494,6 +514,13 @@ export default {
         );
       });
     },
+    reloadForm() {
+      this.pda = {
+        formFields: {},
+      };
+      this.dynamicFields = {};
+      this.completedForm = false;
+    },
   },
 };
 </script>
@@ -505,7 +532,6 @@ export default {
 }
 
 .intake-form {
-  height: 600px;
   overflow: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -552,5 +578,9 @@ h5 {
 
 .ccu-version-overlay p {
   text-align: left !important;
+}
+
+.intake-form #autosuggest__input {
+  height: 40px !important;
 }
 </style>
