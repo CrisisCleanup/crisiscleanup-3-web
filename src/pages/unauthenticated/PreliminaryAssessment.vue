@@ -23,7 +23,7 @@
     style="display: grid;"
     @submit.prevent
   >
-    <div class="intake-form flex-grow">
+    <div class="pda-form flex-grow">
       <div class="form-field text-lg font-semibold">
         {{ lang.personalInfo }}
       </div>
@@ -531,13 +531,13 @@ export default {
   margin: 0;
 }
 
-.intake-form {
+.pda-form {
   overflow: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
 
-.intake-form::-webkit-scrollbar {
+.pda-form::-webkit-scrollbar {
   /* WebKit */
   width: 0;
   height: 0;
@@ -580,7 +580,7 @@ h5 {
   text-align: left !important;
 }
 
-.intake-form #autosuggest__input {
+.pda-form #autosuggest__input {
   height: 40px !important;
 }
 </style>
