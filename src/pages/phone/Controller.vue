@@ -19,6 +19,9 @@
               class="shadow-crisiscleanup-card"
               incident-id="199"
               :pda-id="currentCaseType === 'pda' ? currentCaseId : null"
+              :worksite-id="
+                currentCaseType === 'worksite' ? currentCaseId : null
+              "
               disable-claim-and-save
               :before-save="beforeWorksiteSave"
               @savedWorksite="savedWorksite"
@@ -78,6 +81,9 @@ export default {
         this.caseStatusId,
         worksite.id,
       );
+
+      this.worksites.push(worksite.id);
+      EventBus.$emit(CCEvent.CASE_SAVED, worksite);
     },
     async beforeWorksiteSave() {
       if (!this.caseStatusId) {

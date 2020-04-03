@@ -25,6 +25,7 @@ export const EVENTS = (() => {
     ON_CALL: st('oncall'),
     PAUSED: st('paused'),
     OFF_CALL: st('offcall'),
+    CASE_SAVED: ev('caseSaved'),
   };
 })();
 

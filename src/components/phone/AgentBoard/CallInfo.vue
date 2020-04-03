@@ -116,6 +116,11 @@ export default {
     EventBus.$on(CCEvent.PAUSED, () => {
       this.$timer.stop('syncCallDuration');
     });
+    EventBus.$on(CCEvent.CASE_SAVED, (worksite) => {
+      this.createCards().then(() => {
+        this.setCurrentCase({ id: worksite.id, type: 'worksite' });
+      });
+    });
   },
 };
 </script>
