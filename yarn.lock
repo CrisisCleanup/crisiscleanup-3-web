@@ -20028,10 +20028,10 @@ vue-cookies@^1.7.0:
   resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.7.0.tgz#dd8f147ff1579e0cbd5f352dc5dff2696d8760b8"
   integrity sha512-vuEUm6wYMMrFAHFCrkzIUAy8+MgPAbBGmYXnk2M6X6O2KHbMT1wuDD2izacmsSUp6ZM02e23MJRtPRobl88VMg==
 
-vue-cron-editor-buefy@^0.1.13:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/vue-cron-editor-buefy/-/vue-cron-editor-buefy-0.1.13.tgz#465e5bb18940bfad60449e1fd224c8be9a42c668"
-  integrity sha512-FE7qIZnHrVN1/GIHVDACDH6/8Z8bH1M4mAZiC/C3bNY7rP8/FSaDOErS1YT4V6wFUS/Yez1p3fO3t8Q6kcCKEw==
+vue-cron-editor-buefy@^0.1.15:
+  version "0.1.15"
+  resolved "https://registry.yarnpkg.com/vue-cron-editor-buefy/-/vue-cron-editor-buefy-0.1.15.tgz#ab0fffac7b3a600a69a2ba13d0ab49453bb7a4d2"
+  integrity sha512-nzELk7QCBCNnrJoaxA3gRGReDnQF1ilEzCqvy9aBNE6Z3wYQ1KhRpUav1m30WsGgyuDeI9ndPPj04zhetKT7vw==
   dependencies:
     buefy "^0.8.9"
     core-js "^3.3.2"
