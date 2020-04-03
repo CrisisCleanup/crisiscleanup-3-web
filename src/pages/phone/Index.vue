@@ -41,7 +41,12 @@ export default {
     ...mapGetters('phone', ['connectReady', 'agentState', 'callIncoming']),
   },
   methods: {
-    ...mapActions('phone', ['setPopup', 'setCurrentCase']),
+    ...mapActions('phone', [
+      'setPopup',
+      'setCurrentCase',
+      'setOutboundId',
+      'setContactState',
+    ]),
     async resolveCases({ outboundIds, pdas, worksites }) {
       this.$log.debug('resolving caller cases...');
       const currentCase = {
@@ -109,6 +114,7 @@ export default {
         if (phone_outbound) {
           this.$log.debug('outbound call queued up...', phone_outbound[0]);
           PhoneOutbound.api().callOutbound(phone_outbound[0].id);
+          this.setOutboundId(phone_outbound[0].id);
         }
       }
     },

@@ -34,6 +34,7 @@ const PhoneState = {
     },
   },
   controller: {
+    outboundId: null,
     currentCase: {
       id: null,
       type: null,
@@ -122,7 +123,13 @@ const getters = {
   outboundIds: (state) =>
     state.contact.attributes ? state.contact.attributes.outboundIds : [],
   currentOutbound: (state) => {
-    if (state.controller.currentCase) {
+    const {
+      controller: { outboundId, currentCase },
+    } = state;
+    if (outboundId) {
+      return PhoneOutbound.find(outboundId);
+    }
+    if (currentCase) {
       const caseIdx = state.contact.attributes.pdas.indexOf(
         state.controller.currentCase.id,
       );
@@ -133,6 +140,7 @@ const getters = {
         return PhoneOutbound.find(id[0]);
       }
     }
+
     return null;
   },
   currentCaseType: (state) =>
@@ -244,6 +252,12 @@ const actions = {
   async setCaseStatus({ commit }, status) {
     commit('setStatus', status);
   },
+  async setOutboundId({ commit }, id) {
+    commit('setOutboundId', id);
+  },
+  async setContactState({ commit }, newState) {
+    commit('setContact', { state: newState });
+  },
 };
 
 // mutations
@@ -285,6 +299,9 @@ const mutations = {
       ...state.controller.status,
       ...newStatus,
     };
+  },
+  setOutboundId(state, newId) {
+    state.controller.outboundId = newId;
   },
 };
 
