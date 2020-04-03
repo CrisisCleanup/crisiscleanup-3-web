@@ -11,17 +11,17 @@
         <div>
           <form-select
             v-model="frequency"
-            :options="['Daily', 'Weekly']"
+            :options="['~~Daily', '~~Weekly']"
             indicator-icon="caret-down"
             select-classes="h-10 border bg-white text-sm"
             @input="logChange"
           />
         </div>
-        <div class="daily" v-if="frequency === 'Daily'">
+        <div class="daily" v-if="frequency === '~~Daily'">
           <base-radio
             class="mr-10 pt-4"
-            name="Days"
-            label="Days"
+            name="~~Days"
+            label="~~Days"
             :value="dailyOption"
             @change="dailyOption = $event"
           >
@@ -36,14 +36,14 @@
           </base-radio>
           <base-radio
             class="mr-10 py-2"
-            name="Every Weekday"
-            label="Every Weekday"
+            name="~~Every Weekday"
+            label="~~Every Weekday"
             :value="dailyOption"
             @change="dailyOption = $event"
           />
         </div>
 
-        <div class="weekly" v-if="frequency === 'Weekly'">
+        <div class="weekly" v-if="frequency === '~~Weekly'">
           <div class="py-2">
             {{ $t('Recur Every') }}
             <input
@@ -72,6 +72,7 @@
             input-class="h-10 p-1 outline-none w-full text-sm cursor-pointer"
             wrapper-class="flex-grow"
             :format="customFormatter"
+            :placeholder="$t('~~Select end date')"
             v-model="endDate"
             @input="logChange"
           ></datepicker>
