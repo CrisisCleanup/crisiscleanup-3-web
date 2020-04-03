@@ -5,7 +5,7 @@ const routes = [
   {
     path: '/admin',
     component: AdminDashboard,
-    name: 'admin.nav',
+    name: 'nav.admin',
     meta: {
       layout: 'authenticated',
       admin: true,
@@ -14,7 +14,7 @@ const routes = [
   {
     path: '/admin/organization/:organization_id',
     component: AdminOrganization,
-    name: 'admin.organization',
+    name: 'nav.admin.organization',
     meta: {
       layout: 'authenticated',
       admin: true,

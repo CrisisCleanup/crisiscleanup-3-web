@@ -161,7 +161,6 @@ export default {
         {
           key: 'admin',
           icon: 'history',
-          text: this.$t('nav.admin'),
           to: '/admin',
           disabled: !this.currentUser.isAdmin,
         },
