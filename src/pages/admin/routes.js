@@ -14,7 +14,7 @@ const routes = [
   {
     path: '/admin/organization/:organization_id',
     component: AdminOrganization,
-    name: 'nav.admin.organization',
+    name: 'nav.admin_organization',
     meta: {
       layout: 'authenticated',
       admin: true,
