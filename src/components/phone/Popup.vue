@@ -76,8 +76,9 @@
 
 <script>
 import { UserMixin, IconsMixin, AgentMixin } from '@/mixins';
-import VueTypes from 'vue-types';
 import CaseCard from '@/components/cards/Case.vue';
+import Pda from '@/models/Pda';
+import Worksite from '@/models/Worksite';
 
 export default {
   name: 'IncomingPopup',
@@ -88,15 +89,11 @@ export default {
       cards: [],
     };
   },
-  props: {
-    cases: VueTypes.any,
-  },
   methods: {
     async createCards() {
-      const cases = [
-        ...Array.from(this.cases.worksites),
-        ...Array.from(this.cases.pdas),
-      ];
+      const wksites = await this.fetchCasesByType(Worksite, this.worksites);
+      const pdas = await this.fetchCasesByType(Pda, this.pdas);
+      const cases = [...Array.from(wksites), ...Array.from(pdas)];
       this.$log.debug('generating cards from cases:', cases);
       const cards = cases.map((c) => ({
         caseNumber: c.case_number ? c.case_number : `COVID-${c.id}`,
