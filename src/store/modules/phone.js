@@ -239,13 +239,14 @@ const actions = {
           pdas: Pdas,
           outboundIds,
         };
-        EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
         commit('setContact', {
           id: contactId,
           duration,
           state: contactState.type,
           attributes,
         });
+        dispatch('rehydrateController');
+        EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
         commit('setControllerState', { contactId });
       },
     });
@@ -267,6 +268,33 @@ const actions = {
     });
     return this.callDuration;
   },
+  async stashController({ state }) {
+    // store controller state
+    const { controller } = state;
+    Log.debug('stashing controller state...', controller);
+    localStorage.setItem('ccu-ivr-ctrl', JSON.stringify(controller));
+    return controller;
+  },
+  async rehydrateController({ state, commit }) {
+    // rehydrate controller state from cookie
+    Log.debug('rehydrating controller...');
+    const ctrlState = JSON.parse(localStorage.getItem('ccu-ivr-ctrl'));
+    if (!ctrlState) {
+      Log.debug('controller rehydration bailed, no state found!');
+      return null;
+    }
+    Log.debug('stored state:', ctrlState);
+    if (state.contact.id && state.contact.id === ctrlState.contactId) {
+      Log.debug('success! controller rehydrated.');
+      commit('setControllerState', ctrlState);
+      return ctrlState;
+    }
+    Log.debug('controller rehydration bailed, contact state mismatch!', {
+      id: state.contact.id,
+      contactId: ctrlState.contactId,
+    });
+    return ctrlState;
+  },
   async addCases({ state, commit, dispatch }, { worksites, pdas }) {
     const { controller } = state;
     const newWorksites = new Set([
@@ -279,6 +307,8 @@ const actions = {
       pdas: Array.from(newPdas),
     };
     commit('setControllerState', { cases: newCases });
+    dispatch('stashController');
+  },
   async setResolved({ commit }, resolved) {
     commit('setControllerState', {
       resolved,
