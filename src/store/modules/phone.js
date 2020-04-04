@@ -32,7 +32,13 @@ const getStateDefaults = () => ({
     },
   },
   controller: {
+    contactId: null,
     outboundId: null,
+    cases: {
+      pdas: [],
+      worksites: [],
+    },
+    resolved: false,
     currentCase: {
       id: null,
       type: null,
@@ -77,20 +83,18 @@ const getters = {
   agentAvailable: (state) =>
     state.agentState === ConnectService.STATES.ROUTABLE,
   callIncoming: (state) =>
-    [ConnectService.STATES.INCOMING, ConnectService.STATES.CONNECTING].includes(
-      state.contact ? state.contact.state : null,
-    ),
+    state.agentState === ConnectService.STATES.PENDING_CALL,
   contactState: (state) =>
     state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
   contactAttributes: (state) =>
     state.contact.attributes ? state.contact.attributes : {},
   callerId: (state) =>
     state.contact.attributes ? state.contact.attributes.callerId : '',
-  pdas: (state) =>
-    state.contact.attributes ? state.contact.attributes.pdas : [],
+  pdas: (state) => (state.controller ? state.controller.cases.pdas : []),
   worksites: (state) =>
-    state.contact.attributes ? state.contact.attributes.worksites : [],
+    state.controller ? state.controller.cases.worksites : [],
   callDuration: (state) => (state.contact ? state.contact.duration : 0),
+  currentCases: (state) => (state.controller ? state.controller.cases : {}),
   currentPdaId: (state) => {
     const {
       controller: { currentCase },
@@ -100,6 +104,8 @@ const getters = {
     }
     return null;
   },
+  casesResolved: (state) =>
+    state.controller ? state.controller.resolved : false,
   currentCaseId: (state) => {
     const {
       controller: {
@@ -175,7 +181,7 @@ const actions = {
     commit('setMetrics', newState);
     return resp;
   },
-  async initConnect({ commit }, htmlEl) {
+  async initConnect({ state, commit, dispatch }, htmlEl) {
     try {
       ConnectService.initConnect({
         htmlEl,
@@ -193,20 +199,25 @@ const actions = {
        */
       Log.error(e);
     }
-    ConnectService.initAgent({
-      onRefresh: (agent) => {
-        if (!getters.connectReady) {
+    Log.debug('waiting for agent...');
+    ConnectService.bindAgentEvents({
+      onRefresh: async (agent) => {
+        if (!state.connectRunning) {
           Log.debug('got initial agent agent!');
-          commit('setConnectState', { running: true, authed: true });
+          const agentConfig = await agent.getConfiguration();
+          Log.debug('got agent config: ', agentConfig);
+          commit('setConnectState', {
+            running: true,
+            authed: true,
+            config: agentConfig,
+          });
         }
-        commit('setAgentState', { newState: null, agent });
+        const rawAgentState = await agent.getState();
+        Log.debug('raw agent state: ', rawAgentState);
+        const agentState = ConnectService.parseAgentState(rawAgentState);
+        Log.debug('new agent state inbound:', agentState);
+        commit('setAgentState', agentState);
       },
-      onAuth: (ag, agentConf) =>
-        commit('setConnectState', {
-          running: true,
-          authed: true,
-          config: agentConf,
-        }),
     });
     ConnectService.bindContactEvents({
       onRefresh: (contact) => {
@@ -235,6 +246,7 @@ const actions = {
           state: contactState.type,
           attributes,
         });
+        commit('setControllerState', { contactId });
       },
     });
   },
@@ -254,6 +266,23 @@ const actions = {
       duration: contact.getStatusDuration(),
     });
     return this.callDuration;
+  },
+  async addCases({ state, commit, dispatch }, { worksites, pdas }) {
+    const { controller } = state;
+    const newWorksites = new Set([
+      ...controller.cases.worksites,
+      ...(worksites || []),
+    ]);
+    const newPdas = new Set([...controller.cases.pdas, ...(pdas || [])]);
+    const newCases = {
+      worksites: Array.from(newWorksites),
+      pdas: Array.from(newPdas),
+    };
+    commit('setControllerState', { cases: newCases });
+  async setResolved({ commit }, resolved) {
+    commit('setControllerState', {
+      resolved,
+    });
   },
   async setCurrentCase({ commit }, currentCase) {
     commit('setCurrentCase', currentCase);
@@ -280,14 +309,8 @@ const mutations = {
   setMetrics(state, newState) {
     state.metrics = newState;
   },
-  setAgentState(state, { newState, agent }) {
-    let agentState = newState;
-    if (agent && newState === null) {
-      agentState = agent.getState();
-      agentState = ConnectService.parseAgentState(agentState);
-    }
-    Log.debug('new state inbound:', agentState);
-    state.agentState = agentState;
+  setAgentState(state, newState) {
+    state.agentState = newState;
   },
   setConnectState(state, { running, authed, config }) {
     state.connectRunning = running;
@@ -299,6 +322,12 @@ const mutations = {
   },
   setContact(state, newState) {
     state.contact = { ...state.contact, ...newState };
+  },
+  setControllerState(state, newState) {
+    state.controller = {
+      ...state.controller,
+      ...newState,
+    };
   },
   setCurrentCase(state, currentCase) {
     state.controller.currentCase = {
