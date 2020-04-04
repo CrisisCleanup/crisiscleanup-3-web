@@ -74,15 +74,17 @@ export default {
         this.$log.debug('associating worksite to pda...');
         await Pda.api().associateWorksite(this.currentCase.id, worksite.id);
       }
-      this.$log.debug('updating outbound status with:', this.caseStatusId);
+      if (this.currentOutbound) {
+        this.$log.debug('updating outbound status with:', this.caseStatusId);
 
-      await PhoneOutbound.api().updateStatus(
-        this.currentOutbound.id,
-        this.caseStatusId,
-        worksite.id,
-      );
+        await PhoneOutbound.api().updateStatus(
+          this.currentOutbound.id,
+          this.caseStatusId,
+          worksite.id,
+        );
+      }
 
-      this.worksites.push(worksite.id);
+      this.addCases({ worksites: [worksite.id] });
       EventBus.$emit(CCEvent.CASE_SAVED, worksite);
     },
     async beforeWorksiteSave() {
