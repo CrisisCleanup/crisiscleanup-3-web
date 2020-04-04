@@ -103,15 +103,14 @@ export default {
     },
     async updateUserNeeded() {
       if (this.number && this.validateNumber(this.number)) {
-        this.updateUser(this.number, 'mobile');
+        await this.updateUser(this.number, 'mobile');
       }
       if (this.languages.length >= 1) {
-        this.languages.forEach((lang, idx) => {
-          if (lang) {
-            const field = idx ? 'secondary_language' : 'primary_language';
-            this.updateUser(lang, field);
-          }
-        });
+        await this.updateUser(null, 'primary_language');
+        await this.updateUser(null, 'secondary_language');
+        const [primary_language, secondary_language] = this.languages;
+        await this.updateUser(primary_language, 'primary_language');
+        await this.updateUser(secondary_language, 'secondary_language');
       }
       try {
         await this.saveUser();
