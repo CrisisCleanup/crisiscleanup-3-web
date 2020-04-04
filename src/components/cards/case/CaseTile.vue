@@ -40,7 +40,7 @@ export default {
 
 <style scoped lang="scss">
 .case-card {
-  @apply bg-crisiscleanup-light-grey p-4 mx-2;
+  @apply bg-crisiscleanup-light-grey p-4;
   @apply border-gray-300;
   border-width: 1px;
   display: flex;

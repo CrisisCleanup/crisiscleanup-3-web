@@ -25,18 +25,29 @@
       </div>
     </div>
     <div class="contactbar--cases">
-      <case-card
-        v-for="c in cards"
-        :key="c.caseNumber"
-        :case-number="c.caseNumber"
-        :state="c.state"
-        :worktype="c.worktype"
-        :address="c.address"
-        :tile="true"
-        :active="c.id === currentCaseId"
-        :type="c.type"
-        @click.native="setActive(c.id, c.type)"
-      />
+      <carousel
+        :pagination-enabled="false"
+        :per-page-custom="[
+          [768, 3],
+          [1024, 3],
+          [1400, 4],
+        ]"
+        class="carousel"
+      >
+        <slide class="case" v-for="c in cards" :key="c.id">
+          <case-card
+            :key="c.caseNumber"
+            :case-number="c.caseNumber"
+            :state="c.state"
+            :worktype="c.worktype"
+            :address="c.address"
+            :tile="true"
+            :active="c.id === currentCaseId"
+            :type="c.type"
+            @click.native="setActive(c.id, c.type)"
+          />
+        </slide>
+      </carousel>
     </div>
   </div>
 </template>
@@ -51,11 +62,12 @@ import { EventBus } from '@/event-bus';
 import CaseCard from '@/components/cards/Case.vue';
 import Pda from '@/models/Pda';
 import Worksite from '@/models/Worksite';
+import { Carousel, Slide } from 'vue-carousel';
 
 export default {
   name: 'BoardCallInfo',
   mixins: [IconsMixin, VueTimers, AgentMixin],
-  components: { CaseCard },
+  components: { CaseCard, Carousel, Slide },
   timers: {
     syncCallDuration: { time: 1000, autostart: true, repeat: true },
   },
@@ -195,10 +207,17 @@ export default {
           }
           &--cases {
             display: flex;
-            @apply py-4;
             justify-content: center;
             flex-grow: 1;
             align-items: center;
+            @apply pb-4;
+            .VueCarousel {
+              &-slide {
+                @apply px-2;
+                display: flex;
+                justify-content: center;
+              }
+            }
           }
         }
       }
