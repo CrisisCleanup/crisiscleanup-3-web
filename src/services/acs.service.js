@@ -91,18 +91,6 @@ export const initConnect = ({
   }
 };
 
-export const initAgent = ({ onRefresh, onAuth }) => {
-  Log.info('waiting on agent... ');
-  connect.agent((agent) => {
-    Log.info('agent initialized!');
-    agent.onRefresh(onRefresh);
-    Log.debug('trying to get agent config...');
-    const agentStates = agent.getConfiguration();
-    onAuth(agent, agentStates);
-    Log.debug(agentStates);
-  });
-};
-
 export const setPopup = ({ open } = { open: true }) => {
   const loginUrl = `https://cchotline.awsapps.com/auth?client_id=06919f4fd8ed324e&redirect_uri=${global.encodeURIComponent(
     'https://cchotline.awsapps.com/connect/auth/code',
@@ -132,8 +120,10 @@ export const STATES = {
   CONNECTING: connect.ContactStateType.CONNECTING,
   CONNECTED: connect.ContactStateType.CONNECTED,
   PENDING: connect.ContactStateType.PENDING,
+  DISCONNECTED: connect.ContactStateType.DISCONNECTED,
+  PENDING_CALL: 'PendingBusy',
   POLLING: 'polling',
-  ON_CALL: 'Busy',
+  BUSY: 'Busy',
   PAUSED: 'AfterCallWork',
 };
 
@@ -165,9 +155,18 @@ export const parseAgentState = (stateEvent) => {
         stateType = stateEvent.name;
       }
     }
-    return val.toLowerCase() === stateType.toLowerCase();
+    if (val) {
+      return val.toLowerCase() === stateType.toLowerCase();
+    }
+    return false;
   });
   return state.length >= 1 ? state[0] : null;
+};
+
+export const bindAgentEvents = (handler) => {
+  connect.agent((agent) => {
+    agent.onRefresh(connect.hitch(handler, handler.onRefresh));
+  });
 };
 
 export const bindContactEvents = (handler) => {
