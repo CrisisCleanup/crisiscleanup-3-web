@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full">
     <component :is="page" />
-    <incoming-popup v-if="callIncoming && preresolved" :cases="cases" />
+    <incoming-popup v-if="callIncoming && casesResolved" />
   </div>
 </template>
 
@@ -26,8 +26,6 @@ export default {
   data() {
     return {
       page: Gateway,
-      preresolved: false,
-      cases: {},
     };
   },
   timers: {
@@ -48,7 +46,11 @@ export default {
       'setContactState',
     ]),
     async resolveCases({ outboundIds, pdas, worksites }) {
-      this.$log.debug('resolving caller cases...');
+      this.$log.debug('resolving caller cases...', pdas, worksites);
+      await this.addCases({
+        worksites,
+        pdas,
+      });
       const currentCase = {
         id: null,
         type: null,
@@ -79,6 +81,7 @@ export default {
         worksites: worksiteCases,
         pdas: pdasCases,
       };
+      this.$log.debug('resolved cases:', this.cases);
 
       if (freshPdas.length >= 1) {
         this.$log.debug(
@@ -121,9 +124,9 @@ export default {
   },
   created() {
     EventBus.$on(CCEvent.INBOUND, async (attrs) => {
-      if (!this.preresolved) {
+      if (!this.casesResolved) {
         await this.resolveCases(attrs);
-        this.preresolved = true;
+        this.setResolved(true);
       }
     });
     EventBus.$on(CCEvent.ON_CALL, () => {
