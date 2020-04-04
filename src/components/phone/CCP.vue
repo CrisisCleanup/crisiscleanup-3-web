@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style>
-.ccp-embed {
+#ccp-embed {
   display: none;
 }
 </style>
