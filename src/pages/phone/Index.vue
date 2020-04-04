@@ -130,6 +130,7 @@ export default {
       this.page = Controller;
     });
     EventBus.$on(CCEvent.OFF_CALL, () => {
+      this.$store.dispatch('phone/resetState');
       this.page = Dashboard;
     });
     if (!this.connectReady) {

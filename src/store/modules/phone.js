@@ -19,9 +19,7 @@ const Log = Logger({
   ],
 });
 
-const PhoneState = {
-  agent: null,
-  agentState: ConnectService.STATES.OFFLINE,
+const getStateDefaults = () => ({
   contact: {
     id: null,
     duration: null,
@@ -44,6 +42,16 @@ const PhoneState = {
       notes: '',
     },
   },
+});
+
+/**
+ * @todo Refactor Phone and Split into multiple Stores
+ * @body Split into Controller, Agent, Contact substores.
+ */
+
+const PhoneState = {
+  agent: null,
+  agentState: ConnectService.STATES.OFFLINE,
   agentConfig: null,
   metrics: {},
   connectRunning: false,
@@ -51,6 +59,7 @@ const PhoneState = {
   streams: null,
   popupOpen: false,
   credentials: SSO.retrieveCredentials(),
+  ...getStateDefaults(),
 };
 
 // getters
@@ -258,6 +267,9 @@ const actions = {
   async setContactState({ commit }, newState) {
     commit('setContact', { state: newState });
   },
+  async resetState({ commit }) {
+    commit('resetState');
+  },
 };
 
 // mutations
@@ -302,6 +314,12 @@ const mutations = {
   },
   setOutboundId(state, newId) {
     state.controller.outboundId = newId;
+  },
+  resetState(state) {
+    Object.assign(state, {
+      ...state,
+      ...getStateDefaults(),
+    });
   },
 };
 
