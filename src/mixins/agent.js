@@ -5,7 +5,12 @@ import { mapActions, mapGetters } from 'vuex';
 
 export const AgentMixin = {
   methods: {
-    ...mapActions('phone', ['setCaseStatus', 'setContactState']),
+    ...mapActions('phone', [
+      'setCaseStatus',
+      'setContactState',
+      'addCases',
+      'setResolved',
+    ]),
     async fetchCasesByType(caseModel, ids) {
       const cases = await Promise.all(
         ids.map(async (id) => {
@@ -34,6 +39,7 @@ export const AgentMixin = {
       'agentAvailable',
       'contactState',
       'currentCase',
+      'currentCases',
       'callerId',
       'pdas',
       'worksites',
@@ -41,6 +47,7 @@ export const AgentMixin = {
       'currentOutbound',
       'currentCaseType',
       'currentCaseId',
+      'casesResolved',
     ]),
     callerName() {
       return this.currentCase ? this.currentCase.name : 'Unknown';
