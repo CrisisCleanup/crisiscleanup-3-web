@@ -146,13 +146,16 @@ export default {
         state: 'offline',
       };
       switch (this.agentState) {
+        case CCState.POLLING:
         case CCState.ROUTABLE:
+        case CCState.PENDING_CALL:
           state.key = 'stop';
           state.state = 'available';
           EventBus.$emit(CCEvent.AVAILABLE);
           break;
         case CCState.PENDING:
-        case CCState.ON_CALL:
+        case CCState.INCOMING:
+        case CCState.BUSY:
         case CCState.CONNECTING:
         case CCState.CONNECTED:
           state.key = 'ready';
@@ -165,8 +168,11 @@ export default {
           state.state = 'paused';
           EventBus.$emit(CCEvent.PAUSED);
           break;
-        default:
+        case CCState.OFFLINE:
+        case CCState.DISCONNECTED:
           EventBus.$emit(CCEvent.OFF_CALL);
+          break;
+        default:
           break;
       }
       state.text = this.lang[state.key];
