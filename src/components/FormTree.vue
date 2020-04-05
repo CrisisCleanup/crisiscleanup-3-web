@@ -12,7 +12,9 @@
       <template v-if="['h5'].includes(field.html_type)">
         <div class="form-field flex items-center">
           <base-checkbox
-            :value="worksite.formFields[field.field_key]"
+            :value="
+              !!worksite.formFields[field.field_key] || hasSelectedChildren
+            "
             @input="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });
@@ -225,6 +227,26 @@ export default {
         this.worksite.formFields[this.field.field_key],
       );
     }
+
+    const hasSelectedChildren = this.field.children.some((childField) => {
+      return (
+        childField.if_selected_then_work_type &&
+        Boolean(this.worksite.formFields[childField.field_key])
+      );
+    });
+    if (hasSelectedChildren) {
+      this.showChildren = true;
+    }
+  },
+  computed: {
+    hasSelectedChildren() {
+      return this.field.children.some((childField) => {
+        return (
+          childField.if_selected_then_work_type &&
+          Boolean(this.worksite.formFields[childField.field_key])
+        );
+      });
+    },
   },
   methods: {
     getValue(fieldKey) {
