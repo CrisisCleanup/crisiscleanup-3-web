@@ -717,7 +717,13 @@ export default {
     async saveCurrentLocation() {
       let { geometry } = this.currentPolygon.toGeoJSON();
       const { type, features } = this.currentPolygon.toGeoJSON();
-      const location = {};
+      let locationType = 'locationTypes.org_primary_response_area';
+      if (this.settingLocation === 'secondary_location') {
+        locationType = 'locationTypes.org_secondary_response_area';
+      }
+      const location = {
+        name: `${this.organization.name} ${this.$t(locationType)}`,
+      };
       if (type === 'FeatureCollection') {
         const [feature] = features;
         geometry = feature.geometry;
