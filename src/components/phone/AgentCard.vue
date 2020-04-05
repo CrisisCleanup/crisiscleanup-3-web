@@ -62,6 +62,13 @@
       :request="{ phone: true, lang: true }"
       @user-updated="() => (editCardActive = false)"
     />
+    <modal
+      v-if="showConnectLogin"
+      modal-classes="max-w-2xl"
+      @close="showConnectLogin = false"
+    >
+      <PhoneGateway></PhoneGateway>
+    </modal>
   </div>
 </template>
 
@@ -73,11 +80,13 @@ import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
 import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 import { EventBus } from '@/event-bus';
 import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
+import PhoneGateway from '../../pages/phone/Gateway';
 
 export default {
   name: 'AgentCard',
   mixins: [IconsMixin, LangMixin, UserMixin],
   components: {
+    PhoneGateway,
     moreInfo: ContactMoreInfo,
     'agent-edit-card': CallerIDEditCard,
     TrainingsModal,
@@ -88,6 +97,7 @@ export default {
       completedTraining: false,
       isShowingTrainingModal: false,
       editCardActive: false,
+      showConnectLogin: false,
     };
   },
   async mounted() {
@@ -102,6 +112,12 @@ export default {
         this.isShowingTrainingModal = true;
         return this.isShowingTrainingModal;
       }
+
+      if (!this.connectReady) {
+        this.showConnectLogin = true;
+        return this.showConnectLogin;
+      }
+
       if (this.agentAvailable) {
         return this.setAgentState(CCState.OFFLINE);
       }
@@ -112,8 +128,21 @@ export default {
       this.completedTraining = true;
     },
   },
+  watch: {
+    popupOpen(newState, oldState) {
+      if (!newState && oldState && this.connectReady) {
+        this.showConnectLogin = false;
+        this.setAgentState(CCState.ROUTABLE);
+      }
+    },
+  },
   computed: {
-    ...mapGetters('phone', ['agentState', 'agentAvailable']),
+    ...mapGetters('phone', [
+      'agentState',
+      'agentAvailable',
+      'connectReady',
+      'popupOpen',
+    ]),
     lang() {
       return this.getLang({
         start: '~~Start Taking Calls',
