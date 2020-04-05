@@ -15,7 +15,6 @@ import Pda from '@/models/Pda';
 import { AgentMixin } from '@/mixins';
 import IncomingPopup from '@/components/phone/Popup.vue';
 import { mixin as VueTimer } from 'vue-timers';
-import Gateway from './Gateway.vue';
 import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
 
@@ -25,7 +24,7 @@ export default {
   components: { IncomingPopup },
   data() {
     return {
-      page: Gateway,
+      page: Dashboard,
     };
   },
   timers: {

@@ -2,7 +2,7 @@
   <Loader :loading="loading" class="h-full w-full overflow-auto">
     <template #content>
       <div
-        class="gateway--container h-full w-full overflow-auto flex flex-col flex items-center h-screen bg-crisiscleanup-light-grey"
+        class="gateway--container h-full w-full overflow-auto flex flex-col flex items-center bg-crisiscleanup-light-grey"
       >
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mt-8">
           <div class="step">
