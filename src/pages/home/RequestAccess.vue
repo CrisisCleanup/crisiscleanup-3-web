@@ -18,9 +18,11 @@
               }}
             </div>
             <base-text variant="body" weight="700" class="mt-4 mb-1">
-              ~~To join an organization, you should be invited by an existing
-              member. You can use this form to <br />
-              request access from an existing user by entering their email here.
+              {{
+                $t(
+                  '~~To join an organization, you should be invited by an existing member. You can use this form to request access from an existing user by entering their email here.',
+                )
+              }}
             </base-text>
             <!-- <div>{{ $t('requestAccess.enter_existing_user_email_msg') }}</div> -->
           </div>
@@ -35,7 +37,11 @@
             required
           ></base-input>
           <base-text variant="body" weight="700" class="mt-4 mb-2 pt-8">
-            ~~Now fill out your information here and request request access
+            {{
+              $t(
+                '~~Now fill out your information here and request request access',
+              )
+            }}
           </base-text>
           <base-input
             v-model="email"
@@ -115,7 +121,9 @@
           />
         </form>
         <base-text variant="body" weight="700" class="mt-10 mb-8">
-          ~~Your request will be sent to existing members for approval
+          {{
+            $t('~~Your request will be sent to existing members for approval')
+          }}
         </base-text>
         <modal
           v-if="showSuccessModal"
