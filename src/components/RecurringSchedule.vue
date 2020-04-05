@@ -11,19 +11,27 @@
         <div>
           <form-select
             v-model="frequency"
-            :options="['~~Daily', '~~Weekly']"
+            :options="[
+              $t('recurringSchedule.daily'),
+              $t('recurringSchedule.weekly'),
+            ]"
             indicator-icon="caret-down"
             select-classes="h-10 border bg-white text-sm"
             @input="logChange"
           />
         </div>
-        <div class="daily" v-if="frequency === '~~Daily'">
+        <div class="daily" v-if="frequency === $t('recurringSchedule.daily')">
           <base-radio
             class="mr-10 pt-4"
             :name="$t('recurringSchedule.days')"
             :label="$t('recurringSchedule.days')"
             :value="dailyOption"
-            @change="dailyOption = $event"
+            @change="
+              (value) => {
+                dailyOption = value;
+                logChange();
+              }
+            "
           >
             <div class="flex items-center">
               {{ $t('recurringSchedule.every') }}
@@ -39,23 +47,29 @@
             :name="$t('recurringSchedule.every_weekday')"
             :label="$t('recurringSchedule.every_weekday')"
             :value="dailyOption"
-            @change="dailyOption = $event"
+            @change="
+              (value) => {
+                dailyOption = value;
+                logChange();
+              }
+            "
           />
         </div>
 
-        <div class="weekly" v-if="frequency === '~~Weekly'">
+        <div class="weekly" v-if="frequency === $t('recurringSchedule.weekly')">
           <div class="py-2">
             {{ $t('recurringSchedule.recur_every') }}
             <input
               class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
               v-model="weekInterval"
+              @input="logChange"
             />
             {{ $t('recurringSchedule.weeks_on') }}
           </div>
 
           <div class="flex flex-wrap">
             <div v-for="(day, key) in daysOfWeek" :key="key" class="p-1 w-24">
-              <base-checkbox v-model="selectedDays[key]">
+              <base-checkbox v-model="selectedDays[key]" @input="logChange">
                 {{ key }}
               </base-checkbox>
             </div>
@@ -91,6 +105,7 @@
 
 <script>
 import { RRule } from 'rrule';
+import { isEqual } from 'lodash';
 export default {
   name: 'RecurringSchedule',
   props: {
@@ -102,29 +117,52 @@ export default {
       type: String,
       default: '',
     },
+    isDefault: {
+      type: Boolean,
+    },
   },
   mounted() {
     this.currentRRule = this.value;
+    const inverseDaysOfWeek = {};
+    Object.keys(this.daysOfWeek).forEach((key) => {
+      inverseDaysOfWeek[this.daysOfWeek[key].toString()] = key;
+    });
     if (this.currentRRule) {
       const rule = RRule.fromString(this.currentRRule);
       if (rule.origOptions.freq === RRule.DAILY) {
-        this.frequency = 'Daily';
+        this.frequency = this.$t('recurringSchedule.daily');
         this.dayInterval = rule.origOptions.interval;
         this.endDate = rule.origOptions.until;
+        if (
+          isEqual(rule.origOptions.byweekday, [
+            RRule.MO,
+            RRule.TU,
+            RRule.WE,
+            RRule.TH,
+            RRule.FR,
+          ])
+        ) {
+          this.dailyOption = this.$t('recurringSchedule.every_weekday');
+        }
       }
       if (rule.origOptions.freq === RRule.WEEKLY) {
-        this.frequency = 'Weekly';
+        this.frequency = this.$t('recurringSchedule.weekly');
         this.weekInterval = rule.origOptions.interval;
         this.endDate = rule.origOptions.until;
+        rule.origOptions.byweekday.forEach((weekday) => {
+          this.selectedDays[inverseDaysOfWeek[weekday.toString()]] = true;
+        });
       }
     }
+
+    this.showSchedule = !this.isDefault;
   },
   methods: {
     customFormatter(date) {
       return this.$moment(date).format('ddd MMMM Do YYYY');
     },
     logChange() {
-      if (this.frequency === 'Weekly') {
+      if (this.frequency === this.$t('recurringSchedule.weekly')) {
         this.currentRRule = new RRule({
           freq: RRule.WEEKLY,
           interval: this.weekInterval,
@@ -135,14 +173,14 @@ export default {
             .map((day) => this.daysOfWeek[day]),
         }).toString();
       }
-      if (this.frequency === 'Daily') {
+      if (this.frequency === this.$t('recurringSchedule.daily')) {
         this.currentRRule = new RRule({
           freq: RRule.DAILY,
           interval: this.dayInterval,
           until: this.endDate,
           byhour: [11],
           byweekday:
-            this.dailyOption === "$t('recurringSchedule.every_weekday')"
+            this.dailyOption === this.$t('recurringSchedule.every_weekday')
               ? [RRule.MO, RRule.TU, RRule.WE, RRule.TH, RRule.FR]
               : [],
         }).toString();
@@ -159,11 +197,6 @@ export default {
         return RRule.fromString(this.currentRRule).toText();
       }
       return '';
-    },
-  },
-  watch: {
-    currentRRule(value) {
-      this.$emit('input', value);
     },
   },
   data() {

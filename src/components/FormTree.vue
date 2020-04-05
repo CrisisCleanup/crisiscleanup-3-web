@@ -111,7 +111,8 @@
         <div class="form-field">
           <div class="mb-1">{{ field.label_t }}</div>
           <RecurringSchedule
-            :value="worksite.formFields[field.field_key]"
+            :value="worksite.formFields[field.field_key] || field.recur_default"
+            :is-default="!worksite.formFields[field.field_key]"
             @input="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });

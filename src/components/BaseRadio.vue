@@ -42,6 +42,7 @@ export default {
         return this.value;
       },
       set() {
+        this.$emit('input', this.label);
         this.$emit('change', this.label);
       },
     },
