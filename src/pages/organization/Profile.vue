@@ -433,6 +433,7 @@ import Location from '@/models/Location';
 import User from '@/models/User';
 import { getErrorMessage } from '@/utils/errors';
 import UserSearchInput from '@/components/UserSearchInput';
+import LocationType from '@/models/LocationType';
 import DragDrop from '../../components/DragDrop';
 import LocationTool from '../../components/LocationTool';
 
@@ -584,12 +585,18 @@ export default {
       this.loading = true;
       let { geometry } = this.currentPolygon.toGeoJSON();
       const { type, features } = this.currentPolygon.toGeoJSON();
-      let locationType = 'locationTypes.org_primary_response_area';
+      let locationTypeKey = 'org_primary_response_area';
       if (this.settingLocation === 'secondary_location') {
-        locationType = 'locationTypes.org_secondary_response_area';
+        locationTypeKey = 'org_secondary_response_area';
       }
+      const locationType = LocationType.query()
+        .where('key', locationTypeKey)
+        .get()[0];
       const location = {
-        name: `${this.currentOrganization.name} ${this.$t(locationType)}`,
+        name: `${this.currentOrganization.name} ${this.$t(
+          locationType.name_t,
+        )}`,
+        type: locationType.id,
       };
       if (type === 'FeatureCollection') {
         const [feature] = features;

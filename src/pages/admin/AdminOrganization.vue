@@ -536,6 +536,7 @@ import * as L from 'leaflet';
 import Location from '@/models/Location';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
+import LocationType from '@/models/LocationType';
 import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
 import LocationTool from '../../components/LocationTool';
@@ -717,12 +718,16 @@ export default {
     async saveCurrentLocation() {
       let { geometry } = this.currentPolygon.toGeoJSON();
       const { type, features } = this.currentPolygon.toGeoJSON();
-      let locationType = 'locationTypes.org_primary_response_area';
+      let locationTypeKey = 'org_primary_response_area';
       if (this.settingLocation === 'secondary_location') {
-        locationType = 'locationTypes.org_secondary_response_area';
+        locationTypeKey = 'org_secondary_response_area';
       }
+      const locationType = LocationType.query()
+        .where('key', locationTypeKey)
+        .get()[0];
       const location = {
-        name: `${this.organization.name} ${this.$t(locationType)}`,
+        name: `${this.organization.name} ${this.$t(locationType.name_t)}`,
+        type: locationType.id,
       };
       if (type === 'FeatureCollection') {
         const [feature] = features;
