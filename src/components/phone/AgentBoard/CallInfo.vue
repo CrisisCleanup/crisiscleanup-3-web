@@ -20,8 +20,17 @@
         </div>
       </div>
       <div class="contact--actions">
-        <base-text :weight="600" variant="h1">{{ callTimer }}</base-text>
-        <base-text :weight="400" variant="h3">{{ lang.calltime }}</base-text>
+        <div class="timer">
+          <base-text :weight="600" variant="h1">{{ callTimer }}</base-text>
+          <base-text :weight="400" variant="h3">{{ lang.calltime }}</base-text>
+        </div>
+        <div class="buttons">
+          <ccu-icon
+            @click.native="endCurrentCall"
+            size="xl"
+            :type="icons.phone_hangup"
+          />
+        </div>
       </div>
     </div>
     <div class="contactbar--cases">
@@ -186,11 +195,25 @@ export default {
               }
               &--actions {
                 display: flex;
-                flex-direction: column;
+                flex-direction: row;
+                justify-content: center;
                 @apply pl-3 ml-6;
                 p {
                   &:last-child {
                     @apply text-crisiscleanup-dark-300;
+                  }
+                }
+                div {
+                  @apply px-1;
+                }
+                .buttons {
+                  cursor: pointer;
+                  img {
+                    transition: 300ms ease;
+                    &:hover {
+                      transform: translateY(-3px);
+                      filter: drop-shadow(0 0 0.2rem fade-out(crimson, 0.3));
+                    }
                   }
                 }
                 position: relative;
