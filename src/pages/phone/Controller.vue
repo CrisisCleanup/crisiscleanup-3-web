@@ -1,6 +1,15 @@
 <template>
-  <Loader :loading="loading" class="h-full w-full">
+  <Loader
+    :loading="loading"
+    :class="`h-full w-full phone-controller ${
+      scriptPopup ? 'popup-active' : ''
+    } ${renderPopup ? 'popup' : ''}`"
+  >
     <template #content>
+      <script-popup
+        v-if="renderPopup"
+        @dismissed="() => (scriptPopup = false)"
+      />
       <phone-layout>
         <template #grid-start>
           <div class="grid-start">
@@ -42,24 +51,28 @@ import AgentBoard from '@/components/phone/AgentBoard/Board.vue';
 import { EVENTS as CCEvent, STATES as CCState } from '@/services/acs.service';
 import { EventBus } from '@/event-bus';
 import Loader from '@/components/Loader.vue';
-import { AgentMixin } from '@/mixins';
+import { LocalStorageMixin, AgentMixin } from '@/mixins';
 import PhoneOutbound from '@/models/PhoneOutbound';
+import ScriptPopup from '@/components/phone/ScriptPopup.vue';
 import Pda from '@/models/Pda';
 
 export default {
   name: 'Controller',
-  mixins: [AgentMixin],
+  mixins: [AgentMixin, LocalStorageMixin],
   components: {
     PhoneLayout,
     CaseForm,
     AgentBlock,
     AgentBoard,
     Loader,
+    ScriptPopup,
   },
   data() {
     return {
       worksite: null,
       loading: false,
+      scriptPopup: false,
+      renderPopup: false,
     };
   },
   methods: {
@@ -95,7 +108,22 @@ export default {
       return true;
     },
   },
+  async mounted() {
+    if (!this.existsLocalStorage('ccu-ivr-hide-popup')) {
+      this.renderPopup = true;
+      this.scriptPopup = true;
+    }
+  },
 };
 </script>
 
-<style></style>
+<style scoped lang="scss">
+.phone-controller {
+  &.popup {
+    transition: transform 1.2s ease;
+  }
+  &.popup-active {
+    transform: translateY(8rem);
+  }
+}
+</style>
