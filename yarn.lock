@@ -1168,10 +1168,10 @@
     uuid "^3.0.1"
     webrtc-adapter "^6.4.0"
 
-"@cypress/browserify-preprocessor@2.1.4":
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/@cypress/browserify-preprocessor/-/browserify-preprocessor-2.1.4.tgz#31f3e35969b591da0298eb801d6905c64c7151cf"
-  integrity sha512-149D1E2UzY7kCjnXDofx61MeJ6HQczj5XCAPjRUPpYr/A7T/O4C0IlTLZYV2xxnDD68d71NfT/cT8s0sfi27RQ==
+"@cypress/browserify-preprocessor@2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@cypress/browserify-preprocessor/-/browserify-preprocessor-2.2.1.tgz#0980c667f774f826a79819f56d50f1b385324080"
+  integrity sha512-97vJ1ulp6sIBJ00FJHAP8JDrJmBXV1UudNNs5r2LmXl5ESiVrPc/5wv5zfJuW2toOSOHa9IbJpwJj/4RbvRYXg==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.3.0"
@@ -1189,18 +1189,19 @@
     debug "4.1.1"
     fs-extra "7.0.1"
     lodash.clonedeep "4.5.0"
+    through2 "^2.0.0"
     watchify "3.11.1"
 
-"@cypress/code-coverage@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-2.0.0.tgz#3341b43b049fcf7a2391b9fd8df877962cc46226"
-  integrity sha512-7noyt7rYz8k4GQBq3NxtCYfXgxA3lw2fAGycZSGniZU6y97KkXg5GCrU0+IGqvG4zHaSb4Ovje3c6IDKnpS43w==
+"@cypress/code-coverage@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@cypress/code-coverage/-/code-coverage-2.0.5.tgz#db2a841b93a6d669fecaf781ee6ecd5eb4952715"
+  integrity sha512-niiKtgbQknr42VR0DV6PC6OuSyci3zkDavpV7JH3M4wtlqLIoWNv/WlmV3l86ZCqtcxH0gzuZzZYzgmJME5Skw==
   dependencies:
-    "@cypress/browserify-preprocessor" "2.1.4"
+    "@cypress/browserify-preprocessor" "2.2.1"
     debug "4.1.1"
     execa "4.0.0"
     istanbul-lib-coverage "3.0.0"
-    nyc "15.0.0"
+    nyc "15.0.1"
 
 "@cypress/listr-verbose-renderer@0.4.1":
   version "0.4.1"
@@ -12003,6 +12004,14 @@ istanbul-reports@^3.0.0:
     html-escaper "^2.0.0"
     istanbul-lib-report "^3.0.0"
 
+istanbul-reports@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/istanbul-reports/-/istanbul-reports-3.0.2.tgz#d593210e5000683750cb09fc0644e4b6e27fd53b"
+  integrity sha512-9tZvz7AiR3PEDNGiV9vIouQ/EAcqMXFmkcA1CDFTwOB98OZVDL0PH9glHotf5Ugp6GCOTypfzGWI/OqjWNCRUw==
+  dependencies:
+    html-escaper "^2.0.0"
+    istanbul-lib-report "^3.0.0"
+
 iterate-iterator@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/iterate-iterator/-/iterate-iterator-1.0.1.tgz#1693a768c1ddd79c969051459453f082fe82e9f6"
@@ -14488,7 +14497,7 @@ node-notifier@^6.0.0:
     shellwords "^0.1.1"
     which "^1.3.1"
 
-node-preload@^0.2.0:
+node-preload@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/node-preload/-/node-preload-0.2.1.tgz#c03043bb327f417a18fee7ab7ee57b408a144301"
   integrity sha512-RM5oyBy45cLEoHqCeh+MNuFAxO0vTFBLskvQbOKnEE7YTTSN4tbN8QWDIPQ6L+WvKsB/qLEGpYe2ZZ9d4W9OIQ==
@@ -14655,10 +14664,10 @@ nwsapi@^2.0.7, nwsapi@^2.2.0:
   resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.2.0.tgz#204879a9e3d068ff2a55139c2c772780681a38b7"
   integrity sha512-h2AatdwYH+JHiZpv7pt/gSX1XoRGb7L/qSIeuqA6GwYoF9w1vP1cw42TO0aI2pNyshRK5893hNSl+1//vHK7hQ==
 
-nyc@15.0.0, nyc@^15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/nyc/-/nyc-15.0.0.tgz#eb32db2c0f29242c2414fe46357f230121cfc162"
-  integrity sha512-qcLBlNCKMDVuKb7d1fpxjPR8sHeMVX0CHarXAVzrVWoFrigCkYR8xcrjfXSPi5HXM7EU78L6ywO7w1c5rZNCNg==
+nyc@15.0.1, nyc@^15.0.0:
+  version "15.0.1"
+  resolved "https://registry.yarnpkg.com/nyc/-/nyc-15.0.1.tgz#bd4d5c2b17f2ec04370365a5ca1fc0ed26f9f93d"
+  integrity sha512-n0MBXYBYRqa67IVt62qW1r/d9UH/Qtr7SF1w/nQLJ9KxvWF6b2xCHImRAixHN9tnMMYHC2P14uo6KddNGwMgGg==
   dependencies:
     "@istanbuljs/load-nyc-config" "^1.0.0"
     "@istanbuljs/schema" "^0.1.2"
@@ -14675,10 +14684,9 @@ nyc@15.0.0, nyc@^15.0.0:
     istanbul-lib-processinfo "^2.0.2"
     istanbul-lib-report "^3.0.0"
     istanbul-lib-source-maps "^4.0.0"
-    istanbul-reports "^3.0.0"
-    js-yaml "^3.13.1"
+    istanbul-reports "^3.0.2"
     make-dir "^3.0.0"
-    node-preload "^0.2.0"
+    node-preload "^0.2.1"
     p-map "^3.0.0"
     process-on-spawn "^1.0.0"
     resolve-from "^5.0.0"
@@ -14686,7 +14694,6 @@ nyc@15.0.0, nyc@^15.0.0:
     signal-exit "^3.0.2"
     spawn-wrap "^2.0.0"
     test-exclude "^6.0.0"
-    uuid "^3.3.3"
     yargs "^15.0.2"
 
 oauth-sign@~0.9.0:
