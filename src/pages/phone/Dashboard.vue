@@ -21,9 +21,6 @@
                 >
                 </training-card>
               </div>
-              <div class="grid--story">
-                <stories-card />
-              </div>
             </div>
           </div>
         </template>
@@ -36,7 +33,6 @@
 import User from '@/models/User';
 import { mapActions, mapGetters } from 'vuex';
 import Loader from '@/components/Loader.vue';
-import PeopleStoriesCard from '@/components/phone/PeopleStoriesCard.vue';
 import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
 import Leaderboard from '@/components/phone/Leaderboard.vue';
 import PhoneLayout from '@/layouts/Phone.vue';
@@ -49,7 +45,6 @@ export default {
     AgentBlock,
     Loader,
 
-    'stories-card': PeopleStoriesCard,
     'training-card': NewsTrainingCard,
     Leaderboard,
   },
