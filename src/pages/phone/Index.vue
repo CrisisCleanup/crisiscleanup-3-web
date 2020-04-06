@@ -20,7 +20,7 @@ import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
 
 export default {
-  name: 'PhoneLayout',
+  name: 'Phone',
   mixins: [AgentMixin, VueTimer],
   components: { IncomingPopup },
   data() {

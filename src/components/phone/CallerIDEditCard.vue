@@ -75,6 +75,7 @@
 <script>
 import VueTypes from 'vue-types';
 import { LangMixin, UserMixin } from '@/mixins';
+import Agent from '@/models/Agent';
 import Language from '@/models/Language';
 
 export default {
@@ -111,6 +112,13 @@ export default {
         const [primary_language, secondary_language] = this.languages;
         await this.updateUser(primary_language, 'primary_language');
         await this.updateUser(secondary_language, 'secondary_language');
+        await Agent.api().fetch();
+        const agent = Agent.query()
+          .where('user_id', this.currentUser.id)
+          .first();
+        await Agent.api().updateConfig(agent.agent_id);
+        this.$store.dispatch('phone/setAgent', agent);
+        this.$store.dispatch('phone/syncAgentConfig');
       }
       try {
         await this.saveUser();

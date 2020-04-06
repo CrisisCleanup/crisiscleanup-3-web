@@ -50,6 +50,9 @@ export default class Agent extends Model {
         }
         return agent;
       },
+      async updateConfig(id) {
+        return this.patch(`/agents/${id}`, { save: false });
+      },
     },
   };
 }
