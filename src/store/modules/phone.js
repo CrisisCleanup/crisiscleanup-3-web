@@ -56,7 +56,7 @@ const getStateDefaults = () => ({
  */
 
 const PhoneState = {
-  agent: null,
+  agent: {},
   agentState: ConnectService.STATES.OFFLINE,
   agentConfig: null,
   metrics: {},
@@ -76,7 +76,7 @@ const getters = {
       ? state.agentState
       : ConnectService.STATES.OFFLINE,
   connectRunning: (state) => state.connectRunning, // is connect initialized?
-  connectReady: (state) => state.connectRunning && state.agentConfig !== null, // is connect done w/ init and auth?
+  connectReady: (state) => state.connectRunning && state.agentConfig, // is connect done w/ init and auth?
   popupOpen: (state) => state.popupOpen,
   authToken: (state) =>
     state.credentials ? state.credentials.AccessToken : '',
@@ -260,6 +260,9 @@ const actions = {
     ConnectService.setAgentState(state);
     commit('setAgentState', { newState: state });
   },
+  async setAgent({ commit }, agent) {
+    commit('setAgent', agent);
+  },
   async syncCallDuration({ commit }) {
     const agent = ConnectService.getAgent();
     const [contact] = agent.getContacts();
@@ -326,6 +329,13 @@ const actions = {
   async setContactState({ commit }, newState) {
     commit('setContact', { state: newState });
   },
+  async syncAgentConfig({ state, commit }) {
+    if (state.connectAuthed) {
+      const agent = ConnectService.getAgent();
+      const config = await agent.getConfiguration();
+      commit('setAgentConfig', config);
+    }
+  },
   async resetState({ commit }) {
     commit('resetState');
   },
@@ -335,6 +345,12 @@ const actions = {
 const mutations = {
   setAgent(state, agent) {
     state.agent = agent;
+  },
+  setAgentConfig(state, newState) {
+    state.agentConfig = {
+      ...state.agentConfig,
+      ...newState,
+    };
   },
   setMetrics(state, newState) {
     state.metrics = newState;
