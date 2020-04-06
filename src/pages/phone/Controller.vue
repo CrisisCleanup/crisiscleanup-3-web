@@ -1,9 +1,9 @@
 <template>
   <Loader
     :loading="loading"
-    :class="`h-full w-full phone-controller ${
-      scriptPopup ? 'popup-active' : ''
-    } ${renderPopup ? 'popup' : ''}`"
+    :class="`w-full phone-controller ${scriptPopup ? 'popup-active' : ''} ${
+      renderPopup ? 'popup' : ''
+    }`"
   >
     <template #content>
       <script-popup
