@@ -1,6 +1,7 @@
 import Pda from '@/models/Pda';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import Worksite from '@/models/Worksite';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { mapActions, mapGetters } from 'vuex';
 
 export const AgentMixin = {
@@ -49,6 +50,7 @@ export const AgentMixin = {
       'currentCaseType',
       'currentCaseId',
       'casesResolved',
+      'callerLocale',
     ]),
     callerName() {
       return this.currentCase ? this.currentCase.name : 'Unknown';
@@ -61,6 +63,10 @@ export const AgentMixin = {
         total: 2,
         recent: 6,
       };
+    },
+    callerFormattedNumber() {
+      const number = parsePhoneNumberFromString(this.callerId);
+      return number.formatNational();
     },
   },
 };

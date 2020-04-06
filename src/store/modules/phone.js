@@ -1,4 +1,5 @@
 import { EventBus } from '@/event-bus';
+import Language from '@/models/Language';
 import Pda from '@/models/Pda';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import Worksite from '@/models/Worksite';
@@ -162,6 +163,16 @@ const getters = {
     state.controller.currentCase ? state.controller.currentCase.type : null,
   caseStatusId: (state) =>
     state.controller.status ? state.controller.status.id : null,
+  callerLocale: (state) => {
+    const { contact } = state;
+    if (!contact.attributes) return null;
+    const { callerLocale } = contact.attributes;
+    const lang = Language.query().where('subtag', callerLocale).first();
+    if (!lang) {
+      return Language.find(2);
+    }
+    return lang;
+  },
 };
 
 // actions
@@ -228,16 +239,18 @@ const actions = {
         const duration = contact.getStatusDuration();
         const contactAttrs = contact.getAttributes();
         Log.debug('got contact attributes:', contactAttrs);
-        const { pdas, worksites, callerID, ids } = contactAttrs;
+        const { pdas, worksites, callerID, ids, USER_LANGUAGE } = contactAttrs;
         Log.debug('contact refresh: ', contactState);
         const workSites = worksites.value.split(',').filter((v) => v !== '');
         const Pdas = pdas.value.split(',').filter((v) => v !== '');
         const outboundIds = ids.value.split(',').filter((v) => v !== '');
+        const locale = USER_LANGUAGE.value.replace('_', '-');
         const attributes = {
           callerId: callerID.value,
           worksites: workSites,
           pdas: Pdas,
           outboundIds,
+          callerLocale: locale,
         };
         commit('setContact', {
           id: contactId,

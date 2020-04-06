@@ -4,7 +4,7 @@
       <div class="contact--call">
         <div class="contact-stats">
           <base-text class="mobile" :weight="600" variant="h1">{{
-            callerId
+            callerFormattedNumber
           }}</base-text>
           <base-text :weight="400" variant="h3">{{
             `2 ${lang.callStat.calls} | 1 ${lang.callStat.days}`
@@ -15,7 +15,7 @@
             <base-text>{{ callerName }}</base-text>
           </ccu-icon>
           <ccu-icon with-text size="md" :type="icons.earth_globe">
-            <base-text>{{ lang.english }}</base-text>
+            <base-text>{{ callerLocale.name_t.split(' ')[0] }}</base-text>
           </ccu-icon>
         </div>
       </div>
