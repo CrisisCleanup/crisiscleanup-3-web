@@ -174,3 +174,10 @@ export const bindContactEvents = (handler) => {
     contact.onRefresh(connect.hitch(handler, handler.onRefresh));
   });
 };
+
+export const endContactCall = () => {
+  const agent = getAgent();
+  const contact = agent.getContacts()[0];
+  const initCon = contact.getInitialConnection();
+  initCon.destroy();
+};

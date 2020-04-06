@@ -330,6 +330,10 @@ const actions = {
       resolved,
     });
   },
+  async endCurrentCall() {
+    Log.debug('ending current call!');
+    ConnectService.endContactCall();
+  },
   async setCurrentCase({ commit }, currentCase) {
     commit('setCurrentCase', currentCase);
   },

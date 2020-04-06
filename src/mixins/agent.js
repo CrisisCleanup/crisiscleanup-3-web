@@ -11,6 +11,7 @@ export const AgentMixin = {
       'setContactState',
       'addCases',
       'setResolved',
+      'endCurrentCall',
     ]),
     async fetchCasesByType(caseModel, ids) {
       const cases = await Promise.all(

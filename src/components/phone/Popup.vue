@@ -3,7 +3,7 @@
     <template #header>
       <div class="header">
         <base-text :weight="700" variant="h1">{{
-          $t('Incoming Call')
+          $t('~~Incoming Call')
         }}</base-text>
       </div>
     </template>
@@ -13,15 +13,17 @@
         <base-text variant="body" class="script">
           {{
             $t(
-              "You are currently receiving a phone call. Please answer it via your phone to proceed. Don't worry, your number will never be shared with the caller.",
+              "~~You are currently receiving a phone call. Please answer it via your phone to proceed. Don't worry, your number will never be shared with the caller.",
             )
           }}
         </base-text>
         <base-text variant="body" class="script">
           {{
-            $t('A sample script would be: "Crisis Cleanup Hotline, my name is ')
+            $t(
+              '~~A sample script would be: "Crisis Cleanup Hotline, my name is ',
+            )
           }}
-          {{ currentUser.first_name }} {{ $t('. How may I help you?') }}
+          {{ currentUser.first_name }} {{ $t('~~. How may I help you?') }}
         </base-text>
       </div>
       <div class="modal-callinfo">
@@ -31,7 +33,7 @@
           </ccu-icon>
           <ccu-icon with-text size="md" :type="icons.earth_globe">
             <base-text variant="h1" :weight="400">{{
-              $t('English')
+              callerLocale.name_t.split(' ')[0]
             }}</base-text>
           </ccu-icon>
         </div>
@@ -49,8 +51,8 @@
       </div>
       <div class="modal-divider">
         <base-text variant="h3" :weight="400">
-          <span> {{ callerTotalCases }} {{ $t(' cases ') }} </span>
-          {{ $t(' are assigned to this number') }}
+          <span> {{ callerTotalCases }} {{ $t('~~ cases ') }} </span>
+          {{ $t(' ~~are assigned to this number') }}
         </base-text>
       </div>
       <div class="modal-cases">
@@ -66,8 +68,12 @@
     </div>
     <template #footer>
       <div class="flex items-center justify-center p-6 pt-12">
-        <base-button variant="solid" size="large">
-          {{ $t('Close') }}
+        <base-button
+          :action="() => endCurrentCall()"
+          variant="solid"
+          size="large"
+        >
+          {{ $t('~~Close') }}
         </base-button>
       </div>
     </template>
