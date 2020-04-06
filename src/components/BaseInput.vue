@@ -125,6 +125,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    validator: {
+      type: [Function, Boolean],
+      default: false,
+    },
   },
   data() {
     return {
@@ -175,8 +179,18 @@ export default {
   },
   methods: {
     update(e) {
-      this.$emit('input', e.target.value);
+      const { value } = e.target;
+      if (this.validator) {
+        const { newValue, valid } = this.validator(value);
+        this.isInvalid = valid;
+        if (newValue) {
+          this.$refs.input.value = newValue;
+          return this.$emit('input', value);
+        }
+      }
+      this.$emit('input', value);
       this.isInvalid = !this.$refs.input.checkValidity();
+      return value;
     },
     change(e) {
       this.$emit('change', e.target.value);
