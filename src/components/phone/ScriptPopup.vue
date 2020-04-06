@@ -8,9 +8,9 @@
           }}</base-text>
         </div>
         <div class="body">
-          {{ $t('"Crisis Cleanup Hotline, my name is "') }}
+          {{ $t('"Crisis Cleanup Hotline, my name is ') }}
           {{ currentUser.first_name }}
-          {{ $t('. How may I help you?') }}
+          {{ $t('. How may I help you?"') }}
         </div>
         <div class="action">
           <base-checkbox :checked="checkState" @change="onChange" />
