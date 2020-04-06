@@ -34,11 +34,11 @@
           {{ lang.inputs.phone }}
         </base-text>
         <base-input
-          v-model="number"
+          :value="phoneNumber"
           size="medium"
-          :action="() => {}"
           placeholder="+1 (123) 456-7890"
-          @input="(value) => (number = value)"
+          :validator="formatNumber"
+          @input="(value) => (phoneNumber = value)"
         />
       </div>
       <div v-if="request.lang" class="section flex flex-col">
@@ -77,6 +77,7 @@ import VueTypes from 'vue-types';
 import { LangMixin, UserMixin } from '@/mixins';
 import Agent from '@/models/Agent';
 import Language from '@/models/Language';
+import { AsYouType, parsePhoneNumber, ParseError } from 'libphonenumber-js';
 
 export default {
   name: 'EditCallerID',
@@ -85,6 +86,7 @@ export default {
     return {
       number: '',
       languages: [],
+      phoneNumber: '',
     };
   },
   props: {
@@ -95,16 +97,20 @@ export default {
     }),
   },
   methods: {
-    validateNumber(number) {
-      /**
-       * @todo Create API endpoint to validate phone number
-       * @body Functionality already exists in API, so prob should just use it.
-       */
-      return number;
+    formatNumber(value) {
+      const newValue = new AsYouType('US').input(value);
+      try {
+        parsePhoneNumber(newValue, 'US');
+      } catch (e) {
+        if (e instanceof ParseError) {
+          return { newValue, valid: false };
+        }
+      }
+      return { newValue, valid: true };
     },
     async updateUserNeeded() {
-      if (this.number && this.validateNumber(this.number)) {
-        await this.updateUser(this.number, 'mobile');
+      if (this.phoneNumber) {
+        await this.updateUser(this.phoneNumber, 'mobile');
       }
       if (this.languages.length >= 1) {
         await this.updateUser(null, 'primary_language');
