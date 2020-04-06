@@ -46,8 +46,8 @@ export default {
   name: 'NewsTrainingCard',
   data() {
     return {
-      tabs: ['News', 'Trainings'],
-      selected: 'News',
+      tabs: ['Training'],
+      selected: 'Training',
       trainings: [
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
