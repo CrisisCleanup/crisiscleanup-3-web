@@ -17553,10 +17553,10 @@ safe-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-samlify@^2.7.1:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/samlify/-/samlify-2.7.1.tgz#163bde3a799ba6f9572e7702e520bda1c7f1c367"
-  integrity sha512-ESxWU55Ulw82kZQeubM0SP7KUDczsGO6H6tKlLATEjSjng0leMcgOV9QR0+m7IJ/Ez7lgKLJ8uwpOaNRhSQrJw==
+samlify@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/samlify/-/samlify-2.7.2.tgz#4beab08224a87c92b4030c2f7119b260bca62a35"
+  integrity sha512-8qyEKdd5+vZq9IkhIw2NXuYv0+ZPhvasreV2tQPPw0JaXwGyXm1n7fo97vH/an9oO/klQBDLxyZFL0pHtIt7qQ==
   dependencies:
     "@authenio/xml-encryption" "^0.11.3"
     camelcase "^5.3.1"
