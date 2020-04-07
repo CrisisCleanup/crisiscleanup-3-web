@@ -38,10 +38,10 @@ export default {
           name: 'users',
           key: 'user_management',
         },
-        {
-          name: 'team',
-          key: 'team_management',
-        },
+        // {
+        //   name: 'team',
+        //   key: 'team_management',
+        // },
         {
           name: 'profile',
           key: 'organization_profile',
