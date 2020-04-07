@@ -18,91 +18,245 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
     </div>
      
     <div
-      class="flex"
+      class="flex flex-wrap"
     >
       <div
-        class="w-1/4 m-4 p-6 shadow text-base bg-white"
+        class="w-full md:w-1/2 xl:w-1/4 p-3"
       >
-        <div>
-          
-            dashboard.my_claimed_cases (Texas Flooding, Oct 2018)
-          
-        </div>
-         
         <div
-          class="font-bold"
+          class="bg-crisiscleanup-lightblue-100 rounded-lg shadow-lg p-5"
         >
-          
-            
-          
+          <div
+            class="flex flex-row items-center"
+          >
+            <div
+              class="flex-shrink pr-4"
+            >
+              <div
+                class="rounded-full p-1 bg-crisiscleanup-lightblue-900"
+              >
+                <img
+                  src="@/assets/icons/cases.svg"
+                  style="height: 50px;"
+                />
+              </div>
+            </div>
+             
+            <div
+              class="flex-1 text-right md:text-center"
+            >
+              <h5
+                class="uppercase text-grey-900"
+              >
+                
+                  dashboard.my_claimed_cases (Texas Flooding, Oct 2018)
+                
+              </h5>
+               
+              <h3
+                class="text-3xl"
+              >
+                
+                  
+                  
+                <span
+                  class="text-green"
+                >
+                  <i
+                    class="fas fa-caret-up"
+                  />
+                </span>
+              </h3>
+            </div>
+          </div>
         </div>
       </div>
        
       <div
-        class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
+        class="w-full md:w-1/2 xl:w-1/4 p-3"
       >
-        <div>
-          
-            dashboard.total_claimed (Texas Flooding, Oct 2018)
-          
-        </div>
-         
         <div
-          class="font-bold"
+          class="bg-crisiscleanup-yellow-100 rounded-lg shadow-lg"
         >
-          
-            0 (NaN
-            of Total)
-          
+          <div
+            class="flex flex-row items-center p-5"
+          >
+            <div
+              class="flex-shrink pr-4"
+            >
+              <div
+                class="rounded-full p-1 bg-crisiscleanup-yellow-900"
+              >
+                <img
+                  src="@/assets/icons/cases.svg"
+                  style="height: 50px;"
+                />
+              </div>
+            </div>
+             
+            <div
+              class="flex-1 text-right md:text-center"
+            >
+              <h5
+                class="uppercase text-grey-900"
+              >
+                
+                  dashboard.total_claimed (Texas Flooding, Oct 2018)
+                
+              </h5>
+               
+              <h3
+                class="text-3xl"
+              >
+                
+                  0
+                  
+                <span
+                  class="text-base"
+                >
+                  
+                    (NaN
+                    of Total)
+                  
+                </span>
+                 
+                <span
+                  class="text-orange"
+                >
+                  <i
+                    class="fas fa-exchange-alt"
+                  />
+                </span>
+              </h3>
+            </div>
+          </div>
+           
+          <div
+            class="bottom-0 left-0 border-b-4 rounded-b-lg border-yellow-600"
+          />
         </div>
-         
-        <div
-          class="bottom-0 left-0 absolute border-b-4 border-blue-600"
-        />
       </div>
        
       <div
-        class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
+        class="w-full md:w-1/2 xl:w-1/4 p-3"
       >
-        <div>
-          
-            dashboard.in_progress (Texas Flooding, Oct 2018)
-          
-        </div>
-         
         <div
-          class="font-bold"
+          class="bg-orange-400 rounded-lg shadow-lg"
         >
-          
-            0 (NaN
-            of Claimed)
-          
+          <div
+            class="flex flex-row items-center p-5"
+          >
+            <div
+              class="flex-shrink pr-4"
+            >
+              <div
+                class="rounded-full p-1 bg-orange-600"
+              >
+                <img
+                  src="@/assets/icons/cases.svg"
+                  style="height: 50px;"
+                />
+              </div>
+            </div>
+             
+            <div
+              class="flex-1 text-right md:text-center"
+            >
+              <h5
+                class="uppercase text-grey-900"
+              >
+                
+                  dashboard.in_progress (Texas Flooding, Oct 2018)
+                
+              </h5>
+               
+              <h3
+                class="text-3xl"
+              >
+                
+                  0
+                  
+                <span
+                  class="text-base"
+                >
+                  
+                    (NaN
+                    of Claimed)
+                  
+                </span>
+                 
+                <span
+                  class="text-yellow-900"
+                >
+                  <i
+                    class="fas fa-caret-up"
+                  />
+                </span>
+              </h3>
+            </div>
+          </div>
+           
+          <div
+            class="bottom-0 left-0 border-b-4 rounded-b-lg border-orange-600"
+          />
         </div>
-         
-        <div
-          class="bottom-0 left-0 absolute border-b-4 border-blue-600"
-        />
       </div>
        
       <div
-        class="w-1/4 m-4 p-6 shadow text-base bg-white relative"
+        class="w-full md:w-1/2 xl:w-1/4 p-3"
       >
-        <div>
-          dashboard.closed (Texas Flooding, Oct 2018)
-        </div>
-         
         <div
-          class="font-bold"
+          class="bg-crisiscleanup-green-100 rounded-lg shadow-lg"
         >
-          
-            0 (NaN
-            of Claimed)
-          
+          <div
+            class="flex flex-row items-center p-5"
+          >
+            <div
+              class="flex-shrink pr-4"
+            >
+              <div
+                class="rounded-full p-1 bg-crisiscleanup-green-900"
+              >
+                <img
+                  src="@/assets/icons/cases.svg"
+                  style="height: 50px;"
+                />
+              </div>
+            </div>
+             
+            <div
+              class="flex-1 text-right md:text-center"
+            >
+              <h5
+                class="uppercase text-grey-900"
+              >
+                
+                  dashboard.closed (Texas Flooding, Oct 2018)
+                
+              </h5>
+               
+              <h3
+                class="text-3xl"
+              >
+                
+                  0
+                  
+                <span
+                  class="text-base"
+                >
+                  
+                    (NaN
+                    of Claimed)
+                  
+                </span>
+              </h3>
+            </div>
+          </div>
+           
+          <div
+            class="bottom-0 left-0 border-b-4 rounded-b-lg border-green-600"
+          />
         </div>
-         
-        <div
-          class="bottom-0 left-0 absolute border-b-4 border-green-600"
-        />
       </div>
     </div>
      
