@@ -9,61 +9,140 @@
           <RedeployRequest />
           <InviteUsers class="mx-1" />
         </div>
-        <div class="flex">
-          <div class="w-1/4 m-4 p-6 shadow text-base bg-white">
-            <div>
-              {{ $t('dashboard.my_claimed_cases') }} ({{
-                currentIncident.name
-              }})
-            </div>
-            <div class="font-bold">
-              {{ claimedWorksites.length | numeral('0,0') }}
-            </div>
-          </div>
-          <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-            <div>
-              {{ $t('dashboard.total_claimed') }} ({{ currentIncident.name }})
-            </div>
-            <div class="font-bold">
-              {{ totalClaimed | numeral('0,0') }} ({{
-                (totalClaimed / totalWorksites) | numeral('0%')
-              }}
-              of Total)
-            </div>
+
+        <div class="flex flex-wrap">
+          <div class="w-full md:w-1/2 xl:w-1/4 p-3">
+            <!--Metric Card-->
             <div
-              class="bottom-0 left-0 absolute border-b-4 border-blue-600"
-              :style="{ width: `${(totalClaimed / totalWorksites) * 100}%` }"
-            ></div>
+              class="bg-crisiscleanup-lightblue-100 rounded-lg shadow-lg p-5"
+            >
+              <div class="flex flex-row items-center">
+                <div class="flex-shrink pr-4">
+                  <div class="rounded-full p-1 bg-crisiscleanup-lightblue-900">
+                    <img src="@/assets/icons/cases.svg" style="height: 50px;" />
+                  </div>
+                </div>
+                <div class="flex-1 text-right md:text-center">
+                  <h5 class="uppercase text-grey-900">
+                    {{ $t('dashboard.my_claimed_cases') }} ({{
+                      currentIncident.name
+                    }})
+                  </h5>
+                  <h3 class="text-3xl">
+                    {{ claimedWorksites.length | numeral('0,0') }}
+                    <span class="text-green"
+                      ><i class="fas fa-caret-up"></i
+                    ></span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <!--/Metric Card-->
           </div>
-          <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-            <div>
-              {{ $t('dashboard.in_progress') }} ({{ currentIncident.name }})
+
+          <div class="w-full md:w-1/2 xl:w-1/4 p-3">
+            <!--Metric Card-->
+            <div class="bg-crisiscleanup-yellow-100 rounded-lg shadow-lg">
+              <div class="flex flex-row items-center p-5">
+                <div class="flex-shrink pr-4">
+                  <div class="rounded-full p-1 bg-crisiscleanup-yellow-900">
+                    <img src="@/assets/icons/cases.svg" style="height: 50px;" />
+                  </div>
+                </div>
+                <div class="flex-1 text-right md:text-center">
+                  <h5 class="uppercase text-grey-900">
+                    {{ $t('dashboard.total_claimed') }} ({{
+                      currentIncident.name
+                    }})
+                  </h5>
+                  <h3 class="text-3xl">
+                    {{ totalClaimed | numeral('0,0') }}
+                    <span class="text-base">
+                      ({{ (totalClaimed / totalWorksites) | numeral('0%') }}
+                      of Total)
+                    </span>
+                    <span class="text-orange"
+                      ><i class="fas fa-exchange-alt"></i
+                    ></span>
+                  </h3>
+                </div>
+              </div>
+              <div
+                class="bottom-0 left-0 border-b-4 rounded-b-lg border-yellow-600"
+                :style="{ width: `${(totalClaimed / totalWorksites) * 100}%` }"
+              ></div>
             </div>
-            <div class="font-bold">
-              {{ totalInProgess | numeral('0,0') }} ({{
-                (totalInProgess / totalWorksites) | numeral('0%')
-              }}
-              of Claimed)
-            </div>
-            <div
-              class="bottom-0 left-0 absolute border-b-4 border-blue-600"
-              :style="{ width: `${(totalInProgess / totalWorksites) * 100}%` }"
-            ></div>
+            <!--/Metric Card-->
           </div>
-          <div class="w-1/4 m-4 p-6 shadow text-base bg-white relative">
-            <div>{{ $t('dashboard.closed') }} ({{ currentIncident.name }})</div>
-            <div class="font-bold">
-              {{ totalClosed | numeral('0,0') }} ({{
-                (totalClosed / totalWorksites) | numeral('0%')
-              }}
-              {{ $t('of Claimed') }})
+
+          <div class="w-full md:w-1/2 xl:w-1/4 p-3">
+            <!--Metric Card-->
+            <div class="bg-orange-400 rounded-lg shadow-lg">
+              <div class="flex flex-row items-center p-5">
+                <div class="flex-shrink pr-4">
+                  <div class="rounded-full p-1 bg-orange-600">
+                    <img src="@/assets/icons/cases.svg" style="height: 50px;" />
+                  </div>
+                </div>
+                <div class="flex-1 text-right md:text-center">
+                  <h5 class="uppercase text-grey-900">
+                    {{ $t('dashboard.in_progress') }} ({{
+                      currentIncident.name
+                    }})
+                  </h5>
+                  <h3 class="text-3xl">
+                    {{ totalInProgess | numeral('0,0') }}
+                    <span class="text-base">
+                      ({{ (totalInProgess / totalWorksites) | numeral('0%') }}
+                      of Claimed)
+                    </span>
+                    <span class="text-yellow-900"
+                      ><i class="fas fa-caret-up"></i
+                    ></span>
+                  </h3>
+                </div>
+              </div>
+              <div
+                class="bottom-0 left-0 border-b-4 rounded-b-lg border-orange-600"
+                :style="{
+                  width: `${(totalInProgess / totalWorksites) * 100}%`,
+                }"
+              ></div>
             </div>
-            <div
-              class="bottom-0 left-0 absolute border-b-4 border-green-600"
-              :style="{ width: `${(totalClosed / totalWorksites) * 100}%` }"
-            ></div>
+            <!--/Metric Card-->
+          </div>
+
+          <div class="w-full md:w-1/2 xl:w-1/4 p-3">
+            <!--Metric Card-->
+            <div class="bg-crisiscleanup-green-100 rounded-lg shadow-lg">
+              <div class="flex flex-row items-center p-5">
+                <div class="flex-shrink pr-4">
+                  <div class="rounded-full p-1 bg-crisiscleanup-green-900">
+                    <img src="@/assets/icons/cases.svg" style="height: 50px;" />
+                  </div>
+                </div>
+                <div class="flex-1 text-right md:text-center">
+                  <h5 class="uppercase text-grey-900">
+                    {{ $t('dashboard.closed') }} ({{ currentIncident.name }})
+                  </h5>
+                  <h3 class="text-3xl">
+                    {{ totalClosed | numeral('0,0') }}
+                    <span class="text-base">
+                      ({{ (totalClosed / totalWorksites) | numeral('0%') }}
+                      {{ $t('of Claimed') }})
+                    </span>
+                  </h3>
+                </div>
+              </div>
+              <div
+                class="bottom-0 left-0 border-b-4 rounded-b-lg border-green-600"
+                :style="{ width: `${(totalClosed / totalWorksites) * 100}%` }"
+              ></div>
+            </div>
+            <!--/Metric Card-->
           </div>
         </div>
+
         <div class="flex">
           <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
