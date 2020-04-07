@@ -13,24 +13,34 @@
             weight="700"
             class="text-crisiscleanup-dark-500"
           >
-            {{ lang.header.text }}
+            <!-- {{ lang.header.text }} -->
+            {{ $t('~~Phone System Training') }}
           </base-text>
         </header>
         <div class="flex">
-          <div class="flex-col m-3">
+          <div class="flex-col ml-3 mt-8 w-1/4">
             <img
               src="@/assets/call_center_people.png"
-              width="200px"
+              width="100%"
+              height="auto"
               alt="~~Call Center Users"
             />
           </div>
-          <div class="flex-col m-3 my-8 items-center">
+          <div class="flex-col m-3 my-8 items-center w-3/4">
             <!-- Greeting -->
-            <base-text weight="900" class="text-xl pb-3">
-              {{ lang.subHeader.text }}
+            <base-text weight="900" class="ml-3 mr-3">
+              <!-- {{ lang.subHeader.text }} -->
+              {{
+                $t('~~Thank you so much for becoming a call center volunteer!')
+              }}
             </base-text>
-            <base-text class="pb-3">
-              {{ lang.subHeader.secondaryText }}
+            <base-text class="m-3">
+              <!-- {{ lang.subHeader.secondaryText }} -->
+              {{
+                $t(
+                  '~~We are doing our best to make this a rewarding way to help others from your home. We’ve prepared a quick mini course to help you get comfortable with helping survivors over the phone. Did you know that for every hour you spend on the phone, you save 29.5 volunteer hours in the field. That’s worth $2,000. For every 1.5 hours you answer calls, you enable an additional house to get cleaned up or gutted. You are not expected to be an expert, know answers to most questions, or be a professional therapist. Your job is to actively listen and gather useful assessment information. Do not rush. Take time to listen.',
+                )
+              }}
             </base-text>
           </div>
         </div>
