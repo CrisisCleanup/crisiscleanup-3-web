@@ -108,7 +108,7 @@
     "vue-numeral-filter": "^1.1.1",
     "vue-range-slider": "^0.6.0",
     "vue-router": "^3.1.6",
-    "vue-select": "^3.4.0",
+    "vue-select": "^3.9.5",
     "vue-timers": "^2.0.4",
     "vue-toasted": "^1.1.28",
     "vue-types": "^1.7.0",
