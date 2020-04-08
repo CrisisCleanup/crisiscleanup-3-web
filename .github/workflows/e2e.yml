@@ -79,9 +79,18 @@ jobs:
           path: 'cc3api'
           token: ${{ secrets.GITHUB_PAT }}
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.aws_access_key_id }}
+          aws-secret-access-key: ${{ secrets.aws_secret_access_key }}
+          aws-region: ${{ secrets.aws_default_region }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
       - name: Spin up Api
         run: |
-          echo ${{ secrets.GITHUB_PAT }} | docker login docker.pkg.github.com -u ${{ secrets.GITHUB_PAT_USER }} --password-stdin
           cd "$GITHUB_WORKSPACE/cc3api"
           echo "CI=1" >> "$GITHUB_WORKSPACE/cc3api/compose/envs/.env-dev"
           docker-compose up -d --build app
