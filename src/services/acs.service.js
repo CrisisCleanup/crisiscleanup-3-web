@@ -131,6 +131,7 @@ export const METRICS = {
   ONLINE: 'agentsOnline',
   STAFFED: 'agentsStaffed',
   CONTACTS_QUEUED: 'contactsInQueue',
+  CALLBACKS_QUEUED: 'contactsInQueueOutbound',
   AGENTS_ON_CONTACT: 'agentsOnContact',
   AVAILABLE: 'agentsAvailable',
   AGENTS_ON_CALL: 'agentsOnCall',
