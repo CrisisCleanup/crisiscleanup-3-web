@@ -67,6 +67,7 @@ const PhoneState = {
   streams: null,
   popupOpen: false,
   credentials: SSO.retrieveCredentials(),
+  hydrated: false,
   ...getStateDefaults(),
 };
 
@@ -249,44 +250,8 @@ const actions = {
       onRefresh: (contact) => {
         // Keep our contact state
         // in sync with connect
-        const contactId = contact.getContactId();
-        const contactState = contact.getStatus();
-        const duration = contact.getStatusDuration();
-        const contactAttrs = contact.getAttributes();
-        Log.debug('got contact attributes:', contactAttrs);
-        const {
-          pdas,
-          worksites,
-          callerID,
-          InboundNumber,
-          ids,
-          USER_LANGUAGE,
-        } = contactAttrs;
-        Log.debug('contact refresh: ', contactState);
-        const workSites = worksites.value.split(',').filter((v) => v !== '');
-        const Pdas = pdas.value.split(',').filter((v) => v !== '');
-        const outboundIds = ids.value.split(',').filter((v) => v !== '');
-        const locale = USER_LANGUAGE.value.replace('_', '-');
-        let callerNum = callerID;
-        if (!callerNum) {
-          callerNum = InboundNumber;
-        }
-        const attributes = {
-          callerId: callerNum.value,
-          worksites: workSites,
-          pdas: Pdas,
-          outboundIds,
-          callerLocale: locale,
-        };
-        commit('setContact', {
-          id: contactId,
-          duration,
-          state: contactState.type,
-          attributes,
-        });
-        dispatch('rehydrateController');
-        EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
-        commit('setControllerState', { contactId });
+        Log.debug('contact refreshed!');
+        dispatch('syncContact', contact);
       },
     });
   },
@@ -310,6 +275,64 @@ const actions = {
     });
     return this.callDuration;
   },
+  async syncContact({ commit, state, dispatch }, newContact = null) {
+    Log.debug('syncing current contact...');
+    let contact = newContact;
+    if (!newContact) {
+      contact = ConnectService.getCurrentContact();
+    }
+    if (!contact) {
+      Log.debug('no contact found!');
+      return null;
+    }
+    const contactId = contact.getContactId();
+    const contactState = contact.getStatus();
+    const duration = contact.getStatusDuration();
+    const contactAttrs = contact.getAttributes();
+    const initConnection = contact.getInitialConnection();
+    const connectType = initConnection.getType();
+    Log.debug('got contact attributes:', contactAttrs);
+    const {
+      pdas,
+      worksites,
+      callerID,
+      InboundNumber,
+      ids,
+      USER_LANGUAGE,
+    } = contactAttrs;
+    Log.debug('contact refresh: ', contactState);
+    const workSites = worksites.value.split(',').filter((v) => v !== '');
+    const Pdas = pdas.value.split(',').filter((v) => v !== '');
+    const outboundIds = ids.value.split(',').filter((v) => v !== '');
+    const locale = USER_LANGUAGE.value.replace('_', '-');
+    let callerNum = callerID;
+    if (!callerNum) {
+      callerNum = InboundNumber;
+    }
+    const attributes = {
+      callerId: callerNum.value,
+      worksites: workSites,
+      pdas: Pdas,
+      outboundIds,
+      callerLocale: locale,
+    };
+    commit('setContact', {
+      id: contactId,
+      duration,
+      state: contactState.type,
+      type: connectType,
+      attributes,
+    });
+    if (!state.hydrated) {
+      dispatch('rehydrateController');
+    }
+    if (state.contact.state === ConnectService.STATES.CONNECTED) {
+      EventBus.$emit(ConnectService.EVENTS.ON_CALL);
+    }
+    EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
+    commit('setControllerState', { contactId });
+    return contact;
+  },
   async stashController({ state }) {
     // store controller state
     const { controller } = state;
@@ -329,6 +352,9 @@ const actions = {
     if (state.contact.id && state.contact.id === ctrlState.contactId) {
       Log.debug('success! controller rehydrated.');
       commit('setControllerState', ctrlState);
+      if (state.contact.state === ConnectService.STATES.CONNECTED) {
+        EventBus.$emit(ConnectService.EVENTS.ON_CALL);
+      }
       return ctrlState;
     }
     Log.debug('controller rehydration bailed, contact state mismatch!', {

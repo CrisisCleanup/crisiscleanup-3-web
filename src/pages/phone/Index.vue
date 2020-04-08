@@ -122,6 +122,7 @@ export default {
           this.page = Dashboard;
           this.setPopup(false);
           this.unsub();
+          this.$store.dispatch('phone/syncContact');
         }
       });
     } else {

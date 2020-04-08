@@ -183,3 +183,12 @@ export const endContactCall = () => {
   const initCon = contact.getInitialConnection();
   initCon.destroy();
 };
+
+export const getCurrentContact = () => {
+  const agent = getAgent();
+  const contacts = agent.getContacts();
+  if (contacts.length >= 1) {
+    return contacts[0];
+  }
+  return null;
+};
