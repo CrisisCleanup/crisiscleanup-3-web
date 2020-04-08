@@ -343,6 +343,7 @@ const actions = {
   async rehydrateController({ state, commit }) {
     // rehydrate controller state from cookie
     Log.debug('rehydrating controller...');
+    commit('setHydrated', true);
     const ctrlState = JSON.parse(localStorage.getItem('ccu-ivr-ctrl'));
     if (!ctrlState) {
       Log.debug('controller rehydration bailed, no state found!');
@@ -361,7 +362,6 @@ const actions = {
       id: state.contact.id,
       contactId: ctrlState.contactId,
     });
-    commit('setHydrated', true);
     return ctrlState;
   },
   async addCases({ state, commit, dispatch }, { worksites, pdas }) {
