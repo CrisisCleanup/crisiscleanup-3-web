@@ -15,7 +15,7 @@ export default {
   mixins: [LangMixin],
   computed: {
     text() {
-      const buildNum = process.env.VUE_APP_BUILD || '3CAE35B';
+      const buildNum = process.env.VUE_APP_BUILD || '';
       return `${this.lang.text} - v${version}+${buildNum}`;
     },
     lang() {

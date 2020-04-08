@@ -114,7 +114,7 @@ jobs:
 
       - name: Determine Build Number
         id: build-num
-        run: echo "::set-output name=build-id::$(echo {{ github.sha }} | cut 1-7)"
+        run: echo "::set-output name=build-id::$(echo {{ github.sha }} | cut -c 1-7)"
 
       - name: Cache Node Modules
         uses: actions/cache@v1
