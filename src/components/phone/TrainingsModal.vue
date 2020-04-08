@@ -103,7 +103,11 @@ export default {
       isShowingTrainingModal: false,
       selectedTraining: null,
       allTrainingCompleted: false,
-      trainings: [
+    };
+  },
+  computed: {
+    trainings() {
+      return [
         {
           completed: false,
           videoUrl: 'https://www.youtube.com/embed/3wumEh8wcak',
@@ -437,10 +441,8 @@ export default {
             },
           ],
         },
-      ],
-    };
-  },
-  computed: {
+      ];
+    },
     lang() {
       return {
         actions: {
