@@ -112,6 +112,10 @@ jobs:
         id: yarn-cache
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
+      - name: Determine Build Number
+        id: build-num
+        run: echo "::set-output name=build-id::$(echo {{ github.sha }} | cut 1-7)"
+
       - name: Cache Node Modules
         uses: actions/cache@v1
         with:
@@ -124,6 +128,8 @@ jobs:
         run: yarn install
 
       - name: Deploy Development
+        env:
+          VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
         run: yarn deploy-development
 
       - name: Notify Staging
@@ -157,6 +163,7 @@ jobs:
           VUE_APP_BASE_URL: 'https://app.staging.crisiscleanup.io'
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccustaging'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUStagingConnectRole'
+          VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
         run: yarn deploy-staging
 
       - name: Deploy Production
@@ -166,6 +173,7 @@ jobs:
           VUE_APP_BASE_URL: 'https://crisiscleanup.org'
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccuproduction'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUProductionConnectRole'
+          VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
         run: yarn deploy-production
 
       - name: Notify Staging Done
