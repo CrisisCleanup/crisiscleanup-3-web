@@ -15,7 +15,7 @@ module.exports = {
         h3: '0.875rem', //        ~14px
         h4: '.75rem', //          ~12px
         body: '.9375rem', //      ~15px
-        bodysm: '.75rem', //      ~12px
+        bodysm: '.835rem', //      ~13px
         bodyxsm: '.65rem', //      ~10px
       },
       maxHeight: {
