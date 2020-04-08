@@ -91,8 +91,8 @@ jobs:
 
       - name: Spin up Api
         run: |
-        aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 182237011124.dkr.ecr.us-east-2.amazonaws.com/python-base
-        aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 182237011124.dkr.ecr.us-east-2.amazonaws.com/cc3api-dev
+          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 182237011124.dkr.ecr.us-east-2.amazonaws.com/python-base
+          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 182237011124.dkr.ecr.us-east-2.amazonaws.com/cc3api-dev
           cd "$GITHUB_WORKSPACE/cc3api"
           echo "CI=1" >> "$GITHUB_WORKSPACE/cc3api/compose/envs/.env-dev"
           docker-compose up -d --build app
