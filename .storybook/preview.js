@@ -83,7 +83,7 @@ Vue.use(require('vue-moment'), { moment });
 
 Vue.use(Toasted, {
   position: 'top-center',
-  duration: 2000,
+  duration: 5000,
   theme: 'outline',
 });
 
