@@ -18,6 +18,7 @@
                   :class="showingMap ? 'filter-yellow' : 'filter-gray'"
                   type="map"
                   @click.native="toggleView('showingMap')"
+                  data-cy="cases.mapButton"
                 />
                 <ccu-icon
                   :alt="$t('casesVue.table_view')"
@@ -26,6 +27,7 @@
                   :class="showingTable ? 'filter-yellow' : 'filter-gray'"
                   type="table"
                   @click.native="toggleView('showingTable')"
+                  data-cy="cases.tableButton"
                 />
               </div>
               <span v-if="totalWorksites" class="font-thin">
@@ -498,12 +500,14 @@
               class="p-1 py-2"
               type="download"
               @click.native="downloadWorksite"
+              data-cy="cases.icons.download"
             />
             <ccu-icon
               :alt="$t('actions.share')"
               size="small"
               class="p-1 py-2"
               type="share"
+              data-cy="cases.icons.share"
             />
             <ccu-icon
               :alt="$t('actions.print')"
@@ -511,6 +515,7 @@
               class="p-1 py-2"
               type="print"
               @click.native="printWorksite"
+              data-cy="cases.icons.print"
             />
             <router-link
               v-if="isViewingWorksite"

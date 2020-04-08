@@ -24,7 +24,7 @@ describe('Cases Page', () => {
   });
   beforeEach(() => {
     cy.visit('/incident/158/cases/new');
-    cy.get('.ccu-icon[title="Table View"]').as('TableView');
+    cy.get('cy|cases.tableButton').as('TableView');
     cy.get('div[data-cy="worksiteview"]').as('WorksiteView');
     cy.get('div[data-cy="worksiteview_actions"]').as('WorksiteView_Actions');
   });
@@ -41,13 +41,13 @@ describe('Cases Page', () => {
   it('performs worksite actions', () => {
     cy.visit('/incident/158/cases/141324');
     cy.wrap('@WorksiteView_Actions')
-      .get('.ccu-icon[title="Download"]')
+      .get('cy|cases.icons.download')
       .parent()
       .click();
     cy.wait('@getWorksite');
     // printing functionality
     cy.wrap('@WorksiteView_Actions')
-      .get('.ccu-icon[title="Print"]')
+      .get('cy|cases.icons.print')
       .parent()
       .click();
     cy.wait('@printWorksite');

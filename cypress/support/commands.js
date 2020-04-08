@@ -60,6 +60,12 @@ Cypress.Commands.add(
     })
       .its('body')
       .then((res) => cy.setLocalStorage('user', JSON.stringify(res)));
+    cy.get('body').then(($body) => {
+      const elements = $body.find('[data-cy="termsmodal.acceptBtn"]');
+      if (elements.length) {
+        elements[0].click();
+      }
+    });
   },
 );
 
