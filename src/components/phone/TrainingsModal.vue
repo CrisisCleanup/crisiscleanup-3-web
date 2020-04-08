@@ -17,7 +17,7 @@
           </base-text>
         </header>
         <div class="flex">
-          <div class="flex-col ml-3 mt-16 w-1/4">
+          <div class="flex-col ml-3 w-1/4">
             <img
               src="@/assets/call_center_people.png"
               width="100%"
@@ -308,7 +308,134 @@ export default {
             '~~In this session we present some of the most common out of the ordinary requests you might encounter while working the phone system and how to handle them.',
           ),
           timeToComplete: this.$t('~~10 minutes'),
-          questions: [],
+          questions: [
+            {
+              prompt: this.$t(
+                '~~What should you do if you feel a survivor needs special or rapid (non-emergency) help?',
+              ),
+              answers: [
+                {
+                  text: this.$t('~~Actively listen to the survivor.'),
+                  correct: false,
+                },
+                {
+                  text: this.$t(
+                    "~~After you save the case, reach out to organizations who have claimed cases nearby, and ask them to prioritize the survivor's case.",
+                  ),
+                  correct: false,
+                },
+                {
+                  text: this.$t(
+                    '~~Flag the case as "High Priority" and follow the instructions.',
+                  ),
+                  correct: false,
+                },
+                { text: this.$t('~~All of the above.'), correct: true },
+              ],
+            },
+            {
+              prompt: this.$t(
+                "~~If someone asks you a question and you don't know the answer, you should:",
+              ),
+              answers: [
+                { text: this.$t('~~Make something up'), correct: false },
+                {
+                  text: this.$t(
+                    '~~Keep everyone else on hold while you look up the answer.',
+                  ),
+                  correct: false,
+                },
+                {
+                  text: this.$t(`~~Reply, "I don't know, dial 2-1-1."`),
+                  correct: true,
+                },
+                {
+                  text: this.$t('~~Tell them to call city hall.'),
+                  correct: false,
+                },
+              ],
+            },
+            {
+              prompt: this.$t(
+                '~~If nobody answers the phone when you do a callback or calldown, if possible you should:',
+              ),
+              answers: [
+                { text: this.$t('~~Not leave a message.'), correct: false },
+                {
+                  text: this.$t(
+                    '~~Leave a message telling them to register at crisiscleanup.org.',
+                  ),
+                  correct: false,
+                },
+                {
+                  text: this.$t(
+                    '~~Sing "Happy Birthday" in a thick Oklahoma accent and sign off as "Roy D. Mercer."',
+                  ),
+                  correct: false,
+                },
+                {
+                  text: this.$t(
+                    '~~Leave a message with the phone number of the hotline.',
+                  ),
+                  correct: true,
+                },
+              ],
+            },
+            {
+              prompt: this.$t('~~If someone wants to volunteer:'),
+              answers: [
+                {
+                  text: this.$t(
+                    '~~Encourage the person to volunteer with a local relief organization or community group they already know. ',
+                  ),
+                  correct: true,
+                },
+                {
+                  text: this.$t(
+                    '~~Get their email address and immediately invite them to Crisis Cleanup.',
+                  ),
+                  correct: false,
+                },
+                {
+                  text: this.$t(
+                    '~~Tell them that volunteering is a waste of time.',
+                  ),
+                  correct: false,
+                },
+              ],
+            },
+            {
+              prompt: this.$t(
+                '~~If a government official, media representative, or someone from a major relief organization call and ask to speak to a representative of Crisis Cleanup:',
+              ),
+              answers: [
+                {
+                  text: this.$t(
+                    '~~Tell them you are the President and CEO, and would be happy to answer all their questions.',
+                  ),
+                  correct: false,
+                },
+                {
+                  text: this.$t(
+                    '~~Tell them to send an email to help@crisiscleanup.org, and someone will reply right away.',
+                  ),
+                  correct: true,
+                },
+                {
+                  text: this.$t(
+                    `~~Put your fingers in your ears and yell, "La, la la! I can't hear you!" in to the phone.`,
+                  ),
+                  correct: false,
+                },
+                {
+                  text: this.$t(
+                    `~~Reply, "Crisis Cleanup is run by a couple of neurotic village idiots. You don't want to talk with them."`,
+                  ),
+                  correct: false,
+                },
+              ],
+            },
+          ],
         },
       ],
     };
