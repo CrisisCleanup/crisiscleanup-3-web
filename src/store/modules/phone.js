@@ -196,6 +196,9 @@ const actions = {
     const needed =
       newState[metric.CONTACTS_QUEUED] - newState[metric.AVAILABLE];
     newState[metric.NEEDED] = needed >= 0 ? needed : 0;
+    // todo: the 0 is "calldowns"
+    newState[metric.TOTAL_WAITING] =
+      newState[metric.CONTACTS_QUEUED] + newState[metric.CALLBACKS_QUEUED] + 0;
     commit('setMetrics', newState);
     return resp;
   },

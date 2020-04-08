@@ -136,6 +136,7 @@ export const METRICS = {
   AVAILABLE: 'agentsAvailable',
   AGENTS_ON_CALL: 'agentsOnCall',
   NEEDED: 'agentsNeeded',
+  TOTAL_WAITING: 'totalWaiting',
 };
 
 export const getAgent = () => new connect.Agent();
