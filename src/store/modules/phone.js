@@ -25,6 +25,7 @@ const getStateDefaults = () => ({
     id: null,
     duration: null,
     state: null,
+    type: null,
     attributes: {
       pdas: [],
       worksites: [],
@@ -84,7 +85,11 @@ const getters = {
   agentAvailable: (state) =>
     state.agentState === ConnectService.STATES.ROUTABLE,
   callIncoming: (state) =>
-    state.agentState === ConnectService.STATES.PENDING_CALL,
+    [
+      ConnectService.STATES.AGENT_CALLING,
+      ConnectService.STATES.PENDING_CALL,
+      ConnectService.STATES.AGENT_PENDING,
+    ].includes(state.agentState),
   contactState: (state) =>
     state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
   contactAttributes: (state) =>
@@ -173,6 +178,7 @@ const getters = {
     }
     return lang;
   },
+  callType: (state) => (state.contact ? state.contact.type : null),
 };
 
 // actions
@@ -231,6 +237,15 @@ const actions = {
       },
     });
     ConnectService.bindContactEvents({
+      onIncoming: (contact) => {
+        Log.debug('incoming callback!');
+        commit('setContact', { type: 'outbound' });
+        contact.accept();
+      },
+      onConnected: () => {
+        Log.debug('contact connected!');
+        EventBus.$emit(ConnectService.EVENTS.ON_CALL);
+      },
       onRefresh: (contact) => {
         // Keep our contact state
         // in sync with connect
@@ -239,14 +254,25 @@ const actions = {
         const duration = contact.getStatusDuration();
         const contactAttrs = contact.getAttributes();
         Log.debug('got contact attributes:', contactAttrs);
-        const { pdas, worksites, callerID, ids, USER_LANGUAGE } = contactAttrs;
+        const {
+          pdas,
+          worksites,
+          callerID,
+          InboundNumber,
+          ids,
+          USER_LANGUAGE,
+        } = contactAttrs;
         Log.debug('contact refresh: ', contactState);
         const workSites = worksites.value.split(',').filter((v) => v !== '');
         const Pdas = pdas.value.split(',').filter((v) => v !== '');
         const outboundIds = ids.value.split(',').filter((v) => v !== '');
         const locale = USER_LANGUAGE.value.replace('_', '-');
+        let callerNum = callerID;
+        if (!callerNum) {
+          callerNum = InboundNumber;
+        }
         const attributes = {
-          callerId: callerID.value,
+          callerId: callerNum.value,
           worksites: workSites,
           pdas: Pdas,
           outboundIds,
@@ -355,6 +381,14 @@ const actions = {
   },
   async resetState({ commit }) {
     commit('resetState');
+  },
+  async acceptCallback() {
+    const agent = ConnectService.getAgent();
+    const contact = agent.getContacts()[0];
+    Log.debug('accepting callback!', contact);
+    if (contact) {
+      contact.accept();
+    }
   },
 };
 

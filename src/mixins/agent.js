@@ -12,6 +12,7 @@ export const AgentMixin = {
       'addCases',
       'setResolved',
       'endCurrentCall',
+      'acceptCallback',
     ]),
     async fetchCasesByType(caseModel, ids) {
       const cases = await Promise.all(
@@ -52,6 +53,7 @@ export const AgentMixin = {
       'currentCaseId',
       'casesResolved',
       'callerLocale',
+      'callType',
     ]),
     callerName() {
       return this.currentCase ? this.currentCase.name : 'Unknown';
