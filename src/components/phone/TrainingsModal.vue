@@ -296,6 +296,17 @@ export default {
             },
           ],
         },
+        // {
+        //   completed: false,
+        //   videoUrl: 'https://www.youtube.com/embed/3wumEh8wcak',
+        //   imagePath: require('@/assets/newstrainingss.jpg'),
+        //   title: this.$t('~~Phone system Special Cases Examples (Optional)'),
+        //   description: this.$t(
+        //     '~~In this session we present some of the most common out of the ordinary requests you might encounter while working the phone system and how to handle them.',
+        //   ),
+        //   timeToComplete: this.$t('~~10 minutes'),
+        //   questions: [],
+        // },
       ],
     };
   },
