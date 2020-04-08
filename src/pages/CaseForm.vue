@@ -40,6 +40,7 @@
           selector="js-worksite-phone1"
           size="large"
           :placeholder="$t('formLabels.phone1')"
+          :validator="validatePhoneNumber"
           @input="
             (value) => {
               updateWorksite(value, 'phone1');
@@ -53,6 +54,7 @@
           selector="js-worksite-phone2"
           size="large"
           :placeholder="$t('formLabels.phone2')"
+          :validator="validatePhoneNumber"
           @input="
             (value) => {
               updateWorksite(value, 'phone2');
@@ -304,6 +306,7 @@ import WorksiteImageSection from '@/components/WorksiteImageSection';
 import WorksiteReportSection from '@/components/WorksiteReportSection';
 import SectionHeading from '../components/SectionHeading';
 import { EventBus } from '../event-bus';
+import { ValidateMixin } from '../mixins';
 
 const messageBox = create(MessageBox);
 
@@ -315,6 +318,7 @@ export default {
     WorksiteReportSection,
     WorksiteImageSection,
   },
+  mixins: [ValidateMixin],
   created() {
     EventBus.$on('updatedWorksiteLocation', (latLng) => {
       this.geocodeWorksite(latLng.lat, latLng.lng);
