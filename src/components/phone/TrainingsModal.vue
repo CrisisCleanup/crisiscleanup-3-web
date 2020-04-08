@@ -2,7 +2,7 @@
   <div>
     <modal
       v-if="visible"
-      modal-classes="w-3/5"
+      modal-classes="w-3/5 overflow-auto"
       @ok="visible = false"
       @close="visible = false"
     >
@@ -14,11 +14,10 @@
             class="text-crisiscleanup-dark-500"
           >
             {{ lang.header.text }}
-            <!-- {{ $t('~~Phone System Training') }} -->
           </base-text>
         </header>
         <div class="flex">
-          <div class="flex-col ml-3 mt-8 w-1/4">
+          <div class="flex-col ml-3 mt-16 w-1/4">
             <img
               src="@/assets/call_center_people.png"
               width="100%"
@@ -30,17 +29,15 @@
             <!-- Greeting -->
             <base-text weight="900" class="ml-3 mr-3">
               {{ lang.subHeader.text }}
-              <!-- {{
-                $t('~~Thank you so much for becoming a call center volunteer!')
-              }} -->
             </base-text>
             <base-text class="m-3">
-              {{ lang.subHeader.secondaryText }}
-              <!-- {{
-                $t(
-                  '~~We are doing our best to make this a rewarding way to help others from your home. We’ve prepared a quick mini course to help you get comfortable with helping survivors over the phone. Did you know that for every hour you spend on the phone, you save 29.5 volunteer hours in the field. That’s worth $2,000. For every 1.5 hours you answer calls, you enable an additional house to get cleaned up or gutted. You are not expected to be an expert, know answers to most questions, or be a professional therapist. Your job is to actively listen and gather useful assessment information. Do not rush. Take time to listen.',
-                )
-              }} -->
+              <div class="pb-1">
+                {{ lang.subHeader.secondaryText }}
+              </div>
+              <div class="pb-1">
+                {{ lang.subHeader.pt2Text }}
+              </div>
+              {{ lang.subHeader.pt3Text }}
             </base-text>
           </div>
         </div>
@@ -321,7 +318,13 @@ export default {
             '~~Thank you so much for becoming a call center volunteer! ',
           ),
           secondaryText: this.$t(
-            '~~We are doing our best to make this a rewarding way to help others from your home. We’ve prepared a quick mini course to help you get comfortable with helping survivors over the phone. Did you know that for every hour you spend on the phone, you save 29.5 volunteer hours in the field. That’s worth $2,000. For every 1.5 hours you answer calls, you enable an additional house to get cleaned up or gutted. You are not expected to be an expert, know answers to most questions, or be a professional therapist. Your job is to actively listen and gather useful assessment information. Do not rush. Take time to listen.',
+            '~~We are doing our best to make this a rewarding way to help others from your home. We’ve prepared a quick mini course to help you get comfortable with helping survivors over the phone.',
+          ),
+          pt2Text: this.$t(
+            '~~Before you take your first call, it is important to know a little bit about the system your working in. This is a quick guide on how to navigate and work with the Crisis Cleanup system. This is a quick guide on to help you get comfortable with the basic flow of the call system.',
+          ),
+          pt3Text: this.$t(
+            '~~Most of the calls you will have are pretty straight forward, but occasionally you will get some calls that you’re not sure what to do with. Here is a quick guide for some of the most common situations we have seen in the past.',
           ),
         },
       };
