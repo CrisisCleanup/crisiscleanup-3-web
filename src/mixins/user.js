@@ -15,9 +15,9 @@ export default {
         throw getErrorMessage(error);
       }
     },
-    async updateUser(value, key) {
-      await User.update({
-        where: this.currentUser.id,
+    updateUser(value, key) {
+      User.update({
+        where: this.userId,
         data: {
           [key]: value,
         },

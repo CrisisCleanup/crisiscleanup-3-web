@@ -113,11 +113,21 @@ export default {
         await this.updateUser(this.phoneNumber, 'mobile');
       }
       if (this.languages.length >= 1) {
-        await this.updateUser(null, 'primary_language');
-        await this.updateUser(null, 'secondary_language');
+        this.updateUser(null, 'primary_language');
+        this.updateUser(null, 'secondary_language');
         const [primary_language, secondary_language] = this.languages;
-        await this.updateUser(primary_language, 'primary_language');
-        await this.updateUser(secondary_language, 'secondary_language');
+        this.updateUser(primary_language, 'primary_language');
+        this.updateUser(secondary_language, 'secondary_language');
+      }
+      try {
+        await this.saveUser();
+        this.$emit('user-updated', this.currentUser);
+      } catch (e) {
+        this.$log.error('Failed to save user', e);
+        this.$toasted.error(e);
+      }
+
+      try {
         await Agent.api().fetch();
         const agent = Agent.query()
           .where('user_id', this.currentUser.id)
@@ -125,12 +135,8 @@ export default {
         await Agent.api().updateConfig(agent.agent_id);
         this.$store.dispatch('phone/setAgent', agent);
         this.$store.dispatch('phone/syncAgentConfig');
-      }
-      try {
-        await this.saveUser();
-        this.$emit('user-updated', this.currentUser);
       } catch (e) {
-        this.$log.error('Failed to save user', e);
+        this.$log.error('Failed to save agent', e);
         this.$toasted.error(e);
       }
     },
