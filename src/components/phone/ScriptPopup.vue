@@ -8,9 +8,11 @@
           }}</base-text>
         </div>
         <div class="body">
-          {{ $t('"Crisis Cleanup Hotline, my name is ') }}
-          {{ currentUser.first_name }}
-          {{ $t('. How may I help you?"') }}
+          <base-text>
+            {{ $t('"Crisis Cleanup Hotline, my name is ') }}
+            {{ currentUser.first_name }}
+            {{ $t('. How may I help you?"') }}
+          </base-text>
         </div>
         <div class="action">
           <base-checkbox :checked="checkState" @change="onChange" />
@@ -49,7 +51,7 @@ export default {
 
 <style scoped lang="scss">
 .script {
-  @apply w-full bg-white h-32;
+  @apply w-full bg-crisiscleanup-light-grey h-32;
   z-index: 999;
   position: absolute;
   transform: translateY(-8rem);
@@ -58,7 +60,7 @@ export default {
     &.dismiss {
       transform: translateY(-16rem);
     }
-    @apply bg-white w-full h-32 shadow-lg pt-3 px-16 border-crisiscleanup-light-grey;
+    @apply bg-crisiscleanup-lightblue-100  w-full h-32 shadow-lg pt-3 px-16;
     position: absolute;
     top: 0;
     left: 0;
@@ -76,6 +78,14 @@ export default {
       display: flex;
       align-self: flex-end;
       justify-self: flex-end;
+    }
+
+    .body p {
+      @apply text-xl;
+    }
+
+    .title p {
+      @apply text-3xl;
     }
   }
 }
