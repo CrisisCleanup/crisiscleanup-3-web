@@ -51,14 +51,12 @@ export default {
       trainings: [
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
-          description:
-            'Then go and tempor incididunt ut labore et dolore magna aliqua.',
+          description: ' ~~Crisis Cleanup Basic Training',
           timeToComplete: '10 minutes',
         },
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
-          description:
-            'Then go and tempor incididunt ut labore et dolore magna aliqua.',
+          phoneDescription: '~~Phone System Basic Training',
           timeToComplete: '15 minutes',
         },
       ],

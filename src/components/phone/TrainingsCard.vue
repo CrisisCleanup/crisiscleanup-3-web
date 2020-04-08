@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="overflow-auto">
     <div class="flex flex-row justify-between">
       <!--- media/picture --->
       <div class="w-1/6 m-3">
