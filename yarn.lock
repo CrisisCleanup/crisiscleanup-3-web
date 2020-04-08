@@ -1155,10 +1155,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@crisiscleanup/amazon-connect-streams@^1.5.2":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@crisiscleanup/amazon-connect-streams/-/amazon-connect-streams-1.5.2.tgz#c164c92a65626559f48a56dcfd50fe55e44b490f"
-  integrity sha512-iJEERFW8y99tJX6yK5fujKk9ZMLLF1krfsWDIexo6iPyZZFmcRP2kOhzVh/J11HsN7v0GL7KIVKtV8kIqvBhqg==
+"@crisiscleanup/amazon-connect-streams@^1.5.3":
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/@crisiscleanup/amazon-connect-streams/-/amazon-connect-streams-1.5.3.tgz#15ff481d266da4b474530816121169e9ef1df685"
+  integrity sha512-FxWPcE1/DtAScTa+lqgVvroB+rL3B/0xHNVC5jkJx9HyrPOfHuT8OgS08RexJ8puqEKtD0WubsMvUfUqETtoGA==
 
 "@crisiscleanup/connect-rtc@^1.1.4":
   version "1.1.4"
