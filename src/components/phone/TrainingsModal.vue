@@ -31,13 +31,7 @@
               {{ lang.subHeader.text }}
             </base-text>
             <base-text class="m-3">
-              <div class="pb-1">
-                {{ lang.subHeader.secondaryText }}
-              </div>
-              <div class="pb-1">
-                {{ lang.subHeader.pt2Text }}
-              </div>
-              {{ lang.subHeader.pt3Text }}
+              {{ lang.subHeader.secondaryText }}
             </base-text>
           </div>
         </div>
@@ -322,20 +316,14 @@ export default {
           },
         },
         header: {
-          text: this.$t('~~Start Training'),
+          text: this.$t('~~Mandatory Training Videos'),
         },
         subHeader: {
           text: this.$t(
-            '~~Thank you so much for becoming a call center volunteer! ',
+            '~~Thank you so much for becoming a call center volunteer. Please watch the following short training videos to help familiarize you with the system.',
           ),
           secondaryText: this.$t(
-            '~~We are doing our best to make this a rewarding way to help others from your home. We’ve prepared a quick mini course to help you get comfortable with helping survivors over the phone.',
-          ),
-          pt2Text: this.$t(
-            '~~Before you take your first call, it is important to know a little bit about the system your working in. This is a quick guide on how to navigate and work with the Crisis Cleanup system. This is a quick guide on to help you get comfortable with the basic flow of the call system.',
-          ),
-          pt3Text: this.$t(
-            '~~Most of the calls you will have are pretty straight forward, but occasionally you will get some calls that you’re not sure what to do with. Here is a quick guide for some of the most common situations we have seen in the past.',
+            '~~Answer the questions after each video. After you get all of the questions correct, you can start answering calls. (Hint: you can change your answers).',
           ),
         },
       };
