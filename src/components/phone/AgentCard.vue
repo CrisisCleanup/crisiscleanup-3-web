@@ -177,15 +177,19 @@ export default {
       switch (this.agentState) {
         case CCState.POLLING:
         case CCState.ROUTABLE:
-        case CCState.PENDING_CALL:
+        case CCState.AGENT_CALLING:
+        case CCState.AGENT_PENDING:
           state.key = 'stop';
           state.state = 'available';
           EventBus.$emit(CCEvent.AVAILABLE);
           break;
-        case CCState.PENDING:
         case CCState.INCOMING:
         case CCState.BUSY:
         case CCState.CONNECTING:
+          state.key = 'ready';
+          state.state = 'oncall';
+          state.enabled = false;
+          break;
         case CCState.CONNECTED:
           state.key = 'ready';
           state.state = 'oncall';
