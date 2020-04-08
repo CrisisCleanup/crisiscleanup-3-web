@@ -8,31 +8,23 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { EventBus } from '@/event-bus';
-import { EVENTS as CCEvent, STATES as CCState } from '@/services/acs.service';
+import { EVENTS as CCEvent } from '@/services/acs.service';
 import Worksite from '@/models/Worksite';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import Pda from '@/models/Pda';
 import { AgentMixin } from '@/mixins';
 import IncomingPopup from '@/components/phone/Popup.vue';
-import { mixin as VueTimer } from 'vue-timers';
 import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
 
 export default {
   name: 'Phone',
-  mixins: [AgentMixin, VueTimer],
+  mixins: [AgentMixin],
   components: { IncomingPopup },
   data() {
     return {
       page: Dashboard,
     };
-  },
-  timers: {
-    callNextOutbound: {
-      time: 30000,
-      autostart: true,
-      repeat: true,
-    },
   },
   computed: {
     ...mapGetters('phone', ['connectReady', 'agentState', 'callIncoming']),
@@ -107,18 +99,6 @@ export default {
       currentCase.type = 'new';
       currentCase.id = -1;
       return this.setCurrentCase(currentCase);
-    },
-    async callNextOutbound() {
-      if (this.contactState === CCState.POLLING && this.agentAvailable) {
-        const {
-          entities: { phone_outbound },
-        } = await PhoneOutbound.api().getNextOutbound();
-        if (phone_outbound) {
-          this.$log.debug('outbound call queued up...', phone_outbound[0]);
-          PhoneOutbound.api().callOutbound(phone_outbound[0].id);
-          this.setOutboundId(phone_outbound[0].id);
-        }
-      }
     },
   },
   created() {
