@@ -22,6 +22,8 @@ env:
   VUE_APP_API_BASE_URL: 'http://localhost:5000'
   VUE_APP_BASE_URL: 'http://localhost:8080'
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  ECR_REGISTRY: 182237011124.dkr.ecr.us-east-2.amazonaws.com
+  IMAGE_TAG: latest
 
 jobs:
   build_id:
@@ -87,11 +89,17 @@ jobs:
           aws-region: ${{ secrets.aws_default_region }}
 
       - name: Login to ECR
+        env:
+          ECR_REPOSITORY: python-base
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Login to ECR
+        env:
+          ECR_REPOSITORY: cc3api-dev
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Spin up Api
         run: |
-          aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin 182237011124.dkr.ecr.us-east-2.amazonaws.com
           cd "$GITHUB_WORKSPACE/cc3api"
           echo "CI=1" >> "$GITHUB_WORKSPACE/cc3api/compose/envs/.env-dev"
           docker-compose up -d --build app
