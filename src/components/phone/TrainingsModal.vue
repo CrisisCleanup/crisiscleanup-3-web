@@ -29,18 +29,18 @@
           <div class="flex-col m-3 my-8 items-center w-3/4">
             <!-- Greeting -->
             <base-text weight="900" class="ml-3 mr-3">
-              <!-- {{ lang.subHeader.text }} -->
-              {{
+              {{ lang.subHeader.text }}
+              <!-- {{
                 $t('~~Thank you so much for becoming a call center volunteer!')
-              }}
+              }} -->
             </base-text>
             <base-text class="m-3">
-              <!-- {{ lang.subHeader.secondaryText }} -->
-              {{
+              {{ lang.subHeader.secondaryText }}
+              <!-- {{
                 $t(
                   '~~We are doing our best to make this a rewarding way to help others from your home. We’ve prepared a quick mini course to help you get comfortable with helping survivors over the phone. Did you know that for every hour you spend on the phone, you save 29.5 volunteer hours in the field. That’s worth $2,000. For every 1.5 hours you answer calls, you enable an additional house to get cleaned up or gutted. You are not expected to be an expert, know answers to most questions, or be a professional therapist. Your job is to actively listen and gather useful assessment information. Do not rush. Take time to listen.',
                 )
-              }}
+              }} -->
             </base-text>
           </div>
         </div>
@@ -280,9 +280,11 @@ export default {
           text: this.$t('~~Start Training'),
         },
         subHeader: {
-          text: this.$t('~~Great to see you are ready to start working!'),
+          text: this.$t(
+            '~~Thank you so much for becoming a call center volunteer! ',
+          ),
           secondaryText: this.$t(
-            '~~You must complete the following trainings and read some news before starting.',
+            '~~We are doing our best to make this a rewarding way to help others from your home. We’ve prepared a quick mini course to help you get comfortable with helping survivors over the phone. Did you know that for every hour you spend on the phone, you save 29.5 volunteer hours in the field. That’s worth $2,000. For every 1.5 hours you answer calls, you enable an additional house to get cleaned up or gutted. You are not expected to be an expert, know answers to most questions, or be a professional therapist. Your job is to actively listen and gather useful assessment information. Do not rush. Take time to listen.',
           ),
         },
       };
