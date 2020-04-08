@@ -1,8 +1,9 @@
 import { AgentMixin } from './agent';
-import LocalStorageMixin from './localStorage';
 import { IconsMixin } from './enums';
 import { LangMixin, LangOverrideMixin, LocaleMixin } from './locale';
+import LocalStorageMixin from './localStorage';
 import UserMixin from './user';
+import ValidateMixin from './validate.js';
 import { WorksitesMixin } from './worksite';
 
 export {
@@ -14,4 +15,5 @@ export {
   WorksitesMixin,
   LangOverrideMixin,
   LocalStorageMixin,
+  ValidateMixin,
 };

@@ -37,7 +37,7 @@
           :value="phoneNumber"
           size="medium"
           placeholder="+1 (123) 456-7890"
-          :validator="formatNumber"
+          :validator="validatePhoneNumber"
           @input="(value) => (phoneNumber = value)"
         />
       </div>
@@ -74,14 +74,13 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { LangMixin, UserMixin } from '@/mixins';
+import { LangMixin, UserMixin, ValidateMixin } from '@/mixins';
 import Agent from '@/models/Agent';
 import Language from '@/models/Language';
-import { AsYouType, parsePhoneNumber, ParseError } from 'libphonenumber-js';
 
 export default {
   name: 'EditCallerID',
-  mixins: [UserMixin, LangMixin],
+  mixins: [UserMixin, LangMixin, ValidateMixin],
   data() {
     return {
       number: '',
@@ -97,17 +96,6 @@ export default {
     }),
   },
   methods: {
-    formatNumber(value) {
-      const newValue = new AsYouType('US').input(value);
-      try {
-        parsePhoneNumber(newValue, 'US');
-      } catch (e) {
-        if (e instanceof ParseError) {
-          return { newValue, valid: false };
-        }
-      }
-      return { newValue, valid: true };
-    },
     async updateUserNeeded() {
       if (this.phoneNumber) {
         await this.updateUser(this.phoneNumber, 'mobile');
