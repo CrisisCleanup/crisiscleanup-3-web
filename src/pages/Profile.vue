@@ -98,6 +98,7 @@
                       :value="currentUser.mobile"
                       :placeholder="$t('profileUser.mobile_placeholder')"
                       required
+                      :validator="validatePhoneNumber"
                       @input="
                         (value) => {
                           updateUser(value, 'mobile');
@@ -352,11 +353,13 @@ import Language from '@/models/Language';
 import { i18nService } from '@/services/i18n.service';
 import DragDrop from '@/components/DragDrop';
 import UserRolesSelect from '@/components/UserRolesSelect';
+import { ValidateMixin } from '@/mixins';
 import { getErrorMessage } from '../utils/errors';
 
 export default {
   name: 'Profile',
   components: { DragDrop, UserRolesSelect },
+  mixins: [ValidateMixin],
   data() {
     return {
       mode: 'view',

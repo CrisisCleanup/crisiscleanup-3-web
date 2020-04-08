@@ -39,7 +39,7 @@
         </div>
         <div class="stats">
           <base-text class="mobile" :weight="600" variant="h1">{{
-            callerId
+            validatePhoneNumber(callerId).newValue
           }}</base-text>
           <tag class="tag">
             <base-text variant="bodysm">
@@ -81,14 +81,14 @@
 </template>
 
 <script>
-import { UserMixin, IconsMixin, AgentMixin } from '@/mixins';
+import { UserMixin, IconsMixin, AgentMixin, ValidateMixin } from '@/mixins';
 import CaseCard from '@/components/cards/Case.vue';
 import Pda from '@/models/Pda';
 import Worksite from '@/models/Worksite';
 
 export default {
   name: 'IncomingPopup',
-  mixins: [UserMixin, IconsMixin, AgentMixin],
+  mixins: [UserMixin, IconsMixin, AgentMixin, ValidateMixin],
   components: { CaseCard },
   data() {
     return {

@@ -107,6 +107,7 @@
                   v-model="user.mobile"
                   class="form-field"
                   size="large"
+                  :validator="validatePhoneNumber"
                   :placeholder="$t('registerOrg.cell_phone_number')"
                   required
                 />
@@ -283,10 +284,12 @@ import Organization from '@/models/Organization';
 import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
 import { getErrorMessage } from '@/utils/errors';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput';
+import { ValidateMixin } from '@/mixins';
 
 export default {
   name: 'Register',
   components: { HomeLayout, HomeNav, HomeActions, OrganizationSearchInput },
+  mixins: [ValidateMixin],
 
   async mounted() {
     const incidentsResponse = await this.$http.get(

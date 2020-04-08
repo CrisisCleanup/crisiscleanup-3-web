@@ -127,6 +127,7 @@
               class="mr-2 w-1/2"
               :placeholder="$t('profileOrg.phone')"
               :value="currentOrganization.phone"
+              :validator="validatePhoneNumber"
               @input="
                 (value) => {
                   updateOrganization(value, 'phone');
@@ -434,12 +435,14 @@ import User from '@/models/User';
 import { getErrorMessage } from '@/utils/errors';
 import UserSearchInput from '@/components/UserSearchInput';
 import LocationType from '@/models/LocationType';
+import { ValidateMixin } from '@/mixins';
 import DragDrop from '../../components/DragDrop';
 import LocationTool from '../../components/LocationTool';
 
 export default {
   name: 'Profile',
   components: { UserSearchInput, DragDrop, LocationTool },
+  mixins: [ValidateMixin],
   data() {
     return {
       showingLocationModal: false,
