@@ -115,11 +115,11 @@ export const setPopup = ({ open } = { open: true }) => {
 export const STATES = {
   OFFLINE: connect.AgentStateType.OFFLINE,
   ROUTABLE: connect.AgentStateType.ROUTABLE,
-  NOT_ROUTABLE: connect.AgentStateType.NOT_ROUTABLE,
   INCOMING: connect.ContactStateType.INCOMING,
   CONNECTING: connect.ContactStateType.CONNECTING,
   CONNECTED: connect.ContactStateType.CONNECTED,
-  PENDING: connect.ContactStateType.PENDING,
+  AGENT_PENDING: connect.ContactStateType.PENDING,
+  AGENT_CALLING: 'CallingCustomer',
   DISCONNECTED: connect.ContactStateType.DISCONNECTED,
   PENDING_CALL: 'PendingBusy',
   POLLING: 'polling',
@@ -151,7 +151,7 @@ export const parseAgentState = (stateEvent) => {
     let stateType = stateEvent;
     if (typeof stateEvent === 'object') {
       stateType = stateEvent.type;
-      if (stateType.toLowerCase() === 'system') {
+      if (['system', 'not_routable'].includes(stateType.toLowerCase())) {
         stateType = stateEvent.name;
       }
     }
@@ -170,8 +170,10 @@ export const bindAgentEvents = (handler) => {
 };
 
 export const bindContactEvents = (handler) => {
-  connect.contact((contact) => {
-    contact.onRefresh(connect.hitch(handler, handler.onRefresh));
+  Object.keys(handler).forEach((key) => {
+    connect.contact((contact) => {
+      contact[key](connect.hitch(handler, handler[key]));
+    });
   });
 };
 
