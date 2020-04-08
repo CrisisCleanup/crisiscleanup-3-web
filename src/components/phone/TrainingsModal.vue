@@ -117,35 +117,75 @@ export default {
           completed: false,
           videoUrl: 'https://www.youtube.com/embed/3wumEh8wcak',
           imagePath: require('@/assets/newstrainingss.jpg'),
-          title: 'Mandatory Crisis Cleanup Training Video',
+          title: '~~Crisis Cleanup Basic Training',
           description:
-            'Then go and tempor incididunt ut labore et dolore magna aliqua.',
+            '~~In this session, you will learn how the basics of how crisis clean up system works. You will know enough be comfortable creating cases, looking up records, inviting collogues, escalating cases, and asking for help.',
           timeToComplete: '10 minutes',
           questions: [
             {
+              prompt: 'How much does Crisis Cleanup cost?',
+              answers: [
+                { text: 'An arm and a leg.', correct: false },
+                { text: 'Free.', correct: true },
+                { text: 'Your firstborn child.', correct: false },
+                { text: '$1,000 per year.', correct: false },
+              ],
+            },
+            {
+              prompt: 'When must you claim a case?',
+              answers: [
+                {
+                  text: 'Every time you perform an assessment.',
+                  correct: false,
+                },
+                {
+                  text: 'Whenever ordered by the VOAD or state government.',
+                  correct: false,
+                },
+                { text: 'Only on Tuesdays at high tide.', correct: false },
+                { text: 'Only when convenient for you.', correct: true },
+              ],
+            },
+            {
               prompt:
-                'You can use Crisis Cleanup to do donations management, case management, logistics, etc.',
+                'Always store as much sensitive personal information on Crisis Cleanup as possible.',
               answers: [
                 { text: 'True', correct: false },
                 { text: 'False', correct: true },
               ],
             },
             {
-              prompt: 'How much does Crisis Cleanup cost?',
+              prompt: 'Who may enter cases?',
               answers: [
-                { text: 'An arm and a leg.', correct: false },
-                { text: 'Free.', correct: true },
-                { text: 'Your firstborn child.', correct: false },
-                { text: '$1,000 per year.', correct: false },
+                { text: 'Any member of the public.', correct: false },
+                {
+                  text: 'Any participating organization, including your own.',
+                  correct: true,
+                },
+                {
+                  text: 'Only 2-1-1 or other authorized call-in centers.',
+                  correct: false,
+                },
+                {
+                  text: 'Only your state VOAD or system administrator.',
+                  correct: false,
+                },
               ],
             },
             {
-              prompt: 'How much does Crisis Cleanup cost?',
+              prompt:
+                'What should you do if a fellow relief organization doesn’t complete a case they’ve claimed?',
               answers: [
-                { text: 'An arm and a leg.', correct: false },
-                { text: 'Free.', correct: true },
-                { text: 'Your firstborn child.', correct: false },
-                { text: '$1,000 per year.', correct: false },
+                { text: 'Fill out a trouble ticket.', correct: false },
+                {
+                  text: 'Complain about them on social media.',
+                  correct: false,
+                },
+                { text: 'Break their kneecaps.', correct: false },
+                {
+                  text: 'Contact that organization to offer help.',
+                  correct: true,
+                },
               ],
             },
           ],
@@ -154,35 +194,70 @@ export default {
           completed: false,
           videoUrl: 'https://www.youtube.com/embed/3wumEh8wcak',
           imagePath: require('@/assets/newstrainingss.jpg'),
-          title: 'Mandatory Crisis Cleanup Training Video',
+          title: '~~Phone System Basic Training',
           description:
-            'Then go and tempor incididunt ut labore et dolore magna aliqua.',
+            '~~In this session, you will learn how to work on the front lines of disaster recovery (from home). You will know enough to be comfortable answering calls from survivors and helping them connect to the help they need.',
           timeToComplete: '15 minutes',
           questions: [
             {
               prompt:
-                'You can use Crisis Cleanup to do donations management, case management, logistics, etc.',
+                'What are your top three priorities when answering the phone?',
+              answers: [
+                {
+                  text: 'Solve Problems, Provide Counseling, Promise Results.',
+                  correct: false,
+                },
+                {
+                  text:
+                    'Guarantee Quick Service, Claim Cases, Work Without a Break.',
+                  correct: false,
+                },
+                {
+                  text:
+                    'Listen, Manage Expectations, and Enter Requests on Crisis Cleanup.',
+                  correct: true,
+                },
+                {
+                  text:
+                    'Assign Cases to Other Organizations, Gather Personal Information, Nap.',
+                  correct: false,
+                },
+              ],
+            },
+            {
+              prompt: 'The caller will be able to see your Caller ID.',
               answers: [
                 { text: 'True', correct: false },
                 { text: 'False', correct: true },
               ],
             },
             {
-              prompt: 'How much does Crisis Cleanup cost?',
+              prompt:
+                'It is better to pace yourself over several weeks than to work many hours over a couple of days.',
               answers: [
-                { text: 'An arm and a leg.', correct: false },
-                { text: 'Free.', correct: true },
-                { text: 'Your firstborn child.', correct: false },
-                { text: '$1,000 per year.', correct: false },
+                { text: 'True', correct: true },
+                { text: 'False', correct: false },
               ],
             },
             {
-              prompt: 'How much does Crisis Cleanup cost?',
+              prompt: 'If you begin to feel “compassion fatigue,” you should:',
               answers: [
-                { text: 'An arm and a leg.', correct: false },
-                { text: 'Free.', correct: true },
-                { text: 'Your firstborn child.', correct: false },
-                { text: '$1,000 per year.', correct: false },
+                {
+                  text: 'Take a break.',
+                  correct: false,
+                },
+                {
+                  text: 'Talk to someone.',
+                  correct: false,
+                },
+                {
+                  text: 'Read stories of people who have been helped.',
+                  correct: false,
+                },
+                {
+                  text: 'All of the above.',
+                  correct: true,
+                },
               ],
             },
           ],
