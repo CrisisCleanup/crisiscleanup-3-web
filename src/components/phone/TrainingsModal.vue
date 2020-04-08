@@ -265,6 +265,15 @@ export default {
             },
             {
               prompt: this.$t(
+                '~~The system will prioritize which phone calls are most important to take or return.',
+              ),
+              answers: [
+                { text: this.$t('~~True'), correct: true },
+                { text: this.$t('~~False'), correct: false },
+              ],
+            },
+            {
+              prompt: this.$t(
                 '~~If you begin to feel “compassion fatigue,” you should:',
               ),
               answers: [
@@ -290,17 +299,17 @@ export default {
             },
           ],
         },
-        // {
-        //   completed: false,
-        //   videoUrl: 'https://www.youtube.com/embed/3wumEh8wcak',
-        //   imagePath: require('@/assets/newstrainingss.jpg'),
-        //   title: this.$t('~~Phone system Special Cases Examples (Optional)'),
-        //   description: this.$t(
-        //     '~~In this session we present some of the most common out of the ordinary requests you might encounter while working the phone system and how to handle them.',
-        //   ),
-        //   timeToComplete: this.$t('~~10 minutes'),
-        //   questions: [],
-        // },
+        {
+          completed: false,
+          videoUrl: 'https://www.youtube.com/embed/3wumEh8wcak',
+          imagePath: require('@/assets/newstrainingss.jpg'),
+          title: this.$t('~~Phone system Special Cases Examples (Optional)'),
+          description: this.$t(
+            '~~In this session we present some of the most common out of the ordinary requests you might encounter while working the phone system and how to handle them.',
+          ),
+          timeToComplete: this.$t('~~10 minutes'),
+          questions: [],
+        },
       ],
     };
   },
