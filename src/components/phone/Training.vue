@@ -27,10 +27,16 @@
       <!--- Training Video Description --->
       <div class="flex-col">
         <h1 class="px-10 my-3 text-3xl font-bold text-crisiscleanup-dark-500">
-          {{ training.title }}
+          <!-- {{ training.title }} -->
+          {{ $t(`~~Crisis Cleanup Basic Training`) }}
         </h1>
         <p class="px-10 text-xl text-crisiscleanup-dark-400">
-          {{ training.description }}
+          <!-- {{ training.description }} -->
+          {{
+            $t(
+              `~~In this session, you will learn how the basics of how crisis clean up system works. You will know enough be comfortable creating cases, looking up records, inviting collogues, escalating cases, and asking for help.`,
+            )
+          }}
         </p>
 
         <!-- <h1 class="px-10 my-6 text-2xl font-bold text-crisiscleanup-dark-500">
