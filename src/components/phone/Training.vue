@@ -27,10 +27,10 @@
       <!--- Training Video Description --->
       <div class="flex-col">
         <h1 class="px-10 my-3 text-3xl font-bold text-crisiscleanup-dark-500">
-          {{ $t(training.title) }}
+          {{ training.title }}
         </h1>
         <p class="px-10 text-xl text-crisiscleanup-dark-400">
-          {{ $t(training.description) }}
+          {{ training.description }}
         </p>
 
         <!-- <h1 class="px-10 my-6 text-2xl font-bold text-crisiscleanup-dark-500">

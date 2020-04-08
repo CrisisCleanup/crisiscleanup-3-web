@@ -13,8 +13,8 @@
             weight="700"
             class="text-crisiscleanup-dark-500"
           >
-            <!-- {{ lang.header.text }} -->
-            {{ $t('~~Phone System Training') }}
+            {{ lang.header.text }}
+            <!-- {{ $t('~~Phone System Training') }} -->
           </base-text>
         </header>
         <div class="flex">
@@ -117,73 +117,96 @@ export default {
           completed: false,
           videoUrl: 'https://www.youtube.com/embed/3wumEh8wcak',
           imagePath: require('@/assets/newstrainingss.jpg'),
-          title: '~~Crisis Cleanup Basic Training',
-          description:
+          title: this.$t('~~Crisis Cleanup Basic Training'),
+          description: this.$t(
             '~~In this session, you will learn how the basics of how crisis clean up system works. You will know enough be comfortable creating cases, looking up records, inviting collogues, escalating cases, and asking for help.',
-          timeToComplete: '10 minutes',
+          ),
+          timeToComplete: this.$t('~~10 minutes'),
           questions: [
             {
-              prompt: 'How much does Crisis Cleanup cost?',
+              prompt: this.$t('~~How much does Crisis Cleanup cost?'),
               answers: [
-                { text: 'An arm and a leg.', correct: false },
-                { text: 'Free.', correct: true },
-                { text: 'Your firstborn child.', correct: false },
-                { text: '$1,000 per year.', correct: false },
+                { text: this.$t('~~An arm and a leg.'), correct: false },
+                { text: this.$t('~~Free.'), correct: true },
+                { text: this.$t('~~Your firstborn child.'), correct: false },
+                { text: this.$t('~~$1,000 per year.'), correct: false },
               ],
             },
             {
-              prompt: 'When must you claim a case?',
+              prompt: this.$t('~~When must you claim a case?'),
               answers: [
                 {
-                  text: 'Every time you perform an assessment.',
+                  text: this.$t('~~Every time you perform an assessment.'),
                   correct: false,
                 },
                 {
-                  text: 'Whenever ordered by the VOAD or state government.',
+                  text: this.$t(
+                    '~~Whenever ordered by the VOAD or state government.',
+                  ),
                   correct: false,
                 },
-                { text: 'Only on Tuesdays at high tide.', correct: false },
-                { text: 'Only when convenient for you.', correct: true },
-              ],
-            },
-            {
-              prompt:
-                'Always store as much sensitive personal information on Crisis Cleanup as possible.',
-              answers: [
-                { text: 'True', correct: false },
-                { text: 'False', correct: true },
-              ],
-            },
-            {
-              prompt: 'Who may enter cases?',
-              answers: [
-                { text: 'Any member of the public.', correct: false },
                 {
-                  text: 'Any participating organization, including your own.',
+                  text: this.$t('~~Only on Tuesdays at high tide.'),
+                  correct: false,
+                },
+                {
+                  text: this.$t('~~Only when convenient for you.'),
+                  correct: true,
+                },
+              ],
+            },
+            {
+              prompt: this.$t(
+                '~~Always store as much sensitive personal information on Crisis Cleanup as possible.',
+              ),
+              answers: [
+                { text: this.$t('~~True'), correct: false },
+                { text: this.$t('~~False'), correct: true },
+              ],
+            },
+            {
+              prompt: this.$t('~~Who may enter cases?'),
+              answers: [
+                {
+                  text: this.$t('~~Any member of the public.'),
+                  correct: false,
+                },
+                {
+                  text: this.$t(
+                    '~~Any participating organization, including your own.',
+                  ),
                   correct: true,
                 },
                 {
-                  text: 'Only 2-1-1 or other authorized call-in centers.',
+                  text: this.$t(
+                    '~~Only 2-1-1 or other authorized call-in centers.',
+                  ),
                   correct: false,
                 },
                 {
-                  text: 'Only your state VOAD or system administrator.',
+                  text: this.$t(
+                    '~~Only your state VOAD or system administrator.',
+                  ),
                   correct: false,
                 },
               ],
             },
             {
-              prompt:
-                'What should you do if a fellow relief organization doesn’t complete a case they’ve claimed?',
+              prompt: this.$t(
+                '~~What should you do if a fellow relief organization doesn’t complete a case they’ve claimed?',
+              ),
               answers: [
-                { text: 'Fill out a trouble ticket.', correct: false },
                 {
-                  text: 'Complain about them on social media.',
+                  text: this.$t('~~Fill out a trouble ticket.'),
                   correct: false,
                 },
-                { text: 'Break their kneecaps.', correct: false },
                 {
-                  text: 'Contact that organization to offer help.',
+                  text: this.$t('~~Complain about them on social media.'),
+                  correct: false,
+                },
+                { text: this.$t('~~Break their kneecaps.'), correct: false },
+                {
+                  text: this.$t('~~Contact that organization to offer help.'),
                   correct: true,
                 },
               ],
@@ -194,68 +217,82 @@ export default {
           completed: false,
           videoUrl: 'https://www.youtube.com/embed/3wumEh8wcak',
           imagePath: require('@/assets/newstrainingss.jpg'),
-          title: '~~Phone System Basic Training',
-          description:
+          title: this.$t('~~Phone System Basic Training'),
+          description: this.$t(
             '~~In this session, you will learn how to work on the front lines of disaster recovery (from home). You will know enough to be comfortable answering calls from survivors and helping them connect to the help they need.',
-          timeToComplete: '15 minutes',
+          ),
+          timeToComplete: this.$t('~~15 minutes'),
           questions: [
             {
-              prompt:
-                'What are your top three priorities when answering the phone?',
+              prompt: this.$t(
+                '~~What are your top three priorities when answering the phone?',
+              ),
               answers: [
                 {
-                  text: 'Solve Problems, Provide Counseling, Promise Results.',
+                  text: this.$t(
+                    '~~Solve Problems, Provide Counseling, Promise Results.',
+                  ),
                   correct: false,
                 },
                 {
-                  text:
-                    'Guarantee Quick Service, Claim Cases, Work Without a Break.',
+                  text: this.$t(
+                    '~~Guarantee Quick Service, Claim Cases, Work Without a Break.',
+                  ),
                   correct: false,
                 },
                 {
-                  text:
-                    'Listen, Manage Expectations, and Enter Requests on Crisis Cleanup.',
+                  text: this.$t(
+                    '~~Listen, Manage Expectations, and Enter Requests on Crisis Cleanup.',
+                  ),
                   correct: true,
                 },
                 {
-                  text:
-                    'Assign Cases to Other Organizations, Gather Personal Information, Nap.',
+                  text: this.$t(
+                    '~~Assign Cases to Other Organizations, Gather Personal Information, Nap.',
+                  ),
                   correct: false,
                 },
               ],
             },
             {
-              prompt: 'The caller will be able to see your Caller ID.',
+              prompt: this.$t(
+                '~~The caller will be able to see your Caller ID.',
+              ),
               answers: [
-                { text: 'True', correct: false },
-                { text: 'False', correct: true },
+                { text: this.$t('~~True'), correct: false },
+                { text: this.$t('~~False'), correct: true },
               ],
             },
             {
-              prompt:
-                'It is better to pace yourself over several weeks than to work many hours over a couple of days.',
+              prompt: this.$t(
+                '~~It is better to pace yourself over several weeks than to work many hours over a couple of days.',
+              ),
               answers: [
-                { text: 'True', correct: true },
-                { text: 'False', correct: false },
+                { text: this.$t('~~True'), correct: true },
+                { text: this.$t('~~False'), correct: false },
               ],
             },
             {
-              prompt: 'If you begin to feel “compassion fatigue,” you should:',
+              prompt: this.$t(
+                '~~If you begin to feel “compassion fatigue,” you should:',
+              ),
               answers: [
                 {
-                  text: 'Take a break.',
+                  text: this.$t('~~Take a break.'),
                   correct: false,
                 },
                 {
-                  text: 'Talk to someone.',
+                  text: this.$t('~~Talk to someone.'),
                   correct: false,
                 },
                 {
-                  text: 'Read stories of people who have been helped.',
+                  text: this.$t(
+                    '~~Read stories of people who have been helped.',
+                  ),
                   correct: false,
                 },
                 {
-                  text: 'All of the above.',
+                  text: this.$t('~~All of the above.'),
                   correct: true,
                 },
               ],
