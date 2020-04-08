@@ -354,6 +354,10 @@ export default {
       type: Function,
       default: () => true,
     },
+    dataPrefill: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -417,6 +421,7 @@ export default {
         incident: this.incidentId,
         form_data: [],
         formFields: {},
+        ...this.dataPrefill,
       };
       if (this.pdaId) {
         const response = await this.$http.get(

@@ -33,6 +33,7 @@
               "
               disable-claim-and-save
               :before-save="beforeWorksiteSave"
+              :data-prefill="prefillData"
               @savedWorksite="savedWorksite"
               @closeWorksite="closeWorksite"
             />
@@ -106,6 +107,16 @@ export default {
         return false;
       }
       return true;
+    },
+  },
+  computed: {
+    prefillData() {
+      if (this.callerId) {
+        return {
+          phone1: this.callerId,
+        };
+      }
+      return {};
     },
   },
   async mounted() {
