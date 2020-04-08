@@ -361,6 +361,7 @@ const actions = {
       id: state.contact.id,
       contactId: ctrlState.contactId,
     });
+    commit('setHydrated', true);
     return ctrlState;
   },
   async addCases({ state, commit, dispatch }, { worksites, pdas }) {
@@ -466,6 +467,9 @@ const mutations = {
   },
   setOutboundId(state, newId) {
     state.controller.outboundId = newId;
+  },
+  setHydrated(state, hydrateState) {
+    state.hydrated = hydrateState;
   },
   resetState(state) {
     Object.assign(state, {
