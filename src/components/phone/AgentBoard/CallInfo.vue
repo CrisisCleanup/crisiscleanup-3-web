@@ -97,7 +97,7 @@ export default {
 
       this.$log.debug('generating cards from cases:', cases);
       const cards = cases.map((c) => ({
-        caseNumber: c.case_number ? c.case_number : `COVID-${c.id}`,
+        caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
         address: c.short_address,
         state: c.state,
         worktype: c.getWorkType ? c.getWorkType() : 'wellness_check',
