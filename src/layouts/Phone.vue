@@ -22,6 +22,7 @@ $areas: start main end;
     display: inline-grid;
     column-gap: 2rem;
     @apply h-full p-6;
+    padding-right: 0;
     grid:
       [r1] 'start main end' [r1end]
       / 1fr 1.75fr 1fr;

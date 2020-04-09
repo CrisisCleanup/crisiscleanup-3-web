@@ -23,20 +23,26 @@
         </template>
         <template #grid-end>
           <div class="grid-end flex">
-            <case-form
-              :key="currentCaseId"
-              class="shadow-crisiscleanup-card"
-              incident-id="199"
-              :pda-id="currentCaseType === 'pda' ? currentCaseId : null"
-              :worksite-id="
-                currentCaseType === 'worksite' ? currentCaseId : null
-              "
-              disable-claim-and-save
-              :before-save="beforeWorksiteSave"
-              :data-prefill="prefillData"
-              @savedWorksite="savedWorksite"
-              @closeWorksite="closeWorksite"
-            />
+            <agent-actions>
+              <template #case>
+                <case-form
+                  :key="currentCaseId"
+                  incident-id="199"
+                  :pda-id="currentCaseType === 'pda' ? currentCaseId : null"
+                  :worksite-id="
+                    currentCaseType === 'worksite' ? currentCaseId : null
+                  "
+                  disable-claim-and-save
+                  :before-save="beforeWorksiteSave"
+                  :data-prefill="prefillData"
+                  @savedWorksite="savedWorksite"
+                  @closeWorksite="closeWorksite"
+                />
+              </template>
+              <template #resources>
+                <div></div>
+              </template>
+            </agent-actions>
           </div>
         </template>
       </phone-layout>
@@ -56,11 +62,13 @@ import { LocalStorageMixin, AgentMixin } from '@/mixins';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import ScriptPopup from '@/components/phone/ScriptPopup.vue';
 import Pda from '@/models/Pda';
+import AgentActions from '@/components/phone/AgentActions/Actions.vue';
 
 export default {
   name: 'Controller',
   mixins: [AgentMixin, LocalStorageMixin],
   components: {
+    AgentActions,
     PhoneLayout,
     CaseForm,
     AgentBlock,
