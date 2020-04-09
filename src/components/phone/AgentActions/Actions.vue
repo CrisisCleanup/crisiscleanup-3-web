@@ -17,7 +17,9 @@
         </base-text>
       </div>
     </div>
-    <slot :name="currentTab.key" />
+    <keep-alive>
+      <slot v-for="t in actionTabs" :name="t.key" />
+    </keep-alive>
   </div>
 </template>
 

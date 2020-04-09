@@ -36,8 +36,7 @@ export default {
         .nav {
           display: flex;
           flex-direction: row;
-          @apply border-b-gray-400 #{!important};
-          border-bottom: 3px solid;
+          box-shadow: 0 4px 14px 0 rgba(164, 177, 184, 0.18);
           .nav-item {
             cursor: pointer;
             @apply py-4 px-6;
@@ -52,11 +51,11 @@ export default {
               }
               &:after {
                 content: '';
-                height: 3px;
+                height: 4px;
                 width: 100%;
                 @apply bg-primary-light;
                 position: absolute;
-                bottom: -3px;
+                bottom: 0;
                 left: 0;
               }
             }
