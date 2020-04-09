@@ -123,7 +123,7 @@ export const STATES = {
   DISCONNECTED: connect.ContactStateType.DISCONNECTED,
   PENDING_CALL: 'PendingBusy',
   POLLING: 'polling',
-  BUSY: 'Busy',
+  ON_CALL: 'Busy',
   PAUSED: 'AfterCallWork',
 };
 

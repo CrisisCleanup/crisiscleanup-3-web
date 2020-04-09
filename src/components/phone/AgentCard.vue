@@ -180,8 +180,9 @@ export default {
           state.state = 'available';
           EventBus.$emit(CCEvent.AVAILABLE);
           break;
+        case CCState.PENDING_CALL:
         case CCState.INCOMING:
-        case CCState.BUSY:
+        case CCState.ON_CALL:
         case CCState.CONNECTING:
           state.key = 'ready';
           state.state = 'oncall';

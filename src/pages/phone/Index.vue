@@ -8,7 +8,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { EventBus } from '@/event-bus';
-import { EVENTS as CCEvent } from '@/services/acs.service';
+import { STATES as CCState, EVENTS as CCEvent } from '@/services/acs.service';
 import Worksite from '@/models/Worksite';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import Pda from '@/models/Pda';
@@ -109,22 +109,30 @@ export default {
       }
     });
     EventBus.$on(CCEvent.ON_CALL, () => {
-      this.page = Controller;
+      if (!this.page === Controller) {
+        this.page = Controller;
+      }
     });
     EventBus.$on(CCEvent.OFF_CALL, () => {
       this.$store.dispatch('phone/resetState');
       this.page = Dashboard;
     });
     if (!this.connectReady) {
+      this.$store.dispatch('phone/syncContact');
       this.unsub = this.$store.subscribe((mutation) => {
         if (mutation.type === 'phone/setAgentState') {
           this.$toasted.success('Success!');
-          this.page = Dashboard;
+          if (this.agentState === CCState.ON_CALL) {
+            this.page = Controller;
+          } else {
+            this.page = Dashboard;
+          }
           this.setPopup(false);
           this.unsub();
-          this.$store.dispatch('phone/syncContact');
         }
       });
+    } else if (this.agentState === CCState.ON_CALL) {
+      this.page = Controller;
     } else {
       this.page = Dashboard;
     }
