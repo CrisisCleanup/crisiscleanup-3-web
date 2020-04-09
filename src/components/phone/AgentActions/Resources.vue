@@ -26,7 +26,12 @@
       </div>
     </div>
     <div class="resources--actions">
-      <base-button :disabled="selected === -1" variant="solid" size="large">
+      <base-button
+        :action="() => conferenceCall()"
+        :disabled="selected === -1"
+        variant="solid"
+        size="large"
+      >
         {{ $t('~~Start Conference') }}
       </base-button>
     </div>
@@ -40,6 +45,12 @@ export default {
   name: 'PhoneResources',
   mixins: [IconsMixin, ValidateMixin],
   methods: {
+    async conferenceCall() {
+      this.$log.debug('starting call conference...');
+      const resource = PhoneResource.find(this.selected);
+      this.$log.debug('adding external resource:', resource);
+      this.$store.dispatch('phone/addContact', resource.dnis);
+    },
     selectItem(id) {
       if (this.selected === id) {
         this.selected = -1;

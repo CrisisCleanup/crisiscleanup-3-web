@@ -194,3 +194,9 @@ export const getCurrentContact = () => {
   }
   return null;
 };
+
+export const addContact = (number, handler) => {
+  const endpoint = connect.Endpoint.byPhoneNumber(number);
+  const contact = getCurrentContact();
+  contact.addConnection(endpoint, handler);
+};

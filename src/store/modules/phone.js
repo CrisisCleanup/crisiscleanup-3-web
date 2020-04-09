@@ -33,6 +33,7 @@ const getStateDefaults = () => ({
       callerId: null,
     },
   },
+  externalContacts: [],
   controller: {
     contactId: null,
     outboundId: null,
@@ -451,6 +452,22 @@ const actions = {
   async setActionTab({ commit }, key) {
     commit('setAgentActions', { currentKey: key });
   },
+  async addContact({ commit }, mobile) {
+    const number = `+1${mobile}`;
+    Log.debug('adding contact...', number);
+    ConnectService.addContact(number, {
+      success: (newContact) => {
+        const contact = ConnectService.getCurrentContact();
+        const extContact = contact.getSingleActiveThirdPartyConnection();
+        Log.debug('got 3rd party connection:', extContact);
+        extContact.onConnected(() => {
+          Log.debug('conferencing...', newContact);
+          contact.conferenceConnections();
+          commit('addContact', [extContact]);
+        });
+      },
+    });
+  },
 };
 
 // mutations
@@ -510,6 +527,9 @@ const mutations = {
       ...state.actions,
       ...newState,
     };
+  },
+  addContact(state, newState) {
+    state.externalContacts = [...state.externalContacts, ...newState];
   },
   resetState(state) {
     Object.assign(state, {
