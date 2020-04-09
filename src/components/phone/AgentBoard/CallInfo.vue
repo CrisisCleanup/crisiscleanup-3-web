@@ -11,10 +11,10 @@
           }}</base-text>
         </div>
         <div class="contact-caller">
-          <ccu-icon with-text size="md" :type="icons.phone_user">
+          <ccu-icon with-text size="small" :type="icons.phone_user">
             <base-text>{{ callerName }}</base-text>
           </ccu-icon>
-          <ccu-icon with-text size="md" :type="icons.earth_globe">
+          <ccu-icon with-text size="small" :type="icons.earth_globe">
             <base-text>{{ callerLocale.name_t.split(' ')[0] }}</base-text>
           </ccu-icon>
         </div>
@@ -215,11 +215,14 @@ export default {
                   display: flex;
                   flex-direction: row;
                   cursor: pointer;
+                  div {
+                    @apply px-2;
+                  }
                   div:last-child img:hover {
                     filter: drop-shadow(0 0 0.2rem fade-out(crimson, 0.3));
                   }
                   div:first-child img:hover {
-                    filter: drop-shadow(0 0 0.2rem fade-out(#818181, 0.3));
+                    filter: drop-shadow(0 0 0.2rem fade-out(#818181, 0.1));
                   }
                   img {
                     transition: 300ms ease;

@@ -1,6 +1,8 @@
 <template>
   <div class="w-full h-full">
-    <component :is="page" />
+    <keep-alive>
+      <component :is="page" />
+    </keep-alive>
     <incoming-popup v-if="callIncoming && casesResolved" />
   </div>
 </template>
