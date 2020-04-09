@@ -54,6 +54,7 @@ export const AgentMixin = {
       'casesResolved',
       'callerLocale',
       'callType',
+      'connectReady',
     ]),
     callerName() {
       return this.currentCase ? this.currentCase.name : 'Unknown';

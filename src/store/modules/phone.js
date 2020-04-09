@@ -79,7 +79,7 @@ const getters = {
       ? state.agentState
       : ConnectService.STATES.OFFLINE,
   connectRunning: (state) => state.connectRunning, // is connect initialized?
-  connectReady: (state) => state.connectRunning && state.agentConfig, // is connect done w/ init and auth?
+  connectReady: (state) => !!(state.connectRunning && state.agentConfig), // is connect done w/ init and auth?
   popupOpen: (state) => state.popupOpen,
   authToken: (state) =>
     state.credentials ? state.credentials.AccessToken : '',
