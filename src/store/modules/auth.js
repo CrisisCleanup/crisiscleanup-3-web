@@ -1,6 +1,9 @@
 import { AuthService } from '@/services/auth.service';
 import axios from 'axios';
 import moment from 'moment';
+import Vue from 'vue';
+import Acl from 'vue-browser-acl';
+import User from '@/models/User';
 
 const AuthState = {
   user: AuthService.getUser(),
@@ -49,6 +52,20 @@ const mutations = {
     } else {
       AuthService.saveUser(user);
     }
+  },
+  setAcl(state, router) {
+    const user = User.find(state.user.user_claims.id);
+    Vue.use(
+      Acl,
+      user,
+      (acl) => {
+        const { permissions } = user;
+        Object.keys(permissions).forEach((permissionKey) => {
+          acl.rule(permissionKey, user.permissions[permissionKey]);
+        });
+      },
+      { router },
+    );
   },
 };
 

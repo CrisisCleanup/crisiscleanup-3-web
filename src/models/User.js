@@ -20,6 +20,7 @@ export default class User extends Model {
       organization: this.attr(null),
       states: this.attr({}),
       preferences: this.attr({}),
+      permissions: this.attr({}),
       primary_language: this.attr(null),
       secondary_language: this.attr(null),
       accepted_terms_timestamp: this.attr(null),

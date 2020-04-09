@@ -7,6 +7,8 @@ const routes = [
     name: 'nav.phone',
     meta: {
       layout: 'authenticated',
+      can: 'phone_agent',
+      fail: '$from',
     },
   },
 ];

@@ -2,7 +2,11 @@
   <Loader :loading="loading" :class="loading && 'flex layout h-full'">
     <template #content>
       <div class="layout">
-        <NavMenu :routes="routes" class="sidebar--grid" />
+        <NavMenu
+          :routes="routes"
+          class="sidebar--grid"
+          :key="currentUser && currentUser.permissions"
+        />
         <div class="shadow header--grid bg-white">
           <div class="flex justify-between h-full items-center">
             <div class="flex items-center ml-2">
@@ -94,8 +98,6 @@ import { i18nService } from '@/services/i18n.service';
 import NavMenu from '@/components/navigation/NavMenu';
 import Loader from '@/components/Loader';
 import TermsandConditionsModal from '@/components/TermsandConditionsModal';
-import Vue from 'vue';
-import Acl from 'vue-browser-acl';
 import DisasterIcon from '../components/DisasterIcon';
 import PhoneStatus from '../models/PhoneStatus';
 import { hash } from '../utils/promise';
@@ -156,7 +158,8 @@ export default {
           icon: 'phone',
           text: this.$t('dashboard.phone'),
           to: '/phone',
-          disabled: process.env.NODE_ENV === 'production',
+          disabled:
+            process.env.NODE_ENV === 'production' || !this.$can('phone_agent'),
         },
         {
           key: 'admin',
@@ -206,7 +209,7 @@ export default {
       this.getEnums(),
     ]);
     await this.setupLanguage();
-    this.setupAcl();
+    this.setAcl(this.$router);
 
     let incidentId = this.$route.params.incident_id;
     if (!incidentId) {
@@ -303,18 +306,8 @@ export default {
 
       this.$moment.locale(currentLanguage.split('-')[0]);
     },
-    setupAcl() {
-      Vue.use(Acl, this.user, (acl) => {
-        const { permissions } = this.user.user_claims;
-        Object.keys(permissions).forEach((permissionKey) => {
-          acl.rule(
-            permissionKey,
-            this.user.user_claims.permissions[permissionKey],
-          );
-        });
-      });
-    },
     ...mapActions('auth', ['login']),
+    ...mapMutations('auth', ['setAcl']),
     ...mapMutations('incident', ['setCurrentIncidentId']),
     ...mapMutations('loading', ['setWorksitesLoading']),
     ...mapMutations('locale', ['setLanguage']),

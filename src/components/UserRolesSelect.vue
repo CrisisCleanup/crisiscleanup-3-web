@@ -19,6 +19,8 @@
 import VueTypes from 'vue-types';
 import Role from '@/models/Role';
 import UserRole from '@/models/UserRole';
+import User from '@/models/User';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'UserRolesSelect',
@@ -39,6 +41,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('auth', ['setAcl']),
     async getUserRoles() {
       const results = await UserRole.api().get(
         `/user_roles?user=${this.user.id}`,
@@ -74,6 +77,8 @@ export default {
       }
 
       this.userRoles = await this.getUserRoles();
+      await User.api().get('/users/me', {});
+      this.setAcl(this.$router);
     },
   },
   props: {
