@@ -26,7 +26,7 @@
         </div>
         <div class="buttons">
           <ccu-icon
-            @click.native="endCurrentCall"
+            @click.native="() => setActionTab('resources')"
             size="xl"
             :type="icons.phone_contact_add"
           />
@@ -94,7 +94,11 @@ export default {
     };
   },
   methods: {
-    ...mapActions('phone', ['syncCallDuration', 'setCurrentCase']),
+    ...mapActions('phone', [
+      'syncCallDuration',
+      'setCurrentCase',
+      'setActionTab',
+    ]),
     async createCards() {
       const wksites = await this.fetchCasesByType(Worksite, this.worksites);
       const pdas = await this.fetchCasesByType(Pda, this.pdas);

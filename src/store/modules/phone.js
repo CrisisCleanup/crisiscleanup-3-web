@@ -49,6 +49,9 @@ const getStateDefaults = () => ({
       id: null,
       notes: '',
     },
+    actions: {
+      currentKey: 'case',
+    },
   },
 });
 
@@ -181,6 +184,10 @@ const getters = {
     return lang;
   },
   callType: (state) => (state.contact ? state.contact.type : null),
+  currentActionTab: (state) =>
+    state.controller.actions.currentKey
+      ? state.controller.actions.currentKey
+      : 'case',
 };
 
 // actions
@@ -441,6 +448,9 @@ const actions = {
     EventBus.$emit(ConnectService.EVENTS.OFF_CALL);
     dispatch('resetState');
   },
+  async setActionTab({ commit }, key) {
+    commit('setAgentActions', { currentKey: key });
+  },
 };
 
 // mutations
@@ -494,6 +504,12 @@ const mutations = {
   },
   setHydrated(state, hydrateState) {
     state.hydrated = hydrateState;
+  },
+  setAgentActions(state, newState) {
+    state.controller.actions = {
+      ...state.actions,
+      ...newState,
+    };
   },
   resetState(state) {
     Object.assign(state, {

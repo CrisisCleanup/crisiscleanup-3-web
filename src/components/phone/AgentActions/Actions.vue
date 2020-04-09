@@ -2,10 +2,10 @@
   <div class="agent-actions shadow-crisiscleanup-card">
     <div class="tabbar">
       <div
-        @click="() => setTab(idx)"
-        v-for="(t, idx) in actionTabs"
+        @click="() => setActionTab(t.key)"
+        v-for="t in actionTabs"
         :key="t.title"
-        :class="`tab ${idx === currentIndex ? 'active' : ''}`"
+        :class="`tab ${t.key === currentActionTab ? 'active' : ''}`"
       >
         <ccu-icon v-if="t.icon" with-text size="medium" :type="t.icon">
           <base-text variant="h3">
@@ -17,21 +17,25 @@
         </base-text>
       </div>
     </div>
-    <keep-alive>
-      <slot v-for="t in actionTabs" :name="t.key" />
-    </keep-alive>
+    <div
+      class="flex flex-grow"
+      v-show="t.key === currentActionTab"
+      v-for="t in actionTabs"
+      :key="t.key"
+    >
+      <slot :name="t.key" />
+    </div>
+    <!-- <slot v-for="t in actionTabs" :name="t.key" /> -->
   </div>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   name: 'AgentActions',
-  data() {
-    return {
-      currentIndex: 0,
-    };
-  },
   computed: {
+    ...mapGetters('phone', ['currentActionTab']),
     actionTabs() {
       return [
         {
@@ -45,14 +49,9 @@ export default {
         },
       ];
     },
-    currentTab() {
-      return this.actionTabs[this.currentIndex];
-    },
   },
   methods: {
-    setTab(idx) {
-      this.currentIndex = idx;
-    },
+    ...mapActions('phone', ['setActionTab']),
   },
 };
 </script>
