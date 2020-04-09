@@ -89,13 +89,11 @@ export default {
         await Pda.api().associateWorksite(this.currentCase.id, worksite.id);
       }
       if (this.currentOutbound) {
-        this.$log.debug('updating outbound status with:', this.caseStatusId);
+        this.$log.debug('associating worksite to PhoneOutbound...');
 
-        await PhoneOutbound.api().updateStatus(
-          this.currentOutbound.id,
-          this.caseStatusId,
-          worksite.id,
-        );
+        await PhoneOutbound.api().updateStatus(this.currentOutbound.id, {
+          worksiteId: worksite.id,
+        });
       }
 
       this.addCases({ worksites: [worksite.id] });

@@ -91,6 +91,7 @@ const getters = {
       ConnectService.STATES.PENDING_CALL,
       ConnectService.STATES.AGENT_PENDING,
     ].includes(state.agentState),
+  agentOnCall: (state) => state.agentState === ConnectService.STATES.ON_CALL,
   contactState: (state) =>
     state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
   contactAttributes: (state) =>
@@ -418,6 +419,25 @@ const actions = {
     if (contact) {
       contact.accept();
     }
+  },
+  async closeContact({
+    dispatch,
+    getters: { currentOutbound, caseStatusId, agentOnCall },
+  }) {
+    Log.debug('ending contact...');
+    if (!caseStatusId) {
+      throw new Error('~~You must set a Call Status!');
+    }
+    if (currentOutbound) {
+      Log.debug('updating outbound status with:', caseStatusId);
+      await PhoneOutbound.api().updateStatus(currentOutbound.id, caseStatusId);
+    }
+    if (agentOnCall) {
+      Log.debug('agent still on call, hanging up...');
+      await dispatch('endCurrentCall');
+    }
+    EventBus.$emit(ConnectService.EVENTS.OFF_CALL);
+    dispatch('resetState');
   },
 };
 

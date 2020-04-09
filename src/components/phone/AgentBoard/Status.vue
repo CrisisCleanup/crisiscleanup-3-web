@@ -17,6 +17,14 @@
       @input="(value) => setCaseStatus({ notes: value })"
       :placeholder="lang.issuesResolved"
     ></base-input>
+    <base-button
+      class="save-exit"
+      size="large"
+      variant="solid"
+      :action="() => closeContact()"
+    >
+      {{ $t('~~Save & End Call') }}
+    </base-button>
   </div>
 </template>
 
@@ -37,7 +45,15 @@ export default {
       notes: '',
     };
   },
-
+  methods: {
+    async closeContact() {
+      try {
+        await this.$store.dispatch('phone/closeContact');
+      } catch (e) {
+        this.$toasted.error(this.$t(e.message));
+      }
+    },
+  },
   computed: {
     statuses() {
       return PhoneStatus.all();
