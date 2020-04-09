@@ -28,6 +28,11 @@
           <ccu-icon
             @click.native="endCurrentCall"
             size="xl"
+            :type="icons.phone_contact_add"
+          />
+          <ccu-icon
+            @click.native="endCurrentCall"
+            size="xl"
             :type="icons.phone_hangup"
           />
         </div>
@@ -207,12 +212,19 @@ export default {
                   @apply px-1;
                 }
                 .buttons {
+                  display: flex;
+                  flex-direction: row;
                   cursor: pointer;
+                  div:last-child img:hover {
+                    filter: drop-shadow(0 0 0.2rem fade-out(crimson, 0.3));
+                  }
+                  div:first-child img:hover {
+                    filter: drop-shadow(0 0 0.2rem fade-out(#818181, 0.3));
+                  }
                   img {
                     transition: 300ms ease;
                     &:hover {
                       transform: translateY(-3px);
-                      filter: drop-shadow(0 0 0.2rem fade-out(crimson, 0.3));
                     }
                   }
                 }

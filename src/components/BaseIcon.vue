@@ -23,6 +23,7 @@ const iconMap = {
   'phone-hangup': require('@/assets/icons/phone-hangup.svg'),
   'phone-plus': require('@/assets/icons/phone-plus.svg'),
   'earth-globe': require('@/assets/icons/earth-globe.svg'),
+  'phone-contact-add': require('@/assets/icons/phone-contact-add.svg'),
   share: require('@/assets/icons/share-big.svg'),
   download: require('@/assets/icons/download.svg'),
   active: require('@/assets/icons/active.svg'),
