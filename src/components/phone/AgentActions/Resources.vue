@@ -8,7 +8,7 @@
       </div>
       <div class="items">
         <div
-          @click="() => (selected = r.id)"
+          @click="() => selectItem(r.id)"
           :class="`item flex shadow ${selected === r.id ? 'active' : ''}`"
         >
           <div class="icon">
@@ -39,6 +39,15 @@ import { IconsMixin, ValidateMixin } from '@/mixins';
 export default {
   name: 'PhoneResources',
   mixins: [IconsMixin, ValidateMixin],
+  methods: {
+    selectItem(id) {
+      if (this.selected === id) {
+        this.selected = -1;
+        return;
+      }
+      this.selected = id;
+    },
+  },
   data() {
     return {
       selected: -1,
@@ -90,6 +99,9 @@ export default {
           @apply px-3;
         }
         transition: 300ms ease;
+        &.active {
+          @apply border-primary-light;
+        }
         &.active,
         &:hover {
           background-color: fade-out(#f6f8f9, 0.7);
