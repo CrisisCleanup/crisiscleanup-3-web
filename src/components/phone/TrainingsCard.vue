@@ -17,7 +17,7 @@
               variant="bodysm"
               class="justify-between text-crisiscleanup-grey-800 alight-left"
             >
-              {{ timeToComplete }}
+              {{ [timeToComplete, 'seconds'] | duration('humanize') }}
             </base-text>
           </div>
         </div>
@@ -27,6 +27,7 @@
         <base-button
           class="bg-crisiscleanup-yellow-300 hover:bg-crisiscleanup-yellow-100 text-black px-4 py-1"
           href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
+          :disabled="completed"
           :action="
             () => {
               startTraining();

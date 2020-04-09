@@ -5,6 +5,7 @@ import LocalStorageMixin from './localStorage';
 import UserMixin from './user';
 import ValidateMixin from './validate.js';
 import { WorksitesMixin } from './worksite';
+import { TrainingMixin } from './training';
 
 export {
   LocaleMixin,
@@ -16,4 +17,5 @@ export {
   LangOverrideMixin,
   LocalStorageMixin,
   ValidateMixin,
+  TrainingMixin,
 };

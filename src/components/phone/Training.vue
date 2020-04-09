@@ -17,7 +17,7 @@
           class="resp-video"
           width="100%"
           height="400px"
-          :src="training.videoUrl"
+          :src="training.settings.videos[0].embed"
           frameborder="0"
           allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen
@@ -32,70 +32,56 @@
         <p class="px-10 text-xl text-crisiscleanup-dark-400">
           {{ training.description }}
         </p>
-
-        <!-- <h1 class="px-10 my-6 text-2xl font-bold text-crisiscleanup-dark-500">
-          Test Your Crisis Cleanup Knowledge!
-        </h1> -->
       </div>
 
-      <!-- Questions -->
-      <div
-        v-for="(question, questionIdx) in training.questions"
-        :key="questionIdx"
-        class="flex-col my-10"
-      >
-        <h3 class="px-10 my-3 text-lg font-bold text-crisiscleanup-dark-500">
-          <font-awesome-icon
-            v-if="question.answered && question.answeredCorrectly"
-            icon="check"
-            class="text-green-600"
-          />
-          <font-awesome-icon
-            v-if="question.answered && !question.answeredCorrectly"
-            icon="times"
-            class="text-red-600"
-          />
-          {{ questionIdx + 1 }}. {{ question.prompt }}
-        </h3>
-        <div class="px-10">
-          <div
-            v-for="(answer, answerIdx) in question.answers"
-            :key="`${questionIdx}-${answerIdx}`"
-          >
-            <input
-              type="radio"
-              :value="answer.correct"
-              :name="questionIdx"
-              :id="`${questionIdx}-${answerIdx}`"
-              :disabled="question.disabled"
-              v-model="question.answeredCorrectly"
-              @change="
-                () => {
-                  if (question.answeredCorrectly) {
-                    question.disabled = true;
-                    questionsAnswered++;
-                  }
-                  question.answered = true;
-                }
-              "
+      <div v-for="(test, testIdx) in tests">
+        <!-- Questions -->
+        <div
+          v-for="(question, questionIdx) in test.questions"
+          :key="`${testIdx}-${questionIdx}`"
+          class="flex-col my-10"
+        >
+          <h3 class="px-10 my-3 text-lg font-bold text-crisiscleanup-dark-500">
+            <font-awesome-icon
+              v-if="question.answered && question.answeredCorrectly"
+              icon="check"
+              class="text-green-600"
             />
-            <label :for="`${questionIdx}-${answerIdx}`">
-              {{ answer.text }}
-            </label>
+            <font-awesome-icon
+              v-if="question.answered && !question.answeredCorrectly"
+              icon="times"
+              class="text-red-600"
+            />
+            {{ questionIdx + 1 }}. {{ question.question_t }}
+          </h3>
+          <div class="px-10">
+            <div
+              v-for="(answer, answerIdx) in question.answers_t.answers"
+              :key="`${testIdx}-${questionIdx}-${answerIdx}`"
+            >
+              <input
+                type="radio"
+                :name="questionIdx"
+                :id="`${testIdx}-${questionIdx}-${answerIdx}`"
+                :disabled="question.disabled"
+                v-model="question.answeredCorrectly"
+                @change="
+                  () => {
+                    if (answer.is_correct) {
+                      question.disabled = true;
+                      question.answeredCorrectly = true;
+                    } else {
+                      question.answeredCorrectly = false;
+                    }
+                    question.answered = true;
+                  }
+                "
+              />
+              <label :for="`${questionIdx}-${answerIdx}`">
+                {{ answer.text_t }}
+              </label>
+            </div>
           </div>
-          <!-- <base-radio
-            v-for="(answer, answerIdx) in question.answers"
-            :key="`${questionIdx}-${answerIdx}`"
-            class="my-1"
-            :name="questionIdx"
-            :type="question.answerType"
-            :v-model="question.answeredCorrectly"
-            :label="answer.correct"
-            :value="answer.correct"
-            @change="question.answeredCorrectly = $event"
-          >
-            {{ answer.text }} - {{ question.answeredCorrectly }}
-          </base-radio> -->
         </div>
       </div>
     </div>
@@ -104,7 +90,7 @@
     <div class="flex justify-around mt-10"></div>
     <div slot="footer" class="flex p-1 justify-center mb-3">
       <base-button
-        v-if="questionsAnswered === training.questions.length"
+        v-if="!wrongAnswers.length"
         variant="solid"
         class="px-3 py-2"
         :action="() => complete()"
@@ -125,6 +111,7 @@
 
 <script>
 import VueTypes from 'vue-types';
+import { hash } from '../../utils/promise';
 export default {
   name: 'Training',
   props: {
@@ -133,9 +120,31 @@ export default {
   data() {
     return {
       questionsAnswered: 0,
+      tests: [],
+      userTests: [],
     };
   },
+  async mounted() {
+    const testIds = this.training.settings.tests.map((test) => test.id);
+    const pageData = await hash({
+      tests: this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/tests?id__in=${testIds.join(',')}`,
+      ),
+      user_tests: this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/user_tests`,
+      ),
+    });
+    this.tests = pageData.tests.data.results;
+    this.userTests = pageData.user_tests.data.results;
+  },
   computed: {
+    wrongAnswers() {
+      let questions = [];
+      this.tests.forEach((test) => {
+        questions = [...questions, ...test.questions];
+      });
+      return questions.filter((question) => !question.answeredCorrectly);
+    },
     lang() {
       return {
         actions: {
@@ -153,9 +162,15 @@ export default {
     },
   },
   methods: {
-    complete() {
+    async complete() {
+      await this.$http.post(
+        `${process.env.VUE_APP_API_BASE_URL}/user_trainings`,
+        {
+          training: this.training.id,
+          viewed_at: this.$moment().toISOString(),
+        },
+      );
       this.$emit('onComplete', true);
-      this.close();
     },
     cancel() {
       this.$emit('onCancel', this.visible);
