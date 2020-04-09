@@ -1,5 +1,9 @@
 <template>
-  <div class="flex items-center base-icon" :class="iconSelector">
+  <div
+    :class="`flex items-center base-icon ${iconSelector} ${
+      withText ? 'with-text' : ''
+    } `"
+  >
     <img :class="styles" :src="iconMap[type]" :alt="alt" :title="alt" />
     <slot></slot>
   </div>
@@ -131,8 +135,8 @@ export default {
   width: 7px;
 }
 
-.ccu-icon.text {
-  @apply pr-2;
+.base-icon.with-text p {
+  @apply pl-2;
 }
 
 .filter-gray {

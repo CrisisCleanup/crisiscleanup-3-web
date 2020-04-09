@@ -74,7 +74,7 @@ exports[`Storyshots Basics|BaseButton With Custom Icon 1`] = `
       <!---->
        
       <div
-        class="flex items-center base-icon m-1 js-"
+        class="m-1 flex items-center base-icon js-  "
       >
         <img
           alt=""
@@ -369,7 +369,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
         class="flex flex-col border-2 text-center justify-end"
       >
         <div
-          class="flex items-center base-icon m-6 js-"
+          class="m-6 flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -388,7 +388,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
         class="flex flex-col border-2 text-center justify-end"
       >
         <div
-          class="flex items-center base-icon m-6 js-"
+          class="m-6 flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -407,7 +407,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
         class="flex flex-col border-2 text-center justify-end"
       >
         <div
-          class="flex items-center base-icon m-6 js-"
+          class="m-6 flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -426,7 +426,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
         class="flex flex-col border-2 text-center justify-end"
       >
         <div
-          class="flex items-center base-icon m-6 js-"
+          class="m-6 flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -445,7 +445,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
         class="flex flex-col border-2 text-center justify-end"
       >
         <div
-          class="flex items-center base-icon m-6 js-"
+          class="m-6 flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -464,7 +464,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
         class="flex flex-col border-2 text-center justify-end"
       >
         <div
-          class="flex items-center base-icon m-6 js-"
+          class="m-6 flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -483,7 +483,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
         class="flex flex-col border-2 text-center justify-end"
       >
         <div
-          class="flex items-center base-icon m-6 js-"
+          class="m-6 flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -502,7 +502,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
         class="flex flex-col border-2 text-center justify-end"
       >
         <div
-          class="flex items-center base-icon m-6 js-"
+          class="m-6 flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -521,7 +521,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
         class="flex flex-col border-2 text-center justify-end"
       >
         <div
-          class="flex items-center base-icon m-6 js-"
+          class="m-6 flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -555,7 +555,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -574,7 +574,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -593,7 +593,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -612,7 +612,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -631,7 +631,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -650,7 +650,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -669,7 +669,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -688,7 +688,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -707,7 +707,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -726,7 +726,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -745,7 +745,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -764,7 +764,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -783,7 +783,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -802,7 +802,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -821,7 +821,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -840,7 +840,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -859,7 +859,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -878,7 +878,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -897,7 +897,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -916,7 +916,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -935,7 +935,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -954,7 +954,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -973,7 +973,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -992,7 +992,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1011,7 +1011,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1030,7 +1030,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1049,7 +1049,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1068,7 +1068,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1087,7 +1087,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1106,7 +1106,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1125,7 +1125,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1144,7 +1144,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1163,7 +1163,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1182,7 +1182,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1201,7 +1201,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1220,7 +1220,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1239,7 +1239,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1258,7 +1258,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1277,7 +1277,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1296,7 +1296,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1315,7 +1315,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         class="flex flex-col border-2 text-center"
       >
         <div
-          class="flex items-center base-icon m-8 align-self-center js-"
+          class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1343,7 +1343,7 @@ exports[`Storyshots Basics|BaseIcon Simple Icon 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="flex items-center base-icon js-"
+      class="flex items-center base-icon js-  "
     >
       <img
         alt=""
@@ -1416,7 +1416,7 @@ exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
         class="icon-container flex items-center justify-center large"
       >
         <div
-          class="flex items-center base-icon js-break-glass js-"
+          class="js-break-glass flex items-center base-icon js-  "
           data-cy="js-break-glass"
         >
           <img
@@ -1495,7 +1495,7 @@ exports[`Storyshots Basics|BaseInput With Icon 1`] = `
         class="icon-container flex items-center justify-center large"
       >
         <div
-          class="flex items-center base-icon js-"
+          class="flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -1634,7 +1634,7 @@ exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
         data-original-title="null"
       >
         <div
-          class="flex items-center base-icon js-"
+          class="flex items-center base-icon js-  "
         >
           <img
             alt=""
@@ -2165,7 +2165,7 @@ exports[`Storyshots Elements|Tag Closeable Tag 1`] = `
       class="tag flex items-center px-1 justify-center text-xs"
     >
       <div
-        class="flex items-center base-icon mx-1 js-"
+        class="mx-1 flex items-center base-icon js-  "
       >
         <img
           alt=""
