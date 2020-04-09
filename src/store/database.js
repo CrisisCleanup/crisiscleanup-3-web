@@ -1,22 +1,23 @@
-import { Database } from '@vuex-orm/core';
-import User from '@/models/User';
-import Worksite from '@/models/Worksite';
-import Organization from '@/models/Organization';
-import WorksiteRequest from '@/models/WorksiteRequest';
-import Incident from '@/models/Incident';
-import InvitationRequest from '@/models/InvitationRequest';
-import Invitation from '@/models/Invitation';
-import Location from '@/models/Location';
-import Layer from '@/models/Layer';
-import LocationType from '@/models/LocationType';
 import Affiliate from '@/models/Affiliate';
-import Role from '@/models/Role';
-import Language from '@/models/Language';
 import Agent from '@/models/Agent';
-import UserRole from '@/models/UserRole';
+import Incident from '@/models/Incident';
+import Invitation from '@/models/Invitation';
+import InvitationRequest from '@/models/InvitationRequest';
+import Language from '@/models/Language';
+import Layer from '@/models/Layer';
+import Location from '@/models/Location';
+import LocationType from '@/models/LocationType';
+import Organization from '@/models/Organization';
 import Pda from '@/models/Pda';
 import PhoneOutbound from '@/models/PhoneOutbound';
+import PhoneResource from '@/models/PhoneResource';
 import PhoneStatus from '@/models/PhoneStatus';
+import Role from '@/models/Role';
+import User from '@/models/User';
+import UserRole from '@/models/UserRole';
+import Worksite from '@/models/Worksite';
+import WorksiteRequest from '@/models/WorksiteRequest';
+import { Database } from '@vuex-orm/core';
 
 const database = new Database();
 
@@ -38,5 +39,6 @@ database.register(UserRole, {});
 database.register(Pda, {});
 database.register(PhoneStatus, {});
 database.register(PhoneOutbound, {});
+database.register(PhoneResource, {});
 
 export default database;

@@ -16,6 +16,7 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import Pda from '@/models/Pda';
 import { AgentMixin } from '@/mixins';
 import IncomingPopup from '@/components/phone/Popup.vue';
+import PhoneResource from '@/models/PhoneResource';
 import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
 
@@ -23,6 +24,7 @@ export default {
   name: 'Phone',
   mixins: [AgentMixin],
   components: { IncomingPopup },
+
   data() {
     return {
       page: Dashboard,
@@ -104,6 +106,9 @@ export default {
     },
   },
   created() {
+    PhoneResource.api().get('/phone_resources', {
+      dataKey: 'results',
+    });
     EventBus.$on(CCEvent.INBOUND, async (attrs) => {
       if (!this.casesResolved) {
         await this.resolveCases(attrs);
