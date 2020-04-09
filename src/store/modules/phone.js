@@ -246,8 +246,8 @@ const actions = {
         contact.accept();
       },
       onConnecting: () => {
-        Log.debug('connecting to contact, triggering controller...')
-        EventBus.$emit(ConnectService.EVENTS.ON_CALL)
+        Log.debug('connecting to contact, triggering controller...');
+        EventBus.$emit(ConnectService.EVENTS.ON_CALL);
       },
       onRefresh: (contact) => {
         // Keep our contact state
