@@ -167,7 +167,7 @@ export default {
             justify-content: space-evenly;
             align-content: center;
             flex-grow: 1;
-            @apply pb-6 px-6;
+            @apply pt-4 pb-6 px-6;
             .contact {
               &--call {
                 display: flex;

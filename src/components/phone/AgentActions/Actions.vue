@@ -25,7 +25,6 @@
     >
       <slot :name="t.key" />
     </div>
-    <!-- <slot v-for="t in actionTabs" :name="t.key" /> -->
   </div>
 </template>
 

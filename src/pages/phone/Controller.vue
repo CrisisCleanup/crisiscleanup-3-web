@@ -40,7 +40,7 @@
                 />
               </template>
               <template #resources>
-                <div></div>
+                <phone-resources />
               </template>
             </agent-actions>
           </div>
@@ -63,11 +63,13 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import ScriptPopup from '@/components/phone/ScriptPopup.vue';
 import Pda from '@/models/Pda';
 import AgentActions from '@/components/phone/AgentActions/Actions.vue';
+import PhoneResources from '@/components/phone/AgentActions/Resources.vue';
 
 export default {
   name: 'Controller',
   mixins: [AgentMixin, LocalStorageMixin],
   components: {
+    PhoneResources,
     AgentActions,
     PhoneLayout,
     CaseForm,
