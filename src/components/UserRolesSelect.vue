@@ -46,8 +46,8 @@ export default {
           dataKey: 'results',
         },
       );
-      const { user_roles } = results.entities || [];
-      return user_roles;
+      const { user_roles } = results.entities;
+      return user_roles || [];
     },
     getRoleText(option) {
       let text = option.name_t;
