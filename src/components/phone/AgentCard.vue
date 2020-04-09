@@ -182,13 +182,12 @@ export default {
           break;
         case CCState.PENDING_CALL:
         case CCState.INCOMING:
-        case CCState.ON_CALL:
         case CCState.CONNECTING:
           state.key = 'ready';
           state.state = 'oncall';
           state.enabled = false;
           break;
-        case CCState.CONNECTED:
+        case CCState.ON_CALL:
           state.key = 'ready';
           state.state = 'oncall';
           state.enabled = false;

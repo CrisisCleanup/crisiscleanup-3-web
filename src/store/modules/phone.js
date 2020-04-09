@@ -245,9 +245,9 @@ const actions = {
         commit('setContact', { type: 'outbound' });
         contact.accept();
       },
-      onConnected: () => {
-        Log.debug('contact connected!');
-        EventBus.$emit(ConnectService.EVENTS.ON_CALL);
+      onConnecting: () => {
+        Log.debug('connecting to contact, triggering controller...')
+        EventBus.$emit(ConnectService.EVENTS.ON_CALL)
       },
       onRefresh: (contact) => {
         // Keep our contact state
