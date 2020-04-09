@@ -430,7 +430,9 @@ const actions = {
     }
     if (currentOutbound) {
       Log.debug('updating outbound status with:', caseStatusId);
-      await PhoneOutbound.api().updateStatus(currentOutbound.id, caseStatusId);
+      await PhoneOutbound.api().updateStatus(currentOutbound.id, {
+        statusId: caseStatusId,
+      });
     }
     if (agentOnCall) {
       Log.debug('agent still on call, hanging up...');
