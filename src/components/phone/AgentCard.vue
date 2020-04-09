@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { IconsMixin, UserMixin, LangMixin } from '@/mixins';
+import { IconsMixin, UserMixin, LangMixin, TrainingMixin } from '@/mixins';
 import { mapActions, mapGetters } from 'vuex';
 import { STATES as CCState, EVENTS as CCEvent } from '@/services/acs.service';
 import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
@@ -84,7 +84,7 @@ import PhoneGateway from '../../pages/phone/Gateway';
 
 export default {
   name: 'AgentCard',
-  mixins: [IconsMixin, LangMixin, UserMixin],
+  mixins: [IconsMixin, LangMixin, UserMixin, TrainingMixin],
   components: {
     PhoneGateway,
     moreInfo: ContactMoreInfo,
@@ -94,21 +94,18 @@ export default {
   data() {
     return {
       toggleOpen: true,
-      completedTraining: false,
       isShowingTrainingModal: false,
       editCardActive: false,
       showConnectLogin: false,
     };
   },
   async mounted() {
-    if (this.$cookies.isKey('training-complete')) {
-      this.completedTraining = true;
-    }
+    await this.loadTrainingData();
   },
   methods: {
     ...mapActions('phone', ['setAgentState']),
     async toggleAvailable() {
-      if (!this.completedTraining) {
+      if (!this.allTrainingCompleted) {
         this.isShowingTrainingModal = true;
         return this.isShowingTrainingModal;
       }
@@ -124,8 +121,8 @@ export default {
       return this.setAgentState(CCState.ROUTABLE);
     },
     async onTrainingComplete() {
-      this.$cookies.set('training-complete', true);
-      this.completedTraining = true;
+      await this.loadTrainingData();
+      this.isShowingTrainingModal = false;
     },
   },
   watch: {
@@ -162,7 +159,7 @@ export default {
       });
     },
     currentState() {
-      if (!this.completedTraining) {
+      if (!this.allTrainingCompleted) {
         return {
           enabled: true,
           text: this.lang.train,
