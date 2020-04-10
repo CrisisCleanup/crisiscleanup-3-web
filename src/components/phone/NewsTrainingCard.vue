@@ -19,6 +19,7 @@
           :image-path="training.imagePath"
           :description="training.description"
           :time-to-complete="training.timeToComplete"
+          @onTrainingSelected="toggleAvailable"
         ></Trainings>
       </component>
     </div>
@@ -57,9 +58,9 @@
 <script>
 import { mapActions } from 'vuex';
 import { STATES as CCState } from '@/services/acs.service';
-import TrainingsModal from '@/components/phone/TrainingsModal';
-import NewsCard from '@/components/phone/NewsCard';
-import TrainingsCard from '@/components/phone/TrainingsCard';
+import TrainingsModal from '@/components/phone/TrainingsModal.vue';
+import NewsCard from '@/components/phone/NewsCard.vue';
+import TrainingsCard from '@/components/phone/TrainingsCard.vue';
 
 export default {
   name: 'NewsTrainingCard',
