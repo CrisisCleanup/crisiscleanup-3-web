@@ -44,21 +44,5 @@ export default {
       isShowingTrainingModal: false,
     };
   },
-  computed: {
-    lang() {
-      return {
-        actions: {
-          start: {
-            text: this.$t('~~Start'),
-          },
-        },
-      };
-    },
-  },
-  methods: {
-    startTraining() {
-      this.$emit('onTrainingSelected', true);
-    },
-  },
 };
 </script>
