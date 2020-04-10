@@ -16,14 +16,15 @@
     <div v-if="selected !== 'Trainings'">
       <component :is="selected" class="tab"></component>
     </div>
-    <Trainings
-      v-for="(training, idx) in trainings"
-      :key="idx"
-      :image-path="training.imagePath"
-      :description="training.description"
-      :time-to-complete="trainings.completionTime"
-      class="w-full"
-    ></Trainings>
+    <div class="w-full">
+      <Trainings
+        v-for="(training, idx) in trainings"
+        :key="idx"
+        :image-path="training.imagePath"
+        :description="training.description"
+        :time-to-complete="trainings.completionTime"
+      ></Trainings>
+    </div>
     <!-- line -->
     <hr class="bg-white" />
     <!--- See All Button --->
@@ -61,13 +62,13 @@ export default {
       trainings: [
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
-          description: ' ~~Crisis Cleanup Basic Training',
-          completionTime: '10 minutes',
+          description: this.$t(' ~~Crisis Cleanup Basic Training'),
+          completionTime: this.$t('~~10 minutes'),
         },
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
-          description: '~~Phone System Basic Training',
-          completionTime: '~~15 minutes',
+          description: this.$t('~~Phone System Basic Training'),
+          completionTime: this.$t('~~15 minutes'),
         },
       ],
     };
