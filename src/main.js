@@ -132,7 +132,7 @@ if (AuthService.getUser()) {
 
 // Sentry Logging
 Sentry.init({
-  dsn: process.env.SENTRY_DSN,
+  dsn: 'https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561',
   integrations: [
     new SentryIntegrations.Vue({
       Vue,
