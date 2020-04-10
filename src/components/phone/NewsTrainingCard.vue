@@ -11,7 +11,7 @@
       {{ tab }}
     </button>
     <!-- Training Tab -->
-    <div v-if="selected !== 'Trainings'">
+    <div v-if="selected !== 'Trainings'" class="w-full h-auto">
       <component :is="selected" class="tab">
         <Trainings
           v-for="(training, idx) in trainings"

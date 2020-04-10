@@ -6,7 +6,7 @@
         <!-- <img :src="imagePath" alt="Video Preview" /> -->
         <img src="@/assets/newspicss.png" class="w-auto h-auto" />
       </div>
-      <div class="flex w-4/6 items center">
+      <div class="w-4/6">
         <!--- body blurb --->
         <base-text variant="bodysm" class="mr-4">
           <!-- {{ description }} -->
