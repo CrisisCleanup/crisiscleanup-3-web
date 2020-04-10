@@ -13214,10 +13214,10 @@ leaflet-pixi-overlay@^1.8.1:
   resolved "https://registry.yarnpkg.com/leaflet-pixi-overlay/-/leaflet-pixi-overlay-1.8.1.tgz#540645b1136512f7e63fd1f781bbffb2f5bf0df9"
   integrity sha512-YEAvD5vGuhCvVnlcgMxQyh5wIKDtfRoDXUp/iLd3HNY+mOLhVKMqogQXmyBbzjn4eYkzAOVRF1DBPJaCjYrb8w==
 
-leaflet.gridlayer.googlemutant@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/leaflet.gridlayer.googlemutant/-/leaflet.gridlayer.googlemutant-0.8.0.tgz#9636630cb669577f5bc55ff171dd0a3cc44ece1e"
-  integrity sha512-Ain+jgDKRhlM6qNDDj2QFJa9vXUqV096N0PmpHO3DoNLS4I7EynTQCJXN+9qY4C51ZpV4Q4CI+apNv5XiP5aUA==
+leaflet.gridlayer.googlemutant@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/leaflet.gridlayer.googlemutant/-/leaflet.gridlayer.googlemutant-0.9.0.tgz#587fa0a3260d2e134a9154d497a3e789c940aa34"
+  integrity sha512-hkLEHLcdcCaq1OKgUla5ar6fCaUK6yBYIY9HyAclPcMwhnpJTnLmYYPbVJbq3Niz0YiO75gls4A6D6jkBJXpuw==
 
 leaflet.heat@^0.2.0:
   version "0.2.0"
