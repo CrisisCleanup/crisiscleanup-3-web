@@ -10,9 +10,7 @@
     >
       {{ tab }}
     </button>
-    <!-- line -->
-    <hr class="bg-white" />
-    <!--- Content --->
+    <!-- Training Tab -->
     <div v-if="selected !== 'Trainings'">
       <component :is="selected" class="tab">
         <Trainings
@@ -25,12 +23,17 @@
       </component>
     </div>
     <!-- News Tab -->
-    <News
-      v-if="selected === News"
-      :image-path="news.image"
-      :description="news.description"
-      :time-to-complete="news.timeToComplete"
-    />
+    <div v-if="selected === News">
+      <component :is="selected" class="tab">
+        <News
+          v-for="(newss, idx) in news"
+          :key="idx"
+          :image-path="newss.image"
+          :description="newss.description"
+          :time-to-complete="newss.timeToComplete"
+        />
+      </component>
+    </div>
     <!-- line -->
     <hr class="bg-white" />
     <!--- See All Button --->
