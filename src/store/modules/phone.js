@@ -2,6 +2,7 @@ import { EventBus } from '@/event-bus';
 import Language from '@/models/Language';
 import Pda from '@/models/Pda';
 import PhoneOutbound from '@/models/PhoneOutbound';
+import PhoneResource from '@/models/PhoneResource';
 import Worksite from '@/models/Worksite';
 import * as ConnectService from '@/services/acs.service';
 import * as SSO from '@/services/sso.service';
@@ -33,7 +34,12 @@ const getStateDefaults = () => ({
       callerId: null,
     },
   },
-  externalContact: {},
+  externalContact: {
+    contactId: null,
+    resourceId: null,
+    mobile: null,
+    conferenced: false,
+  },
   controller: {
     contactId: null,
     outboundId: null,
@@ -192,6 +198,13 @@ const getters = {
       : 'case',
   currentExternalContact: (state) =>
     state.externalContact.contactId ? state.externalContact : null,
+  currentExternalResource: (state) => {
+    if (!state.externalContact) return null;
+    if (state.externalContact.resourceId) {
+      return PhoneResource.find(state.externalContact.resourceId);
+    }
+    return null;
+  },
   currentPage: (state) =>
     state.controller ? state.controller.currentPage : 'dashboard',
 };
@@ -292,14 +305,14 @@ const actions = {
     return this.callDuration;
   },
   async syncExternalContact(
-    { commit, getters: { currentExternalContact } },
+    { commit, getters: { currentExternalContact, currentExternalResource } },
     newExternalConnection = null,
   ) {
     const contact = ConnectService.getCurrentContact();
     const agent = ConnectService.getAgent();
     let externalConnection = newExternalConnection;
     if (!externalConnection) {
-      externalConnection = contact.getSingleActiveThirdPartyConnection();
+      [externalConnection] = contact.getThirdPartyConnections();
     }
     if (!externalConnection) {
       Log.debug('no external contact found...');
@@ -320,7 +333,7 @@ const actions = {
     );
     if (externalContact) {
       if (currentExternalContact) {
-        if (externalContact.isConnected()) {
+        if (externalContact.isConnected() && !externalContact.conferenced) {
           Log.debug('external contact connected!');
           Log.debug('now conferencing connections...');
           contact.conferenceConnections({
@@ -328,9 +341,30 @@ const actions = {
             failure: () =>
               Log.debug('conference failed, is the contact ready?'),
           });
+          commit('setExternalContact', { conferenced: true });
         }
       }
-      commit('setExternalContact', { contactId: externalContact.contactId });
+      commit('setExternalContact', {
+        contactId: externalContact.contactId,
+        connectionId: externalConnection.connectionId,
+      });
+      if (!currentExternalResource) {
+        const resourceMobile = externalConnection.getAddress().phoneNumber;
+        const resource = PhoneResource.query()
+          .where('dnis', resourceMobile)
+          .first();
+        Log.debug(
+          'tried to resolve resource by external contact number:',
+          resource,
+          resourceMobile,
+        );
+        if (resource) {
+          commit('setExternalContact', {
+            resourceId: resource.id,
+            mobile: resource.dnis,
+          });
+        }
+      }
     }
   },
   async syncContact({ commit, state, dispatch }, newContact = null) {
@@ -500,10 +534,14 @@ const actions = {
   async setActionTab({ commit }, key) {
     commit('setAgentActions', { currentKey: key });
   },
-  async addContact({ dispatch }, mobile) {
+  async addContact({ commit }, { mobile, ...resource }) {
     Log.debug('adding contact...', mobile);
     ConnectService.addContact(mobile, {
-      success: () => dispatch('syncExternalContact'),
+      success: () =>
+        commit('setExternalContact', {
+          mobile,
+          ...resource,
+        }),
     });
   },
   async setCurrentPage({ commit }, key) {
