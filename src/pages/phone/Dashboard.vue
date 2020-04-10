@@ -8,7 +8,7 @@
           </div>
         </template>
         <template #grid-main>
-          <div class="grid--main">
+          <div class="grid--main w-auto">
             <div class="dash-grid">
               <div class="grid--leader">
                 <leaderboard />
