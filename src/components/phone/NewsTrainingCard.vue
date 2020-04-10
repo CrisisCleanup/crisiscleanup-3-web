@@ -16,15 +16,14 @@
     <div v-if="selected !== 'Trainings'">
       <component :is="selected" class="tab"></component>
     </div>
-    <div v-if="selected === 'Trainings'">
-      <Trainings
-        v-for="(training, idx) in trainings"
-        :key="idx"
-        :image-path="training.imagePath"
-        :description="training.description"
-        :time-to-complete="training.timeToComplete"
-      ></Trainings>
-    </div>
+    <Trainings
+      v-for="(training, idx) in trainings"
+      :key="idx"
+      :image-path="training.imagePath"
+      :description="training.description"
+      :time-to-complete="training.timeToComplete"
+      class="w-full"
+    ></Trainings>
     <!-- line -->
     <hr class="bg-white" />
     <!--- See All Button --->
