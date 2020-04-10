@@ -111,7 +111,7 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { hash } from '../../utils/promise';
+import { hash } from '@/utils/promise';
 export default {
   name: 'Training',
   props: {

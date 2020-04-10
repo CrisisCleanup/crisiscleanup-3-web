@@ -80,7 +80,7 @@ import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
 import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 import { EventBus } from '@/event-bus';
 import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
-import PhoneGateway from '../../pages/phone/Gateway';
+import PhoneGateway from '@/pages/phone/Gateway';
 
 export default {
   name: 'AgentCard',
