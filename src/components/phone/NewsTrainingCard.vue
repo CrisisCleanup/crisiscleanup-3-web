@@ -28,25 +28,36 @@
     <hr class="bg-white" />
     <!--- See All Button --->
     <div class="m-3 pb-2">
-      <base-link
+      <base-button
         variant="bodysm"
         class="bg-crisis-cleanup-yellow-900 text-black align-right"
+        :action="toggleAvailable"
       >
         See All
-      </base-link>
+      </base-button>
     </div>
+    <trainings-modal
+      :visible="isShowingTrainingModal"
+      @onClose="isShowingTrainingModal = false"
+      @onComplete="onTrainingComplete"
+    ></trainings-modal>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import { STATES as CCState } from '@/services/acs.service';
+import TrainingsModal from '@/components/phone/TrainingsModal';
 import NewsCard from './NewsCard';
 import TrainingsCard from './TrainingsCard';
+
 export default {
   name: 'NewsTrainingCard',
   data() {
     return {
       tabs: ['Training'],
       selected: 'Training',
+      isShowingTrainingModal: false,
       trainings: [
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
@@ -64,6 +75,38 @@ export default {
   components: {
     News: NewsCard,
     Trainings: TrainingsCard,
+    TrainingsModal,
+  },
+  methods: {
+    ...mapActions('phone', ['setAgentState']),
+    async toggleAvailable() {
+      if (!this.allTrainingCompleted) {
+        this.isShowingTrainingModal = true;
+        return this.isShowingTrainingModal;
+      }
+
+      if (!this.connectReady) {
+        this.showConnectLogin = true;
+        return this.showConnectLogin;
+      }
+
+      if (this.agentAvailable) {
+        return this.setAgentState(CCState.OFFLINE);
+      }
+      return this.setAgentState(CCState.ROUTABLE);
+    },
+    async onTrainingComplete() {
+      await this.loadTrainingData();
+      this.isShowingTrainingModal = false;
+    },
+  },
+  watch: {
+    popupOpen(newState, oldState) {
+      if (!newState && oldState && this.connectReady) {
+        this.showConnectLogin = false;
+        this.setAgentState(CCState.ROUTABLE);
+      }
+    },
   },
 };
 </script>
