@@ -8,6 +8,7 @@ export const AgentMixin = {
   methods: {
     ...mapActions('phone', [
       'setCaseStatus',
+      'setCurrentPage',
       'setContactState',
       'addCases',
       'setResolved',

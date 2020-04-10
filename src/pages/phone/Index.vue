@@ -1,8 +1,6 @@
 <template>
   <div class="w-full h-full">
-    <keep-alive>
-      <component :is="page" />
-    </keep-alive>
+    <component :is="currentComponent" />
     <incoming-popup v-if="callIncoming && casesResolved" />
   </div>
 </template>
@@ -24,14 +22,22 @@ export default {
   name: 'Phone',
   mixins: [AgentMixin],
   components: { IncomingPopup },
-
-  data() {
-    return {
-      page: Dashboard,
-    };
-  },
   computed: {
-    ...mapGetters('phone', ['connectReady', 'agentState', 'callIncoming']),
+    ...mapGetters('phone', [
+      'connectReady',
+      'agentState',
+      'callIncoming',
+      'currentPage',
+    ]),
+    pages() {
+      return {
+        dashboard: Dashboard,
+        controller: Controller,
+      };
+    },
+    currentComponent() {
+      return this.pages[this.currentPage];
+    },
   },
   methods: {
     ...mapActions('phone', [
@@ -116,11 +122,11 @@ export default {
       }
     });
     EventBus.$on(CCEvent.ON_CALL, () => {
-      this.page = Controller;
+      this.setCurrentPage('controller');
     });
     EventBus.$on(CCEvent.OFF_CALL, () => {
       this.$store.dispatch('phone/resetState');
-      this.page = Dashboard;
+      this.setCurrentPage('dashboard');
     });
     if (!this.connectReady) {
       this.$store.dispatch('phone/syncContact');
@@ -128,18 +134,18 @@ export default {
         if (mutation.type === 'phone/setAgentState') {
           this.$toasted.success('Success!');
           if (this.callIncoming || this.agentOnCall) {
-            this.page = Controller;
+            this.setCurrentPage('controller');
           } else {
-            this.page = Dashboard;
+            this.setCurrentPage('dashboard');
           }
           this.setPopup(false);
           this.unsub();
         }
       });
     } else if (this.callIncoming || this.agentOnCall) {
-      this.page = Controller;
+      this.setCurrentPage('controller');
     } else {
-      this.page = Dashboard;
+      this.setCurrentPage('dashboard');
     }
   },
   beforeDestroy() {

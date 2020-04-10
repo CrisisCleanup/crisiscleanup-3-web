@@ -53,6 +53,7 @@ const getStateDefaults = () => ({
     actions: {
       currentKey: 'case',
     },
+    currentPage: 'dashboard',
   },
 });
 
@@ -191,6 +192,8 @@ const getters = {
       : 'case',
   currentExternalContact: (state) =>
     state.externalContact.contactId ? state.externalContact : null,
+  currentPage: (state) =>
+    state.controller ? state.controller.currentPage : 'dashboard',
 };
 
 // actions
@@ -258,7 +261,7 @@ const actions = {
       },
       onConnecting: () => {
         Log.debug('connecting to contact, triggering controller...');
-        EventBus.$emit(ConnectService.EVENTS.ON_CALL);
+        dispatch('setCurrentPage', 'controller');
       },
       onRefresh: (contact) => {
         // Keep our contact state
@@ -382,7 +385,7 @@ const actions = {
       dispatch('rehydrateController');
     }
     if (state.contact.state === ConnectService.STATES.CONNECTED) {
-      EventBus.$emit(ConnectService.EVENTS.ON_CALL);
+      dispatch('setCurrentPage', 'controller');
     }
     EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
     dispatch('syncExternalContact');
@@ -396,7 +399,7 @@ const actions = {
     localStorage.setItem('ccu-ivr-ctrl', JSON.stringify(controller));
     return controller;
   },
-  async rehydrateController({ state, commit }) {
+  async rehydrateController({ state, commit, dispatch }) {
     // rehydrate controller state from cookie
     Log.debug('rehydrating controller...');
     commit('setHydrated', true);
@@ -410,7 +413,7 @@ const actions = {
       Log.debug('success! controller rehydrated.');
       commit('setControllerState', ctrlState);
       if (state.contact.state === ConnectService.STATES.CONNECTED) {
-        EventBus.$emit(ConnectService.EVENTS.ON_CALL);
+        dispatch('setCurrentPage', 'controller');
       }
       return ctrlState;
     }
@@ -490,9 +493,9 @@ const actions = {
     if (agentOnCall) {
       Log.debug('agent still on call, hanging up...');
       await dispatch('endCurrentCall');
+    } else {
+      dispatch('setCurrentPage', 'dashboard');
     }
-    EventBus.$emit(ConnectService.EVENTS.OFF_CALL);
-    dispatch('resetState');
   },
   async setActionTab({ commit }, key) {
     commit('setAgentActions', { currentKey: key });
@@ -502,6 +505,10 @@ const actions = {
     ConnectService.addContact(mobile, {
       success: () => dispatch('syncExternalContact'),
     });
+  },
+  async setCurrentPage({ commit }, key) {
+    Log.debug('setting current phone page:', key);
+    commit('setControllerState', { currentPage: key });
   },
 };
 
