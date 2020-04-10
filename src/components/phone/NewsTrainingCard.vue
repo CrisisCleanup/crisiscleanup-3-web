@@ -14,17 +14,23 @@
     <hr class="bg-white" />
     <!--- Content --->
     <div v-if="selected !== 'Trainings'">
-      <component :is="selected" class="tab"></component>
+      <component :is="selected" class="tab">
+        <Trainings
+          v-for="(training, idx) in trainings"
+          :key="idx"
+          :image-path="training.imagePath"
+          :description="training.description"
+          :time-to-complete="training.timeToComplete"
+        ></Trainings>
+      </component>
     </div>
-    <div class="w-full">
-      <Trainings
-        v-for="(training, idx) in trainings"
-        :key="idx"
-        :image-path="training.imagePath"
-        :description="training.description"
-        :time-to-complete="trainings.completionTime"
-      ></Trainings>
-    </div>
+    <!-- News Tab -->
+    <News
+      v-if="selected === News"
+      :image-path="news.image"
+      :description="news.description"
+      :time-to-complete="news.timeToComplete"
+    />
     <!-- line -->
     <hr class="bg-white" />
     <!--- See All Button --->
@@ -56,19 +62,28 @@ export default {
   name: 'NewsTrainingCard',
   data() {
     return {
-      tabs: ['Training'],
+      tabs: ['Training', 'News'],
       selected: 'Training',
       isShowingTrainingModal: false,
       trainings: [
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
           description: this.$t(' ~~Crisis Cleanup Basic Training'),
-          completionTime: this.$t('~~10 minutes'),
+          timeToComplete: this.$t('~~10 minutes'),
         },
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
           description: this.$t('~~Phone System Basic Training'),
-          completionTime: this.$t('~~15 minutes'),
+          timeToComplete: this.$t('~~15 minutes'),
+        },
+      ],
+      news: [
+        {
+          imagePath: require('@/assets/newspicss.png'),
+          description: this.$t(
+            `~~For those of you who have ever used our call system in the past (as clunky as it was) You're going to LOVE this new system. It is easier to ever! However it is brand new, so if you find bugs, please let us know.`,
+          ),
+          timeToComplete: this.$t('~~15 minutes'),
         },
       ],
     };

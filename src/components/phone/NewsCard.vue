@@ -2,13 +2,13 @@
   <div>
     <div class="flex flex-row justify-between">
       <!--- media/picture --->
-      <div class="flex-col m-3">
-        <img src="@/assets/newstrainingss.jpg" alt="PFP" />
+      <div class="w-1/6 m-3">
+        <img :src="imagePath" alt="Video Preview" />
       </div>
-      <div class="flex-col m-3">
+      <div class="w-4/6 my-4">
         <!--- body blurb --->
         <base-text variant="bodysm" class="justify-between">
-          Then go and tempor incididunt ut labore et dolore magna aliqua.
+          {{ description }}
         </base-text>
         <div class="flex flex-row justify-between">
           <div class="flex-col">
@@ -17,19 +17,8 @@
               variant="bodysm"
               class="justify-between text-crisiscleanup-grey-800 alight-left"
             >
-              10 Minutes
+              {{ [timeToComplete, ''] | duration('humanize') }}
             </base-text>
-          </div>
-          <div class="flex-col">
-            <!--- Training Start Button --->
-            <div id="Trainingbtn" class="ml-auto m-1">
-              <base-button
-                class="bg-crisiscleanup-yellow-300 hover:bg-crisiscleanup-yellow-100 text-black align-right px-5 py-1"
-                href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
-              >
-                Start
-              </base-button>
-            </div>
           </div>
         </div>
       </div>
@@ -40,7 +29,36 @@
 </template>
 
 <script>
+import VueTypes from 'vue-types';
+
 export default {
   name: 'NewsCard',
+  props: {
+    completed: VueTypes.bool,
+    imagePath: VueTypes.string,
+    description: VueTypes.string,
+    timeToComplete: VueTypes.string,
+  },
+  data() {
+    return {
+      isShowingTrainingModal: false,
+    };
+  },
+  computed: {
+    lang() {
+      return {
+        actions: {
+          start: {
+            text: this.$t('~~Start'),
+          },
+        },
+      };
+    },
+  },
+  methods: {
+    startTraining() {
+      this.$emit('onTrainingSelected', true);
+    },
+  },
 };
 </script>
