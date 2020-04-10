@@ -158,8 +158,6 @@ export default {
           icon: 'phone',
           text: this.$t('dashboard.phone'),
           to: '/phone',
-          disabled:
-            process.env.NODE_ENV === 'production' || !this.$can('phone_agent'),
         },
         {
           key: 'admin',
