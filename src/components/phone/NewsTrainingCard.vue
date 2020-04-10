@@ -68,27 +68,6 @@ export default {
       tabs: ['Training', 'News'],
       selected: 'Training',
       isShowingTrainingModal: false,
-      trainings: [
-        {
-          imagePath: require('@/assets/newstrainingss.jpg'),
-          description: this.$t(' ~~Crisis Cleanup Basic Training'),
-          timeToComplete: this.$t('~~10 minutes'),
-        },
-        {
-          imagePath: require('@/assets/newstrainingss.jpg'),
-          description: this.$t('~~Phone System Basic Training'),
-          timeToComplete: this.$t('~~15 minutes'),
-        },
-      ],
-      news: [
-        {
-          imagePath: require('@/assets/newspicss.png'),
-          description: this.$t(
-            `~~For those of you who have ever used our call system in the past (as clunky as it was) You're going to LOVE this new system. It is easier to ever! However it is brand new, so if you find bugs, please let us know.`,
-          ),
-          timeToComplete: this.$t('~~15 minutes'),
-        },
-      ],
     };
   },
   components: {
@@ -117,6 +96,33 @@ export default {
     async onTrainingComplete() {
       await this.loadTrainingData();
       this.isShowingTrainingModal = false;
+    },
+  },
+  computed: {
+    trainings() {
+      return [
+        {
+          imagePath: require('@/assets/newstrainingss.jpg'),
+          description: this.$t(' ~~Crisis Cleanup Basic Training'),
+          timeToComplete: this.$t('~~10 minutes'),
+        },
+        {
+          imagePath: require('@/assets/newstrainingss.jpg'),
+          description: this.$t('~~Phone System Basic Training'),
+          timeToComplete: this.$t('~~15 minutes'),
+        },
+      ];
+    },
+    news() {
+      return [
+        {
+          imagePath: require('@/assets/newspicss.png'),
+          description: this.$t(
+            `~~For those of you who have ever used our call system in the past (as clunky as it was) You're going to LOVE this new system. It is easier to ever! However it is brand new, so if you find bugs, please let us know.`,
+          ),
+          timeToComplete: this.$t('~~15 minutes'),
+        },
+      ];
     },
   },
   watch: {
