@@ -37,15 +37,16 @@ export default class PhoneOutbound extends Model {
         const result = this.post(`/phone_outbound/${id}/call`);
         return result;
       },
-      async updateStatus(id, { statusId, worksiteId }) {
-        await this.post(
-          `/phone_outbound/${id}/update_status`,
-          {
-            status: statusId || null,
-            worksite: worksiteId || null,
-          },
-          { save: false },
-        );
+      async updateStatus(id, { statusId, worksiteId = null }) {
+        const body = {
+          status: statusId || null,
+        };
+        if (worksiteId) {
+          body[worksiteId] = worksiteId;
+        }
+        await this.post(`/phone_outbound/${id}/update_status`, body, {
+          save: false,
+        });
       },
     },
   };
