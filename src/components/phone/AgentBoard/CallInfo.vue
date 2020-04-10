@@ -3,26 +3,26 @@
     <div v-for="c in activeCalls" :key="c.name" class="contactbar--call">
       <div class="contact--call">
         <div class="contact-stats">
-          <base-text class="mobile" :weight="600" variant="h1">{{
+          <base-text class="mobile" :weight="600" variant="h2">{{
             c.mobile
           }}</base-text>
-          <base-text :weight="400" variant="h3">{{
+          <base-text :weight="400" variant="h4">{{
             `2 ${lang.callStat.calls} | 1 ${lang.callStat.days}`
           }}</base-text>
         </div>
         <div class="contact-caller">
-          <ccu-icon with-text size="small" :type="icons.phone_user">
-            <base-text>{{ c.name }}</base-text>
+          <ccu-icon with-text size="xs" :type="icons.phone_user">
+            <base-text variant="bodysm">{{ c.name }}</base-text>
           </ccu-icon>
-          <ccu-icon with-text size="small" :type="icons.earth_globe">
-            <base-text>{{ c.locale }}</base-text>
+          <ccu-icon with-text size="xs" :type="icons.earth_globe">
+            <base-text variant="bodysm">{{ c.locale }}</base-text>
           </ccu-icon>
         </div>
       </div>
       <div class="contact--actions">
         <div class="timer">
-          <base-text :weight="600" variant="h1">{{ c.time }}</base-text>
-          <base-text :weight="400" variant="h3">{{ lang.calltime }}</base-text>
+          <base-text :weight="600" variant="h2">{{ c.time }}</base-text>
+          <base-text variant="bodysm">{{ lang.calltime }}</base-text>
         </div>
         <div class="buttons">
           <ccu-icon
@@ -187,11 +187,20 @@ export default {
             justify-content: space-evenly;
             align-content: center;
             flex-grow: 1;
-            @apply pt-4 pb-6 px-6;
+            position: relative;
+            @apply py-3 px-6;
+            &:nth-child(even):after {
+              content: '';
+              height: 1px;
+              @apply bg-crisiscleanup-light-grey;
+              width: 100%;
+              position: absolute;
+              top: 0;
+            }
             .contact {
               &--call {
                 display: flex;
-                align-items: flex-start;
+                align-items: center;
                 flex-grow: 1;
                 .contact {
                   &-stats {
@@ -213,11 +222,12 @@ export default {
                     }
                     &:before {
                       content: '';
-                      height: 100%;
+                      height: 90%;
                       width: 1px;
                       @apply bg-crisiscleanup-dark-100;
                       position: absolute;
                       left: 0;
+                      bottom: 0;
                     }
                   }
                 }
@@ -258,10 +268,11 @@ export default {
                 position: relative;
                 &:before {
                   content: '';
-                  height: 100%;
+                  height: 90%;
                   width: 1px;
                   @apply bg-crisiscleanup-dark-100;
                   left: 0;
+                  bottom: 0;
                   position: absolute;
                 }
               }
@@ -272,12 +283,15 @@ export default {
             justify-content: center;
             flex-grow: 1;
             align-items: center;
-            @apply pb-4;
+            align-content: center;
+            @apply py-4 bg-crisiscleanup-light-grey;
             .VueCarousel {
               &-slide {
                 @apply px-2;
                 display: flex;
                 justify-content: center;
+                align-content: center;
+                align-items: center;
               }
             }
           }

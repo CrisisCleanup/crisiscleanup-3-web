@@ -69,7 +69,7 @@ $areas: nav callinfo status advocate;
   &--grid {
     display: inline-grid;
     grid:
-      [r1] 'nav' 0.25fr [r1end]
+      [r1] 'nav' auto [r1end]
       [r2] 'callinfo' .5fr[r2end]
       [r3] 'status' 2fr [r3end]
       [r4] 'advocate' 1fr [r4end]
