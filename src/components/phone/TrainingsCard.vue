@@ -17,7 +17,7 @@
               variant="bodysm"
               class="justify-between text-crisiscleanup-grey-800 alight-left"
             >
-              {{ [timeToComplete, 'seconds'] | duration('humanize') }}
+              {{ timeToComplete }}
             </base-text>
           </div>
         </div>
