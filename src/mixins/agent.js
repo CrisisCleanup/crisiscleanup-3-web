@@ -56,6 +56,7 @@ export const AgentMixin = {
       'callerLocale',
       'callType',
       'connectReady',
+      'currentExternalResource',
     ]),
     callerName() {
       return this.currentCase ? this.currentCase.name : 'Unknown';
@@ -71,6 +72,13 @@ export const AgentMixin = {
     },
     callerFormattedNumber() {
       const number = parsePhoneNumberFromString(this.callerId);
+      return number.formatNational();
+    },
+    extResourceFormattedNumber() {
+      if (!this.currentExternalResource) return '';
+      const number = parsePhoneNumberFromString(
+        this.currentExternalResource.dnis,
+      );
       return number.formatNational();
     },
   },

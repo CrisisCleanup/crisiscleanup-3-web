@@ -130,6 +130,7 @@ export default {
     });
     if (!this.connectReady) {
       this.$store.dispatch('phone/syncContact');
+      this.$store.dispatch('phone/syncExternalContact');
       this.unsub = this.$store.subscribe((mutation) => {
         if (mutation.type === 'phone/setAgentState') {
           this.$toasted.success('Success!');

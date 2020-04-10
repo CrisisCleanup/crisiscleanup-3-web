@@ -51,7 +51,10 @@ export default {
     async conferenceCall(resource) {
       this.selected = resource.id;
       this.$log.debug('adding external resource:', resource);
-      this.$store.dispatch('phone/addContact', resource.dnis);
+      this.$store.dispatch('phone/addContact', {
+        resourceId: resource.id,
+        mobile: resource.dnis,
+      });
     },
   },
   data() {

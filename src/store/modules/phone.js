@@ -38,6 +38,7 @@ const getStateDefaults = () => ({
     contactId: null,
     resourceId: null,
     mobile: null,
+    duration: null,
     conferenced: false,
   },
   controller: {
@@ -113,6 +114,8 @@ const getters = {
   worksites: (state) =>
     state.controller ? state.controller.cases.worksites : [],
   callDuration: (state) => (state.contact ? state.contact.duration : 0),
+  extCallDuration: (state) =>
+    state.externalContact ? state.externalContact.duration : 0,
   currentCases: (state) => (state.controller ? state.controller.cases : {}),
   currentPdaId: (state) => {
     const {
@@ -296,12 +299,24 @@ const actions = {
   async setAgent({ commit }, agent) {
     commit('setAgent', agent);
   },
-  async syncCallDuration({ commit }) {
+  async syncCallDuration({ commit, getters: { currentExternalContact } }) {
     const agent = ConnectService.getAgent();
     const [contact] = agent.getContacts();
     commit('setContact', {
       duration: contact.getStatusDuration(),
     });
+    if (currentExternalContact) {
+      const extConnection = agent
+        .getContacts()[0]
+        .getConnections()
+        .find((c) => c.connectionId === currentExternalContact.connectionId);
+
+      if (extConnection) {
+        commit('setExternalContact', {
+          duration: extConnection.getStatusDuration(),
+        });
+      }
+    }
     return this.callDuration;
   },
   async syncExternalContact(
