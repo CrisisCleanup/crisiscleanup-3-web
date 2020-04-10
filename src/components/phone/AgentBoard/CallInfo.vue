@@ -1,41 +1,52 @@
 <template>
   <div class="contactbar">
-    <div v-for="c in activeCalls" :key="c.name" class="contactbar--call">
-      <div class="contact--call">
-        <div class="contact-stats">
-          <base-text class="mobile" :weight="600" variant="h2">{{
-            c.mobile
-          }}</base-text>
-          <base-text :weight="400" variant="h4">{{
-            `2 ${lang.callStat.calls} | 1 ${lang.callStat.days}`
-          }}</base-text>
-        </div>
-        <div class="contact-caller">
-          <ccu-icon with-text size="xs" :type="icons.phone_user">
-            <base-text variant="bodysm">{{ c.name }}</base-text>
-          </ccu-icon>
-          <ccu-icon with-text size="xs" :type="icons.earth_globe">
-            <base-text variant="bodysm">{{ c.locale }}</base-text>
-          </ccu-icon>
+    <div class="contactbar--conference">
+      <div class="calls">
+        <div v-for="c in activeCalls" :key="c.name" class="contactbar--call">
+          <div class="contact--call">
+            <div class="contact-stats">
+              <base-text class="mobile" :weight="600" variant="h2">{{
+                c.mobile
+              }}</base-text>
+              <base-text :weight="400" variant="h4">{{
+                `2 ${lang.callStat.calls} | 1 ${lang.callStat.days}`
+              }}</base-text>
+            </div>
+            <div class="contact-caller">
+              <ccu-icon with-text size="xs" :type="icons.phone_user">
+                <base-text variant="bodysm">{{ c.name }}</base-text>
+              </ccu-icon>
+              <ccu-icon with-text size="xs" :type="icons.earth_globe">
+                <base-text variant="bodysm">{{ c.locale }}</base-text>
+              </ccu-icon>
+            </div>
+          </div>
+          <div class="contact--actions">
+            <div class="timer">
+              <base-text :weight="600" variant="h2">{{ c.time }}</base-text>
+              <base-text variant="bodysm">{{ lang.calltime }}</base-text>
+            </div>
+            <div class="buttons">
+              <ccu-icon
+                @click.native="() => setActionTab('resources')"
+                size="xl"
+                :type="icons.phone_contact_add"
+              />
+              <ccu-icon
+                @click.native="() => endCurrentCall({ external: c.external })"
+                size="xl"
+                :type="icons.phone_hangup"
+              />
+            </div>
+          </div>
         </div>
       </div>
-      <div class="contact--actions">
-        <div class="timer">
-          <base-text :weight="600" variant="h2">{{ c.time }}</base-text>
-          <base-text variant="bodysm">{{ lang.calltime }}</base-text>
-        </div>
-        <div class="buttons">
-          <ccu-icon
-            @click.native="() => setActionTab('resources')"
-            size="xl"
-            :type="icons.phone_contact_add"
-          />
-          <ccu-icon
-            @click.native="() => endCurrentCall({ external: c.external })"
-            size="xl"
-            :type="icons.phone_hangup"
-          />
-        </div>
+      <div v-if="activeCalls.length >= 2" class="confactions">
+        <ccu-icon
+          :type="icons.phone_exit"
+          size="large"
+          @click.native="endAllCalls"
+        />
       </div>
     </div>
     <div class="contactbar--cases">
@@ -132,6 +143,10 @@ export default {
     formatTimer(millis) {
       return this.$moment.duration(millis, 'ms').format('h:mm:ss');
     },
+    async endAllCalls() {
+      await this.endCurrentCall();
+      await this.endCurrentCall({ external: true });
+    },
   },
   computed: {
     ...mapGetters('phone', [
@@ -183,6 +198,31 @@ export default {
     .grid {
       &--callinfo {
         .contactbar {
+          &--conference {
+            display: flex;
+            flex-grow: 1;
+            .calls {
+              display: flex;
+              flex-direction: column;
+              flex-grow: 1;
+            }
+            .confactions {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              @apply pr-6;
+              .base-icon {
+                @apply p-2 bg-crisiscleanup-red-400;
+                border-radius: 100%;
+                cursor: pointer;
+                transition: 300ms ease;
+                &:hover {
+                  filter: drop-shadow(0 0 0.2rem fade-out(crimson, 0.3));
+                  transform: translateY(-3px);
+                }
+              }
+            }
+          }
           &--call {
             display: flex;
             flex-direction: row;

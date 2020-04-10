@@ -492,8 +492,8 @@ const actions = {
     });
   },
   async endCurrentCall(
-    { commit },
-    { external, getters: { currentExternalContact } },
+    { commit, getters: { currentExternalContact } },
+    { external = false },
   ) {
     Log.debug('ending an active call!');
     if (!external) {
