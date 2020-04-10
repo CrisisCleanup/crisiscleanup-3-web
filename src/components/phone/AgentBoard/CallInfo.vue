@@ -1,10 +1,10 @@
 <template>
   <div class="contactbar">
-    <div class="contactbar--call">
+    <div v-for="c in activeCalls" :key="c.name" class="contactbar--call">
       <div class="contact--call">
         <div class="contact-stats">
           <base-text class="mobile" :weight="600" variant="h1">{{
-            callerFormattedNumber
+            c.mobile
           }}</base-text>
           <base-text :weight="400" variant="h3">{{
             `2 ${lang.callStat.calls} | 1 ${lang.callStat.days}`
@@ -12,16 +12,16 @@
         </div>
         <div class="contact-caller">
           <ccu-icon with-text size="small" :type="icons.phone_user">
-            <base-text>{{ callerName }}</base-text>
+            <base-text>{{ c.name }}</base-text>
           </ccu-icon>
           <ccu-icon with-text size="small" :type="icons.earth_globe">
-            <base-text>{{ callerLocale.name_t.split(' ')[0] }}</base-text>
+            <base-text>{{ c.locale }}</base-text>
           </ccu-icon>
         </div>
       </div>
       <div class="contact--actions">
         <div class="timer">
-          <base-text :weight="600" variant="h1">{{ callTimer }}</base-text>
+          <base-text :weight="600" variant="h1">{{ c.time }}</base-text>
           <base-text :weight="400" variant="h3">{{ lang.calltime }}</base-text>
         </div>
         <div class="buttons">
@@ -129,14 +129,34 @@ export default {
     async setActive(id, type) {
       return this.setCurrentCase({ id, type });
     },
+    formatTimer(millis) {
+      return this.$moment.duration(millis, 'ms').format('h:mm:ss');
+    },
   },
   computed: {
-    ...mapGetters('phone', ['callerId', 'callDuration', 'currentCase']),
-    callTimer() {
-      return this.$moment.duration(this.callDuration, 'ms').format('h:mm:ss');
-    },
-    callerName() {
-      return this.currentCase ? this.currentCase.name : 'Unknown';
+    ...mapGetters('phone', [
+      'callerId',
+      'callDuration',
+      'extCallDuration',
+      'currentCase',
+    ]),
+    activeCalls() {
+      const calls = [];
+      calls.push({
+        name: this.callerName,
+        locale: this.callerLocale.name_t.split(' ')[0],
+        time: this.formatTimer(this.callDuration),
+        mobile: this.callerFormattedNumber,
+      });
+      if (this.currentExternalResource) {
+        calls.push({
+          name: this.currentExternalResource.name_t,
+          locale: this.$t('~~English'),
+          time: this.formatTimer(this.extCallDuration),
+          mobile: this.extResourceFormattedNumber,
+        });
+      }
+      return calls;
     },
   },
   async mounted() {
