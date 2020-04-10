@@ -2,13 +2,13 @@
   <div>
     <div class="flex flex-row justify-between">
       <!--- media/picture --->
-      <div class="w-2/6 m-3">
+      <div class="w-2/6 ml-3 mr-3 mb-3">
         <!-- <img :src="imagePath" alt="Video Preview" /> -->
-        <img src="@/assets/newspicss.png" class="w-auto h-full" />
+        <img src="@/assets/newspicss.png" class="w-auto h-auto" />
       </div>
-      <div class="w-4/6 my-4">
+      <div class="flex w-4/6 items center">
         <!--- body blurb --->
-        <base-text variant="bodysm" class="justify-between">
+        <base-text variant="bodysm" class="mr-4">
           <!-- {{ description }} -->
           {{ this.$t( `~~For those of you who have ever used our call system in the
           past (as clunky as it was) You're going to LOVE this new system. It is
