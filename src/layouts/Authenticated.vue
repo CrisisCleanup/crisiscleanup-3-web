@@ -158,6 +158,7 @@ export default {
           icon: 'phone',
           text: this.$t('dashboard.phone'),
           to: '/phone',
+          disabled: !this.$can('phone_agent'),
         },
         {
           key: 'admin',
