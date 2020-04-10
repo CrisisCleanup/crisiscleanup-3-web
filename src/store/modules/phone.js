@@ -33,7 +33,7 @@ const getStateDefaults = () => ({
       callerId: null,
     },
   },
-  externalContacts: [],
+  externalContact: {},
   controller: {
     contactId: null,
     outboundId: null,
@@ -189,6 +189,8 @@ const getters = {
     state.controller.actions.currentKey
       ? state.controller.actions.currentKey
       : 'case',
+  currentExternalContact: (state) =>
+    state.externalContact.contactId ? state.externalContact : null,
 };
 
 // actions
@@ -286,6 +288,48 @@ const actions = {
     });
     return this.callDuration;
   },
+  async syncExternalContact(
+    { commit, getters: { currentExternalContact } },
+    newExternalConnection = null,
+  ) {
+    const contact = ConnectService.getCurrentContact();
+    const agent = ConnectService.getAgent();
+    let externalConnection = newExternalConnection;
+    if (!externalConnection) {
+      externalConnection = contact.getSingleActiveThirdPartyConnection();
+    }
+    if (!externalConnection) {
+      Log.debug('no external contact found...');
+      return;
+    }
+    Log.debug('found external connection during sync!', externalConnection);
+    const externalContactId = externalConnection.getContactId();
+    if (!externalContactId) {
+      return;
+    }
+    const externalContact = agent
+      .getContacts()
+      .find((c) => c.contactId === externalContactId);
+    Log.debug(
+      'seems to be a new contact, waiting for complete connection...',
+      externalContact,
+      currentExternalContact,
+    );
+    if (externalContact) {
+      if (currentExternalContact) {
+        if (externalContact.isConnected()) {
+          Log.debug('external contact connected!');
+          Log.debug('now conferencing connections...');
+          contact.conferenceConnections({
+            success: () => Log.debug('call conferenced!'),
+            failure: () =>
+              Log.debug('conference failed, is the contact ready?'),
+          });
+        }
+      }
+      commit('setExternalContact', { contactId: externalContact.contactId });
+    }
+  },
   async syncContact({ commit, state, dispatch }, newContact = null) {
     Log.debug('syncing current contact...');
     let contact = newContact;
@@ -341,6 +385,7 @@ const actions = {
       EventBus.$emit(ConnectService.EVENTS.ON_CALL);
     }
     EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
+    dispatch('syncExternalContact');
     commit('setControllerState', { contactId });
     return contact;
   },
@@ -452,20 +497,10 @@ const actions = {
   async setActionTab({ commit }, key) {
     commit('setAgentActions', { currentKey: key });
   },
-  async addContact({ commit }, mobile) {
-    const number = `+1${mobile}`;
-    Log.debug('adding contact...', number);
-    ConnectService.addContact(number, {
-      success: (newContact) => {
-        const contact = ConnectService.getCurrentContact();
-        const extContact = contact.getSingleActiveThirdPartyConnection();
-        Log.debug('got 3rd party connection:', extContact);
-        extContact.onConnected(() => {
-          Log.debug('conferencing...', newContact);
-          contact.conferenceConnections();
-          commit('addContact', [extContact]);
-        });
-      },
+  async addContact({ dispatch }, mobile) {
+    Log.debug('adding contact...', mobile);
+    ConnectService.addContact(mobile, {
+      success: () => dispatch('syncExternalContact'),
     });
   },
 };
@@ -528,8 +563,11 @@ const mutations = {
       ...newState,
     };
   },
-  addContact(state, newState) {
-    state.externalContacts = [...state.externalContacts, ...newState];
+  setExternalContact(state, newState) {
+    state.externalContact = {
+      ...state.externalContact,
+      ...newState,
+    };
   },
   resetState(state) {
     Object.assign(state, {
