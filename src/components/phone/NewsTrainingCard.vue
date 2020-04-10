@@ -29,8 +29,8 @@
     <!--- See All Button --->
     <div class="m-3 pb-2">
       <base-button
-        variant="bodysm"
-        class="bg-crisis-cleanup-yellow-900 text-black align-right"
+        variant="underline"
+        class="text-crisiscleanup-yellow-900"
         :action="toggleAvailable"
       >
         See All
