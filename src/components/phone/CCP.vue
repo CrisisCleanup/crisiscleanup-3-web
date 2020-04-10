@@ -28,7 +28,7 @@ export default {
     });
   },
   async mounted() {
-    if (!this.connectRunning && process.env.NODE_ENV !== 'production') {
+    if (!this.connectRunning) {
       this.$log.debug('CCP embed connecting...');
       const htmlEl = document.getElementById('ccp-embed');
       try {
