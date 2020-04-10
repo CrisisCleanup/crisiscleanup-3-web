@@ -21,7 +21,7 @@
       :key="idx"
       :image-path="training.imagePath"
       :description="training.description"
-      :time-to-complete="training.timeToComplete"
+      :time-to-complete="trainings.completionTime"
       class="w-full"
     ></Trainings>
     <!-- line -->
@@ -62,12 +62,12 @@ export default {
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
           description: ' ~~Crisis Cleanup Basic Training',
-          timeToComplete: '10 minutes',
+          completionTime: '10 minutes',
         },
         {
           imagePath: require('@/assets/newstrainingss.jpg'),
-          phoneDescription: '~~Phone System Basic Training',
-          timeToComplete: '15 minutes',
+          description: '~~Phone System Basic Training',
+          completionTime: '~~15 minutes',
         },
       ],
     };
