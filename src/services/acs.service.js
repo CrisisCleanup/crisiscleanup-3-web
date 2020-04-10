@@ -179,13 +179,6 @@ export const bindContactEvents = (handler) => {
   });
 };
 
-export const endContactCall = () => {
-  const agent = getAgent();
-  const contact = agent.getContacts()[0];
-  const initCon = contact.getInitialConnection();
-  initCon.destroy();
-};
-
 export const getCurrentContact = () => {
   const agent = getAgent();
   const contacts = agent.getContacts();
@@ -193,6 +186,18 @@ export const getCurrentContact = () => {
     return contacts[0];
   }
   return null;
+};
+
+export const endContactCall = (connectionId = null) => {
+  const contact = getCurrentContact();
+  let connection = contact
+    .getConnections()
+    .find((c) => c.connectionId === connectionId);
+  if (!connection) {
+    connection = contact.getInitialConnection();
+  }
+  Log.debug('destroying connection: ', connection);
+  connection.destroy();
 };
 
 export const addContact = (number, handler) => {

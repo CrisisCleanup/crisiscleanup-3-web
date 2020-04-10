@@ -491,9 +491,20 @@ const actions = {
       resolved,
     });
   },
-  async endCurrentCall() {
-    Log.debug('ending current call!');
-    ConnectService.endContactCall();
+  async endCurrentCall(
+    { commit },
+    { external, getters: { currentExternalContact } },
+  ) {
+    Log.debug('ending an active call!');
+    if (!external) {
+      ConnectService.endContactCall();
+      commit('setContact', getStateDefaults().contact);
+      return;
+    }
+    if (currentExternalContact) {
+      ConnectService.endContactCall(currentExternalContact.connectionId);
+      commit('setExternalContact', getStateDefaults().externalContact);
+    }
   },
   async setCurrentCase({ commit }, currentCase) {
     commit('setCurrentCase', currentCase);

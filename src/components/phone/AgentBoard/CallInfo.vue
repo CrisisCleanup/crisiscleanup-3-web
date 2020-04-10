@@ -31,7 +31,7 @@
             :type="icons.phone_contact_add"
           />
           <ccu-icon
-            @click.native="endCurrentCall"
+            @click.native="() => endCurrentCall({ external: c.external })"
             size="xl"
             :type="icons.phone_hangup"
           />
@@ -147,6 +147,7 @@ export default {
         locale: this.callerLocale.name_t.split(' ')[0],
         time: this.formatTimer(this.callDuration),
         mobile: this.callerFormattedNumber,
+        external: false,
       });
       if (this.currentExternalResource) {
         calls.push({
@@ -154,6 +155,7 @@ export default {
           locale: this.$t('~~English'),
           time: this.formatTimer(this.extCallDuration),
           mobile: this.extResourceFormattedNumber,
+          external: true,
         });
       }
       return calls;
