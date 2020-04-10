@@ -89,8 +89,8 @@
 
 <script>
 import { TrainingMixin } from '@/mixins';
-import TrainingsCard from './TrainingsCard.vue';
-import Training from './Training.vue';
+import TrainingsCard from '@/components/phone/TrainingsCard.vue';
+import Training from '@/components/phone/Training.vue';
 
 export default {
   name: 'TrainingsModal',

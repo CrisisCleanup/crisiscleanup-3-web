@@ -158,7 +158,7 @@
   </div>
 </template>
 <script>
-import RecurringSchedule from './RecurringSchedule';
+import RecurringSchedule from '@/components/RecurringSchedule';
 
 export default {
   props: ['field', 'children', 'pda'],

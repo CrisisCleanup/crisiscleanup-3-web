@@ -48,8 +48,8 @@
 import { mapActions } from 'vuex';
 import { STATES as CCState } from '@/services/acs.service';
 import TrainingsModal from '@/components/phone/TrainingsModal';
-import NewsCard from './NewsCard';
-import TrainingsCard from './TrainingsCard';
+import NewsCard from '@/components/phone/NewsCard';
+import TrainingsCard from '@/components/phone/TrainingsCard';
 
 export default {
   name: 'NewsTrainingCard',
