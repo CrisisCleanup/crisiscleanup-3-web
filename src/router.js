@@ -50,7 +50,7 @@ const routes = [
     path: '/incident/:incident_id/cases',
     component: Cases,
     name: 'nav.cases',
-    meta: { layout: 'authenticated' },
+    meta: { id: 'cases', layout: 'authenticated' },
     children: [
       {
         path: 'new',

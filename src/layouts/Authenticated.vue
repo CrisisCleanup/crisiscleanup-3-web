@@ -1,8 +1,9 @@
 <template>
   <Loader :loading="loading" :class="loading && 'flex layout h-full'">
     <template #content>
-      <div class="layout">
+      <div class="layout" :class="{ 'layout--mobile': $mq === 'sm' }">
         <NavMenu
+          v-if="$mq !== 'sm'"
           :routes="routes"
           class="sidebar--grid"
           :key="currentUser && currentUser.permissions"
@@ -16,7 +17,7 @@
                   :current-incident="currentIncident"
                 />
               </div>
-              <div class="flex flex-col ml-2 w-84">
+              <div class="flex flex-col ml-2 md:w-84 lg:w-84">
                 <form-select
                   :key="currentIncidentId"
                   :value="currentIncident"
@@ -375,6 +376,13 @@ body {
   grid-template-areas:
     'sidebar header'
     'sidebar main';
+}
+
+.layout.layout--mobile {
+  grid-template-columns: auto !important;
+  grid-template-areas:
+    'header'
+    'main';
 }
 
 .sidebar--grid {

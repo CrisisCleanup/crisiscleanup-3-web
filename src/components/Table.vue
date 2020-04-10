@@ -1,11 +1,14 @@
 <template>
-  <div class="table w-full">
+  <div class="w-full">
     <div
-      v-if="!hideHeader"
+      v-if="!hideHeader && $mq !== 'sm'"
       class="header text-crisiscleanup-grey-700 bg-white"
       :style="gridStyleHeader"
     >
-      <div v-if="enableSelection" class="flex items-center p-2 border-b">
+      <div
+        v-if="enableSelection && $mq !== 'sm'"
+        class="flex items-center p-2 border-b"
+      >
         <base-checkbox class="mb-5" @input="setAllChecked" />
       </div>
       <div
@@ -60,11 +63,14 @@
         v-for="item of data"
         :key="item.id"
         :style="gridStyleRow"
-        class="hover:bg-crisiscleanup-light-grey"
+        class="hover:bg-crisiscleanup-light-grey sm:border-b"
         :class="{ 'bg-crisiscleanup-light-grey': selectedItems.has(item.id) }"
         @click="rowClick(item, $event)"
       >
-        <div v-if="enableSelection" class="flex items-center p-2 border-b">
+        <div
+          v-if="enableSelection && $mq !== 'sm'"
+          class="flex items-center p-2 lg:border-b md:border-b"
+        >
           <base-checkbox
             :value="selectedItems.has(item.id)"
             class="mb-5"
@@ -79,9 +85,12 @@
         <div
           v-for="column of columns"
           :key="column.key"
-          class="flex items-center p-2 border-b cursor-pointer"
+          class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
         >
           <slot :name="column.key" :item="item">
+            <span v-if="$mq === 'sm'" class="font-semibold mr-2">
+              {{ column.title }}:
+            </span>
             <template v-if="item[column.key]">{{
               column.subKey ? item[column.key][column.subKey] : item[column.key]
             }}</template>
@@ -279,7 +288,7 @@ export default {
     gridStyleRow() {
       return {
         display: 'grid',
-        'grid-template-columns': this.gridTemplate,
+        'grid-template-columns': this.$mq === 'sm' ? 'auto' : this.gridTemplate,
       };
     },
   },
