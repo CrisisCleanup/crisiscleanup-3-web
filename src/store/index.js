@@ -1,16 +1,17 @@
+import VueLog from '@dreipol/vue-log';
 import VuexORM from '@vuex-orm/core';
 import VuexORMAxios from '@vuex-orm/plugin-axios';
-import VueLog from '@dreipol/vue-log';
 import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import database from './database';
 import auth from './modules/auth';
+import enums from './modules/enums';
 import incident from './modules/incident';
 import loading from './modules/loading';
 import locale from './modules/locale';
 import phone from './modules/phone';
-import enums from './modules/enums';
+import rc from './modules/rc';
 
 VuexORM.use(VuexORMAxios, {
   axios,
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     locale,
     phone,
     enums,
+    rc,
   },
   plugins: [VuexORM.install(database)],
   strict: debug,

@@ -12,7 +12,7 @@ import { EVENTS as CCEvent } from '@/services/acs.service';
 import Worksite from '@/models/Worksite';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import Pda from '@/models/Pda';
-import { AgentMixin } from '@/mixins';
+import { AgentMixin, RCMixin } from '@/mixins';
 import IncomingPopup from '@/components/phone/Popup.vue';
 import PhoneResource from '@/models/PhoneResource';
 import Dashboard from './Dashboard.vue';
@@ -20,7 +20,7 @@ import Controller from './Controller.vue';
 
 export default {
   name: 'Phone',
-  mixins: [AgentMixin],
+  mixins: [AgentMixin, RCMixin],
   components: { IncomingPopup },
   computed: {
     ...mapGetters('phone', [
@@ -112,6 +112,7 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch('rc/initialize');
     PhoneResource.api().get('/phone_resources', {
       dataKey: 'results',
     });

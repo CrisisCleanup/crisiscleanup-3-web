@@ -2,10 +2,11 @@ import { AgentMixin } from './agent';
 import { IconsMixin } from './enums';
 import { LangMixin, LangOverrideMixin, LocaleMixin } from './locale';
 import LocalStorageMixin from './localStorage';
+import RCMixin from './rc';
+import { TrainingMixin } from './training';
 import UserMixin from './user';
 import ValidateMixin from './validate.js';
 import { WorksitesMixin } from './worksite';
-import { TrainingMixin } from './training';
 
 export {
   LocaleMixin,
@@ -18,4 +19,5 @@ export {
   LocalStorageMixin,
   ValidateMixin,
   TrainingMixin,
+  RCMixin,
 };

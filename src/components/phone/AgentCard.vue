@@ -73,7 +73,13 @@
 </template>
 
 <script>
-import { IconsMixin, UserMixin, LangMixin, TrainingMixin } from '@/mixins';
+import {
+  IconsMixin,
+  UserMixin,
+  RCMixin,
+  LangMixin,
+  TrainingMixin,
+} from '@/mixins';
 import { mapActions, mapGetters } from 'vuex';
 import { STATES as CCState, EVENTS as CCEvent } from '@/services/acs.service';
 import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
@@ -84,7 +90,7 @@ import PhoneGateway from '@/pages/phone/Gateway';
 
 export default {
   name: 'AgentCard',
-  mixins: [IconsMixin, LangMixin, UserMixin, TrainingMixin],
+  mixins: [IconsMixin, LangMixin, UserMixin, TrainingMixin, RCMixin],
   components: {
     PhoneGateway,
     moreInfo: ContactMoreInfo,
@@ -105,6 +111,7 @@ export default {
   methods: {
     ...mapActions('phone', ['setAgentState']),
     async toggleAvailable() {
+      this.authenticate();
       if (!this.allTrainingCompleted) {
         this.isShowingTrainingModal = true;
         return this.isShowingTrainingModal;
