@@ -65,7 +65,7 @@
         <base-button
           variant="solid"
           :action="inviteUsers"
-          :text="$t('usersVue.invite_users')"
+          :text="$t('actions.submit_invites')"
           class="ml-2 p-3 px-6 text-xs"
         />
       </div>

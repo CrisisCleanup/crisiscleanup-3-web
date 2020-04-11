@@ -140,7 +140,7 @@ export default {
           width: '1fr',
         },
         {
-          title: this.$t('orgApprovalTable.admin_notes'),
+          title: this.$t('adminOrganization.admin_notes'),
           dataIndex: 'admin_notes',
           key: 'admin_notes',
           width: '2fr',
