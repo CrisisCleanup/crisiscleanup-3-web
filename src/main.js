@@ -131,20 +131,21 @@ if (AuthService.getUser()) {
 }
 
 // Sentry Logging
-Sentry.init({
-  dsn: 'https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561',
-  integrations: [
-    new SentryIntegrations.Vue({
-      Vue,
-      attachProps: true,
-      // sets whether to log errors in sentry
-      // AND with the standard web log,
-      // not errors overall
-      logErrors: process.env.NODE_ENV !== 'production',
-    }),
-  ],
-});
-
+if (process.env.NODE_ENV !== 'development') {
+  Sentry.init({
+    dsn: 'https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561',
+    integrations: [
+      new SentryIntegrations.Vue({
+        Vue,
+        attachProps: true,
+        // sets whether to log errors in sentry
+        // AND with the standard web log,
+        // not errors overall
+        logErrors: process.env.NODE_ENV !== 'production',
+      }),
+    ],
+  });
+}
 // Google GTag
 Vue.use(VueGtag, {
   config: {
