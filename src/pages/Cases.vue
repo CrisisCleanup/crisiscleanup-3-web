@@ -177,6 +177,14 @@
                   >{{ filtersCount }}</span
                 >
               </base-button>
+              <base-button
+                class="text-base font-thin mx-4"
+                ccu-icon="download"
+                icon-size="medium"
+                :alt="$t('actions.download')"
+                :text="$t('actions.download')"
+                :action="downloadCsv"
+              />
               <base-dropdown
                 v-if="showingTable"
                 class-name="borderless"
@@ -196,11 +204,7 @@
                       <base-button
                         class="text-base font-thin mx-4"
                         :text="$t('actions.download')"
-                        :action="
-                          (e) => {
-                            downloadWorksite(e, selectedTableItems);
-                          }
-                        "
+                        :action="downloadCsv"
                         data-cy="worksiteview_actionBatchDownload"
                       />
                     </li>
@@ -1057,6 +1061,24 @@ export default {
         const file = await Worksite.api().downloadWorksite(siteIds);
         forceFileDownload(file.response);
         this.reloadTable();
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.spinning = false;
+      }
+    },
+    async downloadCsv() {
+      this.spinning = true;
+      try {
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
+          {
+            params: { ...this.currentQuery },
+            headers: { Accept: 'text/csv' },
+            responseType: 'blob',
+          },
+        );
+        forceFileDownload(response);
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
