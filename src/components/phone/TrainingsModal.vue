@@ -85,6 +85,11 @@
         ></training-detail>
       </div>
       <div slot="footer"></div>
+      <agent-edit-card
+        :active="editCardActive"
+        :request="{ phone: true, lang: true }"
+        @user-updated="() => (editCardActive = false)"
+      />
     </modal>
   </div>
 </template>
@@ -93,12 +98,14 @@
 import { TrainingMixin } from '@/mixins';
 import TrainingsCard from '@/components/phone/TrainingsCard.vue';
 import Training from '@/components/phone/Training.vue';
+import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
 
 export default {
   name: 'TrainingsModal',
   components: {
     'trainings-card': TrainingsCard,
     'training-detail': Training,
+    'agent-edit-card': CallerIDEditCard,
   },
   mixins: [TrainingMixin],
   props: {
