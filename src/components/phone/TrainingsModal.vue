@@ -59,7 +59,8 @@
             v-if="allTrainingCompleted"
             variant="solid"
             class="px-3 py-2"
-            :action="() => finishTraining()"
+            :action="() => (editCardActive = !editCardActive)"
+            @click="finishTraining()"
           >
             {{ lang.actions.complete.text }}
           </base-button>
@@ -121,6 +122,7 @@ export default {
       selectedTraining: null,
       trainings: [],
       userTrainings: [],
+      editCardActive: false,
     };
   },
   computed: {
