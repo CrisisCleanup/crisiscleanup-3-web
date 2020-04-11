@@ -86,7 +86,7 @@
             input-class="h-10 p-1 outline-none w-full text-sm cursor-pointer"
             wrapper-class="flex-grow"
             :format="customFormatter"
-            :placeholder="$t('~~Select end date')"
+            :placeholder="$t('recurringSchedule.select_end_date')"
             v-model="endDate"
             @input="logChange"
           ></datepicker>
