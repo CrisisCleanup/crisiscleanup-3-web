@@ -8,20 +8,24 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import { EventBus } from '@/event-bus';
-import { EVENTS as CCEvent } from '@/services/acs.service';
+import { EVENTS as CCEvent, STATES as CCState } from '@/services/acs.service';
 import Worksite from '@/models/Worksite';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import Pda from '@/models/Pda';
 import { AgentMixin, RCMixin } from '@/mixins';
 import IncomingPopup from '@/components/phone/Popup.vue';
 import PhoneResource from '@/models/PhoneResource';
+import { mixin as VueTimer } from 'vue-timers';
 import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
 
 export default {
   name: 'Phone',
-  mixins: [AgentMixin, RCMixin],
+  mixins: [AgentMixin, RCMixin, VueTimer],
   components: { IncomingPopup },
+  timers: {
+    getNextCallback: { time: 25000, autostart: true, repeat: true },
+  },
   computed: {
     ...mapGetters('phone', [
       'connectReady',
@@ -46,6 +50,22 @@ export default {
       'setOutboundId',
       'setContactState',
     ]),
+    async getNextCallback() {
+      this.$log.debug('checking next callback...');
+      if (
+        !this.agentOnCall &&
+        this.connectReady &&
+        this.agentState === CCState.ROUTABLE
+      ) {
+        try {
+          const callback = await PhoneOutbound.api().getNextOutbound();
+          this.$log.debug('serving up next callback...', callback);
+          PhoneOutbound.api().callOutbound(callback.id);
+        } catch (e) {
+          this.$log.debug('no callbacks available!', e);
+        }
+      }
+    },
     async resolveCases({ outboundIds, pdas, worksites }) {
       this.$log.debug('resolving caller cases...', pdas, worksites);
       await this.addCases({
