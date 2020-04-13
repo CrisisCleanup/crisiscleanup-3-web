@@ -29,7 +29,7 @@ export default class PhoneOutbound extends Model {
 
   static apiConfig = {
     actions: {
-      async getNextOutbound(incidentId) {
+      async getNextOutbound(incidentId = 199) {
         const phoneOutbound = await this.get(
           `/phone_outbound?next=${incidentId}`,
         );
