@@ -103,7 +103,6 @@
           <!--- /Training Video Description --->
         </div>
         <!--- /Content --->
-
       </div>
       <home-footer />
     </template>
