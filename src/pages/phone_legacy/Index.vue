@@ -32,15 +32,12 @@
             </div>
           </div>
         </div>
-        <Loader :loading="iframeLoading" class="h-full">
-          <iframe
-            class="border"
-            src="https://portal.vacd.biz/agent"
-            width="100%"
-            height="100%"
-            @load="iframeLoading = false"
-          ></iframe>
-        </Loader>
+        <iframe
+          class="border"
+          src="https://portal.vacd.biz/agent/#/login"
+          width="100%"
+          height="100%"
+        ></iframe>
       </div>
       <div class="side-grid">
         <div class="p-2 border shadow flex flex-col" v-if="nextOutbound">
