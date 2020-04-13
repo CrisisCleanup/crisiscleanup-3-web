@@ -1,5 +1,5 @@
 <template>
-  <HomeLayout>
+  <HomeLayout class="overflow-auto">
     <template #grid-overlay>
       <div class="grid--overlay homegrid-backdrop" />
     </template>
