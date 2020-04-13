@@ -2,7 +2,10 @@
   <div class="p-3 h-full">
     <div class="main-grid">
       <div class="phone-grid">
-        <div class="p-2 border shadow flex items-start justify-between">
+        <div
+          class="p-2 border shadow flex items-start justify-between"
+          v-if="$route.meta.id === 'caller'"
+        >
           <div class="pb-2">
             <base-text variant="h2">{{ $t('~~Login:') }}</base-text>
             <base-text>{{ $t('~~Username:') }} covid</base-text>
@@ -39,7 +42,7 @@
           height="100%"
         ></iframe>
       </div>
-      <div class="side-grid">
+      <div class="side-grid" v-if="$route.meta.id === 'caller'">
         <div class="p-2 border shadow flex flex-col" v-if="nextOutbound">
           <base-text variant="h3">{{ $t('Next Call:') }}</base-text>
           <div class="flex items-center justify-between">
