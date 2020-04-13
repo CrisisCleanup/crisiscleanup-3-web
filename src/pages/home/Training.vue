@@ -10,12 +10,11 @@
         <!--- Title --->
         <div class="flex flex-col m-5 pb-8">
           <h1 class="text-5xl px-0.5 text-crisiscleanup-dark-500 font-bold">
-            Training
+            {{ $t('training.training') }}
           </h1>
           <!--- Description --->
           <p class="text-xl px-0.5">
-            Please take a minute to see our trainings. It will help you when a
-            you when a disaster happens.
+            {{ $t('training.please_complete_training') }}
           </p>
         </div>
         <!--- Content --->
@@ -27,7 +26,7 @@
                 class="resp-video"
                 width="100%"
                 height="100%"
-                src="https://www.youtube.com/embed/3wumEh8wcak"
+                src="https://www.youtube.com/embed/ot4LZjtK0xo"
                 frameborder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen
@@ -37,13 +36,74 @@
           <!--- Training Video Description --->
           <div class="flex-col w-1/2">
             <h1 class="px-10 text-3xl font-bold text-crisiscleanup-dark-500">
-              Mandatory Crisis Cleanup Training Video
+              {{ $t('training.mandatory_training_video') }}
             </h1>
             <p class="px-10 text-xl text-crisiscleanup-dark-400">
-              Please Take a Minute to Complete a Short Training
+              {{ $t('training.mandatory_training_video_intro') }}
             </p>
           </div>
+          <!--- /Training Video Description --->
         </div>
+        <!--- /Content --->
+
+        <!--- Content --->
+        <div class="flex flex-row justify-between m-5">
+          <!--- Training Video --->
+          <div class="flex-col w-1/2 h-screen">
+            <div class="video-container">
+              <iframe
+                class="resp-video"
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/vWFI7udFmik"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              />
+            </div>
+          </div>
+          <!--- Training Video Description --->
+          <div class="flex-col w-1/2">
+            <h1 class="px-10 text-3xl font-bold text-crisiscleanup-dark-500">
+              {{ $t('training.ccu_during_covid') }}
+            </h1>
+            <p class="px-10 text-xl text-crisiscleanup-dark-400">
+              {{ $t('training.ccu_during_covid_intro') }}
+            </p>
+          </div>
+          <!--- /Training Video Description --->
+        </div>
+        <!--- /Content --->
+
+        <!--- Content --->
+        <div class="flex flex-row justify-between m-5">
+          <!--- Training Video --->
+          <div class="flex-col w-1/2 h-screen">
+            <div class="video-container">
+              <iframe
+                class="resp-video"
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/yCxI5YHyX5k"
+                frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen
+              />
+            </div>
+          </div>
+          <!--- Training Video Description --->
+          <div class="flex-col w-1/2">
+            <h1 class="px-10 text-3xl font-bold text-crisiscleanup-dark-500">
+              {{ $t('training.ccu_intro') }}
+            </h1>
+            <p class="px-10 text-xl text-crisiscleanup-dark-400">
+              {{ $t('training.ccu_intro_intro') }}
+            </p>
+          </div>
+          <!--- /Training Video Description --->
+        </div>
+        <!--- /Content --->
+
       </div>
       <home-footer />
     </template>
