@@ -140,7 +140,7 @@ export default {
         const outbound = await PhoneOutbound.api().getNextOutbound(
           this.currentIncidentId,
         );
-        [this.nextOutbound] = outbound;
+        this.nextOutbound = outbound;
       } catch (e) {
         this.nextOutbound = null;
       }
