@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full w-3/4 m-auto">
+  <div class="flex h-full w-3/4 m-auto overflow-auto">
     <div class="mt-6 w-full">
       <div class="flex justify-between items-center my-6">
         <div>

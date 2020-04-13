@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full" data-cy="myorg-dashboard">
+  <div class="flex flex-col h-full overflow-auto" data-cy="myorg-dashboard">
     <div
       class="h-12 bg-white mx-5 border-t flex justify-center text-crisiscleanup-grey-700"
     >
