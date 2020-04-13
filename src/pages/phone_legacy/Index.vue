@@ -15,7 +15,9 @@
             <base-text>{{ $t('~~Password:') }} covid</base-text>
           </div>
           <div class="pb-2">
-            <base-text variant="h2">{{ $t('~~Disaster Distress Helpline:') }}</base-text>
+            <base-text variant="h2">{{
+              $t('~~Disaster Distress Helpline:')
+            }}</base-text>
             <base-text>1-800-985-5990</base-text>
           </div>
           <div>
