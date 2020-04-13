@@ -10,11 +10,13 @@
             <base-text variant="h2">{{ $t('~~English Login:') }}</base-text>
             <base-text>{{ $t('~~Username:') }} covid</base-text>
             <base-text>{{ $t('~~Password:') }} covid</base-text>
-          </div>
-          <div class="pb-2">
             <base-text variant="h2">{{ $t('~~Spanish Login:') }}</base-text>
             <base-text>{{ $t('~~Username:') }} spanish</base-text>
             <base-text>{{ $t('~~Password:') }} covid</base-text>
+          </div>
+          <div class="pb-2">
+            <base-text variant="h2">{{ $t('~~Disaster Distress Helpline:') }}</base-text>
+            <base-text>1-800-985-5990</base-text>
           </div>
           <div>
             <div class="pb-2" v-if="cards.length">
