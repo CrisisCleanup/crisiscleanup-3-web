@@ -156,7 +156,7 @@ export default {
         {
           key: 'phone',
           icon: 'phone',
-          text: this.$t('dashboard.phone'),
+          text: this.$t('nav.phone'),
           to: '/phone',
           disabled:
             !this.$can('phone_agent') || process.env.NODE_ENV === 'production',
@@ -164,7 +164,7 @@ export default {
         {
           key: 'caller',
           icon: 'phone',
-          text: this.$t('dashboard.caller'),
+          text: this.$t('nav.phone_beta'),
           to: '/caller',
           disabled: !this.$can('phone_agent'),
         },
