@@ -15,6 +15,7 @@ import OrganizationProfile from '@/pages/organization/Profile';
 import Users from '@/pages/organization/Users';
 import UserView from '@/pages/organization/UserView';
 import PhoneRoutes from '@/pages/phone/routes';
+import PhoneLegacyRoutes from '@/pages/phone_legacy/routes';
 import AdminRoutes from '@/pages/admin/routes';
 import Profile from '@/pages/Profile';
 import unAuthedRoutes from '@/pages/unauthenticated/routes';
@@ -144,6 +145,7 @@ const routes = [
     meta: { layout: 'authenticated' },
   },
   ...PhoneRoutes,
+  ...PhoneLegacyRoutes,
   ...AdminRoutes,
   ...HomeRoutes,
   ...unAuthedRoutes,

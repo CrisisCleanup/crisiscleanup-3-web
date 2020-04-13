@@ -29,8 +29,10 @@ export default class PhoneOutbound extends Model {
 
   static apiConfig = {
     actions: {
-      async getNextOutbound() {
-        const phoneOutbound = await this.get(`/phone_outbound?next=199`);
+      async getNextOutbound(incidentId) {
+        const phoneOutbound = await this.get(
+          `/phone_outbound?next=${incidentId}`,
+        );
         const {
           response: { data },
         } = phoneOutbound;

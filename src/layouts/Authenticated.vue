@@ -161,6 +161,13 @@ export default {
           disabled: !this.$can('phone_agent'),
         },
         {
+          key: 'caller',
+          icon: 'phone',
+          text: this.$t('dashboard.caller'),
+          to: '/caller',
+          disabled: !this.$can('phone_agent'),
+        },
+        {
           key: 'admin',
           icon: 'history',
           to: '/admin',

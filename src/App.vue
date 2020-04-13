@@ -1,7 +1,12 @@
 <template>
   <div id="app">
     <component :is="layout">
-      <router-view />
+      <router-view v-if="$route.meta.id !== 'caller'" />
+      <PhoneLegacy
+        class="main-content"
+        v-if="$store.getters['auth/isLoggedIn']"
+        v-show="$route.meta.id === 'caller'"
+      ></PhoneLegacy>
     </component>
     <Version />
     <CCP />
@@ -15,11 +20,12 @@ import '@crisiscleanup/connect-rtc';
 import { mapActions, mapGetters } from 'vuex';
 import CCP from '@/components/phone/CCP.vue';
 import Version from '@/components/Version.vue';
+import PhoneLegacy from './pages/phone_legacy/Index';
 
 const defaultLayout = 'authenticated';
 export default {
   name: 'App',
-  components: { CCP, Version },
+  components: { PhoneLegacy, CCP, Version },
   computed: {
     layout() {
       return `${this.$route.meta.layout || defaultLayout}-layout`;
@@ -143,5 +149,9 @@ body {
   visibility: visible;
   opacity: 1;
   transition: opacity 0.15s;
+}
+
+.main-content {
+  height: 100%;
 }
 </style>

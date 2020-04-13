@@ -57,6 +57,7 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
+import VueRouterMultiView from 'vue-router-multi-view';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -97,6 +98,7 @@ Vue.use(VueClipboard);
 Vue.use(VueAxios, axios);
 momentWithDurations(moment);
 Vue.use(require('vue-moment'), { moment });
+Vue.use(VueRouterMultiView);
 
 Vue.use(Toasted, {
   position: 'top-center',

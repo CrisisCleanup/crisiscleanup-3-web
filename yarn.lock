@@ -20061,6 +20061,11 @@ vue-resize@^0.4.5:
   resolved "https://registry.yarnpkg.com/vue-resize/-/vue-resize-0.4.5.tgz#4777a23042e3c05620d9cbda01c0b3cc5e32dcea"
   integrity sha512-bhP7MlgJQ8TIkZJXAfDf78uJO+mEI3CaLABLjv0WNzr4CcGRGPIAItyWYnP6LsPA4Oq0WE+suidNs6dgpO4RHg==
 
+vue-router-multi-view@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/vue-router-multi-view/-/vue-router-multi-view-0.1.0.tgz#ae94020b1d9d575f4afdb1036ff4cccb4b9691b7"
+  integrity sha512-1kHRhhgIQ5QL74Hd7uWw2ZeYSSP6qbT9KoP89QAoGtvE7KSKfrcj/iN81kZKf51XVLQxHL/0KRYK/EAO0DcWKg==
+
 vue-router@^3.1.6:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.1.6.tgz#45f5a3a3843e31702c061dd829393554e4328f89"
