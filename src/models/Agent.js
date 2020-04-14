@@ -48,10 +48,37 @@ export default class Agent extends Model {
             throw e;
           }
         }
-        return agent;
+        const {
+          response: { data },
+        } = agent;
+        return data;
       },
       async updateConfig(id) {
         return this.patch(`/agents/${id}`, { save: false });
+      },
+      async getDynamicState(id) {
+        let resp;
+        try {
+          resp = await this.get(`/agents/${id}/state`, { save: false });
+        } catch (e) {
+          return {
+            state: 'static',
+          };
+        }
+        const {
+          response: { data },
+        } = resp;
+        return data;
+      },
+      async setDynamicState(id, state) {
+        return this.patch(
+          `/agents/${id}`,
+          {
+            state,
+            entered_timestamp: new Date().toISOString(),
+          },
+          { save: false },
+        );
       },
     },
   };
