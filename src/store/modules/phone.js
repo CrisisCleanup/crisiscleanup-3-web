@@ -1,4 +1,5 @@
 import { EventBus } from '@/event-bus';
+import Agent from '@/models/Agent';
 import Language from '@/models/Language';
 import Pda from '@/models/Pda';
 import PhoneOutbound from '@/models/PhoneOutbound';
@@ -90,6 +91,9 @@ const getters = {
     state.agentState !== null
       ? state.agentState
       : ConnectService.STATES.OFFLINE,
+  agentStateTimestamp: (state) =>
+    state.agentStateTimestamp ? Date.parse(state.agentStateTimestamp) : null,
+  agent: (state) => (state.agent ? Agent.find(state.agent.agent_id) : null),
   connectRunning: (state) => state.connectRunning, // is connect initialized?
   connectReady: (state) => !!(state.connectRunning && state.agentConfig), // is connect done w/ init and auth?
   popupOpen: (state) => state.popupOpen,
@@ -236,7 +240,10 @@ const actions = {
     commit('setMetrics', newState);
     return resp;
   },
-  async initConnect({ state, commit, dispatch }, htmlEl) {
+  async initConnect(
+    { state, commit, dispatch, getters: { agentStateTimestamp } },
+    htmlEl,
+  ) {
     try {
       ConnectService.initConnect({
         htmlEl,
@@ -269,6 +276,11 @@ const actions = {
         }
         const rawAgentState = await agent.getState();
         Log.debug('raw agent state: ', rawAgentState);
+        const { startTimestamp } = rawAgentState;
+        if (agentStateTimestamp && agentStateTimestamp > startTimestamp) {
+          Log.debug('disregarding connect agent state, is stale.');
+          return;
+        }
         const agentState = ConnectService.parseAgentState(rawAgentState);
         Log.debug('new agent state inbound:', agentState);
         commit('setAgentState', agentState);
@@ -297,12 +309,58 @@ const actions = {
     ConnectService.setPopup({ open: state });
     commit('setPopupState', state);
   },
-  async setAgentState({ commit }, state) {
-    ConnectService.setAgentState(state);
+  async setAgentState({ commit, dispatch, getters: { agentId } }, state) {
+    let aId = agentId;
+    if (!aId) {
+      aId = await dispatch('getAgent');
+    }
+    await Agent.api().setDynamicState(aId, state);
     commit('setAgentState', { newState: state });
+    ConnectService.setAgentState(state);
   },
   async setAgent({ commit }, agent) {
     commit('setAgent', agent);
+  },
+  async getAgent({ commit, rootState }) {
+    const userAgent = {
+      user: {
+        id: rootState.auth.user.user_claims.id,
+        email: rootState.auth.user.user_claims.email,
+      },
+    };
+    const agent = await Agent.api().fetch(userAgent);
+    commit('setAgent', agent);
+    return agent.agent_id;
+  },
+  async syncDynamicState({
+    dispatch,
+    getters: { agentId, agentStateTimestamp, agentState },
+  }) {
+    // Sync dynamic states
+    //   * pendingCall -> offline
+    //   * routable -> offline (heartbeat)
+    //   * etc.
+    Log.debug('syncing dynamic agent state...');
+    if (!agentId) {
+      return dispatch('getAgent');
+    }
+    const response = await Agent.api().getDynamicState(agentId);
+    Log.debug('dynamic state response:', response);
+    const { state, entered_timestamp } = response;
+    const entered = Date.parse(entered_timestamp);
+    if (state === ConnectService.STATES.STATIC) {
+      Log.debug('current state is not dynamic!');
+      return state;
+    }
+    if (agentStateTimestamp && entered > agentStateTimestamp) {
+      Log.debug('dynamic state is stale! disregarding...');
+      return null;
+    }
+    if (!agentState === state) {
+      Log.debug('no state change, ignoring...');
+    }
+    Log.debug('got new dynamic state!', state);
+    return ConnectService.setAgentState(state);
   },
   async syncCallDuration({ commit, getters: { currentExternalContact } }) {
     const agent = ConnectService.getAgent();
@@ -597,6 +655,7 @@ const mutations = {
   },
   setAgentState(state, newState) {
     state.agentState = newState;
+    state.agentStateTimestamp = new Date().toISOString();
   },
   setConnectState(state, { running, authed, config }) {
     state.connectRunning = running;

@@ -125,6 +125,7 @@ export const STATES = {
   POLLING: 'polling',
   ON_CALL: 'Busy',
   PAUSED: 'AfterCallWork',
+  STATIC: 'static',
 };
 
 export const METRICS = {

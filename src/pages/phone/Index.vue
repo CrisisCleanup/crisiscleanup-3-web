@@ -24,7 +24,8 @@ export default {
   mixins: [AgentMixin, RCMixin, VueTimer],
   components: { IncomingPopup },
   timers: {
-    getNextCallback: { time: 25000, autostart: true, repeat: true },
+    getNextCallback: { time: 60000, autostart: true, repeat: true },
+    syncDynamicState: { time: 15000, autostart: true, repeat: true },
   },
   computed: {
     ...mapGetters('phone', [
@@ -65,6 +66,9 @@ export default {
           this.$log.debug('no callbacks available!', e);
         }
       }
+    },
+    async syncDynamicState() {
+      return this.$store.dispatch('phone/syncDynamicState');
     },
     async resolveCases({ outboundIds, pdas, worksites }) {
       this.$log.debug('resolving caller cases...', pdas, worksites);
