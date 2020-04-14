@@ -217,12 +217,17 @@ const actions = {
   async getRealtimeMetrics({ commit }) {
     const resp = await axios.get(PhoneApi('metrics'));
     const newState = {};
-    resp.data.results.map(({ name, value }) => {
-      newState[camelCase(name)] = parseFloat(value);
-      return newState;
-    });
     // custom metrics
     const metric = ConnectService.METRICS;
+    const metricNames = Object.keys(metric);
+    resp.data.results.map(({ name, value }, idx) => {
+      let metricName = name;
+      if (!metricName) {
+        metricName = metricNames[idx];
+      }
+      newState[camelCase(metricName)] = parseFloat(value);
+      return newState;
+    });
     // todo: the 0 is "calldowns"
     newState[metric.TOTAL_WAITING] =
       newState[metric.CONTACTS_QUEUED] + newState[metric.CALLBACKS_QUEUED] + 0;
