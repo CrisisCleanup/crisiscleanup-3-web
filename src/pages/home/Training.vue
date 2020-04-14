@@ -6,7 +6,7 @@
     <template #grid-content>
       <home-nav />
       <home-actions />
-      <div class="grid--main h-screen">
+      <div class="grid--main">
         <!--- Title --->
         <div class="flex flex-col m-5 pb-8">
           <h1 class="text-5xl px-0.5 text-crisiscleanup-dark-500 font-bold">
@@ -20,7 +20,7 @@
         <!--- Content --->
         <div class="flex flex-row justify-between m-5">
           <!--- Training Video --->
-          <div class="flex-col w-1/2 h-screen">
+          <div class="flex-col w-1/2">
             <div class="video-container">
               <iframe
                 class="resp-video"
@@ -49,7 +49,7 @@
         <!--- Content --->
         <div class="flex flex-row justify-between m-5">
           <!--- Training Video --->
-          <div class="flex-col w-1/2 h-screen">
+          <div class="flex-col w-1/2">
             <div class="video-container">
               <iframe
                 class="resp-video"
@@ -78,7 +78,7 @@
         <!--- Content --->
         <div class="flex flex-row justify-between m-5">
           <!--- Training Video --->
-          <div class="flex-col w-1/2 h-screen">
+          <div class="flex-col w-1/2">
             <div class="video-container">
               <iframe
                 class="resp-video"
@@ -107,7 +107,7 @@
         <!--- Content --->
         <div class="flex flex-row justify-between m-5">
           <!--- Training Video --->
-          <div class="flex-col w-1/2 h-screen">
+          <div class="flex-col w-1/2">
             <div class="video-container">
               <iframe
                 class="resp-video"
@@ -152,7 +152,25 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.homegrid {
+  &.grid-container {
+    grid-template-areas:
+      'logo . . . . survivors'
+      'nav . main main main main'
+      'nav . main main main main'
+      'actions actions main main main main'
+      '. . main main main main';
+    overflow: auto;
+
+    .grid {
+      &--overlay {
+        grid-row: 1 / span 5;
+        grid-column: 1 / span 3;
+      }
+    }
+  }
+}
 .resp-video {
   position: absolute;
   top: 0;
