@@ -58,7 +58,7 @@ Object {
 
 exports[`Table should render correctly and match snapshot 1`] = `
 <div
-  class="table w-full"
+  class="table-grid w-full"
 >
   <div
     class="header text-crisiscleanup-grey-700 bg-white"
@@ -91,36 +91,44 @@ exports[`Table should render correctly and match snapshot 1`] = `
     <!---->
      
     <div
-      class="hover:bg-crisiscleanup-light-grey"
+      class="hover:bg-crisiscleanup-light-grey sm:border-b"
       style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
     >
       <!---->
        
       <div
-        class="flex items-center p-2 border-b cursor-pointer"
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
       >
+        <!---->
+         
         <!---->
       </div>
       <div
-        class="flex items-center p-2 border-b cursor-pointer"
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
       >
+        <!---->
+         
         <!---->
       </div>
     </div>
     <div
-      class="hover:bg-crisiscleanup-light-grey"
+      class="hover:bg-crisiscleanup-light-grey sm:border-b"
       style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
     >
       <!---->
        
       <div
-        class="flex items-center p-2 border-b cursor-pointer"
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
       >
+        <!---->
+         
         <!---->
       </div>
       <div
-        class="flex items-center p-2 border-b cursor-pointer"
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
       >
+        <!---->
+         
         <!---->
       </div>
     </div>
@@ -134,7 +142,7 @@ exports[`Table should render correctly and match snapshot 1`] = `
 
 exports[`Table should render correctly with selection 1`] = `
 <div
-  class="table w-full"
+  class="table-grid w-full"
 >
   <div
     class="header text-crisiscleanup-grey-700 bg-white"
@@ -183,11 +191,11 @@ exports[`Table should render correctly with selection 1`] = `
     <!---->
      
     <div
-      class="hover:bg-crisiscleanup-light-grey"
+      class="hover:bg-crisiscleanup-light-grey sm:border-b"
       style="display: grid; grid-template-columns: 35px 0.5fr 1.5fr;"
     >
       <div
-        class="flex items-center p-2 border-b"
+        class="flex items-center p-2 lg:border-b md:border-b"
       >
         <label
           class="checkbox-container mb-5"
@@ -206,22 +214,26 @@ exports[`Table should render correctly with selection 1`] = `
       </div>
        
       <div
-        class="flex items-center p-2 border-b cursor-pointer"
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
       >
+        <!---->
+         
         <!---->
       </div>
       <div
-        class="flex items-center p-2 border-b cursor-pointer"
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
       >
+        <!---->
+         
         <!---->
       </div>
     </div>
     <div
-      class="hover:bg-crisiscleanup-light-grey"
+      class="hover:bg-crisiscleanup-light-grey sm:border-b"
       style="display: grid; grid-template-columns: 35px 0.5fr 1.5fr;"
     >
       <div
-        class="flex items-center p-2 border-b"
+        class="flex items-center p-2 lg:border-b md:border-b"
       >
         <label
           class="checkbox-container mb-5"
@@ -240,13 +252,17 @@ exports[`Table should render correctly with selection 1`] = `
       </div>
        
       <div
-        class="flex items-center p-2 border-b cursor-pointer"
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
       >
+        <!---->
+         
         <!---->
       </div>
       <div
-        class="flex items-center p-2 border-b cursor-pointer"
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
       >
+        <!---->
+         
         <!---->
       </div>
     </div>

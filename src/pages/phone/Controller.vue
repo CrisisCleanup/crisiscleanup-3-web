@@ -37,6 +37,7 @@
                   :data-prefill="prefillData"
                   @savedWorksite="savedWorksite"
                   @closeWorksite="closeWorksite"
+                  style="grid-template-rows: auto;"
                 />
               </template>
               <template #resources>

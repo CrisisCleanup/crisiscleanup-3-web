@@ -57,12 +57,11 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
+import VueMq from 'vue-mq';
 import VueRouterMultiView from 'vue-router-multi-view';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
-
-library.add(fas);
 
 // Base Components
 Vue.component('base-link', BaseLink);
@@ -98,6 +97,17 @@ Vue.use(VueClipboard);
 Vue.use(VueAxios, axios);
 momentWithDurations(moment);
 Vue.use(require('vue-moment'), { moment });
+Vue.use(VueMq, {
+  breakpoints: {
+    sm: 640,
+    md: 768,
+    lg: 1024,
+    xl: 1280,
+  },
+  defaultBreakpoint: 'sm',
+});
+
+library.add(fas);
 Vue.use(VueRouterMultiView);
 
 Vue.use(Toasted, {

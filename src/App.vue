@@ -45,6 +45,11 @@ body {
   @apply text-sm font-light;
 }
 
+#app {
+  height: 100vh;
+  width: 100vw;
+}
+
 .interactive-tooltip {
   display: block !important;
   z-index: 10000;

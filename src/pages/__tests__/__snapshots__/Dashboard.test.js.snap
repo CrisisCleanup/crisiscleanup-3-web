@@ -278,7 +278,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="p-4"
         >
           <div
-            class="table w-full"
+            class="table-grid w-full"
           >
             <div
               class="header text-crisiscleanup-grey-700 bg-white"
@@ -355,40 +355,48 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <!---->
                
               <div
-                class="hover:bg-crisiscleanup-light-grey"
+                class="hover:bg-crisiscleanup-light-grey sm:border-b"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex"
@@ -415,40 +423,48 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey"
+                class="hover:bg-crisiscleanup-light-grey sm:border-b"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex"
@@ -475,40 +491,48 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey"
+                class="hover:bg-crisiscleanup-light-grey sm:border-b"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex"
@@ -535,40 +559,48 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey"
+                class="hover:bg-crisiscleanup-light-grey sm:border-b"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex"
@@ -595,40 +627,48 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey"
+                class="hover:bg-crisiscleanup-light-grey sm:border-b"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex"
@@ -655,40 +695,48 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey"
+                class="hover:bg-crisiscleanup-light-grey sm:border-b"
                 style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex flex-wrap w-full"
                   />
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
+                  <!---->
+                   
                   <!---->
                 </div>
                 <div
-                  class="flex items-center p-2 border-b cursor-pointer"
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
                   <div
                     class="flex"
@@ -773,7 +821,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="p-4"
         >
           <div
-            class="table w-full"
+            class="table-grid w-full"
           >
             <div
               class="header text-crisiscleanup-grey-700 bg-white"

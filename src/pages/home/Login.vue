@@ -53,4 +53,17 @@ export default {
     }
   }
 }
+
+@media only screen and (max-width: 640px) {
+  .homegrid {
+    height: 100vh;
+    &.grid-container {
+      grid-template-areas:
+        'logo'
+        'main'
+        'actions';
+      grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
+    }
+  }
+}
 </style>

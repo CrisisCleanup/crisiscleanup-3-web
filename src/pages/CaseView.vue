@@ -1,5 +1,5 @@
 <template>
-  <div v-if="worksite" class="bg-white flex flex-col flex-grow">
+  <div v-if="worksite" class="bg-white flex flex-col intake-view-container">
     <div class="flex p-1">
       <flag
         v-for="flag in worksite.flags"
@@ -642,7 +642,6 @@ export default {
 
 <style scoped>
 .intake-view {
-  height: 600px;
   overflow: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -687,5 +686,10 @@ export default {
   word-wrap: break-word;
   overflow: hidden;
   max-height: 5em;
+}
+
+.intake-view-container {
+  display: grid;
+  grid-template-rows: auto calc(100vh - 265px) 80px;
 }
 </style>

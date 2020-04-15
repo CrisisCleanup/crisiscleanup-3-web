@@ -2,13 +2,13 @@
   <div
     class="flex h-full overflow-hidden cases-container-grid"
     :class="{
-      'cases-container-grid--full': !currentWorksite,
+      'cases-container-grid--full': $mq === 'sm',
     }"
   >
-    <div>
+    <div v-if="isCasesOnly || $mq !== 'sm'">
       <div class="cases-grid">
         <div class="p-3 border border-gray-300 card-header bg-white">
-          <div class="flex items-center justify-between">
+          <div class="flex items-center flex-wrap justify-between">
             <div class="flex items-center">
               <div class="flex" style="min-width: 80px;">
                 <ccu-icon
@@ -240,10 +240,7 @@
             </div>
           </div>
         </div>
-        <div
-          class="flex-grow bg-crisiscleanup-light-grey"
-          style="display: grid;"
-        >
+        <div class="flex-grow bg-crisiscleanup-light-grey">
           <template v-if="showingMap">
             <WorksiteMap
               :key="JSON.stringify(currentQuery)"
@@ -367,7 +364,7 @@
           isViewingWorksiteFlag ||
           isNewWorksite)
       "
-      class="flex flex-col h-full shadow-2xl max-w-sm"
+      class="flex flex-col h-full shadow-2xl md:max-w-lg lg:max-w-lg"
       data-cy="worksiteview"
     >
       <div
@@ -712,6 +709,9 @@ export default {
     },
     isNewWorksite() {
       return this.$route.meta.id === 'case_new';
+    },
+    isCasesOnly() {
+      return this.$route.meta.id === 'cases';
     },
     incidents() {
       return Incident.query().orderBy('id', 'desc').get();
@@ -1250,11 +1250,11 @@ export default {
 
 .cases-container-grid--full {
   display: grid;
-  grid-template-columns: 4fr auto;
+  grid-template-columns: auto;
 }
 .cases-grid {
   display: grid;
-  grid-auto-rows: 3.5rem auto;
+  grid-auto-rows: min-content auto;
   @apply h-full;
 }
 </style>

@@ -60,7 +60,7 @@ describe('Cases Page', () => {
       .click()
       .then(() => {
         // Select Items
-        cy.get('.table')
+        cy.get('.table-grid')
           .find('[data-cy="tableview_actionSelect"]')
           .first()
           .find('input')
