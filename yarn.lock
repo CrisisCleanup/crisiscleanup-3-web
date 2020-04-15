@@ -19866,10 +19866,10 @@ void-elements@^2.0.1:
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
 
-vue-autosuggest@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/vue-autosuggest/-/vue-autosuggest-2.0.4.tgz#ef1bc2eeac6f569d9b638d3af727400b34d19677"
-  integrity sha512-hKklFkSy80s9keIcYFlw52NC8kyhaCTV5K2iL2pxL39T8l7i3E4jdeLvz8H21Quix9oDVRO02bJy8GkUF42T/w==
+vue-autosuggest@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/vue-autosuggest/-/vue-autosuggest-2.1.1.tgz#09db0d5cc7ce5747564b9013fa307706c6beacc3"
+  integrity sha512-yolTny/xbDQwyJ4n8w7+hh069yGsvHZRUuuxYuap5SqYkMCrbbavScQ35j2N6l6pChCcRMu5McpHENCKgfg9EA==
 
 vue-axios@^2.1.5:
   version "2.1.5"
