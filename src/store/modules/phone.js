@@ -315,7 +315,7 @@ const actions = {
       aId = await dispatch('getAgent');
     }
     await Agent.api().setDynamicState(aId, state);
-    commit('setAgentState', { newState: state });
+    commit('setAgentState', state);
     ConnectService.setAgentState(state);
   },
   async setAgent({ commit }, agent) {
