@@ -25,7 +25,7 @@ export default {
   components: { IncomingPopup },
   timers: {
     getNextCallback: { time: 60000, autostart: true, repeat: true },
-    syncDynamicState: { time: 15000, autostart: true, repeat: true },
+    syncDynamicState: { time: 20000, autostart: true, repeat: true },
   },
   computed: {
     ...mapGetters('phone', [
