@@ -601,7 +601,7 @@ const actions = {
   },
   async closeContact({
     dispatch,
-    getters: { currentOutbound, caseStatusId, agentOnCall },
+    getters: { currentOutbound, caseStatusId, agentOnCall, agentId },
   }) {
     Log.debug('ending contact...');
     if (!caseStatusId) {
@@ -617,6 +617,11 @@ const actions = {
       Log.debug('agent still on call, hanging up...');
       await dispatch('endCurrentCall');
     } else {
+      await Agent.setDynamicState(
+        agentId,
+        ConnectService.STATES.ROUTABLE,
+        true,
+      );
       dispatch('setCurrentPage', 'dashboard');
     }
   },

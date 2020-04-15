@@ -70,11 +70,12 @@ export default class Agent extends Model {
         } = resp;
         return data;
       },
-      async setDynamicState(id, state) {
+      async setDynamicState(id, state, flush = false) {
         return this.patch(
           `/agents/${id}`,
           {
             state,
+            flush,
             entered_timestamp: new Date().toISOString(),
           },
           { save: false },
