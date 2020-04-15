@@ -103,7 +103,7 @@
           @savedWorksite="clearCase"
           @closeWorksite="clearCase"
           class="border shadow"
-          style="grid-template-rows: auto;"
+          style="grid-template-rows: auto minmax(auto, 600px);"
         />
       </div>
     </div>
