@@ -314,13 +314,7 @@
             <base-text variant="h3">
               {{ $t('adminOrganization.current_capabilities') }}
             </base-text>
-            <div
-              style="
-                display: grid;
-                grid-template-columns: max-content max-content max-content max-content;
-                grid-column-gap: 10px;
-              "
-            >
+            <div style="display: grid; grid-column-gap: 10px;">
               <div class="pr-3" v-for="capability in organization.capabilities">
                 {{ capability | getCapabilityName(capabilities) }}
               </div>
@@ -651,7 +645,7 @@ export default {
           `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
         ),
         capabilities: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities`,
+          `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
         ),
         roleRequests: await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests?organization=${this.$route.params.organization_id}`,
