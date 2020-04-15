@@ -689,7 +689,8 @@ export default {
 }
 
 .intake-view-container {
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
   display: grid;
-  grid-template-rows: auto calc(100vh - 265px) 80px;
+  grid-template-rows: calc(100vh - 265px - var(--safe-area-inset-bottom)) 80px;
 }
 </style>
