@@ -1,6 +1,6 @@
 <template>
   <HomeLayout>
-    <template #grid-overlay>
+    <template #grid-overlay v-if="$mq !== 'sm'">
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
@@ -268,7 +268,7 @@
           </ol>
           <base-button
             size="large"
-            class="px-5 py-2 m-1 self-center w-108 m-auto mb-20"
+            class="px-5 py-2 m-1 self-center md:w-108 lg:w-108 m-auto mb-20 sm:w-full"
             variant="solid"
             :text="$t('actions.sign_up')"
             :action="register"
@@ -397,5 +397,21 @@ export default {
 
 .activities-checkbox {
   @apply pl-12 my-6;
+}
+
+@media only screen and (max-width: 640px) {
+  .homegrid {
+    height: 100vh;
+    &.grid-container {
+      grid-template-areas:
+        'logo'
+        'main';
+      grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
+    }
+  }
+
+  .form-field {
+    @apply w-full;
+  }
 }
 </style>

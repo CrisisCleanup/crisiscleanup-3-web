@@ -58,7 +58,7 @@ Object {
 
 exports[`Table should render correctly and match snapshot 1`] = `
 <div
-  class="w-full"
+  class="table-grid w-full"
 >
   <div
     class="header text-crisiscleanup-grey-700 bg-white"
@@ -142,7 +142,7 @@ exports[`Table should render correctly and match snapshot 1`] = `
 
 exports[`Table should render correctly with selection 1`] = `
 <div
-  class="w-full"
+  class="table-grid w-full"
 >
   <div
     class="header text-crisiscleanup-grey-700 bg-white"

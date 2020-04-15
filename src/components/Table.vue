@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div class="table-grid w-full">
     <div
       v-if="!hideHeader && $mq !== 'sm'"
       class="header text-crisiscleanup-grey-700 bg-white"
