@@ -20070,6 +20070,11 @@ vue-mq@^1.0.1:
   dependencies:
     json2mq "^0.2.0"
 
+vue-native-websocket@^2.0.14:
+  version "2.0.14"
+  resolved "https://registry.yarnpkg.com/vue-native-websocket/-/vue-native-websocket-2.0.14.tgz#fddb56f9f93d2ecc861486ee3c8f29506ea2a168"
+  integrity sha512-oK8+xG1gmqRs4JngHGwEc4zWoRjsdMB20Sz8pemkh4lW2Vr2676/cDRtd30aGnO2xF7Oxf003wS5JO0kypUsCw==
+
 vue-numeral-filter@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/vue-numeral-filter/-/vue-numeral-filter-1.1.1.tgz#dc717c7d86cb10d2fc370ef992bcac80fb9fc666"

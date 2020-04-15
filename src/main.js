@@ -53,12 +53,13 @@ import Hotjar from 'vue-hotjar';
 import VueI18n from 'vue-i18n';
 import Popover from 'vue-js-popover';
 import * as ModalDialogs from 'vue-modal-dialogs';
+import VueMq from 'vue-mq';
+import VueNativeSocket from 'vue-native-websocket';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import VueRouterMultiView from 'vue-router-multi-view';
 import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
-import VueMq from 'vue-mq';
-import VueRouterMultiView from 'vue-router-multi-view';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -171,6 +172,7 @@ Vue.use(Hotjar, {
   isProduction: process.env.NODE_ENV === 'production',
 });
 
+// Intercept and handle unauthenticated requests
 axios.interceptors.response.use(
   function (response) {
     return response;
@@ -184,6 +186,32 @@ axios.interceptors.response.use(
   },
 );
 
+// Setup websocket
+Vue.use(VueNativeSocket, process.env.VUE_APP_WS_URL, {
+  store,
+  format: 'json',
+  connectManually: true,
+  passToStoreHandler: (eventName, event) => {
+    if (!eventName.startsWith('SOCKET_')) return;
+    window.vue.$log.debug('[WS] incoming message:', eventName, event);
+    let method = 'commit';
+    let target = eventName.toUpperCase();
+    if (event.data) {
+      const {
+        data,
+        namespace,
+        action: { type, name },
+      } = JSON.parse(event.data);
+      target = `${namespace}/${name}`;
+      if (type === 'action') {
+        method = 'dispatch';
+      }
+      window.vue.$store[method](target, data);
+    }
+  },
+});
+
+// Setup i18n
 const getLanguages = async (tags) => {
   const messages = {};
 
