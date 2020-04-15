@@ -364,7 +364,7 @@
           isViewingWorksiteFlag ||
           isNewWorksite)
       "
-      class="flex flex-col h-full shadow-2xl md:max-w-sm lg:max-w-sm"
+      class="flex flex-col h-full shadow-2xl md:max-w-lg lg:max-w-lg"
       data-cy="worksiteview"
     >
       <div

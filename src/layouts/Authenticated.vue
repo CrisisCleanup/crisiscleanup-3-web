@@ -8,11 +8,19 @@
           class="sidebar--grid"
           :key="currentUser && currentUser.permissions"
         />
+        <Slide width="150" v-else>
+          <NavMenu
+            :routes="routes"
+            class="flex flex-col text-sm"
+            :key="currentUser && currentUser.permissions"
+          />
+        </Slide>
         <div class="shadow header--grid bg-white">
           <div class="flex justify-between h-full items-center">
             <div class="flex items-center ml-2">
               <div class="h-10 w-10 flex items-center">
                 <DisasterIcon
+                  v-show="$mq !== 'sm'"
                   v-if="currentIncident && currentIncident.incidentImage"
                   :current-incident="currentIncident"
                 />
@@ -99,6 +107,7 @@ import { i18nService } from '@/services/i18n.service';
 import NavMenu from '@/components/navigation/NavMenu';
 import Loader from '@/components/Loader';
 import TermsandConditionsModal from '@/components/TermsandConditionsModal';
+import { Slide } from 'vue-burger-menu';
 import DisasterIcon from '../components/DisasterIcon';
 import PhoneStatus from '../models/PhoneStatus';
 import { hash } from '../utils/promise';
@@ -107,7 +116,7 @@ const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
 export default {
   name: 'Authenticated',
-  components: { DisasterIcon, NavMenu, Loader, TermsandConditionsModal },
+  components: { DisasterIcon, NavMenu, Loader, TermsandConditionsModal, Slide },
   data() {
     return {
       loading: false,
@@ -370,6 +379,7 @@ body {
 
 .layout {
   height: 100vh;
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 8rem auto;
   grid-template-rows: 4.5rem auto;
@@ -380,6 +390,7 @@ body {
 
 .layout.layout--mobile {
   grid-template-columns: auto !important;
+  grid-template-rows: 4.5rem auto 1px;
   grid-template-areas:
     'header'
     'main';
@@ -395,5 +406,30 @@ body {
 
 .main--grid {
   grid-area: main;
+}
+
+.bm-burger-button {
+  cursor: pointer;
+  height: 20px;
+  left: 15px;
+  position: absolute;
+  top: 30px;
+  width: 25px;
+}
+
+.bm-item-list > * {
+  display: flex;
+  padding: 0;
+  text-decoration: none;
+}
+
+.bm-item-list {
+  margin-left: 0;
+}
+
+.bm-menu {
+  z-index: 1005;
+  padding-top: 0;
+  background-color: #2d2d2d;
 }
 </style>

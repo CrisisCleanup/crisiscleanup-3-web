@@ -2,10 +2,10 @@
   <form
     v-if="ready"
     ref="form"
-    class="bg-white flex flex-col flex-grow w-full"
+    class="bg-white flex flex-col flex-grow w-full intake-form-container"
     @submit.prevent
   >
-    <div class="intake-form flex-grow">
+    <div class="intake-form">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
@@ -881,8 +881,13 @@ export default {
   margin: 0;
 }
 
+.intake-form-container {
+  display: grid;
+  grid-template-rows: calc(100vh - 256px) 80px;
+}
+
 .intake-form {
-  height: 600px;
+  /*height: 600px;*/
   overflow: scroll;
   scrollbar-width: none;
   -ms-overflow-style: none;
