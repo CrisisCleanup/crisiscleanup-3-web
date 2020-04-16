@@ -103,12 +103,12 @@ export default {
     trainings() {
       return [
         {
-          imagePath: require('@/assets/newstrainingss.jpg'),
+          imagePath: require('@/assets/crisiscleanuphand_training.png'),
           description: this.$t(' ~~Crisis Cleanup Basic Training'),
           timeToComplete: this.$t('~~10 minutes'),
         },
         {
-          imagePath: require('@/assets/newstrainingss.jpg'),
+          imagePath: require('@/assets/crisiscleanupphone_training.png'),
           description: this.$t('~~Phone System Basic Training'),
           timeToComplete: this.$t('~~15 minutes'),
         },
