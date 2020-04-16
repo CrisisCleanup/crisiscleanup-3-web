@@ -17,7 +17,7 @@
           </base-text>
         </header>
         <div class="flex">
-          <div class="flex-col ml-3 w-1/4">
+          <div class="flex-col ml-3 w-1/4 mt-5 mr-3">
             <img
               src="@/assets/call_center_people.png"
               width="100%"
@@ -36,19 +36,21 @@
           </div>
         </div>
         <template v-if="trainings.length">
-          <trainings-card
-            v-for="(training, idx) in trainings"
-            :key="idx"
-            :image-path="training.imagePath"
-            :description="training.title_t"
-            :time-to-complete="training.settings.completion_seconds"
-            :completed="isTrainingCompleted(training)"
-            @onTrainingSelected="
-              () => {
-                selectedTraining = training;
-              }
-            "
-          ></trainings-card>
+          <div class="shadow m-5">
+            <trainings-card
+              v-for="(training, idx) in trainings"
+              :key="idx"
+              :image-path="training.imagePath"
+              :description="training.title_t"
+              :time-to-complete="training.settings.completion_seconds"
+              :completed="isTrainingCompleted(training)"
+              @onTrainingSelected="
+                () => {
+                  selectedTraining = training;
+                }
+              "
+            ></trainings-card>
+          </div>
         </template>
         <!-- Footer -->
         <div class="flex justify-around mt-10"></div>
