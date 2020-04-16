@@ -16,8 +16,8 @@
             {{ lang.header.text }}
           </base-text>
         </header>
-        <div class="flex">
-          <div class="flex-col ml-3 w-1/4 mt-5 mr-3">
+        <div class="flex m-3">
+          <div class="flex-col ml-2 w-1/4 mt-5">
             <img
               src="@/assets/call_center_people.png"
               width="100%"
@@ -25,7 +25,7 @@
               alt="~~Call Center Users"
             />
           </div>
-          <div class="flex-col m-3 my-8 items-center w-3/4">
+          <div class="flex-col ml-3 mr-3 mt-5 my-8 items-center w-3/4">
             <!-- Greeting -->
             <base-text weight="900" variant="h1" class="ml-3 mr-3">
               {{ lang.subHeader.text }}
