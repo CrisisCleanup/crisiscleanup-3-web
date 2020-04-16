@@ -191,11 +191,15 @@ Vue.use(VueNativeSocket, process.env.VUE_APP_WS_URL, {
   store,
   format: 'json',
   connectManually: true,
+  reconnection: true, // auto reconnect (after initial connection)
   passToStoreHandler: (eventName, event) => {
     if (!eventName.startsWith('SOCKET_')) return;
     window.vue.$log.debug('[WS] incoming message:', eventName, event);
     let method = 'commit';
     let target = eventName.toUpperCase();
+    if (target === 'SOCKET_ONOPEN') {
+      window.vue.$store.dispatch('socket/setConnected', { connected: true });
+    }
     if (event.data) {
       const {
         data,

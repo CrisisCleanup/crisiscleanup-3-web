@@ -12,6 +12,7 @@ import loading from './modules/loading';
 import locale from './modules/locale';
 import phone from './modules/phone';
 import rc from './modules/rc';
+import socket from './modules/socket';
 
 VuexORM.use(VuexORMAxios, {
   axios,
@@ -36,6 +37,7 @@ export default new Vuex.Store({
     phone,
     enums,
     rc,
+    socket,
   },
   plugins: [VuexORM.install(database)],
   strict: debug,
