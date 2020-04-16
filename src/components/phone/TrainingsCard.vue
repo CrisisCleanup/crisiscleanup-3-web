@@ -10,8 +10,11 @@
         <base-text variant="bodysm" class="justify-between">
           {{ description }}
         </base-text>
-        <div class="flex flex-row justify-between">
-          <div class="flex-col">
+        <div class="flex flex-row justify-start">
+          <div class="flex flex-col">
+            <img src="@/assets/tempclockicon.jpg" class="h-5" />
+          </div>
+          <div class="flex flex-col">
             <!--- Date --->
             <base-text
               variant="bodysm"
