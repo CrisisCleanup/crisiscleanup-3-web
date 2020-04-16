@@ -314,7 +314,6 @@ const actions = {
     if (!aId) {
       aId = await dispatch('getAgent');
     }
-    await Agent.api().setDynamicState(aId, state);
     commit('setAgentState', state);
     ConnectService.setAgentState(state);
   },
