@@ -112,7 +112,7 @@ export const setPopup = ({ open } = { open: true }) => {
   return true;
 };
 
-export const STATES = {
+export const STATES = Object.freeze({
   OFFLINE: connect.AgentStateType.OFFLINE,
   ROUTABLE: connect.AgentStateType.ROUTABLE,
   INCOMING: connect.ContactStateType.INCOMING,
@@ -126,9 +126,9 @@ export const STATES = {
   ON_CALL: 'Busy',
   PAUSED: 'AfterCallWork',
   STATIC: 'static',
-};
+});
 
-export const METRICS = {
+export const METRICS = Object.freeze({
   ONLINE: 'agentsOnline',
   STAFFED: 'agentsStaffed',
   CONTACTS_QUEUED: 'contactsInQueue',
@@ -138,7 +138,7 @@ export const METRICS = {
   AGENTS_ON_CALL: 'agentsOnCall',
   NEEDED: 'agentsNeeded',
   TOTAL_WAITING: 'totalWaiting',
-};
+});
 
 export const getAgent = () => new connect.Agent();
 
