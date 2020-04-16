@@ -187,7 +187,8 @@ axios.interceptors.response.use(
 );
 
 // Setup websocket
-Vue.use(VueNativeSocket, process.env.VUE_APP_WS_URL, {
+const WS_URL = process.env.WS_URL || 'wss://socket.dev.crisiscleanup.io';
+Vue.use(VueNativeSocket, WS_URL, {
   store,
   format: 'json',
   connectManually: true,
