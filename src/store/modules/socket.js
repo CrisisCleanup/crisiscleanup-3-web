@@ -35,6 +35,14 @@ const actions = {
   async setConnected({ commit }, { connected }) {
     commit(types.SET_CONNECTED, connected);
   },
+  async connect({ commit, getters: { connected } }) {
+    if (connected) {
+      Log.debug('socket already connected!');
+      return;
+    }
+    await window.vue.$connect();
+    commit(types.SET_CONNECTED, connected);
+  },
   async send({ getters: { connected } }, data) {
     if (!connected) {
       Log.debug('not connected!');
