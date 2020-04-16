@@ -309,18 +309,43 @@ const actions = {
     ConnectService.setPopup({ open: state });
     commit('setPopupState', state);
   },
-  async setAgentState({ commit, dispatch, getters: { agentId } }, state) {
+  async setAgentState(
+    { commit, dispatch, getters: { agentState, agentId } },
+    state,
+  ) {
+    Log.debug('SETTING AGENT STATE:', state);
     let aId = agentId;
     if (!aId) {
       aId = await dispatch('getAgent');
     }
+    let newState = state;
+    if (typeof newState === 'object') {
+      // websocket support for legacy param
+      newState = state.state;
+    }
+    if (state && state !== null && state !== agentState) {
+      await dispatch(
+        'socket/send',
+        {
+          action: 'SET_AGENT_STATE',
+          options: {
+            includeMeta: true,
+          },
+          data: {
+            agentId: aId,
+            agentState: state,
+          },
+        },
+        { root: true },
+      );
+    }
     commit('setAgentState', state);
-    ConnectService.setAgentState(state);
+    await ConnectService.setAgentState(state);
   },
   async setAgent({ commit }, agent) {
     commit('setAgent', agent);
   },
-  async getAgent({ commit, rootState }) {
+  async getAgent({ commit, dispatch, rootState }) {
     const userAgent = {
       user: {
         id: rootState.auth.user.user_claims.id,
@@ -329,6 +354,11 @@ const actions = {
     };
     const agent = await Agent.api().fetch(userAgent);
     commit('setAgent', agent);
+    await dispatch(
+      'socket/send',
+      { action: 'getAgentState', data: { agentId: agent.agent_id } },
+      { root: true },
+    );
     return agent.agent_id;
   },
   async syncDynamicState({

@@ -142,10 +142,10 @@ export const METRICS = {
 
 export const getAgent = () => new connect.Agent();
 
-export const setAgentState = (state) => {
+export const setAgentState = async (state) => {
   const agent = getAgent();
   const stateDef = agent.getAgentStates().find((s) => s.type === state);
-  agent.setState(stateDef);
+  await agent.setState(stateDef);
   return state;
 };
 
