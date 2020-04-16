@@ -27,7 +27,7 @@
           </div>
           <div class="flex-col m-3 my-8 items-center w-3/4">
             <!-- Greeting -->
-            <base-text weight="900" class="ml-3 mr-3">
+            <base-text weight="900" variant="h1" class="ml-3 mr-3">
               {{ lang.subHeader.text }}
             </base-text>
             <base-text class="m-3">
