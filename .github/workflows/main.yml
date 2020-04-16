@@ -29,7 +29,7 @@ env:
   VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
   VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
   VUE_APP_BASE_URL: 'https://app.dev.crisiscleanup.io'
-  VUE_APP_WS_URL: 'wss://socket.dev.crisiscleanup.io'
+  VUE_APP_WS_URL: 'wss://uk2mehr7w8.execute-api.us-east-1.amazonaws.com/dev'
   VUE_APP_AWS_CCP_REGION: 'us-east-1'
   VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccudev'
   VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUDevConnectRole'
@@ -162,10 +162,10 @@ jobs:
         env:
           VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
           VUE_APP_BASE_URL: 'https://app.staging.crisiscleanup.io'
-          VUE_APP_WS_URL: 'wss://socket.staging.crisiscleanup.io'
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccustaging'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUStagingConnectRole'
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
+          VUE_APP_WS_URL: 'wss://uk2mehr7w8.execute-api.us-east-1.amazonaws.com/dev'
         run: yarn deploy-staging
 
       - name: Deploy Production
@@ -173,7 +173,7 @@ jobs:
         env:
           VUE_APP_API_BASE_URL: 'https://api.crisiscleanup.org'
           VUE_APP_BASE_URL: 'https://crisiscleanup.org'
-          VUE_APP_WS_URL: 'wss://socket.crisiscleanup.org'
+          VUE_APP_WS_URL: 'wss://uk2mehr7w8.execute-api.us-east-1.amazonaws.com/dev'
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccuproduction'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUProductionConnectRole'
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}

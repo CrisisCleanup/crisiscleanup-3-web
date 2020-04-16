@@ -120,7 +120,7 @@ export const STATES = Object.freeze({
   CONNECTED: connect.ContactStateType.CONNECTED,
   AGENT_PENDING: connect.ContactStateType.PENDING,
   AGENT_CALLING: 'CallingCustomer',
-  DISCONNECTED: connect.ContactStateType.DISCONNECTED,
+  DISCONNECTED: connect.ContactStateType.ENDED,
   PENDING_CALL: 'PendingBusy',
   POLLING: 'polling',
   ON_CALL: 'Busy',
