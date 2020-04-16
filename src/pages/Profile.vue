@@ -27,7 +27,7 @@
             <ccu-icon
               :alt="$t('actions.edit')"
               size="small"
-              class="p-1 py-2"
+              class="p-1 py-2 bg-crisiscleanup-yellow-200"
               type="edit"
               @click.native="mode = 'edit'"
             />
