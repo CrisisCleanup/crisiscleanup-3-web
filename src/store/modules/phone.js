@@ -265,7 +265,9 @@ const actions = {
     ConnectService.bindAgentEvents({
       onRefresh: async (agent) => {
         if (!state.connectRunning) {
-          Log.debug('got initial agent agent!');
+          Log.debug('got initial agent!');
+          // Connect to web socket
+          await dispatch('socket/connect', null, { root: true });
           const agentConfig = await agent.getConfiguration();
           Log.debug('got agent config: ', agentConfig);
           commit('setConnectState', {
@@ -323,7 +325,7 @@ const actions = {
       // websocket support for legacy param
       newState = state.state;
     }
-    if (state && state !== null && state !== agentState) {
+    if (newState && newState !== null && newState !== agentState) {
       await dispatch(
         'socket/send',
         {
@@ -333,14 +335,14 @@ const actions = {
           },
           data: {
             agentId: aId,
-            agentState: state,
+            agentState: newState,
           },
         },
         { root: true },
       );
     }
-    commit('setAgentState', state);
-    await ConnectService.setAgentState(state);
+    commit('setAgentState', newState);
+    await ConnectService.setAgentState(newState);
   },
   async setAgent({ commit }, agent) {
     commit('setAgent', agent);
@@ -356,7 +358,7 @@ const actions = {
     commit('setAgent', agent);
     await dispatch(
       'socket/send',
-      { action: 'getAgentState', data: { agentId: agent.agent_id } },
+      { action: 'GET_AGENT_STATE', data: { agentId: agent.agent_id } },
       { root: true },
     );
     return agent.agent_id;
