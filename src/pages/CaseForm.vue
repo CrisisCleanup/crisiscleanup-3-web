@@ -294,6 +294,7 @@
 import * as turf from '@turf/turf';
 import * as moment from 'moment';
 import { create } from 'vue-modal-dialogs';
+import { sortBy } from 'lodash';
 import Worksite from '@/models/Worksite';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
@@ -392,7 +393,7 @@ export default {
     fieldTree() {
       if (this.currentIncident && this.currentIncident.form_fields) {
         const formFields = this.currentIncident.form_fields;
-        return nest(formFields);
+        return sortBy(nest(formFields), (o) => o.list_order);
       }
       return {};
     },
