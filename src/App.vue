@@ -17,9 +17,10 @@
 <script>
 import '@crisiscleanup/amazon-connect-streams';
 import '@crisiscleanup/connect-rtc';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 import CCP from '@/components/phone/CCP.vue';
 import Version from '@/components/Version.vue';
+import { hash } from '@/utils/promise';
 import PhoneLegacy from './pages/phone_legacy/Index';
 
 const defaultLayout = 'authenticated';
@@ -34,6 +35,32 @@ export default {
   methods: {
     ...mapActions('auth', ['login', 'logout']),
     ...mapGetters('auth', ['isLoggedIn']),
+    ...mapMutations('enums', ['setStatuses', 'setWorkTypes']),
+    async getEnums() {
+      const enums = await hash({
+        statuses: this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/statuses`,
+          {
+            headers: {
+              Authorization: null,
+            },
+          },
+        ),
+        workTypes: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/work_types`,
+          {
+            headers: {
+              Authorization: null,
+            },
+          },
+        ),
+      });
+      this.setStatuses(enums.statuses.data.results);
+      this.setWorkTypes(enums.workTypes.data.results);
+    },
+  },
+  async mounted() {
+    await this.getEnums();
   },
 };
 </script>

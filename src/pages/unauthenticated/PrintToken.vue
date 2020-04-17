@@ -83,7 +83,6 @@
 
 <script>
 import HomeLayout from '@/layouts/Home';
-import { mapMutations } from 'vuex';
 import StatusDropDown from '../../components/StatusDropDown';
 import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
@@ -93,28 +92,28 @@ export default {
   name: 'PrintToken',
   async mounted() {
     this.loading = true;
-    const workTypesResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/work_types`,
-    );
-    const statusResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/statuses`,
-    );
-
-    this.setStatuses(statusResponse.data.results);
-    this.setWorkTypes(workTypesResponse.data.results);
-
-    const response = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
-    );
-    this.printToken = response.data;
-    this.loading = false;
+    try {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
+        {
+          headers: {
+            Authorization: null,
+          },
+        },
+      );
+      this.printToken = response.data;
+    } catch (error) {
+      await this.$toasted.error(getErrorMessage(error));
+      this.$log.debug(error);
+    } finally {
+      this.loading = false;
+    }
   },
   computed: {
     fullAddress() {
       const { address, city, state, postal_code } = this.printToken;
       return `${address}, ${city}, ${state} ${postal_code}`;
     },
-    ...mapMutations('enums', ['setStatuses', 'setWorkTypes']),
   },
   methods: {
     async save() {
@@ -128,6 +127,11 @@ export default {
         await this.$http.patch(
           `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
           data,
+          {
+            headers: {
+              Authorization: null,
+            },
+          },
         );
         await this.$toasted.success(this.$t('printToken.success_update_case'));
       } catch (error) {

@@ -110,7 +110,6 @@ import TermsandConditionsModal from '@/components/TermsandConditionsModal';
 import { Slide } from 'vue-burger-menu';
 import DisasterIcon from '../components/DisasterIcon';
 import PhoneStatus from '../models/PhoneStatus';
-import { hash } from '../utils/promise';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
@@ -223,7 +222,6 @@ export default {
       PhoneStatus.api().get('/phone_statuses', {
         dataKey: 'results',
       }),
-      this.getEnums(),
     ]);
     await this.setupLanguage();
     this.setAcl(this.$router);
@@ -267,18 +265,6 @@ export default {
     this.ready = true;
   },
   methods: {
-    async getEnums() {
-      const enums = await hash({
-        statuses: this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/statuses`,
-        ),
-        workTypes: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/work_types`,
-        ),
-      });
-      this.setStatuses(enums.statuses.data.results);
-      this.setWorkTypes(enums.workTypes.data.results);
-    },
     async handleChange(value) {
       this.ready = false;
       await Incident.api().fetchById(value);
