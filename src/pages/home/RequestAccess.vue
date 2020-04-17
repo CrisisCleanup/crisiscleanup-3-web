@@ -104,14 +104,17 @@
             :placeholder="$t('invitationSignup.pw2_placeholder')"
             required
           />
-          <base-button
-            variant="outline"
+          <form-select
+            class="input border border-crisiscleanup-dark-100"
             size="large"
-            class="px-5 py-2 m-1 flex-grow"
-            ccu-icon="down"
-          >
-            Primary Language
-          </base-button>
+            :value="currentLanguage"
+            :options="languages"
+            item-key="id"
+            label="name_t"
+            :placeholder="$t('~~Primary Language')"
+            select-classes="bg-white border text-xs p-1 profile-select"
+            @input="(value) => (primaryLanguage = value)"
+          />
           <base-button
             size="large"
             class="px-5 py-2 m-1 flex-grow"
@@ -166,6 +169,7 @@
 <script>
 import HomeLayout from '@/layouts/Home';
 import InvitationRequest from '@/models/InvitationRequest';
+import Language from '@/models/Language';
 import { getErrorMessage } from '@/utils/errors';
 
 export default {
@@ -186,11 +190,22 @@ export default {
           password2: this.confirmPassword,
           mobile: this.mobile,
           requested_to: this.requestedTo,
+          primary_language: this.primaryLanguage,
         });
         this.showSuccessModal = true;
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
+    },
+  },
+  async mounted() {
+    await Language.api().get('/languages', {
+      dataKey: 'results',
+    });
+  },
+  computed: {
+    languages() {
+      return Language.all();
     },
   },
   data() {
@@ -204,6 +219,7 @@ export default {
       requestedTo: '',
       showSuccessModal: false,
       toggleOpen: false,
+      primaryLanguage: null,
     };
   },
 };

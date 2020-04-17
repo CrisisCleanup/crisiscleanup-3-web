@@ -131,11 +131,7 @@
               :alt="$t('actions.delete_invitation')"
               type="trash"
               size="small"
-              @click.native="
-                () => {
-                  deleteInvitation(slotProps.item);
-                }
-              "
+              @click.native="() => deleteInvitation(slotProps.item)"
             />
           </div>
         </template>
