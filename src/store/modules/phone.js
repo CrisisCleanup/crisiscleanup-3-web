@@ -267,7 +267,7 @@ const actions = {
         if (!state.connectRunning) {
           Log.debug('got initial agent!');
           // Connect to web socket
-          await dispatch('socket/connect', null, { root: true });
+          await dispatch('socket/connect', {}, { root: true });
           const agentConfig = await agent.getConfiguration();
           Log.debug('got agent config: ', agentConfig);
           commit('setConnectState', {
@@ -358,7 +358,11 @@ const actions = {
     commit('setAgent', agent);
     await dispatch(
       'socket/send',
-      { action: 'GET_AGENT_STATE', data: { agentId: agent.agent_id } },
+      {
+        action: 'GET_AGENT_STATE',
+        options: { includeMeta: true },
+        data: { agentId: agent.agent_id },
+      },
       { root: true },
     );
     return agent.agent_id;
@@ -632,7 +636,7 @@ const actions = {
   },
   async closeContact({
     dispatch,
-    getters: { currentOutbound, caseStatusId, agentOnCall, agentId },
+    getters: { currentOutbound, caseStatusId, agentOnCall },
   }) {
     Log.debug('ending contact...');
     if (!caseStatusId) {
@@ -648,11 +652,6 @@ const actions = {
       Log.debug('agent still on call, hanging up...');
       await dispatch('endCurrentCall');
     } else {
-      await Agent.setDynamicState(
-        agentId,
-        ConnectService.STATES.ROUTABLE,
-        true,
-      );
       dispatch('setCurrentPage', 'dashboard');
     }
   },
