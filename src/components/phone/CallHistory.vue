@@ -83,15 +83,28 @@ export default {
 <style scoped>
 .table {
   display: grid;
-  grid-template-columns: minmax(150px, 1.33fr) minmax(150px, 2.33fr);
+  min-width: 100vw;
+  width: auto;
+  flex: 1;
+  border-collapse: collapse;
+  grid-template-columns:
+    minmax(150px, 3.33fr)
+    minmax(150px, 1.67fr)
+    minmax(150px, 1.67fr)
+    minmax(150px, 3.33fr)
+    minmax(150px, 1fr);
 }
 th {
-  position: sticky;
+  /* position: sticky;
   top: 0;
   text-align: left;
   font-weight: normal;
   position: relative;
-  padding: 5px;
+  padding: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; */
+  padding: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
