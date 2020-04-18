@@ -43,3 +43,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* tab selection colors */
+.tab-btn {
+  padding: 6px 10px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  border: 2px;
+  outline: none;
+}
+.active {
+  border-bottom: 3px solid #ffb92f;
+}
+</style>
