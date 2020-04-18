@@ -20,13 +20,21 @@
         </td>
         <td>
           <!-- {{ notes }} -->
-          <base-text variant="bodysm" weight="300"
+          <base-text
+            variant="bodysm"
+            weight="300"
+            class="text-crisiscleanup-dark-300"
             >Lorem ipsum adshnasdsoih alsdfgnx ad aldsk asdiigh</base-text
           >
         </td>
         <td>
           <!-- {{ callCompleted }} -->
-          <base-text variant="bodysm" weight="300">10 mins ago</base-text>
+          <base-text
+            variant="bodysm"
+            weight="300"
+            class="text-crisiscleanup-dark-300"
+            >10 mins ago</base-text
+          >
         </td>
       </tr>
     </table>
