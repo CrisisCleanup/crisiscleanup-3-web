@@ -2,11 +2,51 @@
   <div>
     <table>
       <tr>
-        <th>Phone Number</th>
-        <th>Case #</th>
-        <th>Call Status</th>
-        <th>Notes</th>
-        <th>Call Completed</th>
+        <th>
+          <base-text
+            variant="bodysm"
+            weight="900"
+            class="text-crisiscleanup-dark-300"
+          >
+            Phone Number
+          </base-text>
+        </th>
+        <th>
+          <base-text
+            variant="bodysm"
+            weight="900"
+            class="text-crisiscleanup-dark-300"
+          >
+            Case #
+          </base-text>
+        </th>
+        <th>
+          <base-text
+            variant="bodysm"
+            weight="900"
+            class="text-crisiscleanup-dark-300"
+          >
+            Call Status
+          </base-text>
+        </th>
+        <th>
+          <base-text
+            variant="bodysm"
+            weight="900"
+            class="text-crisiscleanup-dark-300"
+          >
+            Notes
+          </base-text>
+        </th>
+        <th>
+          <base-text
+            variant="bodysm"
+            weight="900"
+            class="text-crisiscleanup-dark-300"
+          >
+            Call Completed
+          </base-text>
+        </th>
       </tr>
     </table>
     <call-summary
@@ -43,5 +83,17 @@ export default {
 <style scoped>
 .table {
   display: grid;
+  grid-template-columns: minmax(150px, 1.33fr) minmax(150px, 2.33fr);
+}
+th {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  font-weight: normal;
+  position: relative;
+  padding: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>
