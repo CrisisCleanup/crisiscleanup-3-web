@@ -44,12 +44,18 @@
             </div>
           </div>
         </div>
-        <iframe
-          class="border"
-          src="https://portal.vacd.biz/agent/#/login"
-          width="100%"
-          height="100%"
-        ></iframe>
+        <!--        <iframe-->
+        <!--          class="border"-->
+        <!--          src="https://portal.vacd.biz/agent/#/login"-->
+        <!--          width="100%"-->
+        <!--          height="100%"-->
+        <!--        ></iframe>-->
+        <div>
+          <base-button :action="login" text="Login"></base-button>
+          <base-button :action="callMe" text="Call me"></base-button>
+          <div v-if="callState">Call State: {{ callState }}</div>
+          <div v-if="callState">Current Call: {{ call }}</div>
+        </div>
       </div>
       <div class="side-grid" v-if="$route.meta.id === 'caller'">
         <div class="p-2 border shadow flex flex-col" v-if="nextOutbound">
@@ -93,7 +99,7 @@
           </base-button>
         </div>
         <case-form
-          :incident-id="currentIncidentId"
+          :incident-id="Number(currentIncidentId)"
           :pda-id="currentType === 'pda' ? caseId : null"
           :worksite-id="currentType === 'worksite' ? caseId : null"
           :key="caseId"
@@ -117,19 +123,33 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneStatus from '@/models/PhoneStatus';
 import Worksite from '@/models/Worksite';
+import User from '@/models/User';
 import Pda from '@/models/Pda';
 import { AgentMixin, WorksitesMixin } from '@/mixins';
 import CaseCard from '@/components/cards/case/CaseCard';
+import Logger from '@/utils/log';
 import CaseForm from '../CaseForm';
+import PhoneService from '../../services/phone.service';
+
+const Log = Logger({
+  name: 'phoneLegacy',
+  middlewares: [
+    (result) => {
+      result.unshift('[phoneLegacy] ');
+      return result;
+    },
+  ],
+});
 
 export default {
   name: 'PhoneLegacy',
   components: { CaseCard, CaseForm },
   mixins: [AgentMixin, WorksitesMixin],
+
   data() {
     return {
       nextOutbound: null,
@@ -140,12 +160,26 @@ export default {
       currentType: null,
       status: null,
       iframeLoading: true,
+      socket: null,
+      incomingCall: null,
+      currentCall: null,
     };
   },
   async mounted() {
+    this.service = new PhoneService();
     await this.getNextCall();
   },
   methods: {
+    ...mapMutations('phone_legacy', ['setCurrentAgentId']),
+    async login() {
+      if (this.currentAgentId) {
+        await this.service.logout(this.currentAgentId);
+      }
+      await this.service.login();
+    },
+    callMe() {
+      this.service.dial('2512107756');
+    },
     setCase(caseObject) {
       this.caseId = caseObject.id;
       this.currentType = caseObject.type;
@@ -206,6 +240,10 @@ export default {
   },
   computed: {
     ...mapState('incident', ['currentIncidentId']),
+    ...mapState('phone_legacy', ['currentAgentId', 'callState', 'call']),
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
+    },
     statuses() {
       return PhoneStatus.all();
     },

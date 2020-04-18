@@ -6,6 +6,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import database from './database';
 import auth from './modules/auth';
+import phone_legacy from './modules/phone_legacy';
 import enums from './modules/enums';
 import incident from './modules/incident';
 import loading from './modules/loading';
@@ -38,6 +39,7 @@ export default new Vuex.Store({
     enums,
     rc,
     socket,
+    phone_legacy,
   },
   plugins: [VuexORM.install(database)],
   strict: debug,
