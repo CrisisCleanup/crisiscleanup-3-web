@@ -62,21 +62,4 @@ td {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-/* .atttribute-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(var(--column-width-min), 1fr));
-}
-.part-id {
-  --column-width-min: 10em;
-}
-.attribute {
-  display: grid;
-  grid-template-columns: minmax(9em, 30%) 1fr;
-}
-.attribute::before {
-  content: attr(data-name);
-}
-.collection-container > li:first-child {
-  display: none;
-} */
 </style>
