@@ -9,6 +9,7 @@ export const AgentMixin = {
     ...mapActions('phone', [
       'setCaseStatus',
       'setCurrentPage',
+      'setCurrentCase',
       'setContactState',
       'addCases',
       'setResolved',

@@ -104,6 +104,12 @@
           @closeWorksite="clearCase"
           class="border shadow"
           style="grid-template-rows: 600px 80px;"
+          @navigateToWorksite="
+            (id) => {
+              currentType = 'worksite';
+              caseId = id;
+            }
+          "
         />
       </div>
     </div>

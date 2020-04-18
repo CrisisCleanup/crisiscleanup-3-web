@@ -38,6 +38,11 @@
                   @savedWorksite="savedWorksite"
                   @closeWorksite="closeWorksite"
                   style="grid-template-rows: 600px 80px;"
+                  @navigateToWorksite="
+                    (id) => {
+                      this.setCurrentCase({ id, type: 'worksite' });
+                    }
+                  "
                 />
               </template>
               <template #resources>
