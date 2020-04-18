@@ -1,5 +1,15 @@
 <template>
   <div class="bg-white shadow-crisiscleanup-card">
+    <!--- Tabs --->
+    <button
+      v-for="tab in tabs"
+      :key="tab"
+      @click="selected = tab"
+      :class="['tab-btn', { active: selected === tab }]"
+      class="m-1"
+    >
+      {{ tab }}
+    </button>
     <!-- Header -->
     <base-text
       variant="h3"
@@ -23,6 +33,13 @@ export default {
   name: 'PeopleStoriesCard',
   components: {
     'i-story': IndividualStoriesCard,
+  },
+  data() {
+    return {
+      tabs: ['Stories from people you helped', 'Last 10 people I talk to'],
+      selected: 'Training',
+      isShowingTrainingModal: false,
+    };
   },
 };
 </script>
