@@ -7,10 +7,15 @@
       <th>Notes</th>
       <th>Call Completed</th>
     </div>
+    <call-summary />
   </div>
 </template>
 <script>
+import CallSummary from '@/components/phone/CallSummary.vue';
 export default {
   name: 'CallHistory',
+  components: {
+    CallSummary,
+  },
 };
 </script>
