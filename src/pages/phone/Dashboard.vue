@@ -23,6 +23,7 @@
                 <Table :columns="contactsCols" :data="contactMetrics" />
               </div>
             </div>
+            <PeopleStoriesCard class="w-auto" />
           </div>
         </template>
       </phone-layout>
@@ -51,6 +52,7 @@ export default {
 
     'training-card': NewsTrainingCard,
     Leaderboard,
+    PeopleStoriesCard,
   },
   data() {
     return {
