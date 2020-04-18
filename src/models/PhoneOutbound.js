@@ -29,10 +29,12 @@ export default class PhoneOutbound extends Model {
 
   static apiConfig = {
     actions: {
-      async getNextOutbound(incidentId = 199) {
-        const phoneOutbound = await this.get(
-          `/phone_outbound?next=${incidentId}`,
-        );
+      async getNextOutbound({ incidentId = 199, agentId = '' }) {
+        let queryUrl = `/phone_outbound?next=${incidentId}`;
+        if (agentId) {
+          queryUrl = `${queryUrl}&agent=${agentId}`;
+        }
+        const phoneOutbound = await this.get(queryUrl);
         const {
           response: { data },
         } = phoneOutbound;

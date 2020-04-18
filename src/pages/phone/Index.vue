@@ -32,6 +32,7 @@ export default {
       'agentState',
       'callIncoming',
       'currentPage',
+      'currentContactId',
     ]),
     pages() {
       return {
@@ -54,11 +55,18 @@ export default {
       this.$log.debug('checking next callback...');
       if (
         !this.agentOnCall &&
+        !this.currentContactId &&
         this.connectReady &&
         this.agentState === CCState.ROUTABLE
       ) {
         try {
-          const callback = await PhoneOutbound.api().getNextOutbound();
+          let aId = this.agentId;
+          if (!aId) {
+            aId = await this.$store.dispatch('getAgent');
+          }
+          const callback = await PhoneOutbound.api().getNextOutbound({
+            agentId: aId,
+          });
           this.$log.debug('serving up next callback...', callback);
           PhoneOutbound.api().callOutbound(callback.id);
         } catch (e) {
