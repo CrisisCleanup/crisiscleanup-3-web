@@ -92,8 +92,8 @@ export const initConnect = ({
 };
 
 export const setPopup = ({ open } = { open: true }) => {
-  const loginUrl = `https://cchotline.awsapps.com/auth?client_id=06919f4fd8ed324e&redirect_uri=${global.encodeURIComponent(
-    'https://cchotline.awsapps.com/connect/auth/code',
+  const loginUrl = `https://ccuhotlinedev.awsapps.com/auth?client_id=06919f4fd8ed324e&redirect_uri=${global.encodeURIComponent(
+    'https://ccuhotlinedev.awsapps.com/connect/auth/code',
   )}`;
   if (!open) {
     // clear state (kept in localStorage)
