@@ -110,6 +110,7 @@ const getters = {
   agentOnCall: (state) => state.agentState === ConnectService.STATES.ON_CALL,
   contactState: (state) =>
     state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
+  currentContactId: (state) => (state.contact.id ? state.contact.id : null),
   contactAttributes: (state) =>
     state.contact.attributes ? state.contact.attributes : {},
   callerId: (state) =>
@@ -204,7 +205,9 @@ const getters = {
       ? state.controller.actions.currentKey
       : 'case',
   currentExternalContact: (state) =>
-    state.externalContact.contactId ? state.externalContact : null,
+    state.externalContact && state.externalContact.contactId
+      ? state.externalContact
+      : null,
   currentExternalResource: (state) => {
     if (!state.externalContact) return null;
     if (state.externalContact.resourceId) {
@@ -480,7 +483,10 @@ const actions = {
       }
     }
   },
-  async syncContact({ commit, state, dispatch }, newContact = null) {
+  async syncContact(
+    { commit, state, dispatch, getters: { agentState, agentId } },
+    newContact = null,
+  ) {
     Log.debug('syncing current contact...');
     let contact = newContact;
     if (!newContact) {
@@ -537,6 +543,24 @@ const actions = {
     EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
     dispatch('syncExternalContact');
     commit('setControllerState', { contactId });
+    let aId = agentId;
+    if (!aId) {
+      aId = await dispatch('getAgent');
+    }
+    await dispatch(
+      'socket/send',
+      {
+        action: 'SET_AGENT_STATE',
+        options: {
+          includeMeta: true,
+        },
+        data: {
+          agentId: aId,
+          agentState,
+        },
+      },
+      { root: true },
+    );
     return contact;
   },
   async stashController({ state }) {
@@ -591,7 +615,7 @@ const actions = {
   },
   async endCurrentCall(
     { commit, getters: { currentExternalContact } },
-    { external = false },
+    { external = false } = {},
   ) {
     Log.debug('ending an active call!');
     if (!external) {
