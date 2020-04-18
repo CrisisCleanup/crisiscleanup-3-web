@@ -23,6 +23,7 @@
                 <Table :columns="contactsCols" :data="contactMetrics" />
               </div>
             </div>
+            <PeopleStoriesCard class="w-full" />
           </div>
         </template>
       </phone-layout>
@@ -39,6 +40,7 @@ import Leaderboard from '@/components/phone/Leaderboard.vue';
 import PhoneLayout from '@/layouts/Phone.vue';
 import AgentBlock from '@/components/phone/blocks/Agent.vue';
 import Table from '@/components/Table.vue';
+import PeopleStoriesCard from '@/components/phone/PeopleStoriesCard.vue';
 
 export default {
   name: 'Phone',
@@ -50,6 +52,7 @@ export default {
 
     'training-card': NewsTrainingCard,
     Leaderboard,
+    PeopleStoriesCard,
   },
   data() {
     return {
