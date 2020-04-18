@@ -10,19 +10,12 @@
     >
       {{ tab }}
     </button>
-    <!-- Header -->
-    <base-text
-      variant="h3"
-      class="text-crisiscleanup-dark-400 justify-between font-bold m-1 p-3"
-    >
-      Stories from people you helped
-    </base-text>
-    <!-- line -->
-    <hr class="bg-white" />
+    <component :is="selected" class="tab"></component>
     <!-- Individual Stories Tab -->
     <div class="stories">
-      <i-story />
-      <i-story />
+      <hr class="bg-white" />
+      <IndividualStoriesCard />
+      <IndividualStoriesCard />
     </div>
     <!-- Call History Tab -->
     <call-history />
@@ -35,8 +28,8 @@ import IndividualStoriesCard from './IndividualStoriesCard.vue';
 export default {
   name: 'PeopleStoriesCard',
   components: {
-    'i-story': IndividualStoriesCard,
-    CallHistory,
+    'Stories from people you helped': IndividualStoriesCard,
+    'Last 10 people I talk to': CallHistory,
   },
   data() {
     return {
