@@ -1,53 +1,55 @@
 <template>
   <div>
     <table>
-      <tr>
-        <th>
-          <base-text
-            variant="bodysm"
-            weight="900"
-            class="text-crisiscleanup-dark-300"
-          >
-            Phone Number
-          </base-text>
-        </th>
-        <th>
-          <base-text
-            variant="bodysm"
-            weight="900"
-            class="text-crisiscleanup-dark-300"
-          >
-            Case #
-          </base-text>
-        </th>
-        <th>
-          <base-text
-            variant="bodysm"
-            weight="900"
-            class="text-crisiscleanup-dark-300"
-          >
-            Call Status
-          </base-text>
-        </th>
-        <th>
-          <base-text
-            variant="bodysm"
-            weight="900"
-            class="text-crisiscleanup-dark-300"
-          >
-            Notes
-          </base-text>
-        </th>
-        <th>
-          <base-text
-            variant="bodysm"
-            weight="900"
-            class="text-crisiscleanup-dark-300"
-          >
-            Call Completed
-          </base-text>
-        </th>
-      </tr>
+      <thead>
+        <tr>
+          <th>
+            <base-text
+              variant="bodysm"
+              weight="900"
+              class="text-crisiscleanup-dark-300"
+            >
+              Phone Number
+            </base-text>
+          </th>
+          <th>
+            <base-text
+              variant="bodysm"
+              weight="900"
+              class="text-crisiscleanup-dark-300"
+            >
+              Case #
+            </base-text>
+          </th>
+          <th>
+            <base-text
+              variant="bodysm"
+              weight="900"
+              class="text-crisiscleanup-dark-300"
+            >
+              Call Status
+            </base-text>
+          </th>
+          <th>
+            <base-text
+              variant="bodysm"
+              weight="900"
+              class="text-crisiscleanup-dark-300"
+            >
+              Notes
+            </base-text>
+          </th>
+          <th>
+            <base-text
+              variant="bodysm"
+              weight="900"
+              class="text-crisiscleanup-dark-300"
+            >
+              Call Completed
+            </base-text>
+          </th>
+        </tr>
+      </thead>
     </table>
     <call-summary
       v-for="(detail, idx) in details"
@@ -93,6 +95,10 @@ export default {
     minmax(150px, 1.67fr)
     minmax(150px, 3.33fr)
     minmax(150px, 1fr);
+}
+thead,
+tr {
+  display: contents;
 }
 th {
   /* position: sticky;
