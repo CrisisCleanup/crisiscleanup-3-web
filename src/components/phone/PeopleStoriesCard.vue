@@ -19,26 +19,29 @@
     </base-text>
     <!-- line -->
     <hr class="bg-white" />
-    <!-- Individual Stories Card -->
+    <!-- Individual Stories Tab -->
     <div class="stories">
       <i-story />
       <i-story />
     </div>
+    <!-- Call History Tab -->
+    <call-history />
   </div>
 </template>
 
 <script>
+import CallHistory from '@/components/phone/CallHistory.vue';
 import IndividualStoriesCard from './IndividualStoriesCard.vue';
 export default {
   name: 'PeopleStoriesCard',
   components: {
     'i-story': IndividualStoriesCard,
+    CallHistory,
   },
   data() {
     return {
       tabs: ['Stories from people you helped', 'Last 10 people I talk to'],
-      selected: 'Training',
-      isShowingTrainingModal: false,
+      selected: 'Stories from people you helped',
     };
   },
 };
