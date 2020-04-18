@@ -7,7 +7,11 @@
       <th>Notes</th>
       <th>Call Completed</th>
     </div>
-    <call-summary />
+    <call-summary
+      v-for="(detail, idx) in details"
+      :key="idx"
+      :phone="detail.phone"
+    ></call-summary>
   </div>
 </template>
 <script>
@@ -16,6 +20,20 @@ export default {
   name: 'CallHistory',
   components: {
     CallSummary,
+  },
+  computed: {
+    details() {
+      return [
+        {
+          phone: this.$t('601-123-4567'),
+          name: this.$t('John Doe'),
+          caseNumber: this.$t('C11'),
+          callStatus: this.$t('Call Status'),
+          notes: this.$t('asldfjasdkfjasldfjd'),
+          callCompleted: this.$t('10 mins ago'),
+        },
+      ];
+    },
   },
 };
 </script>
