@@ -88,7 +88,7 @@ export default {
   flex: 1;
   border-collapse: collapse;
   grid-template-columns:
-    minmax(150px, 3.33fr)
+    minmax(150px, 5.44fr)
     minmax(150px, 1.67fr)
     minmax(150px, 1.67fr)
     minmax(150px, 3.33fr)

@@ -1,5 +1,5 @@
 <template>
-  <div class="attribute-container part-id">
+  <div>
     <table>
       <tr>
         <td>
