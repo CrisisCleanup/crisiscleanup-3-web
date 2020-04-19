@@ -125,9 +125,7 @@ export default {
           const agent = Agent.query()
             .where('user_id', this.currentUser.id)
             .first();
-          await Agent.api().updateConfig(agent.agent_id);
           this.$store.dispatch('phone/setAgent', agent);
-          this.$store.dispatch('phone/syncAgentConfig');
         }
       } catch (e) {
         this.$log.error('Failed to save agent', e);

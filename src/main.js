@@ -188,8 +188,7 @@ axios.interceptors.response.use(
 
 // Setup websocket
 const WS_URL =
-  process.env.VUE_APP_WS_URL ||
-  'wss://o9ug33rkv0.execute-api.us-east-1.amazonaws.com/dev';
+  process.env.VUE_APP_WS_URL || 'wss://socket.dev.crisiscleanup.io';
 Vue.use(VueNativeSocket, WS_URL, {
   store,
   format: 'json',
