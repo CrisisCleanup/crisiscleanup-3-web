@@ -14,66 +14,68 @@ const Log = Logger({
 export default class PhoneService {
   constructor() {
     this.store = store;
-    this.phone = this.store.state.phone;
-    const self = this;
     this.cf = new AgentLibrary({
       // Caution, this is prod
       socketDest: 'wss://c01-con.vacd.biz:8080/', //'ws://d01-test.cf.dev:8080',
       callbacks: {
         closeResponse: this.onCloseFunction,
         openResponse: this.onOpenFunction,
-        // TODO: Figure out a way to access 'self' context when put in seperate function
         newCallNotification: this.onNewCall.bind(this),
+        addSessionNotification: this.onNewSession.bind(this),
         endCallNotification: this.endCallFunction.bind(this),
+        // agentStats: this.onGetStatsAgent.bind(this),
+        agentDailyStats: this.onGetStatsAgentDaily.bind(this),
+        queueStats: this.onQueueStats.bind(this),
       },
     });
-    this.gateway = this.phone.gateway;
-    this.user = this.phone.user;
     this.loggedInAgentId = null;
     this.callInfo = {};
   }
 
-  onNewCall(info) {
+  async onNewCall(info) {
     Log.debug('callinfo: ', info);
     //need to store callInfo to get sessionId
     this.callInfo = info;
     let state = null;
     if (info.callType === 'INBOUND') {
       state = 'ENGAGED-INBOUND';
+      const response = await window.vue.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/get_by_session_id?session_id=${info.uii}`,
+      );
+      this.store.commit('phone_legacy/setIncomingCall', response.data);
     } else if (info.callType === 'OUTBOUND') {
       state = 'ENGAGED-OUTBOUND';
     }
+
     this.store.commit('phone_legacy/setState', state);
-    return new Promise((resolve, reject) => {
-      window.vue.$http
-        .get(
-          `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/get_by_session_id?session_id=${info.uii}`,
-        )
-        .then((data) => {
-          this.store.commit('phone_legacy/setCall', data);
-          resolve(data);
-        })
-        .catch(() => {});
-      // self.store
-      //   .dispatch('phone_legacy/getCallerDetails', info.ani)
-      //   .then((caller) => {
-      //     // Save call info
-      //     const call = {
-      //       call_start: Date.now,
-      //       user_number: info.dialDest,
-      //       caller: caller.id,
-      //       gateway: self.gateway.id,
-      //       call_type: info.callType,
-      //       ccu_number: info.ani, //we want to show the caller's number
-      //       external_id: info.uii,
-      //     };
-      //     self.store.dispatch('phone_legacy/updateCall', call).then(resolve());
-      //   });
-    });
+    const dnisResponse = await window.vue.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis__contains=${info.ani}&sort=-created_at&limit=1`,
+    );
+    const [caller] = dnisResponse.data.results;
+    this.store.commit('phone_legacy/setCaller', caller);
   }
 
   onCloseFunction() {
     Log.debug('AgentLibrary closed');
+  }
+
+  onNewSession(info) {
+    if (info.sessionType === 'AGENT') {
+      if (this.store.getters['phone_legacy/getIncomingCall']) {
+        this.store.commit(
+          'phone_legacy/setCurrentCall',
+          this.store.getters['phone_legacy/getIncomingCall'],
+        );
+        this.store.commit('phone_legacy/setIncomingCall', null);
+      } else {
+        this.store.commit(
+          'phone_legacy/setCurrentCall',
+          this.store.getters['phone_legacy/getOutgoingCall'],
+        );
+        this.store.commit('phone_legacy/setOutgoingCall', null);
+      }
+    }
+    Log.debug(info);
   }
 
   onOpenFunction() {
@@ -83,14 +85,26 @@ export default class PhoneService {
   endCallFunction(info) {
     Log.debug(info);
     this.store.commit('phone_legacy/setState', 'ENDED');
-    this.store.commit('phone_legacy/setCall', {});
-    this.callInfo = {};
+    this.store.commit('phone_legacy/setIncomingCall', null);
+    this.store.commit('phone_legacy/setOutgoingCall', null);
+  }
+
+  onGetStatsAgent(info) {
+    Log.debug(info);
+  }
+
+  onGetStatsAgentDaily(info) {
+    this.store.commit('phone_legacy/setAgentStats', { ...info });
+  }
+
+  onQueueStats(info) {
+    this.store.commit('phone_legacy/setGeneralStats', { ...info.totals });
   }
 
   login(
     username = 'covidtest',
     password = 'covidtest',
-    phoneNumber = '2512107756',
+    phoneNumber = '6479804730',
     gatewayIds = ['124906'],
   ) {
     return new Promise((resolve, reject) => {
@@ -135,6 +149,7 @@ export default class PhoneService {
     return new Promise((resolve, reject) => {
       this.cf.logoutAgent(agentId || this.loggedInAgentId, (data) => {
         Log.debug('logged out agent', data);
+        this.store.commit('phone_legacy/setState', 'AWAY');
         resolve();
       });
     });
@@ -170,11 +185,16 @@ export default class PhoneService {
     return new Promise((resolve, reject) => {
       this.cf.offhookInit((offhookInitResponse) => {
         Log.debug('Offhook init response', offhookInitResponse);
-        //first input = number to call, second input = number that shows up
-        //TODO: remove hard-coded gateway number and used stored information
-        this.cf.manualOutdial(destination, '2722003211', () => {
+        if (offhookInitResponse.status === 'FAILURE') {
+          this.store.commit('phone_legacy/setState', 'ENDED');
+          this.store.commit('phone_legacy/setIncomingCall', null);
+          this.store.commit('phone_legacy/setOutgoingCall', null);
+          this.callInfo = {};
           resolve();
-        });
+        } else {
+          this.cf.manualOutdial(destination, '2722003211');
+          resolve();
+        }
       });
     });
   }

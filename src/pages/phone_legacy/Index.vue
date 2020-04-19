@@ -1,105 +1,279 @@
 <template>
-  <div class="p-3 h-full">
+  <div class="p-3 h-full flex flex-col items-center">
     <div class="main-grid">
-      <div class="phone-grid">
+      <div>
         <div
-          class="p-2 border shadow flex items-start justify-between"
+          class="border shadow flex flex-col mb-5"
           v-if="$route.meta.id === 'caller'"
         >
-          <div class="pb-2">
-            <base-text variant="h2">{{ $t('~~English Login:') }}</base-text>
-            <base-text>{{ $t('~~Username:') }} covid</base-text>
-            <base-text>{{ $t('~~Password:') }} covid</base-text>
-            <base-text variant="h2">{{ $t('~~Spanish Login:') }}</base-text>
-            <base-text>{{ $t('~~Username:') }} spanish</base-text>
-            <base-text>{{ $t('~~Password:') }} covid</base-text>
+          <div class="px-3 pt-3 flex justify-between">
+            <div>Call State: {{ callState }}</div>
+            <ccu-icon
+              @click.native="() => (editCardActive = !editCardActive)"
+              size="sm"
+              type="edit"
+            />
           </div>
-          <div class="pb-2">
-            <base-text variant="h2">{{
-              $t('~~Disaster Distress Helpline:')
-            }}</base-text>
-            <base-text>1-800-985-5990</base-text>
-          </div>
-          <div>
-            <div class="pb-2" v-if="cards.length">
-              <base-text variant="h2">{{ $t('~~Cases:') }}</base-text>
+          <div class="flex items-start justify-start px-3 pt-2 pb-4">
+            <div class="w-20">
+              <img
+                class="rounded-full p-1 profile-image"
+                :src="currentUser.profilePictureUrl"
+                :alt="$t('profileUser.profile_picture')"
+              />
             </div>
-            <div class="h-32 overflow-auto">
-              <div class="case" v-for="c in cards" :key="c.id">
-                <case-card
-                  :key="c.caseNumber"
-                  :case-number="c.caseNumber"
-                  :state="c.state"
-                  :worktype="c.worktype"
-                  :address="c.address"
-                  :tile="true"
-                  :active="c.id === caseId"
-                  :type="c.type"
-                  @click.native="() => setCase(c)"
-                  :svg="getSVG(c.worktype)"
-                  class="cursor-pointer hover:bg-crisiscleanup-light-grey p-2"
-                  :class="c.id === caseId ? 'border' : ''"
-                />
+            <div class="mt-2 mx-2">
+              <base-text variant="h2">{{ currentUser.full_name }}</base-text>
+              <base-text>{{ currentUser.mobile }}</base-text>
+            </div>
+          </div>
+          <hr />
+          <div class="p-3">
+            <div class="flex flex-row tags">
+              <div class="w-20 text-crisiscleanup-dark-200">
+                {{ $t('~~Languages') }}
+              </div>
+              <div
+                v-for="l in languages"
+                :key="`l_${l}`"
+                class="flex flex-col px-1 tag-container"
+              >
+                <tag class="tag-item">{{ l }}</tag>
+              </div>
+            </div>
+          </div>
+          <div class="p-3 flex justify-between items-center">
+            <base-button
+              v-if="!isTakingCalls"
+              variant="solid"
+              size="medium"
+              :action="login"
+              :text="$t('~~Start Taking Calls')"
+              class="flex-grow mr-4"
+            ></base-button>
+            <base-button
+              v-else-if="!isOnCall"
+              variant="solid"
+              size="medium"
+              :action="logout"
+              :text="$t('~~Stop Taking Calls')"
+              class="flex-grow mr-4"
+            ></base-button>
+            <base-button
+              v-else-if="isOnCall"
+              size="medium"
+              :disabled="true"
+              :text="$t('~~On Call')"
+              class="flex-grow mr-4 text-white bg-crisiscleanup-light-grey"
+            ></base-button>
+            <ccu-icon
+              @click.native="() => {}"
+              size="lg"
+              type="dialer"
+            ></ccu-icon>
+          </div>
+        </div>
+        <div
+          class="border shadow flex flex-col mb-5"
+          v-if="$route.meta.id === 'caller'"
+        >
+          <base-text class="p-3" variant="h3">{{
+            $t('~~General Statistics')
+          }}</base-text>
+          <hr />
+          <div class="flex flex-col bg-crisiscleanup-light-grey">
+            <div class="flex p-2 items-center justify-between">
+              <base-text>{{ $t('~~On the phone now') }}</base-text>
+              {{ stats.active || 0 }}
+            </div>
+            <div class="flex p-2 items-center justify-between">
+              <base-text>{{ $t('~~Remaining Callbacks') }}</base-text>
+              0
+            </div>
+            <div class="flex p-2 items-center justify-between">
+              <base-text>{{ $t('~~Remaining Calldowns') }}</base-text>
+              0
+            </div>
+            <div class="flex p-2 items-center justify-between">
+              <ccu-icon with-text type="phone-plus" size="xl">
+                <base-text>{{ $t('~~On the phone now') }}</base-text>
+              </ccu-icon>
+              {{ stats.inQueue || 0 }}
+            </div>
+          </div>
+        </div>
+        <div
+          class="border shadow flex flex-col"
+          v-if="$route.meta.id === 'caller'"
+        >
+          <base-text class="p-3" variant="h3">{{
+            $t('~~My Statistics')
+          }}</base-text>
+          <hr />
+          <div>
+            <div class="flex flex-col">
+              <div class="flex p-2 items-center justify-between">
+                <base-text>{{ $t("~~Calls I've received") }}</base-text>
+                {{ agentStats.agentStats || 0 }}
+              </div>
+              <div class="flex p-2 items-center justify-between">
+                <base-text>{{ $t("~~Calls I've made") }}</base-text>
+                {{ agentStats.totalManualDials || 0 }}
+              </div>
+              <div class="flex p-2 items-center justify-between">
+                <base-text>{{ $t('~~Total Login Time') }}</base-text>
+                {{ agentStats.totalLoginTime || 0 }}
+              </div>
+              <div class="flex p-2 items-center justify-between">
+                <base-text>{{ $t('~~Total Call Time') }}</base-text>
+                {{ agentStats.totalTalkTime || 0 }}
               </div>
             </div>
           </div>
         </div>
-        <!--        <iframe-->
-        <!--          class="border"-->
-        <!--          src="https://portal.vacd.biz/agent/#/login"-->
-        <!--          width="100%"-->
-        <!--          height="100%"-->
-        <!--        ></iframe>-->
-        <div>
-          <base-button :action="login" text="Login"></base-button>
-          <base-button :action="callMe" text="Call me"></base-button>
-          <div v-if="callState">Call State: {{ callState }}</div>
-          <div v-if="callState">Current Call: {{ call }}</div>
-        </div>
       </div>
-      <div class="side-grid" v-if="$route.meta.id === 'caller'">
-        <div class="p-2 border shadow flex flex-col" v-if="nextOutbound">
-          <base-text variant="h3">{{ $t('Next Call:') }}</base-text>
-          <div class="flex items-center justify-between">
-            <base-text variant="h1">
-              {{ nextOutbound && nextOutbound.phone_number }}
-            </base-text>
-            <base-button
-              variant="outline"
-              class="ml-2 px-6 text-xs"
-              size="small"
-              :action="() => $copyText(nextOutbound.phone_number)"
+      <div>
+        <tabs class="border shadow pt-1" ref="tabs">
+          <tab name="Next Call" ref="nextCallTab">
+            <div
+              class="p-2 flex flex-col"
+              v-if="nextOutbound && isTakingCalls && !isOnCall"
             >
-              {{ $t('~~Copy') }}
-            </base-button>
-          </div>
-          <form-select
-            class="select"
-            :options="selectValues"
-            item-key="value"
-            label="name_t"
-            :value="status"
-            @input="updateOutboundStatus"
-            placeholder="Call Status "
-            select-classes="border border-crisiscleanup-dark-100"
-          />
-          <textarea
-            rows="3"
-            class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
-            :placeholder="$t('~~Notes')"
-            @input="(value) => setCaseStatus({ notes: value })"
-          ></textarea>
-          <base-button
-            class="self-end"
-            size="small"
-            variant="solid"
-            :action="getNextCall"
-          >
-            {{ $t('~~Call Complete - Next Call') }}
-          </base-button>
-        </div>
+              <base-text variant="h1">
+                {{ nextOutbound && nextOutbound.phone_number }}
+              </base-text>
+              <div class="flex py-2">
+                <div class="pr-2" v-for="c in cards" :key="c.id">
+                  <div
+                    class="cursor-pointer bg-crisiscleanup-light-grey p-2 w-40"
+                    @click="() => setCase(c)"
+                    :class="c.id === caseId ? 'border' : ''"
+                  >
+                    <div class="flex">
+                      <div
+                        v-html="getSVG(c.worktype)"
+                        class="cases-svg-container p-1"
+                      ></div>
+                      <div class="p-1">{{ c.caseNumber }}</div>
+                    </div>
+                    <div class="text-xs text-crisiscleanup-dark-200 p-1">
+                      {{ c.address }} {{ c.state }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <base-button
+                size="medium"
+                variant="solid"
+                :action="callMe"
+                class="flex-shrink"
+              >
+                {{ $t('~~Call') }}
+              </base-button>
+            </div>
+            <div class="p2" v-else-if="!isTakingCalls">
+              {{ $t('Start taking calls to see the next outbound call') }}
+            </div>
+            <div class="p2" v-else-if="isOnCall">
+              {{ $t('Call in progress') }}
+            </div>
+            <div class="p2" v-else>
+              {{ $t('No user in outbound queue') }}
+            </div>
+          </tab>
+          <tab name="Current Call" ref="currentCallTab">
+            <div v-if="caller">
+              <div class="flex items-center justify-between">
+                <div>
+                  <base-text variant="h3" weight="300" v-if="isOnCall">
+                    {{
+                      isInboundCall
+                        ? $t('~~Inbound Call In Progress')
+                        : $t('~~Outbound Call In Progress')
+                    }}
+                  </base-text>
+                  <base-text variant="h3" weight="300" v-else>
+                    {{ $t('~~Call Completed') }}
+                  </base-text>
+                  <base-text variant="h2">
+                    {{ caller.dnis }}
+                  </base-text>
+                  <div class="text-xs text-crisiscleanup-dark-200">
+                    {{
+                      `${caller.number_of_inbound_calls} ${$t(
+                        ' Calls ',
+                      )} |${$moment(caller.created_at).diff(
+                        $moment(),
+                        'days',
+                      )} days`
+                    }}
+                  </div>
+                </div>
+                <div>
+                  <ccu-icon
+                    @click.native="service.hangup"
+                    v-if="isOnCall && isOutboundCall"
+                    size="lg"
+                    type="hangup"
+                  ></ccu-icon>
+                </div>
+              </div>
+              <div class="flex py-2" v-if="cards.length && isOutboundCall">
+                <div class="pr-2" v-for="c in cards" :key="c.id">
+                  <div
+                    class="cursor-pointer bg-crisiscleanup-light-grey p-2 w-40"
+                    @click="() => setCase(c)"
+                    :class="c.id === caseId ? 'border' : ''"
+                  >
+                    <div class="flex">
+                      <div
+                        v-html="getSVG(c.worktype)"
+                        class="cases-svg-container p-1"
+                      ></div>
+                      <div class="p-1">{{ c.caseNumber }}</div>
+                    </div>
+                    <div class="text-xs text-crisiscleanup-dark-200 p-1">
+                      {{ c.address }} {{ c.state }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <form-select
+                class="select"
+                :options="selectValues"
+                item-key="value"
+                label="name_t"
+                :value="status"
+                @input="updateStatus"
+                placeholder="Call Status "
+                select-classes="border border-crisiscleanup-dark-100"
+              />
+              <textarea
+                rows="3"
+                class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
+                :placeholder="$t('~~Notes')"
+                @input="(value) => setCaseStatus({ notes: value })"
+              ></textarea>
+              <base-button
+                class="self-end"
+                size="small"
+                variant="solid"
+                :disabled="isOnCall"
+                :action="completeCall"
+              >
+                {{ $t('~~Call Complete - Next Call') }}
+              </base-button>
+            </div>
+            <div class="p2" v-else>
+              {{ $t('No current call') }}
+            </div>
+          </tab>
+          <tab name="About Us"> </tab>
+        </tabs>
+      </div>
+      <div v-if="$route.meta.id === 'caller'">
         <case-form
-          :incident-id="Number(currentIncidentId)"
+          :incident-id="String(currentIncidentId)"
           :pda-id="currentType === 'pda' ? caseId : null"
           :worksite-id="currentType === 'worksite' ? caseId : null"
           :key="caseId"
@@ -119,21 +293,118 @@
         />
       </div>
     </div>
+    <EditCallerID
+      :active="editCardActive"
+      :request="{ phone: true, lang: true }"
+      @user-updated="() => (editCardActive = false)"
+    />
+    <modal
+      v-if="incomingCall && caller"
+      :title="$t('~~Incoming Call')"
+      modal-classes="max-w-md"
+    >
+      <div>
+        <div class="px-3 py-1">
+          <div class="modal-script">
+            <base-text variant="body" class="script">
+              {{
+                $t(
+                  "~~You are currently receiving a phone call. Please answer it via your phone to proceed. Don't worry, your number will never be shared with the caller.",
+                )
+              }}
+            </base-text>
+            <base-text variant="body" class="script">
+              {{
+                $t(
+                  '~~A sample script would be: "Crisis Cleanup Hotline, my name is ',
+                )
+              }}
+              {{ currentUser.first_name }} {{ $t('~~. How may I help you?') }}
+            </base-text>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <base-text class="px-3 py-1" variant="h2">
+            {{ caller.dnis }}
+          </base-text>
+          <tag class="tag">
+            <div class="text-xs">
+              {{
+                `${caller.number_of_inbound_calls} ${$t(' Calls ')} | ${$moment(
+                  caller.created_at,
+                ).diff($moment(), 'days')} days`
+              }}
+            </div>
+          </tag>
+        </div>
+      </div>
+      <div slot="footer"></div>
+    </modal>
+    <modal
+      v-if="outgoingCall && caller"
+      @close="
+        () => {
+          setCaller(null);
+        }
+      "
+      :title="$t('~~Outgoing Call')"
+      modal-classes="max-w-md"
+    >
+      <div>
+        <div class="px-3 py-1">
+          {{ $t('~~Please wait while we connect your call') }}
+        </div>
+        <div class="flex items-center">
+          <base-text class="px-3 py-1" variant="h2">
+            {{ caller.dnis }}
+          </base-text>
+          <tag class="tag">
+            <div class="text-xs">
+              {{
+                `${caller.number_of_inbound_calls} ${$t(' Calls ')} | ${$moment(
+                  caller.created_at,
+                ).diff($moment(), 'days')} days`
+              }}
+            </div>
+          </tag>
+        </div>
+        <div v-if="cards.length">
+          <div class="text-xs bg-crisiscleanup-light-grey py-1 px-3">
+            {{ cards.length }} {{ $t('cases are assigned to this number') }}
+          </div>
+          <div class="pr-2" v-for="c in cards" :key="c.id">
+            <div class="p-2">
+              <div class="flex items-center">
+                <div
+                  v-html="getSVG(c.worktype)"
+                  class="cases-svg-container p-1"
+                ></div>
+                <div class="p-1">
+                  <div>{{ c.caseNumber }}</div>
+                  <div>{{ c.address }} {{ c.state }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div slot="footer"></div>
+    </modal>
   </div>
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex';
+import { mapGetters, mapMutations, mapState } from 'vuex';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneStatus from '@/models/PhoneStatus';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
 import Pda from '@/models/Pda';
 import { AgentMixin, WorksitesMixin } from '@/mixins';
-import CaseCard from '@/components/cards/case/CaseCard';
 import Logger from '@/utils/log';
 import CaseForm from '../CaseForm';
 import PhoneService from '../../services/phone.service';
+import EditCallerID from '../../components/phone/CallerIDEditCard';
 
 const Log = Logger({
   name: 'phoneLegacy',
@@ -147,12 +418,13 @@ const Log = Logger({
 
 export default {
   name: 'PhoneLegacy',
-  components: { CaseCard, CaseForm },
+  components: { EditCallerID, CaseForm },
   mixins: [AgentMixin, WorksitesMixin],
 
   data() {
     return {
       nextOutbound: null,
+      service: null,
       worksite: null,
       cases: {},
       cards: [],
@@ -161,24 +433,60 @@ export default {
       status: null,
       iframeLoading: true,
       socket: null,
-      incomingCall: null,
       currentCall: null,
+      editCardActive: false,
     };
   },
   async mounted() {
     this.service = new PhoneService();
-    await this.getNextCall();
   },
   methods: {
-    ...mapMutations('phone_legacy', ['setCurrentAgentId']),
+    ...mapMutations('phone_legacy', [
+      'setCurrentAgentId',
+      'setOutgoingCall',
+      'setIncomingCall',
+      'setCaller',
+    ]),
+    async getUserNameForAgent(agentId) {
+      try {
+        const response = await this.$http.get(
+          `https://frronrxz66.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agent/${agentId}`,
+          {
+            headers: {
+              Authorization: null,
+            },
+          },
+        );
+        return response.data.username;
+      } catch (e) {
+        this.setCurrentAgentId(null);
+        return 'covidtest';
+      }
+    },
     async login() {
+      await this.logout();
+      let username = 'covidtest';
+      if (this.currentAgentId) {
+        username = await this.getUserNameForAgent(this.currentAgentId);
+      }
+      await this.service.login(username);
+      await this.getNextCall();
+    },
+    async logout() {
       if (this.currentAgentId) {
         await this.service.logout(this.currentAgentId);
       }
-      await this.service.login();
     },
-    callMe() {
-      this.service.dial('2512107756');
+    async callMe() {
+      const dnisResponse = await this.$http.get(
+        `${
+          process.env.VUE_APP_API_BASE_URL
+        }/phone_dnis?dnis__contains=${'6479818167'}&sort=-created_at&limit=1`,
+      );
+      const [caller] = dnisResponse.data.results;
+      this.setOutgoingCall(this.nextOutbound);
+      this.setCaller(caller);
+      await this.service.dial('6479818167');
     },
     setCase(caseObject) {
       this.caseId = caseObject.id;
@@ -190,14 +498,16 @@ export default {
     },
     async getNextCall() {
       try {
-        const outbound = await PhoneOutbound.api().getNextOutbound(
-          this.currentIncidentId,
-        );
-        this.nextOutbound = outbound;
+        this.nextOutbound = await PhoneOutbound.api().getSingleOutbound(31);
       } catch (e) {
         this.nextOutbound = null;
       }
       await this.createCards();
+      this.$refs.tabs.selectTab(this.$refs.nextCallTab);
+      this.setOutgoingCall(null);
+      this.setIncomingCall(null);
+      this.setCaller(null);
+      this.setCall(null);
       this.status = null;
       this.caseId = null;
       this.currentType = null;
@@ -230,17 +540,60 @@ export default {
         }));
       }
     },
-    async updateOutboundStatus(statusId) {
-      await PhoneOutbound.api().updateStatus(this.nextOutbound.id, {
-        statusId,
-        worksiteId: Boolean(this.worksite) && this.worksite.id,
-      });
+    async updateStatus(statusId) {
       this.status = statusId;
+    },
+    async completeCall() {
+      if (this.service.callInfo.callType === 'OUTBOUND') {
+        await PhoneOutbound.api().updateStatus(this.call.id, {
+          statusId: this.status,
+          worksiteId: Boolean(this.worksite) && this.worksite.id,
+        });
+      }
+
+      if (this.service.callInfo.callType === 'INBOUND') {
+        await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/${this.call.id}/update_status`,
+          {
+            status: this.status,
+          },
+        );
+      }
+
+      this.status = null;
+      await this.getNextCall();
+    },
+  },
+  watch: {
+    call(value) {
+      if (value) {
+        this.$refs.tabs.selectTab(this.$refs.currentCallTab);
+      }
     },
   },
   computed: {
+    ...mapGetters('phone_legacy', [
+      'isTakingCalls',
+      'isOnCall',
+      'isInboundCall',
+      'isOutboundCall',
+    ]),
     ...mapState('incident', ['currentIncidentId']),
-    ...mapState('phone_legacy', ['currentAgentId', 'callState', 'call']),
+    ...mapState('phone_legacy', [
+      'currentAgentId',
+      'callState',
+      'call',
+      'caller',
+      'incomingCall',
+      'outgoingCall',
+      'stats',
+      'agentStats',
+    ]),
+    languages() {
+      return this.currentUser.languages.map(
+        ({ name_t }) => name_t.split(' ')[0],
+      );
+    },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
@@ -270,29 +623,19 @@ export default {
 <style scoped lang="scss">
 .main-grid {
   display: grid;
-  grid-template-columns: minmax(800px, auto) 360px 1px;
-  grid-gap: 10px;
-}
-
-.side-grid {
-  display: grid;
-  grid-template-rows: auto minmax(auto, 600px);
-  grid-gap: 10px;
+  grid-template-columns: minmax(auto, 300px) 450px minmax(auto, 350px);
+  grid-gap: 30px;
+  height: 80vh;
 }
 
 .phone-grid {
-  display: grid;
-  grid-template-rows: minmax(auto, 175px) minmax(600px, 700px);
-  grid-gap: 10px;
+  /*display: grid;*/
+  /*grid-gap: 10px;*/
 }
+</style>
 
-.VueCarousel {
-  &-slide {
-    @apply px-2;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
-  }
+<style>
+.cases-svg-container svg {
+  width: 30px;
 }
 </style>

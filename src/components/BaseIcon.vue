@@ -62,6 +62,8 @@ const iconMap = {
   'map-sweep': require('@/assets/icons/map-sweep.svg'),
   'map-undo': require('@/assets/icons/map-undo.svg'),
   'map-redo': require('@/assets/icons/map-redo.svg'),
+  dialer: require('@/assets/icons/dialer.svg'),
+  hangup: require('@/assets/icons/hangup.svg'),
 };
 /* eslint-enable global-require */
 

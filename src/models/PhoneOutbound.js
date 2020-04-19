@@ -40,6 +40,13 @@ export default class PhoneOutbound extends Model {
         } = phoneOutbound;
         return data;
       },
+      async getSingleOutbound(id) {
+        const phoneOutbound = await this.get(`/phone_outbound/${id}`);
+        const {
+          response: { data },
+        } = phoneOutbound;
+        return data;
+      },
       async callOutbound(id) {
         const result = this.post(`/phone_outbound/${id}/call`);
         return result;
