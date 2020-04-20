@@ -17,11 +17,13 @@ $areas: start main end;
 
 .phonegrid {
   @apply bg-crisiscleanup-light-grey;
-  @apply w-full h-full;
+  @apply w-full;
   &.grid-container {
+    justify-content: center;
+    align-content: center;
     display: inline-grid;
     column-gap: 2rem;
-    @apply h-full p-6;
+    @apply p-6;
     padding-right: 0;
     grid:
       [r1] 'start main end' [r1end]

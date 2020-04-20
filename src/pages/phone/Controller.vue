@@ -37,11 +37,8 @@
                   :data-prefill="prefillData"
                   @savedWorksite="savedWorksite"
                   @closeWorksite="closeWorksite"
-                  style="grid-template-rows: 600px 80px;"
                   @navigateToWorksite="
-                    (id) => {
-                      this.setCurrentCase({ id, type: 'worksite' });
-                    }
+                    (id) => setCurrentCase({ id, type: 'worksite' })
                   "
                 />
               </template>

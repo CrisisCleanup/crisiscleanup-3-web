@@ -60,7 +60,6 @@ export default {
   display: flex;
   flex-direction: column;
   margin-top: -1.5rem;
-  margin-bottom: -1.5rem;
   @apply w-full;
   .tabbar {
     display: flex;
