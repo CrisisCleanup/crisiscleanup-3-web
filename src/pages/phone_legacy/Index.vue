@@ -19,11 +19,6 @@
               $t('~~Disaster Distress Helpline:')
             }}</base-text>
             <base-text>1-800-985-5990</base-text>
-            <base-text>{{
-              $t(
-                '~~Please Note: When switching between COVID and the Easter Tornadoes, click on the "Phone (Beta)" tab twice to reload.',
-              )
-            }}</base-text>
           </div>
           <div>
             <div class="pb-2" v-if="cards.length">

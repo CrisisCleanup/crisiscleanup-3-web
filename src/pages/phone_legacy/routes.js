@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/caller',
     component: Index,
-    name: 'nav.phone',
+    name: 'nav.caller',
     meta: {
       id: 'caller',
       layout: 'authenticated',
