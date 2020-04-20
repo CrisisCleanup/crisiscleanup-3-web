@@ -140,7 +140,6 @@ export default {
     },
   },
   created() {
-    this.$store.dispatch('rc/initialize');
     PhoneResource.api().get('/phone_resources', {
       dataKey: 'results',
     });

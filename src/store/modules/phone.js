@@ -504,11 +504,11 @@ const actions = {
     const connectType = initConnection.getType();
     Log.debug('got contact attributes:', contactAttrs);
     const {
-      pdas,
-      worksites,
+      pdas = { value: '' },
+      worksites = { value: '' },
       callerID,
       InboundNumber,
-      ids,
+      ids = { value: '' },
       USER_LANGUAGE,
     } = contactAttrs;
     Log.debug('contact refresh: ', contactState);

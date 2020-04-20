@@ -32,10 +32,7 @@ export const AgentMixin = {
     const worksites = await this.fetchCasesByType(Worksite, this.worksites);
     const pdas = await this.fetchCasesByType(Pda, this.pdas);
     // not technically a case, but it works
-    const outboundIds = await this.fetchCasesByType(
-      PhoneOutbound,
-      this.outboundIds,
-    );
+    const outboundIds = await this.fetchCasesByType(PhoneOutbound, this.outboundIds);
     return { worksites, pdas, outboundIds };
   },
   computed: {
@@ -72,14 +69,13 @@ export const AgentMixin = {
       };
     },
     callerFormattedNumber() {
+      if (!this.callerId) return '';
       const number = parsePhoneNumberFromString(this.callerId);
       return number.formatNational();
     },
     extResourceFormattedNumber() {
       if (!this.currentExternalResource) return '';
-      const number = parsePhoneNumberFromString(
-        this.currentExternalResource.dnis,
-      );
+      const number = parsePhoneNumberFromString(this.currentExternalResource.dnis);
       return number.formatNational();
     },
   },
