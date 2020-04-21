@@ -99,6 +99,17 @@ export default {
   methods: {
     ...mapActions('phone', ['getRealtimeMetrics']),
     async fetchMetrics() {
+      await this.$store.dispatch(
+        'socket/send',
+        {
+          action: 'GET_CONTACTS',
+          options: {
+            includeMeta: true,
+          },
+          data: {},
+        },
+        { root: true },
+      );
       await this.getRealtimeMetrics();
     },
   },

@@ -76,6 +76,7 @@ const PhoneState = {
   agentConfig: null,
   metrics: {},
   agentMetrics: {},
+  contactMetrics: [],
   connectRunning: false,
   connectAuthed: false,
   streams: null,
@@ -218,6 +219,7 @@ const getters = {
   },
   currentPage: (state) =>
     state.controller ? state.controller.currentPage : 'dashboard',
+  contactMetrics: (state) => (state.contactMetrics ? state.contactMetrics : []),
 };
 
 // actions
@@ -249,6 +251,10 @@ const actions = {
     // and I have not slept yet :(
     const resp = await axios.get(getApiUrl('agents_metrics')(''));
     commit('setAgentMetrics', resp.data.results);
+  },
+  async setContactMetrics({ commit }, { contacts }) {
+    Log.debug('got contact metrics!', contacts);
+    commit('setContactMetrics', contacts);
   },
   async initConnect(
     { state, commit, dispatch, getters: { agentStateTimestamp } },
@@ -775,6 +781,9 @@ const mutations = {
       ...state.agentMetrics,
       ...metrics,
     };
+  },
+  setContactMetrics(state, metrics) {
+    state.contactMetrics = metrics;
   },
   resetState(state) {
     Object.assign(state, {

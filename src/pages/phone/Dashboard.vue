@@ -20,6 +20,7 @@
                   :time-to-complete="training.timeToComplete"
                 >
                 </training-card>
+                <Table :columns="contactsCols" :data="contactMetrics" />
               </div>
             </div>
           </div>
@@ -37,6 +38,7 @@ import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
 import Leaderboard from '@/components/phone/Leaderboard.vue';
 import PhoneLayout from '@/layouts/Phone.vue';
 import AgentBlock from '@/components/phone/blocks/Agent.vue';
+import Table from '@/components/Table.vue';
 
 export default {
   name: 'Phone',
@@ -44,6 +46,7 @@ export default {
     PhoneLayout,
     AgentBlock,
     Loader,
+    Table,
 
     'training-card': NewsTrainingCard,
     Leaderboard,
@@ -57,6 +60,38 @@ export default {
           'Then go and tempor incididunt ut labore et dolore magna aliqua.',
         timeToComplete: '10 minutes',
       },
+      contactsCols: [
+        {
+          dataIndex: 'contact_id',
+          key: 'contact_id',
+          title: 'Contact',
+          width: '1fr',
+        },
+        {
+          dataIndex: 'state',
+          key: 'state',
+          title: 'State',
+          width: '1fr',
+        },
+        {
+          dataIndex: 'action',
+          key: 'action',
+          title: 'Action',
+          width: '1fr',
+        },
+        {
+          dataIndex: 'entered_timestamp',
+          key: 'entered_timestamp',
+          title: 'Timestamp',
+          width: '1fr',
+        },
+        {
+          dataIndex: 'agent_id',
+          key: 'agent_id',
+          title: 'Agent',
+          width: '1fr',
+        },
+      ],
     };
   },
   computed: {
@@ -68,8 +103,10 @@ export default {
       'agentState',
       'contactState',
       'callIncoming',
+      'contactMetrics',
     ]),
   },
+
   methods: {
     ...mapActions('phone', ['getRealtimeMetrics']),
   },

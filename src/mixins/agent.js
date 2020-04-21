@@ -58,6 +58,7 @@ export const AgentMixin = {
       'callType',
       'connectReady',
       'currentExternalResource',
+      'contactMetrics',
     ]),
     callerName() {
       return this.currentCase ? this.currentCase.name : 'Unknown';
