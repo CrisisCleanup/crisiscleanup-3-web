@@ -49,17 +49,16 @@ export default {
 .wrapper {
   display: grid;
   grid-template-columns: repeat(6, minmax(50px, 1fr));
-  max-width: 800px;
+  /* max-width: 800px; */
+  min-width: 700px;
 }
 .row {
-  grid-column: auto;
+  grid-column: 1 / -1;
   display: grid;
   grid-template-columns: repeat(6, minmax(50px, 1fr));
 }
-
-/* .box {
-   border-radius: 5px;
-   padding: 20px;
-   font-size: 150%;
-} */
+.box {
+  border-radius: 5px;
+  padding: 5px;
+}
 </style>

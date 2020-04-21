@@ -78,7 +78,7 @@ export default {
 .wrapper {
   display: grid;
   grid-template-columns: repeat(6, minmax(50px, 1fr));
-  max-width: 800px;
+  max-width: auto;
 }
 .row {
   grid-column: auto;
