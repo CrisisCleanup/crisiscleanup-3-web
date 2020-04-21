@@ -1,56 +1,46 @@
 <template>
   <div>
-    <table>
-      <thead>
-        <tr>
-          <th>
-            <base-text
-              variant="bodysm"
-              weight="900"
-              class="text-crisiscleanup-dark-300"
-            >
-              Phone Number
-            </base-text>
-          </th>
-          <th>
-            <base-text
-              variant="bodysm"
-              weight="900"
-              class="text-crisiscleanup-dark-300"
-            >
-              Case #
-            </base-text>
-          </th>
-          <th>
-            <base-text
-              variant="bodysm"
-              weight="900"
-              class="text-crisiscleanup-dark-300"
-            >
-              Call Status
-            </base-text>
-          </th>
-          <th>
-            <base-text
-              variant="bodysm"
-              weight="900"
-              class="text-crisiscleanup-dark-300"
-            >
-              Notes
-            </base-text>
-          </th>
-          <th>
-            <base-text
-              variant="bodysm"
-              weight="900"
-              class="text-crisiscleanup-dark-300"
-            >
-              Call Completed
-            </base-text>
-          </th>
-        </tr>
-      </thead>
-    </table>
+    <div class="wrapper">
+      <base-text
+        variant="bodysm"
+        weight="900"
+        class="text-crisiscleanup-dark-300"
+      >
+        Phone Number
+      </base-text>
+
+      <base-text
+        variant="bodysm"
+        weight="900"
+        class="text-crisiscleanup-dark-300"
+      >
+        Case #
+      </base-text>
+
+      <base-text
+        variant="bodysm"
+        weight="900"
+        class="text-crisiscleanup-dark-300"
+      >
+        Call Status
+      </base-text>
+
+      <base-text
+        variant="bodysm"
+        weight="900"
+        class="text-crisiscleanup-dark-300"
+      >
+        Notes
+      </base-text>
+
+      <base-text
+        variant="bodysm"
+        weight="900"
+        class="text-crisiscleanup-dark-300"
+      >
+        Call Completed
+      </base-text>
+    </div>
     <call-summary
       v-for="(detail, idx) in details"
       :key="idx"
@@ -83,36 +73,14 @@ export default {
 </script>
 
 <style scoped>
-.table {
+.wrapper {
   display: grid;
-  min-width: 100vw;
-  width: auto;
-  flex: 1;
-  border-collapse: collapse;
-  grid-template-columns:
-    minmax(150px, 5.44fr)
-    minmax(150px, 1.67fr)
-    minmax(150px, 1.67fr)
-    minmax(150px, 3.33fr)
-    minmax(150px, 1fr);
+  grid-template-columns: repeat(6, minmax(50px, 1fr));
+  max-width: 800px;
 }
-thead,
-tr {
-  display: contents;
-}
-th {
-  /* position: sticky;
-  top: 0;
-  text-align: left;
-  font-weight: normal;
-  position: relative;
-  padding: 15px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; */
-  padding: 15px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.row {
+  grid-column: auto;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(50px, 1fr));
 }
 </style>

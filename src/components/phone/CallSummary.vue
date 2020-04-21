@@ -1,43 +1,41 @@
 <template>
   <div>
-    <table>
-      <tr>
-        <td>
-          <!-- {{ phone }} -->
-          <base-text variant="bodysm" weight="300">601-123-4567</base-text>
-        </td>
-        <td>
-          <!-- {{ name }} -->
-          <base-text variant="bodysm" weight="300">Julie Smith</base-text>
-        </td>
-        <td>
-          <!-- {{ caseNumber }} -->
-          <base-text variant="bodysm" weight="300">C11</base-text>
-        </td>
-        <td>
-          <!-- {{ callStatus }} -->
-          <base-text variant="bodysm" weight="300">Call Status</base-text>
-        </td>
-        <td>
-          <!-- {{ notes }} -->
-          <base-text
-            variant="bodysm"
-            weight="300"
-            class="text-crisiscleanup-dark-300"
-            >Lorem ipsum adshnasdsoih alsdfgnx ad aldsk asdiigh</base-text
-          >
-        </td>
-        <td>
-          <!-- {{ callCompleted }} -->
-          <base-text
-            variant="bodysm"
-            weight="300"
-            class="text-crisiscleanup-dark-300"
-            >10 mins ago</base-text
-          >
-        </td>
-      </tr>
-    </table>
+    <div class="wrapper">
+      <div class="box a">
+        <!-- {{ phone }} -->
+        <base-text variant="bodysm" weight="300">601-123-4567</base-text>
+      </div>
+      <div class="box b">
+        <!-- {{ name }} -->
+        <base-text variant="bodysm" weight="300">Julie Smith</base-text>
+      </div>
+      <div class="box c">
+        <!-- {{ caseNumber }} -->
+        <base-text variant="bodysm" weight="300">C11</base-text>
+      </div>
+      <div class="box d">
+        <!-- {{ callStatus }} -->
+        <base-text variant="bodysm" weight="300">Call Status</base-text>
+      </div>
+      <div class="box e">
+        <!-- {{ notes }} -->
+        <base-text
+          variant="bodysm"
+          weight="300"
+          class="text-crisiscleanup-dark-300"
+          >Lorem ipsum adshnasdsoih alsdfgnx ad aldsk asdiigh</base-text
+        >
+      </div>
+      <div class="box f">
+        <!-- {{ callCompleted }} -->
+        <base-text
+          variant="bodysm"
+          weight="300"
+          class="text-crisiscleanup-dark-300"
+          >10 mins ago</base-text
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -48,26 +46,20 @@ export default {
 </script>
 
 <style scoped>
-.table {
+.wrapper {
   display: grid;
-  min-width: 100vw;
-  width: auto;
-  flex: 1;
-  border-collapse: collapse;
-  grid-template-columns:
-    minmax(150px, 3.33fr)
-    minmax(150px, 1.67fr)
-    minmax(150px, 1.67fr)
-    minmax(150px, 3.33fr)
-    minmax(150px, 1fr);
+  grid-template-columns: repeat(6, minmax(50px, 1fr));
+  max-width: 800px;
 }
-tr {
-  display: contents;
+.row {
+  grid-column: auto;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(50px, 1fr));
 }
-td {
-  padding: 15px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+
+/* .box {
+   border-radius: 5px;
+   padding: 20px;
+   font-size: 150%;
+} */
 </style>
