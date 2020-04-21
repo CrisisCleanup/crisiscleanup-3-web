@@ -1,5 +1,4 @@
 const AppState = {
-  currentAgentId: localStorage.getItem('currentAgentId'),
   user: {},
   call: null,
   incomingCall: null,
@@ -44,16 +43,6 @@ const actions = {};
 
 // mutations
 const mutations = {
-  setCurrentAgentId(state, currentAgentId) {
-    if (!currentAgentId) {
-      localStorage.removeItem('currentAgentId');
-      return;
-    }
-    state.currentAgentId = currentAgentId
-      ? parseInt(currentAgentId)
-      : currentAgentId;
-    localStorage.setItem('currentAgentId', currentAgentId);
-  },
   setUser(state, user) {
     state.user = user;
   },

@@ -67,6 +67,7 @@ import Tab from '@/components/tabs/Tab';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
+import PhoneService from '@/services/phone.service';
 
 // Base Components
 Vue.component('base-link', BaseLink);
@@ -224,6 +225,8 @@ Vue.use(VueNativeSocket, WS_URL, {
     }
   },
 });
+
+Vue.prototype.$phoneService = new PhoneService();
 
 // Setup i18n
 const getLanguages = async (tags) => {

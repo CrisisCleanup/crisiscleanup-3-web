@@ -1,6 +1,7 @@
 import AgentLibrary from '@/../vendor/cf-agent-library';
 import store from '@/store';
 import Logger from '@/utils/log';
+import User from '@/models/User';
 
 const Log = Logger({
   name: 'phoneLegacy',
@@ -107,6 +108,7 @@ export default class PhoneService {
     phoneNumber = '6479804730',
     gatewayIds = ['124906'],
   ) {
+    const currentUser = User.find(this.store.getters['auth/userId']);
     return new Promise((resolve, reject) => {
       Log.debug(this.gateway);
 
@@ -120,11 +122,15 @@ export default class PhoneService {
           }
           Log.debug('AgentLibrary successfully logged in');
           this.store.commit('phone_legacy/setState', 'AVAILABLE');
-          this.store.commit(
-            'phone_legacy/setCurrentAgentId',
-            data.agentSettings.agentId,
-          );
           this.loggedInAgentId = data.agentSettings.agentId;
+          const loggedInAgents = currentUser.states.loggedInAgents || [];
+          User.api().updateUserState(
+            {
+              currentAgentId: data.agentSettings.agentId,
+              loggedInAgents: [...loggedInAgents, data.agentSettings.agentId],
+            },
+            true,
+          );
           this.cf.configureAgent(
             phoneNumber,
             gatewayIds,

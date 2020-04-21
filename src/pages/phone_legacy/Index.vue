@@ -424,7 +424,6 @@ export default {
   data() {
     return {
       nextOutbound: null,
-      service: null,
       worksite: null,
       cases: {},
       cards: [],
@@ -437,12 +436,8 @@ export default {
       editCardActive: false,
     };
   },
-  async mounted() {
-    this.service = new PhoneService();
-  },
   methods: {
     ...mapMutations('phone_legacy', [
-      'setCurrentAgentId',
       'setOutgoingCall',
       'setIncomingCall',
       'setCaller',
@@ -459,22 +454,38 @@ export default {
         );
         return response.data.username;
       } catch (e) {
-        this.setCurrentAgentId(null);
+        await User.api().updateUserState(
+          {
+            currentAgentId: null,
+          },
+          true,
+        );
         return 'covidtest';
       }
     },
     async login() {
       await this.logout();
       let username = 'covidtest';
-      if (this.currentAgentId) {
-        username = await this.getUserNameForAgent(this.currentAgentId);
+      const { currentAgentId } = this.currentUser.states;
+      if (currentAgentId) {
+        username = await this.getUserNameForAgent(currentAgentId);
       }
-      await this.service.login(username);
+      await this.$phoneService.login(username);
       await this.getNextCall();
     },
     async logout() {
-      if (this.currentAgentId) {
-        await this.service.logout(this.currentAgentId);
+      const { loggedInAgents } = this.currentUser.states;
+      if (loggedInAgents && loggedInAgents.length) {
+        await Promise.all(
+          loggedInAgents.map((agentId) => this.$phoneService.logout(agentId)),
+        );
+        await User.api().updateUserState(
+          {
+            loggedInAgents: [],
+            currentAgentId: null,
+          },
+          true,
+        );
       }
     },
     async callMe() {
@@ -486,7 +497,7 @@ export default {
       const [caller] = dnisResponse.data.results;
       this.setOutgoingCall(this.nextOutbound);
       this.setCaller(caller);
-      await this.service.dial('6479818167');
+      await this.$phoneService.dial('6479818167');
     },
     setCase(caseObject) {
       this.caseId = caseObject.id;
@@ -544,14 +555,14 @@ export default {
       this.status = statusId;
     },
     async completeCall() {
-      if (this.service.callInfo.callType === 'OUTBOUND') {
+      if (this.$phoneService.callInfo.callType === 'OUTBOUND') {
         await PhoneOutbound.api().updateStatus(this.call.id, {
           statusId: this.status,
           worksiteId: Boolean(this.worksite) && this.worksite.id,
         });
       }
 
-      if (this.service.callInfo.callType === 'INBOUND') {
+      if (this.$phoneService.callInfo.callType === 'INBOUND') {
         await this.$http.post(
           `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/${this.call.id}/update_status`,
           {
@@ -580,7 +591,6 @@ export default {
     ]),
     ...mapState('incident', ['currentIncidentId']),
     ...mapState('phone_legacy', [
-      'currentAgentId',
       'callState',
       'call',
       'caller',
