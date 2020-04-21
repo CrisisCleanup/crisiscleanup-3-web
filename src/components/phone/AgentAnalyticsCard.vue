@@ -50,7 +50,7 @@ export default {
   timers: {
     fetchMetrics: {
       // metrics are updated every 10s
-      time: 10100,
+      time: 10000,
       autostart: true,
       repeat: true,
       immediate: true,

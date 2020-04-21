@@ -1,6 +1,6 @@
 const ROOT = process.env.VUE_APP_API_BASE_URL;
 
-const getApiUrl = (path) => {
+export const getApiUrl = (path) => {
   const rootUrl = new URL(path, ROOT).toString();
   const getUrl = (endpoint) => {
     if (endpoint === undefined) {

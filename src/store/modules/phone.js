@@ -7,7 +7,7 @@ import PhoneResource from '@/models/PhoneResource';
 import Worksite from '@/models/Worksite';
 import * as ConnectService from '@/services/acs.service';
 import * as SSO from '@/services/sso.service';
-import { PhoneApi } from '@/utils/api';
+import { getApiUrl, PhoneApi } from '@/utils/api';
 import Logger from '@/utils/log';
 import axios from 'axios';
 import { camelCase } from 'lodash';
@@ -75,6 +75,7 @@ const PhoneState = {
   agentState: ConnectService.STATES.OFFLINE,
   agentConfig: null,
   metrics: {},
+  agentMetrics: {},
   connectRunning: false,
   connectAuthed: false,
   streams: null,
@@ -242,6 +243,12 @@ const actions = {
     newState[metric.NEEDED] = needed >= 0 ? needed : 0;
     commit('setMetrics', newState);
     return resp;
+  },
+  async getAgentMetrics({ commit }) {
+    // todo: Do this properly... but its 6am
+    // and I have not slept yet :(
+    const resp = await axios.get(getApiUrl('agents_metrics')(''));
+    commit('setAgentMetrics', resp.data.results);
   },
   async initConnect(
     { state, commit, dispatch, getters: { agentStateTimestamp } },
@@ -761,6 +768,12 @@ const mutations = {
     state.externalContact = {
       ...state.externalContact,
       ...newState,
+    };
+  },
+  setAgentMetrics(state, metrics) {
+    state.agentMetrics = {
+      ...state.agentMetrics,
+      ...metrics,
     };
   },
   resetState(state) {

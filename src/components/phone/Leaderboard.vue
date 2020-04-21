@@ -28,21 +28,35 @@
       </div>
     </div>
     <!-- Profiles -->
-    <LeaderboardProfileCard />
+    <LeaderboardProfileCard
+      v-for="a in agentMetrics"
+      :key="a.agent"
+      :calls="a.total_calls"
+      :name="`${a.user.first_name} ${a.user.last_name}`"
+      :org-name="`${a.organization.name}`"
+    />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import LeaderboardProfileCard from './LeaderboardProfileCard.vue';
+
 export default {
   name: 'Leaderboard',
   components: {
     LeaderboardProfileCard,
   },
+  computed: {
+    ...mapState('phone', ['agentMetrics']),
+  },
   data() {
     return {
       toggleOpen: false,
     };
+  },
+  async mounted() {
+    await this.$store.dispatch('phone/getAgentMetrics');
   },
 };
 </script>
