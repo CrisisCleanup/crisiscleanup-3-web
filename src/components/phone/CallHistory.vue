@@ -1,53 +1,59 @@
 <template>
   <div>
     <div class="wrapper">
-      <base-text
-        variant="bodysm"
-        weight="900"
-        class="text-crisiscleanup-dark-300"
-      >
-        Phone Number
-      </base-text>
-
+      <div class="box a">
+        <base-text
+          variant="bodysm"
+          weight="900"
+          class="text-crisiscleanup-dark-300"
+        >
+          Phone Number
+        </base-text>
+      </div>
       <div class="box b" />
-
-      <base-text
-        variant="bodysm"
-        weight="900"
-        class="text-crisiscleanup-dark-300"
-      >
-        Case #
-      </base-text>
-
-      <base-text
-        variant="bodysm"
-        weight="900"
-        class="text-crisiscleanup-dark-300"
-      >
-        Call Status
-      </base-text>
-
-      <base-text
-        variant="bodysm"
-        weight="900"
-        class="text-crisiscleanup-dark-300"
-      >
-        Notes
-      </base-text>
-
-      <base-text
-        variant="bodysm"
-        weight="900"
-        class="text-crisiscleanup-dark-300"
-      >
-        Call Completed
-      </base-text>
+      <div class="box c">
+        <base-text
+          variant="bodysm"
+          weight="900"
+          class="text-crisiscleanup-dark-300"
+        >
+          Case #
+        </base-text>
+      </div>
+      <div class="box d">
+        <base-text
+          variant="bodysm"
+          weight="900"
+          class="text-crisiscleanup-dark-300"
+        >
+          Call Status
+        </base-text>
+      </div>
+      <div class="box e">
+        <base-text
+          variant="bodysm"
+          weight="900"
+          class="text-crisiscleanup-dark-300"
+        >
+          Notes
+        </base-text>
+      </div>
+      <div class="box f">
+        <base-text
+          variant="bodysm"
+          weight="900"
+          class="text-crisiscleanup-dark-300"
+        >
+          Call Completed
+        </base-text>
+      </div>
     </div>
     <call-summary
       v-for="(detail, idx) in details"
       :key="idx"
       :phone="detail.phone"
     ></call-summary>
+    <call-summary />
   </div>
 </template>
 <script>
@@ -84,5 +90,9 @@ export default {
   grid-column: auto;
   display: grid;
   grid-template-columns: repeat(6, minmax(50px, 1fr));
+}
+.box {
+  border-radius: 5px;
+  padding: 5px;
 }
 </style>
