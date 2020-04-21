@@ -49,10 +49,8 @@ export default {
   mixins: [VueTimers, LangMixin, IconsMixin],
   timers: {
     fetchMetrics: {
-      // AWS refreshes metrics every
-      // 15 seconds, so add a small delay
-      // on top of that
-      time: 20250,
+      // metrics are updated every 10s
+      time: 10100,
       autostart: true,
       repeat: true,
       immediate: true,
