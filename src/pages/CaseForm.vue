@@ -892,14 +892,6 @@ export default {
 .intake-form {
   /*height: 600px;*/
   overflow: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.intake-form::-webkit-scrollbar {
-  /* WebKit */
-  width: 0;
-  height: 0;
 }
 
 .card-footer {
