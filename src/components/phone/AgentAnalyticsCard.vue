@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 import { mixin as VueTimers } from 'vue-timers';
 import { METRICS } from '@/services/acs.service';
 import { LangMixin, UserMixin, IconsMixin } from '@/mixins';
@@ -48,8 +48,9 @@ export default {
   name: 'AgentAnalyticsCard',
   mixins: [VueTimers, LangMixin, IconsMixin, UserMixin],
   timers: {
-    fetchMetrics: {
-      // metrics are updated every 10s
+    clientHeartbeat: {
+      // pings integrations to let it know
+      // to update me
       time: 30000,
       autostart: true,
       repeat: true,
@@ -97,9 +98,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('phone', ['getRealtimeMetrics']),
-    async fetchMetrics() {
-      // await this.getRealtimeMetrics();
+    async clientHeartbeat() {
       await this.$store.dispatch('socket/send', {
         action: 'CLIENT_HEARTBEAT',
         options: {

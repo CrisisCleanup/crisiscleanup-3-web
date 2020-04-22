@@ -501,7 +501,7 @@ const actions = {
     }
   },
   async syncContact(
-    { commit, state, dispatch, getters: { agentState, agentId } },
+    { commit, state, dispatch, getters: { agentState, agentId, contactState } },
     newContact = null,
   ) {
     Log.debug('syncing current contact...');
@@ -514,7 +514,7 @@ const actions = {
       return null;
     }
     const contactId = contact.getContactId();
-    const contactState = contact.getStatus();
+    const newContactState = contact.getStatus();
     const duration = contact.getStatusDuration();
     const contactAttrs = contact.getAttributes();
     const initConnection = contact.getInitialConnection();
@@ -528,7 +528,7 @@ const actions = {
       ids = { value: '' },
       USER_LANGUAGE,
     } = contactAttrs;
-    Log.debug('contact refresh: ', contactState);
+    Log.debug('contact refresh: ', newContactState);
     const workSites = worksites.value.split(',').filter((v) => v !== '');
     const Pdas = pdas.value.split(',').filter((v) => v !== '');
     const outboundIds = ids.value.split(',').filter((v) => v !== '');
@@ -544,10 +544,27 @@ const actions = {
       outboundIds,
       callerLocale: locale,
     };
+    if (newContactState.type !== contactState) {
+      Log.debug('updating contact action...');
+      await dispatch(
+        'socket/send',
+        {
+          action: 'UPDATE_CONTACT',
+          options: {
+            includeMeta: true,
+          },
+          data: {
+            contactId,
+            action: newContactState.type,
+          },
+        },
+        { root: true },
+      );
+    }
     commit('setContact', {
       id: contactId,
       duration,
-      state: contactState.type,
+      state: newContactState.type,
       type: connectType,
       attributes,
     });
