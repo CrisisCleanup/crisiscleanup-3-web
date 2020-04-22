@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex h-full overflow-auto cases-container-grid"
+    class="flex h-full overflow-hidden cases-container-grid"
     :class="{
       'cases-container-grid--full': $mq === 'sm',
     }"
