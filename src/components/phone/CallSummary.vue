@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="wrapper">
+    <div class="wrapper ml-3">
       <div class="box a">
         <!-- {{ phone }} -->
         <base-text variant="bodysm" weight="300">601-123-4567</base-text>

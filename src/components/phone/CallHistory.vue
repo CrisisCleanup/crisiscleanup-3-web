@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="wrapper">
+    <div class="wrapper ml-3">
       <div class="box a">
         <base-text
           variant="bodysm"
