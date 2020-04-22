@@ -23,8 +23,28 @@
           variant="bodysm"
           weight="300"
           class="text-crisiscleanup-dark-300"
-          >Lorem ipsum adshnasdsoih alsdfgnx ad aldsk asdiigh</base-text
+          >Lorem ipsum adshnasdsoih
+          <!-- <base-button
+            @click="more === true"
+            :aria-expanded="more ? 'true' : 'false'"
+            class="color-crisiscleanup=blue"
+          >
+            ...More
+          </base-button> -->
+        </base-text>
+        <base-button
+          @click="readMore === true"
+          class="text-crisiscleanup-dark-blue"
+          >...More
+        </base-button>
+        <base-text
+          v-if="(readMore === true)"
+          variant="bodysm"
+          weight="300"
+          class="text-crisiscleanup-dark-300"
         >
+          alsdfgnx ad aldsk asdiigh
+        </base-text>
       </div>
       <div class="box f">
         <!-- {{ callCompleted }} -->
@@ -42,6 +62,11 @@
 <script>
 export default {
   name: 'CallSummary',
+  data() {
+    return {
+      readMore: false,
+    };
+  },
 };
 </script>
 
