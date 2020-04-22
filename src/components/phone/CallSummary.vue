@@ -27,7 +27,7 @@
           <span
             ><base-button
               @click="readMore === true"
-              class="text-crisiscleanup-dark-blue text-sm"
+              class="text-crisiscleanup-dark-blue text-xs"
               >...More
             </base-button>
           </span>
