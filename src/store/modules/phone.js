@@ -224,13 +224,17 @@ const getters = {
 
 // actions
 const actions = {
-  async getRealtimeMetrics({ commit }) {
-    const resp = await axios.get(PhoneApi('metrics'));
+  async getRealtimeMetrics({ commit }, { metrics }) {
+    let metricData = metrics;
+    if (!metricData) {
+      const resp = await axios.get(PhoneApi('metrics'));
+      metricData = resp.data.results;
+    }
     const newState = {};
     // custom metrics
     const metric = ConnectService.METRICS;
     const metricNames = Object.keys(metric);
-    resp.data.results.map(({ name, value }, idx) => {
+    metricData.map(({ name, value }, idx) => {
       let metricName = name;
       if (!metricName) {
         metricName = metricNames[idx];
@@ -244,7 +248,6 @@ const actions = {
     const needed = newState[metric.TOTAL_WAITING] - newState[metric.AVAILABLE];
     newState[metric.NEEDED] = needed >= 0 ? needed : 0;
     commit('setMetrics', newState);
-    return resp;
   },
   async getAgentMetrics({ commit }) {
     // todo: Do this properly... but its 6am
@@ -723,7 +726,7 @@ const mutations = {
     };
   },
   setMetrics(state, newState) {
-    state.metrics = newState;
+    state.metrics = { ...state.metrics, ...newState };
   },
   setAgentState(state, newState) {
     state.agentState = newState;
