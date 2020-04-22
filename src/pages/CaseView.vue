@@ -643,14 +643,6 @@ export default {
 <style scoped>
 .intake-view {
   overflow: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.intake-view::-webkit-scrollbar {
-  /* WebKit */
-  width: 0;
-  height: 0;
 }
 
 .notes {

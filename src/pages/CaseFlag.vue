@@ -372,13 +372,5 @@ export default {
 .intake-view {
   height: 600px;
   overflow: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.intake-view::-webkit-scrollbar {
-  /* WebKit */
-  width: 0;
-  height: 0;
 }
 </style>

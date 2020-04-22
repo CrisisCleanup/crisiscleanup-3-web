@@ -533,14 +533,6 @@ export default {
 
 .pda-form {
   overflow: scroll;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.pda-form::-webkit-scrollbar {
-  /* WebKit */
-  width: 0;
-  height: 0;
 }
 
 .card-footer {
