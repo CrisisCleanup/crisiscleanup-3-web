@@ -24,21 +24,17 @@
           weight="300"
           class="text-crisiscleanup-dark-300"
           >Lorem ipsum adshnasddfx
-          <span
-            ><base-button
-              @click="readMore === true"
-              class="text-crisiscleanup-dark-blue text-xs"
-              >...More
-            </base-button>
+          <span v-if="readMore">
+            alsdfgnx ad aldsk asdiigh
           </span>
-        </base-text>
-        <base-text
-          v-if="(readMore === true)"
-          variant="bodysm"
-          weight="300"
-          class="text-crisiscleanup-dark-300"
-        >
-          alsdfgnx ad aldsk asdiigh
+          <!-- Read More Button -->
+          <button
+            @click="readMore = !readMore"
+            class="text-crisiscleanup-dark-blue text-xs"
+          >
+            <span v-if="readMore">Less</span>
+            <span v-else>...More</span>
+          </button>
         </base-text>
       </div>
       <div class="box f">
