@@ -216,7 +216,7 @@
         <div class="flex">
           <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
             <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('dashboard.pending_cases') }}
+              {{ $t('dashboard.case_transfer_requests') }}
             </div>
             <div class="py-4 px-4 border-b flex items-center">
               <base-button
@@ -226,7 +226,7 @@
                 "
                 class="mr-2 border-r pr-2"
                 size="medium"
-                text="Inbound Requests"
+                :text="$t('dashboard.inbound_requests')"
                 :class="[pendingView === 'inbound' ? 'text-primary-dark' : '']"
                 @click.native="pendingView = 'inbound'"
                 variant="text"
@@ -235,7 +235,7 @@
               <base-button
                 class="mr-2 border-r pr-2"
                 size="medium"
-                text="Outbound Requests"
+                :text="$t('dashboard.outbound_requests')"
                 :class="[pendingView === 'outbound' ? 'text-primary-dark' : '']"
                 @click.native="pendingView = 'outbound'"
                 variant="text"
@@ -244,7 +244,7 @@
               <base-button
                 class="mr-2"
                 size="medium"
-                text="Archived Requests"
+                :text="$t('dashboard.archived_requests')"
                 :class="[pendingView === 'archived' ? 'text-primary-dark' : '']"
                 @click.native="pendingView = 'archived'"
                 variant="text"

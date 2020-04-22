@@ -788,7 +788,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="py-4 px-4 text-gray-500 border-b"
         >
           
-            dashboard.pending_cases
+            dashboard.case_transfer_requests
           
         </div>
          
@@ -798,21 +798,21 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           <base-button-stub
             class="mr-2 border-r pr-2 text-primary-dark"
             size="medium"
-            text="Inbound Requests"
+            text="dashboard.inbound_requests"
             variant="text"
           />
            
           <base-button-stub
             class="mr-2 border-r pr-2"
             size="medium"
-            text="Outbound Requests"
+            text="dashboard.outbound_requests"
             variant="text"
           />
            
           <base-button-stub
             class="mr-2"
             size="medium"
-            text="Archived Requests"
+            text="dashboard.archived_requests"
             variant="text"
           />
         </div>
