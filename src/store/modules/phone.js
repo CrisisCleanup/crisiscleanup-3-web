@@ -224,7 +224,7 @@ const getters = {
 
 // actions
 const actions = {
-  async getRealtimeMetrics({ commit }, { metrics }) {
+  async getRealtimeMetrics({ commit }, { metrics } = {}) {
     let metricData = metrics;
     if (!metricData) {
       const resp = await axios.get(PhoneApi('metrics'));
