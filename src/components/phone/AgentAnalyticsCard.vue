@@ -42,15 +42,15 @@
 import { mapState, mapActions } from 'vuex';
 import { mixin as VueTimers } from 'vue-timers';
 import { METRICS } from '@/services/acs.service';
-import { LangMixin, IconsMixin } from '@/mixins';
+import { LangMixin, UserMixin, IconsMixin } from '@/mixins';
 
 export default {
   name: 'AgentAnalyticsCard',
-  mixins: [VueTimers, LangMixin, IconsMixin],
+  mixins: [VueTimers, LangMixin, IconsMixin, UserMixin],
   timers: {
     fetchMetrics: {
       // metrics are updated every 10s
-      time: 10000,
+      time: 30000,
       autostart: true,
       repeat: true,
       immediate: true,
@@ -99,18 +99,17 @@ export default {
   methods: {
     ...mapActions('phone', ['getRealtimeMetrics']),
     async fetchMetrics() {
-      await this.$store.dispatch(
-        'socket/send',
-        {
-          action: 'GET_CONTACTS',
-          options: {
-            includeMeta: true,
-          },
-          data: {},
+      // await this.getRealtimeMetrics();
+      await this.$store.dispatch('socket/send', {
+        action: 'CLIENT_HEARTBEAT',
+        options: {
+          includeMeta: true,
         },
-        { root: true },
-      );
-      await this.getRealtimeMetrics();
+        data: {
+          userId: this.userId,
+          type: this.currentUser.isAdmin ? 'admin' : 'user',
+        },
+      });
     },
   },
 };
