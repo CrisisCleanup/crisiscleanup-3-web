@@ -77,15 +77,23 @@
             />
           </span>
           <form-select
-            :value="worksite.formFields[field.field_key]"
+            :value="
+              worksite.formFields[field.field_key] &&
+              worksite.formFields[field.field_key].split(',')
+            "
             multiple
-            :options="field.values"
+            :options="
+              field.values || getSelectValuesList(field.values_default_t)
+            "
             item-key="value"
             label="name_t"
-            select-classes="h-12 border"
+            select-classes="bg-white border text-xs role-select p-1 form-multiselect"
             @input="
               (value) => {
-                $emit('updateField', { key: field.field_key, value });
+                $emit('updateField', {
+                  key: field.field_key,
+                  value: value.join(','),
+                });
               }
             "
           />
@@ -283,5 +291,8 @@ export default {
 <style>
 .form-field {
   @apply py-1 mx-3;
+}
+.form-multiselect .vs__selected {
+  @apply text-xs bg-white !important;
 }
 </style>

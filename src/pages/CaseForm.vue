@@ -724,6 +724,7 @@ export default {
         } else {
           const savedWorksite = await Worksite.api().post('/worksites', {
             ...this.worksite,
+            incident: this.incidentId,
             skip_duplicate_check: true,
           });
           this.worksite = Worksite.find(savedWorksite.entities.worksites[0].id);

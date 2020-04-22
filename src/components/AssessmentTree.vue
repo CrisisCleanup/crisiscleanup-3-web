@@ -67,7 +67,10 @@
         <div :key="field.field_key" class="form-field">
           <span>{{ field.label_t }}</span>
           <form-select
-            :value="pda.formFields[field.field_key]"
+            :value="
+              pda.formFields[field.field_key] &&
+              pda.formFields[field.field_key].split(',')
+            "
             :options="
               field.values || getSelectValuesList(field.values_default_t)
             "
@@ -75,10 +78,13 @@
             indicator-icon="caret-down"
             item-key="value"
             label="name_t"
-            select-classes="h-10 border"
+            select-classes="bg-white border text-xs role-select p-1 form-multiselect"
             @input="
               (value) => {
-                $emit('updateField', { key: field.field_key, value });
+                $emit('updateField', {
+                  key: field.field_key,
+                  value: value.join(','),
+                });
               }
             "
           />
