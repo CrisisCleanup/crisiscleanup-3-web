@@ -10,8 +10,8 @@
         <div class="flex flex-row">
           <base-text variant="h3">{{ name }}</base-text>
           <base-text variant="h3" class="px-2">
-            <span class="text-crisiscleanup-green-300">
-              &#8226; Online
+            <span :class="`dot ${currentState}`">
+              &#8226; {{ currentState | capitalize }}
             </span>
           </base-text>
         </div>
@@ -46,6 +46,36 @@ export default {
     calls: VueTypes.number,
     name: VueTypes.string,
     orgName: VueTypes.string,
+    state: VueTypes.string,
+  },
+  computed: {
+    currentState() {
+      const stateMap = {
+        routable: 'online',
+      };
+      const state = this.state.split('#')[2];
+      if (Object.keys(stateMap).includes(state)) {
+        return stateMap[state];
+      }
+      return state;
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.dot {
+  &.offline {
+    @apply text-crisiscleanup-red-500;
+  }
+  &.online {
+    @apply text-crisiscleanup-green-300;
+  }
+  &.oncall {
+    @apply text-crisiscleanup-dark-blue;
+  }
+  &.paused {
+    @apply text-crisiscleanup-yellow-500;
+  }
+}
+</style>

@@ -29,17 +29,18 @@
     </div>
     <!-- Profiles -->
     <LeaderboardProfileCard
-      v-for="a in agentMetrics"
+      v-for="a in agentBoard"
       :key="a.agent"
       :calls="a.total_calls"
       :name="`${a.user.first_name} ${a.user.last_name}`"
       :org-name="`${a.organization.name}`"
+      :state="a.currentState"
     />
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import LeaderboardProfileCard from './LeaderboardProfileCard.vue';
 
 export default {
@@ -48,7 +49,7 @@ export default {
     LeaderboardProfileCard,
   },
   computed: {
-    ...mapState('phone', ['agentMetrics']),
+    ...mapGetters('phone', ['agentBoard']),
   },
   data() {
     return {
