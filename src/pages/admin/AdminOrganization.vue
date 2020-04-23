@@ -610,6 +610,9 @@ export default {
   methods: {
     getContactView(request) {
       const contact = request.requested_by_contact;
+      if (!request.requested_by_contact) {
+        return '';
+      }
       return `
           <div>Requested By</div>
           <div>${contact.first_name} ${contact.last_name}</div>
@@ -637,38 +640,43 @@ export default {
       this.loadPageData();
     },
     async loadPageData() {
-      const pageData = await hash({
-        organization: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}`,
-        ),
-        roles: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
-        ),
-        capabilities: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
-        ),
-        roleRequests: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests?organization=${this.$route.params.organization_id}`,
-        ),
-        incidentRequests: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/admins/incident_requests?organization=${this.$route.params.organization_id}`,
-        ),
-        users: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/users?organization=${this.$route.params.organization_id}`,
-        ),
-        incidents: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
-        ),
-        ghostUsers: await this.getGhostUsers(),
-      });
-      this.organization = pageData.organization.data;
-      this.capabilities = pageData.capabilities.data.results;
-      this.roles = pageData.roles.data.results;
-      this.roleRequests = pageData.roleRequests.data.results;
-      this.incidentRequests = pageData.incidentRequests.data.results;
-      this.users = pageData.users.data.results;
-      this.incidents = pageData.incidents.data.results;
-      this.ghostUsers = pageData.ghostUsers;
+      try {
+        const pageData = await hash({
+          organization: await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}`,
+          ),
+          roles: await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
+          ),
+          capabilities: await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
+          ),
+          roleRequests: await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests?organization=${this.$route.params.organization_id}`,
+          ),
+          incidentRequests: await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/admins/incident_requests?organization=${this.$route.params.organization_id}`,
+          ),
+          users: await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/users?organization=${this.$route.params.organization_id}`,
+          ),
+          incidents: await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
+          ),
+          ghostUsers: await this.getGhostUsers(),
+        });
+
+        this.organization = pageData.organization.data;
+        this.capabilities = pageData.capabilities.data.results;
+        this.roles = pageData.roles.data.results;
+        this.roleRequests = pageData.roleRequests.data.results;
+        this.incidentRequests = pageData.incidentRequests.data.results;
+        this.users = pageData.users.data.results;
+        this.incidents = pageData.incidents.data.results;
+        this.ghostUsers = pageData.ghostUsers;
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
     },
 
     async getGhostUsers() {
