@@ -155,6 +155,7 @@ jobs:
       - name: Deploy Development
         env:
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
+          VUE_APP_STAGE: development
         run: yarn deploy-development
 
       - name: Deploy Staging
@@ -166,6 +167,7 @@ jobs:
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUStagingConnectRole'
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
           VUE_APP_WS_URL: 'wss://socket.staging.crisiscleanup.io'
+          VUE_APP_STAGE: staging
         run: yarn deploy-staging
 
       - name: Deploy Production
@@ -177,6 +179,7 @@ jobs:
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccuproduction'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUProductionConnectRole'
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
+          VUE_APP_STAGE: production
         run: yarn deploy-production
 
       - name: Post Notify Staging
