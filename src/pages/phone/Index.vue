@@ -62,7 +62,7 @@ export default {
         try {
           let aId = this.agentId;
           if (!aId) {
-            aId = await this.$store.dispatch('getAgent');
+            aId = await this.$store.dispatch('phone/getAgent');
           }
           const callback = await PhoneOutbound.api().getNextOutbound({
             agentId: aId,
