@@ -99,6 +99,7 @@ export default {
   },
   methods: {
     async clientHeartbeat() {
+      await this.$store.dispatch('phone/getRealtimeMetrics');
       await this.$store.dispatch('socket/send', {
         action: 'CLIENT_HEARTBEAT',
         options: {

@@ -53,6 +53,14 @@ export default class Agent extends Model {
         } = agent;
         return data;
       },
+      async getMetrics(agent_id) {
+        const response = await this.get(`/agents_metrics?agent=${agent_id}`);
+        const {
+          response: { data },
+        } = response;
+        const [metrics] = data.results;
+        return metrics;
+      },
       async updateConfig(id) {
         return this.patch(`/agents/${id}`, { save: false });
       },

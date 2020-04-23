@@ -7,7 +7,7 @@ import PhoneResource from '@/models/PhoneResource';
 import Worksite from '@/models/Worksite';
 import * as ConnectService from '@/services/acs.service';
 import * as SSO from '@/services/sso.service';
-import { getApiUrl, PhoneApi } from '@/utils/api';
+import { PhoneApi } from '@/utils/api';
 import Logger from '@/utils/log';
 import axios from 'axios';
 import { camelCase } from 'lodash';
@@ -220,6 +220,8 @@ const getters = {
   currentPage: (state) =>
     state.controller ? state.controller.currentPage : 'dashboard',
   contactMetrics: (state) => (state.contactMetrics ? state.contactMetrics : []),
+  agentBoard: (state) =>
+    state.agentMetrics ? Object.values(state.agentMetrics) : [],
 };
 
 // actions
@@ -262,11 +264,19 @@ const actions = {
     Log.debug('new metrics:', newState);
     commit('setMetrics', newState);
   },
-  async getAgentMetrics({ commit }) {
-    // todo: Do this properly... but its 6am
-    // and I have not slept yet :(
-    const resp = await axios.get(getApiUrl('agents_metrics')(''));
-    commit('setAgentMetrics', resp.data.results);
+  async getAgentMetrics({ commit }, { agents }) {
+    const agentBoard = {};
+    await Promise.all(
+      agents.map(async ({ agent_id, state }) => {
+        await Agent.api().get(`/agents/${agent_id}`);
+        const metrics = await Agent.api().getMetrics(agent_id);
+        agentBoard[agent_id] = {
+          ...metrics,
+          currentState: state,
+        };
+      }),
+    );
+    commit('setAgentMetrics', agentBoard);
   },
   async setContactMetrics({ commit }, { contacts }) {
     Log.debug('got contact metrics!', contacts);
@@ -770,10 +780,10 @@ const mutations = {
       ...newState,
     };
   },
-  setAgentMetrics(state, metrics) {
+  setAgentMetrics(state, newAgents) {
     state.agentMetrics = {
       ...state.agentMetrics,
-      ...metrics,
+      ...newAgents,
     };
   },
   setContactMetrics(state, metrics) {
