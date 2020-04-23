@@ -367,7 +367,7 @@ const actions = {
   async setAgent({ commit }, agent) {
     commit('setAgent', agent);
   },
-  async getAgent({ commit, dispatch, rootState }) {
+  async getAgent({ commit, rootState }) {
     const userAgent = {
       user: {
         id: rootState.auth.user.user_claims.id,
@@ -376,46 +376,7 @@ const actions = {
     };
     const agent = await Agent.api().fetch(userAgent);
     commit('setAgent', agent);
-    await dispatch(
-      'socket/send',
-      {
-        action: 'GET_AGENT_STATE',
-        options: { includeMeta: true },
-        data: { agentId: agent.agent_id },
-      },
-      { root: true },
-    );
     return agent.agent_id;
-  },
-  async syncDynamicState({
-    dispatch,
-    getters: { agentId, agentStateTimestamp, agentState },
-  }) {
-    // Sync dynamic states
-    //   * pendingCall -> offline
-    //   * routable -> offline (heartbeat)
-    //   * etc.
-    Log.debug('syncing dynamic agent state...');
-    if (!agentId) {
-      return dispatch('getAgent');
-    }
-    const response = await Agent.api().getDynamicState(agentId);
-    Log.debug('dynamic state response:', response);
-    const { state, entered_timestamp } = response;
-    const entered = Date.parse(entered_timestamp);
-    if (state === ConnectService.STATES.STATIC) {
-      Log.debug('current state is not dynamic!');
-      return state;
-    }
-    if (agentStateTimestamp && entered > agentStateTimestamp) {
-      Log.debug('dynamic state is stale! disregarding...');
-      return null;
-    }
-    if (!agentState === state) {
-      Log.debug('no state change, ignoring...');
-    }
-    Log.debug('got new dynamic state!', state);
-    return ConnectService.setAgentState(state);
   },
   async syncCallDuration({ commit, getters: { currentExternalContact } }) {
     const agent = ConnectService.getAgent();
