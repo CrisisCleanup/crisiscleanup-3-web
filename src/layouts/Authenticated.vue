@@ -168,7 +168,8 @@ export default {
           text: this.$t('nav.phone'),
           to: '/phone',
           disabled:
-            !this.$can('phone_agent') || process.env.NODE_ENV === 'production',
+            !this.$can('phone_agent') ||
+            process.env.VUE_APP_STAGE === 'production',
         },
         {
           key: 'caller',
