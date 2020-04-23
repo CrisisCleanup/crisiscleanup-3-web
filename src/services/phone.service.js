@@ -103,15 +103,14 @@ export default class PhoneService {
   }
 
   login(
-    username = 'covidtest',
-    password = 'covidtest',
-    phoneNumber = '6479804730',
-    gatewayIds = ['124906'],
+    username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME,
+    password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD,
   ) {
     const currentUser = User.find(this.store.getters['auth/userId']);
     return new Promise((resolve, reject) => {
-      Log.debug(this.gateway);
-
+      if (!currentUser.mobile) {
+        throw new Error('Please set a valid phone number to take calls');
+      }
       this.cf.loginAgent(
         username,
         password,
@@ -120,8 +119,6 @@ export default class PhoneService {
           if (data.status === 'FAILURE') {
             throw new Error('Could not log in.');
           }
-          Log.debug('AgentLibrary successfully logged in');
-          this.store.commit('phone_legacy/setState', 'AVAILABLE');
           this.loggedInAgentId = data.agentSettings.agentId;
           const loggedInAgents = currentUser.states.loggedInAgents || [];
           User.api().updateUserState(
@@ -131,16 +128,29 @@ export default class PhoneService {
             },
             true,
           );
+          const queueIds = Array.from(
+            new Set([
+              process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
+              process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+            ]),
+          );
           this.cf.configureAgent(
-            phoneNumber,
-            gatewayIds,
+            currentUser.mobile,
+            queueIds,
             null,
             null,
             null,
             null,
             (configureResponse) => {
               Log.debug('Configure response', configureResponse);
-              resolve();
+              if (configureResponse.status === 'FAILURE') {
+                this.logout(data.agentSettings.agentId);
+                reject();
+              } else {
+                Log.debug('AgentLibrary successfully logged in');
+                this.store.commit('phone_legacy/setState', 'AVAILABLE');
+                resolve();
+              }
             },
           );
         },

@@ -88,7 +88,7 @@
             </div>
             <div class="flex p-2 items-center justify-between">
               <base-text>{{ $t('~~Remaining Callbacks') }}</base-text>
-              0
+              {{ remainingCallbacks }}
             </div>
             <div class="flex p-2 items-center justify-between">
               <base-text>{{ $t('~~Remaining Calldowns') }}</base-text>
@@ -211,7 +211,7 @@
                 </div>
                 <div>
                   <ccu-icon
-                    @click.native="service.hangup"
+                    @click.native="$phoneService.hangup"
                     v-if="isOnCall && isOutboundCall"
                     size="lg"
                     type="hangup"
@@ -268,7 +268,6 @@
               {{ $t('No current call') }}
             </div>
           </tab>
-          <tab name="About Us"> </tab>
         </tabs>
       </div>
       <div v-if="$route.meta.id === 'caller'">
@@ -420,7 +419,11 @@ export default {
   name: 'PhoneLegacy',
   components: { EditCallerID, CaseForm },
   mixins: [AgentMixin, WorksitesMixin],
-
+  async mounted() {
+    this.remainingCallbacks = await PhoneOutbound.api().getRemainingCallbackCount(
+      this.currentIncidentId,
+    );
+  },
   data() {
     return {
       nextOutbound: null,
@@ -434,6 +437,7 @@ export default {
       socket: null,
       currentCall: null,
       editCardActive: false,
+      remainingCallbacks: 0,
     };
   },
   methods: {
@@ -490,14 +494,12 @@ export default {
     },
     async callMe() {
       const dnisResponse = await this.$http.get(
-        `${
-          process.env.VUE_APP_API_BASE_URL
-        }/phone_dnis?dnis__contains=${'6479818167'}&sort=-created_at&limit=1`,
+        `${process.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis__contains=${this.nextOutbound.phone_number}&sort=-created_at&limit=1`,
       );
       const [caller] = dnisResponse.data.results;
       this.setOutgoingCall(this.nextOutbound);
       this.setCaller(caller);
-      await this.$phoneService.dial('6479818167');
+      await this.$phoneService.dial(this.nextOutbound.phone_number);
     },
     setCase(caseObject) {
       this.caseId = caseObject.id;
