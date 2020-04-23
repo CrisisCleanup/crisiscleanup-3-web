@@ -57,6 +57,18 @@ export default {
       immediate: true,
     },
   },
+  async mounted() {
+    await this.$store.dispatch('socket/send', {
+      action: 'GET_AGENTS',
+      options: {
+        includeMeta: true,
+      },
+      data: {
+        userId: this.userId,
+        type: this.currentUser.isAdmin ? 'admin' : 'user',
+      },
+    });
+  },
   computed: {
     ...mapState('phone', ['metrics']),
     statistics() {
