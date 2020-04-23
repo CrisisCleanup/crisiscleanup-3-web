@@ -240,14 +240,26 @@ const actions = {
       if (!metricName) {
         metricName = metricNames[idx];
       }
-      newState[camelCase(metricName)] = parseFloat(value);
+      newState[camelCase(metricName)] = parseFloat(value) || 0;
       return newState;
     });
-    // todo: the 0 is "calldowns"
-    newState[metric.TOTAL_WAITING] =
-      newState[metric.CONTACTS_QUEUED] + newState[metric.CALLBACKS_QUEUED] + 0;
-    const needed = newState[metric.TOTAL_WAITING] - newState[metric.AVAILABLE];
-    newState[metric.NEEDED] = needed >= 0 ? needed : 0;
+    // set default values of 0
+    newState[metric.TOTAL_WAITING] = 0;
+    newState[metric.NEEDED] = 0;
+    if (newState[metric.CALLBACKS_QUEUED] && newState[metric.CONTACTS_QUEUED]) {
+      // count up needed and total if required values exists
+      // todo: the 0 is "calldowns"
+      let totalWaiting =
+        newState[metric.CONTACTS_QUEUED] +
+        newState[metric.CALLBACKS_QUEUED] +
+        0;
+      totalWaiting = typeof totalWaiting === 'number' ? totalWaiting : 0;
+      newState[metric.TOTAL_WAITING] = totalWaiting;
+      const needed =
+        newState[metric.TOTAL_WAITING] - newState[metric.AVAILABLE];
+      newState[metric.NEEDED] = needed >= 0 ? needed : 0;
+    }
+    Log.debug('new metrics:', newState);
     commit('setMetrics', newState);
   },
   async getAgentMetrics({ commit }) {
