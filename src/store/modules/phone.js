@@ -265,7 +265,7 @@ const actions = {
       typeof totalWaiting === 'number' ? totalWaiting : 0;
     let needed = totalWaiting - numAvailable;
     needed = typeof needed === 'number' ? needed : 0;
-    needed = needed >= 0 ? needed : 0;
+    needed = needed >= 0 ? Math.floor(needed / 12) : 0;
     newState[metric.NEEDED] = needed;
     Log.debug('new metrics:', newState);
     commit('setMetrics', newState);
