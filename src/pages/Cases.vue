@@ -674,24 +674,22 @@ export default {
       return Worksite.find(this.$route.params.id);
     },
     usStates() {
-      return Location.query()
-        .where(
-          'type',
-          LocationType.query()
-            .where('key', 'boundary_political_us_state')
-            .get()[0].id,
-        )
+      const locationTypes = LocationType.query()
+        .where('key', 'boundary_political_us_state')
         .get();
+      if (locationTypes.length) {
+        return Location.query().where('type', locationTypes[0].id).get();
+      }
+      return [];
     },
     districts() {
-      return Location.query()
-        .where(
-          'type',
-          LocationType.query()
-            .where('key', 'boundary_political_us_congress')
-            .get()[0].id,
-        )
+      const locationTypes = LocationType.query()
+        .where('key', 'boundary_political_us_congress')
         .get();
+      if (locationTypes.length) {
+        return Location.query().where('type', locationTypes[0].id).get();
+      }
+      return [];
     },
     isEditingWorksite() {
       return this.$route.meta.id === 'case_edit';

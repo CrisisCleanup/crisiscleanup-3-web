@@ -100,6 +100,17 @@
           <div v-if="currentSection === 'general'" class="flex flex-col">
             <div class="claim-status mb-2">
               <div class="my-1 text-base">
+                {{ $t('~~Location') }}
+              </div>
+              <base-checkbox
+                v-model="filters.locations.data['organization_bounds']"
+                class="block my-1"
+              >
+                {{ $t('~~Within My Organization Response Area') }}
+              </base-checkbox>
+            </div>
+            <div class="claim-status mb-2">
+              <div class="my-1 text-base">
                 {{ $t('worksiteFilters.claim_reported_by') }}
               </div>
               <base-checkbox
@@ -306,6 +317,7 @@ import WorksiteFieldsFilter from '../utils/data_filters/WorksiteFieldsFilter';
 import WorksiteFlagsFilter from '../utils/data_filters/WorksiteFlagsFilter';
 import WorksiteStatusGroupFilter from '../utils/data_filters/WorksiteStatusGroupFilter';
 import WorksiteStatusFilter from '../utils/data_filters/WorksiteStatusFilter';
+import WorksiteLocationsFilter from '../utils/data_filters/WorksiteLocationsFilter';
 
 export default {
   name: 'WorksiteFilters',
@@ -334,6 +346,7 @@ export default {
         statusGroups: {},
         flags: {},
         sub_fields: {},
+        locations: {},
       },
       currentSection: 'general',
       expanded: {},
@@ -377,11 +390,15 @@ export default {
     flagsCount() {
       return this.filters.flags.count;
     },
+    locationsCount() {
+      return this.filters.locations.count;
+    },
     filtersCount() {
       return (
         this.fieldsCount +
         this.statusCount +
         this.statusGroupCount +
+        this.locationsCount +
         this.flagsCount
       );
     },
@@ -411,6 +428,12 @@ export default {
         flags: new WorksiteFlagsFilter(
           'flags',
           (this.currentFilters.flags && this.currentFilters.flags.data) || {},
+        ),
+        locations: new WorksiteLocationsFilter(
+          'locations',
+          (this.currentFilters.locations &&
+            this.currentFilters.locations.data) ||
+            {},
         ),
         statuses: new WorksiteStatusFilter(
           'statuses',
@@ -474,6 +497,7 @@ export default {
         statusGroups: new WorksiteStatusGroupFilter('statusGroups', {}),
         flags: new WorksiteFlagsFilter('flags', {}),
         statuses: new WorksiteStatusFilter('statuses', {}),
+        locations: new WorksiteLocationsFilter('locations', {}),
       };
     },
   },

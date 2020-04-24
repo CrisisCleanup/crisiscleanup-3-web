@@ -219,7 +219,7 @@ export default {
 
 .intake-form {
   height: 600px;
-  overflow: scroll;
+  overflow: auto;
 }
 
 .card-footer {

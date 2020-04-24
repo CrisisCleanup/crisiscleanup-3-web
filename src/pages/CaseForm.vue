@@ -519,7 +519,7 @@ export default {
       const sixtyDaysAgo = moment().subtract(60, 'days');
 
       const response = await Incident.api().get(
-        `/incidents?fields=id,name&location=${lat},${lng}&start_at__gt=${sixtyDaysAgo.toISOString()}`,
+        `/incidents?fields=id,name&location=${lng},${lat}&start_at__gt=${sixtyDaysAgo.toISOString()}`,
         {
           save: false,
         },
@@ -891,7 +891,7 @@ export default {
 
 .intake-form {
   /*height: 600px;*/
-  overflow: scroll;
+  overflow: auto;
 }
 
 .card-footer {

@@ -45,7 +45,7 @@
               </div>
               <div v-if="getUser(user).mobile">
                 <font-awesome-icon icon="phone" />
-                <a :href="`tel:${getUser(user).email}`" class="ml-1">{{
+                <a :href="`tel:${getUser(user).mobile}`" class="ml-1">{{
                   getUser(user).mobile
                 }}</a>
               </div>
@@ -129,13 +129,13 @@ export default {
   @apply bg-black text-white p-3 outline-none;
   width: 230px;
   left: 0.75rem !important;
-  z-index: 100;
+  z-index: 1000;
 }
 </style>
 
 <style scoped>
 .intake-view {
   height: 600px;
-  overflow: scroll;
+  overflow: auto;
 }
 </style>

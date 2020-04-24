@@ -532,7 +532,7 @@ export default {
 }
 
 .pda-form {
-  overflow: scroll;
+  overflow: auto;
 }
 
 .card-footer {

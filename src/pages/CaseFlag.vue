@@ -30,6 +30,77 @@
             rows="4"
             class="block w-full border outline-none"
           />
+
+          <base-text variant="h2" class="py-2">
+            {{ $t('~~Nearby Organizations') }}
+          </base-text>
+          <div>
+            <span>
+              <strong>{{
+                $t('caseHistory.do_not_share_contact_warning')
+              }}</strong
+              >{{ $t('caseHistory.do_not_share_contact_explanation') }}
+            </span>
+          </div>
+          <div v-for="organization in organizationsWithClaimsInArea">
+            <v-popover popover-class="contact-popover" placement="top-end">
+              <span class="text-yellow-600 tooltip-target cursor-pointer">{{
+                organization.name
+              }}</span>
+              <div slot="popover">
+                <base-text
+                  variant="h2"
+                  v-if="organization.incident_primary_contacts.length"
+                  >{{ $t('~~Incident Primary Contacts') }}</base-text
+                >
+                <div
+                  v-for="contact in organization.incident_primary_contacts"
+                  class="pb-1"
+                >
+                  <div class="text-base">
+                    {{ contact.first_name }} {{ contact.last_name }}
+                  </div>
+                  <div class="mt-2">
+                    <font-awesome-icon icon="envelope" />
+                    <a :href="`mailto:${contact.email}`" class="ml-1">{{
+                      contact.email
+                    }}</a>
+                  </div>
+                  <div v-if="contact.mobile">
+                    <font-awesome-icon icon="phone" />
+                    <a :href="`tel:${contact.mobile}`" class="ml-1">{{
+                      contact.mobile
+                    }}</a>
+                  </div>
+                </div>
+                <base-text
+                  variant="h2"
+                  v-if="organization.primary_contacts.length"
+                  >{{ $t('~~Primary Contacts') }}</base-text
+                >
+                <div
+                  v-for="contact in organization.primary_contacts"
+                  class="pb-1"
+                >
+                  <div class="text-base">
+                    {{ contact.first_name }} {{ contact.last_name }}
+                  </div>
+                  <div class="mt-2">
+                    <font-awesome-icon icon="envelope" />
+                    <a :href="`mailto:${contact.email}`" class="ml-1">{{
+                      contact.email
+                    }}</a>
+                  </div>
+                  <div v-if="contact.mobile">
+                    <font-awesome-icon icon="phone" />
+                    <a :href="`tel:${contact.mobile}`" class="ml-1">{{
+                      contact.mobile
+                    }}</a>
+                  </div>
+                </div>
+              </div>
+            </v-popover>
+          </div>
         </div>
       </div>
       <div v-if="currentFlag.reason_t === 'flag.worksite_wrong_incident'">
@@ -238,6 +309,7 @@ import User from '@/models/User';
 import Worksite from '@/models/Worksite';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput';
 import Incident from '@/models/Incident';
+import Organization from '@/models/Organization';
 import { getGoogleMapsLocation } from '@/utils/map';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
@@ -250,6 +322,7 @@ export default {
       worksite: {},
       ready: false,
       selectedOrganizations: new Set(),
+      organizationsWithClaimsInArea: [],
       abusingOrganization: null,
       currentFlag: {
         reason_t: null,
@@ -300,6 +373,14 @@ export default {
     if (this.$route.query.showOnMap) {
       this.$emit('jumpToCase', this.$route.params.id);
     }
+    const organizationResults = await Organization.api().get(
+      `/organizations?nearby_claimed=${this.worksite.longitude},${this.worksite.latitude}`,
+      {
+        dataKey: 'results',
+      },
+    );
+    this.organizationsWithClaimsInArea =
+      organizationResults.entities.organizations;
   },
   methods: {
     async flagWorksite() {
@@ -360,17 +441,19 @@ export default {
 </script>
 
 <style>
-.user-popover {
+.contact-popover {
   @apply bg-black text-white p-3 outline-none;
-  width: 230px;
+  width: 300px;
   left: 0.75rem !important;
-  z-index: 100;
+  z-index: 1000;
+  height: 200px;
+  overflow: auto;
 }
 </style>
 
 <style scoped>
 .intake-view {
   height: 600px;
-  overflow: scroll;
+  overflow: auto;
 }
 </style>

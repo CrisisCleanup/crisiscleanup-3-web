@@ -642,7 +642,7 @@ export default {
 
 <style scoped>
 .intake-view {
-  overflow: scroll;
+  overflow: auto;
 }
 
 .notes {
