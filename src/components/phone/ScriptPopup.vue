@@ -9,9 +9,7 @@
         </div>
         <div class="body">
           <base-text>
-            {{ $t('"Crisis Cleanup Hotline, my name is ') }}
-            {{ currentUser.first_name }}
-            {{ $t('. How may I help you?"') }}
+            {{ currentScript }}
           </base-text>
         </div>
         <div class="action">
@@ -67,7 +65,7 @@ export default {
   computed: {
     currentScript() {
       const script = this.scripts[this.scriptName];
-      return template(script, { user: this.currentUser.first_name });
+      return template(script)({ name: this.currentUser.first_name });
     },
   },
 };
