@@ -10,7 +10,7 @@
         <div class="flex flex-row">
           <base-text variant="h3">{{ name }}</base-text>
           <base-text variant="h3" class="px-2">
-            <span :class="`dot ${currentState}`">
+            <span :class="`dot ${currentState.replace(' ', '')}`">
               &#8226; {{ currentState | capitalize }}
             </span>
           </base-text>
@@ -39,9 +39,11 @@
 
 <script>
 import VueTypes from 'vue-types';
+import { AgentMixin } from '@/mixins';
 
 export default {
   name: 'LeaderboardProfileCard',
+  mixins: [AgentMixin],
   props: {
     calls: VueTypes.number,
     name: VueTypes.string,
@@ -50,14 +52,7 @@ export default {
   },
   computed: {
     currentState() {
-      const stateMap = {
-        routable: 'online',
-      };
-      const state = this.state.split('#')[2];
-      if (Object.keys(stateMap).includes(state)) {
-        return stateMap[state];
-      }
-      return state;
+      return this.getStateFriendlyName(this.state);
     },
   },
 };

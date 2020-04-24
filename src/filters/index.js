@@ -1,6 +1,6 @@
 import { colors as iconColors, templates } from '@/icons/icons_templates';
-import { RRule } from 'rrule';
 import enums from '@/store/modules/enums';
+import { RRule } from 'rrule';
 
 export function snakeToTitleCase(value) {
   if (!value) return '';
@@ -97,10 +97,13 @@ export const secondsToHm = (seconds) => {
 };
 
 export const capitalize = (value) => {
+  // "two words" -> "Two Words"
   if (!value) return '';
-  let capped = value.toString();
-  capped = capped.charAt(0).toUpperCase() + capped.slice(1);
-  return capped;
+  const casted = value.toString();
+  const words = casted.split(' ');
+  const cappedWords = words.map((w) => w.charAt(0).toUpperCase() + w.slice(1));
+  const final = cappedWords.join(' ');
+  return final;
 };
 
 export const toUpper = (value) => {

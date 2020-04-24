@@ -1,6 +1,7 @@
 import Pda from '@/models/Pda';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import Worksite from '@/models/Worksite';
+import { STATES as CCState } from '@/services/acs.service';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { mapActions, mapGetters } from 'vuex';
 
@@ -37,6 +38,17 @@ export const AgentMixin = {
       this.outboundIds,
     );
     return { worksites, pdas, outboundIds };
+  },
+  getStateFriendlyName(value) {
+    const stateMap = {
+      [CCState.ROUTABLE]: 'on call',
+      [CCState.PENDING_CALL]: 'on call',
+      [CCState.PAUSED]: 'paused',
+    };
+    if (Object.keys(stateMap).includes(value)) {
+      return stateMap[value];
+    }
+    return value;
   },
   computed: {
     ...mapGetters('phone', [
