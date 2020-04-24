@@ -28,6 +28,11 @@
           <div class="flex-row my-2">
               <hr />
           </div>-->
+          <div class="flex flex-row shadow mt-4">
+            <div class="flex-col w-2/3">
+              <CaseOverview />
+            </div>
+          </div>
         </div>
         <home-footer />
       </div>
@@ -39,6 +44,7 @@
 import HomeLayout, { HomeNav, HomeFooter, HomeActions } from '@/layouts/Home';
 import { mapActions, mapGetters } from 'vuex';
 import User from '@/models/User';
+import CaseOverview from '@/components/CaseOverview.vue';
 
 export default {
   name: 'AssignCasePage',
@@ -47,6 +53,7 @@ export default {
     HomeFooter,
     HomeNav,
     HomeActions,
+    CaseOverview,
   },
   computed: {
     currentUser() {
