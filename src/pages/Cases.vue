@@ -40,11 +40,22 @@
                 </span>
               </span>
               <div class="flex justify-start w-auto">
-                <base-input
-                  size="small"
-                  @input="onSearch"
+                <WorksiteSearchInput
+                  width="300px"
                   icon="search"
-                  class="px-2"
+                  :suggestions="[
+                    {
+                      name: 'worksites',
+                      data: searchWorksites || [],
+                      key: 'name',
+                    },
+                  ]"
+                  display-property="name"
+                  :placeholder="$t('actions.search')"
+                  size="medium"
+                  class="mx-2"
+                  @selectedExisting="handleChange"
+                  @search="onSearch"
                 />
               </div>
             </div>
@@ -573,10 +584,13 @@ import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
 import { EventBus } from '../event-bus';
 import WorksiteTable from './WorksiteTable';
+import { hash } from '../utils/promise';
+import WorksiteSearchInput from '../components/WorksiteSearchInput';
 
 export default {
   name: 'Cases',
   components: {
+    WorksiteSearchInput,
     WorksiteTable,
     WorksiteMap,
     WorksiteFilters,
@@ -1001,10 +1015,19 @@ export default {
     },
     onSearch: throttle(async function (search) {
       this.currentSearch = search;
-      await this.fetch({
-        pageSize: this.pagination.pageSize,
-        page: this.pagination.current,
+      this.searchingWorksites = true;
+      const searchData = await hash({
+        tableSearch: this.fetch({
+          pageSize: this.pagination.pageSize,
+          page: this.pagination.current,
+        }),
+        dropdownSearch: await Worksite.api().searchWorksites(
+          search,
+          this.$route.params.incident_id,
+        ),
       });
+      this.searchWorksites = searchData.dropdownSearch.entities.worksites;
+      this.searchingWorksites = false;
     }, 1000),
 
     async handleChange(value) {
