@@ -162,7 +162,7 @@ export default class PhoneService {
   }
 
   logout(agentId = null) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.cf.logoutAgent(agentId || this.loggedInAgentId, (data) => {
         Log.debug('logged out agent', data);
         this.store.commit('phone_legacy/setState', 'AWAY');
@@ -172,7 +172,7 @@ export default class PhoneService {
   }
 
   changeState(newState) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       let state = newState;
       this.cf.setAgentState(newState, null, (setAgentStateResponse) => {
         if (
@@ -198,7 +198,7 @@ export default class PhoneService {
   }
 
   dial(destination) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.cf.offhookInit((offhookInitResponse) => {
         Log.debug('Offhook init response', offhookInitResponse);
         if (offhookInitResponse.status === 'FAILURE') {
@@ -216,7 +216,7 @@ export default class PhoneService {
   }
 
   hangup() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       this.cf.hangup(this.callInfo.sessionId);
       //TODO: inbound calls are not handling this hangup function correctly, I suspect we need to handle offhookTerm differently!
       this.store.commit('phone_legacy/setState', 'AVAILABLE');

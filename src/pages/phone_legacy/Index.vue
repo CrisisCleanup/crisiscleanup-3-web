@@ -402,7 +402,6 @@ import Pda from '@/models/Pda';
 import { AgentMixin, WorksitesMixin } from '@/mixins';
 import Logger from '@/utils/log';
 import CaseForm from '../CaseForm';
-import PhoneService from '../../services/phone.service';
 import EditCallerID from '../../components/phone/CallerIDEditCard';
 
 const Log = Logger({
@@ -475,6 +474,7 @@ export default {
         username = await this.getUserNameForAgent(currentAgentId);
       }
       await this.$phoneService.login(username);
+      Log.debug(`Logged in agents ${username}`);
       await this.getNextCall();
     },
     async logout() {
@@ -483,6 +483,7 @@ export default {
         await Promise.all(
           loggedInAgents.map((agentId) => this.$phoneService.logout(agentId)),
         );
+        Log.debug(`Logged out agents ${loggedInAgents}`);
         await User.api().updateUserState(
           {
             loggedInAgents: [],

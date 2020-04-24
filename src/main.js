@@ -64,10 +64,10 @@ import Datepicker from 'vuejs-datepicker';
 import VueRouterMultiView from 'vue-router-multi-view';
 import Tabs from '@/components/tabs/Tabs';
 import Tab from '@/components/tabs/Tab';
+import PhoneService from '@/services/phone.service';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
-import PhoneService from '@/services/phone.service';
 
 // Base Components
 Vue.component('base-link', BaseLink);
