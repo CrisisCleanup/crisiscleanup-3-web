@@ -226,7 +226,7 @@ const getters = {
 
 // actions
 const actions = {
-  async getRealtimeMetrics({ commit }, { metrics } = {}) {
+  async getRealtimeMetrics({ commit, state }, { metrics } = {}) {
     let metricData = metrics;
     if (!metricData) {
       Log.debug('falling back to api to fetch metrics...');
@@ -246,21 +246,25 @@ const actions = {
       return newState;
     });
     // set default values of 0
-    newState[metric.TOTAL_WAITING] = 0;
-    newState[metric.NEEDED] = 0;
-    if (newState[metric.CALLBACKS_QUEUED] && newState[metric.CONTACTS_QUEUED]) {
-      // count up needed and total if required values exists
-      // todo: the 0 is "calldowns"
-      let totalWaiting =
-        newState[metric.CONTACTS_QUEUED] +
-        newState[metric.CALLBACKS_QUEUED] +
-        0;
-      totalWaiting = typeof totalWaiting === 'number' ? totalWaiting : 0;
-      newState[metric.TOTAL_WAITING] = totalWaiting;
-      const needed =
-        newState[metric.TOTAL_WAITING] - newState[metric.AVAILABLE];
-      newState[metric.NEEDED] = needed >= 0 ? needed : 0;
-    }
+    newState[metric.TOTAL_WAITING] = newState[metric.TOTAL_WAITING] || 0;
+    newState[metric.NEEDED] = newState[metric.NEEDED] || 0;
+    const updatedKeys = Object.keys(newState);
+    const numCallbacks = updatedKeys.includes(metric.CALLBACKS_QUEUED)
+      ? newState[metric.CALLBACKS_QUEUED]
+      : state.metrics[metric.CALLBACKS_QUEUED];
+    const numQueued = updatedKeys.includes(metric.CONTACTS_QUEUED)
+      ? newState[metric.CONTACTS_QUEUED]
+      : state.metrics[metric.CONTACTS_QUEUED];
+    const numAvailable = updatedKeys.includes(metric.AVAILABLE)
+      ? newState[metric.AVAILABLE]
+      : state.metrics[metric.AVAILABLE];
+    // count up needed and total if required values exists
+    // todo: the 0 is "calldowns"
+    const totalWaiting = numCallbacks + numQueued + 0;
+    newState[metric.TOTAL_WAITING] =
+      typeof totalWaiting === 'number' ? totalWaiting : 0;
+    const needed = totalWaiting - numAvailable;
+    newState[metric.NEEDED] = typeof needed === 'number' ? needed : 0;
     Log.debug('new metrics:', newState);
     commit('setMetrics', newState);
   },
