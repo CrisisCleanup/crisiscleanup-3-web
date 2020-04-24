@@ -16,22 +16,33 @@
           </div>
           <!-- Search Bar -->
           <div class="flex flex-row w-2/3">
-            <div class="flex flex-col">
+            <div class="flex flex-col w-2/3">
               <base-input placeholder="Search" />
             </div>
             <!-- Settings Button -->
             <div class="flex flex-col">
-              <base-button ccu-icon="filters" size="lg" />
+              <base-button ccu-icon="filters" class="w-full h-full" />
             </div>
           </div>
           <!-- divider line
           <div class="flex-row my-2">
               <hr />
           </div>-->
-          <div class="flex flex-row shadow mt-4 w-2/3">
+          <div class="flex flex-row shadow mt-4 w-1/2">
             <div class="flex-col">
               <CaseOverview class="m-3" />
             </div>
+          </div>
+          <div class="flex flex-row shadow mt-4 w-1/2">
+            <div class="flex-col">
+              <CaseOverview class="m-3" />
+            </div>
+          </div>
+          <!-- Assign to Team Button -->
+          <div class="flex flex-row w-1/2 mt-4">
+            <base-button variant="solid" class="w-full py-2">
+              Assign to Team
+            </base-button>
           </div>
         </div>
         <home-footer />
