@@ -7,6 +7,28 @@
       <home-nav />
       <home-actions />
       <div class="grid--main">
+        <!-- Header -->
+        <div class="flex-col">
+          <div class="flex flex-row mb-5">
+            <h1 class="text-2xl font-bold">
+              Assign Case
+            </h1>
+          </div>
+          <!-- Search Bar -->
+          <div class="flex flex-row">
+            <div class="flex flex-col">
+              <base-input placeholder="Search" />
+            </div>
+            <!-- Settings Button -->
+            <div class="flex flex-col">
+              <base-button ccu-icon="filters" size="lg" />
+            </div>
+          </div>
+          <!-- divider line
+          <div class="flex-row my-2">
+              <hr />
+          </div>-->
+        </div>
         <home-footer />
       </div>
     </template>
