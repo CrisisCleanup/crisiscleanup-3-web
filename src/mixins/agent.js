@@ -63,6 +63,7 @@ export const AgentMixin = {
       'agentState',
       'agentAvailable',
       'contactState',
+      'contactAttributes',
       'currentCase',
       'currentCases',
       'callerId',

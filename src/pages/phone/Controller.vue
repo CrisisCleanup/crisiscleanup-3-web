@@ -9,6 +9,7 @@
       <script-popup
         v-if="renderPopup"
         @dismissed="() => (scriptPopup = false)"
+        :script-name="scriptName"
       />
       <phone-layout>
         <template #grid-start>
@@ -132,6 +133,16 @@ export default {
         };
       }
       return {};
+    },
+    scriptName() {
+      const { incidentId } = this.contactAttributes;
+      if (incidentId === '199' && this.callType === 'outbound') {
+        if (this.pdas.length) {
+          return 'covidPda';
+        }
+        return 'covid';
+      }
+      return this.callType;
     },
   },
   async mounted() {

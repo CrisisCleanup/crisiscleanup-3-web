@@ -25,13 +25,31 @@
 
 <script>
 import { UserMixin, LocalStorageMixin } from '@/mixins';
+import { template } from 'lodash';
+import VueTypes from 'vue-types';
+
 export default {
   name: 'ScriptPopup',
   mixins: [UserMixin, LocalStorageMixin],
   data() {
     return {
       checkState: false,
+      // To Aaron: do not localize these,
+      // they will not stay hard coded like this.
+      scripts: {
+        inbound:
+          'Crisis Cleanup Hotline. My name is <%= name %>, how may I help you?',
+        outbound:
+          'My name is <%= name %> from the Crisis Cleanup Hotline. Someone from this number called to ask for help cleanup up after a recent disaster. I am returning your call.',
+        covid:
+          'My name is <%= name %> from the Crisis Cleanup Hotline. Someone from this number called to ask for help related to COVID-19. I am returning your call.',
+        covidPda:
+          'My name is <%= name %> from the Crisis Cleanup Hotline. We received a web request for help relating to COVID-19. Do you have a minute to discuss that?',
+      },
     };
+  },
+  props: {
+    scriptName: VueTypes.string.def('inbound'),
   },
   methods: {
     onChange(value) {
@@ -45,6 +63,12 @@ export default {
       this.$emit('dismissed', this.checkState);
       this.checkState = true;
     }
+  },
+  computed: {
+    currentScript() {
+      const script = this.scripts[this.scriptName];
+      return template(script, { user: this.currentUser.first_name });
+    },
   },
 };
 </script>
