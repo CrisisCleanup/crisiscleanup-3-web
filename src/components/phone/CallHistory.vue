@@ -12,13 +12,16 @@
       </div>
       <div class="box b" />
       <div class="box c">
-        <base-text
-          variant="bodysm"
-          weight="900"
-          class="text-crisiscleanup-dark-300"
-        >
-          Case #
-        </base-text>
+        <div class="flex flex-row">
+          <base-text
+            variant="bodysm"
+            weight="900"
+            class="text-crisiscleanup-dark-300"
+          >
+            Case #
+          </base-text>
+          <base-button ccu-icon="updown"> </base-button>
+        </div>
       </div>
       <div class="box d">
         <base-text
@@ -39,13 +42,16 @@
         </base-text>
       </div>
       <div class="box f">
-        <base-text
-          variant="bodysm"
-          weight="900"
-          class="text-crisiscleanup-dark-300"
-        >
-          Call Completed
-        </base-text>
+        <div class="flex flex-row">
+          <base-text
+            variant="bodysm"
+            weight="900"
+            class="text-crisiscleanup-dark-300"
+          >
+            Call Completed
+          </base-text>
+          <base-button ccu-icon="updown"> </base-button>
+        </div>
       </div>
     </div>
     <call-summary
