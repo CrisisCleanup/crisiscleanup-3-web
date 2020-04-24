@@ -67,15 +67,7 @@
       </div>
     </div>
     <template #footer>
-      <div class="flex items-center justify-center p-6 pt-12">
-        <base-button
-          :action="() => endCurrentCall()"
-          variant="solid"
-          size="large"
-        >
-          {{ $t('~~Close') }}
-        </base-button>
-      </div>
+      <div />
     </template>
   </modal>
 </template>
