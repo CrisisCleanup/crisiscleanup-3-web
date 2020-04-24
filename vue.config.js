@@ -1,5 +1,5 @@
 const threadLoader = require('thread-loader');
-const LodashPlugin = require('lodash-webpack-plugin');
+// const LodashPlugin = require('lodash-webpack-plugin');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 const basicPool = {
   workerParallelJobs: 200,
@@ -85,7 +85,7 @@ module.exports = {
     jsRule.test(/\.js$/).exclude.add(/node_modules/);
     useBasicTPool(jsRule, 'babel-loader');
     useBasicTPool(vueRule, 'vue-loader');
-    config.plugin('lodash').use(LodashPlugin);
+    // config.plugin('lodash').use(LodashPlugin);
     if (['staging', 'production'].includes(process.env.VUE_APP_STAGE)) {
       config.plugin('sentry').use(SentryWebpackPlugin, [
         {
