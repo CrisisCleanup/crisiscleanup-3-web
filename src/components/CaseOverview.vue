@@ -16,18 +16,20 @@
           <div class="flex-col">
             <!-- Name -->
             <div class="flex flex-row">
-              <ccu-icon />
+              <!-- <ccu-icon /> -->
+              <img src="@/assets/littleperson.jpg" class="h-5" />
               <base-text
                 variant="bodysm"
                 weight="300"
-                class="text-crisiscleanup-dark-400 ml-2"
+                class="text-crisiscleanup-dark-400 ml-3"
               >
                 Milton R. Thurman
               </base-text>
             </div>
             <!-- Location -->
             <div class="flex flex-row">
-              <ccu-icon />
+              <!-- <ccu-icon /> -->
+              <img src="@/assets/littlemap.jpg" class="h-5" />
               <base-text
                 variant="bodysm"
                 weight="300"
@@ -38,11 +40,12 @@
             </div>
             <!-- Phone # -->
             <div class="flex flex-row">
-              <ccu-icon />
+              <!-- <ccu-icon /> -->
+              <img src="@/assets/littlephone.jpg" class="h-5" />
               <base-text
                 variant="bodysm"
                 weight="300"
-                class="text-crisiscleanup-dark-400 ml-2"
+                class="text-crisiscleanup-dark-400 ml-3"
               >
                 (732) 258-3730
               </base-text>
