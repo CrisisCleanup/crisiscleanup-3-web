@@ -335,6 +335,15 @@ const actions = {
         Log.debug('new agent state inbound:', agentState);
         commit('setAgentState', agentState);
       },
+      onAfterCallWork: async () => {
+        Log.debug('agent entered ACW, going routable in 3m...');
+        const timeout = (time) => {
+          return new Promise((resolve) => setTimeout(resolve, time));
+        };
+        await timeout(2900 * 60); // 2.9 minutes
+        Log.debug('times up, going routable!');
+        await dispatch('setAgentState', ConnectService.STATES.ROUTABLE);
+      },
     });
     ConnectService.bindContactEvents({
       onIncoming: (contact) => {

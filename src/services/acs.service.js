@@ -167,8 +167,10 @@ export const parseAgentState = (stateEvent) => {
 };
 
 export const bindAgentEvents = (handler) => {
-  connect.agent((agent) => {
-    agent.onRefresh(connect.hitch(handler, handler.onRefresh));
+  Object.keys(handler).forEach((key) => {
+    connect.agent((agent) => {
+      agent[key](connect.hitch(handler, handler[key]));
+    });
   });
 };
 
