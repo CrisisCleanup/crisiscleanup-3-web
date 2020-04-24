@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import '@crisiscleanup/amazon-connect-streams';
-import '@crisiscleanup/connect-rtc';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import CCP from '@/components/phone/CCP.vue';
 import Version from '@/components/Version.vue';

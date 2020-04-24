@@ -1,4 +1,6 @@
 import '@/assets/css/tailwind.css';
+import '@crisiscleanup/amazon-connect-streams';
+import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
 import Autocomplete from '@/components/Autocomplete';
 import Badge from '@/components/Badge';
