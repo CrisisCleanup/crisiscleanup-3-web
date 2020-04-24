@@ -40,7 +40,7 @@ import User from '@/models/User';
 import { mapActions, mapGetters } from 'vuex';
 import Loader from '@/components/Loader.vue';
 import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
-import Leaderboard from '@/components/phone/Leaderboard.vue';
+import Leaderboard from '@/components/phone/Widgets/Leaderboard.vue';
 import PhoneLayout from '@/layouts/Phone.vue';
 import AgentBlock from '@/components/phone/blocks/Agent.vue';
 import Table from '@/components/Table.vue';
