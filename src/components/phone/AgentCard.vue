@@ -115,6 +115,15 @@ export default {
         return this.showConnectLogin;
       }
 
+      if (
+        this.agentState === CCState.PAUSED &&
+        this.currentPage === 'controller'
+      ) {
+        this.$toast.error(
+          this.$t('~~You must complete the open call to take another!'),
+        );
+      }
+
       if (this.agentAvailable) {
         return this.setAgentState(CCState.OFFLINE);
       }
