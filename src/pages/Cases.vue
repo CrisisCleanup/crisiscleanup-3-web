@@ -564,6 +564,7 @@ import Worksite from '@/models/Worksite';
 import User from '@/models/User';
 import Incident from '@/models/Incident';
 import Location from '@/models/Location';
+import LocationType from '@/models/LocationType';
 import WorksiteMap from '@/components/WorksiteMap';
 import WorksiteFilters from '@/components/WorksiteFilters';
 import { getQueryString } from '@/utils/urls';
@@ -674,12 +675,22 @@ export default {
     },
     usStates() {
       return Location.query()
-        .where('type', 'boundary_political_us_state')
+        .where(
+          'type',
+          LocationType.query()
+            .where('key', 'boundary_political_us_state')
+            .get()[0].id,
+        )
         .get();
     },
     districts() {
       return Location.query()
-        .where('type', 'boundary_political_us_congress')
+        .where(
+          'type',
+          LocationType.query()
+            .where('key', 'boundary_political_us_congress')
+            .get()[0].id,
+        )
         .get();
     },
     isEditingWorksite() {
@@ -780,6 +791,9 @@ export default {
     };
     const queryString = getQueryString(locationParams);
     await Location.api().get(`/locations?${queryString}`, {
+      dataKey: 'results',
+    });
+    await LocationType.api().get('/location_types', {
       dataKey: 'results',
     });
     this.isMounted = queryString;
