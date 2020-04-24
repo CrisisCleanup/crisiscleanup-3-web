@@ -40,22 +40,11 @@
                 </span>
               </span>
               <div class="flex justify-start w-auto">
-                <WorksiteSearchInput
-                  width="300px"
+                <base-input
+                  size="small"
+                  @input="onSearch"
                   icon="search"
-                  :suggestions="[
-                    {
-                      name: 'worksites',
-                      data: searchWorksites || [],
-                      key: 'name',
-                    },
-                  ]"
-                  display-property="name"
-                  :placeholder="$t('actions.search')"
-                  size="medium"
-                  class="mx-2"
-                  @selectedExisting="handleChange"
-                  @search="onSearch"
+                  class="px-2"
                 />
               </div>
             </div>
@@ -579,7 +568,6 @@ import WorksiteMap from '@/components/WorksiteMap';
 import WorksiteFilters from '@/components/WorksiteFilters';
 import { getQueryString } from '@/utils/urls';
 import { getColorForStatus } from '@/filters';
-import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
 import { EventBus } from '../event-bus';
@@ -589,7 +577,6 @@ export default {
   name: 'Cases',
   components: {
     WorksiteTable,
-    WorksiteSearchInput,
     WorksiteMap,
     WorksiteFilters,
   },
@@ -864,7 +851,9 @@ export default {
         fields:
           'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code',
         incident: this.$route.params.incident_id,
+        search: this.currentSearch,
       };
+
       this.currentQuery = { ...query, ...this.appliedFilters };
       const queryParams = {
         ...query,
@@ -1000,13 +989,10 @@ export default {
     },
     onSearch: throttle(async function (search) {
       this.currentSearch = search;
-      this.searchingWorksites = true;
-      const searchWorksites = await Worksite.api().searchWorksites(
-        search,
-        this.$route.params.incident_id,
-      );
-      this.searchWorksites = searchWorksites.entities.worksites;
-      this.searchingWorksites = false;
+      await this.fetch({
+        pageSize: this.pagination.pageSize,
+        page: this.pagination.current,
+      });
     }, 1000),
 
     async handleChange(value) {

@@ -136,7 +136,8 @@ export default {
       isInvalid: false,
       iconClasses: {
         large: this.size === 'large',
-        base: this.size !== 'large',
+        small: this.size === 'small',
+        base: this.size !== 'large' && this.size !== 'small',
         'has-tooltip': Boolean(this.tooltip),
       },
       glassBroken: false,
@@ -235,6 +236,7 @@ input.medium {
 
 input.small {
   height: 30px;
+  width: 150px;
 }
 
 textarea.large {
@@ -251,6 +253,10 @@ textarea.large {
 .icon-container.large {
   width: 50px;
   height: 50px;
+}
+
+.icon-container.small {
+  height: 30px;
 }
 
 .icon-container.has-tooltip {
