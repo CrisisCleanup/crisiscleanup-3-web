@@ -9,7 +9,12 @@
       <div class="flex-col w-5/7">
         <!-- Row of Icons -->
         <div class="flex flex-row">
-          icons
+          <!-- these are all temp -->
+          <img src="@/assets/tempflag.jpg" class="h-6" />
+          <img src="@/assets/tempcasenumbericon.jpg" class="h-6" />
+          <img src="@/assets/redlobster.jpg" class="h-6" />
+          <img src="@/assets/yellowboot.jpg" class="h-6" />
+          <img src="@/assets/greenflame.jpg" class="h-6" />
         </div>
         <!-- Name / Location / Phone # -->
         <div class="flex flex-row justify-start mt-3">
