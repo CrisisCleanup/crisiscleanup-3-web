@@ -201,7 +201,7 @@ const getters = {
     }
     return lang;
   },
-  callType: (state) => (state.contact ? state.contact.type : 'inbound'),
+  callType: (state) => (state.currentOutbound ? 'outbound' : 'inbound'),
   currentActionTab: (state) =>
     state.controller.actions.currentKey
       ? state.controller.actions.currentKey
