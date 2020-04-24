@@ -263,9 +263,9 @@ const actions = {
     const totalWaiting = numCallbacks + numQueued + 0;
     newState[metric.TOTAL_WAITING] =
       typeof totalWaiting === 'number' ? totalWaiting : 0;
-    let needed = totalWaiting - numOnline;
-    needed = typeof needed === 'number' ? needed : 0;
-    needed = needed >= 0 ? Math.floor(needed / 12) : 0;
+    const agentCapacity = 12 * numOnline; // each agent can take 12 calls
+    const queueOverflow = agentCapacity - totalWaiting; // number of callers over the capacity
+    const needed = queueOverflow >= 1 ? Math.floor(queueOverflow / 12) + 1 : 0;
     newState[metric.NEEDED] = needed;
     Log.debug('new metrics:', newState);
     commit('setMetrics', newState);
