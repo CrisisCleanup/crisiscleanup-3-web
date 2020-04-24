@@ -39,15 +39,19 @@ export const AgentMixin = {
       return { worksites, pdas, outboundIds };
     },
     getStateFriendlyName(value) {
+      let state = value;
+      if (value.includes('#')) {
+        [, , state] = value.split('#');
+      }
       const stateMap = {
-        [CCState.ROUTABLE]: 'on call',
+        [CCState.ROUTABLE]: 'online',
         [CCState.PENDING_CALL]: 'on call',
         [CCState.PAUSED]: 'paused',
       };
-      if (Object.keys(stateMap).includes(value)) {
-        return stateMap[value];
+      if (Object.keys(stateMap).includes(state)) {
+        return stateMap[state];
       }
-      return value;
+      return state;
     },
   },
   computed: {
