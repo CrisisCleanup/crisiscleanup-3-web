@@ -85,9 +85,9 @@ export default class PhoneService {
 
   endCallFunction(info) {
     Log.debug(info);
-    this.store.commit('phone_legacy/setState', 'ENDED');
     this.store.commit('phone_legacy/setIncomingCall', null);
     this.store.commit('phone_legacy/setOutgoingCall', null);
+    this.changeState('AWAY');
   }
 
   onGetStatsAgent(info) {
