@@ -18,6 +18,7 @@ import PhoneRoutes from '@/pages/phone/routes';
 import PhoneLegacyRoutes from '@/pages/phone_legacy/routes';
 import AdminRoutes from '@/pages/admin/routes';
 import Profile from '@/pages/Profile';
+import AssignCasePage from '@/pages/AssignCase.vue';
 import unAuthedRoutes from '@/pages/unauthenticated/routes';
 import store from '@/store/index';
 import Vue from 'vue';
@@ -143,6 +144,12 @@ const routes = [
     component: Location,
     name: 'nav.edit_location',
     meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/AssignCase',
+    component: AssignCasePage,
+    name: 'AssignCase',
+    meta: { layout: 'unauthenticated' },
   },
   ...PhoneRoutes,
   ...PhoneLegacyRoutes,
