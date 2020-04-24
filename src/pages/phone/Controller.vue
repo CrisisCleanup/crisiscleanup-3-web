@@ -27,7 +27,11 @@
               <template #case>
                 <case-form
                   :key="currentCaseId"
-                  incident-id="199"
+                  :incident-id="
+                    contactAttributes.incidentId
+                      ? contactAttributes.incidentId
+                      : '199'
+                  "
                   :pda-id="currentCaseType === 'pda' ? currentCaseId : null"
                   :worksite-id="
                     currentCaseType === 'worksite' ? currentCaseId : null

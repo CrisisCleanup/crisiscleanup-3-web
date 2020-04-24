@@ -201,7 +201,7 @@ const getters = {
     }
     return lang;
   },
-  callType: (state) => (state.contact ? state.contact.type : null),
+  callType: (state) => (state.contact ? state.contact.type : 'inbound'),
   currentActionTab: (state) =>
     state.controller.actions.currentKey
       ? state.controller.actions.currentKey
@@ -525,12 +525,14 @@ const actions = {
       InboundNumber,
       ids = { value: '' },
       USER_LANGUAGE,
+      INCIDENT_ID,
     } = contactAttrs;
     Log.debug('contact refresh: ', newContactState);
     const workSites = worksites.value.split(',').filter((v) => v !== '');
     const Pdas = pdas.value.split(',').filter((v) => v !== '');
     const outboundIds = ids.value.split(',').filter((v) => v !== '');
     const locale = USER_LANGUAGE.value.replace('_', '-');
+    const incidentId = INCIDENT_ID.value ? INCIDENT_ID.value : '199';
     let callerNum = callerID;
     if (!callerNum) {
       callerNum = InboundNumber;
@@ -541,6 +543,7 @@ const actions = {
       pdas: Pdas,
       outboundIds,
       callerLocale: locale,
+      incidentId,
     };
     if (newContactState.type !== contactState) {
       Log.debug('updating contact action...');
