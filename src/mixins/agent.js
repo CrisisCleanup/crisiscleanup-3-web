@@ -28,27 +28,27 @@ export const AgentMixin = {
       );
       return cases;
     },
-  },
-  async fetchAllCases() {
-    const worksites = await this.fetchCasesByType(Worksite, this.worksites);
-    const pdas = await this.fetchCasesByType(Pda, this.pdas);
-    // not technically a case, but it works
-    const outboundIds = await this.fetchCasesByType(
-      PhoneOutbound,
-      this.outboundIds,
-    );
-    return { worksites, pdas, outboundIds };
-  },
-  getStateFriendlyName(value) {
-    const stateMap = {
-      [CCState.ROUTABLE]: 'on call',
-      [CCState.PENDING_CALL]: 'on call',
-      [CCState.PAUSED]: 'paused',
-    };
-    if (Object.keys(stateMap).includes(value)) {
-      return stateMap[value];
-    }
-    return value;
+    async fetchAllCases() {
+      const worksites = await this.fetchCasesByType(Worksite, this.worksites);
+      const pdas = await this.fetchCasesByType(Pda, this.pdas);
+      // not technically a case, but it works
+      const outboundIds = await this.fetchCasesByType(
+        PhoneOutbound,
+        this.outboundIds,
+      );
+      return { worksites, pdas, outboundIds };
+    },
+    getStateFriendlyName(value) {
+      const stateMap = {
+        [CCState.ROUTABLE]: 'on call',
+        [CCState.PENDING_CALL]: 'on call',
+        [CCState.PAUSED]: 'paused',
+      };
+      if (Object.keys(stateMap).includes(value)) {
+        return stateMap[value];
+      }
+      return value;
+    },
   },
   computed: {
     ...mapGetters('phone', [
