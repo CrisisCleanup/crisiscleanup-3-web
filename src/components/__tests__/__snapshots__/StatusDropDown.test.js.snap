@@ -8,7 +8,7 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
 >
   <div
     class="badge-holder rounded-lg px-2"
-    style="color: rgb(208, 2, 27);"
+    style="color: rgb(208, 2, 27); background-color: rgba(208, 2, 27, 0.239);"
   >
     <!---->
      
@@ -72,7 +72,7 @@ exports[`StatusDropDown should render correctly and match snapshot when using ic
 >
   <div
     class="badge-holder rounded-lg px-2"
-    style="color: rgb(208, 2, 27);"
+    style="color: rgb(208, 2, 27); background-color: rgba(208, 2, 27, 0.239);"
   >
     <div
       class="case-svg-container mr-1"
