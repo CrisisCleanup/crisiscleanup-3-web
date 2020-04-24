@@ -59,9 +59,12 @@ const mutations = {
       Acl,
       user,
       (acl) => {
-        const { permissions } = user;
+        const { permissions, beta_features } = user;
         Object.keys(permissions).forEach((permissionKey) => {
           acl.rule(permissionKey, user.permissions[permissionKey]);
+        });
+        beta_features.forEach((feature) => {
+          acl.rule(`beta_feature.${feature}`, true);
         });
       },
       { router },

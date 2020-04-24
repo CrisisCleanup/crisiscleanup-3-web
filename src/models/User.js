@@ -21,6 +21,7 @@ export default class User extends Model {
       states: this.attr({}),
       preferences: this.attr({}),
       permissions: this.attr({}),
+      beta_features: this.attr({}),
       primary_language: this.attr(null),
       secondary_language: this.attr(null),
       accepted_terms_timestamp: this.attr(null),

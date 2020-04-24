@@ -169,7 +169,7 @@ export default {
           to: '/phone',
           disabled:
             !this.$can('phone_agent') ||
-            process.env.VUE_APP_STAGE === 'production',
+            !this.$can('beta_feature.aws_connect_phone'),
         },
         {
           key: 'caller',
