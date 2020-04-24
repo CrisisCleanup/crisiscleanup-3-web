@@ -263,8 +263,10 @@ const actions = {
     const totalWaiting = numCallbacks + numQueued + 0;
     newState[metric.TOTAL_WAITING] =
       typeof totalWaiting === 'number' ? totalWaiting : 0;
-    const needed = totalWaiting - numAvailable;
-    newState[metric.NEEDED] = typeof needed === 'number' ? needed : 0;
+    let needed = totalWaiting - numAvailable;
+    needed = typeof needed === 'number' ? needed : 0;
+    needed = needed >= 0 ? needed : 0;
+    newState[metric.NEEDED] = needed;
     Log.debug('new metrics:', newState);
     commit('setMetrics', newState);
   },
