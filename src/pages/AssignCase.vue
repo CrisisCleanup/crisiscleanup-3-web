@@ -15,7 +15,7 @@
             </h1>
           </div>
           <!-- Search Bar -->
-          <div class="flex flex-row">
+          <div class="flex flex-row w-2/3">
             <div class="flex flex-col">
               <base-input placeholder="Search" />
             </div>
@@ -28,9 +28,9 @@
           <div class="flex-row my-2">
               <hr />
           </div>-->
-          <div class="flex flex-row shadow mt-4">
-            <div class="flex-col w-2/3">
-              <CaseOverview />
+          <div class="flex flex-row shadow mt-4 w-2/3">
+            <div class="flex-col">
+              <CaseOverview class="m-3" />
             </div>
           </div>
         </div>
