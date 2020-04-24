@@ -133,9 +133,7 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{
-                          $t('casesVue.incident')
-                        }}</template>
+                        <template slot="btn">{{ $t('~~Incident') }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
                             <li
@@ -150,6 +148,46 @@
                                   }
                                 "
                                 >{{ location.name }}</base-checkbox
+                              >
+                            </li>
+                            <li v-if="currentOrganization.primary_location">
+                              <base-checkbox
+                                :value="
+                                  appliedLocations.has(
+                                    currentOrganization.primary_location,
+                                  )
+                                "
+                                @input="
+                                  (value) => {
+                                    applyLocation(
+                                      currentOrganization.primary_location,
+                                      value,
+                                    );
+                                  }
+                                "
+                                >{{
+                                  $t('~~Primary Response Area')
+                                }}</base-checkbox
+                              >
+                            </li>
+                            <li v-if="currentOrganization.secondary_location">
+                              <base-checkbox
+                                :value="
+                                  appliedLocations.has(
+                                    currentOrganization.secondary_location,
+                                  )
+                                "
+                                @input="
+                                  (value) => {
+                                    applyLocation(
+                                      currentOrganization.secondary_location,
+                                      value,
+                                    );
+                                  }
+                                "
+                                >{{
+                                  $t('~~Secondary Response Area')
+                                }}</base-checkbox
                               >
                             </li>
                           </ul>
@@ -574,6 +612,7 @@ import * as L from 'leaflet';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
 import Incident from '@/models/Incident';
+import Organization from '@/models/Organization';
 import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import WorksiteMap from '@/components/WorksiteMap';
@@ -732,6 +771,9 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
+    currentOrganization() {
+      return Organization.find(this.currentUser.organization.id);
+    },
     markers() {
       if (this.data) {
         return this.data.map((worksite) => {
@@ -855,20 +897,24 @@ export default {
           properties: location.attr,
           geometry: location.poly || location.geom || location.point,
         };
-        L.geoJSON(geojsonFeature, {
+        const polygon = L.geoJSON(geojsonFeature, {
           weight: '1',
           onEachFeature(feature, layer) {
             layer.location_id = locationId;
           },
-        }).addTo(this.$refs.workstiteMap.map);
-        this.appliedLocations.add(locationId);
+        });
+        polygon.addTo(this.$refs.workstiteMap.map);
+        this.$refs.workstiteMap.map.fitBounds(polygon.getBounds());
+        this.appliedLocations = new Set(this.appliedLocations.add(locationId));
       } else {
         this.$refs.workstiteMap.map.eachLayer((layer) => {
           if (layer.location_id && layer.location_id === locationId) {
             this.$refs.workstiteMap.map.removeLayer(layer);
           }
         });
-        this.appliedLocations.delete(locationId);
+        this.appliedLocations = new Set(
+          this.appliedLocations.delete(locationId),
+        );
       }
     },
     async fetch(params = {}) {
