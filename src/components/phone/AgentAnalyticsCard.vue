@@ -103,7 +103,7 @@ export default {
       metricLang[METRICS.CALLBACKS_QUEUED] = '~~Remaining Callbacks';
       // TODO
       metricLang['todo:calldowns'] = '~~Remaining Calldowns';
-      metricLang[METRICS.NEEDED] = '~~Volunteers Needed';
+      metricLang[METRICS.NEEDED] = '~~Additional Volunteers Needed';
       metricLang[METRICS.ONLINE] = '~~Volunteers Online';
       metricLang[METRICS.AGENTS_ON_CALL] = '~~Volunteers on the Phone';
       return this.getLang(metricLang);
