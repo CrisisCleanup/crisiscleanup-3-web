@@ -255,15 +255,15 @@ const actions = {
     const numQueued = updatedKeys.includes(metric.CONTACTS_QUEUED)
       ? newState[metric.CONTACTS_QUEUED]
       : state.metrics[metric.CONTACTS_QUEUED];
-    const numAvailable = updatedKeys.includes(metric.AVAILABLE)
-      ? newState[metric.AVAILABLE]
-      : state.metrics[metric.AVAILABLE];
+    const numOnline = updatedKeys.includes(metric.ONLINE)
+      ? newState[metric.ONLINE]
+      : state.metrics[metric.ONLINE];
     // count up needed and total if required values exists
     // todo: the 0 is "calldowns"
     const totalWaiting = numCallbacks + numQueued + 0;
     newState[metric.TOTAL_WAITING] =
       typeof totalWaiting === 'number' ? totalWaiting : 0;
-    let needed = totalWaiting - numAvailable;
+    let needed = totalWaiting - numOnline;
     needed = typeof needed === 'number' ? needed : 0;
     needed = needed >= 0 ? Math.floor(needed / 12) : 0;
     newState[metric.NEEDED] = needed;
