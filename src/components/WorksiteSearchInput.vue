@@ -214,6 +214,7 @@ export default {
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         if (text === '' || text === undefined) {
+          this.$emit('clear', text);
           return;
         }
         this.$emit('search', text);

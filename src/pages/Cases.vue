@@ -56,6 +56,7 @@
                   class="mx-2"
                   @selectedExisting="handleChange"
                   @search="onSearch"
+                  @clear="onSearch"
                 />
               </div>
             </div>
@@ -1062,6 +1063,9 @@ export default {
     onSearch: throttle(async function (search) {
       this.currentSearch = search;
       this.searchingWorksites = true;
+      if (!search) {
+        this.searchWorksites = [];
+      }
       const searchData = await hash({
         tableSearch: this.fetch({
           pageSize: this.pagination.pageSize,
@@ -1072,7 +1076,9 @@ export default {
           this.$route.params.incident_id,
         ),
       });
-      this.searchWorksites = searchData.dropdownSearch.entities.worksites;
+      this.searchWorksites = search
+        ? searchData.dropdownSearch.entities.worksites
+        : [];
       this.searchingWorksites = false;
     }, 1000),
 
