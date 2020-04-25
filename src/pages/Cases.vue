@@ -67,6 +67,7 @@
                   variant="text"
                   class="text-base font-thin mx-4"
                   :text="$t('casesVue.layers')"
+                  :alt="$t('casesVue.layers')"
                   ccu-icon="layers"
                   icon-size="medium"
                 />
@@ -202,14 +203,14 @@
                 class="text-base font-thin mx-4"
                 ccu-icon="filters"
                 icon-size="medium"
-                alt="Filters"
+                :alt="$t('~~Filters')"
                 :action="
                   () => {
                     showingFilters = true;
                   }
                 "
               >
-                Filters
+                ~~Filters
                 <span
                   v-if="filtersCount > 0"
                   class="rounded-full mx-2 px-1 bg-yellow-500 text-xs"
@@ -243,6 +244,7 @@
                       <base-button
                         class="text-base font-thin mx-4"
                         :text="$t('actions.download')"
+                        :alt="$t('actions.download')"
                         :action="downloadCsv"
                         data-cy="worksiteview_actionBatchDownload"
                       />
@@ -251,6 +253,7 @@
                       <base-button
                         class="text-base font-thin mx-4"
                         :text="$t('actions.print')"
+                        :alt="$t('actions.print')"
                         :action="
                           (e) => {
                             printWorksite(e, selectedTableItems);
@@ -263,6 +266,7 @@
                       <base-button
                         class="text-base font-thin mx-4"
                         :text="$t('actions.share')"
+                        :alt="$t('actions.share')"
                       />
                     </li>
                   </ul>
@@ -305,12 +309,14 @@
                       }
                     "
                     :text="$t('actions.unclaim')"
+                    :alt="$t('actions.unclaim')"
                   >
                   </base-button>
                   <base-button
                     icon="sync"
                     class="border p-1 px-4 text-crisiscleanup-grey-700 ml-3 my-3 flex items-center bg-white"
                     :text="$t('actions.update_status')"
+                    :alt="$t('actions.update_status')"
                     @click="() => {}"
                   />
                   <modal
@@ -360,6 +366,7 @@
                         class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
                         :action="unclaimSelected"
                         :text="$t('actions.ok')"
+                        :alt="$t('actions.ok')"
                       />
                       <base-button
                         type="bare"
@@ -370,6 +377,7 @@
                           }
                         "
                         :text="$t('actions.cancel')"
+                        :alt="$t('actions.cancel')"
                       />
                     </div>
                   </modal>

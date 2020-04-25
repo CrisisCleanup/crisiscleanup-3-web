@@ -207,10 +207,12 @@
         <div class="flex items-center justify-end h-16">
           <base-button
             :text="$t('actions.reset')"
+            :alt="$t('actions.reset')"
             class="border border-black p-2 mr-1"
           />
           <base-button
             :text="$t('actions.save_location')"
+            :alt="$t('actions.save_location')"
             class="p-2 mr-1"
             variant="solid"
             :action="saveLocation"
@@ -218,6 +220,7 @@
           <base-button
             v-if="isNew"
             :text="$t('actions.save_and_new')"
+            :alt="$t('actions.save_and_new')"
             class="p-2"
             variant="solid"
             :action="

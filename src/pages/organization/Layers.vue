@@ -24,6 +24,7 @@
         </div>
         <base-button
           :text="$t('actions.create_location')"
+          :alt="$t('actions.create_location')"
           variant="solid"
           size="small"
           :action="

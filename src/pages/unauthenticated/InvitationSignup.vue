@@ -70,6 +70,7 @@
             class="px-5 py-2 m-2 flex-grow"
             variant="solid"
             :text="$t('actions.accept_invite')"
+            :alt="$t('actions.accept_invite')"
             :action="acceptInvite"
           />
         </form>

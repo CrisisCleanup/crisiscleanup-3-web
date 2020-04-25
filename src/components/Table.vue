@@ -125,6 +125,7 @@
               }
             "
             :text="$t('tableVue.prev')"
+            :alt="$t('tableVue.prev')"
             icon="caret-left"
             class="mr-3 text-base"
           />
@@ -154,6 +155,7 @@
               }
             "
             :text="$t('tableVue.next')"
+            :alt="$t('tableVue.next')"
             suffix-icon="caret-right"
             class="text-base"
           />

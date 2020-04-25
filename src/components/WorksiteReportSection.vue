@@ -19,6 +19,7 @@
       />
       <base-button
         :text="$t('actions.add')"
+        :alt="$t('actions.add')"
         variant="solid"
         class="p-3"
         :action="addTime"

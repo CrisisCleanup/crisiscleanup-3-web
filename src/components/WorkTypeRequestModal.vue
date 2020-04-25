@@ -71,6 +71,7 @@
     <div slot="footer" class="p-3 flex justify-end">
       <base-button
         :text="$t('actions.cancel')"
+        :alt="$t('actions.cancel')"
         class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
         :action="
           () => {
@@ -89,6 +90,7 @@
           }
         "
         :text="$t('actions.request')"
+        :alt="$t('actions.request')"
         class="ml-2 p-3 px-6 text-xs"
       />
     </div>

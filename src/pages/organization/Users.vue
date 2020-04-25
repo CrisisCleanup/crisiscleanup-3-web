@@ -146,7 +146,7 @@
                 <img
                   class="rounded-full mr-2 user-image"
                   :src="slotProps.item.profilePictureUrl"
-                  :alt="$t('Profile Picture')"
+                  :alt="$t('usersVue.profile_picture')"
                 />
                 <div>
                   {{ slotProps.item.full_name }}

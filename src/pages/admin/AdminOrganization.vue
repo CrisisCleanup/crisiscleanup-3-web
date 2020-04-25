@@ -879,7 +879,7 @@ export default {
         text += `${user.first_name}\t${user.last_name}\t${user.email}\t${user.mobile}\t\n`;
       });
       await this.$copyText(text);
-      this.$toasted.success('adminOrganization.users_copied');
+      this.$toasted.success('info.users_copied');
     },
   },
   data() {

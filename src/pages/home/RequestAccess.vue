@@ -120,6 +120,7 @@
             class="px-5 py-2 m-1 flex-grow"
             variant="solid"
             :text="$t('actions.request_access')"
+            :alt="$t('actions.request_access')"
             :action="requestAccess"
           />
         </form>
@@ -149,6 +150,7 @@
             </base-text>
             <base-button
               :text="$t('actions.got_it')"
+              :alt="$t('actions.got_it')"
               size="large"
               variant="solid"
               class="mt-10"

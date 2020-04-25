@@ -12,6 +12,7 @@
       <div class="flex mr-2 justify-end w-full items-center">
         <base-button
           :text="$t('actions.approve')"
+          :alt="$t('actions.approve')"
           variant="solid"
           size="small"
           class="mx-2"
@@ -23,6 +24,7 @@
         />
         <base-button
           :text="$t('actions.reject')"
+          :alt="$t('actions.reject')"
           variant="outline"
           size="small"
           class="mx-2"

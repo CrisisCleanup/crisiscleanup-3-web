@@ -14,6 +14,7 @@
           <base-button
             size="small"
             :text="$t('actions.download')"
+            :alt="$t('actions.download')"
             class="table-action-button"
             ccu-icon="download"
             icon-size="small"
@@ -21,6 +22,7 @@
           <base-button
             size="small"
             :text="$t('actions.print')"
+            :alt="$t('actions.print')"
             class="table-action-button"
             ccu-icon="print"
             icon-size="small"
@@ -40,6 +42,7 @@
               class="m-1 mx-2 text-xs px-3 py-1"
               :action="() => {}"
               :text="$t('actions.ignore')"
+              :alt="$t('actions.ignore')"
             />
             <base-button
               size="small"
@@ -51,6 +54,7 @@
                 }
               "
               :text="$t('actions.reject')"
+              :alt="$t('actions.reject')"
             />
             <base-button
               size="small"
@@ -62,6 +66,7 @@
                 }
               "
               :text="$t('actions.accept')"
+              :alt="$t('actions.accept')"
             />
           </div>
         </template>
@@ -84,6 +89,7 @@
           <base-button
             size="small"
             :text="$t('actions.download')"
+            :alt="$t('actions.download')"
             class="table-action-button"
             ccu-icon="download"
             icon-size="small"
@@ -91,6 +97,7 @@
           <base-button
             size="small"
             :text="$t('actions.print')"
+            :alt="$t('actions.print')"
             class="table-action-button"
             ccu-icon="print"
             icon-size="small"
@@ -98,6 +105,7 @@
           <base-button
             size="small"
             :text="$t('actions.delete_expired')"
+            :alt="$t('actions.delete_expired')"
             class="table-action-button"
             ccu-icon="trash"
             icon-size="small"
@@ -122,6 +130,7 @@
                 }
               "
               :text="$t('actions.re_invite')"
+              :alt="$t('actions.re_invite')"
             />
           </div>
         </template>

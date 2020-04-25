@@ -10,6 +10,7 @@
             <base-button
               class="px-4 py-2 border border-black mr-1"
               :text="$t('actions.cancel')"
+              :alt="$t('actions.cancel')"
               :action="
                 () => {
                   mode = 'view';
@@ -20,6 +21,7 @@
               variant="solid"
               class="px-4 py-2"
               :text="$t('actions.save')"
+              :alt="$t('actions.save')"
               :action="saveUser"
             />
           </div>

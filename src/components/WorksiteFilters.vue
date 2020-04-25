@@ -41,6 +41,7 @@
           <base-button
             type="bare"
             :text="$t('actions.clear_filters')"
+            :alt="$t('actions.clear_filters')"
             class="text-yellow-500 text-underline w-32"
             :action="clearAllFilters"
           />
@@ -292,6 +293,7 @@
     >
       <base-button
         :text="$t('actions.cancel')"
+        :alt="$t('actions.cancel')"
         size="medium"
         class="m-1 border-2 border-black px-6 py-2"
         :action="
@@ -302,6 +304,7 @@
       />
       <base-button
         :text="$t('actions.apply_filters')"
+        :alt="$t('actions.apply_filters')"
         size="medium"
         class="m-1 p-3 px-6"
         variant="solid"

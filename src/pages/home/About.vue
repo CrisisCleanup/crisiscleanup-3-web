@@ -12,7 +12,7 @@
           <h1
             class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold pb-8"
           >
-            About Crisis Cleanup
+            ~~About Crisis Cleanup
           </h1>
           <!--- Description --->
           <p class="text-xl px-0.5 pb-5">

@@ -146,6 +146,7 @@
           <base-button
             class="text-white bg-black w-full p-2"
             :action="flagWorksite"
+            :alt="$t('flag.location_unknown')"
             >{{ $t('flag.location_unknown') }}</base-button
           >
         </div>
@@ -278,6 +279,7 @@
         size="medium"
         class="m-1 text-black p-3 px-4 border-2 border-black"
         :text="$t('actions.cancel')"
+        :alt="$t('actions.cancel')"
         :action="
           () => {
             currentFlag.reason_t = null;
@@ -290,6 +292,7 @@
         variant="solid"
         class="m-1 text-black p-3 px-4 border-2 border-primary-light"
         :text="$t('actions.update_location')"
+        :alt="$t('actions.update_location')"
         :action="updateWorksiteLocation"
       />
       <base-button
@@ -298,6 +301,7 @@
         variant="solid"
         class="m-1 text-black p-3 px-4 border-2 border-primary-light"
         :text="$t('actions.submit')"
+        :alt="$t('actions.submit')"
         :action="flagWorksite"
       />
     </div>

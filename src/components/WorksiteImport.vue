@@ -19,24 +19,26 @@
           variant="solid"
           :show-spinner="uploading"
           :disabled="uploading"
-          :text="$t('Upload CSV')"
+          :text="$t('actions.upload_csv')"
+          :alt="$t('actions.upload_csv')"
         />
       </DragDrop>
       <base-checkbox v-model="ignoreDuplicates"
-        >{{ $t('Ignore duplicates') }}
+        >{{ $t('~~Ignore duplicates') }}
       </base-checkbox>
       <form-select
         v-model="uploadType"
         :options="['worksite', 'pda']"
         select-classes="bg-white border w-64 mx-2"
-        :placeholder="$t('Upload Type')"
+        :placeholder="$t('~~Upload Type')"
       />
     </div>
     <Table :columns="columns" :data="imports" :body-style="{ height: '300px' }">
       <template #actions="slotProps">
         <div class="flex mr-2 justify-end w-full items-center">
           <base-button
-            :text="`Download Successful (${slotProps.item.success_count})`"
+            :text="~~`Download Successful (${slotProps.item.success_count})`"
+            :alt="~~`Download Successful (${slotProps.item.success_count})`"
             variant="solid"
             size="small"
             class="mx-2"
@@ -47,7 +49,8 @@
             "
           />
           <base-button
-            :text="`Download Failed (${slotProps.item.failed_count})`"
+            :text="~~`Download Failed (${slotProps.item.failed_count})`"
+            :alt="~~`Download Failed (${slotProps.item.failed_count})`"
             variant="outline"
             size="small"
             class="mx-2"
@@ -78,25 +81,25 @@ export default {
       imports: [],
       columns: [
         {
-          title: this.$t('ID'),
+          title: this.$t('~~ID'),
           dataIndex: 'id',
           key: 'id',
           width: '1fr',
         },
         {
-          title: this.$t('Created At'),
+          title: this.$t('~~Created At'),
           dataIndex: 'created_at',
           key: 'created_at',
           width: '1fr',
         },
         {
-          title: this.$t('Total Items'),
+          title: this.$t('~~Total Items'),
           dataIndex: 'total_items',
           key: 'total_items',
           width: '1fr',
         },
         {
-          title: this.$t('Processed Items'),
+          title: this.$t('~~Processed Items'),
           dataIndex: 'items_processed',
           key: 'items_processed',
           width: '1fr',

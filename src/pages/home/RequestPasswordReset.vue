@@ -26,6 +26,7 @@
             class="px-5 py-2 m-1 flex-grow"
             variant="solid"
             :text="$t('actions.send_reset_password_instructions')"
+            :alt="$t('actions.send_reset_password_instructions')"
             :action="requestPasswordReset"
           />
         </form>
@@ -45,6 +46,7 @@
             </base-text>
             <base-button
               :text="$t('actions.got_it')"
+              :alt="$t('actions.got_it')"
               size="large"
               variant="solid"
               class="mt-10"

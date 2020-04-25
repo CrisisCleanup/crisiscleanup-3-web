@@ -9,6 +9,7 @@
           variant="solid"
           class="px-4 py-2"
           :text="$t('actions.save')"
+          :alt="$t('actions.save')"
           :action="saveOrganization"
         />
       </div>
@@ -199,6 +200,7 @@
           <base-button
             v-if="currentOrganization.primary_location"
             :text="$t('profileOrg.edit_response_area')"
+            :alt="$t('profileOrg.edit_response_area')"
             variant="solid"
             class="px-2 py-1"
             :action="
@@ -213,6 +215,7 @@
             class="px-2 py-1"
             variant="solid"
             :text="$t('profileOrg.add_response_area')"
+            :alt="$t('profileOrg.add_response_area')"
             :action="
               () => {
                 showingLocationModal = true;
@@ -231,6 +234,7 @@
           <base-button
             v-if="currentOrganization.secondary_location"
             :text="$t('profileOrg.edit_response_area')"
+            :alt="$t('profileOrg.edit_response_area')"
             variant="solid"
             class="px-2 py-1"
             :action="
@@ -245,6 +249,7 @@
             class="px-2 py-1"
             variant="solid"
             :text="$t('profileOrg.add_response_area')"
+            :alt="$t('profileOrg.add_response_area')"
             :action="
               () => {
                 showingLocationModal = true;
@@ -281,6 +286,7 @@
           variant="solid"
           class="px-4 py-2"
           :text="$t('actions.save')"
+          :alt="$t('actions.save')"
           :action="saveOrganization"
         />
       </div>
@@ -344,6 +350,7 @@
             class="cursor-pointer px-3 py-1"
             variant="solid"
             :text="$t('actions.add_terms')"
+            :alt="$t('actions.add_terms')"
             :show-spinner="uploading"
             :disabled="uploading"
           />
@@ -404,6 +411,7 @@
             class="cursor-pointer px-3 py-1"
             variant="solid"
             :text="$t('profileOrg.custom_survivor_waiver')"
+            :alt="$t('profileOrg.custom_survivor_waiver')"
             :show-spinner="uploading"
             :disabled="uploading"
           />

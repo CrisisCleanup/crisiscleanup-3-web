@@ -13,7 +13,8 @@
       size="small"
       class="my-3 p-1 text-black bg-purple-700 text-white"
       :action="reloadForm"
-      :text="$t('Enter another case')"
+      :text="$t('actions.enter_another_case')"
+      :alt="$t('actions.enter_another_case')"
     />
   </div>
   <form
@@ -212,7 +213,8 @@
         data-cy="worksite-formaction-save"
         class="flex-grow m-1 text-black bg-purple-700 text-white"
         :action="savePda"
-        :text="lang.submitRequest"
+        :text="$t('actions.submit_request')"
+        :alt="$t('actions.submit_request')"
       />
     </div>
   </form>
@@ -292,7 +294,6 @@ export default {
     lang() {
       return this.getLang({
         personalInfo: 'formLabels.personal_information',
-        submitRequest: 'actions.submit_request',
       });
     },
   },

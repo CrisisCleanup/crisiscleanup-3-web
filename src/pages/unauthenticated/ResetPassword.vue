@@ -19,6 +19,7 @@
             </div>
             <base-button
               :text="$t('resetPassword.go_to_login')"
+              :alt="$t('resetPassword.go_to_login')"
               size="large"
               variant="solid"
               class="mt-10"
@@ -60,6 +61,7 @@
             class="px-5 py-2 m-1 flex-grow"
             variant="solid"
             :text="$t('actions.reset')"
+            :alt="$t('actions.reset')"
             :action="resetPassword"
           />
         </form>
@@ -79,6 +81,7 @@
             }}</base-text>
             <base-button
               :text="$t('resetPassword.go_to_login')"
+              :alt="$t('resetPassword.go_to_login')"
               size="large"
               variant="solid"
               class="mt-10"
