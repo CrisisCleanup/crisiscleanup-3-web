@@ -225,7 +225,7 @@ const getters = {
 };
 
 // actions
-const actions = {
+export const actions = {
   async getRealtimeMetrics({ commit, state }, { metrics } = {}) {
     let metricData = metrics;
     if (!metricData) {
@@ -264,7 +264,8 @@ const actions = {
     newState[metric.TOTAL_WAITING] =
       typeof totalWaiting === 'number' ? totalWaiting : 0;
     const agentCapacity = 12 * numOnline; // each agent can take 12 calls
-    const queueOverflow = agentCapacity - totalWaiting; // number of callers over the capacity
+    const queueOverflow = totalWaiting - agentCapacity; // number of callers over the capacity
+    Log.debug('current queue capacity overflow:', queueOverflow);
     const needed = queueOverflow >= 1 ? Math.ceil(queueOverflow / 12) : 0;
     newState[metric.NEEDED] = needed;
     Log.debug('new metrics:', newState);
