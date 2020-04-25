@@ -4,7 +4,7 @@
       <div class="left">
         <slot name="left">
           <base-text variant="body" weight="700">
-            {{ title }}
+            {{ $t(title) }}
           </base-text>
         </slot>
       </div>

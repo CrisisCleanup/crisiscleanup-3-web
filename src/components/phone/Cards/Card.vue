@@ -36,7 +36,7 @@ export default {
     }
   }
   .body {
-    /* @apply p-4; */
+    @apply bg-white;
     display: flex;
     &--inner {
       display: flex;

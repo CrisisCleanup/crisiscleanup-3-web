@@ -25,12 +25,10 @@
             </div>
           </div>
         </template>
-        <template #grid-end>
-          <div class="grid--end">
-            <Table :columns="contactsCols" :data="contactMetrics" />
-          </div>
-        </template>
       </phone-layout>
+      <div v-if="currentUser.isAdmin" class="contact-container">
+        <ContactTable />
+      </div>
     </template>
   </Loader>
 </template>
@@ -43,8 +41,8 @@ import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
 import Leaderboard from '@/components/phone/Widgets/Leaderboard.vue';
 import PhoneLayout from '@/layouts/Phone.vue';
 import AgentBlock from '@/components/phone/blocks/Agent.vue';
-import Table from '@/components/Table.vue';
 import Stories from '@/components/phone/PeopleStoriesCard.vue';
+import ContactTable from '@/components/phone/Widgets/ContactTable.vue';
 
 export default {
   name: 'Phone',
@@ -52,10 +50,10 @@ export default {
     PhoneLayout,
     AgentBlock,
     Loader,
-    Table,
     Stories,
     'training-card': NewsTrainingCard,
     Leaderboard,
+    ContactTable,
   },
   data() {
     return {
@@ -66,38 +64,6 @@ export default {
           'Then go and tempor incididunt ut labore et dolore magna aliqua.',
         timeToComplete: '10 minutes',
       },
-      contactsCols: [
-        {
-          dataIndex: 'contact_id',
-          key: 'contact_id',
-          title: 'Contact',
-          width: '1fr',
-        },
-        {
-          dataIndex: 'state',
-          key: 'state',
-          title: 'State',
-          width: '1fr',
-        },
-        {
-          dataIndex: 'action',
-          key: 'action',
-          title: 'Action',
-          width: '1fr',
-        },
-        {
-          dataIndex: 'entered_timestamp',
-          key: 'entered_timestamp',
-          title: 'Timestamp',
-          width: '1fr',
-        },
-        {
-          dataIndex: 'agent_id',
-          key: 'agent_id',
-          title: 'Agent',
-          width: '1fr',
-        },
-      ],
     };
   },
   computed: {
@@ -144,5 +110,9 @@ $areas: leader train story;
       }
     }
   }
+}
+
+.contact-container {
+  @apply bg-crisiscleanup-light-grey p-6;
 }
 </style>
