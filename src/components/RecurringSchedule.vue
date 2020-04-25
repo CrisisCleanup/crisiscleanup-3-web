@@ -80,7 +80,7 @@
             class="h-10"
             type="calendar"
             size="xl"
-            :alt="$t('calendar')"
+            :alt="$t('recurringSchedule.calendar')"
           />
           <datepicker
             input-class="h-10 p-1 outline-none w-full text-sm cursor-pointer"

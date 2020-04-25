@@ -129,7 +129,7 @@
                 <ccu-icon
                   type="trash"
                   size="small"
-                  :alt="$t('~Clear Location')"
+                  :alt="$t('actions.clear_location')"
                   @click.native="
                     () => {
                       detachLocationFromOrganization(organization);
@@ -150,7 +150,7 @@
                 <ccu-icon
                   type="trash"
                   size="small"
-                  :alt="$t('~Clear Location')"
+                  :alt="$t('actions.clear_location')"
                   @click.native="
                     () => {
                       detachLocationFromIncident(incident);
