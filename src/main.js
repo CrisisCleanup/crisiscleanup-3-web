@@ -1,6 +1,4 @@
 import '@/assets/css/tailwind.css';
-import '@crisiscleanup/amazon-connect-streams';
-import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
 import Autocomplete from '@/components/Autocomplete';
 import Badge from '@/components/Badge';
@@ -33,6 +31,8 @@ import Unauthenticated from '@/layouts/Unauthenticated';
 import { LangOverrideMixin } from '@/mixins';
 import { AuthService } from '@/services/auth.service';
 import { i18nService } from '@/services/i18n.service';
+import '@crisiscleanup/amazon-connect-streams';
+import '@crisiscleanup/connect-rtc';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -149,6 +149,8 @@ if (AuthService.getUser()) {
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
     dsn: 'https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561',
+    release: `crisiscleanup-3-web@${process.env.npm_package_version}`,
+    environment: process.env.VUE_APP_STAGE,
     integrations: [
       new SentryIntegrations.Vue({
         Vue,
