@@ -1,4 +1,5 @@
 import User from '@/models/User';
+import Organization from '@/models/Organization';
 import { getErrorMessage } from '@/utils/errors';
 import { mapGetters } from 'vuex';
 
@@ -22,6 +23,13 @@ export default {
           [key]: value,
         },
       });
+    },
+    getOrganizationName(id) {
+      const organization = Organization.find(id);
+      return organization.name;
+    },
+    getUser(id) {
+      return User.find(id);
     },
   },
   computed: {

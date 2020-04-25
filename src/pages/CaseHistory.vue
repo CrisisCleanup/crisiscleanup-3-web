@@ -29,28 +29,9 @@
           :key="user.id"
           class="py-5 border-b"
         >
-          <v-popover popover-class="user-popover" placement="top-start">
-            <span class="text-yellow-600 tooltip-target cursor-pointer">{{
-              getUser(user).full_name
-            }}</span>
+          <UserDetailTooltip :user="user">
             made {{ events.length }} edits
-            <div slot="popover">
-              <div class="text-base">{{ getUser(user).full_name }}</div>
-              <div class="text-xs">{{ getUser(user).organization.name }}</div>
-              <div class="mt-2">
-                <font-awesome-icon icon="envelope" />
-                <a :href="`mailto:${getUser(user).email}`" class="ml-1">{{
-                  getUser(user).email
-                }}</a>
-              </div>
-              <div v-if="getUser(user).mobile">
-                <font-awesome-icon icon="phone" />
-                <a :href="`tel:${getUser(user).mobile}`" class="ml-1">{{
-                  getUser(user).mobile
-                }}</a>
-              </div>
-            </div>
-          </v-popover>
+          </UserDetailTooltip>
           <div v-for="event in events" :key="event.id">
             {{ event.created_at | moment('MM/DD/YYYY, h:mm:ss A') }}:
             {{ event.event.event_name_t }}
@@ -69,9 +50,11 @@ import User from '@/models/User';
 import Organization from '@/models/Organization';
 import { groupBy } from '@/utils/array';
 import Worksite from '@/models/Worksite';
+import UserDetailTooltip from '@/components/user/DetailsTooltip.vue';
 
 export default {
   name: 'CaseHistory',
+  components: { UserDetailTooltip },
   data() {
     return {
       worksite: {},
@@ -117,21 +100,9 @@ export default {
       const organization = Organization.find(id);
       return organization.name;
     },
-    getUser(id) {
-      return User.find(id);
-    },
   },
 };
 </script>
-
-<style>
-.user-popover {
-  @apply bg-black text-white p-3 outline-none;
-  width: 230px;
-  left: 0.75rem !important;
-  z-index: 1000;
-}
-</style>
 
 <style scoped>
 .intake-view {

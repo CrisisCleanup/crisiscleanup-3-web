@@ -1,4 +1,6 @@
 import '@/assets/css/tailwind.css';
+import '@crisiscleanup/amazon-connect-streams';
+import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
 import Autocomplete from '@/components/Autocomplete';
 import Badge from '@/components/Badge';
@@ -31,8 +33,6 @@ import Unauthenticated from '@/layouts/Unauthenticated';
 import { LangOverrideMixin } from '@/mixins';
 import { AuthService } from '@/services/auth.service';
 import { i18nService } from '@/services/i18n.service';
-import '@crisiscleanup/amazon-connect-streams';
-import '@crisiscleanup/connect-rtc';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
