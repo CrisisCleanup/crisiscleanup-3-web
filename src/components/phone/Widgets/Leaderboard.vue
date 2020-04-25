@@ -1,5 +1,5 @@
 <template>
-  <TitledCard title="Leaderboard">
+  <TitledCard title="~~Leaderboard">
     <div class="card-container">
       <div v-for="a in agentBoard" :key="a.agent" class="item">
         <div class="item--profile">
@@ -8,9 +8,7 @@
           </div>
           <div class="info">
             <div class="info--user">
-              <base-text variant="h3">
-                {{ `${a.user.first_name} ${a.user.last_name}` }}
-              </base-text>
+              <UserDetailsTooltip :user="a.user.id" />
               <base-text
                 variant="h3"
                 weight="400"
@@ -30,19 +28,13 @@
           </div>
         </div>
         <div class="item--metrics">
-          <div class="metric">
-            <base-text variant="h2">
-              {{ a.total_inbound }}
-            </base-text>
-          </div>
-          <div class="metric">
-            <base-text variant="h2">
-              {{ a.total_outbound }}
-            </base-text>
-          </div>
-          <div class="metric">
-            <base-text variant="h2">
-              {{ a.total_calls }}
+          <div
+            class="metric"
+            v-for="m in ['total_inbound', 'total_outbound', 'total_calls']"
+            :key="m"
+          >
+            <base-text variant="h1" weight="700">
+              {{ a[m] }}
             </base-text>
           </div>
         </div>
@@ -55,12 +47,14 @@
 import TitledCard from '@/components/phone/Cards/TitledCard.vue';
 import { UserMixin, AgentMixin } from '@/mixins';
 import { mapGetters } from 'vuex';
+import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 
 export default {
   name: 'Leaderboard',
   mixins: [UserMixin, AgentMixin],
   components: {
     TitledCard,
+    UserDetailsTooltip,
   },
   computed: {
     ...mapGetters('phone', ['agentBoard']),
@@ -69,13 +63,6 @@ export default {
         intake: this.agentBoard.map((a) => a.total_inbound),
         return: this.agentBoard.map((a) => a.total_outbound),
         total: this.agentBoard.map((a) => a.total_calls),
-      };
-    },
-    metricHeaders() {
-      return {
-        intake: this.$t('~~Intake'),
-        return: this.$t('~~Return'),
-        total: this.$t('~~Total'),
       };
     },
   },
@@ -93,7 +80,7 @@ $dot-colors: (
   'paused': 'yellow.500',
 );
 
-$metric-headers: ('Invoke' 'Return' 'Total');
+$metric-headers: ('In' 'Out' 'Total');
 
 .card-container {
   display: flex;
@@ -172,6 +159,7 @@ $metric-headers: ('Invoke' 'Return' 'Total');
             }
           }
           display: flex;
+          .user-popover .details-name p,
           p {
             @apply text-crisiscleanup-dark-400 pr-2;
           }
