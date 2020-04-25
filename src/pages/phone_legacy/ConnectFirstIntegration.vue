@@ -229,31 +229,35 @@
                   </div>
                 </div>
               </div>
-              <form-select
-                class="select"
-                :options="selectValues"
-                item-key="value"
-                label="name_t"
-                :value="status"
-                @input="updateStatus"
-                placeholder="Call Status "
-                select-classes="border border-crisiscleanup-dark-100"
-              />
-              <textarea
-                :value="callNotes"
-                rows="3"
-                class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
-                :placeholder="$t('~~Notes')"
-                @input="updateNotes"
-              ></textarea>
-              <base-button
-                class="self-end"
-                size="small"
-                variant="solid"
-                :action="completeCall"
-              >
-                {{ $t('~~Call Complete - Next Call') }}
-              </base-button>
+              <form>
+                <form-select
+                  class="select"
+                  :options="selectValues"
+                  item-key="value"
+                  label="name_t"
+                  :value="status"
+                  @input="updateStatus"
+                  placeholder="Call Status"
+                  required
+                  select-classes="border border-crisiscleanup-dark-100"
+                />
+                <textarea
+                  :value="callNotes"
+                  rows="3"
+                  class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
+                  :placeholder="$t('~~Notes')"
+                  @input="updateNotes"
+                  required
+                ></textarea>
+                <base-button
+                  class="self-end"
+                  size="small"
+                  variant="solid"
+                  :action="completeCall"
+                >
+                  {{ $t('~~Call Complete - Next Call') }}
+                </base-button>
+              </form>
             </div>
             <div class="p2" v-else>
               {{ $t('No current call') }}
@@ -395,6 +399,7 @@ import Logger from '@/utils/log';
 import { parsePhoneNumber } from 'libphonenumber-js';
 import CaseForm from '../CaseForm';
 import EditCallerID from '../../components/phone/CallerIDEditCard';
+import { getErrorMessage } from '../../utils/errors';
 
 const Log = Logger({
   name: 'connectFirstIntegration',
@@ -506,7 +511,9 @@ export default {
     },
     async getNextCall() {
       try {
-        this.nextOutbound = await PhoneOutbound.api().getSingleOutbound(31);
+        this.nextOutbound = await PhoneOutbound.api().getNextOutbound({
+          incidentId: this.currentIncidentId,
+        });
       } catch (e) {
         this.nextOutbound = null;
       }
@@ -555,27 +562,31 @@ export default {
       this.callNotes = e.target.value;
     },
     async completeCall() {
-      if (this.$phoneService.callInfo.callType === 'OUTBOUND') {
-        await PhoneOutbound.api().updateStatus(this.call.id, {
-          statusId: this.status,
-          worksiteId: Boolean(this.worksite) && this.worksite.id,
-          notes: this.callNotes,
-        });
-      }
-
-      if (this.$phoneService.callInfo.callType === 'INBOUND') {
-        await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/${this.call.id}/update_status`,
-          {
-            status: this.status,
+      try {
+        if (this.$phoneService.callInfo.callType === 'OUTBOUND') {
+          await PhoneOutbound.api().updateStatus(this.call.id, {
+            statusId: this.status,
+            worksiteId: Boolean(this.worksite) && this.worksite.id,
             notes: this.callNotes,
-          },
-        );
-      }
+          });
+        }
 
-      this.status = null;
-      this.callNotes = '';
-      await this.getNextCall();
+        if (this.$phoneService.callInfo.callType === 'INBOUND') {
+          await this.$http.post(
+            `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/${this.call.id}/update_status`,
+            {
+              status: this.status,
+              notes: this.callNotes,
+            },
+          );
+        }
+
+        this.status = null;
+        this.callNotes = '';
+        await this.getNextCall();
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
     },
     async logoutByPhoneNumber() {
       const parsedNumber = parsePhoneNumber(this.currentUser.mobile, 'US');

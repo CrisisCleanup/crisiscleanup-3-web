@@ -2,6 +2,7 @@ import AgentLibrary from '@/../vendor/cf-agent-library';
 import store from '@/store';
 import Logger from '@/utils/log';
 import User from '@/models/User';
+import Incident from '@/models/Incident';
 
 const Log = Logger({
   name: 'phoneLegacy',
@@ -80,7 +81,7 @@ export default class PhoneService {
 
   async onNewCall(info) {
     Log.debug('callinfo: ', info);
-    //need to store callInfo to get sessionId
+    const currentUser = User.find(this.store.getters['auth/userId']);
     this.callInfo = info;
     let state = null;
     if (info.callType === 'INBOUND') {
@@ -89,6 +90,29 @@ export default class PhoneService {
         `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/get_by_session_id?session_id=${info.uii}`,
       );
       this.store.commit('phone_legacy/setIncomingCall', response.data);
+
+      const availableIncidentIds = Incident.all().map(
+        (incident) => incident.id,
+      );
+      const incidentsToRequest = response.data.incident_id.filter((id) => {
+        return !availableIncidentIds.includes(id);
+      });
+      try {
+        await Promise.all(
+          incidentsToRequest.map((id) => {
+            return window.vue.$http.post(
+              `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
+              {
+                organization: currentUser.organization.id,
+                incident: id,
+                temporary_access: true,
+              },
+            );
+          }),
+        );
+      } catch (error) {
+        Log.debug('Error requesting incident access: ', error);
+      }
     } else if (info.callType === 'OUTBOUND') {
       state = 'ENGAGED-OUTBOUND';
     }
@@ -105,7 +129,7 @@ export default class PhoneService {
     Log.debug('AgentLibrary closed');
   }
 
-  onNewSession(info) {
+  async onNewSession(info) {
     if (info.sessionType === 'AGENT') {
       if (this.store.getters['phone_legacy/getIncomingCall']) {
         this.store.commit(
@@ -120,6 +144,12 @@ export default class PhoneService {
         );
         this.store.commit('phone_legacy/setOutgoingCall', null);
       }
+      await Incident.api().get(
+        '/incidents?fields=id,name,short_name,geofence,locations&limit=150&ordering=-start_at',
+        {
+          dataKey: 'results',
+        },
+      );
     }
     Log.debug(info);
   }
