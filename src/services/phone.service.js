@@ -15,6 +15,18 @@ const Log = Logger({
 export default class PhoneService {
   constructor() {
     this.store = store;
+    this.initPhoneService();
+    this.loggedInAgentId = null;
+    this.callInfo = {};
+  }
+
+  initPhoneService() {
+    this.queueIds = Array.from(
+      new Set([
+        process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
+        process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+      ]),
+    );
     this.cf = new AgentLibrary({
       // Caution, this is prod
       socketDest: 'wss://c01-con.vacd.biz:8080/', //'ws://d01-test.cf.dev:8080',
@@ -29,8 +41,6 @@ export default class PhoneService {
         queueStats: this.onQueueStats.bind(this),
       },
     });
-    this.loggedInAgentId = null;
-    this.callInfo = {};
   }
 
   async apiLogoutAgent(agentId) {
@@ -49,6 +59,17 @@ export default class PhoneService {
     await window.vue.$http.post(
       `https://frronrxz66.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/username/${username}/logout`,
       {},
+      {
+        headers: {
+          Authorization: null,
+        },
+      },
+    );
+  }
+
+  async apiLoginsByPhone(phone, queue) {
+    return window.vue.$http.get(
+      `https://frronrxz66.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agentLogins?phone=${phone}&queue=${queue}`,
       {
         headers: {
           Authorization: null,
@@ -152,15 +173,9 @@ export default class PhoneService {
             },
             true,
           );
-          const queueIds = Array.from(
-            new Set([
-              process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
-              process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
-            ]),
-          );
           this.cf.configureAgent(
             currentUser.mobile,
-            queueIds,
+            this.queueIds,
             null,
             null,
             null,
@@ -168,11 +183,21 @@ export default class PhoneService {
             (configureResponse) => {
               Log.debug('Configure response', configureResponse);
               if (configureResponse.status === 'FAILURE') {
-                this.logout(data.agentSettings.agentId);
-                reject();
+                if (
+                  configureResponse.detail.includes(
+                    'Active agent session found',
+                  )
+                ) {
+                  Log.debug('Existing login found. Setting status');
+                  this.changeState('AVAILABLE');
+                  resolve();
+                } else {
+                  this.logout(data.agentSettings.agentId);
+                  reject();
+                }
               } else {
                 Log.debug('AgentLibrary successfully logged in');
-                this.store.commit('phone_legacy/setState', 'AVAILABLE');
+                this.changeState('AVAILABLE');
                 resolve();
               }
             },
@@ -199,29 +224,24 @@ export default class PhoneService {
     return new Promise((resolve) => {
       let state = newState;
       this.cf.setAgentState(newState, null, (setAgentStateResponse) => {
-        if (
-          setAgentStateResponse.previousState !==
-          setAgentStateResponse.currentState
-        ) {
-          if (setAgentStateResponse.currentState === 'ENGAGED') {
-            if (this.callInfo.callType === 'INBOUND') {
-              state = 'ENGAGED-INBOUND';
-            } else if (this.callInfo.callType === 'OUTBOUND') {
-              state = 'ENGAGED-OUTBOUND';
-            }
-          } else {
-            state = newState;
+        if (setAgentStateResponse.currentState === 'ENGAGED') {
+          if (this.callInfo.callType === 'INBOUND') {
+            state = 'ENGAGED-INBOUND';
+          } else if (this.callInfo.callType === 'OUTBOUND') {
+            state = 'ENGAGED-OUTBOUND';
           }
-
-          this.store.commit('phone_legacy/setState', state);
+        } else {
+          state = newState;
         }
+
+        this.store.commit('phone_legacy/setState', state);
         Log.debug('Set agent state response', setAgentStateResponse);
         resolve();
       });
     });
   }
 
-  dial(destination) {
+  dial(destination, callerId = null) {
     return new Promise((resolve) => {
       this.cf.offhookInit((offhookInitResponse) => {
         Log.debug('Offhook init response', offhookInitResponse);
@@ -232,7 +252,10 @@ export default class PhoneService {
           this.callInfo = {};
           resolve();
         } else {
-          this.cf.manualOutdial(destination, '2722003211');
+          this.cf.manualOutdial(
+            destination,
+            callerId || process.env.VUE_APP_DEFAULT_CALLER_ID,
+          );
           resolve();
         }
       });

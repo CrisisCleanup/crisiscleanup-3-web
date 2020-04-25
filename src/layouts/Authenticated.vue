@@ -176,7 +176,18 @@ export default {
           icon: 'phone',
           text: this.$t('nav.phone_beta'),
           to: '/caller',
-          disabled: !this.$can('phone_agent'),
+          disabled:
+            !this.$can('phone_agent') ||
+            this.$can('beta_feature.connect_first_integration'),
+        },
+        {
+          key: 'connect_first',
+          icon: 'phone',
+          text: this.$t('nav.phone_alpha'),
+          to: '/connect_first',
+          disabled:
+            !this.$can('phone_agent') ||
+            !this.$can('beta_feature.connect_first_integration'),
         },
         {
           key: 'admin',

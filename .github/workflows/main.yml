@@ -31,6 +31,7 @@ env:
   VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
   VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
   VUE_APP_SPANISH_PHONE_GATEWAY: '114659'
+  VUE_APP_DEFAULT_CALLER_ID: '8004511954'
   VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
   VUE_APP_BASE_URL: 'https://app.dev.crisiscleanup.io'
   VUE_APP_WS_URL: 'wss://socket.dev.crisiscleanup.io'
