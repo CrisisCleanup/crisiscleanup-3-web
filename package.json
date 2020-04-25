@@ -125,6 +125,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.9.0",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@cypress/code-coverage": "^3.0.0",
     "@cypress/webpack-preprocessor": "^5.1.1",
