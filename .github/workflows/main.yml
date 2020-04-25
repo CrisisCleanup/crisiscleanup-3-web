@@ -117,6 +117,10 @@ jobs:
         id: build-num
         run: echo "::set-output name=build-id::$(echo ${{ github.sha }} | cut -c 1-7)"
 
+      - name: Determine Stage
+        id: find-stage
+        run: echo "::set-output name=stage::$(if [ '${{ github.event_name }}' = 'create' ]; then echo 'staging'; else echo 'production';fi)"
+
       - name: Cache Node Modules
         uses: actions/cache@v1
         with:
@@ -151,6 +155,17 @@ jobs:
 
       - name: Install Dependencies
         run: yarn install
+
+      - name: Create Sentry Release
+        if: "github.event_name == 'release' || (github.event_name == 'create' && github.event.ref_type == 'tag')"
+        uses: tclindner/sentry-releases-action@v1.1.1
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_PROPERTIES: sentry.properties
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        with:
+          tagName: ${{ github.ref }}
+          environment: ${{ steps.find-stage.outputs.stage }}
 
       - name: Deploy Development
         env:
