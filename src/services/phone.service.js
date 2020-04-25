@@ -33,6 +33,30 @@ export default class PhoneService {
     this.callInfo = {};
   }
 
+  async apiLogoutAgent(agentId) {
+    await window.vue.$http.post(
+      `https://frronrxz66.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agent/${agentId}/logout`,
+      {},
+      {
+        headers: {
+          Authorization: null,
+        },
+      },
+    );
+  }
+
+  async apiLogoutByUsername(username) {
+    await window.vue.$http.post(
+      `https://frronrxz66.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/username/${username}/logout`,
+      {},
+      {
+        headers: {
+          Authorization: null,
+        },
+      },
+    );
+  }
+
   async onNewCall(info) {
     Log.debug('callinfo: ', info);
     //need to store callInfo to get sessionId

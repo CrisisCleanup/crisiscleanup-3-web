@@ -463,12 +463,12 @@ export default {
           },
           true,
         );
-        return 'covidtest';
+        return process.env.VUE_APP_PHONE_DEFAULT_USERNAME;
       }
     },
     async login() {
       await this.logout();
-      let username = 'covidtest';
+      let username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME;
       const { currentAgentId } = this.currentUser.states;
       if (currentAgentId) {
         username = await this.getUserNameForAgent(currentAgentId);
