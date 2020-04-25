@@ -290,7 +290,7 @@ export const actions = {
     commit('setContactMetrics', contacts);
   },
   async initConnect(
-    { state, commit, dispatch, getters: { agentStateTimestamp } },
+    { state, commit, dispatch, getters: { agentStateTimestamp, agentId } },
     htmlEl,
   ) {
     try {
@@ -347,8 +347,23 @@ export const actions = {
       },
     });
     ConnectService.bindContactEvents({
-      onIncoming: (contact) => {
+      onIncoming: async (contact) => {
         Log.debug('incoming callback!');
+        await dispatch(
+          'socket/send',
+          {
+            action: 'SET_AGENT_STATE',
+            options: {
+              includeMeta: true,
+            },
+            data: {
+              agentId,
+              agentState: state.agentState,
+              currentContactId: contact.getInitialContactId(),
+            },
+          },
+          { root: true },
+        );
         commit('setContact', { type: 'outbound' });
         contact.accept();
       },
