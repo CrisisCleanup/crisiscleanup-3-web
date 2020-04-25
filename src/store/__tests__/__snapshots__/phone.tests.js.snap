@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`actions getRealtimeMetrics 1`] = `
+[MockFunction] {
+  "calls": Array [
+    Array [
+      "setMetrics",
+      Object {
+        "agentsAvailable": 1,
+        "agentsNeeded": 0,
+        "agentsOnCall": 1,
+        "agentsOnline": 1,
+        "contactsInQueue": 2,
+        "contactsInQueueOutbound": 0,
+        "totalWaiting": 2,
+      },
+    ],
+    Array [
+      "setMetrics",
+      Object {
+        "agentsAvailable": 1,
+        "agentsNeeded": 0,
+        "agentsOnCall": 1,
+        "agentsOnline": 1,
+        "contactsInQueue": 12,
+        "contactsInQueueOutbound": 0,
+        "totalWaiting": 12,
+      },
+    ],
+    Array [
+      "setMetrics",
+      Object {
+        "agentsAvailable": 0,
+        "agentsNeeded": 3,
+        "agentsOnCall": 1,
+        "agentsOnline": 0,
+        "contactsInQueue": 35,
+        "contactsInQueueOutbound": 0,
+        "totalWaiting": 35,
+      },
+    ],
+    Array [
+      "setMetrics",
+      Object {
+        "agentsAvailable": 1,
+        "agentsNeeded": 2,
+        "agentsOnCall": 1,
+        "agentsOnline": 1,
+        "contactsInQueue": 35,
+        "contactsInQueueOutbound": 0,
+        "totalWaiting": 35,
+      },
+    ],
+  ],
+  "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
+  ],
+}
+`;
