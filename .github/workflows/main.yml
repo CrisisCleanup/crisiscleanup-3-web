@@ -207,7 +207,7 @@ jobs:
           SLACK_MESSAGE: ':rocket: Production is live! Check it out at: https://crisiscleanup.org'
 
       - name: Notify Failed
-        if: "((github.event_name == 'release') || (github.event_name == 'create' && github.event.ref_type == 'tag') && failure())"
+        if: "((github.event_name == 'release') || (github.event_name == 'create' && github.event.ref_type == 'tag')) && failure()"
         uses: rtCamp/action-slack-notify@v2.0.1
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
