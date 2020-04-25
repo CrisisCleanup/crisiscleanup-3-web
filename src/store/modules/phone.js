@@ -511,7 +511,7 @@ const actions = {
       Log.debug('no contact found!');
       return null;
     }
-    const contactId = contact.getContactId();
+    const contactId = contact.getInitialContactId();
     const newContactState = contact.getStatus();
     const duration = contact.getStatusDuration();
     const contactAttrs = contact.getAttributes();
