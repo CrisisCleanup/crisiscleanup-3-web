@@ -56,14 +56,14 @@ export default {
     tabs() {
       return [
         {
-          key: 'training',
-          title: 'Training',
-          component: TrainingsCard,
-        },
-        {
           key: 'news',
           title: 'News',
           component: NewsCard,
+        },
+        {
+          key: 'training',
+          title: 'Training',
+          component: TrainingsCard,
         },
       ];
     },
