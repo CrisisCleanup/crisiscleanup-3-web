@@ -1,5 +1,5 @@
 <template>
-  <TitledCard title="~~Last 10 People I talked too">
+  <TitledCard title="~~Last 10 Calls">
     <div class="card-container">
       <Table :columns="historyCols" :data="historyData" />
     </div>
@@ -18,6 +18,7 @@ export default {
       return [
         {
           // stub data
+          name: 'Calvin Baker',
           mobile: '+19999999999',
           cases: ['C10', 'PDA-10'],
           status: 'Worksite added.',
@@ -28,6 +29,12 @@ export default {
     },
     historyCols() {
       return [
+        {
+          title: 'Name',
+          dataIndex: 'name',
+          key: 'name',
+          width: '1fr',
+        },
         {
           title: 'Phone Number',
           dataIndex: 'mobile',
