@@ -4,7 +4,10 @@
       <div v-for="a in agentBoard" :key="a.agent" class="item">
         <div class="item--profile">
           <div class="image">
-            <img class="rounded-full" :src="currentUser.profilePictureUrl" />
+            <img
+              class="rounded-full"
+              :src="getUser(a.user.id).profilePictureUrl"
+            />
           </div>
           <div class="info">
             <div class="info--user">
@@ -147,7 +150,7 @@ $metric-headers: ('In' 'Out' 'Total');
         @apply px-1;
       }
       .image {
-        max-width: 10%;
+        max-width: 3rem;
         object-fit: contain;
         border-radius: 50%;
         position: relative;
