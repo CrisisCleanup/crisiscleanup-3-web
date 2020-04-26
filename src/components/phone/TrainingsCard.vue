@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-grow">
     <div class="flex flex-row justify-between">
       <!--- media/picture --->
       <div class="w-1/6 m-3">
