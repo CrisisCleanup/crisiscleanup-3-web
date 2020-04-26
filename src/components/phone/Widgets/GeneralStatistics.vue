@@ -59,7 +59,7 @@ export default {
   },
   async mounted() {
     await this.$store.watch(
-      () => this.$store.getters.socket.connected,
+      () => this.$store.getters['socket/connected'],
       () => true,
     );
     await this.$store.dispatch('socket/send', {
