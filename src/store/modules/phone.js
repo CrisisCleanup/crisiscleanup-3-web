@@ -2,6 +2,7 @@ import { EventBus } from '@/event-bus';
 import Agent from '@/models/Agent';
 import Language from '@/models/Language';
 import Pda from '@/models/Pda';
+import PhoneDnis from '@/models/PhoneDnis';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneResource from '@/models/PhoneResource';
 import Worksite from '@/models/Worksite';
@@ -62,6 +63,7 @@ const getStateDefaults = () => ({
       currentKey: 'case',
     },
     currentPage: 'dashboard',
+    currentDnis: null,
   },
 });
 
@@ -216,6 +218,11 @@ const getters = {
       return PhoneResource.find(state.externalContact.resourceId);
     }
     return null;
+  },
+  currentDnis: (state) => {
+    const { controller } = state;
+    if (!controller.currentDnis) return null;
+    return PhoneDnis.find(controller.currentDnis);
   },
   currentPage: (state) =>
     state.controller ? state.controller.currentPage : 'dashboard',
@@ -587,14 +594,15 @@ export const actions = {
       type: connectType,
       attributes,
     });
+    await dispatch('getCurrentDnis');
     if (!state.hydrated) {
-      dispatch('rehydrateController');
+      await dispatch('rehydrateController');
     }
     if (state.contact.state === ConnectService.STATES.CONNECTED) {
-      dispatch('setCurrentPage', 'controller');
+      await dispatch('setCurrentPage', 'controller');
     }
     EventBus.$emit(ConnectService.EVENTS.INBOUND, attributes);
-    dispatch('syncExternalContact');
+    await dispatch('syncExternalContact');
     commit('setControllerState', { contactId });
     let aId = agentId;
     if (!aId) {
@@ -748,6 +756,23 @@ export const actions = {
   async setCurrentPage({ commit }, key) {
     Log.debug('setting current phone page:', key);
     commit('setControllerState', { currentPage: key });
+  },
+  async getCurrentDnis({ commit, state, getters: { currentDnis } }) {
+    const { contact } = state;
+    if (!contact.attributes) return;
+    if (currentDnis !== null) return;
+    const { callerId } = contact.attributes;
+    const queryDnis = String(callerId).includes('+')
+      ? Number(callerId.slice(1))
+      : Number(callerId);
+    let dnis = await PhoneDnis.query().where('dnis', queryDnis).first();
+    if (!dnis) {
+      await PhoneDnis.api().get(`/phone_dnis?dnis=${queryDnis}`, {
+        dataKey: 'results',
+      });
+      dnis = await PhoneDnis.query().where('dnis', queryDnis).first();
+    }
+    commit('setControllerState', { currentDnis: dnis.id });
   },
 };
 
