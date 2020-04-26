@@ -4,6 +4,11 @@ import Logger from '@/utils/log';
 import User from '@/models/User';
 import Incident from '@/models/Incident';
 
+const LANGUAGE_ID_MAPPING = {
+  2: process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
+  7: process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+};
+
 const Log = Logger({
   name: 'phoneLegacy',
   middlewares: [
@@ -203,9 +208,26 @@ export default class PhoneService {
             },
             true,
           );
+
+          const queueIds = [];
+
+          if (
+            currentUser.primary_language &&
+            LANGUAGE_ID_MAPPING[currentUser.primary_language]
+          ) {
+            queueIds.push(LANGUAGE_ID_MAPPING[currentUser.primary_language]);
+          }
+
+          if (
+            currentUser.secondary_language &&
+            LANGUAGE_ID_MAPPING[currentUser.secondary_language]
+          ) {
+            queueIds.push(LANGUAGE_ID_MAPPING[currentUser.secondary_language]);
+          }
+
           this.cf.configureAgent(
             currentUser.mobile,
-            this.queueIds,
+            queueIds,
             null,
             null,
             null,

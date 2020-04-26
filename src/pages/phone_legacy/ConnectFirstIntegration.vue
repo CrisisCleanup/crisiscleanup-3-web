@@ -467,6 +467,20 @@ export default {
       }
     },
     async login() {
+      if (!this.languages.length) {
+        await this.$toasted.error(
+          this.$t('~~Please select a language before accepting calls'),
+        );
+        return;
+      }
+
+      if (!this.currentUser.mobile) {
+        await this.$toasted.error(
+          this.$t('~~Please add a phone number to start accepting calls'),
+        );
+        return;
+      }
+
       await this.logout();
       let username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME;
       const { currentAgentId } = this.currentUser.states;
@@ -511,9 +525,11 @@ export default {
     },
     async getNextCall() {
       try {
-        this.nextOutbound = await PhoneOutbound.api().getNextOutbound({
-          incidentId: this.currentIncidentId,
-        });
+        // Not serving outbounds here for now
+        // this.nextOutbound = await PhoneOutbound.api().getNextOutbound({
+        //   incidentId: this.currentIncidentId,
+        // });
+        this.nextOutbound = null;
       } catch (e) {
         this.nextOutbound = null;
       }
