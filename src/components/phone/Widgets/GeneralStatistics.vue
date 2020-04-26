@@ -58,6 +58,10 @@ export default {
     },
   },
   async mounted() {
+    await this.$store.watch(
+      () => this.$store.getters.socket.connected,
+      () => true,
+    );
     await this.$store.dispatch('socket/send', {
       action: 'GET_AGENTS',
       options: {
@@ -128,36 +132,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.agent-metrics {
-  .metrics {
-    &--title {
-      p {
-        @apply text-crisiscleanup-dark-400;
+.agent-metrics .metrics {
+  &--title {
+    p {
+      @apply text-crisiscleanup-dark-400;
+    }
+  }
+  &--body {
+    hr {
+      padding: 0;
+      margin: 0;
+    }
+    &:nth-child(-n + 5) {
+      @apply bg-crisiscleanup-light-grey;
+    }
+    &:nth-child(5) {
+      .metric {
+        div p {
+          @apply text-crisiscleanup-dark-500;
+        }
+        p {
+          @apply text-crisiscleanup-red-400;
+        }
       }
     }
-    &--body {
-      hr {
-        padding: 0;
-        margin: 0;
-      }
-      &:nth-child(-n + 5) {
-        @apply bg-crisiscleanup-light-grey;
-      }
-      &:nth-child(5) {
-        .metric {
-          div p {
-            @apply text-crisiscleanup-dark-500;
-          }
-          p {
-            @apply text-crisiscleanup-red-400;
-          }
-        }
-      }
-      .metric {
-        align-items: center;
-        p {
-          @apply text-crisiscleanup-dark-400;
-        }
+    .metric {
+      align-items: center;
+      p {
+        @apply text-crisiscleanup-dark-400;
       }
     }
   }
