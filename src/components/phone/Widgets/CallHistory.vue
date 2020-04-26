@@ -1,6 +1,6 @@
 <template>
   <TitledCard title="~~Last 10 Calls">
-    <div class="card-container">
+    <div class="card-container flex flex-grow">
       <Table :columns="historyCols" :data="historyData" />
     </div>
   </TitledCard>
@@ -9,23 +9,29 @@
 <script>
 import TitledCard from '@/components/phone/Cards/TitledCard.vue';
 import Table from '@/components/Table.vue';
+import { mapGetters } from 'vuex';
+import { UserMixin, ValidateMixin } from '@/mixins';
 
 export default {
   name: 'CallHistory',
   components: { TitledCard, Table },
+  mixins: [UserMixin, ValidateMixin],
   computed: {
+    ...mapGetters('phone', ['agentBoard']),
     historyData() {
-      return [
-        {
-          // stub data
-          name: 'Calvin Baker',
-          mobile: '+19999999999',
-          cases: ['C10', 'PDA-10'],
-          status: 'Worksite added.',
-          notes: 'User had entered a PDA',
-          completed: '10 minutes ago.',
-        },
-      ];
+      if (!this.agentBoard.length) return [];
+      const { recent_contacts } = this.agentBoard.find(
+        (a) => a.user.id === this.currentUser.id,
+      );
+      const calls = recent_contacts.map(({ dnis }) => ({
+        name: 'Unknown',
+        mobile: this.validatePhoneNumber(dnis).newValue,
+        cases: ['C19'],
+        status: 'Worksite added.',
+        notes: 'User notes.',
+        completed: '10 minutes ago.',
+      }));
+      return calls;
     },
     historyCols() {
       return [
