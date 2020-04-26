@@ -27,11 +27,11 @@ env:
   VUE_APP_GOOGLE_MAPS_API_KEY: ${{ secrets.VUE_APP_GOOGLE_MAPS_API_KEY }}
   VUE_APP_PITNEYBOWES_API_KEY: ${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
   VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN: ${{ secrets.VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN }}
-  VUE_APP_PHONE_DEFAULT_USERNAME: 'covid'
-  VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
-  VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
-  VUE_APP_SPANISH_PHONE_GATEWAY: '114659'
-  VUE_APP_DEFAULT_CALLER_ID: '8004511954'
+  VUE_APP_PHONE_DEFAULT_USERNAME: 'covidtest'
+  VUE_APP_PHONE_DEFAULT_PASSWORD: 'covidtest'
+  VUE_APP_ENGLISH_PHONE_GATEWAY: '124906'
+  VUE_APP_SPANISH_PHONE_GATEWAY: '124906'
+  VUE_APP_DEFAULT_CALLER_ID: '2722003211'
   VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
   VUE_APP_BASE_URL: 'https://app.dev.crisiscleanup.io'
   VUE_APP_WS_URL: 'wss://socket.dev.crisiscleanup.io'
@@ -183,6 +183,11 @@ jobs:
         env:
           VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
           VUE_APP_BASE_URL: 'https://app.staging.crisiscleanup.io'
+          VUE_APP_PHONE_DEFAULT_USERNAME: 'covid'
+          VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
+          VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
+          VUE_APP_SPANISH_PHONE_GATEWAY: '114659'
+          VUE_APP_DEFAULT_CALLER_ID: '8004511954'
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccustaging'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUStagingConnectRole'
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
@@ -195,6 +200,11 @@ jobs:
         env:
           VUE_APP_API_BASE_URL: 'https://api.crisiscleanup.org'
           VUE_APP_BASE_URL: 'https://crisiscleanup.org'
+          VUE_APP_PHONE_DEFAULT_USERNAME: 'covid'
+          VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
+          VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
+          VUE_APP_SPANISH_PHONE_GATEWAY: '114659'
+          VUE_APP_DEFAULT_CALLER_ID: '8004511954'
           VUE_APP_WS_URL: 'wss://socket.crisiscleanup.org'
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccuproduction'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUProductionConnectRole'
