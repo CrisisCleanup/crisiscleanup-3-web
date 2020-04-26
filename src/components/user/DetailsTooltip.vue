@@ -3,7 +3,7 @@
     <base-text class="details-name" variant="body">
       <span
         variant="body"
-        class="text-yellow-600 tooltip-target cursor-pointer"
+        :class="`${nameClass} tooltip-target cursor-pointer`"
         >{{ userItem.full_name }}</span
       >
       <slot
@@ -36,6 +36,7 @@ export default {
   mixins: [UserMixin],
   props: {
     user: VueTypes.number,
+    nameClass: VueTypes.string.def('text-yellow-600'),
   },
   computed: {
     userItem() {

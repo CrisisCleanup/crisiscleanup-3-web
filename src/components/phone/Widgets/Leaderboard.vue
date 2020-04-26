@@ -8,7 +8,10 @@
           </div>
           <div class="info">
             <div class="info--user">
-              <UserDetailsTooltip :user="a.user.id" />
+              <UserDetailsTooltip
+                :name-class="'text-h3 font-h3 pr-2 text-crisiscleanup-dark-500 name-tooltip'"
+                :user="a.user.id"
+              />
               <base-text
                 variant="h3"
                 weight="400"
@@ -159,7 +162,12 @@ $metric-headers: ('In' 'Out' 'Total');
             }
           }
           display: flex;
-          .user-popover .details-name p,
+          .v-popover .trigger p {
+            @apply text-crisiscleanup-dark-500 pr-2;
+            cursor: pointer;
+          }
+
+          .user-popover p.details-name span,
           p {
             @apply text-crisiscleanup-dark-400 pr-2;
           }
