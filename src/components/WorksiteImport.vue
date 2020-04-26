@@ -1,6 +1,6 @@
 <template>
   <div class="p-3">
-    <base-text variant="h2">{{ $t('Worksite Imports') }}</base-text>
+    <base-text variant="h2">{{ $t('worksiteImport.worksite_imports') }}</base-text>
     <div class="flex items-center justify-start">
       <DragDrop
         class="cursor-pointer w-32 py-2 mr-2"
@@ -24,21 +24,21 @@
         />
       </DragDrop>
       <base-checkbox v-model="ignoreDuplicates"
-        >{{ $t('~~Ignore duplicates') }}
+        >{{ $t('worksiteImport.ignore_duplicates') }}
       </base-checkbox>
       <form-select
         v-model="uploadType"
         :options="['worksite', 'pda']"
         select-classes="bg-white border w-64 mx-2"
-        :placeholder="$t('~~Upload Type')"
+        :placeholder="$t('worksiteImport.upload_type')"
       />
     </div>
     <Table :columns="columns" :data="imports" :body-style="{ height: '300px' }">
       <template #actions="slotProps">
         <div class="flex mr-2 justify-end w-full items-center">
           <base-button
-            :text="~~`Download Successful (${slotProps.item.success_count})`"
-            :alt="~~`Download Successful (${slotProps.item.success_count})`"
+            :text="'${$t('worksiteImport.successful_imports')} (${slotProps.item.success_count}) '"
+            :alt="'${$t('worksiteImport.successful_imports')} (${slotProps.item.success_count}) '"
             variant="solid"
             size="small"
             class="mx-2"
@@ -49,8 +49,8 @@
             "
           />
           <base-button
-            :text="~~`Download Failed (${slotProps.item.failed_count})`"
-            :alt="~~`Download Failed (${slotProps.item.failed_count})`"
+            :text="'${$t('worksiteImport.failed_imports')} (${slotProps.item.failed_count}) '"
+            :alt="'${$t('worksiteImport.failed_imports')} (${slotProps.item.failed_count}) '"
             variant="outline"
             size="small"
             class="mx-2"
@@ -81,25 +81,25 @@ export default {
       imports: [],
       columns: [
         {
-          title: this.$t('~~ID'),
+          title: this.$t('worksiteImport.id'),
           dataIndex: 'id',
           key: 'id',
           width: '1fr',
         },
         {
-          title: this.$t('~~Created At'),
+          title: this.$t('worksiteImport.created_at'),
           dataIndex: 'created_at',
           key: 'created_at',
           width: '1fr',
         },
         {
-          title: this.$t('~~Total Items'),
+          title: this.$t('worksiteImport.total_items'),
           dataIndex: 'total_items',
           key: 'total_items',
           width: '1fr',
         },
         {
-          title: this.$t('~~Processed Items'),
+          title: this.$t('worksiteImport.processed_items'),
           dataIndex: 'items_processed',
           key: 'items_processed',
           width: '1fr',

@@ -21,7 +21,7 @@
           <p class="text-xl px-o.5 pb-8">
             <span class="font-bold">Mission:</span>
             To help voluntary relief organizations help more more people by
-            enabling collaborative disaster recovery.
+            enabling collaborative disaster recovery. https://www.youtube.com/watch?v=yCxI5YHyX5k
           </p>
         </div>
         <!--- Content --->
@@ -174,6 +174,81 @@
             </div>
           </div>
         </div>
+
+        <!-- The People of Crisis Cleanup -->
+        <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
+          The People of Crisis Cleanup
+        </h1>
+******************
+              <div class="flex flex-row m-3 py-5">
+                <img
+                  src="@/assets/tinycrisiscleanuplogoscreenshot.jpg"
+                  class="w-7 h-6"
+                />
+                <base-text variant="body" class="pt-2">
+                  <span class="font-bold">Crisis Cleanup</span>
+                  is a collaborative
+                  <span class="font-bold">disaster work order</span>
+                  management platform that improves coordination, reduces
+                  duplication of efforts, imporves efficiency and improves
+                  volunteers' experience.
+                </base-text>
+          <p class="text-xl px-0.5 pb-5">
+            Crisis Cleanup is not a technology. It's a philosophy.
+          </p>
+          <p class="text-xl px-o.5 pb-8">
+            <span class="font-bold">Mission:</span>
+            To help voluntary relief organizations help more more people by
+            enabling collaborative disaster recovery. https://www.youtube.com/watch?v=yCxI5YHyX5k
+          </p>
+
+
+        <!-- Headshots -->
+        <!-- Start Row -->
+        <div class="flex flex-row justify-around m-5">
+          <!-- StartCard -->
+          <div class="flex flex-col">
+            <img
+              src="@/assets/headshots/aarontitus.jpg"
+              class="rounded-full m-5"
+            />
+            <p class="text-3xl px-0.5 pb-5">
+              <span class="font-bold">Aaron Titus</span>, Executive Director
+            </p>
+            <base-text variant="body" class="pt-2"><a href="https://twitter.com/aarontitus" target="_blank">Aaron Titus</a> is a proud husband and father of nine children, the past president of Mountain West VOAD, the Latter-day Saint Charities representative to Colorado VOAD, a privacy attorney, and author of <em><a href="http://h2prep.me/amazon">How to Prepare for Everything</a></em>.</base-text>
+          </div>
+          <!-- End Card -->
+
+          <!-- StartCard -->
+          <div class="flex flex-col">
+            <img
+              src="@/assets/headshots/aarontitus.jpg"
+              class="rounded-full m-5"
+            />
+            <p class="text-3xl px-0.5 pb-5">
+              <span class="font-bold">Aaron Titus</span>, Executive Director
+            </p>
+            <base-text variant="body" class="pt-2"><a href="https://twitter.com/aarontitus" target="_blank">Aaron Titus</a> is a proud husband and father of nine children, the past president of Mountain West VOAD, the Latter-day Saint Charities representative to Colorado VOAD, a privacy attorney, and author of <em><a href="http://h2prep.me/amazon">How to Prepare for Everything</a></em>.</base-text>
+          </div>
+          <!-- End Card -->
+
+          <!-- StartCard -->
+          <div class="flex flex-col">
+            <img
+              src="@/assets/headshots/aarontitus.jpg"
+              class="rounded-full m-5"
+            />
+            <p class="text-3xl px-0.5 pb-5">
+              <span class="font-bold">Aaron Titus</span>, Executive Director
+            </p>
+            <base-text variant="body" class="pt-2"><a href="https://twitter.com/aarontitus" target="_blank">Aaron Titus</a> is a proud husband and father of nine children, the past president of Mountain West VOAD, the Latter-day Saint Charities representative to Colorado VOAD, a privacy attorney, and author of <em><a href="http://h2prep.me/amazon">How to Prepare for Everything</a></em>.</base-text>
+          </div>
+          <!-- End Card -->
+        </div>
+        <!-- End Row -->
+
+**************
+
         <!-- Foundational Philosophies -->
         <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
           Foundational Philosophies

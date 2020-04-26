@@ -135,7 +135,7 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{ $t('~~Incident') }}</template>
+                        <template slot="btn">{{ $t('casesVue.incident') }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
                             <li
@@ -168,7 +168,7 @@
                                   }
                                 "
                                 >{{
-                                  $t('~~Primary Response Area')
+                                  $t('casesVue.primary_response_area')
                                 }}</base-checkbox
                               >
                             </li>
@@ -188,7 +188,7 @@
                                   }
                                 "
                                 >{{
-                                  $t('~~Secondary Response Area')
+                                  $t('casesVue.secondary_response_area')
                                 }}</base-checkbox
                               >
                             </li>
@@ -203,14 +203,14 @@
                 class="text-base font-thin mx-4"
                 ccu-icon="filters"
                 icon-size="medium"
-                :alt="$t('~~Filters')"
+                :alt="$t('casesVue.filters')"
                 :action="
                   () => {
                     showingFilters = true;
                   }
                 "
               >
-                ~~Filters
+                {{ $t('casesVue.filters') }}
                 <span
                   v-if="filtersCount > 0"
                   class="rounded-full mx-2 px-1 bg-yellow-500 text-xs"

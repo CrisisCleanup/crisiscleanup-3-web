@@ -32,7 +32,7 @@
           />
 
           <base-text variant="h2" class="py-2">
-            {{ $t('~~Nearby Organizations') }}
+            {{ $t('flag.nearby_organizations') }}
           </base-text>
           <div>
             <span>
@@ -51,7 +51,7 @@
                 <base-text
                   variant="h2"
                   v-if="organization.incident_primary_contacts.length"
-                  >{{ $t('~~Incident Primary Contacts') }}</base-text
+                  >{{ $t('flag.incident_primary_contacts') }}</base-text
                 >
                 <div
                   v-for="contact in organization.incident_primary_contacts"
@@ -76,7 +76,7 @@
                 <base-text
                   variant="h2"
                   v-if="organization.primary_contacts.length"
-                  >{{ $t('~~Primary Contacts') }}</base-text
+                  >{{ $t('flag.primary_contacts') }}</base-text
                 >
                 <div
                   v-for="contact in organization.primary_contacts"
