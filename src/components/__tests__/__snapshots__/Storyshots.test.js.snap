@@ -77,10 +77,10 @@ exports[`Storyshots Basics|BaseButton With Custom Icon 1`] = `
         class="m-1 flex items-center base-icon js-  "
       >
         <img
-          alt=""
+          alt="info.icon"
           class="ccu-icon cursor-pointer medium"
           src="IMAGE_MOCK"
-          title=""
+          title="info.icon"
         />
          
       </div>
@@ -372,10 +372,10 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
           class="m-6 flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xxs"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -391,10 +391,10 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
           class="m-6 flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xs"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -410,10 +410,10 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
           class="m-6 flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer small"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -429,10 +429,10 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
           class="m-6 flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer small"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -448,10 +448,10 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
           class="m-6 flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer medium"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -467,10 +467,10 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
           class="m-6 flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer medium"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -486,10 +486,10 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
           class="m-6 flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer large"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -505,10 +505,10 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
           class="m-6 flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer large"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -524,10 +524,10 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
           class="m-6 flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -558,10 +558,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -577,10 +577,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -596,10 +596,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -615,10 +615,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -634,10 +634,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -653,10 +653,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -672,10 +672,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -691,10 +691,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -710,10 +710,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -729,10 +729,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -748,10 +748,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -767,10 +767,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -786,10 +786,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -805,10 +805,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -824,10 +824,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -843,10 +843,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -862,10 +862,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -881,10 +881,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -900,10 +900,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -919,10 +919,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -938,10 +938,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -957,10 +957,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -976,10 +976,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -995,10 +995,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1014,10 +1014,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1033,10 +1033,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1052,10 +1052,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1071,10 +1071,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1090,10 +1090,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1109,10 +1109,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1128,10 +1128,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1147,10 +1147,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1166,10 +1166,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1185,10 +1185,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1204,10 +1204,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1223,10 +1223,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1242,10 +1242,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1261,10 +1261,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1280,10 +1280,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1299,10 +1299,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1318,10 +1318,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1337,10 +1337,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1365,10 +1365,10 @@ exports[`Storyshots Basics|BaseIcon Simple Icon 1`] = `
       class="flex items-center base-icon js-  "
     >
       <img
-        alt=""
+        alt="info.icon"
         class="ccu-icon cursor-pointer large"
         src="IMAGE_MOCK"
-        title=""
+        title="info.icon"
       />
        
     </div>
@@ -1439,10 +1439,10 @@ exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
           data-cy="js-break-glass"
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer small"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1517,10 +1517,10 @@ exports[`Storyshots Basics|BaseInput With Icon 1`] = `
           class="flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer small"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1656,10 +1656,10 @@ exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
           class="flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer small"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -2187,10 +2187,10 @@ exports[`Storyshots Elements|Tag Closeable Tag 1`] = `
         class="mx-1 flex items-center base-icon js-  "
       >
         <img
-          alt=""
+          alt="info.icon"
           class="ccu-icon cursor-pointer xxs"
           src="IMAGE_MOCK"
-          title=""
+          title="info.icon"
         />
          
       </div>
@@ -2235,7 +2235,7 @@ exports[`Storyshots Layouts|HomeLayout With All 1`] = `
         class="grid--logo logo my-8"
       >
         <img
-          alt="CrisisCleanup"
+          alt="Crisis Cleanup"
           src="@/assets/ccu-logo-black-500w.png"
         />
       </div>
@@ -2305,7 +2305,7 @@ exports[`Storyshots Layouts|HomeLayout With Basic Content 1`] = `
         class="grid--logo logo my-8"
       >
         <img
-          alt="CrisisCleanup"
+          alt="Crisis Cleanup"
           src="@/assets/ccu-logo-black-500w.png"
         />
       </div>
@@ -2401,7 +2401,7 @@ exports[`Storyshots Layouts|HomeLayout With Overlay 1`] = `
         class="grid--logo logo my-8"
       >
         <img
-          alt="CrisisCleanup"
+          alt="Crisis Cleanup"
           src="@/assets/ccu-logo-black-500w.png"
         />
       </div>
@@ -2628,7 +2628,7 @@ exports[`Storyshots Pages|NotFound With Defaults 1`] = `
         class="grid--logo logo my-8"
       >
         <img
-          alt="CrisisCleanup"
+          alt="Crisis Cleanup"
           src="@/assets/ccu-logo-black-500w.png"
         />
       </div>

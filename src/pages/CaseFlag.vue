@@ -32,7 +32,7 @@
           />
 
           <base-text variant="h2" class="py-2">
-            {{ $t('~~Nearby Organizations') }}
+            {{ $t('flag.nearby_organizations') }}
           </base-text>
           <div>
             <span>
@@ -51,7 +51,7 @@
                 <base-text
                   variant="h2"
                   v-if="organization.incident_primary_contacts.length"
-                  >{{ $t('~~Incident Primary Contacts') }}</base-text
+                  >{{ $t('flag.incident_primary_contacts') }}</base-text
                 >
                 <div
                   v-for="contact in organization.incident_primary_contacts"
@@ -76,7 +76,7 @@
                 <base-text
                   variant="h2"
                   v-if="organization.primary_contacts.length"
-                  >{{ $t('~~Primary Contacts') }}</base-text
+                  >{{ $t('flag.primary_contacts') }}</base-text
                 >
                 <div
                   v-for="contact in organization.primary_contacts"
@@ -146,6 +146,7 @@
           <base-button
             class="text-white bg-black w-full p-2"
             :action="flagWorksite"
+            :alt="$t('flag.location_unknown')"
             >{{ $t('flag.location_unknown') }}</base-button
           >
         </div>
@@ -278,6 +279,7 @@
         size="medium"
         class="m-1 text-black p-3 px-4 border-2 border-black"
         :text="$t('actions.cancel')"
+        :alt="$t('actions.cancel')"
         :action="
           () => {
             currentFlag.reason_t = null;
@@ -290,6 +292,7 @@
         variant="solid"
         class="m-1 text-black p-3 px-4 border-2 border-primary-light"
         :text="$t('actions.update_location')"
+        :alt="$t('actions.update_location')"
         :action="updateWorksiteLocation"
       />
       <base-button
@@ -298,6 +301,7 @@
         variant="solid"
         class="m-1 text-black p-3 px-4 border-2 border-primary-light"
         :text="$t('actions.submit')"
+        :alt="$t('actions.submit')"
         :action="flagWorksite"
       />
     </div>

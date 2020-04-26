@@ -200,7 +200,7 @@
           </div>
         </div>
         <base-button
-          text="Save"
+          :text="$t('actions.save')"
           variant="solid"
           class="flex-grow px-3 py-1 my-1"
           :action="
@@ -214,7 +214,7 @@
         {{ bufferedLayer && bufferedLayer.name }}
         <div class="flex text-primary-dark">
           <base-button
-            text="Add"
+            :text="$t('actions.add')"
             :action="
               () => {
                 handleMapEvent('add', 'Location');

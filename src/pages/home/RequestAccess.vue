@@ -18,13 +18,8 @@
               }}
             </div>
             <base-text variant="body" weight="700" class="mt-4 mb-1">
-              {{
-                $t(
-                  '~~To join an organization, you should be invited by an existing member. You can use this form to request access from an existing user by entering their email here.',
-                )
-              }}
+              {{ $t('requestAccess.enter_existing_user_email_msg') }}
             </base-text>
-            <!-- <div>{{ $t('requestAccess.enter_existing_user_email_msg') }}</div> -->
           </div>
         </div>
         <form class="w-108 flex flex-col" autocomplete="off" ref="form">
@@ -37,11 +32,7 @@
             required
           ></base-input>
           <base-text variant="body" weight="700" class="mt-4 mb-2 pt-8">
-            {{
-              $t(
-                '~~Now fill out your information here and request request access',
-              )
-            }}
+            {{ $t('requestAccess.complete_form_request_access') }}
           </base-text>
           <base-input
             v-model="email"
@@ -111,7 +102,7 @@
             :options="languages"
             item-key="id"
             label="name_t"
-            :placeholder="$t('~~Primary Language')"
+            :placeholder="$t('requestAccess.primary_language')"
             select-classes="bg-white border text-xs p-1 profile-select"
             @input="(value) => (primaryLanguage = value)"
           />
@@ -120,13 +111,12 @@
             class="px-5 py-2 m-1 flex-grow"
             variant="solid"
             :text="$t('actions.request_access')"
+            :alt="$t('actions.request_access')"
             :action="requestAccess"
           />
         </form>
         <base-text variant="body" weight="700" class="mt-10 mb-8">
-          {{
-            $t('~~Your request will be sent to existing members for approval')
-          }}
+          {{ $t('requestAccess.request_will_be_sent') }}
         </base-text>
         <modal
           v-if="showSuccessModal"
@@ -149,6 +139,7 @@
             </base-text>
             <base-button
               :text="$t('actions.got_it')"
+              :alt="$t('actions.got_it')"
               size="large"
               variant="solid"
               class="mt-10"

@@ -22,6 +22,7 @@
         v-for="action in actions"
         :key="action.id"
         :text="action.text"
+        :alt="action.text"
         :action="
           () => {
             $emit('changed', action.id);

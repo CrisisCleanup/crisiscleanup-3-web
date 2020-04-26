@@ -71,6 +71,7 @@
                   :action="save"
                   class="my-2 font-light p-3"
                   :text="$t('actions.save')"
+                  :alt="$t('actions.save')"
                 />
               </form>
             </div>

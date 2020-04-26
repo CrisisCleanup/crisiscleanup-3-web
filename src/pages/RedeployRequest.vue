@@ -4,6 +4,7 @@
       variant="outline"
       class="mx-1 px-3 py-1"
       :text="$t('requestRedeploy.request_redeploy')"
+      :alt="$t('requestRedeploy.request_redeploy')"
       @click.native="showRedeployModal = true"
     ></base-button>
     <modal
@@ -36,6 +37,7 @@
       <div slot="footer" class="p-3 flex justify-end">
         <base-button
           :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
           class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
           :action="
             () => {
@@ -47,6 +49,7 @@
           variant="solid"
           :action="requestIncident"
           :text="$t('actions.submit')"
+          :alt="$t('actions.submit')"
           class="ml-2 p-3 px-6 text-xs"
         />
       </div>

@@ -2,6 +2,7 @@
   <div>
     <base-button
       :text="$t('usersVue.invite_new_user')"
+      :alt="$t('usersVue.invite_new_user')"
       variant="solid"
       class="px-3 py-1"
       :action="
@@ -55,6 +56,7 @@
       <div slot="footer" class="p-3 flex justify-end">
         <base-button
           :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
           class="ml-2 p-3 px-6 mr-1 text-xs border border-black"
           :action="
             () => {
@@ -66,6 +68,7 @@
           variant="solid"
           :action="inviteUsers"
           :text="$t('actions.submit_invites')"
+          :alt="$t('actions.submit_invites')"
           class="ml-2 p-3 px-6 text-xs"
         />
       </div>

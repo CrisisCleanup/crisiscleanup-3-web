@@ -10,6 +10,7 @@
             }
           "
           :text="$t('affiliatesVue.add_affiliate')"
+          :alt="$t('affiliatesVue.add_affiliate')"
           variant="solid"
           class="px-2 py-1"
         />
@@ -58,6 +59,7 @@
                 }
               "
               :text="$t('actions.cancel')"
+              :alt="$t('actions.cancel')"
               class="ml-2 p-3 px-6 text-xs border border-black"
             />
             <base-button
@@ -70,6 +72,7 @@
                 }
               "
               :text="$t('actions.invite')"
+              :alt="$t('actions.invite')"
               class="ml-2 p-3 px-6 text-xs"
             />
           </div>
@@ -107,6 +110,7 @@
                 }
               "
               :text="$t('actions.unaffiliate')"
+              :alt="$t('actions.unaffiliate')"
             />
             <base-button
               v-if="
@@ -121,6 +125,7 @@
                 }
               "
               :text="$t('actions.accept')"
+              :alt="$t('actions.accept')"
             />
             <base-button
               v-if="
@@ -136,6 +141,7 @@
                 }
               "
               :text="$t('actions.reject')"
+              :alt="$t('actions.reject')"
             />
           </div>
         </template>

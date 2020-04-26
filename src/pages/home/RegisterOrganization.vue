@@ -271,6 +271,7 @@
             class="px-5 py-2 m-1 self-center md:w-108 lg:w-108 m-auto mb-20 sm:w-full"
             variant="solid"
             :text="$t('actions.sign_up')"
+            :alt="$t('actions.sign_up')"
             :action="register"
           />
         </form>

@@ -31,6 +31,7 @@
             <div class="flex">
               <base-button
                 :text="$t('actions.see_sample')"
+                :alt="$t('actions.see_sample')"
                 size="small"
                 class="border border-black px-2 py-1"
                 :action="
@@ -138,6 +139,7 @@
           <div class="my-2 flex justify-center">
             <base-button
               :text="$t('actions.upload')"
+              :alt="$t('actions.upload')"
               :action="
                 () => {
                   uploadShapefile(data.filename);

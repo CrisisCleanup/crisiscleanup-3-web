@@ -6,7 +6,7 @@
   >
     <div class="flex flex-col h-full">
       <div class="p-3">
-        {{ $t('Filters') }}
+        {{ $t('worksiteFilters.filters') }}
         <span
           v-if="filtersCount > 0"
           class="rounded-full px-1 bg-yellow-500 text-xs"
@@ -41,6 +41,7 @@
           <base-button
             type="bare"
             :text="$t('actions.clear_filters')"
+            :alt="$t('actions.clear_filters')"
             class="text-yellow-500 text-underline w-32"
             :action="clearAllFilters"
           />
@@ -56,7 +57,7 @@
             }"
             @click="currentSection = 'general'"
           >
-            {{ $t('General') }}
+            {{ $t('worksiteFilters.general') }}
             <span
               v-if="statusCount + statusGroupCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
@@ -64,7 +65,7 @@
             >
           </div>
           <div class="p-3 px-4 border-b cursor-pointer">
-            {{ $t('Personal Info') }}
+            {{ $t('worksiteFilters.personal_info') }}
           </div>
           <div
             class="p-3 px-4 border-b cursor-pointer"
@@ -85,7 +86,7 @@
             :class="{ 'border-l-4 border-l-black': currentSection === 'work' }"
             @click="currentSection = 'work'"
           >
-            {{ $t('Work') }}
+            {{ $t('worksiteFilters.work') }}
             <span
               v-if="fieldsCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
@@ -100,13 +101,13 @@
           <div v-if="currentSection === 'general'" class="flex flex-col">
             <div class="claim-status mb-2">
               <div class="my-1 text-base">
-                {{ $t('~~Location') }}
+                {{ $t('worksiteFilters.location') }}
               </div>
               <base-checkbox
                 v-model="filters.locations.data['organization_bounds']"
                 class="block my-1"
               >
-                {{ $t('~~Within My Organization Response Area') }}
+                {{ $t('worksiteFilters.within_my_org_response_area') }}
               </base-checkbox>
             </div>
             <div class="claim-status mb-2">
@@ -292,6 +293,7 @@
     >
       <base-button
         :text="$t('actions.cancel')"
+        :alt="$t('actions.cancel')"
         size="medium"
         class="m-1 border-2 border-black px-6 py-2"
         :action="
@@ -302,6 +304,7 @@
       />
       <base-button
         :text="$t('actions.apply_filters')"
+        :alt="$t('actions.apply_filters')"
         size="medium"
         class="m-1 p-3 px-6"
         variant="solid"

@@ -25,6 +25,9 @@ const mountWithOptions = (options) =>
       searchable: true,
       placeholder: 'Some Value',
     },
+    mocks: {
+      $t: (key) => key,
+    },
     ...options,
   });
 
