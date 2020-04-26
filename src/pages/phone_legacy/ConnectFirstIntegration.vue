@@ -493,6 +493,7 @@ export default {
       await this.getNextCall();
     },
     async logout() {
+      this.$phoneService.changeState('AWAY');
       const { loggedInAgents } = this.currentUser.states;
       if (loggedInAgents && loggedInAgents.length) {
         await Promise.all(
