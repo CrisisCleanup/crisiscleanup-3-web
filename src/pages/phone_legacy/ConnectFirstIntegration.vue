@@ -90,7 +90,7 @@
             </div>
             <div class="flex p-2 items-center justify-between">
               <ccu-icon with-text type="phone-plus" size="xl">
-                <base-text>{{ $t('~~On the phone now') }}</base-text>
+                <base-text>{{ $t('~~Total People Waiting') }}</base-text>
               </ccu-icon>
               {{ stats.inQueue || 0 }}
             </div>
@@ -267,6 +267,7 @@
       </div>
       <div>
         <case-form
+          ref="worksiteForm"
           :incident-id="String(currentIncidentId)"
           :pda-id="currentType === 'pda' ? caseId : null"
           :worksite-id="currentType === 'worksite' ? caseId : null"
@@ -394,7 +395,7 @@ import PhoneStatus from '@/models/PhoneStatus';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
 import Pda from '@/models/Pda';
-import { AgentMixin, WorksitesMixin } from '@/mixins';
+import { AgentMixin, WorksitesMixin, DialogsMixin } from '@/mixins';
 import Logger from '@/utils/log';
 import { parsePhoneNumber } from 'libphonenumber-js';
 import CaseForm from '../CaseForm';
@@ -414,7 +415,7 @@ const Log = Logger({
 export default {
   name: 'ConnectFirstIntegration',
   components: { EditCallerID, CaseForm },
-  mixins: [AgentMixin, WorksitesMixin],
+  mixins: [AgentMixin, WorksitesMixin, DialogsMixin],
   async mounted() {
     this.remainingCallbacks = await PhoneOutbound.api().getRemainingCallbackCount(
       this.currentIncidentId,
@@ -538,7 +539,6 @@ export default {
       this.setOutgoingCall(null);
       this.setIncomingCall(null);
       this.setCaller(null);
-      this.setCall(null);
       this.status = null;
       this.caseId = null;
       this.currentType = null;
@@ -578,6 +578,29 @@ export default {
       this.callNotes = e.target.value;
     },
     async completeCall() {
+      if (this.$refs.worksiteForm.dirtyFields.size) {
+        const result = await this.$confirm({
+          title: this.$t('~~Complete Call'),
+          content: this.$t(
+            '~~The case for seems to have some unsaved changes, would you like to complete the call without saving those changes?',
+          ),
+          actions: {
+            no: {
+              text: this.$t('~~Stop saving'),
+              type: 'outline',
+              buttonClass: 'border border-black',
+            },
+            yes: {
+              text: this.$t('Continue'),
+              type: 'solid',
+            },
+          },
+        });
+        if (result === 'no' || result === 'cancel') {
+          return;
+        }
+      }
+
       try {
         if (this.$phoneService.callInfo.callType === 'OUTBOUND') {
           await PhoneOutbound.api().updateStatus(this.call.id, {
