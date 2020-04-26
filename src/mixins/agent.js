@@ -66,6 +66,7 @@ export const AgentMixin = {
       'contactAttributes',
       'currentCase',
       'currentCases',
+      'currentDnis',
       'callerId',
       'pdas',
       'worksites',
@@ -87,9 +88,15 @@ export const AgentMixin = {
       return this.pdas.length + this.worksites.length;
     },
     callerHistory() {
+      if (this.currentDnis) {
+        return {
+          total: this.currentDnis.totalCalls,
+          recent: this.currentDnis.lastCallDays,
+        };
+      }
       return {
-        total: 2,
-        recent: 6,
+        total: 1,
+        recent: 'Never',
       };
     },
     callerFormattedNumber() {

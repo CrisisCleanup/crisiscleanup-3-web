@@ -44,7 +44,7 @@
           <tag class="tag">
             <base-text variant="bodysm">
               {{ callerHistory.total }}
-              {{ `${$t(' Calls ')} | ${callerHistory.recent} days` }}
+              {{ `${$t(' Calls ')} | ${callerHistory.recent}` }}
             </base-text>
           </tag>
         </div>

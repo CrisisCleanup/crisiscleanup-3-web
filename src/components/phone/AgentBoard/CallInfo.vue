@@ -9,7 +9,7 @@
                 c.mobile
               }}</base-text>
               <base-text :weight="400" variant="h4">{{
-                `2 ${lang.callStat.calls} | 1 ${lang.callStat.days}`
+                `${callerHistory.total} Calls | ${callerHistory.recent}`
               }}</base-text>
             </div>
             <div class="contact-caller">

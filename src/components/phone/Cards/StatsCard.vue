@@ -46,7 +46,7 @@ export default {
   components: { TitledCard },
   props: {
     cardTitle: VueTypes.string,
-    metrics: VueTypes.object,
+    metrics: VueTypes.any,
   },
 };
 </script>
