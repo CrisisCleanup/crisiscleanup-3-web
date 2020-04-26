@@ -20,7 +20,9 @@
                   :time-to-complete="training.timeToComplete"
                 >
                 </training-card>
-                <Stories />
+              </div>
+              <div class="grid--history">
+                <CallHistory />
               </div>
             </div>
           </div>
@@ -37,12 +39,12 @@
 import User from '@/models/User';
 import { mapActions, mapGetters } from 'vuex';
 import Loader from '@/components/Loader.vue';
-import NewsTrainingCard from '@/components/phone/NewsTrainingCard.vue';
 import Leaderboard from '@/components/phone/Widgets/Leaderboard.vue';
 import PhoneLayout from '@/layouts/Phone.vue';
 import AgentBlock from '@/components/phone/blocks/Agent.vue';
-import Stories from '@/components/phone/PeopleStoriesCard.vue';
+import CallHistory from '@/components/phone/Widgets/CallHistory.vue';
 import ContactTable from '@/components/phone/Widgets/ContactTable.vue';
+import NewsTrainingCard from '@/components/phone/Widgets/NewsTrainingCard.vue';
 
 export default {
   name: 'Phone',
@@ -50,7 +52,7 @@ export default {
     PhoneLayout,
     AgentBlock,
     Loader,
-    Stories,
+    CallHistory,
     'training-card': NewsTrainingCard,
     Leaderboard,
     ContactTable,
@@ -93,10 +95,20 @@ export default {
 <style scoped lang="scss">
 $areas: leader train story;
 
+.phonegrid {
+  &.grid-container {
+    grid:
+      [r1] 'start main' [r1end]
+      / 1fr 3.75fr;
+  }
+}
+
 .grid--main {
   .dash-grid {
     display: inline-grid;
     grid-gap: 2rem;
+    width: 100%;
+    @apply pr-6;
     grid:
       [r1] 'leader' [r1end]
       [r2] 'train' [r2end]
