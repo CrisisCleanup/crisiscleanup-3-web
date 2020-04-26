@@ -9,7 +9,7 @@
         </template>
         <template #grid-main>
           <div class="grid--main w-auto">
-            <div class="dash-grid">
+            <div class="dash-grid h-full">
               <div class="grid--leader">
                 <leaderboard />
               </div>
@@ -114,8 +114,8 @@ $areas: leader train history;
     width: 100%;
     padding-right: 2rem;
     grid:
-      [r1] 'leader train' 2fr [r1end]
-      [r2] 'history history' 1fr [r2end]
+      [r1] 'leader train' 1.25fr [r1end]
+      [r2] 'history history' 2.75fr [r2end]
       / 1fr 1fr;
     .grid {
       @each $area in $areas {
