@@ -4,11 +4,11 @@
       withText ? 'with-text' : ''
     } `"
   >
-    <img 
-      :class="styles" 
-      :src="iconMap[type]" 
-      :alt="$t('info.icon')" 
-      :title="$t('info.icon')"  
+    <img
+      :class="styles"
+      :src="iconMap[type]"
+      :alt="$t('info.icon')"
+      :title="$t('info.icon')"
     />
     <slot></slot>
   </div>

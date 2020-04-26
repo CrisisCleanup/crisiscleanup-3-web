@@ -135,7 +135,9 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{ $t('casesVue.incident') }}</template>
+                        <template slot="btn">{{
+                          $t('casesVue.incident')
+                        }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
                             <li

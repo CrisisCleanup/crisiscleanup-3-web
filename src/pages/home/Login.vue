@@ -11,10 +11,7 @@
       </div>
       <div class="grid--globe self-center">
         <div class="homegrid-globe">
-          <img 
-            src="@/assets/globe.png" 
-            :alt="$t('loginForm.globe')"
-          />
+          <img src="@/assets/globe.png" :alt="$t('loginForm.globe')" />
         </div>
       </div>
       <home-footer />

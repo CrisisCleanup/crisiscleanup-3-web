@@ -27,7 +27,9 @@ export default class UserLocationsFilter extends Filter {
       .forEach(([key]) => {
         labels[key] = key;
         if (key === 'organization_bounds') {
-          labels[key] = window.vue.$t('worksiteFilters.within_my_org_response_area');
+          labels[key] = window.vue.$t(
+            'worksiteFilters.within_my_org_response_area',
+          );
         }
       });
     return labels;

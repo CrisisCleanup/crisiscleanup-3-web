@@ -11,12 +11,21 @@ import BaseIcon from '../BaseIcon';
 describe('BaseIcon', () => {
   it('should not log any errors', () => {
     const spy = jest.spyOn(global.console, 'error');
-    mount(BaseIcon);
+    mount(BaseIcon, {
+      mocks: {
+        $t: (key) => key,
+      },
+    });
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('should render correctly and match snapshot', () => {
-    const testProps = { propsData: { size: 'small', type: 'dashboard' } };
+    const testProps = {
+      mocks: {
+        $t: (key) => key,
+      },
+      propsData: { size: 'small', type: 'dashboard' },
+    };
     const wrapper = mount(BaseIcon, testProps);
     expect(wrapper.element).toMatchSnapshot();
   });

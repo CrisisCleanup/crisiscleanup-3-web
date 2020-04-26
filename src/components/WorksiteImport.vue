@@ -1,6 +1,8 @@
 <template>
   <div class="p-3">
-    <base-text variant="h2">{{ $t('worksiteImport.worksite_imports') }}</base-text>
+    <base-text variant="h2">{{
+      $t('worksiteImport.worksite_imports')
+    }}</base-text>
     <div class="flex items-center justify-start">
       <DragDrop
         class="cursor-pointer w-32 py-2 mr-2"
@@ -37,8 +39,12 @@
       <template #actions="slotProps">
         <div class="flex mr-2 justify-end w-full items-center">
           <base-button
-            :text="'${$t('worksiteImport.successful_imports')} (${slotProps.item.success_count}) '"
-            :alt="'${$t('worksiteImport.successful_imports')} (${slotProps.item.success_count}) '"
+            :text="`${$t('worksiteImport.successful_imports')} (${
+              slotProps.item.success_count
+            })`"
+            :alt="`${$t('worksiteImport.successful_imports')} (${
+              slotProps.item.success_count
+            })`"
             variant="solid"
             size="small"
             class="mx-2"
@@ -49,8 +55,12 @@
             "
           />
           <base-button
-            :text="'${$t('worksiteImport.failed_imports')} (${slotProps.item.failed_count}) '"
-            :alt="'${$t('worksiteImport.failed_imports')} (${slotProps.item.failed_count}) '"
+            :text="`${$t('worksiteImport.failed_imports')} (${
+              slotProps.item.failed_count
+            })`"
+            :alt="`${$t('worksiteImport.failed_imports')} (${
+              slotProps.item.failed_count
+            })`"
             variant="outline"
             size="small"
             class="mx-2"
