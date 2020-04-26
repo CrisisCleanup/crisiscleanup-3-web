@@ -19,8 +19,8 @@ $areas: start main end;
   @apply bg-crisiscleanup-light-grey;
   @apply w-full;
   &.grid-container {
+    @apply h-full;
     justify-content: center;
-    align-content: center;
     display: inline-grid;
     column-gap: 2rem;
     @apply p-6;
