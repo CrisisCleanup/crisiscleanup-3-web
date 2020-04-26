@@ -7,7 +7,7 @@
         :image-path="training.imagePath"
         :description="training.description"
         :time-to-complete="training.timeToComplete"
-        @onTrainingSelected="toggleAvailable"
+        @onTrainingSelected="$emit('phone:showTraining', true)"
       ></TrainingsCard>
     </template>
     <template class="flex flex-grow" #news>
@@ -19,16 +19,10 @@
         :time-to-complete="newss.timeToComplete"
       />
     </template>
-    <trainings-modal
-      :visible="isShowingTrainingModal"
-      @onClose="isShowingTrainingModal = false"
-      @onComplete="onTrainingComplete"
-    ></trainings-modal>
   </TabbedCard>
 </template>
 
 <script>
-import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 import NewsCard from '@/components/phone/NewsCard.vue';
 import TrainingsCard from '@/components/phone/TrainingsCard.vue';
 import TabbedCard from '@/components/phone/Cards/TabbedCard.vue';
@@ -36,21 +30,9 @@ import TabbedCard from '@/components/phone/Cards/TabbedCard.vue';
 export default {
   name: 'NewsTrainingCard',
   components: {
-    TrainingsModal,
     NewsCard,
     TrainingsCard,
     TabbedCard,
-  },
-  data() {
-    return {
-      isShowingTrainingModal: false,
-    };
-  },
-  methods: {
-    async onTrainingComplete() {
-      await this.loadTrainingData();
-      this.isShowingTrainingModal = false;
-    },
   },
   computed: {
     tabs() {

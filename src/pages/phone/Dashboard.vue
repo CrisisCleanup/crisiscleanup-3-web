@@ -14,12 +14,11 @@
                 <leaderboard />
               </div>
               <div class="grid--train">
-                <training-card
-                  :image-path="training.imagePath"
-                  :description="training.description"
-                  :time-to-complete="training.timeToComplete"
-                >
-                </training-card>
+                <NewsTrainingCard
+                  @phone:showTraining="
+                    ($event) => (isShowingTrainingModal = $event)
+                  "
+                />
               </div>
               <div class="grid--history">
                 <CallHistory />
@@ -28,6 +27,11 @@
           </div>
         </template>
       </phone-layout>
+      <TrainingModal
+        :visible="isShowingTrainingModal"
+        @onClose="isShowingTrainingModal = false"
+        @onComplete="onTrainingComplete"
+      ></TrainingModal>
       <div v-if="currentUser.isAdmin" class="contact-container">
         <ContactTable />
       </div>
@@ -45,6 +49,7 @@ import AgentBlock from '@/components/phone/blocks/Agent.vue';
 import CallHistory from '@/components/phone/Widgets/CallHistory.vue';
 import ContactTable from '@/components/phone/Widgets/ContactTable.vue';
 import NewsTrainingCard from '@/components/phone/Widgets/NewsTrainingCard.vue';
+import TrainingModal from '@/components/phone/TrainingsModal.vue';
 
 export default {
   name: 'Phone',
@@ -53,19 +58,15 @@ export default {
     AgentBlock,
     Loader,
     CallHistory,
-    'training-card': NewsTrainingCard,
+    NewsTrainingCard,
     Leaderboard,
     ContactTable,
+    TrainingModal,
   },
   data() {
     return {
       loading: false,
-      training: {
-        imagePath: require('@/assets/newstrainingss.jpg'),
-        description:
-          'Then go and tempor incididunt ut labore et dolore magna aliqua.',
-        timeToComplete: '10 minutes',
-      },
+      isShowingTrainingModal: false,
     };
   },
   computed: {
@@ -80,9 +81,12 @@ export default {
       'contactMetrics',
     ]),
   },
-
   methods: {
     ...mapActions('phone', ['getRealtimeMetrics']),
+    async onTrainingComplete() {
+      await this.loadTrainingData();
+      this.$emit('phone:showTrainingModal', false);
+    },
   },
   async mounted() {
     this.loading = true;

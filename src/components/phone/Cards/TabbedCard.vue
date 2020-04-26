@@ -15,9 +15,9 @@
       </div>
     </template>
     <div
+      v-show="t.key === currentTab"
       class="flex flex-grow flex-col"
       v-for="t in tabs"
-      v-show="t.key === currentTab"
       :key="t.key"
     >
       <slot :name="t.key" />
