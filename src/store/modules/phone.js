@@ -10,7 +10,7 @@ import * as SSO from '@/services/sso.service';
 import { PhoneApi } from '@/utils/api';
 import Logger from '@/utils/log';
 import axios from 'axios';
-import { camelCase } from 'lodash';
+import { camelCase, orderBy } from 'lodash';
 
 const Log = Logger({
   name: 'phone.store',
@@ -221,7 +221,9 @@ const getters = {
     state.controller ? state.controller.currentPage : 'dashboard',
   contactMetrics: (state) => (state.contactMetrics ? state.contactMetrics : []),
   agentBoard: (state) =>
-    state.agentMetrics ? Object.values(state.agentMetrics) : [],
+    state.agentMetrics
+      ? orderBy(Object.values(state.agentMetrics), ['total_calls'], ['desc'])
+      : [],
 };
 
 // actions
