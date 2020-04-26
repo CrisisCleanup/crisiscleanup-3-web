@@ -145,7 +145,7 @@ export default class User extends Model {
           { save: false },
         );
       },
-      async updateUserState(states) {
+      async updateUserState(states, reload = false) {
         const currentUser = User.find(AuthService.getUser().user_claims.id);
         const newStates = {
           ...currentUser.states,
@@ -158,8 +158,11 @@ export default class User extends Model {
           },
           { save: false },
         );
+        if (reload) {
+          await this.get('/users/me', {});
+        }
       },
-      async updateUserPreferences(preferences) {
+      async updateUserPreferences(preferences, reload = false) {
         const currentUser = User.find(AuthService.getUser().user_claims.id);
         const newPreferences = {
           ...currentUser.preferences,
@@ -172,6 +175,9 @@ export default class User extends Model {
           },
           { save: false },
         );
+        if (reload) {
+          await this.get('/users/me', {});
+        }
       },
       async acceptTerms() {
         const currentUser = User.find(AuthService.getUser().user_claims.id);

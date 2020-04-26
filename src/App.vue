@@ -4,7 +4,11 @@
       <router-view v-if="$route.meta.id !== 'caller'" />
       <PhoneLegacy
         class="main-content"
-        v-if="$store.getters['auth/isLoggedIn']"
+        v-if="
+          $store.getters['auth/isLoggedIn'] &&
+          this.$can &&
+          !this.$can('beta_feature.connect_first_integration')
+        "
         v-show="$route.meta.id === 'caller'"
       ></PhoneLegacy>
     </component>

@@ -58,10 +58,13 @@ import * as ModalDialogs from 'vue-modal-dialogs';
 import VueMq from 'vue-mq';
 import VueNativeSocket from 'vue-native-websocket';
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
-import VueRouterMultiView from 'vue-router-multi-view';
 import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
+import VueRouterMultiView from 'vue-router-multi-view';
+import Tabs from '@/components/tabs/Tabs';
+import Tab from '@/components/tabs/Tab';
+import PhoneService from '@/services/phone.service';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -81,6 +84,8 @@ Vue.component('assessment-tree', AssessmentTree);
 Vue.component('modal', Modal);
 Vue.component('autocomplete', Autocomplete);
 Vue.component('tag', Tag);
+Vue.component('tabs', Tabs);
+Vue.component('tab', Tab);
 Vue.component('spinner', Spinner);
 Vue.component('badge', Badge);
 Vue.component('tag-input', VueTagsInput);
@@ -220,6 +225,8 @@ Vue.use(VueNativeSocket, WS_URL, {
     }
   },
 });
+
+Vue.prototype.$phoneService = new PhoneService();
 
 // Setup i18n
 const getLanguages = async (tags) => {

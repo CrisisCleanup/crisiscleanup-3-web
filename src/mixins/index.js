@@ -5,6 +5,7 @@ import LocalStorageMixin from './localStorage';
 import RCMixin from './rc';
 import { TrainingMixin } from './training';
 import UserMixin from './user';
+import { DialogsMixin } from './dialogs';
 import ValidateMixin from './validate.js';
 import { WorksitesMixin } from './worksite';
 
@@ -20,4 +21,5 @@ export {
   ValidateMixin,
   TrainingMixin,
   RCMixin,
+  DialogsMixin,
 };

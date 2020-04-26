@@ -12,9 +12,13 @@ export function getErrorMessage(error) {
 
   if (error.response.status === 400) {
     // Show the error field, unless it is 'non_field_errors'
-    let { field } = error.response.data.errors[0];
-    field = field === 'non_field_errors' ? '' : `${field}: `;
-    return `${field}${message}`;
+    let respone = '';
+    error.response.data.errors.forEach((e) => {
+      let { field } = e;
+      field = field === 'non_field_errors' ? '' : `${field}: `;
+      respone = `${respone}${field}${e.message}<br>`;
+    });
+    return respone;
   }
   return message;
 }

@@ -229,6 +229,7 @@
         :worksite="worksite"
         @updateField="
           ({ key, value }) => {
+            updateDirtyFields(key);
             dynamicFields[key] = value;
           }
         "
@@ -375,9 +376,9 @@ export default {
       worksite: {},
       dynamicFields: {},
       potentialIncidents: [],
+      dirtyFields: new Set(),
       sectionCounter: 2,
       addAdditionalPhone: false,
-      cronExpression: '*/1 * * * *',
     };
   },
   computed: {
@@ -443,7 +444,11 @@ export default {
     getSectionCount(currentField) {
       return currentField.order_label;
     },
+    updateDirtyFields(key) {
+      this.dirtyFields = new Set(this.dirtyFields.add(key));
+    },
     updateWorksite(value, key) {
+      this.updateDirtyFields(key);
       if (this.worksite.id) {
         Worksite.update({
           where: this.worksite.id,
@@ -730,6 +735,7 @@ export default {
           this.worksite = Worksite.find(savedWorksite.entities.worksites[0].id);
         }
         await this.$toasted.success(this.$t('caseForm.new_case_success'));
+        this.dirtyFields = new Set();
         if (reload) {
           this.$emit('reloadTable');
           this.$emit('reloadMap', this.worksite.id);
@@ -872,6 +878,9 @@ export default {
         this.gettingLocation = false;
         this.errorStr = e.message;
       }
+    },
+    logFormdata() {
+      this.$log.debug(new FormData(this.$refs.form));
     },
   },
 };

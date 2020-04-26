@@ -40,13 +40,30 @@ export default class PhoneOutbound extends Model {
         } = phoneOutbound;
         return data;
       },
+      async getRemainingCallbackCount(incidentId) {
+        const phoneOutbound = await this.get(
+          `/phone_outbound?incident_id=${incidentId}&&completion__lt=1&limit=1`,
+        );
+        const {
+          response: { data },
+        } = phoneOutbound;
+        return data.count;
+      },
+      async getSingleOutbound(id) {
+        const phoneOutbound = await this.get(`/phone_outbound/${id}`);
+        const {
+          response: { data },
+        } = phoneOutbound;
+        return data;
+      },
       async callOutbound(id) {
         const result = this.post(`/phone_outbound/${id}/call`);
         return result;
       },
-      async updateStatus(id, { statusId, worksiteId = null }) {
+      async updateStatus(id, { statusId, worksiteId = null, notes = '' }) {
         const body = {
           status: statusId || null,
+          notes,
         };
         if (worksiteId) {
           body[worksiteId] = worksiteId;
