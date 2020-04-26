@@ -59,9 +59,9 @@
             v-if="allTrainingCompleted"
             variant="solid"
             class="px-3 py-2"
-            :action="() => (editCardActive = !editCardActive)"
-            @click="finishTraining()"
+            :action="() => finishTraining()"
           >
+            <!-- :action="() => (editCardActive = !editCardActive)" -->
             {{ lang.actions.complete.text }}
           </base-button>
           <base-button
@@ -163,12 +163,15 @@ export default {
       this.selectedTraining = null;
     },
     finishTraining() {
+      this.openModal();
       this.$emit('onComplete', true);
-      this.close();
     },
     close() {
       this.visible = false;
       this.$emit('onClose', this.visible);
+    },
+    openModal() {
+      this.editCardActive = true;
     },
   },
 };
