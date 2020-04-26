@@ -1,4 +1,4 @@
-import AgentLibrary from '@/../vendor/cf-agent-library';
+import AgentLibrary from 'cf-agent-library';
 import store from '@/store';
 import Logger from '@/utils/log';
 import User from '@/models/User';

@@ -53,6 +53,7 @@
     "@vuex-orm/plugin-axios": "^0.9.2",
     "aws-sdk": "^2.652.0",
     "axios": "^0.19.2",
+    "cf-agent-library": "git+https://git@github.com/CrisisCleanup/cf-agent-library.git",
     "chart.js": "^2.9.3",
     "circle-to-polygon": "^2.0.1",
     "concaveman": "^1.1.1",
