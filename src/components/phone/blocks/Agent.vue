@@ -1,28 +1,28 @@
 <template>
   <div class="agentgrid grid-container">
     <div class="grid--contact">
-      <agent-card />
+      <AgentCard />
     </div>
     <div class="grid--analytics">
-      <agent-analytics-card />
+      <GeneralStatistics />
     </div>
     <div class="grid--metrics">
-      <operator-metrics />
+      <AgentAnalytics />
     </div>
   </div>
 </template>
 
 <script>
 import AgentCard from '@/components/phone/AgentCard.vue';
-import OperatorMetrics from '@/components/phone/OperatorStatisticsCard.vue';
-import AgentAnalyticsCard from '@/components/phone/AgentAnalyticsCard.vue';
+import AgentAnalytics from '@/components/phone/Widgets/AgentAnalytics.vue';
+import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics.vue';
 
 export default {
   name: 'AgentBlock',
   components: {
     AgentCard,
-    OperatorMetrics,
-    AgentAnalyticsCard,
+    AgentAnalytics,
+    GeneralStatistics,
   },
 };
 </script>
