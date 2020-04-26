@@ -1,40 +1,33 @@
 <template>
-  <div class="bg-white shadow-crisiscleanup-card">
-    <!--- Tabs --->
-    <button
-      v-for="tab in tabs"
-      :key="tab"
-      @click="selected = tab"
-      :class="['tab-btn', { active: selected === tab }]"
-      class="m-1"
-    >
-      {{ tab }}
-    </button>
+  <TitledCard :title="selected">
     <component :is="selected" class="tab"></component>
     <!-- Individual Stories Tab -->
-    <div class="stories">
+    <!-- <div class="stories">
       <hr class="bg-white" />
       <IndividualStoriesCard />
       <IndividualStoriesCard />
-    </div>
+    </div> -->
     <!-- Call History Tab -->
-    <call-history />
-  </div>
+    <!-- <call-history /> -->
+  </TitledCard>
 </template>
 
 <script>
 import CallHistory from '@/components/phone/CallHistory.vue';
+import TitledCard from '@/components/phone/Cards/TitledCard.vue';
 import IndividualStoriesCard from './IndividualStoriesCard.vue';
+
 export default {
   name: 'PeopleStoriesCard',
   components: {
+    TitledCard,
     'Stories from people you helped': IndividualStoriesCard,
     'Last 10 people I talk to': CallHistory,
   },
   data() {
     return {
-      tabs: ['Stories from people you helped', 'Last 10 people I talk to'],
-      selected: 'Stories from people you helped',
+      tabs: ['Last 10 people I talk to'],
+      selected: 'Last 10 people I talk to',
     };
   },
 };
