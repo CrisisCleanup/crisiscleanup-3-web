@@ -1356,10 +1356,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
@@ -1375,10 +1375,10 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           class="m-8 align-self-center flex items-center base-icon js-  "
         >
           <img
-            alt=""
+            alt="info.icon"
             class="ccu-icon cursor-pointer xl"
             src="IMAGE_MOCK"
-            title=""
+            title="info.icon"
           />
            
         </div>
