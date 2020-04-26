@@ -21,6 +21,7 @@ export default {
 
 <style lang="scss" scoped>
 .card {
+  flex-grow: 1;
   .header {
     @apply py-5 px-6;
     position: relative;

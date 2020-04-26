@@ -82,11 +82,17 @@ export default {
 $dot-colors: (
   'offline': 'red.500',
   'online': 'green.300',
-  'oncall': 'dark-blue',
+  'talking': 'dark-blue',
   'paused': 'yellow.500',
 );
 
 $metric-headers: ('In' 'Out' 'Total');
+
+@mixin truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 .card-container {
   display: flex;
@@ -94,7 +100,6 @@ $metric-headers: ('In' 'Out' 'Total');
   flex-direction: column;
 
   .item:first-child {
-    @apply my-2;
     .item--metrics {
       @for $i from 1 through 3 {
         .metric {
@@ -103,11 +108,15 @@ $metric-headers: ('In' 'Out' 'Total');
             &:before {
               content: nth($metric-headers, $i);
               position: absolute;
-              top: -1.5rem;
+              top: -2.25rem;
               left: 0;
               width: 100%;
               text-align: center;
               @apply font-body text-h4 text-crisiscleanup-dark-300;
+            }
+            &:last-child:before {
+              font-weight: 500;
+              @apply text-crisiscleanup-dark-400;
             }
           }
         }
@@ -130,7 +139,7 @@ $metric-headers: ('In' 'Out' 'Total');
     display: flex;
     flex-grow: 1;
     align-items: baseline;
-    @apply p-4;
+    @apply p-2;
     &--metrics {
       display: flex;
       align-content: center;
@@ -140,6 +149,11 @@ $metric-headers: ('In' 'Out' 'Total');
       p {
         @apply px-4;
         color: theme('colors.crisiscleanup-dark.300');
+      }
+      .metric:last-child {
+        p {
+          color: theme('colors.crisiscleanup-dark.400');
+        }
       }
     }
     &--profile {
@@ -162,22 +176,26 @@ $metric-headers: ('In' 'Out' 'Total');
           @each $state, $color in $dot-colors {
             .dot.#{$state} {
               color: theme('colors.crisiscleanup-#{$color}');
+              @include truncate;
             }
           }
           display: flex;
-          .v-popover .trigger p {
+          .v-popover .trigger p span {
             @apply text-crisiscleanup-dark-500 pr-2;
             cursor: pointer;
+            @include truncate;
           }
 
           .user-popover p.details-name span,
           p {
             @apply text-crisiscleanup-dark-400 pr-2;
+            @include truncate;
           }
         }
         &--org {
           p {
             @apply text-crisiscleanup-dark-300;
+            @include truncate;
           }
         }
       }

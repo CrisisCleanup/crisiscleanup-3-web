@@ -110,14 +110,15 @@ $areas: leader train history;
     width: 100%;
     padding-right: 2rem;
     grid:
-      [r1] 'leader train' [r1end]
-      [r2] '. .' [r2end]
-      [r3] 'history history' [r3end]
-      / auto;
+      [r1] 'leader train' 2fr [r1end]
+      [r2] 'history history' 1fr [r2end]
+      / 1fr 1fr;
     .grid {
       @each $area in $areas {
         &--#{$area} {
           grid-area: $area;
+          display: flex;
+          flex-direction: column;
         }
       }
     }
