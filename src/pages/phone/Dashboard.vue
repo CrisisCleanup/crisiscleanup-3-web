@@ -93,7 +93,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$areas: leader train story;
+$areas: leader train history;
 
 .phonegrid {
   &.grid-container {
@@ -108,11 +108,11 @@ $areas: leader train story;
     display: inline-grid;
     grid-gap: 2rem;
     width: 100%;
-    @apply pr-6;
+    padding-right: 2rem;
     grid:
-      [r1] 'leader' [r1end]
-      [r2] 'train' [r2end]
-      [r3] 'story' [r3end]
+      [r1] 'leader train' [r1end]
+      [r2] '. .' [r2end]
+      [r3] 'history history' [r3end]
       / auto;
     .grid {
       @each $area in $areas {

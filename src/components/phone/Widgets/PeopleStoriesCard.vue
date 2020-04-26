@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import CallHistory from '@/components/phone/CallHistory.vue';
+import CallHistory from '@/components/phone/Widgets/CallHistory.vue';
 import TitledCard from '@/components/phone/Cards/TitledCard.vue';
 import IndividualStoriesCard from './IndividualStoriesCard.vue';
 
