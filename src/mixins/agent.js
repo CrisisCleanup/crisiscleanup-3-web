@@ -74,6 +74,7 @@ export const AgentMixin = {
       'currentOutbound',
       'currentCaseType',
       'currentCaseId',
+      'currentAniIncident',
       'casesResolved',
       'callerLocale',
       'callType',

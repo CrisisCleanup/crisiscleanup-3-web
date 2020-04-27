@@ -2,9 +2,15 @@
   <modal modal-classes="w-108">
     <template #header>
       <div class="header">
-        <base-text :weight="700" variant="h1">{{
-          $t('~~Incoming Call')
-        }}</base-text>
+        <DisasterIcon
+          v-if="currentAniIncident && currentAniIncident.incidentImage"
+          :width="50"
+          :current-incident="currentAniIncident"
+        />
+        <base-text :weight="700" variant="h1"
+          >{{ $t('~~Incoming Call for ') }}
+          {{ currentAniIncident.friendlyName }}
+        </base-text>
       </div>
     </template>
 
@@ -13,17 +19,14 @@
         <base-text variant="body" class="script">
           {{
             $t(
-              "~~You are currently receiving a phone call. Please answer it via your phone to proceed. Don't worry, your number will never be shared with the caller.",
+              "~~ Press 1 to let us know you're ready, then we will call you right back with the live call.",
             )
           }}
         </base-text>
         <base-text variant="body" class="script">
           {{
-            $t(
-              '~~A sample script would be: "Crisis Cleanup Hotline, my name is ',
-            )
+            $t("Don't worry, your number will never be shared with the caller.")
           }}
-          {{ currentUser.first_name }} {{ $t('~~. How may I help you?') }}
         </base-text>
       </div>
       <div class="modal-callinfo">
@@ -73,15 +76,22 @@
 </template>
 
 <script>
-import { UserMixin, IconsMixin, AgentMixin, ValidateMixin } from '@/mixins';
+import {
+  IncidentMixin,
+  UserMixin,
+  IconsMixin,
+  AgentMixin,
+  ValidateMixin,
+} from '@/mixins';
 import CaseCard from '@/components/cards/Case.vue';
 import Pda from '@/models/Pda';
 import Worksite from '@/models/Worksite';
+import DisasterIcon from '@/components/DisasterIcon.vue';
 
 export default {
   name: 'IncomingPopup',
-  mixins: [UserMixin, IconsMixin, AgentMixin, ValidateMixin],
-  components: { CaseCard },
+  mixins: [UserMixin, IconsMixin, AgentMixin, ValidateMixin, IncidentMixin],
+  components: { CaseCard, DisasterIcon },
   data() {
     return {
       cards: [],
@@ -113,7 +123,12 @@ export default {
 
 <style scoped lang="scss">
 .header {
+  display: flex;
+  justify-content: space-around;
   @apply pt-6 px-6;
+  p {
+    @apply px-4;
+  }
 }
 
 @mixin fullwidth {
@@ -149,10 +164,10 @@ export default {
         }
         p.script {
           &:first-child {
-            @apply mt-4;
+            @apply mt-4 pb-6 px-3;
           }
           &:last-child {
-            @apply mb-4;
+            @apply mb-4 px-3;
           }
           @apply text-crisiscleanup-dark-300;
         }
@@ -188,7 +203,7 @@ export default {
             border-radius: 500px;
             p {
               @apply px-2;
-              @apply text-primary-dark;
+              @apply text-primary-dark text-h4;
             }
           }
         }
