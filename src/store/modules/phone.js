@@ -1,5 +1,6 @@
 import { EventBus } from '@/event-bus';
 import Agent from '@/models/Agent';
+import Incident from '@/models/Incident';
 import Language from '@/models/Language';
 import Pda from '@/models/Pda';
 import PhoneDnis from '@/models/PhoneDnis';
@@ -34,6 +35,7 @@ const getStateDefaults = () => ({
       worksites: [],
       outboundIds: [],
       callerId: null,
+      incidentId: null,
     },
   },
   externalContact: {
@@ -226,6 +228,10 @@ const getters = {
   },
   currentPage: (state) =>
     state.controller ? state.controller.currentPage : 'dashboard',
+  currentAniIncident: (state) =>
+    state.contact.attributes
+      ? Incident.find(state.contact.attributes.incidentId)
+      : null,
   contactMetrics: (state) => (state.contactMetrics ? state.contactMetrics : []),
   agentBoard: (state) =>
     state.agentMetrics

@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full">
     <component :is="currentComponent" />
-    <incoming-popup v-if="callIncoming && casesResolved" />
+    <IncomingPopup v-if="callIncoming && casesResolved" />
   </div>
 </template>
 
@@ -12,7 +12,7 @@ import { EVENTS as CCEvent, STATES as CCState } from '@/services/acs.service';
 import Worksite from '@/models/Worksite';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import Pda from '@/models/Pda';
-import { AgentMixin, RCMixin } from '@/mixins';
+import { AgentMixin } from '@/mixins';
 import IncomingPopup from '@/components/phone/Popup.vue';
 import PhoneResource from '@/models/PhoneResource';
 import { mixin as VueTimer } from 'vue-timers';
@@ -21,7 +21,7 @@ import Controller from './Controller.vue';
 
 export default {
   name: 'Phone',
-  mixins: [AgentMixin, RCMixin, VueTimer],
+  mixins: [AgentMixin, VueTimer],
   components: { IncomingPopup },
   timers: {
     getNextCallback: { time: 60000, autostart: true, repeat: true },
@@ -157,8 +157,9 @@ export default {
       this.setCurrentPage('dashboard');
     });
     if (!this.connectReady) {
-      this.$store.dispatch('phone/syncContact');
-      this.$store.dispatch('phone/syncExternalContact');
+      this.$store.dispatch('phone/syncContact').then(() => {
+        this.$store.dispatch('phone/syncExternalContact');
+      });
       this.unsub = this.$store.subscribe((mutation) => {
         if (mutation.type === 'phone/setAgentState') {
           this.$toasted.success('Success!');
