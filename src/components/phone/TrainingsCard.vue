@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-grow">
-    <div class="flex flex-row justify-between">
+  <div class="flex flex-grow training-item">
+    <div class="flex flex-row justify-between flex-grow p-3">
       <!--- media/picture --->
-      <div class="w-1/6 m-3">
+      <div class="w-1/6">
         <img :src="imagePath" alt="Video Preview" />
       </div>
-      <div class="w-4/6 my-4">
+      <div class="w-4/6 pl-4">
         <!--- body blurb --->
         <base-text variant="bodysm" class="justify-between">
           {{ description }}
@@ -30,18 +30,12 @@
         <base-button
           class="bg-crisiscleanup-yellow-300 hover:bg-crisiscleanup-yellow-100 text-black px-4 py-1"
           href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
-          :action="
-            () => {
-              startTraining();
-            }
-          "
+          :action="() => startTraining()"
         >
           {{ completed ? 'Review' : lang.actions.start.text }}
         </base-button>
       </div>
     </div>
-    <!-- line -->
-    <hr class="bg-white" />
   </div>
 </template>
 
@@ -79,3 +73,19 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.training-item {
+  position: relative;
+  &:after {
+    content: '';
+    position: absolute;
+    height: 1px;
+    width: calc(100% - 0.75rem * 2);
+    bottom: 0;
+    left: 0.75rem;
+    opacity: 0.2;
+    background-color: #979797;
+  }
+}
+</style>

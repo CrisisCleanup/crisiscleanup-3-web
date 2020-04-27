@@ -77,4 +77,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.cell {
+  @apply text-crisiscleanup-dark-300;
+}
+</style>
