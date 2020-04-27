@@ -560,6 +560,7 @@ export const actions = {
       ids = { value: '' },
       USER_LANGUAGE,
       INCIDENT_ID,
+      CALLBACK_NUMBER,
     } = contactAttrs;
     Log.debug('contact refresh: ', newContactState);
     const workSites = worksites.value.split(',').filter((v) => v !== '');
@@ -579,6 +580,9 @@ export const actions = {
       callerLocale: locale,
       incidentId,
     };
+    if (CALLBACK_NUMBER && outboundIds.length) {
+      await dispatch('setOutboundId', outboundIds[0]);
+    }
     if (newContactState.type !== contactState) {
       Log.debug('updating contact action...');
       await dispatch(
@@ -705,6 +709,7 @@ export const actions = {
     commit('setStatus', status);
   },
   async setOutboundId({ commit }, id) {
+    await PhoneOutbound.api().get(`/phone_outbound/${id}`);
     commit('setOutboundId', id);
   },
   async setContactState({ commit }, newState) {
