@@ -1,13 +1,13 @@
 <template>
-  <div class="flex flex-row justify-between p-3">
+  <div class="flex flex-row flex-grow justify-around p-3 news-card">
     <!--- media/picture --->
-    <div class="w-2/6 ml-3 mr-3 mb-3">
+    <div class="card--img">
       <!-- <img :src="imagePath" alt="Video Preview" /> -->
-      <img src="@/assets/newspicss.png" class="news-img h-auto" />
+      <img src="@/assets/newspicss.png" class="news-img shadow" />
     </div>
-    <div class="w-4/6">
+    <div class="card--body">
       <!--- body blurb --->
-      <base-text variant="bodysm" class="mr-4">
+      <base-text variant="bodysm">
         <!-- {{ description }} -->
         {{ this.$t( `~~For those of you who have ever used our call system in the
           past (as clunky as it was) You're going to LOVE this new system. It is
@@ -48,8 +48,28 @@ export default {
 };
 </script>
 
-<style scoped>
-.news-img {
-  max-width: 40%;
+<style lang="scss" scoped>
+.news-card {
+  align-items: center;
+  position: relative;
+  &:after {
+    content: '';
+    position: absolute;
+    background-color: #979797;
+    opacity: 0.2;
+    width: calc(100% - 0.75rem * 2);
+    bottom: 0;
+    left: 0.75rem;
+    height: 1px;
+  }
+  .card {
+    &--img {
+      flex: 1;
+    }
+    &--body {
+      flex: 2.4;
+      @apply pl-3 text-crisiscleanup-dark-500;
+    }
+  }
 }
 </style>
