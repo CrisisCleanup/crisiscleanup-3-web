@@ -3,7 +3,7 @@
     <div class="flex flex-row justify-between flex-grow p-3">
       <!--- media/picture --->
       <div class="w-1/6">
-        <img :src="imagePath" alt="Video Preview" />
+        <img :src="imagePath" alt="Video Preview" class="shadow" />
       </div>
       <div class="w-4/6 pl-4">
         <!--- body blurb --->
