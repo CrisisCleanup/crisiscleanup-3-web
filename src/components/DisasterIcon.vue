@@ -5,13 +5,21 @@
     class="disaster-icon"
     :data="currentIncident.incidentImage"
     :style="style"
-    @load="setColor"
+    @load="setStyle"
   ></object>
 </template>
 <script>
 export default {
   name: 'DisasterIcon',
   props: {
+    width: {
+      type: [Number, null],
+      default: null,
+    },
+    height: {
+      type: [Number, null],
+      default: null,
+    },
     currentIncident: {
       type: Object,
       default: () => {
@@ -30,13 +38,26 @@ export default {
     },
   },
   methods: {
+    setStyle() {
+      this.setColor();
+      if (this.width !== null || this.height !== null) {
+        this.width = this.width === null ? this.height : this.width;
+        this.height = this.height === null ? this.width : this.height;
+        this.setSize();
+      }
+      this.ready = true;
+    },
     setColor() {
       this.$refs.icon
         .getSVGDocument()
         .getElementsByTagName(
           'path',
         )[0].style.fill = this.currentIncident.color;
-      this.ready = true;
+    },
+    setSize() {
+      const svg = this.$refs.icon.getSVGDocument().activeElement;
+      svg.attributes.width.nodeValue = this.width;
+      svg.attributes.height.nodeValue = this.height;
     },
   },
 };
