@@ -1,5 +1,5 @@
-import { Model } from '@vuex-orm/core';
 import Location from '@/models/Location';
+import { Model } from '@vuex-orm/core';
 
 export default class Incident extends Model {
   static entity = 'incidents';
@@ -43,6 +43,16 @@ export default class Incident extends Model {
       return this.form_fields[0].phase;
     }
     return null;
+  }
+
+  get friendlyName() {
+    if (this.short_name) {
+      return this.short_name
+        .split('_')
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(' ');
+    }
+    return this.name;
   }
 
   static apiConfig = {
