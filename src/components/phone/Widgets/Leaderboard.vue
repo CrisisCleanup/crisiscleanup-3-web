@@ -110,6 +110,7 @@ $dot-colors: (
   'online': 'green.300',
   'talking': 'dark-blue',
   'paused': 'yellow.500',
+  'connecting': 'teal',
 );
 
 $metric-headers: ('In' 'Out' 'Total');

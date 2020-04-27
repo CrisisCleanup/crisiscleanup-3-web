@@ -45,11 +45,11 @@ export const AgentMixin = {
       }
       const stateMap = {
         [CCState.ROUTABLE]: 'online',
-        [CCState.PENDING_CALL]: 'talking',
-        [CCState.AGENT_CALLING]: 'talking',
+        [CCState.PENDING_CALL]: 'connecting',
+        [CCState.AGENT_CALLING]: 'connecting',
         [CCState.PAUSED]: 'paused',
         [CCState.ON_CALL]: 'talking',
-        [CCState.AGENT_PENDING]: 'talking',
+        [CCState.AGENT_PENDING]: 'connecting',
       };
       if (Object.keys(stateMap).includes(state)) {
         return stateMap[state];
