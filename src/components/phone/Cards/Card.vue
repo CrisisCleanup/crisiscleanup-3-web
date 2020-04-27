@@ -35,6 +35,10 @@ export default {
       opacity: 0.2;
       background-color: #979797;
     }
+    &--inner {
+      display: flex;
+      justify-content: space-between;
+    }
   }
   .body {
     @apply bg-white;

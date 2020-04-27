@@ -34,6 +34,7 @@ export default {
 <style lang="scss" scoped>
 .right,
 .left {
+  display: flex;
   p {
     @apply text-crisiscleanup-dark-400;
   }

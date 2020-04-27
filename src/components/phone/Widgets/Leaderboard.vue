@@ -1,6 +1,18 @@
 <template>
   <TitledCard title="~~Leaderboard">
-    <Loader :loading="loading" class="card-container">
+    <template #right>
+      <div class="metric-details flex">
+        <base-text
+          v-for="t in ['~~In', '~~Out', '~~Total']"
+          variant="h4"
+          weight="400"
+          :key="t"
+        >
+          {{ $t(t) }}
+        </base-text>
+      </div>
+    </template>
+    <Loader :loading="loading" class="card-container overflow-auto">
       <template #content>
         <div v-for="a in agentBoard" :key="a.agent" class="item">
           <div class="item--profile">
@@ -108,43 +120,39 @@ $metric-headers: ('In' 'Out' 'Total');
   text-overflow: ellipsis;
 }
 
+.metric-details {
+  .right & {
+    margin-bottom: -1.25rem;
+  }
+  align-self: flex-end;
+  text-align: center;
+  p {
+    &:nth-child(2) {
+      @apply pr-3;
+    }
+    &:last-child {
+      font-weight: 500;
+      @apply text-crisiscleanup-dark-400;
+    }
+    text-align: center;
+    @apply px-4 text-crisiscleanup-dark-300;
+  }
+}
+
 .card-container {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-
-  .item:first-child {
-    .item--metrics {
-      @for $i from 1 through 3 {
-        .metric {
-          &:nth-child(#{$i}) {
-            position: relative;
-            &:before {
-              content: nth($metric-headers, $i);
-              position: absolute;
-              top: -2.25rem;
-              left: 0;
-              width: 100%;
-              text-align: center;
-              @apply font-body text-h4 text-crisiscleanup-dark-300;
-            }
-            &:last-child:before {
-              font-weight: 500;
-              @apply text-crisiscleanup-dark-400;
-            }
-          }
-        }
-      }
-    }
-  }
+  scrollbar-width: none;
+  max-height: 15rem;
 
   .item {
     &:after {
       content: '';
       position: absolute;
       bottom: 0;
-      left: 0;
-      width: 100%;
+      left: 0.75rem;
+      width: calc(100% - 0.75rem * 2);
       height: 1px;
       opacity: 0.2;
       background-color: #979797;
@@ -174,11 +182,8 @@ $metric-headers: ('In' 'Out' 'Total');
       display: flex;
       flex-grow: 1;
       align-items: center;
-      div {
-        @apply px-1;
-      }
       .image {
-        max-width: 3rem;
+        max-width: 2.75rem;
         object-fit: contain;
         border-radius: 50%;
         position: relative;
@@ -186,6 +191,7 @@ $metric-headers: ('In' 'Out' 'Total');
       .info {
         display: flex;
         flex-direction: column;
+        @apply pl-3;
         &--user {
           @each $state, $color in $dot-colors {
             .dot.#{$state} {

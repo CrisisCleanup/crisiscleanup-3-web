@@ -59,5 +59,7 @@ export default {
 <style lang="scss" scoped>
 .card-container {
   @apply bg-white;
+  display: flex;
+  flex-grow: 1;
 }
 </style>
