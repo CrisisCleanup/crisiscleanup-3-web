@@ -2,8 +2,13 @@ import { AsYouType, ParseError, parsePhoneNumber } from 'libphonenumber-js';
 
 export default {
   methods: {
-    validatePhoneNumber(value) {
-      const newValue = new AsYouType('US').input(value);
+    validatePhoneNumber(value = '') {
+      let newValue = value;
+      try {
+        newValue = new AsYouType('US').input(value);
+      } catch {
+        return { newValue: value, valid: false };
+      }
       try {
         parsePhoneNumber(newValue, 'US');
       } catch (e) {
