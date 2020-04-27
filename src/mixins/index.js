@@ -1,11 +1,12 @@
 import { AgentMixin } from './agent';
+import { DialogsMixin } from './dialogs';
 import { IconsMixin } from './enums';
+import IncidentMixin from './incident';
 import { LangMixin, LangOverrideMixin, LocaleMixin } from './locale';
 import LocalStorageMixin from './localStorage';
 import RCMixin from './rc';
 import { TrainingMixin } from './training';
 import UserMixin from './user';
-import { DialogsMixin } from './dialogs';
 import ValidateMixin from './validate.js';
 import { WorksitesMixin } from './worksite';
 
@@ -22,4 +23,5 @@ export {
   TrainingMixin,
   RCMixin,
   DialogsMixin,
+  IncidentMixin,
 };

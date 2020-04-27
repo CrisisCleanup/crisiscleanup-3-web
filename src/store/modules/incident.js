@@ -1,9 +1,14 @@
+import Incident from '@/models/Incident';
+
 const AppState = {
   currentIncidentId: null,
 };
 
 // getters
-const getters = {};
+const getters = {
+  currentIncident: (state) =>
+    state.currentIncidentId ? Incident.find(state.currentIncidentId) : null,
+};
 
 // actions
 const actions = {};
