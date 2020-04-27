@@ -13,16 +13,15 @@ export default {
 </script>
 
 <style lang="scss">
-$areas: start main end;
+$areas: start main end footer;
 
 .phonegrid {
   @apply bg-crisiscleanup-light-grey;
-  @apply w-full;
+  @apply w-full h-full;
   &.grid-container {
-    @apply h-full;
     justify-content: center;
     display: inline-grid;
-    column-gap: 2rem;
+    gap: 2rem 2rem;
     @apply p-6;
     padding-right: 0;
     grid:

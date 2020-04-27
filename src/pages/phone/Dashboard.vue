@@ -1,5 +1,5 @@
 <template>
-  <Loader :loading="loading" class="h-full w-full">
+  <Loader :loading="loading" class="root">
     <template #content>
       <phone-layout>
         <template #grid-start>
@@ -25,6 +25,11 @@
               </div>
             </div>
           </div>
+          <div class="grid--footer">
+            <div v-if="currentUser.isAdmin" class="contact-container">
+              <ContactTable />
+            </div>
+          </div>
         </template>
       </phone-layout>
       <TrainingModal
@@ -32,9 +37,6 @@
         @onClose="isShowingTrainingModal = false"
         @onComplete="onTrainingComplete"
       ></TrainingModal>
-      <div v-if="currentUser.isAdmin" class="contact-container">
-        <ContactTable />
-      </div>
     </template>
   </Loader>
 </template>
@@ -103,6 +105,7 @@ $areas: leader train history;
   &.grid-container {
     grid:
       [r1] 'start main' [r1end]
+      [r2] 'footer footer' [r2end]
       / 1fr 3.75fr;
   }
 }
@@ -130,6 +133,7 @@ $areas: leader train history;
 }
 
 .contact-container {
-  @apply bg-crisiscleanup-light-grey p-6;
+  padding-right: 2rem;
+  @apply bg-crisiscleanup-light-grey;
 }
 </style>

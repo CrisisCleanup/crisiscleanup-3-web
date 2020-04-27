@@ -22,13 +22,12 @@ export default {
       return this.agentBoard.find((a) => a.user.id === this.currentUser.id);
     },
     metrics() {
-      if (!this.agentBoard.length) return [];
       const stats = new Map();
       const {
-        total_inbound,
-        total_outbound,
-        total_abandons,
-        total_rejects,
+        total_inbound = 0,
+        total_outbound = 0,
+        total_abandons = 0,
+        total_rejects = 0,
       } = this.currentAgent;
       stats.set('~~Received Calls', total_inbound);
       stats.set('~~Made Calls', total_outbound);

@@ -56,15 +56,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@keyframes select {
-  from {
-    width: 0%;
-  }
-  to {
-    width: 100%;
-  }
-}
-
 @for $i from 1 through 10 {
   .tabs.active-#{$i} {
     & .tab-item:first-child:after {
@@ -81,13 +72,16 @@ export default {
     position: relative;
     cursor: pointer;
     transition: color 250ms ease;
+    &:hover {
+      @apply text-crisiscleanup-dark-300;
+    }
     &:first-child:after {
       content: '';
       @apply bg-primary-light;
       height: 4px;
       position: absolute;
       left: -1.5rem;
-      bottom: calc(-1.5rem + 4px);
+      bottom: calc(-1.5rem + 3px);
       width: 100%;
       transition: left 250ms ease, width 250ms ease, height 250ms ease;
       z-index: 99;
