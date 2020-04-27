@@ -488,11 +488,19 @@ export default {
       if (currentAgentId) {
         username = await this.getUserNameForAgent(currentAgentId);
       }
-      await this.$phoneService.login(username);
+      try {
+        await this.$phoneService.login(username);
+      } catch (e) {
+        this.logout(true);
+        await this.$toasted.error(
+          this.$t('~~Error logging in to phone system, please try again'),
+        );
+        throw e; //Rethrow for sentry
+      }
       Log.debug(`Logged in agents ${username}`);
       await this.getNextCall();
     },
-    async logout() {
+    async logout(clearAgent = false) {
       this.$phoneService.changeState('AWAY');
       const { loggedInAgents } = this.currentUser.states;
       if (loggedInAgents && loggedInAgents.length) {
@@ -500,12 +508,13 @@ export default {
           loggedInAgents.map((agentId) => this.$phoneService.logout(agentId)),
         );
         Log.debug(`Logged out agents ${loggedInAgents}`);
-        await User.api().updateUserState(
-          {
-            loggedInAgents: [],
-          },
-          true,
-        );
+        const stateUpdate = {
+          loggedInAgents: [],
+        };
+        if (clearAgent) {
+          stateUpdate.currentAgentId = null;
+        }
+        await User.api().updateUserState(stateUpdate, true);
       }
     },
     async callOutbound() {

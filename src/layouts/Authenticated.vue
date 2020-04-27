@@ -62,22 +62,27 @@
                   </span>
                 </div>
                 <div slot="popover" class="flex flex-col">
-                  <router-link
-                    to="/profile"
-                    class="router-link text-base p-2 hover:bg-crisiscleanup-light-grey"
-                    >Profile</router-link
-                  >
-                  <div
+                  <base-button
+                    data-cy="auth.userprofile.profile"
+                    class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
+                    :text="$t('~~Profile')"
+                    :action="
+                      () => {
+                        this.$router.push(`/profile`);
+                      }
+                    "
+                  />
+                  <base-button
                     data-cy="auth.userprofile.logout"
                     class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-                    @click="
+                    :text="$t('~~Logout')"
+                    :action="
                       () => {
+                        logoutByPhoneNumber();
                         $store.dispatch('auth/logout');
                       }
                     "
-                  >
-                    Logout
-                  </div>
+                  />
                 </div>
               </v-popover>
             </div>
@@ -108,6 +113,7 @@ import NavMenu from '@/components/navigation/NavMenu';
 import Loader from '@/components/Loader';
 import TermsandConditionsModal from '@/components/TermsandConditionsModal';
 import { Slide } from 'vue-burger-menu';
+import { parsePhoneNumber } from 'libphonenumber-js';
 import DisasterIcon from '../components/DisasterIcon';
 import PhoneStatus from '../models/PhoneStatus';
 
@@ -330,6 +336,31 @@ export default {
     async acceptTermsAndConditions() {
       await User.api().acceptTerms();
       this.showAcceptTermsModal = false;
+    },
+    async logoutByPhoneNumber() {
+      const parsedNumber = parsePhoneNumber(this.currentUser.mobile, 'US');
+      if (this.currentUser.mobile) {
+        await Promise.all(
+          this.$phoneService.queueIds.map((queueId) =>
+            this.$phoneService
+              .apiLoginsByPhone(
+                parsedNumber.formatNational().replace(/[^\d.]/g, ''),
+                queueId,
+              )
+              .then(async ({ data }) => {
+                if (data.length) {
+                  await Promise.all(
+                    data.map((login) =>
+                      this.$phoneService.apiLogoutAgent(login.agentId),
+                    ),
+                  );
+                }
+                return null;
+              })
+              .catch(() => {}),
+          ),
+        );
+      }
     },
   },
 };
