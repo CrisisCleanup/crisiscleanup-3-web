@@ -251,7 +251,10 @@ export const actions = {
       if (!metricName) {
         metricName = metricNames[idx];
       }
-      newState[camelCase(metricName)] = parseFloat(value) || 0;
+      const parsedValue = parseFloat(value) || 0;
+      // prevents 'fake' realtime values from going negative
+      // till the true metrics come in
+      newState[camelCase(metricName)] = parsedValue >= 0 ? parsedValue : 0;
       return newState;
     });
     // set default values of 0

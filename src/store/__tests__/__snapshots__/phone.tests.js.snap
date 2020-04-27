@@ -51,8 +51,24 @@ exports[`actions getRealtimeMetrics 1`] = `
         "totalWaiting": 35,
       },
     ],
+    Array [
+      "setMetrics",
+      Object {
+        "agentsAvailable": 1,
+        "agentsNeeded": 0,
+        "agentsOnCall": 1,
+        "agentsOnline": 1,
+        "contactsInQueue": 0,
+        "contactsInQueueOutbound": 0,
+        "totalWaiting": 0,
+      },
+    ],
   ],
   "results": Array [
+    Object {
+      "type": "return",
+      "value": undefined,
+    },
     Object {
       "type": "return",
       "value": undefined,

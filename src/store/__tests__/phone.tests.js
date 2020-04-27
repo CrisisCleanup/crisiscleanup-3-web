@@ -55,6 +55,10 @@ describe('actions', () => {
       { commit, state },
       { metrics: MockMetrics({ queueCount: 35, online: 1 }) },
     );
+    await actions.getRealtimeMetrics(
+      { commit, state },
+      { metrics: MockMetrics({ queueCount: -1, online: 1 }) },
+    );
 
     expect(commit).toMatchSnapshot();
   });
