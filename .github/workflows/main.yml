@@ -183,6 +183,7 @@ jobs:
         env:
           VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
           VUE_APP_BASE_URL: 'https://app.staging.crisiscleanup.io'
+          VUE_APP_AWS_CCP_URL: https://ccuhotlinestaging.awsapps.com/connect/ccp-v2/
           VUE_APP_PHONE_DEFAULT_USERNAME: 'covid'
           VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
           VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
@@ -200,6 +201,7 @@ jobs:
         env:
           VUE_APP_API_BASE_URL: 'https://api.crisiscleanup.org'
           VUE_APP_BASE_URL: 'https://crisiscleanup.org'
+          VUE_APP_AWS_CCP_URL: https://ccuhotlinelive.awsapps.com/connect/ccp-v2/
           VUE_APP_PHONE_DEFAULT_USERNAME: 'covid'
           VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
           VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
