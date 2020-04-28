@@ -450,7 +450,7 @@
             type="cancel"
             class="ml-2"
             @click.native="
-              $router.push(`/incident/${$route.params.incident_id}/cases/new`)
+              $router.push(`/incident/${currentIncidentId}/cases/new`)
             "
           />
         </div>
@@ -518,7 +518,7 @@
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">
             <router-link
-              :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/flag`"
+              :to="`/incident/${currentIncidentId}/cases/${$route.params.id}/flag`"
             >
               <ccu-icon
                 :alt="$t('actions.flag')"
@@ -535,7 +535,7 @@
               @click.native="jumpToCase"
             />
             <router-link
-              :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/history`"
+              :to="`/incident/${currentIncidentId}/cases/${$route.params.id}/history`"
             >
               <ccu-icon
                 :alt="$t('actions.history')"
@@ -569,7 +569,7 @@
             />
             <router-link
               v-if="isViewingWorksite"
-              :to="`/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}/edit`"
+              :to="`/incident/${currentIncidentId}/cases/${$route.params.id}/edit`"
             >
               <ccu-icon
                 :alt="$t('actions.edit')"
@@ -584,7 +584,7 @@
       <router-view
         v-if="!spinning"
         :key="$route.params.id"
-        :incident-id="$route.params.incident_id"
+        :incident-id="currentIncidentId"
         :worksite-id="$route.params.id"
         :incident="currentIncident"
         :is-editing="isEditingWorksite"
@@ -597,7 +597,7 @@
         @navigateToWorksite="
           (id) => {
             $router.push(
-              `/incident/${this.$route.params.incident_id}/cases/${id}/edit?showOnMap=true`,
+              `/incident/${currentIncidentId}/cases/${id}/edit?showOnMap=true`,
             );
           }
         "
@@ -685,6 +685,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('incident', ['currentIncidentId']),
     columns() {
       return [
         {
@@ -777,7 +778,7 @@ export default {
       return Incident.query().orderBy('id', 'desc').get();
     },
     currentIncident() {
-      return Incident.find(this.$route.params.incident_id);
+      return Incident.find(this.currentIncidentId);
     },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
@@ -814,11 +815,13 @@ export default {
     ...mapState('loading', ['worksitesLoading']),
   },
   watch: {
-    currentIncident() {
-      this.fetch({
-        pageSize: this.pagination.pageSize,
-        page: 1,
-      });
+    currentIncidentId(newState, oldState) {
+      if (String(newState) !== String(oldState)) {
+        this.fetch({
+          pageSize: this.pagination.pageSize,
+          page: 1,
+        });
+      }
     },
   },
   created() {
@@ -842,7 +845,7 @@ export default {
         };
       }
     }
-    if (this.$route.params.incident_id) {
+    if (this.currentIncidentId) {
       this.fetch({
         pageSize: this.pagination.pageSize,
         page: 1,
@@ -880,7 +883,7 @@ export default {
         data = {};
       }
       User.api().updateUserState({
-        incident: this.$route.params.incident_id,
+        incident: this.currentIncidentId,
         appliedFilters: this.appliedFilters,
         filters: this.filters,
         showingMap: this.showingMap,
@@ -933,7 +936,7 @@ export default {
       const query = {
         fields:
           'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code',
-        incident: this.$route.params.incident_id,
+        incident: this.currentIncidentId,
         search: this.currentSearch,
       };
 
@@ -952,7 +955,7 @@ export default {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksites`,
         {
-          params: queryParams,
+          params: { ...queryParams, incident: this.currentIncidentId },
         },
       );
       this.tableLoading = false;
@@ -1001,7 +1004,7 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/worksites`,
         {
           params: {
-            incident: this.$route.params.incident_id,
+            incident: this.currentIncidentId,
             limit: 2,
             fields: 'id',
           },
@@ -1036,31 +1039,27 @@ export default {
 
     async closeWorksite() {
       if (this.isNewWorksite) {
-        await this.$router.push(
-          `/incident/${this.$route.params.incident_id}/cases`,
-        );
+        await this.$router.push(`/incident/${this.currentIncidentId}/cases`);
       } else {
         await this.$router.push(
-          `/incident/${this.$route.params.incident_id}/cases/new`,
+          `/incident/${this.currentIncidentId}/cases/new`,
         );
       }
     },
 
     async backToWorksite() {
       await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}`,
+        `/incident/${this.currentIncidentId}/cases/${this.$route.params.id}`,
       );
     },
 
     async displayWorksite(record) {
-      await this.$router.replace(
-        `/incident/${this.$route.params.incident_id}/cases/${record.id}`,
+      await this.$router.push(
+        `/incident/${this.currentIncidentId}/cases/${record.id}`,
       );
     },
     async createNewWorksite() {
-      await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/new`,
-      );
+      await this.$router.push(`/incident/${this.currentIncidentId}/cases/new`);
       this.toggleView('showingMap');
       this.spinning = false;
     },
@@ -1083,7 +1082,7 @@ export default {
         }),
         dropdownSearch: await Worksite.api().searchWorksites(
           search,
-          this.$route.params.incident_id,
+          this.currentIncidentId,
         ),
       });
       this.searchWorksites = search
@@ -1094,7 +1093,7 @@ export default {
 
     async handleChange(value) {
       await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/${value.id}?showOnMap=true`,
+        `/incident/${this.currentIncidentId}/cases/${value.id}?showOnMap=true`,
       );
       this.searchValue = '';
     },
@@ -1251,9 +1250,7 @@ export default {
       this.reloadTable();
     },
     clearWorksite() {
-      this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/new`,
-      );
+      this.$router.push(`/incident/${this.currentIncidentId}/cases/new`);
       EventBus.$emit('clearWorksite');
     },
     async savedWorksite(worksite) {
