@@ -40,7 +40,6 @@
           selector="js-worksite-phone1"
           size="large"
           :placeholder="$t('formLabels.phone1')"
-          :validator="validatePhoneNumber"
           @input="
             (value) => {
               updateWorksite(value, 'phone1');
@@ -54,7 +53,6 @@
           selector="js-worksite-phone2"
           size="large"
           :placeholder="$t('formLabels.phone2')"
-          :validator="validatePhoneNumber"
           @input="
             (value) => {
               updateWorksite(value, 'phone2');
