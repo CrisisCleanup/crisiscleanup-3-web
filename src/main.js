@@ -1,3 +1,4 @@
+import { version } from '@/../package.json';
 import '@/assets/css/tailwind.css';
 import '@crisiscleanup/amazon-connect-streams';
 import '@crisiscleanup/connect-rtc';
@@ -151,23 +152,21 @@ if (AuthService.getUser()) {
 }
 
 // Sentry Logging
-if (process.env.NODE_ENV !== 'development') {
-  Sentry.init({
-    dsn: 'https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561',
-    release: `crisiscleanup-3-web@${process.env.npm_package_version}`,
-    environment: process.env.VUE_APP_STAGE,
-    integrations: [
-      new SentryIntegrations.Vue({
-        Vue,
-        attachProps: true,
-        // sets whether to log errors in sentry
-        // AND with the standard web log,
-        // not errors overall
-        logErrors: process.env.NODE_ENV !== 'production',
-      }),
-    ],
-  });
-}
+Sentry.init({
+  dsn: 'https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561',
+  release: `crisiscleanup-3-web@${version}`,
+  environment: process.env.VUE_APP_STAGE,
+  integrations: [
+    new SentryIntegrations.Vue({
+      Vue,
+      attachProps: true,
+      // sets whether to log errors in sentry
+      // AND with the standard web log,
+      // not errors overall
+      logErrors: process.env.NODE_ENV !== 'production',
+    }),
+  ],
+});
 // Google GTag
 Vue.use(VueGtag, {
   config: {

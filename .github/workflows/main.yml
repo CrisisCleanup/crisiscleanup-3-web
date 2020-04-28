@@ -171,6 +171,7 @@ jobs:
         with:
           tagName: ${{ github.ref }}
           environment: ${{ steps.find-stage.outputs.stage }}
+          releaseNamePrefix: crisiscleanup-3-web@
 
       - name: Deploy Development
         env:
