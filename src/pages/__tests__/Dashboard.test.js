@@ -71,6 +71,7 @@ const mountWithOptions = () =>
     stubs: {
       'base-button': true,
       'base-input': true,
+      'form-select': true,
       'ccu-icon': true,
       badge: true,
       spinner: true,

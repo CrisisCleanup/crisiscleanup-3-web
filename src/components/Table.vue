@@ -51,6 +51,42 @@
           />
         </div>
       </div>
+      <template v-if="enableColumnSearch">
+        <div
+          v-for="column of columns"
+          :key="`search-${column.key}`"
+          class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+        >
+          <template v-if="column.searchable">
+            <form-select
+              v-if="column.searchSelect"
+              class="w-64 bg-white border h-10 border-crisiscleanup-dark-100"
+              :options="column ? column.getSelectValues(data) : []"
+              item-key="value"
+              label="name_t"
+              :value="columnSearch[column.key]"
+              @input="
+                (value) => {
+                  columnSearch[column.key] = value;
+                  onSearch();
+                }
+              "
+            ></form-select>
+            <base-input
+              v-else
+              :placeholder="column.title"
+              :value="columnSearch[column.key]"
+              @input="
+                (value) => {
+                  columnSearch[column.key] = value;
+                  onSearch();
+                }
+              "
+              input-style="width: 100%"
+            ></base-input>
+          </template>
+        </div>
+      </template>
     </div>
     <div class="body bg-white relative" :style="gridStyleBody">
       <div
@@ -194,9 +230,16 @@ export default {
         return {};
       },
     },
+    columnSearch: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
     loading: Boolean,
     enableSelection: Boolean,
     enablePagination: Boolean,
+    enableColumnSearch: Boolean,
     bodyStyle: {
       type: Object,
       default: () => {
@@ -327,6 +370,7 @@ export default {
         default:
           newPage = value;
       }
+      const columnSearch = { ...this.columnSearch };
 
       const pagination = {
         ...this.pagination,
@@ -337,9 +381,10 @@ export default {
       const sorter = {
         ...this.sorter,
       };
-      this.$emit('change', { pagination, filter, sorter });
+      this.$emit('change', { pagination, filter, sorter, columnSearch });
     },
     onSelectPageSize(pageSize) {
+      const columnSearch = { ...this.columnSearch };
       const pagination = {
         ...this.pagination,
         current: 1,
@@ -349,9 +394,10 @@ export default {
       const sorter = {
         ...this.sorter,
       };
-      this.$emit('change', { pagination, filter, sorter });
+      this.$emit('change', { pagination, filter, sorter, columnSearch });
     },
     sort(key) {
+      const columnSearch = { ...this.columnSearch };
       const sorter = { ...this.sorter };
       sorter.key = key;
       if (sorter.direction === 'asc') {
@@ -364,7 +410,16 @@ export default {
         ...this.pagination,
       };
       const filter = {};
-      this.$emit('change', { pagination, filter, sorter });
+      this.$emit('change', { pagination, filter, sorter, columnSearch });
+    },
+    onSearch() {
+      const columnSearch = { ...this.columnSearch };
+      const sorter = { ...this.sorter };
+      const pagination = {
+        ...this.pagination,
+      };
+      const filter = {};
+      this.$emit('change', { pagination, filter, sorter, columnSearch });
     },
     rowClick(item, event) {
       const hasClass = (className) =>

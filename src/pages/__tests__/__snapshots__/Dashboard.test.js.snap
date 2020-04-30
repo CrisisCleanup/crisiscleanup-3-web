@@ -282,7 +282,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           >
             <div
               class="header text-crisiscleanup-grey-700 bg-white"
-              style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
+              style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
             >
               <!---->
                
@@ -346,6 +346,54 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       
                 <!---->
               </div>
+               
+              <div
+                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+              >
+                <base-input-stub
+                  input-style="width: 100%"
+                  placeholder="dashboard.no"
+                />
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+              >
+                <form-select-stub
+                  class="w-64 bg-white border h-10 border-crisiscleanup-dark-100"
+                  item-key="value"
+                  label="name_t"
+                  options=""
+                />
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+              >
+                <base-input-stub
+                  input-style="width: 100%"
+                  placeholder="dashboard.name"
+                />
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+              >
+                <base-input-stub
+                  input-style="width: 100%"
+                  placeholder="dashboard.full_address"
+                />
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+              >
+                <base-input-stub
+                  input-style="width: 100%"
+                  placeholder="dashboard.phone"
+                />
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+              >
+                <!---->
+              </div>
             </div>
              
             <div
@@ -356,7 +404,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                
               <div
                 class="hover:bg-crisiscleanup-light-grey sm:border-b"
-                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -424,7 +472,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-crisiscleanup-light-grey sm:border-b"
-                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -492,7 +540,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-crisiscleanup-light-grey sm:border-b"
-                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -560,7 +608,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-crisiscleanup-light-grey sm:border-b"
-                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -628,7 +676,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-crisiscleanup-light-grey sm:border-b"
-                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -696,7 +744,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
               <div
                 class="hover:bg-crisiscleanup-light-grey sm:border-b"
-                style="display: grid; grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
                  
@@ -891,6 +939,8 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       
                 <!---->
               </div>
+               
+              <!---->
             </div>
              
             <div

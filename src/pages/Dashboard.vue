@@ -155,6 +155,7 @@
                 :columns="columns"
                 :sorter="sorter"
                 :loading="loading"
+                enable-column-search
                 :body-style="{ height: '300px' }"
                 @change="handleTableChange"
               >
@@ -350,7 +351,11 @@ import { colors } from '@/icons/icons_templates';
 import Incident from '@/models/Incident';
 import WorksiteRequest from '@/models/WorksiteRequest';
 import Table from '@/components/Table';
-import { getColorForStatus, getWorkTypeImage } from '@/filters';
+import {
+  getColorForStatus,
+  getWorkTypeImage,
+  getWorkTypeName,
+} from '@/filters';
 import StatusDropDown from '@/components/StatusDropDown';
 import { forceFileDownload } from '@/utils/downloads';
 import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
@@ -391,6 +396,7 @@ export default {
         key: null,
         direction: null,
       },
+      columnSearch: {},
       pendingSorter: {
         key: null,
         direction: null,
@@ -486,8 +492,10 @@ export default {
           title: this.$t('dashboard.no'),
           dataIndex: 'case_number',
           key: 'case_number',
-          width: '0.5fr',
+          width: '0.75fr',
           sortable: true,
+          searchable: true,
+          searchTitle: this.$t('all'),
         },
         {
           title: this.$t('dashboard.work_type'),
@@ -495,6 +503,26 @@ export default {
           key: 'work_types',
           scopedSlots: { customRender: 'work_types' },
           width: '2fr',
+          searchable: true,
+          searchSelect: true,
+          getSelectValues: (data) => {
+            const values = {};
+            if (data && data.length) {
+              data.forEach((item) => {
+                item.work_types.forEach((wt) => {
+                  values[wt.work_type] = true;
+                });
+              });
+              return Object.keys(values).map((key) => {
+                return {
+                  value: key,
+                  name_t: getWorkTypeName(key),
+                };
+              });
+            }
+            return [];
+          },
+          searchTitle: this.$t('~~All'),
         },
         {
           title: this.$t('dashboard.name'),
@@ -502,17 +530,23 @@ export default {
           key: 'name',
           width: '1fr',
           sortable: true,
+          searchable: true,
+          searchTitle: this.$t('all'),
         },
         {
           title: this.$t('dashboard.full_address'),
           dataIndex: 'short_address',
           key: 'short_address',
+          searchable: true,
+          searchTitle: this.$t('all'),
         },
         {
           title: this.$t('dashboard.phone'),
           dataIndex: 'phone1',
           key: 'phone1',
           sortable: false,
+          searchable: true,
+          searchTitle: this.$t('all'),
         },
         {
           title: '',
@@ -596,6 +630,17 @@ export default {
         }
         query.orderBy(this.sorter.key, this.sorter.direction);
       }
+
+      if (Object.keys(this.columnSearch).length) {
+        Object.entries(this.columnSearch).forEach(([key, value]) => {
+          if (value) {
+            query.where(key, (prop) =>
+              JSON.stringify(prop).toLowerCase().includes(value.toLowerCase()),
+            );
+          }
+        });
+      }
+
       return query.get();
     },
   },
@@ -638,8 +683,9 @@ export default {
         await Worksite.api().fetch(worksiteId);
       }
     },
-    handleTableChange({ sorter }) {
+    handleTableChange({ sorter, columnSearch }) {
       this.sorter = { ...sorter };
+      this.columnSearch = { ...columnSearch };
     },
     handlePendingTableChange({ sorter }) {
       this.pendingSorter = { ...sorter };
