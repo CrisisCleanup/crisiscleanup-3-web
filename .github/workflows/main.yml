@@ -39,7 +39,7 @@ env:
   VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccudev'
   VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUDevConnectRole'
   VUE_APP_CCP_INSTANCE: 89c1729b-4547-4548-9508-9365b71e586b
-  VUE_APP_AWS_CCP_URL: https://ccuhotlinedev.awsapps.com/connect/ccp-v2/
+  VUE_APP_AWS_CCP_URL: https://ccudev.awsapps.com/connect/ccp-v2/
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   SENTRY_PROPERTIES: sentry.properties
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
@@ -183,7 +183,7 @@ jobs:
         env:
           VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
           VUE_APP_BASE_URL: 'https://app.staging.crisiscleanup.io'
-          VUE_APP_AWS_CCP_URL: https://ccuhotlinestaging.awsapps.com/connect/ccp-v2/
+          VUE_APP_AWS_CCP_URL: https://ccustaging.awsapps.com/connect/ccp-v2/
           VUE_APP_PHONE_DEFAULT_USERNAME: 'covid'
           VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
           VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
@@ -201,7 +201,7 @@ jobs:
         env:
           VUE_APP_API_BASE_URL: 'https://api.crisiscleanup.org'
           VUE_APP_BASE_URL: 'https://crisiscleanup.org'
-          VUE_APP_AWS_CCP_URL: https://ccuhotlinelive.awsapps.com/connect/ccp-v2/
+          VUE_APP_AWS_CCP_URL: https://cculive.awsapps.com/connect/ccp-v2/
           VUE_APP_PHONE_DEFAULT_USERNAME: 'covid'
           VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
           VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
