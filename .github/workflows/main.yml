@@ -38,7 +38,7 @@ env:
   VUE_APP_AWS_CCP_REGION: 'us-east-1'
   VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccudev'
   VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUDevConnectRole'
-  VUE_APP_CCP_INSTANCE: 89c1729b-4547-4548-9508-9365b71e586b
+  VUE_APP_CCP_INSTANCE: 87fbcad4-9f58-4153-84e8-d5b7202693e8
   VUE_APP_AWS_CCP_URL: https://ccudev.awsapps.com/connect/ccp-v2/
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   SENTRY_PROPERTIES: sentry.properties
@@ -191,6 +191,7 @@ jobs:
           VUE_APP_DEFAULT_CALLER_ID: '8004511954'
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccustaging'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUStagingConnectRole'
+          VUE_APP_CCP_INSTANCE: 414df788-cd99-4580-ad07-f8af22246ce5
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
           VUE_APP_WS_URL: 'wss://socket.staging.crisiscleanup.io'
           VUE_APP_STAGE: staging
@@ -210,6 +211,7 @@ jobs:
           VUE_APP_WS_URL: 'wss://socket.crisiscleanup.org'
           VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccuproduction'
           VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUProductionConnectRole'
+          VUE_APP_CCP_INSTANCE: cd54a377-8223-4c43-8524-a21d2837b7c5
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
           VUE_APP_STAGE: production
         run: yarn deploy-production
