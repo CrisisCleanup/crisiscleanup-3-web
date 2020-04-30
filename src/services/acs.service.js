@@ -4,6 +4,7 @@
  *
  */
 
+import { AuthService } from '@/services/auth.service.js';
 import * as SSO from '@/services/sso.service';
 import Logger from '@/utils/log';
 
@@ -44,7 +45,7 @@ export const ConnectConfig = async () => ({
     autoClose: true,
     forceWindow: true,
   },
-  loginUrl: await SSO.authenticate(),
+  loginUrl: await SSO.authenticate(AuthService.getToken()),
 });
 
 export const initConnect = async ({

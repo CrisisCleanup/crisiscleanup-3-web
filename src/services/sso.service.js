@@ -42,7 +42,7 @@ export const IDP = (metadata) =>
     metadata,
   });
 
-export const authenticate = async () => {
+export const authenticate = async (token) => {
   let metadata;
   try {
     metadata = await fetchMetadata();
@@ -52,5 +52,7 @@ export const authenticate = async () => {
   }
   const idp = IDP(metadata);
   const { context } = await SP.createLoginRequest(idp, 'redirect');
-  return context;
+  const url = `${context}&jwt=${token}`;
+  console.log(url);
+  return url;
 };
