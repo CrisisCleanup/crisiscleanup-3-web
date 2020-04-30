@@ -148,6 +148,7 @@ Vue.filter('capitalize', capitalize);
 
 // API & Auth
 if (AuthService.getUser()) {
+  axios.defaults.withCredentials = true;
   axios.defaults.headers.common.Authorization = `Bearer ${AuthService.getToken()}`;
 }
 

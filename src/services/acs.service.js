@@ -34,12 +34,15 @@ export const ConnectConfig = {
   // for custom options
   ccpUrl: process.env.VUE_APP_AWS_CCP_URL,
   region: process.env.VUE_APP_AWS_CCP_REGION,
-  allowFramedSoftphone: false,
+  softphone: {
+    allowFramedSoftphone: true,
+  },
   loginPopup: {
     autoOpen: false,
     autoClose: true,
     forceWindow: true,
   },
+  loginUrl: `${process.env.VUE_APP_API_BASE_URL}/idp/sso/init/?sp=urn:amazon:webservices&RelayState=https://us-east-1.console.aws.amazon.com/connect/federate/414df788-cd99-4580-ad07-f8af22246ce5?destination=%2Fconnect%2Fccp#/`,
 };
 
 export const initConnect = ({
@@ -54,7 +57,6 @@ export const initConnect = ({
   Log.debug('initializing ACS service with config:');
   Log.debug(finalConf);
   connect.core.initCCP(htmlEl, finalConf);
-  connect.core.initSoftphoneManager({ allowFramedSoftphone: true });
   const eventBus = connect.core.getEventBus();
   const upstream = connect.core.getUpstream();
   if (onAuth) {
@@ -92,10 +94,6 @@ export const initConnect = ({
 };
 
 export const setPopup = ({ open } = { open: true }) => {
-  const [loginRoot] = process.env.VUE_APP_AWS_CCP_URL.split('/connect/');
-  const loginUrl = `${loginRoot}/auth?client_id=06919f4fd8ed324e&redirect_uri=${global.encodeURIComponent(
-    `${loginRoot}/connect/auth/code`,
-  )}`;
   if (!open) {
     // clear state (kept in localStorage)
     Log.debug('closing popup manager...');
@@ -109,7 +107,11 @@ export const setPopup = ({ open } = { open: true }) => {
   connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
   connect.core.loginWindow = connect.core
     .getPopupManager()
-    .open(loginUrl, connect.MasterTopics.LOGIN_POPUP, ConnectConfig.loginPopup);
+    .open(
+      ConnectConfig.loginUrl,
+      connect.MasterTopics.LOGIN_POPUP,
+      ConnectConfig.loginPopup,
+    );
   return true;
 };
 
