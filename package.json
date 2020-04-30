@@ -115,7 +115,7 @@
     "vue-responsive": "^1.1.0",
     "vue-router": "^3.1.6",
     "vue-router-multi-view": "^0.1.0",
-    "vue-select": "^3.4.0",
+    "vue-select": "^3.10.3",
     "vue-socket.io": "^3.0.7",
     "vue-timers": "^2.0.4",
     "vue-toasted": "^1.1.28",
