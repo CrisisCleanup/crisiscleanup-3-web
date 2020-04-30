@@ -68,7 +68,7 @@
                     :text="$t('~~Profile')"
                     :action="
                       () => {
-                        this.$router.push(`/profile`);
+                        $router.push(`/profile`);
                       }
                     "
                   />
