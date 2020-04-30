@@ -8,7 +8,6 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneResource from '@/models/PhoneResource';
 import Worksite from '@/models/Worksite';
 import * as ConnectService from '@/services/acs.service';
-import * as SSO from '@/services/sso.service';
 import { PhoneApi } from '@/utils/api';
 import Logger from '@/utils/log';
 import axios from 'axios';
@@ -85,7 +84,6 @@ const PhoneState = {
   connectAuthed: false,
   streams: null,
   popupOpen: false,
-  credentials: SSO.retrieveCredentials(),
   hydrated: false,
   ...getStateDefaults(),
 };
@@ -312,7 +310,7 @@ export const actions = {
     htmlEl,
   ) {
     try {
-      ConnectService.initConnect({
+      await ConnectService.initConnect({
         htmlEl,
         config: { authToken: getters.authToken(PhoneState) },
         onAuth: () =>
@@ -399,7 +397,7 @@ export const actions = {
   },
   async setPopup({ commit }, state = true) {
     Log.debug('setting popup:', state);
-    ConnectService.setPopup({ open: state });
+    await ConnectService.setPopup({ open: state });
     commit('setPopupState', state);
   },
   async setAgentState(

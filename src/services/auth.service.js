@@ -24,7 +24,6 @@ const AuthService = {
   saveUser(user) {
     localStorage.setItem('user', JSON.stringify(user));
     axios.defaults.headers.common.Authorization = `Bearer ${user.access_token}`;
-    window.vue.$cookies.set('ccu-auth-token', user.access_token);
   },
   removeUser() {
     localStorage.removeItem('user');

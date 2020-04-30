@@ -26,8 +26,8 @@ rbZeBUD+hq8RiBl7pDP4zLc=</ds:X509Certificate>
         </ds:X509Data>
       </ds:KeyInfo>
     </KeyDescriptor>
-    <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
     <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+    <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
     <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
     <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</NameIDFormat>
     <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName</NameIDFormat>
@@ -64,4 +64,3 @@ rbZeBUD+hq8RiBl7pDP4zLc=</ds:X509Certificate>
     <OrganizationURL xml:lang="en">https://aws.amazon.com</OrganizationURL>
   </Organization>
 </EntityDescriptor>
-

@@ -4,7 +4,9 @@
  *
  */
 
+import * as SSO from '@/services/sso.service';
 import Logger from '@/utils/log';
+
 const Log = Logger({
   name: 'acs.service',
   middlewares: [
@@ -29,7 +31,7 @@ export const EVENTS = (() => {
   };
 })();
 
-export const ConnectConfig = {
+export const ConnectConfig = async () => ({
   // reference @crisiscleanup/amazon-connect-streams
   // for custom options
   ccpUrl: process.env.VUE_APP_AWS_CCP_URL,
@@ -42,10 +44,10 @@ export const ConnectConfig = {
     autoClose: true,
     forceWindow: true,
   },
-  loginUrl: `${process.env.VUE_APP_API_BASE_URL}/idp/sso/init/?sp=urn:amazon:webservices&RelayState=https://us-east-1.console.aws.amazon.com/connect/federate/414df788-cd99-4580-ad07-f8af22246ce5?destination=%2Fconnect%2Fccp#/`,
-};
+  loginUrl: await SSO.authenticate(),
+});
 
-export const initConnect = ({
+export const initConnect = async ({
   htmlEl,
   config,
   onAuth,
@@ -53,7 +55,8 @@ export const initConnect = ({
   onTimeout,
 }) => {
   // Bind and initialize connect
-  const finalConf = { ...ConnectConfig, ...config };
+  const connectConfig = await ConnectConfig();
+  const finalConf = { ...connectConfig, ...config };
   Log.debug('initializing ACS service with config:');
   Log.debug(finalConf);
   connect.core.initCCP(htmlEl, finalConf);
@@ -93,7 +96,7 @@ export const initConnect = ({
   }
 };
 
-export const setPopup = ({ open } = { open: true }) => {
+export const setPopup = async ({ open } = { open: true }) => {
   if (!open) {
     // clear state (kept in localStorage)
     Log.debug('closing popup manager...');
@@ -105,13 +108,10 @@ export const setPopup = ({ open } = { open: true }) => {
     return false;
   }
   connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
+  const { loginUrl, loginPopup } = await ConnectConfig();
   connect.core.loginWindow = connect.core
     .getPopupManager()
-    .open(
-      ConnectConfig.loginUrl,
-      connect.MasterTopics.LOGIN_POPUP,
-      ConnectConfig.loginPopup,
-    );
+    .open(loginUrl, connect.MasterTopics.LOGIN_POPUP, loginPopup);
   return true;
 };
 
