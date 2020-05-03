@@ -23,6 +23,7 @@ import store from '@/store/index';
 import Vue from 'vue';
 import VueCookies from 'vue-cookies';
 import VueRouter from 'vue-router';
+import Reports from '@/pages/Reports';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -136,6 +137,12 @@ const routes = [
     path: '/locations/new',
     component: Location,
     name: 'nav.new_location',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/Reports',
+    component: Reports,
+    name: 'Reports',
     meta: { layout: 'authenticated' },
   },
   {
