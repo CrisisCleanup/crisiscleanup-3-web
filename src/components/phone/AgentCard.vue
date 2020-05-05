@@ -59,16 +59,9 @@
     ></trainings-modal>
     <agent-edit-card
       :active="editCardActive"
-      :request="{ phone: true, lang: true }"
-      @user-updated="() => (editCardActive = false)"
+      :request="agentNeeded"
+      @user-updated="() => validateAgent()"
     />
-    <modal
-      v-if="showConnectLogin"
-      modal-classes="max-w-2xl"
-      @close="showConnectLogin = false"
-    >
-      <PhoneGateway></PhoneGateway>
-    </modal>
   </div>
 </template>
 
@@ -80,13 +73,12 @@ import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
 import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 import { EventBus } from '@/event-bus';
 import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
-import PhoneGateway from '@/pages/phone/Gateway';
+import { ERRORS as AgentErrors } from '@/models/Agent';
 
 export default {
   name: 'AgentCard',
   mixins: [IconsMixin, LangMixin, UserMixin, TrainingMixin],
   components: {
-    PhoneGateway,
     moreInfo: ContactMoreInfo,
     'agent-edit-card': CallerIDEditCard,
     TrainingsModal,
@@ -97,13 +89,47 @@ export default {
       isShowingTrainingModal: false,
       editCardActive: false,
       showConnectLogin: false,
+      agentNeeded: {
+        phone: false,
+        lang: false,
+      },
+      agent: {},
     };
   },
   async mounted() {
     await this.loadTrainingData();
   },
   methods: {
-    ...mapActions('phone', ['setAgentState']),
+    ...mapActions('phone', ['setAgentState', 'getAgent']),
+    authenticate() {
+      EventBus.$emit('acs:requestAgent');
+    },
+    async validateAgent() {
+      this.editCardActive = false;
+      this.agentNeeded.phone = false;
+      this.agentNeeded.lang = false;
+      try {
+        this.agent = await this.getAgent();
+      } catch (errs) {
+        const {
+          MOBILE_INVALID,
+          MOBILE_NOT_FOUND,
+          LANGUAGE_NOT_FOUND,
+          LANGUAGE_NOT_SUPPORTED,
+        } = AgentErrors;
+        const invalidPhone = (el) =>
+          [MOBILE_INVALID, MOBILE_NOT_FOUND].includes(el);
+        const invalidLang = (el) =>
+          [LANGUAGE_NOT_FOUND, LANGUAGE_NOT_SUPPORTED].includes(el);
+        this.editCardActive = true;
+        if (errs.some(invalidPhone)) {
+          this.agentNeeded.phone = true;
+        }
+        if (errs.some(invalidLang)) {
+          this.agentNeeded.lang = true;
+        }
+      }
+    },
     async toggleAvailable() {
       if (!this.allTrainingCompleted) {
         this.isShowingTrainingModal = true;
@@ -111,8 +137,11 @@ export default {
       }
 
       if (!this.connectReady) {
-        this.showConnectLogin = true;
-        return this.showConnectLogin;
+        await this.validateAgent();
+        if (!this.editCardActive) {
+          this.authenticate();
+        }
+        return this.editCardActive;
       }
 
       if (
