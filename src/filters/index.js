@@ -1,5 +1,6 @@
 import { colors as iconColors, templates } from '@/icons/icons_templates';
 import enums from '@/store/modules/enums';
+import { truncate } from 'lodash';
 import { RRule } from 'rrule';
 
 export function snakeToTitleCase(value) {
@@ -110,3 +111,6 @@ export const toUpper = (value) => {
   if (!value) return '';
   return value.toUpperCase();
 };
+
+export const truncateFilter = (value, length, ...args) =>
+  truncate(value, { length, ...args });

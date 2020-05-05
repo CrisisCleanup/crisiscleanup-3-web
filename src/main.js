@@ -28,6 +28,7 @@ import {
   secondsToHm,
   snakeToTitleCase,
   toUpper,
+  truncateFilter,
 } from '@/filters';
 import Authenticated from '@/layouts/Authenticated';
 import Unauthenticated from '@/layouts/Unauthenticated';
@@ -145,6 +146,7 @@ Vue.filter('getColorForStatus', getColorForStatus);
 Vue.filter('getRecurrenceString', getRecurrenceString);
 Vue.filter('upper', toUpper);
 Vue.filter('capitalize', capitalize);
+Vue.filter('truncate', truncateFilter);
 
 // API & Auth
 if (AuthService.getUser()) {
