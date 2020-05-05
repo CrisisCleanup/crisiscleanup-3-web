@@ -41,7 +41,7 @@
               </div>
               <div class="info--org">
                 <base-text variant="bodysm">
-                  {{ a.organization.name }}
+                  {{ a.organization.name | truncate(28) }}
                 </base-text>
               </div>
             </div>
