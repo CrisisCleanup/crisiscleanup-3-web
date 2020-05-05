@@ -447,9 +447,15 @@ export const actions = {
     commit('setAgent', agent);
     return agent.agent_id;
   },
-  async syncCallDuration({ commit, getters: { currentExternalContact } }) {
+  async syncCallDuration({
+    commit,
+    getters: { currentExternalContact, agentOnCall, callDuration },
+  }) {
     const agent = ConnectService.getAgent();
     const [contact] = agent.getContacts();
+    if (!agentOnCall) {
+      return callDuration;
+    }
     commit('setContact', {
       duration: contact.getStatusDuration(),
     });
@@ -465,7 +471,7 @@ export const actions = {
         });
       }
     }
-    return this.callDuration;
+    return callDuration;
   },
   async syncExternalContact(
     { commit, getters: { currentExternalContact, currentExternalResource } },
