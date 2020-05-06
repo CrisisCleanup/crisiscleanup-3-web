@@ -1,6 +1,7 @@
 const threadLoader = require('thread-loader');
 // const LodashPlugin = require('lodash-webpack-plugin');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+const Version = require('./package.json').version;
 const basicPool = {
   workerParallelJobs: 200,
   name: 'basicPool',
@@ -93,6 +94,11 @@ module.exports = {
           ignoreFile: '.gitignore',
           ignore: ['node_modules', 'vue.config.js'],
           configFile: 'sentry.properties',
+          release: `crisiscleanup-3-web@${Version}`,
+          setCommits: {
+            repo: 'CrisisCleanup/crisiscleanup-3-web',
+            auto: true,
+          },
         },
       ]);
     }
