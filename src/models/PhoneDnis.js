@@ -14,6 +14,7 @@ export default class PhoneDnis extends Model {
       last_call_at: this.attr(),
       last_action: this.attr(),
       last_status: this.attr(),
+      meta: this.attr(),
     };
   }
 

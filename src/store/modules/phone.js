@@ -739,7 +739,14 @@ export const actions = {
   },
   async closeContact({
     dispatch,
-    getters: { currentOutbound, caseStatusId, agentOnCall },
+    getters: {
+      currentOutbound,
+      caseStatusId,
+      agentOnCall,
+      currentCase,
+      worksites,
+      agentId,
+    },
   }) {
     Log.debug('ending contact...');
     if (!caseStatusId) {
@@ -749,6 +756,11 @@ export const actions = {
       Log.debug('updating outbound status with:', caseStatusId);
       await PhoneOutbound.api().updateStatus(currentOutbound.id, {
         statusId: caseStatusId,
+        agentId,
+        dnisMeta: {
+          caller_name: currentCase ? currentCase.name : 'Unknown',
+          cases: worksites,
+        },
       });
     }
     if (agentOnCall) {
