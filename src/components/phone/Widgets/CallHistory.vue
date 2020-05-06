@@ -17,6 +17,7 @@ import TitledCard from '@/components/phone/Cards/TitledCard.vue';
 import Table from '@/components/Table.vue';
 import { mapGetters } from 'vuex';
 import { UserMixin, ValidateMixin } from '@/mixins';
+import PhoneStatus from '@/models/PhoneStatus';
 
 export default {
   name: 'CallHistory',
@@ -30,9 +31,10 @@ export default {
         (a) => a.user.id === this.currentUser.id,
       );
       const calls = recent_contacts.map(
-        ({ phone_number, caller_name, ...metrics }) => ({
+        ({ phone_number, caller_name, status, ...metrics }) => ({
           name: caller_name,
           mobile: this.validatePhoneNumber(phone_number).newValue,
+          status: PhoneStatus.find(status).substatus_name_t,
           ...metrics,
         }),
       );
