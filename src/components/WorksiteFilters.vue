@@ -88,9 +88,9 @@
           >
             {{ $t('worksiteFilters.work') }}
             <span
-              v-if="fieldsCount > 0"
+              v-if="fieldsCount + missingWorkTypeCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
-              >{{ fieldsCount }}</span
+              >{{ fieldsCount + missingWorkTypeCount }}</span
             >
           </div>
         </div>
@@ -283,6 +283,17 @@
                 </template>
               </div>
             </div>
+            <div class="status-group mb-2">
+              <div class="my-1 text-base">
+                {{ $t('~~Missing Information') }}
+              </div>
+              <base-checkbox
+                v-model="filters.missingWorkType.data['missing_work_type']"
+                class="block my-1"
+              >
+                {{ $t('~~Missing a work type') }}
+              </base-checkbox>
+            </div>
           </template>
         </div>
       </div>
@@ -321,6 +332,7 @@ import WorksiteFlagsFilter from '../utils/data_filters/WorksiteFlagsFilter';
 import WorksiteStatusGroupFilter from '../utils/data_filters/WorksiteStatusGroupFilter';
 import WorksiteStatusFilter from '../utils/data_filters/WorksiteStatusFilter';
 import WorksiteLocationsFilter from '../utils/data_filters/WorksiteLocationsFilter';
+import WorksiteMissingWorkTypeFilter from '../utils/data_filters/WorksiteMissingWorkTypeFilter';
 
 export default {
   name: 'WorksiteFilters',
@@ -350,6 +362,7 @@ export default {
         flags: {},
         sub_fields: {},
         locations: {},
+        missingWorkType: {},
       },
       currentSection: 'general',
       expanded: {},
@@ -396,13 +409,17 @@ export default {
     locationsCount() {
       return this.filters.locations.count;
     },
+    missingWorkTypeCount() {
+      return this.filters.missingWorkType.count;
+    },
     filtersCount() {
       return (
         this.fieldsCount +
         this.statusCount +
         this.statusGroupCount +
         this.locationsCount +
-        this.flagsCount
+        this.flagsCount +
+        this.missingWorkTypeCount
       );
     },
     ...mapState('enums', ['statuses', 'workTypes']),
@@ -441,6 +458,12 @@ export default {
         statuses: new WorksiteStatusFilter(
           'statuses',
           (this.currentFilters.statuses && this.currentFilters.statuses.data) ||
+            {},
+        ),
+        missingWorkType: new WorksiteMissingWorkTypeFilter(
+          'missingWorkType',
+          (this.currentFilters.missingWorkType &&
+            this.currentFilters.missingWorkType.data) ||
             {},
         ),
       };
@@ -501,6 +524,10 @@ export default {
         flags: new WorksiteFlagsFilter('flags', {}),
         statuses: new WorksiteStatusFilter('statuses', {}),
         locations: new WorksiteLocationsFilter('locations', {}),
+        missingWorkType: new WorksiteMissingWorkTypeFilter(
+          'missingWorkType',
+          {},
+        ),
       };
     },
   },
