@@ -449,16 +449,26 @@ export const actions = {
   },
   async syncCallDuration({
     commit,
-    getters: { currentExternalContact, agentOnCall, callDuration },
+    getters: {
+      currentExternalContact,
+      agentOnCall,
+      callDuration,
+      extCallDuration,
+    },
   }) {
     const agent = ConnectService.getAgent();
     const [contact] = agent.getContacts();
     if (!agentOnCall) {
       return callDuration;
     }
-    commit('setContact', {
-      duration: contact.getStatusDuration(),
-    });
+    const newDuration = contact.getStatusDuration();
+    // if the status changes (call ended),
+    // ignore the new durations
+    if (newDuration > callDuration) {
+      commit('setContact', {
+        duration: newDuration,
+      });
+    }
     if (currentExternalContact) {
       const extConnection = agent
         .getContacts()[0]
@@ -466,9 +476,12 @@ export const actions = {
         .find((c) => c.connectionId === currentExternalContact.connectionId);
 
       if (extConnection) {
-        commit('setExternalContact', {
-          duration: extConnection.getStatusDuration(),
-        });
+        const extNewDuration = extConnection.getStatusDuration();
+        if (extNewDuration > extCallDuration) {
+          commit('setExternalContact', {
+            duration: extNewDuration,
+          });
+        }
       }
     }
     return callDuration;
@@ -606,7 +619,6 @@ export const actions = {
     }
     commit('setContact', {
       id: contactId,
-      duration,
       state: newContactState.type,
       type: connectType,
       attributes,
