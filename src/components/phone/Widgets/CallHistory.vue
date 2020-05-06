@@ -1,7 +1,13 @@
 <template>
   <TitledCard title="~~Last 10 Calls">
     <div class="card-container flex flex-grow">
-      <Table :columns="historyCols" :data="historyData" />
+      <Table :columns="historyCols" :data="historyData">
+        <template #completed_at="slotProps">
+          <div :title="slotProps.item.completed_at">
+            {{ slotProps.item.completed_at | moment('from', 'now') }}
+          </div>
+        </template>
+      </Table>
     </div>
   </TitledCard>
 </template>
@@ -23,14 +29,13 @@ export default {
       const { recent_contacts } = this.agentBoard.find(
         (a) => a.user.id === this.currentUser.id,
       );
-      const calls = recent_contacts.map(({ dnis }) => ({
-        name: 'Unknown',
-        mobile: this.validatePhoneNumber(dnis).newValue,
-        cases: ['C19'],
-        status: 'Worksite added.',
-        notes: 'User notes.',
-        completed: '10 minutes ago.',
-      }));
+      const calls = recent_contacts.map(
+        ({ phone_number, caller_name, ...metrics }) => ({
+          name: caller_name,
+          mobile: this.validatePhoneNumber(phone_number).newValue,
+          ...metrics,
+        }),
+      );
       return calls;
     },
     historyCols() {
@@ -67,8 +72,8 @@ export default {
         },
         {
           title: 'Completed',
-          dataIndex: 'completed',
-          key: 'completed',
+          dataIndex: 'completed_at',
+          key: 'completed_at',
           width: '1fr',
         },
       ];
