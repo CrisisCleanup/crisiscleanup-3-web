@@ -18,6 +18,7 @@ import Table from '@/components/Table.vue';
 import { mapGetters } from 'vuex';
 import { UserMixin, ValidateMixin } from '@/mixins';
 import PhoneStatus from '@/models/PhoneStatus';
+import { get } from 'lodash';
 
 export default {
   name: 'CallHistory',
@@ -34,7 +35,7 @@ export default {
         ({ phone_number, caller_name, status, ...metrics }) => ({
           name: caller_name,
           mobile: this.validatePhoneNumber(phone_number).newValue,
-          status: PhoneStatus.find(status).substatus_name_t,
+          status: get(PhoneStatus.find(status), 'substatus_name_t', 'Unknown'),
           ...metrics,
         }),
       );
