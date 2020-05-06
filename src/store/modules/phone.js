@@ -12,7 +12,7 @@ import * as ConnectService from '@/services/acs.service';
 import { PhoneApi } from '@/utils/api';
 import Logger from '@/utils/log';
 import axios from 'axios';
-import { camelCase, isInteger, orderBy } from 'lodash';
+import { camelCase, delay, isInteger, once, orderBy } from 'lodash';
 
 const Log = Logger({
   name: 'phone.store',
@@ -622,6 +622,19 @@ export const actions = {
       // call is in inbound
       await dispatch('setInboundId', contactId);
     }
+    // resolve worksites
+    once(async () => {
+      const sites = await Worksite.api().fetchByPhoneNumber(
+        callerNum,
+        incidentId,
+      );
+      if (sites && sites.length) {
+        attributes.worksites = [
+          ...attributes.worksites,
+          ...sites.map((s) => s.id),
+        ];
+      }
+    });
     if (newContactState.type !== contactState) {
       Log.debug('updating contact action...');
       await dispatch(

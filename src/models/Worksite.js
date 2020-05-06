@@ -297,6 +297,19 @@ export default class Worksite extends Model {
           // console.error(e)
         }
       },
+      async fetchByPhoneNumber(phoneNumber, incidentId) {
+        const results = await this.get(
+          `/worksites`,
+          {
+            params: {
+              phone_number: phoneNumber,
+              incident: incidentId,
+            },
+          },
+          { save: false },
+        );
+        return results || [];
+      },
     },
   };
 }
