@@ -759,7 +759,7 @@ export const actions = {
         agentId,
         dnisMeta: {
           caller_name: currentCase ? currentCase.name : 'Unknown',
-          cases: worksites,
+          cases: worksites.join(','),
         },
       });
     }
