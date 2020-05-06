@@ -97,7 +97,7 @@ export const AgentMixin = {
       }
       return {
         total: 1,
-        recent: 'Never',
+        recent: 'First Call',
       };
     },
     callerFormattedNumber() {
