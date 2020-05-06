@@ -363,12 +363,16 @@ export const actions = {
       },
       onAfterCallWork: async () => {
         Log.debug('agent entered ACW, going routable in 3m...');
-        const timeout = (time) => {
-          return new Promise((resolve) => setTimeout(resolve, time));
-        };
-        await timeout(2900 * 60); // 2.9 minutes
-        Log.debug('times up, going routable!');
-        await dispatch('setAgentState', ConnectService.STATES.ROUTABLE);
+        delay(
+          async (currentState) => {
+            if (currentState === ConnectService.STATES.PAUSED) {
+              await dispatch('setAgentState', ConnectService.STATES.ROUTABLE);
+              Log.debug('times up, going routable!');
+            }
+          },
+          2900 * 60, // 2.9 minutes
+          state.agentState,
+        );
       },
     });
     ConnectService.bindContactEvents({
