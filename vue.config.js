@@ -94,7 +94,7 @@ module.exports = {
           ignoreFile: '.gitignore',
           ignore: ['node_modules', 'vue.config.js'],
           configFile: 'sentry.properties',
-          release: `crisiscleanup-3-web@${Version}`,
+          release: `crisiscleanup-3-web@v${Version}`,
           setCommits: {
             repo: 'CrisisCleanup/crisiscleanup-3-web',
             auto: true,

@@ -157,7 +157,7 @@ if (AuthService.getUser()) {
 // Sentry Logging
 Sentry.init({
   dsn: 'https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561',
-  release: `crisiscleanup-3-web@${version}`,
+  release: `crisiscleanup-3-web@v${version}`,
   environment: process.env.VUE_APP_STAGE,
   integrations: [
     new SentryIntegrations.Vue({
