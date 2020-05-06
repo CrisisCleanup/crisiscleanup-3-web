@@ -2,7 +2,7 @@
   <div class="agentcard shadow-crisiscleanup-card">
     <div class="card-edit">
       <ccu-icon
-        @click.native="() => (editCardActive = !editCardActive)"
+        @click.native="() => forceEdit()"
         size="md"
         :type="icons.edit"
       />
@@ -101,6 +101,11 @@ export default {
   },
   methods: {
     ...mapActions('phone', ['setAgentState', 'getAgent']),
+    forceEdit() {
+      this.agentNeeded.phone = true;
+      this.agentNeeded.lang = true;
+      this.editCardActive = true;
+    },
     authenticate() {
       EventBus.$emit('acs:requestAgent');
     },
