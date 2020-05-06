@@ -4,6 +4,7 @@ import Incident from '@/models/Incident';
 import Language from '@/models/Language';
 import Pda from '@/models/Pda';
 import PhoneDnis from '@/models/PhoneDnis';
+import PhoneInbound from '@/models/PhoneInbound';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneResource from '@/models/PhoneResource';
 import Worksite from '@/models/Worksite';
@@ -11,7 +12,7 @@ import * as ConnectService from '@/services/acs.service';
 import { PhoneApi } from '@/utils/api';
 import Logger from '@/utils/log';
 import axios from 'axios';
-import { camelCase, orderBy } from 'lodash';
+import { camelCase, isInteger, orderBy } from 'lodash';
 
 const Log = Logger({
   name: 'phone.store',
@@ -65,6 +66,7 @@ const getStateDefaults = () => ({
     },
     currentPage: 'dashboard',
     currentDnis: null,
+    currentInbound: null,
   },
 });
 
@@ -188,6 +190,11 @@ const getters = {
     }
 
     return null;
+  },
+  currentInbound: (state) => {
+    const { controller } = state;
+    if (!controller.currentInbound) return null;
+    return PhoneInbound.find(controller.currentInbound);
   },
   currentCaseType: (state) =>
     state.controller.currentCase ? state.controller.currentCase.type : null,
@@ -550,7 +557,12 @@ export const actions = {
     }
   },
   async syncContact(
-    { commit, state, dispatch, getters: { agentState, agentId, contactState } },
+    {
+      commit,
+      state,
+      dispatch,
+      getters: { agentState, agentId, contactState, currentInbound },
+    },
     newContact = null,
   ) {
     Log.debug('syncing current contact...');
@@ -598,7 +610,12 @@ export const actions = {
       incidentId,
     };
     if (CALLBACK_NUMBER && outboundIds.length) {
+      // call is an outbound
       await dispatch('setOutboundId', outboundIds[0]);
+    }
+    if (!currentInbound && !CALLBACK_NUMBER) {
+      // call is in inbound
+      await dispatch('setInboundId', contactId);
     }
     if (newContactState.type !== contactState) {
       Log.debug('updating contact action...');
@@ -728,6 +745,10 @@ export const actions = {
     await PhoneOutbound.api().get(`/phone_outbound/${id}`);
     commit('setOutboundId', id);
   },
+  async setInboundId({ commit }, sessionId) {
+    const inbound = await PhoneInbound.api().fetchBySessionId(sessionId);
+    commit('setControllerState', { currentInbound: inbound.id });
+  },
   async setContactState({ commit }, newState) {
     commit('setContact', { state: newState });
   },
@@ -753,6 +774,7 @@ export const actions = {
     dispatch,
     getters: {
       currentOutbound,
+      currentInbound,
       caseStatusId,
       agentOnCall,
       currentCase,
@@ -764,17 +786,24 @@ export const actions = {
     if (!caseStatusId) {
       throw new Error('~~You must set a Call Status!');
     }
+    const callStatus = {
+      statusId: caseStatusId,
+      notes: caseStatusNotes,
+      agentId,
+      dnisMeta: {
+        caller_name: currentCase ? currentCase.name : 'Unknown',
+        cases: worksites.join(','),
+      },
+    };
     if (currentOutbound) {
-      Log.debug('updating outbound status with:', caseStatusId);
-      await PhoneOutbound.api().updateStatus(currentOutbound.id, {
-        statusId: caseStatusId,
-        agentId,
-        dnisMeta: {
-          caller_name: currentCase ? currentCase.name : 'Unknown',
-          cases: worksites.join(','),
-        },
-      });
+      Log.debug('updating outbound status with:', callStatus);
+      await PhoneOutbound.api().updateStatus(currentOutbound.id, callStatus);
     }
+    if (currentInbound) {
+      Log.debug('updating inbound status:', callStatus);
+      await PhoneInbound.api().updateStatus(currentInbound.id, callStatus);
+    }
+
     if (agentOnCall) {
       Log.debug('agent still on call, hanging up...');
       await dispatch('endCurrentCall');
