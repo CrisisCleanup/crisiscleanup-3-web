@@ -11,6 +11,7 @@ import Organization from '@/models/Organization';
 import Pda from '@/models/Pda';
 import PhoneDnis from '@/models/PhoneDnis';
 import PhoneOutbound from '@/models/PhoneOutbound';
+import PhoneInbound from '@/models/PhoneInbound';
 import PhoneResource from '@/models/PhoneResource';
 import PhoneStatus from '@/models/PhoneStatus';
 import Role from '@/models/Role';
@@ -40,6 +41,7 @@ database.register(UserRole, {});
 database.register(Pda, {});
 database.register(PhoneStatus, {});
 database.register(PhoneOutbound, {});
+database.register(PhoneInbound, {});
 database.register(PhoneResource, {});
 database.register(PhoneDnis, {});
 

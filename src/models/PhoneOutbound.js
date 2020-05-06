@@ -1,4 +1,5 @@
 import { Model } from '@vuex-orm/core';
+import { isNil, omitBy } from 'lodash';
 
 export default class PhoneOutbound extends Model {
   static entity = 'phone_outbound';
@@ -70,19 +71,16 @@ export default class PhoneOutbound extends Model {
           agentId = null,
         },
       ) {
-        const body = {
-          status: statusId || null,
-          dnis_meta: dnisMeta || {},
-        };
-        if (worksiteId) {
-          body.worksite = worksiteId;
-        }
-        if (notes) {
-          body.notes = notes;
-        }
-        if (agentId) {
-          body.agent = agentId;
-        }
+        const body = omitBy(
+          {
+            status: statusId || null,
+            dnis_meta: dnisMeta || {},
+            agent: agentId,
+            worksite: worksiteId,
+            notes: notes || null,
+          },
+          isNil,
+        );
         await this.post(`/phone_outbound/${id}/update_status`, body, {
           save: false,
         });

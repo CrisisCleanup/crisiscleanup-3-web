@@ -15,7 +15,7 @@ export default class PhoneResource extends Model {
       updated_at: this.attr(''),
       file: this.attr(''),
       created_by: this.attr(''),
-      uodated_by: this.attr(''),
+      updated_by: this.attr(''),
     };
   }
 }
