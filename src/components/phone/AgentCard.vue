@@ -106,8 +106,15 @@ export default {
       this.agentNeeded.lang = true;
       this.editCardActive = true;
     },
-    authenticate() {
-      EventBus.$emit('acs:requestAgent');
+    async authenticate() {
+      if (!this.connectReady) {
+        await this.validateAgent();
+        if (!this.editCardActive) {
+          return EventBus.$emit('acs:requestAgent');
+        }
+        return this.editCardActive;
+      }
+      return this.editCardActive;
     },
     async validateAgent() {
       this.editCardActive = false;
@@ -166,14 +173,6 @@ export default {
     async onTrainingComplete() {
       await this.loadTrainingData();
       this.isShowingTrainingModal = false;
-    },
-  },
-  watch: {
-    popupOpen(newState, oldState) {
-      if (!newState && oldState && this.connectReady) {
-        this.showConnectLogin = false;
-        this.setAgentState(CCState.ROUTABLE);
-      }
     },
   },
   computed: {

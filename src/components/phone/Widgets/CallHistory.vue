@@ -32,10 +32,11 @@ export default {
         (a) => a.user.id === this.currentUser.id,
       );
       const calls = recent_contacts.map(
-        ({ phone_number, caller_name, status, ...metrics }) => ({
+        ({ phone_number, caller_name, status, notes, ...metrics }) => ({
           name: caller_name,
           mobile: this.validatePhoneNumber(phone_number).newValue,
           status: get(PhoneStatus.find(status), 'substatus_name_t', 'Unknown'),
+          notes: notes || 'N/A',
           ...metrics,
         }),
       );
