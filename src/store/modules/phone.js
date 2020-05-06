@@ -200,6 +200,8 @@ const getters = {
     state.controller.currentCase ? state.controller.currentCase.type : null,
   caseStatusId: (state) =>
     state.controller.status ? state.controller.status.id : null,
+  caseStatusNotes: (state) =>
+    state.controller.status ? state.controller.status.notes : null,
   callerLocale: (state) => {
     const { contact } = state;
     if (!contact.attributes) return null;
@@ -576,7 +578,6 @@ export const actions = {
     }
     const contactId = contact.getInitialContactId();
     const newContactState = contact.getStatus();
-    const duration = contact.getStatusDuration();
     const contactAttrs = contact.getAttributes();
     const initConnection = contact.getInitialConnection();
     const connectType = initConnection.getType();
@@ -776,6 +777,7 @@ export const actions = {
       currentOutbound,
       currentInbound,
       caseStatusId,
+      caseStatusNotes,
       agentOnCall,
       currentCase,
       worksites,
@@ -873,7 +875,11 @@ const mutations = {
   setPopupState(state, newState) {
     state.popupOpen = newState;
   },
-  setContact(state, newState) {
+  setContact(state, { duration, ...newState }) {
+    if (isInteger(duration)) {
+      state.contact = { ...state.contact, ...newState, duration };
+      return;
+    }
     state.contact = { ...state.contact, ...newState };
   },
   setControllerState(state, newState) {
