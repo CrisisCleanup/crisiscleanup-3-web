@@ -1,5 +1,5 @@
 <template>
-  <Loader :loading="loading" class="root">
+  <Loader :loading="loading" class="root h-full">
     <template #content>
       <phone-layout>
         <template #grid-start>
