@@ -623,18 +623,16 @@ export const actions = {
       await dispatch('setInboundId', contactId);
     }
     // resolve worksites
-    once(async () => {
-      const sites = await Worksite.api().fetchByPhoneNumber(
-        callerNum,
-        incidentId,
-      );
-      if (sites && sites.length) {
-        attributes.worksites = [
-          ...attributes.worksites,
-          ...sites.map((s) => s.id),
-        ];
-      }
-    });
+    const getSites = once(() =>
+      Worksite.api().fetchByPhoneNumber(callerNum, incidentId),
+    );
+    const sites = await getSites();
+    if (sites && sites.length) {
+      attributes.worksites = [
+        ...attributes.worksites,
+        ...sites.map((s) => s.id),
+      ];
+    }
     if (newContactState.type !== contactState) {
       Log.debug('updating contact action...');
       await dispatch(
