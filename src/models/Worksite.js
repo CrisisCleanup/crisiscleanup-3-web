@@ -308,7 +308,10 @@ export default class Worksite extends Model {
           },
           { save: false },
         );
-        return results || [];
+        const {
+          response: { data },
+        } = results;
+        return data;
       },
     },
   };
