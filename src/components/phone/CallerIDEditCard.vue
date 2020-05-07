@@ -126,6 +126,7 @@ export default {
             .where('user_id', this.currentUser.id)
             .first();
           this.$store.dispatch('phone/setAgent', agent);
+          this.$store.dispatch('phone/syncAgentConfig')
         }
       } catch (e) {
         this.$log.error('Failed to save agent', e);
