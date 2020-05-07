@@ -12,7 +12,16 @@ import * as ConnectService from '@/services/acs.service';
 import { PhoneApi } from '@/utils/api';
 import Logger from '@/utils/log';
 import axios from 'axios';
-import { camelCase, delay, isInteger, once, orderBy } from 'lodash';
+import {
+  camelCase,
+  delay,
+  isArray,
+  isInteger,
+  mergeWith,
+  once,
+  orderBy,
+  union,
+} from 'lodash';
 
 const Log = Logger({
   name: 'phone.store',
@@ -378,21 +387,23 @@ export const actions = {
     ConnectService.bindContactEvents({
       onIncoming: async (contact) => {
         Log.debug('incoming callback!');
-        await dispatch(
-          'socket/send',
-          {
-            action: 'SET_AGENT_STATE',
-            options: {
-              includeMeta: true,
+        if (agentId) {
+          await dispatch(
+            'socket/send',
+            {
+              action: 'SET_AGENT_STATE',
+              options: {
+                includeMeta: true,
+              },
+              data: {
+                agentId,
+                agentState: state.agentState,
+                currentContactId: contact.getInitialContactId(),
+              },
             },
-            data: {
-              agentId,
-              agentState: state.agentState,
-              currentContactId: contact.getInitialContactId(),
-            },
-          },
-          { root: true },
-        );
+            { root: true },
+          );
+        }
         commit('setContact', { type: 'outbound' });
         contact.accept();
       },
@@ -745,7 +756,7 @@ export const actions = {
     Log.debug('ending an active call!');
     if (!external) {
       ConnectService.endContactCall();
-      commit('setContact', getStateDefaults().contact);
+      commit('setContact', getStateDefaults().contact, { force: true });
       return;
     }
     if (currentExternalContact) {
@@ -767,7 +778,25 @@ export const actions = {
     const inbound = await PhoneInbound.api().fetchBySessionId(sessionId);
     commit('setControllerState', { currentInbound: inbound.id });
   },
-  async setContactState({ commit }, newState) {
+  async setContactState(
+    { commit, getters: { contactAttributes } },
+    { attributes, ...newState },
+    { force = false } = {},
+  ) {
+    if (!force) {
+      commit('setContact', {
+        state: {
+          attributes: mergeWith(
+            contactAttributes,
+            attributes,
+            (objValue, srcValue) =>
+              isArray(objValue) ? union(objValue, srcValue) : undefined,
+          ),
+          ...newState,
+        },
+      });
+      return;
+    }
     commit('setContact', { state: newState });
   },
   async syncAgentConfig({ state, commit }) {
