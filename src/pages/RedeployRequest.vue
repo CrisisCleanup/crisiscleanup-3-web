@@ -67,7 +67,11 @@ export default {
     const response = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
     );
+    const incidentRequestsResponse = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/incident_requests`,
+    );
     this.incidents = response.data.results;
+    this.incidentRequests = incidentRequestsResponse.data.results;
   },
   computed: {
     currentUser() {
@@ -77,7 +81,12 @@ export default {
       if (this.incidents) {
         return this.incidents.filter(
           (incident) =>
-            !this.currentOrganization.incidents.includes(incident.id),
+            !this.currentOrganization.approved_incidents.includes(
+              incident.id,
+            ) &&
+            !this.incidentRequests
+              .map((request) => request.incident)
+              .includes(incident.id),
         );
       }
       return [];
@@ -110,6 +119,7 @@ export default {
       showRedeployModal: false,
       selectedIncidentId: false,
       incidents: [],
+      incidentRequests: [],
     };
   },
 };
