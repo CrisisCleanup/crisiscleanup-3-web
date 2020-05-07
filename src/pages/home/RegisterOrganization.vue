@@ -52,7 +52,6 @@
                   class="form-field"
                   size="large"
                   :placeholder="$t('registerOrg.website')"
-                  required
                 />
                 <base-input
                   v-model="organization.facebook"

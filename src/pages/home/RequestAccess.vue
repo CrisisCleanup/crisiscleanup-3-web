@@ -66,7 +66,6 @@
             class="input"
             size="large"
             placeholder="Title"
-            required
           />
           <base-input
             v-model="mobile"
