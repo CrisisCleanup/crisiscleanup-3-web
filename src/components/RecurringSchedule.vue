@@ -55,7 +55,6 @@
             "
           />
         </div>
-
         <div class="weekly" v-if="frequency === $t('recurringSchedule.weekly')">
           <div class="py-2">
             {{ $t('recurringSchedule.recur_every') }}

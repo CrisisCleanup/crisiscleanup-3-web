@@ -66,6 +66,7 @@ const mutations = {
         beta_features.forEach((feature) => {
           acl.rule(`beta_feature.${feature}`, true);
         });
+        acl.rule(`development_mode`, process.env.NODE_ENV !== 'production');
       },
       { router },
     );

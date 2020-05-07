@@ -19,6 +19,7 @@ import User from '@/models/User';
 import UserRole from '@/models/UserRole';
 import Worksite from '@/models/Worksite';
 import WorksiteRequest from '@/models/WorksiteRequest';
+import Report from '@/models/Report';
 import { Database } from '@vuex-orm/core';
 
 const database = new Database();
@@ -44,5 +45,6 @@ database.register(PhoneOutbound, {});
 database.register(PhoneInbound, {});
 database.register(PhoneResource, {});
 database.register(PhoneDnis, {});
+database.register(Report, {});
 
 export default database;
