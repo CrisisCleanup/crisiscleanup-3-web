@@ -72,6 +72,7 @@ import ScriptPopup from '@/components/phone/ScriptPopup.vue';
 import Pda from '@/models/Pda';
 import AgentActions from '@/components/phone/AgentActions/Actions.vue';
 import PhoneResources from '@/components/phone/AgentActions/Resources.vue';
+import { join } from 'lodash';
 
 export default {
   name: 'Controller',
@@ -110,6 +111,13 @@ export default {
         this.$log.debug('associating worksite to PhoneOutbound...');
 
         await PhoneOutbound.api().updateStatus(this.currentOutbound.id, {
+          agentId: this.agentId,
+          dnisMeta: {
+            caller_name: this.callerName,
+            cases: this.worksites.map((w) => w.case_number).join(', '),
+          },
+          statusId: this.statusId,
+          notes: this.caseStatusNotes,
           worksiteId: worksite.id,
         });
       }

@@ -15,12 +15,11 @@ import axios from 'axios';
 import {
   camelCase,
   delay,
-  isArray,
   isInteger,
-  mergeWith,
+  merge,
   once,
   orderBy,
-  union,
+  trimStart,
 } from 'lodash';
 
 const Log = Logger({
@@ -840,7 +839,7 @@ export const actions = {
       agentId,
       dnisMeta: {
         caller_name: currentCase ? currentCase.name : 'Unknown',
-        cases: worksites.join(','),
+        cases: worksites.map((w) => w.case_number).join(', '),
       },
     };
     if (currentOutbound) {
