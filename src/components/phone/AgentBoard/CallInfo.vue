@@ -189,6 +189,11 @@ export default {
       });
     });
   },
+  watch: {
+    async worksites() {
+      await this.createCards();
+    },
+  },
 };
 </script>
 
