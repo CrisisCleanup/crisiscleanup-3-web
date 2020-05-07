@@ -74,7 +74,7 @@ export default {
     });
   },
   computed: {
-    ...mapState('phone', ['metrics']),
+    ...mapState('phone', ['metrics', 'agentId']),
     statistics() {
       // reorder stats in correct order
       const stats = new Map();
@@ -124,6 +124,7 @@ export default {
         data: {
           userId: this.userId,
           type: this.currentUser.isAdmin ? 'admin' : 'user',
+          agentId: this.agentId,
         },
       });
     },
