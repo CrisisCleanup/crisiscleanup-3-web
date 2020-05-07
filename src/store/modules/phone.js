@@ -624,9 +624,11 @@ export const actions = {
     }
     // resolve worksites
     const getSites = once(() =>
-      Worksite.api().fetchByPhoneNumber(callerNum, incidentId),
+      Worksite.api().fetchByPhoneNumber(callerNum.value, incidentId),
     );
     const sites = await getSites();
+    Log.debug('searched for pre-existing worksites, found:');
+    Log.debug(sites);
     if (sites && sites.length) {
       attributes.worksites = [
         ...attributes.worksites,
