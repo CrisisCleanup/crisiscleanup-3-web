@@ -203,7 +203,6 @@ const WS_URL =
 Vue.use(VueNativeSocket, WS_URL, {
   store,
   format: 'json',
-  connectManually: true,
   reconnection: true, // auto reconnect (after initial connection)
   passToStoreHandler: (eventName, event) => {
     if (!eventName.startsWith('SOCKET_')) return;
