@@ -72,7 +72,6 @@ import ScriptPopup from '@/components/phone/ScriptPopup.vue';
 import Pda from '@/models/Pda';
 import AgentActions from '@/components/phone/AgentActions/Actions.vue';
 import PhoneResources from '@/components/phone/AgentActions/Resources.vue';
-import { join } from 'lodash';
 
 export default {
   name: 'Controller',

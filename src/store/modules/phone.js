@@ -634,7 +634,10 @@ export const actions = {
     }
     // resolve worksites
     const getSites = once(() =>
-      Worksite.api().fetchByPhoneNumber(callerNum.value, incidentId),
+      Worksite.api().fetchByPhoneNumber(
+        trimStart(callerNum.value, '+'),
+        incidentId,
+      ),
     );
     const sites = await getSites();
     Log.debug('searched for pre-existing worksites, found:');
@@ -783,14 +786,12 @@ export const actions = {
     { force = false } = {},
   ) {
     if (!force) {
+      const newAttrs = {};
+      Object.assign(newAttrs, contactAttributes);
+      merge(newAttrs, attributes);
       commit('setContact', {
         state: {
-          attributes: mergeWith(
-            contactAttributes,
-            attributes,
-            (objValue, srcValue) =>
-              isArray(objValue) ? union(objValue, srcValue) : undefined,
-          ),
+          attributes: newAttrs,
           ...newState,
         },
       });
