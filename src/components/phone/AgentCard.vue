@@ -156,11 +156,8 @@ export default {
         return this.editCardActive;
       }
 
-      if (
-        this.agentState === CCState.PAUSED &&
-        this.currentPage === 'controller'
-      ) {
-        this.$toast.error(
+      if (this.currentPage === 'controller') {
+        return this.$toasted.error(
           this.$t('~~You must complete the open call to take another!'),
         );
       }
@@ -181,6 +178,7 @@ export default {
       'agentAvailable',
       'connectReady',
       'popupOpen',
+      'currentPage',
     ]),
     lang() {
       return this.getLang({
