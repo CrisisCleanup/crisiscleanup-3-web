@@ -603,6 +603,15 @@ export const actions = {
     }
     const contactId = contact.getInitialContactId();
     const newContactState = contact.getStatus();
+    Log.debug('contact refresh: ', newContactState);
+    if (contactId && newContactState && newContactState.type === 'error') {
+      // Some bug in connect causes the agent to go into a "hung up" state
+      // and the from prompt -> to contact call/connection doesnt happen.
+      // this is a small workaround.
+      Log.debug('disregarding contact sync due to connection issue!');
+      await ConnectService.setAgentState(ConnectService.STATES.ROUTABLE);
+      return null;
+    }
     const contactAttrs = contact.getAttributes();
     const initConnection = contact.getInitialConnection();
     const connectType = initConnection.getType();
@@ -617,7 +626,6 @@ export const actions = {
       INCIDENT_ID,
       CALLBACK_NUMBER,
     } = contactAttrs;
-    Log.debug('contact refresh: ', newContactState);
     const workSites = worksites.value.split(',').filter((v) => v !== '');
     const Pdas = pdas.value.split(',').filter((v) => v !== '');
     const outboundIds = ids.value.split(',').filter((v) => v !== '');
