@@ -322,10 +322,13 @@ export const actions = {
     Log.debug('got contact metrics!', contacts);
     commit('setContactMetrics', contacts);
   },
-  async initConnect(
-    { state, commit, dispatch, getters: { agentStateTimestamp, agentId } },
-    htmlEl,
-  ) {
+  async initConnect(context, htmlEl) {
+    const {
+      state,
+      commit,
+      dispatch,
+      getters: { agentStateTimestamp, agentId },
+    } = context;
     try {
       await ConnectService.initConnect({
         htmlEl,
@@ -369,17 +372,17 @@ export const actions = {
         Log.debug('new agent state inbound:', agentState);
         commit('setAgentState', agentState);
       },
-      onAfterCallWork: async () => {
+      onAfterCallWork: () => {
         Log.debug('agent entered ACW, going routable in 3m...');
         delay(
-          async (currentState) => {
+          (currentState) => {
             if (currentState === ConnectService.STATES.PAUSED) {
-              await dispatch('setAgentState', ConnectService.STATES.ROUTABLE);
+              dispatch('setAgentState', ConnectService.STATES.ROUTABLE);
               Log.debug('times up, going routable!');
             }
           },
           2900 * 60, // 2.9 minutes
-          state.agentState,
+          context.getters.agentState,
         );
       },
     });
