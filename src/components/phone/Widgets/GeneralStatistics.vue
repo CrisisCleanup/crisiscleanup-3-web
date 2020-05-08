@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import { mixin as VueTimers } from 'vue-timers';
 import { METRICS } from '@/services/acs.service';
 import { LangMixin, UserMixin, IconsMixin } from '@/mixins';
@@ -74,7 +74,8 @@ export default {
     });
   },
   computed: {
-    ...mapState('phone', ['metrics', 'agentId']),
+    ...mapState('phone', ['metrics']),
+    ...mapGetters('phone', ['agentId', 'agentState']),
     statistics() {
       // reorder stats in correct order
       const stats = new Map();
@@ -125,6 +126,7 @@ export default {
           userId: this.userId,
           type: this.currentUser.isAdmin ? 'admin' : 'user',
           agentId: this.agentId,
+          agentState: this.agentState,
         },
       });
     },
