@@ -370,7 +370,9 @@ export const actions = {
         }
         const agentState = ConnectService.parseAgentState(rawAgentState);
         Log.debug('new agent state inbound:', agentState);
-        commit('setAgentState', agentState);
+        if (!isNull(agentState)) {
+          commit('setAgentState', agentState);
+        }
       },
       onAfterCallWork: () => {
         Log.debug('agent entered ACW, going routable in 3m...');
@@ -389,7 +391,7 @@ export const actions = {
     ConnectService.bindContactEvents({
       onIncoming: async (contact) => {
         Log.debug('incoming callback!');
-        if (agentId) {
+        if (agentId && context.getters.agentState) {
           await dispatch(
             'socket/send',
             {
@@ -397,11 +399,17 @@ export const actions = {
               options: {
                 includeMeta: true,
               },
-              data: {
-                agentId,
-                agentState: state.agentState,
-                currentContactId: contact.getInitialContactId(),
-              },
+              data: omitBy(
+                {
+                  agentId,
+                  agentState: context.getters.agentState,
+                  currentContactId: defaultTo(
+                    contact.getInitialContactId(),
+                    context.getters.currentContactId,
+                  ),
+                },
+                isNil,
+              ),
             },
             { root: true },
           );
@@ -519,7 +527,7 @@ export const actions = {
     const contact = ConnectService.getCurrentContact();
     const agent = ConnectService.getAgent();
     let externalConnection = newExternalConnection;
-    if (!externalConnection) {
+    if (!externalConnection && contact) {
       [externalConnection] = contact.getThirdPartyConnections();
     }
     if (!externalConnection) {
