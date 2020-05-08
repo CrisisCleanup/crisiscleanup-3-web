@@ -843,11 +843,12 @@ export const actions = {
     if (!caseStatusId) {
       throw new Error('~~You must set a Call Status!');
     }
-    await dispatch('setStatus', { modified: [currentCase.case_number] });
+    await dispatch('setStatus', { modified: [currentCase.id] });
     const callStatus = {
       statusId: caseStatusId,
       notes: caseStatusNotes,
       agentId,
+      cases: modifiedCases,
       dnisMeta: {
         caller_name: currentCase ? currentCase.name : 'Unknown',
         cases: modifiedCases.join(', '),

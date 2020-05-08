@@ -107,7 +107,7 @@ export default {
       }
 
       this.addCases({ worksites: [worksite.id] });
-      this.setCaseStatus({ modified: [worksite.case_number] });
+      this.setCaseStatus({ modified: [worksite.id] });
       EventBus.$emit(CCEvent.CASE_SAVED, worksite);
     },
     async beforeWorksiteSave() {

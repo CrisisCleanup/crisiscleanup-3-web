@@ -33,13 +33,14 @@ export default class PhoneInbound extends Model {
         } = inbound;
         return data;
       },
-      async updateStatus(id, { statusId, notes, dnisMeta, agentId }) {
+      async updateStatus(id, { statusId, notes, dnisMeta, agentId, cases }) {
         const body = omitBy(
           {
             status: statusId || null,
             dnis_meta: dnisMeta || null,
             agent: agentId,
             notes: notes || null,
+            cases,
           },
           isNil,
         );

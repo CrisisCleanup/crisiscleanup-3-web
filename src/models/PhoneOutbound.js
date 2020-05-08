@@ -69,6 +69,7 @@ export default class PhoneOutbound extends Model {
           notes = null,
           dnisMeta = null,
           agentId = null,
+          cases = null,
         },
       ) {
         const body = omitBy(
@@ -78,6 +79,7 @@ export default class PhoneOutbound extends Model {
             agent: agentId,
             worksite: worksiteId,
             notes: notes || null,
+            cases,
           },
           isNil,
         );
