@@ -88,6 +88,7 @@ import CaseCard from '@/components/cards/Case.vue';
 import Pda from '@/models/Pda';
 import Worksite from '@/models/Worksite';
 import { Carousel, Slide } from 'vue-carousel';
+import { differenceBy, reverse, unionBy, sortBy } from 'lodash';
 
 export default {
   name: 'BoardCallInfo',
@@ -113,7 +114,11 @@ export default {
     async createCards() {
       const wksites = await this.fetchCasesByType(Worksite, this.worksites);
       const pdas = await this.fetchCasesByType(Pda, this.pdas);
-      const cases = [...Array.from(wksites), ...Array.from(pdas)];
+      const cases = differenceBy(
+        [...Array.from(wksites), ...Array.from(pdas)],
+        this.cards,
+        'id',
+      );
 
       this.$log.debug('generating cards from cases:', cases);
       const cards = cases.map((c) => ({
@@ -125,16 +130,18 @@ export default {
         id: c.id,
         type: this.pdas.includes(c.id) ? 'pda' : 'worksite',
       }));
-      cards.push({
-        caseNumber: 'New Case',
-        address: '123 Example Street',
-        state: 'NY',
-        worktype: 'unknown',
-        id: -1,
-        type: 'new',
-      });
-      this.$log.debug('cards:', cards);
-      this.cards = cards;
+      if (!this.cards.length) {
+        cards.push({
+          caseNumber: 'New Case',
+          address: '123 Example Street',
+          state: 'NY',
+          worktype: 'unknown',
+          id: -1,
+          type: 'new',
+        });
+      }
+      this.cards = reverse(sortBy(unionBy(this.cards, cards, 'id'), 'id'));
+      this.$log.debug('cards:', this.cards);
       return cards;
     },
     async setActive(id, type) {

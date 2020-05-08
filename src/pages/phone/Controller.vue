@@ -67,7 +67,6 @@ import { EVENTS as CCEvent, STATES as CCState } from '@/services/acs.service';
 import { EventBus } from '@/event-bus';
 import Loader from '@/components/Loader.vue';
 import { LocalStorageMixin, AgentMixin } from '@/mixins';
-import PhoneOutbound from '@/models/PhoneOutbound';
 import ScriptPopup from '@/components/phone/ScriptPopup.vue';
 import Pda from '@/models/Pda';
 import AgentActions from '@/components/phone/AgentActions/Actions.vue';
