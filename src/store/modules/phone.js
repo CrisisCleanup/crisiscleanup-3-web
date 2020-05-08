@@ -14,12 +14,16 @@ import Logger from '@/utils/log';
 import axios from 'axios';
 import {
   camelCase,
+  defaultTo,
   delay,
+  isEqual,
   isInteger,
+  isNil,
+  isNull,
   merge,
-  once,
+  omitBy,
   orderBy,
-  trimStart,
+  unionBy,
 } from 'lodash';
 
 const Log = Logger({
@@ -68,6 +72,7 @@ const getStateDefaults = () => ({
     status: {
       id: null,
       notes: '',
+      modified: [],
     },
     actions: {
       currentKey: 'case',
@@ -210,6 +215,8 @@ const getters = {
     state.controller.status ? state.controller.status.id : null,
   caseStatusNotes: (state) =>
     state.controller.status ? state.controller.status.notes : null,
+  modifiedCases: (state) =>
+    state.controller.status ? state.controller.status.modified : null,
   callerLocale: (state) => {
     const { contact } = state;
     if (!contact.attributes) return null;
@@ -826,9 +833,9 @@ export const actions = {
       currentInbound,
       caseStatusId,
       caseStatusNotes,
+      modifiedCases,
       agentOnCall,
       currentCase,
-      worksites,
       agentId,
     },
   }) {
@@ -836,13 +843,14 @@ export const actions = {
     if (!caseStatusId) {
       throw new Error('~~You must set a Call Status!');
     }
+    await dispatch('setStatus', { modified: [currentCase.case_number] });
     const callStatus = {
       statusId: caseStatusId,
       notes: caseStatusNotes,
       agentId,
       dnisMeta: {
         caller_name: currentCase ? currentCase.name : 'Unknown',
-        cases: worksites.map((w) => w.case_number).join(', '),
+        cases: modifiedCases.join(', '),
       },
     };
     if (currentOutbound) {
@@ -942,10 +950,15 @@ const mutations = {
       ...currentCase,
     };
   },
-  setStatus(state, newStatus) {
+  setStatus(state, { modified, ...newStatus }) {
     state.controller.status = {
       ...state.controller.status,
       ...newStatus,
+      modified: unionBy(
+        state.controller.status.modified,
+        defaultTo(modified, []),
+        isEqual,
+      ),
     };
   },
   setOutboundId(state, newId) {

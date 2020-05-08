@@ -106,22 +106,9 @@ export default {
         this.$log.debug('associating worksite to pda...');
         await Pda.api().associateWorksite(this.currentCase.id, worksite.id);
       }
-      if (this.currentOutbound) {
-        this.$log.debug('associating worksite to PhoneOutbound...');
-
-        await PhoneOutbound.api().updateStatus(this.currentOutbound.id, {
-          agentId: this.agentId,
-          dnisMeta: {
-            caller_name: this.callerName,
-            cases: this.worksites.map((w) => w.case_number).join(', '),
-          },
-          statusId: this.statusId,
-          notes: this.caseStatusNotes,
-          worksiteId: worksite.id,
-        });
-      }
 
       this.addCases({ worksites: [worksite.id] });
+      this.setCaseStatus({ modified: [worksite.case_number] });
       EventBus.$emit(CCEvent.CASE_SAVED, worksite);
     },
     async beforeWorksiteSave() {
