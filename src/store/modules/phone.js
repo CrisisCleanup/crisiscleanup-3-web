@@ -651,22 +651,6 @@ export const actions = {
       // call is in inbound
       await dispatch('setInboundId', contactId);
     }
-    // resolve worksites
-    const getSites = once(() =>
-      Worksite.api().fetchByPhoneNumber(
-        trimStart(callerNum.value, '+'),
-        incidentId,
-      ),
-    );
-    const sites = await getSites();
-    Log.debug('searched for pre-existing worksites, found:');
-    Log.debug(sites);
-    if (sites && sites.length) {
-      attributes.worksites = [
-        ...attributes.worksites,
-        ...sites.map((s) => s.id),
-      ];
-    }
     if (newContactState.type !== contactState) {
       Log.debug('updating contact action...');
       await dispatch(
