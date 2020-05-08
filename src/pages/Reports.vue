@@ -49,6 +49,7 @@
                 <ExampleReports
                   v-if="$can('development_mode')"
                   :formats="r.output_formats"
+                  :files="r.files"
                   @download="(download) => requestReport(r.name_t, download)"
                 />
               </div>

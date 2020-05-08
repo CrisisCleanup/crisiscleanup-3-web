@@ -6,6 +6,7 @@
     <template #content>
       <div class="flex flex-col">
         <InviteUsers class="px-3" is-admin />
+        <FileUpload class="mx-3 my-1" />
         <div class="flex">
           <WorksiteImport
             class="m-4 pt-2 shadow bg-white w-full"
@@ -52,10 +53,12 @@ import { getQueryString } from '../../utils/urls';
 import { getErrorMessage } from '../../utils/errors';
 import Loader from '../../components/Loader';
 import WorksiteImport from '../../components/WorksiteImport';
+import FileUpload from '../../components/FileUpload';
 
 export default {
   name: 'AdminDashboard',
   components: {
+    FileUpload,
     WorksiteImport,
     IncidentApprovalTable,
     OrganizationApprovalTable,

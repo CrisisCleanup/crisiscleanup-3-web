@@ -11,6 +11,31 @@ export default class Report extends Model {
       report_key: this.attr(null),
       inputs: this.attr(null),
       output_formats: this.attr(null),
+      files: this.attr(null),
     };
   }
+
+  static apiConfig = {
+    actions: {
+      addFile(id, file, type) {
+        return this.post(
+          `/reports/${id}/files`,
+          {
+            file,
+            type_t: type,
+          },
+          { save: false },
+        );
+      },
+      deleteFile(id, file) {
+        return this.delete(
+          `/reports/${id}/files`,
+          {
+            data: { file },
+          },
+          { save: false },
+        );
+      },
+    },
+  };
 }
