@@ -651,23 +651,22 @@ export const actions = {
       // call is in inbound
       await dispatch('setInboundId', contactId);
     }
-    if (newContactState.type !== contactState) {
-      Log.debug('updating contact action...');
-      await dispatch(
-        'socket/send',
-        {
-          action: 'UPDATE_CONTACT',
-          options: {
-            includeMeta: true,
-          },
-          data: {
-            contactId,
-            action: newContactState.type,
-          },
+    Log.debug('updating contact action...');
+    await dispatch(
+      'socket/send',
+      {
+        action: 'UPDATE_CONTACT',
+        options: {
+          includeMeta: true,
         },
-        { root: true },
-      );
-    }
+        data: {
+          contactId,
+          agentId,
+          action: defaultTo(newContactState.type, contactState),
+        },
+      },
+      { root: true },
+    );
     commit('setContact', {
       id: contactId,
       state: newContactState.type,
