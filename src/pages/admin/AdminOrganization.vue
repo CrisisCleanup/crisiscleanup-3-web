@@ -22,6 +22,13 @@
             class="mr-2"
             :action="saveOrganization"
           />
+          <base-button
+            :text="$t('~~Generate API Key')"
+            variant="solid"
+            size="medium"
+            class="mr-2"
+            :action="generateApiKey"
+          />
           <template
             v-if="!organization.approved_by && !organization.rejected_by"
           >
@@ -520,6 +527,29 @@
             @changed="setCurrentLocation"
           />
         </modal>
+        <modal
+          v-if="showingApiKeyModal"
+          :title="$t('~~Organization API Key')"
+          modal-classes="max-w-sm"
+          @close="showingApiKeyModal = false"
+          closeable
+        >
+          <div class="flex flex-col items-center justify-center p-3">
+            <base-input
+              :value="apiKey"
+              disabled
+              class="w-full"
+              input-classes=""
+            />
+            <base-button
+              :action="copyApiKey"
+              :text="$t('~~Copy Key')"
+              variant="solid"
+              size="medium"
+              class="my-2"
+            ></base-button>
+          </div>
+        </modal>
       </div>
     </template>
   </Loader>
@@ -881,6 +911,18 @@ export default {
       await this.$copyText(text);
       this.$toasted.success('info.users_copied');
     },
+    async copyApiKey() {
+      await this.$copyText(this.apiKey);
+      this.$toasted.success('~~Copied Api Key');
+    },
+    async generateApiKey() {
+      const response = await this.$http.post(
+        `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}/create_api_key`,
+      );
+      const { api_key } = response.data;
+      this.apiKey = api_key;
+      this.showingApiKeyModal = true;
+    },
   },
   data() {
     return {
@@ -891,6 +933,8 @@ export default {
       capabilityToAdd: null,
       incidentToAdd: null,
       showingLocationModal: false,
+      showingApiKeyModal: false,
+      apiKey: false,
       currentPolygon: null,
       primaryLocationMap: null,
       secondaryLocationMap: null,
