@@ -7,6 +7,17 @@
             {{ slotProps.item.completed_at | moment('from', 'now') }}
           </div>
         </template>
+        <template #cases="slotProps">
+          <div class="flex flex-wrap w-full">
+            <div
+              v-for="caseItem in slotProps.item.cases"
+              :key="caseItem.id"
+              class="mx-1"
+            >
+              {{ caseItem.case_number }}
+            </div>
+          </div>
+        </template>
       </Table>
     </div>
   </TitledCard>
