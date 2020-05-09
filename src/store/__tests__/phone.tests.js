@@ -106,7 +106,7 @@ describe('metric actions', () => {
             caller_name: 'Adam Smith',
             dnis: 0,
             phone_number: '+11234567890',
-            completed_at: new Date(2020, 0, 0, 0, 0, 0, 0).toISOString(),
+            completed_at: '2019-12-31T06:00:00.000Z',
             cases: [1, 2],
             notes: 'metric note',
             status: 1,
@@ -115,7 +115,6 @@ describe('metric actions', () => {
       },
     ];
 
-    // Agent.api().getMetrics = jest.fn(() => inboundMetrics);
     Agent.api = jest.fn(() => ({
       get: jest.fn(() => MockAgents[0]),
       getMetrics: jest.fn((id) =>
@@ -135,6 +134,6 @@ describe('metric actions', () => {
         ],
       },
     );
-    expect(commit).toMatchSnapshot();
+    expect(commit.mock.calls).toMatchSnapshot();
   });
 });
