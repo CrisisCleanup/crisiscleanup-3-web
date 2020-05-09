@@ -16,6 +16,7 @@ import {
   camelCase,
   defaultTo,
   delay,
+  get,
   isEqual,
   isInteger,
   isNil,
@@ -311,23 +312,48 @@ export const actions = {
     Log.debug('new metrics:', newState);
     commit('setMetrics', newState);
   },
-  async getAgentMetrics({ commit }, { agents }) {
+  async getAgentMetrics(
+    { commit, getters: { currentAniIncident } },
+    { agents } = {},
+  ) {
     const agentBoard = {};
     await Promise.all(
       agents.map(async ({ agent_id, state }) => {
         await Agent.api().get(`/agents/${agent_id}`);
-        const metrics = await Agent.api().getMetrics(agent_id);
+        const { recent_contacts, ...metrics } = await Agent.api().getMetrics(
+          agent_id,
+        );
+        let recentContacts = defaultTo(recent_contacts, []);
+        recentContacts = recentContacts.map(async ({ cases, ...c }) => {
+          const wkSites = await Promise.all(
+            cases.map(async (cId) => {
+              let caseItem = await Worksite.find(cId);
+              if (isNil(caseItem)) {
+                caseItem = await Worksite.api().fetch(
+                  cId,
+                  get(currentAniIncident, 'id', null),
+                );
+              }
+              return caseItem;
+            }),
+          );
+          return { cases: wkSites, ...c };
+        });
+        recentContacts = await Promise.all(recentContacts);
         agentBoard[agent_id] = {
           ...metrics,
           currentState: state,
+          recent_contacts: recentContacts,
         };
       }),
     );
     commit('setAgentMetrics', agentBoard);
   },
-  async setContactMetrics({ commit }, { contacts }) {
+  async setContactMetrics({ commit }, { contacts } = {}) {
     Log.debug('got contact metrics!', contacts);
-    commit('setContactMetrics', contacts);
+    if (!isNil(contacts)) {
+      commit('setContactMetrics', contacts);
+    }
   },
   async initConnect(context, htmlEl) {
     const {
