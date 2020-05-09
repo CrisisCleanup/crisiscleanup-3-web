@@ -65,7 +65,7 @@
                   <base-button
                     data-cy="auth.userprofile.profile"
                     class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-                    :text="$t('~~Profile')"
+                    :text="$t('actions.profile')"
                     :action="
                       () => {
                         $router.push(`/profile`);
@@ -75,7 +75,7 @@
                   <base-button
                     data-cy="auth.userprofile.logout"
                     class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-                    :text="$t('~~Logout')"
+                    :text="$t('actions.logout')"
                     :action="
                       () => {
                         logoutByPhoneNumber();
@@ -196,12 +196,6 @@ export default {
             !this.$can('beta_feature.connect_first_integration'),
         },
         {
-          key: 'admin',
-          icon: 'history',
-          to: '/admin',
-          disabled: !this.currentUser.isAdmin,
-        },
-        {
           key: 'reports',
           icon: 'reports',
           to: '/reports',
@@ -210,6 +204,12 @@ export default {
             !this.currentUser.organization ||
             (this.currentUser.organization.type_t !== 'orgType.government' &&
               !this.currentUser.isAdmin),
+        },
+        {
+          key: 'admin',
+          icon: 'admin',
+          to: '/admin',
+          disabled: !this.currentUser.isAdmin,
         },
       ];
     },

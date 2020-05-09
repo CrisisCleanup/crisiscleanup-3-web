@@ -142,7 +142,7 @@ const routes = [
   {
     path: '/Reports',
     component: Reports,
-    name: 'Reports',
+    name: 'nav.reports',
     meta: { layout: 'authenticated' },
   },
   {
