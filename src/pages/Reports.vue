@@ -47,7 +47,7 @@
                   {{ r.description_t }}
                 </base-text>
                 <ExampleReports
-                  v-if="$can('development_mode')"
+                  v-if="$can('development_mode') || currentUser.isAdmin"
                   :formats="r.output_formats"
                   :files="r.files"
                   @download="(download) => requestReport(r.name_t, download)"
