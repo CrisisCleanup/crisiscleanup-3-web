@@ -3,27 +3,28 @@
     <span>{{ $t('~~Examples:') }}</span>
     <div class="flex">
       <template v-for="format in formats">
-        <font-awesome-icon
-          :key="file"
-          v-for="file in getFilesForFormat(format)"
-          @click.stop="
-            () => {
-              $emit('download', format);
-            }
-          "
-          :title="file.filename_original"
-          class="p-1 cursor-pointer"
-          size="3x"
-          :icon="`file-${format}`"
-        />
+        <a :href="file.url" v-for="file in getFilesForFormat(format)" download>
+          <font-awesome-icon
+            :key="file"
+            @click.stop="
+              () => {
+                $emit('download', format);
+              }
+            "
+            :title="file.filename_original"
+            class="p-1 cursor-pointer"
+            size="3x"
+            :icon="`file-${format}`"
+          />
+        </a>
       </template>
     </div>
   </div>
 </template>
 <script>
 const FORMAT_TO_MIME_TYPE = {
-  csv: 'text/csv',
-  pdf: 'application/pdf',
+  csv: ['text/csv', 'application/vnd.ms-excel'],
+  pdf: ['application/pdf'],
 };
 
 export default {
@@ -35,8 +36,9 @@ export default {
   },
   methods: {
     getFilesForFormat(format) {
-      return this.files.filter(
-        (file) => file.mime_content_type === FORMAT_TO_MIME_TYPE[format],
+      const mimeTypes = FORMAT_TO_MIME_TYPE[format] || [];
+      return this.files.filter((file) =>
+        mimeTypes.includes(file.mime_content_type),
       );
     },
   },
