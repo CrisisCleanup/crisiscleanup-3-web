@@ -8,6 +8,7 @@ Array [
       "xxxx": Object {
         "agent": "xxxx",
         "currentState": "routable",
+        "enteredTimestamp": 1577772000000,
         "recent_contacts": Array [],
         "state": "routable",
         "total_abandons": 0,
@@ -28,6 +29,7 @@ Array [
       "yyyy": Object {
         "agent": "yyyy",
         "currentState": "routable",
+        "enteredTimestamp": 1577772000000,
         "recent_contacts": Array [
           Object {
             "caller_name": "Adam Smith",

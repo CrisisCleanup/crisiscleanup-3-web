@@ -318,7 +318,7 @@ export const actions = {
   ) {
     const agentBoard = {};
     await Promise.all(
-      agents.map(async ({ agent_id, state }) => {
+      agents.map(async ({ agent_id, state, entered_timestamp }) => {
         await Agent.api().get(`/agents/${agent_id}`);
         const { recent_contacts, ...metrics } = await Agent.api().getMetrics(
           agent_id,
@@ -343,6 +343,7 @@ export const actions = {
         agentBoard[agent_id] = {
           ...metrics,
           currentState: state,
+          enteredTimestamp: Date.parse(entered_timestamp),
           recent_contacts: recentContacts,
         };
       }),

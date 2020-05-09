@@ -129,8 +129,16 @@ describe('metric actions', () => {
       { commit, state, getters: { currentAniIncident: () => aniIncident } },
       {
         agents: [
-          { agent_id: 'xxxx', state: 'routable' },
-          { agent_id: 'yyyy', state: 'routable' },
+          {
+            agent_id: 'xxxx',
+            state: 'routable',
+            entered_timestamp: '2019-12-31T06:00:00.000Z',
+          },
+          {
+            agent_id: 'yyyy',
+            state: 'routable',
+            entered_timestamp: '2019-12-31T06:00:00.000Z',
+          },
         ],
       },
     );

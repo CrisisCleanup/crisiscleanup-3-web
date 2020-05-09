@@ -38,6 +38,9 @@
                 >
                   &#8226; {{ getStateFriendlyName(a.currentState) }}
                 </base-text>
+                <base-text variant="h4" weight="100">
+                  {{ a.enteredTimestamp | moment('from', 'now') }}
+                </base-text>
               </div>
               <div class="info--org">
                 <base-text variant="bodysm">
@@ -201,6 +204,7 @@ $metric-headers: ('In' 'Out' 'Total');
             }
           }
           display: flex;
+          align-items: baseline;
           .v-popover .trigger p span {
             @apply text-crisiscleanup-dark-500 pr-2;
             cursor: pointer;
@@ -211,6 +215,9 @@ $metric-headers: ('In' 'Out' 'Total');
           p {
             @apply text-crisiscleanup-dark-400 pr-2;
             @include truncate;
+            &:last-child {
+              @apply text-crisiscleanup-dark-300;
+            }
           }
         }
         &--org {
