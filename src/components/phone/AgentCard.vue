@@ -186,6 +186,7 @@ export default {
         ready: '~~Ready for Next Call',
         stop: '~~Stop Taking Calls',
         train: '~~Start Training',
+        authenticate: '~~Authenticate',
         toggle: {
           more: '~~More Info',
           less: '~~Less Info',
@@ -203,6 +204,13 @@ export default {
         return {
           enabled: true,
           text: this.lang.train,
+          statusText: this.lang.status.offline,
+        };
+      }
+      if (!this.connectReady) {
+        return {
+          enabled: true,
+          text: this.lang.authenticate,
           statusText: this.lang.status.offline,
         };
       }
