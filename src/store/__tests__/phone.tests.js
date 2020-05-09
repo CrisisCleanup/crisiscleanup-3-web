@@ -3,10 +3,18 @@
  * Phone Store Tests
  */
 
+import Agent from '@/models/Agent';
+import { MockAgents, MockUsers } from '@/utils/testing';
 import { actions } from '../modules/phone';
 
 jest.mock('@/services/acs.service.js');
 jest.mock('@/services/sso.service.js');
+
+jest.mock('@/models/Worksite');
+jest.mock('@/models/Incident');
+jest.mock('@/models/User');
+jest.mock('@/models/PhoneStatus');
+jest.mock('@/models/Agent');
 
 const MockMetrics = ({ queueCount = 2, online = 1 } = {}) => [
   {
@@ -36,7 +44,7 @@ const MockMetrics = ({ queueCount = 2, online = 1 } = {}) => [
   },
 ];
 
-describe('actions', () => {
+describe('metric actions', () => {
   it('getRealtimeMetrics', async () => {
     const commit = jest.fn();
     const state = {};
@@ -60,6 +68,73 @@ describe('actions', () => {
       { metrics: MockMetrics({ queueCount: -1, online: 1 }) },
     );
 
+    expect(commit).toMatchSnapshot();
+  });
+
+  it('getAgentMetrics', async () => {
+    const commit = jest.fn();
+    const state = {
+      contact: {
+        attributes: {
+          incidentId: 99,
+        },
+      },
+    };
+
+    const inboundMetrics = [
+      {
+        agent: 'xxxx',
+        state: 'routable',
+        user: MockUsers[0],
+        total_calls: 6,
+        total_inbound: 3,
+        total_outbound: 3,
+        total_rejects: 0,
+        total_abandons: 0,
+      },
+      {
+        agent: 'yyyy',
+        state: 'routable',
+        user: MockUsers[1],
+        total_calls: 6,
+        total_inbound: 3,
+        total_outbound: 3,
+        total_rejects: 0,
+        total_abandons: 0,
+        recent_contacts: [
+          {
+            caller_name: 'Adam Smith',
+            dnis: 0,
+            phone_number: '+11234567890',
+            completed_at: new Date(2020, 0, 0, 0, 0, 0, 0).toISOString(),
+            cases: [1, 2],
+            notes: 'metric note',
+            status: 1,
+          },
+        ],
+      },
+    ];
+
+    // Agent.api().getMetrics = jest.fn(() => inboundMetrics);
+    Agent.api = jest.fn(() => ({
+      get: jest.fn(() => MockAgents[0]),
+      getMetrics: jest.fn((id) =>
+        inboundMetrics.find(({ agent }) => agent === id),
+      ),
+    }));
+
+    const aniIncident = jest.fn();
+    aniIncident.id = 99;
+
+    await actions.getAgentMetrics(
+      { commit, state, getters: { currentAniIncident: () => aniIncident } },
+      {
+        agents: [
+          { agent_id: 'xxxx', state: 'routable' },
+          { agent_id: 'yyyy', state: 'routable' },
+        ],
+      },
+    );
     expect(commit).toMatchSnapshot();
   });
 });

@@ -18,7 +18,7 @@
     "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "cross-env VUE_CLI_BABEL_TARGET_NODE=true VUE_CLI_BABEL_TRANSPILE_MODULES=true NODE_ENV=test vue-cli-service test:unit --coverage",
     "test:unit-fix": "yarn test:unit -u",
-    "test:watch": "yarn test:unit --watchAll",
+    "test:watch": "yarn test:unit --watchAll --silent --coverage=false",
     "test:e2e": "cross-env NODE_ENV=test cypress run",
     "test:e2e:hl": "yarn run test:e2e --headless",
     "test:cy": "cross-env NODE_ENV=test cypress run --browser chrome",

@@ -176,3 +176,47 @@ export const MockIncident = {
     },
   ],
 };
+
+export const MockPhoneStatus = [
+  {
+    id: 1,
+    substatus_name_t: 'Added work request to Crisis Cleanup',
+    status_name_t: 'Answered: Added work request to Crisis Cleanup',
+    primary_state_name_t: 'Answered',
+    primary_state: 'answered',
+    status: 'answered_added',
+    substatus: 'added',
+    completion: 1.0,
+    try_again_delay: 0,
+    list_order: 50,
+    created_at: '2018-10-29T04:57:13Z',
+    updated_at: '2020-03-25T04:19:27Z',
+    must_associate_worksite: 'never',
+    created_by: 14,
+    updated_by: 14,
+  },
+];
+
+export const MockAgents = [
+  {
+    agent_id: 'xxxx',
+    instance_id: 'instance',
+    arn: 'agentarn',
+    user: MockUsers[0],
+  },
+];
+
+export const mockModel = (data) => ({
+  all: jest.fn(() => data),
+  find: jest.fn(() => data[0]),
+  database: jest.fn(() => data),
+  query: () => ({
+    where: () => ({
+      get: () => data[0],
+    }),
+  }),
+  api: jest.fn(() => ({
+    get: () => data[0],
+    fetch: () => data[0],
+  })),
+});
