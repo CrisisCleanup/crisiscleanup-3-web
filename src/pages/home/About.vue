@@ -18,10 +18,7 @@
           <p class="text-xl px-0.5 pb-5">
             {{ $t('about.philosophy_not_tech') }}
           </p>
-          <p class="text-xl px-0.5 pb-5"
-            v-html="$t('about.mission')"
-            >
-          </p>
+          <p class="text-xl px-0.5 pb-5" v-html="$t('about.mission')"></p>
         </div>
         <!--- Content --->
         <!--- About Us Video --->
@@ -58,9 +55,11 @@
                     src="@/assets/tinycrisiscleanuplogoscreenshot.jpg"
                     class="w-7 h-6"
                   />
-                  <base-text variant="body" class="pt-2"
+                  <base-text
+                    variant="body"
+                    class="pt-2"
                     v-html="$t('about.four_cs')"
-                    >
+                  >
                   </base-text>
                 </div>
               </div>
@@ -84,9 +83,11 @@
                     src="@/assets/tinycrisiscleanuplogoscreenshot.jpg"
                     class="w-7 h-6"
                   />
-                  <base-text variant="body" class="pt-2"
+                  <base-text
+                    variant="body"
+                    class="pt-2"
                     v-html="$t('about.four_rs')"
-                    >
+                  >
                   </base-text>
                 </div>
               </div>
@@ -111,7 +112,7 @@
               variant="body"
               class="crisiscleanup-grey-500"
               v-html="$t('about.homes_businesses_cleaned_up')"
-              >
+            >
             </base-text>
           </div>
           <div class="flex flex-col text-center">
@@ -121,15 +122,15 @@
               variant="body"
               class="crisiscleanup-grey-500"
               v-html="$t('about.dollars_saved_survivors_daily')"
-              >
+            >
             </base-text>
           </div>
         </div>
         <!-- View Details Button -->
         <div class="flex justify-around py-2">
-          <base-button variant="solid" class="py-2 px-3"
-            >{{ $t('about.view_details') }}</base-button
-          >
+          <base-button variant="solid" class="py-2 px-3">{{
+            $t('about.view_details')
+          }}</base-button>
         </div>
         <!-- Info Card w/ Sketch -->
         <div
@@ -164,9 +165,11 @@
               <span class="font-bold">Aaron Titus</span><br />
               {{ $t('about.aaron_titus_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.aaron_titus_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -178,9 +181,11 @@
               <span class="font-bold">Ross Arroyo</span><br />
               {{ $t('about.ross_arroyo_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.ross_arroyo_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -192,9 +197,11 @@
               <span class="font-bold">Tobi Abiodun</span><br />
               {{ $t('about.tobi_abiodun_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.tobi_abiodun_bio')"
-              >
+            >
             </base-text>
           </div>
 
@@ -204,9 +211,11 @@
               <span class="font-bold">Olga Uzhykova</span><br />
               {{ $t('about.olga_uzhykova_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.olga_uzhykova_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -218,9 +227,11 @@
               <span class="font-bold">Mariia Filatova</span><br />
               {{ $t('about.mariia_filatova_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.mariia_filatova_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -232,9 +243,11 @@
               <span class="font-bold">Braden Mars</span><br />
               {{ $t('about.braden_mars_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.braden_mars_bio')"
-              >
+            >
             </base-text>
           </div>
 
@@ -245,9 +258,11 @@
               <span class="font-bold">Tyler Sanders</span><br />
               {{ $t('about.tyler_sanders_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.tyler_sanders_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -259,9 +274,11 @@
               <span class="font-bold">Mark Tregellas</span><br />
               {{ $t('about.mark_tregellas_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.mark_tregellas_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -280,9 +297,11 @@
               <span class="font-bold">Andy Gimma</span><br />
               {{ $t('about.andy_gimma_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.andy_gimma_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -294,9 +313,11 @@
               <span class="font-bold">Zachary Straub</span><br />
               {{ $t('about.zachary_straub_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.zachary_straub_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -308,9 +329,11 @@
               <span class="font-bold">Dhruv Mehrotra</span><br />
               {{ $t('about.dhruv_mehrotra_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.dhruv_mehrotra_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -322,9 +345,11 @@
               <span class="font-bold">Chris Wood</span><br />
               {{ $t('about.chris_wood_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.chris_wood_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -336,9 +361,11 @@
               <span class="font-bold">Karissa Phelps</span><br />
               {{ $t('about.karissa_phelps_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.karissa_phelps_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -350,9 +377,11 @@
               <span class="font-bold">Jeremy Pack</span><br />
               {{ $t('about.jeremy_pack_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.jeremy_pack_bio')"
-              >
+            >
             </base-text>
           </div>
           <!-- End Card -->
@@ -363,9 +392,11 @@
               <span class="font-bold">Bruce Christensen</span><br />
               {{ $t('about.bruce_christensen_title') }}
             </p>
-            <base-text variant="body" class="pt-2"
+            <base-text
+              variant="body"
+              class="pt-2"
               v-html="$t('about.bruce_christensen_bio')"
-              >
+            >
             </base-text>
           </div>
 
@@ -376,9 +407,9 @@
         <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
           {{ $t('about.major_supporters') }}
         </h1>
-        <base-text variant="body" class="pt-2"
-          >{{ $t('about.in_kind_supporter_intro') }}</base-text
-        >
+        <base-text variant="body" class="pt-2">{{
+          $t('about.in_kind_supporter_intro')
+        }}</base-text>
 
         <!-- Logos -->
         <div class="partners-grid">
@@ -595,10 +626,10 @@
         </h1>
 
         <div>
-          <p class="text-xl px-0.5 pb-5"
+          <p
+            class="text-xl px-0.5 pb-5"
             v-html="$t('about.ccu_llc_open_source')"
-            >
-          </p>
+          ></p>
         </div>
         <!-- End Corporate and Legal Stuff -->
 
@@ -610,34 +641,53 @@
           <div class="flex flex-col m-5">
             <ul class="text-xl text-crisiscleanup-dark-400 font-hairline">
               <li>
-                <a href="https://app.dev.crisiscleanup.io/" target="_blank" title="{{ $t('about.ccu_demo') }}">{{ $t('about.ccu_demo') }}</a>
-              </li>
-              <br />
-              <li>
-                <a href="/training" target="_blank" title="{{ $t('about.mandatory_training') }}">{{ $t('about.mandatory_training') }}</a>
-              </li>
-              <br />
-              <li>
-                <a href="https://crisiscleanup.zendesk.com/hc/en-us/articles/200603007" target="_blank" title="{{ $t('about.req_for_participation') }}">{{ $t('about.req_for_participation') }}</a>
-              </li>
-              <br />
-              <li>
-                <a href="https://crisiscleanup.zendesk.com/hc/en-us/articles/200596493-Is-Crisis-Cleanup-a-Good-Fit-" target="_blank" title="{{ $t('about.good_fit') }}">{{ $t('about.good_fit') }}</a>
-              </li>
-              <br />
-              <li 
-                v-html="$t('about.contribute')"
+                <a
+                  href="https://app.dev.crisiscleanup.io/"
+                  target="_blank"
+                  title="{{ $t('about.ccu_demo') }}"
+                  >{{ $t('about.ccu_demo') }}</a
                 >
               </li>
               <br />
               <li>
-                <a href="https://crisiscleanup.zendesk.com/hc/en-us/" target="_blank" title="{{ $t('about.helpdesk') }}">{{ $t('about.helpdesk') }}</a>
-              </li>
-              <br />
-              <li
-                v-html="$t('about.ccu_story')"
+                <a
+                  href="/training"
+                  target="_blank"
+                  title="{{ $t('about.mandatory_training') }}"
+                  >{{ $t('about.mandatory_training') }}</a
                 >
               </li>
+              <br />
+              <li>
+                <a
+                  href="https://crisiscleanup.zendesk.com/hc/en-us/articles/200603007"
+                  target="_blank"
+                  title="{{ $t('about.req_for_participation') }}"
+                  >{{ $t('about.req_for_participation') }}</a
+                >
+              </li>
+              <br />
+              <li>
+                <a
+                  href="https://crisiscleanup.zendesk.com/hc/en-us/articles/200596493-Is-Crisis-Cleanup-a-Good-Fit-"
+                  target="_blank"
+                  title="{{ $t('about.good_fit') }}"
+                  >{{ $t('about.good_fit') }}</a
+                >
+              </li>
+              <br />
+              <li v-html="$t('about.contribute')"></li>
+              <br />
+              <li>
+                <a
+                  href="https://crisiscleanup.zendesk.com/hc/en-us/"
+                  target="_blank"
+                  title="{{ $t('about.helpdesk') }}"
+                  >{{ $t('about.helpdesk') }}</a
+                >
+              </li>
+              <br />
+              <li v-html="$t('about.ccu_story')"></li>
             </ul>
           </div>
         </div>
@@ -659,7 +709,6 @@
           </div>
         </div>
         <!-- End Helpful Links -->
-
       </div>
     </template>
   </HomeLayout>

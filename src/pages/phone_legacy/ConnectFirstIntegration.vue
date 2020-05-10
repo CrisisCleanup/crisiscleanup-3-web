@@ -81,16 +81,22 @@
               {{ stats.active || 0 }}
             </div>
             <div class="flex p-2 items-center justify-between">
-              <base-text>{{ $t('phoneDashboard.remaining_callbacks') }}</base-text>
+              <base-text>{{
+                $t('phoneDashboard.remaining_callbacks')
+              }}</base-text>
               {{ remainingCallbacks }}
             </div>
             <div class="flex p-2 items-center justify-between">
-              <base-text>{{ $t('phoneDashboard.remaining_calldowns') }}</base-text>
+              <base-text>{{
+                $t('phoneDashboard.remaining_calldowns')
+              }}</base-text>
               0
             </div>
             <div class="flex p-2 items-center justify-between">
               <ccu-icon with-text type="phone-plus" size="xl">
-                <base-text>{{ $t('phoneDashboard.total_people_waiting') }}</base-text>
+                <base-text>{{
+                  $t('phoneDashboard.total_people_waiting')
+                }}</base-text>
               </ccu-icon>
               {{ stats.inQueue || 0 }}
             </div>
@@ -104,19 +110,27 @@
           <div>
             <div class="flex flex-col">
               <div class="flex p-2 items-center justify-between">
-                <base-text>{{ $t("phoneDashboard.my_inbound_count") }}</base-text>
+                <base-text>{{
+                  $t('phoneDashboard.my_inbound_count')
+                }}</base-text>
                 {{ agentStats.agentStats || 0 }}
               </div>
               <div class="flex p-2 items-center justify-between">
-                <base-text>{{ $t("phoneDashboard.my_outbound_count") }}</base-text>
+                <base-text>{{
+                  $t('phoneDashboard.my_outbound_count')
+                }}</base-text>
                 {{ agentStats.totalManualDials || 0 }}
               </div>
               <div class="flex p-2 items-center justify-between">
-                <base-text>{{ $t('phoneDashboard.total_login_time') }}</base-text>
+                <base-text>{{
+                  $t('phoneDashboard.total_login_time')
+                }}</base-text>
                 {{ agentStats.totalLoginTime || 0 }}
               </div>
               <div class="flex p-2 items-center justify-between">
-                <base-text>{{ $t('phoneDashboard.total_call_time') }}</base-text>
+                <base-text>{{
+                  $t('phoneDashboard.total_call_time')
+                }}</base-text>
                 {{ agentStats.totalTalkTime || 0 }}
               </div>
             </div>
@@ -306,7 +320,7 @@
             </base-text>
             <base-text variant="body" class="script">
               {{
-                 $t('phoneDashboard.inbound_script_example', {
+                $t('phoneDashboard.inbound_script_example', {
                   firstName: currentUser.first_name,
                 })
               }}
@@ -320,9 +334,9 @@
           <tag class="tag">
             <div class="text-xs">
               {{
-                `${caller.number_of_inbound_calls} ${$t(' phoneDashboard.calls ')} | ${$moment(
-                  caller.created_at,
-                ).diff($moment(), 'days')} days`
+                `${caller.number_of_inbound_calls} ${$t(
+                  ' phoneDashboard.calls ',
+                )} | ${$moment(caller.created_at).diff($moment(), 'days')} days`
               }}
             </div>
           </tag>
@@ -351,9 +365,9 @@
           <tag class="tag">
             <div class="text-xs">
               {{
-                `${caller.number_of_inbound_calls} ${$t(' phoneDashboard.calls ')} | ${$moment(
-                  caller.created_at,
-                ).diff($moment(), 'days')} days`
+                `${caller.number_of_inbound_calls} ${$t(
+                  ' phoneDashboard.calls ',
+                )} | ${$moment(caller.created_at).diff($moment(), 'days')} days`
               }}
             </div>
           </tag>
@@ -586,9 +600,7 @@ export default {
       if (this.$refs.worksiteForm.dirtyFields.size) {
         const result = await this.$confirm({
           title: this.$t('phoneDashboard.complete_call'),
-          content: this.$t(
-            'phoneDashboard.unsaved_changes_error',
-          ),
+          content: this.$t('phoneDashboard.unsaved_changes_error'),
           actions: {
             no: {
               text: this.$t('actions.do_not_save'),

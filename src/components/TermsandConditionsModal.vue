@@ -3,7 +3,8 @@
     :title="$t('termsConditionsModal.terms_conditions_title')"
     modal-classes="max-w-lg h-64"
   >
-    <div class="p-3"
+    <div
+      class="p-3"
       v-html="$t('termsConditionsModal.accept_terms_conditions')"
     ></div>
     <div slot="footer" class="flex items-center justify-center py-2 border-t">
