@@ -644,7 +644,7 @@
                 <a
                   href="https://app.dev.crisiscleanup.io/"
                   target="_blank"
-                  title="{{ $t('about.ccu_demo') }}"
+                  :title="$t('about.ccu_demo')"
                   >{{ $t('about.ccu_demo') }}</a
                 >
               </li>
@@ -653,7 +653,7 @@
                 <a
                   href="/training"
                   target="_blank"
-                  title="{{ $t('about.mandatory_training') }}"
+                  :title="$t('about.mandatory_training')"
                   >{{ $t('about.mandatory_training') }}</a
                 >
               </li>
@@ -662,7 +662,7 @@
                 <a
                   href="https://crisiscleanup.zendesk.com/hc/en-us/articles/200603007"
                   target="_blank"
-                  title="{{ $t('about.req_for_participation') }}"
+                  :title="$t('about.req_for_participation')"
                   >{{ $t('about.req_for_participation') }}</a
                 >
               </li>
@@ -671,7 +671,7 @@
                 <a
                   href="https://crisiscleanup.zendesk.com/hc/en-us/articles/200596493-Is-Crisis-Cleanup-a-Good-Fit-"
                   target="_blank"
-                  title="{{ $t('about.good_fit') }}"
+                  :title="$t('about.good_fit')"
                   >{{ $t('about.good_fit') }}</a
                 >
               </li>
@@ -682,7 +682,7 @@
                 <a
                   href="https://crisiscleanup.zendesk.com/hc/en-us/"
                   target="_blank"
-                  title="{{ $t('about.helpdesk') }}"
+                  :title="$t('about.helpdesk')"
                   >{{ $t('about.helpdesk') }}</a
                 >
               </li>
