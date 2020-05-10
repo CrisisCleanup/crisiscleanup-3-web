@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center">
-    <span>{{ $t('~~Examples:') }}</span>
+    <span>{{ $t('reportsVue.examples') }}</span>
     <div class="flex">
       <template v-for="format in formats">
         <a :href="file.url" v-for="file in getFilesForFormat(format)" download>

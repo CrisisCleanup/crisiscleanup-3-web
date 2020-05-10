@@ -285,13 +285,13 @@
             </div>
             <div class="status-group mb-2">
               <div class="my-1 text-base">
-                {{ $t('~~Missing Information') }}
+                {{ $t('worksiteFilters.missing_information') }}
               </div>
               <base-checkbox
                 v-model="filters.missingWorkType.data['missing_work_type']"
                 class="block my-1"
               >
-                {{ $t('~~Missing a work type') }}
+                {{ $t('worksiteFilters.no_work_type') }}
               </base-checkbox>
             </div>
           </template>

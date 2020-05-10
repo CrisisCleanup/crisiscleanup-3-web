@@ -522,7 +522,7 @@ export default {
             }
             return [];
           },
-          searchTitle: this.$t('~~All'),
+          searchTitle: this.$t('dashboard.all'),
         },
         {
           title: this.$t('dashboard.name'),

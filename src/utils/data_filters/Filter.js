@@ -5,20 +5,20 @@ export default class Filter {
   }
 
   packFunction() {
-    throw new Error('You have to implement the method doSomething!');
+    throw new Error('~~You called the undefined method packFunction!');
   }
 
   getCount() {
-    throw new Error('You have to implement the method doSomething!');
+    throw new Error('~~You called the undefined method getCount!');
   }
 
   getFilterLabels() {
-    throw new Error('You have to implement the method doSomething!');
+    throw new Error('~~You called the undefined method getFilterLabels!');
   }
 
   // eslint-disable-next-line no-unused-vars
   removeField(identifier) {
-    throw new Error('You have to implement the method doSomething!');
+    throw new Error('~~You called the undefined method removeField!');
   }
 
   get count() {

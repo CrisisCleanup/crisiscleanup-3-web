@@ -28,7 +28,7 @@
           <div class="p-3">
             <div class="flex flex-row tags">
               <div class="w-20 text-crisiscleanup-dark-200">
-                {{ $t('~~Languages') }}
+                {{ $t('phoneDashboard.languages') }}
               </div>
               <div
                 v-for="l in languages"
@@ -45,7 +45,7 @@
               variant="solid"
               size="medium"
               :action="login"
-              :text="$t('~~Start Taking Calls')"
+              :text="$t('phoneDashboard.take_call')"
               class="flex-grow mr-4"
             ></base-button>
             <base-button
@@ -53,14 +53,14 @@
               variant="solid"
               size="medium"
               :action="logout"
-              :text="$t('~~Stop Taking Calls')"
+              :text="$t('phoneDashboard.stop_call')"
               class="flex-grow mr-4"
             ></base-button>
             <base-button
               v-else-if="isOnCall"
               size="medium"
               :disabled="true"
-              :text="$t('~~On Call')"
+              :text="$t('phoneDashboard.on_call')"
               class="flex-grow mr-4 text-white bg-crisiscleanup-light-grey"
             ></base-button>
             <ccu-icon
@@ -72,25 +72,25 @@
         </div>
         <div class="border shadow flex flex-col mb-5">
           <base-text class="p-3" variant="h3">{{
-            $t('~~General Statistics')
+            $t('phoneDashboard.general_statistics')
           }}</base-text>
           <hr />
           <div class="flex flex-col bg-crisiscleanup-light-grey">
             <div class="flex p-2 items-center justify-between">
-              <base-text>{{ $t('~~On the phone now') }}</base-text>
+              <base-text>{{ $t('phoneDashboard.on_phone_now') }}</base-text>
               {{ stats.active || 0 }}
             </div>
             <div class="flex p-2 items-center justify-between">
-              <base-text>{{ $t('~~Remaining Callbacks') }}</base-text>
+              <base-text>{{ $t('phoneDashboard.remaining_callbacks') }}</base-text>
               {{ remainingCallbacks }}
             </div>
             <div class="flex p-2 items-center justify-between">
-              <base-text>{{ $t('~~Remaining Calldowns') }}</base-text>
+              <base-text>{{ $t('phoneDashboard.remaining_calldowns') }}</base-text>
               0
             </div>
             <div class="flex p-2 items-center justify-between">
               <ccu-icon with-text type="phone-plus" size="xl">
-                <base-text>{{ $t('~~Total People Waiting') }}</base-text>
+                <base-text>{{ $t('phoneDashboard.total_people_waiting') }}</base-text>
               </ccu-icon>
               {{ stats.inQueue || 0 }}
             </div>
@@ -98,25 +98,25 @@
         </div>
         <div class="border shadow flex flex-col">
           <base-text class="p-3" variant="h3">{{
-            $t('~~My Statistics')
+            $t('phoneDashboard.my_statistics')
           }}</base-text>
           <hr />
           <div>
             <div class="flex flex-col">
               <div class="flex p-2 items-center justify-between">
-                <base-text>{{ $t("~~Calls I've received") }}</base-text>
+                <base-text>{{ $t("phoneDashboard.my_inbound_count") }}</base-text>
                 {{ agentStats.agentStats || 0 }}
               </div>
               <div class="flex p-2 items-center justify-between">
-                <base-text>{{ $t("~~Calls I've made") }}</base-text>
+                <base-text>{{ $t("phoneDashboard.my_outbound_count") }}</base-text>
                 {{ agentStats.totalManualDials || 0 }}
               </div>
               <div class="flex p-2 items-center justify-between">
-                <base-text>{{ $t('~~Total Login Time') }}</base-text>
+                <base-text>{{ $t('phoneDashboard.total_login_time') }}</base-text>
                 {{ agentStats.totalLoginTime || 0 }}
               </div>
               <div class="flex p-2 items-center justify-between">
-                <base-text>{{ $t('~~Total Call Time') }}</base-text>
+                <base-text>{{ $t('phoneDashboard.total_call_time') }}</base-text>
                 {{ agentStats.totalTalkTime || 0 }}
               </div>
             </div>
@@ -159,17 +159,17 @@
                 :action="callOutbound"
                 class="flex-shrink"
               >
-                {{ $t('~~Call') }}
+                {{ $t('phoneDashboard.call') }}
               </base-button>
             </div>
             <div class="p2" v-else-if="!isTakingCalls">
-              {{ $t('Start taking calls to see the next outbound call') }}
+              {{ $t('phoneDashboard.start_taking_calls_to_see') }}
             </div>
             <div class="p2" v-else-if="isOnCall">
-              {{ $t('Call in progress') }}
+              {{ $t('phoneDashboard.call_in_progress') }}
             </div>
             <div class="p2" v-else>
-              {{ $t('No user in outbound queue') }}
+              {{ $t('phoneDashboard.no_user_in_inbound_queue') }}
             </div>
           </tab>
           <tab name="Current Call" ref="currentCallTab">
@@ -179,12 +179,12 @@
                   <base-text variant="h3" weight="300" v-if="isOnCall">
                     {{
                       isInboundCall
-                        ? $t('~~Inbound Call In Progress')
-                        : $t('~~Outbound Call In Progress')
+                        ? $t('phoneDashboard.inbound_call_in_progress')
+                        : $t('phoneDashboard.outbound_call_in_progress')
                     }}
                   </base-text>
                   <base-text variant="h3" weight="300" v-else>
-                    {{ $t('~~Call Completed') }}
+                    {{ $t('phoneDashboard.call_completed') }}
                   </base-text>
                   <base-text variant="h2">
                     {{ caller.dnis }}
@@ -192,7 +192,7 @@
                   <div class="text-xs text-crisiscleanup-dark-200">
                     {{
                       `${caller.number_of_inbound_calls} ${$t(
-                        ' Calls ',
+                        ' phoneDashboard.calls ',
                       )} |${$moment(caller.created_at).diff(
                         $moment(),
                         'days',
@@ -237,7 +237,7 @@
                   label="name_t"
                   :value="status"
                   @input="updateStatus"
-                  placeholder="Call Status"
+                  :placeholder="$t('phoneDashboard.call_status')"
                   required
                   select-classes="border border-crisiscleanup-dark-100"
                 />
@@ -245,7 +245,7 @@
                   :value="callNotes"
                   rows="3"
                   class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
-                  :placeholder="$t('~~Notes')"
+                  :placeholder="$t('phoneDashboard.notes')"
                   @input="updateNotes"
                   required
                 ></textarea>
@@ -255,12 +255,12 @@
                   variant="solid"
                   :action="completeCall"
                 >
-                  {{ $t('~~Call Complete - Next Call') }}
+                  {{ $t('phoneDashboard.call_complete_next_call') }}
                 </base-button>
               </form>
             </div>
             <div class="p2" v-else>
-              {{ $t('No current call') }}
+              {{ $t('phoneDashboard.no_current_call') }}
             </div>
           </tab>
         </tabs>
@@ -295,26 +295,21 @@
     />
     <modal
       v-if="incomingCall && caller"
-      :title="$t('~~Incoming Call')"
+      :title="$t('phoneDashboard.incoming_call')"
       modal-classes="max-w-md"
     >
       <div>
         <div class="px-3 py-1">
           <div class="modal-script">
             <base-text variant="body" class="script">
-              {{
-                $t(
-                  "~~You are currently receiving a phone call. Please answer it via your phone to proceed. Don't worry, your number will never be shared with the caller.",
-                )
-              }}
+              {{ $t('phoneDashboard.incoming_call_msg') }}
             </base-text>
             <base-text variant="body" class="script">
               {{
-                $t(
-                  '~~A sample script would be: "Crisis Cleanup Hotline, my name is ',
-                )
+                 $t('phoneDashboard.inbound_script_example', {
+                  firstName: currentUser.first_name,
+                })
               }}
-              {{ currentUser.first_name }} {{ $t('~~. How may I help you?') }}
             </base-text>
           </div>
         </div>
@@ -325,7 +320,7 @@
           <tag class="tag">
             <div class="text-xs">
               {{
-                `${caller.number_of_inbound_calls} ${$t(' Calls ')} | ${$moment(
+                `${caller.number_of_inbound_calls} ${$t(' phoneDashboard.calls ')} | ${$moment(
                   caller.created_at,
                 ).diff($moment(), 'days')} days`
               }}
@@ -342,12 +337,12 @@
           setCaller(null);
         }
       "
-      :title="$t('~~Outgoing Call')"
+      :title="$t('phoneDashboard.outbound_call')"
       modal-classes="max-w-md"
     >
       <div>
         <div class="px-3 py-1">
-          {{ $t('~~Please wait while we connect your call') }}
+          {{ $t('phoneDashboard.please_wait_connect') }}
         </div>
         <div class="flex items-center">
           <base-text class="px-3 py-1" variant="h2">
@@ -356,7 +351,7 @@
           <tag class="tag">
             <div class="text-xs">
               {{
-                `${caller.number_of_inbound_calls} ${$t(' Calls ')} | ${$moment(
+                `${caller.number_of_inbound_calls} ${$t(' phoneDashboard.calls ')} | ${$moment(
                   caller.created_at,
                 ).diff($moment(), 'days')} days`
               }}
@@ -365,7 +360,7 @@
         </div>
         <div v-if="cards.length">
           <div class="text-xs bg-crisiscleanup-light-grey py-1 px-3">
-            {{ cards.length }} {{ $t('cases are assigned to this number') }}
+            {{ cards.length }} {{ $t('phoneDashboard.cases_assigned_to_dnis') }}
           </div>
           <div class="pr-2" v-for="c in cards" :key="c.id">
             <div class="p-2">
@@ -470,14 +465,14 @@ export default {
     async login() {
       if (!this.languages.length) {
         await this.$toasted.error(
-          this.$t('~~Please select a language before accepting calls'),
+          this.$t('phoneDashboard.select_language_error'),
         );
         return;
       }
 
       if (!this.currentUser.mobile) {
         await this.$toasted.error(
-          this.$t('~~Please add a phone number to start accepting calls'),
+          this.$t('phoneDashboard.add_phone_number_error'),
         );
         return;
       }
@@ -493,7 +488,7 @@ export default {
       } catch (e) {
         this.logout(true);
         await this.$toasted.error(
-          this.$t('~~Error logging in to phone system, please try again'),
+          this.$t('phoneDashboard.phone_system_login_error'),
         );
         throw e; //Rethrow for sentry
       }
@@ -590,18 +585,18 @@ export default {
     async completeCall() {
       if (this.$refs.worksiteForm.dirtyFields.size) {
         const result = await this.$confirm({
-          title: this.$t('~~Complete Call'),
+          title: this.$t('phoneDashboard.complete_call'),
           content: this.$t(
-            '~~The case for seems to have some unsaved changes, would you like to complete the call without saving those changes?',
+            'phoneDashboard.unsaved_changes_error',
           ),
           actions: {
             no: {
-              text: this.$t('~~Stop saving'),
+              text: this.$t('actions.do_not_save'),
               type: 'outline',
               buttonClass: 'border border-black',
             },
             yes: {
-              text: this.$t('Continue'),
+              text: this.$t('actions.continue'),
               type: 'solid',
             },
           },
