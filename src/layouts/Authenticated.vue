@@ -5,12 +5,14 @@
         <NavMenu
           v-if="$mq !== 'sm'"
           :routes="routes"
+          :logo-route="logoRoute"
           class="sidebar--grid"
           :key="currentUser && currentUser.permissions"
         />
         <Slide width="150" v-else>
           <NavMenu
             :routes="routes"
+            :logo-route="logoRoute"
             class="flex flex-col text-sm"
             :key="currentUser && currentUser.permissions"
           />
@@ -212,6 +214,13 @@ export default {
               !this.currentUser.isAdmin),
         },
       ];
+    },
+    logoRoute() {
+      return {
+        key: 'dashboard',
+        text: this.$t('nav.dashboard'),
+        to: `/incident/${this.currentIncidentId}/dashboard`,
+      };
     },
     ...mapState('incident', ['currentIncidentId']),
     ...mapState('auth', ['user']),

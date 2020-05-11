@@ -1,8 +1,10 @@
 <template>
   <div class="sidebar">
-    <div class="logo flex justify-center p-3">
-      <img src="@/assets/crisiscleanup_logo.png" style="height: 53px;" />
-    </div>
+    <router-link :to="logoRoute.to">
+      <div class="logo flex justify-center p-3">
+        <img src="@/assets/crisiscleanup_logo.png" style="height: 53px;" />
+      </div>
+    </router-link>
     <div class="menu">
       <NavButton v-for="r in routes" :key="r.key" :route="r" />
     </div>
@@ -13,20 +15,21 @@
 import VueTypes from 'vue-types';
 import NavButton from './NavButton';
 
+const routeShape = VueTypes.shape({
+  key: VueTypes.string,
+  text: VueTypes.string,
+  to: VueTypes.string,
+  icon: VueTypes.string,
+  iconSize: VueTypes.string,
+  disabled: VueTypes.bool,
+});
+
 export default {
   name: 'NavMenu',
   components: { NavButton },
   props: {
-    routes: VueTypes.arrayOf(
-      VueTypes.shape({
-        key: VueTypes.string,
-        text: VueTypes.string,
-        to: VueTypes.string,
-        icon: VueTypes.string,
-        iconSize: VueTypes.string,
-        disabled: VueTypes.bool,
-      }),
-    ),
+    routes: VueTypes.arrayOf(routeShape),
+    logoRoute: routeShape,
   },
 };
 </script>
