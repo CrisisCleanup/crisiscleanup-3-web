@@ -9,15 +9,7 @@
       >
         <div class="flex justify-around m-5">
           <base-text variant="body">
-            We do not yet have an account set up with your state government.
-            Please have someone from your state government contact
-            <a
-              href="mailto:help@crisiscleanup.org"
-              class="text-crisiscleanup-yellow-900 underline"
-              >help@crisiscleanup.org</a
-            >
-            to set up a paid account, so we can provide this report. to request
-            more information on report access"
+            {{ $t('reportsVue.no_state_account_yet') }}
           </base-text>
         </div>
         <div slot="footer" class="flex p-1 justify-center">

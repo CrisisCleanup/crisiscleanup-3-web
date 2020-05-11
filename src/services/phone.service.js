@@ -116,7 +116,7 @@ export default class PhoneService {
           }),
         );
       } catch (error) {
-        Log.debug('Error requesting incident access: ', error);
+        Log.debug('~~Error requesting incident access: ', error);
       }
     } else if (info.callType === 'OUTBOUND') {
       state = 'ENGAGED-OUTBOUND';
@@ -189,7 +189,7 @@ export default class PhoneService {
     const currentUser = User.find(this.store.getters['auth/userId']);
     return new Promise((resolve, reject) => {
       if (!currentUser.mobile) {
-        throw new Error('Please set a valid phone number to take calls');
+        throw new Error('~~Please set a valid phone number to take calls');
       }
       this.cf.loginAgent(
         username,
@@ -197,7 +197,7 @@ export default class PhoneService {
         (data) => {
           Log.debug('Logged in agent', data);
           if (data.status === 'FAILURE') {
-            throw new Error('Could not log in.');
+            throw new Error('~~Could not log in.');
           }
           this.loggedInAgentId = data.agentSettings.agentId;
           const loggedInAgents = currentUser.states.loggedInAgents || [];

@@ -5,7 +5,7 @@
       @close="showingUploadModal = false"
       v-if="showingUploadModal"
       modal-classes="bg-white max-w-md shadow"
-      :title="$t('~~Upload File')"
+      :title="$t('fileUpload.upload_file')"
     >
       <div class="flex flex-col items-center p-3">
         <form-select
@@ -13,7 +13,7 @@
           :options="Object.keys(fileAwareModels)"
           class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
           @input="(value) => (selectedModel = value)"
-          :placeholder="$t('~~Select an entity')"
+          :placeholder="$t('fileUpload.select_entity')"
         />
 
         <form-select
@@ -23,7 +23,7 @@
           @input="(value) => (uploadType = value)"
           item-key="value"
           label="name_t"
-          :placeholder="$t('~~Select a file type')"
+          :placeholder="$t('fileUpload.select_file_type')"
         />
 
         <OrganizationSearchInput
@@ -41,13 +41,13 @@
           label="name_t"
           class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
           @input="(value) => (entityId = value)"
-          :placeholder="$t('~~Select a Report')"
+          :placeholder="$t('fileUpload.select_report')"
         />
 
         <DragDrop
           class="border w-72 bg-white"
           :choose-title="$t('dragDrop.choose_files')"
-          :drag-title="$t('~~Select a file to upload')"
+          :drag-title="$t('fileUpload.select_file_upload')"
           :key="entityId"
           @files="handleFileUpload"
         >
@@ -59,7 +59,7 @@
       <div slot="footer"></div>
     </modal>
     <base-button
-      :text="$t('~~File Uploader')"
+      :text="$t('fileUpload.file_uploader')"
       variant="solid"
       class="px-3 py-1"
       :action="

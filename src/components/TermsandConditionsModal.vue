@@ -1,18 +1,12 @@
 <template>
   <modal
-    :title="$t('~~Accept Terms and Conditions')"
+    :title="$t('termsConditionsModal.terms_conditions_title')"
     modal-classes="max-w-lg h-64"
   >
-    <div class="p-3">
-      {{ $t('~~Please Review and accept the') }}
-      <base-link href="/terms" target="_blank">{{
-        $t('Terms and Conditions')
-      }}</base-link>
-      and
-      <base-link href="/privacy" target="_blank">{{
-        $t('~~Privacy Policy')
-      }}</base-link>
-    </div>
+    <div
+      class="p-3"
+      v-html="$t('termsConditionsModal.accept_terms_conditions')"
+    ></div>
     <div slot="footer" class="flex items-center justify-center py-2 border-t">
       <base-button
         data-cy="termsmodal.acceptBtn"
