@@ -147,14 +147,15 @@ export default class User extends Model {
       },
       async updateUserState(states, reload = false) {
         const currentUser = User.find(AuthService.getUser().user_claims.id);
-        const newStates = {
+        currentUser.states = {
           ...currentUser.states,
           ...states,
         };
+        currentUser.$save();
         await this.patch(
           `/users/${currentUser.id}`,
           {
-            states: newStates,
+            states: currentUser.states,
           },
           { save: false },
         );
