@@ -75,7 +75,7 @@ export default {
   },
   computed: {
     ...mapState('phone', ['metrics']),
-    ...mapGetters('phone', ['agentId', 'agentState']),
+    ...mapGetters('phone', ['agentId', 'agentState', 'currentContactId']),
     statistics() {
       // reorder stats in correct order
       const stats = new Map();
@@ -117,6 +117,10 @@ export default {
   methods: {
     async clientHeartbeat() {
       await this.$store.dispatch('phone/getRealtimeMetrics');
+      let aId = this.agentId;
+      if (!aId) {
+        aId = await this.$store.dispatch('phone/getAgent');
+      }
       await this.$store.dispatch('socket/send', {
         action: 'CLIENT_HEARTBEAT',
         options: {
@@ -125,8 +129,9 @@ export default {
         data: {
           userId: this.userId,
           type: this.currentUser.isAdmin ? 'admin' : 'user',
-          agentId: this.agentId,
+          agentId: aId,
           agentState: this.agentState,
+          currentContactId: this.currentContactId,
         },
       });
     },
