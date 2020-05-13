@@ -126,10 +126,10 @@ const getters = {
       ConnectService.STATES.AGENT_CALLING,
       ConnectService.STATES.PENDING_CALL,
       ConnectService.STATES.AGENT_PENDING,
-    ].includes(state.agentState),
+    ].includes(state.agentState) || !isNil(get(state.contact, 'id', null)),
   agentOnCall: (state) => state.agentState === ConnectService.STATES.ON_CALL,
   contactState: (state) =>
-    state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
+    state.contact.id ? state.contact.state : ConnectService.STATES.CONNECTED,
   currentContactId: (state) => (state.contact.id ? state.contact.id : null),
   contactAttributes: (state) =>
     state.contact.attributes ? state.contact.attributes : {},
@@ -482,7 +482,7 @@ export const actions = {
       // websocket support for legacy param
       newState = state.state;
     }
-    if (newState && newState !== null && newState !== agentState) {
+    if (newState && newState !== agentState) {
       await dispatch(
         'socket/send',
         {
@@ -731,6 +731,7 @@ export const actions = {
         data: {
           agentId: aId,
           agentState,
+          currentContactId: contactId,
         },
       },
       { root: true },
