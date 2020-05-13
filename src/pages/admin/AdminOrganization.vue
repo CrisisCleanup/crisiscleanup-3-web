@@ -261,7 +261,7 @@
           Roles
         </base-text>
         <form-select
-          :value="organization.roles[0]"
+          :value="organization.approved_roles[0]"
           :placeholder="$t('adminOrganization.role')"
           class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
           :options="roles"
@@ -830,6 +830,13 @@ export default {
     },
     async saveRole() {
       if (this.roleToAdd) {
+        await Promise.all(
+          this.roleRequests.map((request) =>
+            this.$http.delete(
+              `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests/${request.id}`,
+            ),
+          ),
+        );
         await this.$http.post(
           `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests`,
           {
