@@ -10,7 +10,7 @@ import NavMenu from '../NavMenu';
 
 const shallowMountWithOptions = () =>
   shallowMount(NavMenu, {
-    stubs: ['NavButton'],
+    stubs: ['NavButton', 'router-link'],
     propsData: {
       routes: [
         {
@@ -20,6 +20,12 @@ const shallowMountWithOptions = () =>
           iconSize: 'sm',
         },
       ],
+      logoRoute: {
+        to: '/mockroute',
+        key: 'mockroute',
+        icon: 'mock',
+        iconSize: 'sm',
+      },
     },
   });
 

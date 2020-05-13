@@ -3,7 +3,9 @@
     <slot name="grid-overlay" />
     <slot name="grid-logo">
       <div class="grid--logo logo my-8">
-        <img src="@/assets/ccu-logo-black-500w.png" alt="Crisis Cleanup" />
+        <a href="/">
+          <img src="@/assets/ccu-logo-black-500w.png" alt="Crisis Cleanup" />
+        </a>
       </div>
     </slot>
     <slot name="grid-survivors">

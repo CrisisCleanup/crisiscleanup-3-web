@@ -2291,10 +2291,14 @@ exports[`Storyshots Layouts|HomeLayout With All 1`] = `
       <div
         class="grid--logo logo my-8"
       >
-        <img
-          alt="Crisis Cleanup"
-          src="@/assets/ccu-logo-black-500w.png"
-        />
+        <a
+          href="/"
+        >
+          <img
+            alt="Crisis Cleanup"
+            src="@/assets/ccu-logo-black-500w.png"
+          />
+        </a>
       </div>
        
       <div
@@ -2361,10 +2365,14 @@ exports[`Storyshots Layouts|HomeLayout With Basic Content 1`] = `
       <div
         class="grid--logo logo my-8"
       >
-        <img
-          alt="Crisis Cleanup"
-          src="@/assets/ccu-logo-black-500w.png"
-        />
+        <a
+          href="/"
+        >
+          <img
+            alt="Crisis Cleanup"
+            src="@/assets/ccu-logo-black-500w.png"
+          />
+        </a>
       </div>
        
       <div
@@ -2457,10 +2465,14 @@ exports[`Storyshots Layouts|HomeLayout With Overlay 1`] = `
       <div
         class="grid--logo logo my-8"
       >
-        <img
-          alt="Crisis Cleanup"
-          src="@/assets/ccu-logo-black-500w.png"
-        />
+        <a
+          href="/"
+        >
+          <img
+            alt="Crisis Cleanup"
+            src="@/assets/ccu-logo-black-500w.png"
+          />
+        </a>
       </div>
        
       <div
@@ -2684,10 +2696,14 @@ exports[`Storyshots Pages|NotFound With Defaults 1`] = `
       <div
         class="grid--logo logo my-8"
       >
-        <img
-          alt="Crisis Cleanup"
-          src="@/assets/ccu-logo-black-500w.png"
-        />
+        <a
+          href="/"
+        >
+          <img
+            alt="Crisis Cleanup"
+            src="@/assets/ccu-logo-black-500w.png"
+          />
+        </a>
       </div>
        
       <div
