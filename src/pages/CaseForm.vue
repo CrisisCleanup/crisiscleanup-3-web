@@ -716,6 +716,20 @@ export default {
 
       this.updateWorksite(formData, 'form_data');
 
+      const anyWorkTypes = this.currentIncident.form_fields
+        .map(
+          (field) =>
+            // eslint-disable-next-line camelcase
+            field.if_selected_then_work_type && fieldData[field.field_key],
+        )
+        .some((x) => x);
+      if (!anyWorkTypes) {
+        await this.$toasted.error(
+          this.$t('~~You must set at least one work type.'),
+        );
+        return;
+      }
+
       try {
         if (this.worksite.id) {
           const data = { ...this.worksite };
