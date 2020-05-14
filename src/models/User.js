@@ -88,6 +88,16 @@ export default class User extends Model {
     return this.active_roles.includes(1);
   }
 
+  getStatesForIncident(incidentId, fallback = true) {
+    if (this.states.incidents && this.states.incidents[incidentId]) {
+      return this.states.incidents[incidentId];
+    }
+    if (fallback) {
+      return this.states;
+    }
+    return null;
+  }
+
   static apiConfig = {
     actions: {
       login(email, password) {
@@ -145,13 +155,37 @@ export default class User extends Model {
           { save: false },
         );
       },
-      async updateUserState(states, reload = false) {
+      async updateUserState(globalStates, incidentStates, reload = false) {
+        /* Update user states JSON with new states.
+
+           To be backwards-compatible with clients without per-incident states,
+           update top-level with both globalStates and incidentStates
+           and then update state for current incident with incidentStates.
+        */
         const currentUser = User.find(AuthService.getUser().user_claims.id);
-        currentUser.states = {
+        const currentIncident = currentUser.states.incident;
+        let updatedStates = {
           ...currentUser.states,
-          ...states,
+          ...globalStates,
+          ...incidentStates,
         };
-        currentUser.$save();
+        let updatedIncidentStates = currentUser.states.incidents || {};
+        if (incidentStates) {
+          updatedIncidentStates = {
+            ...updatedIncidentStates,
+            [currentIncident]: incidentStates,
+          };
+        }
+        updatedStates = {
+          ...updatedStates,
+          ...{ incidents: updatedIncidentStates },
+        };
+        User.update({
+          where: currentUser.id,
+          data: {
+            states: updatedStates,
+          },
+        });
         await this.patch(
           `/users/${currentUser.id}`,
           {
