@@ -473,7 +473,7 @@ export const actions = {
   async setAgentState(
     { commit, dispatch, getters: { agentState, agentId } },
     state,
-    { force },
+    { force = false } = {},
   ) {
     Log.debug('SETTING AGENT STATE:', state);
     let aId = agentId;
