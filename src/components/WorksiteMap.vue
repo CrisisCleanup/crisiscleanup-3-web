@@ -121,11 +121,11 @@ import 'leaflet-loading';
 import 'leaflet.gridlayer.googlemutant';
 import 'leaflet-pixi-overlay';
 import 'leaflet.heat';
-import User from '@/models/User';
 import { averageGeolocation, getWorksiteLayer } from '@/utils/map';
 import { colors, templates } from '@/icons/icons_templates';
 import { groupBy } from '@/utils/array';
 import Worksite from '@/models/Worksite';
+import User from '@/models/User';
 
 PixiSettings.SPRITE_MAX_TEXTURES = Math.min(
   PixiSettings.SPRITE_MAX_TEXTURES,
