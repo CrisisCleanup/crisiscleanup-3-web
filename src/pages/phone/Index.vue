@@ -68,7 +68,7 @@ export default {
             agentId: aId,
           });
           this.$log.debug('serving up next callback...', callback);
-          PhoneOutbound.api().callOutbound(callback.id);
+          await PhoneOutbound.api().callOutbound(callback.id);
         } catch (e) {
           this.$log.debug('no callbacks available!', e);
         }

@@ -4,6 +4,7 @@ import moment from 'moment';
 import Vue from 'vue';
 import Acl from 'vue-browser-acl';
 import User from '@/models/User';
+import * as Sentry from '@sentry/browser';
 
 const AuthState = {
   user: AuthService.getUser(),
@@ -47,6 +48,7 @@ const actions = {
 const mutations = {
   setUser(state, user) {
     state.user = user;
+    Sentry.setUser(state.user);
     if (!user) {
       AuthService.removeUser();
     } else {
@@ -55,6 +57,7 @@ const mutations = {
   },
   setAcl(state, router) {
     const user = User.find(state.user.user_claims.id);
+    Sentry.setUser(state.user);
     Vue.use(
       Acl,
       user,
