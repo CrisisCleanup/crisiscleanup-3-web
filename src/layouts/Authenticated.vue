@@ -200,6 +200,7 @@ export default {
         {
           key: 'reports',
           icon: 'reports',
+          text: this.$t('~~Reports'),
           to: '/reports',
           disabled:
             !this.currentUser ||
@@ -210,6 +211,7 @@ export default {
         {
           key: 'admin',
           icon: 'admin',
+          text: this.$t('~~Admin'),
           to: '/admin',
           disabled: !this.currentUser.isAdmin,
         },
