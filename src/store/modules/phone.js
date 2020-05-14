@@ -408,12 +408,14 @@ export const actions = {
           commit('setAgentState', agentState);
         }
       },
-      onAfterCallWork: () => {
+      onAfterCallWork: async () => {
         Log.debug('agent entered ACW, going routable in 3m...');
-        delay(
-          (currentState) => {
+        await delay(
+          async (currentState) => {
             if (currentState === ConnectService.STATES.PAUSED) {
-              dispatch('setAgentState', ConnectService.STATES.ROUTABLE);
+              await dispatch('setAgentState', ConnectService.STATES.ROUTABLE, {
+                force: true,
+              });
               Log.debug('times up, going routable!');
             }
           },
@@ -471,6 +473,7 @@ export const actions = {
   async setAgentState(
     { commit, dispatch, getters: { agentState, agentId } },
     state,
+    { force },
   ) {
     Log.debug('SETTING AGENT STATE:', state);
     let aId = agentId;
@@ -482,7 +485,7 @@ export const actions = {
       // websocket support for legacy param
       newState = state.state;
     }
-    if (newState && newState !== agentState) {
+    if ((newState && newState !== agentState) || force) {
       await dispatch(
         'socket/send',
         {
