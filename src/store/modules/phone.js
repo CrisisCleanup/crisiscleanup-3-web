@@ -126,10 +126,10 @@ const getters = {
       ConnectService.STATES.AGENT_CALLING,
       ConnectService.STATES.PENDING_CALL,
       ConnectService.STATES.AGENT_PENDING,
-    ].includes(state.agentState) || !isNil(get(state.contact, 'id', null)),
+    ].includes(state.agentState),
   agentOnCall: (state) => state.agentState === ConnectService.STATES.ON_CALL,
   contactState: (state) =>
-    state.contact.id ? state.contact.state : ConnectService.STATES.CONNECTED,
+    state.contact.id ? state.contact.state : ConnectService.STATES.POLLING,
   currentContactId: (state) => (state.contact.id ? state.contact.id : null),
   contactAttributes: (state) =>
     state.contact.attributes ? state.contact.attributes : {},
