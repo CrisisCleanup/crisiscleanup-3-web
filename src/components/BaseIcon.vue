@@ -49,6 +49,7 @@ const iconMap = {
   info: require('@/assets/icons/inform.svg'),
   trash: require('@/assets/icons/delete.svg'),
   organization: require('@/assets/icons/my-organization.svg'),
+  admin: require('@/assets/icons/admin.svg'),
   history: require('@/assets/icons/history.svg'),
   cancel: require('@/assets/icons/big.svg'),
   help: require('@/assets/icons/help.svg'),
