@@ -1152,10 +1152,12 @@ export default {
     async downloadCsv() {
       this.spinning = true;
       try {
+        const params = { ...this.currentQuery };
+        delete params.fields;
         const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
+          `${process.env.VUE_APP_API_BASE_URL}/worksites_download/download_csv`,
           {
-            params: { ...this.currentQuery },
+            params,
             headers: { Accept: 'text/csv' },
             responseType: 'blob',
           },
