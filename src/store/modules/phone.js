@@ -897,9 +897,8 @@ export const actions = {
     if (agentOnCall) {
       Log.debug('agent still on call, hanging up...');
       await dispatch('endCurrentCall');
-    } else {
-      dispatch('setCurrentPage', 'dashboard');
     }
+    await dispatch('setCurrentPage', 'dashboard');
   },
   async setActionTab({ commit }, key) {
     commit('setAgentActions', { currentKey: key });
