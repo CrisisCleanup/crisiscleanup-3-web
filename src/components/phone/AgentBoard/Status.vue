@@ -80,12 +80,6 @@ export default {
     async closeContact(force = false) {
       if (!this.modifiedCases.length && !force) {
         this.confirmModal = true;
-        this.$toasted.error(
-          this.$t(
-            "~~You didn't make any changes, are you sure you want to end this call?",
-          ),
-        );
-        this.$toasted.info(this.$t('~Click again to confirm.'));
         return;
       }
       try {
