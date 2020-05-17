@@ -1,5 +1,35 @@
 <template>
   <div class="status">
+    <modal
+      v-if="confirmModal"
+      :title="$t('~~Are you sure?')"
+      modal-classes="bg-white max-w-md shadow"
+    >
+      <div class="modal--body">
+        <base-text variant="body">
+          {{ $t('~~You have not saved any changes to any worksites yet!') }}
+        </base-text>
+        <base-text variant="body">
+          {{ $t('~~Are you sure you want to close this case?') }}
+        </base-text>
+      </div>
+      <template #footer>
+        <div class="modal--footer flex flex-row p-2">
+          <base-button
+            size="medium"
+            variant="solid"
+            :action="() => (confirmModal = false)"
+            >{{ $t('~~Keep Editing') }}</base-button
+          >
+          <base-button
+            size="medium"
+            variant="solid"
+            :action="() => closeContact(true)"
+            >{{ $t('~~End Call') }}</base-button
+          >
+        </div>
+      </template>
+    </modal>
     <base-text variant="h3">{{ lang.notes }}</base-text>
     <form-select
       class="select"
@@ -43,10 +73,21 @@ export default {
     return {
       status: null,
       notes: '',
+      confirmModal: false,
     };
   },
   methods: {
-    async closeContact() {
+    async closeContact(force = false) {
+      if (!this.modifiedCases.length && !force) {
+        this.confirmModal = true;
+        this.$toasted.error(
+          this.$t(
+            "~~You didn't make any changes, are you sure you want to end this call?",
+          ),
+        );
+        this.$toasted.info(this.$t('~Click again to confirm.'));
+        return;
+      }
       try {
         await this.$store.dispatch('phone/closeContact');
       } catch (e) {
@@ -76,6 +117,19 @@ export default {
     .grid {
       &--status {
         .status {
+          .modal {
+            &--body {
+              display: flex;
+              flex-direction: column;
+              flex-grow: 1;
+              @apply px-8;
+            }
+            &--footer {
+              flex-grow: 1;
+              justify-content: space-around;
+            }
+          }
+
           @apply px-16 py-12;
           display: flex;
           flex-direction: column;
