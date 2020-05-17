@@ -4,7 +4,15 @@ import Worksite from '@/models/Worksite';
 import { STATES as CCState } from '@/services/acs.service';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { mapActions, mapGetters } from 'vuex';
-import { differenceBy, reverse, sortBy, unionBy, omitBy, isNil } from 'lodash';
+import {
+  differenceBy,
+  reverse,
+  sortBy,
+  unionBy,
+  isNil,
+  negate,
+  filter,
+} from 'lodash';
 
 export const AgentMixin = {
   data() {
@@ -65,13 +73,13 @@ export const AgentMixin = {
     async createCaseCards() {
       const wksites = await this.fetchCasesByType(Worksite, this.worksites);
       const pdas = await this.fetchCasesByType(Pda, this.pdas);
-      const cases = omitBy(
+      const cases = filter(
         differenceBy(
           [...Array.from(wksites), ...Array.from(pdas)],
           this.caseCards,
           'id',
         ),
-        isNil,
+        negate(isNil),
       );
 
       this.$log.debug('generating cards from cases:', cases);
