@@ -4,8 +4,14 @@ import Worksite from '@/models/Worksite';
 import { STATES as CCState } from '@/services/acs.service';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { mapActions, mapGetters } from 'vuex';
+import { differenceBy, reverse, sortBy, unionBy, omitBy, isNil } from 'lodash';
 
 export const AgentMixin = {
+  data() {
+    return {
+      caseCards: [],
+    };
+  },
   methods: {
     ...mapActions('phone', [
       'setCaseStatus',
@@ -56,6 +62,44 @@ export const AgentMixin = {
       }
       return state;
     },
+    async createCaseCards() {
+      const wksites = await this.fetchCasesByType(Worksite, this.worksites);
+      const pdas = await this.fetchCasesByType(Pda, this.pdas);
+      const cases = omitBy(
+        differenceBy(
+          [...Array.from(wksites), ...Array.from(pdas)],
+          this.caseCards,
+          'id',
+        ),
+        isNil,
+      );
+
+      this.$log.debug('generating cards from cases:', cases);
+      const cards = cases.map((c) => ({
+        caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
+        address: c.short_address,
+        state: c.state,
+        worktype: c.getWorkType ? c.getWorkType() : 'wellness_check',
+        fullAddress: c.full_address,
+        id: c.id,
+        type: this.pdas.includes(c.id) ? 'pda' : 'worksite',
+      }));
+      if (!this.caseCards.length) {
+        cards.push({
+          caseNumber: 'New Case',
+          address: '123 Example Street',
+          state: 'NY',
+          worktype: 'unknown',
+          id: -1,
+          type: 'new',
+        });
+      }
+      this.caseCards = reverse(
+        sortBy(unionBy(this.caseCards, cards, 'id'), 'id'),
+      );
+      this.$log.debug('cards:', this.caseCards);
+      return cards;
+    },
   },
   computed: {
     ...mapGetters('phone', [
@@ -81,6 +125,7 @@ export const AgentMixin = {
       'connectReady',
       'currentExternalResource',
       'contactMetrics',
+      'modifiedCases',
     ]),
     callerName() {
       return this.currentCase ? this.currentCase.name : 'Unknown';
@@ -111,6 +156,14 @@ export const AgentMixin = {
         this.currentExternalResource.dnis,
       );
       return number.formatNational();
+    },
+  },
+  watch: {
+    async worksites() {
+      // Create case cards checks
+      // if any actually need to be retrieved
+      if (!this.casesResolved) return;
+      await this.createCaseCards();
     },
   },
 };

@@ -60,7 +60,7 @@
       </div>
       <div class="modal-cases">
         <case-card
-          v-for="c in cards"
+          v-for="c in caseCards"
           :key="c.caseNumber"
           :case-number="c.caseNumber"
           :address="c.address"
@@ -84,39 +84,14 @@ import {
   ValidateMixin,
 } from '@/mixins';
 import CaseCard from '@/components/cards/Case.vue';
-import Pda from '@/models/Pda';
-import Worksite from '@/models/Worksite';
 import DisasterIcon from '@/components/DisasterIcon.vue';
 
 export default {
   name: 'IncomingPopup',
   mixins: [UserMixin, IconsMixin, AgentMixin, ValidateMixin, IncidentMixin],
   components: { CaseCard, DisasterIcon },
-  data() {
-    return {
-      cards: [],
-    };
-  },
-  methods: {
-    async createCards() {
-      const wksites = await this.fetchCasesByType(Worksite, this.worksites);
-      const pdas = await this.fetchCasesByType(Pda, this.pdas);
-      const cases = [...Array.from(wksites), ...Array.from(pdas)];
-      this.$log.debug('generating cards from cases:', cases);
-      const cards = cases.map((c) => ({
-        caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
-        address: c.short_address,
-        state: c.city_state,
-        worktype: c.getWorkType ? c.getWorkType() : 'wellness_check',
-        fullAddress: c.full_address,
-      }));
-      this.$log.debug('cards:', cards);
-      this.cards = cards;
-      return cards;
-    },
-  },
   async mounted() {
-    await this.createCards();
+    await this.createCaseCards();
   },
 };
 </script>

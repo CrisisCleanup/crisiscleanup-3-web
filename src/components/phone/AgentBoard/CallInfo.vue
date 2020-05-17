@@ -59,7 +59,7 @@
         ]"
         class="carousel"
       >
-        <slide class="case" v-for="c in cards" :key="c.id">
+        <slide class="case" v-for="c in caseCards" :key="c.id">
           <case-card
             :key="c.caseNumber"
             :case-number="c.caseNumber"
@@ -79,16 +79,13 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { IconsMixin, AgentMixin } from '@/mixins';
-import { mapGetters, mapActions } from 'vuex';
+import { AgentMixin, IconsMixin } from '@/mixins';
+import { mapActions, mapGetters } from 'vuex';
 import { EVENTS as CCEvent } from '@/services/acs.service';
 import { mixin as VueTimers } from 'vue-timers';
 import { EventBus } from '@/event-bus';
 import CaseCard from '@/components/cards/Case.vue';
-import Pda from '@/models/Pda';
-import Worksite from '@/models/Worksite';
 import { Carousel, Slide } from 'vue-carousel';
-import { differenceBy, reverse, unionBy, sortBy } from 'lodash';
 
 export default {
   name: 'BoardCallInfo',
@@ -100,50 +97,12 @@ export default {
   props: {
     lang: VueTypes.objectOf(VueTypes.any),
   },
-  data() {
-    return {
-      cards: [],
-    };
-  },
   methods: {
     ...mapActions('phone', [
       'syncCallDuration',
       'setCurrentCase',
       'setActionTab',
     ]),
-    async createCards() {
-      const wksites = await this.fetchCasesByType(Worksite, this.worksites);
-      const pdas = await this.fetchCasesByType(Pda, this.pdas);
-      const cases = differenceBy(
-        [...Array.from(wksites), ...Array.from(pdas)],
-        this.cards,
-        'id',
-      );
-
-      this.$log.debug('generating cards from cases:', cases);
-      const cards = cases.map((c) => ({
-        caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
-        address: c.short_address,
-        state: c.state,
-        worktype: c.getWorkType ? c.getWorkType() : 'wellness_check',
-        fullAddress: c.full_address,
-        id: c.id,
-        type: this.pdas.includes(c.id) ? 'pda' : 'worksite',
-      }));
-      if (!this.cards.length) {
-        cards.push({
-          caseNumber: 'New Case',
-          address: '123 Example Street',
-          state: 'NY',
-          worktype: 'unknown',
-          id: -1,
-          type: 'new',
-        });
-      }
-      this.cards = reverse(sortBy(unionBy(this.cards, cards, 'id'), 'id'));
-      this.$log.debug('cards:', this.cards);
-      return cards;
-    },
     async setActive(id, type) {
       return this.setCurrentCase({ id, type });
     },
@@ -184,22 +143,17 @@ export default {
     },
   },
   async mounted() {
-    await this.createCards();
+    await this.createCaseCards();
   },
   created() {
     EventBus.$on(CCEvent.PAUSED, () => {
       this.$timer.stop('syncCallDuration');
     });
     EventBus.$on(CCEvent.CASE_SAVED, (worksite) => {
-      this.createCards().then(() => {
+      this.createCaseCards().then(() => {
         this.setCurrentCase({ id: worksite.id, type: 'worksite' });
       });
     });
-  },
-  watch: {
-    async worksites() {
-      await this.createCards();
-    },
   },
 };
 </script>
