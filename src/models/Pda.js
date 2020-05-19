@@ -15,6 +15,7 @@ export default class Pda extends Model {
       phone1: this.attr(null),
       phone2: this.attr(null),
       email: this.attr(null),
+      worksite: this.attr(null),
     };
   }
 
@@ -57,6 +58,7 @@ export default class Pda extends Model {
   static apiConfig = {
     actions: {
       async associateWorksite(pdaId, worksite) {
+        this.worksite = worksite;
         await this.patch(`/pdas/${pdaId}`, {
           worksite,
         });
