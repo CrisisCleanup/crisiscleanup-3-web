@@ -12,6 +12,7 @@ import {
   isNil,
   negate,
   filter,
+  isEmpty,
 } from 'lodash';
 
 export const AgentMixin = {
@@ -32,6 +33,7 @@ export const AgentMixin = {
       'acceptCallback',
     ]),
     async fetchCasesByType(caseModel, ids) {
+      if (isEmpty(ids)) return [];
       const cases = await Promise.all(
         ids.map(async (id) => {
           if (!caseModel.exists(id)) {
@@ -72,7 +74,7 @@ export const AgentMixin = {
     },
     async createCaseCards() {
       const wksites = await this.fetchCasesByType(Worksite, this.worksites);
-      const pdas = await this.fetchCasesByType(Pda, this.pdas);
+      const pdas = await this.fetchCasesByType(Pda, this.incompletePdas);
       const cases = filter(
         differenceBy(
           [...Array.from(wksites), ...Array.from(pdas)],
@@ -82,16 +84,19 @@ export const AgentMixin = {
         negate(isNil),
       );
 
-      this.$log.debug('generating cards from cases:', cases);
-      const cards = cases.map((c) => ({
-        caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
-        address: c.short_address,
-        state: c.state,
-        worktype: c.getWorkType ? c.getWorkType() : 'wellness_check',
-        fullAddress: c.full_address,
-        id: c.id,
-        type: this.pdas.includes(c.id) ? 'pda' : 'worksite',
-      }));
+      let cards = [];
+      if (!isEmpty(cases)) {
+        this.$log.debug('generating cards from cases:', cases);
+        cards = cases.map((c) => ({
+          caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
+          address: c.short_address,
+          state: c.state,
+          worktype: c.getWorkType ? c.getWorkType() : 'wellness_check',
+          fullAddress: c.full_address,
+          id: c.id,
+          type: this.pdas.includes(c.id) ? 'pda' : 'worksite',
+        }));
+      }
       if (!this.caseCards.length) {
         cards.push({
           caseNumber: 'New Case',
@@ -121,6 +126,7 @@ export const AgentMixin = {
       'currentDnis',
       'callerId',
       'pdas',
+      'incompletePdas',
       'worksites',
       'caseStatusId',
       'currentOutbound',
@@ -139,7 +145,7 @@ export const AgentMixin = {
       return this.currentCase ? this.currentCase.name : 'Unknown';
     },
     callerTotalCases() {
-      return this.pdas.length + this.worksites.length;
+      return this.incompletePdas.length + this.worksites.length;
     },
     callerHistory() {
       if (this.currentDnis) {
