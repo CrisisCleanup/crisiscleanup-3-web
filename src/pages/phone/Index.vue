@@ -16,6 +16,7 @@ import { AgentMixin } from '@/mixins';
 import IncomingPopup from '@/components/phone/Popup.vue';
 import PhoneResource from '@/models/PhoneResource';
 import { mixin as VueTimer } from 'vue-timers';
+import { isNil } from 'lodash';
 import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
 
@@ -76,9 +77,10 @@ export default {
     },
     async resolveCases({ outboundIds, pdas, worksites }) {
       this.$log.debug('resolving caller cases...', pdas, worksites);
+      const incompletePdas = pdas.filter((p) => isNil(p.worksite));
       await this.addCases({
         worksites,
-        pdas,
+        pdas: incompletePdas,
       });
       const currentCase = {
         id: null,
@@ -97,8 +99,14 @@ export default {
 
       await Promise.all(
         pdasCases.map(async (p) => {
-          if (p.worksite_id) {
-            const wksite = await Worksite.api().fetch(p.worksite_id);
+          if (p.worksite) {
+            this.$log.debug(
+              `fetching worksite [${p.worksite}] from pda: ${p.id}`,
+            );
+            if (!Worksite.exists(p.worksite)) {
+              await Worksite.api().fetch(p.worksite);
+            }
+            const wksite = Worksite.find(p.worksite);
             worksiteCases.push(wksite);
           } else {
             freshPdas.push(p);
