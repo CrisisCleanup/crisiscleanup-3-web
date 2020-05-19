@@ -138,6 +138,10 @@ const getters = {
   pdas: (state) => (state.controller ? state.controller.cases.pdas : []),
   worksites: (state) =>
     state.controller ? state.controller.cases.worksites : [],
+  incompletePdas: (state) =>
+    state.controller
+      ? state.controller.cases.pdas.filter((p) => isNil(p.worksite))
+      : [],
   callDuration: (state) => (state.contact ? state.contact.duration : 0),
   extCallDuration: (state) =>
     state.externalContact ? state.externalContact.duration : 0,
@@ -314,7 +318,7 @@ export const actions = {
   },
   async getAgentMetrics(
     { commit, getters: { currentAniIncident } },
-    { agents } = {},
+    { agents = [] } = {},
   ) {
     const agentBoard = {};
     await Promise.all(
