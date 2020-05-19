@@ -54,13 +54,13 @@
       </div>
       <div class="modal-divider">
         <base-text variant="h3" :weight="400">
-          <span> {{ callerTotalCases }} {{ $t('~~ cases ') }} </span>
+          <span> {{ previewCaseCards.length }} {{ $t('~~ cases ') }} </span>
           {{ $t(' ~~are assigned to this number') }}
         </base-text>
       </div>
       <div class="modal-cases">
         <case-card
-          v-for="c in caseCards"
+          v-for="c in previewCaseCards"
           :key="c.caseNumber"
           :case-number="c.caseNumber"
           :address="c.address"
@@ -92,6 +92,11 @@ export default {
   components: { CaseCard, DisasterIcon },
   async mounted() {
     await this.createCaseCards();
+  },
+  computed: {
+    previewCaseCards() {
+      return this.caseCards.filter((c) => c.id !== -1);
+    },
   },
 };
 </script>
