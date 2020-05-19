@@ -342,7 +342,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import { create } from 'vue-modal-dialogs';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
 import { getQueryString } from '@/utils/urls';
@@ -358,15 +357,14 @@ import {
 } from '@/filters';
 import StatusDropDown from '@/components/StatusDropDown';
 import { forceFileDownload } from '@/utils/downloads';
-import MessageResponseDialog from '@/components/dialogs/MessageResponseDialog';
 import Loader from '@/components/Loader';
 import InviteUsers from './organization/InviteUsers';
 import RedeployRequest from './RedeployRequest';
-
-const responseDialog = create(MessageResponseDialog);
+import { DialogsMixin } from '../mixins';
 
 export default {
   name: 'Dashboard',
+  mixins: [DialogsMixin],
   components: {
     RedeployRequest,
     InviteUsers,
@@ -716,7 +714,7 @@ export default {
       await this.getWorksiteRequests();
     },
     async acceptRequest(id) {
-      const result = await responseDialog({
+      const result = await this.$prompt({
         title: this.$t('actions.approve_worksite_request'),
         content: this.$t('dashboard.approve_worksite_request_reason'),
       });
@@ -726,7 +724,7 @@ export default {
       }
     },
     async rejectRequest(id) {
-      const result = await responseDialog({
+      const result = await this.$prompt({
         title: this.$t('actions.reject_worksite_request'),
         content: this.$t('dashboard.reject_worksite_request_reason'),
       });

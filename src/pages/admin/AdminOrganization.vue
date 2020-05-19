@@ -22,13 +22,6 @@
             class="mr-2"
             :action="saveOrganization"
           />
-          <base-button
-            :text="$t('~~Generate API Key')"
-            variant="solid"
-            size="medium"
-            class="mr-2"
-            :action="generateApiKey"
-          />
           <template
             v-if="!organization.approved_by && !organization.rejected_by"
           >
@@ -108,6 +101,23 @@
               item-key="key"
               label="label"
             ></form-select>
+
+            <template v-if="apiKeys.length">
+              <div class="flex items-center justify-between">
+                <base-text variant="h2" :weight="600">
+                  {{ $t('~~API Keys') }}
+                </base-text>
+                <base-button
+                  :text="$t('~~Generate API Key')"
+                  variant="solid"
+                  size="medium"
+                  :action="generateApiKey"
+                />
+              </div>
+              <div v-for="key in apiKeys">
+                {{ key.api_key }} ({{ key.type }})
+              </div>
+            </template>
           </div>
           <div class="w-1/2 bg-white p-3 shadow text-sm">
             <base-text variant="h3">
@@ -565,10 +575,12 @@ import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
 import LocationTool from '../../components/LocationTool';
 import { hash } from '../../utils/promise';
+import { DialogsMixin } from '../../mixins';
 
 export default {
   name: 'AdminOrganization',
   components: { Loader, LocationTool },
+  mixins: [DialogsMixin],
   filters: {
     getCapabilityName(value, capabilities) {
       return (
@@ -693,6 +705,9 @@ export default {
           incidents: await this.$http.get(
             `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
           ),
+          apiKeys: await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}/get_api_keys`,
+          ),
           ghostUsers: await this.getGhostUsers(),
         });
 
@@ -704,6 +719,7 @@ export default {
         this.users = pageData.users.data.results;
         this.incidents = pageData.incidents.data.results;
         this.ghostUsers = pageData.ghostUsers;
+        this.apiKeys = pageData.apiKeys.data;
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -923,12 +939,26 @@ export default {
       this.$toasted.success('~~Copied Api Key');
     },
     async generateApiKey() {
-      const response = await this.$http.post(
-        `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}/create_api_key`,
-      );
-      const { api_key } = response.data;
-      this.apiKey = api_key;
-      this.showingApiKeyModal = true;
+      const result = await this.$selection({
+        title: this.$t('~~Generate API Key'),
+        content: this.$t(
+          '~~Please select a type of api key to generate for this organization',
+        ),
+        options: ['public', 'read'],
+        placeholder: this.$t('~~Key Type'),
+      });
+      if (result) {
+        const response = await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}/create_api_key`,
+          {
+            type: result,
+          },
+        );
+        const { api_key } = response.data;
+        this.apiKey = api_key;
+        this.showingApiKeyModal = true;
+        this.loadPageData();
+      }
     },
   },
   data() {
@@ -948,6 +978,7 @@ export default {
       settingLocation: '',
       incidentRequests: [],
       roles: [],
+      apiKeys: [],
       roleRequests: [],
       users: [],
       ghostUsers: [],
