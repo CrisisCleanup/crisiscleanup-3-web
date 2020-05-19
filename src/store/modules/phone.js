@@ -504,7 +504,11 @@ export const actions = {
       // websocket support for legacy param
       newState = state.state;
     }
-    if ((newState && newState !== agentState) || force) {
+    if (
+      (newState && newState !== agentState) ||
+      agentState === ConnectService.STATES.PAUSED ||
+      force
+    ) {
       await dispatch(
         'socket/send',
         {
