@@ -420,6 +420,21 @@ export const actions = {
               await dispatch('setAgentState', ConnectService.STATES.ROUTABLE, {
                 force: true,
               });
+              await dispatch(
+                'socket/send',
+                {
+                  action: 'SET_AGENT_STATE',
+                  options: {
+                    includeMeta: true,
+                  },
+                  data: {
+                    agentId: context.getters.agentId,
+                    agentState: currentState,
+                    currentContactId: context.getters.currentContactId,
+                  },
+                },
+                { root: true },
+              );
               Log.debug('times up, going routable!');
             }
           },
