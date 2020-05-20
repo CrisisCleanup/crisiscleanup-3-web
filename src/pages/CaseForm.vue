@@ -634,8 +634,9 @@ export default {
       this.$emit('navigateToWorksite', value.id);
     },
     async geocoderSearch(value) {
-      this.geocoderResults = await GeocoderService.getMatchingAddressesGoogle(
+      this.geocoderResults = await GeocoderService.getMatchingAddresses(
         value,
+        'USA',
       );
       const searchWorksites = await Worksite.api().searchWorksites(
         value,

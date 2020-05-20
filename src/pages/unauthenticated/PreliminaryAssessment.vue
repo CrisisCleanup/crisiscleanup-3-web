@@ -394,8 +394,9 @@ export default {
       await this.updatePdaFields(geocode);
     },
     async geocoderSearch(value) {
-      this.geocoderResults = await GeocoderService.getMatchingAddressesGoogle(
+      this.geocoderResults = await GeocoderService.getMatchingAddresses(
         value,
+        'USA',
       );
     },
     async savePda() {

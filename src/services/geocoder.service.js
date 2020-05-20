@@ -2,6 +2,7 @@
 /* eslint-disable */
 
 const GEOCODER_BASE_URL = 'https://api.pitneybowes.com';
+const GEOCODER = 'google';
 
 export default {
   getOauthToken() {
@@ -26,133 +27,206 @@ export default {
       .then((resp) => resp.json())
       .then((data) => data.access_token);
   },
-  async getMatchingAddresses(text, country) {
-    const geoCoderUrl = new URL(
-      `${GEOCODER_BASE_URL}/location-intelligence/geocode-service/v1/transient/premium/geocode`,
-    );
-    const params = {
-      mainAddress: text,
-      country,
-      maxCands: 5,
-    };
-    Object.keys(params).forEach((key) =>
-      geoCoderUrl.searchParams.append(key, params[key]),
-    );
-
-    const oauthToken = await this.getOauthToken();
-
-    return fetch(geoCoderUrl, {
-      method: 'get',
-      mode: 'cors',
-      headers: {
-        'Content-type': 'application/json',
-        Accept: 'application/json',
-        Authorization: `Bearer ${oauthToken}`,
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => data.candidates);
-  },
-
-  async getMatchingAddressesGoogle(text) {
-    return new Promise((resolve) => {
-      const sessionToken = new google.maps.places.AutocompleteSessionToken();
-
-      // Pass the token to the autocomplete service.
-      const autocompleteService = new google.maps.places.AutocompleteService();
-      autocompleteService.getPlacePredictions(
-        {
-          input: text,
-          sessionToken,
-        },
-        (results) => resolve(results),
+  async getMatchingAddresses(text, country, maxCandidates = 5) {
+    if (GEOCODER === 'pitney-bowes') {
+      const geoCoderUrl = new URL(
+        `${GEOCODER_BASE_URL}/location-intelligence/geosearch/v2/locations`,
       );
-    });
+      const params = {
+        searchText: text,
+        country,
+        maxCandidates,
+      };
+      Object.keys(params).forEach((key) =>
+        geoCoderUrl.searchParams.append(key, params[key]),
+      );
+
+      const oauthToken = await this.getOauthToken();
+
+      const results = await fetch(geoCoderUrl, {
+        method: 'get',
+        mode: 'cors',
+        headers: {
+          'Content-type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${oauthToken}`,
+        },
+      })
+        .then((resp) => resp.json())
+        .then((data) => data.location);
+
+      return results.map((result) => {
+        return {
+          description: result.address.formattedAddress,
+          data: result,
+        };
+      });
+    } else if (GEOCODER === 'google') {
+      return new Promise((resolve) => {
+        const sessionToken = new google.maps.places.AutocompleteSessionToken();
+
+        // Pass the token to the autocomplete service.
+        const autocompleteService = new google.maps.places.AutocompleteService();
+        autocompleteService.getPlacePredictions(
+          {
+            input: text,
+            sessionToken,
+          },
+          (results) =>
+            resolve(
+              results.map((result) => {
+                return {
+                  description: result.description,
+                  data: result,
+                };
+              }),
+            ),
+        );
+      });
+    } else {
+      return [];
+    }
   },
 
-  getPlaceDetails(address) {
-    return new Promise((resolve, reject) => {
-      const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ address }, (results, status) => {
-        if (status === google.maps.GeocoderStatus.OK) {
-          const location = results[0];
-          const { address_components } = location;
-          resolve({
-            address_components: {
-              address: `${this.extractFromAddress(
-                address_components,
-                'street_number',
-              )} ${this.extractFromAddress(address_components, 'route')}`,
-              city: `${this.extractFromAddress(
-                address_components,
-                'locality',
-              )}`,
-              county: `${this.extractFromAddress(
-                address_components,
-                'administrative_area_level_2',
-              )}`,
-              state: `${this.extractFromAddress(
-                address_components,
-                'administrative_area_level_1',
-              )}`,
-              postal_code: `${this.extractFromAddress(
-                address_components,
-                'postal_code',
-              )}`,
-            },
-            location: {
-              lat: location.geometry.location.lat(),
-              lng: location.geometry.location.lng(),
-            },
-          });
-        } else {
-          reject(`Can't find address: ${status}`);
-        }
+  async getPlaceDetails(address) {
+    if (GEOCODER === 'google') {
+      return new Promise((resolve, reject) => {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address }, (results, status) => {
+          if (status === google.maps.GeocoderStatus.OK) {
+            const location = results[0];
+            const { address_components } = location;
+            resolve({
+              address_components: {
+                address: `${this.extractFromAddress(
+                  address_components,
+                  'street_number',
+                )} ${this.extractFromAddress(address_components, 'route')}`,
+                city: `${this.extractFromAddress(
+                  address_components,
+                  'locality',
+                )}`,
+                county: `${this.extractFromAddress(
+                  address_components,
+                  'administrative_area_level_2',
+                )}`,
+                state: `${this.extractFromAddress(
+                  address_components,
+                  'administrative_area_level_1',
+                )}`,
+                postal_code: `${this.extractFromAddress(
+                  address_components,
+                  'postal_code',
+                )}`,
+              },
+              location: {
+                lat: location.geometry.location.lat(),
+                lng: location.geometry.location.lng(),
+              },
+            });
+          } else {
+            reject(`Can't find address: ${status}`);
+          }
+        });
       });
-    });
+    } else if (GEOCODER === 'pitney-bowes') {
+      const [result] = await this.getMatchingAddresses(address, 'USA', 1);
+      return {
+        address_components: {
+          address: result.data.address.mainAddressLine,
+          city: result.data.address.areaName3,
+          county: result.data.address.areaName2,
+          state: result.data.address.areaName1,
+          postal_code: result.data.address.postCode,
+        },
+        location: {
+          lat: result.data.geometry.coordinates[1],
+          lng: result.data.geometry.coordinates[0],
+        },
+      };
+    }
   },
 
-  getLocationDetails({ longitude, latitude }) {
-    const latlng = { lat: latitude, lng: longitude };
-    return new Promise((resolve, reject) => {
-      const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ location: latlng }, (results, status) => {
-        if (status === google.maps.GeocoderStatus.OK) {
-          const location = results[0];
-          const { address_components } = location;
-          resolve({
-            address_components: {
-              address: `${this.extractFromAddress(
-                address_components,
-                'street_number',
-              )} ${this.extractFromAddress(address_components, 'route')}`,
-              city: `${this.extractFromAddress(
-                address_components,
-                'locality',
-              )}`,
-              county: `${this.extractFromAddress(
-                address_components,
-                'administrative_area_level_2',
-              )}`,
-              state: `${this.extractFromAddress(
-                address_components,
-                'administrative_area_level_1',
-              )}`,
-              postal_code: `${this.extractFromAddress(
-                address_components,
-                'postal_code',
-              )}`,
-            },
-            location: {
-              lat: location.geometry.location.lat(),
-              lng: location.geometry.location.lng(),
-            },
-          });
-        } else {
-          reject(`Can't find location: ${status}`);
-        }
+  async getLocationDetails({ longitude, latitude }) {
+    if (GEOCODER === 'google') {
+      const latlng = { lat: latitude, lng: longitude };
+      return new Promise((resolve, reject) => {
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: latlng }, (results, status) => {
+          if (status === google.maps.GeocoderStatus.OK) {
+            const location = results[0];
+            const { address_components } = location;
+            resolve({
+              address_components: {
+                address: `${this.extractFromAddress(
+                  address_components,
+                  'street_number',
+                )} ${this.extractFromAddress(address_components, 'route')}`,
+                city: `${this.extractFromAddress(
+                  address_components,
+                  'locality',
+                )}`,
+                county: `${this.extractFromAddress(
+                  address_components,
+                  'administrative_area_level_2',
+                )}`,
+                state: `${this.extractFromAddress(
+                  address_components,
+                  'administrative_area_level_1',
+                )}`,
+                postal_code: `${this.extractFromAddress(
+                  address_components,
+                  'postal_code',
+                )}`,
+              },
+              location: {
+                lat: location.geometry.location.lat(),
+                lng: location.geometry.location.lng(),
+              },
+            });
+          } else {
+            reject(`Can't find location: ${status}`);
+          }
+        });
       });
-    });
+    } else if (GEOCODER === 'pitney-bowes') {
+      const geoCoderUrl = new URL(
+        `${GEOCODER_BASE_URL}/location-intelligence/geocode-service/v1/transient/advanced/reverseGeocode`,
+      );
+      const params = {
+        x: longitude,
+        y: latitude,
+      };
+      Object.keys(params).forEach((key) =>
+        geoCoderUrl.searchParams.append(key, params[key]),
+      );
+      const oauthToken = await this.getOauthToken();
+      const [result] = await fetch(geoCoderUrl, {
+        method: 'get',
+        mode: 'cors',
+        headers: {
+          'Content-type': 'application/json',
+          Accept: 'application/json',
+          Authorization: `Bearer ${oauthToken}`,
+        },
+      })
+        .then((resp) => resp.json())
+        .then((data) => data.candidates);
+
+      return {
+        address_components: {
+          address: result.address.mainAddressLine,
+          city: result.address.areaName3,
+          county: result.address.areaName2,
+          state: result.address.areaName1,
+          postal_code: result.address.postCode,
+        },
+        location: {
+          lat: result.geometry.coordinates[1],
+          lng: result.geometry.coordinates[0],
+        },
+      };
+    }
   },
   /**
    * Get the value for a given key in address_components
