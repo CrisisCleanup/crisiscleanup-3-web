@@ -5,10 +5,10 @@ exports[`BaseIcon should render correctly and match snapshot 1`] = `
   class="flex items-center base-icon js-  "
 >
   <img
-    alt="info.icon"
+    alt=""
     class="ccu-icon cursor-pointer small"
     src="IMAGE_MOCK"
-    title="info.icon"
+    title=""
   />
    
 </div>
