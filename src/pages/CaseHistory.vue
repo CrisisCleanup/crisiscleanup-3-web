@@ -66,7 +66,7 @@ export default {
       return User.find(this.$store.getters['auth/userId']);
     },
     users() {
-      return groupBy(this.worksite.events, 'user');
+      return groupBy(this.worksite.events, 'created_by');
     },
     organizationsWithClaims() {
       const claimedIds = this.worksite.work_types
