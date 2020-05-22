@@ -114,7 +114,7 @@ export default {
     },
     async onOrganizationSearch(value) {
       const results = await Organization.api().get(
-        `/organizations?search=${value}&limit=10&fields=id,name`,
+        `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
         {
           dataKey: 'results',
         },
