@@ -14,6 +14,7 @@ import locale from './modules/locale';
 import phone from './modules/phone';
 import rc from './modules/rc';
 import socket from './modules/socket';
+import ui from './modules/ui';
 
 VuexORM.use(VuexORMAxios, {
   axios,
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     rc,
     socket,
     phone_legacy,
+    ui,
   },
   plugins: [VuexORM.install(database)],
   strict: debug,
