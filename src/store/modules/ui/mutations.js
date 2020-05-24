@@ -5,5 +5,11 @@
 
 import * as types from './types';
 
-export default {}
-
+export default {
+  [types.SET_BANNER](state, newState) {
+    state.siteBanner = {
+      ...state.siteBanner,
+      ...newState,
+    };
+  },
+};
