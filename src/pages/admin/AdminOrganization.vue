@@ -400,7 +400,12 @@
                       classes: 'interactive-tooltip w-72',
                     }"
                   >
-                    <ccu-icon type="info" size="small" class="mr-2" />
+                    <ccu-icon
+                      :alt="$t('actions.help_alt')"
+                      type="info"
+                      size="small"
+                      class="mr-2"
+                    />
                   </div>
                   {{ request.incident | getIncidentName(incidents) }}
                 </div>

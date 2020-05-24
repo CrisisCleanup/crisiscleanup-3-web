@@ -131,7 +131,7 @@ export default {
       organizationRoles: [],
       columns: [
         {
-          title: this.$t('ID'),
+          title: this.$t('orgTable.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',

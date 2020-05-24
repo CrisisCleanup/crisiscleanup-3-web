@@ -815,7 +815,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 class="p-2 text-crisiscleanup-grey-700 italic"
               >
                 
-      No Items found
+      info.no_items_found
     
               </div>
             </div>
@@ -953,7 +953,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 class="p-2 text-crisiscleanup-grey-700 italic"
               >
                 
-      No Items found
+      info.no_items_found
     
               </div>
             </div>

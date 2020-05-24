@@ -5,7 +5,11 @@
     }`"
   >
     <div v-if="type === 'new'" class="case--overlay">
-      <ccu-icon :type="icons.active" size="xl" />
+      <ccu-icon
+        :alt="$t('actions.create_new')"
+        :type="icons.active"
+        size="xl"
+      />
     </div>
     <div class="case--head">
       <div class="case--svg" v-html="svg" />

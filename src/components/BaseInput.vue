@@ -27,6 +27,7 @@
       @click="glassBroken = true"
     >
       <ccu-icon
+        :alt="$t('actions.edit')"
         data-cy="js-break-glass"
         type="edit"
         size="small"
@@ -43,7 +44,11 @@
       class="icon-container flex items-center justify-center"
       :class="iconClasses"
     >
-      <ccu-icon :type="tooltip ? 'info' : icon" :size="iconSize" />
+      <ccu-icon
+        :alt="$t('actions.help_alt')"
+        :type="tooltip ? 'info' : icon"
+        :size="iconSize"
+      />
     </div>
     <slot></slot>
   </div>

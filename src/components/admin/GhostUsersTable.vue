@@ -49,7 +49,7 @@ export default {
     return {
       columns: [
         {
-          title: this.$t('ID'),
+          title: this.$t('ghostUserTable.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',

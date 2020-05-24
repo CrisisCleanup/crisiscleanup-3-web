@@ -14,6 +14,7 @@
     <template #actions="slotProps">
       <div class="flex mr-2 justify-center w-full">
         <ccu-icon
+          :alt="$t('actions.edit')"
           size="small"
           type="edit"
           class="mx-2"
@@ -24,6 +25,7 @@
           "
         />
         <ccu-icon
+          :alt="$t('actions.delete')"
           size="small"
           type="trash"
           class="mx-2"

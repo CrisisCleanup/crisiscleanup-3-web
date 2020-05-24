@@ -1530,14 +1530,14 @@ exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
         class="icon-container flex items-center justify-center large"
       >
         <div
-          class="js-break-glass flex items-center base-icon js-  "
+          class="js-break-glass flex items-center base-icon js-actions-edit  "
           data-cy="js-break-glass"
         >
           <img
-            alt=""
+            alt="actions.edit"
             class="ccu-icon cursor-pointer small"
             src="IMAGE_MOCK"
-            title=""
+            title="actions.edit"
           />
            
         </div>
@@ -1609,13 +1609,13 @@ exports[`Storyshots Basics|BaseInput With Icon 1`] = `
         class="icon-container flex items-center justify-center large"
       >
         <div
-          class="flex items-center base-icon js-  "
+          class="flex items-center base-icon js-actions-help-alt  "
         >
           <img
-            alt=""
+            alt="actions.help_alt"
             class="ccu-icon cursor-pointer small"
             src="IMAGE_MOCK"
-            title=""
+            title="actions.help_alt"
           />
            
         </div>
@@ -1748,13 +1748,13 @@ exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
         data-original-title="null"
       >
         <div
-          class="flex items-center base-icon js-  "
+          class="flex items-center base-icon js-actions-help-alt  "
         >
           <img
-            alt=""
+            alt="actions.help_alt"
             class="ccu-icon cursor-pointer small"
             src="IMAGE_MOCK"
-            title=""
+            title="actions.help_alt"
           />
            
         </div>
@@ -2279,13 +2279,13 @@ exports[`Storyshots Elements|Tag Closeable Tag 1`] = `
       class="tag flex items-center px-1 justify-center text-xs"
     >
       <div
-        class="mx-1 flex items-center base-icon js-  "
+        class="mx-1 flex items-center base-icon js-actions-cancel  "
       >
         <img
-          alt=""
+          alt="actions.cancel"
           class="ccu-icon cursor-pointer xxs"
           src="IMAGE_MOCK"
-          title=""
+          title="actions.cancel"
         />
          
       </div>

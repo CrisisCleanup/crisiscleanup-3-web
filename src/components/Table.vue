@@ -143,7 +143,7 @@
         </div>
       </div>
       <div v-if="!data.length" class="p-2 text-crisiscleanup-grey-700 italic">
-        No Items found
+        {{ $t('info.no_items_found') }}
       </div>
     </div>
     <div
