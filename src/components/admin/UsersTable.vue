@@ -92,7 +92,7 @@ export default {
     return {
       columns: [
         {
-          title: this.$t('ID'),
+          title: this.$t('userTable.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',
