@@ -400,7 +400,7 @@
                       classes: 'interactive-tooltip w-72',
                     }"
                   >
-                    <ccu-icon 
+                    <ccu-icon
                       :alt="$t('actions.help_alt')"
                       type="info"
                       size="small"
