@@ -1,9 +1,20 @@
 import VueLog from '@dreipol/vue-log';
 import Vue from 'vue';
 
-export default (params) => {
+export default ({ name, ...params }) => {
   if (!('log' in Vue)) {
     Vue.use(VueLog);
   }
-  return Vue.log(params);
+  const opts = {
+    name,
+    middlewares: [
+      (result) => {
+        result.unshift(`[${name}] `);
+        return result;
+      },
+    ],
+    ...params,
+  };
+
+  return Vue.log(opts);
 };
