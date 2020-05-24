@@ -110,7 +110,12 @@ export default {
       Deselect: {
         render() {
           return (
-            <ccu-icon size={iconSize} class="mx-1 opacity-50" type="cancel" />
+            <ccu-icon
+              :alt="$t('actions.cancel')"
+              size={iconSize}
+              class="mx-1 opacity-50"
+              type="cancel"
+            />
           );
         },
       },

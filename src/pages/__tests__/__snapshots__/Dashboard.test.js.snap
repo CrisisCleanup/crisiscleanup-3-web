@@ -294,7 +294,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       
                 <div>
                   <ccu-icon-stub
-                    alt="actions.sortable"
+                    :alt="$t('actions.sortable')"
                     size="small"
                     type="updown"
                   />
@@ -316,7 +316,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       
                 <div>
                   <ccu-icon-stub
-                    alt="actions.sortable"
+                    :alt="$t('actions.sortable')"
                     size="small"
                     type="updown"
                   />
@@ -454,7 +454,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       to="/incident/99/cases/undefined/edit?showOnMap=true"
                     >
                       <ccu-icon-stub
-                        alt="actions.jump_to_case"
+                        :alt="$t('actions.jump_to_case')"
                         class="p-1 py-2 w-8"
                         size="medium"
                         type="go-case"
@@ -462,7 +462,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                     </router-link-stub>
                      
                     <ccu-icon-stub
-                      alt="actions.print"
+                      :alt="$t('actions.print')"
                       class="p-1 py-2 w-8"
                       size="medium"
                       type="print"
@@ -522,7 +522,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       to="/incident/99/cases/undefined/edit?showOnMap=true"
                     >
                       <ccu-icon-stub
-                        alt="actions.jump_to_case"
+                        :alt="$t('actions.jump_to_case')"
                         class="p-1 py-2 w-8"
                         size="medium"
                         type="go-case"
@@ -530,7 +530,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                     </router-link-stub>
                      
                     <ccu-icon-stub
-                      alt="actions.print"
+                      :alt="$t('actions.print')"
                       class="p-1 py-2 w-8"
                       size="medium"
                       type="print"
@@ -590,7 +590,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       to="/incident/99/cases/undefined/edit?showOnMap=true"
                     >
                       <ccu-icon-stub
-                        alt="actions.jump_to_case"
+                        :alt="$t('actions.jump_to_case')"
                         class="p-1 py-2 w-8"
                         size="medium"
                         type="go-case"
@@ -598,7 +598,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                     </router-link-stub>
                      
                     <ccu-icon-stub
-                      alt="actions.print"
+                      :alt="$t('actions.print')"
                       class="p-1 py-2 w-8"
                       size="medium"
                       type="print"
@@ -658,7 +658,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       to="/incident/99/cases/undefined/edit?showOnMap=true"
                     >
                       <ccu-icon-stub
-                        alt="actions.jump_to_case"
+                        :alt="$t('actions.jump_to_case')"
                         class="p-1 py-2 w-8"
                         size="medium"
                         type="go-case"
@@ -666,7 +666,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                     </router-link-stub>
                      
                     <ccu-icon-stub
-                      alt="actions.print"
+                      :alt="$t('actions.print')"
                       class="p-1 py-2 w-8"
                       size="medium"
                       type="print"
@@ -726,7 +726,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       to="/incident/99/cases/undefined/edit?showOnMap=true"
                     >
                       <ccu-icon-stub
-                        alt="actions.jump_to_case"
+                        :alt="$t('actions.jump_to_case')"
                         class="p-1 py-2 w-8"
                         size="medium"
                         type="go-case"
@@ -734,7 +734,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                     </router-link-stub>
                      
                     <ccu-icon-stub
-                      alt="actions.print"
+                      :alt="$t('actions.print')"
                       class="p-1 py-2 w-8"
                       size="medium"
                       type="print"
@@ -794,7 +794,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       to="/incident/99/cases/undefined/edit?showOnMap=true"
                     >
                       <ccu-icon-stub
-                        alt="actions.jump_to_case"
+                        :alt="$t('actions.jump_to_case')"
                         class="p-1 py-2 w-8"
                         size="medium"
                         type="go-case"
@@ -802,7 +802,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                     </router-link-stub>
                      
                     <ccu-icon-stub
-                      alt="actions.print"
+                      :alt="$t('actions.print')"
                       class="p-1 py-2 w-8"
                       size="medium"
                       type="print"
@@ -885,7 +885,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       
                 <div>
                   <ccu-icon-stub
-                    alt="actions.sortable"
+                    :alt="$t('actions.sortable')"
                     size="small"
                     type="updown"
                   />

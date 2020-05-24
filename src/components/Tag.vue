@@ -1,6 +1,7 @@
 <template>
   <div class="tag flex items-center px-1 justify-center text-xs">
     <ccu-icon
+      :alt="$t('actions.cancel')"
       v-if="closeable"
       size="xxs"
       class="mx-1"
