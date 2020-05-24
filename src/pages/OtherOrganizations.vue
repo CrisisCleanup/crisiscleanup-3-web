@@ -1,5 +1,16 @@
 <template>
   <div class="p-10">
+    <base-text variant="h2" :weight="600">
+      {{ $t('~~Important: Do NOT share this information with the public') }}
+    </base-text>
+    <base-text class="w-3/5">
+      {{
+        $t(
+          '~~This information is to allow volunteer organizations to coordinate with one another. You may not sign these people up for your newsletter, nor tell them what to do',
+        )
+      }}
+    </base-text>
+
     <base-input
       :value="organizations.search"
       icon="search"
@@ -16,7 +27,7 @@
     <Table
       :columns="columns"
       :data="organizations.data"
-      :body-style="{ height: '350px' }"
+      :body-style="{ height: '300px' }"
       enable-pagination
       :pagination="organizations.meta.pagination"
       :loading="loading"
@@ -57,6 +68,24 @@
         </v-popover>
       </template>
     </Table>
+
+    <div
+      class="w-120 border-primary-dark h-20 border-2 my-4 flex items-center p-2"
+    >
+      <span class="text-5xl text-primary-dark mr-2">&#9888;</span>
+      <div>
+        <base-text variant="h2" :weight="600">
+          {{ $t('~~Coordinate with others') }}
+        </base-text>
+        <base-text>
+          {{
+            $t(
+              '~~Use this infomation to coordinate with other organizations on work requests',
+            )
+          }}
+        </base-text>
+      </div>
+    </div>
   </div>
 </template>
 
