@@ -88,6 +88,7 @@ export default {
     size: VueTypes.oneOf(ICON_SIZES).def('large'),
     selector: VueTypes.string,
     withText: VueTypes.bool.def(false),
+    invertColor: VueTypes.bool.def(false),
   },
   data() {
     return {
@@ -102,6 +103,7 @@ export default {
         xxs: this.size === 'xxs',
         xl: this.size === 'xl',
         text: this.withText === true,
+        inverted: this.invertColor === true,
       },
     };
   },
@@ -138,6 +140,10 @@ export default {
 .ccu-icon.xxs {
   height: 7px;
   width: 7px;
+}
+
+.ccu-icon.inverted {
+  filter: brightness(0) invert(1);
 }
 
 .base-icon.with-text p {
