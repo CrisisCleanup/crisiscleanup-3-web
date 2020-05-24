@@ -1,5 +1,10 @@
 <template>
   <div id="app">
+    <BannerOverlay
+      :enabled="currentBanner.enabled"
+      :type="currentBanner.type"
+      :text="currentBanner.text"
+    />
     <component :is="layout">
       <router-view v-if="$route.meta.id !== 'caller'" />
       <PhoneLegacy
@@ -22,20 +27,23 @@
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import CCP from '@/components/phone/CCP.vue';
 import Version from '@/components/Version.vue';
+import BannerOverlay from '@/components/notifications/BannerOverlay';
 import { hash } from '@/utils/promise';
 import PhoneLegacy from './pages/phone_legacy/Index';
 
 const defaultLayout = 'authenticated';
 export default {
   name: 'App',
-  components: { PhoneLegacy, CCP, Version },
+  components: { PhoneLegacy, CCP, Version, BannerOverlay },
   computed: {
+    ...mapGetters('ui', ['currentBanner']),
     layout() {
       return `${this.$route.meta.layout || defaultLayout}-layout`;
     },
   },
   methods: {
     ...mapActions('auth', ['login', 'logout']),
+    ...mapActions('ui', ['validateBrowser']),
     ...mapGetters('auth', ['isLoggedIn']),
     ...mapMutations('enums', ['setStatuses', 'setWorkTypes']),
     async getEnums() {
@@ -62,6 +70,7 @@ export default {
     },
   },
   async mounted() {
+    await this.validateBrowser();
     await this.getEnums();
   },
 };
