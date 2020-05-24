@@ -171,6 +171,12 @@ export default {
           to: '/organization/invitations',
         },
         {
+          key: 'other_organizations',
+          icon: 'otherorg',
+          iconSize: 'xl',
+          to: '/other_organizations',
+        },
+        {
           key: 'phone',
           icon: 'phone',
           text: this.$t('nav.phone'),

@@ -15,6 +15,7 @@
         v-for="column of columns"
         :key="column.key"
         class="p-2 border-b flex items-center cursor-pointer"
+        :class="column.class || []"
         @click="
           () => {
             if (column.sortable) {
@@ -122,14 +123,22 @@
           v-for="column of columns"
           :key="column.key"
           class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+          :class="column.class || []"
         >
           <slot :name="column.key" :item="item">
             <span v-if="$mq === 'sm'" class="font-semibold mr-2">
               {{ column.title }}:
             </span>
-            <template v-if="item[column.key]">{{
-              column.subKey ? item[column.key][column.subKey] : item[column.key]
-            }}</template>
+            <template v-if="item[column.key] || item[column.key] === 0">
+              <span v-if="column.formatter">{{
+                column.formatter(item[column.key])
+              }}</span>
+              <span v-else>{{
+                column.subKey
+                  ? item[column.key][column.subKey]
+                  : item[column.key]
+              }}</span>
+            </template>
           </slot>
         </div>
       </div>

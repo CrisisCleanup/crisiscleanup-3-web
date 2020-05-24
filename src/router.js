@@ -24,6 +24,7 @@ import Vue from 'vue';
 import VueCookies from 'vue-cookies';
 import VueRouter from 'vue-router';
 import Reports from '@/pages/Reports';
+import OtherOrganizations from '@/pages/OtherOrganizations';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -131,6 +132,12 @@ const routes = [
         name: 'nav.organization_layers',
       },
     ],
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/other_organizations',
+    component: OtherOrganizations,
+    name: '~~Other Organizations',
     meta: { layout: 'authenticated' },
   },
   {
