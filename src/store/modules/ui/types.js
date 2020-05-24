@@ -4,6 +4,7 @@
  */
 
 export const BannerTypes = Object.freeze({
-  ERROR: 'error',
-})
+  ERROR: 'ERROR',
+});
 
+export const SET_BANNER = 'SET_BANNER';
