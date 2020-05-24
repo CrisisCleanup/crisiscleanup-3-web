@@ -67,6 +67,7 @@ import VueRouterMultiView from 'vue-router-multi-view';
 import Tabs from '@/components/tabs/Tabs';
 import Tab from '@/components/tabs/Tab';
 import PhoneService from '@/services/phone.service';
+import Logger from '@/utils/log';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -206,7 +207,12 @@ Vue.use(VueNativeSocket, WS_URL, {
   reconnection: true, // auto reconnect (after initial connection)
   passToStoreHandler: (eventName, event) => {
     if (!eventName.startsWith('SOCKET_')) return;
-    window.vue.$log.debug('[WS] incoming message:', eventName, event);
+    const Log = Logger({ name: 'WS' });
+    Log.debug('incoming message:', eventName, event);
+    if (!('$store' in window.vue)) {
+      Log.debug("store isn't ready yet!");
+      return;
+    }
     let method = 'commit';
     let target = eventName.toUpperCase();
     if (target === 'SOCKET_ONOPEN') {
