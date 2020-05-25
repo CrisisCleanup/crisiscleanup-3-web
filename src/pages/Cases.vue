@@ -946,17 +946,18 @@ export default {
         search: this.currentSearch,
       };
 
-      this.currentQuery = { ...query, ...this.appliedFilters };
-      let queryParams = {
+      this.currentQuery = {
+        ...query,
+        ...this.appliedFilters,
+        ...this.$route.query,
+      };
+      const queryParams = {
         ...query,
         offset: params.pageSize * (params.page - 1),
         limit: params.pageSize,
         ...this.appliedFilters,
+        ...this.$route.query,
       };
-
-      if (Object.keys(this.$route.query).length) {
-        queryParams = { ...queryParams, ...this.$route.query };
-      }
 
       if (params.sortKey) {
         queryParams.sort = `${params.sortDirection === 'desc' ? '-' : ''}${
