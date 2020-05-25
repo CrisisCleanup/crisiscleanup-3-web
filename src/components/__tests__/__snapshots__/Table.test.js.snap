@@ -84,6 +84,8 @@ exports[`Table should render correctly and match snapshot 1`] = `
     </div>
      
     <!---->
+     
+    <!---->
   </div>
    
   <div
@@ -112,6 +114,10 @@ exports[`Table should render correctly and match snapshot 1`] = `
          
         <!---->
       </div>
+       
+      <!---->
+       
+      <!---->
     </div>
     <div
       class="hover:bg-crisiscleanup-light-grey"
@@ -133,6 +139,10 @@ exports[`Table should render correctly and match snapshot 1`] = `
          
         <!---->
       </div>
+       
+      <!---->
+       
+      <!---->
     </div>
      
     <!---->
@@ -186,6 +196,8 @@ exports[`Table should render correctly with selection 1`] = `
     </div>
      
     <!---->
+     
+    <!---->
   </div>
    
   <div
@@ -231,6 +243,10 @@ exports[`Table should render correctly with selection 1`] = `
          
         <!---->
       </div>
+       
+      <!---->
+       
+      <!---->
     </div>
     <div
       class="hover:bg-crisiscleanup-light-grey"
@@ -269,6 +285,10 @@ exports[`Table should render correctly with selection 1`] = `
          
         <!---->
       </div>
+       
+      <!---->
+       
+      <!---->
     </div>
      
     <!---->

@@ -1,15 +1,22 @@
 <template>
   <div class="p-10">
-    <base-text variant="h2" :weight="600">
-      {{ $t('~~Important: Do NOT share this information with the public') }}
-    </base-text>
-    <base-text class="w-3/5">
-      {{
-        $t(
-          '~~This information is to allow volunteer organizations to coordinate with one another. You may not sign these people up for your newsletter, nor tell them what to do',
-        )
-      }}
-    </base-text>
+    <div
+      class="w-3/5 border-primary-dark h-20 border-2 my-4 flex items-center p-2"
+    >
+      <span class="text-5xl text-primary-dark mr-4">&#9888;</span>
+      <div>
+        <base-text variant="h2" :weight="600">
+          {{ $t('~~Important: Do NOT share this information with the public') }}
+        </base-text>
+        <base-text>
+          {{
+            $t(
+              '~~This information is to allow volunteer organizations to coordinate with one another. You may not sign these people up for your newsletter, nor tell them what to do',
+            )
+          }}
+        </base-text>
+      </div>
+    </div>
 
     <base-input
       :value="organizations.search"
@@ -33,21 +40,49 @@
       :loading="loading"
       @change="getOrganizations"
       class="bg-white border"
+      has-row-details
     >
-      <template #actions="slotProps">
-        <div class="flex mr-2 w-full items-center">
-          <base-button
-            :text="$t('~~Show Contacts')"
-            :alt="$t('~~Show Contacts')"
-            variant="solid"
-            size="small"
-            class="mx-2"
-            :action="
-              () => {
-                showContacts(slotProps.item);
-              }
-            "
-          />
+      <template #rowDetails="slotProps">
+        <div class="flex p-3">
+          <div class="mr-4">
+            <base-text variant="h2">
+              {{ $t('~~Primary Contacts') }}
+            </base-text>
+            <div>
+              <template v-for="contact in slotProps.item.primary_contacts">
+                <div :key="contact.email">
+                  <strong class="font-bold"
+                    >{{ contact.first_name }} {{ contact.last_name }}</strong
+                  >
+                  <div>{{ contact.title ? contact.title : '' }}</div>
+                  <div>{{ contact.email }}</div>
+                  <div>{{ contact.mobile }}</div>
+                </div>
+              </template>
+            </div>
+          </div>
+          <div>
+            <base-text
+              variant="h2"
+              v-if="slotProps.item.incident_primary_contacts.length"
+            >
+              {{ $t('~~Incident Primary Contacts') }}
+            </base-text>
+            <div>
+              <template
+                v-for="contact in slotProps.item.incident_primary_contacts"
+              >
+                <div :key="contact.email">
+                  <strong class="font-bold"
+                    >{{ contact.first_name }} {{ contact.last_name }}</strong
+                  >
+                  <div>{{ contact.title ? contact.title : '' }}</div>
+                  <div>{{ contact.email }}</div>
+                  <div>{{ contact.mobile }}</div>
+                </div>
+              </template>
+            </div>
+          </div>
         </div>
       </template>
       <template #approved_roles="slotProps">
@@ -67,41 +102,35 @@
           </div>
         </v-popover>
       </template>
+      <template #overdue_count="slotProps">
+        <base-button
+          class="text-primary-dark underline"
+          :action="
+            () => {
+              $router.push(
+                `/incident/${currentIncidentId}/cases/new?showTable=true&work_type__claimed_by=${
+                  slotProps.item.id
+                }&work_type__status__in=${getOpenStatuses()}&created_at__lte=${$moment()
+                  .subtract(6, 'd')
+                  .toISOString()}`,
+              );
+            }
+          "
+        >
+          {{ slotProps.item.overdue_count }}
+        </base-button>
+      </template>
     </Table>
-
-    <div
-      class="w-120 border-primary-dark h-20 border-2 my-4 flex items-center p-2"
-    >
-      <span class="text-5xl text-primary-dark mr-2">&#9888;</span>
-      <div>
-        <base-text variant="h2" :weight="600">
-          {{ $t('~~Coordinate with others') }}
-        </base-text>
-        <base-text>
-          {{
-            $t(
-              '~~Use this infomation to coordinate with other organizations on work requests',
-            )
-          }}
-        </base-text>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import Table from '@/components/Table';
-import Organization from '@/models/Organization';
 import User from '@/models/User';
-import OrganizationApprovalDialog from '@/components/dialogs/OrganizationApprovalDialog';
-import { create } from 'vue-modal-dialogs';
-import MessageBox from '@/components/dialogs/MessageBox';
 import { mapState } from 'vuex';
 import { throttle } from 'lodash';
 import { getQueryString } from '../utils/urls';
-
-const messageBox = create(MessageBox);
-const responseDialog = create(OrganizationApprovalDialog);
+import enums from '../store/modules/enums';
 
 export default {
   name: 'OtherOrganizations',
@@ -146,60 +175,18 @@ export default {
       };
       this.loading = false;
     },
+    getOpenStatuses() {
+      enums.state.statuses.filter((status) => status.primary_state === 'open');
+      const openStatuses = enums.state.statuses.filter(
+        (status) => status.primary_state === 'open',
+      );
+      return openStatuses.map((status) => status.status).join(',');
+    },
     async getOrganizationContacts(organizationId) {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/ghost_users?organization=${organizationId}`,
       );
       return response.data.results;
-    },
-    async showContacts(organization) {
-      const { primary_contacts, incident_primary_contacts } = organization;
-      let content = '';
-
-      primary_contacts.forEach((contact) => {
-        content = `${content}<strong class="font-bold">${contact.first_name} ${
-          contact.last_name
-        }</strong>
-          <div>${contact.title ? contact.title : ''}</div>
-          <div>${contact.email}</div>
-          <div>${contact.mobile}</div>
-          </p>`;
-      });
-
-      incident_primary_contacts.forEach((contact) => {
-        content = `${content}<strong class="font-bold">${contact.first_name} ${
-          contact.last_name
-        }</strong>
-          <div>${contact.title ? contact.title : ''}</div>
-          <div>${contact.email}</div>
-          <div>${contact.mobile}</div>
-          </p>`;
-      });
-
-      await messageBox({
-        title: this.$t('adminOrganization.organization_contact'),
-        content,
-      });
-    },
-    async approveOrganization(organizationId) {
-      const result = await responseDialog({
-        title: this.$t('actions.approve_organization'),
-        content: this.$t('orgApprovalTable.give_approve_reason'),
-      });
-      if (result) {
-        await Organization.api().approve(organizationId, result);
-        this.$emit('reload');
-      }
-    },
-    async rejectOrganization(organizationId) {
-      const result = await responseDialog({
-        title: this.$t('actions.reject_organization'),
-        content: this.$t('orgApprovalTable.give_reject_reason'),
-      });
-      if (result) {
-        await Organization.api().reject(organizationId, result);
-        this.$emit('reload');
-      }
     },
     getHighestRole(roles) {
       if (roles.length) {
@@ -225,18 +212,17 @@ export default {
           dataIndex: 'approved_roles',
           key: 'approved_roles',
           width: '150px',
+        },
+        {
+          title: this.$t('~~Incidents'),
+          dataIndex: 'incident_count',
+          key: 'incident_count',
           class: 'justify-center',
         },
         {
           title: this.$t('~~Cases Reported'),
           dataIndex: 'reported_count',
           key: 'reported_count',
-          class: 'justify-center',
-        },
-        {
-          title: this.$t('~~Incidents'),
-          dataIndex: 'incident_count',
-          key: 'incident_count',
           class: 'justify-center',
         },
         {
@@ -266,12 +252,6 @@ export default {
           formatter: (item) => {
             return this.$moment(item).fromNow();
           },
-        },
-        {
-          title: '',
-          dataIndex: 'actions',
-          key: 'actions',
-          width: '175px',
         },
       ],
       loading: false,

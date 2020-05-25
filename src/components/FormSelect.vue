@@ -104,14 +104,15 @@ export default {
   },
   data() {
     const iconSize = this.multiple ? 'xxs' : 'medium';
-    const { indicatorIcon, $t } = this;
+    const { indicatorIcon } = this;
+    const cancelText = this.$t('actions.cancel');
     return {
       isInvalid: false,
       Deselect: {
         render() {
           return (
             <ccu-icon
-              alt={$t('actions.cancel')}
+              alt={cancelText}
               size={iconSize}
               class="mx-1 opacity-50"
               type="cancel"

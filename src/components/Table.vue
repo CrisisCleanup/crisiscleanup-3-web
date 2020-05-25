@@ -52,6 +52,10 @@
           />
         </div>
       </div>
+      <div
+        v-if="hasRowDetails && $mq !== 'sm'"
+        class="flex items-center p-2 border-b"
+      ></div>
       <template v-if="enableColumnSearch">
         <div
           v-for="column of columns"
@@ -140,6 +144,26 @@
               }}</span>
             </template>
           </slot>
+        </div>
+        <div
+          v-if="hasRowDetails && $mq !== 'sm'"
+          class="flex items-center p-2 lg:border-b md:border-b"
+        >
+          <font-awesome-icon
+            class="cursor-pointer"
+            size="md"
+            :icon="showingDetails.has(item.id) ? 'caret-up' : 'caret-down'"
+            @click="setShowingDetails(item)"
+          />
+        </div>
+        <div
+          v-if="hasRowDetails"
+          v-show="showingDetails.has(item.id)"
+          :style="`grid-column-start: 1; grid-column-end: ${
+            columns.length + 1
+          };`"
+        >
+          <slot name="rowDetails" :item="item"></slot>
         </div>
       </div>
       <div v-if="!data.length" class="p-2 text-crisiscleanup-grey-700 italic">
@@ -249,6 +273,7 @@ export default {
     enableSelection: Boolean,
     enablePagination: Boolean,
     enableColumnSearch: Boolean,
+    hasRowDetails: Boolean,
     bodyStyle: {
       type: Object,
       default: () => {
@@ -261,6 +286,7 @@ export default {
       pageSizes: [5, 10, 20, 100, 500, 1000],
       visiblePagesCount: 5,
       selectedItems: new Set([]),
+      showingDetails: new Set([]),
     };
   },
   computed: {
@@ -324,6 +350,9 @@ export default {
       if (this.enableSelection) {
         columnWidths.unshift('35px');
       }
+      if (this.hasRowDetails) {
+        columnWidths.push('35px');
+      }
       return columnWidths.join(' ');
     },
     gridStyleHeader() {
@@ -356,6 +385,14 @@ export default {
       }
       this.selectedItems = new Set(this.selectedItems);
       this.$emit('selectionChanged', this.selectedItems);
+    },
+    setShowingDetails(item) {
+      if (this.showingDetails.has(item.id)) {
+        this.showingDetails.delete(item.id);
+      } else {
+        this.showingDetails.add(item.id);
+      }
+      this.showingDetails = new Set(this.showingDetails);
     },
     setAllChecked(value) {
       if (value) {
@@ -432,6 +469,7 @@ export default {
     },
     rowClick(item, event) {
       const hasClass = (className) =>
+        event.target.className.includes &&
         event.target.className.includes(className);
       if (
         event &&

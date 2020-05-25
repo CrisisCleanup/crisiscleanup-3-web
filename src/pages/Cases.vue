@@ -845,6 +845,12 @@ export default {
         };
       }
     }
+    if (this.$route.query.showTable) {
+      this.showingMap = false;
+      this.showingTable = true;
+      this.appliedFilters = {};
+      this.filters = {};
+    }
     if (this.currentIncidentId) {
       this.fetch({
         pageSize: this.pagination.pageSize,
@@ -941,12 +947,17 @@ export default {
       };
 
       this.currentQuery = { ...query, ...this.appliedFilters };
-      const queryParams = {
+      let queryParams = {
         ...query,
         offset: params.pageSize * (params.page - 1),
         limit: params.pageSize,
         ...this.appliedFilters,
       };
+
+      if (Object.keys(this.$route.query).length) {
+        queryParams = { ...queryParams, ...this.$route.query };
+      }
+
       if (params.sortKey) {
         queryParams.sort = `${params.sortDirection === 'desc' ? '-' : ''}${
           params.sortKey
