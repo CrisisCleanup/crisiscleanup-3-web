@@ -321,6 +321,7 @@ export default {
       await this.$router.push({
         name: this.$route.name,
         params: { ...this.$route.params, incident_id: value },
+        query: { ...this.$route.query },
       });
     },
     async setupLanguage() {
