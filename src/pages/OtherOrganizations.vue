@@ -139,6 +139,62 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
+    columns() {
+      return [
+        {
+          title: this.$t('~~Name'),
+          dataIndex: 'name',
+          key: 'name',
+          width: '350px',
+        },
+        {
+          title: this.$t('~~Organization Role'),
+          dataIndex: 'approved_roles',
+          key: 'approved_roles',
+          width: '150px',
+        },
+        {
+          title: this.$t('~~Incidents'),
+          dataIndex: 'incident_count',
+          key: 'incident_count',
+          class: 'justify-center',
+        },
+        {
+          title: this.$t('~~Cases Reported'),
+          dataIndex: 'reported_count',
+          key: 'reported_count',
+          class: 'justify-center',
+        },
+        {
+          title: this.$t('~~Cases Claimed'),
+          dataIndex: 'claimed_count',
+          key: 'claimed_count',
+          class: 'justify-center',
+        },
+        {
+          title: this.$t('~~Cases Closed'),
+          dataIndex: 'closed_count',
+          key: 'closed_count',
+          class: 'justify-center',
+        },
+        {
+          title: this.$t('~~Cases Overdue'),
+          dataIndex: 'overdue_count',
+          key: 'overdue_count',
+          class: 'justify-center',
+        },
+        {
+          title: this.$t('~~Last Login'),
+          dataIndex: 'last_login',
+          key: 'last_login',
+          class: 'justify-center',
+          width: '150px',
+          formatter: (item) => {
+            return this.$moment(item).fromNow();
+          },
+        },
+      ];
+    },
     ...mapState('incident', ['currentIncidentId']),
   },
   async mounted() {
@@ -200,60 +256,6 @@ export default {
   data() {
     return {
       throttle,
-      columns: [
-        {
-          title: this.$t('~~Name'),
-          dataIndex: 'name',
-          key: 'name',
-          width: '350px',
-        },
-        {
-          title: this.$t('~~Organization Role'),
-          dataIndex: 'approved_roles',
-          key: 'approved_roles',
-          width: '150px',
-        },
-        {
-          title: this.$t('~~Incidents'),
-          dataIndex: 'incident_count',
-          key: 'incident_count',
-          class: 'justify-center',
-        },
-        {
-          title: this.$t('~~Cases Reported'),
-          dataIndex: 'reported_count',
-          key: 'reported_count',
-          class: 'justify-center',
-        },
-        {
-          title: this.$t('~~Cases Claimed'),
-          dataIndex: 'claimed_count',
-          key: 'claimed_count',
-          class: 'justify-center',
-        },
-        {
-          title: this.$t('~~Cases Closed'),
-          dataIndex: 'closed_count',
-          key: 'closed_count',
-          class: 'justify-center',
-        },
-        {
-          title: this.$t('~~Cases Overdue'),
-          dataIndex: 'overdue_count',
-          key: 'overdue_count',
-          class: 'justify-center',
-        },
-        {
-          title: this.$t('~~Last Login'),
-          dataIndex: 'last_login',
-          key: 'last_login',
-          class: 'justify-center',
-          width: '150px',
-          formatter: (item) => {
-            return this.$moment(item).fromNow();
-          },
-        },
-      ],
       loading: false,
       organizations: {
         data: [],
