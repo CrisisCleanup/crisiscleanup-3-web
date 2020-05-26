@@ -6,8 +6,6 @@ Crisis Cleanup is a collaboration platform that connects disaster recovery organ
 
 Crisis Cleanup works best in a collaborative environment where multiple voluntary organizations and agencies work together and coordinate efforts. Because these organizations do not take orders from one another, Crisis Cleanup is designed to facilitate Collaborative Accountability models of inter-agency interaction, rather than command-and-control operations, or or heirarchical accountability models of interaction. 
 
-This is the repository for the V.3 Crisis Cleanup web application, which is currently under development. The current version, V.2 is available at: https://github.com/CrisisCleanup/crisiscleanup-2
-
 Other Project Stats (As of 2020-03-22)
 -------------
 
