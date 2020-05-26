@@ -289,7 +289,7 @@
           <template v-if="showingMap">
             <WorksiteMap
               :key="JSON.stringify(currentQuery)"
-              ref="workstiteMap"
+              ref="worksiteMap"
               class="w-full h-full"
               :query="currentQuery"
               :new-marker="newMarker"
@@ -909,7 +909,7 @@ export default {
     },
 
     async applyLocation(locationId, value) {
-      if (value && this.$refs.workstiteMap.map) {
+      if (value && this.$refs.worksiteMap.map) {
         await Location.api().fetchById(locationId);
         const location = Location.find(locationId);
         const geojsonFeature = {
@@ -923,13 +923,13 @@ export default {
             layer.location_id = locationId;
           },
         });
-        polygon.addTo(this.$refs.workstiteMap.map);
-        this.$refs.workstiteMap.map.fitBounds(polygon.getBounds());
+        polygon.addTo(this.$refs.worksiteMap.map);
+        this.$refs.worksiteMap.map.fitBounds(polygon.getBounds());
         this.appliedLocations = new Set(this.appliedLocations.add(locationId));
       } else {
-        this.$refs.workstiteMap.map.eachLayer((layer) => {
+        this.$refs.worksiteMap.map.eachLayer((layer) => {
           if (layer.location_id && layer.location_id === locationId) {
-            this.$refs.workstiteMap.map.removeLayer(layer);
+            this.$refs.worksiteMap.map.removeLayer(layer);
           }
         });
         this.appliedLocations = new Set(
@@ -1035,12 +1035,12 @@ export default {
     },
 
     reloadMap(worksiteId) {
-      if (this.$refs.workstiteMap) {
+      if (this.$refs.worksiteMap) {
         if (worksiteId) {
-          this.$refs.workstiteMap.updateMap(worksiteId);
-          this.$refs.workstiteMap.markerLayer.clearLayers();
+          this.$refs.worksiteMap.updateMap(worksiteId);
+          this.$refs.worksiteMap.markerLayer.clearLayers();
         } else {
-          this.$refs.workstiteMap.$forceUpdate();
+          this.$refs.worksiteMap.$forceUpdate();
         }
       }
     },
@@ -1187,8 +1187,8 @@ export default {
       this.toggleView('showingMap');
 
       const waitForMap = () => {
-        if (this.$refs.workstiteMap && !this.$refs.workstiteMap.mapLoading) {
-          this.$refs.workstiteMap.map.setView(
+        if (this.$refs.worksiteMap && !this.$refs.worksiteMap.mapLoading) {
+          this.$refs.worksiteMap.map.setView(
             [this.currentWorksite.latitude, this.currentWorksite.longitude],
             18,
           );
@@ -1201,9 +1201,9 @@ export default {
             .setContent(
               `<b>${this.currentWorksite.name} (${this.currentWorksite.case_number}</b>)`,
             )
-            .openOn(this.$refs.workstiteMap.map);
+            .openOn(this.$refs.worksiteMap.map);
           setTimeout(() => {
-            this.$refs.workstiteMap.map.closePopup();
+            this.$refs.worksiteMap.map.closePopup();
           }, 5000);
         } else {
           setTimeout(waitForMap, 50);
@@ -1214,17 +1214,17 @@ export default {
     addMarkerToMap(location) {
       let markerLocation = location;
       if (!markerLocation) {
-        markerLocation = this.$refs.workstiteMap.map.getCenter();
+        markerLocation = this.$refs.worksiteMap.map.getCenter();
       }
 
-      this.$refs.workstiteMap.markerLayer.clearLayers();
+      this.$refs.worksiteMap.markerLayer.clearLayers();
       const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
-        this.$refs.workstiteMap.markerLayer,
+        this.$refs.worksiteMap.markerLayer,
       );
       marker.on('dragend', function (event) {
         EventBus.$emit('updatedWorksiteLocation', event.target.getLatLng());
       });
-      this.$refs.workstiteMap.map.setView(
+      this.$refs.worksiteMap.map.setView(
         [markerLocation.lat, markerLocation.lng],
         15,
       );
@@ -1236,7 +1236,7 @@ export default {
       this.toggleView('showingMap');
     },
     removeMarkerFromMap() {
-      this.$refs.workstiteMap.markerLayer.clearLayers();
+      this.$refs.worksiteMap.markerLayer.clearLayers();
     },
 
     async unclaimSelected() {
