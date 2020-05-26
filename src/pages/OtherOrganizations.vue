@@ -94,6 +94,9 @@
           </base-text>
           <div slot="popover">
             <div class="text-base">
+              {{ getHighestRole(slotProps.item.approved_roles).data_access_t }}
+            </div>
+            <div class="text-xs mb-2">
               {{ getHighestRole(slotProps.item.approved_roles).description_t }}
             </div>
             <div class="text-xs">
