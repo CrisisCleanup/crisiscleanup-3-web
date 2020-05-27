@@ -66,6 +66,8 @@ exports[`Table should render correctly and match snapshot 1`] = `
   >
     <!---->
      
+    <!---->
+     
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
@@ -84,8 +86,6 @@ exports[`Table should render correctly and match snapshot 1`] = `
     </div>
      
     <!---->
-     
-    <!---->
   </div>
    
   <div
@@ -100,22 +100,22 @@ exports[`Table should render correctly and match snapshot 1`] = `
     >
       <!---->
        
-      <div
-        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
-      >
-        <!---->
-         
-        <!---->
-      </div>
-      <div
-        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
-      >
-        <!---->
-         
-        <!---->
-      </div>
-       
       <!---->
+       
+      <div
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+      >
+        <!---->
+         
+        <!---->
+      </div>
+      <div
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+      >
+        <!---->
+         
+        <!---->
+      </div>
        
       <!---->
     </div>
@@ -125,22 +125,22 @@ exports[`Table should render correctly and match snapshot 1`] = `
     >
       <!---->
        
-      <div
-        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
-      >
-        <!---->
-         
-        <!---->
-      </div>
-      <div
-        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
-      >
-        <!---->
-         
-        <!---->
-      </div>
-       
       <!---->
+       
+      <div
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+      >
+        <!---->
+         
+        <!---->
+      </div>
+      <div
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+      >
+        <!---->
+         
+        <!---->
+      </div>
        
       <!---->
     </div>
@@ -178,6 +178,8 @@ exports[`Table should render correctly with selection 1`] = `
       </label>
     </div>
      
+    <!---->
+     
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
@@ -194,8 +196,6 @@ exports[`Table should render correctly with selection 1`] = `
       
       <!---->
     </div>
-     
-    <!---->
      
     <!---->
   </div>
@@ -229,22 +229,22 @@ exports[`Table should render correctly with selection 1`] = `
         </label>
       </div>
        
-      <div
-        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
-      >
-        <!---->
-         
-        <!---->
-      </div>
-      <div
-        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
-      >
-        <!---->
-         
-        <!---->
-      </div>
-       
       <!---->
+       
+      <div
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+      >
+        <!---->
+         
+        <!---->
+      </div>
+      <div
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+      >
+        <!---->
+         
+        <!---->
+      </div>
        
       <!---->
     </div>
@@ -271,22 +271,22 @@ exports[`Table should render correctly with selection 1`] = `
         </label>
       </div>
        
-      <div
-        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
-      >
-        <!---->
-         
-        <!---->
-      </div>
-      <div
-        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
-      >
-        <!---->
-         
-        <!---->
-      </div>
-       
       <!---->
+       
+      <div
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+      >
+        <!---->
+         
+        <!---->
+      </div>
+      <div
+        class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+      >
+        <!---->
+         
+        <!---->
+      </div>
        
       <!---->
     </div>

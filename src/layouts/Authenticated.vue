@@ -208,11 +208,7 @@ export default {
           icon: 'reports',
           text: this.$t('~~Reports'),
           to: '/reports',
-          disabled:
-            !this.currentUser ||
-            !this.currentUser.organization ||
-            (this.currentUser.organization.type_t !== 'orgType.government' &&
-              !this.currentUser.isAdmin),
+          disabled: !this.currentUser || !this.currentUser.organization,
         },
         {
           key: 'admin',

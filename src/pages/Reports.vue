@@ -9,7 +9,7 @@
       >
         <div class="flex justify-around m-5">
           <base-text variant="body">
-            {{ $t('reportsVue.no_state_account_yet') }}
+            <span v-html="$t('reportsVue.no_state_account_yet')"></span>
           </base-text>
         </div>
         <div slot="footer" class="flex p-1 justify-center">

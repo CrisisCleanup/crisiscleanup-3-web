@@ -48,9 +48,15 @@
             <base-text variant="h2">
               {{ $t('~~Primary Contacts') }}
             </base-text>
-            <div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: max-content max-content max-content;
+                grid-column-gap: 10px;
+              "
+            >
               <template v-for="contact in slotProps.item.primary_contacts">
-                <div :key="contact.email">
+                <div :key="contact.email" class="my-1">
                   <strong class="font-bold"
                     >{{ contact.first_name }} {{ contact.last_name }}</strong
                   >
@@ -61,7 +67,13 @@
               </template>
             </div>
           </div>
-          <div>
+          <div
+            style="
+              display: grid;
+              grid-template-columns: max-content max-content max-content;
+              grid-column-gap: 10px;
+            "
+          >
             <base-text
               variant="h2"
               v-if="slotProps.item.incident_primary_contacts.length"
