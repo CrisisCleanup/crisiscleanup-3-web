@@ -55,10 +55,6 @@ export const AgentMixin = {
       return { worksites, pdas, outboundIds };
     },
     getStateFriendlyName(value) {
-      let state = value;
-      if (value.includes('#')) {
-        [, , state] = value.split('#');
-      }
       const stateMap = {
         [CCState.ROUTABLE]: 'online',
         [CCState.PENDING_CALL]: 'connecting',
@@ -67,6 +63,13 @@ export const AgentMixin = {
         [CCState.ON_CALL]: 'talking',
         [CCState.AGENT_PENDING]: 'connecting',
       };
+      if (!value) {
+        return CCState.OFFLINE;
+      }
+      let state = value;
+      if (value.includes('#')) {
+        [, , state] = value.split('#');
+      }
       if (Object.keys(stateMap).includes(state)) {
         return stateMap[state];
       }

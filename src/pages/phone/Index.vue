@@ -148,6 +148,7 @@ export default {
     },
   },
   created() {
+    EventBus.$emit(CCEvent.INIT);
     PhoneResource.api().get('/phone_resources', {
       dataKey: 'results',
     });
@@ -187,7 +188,9 @@ export default {
     }
   },
   beforeDestroy() {
-    this.unsub();
+    if (this.unsub) {
+      this.unsub();
+    }
   },
 };
 </script>

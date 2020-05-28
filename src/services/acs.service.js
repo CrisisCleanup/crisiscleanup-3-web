@@ -22,6 +22,7 @@ export const EVENTS = (() => {
   const ev = (e) => `acs:${e}`;
   const st = (e) => `${ev('status')}:${e}`;
   return {
+    INIT: ev('initialize'),
     REQUEST: ev('requestAgent'),
     INBOUND: ev('inbound'),
     AVAILABLE: st('available'),

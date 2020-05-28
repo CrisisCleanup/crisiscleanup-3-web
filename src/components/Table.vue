@@ -12,6 +12,10 @@
         <base-checkbox class="mb-5" @input="setAllChecked" />
       </div>
       <div
+        v-if="hasRowDetails && $mq !== 'sm'"
+        class="flex items-center p-2 border-b"
+      ></div>
+      <div
         v-for="column of columns"
         :key="column.key"
         class="p-2 border-b flex items-center cursor-pointer"
@@ -52,10 +56,6 @@
           />
         </div>
       </div>
-      <div
-        v-if="hasRowDetails && $mq !== 'sm'"
-        class="flex items-center p-2 border-b"
-      ></div>
       <template v-if="enableColumnSearch">
         <div
           v-for="column of columns"
@@ -124,6 +124,17 @@
           />
         </div>
         <div
+          v-if="hasRowDetails && $mq !== 'sm'"
+          class="flex items-center p-2 lg:border-b md:border-b"
+        >
+          <font-awesome-icon
+            class="cursor-pointer"
+            size="md"
+            :icon="showingDetails.has(item.id) ? 'caret-up' : 'caret-down'"
+            @click="setShowingDetails(item)"
+          />
+        </div>
+        <div
           v-for="column of columns"
           :key="column.key"
           class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -144,17 +155,6 @@
               }}</span>
             </template>
           </slot>
-        </div>
-        <div
-          v-if="hasRowDetails && $mq !== 'sm'"
-          class="flex items-center p-2 lg:border-b md:border-b"
-        >
-          <font-awesome-icon
-            class="cursor-pointer"
-            size="md"
-            :icon="showingDetails.has(item.id) ? 'caret-up' : 'caret-down'"
-            @click="setShowingDetails(item)"
-          />
         </div>
         <div
           v-if="hasRowDetails"
@@ -347,11 +347,11 @@ export default {
     },
     gridTemplate() {
       const columnWidths = this.columns.map((column) => column.width || '1fr');
-      if (this.enableSelection) {
+      if (this.hasRowDetails) {
         columnWidths.unshift('35px');
       }
-      if (this.hasRowDetails) {
-        columnWidths.push('35px');
+      if (this.enableSelection) {
+        columnWidths.unshift('35px');
       }
       return columnWidths.join(' ');
     },

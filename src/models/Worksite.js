@@ -177,6 +177,20 @@ export default class Worksite extends Model {
         });
         return worksite;
       },
+      async find_or_fetch(id, { resolve = true }) {
+        let item = await Worksite.find(id);
+        if (!item) {
+          if (resolve) {
+            item = Worksite.api().fetch(id);
+          } else {
+            const {
+              response: { data },
+            } = await Worksite.api().get(id);
+            item = data;
+          }
+        }
+        return item;
+      },
       claimWorksite(id, workTypes) {
         return this.post(
           `/worksites/${id}/claim`,

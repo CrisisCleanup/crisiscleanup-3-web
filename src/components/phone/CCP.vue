@@ -14,29 +14,30 @@ export default {
   name: 'CCP',
   methods: {
     ...mapActions('phone', ['initConnect', 'setPopup']),
+    async init() {
+      if (!this.connectRunning && !connect.core.initialized) {
+        this.$log.debug('CCP embed connecting...');
+        const htmlEl = document.getElementById('ccp-embed');
+        try {
+          await this.initConnect(htmlEl);
+        } catch (e) {
+          this.$log.error(e);
+        }
+      }
+    },
   },
   computed: {
     ...mapState('phone', ['streams', 'connectRunning', 'connectAuthed']),
     ...mapGetters('auth', ['isLoggedIn']),
   },
   created() {
+    EventBus.$on(EVENTS.INIT, () => this.init());
     EventBus.$on(EVENTS.REQUEST, () => {
       if (!this.connectAuthed) {
         this.$log.info('setting popup!');
-        Promise.resolve(this.setPopup(true));
+        this.init().then(() => this.setPopup(true));
       }
     });
-  },
-  async mounted() {
-    if (!this.connectRunning) {
-      this.$log.debug('CCP embed connecting...');
-      const htmlEl = document.getElementById('ccp-embed');
-      try {
-        await this.initConnect(htmlEl);
-      } catch (e) {
-        this.$log.error(e);
-      }
-    }
   },
 };
 </script>

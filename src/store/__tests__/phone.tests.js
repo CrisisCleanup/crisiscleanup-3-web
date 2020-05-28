@@ -74,6 +74,11 @@ describe('metric actions', () => {
   it('getAgentMetrics', async () => {
     const commit = jest.fn();
     const state = {
+      controller: {
+        history: {
+          resolvedCases: [],
+        },
+      },
       contact: {
         attributes: {
           incidentId: 99,

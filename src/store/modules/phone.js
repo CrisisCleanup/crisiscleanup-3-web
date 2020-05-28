@@ -16,7 +16,10 @@ import {
   camelCase,
   defaultTo,
   delay,
-  get,
+  flatten,
+  uniq,
+  union,
+  difference,
   isEqual,
   isInteger,
   isNil,
@@ -64,6 +67,9 @@ const getStateDefaults = () => ({
     cases: {
       pdas: [],
       worksites: [],
+    },
+    history: {
+      resolvedCases: [],
     },
     resolved: false,
     currentCase: {
@@ -317,7 +323,12 @@ export const actions = {
     commit('setMetrics', newState);
   },
   async getAgentMetrics(
-    { commit, getters: { currentAniIncident } },
+    {
+      commit,
+      state: {
+        controller: { history },
+      },
+    },
     { agents = [] } = {},
   ) {
     const agentBoard = {};
@@ -328,15 +339,27 @@ export const actions = {
           agent_id,
         );
         let recentContacts = defaultTo(recent_contacts, []);
+        // find all unique case ids and prefetch em
+        let recentCases = uniq(
+          flatten(recentContacts.map(({ cases }) => cases)),
+        );
+        recentCases = difference(recentCases, history.resolvedCases);
+        await commit('setControllerState', {
+          history: { resolvedCases: union(recentCases, history.resolvedCases) },
+        });
+        Log.debug('Found cases in history:', recentCases);
+        recentCases.map((cId) =>
+          Worksite.api().find_or_fetch(cId, { resolve: false }),
+        );
         recentContacts = recentContacts.map(async ({ cases, ...c }) => {
           const wkSites = await Promise.all(
             cases.map(async (cId) => {
               let caseItem = await Worksite.find(cId);
               if (isNil(caseItem)) {
-                caseItem = await Worksite.api().fetch(
-                  cId,
-                  get(currentAniIncident, 'id', null),
-                );
+                const {
+                  response: { data },
+                } = await Worksite.api().get(`/worksites/${cId}`);
+                caseItem = data;
               }
               return caseItem;
             }),

@@ -30,18 +30,10 @@
         <div>
           <tag-input
             v-model="emails"
-            :tags="usersToInvite"
+            :tags.sync="usersToInvite"
             :placeholder="$t('usersVue.emails')"
-            :add-on-key="[13, ',']"
-            @before-adding-tag="
-              (obj) => {
-                let emailMatch = getEmailMatch(obj.tag.text);
-                if (emailMatch) {
-                  obj.tag.text = emailMatch;
-                  obj.addTag();
-                }
-              }
-            "
+            :validation="validation"
+            :add-on-key="[13, 32, ',']"
             :separators="[';', ',', ', ']"
             @tags-changed="(newTags) => (usersToInvite = newTags)"
           />
@@ -66,7 +58,7 @@
         />
         <base-button
           variant="solid"
-          :action="inviteUsers"
+          :action="() => inviteUsers()"
           :text="$t('actions.submit_invites')"
           :alt="$t('actions.submit_invites')"
           class="ml-2 p-3 px-6 text-xs"
@@ -78,9 +70,12 @@
 <script>
 import User from '@/models/User';
 import Organization from '@/models/Organization';
-import { createTag } from '@johmun/vue-tags-input';
+import { createTags } from '@johmun/vue-tags-input';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput';
+import _ from 'lodash';
 import { getErrorMessage } from '../../utils/errors';
+
+const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 
 export default {
   name: 'InviteUsers',
@@ -98,20 +93,16 @@ export default {
       showInviteModal: false,
       selectedOrganization: null,
       organizationResults: [],
+      validation: [
+        {
+          classes: 'email',
+          rule: /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*/,
+          disableAdd: true,
+        },
+      ],
     };
   },
   methods: {
-    getEmailMatch(text) {
-      const emailMatch = text
-        .toLowerCase()
-        .match(
-          /[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*/,
-        );
-      if (emailMatch) {
-        return emailMatch[0];
-      }
-      return null;
-    },
     async onOrganizationSearch(value) {
       const results = await Organization.api().get(
         `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
@@ -122,14 +113,23 @@ export default {
       this.organizationResults = results.entities.organizations;
     },
     async inviteUsers() {
+      let tags = _.defaultTo(this.usersToInvite.slice(), []);
       try {
         if (this.emails) {
-          const email = createTag(this.getEmailMatch(this.emails));
-          if (email) {
-            this.usersToInvite.push(email);
+          const emailList = this.emails.match(EMAIL_REGEX);
+          let extTags = _.attempt(createTags, emailList);
+          if (_.isError(extTags)) {
+            extTags = [];
           }
+          tags = _.uniqBy(tags.concat(extTags), 'text');
         }
-        const emails = this.usersToInvite.map((value) => value.text);
+        if (_.isEmpty(tags)) {
+          await this.$toasted.error(
+            this.$t('~~You must provide at least 1 valid email!'),
+          );
+          return;
+        }
+        const emails = tags.map((value) => value.text);
         await Promise.all(
           emails.map((email) =>
             User.api().inviteUser(email, this.selectedOrganization),
