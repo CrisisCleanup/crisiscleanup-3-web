@@ -25,7 +25,7 @@
     "test:percy": "cross-env NODE_ENV=test percy exec -- yarn run test:cy",
     "cy:open": "cross-env NODE_ENV=test cypress open",
     "cy:patch": "node ./internal/scripts/patchCypress.js",
-    "storybook": "cross-env NODE_ENV=development start-storybook -p 6006",
+    "storybook": "cross-env NODE_ENV=storybook start-storybook -p 6006",
     "build-storybook": "cross-env NODE_ENV=storybook build-storybook",
     "postinstall": "yarn cache clean"
   },

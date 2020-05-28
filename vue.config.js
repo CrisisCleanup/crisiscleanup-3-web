@@ -84,8 +84,10 @@ module.exports = {
     };
 
     jsRule.test(/\.js$/).exclude.add(/node_modules/);
-    useBasicTPool(jsRule, 'babel-loader');
-    useBasicTPool(vueRule, 'vue-loader');
+    if (process.env.NODE_ENV !== 'storybook') {
+      useBasicTPool(jsRule, 'babel-loader');
+      useBasicTPool(vueRule, 'vue-loader');
+    }
     // config.plugin('lodash').use(LodashPlugin);
     if (['staging', 'production'].includes(process.env.VUE_APP_STAGE)) {
       config.plugin('sentry').use(SentryWebpackPlugin, [
