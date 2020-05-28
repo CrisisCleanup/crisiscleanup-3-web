@@ -12,5 +12,6 @@ export default {
   api: () => ({
     get: () => MockWorksites[0],
     fetch: () => MockWorksites[0],
+    find_or_fetch: () => MockWorksites[0],
   }),
 };
