@@ -15,7 +15,7 @@ export default {
   methods: {
     ...mapActions('phone', ['initConnect', 'setPopup']),
     async init() {
-      if (!this.connectRunning) {
+      if (!this.connectRunning && !connect.core.initialized) {
         this.$log.debug('CCP embed connecting...');
         const htmlEl = document.getElementById('ccp-embed');
         try {
