@@ -384,7 +384,7 @@ export const actions = {
        */
       Log.error(e);
     }
-    Log.debug('~~waiting for agent...');
+    Log.debug('waiting for agent...');
     ConnectService.bindAgentEvents({
       onRefresh: async (agent) => {
         if (!state.connectRunning) {

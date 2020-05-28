@@ -105,10 +105,10 @@
             <template v-if="apiKeys.length">
               <div class="flex items-center justify-between">
                 <base-text variant="h2" :weight="600">
-                  {{ $t('~~API Keys') }}
+                  {{ $t('adminOrganization.api_keys') }}
                 </base-text>
                 <base-button
-                  :text="$t('~~Generate API Key')"
+                  :text="$t('actions.generate_api_key')"
                   variant="solid"
                   size="medium"
                   :action="generateApiKey"
@@ -544,7 +544,7 @@
         </modal>
         <modal
           v-if="showingApiKeyModal"
-          :title="$t('~~Organization API Key')"
+          :title="$t('adminOrganization.org_api_keys')"
           modal-classes="max-w-sm"
           @close="showingApiKeyModal = false"
           closeable
@@ -558,7 +558,7 @@
             />
             <base-button
               :action="copyApiKey"
-              :text="$t('~~Copy Key')"
+              :text="$t('actions.copy_key')"
               variant="solid"
               size="medium"
               class="my-2"
@@ -941,16 +941,16 @@ export default {
     },
     async copyApiKey() {
       await this.$copyText(this.apiKey);
-      this.$toasted.success('~~Copied Api Key');
+      this.$toasted.success('adminOrganization.api_key_copied');
     },
     async generateApiKey() {
       const result = await this.$selection({
-        title: this.$t('~~Generate API Key'),
+        title: this.$t('actions.generate_api_key'),
         content: this.$t(
-          '~~Please select a type of api key to generate for this organization',
+          'adminOrganization.please_select_api_key_type',
         ),
         options: ['public', 'read'],
-        placeholder: this.$t('~~Key Type'),
+        placeholder: this.$t('adminOrganization.key_type'),
       });
       if (result) {
         const response = await this.$http.post(
