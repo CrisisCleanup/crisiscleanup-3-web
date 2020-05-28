@@ -1,0 +1,13 @@
+component: website
+name: storybook-site
+stage: dev
+
+org: crisiscleanup
+app: storybook-site
+
+inputs:
+  src:
+    src: ../../storybook-static
+    hook: yarn --cwd ../../ build-storybook
+    domain: storybook.crisiscleanup.io
+    bucketName: crisiscleanup-storybook

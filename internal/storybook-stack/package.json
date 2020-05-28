@@ -1,0 +1,10 @@
+{
+  "name": "website",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {},
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+  }
+}
