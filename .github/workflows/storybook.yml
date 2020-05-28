@@ -34,7 +34,7 @@ jobs:
         run: yarn build-storybook
 
       - name: Deploy Storybook
-        working-directory: ./internal/storybook-site
+        working-directory: ./internal/storybook-stack
         run: npx serverless deploy
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
