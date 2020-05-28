@@ -946,9 +946,7 @@ export default {
     async generateApiKey() {
       const result = await this.$selection({
         title: this.$t('actions.generate_api_key'),
-        content: this.$t(
-          'adminOrganization.please_select_api_key_type',
-        ),
+        content: this.$t('adminOrganization.please_select_api_key_type'),
         options: ['public', 'read'],
         placeholder: this.$t('adminOrganization.key_type'),
       });
