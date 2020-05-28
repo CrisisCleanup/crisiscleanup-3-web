@@ -11,3 +11,9 @@ global.connect = {
     ENDED: 'ended',
   },
 };
+
+global.vue = {
+  $i18n: {
+    t: (key) => key,
+  },
+};

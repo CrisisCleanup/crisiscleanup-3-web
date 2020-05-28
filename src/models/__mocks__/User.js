@@ -1,7 +1,7 @@
-import { MockUsers } from '@/utils/testing';
+import { MockUsers, mockModel } from '@/utils/testing';
 
-export default {
-  all: jest.fn(() => MockUsers),
-  find: jest.fn(() => MockUsers[0]),
-  database: jest.fn(() => MockUsers),
-};
+export default mockModel(MockUsers, {
+  api: {
+    inviteUser: jest.fn(),
+  },
+});
