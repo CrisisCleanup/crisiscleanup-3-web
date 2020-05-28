@@ -3,6 +3,25 @@
 exports[`metric actions getAgentMetrics 1`] = `
 Array [
   Array [
+    "setControllerState",
+    Object {
+      "history": Object {
+        "resolvedCases": Array [],
+      },
+    },
+  ],
+  Array [
+    "setControllerState",
+    Object {
+      "history": Object {
+        "resolvedCases": Array [
+          1,
+          2,
+        ],
+      },
+    },
+  ],
+  Array [
     "setAgentMetrics",
     Object {
       "xxxx": Object {
