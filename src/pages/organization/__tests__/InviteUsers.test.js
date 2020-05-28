@@ -36,11 +36,6 @@ describe('InviteUsers', () => {
     expect(spy).not.toHaveBeenCalled();
   });
 
-  it('should match snapshot', async () => {
-    const wrapper = mountWithOptions({ data: { showInviteModal: true } });
-    expect(wrapper.element).toMatchSnapshot();
-  });
-
   it('should convert emails to tags on submit', async () => {
     const wrapper = mountWithOptions({
       data: { showInviteModal: true, emails: 'example@example.com' },
