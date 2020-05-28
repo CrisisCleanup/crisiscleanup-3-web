@@ -622,7 +622,7 @@
         <!-- End Foundational Philosophies -->
         <!-- Corporate and Legal Stuff -->
         <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
-          ~~Corporate and Legal Stuff
+          {{ $t('about.corporate_legal_stuff') }}
         </h1>
 
         <div>

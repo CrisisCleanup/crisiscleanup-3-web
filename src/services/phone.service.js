@@ -116,7 +116,7 @@ export default class PhoneService {
           }),
         );
       } catch (error) {
-        Log.debug('~~Error requesting incident access: ', error);
+        Log.debug('Error requesting incident access: ', error);
       }
     } else if (info.callType === 'OUTBOUND') {
       state = 'ENGAGED-OUTBOUND';

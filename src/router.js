@@ -137,7 +137,7 @@ const routes = [
   {
     path: '/other_organizations',
     component: OtherOrganizations,
-    name: '~~Other Organizations',
+    name: 'nav.other_organizations',
     meta: { layout: 'authenticated' },
   },
   {

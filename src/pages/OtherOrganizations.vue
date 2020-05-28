@@ -6,14 +6,10 @@
       <span class="text-5xl text-primary-dark mr-4">&#9888;</span>
       <div>
         <base-text variant="h2" :weight="600">
-          {{ $t('~~Important: Do NOT share this information with the public') }}
+          {{ $t('otherOrganizations.do_not_share_public') }}
         </base-text>
         <base-text>
-          {{
-            $t(
-              '~~This information is to allow volunteer organizations to coordinate with one another. You may not sign these people up for your newsletter, nor tell them what to do',
-            )
-          }}
+          {{ $t('otherOrganizations.do_not_abuse_contact_data') }}
         </base-text>
       </div>
     </div>
@@ -46,7 +42,7 @@
         <div class="flex p-3">
           <div class="mr-4">
             <base-text variant="h2">
-              {{ $t('~~Primary Contacts') }}
+              {{ $t('otherOrganizations.primary_contacts') }}
             </base-text>
             <div
               style="
@@ -78,7 +74,7 @@
               variant="h2"
               v-if="slotProps.item.incident_primary_contacts.length"
             >
-              {{ $t('~~Incident Primary Contacts') }}
+              {{ $t('otherOrganizations.incident_primary_contacts') }}
             </base-text>
             <div>
               <template
@@ -157,49 +153,49 @@ export default {
     columns() {
       return [
         {
-          title: this.$t('~~Name'),
+          title: this.$t('otherOrganizations.name'),
           dataIndex: 'name',
           key: 'name',
           width: '350px',
         },
         {
-          title: this.$t('~~Organization Role'),
+          title: this.$t('otherOrganizations.access_level'),
           dataIndex: 'approved_roles',
           key: 'approved_roles',
           width: '150px',
         },
         {
-          title: this.$t('~~Incidents'),
+          title: this.$t('otherOrganizations.incidents'),
           dataIndex: 'incident_count',
           key: 'incident_count',
           class: 'justify-center',
         },
         {
-          title: this.$t('~~Cases Reported'),
+          title: this.$t('otherOrganizations.cases_reported'),
           dataIndex: 'reported_count',
           key: 'reported_count',
           class: 'justify-center',
         },
         {
-          title: this.$t('~~Cases Claimed'),
+          title: this.$t('otherOrganizations.cases_claimed'),
           dataIndex: 'claimed_count',
           key: 'claimed_count',
           class: 'justify-center',
         },
         {
-          title: this.$t('~~Cases Closed'),
+          title: this.$t('otherOrganizations.cases_closed'),
           dataIndex: 'closed_count',
           key: 'closed_count',
           class: 'justify-center',
         },
         {
-          title: this.$t('~~Cases Overdue'),
+          title: this.$t('otherOrganizations.cases_overdue'),
           dataIndex: 'overdue_count',
           key: 'overdue_count',
           class: 'justify-center',
         },
         {
-          title: this.$t('~~Last Login'),
+          title: this.$t('otherOrganizations.last_login'),
           dataIndex: 'last_login',
           key: 'last_login',
           class: 'justify-center',

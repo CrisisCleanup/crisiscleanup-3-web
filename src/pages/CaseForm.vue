@@ -725,9 +725,7 @@ export default {
         )
         .some((x) => x);
       if (!anyWorkTypes) {
-        await this.$toasted.error(
-          this.$t('~~You must set at least one work type.'),
-        );
+        await this.$toasted.error(this.$t('caseForm.select_work_type_error'));
         return;
       }
 
