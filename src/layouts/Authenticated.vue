@@ -206,18 +206,13 @@ export default {
         {
           key: 'reports',
           icon: 'reports',
-          text: this.$t('~~Reports'),
+          text: this.$t('nav.reports'),
           to: '/reports',
-          disabled:
-            !this.currentUser ||
-            !this.currentUser.organization ||
-            (this.currentUser.organization.type_t !== 'orgType.government' &&
-              !this.currentUser.isAdmin),
         },
         {
           key: 'admin',
           icon: 'admin',
-          text: this.$t('~~Admin'),
+          text: this.$t('nav.admin'),
           to: '/admin',
           disabled: !this.currentUser.isAdmin,
         },
