@@ -152,7 +152,7 @@ export default {
         await this.fileAwareModels[this.selectedModel]
           .api()
           .addFile(this.entityId, file);
-        await this.$toasted.success(this.$t('~~Successfully uploaded file'));
+        await this.$toasted.success(this.$t('info.upload_file_successful'));
         this.entityId = null;
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
