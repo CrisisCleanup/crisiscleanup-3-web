@@ -831,17 +831,21 @@ export default {
     // }.bind(this), 100000);
   },
   async mounted() {
-    if (this.currentUser.states) {
-      if (this.currentUser.states.showingMap) {
+    const states = this.currentUser.getStatesForIncident(
+      this.currentIncidentId,
+      true,
+    );
+    if (states) {
+      if (states.showingMap) {
         this.showingMap = true;
         this.showingTable = false;
       }
-      if (this.currentUser.states.appliedFilters) {
-        this.appliedFilters = this.currentUser.states.appliedFilters;
+      if (states.appliedFilters) {
+        this.appliedFilters = states.appliedFilters;
       }
-      if (this.currentUser.states.filters) {
+      if (states.filters) {
         this.filters = {
-          ...this.currentUser.states.filters,
+          ...states.filters,
         };
       }
     }
@@ -888,14 +892,18 @@ export default {
       if (!data) {
         data = {};
       }
-      User.api().updateUserState({
-        incident: this.currentIncidentId,
-        appliedFilters: this.appliedFilters,
-        filters: this.filters,
-        showingMap: this.showingMap,
-        showingTable: this.showingTable,
-        ...data,
-      });
+      User.api().updateUserState(
+        {
+          incident: this.currentIncidentId,
+        },
+        {
+          appliedFilters: this.appliedFilters,
+          filters: this.filters,
+          showingMap: this.showingMap,
+          showingTable: this.showingTable,
+          ...data,
+        },
+      );
     },
 
     onUpdatedFilters(filters) {

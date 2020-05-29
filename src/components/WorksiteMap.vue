@@ -121,11 +121,12 @@ import 'leaflet-loading';
 import 'leaflet.gridlayer.googlemutant';
 import 'leaflet-pixi-overlay';
 import 'leaflet.heat';
-import User from '@/models/User';
 import { averageGeolocation, getWorksiteLayer } from '@/utils/map';
 import { colors, templates } from '@/icons/icons_templates';
 import { groupBy } from '@/utils/array';
+import { mapState } from 'vuex';
 import Worksite from '@/models/Worksite';
+import User from '@/models/User';
 
 PixiSettings.SPRITE_MAX_TEXTURES = Math.min(
   PixiSettings.SPRITE_MAX_TEXTURES,
@@ -194,6 +195,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('incident', ['currentIncidentId']),
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
@@ -255,11 +257,12 @@ export default {
             );
           }
           const { map } = this;
-          if (this.currentUser.states && this.currentUser.states.mapViewPort) {
-            const {
-              _northEast,
-              _southWest,
-            } = this.currentUser.states.mapViewPort;
+          const states = this.currentUser.getStatesForIncident(
+            this.currentIncidentId,
+            true,
+          );
+          if (states && states.mapViewPort) {
+            const { _northEast, _southWest } = states.mapViewPort;
             this.map.fitBounds([
               [_northEast.lat, _northEast.lng],
               [_southWest.lat, _southWest.lng],
