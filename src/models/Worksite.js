@@ -171,8 +171,10 @@ export default class Worksite extends Model {
             dataKey: 'results',
           },
         );
-        const users = worksite.response.data.events.map((event) => event.user);
-        await User.api().get(`/users?id__in=${users.join(',')}`, {
+        const eventUserIds = worksite.response.data.events.map(
+          (event) => event.created_by,
+        );
+        await User.api().get(`/users?id__in=${eventUserIds.join(',')}`, {
           dataKey: 'results',
         });
         return worksite;
