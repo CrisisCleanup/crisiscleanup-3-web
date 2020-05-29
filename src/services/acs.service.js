@@ -117,21 +117,22 @@ export const setPopup = async ({ open } = { open: true }) => {
   return true;
 };
 
-export const STATES = Object.freeze({
-  OFFLINE: connect.AgentStateType.OFFLINE,
-  ROUTABLE: connect.AgentStateType.ROUTABLE,
-  INCOMING: connect.ContactStateType.INCOMING,
-  CONNECTING: connect.ContactStateType.CONNECTING,
-  CONNECTED: connect.ContactStateType.CONNECTED,
-  AGENT_PENDING: connect.ContactStateType.PENDING,
-  AGENT_CALLING: 'CallingCustomer',
-  DISCONNECTED: connect.ContactStateType.ENDED,
-  PENDING_CALL: 'PendingBusy',
-  POLLING: 'polling',
-  ON_CALL: 'Busy',
-  PAUSED: 'AfterCallWork',
-  STATIC: 'static',
-});
+export const STATES = () =>
+  Object.freeze({
+    OFFLINE: connect.AgentStateType.OFFLINE,
+    ROUTABLE: connect.AgentStateType.ROUTABLE,
+    INCOMING: connect.ContactStateType.INCOMING,
+    CONNECTING: connect.ContactStateType.CONNECTING,
+    CONNECTED: connect.ContactStateType.CONNECTED,
+    AGENT_PENDING: connect.ContactStateType.PENDING,
+    AGENT_CALLING: 'CallingCustomer',
+    DISCONNECTED: connect.ContactStateType.ENDED,
+    PENDING_CALL: 'PendingBusy',
+    POLLING: 'polling',
+    ON_CALL: 'Busy',
+    PAUSED: 'AfterCallWork',
+    STATIC: 'static',
+  })();
 
 export const METRICS = Object.freeze({
   ONLINE: 'agentsOnline',
