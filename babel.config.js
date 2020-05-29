@@ -10,7 +10,7 @@ module.exports = {
     [
       '@vue/app',
       {
-        useBuiltIns: 'usage',
+        useBuiltIns: 'entry',
       },
     ],
   ],

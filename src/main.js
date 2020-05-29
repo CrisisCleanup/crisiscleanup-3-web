@@ -1,7 +1,9 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import { version } from '@/../package.json';
 import '@/assets/css/tailwind.css';
-import '@crisiscleanup/amazon-connect-streams';
-import '@crisiscleanup/connect-rtc';
+// import '@crisiscleanup/amazon-connect-streams';
+// import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
 import Autocomplete from '@/components/Autocomplete';
 import Badge from '@/components/Badge';

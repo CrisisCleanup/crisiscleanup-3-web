@@ -119,6 +119,13 @@ module.exports = {
       },
     },
   },
+  transpileDependencies: [
+    '@crisiscleanup/amazon-connect-streams',
+    '@crisiscleanup/connect-rtc',
+    'bp-vuejs-dropdown',
+    'circle-to-polygon',
+    'ismobilejs',
+  ],
   pluginOptions: (() => {
     const stages = {
       staging: {
