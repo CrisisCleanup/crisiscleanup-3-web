@@ -291,11 +291,11 @@
                   />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
-                <div class="my-2">
-                  <base-button variant="solid" class="px-4 py-1">
-                    {{ $t('profileUser.change_organization') }}
-                  </base-button>
-                </div>
+                <!--                <div class="my-2">-->
+                <!--                  <base-button variant="solid" class="px-4 py-1">-->
+                <!--                    {{ $t('profileUser.change_organization') }}-->
+                <!--                  </base-button>-->
+                <!--                </div>-->
               </div>
               <div v-if="isEditing" class="mt-6">
                 <h3>{{ $t('profileUser.notification_settings') }}</h3>
