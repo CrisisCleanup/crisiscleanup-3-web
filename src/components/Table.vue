@@ -145,8 +145,8 @@
               {{ column.title }}:
             </span>
             <template v-if="item[column.key] || item[column.key] === 0">
-              <span v-if="column.formatter">{{
-                column.formatter(item[column.key])
+              <span v-if="column.transformer">{{
+                column.transformer(item[column.key], item)
               }}</span>
               <span v-else>{{
                 column.subKey
@@ -235,6 +235,8 @@
 </template>
 
 <script>
+import { exportCSVFile } from '../utils/downloads';
+
 export default {
   name: 'Table',
   props: {
@@ -480,6 +482,24 @@ export default {
         return;
       }
       this.$emit('rowClick', item);
+    },
+    exportTableCSV() {
+      const headers = {};
+      const headersColumns = this.columns.filter((column) =>
+        Boolean(column.title),
+      );
+      headersColumns.forEach((column) => {
+        headers[column.key] = column.title;
+      });
+
+      const data = this.data.map((obj) => {
+        const response = {};
+        headersColumns.forEach((column) => {
+          response[column.key] = obj[column.key];
+        });
+        return response;
+      });
+      exportCSVFile(headers, data, 'export');
     },
   },
 };

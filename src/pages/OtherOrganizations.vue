@@ -200,7 +200,7 @@ export default {
           key: 'last_login',
           class: 'justify-center',
           width: '150px',
-          formatter: (item) => {
+          transformer: (item) => {
             return this.$moment(item).fromNow();
           },
         },

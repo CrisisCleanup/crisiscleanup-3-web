@@ -57,7 +57,7 @@ export default {
       return this.selector || `js-${kebabCase(this.buttonTitle)}`;
     },
     buttonTitle() {
-      return this.title || this.text || this.alt;
+      return this.text || this.alt || this.title;
     },
     styles() {
       const styles = {

@@ -12,7 +12,7 @@ exports[`Storyshots Basics|BaseButton With Action 1`] = `
       class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
       data-cy="js-button"
       size="large"
-      title="Button"
+      title="button"
       type="submit"
     >
       <!---->
@@ -39,7 +39,7 @@ exports[`Storyshots Basics|BaseButton With Async Action 1`] = `
       class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
       data-cy="js-button"
       size="large"
-      title="Button"
+      title="button"
       type="submit"
     >
       <!---->
@@ -66,7 +66,7 @@ exports[`Storyshots Basics|BaseButton With Custom Icon 1`] = `
       class="large text-h3 font-h3 flex items-center justify-center base-button outline js-button"
       data-cy="js-button"
       size="large"
-      title="Button"
+      title="button"
       type="submit"
     >
       <!---->
@@ -103,7 +103,7 @@ exports[`Storyshots Basics|BaseButton With Icon 1`] = `
       class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
       data-cy="js-button"
       size="large"
-      title="Button"
+      title="button"
       type="submit"
     >
       <!---->
@@ -149,7 +149,7 @@ exports[`Storyshots Basics|BaseButton With Sizes 1`] = `
           class="small text-bodysm font-bodysm flex items-center justify-center base-button solid js-button"
           data-cy="js-button"
           size="small"
-          title="Button"
+          title="button"
           type="submit"
         >
           <!---->
@@ -169,7 +169,7 @@ exports[`Storyshots Basics|BaseButton With Sizes 1`] = `
           class="medium text-sans text-h4 font-h4 flex items-center justify-center base-button solid js-button"
           data-cy="js-button"
           size="medium"
-          title="Button"
+          title="button"
           type="submit"
         >
           <!---->
@@ -189,7 +189,7 @@ exports[`Storyshots Basics|BaseButton With Sizes 1`] = `
           class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
           data-cy="js-button"
           size="large"
-          title="Button"
+          title="button"
           type="submit"
         >
           <!---->
@@ -218,7 +218,7 @@ exports[`Storyshots Basics|BaseButton With Text 1`] = `
       class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
       data-cy="js-button"
       size="large"
-      title="Button"
+      title="button"
       type="submit"
     >
       <!---->
@@ -249,7 +249,7 @@ exports[`Storyshots Basics|BaseButton With Variants 1`] = `
           class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
           data-cy="js-button"
           size="large"
-          title="Button"
+          title="button"
           type="submit"
         >
           <!---->
@@ -269,7 +269,7 @@ exports[`Storyshots Basics|BaseButton With Variants 1`] = `
           class="large text-h3 font-h3 flex items-center justify-center base-button outline js-button"
           data-cy="js-button"
           size="large"
-          title="Button"
+          title="button"
           type="submit"
         >
           <!---->
@@ -289,7 +289,7 @@ exports[`Storyshots Basics|BaseButton With Variants 1`] = `
           class="large text-h3 font-h3 flex items-center justify-center base-button text js-button"
           data-cy="js-button"
           size="large"
-          title="Button"
+          title="button"
           type="submit"
         >
           <!---->
@@ -2086,9 +2086,9 @@ exports[`Storyshots Basics|Modal Basic Modal 1`] = `
     <div>
       <button
         alt="button"
-        class="flex items-center justify-center base-button outline js-button"
-        data-cy="js-button"
-        title="Button"
+        class="flex items-center justify-center base-button outline js-show-modal"
+        data-cy="js-show-modal"
+        title="Show Modal"
         type="submit"
       >
         <!---->
@@ -2116,9 +2116,9 @@ exports[`Storyshots Basics|Modal Modal With Custom Header And Footer 1`] = `
     <div>
       <button
         alt="button"
-        class="flex items-center justify-center base-button outline js-button"
-        data-cy="js-button"
-        title="Button"
+        class="flex items-center justify-center base-button outline js-show-modal"
+        data-cy="js-show-modal"
+        title="Show Modal"
         type="submit"
       >
         <!---->

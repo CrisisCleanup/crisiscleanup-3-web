@@ -17,7 +17,7 @@ export default class Invitation extends Model {
 
   get invitation_date() {
     if (this.created_at) {
-      return moment(this.created_at).format('DD/MM/YYYY');
+      return moment(this.created_at).format('L');
     }
     return '';
   }

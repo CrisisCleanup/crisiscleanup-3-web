@@ -3,9 +3,9 @@
 exports[`BaseButton should render correctly and match snapshot 1`] = `
 <button
   alt="alt-text"
-  class="flex items-center justify-center base-button undefined js-btntitle"
-  data-cy="js-btntitle"
-  title="btntitle"
+  class="flex items-center justify-center base-button undefined js-button"
+  data-cy="js-button"
+  title="button"
   type="primary"
 >
   <!---->

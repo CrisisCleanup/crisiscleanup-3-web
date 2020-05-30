@@ -18,14 +18,7 @@
             class="table-action-button"
             ccu-icon="download"
             icon-size="small"
-          />
-          <base-button
-            size="small"
-            :text="$t('actions.print')"
-            :alt="$t('actions.print')"
-            class="table-action-button"
-            ccu-icon="print"
-            icon-size="small"
+            :action="exportInvitationRequestsTable"
           />
         </div>
       </div>
@@ -34,6 +27,9 @@
         :data="invitationRequests"
         :columns="currentRequestsColumns"
         :loading="false"
+        ref="invitationRequestsTable"
+        :sorter="invitationRequestsSorter"
+        @change="handleInvitationRequestsTableChange"
       >
         <template #actions="slotProps">
           <div class="flex mr-2 justify-end w-full">
@@ -77,13 +73,6 @@
           <div class="text-base">
             {{ $t('invitationsVue.incomplete_invitations') }}
           </div>
-          <div
-            class="mx-5 flex items-center bg-white border p-1 px-4 cursor-pointer"
-            @click="() => {}"
-          >
-            Filters
-            <font-awesome-icon icon="sort" class="ml-20" />
-          </div>
         </div>
         <div class="flex">
           <base-button
@@ -93,14 +82,7 @@
             class="table-action-button"
             ccu-icon="download"
             icon-size="small"
-          />
-          <base-button
-            size="small"
-            :text="$t('actions.print')"
-            :alt="$t('actions.print')"
-            class="table-action-button"
-            ccu-icon="print"
-            icon-size="small"
+            :action="exportInvitationsTable"
           />
           <base-button
             size="small"
@@ -109,6 +91,7 @@
             class="table-action-button"
             ccu-icon="trash"
             icon-size="small"
+            :action="deleteExpiredInvitations"
           />
         </div>
       </div>
@@ -117,6 +100,9 @@
         :data="invitations"
         :columns="invitationsColumns"
         :loading="false"
+        @change="handleInvitationsTableChange"
+        :sorter="invitationSorter"
+        ref="invitationsTable"
       >
         <template #actions="slotProps">
           <div class="flex mr-2 justify-center w-full">
@@ -140,7 +126,7 @@
               :alt="$t('actions.delete_invitation')"
               type="trash"
               size="small"
-              @click.native="() => deleteInvitation(slotProps.item)"
+              @click.native="() => deleteInvitations([slotProps.item])"
             />
           </div>
         </template>
@@ -164,19 +150,22 @@ export default {
           title: this.$t('invitationsVue.requestor'),
           dataIndex: 'requestor',
           key: 'full_name',
-          width: '2fr',
+          sortable: true,
         },
         {
           title: this.$t('invitationsVue.phone'),
           dataIndex: 'phone',
           key: 'mobile',
-          width: '2fr',
+          sortable: true,
         },
         {
           title: this.$t('invitationsVue.request_date'),
-          dataIndex: 'requested_at_moment',
-          key: 'requested_at_moment',
-          width: '2fr',
+          dataIndex: 'requested_at',
+          key: 'requested_at',
+          sortable: true,
+          transformer: (requested_at) => {
+            return this.$moment(requested_at).format('L');
+          },
         },
         {
           title: '',
@@ -191,24 +180,31 @@ export default {
           dataIndex: 'email',
           key: 'invitee_email',
           width: '250px',
+          sortable: true,
         },
         {
           title: this.$t('invitationsVue.invited_by'),
           dataIndex: 'inviter',
           key: 'inviter',
           width: '1fr',
+          sortable: true,
         },
         {
           title: this.$t('invitationsVue.status'),
           dataIndex: 'status',
           key: 'status',
           width: '1fr',
+          sortable: true,
         },
         {
-          title: this.$t('invitationsVue.invitation_date'),
-          dataIndex: 'invitation_date',
-          key: 'invitation_date',
+          title: this.$t('~~Expiry Date'),
+          dataIndex: 'expires_at',
+          key: 'expires_at',
           width: '1fr',
+          transformer: (expires_at) => {
+            return this.$moment(expires_at).format('L');
+          },
+          sortable: true,
         },
         {
           title: '',
@@ -223,17 +219,28 @@ export default {
           width: '0.5fr',
         },
       ],
+      invitationSorter: {},
+      invitationRequestsSorter: {},
     };
   },
   computed: {
     invitationRequests() {
-      return InvitationRequest.query()
+      const baseQuery = InvitationRequest.query()
         .where('approved_at', null)
-        .where('rejected_at', null)
-        .get();
+        .where('rejected_at', null);
+
+      if (this.invitationRequestsSorter.key) {
+        const { key, direction } = this.invitationRequestsSorter;
+        return baseQuery.orderBy(key, direction).get();
+      }
+      return baseQuery.orderBy('id', 'desc').get();
     },
     invitations() {
-      return Invitation.all();
+      if (this.invitationSorter.key) {
+        const { key, direction } = this.invitationSorter;
+        return Invitation.query().orderBy(key, direction).get();
+      }
+      return Invitation.query().orderBy('id', 'desc').get();
     },
   },
   async mounted() {
@@ -247,6 +254,18 @@ export default {
       await InvitationRequest.api().get(`/invitation_requests`, {
         dataKey: 'results',
       });
+    },
+    exportInvitationsTable() {
+      this.$refs.invitationsTable.exportTableCSV();
+    },
+    exportInvitationRequestsTable() {
+      this.$refs.invitationRequestsTable.exportTableCSV();
+    },
+    async deleteExpiredInvitations() {
+      const invitations = Invitation.query()
+        .where('status', (status) => status === 'Expired')
+        .get();
+      await this.deleteInvitations(invitations);
     },
     async loadAllInvitations() {
       await Invitation.api().get(`/invitations`, {
@@ -272,11 +291,22 @@ export default {
       await this.loadAllInvitations();
       await this.$toasted.success(this.$t('invitationsVue.invitation_resent'));
     },
-    async deleteInvitation(invitation) {
-      await Invitation.api().delete(`/invitations/${invitation.id}`, {
-        delete: invitation.id,
-      });
+    async deleteInvitations(invitations) {
+      await Promise.all(
+        invitations.map((invitation) =>
+          Invitation.api().delete(`/invitations/${invitation.id}`, {
+            delete: invitation.id,
+          }),
+        ),
+      );
+
       await this.$toasted.success(this.$t('invitationsVue.invitation_deleted'));
+    },
+    handleInvitationsTableChange({ sorter }) {
+      this.invitationSorter = { ...sorter };
+    },
+    handleInvitationRequestsTableChange({ sorter }) {
+      this.invitationRequestsSorter = { ...sorter };
     },
   },
 };

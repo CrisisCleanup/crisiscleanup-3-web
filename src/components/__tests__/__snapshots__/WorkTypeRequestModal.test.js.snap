@@ -77,9 +77,9 @@ exports[`WorkTypeRequestModal show modal with options 1`] = `
   >
     <button
       alt="actions.cancel"
-      class="ml-2 p-3 px-6 mr-1 text-xs border border-black flex items-center justify-center base-button undefined js-button"
-      data-cy="js-button"
-      title="Button"
+      class="ml-2 p-3 px-6 mr-1 text-xs border border-black flex items-center justify-center base-button undefined js-actions-cancel"
+      data-cy="js-actions-cancel"
+      title="actions.cancel"
       type="submit"
     >
       <!---->
@@ -93,9 +93,9 @@ exports[`WorkTypeRequestModal show modal with options 1`] = `
      
     <button
       alt="actions.request"
-      class="ml-2 p-3 px-6 text-xs flex items-center justify-center base-button solid js-button"
-      data-cy="js-button"
-      title="Button"
+      class="ml-2 p-3 px-6 text-xs flex items-center justify-center base-button solid js-actions-request"
+      data-cy="js-actions-request"
+      title="actions.request"
       type="submit"
     >
       <!---->
