@@ -13,6 +13,7 @@ export default class InvitationRequest extends Model {
       invitation_token: this.attr(null),
       mobile: this.attr(null),
       requested_to: this.attr(null),
+      requested_to_organization: this.attr(null),
       requested_at: this.attr(null),
       approved_at: this.attr(null),
       rejected_at: this.attr(null),

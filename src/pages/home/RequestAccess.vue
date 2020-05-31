@@ -131,8 +131,8 @@
             <base-text class="w-3/4 text-center" variant="body" wieght="300">
               {{
                 $t('requestAccess.request_sent_to_org', {
-                  organization: organization,
-                  requested_to: requested_to,
+                  organization: requestedToOrg,
+                  requested_to: requestedTo,
                 })
               }}"
             </base-text>
@@ -172,16 +172,20 @@ export default {
         if (!isValid) {
           return;
         }
-        await InvitationRequest.api().post(`/invitation_requests`, {
-          first_name: this.firstName,
-          last_name: this.lastName,
-          email: this.email,
-          password1: this.password,
-          password2: this.confirmPassword,
-          mobile: this.mobile,
-          requested_to: this.requestedTo,
-          primary_language: this.primaryLanguage,
-        });
+        const response = await InvitationRequest.api().post(
+          `/invitation_requests`,
+          {
+            first_name: this.firstName,
+            last_name: this.lastName,
+            email: this.email,
+            password1: this.password,
+            password2: this.confirmPassword,
+            mobile: this.mobile,
+            requested_to: this.requestedTo,
+            primary_language: this.primaryLanguage,
+          },
+        );
+        this.requestedToOrg = response.response.data.requested_to_organization;
         this.showSuccessModal = true;
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -210,6 +214,7 @@ export default {
       showSuccessModal: false,
       toggleOpen: false,
       primaryLanguage: null,
+      requestedToOrg: null,
     };
   },
 };
