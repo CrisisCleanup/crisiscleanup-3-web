@@ -92,7 +92,7 @@
     "typeface-nunito-sans": "^0.0.72",
     "v-tooltip": "^2.0.3",
     "vue": "2.6.11",
-    "vue-autosuggest": "^2.0.4",
+    "vue-autosuggest": "^2.1.2",
     "vue-axios": "^2.1.5",
     "vue-browser-acl": "^0.13.5",
     "vue-burger-menu": "^2.0.5",
