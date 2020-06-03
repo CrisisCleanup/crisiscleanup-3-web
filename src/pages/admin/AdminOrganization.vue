@@ -102,18 +102,18 @@
               label="label"
             ></form-select>
 
+            <div class="flex items-center justify-between">
+              <base-text variant="h2" :weight="600">
+                {{ $t('adminOrganization.api_keys') }}
+              </base-text>
+              <base-button
+                :text="$t('actions.generate_api_key')"
+                variant="solid"
+                size="medium"
+                :action="generateApiKey"
+              />
+            </div>
             <template v-if="apiKeys.length">
-              <div class="flex items-center justify-between">
-                <base-text variant="h2" :weight="600">
-                  {{ $t('adminOrganization.api_keys') }}
-                </base-text>
-                <base-button
-                  :text="$t('actions.generate_api_key')"
-                  variant="solid"
-                  size="medium"
-                  :action="generateApiKey"
-                />
-              </div>
               <div v-for="key in apiKeys">
                 {{ key.api_key }} ({{ key.type }})
               </div>
