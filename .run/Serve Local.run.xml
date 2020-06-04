@@ -1,0 +1,44 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Serve Local" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="serve-dev" />
+    </scripts>
+    <node-interpreter value="$USER_HOME$/.nvm/versions/node/v13.9.0/bin/node" />
+    <envs>
+      <env name="AWS_PROFILE" value="ccalt_braden" />
+      <env name="VUE_APP_WHAT_3_WORDS_API_KEY" value="20SA3N5X" />
+      <env name="VUE_APP_GOOGLE_MAPS_API_KEY" value="AIzaSyBuQPeETkH_q3QE00PeC3g8bHAyVseh7FY" />
+      <env name="VUE_APP_PITNEYBOWES_API_KEY" value="sFDDfMzkX8Ior1oIYR8PhxVm9MjwbGpy" />
+      <env name="VUE_APP_PITNEYBOWES_BASIC_AUTH_TOKEN" value="c0ZERGZNemtYOElvcjFvSVlSOFBoeFZtOU1qd2JHcHk6ckdCUmtObUF1YkxWS01CTw==" />
+      <env name="VUE_APP_BASE_URL" value="http://localhost:8080" />
+      <env name="VUE_APP_API_BASE_URL" value="http://localhost:5000" />
+      <env name="CYPRESS_WEB_USER" value="test@crisiscleanup.org" />
+      <env name="CYPRESS_WEB_PASS" value="test123" />
+      <env name="CYPRESS_API_URL" value="http://localhost:5000" />
+      <env name="CYPRESS_RECORD_KEY" value="410e24d3-a2f4-43d0-a76c-6db28da0b25e" />
+      <env name="SORRY_CYP_API_URL" value="http://sorry-cypress-1217169710.us-east-1.elb.amazonaws.com:8080/" />
+      <env name="PERCY_TOKEN" value="ce01d730b3346da30148169f5e428ee12bc74f75f9f295b115f5b736c3d12d4b" />
+      <env name="GITHUB_PAT" value="a61802fa82fc842042dd00c58c1a0fc3a1d151c2" />
+      <env name="VUE_APP_AWS_CCP_URL" value="https://ccudev.awsapps.com/connect/ccp-v2/" />
+      <env name="VUE_APP_AWS_CCP_REGION" value="us-east-1" />
+      <env name="VUE_APP_CCP_PRINCIPAL" value="arn:aws:iam::240937704012:saml-provider/localhost" />
+      <env name="VUE_APP_CCP_ROLE" value="arn:aws:iam::240937704012:role/CCULocalConnectRole" />
+      <env name="VUE_APP_CCP_INSTANCE" value="87fbcad4-9f58-4153-84e8-d5b7202693e8" />
+      <env name="VUE_APP_RC_CLIENT_ID" value="v7GqtPuqQpSkEYXFZan8Fw" />
+      <env name="VUE_APP_RC_CLIENT_SECRET" value="r6B2PGAOQK-KHrmES8nvKw61X3rnLkTEq9AJ2VgXJFMQ" />
+      <env name="COMPOSE_DOCKER_CLI_BUILD" value="1" />
+      <env name="DOCKER_BUILDKIT" value="1" />
+      <env name="SENTRY_DSN" value="https://2b3f683efc3d444d82c8719fdb6d69dd@sentry.io/5166561" />
+      <env name="SENTRY_AUTH_TOKEN" value="52d2ab0516ac48e19f2dc9a711df5300bd7403325299458aa663d0dcff4c0d67" />
+      <env name="SENTRY_PROPERTIES" value="sentry.properties" />
+      <env name="VAULT_ADDR" value="https://vault.crisiscleanup.io:8200" />
+      <env name="VAULT_CAPATH" value="$USER_HOME$/.ccu/ca.pem" />
+      <env name="VAULT_TOKEN" value="db0d0ce8de18f2fae68c2a31a0fb6b495f07f9df" />
+      <env name="VUE_APP_STAGE" value="development" />
+      <env name="VUE_APP_WS_URL" value="wss://socket.dev.crisiscleanup.io" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>
