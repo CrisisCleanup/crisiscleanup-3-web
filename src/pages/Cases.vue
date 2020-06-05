@@ -442,7 +442,7 @@
           {{
             currentWorksite && isEditingWorksite
               ? `Edit ${currentWorksite.case_number}`
-              : `View ${currentWorksite.case_number}`
+              : `View ${currentWorksite && currentWorksite.case_number}`
           }}
           <ccu-icon
             :alt="$t('actions.cancel')"
@@ -474,7 +474,7 @@
             type="history"
           >
             <span class="ml-1 mt-1"
-              >{{ currentWorksite.case_number }}
+              >{{ currentWorksite && currentWorksite.case_number }}
               {{ $t('actions.history') }}</span
             >
           </ccu-icon>
@@ -493,7 +493,8 @@
             type="flag"
           >
             <span v-if="currentWorksite" class="ml-1 mt-1"
-              >{{ currentWorksite.case_number }} {{ $t('actions.flag') }}</span
+              >{{ currentWorksite && currentWorksite.case_number }}
+              {{ $t('actions.flag') }}</span
             >
           </ccu-icon>
           <ccu-icon
