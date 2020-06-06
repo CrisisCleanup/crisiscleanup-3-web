@@ -557,7 +557,6 @@ export const actions = {
   async setAgentState(
     { commit, dispatch, getters: { agentState, agentId } },
     state,
-    { force = false } = {},
   ) {
     Log.debug('SETTING AGENT STATE:', state);
     let aId = agentId;
@@ -565,9 +564,12 @@ export const actions = {
       aId = await dispatch('getAgent');
     }
     let newState = state;
+    let force = false;
     if (typeof newState === 'object') {
       // websocket support for legacy param
+      // and additional options
       newState = state.state;
+      force = state.force ? state.force : false;
     }
     if (
       (newState && newState !== agentState) ||
