@@ -71,6 +71,7 @@ import Logger from '@/utils/log';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
+import { has } from 'lodash';
 
 // Base Components
 Vue.component('base-link', BaseLink);
@@ -209,7 +210,7 @@ Vue.use(VueNativeSocket, WS_URL, {
     if (!eventName.startsWith('SOCKET_')) return;
     const Log = Logger({ name: 'WS' });
     Log.debug('incoming message:', eventName, event);
-    if (!('$store' in window.vue)) {
+    if (!has(window, 'vue.$store')) {
       Log.debug("store isn't ready yet!");
       return;
     }
