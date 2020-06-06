@@ -183,11 +183,11 @@ export default class Worksite extends Model {
         let item = await Worksite.find(id);
         if (!item) {
           if (resolve) {
-            item = Worksite.api().fetch(id);
+            item = await Worksite.api().fetch(id);
           } else {
             const {
               response: { data },
-            } = await Worksite.api().get(id);
+            } = await Worksite.api().get(`/worksites/${id}`);
             item = data;
           }
         }
