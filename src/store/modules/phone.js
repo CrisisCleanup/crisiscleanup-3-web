@@ -118,6 +118,15 @@ const getters = {
     state.agentState !== null
       ? state.agentState
       : ConnectService.STATES.OFFLINE,
+  agentCompleteState: (state, { agentBoard, agentId }) => {
+    // Current complete state from database
+    // <online/offline>#<routable/non_routable>#<contact-state>
+    if (!isEmpty(agentBoard)) {
+      const agentStat = agentBoard.find((a) => a.agent === agentId);
+      return agentStat ? agentStat.currentState : null;
+    }
+    return null;
+  },
   agentStateTimestamp: (state) =>
     state.agentStateTimestamp ? Date.parse(state.agentStateTimestamp) : null,
   agent: (state) => (state.agent ? Agent.find(state.agent.agent_id) : null),
@@ -443,18 +452,32 @@ export const actions = {
         }
         const agentState = ConnectService.parseAgentState(rawAgentState);
         Log.debug('new agent state inbound:', agentState);
+        // This is a small workaround for clearing a paused state
+        // since connect fails to reliably call the
+        // onAfterCallWork callback below
+        if (!isNil(rootGetters['phone/agentCompleteState'])) {
+          if (
+            rootGetters['phone/agentCompleteState'].includes(
+              ConnectService.STATES.PAUSED,
+            ) &&
+            agentState !== ConnectService.STATES.PAUSED
+          ) {
+            Log.debug('ACW has expires, pushing new state!');
+            await dispatch('setAgentState', { state: agentState, force: true });
+          }
+        }
         if (!isNull(agentState)) {
           commit('setAgentState', agentState);
         }
       },
       onAfterCallWork: async () => {
+        // Seems connect does NOT reliably
+        // execute this callback...
         Log.debug('agent entered ACW, going routable in 3m...');
         await delay(
           async (currentState) => {
             if (currentState === ConnectService.STATES.PAUSED) {
-              await dispatch('setAgentState', ConnectService.STATES.ROUTABLE, {
-                force: true,
-              });
+              await dispatch('setAgentState', ConnectService.STATES.ROUTABLE);
               await dispatch(
                 'socket/send',
                 {
