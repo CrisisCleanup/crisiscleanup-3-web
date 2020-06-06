@@ -130,7 +130,6 @@ export default {
           userId: this.userId,
           type: this.currentUser.isAdmin ? 'admin' : 'user',
           agentId: aId,
-          currentContactId: this.currentContactId,
         },
       });
     },
