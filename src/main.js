@@ -68,10 +68,10 @@ import Tabs from '@/components/tabs/Tabs';
 import Tab from '@/components/tabs/Tab';
 import PhoneService from '@/services/phone.service';
 import Logger from '@/utils/log';
+import { has } from 'lodash';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
-import { has } from 'lodash';
 
 // Base Components
 Vue.component('base-link', BaseLink);
