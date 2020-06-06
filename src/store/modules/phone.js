@@ -405,13 +405,7 @@ export const actions = {
     }
   },
   async initConnect(context, htmlEl) {
-    const {
-      state,
-      commit,
-      dispatch,
-      getters: { agentId },
-      rootGetters,
-    } = context;
+    const { state, commit, dispatch, rootGetters } = context;
     try {
       await ConnectService.initConnect({
         htmlEl,
