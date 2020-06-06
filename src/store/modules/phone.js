@@ -987,6 +987,10 @@ export const actions = {
     if (agentOnCall) {
       Log.debug('agent still on call, hanging up...');
       await dispatch('endCurrentCall');
+      // there is a minor delay during the 'hang up' process
+      // where the contact still appears as 'connected', causing the
+      // page to stay in the controller. This compensates for it.
+      delay(() => dispatch('setCurrentPage', 'dashboard'), 1000);
     }
     await dispatch('setCurrentPage', 'dashboard');
   },
