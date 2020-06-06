@@ -409,7 +409,8 @@ export const actions = {
       state,
       commit,
       dispatch,
-      getters: { agentStateTimestamp, agentId },
+      getters: { agentId },
+      rootGetters,
     } = context;
     try {
       await ConnectService.initConnect({
@@ -446,7 +447,13 @@ export const actions = {
         const rawAgentState = await agent.getState();
         Log.debug('raw agent state: ', rawAgentState);
         const { startTimestamp } = rawAgentState;
-        if (agentStateTimestamp && agentStateTimestamp > startTimestamp) {
+        // apparently by using destructuring on the getters obj
+        // and using the values in a subfunction down here,
+        // it dereferences it... so use rootGetters
+        if (
+          rootGetters['phone/agentStateTimestamp'] &&
+          rootGetters['phone/agentStateTimestamp'] > startTimestamp
+        ) {
           Log.debug('disregarding connect agent state, is stale.');
           return;
         }
@@ -504,7 +511,7 @@ export const actions = {
     ConnectService.bindContactEvents({
       onIncoming: async (contact) => {
         Log.debug('incoming callback!');
-        if (agentId && context.getters.agentState) {
+        if (rootGetters['phone/agentId'] && rootGetters['phone/agentState']) {
           await dispatch(
             'socket/send',
             {
@@ -514,11 +521,11 @@ export const actions = {
               },
               data: omitBy(
                 {
-                  agentId,
-                  agentState: context.getters.agentState,
+                  agentId: rootGetters['phone/agentId'],
+                  agentState: rootGetters['phone/agentState'],
                   currentContactId: defaultTo(
                     contact.getInitialContactId(),
-                    context.getters.currentContactId,
+                    rootGetters['phone/currentContactId'],
                   ),
                 },
                 isNil,
