@@ -28,6 +28,7 @@ import {
   omitBy,
   orderBy,
   unionBy,
+  isEmpty,
 } from 'lodash';
 
 const Log = Logger({
@@ -325,6 +326,7 @@ export const actions = {
   async getAgentMetrics(
     {
       commit,
+      rootGetters,
       state: {
         controller: { history },
       },
@@ -335,40 +337,50 @@ export const actions = {
     await Promise.all(
       agents.map(async ({ agent_id, state, entered_timestamp }) => {
         await Agent.api().get(`/agents/${agent_id}`);
-        const { recent_contacts, ...metrics } = await Agent.api().getMetrics(
-          agent_id,
-        );
-        let recentContacts = defaultTo(recent_contacts, []);
-        // find all unique case ids and prefetch em
-        let recentCases = uniq(
-          flatten(recentContacts.map(({ cases }) => cases)),
-        );
-        recentCases = difference(recentCases, history.resolvedCases);
-        await commit('setControllerState', {
-          history: { resolvedCases: union(recentCases, history.resolvedCases) },
-        });
-        Log.debug('Found cases in history:', recentCases);
-        recentCases.map((cId) =>
-          Worksite.api().find_or_fetch(cId, { resolve: false }),
-        );
-        recentContacts = recentContacts.map(async ({ cases, ...c }) => {
-          const wkSites = await Promise.all(
-            cases.map(async (cId) => {
-              let caseItem = await Worksite.find(cId);
-              if (isNil(caseItem)) {
-                const {
-                  response: { data },
-                } = await Worksite.api().get(`/worksites/${cId}`);
-                caseItem = data;
-              }
-              return caseItem;
-            }),
+        const {
+          recent_contacts,
+          user,
+          ...metrics
+        } = await Agent.api().getMetrics(agent_id);
+        let recentContacts = [];
+        if (rootGetters['auth/userId'] === user.id) {
+          recentContacts = defaultTo(recent_contacts, []);
+          // find all unique case ids and prefetch em
+          let recentCases = uniq(
+            flatten(recentContacts.map(({ cases }) => cases)),
           );
-          return { cases: wkSites, ...c };
-        });
-        recentContacts = await Promise.all(recentContacts);
+          recentCases = difference(recentCases, history.resolvedCases);
+          await commit('setControllerState', {
+            history: {
+              resolvedCases: union(recentCases, history.resolvedCases),
+            },
+          });
+          Log.debug('Found cases in history:', recentCases);
+          await Promise.all(
+            recentCases.map((cId) =>
+              Worksite.api().find_or_fetch(cId, { resolve: false }),
+            ),
+          );
+          recentContacts = recentContacts.map(async ({ cases, ...c }) => {
+            const wkSites = await Promise.all(
+              cases.map(async (cId) => {
+                let caseItem = await Worksite.find(cId);
+                if (isNil(caseItem)) {
+                  const {
+                    response: { data },
+                  } = await Worksite.api().get(`/worksites/${cId}`);
+                  caseItem = data;
+                }
+                return caseItem;
+              }),
+            );
+            return { cases: wkSites, ...c };
+          });
+          recentContacts = await Promise.all(recentContacts);
+        }
         agentBoard[agent_id] = {
           ...metrics,
+          user,
           currentState: state,
           enteredTimestamp: Date.parse(entered_timestamp),
           recent_contacts: recentContacts,
