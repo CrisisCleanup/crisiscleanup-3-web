@@ -6,14 +6,6 @@ Array [
     "setControllerState",
     Object {
       "history": Object {
-        "resolvedCases": Array [],
-      },
-    },
-  ],
-  Array [
-    "setControllerState",
-    Object {
-      "history": Object {
         "resolvedCases": Array [
           1,
           2,

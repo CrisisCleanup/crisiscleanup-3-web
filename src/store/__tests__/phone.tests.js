@@ -131,7 +131,12 @@ describe('metric actions', () => {
     aniIncident.id = 99;
 
     await actions.getAgentMetrics(
-      { commit, state, getters: { currentAniIncident: () => aniIncident } },
+      {
+        commit,
+        state,
+        getters: { currentAniIncident: () => aniIncident },
+        rootGetters: { 'auth/userId': MockUsers[1].id },
+      },
       {
         agents: [
           {
