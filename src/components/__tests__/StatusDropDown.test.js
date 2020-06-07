@@ -1,13 +1,13 @@
 /**
  *
- * Tests for StatusDropDown
+ * Tests for WorksiteStatusDropdown
  *
  * Components
  */
 
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import StatusDropDown from '../StatusDropDown';
+import WorksiteStatusDropdown from '../WorksiteStatusDropdown';
 const statuses = [
   {
     id: 1,
@@ -57,7 +57,7 @@ const mockWorkType = {
 };
 
 const mountWithOptions = (store, props = {}) =>
-  shallowMount(StatusDropDown, {
+  shallowMount(WorksiteStatusDropdown, {
     stubs: {
       'font-awesome-icon': true,
       'a-select': "<input type='select'>",
@@ -72,7 +72,7 @@ const mountWithOptions = (store, props = {}) =>
     store,
   });
 
-describe('StatusDropDown', () => {
+describe('WorksiteStatusDropdown', () => {
   let store;
 
   beforeEach(() => {

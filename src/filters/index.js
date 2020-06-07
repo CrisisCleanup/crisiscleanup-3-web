@@ -19,8 +19,8 @@ export function getWorkTypeName(workType) {
 }
 
 export function getStatusName(statusKey) {
-  return enums.state.statuses.find((type) => type.status === statusKey)
-    .status_name_t;
+  const status = enums.state.statuses.find((type) => type.status === statusKey);
+  return status ? status.status_name_t : '';
 }
 
 export function getRecurrenceString(rule) {

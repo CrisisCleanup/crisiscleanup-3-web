@@ -166,7 +166,7 @@
                       :key="work_type.id"
                       class="mx-1"
                     >
-                      <StatusDropDown
+                      <WorksiteStatusDropdown
                         class="block"
                         :current-work-type="work_type"
                         use-icon
@@ -355,7 +355,7 @@ import {
   getWorkTypeImage,
   getWorkTypeName,
 } from '@/filters';
-import StatusDropDown from '@/components/StatusDropDown';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown';
 import { forceFileDownload } from '@/utils/downloads';
 import Loader from '@/components/Loader';
 import InviteUsers from './organization/InviteUsers';
@@ -369,7 +369,7 @@ export default {
     RedeployRequest,
     InviteUsers,
     Table,
-    StatusDropDown,
+    WorksiteStatusDropdown,
     Loader,
   },
   data() {

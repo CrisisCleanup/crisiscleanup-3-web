@@ -27,7 +27,7 @@
                   <span class="text-sm">{{
                     work_type.work_type | getWorkTypeName
                   }}</span>
-                  <StatusDropDown
+                  <WorksiteStatusDropdown
                     class="block"
                     :current-work-type="work_type"
                     use-icon
@@ -84,12 +84,12 @@
 
 <script>
 import HomeLayout from '@/layouts/Home';
-import StatusDropDown from '../../components/StatusDropDown';
+import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
 import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
 
 export default {
-  components: { HomeLayout, StatusDropDown, Loader },
+  components: { HomeLayout, WorksiteStatusDropdown, Loader },
   name: 'PrintToken',
   async mounted() {
     this.loading = true;

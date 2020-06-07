@@ -46,7 +46,7 @@ import { getColorForStatus, getWorkTypeImage } from '@/filters';
 import { mapState } from 'vuex';
 
 export default {
-  name: 'StatusDropDown',
+  name: 'WorksiteStatusDropdown',
   props: {
     currentWorkType: {
       type: Object,
@@ -121,6 +121,7 @@ export default {
 <style>
 .status-dropdown {
   @apply outline-none;
+  z-index: 10000000;
 }
 </style>
 
