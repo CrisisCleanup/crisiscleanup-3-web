@@ -197,7 +197,7 @@ export default {
           sortable: true,
         },
         {
-          title: this.$t('~~Expiry Date'),
+          title: this.$t('invitationsVue.expiration_date'),
           dataIndex: 'expires_at',
           key: 'expires_at',
           width: '1fr',
