@@ -303,7 +303,12 @@
               <div class="table-operations flex justify-end items-center">
                 <div class="flex">
                   <base-button
-                    class="ml-3 my-3 border p-1 px-4 text-crisiscleanup-grey-700 bg-white"
+                    class="ml-3 my-3 border p-1 px-4 bg-white"
+                    :class="
+                      selectedTableItems.length === 0
+                        ? 'text-crisiscleanup-grey-700'
+                        : ''
+                    "
                     :disabled="selectedTableItems.length === 0"
                     :action="
                       () => {
@@ -316,11 +321,63 @@
                   </base-button>
                   <base-button
                     icon="sync"
-                    class="border p-1 px-4 text-crisiscleanup-grey-700 ml-3 my-3 flex items-center bg-white"
+                    class="ml-3 my-3 border p-1 px-4 bg-white"
+                    :class="
+                      selectedTableItems.length === 0
+                        ? 'text-crisiscleanup-grey-700'
+                        : ''
+                    "
                     :text="$t('actions.update_status')"
                     :alt="$t('actions.update_status')"
-                    @click="() => {}"
+                    :action="
+                      () => {
+                        showingUpdateStatusModal = true;
+                      }
+                    "
                   />
+
+                  <modal
+                    v-if="showingUpdateStatusModal"
+                    modal-classes="bg-white max-w-lg shadow"
+                  >
+                    <div slot="header" class="text-lg border-b p-3">
+                      {{ $t('actions.actions.update_status') }}
+                    </div>
+                    <div class="p-3 flex flex-col">
+                      <StatusDropdown
+                        class="block"
+                        :phase="currentIncident.phase"
+                        @input="
+                          (value) => {
+                            statusForUpdate = value;
+                          }
+                        "
+                      />
+                    </div>
+                    <div
+                      slot="footer"
+                      class="flex items-center justify-center p-2 bg-white border-t"
+                    >
+                      <base-button
+                        variant="solid"
+                        class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
+                        :action="updateStatusSelected"
+                        :text="$t('actions.ok')"
+                        :alt="$t('actions.ok')"
+                      />
+                      <base-button
+                        type="bare"
+                        class="border border-black mx-2 text-base p-2 px-4 text-black"
+                        :action="
+                          () => {
+                            showingUpdateStatusModal = false;
+                          }
+                        "
+                        :text="$t('actions.cancel')"
+                        :alt="$t('actions.cancel')"
+                      />
+                    </div>
+                  </modal>
                   <modal
                     v-if="showingUnclaimModal"
                     modal-classes="bg-white max-w-lg shadow"
@@ -637,10 +694,12 @@ import { EventBus } from '../event-bus';
 import WorksiteTable from './WorksiteTable';
 import { hash } from '../utils/promise';
 import WorksiteSearchInput from '../components/WorksiteSearchInput';
+import StatusDropdown from '../components/StatusDropdown';
 
 export default {
   name: 'Cases',
   components: {
+    StatusDropdown,
     WorksiteSearchInput,
     WorksiteTable,
     WorksiteMap,
@@ -683,6 +742,8 @@ export default {
       unchangedStatusOnUnclaim: true,
       updateStatusOnUnclaim: false,
       isMounted: false,
+      showingUpdateStatusModal: false,
+      statusForUpdate: null,
     };
   },
   computed: {
@@ -1266,6 +1327,31 @@ export default {
       this.showingUnclaimModal = false;
       this.reloadTable();
     },
+    async updateStatusSelected() {
+      this.spinning = true;
+      const promises = [];
+      this.selectedTableItems.forEach((worksiteId) => {
+        const worksite = this.data.find((w) => {
+          return w.id === worksiteId;
+        });
+
+        worksite.work_types.forEach((workType) => {
+          promises.push(
+            Worksite.api().updateWorkTypeStatus(
+              workType.id,
+              this.statusForUpdate,
+            ),
+          );
+        });
+      });
+      const results = await Promise.allSettled(promises);
+      results.forEach((result) => this.$log.debug(result));
+      this.spinning = false;
+      this.showingUpdateStatusModal = false;
+      this.statusForUpdate = null;
+      this.reloadTable();
+    },
+
     async batchAction(action) {
       this.spinning = true;
       await this.selectedTableItems.forEach((i) => action(null, i));

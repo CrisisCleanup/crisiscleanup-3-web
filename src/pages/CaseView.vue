@@ -174,7 +174,7 @@
                   <span class="text-sm">{{
                     work_type.work_type | getWorkTypeName
                   }}</span>
-                  <StatusDropDown
+                  <WorksiteStatusDropdown
                     class="block"
                     :phase="incident.phase"
                     :current-work-type="work_type"
@@ -236,7 +236,7 @@
                 <span class="text-sm">{{
                   work_type.work_type | getWorkTypeName
                 }}</span>
-                <StatusDropDown
+                <WorksiteStatusDropdown
                   class="block"
                   :phase="incident.phase"
                   :current-work-type="work_type"
@@ -284,7 +284,7 @@
                 <span class="text-sm">{{
                   work_type.work_type | getWorkTypeName
                 }}</span>
-                <StatusDropDown
+                <WorksiteStatusDropdown
                   class="block"
                   :phase="incident.phase"
                   :current-work-type="work_type"
@@ -394,7 +394,7 @@
 <script>
 import moment from 'moment';
 import { getErrorMessage } from '@/utils/errors';
-import StatusDropDown from '@/components/StatusDropDown';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown';
 import User from '@/models/User';
 import Worksite from '@/models/Worksite';
 import Incident from '@/models/Incident';
@@ -417,7 +417,7 @@ export default {
     Flag,
     SectionHeading,
     WorkTypeRequestModal,
-    StatusDropDown,
+    WorksiteStatusDropdown,
   },
   mixins: [LocaleMixin],
   data() {

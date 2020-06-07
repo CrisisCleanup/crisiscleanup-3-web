@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`StatusDropDown should render correctly and match snapshot 1`] = `
+exports[`WorksiteStatusDropdown should render correctly and match snapshot 1`] = `
 <v-popover-stub
   class="text-xs"
   placement="bottom-end"
@@ -11,18 +11,18 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
     style="color: rgb(208, 2, 27);"
   >
     <!---->
-     
+
     <div>
       status.open_unassigned
     </div>
-     
+
     <font-awesome-icon-stub
       class="mx-1"
       icon="chevron-down"
       size="sm"
     />
   </div>
-   
+
   <div
     class="bg-white border outline-none h-84 w-56 overflow-auto"
   >
@@ -37,7 +37,7 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
           class="mx-1"
           color="#fab92e"
         />
-         
+
         <div>
           status.open_unassigned
         </div>
@@ -54,7 +54,7 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
           class="mx-1"
           color="#f0f032"
         />
-         
+
         <div>
           status.open_assigned
         </div>
@@ -64,7 +64,7 @@ exports[`StatusDropDown should render correctly and match snapshot 1`] = `
 </v-popover-stub>
 `;
 
-exports[`StatusDropDown should render correctly and match snapshot when using icons 1`] = `
+exports[`WorksiteStatusDropdown should render correctly and match snapshot when using icons 1`] = `
 <v-popover-stub
   class="text-xs"
   placement="bottom-end"
@@ -77,18 +77,18 @@ exports[`StatusDropDown should render correctly and match snapshot when using ic
     <div
       class="case-svg-container mr-1"
     />
-     
+
     <div>
       status.open_unassigned
     </div>
-     
+
     <font-awesome-icon-stub
       class="mx-1"
       icon="chevron-down"
       size="sm"
     />
   </div>
-   
+
   <div
     class="bg-white border outline-none h-84 w-56 overflow-auto"
   >
@@ -103,7 +103,7 @@ exports[`StatusDropDown should render correctly and match snapshot when using ic
           class="mx-1"
           color="#fab92e"
         />
-         
+
         <div>
           status.open_unassigned
         </div>
@@ -120,7 +120,7 @@ exports[`StatusDropDown should render correctly and match snapshot when using ic
           class="mx-1"
           color="#f0f032"
         />
-         
+
         <div>
           status.open_assigned
         </div>
