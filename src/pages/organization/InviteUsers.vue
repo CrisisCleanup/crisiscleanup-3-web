@@ -125,7 +125,7 @@ export default {
         }
         if (_.isEmpty(tags)) {
           await this.$toasted.error(
-            this.$t('~~You must provide at least 1 valid email!'),
+            this.$t('inviteTeammates.provide_valid_email'),
           );
           return;
         }
