@@ -305,11 +305,11 @@
                   <base-button
                     class="ml-3 my-3 border p-1 px-4 bg-white"
                     :class="
-                      selectedTableItems.length === 0
+                      selectedTableItems.size === 0
                         ? 'text-crisiscleanup-grey-700'
                         : ''
                     "
-                    :disabled="selectedTableItems.length === 0"
+                    :disabled="selectedTableItems.size === 0"
                     :action="
                       () => {
                         showingUnclaimModal = true;
@@ -323,10 +323,11 @@
                     icon="sync"
                     class="ml-3 my-3 border p-1 px-4 bg-white"
                     :class="
-                      selectedTableItems.length === 0
+                      selectedTableItems.size === 0
                         ? 'text-crisiscleanup-grey-700'
                         : ''
                     "
+                    :disabled="selectedTableItems.size === 0"
                     :text="$t('actions.update_status')"
                     :alt="$t('actions.update_status')"
                     :action="
@@ -389,7 +390,7 @@
                       <span class="text-base pb-3">
                         {{
                           $t('casesVue.bulk_unclaim_reassign_status', {
-                            length: selectedTableItems.length,
+                            length: selectedTableItems.size,
                           })
                         }}
                       </span>
