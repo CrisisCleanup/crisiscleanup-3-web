@@ -8,6 +8,16 @@
     @change="$emit('change', $event)"
     @rowClick="showContacts"
   >
+    <template #profile_completed="slotProps">
+      <div class="w-full flex items-center text-primary-dark">
+        <font-awesome-icon
+          class="mx-1"
+          size="lg"
+          icon="check-circle"
+          v-if="slotProps.item.profile_completed"
+        />
+      </div>
+    </template>
     <template #actions="slotProps">
       <div class="flex mr-2 justify-end w-full items-center">
         <base-button
@@ -134,6 +144,12 @@ export default {
           dataIndex: 'name',
           key: 'name',
           width: '1.5fr',
+        },
+        {
+          title: this.$t('~~Profile Complete'),
+          dataIndex: 'profile_completed',
+          key: 'profile_completed',
+          width: '1fr',
         },
         {
           title: this.$t('orgApprovalTable.website'),

@@ -168,6 +168,82 @@
             </div>
           </div>
         </div>
+        <div class="flex">
+          <div class="m-4 pt-2 shadow bg-white w-full">
+            <div class="p2-4 px-2 border-b flex items-center">
+              <span class="flex items-center">
+                <base-button
+                  class="text-4xl mx-3"
+                  :action="
+                    () => {
+                      invitationRequests.visible = !invitationRequests.visible;
+                    }
+                  "
+                  >-</base-button
+                >
+                {{ $t('Invitation Requests') }}
+              </span>
+              <base-input
+                :value="invitationRequests.search"
+                icon="search"
+                class="w-72 mx-4"
+                :placeholder="$t('actions.search')"
+                @input="
+                  (value) => {
+                    invitationRequests.search = value;
+                    throttle(getInvitationRequests, 1000)();
+                  }
+                "
+              ></base-input>
+            </div>
+            <div class="p-4" v-if="invitationRequests.visible">
+              <InvitationRequestTable
+                :requests="invitationRequests.data"
+                :meta="invitationRequests.meta"
+                @change="getInvitationRequests"
+                @reload="getInvitationRequests"
+              ></InvitationRequestTable>
+            </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="m-4 pt-2 shadow bg-white w-full">
+            <div class="p2-4 px-2 border-b flex items-center">
+              <span class="flex items-center">
+                <base-button
+                  class="text-4xl mx-3"
+                  :action="
+                    () => {
+                      invitations.visible = !invitations.visible;
+                    }
+                  "
+                  >-</base-button
+                >
+                {{ $t('Invitations') }}
+              </span>
+              <base-input
+                :value="invitations.search"
+                icon="search"
+                class="w-72 mx-4"
+                :placeholder="$t('actions.search')"
+                @input="
+                  (value) => {
+                    invitations.search = value;
+                    throttle(getInvitations, 1000)();
+                  }
+                "
+              ></base-input>
+            </div>
+            <div class="p-4" v-if="invitations.visible">
+              <InvitationTable
+                :invitations="invitations.data"
+                :meta="invitations.meta"
+                @change="getInvitations"
+                @reload="getInvitations"
+              ></InvitationTable>
+            </div>
+          </div>
+        </div>
       </div>
     </template>
   </Loader>
@@ -177,6 +253,8 @@
 import { mapState } from 'vuex';
 import User from '@/models/User';
 import { throttle } from 'lodash';
+import InvitationRequestTable from '@/components/admin/InvitationRequestTable';
+import InvitationTable from '@/components/admin/InvitationTable';
 import IncidentApprovalTable from '../../components/IncidentApprovalTable';
 import OrganizationApprovalTable from '../../components/OrganizationApprovalTable';
 import InviteUsers from '../organization/InviteUsers';
@@ -192,6 +270,8 @@ import GhostUsersTable from '../../components/admin/GhostUsersTable';
 export default {
   name: 'AdminDashboard',
   components: {
+    InvitationTable,
+    InvitationRequestTable,
     GhostUsersTable,
     UsersTable,
     OrganizationsTable,
@@ -242,6 +322,30 @@ export default {
         search: '',
         visible: true,
       },
+      invitationRequests: {
+        data: [],
+        meta: {
+          pagination: {
+            pageSize: 20,
+            page: 1,
+            current: 1,
+          },
+        },
+        search: '',
+        visible: true,
+      },
+      invitations: {
+        data: [],
+        meta: {
+          pagination: {
+            pageSize: 20,
+            page: 1,
+            current: 1,
+          },
+        },
+        search: '',
+        visible: true,
+      },
       organizationsForApproval: [],
       incident_requests: [],
       loading: false,
@@ -270,6 +374,8 @@ export default {
         this.getOrganizations({ pagination: this.defaultPagination }),
         this.getUsers({ pagination: this.defaultPagination }),
         this.getGhostUsers({ pagination: this.defaultPagination }),
+        this.getInvitationRequests({ pagination: this.defaultPagination }),
+        this.getInvitations({ pagination: this.defaultPagination }),
       ]);
     },
     async getOrganizationsForApproval() {
@@ -356,6 +462,56 @@ export default {
         total: response.data.count,
       };
       this.ghostUsers.meta = {
+        pagination: newPagination,
+      };
+    },
+    async getInvitationRequests(data = {}) {
+      const pagination =
+        data.pagination || this.invitationRequests.meta.pagination;
+      const params = {
+        offset: pagination.pageSize * (pagination.page - 1),
+        limit: pagination.pageSize,
+        approved_by__isnull: true,
+        rejected_by__isnull: true,
+      };
+      if (this.invitationRequests.search || this.globalSearch) {
+        params.search = this.globalSearch || this.invitationRequests.search;
+      }
+      const queryString = getQueryString(params);
+
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/admins/invitation_requests?${queryString}`,
+      );
+      this.invitationRequests.data = response.data.results;
+      const newPagination = {
+        ...pagination,
+        total: response.data.count,
+      };
+      this.invitationRequests.meta = {
+        pagination: newPagination,
+      };
+    },
+    async getInvitations(data = {}) {
+      const pagination = data.pagination || this.invitations.meta.pagination;
+      const params = {
+        offset: pagination.pageSize * (pagination.page - 1),
+        limit: pagination.pageSize,
+        activated: false,
+      };
+      if (this.invitations.search || this.globalSearch) {
+        params.search = this.globalSearch || this.invitations.search;
+      }
+      const queryString = getQueryString(params);
+
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/admins/invitations?${queryString}`,
+      );
+      this.invitations.data = response.data.results;
+      const newPagination = {
+        ...pagination,
+        total: response.data.count,
+      };
+      this.invitations.meta = {
         pagination: newPagination,
       };
     },

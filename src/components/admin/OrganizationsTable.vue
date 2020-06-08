@@ -8,6 +8,16 @@
     @change="$emit('change', $event)"
     enable-pagination
   >
+    <template #profile_completed="slotProps">
+      <div class="w-full flex items-center text-primary-dark">
+        <font-awesome-icon
+          class="mx-1"
+          size="lg"
+          icon="check-circle"
+          v-if="slotProps.item.profile_completed"
+        />
+      </div>
+    </template>
     <template #actions="slotProps">
       <div class="flex mr-2 w-full items-center">
         <base-button
@@ -140,19 +150,25 @@ export default {
           title: this.$t('orgTable.name'),
           dataIndex: 'name',
           key: 'name',
-          width: '1.5fr',
+          width: '2fr',
+        },
+        {
+          title: this.$t('~~Profile Complete'),
+          dataIndex: 'profile_completed',
+          key: 'profile_completed',
+          width: '0.75fr',
         },
         {
           title: this.$t('orgTable.is_active'),
           dataIndex: 'is_active',
           key: 'is_active',
-          width: '1.5fr',
+          width: '0.75fr',
         },
         {
           title: this.$t('orgTable.org_verified'),
           dataIndex: 'org_verified',
           key: 'org_verified',
-          width: '1.5fr',
+          width: '0.75fr',
         },
         {
           title: this.$t('orgTable.type_t'),

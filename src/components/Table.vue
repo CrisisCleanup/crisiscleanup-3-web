@@ -144,7 +144,11 @@
             <span v-if="$mq === 'sm'" class="font-semibold mr-2">
               {{ column.title }}:
             </span>
-            <template v-if="item[column.key] || item[column.key] === 0">
+            <template
+              v-if="
+                item[column.key] || item[column.key] === 0 || column.transformer
+              "
+            >
               <span v-if="column.transformer">{{
                 column.transformer(item[column.key], item)
               }}</span>
