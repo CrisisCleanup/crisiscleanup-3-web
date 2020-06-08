@@ -400,12 +400,7 @@
           :key="work_type_to_claim.work_type"
           @input="
             (value) => {
-              if (value) {
-                workTypesToClaim.add(work_type_to_claim.work_type);
-              } else {
-                workTypesToClaim.remove(work_type_to_claim.work_type);
-              }
-              workTypesToClaim = new Set(workTypesToClaim);
+              updateWorkTypesToClaim(value, work_type_to_claim);
             }
           "
         >
@@ -585,6 +580,14 @@ export default {
     }
   },
   methods: {
+    updateWorkTypesToClaim(value, workTypeToClaim) {
+      if (value) {
+        this.workTypesToClaim.add(workTypeToClaim.work_type);
+      } else {
+        this.workTypesToClaim.delete(workTypeToClaim.work_type);
+      }
+      this.workTypesToClaim = new Set(this.workTypesToClaim);
+    },
     async getWorksiteRequests() {
       const worksiteRequestParams = {
         worksite_work_type__worksite: this.$route.params.id,
