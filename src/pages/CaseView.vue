@@ -128,7 +128,9 @@
             :text="$t('actions.claim_all_alt')"
             :action="
               () => {
-                return claimWorkType();
+                return claimWorkType(
+                  workTypesUnclaimed.map((workType) => workType.work_type),
+                );
               }
             "
           />
@@ -250,7 +252,7 @@
                   variant="solid"
                   :action="
                     () => {
-                      return unclaimWorkType(work_type);
+                      return unclaimWorkType([work_type.work_type]);
                     }
                   "
                   :text="$t('actions.unclaim')"
@@ -298,7 +300,7 @@
                   variant="solid"
                   :action="
                     () => {
-                      return claimWorkType(work_type);
+                      return claimWorkType([work_type.work_type]);
                     }
                   "
                   :text="$t('actions.claim')"
@@ -356,7 +358,7 @@
         :text="$t('actions.claim')"
         :action="
           () => {
-            return claimWorkType();
+            showingClaimModal = true;
           }
         "
       />
@@ -385,6 +387,68 @@
         "
       />
     </div>
+
+    <modal v-if="showingClaimModal" modal-classes="bg-white max-w-lg shadow">
+      <div slot="header" class="text-lg border-b p-3">
+        {{ $t('~~Claim Cases') }}
+      </div>
+      <div class="p-3">
+        <base-checkbox
+          v-for="work_type_to_claim in workTypesUnclaimed"
+          class="mb-3"
+          :value="workTypesToClaim.has(work_type_to_claim.work_type)"
+          :key="work_type_to_claim.work_type"
+          @input="
+            (value) => {
+              if (value) {
+                workTypesToClaim.add(work_type_to_claim.work_type);
+              } else {
+                workTypesToClaim.remove(work_type_to_claim.work_type);
+              }
+              workTypesToClaim = new Set(workTypesToClaim);
+            }
+          "
+        >
+          <span class="text-sm">{{
+            work_type_to_claim.work_type | getWorkTypeName
+          }}</span>
+          <div class="work-list">
+            {{
+              getFieldsForType(work_type_to_claim.work_type)
+                .map((_) => _.label_t)
+                .join(', ')
+            }}
+          </div>
+        </base-checkbox>
+      </div>
+      <div
+        slot="footer"
+        class="flex items-center justify-center p-2 bg-white border-t"
+      >
+        <base-button
+          variant="solid"
+          class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
+          :action="
+            () => {
+              claimWorkType(Array.from(workTypesToClaim));
+            }
+          "
+          :text="$t('actions.ok')"
+          :alt="$t('actions.ok')"
+        />
+        <base-button
+          type="bare"
+          class="border border-black mx-2 text-base p-2 px-4 text-black"
+          :action="
+            () => {
+              showingClaimModal = false;
+            }
+          "
+          :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
+        />
+      </div>
+    </modal>
   </div>
   <div v-else class="flex items-center justify-center h-full">
     <spinner />
@@ -430,6 +494,8 @@ export default {
       initialWorkTypeRequestSelection: [],
       currentNote: '',
       uploading: false,
+      showingClaimModal: false,
+      workTypesToClaim: new Set(),
     };
   },
   computed: {
@@ -531,26 +597,20 @@ export default {
         },
       );
     },
-    async claimWorkType(workType) {
+    async claimWorkType(workTypes = []) {
       try {
-        const workTypes = [];
-        if (workType) {
-          workTypes.push(workType.work_type);
-        }
         await Worksite.api().claimWorksite(this.worksite.id, workTypes);
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
+        this.showingClaimModal = false;
+        this.workTypesToClaim = new Set();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
     },
-    async unclaimWorkType(workType) {
+    async unclaimWorkType(workTypes = []) {
       try {
-        const workTypes = [];
-        if (workType) {
-          workTypes.push(workType.work_type);
-        }
         await Worksite.api().unclaimWorksite(this.worksite.id, workTypes);
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
