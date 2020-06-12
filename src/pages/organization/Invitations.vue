@@ -153,6 +153,12 @@ export default {
           sortable: true,
         },
         {
+          title: this.$t('~~Email'),
+          dataIndex: 'email',
+          key: 'email',
+          sortable: true,
+        },
+        {
           title: this.$t('invitationsVue.phone'),
           dataIndex: 'phone',
           key: 'mobile',
