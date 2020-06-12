@@ -11,6 +11,7 @@
           </div>
         </div>
         <div class="flex">
+          <InviteUsers class="mx-1" />
           <base-button
             size="small"
             :text="$t('actions.download')"
@@ -139,10 +140,11 @@
 import Table from '@/components/Table';
 import InvitationRequest from '@/models/InvitationRequest';
 import Invitation from '@/models/Invitation';
+import InviteUsers from './InviteUsers';
 
 export default {
   name: 'Invitations',
-  components: { Table },
+  components: { InviteUsers, Table },
   data() {
     return {
       currentRequestsColumns: [
