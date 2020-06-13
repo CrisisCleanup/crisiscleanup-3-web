@@ -625,7 +625,11 @@
               type="print"
               @click.native="
                 () => {
-                  showingPrintWorksiteModal = true;
+                  if (workTypesClaimedByOrganization.length > 0) {
+                    printWorksite();
+                  } else {
+                    showingPrintWorksiteModal = true;
+                  }
                 }
               "
               data-cy="cases.icons.print"
@@ -702,17 +706,15 @@
         class="flex items-center justify-center p-2 bg-white border-t"
       >
         <base-button
-          variant="solid"
-          class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
+          type="bare"
+          class="border border-black mx-2 text-base p-2 px-4 text-black"
           :action="
             () => {
-              printWorksite();
               showingPrintWorksiteModal = false;
-              noClaimReason = null;
             }
           "
-          :text="$t('~~Claim and Print')"
-          :alt="$t('~~Claim and Print')"
+          :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
         />
         <base-button
           variant="solid"
@@ -733,15 +735,17 @@
           :alt="$t('~~Print without Claiming')"
         />
         <base-button
-          type="bare"
-          class="border border-black mx-2 text-base p-2 px-4 text-black"
+          variant="solid"
+          class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
           :action="
             () => {
+              printWorksite();
               showingPrintWorksiteModal = false;
+              noClaimReason = null;
             }
           "
-          :text="$t('actions.cancel')"
-          :alt="$t('actions.cancel')"
+          :text="$t('~~Claim and Print')"
+          :alt="$t('~~Claim and Print')"
         />
       </div>
     </modal>
@@ -876,6 +880,14 @@ export default {
     },
     currentWorksite() {
       return Worksite.find(this.$route.params.id);
+    },
+    workTypesClaimedByOrganization() {
+      if (this.currentWorksite) {
+        return this.currentWorksite.work_types.filter(
+          (type) => type.claimed_by === this.currentUser.organization.id,
+        );
+      }
+      return [];
     },
     usStates() {
       const locationTypes = LocationType.query()
