@@ -282,12 +282,17 @@ export default class Worksite extends Model {
       },
       // TODO: handle exceptions and ensure a value is returned
       // eslint-disable-next-line consistent-return
-      printWorksite(id) {
+      printWorksite(id, noClaimReason = null) {
         try {
+          const data = {};
+          if (noClaimReason) {
+            data.no_claim_reason_text = noClaimReason;
+          }
           return this.request({
             url: `/worksites/${id}/download`,
             method: 'POST',
             responseType: 'blob',
+            data,
             headers: { Accept: 'application/pdf' },
             save: false,
           });

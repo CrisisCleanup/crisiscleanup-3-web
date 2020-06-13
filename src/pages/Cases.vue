@@ -623,7 +623,11 @@
               size="small"
               class="p-1 py-2"
               type="print"
-              @click.native="printWorksite"
+              @click.native="
+                () => {
+                  showingPrintWorksiteModal = true;
+                }
+              "
               data-cy="cases.icons.print"
             />
             <router-link
@@ -671,6 +675,76 @@
         </div>
       </div>
     </div>
+
+    <modal
+      v-if="showingPrintWorksiteModal"
+      modal-classes="bg-white max-w-lg shadow"
+    >
+      <div slot="header" class="text-lg border-b p-3">
+        {{ $t('~~Print Case') }}
+      </div>
+      <div class="p-3 flex flex-col">
+        <span class="text-base pb-3">
+          {{
+            $t(
+              'Please claim this case if you plan to do any part of it. If you do not plan to do the work, please let us know why you are printing the case.',
+            )
+          }}
+        </span>
+        <textarea
+          v-model="noClaimReason"
+          rows="4"
+          class="text-base form-field border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none resize-none"
+        />
+      </div>
+      <div
+        slot="footer"
+        class="flex items-center justify-center p-2 bg-white border-t"
+      >
+        <base-button
+          variant="solid"
+          class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
+          :action="
+            () => {
+              printWorksite();
+              showingPrintWorksiteModal = false;
+              noClaimReason = null;
+            }
+          "
+          :text="$t('~~Claim and Print')"
+          :alt="$t('~~Claim and Print')"
+        />
+        <base-button
+          variant="solid"
+          class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
+          :action="
+            () => {
+              if (!noClaimReason) {
+                return $toasted.error(
+                  $t('~~Please explain why you are not claiming this case'),
+                );
+              }
+              printWorksite(null, currentWorksite.id, noClaimReason);
+              showingPrintWorksiteModal = false;
+              noClaimReason = null;
+            }
+          "
+          :text="$t('~~Print without Claiming')"
+          :alt="$t('~~Print without Claiming')"
+        />
+        <base-button
+          type="bare"
+          class="border border-black mx-2 text-base p-2 px-4 text-black"
+          :action="
+            () => {
+              showingPrintWorksiteModal = false;
+            }
+          "
+          :text="$t('actions.cancel')"
+          :alt="$t('actions.cancel')"
+        />
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -740,11 +814,13 @@ export default {
       getColorForStatus,
       appliedLocations: new Set(),
       showingUnclaimModal: false,
+      showingPrintWorksiteModal: false,
       unchangedStatusOnUnclaim: true,
       updateStatusOnUnclaim: false,
       isMounted: false,
       showingUpdateStatusModal: false,
       statusForUpdate: null,
+      noClaimReason: null,
     };
   },
   computed: {
@@ -1197,17 +1273,22 @@ export default {
       });
       this.updateUserState();
     },
-    async printWorksite(e, siteId) {
+    async printWorksite(e, siteId, noClaimReason) {
       this.spinning = true;
       const siteIds =
         typeof siteId === 'object'
           ? Array.from(siteId)
           : [this.currentWorksite.id];
       try {
-        const file = await Worksite.api().downloadWorksite(
-          siteIds,
-          'application/pdf',
-        );
+        let file;
+        if (siteIds.length === 1) {
+          file = await Worksite.api().printWorksite(siteIds[0], noClaimReason);
+        } else {
+          file = await Worksite.api().downloadWorksite(
+            siteIds,
+            'application/pdf',
+          );
+        }
         forceFileDownload(file.response);
         this.reloadTable();
       } catch (error) {
