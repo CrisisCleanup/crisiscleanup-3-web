@@ -127,6 +127,7 @@ import { groupBy } from '@/utils/array';
 import { mapState } from 'vuex';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
+import Incident from '@/models/Incident';
 
 PixiSettings.SPRITE_MAX_TEXTURES = Math.min(
   PixiSettings.SPRITE_MAX_TEXTURES,
@@ -341,37 +342,56 @@ export default {
       }, 5000);
     },
     goToIncidentCenter() {
-      const center = averageGeolocation(
-        this.markers.map((marker) => [
-          marker.location.coordinates[1],
-          marker.location.coordinates[0],
-        ]),
-      );
-      this.map.setView([center.latitude, center.longitude], 6);
+      this.showInteractivePopover = false;
+      const { locationModels } = Incident.find(this.currentIncidentId);
+      if (locationModels.length) {
+        locationModels.forEach((location) => {
+          this.fitLocation(location, true);
+        });
+      } else {
+        const center = averageGeolocation(
+          this.markers.map((marker) => [
+            marker.location.coordinates[1],
+            marker.location.coordinates[0],
+          ]),
+        );
+        this.map.setView([center.latitude, center.longitude], 6);
+      }
       this.showInteractivePopover = false;
     },
     goToInteractive() {
-      const center = averageGeolocation(
-        this.markers.map((marker) => [
-          marker.location.coordinates[1],
-          marker.location.coordinates[0],
-        ]),
-      );
-      this.map.setView(
-        [center.latitude, center.longitude],
-        INTERACTIVE_ZOOM_LEVEL,
-      );
+      if (Incident.find(this.currentIncidentId).locationModels.length) {
+        this.goToIncidentCenter();
+        this.map.setZoom(INTERACTIVE_ZOOM_LEVEL);
+      } else {
+        const center = averageGeolocation(
+          this.markers.map((marker) => [
+            marker.location.coordinates[1],
+            marker.location.coordinates[0],
+          ]),
+        );
+        this.map.setView(
+          [center.latitude, center.longitude],
+          INTERACTIVE_ZOOM_LEVEL,
+        );
+      }
       this.showInteractivePopover = false;
     },
-    goToLocal() {
-      const center = averageGeolocation(
-        this.markers.map((marker) => [
-          marker.location.coordinates[1],
-          marker.location.coordinates[0],
-        ]),
-      );
-      this.map.setView([center.latitude, center.longitude], 15);
-      this.showInteractivePopover = false;
+    fitLocation(location) {
+      if (this.map) {
+        const geojsonFeature = {
+          type: 'Feature',
+          properties: location.attr,
+          geometry: location.poly || location.geom || location.point,
+        };
+        const polygon = L.geoJSON(geojsonFeature, {
+          weight: '1',
+          onEachFeature(feature, layer) {
+            layer.location_id = location.id;
+          },
+        });
+        this.map.fitBounds(polygon.getBounds());
+      }
     },
     workTypesClaimedByOrganization() {
       return this.worksite.work_types.filter(
