@@ -33,12 +33,13 @@
             <th class="text-left border p-1 break-all">
               {{ $t('caseView.entered_by') }}
             </th>
-            <th class="border p-1 break-all">
+            <th class="border p-1 break-all" width="90px">
               {{ $t('caseView.volunteers') }}
             </th>
             <th class="border p-1 break-all">
               {{ $t('caseView.hours_per_volunteer') }}
             </th>
+            <th width="20px"></th>
           </tr>
         </thead>
         <tbody>
@@ -46,9 +47,48 @@
             <td class="text-left border p-1 break-all">
               {{ entry.created_by_name }}
             </td>
-            <td class="text-right border p-1">{{ entry.volunteers }}</td>
             <td class="text-right border p-1">
-              {{ entry.seconds | secondsToHm }}
+              <div v-if="currentTimeEdit.id === entry.id">
+                <input
+                  class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none text-center"
+                  :value="entry.volunteers"
+                  @input="currentTimeEdit.volunteers = $event.target.value"
+                />
+              </div>
+              <div v-else>
+                {{ entry.volunteers }}
+              </div>
+            </td>
+            <td class="text-right border p-1">
+              <div v-if="currentTimeEdit.id === entry.id">
+                <input
+                  class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none text-center"
+                  :value="entry.seconds / 3600"
+                  @input="currentTimeEdit.seconds = $event.target.value * 3600"
+                />
+              </div>
+              <div v-else>
+                {{ entry.seconds | secondsToHm }}
+              </div>
+            </td>
+            <td class="">
+              <ccu-icon
+                v-if="!currentTimeEdit.id"
+                :alt="$t('actions.edit')"
+                size="md"
+                class="p-1 w-5"
+                type="edit"
+                @click.native="editTimeEntry(entry)"
+              />
+              <font-awesome-icon
+                icon="check"
+                v-if="currentTimeEdit.id === entry.id"
+                :alt="$t('actions.save')"
+                size="md"
+                class="mx-1 text-green-600 cursor-pointer"
+                type="up"
+                @click="saveTimeEntry"
+              />
             </td>
           </tr>
           <tr v-if="timeEnteredByOtherOrganizations.volunteers">
@@ -87,6 +127,7 @@ export default {
       volunteersToAdd: '',
       hoursPerVolunteer: '',
       addingTime: false,
+      currentTimeEdit: {},
     };
   },
   props: {
@@ -114,6 +155,25 @@ export default {
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
+    },
+    async saveTimeEntry() {
+      try {
+        await Worksite.api().updateTimeEntry(
+          this.currentTimeEdit.id,
+          this.currentTimeEdit.seconds,
+          this.currentTimeEdit.volunteers,
+        );
+        this.currentTimeEdit = {};
+        await Worksite.api().fetch(this.worksite.id);
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
+    },
+    editTimeEntry(entry) {
+      this.currentTimeEdit.id = entry.id;
+      this.currentTimeEdit.seconds = entry.seconds;
+      this.currentTimeEdit.volunteers = entry.volunteers;
+      this.currentTimeEdit = { ...this.currentTimeEdit };
     },
   },
   computed: {

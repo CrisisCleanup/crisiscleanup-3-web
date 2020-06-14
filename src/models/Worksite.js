@@ -230,11 +230,21 @@ export default class Worksite extends Model {
           { save: false },
         );
       },
-      addTime(id, seconds, volunteers) {
+      addTime(worksiteId, seconds, volunteers) {
         return this.post(
           `/time`,
           {
-            worksite: id,
+            worksite: worksiteId,
+            seconds,
+            volunteers,
+          },
+          { save: false },
+        );
+      },
+      updateTimeEntry(id, seconds, volunteers) {
+        return this.patch(
+          `/time/${id}`,
+          {
             seconds,
             volunteers,
           },
