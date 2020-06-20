@@ -25,6 +25,7 @@ import VueCookies from 'vue-cookies';
 import VueRouter from 'vue-router';
 import Reports from '@/pages/Reports';
 import OtherOrganizations from '@/pages/OtherOrganizations';
+import Teams from '@/pages/organization/Teams';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -125,6 +126,11 @@ const routes = [
         path: 'profile',
         component: OrganizationProfile,
         name: 'nav.organization_profile',
+      },
+      {
+        path: 'teams',
+        component: Teams,
+        name: 'nav.organization_teams',
       },
       {
         path: 'layers',
