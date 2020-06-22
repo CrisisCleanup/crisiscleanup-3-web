@@ -19,7 +19,7 @@ describe('Cases Page', () => {
     }).as('getWorksite');
     cy.route({
       method: 'GET',
-      url: `${Cypress.env('API_URL')}/worksites?id__in=*`,
+      url: `${Cypress.env('API_URL')}/worksites_*`,
     }).as('printWorksite');
   });
   beforeEach(() => {
