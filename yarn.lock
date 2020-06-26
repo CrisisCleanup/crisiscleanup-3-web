@@ -20279,10 +20279,10 @@ vue-router@^3.1.6:
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.1.6.tgz#45f5a3a3843e31702c061dd829393554e4328f89"
   integrity sha512-GYhn2ynaZlysZMkFE5oCHRUTqE8BWs/a9YbKpNLi0i7xD6KG1EzDqpHQmv1F5gXjr8kL5iIVS8EOtRaVUEXTqA==
 
-vue-select@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.4.0.tgz#e56b0612845d13d10162cd8df81bfb46af2083ac"
-  integrity sha512-UHd0fiUjPgRmHIGhI6yUKtnJsHOdvzD00QUGUtD+FaxWWZRWF2AAb7KPZRj0j/egVfZQvey6M6woHn78GbTogA==
+vue-select@^3.10.5:
+  version "3.10.5"
+  resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.10.5.tgz#2c4c3d5fdedbdc348eab581de16168c1e8d08448"
+  integrity sha512-32kJNHE9FqV2RzuIfwAYHny40+EltZjf86Jf4cIHc0QUy2/yAr0PM7cET1MBJe+puJdYrItGTwnmTC4I9gKLWg==
 
 vue-socket.io@^3.0.7:
   version "3.0.7"
