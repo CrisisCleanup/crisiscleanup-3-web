@@ -26,6 +26,7 @@ import VueRouter from 'vue-router';
 import Reports from '@/pages/Reports';
 import OtherOrganizations from '@/pages/OtherOrganizations';
 import Teams from '@/pages/organization/Teams';
+import TeamDetail from '@/pages/organization/TeamDetail';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -131,6 +132,14 @@ const routes = [
         path: 'teams',
         component: Teams,
         name: 'nav.organization_teams',
+        children: [
+          {
+            path: ':team_id',
+            component: TeamDetail,
+            name: 'nav.organization_team_detail',
+            meta: { id: 'team_detail' },
+          },
+        ],
       },
       {
         path: 'layers',
