@@ -90,6 +90,7 @@
     "spin.js": "^4.1.0",
     "typeface-montserrat": "^0.0.75",
     "typeface-nunito-sans": "^0.0.72",
+    "unique-names-generator": "^4.2.0",
     "v-tooltip": "^2.0.3",
     "vue": "2.6.11",
     "vue-autosuggest": "^2.0.4",
@@ -122,6 +123,7 @@
     "vue-types": "^1.7.0",
     "vue2-gmap-custom-marker": "^5.5.10",
     "vue2-google-maps": "^0.10.7",
+    "vuedraggable": "^2.23.2",
     "vuejs-datepicker": "^1.6.2",
     "vuex": "^3.1.3"
   },

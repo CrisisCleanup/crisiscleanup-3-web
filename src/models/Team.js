@@ -1,0 +1,23 @@
+import { Model } from '@vuex-orm/core';
+
+export default class Team extends Model {
+  static entity = 'teams';
+
+  static fields() {
+    return {
+      id: this.attr(),
+      name: this.string(''),
+      notes: this.attr(null),
+      users: this.attr([]),
+      assigned_work_types: this.attr([]),
+    };
+  }
+
+  static apiConfig = {
+    actions: {
+      fetchById(id) {
+        return this.get(`/teams/${id}`);
+      },
+    },
+  };
+}

@@ -21,6 +21,8 @@ const iconMap = {
   calendar: require('@/assets/icons/calendar.svg'),
   call: require('@/assets/icons/call.svg'),
   chat: require('@/assets/icons/chat.svg'),
+  drag: require('@/assets/icons/drag.svg'),
+  settings: require('@/assets/icons/settings.svg'),
   print: require('@/assets/icons/print-big.svg'),
   pin: require('@/assets/icons/pin.svg'),
   phone: require('@/assets/icons/phone.svg'),

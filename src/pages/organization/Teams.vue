@@ -1,0 +1,209 @@
+<template>
+  <div class="p-8">
+    <div class="flex justify-between items-center">
+      <base-input
+        v-model="currentSearch"
+        icon="search"
+        class="w-84 mr-4 mb-6"
+        :placeholder="$t('actions.search')"
+        @input="onSearch"
+      ></base-input>
+
+      <base-button
+        :text="$t('~~Create New Team')"
+        variant="solid"
+        size="medium"
+        :action="
+          () => {
+            creatingTeam = true;
+          }
+        "
+      />
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 2fr;" class="h-120">
+      <div
+        style="
+          display: grid;
+          grid-template-columns: auto;
+          grid-template-rows: repeat(auto-fill, 125px);
+        "
+        class="border bg-white h-3/4 overflow-auto"
+      >
+        <div
+          v-for="team in teams"
+          class="h-full px-4 pt-2 pb-6 hover:bg-crisiscleanup-light-grey cursor-pointer"
+          :class="
+            String(team.id) === String($route.params.team_id)
+              ? 'bg-crisiscleanup-light-grey'
+              : 'bg-white'
+          "
+          @click="
+            () => {
+              $router.push(`/organization/teams/${team.id}`);
+            }
+          "
+        >
+          <div class="flex justify-between items-center">
+            <base-text>{{ team.name }}</base-text>
+            <base-text
+              >{{ getAssignedWorkTypes(team).length }}
+              {{ $t('~~cases assigned') }}</base-text
+            >
+          </div>
+          <div>
+            {{ getCaseCompletion(team) }}{{ $t('~~% of cases completed') }}
+          </div>
+          <div class="mt-2 flex">
+            <Avatar
+              v-for="user in team.users.map((u) => getUser(u))"
+              :key="user.id"
+              :initials="user.first_name"
+              :url="user.profilePictureUrl"
+              class="mr-2"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="h-full">
+        <div class="h-full flex flex-col bg-white shadow">
+          <router-view
+            :work-types="claimedWorktypes"
+            :users="users"
+            @addedCases="getData"
+          ></router-view>
+        </div>
+      </div>
+    </div>
+    <CreateTeamModal
+      v-if="creatingTeam"
+      @close="creatingTeam = false"
+      @saved="getData"
+      :users="users"
+      :cases="claimedWorktypes"
+    />
+  </div>
+</template>
+
+<script>
+import { UserMixin } from '@/mixins';
+import User from '@/models/User';
+import Team from '@/models/Team';
+import Worksite from '@/models/Worksite';
+import { mapState } from 'vuex';
+import Avatar from '../../components/Avatar';
+import CreateTeamModal from './CreateTeamModal';
+import { getQueryString } from '../../utils/urls';
+import enums from '../../store/modules/enums';
+
+export default {
+  name: 'Teams',
+  components: { CreateTeamModal, Avatar },
+  mixins: [UserMixin],
+
+  methods: {
+    async onSearch() {
+      await this.getTeams();
+    },
+    async getTeams() {
+      const results = await Team.api().get(
+        `/teams?search=${this.currentSearch || ''}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      this.teams = results.entities.teams;
+    },
+    getAssignedWorkTypes(team) {
+      return this.claimedWorktypes.filter((wt) => {
+        return team.assigned_work_types.map((awt) => awt.id).includes(wt.id);
+      });
+    },
+    getCaseCompletion(team) {
+      const workTypes = this.getAssignedWorkTypes(team);
+      if (workTypes && workTypes.length) {
+        return Number(
+          (workTypes.filter((wt) => Boolean(wt.completed)).length /
+            workTypes.length) *
+            100,
+        ).toFixed(0);
+      }
+      return 0;
+    },
+    async getClaimedWorksites() {
+      const params = {
+        incident: this.currentIncidentId,
+        work_type__claimed_by: this.currentUser.organization.id,
+        fields:
+          'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
+      };
+
+      Worksite.api().get(`/worksites?${getQueryString(params)}`, {
+        dataKey: 'results',
+      });
+    },
+    async getData() {
+      const results = await User.api().get(
+        `/users?organization=${this.currentUser.organization.id}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      this.users = results.entities.users;
+      await this.getTeams();
+      await this.getClaimedWorksites();
+    },
+  },
+  data() {
+    return {
+      currentSearch: '',
+      creatingTeam: false,
+      users: [],
+      teams: [],
+    };
+  },
+  computed: {
+    claimedWorktypes() {
+      const query = Worksite.query().where((worksite) => {
+        if (
+          worksite.work_types &&
+          this.currentIncidentId === worksite.incident
+        ) {
+          const claimed = worksite.work_types.find(
+            (workType) =>
+              workType.claimed_by === this.currentUser.organization.id,
+          );
+          return Boolean(claimed);
+        }
+        return false;
+      });
+      const worksites = query.get();
+      const workTypes = [];
+      worksites.forEach((w) => {
+        w.work_types.forEach((wt) => {
+          if (wt.claimed_by === this.currentUser.organization.id) {
+            const closedStatuses = enums.state.statuses.filter(
+              (status) => status.primary_state === 'closed',
+            );
+
+            workTypes.push({
+              case_number: w.case_number,
+              ...wt,
+              completed: closedStatuses
+                .map((status) => status.status)
+                .includes(wt.status),
+            });
+          }
+        });
+      });
+      return workTypes;
+    },
+    ...mapState('incident', ['currentIncidentId']),
+    ...mapState('enums', ['statuses']),
+  },
+  async mounted() {
+    await this.getData();
+  },
+};
+</script>
+
+<style scoped></style>
