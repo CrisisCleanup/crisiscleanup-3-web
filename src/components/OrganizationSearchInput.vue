@@ -12,7 +12,18 @@
       }
     "
     @search="onOrganizationSearch"
-  />
+  >
+    <template #result="slotProps" v-if="isAdmin">
+      <div
+        class="flex justify-between text-sm p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
+      >
+        <span
+          >{{ slotProps.suggestion.item.id }} -
+          {{ slotProps.suggestion.item.name }}</span
+        >
+      </div>
+    </template>
+  </autocomplete>
 </template>
 <script>
 import Organization from '@/models/Organization';
@@ -22,6 +33,10 @@ export default {
     size: {
       type: String,
       default: null,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {

@@ -18,8 +18,9 @@
               }
             "
           ></base-input>
-          <div>
+          <div class="flex items-center">
             <InviteUsers class="px-3" is-admin />
+            <MergeOrganizations is-admin />
             <FileUpload class="mx-3 my-1" />
           </div>
         </div>
@@ -266,10 +267,12 @@ import FileUpload from '../../components/FileUpload';
 import OrganizationsTable from '../../components/admin/OrganizationsTable';
 import UsersTable from '../../components/admin/UsersTable';
 import GhostUsersTable from '../../components/admin/GhostUsersTable';
+import MergeOrganizations from '../../components/MergeOrganizations';
 
 export default {
   name: 'AdminDashboard',
   components: {
+    MergeOrganizations,
     InvitationTable,
     InvitationRequestTable,
     GhostUsersTable,
