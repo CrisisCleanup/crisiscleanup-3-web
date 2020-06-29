@@ -93,7 +93,7 @@
     "unique-names-generator": "^4.2.0",
     "v-tooltip": "^2.0.3",
     "vue": "2.6.11",
-    "vue-autosuggest": "^2.0.4",
+    "vue-autosuggest": "^2.2.0",
     "vue-axios": "^2.1.5",
     "vue-browser-acl": "^0.13.5",
     "vue-burger-menu": "^2.0.5",
