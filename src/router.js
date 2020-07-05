@@ -1,6 +1,7 @@
 import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
+import Schedules from '@/pages/Schedules';
 import Cases from '@/pages/Cases';
 import CaseView from '@/pages/CaseView';
 import Dashboard from '@/pages/Dashboard';
@@ -48,6 +49,12 @@ const routes = [
     path: '/profile',
     component: Profile,
     name: 'nav.profile',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/schedules',
+    component: Schedules,
+    name: 'nav.schedules',
     meta: { layout: 'authenticated' },
   },
   {
