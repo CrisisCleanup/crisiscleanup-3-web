@@ -51,6 +51,7 @@ const iconMap = {
   cancel: require('@/assets/icons/big.svg'),
   help: require('@/assets/icons/help.svg'),
   up: require('@/assets/icons/up.svg'),
+  right: require('@/assets/icons/right.svg'),
   down: require('@/assets/icons/down.svg'),
   updown: require('@/assets/icons/updown.svg'),
   'go-case': require('@/assets/icons/replace-case.svg'),

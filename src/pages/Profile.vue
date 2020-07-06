@@ -291,11 +291,23 @@
                   />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
-                <!--                <div class="my-2">-->
-                <!--                  <base-button variant="solid" class="px-4 py-1">-->
-                <!--                    {{ $t('profileUser.change_organization') }}-->
-                <!--                  </base-button>-->
-                <!--                </div>-->
+                <div class="my-2">
+                  <base-button
+                    variant="solid"
+                    class="px-4 py-1"
+                    :action="
+                      () => {
+                        showChangeOrganizationModal = true;
+                      }
+                    "
+                  >
+                    {{ $t('profileUser.change_organization') }}
+                  </base-button>
+                  <ChangeOrganizationModal
+                    v-if="showChangeOrganizationModal"
+                    @cancel="showChangeOrganizationModal = false"
+                  />
+                </div>
               </div>
               <div v-if="isEditing" class="mt-6">
                 <h3>{{ $t('profileUser.notification_settings') }}</h3>
@@ -357,15 +369,17 @@ import DragDrop from '@/components/DragDrop';
 import UserRolesSelect from '@/components/UserRolesSelect';
 import { ValidateMixin } from '@/mixins';
 import { getErrorMessage } from '../utils/errors';
+import ChangeOrganizationModal from '../components/ChangeOrganizationModal';
 
 export default {
   name: 'Profile',
-  components: { DragDrop, UserRolesSelect },
+  components: { ChangeOrganizationModal, DragDrop, UserRolesSelect },
   mixins: [ValidateMixin],
   data() {
     return {
       mode: 'view',
       uploading: false,
+      showChangeOrganizationModal: false,
       notifications: {
         new_incident: this.$t('profileUser.notification_new_incident'),
         request_work_type: this.$t('profileUser.notification_request_work'),
