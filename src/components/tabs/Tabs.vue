@@ -30,6 +30,7 @@ export default {
   },
   mounted() {
     this.tabs[0].isActive = true;
+    this.$emit('mounted', this);
   },
   computed: {
     isFirst() {

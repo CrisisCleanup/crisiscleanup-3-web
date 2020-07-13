@@ -56,10 +56,11 @@
         <div class="overflow-auto">
           <div class="flex">
             <div class="flex flex-col p-8 w-64 items-center">
-              <img
-                class="rounded-full p-1 profile-image"
-                :src="currentUser.profilePictureUrl"
-                :alt="$t('profileUser.profile_picture')"
+              <Avatar
+                :initials="currentUser.first_name"
+                :url="currentUser.profilePictureUrl"
+                class="p-1"
+                size="3xl"
               />
               <DragDrop
                 class="text-primary-dark cursor-pointer"
@@ -370,10 +371,11 @@ import UserRolesSelect from '@/components/UserRolesSelect';
 import { ValidateMixin } from '@/mixins';
 import { getErrorMessage } from '../utils/errors';
 import ChangeOrganizationModal from '../components/ChangeOrganizationModal';
+import Avatar from '../components/Avatar';
 
 export default {
   name: 'Profile',
-  components: { ChangeOrganizationModal, DragDrop, UserRolesSelect },
+  components: { Avatar, ChangeOrganizationModal, DragDrop, UserRolesSelect },
   mixins: [ValidateMixin],
   data() {
     return {

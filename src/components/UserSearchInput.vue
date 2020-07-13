@@ -33,7 +33,7 @@ export default {
   methods: {
     async onUserSearch(value) {
       const results = await User.api().get(
-        `/users?search=${value}&limit=10&fields=id,name&organization=${this.currentUser.organization.id}`,
+        `/users?search=${value}&limit=10&&organization=${this.currentUser.organization.id}`,
         {
           dataKey: 'results',
         },

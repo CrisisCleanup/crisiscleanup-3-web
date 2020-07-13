@@ -1,13 +1,18 @@
 <template>
   <modal
     modal-classes="bg-white max-w-2xl shadow"
-    :closeable="false"
+    :closeable="true"
     @close="$emit('cancel')"
   >
     <div slot="header" class="text-lg border-b p-3">
       {{ $t('~~Change Organization') }}
     </div>
-    <div class="p-3">
+    <Loader
+      v-if="loading"
+      :loading="loading"
+      :class="loading && 'h-64'"
+    ></Loader>
+    <div class="p-3" v-else>
       <div v-if="page === 'start'">
         <base-text variant="h2" :weight="400" class="text-center">
           {{ $t('~~To where would you want to move?') }}
@@ -31,7 +36,7 @@
       </div>
 
       <div v-if="page === 'existing'">
-        <tabs class="" ref="tabs">
+        <tabs class="" ref="tabs" @mounted="setTabs">
           <tab name="Select Organization">
             <div class="text-base mt-1 mb-3">
               {{ $t('~~Please select an organization to move to') }}
@@ -47,6 +52,92 @@
             ref="currentCallTab"
             :disabled="!selectedOrganization"
           >
+            <div class="h-72 overflow-auto py-2">
+              <div class="pb-2">
+                {{ $t('~~Who do you want to move to') }}
+                {{ selectedOrganization && selectedOrganization.name }}
+              </div>
+              <base-checkbox class="pb-2" @input="setAllUsers">{{
+                $t('~~Select All')
+              }}</base-checkbox>
+              <tree-menu
+                v-for="user in nestedUsers"
+                :key="user.id"
+                :children="user.children"
+                :label="user.label"
+                :data="user"
+                :indent="0"
+                :selected-users="selectedUsers"
+                @addUser="addUser"
+                @removeUser="removeUser"
+                @addUserTree="addUserTree"
+                @removeUserTree="removeUserTree"
+              ></tree-menu>
+            </div>
+          </tab>
+          <tab
+            name="Select Cases"
+            ref="currentCasesTab"
+            :disabled="!selectedOrganization"
+          >
+            <div class="h-72 overflow-auto py-2">
+              <div class="pb-2">
+                {{ $t('~~Select cases you want to move') }}
+                <div class="">
+                  <div
+                    v-for="(cases, incident) in claimedCases"
+                    :key="incident"
+                    class="py-2 border-b"
+                  >
+                    <div class="text-base py-2">
+                      {{ incident | getIncidentName(incidents) }}
+                    </div>
+                    <base-checkbox
+                      class="pb-2"
+                      @input="
+                        (value) => {
+                          setCases(value, cases);
+                        }
+                      "
+                      >{{ $t('~~Select all') }}
+                      {{ incident | getIncidentName(incidents) }}
+                      {{ $t('~~cases') }}</base-checkbox
+                    >
+                    <div
+                      v-for="work_type in cases"
+                      :key="work_type.id"
+                      class="border-t py-1"
+                    >
+                      <base-checkbox
+                        class="pb-2"
+                        :value="selectedCases.includes(work_type.id)"
+                        @input="
+                          (value) => {
+                            setCases(value, [work_type]);
+                          }
+                        "
+                      >
+                        <div class="badge-holder flex items-center">
+                          <badge
+                            class="ml-1 mr-3"
+                            :color="
+                              getColorForStatus(
+                                work_type.status,
+                                Boolean(work_type.claimed_by),
+                              )
+                            "
+                          />
+                          <span class="mr-2">{{ work_type.case_number }}</span>
+                          <span>{{
+                            work_type.work_type | getWorkTypeName
+                          }}</span>
+                        </div>
+                      </base-checkbox>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </tab>
         </tabs>
       </div>
@@ -74,8 +165,8 @@
         class="px-6 p-3 mx-2 w-24"
         :action="
           () => {
-            if ($refs.tabs) {
-              $refs.tabs.previousTab();
+            if (tabs) {
+              tabs.previousTab();
             }
           }
         "
@@ -83,20 +174,30 @@
         {{ $t('actions.back') }}
       </base-button>
       <base-button
-        v-if="page !== 'start'"
+        v-if="page !== 'start' && tabs && !tabs.isLast"
         :text="$t('actions.next')"
         :alt="$t('actions.next')"
         variant="solid"
         class="px-6 p-3 mx-2 w-24"
         :action="
           () => {
-            if ($refs.tabs) {
-              $refs.tabs.nextTab();
+            if (tabs) {
+              tabs.nextTab();
             }
           }
         "
       >
         {{ $t('actions.next') }}
+      </base-button>
+      <base-button
+        v-if="tabs && tabs.isLast"
+        :text="$t('actions.move')"
+        :alt="$t('actions.move')"
+        variant="solid"
+        class="px-6 p-3 mx-2 w-24"
+        :action="transferRequest"
+      >
+        {{ $t('actions.move') }}
       </base-button>
     </div>
   </modal>
@@ -105,15 +206,125 @@
 <script>
 import { UserMixin } from '@/mixins';
 import OrganizationSearchInput from './OrganizationSearchInput';
+import { hash } from '../utils/promise';
+import { nestUsers } from '../utils/form';
+import Loader from './Loader';
+import User from '../models/User';
+import { groupBy } from '../utils/array';
+import { getColorForStatus } from '../filters';
 
 export default {
   name: 'ChangeOrganizationModal',
-  components: { OrganizationSearchInput },
+  components: { Loader, OrganizationSearchInput },
   mixins: [UserMixin],
+  filters: {
+    getIncidentName(value, incidents) {
+      return (
+        incidents.length && incidents.find((c) => c.id === Number(value)).name
+      );
+    },
+  },
+  async mounted() {
+    this.loading = true;
+    await this.loadPageData();
+    this.loading = false;
+    this.isMounted = true;
+  },
+  methods: {
+    async loadPageData() {
+      const pageData = await hash({
+        lineageUsers: User.api().get(
+          `/users?lineage=${this.currentUser.id}&limit=1000&fields=id,referring_user,first_name,last_name,files,lineage`,
+          {
+            dataKey: 'results',
+          },
+        ),
+        incidents: await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
+        ),
+      });
+      this.lineageUsers = pageData.lineageUsers.entities.users;
+      this.incidents = pageData.incidents.data.results;
+      this.nestedUsers = nestUsers(
+        this.lineageUsers,
+        this.currentUser.id,
+      ).filter((user) => Boolean(user.children.length));
+
+      const user_ids = this.lineageUsers.map((user) => user.id);
+      user_ids.push(this.currentUser.id);
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types?claimed_by=${this.currentUser.organization.id}&limit=150`,
+      );
+      this.claimedCases = groupBy(response.data.results, 'incident');
+    },
+    setTabs(tabs) {
+      this.tabs = tabs;
+    },
+    async transferRequest() {
+      await this.$http.post(
+        `${process.env.VUE_APP_API_BASE_URL}/transfer_requests`,
+        {
+          transfering_user_ids: [...this.selectedUsers],
+          transfering_wwwtsp_ids: this.selectedCases,
+          origin_organization: this.currentUser.organization.id,
+          target_organization: this.selectedOrganization.id,
+          user_notes: '',
+        },
+      );
+      this.$emit('cancel');
+    },
+    setAllUsers(value) {
+      if (value) {
+        const user_ids = this.lineageUsers.map((user) => user.id);
+        this.selectedUsers = [...user_ids];
+      } else {
+        this.selectedUsers = [];
+      }
+    },
+    setCases(value, cases) {
+      const caseIds = cases.map((c) => c.id);
+      if (value) {
+        this.selectedCases = [...this.selectedCases, ...caseIds];
+      } else {
+        this.selectedCases = this.selectedCases.filter(
+          (id) => !caseIds.includes(id),
+        );
+      }
+    },
+    addUser(userId) {
+      this.selectedUsers.push(userId);
+    },
+    removeUser(userId) {
+      this.selectedUsers = this.selectedUsers.filter((id) => id !== userId);
+    },
+    addUserTree(userId) {
+      const userLineage = this.lineageUsers.filter((user) =>
+        user.lineage.includes(userId),
+      );
+      this.selectedUsers.push(...userLineage.map((user) => user.id));
+    },
+    removeUserTree(userId) {
+      const userLineageIds = this.lineageUsers
+        .filter((user) => user.lineage.includes(userId))
+        .map((user) => user.id);
+      this.selectedUsers = this.selectedUsers.filter(
+        (id) => !userLineageIds.includes(id),
+      );
+    },
+  },
   data() {
     return {
       page: 'start',
+      lineageUsers: [],
+      nestedUsers: [],
+      claimedCases: [],
       selectedOrganization: null,
+      tabs: null,
+      loading: false,
+      isMounted: false,
+      selectedUsers: [],
+      selectedCases: [],
+      getColorForStatus,
     };
   },
 };
