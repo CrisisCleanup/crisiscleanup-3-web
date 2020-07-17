@@ -34,6 +34,7 @@ export default {
       'callIncoming',
       'currentPage',
       'currentContactId',
+      'casesResolved',
     ]),
     pages() {
       return {
@@ -51,6 +52,7 @@ export default {
       'setCurrentCase',
       'setOutboundId',
       'setContactState',
+      'setResolved',
     ]),
     async getNextCallback() {
       this.$log.debug('checking next callback...');
@@ -153,9 +155,10 @@ export default {
       dataKey: 'results',
     });
     EventBus.$on(CCEvent.INBOUND, async (attrs) => {
-      if (!this.casesResolved) {
+      if (!this.$store.getters['phone/casesResolved']) {
+        this.$log.info('inbound event recv, resolving cases');
+        await this.setResolved(true);
         await this.resolveCases(attrs);
-        this.setResolved(true);
       }
     });
     EventBus.$on(CCEvent.ON_CALL, () => {
