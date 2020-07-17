@@ -13,6 +13,10 @@ on:
       - '**/**.js.snap'
       - '.github/workflows/*'
   push:
+    branches:
+      - master
+    tags:
+      - 'v**'
     paths:
       - '*.json'
       - 'yarn.lock'
