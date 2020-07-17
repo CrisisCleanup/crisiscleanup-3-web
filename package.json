@@ -68,7 +68,7 @@
     "exports-loader": "^0.7.0",
     "fs": "^0.0.1-security",
     "google-maps-api-loader": "^1.1.1",
-    "handlebars": "^4.7.5",
+    "handlebars": "^4.7.6",
     "jwt-decode": "^2.2.0",
     "leaflet": "^1.6.0",
     "leaflet-draw": "^1.0.4",
