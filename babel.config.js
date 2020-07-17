@@ -1,5 +1,6 @@
 module.exports = {
   presets: [
+    '@babel/preset-flow',
     ['@babel/preset-env'],
     [
       '@vue/babel-preset-jsx',
