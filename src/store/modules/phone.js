@@ -409,7 +409,7 @@ export const actions = {
     try {
       await ConnectService.initConnect({
         htmlEl,
-        config: { authToken: getters.authToken(PhoneState) },
+        config: {},
         onAuth: () =>
           commit('setConnectState', { running: true, authed: true }),
         // refresh session
@@ -448,7 +448,7 @@ export const actions = {
           rootGetters['phone/agentStateTimestamp'] &&
           rootGetters['phone/agentStateTimestamp'] > startTimestamp
         ) {
-          Log.debug('disregarding connect agent state, is stale.');
+          Log.info('disregarding connect agent state, is stale.');
           return;
         }
         const agentState = ConnectService.parseAgentState(rawAgentState);
@@ -456,6 +456,7 @@ export const actions = {
         // This is a small workaround for clearing a paused state
         // since connect fails to reliably call the
         // onAfterCallWork callback below
+        // @update: possibly no longer needed...
         if (!isNil(rootGetters['phone/agentCompleteState'])) {
           if (
             rootGetters['phone/agentCompleteState'].includes(
@@ -463,7 +464,7 @@ export const actions = {
             ) &&
             agentState !== ConnectService.STATES.PAUSED
           ) {
-            Log.debug('ACW has expires, pushing new state!');
+            Log.info('ACW has expires, pushing new state!');
             await dispatch('setAgentState', { state: agentState, force: true });
           }
         }
@@ -472,9 +473,7 @@ export const actions = {
         }
       },
       onAfterCallWork: async () => {
-        // Seems connect does NOT reliably
-        // execute this callback...
-        Log.debug('agent entered ACW, going routable in 3m...');
+        Log.info('agent entered ACW, going routable in 3m...');
         await delay(
           async (currentState) => {
             if (currentState === ConnectService.STATES.PAUSED) {
@@ -494,7 +493,7 @@ export const actions = {
                 },
                 { root: true },
               );
-              Log.debug('times up, going routable!');
+              Log.info('times up, going routable!');
             }
           },
           2900 * 60, // 2.9 minutes
@@ -504,7 +503,7 @@ export const actions = {
     });
     ConnectService.bindContactEvents({
       onIncoming: async (contact) => {
-        Log.debug('incoming callback!');
+        Log.info('incoming callback!');
         if (rootGetters['phone/agentId'] && rootGetters['phone/agentState']) {
           await dispatch(
             'socket/send',
@@ -532,7 +531,7 @@ export const actions = {
         contact.accept();
       },
       onConnecting: () => {
-        Log.debug('connecting to contact, triggering controller...');
+        Log.info('connecting to contact, triggering controller...');
         dispatch('setCurrentPage', 'controller');
       },
       onRefresh: (contact) => {
@@ -544,7 +543,7 @@ export const actions = {
     });
   },
   async setPopup({ commit }, state = true) {
-    Log.debug('setting popup:', state);
+    Log.info('setting popup:', state);
     await ConnectService.setPopup({ open: state });
     commit('setPopupState', state);
   },
@@ -552,7 +551,6 @@ export const actions = {
     { commit, dispatch, getters: { agentState, agentId } },
     state,
   ) {
-    Log.debug('SETTING AGENT STATE:', state);
     let aId = agentId;
     if (!aId) {
       aId = await dispatch('getAgent');
@@ -728,7 +726,7 @@ export const actions = {
       // Some bug in connect causes the agent to go into a "hung up" state
       // and the from prompt -> to contact call/connection doesnt happen.
       // this is a small workaround.
-      Log.debug('disregarding contact sync due to connection issue!');
+      Log.info('disregarding contact sync due to connection issue!');
       await ConnectService.setAgentState(ConnectService.STATES.ROUTABLE);
       return null;
     }
@@ -1040,6 +1038,7 @@ const mutations = {
     state.metrics = { ...state.metrics, ...newState };
   },
   setAgentState(state, newState) {
+    Log.info('AGENT STATE MUTATION:', newState);
     state.agentState = newState;
     state.agentStateTimestamp = new Date().toISOString();
   },
@@ -1109,6 +1108,7 @@ const mutations = {
     state.contactMetrics = metrics;
   },
   resetState(state) {
+    Log.info('Resetting session state!');
     Object.assign(state, {
       ...state,
       ...getStateDefaults(),
