@@ -1834,6 +1834,7 @@ exports[`Storyshots Basics|BaseLink As Router Link 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <a
+      aria-current="page"
       class="link router-link-exact-active router-link-active"
       href=""
       target=""
