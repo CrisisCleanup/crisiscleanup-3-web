@@ -182,6 +182,7 @@
     "eslint-plugin-prettier": "^3.1.2",
     "eslint-plugin-vue": "^6.2.2",
     "eslint-plugin-vue-types": "^1.0.1",
+    "flow-bin": "^0.129.0",
     "husky": "^4.2.3",
     "istanbul-lib-coverage": "^3.0.0",
     "jest": "^25.2.7",
