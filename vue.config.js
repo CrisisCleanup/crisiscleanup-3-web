@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'development') {
   threadLoader.warmup(basicPool, ['babel-loader', 'vue-loader']);
 }
 module.exports = {
-  runtimeCompiler: true,
+  runtimeCompiler: process.env.NODE_ENV === 'storybook',
   lintOnSave: false,
   configureWebpack: () => {
     const common = {
