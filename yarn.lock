@@ -20191,10 +20191,10 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
-vue-hotjar@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/vue-hotjar/-/vue-hotjar-1.1.0.tgz#b416ee689a6af4523756c3b5aedddfc0be7f8b34"
-  integrity sha512-eRzinL4UjUVPAEfhIhWbOEbTN7LpzgL8liIbpHINY7WTj2c5sHkcxLWj1yT9Xo7STys4qfOfOvOfJ5VujQ+3+g==
+vue-hotjar@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/vue-hotjar/-/vue-hotjar-1.1.2.tgz#125095fe7b923577dd89a29cf0e46da7414010ca"
+  integrity sha512-nuxwp/JfsUL5hveFb8aLlvJolK0D+rwoRZ89GJp7xxvoZe4U59UelO51zLFhj1FNONCvPSkmzGAlVZk2cCXvnw==
 
 vue-i18n@^8.16.0:
   version "8.16.0"
