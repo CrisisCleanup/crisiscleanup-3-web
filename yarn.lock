@@ -2695,10 +2695,10 @@
     prop-types "^15.6.1"
     react-lifecycles-compat "^3.0.4"
 
-"@ringcentral/sdk@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@ringcentral/sdk/-/sdk-4.0.0.tgz#c6131c951a3f6abb70ce5a3241713a094520429d"
-  integrity sha512-798ANDJAegRSHPqiH3JE9wn/bLsCOBlTbg0juktV9v8uPlgdZr1TCi7oqP+/CsG/8BRJ2yPzrMJMJbdJplnGfw==
+"@ringcentral/sdk@^4.3.2":
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/@ringcentral/sdk/-/sdk-4.3.2.tgz#39d42736e25069e3bee8a9030c66c7cb345d1a6c"
+  integrity sha512-L4o+Kz6oHwPXn2/8eaCj2dJrosTMOQMtbH081LI0BrxgckpeYTSTraE+IZTukadYgrsMONBcyZXVHD9rJoX/YA==
   dependencies:
     dom-storage "2.1.0"
     is-plain-object "2.0.4"
