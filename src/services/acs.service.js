@@ -130,6 +130,15 @@ export const STATES = Object.freeze({
   STATIC: 'static',
 });
 
+const LOCKED_STATES = [
+  STATES.PENDING_CALL,
+  STATES.AGENT_CALLING,
+  STATES.AGENT_PENDING,
+];
+
+export const isLockedState = (state, currentState) =>
+  state === STATES.ROUTABLE && LOCKED_STATES.includes(currentState);
+
 export const METRICS = Object.freeze({
   ONLINE: 'agentsOnline',
   STAFFED: 'agentsStaffed',
@@ -145,6 +154,7 @@ export const METRICS = Object.freeze({
 export const getAgent = () => new connect.Agent();
 
 export const setAgentState = async (state) => {
+  Log.info('setting upstream agent state -> connect', state);
   const agent = getAgent();
   const stateDef = agent.getAgentStates().find((s) => s.type === state);
   await agent.setState(stateDef);
