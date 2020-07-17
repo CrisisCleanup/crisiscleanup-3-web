@@ -733,6 +733,10 @@ export const actions = {
       contact = ConnectService.getCurrentContact();
     }
     if (!contact) {
+      // If we have a local contact, but connect says otherwise,
+      // override our local controller stash
+      Log.info('tried to sync local contact, but its been terminated!');
+      dispatch('stashController');
       return null;
     }
     const contactId = contact.getInitialContactId();
