@@ -248,7 +248,6 @@ export default {
           break;
         case CCState.OFFLINE:
         case CCState.DISCONNECTED:
-          EventBus.$emit(CCEvent.OFF_CALL);
           break;
         default:
           break;
