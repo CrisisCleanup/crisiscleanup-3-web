@@ -1155,15 +1155,15 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@crisiscleanup/amazon-connect-streams@^1.5.3":
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/@crisiscleanup/amazon-connect-streams/-/amazon-connect-streams-1.5.3.tgz#15ff481d266da4b474530816121169e9ef1df685"
-  integrity sha512-FxWPcE1/DtAScTa+lqgVvroB+rL3B/0xHNVC5jkJx9HyrPOfHuT8OgS08RexJ8puqEKtD0WubsMvUfUqETtoGA==
+"@crisiscleanup/amazon-connect-streams@^1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@crisiscleanup/amazon-connect-streams/-/amazon-connect-streams-1.5.4.tgz#d213a996f27d7df6e9147c2c8df615d46ed9a710"
+  integrity sha512-GN5reKwo/5gHf2OW2KZAtvYwaOzIYeENqDSYhmgHeMmJ+LCS8tyAUrCJvfZ1IC9RMob5TaTykHnkwbRujfNgXA==
 
-"@crisiscleanup/connect-rtc@^1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@crisiscleanup/connect-rtc/-/connect-rtc-1.1.4.tgz#f69f2d6995fa216292c5261f41a40b8dcff868f7"
-  integrity sha512-haGaQGCIh6qrqZQ4slYcxjvQfJKZq+DjmXSPakzsMBUFQ+vTxqaGZI3CASuN+OvNlAAFSvqlg9S6tLN+zvsQbw==
+"@crisiscleanup/connect-rtc@^1.1.5":
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/@crisiscleanup/connect-rtc/-/connect-rtc-1.1.5.tgz#23ab48f6448db866cee0ea7df762323070d3766d"
+  integrity sha512-SWD8tWdbqJa3KfUcjtZyE8+HB45gQDMOcvlWEL+BpPUGlJINSjaUPuEZeCaHrzEHhXdyAutfSkwbihWcPaLAzg==
   dependencies:
     uuid "^3.0.1"
     webrtc-adapter "^6.4.0"
