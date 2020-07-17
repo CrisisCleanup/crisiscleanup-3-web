@@ -223,7 +223,6 @@ export default {
         case CCState.POLLING:
         case CCState.ROUTABLE:
         case CCState.AGENT_CALLING:
-        case CCState.AGENT_PENDING:
           state.key = 'stop';
           state.state = 'available';
           EventBus.$emit(CCEvent.AVAILABLE);
@@ -231,6 +230,7 @@ export default {
         case CCState.PENDING_CALL:
         case CCState.INCOMING:
         case CCState.CONNECTING:
+        case CCState.AGENT_PENDING:
           state.key = 'ready';
           state.state = 'oncall';
           state.enabled = false;
