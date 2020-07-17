@@ -211,7 +211,7 @@ Vue.use(VueNativeSocket, WS_URL, {
     const Log = Logger({ name: 'WS' });
     Log.debug('incoming message:', eventName, event);
     if (!has(window, 'vue.$store')) {
-      Log.debug("store isn't ready yet!");
+      Log.debug('store is not ready yet!');
       return;
     }
     let method = 'commit';
@@ -220,13 +220,13 @@ Vue.use(VueNativeSocket, WS_URL, {
       window.vue.$store.dispatch('socket/setConnected', { connected: true });
     }
     if (event.data) {
-      const {
-        data,
-        namespace,
-        action: { type, name },
-      } = JSON.parse(event.data);
-      target = `${namespace}/${name}`;
-      if (type === 'action') {
+      const { data, namespace, action } = JSON.parse(event.data);
+      if (!action || Object.keys('action').includes('type')) {
+        Log.debug('Incoming message did not define an action!', event);
+        return;
+      }
+      target = `${namespace}/${action.name}`;
+      if (action.type === 'action') {
         method = 'dispatch';
       }
       window.vue.$store[method](target, data);
