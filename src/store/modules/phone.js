@@ -16,10 +16,9 @@ import {
   camelCase,
   defaultTo,
   delay,
-  flatten,
-  uniq,
-  union,
   difference,
+  flatten,
+  isEmpty,
   isEqual,
   isInteger,
   isNil,
@@ -27,8 +26,9 @@ import {
   merge,
   omitBy,
   orderBy,
+  union,
   unionBy,
-  isEmpty,
+  uniq,
 } from 'lodash';
 
 const Log = Logger({
@@ -468,8 +468,18 @@ export const actions = {
             await dispatch('setAgentState', { state: agentState, force: true });
           }
         }
-        if (!isNull(agentState)) {
-          commit('setAgentState', agentState);
+        if (
+          !isNull(agentState) &&
+          !ConnectService.isLockedState(
+            agentState,
+            rootGetters['phone/agentState'],
+          )
+        ) {
+          await dispatch('setAgentState', {
+            state: agentState,
+            force: true,
+            upstream: false,
+          });
         }
       },
       onAfterCallWork: async () => {
@@ -557,12 +567,16 @@ export const actions = {
     }
     let newState = state;
     let force = false;
+    let upstream = true;
     if (typeof newState === 'object') {
       // websocket support for legacy param
       // and additional options
       newState = state.state;
       force = state.force ? state.force : false;
+      upstream = isNil(state.upstream) ? true : state.upstream;
+      upstream = state.upstream === undefined ? true : state.upstream;
     }
+    Log.info('SETTING AGENT STATE:', { newState, force, upstream });
     if (
       (newState && newState !== agentState) ||
       agentState === ConnectService.STATES.PAUSED ||
@@ -584,7 +598,9 @@ export const actions = {
       );
     }
     commit('setAgentState', newState);
-    await ConnectService.setAgentState(newState);
+    if (upstream === true) {
+      await ConnectService.setAgentState(newState);
+    }
   },
   async setAgent({ commit }, agent) {
     commit('setAgent', agent);
