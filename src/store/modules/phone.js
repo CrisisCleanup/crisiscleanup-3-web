@@ -719,7 +719,6 @@ export const actions = {
       contact = ConnectService.getCurrentContact();
     }
     if (!contact) {
-      Log.debug('no contact found!');
       return null;
     }
     const contactId = contact.getInitialContactId();
@@ -828,7 +827,7 @@ export const actions = {
   async stashController({ state }) {
     // store controller state
     const { controller } = state;
-    Log.debug('stashing controller state...', controller);
+    Log.info('stashing controller state...', controller);
     localStorage.setItem('ccu-ivr-ctrl', JSON.stringify(controller));
     return controller;
   },
@@ -871,6 +870,7 @@ export const actions = {
     dispatch('stashController');
   },
   async setResolved({ commit }, resolved) {
+    Log.info('cases resolved!');
     commit('setControllerState', {
       resolved,
     });
@@ -930,8 +930,9 @@ export const actions = {
       commit('setAgentConfig', config);
     }
   },
-  async resetState({ commit }) {
+  async resetState({ commit, dispatch }) {
     commit('resetState');
+    await dispatch('stashController');
   },
   async acceptCallback() {
     const agent = ConnectService.getAgent();
