@@ -41,11 +41,8 @@ export const ConnectConfig = async () => ({
   softphone: {
     allowFramedSoftphone: true,
   },
-  loginPopup: {
-    autoOpen: false,
-    autoClose: true,
-    forceWindow: true,
-  },
+  loginPopup: false,
+  loginPopupAutoClose: true,
   loginUrl: await SSO.authenticate(AuthService.getToken()),
 });
 
