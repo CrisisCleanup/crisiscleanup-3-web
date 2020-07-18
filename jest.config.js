@@ -5,7 +5,6 @@ module.exports = {
     '!src/**/*.stories.js',
     '!**/node_modules/**',
     '!**/*.test.js',
-    '!src/services/*.js',
   ],
   // TODO: integrate coveralls or something similiar
   moduleDirectories: ['src', 'node_modules', '.storybook'],
