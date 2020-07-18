@@ -1,0 +1,13 @@
+[ignore]
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+esproposal.decorators=ignore
+module.name_mapper='@/\(.*\)$' -> '<PROJECT_ROOT>/src/\1'
+
+[strict]
