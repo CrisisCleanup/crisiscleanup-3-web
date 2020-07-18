@@ -16,4 +16,7 @@ global.vue = {
   $i18n: {
     t: (key) => key,
   },
+  $socket: {
+    sendObj: jest.fn(),
+  },
 };
