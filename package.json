@@ -52,6 +52,7 @@
     "@vue/babel-preset-jsx": "^1.1.2",
     "@vuex-orm/core": "^0.36.3",
     "@vuex-orm/plugin-axios": "^0.9.3",
+    "@vuex-orm/plugin-change-flags": "^1.2.3",
     "aws-sdk": "^2.715.0",
     "axios": "^0.19.2",
     "cf-agent-library": "git+https://git@github.com/CrisisCleanup/cf-agent-library.git",
@@ -126,10 +127,13 @@
     "vue2-google-maps": "^0.10.7",
     "vuedraggable": "^2.24.0",
     "vuejs-datepicker": "^1.6.2",
-    "vuex": "^3.5.1"
+    "vuex": "^3.5.1",
+    "vuex-module-decorators": "^0.8.0-2",
+    "vuex-persist": "^2.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
     "@babel/plugin-transform-modules-commonjs": "^7.9.0",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-flow": "^7.10.4",

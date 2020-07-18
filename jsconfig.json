@@ -1,6 +1,7 @@
 {
   "include": ["./src/**/*", "./node_modules/cypress", "cypress/**/*.js"],
   "compilerOptions": {
+    "experimentalDecorators": true,
     "module": "commonjs",
     "target": "es2015",
     "baseUrl": ".",
