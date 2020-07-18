@@ -60,7 +60,9 @@ class WebsocketStore extends VuexModule {
     const payload: SocketPayload = {
       action,
       data: _.omitBy(data, _.isNil),
-      options: _.defaultTo(options, { includeMeta: true }),
+      options: (_.defaultTo((options: any), {
+        includeMeta: true,
+      }): SocketActionOptions),
     };
     Log.debug('SEND:', payload);
     await window.vue.$socket.sendObj(payload);
