@@ -224,7 +224,8 @@
   ],
   "lint-staged": {
     "*.{js,vue}": [
-      "yarn format",
+      "vue-cli-service lint",
+      "prettier --write",
       "git add --force"
     ],
     "*.json": [
