@@ -1,4 +1,5 @@
 /**
+ * @DEPRECATED by websocket store
  * socket.js
  * WebSocket Store
  */
