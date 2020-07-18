@@ -1,4 +1,7 @@
 [ignore]
+.*/__tests__/.*
+<PROJECT_ROOT>/\(dist|storybook-static|coverage\)/.*
+<PROJECT_ROOT>/node_modules/module-deps/.*
 
 [include]
 

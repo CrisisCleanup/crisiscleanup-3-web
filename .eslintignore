@@ -5,3 +5,4 @@ yarn.lock
 package.json
 dist/
 storybook-static/
+flow-typed/
