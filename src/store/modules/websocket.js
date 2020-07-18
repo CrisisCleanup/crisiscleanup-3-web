@@ -1,8 +1,7 @@
 // @flow
 
 /**
- * websocket.js
- * WebSocket Store
+ * Websocket Store
  */
 
 import { Module, MutationAction, VuexModule } from 'vuex-module-decorators';
@@ -11,6 +10,12 @@ import _ from 'lodash';
 
 const Log = Logger({ name: 'WS' });
 
+/**
+ * Actions that are defined in the WS Api that can be invoked
+ * by this client.
+ *
+ * @type {{CLIENT_HEARTBEAT: string, SET_AGENT_STATE: string}}
+ */
 export const ACTIONS = {
   CLIENT_HEARTBEAT: 'CLIENT_HEARTBEAT',
   SET_AGENT_STATE: 'SET_AGENT_STATE',
@@ -34,8 +39,10 @@ type SocketPayload = {|
   namespaced: true,
 })
 class WebsocketStore extends VuexModule {
+  // Connection status
   connected: boolean = false;
 
+  // Snapshot of the most recent payload sent.
   lastSent: SocketPayload | null = null;
 
   get isConnected(): boolean {
@@ -47,6 +54,14 @@ class WebsocketStore extends VuexModule {
     return { connected: isConnected };
   }
 
+  /**
+   * Publish a message upstream to the websocket api
+   * via a channel determined by the provided action.
+   * @param action - action to invoke.
+   * @param data - payload to provide.
+   * @param options - configuration options.
+   * @returns {Promise<{lastSent: SocketPayload}>}
+   */
   @MutationAction({ mutate: ['lastSent'] })
   async send({
     action,
