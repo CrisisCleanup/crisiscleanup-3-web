@@ -55,11 +55,9 @@
 </template>
 
 <script>
-import VueTimepicker from 'vue2-timepicker';
 import Schedule from '../components/Schedule';
 import CreateSchedule from '../components/CreateSchedule';
 import 'vue2-timepicker/dist/VueTimepicker.css';
-import { getErrorMessage } from '../utils/errors';
 export default {
   name: 'Schedules',
   components: { CreateSchedule, Schedule },
