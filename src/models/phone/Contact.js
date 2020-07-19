@@ -5,7 +5,12 @@
  */
 
 import { Model } from '@vuex-orm/core';
-import type { ContactType } from '@/models/phone/types';
+import type {
+  ConnectionType,
+  ContactType,
+  ConnectionState,
+} from '@/models/phone/types';
+import Connection, { ConnectionStates } from '@/models/phone/Connection';
 
 /**
  * Enum of possible contact states.
@@ -30,15 +35,18 @@ export const ContactActions = Object.freeze({
 });
 
 export default class Contact extends Model {
-  static entity = 'phone/contact';
+  static entity = 'phone_contact';
 
   static primaryKey = 'contactId';
 
   static fields() {
     return ({
       contactId: this.string(),
+      agentId: this.string(),
       state: this.string(),
       action: this.string(),
+      connection: this.hasOne(Connection, 'contactId'),
     }: ContactType);
   }
+
 }
