@@ -4,18 +4,20 @@
 
 import * as ACS from '../connect.service.js';
 
-jest.mock('@crisiscleanup/amazon-connect-streams');
-
 describe('connect service tests', () => {
-  it('should bind events', () => {
+  it('should bind agent events', () => {
     const cbMock = jest.fn();
     ACS.bindEvents(ACS.EventTopics.AGENT, {
       [ACS.AgentEvents.ON_ROUTABLE]: cbMock,
+      [ACS.ContactEvents.ON_PENDING]: cbMock,
     });
-    expect(cbMock.mock.calls).toMatchInlineSnapshot(`
+    expect(global.connect.agent.mock.calls).toMatchInlineSnapshot(`
       Array [
         Array [
-          true,
+          [Function],
+        ],
+        Array [
+          [Function],
         ],
       ]
     `);
