@@ -5,7 +5,15 @@
  */
 
 import { Model } from '@vuex-orm/core';
-import type { AgentClientType } from '@/models/phone/types';
+import type {
+  AgentClientType,
+  AgentState,
+  ConnectionState, ConnectionType,
+  RouteState,
+} from '@/models/phone/types';
+import Contact from '@/models/phone/Contact';
+import Connection, { ConnectionStates } from '@/models/phone/Connection';
+import _ from 'lodash';
 
 /**
  * Enum of states that represent whether a client is currently
@@ -31,7 +39,7 @@ export const RouteStates = Object.freeze({
 export default class AgentClient extends Model {
   static entity = 'phone/agent';
 
-  static primaryKey = ['userId', 'agentId'];
+  static primaryKey = 'agentId';
 
   static fields() {
     return ({
@@ -39,6 +47,13 @@ export default class AgentClient extends Model {
       agentId: this.string(),
       state: this.string(),
       routeState: this.string(),
+      contacts: this.hasMany(Contact, 'agentId'),
+      connections: this.hasManyThrough(
+        Connection,
+        Contact,
+        'agentId',
+        'contactId',
+      ),
     }: AgentClientType);
   }
 
@@ -52,5 +67,13 @@ export default class AgentClient extends Model {
     return !Object.keys(ConnectionStates).includes(state)
       ? RouteStates.ROUTABLE
       : RouteStates.NOT_ROUTABLE;
+  }
+
+  get contactState(): ConnectionState | RouteState {
+    if (!_.isEmpty(this.connections)) {
+      const initConnection: ConnectionType = this.connections[0];
+      return initConnection.state;
+    }
+    return this.routeState;
   }
 }

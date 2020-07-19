@@ -5,7 +5,7 @@
  */
 
 import { Model } from '@vuex-orm/core';
-import type { ConnectionType } from '@/models/phone/types';
+import type { ConnectionType, ContactConnectionType } from '@/models/phone/types';
 
 /**
  * Enum of states representing the current step or stage of a connection.
@@ -20,15 +20,15 @@ export const ConnectionStates = Object.freeze({
 });
 
 export default class Connection extends Model {
-  static entity = 'phone/connection';
+  static entity = 'phone_contactConnection';
 
-  static primaryKey = ['connectionId', 'contactId'];
+  static primaryKey = 'connectionId';
 
   static fields() {
     return ({
       connectionId: this.string(),
       contactId: this.string(),
       state: this.string(),
-    }: ConnectionType);
+    }: ContactConnectionType);
   }
 }
