@@ -41,4 +41,16 @@ export default class AgentClient extends Model {
       routeState: this.string(),
     }: AgentClientType);
   }
+
+  static isStateOnline(state: AgentState): AgentState {
+    return [AgentStates.ONLINE, RouteStates.ROUTABLE].includes(state)
+      ? AgentStates.ONLINE
+      : AgentStates.OFFLINE;
+  }
+
+  static isStateRoutable(state: ConnectionState): RouteState {
+    return !Object.keys(ConnectionStates).includes(state)
+      ? RouteStates.ROUTABLE
+      : RouteStates.NOT_ROUTABLE;
+  }
 }
