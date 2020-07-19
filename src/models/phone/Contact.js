@@ -49,4 +49,20 @@ export default class Contact extends Model {
     }: ContactType);
   }
 
+  static afterCreate(model: Contact): void {
+    const initConnection: ConnectionType = {
+      connectionId: 's',
+      state: model.initConnectionState,
+      contactId: model.contactId,
+    };
+    Connection.insertOrUpdate({ data: initConnection });
+  }
+
+  get initConnectionState(): ConnectionState {
+    const stateMap = {
+      [ContactStates.QUEUED]: ConnectionStates.PENDING_CALL,
+      [ContactStates.ROUTED]: ConnectionStates.AGENT_CALLING,
+    };
+    return stateMap[this.state];
+  }
 }
