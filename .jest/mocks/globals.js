@@ -1,22 +1,10 @@
-global.connect = {
-  AgentStateType: {
-    OFFLINE: 'offline',
-    ROUTABLE: 'routable',
-  },
-  ContactStateType: {
-    INCOMING: 'incoming',
-    CONNECTING: 'connecting',
-    CONNECTED: 'connected',
-    PENDING: 'pending',
-    ENDED: 'ended',
-  },
-  hitch: jest.fn((handler, callback) => callback(true)),
-  agent: jest.fn((mock) => ({
-    onRoutable: mock({
-      onRoutable: jest.fn((val) => 'onRoutable event'),
-    }),
-  })),
-};
+require('@crisiscleanup/amazon-connect-streams');
+
+global.connect.RTCSession = function () {};
+global.connect.core.agent = jest.fn();
+global.connect.agent = jest.fn();
+global.connect.hitch = jest.fn();
+global.connect.onAuthFail = jest.fn();
 
 global.vue = {
   $i18n: {
