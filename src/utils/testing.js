@@ -206,7 +206,8 @@ export const MockAgents = [
   },
 ];
 
-export const mockModel = (data, { api } = {}) => ({
+export const mockModel = (data, { api, statics } = {}) => ({
+  create: jest.fn(() => data[0]),
   all: jest.fn(() => data),
   find: jest.fn(() => data[0]),
   database: jest.fn(() => data),
@@ -214,6 +215,7 @@ export const mockModel = (data, { api } = {}) => ({
     where: () => ({
       get: () => data[0],
     }),
+    ...statics,
   }),
   api: jest.fn(() => ({
     get: () => data[0],
