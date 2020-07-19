@@ -22,6 +22,7 @@ const getters = {
     return state.user && state.user.user_claims.active_roles.includes(1);
   },
   userId: (state) => (state.user ? state.user.user_claims.id : null),
+  userToken: (state) => (state.user ? state.user.access_token : null),
 };
 
 // actions
