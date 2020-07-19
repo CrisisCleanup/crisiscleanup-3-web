@@ -37,3 +37,6 @@ declare module '@crisiscleanup/amazon-connect-streams/release/connect-streams-mi
 declare module '@crisiscleanup/amazon-connect-streams/release/connect-streams.js' {
   declare module.exports: $Exports<'@crisiscleanup/amazon-connect-streams/release/connect-streams'>;
 }
+
+declare var connect;
+
