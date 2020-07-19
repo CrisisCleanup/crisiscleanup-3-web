@@ -5680,11 +5680,6 @@
   dependencies:
     axios "^0.19.2"
 
-"@vuex-orm/plugin-change-flags@^1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@vuex-orm/plugin-change-flags/-/plugin-change-flags-1.2.3.tgz#1e6082da205419d18be3e05ea7180c3a2fc323e7"
-  integrity sha512-Zd2ndi4ceDvmb4O/kU7sFjJ7ZtupQgO+Ggvx7o3Q2VFylZ1Zv6lSLKyNPWKYDxSvcrUPJmhliiWbLUaVmyC3hw==
-
 "@webassemblyjs/ast@1.8.5":
   version "1.8.5"
   resolved "https://registry.yarnpkg.com/@webassemblyjs/ast/-/ast-1.8.5.tgz#51b1c5fe6576a34953bf4b253df9f0d490d9e359"
