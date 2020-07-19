@@ -65,6 +65,7 @@ import vueNumeralFilterInstaller from 'vue-numeral-filter';
 import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
+import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 import VueRouterMultiView from 'vue-router-multi-view';
 import Tabs from '@/components/tabs/Tabs';
 import Tab from '@/components/tabs/Tab';
@@ -97,6 +98,7 @@ Vue.component('spinner', Spinner);
 Vue.component('badge', Badge);
 Vue.component('tag-input', VueTagsInput);
 Vue.component('datepicker', Datepicker);
+Vue.component('v-datepicker', DatePicker);
 
 // Layouts
 Vue.component('authenticated-layout', Authenticated);

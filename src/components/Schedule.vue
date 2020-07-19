@@ -13,7 +13,12 @@
             :value="getAvailabilityForDay(day)"
             @input="(availablity) => setAvailabilityForDay(day, availablity)"
           />
-          <span class="capitalize">{{ day | moment('ddd') }}</span>
+          <div class="capitalize">
+            {{ day | moment('ddd') }}
+          </div>
+          <div class="capitalize">
+            {{ day | moment('MM/DD') }}
+          </div>
         </div>
       </div>
 
@@ -28,8 +33,11 @@
               class="mr-3"
             />
             <div class="flex-col flex items-start justify-center">
-              <span>{{ shift.name }}</span>
-              <span>{{ shift.start_time }} - {{ shift.end_time }}</span>
+              <div class="mb-1">{{ shift.name }}</div>
+              <div class="mb-1">
+                {{ [shift.start_time, 'HH:mm:ss'] | moment('hA') }} -
+                {{ [shift.end_time, 'HH:mm:ss'] | moment('hA') }}
+              </div>
             </div>
           </div>
         </div>
@@ -81,6 +89,7 @@ export default {
     );
 
     this.shifts = scheduleResponse.data.shifts;
+    this.schedule = scheduleResponse.data;
 
     const weekStart = this.$moment.utc().startOf('week');
     const weekEnd = this.$moment.utc().endOf('week');
@@ -89,6 +98,7 @@ export default {
       shift_ids: this.shifts.map((shift) => shift.id).join(','),
       start_at: weekStart.toISOString(),
       end_at: weekEnd.toISOString(),
+      schedule: this.schedule.id,
     };
 
     const response = await this.$http.get(
@@ -100,14 +110,14 @@ export default {
   },
   props: {
     scheduleId: {
-      type: String,
+      type: Number,
       default: null,
     },
   },
   data() {
     return {
-      days: this.getCurrentWeekDays(),
       availablityMatrix: {},
+      schedule: null,
       shifts: [],
       availability: {
         available: [],
@@ -118,16 +128,6 @@ export default {
     };
   },
   methods: {
-    getCurrentWeekDays() {
-      const weekStart = this.$moment.utc().startOf('week');
-
-      const days = [];
-      for (let i = 0; i <= 6; i++) {
-        days.push(this.$moment.utc(weekStart).add(i, 'days'));
-      }
-
-      return days;
-    },
     setAvailability(shift, day, availablity) {
       if (this.availablityMatrix[shift.id]) {
         this.availablityMatrix[shift.id][
@@ -138,6 +138,7 @@ export default {
           [day.format('YYYY-MM-DD')]: availablity,
         };
       }
+      this.$forceUpdate();
     },
     setAvailabilityForShift(shift, availablity) {
       this.availablityMatrix[shift.id] = {};
@@ -147,6 +148,7 @@ export default {
           day.format('YYYY-MM-DD')
         ] = availablity;
       });
+      this.$forceUpdate();
     },
 
     setAvailabilityForDay(day, availablity) {
@@ -155,6 +157,7 @@ export default {
           day.format('YYYY-MM-DD')
         ] = availablity;
       });
+      this.$forceUpdate();
     },
     getAvailability(shift, day) {
       if (this.availablityMatrix[shift.id]) {
@@ -246,10 +249,20 @@ export default {
     },
   },
   computed: {
+    days() {
+      if (this.schedule && this.schedule.days) {
+        const results = this.schedule.days.map((day) => {
+          return this.$moment(day);
+        });
+        results.sort((a, b) => a - b);
+        return results;
+      }
+      return [];
+    },
     gridStyle() {
       return {
         display: 'grid',
-        'grid-template-columns': '2.5fr repeat(7, 1fr)',
+        'grid-template-columns': `2.5fr repeat(${this.days.length}, 1fr)`,
         'grid-template-rows': `1fr repeat(${this.shifts.length}, 1.1fr)`,
       };
     },
