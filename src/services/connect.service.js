@@ -4,8 +4,7 @@
  * AWS Connect Service
  */
 
-import type { ACSEvent, ACSEventTopic } from '@/services/types';
-import '@crisiscleanup/amazon-connect-streams/release/connect-streams-min';
+import type { ACSEventTopic, ACSCallback } from '@/services/types';
 
 export const EventTopics = Object.freeze({
   AGENT: 'agent',
@@ -28,11 +27,9 @@ export const ContactEvents = Object.freeze({
 
 export const bindEvents = <T>(
   topic: ACSEventTopic,
-  handler: { [T]: connect.AgentCallback },
+  handler: { [T]: ACSCallback },
 ) => {
   Object.keys(handler).forEach((key) => {
-    connect[topic]((item) =>
-      item[key](connect.hitch(handler, handler[key])),
-    );
+    connect[topic]((item) => item[key](connect.hitch(handler, handler[key])));
   });
 };
