@@ -70,11 +70,24 @@ export default class AgentClient extends Model {
       : RouteStates.NOT_ROUTABLE;
   }
 
+  static friendlyStateMap = {
+    [RouteStates.ROUTABLE]: 'online',
+    [ConnectionStates.PENDING_CALL]: 'connecting',
+    [ConnectionStates.AGENT_CALLING]: 'connecting',
+    [ConnectionStates.PAUSED]: 'paused',
+    [ConnectionStates.BUSY]: 'talking',
+    [ConnectionStates.AGENT_PENDING]: 'connecting',
+  };
+
   get contactState(): ConnectionState | RouteState {
     if (!_.isEmpty(this.connections)) {
       const initConnection: ConnectionType = this.connections[0];
       return initConnection.state;
     }
     return this.routeState;
+  }
+
+  get friendlyState(): string {
+    return _.get(AgentClient.friendlyStateMap, this.contactState, 'offline');
   }
 }
