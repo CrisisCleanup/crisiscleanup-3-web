@@ -9,10 +9,14 @@ import type {
   ConnectionType,
   ContactType,
   ConnectionState,
+  RawContactAttributes,
+  RawContactAttribute,
+  ContactAttributesType,
 } from '@/models/phone/types';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import * as ACS from '@/services/connect.service';
 import Logger from '@/utils/log';
+import _ from 'lodash';
 
 /**
  * Enum of possible contact states.
@@ -88,6 +92,7 @@ export default class Contact extends Model {
       state: this.string(),
       action: this.string(),
       connection: this.hasOne(Connection, 'contactId'),
+      attributes: this.attr(null),
     }: ContactType);
   }
 
@@ -126,6 +131,35 @@ export default class Contact extends Model {
         }: ConnectionType),
       });
     }
+  }
+
+  static parseAttributes(
+    rawAttrs: RawContactAttributes,
+  ): ContactAttributesType {
+    const idAttrs = [
+      ContactAttributes.WORKSITES,
+      ContactAttributes.INCIDENT,
+      ContactAttributes.PDAS,
+      ContactAttributes.OUTBOUND_IDS,
+    ];
+    return _.transform(
+      rawAttrs,
+      (result, value: RawContactAttribute, key) => {
+        const _val = value.value;
+        result[key] = _val; // string values
+        if (_.includes(idAttrs, key)) {
+          result[key] = [];
+          if (!_.isEmpty(_val)) {
+            const ids = _.forEach(value.value.split(','), _.trim);
+            result[key] = _.reject(_.map(ids, _.parseInt), _.isNaN); // number[] values
+          }
+        }
+        if (_.isNumber(_val) && !_.isArray(result[key])) {
+          result[key] = _.parseInt(_val); // number values
+        }
+      },
+      {},
+    );
   }
 
   get initConnectionState(): ConnectionState {
