@@ -8,7 +8,8 @@ import { Model } from '@vuex-orm/core';
 import type {
   AgentClientType,
   AgentState,
-  ConnectionState, ConnectionType,
+  ConnectionState,
+  ConnectionType,
   RouteState,
 } from '@/models/phone/types';
 import Contact from '@/models/phone/Contact';
