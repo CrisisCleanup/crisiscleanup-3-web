@@ -5,7 +5,31 @@
  */
 
 import { AuthStates } from '@/store/modules/phone/streams';
+import Pda from '@/models/Pda';
+import {
+  ControllerActionTabs,
+  ControllerPages,
+} from '@/store/modules/phone/controller';
 
 type AuthState = $Values<typeof AuthStates>;
 
-export type { AuthState };
+type ControllerPage = $Values<typeof ControllerPages>;
+type ControllerActionTab = $Values<typeof ControllerActionTabs>;
+
+type CaseType = {|
+  id: number,
+  type: 'worksite' | 'pda',
+|};
+
+type ViewStateT = {|
+  page: ControllerPage,
+  actionTab: ControllerActionTab,
+|};
+
+export type {
+  AuthState,
+  CaseType,
+  ControllerActionTab,
+  ControllerPage,
+  ViewStateT,
+};
