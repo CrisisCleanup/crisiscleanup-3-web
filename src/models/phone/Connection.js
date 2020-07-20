@@ -5,11 +5,11 @@
  */
 
 import { Model } from '@vuex-orm/core';
-import type { ConnectionType, ContactConnectionType } from '@/models/phone/types';
+import type { ConnectionType } from '@/models/phone/types';
 
 /**
  * Enum of states representing the current step or stage of a connection.
- * @type {{PAUSED: string, AGENT_PENDING: string, PENDING_CALL: string, BUSY: string, AGENT_CALLING: string} | any}
+ * @type {any | {PAUSED: string, AGENT_PENDING: string, PENDING_CALL: string, BUSY: string, AGENT_CALLING: string}}
  */
 export const ConnectionStates = Object.freeze({
   AGENT_CALLING: 'CallingCustomer', // Agent -> Outbound Call.
@@ -20,7 +20,7 @@ export const ConnectionStates = Object.freeze({
 });
 
 export default class Connection extends Model {
-  static entity = 'phone_contactConnection';
+  static entity = 'phone/connection';
 
   static primaryKey = 'connectionId';
 
@@ -29,6 +29,7 @@ export default class Connection extends Model {
       connectionId: this.string(),
       contactId: this.string(),
       state: this.string(),
-    }: ContactConnectionType);
+      streamsConnectionId: this.string(''),
+    }: ConnectionType);
   }
 }
