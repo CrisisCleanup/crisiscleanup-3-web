@@ -5,7 +5,6 @@
  */
 
 import { AuthStates } from '@/store/modules/phone/streams';
-import Pda from '@/models/Pda';
 import {
   ControllerActionTabs,
   ControllerPages,
