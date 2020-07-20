@@ -4,7 +4,13 @@
  * Phone ACS Streams Store
  */
 
-import { Action, Module, Mutation, VuexModule } from 'vuex-module-decorators';
+import {
+  Action,
+  Module,
+  Mutation,
+  VuexModule,
+  config,
+} from 'vuex-module-decorators';
 import type { AuthState } from '@/store/modules/phone/types';
 import * as ACS from '@/services/connect.service';
 import Logger from '@/utils/log';
@@ -25,7 +31,7 @@ import AgentClient, {
   RouteStates,
 } from '@/models/phone/AgentClient';
 import Contact, { ContactActions, ContactStates } from '@/models/phone/Contact';
-
+config.rawError = true;
 /**
  * Enum of different Connect authentication states.
  * @type {*|{IN_PROGRESS: string, SUCCESS: string, FAIL: string}}
@@ -74,7 +80,8 @@ class StreamsStore extends VuexModule {
   }
 
   @Action
-  async createClient(agent: connect.Agent) {
+  async createClient(agentInstance?: connect.Agent) {
+    const agent = agentInstance || new connect.Agent();
     const agentState = agent.getState().type;
     const isOnline: AgentState = AgentClient.isStateOnline(agentState);
 
@@ -105,7 +112,7 @@ class StreamsStore extends VuexModule {
   async updateAgentClient(newData: $Shape<AgentClientType>) {
     Log.debug('agent client update:', newData);
     await AgentClient.update({
-      where: this.agentClientId,
+      where: this.context.getters.agentClientId,
       data: newData,
     });
   }
@@ -129,10 +136,14 @@ class StreamsStore extends VuexModule {
     const ssoPortalUrl: string = await SSO.authenticate(
       this.context.rootGetters['auth/userToken'],
     );
-    ACS.initConnect({
-      htmlEl: element,
-      config: { loginUrl: ssoPortalUrl },
-    });
+    try {
+      ACS.initConnect({
+        htmlEl: element,
+        config: { loginUrl: ssoPortalUrl },
+      });
+    } catch (e) {
+      Log.error(e);
+    }
     // Bind core events
     ACS.bindEvents<ACSCoreEvent>(ACS.EventTopics.CORE, {
       [ACS.CoreEvents.ON_AUTH_FAIL]: () => {
@@ -142,9 +153,9 @@ class StreamsStore extends VuexModule {
     });
     // Bind agent events
     ACS.bindEvents<ACSAgentEvent>(ACS.EventTopics.AGENT, {
-      [ACS.AgentEvents.ON_CONNECTION_GAINED]: (agent: connect.Agent) => {
+      [ACS.AgentEvents.ON_CONNECTION_GAINED]: () => {
         Log.info('ACS successfully connected!');
-        this.createClient(agent).then(() => {
+        this.createClient().then(() => {
           this.context.commit('setConnected', true);
         });
       },
