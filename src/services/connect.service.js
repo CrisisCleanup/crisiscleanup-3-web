@@ -5,6 +5,7 @@
  */
 
 import type { ACSEventTopic, ACSCallback, ACSConfig } from '@/services/types';
+import _ from 'lodash';
 
 /**
  * Enum of Connect Event Topics.
@@ -91,4 +92,28 @@ export const initConnect = ({
     finalConfig = { ...finalConfig, ...config };
   }
   connect.core.initCCP(htmlEl, finalConfig);
+};
+
+/**
+ * Retrieves the initial connection (contact => agent) by contact id
+ * if it exists.
+ * @param contactId
+ * @returns {null|void|connect.ConnectionType}
+ */
+export const getConnectionByContactId = (
+  contactId: string,
+): connect.Connection | null => {
+  const agent: connect.Agent = new connect.Agent();
+  const contacts: connect.Contact[] = agent.getContacts();
+  if (_.isEmpty(contacts)) {
+    return null;
+  }
+  const targContact = contacts.find(
+    (c: connect.Contact) => c.getInitialContactId() === contactId,
+  );
+  if (!targContact) {
+    return null;
+  }
+  const targConnection: void | connect.ConnectionType = targContact.getInitialConnection();
+  return targConnection || null;
 };
