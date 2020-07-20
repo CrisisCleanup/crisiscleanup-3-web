@@ -49,6 +49,29 @@ export const ContactActions = Object.freeze({
   ERROR: 'error',
 });
 
+/**
+ * Enum of possible contact attributes.
+ * @prop CALLER_ID - Deprecated: Contact's Caller Id.
+ * @prop PDAS - PDAs associated with contact.
+ * @prop WORKSITES - Worksites associated with contact.
+ * @prop OUTBOUND_IDS - Outbounds associated with contact.
+ * @prop LOCALE - Contact's selected locale.
+ * @prop INCIDENT - Incident associated with hotline.
+ * @prop CALLBACK_NUMBER - Contact's caller Id (only present in callbacks!)
+ * @prop INBOUND_NUMBER - Contact's caller Id (only present in inbound calls!)
+ * @readonly
+ * @enum {string}
+ * @type {any | {PDAS: string, LOCALE: string, WORKSITES: string, INCIDENT: string, OUTBOUND_IDS: string, CALLBACK_NUMBER: string, CALLER_ID: string, INBOUND_NUMBER: string}}
+ */
+export const ContactAttributes = Object.freeze({
+  CALLER_ID: 'callerID',
+  PDAS: 'pdas',
+  WORKSITES: 'worksites',
+  OUTBOUND_IDS: 'ids',
+  LOCALE: 'USER_LANGUAGE',
+  INCIDENT: 'INCIDENT_ID',
+  CALLBACK_NUMBER: 'CALLBACK_NUMBER',
+  INBOUND_NUMBER: 'InboundNumber',
 });
 
 const Log = Logger({ name: 'phone.contact' });
