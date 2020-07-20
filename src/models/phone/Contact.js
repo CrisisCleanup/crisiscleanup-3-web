@@ -32,7 +32,8 @@ export const ContactActions = Object.freeze({
   ENTER: 'enter_ivr', // Contact has entered primary queue.
   CONNECTING: 'connecting', // Contact has been accepted by an agent.
   CONNECTED: 'connected', // Contact has an active connection with at least 1 agent.
-  ENDED: 'ended', // Contact has been terminated.
+  ENDED: 'ended', // Contact connection has been terminated.
+  DESTROYED: 'destroyed', // Contact completely closed (post ACW).
   ERROR: 'error', // An exception occurred at some point.
 });
 

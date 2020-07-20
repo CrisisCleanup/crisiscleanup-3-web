@@ -36,7 +36,13 @@ export const AgentEvents = Object.freeze({
  * @type {*|{ON_PENDING: string}}
  */
 export const ContactEvents = Object.freeze({
-  ON_PENDING: 'onPending',
+  ON_PENDING: 'onPending', // Occurs before connecting.
+  ON_CONNECTING: 'onConnecting', // Contact is connecting to agent.
+  ON_CONNECTED: 'onConnected', // Contact is live with agent.
+  ON_MISSED: 'onMissed', // Agent fails to answer or rejects.
+  ON_ENDED: 'onEnded', // Agent ends call or contact is missed (outbound).
+  ON_ACW: 'onACW', // Call has been ended, agent & contact -> ACW.
+  ON_DESTROY: 'onDestroy', // Contact is completely closed.
 });
 
 /**
