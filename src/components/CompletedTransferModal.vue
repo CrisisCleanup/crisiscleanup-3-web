@@ -1,34 +1,35 @@
 <template>
-  <modal
-    :title="$t('termsConditionsModal.terms_conditions_title')"
-    modal-classes="max-w-lg h-64"
-  >
-    <div
-      class="p-3"
-      v-html="$t('termsConditionsModal.accept_terms_conditions')"
-    ></div>
-    <div slot="footer" class="flex items-center justify-center py-2 border-t">
+  <modal :title="$t('~~You have been moved')" modal-classes="max-w-lg h-64">
+    <div class="p-3">
+      <div>{{ $t('~~You have been moved') }}</div>
+      <div>{{ transferRequest }}</div>
+    </div>
+    <div slot="footer" class="p-3 flex items-center justify-center">
       <base-button
-        data-cy="termsmodal.acceptBtn"
-        :text="$t('actions.accept')"
-        :alt="$t('actions.accept')"
+        :action="$emit('close')"
+        :text="$t('~~Stay')"
+        variant="outline"
+        class="ml-2 p-3 px-6 text-xs"
+      />
+      <base-button
         variant="solid"
-        class="px-6 p-3"
-        :action="
-          () => {
-            $emit('acceptedTerms');
-          }
-        "
-      >
-        {{ $t('actions.accept') }}
-      </base-button>
+        :action="$router.push('/profile?move=true')"
+        :text="$t('~~Move Back')"
+        class="ml-2 p-3 px-6 text-xs"
+      />
     </div>
   </modal>
 </template>
 
 <script>
 export default {
-  name: 'TermsandConditionsModal',
+  name: 'CompletedTransferModal',
+  props: {
+    transferRequest: {
+      type: Object,
+      required: true,
+    },
+  },
 };
 </script>
 

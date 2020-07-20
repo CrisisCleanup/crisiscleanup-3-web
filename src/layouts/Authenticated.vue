@@ -96,6 +96,11 @@
         <div v-if="showAcceptTermsModal">
           <TermsandConditionsModal @acceptedTerms="acceptTermsAndConditions" />
         </div>
+        <div v-if="transferRequest">
+          <CompletedTransferModal
+            :transfer-request="transferRequest"
+          />
+        </div>
       </div>
     </template>
   </Loader>
@@ -118,17 +123,19 @@ import { Slide } from 'vue-burger-menu';
 import { parsePhoneNumber } from 'libphonenumber-js';
 import DisasterIcon from '../components/DisasterIcon';
 import PhoneStatus from '../models/PhoneStatus';
+import CompletedTransferModal from '../components/CompletedTransferModal';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
 export default {
   name: 'Authenticated',
-  components: { DisasterIcon, NavMenu, Loader, TermsandConditionsModal, Slide },
+  components: { CompletedTransferModal, DisasterIcon, NavMenu, Loader, TermsandConditionsModal, Slide },
   data() {
     return {
       loading: false,
       ready: false,
       showAcceptTermsModal: false,
+      transferRequest: null,
     };
   },
   computed: {
@@ -263,6 +270,7 @@ export default {
         dataKey: 'results',
       }),
     ]);
+    await this.getUserTransferRequests();
     await this.setupLanguage();
     this.setAcl(this.$router);
 
@@ -359,6 +367,14 @@ export default {
     async acceptTermsAndConditions() {
       await User.api().acceptTerms();
       this.showAcceptTermsModal = false;
+    },
+    async getUserTransferRequests() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/transfer_requests`,
+      );
+      this.transferRequest = response.data.results.find((request) => {
+        return request.user === this.currentUser.id;
+      });
     },
     async logoutByPhoneNumber() {
       const parsedNumber = parsePhoneNumber(this.currentUser.mobile, 'US');

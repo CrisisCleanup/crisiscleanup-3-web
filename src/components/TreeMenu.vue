@@ -27,6 +27,7 @@
       class="pb-2 text-primary-dark"
     >
       <base-checkbox
+        :value="children.every((child) => selectedUsers.includes(child.id))"
         @input="
           (value) => {
             if (value) {

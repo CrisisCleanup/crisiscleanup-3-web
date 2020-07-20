@@ -341,7 +341,10 @@
               {{ $t('~~User Transfer Requests') }}
             </div>
             <div class="p-4">
-              <UserTransferRequestTable :requests="transferRequests" />
+              <UserTransferRequestTable
+                :requests="transferRequests"
+                @reload="getUserTransferRequests"
+              />
             </div>
           </div>
         </div>

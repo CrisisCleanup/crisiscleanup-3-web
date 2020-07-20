@@ -234,7 +234,7 @@ export default {
     async loadPageData() {
       const pageData = await hash({
         lineageUsers: User.api().get(
-          `/users?lineage=${this.currentUser.id}&limit=1000&fields=id,referring_user,first_name,last_name,files,lineage`,
+          `/users?lineage=${this.currentUser.id}&limit=1000&fields=id,referring_user,first_name,last_name,files,lineage&organization=${this.currentUser.organization.id}`,
           {
             dataKey: 'results',
           },
@@ -248,7 +248,7 @@ export default {
       this.nestedUsers = nestUsers(
         this.lineageUsers,
         this.currentUser.id,
-      ).filter((user) => Boolean(user.children.length));
+      );
 
       const user_ids = this.lineageUsers.map((user) => user.id);
       user_ids.push(this.currentUser.id);

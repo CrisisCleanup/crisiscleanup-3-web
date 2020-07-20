@@ -19,7 +19,7 @@
         v-for="column of columns"
         :key="column.key"
         class="p-2 border-b flex items-center cursor-pointer"
-        :class="column.class || []"
+        :class="column.headerClass || []"
         @click="
           () => {
             if (column.sortable) {
@@ -139,6 +139,7 @@
           :key="column.key"
           class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
           :class="column.class || []"
+          @click="handleColumnAction(column, item[column.key], item)"
         >
           <slot :name="column.key" :item="item">
             <span v-if="$mq === 'sm'" class="font-semibold mr-2">
@@ -504,6 +505,11 @@ export default {
         return response;
       });
       exportCSVFile(headers, data, 'export');
+    },
+    async handleColumnAction(column, data, item) {
+      if (column.action) {
+        await column.action(data, item);
+      }
     },
   },
 };

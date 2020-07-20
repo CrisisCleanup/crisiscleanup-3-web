@@ -39,6 +39,9 @@
 <script>
 import Table from '@/components/Table';
 import { DialogsMixin } from '../mixins';
+import Organization from '../models/Organization';
+import User from '../models/User';
+import { getStatusName, getWorkTypeName } from '../filters';
 
 export default {
   name: 'UserTransferRequestTable',
@@ -51,7 +54,71 @@ export default {
     },
     loading: Boolean,
   },
+  async mounted() {
+    const organizations = this.requests.map(
+      (request) => request.origin_organization,
+    );
+    await Organization.api().get(
+      `/organizations?id__in=${organizations.join(',')}`,
+      {
+        dataKey: 'results',
+      },
+    );
+  },
   methods: {
+    async getChildRequests(childRequests) {
+      const userIds = childRequests.map((request) => request.user);
+      const results = await User.api().get(
+        `/users?id__in=${userIds.join(',')}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      const { users } = results.entities;
+      await this.$confirm({
+        title: this.$t('~~Transferring Users'),
+        content: users
+          .map(
+            (user) => `
+          <div>${user.first_name} ${user.last_name} - ${user.email} - ${user.mobile}</div>
+        `,
+          )
+          .join(''),
+        actions: {
+          ok: {
+            text: this.$t('actions.ok'),
+            type: 'solid',
+          },
+        },
+      });
+    },
+    async getTransferringRequests(requests) {
+      const requestIds = requests.map((request) => request);
+      const response = await this.$http.get(
+        `${
+          process.env.VUE_APP_API_BASE_URL
+        }/worksite_work_types?id__in=${requestIds.join(',')}`,
+      );
+      const { results } = response.data;
+      await this.$confirm({
+        title: this.$t('~~Transferring Cases'),
+        content: results
+          .map(
+            (work_type) => `
+          <div>${work_type.case_number} - ${getWorkTypeName(
+              work_type.work_type,
+            )} - ${getStatusName(work_type.status)}</div>
+        `,
+          )
+          .join(''),
+        actions: {
+          ok: {
+            text: this.$t('actions.ok'),
+            type: 'solid',
+          },
+        },
+      });
+    },
     async approveRequest(requestId) {
       const result = await this.$prompt({
         title: this.$t('~~Approve User Transfer'),
@@ -96,15 +163,23 @@ export default {
           title: this.$t('~~Origin Organization'),
           dataIndex: 'origin_organization',
           key: 'origin_organization',
-          width: '1fr',
+          width: '40%',
+          transformer: (field) => {
+            const organization = Organization.find(field);
+            return organization && organization.name;
+          },
         },
         {
           title: this.$t('~~No of Users'),
           dataIndex: 'child_requests',
           key: 'child_requests',
           width: '1fr',
+          class: 'text-primary-dark underline',
           transformer: (field) => {
             return field.length;
+          },
+          action: (field) => {
+            this.getChildRequests(field);
           },
         },
         {
@@ -112,8 +187,12 @@ export default {
           dataIndex: 'transfering_wwwtsp_ids',
           key: 'transfering_wwwtsp_ids',
           width: '1fr',
+          class: 'text-primary-dark underline',
           transformer: (field) => {
             return field.length;
+          },
+          action: (field) => {
+            this.getTransferringRequests(field);
           },
         },
         {
