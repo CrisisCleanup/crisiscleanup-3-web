@@ -6,9 +6,14 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexORM, { Database } from '@vuex-orm/core';
 import * as ACS from '@/services/connect.service';
+import _ from 'lodash';
 import AgentClient, { AgentStates, RouteStates } from '../AgentClient';
 import Connection, { ConnectionStates } from '../Connection';
-import Contact, { ContactActions, ContactStates } from '../Contact';
+import Contact, {
+  ContactActions,
+  ContactAttributes,
+  ContactStates,
+} from '../Contact';
 
 jest.mock('@/services/connect.service.js');
 
@@ -173,6 +178,44 @@ describe('phone models', () => {
         "contactId": "contact-123",
         "state": "PendingBusy",
         "streamsConnectionId": "verified_connection123",
+      }
+    `);
+  });
+
+  it('parse contact attributes correctly', () => {
+    const _attrs = {
+      [ContactAttributes.PDAS]: '1,2,3',
+      [ContactAttributes.WORKSITES]: '0',
+      [ContactAttributes.INCIDENT]: '500,',
+      [ContactAttributes.OUTBOUND_IDS]: '0,2 , 3',
+      [ContactAttributes.LOCALE]: 'en_US',
+      [ContactAttributes.CALLBACK_NUMBER]: '+19999999999',
+      [ContactAttributes.INBOUND_NUMBER]: '+19999999999',
+      [ContactAttributes.CALLER_ID]: '+19999999999',
+    };
+    const attrs = _.mapValues(_attrs, (v) => ({ name: '', value: v }));
+    expect(Contact.parseAttributes(attrs)).toMatchInlineSnapshot(`
+      Object {
+        "CALLBACK_NUMBER": "+19999999999",
+        "INCIDENT_ID": Array [
+          500,
+        ],
+        "InboundNumber": "+19999999999",
+        "USER_LANGUAGE": "en_US",
+        "callerID": "+19999999999",
+        "ids": Array [
+          0,
+          2,
+          3,
+        ],
+        "pdas": Array [
+          1,
+          2,
+          3,
+        ],
+        "worksites": Array [
+          0,
+        ],
       }
     `);
   });
