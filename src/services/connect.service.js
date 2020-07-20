@@ -123,3 +123,24 @@ export const getConnectionByContactId = (
   const targConnection: void | connect.ConnectionType = targContact.getInitialConnection();
   return targConnection || null;
 };
+
+/**
+ * Initialize SAML authentication via connect popup.
+ * @param open - To open or close.
+ * @param loginUrl - SAML login url.
+ * @returns {Promise<void>}
+ */
+export const initAuthGateway = async ({ open = true, loginUrl = '' } = {}) => {
+  if (!open) {
+    connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
+    if (connect.core.loginWindow) {
+      connect.core.loginWindow.close();
+      connect.core.loginWindow = null;
+    }
+    return;
+  }
+  connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
+  connect.core.loginWindow = connect.core
+    .getPopupManager()
+    .open(loginUrl, connect.MasterTopics.LOGIN_POPUP);
+};
