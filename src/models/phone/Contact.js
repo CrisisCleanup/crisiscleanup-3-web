@@ -16,25 +16,39 @@ import Logger from '@/utils/log';
 
 /**
  * Enum of possible contact states.
- * @type {{QUEUED: string, ROUTED: string}|*}
+ * @prop QUEUED - Currently waiting in the primary queue.
+ * @prop ROUTED - Currently has a target agent (*Does NOT imply an active connection!)
+ * @readonly
+ * @enum {string}
+ * @type {any | {QUEUED: string, ROUTED: string}}
  */
 export const ContactStates = Object.freeze({
-  QUEUED: 'queued', // Currently waiting in the primary queue.
-  ROUTED: 'routed', // Currently has a target agent. (*Does NOT imply an active connection!)
+  QUEUED: 'queued',
+  ROUTED: 'routed',
 });
 
 /**
  * Enum of possible contact actions.
  * Primarily used for metric purpose.
- * @type {{CONNECTING: string, ENTER: string, ENDED: string, ERROR: string, CONNECTED: string}|*}
+ * @prop ENTER - Contact has entered primary queue.
+ * @prop CONNECTING - Contact has been accepted by an agent.
+ * @prop CONNECTED - Contact has an active connection with at least 1 agent.
+ * @prop ENDED - Contact connection has been terminated.
+ * @prop DESTROYED - Contact completely closed (post ACW).
+ * @prop ERROR - An exception occured at some point.
+ * @readonly
+ * @enum {string}
+ * @type {any | {CONNECTING: string, ENTER: string, ENDED: string, DESTROYED: string, ERROR: string, CONNECTED: string}}
  */
 export const ContactActions = Object.freeze({
-  ENTER: 'enter_ivr', // Contact has entered primary queue.
-  CONNECTING: 'connecting', // Contact has been accepted by an agent.
-  CONNECTED: 'connected', // Contact has an active connection with at least 1 agent.
-  ENDED: 'ended', // Contact connection has been terminated.
-  DESTROYED: 'destroyed', // Contact completely closed (post ACW).
-  ERROR: 'error', // An exception occurred at some point.
+  ENTER: 'enter_ivr',
+  CONNECTING: 'connecting',
+  CONNECTED: 'connected',
+  ENDED: 'ended',
+  DESTROYED: 'destroyed',
+  ERROR: 'error',
+});
+
 });
 
 const Log = Logger({ name: 'phone.contact' });
