@@ -22,6 +22,7 @@ import WorksiteRequest from '@/models/WorksiteRequest';
 import Report from '@/models/Report';
 import Team from '@/models/Team';
 import Event from '@/models/Event';
+import ConnectIntegration from '@/models/phone';
 import { Database } from '@vuex-orm/core';
 import EventComponent from '@/models/EventComponent';
 import UserBadge from '@/models/UserBadge';
@@ -54,5 +55,8 @@ database.register(Team, {});
 database.register(Event, {});
 database.register(EventComponent, {});
 database.register(UserBadge, {});
+database.register(ConnectIntegration.AgentClient, {});
+database.register(ConnectIntegration.Connection, {});
+database.register(ConnectIntegration.Contact, {});
 
 export default database;
