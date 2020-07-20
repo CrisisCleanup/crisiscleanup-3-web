@@ -11,6 +11,8 @@ import type {
   ConnectionState,
 } from '@/models/phone/types';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
+import * as ACS from '@/services/connect.service';
+import Logger from '@/utils/log';
 
 /**
  * Enum of possible contact states.
@@ -34,8 +36,10 @@ export const ContactActions = Object.freeze({
   ERROR: 'error', // An exception occurred at some point.
 });
 
+const Log = Logger({ name: 'phone.contact' });
+
 export default class Contact extends Model {
-  static entity = 'phone_contact';
+  static entity = 'phone/contact';
 
   static primaryKey = 'contactId';
 
@@ -51,17 +55,47 @@ export default class Contact extends Model {
 
   static afterCreate(model: Contact): void {
     const initConnection: ConnectionType = {
-      connectionId: 's',
+      connectionId: `connection#${model.contactId}`,
       state: model.initConnectionState,
       contactId: model.contactId,
     };
+    Log.debug('Creating initial connection for contact:', initConnection);
     Connection.insertOrUpdate({ data: initConnection });
+  }
+
+  static afterUpdate(model: Contact): void {
+    const connection: ConnectionType = Connection.query()
+      .where('contactId', model.contactId)
+      .first();
+    const voiceConnection = ACS.getConnectionByContactId(model.contactId);
+    if (
+      voiceConnection !== null &&
+      connection.connectionId !== voiceConnection.getConnectionId() &&
+      model.state === ContactStates.ROUTED
+    ) {
+      // This occurs post verification, since we now have a 'real' connection.
+      Log.info('Agent verified connection, updating!');
+      Log.info(
+        `${connection.connectionId} ==> ${voiceConnection.getConnectionId()}`,
+      );
+      Connection.update({
+        where: connection.connectionId,
+        data: ({
+          connectionId: connection.connectionId,
+          streamsConnectionId: voiceConnection.getConnectionId(),
+          contactId: model.contactId,
+          state: model.initConnectionState,
+        }: ConnectionType),
+      });
+    }
   }
 
   get initConnectionState(): ConnectionState {
     const stateMap = {
-      [ContactStates.QUEUED]: ConnectionStates.PENDING_CALL,
-      [ContactStates.ROUTED]: ConnectionStates.AGENT_CALLING,
+      // Contact locked to an agent, awaiting agent acceptance.
+      [ContactStates.QUEUED]: ConnectionStates.AGENT_PENDING,
+      // Contact's agent accepted, they are now in route to agent.
+      [ContactStates.ROUTED]: ConnectionStates.PENDING_CALL,
     };
     return stateMap[this.state];
   }

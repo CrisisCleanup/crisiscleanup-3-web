@@ -14,11 +14,11 @@ type ConnectionState = $Values<typeof ConnectionStates>;
 type ContactState = $Values<typeof ContactStates>;
 type ContactAction = $Values<typeof ContactActions>;
 
-
 type ConnectionType = {|
   connectionId: string,
   contactId: string,
   state: ConnectionState,
+  streamsConnectionId?: string,
   // duration: number
 |};
 
@@ -27,9 +27,8 @@ type ContactType = {|
   agentId: string,
   state: ContactState,
   action: ContactAction,
-  connection: ConnectionType
+  connection: ConnectionType,
 |};
-
 
 type AgentClientType = {|
   userId: number,
