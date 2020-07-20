@@ -95,6 +95,7 @@ describe('phone models', () => {
                     "$id": "contact-123",
                     "action": "enter_ivr",
                     "agentId": "123",
+                    "attributes": null,
                     "connection": Connection {
                       "$id": "connection#contact-123",
                       "connectionId": "connection#contact-123",
