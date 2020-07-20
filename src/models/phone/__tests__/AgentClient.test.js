@@ -5,13 +5,15 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexORM, { Database } from '@vuex-orm/core';
+import * as ACS from '@/services/connect.service';
 import AgentClient, { AgentStates, RouteStates } from '../AgentClient';
 import Connection, { ConnectionStates } from '../Connection';
 import Contact, { ContactActions, ContactStates } from '../Contact';
 
+jest.mock('@/services/connect.service.js');
+
 const database = new Database();
 database.register(AgentClient, {});
-database.register(Connection, {});
 database.register(Connection, {});
 database.register(Contact, {});
 Vue.use(Vuex);
@@ -76,10 +78,11 @@ describe('phone models', () => {
                 "agentId": "123",
                 "connections": Array [
                   Connection {
-                    "$id": "s",
-                    "connectionId": "s",
+                    "$id": "connection#contact-123",
+                    "connectionId": "connection#contact-123",
                     "contactId": "contact-123",
-                    "state": "PendingBusy",
+                    "state": "pending",
+                    "streamsConnectionId": "",
                   },
                 ],
                 "contacts": Array [
@@ -88,10 +91,11 @@ describe('phone models', () => {
                     "action": "enter_ivr",
                     "agentId": "123",
                     "connection": Connection {
-                      "$id": "s",
-                      "connectionId": "s",
+                      "$id": "connection#contact-123",
+                      "connectionId": "connection#contact-123",
                       "contactId": "contact-123",
-                      "state": "PendingBusy",
+                      "state": "pending",
+                      "streamsConnectionId": "",
                     },
                     "contactId": "contact-123",
                     "state": "queued",
@@ -126,7 +130,7 @@ describe('phone models', () => {
       data: mockContactData(),
     });
     const agent = await AgentClient.query().withAllRecursive().first();
-    expect(agent.contactState).toBe(ConnectionStates.PENDING_CALL);
+    expect(agent.contactState).toBe(ConnectionStates.AGENT_PENDING);
   });
 
   it('resolve contact state with routed contact', async () => {
@@ -137,6 +141,39 @@ describe('phone models', () => {
       }),
     });
     const agent = await AgentClient.query().withAllRecursive().first();
-    expect(agent.contactState).toBe(ConnectionStates.AGENT_CALLING);
+    expect(agent.contactState).toBe(ConnectionStates.PENDING_CALL);
+  });
+
+  it('should update connection when contact has been routed', async () => {
+    ACS.getConnectionByContactId.mockReturnValueOnce({
+      getConnectionId: () => 'verified_connection123',
+    });
+    await AgentClient.create({ data: mockAgentData() });
+    await Contact.insert({ data: mockContactData() });
+    let agent = await AgentClient.query().withAllRecursive().first();
+    expect(agent.connections[0]).toMatchInlineSnapshot(`
+      Connection {
+        "$id": "connection#contact-123",
+        "connectionId": "connection#contact-123",
+        "contactId": "contact-123",
+        "state": "pending",
+        "streamsConnectionId": "",
+      }
+    `);
+    await Contact.update({
+      where: 'contact-123',
+      data: { state: ContactStates.ROUTED },
+    });
+    agent = await AgentClient.query().withAllRecursive().first();
+    expect(agent.connections.length).toBe(1);
+    expect(agent.connections[0]).toMatchInlineSnapshot(`
+      Connection {
+        "$id": "connection#contact-123",
+        "connectionId": "connection#contact-123",
+        "contactId": "contact-123",
+        "state": "PendingBusy",
+        "streamsConnectionId": "verified_connection123",
+      }
+    `);
   });
 });
