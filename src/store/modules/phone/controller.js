@@ -16,8 +16,6 @@ import store from '@/store';
 import Logger from '@/utils/log';
 import StreamsStore from '@/store/modules/phone/streams';
 
-import { initAuthGateway } from '@/services/connect.service';
-
 /**
  * Enum of possible controller pages.
  * @param DASHBOARD - Dashboard page (Standby).
@@ -70,6 +68,7 @@ class ControllerStore extends VuexModule {
 
   @MutationAction({ mutate: ['currentCase'] })
   setCase(newCase: $Shape<CaseType>) {
+    Log.debug('updating active case:', newCase);
     if (this.currentCase === null) {
       this.currentCase = newCase;
     } else {
@@ -79,6 +78,7 @@ class ControllerStore extends VuexModule {
 
   @Action
   async init() {
+    Log.debug('init controller!');
     const streamsStore = getModule(StreamsStore, this.$store);
     if (!streamsStore.connected) {
       const htmlEl = document.getElementById('ccp-embed');
