@@ -9,6 +9,8 @@
 import { mapState, mapActions, mapGetters } from 'vuex';
 import { EventBus } from '@/event-bus';
 import { EVENTS } from '@/services/acs.service';
+import StreamsStore from '@/store/modules/phone/streams';
+import { getModule } from 'vuex-module-decorators';
 
 export default {
   name: 'CCP',
@@ -18,8 +20,9 @@ export default {
       if (!this.connectRunning && !connect.core.initialized) {
         this.$log.debug('CCP embed connecting...');
         const htmlEl = document.getElementById('ccp-embed');
+        const phStore = getModule(StreamsStore, this.$store);
         try {
-          await this.initConnect(htmlEl);
+          await phStore.init({ element: htmlEl });
         } catch (e) {
           this.$log.error(e);
         }
@@ -31,11 +34,16 @@ export default {
     ...mapGetters('auth', ['isLoggedIn']),
   },
   created() {
-    EventBus.$on(EVENTS.INIT, () => this.init());
+    EventBus.$on(EVENTS.INIT, () => {
+      this.$log.info('event init');
+      const htmlEl = document.getElementById('ccp-embed');
+      const phStore = getModule(StreamsStore, this.$store);
+      phStore.init({ element: htmlEl });
+    });
     EventBus.$on(EVENTS.REQUEST, () => {
       if (!this.connectAuthed) {
         this.$log.info('setting popup!');
-        this.init().then(() => this.setPopup(true));
+        this.init();
       }
     });
   },
@@ -43,7 +51,7 @@ export default {
 </script>
 
 <style>
-#ccp-embed {
+#ccp-embed iframe {
   display: none;
 }
 </style>

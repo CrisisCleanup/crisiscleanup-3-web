@@ -6,6 +6,7 @@
 </template>
 
 <script>
+// @flow
 import { mapGetters, mapActions } from 'vuex';
 import { EventBus } from '@/event-bus';
 import { EVENTS as CCEvent, STATES as CCState } from '@/services/acs.service';
@@ -14,19 +15,22 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import Pda from '@/models/Pda';
 import { AgentMixin } from '@/mixins';
 import IncomingPopup from '@/components/phone/Popup.vue';
-import PhoneResource from '@/models/PhoneResource';
 import { mixin as VueTimer } from 'vue-timers';
 import { isNil } from 'lodash';
-import Dashboard from './Dashboard.vue';
+import { getModule } from 'vuex-module-decorators';
+import ControllerStore, {
+  ControllerPages,
+} from '@/store/modules/phone/controller';
 import Controller from './Controller.vue';
+import Dashboard from './Dashboard.vue';
 
 export default {
   name: 'Phone',
   mixins: [AgentMixin, VueTimer],
   components: { IncomingPopup },
-  timers: {
-    getNextCallback: { time: 60000, autostart: true, repeat: true },
-  },
+  // timers: {
+  //   getNextCallback: { time: 60000, autostart: true, repeat: true },
+  // },
   computed: {
     ...mapGetters('phone', [
       'connectReady',
@@ -38,12 +42,13 @@ export default {
     ]),
     pages() {
       return {
-        dashboard: Dashboard,
-        controller: Controller,
+        [ControllerPages.DASHBOARD]: Dashboard,
+        [ControllerPages.CONTROLLER]: Controller,
       };
     },
     currentComponent() {
-      return this.pages[this.currentPage];
+      const controller = getModule(ControllerStore, this.$store);
+      return this.pages[controller.view.page];
     },
   },
   methods: {
@@ -151,50 +156,53 @@ export default {
   },
   created() {
     EventBus.$emit(CCEvent.INIT);
-    PhoneResource.api().get('/phone_resources', {
-      dataKey: 'results',
-    });
-    EventBus.$on(CCEvent.INBOUND, async (attrs) => {
-      if (!this.$store.getters['phone/casesResolved']) {
-        this.$log.info('inbound event recv, resolving cases');
-        await this.setResolved(true);
-        await this.resolveCases(attrs);
-      }
-    });
-    EventBus.$on(CCEvent.ON_CALL, () => {
-      this.setCurrentPage('controller');
-    });
-    EventBus.$on(CCEvent.OFF_CALL, () => {
-      this.$store.dispatch('phone/resetState');
-      this.setCurrentPage('dashboard');
-    });
-    if (!this.connectReady) {
-      this.$store.dispatch('phone/syncContact').then(() => {
-        this.$store.dispatch('phone/syncExternalContact');
-      });
-      this.unsub = this.$store.subscribe((mutation) => {
-        if (mutation.type === 'phone/setAgentState') {
-          this.$toasted.success('Success!');
-          if (this.callIncoming || this.agentOnCall) {
-            this.setCurrentPage('controller');
-          } else {
-            this.setCurrentPage('dashboard');
-          }
-          this.setPopup(false);
-          this.unsub();
-        }
-      });
-    } else if (this.callIncoming || this.agentOnCall) {
-      this.setCurrentPage('controller');
-    } else {
-      this.setCurrentPage('dashboard');
-    }
   },
-  beforeDestroy() {
-    if (this.unsub) {
-      this.unsub();
-    }
-  },
+  // created() {
+  //   // EventBus.$emit(CCEvent.INIT);
+  //   PhoneResource.api().get('/phone_resources', {
+  //     dataKey: 'results',
+  //   });
+  //   EventBus.$on(CCEvent.INBOUND, async (attrs) => {
+  //     if (!this.$store.getters['phone/casesResolved']) {
+  //       this.$log.info('inbound event recv, resolving cases');
+  //       await this.setResolved(true);
+  //       await this.resolveCases(attrs);
+  //     }
+  //   });
+  //   EventBus.$on(CCEvent.ON_CALL, () => {
+  //     this.setCurrentPage('controller');
+  //   });
+  //   EventBus.$on(CCEvent.OFF_CALL, () => {
+  //     this.$store.dispatch('phone/resetState');
+  //     this.setCurrentPage('dashboard');
+  //   });
+  //   if (!this.connectReady) {
+  //     this.$store.dispatch('phone/syncContact').then(() => {
+  //       this.$store.dispatch('phone/syncExternalContact');
+  //     });
+  //     this.unsub = this.$store.subscribe((mutation) => {
+  //       if (mutation.type === 'phone/setAgentState') {
+  //         this.$toasted.success('Success!');
+  //         if (this.callIncoming || this.agentOnCall) {
+  //           this.setCurrentPage('controller');
+  //         } else {
+  //           this.setCurrentPage('dashboard');
+  //         }
+  //         this.setPopup(false);
+  //         this.unsub();
+  //       }
+  //     });
+  //   } else if (this.callIncoming || this.agentOnCall) {
+  //     this.setCurrentPage('controller');
+  //   } else {
+  //     this.setCurrentPage('dashboard');
+  //   }
+  // },
+  // beforeDestroy() {
+  //   if (this.unsub) {
+  //     this.unsub();
+  //   }
+  // },
 };
 </script>
 
