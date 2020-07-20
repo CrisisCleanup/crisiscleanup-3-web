@@ -13,12 +13,15 @@ import type { ACSAgentEvent, ACSCoreEvent } from '@/services/types';
 import type {
   AgentClientType,
   AgentState,
+  ContactType,
   RouteState,
 } from '@/models/phone/types';
 import AgentClient, {
   AgentStates,
   RouteStates,
 } from '@/models/phone/AgentClient';
+import Contact from '@/models/phone/Contact';
+
 
 /**
  * Enum of different Connect authentication states.
@@ -105,6 +108,12 @@ class StreamsStore extends VuexModule {
   }
 
   @Action
+  async updateContact(newData: $Shape<ContactType>): void {
+    Log.debug('contact update:', newData);
+    await Contact.insertOrUpdate({ data: newData });
+  }
+
+  @Action
   async init({ element }: { element: HTMLElement }) {
     Log.info('Initializing ACS streams store!');
     const ssoPortalUrl: string = await SSO.authenticate(
@@ -139,13 +148,13 @@ class StreamsStore extends VuexModule {
           state: AgentStates.ONLINE,
           routeState: RouteStates.ROUTABLE,
         }).then(() => {
-          Log.debug('Agent Client => ROUTABLE');
+          Log.info('Agent Client => ROUTABLE');
         });
       },
       [ACS.AgentEvents.ON_NOT_ROUTABLE]: () => {
         this.updateAgentClient({ routeState: RouteStates.NOT_ROUTABLE }).then(
           () => {
-            Log.debug('Agent Client => NOT_ROUTABLE');
+            Log.info('Agent Client => NOT_ROUTABLE');
           },
         );
       },
@@ -154,7 +163,15 @@ class StreamsStore extends VuexModule {
           routeState: RouteStates.NOT_ROUTABLE,
           state: AgentStates.OFFLINE,
         }).then(() => {
-          Log.debug('Agent Client => OFFLINE');
+          Log.info('Agent Client => OFFLINE');
+        });
+      },
+      [ACS.AgentEvents.ON_ACW]: () => {
+        this.updateAgentClient({
+          routeState: RouteStates.NOT_ROUTABLE,
+          state: AgentStates.ONLINE,
+        }).then(() => {
+          Log.info('Agent Client => ACW');
         });
       },
     });
