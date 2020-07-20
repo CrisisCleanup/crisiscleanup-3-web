@@ -19,6 +19,17 @@ type ContactState = $Values<typeof ContactStates>;
 type ContactAction = $Values<typeof ContactActions>;
 type ContactAttribute = $Values<typeof ContactAttributes>;
 
+type RawContactAttribute = {|
+  name: string,
+  value: string,
+|};
+
+type RawContactAttributes = { [key: ContactAttribute]: RawContactAttribute };
+
+type ContactAttributesType = {
+  [key: ContactAttribute]: string | number[],
+};
+
 type ConnectionType = {|
   connectionId: string,
   contactId: string,
@@ -33,6 +44,7 @@ type ContactType = {|
   state: ContactState,
   action: ContactAction,
   connection: ConnectionType,
+  attributes?: ?ContactAttributesType,
 |};
 
 type AgentClientType = {|
@@ -54,4 +66,7 @@ export type {
   AgentClientType,
   ContactType,
   ConnectionType,
+  RawContactAttribute,
+  RawContactAttributes,
+  ContactAttributesType,
 };
