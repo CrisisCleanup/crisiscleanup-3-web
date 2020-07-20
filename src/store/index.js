@@ -15,6 +15,7 @@ import phone from './modules/phone';
 import rc from './modules/rc';
 import socket from './modules/socket';
 import ui from './modules/ui';
+import ConnectStores from './modules/phone/index';
 
 VuexORM.use(VuexORMAxios, {
   axios,
@@ -42,6 +43,7 @@ export default new Vuex.Store({
     socket,
     phone_legacy,
     ui,
+    'phone/streams': ConnectStores.StreamsStore,
   },
   plugins: [VuexORM.install(database)],
   strict: debug,
