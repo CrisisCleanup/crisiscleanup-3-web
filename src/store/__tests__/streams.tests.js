@@ -13,6 +13,7 @@ import Vue from 'vue';
 
 jest.mock('@/models/User');
 jest.mock('@/models/phone/AgentClient');
+jest.mock('@crisiscleanup/amazon-connect-streams');
 
 Vue.use(Vuex);
 
