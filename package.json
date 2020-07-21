@@ -133,7 +133,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.9.0",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-flow": "^7.10.4",
-    "@cypress/code-coverage": "^3.7.2",
+    "@cypress/code-coverage": "^3.8.1",
     "@cypress/webpack-preprocessor": "^5.1.1",
     "@percy/cypress": "^2.3.1",
     "@sentry/browser": "^5.15.4",
