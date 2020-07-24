@@ -25,7 +25,7 @@
 <script>
 import NewsCard from '@/components/phone/NewsCard.vue';
 import TrainingsCard from '@/components/phone/TrainingsCard.vue';
-import TabbedCard from '@/components/phone/Cards/TabbedCard.vue';
+import TabbedCard from '@/components/cards/TabbedCard.vue';
 
 export default {
   name: 'NewsTrainingCard',

@@ -14,7 +14,7 @@
 
 <script>
 import CallHistory from '@/components/phone/Widgets/CallHistory.vue';
-import TitledCard from '@/components/phone/Cards/TitledCard.vue';
+import TitledCard from '@/components/cards/TitledCard.vue';
 import IndividualStoriesCard from './IndividualStoriesCard.vue';
 
 export default {

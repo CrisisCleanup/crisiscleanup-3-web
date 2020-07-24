@@ -38,7 +38,7 @@
 <script>
 import VueTypes from 'vue-types';
 import { IconsMixin } from '@/mixins';
-import TitledCard from './TitledCard.vue';
+import TitledCard from '../../cards/TitledCard.vue';
 
 export default {
   name: 'StatsCard',

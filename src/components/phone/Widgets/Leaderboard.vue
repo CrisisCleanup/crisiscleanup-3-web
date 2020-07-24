@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import TitledCard from '@/components/phone/Cards/TitledCard.vue';
+import TitledCard from '@/components/cards/TitledCard.vue';
 import { UserMixin, AgentMixin } from '@/mixins';
 import { mapGetters } from 'vuex';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
