@@ -19,7 +19,7 @@
         </base-text>
         <div class="flex justify-center text-base my-10">
           <div
-            class="h-40 w-40 mx-4 border p-2 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-crisiscleanup-light-grey"
+            class="h-40 w-40 mx-4 border p-2 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-crisiscleanup-light-grey hidden"
             @click="page = 'new'"
           >
             {{ $t('~~Move to new organization') }}
