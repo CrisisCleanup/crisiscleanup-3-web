@@ -246,10 +246,7 @@ export default {
       this.lineageUsers = pageData.lineageUsers.entities.users;
       this.incidents = pageData.incidents.data.results;
       if (this.lineageUsers && this.lineageUsers.length) {
-        this.nestedUsers = nestUsers(
-          this.lineageUsers,
-          this.currentUser.id,
-        );
+        this.nestedUsers = nestUsers(this.lineageUsers, this.currentUser.id);
 
         const user_ids = this.lineageUsers.map((user) => user.id);
         user_ids.push(this.currentUser.id);

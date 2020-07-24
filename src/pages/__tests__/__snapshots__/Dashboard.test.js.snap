@@ -991,6 +991,30 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
         </div>
       </div>
     </div>
+     
+    <div
+      class="flex"
+    >
+      <div
+        class="w-full m-4 pt-2 shadow bg-white flex-shrink"
+      >
+        <div
+          class="py-4 px-4 text-gray-500 border-b"
+        >
+          
+            ~~User Transfer Requests
+          
+        </div>
+         
+        <div
+          class="p-4"
+        >
+          <usertransferrequesttable-stub
+            requests=""
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </loader-stub>
 `;

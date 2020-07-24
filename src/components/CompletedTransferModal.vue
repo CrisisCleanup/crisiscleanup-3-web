@@ -1,10 +1,25 @@
 <template>
-  <modal :title="$t('~~You have been moved')" modal-classes="max-w-lg h-64" @cancel="$emit('close')" closeable>
+  <modal
+    :title="$t('~~You have been moved')"
+    modal-classes="max-w-lg h-64"
+    @cancel="$emit('close')"
+    closeable
+  >
     <div class="p-3">
       <div>
-        {{ $t('~~You have been moved to ') }} {{currentUser.organization.name}} {{$t('~~by')}} {{requestingUser.first_name}} {{requestingUser.last_name}} ({{requestingUser.email}})
+        {{ $t('~~You have been moved to ') }}
+        {{ currentUser.organization.name }} {{ $t('~~by') }}
+        {{ requestingUser.first_name }} {{ requestingUser.last_name }} ({{
+          requestingUser.email
+        }})
       </div>
-      <div>{{ $t('~~You can choose to stay in the current organization, or request to move back') }}</div>
+      <div>
+        {{
+          $t(
+            '~~You can choose to stay in the current organization, or request to move back',
+          )
+        }}
+      </div>
     </div>
     <div slot="footer" class="p-3 flex items-center justify-center">
       <base-button
@@ -24,8 +39,8 @@
 </template>
 
 <script>
-import User from '../models/User';
 import { UserMixin } from '@/mixins';
+import User from '../models/User';
 
 export default {
   name: 'CompletedTransferModal',
