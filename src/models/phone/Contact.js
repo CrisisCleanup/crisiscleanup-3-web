@@ -24,7 +24,6 @@ import _ from 'lodash';
  * @prop ROUTED - Currently has a target agent (*Does NOT imply an active connection!)
  * @readonly
  * @enum {string}
- * @type {any | {QUEUED: string, ROUTED: string}}
  */
 export const ContactStates = Object.freeze({
   QUEUED: 'queued',
@@ -42,7 +41,6 @@ export const ContactStates = Object.freeze({
  * @prop ERROR - An exception occured at some point.
  * @readonly
  * @enum {string}
- * @type {any | {CONNECTING: string, ENTER: string, ENDED: string, DESTROYED: string, ERROR: string, CONNECTED: string}}
  */
 export const ContactActions = Object.freeze({
   ENTER: 'enter_ivr',
@@ -65,7 +63,6 @@ export const ContactActions = Object.freeze({
  * @prop INBOUND_NUMBER - Contact's caller Id (only present in inbound calls!)
  * @readonly
  * @enum {string}
- * @type {any | {PDAS: string, LOCALE: string, WORKSITES: string, INCIDENT: string, OUTBOUND_IDS: string, CALLBACK_NUMBER: string, CALLER_ID: string, INBOUND_NUMBER: string}}
  */
 export const ContactAttributes = Object.freeze({
   CALLER_ID: 'callerID',
