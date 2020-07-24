@@ -55,19 +55,29 @@ export default {
     loading: Boolean,
   },
   async mounted() {
-    const organizations = this.requests.map(
-      (request) => request.origin_organization,
-    );
-    await Organization.api().get(
-      `/organizations?id__in=${organizations.join(',')}`,
-      {
-        dataKey: 'results',
-      },
-    );
+    if (this.requests.length) {
+      const organizations = this.requests.map(
+        (request) => request.origin_organization,
+      );
+      await Organization.api().get(
+        `/organizations?id__in=${organizations.join(',')}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      await this.getUsers();
+    }
   },
   methods: {
-    async getChildRequests(childRequests) {
+    async getUsers() {
+      const userIds = this.requests.map((request) => request.user);
+      await User.api().get(`/users?id__in=${userIds.join(',')}`, {
+        dataKey: 'results',
+      });
+    },
+    async getChildRequests(childRequests, item) {
       const userIds = childRequests.map((request) => request.user);
+      userIds.push(item.user);
       const results = await User.api().get(
         `/users?id__in=${userIds.join(',')}`,
         {
@@ -163,10 +173,30 @@ export default {
           title: this.$t('~~Origin Organization'),
           dataIndex: 'origin_organization',
           key: 'origin_organization',
-          width: '40%',
+          width: '30%',
           transformer: (field) => {
             const organization = Organization.find(field);
             return organization && organization.name;
+          },
+        },
+        {
+          title: this.$t('~~Email'),
+          dataIndex: 'email',
+          key: 'email',
+          width: '1.5fr',
+          transformer: (_, item) => {
+            const user = User.find(item.user);
+            return user.email;
+          },
+        },
+        {
+          title: this.$t('~~Requested By'),
+          dataIndex: 'full_name',
+          key: 'full_name',
+          width: '1.5fr',
+          transformer: (_, item) => {
+            const user = User.find(item.user);
+            return `${user.first_name} ${user.last_name}`;
           },
         },
         {
@@ -176,10 +206,10 @@ export default {
           width: '1fr',
           class: 'text-primary-dark underline',
           transformer: (field) => {
-            return field.length;
+            return field.length + 1;
           },
-          action: (field) => {
-            this.getChildRequests(field);
+          action: (field, item) => {
+            this.getChildRequests(field, item);
           },
         },
         {

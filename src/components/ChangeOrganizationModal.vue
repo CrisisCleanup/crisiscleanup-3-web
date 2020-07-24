@@ -245,13 +245,15 @@ export default {
       });
       this.lineageUsers = pageData.lineageUsers.entities.users;
       this.incidents = pageData.incidents.data.results;
-      this.nestedUsers = nestUsers(
-        this.lineageUsers,
-        this.currentUser.id,
-      );
+      if (this.lineageUsers && this.lineageUsers.length) {
+        this.nestedUsers = nestUsers(
+          this.lineageUsers,
+          this.currentUser.id,
+        );
 
-      const user_ids = this.lineageUsers.map((user) => user.id);
-      user_ids.push(this.currentUser.id);
+        const user_ids = this.lineageUsers.map((user) => user.id);
+        user_ids.push(this.currentUser.id);
+      }
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types?claimed_by=${this.currentUser.organization.id}&limit=150`,
       );

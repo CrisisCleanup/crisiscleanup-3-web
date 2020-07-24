@@ -99,6 +99,11 @@
         <div v-if="transferRequest">
           <CompletedTransferModal
             :transfer-request="transferRequest"
+            @close="
+              () => {
+                transferRequest = null;
+              }
+            "
           />
         </div>
       </div>
@@ -129,7 +134,14 @@ const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
 export default {
   name: 'Authenticated',
-  components: { CompletedTransferModal, DisasterIcon, NavMenu, Loader, TermsandConditionsModal, Slide },
+  components: {
+    CompletedTransferModal,
+    DisasterIcon,
+    NavMenu,
+    Loader,
+    TermsandConditionsModal,
+    Slide,
+  },
   data() {
     return {
       loading: false,

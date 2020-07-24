@@ -377,6 +377,11 @@ export default {
   name: 'Profile',
   components: { Avatar, ChangeOrganizationModal, DragDrop, UserRolesSelect },
   mixins: [ValidateMixin],
+  mounted() {
+    if (this.$route.query.move) {
+      this.showChangeOrganizationModal = true;
+    }
+  },
   data() {
     return {
       mode: 'view',
