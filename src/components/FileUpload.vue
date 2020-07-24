@@ -61,7 +61,7 @@
     <base-button
       :text="$t('fileUpload.file_uploader')"
       variant="solid"
-      class="px-3 py-1"
+      size="medium"
       :action="
         () => {
           showingUploadModal = true;

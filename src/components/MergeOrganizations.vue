@@ -4,7 +4,7 @@
       :text="$t('~~Merge Organizations')"
       :alt="$t('Merge Organizations')"
       variant="solid"
-      class="px-3 py-1"
+      size="medium"
       :action="
         () => {
           showMergeModal = true;
