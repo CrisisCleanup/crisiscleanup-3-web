@@ -9,14 +9,20 @@ import type { ConnectionType } from '@/models/phone/types';
 
 /**
  * Enum of states representing the current step or stage of a connection.
- * @type {any | {PAUSED: string, AGENT_PENDING: string, PENDING_CALL: string, BUSY: string, AGENT_CALLING: string}}
+ * @param AGENT_CALLING - Agent -> Outbound Call.
+ * @param AGENT_PENDING - Server -> Agent verification call.
+ * @param PENDING_CALL - Agent -> Customer post verification transfer.
+ * @param BUSY - Agent has at least 1 connected contact.
+ * @param PAUSED - Agent has closed all open contacts. Rest period.
+ * @readonly
+ * @enum {string}
  */
 export const ConnectionStates = Object.freeze({
-  AGENT_CALLING: 'CallingCustomer', // Agent -> Outbound Call.
-  AGENT_PENDING: 'pending', // Server -> Agent verification call.
-  PENDING_CALL: 'PendingBusy', // Agent -> Customer post verification transfer.
-  BUSY: 'Busy', // Agent has at least 1 connected contact.
-  PAUSED: 'AfterCallWork', // Agent has closed all open contacts. Rest period.
+  AGENT_CALLING: 'CallingCustomer',
+  AGENT_PENDING: 'pending',
+  PENDING_CALL: 'PendingBusy',
+  BUSY: 'Busy',
+  PAUSED: 'AfterCallWork',
 });
 
 export default class Connection extends Model {

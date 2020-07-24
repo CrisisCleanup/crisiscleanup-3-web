@@ -20,7 +20,10 @@ import _ from 'lodash';
  * Enum of states that represent whether a client is currently
  * actively connected via websocket or not.
  * (if they they online or offline)
- * @type {{ONLINE: string, OFFLINE: string}|*}
+ * @param ONLINE - Is online.
+ * @param OFFLINE - Is offline.
+ * @readonly
+ * @enum {string}
  */
 export const AgentStates = Object.freeze({
   ONLINE: 'online',
@@ -30,7 +33,8 @@ export const AgentStates = Object.freeze({
 /**
  * Enum of states representing a singular agent's eligibility
  * to receive an inbound/outbound contact.
- * @type {{ROUTABLE: string, NOT_ROUTABLE: string}|*}
+ * @readonly
+ * @enum {string}
  */
 export const RouteStates = Object.freeze({
   ROUTABLE: 'routable',

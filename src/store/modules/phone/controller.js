@@ -18,11 +18,10 @@ import StreamsStore from '@/store/modules/phone/streams';
 
 /**
  * Enum of possible controller pages.
- * @param DASHBOARD - Dashboard page (Standby).
- * @param CONTROLLER - Controller page (Active call).
+ * @property DASHBOARD - Dashboard page (Standby).
+ * @property CONTROLLER - Controller page (Active call).
  * @readonly
  * @enum {string}
- * @type {*|{CONTROLLER: string, DASHBOARD: string}}
  */
 export const ControllerPages = Object.freeze({
   DASHBOARD: 'dashboard',
@@ -31,11 +30,10 @@ export const ControllerPages = Object.freeze({
 
 /**
  * Enum of possible controller action tabs.
- * @param RESOURCES - Resource tab view.
- * @param CASE - Case form tab view.
+ * @property RESOURCES - Resource tab view.
+ * @property CASE - Case form tab view.
  * @readonly
  * @enum {string}
- * @type {any | {RESOURCES: string, CASE: string}}
  */
 export const ControllerActionTabs = Object.freeze({
   CASE: 'case',

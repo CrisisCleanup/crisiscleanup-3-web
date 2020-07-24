@@ -13,8 +13,10 @@ const Log = Logger({ name: 'WS' });
 /**
  * Actions that are defined in the WS Api that can be invoked
  * by this client.
- *
- * @type {{CLIENT_HEARTBEAT: string, SET_AGENT_STATE: string}}
+ * @prop CLIENT_HEARTBEAT - Client Heartbeat endpoint.
+ * @prop SET_AGENT_STATE - Update agent state endpoint.
+ * @enum {string}
+ * @readonly
  */
 export const ACTIONS = {
   CLIENT_HEARTBEAT: 'CLIENT_HEARTBEAT',

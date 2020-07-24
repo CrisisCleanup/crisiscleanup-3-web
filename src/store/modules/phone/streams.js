@@ -34,7 +34,8 @@ import Contact, { ContactActions, ContactStates } from '@/models/phone/Contact';
 config.rawError = true;
 /**
  * Enum of different Connect authentication states.
- * @type {*|{IN_PROGRESS: string, SUCCESS: string, FAIL: string}}
+ * @readonly
+ * @enum {string}
  */
 export const AuthStates = Object.freeze({
   FAIL: 'unauthenticated',

@@ -9,7 +9,11 @@ import _ from 'lodash';
 
 /**
  * Enum of Connect Event Topics.
- * @type {*|{AGENT: string, CONTACT: string}}
+ * @param AGENT - Agent related  topics.
+ * @param CONTACT - Contact related topics.
+ * @param CORE - Core topics.
+ * @enum {string}
+ * @readonly
  */
 export const EventTopics = Object.freeze({
   AGENT: 'agent',
@@ -19,7 +23,8 @@ export const EventTopics = Object.freeze({
 
 /**
  * Enum of bindable Connect Agent events.
- * @type {*|{ON_NOT_ROUTABLE: string, ON_OFFLINE: string, ON_ACW: string, ON_CONNECTION_LOST: string, ON_CONNECTION_GAINED: string, ON_ROUTABLE: string, ON_ERROR: string}}
+ * @readonly
+ * @enum {string}
  */
 export const AgentEvents = Object.freeze({
   ON_ROUTABLE: 'onRoutable',
@@ -33,21 +38,31 @@ export const AgentEvents = Object.freeze({
 
 /**
  * Enum of bindable Connect Contact events.
- * @type {*|{ON_PENDING: string}}
+ * @param ON_PENDING - Occurs before connecting.
+ * @param ON_CONNECTING - Contact is connecting to agent.
+ * @param ON_CONNECTED - Contact is live with agent.
+ * @param ON_MISSED - Agent fails to answer or rejects.
+ * @param ON_ENDED - Agent ends call or contact is missed (outbound).
+ * @param ON_ACW - Call has been ended, agent & contact -> ACW.
+ * @param ON_DESTORY - Contact is completely closed.
+ * @enum {string}
+ * @readonly
  */
 export const ContactEvents = Object.freeze({
-  ON_PENDING: 'onPending', // Occurs before connecting.
-  ON_CONNECTING: 'onConnecting', // Contact is connecting to agent.
-  ON_CONNECTED: 'onConnected', // Contact is live with agent.
-  ON_MISSED: 'onMissed', // Agent fails to answer or rejects.
-  ON_ENDED: 'onEnded', // Agent ends call or contact is missed (outbound).
-  ON_ACW: 'onACW', // Call has been ended, agent & contact -> ACW.
-  ON_DESTROY: 'onDestroy', // Contact is completely closed.
+  ON_PENDING: 'onPending',
+  ON_CONNECTING: 'onConnecting',
+  ON_CONNECTED: 'onConnected',
+  ON_MISSED: 'onMissed',
+  ON_ENDED: 'onEnded',
+  ON_ACW: 'onACW',
+  ON_DESTROY: 'onDestroy',
 });
 
 /**
  * Enum of bindable Connect Core events.
- * @type {*|{ON_AUTH_FAIL: string}}
+ * @param ON_AUTH_FAIL - On SAML authenticaton failure/timeout.
+ * @readonly
+ * @enum {string}
  */
 export const CoreEvents = Object.freeze({
   ON_AUTH_FAIL: 'onAuthFail',
@@ -77,7 +92,7 @@ const ConfigDefaults: ACSConfig = {
   softphone: {
     allowFramedSoftphone: true,
   },
-  loginPopup: false,
+  loginPopup: true,
   loginPopupAutoClose: true,
 };
 
