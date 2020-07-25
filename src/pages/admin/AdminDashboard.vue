@@ -18,10 +18,16 @@
               }
             "
           ></base-input>
-          <div class="flex items-center">
+          <div class="flex items-center mr-4">
             <InviteUsers class="px-3" is-admin />
             <MergeOrganizations is-admin />
             <FileUpload class="mx-3 my-1" />
+            <base-button
+              variant="solid"
+              size="medium"
+              :action="() => $router.push({ name: 'nav.admin_tools' })"
+              >{{ $t('~~Tools') }}</base-button
+            >
           </div>
         </div>
         <div class="flex">
