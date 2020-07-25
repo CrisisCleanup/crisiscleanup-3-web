@@ -23,6 +23,7 @@ import Report from '@/models/Report';
 import Team from '@/models/Team';
 import Event from '@/models/Event';
 import { Database } from '@vuex-orm/core';
+import EventComponent from '@/models/EventComponent';
 
 const database = new Database();
 
@@ -50,5 +51,6 @@ database.register(PhoneDnis, {});
 database.register(Report, {});
 database.register(Team, {});
 database.register(Event, {});
+database.register(EventComponent, {});
 
 export default database;
