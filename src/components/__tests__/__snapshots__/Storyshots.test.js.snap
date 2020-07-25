@@ -2351,6 +2351,67 @@ exports[`Storyshots Elements|Tag Simple Tag 1`] = `
 </div>
 `;
 
+exports[`Storyshots Elements|TitledCard With Defaults 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex flex-grow w-full h-full"
+    >
+      <div
+        class="bg-white shadow-crisiscleanup-card card"
+      >
+        <div
+          class="header"
+          slot="header"
+        >
+          <div
+            class="header--inner"
+          >
+            <div
+              class="left"
+            >
+              <p
+                class="text-body font-body font-sans"
+                style="font-weight: 700;"
+              >
+                
+          Card Title
+        
+              </p>
+            </div>
+             
+            <div
+              class="right"
+            />
+          </div>
+        </div>
+         
+        <div
+          class="body"
+        >
+          <div
+            class="body--inner"
+          >
+             
+            <div
+              class="flex flex-grow bg-white"
+            >
+              <p>
+                Hi
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Layouts|HomeLayout With All 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
