@@ -2398,7 +2398,7 @@ exports[`Storyshots Elements|TitledCard With Defaults 1`] = `
           >
              
             <div
-              class="flex flex-grow bg-white"
+              class="flex flex-grow bg-white m-6"
             >
               <p>
                 Hi

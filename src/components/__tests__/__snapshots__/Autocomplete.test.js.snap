@@ -6,9 +6,8 @@ exports[`Autocomplete should render correctly and match snapshot 1`] = `
 >
   <vue-autosuggest-stub
     class="flex-grow relative text-base font-light base"
-    componentattrclassautosuggestresults="autosuggest__results"
-    componentattrclassautosuggestresultscontainer="autosuggest__results-container"
     componentattridautosuggest="autosuggest"
+    componentattrprefix="autosuggest"
     getsuggestionvalue="function () { [native code] }"
     inputprops="[object Object]"
     limit="Infinity"
