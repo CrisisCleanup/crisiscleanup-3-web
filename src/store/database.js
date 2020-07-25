@@ -21,6 +21,7 @@ import Worksite from '@/models/Worksite';
 import WorksiteRequest from '@/models/WorksiteRequest';
 import Report from '@/models/Report';
 import Team from '@/models/Team';
+import Event from '@/models/Event';
 import { Database } from '@vuex-orm/core';
 
 const database = new Database();
@@ -48,5 +49,6 @@ database.register(PhoneResource, {});
 database.register(PhoneDnis, {});
 database.register(Report, {});
 database.register(Team, {});
+database.register(Event, {});
 
 export default database;
