@@ -169,36 +169,42 @@ export default {
           dataIndex: 'incident_count',
           key: 'incident_count',
           class: 'justify-center',
+          headerClass: 'justify-center',
         },
         {
           title: this.$t('otherOrganizations.cases_reported'),
           dataIndex: 'reported_count',
           key: 'reported_count',
           class: 'justify-center',
+          headerClass: 'justify-center',
         },
         {
           title: this.$t('otherOrganizations.cases_claimed'),
           dataIndex: 'claimed_count',
           key: 'claimed_count',
           class: 'justify-center',
+          headerClass: 'justify-center',
         },
         {
           title: this.$t('otherOrganizations.cases_closed'),
           dataIndex: 'closed_count',
           key: 'closed_count',
           class: 'justify-center',
+          headerClass: 'justify-center',
         },
         {
           title: this.$t('otherOrganizations.cases_overdue'),
           dataIndex: 'overdue_count',
           key: 'overdue_count',
           class: 'justify-center',
+          headerClass: 'justify-center',
         },
         {
           title: this.$t('otherOrganizations.last_login'),
           dataIndex: 'last_login',
           key: 'last_login',
           class: 'justify-center',
+          headerClass: 'justify-center',
           width: '150px',
           transformer: (item) => {
             return this.$moment(item).fromNow();

@@ -56,10 +56,11 @@
         <div class="overflow-auto">
           <div class="flex">
             <div class="flex flex-col p-8 w-64 items-center">
-              <img
-                class="rounded-full p-1 profile-image"
-                :src="currentUser.profilePictureUrl"
-                :alt="$t('profileUser.profile_picture')"
+              <Avatar
+                :initials="currentUser.first_name"
+                :url="currentUser.profilePictureUrl"
+                class="p-1"
+                size="3xl"
               />
               <DragDrop
                 class="text-primary-dark cursor-pointer"
@@ -291,11 +292,24 @@
                   />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
-                <!--                <div class="my-2">-->
-                <!--                  <base-button variant="solid" class="px-4 py-1">-->
-                <!--                    {{ $t('profileUser.change_organization') }}-->
-                <!--                  </base-button>-->
-                <!--                </div>-->
+                <div class="my-2">
+                  <base-button
+                    variant="solid"
+                    v-if="$can('development_mode')"
+                    class="px-4 py-1"
+                    :action="
+                      () => {
+                        showChangeOrganizationModal = true;
+                      }
+                    "
+                  >
+                    {{ $t('profileUser.change_organization') }}
+                  </base-button>
+                  <ChangeOrganizationModal
+                    v-if="showChangeOrganizationModal"
+                    @cancel="showChangeOrganizationModal = false"
+                  />
+                </div>
               </div>
               <div v-if="isEditing" class="mt-6">
                 <h3>{{ $t('profileUser.notification_settings') }}</h3>
@@ -357,15 +371,23 @@ import DragDrop from '@/components/DragDrop';
 import UserRolesSelect from '@/components/UserRolesSelect';
 import { ValidateMixin } from '@/mixins';
 import { getErrorMessage } from '../utils/errors';
+import ChangeOrganizationModal from '../components/ChangeOrganizationModal';
+import Avatar from '../components/Avatar';
 
 export default {
   name: 'Profile',
-  components: { DragDrop, UserRolesSelect },
+  components: { Avatar, ChangeOrganizationModal, DragDrop, UserRolesSelect },
   mixins: [ValidateMixin],
+  mounted() {
+    if (this.$route.query.move) {
+      this.showChangeOrganizationModal = true;
+    }
+  },
   data() {
     return {
       mode: 'view',
       uploading: false,
+      showChangeOrganizationModal: false,
       notifications: {
         new_incident: this.$t('profileUser.notification_new_incident'),
         request_work_type: this.$t('profileUser.notification_request_work'),

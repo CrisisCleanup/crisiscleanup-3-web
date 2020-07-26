@@ -39,6 +39,8 @@ export default {
         'w-12 h-12': this.size === 'medium',
         'w-16 h-16': this.size === 'large',
         'w-24 h-24': this.size === 'xl',
+        'w-32 h-32': this.size === '2xl',
+        'w-40 h-40': this.size === '3xl',
         'relative mb-4': true,
       };
     },

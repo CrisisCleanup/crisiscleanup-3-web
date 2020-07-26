@@ -8,6 +8,7 @@ export default {
   props: {
     name: { required: true, type: String },
     selected: { type: Boolean },
+    disabled: { type: Boolean, default: false },
   },
 
   data() {

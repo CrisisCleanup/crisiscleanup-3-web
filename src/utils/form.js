@@ -28,4 +28,21 @@ export const nest = (
     .filter((item) => item[link] === key && !excluded.includes(item.field_key))
     .map((item) => ({ ...item, children: nest(items, item.field_key) }));
 
+export const nestUsers = (items, key = null) => {
+  return items
+    .filter((item) => {
+      if (item.referring_user) {
+        return item.referring_user === key;
+      }
+      return false;
+    })
+    .map((item) => {
+      return {
+        ...item,
+        label: `${item.first_name} ${item.last_name}`,
+        children: nestUsers(items, item.id),
+      };
+    });
+};
+
 export const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;

@@ -335,6 +335,19 @@
             </div>
           </div>
         </div>
+        <div class="flex">
+          <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
+            <div class="py-4 px-4 text-gray-500 border-b">
+              {{ $t('~~User Transfer Requests') }}
+            </div>
+            <div class="p-4">
+              <UserTransferRequestTable
+                :requests="transferRequests"
+                @reload="getUserTransferRequests"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </template>
   </Loader>
@@ -361,11 +374,13 @@ import Loader from '@/components/Loader';
 import InviteUsers from './organization/InviteUsers';
 import RedeployRequest from './RedeployRequest';
 import { DialogsMixin } from '../mixins';
+import UserTransferRequestTable from '../components/UserTransferRequestTable';
 
 export default {
   name: 'Dashboard',
   mixins: [DialogsMixin],
   components: {
+    UserTransferRequestTable,
     RedeployRequest,
     InviteUsers,
     Table,
@@ -381,6 +396,7 @@ export default {
       totalInProgess: 0,
       organizations: [],
       incident_requests: [],
+      transferRequests: [],
       loading: false,
       datacollection: null,
       pendingViewLoading: false,
@@ -670,6 +686,7 @@ export default {
         this.getClaimedCount(),
         this.getInProgessCount(),
         this.getClosedCount(),
+        this.getUserTransferRequests(),
       ]);
     },
     async statusValueChange(value, workType, worksiteId) {
@@ -768,6 +785,12 @@ export default {
         dataKey: 'results',
       });
       this.pendingViewLoading = false;
+    },
+    async getUserTransferRequests() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/transfer_requests`,
+      );
+      this.transferRequests = response.data.results;
     },
     async getWorksiteCount() {
       const response = await this.$http.get(

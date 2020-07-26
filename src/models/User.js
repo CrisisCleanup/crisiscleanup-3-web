@@ -28,6 +28,7 @@ export default class User extends Model {
       accepted_terms: this.attr(null),
       social: this.attr({}),
       referring_user: this.attr({}),
+      lineage: this.attr([]),
     };
   }
 
@@ -89,7 +90,11 @@ export default class User extends Model {
   }
 
   getStatesForIncident(incidentId, fallback = true) {
-    if (this.states.incidents && this.states.incidents[incidentId]) {
+    if (
+      this.states &&
+      this.states.incidents &&
+      this.states.incidents[incidentId]
+    ) {
       return this.states.incidents[incidentId];
     }
     if (fallback) {
