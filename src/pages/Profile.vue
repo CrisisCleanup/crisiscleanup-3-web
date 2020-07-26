@@ -295,6 +295,7 @@
                 <div class="my-2">
                   <base-button
                     variant="solid"
+                    v-if="$can('development_mode')"
                     class="px-4 py-1"
                     :action="
                       () => {
