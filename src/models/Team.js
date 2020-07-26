@@ -10,6 +10,7 @@ export default class Team extends Model {
       notes: this.attr(null),
       users: this.attr([]),
       assigned_work_types: this.attr([]),
+      cases_area: this.attr({}),
     };
   }
 
@@ -17,6 +18,9 @@ export default class Team extends Model {
     actions: {
       fetchById(id) {
         return this.get(`/teams/${id}`);
+      },
+      getCasesArea(id, incident) {
+        return this.get(`/teams/${id}/cases_area?incident=${incident}`);
       },
     },
   };

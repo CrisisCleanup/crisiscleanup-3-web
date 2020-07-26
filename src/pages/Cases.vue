@@ -73,7 +73,9 @@
                 />
                 <template slot="body">
                   <ul class="text-base">
-                    Standard Layers
+                    {{
+                      $t('~~Standard Layers')
+                    }}
                     <li class="py-2">
                       <base-dropdown
                         :trigger="'hover'"
@@ -123,6 +125,30 @@
                                   }
                                 "
                                 >{{ district.name }}</base-checkbox
+                              >
+                            </li>
+                          </ul>
+                        </template>
+                      </base-dropdown>
+                    </li>
+                    <li class="py-2" v-if="$can('development_mode')">
+                      <base-dropdown
+                        :trigger="'hover'"
+                        :role="'sublist'"
+                        :align="'right'"
+                      >
+                        <template slot="btn">{{ $t('~~Teams') }}</template>
+                        <template slot="body">
+                          <ul class="h-64 overflow-auto">
+                            <li v-for="team in teams" :key="team.id">
+                              <base-checkbox
+                                :value="appliedLocations.has(team.id)"
+                                @input="
+                                  (value) => {
+                                    applyTeamGeoJson(team, value);
+                                  }
+                                "
+                                >{{ team.name }}</base-checkbox
                               >
                             </li>
                           </ul>
@@ -769,6 +795,7 @@ import { getQueryString } from '@/utils/urls';
 import { getColorForStatus } from '@/filters';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
+import Team from '@/models/Team';
 import { EventBus } from '../event-bus';
 import WorksiteTable from './WorksiteTable';
 import { hash } from '../utils/promise';
@@ -907,6 +934,9 @@ export default {
       }
       return [];
     },
+    teams() {
+      return Team.all();
+    },
     isEditingWorksite() {
       return this.$route.meta.id === 'case_edit';
     },
@@ -1019,12 +1049,18 @@ export default {
       fields: 'id,name,type',
     };
     const queryString = getQueryString(locationParams);
-    await Location.api().get(`/locations?${queryString}`, {
-      dataKey: 'results',
-    });
-    await LocationType.api().get('/location_types', {
-      dataKey: 'results',
-    });
+
+    await Promise.all([
+      Location.api().get(`/locations?${queryString}`, {
+        dataKey: 'results',
+      }),
+      LocationType.api().get('/location_types', {
+        dataKey: 'results',
+      }),
+      Team.api().get('/teams', {
+        dataKey: 'results',
+      }),
+    ]);
     this.isMounted = queryString;
   },
   methods: {
@@ -1079,6 +1115,39 @@ export default {
         const polygon = L.geoJSON(geojsonFeature, {
           weight: '1',
           onEachFeature(feature, layer) {
+            layer.location_id = locationId;
+          },
+        });
+        polygon.addTo(this.$refs.worksiteMap.map);
+        this.$refs.worksiteMap.map.fitBounds(polygon.getBounds());
+        this.appliedLocations = new Set(this.appliedLocations.add(locationId));
+      } else {
+        this.$refs.worksiteMap.map.eachLayer((layer) => {
+          if (layer.location_id && layer.location_id === locationId) {
+            this.$refs.worksiteMap.map.removeLayer(layer);
+          }
+        });
+        this.appliedLocations = new Set(
+          this.appliedLocations.delete(locationId),
+        );
+      }
+    },
+    async applyTeamGeoJson(team, value) {
+      const feature = await Team.api().getCasesArea(
+        team.id,
+        this.currentIncidentId,
+      );
+      const locationId = team.id;
+
+      if (value && this.$refs.worksiteMap.map) {
+        const geojsonFeature = {
+          type: 'Feature',
+          properties: {},
+          geometry: feature.response.data,
+        };
+        const polygon = L.geoJSON(geojsonFeature, {
+          weight: '1',
+          onEachFeature(_, layer) {
             layer.location_id = locationId;
           },
         });

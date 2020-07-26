@@ -93,6 +93,19 @@
               >{{ fieldsCount + missingWorkTypeCount }}</span
             >
           </div>
+          <div
+            class="p-3 px-4 border-b cursor-pointer"
+            :class="{ 'border-l-4 border-l-black': currentSection === 'teams' }"
+            @click="currentSection = 'teams'"
+            v-if="teams.length && $can('development_mode')"
+          >
+            {{ $t('~~Teams') }}
+            <span
+              v-if="teamsCount > 0"
+              class="rounded-full px-1 bg-black text-white text-xs"
+              >{{ teamsCount }}</span
+            >
+          </div>
         </div>
         <div
           class="w-3/4 ml-4 mt-2 flex-grow"
@@ -108,6 +121,17 @@
                 class="block my-1"
               >
                 {{ $t('worksiteFilters.within_my_org_response_area') }}
+              </base-checkbox>
+            </div>
+            <div class="claim-status mb-2" v-if="$can('development_mode')">
+              <div class="my-1 text-base">
+                {{ $t('~~Team') }}
+              </div>
+              <base-checkbox
+                v-model="filters.my_team.data.my_team"
+                class="block my-1"
+              >
+                {{ $t('~~Assigned to My Team') }}
               </base-checkbox>
             </div>
             <div class="claim-status mb-2">
@@ -295,6 +319,26 @@
               </base-checkbox>
             </div>
           </template>
+          <div v-if="currentSection === 'teams'" class="flex flex-col">
+            <div class="status-group mb-2">
+              <div class="my-1 text-base">
+                {{ $t('~~Teams') }}
+              </div>
+              <base-checkbox
+                v-for="team in teams"
+                :key="team.id"
+                class="block my-1"
+                :value="filters.teams.data[team.id]"
+                @input="
+                  (value) => {
+                    filters.teams.data[team.id] = value;
+                    filters.teams.data = { ...filters.teams.data };
+                  }
+                "
+                >{{ team.name }}
+              </base-checkbox>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -327,15 +371,20 @@
 
 <script>
 import { mapState } from 'vuex';
+import Team from '@/models/Team';
 import WorksiteFieldsFilter from '../utils/data_filters/WorksiteFieldsFilter';
 import WorksiteFlagsFilter from '../utils/data_filters/WorksiteFlagsFilter';
 import WorksiteStatusGroupFilter from '../utils/data_filters/WorksiteStatusGroupFilter';
 import WorksiteStatusFilter from '../utils/data_filters/WorksiteStatusFilter';
 import WorksiteLocationsFilter from '../utils/data_filters/WorksiteLocationsFilter';
 import WorksiteMissingWorkTypeFilter from '../utils/data_filters/WorksiteMissingWorkTypeFilter';
+import WorksiteMyTeamFilter from '../utils/data_filters/WorksiteMyTeamFilter';
+import WorksiteTeamsFilter from '../utils/data_filters/WorksiteTeamsFilter';
+import { UserMixin } from '../mixins';
 
 export default {
   name: 'WorksiteFilters',
+  mixins: [UserMixin],
   props: {
     incident: {
       type: Object,
@@ -358,6 +407,8 @@ export default {
       filters: {
         fields: {},
         statuses: {},
+        teams: {},
+        my_team: {},
         statusGroups: {},
         flags: {},
         sub_fields: {},
@@ -412,6 +463,12 @@ export default {
     missingWorkTypeCount() {
       return this.filters.missingWorkType.count;
     },
+    teamsCount() {
+      return this.filters.teams.count;
+    },
+    myTeamCount() {
+      return this.filters.my_team.count;
+    },
     filtersCount() {
       return (
         this.fieldsCount +
@@ -419,8 +476,13 @@ export default {
         this.statusGroupCount +
         this.locationsCount +
         this.flagsCount +
-        this.missingWorkTypeCount
+        this.missingWorkTypeCount +
+        this.teamsCount +
+        this.myTeamCount
       );
+    },
+    teams() {
+      return Team.all();
     },
     ...mapState('enums', ['statuses', 'workTypes']),
     allStatuses() {
@@ -459,6 +521,15 @@ export default {
           'statuses',
           (this.currentFilters.statuses && this.currentFilters.statuses.data) ||
             {},
+        ),
+        my_team: new WorksiteMyTeamFilter(
+          'my_team',
+          (this.currentFilters.my_team && this.currentFilters.my_team.data) ||
+            {},
+        ),
+        teams: new WorksiteTeamsFilter(
+          'teams',
+          (this.currentFilters.teams && this.currentFilters.teams.data) || {},
         ),
         missingWorkType: new WorksiteMissingWorkTypeFilter(
           'missingWorkType',
@@ -524,6 +595,8 @@ export default {
         flags: new WorksiteFlagsFilter('flags', {}),
         statuses: new WorksiteStatusFilter('statuses', {}),
         locations: new WorksiteLocationsFilter('locations', {}),
+        teams: new WorksiteTeamsFilter('teams', {}),
+        my_team: new WorksiteMyTeamFilter('my_team', {}),
         missingWorkType: new WorksiteMissingWorkTypeFilter(
           'missingWorkType',
           {},

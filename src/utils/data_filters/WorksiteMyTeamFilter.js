@@ -1,10 +1,10 @@
 import Filter from '@/utils/data_filters/Filter';
 
-export default class WorksiteTeamsFilter extends Filter {
+export default class WorksiteMyTeamFilter extends Filter {
   packFunction() {
     const packed = {};
     if (this.data.my_team) {
-      packed.my_team = this.data.my_team
+      packed.my_team = this.data.my_team;
     }
     return packed;
   }
@@ -17,8 +17,11 @@ export default class WorksiteTeamsFilter extends Filter {
   }
 
   getFilterLabels() {
+    if (!this.data.my_team) {
+      return {};
+    }
     return {
-      my_team: window.vue.$i18n.t('~~My Team')
+      my_team: window.vue.$i18n.t('~~My Team'),
     };
   }
 

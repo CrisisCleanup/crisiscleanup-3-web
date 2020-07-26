@@ -1,22 +1,27 @@
 <template>
-  <div class="bg-white px-5">
-    <div class="flex justify-between border-b px-3 py-1">
+  <div class="bg-white px-5 h-full h-84">
+    <div class="flex justify-between border-b py-1">
       <div class="font-semibold flex justify-between items-center h-16">
         {{ team.name }}
       </div>
       <div class="flex flex-wrap items-center justify-end">
         <ccu-icon
-          :alt="$t('actions.edit')"
-          type="edit"
-          class="mx-2"
+          :alt="$t('actions.jump_to_case')"
           size="small"
-          @click.native="isEditing = true"
+          class="p-1 py-2"
+          type="go-case"
+          @click.native="showAllOnMap"
         />
         <ccu-icon
           :alt="$t('actions.delete')"
           type="trash"
           class="mx-2"
           size="small"
+          @click.native="
+            () => {
+              deleteCurrentTeam();
+            }
+          "
         />
       </div>
     </div>
@@ -49,7 +54,7 @@
             class="border-t last:border-b pt-4 bg-white"
             style="
               display: grid;
-              grid-template-columns: 25px max-content 20% 35% 35% max-content;
+              grid-template-columns: 25px max-content 20% 35% 30% 1fr;
             "
           >
             <div class="handle" style="width: 15px; margin-top: 2px;">
@@ -61,9 +66,15 @@
               class="mr-2"
             />
             <span>{{ user.full_name }}</span>
-            <span>{{ user.email }}</span>
-            <span>{{ user.mobile }}</span>
-            <div style="margin-top: 2px;">
+            <span>
+              <font-awesome-icon icon="envelope" />
+              {{ user.email }}
+            </span>
+            <span>
+              <font-awesome-icon icon="phone" />
+              {{ user.mobile }}
+            </span>
+            <div style="margin-top: 2px;" class="flex justify-end">
               <base-dropdown
                 :trigger="'click'"
                 class-name="team-detail-user"
@@ -93,6 +104,11 @@
                     </li>
                     <li
                       class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                      @click="
+                        () => {
+                          moveToDifferentTeam(user.id);
+                        }
+                      "
                     >
                       {{ $t('~~Move to another team') }}
                     </li>
@@ -128,7 +144,7 @@
           "
         />
       </div>
-      <div class="mt-2 h-48 overflow-auto">
+      <div class="mt-2 h-40 overflow-auto">
         <draggable
           v-model="cases"
           :options="{ group: 'cases' }"
@@ -143,8 +159,7 @@
             class="border-t last:border-b py-3 bg-white"
             style="
               display: grid;
-              grid-template-columns: 25px max-content 1fr;
-              grid-gap: 10px;
+              grid-template-columns: 25px 20% 20% 20% 20% 25px;
             "
           >
             <div class="handle" style="width: 15px; margin-top: 2px;">
@@ -163,6 +178,22 @@
               {{ work_type.case_number }}
             </div>
             <span>{{ work_type.work_type | getWorkTypeName }}</span>
+            <span>{{ work_type.name }}</span>
+            <span>
+              <font-awesome-icon icon="phone" />
+              {{ work_type.phone1 }}
+            </span>
+            <ccu-icon
+              :alt="$t('actions.jump_to_case')"
+              size="small"
+              class="p-1 py-2"
+              type="go-case"
+              @click.native="
+                () => {
+                  showOnMap(work_type);
+                }
+              "
+            />
           </div>
         </draggable>
       </div>
@@ -173,7 +204,7 @@
         rows="4"
         :placeholder="$t('~~Notes')"
         @input="updateNotes"
-        @blur="updateTeam"
+        @blur="updateCurrentTeam"
       />
     </div>
 
@@ -327,7 +358,7 @@
 
 <script>
 import Team from '@/models/Team';
-import { UserMixin } from '@/mixins';
+import { UserMixin, DialogsMixin } from '@/mixins';
 import draggable from 'vuedraggable';
 import { mapState } from 'vuex';
 import Avatar from '../../components/Avatar';
@@ -336,7 +367,7 @@ import { getColorForStatus } from '../../filters';
 export default {
   name: 'TeamDetail',
   components: { Avatar, draggable },
-  mixins: [UserMixin],
+  mixins: [UserMixin, DialogsMixin],
   async mounted() {
     await Team.api().get(`/teams/${this.$route.params.team_id}`);
   },
@@ -346,6 +377,10 @@ export default {
       default: () => [],
     },
     users: {
+      type: Array,
+      default: () => [],
+    },
+    teams: {
       type: Array,
       default: () => [],
     },
@@ -407,7 +442,7 @@ export default {
         },
       });
 
-      await this.updateTeam();
+      await this.updateCurrentTeam();
       this.usersToAdd = [];
       this.showAddMembersModal = false;
     },
@@ -419,8 +454,11 @@ export default {
         },
       });
     },
-    async updateTeam() {
+    async updateCurrentTeam() {
       await Team.api().patch(`/teams/${this.team.id}`, this.team.$toJson());
+    },
+    async updateTeam(id, data) {
+      await Team.api().patch(`/teams/${id}`, data);
     },
     async addCases() {
       if (this.casesToAdd.length) {
@@ -438,7 +476,7 @@ export default {
       }
       this.casesToAdd = [];
       this.showAddCasesModal = false;
-      this.$emit('addedCases');
+      this.$emit('reload');
     },
     async removeFromTeam(userId) {
       const newUsers = this.team.users.filter((id) => id !== userId);
@@ -448,7 +486,69 @@ export default {
           users: newUsers,
         },
       });
-      await this.updateTeam();
+      await this.updateCurrentTeam();
+      this.$emit('reload');
+    },
+    async moveToDifferentTeam(userId) {
+      const result = await this.$selection({
+        title: this.$t('~~Move Teams'),
+        content: '',
+        label: 'name',
+        options: this.teams.filter((t) => t.id !== this.team.id),
+        placeholder: this.$t('~Select a team to move user to'),
+      });
+      if (result.id) {
+        await this.removeFromTeam(userId);
+        result.users.push(userId);
+        await this.updateTeam(result.id, result.$toJson());
+        this.$emit('reload');
+      }
+    },
+    async deleteCurrentTeam() {
+      const result = await this.$confirm({
+        title: this.$t('~~Delete Team'),
+        content: this.$t('~~Are you sure you want to delete this team?'),
+        actions: {
+          no: {
+            text: this.$t('~~No'),
+            type: 'outline',
+            buttonClass: 'border border-black',
+          },
+          yes: {
+            text: this.$t('~~Yes'),
+            type: 'solid',
+          },
+        },
+      });
+      if (result === 'no' || result === 'cancel') {
+        return;
+      }
+
+      await Team.api().delete(`/teams/${this.team.id}`, {
+        delete: this.team.id,
+      });
+      this.$emit('reload');
+      await this.$router.push('/organization/teams');
+    },
+    async showOnMap(work_type) {
+      await this.$component({
+        title: this.$t('~~View Case'),
+        component: 'WorkTypeMap',
+        classes: 'w-full h-96',
+        props: {
+          workTypes: [work_type],
+        },
+      });
+    },
+    async showAllOnMap() {
+      await this.$component({
+        title: this.$t('~~View All Cases'),
+        component: 'WorkTypeMap',
+        classes: 'w-full h-96',
+        props: {
+          workTypes: this.cases,
+        },
+      });
     },
   },
   computed: {

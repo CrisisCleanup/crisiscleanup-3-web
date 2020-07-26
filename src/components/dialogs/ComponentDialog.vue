@@ -22,17 +22,19 @@
             </div>
           </div>
 
-          <div class="modal-body flex-grow p-3">
+          <div class="modal-body flex-grow">
             <div>
-              <div v-html="content"></div>
+              <component
+                :is="dynamicComponent"
+                v-bind="props"
+                :class="classes"
+              />
             </div>
           </div>
 
           <div class="modal-footer flex-shrink">
             <div class="flex items-center justify-center py-2 border-t">
-              <div
-                class="flex flex-col items-center justify-center"
-              >
+              <div class="flex flex-col items-center justify-center">
                 <base-button
                   :alt="$t('actions.ok')"
                   variant="solid"
@@ -56,24 +58,29 @@
 
 <script>
 export default {
-  name: 'MapDialog',
+  name: 'ComponentDialog',
+  computed: {
+    dynamicComponent() {
+      return () => import(`@/components/${this.component}`);
+    },
+  },
   props: {
     title: {
       type: String,
       default: '',
     },
-    content: {
+    component: {
       type: String,
       default: '',
     },
-    mapComponent: {
+    classes: {
       type: String,
       default: '',
-    }, 
-    objects: {
-      type: Array,
+    },
+    props: {
+      type: Object,
       default: () => {
-        return [];
+        return {};
       },
     },
   },

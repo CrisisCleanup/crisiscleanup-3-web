@@ -1,5 +1,5 @@
 <template>
-  <div class="p-8">
+  <div class="px-8 py-4">
     <div class="flex justify-between items-center">
       <base-input
         v-model="currentSearch"
@@ -67,9 +67,11 @@
       <div class="h-full">
         <div class="h-full flex flex-col bg-white shadow">
           <router-view
+            v-show="teams.length"
             :work-types="claimedWorktypes"
-            :users="users"
-            @addedCases="getData"
+            :users="usersWithoutTeams"
+            :teams="teams"
+            @reload="getData"
           ></router-view>
         </div>
       </div>
@@ -78,7 +80,7 @@
       v-if="creatingTeam"
       @close="creatingTeam = false"
       @saved="getData"
-      :users="users"
+      :users="usersWithoutTeams"
       :cases="claimedWorktypes"
     />
   </div>
@@ -148,7 +150,14 @@ export default {
           dataKey: 'results',
         },
       );
+      const usersWithoutTeamsResults = await User.api().get(
+        `/users?organization=${this.currentUser.organization.id}&has_team=false`,
+        {
+          dataKey: 'results',
+        },
+      );
       this.users = results.entities.users;
+      this.usersWithoutTeams = usersWithoutTeamsResults.entities.users;
       await this.getTeams();
       await this.getClaimedWorksites();
     },
@@ -158,6 +167,7 @@ export default {
       currentSearch: '',
       creatingTeam: false,
       users: [],
+      usersWithoutTeams: [],
       teams: [],
     };
   },
@@ -187,6 +197,10 @@ export default {
 
             workTypes.push({
               case_number: w.case_number,
+              phone1: w.phone1,
+              location: w.location,
+              name: w.name,
+              email: w.email,
               ...wt,
               completed: closedStatuses
                 .map((status) => status.status)
