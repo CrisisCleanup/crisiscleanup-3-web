@@ -50,7 +50,21 @@ export type SuggestedEvent = {
 };
 
 export type SuggestedEventResponse = {|
-  key_suggest_match: SuggestedEvent[],
+  key_suggest: SuggestedEvent[],
+|};
+
+export type EventSearchResult = {|
+  id: number,
+  key: string,
+  name: string,
+|};
+
+export type EventSearchQueryT = {|
+  count: number,
+  next: string | null,
+  previous: string | null,
+  facets: any,
+  results: EventSearchResult[],
 |};
 
 const Log = Logger({ name: 'events.store' });
@@ -97,7 +111,7 @@ export default class Event extends Model {
     partialKey: string,
   ): Promise<Array<{ id: number, key: string, ... }>> {
     const parsedPartial = partialKey.toLowerCase().replace(' ', '_');
-    Log.debug('searching for:', parsedPartial);
+    Log.debug('fetching completions for:', parsedPartial);
     const {
       response: { data },
     }: { response: { data: SuggestedEventResponse } } = await this.api().get(
@@ -105,17 +119,39 @@ export default class Event extends Model {
       {
         save: false,
         params: {
-          key_suggest_match: parsedPartial,
+          key_suggest: parsedPartial,
         },
       },
     );
-    const resp = data.key_suggest_match.pop();
+    const resp = data.key_suggest.pop();
     return resp.options.map<{ id: number, key: string }>(
       (o: SuggestedEventItem) => ({
         id: o._source.id,
         key: o._source.key,
       }),
     );
+  }
+
+  /**
+   * Perform a compound search of events by key and name.
+   * @param query - query to search by.
+   * @param limit - limit return count. Defaults to 10.
+   * @returns {Promise<[EventSearchResult]>}
+   */
+  static async search(query: string, limit: number = 10) {
+    const {
+      response: { data },
+    }: { response: { data: EventSearchQueryT } } = await this.api().get(
+      '/events_search',
+      {
+        save: false,
+        params: {
+          search: query,
+          limit,
+        },
+      },
+    );
+    return data.results;
   }
 
   /**
