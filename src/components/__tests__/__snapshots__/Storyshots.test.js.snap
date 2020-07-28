@@ -2228,14 +2228,14 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
                 class="accordion__card"
               >
                 <p
-                  class="accordion__title text-h3 font-h3 font-sans"
+                  class="text-h3 font-h3 font-sans accordion__title"
                 >
                   
         One
                 </p>
                  
                 <div
-                  class="accordion__body "
+                  class="accordion__body"
                 >
                   
         One
@@ -2246,14 +2246,14 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
                 class="accordion__card"
               >
                 <p
-                  class="accordion__title text-h3 font-h3 font-sans"
+                  class="text-h3 font-h3 font-sans accordion__title accordion__title--active"
                 >
                   
         Two
                 </p>
                  
                 <div
-                  class="accordion__body accordion__body--active"
+                  class="accordion__body--active accordion__body"
                 >
                   
         Two
@@ -2328,7 +2328,7 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
                 </p>
                  
                 <div
-                  class="accordion__body accordion__body--active"
+                  class="accordion__body--active accordion__body"
                 >
                   <p
                     class="text-body font-body font-sans"
@@ -2341,14 +2341,14 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
                 class="accordion__card"
               >
                 <p
-                  class="accordion__title text-h3 font-h3 font-sans"
+                  class="text-h3 font-h3 font-sans accordion__title"
                 >
                   
         Two
                 </p>
                  
                 <div
-                  class="accordion__body "
+                  class="accordion__body"
                 >
                   
         Two
@@ -2364,7 +2364,7 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Accordion With Defaults 1`] = `
+exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2378,14 +2378,14 @@ exports[`Storyshots Elements|Accordion With Defaults 1`] = `
         class="accordion__card"
       >
         <p
-          class="accordion__title text-h3 font-h3 font-sans"
+          class="text-h3 font-h3 font-sans accordion__title accordion__title--active"
         >
           
         One
         </p>
          
         <div
-          class="accordion__body accordion__body--active"
+          class="accordion__body--active accordion__body"
         >
           
         One
@@ -2396,14 +2396,14 @@ exports[`Storyshots Elements|Accordion With Defaults 1`] = `
         class="accordion__card"
       >
         <p
-          class="accordion__title text-h3 font-h3 font-sans"
+          class="text-h3 font-h3 font-sans accordion__title"
         >
           
         Two
         </p>
          
         <div
-          class="accordion__body "
+          class="accordion__body"
         >
           
         Two
@@ -2414,14 +2414,14 @@ exports[`Storyshots Elements|Accordion With Defaults 1`] = `
         class="accordion__card"
       >
         <p
-          class="accordion__title text-h3 font-h3 font-sans"
+          class="text-h3 font-h3 font-sans accordion__title"
         >
           
         Three
         </p>
          
         <div
-          class="accordion__body "
+          class="accordion__body"
         >
           
         Three
@@ -2432,14 +2432,14 @@ exports[`Storyshots Elements|Accordion With Defaults 1`] = `
         class="accordion__card"
       >
         <p
-          class="accordion__title text-h3 font-h3 font-sans"
+          class="text-h3 font-h3 font-sans accordion__title"
         >
           
         Four
         </p>
          
         <div
-          class="accordion__body "
+          class="accordion__body"
         >
           
         Four
