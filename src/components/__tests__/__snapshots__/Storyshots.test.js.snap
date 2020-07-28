@@ -2175,6 +2175,282 @@ exports[`Storyshots Basics|Modal Modal With Custom Header And Footer 1`] = `
 </div>
 `;
 
+exports[`Storyshots Elements|Accordion With Card 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="bg-white shadow-crisiscleanup-card card"
+    >
+      <div
+        class="header"
+        slot="header"
+      >
+        <div
+          class="header--inner"
+        >
+          <div
+            class="left"
+          >
+            <p
+              class="text-body font-body font-sans"
+              style="font-weight: 700;"
+            >
+              
+          Example Accordion
+        
+            </p>
+          </div>
+           
+          <div
+            class="right"
+          />
+        </div>
+      </div>
+       
+      <div
+        class="body"
+      >
+        <div
+          class="body--inner"
+        >
+           
+          <div
+            class="m-16"
+          >
+            <div
+              class="accordion"
+            >
+              <div
+                class="accordion__card"
+              >
+                <p
+                  class="accordion__title text-h3 font-h3 font-sans"
+                >
+                  
+        One
+                </p>
+                 
+                <div
+                  class="accordion__body "
+                >
+                  
+        One
+      
+                </div>
+              </div>
+              <div
+                class="accordion__card"
+              >
+                <p
+                  class="accordion__title text-h3 font-h3 font-sans"
+                >
+                  
+        Two
+                </p>
+                 
+                <div
+                  class="accordion__body accordion__body--active"
+                >
+                  
+        Two
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements|Accordion With Components 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="bg-white shadow-crisiscleanup-card card"
+    >
+      <div
+        class="header"
+        slot="header"
+      >
+        <div
+          class="header--inner"
+        >
+          <div
+            class="left"
+          >
+            <p
+              class="text-body font-body font-sans"
+              style="font-weight: 700;"
+            >
+              
+          Example with Components
+        
+            </p>
+          </div>
+           
+          <div
+            class="right"
+          />
+        </div>
+      </div>
+       
+      <div
+        class="body"
+      >
+        <div
+          class="body--inner"
+        >
+           
+          <div
+            class="m-16"
+          >
+            <div
+              class="accordion"
+            >
+              <div
+                class="accordion__card"
+              >
+                <p
+                  class="bg-blue-500 p-6 text-body font-body font-sans"
+                >
+                  Custom Title Component
+                </p>
+                 
+                <div
+                  class="accordion__body accordion__body--active"
+                >
+                  <p
+                    class="text-body font-body font-sans"
+                  >
+                    I am a custom component
+                  </p>
+                </div>
+              </div>
+              <div
+                class="accordion__card"
+              >
+                <p
+                  class="accordion__title text-h3 font-h3 font-sans"
+                >
+                  
+        Two
+                </p>
+                 
+                <div
+                  class="accordion__body "
+                >
+                  
+        Two
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements|Accordion With Defaults 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="accordion"
+    >
+      <div
+        class="accordion__card"
+      >
+        <p
+          class="accordion__title text-h3 font-h3 font-sans"
+        >
+          
+        One
+        </p>
+         
+        <div
+          class="accordion__body accordion__body--active"
+        >
+          
+        One
+      
+        </div>
+      </div>
+      <div
+        class="accordion__card"
+      >
+        <p
+          class="accordion__title text-h3 font-h3 font-sans"
+        >
+          
+        Two
+        </p>
+         
+        <div
+          class="accordion__body "
+        >
+          
+        Two
+      
+        </div>
+      </div>
+      <div
+        class="accordion__card"
+      >
+        <p
+          class="accordion__title text-h3 font-h3 font-sans"
+        >
+          
+        Three
+        </p>
+         
+        <div
+          class="accordion__body "
+        >
+          
+        Three
+      
+        </div>
+      </div>
+      <div
+        class="accordion__card"
+      >
+        <p
+          class="accordion__title text-h3 font-h3 font-sans"
+        >
+          
+        Four
+        </p>
+         
+        <div
+          class="accordion__body "
+        >
+          
+        Four
+      
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Elements|Badge With Defaults 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
