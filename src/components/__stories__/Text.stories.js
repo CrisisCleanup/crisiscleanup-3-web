@@ -1,4 +1,5 @@
-import BaseText, { VARIANTS as TextVariants } from '@/components/BaseText';
+import BaseText from '@/components/BaseText';
+import { TEXT_VARIANTS as TextVariants } from '@/constants';
 
 export default {
   title: 'Basics|BaseText',

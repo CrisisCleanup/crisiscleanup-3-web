@@ -14,13 +14,12 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { VARIANTS as TextVariants } from '@/components/BaseText';
 
 export default {
   name: 'BaseLink',
   props: {
     href: VueTypes.string,
-    textVariant: VueTypes.oneOf(TextVariants).def('body'),
+    textVariant: VueTypes.string.def('body'),
     to: VueTypes.string,
     target: VueTypes.string,
   },

@@ -1,4 +1,4 @@
-import { ICONS } from '@/components/BaseIcon.vue';
+import { ICONS } from '@/constants';
 
 export const IconsMixin = {
   data() {

@@ -25,10 +25,7 @@
 <script>
 import { kebabCase } from 'lodash';
 import VueTypes from 'vue-types';
-import { ICONS, ICON_SIZES } from '@/components/BaseIcon';
-
-export const STYLES = ['primary', 'danger', 'warning', 'link', 'bare'];
-export const VARIANTS = ['solid', 'outline', 'text'];
+import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from '@/constants';
 
 export default {
   name: 'BaseButton',
