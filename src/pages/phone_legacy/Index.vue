@@ -8,11 +8,11 @@
         >
           <div class="pb-2">
             <base-text variant="h2">{{ $t('~~English Login:') }}</base-text>
-            <base-text>{{ $t('~~Username:') }} covid</base-text>
-            <base-text>{{ $t('~~Password:') }} covid</base-text>
+            <base-text>{{ $t('~~Username:') }} english</base-text>
+            <base-text>{{ $t('~~Password:') }} volunteer</base-text>
             <base-text variant="h2">{{ $t('~~Spanish Login:') }}</base-text>
             <base-text>{{ $t('~~Username:') }} spanish</base-text>
-            <base-text>{{ $t('~~Password:') }} covid</base-text>
+            <base-text>{{ $t('~~Password:') }} volunteer</base-text>
           </div>
           <div class="pb-2">
             <base-text variant="h2">{{
