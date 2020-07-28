@@ -1,4 +1,5 @@
-import BaseIcon, { ICONS, ICON_SIZES } from '@/components/BaseIcon';
+import BaseIcon from '@/components/BaseIcon';
+import { ICONS, ICON_SIZES } from '@/constants';
 
 export default {
   title: 'Basics|BaseIcon',

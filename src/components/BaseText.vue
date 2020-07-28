@@ -6,8 +6,7 @@
 
 <script>
 import VueTypes from 'vue-types';
-
-export const VARIANTS = ['h1', 'h2', 'h3', 'h4', 'body', 'bodysm'];
+import { TEXT_VARIANTS as VARIANTS } from '@/constants';
 
 export default {
   name: 'BaseText',
