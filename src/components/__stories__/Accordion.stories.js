@@ -1,4 +1,4 @@
-import Accordion from '@/components/dialogs/accordion/Accordion.vue';
+import Accordion from '@/components/accordion/Accordion.vue';
 import TitledCard from '@/components/cards/TitledCard.vue';
 
 export default {
