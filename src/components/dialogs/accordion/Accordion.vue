@@ -50,7 +50,7 @@ export default {
   }),
   data() {
     return {
-      activeCard_: null,
+      activeCard_: this.defaultCard ? this.defaultCard : null,
     };
   },
   methods: {
