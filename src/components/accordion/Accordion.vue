@@ -7,14 +7,24 @@
       :key="card.key"
     >
       <slot :name="`${card.key}-title`">
-        <base-text class="accordion__title" variant="h3">
+        <base-text
+          :class="[
+            'accordion__title',
+            {
+              'accordion__title--active':
+                highlightActive && card.key === activeCard,
+            },
+          ]"
+          variant="h3"
+        >
           {{ card.title }}</base-text
         >
       </slot>
       <div
-        :class="`accordion__body ${
-          card.key === activeCard ? 'accordion__body--active' : ''
-        }`"
+        :class="[
+          { 'accordion__body--active': card.key === activeCard },
+          'accordion__body',
+        ]"
       >
         <slot :name="card.key">
           {{ card.title }}
@@ -37,14 +47,19 @@ export type AccordionCardT = {|
 export default {
   name: 'Accordion',
   props: ({
+    /** Keep the active card highlighted. */
+    highlightActive: VueTypes.bool,
+    /** Set default card to be open by key. */
     defaultCard: VueTypes.string.def(null),
+    /** Card definitions. */
     cards: VueTypes.arrayOf<AccordionCardT[]>(
       VueTypes.shape<AccordionCardT>({
         title: VueTypes.string.isRequired,
-        key: VueTypes.string,
+        key: VueTypes.oneOfType([VueTypes.string, VueTypes.number]),
       }).isRequired,
     ),
   }: {
+    highlightActive: boolean,
     defaultCard: string | null,
     cards: AccordionCardT[],
   }),
@@ -88,22 +103,23 @@ export default {
     cursor: pointer;
     transition: 300ms ease;
 
+    &--active,
     &:hover {
-      background: theme('colors.crisiscleanup-dark.500');
+      background: theme('colors.crisiscleanup-dark.400');
       color: white;
     }
   }
 
   &__body {
-    height: 0;
-    transition: 300ms ease;
+    overflow: hidden;
+    max-height: 0;
     opacity: 0;
-    padding: -1rem -1.5rem -2rem -1.5rem;
+    transition: max-height 450ms ease-in-out, opacity 200ms ease,
+      padding 250ms ease;
     &--active {
       padding: 1rem 1.5rem 2rem 1.5rem;
-      margin: 0;
       opacity: 1;
-      height: auto;
+      max-height: 100rem;
     }
   }
 }
