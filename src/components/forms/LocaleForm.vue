@@ -18,7 +18,9 @@
               class="pb-3"
               placeholder="Value"
               size="medium"
+              :value="getValue(ln.key, fieldKey)"
               @change="(value) => setValue(ln.key, fieldKey, value)"
+              @blur="() => onFocusLost(ln.key, fieldKey)"
             />
           </div>
         </div>
@@ -61,8 +63,31 @@ export default {
     }: { currentCard: number | null });
   },
   methods: {
+    getValue(localeId: number, fieldKey: string) {
+      return _.get(this.fieldData, `${localeId}.${fieldKey}`, '');
+    },
     setValue(localeId: number, fieldKey: string, value: string) {
       return _.set(this.fieldData, `${localeId}.${fieldKey}`, value);
+    },
+    async onFocusLost(localeId: number, fieldKey: string) {
+      this.$log.debug('focus lost on initial card input item!');
+      if (localeId === 2) {
+        const value = this.getValue(localeId, fieldKey);
+        if (_.isNil(value) || _.isEmpty(value)) {
+          return;
+        }
+        this.$log.debug('auto translating:', value);
+        await _.mapValues(
+          this.allLocales.slice(1, this.allLocales.length),
+          async (ln: Language) => {
+            const resp = await Language.translateText(ln.id, value);
+            this.$log.debug(
+              `translated: [${value}] -> (${ln.subtag}) [${resp.translated_text}]`,
+            );
+            this.setValue(ln.id, fieldKey, resp.translated_text);
+          },
+        );
+      }
     },
   },
   async mounted() {
