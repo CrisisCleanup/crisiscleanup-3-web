@@ -19,6 +19,7 @@
       :readonly="readonly"
       @input="update"
       @change="change"
+      @blur="$emit('blur')"
     />
     <div
       v-if="breakGlass && !glassBroken"
