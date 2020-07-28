@@ -1,13 +1,20 @@
 import Accordion from '@/components/accordion/Accordion.vue';
 import TitledCard from '@/components/cards/TitledCard.vue';
+import { withKnobs, boolean } from '@storybook/addon-knobs';
 
 export default {
   title: 'Elements|Accordion',
   component: Accordion,
+  decorators: [withKnobs],
 };
 
-export const withDefaults = () => ({
+export const withDynamicProps = () => ({
   components: { Accordion },
+  props: {
+    highlightActive: {
+      default: boolean('Highlight Active', true),
+    },
+  },
   data() {
     return {
       cards: [
@@ -18,7 +25,7 @@ export const withDefaults = () => ({
       ],
     };
   },
-  template: `<Accordion  :cards="cards" />`,
+  template: `<Accordion :highlight-active="highlightActive" :cards="cards" />`,
 });
 
 export const withCard = () => ({
