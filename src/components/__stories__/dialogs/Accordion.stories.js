@@ -2,7 +2,7 @@ import Accordion from '@/components/dialogs/accordion/Accordion.vue';
 import TitledCard from '@/components/cards/TitledCard.vue';
 
 export default {
-  title: 'Elements|Dialogs/Accordion',
+  title: 'Elements|Accordion',
   component: Accordion,
 };
 
@@ -31,7 +31,8 @@ export const withCard = () => ({
   template: `
     <TitledCard title="Example Accordion">
       <div class="m-16">
-        <Accordion  :cards="cards" />
+        <!-- override default card -->
+        <Accordion defaultCard="two" :cards="cards" />
       </div>
     </TitledCard>
   `,
