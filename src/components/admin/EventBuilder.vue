@@ -1,7 +1,7 @@
 <template>
   <TitledCard title="~~Event Builder">
-    <div class="card-container w-full h-full m-6">
-      <div class="card--item">
+    <div class="card__container w-full h-full m-6">
+      <div class="card__item">
         <base-text variant="h3" class="pb-2">{{
           $t('Search Events')
         }}</base-text>
@@ -14,8 +14,8 @@
       <div>
         <base-text variant="h1" class="pb-3">Create Event</base-text>
         <base-text variant="body" class="pb-3">Generate Key</base-text>
-        <div class="card--builder pb-6">
-          <div v-for="key in Object.keys(eventInputs)">
+        <div class="card__builder pb-6">
+          <div v-for="key in Object.keys(eventInputs)" :key="key">
             <base-text variant="h4" class="pb-1">{{
               key | capitalize
             }}</base-text>
@@ -27,23 +27,8 @@
           </div>
         </div>
         <base-text variant="body" class="pb-3">Set Localizations</base-text>
-        <div class="card--builder">
-          <div v-for="key in Object.keys(eventLocaleInputs)">
-            <base-text variant="h4" class="pb-1">{{
-              key | capitalize
-            }}</base-text>
-            <base-input
-              class="pb-3"
-              placeholder="Translation Key"
-              size="medium"
-              @change="(value) => (eventLocaleInputs[key].key = value)"
-            />
-            <base-input
-              placeholder="Value"
-              size="medium"
-              @change="(value) => (eventLocaleInputs[key].value = value)"
-            />
-          </div>
+        <div class="card__locale py-4">
+          <LocaleForm :fields="eventLocaleInputs" />
         </div>
         <div class="my-4">
           <base-text variant="h2" class="pb-2">Event Output</base-text>
@@ -65,6 +50,8 @@ import { EventComponentTypes } from '@/models/EventComponent';
 import type { EventComponentTypeT } from '@/models/EventComponent';
 import Table from '@/components/Table.vue';
 import _ from 'lodash';
+import LocaleForm from '@/components/forms/LocaleForm.vue';
+import type { LocaleFormFieldsT } from '@/components/forms/LocaleForm.vue';
 
 const makeCol = (name, width = '1fr') => ({
   dataIndex: _.snakeCase(name),
@@ -103,18 +90,15 @@ export type EventInputsMap = {
   [key: string]: EventInput,
 };
 
-type EventLocaleInput = {|
-  key: string | null,
-  value: string | null,
-|};
-
-type EventLocaleInputsMap = {
-  [key: string]: EventLocaleInput,
-};
-
 export default {
   name: 'EventBuilder',
-  components: { TitledCard, EventSearch, Table, EventComponentSearch },
+  components: {
+    LocaleForm,
+    TitledCard,
+    EventSearch,
+    Table,
+    EventComponentSearch,
+  },
   mixins: [IconsMixin],
   data() {
     return ({
@@ -144,27 +128,31 @@ export default {
           value: null,
         },
       },
-      eventLocaleInputs: {
-        name: {
-          key: null,
-          value: null,
-        },
-        description: {
-          key: null,
-          value: null,
-        },
-      },
+      eventLocaleInputs_: [
+        'name',
+        'description:d',
+        'past_tense:pt',
+        'present_progressive:ppt',
+      ],
     }: {
       loading: boolean,
       currentEvent: null | EventType,
       eventInputs: EventInputsMap,
-      eventLocaleInputs: EventLocaleInputsMap,
+      eventLocaleInputs_: LocaleFormFieldsT,
     });
   },
   computed: {
+    /**
+     * Table Data for currently selected event.
+     * @returns {any}
+     */
     tableData() {
       return this.currentEvent ? [this.currentEvent.withTrans()] : [];
     },
+    /**
+     * Maps event input data to 'dirty' partial keys.
+     * @returns {Dictionary<string>}
+     */
     dirtyKeys() {
       return _.transform(
         this.eventInputs,
@@ -174,6 +162,10 @@ export default {
         {},
       );
     },
+    /**
+     * Formats dirty partial keys into a dirty full event key.
+     * @returns {string}
+     */
     dirtyEventKey() {
       const { actor, action, subaction, recipient, patient } = this.dirtyKeys;
       let baseKey = _.snakeCase(`${actor} ${action} ${recipient} ${patient}`);
@@ -182,6 +174,10 @@ export default {
       }
       return baseKey;
     },
+    /**
+     * Computes dirty event data for preview and eventual submission.
+     * @returns {$Shape<EventType>}
+     */
     dirtyEventData() {
       return this.dirtyEventKey
         ? [
@@ -204,19 +200,39 @@ export default {
           ]
         : [];
     },
+    /**
+     * Iterates over locale inputs and generates locale keys for each.
+     * @returns {Dictionary<LocaleFormFieldsT>}
+     */
+    eventLocaleInputs() {
+      return _.transform(
+        this.eventLocaleInputs_,
+        (result, value) => {
+          const [name, suffix = null] = _.split(value, ':');
+          const _key = `event.${_.snakeCase(this.dirtyEventKey)}${
+            _.isNil(suffix) ? '' : `_${suffix}`
+          }`;
+          result[name] = {
+            value,
+            key: _key,
+          };
+        },
+        {},
+      );
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 .card {
-  &-container {
+  &__container {
     display: grid;
     grid-auto-flow: row;
     grid-template-rows: 1fr auto;
     gap: 2rem;
   }
-  &--builder {
+  &__builder {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
     gap: 1rem;
