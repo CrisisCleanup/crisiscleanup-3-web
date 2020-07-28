@@ -5,10 +5,17 @@
         <base-text variant="h3" class="pb-2">{{
           $t('Search Events')
         }}</base-text>
-        <EventSearch :selected-event.sync="currentEvent" />
+        <EventSearch
+          :event-items.sync="eventResults_"
+          :loading.sync="isLoadingSearch"
+        />
         <div class="my-4">
           <base-text variant="h4" class="pb-2">Event Details</base-text>
-          <Table :columns="eventColumns" :data="tableData" />
+          <Table
+            :loading="isLoadingSearch"
+            :columns="eventColumns"
+            :data="tableData"
+          />
         </div>
       </div>
       <div>
@@ -61,15 +68,14 @@ const makeCol = (name, width = '1fr') => ({
 });
 
 const eventCols = [
-  makeCol('id', '0.5fr'),
+  makeCol('id', '0.2fr'),
   makeCol('key'),
   makeCol('name_t'),
   makeCol('description_t'),
   makeCol('actor_model', '0.5fr'),
   makeCol('patient_model', '0.5fr'),
   makeCol('recipient_model', '0.5fr'),
-  makeCol('total_uses', '0.5fr'),
-  makeCol('last_used_at', '0.5fr'),
+  makeCol('total_uses', '0.2fr'),
 ];
 
 const dirtyEventCols = [
@@ -103,7 +109,8 @@ export default {
   data() {
     return ({
       loading: false,
-      currentEvent: null,
+      eventResults_: [],
+      isLoadingSearch: false,
       eventColumns: eventCols,
       dirtyEventColumns: dirtyEventCols,
       eventInputs: {
@@ -135,8 +142,9 @@ export default {
         'present_progressive:ppt',
       ],
     }: {
+      isLoadingSearch: boolean,
       loading: boolean,
-      currentEvent: null | EventType,
+      eventResults_: EventType[],
       eventInputs: EventInputsMap,
       eventLocaleInputs_: LocaleFormFieldsT,
     });
@@ -147,7 +155,7 @@ export default {
      * @returns {any}
      */
     tableData() {
-      return this.currentEvent ? [this.currentEvent.withTrans()] : [];
+      return this.eventResults_.map((e) => e.withTrans());
     },
     /**
      * Maps event input data to 'dirty' partial keys.
