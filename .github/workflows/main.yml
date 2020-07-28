@@ -75,11 +75,10 @@ jobs:
       - name: Run Tests
         run: yarn test:unit
 
-      # TODO: Coverage integration
-      # - name: Upload Coverage
-      #   uses: coverallsapp/github-action@master
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+       - name: Upload Coverage
+         uses: coverallsapp/github-action@1.1.1
+         with:
+           github-token: ${{ secrets.GITHUB_TOKEN }}
 
   lint:
     name: Run Linter
