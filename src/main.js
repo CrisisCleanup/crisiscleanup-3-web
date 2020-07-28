@@ -30,6 +30,7 @@ import {
   snakeToTitleCase,
   toUpper,
   truncateFilter,
+  startCase,
 } from '@/filters';
 import Authenticated from '@/layouts/Authenticated';
 import Unauthenticated from '@/layouts/Unauthenticated';
@@ -151,6 +152,7 @@ Vue.filter('getRecurrenceString', getRecurrenceString);
 Vue.filter('upper', toUpper);
 Vue.filter('capitalize', capitalize);
 Vue.filter('truncate', truncateFilter);
+Vue.filter('startCase', startCase);
 
 // API & Auth
 if (AuthService.getUser()) {
