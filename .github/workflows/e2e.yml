@@ -37,6 +37,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Determine Yarn Cache
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache Node Modules
+        uses: actions/cache@v2.1.0
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-path.outputs.dir }}
+          key: yarn-e2e-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            yarn-e2e-
+
       - name: Checkout Api
         uses: actions/checkout@v2
         with:
