@@ -107,7 +107,7 @@ jobs:
           parallel: true
           start: yarn serve
           wait-on: 'http://localhost:8080'
-          wait-on-timeout: 240
+          wait-on-timeout: 360
           browser: chrome
           group: 'CI Chrome'
           headless: true
