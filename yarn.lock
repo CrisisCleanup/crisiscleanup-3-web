@@ -21470,10 +21470,10 @@ vue-undo-redo-stack@^1.0.0:
   resolved "https://registry.yarnpkg.com/vue-undo-redo-stack/-/vue-undo-redo-stack-1.0.0.tgz#76e3d57cb1bc21462d23d2a9eea7ad8f27d55ac6"
   integrity sha512-Q7b3lOD+t2VygrNVksla1NDtVBCbYq4o7zXCn9c52OzApfAft2r552Tr8W7aZDo6y+AZURPxuHY3B2Gqnv1OVg==
 
-vue2-gmap-custom-marker@^5.5.10:
-  version "5.5.10"
-  resolved "https://registry.yarnpkg.com/vue2-gmap-custom-marker/-/vue2-gmap-custom-marker-5.5.10.tgz#d14eba235f06a336c1d1153e8299eb3b9b0ca475"
-  integrity sha512-/FQpIi/hDrME/ePhWmUgyfJk+mpY2i3ZQ/Z7XUJoHD4PKndRwYnKiy/Y0xltxmbPJqSNJTzzpGqPMzzZH/guBQ==
+vue2-gmap-custom-marker@^5.6.0:
+  version "5.6.0"
+  resolved "https://registry.yarnpkg.com/vue2-gmap-custom-marker/-/vue2-gmap-custom-marker-5.6.0.tgz#e64d6f7e30cf202eeb2edd444e6aa3c71e5ccafa"
+  integrity sha512-seEHsvb6/rSQyirIhWplZh6SjFoKrQ8DCRFqKcYWBBQuluzgincXT8tdO6LNreRmQ8bRxAFVIwgN1vVn5OQOSg==
   dependencies:
     vue "^2.5.17"
     vue2-google-maps "^0.10.2"
