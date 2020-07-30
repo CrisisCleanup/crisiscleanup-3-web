@@ -5,7 +5,8 @@
  */
 
 import Logger from '@/utils/log';
-import { Model } from '@vuex-orm/core';
+import CCUModel from '@/models/model';
+import { Localized } from '@/models/decorators';
 
 /**
  * Enum of different event component types.
@@ -67,8 +68,9 @@ export type EventComponentCompletionArgs = {|
 
 const Log = Logger({ name: 'event_components.store' });
 
-export default class EventComponent extends Model {
-  static entity = 'event_component';
+@Localized
+class EventComponent extends CCUModel<EventComponentType> {
+  static entity = 'event_components';
 
   static fields() {
     return ({
@@ -102,6 +104,23 @@ export default class EventComponent extends Model {
   }
 
   /**
+   * Fetch all components by type.
+   * @param type - type of component.
+   * @returns {Promise<Query<InstanceOf<EventComponent>>>}
+   */
+  static async fetchAllByType(
+    type: EventComponentTypeT,
+  ): Promise<EventComponentType[]> {
+    await this.api().get(`/event_components`, {
+      dataKey: 'results',
+      params: {
+        type,
+      },
+    });
+    return this.query().where('type', type);
+  }
+
+  /**
    * Fetch completions by partial key and type.
    * @param partial
    * @param type
@@ -132,3 +151,5 @@ export default class EventComponent extends Model {
     }));
   }
 }
+
+export default EventComponent;
