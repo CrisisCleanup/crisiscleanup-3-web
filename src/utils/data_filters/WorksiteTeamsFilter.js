@@ -30,7 +30,12 @@ export default class WorksiteTeamsFilter extends Filter {
         return Boolean(value);
       })
       .forEach(([key]) => {
-        labels[key] = `${window.vue.$i18n.t('~~Team')}: ${Team.find(key).name}`;
+        const team = Team.find(key);
+        let name = '';
+        if (team) {
+          name = team.name;
+        }
+        labels[key] = `${window.vue.$i18n.t('~~Team')}: ${name}`;
       });
     return labels;
   }

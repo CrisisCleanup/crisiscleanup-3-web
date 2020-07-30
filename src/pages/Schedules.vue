@@ -57,7 +57,6 @@
 <script>
 import Schedule from '../components/Schedule';
 import CreateSchedule from '../components/CreateSchedule';
-import 'vue2-timepicker/dist/VueTimepicker.css';
 export default {
   name: 'Schedules',
   components: { CreateSchedule, Schedule },
@@ -84,10 +83,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.time-input {
-  @apply text-base border border-crisiscleanup-dark-100 outline-none p-2 mb-2 resize-none w-full;
-  height: 2.5rem !important;
-}
-</style>
