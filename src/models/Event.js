@@ -50,7 +50,8 @@ export type SuggestedEvent = {
 };
 
 export type SuggestedEventResponse = {|
-  key_suggest: SuggestedEvent[],
+  key_suggest?: SuggestedEvent[],
+  badge_key_suggest?: SuggestedEvent[],
 |};
 
 export type EventSearchResult = {|
@@ -102,13 +103,14 @@ class Event extends CCUModel<EventType> {
   /**
    * Fetch auto completions from partial key.
    * @param partialKey - key to fetch suggestions for.
-   * @returns {Promise<Array<{ id: number, key: string, ... }>>}
+   * @param field - field to search for.
+   * @returns {Promise<Array<{ id: number, value: string, ... }>>}
    */
   static async getCompletions(
     partialKey: string,
-  ): Promise<Array<{ id: number, key: string, ... }>> {
-    const parsedPartial = partialKey.toLowerCase().replace(' ', '_');
-    Log.debug('fetching completions for:', parsedPartial);
+    field: string,
+  ): Promise<Array<{ id: number, value: string, ... }>> {
+    Log.debug(`fetching completions for: ${partialKey} in field: ${field}`);
     const {
       response: { data },
     }: { response: { data: SuggestedEventResponse } } = await this.api().get(
@@ -116,15 +118,15 @@ class Event extends CCUModel<EventType> {
       {
         save: false,
         params: {
-          key_suggest: parsedPartial,
+          [`${field}_suggest`]: partialKey,
         },
       },
     );
-    const resp = data.key_suggest.pop();
-    return resp.options.map<{ id: number, key: string }>(
+    const resp: SuggestedEvent = data[`${field}_suggest`].pop();
+    return resp.options.map<{ id: number, value: string }>(
       (o: SuggestedEventItem) => ({
         id: o._source.id,
-        key: o._source.key,
+        value: o.text,
       }),
     );
   }
