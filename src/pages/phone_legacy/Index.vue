@@ -156,9 +156,9 @@ export default {
     },
     async getNextCall() {
       try {
-        const outbound = await PhoneOutbound.api().getNextOutbound(
-          this.currentIncidentId,
-        );
+        const outbound = await PhoneOutbound.api().getNextOutbound({
+          incidentId: this.currentIncidentId,
+        });
         this.nextOutbound = outbound;
       } catch (e) {
         this.nextOutbound = null;
