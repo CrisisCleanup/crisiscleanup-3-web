@@ -115,14 +115,14 @@ export const setPopup = async ({ open } = { open: true }) => {
 };
 
 export const STATES = Object.freeze({
-  OFFLINE: connect.AgentStateType.OFFLINE,
-  ROUTABLE: connect.AgentStateType.ROUTABLE,
-  INCOMING: connect.ContactStateType.INCOMING,
-  CONNECTING: connect.ContactStateType.CONNECTING,
-  CONNECTED: connect.ContactStateType.CONNECTED,
-  AGENT_PENDING: connect.ContactStateType.PENDING,
+  OFFLINE: 'offline',
+  ROUTABLE: 'routable',
+  INCOMING: 'incoming',
+  CONNECTING: 'connecting',
+  CONNECTED: 'connected',
+  AGENT_PENDING: 'pending',
   AGENT_CALLING: 'CallingCustomer',
-  DISCONNECTED: connect.ContactStateType.ENDED,
+  DISCONNECTED: 'disconnected',
   PENDING_CALL: 'PendingBusy',
   POLLING: 'polling',
   ON_CALL: 'Busy',

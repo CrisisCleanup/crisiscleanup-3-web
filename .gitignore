@@ -25,6 +25,8 @@ yarn-error.log*
 # Testing
 coverage
 .nyc_output/
+tests/screenshots
+tests/videos
 cypress/screenshots
 cypress/videos
 cypress.env.json

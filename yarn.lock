@@ -5227,7 +5227,7 @@
     semver "^6.0.0"
     string.prototype.padstart "^3.0.0"
 
-"@vue/cli-shared-utils@^4.4.6":
+"@vue/cli-shared-utils@^4.3.1", "@vue/cli-shared-utils@^4.4.6":
   version "4.4.6"
   resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-4.4.6.tgz#0ec59880920736c6dd79079ac0b5ceac29fa55e1"
   integrity sha512-ba+FZZCjiTSu2otnLjY4qXqASe7ZIQ/QBljk5oRPgqrR0p1NUkDPUcZhqa041aOaSW1yAfSfhOD7Q84nMnWhzQ==
@@ -21191,6 +21191,14 @@ vue-class-component@^7.1.0:
   version "7.2.5"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.5.tgz#212b3548c4fdd3314774c4adbc1c3792a40b52d0"
   integrity sha512-0CSftHY0bDTD+4FbYkuFf6+iKDjZ4h2in2YYJDRMk5daZIjrgT9LjFHvP7Rzqy9/s1pij3zDtTSLRUjsPWMwqg==
+
+vue-cli-plugin-cypress-experimental@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-cypress-experimental/-/vue-cli-plugin-cypress-experimental-1.1.0.tgz#be69ac0e889ccaf52af0ff0d3cd00fc575a38404"
+  integrity sha512-OW7/iemCJ8Utnkgh1eEUFWF4+38b94XDYpcBMMQk2ClKPdeGclPqDrjxFlnLa+kNJAY4ef8BQU7DJP99k0ZUsg==
+  dependencies:
+    "@vue/cli-shared-utils" "^4.3.1"
+    eslint-plugin-cypress "^2.10.3"
 
 vue-cli-plugin-s3-deploy@^4.0.0-rc3:
   version "4.0.0-rc3"

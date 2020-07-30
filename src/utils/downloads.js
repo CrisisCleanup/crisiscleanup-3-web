@@ -14,6 +14,10 @@ export function forceFileDownload(response) {
   document.body.appendChild(link);
   link.href = url;
   link.target = '_blank';
+  if (window && window.Cypress) {
+    // skip actual download in cy e2e testing environment.
+    return;
+  }
   link.click();
   link.remove();
   window.URL.revokeObjectURL(url);

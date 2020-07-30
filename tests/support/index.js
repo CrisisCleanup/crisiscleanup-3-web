@@ -14,7 +14,6 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-// @TODO: Performance issues causing CI to fail
-// import '@cypress/code-coverage/support';
-require('cypress-plugin-retries');
-require('./commands');
+import 'cypress-vue-unit-test/dist/support';
+import 'cypress-plugin-retries';
+import './commands';
