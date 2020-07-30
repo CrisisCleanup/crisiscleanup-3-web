@@ -34,6 +34,19 @@
           </div>
           <div>
             <base-text variant="h4" class="pb-1">
+              Badge Key
+            </base-text>
+            <FormSelect
+              searchable
+              placeholder="Badge Key"
+              label="text"
+              item-key="id"
+              @search="(payload) => debouncedBadgeKey(payload)"
+              :options="badgeKeys_"
+            />
+          </div>
+          <div>
+            <base-text variant="h4" class="pb-1">
               Required Attributes
             </base-text>
             <FormSelect
@@ -66,6 +79,7 @@ import { IconsMixin } from '@/mixins';
 import EventSearch from '@/components/admin/EventSearch.vue';
 import EventComponentSearch from '@/components/admin/EventComponentSearch.vue';
 import EventComponent, { EventComponentTypes } from '@/models/EventComponent';
+import Event from '@/models/Event';
 import type { EventComponentTypeT } from '@/models/EventComponent';
 import Table from '@/components/Table.vue';
 import _ from 'lodash';
@@ -156,16 +170,31 @@ export default {
         'past_tense:pt',
         'present_progressive:ppt',
       ],
+      badgeKeys_: [],
     }: {
       isLoadingSearch: boolean,
       loading: boolean,
       eventResults_: EventType[],
       eventInputs: EventInputsMap,
       eventLocaleInputs_: LocaleFormFieldsT,
+      badgeKeys_: string[],
     });
   },
   async mounted() {
     await EventComponent.fetchAllByType(EventComponentTypes.ATTR);
+  },
+  created() {
+    this.debouncedBadgeKey = _.debounce(this.handleBadgeKeys, 250);
+  },
+  methods: {
+    async handleBadgeKeys(value: string) {
+      if (!value) return;
+      const results = await Event.getCompletions(value, 'badge_key');
+      this.badgeKeys_ = _.uniqBy(
+        results.map((r) => r.value),
+        _.isEqual,
+      );
+    },
   },
   computed: {
     /**
