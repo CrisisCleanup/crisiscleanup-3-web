@@ -149,13 +149,12 @@ export default {
     onInput(value) {
       this.$emit('input', value);
       if (this.multiple) {
+        const current = this.value || [];
         this.$emit(
           'changed',
           xor(
             value,
-            this.value.map((item) =>
-              this.itemKey ? item[this.itemKey] : item,
-            ),
+            current.map((item) => (this.itemKey ? item[this.itemKey] : item)),
           ),
         );
       }
