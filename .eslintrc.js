@@ -14,9 +14,7 @@ module.exports = {
     node: true,
     'cypress/globals': true,
   },
-  plugins: [
-    'flowtype'
-  ],
+  plugins: ['flowtype', 'cypress'],
   extends: [
     'airbnb-base',
     'plugin:vue/strongly-recommended',
@@ -25,7 +23,7 @@ module.exports = {
     'prettier/vue',
     'plugin:cypress/recommended',
     'plugin:vue-types/strongly-recommended',
-    'plugin:flowtype/recommended'
+    'plugin:flowtype/recommended',
   ],
   globals: {
     Atomics: 'readonly',

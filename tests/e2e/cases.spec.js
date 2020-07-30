@@ -6,8 +6,8 @@
  */
 
 describe('Cases Page', () => {
-  beforeEach(cy.login);
   beforeEach(() => {
+    cy.login();
     cy.server();
     cy.route({
       method: 'GET',

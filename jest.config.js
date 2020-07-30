@@ -7,7 +7,7 @@ module.exports = {
     '!**/node_modules/**',
     '!**/*.test.js',
   ],
-  // TODO: integrate coveralls or something similiar
+  modulePathIgnorePatterns: ['<rootDir>/tests'], // cypress tests
   moduleDirectories: ['src', 'node_modules', '.storybook'],
   moduleFileExtensions: ['js', 'json', 'vue', 'node'],
   moduleNameMapper: {

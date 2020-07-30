@@ -4,31 +4,32 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode production",
-    "serve-dev": "cross-env NODE_ENV=development vue-cli-service serve --mode development",
     "build": "vue-cli-service build",
-    "lint-fix": "vue-cli-service lint .",
-    "lint-staged": "lint-staged",
-    "lint": "vue-cli-service lint --no-fix  .",
-    "prettify": "prettier --write {.,**}/*.js **/*.vue **/**/*.{vue,js}",
-    "format": "yarn lint-fix && yarn prettify",
-    "deploy-development": "vue-cli-service build --mode development && cross-env VUE_APP_STAGE=development vue-cli-service s3-deploy",
-    "deploy-staging": "vue-cli-service build --mode production && cross-env VUE_APP_STAGE=staging vue-cli-service s3-deploy",
-    "deploy-production": "vue-cli-service build --mode production && cross-env VUE_APP_STAGE=production vue-cli-service s3-deploy",
-    "compile-icons": "./template-compiler.js",
-    "test": "yarn test:unit && yarn test:e2e",
     "test:unit": "cross-env VUE_CLI_BABEL_TARGET_NODE=true VUE_CLI_BABEL_TRANSPILE_MODULES=true NODE_ENV=test vue-cli-service test:unit --coverage",
-    "test:unit-fix": "yarn test:unit -u",
-    "test:watch": "yarn test:unit --watchAll --silent --coverage=false",
-    "test:e2e": "cross-env NODE_ENV=test cypress run",
-    "test:e2e:hl": "yarn run test:e2e --headless",
-    "test:cy": "cross-env NODE_ENV=test cypress run --browser chrome",
-    "test:percy": "cross-env NODE_ENV=test percy exec -- yarn run test:cy",
+    "test:e2e": "cross-env NODE_ENV=test vue-cli-service test:e2e",
+    "lint": "vue-cli-service lint --no-fix  .",
+    "build-storybook": "cross-env NODE_ENV=storybook build-storybook",
+    "compile-icons": "./template-compiler.js",
     "cy:open": "cross-env NODE_ENV=test cypress open",
     "cy:patch": "node ./internal/scripts/patchCypress.js",
-    "storybook": "cross-env NODE_ENV=storybook start-storybook -p 6006",
-    "build-storybook": "cross-env NODE_ENV=storybook build-storybook",
+    "deploy-development": "vue-cli-service build --mode development && cross-env VUE_APP_STAGE=development vue-cli-service s3-deploy",
+    "deploy-production": "vue-cli-service build --mode production && cross-env VUE_APP_STAGE=production vue-cli-service s3-deploy",
+    "deploy-staging": "vue-cli-service build --mode production && cross-env VUE_APP_STAGE=staging vue-cli-service s3-deploy",
+    "flow": "flow",
+    "format": "yarn lint-fix && yarn prettify",
+    "lint-fix": "vue-cli-service lint .",
+    "lint-staged": "lint-staged",
     "postinstall": "yarn cache clean",
-    "flow": "flow"
+    "prettify": "prettier --write {.,**}/*.js **/*.vue **/**/*.{vue,js}",
+    "serve-dev": "cross-env NODE_ENV=development vue-cli-service serve --mode development",
+    "storybook": "cross-env NODE_ENV=storybook start-storybook -p 6006",
+    "test": "yarn test:unit && yarn test:e2e",
+    "test:components": "vue-cli-service test:components",
+    "test:cy": "cross-env NODE_ENV=test tests run --browser chrome",
+    "test:e2e:hl": "yarn run test:e2e --headless",
+    "test:percy": "cross-env NODE_ENV=test percy exec -- yarn run test:cy",
+    "test:unit-fix": "yarn test:unit -u",
+    "test:watch": "yarn test:unit --watchAll --silent --coverage=false"
   },
   "dependencies": {
     "@authenio/samlify-xsd-schema-validator": "^1.0.3",
@@ -210,19 +211,23 @@
     "storybook-vue-router": "^1.0.7",
     "tailwindcss": "^1.5.1",
     "thread-loader": "^2.1.3",
+    "vue-cli-plugin-cypress-experimental": "~1.1.0",
     "vue-docgen-api": "^4.15.1",
     "vue-docgen-loader": "^1.5.0",
     "vue-template-compiler": "2.6.11",
     "vue-undo-redo-stack": "^1.0.0",
     "vuex-mock-store": "0.0.8"
   },
-  "resolutions": {
-    "flow-typed/semver": "7.1.3"
-  },
   "browserslist": [
     "> 1%",
     "last 2 versions"
   ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "lint-staged && yarn test:unit"
+    }
+  },
   "lint-staged": {
     "*.{js,vue}": [
       "vue-cli-service lint",
@@ -234,10 +239,7 @@
       "git add --force"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "lint-staged && yarn test:unit"
-    }
+  "resolutions": {
+    "flow-typed/semver": "7.1.3"
   }
 }
