@@ -5,8 +5,8 @@
  */
 
 import Logger from '@/utils/log';
-import { Model } from '@vuex-orm/core';
-import _ from 'lodash';
+import CCUModel from '@/models/model';
+import { Localized } from '@/models/decorators';
 
 export type EventType = {|
   id: number,
@@ -69,8 +69,9 @@ export type EventSearchQueryT = {|
 
 const Log = Logger({ name: 'events.store' });
 
-export default class Event extends Model {
-  static entity = 'event';
+@Localized
+class Event extends CCUModel<EventType> {
+  static entity = 'events';
 
   static fields() {
     return ({
@@ -96,10 +97,6 @@ export default class Event extends Model {
       created_at: this.attr('', (value) => Date.parse(value)),
       updated_at: this.attr('', (value) => Date.parse(value)),
     }: EventType);
-  }
-
-  static fetchById(id: number) {
-    return this.api().get(`/events/${id}`);
   }
 
   /**
@@ -153,21 +150,6 @@ export default class Event extends Model {
     );
     return data.results;
   }
-
-  /**
-   * Returns event object with pre-translated values.
-   * @returns {EventType}
-   */
-  withTrans(): EventType {
-    return _.transform(
-      this,
-      (result, value, key: string) => {
-        result[key] = value;
-        if (key.includes('_t')) {
-          result[key] = window.vue.$t(value);
-        }
-      },
-      {},
-    );
-  }
 }
+
+export default Event;

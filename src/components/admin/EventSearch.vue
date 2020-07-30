@@ -47,11 +47,7 @@ export default {
     async fetchDetails(): void {
       this.eventItems = [];
       await _.mapValues(this.eventResults, async ({ id }) => {
-        const exists = await Event.query().whereId(id).exists();
-        if (!exists) {
-          await Event.fetchById(id);
-        }
-        const event = Event.find(id);
+        const event = await Event.fetchOrFindId(id);
         this.eventItems.push(event);
       });
       this.$emit('update:event-items', this.eventItems);
