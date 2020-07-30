@@ -18,6 +18,7 @@
     "
     @input="onInput"
     @search:focus="open"
+    @search="(payload) => $emit('search', payload)"
   >
     <template #selected-option="option">
       <slot name="selected-option" :option="option" />
