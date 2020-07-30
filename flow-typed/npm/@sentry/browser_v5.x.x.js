@@ -1,5 +1,5 @@
-// flow-typed signature: 9f3b002a4fe905e665d049801e4a5f7f
-// flow-typed version: 0f57ed492b/@sentry/browser_v5.x.x/flow_>=v0.90.x
+// flow-typed signature: 2fc805a0cc6a4c4f229f1ab5259c37a3
+// flow-typed version: 40038b550b/@sentry/browser_v5.x.x/flow_>=v0.90.x
 
 // @flow
 
@@ -397,6 +397,9 @@ declare module '@sentry/browser' {
             hint?: EventHint,
         ) => Promise<SentryEvent | null> | SentryEvent | null,
 
+        +denyUrls?: $ReadOnlyArray<string | RegExp>,
+        +allowUrls?: $ReadOnlyArray<string | RegExp>,
+        // Deprecated as of 5.18.0, prefer the allowUrls/denyUrls instead
         +blacklistUrls?: $ReadOnlyArray<string | RegExp>,
         +whitelistUrls?: $ReadOnlyArray<string | RegExp>,
         // This really should be typed as:
