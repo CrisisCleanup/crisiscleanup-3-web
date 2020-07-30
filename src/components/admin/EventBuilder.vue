@@ -32,6 +32,18 @@
               :type="eventInputs[key].type"
             />
           </div>
+          <div>
+            <base-text variant="h4" class="pb-1">
+              Required Attributes
+            </base-text>
+            <FormSelect
+              searchable
+              multiple
+              placeholder="Required Attrs"
+              label="name"
+              :options="componentAttrs"
+            />
+          </div>
         </div>
         <base-text variant="body" class="pb-3">Set Localizations</base-text>
         <div class="card__locale py-4">
@@ -53,25 +65,26 @@ import type { EventType } from '@/models/Event';
 import { IconsMixin } from '@/mixins';
 import EventSearch from '@/components/admin/EventSearch.vue';
 import EventComponentSearch from '@/components/admin/EventComponentSearch.vue';
-import { EventComponentTypes } from '@/models/EventComponent';
+import EventComponent, { EventComponentTypes } from '@/models/EventComponent';
 import type { EventComponentTypeT } from '@/models/EventComponent';
 import Table from '@/components/Table.vue';
 import _ from 'lodash';
 import LocaleForm from '@/components/forms/LocaleForm.vue';
 import type { LocaleFormFieldsT } from '@/components/forms/LocaleForm.vue';
+import FormSelect from '@/components/FormSelect.vue';
 
-const makeCol = (name, width = '1fr') => ({
+const makeCol = (name, width = '1fr', title) => ({
   dataIndex: _.snakeCase(name),
   key: _.snakeCase(name),
-  title: _.startCase(_.replace(name, '_t', '')),
+  title: title || _.startCase(_.replace(name, '_t', '')),
   width,
 });
 
 const eventCols = [
   makeCol('id', '0.2fr'),
-  makeCol('key'),
+  makeCol('key', '0.7fr'),
   makeCol('name_t'),
-  makeCol('description_t'),
+  makeCol('past_tense_t', '1fr', 'Past Tense'),
   makeCol('actor_model', '0.5fr'),
   makeCol('patient_model', '0.5fr'),
   makeCol('recipient_model', '0.5fr'),
@@ -104,6 +117,7 @@ export default {
     EventSearch,
     Table,
     EventComponentSearch,
+    FormSelect,
   },
   mixins: [IconsMixin],
   data() {
@@ -149,13 +163,16 @@ export default {
       eventLocaleInputs_: LocaleFormFieldsT,
     });
   },
+  async mounted() {
+    await EventComponent.fetchAllByType(EventComponentTypes.ATTR);
+  },
   computed: {
     /**
      * Table Data for currently selected event.
      * @returns {any}
      */
     tableData() {
-      return this.eventResults_.map((e) => e.withTrans());
+      return this.eventResults_.map((e) => e.withTrans<EventType>());
     },
     /**
      * Maps event input data to 'dirty' partial keys.
@@ -227,6 +244,16 @@ export default {
         },
         {},
       );
+    },
+    /**
+     * Returns all Event Components of Attr type.
+     * @returns {Data.Collection<InstanceOf<EventComponent>>}
+     */
+    componentAttrs() {
+      return EventComponent.query()
+        .where('type', EventComponentTypes.ATTR)
+        .get()
+        .map((e) => e.withTrans());
     },
   },
 };
