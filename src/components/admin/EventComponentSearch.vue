@@ -1,15 +1,22 @@
 <template>
-  <autocomplete
-    v-bind="$attrs"
-    :icon="icons.search"
-    :suggestions="eventSuggestions"
-    size="large"
-    display-property="key"
-    :loading="loading"
-    :clear-on-selected="false"
-    @search="debouncedCompletions"
-    @selected="fetchSelected"
-  />
+  <div>
+    <autocomplete
+      v-bind="$attrs"
+      :icon="icons.search"
+      :suggestions="eventSuggestions"
+      size="large"
+      display-property="key"
+      :loading="loading"
+      :clear-on-selected="false"
+      @search="debouncedCompletions"
+      @selected="fetchSelected"
+    />
+    <template v-if="selected">
+      <base-text variant="bodysm" class="text-gray-800 pl-1">{{
+        selected.description
+      }}</base-text>
+    </template>
+  </div>
 </template>
 
 <script>
@@ -49,6 +56,11 @@ export default {
   },
   created() {
     this.debouncedCompletions = _.debounce(this.fetchCompletions, 250);
+  },
+  computed: {
+    selected() {
+      return this.selectedComponent ? this.selectedComponent.withTrans() : null;
+    },
   },
   methods: {
     async fetchCompletions(key: string): void {
