@@ -98,6 +98,7 @@ const dirtyEventCols = [
   makeCol('actor_model', '0.5fr'),
   makeCol('patient_model', '0.5fr'),
   makeCol('recipient_model', '0.5fr'),
+  makeCol('points', '0.25fr'),
 ];
 
 export type EventInput = {|
@@ -199,6 +200,13 @@ export default {
       }
       return baseKey;
     },
+    dirtyEventPoints() {
+      return _.reduce(
+        this.eventInputs,
+        (result, value) => result + _.get(value.value, 'points', 0),
+        0,
+      );
+    },
     /**
      * Computes dirty event data for preview and eventual submission.
      * @returns {$Shape<EventType>}
@@ -221,6 +229,7 @@ export default {
                 'key',
                 '',
               ),
+              points: this.dirtyEventPoints,
             },
           ]
         : [];
