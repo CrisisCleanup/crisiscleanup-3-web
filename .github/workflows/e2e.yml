@@ -29,6 +29,7 @@ jobs:
   cypress:
     name: E2E // Cypress
     runs-on: ubuntu-16.04
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -93,7 +94,7 @@ jobs:
       - uses: zcong1993/setup-dockerize@v1.2.0
 
       - name: Wait for Api
-        run: 'dockerize -wait-retry-interval 5s -timeout 240s -wait http://localhost:5000/health'
+        run: 'dockerize -wait-retry-interval 5s -timeout 380s -wait http://localhost:5000/health'
 
       - name: Dump Api Logs
         run: docker-compose logs
