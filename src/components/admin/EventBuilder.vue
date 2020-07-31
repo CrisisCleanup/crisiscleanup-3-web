@@ -98,7 +98,7 @@ const eventCols = [
   makeCol('id', '0.2fr'),
   makeCol('key', '0.7fr'),
   makeCol('name_t'),
-  makeCol('past_tense_t', '1fr', 'Past Tense'),
+  makeCol('description'),
   makeCol('actor_model', '0.5fr'),
   makeCol('patient_model', '0.5fr'),
   makeCol('recipient_model', '0.5fr'),
