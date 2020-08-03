@@ -74,22 +74,26 @@
             :options="selectValues"
             item-key="value"
             label="name_t"
-            :value="status"
-            @input="updateOutboundStatus"
+            v-model="status"
             placeholder="Call Status "
             select-classes="border border-crisiscleanup-dark-100"
           />
           <textarea
             rows="3"
+            v-model="currentNotes"
             class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
             :placeholder="$t('~~Notes')"
-            @input="(value) => setCaseStatus({ notes: value })"
           ></textarea>
           <base-button
             class="self-end"
             size="small"
             variant="solid"
-            :action="getNextCall"
+            :action="
+              () => {
+                updateOutboundStatus();
+                getNextCall();
+              }
+            "
           >
             {{ $t('~~Call Complete - Next Call') }}
           </base-button>
@@ -142,6 +146,7 @@ export default {
       currentType: null,
       status: null,
       iframeLoading: true,
+      currentNotes: '',
     };
   },
   async mounted() {
@@ -167,6 +172,7 @@ export default {
       }
       await this.createCards();
       this.status = null;
+      this.currentNotes = '';
       this.caseId = null;
       this.currentType = null;
     },
@@ -198,12 +204,12 @@ export default {
         }));
       }
     },
-    async updateOutboundStatus(statusId) {
+    async updateOutboundStatus() {
       await PhoneOutbound.api().updateStatus(this.nextOutbound.id, {
-        statusId,
-        worksiteId: Boolean(this.worksite) && this.worksite.id,
+        statusId: this.status,
+        notes: this.currentNotes,
+        worksiteId: this.worksite ? this.worksite.id : null,
       });
-      this.status = statusId;
     },
   },
   computed: {
