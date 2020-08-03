@@ -947,6 +947,25 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
         </div>
          
         <p>
+          active-link
+        </p>
+      </div>
+      <div
+        class="flex flex-col border-2 text-center"
+      >
+        <div
+          class="m-8 align-self-center flex items-center base-icon js-  "
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
+         
+        <p>
           edit
         </p>
       </div>
@@ -1482,6 +1501,25 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
           hangup
         </p>
       </div>
+      <div
+        class="flex flex-col border-2 text-center"
+      >
+        <div
+          class="m-8 align-self-center flex items-center base-icon js-  "
+        >
+          <img
+            alt=""
+            class="ccu-icon cursor-pointer xl"
+            src="IMAGE_MOCK"
+            title=""
+          />
+           
+        </div>
+         
+        <p>
+          time
+        </p>
+      </div>
     </div>
   </div>
 </div>
@@ -1904,6 +1942,7 @@ exports[`Storyshots Basics|BaseRadio With Basics 1`] = `
   >
     <label
       class="z-50 flex items-center"
+      style="--color: #353535;"
     >
       <input
         class=""
