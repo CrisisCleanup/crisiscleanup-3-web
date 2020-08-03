@@ -9,7 +9,7 @@
     ></base-button>
     <modal
       v-if="showCreateScheduleModal"
-      modal-classes="bg-white max-w-5xl shadow"
+      modal-classes="bg-white max-w-6xl shadow"
       :title="$t('~~Create Schedule')"
       closeable
       @close="
@@ -21,6 +21,7 @@
       <Wizard
         :steps="[
           { id: 'schedule', name: 'Schedule Information', disabled: false },
+          { id: 'template', name: 'Select Template', disabled: false },
           { id: 'days', name: 'Select Days', disabled: false },
           { id: 'users', name: 'Select Users', disabled: false },
         ]"
@@ -70,25 +71,150 @@
             />
           </div>
         </template>
-        <template #days>
-          <div class="flex m-3">
-            <div class="w-3/4">
-              <v-datepicker
-                v-model="days"
-                :update-on-input="false"
-                color="yellow"
-                :masks="{
-                  input: 'YYYY-MM-DD',
-                }"
-                :popover="{ placement: 'bottom', visibility: 'click' }"
-                mode="multiple"
+        <template #template>
+          <div class="flex flex-col items-center justify-center pt-8">
+            <div class="grid grid-cols-2 grid-rows-2 gap-4">
+              <base-radio
+                class="border p-3 w-56 h-40 flex flex-col items-start"
+                :color="selectedTemplate === 'Custom' ? '#009bff' : null"
+                :class="
+                  selectedTemplate === 'Custom'
+                    ? 'border-crisiscleanup-dark-blue text-crisiscleanup-dark-blue'
+                    : null
+                "
+                name="Custom"
+                label="Custom"
+                :value="selectedTemplate"
+                @change="
+                  (value) => {
+                    selectedTemplate = value;
+                  }
+                "
               >
-                <base-button
-                  :text="$t('~~Set Dates')"
-                  class="flex items-center justify-start pb-3 text-primary-dark"
-                />
-              </v-datepicker>
-              <div :style="gridStyle" class="grid" v-if="days.length">
+                <div
+                  class="mt-4 flex flex-col items-center justify-center text-center"
+                >
+                  <div>{{ $t('~~Custom') }}</div>
+                  <div class="text-xs">
+                    {{ $t('~~Select Days, Create time slots') }}
+                  </div>
+                </div>
+              </base-radio>
+              <base-radio
+                class="border p-3 w-56 h-40 flex flex-col items-start"
+                :color="
+                  selectedTemplate === 'Field Worker Schedule'
+                    ? '#009bff'
+                    : null
+                "
+                :class="
+                  selectedTemplate === 'Field Worker Schedule'
+                    ? 'border-crisiscleanup-dark-blue text-crisiscleanup-dark-blue'
+                    : null
+                "
+                name="Field Worker Schedule"
+                label="Field Worker Schedule"
+                :value="selectedTemplate"
+                @change="
+                  (value) => {
+                    selectedTemplate = value;
+                    createPresetSchedule('field_worker');
+                  }
+                "
+              >
+                <div
+                  class="mt-4 flex flex-col items-center justify-center text-center"
+                >
+                  <div>{{ $t('~~Field Worker Template') }}</div>
+                  <div class="text-xs">
+                    {{ $t('~~3 weeks, 6 days, 4 time slots') }}
+                  </div>
+                </div>
+              </base-radio>
+              <base-radio
+                class="border p-3 w-56 h-40 flex flex-col items-start"
+                :color="
+                  selectedTemplate === 'Phone Volunteer Schedule'
+                    ? '#009bff'
+                    : null
+                "
+                :class="
+                  selectedTemplate === 'Phone Volunteer Schedule'
+                    ? 'border-crisiscleanup-dark-blue text-crisiscleanup-dark-blue'
+                    : null
+                "
+                name="Phone Volunteer Schedule"
+                label="Phone Volunteer Schedule"
+                :value="selectedTemplate"
+                @change="
+                  (value) => {
+                    selectedTemplate = value;
+                    createPresetSchedule('phone_volunteer');
+                  }
+                "
+              >
+                <div
+                  class="mt-4 flex flex-col items-center justify-center text-center"
+                >
+                  <div>{{ $t('~~Phone Volunteer Template') }}</div>
+                  <div class="text-xs">
+                    {{ $t('~~1 week, 7 days, 3 time slots') }}
+                  </div>
+                </div>
+              </base-radio>
+              <base-radio
+                class="border p-3 w-56 h-40 flex flex-col items-start"
+                :color="
+                  selectedTemplate === 'Team Organizer Schedule'
+                    ? '#009bff'
+                    : null
+                "
+                :class="
+                  selectedTemplate === 'Team Organizer Schedule'
+                    ? 'border-crisiscleanup-dark-blue text-crisiscleanup-dark-blue'
+                    : null
+                "
+                name="Team Organizer Schedule"
+                label="Team Organizer Schedule"
+                :value="selectedTemplate"
+                @change="
+                  (value) => {
+                    selectedTemplate = value;
+                    createPresetSchedule('team_organizer');
+                  }
+                "
+              >
+                <div
+                  class="mt-4 flex flex-col items-center justify-center text-center"
+                >
+                  <div>{{ $t('~~Team Organizer Template') }}</div>
+                  <div class="text-xs">
+                    {{ $t('~~3 weeks, 21 days, 4 time slots') }}
+                  </div>
+                </div>
+              </base-radio>
+            </div>
+          </div>
+        </template>
+        <template #days>
+          <div class="flex flex-col mx-3 items-center justify-center">
+            <v-datepicker
+              v-model="days"
+              :update-on-input="false"
+              color="yellow"
+              :masks="{
+                input: 'YYYY-MM-DD',
+              }"
+              :popover="{ placement: 'bottom', visibility: 'click' }"
+              mode="multiple"
+            >
+              <base-button
+                :text="$t('~~Set Dates')"
+                class="flex items-center justify-start pb-3 text-primary-dark"
+              />
+            </v-datepicker>
+            <div>
+              <div :style="gridStyle" class="main-grid" v-if="days.length">
                 <div class="grid-cell">
                   <div class="p-2 flex items-center justify-center">
                     {{ $t('~~ALL DAY') }}
@@ -113,39 +239,58 @@
 
                 <template v-for="shift in schedule.shifts">
                   <div class="grid-cell">
-                    <div class="flex items-center justify-start">
-                      <div class="flex-col flex items-start justify-center">
-                        <div v-if="shift.isEditing">
+                    <div class="flex items-center justify-start w-full px-1">
+                      <div
+                        class="flex-col flex items-start justify-center w-full"
+                      >
+                        <div
+                          v-if="shift.isEditing"
+                          class="flex flex-col items-center justify-center"
+                        >
                           <base-input
-                            size="small"
-                            class="w-full my-1"
-                            :placeholder="$t('~~Shift Name')"
                             v-model="shift.name"
-                          ></base-input>
-                          <div class="flex my-1 pb-2">
+                            type="text"
+                            class="w-full"
+                            :placeholder="$t('~~Shift Name')"
+                            size="small"
+                          />
+                          <div class="flex my-1 relative">
                             <TimeSelect
                               :placeholder="$t('~~Start')"
-                              :value="shift.start_time"
+                              :value="
+                                shift.buffer.start_time
+                                  ? $moment(shift.buffer.start_time, 'HH:mm:ss')
+                                  : $moment(shift.start_time, 'HH:mm:ss')
+                              "
+                              :key="shift.buffer.start_time"
                               @input="
                                 (value) => {
-                                  shift.buffer.start_time = value;
+                                  shift.buffer.start_time =
+                                    value && value.format('HH:mm:ss');
+                                  shift = { ...shift };
                                 }
                               "
-                              class="mr-1"
+                              style="margin-right: 5px;"
                             ></TimeSelect>
                             <TimeSelect
                               :placeholder="$t('~~End')"
                               @input="
                                 (value) => {
-                                  shift.buffer.end_time = value;
+                                  shift.buffer.end_time =
+                                    value && value.format('HH:mm:ss');
+                                  shift = { ...shift };
                                 }
                               "
-                              :value="shift.end_time"
-                              class="ml-1"
+                              :value="
+                                shift.buffer.end_time
+                                  ? $moment(shift.buffer.end_time, 'HH:mm:ss')
+                                  : $moment(shift.end_time, 'HH:mm:ss')
+                              "
+                              :key="shift.buffer.end_time"
                             ></TimeSelect>
                           </div>
                           <div
-                            class="grid grid-cols-2 divide-x text-xs divide-gray-400 my-1"
+                            class="grid grid-cols-2 divide-x text-xs divide-gray-400 w-8"
                           >
                             <base-button
                               class="px-1 text-primary-dark"
@@ -169,8 +314,8 @@
                             />
                           </div>
                         </div>
-                        <div v-else>
-                          <div class="flex mt-1 justify-end w-full">
+                        <div v-else class="w-full">
+                          <div class="flex justify-end w-full">
                             <ccu-icon
                               :alt="$t('actions.edit')"
                               size="sm"
@@ -188,9 +333,9 @@
                               type="trash"
                             />
                           </div>
-                          <div class="px-5 pb-1">
+                          <div class="px-2">
                             <div class="mb-1">{{ shift.name }}</div>
-                            <div class="mb-1 flex items-center">
+                            <div class="mb-1 flex">
                               <ccu-icon
                                 :alt="$t('actions.delete')"
                                 size="small"
@@ -221,7 +366,9 @@
                 </template>
                 <div
                   class="h-10 border p-2 border-crisiscleanup-dark-blue border-dashed text-crisiscleanup-dark-blue cursor-pointer flex items-center"
-                  :style="`grid-column: span ${schedule.days.length + 1}`"
+                  :style="`grid-column: span ${
+                    schedule.days.length + 1
+                  }; margin-right: -2px;`"
                   @click="addShift"
                 >
                   <ccu-icon
@@ -234,55 +381,84 @@
                 </div>
               </div>
             </div>
-            <div class="pl-6">
-              <div class="mb-2">{{ $t('~~Select Template') }}</div>
-              <base-radio
-                class="mb-4"
-                name="Custom"
-                label="Custom"
-                :value="selectedTemplate"
-                @change="
-                  (value) => {
-                    selectedTemplate = value;
-                  }
-                "
-              />
-              <base-radio
-                class="mb-4"
-                name="Field Worker Schedule"
-                label="Field Worker Schedule"
-                :value="selectedTemplate"
-                @change="
-                  (value) => {
-                    selectedTemplate = value;
-                    createPresetSchedule('field_worker');
-                  }
-                "
-              />
-              <base-radio
-                class="mb-4"
-                name="Phone Volunteer Schedule"
-                label="Phone Volunteer Schedule"
-                :value="selectedTemplate"
-                @change="
-                  (value) => {
-                    selectedTemplate = value;
-                    createPresetSchedule('phone_volunteer');
-                  }
-                "
-              />
-              <base-radio
-                class="mb-4"
-                name="Team Organizer Schedule"
-                label="Team Organizer Schedule"
-                :value="selectedTemplate"
-                @change="
-                  (value) => {
-                    selectedTemplate = value;
-                    createPresetSchedule('team_organizer');
-                  }
-                "
-              />
+          </div>
+        </template>
+        <template #users>
+          <div class="flex flex-col items-center justify-center pt-3">
+            <div class="w-132 shadow px-3 mb-1">
+              <div class="text-base py-1 flex items-center justify-between">
+                {{ $t('~~Select Users') }}
+                <span
+                  class="text-3xl cursor-pointer"
+                  @click="showSelectUsers = !showSelectUsers"
+                  >-</span
+                >
+              </div>
+              <div v-show="showSelectUsers">
+                <base-input
+                  :value="userSearch"
+                  icon="search"
+                  :placeholder="$t('actions.search')"
+                  class="mb-3"
+                  size="small"
+                  @input="
+                    (value) => {
+                      userSearch = value;
+                      throttle(getUsers, 1000)();
+                    }
+                  "
+                ></base-input>
+                <div class="h-64 overflow-scroll">
+                  <base-checkbox
+                    :value="selectedUsers.has(user.email)"
+                    v-for="user in users"
+                    :key="user.id"
+                    class="flex items-center pb-1"
+                    @input="
+                      (value) => {
+                        if (value) {
+                          selectedUsers.add(user.email);
+                        } else {
+                          selectedUsers.delete(user.email);
+                        }
+                        selectedUsers = new Set(selectedUsers);
+                      }
+                    "
+                  >
+                    <div
+                      style="
+                        display: grid;
+                        grid-template-columns: max-content 1fr;
+                      "
+                    >
+                      <Avatar
+                        :initials="user.first_name"
+                        :url="user.profilePictureUrl"
+                        class="mr-2"
+                      />
+                      <div>
+                        {{ user.full_name }}
+                        <div class="text-xs text-primary-dark">
+                          {{ user.currentRole.name_t }}
+                        </div>
+                      </div>
+                    </div>
+                  </base-checkbox>
+                </div>
+              </div>
+            </div>
+            <div class="w-132 shadow px-3">
+              <div class="text-base py-1 flex items-center justify-between">
+                {{ $t('~~Invite New People') }}
+                <span
+                  class="text-3xl cursor-pointer"
+                  @click="showInviteUsers = !showInviteUsers"
+                  >-</span
+                >
+              </div>
+              <div v-show="showInviteUsers">
+                <EmailInput @input="invitedUsers = $event" />
+              </div>
             </div>
           </div>
         </template>
@@ -292,29 +468,37 @@
   </div>
 </template>
 <script>
+import { UserMixin } from '@/mixins';
+import { throttle } from 'lodash';
 import { getErrorMessage } from '../utils/errors';
 import TimeSelect from './TimeSelect';
 import Wizard from './Wizard';
+import User from '../models/User';
+import Avatar from './Avatar';
+import { getQueryString } from '../utils/urls';
+import EmailInput from './EmailInput';
 
 export default {
   name: 'CreateSchedule',
-  components: { Wizard, TimeSelect },
+  components: { EmailInput, Avatar, Wizard, TimeSelect },
+  mixins: [UserMixin],
   async mounted() {
     const capabilitiesResponse = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
     );
     this.capabilities = capabilitiesResponse.data.results;
+    await this.getUsers();
   },
   computed: {
     gridStyle() {
       return {
         display: 'grid',
-        'grid-template-columns': `max-content repeat(${
+        'grid-template-columns': `170px repeat(${
           this.schedule.days.length ? this.schedule.days.length : 1
-        }, auto)`,
-        'grid-template-rows': `max-content repeat(${
+        }, 85px)`,
+        'grid-template-rows': `60px repeat(${
           this.schedule.shifts.length ? this.schedule.shifts.length : 1
-        }, auto)`,
+        }, 85px)`,
       };
     },
   },
@@ -329,6 +513,21 @@ export default {
     },
   },
   methods: {
+    async getUsers() {
+      const params = {
+        organization: this.currentUser.organization.id,
+      };
+      if (this.userSearch) {
+        params.search = this.userSearch;
+      }
+      const queryString = getQueryString(params);
+
+      const results = await User.api().get(`/users?${queryString}`, {
+        dataKey: 'results',
+      });
+      const { users } = results.entities;
+      this.users = users;
+    },
     getCurrentWeekDays() {
       const weekStart = this.$moment().startOf('week');
 
@@ -404,8 +603,8 @@ export default {
       this.schedule.shifts.push({
         name: '',
         isEditing: true,
-        start_time: '',
-        end_time: '',
+        start_time: '00:00:00',
+        end_time: '00:00:00',
         buffer: {},
       });
     },
@@ -416,9 +615,19 @@ export default {
         }),
       );
       try {
-        await this.$http.post(`${process.env.VUE_APP_API_BASE_URL}/schedules`, {
-          ...this.schedule,
-        });
+        const response = await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/schedules`,
+          {
+            ...this.schedule,
+          },
+        );
+        const scheduleId = response.data.id;
+        await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/schedules/${scheduleId}/send`,
+          {
+            emails: [...Array.from(this.selectedUsers), ...this.invitedUsers],
+          },
+        );
         this.showCreateScheduleModal = false;
         await this.$toasted.success(this.$t('~~Created Schedule'));
         this.$emit('reload');
@@ -448,7 +657,7 @@ export default {
       shift.isEditing = false;
     },
     async cancelShift(shift) {
-      if (shift.start_time && shift.end_time) {
+      if (shift.name && shift.start_time && shift.end_time) {
         shift.buffer = {};
         shift.isEditing = false;
       } else {
@@ -463,10 +672,17 @@ export default {
   },
   data() {
     return {
+      throttle,
       showCreateScheduleModal: false,
       capabilities: [],
-      selectedTemplate: 'Custom',
+      selectedTemplate: null,
       days: [],
+      users: [],
+      userSearch: '',
+      selectedUsers: new Set(),
+      showSelectUsers: true,
+      invitedUsers: [],
+      showInviteUsers: false,
       schedule: {
         name: '',
         description: '',
@@ -482,9 +698,9 @@ export default {
 </script>
 
 <style scoped>
-.grid {
+.main-grid {
   grid-gap: 1px;
-  @apply bg-white;
+  @apply bg-white w-full;
 }
 .grid-cell {
   @apply border flex;

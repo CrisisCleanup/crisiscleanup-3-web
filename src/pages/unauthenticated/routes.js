@@ -1,5 +1,6 @@
 import EmbedMap from '@/pages/unauthenticated/EmbedMap';
 import InvitationSignup from './InvitationSignup.vue';
+import SetSchedule from './SetSchedule.vue';
 import PreliminaryAssessment from './PreliminaryAssessment.vue';
 import PrintToken from './PrintToken.vue';
 import ResetPassword from './ResetPassword';
@@ -15,6 +16,12 @@ export default [
     path: '/print_token/:token',
     component: PrintToken,
     name: 'nav.print_token',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/set_schedule/:schedule_id',
+    component: SetSchedule,
+    name: 'nav.set_schedule',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {

@@ -105,7 +105,7 @@
                     Invited By
                     <UserSearchInput
                       :placeholder="$t('usersVue.search_users')"
-                      class="my-1"
+                      class="my-1 form-field"
                       @selectedUser="
                         (user) => {
                           filters.invitedBy.data = new Set(

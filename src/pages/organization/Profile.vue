@@ -178,7 +178,7 @@
           </div>
           <div class="divider" />
           <div class="form-row">
-            <UserSearchInput :placeholder="$t('profileOrg.primary_contact')" />
+            <UserSearchInput class="form-field" :placeholder="$t('profileOrg.primary_contact')" />
           </div>
         </form>
       </div>

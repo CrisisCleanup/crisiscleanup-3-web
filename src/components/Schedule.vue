@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-col items-center justify-center">
     <div :style="gridStyle" class="grid" v-if="shifts.length">
       <div class="grid-cell">
         <div class="flex items-center justify-start px-5">
@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="grid-cell flex-col justify-center" v-for="day in days">
-        <div class="flex flex-col items-center justify-center p-2">
+        <div class="flex flex-col items-center justify-center p-3">
           <AvailabilityCheckbox
             :value="getAvailabilityForDay(day)"
             @input="(availablity) => setAvailabilityForDay(day, availablity)"
@@ -34,9 +34,17 @@
             />
             <div class="flex-col flex items-start justify-center">
               <div class="mb-1">{{ shift.name }}</div>
-              <div class="mb-1">
-                {{ [shift.start_time, 'HH:mm:ss'] | moment('hA') }} -
-                {{ [shift.end_time, 'HH:mm:ss'] | moment('hA') }}
+              <div class="flex items-center">
+                <ccu-icon
+                  :alt="$t('actions.delete')"
+                  size="small"
+                  type="time"
+                  class="mr-1"
+                />
+                <div class="my-1">
+                  {{ [shift.start_time, 'HH:mm:ss'] | moment('hA') }} -
+                  {{ [shift.end_time, 'HH:mm:ss'] | moment('hA') }}
+                </div>
               </div>
             </div>
           </div>
@@ -54,6 +62,7 @@
     </div>
     <div slot="footer" class="p-3 flex items-center justify-center">
       <base-button
+        v-if="!hideCancel"
         :action="
           () => {
             $emit('cancel');
@@ -66,7 +75,7 @@
       <base-button
         variant="solid"
         :action="createSchedule"
-        :text="$t('~~Create Schedule')"
+        :text="$t('~~Save Availability')"
         class="ml-2 p-3 px-6 text-xs"
       />
     </div>
@@ -99,6 +108,7 @@ export default {
       start_at: weekStart.toISOString(),
       end_at: weekEnd.toISOString(),
       schedule: this.schedule.id,
+      email: this.email || this.currentUser.email,
     };
 
     const response = await this.$http.get(
@@ -112,6 +122,14 @@ export default {
     scheduleId: {
       type: Number,
       default: null,
+    },
+    email: {
+      type: String,
+      default: null,
+    },
+    hideCancel: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -206,8 +224,13 @@ export default {
       const startMoment = moment.utc(day);
       startMoment.set({ hour: Number(startHour), minute: Number(startMinute) });
 
-      const endMoment = moment.utc(day);
+      let endMoment = moment.utc(day);
       endMoment.set({ hour: Number(endHour), minute: Number(endMinute) });
+
+      if (startMoment > endMoment) {
+        endMoment = moment.utc(day).add(1, 'd');
+        endMoment.set({ hour: Number(endHour), minute: Number(endMinute) });
+      }
 
       const intervals = startMoment.twix(endMoment).toArray(30, 'minutes');
       const timeslots = [];
@@ -241,7 +264,7 @@ export default {
       await this.$http.post(
         `${process.env.VUE_APP_API_BASE_URL}/user_schedule`,
         {
-          user: this.currentUser.id,
+          email: this.email || this.currentUser.email,
           schedule,
         },
       );
@@ -264,6 +287,17 @@ export default {
         display: 'grid',
         'grid-template-columns': `2.5fr repeat(${this.days.length}, 1fr)`,
         'grid-template-rows': `1fr repeat(${this.shifts.length}, 1.1fr)`,
+      };
+    },
+    gridStyle() {
+      return {
+        display: 'grid',
+        'grid-template-columns': `180px repeat(${
+          this.days.length ? this.days.length : 1
+        }, 85px)`,
+        'grid-template-rows': `70px repeat(${
+          this.shifts.length ? this.shifts.length : 1
+        }, 85px)`,
       };
     },
   },

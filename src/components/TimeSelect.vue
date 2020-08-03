@@ -1,14 +1,7 @@
 <template>
-  <form-select
-    :value="value"
-    :options="getTimes()"
-    class="bg-white border border-crisiscleanup-dark-100 h-8 w-24"
-    @input="$emit('input', $event)"
-    item-key="key"
-    label="value"
-    select-classes="h-5 text-sm"
-    :placeholder="placeholder"
-  />
+  <a-time-picker v-model="value" format="hA">
+    <font-awesome-icon slot="suffixIcon" icon="sort" />
+  </a-time-picker>
 </template>
 
 <script>
@@ -24,29 +17,18 @@ export default {
       default: '',
     },
   },
-  methods: {
-    getTimes() {
-      const hoursPerDay = 24;
-      const time = [];
-
-      for (let i = 0; i < hoursPerDay + 1; i++) {
-        const value = this.$moment()
-          .subtract(i, 'hours')
-          .startOf('hour')
-          .format('hA');
-        const key = this.$moment()
-          .subtract(i, 'hours')
-          .startOf('hour')
-          .format('HH:mm:ss');
-        time.unshift({
-          key,
-          value,
-        });
-      }
-      return time;
-    },
-  },
 };
 </script>
 
-<style scoped></style>
+<style>
+.ant-time-picker {
+  width: 80px;
+}
+.ant-time-picker-input {
+  height: 28px;
+  border-radius: 0;
+}
+.ant-time-picker-panel {
+  z-index: 10000;
+}
+</style>

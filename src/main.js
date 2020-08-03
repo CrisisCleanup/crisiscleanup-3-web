@@ -1,5 +1,6 @@
 import { version } from '@/../package.json';
 import '@/assets/css/tailwind.css';
+import 'ant-design-vue/lib/time-picker/style';
 import '@crisiscleanup/amazon-connect-streams';
 import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
@@ -67,6 +68,7 @@ import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
 import DatePicker from 'v-calendar/lib/components/date-picker.umd';
 import VueRouterMultiView from 'vue-router-multi-view';
+import Timepicker from 'ant-design-vue/lib/time-picker';
 import Tabs from '@/components/tabs/Tabs';
 import Tab from '@/components/tabs/Tab';
 import PhoneService from '@/services/phone.service';
@@ -137,6 +139,7 @@ Vue.use(VueI18n);
 Vue.use(Popover);
 Vue.component('base-dropdown', Dropdown);
 Vue.component('v-select', vSelect);
+Vue.use(Timepicker);
 
 // Mixins
 Vue.mixin(LangOverrideMixin);

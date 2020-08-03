@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="max-w-xl mx-auto my-4">
-      <div class="flex py-4 mt-8">
+      <div class="flex pt-4 mt-8">
         <div class="flex-1"></div>
 
         <template v-for="(step, idx) of steps">
@@ -53,7 +53,7 @@
       </div>
     </div>
 
-    <div class="body h-120">
+    <div class="body h-132">
       <div v-for="(step, idx) of steps" :key="step.id">
         <slot v-if="idx === currentStepIndex" :name="step.id" />
       </div>

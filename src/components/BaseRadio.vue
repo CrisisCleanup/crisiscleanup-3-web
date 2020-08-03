@@ -1,5 +1,5 @@
 <template>
-  <label class="z-50 flex items-center">
+  <label class="z-50 flex items-center" :style="cssProps">
     <input
       v-model="radioButtonValue"
       type="radio"
@@ -35,8 +35,17 @@ export default {
       type: String,
       default: 'text',
     },
+    color: {
+      type: String,
+      default: '#353535',
+    },
   },
   computed: {
+    cssProps() {
+      return {
+        '--color': this.color || '#353535',
+      };
+    },
     radioButtonValue: {
       get() {
         return this.value;
@@ -72,7 +81,7 @@ export default {
   top: 0;
   width: 18px;
   height: 18px;
-  border: 1px solid #353535;
+  border: 1px solid var(--color);;
   border-radius: 100%;
   background: #fff;
 }
@@ -81,7 +90,7 @@ export default {
   content: '';
   width: 12px;
   height: 12px;
-  background: #353535;
+  background: var(--color);;
   position: absolute;
   top: 3px;
   left: 3px;

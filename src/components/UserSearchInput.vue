@@ -1,6 +1,5 @@
 <template>
   <autocomplete
-    class="form-field"
     icon="search"
     :suggestions="userResults"
     display-property="full_name"
