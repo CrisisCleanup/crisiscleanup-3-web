@@ -85,6 +85,7 @@
         :alt="$t('actions.next')"
         class="ml-2 p-3 px-6 text-xs"
         :action="next"
+        :disabled="steps[currentStepIndex].disabled"
       />
       <base-button
         v-if="currentStepIndex === steps.length - 1"
@@ -117,7 +118,9 @@ export default {
   },
   methods: {
     next() {
-      this.currentStepIndex += 1;
+      if (!this.steps[this.currentStepIndex].disabled) {
+        this.currentStepIndex += 1;
+      }
     },
     previous() {
       this.currentStepIndex -= 1;

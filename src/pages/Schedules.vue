@@ -5,7 +5,18 @@
       <div
         class="my-4 mx-2 p-4 bg-white shadow h-auto content-center flex-wrap cursor-pointer w-108"
       >
-        <div class="text-base">{{ schedule.name }}</div>
+        <div class="flex items-center justify-between">
+          <div class="text-base">{{ schedule.name }}</div>
+          <CreateSchedule @reload="loadSchedules" :schedule="schedule">
+            <ccu-icon
+              slot="trigger"
+              :alt="$t('actions.edit')"
+              size="sm"
+              type="edit"
+              class="mr-2"
+            />
+          </CreateSchedule>
+        </div>
         <div>{{ schedule.description }}</div>
         <base-button
           class="my-1 text-primary-dark"
@@ -23,7 +34,7 @@
     </div>
     <modal
       v-if="showAvailabilityModal"
-      modal-classes="bg-white max-w-4xl shadow"
+      modal-classes="bg-white max-w-6xl shadow"
       closeable
       :title="$t('~~Set Availability')"
       @close="
@@ -33,6 +44,7 @@
         }
       "
     >
+      <AvailabiltyLegend class="bg-crisiscleanup-light-grey p-2" />
       <Schedule
         :schedule-id="currentSchedule.id"
         class="p-3"
@@ -57,9 +69,10 @@
 <script>
 import Schedule from '../components/Schedule';
 import CreateSchedule from '../components/CreateSchedule';
+import AvailabiltyLegend from './AvailabiltyLegend';
 export default {
   name: 'Schedules',
-  components: { CreateSchedule, Schedule },
+  components: { AvailabiltyLegend, CreateSchedule, Schedule },
   data() {
     return {
       schedules: [],

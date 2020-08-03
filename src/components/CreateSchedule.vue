@@ -1,30 +1,29 @@
 <template>
   <div>
-    <base-button
-      variant="outline"
-      class="mx-1 px-3 py-1"
-      :text="$t('~~Create Schedule')"
-      :alt="$t('~~Create Schedule')"
-      @click.native="showCreateScheduleModal = true"
-    ></base-button>
+    <div @click="showCreateScheduleModal = true">
+      <slot name="trigger">
+        <base-button
+          variant="outline"
+          class="mx-1 px-3 py-1"
+          :text="schedule.id ? $t('~~Edit Schedule') : $t('~~Create Schedule')"
+          :alt="schedule.id ? $t('~~Edit Schedule') : $t('~~Create Schedule')"
+        ></base-button>
+      </slot>
+    </div>
     <modal
       v-if="showCreateScheduleModal"
       modal-classes="bg-white max-w-6xl shadow"
-      :title="$t('~~Create Schedule')"
+      :title="schedule.id ? $t('~~Edit Schedule') : $t('~~Create Schedule')"
       closeable
       @close="
         () => {
           showCreateScheduleModal = false;
+          this.$emit('reload');
         }
       "
     >
       <Wizard
-        :steps="[
-          { id: 'schedule', name: 'Schedule Information', disabled: false },
-          { id: 'template', name: 'Select Template', disabled: false },
-          { id: 'days', name: 'Select Days', disabled: false },
-          { id: 'users', name: 'Select Users', disabled: false },
-        ]"
+        :steps="wizardSteps"
         @cancel="showCreateScheduleModal = false"
         @complete="createSchedule"
       >
@@ -88,6 +87,7 @@
                 @change="
                   (value) => {
                     selectedTemplate = value;
+                    createPresetSchedule('custom');
                   }
                 "
               >
@@ -290,7 +290,7 @@
                             ></TimeSelect>
                           </div>
                           <div
-                            class="grid grid-cols-2 divide-x text-xs divide-gray-400 w-8"
+                            class="grid grid-cols-2 divide-x text-xs divide-gray-400"
                           >
                             <base-button
                               class="px-1 text-primary-dark"
@@ -331,6 +331,15 @@
                               :alt="$t('actions.delete')"
                               size="small"
                               type="trash"
+                              @click.native="
+                                () => {
+                                  schedule.shifts = schedule.shifts.filter(
+                                    (s) => {
+                                      return s !== shift;
+                                    },
+                                  );
+                                }
+                              "
                             />
                           </div>
                           <div class="px-2">
@@ -482,12 +491,34 @@ export default {
   name: 'CreateSchedule',
   components: { EmailInput, Avatar, Wizard, TimeSelect },
   mixins: [UserMixin],
+  props: {
+    schedule: {
+      type: Object,
+      default: () => {
+        return {
+          name: '',
+          description: '',
+          capability_ids: [],
+          available_to: {},
+          shift_ids: [],
+          days: [],
+          shifts: [],
+        };
+      },
+    },
+  },
   async mounted() {
     const capabilitiesResponse = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
     );
     this.capabilities = capabilitiesResponse.data.results;
     await this.getUsers();
+
+    if (this.schedule.days.length) {
+      this.days = this.schedule.days.map((day) => {
+        return this.$moment(day);
+      });
+    }
   },
   computed: {
     gridStyle() {
@@ -500,6 +531,41 @@ export default {
           this.schedule.shifts.length ? this.schedule.shifts.length : 1
         }, 85px)`,
       };
+    },
+    wizardSteps() {
+      if (this.schedule.id) {
+        return [
+          {
+            id: 'schedule',
+            name: 'Schedule Information',
+            disabled: !this.schedule.name,
+          },
+          {
+            id: 'days',
+            name: 'Select Days',
+            disabled: !this.schedule.days.length,
+          },
+          { id: 'users', name: 'Select Users', disabled: false },
+        ];
+      }
+      return [
+        {
+          id: 'schedule',
+          name: 'Schedule Information',
+          disabled: !this.schedule.name,
+        },
+        {
+          id: 'template',
+          name: 'Select Template',
+          disabled: !this.selectedTemplate,
+        },
+        {
+          id: 'days',
+          name: 'Select Days',
+          disabled: !this.schedule.days.length,
+        },
+        { id: 'users', name: 'Select Users', disabled: false },
+      ];
     },
   },
   watch: {
@@ -555,6 +621,12 @@ export default {
       return days;
     },
     createPresetSchedule(preset) {
+      if (preset === 'custom') {
+        this.days = [];
+        this.shifts = [];
+        return;
+      }
+
       if (preset === 'field_worker') {
         this.days = this.getCurrentWeekDays();
       }
@@ -609,27 +681,47 @@ export default {
       });
     },
     async createSchedule() {
+      this.schedule.shift_ids = [];
       await Promise.all(
         this.schedule.shifts.map((shift) => {
           return this.createShift(shift);
         }),
       );
       try {
-        const response = await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/schedules`,
-          {
-            ...this.schedule,
-          },
-        );
-        const scheduleId = response.data.id;
+        let scheduleId = this.schedule.id;
+        if (this.schedule.id) {
+          await this.$http.patch(
+            `${process.env.VUE_APP_API_BASE_URL}/schedules/${this.schedule.id}`,
+            {
+              ...this.schedule,
+            },
+          );
+        } else {
+          const response = await this.$http.post(
+            `${process.env.VUE_APP_API_BASE_URL}/schedules`,
+            {
+              ...this.schedule,
+            },
+          );
+          scheduleId = response.data.id;
+        }
         await this.$http.post(
           `${process.env.VUE_APP_API_BASE_URL}/schedules/${scheduleId}/send`,
           {
             emails: [...Array.from(this.selectedUsers), ...this.invitedUsers],
           },
         );
+        this.schedule = {
+          name: '',
+          description: '',
+          capability_ids: [],
+          available_to: {},
+          shift_ids: [],
+          days: [],
+          shifts: [],
+        };
         this.showCreateScheduleModal = false;
-        await this.$toasted.success(this.$t('~~Created Schedule'));
+        await this.$toasted.success(this.$t('~~Saved Schedule'));
         this.$emit('reload');
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -637,14 +729,18 @@ export default {
     },
     async createShift(shift) {
       try {
-        const response = await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/shifts`,
-          shift,
-        );
-        this.schedule.shift_ids = [
-          ...this.schedule.shift_ids,
-          response.data.id,
-        ];
+        if (shift.id) {
+          this.schedule.shift_ids = [...this.schedule.shift_ids, shift.id];
+        } else {
+          const response = await this.$http.post(
+            `${process.env.VUE_APP_API_BASE_URL}/shifts`,
+            shift,
+          );
+          this.schedule.shift_ids = [
+            ...this.schedule.shift_ids,
+            response.data.id,
+          ];
+        }
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -683,15 +779,6 @@ export default {
       showSelectUsers: true,
       invitedUsers: [],
       showInviteUsers: false,
-      schedule: {
-        name: '',
-        description: '',
-        capability_ids: [],
-        available_to: {},
-        shift_ids: [],
-        days: [],
-        shifts: [],
-      },
     };
   },
 };

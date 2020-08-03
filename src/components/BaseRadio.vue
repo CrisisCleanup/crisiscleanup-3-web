@@ -81,7 +81,7 @@ export default {
   top: 0;
   width: 18px;
   height: 18px;
-  border: 1px solid var(--color);;
+  border: 1px solid var(--color);
   border-radius: 100%;
   background: #fff;
 }
@@ -90,7 +90,7 @@ export default {
   content: '';
   width: 12px;
   height: 12px;
-  background: var(--color);;
+  background: var(--color);
   position: absolute;
   top: 3px;
   left: 3px;

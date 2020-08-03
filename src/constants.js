@@ -27,6 +27,7 @@ export const ICON_MAP = {
   share: require('@/assets/icons/share-big.svg'),
   download: require('@/assets/icons/download.svg'),
   active: require('@/assets/icons/active.svg'),
+  'active-link': require('@/assets/icons/active-link.svg'),
   edit: require('@/assets/icons/edit.svg'),
   flag: require('@/assets/icons/flag.svg'),
   filters: require('@/assets/icons/filters.svg'),

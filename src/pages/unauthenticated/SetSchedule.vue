@@ -8,7 +8,11 @@
         <Loader :loading="false">
           <template #content>
             <div>
-              <div>{{ $refs.schedule && $refs.schedule.name }}</div>
+              <div v-if="schedule" class="text-center text-2xl">
+                {{ $t('~~Set availability for') }} {{ schedule.name }}
+              </div>
+
+              <AvailabiltyLegend class="p-2" />
               <Schedule
                 :schedule-id="$route.params.schedule_id"
                 :email="$route.query.email"
@@ -27,10 +31,11 @@
 import HomeLayout from '@/layouts/Home';
 import Schedule from '../../components/Schedule';
 import Loader from '../../components/Loader';
+import AvailabiltyLegend from '../AvailabiltyLegend';
 
 export default {
   name: 'SetSchedule',
-  components: { HomeLayout, Loader, Schedule },
+  components: { AvailabiltyLegend, HomeLayout, Loader, Schedule },
   async mounted() {
     const scheduleResponse = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/schedules/${this.$route.params.schedule_id}`,
@@ -40,8 +45,8 @@ export default {
   },
   data() {
     return {
-      schedule: null
-    }
+      schedule: null,
+    };
   },
 };
 </script>
@@ -49,6 +54,7 @@ export default {
 <style scoped lang="scss">
 .homegrid {
   &.grid-container {
+    overflow: auto;
     grid-template-areas:
       'logo . . . . survivors'
       'main main main main main main'

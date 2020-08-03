@@ -87,6 +87,7 @@ import moment from 'moment';
 import { UserMixin } from '@/mixins';
 import AvailabilityCheckbox from './AvailabilityCheckbox';
 import { getQueryString } from '../utils/urls';
+import { getErrorMessage } from '../utils/errors';
 require('twix');
 export default {
   name: 'Schedule',
@@ -261,14 +262,19 @@ export default {
           timeslots: this.availability[availability],
         };
       });
-      await this.$http.post(
-        `${process.env.VUE_APP_API_BASE_URL}/user_schedule`,
-        {
-          email: this.email || this.currentUser.email,
-          schedule,
-        },
-      );
-      this.$emit('saved');
+      try {
+        await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/user_schedule`,
+          {
+            email: this.email || this.currentUser.email,
+            schedule,
+          },
+        );
+        this.$emit('saved');
+        await this.$toasted.success(this.$t('~~Saved Availability'));
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
     },
   },
   computed: {
@@ -285,17 +291,10 @@ export default {
     gridStyle() {
       return {
         display: 'grid',
-        'grid-template-columns': `2.5fr repeat(${this.days.length}, 1fr)`,
-        'grid-template-rows': `1fr repeat(${this.shifts.length}, 1.1fr)`,
-      };
-    },
-    gridStyle() {
-      return {
-        display: 'grid',
-        'grid-template-columns': `180px repeat(${
+        'grid-template-columns': `210px repeat(${
           this.days.length ? this.days.length : 1
         }, 85px)`,
-        'grid-template-rows': `70px repeat(${
+        'grid-template-rows': `80px repeat(${
           this.shifts.length ? this.shifts.length : 1
         }, 85px)`,
       };
