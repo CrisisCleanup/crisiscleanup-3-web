@@ -27,6 +27,7 @@
 </template>
 <script>
 import Organization from '@/models/Organization';
+import { getQueryString } from '../utils/urls';
 export default {
   name: 'OrganizationSearchInput',
   props: {
@@ -35,6 +36,10 @@ export default {
       default: null,
     },
     isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    includeInactive: {
       type: Boolean,
       default: false,
     },
@@ -47,8 +52,19 @@ export default {
   methods: {
     async onOrganizationSearch(value) {
       this.$emit('input', value);
+
+      const params = {
+        fields: 'id,name',
+        limit: '10',
+        search: value,
+      };
+
+      if (!this.includeInactive) {
+        params.is_active = true;
+      }
+
       const results = await Organization.api().get(
-        `/organizations?search=${value}&limit=10&fields=id,name&is_active=true`,
+        `/organizations?${getQueryString(params)}`,
         {
           dataKey: 'results',
         },

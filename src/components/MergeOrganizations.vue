@@ -26,11 +26,13 @@
         <div>{{ $t('~~Organization To Keep') }}</div>
         <OrganizationSearchInput
           @selectedOrganization="keepOrganization = $event.id"
+          include-inactive
           class="w-108"
         />
         <div>{{ $t('~~Organization To Merge') }}</div>
         <OrganizationSearchInput
           @selectedOrganization="mergeOrganization = $event.id"
+          include-inactive
           class="w-108"
         />
         <div>{{ $t('~~Reason for merge') }}</div>
