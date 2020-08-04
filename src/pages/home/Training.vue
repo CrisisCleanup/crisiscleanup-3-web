@@ -161,8 +161,8 @@
           <!--- /Training Video Description --->
         </div>
         <!--- /Content --->
+        <home-footer />
       </div>
-      <home-footer />
     </template>
   </HomeLayout>
 </template>
@@ -184,18 +184,29 @@ export default {
 <style scoped lang="scss">
 .homegrid {
   &.grid-container {
-    grid-template-areas:
-      'logo . . . . survivors'
-      'nav . main main main main'
-      'nav . main main main main'
-      'actions actions main main main main'
-      '. . main main main main';
-    overflow: auto;
+    grid:
+      [r1] 'logo . main main main main survivors' 20% [r1end]
+      [r2] 'nav . main main main main main' [r2end]
+      [r3] 'actions . main main main main main' [r3end]
+      [r4] '. . . . footer footer .' [r4end]
+      / auto;
 
     .grid {
+      &--main {
+        align-self: center;
+        @apply mx-10 h-full;
+        overflow: auto;
+        grid-column: logo-end / span main-end;
+        grid-row: main-start / span actions-end;
+      }
       &--overlay {
-        grid-row: 1 / span 5;
-        grid-column: 1 / span 3;
+        grid-column: 1 / span 5;
+      }
+      &--footer {
+        height: auto;
+        display: flex;
+        justify-content: space-evenly;
+        @apply my-1;
       }
     }
   }
