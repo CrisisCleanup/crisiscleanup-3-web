@@ -7,11 +7,7 @@
     v-if="!route.disabled"
   >
     <div :key="route.key" class="flex flex-col items-center">
-      <ccu-icon
-        :alt="$t(`nav.${route.key}`)"
-        :type="route.icon || route.key"
-        :size="route.iconSize"
-      />
+      <ccu-icon :alt="$t(`nav.${route.key}`)" v-bind="iconProps" />
       <div class="menu-text mt-1">
         {{ route.text || $t(`nav.${route.key}`) }}
       </div>
@@ -29,12 +25,20 @@ export default {
       key: VueTypes.string,
       text: VueTypes.string,
       to: VueTypes.string,
-      icon: VueTypes.string,
+      icon: VueTypes.oneOfType([VueTypes.string, VueTypes.object]),
       iconSize: VueTypes.string,
       disabled: VueTypes.bool,
     }),
   },
   computed: {
+    iconProps() {
+      return typeof this.route.icon === 'object'
+        ? this.route.icon
+        : {
+            type: this.route.icon || this.route.key,
+            size: '',
+          };
+    },
     isActive() {
       return this.$t(this.$route.name).includes(this.route.key.toLowerCase());
     },
