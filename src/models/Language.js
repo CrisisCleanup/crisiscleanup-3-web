@@ -4,6 +4,7 @@
  */
 
 import { Model } from '@vuex-orm/core';
+import detectBrowserLanguage from 'detect-browser-language';
 
 export type LanguageType = {|
   id: number,
@@ -20,6 +21,12 @@ type LanguageTranslationResponse = {|
 
 export default class Language extends Model {
   static entity = 'languages';
+
+  static state() {
+    return ({
+      _browserLanguage: detectBrowserLanguage(),
+    }: { _browserLanguage: null | string });
+  }
 
   static fields() {
     return ({
@@ -39,6 +46,15 @@ export default class Language extends Model {
       await this.fetchById(id);
     }
     return this.find(id);
+  }
+
+  static get browserLanguage() {
+    return Language.query()
+      .where(
+        'subtag',
+        Language.store().state.entities.languages._browserLanguage,
+      )
+      .first();
   }
 
   /**
