@@ -42,10 +42,10 @@ export const HomeNavigation = [
     key: 'map',
     route: '/map',
   },
-  // {
-  //   key: 'training',
-  //   route: '/traning',
-  // },
+  {
+    key: 'training',
+    route: '/training',
+  },
   {
     key: 'contact',
     route: 'https://crisiscleanup.zendesk.com/hc/en-us/requests/new',
