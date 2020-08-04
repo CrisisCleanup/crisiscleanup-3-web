@@ -128,13 +128,34 @@
             <base-text variant="h1" class="mb-6">{{
               $t('info.success')
             }}</base-text>
-            <base-text class="w-3/4 text-center" variant="body" wieght="300">
+            <base-text
+              v-if="wasPreapproved"
+              class="w-3/4 text-center"
+              variant="body"
+              wieght="300"
+            >
+              {{
+                $t(
+                  '{requested_to} has pre-approved you to join {organization}. You may now login using your provided email and password.',
+                  {
+                    organization: requestedToOrg,
+                    requested_to: requestedTo,
+                  },
+                )
+              }}
+            </base-text>
+            <base-text
+              v-else
+              class="w-3/4 text-center"
+              variant="body"
+              wieght="300"
+            >
               {{
                 $t('requestAccess.request_sent_to_org', {
                   organization: requestedToOrg,
                   requested_to: requestedTo,
                 })
-              }}"
+              }}
             </base-text>
             <base-button
               :text="$t('actions.got_it')"
@@ -187,8 +208,12 @@ export default {
           },
         );
         this.requestedToOrg = response.response.data.requested_to_organization;
+        if (response.response.data.approved_by) {
+          this.wasPreapproved = true;
+        }
         this.showSuccessModal = true;
       } catch (error) {
+        this.$log.error(error);
         await this.$toasted.error(getErrorMessage(error));
       }
     },
@@ -223,6 +248,7 @@ export default {
       toggleOpen: false,
       primaryLanguage: null,
       requestedToOrg: null,
+      wasPreapproved: false,
     };
   },
 };
