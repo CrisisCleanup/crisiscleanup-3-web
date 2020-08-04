@@ -223,6 +223,14 @@ export default {
             !this.$can('beta_feature.connect_first_integration'),
         },
         {
+          key: 'training',
+          icon: {
+            type: 'info',
+            invertColor: true,
+          },
+          to: '/training',
+        },
+        {
           key: 'reports',
           icon: 'reports',
           text: this.$t('nav.reports'),
