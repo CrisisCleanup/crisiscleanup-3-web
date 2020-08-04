@@ -264,6 +264,7 @@ const getLanguages = async (tags) => {
   const locale = Object.keys(messages).pop();
   axios.defaults.headers.common['Accept-Language'] = locale;
   return new VueI18n({
+    formatFallbackMessages: true,
     locale,
     messages,
   });
