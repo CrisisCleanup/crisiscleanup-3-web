@@ -1637,14 +1637,15 @@
     postcss "7.0.32"
     purgecss "^2.3.0"
 
-"@geoman-io/leaflet-geoman-free@^2.5.0":
-  version "2.5.0"
-  resolved "https://registry.yarnpkg.com/@geoman-io/leaflet-geoman-free/-/leaflet-geoman-free-2.5.0.tgz#0f8fb8945f9edffa697382aa24e60c7dddc3cdcd"
-  integrity sha512-Zq/gOGPpsRurTrW3d3qiXlvEPHZfU/PZ7jr02jtweaN0kXyHo/WqkihMS9h5yUySjJBXdUC9Xuuo4/ZzHqEH4g==
+"@geoman-io/leaflet-geoman-free@^2.6.0":
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/@geoman-io/leaflet-geoman-free/-/leaflet-geoman-free-2.6.0.tgz#3b160b76c9bba6c3a55957b9a29f58da8f3b6e4d"
+  integrity sha512-lJ/s277OjvW8OVJ49lonqTk2VNS5Qmn6fdfkBS4FkBqjzDTa5PKfkSRXUZlV+CMGt1fTIezfSwpEK+85gqo6sw==
   dependencies:
     "@turf/difference" "^6.0.2"
     "@turf/intersect" "^6.1.3"
     "@turf/kinks" "6.x"
+    "@turf/line-intersect" "^6.0.2"
     lodash "^4.17.15"
 
 "@hapi/address@2.x.x":
@@ -3637,6 +3638,14 @@
   dependencies:
     "@turf/helpers" "^5.1.5"
 
+"@turf/bbox@*":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-6.0.1.tgz#b966075771475940ee1c16be2a12cf389e6e923a"
+  integrity sha512-EGgaRLettBG25Iyx7VyUINsPpVj1x3nFQFiGS3ER8KCI1MximzNLsam3eXRabqQDjyAKyAE1bJ4EZEpGvspQxw==
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
+
 "@turf/bbox@5.1.x", "@turf/bbox@^5.1.5":
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-5.1.5.tgz#3051df514ad4c50f4a4f9b8a2d15fd8b6840eda3"
@@ -4198,6 +4207,17 @@
     "@turf/meta" "^5.1.5"
     geojson-rbush "2.1.0"
 
+"@turf/line-intersect@^6.0.2":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@turf/line-intersect/-/line-intersect-6.0.2.tgz#b45b7a4e7e08c39a0e4e91099580ed377ef7335f"
+  integrity sha512-pfL/lBu7ukBPdTjvSCmcNUzZ83V4R95htwqs5NqU8zeS4R+5KTwacbrOYKztjpmHBwUmPEIIpSbqkUoD0Fp7kg==
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+    "@turf/line-segment" "6.x"
+    "@turf/meta" "6.x"
+    geojson-rbush "3.x"
+
 "@turf/line-offset@5.1.x":
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@turf/line-offset/-/line-offset-5.1.5.tgz#2ab5b2f089f8c913e231d994378e79dca90b5a1e"
@@ -4228,6 +4248,15 @@
     "@turf/helpers" "^5.1.5"
     "@turf/invariant" "^5.1.5"
     "@turf/meta" "^5.1.5"
+
+"@turf/line-segment@6.x":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@turf/line-segment/-/line-segment-6.0.2.tgz#e280bcde70d28b694028ec1623dc406c928e59b6"
+  integrity sha512-8AkzDHoNw3X68y115josal+lvdAi4b2P1K0YNTKGyLRBaUhPXVSuMBpMd53FRF1hYEb9UJgMbugF9ZE7m5L6zg==
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+    "@turf/meta" "6.x"
 
 "@turf/line-slice-along@5.1.x", "@turf/line-slice-along@^5.1.5":
   version "5.1.5"
@@ -11245,6 +11274,16 @@ geojson-rbush@2.1.0:
     "@turf/meta" "*"
     rbush "*"
 
+geojson-rbush@3.x:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/geojson-rbush/-/geojson-rbush-3.1.2.tgz#577d6ec70ba986d4e60b741f1df5147faeb82c97"
+  integrity sha512-grkfdg3HIeTjwTfiJe5FT8+fGU3fABCc+vRJDBwdQz9kkLF0Sbif2gs2JUzjewwgmnvLGy9fInySDeADoNuk7w==
+  dependencies:
+    "@turf/bbox" "*"
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
+    rbush "^2.0.0"
+
 get-assigned-identifiers@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/get-assigned-identifiers/-/get-assigned-identifiers-1.2.0.tgz#6dbf411de648cbaf8d9169ebb0d2d576191e2ff1"
@@ -17970,7 +18009,7 @@ rbush@*, rbush@^3.0.0:
   dependencies:
     quickselect "^2.0.0"
 
-rbush@^2.0.1:
+rbush@^2.0.0, rbush@^2.0.1:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/rbush/-/rbush-2.0.2.tgz#bb6005c2731b7ba1d5a9a035772927d16a614605"
   integrity sha512-XBOuALcTm+O/H8G90b6pzu6nX6v2zCKiFG4BJho8a+bY6AER6t8uQUZdi5bomQc0AprCWhEGa7ncAbbRap0bRA==
