@@ -97,7 +97,7 @@
           <form-select
             class="input border border-crisiscleanup-dark-100"
             size="large"
-            :value="currentLanguage"
+            :value="selectedLanguage"
             :options="languages"
             item-key="id"
             label="name_t"
@@ -182,7 +182,7 @@ export default {
             password2: this.confirmPassword,
             mobile: this.mobile,
             requested_to: this.requestedTo,
-            primary_language: this.primaryLanguage,
+            primary_language: this.selectedLanguage,
           },
         );
         this.requestedToOrg = response.response.data.requested_to_organization;
@@ -200,6 +200,12 @@ export default {
   computed: {
     languages() {
       return Language.all();
+    },
+    selectedLanguage() {
+      if (Language.browserLanguage && !this.primaryLanguage) {
+        return Language.browserLanguage.id;
+      }
+      return this.primaryLanguage;
     },
   },
   data() {
