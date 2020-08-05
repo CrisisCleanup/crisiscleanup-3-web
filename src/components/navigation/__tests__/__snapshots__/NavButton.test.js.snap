@@ -11,7 +11,7 @@ exports[`NavButton should render correctly and match snapshot 1`] = `
   >
     <ccu-icon-stub
       alt="nav.mockroute"
-      size=""
+      size="xl"
       type="mock"
     />
      

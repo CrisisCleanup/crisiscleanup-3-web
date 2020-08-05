@@ -36,7 +36,7 @@ export default {
         ? this.route.icon
         : {
             type: this.route.icon || this.route.key,
-            size: '',
+            size: 'xl',
           };
     },
     isActive() {
