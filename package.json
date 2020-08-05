@@ -84,7 +84,7 @@
     "lodash": "^4.17.19",
     "marker-clusterer-plus": "^2.1.4",
     "moment-duration-format": "^2.3.2",
-    "moment-timezone": "^0.5.28",
+    "moment-timezone": "^0.5.31",
     "pixi-filters": "^3.1.1",
     "pixi.js": "^5.3.0",
     "rrule": "^2.6.4",
