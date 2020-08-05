@@ -99,7 +99,7 @@
           </base-button>
         </div>
         <case-form
-          :incident-id="currentIncidentId"
+          :incident-id="String(currentIncidentId)"
           :pda-id="currentType === 'pda' ? caseId : null"
           :worksite-id="currentType === 'worksite' ? caseId : null"
           :key="caseId"
@@ -157,9 +157,22 @@ export default {
       this.caseId = caseObject.id;
       this.currentType = caseObject.type;
     },
-    clearCase() {
-      this.caseId = null;
-      this.currentType = null;
+    /**
+     * Clears and refreshes intake form.
+     * Because the initial caseId is null,
+     * updating it from null => null
+     * does NOT trigger a rerender.
+     * As a workaround, temporarily set
+     * the ID to -1 (or the completed worksite ID)
+     * and then reset it to null on the next tick.
+     */
+    clearCase(worksite) {
+      this.caseId = worksite ? worksite.id : -1;
+      this.$nextTick(() => {
+        this.$log.info('clearing current case!');
+        this.caseId = null;
+        this.currentType = null;
+      });
     },
     async getNextCall() {
       try {
@@ -173,6 +186,7 @@ export default {
       await this.createCards();
       this.status = null;
       this.currentNotes = '';
+      this.clearCase();
       this.caseId = null;
       this.currentType = null;
     },
