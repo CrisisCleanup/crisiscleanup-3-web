@@ -1,6 +1,6 @@
 {
   "name": "crisiscleanup",
-  "version": "3.0.0-alpha89",
+  "version": "3.0.0-alpha95",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode production",
