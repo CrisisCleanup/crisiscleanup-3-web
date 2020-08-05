@@ -7857,10 +7857,10 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
-circle-to-polygon@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/circle-to-polygon/-/circle-to-polygon-2.0.1.tgz#92f3a373527ee3cfa6e6576720ee2830aa147ee8"
-  integrity sha512-oRD+Phh4ehxA/q76d/H/6kw8w9kRgDu3T9NBN+KMWzzn0C6geQVaAziXq5CqOpi+RD1YhJlAlFBrsJ3ja9SuPQ==
+circle-to-polygon@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/circle-to-polygon/-/circle-to-polygon-2.0.2.tgz#e4a8fa50ad89227e6bc1cee5ead8851369290540"
+  integrity sha512-k0DBIkH5a5EUgcEjWtJm9INOiTioQrW4uec5UCeFwlofD/+lvaN8rMk/67UJ6K4VcLbkBFw8DZGV0dzsH2CElQ==
 
 class-utils@^0.3.5:
   version "0.3.6"
