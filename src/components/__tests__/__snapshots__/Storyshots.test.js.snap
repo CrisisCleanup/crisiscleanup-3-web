@@ -1517,7 +1517,7 @@ exports[`Storyshots Basics|BaseInput Disabled 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="flex justify-start items-center"
+      class="flex justify-start relative items-center"
     >
       <!---->
        
@@ -1536,6 +1536,8 @@ exports[`Storyshots Basics|BaseInput Disabled 1`] = `
        
       <!---->
        
+      <!---->
+       
     </div>
   </div>
 </div>
@@ -1549,7 +1551,7 @@ exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="flex justify-start items-center"
+      class="flex justify-start relative items-center"
     >
       <!---->
        
@@ -1583,6 +1585,8 @@ exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
        
       <!---->
        
+      <!---->
+       
     </div>
   </div>
 </div>
@@ -1596,7 +1600,7 @@ exports[`Storyshots Basics|BaseInput Simple 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="flex justify-start items-center"
+      class="flex justify-start relative items-center"
     >
       <!---->
        
@@ -1609,6 +1613,8 @@ exports[`Storyshots Basics|BaseInput Simple 1`] = `
         type="search"
         value="text"
       />
+       
+      <!---->
        
       <!---->
        
@@ -1627,7 +1633,7 @@ exports[`Storyshots Basics|BaseInput With Icon 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="flex justify-start items-center"
+      class="flex justify-start relative items-center"
     >
       <!---->
        
@@ -1659,6 +1665,8 @@ exports[`Storyshots Basics|BaseInput With Icon 1`] = `
         </div>
       </div>
        
+      <!---->
+       
     </div>
   </div>
 </div>
@@ -1672,7 +1680,7 @@ exports[`Storyshots Basics|BaseInput With Placeholder 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="flex justify-start items-center"
+      class="flex justify-start relative items-center"
     >
       <!---->
        
@@ -1684,6 +1692,8 @@ exports[`Storyshots Basics|BaseInput With Placeholder 1`] = `
         placeholder="Some placeholder"
         type="search"
       />
+       
+      <!---->
        
       <!---->
        
@@ -1706,7 +1716,7 @@ exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
         class="m-4"
       >
         <div
-          class="flex justify-start items-center"
+          class="flex justify-start relative items-center"
         >
           <!---->
            
@@ -1725,13 +1735,15 @@ exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
            
           <!---->
            
+          <!---->
+           
         </div>
       </div>
       <div
         class="m-4"
       >
         <div
-          class="flex justify-start items-center"
+          class="flex justify-start relative items-center"
         >
           <!---->
            
@@ -1745,6 +1757,8 @@ exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
             type="search"
             value="large"
           />
+           
+          <!---->
            
           <!---->
            
@@ -1765,7 +1779,7 @@ exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="flex justify-start items-center"
+      class="flex justify-start relative items-center"
     >
       <!---->
        
@@ -1797,6 +1811,8 @@ exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
            
         </div>
       </div>
+       
+      <!---->
        
     </div>
   </div>

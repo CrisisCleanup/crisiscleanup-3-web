@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-start" :class="classes">
+  <div class="flex justify-start relative" :class="classes">
     <label v-if="topLabel" class="text-xs px-1 text-crisiscleanup-dark-300">{{
       topLabel
     }}</label>
@@ -9,7 +9,7 @@
       :class="[inputClasses, defaultInputClasses, selector]"
       :data-cy="selector"
       :style="inputStyle"
-      :type="type || 'search'"
+      :type="passwordView || type || 'search'"
       :value="value"
       :disabled="disabled || (breakGlass && !glassBroken)"
       :placeholder="placeholder"
@@ -51,6 +51,22 @@
         :size="iconSize"
       />
     </div>
+    <font-awesome-icon
+      v-if="type === 'password'"
+      :alt="$t('actions.help_alt')"
+      size="lg"
+      class="cursor-pointer absolute right-0 mr-4"
+      :icon="passwordView === 'text' ? 'eye-slash' : 'eye'"
+      @click="
+        () => {
+          if (passwordView === 'text') {
+            passwordView = 'password';
+          } else {
+            passwordView = 'text';
+          }
+        }
+      "
+    />
     <slot></slot>
   </div>
 </template>
@@ -140,6 +156,7 @@ export default {
     return {
       id: null,
       isInvalid: false,
+      passwordView: this.type === 'password' ? 'password' : '',
       iconClasses: {
         large: this.size === 'large',
         small: this.size === 'small',
