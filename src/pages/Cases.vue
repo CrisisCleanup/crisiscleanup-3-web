@@ -131,6 +131,32 @@
                         </template>
                       </base-dropdown>
                     </li>
+                    <li class="py-2">
+                      <base-dropdown
+                        :trigger="'hover'"
+                        :role="'sublist'"
+                        :align="'right'"
+                      >
+                        <template slot="btn">{{
+                          $t('locationTypes.boundary_political_us_county')
+                        }}</template>
+                        <template slot="body">
+                          <ul class="h-64 overflow-auto">
+                            <li v-for="county in counties" :key="county.id">
+                              <base-checkbox
+                                :value="appliedLocations.has(county.id)"
+                                @input="
+                                  (value) => {
+                                    applyLocation(county.id, value);
+                                  }
+                                "
+                                >{{ county.name }}</base-checkbox
+                              >
+                            </li>
+                          </ul>
+                        </template>
+                      </base-dropdown>
+                    </li>
                     <li class="py-2" v-if="$can('development_mode')">
                       <base-dropdown
                         :trigger="'hover'"
@@ -934,6 +960,15 @@ export default {
       }
       return [];
     },
+    counties() {
+      const locationTypes = LocationType.query()
+        .where('key', 'boundary_political_us_county')
+        .get();
+      if (locationTypes.length) {
+        return Location.query().where('type', locationTypes[0].id).get();
+      }
+      return [];
+    },
     teams() {
       return Team.all();
     },
@@ -1043,10 +1078,11 @@ export default {
       });
     }
     const locationParams = {
-      limit: 100,
+      limit: 200,
       type__key__in:
-        'boundary_political_us_congress,boundary_political_us_state,',
+        'boundary_political_us_congress,boundary_political_us_state,boundary_political_us_county',
       fields: 'id,name,type',
+      incident_area: this.currentIncidentId,
     };
     const queryString = getQueryString(locationParams);
 
