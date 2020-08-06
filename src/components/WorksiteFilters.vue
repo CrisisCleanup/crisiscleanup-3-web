@@ -99,7 +99,7 @@
             @click="currentSection = 'teams'"
             v-if="teams.length && $can('development_mode')"
           >
-            {{ $t('~~Teams') }}
+            {{ $t('worksiteFilters.teams') }}
             <span
               v-if="teamsCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
@@ -125,13 +125,13 @@
             </div>
             <div class="claim-status mb-2" v-if="$can('development_mode')">
               <div class="my-1 text-base">
-                {{ $t('~~Team') }}
+                {{ $t('worksiteFilters.team') }}
               </div>
               <base-checkbox
                 v-model="filters.my_team.data.my_team"
                 class="block my-1"
               >
-                {{ $t('~~Assigned to My Team') }}
+                {{ $t('worksiteFilters.assigned_to_my_team') }}
               </base-checkbox>
             </div>
             <div class="claim-status mb-2">
@@ -322,7 +322,7 @@
           <div v-if="currentSection === 'teams'" class="flex flex-col">
             <div class="status-group mb-2">
               <div class="my-1 text-base">
-                {{ $t('~~Teams') }}
+                {{ $t('worksiteFilters.teams') }}
               </div>
               <base-checkbox
                 v-for="team in teams"

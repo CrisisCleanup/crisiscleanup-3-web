@@ -338,7 +338,7 @@
         <div class="flex">
           <div class="w-full m-4 pt-2 shadow bg-white flex-shrink">
             <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('~~User Transfer Requests') }}
+              {{ $t('dashboard.user_transfer_requests') }}
             </div>
             <div class="p-4">
               <UserTransferRequestTable

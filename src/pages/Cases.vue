@@ -74,7 +74,7 @@
                 <template slot="body">
                   <ul class="text-base">
                     {{
-                      $t('~~Standard Layers')
+                      $t('casesVue.standard_layers')
                     }}
                     <li class="py-2">
                       <base-dropdown
@@ -163,7 +163,7 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{ $t('~~Teams') }}</template>
+                        <template slot="btn">{{ $t('casesVue.teams') }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
                             <li v-for="team in teams" :key="team.id">
@@ -737,15 +737,11 @@
       modal-classes="bg-white max-w-lg shadow"
     >
       <div slot="header" class="text-lg border-b p-3">
-        {{ $t('~~Print Case') }}
+        {{ $t('actions.print_case') }}
       </div>
       <div class="p-3 flex flex-col">
         <span class="text-base pb-3">
-          {{
-            $t(
-              'Please claim this case if you plan to do any part of it. If you do not plan to do the work, please let us know why you are printing the case.',
-            )
-          }}
+          {{ $t('casesVue.please_claim_if_print') }}
         </span>
         <textarea
           v-model="noClaimReason"
@@ -775,7 +771,7 @@
             () => {
               if (!noClaimReason) {
                 return $toasted.error(
-                  $t('~~Please explain why you are not claiming this case'),
+                  $t('casesVue.please_explain_why_no_claim'),
                 );
               }
               printWorksite(null, currentWorksite.id, noClaimReason);
@@ -783,8 +779,8 @@
               noClaimReason = null;
             }
           "
-          :text="$t('~~Print without Claiming')"
-          :alt="$t('~~Print without Claiming')"
+          :text="$t('actions.print_without_claiming')"
+          :alt="$t('actions.print_without_claiming')"
         />
         <base-button
           variant="solid"
@@ -796,8 +792,8 @@
               noClaimReason = null;
             }
           "
-          :text="$t('~~Claim and Print')"
-          :alt="$t('~~Claim and Print')"
+          :text="$t('actions.claim_and_print')"
+          :alt="$t('actions.claim_and_print')"
         />
       </div>
     </modal>
