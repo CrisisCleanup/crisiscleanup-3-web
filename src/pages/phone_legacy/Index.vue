@@ -7,24 +7,38 @@
           v-if="$route.meta.id === 'caller'"
         >
           <div class="pb-2">
-            <base-text variant="h2">{{ $t('~~English Login:') }}</base-text>
-            <base-text>{{ $t('~~Username:') }} english</base-text>
-            <base-text>{{ $t('~~Password:') }} volunteer</base-text>
+            <base-text variant="h2">{{ $t('phoneConnectFirst.english_login') }}</base-text>
+            <base-text>{{ $t('phoneConnectFirst.username') }} english</base-text>
+            <base-text>{{ $t('phoneConnectFirst.password') }} volunteer</base-text>
             <!--
-            <base-text variant="h2">{{ $t('~~Spanish Login:') }}</base-text>
-            <base-text>{{ $t('~~Username:') }} spanish</base-text>
-            <base-text>{{ $t('~~Password:') }} volunteer</base-text>
+            <base-text variant="h2">{{ $t('phoneConnectFirst.spanish_login') }}</base-text>
+            <base-text>{{ $t('phoneConnectFirst.username') }} spanish</base-text>
+            <base-text>{{ $t('phoneConnectFirst.password') }} volunteer</base-text>
             -->
           </div>
           <div class="pb-2">
             <base-text variant="h2">{{
-              $t('~~Disaster Distress Helpline:')
+              $t('phoneConnectFirst.hotline_1_title')
             }}</base-text>
-            <base-text>1-800-985-5990</base-text>
+            <base-text>{{
+              $t('phoneConnectFirst.hotline_1_number')
+            }}</base-text>
+            <base-text variant="h2">{{
+              $t('phoneConnectFirst.hotline_2_title')
+            }}</base-text>
+            <base-text>{{
+              $t('phoneConnectFirst.hotline_2_number')
+            }}</base-text>
+            <base-text variant="h2">{{
+              $t('phoneConnectFirst.disaster_distress_helpline')
+            }}</base-text>
+            <base-text>{{
+              $t('phoneConnectFirst.disaster_distress_helpline_number')
+            }}</base-text>
           </div>
           <div>
             <div class="pb-2" v-if="cards.length">
-              <base-text variant="h2">{{ $t('~~Cases:') }}</base-text>
+              <base-text variant="h2">{{ $t('phoneConnectFirst.cases') }}</base-text>
             </div>
             <div class="h-32 overflow-auto">
               <div class="case" v-for="c in cards" :key="c.id">
@@ -66,7 +80,7 @@
               size="small"
               :action="() => $copyText(nextOutbound.phone_number)"
             >
-              {{ $t('~~Copy') }}
+              {{ $t('actions.copy') }}
             </base-button>
           </div>
           <form-select
@@ -82,7 +96,7 @@
             rows="3"
             v-model="currentNotes"
             class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
-            :placeholder="$t('~~Notes')"
+            :placeholder="$t('phoneConnectFirst.notes')"
           ></textarea>
           <base-button
             class="self-end"
@@ -95,7 +109,7 @@
               }
             "
           >
-            {{ $t('~~Call Complete - Next Call') }}
+            {{ $t('actions.call_complete_next') }}
           </base-button>
         </div>
         <case-form
