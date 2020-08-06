@@ -12,7 +12,7 @@
           size="medium"
           :action="() => $router.back()"
         >
-          {{ $t('~~Back') }}
+          {{ $t('actions.back') }}
         </base-button>
       </div>
       <EventBuilder />

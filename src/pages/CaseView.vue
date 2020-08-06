@@ -390,7 +390,7 @@
 
     <modal v-if="showingClaimModal" modal-classes="bg-white max-w-lg shadow">
       <div slot="header" class="text-lg border-b p-3">
-        {{ $t('~~Claim Cases') }}
+        {{ $t('actions.claim_cases') }}
       </div>
       <div class="p-3">
         <base-checkbox

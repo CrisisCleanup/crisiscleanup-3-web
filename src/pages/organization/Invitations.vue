@@ -155,7 +155,7 @@ export default {
           sortable: true,
         },
         {
-          title: this.$t('~~Email'),
+          title: this.$t('invitationsVue.email'),
           dataIndex: 'email',
           key: 'email',
           sortable: true,
