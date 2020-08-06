@@ -5,20 +5,20 @@ export default class Filter {
   }
 
   packFunction() {
-    throw new Error('~~You called the undefined method packFunction!');
+    throw new Error(i18n.t('info.error_pack_function'));
   }
 
   getCount() {
-    throw new Error('~~You called the undefined method getCount!');
+    throw new Error(i18n.t('info.error_get_count'));
   }
 
   getFilterLabels() {
-    throw new Error('~~You called the undefined method getFilterLabels!');
+    throw new Error(i18n.t('info.error_get_filter_labels'));
   }
 
   // eslint-disable-next-line no-unused-vars
   removeField(identifier) {
-    throw new Error('~~You called the undefined method removeField!');
+    throw new Error(i18n.t('info.error_remove_field'));
   }
 
   get count() {
