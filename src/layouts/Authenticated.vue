@@ -2,6 +2,16 @@
   <Loader :loading="loading" :class="loading && 'flex layout h-full'">
     <template #content>
       <div class="layout" :class="{ 'layout--mobile': $mq === 'sm' }">
+        <router-link
+          v-if="$mq !== 'sm'"
+          :to="logoRoute.to"
+          replace="div"
+          class="logo--grid"
+        >
+          <div class="logo flex justify-center p-3">
+            <img src="@/assets/crisiscleanup_logo.png" style="height: 53px;" />
+          </div>
+        </router-link>
         <NavMenu
           v-if="$mq !== 'sm'"
           :routes="routes"
@@ -473,7 +483,7 @@ body {
   grid-template-columns: 8rem auto;
   grid-template-rows: 4.5rem auto;
   grid-template-areas:
-    'sidebar header'
+    'logo header'
     'sidebar main';
 }
 
@@ -483,6 +493,11 @@ body {
   grid-template-areas:
     'header'
     'main';
+}
+
+.logo--grid {
+  grid-area: logo;
+  background-color: #2d2d2d;
 }
 
 .sidebar--grid {

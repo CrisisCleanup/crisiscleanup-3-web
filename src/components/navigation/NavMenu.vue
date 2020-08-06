@@ -1,10 +1,16 @@
 <template>
   <div class="sidebar">
-    <router-link :to="logoRoute.to">
+    <router-link
+      v-if="$mq === 'sm'"
+      :to="logoRoute.to"
+      replace="div"
+      class="logo--grid"
+    >
       <div class="logo flex justify-center p-3">
         <img src="@/assets/crisiscleanup_logo.png" style="height: 53px;" />
       </div>
     </router-link>
+
     <div class="menu">
       <NavButton v-for="r in routes" :key="r.key" :route="r" />
     </div>
