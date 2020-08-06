@@ -1,3 +1,4 @@
+import AdminPage from '@/pages/admin/Index.vue';
 import AdminDashboard from '@/pages/admin/AdminDashboard.vue';
 import AdminOrganization from '@/pages/admin/AdminOrganization.vue';
 import AdminTools from '@/pages/admin/AdminTools.vue';
@@ -5,30 +6,29 @@ import AdminTools from '@/pages/admin/AdminTools.vue';
 const routes = [
   {
     path: '/admin',
-    component: AdminDashboard,
+    component: AdminPage,
     name: 'nav.admin',
     meta: {
       layout: 'authenticated',
       admin: true,
     },
-  },
-  {
-    path: '/admin/organization/:organization_id',
-    component: AdminOrganization,
-    name: 'nav.admin_organization',
-    meta: {
-      layout: 'authenticated',
-      admin: true,
-    },
-  },
-  {
-    path: '/admin/tools',
-    component: AdminTools,
-    name: 'nav.admin_tools',
-    meta: {
-      layout: 'authenticated',
-      admin: true,
-    },
+    children: [
+      {
+        path: 'home',
+        name: 'nav.admin_dashboard',
+        component: AdminDashboard,
+      },
+      {
+        path: 'organization/:organization_id',
+        name: 'nav.admin_organization',
+        component: AdminOrganization,
+      },
+      {
+        path: 'tools',
+        name: 'nav.admin_tools',
+        component: AdminTools,
+      },
+    ],
   },
 ];
 
