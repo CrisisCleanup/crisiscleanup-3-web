@@ -146,7 +146,7 @@ export default {
           width: '1.5fr',
         },
         {
-          title: this.$t('~~Profile Complete'),
+          title: this.$t('orgApprovalTable.profile_complete'),
           dataIndex: 'profile_completed',
           key: 'profile_completed',
           width: '1fr',

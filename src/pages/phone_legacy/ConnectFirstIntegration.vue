@@ -139,7 +139,7 @@
       </div>
       <div>
         <tabs class="border shadow pt-1" ref="tabs">
-          <tab name="Next Call" ref="nextCallTab">
+          <tab name="phoneDashboard.next_call" ref="nextCallTab">
             <div
               class="p-2 flex flex-col"
               v-if="nextOutbound && isTakingCalls && !isOnCall"
@@ -186,7 +186,7 @@
               {{ $t('phoneDashboard.no_user_in_inbound_queue') }}
             </div>
           </tab>
-          <tab name="Current Call" ref="currentCallTab">
+          <tab name="phoneDashboard.current_call" ref="currentCallTab">
             <div v-if="caller">
               <div class="flex items-center justify-between">
                 <div>

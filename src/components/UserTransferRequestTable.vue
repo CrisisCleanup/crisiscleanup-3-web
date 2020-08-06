@@ -86,7 +86,7 @@ export default {
       );
       const { users } = results.entities;
       await this.$confirm({
-        title: this.$t('~~Transferring Users'),
+        title: this.$t('userTransfer.transferring_users'),
         content: users
           .map(
             (user) => `
@@ -111,7 +111,7 @@ export default {
       );
       const { results } = response.data;
       await this.$confirm({
-        title: this.$t('~~Transferring Cases'),
+        title: this.$t('userTransfer.transferring_cases'),
         content: results
           .map(
             (work_type) => `
@@ -131,9 +131,9 @@ export default {
     },
     async approveRequest(requestId) {
       const result = await this.$prompt({
-        title: this.$t('~~Approve User Transfer'),
+        title: this.$t('userTransfer.approve_user_transfer'),
         content: this.$t(
-          '~~Please provide a reason for approving this transfer',
+          'userTransfer.please_give_approval_reason',
         ),
       });
       if (result) {
@@ -149,9 +149,9 @@ export default {
     },
     async rejectRequest(requestId) {
       const result = await this.$prompt({
-        title: this.$t('~~Reject User Transfer'),
+        title: this.$t('userTransfer.reject_user_transfer'),
         content: this.$t(
-          '~~Please provide a reason for rejecting this transfer',
+          'userTransfer.please_give_reject_reason',
         ),
       });
       if (result) {
@@ -170,7 +170,7 @@ export default {
     return {
       columns: [
         {
-          title: this.$t('~~Origin Organization'),
+          title: this.$t('userTransfer.origin_organization'),
           dataIndex: 'origin_organization',
           key: 'origin_organization',
           width: '30%',
@@ -180,7 +180,7 @@ export default {
           },
         },
         {
-          title: this.$t('~~Email'),
+          title: this.$t('userTransfer.email'),
           dataIndex: 'email',
           key: 'email',
           width: '1.5fr',
@@ -190,7 +190,7 @@ export default {
           },
         },
         {
-          title: this.$t('~~Requested By'),
+          title: this.$t('userTransfer.requested_by'),
           dataIndex: 'full_name',
           key: 'full_name',
           width: '1.5fr',
@@ -200,7 +200,7 @@ export default {
           },
         },
         {
-          title: this.$t('~~No of Users'),
+          title: this.$t('userTransfer.user_count'),
           dataIndex: 'child_requests',
           key: 'child_requests',
           width: '1fr',
@@ -213,7 +213,7 @@ export default {
           },
         },
         {
-          title: this.$t('~~No of Cases'),
+          title: this.$t('userTransfer.case_count'),
           dataIndex: 'transfering_wwwtsp_ids',
           key: 'transfering_wwwtsp_ids',
           width: '1fr',

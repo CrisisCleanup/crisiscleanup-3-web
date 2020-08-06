@@ -1,8 +1,8 @@
 <template>
   <div>
     <base-button
-      :text="$t('~~Merge Organizations')"
-      :alt="$t('Merge Organizations')"
+      :text="$t('mergeOrganizations.merge_organizations')"
+      :alt="$t('mergeOrganizations.merge_organizations')"
       variant="solid"
       size="medium"
       :action="
@@ -14,7 +14,7 @@
     <modal
       v-if="showMergeModal"
       modal-classes="bg-white max-w-md shadow"
-      :title="$t('Merge Organizations')"
+      :title="$t('mergeOrganizations.merge_organizations')"
       closeable
       @close="
         () => {
@@ -23,19 +23,19 @@
       "
     >
       <div class="text-justify flex flex-col p-3 justify-center">
-        <div>{{ $t('~~Organization To Keep') }}</div>
+        <div>{{ $t('mergeOrganizations.organization_keep') }}</div>
         <OrganizationSearchInput
           @selectedOrganization="keepOrganization = $event.id"
           include-inactive
           class="w-108"
         />
-        <div>{{ $t('~~Organization To Merge') }}</div>
+        <div>{{ $t('mergeOrganizations.organization_merge') }}</div>
         <OrganizationSearchInput
           @selectedOrganization="mergeOrganization = $event.id"
           include-inactive
           class="w-108"
         />
-        <div>{{ $t('~~Reason for merge') }}</div>
+        <div>{{ $t('mergeOrganizations.merge_reason') }}</div>
         <textarea
           v-model="mergeReason"
           class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-108"
@@ -56,8 +56,8 @@
         <base-button
           variant="solid"
           :action="mergeOrganizations"
-          :text="$t('Merge Organizations')"
-          :alt="$t('Merge Organizations')"
+          :text="$t('mergeOrganizations.merge_organizations')"
+          :alt="$t('mergeOrganizations.merge_organizations')"
           class="ml-2 p-3 px-6 text-xs"
         />
       </div>
@@ -90,7 +90,7 @@ export default {
             organization_merged_reason: this.mergeReason,
           },
         );
-        await this.$toasted.success(this.$t('~~Merged Organizations'));
+        await this.$toasted.success(this.$t('mergeOrganizations.merge_successful'));
         this.showMergeModal = false;
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));

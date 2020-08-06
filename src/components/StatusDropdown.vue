@@ -11,7 +11,7 @@
     "
     item-key="status"
     label="status_name_t"
-    :placeholder="$t('~~Select Status')"
+    :placeholder="$t('actions.select_status')"
   >
     <template #selected-option="slotProps">
       <div class="badge-holder">
