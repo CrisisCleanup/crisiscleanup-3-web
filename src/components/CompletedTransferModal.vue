@@ -1,36 +1,32 @@
 <template>
   <modal
-    :title="$t('~~You have been moved')"
+    :title="$t('userTransfer.you_have_been_moved')"
     modal-classes="max-w-lg h-64"
     @cancel="$emit('close')"
     closeable
   >
     <div class="p-3">
       <div>
-        {{ $t('~~You have been moved to ') }}
-        {{ currentUser.organization.name }} {{ $t('~~by') }}
+        {{ $t('userTransfer.you_have_been_moved_to') }} 
+        {{ currentUser.organization.name }} {{ $t('userTransfer.by') }}
         {{ requestingUser.first_name }} {{ requestingUser.last_name }} ({{
           requestingUser.email
         }})
       </div>
       <div>
-        {{
-          $t(
-            '~~You can choose to stay in the current organization, or request to move back',
-          )
-        }}
+        {{ $t('userTransfer.choose_to_stay_return') }}
       </div>
     </div>
     <div slot="footer" class="p-3 flex items-center justify-center">
       <base-button
         variant="outline"
         :action="goBack"
-        :text="$t('~~Move Back')"
+        :text="$t('actions.move_back')"
         class="ml-2 p-3 px-6 text-xs"
       />
       <base-button
         :action="stay"
-        :text="$t('~~Stay')"
+        :text="$t('actions.stay')"
         variant="solid"
         class="ml-2 p-3 px-6 text-xs"
       />
