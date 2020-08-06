@@ -66,6 +66,7 @@ import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
 import VueRouterMultiView from 'vue-router-multi-view';
+import VueCompositionApi from '@vue/composition-api';
 import Tabs from '@/components/tabs/Tabs';
 import Tab from '@/components/tabs/Tab';
 import PhoneService from '@/services/phone.service';
@@ -103,6 +104,9 @@ Vue.component('authenticated-layout', Authenticated);
 Vue.component('unauthenticated-layout', Unauthenticated);
 
 Vue.config.productionTip = false;
+
+// Vue 3.x backports
+Vue.use(VueCompositionApi);
 
 // 3rd Party Libraries
 Vue.use(VueAutosuggest);
