@@ -153,7 +153,7 @@ export default {
           width: '2fr',
         },
         {
-          title: this.$t('~~Profile Complete'),
+          title: this.$t('orgTable.profile_complete'),
           dataIndex: 'profile_completed',
           key: 'profile_completed',
           width: '0.75fr',

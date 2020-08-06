@@ -85,19 +85,19 @@ export default {
     return {
       columns: [
         {
-          title: this.$t('~~Id'),
+          title: this.$t('invitationTables.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',
         },
         {
-          title: this.$t('~~Email'),
+          title: this.$t('invitationTables.email'),
           dataIndex: 'email',
           key: 'email',
           width: '1fr',
         },
         {
-          title: this.$t('~~Full Name'),
+          title: this.$t('invitationTables.full_name'),
           dataIndex: 'full_name',
           key: 'full_name',
           width: '1fr',
@@ -106,19 +106,19 @@ export default {
           },
         },
         {
-          title: this.$t('~~Mobile'),
+          title: this.$t('invitationTables.mobile'),
           dataIndex: 'mobile',
           key: 'mobile',
           width: '1fr',
         },
         {
-          title: this.$t('~~Requested To'),
+          title: this.$t('invitationTables.requested_to'),
           dataIndex: 'requested_to',
           key: 'requested_to',
           width: '1fr',
         },
         {
-          title: this.$t('Organization'),
+          title: this.$t('invitationTables.organization'),
           dataIndex: 'requested_to_organization',
           key: 'requested_to_organization',
           width: '2fr',

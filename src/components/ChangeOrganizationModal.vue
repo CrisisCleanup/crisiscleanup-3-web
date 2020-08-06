@@ -5,7 +5,7 @@
     @close="$emit('cancel')"
   >
     <div slot="header" class="text-lg border-b p-3">
-      {{ $t('~~Change Organization') }}
+      {{ $t('userTransfer.change_organization') }}
     </div>
     <Loader
       v-if="loading"
@@ -15,21 +15,21 @@
     <div class="p-3" v-else>
       <div v-if="page === 'start'">
         <base-text variant="h2" :weight="400" class="text-center">
-          {{ $t('~~To where would you want to move?') }}
+          {{ $t('userTransfer.where_move_to') }}
         </base-text>
         <div class="flex justify-center text-base my-10">
           <div
             class="h-40 w-40 mx-4 border p-2 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-crisiscleanup-light-grey hidden"
             @click="page = 'new'"
           >
-            {{ $t('~~Move to new organization') }}
+            {{ $t('userTransfer.move_new_organization') }}
             <ccu-icon size="lg" type="right" class="mt-3" />
           </div>
           <div
             class="h-40 w-40 mx-4 border p-2 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-crisiscleanup-light-grey"
             @click="page = 'existing'"
           >
-            {{ $t('~~Move to existing organization') }}
+            {{ $t('userTransfer.move_existing_organization') }}
             <ccu-icon size="lg" type="right" class="mt-3" />
           </div>
         </div>
@@ -37,9 +37,9 @@
 
       <div v-if="page === 'existing'">
         <tabs class="" ref="tabs" @mounted="setTabs">
-          <tab name="Select Organization">
+          <tab name="userTransfer.select_organization">
             <div class="text-base mt-1 mb-3">
-              {{ $t('~~Please select an organization to move to') }}
+              {{ $t('userTransfer.please_select_target_organization') }}
             </div>
             <OrganizationSearchInput
               @selectedOrganization="selectedOrganization = $event"
@@ -54,11 +54,11 @@
           >
             <div class="h-72 overflow-auto py-2">
               <div class="pb-2">
-                {{ $t('~~Who do you want to move to') }}
+                {{ $t('userTransfer.select_users') }}
                 {{ selectedOrganization && selectedOrganization.name }}
               </div>
               <base-checkbox class="pb-2" @input="setAllUsers">{{
-                $t('~~Select All')
+                $t('actions.select_all')
               }}</base-checkbox>
               <tree-menu
                 v-for="user in nestedUsers"
@@ -82,7 +82,7 @@
           >
             <div class="h-72 overflow-auto py-2">
               <div class="pb-2">
-                {{ $t('~~Select cases you want to move') }}
+                {{ $t('userTransfer.select_cases') }}
                 <div class="">
                   <div
                     v-for="(cases, incident) in claimedCases"
@@ -99,9 +99,9 @@
                           setCases(value, cases);
                         }
                       "
-                      >{{ $t('~~Select all') }}
+                      >{{ $t('actions.select_all') }}
                       {{ incident | getIncidentName(incidents) }}
-                      {{ $t('~~cases') }}</base-checkbox
+                      {{ $t('userTransfer.cases') }}</base-checkbox
                     >
                     <div
                       v-for="work_type in cases"
