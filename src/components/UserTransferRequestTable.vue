@@ -132,9 +132,7 @@ export default {
     async approveRequest(requestId) {
       const result = await this.$prompt({
         title: this.$t('userTransfer.approve_user_transfer'),
-        content: this.$t(
-          'userTransfer.please_give_approval_reason',
-        ),
+        content: this.$t('userTransfer.please_give_approval_reason'),
       });
       if (result) {
         await this.$http.post(
@@ -150,9 +148,7 @@ export default {
     async rejectRequest(requestId) {
       const result = await this.$prompt({
         title: this.$t('userTransfer.reject_user_transfer'),
-        content: this.$t(
-          'userTransfer.please_give_reject_reason',
-        ),
+        content: this.$t('userTransfer.please_give_reject_reason'),
       });
       if (result) {
         await this.$http.post(

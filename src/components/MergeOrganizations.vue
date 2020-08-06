@@ -90,7 +90,9 @@ export default {
             organization_merged_reason: this.mergeReason,
           },
         );
-        await this.$toasted.success(this.$t('mergeOrganizations.merge_successful'));
+        await this.$toasted.success(
+          this.$t('mergeOrganizations.merge_successful'),
+        );
         this.showMergeModal = false;
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
