@@ -271,6 +271,7 @@ const getLanguages = async (tags) => {
   axios.defaults.headers.common['Accept-Language'] = locale;
   return new VueI18n({
     formatFallbackMessages: true,
+    silentFallbackWarn: true,
     locale,
     messages,
   });
