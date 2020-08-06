@@ -10,7 +10,7 @@
       ></base-input>
 
       <base-button
-        :text="$t('~~Create New Team')"
+        :text="$t('teams.create_new_team')"
         variant="solid"
         size="medium"
         :action="
@@ -47,11 +47,11 @@
             <base-text>{{ team.name }}</base-text>
             <base-text
               >{{ getAssignedWorkTypes(team).length }}
-              {{ $t('~~cases assigned') }}</base-text
+              {{ $t('teams.cases_assigned') }}</base-text
             >
           </div>
           <div>
-            {{ getCaseCompletion(team) }}{{ $t('~~% of cases completed') }}
+            {{ getCaseCompletion(team) }}{{ $t('teams.cases_completed') }}
           </div>
           <div class="mt-2 flex">
             <Avatar

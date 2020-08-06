@@ -21,7 +21,7 @@ export default class WorksiteMyTeamFilter extends Filter {
       return {};
     }
     return {
-      my_team: window.vue.$i18n.t('~~My Team'),
+      my_team: window.vue.$i18n.t('worksiteFilters.my_team'),
     };
   }
 
