@@ -1002,7 +1002,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="py-4 px-4 text-gray-500 border-b"
         >
           
-            ~~User Transfer Requests
+            dashboard.user_transfer_requests
           
         </div>
          
