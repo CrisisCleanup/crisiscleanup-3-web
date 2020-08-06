@@ -27,12 +27,12 @@
     </div>
     <div class="px-3 py-1">
       <div class="flex items-center justify-between py-2">
-        <base-text>{{ $t('~~List of members') }}</base-text>
+        <base-text>{{ $t('teams.list_of_members') }}</base-text>
         <base-button
           class="my-1 text-primary-dark"
           type="link"
-          :text="$t('~~+ Add Members')"
-          :alt="$t('~~+ Add Members')"
+          :text="$t('teams.add_members')"
+          :alt="$t('teams.add_members')"
           :action="
             () => {
               showAddMembersModal = true;
@@ -58,7 +58,7 @@
             "
           >
             <div class="handle" style="width: 15px; margin-top: 2px;">
-              <ccu-icon :alt="$t('~~Drag')" size="medium" type="drag" />
+              <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
             </div>
             <Avatar
               :initials="user.first_name"
@@ -82,7 +82,7 @@
               >
                 <ccu-icon
                   slot="icon"
-                  :alt="$t('~~Settings')"
+                  :alt="$t('teams.settings')"
                   size="medium"
                   type="settings"
                 />
@@ -92,14 +92,14 @@
                       class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
                     >
                       <a :href="`mailto:${user.email}`">{{
-                        $t('~~Send Email')
+                        $t('teams.send_email')
                       }}</a>
                     </li>
                     <li
                       class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
                     >
                       <a :href="`/organization/users/${user.id}`">
-                        {{ $t('~~View Full Profile') }}
+                        {{ $t('teams.view_full_profile') }}
                       </a>
                     </li>
                     <li
@@ -110,7 +110,7 @@
                         }
                       "
                     >
-                      {{ $t('~~Move to another team') }}
+                      {{ $t('teams.move_to_another_team') }}
                     </li>
                     <li
                       class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
@@ -120,7 +120,7 @@
                         }
                       "
                     >
-                      {{ $t('~~Remove from team') }}
+                      {{ $t('teams.remove_from_team') }}
                     </li>
                   </ul>
                 </template>
@@ -131,12 +131,12 @@
       </div>
 
       <div class="flex items-center justify-between py-2">
-        <base-text>{{ $t('~~List of cases') }}</base-text>
+        <base-text>{{ $t('teams.list_of_cases') }}</base-text>
         <base-button
           class="my-1 text-primary-dark"
           type="link"
-          :text="$t('~~+ Assign Cases')"
-          :alt="$t('~~+ Assign Cases')"
+          :text="$t('teams.assign_cases')"
+          :alt="$t('teams.assign_cases')"
           :action="
             () => {
               showAddCasesModal = true;
@@ -163,7 +163,7 @@
             "
           >
             <div class="handle" style="width: 15px; margin-top: 2px;">
-              <ccu-icon :alt="$t('~~Drag')" size="medium" type="drag" />
+              <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
             </div>
             <div class="badge-holder flex items-center">
               <badge
@@ -202,7 +202,7 @@
         :value="team.notes"
         class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-4 resize-none w-full"
         rows="4"
-        :placeholder="$t('~~Notes')"
+        :placeholder="$t('teams.notes')"
         @input="updateNotes"
         @blur="updateCurrentTeam"
       />
@@ -217,7 +217,7 @@
     >
       <div class="px-5 py-2">
         <div class="py-2">
-          {{ $t('~~Choose members you want to add to the team') }}
+          {{ $t('teams.choose_members') }}
         </div>
         <base-input
           v-model="currentUserSearch"
@@ -286,7 +286,7 @@
     >
       <div class="px-5 py-2">
         <div class="py-2">
-          {{ $t('~~Choose cases you want to assign to the team') }}
+          {{ $t('teams.choose_cases') }}
         </div>
         <base-input
           v-model="currentCaseSearch"
@@ -491,11 +491,11 @@ export default {
     },
     async moveToDifferentTeam(userId) {
       const result = await this.$selection({
-        title: this.$t('~~Move Teams'),
+        title: this.$t('teams.move_teams'),
         content: '',
         label: 'name',
         options: this.teams.filter((t) => t.id !== this.team.id),
-        placeholder: this.$t('~Select a team to move user to'),
+        placeholder: this.$t('teams.select_target_team'),
       });
       if (result.id) {
         await this.removeFromTeam(userId);
@@ -506,16 +506,16 @@ export default {
     },
     async deleteCurrentTeam() {
       const result = await this.$confirm({
-        title: this.$t('~~Delete Team'),
-        content: this.$t('~~Are you sure you want to delete this team?'),
+        title: this.$t('teams.delete_team'),
+        content: this.$t('teams.delete_team_confirm'),
         actions: {
           no: {
-            text: this.$t('~~No'),
+            text: this.$t('teams.no'),
             type: 'outline',
             buttonClass: 'border border-black',
           },
           yes: {
-            text: this.$t('~~Yes'),
+            text: this.$t('teams.yes'),
             type: 'solid',
           },
         },
@@ -532,7 +532,7 @@ export default {
     },
     async showOnMap(work_type) {
       await this.$component({
-        title: this.$t('~~View Case'),
+        title: this.$t('teams.view_case'),
         component: 'WorkTypeMap',
         classes: 'w-full h-96',
         props: {
@@ -542,7 +542,7 @@ export default {
     },
     async showAllOnMap() {
       await this.$component({
-        title: this.$t('~~View All Cases'),
+        title: this.$t('teams.view_all_cases'),
         component: 'WorkTypeMap',
         classes: 'w-full h-96',
         props: {

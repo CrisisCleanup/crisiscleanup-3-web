@@ -1,6 +1,6 @@
 <template>
   <modal
-    :title="$t('~~Create New Team')"
+    :title="$t('teams.create_new_team')"
     modal-classes="max-w-6xl"
     @close="$emit('close')"
   >
@@ -11,17 +11,17 @@
           :required="true"
           type="search"
           v-model="team.name"
-          :placeholder="$t('~~Team Name')"
+          :placeholder="$t('teams.team_name')"
         />
         <base-button
           class="my-3 text-primary-dark underline"
           type="link"
-          :text="$t('~~Choose the name for me')"
-          :alt="$t('~~Choose the name for me')"
+          :text="$t('teams.suggest_name')"
+          :alt="$t('teams.suggest_name')"
           :action="generateTeamName"
         />
 
-        <base-text class="mb-2">{{ $t('~~Team Members List') }}</base-text>
+        <base-text class="mb-2">{{ $t('teams.team_members_list') }}</base-text>
         <draggable
           v-model="team.users"
           :options="{ group: 'people' }"
@@ -37,7 +37,7 @@
             style="display: grid; grid-template-columns: 25px max-content 1fr;"
           >
             <div class="handle" style="width: 15px; margin-top: 2px;">
-              <ccu-icon :alt="$t('~~Drag')" size="medium" type="drag" />
+              <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
             </div>
             <Avatar
               :initials="user.first_name"
@@ -50,8 +50,8 @@
         <base-button
           class="my-3 text-primary-dark underline"
           type="link"
-          :text="$t('~~Add team members')"
-          :alt="$t('~~Add team members')"
+          :text="$t('teams.add_members')"
+          :alt="$t('teams.add_members')"
           :action="
             () => {
               view = 'users';
@@ -59,7 +59,7 @@
           "
         />
 
-        <base-text class="mb-2">{{ $t('~~Cases') }}</base-text>
+        <base-text class="mb-2">{{ $t('teams.cases') }}</base-text>
         <draggable
           v-model="teamCases"
           :options="{ group: 'cases' }"
@@ -79,7 +79,7 @@
             "
           >
             <div class="handle" style="width: 15px; margin-top: 2px;">
-              <ccu-icon :alt="$t('~~Drag')" size="medium" type="drag" />
+              <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
             </div>
             <div class="badge-holder flex items-center">
               <badge
@@ -99,8 +99,8 @@
         <base-button
           class="my-3 text-primary-dark underline"
           type="link"
-          :text="$t('~~Assign cases to team')"
-          :alt="$t('~~Assign cases to team')"
+          :text="$t('teams.assign_cases')"
+          :alt="$t('teams.assign_cases')"
           :action="
             () => {
               view = 'cases';
@@ -121,20 +121,20 @@
             {{ $t('actions.cancel') }}
           </base-button>
           <base-button
-            :alt="$t('~~Create')"
+            :alt="$t('actions.create')"
             variant="solid"
             class="px-4 p-2 mx-2"
             :action="saveTeam"
           >
-            {{ $t('~~Create') }}
+            {{ $t('actions.create') }}
           </base-button>
         </div>
       </div>
       <div class="p-2">
         <template v-if="view === 'users'">
-          <base-text variant="h2">{{ $t('~~Members') }}</base-text>
+          <base-text variant="h2">{{ $t('teams.members') }}</base-text>
           <base-text class="font-light mb-4"
-            >{{ $t('~~Choose Members then drag to the team') }}
+            >{{ $t('teams.choose_drag_members') }}
           </base-text>
           <base-input
             v-model="currentSearch"
@@ -161,7 +161,7 @@
               "
             >
               <div class="handle" style="width: 15px; margin-top: 2px;">
-                <ccu-icon :alt="$t('~~Drag')" size="medium" type="drag" />
+                <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
               </div>
               <Avatar
                 :initials="user.first_name"
@@ -173,9 +173,9 @@
           </draggable>
         </template>
         <template v-if="view === 'cases'">
-          <base-text variant="h2">{{ $t('~~Cases') }}</base-text>
+          <base-text variant="h2">{{ $t('teams.cases') }}</base-text>
           <base-text class="font-light mb-4"
-            >{{ $t('~~Choose a case and then drag to the team') }}
+            >{{ $t('teams.choose_drag_cases') }}
           </base-text>
           <base-input
             v-model="currentCaseSearch"
@@ -203,7 +203,7 @@
               "
             >
               <div class="handle" style="width: 15px; margin-top: 2px;">
-                <ccu-icon :alt="$t('~~Drag')" size="medium" type="drag" />
+                <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
               </div>
               <div class="badge-holder flex items-center">
                 <badge
