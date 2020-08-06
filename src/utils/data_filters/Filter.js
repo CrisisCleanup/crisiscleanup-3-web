@@ -1,3 +1,5 @@
+const i18n = window.vue.$i18n;
+
 export default class Filter {
   constructor(name, data) {
     this.name = name;
