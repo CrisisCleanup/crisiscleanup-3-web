@@ -1,16 +1,16 @@
 <template>
-  <TitledCard title="~~Event Builder">
+  <TitledCard title="eventBuilder.event_builder">
     <div class="card__container w-full h-full m-6">
       <div class="card__item">
         <base-text variant="h3" class="pb-2">{{
-          $t('Search Events')
+          $t('eventBuilder.search_events')
         }}</base-text>
         <EventSearch
           :event-items.sync="eventResults_"
           :loading.sync="isLoadingSearch"
         />
         <div class="my-4">
-          <base-text variant="h4" class="pb-2">Event Details</base-text>
+          <base-text variant="h4" class="pb-2">{{ $t('eventBuilder.event_details') }}</base-text>
           <Table
             :loading="isLoadingSearch"
             :columns="eventColumns"
@@ -19,8 +19,8 @@
         </div>
       </div>
       <div>
-        <base-text variant="h1" class="pb-3">Create Event</base-text>
-        <base-text variant="body" class="pb-3">Generate Key</base-text>
+        <base-text variant="h1" class="pb-3">{{ $t('eventBuilder.create_event') }}</base-text>
+        <base-text variant="body" class="pb-3">{{ $t('eventBuilder.generate_key') }}</base-text>
         <div class="card__builder pb-6">
           <div v-for="key in Object.keys(eventInputs)" :key="key">
             <base-text variant="h4" class="pb-1">{{
@@ -34,11 +34,11 @@
           </div>
           <div>
             <base-text variant="h4" class="pb-1">
-              Badge Key
+              {{ $t('eventBuilder.badge_key') }}
             </base-text>
             <FormSelect
               searchable
-              placeholder="Badge Key"
+              :placeholder="$t('eventBuilder.badge_key')"
               label="text"
               item-key="id"
               @search="(payload) => debouncedBadgeKey(payload)"
@@ -47,23 +47,23 @@
           </div>
           <div>
             <base-text variant="h4" class="pb-1">
-              Required Attributes
+              {{ $t('eventBuilder.required_attributes') }}
             </base-text>
             <FormSelect
               searchable
               multiple
-              placeholder="Required Attrs"
+              :placeholder="$t('eventBuilder.required_attributes')"
               label="name"
               :options="componentAttrs"
             />
           </div>
         </div>
-        <base-text variant="body" class="pb-3">Set Localizations</base-text>
+        <base-text variant="body" class="pb-3">{{ $t('eventBuilder.set_localizations') }}</base-text>
         <div class="card__locale py-4">
           <LocaleForm :fields="eventLocaleInputs" />
         </div>
         <div class="my-4">
-          <base-text variant="h2" class="pb-2">Event Output</base-text>
+          <base-text variant="h2" class="pb-2">{{ $t('eventBuilder.event_output') }}</base-text>
           <Table :columns="dirtyEventColumns" :data="dirtyEventData" />
         </div>
       </div>

@@ -13,7 +13,7 @@
         :href="`/invitation_token/${slotProps.item.invitation_token}`"
         text-variant="bodysm"
         class="px-2"
-        >{{ $t('~~Activate') }}</base-link
+        >{{ $t('actions.activate') }}</base-link
       >
     </template>
     <template #organization="slotProps">
@@ -81,19 +81,19 @@ export default {
     return {
       columns: [
         {
-          title: this.$t('~~Id'),
+          title: this.$t('invitationTables.id'),
           dataIndex: 'id',
           key: 'id',
           width: '0.5fr',
         },
         {
-          title: this.$t('~~Email'),
+          title: this.$t('invitationTables.email'),
           dataIndex: 'invitee_email',
           key: 'invitee_email',
           width: '1fr',
         },
         {
-          title: this.$t('~~Invited By'),
+          title: this.$t('invitationTables.invited_by'),
           dataIndex: 'invited_by',
           key: 'invited_by',
           width: '1fr',
@@ -102,19 +102,19 @@ export default {
           },
         },
         {
-          title: this.$t('~~Activation Link'),
+          title: this.$t('invitationTables.activation_link'),
           dataIndex: 'invitation_token',
           key: 'invitation_token',
           width: '1fr',
         },
         {
-          title: this.$t('Organization'),
+          title: this.$t('invitationTables.organization'),
           dataIndex: 'organization',
           key: 'organization',
           width: '1fr',
         },
         {
-          title: this.$t('~~Expiry Date'),
+          title: this.$t('invitationTables.expiration_date'),
           dataIndex: 'expires_at',
           key: 'expires_at',
           width: '1fr',
