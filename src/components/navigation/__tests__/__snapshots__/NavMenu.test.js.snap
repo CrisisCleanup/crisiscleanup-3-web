@@ -4,18 +4,7 @@ exports[`NavMenu should render correctly and match snapshot 1`] = `
 <div
   class="sidebar"
 >
-  <router-link-stub
-    to="/mockroute"
-  >
-    <div
-      class="logo flex justify-center p-3"
-    >
-      <img
-        src="@/assets/crisiscleanup_logo.png"
-        style="height: 53px;"
-      />
-    </div>
-  </router-link-stub>
+  <!---->
    
   <div
     class="menu"
