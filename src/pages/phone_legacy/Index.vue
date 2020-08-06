@@ -141,6 +141,28 @@
             }
           "
         />
+        <div class="flex flex-col bg-crisiscleanup-light-grey p-2">
+          <div class="flex items-center justify-between">
+            <base-text variant="h2">{{ $t('~~Current Stats') }}</base-text>
+            <base-button icon="sync" :action="getStats" />
+          </div>
+          <div class="flex py-2 items-center justify-between">
+            <base-text>{{ $t('~~Callbacks') }}</base-text>
+            {{ stats.callbacks }}
+          </div>
+          <div class="flex py-2 items-center justify-between">
+            <base-text>{{ $t('~~Calldowns') }}</base-text>
+            {{ stats.calldowns }}
+          </div>
+          <div class="flex py-2 items-center justify-between">
+            <base-text>{{ $t('~~In Progess') }}</base-text>
+            {{ stats.in_progress }}
+          </div>
+          <div class="flex py-2 items-center justify-between">
+            <base-text>{{ $t('~~Pending') }}</base-text>
+            {{ stats.pending }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -165,6 +187,12 @@ export default {
       nextOutbound: null,
       worksite: null,
       cases: {},
+      stats: {
+        callbacks: 0,
+        calldowns: 0,
+        in_progress: 0,
+        pending: 0,
+      },
       cards: [],
       caseId: null,
       currentType: null,
@@ -175,8 +203,20 @@ export default {
   },
   async mounted() {
     await this.getNextCall();
+    await this.getStats();
   },
   methods: {
+    async getStats() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/phone_outbound_metrics`,
+        {
+          params: {
+            incident: this.currentIncidentId,
+          },
+        },
+      );
+      this.stats = response.data;
+    },
     setCase(caseObject) {
       this.caseId = caseObject.id;
       this.currentType = caseObject.type;
@@ -284,7 +324,7 @@ export default {
 
 .side-grid {
   display: grid;
-  grid-template-rows: auto minmax(auto, 600px);
+  grid-template-rows: auto minmax(auto, 600px) max-content;
   grid-gap: 10px;
 }
 
