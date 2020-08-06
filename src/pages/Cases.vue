@@ -163,7 +163,9 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{ $t('casesVue.teams') }}</template>
+                        <template slot="btn">{{
+                          $t('casesVue.teams')
+                        }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
                             <li v-for="team in teams" :key="team.id">

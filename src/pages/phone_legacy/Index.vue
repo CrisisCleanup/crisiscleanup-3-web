@@ -7,9 +7,15 @@
           v-if="$route.meta.id === 'caller'"
         >
           <div class="pb-2">
-            <base-text variant="h2">{{ $t('phoneConnectFirst.english_login') }}</base-text>
-            <base-text>{{ $t('phoneConnectFirst.username') }} english</base-text>
-            <base-text>{{ $t('phoneConnectFirst.password') }} volunteer</base-text>
+            <base-text variant="h2">{{
+              $t('phoneConnectFirst.english_login')
+            }}</base-text>
+            <base-text
+              >{{ $t('phoneConnectFirst.username') }} english</base-text
+            >
+            <base-text
+              >{{ $t('phoneConnectFirst.password') }} volunteer</base-text
+            >
             <!--
             <base-text variant="h2">{{ $t('phoneConnectFirst.spanish_login') }}</base-text>
             <base-text>{{ $t('phoneConnectFirst.username') }} spanish</base-text>
@@ -38,7 +44,9 @@
           </div>
           <div>
             <div class="pb-2" v-if="cards.length">
-              <base-text variant="h2">{{ $t('phoneConnectFirst.cases') }}</base-text>
+              <base-text variant="h2">{{
+                $t('phoneConnectFirst.cases')
+              }}</base-text>
             </div>
             <div class="h-32 overflow-auto">
               <div class="case" v-for="c in cards" :key="c.id">
@@ -69,7 +77,9 @@
       </div>
       <div class="side-grid" v-if="$route.meta.id === 'caller'">
         <div class="p-2 border shadow flex flex-col" v-if="nextOutbound">
-          <base-text variant="h3">{{ $t('phoneConnectFirst.next_call') }}</base-text>
+          <base-text variant="h3">{{
+            $t('phoneConnectFirst.next_call')
+          }}</base-text>
           <div class="flex items-center justify-between">
             <base-text variant="h1">
               {{ nextOutbound && nextOutbound.phone_number }}
