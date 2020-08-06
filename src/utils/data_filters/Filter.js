@@ -1,5 +1,3 @@
-const i18n = window.vue.$i18n;
-
 export default class Filter {
   constructor(name, data) {
     this.name = name;
@@ -7,20 +5,20 @@ export default class Filter {
   }
 
   packFunction() {
-    throw new Error(i18n.t('info.error_pack_function'));
+    throw new Error(window.vue.$t('info.error_pack_function'));
   }
 
   getCount() {
-    throw new Error(i18n.t('info.error_get_count'));
+    throw new Error(window.vue.$t('info.error_get_count'));
   }
 
   getFilterLabels() {
-    throw new Error(i18n.t('info.error_get_filter_labels'));
+    throw new Error(window.vue.$t('info.error_get_filter_labels'));
   }
 
   // eslint-disable-next-line no-unused-vars
   removeField(identifier) {
-    throw new Error(i18n.t('info.error_remove_field'));
+    throw new Error(window.vue.$t('info.error_remove_field'));
   }
 
   get count() {
