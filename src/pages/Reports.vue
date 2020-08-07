@@ -39,7 +39,11 @@
                   {{ r.description_t }}
                 </base-text>
                 <ExampleReports
-                  v-if="$can('development_mode') || currentUser.isAdmin"
+                  v-if="
+                    $can('app_stage.development') ||
+                    $can('app_stage.staging') ||
+                    currentUser.isAdmin
+                  "
                   :formats="r.output_formats"
                   :files="r.files"
                   @download="(download) => requestReport(r.name_t, download)"

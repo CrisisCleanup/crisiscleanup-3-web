@@ -295,7 +295,7 @@
                 <div class="my-2">
                   <base-button
                     variant="solid"
-                    v-if="$can('development_mode')"
+                    v-if="($can('app_stage.development') || $can('app_stage.staging'))"
                     class="px-4 py-1"
                     :action="
                       () => {

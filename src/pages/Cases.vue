@@ -157,7 +157,10 @@
                         </template>
                       </base-dropdown>
                     </li>
-                    <li class="py-2" v-if="$can('development_mode')">
+                    <li
+                      class="py-2"
+                      v-if="($can('app_stage.development') || $can('app_stage.staging'))"
+                    >
                       <base-dropdown
                         :trigger="'hover'"
                         :role="'sublist'"

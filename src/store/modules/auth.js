@@ -70,6 +70,7 @@ const mutations = {
           acl.rule(`beta_feature.${feature}`, true);
         });
         acl.rule(`development_mode`, process.env.NODE_ENV !== 'production');
+        acl.rule(`app_stage.${process.env.VUE_APP_STAGE}`, true);
       },
       { router },
     );
