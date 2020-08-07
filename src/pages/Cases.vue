@@ -1035,6 +1035,7 @@ export default {
           pageSize: this.pagination.pageSize,
           page: 1,
         });
+        this.getLocations();
       }
     },
   },
@@ -1075,19 +1076,8 @@ export default {
         page: 1,
       });
     }
-    const locationParams = {
-      limit: 200,
-      type__key__in:
-        'boundary_political_us_congress,boundary_political_us_state,boundary_political_us_county',
-      fields: 'id,name,type',
-      incident_area: this.currentIncidentId,
-    };
-    const queryString = getQueryString(locationParams);
-
     await Promise.all([
-      Location.api().get(`/locations?${queryString}`, {
-        dataKey: 'results',
-      }),
+      this.getLocations(),
       LocationType.api().get('/location_types', {
         dataKey: 'results',
       }),
@@ -1095,9 +1085,22 @@ export default {
         dataKey: 'results',
       }),
     ]);
-    this.isMounted = queryString;
+    this.isMounted = JSON.stringify(this.appliedFilters);
   },
   methods: {
+    async getLocations() {
+      const locationParams = {
+        limit: 200,
+        type__key__in:
+          'boundary_political_us_congress,boundary_political_us_state,boundary_political_us_county',
+        fields: 'id,name,type',
+        incident_area: this.currentIncidentId,
+      };
+      const queryString = getQueryString(locationParams);
+      await Location.api().get(`/locations?${queryString}`, {
+        dataKey: 'results',
+      });
+    },
     handleTableChange({ pagination, filters, sorter }) {
       this.fetch({
         pageSize: pagination.pageSize,
