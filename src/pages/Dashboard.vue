@@ -59,7 +59,7 @@
                     {{ totalClaimed | numeral('0,0') }}
                     <span class="text-base">
                       ({{ (totalClaimed / totalWorksites) | numeral('0%') }}
-                      of Total)
+                      {{ $t('dashboard.of_total') }})
                     </span>
                     <span class="text-orange"
                       ><i class="fas fa-exchange-alt"></i
@@ -94,7 +94,7 @@
                     {{ totalInProgess | numeral('0,0') }}
                     <span class="text-base">
                       ({{ (totalInProgess / totalWorksites) | numeral('0%') }}
-                      of Claimed)
+                      {{ $t('dashboard.of_total') }})
                     </span>
                     <span class="text-yellow-900"
                       ><i class="fas fa-caret-up"></i
@@ -129,7 +129,7 @@
                     {{ totalClosed | numeral('0,0') }}
                     <span class="text-base">
                       ({{ (totalClosed / totalWorksites) | numeral('0%') }}
-                      {{ $t('of Claimed') }})
+                      {{ $t('dashboard.of_total') }})
                     </span>
                   </h3>
                 </div>
