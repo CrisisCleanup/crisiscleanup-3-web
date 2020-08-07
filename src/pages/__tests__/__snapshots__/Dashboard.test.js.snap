@@ -116,7 +116,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 >
                   
                     (NaN
-                    of Total)
+                    dashboard.of_total)
                   
                 </span>
                  
@@ -181,7 +181,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 >
                   
                     (NaN
-                    of Claimed)
+                    dashboard.of_total)
                   
                 </span>
                  
@@ -246,7 +246,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 >
                   
                     (NaN
-                    of Claimed)
+                    dashboard.of_total)
                   
                 </span>
               </h3>
