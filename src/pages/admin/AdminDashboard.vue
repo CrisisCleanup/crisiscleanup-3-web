@@ -26,14 +26,14 @@
               variant="solid"
               size="medium"
               :action="() => $router.push({ name: 'nav.admin_tools' })"
-              >{{ $t('~~Tools') }}</base-button
+              >{{ $t('adminDashboard.tools') }}</base-button
             >
           </div>
         </div>
         <div class="flex">
           <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('~~Pending Organizations') }}
+              {{ $t('adminDashboard.pending_organizations') }}
             </div>
             <div class="p-4">
               <OrganizationApprovalTable
@@ -46,7 +46,7 @@
         <div class="flex">
           <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('inviteTeammates.redeploy_requests') }}
+              {{ $t('adminDashboard.redeploy_requests') }}
             </div>
             <div class="p-4">
               <IncidentApprovalTable
@@ -74,7 +74,7 @@
                   "
                   >-</base-button
                 >
-                {{ $t('Organizations') }}
+                {{ $t('adminDashboard.organizations') }}
               </span>
               <base-input
                 :value="organizations.search"
@@ -112,7 +112,7 @@
                   "
                   >-</base-button
                 >
-                {{ $t('Users') }}
+                {{ $t('adminDashboard.users') }}
               </span>
               <base-input
                 :value="users.search"
@@ -150,7 +150,7 @@
                   "
                   >-</base-button
                 >
-                {{ $t('Ghost Users') }}
+                {{ $t('adminDashboard.ghost_users') }}
               </span>
               <base-input
                 :value="ghostUsers.search"
@@ -188,7 +188,7 @@
                   "
                   >-</base-button
                 >
-                {{ $t('Invitation Requests') }}
+                {{ $t('adminDashboard.invitation_requests') }}
               </span>
               <base-input
                 :value="invitationRequests.search"
@@ -226,7 +226,7 @@
                   "
                   >-</base-button
                 >
-                {{ $t('Invitations') }}
+                {{ $t('adminDashboard.invitations') }}
               </span>
               <base-input
                 :value="invitations.search"
