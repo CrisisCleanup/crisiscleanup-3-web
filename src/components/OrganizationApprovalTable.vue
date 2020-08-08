@@ -18,6 +18,18 @@
         />
       </div>
     </template>
+    <template #incidents="slotProps">
+      <div
+        class="w-full flex items-center text-primary-dark link underline"
+        @click="
+          () => {
+            showAssociatedIncidents(slotProps.item.incidents);
+          }
+        "
+      >
+        {{ slotProps.item.incidents.length }}
+      </div>
+    </template>
     <template #actions="slotProps">
       <div class="flex mr-2 justify-end w-full items-center">
         <base-button
@@ -63,12 +75,15 @@ import User from '@/models/User';
 import OrganizationApprovalDialog from '@/components/dialogs/OrganizationApprovalDialog';
 import { create } from 'vue-modal-dialogs';
 import MessageBox from '@/components/dialogs/MessageBox';
+import { DialogsMixin } from '../mixins';
+import Incident from '../models/Incident';
 
 const messageBox = create(MessageBox);
 const responseDialog = create(OrganizationApprovalDialog);
 
 export default {
   name: 'OrganizationApprovalTable',
+  mixins: [DialogsMixin],
   components: { Table },
   props: {
     organizations: {
@@ -94,6 +109,16 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/ghost_users?organization=${organizationId}`,
       );
       return response.data.results;
+    },
+    async showAssociatedIncidents(incidents) {
+      await this.$component({
+        title: this.$t('~~Associated Incidents'),
+        component: 'IncidentList',
+        classes: 'w-full h-48',
+        props: {
+          incidents: Incident.query().whereIdIn(incidents).get(),
+        },
+      });
     },
     async showContacts(organization) {
       const contacts = await this.getOrganizationContacts(organization.id);
@@ -162,6 +187,12 @@ export default {
           dataIndex: 'admin_notes',
           key: 'admin_notes',
           width: '2fr',
+        },
+        {
+          title: this.$t('Associated Incidents'),
+          dataIndex: 'incidents',
+          key: 'incidents',
+          width: '1fr',
         },
         {
           title: '',

@@ -480,9 +480,13 @@ export default {
         event.target.className.includes(className);
       if (
         event &&
-        ['case-flag', 'checkmark', 'checkmark-input', 'base-button'].some(
-          hasClass,
-        )
+        [
+          'case-flag',
+          'checkmark',
+          'checkmark-input',
+          'base-button',
+          'link',
+        ].some(hasClass)
       ) {
         return;
       }

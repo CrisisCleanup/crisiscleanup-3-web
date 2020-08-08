@@ -13,11 +13,22 @@
         {{ slotProps.item.created_at | moment('from', 'now') }}
       </div>
     </template>
+    <template #organization_profile_completed="slotProps">
+      <div class="w-full flex items-center text-primary-dark">
+        <font-awesome-icon
+          class="mx-1"
+          size="lg"
+          icon="check-circle"
+          v-if="slotProps.item.organization_profile_completed"
+        />
+      </div>
+    </template>
     <template #actions="slotProps">
       <div class="flex mr-2 justify-end w-full items-center">
         <base-button
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
+          v-if="slotProps.item.org_verified"
           variant="solid"
           size="small"
           class="mx-2"
@@ -33,6 +44,7 @@
           variant="outline"
           size="small"
           class="mx-2"
+          v-if="slotProps.item.org_verified"
           :action="
             () => {
               rejectRequest(slotProps.item.id);
@@ -111,6 +123,12 @@ export default {
           title: this.$t('incidentApprovalTable.organization_name'),
           dataIndex: 'organization_name',
           key: 'organization_name',
+          width: '1fr',
+        },
+        {
+          title: this.$t('~~Profile Completed'),
+          dataIndex: 'organization_profile_completed',
+          key: 'organization_profile_completed',
           width: '1fr',
         },
         {
