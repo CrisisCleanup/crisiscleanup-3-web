@@ -208,7 +208,7 @@ export default {
           },
         );
         this.requestedToOrg = response.response.data.requested_to_organization;
-        if (response.response.data.approved_by) {
+        if (response.response.data.approved_at) {
           this.wasPreapproved = true;
         }
         this.showSuccessModal = true;
