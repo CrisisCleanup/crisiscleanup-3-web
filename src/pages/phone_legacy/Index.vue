@@ -75,8 +75,8 @@
           height="100%"
         ></iframe>
       </div>
-      <div class="side-grid" v-if="$route.meta.id === 'caller'">
-        <div class="p-2 border shadow flex flex-col" v-if="nextOutbound">
+      <div v-if="$route.meta.id === 'caller'">
+        <div class="p-2 border shadow flex flex-col mb-4" v-if="nextOutbound">
           <base-text variant="h3">{{
             $t('phoneConnectFirst.next_call')
           }}</base-text>
@@ -132,8 +132,8 @@
           :is-editing="currentType === 'worksite'"
           @savedWorksite="clearCase"
           @closeWorksite="clearCase"
-          class="border shadow"
-          style="grid-template-rows: 600px 80px;"
+          class="border shadow mb-4"
+          style="grid-template-rows: 600px 80px; height: 700px;"
           @navigateToWorksite="
             (id) => {
               currentType = 'worksite';

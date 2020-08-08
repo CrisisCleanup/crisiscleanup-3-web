@@ -47,6 +47,7 @@ export default {
 $areas: main nav logo actions overlay survivors globe footer;
 
 .homegrid {
+  overflow: auto;
   &.grid-container {
     display: grid;
     grid-template-columns: repeat(6, 1fr);

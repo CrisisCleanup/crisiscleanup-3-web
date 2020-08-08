@@ -1,9 +1,9 @@
 <template>
   <div
     v-if="ready"
-    class="bg-white flex flex-col flex-grow justify-between p-3"
+    class="bg-white flex flex-col flex-grow justify-between p-3 main-container w-full"
   >
-    <div class="flex-grow overflow-auto" style="height: 600px;">
+    <div class="w-full overflow-auto">
       <form-select
         v-model="currentFlag.reason_t"
         :options="flagTypes"
@@ -273,7 +273,6 @@
         </div>
       </div>
     </div>
-
     <div v-if="currentFlag.reason_t" class="flex justify-center items-center">
       <base-button
         size="medium"
@@ -452,6 +451,13 @@ export default {
   z-index: 1000;
   height: 200px;
   overflow: auto;
+}
+
+.main-container {
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: calc(100vh - 320px - var(--safe-area-inset-bottom)) 80px;
 }
 </style>
 

@@ -37,7 +37,7 @@
 
       <div v-if="page === 'existing'">
         <tabs class="" ref="tabs" @mounted="setTabs">
-          <tab name="userTransfer.select_organization">
+          <tab :name="$t('userTransfer.select_organ  ization')">
             <div class="text-base mt-1 mb-3">
               {{ $t('userTransfer.please_select_target_organization') }}
             </div>
@@ -48,7 +48,7 @@
             />
           </tab>
           <tab
-            name="Select Users"
+            :name="$t('userTransfer.select_users')"
             ref="currentCallTab"
             :disabled="!selectedOrganization"
           >
@@ -76,7 +76,7 @@
             </div>
           </tab>
           <tab
-            name="Select Cases"
+            :name="$t('userTransfer.select_cases')"
             ref="currentCasesTab"
             :disabled="!selectedOrganization"
           >
