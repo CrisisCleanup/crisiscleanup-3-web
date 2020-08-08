@@ -45,7 +45,11 @@ export default {
     ...mapActions('auth', ['login', 'logout']),
     ...mapActions('ui', ['validateBrowser']),
     ...mapGetters('auth', ['isLoggedIn']),
-    ...mapMutations('enums', ['setStatuses', 'setWorkTypes']),
+    ...mapMutations('enums', [
+      'setStatuses',
+      'setWorkTypes',
+      'setLocationTypes',
+    ]),
     async getEnums() {
       const enums = await hash({
         statuses: this.$http.get(
@@ -56,8 +60,16 @@ export default {
             },
           },
         ),
-        workTypes: await this.$http.get(
+        workTypes: this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/work_types`,
+          {
+            headers: {
+              Authorization: null,
+            },
+          },
+        ),
+        locationTypes: this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/location_types`,
           {
             headers: {
               Authorization: null,
@@ -67,6 +79,7 @@ export default {
       });
       this.setStatuses(enums.statuses.data.results);
       this.setWorkTypes(enums.workTypes.data.results);
+      this.setLocationTypes(enums.locationTypes.data.results);
     },
   },
   async mounted() {

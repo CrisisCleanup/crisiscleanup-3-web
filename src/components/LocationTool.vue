@@ -1,13 +1,13 @@
 <template>
   <div style="display: grid; grid-template-rows: auto 1fr;">
-    <div class="h-16 flex items-center">
+    <div class="h-16 flex items-center" style="z-index: 10000;">
       <autocomplete
         icon="search"
         :suggestions="locationResults"
         display-property="name"
         size="large"
         :placeholder="$t('locationTool.search_several_area_types')"
-        class="w-2/5"
+        class="w-2/5 mr-2"
         @selected="onLocationSelected"
         @search="onLocationSearch"
       >
@@ -22,6 +22,21 @@
           </div>
         </template>
       </autocomplete>
+
+      <form-select
+        :value="currentLocationType"
+        :options="locationTypes"
+        item-key="id"
+        label="name_t"
+        :required="true"
+        :placeholder="$t('locationVue.location_type')"
+        select-classes="bg-white border border-crisiscleanup-dark-100 w-2/5 h-12"
+        @input="
+          (type) => {
+            currentLocationType = type;
+          }
+        "
+      />
     </div>
     <div
       class="layers-tool flex-grow relative"
@@ -252,7 +267,9 @@ import LocationType from '@/models/LocationType';
 import User from '@/models/User';
 import { getWorksiteLayer } from '@/utils/map';
 import LayerUploadTool from '@/components/LayerUploadTool';
+import { throttle, debounce } from 'lodash';
 import MapButton from './MapButton';
+import { getQueryString } from '../utils/urls';
 
 export default {
   name: 'LocationTool',
@@ -303,9 +320,11 @@ export default {
         weight: '1',
       },
       map: null,
+      currentLocationType: null,
       currentBufferDistance: 0,
       markers: [],
       worksitesLoading: false,
+      throttle,
     };
   },
   computed: {
@@ -317,6 +336,7 @@ export default {
         currentPolygon: this.currentPolygon,
       };
     },
+    ...mapState('enums', ['locationTypes']),
     ...mapState('incident', ['currentIncidentId']),
   },
   watch: {
@@ -669,15 +689,30 @@ export default {
         this.map.pm.enableDraw(type, options);
       }, 200);
     },
-    async onLocationSearch(value) {
-      const results = await Location.api().get(
-        `/locations?search=${value}&limit=10&fields=id,name,type`,
-        {
+    onLocationSearch: debounce(
+      async function (value) {
+        const params = {
+          search: value,
+          limit: 10,
+          fields: 'id,name,type',
+        };
+        if (this.currentLocationType) {
+          params.type = this.currentLocationType;
+        }
+
+        const queryString = getQueryString(params);
+        const results = await Location.api().get(`/locations?${queryString}`, {
           dataKey: 'results',
-        },
-      );
-      this.locationResults = results.entities.locations;
-    },
+        });
+        this.locationResults = results.entities.locations;
+      },
+      150,
+      {
+        leading: false,
+        trailing: true,
+      },
+    ),
+
     showPopup(center) {
       const popup = L.popup({
         closeOnClick: false,
