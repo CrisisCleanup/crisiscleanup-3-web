@@ -90,6 +90,10 @@ export default {
 </script>
 
 <style>
+html {
+  font-size: responsive 10px 18px;
+}
+
 body {
   height: 100vh;
   font-family: 'Nunito Sans', sans-serif;
