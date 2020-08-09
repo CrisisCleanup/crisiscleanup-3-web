@@ -12,6 +12,7 @@ import FormSelect from '@/components/FormSelect';
 import Modal from '@/components/Modal';
 import Spinner from '@/components/Spinner';
 import Tag from '@/components/Tag';
+import VueCompositionApi from '@vue/composition-api';
 import {
   getColorForWorkType,
   getStatusName,
@@ -90,6 +91,7 @@ Vue.use(Toasted, {
 Vue.use(VueI18n);
 Vue.use(VueLog);
 Vue.use(Popover);
+Vue.use(VueCompositionApi);
 Vue.component('v-select', vSelect);
 
 // Filters
