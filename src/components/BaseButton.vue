@@ -36,13 +36,13 @@ export default {
     text: VueTypes.string,
     alt: VueTypes.string.def('button'),
     title: VueTypes.string.def('Button'),
-    size: VueTypes.oneOf(['small', 'medium', 'large']),
+    size: VueTypes.oneOf(['small', 'medium', 'large', 'sm', 'md', 'lg']),
     icon: VueTypes.string,
     ccuIcon: VueTypes.oneOf(Object.values(ICONS)),
     iconSize: VueTypes.oneOf(ICON_SIZES).def('sm'),
     suffixIcon: VueTypes.oneOf(Object.values(ICONS)),
     selector: VueTypes.string,
-    variant: VueTypes.oneOf(VARIANTS),
+    variant: VueTypes.oneOf(Object.values(VARIANTS)),
   },
   data() {
     return {
@@ -58,9 +58,11 @@ export default {
     },
     styles() {
       const styles = {
-        'large text-h3 font-h3': this.size === 'large',
-        'medium text-sans text-h4 font-h4': this.size === 'medium',
-        'small text-bodysm font-bodysm': this.size === 'small',
+        'large text-h3 font-h3': ['large', 'lg'].includes(this.size),
+        'medium text-sans text-h4 font-h4': ['medium', 'md'].includes(
+          this.size,
+        ),
+        'small text-bodysm font-bodysm': ['small', 'sm'].includes(this.size),
         disabled: this.disabled,
         // **** DEPRECATED ****
         primary: this.type === 'primary',
