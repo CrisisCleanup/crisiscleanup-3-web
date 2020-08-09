@@ -17,6 +17,7 @@ const routes = [
         path: 'home',
         name: 'nav.admin_dashboard',
         component: AdminDashboard,
+        alias: '',
       },
       {
         path: 'organization/:organization_id',

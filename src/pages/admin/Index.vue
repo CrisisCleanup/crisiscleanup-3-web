@@ -11,14 +11,14 @@ export default {
   components: { PageLayout },
   setup() {
     const tabs = reactive([
-      {
+      reactive({
         key: 'nav.admin_dashboard',
         title: 'Home',
-      },
-      {
+      }),
+      reactive({
         key: 'nav.admin_tools',
         title: 'Events',
-      },
+      }),
     ]);
     return { tabs };
   },
