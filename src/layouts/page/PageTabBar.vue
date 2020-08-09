@@ -41,6 +41,11 @@ export type Tab = {|
   route: string | {},
 |};
 
+/**
+ * PageTabBar
+ * This component is utilized by the Page component.
+ * This component should NOT be used directly.
+ */
 export default {
   name: 'PageTabBar',
   props: {
