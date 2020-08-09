@@ -1,3 +1,4 @@
+// @flow
 /**
  * Various Constants
  */
@@ -77,4 +78,18 @@ export const ICON_SIZES = [
 
 export const BUTTON_STYLES = ['primary', 'danger', 'warning', 'link', 'bare'];
 
-export const BUTTON_VARIANTS = ['solid', 'outline', 'text'];
+export const BUTTON_SIZES = {
+  SM: 'small',
+  MD: 'medium',
+  LG: 'large',
+};
+
+export const BUTTON_VARIANTS = {
+  SOLID: 'solid',
+  OUTLINE: 'outline',
+  TEXT: 'text',
+};
+
+export type ButtonVariant = $Values<BUTTON_VARIANTS>;
+export type ButtonSize = $Values<BUTTON_SIZES>;
+export type Icon = $Values<Icons>;
