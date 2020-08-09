@@ -199,7 +199,7 @@
     "jest-serializer-vue": "^2.0.2",
     "jest-vue-preprocessor": "^1.7.1",
     "less": "^3.12.2",
-    "less-loader": "^5.0.0",
+    "less-loader": "^6.2.0",
     "lint-staged": "^10.2.11",
     "lodash-webpack-plugin": "^0.11.5",
     "lost": "^8.3.1",
