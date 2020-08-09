@@ -92,6 +92,7 @@ export default {
 <style>
 html {
   font-size: responsive 10px 18px;
+  @apply subpixel-antialiased;
 }
 
 body {
