@@ -1,5 +1,8 @@
 <template>
-  <p :class="[styles]" :style="weight && { fontWeight: weight }">
+  <p
+    :class="[styles, 'subpixel-antialiased']"
+    :style="weight && { fontWeight: weight }"
+  >
     <slot>BaseText</slot>
   </p>
 </template>
