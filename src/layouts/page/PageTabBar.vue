@@ -78,7 +78,12 @@ export default {
     });
     const setTab = (route, idx) => {
       activeIndex.value = idx;
-      root.$router.replace(route);
+      try {
+        root.$router.replace(route);
+      } catch (e) {
+        root.$log.error('Ran into an error trying to navigate!');
+        root.$log.error(e);
+      }
     };
     const tabBar = ref(null);
     const updateSelector = () => {
