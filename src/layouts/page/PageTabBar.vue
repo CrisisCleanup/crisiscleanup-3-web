@@ -1,18 +1,19 @@
 <template>
   <div class="page">
-    <div class="page__tabbar border-t border-gray-300">
+    <div ref="tabBar" :class="`page__tabbar border-t border-gray-300`">
       <div
         v-for="(t, idx) in state.tabs"
         :class="`page__tab page__tab--${idx} page__tab--${
           t.key === $route.name ? 'active' : ''
         }`"
         :key="t.key"
-        @click="() => $router.replace(t.route)"
+        @click="() => setTab(t.route, idx)"
       >
         <base-text variant="h3" weight="600">
           {{ $t(t.title) }}
         </base-text>
       </div>
+      <div class="page__selector" :style="selectorStyle" />
     </div>
     <div class="page__body">
       <keep-alive>
@@ -26,7 +27,13 @@
 // @flow
 import VueTypes from 'vue-types';
 import _ from 'lodash';
-import { reactive } from '@vue/composition-api';
+import {
+  reactive,
+  ref,
+  watchEffect,
+  computed,
+  onMounted,
+} from '@vue/composition-api';
 
 export type Tab = {|
   key: string,
@@ -47,51 +54,90 @@ export default {
       ),
     ),
   },
-  setup({ tabs }) {
+  setup({ tabs }, { root }) {
     const state = reactive({
       tabs: tabs.map(({ key, ...rest }) =>
-        _.defaults(rest, {
-          title: _.startCase(_.last(_.last(key.split('.')).split('_'))),
-          route: { name: key },
-          key,
-        }),
+        reactive(
+          _.defaults(rest, {
+            title: _.startCase(_.last(_.last(key.split('.')).split('_'))),
+            route: { name: key },
+            key,
+          }),
+        ),
       ),
+    });
+    const activeIndex = ref(0);
+    const selectorState = reactive({
+      transform: 0,
+      scale: 0,
+    });
+    const setTab = (route, idx) => {
+      activeIndex.value = idx;
+      root.$router.replace(route);
+    };
+    const tabBar = ref(null);
+    const updateSelector = () => {
+      if (!tabBar || !tabBar.value) return;
+      const nodes = _.get(tabBar.value, 'children', []);
+      if (!nodes.length) return;
+      const activeTab: HTMLElement = nodes.item(activeIndex.value);
+      root.$log.debug(activeTab, activeIndex.value);
+      const scaleMulti = activeTab.clientWidth / tabBar.value.clientWidth;
+      const newWS = tabBar.value.clientWidth - activeTab.clientWidth; // new whitespace
+      const scaledOffset = newWS / 2;
+      root.$log.debug(`selector scale multiplier: ${scaleMulti}`);
+      root.$log.debug(`scaled offset: ${scaledOffset}`);
+      selectorState.transform = Number(
+        scaledOffset - activeTab.offsetLeft,
+      ).toFixed(2);
+      selectorState.scale = Number(scaleMulti).toFixed(2);
+    };
+
+    const selectorStyle = computed(() => ({
+      transform: `translateX(-${selectorState.transform}px) scaleX(${selectorState.scale})`,
+    }));
+
+    onMounted(() => {
+      watchEffect(() => updateSelector());
     });
     return {
       state,
+      tabBar,
+      setTab,
+      updateSelector,
+      selectorState,
+      selectorStyle,
+      activeIndex,
     };
+  },
+  beforeRouteLeave(to, from, next) {
+    // workaround for: https://github.com/vuejs/composition-api/issues/49
+    from.matched[0].instances.default.updateSelector();
+    next();
   },
 };
 </script>
 
 <style scoped lang="postcss">
+$neg-top-space: calc(0rem - theme('spacing.6'));
+$neg-y-pad: calc(0rem - theme('spacing.4'));
+$neg-x-pad: calc(0rem - theme('spacing.5'));
+$tab-x-pad: calc(theme('spacing.5') * 4);
+
 .page {
-  --top-spacing: calc(0rem - theme('spacing.6'));
   &__tabbar {
     display: flex;
     @apply bg-white;
-    margin: var(--top-spacing) var(--top-spacing) var(--top-spacing);
+    margin: $neg-top-space $neg-top-space $neg-top-space;
     position: fixed;
     z-index: 99;
     width: 100%;
   }
   &__tab {
-    --neg-y-pad: calc(0rem - theme('spacing.4'));
-    --neg-x-pad: calc(0rem - theme('spacing.5'));
     @apply py-4 px-5 text-crisiscleanup-dark-300;
     cursor: pointer;
     transition: color 250ms ease;
     position: relative;
-    &:after {
-      content: '';
-      height: 4px;
-      width: 100%;
-      @apply bg-primary-light;
-      position: absolute;
-      z-index: 99;
-      margin-left: var(--neg-x-pad);
-      bottom: 0;
-    }
     &:hover {
       @apply text-crisiscleanup-dark-400;
     }
@@ -99,6 +145,16 @@ export default {
       @apply text-crisiscleanup-dark-500;
       font-weight: 700;
     }
+  }
+  &__selector {
+    height: 4px;
+    @apply bg-primary-light;
+    position: absolute;
+    z-index: 99;
+    bottom: 0;
+    width: 100%;
+    display: inline-block;
+    transition: transform 300ms easeInOutCirc;
   }
   &__body {
     @apply pt-8;
