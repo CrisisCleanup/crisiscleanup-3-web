@@ -1833,7 +1833,7 @@ exports[`Storyshots Basics|BaseLink As Anchor 1`] = `
       to=""
     >
       <p
-        class="text-body font-body font-sans"
+        class="text-body font-body font-sans subpixel-antialiased"
       >
         As Anchor
       </p>
@@ -1856,7 +1856,7 @@ exports[`Storyshots Basics|BaseLink As Router Link 1`] = `
       target=""
     >
       <p
-        class="text-body font-body font-sans"
+        class="text-body font-body font-sans subpixel-antialiased"
       >
         As router-link
       </p>
@@ -1879,7 +1879,7 @@ exports[`Storyshots Basics|BaseLink With Defaults 1`] = `
       to=""
     >
       <p
-        class="text-body font-body font-sans"
+        class="text-body font-body font-sans subpixel-antialiased"
       >
         Link
       </p>
@@ -1902,7 +1902,7 @@ exports[`Storyshots Basics|BaseLink With Text Variant 1`] = `
       to=""
     >
       <p
-        class="text-h1 font-h1 font-sans"
+        class="text-h1 font-h1 font-sans subpixel-antialiased"
       >
         H1 Link
       </p>
@@ -1946,7 +1946,7 @@ exports[`Storyshots Basics|BaseText With Custom Styles 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <p
-      class="text-white bg-black text-h1 font-h1 font-sans"
+      class="text-white bg-black text-h1 font-h1 font-sans subpixel-antialiased"
     >
       Sample Text
     </p>
@@ -1962,7 +1962,7 @@ exports[`Storyshots Basics|BaseText With Defaults 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <p
-      class="text-body font-body font-sans"
+      class="text-body font-body font-sans subpixel-antialiased"
     >
       Sample Text
     </p>
@@ -1982,7 +1982,7 @@ exports[`Storyshots Basics|BaseText With Font Weights 1`] = `
         class="m-4"
       >
         <p
-          class="text-h1 font-h1 font-sans"
+          class="text-h1 font-h1 font-sans subpixel-antialiased"
           style="font-weight: 300;"
         >
           Sample Text - (300)
@@ -1992,7 +1992,7 @@ exports[`Storyshots Basics|BaseText With Font Weights 1`] = `
         class="m-4"
       >
         <p
-          class="text-h1 font-h1 font-sans"
+          class="text-h1 font-h1 font-sans subpixel-antialiased"
           style="font-weight: 400;"
         >
           Sample Text - (400)
@@ -2002,7 +2002,7 @@ exports[`Storyshots Basics|BaseText With Font Weights 1`] = `
         class="m-4"
       >
         <p
-          class="text-h1 font-h1 font-sans"
+          class="text-h1 font-h1 font-sans subpixel-antialiased"
           style="font-weight: 500;"
         >
           Sample Text - (500)
@@ -2012,7 +2012,7 @@ exports[`Storyshots Basics|BaseText With Font Weights 1`] = `
         class="m-4"
       >
         <p
-          class="text-h1 font-h1 font-sans"
+          class="text-h1 font-h1 font-sans subpixel-antialiased"
           style="font-weight: 600;"
         >
           Sample Text - (600)
@@ -2022,7 +2022,7 @@ exports[`Storyshots Basics|BaseText With Font Weights 1`] = `
         class="m-4"
       >
         <p
-          class="text-h1 font-h1 font-sans"
+          class="text-h1 font-h1 font-sans subpixel-antialiased"
           style="font-weight: 700;"
         >
           Sample Text - (700)
@@ -2045,7 +2045,7 @@ exports[`Storyshots Basics|BaseText With Fonts 1`] = `
         class="m-4"
       >
         <p
-          class="text-h1 font-h1 font-sans"
+          class="text-h1 font-h1 font-sans subpixel-antialiased"
         >
           Sample Text - (sans)
         </p>
@@ -2054,7 +2054,7 @@ exports[`Storyshots Basics|BaseText With Fonts 1`] = `
         class="m-4"
       >
         <p
-          class="text-h1 font-h1 font-display"
+          class="text-h1 font-h1 font-display subpixel-antialiased"
         >
           Sample Text - (display)
         </p>
@@ -2076,7 +2076,7 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
         class="m-4"
       >
         <p
-          class="text-h1 font-h1 font-sans"
+          class="text-h1 font-h1 font-sans subpixel-antialiased"
         >
           Sample Text - (h1)
         </p>
@@ -2085,7 +2085,7 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
         class="m-4"
       >
         <p
-          class="text-h2 font-h2 font-sans"
+          class="text-h2 font-h2 font-sans subpixel-antialiased"
         >
           Sample Text - (h2)
         </p>
@@ -2094,7 +2094,7 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
         class="m-4"
       >
         <p
-          class="text-h3 font-h3 font-sans"
+          class="text-h3 font-h3 font-sans subpixel-antialiased"
         >
           Sample Text - (h3)
         </p>
@@ -2103,7 +2103,7 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
         class="m-4"
       >
         <p
-          class="text-h4 font-h4 font-sans"
+          class="text-h4 font-h4 font-sans subpixel-antialiased"
         >
           Sample Text - (h4)
         </p>
@@ -2112,7 +2112,7 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
         class="m-4"
       >
         <p
-          class="text-body font-body font-sans"
+          class="text-body font-body font-sans subpixel-antialiased"
         >
           Sample Text - (body)
         </p>
@@ -2121,7 +2121,7 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
         class="m-4"
       >
         <p
-          class="text-bodysm font-bodysm font-sans"
+          class="text-bodysm font-bodysm font-sans subpixel-antialiased"
         >
           Sample Text - (bodysm)
         </p>
@@ -2212,7 +2212,7 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
             class="left"
           >
             <p
-              class="text-body font-body font-sans"
+              class="text-body font-body font-sans subpixel-antialiased"
               style="font-weight: 700;"
             >
               
@@ -2244,7 +2244,7 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
                 class="accordion__card"
               >
                 <p
-                  class="text-h3 font-h3 font-sans accordion__title"
+                  class="text-h3 font-h3 font-sans subpixel-antialiased accordion__title"
                 >
                   
         One
@@ -2262,7 +2262,7 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
                 class="accordion__card"
               >
                 <p
-                  class="text-h3 font-h3 font-sans accordion__title accordion__title--active"
+                  class="text-h3 font-h3 font-sans subpixel-antialiased accordion__title accordion__title--active"
                 >
                   
         Two
@@ -2306,7 +2306,7 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
             class="left"
           >
             <p
-              class="text-body font-body font-sans"
+              class="text-body font-body font-sans subpixel-antialiased"
               style="font-weight: 700;"
             >
               
@@ -2338,7 +2338,7 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
                 class="accordion__card"
               >
                 <p
-                  class="bg-blue-500 p-6 text-body font-body font-sans"
+                  class="bg-blue-500 p-6 text-body font-body font-sans subpixel-antialiased"
                 >
                   Custom Title Component
                 </p>
@@ -2347,7 +2347,7 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
                   class="accordion__body--active accordion__body"
                 >
                   <p
-                    class="text-body font-body font-sans"
+                    class="text-body font-body font-sans subpixel-antialiased"
                   >
                     I am a custom component
                   </p>
@@ -2357,7 +2357,7 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
                 class="accordion__card"
               >
                 <p
-                  class="text-h3 font-h3 font-sans accordion__title"
+                  class="text-h3 font-h3 font-sans subpixel-antialiased accordion__title"
                 >
                   
         Two
@@ -2394,7 +2394,7 @@ exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
         class="accordion__card"
       >
         <p
-          class="text-h3 font-h3 font-sans accordion__title accordion__title--active"
+          class="text-h3 font-h3 font-sans subpixel-antialiased accordion__title accordion__title--active"
         >
           
         One
@@ -2412,7 +2412,7 @@ exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
         class="accordion__card"
       >
         <p
-          class="text-h3 font-h3 font-sans accordion__title"
+          class="text-h3 font-h3 font-sans subpixel-antialiased accordion__title"
         >
           
         Two
@@ -2430,7 +2430,7 @@ exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
         class="accordion__card"
       >
         <p
-          class="text-h3 font-h3 font-sans accordion__title"
+          class="text-h3 font-h3 font-sans subpixel-antialiased accordion__title"
         >
           
         Three
@@ -2448,7 +2448,7 @@ exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
         class="accordion__card"
       >
         <p
-          class="text-h3 font-h3 font-sans accordion__title"
+          class="text-h3 font-h3 font-sans subpixel-antialiased accordion__title"
         >
           
         Four
@@ -2667,7 +2667,7 @@ exports[`Storyshots Elements|TitledCard With Defaults 1`] = `
               class="left"
             >
               <p
-                class="text-body font-body font-sans"
+                class="text-body font-body font-sans subpixel-antialiased"
                 style="font-weight: 700;"
               >
                 
@@ -2738,13 +2738,13 @@ exports[`Storyshots Layouts|HomeLayout With All 1`] = `
           class="homegrid-survivors"
         >
           <p
-            class="text-h1 font-h1 font-display"
+            class="text-h1 font-h1 font-display subpixel-antialiased"
           >
             homeVue.survivors_call
           </p>
            
           <p
-            class="text-h2 font-h2 font-display"
+            class="text-h2 font-h2 font-display subpixel-antialiased"
           >
             <span>
               homeVue.phone_or_website
@@ -2812,13 +2812,13 @@ exports[`Storyshots Layouts|HomeLayout With Basic Content 1`] = `
           class="homegrid-survivors"
         >
           <p
-            class="text-h1 font-h1 font-display"
+            class="text-h1 font-h1 font-display subpixel-antialiased"
           >
             homeVue.survivors_call
           </p>
            
           <p
-            class="text-h2 font-h2 font-display"
+            class="text-h2 font-h2 font-display subpixel-antialiased"
           >
             <span>
               homeVue.phone_or_website
@@ -2912,13 +2912,13 @@ exports[`Storyshots Layouts|HomeLayout With Overlay 1`] = `
           class="homegrid-survivors"
         >
           <p
-            class="text-h1 font-h1 font-display"
+            class="text-h1 font-h1 font-display subpixel-antialiased"
           >
             homeVue.survivors_call
           </p>
            
           <p
-            class="text-h2 font-h2 font-display"
+            class="text-h2 font-h2 font-display subpixel-antialiased"
           >
             <span>
               homeVue.phone_or_website
@@ -3143,13 +3143,13 @@ exports[`Storyshots Pages|NotFound With Defaults 1`] = `
           class="homegrid-survivors"
         >
           <p
-            class="text-h1 font-h1 font-display"
+            class="text-h1 font-h1 font-display subpixel-antialiased"
           >
             homeVue.survivors_call
           </p>
            
           <p
-            class="text-h2 font-h2 font-display"
+            class="text-h2 font-h2 font-display subpixel-antialiased"
           >
             <span>
               homeVue.phone_or_website
