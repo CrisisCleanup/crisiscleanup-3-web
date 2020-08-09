@@ -22,12 +22,6 @@
             <InviteUsers class="px-3" is-admin />
             <MergeOrganizations is-admin />
             <FileUpload class="mx-3 my-1" />
-            <base-button
-              variant="solid"
-              size="medium"
-              :action="() => $router.push({ name: 'nav.admin_tools' })"
-              >{{ $t('adminDashboard.tools') }}</base-button
-            >
           </div>
         </div>
         <div class="flex">
