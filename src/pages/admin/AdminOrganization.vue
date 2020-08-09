@@ -411,6 +411,7 @@
                 </div>
                 <div class="flex">
                   <base-button
+                    v-if="request.org_verified"
                     :text="$t('actions.approve')"
                     variant="solid"
                     size="small"
@@ -426,6 +427,7 @@
                     variant="outline"
                     size="small"
                     class="mx-2 w-24"
+                    v-if="request.org_verified"
                     :action="
                       () => {
                         rejectIncidentRequest(request.id);
