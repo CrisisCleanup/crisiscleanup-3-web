@@ -1,11 +1,6 @@
 <template>
   <div class="sidebar">
-    <router-link
-      v-if="$mq === 'sm'"
-      :to="logoRoute.to"
-      replace="div"
-      class="logo--grid"
-    >
+    <router-link v-if="$mq === 'sm'" :to="logoRoute.to" class="logo--grid">
       <div class="logo flex justify-center p-3">
         <img src="@/assets/crisiscleanup_logo.png" style="height: 53px;" />
       </div>
