@@ -19,6 +19,7 @@ module.exports = {
     require('postcss-will-change'),
     require('postcss-responsive-type'),
     require('postcss-easings'),
+    require('lost'),
     require('autoprefixer'),
     require('postcss-pxtorem')({
       propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
