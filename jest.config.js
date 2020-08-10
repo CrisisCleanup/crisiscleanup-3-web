@@ -1,14 +1,7 @@
 module.exports = {
-  testEnvironment: 'jest-environment-jsdom-sixteen',
   collectCoverage: true,
-  collectCoverageFrom: [
-    'src/**/*.{js,vue}',
-    '!src/**/*.stories.js',
-    '!**/node_modules/**',
-    '!**/*.test.js',
-  ],
+  collectCoverageFrom: ['src/**/*.{js,vue}', '!**/node_modules/**'],
   modulePathIgnorePatterns: ['<rootDir>/tests'], // cypress tests
-  moduleDirectories: ['src', 'node_modules', '.storybook'],
   moduleFileExtensions: ['js', 'json', 'vue', 'node'],
   moduleNameMapper: {
     '.*\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|xml)$':
@@ -32,11 +25,4 @@ module.exports = {
     '<rootDir>/.jest/mocks/globals.js',
   ],
   snapshotSerializers: ['jest-serializer-vue'],
-  globals: {
-    'vue-jest': {
-      babelConfig: {
-        configFile: './babel.config.js',
-      },
-    },
-  },
 };
