@@ -111,13 +111,17 @@ class EventComponent extends CCUModel<EventComponentType> {
   static async fetchAllByType(
     type: EventComponentTypeT,
   ): Promise<EventComponentType[]> {
+    const query = this.query().where('type', type);
+    if (query.exists()) {
+      return query.all();
+    }
     await this.api().get(`/event_components`, {
       dataKey: 'results',
       params: {
         type,
       },
     });
-    return this.query().where('type', type);
+    return this.query().where('type', type).all();
   }
 
   /**
