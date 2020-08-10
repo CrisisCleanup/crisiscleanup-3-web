@@ -15,7 +15,7 @@
       </div>
       <div class="events__build">
         <TitledCard class="build__input" title="~~Event Builder">
-          <EventForm />
+          <EventForm @update:inputs="(payload) => onEventInput(payload)" />
         </TitledCard>
         <TitledCard class="build__preview" title="~~Preview"> </TitledCard>
       </div>
@@ -27,10 +27,21 @@
 import EventSearchTable from '@/components/admin/events/EventSearchTable.vue';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import EventForm from '@/components/admin/events/EventForm.vue';
+import { ref } from '@vue/composition-api';
 
 export default {
   name: 'AdminEvents',
   components: { EventSearchTable, TitledCard, EventForm },
+  setup() {
+    const eventInputs = ref({});
+    const onEventInput = (inputs) => {
+      eventInputs.value = inputs;
+    };
+    return {
+      eventInputs,
+      onEventInput,
+    };
+  },
 };
 </script>
 
