@@ -262,6 +262,7 @@ export default {
             this.currentIncidentId,
             true,
           );
+          this.goToIncidentCenter();
           if (states && states.mapViewPort) {
             const { _northEast, _southWest } = states.mapViewPort;
             this.map.fitBounds([
@@ -292,12 +293,17 @@ export default {
       const markerSprite = this.pixiContainer.children.find(
         (ms) => parseInt(ms.id) === parseInt(worksiteId),
       );
+      await Worksite.api().fetch(worksiteId);
       const worksite = Worksite.find(worksiteId);
-
       if (!markerSprite) {
         this.markers.push(worksite);
         await this.loadMap(this.markers);
       } else {
+        if (worksite.incident !== this.currentIncidentId) {
+          markerSprite.texture = null;
+          return;
+        }
+
         const workType = Worksite.getWorkType(
           worksite.work_types,
           this.currentFilters,
