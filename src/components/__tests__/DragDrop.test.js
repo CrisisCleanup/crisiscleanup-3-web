@@ -17,8 +17,8 @@ const mountWithOptions = () =>
   shallowMount(DragDrop, {
     stubs: {
       table: Table,
-      'form-select': "<input type='select'>",
-      'base-button': '<button></button>',
+      'form-select': true,
+      'base-button': true,
     },
     mocks,
   });
