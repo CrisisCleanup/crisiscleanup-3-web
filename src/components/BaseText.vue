@@ -1,8 +1,5 @@
 <template>
-  <p
-    :class="[styles, 'subpixel-antialiased']"
-    :style="weight && { fontWeight: weight }"
-  >
+  <p :class="[styles, 'subpixel-antialiased']" :style="weights">
     <slot>BaseText</slot>
   </p>
 </template>
@@ -16,6 +13,8 @@ export default {
   props: {
     variant: VueTypes.oneOf(VARIANTS).def('body'),
     font: VueTypes.oneOf(['sans', 'display']).def('sans'),
+    bold: VueTypes.bool.def(false),
+    semiBold: VueTypes.bool.def(false),
     weight: VueTypes.oneOf([
       100,
       200,
@@ -46,6 +45,19 @@ export default {
         'font-sans': this.font === 'sans',
         'font-display': this.font === 'display',
       };
+    },
+    weights() {
+      if (this.weight) {
+        // weight prop takes priority.
+        return { fontWeight: this.weight };
+      }
+      if (this.bold) {
+        return { fontWeight: 700 };
+      }
+      if (this.semiBold) {
+        return { fontWeight: 600 };
+      }
+      return {};
     },
   },
 };
