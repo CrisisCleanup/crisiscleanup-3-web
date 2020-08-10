@@ -70,7 +70,11 @@ exports[`FormSelect should match snapshot with props 1`] = `
     </div>
   </div>
    
-  <!---->
+  <transition-stub
+    name="vs__fade"
+  >
+    <!---->
+  </transition-stub>
 </div>
 `;
 
@@ -144,6 +148,10 @@ exports[`FormSelect should render correctly and match snapshot 1`] = `
     </div>
   </div>
    
-  <!---->
+  <transition-stub
+    name="vs__fade"
+  >
+    <!---->
+  </transition-stub>
 </div>
 `;
