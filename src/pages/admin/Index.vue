@@ -16,8 +16,7 @@ export default {
         title: 'Home',
       }),
       reactive({
-        key: 'nav.admin_tools',
-        title: 'Events',
+        key: 'nav.admin_events',
       }),
     ]);
     return { tabs };

@@ -1,7 +1,7 @@
 import AdminPage from '@/pages/admin/Index.vue';
 import AdminDashboard from '@/pages/admin/AdminDashboard.vue';
 import AdminOrganization from '@/pages/admin/AdminOrganization.vue';
-import AdminTools from '@/pages/admin/AdminTools.vue';
+import AdminEvents from '@/pages/admin/AdminEvents.vue';
 
 const routes = [
   {
@@ -25,9 +25,9 @@ const routes = [
         component: AdminOrganization,
       },
       {
-        path: 'tools',
-        name: 'nav.admin_tools',
-        component: AdminTools,
+        path: 'events',
+        name: 'nav.admin_events',
+        component: AdminEvents,
       },
     ],
   },
