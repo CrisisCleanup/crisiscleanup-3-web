@@ -3145,7 +3145,7 @@ exports[`Storyshots Layouts|Page With Tabs 1`] = `
       <!---->
        
       <div
-        class="page"
+        class="page h-full w-full"
       >
         <div
           class="page__tabbar border-t border-gray-300"
@@ -3206,7 +3206,7 @@ exports[`Storyshots Layouts|Page With Tabs 1`] = `
         </div>
          
         <div
-          class="page__body"
+          class="page__body h-full w-full"
         >
           <div>
             One
