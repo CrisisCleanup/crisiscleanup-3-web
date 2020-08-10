@@ -36,11 +36,12 @@ export default {
   computed: {
     styles() {
       return {
-        'text-h1 font-h1': this.variant === 'h1',
-        'text-h2 font-h2': this.variant === 'h2',
-        'text-h3 font-h3': this.variant === 'h3',
-        'text-h4 font-h4': this.variant === 'h4',
-        'text-body font-body': this.variant === 'body',
+        'text-h1 font-h1 text-crisiscleanup-dark-400': this.variant === 'h1',
+        'text-h2 font-h2 text-crisiscleanup-dark-500': this.variant === 'h2',
+        'text-h3 font-h3 text-crisiscleanup-dark-500': this.variant === 'h3',
+        'text-h4 font-h4 text-crisiscleanup-dark-400': this.variant === 'h4',
+        'text-body font-body text-crisiscleanup-dark-500':
+          this.variant === 'body',
         'text-bodysm font-bodysm': this.variant === 'bodysm',
         'font-sans': this.font === 'sans',
         'font-display': this.font === 'display',
