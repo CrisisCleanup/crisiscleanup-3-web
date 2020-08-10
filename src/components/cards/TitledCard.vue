@@ -3,7 +3,7 @@
     <template #header>
       <div class="left">
         <slot name="left">
-          <base-text variant="body" weight="700">
+          <base-text variant="h2" weight="700">
             {{ $t(title) }}
           </base-text>
         </slot>
