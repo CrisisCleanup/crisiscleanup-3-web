@@ -13,14 +13,14 @@
 // @flow
 import EventFormInput from '@/components/admin/events/EventFormInput.vue';
 import EventComponent, { EventComponentTypes } from '@/models/EventComponent';
-import { reactive } from '@vue/composition-api';
+import { reactive, watchEffect } from '@vue/composition-api';
 import _ from 'lodash';
 import type { EventComponentTypeT } from '@/models/EventComponent';
 
 export default {
   name: 'EventForm',
   components: { EventFormInput },
-  setup() {
+  setup(props, context) {
     const inputs = reactive(
       _.reduce(
         EventComponentTypes,
@@ -38,6 +38,10 @@ export default {
     ]) => {
       inputs[type] = value;
     };
+
+    watchEffect(() => {
+      context.emit('update:inputs', inputs);
+    });
 
     return {
       inputs,
