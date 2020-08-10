@@ -14,6 +14,7 @@ module.exports = {
     }),
     require('postcss-atroot'),
     require('postcss-property-lookup'),
+    require('postcss-nested-ancestors'),
     require('postcss-nested'),
     require('postcss-will-change-transition'),
     require('postcss-will-change'),

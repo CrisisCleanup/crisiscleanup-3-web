@@ -209,6 +209,7 @@
     "postcss-easings": "^2.0.0",
     "postcss-extend-rule": "^3.0.0",
     "postcss-nested": "^4.2.3",
+    "postcss-nested-ancestors": "^2.0.0",
     "postcss-preset-env": "^6.7.0",
     "postcss-property-lookup": "^2.0.0",
     "postcss-pxtorem": "^5.1.1",
