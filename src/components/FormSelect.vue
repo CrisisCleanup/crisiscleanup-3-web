@@ -1,42 +1,53 @@
 <template>
-  <v-select
-    :value="value"
-    :options="options"
-    :label="label"
-    :components="{ OpenIndicator, Deselect }"
-    :searchable="searchable"
-    :multiple="multiple"
-    :clearable="clearable"
-    :disabled="disabled"
-    class="form-select text-base"
-    :class="[selectClasses, isInvalid && !value ? 'invalid' : '']"
-    :placeholder="placeholder"
-    :reduce="(item) => (itemKey ? item[itemKey] : item)"
-    :selectable="
-      () =>
-        !multiple || !limit || (multiple && limit > 0 && value.length < limit)
-    "
-    @input="onInput"
-    @search:focus="open"
-    @search="(payload) => $emit('search', payload)"
-  >
-    <template #selected-option="option">
-      <slot name="selected-option" :option="option" />
-    </template>
-    <template #option="option">
-      <slot name="option" :option="option" />
-    </template>
-    <template v-if="required" #search="{attributes, events}">
-      <input
-        ref="input"
-        class="vs__search"
-        :required="!value"
-        :readonly="false"
-        v-bind="attributes"
-        v-on="events"
-      />
-    </template>
-  </v-select>
+  <div class="select__container">
+    <v-select
+      input-id="select-id"
+      :value="value"
+      :options="options"
+      :label="label"
+      :components="{ OpenIndicator, Deselect }"
+      :searchable="searchable"
+      :multiple="multiple"
+      :clearable="clearable"
+      :disabled="disabled"
+      class="form-select text-base"
+      :class="[
+        selectClasses,
+        isInvalid && !value ? 'invalid' : '',
+        floatLabel ? 'py-2 pt-3' : '',
+      ]"
+      :placeholder="placeholder"
+      :reduce="(item) => (itemKey ? item[itemKey] : item)"
+      :selectable="
+        () =>
+          !multiple || !limit || (multiple && limit > 0 && value.length < limit)
+      "
+      @input="onInput"
+      @search:focus="open"
+      @search:blur="onBlur"
+      @search="(payload) => $emit('search', payload)"
+    >
+      <template #selected-option="option">
+        <slot name="selected-option" :option="option" />
+      </template>
+      <template #option="option">
+        <slot name="option" :option="option" />
+      </template>
+      <template v-if="required" #search="{attributes, events}">
+        <input
+          ref="input"
+          class="vs__search"
+          :required="!value"
+          :readonly="false"
+          v-bind="attributes"
+          v-on="events"
+        />
+      </template>
+    </v-select>
+    <label v-if="floatLabel" ref="inputLabel" for="select-id">{{
+      floatLabel
+    }}</label>
+  </div>
 </template>
 
 <script>
@@ -102,12 +113,17 @@ export default {
       type: String,
       default: 'sort',
     },
+    floatLabel: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     const iconSize = this.multiple ? 'xxs' : 'medium';
     const { indicatorIcon } = this;
     const cancelText = this.$t('actions.cancel');
     return {
+      isEmpty: true,
       isInvalid: false,
       Deselect: {
         render() {
@@ -149,6 +165,7 @@ export default {
   methods: {
     onInput(value) {
       this.$emit('input', value);
+      this.isEmpty = value === null;
       if (this.multiple) {
         const current = this.value || [];
         this.$emit(
@@ -165,7 +182,15 @@ export default {
         }
       }
     },
+    onBlur() {
+      if (this.floatLabel && this.isEmpty) {
+        this.$refs.inputLabel.classList.remove('focused');
+      }
+    },
     open() {
+      if (this.floatLabel) {
+        this.$refs.inputLabel.classList.add('focused');
+      }
       this.$nextTick(() => {
         const items = [].slice.call(
           document.querySelectorAll('.vs__dropdown-option'),
@@ -217,5 +242,28 @@ export default {
 .vue-select-up.form-select .vs__dropdown-menu {
   top: auto !important;
   bottom: calc(100% - 3px);
+}
+</style>
+
+<style lang="postcss">
+.select {
+  &__container {
+    position: relative;
+    > label {
+      @apply text-h2 font-normal text-crisiscleanup-dark-500;
+      position: absolute;
+      top: 25%;
+      bottom: 0;
+      left: 1%;
+      width: 100%;
+      pointer-events: none;
+      transition: transform 150ms easeInOutQuint, color 150ms easeInOutQuint,
+        font-size 150ms easeInOutQuint;
+      &.focused {
+        @apply text-h4 font-normal text-crisiscleanup-dark-300;
+        transform: translateY(-12px);
+      }
+    }
+  }
 }
 </style>
