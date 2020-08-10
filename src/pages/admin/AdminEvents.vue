@@ -44,9 +44,8 @@ export default {
     lost-row: 1/22;
   }
   &__body {
-    @apply h-full;
     > div {
-      lost-row: 1/3;
+      lost-row: 1/2;
     }
   }
   &__build {
