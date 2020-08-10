@@ -10,7 +10,12 @@ import type { EventSearchResult } from '@/models/Event';
 import { ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
 
-export default ({ context }) => {
+/**
+ * Hook for searching Event items.
+ * @param context - component context.
+ * @returns {{loading: Ref<UnwrapRef<boolean>>, items: Ref<UnwrapRef<Event[]>>, makeQuery: *}}
+ */
+export default ({ context }: { context: any }) => {
   const items = ref<Event[]>([]);
   const { loading, results, makeQuery } = useSearch<EventSearchResult>({
     context,
