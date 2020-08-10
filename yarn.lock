@@ -22252,10 +22252,10 @@ vue-select@^3.4.0:
   resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.4.0.tgz#e56b0612845d13d10162cd8df81bfb46af2083ac"
   integrity sha512-UHd0fiUjPgRmHIGhI6yUKtnJsHOdvzD00QUGUtD+FaxWWZRWF2AAb7KPZRj0j/egVfZQvey6M6woHn78GbTogA==
 
-vue-socket.io@^3.0.9:
-  version "3.0.9"
-  resolved "https://registry.yarnpkg.com/vue-socket.io/-/vue-socket.io-3.0.9.tgz#c725fe99d7a3aa173478c0a2607816c993feec0d"
-  integrity sha512-imgrZL+UuyMhEyOOD6Cl11eDtEaVn606e3mCD/2s/oUAB511Ckqon4U7y97t6dwQgLCKW+tfA8aFhF5d3Eogdw==
+vue-socket.io@^3.0.10:
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/vue-socket.io/-/vue-socket.io-3.0.10.tgz#76135bf5043baf484c648636a7a9822b4c11c084"
+  integrity sha512-XGYjD30Q9xAeHpBnp2SU+ljEe59qpGKaAQe4VOO9ezuly09MlzrT2ZZPJu3BVFpQwKdjQDz1I2fV9r4YjlZDCA==
   dependencies:
     socket.io-client "^2.1.1"
 

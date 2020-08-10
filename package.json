@@ -121,7 +121,7 @@
     "vue-router": "^3.2.0",
     "vue-router-multi-view": "^0.1.0",
     "vue-select": "^3.4.0",
-    "vue-socket.io": "^3.0.9",
+    "vue-socket.io": "^3.0.10",
     "vue-timers": "^2.0.4",
     "vue-toasted": "^1.1.28",
     "vue-types": "^1.7.0",
