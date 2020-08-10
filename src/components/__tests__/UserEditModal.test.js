@@ -24,8 +24,8 @@ const mountWithOptions = (props) =>
   shallowMount(UserEditModal, {
     stubs: {
       modal: true,
-      'base-input': '<input />',
-      'form-select': "<input type='select'>",
+      'base-input': true,
+      'form-select': true,
       'base-button': true,
     },
     propsData: {

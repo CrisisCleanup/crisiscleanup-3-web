@@ -60,7 +60,7 @@ const mountWithOptions = (store, props = {}) =>
   shallowMount(WorksiteStatusDropdown, {
     stubs: {
       'font-awesome-icon': true,
-      'a-select': "<input type='select'>",
+      'a-select': true,
       'v-popover': true,
       badge: true,
     },

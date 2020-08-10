@@ -20,7 +20,6 @@
 <script>
 // @flow
 
-// import { useSearchEvents } from '@/use';
 import useSearchEvents from '@/use/events/useSearchEvents';
 import { makeTableColumns } from '@/utils/table';
 import { computed } from '@vue/composition-api';
