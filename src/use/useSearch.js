@@ -12,6 +12,13 @@ export type useSearchProps = {|
   debounceInterval?: number,
 |};
 
+/**
+ * Generic hook for searching something.
+ * @param context - component context.
+ * @param resolveSearch - function to resolve search query.
+ * @param debounceInterval - interval to debounce search query.
+ * @returns {{loading: Ref<UnwrapRef<boolean>>, results: T[] extends Ref ? T[] : Ref<UnwrapRef<T[]>>, makeQuery: (function(string): T[] extends Ref ? T[] : Ref<UnwrapRef<T[]>>) & Cancelable}}
+ */
 export default <T>({
   context,
   resolveSearch,
