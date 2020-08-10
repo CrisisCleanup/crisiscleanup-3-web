@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page h-full w-full">
     <div ref="tabBar" :class="`page__tabbar border-t border-gray-300`">
       <div
         v-for="(t, idx) in state.tabs"
@@ -15,7 +15,7 @@
       </div>
       <div class="page__selector" :style="selectorStyle" />
     </div>
-    <div class="page__body">
+    <div class="page__body h-full w-full">
       <keep-alive>
         <router-view />
       </keep-alive>
