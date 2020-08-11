@@ -7280,10 +7280,10 @@ btoa-lite@^1.0.0:
   resolved "https://registry.yarnpkg.com/btoa-lite/-/btoa-lite-1.0.0.tgz#337766da15801210fdd956c22e9c6891ab9d0337"
   integrity sha1-M3dm2hWAEhD92VbCLpxokaudAzc=
 
-buefy@^0.8.9:
-  version "0.8.13"
-  resolved "https://registry.yarnpkg.com/buefy/-/buefy-0.8.13.tgz#90ce1645807c15d81f584dc78a2090a0feb7a70b"
-  integrity sha512-SpJq1Bl569mT6YujrEpyqn1al6U2PcBBQkVdgdKFrW+zjh1BAcs3+sNx7+r0tPSBsLYsSU2ZZsfkFzWOnOTX8A==
+buefy@^0.8.19:
+  version "0.8.20"
+  resolved "https://registry.yarnpkg.com/buefy/-/buefy-0.8.20.tgz#75708800548220654575903d031a81fc8575b7f3"
+  integrity sha512-pg8Cn0m9cjqp2/vaKT4VIfU8KIumuX/gAT1GtearXRs56+kKqAPx3j9O8cm9W6P4jPUCHajKX6H8AqD0ram2Bg==
   dependencies:
     bulma "0.7.5"
 
@@ -8565,6 +8565,11 @@ create-react-context@0.3.0, create-react-context@^0.3.0:
   dependencies:
     gud "^1.0.0"
     warning "^4.0.3"
+
+cronstrue@^1.94.0:
+  version "1.96.0"
+  resolved "https://registry.yarnpkg.com/cronstrue/-/cronstrue-1.96.0.tgz#10379b50e9a638965ea03bb9c854e9dadeaa79e3"
+  integrity sha512-kNuuN0AXqspm+jlpwiecFSFBrG5dYBaL5EaW5MEjGAh4IFT/jbKwKCNhzWb8N5NulKQUHEDN7w98GjoAm6PmMg==
 
 cross-env@^7.0.2:
   version "7.0.2"
@@ -22045,13 +22050,14 @@ vue-cookies@^1.7.3:
   resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.7.3.tgz#de8da757ecb01cd4c5731fcff7f3f86781acc5e8"
   integrity sha512-94AhF6LDHuZkrkWe1miDFkMALD6r9sKYZ+kT0TV9e6L97HST+Ozj+cKaWf97+fWSadJu50a2w/Cgo0iKQhNtKg==
 
-vue-cron-editor-buefy@^0.1.15:
-  version "0.1.15"
-  resolved "https://registry.yarnpkg.com/vue-cron-editor-buefy/-/vue-cron-editor-buefy-0.1.15.tgz#ab0fffac7b3a600a69a2ba13d0ab49453bb7a4d2"
-  integrity sha512-nzELk7QCBCNnrJoaxA3gRGReDnQF1ilEzCqvy9aBNE6Z3wYQ1KhRpUav1m30WsGgyuDeI9ndPPj04zhetKT7vw==
+vue-cron-editor-buefy@^0.2.12:
+  version "0.2.12"
+  resolved "https://registry.yarnpkg.com/vue-cron-editor-buefy/-/vue-cron-editor-buefy-0.2.12.tgz#8c71a30289a24b82bc551c43866c09d2cd1875de"
+  integrity sha512-GIz+Kli0XAqVV54Z3OhLCD2DJObeEoVqA2QWesU/b/r0VZUS2du7dOKRKyJtuf4sHHaxQcnQTlUY5iNNM0L20Q==
   dependencies:
-    buefy "^0.8.9"
+    buefy "^0.8.19"
     core-js "^3.3.2"
+    cronstrue "^1.94.0"
     vue "^2.6.10"
 
 vue-docgen-api@^3.11.4:
