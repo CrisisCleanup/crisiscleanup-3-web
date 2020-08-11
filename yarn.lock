@@ -22120,10 +22120,10 @@ vue-jest@^3.0.5:
     tsconfig "^7.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
-vue-js-popover@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/vue-js-popover/-/vue-js-popover-1.1.8.tgz#9578656bbef9033a9373528774753f0520f2e83f"
-  integrity sha512-u2RN08XU3ZhatES48z3C0Yv/+Ft0hXkcKS63DjK9uX7oImQWsuC5xUC74CG0aQV+o8rUwgoikZFo696LTNNF1g==
+vue-js-popover@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/vue-js-popover/-/vue-js-popover-1.2.1.tgz#ef48ea253483c9357bdb92bbe213e602cb28a279"
+  integrity sha512-kcnbv2qIJ26fCWtaDgzBq7A+K8/+w78fr0sQhmqLv66NewggwbsbFX4yqN9KeL4PwHrLfqr1QTBgaR+/TKZWyQ==
 
 vue-loader@^15.9.2:
   version "15.9.3"
