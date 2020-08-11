@@ -179,7 +179,7 @@
     "cypress-vue-unit-test": "^3.5.1",
     "cypress-wait-until": "^1.7.1",
     "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-import-resolver-webpack": "^0.12.2",
     "eslint-plugin-babel": "^5.3.1",
