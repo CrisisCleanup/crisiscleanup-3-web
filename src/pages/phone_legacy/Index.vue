@@ -16,11 +16,9 @@
             <base-text
               >{{ $t('phoneConnectFirst.password') }} volunteer</base-text
             >
-            <!--
             <base-text variant="h2">{{ $t('phoneConnectFirst.spanish_login') }}</base-text>
             <base-text>{{ $t('phoneConnectFirst.username') }} spanish</base-text>
             <base-text>{{ $t('phoneConnectFirst.password') }} volunteer</base-text>
-            -->
           </div>
           <div class="pb-2">
             <base-text variant="h2">{{
