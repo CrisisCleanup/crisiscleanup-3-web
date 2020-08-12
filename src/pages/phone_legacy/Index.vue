@@ -11,14 +11,24 @@
               $t('phoneConnectFirst.english_login')
             }}</base-text>
             <base-text
-              >{{ $t('phoneConnectFirst.username') }} {{ $t('phoneConnectFirst.english_username') }}</base-text
+              >{{ $t('phoneConnectFirst.username') }}
+              {{ $t('phoneConnectFirst.english_username') }}</base-text
             >
             <base-text
-              >{{ $t('phoneConnectFirst.password') }} {{ $t('phoneConnectFirst.english_password') }}</base-text
+              >{{ $t('phoneConnectFirst.password') }}
+              {{ $t('phoneConnectFirst.english_password') }}</base-text
             >
-            <base-text variant="h2">{{ $t('phoneConnectFirst.spanish_login') }}</base-text>
-            <base-text>{{ $t('phoneConnectFirst.username') }} {{ $t('phoneConnectFirst.spanish_username') }}</base-text>
-            <base-text>{{ $t('phoneConnectFirst.password') }} {{ $t('phoneConnectFirst.spanish_password') }}</base-text>
+            <base-text variant="h2">{{
+              $t('phoneConnectFirst.spanish_login')
+            }}</base-text>
+            <base-text
+              >{{ $t('phoneConnectFirst.username') }}
+              {{ $t('phoneConnectFirst.spanish_username') }}</base-text
+            >
+            <base-text
+              >{{ $t('phoneConnectFirst.password') }}
+              {{ $t('phoneConnectFirst.spanish_password') }}</base-text
+            >
           </div>
           <div class="pb-2">
             <base-text variant="h2">{{
