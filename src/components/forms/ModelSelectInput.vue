@@ -1,0 +1,116 @@
+<template>
+  <div class="m-input">
+    <FormSelect
+      v-bind="$attrs"
+      searchable
+      item-key="id"
+      :options="items"
+      @input="(value) => onSelected(value)"
+      select-classes="bg-white border border-crisiscleanup-dark"
+      indicator-icon="caret-down"
+      :float-label="name"
+      :multi="multi"
+    >
+      <template #float-label="{isFloated}">
+        {{ name | startCase }}
+        <span
+          v-if="description"
+          class="transition transition-opacity duration-150 ease-in-out text-h4 text-crisiscleanup-dark-200"
+          :class="[isFloated && 'opacity-0']"
+          >({{ description }})</span
+        >
+      </template>
+    </FormSelect>
+    <slot name="detail" v-bind="{ value }">
+      <div class="m-input__detail">
+        <base-text variant="bodyxsm" class="text-crisiscleanup-dark-400 pl-1">
+          {{ value && value.description_t ? value.description_t : '' }}
+        </base-text>
+      </div>
+    </slot>
+  </div>
+</template>
+
+<script>
+// @flow
+import VueTypes from 'vue-types';
+import useSelectForm from '@/use/useSelectForm';
+import type { SelectFormProps } from '@/use/useSelectForm';
+import FormSelect from '@/components/FormSelect.vue';
+import { toRefs, watchEffect } from '@vue/composition-api';
+
+export type ModelSelectInputProps = {|
+  name: string,
+  description?: string,
+  model: any,
+  multi?: boolean,
+  translate?: boolean,
+  resolveFetch?: $ElementType<SelectFormProps, 'resolveFetch'>,
+  resolveFromId?: $ElementType<SelectFormProps, 'resolveFromId'>,
+|};
+
+// Select model item(s) from a form select.
+export default {
+  name: 'ModelSelectInput',
+  components: { FormSelect },
+  props: ({
+    // Form name, converted to start case for label.
+    name: VueTypes.string.def(''),
+    // Description to add to float label.
+    description: VueTypes.string,
+    // VuexORM model to use as queryset.
+    model: VueTypes.any,
+    // Auto translate model items.
+    translate: VueTypes.bool.def(false),
+    // Allow multi select.
+    multi: VueTypes.bool.def(false),
+    // Custom resolver for initial model fetch.
+    resolveFetch: VueTypes.any,
+    // Custom resolution of item id.
+    resolveFromId: VueTypes.any,
+  }: ModelSelectInputProps),
+  setup(props, context) {
+    const {
+      name,
+      model,
+      multi,
+      translate,
+      resolveFetch,
+      resolveFromId,
+    } = toRefs(props);
+
+    let _model = model.value;
+    if (typeof _model === 'string') {
+      _model = context.root.$store.$db().model(_model);
+    }
+
+    const { items, onSelected, value } = useSelectForm<model>({
+      context,
+      multi: multi.value,
+      model: _model,
+      translate: translate.value,
+      resolveFetch: resolveFetch.value,
+      resolveFromId: resolveFromId.value,
+    });
+
+    watchEffect(() => {
+      context.emit('update:value', [name, value]);
+    });
+
+    return {
+      items,
+      onSelected,
+      value,
+    };
+  },
+};
+</script>
+
+<style scoped>
+.m-input {
+  &__detail {
+    transition: height 500ms ease;
+    min-height: 20px;
+  }
+}
+</style>
