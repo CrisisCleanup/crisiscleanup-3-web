@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="body">
-      <div class="body--inner">
+      <div class="body--inner h-full">
         <slot></slot>
       </div>
     </div>
