@@ -90,6 +90,8 @@ export default {
 </script>
 
 <style>
+@lost flexbox flex;
+
 html {
   font-size: responsive 10px 18px;
   @apply subpixel-antialiased;
