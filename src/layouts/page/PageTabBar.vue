@@ -97,10 +97,8 @@ export default {
       const scaledOffset = newWS / 2;
       root.$log.debug(`selector scale multiplier: ${scaleMulti}`);
       root.$log.debug(`scaled offset: ${scaledOffset}`);
-      selectorState.transform = Number(
-        scaledOffset - activeTab.offsetLeft,
-      ).toFixed(2);
-      selectorState.scale = Number(scaleMulti).toFixed(2);
+      selectorState.transform = scaledOffset - activeTab.offsetLeft;
+      selectorState.scale = scaleMulti;
     };
 
     const selectorStyle = computed(() => ({
