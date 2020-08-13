@@ -5,7 +5,15 @@
 
 import { snakeCase } from 'lodash';
 
-export const TEXT_VARIANTS = ['h1', 'h2', 'h3', 'h4', 'body', 'bodysm'];
+export const TEXT_VARIANTS = [
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'body',
+  'bodysm',
+  'bodyxsm',
+];
 
 export const ICON_MAP = {
   dashboard: require('@/assets/icons/dashboard.svg'),

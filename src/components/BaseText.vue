@@ -42,6 +42,7 @@ export default {
         'text-body font-body text-crisiscleanup-dark-500':
           this.variant === 'body',
         'text-bodysm font-bodysm': this.variant === 'bodysm',
+        'text-bodyxsm font-bodyxsm': this.variant === 'bodyxsm',
         'font-sans': this.font === 'sans',
         'font-display': this.font === 'display',
       };
