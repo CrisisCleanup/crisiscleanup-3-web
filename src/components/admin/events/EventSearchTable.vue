@@ -13,6 +13,7 @@
         {{ $t('eventBuilder.event_details') }}
       </base-text>
       <Table
+        class="border border-1 select-none cursor-pointer"
         :loading="loading"
         :columns="tableCols"
         :data="tableData"
@@ -39,12 +40,13 @@ export default {
       makeTableColumns([
         ['id', '0.2fr'],
         ['key', '0.7fr'],
-        ['name_t'],
+        ['name_t', '0.7fr'],
         ['description'],
         ['actor_model', '0.5fr'],
         ['patient_model', '0.5fr'],
         ['recipient_model', '0.5fr'],
-        ['total_uses', '0.2fr'],
+        ['points', '0.2fr'],
+        ['total_uses', '0.3fr'],
       ]),
     );
     const tableData = computed(() =>
@@ -52,7 +54,7 @@ export default {
     );
     const onKeyClick = (key) => {
       context.root.$copyText(key);
-      context.root.$toasted.success('~~Copied to Clipboard!');
+      context.root.$toasted.success(context.root.$t('~~Copied to Clipboard!'));
     };
     return {
       loading,
