@@ -4,7 +4,21 @@
       withText ? 'with-text' : ''
     } `"
   >
-    <img :class="styles" :src="iconMap[type]" :alt="alt" :title="alt" />
+    <img
+      v-if="!fa"
+      :class="styles"
+      :src="iconMap[type]"
+      :alt="alt"
+      :title="alt"
+    />
+    <font-awesome-icon
+      v-else
+      :class="[styles]"
+      :icon="type"
+      :alt="alt"
+      :title="alt"
+      :size="size"
+    />
     <slot></slot>
   </div>
 </template>
@@ -18,7 +32,11 @@ import { ICON_MAP, ICONS, ICON_SIZES } from '@/constants';
 export default {
   name: 'BaseIcon',
   props: {
-    type: VueTypes.oneOf(Object.values(ICONS)),
+    type: VueTypes.oneOfType([
+      VueTypes.oneOf(Object.values(ICONS)),
+      VueTypes.string,
+    ]),
+    fa: VueTypes.bool.def(false),
     alt: VueTypes.string,
     size: VueTypes.oneOf(ICON_SIZES).def('large'),
     selector: VueTypes.string,
