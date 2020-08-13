@@ -1,3 +1,8 @@
+// @flow
+
+import _ from 'lodash';
+import type { LocaleFormFieldsT } from '@/components/forms/LocaleForm.vue';
+
 export const groupBy = (key) => (array) =>
   array.reduce((objectsByKeyValue, obj) => {
     const value = obj[key];
@@ -46,3 +51,34 @@ export const nestUsers = (items, key = null) => {
 };
 
 export const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+/**
+ * Iterates over locale inputs and generates locale keys for each.
+ * @param inputs - locale inputs.
+ * @param prefix - locale key prefix.
+ * @param base - locale key base value.
+ * @returns {Dictionary<LocaleFormFieldsT>}
+ */
+export const makeLocaleInputs = ({
+  inputs,
+  prefix = '',
+  base = '',
+}: {
+  inputs: string[],
+  prefix: string,
+  base: string,
+}): LocaleFormFieldsT =>
+  _.transform(
+    inputs,
+    (result, value) => {
+      const [name, suffix = null] = _.split(value, ':');
+      const _key = `${prefix}.${_.snakeCase(base)}${
+        _.isNil(suffix) ? '' : `_${suffix || ''}`
+      }`;
+      result[name] = {
+        value,
+        key: _key,
+      };
+    },
+    {},
+  );
