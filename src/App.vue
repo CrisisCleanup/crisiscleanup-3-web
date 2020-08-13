@@ -90,6 +90,7 @@ export default {
 </script>
 
 <style>
+@import '~vue-resize/dist/vue-resize.css';
 @lost flexbox flex;
 
 html {

@@ -1,5 +1,6 @@
 import { version } from '@/../package.json';
 import '@/assets/css/tailwind.css';
+import 'vue-resize/dist/vue-resize.css';
 import '@crisiscleanup/amazon-connect-streams';
 import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
@@ -52,6 +53,7 @@ import 'moment/min/locales';
 import VTooltip from 'v-tooltip';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
+import VueResize from 'vue-resize';
 import VueAxios from 'vue-axios';
 import VueClipboard from 'vue-clipboard2';
 import VueGtag from 'vue-gtag';
@@ -111,6 +113,7 @@ Vue.use(VueCompositionApi);
 
 // 3rd Party Libraries
 Vue.component('number-input', VueNumberInput);
+Vue.use(VueResize);
 Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
 Vue.use(ModalDialogs);
