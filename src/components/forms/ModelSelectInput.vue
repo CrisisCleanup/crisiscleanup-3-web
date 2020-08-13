@@ -8,11 +8,11 @@
       @input="(value) => onSelected(value)"
       select-classes="bg-white border border-crisiscleanup-dark"
       indicator-icon="caret-down"
-      :float-label="name"
+      :float-label="$t(floatLabel) || name"
       :multiple="multi"
     >
       <template #float-label="{isFloated}">
-        {{ name | startCase }}
+        {{ $t(floatLabel) || name | startCase }}
         <span
           v-if="description"
           class="transition transition-opacity duration-150 ease-in-out text-h4 text-crisiscleanup-dark-200"
@@ -47,6 +47,7 @@ export type ModelSelectInputProps = {|
   translate?: boolean,
   resolveFetch?: $ElementType<SelectFormProps, 'resolveFetch'>,
   resolveFromId?: $ElementType<SelectFormProps, 'resolveFromId'>,
+  floatLabel?: string,
 |};
 
 // Select model item(s) from a form select.
@@ -68,6 +69,8 @@ export default {
     resolveFetch: VueTypes.any,
     // Custom resolution of item id.
     resolveFromId: VueTypes.any,
+    // Custom float label.
+    floatLabel: VueTypes.string,
   }: ModelSelectInputProps),
   setup(props, context) {
     const {
