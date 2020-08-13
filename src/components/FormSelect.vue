@@ -1,7 +1,7 @@
 <template>
   <div class="select__container">
     <v-select
-      input-id="select-id"
+      :input-id="inputIdSelector"
       :value="value"
       :options="options"
       :label="label"
@@ -44,14 +44,16 @@
         />
       </template>
     </v-select>
-    <label v-if="floatLabel" ref="inputLabel" for="select-id">{{
-      floatLabel
-    }}</label>
+    <label v-if="floatLabel" ref="inputLabel" for="select-id">
+      <slot name="float-label" v-bind="{ isFloated }">
+        {{ floatLabel }}
+      </slot>
+    </label>
   </div>
 </template>
 
 <script>
-import { xor } from 'lodash';
+import { xor, kebabCase } from 'lodash';
 export default {
   name: 'FormSelect',
   props: {
@@ -123,6 +125,7 @@ export default {
     const { indicatorIcon } = this;
     const cancelText = this.$t('actions.cancel');
     return {
+      isFloated: false,
       isEmpty: true,
       isInvalid: false,
       Deselect: {
@@ -150,6 +153,16 @@ export default {
       },
     };
   },
+  computed: {
+    inputIdSelector() {
+      const idSpec = this.floatLabel ? this.floatLabel : '';
+      return `select-id-${kebabCase(idSpec)}`;
+    },
+    inputRef() {
+      if (this.$refs.input) return this.$refs.input;
+      return document.getElementById(this.inputIdSelector);
+    },
+  },
   mounted() {
     this.id = this._uid;
     if (this.required) {
@@ -160,6 +173,9 @@ export default {
         },
         true,
       );
+    }
+    if (this.floatLabel) {
+      this.inputRef.parentElement.classList.add('has-float');
     }
   },
   methods: {
@@ -184,11 +200,13 @@ export default {
     },
     onBlur() {
       if (this.floatLabel && this.isEmpty) {
+        this.isFloated = false;
         this.$refs.inputLabel.classList.remove('focused');
       }
     },
     open() {
       if (this.floatLabel) {
+        this.isFloated = true;
         this.$refs.inputLabel.classList.add('focused');
       }
       this.$nextTick(() => {
@@ -230,6 +248,10 @@ export default {
   height: 100%;
   border-radius: 0;
   border: none;
+  .vs__selected-options.has-float {
+    margin-top: 5px;
+    margin-bottom: -5px;
+  }
 }
 .form-select .vs__search::placeholder {
   @apply text-crisiscleanup-dark-200;
