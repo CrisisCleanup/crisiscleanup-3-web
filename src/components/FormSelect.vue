@@ -1,5 +1,6 @@
 <template>
   <div class="select__container">
+    <resize-observer @notify="handleResize" />
     <v-select
       :input-id="inputIdSelector"
       :value="value"
@@ -44,7 +45,12 @@
         />
       </template>
     </v-select>
-    <label v-if="floatLabel" ref="inputLabel" for="select-id">
+    <label
+      :style="isFloated && floatStyle"
+      v-if="floatLabel"
+      ref="inputLabel"
+      for="select-id"
+    >
       <slot name="float-label" v-bind="{ isFloated }">
         {{ floatLabel }}
       </slot>
@@ -128,6 +134,9 @@ export default {
       isFloated: false,
       isEmpty: true,
       isInvalid: false,
+      baseHeight_: 0.0,
+      currentHeight_: 0.0,
+      floatDisplacement: 0,
       Deselect: {
         render() {
           return (
@@ -162,6 +171,17 @@ export default {
       if (this.$refs.input) return this.$refs.input;
       return document.getElementById(this.inputIdSelector);
     },
+    heightMultiplier() {
+      if (this.currentHeight_ === 0.0) return 1;
+      this.$log.debug('current container height:', this.currentHeight_);
+      const multi = this.currentHeight_ / this.baseHeight_;
+      this.$log.debug('height multiplier change: ', multi);
+      return multi;
+    },
+    floatStyle() {
+      const displace = this.heightMultiplier * -12;
+      return { transform: `translateY(${displace}px)` };
+    },
   },
   mounted() {
     this.id = this._uid;
@@ -177,6 +197,7 @@ export default {
     if (this.floatLabel) {
       this.inputRef.parentElement.classList.add('has-float');
     }
+    this.baseHeight_ = this.inputRef.parentElement.clientHeight;
   },
   methods: {
     onInput(value) {
@@ -235,6 +256,10 @@ export default {
         }
       });
     },
+    handleResize() {
+      this.$log.debug('resize event:');
+      this.currentHeight_ = this.inputRef.parentElement.clientHeight;
+    },
   },
 };
 </script>
@@ -278,12 +303,12 @@ export default {
       bottom: 0;
       left: 1%;
       width: 100%;
+      height: 100%;
       pointer-events: none;
-      transition: transform 150ms easeInOutQuint, color 150ms easeInOutQuint,
+      transition: transform 200ms easeInOutQuint, color 150ms easeInOutQuint,
         font-size 150ms easeInOutQuint;
       &.focused {
         @apply text-h4 font-normal text-crisiscleanup-dark-300;
-        transform: translateY(-12px);
       }
     }
   }
