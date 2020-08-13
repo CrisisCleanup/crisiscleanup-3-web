@@ -9,7 +9,7 @@
       select-classes="bg-white border border-crisiscleanup-dark"
       indicator-icon="caret-down"
       :float-label="name"
-      :multi="multi"
+      :multiple="multi"
     >
       <template #float-label="{isFloated}">
         {{ name | startCase }}
@@ -58,7 +58,7 @@ export default {
     name: VueTypes.string.def(''),
     // Description to add to float label.
     description: VueTypes.string,
-    // VuexORM model to use as queryset.
+    // VuexORM model (or entity name) to use as queryset.
     model: VueTypes.any,
     // Auto translate model items.
     translate: VueTypes.bool.def(false),
