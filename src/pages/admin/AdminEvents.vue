@@ -17,7 +17,9 @@
         <TitledCard class="build__input" title="~~Event Builder">
           <EventForm @update:inputs="(payload) => onEventInput(payload)" />
         </TitledCard>
-        <TitledCard class="build__preview" title="~~Preview"> </TitledCard>
+        <TitledCard class="build__preview" title="~~Preview">
+          <EventPreview :event-key="eventKey" :event-points="eventPoints" />
+        </TitledCard>
       </div>
     </div>
   </div>
@@ -27,19 +29,27 @@
 import EventSearchTable from '@/components/admin/events/EventSearchTable.vue';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import EventForm from '@/components/admin/events/EventForm.vue';
+import EventPreview from '@/components/admin/events/EventPreview.vue';
 import { ref } from '@vue/composition-api';
+import useEventPreview from '@/use/events/useEventPreview';
 
 export default {
   name: 'AdminEvents',
-  components: { EventSearchTable, TitledCard, EventForm },
+  components: { EventSearchTable, TitledCard, EventForm, EventPreview },
   setup() {
     const eventInputs = ref({});
+
+    const { updateEventKeys, eventKey, eventPoints } = useEventPreview();
+
     const onEventInput = (inputs) => {
       eventInputs.value = inputs;
+      updateEventKeys(eventInputs.value);
     };
     return {
       eventInputs,
       onEventInput,
+      eventKey,
+      eventPoints,
     };
   },
 };
@@ -48,18 +58,22 @@ export default {
 <style scoped lang="postcss">
 .events {
   &__container {
-    lost-utility: clearfix;
-    @apply h-full w-full bg-crisiscleanup-light-grey p-6;
+    lost-flex-container: column;
+    @apply w-full bg-crisiscleanup-light-grey p-6;
   }
   &__header {
     lost-row: 1/22;
   }
   &__body {
+    @apply h-full w-full;
+    lost-flex-container: column;
     > div {
       lost-row: 1/2;
     }
   }
   &__build {
+    @apply h-full;
+    lost-flex-container: row;
     > div {
       lost-column: 1/2;
     }
