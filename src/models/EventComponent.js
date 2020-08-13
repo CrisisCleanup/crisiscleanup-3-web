@@ -19,10 +19,54 @@ export const EventComponentTypes = Object.freeze({
   UI_ACTION: 'uiaction',
   OBJECT: 'object',
   ATTR: 'attr',
+  ATTR_ALIAS: 'attr_alias',
   SUB_ACTION: 'subaction',
 });
 
 export type EventComponentTypeT = $Values<typeof EventComponentTypes>;
+
+/**
+ * EventPartDef
+ * Event Part Definition
+ * name - string
+ *
+ */
+export type EventPart = {|
+  name: string,
+  type: EventComponentTypeT,
+  description: string,
+  dataType?: mixed,
+|};
+
+export const EventParts = Object.freeze(
+  ({
+    ACTOR: {
+      name: 'actor',
+      type: EventComponentTypes.OBJECT,
+      description: 'Jack',
+    },
+    SUB_ACTION: {
+      name: 'sub_action',
+      type: EventComponentTypes.SUB_ACTION,
+      description: 'tries to',
+    },
+    ACTION: {
+      name: 'action',
+      type: EventComponentTypes.ACTION,
+      description: 'Kick',
+    },
+    PATIENT: {
+      name: 'patient',
+      type: EventComponentTypes.OBJECT,
+      description: 'the ball',
+    },
+    RECIPIENT: {
+      name: 'recipient',
+      type: EventComponentTypes.OBJECT,
+      description: 'to Jill',
+    },
+  }: { [key: string]: EventPart }),
+);
 
 export type EventComponentType = {|
   id: number,
@@ -112,7 +156,7 @@ class EventComponent extends CCUModel<EventComponentType> {
     type: EventComponentTypeT,
   ): Promise<EventComponentType[]> {
     const query = this.query().where('type', type);
-    if (query.exists()) {
+    if (query.count()) {
       return query.all();
     }
     await this.api().get(`/event_components`, {
