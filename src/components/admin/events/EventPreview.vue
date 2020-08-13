@@ -31,9 +31,6 @@
       </div>
     </div>
     <div class="epreview__section">
-      <base-text variant="h3" class="pb-1">
-        {{ $t('~~Attributes') }}
-      </base-text>
       <ModelSelectInput v-bind="componentAttrProps" multi translate />
     </div>
     <div class="epreview__section">
@@ -88,6 +85,7 @@ export default {
       model: EventComponent,
       resolveFetch: [EventComponent.fetchAllByType, EventComponentTypes.ATTR],
       label: 'name_t',
+      floatLabel: '~~Attributes',
     }));
 
     const { loading, items, makeQuery } = useSearchEvents({ context });

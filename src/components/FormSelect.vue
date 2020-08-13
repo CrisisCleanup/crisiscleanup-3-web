@@ -257,7 +257,6 @@ export default {
       });
     },
     handleResize() {
-      this.$log.debug('resize event:');
       this.currentHeight_ = this.inputRef.parentElement.clientHeight;
     },
   },
