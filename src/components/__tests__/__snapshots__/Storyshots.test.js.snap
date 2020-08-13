@@ -2126,6 +2126,15 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
           Sample Text - (bodysm)
         </p>
       </div>
+      <div
+        class="m-4"
+      >
+        <p
+          class="text-bodyxsm font-bodyxsm font-sans subpixel-antialiased"
+        >
+          Sample Text - (bodyxsm)
+        </p>
+      </div>
     </div>
   </div>
 </div>
@@ -2231,7 +2240,7 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
         class="body"
       >
         <div
-          class="body--inner"
+          class="body--inner h-full"
         >
            
           <div
@@ -2243,12 +2252,36 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
               <div
                 class="accordion__card"
               >
-                <p
-                  class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased accordion__title"
+                <div
+                  class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+                  variant="h3"
                 >
-                  
-        One
-                </p>
+                  <svg
+                    alt=""
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                    data-icon="chevron-down"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 448 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      class=""
+                      d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  <p
+                    class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                  >
+                    
+          One
+        
+                  </p>
+                </div>
                  
                 <div
                   class="accordion__body"
@@ -2261,12 +2294,36 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
               <div
                 class="accordion__card"
               >
-                <p
-                  class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased accordion__title accordion__title--active"
+                <div
+                  class="primary-dark flex items-center base-icon js- with-text  accordion__title accordion__title--active"
+                  variant="h3"
                 >
-                  
-        Two
-                </p>
+                  <svg
+                    alt=""
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                    data-icon="chevron-down"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 448 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      class=""
+                      d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  <p
+                    class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                  >
+                    
+          Two
+        
+                  </p>
+                </div>
                  
                 <div
                   class="accordion__body--active accordion__body"
@@ -2325,7 +2382,7 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
         class="body"
       >
         <div
-          class="body--inner"
+          class="body--inner h-full"
         >
            
           <div
@@ -2356,12 +2413,36 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
               <div
                 class="accordion__card"
               >
-                <p
-                  class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased accordion__title"
+                <div
+                  class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+                  variant="h3"
                 >
-                  
-        Two
-                </p>
+                  <svg
+                    alt=""
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                    data-icon="chevron-down"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 448 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      class=""
+                      d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                   
+                  <p
+                    class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                  >
+                    
+          Two
+        
+                  </p>
+                </div>
                  
                 <div
                   class="accordion__body"
@@ -2393,12 +2474,36 @@ exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
       <div
         class="accordion__card"
       >
-        <p
-          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased accordion__title accordion__title--active"
+        <div
+          class="primary-dark flex items-center base-icon js- with-text  accordion__title accordion__title--active"
+          variant="h3"
         >
-          
-        One
-        </p>
+          <svg
+            alt=""
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 448 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              class=""
+              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+              fill="currentColor"
+            />
+          </svg>
+           
+          <p
+            class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+          >
+            
+          One
+        
+          </p>
+        </div>
          
         <div
           class="accordion__body--active accordion__body"
@@ -2411,12 +2516,36 @@ exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
       <div
         class="accordion__card"
       >
-        <p
-          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased accordion__title"
+        <div
+          class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+          variant="h3"
         >
-          
-        Two
-        </p>
+          <svg
+            alt=""
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 448 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              class=""
+              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+              fill="currentColor"
+            />
+          </svg>
+           
+          <p
+            class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+          >
+            
+          Two
+        
+          </p>
+        </div>
          
         <div
           class="accordion__body"
@@ -2429,12 +2558,36 @@ exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
       <div
         class="accordion__card"
       >
-        <p
-          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased accordion__title"
+        <div
+          class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+          variant="h3"
         >
-          
-        Three
-        </p>
+          <svg
+            alt=""
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 448 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              class=""
+              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+              fill="currentColor"
+            />
+          </svg>
+           
+          <p
+            class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+          >
+            
+          Three
+        
+          </p>
+        </div>
          
         <div
           class="accordion__body"
@@ -2447,12 +2600,36 @@ exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
       <div
         class="accordion__card"
       >
-        <p
-          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased accordion__title"
+        <div
+          class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+          variant="h3"
         >
-          
-        Four
-        </p>
+          <svg
+            alt=""
+            aria-hidden="true"
+            class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+            data-icon="chevron-down"
+            data-prefix="fas"
+            focusable="false"
+            role="img"
+            viewBox="0 0 448 512"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              class=""
+              d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+              fill="currentColor"
+            />
+          </svg>
+           
+          <p
+            class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+          >
+            
+          Four
+        
+          </p>
+        </div>
          
         <div
           class="accordion__body"
@@ -2686,7 +2863,7 @@ exports[`Storyshots Elements|TitledCard With Defaults 1`] = `
           class="body"
         >
           <div
-            class="body--inner"
+            class="body--inner h-full"
           >
              
             <div
