@@ -1,6 +1,14 @@
 <template>
   <div class="epreview">
     <div class="epreview__section">
+      <base-text variant="h3" class="pb-1">
+        {{ $t('~~Event Name') }}
+      </base-text>
+      <base-text variant="h3" class="pb-1">
+        {{ eventName }}
+      </base-text>
+    </div>
+    <div class="epreview__section">
       <div>
         <base-text variant="h3" class="pb-1">
           {{ $t('~~Key') }}
@@ -53,6 +61,7 @@ import EventComponent, { EventComponentTypes } from '@/models/EventComponent';
 import useSearchEvents from '@/use/events/useSearchEvents';
 import { makeTableColumns } from '@/utils/table';
 import Table from '@/components/Table.vue';
+import _ from 'lodash';
 
 // Renders dirty new event data for preview.
 export default {
@@ -63,9 +72,11 @@ export default {
     eventKey: VueTypes.string.def(''),
     // Dirty event points.
     eventPoints: VueTypes.number.def(0),
+    // Dirty event locale(s).
+    eventLocale: VueTypes.object,
   },
   setup(props, context) {
-    const { eventKey, eventPoints } = toRefs(props);
+    const { eventKey, eventPoints, eventLocale } = toRefs(props);
 
     const eventData = reactive({
       key: eventKey,
@@ -86,6 +97,8 @@ export default {
       items.value.map((e) => e.withTrans<Event>()),
     );
 
+    const eventName = computed(() => _.get(eventLocale.value, '2.name', ''));
+
     watch(
       () => eventData.key,
       async () => makeQuery(eventData.key),
@@ -98,6 +111,7 @@ export default {
       relatedEvents,
       relatedCols,
       relatedLoading: loading,
+      eventName,
     };
   },
 };
@@ -111,14 +125,14 @@ export default {
     @apply h-full w-full;
     lost-row: 1/7;
 
-    &:first-child {
-      > div:first-child {
-        @apply w-5/6 pr-6;
-      }
-      &:first-child {
-        display: flex;
-        flex-direction: row;
-        > div:last-child {
+    &:nth-child(2) {
+      display: flex;
+      flex-direction: row;
+      > div {
+        &:first-child {
+          @apply w-5/6 pr-6;
+        }
+        &:last-child {
           justify-content: flex-end;
         }
       }
