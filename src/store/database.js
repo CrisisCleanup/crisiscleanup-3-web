@@ -24,6 +24,7 @@ import Team from '@/models/Team';
 import Event from '@/models/Event';
 import { Database } from '@vuex-orm/core';
 import EventComponent from '@/models/EventComponent';
+import UserBadge from '@/models/UserBadge';
 
 const database = new Database();
 
@@ -52,5 +53,6 @@ database.register(Report, {});
 database.register(Team, {});
 database.register(Event, {});
 database.register(EventComponent, {});
+database.register(UserBadge, {});
 
 export default database;
