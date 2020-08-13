@@ -67,7 +67,8 @@ export default {
       return _.get(this.fieldData, `${localeId}.${fieldKey}`, '');
     },
     setValue(localeId: number, fieldKey: string, value: string) {
-      return _.set(this.fieldData, `${localeId}.${fieldKey}`, value);
+      _.set(this.fieldData, `${localeId}.${fieldKey}`, value);
+      this.$emit('update:fields', this.fieldData);
     },
     async onFocusLost(localeId: number, fieldKey: string) {
       this.$log.debug('focus lost on initial card input item!');

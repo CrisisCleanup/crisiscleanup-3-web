@@ -18,12 +18,16 @@
           <EventForm @update:inputs="(payload) => onEventInput(payload)" />
         </TitledCard>
         <TitledCard class="build__preview" title="~~Preview">
-          <EventPreview :event-key="eventKey" :event-points="eventPoints" />
+          <EventPreview
+            :event-key="eventKey"
+            :event-points="eventPoints"
+            :event-locale="localeData"
+          />
         </TitledCard>
       </div>
       <div class="events__locale">
         <TitledCard title="~~Localizations">
-          <LocaleForm class="w-full" :fields="localeInputs" />
+          <LocaleForm class="w-full" :fields.sync="localeInputs" />
         </TitledCard>
       </div>
     </div>
@@ -49,8 +53,9 @@ export default {
     EventForm,
     EventPreview,
   },
-  setup() {
+  setup(props, context) {
     const eventInputs = ref({});
+    const _localeInputs = ref({});
 
     const { updateEventKeys, eventKey, eventPoints } = useEventPreview();
 
@@ -59,18 +64,26 @@ export default {
       updateEventKeys(eventInputs.value);
     };
 
-    const localeInputs = computed(() =>
-      makeLocaleInputs({
-        inputs: [
-          'name',
-          'description:d',
-          'past_tense:pt',
-          'present_progressive:ppt',
-        ],
-        base: eventKey.value,
-        prefix: 'event',
-      }),
-    );
+    const localeInputs = computed({
+      get: () =>
+        makeLocaleInputs({
+          inputs: [
+            'name',
+            'description:d',
+            'past_tense:pt',
+            'present_progressive:ppt',
+          ],
+          base: eventKey.value,
+          prefix: 'event',
+        }),
+      set: (payload) => {
+        _localeInputs.value = payload;
+        context.root.$log.debug(payload);
+        return payload;
+      },
+    });
+
+    const localeData = computed(() => _localeInputs.value);
 
     return {
       eventInputs,
@@ -78,6 +91,7 @@ export default {
       eventKey,
       eventPoints,
       localeInputs,
+      localeData,
     };
   },
 };
