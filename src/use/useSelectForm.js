@@ -62,8 +62,12 @@ export default <T: typeof CCUModel>({
     items.value = results;
   });
 
-  const onSelected = async (itemId: number) => {
+  const onSelected = async (itemId: number | number[]) => {
     if (!itemId) return;
+    if (Array.isArray(itemId)) {
+      itemId.map(onSelected);
+      return;
+    }
     const _resolveFromId = resolveFromId || model.fetchOrFindId;
     const item = await _.bind(_resolveFromId, model)(itemId);
     selected.value.push(translate ? item.withTrans() : item);

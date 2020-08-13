@@ -4,13 +4,13 @@
  * Use Event Preview Hook.
  */
 
-import EventComponent from '@/models/EventComponent';
+import EventComponent, { EventParts } from '@/models/EventComponent';
 import _ from 'lodash';
 import { ref, computed, reactive } from '@vue/composition-api';
-import type { EventComponentTypeT } from '@/models/EventComponent';
+import type { EventPart, EventPartT } from '@/models/EventComponent';
 
 export type EventInputMap = {
-  [key: EventComponentTypeT]: EventComponent,
+  [key: $ElementType<EventPartT, 'name'>]: EventComponent,
 };
 
 export type EventPreviewProps = {|
@@ -25,12 +25,12 @@ export type EventPreviewProps = {|
  */
 export default () => {
   const eventPoints = ref(0);
-  const eventKeys = reactive<{ [key: string]: string }>({
-    actor: '',
-    action: '',
-    subaction: '',
-    recipient: '',
-    patient: '',
+  const eventKeys = reactive<{ [key: EventPart]: string }>({
+    [EventParts.ACTOR.name]: '',
+    [EventParts.ACTION.name]: '',
+    [EventParts.SUB_ACTION.name]: '',
+    [EventParts.RECIPIENT.name]: '',
+    [EventParts.PATIENT.name]: '',
   });
 
   const calcEventPoints = (inputs: EventInputMap) =>
@@ -45,10 +45,10 @@ export default () => {
   };
 
   const eventKey = computed(() => {
-    const mainKeys = _.omit(eventKeys, ['subaction']);
+    const mainKeys = _.omit(eventKeys, [EventParts.SUB_ACTION.name]);
     let _baseKey = _.snakeCase(Object.values(mainKeys).join(' '));
-    if (!_.isEmpty(eventKeys.subaction)) {
-      _baseKey = `${_baseKey}:${eventKeys.subaction}`;
+    if (!_.isEmpty(eventKeys[EventParts.SUB_ACTION.name])) {
+      _baseKey = `${_baseKey}:${eventKeys[EventParts.SUB_ACTION.name]}`;
     }
     return _baseKey;
   });

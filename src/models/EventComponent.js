@@ -31,7 +31,7 @@ export type EventComponentTypeT = $Values<typeof EventComponentTypes>;
  * name - string
  *
  */
-export type EventPart = {|
+export type EventPartT = {|
   name: string,
   type: EventComponentTypeT,
   description: string,
@@ -65,8 +65,10 @@ export const EventParts = Object.freeze(
       type: EventComponentTypes.OBJECT,
       description: 'to Jill',
     },
-  }: { [key: string]: EventPart }),
+  }: { [key: string]: EventPartT }),
 );
+
+export type EventPart = $Values<typeof EventParts>;
 
 export type EventComponentType = {|
   id: number,
