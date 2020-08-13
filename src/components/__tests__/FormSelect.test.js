@@ -20,6 +20,7 @@ const mountWithOptions = (options) =>
       'v-select': vSelect,
       'font-awesome-icon': FontAwesomeIcon,
       'ccu-icon': BaseIcon,
+      'resize-observer': true,
     },
     propsData: {
       searchable: true,

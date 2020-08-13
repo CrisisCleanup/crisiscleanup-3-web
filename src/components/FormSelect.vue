@@ -196,8 +196,8 @@ export default {
     }
     if (this.floatLabel) {
       this.inputRef.parentElement.classList.add('has-float');
+      this.baseHeight_ = this.inputRef.parentElement.clientHeight;
     }
-    this.baseHeight_ = this.inputRef.parentElement.clientHeight;
   },
   methods: {
     onInput(value) {
