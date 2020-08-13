@@ -12,7 +12,12 @@
       <base-text variant="h3">
         {{ $t('eventBuilder.event_details') }}
       </base-text>
-      <Table :loading="loading" :columns="tableCols" :data="tableData" />
+      <Table
+        :loading="loading"
+        :columns="tableCols"
+        :data="tableData"
+        @rowClick="(row) => onKeyClick(row.key)"
+      />
     </div>
   </div>
 </template>
@@ -45,12 +50,17 @@ export default {
     const tableData = computed(() =>
       items.value.map((e) => e.withTrans<Event>()),
     );
+    const onKeyClick = (key) => {
+      context.root.$copyText(key);
+      context.root.$toasted.success('~~Copied to Clipboard!');
+    };
     return {
       loading,
       items,
       makeQuery,
       tableCols,
       tableData,
+      onKeyClick,
     };
   },
 };
