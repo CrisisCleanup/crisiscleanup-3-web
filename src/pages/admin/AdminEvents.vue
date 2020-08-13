@@ -21,6 +21,11 @@
           <EventPreview :event-key="eventKey" :event-points="eventPoints" />
         </TitledCard>
       </div>
+      <div class="events__locale">
+        <TitledCard title="~~Localizations">
+          <LocaleForm class="w-full" :fields="localeInputs" />
+        </TitledCard>
+      </div>
     </div>
   </div>
 </template>
@@ -30,12 +35,20 @@ import EventSearchTable from '@/components/admin/events/EventSearchTable.vue';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import EventForm from '@/components/admin/events/EventForm.vue';
 import EventPreview from '@/components/admin/events/EventPreview.vue';
-import { ref } from '@vue/composition-api';
+import { ref, computed } from '@vue/composition-api';
 import useEventPreview from '@/use/events/useEventPreview';
+import LocaleForm from '@/components/forms/LocaleForm';
+import { makeLocaleInputs } from '@/utils/form';
 
 export default {
   name: 'AdminEvents',
-  components: { EventSearchTable, TitledCard, EventForm, EventPreview },
+  components: {
+    LocaleForm,
+    EventSearchTable,
+    TitledCard,
+    EventForm,
+    EventPreview,
+  },
   setup() {
     const eventInputs = ref({});
 
@@ -45,11 +58,26 @@ export default {
       eventInputs.value = inputs;
       updateEventKeys(eventInputs.value);
     };
+
+    const localeInputs = computed(() =>
+      makeLocaleInputs({
+        inputs: [
+          'name',
+          'description:d',
+          'past_tense:pt',
+          'present_progressive:ppt',
+        ],
+        base: eventKey.value,
+        prefix: 'event',
+      }),
+    );
+
     return {
       eventInputs,
       onEventInput,
       eventKey,
       eventPoints,
+      localeInputs,
     };
   },
 };
@@ -76,6 +104,13 @@ export default {
     lost-flex-container: row;
     > div {
       lost-column: 1/2;
+    }
+  }
+  &__locale {
+    @apply h-full w-full;
+    lost-flex-container: column;
+    > div {
+      lost-row: 1/1;
     }
   }
 }
