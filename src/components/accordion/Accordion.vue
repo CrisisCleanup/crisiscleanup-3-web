@@ -7,7 +7,13 @@
       :key="card.key"
     >
       <slot :name="`${card.key}-title`">
-        <base-text
+        <ccu-icon
+          with-text
+          fa
+          size="sm"
+          type="chevron-down"
+          :ref="`icon-${card.key}`"
+          class="primary-dark"
           :class="[
             'accordion__title',
             {
@@ -17,8 +23,10 @@
           ]"
           variant="h3"
         >
-          {{ card.title }}</base-text
-        >
+          <base-text variant="h3" class="crisiscleanup-dark-400">
+            {{ card.title }}
+          </base-text>
+        </ccu-icon>
       </slot>
       <div
         :class="[
@@ -37,6 +45,7 @@
 <script>
 // @flow
 import VueTypes from 'vue-types';
+import { theme } from '@/../tailwind.config';
 import _ from 'lodash';
 
 export type AccordionCardT = {|
@@ -68,10 +77,34 @@ export default {
       activeCard_: this.defaultCard ? this.defaultCard : null,
     };
   },
+  mounted() {
+    this.cards.map((c) => {
+      const svgRef = this.$refs[`icon-${c.key}`][0].$el.firstChild;
+      svgRef.firstChild.style.fill = theme.extend.colors.primary.dark;
+      return svgRef;
+    });
+  },
   methods: {
     toggleCard(key: string) {
       this.activeCard_ = key;
       this.$emit('update:active-card', key);
+    },
+    getIndicatorStyle(key) {
+      const pos = key === this.activeCard ? '90px' : '0px';
+      return {
+        transform: `rotate(${pos})`,
+      };
+    },
+    animateIndicator(svgRef, direction) {
+      const animParams = [
+        [{ transform: 'rotate(180deg)' }, { transform: 'rotate(0deg)' }],
+        {
+          duration: 200,
+          fill: 'forwards',
+          direction,
+        },
+      ];
+      svgRef.animate(...animParams);
     },
   },
   computed: {
@@ -87,6 +120,15 @@ export default {
       }));
     },
   },
+  watch: {
+    activeCard(newKey, oldKey) {
+      const newCard: HTMLElement = this.$refs[`icon-${newKey}`][0].$el;
+      const oldCard: HTMLElement = this.$refs[`icon-${oldKey}`][0].$el;
+      this.$log.debug('new card:', newCard, oldCard);
+      this.animateIndicator(newCard.firstChild, 'normal');
+      this.animateIndicator(oldCard.firstChild, 'reverse');
+    },
+  },
 };
 </script>
 
@@ -99,13 +141,16 @@ export default {
     text-transform: uppercase;
     letter-spacing: 0.15rem;
     padding: 1rem 1.5rem;
-    background: theme('colors.crisiscleanup-grey.100');
+    background: theme('colors.crisiscleanup-light-smoke');
     cursor: pointer;
     transition: 300ms ease;
 
-    &--active,
+    div > svg {
+      color: theme('colors.primary.dark');
+    }
+
     &:hover {
-      background: theme('colors.crisiscleanup-dark.400');
+      background: theme('colors.crisiscleanup-grey.100');
       color: white;
     }
   }
