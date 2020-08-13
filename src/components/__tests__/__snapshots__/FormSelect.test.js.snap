@@ -4,6 +4,8 @@ exports[`FormSelect should match snapshot with props 1`] = `
 <div
   class="select__container"
 >
+  <resize-observer-stub />
+   
   <div
     class="v-select form-select text-base vs--single vs--searchable"
     dir="auto"
@@ -19,7 +21,7 @@ exports[`FormSelect should match snapshot with props 1`] = `
           aria-label="Search for option"
           autocomplete="off"
           class="vs__search"
-          id="select-id"
+          id="select-id-"
           placeholder="Some Value"
           role="combobox"
           type="search"
@@ -89,6 +91,8 @@ exports[`FormSelect should render correctly and match snapshot 1`] = `
 <div
   class="select__container"
 >
+  <resize-observer-stub />
+   
   <div
     class="v-select form-select text-base vs--single vs--searchable"
     dir="auto"
@@ -104,7 +108,7 @@ exports[`FormSelect should render correctly and match snapshot 1`] = `
           aria-label="Search for option"
           autocomplete="off"
           class="vs__search"
-          id="select-id"
+          id="select-id-"
           placeholder="Some Value"
           role="combobox"
           type="search"
