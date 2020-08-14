@@ -83,7 +83,7 @@
     "leaflet.heat": "^0.2.0",
     "leaflet.markercluster": "^1.4.1",
     "libphonenumber-js": "^1.7.56",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.20",
     "marker-clusterer-plus": "^2.1.4",
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.31",
