@@ -161,17 +161,15 @@
               size="large"
             />
           </span>
-          <textarea
-            class="block w-full border outline-none"
-            :placeholder="field.placeholder_t || field.label_t"
-            rows="4"
+          <base-input
+            text-area
+            :disabled="false"
+            :rows="4"
             :value="worksite.formFields[field.field_key]"
+            :placeholder="field.placeholder_t || field.label_t"
             @input="
-              (e) => {
-                $emit('updateField', {
-                  key: field.field_key,
-                  value: e.target.value,
-                });
+              (value) => {
+                $emit('updateField', { key: field.field_key, value });
               }
             "
           />

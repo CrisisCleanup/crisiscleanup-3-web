@@ -703,7 +703,6 @@ export default {
         this.updateWorksite(what3words, 'what3words');
       }
       const fieldData = this.dynamicFields;
-
       const truthyValues = Object.keys(fieldData).filter((key) => {
         return Boolean(fieldData[key]) && this.fieldsArray.includes(key);
       });

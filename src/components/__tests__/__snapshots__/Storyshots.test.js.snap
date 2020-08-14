@@ -1528,8 +1528,8 @@ exports[`Storyshots Basics|BaseInput Disabled 1`] = `
         disabled="disabled"
         pattern=".*"
         placeholder=""
+        rows="0"
         type="search"
-        value="text"
       />
        
       <!---->
@@ -1562,8 +1562,8 @@ exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
         disabled="disabled"
         pattern=".*"
         placeholder=""
+        rows="0"
         type="search"
-        value="text"
       />
        
       <div
@@ -1610,8 +1610,8 @@ exports[`Storyshots Basics|BaseInput Simple 1`] = `
         data-cy=""
         pattern=".*"
         placeholder=""
+        rows="0"
         type="search"
-        value="text"
       />
        
       <!---->
@@ -1643,8 +1643,8 @@ exports[`Storyshots Basics|BaseInput With Icon 1`] = `
         data-cy=""
         pattern=".*"
         placeholder=""
+        rows="0"
         type="search"
-        value="text"
       />
        
       <!---->
@@ -1690,6 +1690,7 @@ exports[`Storyshots Basics|BaseInput With Placeholder 1`] = `
         data-cy=""
         pattern=".*"
         placeholder="Some placeholder"
+        rows="0"
         type="search"
       />
        
@@ -1727,8 +1728,8 @@ exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
             disabled="disabled"
             pattern=".*"
             placeholder=""
+            rows="0"
             type="search"
-            value="base"
           />
            
           <!---->
@@ -1754,8 +1755,8 @@ exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
             disabled="disabled"
             pattern=".*"
             placeholder=""
+            rows="0"
             type="search"
-            value="large"
           />
            
           <!---->
@@ -1789,8 +1790,8 @@ exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
         data-cy=""
         pattern=".*"
         placeholder=""
+        rows="0"
         type="search"
-        value="text"
       />
        
       <!---->

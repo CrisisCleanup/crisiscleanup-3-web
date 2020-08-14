@@ -10,7 +10,7 @@
       :data-cy="selector"
       :style="inputStyle"
       :type="passwordView || type || 'search'"
-      :value="value"
+      :value.prop="value"
       :disabled="disabled || (breakGlass && !glassBroken)"
       :placeholder="placeholder"
       :required="required"
@@ -20,6 +20,7 @@
       @input="update"
       @change="change"
       @blur="$emit('blur')"
+      :rows="rows"
     />
     <div
       v-if="breakGlass && !glassBroken"
@@ -147,6 +148,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    rows: {
+      type: Number,
+      default: 0,
+    },
     validator: {
       type: [Function, Boolean],
       default: false,
@@ -243,6 +248,12 @@ input {
   height: 40px;
   border-radius: 0;
   @apply border border-crisiscleanup-dark-100;
+}
+
+textarea {
+  outline: none;
+  @apply border border-crisiscleanup-dark-100;
+  border-radius: 0;
 }
 
 input.xlarge {

@@ -20,6 +20,7 @@ exports[`BaseInput should render correctly and match snapshot 1`] = `
     data-cy=""
     pattern=".*"
     placeholder=""
+    rows="0"
     type="search"
   />
    
@@ -45,6 +46,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     pattern=".*"
     placeholder=""
     required="required"
+    rows="0"
     type="search"
   />
    
@@ -70,6 +72,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     pattern=".*"
     placeholder=""
     required="required"
+    rows="0"
     type="search"
   />
    
@@ -95,8 +98,8 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     pattern=".*"
     placeholder=""
     required="required"
+    rows="0"
     type="search"
-    value="Test"
   />
    
   <!---->
@@ -121,8 +124,8 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     pattern=".*"
     placeholder=""
     required="required"
+    rows="0"
     type="search"
-    value="Test"
   />
    
   <!---->
@@ -150,6 +153,7 @@ exports[`BaseInput should render correctly and match snapshot with label 1`] = `
     data-cy=""
     pattern=".*"
     placeholder=""
+    rows="0"
     type="search"
   />
    
