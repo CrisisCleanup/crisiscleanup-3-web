@@ -145,7 +145,7 @@
     "@percy/cypress": "^2.3.1",
     "@sentry/browser": "^5.21.1",
     "@sentry/integrations": "^5.20.1",
-    "@sentry/webpack-plugin": "^1.12.0",
+    "@sentry/webpack-plugin": "^1.12.1",
     "@storybook/addon-a11y": "^5.3.19",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-backgrounds": "^5.3.19",
