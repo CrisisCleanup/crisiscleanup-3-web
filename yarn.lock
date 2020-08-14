@@ -10320,10 +10320,10 @@ eslint-plugin-prettier@^3.1.4:
   dependencies:
     prettier-linter-helpers "^1.0.0"
 
-eslint-plugin-vue-types@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-vue-types/-/eslint-plugin-vue-types-1.0.1.tgz#e44659b6afe7a3c741b506c582e8f2a43d8c46d6"
-  integrity sha512-quZgpxy7dOhvltPkplcX82YLJ0ThgP1KaboIwl+RZSnK/JI2CxWhv0/sFcAeZlpaynsFULjkXKKxlWVxsFjgkw==
+eslint-plugin-vue-types@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-vue-types/-/eslint-plugin-vue-types-2.0.0.tgz#943c0e03d27c698a312c541986f1bfd3411ad058"
+  integrity sha512-Yvry2d+FmeyDp6NU1LLUWDDlpOu9jpIJGHFNj/yR5N/iqfCtw/gSoTOnGtFxNYJARw+1h0W0BZznObh8luo5Cg==
   dependencies:
     eslint-rule-composer "^0.3.0"
 
