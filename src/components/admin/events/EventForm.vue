@@ -39,11 +39,11 @@ import {
   ref,
   watchEffect,
   onMounted,
-  unref,
   computed,
 } from '@vue/composition-api';
 import _ from 'lodash';
 import Event from '@/models/Event';
+import { unwrap } from '@/utils/wrap';
 
 // Form for creating a new event.
 export default {
@@ -86,7 +86,7 @@ export default {
     });
 
     const updateValue = ([part: string, value: EventComponent | UserBadge]) => {
-      inputs[unref(part)] = unref(value);
+      inputs[unwrap(part)] = unwrap(value);
     };
 
     const eventKeys = computed(() =>
@@ -102,8 +102,8 @@ export default {
     const eventKey = computed(() => _eventKey.value);
 
     watchEffect(async () => {
-      if (_.isNil(inputs.actor) || _.isNil(inputs.action)) return;
       context.emit('update:inputs', inputs);
+      if (_.isNil(inputs.actor) || _.isNil(inputs.action)) return;
       const { errors, data } = await Event.validate(eventKeys.value);
       context.root.$log.debug(errors);
       context.root.$log.debug(data);
