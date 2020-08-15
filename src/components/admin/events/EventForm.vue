@@ -117,6 +117,22 @@ export default {
         _eventKey.value = eKey;
         context.emit('update:event-key', eventKey.value);
       }
+      if (reqAttr) {
+        const _reqAttr = [];
+        reqAttr.map((attr) => {
+          _reqAttr.push(
+            EventComponent.query()
+              .where('key', attr)
+              .first()
+              .withTrans<Event>(),
+          );
+          return _reqAttr;
+        });
+        context.emit('update:required-attr', [
+          EventComponentTypes.ATTR,
+          _reqAttr,
+        ]);
+      }
     });
 
     return {
