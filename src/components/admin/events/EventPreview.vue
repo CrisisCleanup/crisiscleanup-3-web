@@ -31,7 +31,13 @@
       </div>
     </div>
     <div class="epreview__section">
-      <ModelSelectInput v-bind="componentAttrProps" multi translate />
+      <ModelSelectInput
+        v-bind="componentAttrProps"
+        multi
+        translate
+        :selected="requiredAttributes"
+        @update:value="(payload) => $emit('update:required-attr', payload)"
+      />
     </div>
     <div class="epreview__section">
       <base-text variant="h3" class="pb-1">
@@ -71,9 +77,11 @@ export default {
     eventPoints: VueTypes.number.def(0),
     // Dirty event locale(s).
     eventLocale: VueTypes.object,
+    // Prepopulated required attributes
+    requiredAttr: VueTypes.any.def({}),
   },
   setup(props, context) {
-    const { eventKey, eventPoints, eventLocale } = toRefs(props);
+    const { eventKey, eventPoints, eventLocale, requiredAttr } = toRefs(props);
 
     const eventData = reactive({
       key: eventKey,
@@ -88,11 +96,15 @@ export default {
       floatLabel: '~~Attributes',
     }));
 
+    const requiredAttributes = computed(() =>
+      requiredAttr.value !== null ? Object.values(requiredAttr.value) : [],
+    );
+
     const { loading, items, makeQuery } = useSearchEvents({ context });
 
     const relatedCols = computed(() => makeTableColumns([['name_t'], ['key']]));
     const relatedEvents = computed(() =>
-      items.value.map((e) => e.withTrans<Event>()),
+      items.value !== null ? items.value.map((e) => e.withTrans<Event>()) : [],
     );
 
     const eventName = computed(() => _.get(eventLocale.value, '2.name', ''));
@@ -110,6 +122,7 @@ export default {
       relatedCols,
       relatedLoading: loading,
       eventName,
+      requiredAttributes,
     };
   },
 };
