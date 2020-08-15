@@ -46,7 +46,7 @@ export const EventParts = Object.freeze(
       description: 'Jack',
     },
     SUB_ACTION: {
-      name: 'sub_action',
+      name: 'subaction',
       type: EventComponentTypes.SUB_ACTION,
       description: 'tries to',
     },
