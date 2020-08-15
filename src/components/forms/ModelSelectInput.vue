@@ -6,7 +6,9 @@
       item-key="id"
       :options="items"
       @input="(value) => onSelected(value)"
-      select-classes="bg-white border border-crisiscleanup-dark"
+      :select-classes="`bg-white border border-crisiscleanup-${
+        errorDetail ? 'red-100' : 'dark'
+      }`"
       indicator-icon="caret-down"
       :float-label="$t(floatLabel) || name"
       :multiple="multi"
@@ -23,8 +25,20 @@
     </FormSelect>
     <slot name="detail" v-bind="{ value }">
       <div class="m-input__detail">
-        <base-text variant="bodyxsm" class="text-crisiscleanup-dark-400 pl-1">
+        <base-text
+          v-if="!errorDetail"
+          variant="bodyxsm"
+          class="text-crisiscleanup-dark-400 pl-1"
+        >
           {{ value && value.description_t ? value.description_t : '' }}
+        </base-text>
+        <base-text
+          v-if="errorDetail"
+          variant="bodyxsm"
+          class="text-crisiscleanup-red-900 pl-1"
+          bold
+        >
+          {{ $t(errorDetail) }}
         </base-text>
       </div>
     </slot>
@@ -71,6 +85,8 @@ export default {
     resolveFromId: VueTypes.any,
     // Custom float label.
     floatLabel: VueTypes.string,
+    // Error detail
+    errorDetail: VueTypes.string,
   }: ModelSelectInputProps),
   setup(props, context) {
     const {
