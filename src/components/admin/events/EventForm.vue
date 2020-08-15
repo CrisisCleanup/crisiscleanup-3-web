@@ -8,6 +8,7 @@
       <ModelSelectInput
         label="name_t"
         translate
+        :error-detail="fieldErrors[i.name]"
         v-bind="{ ...i, ...getEventFetchProps(i.type) }"
         @update:value="(payload) => updateValue(payload)"
       />
@@ -30,14 +31,30 @@
 import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
 import UserBadge from '@/models/UserBadge';
 import EventComponent, { EventParts } from '@/models/EventComponent';
-import { reactive, watchEffect, onMounted, unref } from '@vue/composition-api';
+import {
+  reactive,
+  watchEffect,
+  onMounted,
+  unref,
+  computed,
+} from '@vue/composition-api';
 import _ from 'lodash';
+import Event from '@/models/Event';
 
 // Form for creating a new event.
 export default {
   name: 'EventForm',
   components: { ModelSelectInput },
   setup(props, context) {
+    const keyParts = _.reduce(
+      EventParts,
+      (result, value) => {
+        result[value.name] = null;
+        return result;
+      },
+      {},
+    );
+
     const inputs = reactive(
       _.reduce(
         EventParts,
@@ -49,6 +66,8 @@ export default {
         {},
       ),
     );
+
+    const fieldErrors = reactive(keyParts);
 
     const getEventFetchProps = (type) => ({
       model: EventComponent,
@@ -65,8 +84,25 @@ export default {
       inputs[unref(part)] = unref(value);
     };
 
-    watchEffect(() => {
+    const eventKeys = computed(() =>
+      _.transform(
+        inputs,
+        (result, value, key) => {
+          result[`${key}_key`] = value ? value.key : null;
+        },
+        {},
+      ),
+    );
+
+    watchEffect(async () => {
       context.emit('update:inputs', inputs);
+      const { errors, data } = await Event.validate(eventKeys.value);
+      context.root.$log.debug(errors);
+      context.root.$log.debug(data);
+      _.mapValues(fieldErrors, (invalidations, key: string) => {
+        const err = _.get(errors, `${key}_key`, null);
+        fieldErrors[key] = err === null ? err : _.first(err);
+      });
     });
 
     return {
@@ -74,6 +110,7 @@ export default {
       inputs,
       updateValue,
       EventParts,
+      fieldErrors,
     };
   },
 };
