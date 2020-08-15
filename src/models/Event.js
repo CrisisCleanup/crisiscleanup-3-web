@@ -32,6 +32,13 @@ export type EventType = {|
   updated_at: Date,
 |};
 
+export type EventValidationResponse = {|
+  errors: {
+    [field: string]: string[],
+  },
+  data: $Shape<EventType> & { attr: { [key: string]: string } },
+|};
+
 export type SuggestedEventItem = {
   text: string,
   length: number,
@@ -151,6 +158,26 @@ class Event extends CCUModel<EventType> {
       },
     );
     return data.results;
+  }
+
+  /**
+   * Validate partial event item against api.
+   * @param query - partial event item.
+   * @returns {Promise<EventValidationResponse>} - Broken constrains and completions.
+   */
+  static async validate(
+    query: $Shape<EventType>,
+  ): Promise<EventValidationResponse> {
+    const {
+      response: { data },
+    }: { response: { data: EventValidationResponse } } = await this.api().post(
+      '/events/validate',
+      query,
+      {
+        save: false,
+      },
+    );
+    return data;
   }
 }
 
