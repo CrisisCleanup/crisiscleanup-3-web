@@ -95,6 +95,7 @@ export default {
     );
 
     watchEffect(async () => {
+      if (_.isNil(inputs.actor) || _.isNil(inputs.action)) return;
       context.emit('update:inputs', inputs);
       const { errors, data } = await Event.validate(eventKeys.value);
       context.root.$log.debug(errors);
