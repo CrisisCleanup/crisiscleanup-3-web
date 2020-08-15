@@ -300,7 +300,10 @@ export default {
         await this.loadMap(this.markers);
       } else {
         if (worksite.incident !== this.currentIncidentId) {
-          markerSprite.texture = null;
+          this.pixiContainer.removeChild(markerSprite);
+          this.$nextTick(() => {
+            this.map.panBy([1, 0]);
+          });
           return;
         }
 
