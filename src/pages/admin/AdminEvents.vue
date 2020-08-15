@@ -15,7 +15,10 @@
       </div>
       <div class="events__build">
         <TitledCard class="build__input" title="~~Event Builder">
-          <EventForm @update:inputs="(payload) => onEventInput(payload)" />
+          <EventForm
+            @update:inputs="(payload) => onEventInput(payload)"
+            :event-key.sync="eventKey"
+          />
         </TitledCard>
         <TitledCard class="build__preview" title="~~Preview">
           <EventPreview
@@ -39,7 +42,7 @@ import EventSearchTable from '@/components/admin/events/EventSearchTable.vue';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import EventForm from '@/components/admin/events/EventForm.vue';
 import EventPreview from '@/components/admin/events/EventPreview.vue';
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed, unref } from '@vue/composition-api';
 import useEventPreview from '@/use/events/useEventPreview';
 import LocaleForm from '@/components/forms/LocaleForm';
 import { makeLocaleInputs } from '@/utils/form';
@@ -56,8 +59,8 @@ export default {
   setup(props, context) {
     const eventInputs = ref({});
     const _localeInputs = ref({});
-
-    const { updateEventKeys, eventKey, eventPoints } = useEventPreview();
+    const eventKey = ref('');
+    const { updateEventKeys, eventPoints } = useEventPreview();
 
     const onEventInput = (inputs) => {
       eventInputs.value = inputs;
