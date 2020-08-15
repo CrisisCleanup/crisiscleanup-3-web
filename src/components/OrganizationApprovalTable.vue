@@ -162,7 +162,7 @@ export default {
           title: this.$t('ID'),
           dataIndex: 'id',
           key: 'id',
-          width: '0.5fr',
+          width: '75px',
         },
         {
           title: this.$t('orgApprovalTable.name'),
@@ -174,7 +174,7 @@ export default {
           title: this.$t('orgApprovalTable.profile_complete'),
           dataIndex: 'profile_completed',
           key: 'profile_completed',
-          width: '1fr',
+          width: '0.75fr',
         },
         {
           title: this.$t('orgApprovalTable.website'),

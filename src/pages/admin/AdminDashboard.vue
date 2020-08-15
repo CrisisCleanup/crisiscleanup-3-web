@@ -522,7 +522,7 @@ export default {
       if (this.$can('move_orgs')) {
         try {
           const response = await this.$http.get(
-            `${process.env.VUE_APP_API_BASE_URL}/admins/incident_requests`,
+            `${process.env.VUE_APP_API_BASE_URL}/admins/incident_requests?organization__org_verified=true`,
           );
           if (response.data) {
             this.incident_requests = [...response.data.results];
