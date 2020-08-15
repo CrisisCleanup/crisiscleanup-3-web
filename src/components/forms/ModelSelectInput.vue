@@ -2,6 +2,7 @@
   <div class="m-input">
     <FormSelect
       v-bind="$attrs"
+      :value="selected"
       searchable
       item-key="id"
       :options="items"
@@ -62,6 +63,8 @@ export type ModelSelectInputProps = {|
   resolveFetch?: $ElementType<SelectFormProps, 'resolveFetch'>,
   resolveFromId?: $ElementType<SelectFormProps, 'resolveFromId'>,
   floatLabel?: string,
+  errorDetail?: string,
+  value?: any[],
 |};
 
 // Select model item(s) from a form select.
@@ -87,6 +90,8 @@ export default {
     floatLabel: VueTypes.string,
     // Error detail
     errorDetail: VueTypes.string,
+    // Override selected items
+    selected: VueTypes.any,
   }: ModelSelectInputProps),
   setup(props, context) {
     const {
