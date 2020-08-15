@@ -218,6 +218,10 @@ export default {
     onInput(value) {
       this.$emit('input', value);
       this.isEmpty_ = value === null;
+      if (value === null) {
+        this.isFloated_ = false;
+        this.$refs.inputLabel.classList.remove('focused');
+      }
       if (this.multiple) {
         const current = this.value || [];
         this.$emit(

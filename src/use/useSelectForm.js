@@ -62,8 +62,12 @@ export default <T: typeof CCUModel>({
     items.value = results;
   });
 
-  const onSelected = async (itemId: number | number[]) => {
-    if (!itemId) return;
+  const onSelected = async (itemId: number | number[] | null) => {
+    if (itemId === null) {
+      selected.value = [];
+      _value.value = null;
+      return;
+    }
     if (Array.isArray(itemId)) {
       itemId.map(onSelected);
       return;
