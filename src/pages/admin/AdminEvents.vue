@@ -18,6 +18,7 @@
           <EventForm
             @update:inputs="(payload) => onEventInput(payload)"
             :event-key.sync="eventKey"
+            @update:required-attr="(payload) => onAttrOverride(payload)"
           />
         </TitledCard>
         <TitledCard class="build__preview" title="~~Preview">
@@ -25,6 +26,8 @@
             :event-key="eventKey"
             :event-points="eventPoints"
             :event-locale="localeData"
+            :required-attr="eventInputs.required_attr"
+            @update:required-attr="(payload) => onAttrOverride(payload)"
           />
         </TitledCard>
       </div>
@@ -67,6 +70,17 @@ export default {
       updateEventKeys(eventInputs.value);
     };
 
+    const onAttrOverride = ([, value]) => {
+      if (!value) return;
+      const _value = unref(value);
+      if (!_value) return;
+      eventInputs.value.required_attr = {};
+      _value.map((attr) => {
+        eventInputs.value.required_attr[attr.id] = attr;
+        return eventInputs;
+      });
+    };
+
     const localeInputs = computed({
       get: () =>
         makeLocaleInputs({
@@ -87,7 +101,6 @@ export default {
     });
 
     const localeData = computed(() => _localeInputs.value);
-
     return {
       eventInputs,
       onEventInput,
@@ -95,6 +108,7 @@ export default {
       eventPoints,
       localeInputs,
       localeData,
+      onAttrOverride,
     };
   },
 };
