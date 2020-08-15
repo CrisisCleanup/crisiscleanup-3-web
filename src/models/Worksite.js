@@ -24,7 +24,7 @@ export default class Worksite extends Model {
       state: this.attr(null),
       work_types: this.attr(null),
       what3words: this.attr(null),
-      notes: this.attr(null),
+      notes: this.attr([]),
       files: this.attr(null),
       time: this.attr(null),
       flags: this.attr(null),

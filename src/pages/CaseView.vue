@@ -12,86 +12,7 @@
         $t('caseForm.property_information')
       }}</SectionHeading>
       <section class="px-3 pb-3">
-        <div>
-          <div class="flex items-center justify-between">
-            <label
-              v-if="worksite.notes && worksite.notes.length > 0"
-              class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
-              >{{ $t('formLabels.notes') }}</label
-            >
-
-            <base-button
-              v-if="worksite.notes.length"
-              icon="caret-down"
-              type="link"
-              :text="
-                showingAllNotes
-                  ? $t('actions.some_notes')
-                  : $t('actions.all_notes')
-              "
-              :action="
-                () => {
-                  showingAllNotes = !showingAllNotes;
-                }
-              "
-            />
-          </div>
-          <template v-for="(note, index) in sortedNotes">
-            <div
-              v-if="index < 4 || showingAllNotes"
-              :key="note.id"
-              class="notes my-1 p-1 flex items-start"
-              @click="
-                () => {
-                  expandedNotes[note.id] = !expandedNotes[note.id];
-                  expandedNotes = { ...expandedNotes };
-                }
-              "
-            >
-              <span class="text-crisiscleanup-grey-700 mr-3 notes-time w-40"
-                >{{ note.created_at | moment('from', 'now') }}:</span
-              ><span
-                class="font-hairline w-64 cursor-pointer"
-                :class="expandedNotes[note.id] ? '' : 'max-lines'"
-                >{{ note.note }}</span
-              >
-            </div>
-          </template>
-          <base-button
-            v-if="!addingNotes"
-            class="my-1"
-            type="link"
-            :text="$t('caseView.add_note')"
-            :alt="$t('caseView.add_note_alt')"
-            :action="
-              () => {
-                addingNotes = true;
-              }
-            "
-          />
-          <div v-if="addingNotes">
-            Note
-            <textarea
-              v-model="currentNote"
-              rows="4"
-              class="block w-full border outline-none"
-            />
-            <div class="flex items-center justify-between">
-              <base-button
-                class="my-1"
-                type="bare"
-                :text="$t('actions.cancel')"
-                :action="cancelNote"
-              />
-              <base-button
-                class="my-1"
-                type="link"
-                :text="$t('actions.save')"
-                :action="saveNote"
-              />
-            </div>
-          </div>
-        </div>
+        <WorksiteNotes @saveNote="saveNote" :worksite="worksite" />
 
         <div class="flex flex-row">
           <div class="flex-1">
@@ -451,7 +372,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 import { getErrorMessage } from '@/utils/errors';
 import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown';
 import User from '@/models/User';
@@ -467,10 +387,12 @@ import SectionHeading from '@/components/SectionHeading';
 import WorksiteImageSection from '@/components/WorksiteImageSection';
 import WorksiteReportSection from '@/components/WorksiteReportSection';
 import Flag from './Flag';
+import WorksiteNotes from './WorksiteNotes';
 
 export default {
   name: 'CaseView',
   components: {
+    WorksiteNotes,
     WorksiteReportSection,
     WorksiteImageSection,
     Flag,
@@ -496,11 +418,6 @@ export default {
   computed: {
     worksite() {
       return Worksite.find(this.$route.params.id);
-    },
-    sortedNotes() {
-      return [...this.worksite.notes].sort((a, b) => {
-        return moment(b.created_at).unix() - moment(a.created_at).unix();
-      });
     },
     incident() {
       return Incident.find(this.$route.params.incident_id);
@@ -641,11 +558,9 @@ export default {
         await this.$toasted.error(getErrorMessage(error));
       }
     },
-    async saveNote() {
+    async saveNote(currentNote) {
       try {
-        await Worksite.api().addNote(this.worksite.id, this.currentNote);
-        this.addingNotes = false;
-        this.currentNote = '';
+        await Worksite.api().addNote(this.worksite.id, currentNote);
         await Worksite.api().fetch(this.worksite.id);
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -706,14 +621,6 @@ export default {
 <style scoped>
 .intake-view {
   overflow: auto;
-}
-
-.notes {
-  background-color: rgba(216, 216, 216, 0.15);
-}
-
-.notes-time {
-  color: #848f99;
 }
 
 .work_type_section {

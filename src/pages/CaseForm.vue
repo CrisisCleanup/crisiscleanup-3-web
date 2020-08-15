@@ -218,8 +218,8 @@
             :text="$t('caseForm.select_on_map')"
           />
         </div>
+        <WorksiteNotes @saveNote="saveNote" :worksite="worksite" />
       </div>
-
       <form-tree
         v-for="field in fieldTree"
         :key="field.field_key"
@@ -293,7 +293,7 @@
 import * as turf from '@turf/turf';
 import * as moment from 'moment';
 import { create } from 'vue-modal-dialogs';
-import { sortBy } from 'lodash';
+import { sortBy, uniqueId } from 'lodash';
 import Worksite from '@/models/Worksite';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
@@ -307,12 +307,14 @@ import WorksiteReportSection from '@/components/WorksiteReportSection';
 import SectionHeading from '../components/SectionHeading';
 import { EventBus } from '../event-bus';
 import { ValidateMixin } from '../mixins';
+import WorksiteNotes from './WorksiteNotes';
 
 const messageBox = create(MessageBox);
 
 export default {
   name: 'CaseForm',
   components: {
+    WorksiteNotes,
     SectionHeading,
     WorksiteSearchInput,
     WorksiteReportSection,
@@ -420,6 +422,7 @@ export default {
       this.worksite = {
         incident: this.incidentId,
         form_data: [],
+        notes: [],
         formFields: {},
         ...this.dataPrefill,
       };
@@ -439,6 +442,17 @@ export default {
     this.ready = true;
   },
   methods: {
+    async saveNote(currentNote) {
+      const notes = [...this.worksite.notes];
+      notes.push({
+        id: uniqueId(),
+        note: currentNote,
+        created_at: this.$moment().toISOString(),
+        pending: true,
+      });
+
+      this.updateWorksite(notes, 'notes');
+    },
     getSectionCount(currentField) {
       return currentField.order_label;
     },
@@ -729,19 +743,31 @@ export default {
       }
 
       try {
+        const notesToSave = this.worksite.notes
+          .filter((n) => Boolean(n.pending))
+          .map((n) => n.note);
         if (this.worksite.id) {
           const data = { ...this.worksite };
           delete data.flags;
+          delete data.notes;
           await Worksite.api().put(`/worksites/${this.worksite.id}`, {
             ...data,
             skip_duplicate_check: true,
           });
+          await Promise.all(
+            notesToSave.map((n) => Worksite.api().addNote(this.worksite.id, n)),
+          );
         } else {
           const savedWorksite = await Worksite.api().post('/worksites', {
             ...this.worksite,
             incident: this.incidentId,
             skip_duplicate_check: true,
           });
+          await Promise.all(
+            notesToSave.map((n) =>
+              Worksite.api().addNote(savedWorksite.entities.worksites[0].id, n),
+            ),
+          );
           this.worksite = Worksite.find(savedWorksite.entities.worksites[0].id);
         }
         await this.$toasted.success(this.$t('caseForm.new_case_success'));
