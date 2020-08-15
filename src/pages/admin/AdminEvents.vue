@@ -18,6 +18,7 @@
           <EventForm
             @update:inputs="(payload) => onEventInput(payload)"
             :event-key.sync="eventKey"
+            :field-errors.sync="fieldErrors"
             @update:required-attr="(payload) => onAttrOverride(payload)"
           />
         </TitledCard>
@@ -27,6 +28,7 @@
             :event-points="eventPoints"
             :event-locale="localeData"
             :required-attr="eventInputs.required_attr"
+            :field-errors="fieldErrors"
             @update:required-attr="(payload) => onAttrOverride(payload)"
           />
         </TitledCard>
@@ -63,6 +65,7 @@ export default {
     const eventInputs = ref({});
     const _localeInputs = ref({});
     const eventKey = ref('');
+    const fieldErrors = ref({});
     const { updateEventKeys, eventPoints } = useEventPreview();
 
     const onEventInput = (inputs) => {
@@ -109,6 +112,7 @@ export default {
       localeInputs,
       localeData,
       onAttrOverride,
+      fieldErrors,
     };
   },
 };
