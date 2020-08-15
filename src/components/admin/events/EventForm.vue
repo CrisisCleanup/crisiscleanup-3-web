@@ -30,9 +30,13 @@
 // @flow
 import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
 import UserBadge from '@/models/UserBadge';
-import EventComponent, { EventParts } from '@/models/EventComponent';
+import EventComponent, {
+  EventComponentTypes,
+  EventParts,
+} from '@/models/EventComponent';
 import {
   reactive,
+  ref,
   watchEffect,
   onMounted,
   unref,
@@ -66,6 +70,7 @@ export default {
         {},
       ),
     );
+    const _eventKey = ref('');
 
     const fieldErrors = reactive(keyParts);
 
@@ -94,6 +99,8 @@ export default {
       ),
     );
 
+    const eventKey = computed(() => _eventKey.value);
+
     watchEffect(async () => {
       if (_.isNil(inputs.actor) || _.isNil(inputs.action)) return;
       context.emit('update:inputs', inputs);
@@ -104,6 +111,12 @@ export default {
         const err = _.get(errors, `${key}_key`, null);
         fieldErrors[key] = err === null ? err : _.first(err);
       });
+      const eKey = _.get(data, 'key', null);
+      const reqAttr = _.get(data, 'required_attr', []);
+      if (eKey) {
+        _eventKey.value = eKey;
+        context.emit('update:event-key', eventKey.value);
+      }
     });
 
     return {
@@ -112,6 +125,7 @@ export default {
       updateValue,
       EventParts,
       fieldErrors,
+      eventKey,
     };
   },
 };
