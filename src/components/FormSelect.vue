@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { xor, kebabCase } from 'lodash';
+import { xor, kebabCase, isEmpty } from 'lodash';
 export default {
   name: 'FormSelect',
   props: {
@@ -131,8 +131,8 @@ export default {
     const { indicatorIcon } = this;
     const cancelText = this.$t('actions.cancel');
     return {
-      isFloated: false,
-      isEmpty: true,
+      isFloated_: false,
+      isEmpty_: true,
       isInvalid: false,
       baseHeight_: 0.0,
       currentHeight_: 0.0,
@@ -182,6 +182,21 @@ export default {
       const displace = this.heightMultiplier * -12;
       return { transform: `translateY(${displace}px)` };
     },
+    isEmpty() {
+      if (this.value !== null) {
+        return isEmpty(this.value);
+      }
+      return this.isEmpty_;
+    },
+    isFloated() {
+      if (this.isFloated_ === true) {
+        return true;
+      }
+      if (this.isEmpty === false) {
+        return true;
+      }
+      return this.isFloated_;
+    },
   },
   mounted() {
     this.id = this._uid;
@@ -202,7 +217,7 @@ export default {
   methods: {
     onInput(value) {
       this.$emit('input', value);
-      this.isEmpty = value === null;
+      this.isEmpty_ = value === null;
       if (this.multiple) {
         const current = this.value || [];
         this.$emit(
@@ -221,13 +236,13 @@ export default {
     },
     onBlur() {
       if (this.floatLabel && this.isEmpty) {
-        this.isFloated = false;
+        this.isFloated_ = false;
         this.$refs.inputLabel.classList.remove('focused');
       }
     },
     open() {
       if (this.floatLabel) {
-        this.isFloated = true;
+        this.isFloated_ = true;
         this.$refs.inputLabel.classList.add('focused');
       }
       this.$nextTick(() => {
