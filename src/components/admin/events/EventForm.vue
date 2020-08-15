@@ -54,6 +54,7 @@ export default {
       EventParts,
       (result, value) => {
         result[value.name] = null;
+        result.key = null;
         return result;
       },
       {},
@@ -108,9 +109,11 @@ export default {
       context.root.$log.debug(errors);
       context.root.$log.debug(data);
       _.mapValues(fieldErrors, (invalidations, key: string) => {
-        const err = _.get(errors, `${key}_key`, null);
+        const _key = key === 'key' ? key : `${key}_key`;
+        const err = _.get(errors, _key, null);
         fieldErrors[key] = err === null ? err : _.first(err);
       });
+      context.emit('update:field-errors', fieldErrors);
       const eKey = _.get(data, 'key', null);
       const reqAttr = _.get(data, 'required_attr', []);
       if (eKey) {

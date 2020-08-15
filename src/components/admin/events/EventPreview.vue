@@ -13,7 +13,20 @@
         <base-text variant="h3" class="pb-1">
           {{ $t('~~Key') }}
         </base-text>
-        <base-input size="medium" :value="eventData.key" break-glass />
+        <base-input
+          :class="keyError !== null && 'border border-crisiscleanup-red-100'"
+          size="medium"
+          :value="eventData.key"
+          break-glass
+        />
+        <base-text
+          variant="bodyxsm"
+          class="text-crisiscleanup-red-900"
+          bold
+          v-if="keyError !== null"
+        >
+          {{ $t(keyError) }}
+        </base-text>
       </div>
       <div>
         <base-text variant="h3" class="pb-1">
@@ -79,9 +92,17 @@ export default {
     eventLocale: VueTypes.object,
     // Prepopulated required attributes
     requiredAttr: VueTypes.any.def({}),
+    // Field errors
+    fieldErrors: VueTypes.any.def([]),
   },
   setup(props, context) {
-    const { eventKey, eventPoints, eventLocale, requiredAttr } = toRefs(props);
+    const {
+      eventKey,
+      eventPoints,
+      eventLocale,
+      requiredAttr,
+      fieldErrors,
+    } = toRefs(props);
 
     const eventData = reactive({
       key: eventKey,
@@ -108,6 +129,9 @@ export default {
     );
 
     const eventName = computed(() => _.get(eventLocale.value, '2.name', ''));
+    const keyError = computed(() =>
+      fieldErrors.value.key ? fieldErrors.value.key : null,
+    );
 
     watch(
       () => eventData.key,
@@ -123,6 +147,7 @@ export default {
       relatedLoading: loading,
       eventName,
       requiredAttributes,
+      keyError,
     };
   },
 };
