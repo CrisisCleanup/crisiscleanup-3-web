@@ -104,7 +104,7 @@ export default {
             'present_progressive:ppt',
           ],
           base: eventKey.value,
-          prefix: 'event',
+          prefix: 'events',
         }),
       set: (payload) => {
         _localeInputs.value = payload;
@@ -115,9 +115,25 @@ export default {
 
     const localeData = computed(() => _localeInputs.value);
 
+    const getEventTranslations = (inputs, data) =>
+      _.transform(
+        inputs,
+        (results, inputValue, inputKey) => {
+          _.map(data, (value, key) =>
+            results.push({
+              label: inputValue.key,
+              text: value[inputKey],
+              language: key,
+            }),
+          );
+        },
+        [],
+      );
+
     const onSubmit = async () => {
-      const { name, description, past_tense, present_progressive } = unwrap(
-        localeInputs,
+      const eventTranslations = getEventTranslations(
+        unwrap(localeInputs),
+        unwrap(localeData),
       );
       const {
         actor,
@@ -132,10 +148,6 @@ export default {
       try {
         data = {
           key: unwrap(eventKey),
-          name_t: name.key,
-          description_t: description.key,
-          past_tense_t: past_tense.key,
-          present_progressive_t: present_progressive.key,
           required_attr: Object.values(required_attr || {}).map((a) => a.key),
           points: unwrap(eventPoints),
           actor_key: actor.key,
@@ -144,13 +156,14 @@ export default {
           patient_key: _.get(patient, 'key', null),
           recipient_key: _.get(recipient, 'key', null),
           badge_key: _.get(user_badge, 'key', null),
+          localizations: eventTranslations,
         };
       } catch (e) {
         console.error(e);
         return;
       }
       context.root.$log.info('creating new event:', data);
-      const resp = await Event.create(data);
+      const resp = await Event.createNew(data);
       context.root.$log.debug(resp);
     };
 
