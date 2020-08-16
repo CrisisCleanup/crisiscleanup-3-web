@@ -160,11 +160,16 @@ export default {
         };
       } catch (e) {
         console.error(e);
+        context.root.$toasted.error(e);
         return;
       }
       context.root.$log.info('creating new event:', data);
       const resp = await Event.createNew(data);
       context.root.$log.debug(resp);
+      context.root.$toasted.success(context.root.$t('Success!'));
+      eventInputs.value = {};
+      _localeInputs.value = {};
+      eventKey.value = '';
     };
 
     return {
