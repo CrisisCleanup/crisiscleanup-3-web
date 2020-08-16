@@ -180,7 +180,12 @@ class Event extends CCUModel<EventType> {
     return data;
   }
 
-  async create(payload) {
+  /**
+   * Publish new event to api.
+   * @param payload - event payload.
+   * @returns {Promise<*>}
+   */
+  static async createNew(payload: $Shape<EventType>) {
     return this.api().post('/events', payload);
   }
 }
