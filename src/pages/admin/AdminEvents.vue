@@ -39,6 +39,13 @@
         </TitledCard>
       </div>
     </div>
+    <div class="events__footer">
+      <div>
+        <base-button :action="onSubmit" size="lg" variant="solid"
+          >Save</base-button
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -51,6 +58,9 @@ import { ref, computed, unref } from '@vue/composition-api';
 import useEventPreview from '@/use/events/useEventPreview';
 import LocaleForm from '@/components/forms/LocaleForm';
 import { makeLocaleInputs } from '@/utils/form';
+import _ from 'lodash';
+import Event from '@/models/Event';
+import { unwrap } from '@/utils/wrap';
 
 export default {
   name: 'AdminEvents',
@@ -104,6 +114,46 @@ export default {
     });
 
     const localeData = computed(() => _localeInputs.value);
+
+    const onSubmit = async () => {
+      const { name, description, past_tense, present_progressive } = unwrap(
+        localeInputs,
+      );
+      const {
+        actor,
+        action,
+        subaction,
+        patient,
+        recipient,
+        user_badge,
+        required_attr,
+      } = unwrap(eventInputs);
+      let data = {};
+      try {
+        data = {
+          key: unwrap(eventKey),
+          name_t: name.key,
+          description_t: description.key,
+          past_tense_t: past_tense.key,
+          present_progressive_t: present_progressive.key,
+          required_attr: Object.values(required_attr || {}).map((a) => a.key),
+          points: unwrap(eventPoints),
+          actor_key: actor.key,
+          action_key: action.key,
+          subaction_key: _.get(subaction, 'key', null),
+          patient_key: _.get(patient, 'key', null),
+          recipient_key: _.get(recipient, 'key', null),
+          badge_key: _.get(user_badge, 'key', null),
+        };
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+      context.root.$log.info('creating new event:', data);
+      const resp = await Event.create(data);
+      context.root.$log.debug(resp);
+    };
+
     return {
       eventInputs,
       onEventInput,
@@ -113,12 +163,16 @@ export default {
       localeData,
       onAttrOverride,
       fieldErrors,
+      onSubmit,
     };
   },
 };
 </script>
 
 <style scoped lang="postcss">
+$neg-container-y-pad: calc(0rem - theme('spacing.6'));
+$neg-container-x-pad: calc(0rem - theme('spacing.12'));
+
 .events {
   &__container {
     lost-flex-container: column;
@@ -147,6 +201,13 @@ export default {
     > div {
       lost-row: 1/1;
     }
+  }
+  &__footer {
+    @apply bg-white p-6;
+    display: flex;
+    justify-content: flex-end;
+    margin: theme('spacing.6') $neg-container-x-pad $neg-container-y-pad
+      $neg-container-x-pad;
   }
 }
 
