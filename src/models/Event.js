@@ -179,6 +179,10 @@ class Event extends CCUModel<EventType> {
     );
     return data;
   }
+
+  async create(payload) {
+    return this.api().post('/events', payload);
+  }
 }
 
 export default Event;
