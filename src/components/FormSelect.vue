@@ -218,7 +218,7 @@ export default {
     onInput(value) {
       this.$emit('input', value);
       this.isEmpty_ = value === null;
-      if (value === null) {
+      if (value === null && this.floatLabel) {
         this.isFloated_ = false;
         this.$refs.inputLabel.classList.remove('focused');
       }
