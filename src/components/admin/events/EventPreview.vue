@@ -9,11 +9,16 @@
       </base-text>
     </div>
     <div class="epreview__section">
-      <div>
+      <div class="relative">
         <base-text variant="h3" class="pb-1">
           {{ $t('~~Key') }}
         </base-text>
+        <div
+          class="click-cap h-full w-full absolute z-10"
+          @click="onKeyClick"
+        />
         <base-input
+          class="epreview__key"
           :class="keyError !== null && 'border border-crisiscleanup-red-100'"
           size="medium"
           :value="eventData.key"
@@ -134,6 +139,11 @@ export default {
       fieldErrors.value.key ? fieldErrors.value.key : null,
     );
 
+    const onKeyClick = () => {
+      context.root.$copyText(eventData.key);
+      context.root.$toasted.success(context.root.$t('~~Copied to Clipboard!'));
+    };
+
     watch(
       () => eventData.key,
       async () => makeQuery(eventData.key),
@@ -149,6 +159,7 @@ export default {
       eventName,
       requiredAttributes,
       keyError,
+      onKeyClick,
     };
   },
 };
@@ -173,6 +184,22 @@ export default {
           justify-content: flex-end;
         }
       }
+    }
+  }
+  .click-cap {
+    &:hover {
+      + .epreview__key {
+        @apply shadow-outline;
+        box-shadow: 0 0 0 3px rgba(254, 206, 9, 0.4);
+      }
+    }
+  }
+  &__key {
+    transition: box-shadow 250ms easeInOutCirc;
+    cursor: pointer;
+    &:hover {
+      @apply shadow-outline;
+      box-shadow: 0 0 0 3px rgba(254, 206, 9, 0.4);
     }
   }
 }
