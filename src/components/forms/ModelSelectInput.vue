@@ -65,6 +65,7 @@ export type ModelSelectInputProps = {|
   floatLabel?: string,
   errorDetail?: string,
   value?: any[],
+  sortKey?: string,
 |};
 
 // Select model item(s) from a form select.
@@ -92,6 +93,8 @@ export default {
     errorDetail: VueTypes.string,
     // Override selected items
     selected: VueTypes.any,
+    // Element key to sort options by.
+    sortKey: VueTypes.string,
   }: ModelSelectInputProps),
   setup(props, context) {
     const {
@@ -101,6 +104,7 @@ export default {
       translate,
       resolveFetch,
       resolveFromId,
+      sortKey,
     } = toRefs(props);
 
     let _model = model.value;
@@ -115,6 +119,7 @@ export default {
       translate: translate.value,
       resolveFetch: resolveFetch.value,
       resolveFromId: resolveFromId.value,
+      sortKey: sortKey.value,
     });
 
     watchEffect(() => {

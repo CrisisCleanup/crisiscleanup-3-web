@@ -7,6 +7,7 @@
     >
       <ModelSelectInput
         label="name_t"
+        sort-key="name_t"
         translate
         :error-detail="fieldErrors[i.name]"
         v-bind="{ ...i, ...getEventFetchProps(i.type) }"
@@ -16,6 +17,7 @@
     <div class="eform__input">
       <ModelSelectInput
         name="user_badge"
+        sort-key="name_t"
         :description="$t('~~Badge to appropriate points to')"
         label="name_t"
         model="user_badges"

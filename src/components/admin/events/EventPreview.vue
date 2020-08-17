@@ -45,6 +45,7 @@
     </div>
     <div class="epreview__section">
       <ModelSelectInput
+        sort-key="name_t"
         v-bind="componentAttrProps"
         multi
         translate

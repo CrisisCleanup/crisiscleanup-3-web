@@ -14,6 +14,7 @@ export type SelectFormProps<T> = {|
   resolveFetch?: [Function, $Rest<SelectFormProps<T>, mixed>],
   resolveFromId?: Function,
   translate?: boolean,
+  sortKey?: string,
 |};
 
 /**
@@ -26,6 +27,7 @@ export type SelectFormProps<T> = {|
  * @param resolveFetch - Custom fetch method.
  * @param resolveFromId - Custom resolve method.
  * @param translate - Auto-translate results.
+ * @param sortKey - Key to sort by.
  * @returns {{onSelected: onSelected, items: T[] extends Ref ? T[] : Ref<UnwrapRef<T[]>>, value: *, selected: T[] extends Ref ? T[] : Ref<UnwrapRef<T[]>>}}
  */
 export default <T: typeof CCUModel>({
@@ -35,6 +37,7 @@ export default <T: typeof CCUModel>({
   resolveFetch,
   resolveFromId,
   translate,
+  sortKey,
 }: SelectFormProps<T> = {}) => {
   const items = ref<T[]>([]);
   const selected = ref<T[]>([]);
@@ -58,6 +61,9 @@ export default <T: typeof CCUModel>({
     let results = await debouncedFetch(...resolveArgs);
     if (translate) {
       results = results.map((r) => reactive(r.withTrans<T>()));
+    }
+    if (sortKey) {
+      results = _.sortBy(results, sortKey);
     }
     items.value = results;
   });
