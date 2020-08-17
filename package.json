@@ -157,7 +157,7 @@
     "@storybook/addon-storysource": "^5.3.19",
     "@storybook/addons": "^5.3.19",
     "@storybook/vue": "^5.3.19",
-    "@vue/babel-preset-app": "^4.5.2",
+    "@vue/babel-preset-app": "^4.5.3",
     "@vue/cli-plugin-babel": "^4.5.2",
     "@vue/cli-plugin-e2e-cypress": "^4.5.3",
     "@vue/cli-plugin-eslint": "^4.4.6",
