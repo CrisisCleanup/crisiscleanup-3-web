@@ -52,7 +52,7 @@
     "@turf/turf": "^5.1.6",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
     "@vue/babel-preset-jsx": "^1.1.2",
-    "@vue/composition-api": "^1.0.0-beta.8",
+    "@vue/composition-api": "^1.0.0-beta.10",
     "@vuex-orm/core": "^0.36.3",
     "@vuex-orm/plugin-axios": "^0.9.3",
     "@vuex-orm/plugin-change-flags": "^1.2.3",
