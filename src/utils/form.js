@@ -72,7 +72,7 @@ export const makeLocaleInputs = ({
     inputs,
     (result, value) => {
       const [name, suffix = null] = _.split(value, ':');
-      const _key = `${prefix}.${_.snakeCase(base)}${
+      const _key = `${prefix}.${base}${
         _.isNil(suffix) ? '' : `_${suffix || ''}`
       }`;
       result[name] = {
