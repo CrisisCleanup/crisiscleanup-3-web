@@ -14,6 +14,7 @@ export default {
     variant: VueTypes.oneOf(VARIANTS).def('body'),
     font: VueTypes.oneOf(['sans', 'display']).def('sans'),
     bold: VueTypes.bool.def(false),
+    regular: VueTypes.bool.def(false),
     semiBold: VueTypes.bool.def(false),
     weight: VueTypes.oneOf([
       100,
@@ -57,6 +58,9 @@ export default {
       }
       if (this.semiBold) {
         return { fontWeight: 600 };
+      }
+      if (this.regular) {
+        return { fontWeight: 400 };
       }
       return {};
     },

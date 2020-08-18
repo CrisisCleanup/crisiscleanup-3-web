@@ -23,6 +23,9 @@
           >({{ description }})</span
         >
       </template>
+      <template #option="{option}">
+        <slot name="option" :option="option" />
+      </template>
     </FormSelect>
     <slot name="detail" v-bind="{ value }">
       <div class="m-input__detail">
