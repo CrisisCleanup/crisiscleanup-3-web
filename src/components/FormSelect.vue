@@ -300,6 +300,12 @@ export default {
   @apply text-crisiscleanup-dark-200;
 }
 
+.form-select {
+  &.vs--single .has-float span {
+    @apply font-bold;
+  }
+}
+
 .form-select.invalid {
   @apply border border-crisiscleanup-red-100;
 }
@@ -315,7 +321,7 @@ export default {
   &__container {
     position: relative;
     > label {
-      @apply text-h2 font-normal text-crisiscleanup-dark-500;
+      @apply text-h2 font-normal text-crisiscleanup-dark-400;
       position: absolute;
       top: 25%;
       bottom: 0;
