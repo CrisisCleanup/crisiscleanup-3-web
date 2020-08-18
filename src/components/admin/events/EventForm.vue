@@ -114,9 +114,23 @@ export default {
 
     const eventKey = computed(() => _eventKey.value);
 
+    const clearForm = () => {
+      context.root.$log.debug('all inputs are empty, clearing!');
+      _.mapValues(fieldErrors, (invalidation, key) => {
+        fieldErrors[key] = null;
+      });
+      context.emit('update:required-attr', [EventComponentTypes.ATTR, []]);
+      context.emit('update:event-key', '');
+    };
+
     watchEffect(async () => {
       context.emit('update:inputs', inputs);
-      if (_.isNil(inputs.actor) || _.isNil(inputs.action)) return;
+      const keyInputs = _.omit(unwrap(inputs), ['required_attr']);
+      context.root.$log.debug('key inputs', keyInputs);
+      if (!_.some(keyInputs)) {
+        clearForm();
+        return;
+      }
       const { errors, data } = await Event.validate(eventKeys.value);
       context.root.$log.debug(errors);
       context.root.$log.debug(data);
