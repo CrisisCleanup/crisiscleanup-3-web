@@ -145,6 +145,8 @@ export default {
         required_attr,
       } = unwrap(eventInputs);
       let data = {};
+      let badge_key = _.get(user_badge, 'key', null);
+      badge_key = badge_key === -1 ? null : badge_key;
       try {
         data = {
           key: unwrap(eventKey),
@@ -155,7 +157,7 @@ export default {
           subaction_key: _.get(subaction, 'key', null),
           patient_key: _.get(patient, 'key', null),
           recipient_key: _.get(recipient, 'key', null),
-          badge_key: _.get(user_badge, 'key', null),
+          badge_key,
           localizations: eventTranslations,
         };
       } catch (e) {
