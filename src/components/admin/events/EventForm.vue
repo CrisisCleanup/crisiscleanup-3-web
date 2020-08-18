@@ -68,6 +68,7 @@ export default {
       (result, value) => {
         result[value.name] = null;
         result.key = null;
+        result.user_badge = null;
         return result;
       },
       {},
