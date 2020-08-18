@@ -5,7 +5,7 @@
       :value="selected"
       searchable
       item-key="id"
-      :options="items"
+      :options="options(items)"
       @input="(value) => onSelected(value)"
       :select-classes="`bg-white border border-crisiscleanup-${
         errorDetail ? 'red-100' : 'dark'
@@ -69,6 +69,7 @@ export type ModelSelectInputProps = {|
   errorDetail?: string,
   value?: any[],
   sortKey?: string,
+  options?: Function,
 |};
 
 // Select model item(s) from a form select.
@@ -98,6 +99,8 @@ export default {
     selected: VueTypes.any,
     // Element key to sort options by.
     sortKey: VueTypes.string,
+    // Custom Options callback.
+    options: VueTypes.func.def((opts) => opts),
   }: ModelSelectInputProps),
   setup(props, context) {
     const {
