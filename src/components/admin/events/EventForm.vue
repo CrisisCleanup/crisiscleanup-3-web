@@ -6,13 +6,18 @@
       :key="i.name"
     >
       <ModelSelectInput
-        label="name_t"
+        label="key"
         sort-key="name_t"
         translate
         :error-detail="fieldErrors[i.name]"
         v-bind="{ ...i, ...getEventFetchProps(i.type) }"
         @update:value="(payload) => updateValue(payload)"
-      />
+      >
+        <template #option="{option}">
+          <base-text variant="h3">{{ option.name_t }}</base-text>
+          <base-text variant="h4" regular>{{ option.key }}</base-text>
+        </template>
+      </ModelSelectInput>
     </div>
     <div class="eform__input">
       <ModelSelectInput
@@ -23,7 +28,12 @@
         model="user_badges"
         @update:value="(payload) => updateValue(payload)"
         translate
-      />
+      >
+        <template #option="{option}">
+          <base-text variant="h3">{{ option.name_t }}</base-text>
+          <base-text variant="h4" regular>{{ option.key }}</base-text>
+        </template>
+      </ModelSelectInput>
     </div>
   </div>
 </template>
