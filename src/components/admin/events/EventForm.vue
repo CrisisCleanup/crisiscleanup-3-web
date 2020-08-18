@@ -6,7 +6,7 @@
       :key="i.name"
     >
       <ModelSelectInput
-        label="key"
+        label="name_t"
         sort-key="name_t"
         translate
         :error-detail="fieldErrors[i.name]"
