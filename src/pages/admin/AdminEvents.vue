@@ -135,6 +135,8 @@ export default {
         unwrap(localeInputs),
         unwrap(localeData),
       );
+      let localeKeys = _.mapValues(unwrap(localeInputs), 'key');
+      localeKeys = _.mapKeys(localeKeys, (value, key) => `${key}_t`);
       const {
         actor,
         action,
@@ -159,6 +161,7 @@ export default {
           recipient_key: _.get(recipient, 'key', null),
           badge_key,
           localizations: eventTranslations,
+          ...localeKeys,
         };
       } catch (e) {
         console.error(e);
