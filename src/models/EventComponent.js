@@ -152,10 +152,12 @@ class EventComponent extends CCUModel<EventComponentType> {
   /**
    * Fetch all components by type.
    * @param type - type of component.
+   * @param limit - limit results.
    * @returns {Promise<Query<InstanceOf<EventComponent>>>}
    */
   static async fetchAllByType(
     type: EventComponentTypeT,
+    limit: number = 100,
   ): Promise<EventComponentType[]> {
     const query = this.query().where('type', type);
     if (query.count()) {
@@ -165,6 +167,7 @@ class EventComponent extends CCUModel<EventComponentType> {
       dataKey: 'results',
       params: {
         type,
+        limit,
       },
     });
     return this.query().where('type', type).all();
