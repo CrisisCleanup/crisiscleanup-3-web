@@ -82,7 +82,7 @@
     "leaflet.gridlayer.googlemutant": "^0.8.0",
     "leaflet.heat": "^0.2.0",
     "leaflet.markercluster": "^1.4.1",
-    "libphonenumber-js": "^1.7.56",
+    "libphonenumber-js": "^1.7.57",
     "lodash": "^4.17.20",
     "marker-clusterer-plus": "^2.1.4",
     "moment-duration-format": "^2.3.2",
