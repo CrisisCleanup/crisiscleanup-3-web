@@ -135,7 +135,7 @@
               wieght="300"
             >
               {{
-                 $t('requestAccess.you_are_approved_login', {
+                $t('requestAccess.you_are_approved_login', {
                   organization: requestedToOrg,
                   requested_to: requestedTo,
                 })

@@ -54,7 +54,9 @@ export default {
     );
     const onKeyClick = (key) => {
       context.root.$copyText(key);
-      context.root.$toasted.success(context.root.$t('info.copied_to_clipboard'));
+      context.root.$toasted.success(
+        context.root.$t('info.copied_to_clipboard'),
+      );
     };
     return {
       loading,
