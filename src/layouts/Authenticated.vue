@@ -235,7 +235,7 @@ export default {
         },
         {
           key: 'training',
-          text: this.$t('~~Training'),
+          text: this.$t('nav.training'),
           icon: {
             type: 'info',
             invertColor: true,

@@ -112,7 +112,7 @@ export default {
     },
     async showAssociatedIncidents(incidents) {
       await this.$component({
-        title: this.$t('~~Associated Incidents'),
+        title: this.$t('orgApprovalTable.associated_incidents'),
         component: 'IncidentList',
         classes: 'w-full h-48',
         props: {
