@@ -120,7 +120,7 @@ export default {
       model: EventComponent,
       resolveFetch: [EventComponent.fetchAllByType, EventComponentTypes.ATTR],
       label: 'name_t',
-      floatLabel: $t('eventBuilder.attributes'),
+      floatLabel: context.root.$t('eventBuilder.attributes'),
     }));
 
     const requiredAttributes = computed(() =>
@@ -141,7 +141,9 @@ export default {
 
     const onKeyClick = () => {
       context.root.$copyText(eventData.key);
-      context.root.$toasted.success(context.root.$t('info.copied_to_clipboard'));
+      context.root.$toasted.success(
+        context.root.$t('info.copied_to_clipboard'),
+      );
     };
 
     watch(
