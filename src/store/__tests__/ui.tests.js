@@ -40,7 +40,7 @@ describe('ui store', () => {
           "SET_BANNER",
           Object {
             "enabled": true,
-            "text": "~~This website does not support Internet Explorer. We recommend using a modern browser such as Firefox, Chrome, Edge, etc.",
+            "text": "info.ie_not_supported",
             "type": "ERROR",
           },
         ],

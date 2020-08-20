@@ -22,7 +22,7 @@ const validateBrowser = async ({ commit, getters: { isBrowserIE } }) => {
     Sentry.setExtra('site_banner', 'browser_unsupported');
     commit(types.SET_BANNER, {
       enabled: true,
-      text: this.$t('info.ie_not_supported'),
+      text: 'info.ie_not_supported',
       type: types.BannerTypes.ERROR,
     });
   }
