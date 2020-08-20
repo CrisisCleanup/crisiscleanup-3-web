@@ -55,7 +55,7 @@
       "
     />
     <div v-if="addingNotes">
-      {{ $t('~~Note') }}
+      {{ $t('caseView.note') }}
       <base-input text-area v-model="currentNote" :rows="3" />
       <div class="flex items-center justify-between">
         <base-button

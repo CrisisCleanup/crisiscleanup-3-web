@@ -395,7 +395,7 @@ export default {
           incident: this.newIncident,
           skip_duplicate_check: true,
         });
-        await this.$toasted.success(this.$t('~~Case successfully moved'));
+        await this.$toasted.success(this.$t('flag.case_moved_success'));
         this.$emit('reloadMap', this.$route.params.id);
         await this.$router.push(
           `/incident/${this.$route.params.incident_id}/cases/new`,
