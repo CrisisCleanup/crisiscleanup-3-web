@@ -135,13 +135,10 @@
               wieght="300"
             >
               {{
-                $t(
-                  '{requested_to} has pre-approved you to join {organization}. You may now login using your provided email and password.',
-                  {
-                    organization: requestedToOrg,
-                    requested_to: requestedTo,
-                  },
-                )
+                 $t('requestAccess.you_are_approved_login', {
+                  organization: requestedToOrg,
+                  requested_to: requestedTo,
+                })
               }}
             </base-text>
             <base-text
