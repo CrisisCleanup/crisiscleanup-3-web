@@ -7,14 +7,20 @@
     </div>
     <div class="events__body">
       <div class="events__search">
-        <TitledCard class="search__card" :title="$t('adminDashboard.event_search')">
+        <TitledCard
+          class="search__card"
+          :title="$t('adminDashboard.event_search')"
+        >
           <div class="search__container">
             <EventSearchTable />
           </div>
         </TitledCard>
       </div>
       <div class="events__build">
-        <TitledCard class="build__input" :title="$t('adminDashboard.event_builder')">
+        <TitledCard
+          class="build__input"
+          :title="$t('adminDashboard.event_builder')"
+        >
           <EventForm
             @update:inputs="(payload) => onEventInput(payload)"
             :event-key.sync="eventKey"
@@ -22,7 +28,10 @@
             @update:required-attr="(payload) => onAttrOverride(payload)"
           />
         </TitledCard>
-        <TitledCard class="build__preview" :title="$t('adminDashboard.preview')">
+        <TitledCard
+          class="build__preview"
+          :title="$t('adminDashboard.preview')"
+        >
           <EventPreview
             :event-key="eventKey"
             :event-points="eventPoints"
@@ -41,9 +50,9 @@
     </div>
     <div class="events__footer">
       <div>
-        <base-button :action="onSubmit" size="lg" variant="solid"
-          >{{ $t('actions.save') }}</base-button
-        >
+        <base-button :action="onSubmit" size="lg" variant="solid">{{
+          $t('actions.save')
+        }}</base-button>
       </div>
     </div>
   </div>
