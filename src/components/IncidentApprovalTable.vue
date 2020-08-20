@@ -126,7 +126,7 @@ export default {
           width: '1fr',
         },
         {
-          title: this.$t('~~Profile Completed'),
+          title: this.$t('incidentApprovalTable.profile_completed'),
           dataIndex: 'organization_profile_completed',
           key: 'organization_profile_completed',
           width: '1fr',

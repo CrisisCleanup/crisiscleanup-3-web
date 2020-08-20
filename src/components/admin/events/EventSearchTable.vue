@@ -4,7 +4,7 @@
       <base-input
         icon="search"
         size="large"
-        placeholder="Events Query"
+        :placeholder="$t('eventBuilder.search_events')"
         @input="(value) => makeQuery(value)"
       />
     </div>
@@ -54,7 +54,7 @@ export default {
     );
     const onKeyClick = (key) => {
       context.root.$copyText(key);
-      context.root.$toasted.success(context.root.$t('~~Copied to Clipboard!'));
+      context.root.$toasted.success(context.root.$t('info.copied_to_clipboard'));
     };
     return {
       loading,

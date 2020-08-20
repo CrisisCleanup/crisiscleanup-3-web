@@ -2,7 +2,7 @@
   <div class="epreview">
     <div class="epreview__section">
       <base-text variant="h3" class="pb-1">
-        {{ $t('~~Event Name') }}
+        {{ $t('eventBuilder.event_name') }}
       </base-text>
       <base-text variant="h3" class="pb-1">
         {{ eventName }}
@@ -11,7 +11,7 @@
     <div class="epreview__section">
       <div class="relative">
         <base-text variant="h3" class="pb-1">
-          {{ $t('~~Key') }}
+          {{ $t('eventBuilder.key') }}
         </base-text>
         <div
           class="click-cap h-full w-full absolute z-10"
@@ -35,7 +35,7 @@
       </div>
       <div>
         <base-text variant="h3" class="pb-1">
-          {{ $t('~~Points') }}
+          {{ $t('eventBuilder.points') }}
         </base-text>
         <number-input
           :attrs="{ style: { maxHeight: '40px' } }"
@@ -60,7 +60,7 @@
     </div>
     <div class="epreview__section">
       <base-text variant="h3" class="pb-1">
-        {{ $t('~~Related') }}
+        {{ $t('eventBuilder.related') }}
       </base-text>
       <Table
         class="border border-1 select-none cursor-pointer"
@@ -120,7 +120,7 @@ export default {
       model: EventComponent,
       resolveFetch: [EventComponent.fetchAllByType, EventComponentTypes.ATTR],
       label: 'name_t',
-      floatLabel: '~~Attributes',
+      floatLabel: $t('eventBuilder.attributes'),
     }));
 
     const requiredAttributes = computed(() =>
@@ -141,7 +141,7 @@ export default {
 
     const onKeyClick = () => {
       context.root.$copyText(eventData.key);
-      context.root.$toasted.success(context.root.$t('~~Copied to Clipboard!'));
+      context.root.$toasted.success(context.root.$t('info.copied_to_clipboard'));
     };
 
     watch(

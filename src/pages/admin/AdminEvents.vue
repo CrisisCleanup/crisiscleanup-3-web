@@ -7,14 +7,14 @@
     </div>
     <div class="events__body">
       <div class="events__search">
-        <TitledCard class="search__card" title="~~Event Search">
+        <TitledCard class="search__card" :title="$t('adminDashboard.event_search')">
           <div class="search__container">
             <EventSearchTable />
           </div>
         </TitledCard>
       </div>
       <div class="events__build">
-        <TitledCard class="build__input" title="~~Event Builder">
+        <TitledCard class="build__input" :title="$t('adminDashboard.event_builder')">
           <EventForm
             @update:inputs="(payload) => onEventInput(payload)"
             :event-key.sync="eventKey"
@@ -22,7 +22,7 @@
             @update:required-attr="(payload) => onAttrOverride(payload)"
           />
         </TitledCard>
-        <TitledCard class="build__preview" title="~~Preview">
+        <TitledCard class="build__preview" :title="$t('adminDashboard.preview')">
           <EventPreview
             :event-key="eventKey"
             :event-points="eventPoints"
@@ -34,7 +34,7 @@
         </TitledCard>
       </div>
       <div class="events__locale">
-        <TitledCard title="~~Localizations">
+        <TitledCard :title="$t('adminDashboard.localizations')">
           <LocaleForm class="w-full" :fields.sync="localeInputs" />
         </TitledCard>
       </div>
@@ -42,7 +42,7 @@
     <div class="events__footer">
       <div>
         <base-button :action="onSubmit" size="lg" variant="solid"
-          >Save</base-button
+          >{{ $t('actions.save') }}</base-button
         >
       </div>
     </div>

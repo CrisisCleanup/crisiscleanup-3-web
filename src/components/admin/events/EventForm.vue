@@ -23,12 +23,12 @@
       <ModelSelectInput
         name="user_badge"
         sort-key="name_t"
-        :description="$t('~~Badge to appropriate points to')"
+        :description="$t('eventBuilder.give_points_to_badge')"
         label="name_t"
         model="user_badges"
         @update:value="(payload) => updateValue(payload)"
         translate
-        :options="(options) => [...options, { id: -1, name_t: $t('~~None') }]"
+        :options="(options) => [...options, { id: -1, name_t: $t('eventBuilder.none') }]"
       >
         <template #option="{option}">
           <base-text variant="h3">{{ option.name_t }}</base-text>
