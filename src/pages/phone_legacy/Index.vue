@@ -151,7 +151,7 @@
         />
         <div class="flex flex-col bg-crisiscleanup-light-grey p-2">
           <div class="flex items-center justify-between">
-            <base-text variant="h2">{{ $t('~~Current Stats') }}</base-text>
+            <base-text variant="h2">{{ $t('~~Callback Stats') }}</base-text>
             <base-button icon="sync" :action="getStats" />
           </div>
           <div class="flex py-2 items-center justify-between">
