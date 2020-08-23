@@ -413,7 +413,7 @@ const food = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3
     </g>{{multiple}}
 </svg>`;
 
-const important = `<svg width="50" height="45" viewBox="0 0 50 45" fill="{{fillColor}}" xmlns="http://www.w3.org/2000/svg">
+const important = `<svg width="50" height="50" viewBox="0 0 50 50" fill="{{fillColor}}" xmlns="http://www.w3.org/2000/svg">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M25 0.962891L48.8481 44.5001H1.13354L25 0.962891ZM27.0207 35.4821H23.0207V39.4821H27.0207V35.4821ZM27.0207 16.4821H23.0207V21.3313L24.1724 32.4821H25.8849L27.0207 21.3317V16.4821Z" stroke="{{strokeColor}}"/>
 {{multiple}}
 </svg>`;

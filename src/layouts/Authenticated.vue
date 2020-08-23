@@ -95,7 +95,11 @@
             </div>
           </div>
         </div>
-        <div v-if="ready" class="main--grid overflow-auto">
+        <div
+          v-if="ready"
+          class="main--grid"
+          :class="!$route.meta.noscroll ? 'overflow-auto' : ''"
+        >
           <slot />
         </div>
         <div v-if="showAcceptTermsModal">

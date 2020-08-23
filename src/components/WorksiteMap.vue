@@ -319,11 +319,20 @@ export default {
         markerSprite.active_work_type = workType;
         markerSprite.work_types = worksite.work_types;
         markerSprite.colorsKey = colorsKey;
-
+        let detailedTemplate =
+          templates[workType.work_type] || templates.unknown;
+        const flags = worksite.flags || [];
+        const isHighPriority = Boolean(
+          flags.filter((flag) => flag.is_high_priority).length,
+        );
+        if (isHighPriority) {
+          detailedTemplate = templates.important;
+        }
         const worksiteTemplate =
           this.map.getZoom() < INTERACTIVE_ZOOM_LEVEL
             ? templates.circle
-            : templates[workType.work_type] || templates.unknown;
+            : detailedTemplate;
+
         const spriteColors = colors[colorsKey];
 
         if (spriteColors) {
