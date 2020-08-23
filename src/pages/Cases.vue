@@ -630,7 +630,21 @@
         </template>
         <template v-else>
           <div class="text-left text-black flex items-center">
-            {{ currentWorksite && currentWorksite.case_number }}
+            <div class="mt-1 mr-1">
+              {{ currentWorksite && currentWorksite.case_number }}
+            </div>
+            <div
+              v-if="currentWorksite && currentWorksite.isHighPriority"
+              class="svg-container cursor-pointer"
+              v-html="highPrioritySvgActive"
+              @click="() => toggleHighPriority(false)"
+            ></div>
+            <div
+              v-else
+              class="svg-container cursor-pointer"
+              v-html="highPrioritySvgInactive"
+              @click="() => toggleHighPriority(true)"
+            ></div>
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">
             <router-link
@@ -823,6 +837,7 @@ import { getColorForStatus } from '@/filters';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
 import Team from '@/models/Team';
+import { templates } from '@/icons/icons_templates';
 import { EventBus } from '../event-bus';
 import WorksiteTable from './WorksiteTable';
 import { hash } from '../utils/promise';
@@ -883,6 +898,21 @@ export default {
   },
   computed: {
     ...mapState('incident', ['currentIncidentId']),
+    highPrioritySvgInactive() {
+      const template = templates.important;
+      return template
+        .replace('{{fillColor}}', 'grey')
+        .replace('{{strokeColor}}', 'white')
+        .replace('{{multple}}', '');
+    },
+    highPrioritySvgActive() {
+      const template = templates.important;
+      const svg = template
+        .replace('{{fillColor}}', 'red')
+        .replace('{{strokeColor}}', 'white')
+        .replace('{{multple}}', '');
+      return svg;
+    },
     columns() {
       return [
         {
@@ -1575,6 +1605,26 @@ export default {
         `/incident/${data.incident}/cases/${data.worksite.id}/edit`,
       );
     },
+    async toggleHighPriority(isHighPriority) {
+      if (isHighPriority) {
+        await Worksite.api().addFlag(this.currentWorksite.id, {
+          reason_t: 'flag.worksite_high_priority',
+          is_high_priority: true,
+          notes: '',
+          requested_action: '',
+        });
+      } else {
+        const highPriorityFlags = this.currentWorksite.flags.filter(
+          (flag) => flag.is_high_priority,
+        );
+        await Promise.all(
+          highPriorityFlags.map((f) =>
+            Worksite.api().deleteFlag(this.currentWorksite.id, f),
+          ),
+        );
+      }
+      await Worksite.api().fetch(this.currentWorksite.id);
+    },
   },
 };
 </script>
@@ -1648,5 +1698,10 @@ export default {
   display: grid;
   grid-auto-rows: min-content auto;
   @apply h-full;
+}
+
+.svg-container svg {
+  width: 20px;
+  height: 20px;
 }
 </style>

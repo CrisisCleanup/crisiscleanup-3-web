@@ -219,6 +219,14 @@
           />
         </div>
         <WorksiteNotes @saveNote="saveNote" :worksite="worksite" />
+        <div class="my-1 py-1" v-if="!worksite.isHighPriority">
+          <base-checkbox
+            v-model="isHighPriority"
+            class="text-crisiscleanup-red-700"
+          >
+            {{ $t('flag.flag_high_priority') }}
+          </base-checkbox>
+        </div>
       </div>
       <form-tree
         v-for="field in fieldTree"
@@ -365,6 +373,7 @@ export default {
     return {
       showAllFields: true,
       ready: false,
+      isHighPriority: false,
       gettingLocation: false,
       location: null,
       what3words: null,
@@ -757,18 +766,33 @@ export default {
           await Promise.all(
             notesToSave.map((n) => Worksite.api().addNote(this.worksite.id, n)),
           );
+          if (this.isHighPriority) {
+            await Worksite.api().addFlag(this.worksite.id, {
+              reason_t: 'flag.worksite_high_priority',
+              is_high_priority: true,
+              notes: '',
+              requested_action: '',
+            });
+          }
         } else {
           const savedWorksite = await Worksite.api().post('/worksites', {
             ...this.worksite,
             incident: this.incidentId,
             skip_duplicate_check: true,
           });
+          const worksiteId = savedWorksite.entities.worksites[0].id;
           await Promise.all(
-            notesToSave.map((n) =>
-              Worksite.api().addNote(savedWorksite.entities.worksites[0].id, n),
-            ),
+            notesToSave.map((n) => Worksite.api().addNote(worksiteId, n)),
           );
-          this.worksite = Worksite.find(savedWorksite.entities.worksites[0].id);
+          if (this.isHighPriority) {
+            await Worksite.api().addFlag(worksiteId, {
+              reason_t: 'flag.worksite_high_priority',
+              is_high_priority: true,
+              notes: '',
+              requested_action: '',
+            });
+          }
+          this.worksite = Worksite.find(worksiteId);
         }
         await this.$toasted.success(this.$t('caseForm.new_case_success'));
         this.dirtyFields = new Set();
