@@ -6,14 +6,14 @@
   >
     <img
       v-if="!fa"
-      :class="styles"
+      :class="[iconClasses, styles]"
       :src="iconMap[type]"
       :alt="alt"
       :title="alt"
     />
     <font-awesome-icon
       v-else
-      :class="[styles]"
+      :class="[iconClasses, styles]"
       :icon="type"
       :alt="alt"
       :title="alt"
@@ -42,6 +42,7 @@ export default {
     selector: VueTypes.string,
     withText: VueTypes.bool.def(false),
     invertColor: VueTypes.bool.def(false),
+    iconClasses: VueTypes.string.def(''),
   },
   data() {
     return {

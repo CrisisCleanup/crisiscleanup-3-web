@@ -37,7 +37,7 @@
 
       <div v-if="page === 'existing'">
         <tabs class="" ref="tabs" @mounted="setTabs">
-          <tab :name="$t('userTransfer.select_organ  ization')">
+          <tab :name="$t('userTransfer.select_organization')">
             <div class="text-base mt-1 mb-3">
               {{ $t('userTransfer.please_select_target_organization') }}
             </div>

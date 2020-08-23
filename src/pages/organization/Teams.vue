@@ -8,66 +8,72 @@
         :placeholder="$t('actions.search')"
         @input="onSearch"
       ></base-input>
-
-      <base-button
-        :text="$t('teams.create_new_team')"
-        variant="solid"
-        size="medium"
-        :action="
-          () => {
-            creatingTeam = true;
-          }
-        "
-      />
     </div>
-    <div style="display: grid; grid-template-columns: 1fr 2fr;" class="h-120">
-      <div
-        style="
-          display: grid;
-          grid-template-columns: auto;
-          grid-template-rows: repeat(auto-fill, 125px);
-        "
-        class="border bg-white h-3/4 overflow-auto"
-      >
+    <div
+      style="display: grid; grid-template-columns: 0.75fr 2fr;"
+      class="h-120"
+    >
+      <div class="border bg-white h-3/4 overflow-auto">
+        <div class="flex items-center justify-between px-2 py-3">
+          <span>{{ $t('~~Team Management') }}</span>
+          <base-button
+            :text="$t('teams.create_new_team')"
+            variant="solid"
+            size="small"
+            :action="
+              () => {
+                creatingTeam = true;
+              }
+            "
+          />
+        </div>
         <div
-          v-for="team in teams"
-          class="h-full px-4 pt-2 pb-6 hover:bg-crisiscleanup-light-grey cursor-pointer"
-          :class="
-            String(team.id) === String($route.params.team_id)
-              ? 'bg-crisiscleanup-light-grey'
-              : 'bg-white'
-          "
-          @click="
-            () => {
-              $router.push(`/organization/teams/${team.id}`);
-            }
+          style="
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: repeat(auto-fill, 125px);
           "
         >
-          <div class="flex justify-between items-center">
-            <base-text>{{ team.name }}</base-text>
-            <base-text
-              >{{ getAssignedWorkTypes(team).length }}
-              {{ $t('teams.cases_assigned') }}</base-text
-            >
-          </div>
-          <div>
-            {{ getCaseCompletion(team) }}{{ $t('teams.cases_completed') }}
-          </div>
-          <div class="mt-2 flex">
-            <Avatar
-              v-for="user in team.users.map((u) => getUser(u))"
-              :key="user.id"
-              :initials="user.first_name"
-              :url="user.profilePictureUrl"
-              class="mr-2"
-            />
+          <div
+            v-for="team in teams"
+            class="h-full px-4 pt-2 pb-6 hover:bg-crisiscleanup-light-grey cursor-move"
+            :class="
+              String(team.id) === String($route.params.team_id)
+                ? 'bg-crisiscleanup-light-grey'
+                : 'bg-white'
+            "
+            @click="
+              () => {
+                $router.push(`/organization/teams/${team.id}`);
+              }
+            "
+          >
+            <div class="flex justify-between items-center">
+              <base-text>{{ team.name }}</base-text>
+              <base-text
+                >{{ getAssignedWorkTypes(team).length }}
+                {{ $t('teams.cases_assigned') }}
+              </base-text>
+            </div>
+            <div>
+              {{ getCaseCompletion(team) }} {{ $t('teams.cases_completed') }}
+            </div>
+            <div class="mt-2 flex">
+              <Avatar
+                v-for="user in team.users.map((u) => getUser(u))"
+                :key="user.id"
+                :initials="user.first_name"
+                :url="user.profilePictureUrl"
+                class="mr-2"
+              />
+            </div>
           </div>
         </div>
       </div>
       <div class="h-full">
         <div class="h-full flex flex-col bg-white shadow">
           <router-view
-            v-show="teams.length"
+            v-show="teams && teams.length"
             :work-types="claimedWorktypes"
             :users="usersWithoutTeams"
             :teams="teams"

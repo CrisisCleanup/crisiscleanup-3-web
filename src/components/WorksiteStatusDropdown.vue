@@ -10,7 +10,7 @@
         class="case-svg-container mr-1"
         v-html="workTypeImage"
       ></div>
-      <div>{{ currentWorkType.status | getStatusName }}</div>
+      <div v-if="!hideName">{{ currentWorkType.status | getStatusName }}</div>
       <font-awesome-icon class="mx-1" size="sm" icon="chevron-down" />
     </div>
     <div
@@ -55,6 +55,10 @@ export default {
       },
     },
     useIcon: {
+      type: Boolean,
+      default: false,
+    },
+    hideName: {
       type: Boolean,
       default: false,
     },

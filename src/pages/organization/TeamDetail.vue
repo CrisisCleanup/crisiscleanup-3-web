@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white px-5 h-full h-84">
-    <div class="flex justify-between border-b py-1">
-      <div class="font-semibold flex justify-between items-center h-16">
+  <div class="bg-white h-full h-84">
+    <div class="flex justify-between">
+      <div class="font-semibold flex justify-between items-center h-12 px-3">
         {{ team.name }}
       </div>
       <div class="flex flex-wrap items-center justify-end">
@@ -25,188 +25,210 @@
         />
       </div>
     </div>
-    <div class="px-3 py-1">
-      <div class="flex items-center justify-between py-2">
-        <base-text>{{ $t('teams.list_of_members') }}</base-text>
-        <base-button
-          class="my-1 text-primary-dark"
-          type="link"
-          :text="$t('teams.add_members')"
-          :alt="$t('teams.add_members')"
-          :action="
-            () => {
-              showAddMembersModal = true;
-            }
-          "
-        />
-      </div>
-      <div class="mt-2 h-40 overflow-auto">
-        <draggable
-          v-model="allTeamUsers"
-          :options="{ group: 'people' }"
-          @start="drag = true"
-          @end="drag = false"
-          handle=".handle"
-        >
-          <div
-            v-for="user in allTeamUsers"
-            :key="user.id"
-            class="border-t last:border-b pt-4 bg-white"
-            style="
-              display: grid;
-              grid-template-columns: 25px max-content 20% 35% 30% 1fr;
+    <tabs class="w-full" ref="tabs">
+      <tab :name="$t('~~Manage Users')">
+        <div class="flex items-center justify-between py-2">
+          <base-button
+            class="my-1 text-primary-dark"
+            type="link"
+            :text="$t('teams.add_members')"
+            :alt="$t('teams.add_members')"
+            :action="
+              () => {
+                showAddMembersModal = true;
+              }
             "
+          />
+        </div>
+        <div class="mt-2 h-40 overflow-auto">
+          <draggable
+            v-model="allTeamUsers"
+            :options="{ group: 'people' }"
+            @start="drag = true"
+            @end="drag = false"
+            handle=".handle"
           >
-            <div class="handle" style="width: 15px; margin-top: 2px;">
-              <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
-            </div>
-            <Avatar
-              :initials="user.first_name"
-              :url="user.profilePictureUrl"
-              class="mr-2"
-            />
-            <span>{{ user.full_name }}</span>
-            <span>
-              <font-awesome-icon icon="envelope" />
-              {{ user.email }}
-            </span>
-            <span>
-              <font-awesome-icon icon="phone" />
-              {{ user.mobile }}
-            </span>
-            <div style="margin-top: 2px;" class="flex justify-end">
-              <base-dropdown
-                :trigger="'click'"
-                class-name="team-detail-user"
-                :x="-145"
-              >
-                <ccu-icon
-                  slot="icon"
-                  :alt="$t('teams.settings')"
-                  size="medium"
-                  type="settings"
-                />
-                <template slot="body">
-                  <ul class="overflow-auto w-40">
-                    <li
-                      class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
-                    >
-                      <a :href="`mailto:${user.email}`">{{
-                        $t('teams.send_email')
-                      }}</a>
-                    </li>
-                    <li
-                      class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
-                    >
-                      <a :href="`/organization/users/${user.id}`">
-                        {{ $t('teams.view_full_profile') }}
-                      </a>
-                    </li>
-                    <li
-                      class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
-                      @click="
-                        () => {
-                          moveToDifferentTeam(user.id);
-                        }
-                      "
-                    >
-                      {{ $t('teams.move_to_another_team') }}
-                    </li>
-                    <li
-                      class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
-                      @click="
-                        () => {
-                          removeFromTeam(user.id);
-                        }
-                      "
-                    >
-                      {{ $t('teams.remove_from_team') }}
-                    </li>
-                  </ul>
-                </template>
-              </base-dropdown>
-            </div>
-          </div>
-        </draggable>
-      </div>
-
-      <div class="flex items-center justify-between py-2">
-        <base-text>{{ $t('teams.list_of_cases') }}</base-text>
-        <base-button
-          class="my-1 text-primary-dark"
-          type="link"
-          :text="$t('teams.assign_cases')"
-          :alt="$t('teams.assign_cases')"
-          :action="
-            () => {
-              showAddCasesModal = true;
-            }
-          "
-        />
-      </div>
-      <div class="mt-2 h-40 overflow-auto">
-        <draggable
-          v-model="cases"
-          :options="{ group: 'cases' }"
-          @start="drag = true"
-          @end="drag = false"
-          handle=".handle"
-          class="overflow-auto"
-        >
-          <div
-            v-for="work_type in cases"
-            :key="work_type.id"
-            class="border-t last:border-b py-3 bg-white"
-            style="
-              display: grid;
-              grid-template-columns: 25px 20% 20% 20% 20% 25px;
-            "
-          >
-            <div class="handle" style="width: 15px; margin-top: 2px;">
-              <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
-            </div>
-            <div class="badge-holder flex items-center">
-              <badge
-                class="mx-1"
-                :color="
-                  getColorForStatus(
-                    work_type.status,
-                    Boolean(work_type.claimed_by),
-                  )
-                "
-              />
-              {{ work_type.case_number }}
-            </div>
-            <span>{{ work_type.work_type | getWorkTypeName }}</span>
-            <span>{{ work_type.name }}</span>
-            <span>
-              <font-awesome-icon icon="phone" />
-              {{ work_type.phone1 }}
-            </span>
-            <ccu-icon
-              :alt="$t('actions.jump_to_case')"
-              size="small"
-              class="p-1 py-2"
-              type="go-case"
-              @click.native="
-                () => {
-                  showOnMap(work_type);
-                }
+            <div
+              v-for="user in allTeamUsers"
+              :key="user.id"
+              class="border-t last:border-b pt-4 bg-white"
+              style="
+                display: grid;
+                grid-template-columns: 25px max-content 20% 35% 30% 1fr;
               "
-            />
-          </div>
-        </draggable>
-      </div>
-
-      <textarea
-        :value="team.notes"
-        class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-4 resize-none w-full"
-        rows="4"
-        :placeholder="$t('teams.notes')"
-        @input="updateNotes"
-        @blur="updateCurrentTeam"
-      />
-    </div>
+            >
+              <div class="handle" style="width: 15px; margin-top: 2px;">
+                <ccu-icon
+                  icon-classes="cursor-move"
+                  :alt="$t('actions.drag')"
+                  size="medium"
+                  type="drag"
+                />
+              </div>
+              <Avatar
+                :initials="user.first_name"
+                :url="user.profilePictureUrl"
+                class="mr-2"
+              />
+              <span>{{ user.full_name }}</span>
+              <span>
+                <font-awesome-icon icon="envelope" />
+                {{ user.email }}
+              </span>
+              <span>
+                <font-awesome-icon icon="phone" />
+                {{ user.mobile }}
+              </span>
+              <div style="margin-top: 2px;" class="flex justify-end">
+                <base-dropdown
+                  :trigger="'click'"
+                  class-name="team-detail-user"
+                  :x="-145"
+                >
+                  <ccu-icon
+                    slot="icon"
+                    :alt="$t('teams.settings')"
+                    size="medium"
+                    type="settings"
+                  />
+                  <template slot="body">
+                    <ul class="overflow-auto w-40">
+                      <li
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                      >
+                        <a :href="`mailto:${user.email}`">{{
+                          $t('teams.send_email')
+                        }}</a>
+                      </li>
+                      <li
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                      >
+                        <a :href="`/organization/users/${user.id}`">
+                          {{ $t('teams.view_full_profile') }}
+                        </a>
+                      </li>
+                      <li
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        @click="
+                          () => {
+                            moveToDifferentTeam(user.id);
+                          }
+                        "
+                      >
+                        {{ $t('teams.move_to_another_team') }}
+                      </li>
+                      <li
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        @click="
+                          () => {
+                            removeFromTeam(user.id);
+                          }
+                        "
+                      >
+                        {{ $t('teams.remove_from_team') }}
+                      </li>
+                    </ul>
+                  </template>
+                </base-dropdown>
+              </div>
+            </div>
+          </draggable>
+        </div>
+      </tab>
+      <tab :name="$t('~~Manage Cases')">
+        <div class="flex items-center justify-between py-2">
+          <base-button
+            class="my-1 text-primary-dark"
+            type="link"
+            :text="$t('teams.assign_cases')"
+            :alt="$t('teams.assign_cases')"
+            :action="
+              () => {
+                showAddCasesModal = true;
+              }
+            "
+          />
+        </div>
+        <div class="mt-2 overflow-auto">
+          <draggable
+            v-model="assignedWorksites"
+            :options="{ group: 'cases' }"
+            @start="drag = true"
+            @end="drag = false"
+            handle=".handle"
+            class="overflow-auto"
+          >
+            <div
+              v-for="worksite in assignedWorksites"
+              :key="worksite.id"
+              class="border-t last:border-b py-3 bg-white"
+              style="
+                display: grid;
+                grid-template-columns: 25px 100px 175px 0.75fr 1.5fr 1fr 25px;
+              "
+            >
+              <div class="handle" style="width: 15px; margin-top: 2px;">
+                <ccu-icon
+                  icon-classes="cursor-move"
+                  :alt="$t('actions.drag')"
+                  size="medium"
+                  type="drag"
+                />
+              </div>
+              <span>{{ worksite.case_number }}</span>
+              <div class="flex flex-wrap w-full">
+                <div
+                  v-for="work_type in worksite.work_types"
+                  :key="work_type.id"
+                  class="mx-1"
+                >
+                  <WorksiteStatusDropdown
+                    class="block"
+                    :current-work-type="work_type"
+                    use-icon
+                    hide-name
+                    @input="
+                      (value) => {
+                        statusValueChange(value, work_type, worksite.id);
+                      }
+                    "
+                  />
+                </div>
+              </div>
+              <span>{{ worksite.name }}</span>
+              <span>{{ worksite.full_address }}</span>
+              <span>
+                <font-awesome-icon icon="phone" />
+                {{ worksite.phone1 }}
+              </span>
+              <div class="flex items-start">
+                <ccu-icon
+                  :alt="$t('actions.jump_to_case')"
+                  size="small"
+                  class="p-1 py-2"
+                  type="go-case"
+                  @click.native="
+                    () => {
+                      showOnMap(worksite);
+                    }
+                  "
+                />
+              </div>
+            </div>
+          </draggable>
+        </div>
+      </tab>
+      <tab :name="$t('~~Notes')">
+        <base-input
+          :value="team.notes"
+          text-area
+          rows="4"
+          :placeholder="$t('teams.notes')"
+          @input="updateNotes"
+          @blur="updateCurrentTeam"
+        />
+      </tab>
+    </tabs>
 
     <modal
       v-if="showAddMembersModal"
@@ -279,58 +301,80 @@
     </modal>
     <modal
       v-if="showAddCasesModal"
-      title="Assign Cases"
+      :title="$t('~~Assign Cases')"
       closeable
       @close="showAddCasesModal = false"
-      modal-classes="max-w-xl"
+      modal-classes="max-w-4xl"
     >
-      <div class="px-5 py-2">
-        <div class="py-2">
-          {{ $t('teams.choose_cases') }}
+      <div class="flex">
+        <div class="w-1/3">
+          <WorkTypeMap
+            class="w-full h-96"
+            :work-types="mapWorkTypes"
+          ></WorkTypeMap>
         </div>
-        <base-input
-          v-model="currentCaseSearch"
-          icon="search"
-          class="w-64 mr-4 mb-6"
-          :placeholder="$t('actions.search')"
-          @input="onCaseSearch"
-        ></base-input>
-        <div class="h-64 overflow-auto">
-          <div
-            v-for="work_type in caseResults"
-            :key="work_type.id"
-            class="border-t last:border-b py-3 px-3 bg-white"
-            style="
-              display: grid;
-              grid-template-columns: 25px max-content 1fr;
-              grid-gap: 10px;
-            "
-          >
-            <base-checkbox
-              :value="casesToAdd.includes(work_type.id)"
-              @input="
-                (value) => {
-                  if (value) {
-                    casesToAdd.push(work_type.id);
-                  } else {
-                    casesToAdd = casesToAdd.filter((id) => id !== work_type.id);
-                  }
-                }
+        <div class="w-2/3 px-5 py-2">
+          <div class="py-2">
+            {{ $t('teams.choose_cases') }}
+          </div>
+          <base-input
+            v-model="currentCaseSearch"
+            icon="search"
+            class="w-64 mr-4 mb-6"
+            :placeholder="$t('actions.search')"
+            @input="getClaimedWorksites"
+          ></base-input>
+          <div class="h-64 overflow-auto">
+            <div
+              v-for="worksite in selectableWorksites"
+              :key="worksite.id"
+              class="border-t last:border-b py-3 px-3 bg-white"
+              style="
+                display: grid;
+                grid-template-columns: 25px max-content 1fr 1fr 1fr;
+                grid-gap: 10px;
               "
-            />
-            <div class="badge-holder flex items-center">
-              <badge
-                class="mx-1"
-                :color="
-                  getColorForStatus(
-                    work_type.status,
-                    Boolean(work_type.claimed_by),
-                  )
+            >
+              <base-checkbox
+                @input="
+                  (value) => {
+                    const ids = worksite.work_types
+                      .filter(
+                        (type) =>
+                          type.claimed_by === currentUser.organization.id,
+                      )
+                      .map((wt) => wt.id);
+                    if (value) {
+                      casesToAdd.push(...ids);
+                    } else {
+                      casesToAdd = casesToAdd.filter((id) => !ids.includes(id));
+                    }
+                  }
                 "
               />
-              {{ work_type.case_number }}
+              <span>{{ worksite.case_number }}</span>
+              <div class="flex flex-wrap w-full">
+                <div
+                  v-for="work_type in worksite.work_types"
+                  :key="work_type.id"
+                  class="mx-1"
+                >
+                  <WorksiteStatusDropdown
+                    class="block"
+                    :current-work-type="work_type"
+                    use-icon
+                    hide-name
+                    @input="
+                      (value) => {
+                        statusValueChange(value, work_type, worksite.id);
+                      }
+                    "
+                  />
+                </div>
+              </div>
+              <span>{{ worksite.name }}</span>
+              <span>{{ worksite.full_address }}</span>
             </div>
-            <span>{{ work_type.work_type | getWorkTypeName }}</span>
           </div>
         </div>
       </div>
@@ -339,6 +383,8 @@
           :action="
             () => {
               showAddCasesModal = false;
+              currentCaseSearch = null;
+              getClaimedWorksites();
             }
           "
           :text="$t('actions.cancel')"
@@ -358,18 +404,24 @@
 
 <script>
 import Team from '@/models/Team';
+import Worksite from '@/models/Worksite';
 import { UserMixin, DialogsMixin } from '@/mixins';
 import draggable from 'vuedraggable';
 import { mapState } from 'vuex';
 import Avatar from '../../components/Avatar';
 import { getColorForStatus } from '../../filters';
+import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
+import { getErrorMessage } from '../../utils/errors';
+import WorkTypeMap from '../../components/WorkTypeMap';
+import { getQueryString } from '../../utils/urls';
 
 export default {
   name: 'TeamDetail',
-  components: { Avatar, draggable },
+  components: { WorkTypeMap, WorksiteStatusDropdown, Avatar, draggable },
   mixins: [UserMixin, DialogsMixin],
   async mounted() {
     await Team.api().get(`/teams/${this.$route.params.team_id}`);
+    await this.getClaimedWorksites();
   },
   props: {
     workTypes: {
@@ -393,6 +445,7 @@ export default {
       caseResults: [],
       usersToAdd: [],
       casesToAdd: [],
+      worksites: [],
       showAddMembersModal: false,
       showAddCasesModal: false,
       currentUserSearch: '',
@@ -408,6 +461,26 @@ export default {
     },
   },
   methods: {
+    async getClaimedWorksites() {
+      const params = {
+        incident: this.currentIncidentId,
+        work_type__claimed_by: this.currentUser.organization.id,
+        fields:
+          'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
+      };
+
+      if (this.currentCaseSearch) {
+        params.search = this.currentCaseSearch;
+      }
+
+      const results = await Worksite.api().get(
+        `/worksites?${getQueryString(params)}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      this.worksites = results.entities.worksites;
+    },
     onUserSearch() {
       this.userResults = Array.from(
         this.users.filter((user) => {
@@ -446,11 +519,11 @@ export default {
       this.usersToAdd = [];
       this.showAddMembersModal = false;
     },
-    updateNotes(event) {
+    updateNotes(value) {
       Team.update({
         where: this.team.id,
         data: {
-          notes: event.target.value,
+          notes: value,
         },
       });
     },
@@ -476,6 +549,8 @@ export default {
       }
       this.casesToAdd = [];
       this.showAddCasesModal = false;
+      this.currentCaseSearch = null;
+      this.getClaimedWorksites();
       this.$emit('reload');
     },
     async removeFromTeam(userId) {
@@ -530,15 +605,29 @@ export default {
       this.$emit('reload');
       await this.$router.push('/organization/teams');
     },
-    async showOnMap(work_type) {
+    async showOnMap(worksite) {
+      const workType = Worksite.getWorkType(
+        worksite.work_types,
+        null,
+        this.currentUser.organization,
+      );
       await this.$component({
         title: this.$t('teams.view_case'),
         component: 'WorkTypeMap',
         classes: 'w-full h-96',
         props: {
-          workTypes: [work_type],
+          workTypes: [{ ...workType, location: worksite.location }],
         },
       });
+    },
+    async statusValueChange(value, workType, worksiteId) {
+      try {
+        await Worksite.api().updateWorkTypeStatus(workType.id, value);
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        await Worksite.api().fetch(worksiteId);
+      }
     },
     async showAllOnMap() {
       await this.$component({
@@ -546,7 +635,14 @@ export default {
         component: 'WorkTypeMap',
         classes: 'w-full h-96',
         props: {
-          workTypes: this.cases,
+          workTypes: this.assignedWorksites.map((worksite) => {
+            const workType = Worksite.getWorkType(
+              worksite.work_types,
+              null,
+              this.currentUser.organization,
+            );
+            return { ...workType, location: worksite.location };
+          }),
         },
       });
     },
@@ -555,12 +651,34 @@ export default {
     team() {
       return Team.find(this.$route.params.team_id);
     },
-    cases() {
-      return this.workTypes.filter((wt) => {
-        return this.team.assigned_work_types
-          .map((awt) => awt.id)
-          .includes(wt.id);
+    selectableWorksites() {
+      return this.worksites.filter(
+        (w) => !this.assignedWorksites.map((ws) => ws.id).includes(w.id),
+      );
+    },
+    mapWorkTypes() {
+      return this.selectableWorksites.map((worksite) => {
+        const workType = Worksite.getWorkType(
+          worksite.work_types,
+          null,
+          this.currentUser.organization,
+        );
+        return { ...workType, location: worksite.location };
       });
+    },
+    assignedWorksites() {
+      return Worksite.query()
+        .where((worksite) => {
+          return this.workTypes
+            .filter((wt) => {
+              return this.team.assigned_work_types
+                .map((awt) => awt.id)
+                .includes(wt.id);
+            })
+            .map((awt) => awt.case_number)
+            .includes(worksite.case_number);
+        })
+        .get();
     },
     allTeamUsers: {
       get() {

@@ -37,7 +37,12 @@
             style="display: grid; grid-template-columns: 25px max-content 1fr;"
           >
             <div class="handle" style="width: 15px; margin-top: 2px;">
-              <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
+              <ccu-icon
+                icon-classes="cursor-move"
+                :alt="$t('actions.drag')"
+                size="medium"
+                type="drag"
+              />
             </div>
             <Avatar
               :initials="user.first_name"
@@ -61,7 +66,7 @@
 
         <base-text class="mb-2">{{ $t('teams.cases') }}</base-text>
         <draggable
-          v-model="teamCases"
+          v-model="teamWorksites"
           :options="{ group: 'cases' }"
           @start="drag = true"
           @end="drag = false"
@@ -69,31 +74,45 @@
           class="h-24 overflow-auto w-3/4"
         >
           <div
-            v-for="work_type in teamCases"
-            :key="work_type.id"
-            class="border-t last:border-b py-3 bg-white"
+            v-for="worksite in teamWorksites"
+            :key="worksite.id"
+            class="border-t last:border-b py-3 px-3 bg-white"
             style="
               display: grid;
-              grid-template-columns: 25px max-content 1fr;
+              grid-template-columns: 25px max-content 1fr 1fr 1fr;
               grid-gap: 10px;
             "
           >
             <div class="handle" style="width: 15px; margin-top: 2px;">
-              <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
-            </div>
-            <div class="badge-holder flex items-center">
-              <badge
-                class="mx-1"
-                :color="
-                  getColorForStatus(
-                    work_type.status,
-                    Boolean(work_type.claimed_by),
-                  )
-                "
+              <ccu-icon
+                icon-classes="cursor-move"
+                :alt="$t('actions.drag')"
+                size="medium"
+                type="drag"
               />
-              {{ work_type.case_number }}
             </div>
-            <span>{{ work_type.work_type | getWorkTypeName }}</span>
+            <span>{{ worksite.case_number }}</span>
+            <div class="flex flex-wrap w-full">
+              <div
+                v-for="work_type in worksite.work_types"
+                :key="work_type.id"
+                class="mx-1"
+              >
+                <WorksiteStatusDropdown
+                  class="block"
+                  :current-work-type="work_type"
+                  use-icon
+                  hide-name
+                  @input="
+                    (value) => {
+                      statusValueChange(value, work_type, worksite.id);
+                    }
+                  "
+                />
+              </div>
+            </div>
+            <span>{{ worksite.name }}</span>
+            <span>{{ worksite.full_address }}</span>
           </div>
         </draggable>
         <base-button
@@ -149,7 +168,7 @@
             @start="drag = true"
             @end="drag = false"
             handle=".handle"
-            class="h-full"
+            class="h-96 overflow-auto"
           >
             <div
               v-for="user in usersList"
@@ -161,7 +180,12 @@
               "
             >
               <div class="handle" style="width: 15px; margin-top: 2px;">
-                <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
+                <ccu-icon
+                  icon-classes="cursor-move"
+                  :alt="$t('actions.drag')"
+                  size="medium"
+                  type="drag"
+                />
               </div>
               <Avatar
                 :initials="user.first_name"
@@ -182,42 +206,56 @@
             icon="search"
             class="w-84 mr-4 mb-6"
             :placeholder="$t('actions.search')"
-            @input="onCaseSearch"
+            @input="getClaimedWorksites"
           ></base-input>
           <draggable
-            v-model="caseList"
+            v-model="worksites"
             :options="{ group: 'cases' }"
             @start="drag = true"
             @end="drag = false"
             handle=".handle"
-            class="h-full"
+            class="h-96 overflow-auto"
           >
             <div
-              v-for="work_type in caseList"
-              :key="work_type.id"
-              class="border-t last:border-b py-3 bg-white"
+              v-for="worksite in worksites"
+              :key="worksite.id"
+              class="border-t last:border-b py-3 px-3 bg-white"
               style="
                 display: grid;
-                grid-template-columns: 25px max-content 1fr;
+                grid-template-columns: 25px max-content 1fr 1fr 1fr;
                 grid-gap: 10px;
               "
             >
               <div class="handle" style="width: 15px; margin-top: 2px;">
-                <ccu-icon :alt="$t('actions.drag')" size="medium" type="drag" />
-              </div>
-              <div class="badge-holder flex items-center">
-                <badge
-                  class="mx-1"
-                  :color="
-                    getColorForStatus(
-                      work_type.status,
-                      Boolean(work_type.claimed_by),
-                    )
-                  "
+                <ccu-icon
+                  icon-classes="cursor-move"
+                  :alt="$t('actions.drag')"
+                  size="medium"
+                  type="drag"
                 />
-                {{ work_type.case_number }}
               </div>
-              <span>{{ work_type.work_type | getWorkTypeName }}</span>
+              <span>{{ worksite.case_number }}</span>
+              <div class="flex flex-wrap w-full">
+                <div
+                  v-for="work_type in worksite.work_types"
+                  :key="work_type.id"
+                  class="mx-1"
+                >
+                  <WorksiteStatusDropdown
+                    class="block"
+                    :current-work-type="work_type"
+                    use-icon
+                    hide-name
+                    @input="
+                      (value) => {
+                        statusValueChange(value, work_type, worksite.id);
+                      }
+                    "
+                  />
+                </div>
+              </div>
+              <span>{{ worksite.name }}</span>
+              <span>{{ worksite.full_address }}</span>
             </div>
           </draggable>
         </template>
@@ -229,6 +267,7 @@
 
 <script>
 import Team from '@/models/Team';
+import Worksite from '@/models/Worksite';
 import draggable from 'vuedraggable';
 import {
   adjectives,
@@ -236,13 +275,18 @@ import {
   colors,
   uniqueNamesGenerator,
 } from 'unique-names-generator';
+import { UserMixin } from '@/mixins';
+import { mapState } from 'vuex';
 import Avatar from '../../components/Avatar';
 import { getColorForStatus } from '../../filters';
 import { getErrorMessage } from '../../utils/errors';
+import { getQueryString } from '../../utils/urls';
+import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
 
 export default {
   name: 'CreateTeamModal',
-  components: { Avatar, draggable },
+  components: { WorksiteStatusDropdown, Avatar, draggable },
+  mixins: [UserMixin],
   props: {
     users: {
       type: Array,
@@ -253,9 +297,10 @@ export default {
       default: () => [],
     },
   },
-  mounted() {
+  async mounted() {
     this.usersList = Array.from(this.users);
     this.caseList = Array.from(this.cases);
+    await this.getClaimedWorksites();
   },
   data() {
     return {
@@ -270,10 +315,45 @@ export default {
         name: '',
         notes: '',
       },
-      teamCases: [],
+      teamWorksites: [],
+      worksites: [],
     };
   },
+  computed: {
+    ...mapState('incident', ['currentIncidentId']),
+  },
   methods: {
+    async getClaimedWorksites() {
+      const params = {
+        incident: this.currentIncidentId,
+        work_type__claimed_by: this.currentUser.organization.id,
+        fields:
+          'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
+      };
+
+      if (this.currentCaseSearch) {
+        params.search = this.currentCaseSearch;
+      }
+
+      const results = await Worksite.api().get(
+        `/worksites?${getQueryString(params)}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      this.worksites = results.entities.worksites;
+    },
+    async statusValueChange(value, workType) {
+      try {
+        await Worksite.api().updateWorkTypeStatus(workType.id, value);
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        await Worksite.api().fetch(this.worksite.id);
+        this.$emit('reloadMap', this.worksite.id);
+        this.$emit('reloadTable');
+      }
+    },
     async saveTeam() {
       try {
         const teamResult = await Team.api().post('/teams', {
@@ -281,18 +361,24 @@ export default {
           users: this.team.users.map((u) => u.id),
         });
         const [team] = await teamResult.entities.teams;
-        if (this.teamCases.length) {
-          await Promise.all(
-            this.teamCases.map((c) =>
-              this.$http.post(
-                `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams`,
-                {
-                  team: team.id,
-                  worksite_work_type: c.id,
-                },
-              ),
-            ),
+        if (this.teamWorksites.length) {
+          const promises = [];
+          this.teamWorksites.forEach((w) =>
+            w.work_types.forEach((wt) => {
+              if (wt.claimed_by === this.currentUser.organization.id) {
+                promises.push(
+                  this.$http.post(
+                    `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams`,
+                    {
+                      team: team.id,
+                      worksite_work_type: wt.id,
+                    },
+                  ),
+                );
+              }
+            }),
           );
+          await Promise.all(promises);
         }
         this.$emit('saved');
         this.$emit('close');
