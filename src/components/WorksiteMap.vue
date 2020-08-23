@@ -379,10 +379,12 @@ export default {
             marker.location.coordinates[0],
           ]),
         );
-        this.map.setView(
-          [center.latitude, center.longitude],
-          INTERACTIVE_ZOOM_LEVEL,
-        );
+        if (center.latitude && center.longitude) {
+          this.map.setView(
+            [center.latitude, center.longitude],
+            INTERACTIVE_ZOOM_LEVEL,
+          );
+        }
       }
       this.showInteractivePopover = false;
     },
