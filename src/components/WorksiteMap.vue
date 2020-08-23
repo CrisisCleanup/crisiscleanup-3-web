@@ -364,7 +364,9 @@ export default {
             marker.location.coordinates[0],
           ]),
         );
-        this.map.setView([center.latitude, center.longitude], 6);
+        if (center.latitude && center.longitude) {
+          this.map.setView([center.latitude, center.longitude], 6);
+        }
       }
       this.showInteractivePopover = false;
     },
