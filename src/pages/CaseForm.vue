@@ -218,7 +218,11 @@
             :text="$t('caseForm.select_on_map')"
           />
         </div>
-        <WorksiteNotes @saveNote="saveNote" :worksite="worksite" />
+        <WorksiteNotes
+          @saveNote="saveNote"
+          :worksite="worksite"
+          @input="currentNote = $event"
+        />
         <div class="my-1 py-1" v-if="!worksite.isHighPriority">
           <base-checkbox
             v-model="isHighPriority"
@@ -388,6 +392,7 @@ export default {
       dirtyFields: new Set(),
       sectionCounter: 2,
       addAdditionalPhone: false,
+      currentNote: '',
     };
   },
   computed: {
@@ -755,6 +760,12 @@ export default {
         const notesToSave = this.worksite.notes
           .filter((n) => Boolean(n.pending))
           .map((n) => n.note);
+
+        if (this.currentNote) {
+          notesToSave.push(this.currentNote);
+          this.currentNote = '';
+        }
+
         if (this.worksite.id) {
           const data = { ...this.worksite };
           delete data.flags;

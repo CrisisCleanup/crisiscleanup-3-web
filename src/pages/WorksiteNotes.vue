@@ -56,7 +56,17 @@
     />
     <div v-if="addingNotes">
       {{ $t('caseView.note') }}
-      <base-input text-area v-model="currentNote" :rows="3" />
+      <base-input
+        text-area
+        :value="currentNote"
+        :rows="3"
+        @input="
+          (value) => {
+            currentNote = value;
+            $emit('input', value);
+          }
+        "
+      />
       <div class="flex items-center justify-between">
         <base-button
           class="my-1"
@@ -67,7 +77,7 @@
         <base-button
           class="my-1 text-primary-dark"
           type="link"
-          :text="$t('actions.save')"
+          :text="$t('~~Add')"
           :action="saveNote"
         />
       </div>
@@ -109,11 +119,13 @@ export default {
   methods: {
     async saveNote() {
       this.$emit('saveNote', this.currentNote);
+      this.$emit('input', '');
       this.addingNotes = false;
       this.currentNote = '';
     },
     cancelNote() {
       this.addingNotes = false;
+      this.$emit('input', '');
       this.currentNote = '';
     },
   },
