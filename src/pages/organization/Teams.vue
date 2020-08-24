@@ -88,6 +88,7 @@
       @saved="getData"
       :users="usersWithoutTeams"
       :cases="claimedWorktypes"
+      :teams="teams"
     />
   </div>
 </template>

@@ -296,11 +296,16 @@ export default {
       type: Array,
       default: () => [],
     },
+    teams: {
+      type: Array,
+      default: () => [],
+    },
   },
   async mounted() {
     this.usersList = Array.from(this.users);
     this.caseList = Array.from(this.cases);
     await this.getClaimedWorksites();
+    // this.team.name = `Team ${this.teams.length + 1}`;
   },
   data() {
     return {
@@ -312,7 +317,7 @@ export default {
       view: 'users',
       team: {
         users: [],
-        name: '',
+        name: `Team ${this.teams.length + 1}`,
         notes: '',
       },
       teamWorksites: [],

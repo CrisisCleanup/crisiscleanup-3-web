@@ -164,7 +164,7 @@
               class="border-t last:border-b py-3 bg-white"
               style="
                 display: grid;
-                grid-template-columns: 25px 100px 175px 0.75fr 1.5fr 1fr 25px;
+                grid-template-columns: 25px 100px 175px 0.75fr 1.5fr 1fr 25px 1fr;
               "
             >
               <div class="handle" style="width: 15px; margin-top: 2px;">
@@ -213,6 +213,34 @@
                     }
                   "
                 />
+              </div>
+              <div style="margin-top: 2px;" class="flex justify-end">
+                <base-dropdown
+                  :trigger="'click'"
+                  class-name="team-detail-case"
+                  :x="-145"
+                >
+                  <ccu-icon
+                    slot="icon"
+                    :alt="$t('teams.settings')"
+                    size="medium"
+                    type="settings"
+                  />
+                  <template slot="body">
+                    <ul class="overflow-auto w-40">
+                      <li
+                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        @click="
+                          () => {
+                            removeWorksiteFromTeam(worksite);
+                          }
+                        "
+                      >
+                        {{ $t('teams.remove_from_team') }}
+                      </li>
+                    </ul>
+                  </template>
+                </base-dropdown>
               </div>
             </div>
           </draggable>
@@ -564,6 +592,27 @@ export default {
       await this.updateCurrentTeam();
       this.$emit('reload');
     },
+    async removeWorksiteFromTeam(worksite) {
+      const ids = worksite.work_types
+        .filter((type) => type.claimed_by === this.currentUser.organization.id)
+        .map((wt) => wt.id);
+
+      const workTypesToDelete = this.team.assigned_work_types.filter((awt) =>
+        ids.includes(awt.id),
+      );
+      await Promise.all(
+        workTypesToDelete.map((wt) => {
+          return this.$http.delete(
+            `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types_teams/${wt.id}`,
+            {
+              data: { team: this.team.id },
+            },
+          );
+        }),
+      );
+
+      this.$emit('reload');
+    },
     async moveToDifferentTeam(userId) {
       const result = await this.$selection({
         title: this.$t('teams.move_teams'),
@@ -704,6 +753,14 @@ export default {
 }
 
 .team-detail-user-bp__btn {
+  @apply border-0;
+}
+
+.team-detail-case-bp__btn--active {
+  background: #fff;
+}
+
+.team-detail-case-bp__btn {
   @apply border-0;
 }
 </style>
