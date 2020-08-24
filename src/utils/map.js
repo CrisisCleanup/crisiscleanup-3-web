@@ -168,6 +168,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             markerSprite.location = marker.location;
             markerSprite.name = marker.name;
             markerSprite.address = marker.address;
+            markerSprite.flags = marker.flags || [];
             markerSprite.case_number = marker.case_number;
             markerSprite.work_types = marker.work_types;
             markerSprite.active_work_type = workType;
@@ -271,9 +272,18 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
                 }`;
 
                 const spriteColors = colors[colorsKey];
+
+                let detailedTemplate =
+                  templates[workType.work_type] || templates.unknown;
+                const isHighPriority = Boolean(
+                  markerSprite.flags.filter((flag) => flag.is_high_priority)
+                    .length,
+                );
+                if (isHighPriority) {
+                  detailedTemplate = templates.important;
+                }
                 if (spriteColors) {
-                  const template =
-                    templates[workType.work_type] || templates.unknown;
+                  const template = detailedTemplate;
                   const typeSvg = template
                     .replace('{{fillColor}}', spriteColors.fillColor)
                     .replace('{{strokeColor}}', spriteColors.strokeColor)

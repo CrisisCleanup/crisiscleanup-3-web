@@ -27,7 +27,7 @@ export default class Worksite extends Model {
       notes: this.attr([]),
       files: this.attr(null),
       time: this.attr(null),
-      flags: this.attr(null),
+      flags: this.attr([]),
       events: this.attr(null),
       reported_by: this.attr(null),
       phone1: this.attr(null),
@@ -78,6 +78,10 @@ export default class Worksite extends Model {
         [item.field_key]: item.field_value,
       };
     }, {});
+  }
+
+  get isHighPriority() {
+    return Boolean(this.flags.filter((flag) => flag.is_high_priority).length);
   }
 
   static getWorkType(workTypes, filters, organization) {
@@ -271,6 +275,15 @@ export default class Worksite extends Model {
       },
       addFlag(id, flag) {
         return this.post(`/worksites/${id}/flags`, flag, { save: false });
+      },
+      deleteFlag(id, flag) {
+        return this.delete(
+          `/worksites/${id}/flags`,
+          {
+            data: { flag_id: flag.id },
+          },
+          { save: false },
+        );
       },
       searchWorksites(search, incident) {
         return this.get(
