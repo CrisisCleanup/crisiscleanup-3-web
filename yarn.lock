@@ -1426,10 +1426,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@crisiscleanup/amazon-connect-streams@^1.5.4":
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/@crisiscleanup/amazon-connect-streams/-/amazon-connect-streams-1.5.4.tgz#d213a996f27d7df6e9147c2c8df615d46ed9a710"
-  integrity sha512-GN5reKwo/5gHf2OW2KZAtvYwaOzIYeENqDSYhmgHeMmJ+LCS8tyAUrCJvfZ1IC9RMob5TaTykHnkwbRujfNgXA==
+"@crisiscleanup/amazon-connect-streams@^1.5.5":
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/@crisiscleanup/amazon-connect-streams/-/amazon-connect-streams-1.5.5.tgz#ef172a29c8cdefa98a5935cd08e0fbf8adc003fe"
+  integrity sha512-sCN/7Br4/cVvycXyncOlPDJ4Fa0V4tccMrYAbb7tQaZgiSupDZKNxq+iIXiXmYXQg31FgfBegsDloxRpmP4pSw==
 
 "@crisiscleanup/connect-rtc@^1.1.5":
   version "1.1.5"
@@ -5304,6 +5304,13 @@
   dependencies:
     "@types/yargs-parser" "*"
 
+"@u3u/vue-hooks@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@u3u/vue-hooks/-/vue-hooks-2.0.1.tgz#d7e3d22a08bd612ca08f78f9b0def0ad54e3d667"
+  integrity sha512-VEz/Ru602tcg0rECn2R7KvtmGOUpZrqL3g8N0C+819zUKTMKgrhQYc7SMb3YivMCCWmBG8TOw1WH2Rzl5Kjj+g==
+  dependencies:
+    dayjs "^1.8.15"
+
 "@vue/babel-helper-vue-jsx-merge-props@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@vue/babel-helper-vue-jsx-merge-props/-/babel-helper-vue-jsx-merge-props-1.0.0.tgz#048fe579958da408fb7a8b2a3ec050b50a661040"
@@ -5626,10 +5633,10 @@
   optionalDependencies:
     prettier "^1.18.2"
 
-"@vue/composition-api@^1.0.0-beta.10":
-  version "1.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.0.0-beta.10.tgz#0494982b684c87b474c7869499ba37d1255a43c5"
-  integrity sha512-/uhUyexcEbFh+nyXF/KMC2H5gJjdMqAMdgc5tp+FASpEGFCXZp7+8yyR1Y91fkt1d0xYUJ2rPB0Hr2fpzyBTVw==
+"@vue/composition-api@>=1.0.0-beta.1", "@vue/composition-api@^1.0.0-beta.11":
+  version "1.0.0-beta.11"
+  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.0.0-beta.11.tgz#260e9d23d59078d7a6358fec53c77a9adc0cd5b5"
+  integrity sha512-WHwX8e1V2NxQtFn7DsgET3QKAfA8kIm13hT4lCdGMAtxbM1dZ/lczF4wdhmkKtKrZiv657aanXV+cgGFF71krg==
   dependencies:
     tslib "^2.0.1"
 
@@ -5665,6 +5672,13 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@vue/web-component-wrapper/-/web-component-wrapper-1.2.0.tgz#bb0e46f1585a7e289b4ee6067dcc5a6ae62f1dd1"
   integrity sha512-Xn/+vdm9CjuC9p3Ae+lTClNutrVhsXpzxvoTXXtoys6kVRX9FkueSUAqSWAyZntmVLlR4DosBV4pH8y5Z/HbUw==
+
+"@vueuse/core@^4.0.0-beta.9":
+  version "4.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-4.0.0-beta.9.tgz#d5791d7624993df0917d94bcff5787e2957e7868"
+  integrity sha512-7qGDQkCCCnGZAXF+xAjnUCsYNjYmYcoRxeb0IsopJAPbtWL0Q/mD3Wgkysdl88qpUxaHNd7uzS762cLnFqJc7A==
+  dependencies:
+    vue-demi latest
 
 "@vuex-orm/core@^0.36.3":
   version "0.36.3"
@@ -9374,6 +9388,11 @@ date-fns@^1.27.2:
   version "1.30.1"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.30.1.tgz#2e71bf0b119153dbb4cc4e88d9ea5acfb50dc05c"
   integrity sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==
+
+dayjs@^1.8.15:
+  version "1.8.34"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.34.tgz#d3ad33cc43d6b0f24cb8686b90aad2c653708069"
+  integrity sha512-Olb+E6EoMvdPmAMq2QoucuyZycKHjTlBXmRx8Ada+wGtq4SIXuDCdtoaX4KkK0yjf1fJLnwXQURr8gQKWKaybw==
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -22393,6 +22412,13 @@ vue-cron-editor-buefy@^0.1.15:
     buefy "^0.8.9"
     core-js "^3.3.2"
     vue "^2.6.10"
+
+vue-demi@latest:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.2.0.tgz#9b464f094c7c37547c1babe95e9bf2c61cf4a1d2"
+  integrity sha512-EbB3UxYacKwORuey3VShOO0IJ+h8W2aq6v574m0XRMYrVOH2TkfO660gm7ZfNVHKHK4leNzVkAGGIfYDxrAFPg==
+  dependencies:
+    "@vue/composition-api" ">=1.0.0-beta.1"
 
 vue-docgen-api@^3.11.4:
   version "3.26.0"
