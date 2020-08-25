@@ -19,6 +19,9 @@ export default () => {
   };
 
   const _agentClient = computed(() => AgentClient.query().first());
+  if (_agentClient.value) {
+    loading.value = false;
+  }
 
   watch(
     () => getters.agentClientId.value,
