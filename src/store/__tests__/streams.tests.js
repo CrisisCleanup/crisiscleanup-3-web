@@ -10,16 +10,18 @@ import AgentClient, {
 } from '@/models/phone/AgentClient';
 import Vuex from 'vuex';
 import Vue from 'vue';
+import * as ACS from '@/services/connect.service';
 
 jest.mock('@/models/User');
 jest.mock('@/models/phone/AgentClient');
 jest.mock('@crisiscleanup/amazon-connect-streams');
+jest.mock('@/services/sso.service');
 
 Vue.use(Vuex);
 
 const mockStore = new Vuex.Store({
   modules: {
-    'phone/streams': StreamsStore,
+    'phone.streams': StreamsStore,
   },
 });
 
@@ -62,5 +64,17 @@ describe('phone/streams store', () => {
         ],
       ]
     `);
+  });
+
+  it('recreates client without reinit connect', async () => {
+    const createSpy = jest.spyOn(AgentClient, 'create');
+    const connectInitSpy = jest.spyOn(ACS, 'initConnect');
+    AgentClient.isStateOnline.mockReturnValue(AgentStates.OFFLINE);
+    AgentClient.isStateRoutable.mockReturnValue(RouteStates.NOT_ROUTABLE);
+    global.connect.core.initialized = true;
+    const store = getModule(StreamsStore, mockStore);
+    await store.init({});
+    expect(createSpy).toBeCalled();
+    expect(connectInitSpy).not.toBeCalled();
   });
 });
