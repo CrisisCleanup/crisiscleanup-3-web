@@ -76,6 +76,8 @@ import PhoneService from '@/services/phone.service';
 import VueNumberInput from '@chenfengyuan/vue-number-input';
 import Logger from '@/utils/log';
 import { has } from 'lodash';
+import { getModule } from 'vuex-module-decorators';
+import WebsocketStore from '@/store/modules/websocket';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -235,6 +237,10 @@ Vue.use(VueNativeSocket, WS_URL, {
     let target = eventName.toUpperCase();
     if (target === 'SOCKET_ONOPEN') {
       window.vue.$store.dispatch('socket/setConnected', { connected: true });
+    }
+    const wsStore = getModule(WebsocketStore, store);
+    if (!wsStore.isConnected) {
+      wsStore.setConnected(true).then(() => Log.debug('recv connection event'));
     }
     if (event.data) {
       const { data, namespace, action } = JSON.parse(event.data);
