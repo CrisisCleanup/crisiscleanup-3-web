@@ -215,6 +215,7 @@ export const mockModel = (data, { api, statics } = {}) => ({
     where: () => ({
       get: () => data[0],
     }),
+    first: () => data[0],
     ...statics,
   }),
   api: jest.fn(() => ({
