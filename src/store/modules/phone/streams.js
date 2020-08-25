@@ -4,6 +4,7 @@
  * Phone ACS Streams Store
  */
 
+import _ from 'lodash';
 import {
   Action,
   Module,
@@ -139,14 +140,17 @@ class StreamsStore extends VuexModule {
     const ssoPortalUrl: string = await SSO.authenticate(
       this.context.rootGetters['auth/userToken'],
     );
-    if (this.connected || connect.core.initialized) {
+    if (connect.core.initialized) {
       Log.warn('connect already initialized!');
-      if (!this.connected) {
-        this.createClient().then(() => {
-          this.context.commit('setConnected', true);
-        });
+      if (this.connected) {
+        Log.info('skipping event rebind, already connected!');
+        return;
       }
-      return;
+      const ccpEmbed = document.getElementById('ccp-embed');
+      if (ccpEmbed && ccpEmbed.childElementCount >= 1) {
+        Log.warn('existing connect embeds detected! removing...');
+        _.map(ccpEmbed.children, (c) => c.remove());
+      }
     }
     try {
       ACS.initConnect({
