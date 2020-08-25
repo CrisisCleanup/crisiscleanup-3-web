@@ -6,6 +6,9 @@
 
 import type { ACSEventTopic, ACSCallback, ACSConfig } from '@/services/types';
 import _ from 'lodash';
+import Logger from '@/utils/log';
+
+const Log = Logger({ name: 'connect.service' });
 
 /**
  * Enum of Connect Event Topics.
@@ -158,4 +161,30 @@ export const initAuthGateway = async ({ open = true, loginUrl = '' } = {}) => {
   connect.core.loginWindow = connect.core
     .getPopupManager()
     .open(loginUrl, connect.MasterTopics.LOGIN_POPUP);
+};
+
+/**
+ * Set connect agent online/offline state.
+ * @param online - online status.
+ */
+export const setAgentState = (online: boolean = true) => {
+  const stateType = online
+    ? connect.AgentStateType.ROUTABLE
+    : connect.AgentStateType.OFFLINE;
+  const agent = new connect.Agent();
+  if (!agent) {
+    Log.error('Cannot change agent state because there is no agent!');
+    return;
+  }
+  const connectState = agent.getAgentStates().find((s) => s.type === stateType);
+  agent.setState(connectState, {
+    success: () => {
+      Log.debug(`agent state successfully updated!`);
+      Log.debug(connectState);
+    },
+    failure: () => {
+      Log.error('failed to update agent state!');
+      Log.error(connectState);
+    },
+  });
 };
