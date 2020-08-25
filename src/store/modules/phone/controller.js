@@ -10,11 +10,20 @@ import {
   Module,
   MutationAction,
   getModule,
+  Mutation,
 } from 'vuex-module-decorators';
-import type { CaseType, ViewStateT } from '@/store/modules/phone/types';
+import axios from 'axios';
+import { PhoneApi } from '@/utils/api';
+import type {
+  CaseType,
+  MetricsStateT,
+  PhoneMetricUpdate,
+  ViewStateT,
+} from '@/store/modules/phone/types';
 import store from '@/store';
 import Logger from '@/utils/log';
 import StreamsStore from '@/store/modules/phone/streams';
+import _ from 'lodash';
 
 /**
  * Enum of possible controller pages.
@@ -40,6 +49,29 @@ export const ControllerActionTabs = Object.freeze({
   RESOURCES: 'resources',
 });
 
+/**
+ * Enum of phone system metrics and descriptions.
+ * @prop ONLINE - Number of agents online.
+ * @prop CONTACT_QUEUED - Number of contacts currently waiting in inbound queue.
+ * @prop CALLBACKS_QUEUED - Number of callbacks remaining.
+ * @prop AVAILABLE - Number of agents online and routable.
+ * @prop AGENTS_ON_CALL - Number of agents currently talking.
+ * @prop NEEDED - Calculated number of agents needed.
+ * @prop TOTAL_WAITING - Total number of inbound/outbound contacts waiting.
+ * @type {Readonly<{AVAILABLE: [string, string], NEEDED: [string, string], CONTACTS_QUEUED: [string, string], TOTAL_WAITING: [string, string], CALLBACKS_QUEUED: [string, string], AGENTS_ON_CALL: [string, string], ONLINE: [string, string]}>}
+ * @readonly
+ * @enum {string[]}
+ */
+export const Metrics = Object.freeze({
+  ONLINE: ['agentsOnline', '~~Volunteers Online'],
+  CONTACTS_QUEUED: ['contactsInQueue', '~~On hold now'],
+  CALLBACKS_QUEUED: ['contactsInQueueOutbound', '~~Remaining Callbacks'],
+  AVAILABLE: ['agentsAvailable', '~~Volunteers Available'],
+  AGENTS_ON_CALL: ['agentsOnCall', '~~Volunteers on the Phone'],
+  NEEDED: ['agentsNeeded', '~~Additional Volunteers Needed'],
+  TOTAL_WAITING: ['totalWaiting', '~~Total People Waiting'],
+});
+
 const Log = Logger({ name: 'phone.controller' });
 
 @Module({
@@ -58,6 +90,68 @@ class ControllerStore extends VuexModule {
     page: ControllerPages.DASHBOARD,
     actionTab: ControllerActionTabs.CASE,
   };
+
+  // phone metrics
+  metrics: MetricsStateT = {};
+
+  @Mutation
+  setMetrics(newMetrics: $Shape<MetricsStateT>) {
+    this.metrics = { ...this.metrics, ...newMetrics };
+  }
+
+  @Action
+  async updateMetrics({ metrics }: { metrics?: PhoneMetricUpdate[] } = {}) {
+    let metricData = metrics;
+    if (!metrics) {
+      Log.debug('falling back to api to fetch metrics...');
+      const resp = await axios.get(PhoneApi('metrics'));
+      const { results }: { results: PhoneMetricUpdate[] } = resp.data;
+      metricData = results;
+    }
+    if (!metricData) {
+      return;
+    }
+    const newState = {};
+    // custom metrics
+    const metricNames = Object.keys(Metrics);
+    metricData.map(({ name, value }, idx) => {
+      let metricName = name;
+      if (!metricName) {
+        metricName = metricNames[idx];
+      }
+      const parsedValue = parseFloat(value) || 0;
+      // prevents 'fake' realtime values from going negative
+      // till the true metrics come in
+      newState[_.camelCase(metricName)] = parsedValue >= 0 ? parsedValue : 0;
+      return newState;
+    });
+    // set default values of 0
+    newState[Metrics.TOTAL_WAITING[0]] =
+      newState[Metrics.TOTAL_WAITING[0]] || 0;
+    newState[Metrics.NEEDED[0]] = newState[Metrics.NEEDED[0]] || 0;
+    const updatedKeys = Object.keys(newState);
+    const numCallbacks = updatedKeys.includes(Metrics.CALLBACKS_QUEUED[0])
+      ? newState[Metrics.CALLBACKS_QUEUED[0]]
+      : this.metrics[Metrics.CALLBACKS_QUEUED[0]];
+    const numQueued = updatedKeys.includes(Metrics.CONTACTS_QUEUED[0])
+      ? newState[Metrics.CONTACTS_QUEUED[0]]
+      : this.metrics[Metrics.CONTACTS_QUEUED[0]];
+    const numOnline = updatedKeys.includes(Metrics.ONLINE[0])
+      ? newState[Metrics.ONLINE[0]]
+      : this.metrics[Metrics.ONLINE[0]];
+    // count up needed and total if required values exists
+    // todo: the 0 is "calldowns"
+    const totalWaiting = numCallbacks + numQueued + 0;
+    newState[Metrics.TOTAL_WAITING[0]] =
+      typeof totalWaiting === 'number' ? totalWaiting : 0;
+    const agentCapacity = 12 * numOnline; // each agent can take 12 calls
+    const queueOverflow = totalWaiting - agentCapacity; // number of callers over the capacity
+    Log.debug('current queue capacity overflow:', queueOverflow);
+    const needed = queueOverflow >= 1 ? Math.ceil(queueOverflow / 12) : 0;
+    newState[Metrics.NEEDED[0]] = needed;
+    Log.debug('new metrics:', newState);
+    this.context.commit('setMetrics', newState);
+  }
 
   @MutationAction({ mutate: ['view'] })
   setView(newView: $Shape<ViewStateT>) {
