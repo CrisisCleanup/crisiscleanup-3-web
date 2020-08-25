@@ -67,14 +67,13 @@ describe('phone/streams store', () => {
   });
 
   it('recreates client without reinit connect', async () => {
-    const createSpy = jest.spyOn(AgentClient, 'create');
     const connectInitSpy = jest.spyOn(ACS, 'initConnect');
     AgentClient.isStateOnline.mockReturnValue(AgentStates.OFFLINE);
     AgentClient.isStateRoutable.mockReturnValue(RouteStates.NOT_ROUTABLE);
     global.connect.core.initialized = true;
     const store = getModule(StreamsStore, mockStore);
+    await store.setConnected(true);
     await store.init({});
-    expect(createSpy).toBeCalled();
     expect(connectInitSpy).not.toBeCalled();
   });
 });

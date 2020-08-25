@@ -34,9 +34,18 @@ export default {
   created() {
     EventBus.$on(EVENTS.INIT, () => {
       this.$log.info('event init');
-      const htmlEl = document.getElementById('ccp-embed');
-      const phStore = getModule(StreamsStore, this.$store);
-      phStore.init({ element: htmlEl });
+      if (!connect.core.initialized) {
+        const htmlEl = document.getElementById('ccp-embed');
+        const phStore = getModule(StreamsStore, this.$store);
+        try {
+          phStore
+            .init({ element: htmlEl })
+            .then(() => this.$log.info('CCP ready!'))
+            .catch((e) => this.$log.error(e));
+        } catch (e) {
+          this.$log.error(e);
+        }
+      }
     });
     EventBus.$on(EVENTS.REQUEST, () => {
       if (!this.connectAuthed) {
