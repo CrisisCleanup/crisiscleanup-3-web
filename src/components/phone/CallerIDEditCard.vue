@@ -74,13 +74,13 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { LangMixin, UserMixin, ValidateMixin, AgentMixin } from '@/mixins';
+import { LangMixin, UserMixin, ValidateMixin } from '@/mixins';
 import Agent from '@/models/Agent';
 import Language from '@/models/Language';
 
 export default {
   name: 'EditCallerID',
-  mixins: [UserMixin, LangMixin, ValidateMixin, AgentMixin],
+  mixins: [UserMixin, LangMixin, ValidateMixin],
   data() {
     return {
       number: '',
@@ -116,18 +116,7 @@ export default {
       }
 
       try {
-        this.$log.debug(
-          'checking if agent should be updating...',
-          this.connectReady,
-        );
-        if (this.connectReady) {
-          await Agent.api().fetch();
-          const agent = Agent.query()
-            .where('user_id', this.currentUser.id)
-            .first();
-          this.$store.dispatch('phone/setAgent', agent);
-          this.$store.dispatch('phone/syncAgentConfig');
-        }
+        await Agent.api().fetch();
       } catch (e) {
         this.$log.error('Failed to save agent', e);
         this.$toasted.error(e);
