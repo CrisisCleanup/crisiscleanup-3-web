@@ -214,7 +214,7 @@ export default {
         this.isInvalid = valid;
         if (newValue) {
           this.$refs.input.value = newValue;
-          return this.$emit('input', value);
+          return this.$emit('input', newValue);
         }
       }
       this.$emit('input', value);
