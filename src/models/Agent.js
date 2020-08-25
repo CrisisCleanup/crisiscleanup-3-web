@@ -1,5 +1,5 @@
 import User from '@/models/User';
-import { Model } from '@vuex-orm/core';
+import CCUModel from '@/models/model';
 
 export const ERRORS = {
   AGENT_NOT_FOUND: 'AGENT_NOT_FOUND',
@@ -9,7 +9,7 @@ export const ERRORS = {
   LANGUAGE_NOT_SUPPORTED: 'LANGUAGE_NOT_SUPPORTED',
 };
 
-export default class Agent extends Model {
+export default class Agent extends CCUModel {
   static entity = 'agents';
 
   static primaryKey = 'agent_id';
@@ -65,31 +65,6 @@ export default class Agent extends Model {
       },
       async updateConfig(id) {
         return this.patch(`/agents/${id}`, { save: false });
-      },
-      async getDynamicState(id) {
-        let resp;
-        try {
-          resp = await this.get(`/agents/${id}/state`, { save: false });
-        } catch (e) {
-          return {
-            state: 'static',
-          };
-        }
-        const {
-          response: { data },
-        } = resp;
-        return data;
-      },
-      async setDynamicState(id, state, flush = false) {
-        return this.patch(
-          `/agents/${id}`,
-          {
-            state,
-            flush,
-            entered_timestamp: new Date().toISOString(),
-          },
-          { save: false },
-        );
       },
     },
   };
