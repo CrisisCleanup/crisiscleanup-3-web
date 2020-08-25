@@ -6,18 +6,17 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import { EventBus } from '@/event-bus';
 import { EVENTS } from '@/services/acs.service';
-import StreamsStore from '@/store/modules/phone/streams';
 import { getModule } from 'vuex-module-decorators';
+import StreamsStore from '@/store/modules/phone/streams';
 
 export default {
   name: 'CCP',
   methods: {
-    ...mapActions('phone', ['initConnect', 'setPopup']),
     async init() {
-      if (!this.connectRunning && !connect.core.initialized) {
+      if (!connect.core.initialized) {
         this.$log.debug('CCP embed connecting...');
         const htmlEl = document.getElementById('ccp-embed');
         const phStore = getModule(StreamsStore, this.$store);
@@ -30,7 +29,6 @@ export default {
     },
   },
   computed: {
-    ...mapState('phone', ['streams', 'connectRunning', 'connectAuthed']),
     ...mapGetters('auth', ['isLoggedIn']),
   },
   created() {
