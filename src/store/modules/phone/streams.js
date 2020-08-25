@@ -47,9 +47,10 @@ export const AuthStates = Object.freeze({
 const Log = Logger({ name: 'phone.streams' });
 
 @Module({
-  name: 'phone/streams',
+  name: 'phone.streams',
   persist: false,
   namespaced: true,
+  dynamic: false,
 })
 class StreamsStore extends VuexModule {
   // streams socket connection status
@@ -87,9 +88,10 @@ class StreamsStore extends VuexModule {
     const isOnline: AgentState = AgentClient.isStateOnline(agentState);
 
     const agentAvail = agent.getState().name;
-    const isRoutable: RouteState = isOnline
-      ? AgentClient.isStateRoutable(agentAvail)
-      : RouteStates.NOT_ROUTABLE;
+    const isRoutable: RouteState =
+      isOnline === AgentStates.ONLINE
+        ? AgentClient.isStateRoutable(agentAvail)
+        : RouteStates.NOT_ROUTABLE;
 
     const {
       routingProfile: { queues },
@@ -137,6 +139,15 @@ class StreamsStore extends VuexModule {
     const ssoPortalUrl: string = await SSO.authenticate(
       this.context.rootGetters['auth/userToken'],
     );
+    if (this.connected || connect.core.initialized) {
+      Log.warn('connect already initialized!');
+      if (!this.connected) {
+        this.createClient().then(() => {
+          this.context.commit('setConnected', true);
+        });
+      }
+      return;
+    }
     try {
       ACS.initConnect({
         htmlEl: element,

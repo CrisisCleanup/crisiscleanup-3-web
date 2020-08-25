@@ -12,7 +12,6 @@ import enums from './modules/enums';
 import incident from './modules/incident';
 import loading from './modules/loading';
 import locale from './modules/locale';
-import phone from './modules/phone';
 import rc from './modules/rc';
 import socket from './modules/socket';
 import ui from './modules/ui';
@@ -38,13 +37,12 @@ export default new Vuex.Store({
     incident,
     loading,
     locale,
-    phone,
     enums,
     rc,
     socket,
     phone_legacy,
     ui,
-    'phone/streams': ConnectStores.StreamsStore,
+    'phone.streams': ConnectStores.StreamsStore,
     websocket: WebsocketStore,
   },
   plugins: [VuexORM.install(database)],
