@@ -7,6 +7,7 @@ import Vuex from 'vuex';
 import VuexORM, { Database } from '@vuex-orm/core';
 import * as ACS from '@/services/connect.service';
 import _ from 'lodash';
+import WebsocketStore from '@/store/modules/websocket';
 import AgentClient, { AgentStates, RouteStates } from '../AgentClient';
 import Connection, { ConnectionStates } from '../Connection';
 import Contact, {
@@ -26,6 +27,9 @@ Vue.use(Vuex);
 // eslint-disable-next-line no-unused-vars
 const mockStore = new Vuex.Store({
   plugins: [VuexORM.install(database)],
+  modules: {
+    websocket: WebsocketStore,
+  },
 });
 
 const mockAgentData = ({ agentId, routeState, state, ...rest } = {}) => ({
@@ -219,5 +223,33 @@ describe('phone models', () => {
         ],
       }
     `);
+  });
+  it('should return online/routable status correctly', async () => {
+    await AgentClient.create({ data: mockAgentData() });
+    let agent = await AgentClient.find('123');
+    expect(agent.isOnline).toBe(true);
+    expect(agent.isRoutable).toBe(true);
+    await agent.$update({
+      state: AgentStates.OFFLINE,
+      routeState: RouteStates.NOT_ROUTABLE,
+    });
+    agent = await AgentClient.find('123');
+    expect(agent.isOnline).toBe(false);
+    expect(agent.isRoutable).toBe(false);
+  });
+  it('should auto set routable state on state update', async () => {
+    await AgentClient.create({ data: mockAgentData() });
+    let agent = await AgentClient.find('123');
+    await agent.$update({ state: AgentStates.OFFLINE });
+    agent = await AgentClient.find('123');
+    expect(agent.isRoutable).toBe(false);
+  });
+  it('should toggle online status correctly', async () => {
+    await AgentClient.create({ data: mockAgentData() });
+    const agent = await AgentClient.find('123');
+    agent.toggleOnline();
+    expect(ACS.setAgentState).toBeCalledWith(false);
+    agent.toggleOnline(true);
+    expect(ACS.setAgentState).toBeCalledWith(true);
   });
 });
