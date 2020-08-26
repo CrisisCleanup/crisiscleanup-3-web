@@ -25,6 +25,8 @@ import store from '@/store';
 import Logger from '@/utils/log';
 import StreamsStore from '@/store/modules/phone/streams';
 import _ from 'lodash';
+import Agent from '@/models/Agent';
+import Worksite from '@/models/Worksite';
 
 /**
  * Enum of possible controller pages.
@@ -94,8 +96,19 @@ class ControllerStore extends VuexModule {
     actionTab: ControllerActionTabs.CASE,
   };
 
+  // history
+  history = {
+    resolvedCases: [],
+  };
+
   // phone metrics
   metrics: MetricsStateT = {};
+
+  // contact metrics
+  contactMetrics = [];
+
+  // agent metrics
+  agentMetrics = {};
 
   get getGeneralMetrics() {
     return (metricOrder: PhoneMetric[]) => {
@@ -107,9 +120,97 @@ class ControllerStore extends VuexModule {
     };
   }
 
+  get agentRankings() {
+    return _.orderBy(
+      Object.values(this.agentMetrics, ['total_calls'], ['desc']),
+    );
+  }
+
+  @MutationAction({ mutate: ['contactMetrics'] })
+  updateContactMetrics({ contacts } = {}) {
+    if (!_.isNull(contacts)) {
+      return { contactMetrics: contacts };
+    }
+    return [];
+  }
+
+  @Mutation
+  setHistory(newHistory = {}) {
+    this.history = { ...this.history, ...newHistory };
+  }
+
+  @Mutation
+  setAgentMetrics(newAgents = {}) {
+    this.agentMetrics = { ...this.agentMetrics, ...newAgents };
+  }
+
   @Mutation
   setMetrics(newMetrics: $Shape<MetricsStateT>) {
     this.metrics = { ...this.metrics, ...newMetrics };
+  }
+
+  @Action
+  async updateAgentMetrics({ agents = [] } = {}) {
+    const agentBoard = {};
+    await Promise.all(
+      agents.map(async ({ agent_id, state, entered_timestamp }) => {
+        try {
+          await Agent.api().get(`/agents/${agent_id}`);
+        } catch (e) {
+          Log.warn(`failed to fetch agent, does it exist? (${agent_id})`);
+          return;
+        }
+        const {
+          recent_contacts,
+          user,
+          ...metrics
+        } = await Agent.api().getMetrics(agent_id);
+        let recentContacts = [];
+        if (this.context.rootGetters['auth/userId'] === user.id) {
+          recentContacts = _.defaultTo(recent_contacts, []);
+          // find all unique case ids and prefetch em
+          let recentCases = _.uniq(
+            _.flatten(recentContacts.map(({ cases }) => cases)),
+          );
+          recentCases = _.difference(recentCases, this.history.resolvedCases);
+          this.setHistory({
+            history: {
+              resolvedCases: _.union(recentCases, this.history.resolvedCases),
+            },
+          });
+          Log.debug('found cases in history:', recentCases);
+          await Promise.all(
+            recentCases.map((cId) =>
+              Worksite.api().find_or_fetch(cId, { resolve: false }),
+            ),
+          );
+          recentContacts = recentContacts.map(async ({ cases, ...c }) => {
+            const wkSites = await Promise.all(
+              cases.map(async (cId) => {
+                let caseItem = await Worksite.find(cId);
+                if (_.isNil(caseItem)) {
+                  const {
+                    response: { data },
+                  } = await Worksite.api().get(`/worksites/${cId}`);
+                  caseItem = data;
+                }
+                return caseItem;
+              }),
+            );
+            return { cases: wkSites, ...c };
+          });
+          recentContacts = await Promise.all(recentContacts);
+        }
+        agentBoard[agent_id] = {
+          ...metrics,
+          user,
+          currentState: state,
+          enteredTimestamp: Date.parse(entered_timestamp),
+          recent_contacts: recentContacts,
+        };
+      }),
+    );
+    this.setAgentMetrics(agentBoard);
   }
 
   @Action
@@ -176,7 +277,7 @@ class ControllerStore extends VuexModule {
 
   @MutationAction({ mutate: ['view'] })
   setView(newView: $Shape<ViewStateT>) {
-    this.view = { ...this.view, ...newView };
+    return { view: { ...this.view, ...newView } };
   }
 
   @MutationAction({ mutate: ['currentCase'] })
