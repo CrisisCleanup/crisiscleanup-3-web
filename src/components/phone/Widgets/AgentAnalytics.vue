@@ -2,41 +2,42 @@
   <StatsCard
     class="flex flex-col flex-grow"
     card-title="~~My Statistics"
-    :metrics="metrics"
+    :metrics="stats"
   />
 </template>
 
 <script>
 import StatsCard from '@/components/phone/Cards/StatsCard.vue';
-import { mapGetters } from 'vuex';
-import { UserMixin } from '@/mixins';
+import useUser from '@/use/user/useUser';
+import { useGetters } from '@u3u/vue-hooks';
+import { computed } from '@vue/composition-api';
+import _ from 'lodash';
 
 export default {
   name: 'AgentAnalytics',
-  mixins: [UserMixin],
   components: { StatsCard },
-  computed: {
-    ...mapGetters('phone', ['agentBoard']),
-    currentAgent() {
-      if (!this.agentBoard.length) return [];
-      return this.agentBoard.find((a) => a.user.id === this.currentUser.id);
-    },
-    metrics() {
-      const stats = new Map();
-      const {
-        total_inbound = 0,
-        total_outbound = 0,
-        total_abandons = 0,
-        total_rejects = 0,
-      } = this.currentAgent;
-      stats.set('~~Received Calls', total_inbound);
-      stats.set('~~Made Calls', total_outbound);
-      stats.set('~~Rejected Calls', total_rejects);
-      stats.set('~~Abandoned Calls', total_abandons);
-      const TStats = new Map();
-      stats.forEach((value, key) => TStats.set(this.$t(key), value));
-      return TStats;
-    },
+  setup(props, context) {
+    const { currentAgentMetrics } = useGetters('phone.controller', [
+      'currentAgentMetrics',
+    ]);
+
+    const stats = computed(() => {
+      const _stats = new Map();
+      const setStat = (name, key) =>
+        _stats.set(
+          context.root.$t(name),
+          _.get(currentAgentMetrics.value, key, 0),
+        );
+      setStat('~~Received Calls', 'total_inbound');
+      setStat('~~Made Calls', 'total_outbound');
+      setStat('~~Rejected Calls', 'total_rejects');
+      setStat('~~Abandoned Calls', 'total_abandons');
+      return _stats;
+    });
+    return {
+      ...useUser(),
+      stats,
+    };
   },
 };
 </script>
