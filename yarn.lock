@@ -22399,6 +22399,11 @@ vue-clipboard2@^0.3.1:
   dependencies:
     clipboard "^2.0.0"
 
+vue-composable@^1.0.0-beta.4:
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/vue-composable/-/vue-composable-1.0.0-beta.4.tgz#5e15e10677ddc875e52406daebdcff92d2aeda57"
+  integrity sha512-XFSpYLNwH0EwxMmZz1I1WbBFebRSTcxy2cnomwKUTYMGqPtrxJu1B/qi38Ms5C6YJQK9i/n4dfOI88c/XIEtlg==
+
 vue-cookies@^1.7.3:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.7.3.tgz#de8da757ecb01cd4c5731fcff7f3f86781acc5e8"
