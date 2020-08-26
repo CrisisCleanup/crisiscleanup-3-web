@@ -17,6 +17,7 @@ import { PhoneApi } from '@/utils/api';
 import type {
   CaseType,
   MetricsStateT,
+  PhoneMetric,
   PhoneMetricUpdate,
   ViewStateT,
 } from '@/store/modules/phone/types';
@@ -63,6 +64,7 @@ export const ControllerActionTabs = Object.freeze({
  * @enum {string[]}
  */
 export const Metrics = Object.freeze({
+  // note: translation takes place in component, $t not needed here.
   ONLINE: ['agentsOnline', '~~Volunteers Online'],
   CONTACTS_QUEUED: ['contactsInQueue', '~~On hold now'],
   CALLBACKS_QUEUED: ['contactsInQueueOutbound', '~~Remaining Callbacks'],
@@ -70,6 +72,7 @@ export const Metrics = Object.freeze({
   AGENTS_ON_CALL: ['agentsOnCall', '~~Volunteers on the Phone'],
   NEEDED: ['agentsNeeded', '~~Additional Volunteers Needed'],
   TOTAL_WAITING: ['totalWaiting', '~~Total People Waiting'],
+  CALLDOWNS_QUEUED: ['calldowns', '~~Remaining Calldowns'],
 });
 
 const Log = Logger({ name: 'phone.controller' });
@@ -93,6 +96,16 @@ class ControllerStore extends VuexModule {
 
   // phone metrics
   metrics: MetricsStateT = {};
+
+  get getGeneralMetrics() {
+    return (metricOrder: PhoneMetric[]) => {
+      const metricMap = new Map<string, number>();
+      metricOrder.map(([name, description]) => {
+        return metricMap.set(description, _.get(this.metrics, name, 0));
+      });
+      return metricMap;
+    };
+  }
 
   @Mutation
   setMetrics(newMetrics: $Shape<MetricsStateT>) {
@@ -126,22 +139,30 @@ class ControllerStore extends VuexModule {
       return newState;
     });
     // set default values of 0
-    newState[Metrics.TOTAL_WAITING[0]] =
-      newState[Metrics.TOTAL_WAITING[0]] || 0;
-    newState[Metrics.NEEDED[0]] = newState[Metrics.NEEDED[0]] || 0;
+    newState[Metrics.TOTAL_WAITING[0]] = _.defaultTo(
+      newState[Metrics.TOTAL_WAITING[0]],
+      0,
+    );
+    newState[Metrics.NEEDED[0]] = _.defaultTo(newState[Metrics.NEEDED[0]], 0);
+    newState[Metrics.CALLDOWNS_QUEUED[0]] = _.defaultTo(
+      newState[Metrics.CALLDOWNS_QUEUED[0]],
+      0,
+    );
+
     const updatedKeys = Object.keys(newState);
-    const numCallbacks = updatedKeys.includes(Metrics.CALLBACKS_QUEUED[0])
-      ? newState[Metrics.CALLBACKS_QUEUED[0]]
-      : this.metrics[Metrics.CALLBACKS_QUEUED[0]];
-    const numQueued = updatedKeys.includes(Metrics.CONTACTS_QUEUED[0])
-      ? newState[Metrics.CONTACTS_QUEUED[0]]
-      : this.metrics[Metrics.CONTACTS_QUEUED[0]];
-    const numOnline = updatedKeys.includes(Metrics.ONLINE[0])
-      ? newState[Metrics.ONLINE[0]]
-      : this.metrics[Metrics.ONLINE[0]];
+    const getOrUpdate = (metricName: string) =>
+      updatedKeys.includes(metricName)
+        ? newState[metricName]
+        : this.metrics[metricName];
+    const [numCallbacks, numQueued, numOnline, numCalldowns] = [
+      Metrics.CALLBACKS_QUEUED,
+      Metrics.CONTACTS_QUEUED,
+      Metrics.ONLINE,
+      Metrics.CALLDOWNS_QUEUED,
+    ].map((m) => getOrUpdate(m[0]));
+
     // count up needed and total if required values exists
-    // todo: the 0 is "calldowns"
-    const totalWaiting = numCallbacks + numQueued + 0;
+    const totalWaiting = numCallbacks + numQueued + numCalldowns;
     newState[Metrics.TOTAL_WAITING[0]] =
       typeof totalWaiting === 'number' ? totalWaiting : 0;
     const agentCapacity = 12 * numOnline; // each agent can take 12 calls
