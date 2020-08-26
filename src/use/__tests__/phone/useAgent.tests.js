@@ -39,7 +39,11 @@ describe('useAgent', () => {
   it('retrieves agent when ready', () => {
     const firstMock = jest.fn();
     AgentClient.query = jest.fn();
-    AgentClient.query.mockReturnValue({ first: firstMock });
+    AgentClient.query.mockReturnValue({
+      withAllRecursive: () => ({
+        first: firstMock,
+      }),
+    });
     useGetters.mockReturnValue({
       agentClientId: {
         value: null,
