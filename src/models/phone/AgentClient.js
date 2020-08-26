@@ -19,6 +19,7 @@ import { getModule } from 'vuex-module-decorators';
 import Logger from '@/utils/log';
 import * as ACS from '@/services/connect.service';
 import WebsocketStore, { ACTIONS } from '@/store/modules/websocket';
+import User from '@/models/User';
 
 /**
  * Enum of states that represent whether a client is currently
@@ -90,6 +91,9 @@ export default class AgentClient extends Model {
         },
       })
       .then(() => Log.debug('agent state pushed'));
+    client
+      .heartbeat()
+      .then(() => Log.debug('client heartbeat triggered by update'));
   }
 
   static isStateOnline(state: AgentState): AgentState {
@@ -141,10 +145,27 @@ export default class AgentClient extends Model {
     return AgentClient.isStateOnline(this.state) === AgentStates.ONLINE;
   }
 
+  get user(): User {
+    return User.query().whereId(this.userId).first();
+  }
+
   toggleOnline(connected?: boolean): void {
     if (typeof connected === 'boolean') {
       return ACS.setAgentState(connected);
     }
     return ACS.setAgentState(!this.isOnline);
+  }
+
+  async heartbeat() {
+    Log.info('pushing client heartbeat');
+    const wsStore = getModule(WebsocketStore, AgentClient.store());
+    await wsStore.send({
+      action: ACTIONS.CLIENT_HEARTBEAT,
+      data: {
+        userId: this.userId,
+        type: this.user.isAdmin ? 'admin' : 'user',
+        agentId: this.agentId,
+      },
+    });
   }
 }
