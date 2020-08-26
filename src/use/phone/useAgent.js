@@ -18,7 +18,9 @@ export default () => {
     ...useGetters('phone.streams', ['agentClientId']),
   };
 
-  const _agentClient = computed(() => AgentClient.query().first());
+  const _agentClient = computed(() =>
+    AgentClient.query().withAllRecursive().first(),
+  );
   if (_agentClient.value) {
     loading.value = false;
   }
@@ -27,7 +29,7 @@ export default () => {
     () => getters.agentClientId.value,
     () => {
       if (getters.agentClientId.value && loading.value) {
-        _agent.value = AgentClient.query().first();
+        _agent.value = AgentClient.query().withAllRecursive().first();
         loading.value = false;
       }
     },
