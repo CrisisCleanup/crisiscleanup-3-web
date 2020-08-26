@@ -126,6 +126,12 @@ class ControllerStore extends VuexModule {
     );
   }
 
+  get currentAgentMetrics() {
+    return this.agentRankings.find(
+      (a) => a.user.id === this.context.rootGetters['auth/userId'],
+    );
+  }
+
   @MutationAction({ mutate: ['contactMetrics'] })
   updateContactMetrics({ contacts } = {}) {
     if (!_.isNull(contacts)) {
