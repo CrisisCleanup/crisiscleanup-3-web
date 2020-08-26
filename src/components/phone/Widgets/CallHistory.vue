@@ -36,12 +36,10 @@ export default {
   components: { TitledCard, Table },
   mixins: [UserMixin, ValidateMixin],
   computed: {
-    ...mapGetters('phone', ['agentBoard']),
+    ...mapGetters('phone.controller', ['agentRankings', 'currentAgentMetrics']),
     historyData() {
-      if (!this.agentBoard.length) return [];
-      const { recent_contacts } = this.agentBoard.find(
-        (a) => a.user.id === this.currentUser.id,
-      );
+      if (!this.currentAgentMetrics) return [];
+      const { recent_contacts } = this.currentAgentMetrics;
       const calls = recent_contacts.map(
         ({ phone_number, caller_name, status, notes, ...metrics }) => ({
           name: caller_name,

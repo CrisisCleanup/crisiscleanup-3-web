@@ -151,6 +151,10 @@ export default class AgentClient extends Model {
     );
   }
 
+  get isConnecting(): boolean {
+    return Object.values(ConnectionStates).includes(this.contactState);
+  }
+
   get isOnline(): boolean {
     return AgentClient.isStateOnline(this.state) === AgentStates.ONLINE;
   }
