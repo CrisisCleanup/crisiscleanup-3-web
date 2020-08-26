@@ -120,6 +120,16 @@ export default class AgentClient extends Model {
     [ConnectionStates.AGENT_PENDING]: 'connecting',
   };
 
+  static getFriendlyState(
+    state: AgentState | RouteState | ConnectionState,
+  ): string {
+    let contactState = state;
+    if (state.includes('#')) {
+      [, , contactState] = state.split('#');
+    }
+    return _.get(AgentClient.friendlyStateMap, contactState, 'offline');
+  }
+
   get contactState(): ConnectionState | RouteState {
     if (!_.isEmpty(this.connections)) {
       const initConnection: ConnectionType = this.connections[0];
