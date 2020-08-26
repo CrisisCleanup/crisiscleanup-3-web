@@ -12,14 +12,14 @@
         </base-text>
       </div>
     </template>
-    <Loader :loading="loading" class="card-container overflow-auto">
+    <Loader :loading="false" class="card-container overflow-auto">
       <template #content>
-        <div v-for="a in agentBoard" :key="a.agent" class="item">
+        <div v-for="a in agentRankings" :key="a.agent" class="item">
           <div class="item--profile">
             <div class="image">
               <img
                 class="rounded-full"
-                :src="getUser(a.user.id).profilePictureUrl"
+                :src="userImages[a.user.id] ? userImages[a.user.id].result : ''"
               />
             </div>
             <div class="info">
@@ -68,41 +68,57 @@
 
 <script>
 import TitledCard from '@/components/cards/TitledCard.vue';
-import { UserMixin, AgentMixin } from '@/mixins';
-import { mapGetters } from 'vuex';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 import Loader from '@/components/Loader.vue';
+import useUser from '@/use/user/useUser';
+import { useGetters } from '@u3u/vue-hooks';
+import AgentClient from '@/models/phone/AgentClient';
+import User from '@/models/User';
+import { ref, watch } from '@vue/composition-api';
+import { usePromise } from 'vue-composable';
 
 export default {
   name: 'Leaderboard',
-  mixins: [UserMixin, AgentMixin],
   components: {
     TitledCard,
     UserDetailsTooltip,
     Loader,
   },
-  data() {
-    return {
-      loading: true,
-    };
-  },
-  computed: {
-    ...mapGetters('phone', ['agentBoard']),
-    ...mapGetters('socket', ['connected']),
-    metricData() {
-      return {
-        intake: this.agentBoard.map((a) => a.total_inbound),
-        return: this.agentBoard.map((a) => a.total_outbound),
-        total: this.agentBoard.map((a) => a.total_calls),
-      };
-    },
-  },
-  async mounted() {
-    await this.$store.watch(
-      () => this.connected,
-      () => this.$store.dispatch('phone/getAgentMetrics'),
+  setup() {
+    const { agentRankings } = useGetters('phone.controller', ['agentRankings']);
+    const _users = {};
+    agentRankings.value.map((a) => {
+      _users[a.user.id] = { loading: true, result: { value: '' } };
+      return a;
+    });
+    const userImages = ref(_users);
+
+    watch(
+      () => agentRankings.value,
+      () => {
+        const _newUsers = {};
+        agentRankings.value.map((agent) => {
+          if (!Object.keys(userImages).includes(agent.user.id)) {
+            _newUsers[agent.user.id] = usePromise(() =>
+              User.fetchOrFindId(agent.user.id).then(
+                (u) => u.profilePictureUrl,
+              ),
+            );
+          }
+          userImages.value = { ...userImages.value, ..._newUsers };
+          return agent;
+        });
+      },
     );
-    this.loading = false;
+
+    return {
+      ...useUser(),
+      agentRankings,
+      userImages,
+      getStateFriendlyName(state) {
+        return AgentClient.getFriendlyState(state);
+      },
+    };
   },
 };
 </script>
