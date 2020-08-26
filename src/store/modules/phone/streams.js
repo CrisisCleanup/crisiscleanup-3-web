@@ -168,12 +168,19 @@ class StreamsStore extends VuexModule {
       },
     });
     // Bind agent events
+    connect.agent((agent) => {
+      Log.info('ACS got agent!');
+      Log.debug(agent);
+      this.createClient(agent)
+        .then(() => {
+          this.context.commit('setConnected', true);
+          this.context.commit('setAuthed', AuthStates.SUCCESS);
+        })
+        .catch((e) => Log.error(e));
+    });
     ACS.bindEvents<ACSAgentEvent>(ACS.EventTopics.AGENT, {
       [ACS.AgentEvents.ON_CONNECTION_GAINED]: () => {
         Log.info('ACS successfully connected!');
-        this.createClient().then(() => {
-          this.context.commit('setConnected', true);
-        });
       },
       [ACS.AgentEvents.ON_CONNECTION_LOST]: () => {
         Log.warn('ACS lost connection!');
@@ -210,6 +217,9 @@ class StreamsStore extends VuexModule {
         }).then(() => {
           Log.info('Agent Client => ACW');
         });
+      },
+      [ACS.AgentEvents.ON_ERROR]: () => {
+        Log.error('connect agent error!');
       },
     });
     // Bind Contact Events
