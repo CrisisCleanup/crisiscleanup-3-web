@@ -47,12 +47,6 @@ export default {
         }
       }
     });
-    EventBus.$on(EVENTS.REQUEST, () => {
-      if (!this.connectAuthed) {
-        this.$log.info('setting popup!');
-        this.init();
-      }
-    });
   },
 };
 </script>
