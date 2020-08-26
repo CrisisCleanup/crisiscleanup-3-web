@@ -1,10 +1,10 @@
-import { Model } from '@vuex-orm/core';
 import { AuthService } from '@/services/auth.service';
 import Language from '@/models/Language';
 import Role from '@/models/Role';
 import moment from 'moment';
+import CCUModel from '@/models/model';
 
-export default class User extends Model {
+export default class User extends CCUModel {
   static entity = 'users';
 
   static fields() {
