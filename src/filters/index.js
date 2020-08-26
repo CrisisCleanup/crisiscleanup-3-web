@@ -116,3 +116,5 @@ export const truncateFilter = (value, length, ...args) =>
   _.truncate(value, { length, ...args });
 
 export const startCase = (value) => _.startCase(value);
+
+export const snakeCase = (value) => _.snakeCase(value);

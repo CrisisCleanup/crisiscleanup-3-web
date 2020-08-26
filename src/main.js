@@ -19,6 +19,7 @@ import TreeMenu from '@/components/TreeMenu';
 import Modal from '@/components/Modal';
 import Spinner from '@/components/Spinner';
 import Tag from '@/components/Tag';
+import VueTimers from 'vue-timers';
 import {
   capitalize,
   getColorForStatus,
@@ -32,6 +33,7 @@ import {
   toUpper,
   truncateFilter,
   startCase,
+  snakeCase,
 } from '@/filters';
 import Authenticated from '@/layouts/Authenticated';
 import Unauthenticated from '@/layouts/Unauthenticated';
@@ -118,6 +120,7 @@ Vue.use(VueCompositionApi);
 // 3rd Party Libraries
 Vue.component('number-input', VueNumberInput);
 Vue.use(VueResize);
+Vue.use(VueTimers);
 Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
 Vue.use(ModalDialogs);
@@ -166,6 +169,7 @@ Vue.filter('upper', toUpper);
 Vue.filter('capitalize', capitalize);
 Vue.filter('truncate', truncateFilter);
 Vue.filter('startCase', startCase);
+Vue.filter('snakeCase', snakeCase);
 
 // API & Auth
 if (AuthService.getUser()) {
@@ -249,6 +253,7 @@ Vue.use(VueNativeSocket, WS_URL, {
         return;
       }
       target = `${namespace}/${action.name}`;
+      Log.debug(`mapped target => ${target}`);
       if (action.type === 'action') {
         method = 'dispatch';
       }

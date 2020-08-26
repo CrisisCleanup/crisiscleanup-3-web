@@ -6,7 +6,7 @@
       }}</base-text>
     </div>
     <div
-      v-for="[title, value] in statistics.entries()"
+      v-for="[title, value] in generalMetrics.entries()"
       :key="`metric_${title}`"
       class="metrics--body"
     >
@@ -16,11 +16,11 @@
           <ccu-icon
             with-text
             v-if="title.includes('Total')"
-            :type="icons.phone_plus"
+            type="phone-plus"
             size="xl"
           >
             <base-text variant="body" :weight="600" class="align-middle">{{
-              title
+              $t(title)
             }}</base-text>
           </ccu-icon>
 
@@ -29,7 +29,7 @@
             variant="bodysm"
             :weight="500"
             class="align-middle"
-            >{{ title }}</base-text
+            >{{ $t(title) }}</base-text
           >
         </div>
         <base-text variant="h1">{{ value }}</base-text>
@@ -39,100 +39,39 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex';
-import { mixin as VueTimers } from 'vue-timers';
-import { METRICS } from '@/services/acs.service';
-import { LangMixin, UserMixin, IconsMixin } from '@/mixins';
+import useUser from '@/use/user/useUser';
+import usePhoneMetrics from '@/use/phone/usePhoneMetrics';
+import { Metrics } from '@/store/modules/phone/controller';
+import { useIntervalFn } from '@vueuse/core';
 
 export default {
   name: 'AgentAnalyticsCard',
-  mixins: [VueTimers, LangMixin, IconsMixin, UserMixin],
-  timers: {
-    clientHeartbeat: {
-      // pings integrations to let it know
-      // to update me
-      time: 30000,
-      autostart: true,
-      repeat: true,
-      immediate: true,
-    },
-  },
-  async mounted() {
-    await this.$store.watch(
-      () => this.$store.getters['socket/connected'],
-      () => true,
-    );
-    await this.$store.dispatch('socket/send', {
-      action: 'GET_AGENTS',
-      options: {
-        includeMeta: true,
-      },
-      data: {
-        userId: this.userId,
-        type: this.currentUser.isAdmin ? 'admin' : 'user',
-      },
+  setup() {
+    const { generalMetrics, updateGenMetrics } = usePhoneMetrics({
+      metrics: [
+        Metrics.CONTACTS_QUEUED,
+        Metrics.CALLBACKS_QUEUED,
+        Metrics.CALLDOWNS_QUEUED,
+        Metrics.TOTAL_WAITING,
+        Metrics.ONLINE,
+        Metrics.AVAILABLE,
+        Metrics.AGENTS_ON_CALL,
+        Metrics.NEEDED,
+      ],
     });
-  },
-  computed: {
-    ...mapState('phone', ['metrics']),
-    ...mapGetters('phone', ['agentId', 'agentState', 'currentContactId']),
-    statistics() {
-      // reorder stats in correct order
-      const stats = new Map();
-      stats.set(
-        this.lang[METRICS.CONTACTS_QUEUED],
-        this.metrics[METRICS.CONTACTS_QUEUED],
-      );
-      stats.set(
-        this.lang[METRICS.CALLBACKS_QUEUED],
-        this.metrics[METRICS.CALLBACKS_QUEUED],
-      );
-      // TODO: callbacks
-      stats.set(this.lang['todo:calldowns'], 0);
-      stats.set(
-        this.lang[METRICS.TOTAL_WAITING],
-        this.metrics[METRICS.TOTAL_WAITING],
-      );
-      stats.set(this.lang[METRICS.ONLINE], this.metrics[METRICS.ONLINE]);
-      stats.set(
-        this.lang[METRICS.AGENTS_ON_CALL],
-        this.metrics[METRICS.AGENTS_ON_CALL],
-      );
-      stats.set(this.lang[METRICS.NEEDED], this.metrics[METRICS.NEEDED]);
-      return stats;
-    },
-    lang() {
-      const metricLang = {};
-      metricLang[METRICS.CONTACTS_QUEUED] = '~~On hold now';
-      metricLang[METRICS.TOTAL_WAITING] = '~~Total People Waiting';
-      metricLang[METRICS.CALLBACKS_QUEUED] = '~~Remaining Callbacks';
-      // TODO
-      metricLang['todo:calldowns'] = '~~Remaining Calldowns';
-      metricLang[METRICS.NEEDED] = '~~Additional Volunteers Needed';
-      metricLang[METRICS.ONLINE] = '~~Volunteers Online';
-      metricLang[METRICS.AGENTS_ON_CALL] = '~~Volunteers on the Phone';
-      return this.getLang(metricLang);
-    },
-  },
-  methods: {
-    async clientHeartbeat() {
-      await this.$store.dispatch('phone/getRealtimeMetrics');
-      let aId = this.agentId;
-      if (!aId) {
-        aId = await this.$store.dispatch('phone/getAgent');
-      }
-      await this.$store.dispatch('socket/send', {
-        action: 'CLIENT_HEARTBEAT',
-        options: {
-          includeMeta: true,
-        },
-        data: {
-          userId: this.userId,
-          type: this.currentUser.isAdmin ? 'admin' : 'user',
-          agentId: aId,
-        },
-      });
-    },
+
+    useIntervalFn(
+      async () => {
+        await updateGenMetrics();
+      },
+      20000,
+      true,
+    );
+
+    return {
+      ...useUser(),
+      generalMetrics,
+    };
   },
 };
 </script>
