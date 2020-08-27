@@ -232,7 +232,6 @@ Vue.use(VueNativeSocket, WS_URL, {
   passToStoreHandler: (eventName, event) => {
     if (!eventName.startsWith('SOCKET_')) return;
     const Log = Logger({ name: 'WS' });
-    Log.debug('incoming message:', eventName, event);
     if (!has(window, 'vue.$store')) {
       Log.debug('store is not ready yet!');
       return;
@@ -242,7 +241,7 @@ Vue.use(VueNativeSocket, WS_URL, {
     if (target === 'SOCKET_ONOPEN') {
       window.vue.$store.dispatch('socket/setConnected', { connected: true });
     }
-    const wsStore = getModule(WebsocketStore, store);
+    const wsStore = getModule(WebsocketStore, window.vue.$store);
     if (!wsStore.isConnected) {
       wsStore.setConnected(true).then(() => Log.debug('recv connection event'));
     }
