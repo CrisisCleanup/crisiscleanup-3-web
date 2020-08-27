@@ -75,6 +75,11 @@ export const ContactAttributes = Object.freeze({
   INBOUND_NUMBER: 'InboundNumber',
 });
 
+export const ContactConnectionMap = Object.freeze({
+  [ContactActions.CONNECTED]: ConnectionStates.BUSY,
+  [ContactActions.ENDED]: ConnectionStates.PAUSED,
+});
+
 const Log = Logger({ name: 'phone.contact' });
 
 export default class Contact extends Model {
@@ -104,11 +109,16 @@ export default class Contact extends Model {
   }
 
   static afterUpdate(model: Contact): void {
-    const connection: ConnectionType = Connection.query()
+    const connection: Connection = Connection.query()
       .where('contactId', model.contactId)
       .first();
     const voiceConnection = ACS.getConnectionByContactId(model.contactId);
-    if (voiceConnection !== null && model.state === ContactStates.ROUTED) {
+    // Handle agent pending -> contact connecting
+    if (
+      voiceConnection !== null &&
+      model.state === ContactStates.ROUTED &&
+      _.isEmpty(connection.streamsConnectionId)
+    ) {
       // This occurs post verification, since we now have a 'real' connection.
       Log.info('Agent verified connection, updating!');
       Log.info(
@@ -123,6 +133,23 @@ export default class Contact extends Model {
           state: model.initConnectionState,
         }: ConnectionType),
       }).then((c) => Log.debug('connection updated => ', c));
+    }
+    // Handle connection states on and after actual connection.
+    if (
+      model.state === ContactStates.ROUTED &&
+      !_.isEmpty(connection.streamsConnectionId)
+    ) {
+      const newState = _.get(
+        ContactConnectionMap,
+        model.action,
+        connection.state,
+      );
+      connection
+        .$update({
+          state: newState,
+        })
+        .then(() => Log.info(`Connection state => ${newState}`))
+        .catch((e) => Log.error(`failed to update connection state!`, e));
     }
   }
 
