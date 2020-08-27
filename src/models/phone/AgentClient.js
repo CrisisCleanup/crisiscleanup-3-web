@@ -15,10 +15,9 @@ import type {
 import Contact from '@/models/phone/Contact';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import _ from 'lodash';
-import { getModule } from 'vuex-module-decorators';
 import Logger from '@/utils/log';
 import * as ACS from '@/services/connect.service';
-import WebsocketStore, { ACTIONS } from '@/store/modules/websocket';
+import { ACTIONS } from '@/store/modules/websocket';
 import User from '@/models/User';
 
 /**
@@ -69,9 +68,14 @@ export default class AgentClient extends Model {
     }: AgentClientType);
   }
 
+  static beforeUpdate(model: AgentClient): void {
+    model.routeState = AgentClient.isStateRoutable(model.contactState);
+  }
+
   static afterUpdate(model: AgentClient): void {
     Log.info('publishing agent client state update!');
     const client: AgentClient = AgentClient.query()
+      .withAllRecursive()
       .where('agentId', model.agentId)
       .first();
     if (!model.isOnline && model.isRoutable) {
@@ -81,14 +85,28 @@ export default class AgentClient extends Model {
           Log.info('client went offline, forcing not_routable route state'),
         );
     }
-    const wsStore = getModule(WebsocketStore, AgentClient.store());
-    wsStore
-      .send({
-        action: ACTIONS.SET_AGENT_STATE,
+    const newRouteState = AgentClient.isStateRoutable(client.contactState);
+    if (newRouteState !== client.routeState) {
+      AgentClient.update({
+        where: client.agentId,
         data: {
-          agentId: client.agentId,
-          agentState: client.contactState,
+          routeState: newRouteState,
         },
+      }).then((a) => a);
+      return;
+    }
+    Log.info(`Agent => ${client.contactState}`);
+    Log.info(client);
+    const payload = {
+      agentId: client.agentId,
+      state: client.state,
+      routeState: client.routeState,
+      contactState: client.contactState,
+    };
+    AgentClient.store()
+      .dispatch('websocket/send', {
+        action: ACTIONS.SET_AGENT_STATE,
+        data: payload,
       })
       .then(() => Log.debug('agent state pushed'));
     client
@@ -172,8 +190,7 @@ export default class AgentClient extends Model {
 
   async heartbeat() {
     Log.info('pushing client heartbeat');
-    const wsStore = getModule(WebsocketStore, AgentClient.store());
-    await wsStore.send({
+    await AgentClient.store().dispatch('websocket/send', {
       action: ACTIONS.CLIENT_HEARTBEAT,
       data: {
         userId: this.userId,
