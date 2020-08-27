@@ -119,14 +119,11 @@ export const initConnect = ({
 };
 
 /**
- * Retrieves the initial connection (contact => agent) by contact id
- * if it exists.
- * @param contactId
- * @returns {null|void|connect.ConnectionType}
+ * Retrieves a contact instance by id if it exists.
+ * @param contactId - ID of contact to retrieve.
+ * @returns {null|connect.Contact}
  */
-export const getConnectionByContactId = (
-  contactId: string,
-): connect.Connection | null => {
+export const getContactById = (contactId: string): connect.Contact | null => {
   const agent: connect.Agent = new connect.Agent();
   const contacts: connect.Contact[] = agent.getContacts();
   if (_.isEmpty(contacts)) {
@@ -138,6 +135,20 @@ export const getConnectionByContactId = (
   if (!targContact) {
     return null;
   }
+  return targContact;
+};
+
+/**
+ * Retrieves the initial connection (contact => agent) by contact id
+ * if it exists.
+ * @param contactId
+ * @returns {null|void|connect.ConnectionType}
+ */
+export const getConnectionByContactId = (
+  contactId: string,
+): connect.Connection | null => {
+  const targContact = getContactById(contactId);
+  if (targContact === null) return null;
   const targConnection: void | connect.ConnectionType = targContact.getInitialConnection();
   return targConnection || null;
 };
