@@ -137,7 +137,7 @@ class ControllerStore extends VuexModule {
     if (!_.isNull(contacts)) {
       return { contactMetrics: contacts };
     }
-    return [];
+    return { contactMetrics: contacts };
   }
 
   @Mutation
@@ -180,9 +180,7 @@ class ControllerStore extends VuexModule {
           );
           recentCases = _.difference(recentCases, this.history.resolvedCases);
           this.setHistory({
-            history: {
-              resolvedCases: _.union(recentCases, this.history.resolvedCases),
-            },
+            resolvedCases: _.union(recentCases, this.history.resolvedCases),
           });
           Log.debug('found cases in history:', recentCases);
           await Promise.all(
