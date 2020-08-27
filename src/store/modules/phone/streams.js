@@ -133,6 +133,15 @@ class StreamsStore extends VuexModule {
   @Action
   async updateContact(newData: $Shape<ContactType>) {
     Log.debug('contact update:', newData);
+    if (_.isNil(newData.contactId)) {
+      const agent = await AgentClient.query()
+        .withAllRecursive()
+        .find(this.agentClientId);
+      if (!_.isEmpty(agent.contacts)) {
+        newData.contactId = agent.contacts[0].contactId;
+        Log.info('had to auto resolve contact id!');
+      }
+    }
     await AgentClient.update({
       data: {
         agentId: this.agentClientId,
