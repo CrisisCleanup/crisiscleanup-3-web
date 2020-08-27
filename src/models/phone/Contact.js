@@ -108,6 +108,13 @@ export default class Contact extends Model {
     Connection.insertOrUpdate({ data: initConnection }).then((c) => c);
   }
 
+  static beforeUpdate(model: ContactType): void {
+    const connectContact = ACS.getContactById(model.contactId);
+    if (connectContact) {
+      model.attributes = connectContact.getAttributes();
+    }
+  }
+
   static afterUpdate(model: Contact): void {
     const connection: Connection = Connection.query()
       .where('contactId', model.contactId)
