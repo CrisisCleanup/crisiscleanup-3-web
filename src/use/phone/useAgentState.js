@@ -3,13 +3,11 @@
  * useAgentState Hook
  */
 
-import AgentClient, {
-  AgentStates,
-  RouteStates,
-} from '@/models/phone/AgentClient';
+import AgentClient, { RouteStates } from '@/models/phone/AgentClient';
 import { computed, ref } from '@vue/composition-api';
 import { ConnectionStates } from '@/models/phone/Connection';
 import { unwrap } from '@/utils/wrap';
+import _ from 'lodash';
 
 /**
  * Utilize current agent state to compute UI components.
@@ -32,7 +30,7 @@ export default ({
   // UI friendly 'action' string to enact state change.
   const _stateAction = {
     // translation takes place in component, no $t here.
-    [AgentStates.OFFLINE]: '~~Start Taking Calls',
+    [RouteStates.NOT_ROUTABLE]: '~~Start Taking Calls',
     [RouteStates.ROUTABLE]: '~~Stop Taking Calls',
     [ConnectionStates.PAUSED]: '~~Ready for Next Call',
     NEED_TRAINING: '~~Start Training',
@@ -44,21 +42,22 @@ export default ({
       return {
         text: _stateAction.NEED_TRAINING,
         enabled: true,
-        statusText: _stateAction[AgentStates.OFFLINE],
+        statusText: _stateAction[RouteStates.NOT_ROUTABLE],
       };
     }
     if (!_agent.value) {
       return {
-        text: _stateAction[AgentStates.OFFLINE],
+        text: _stateAction[RouteStates.NOT_ROUTABLE],
         enabled: true,
-        statusText: _stateAction[AgentStates.OFFLINE],
+        statusText: _stateAction[RouteStates.NOT_ROUTABLE],
       };
     }
     return {
-      text:
-        _stateAction[
-          _agent.value.isOnline ? _agent.value.contactState : _agent.value.state
-        ],
+      text: _.get(
+        _stateAction,
+        _agent.value.contactState,
+        _stateAction[_agent.value.routeState],
+      ),
       enabled: _agent.value.isRoutable || _agent.value.isOnline === false,
       statusText: _agent.value.isOnline
         ? _agent.value.friendlyState
