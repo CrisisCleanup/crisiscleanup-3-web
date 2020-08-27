@@ -8,6 +8,8 @@ import VuexORM, { Database } from '@vuex-orm/core';
 import * as ACS from '@/services/connect.service';
 import _ from 'lodash';
 import WebsocketStore from '@/store/modules/websocket';
+import StreamsStore from '@/store/modules/phone/streams';
+import { getModule } from 'vuex-module-decorators';
 import AgentClient, { AgentStates, RouteStates } from '../AgentClient';
 import Connection, { ConnectionStates } from '../Connection';
 import Contact, {
@@ -18,19 +20,16 @@ import Contact, {
 
 jest.mock('@/services/connect.service.js');
 
-const database = new Database();
-database.register(AgentClient, {});
-database.register(Connection, {});
-database.register(Contact, {});
-Vue.use(Vuex);
-
-// eslint-disable-next-line no-unused-vars
-const mockStore = new Vuex.Store({
-  plugins: [VuexORM.install(database)],
-  modules: {
-    websocket: WebsocketStore,
-  },
-});
+const RawContactAttrs = {
+  [ContactAttributes.PDAS]: '1,2,3',
+  [ContactAttributes.WORKSITES]: '0',
+  [ContactAttributes.INCIDENT]: '500,',
+  [ContactAttributes.OUTBOUND_IDS]: '0,2 , 3',
+  [ContactAttributes.LOCALE]: 'en_US',
+  [ContactAttributes.CALLBACK_NUMBER]: '+19999999999',
+  [ContactAttributes.INBOUND_NUMBER]: '+19999999999',
+  [ContactAttributes.CALLER_ID]: '+19999999999',
+};
 
 const mockAgentData = ({ agentId, routeState, state, ...rest } = {}) => ({
   agentId: agentId || '123',
@@ -49,6 +48,27 @@ const mockContactData = ({ state, action } = {}) => ({
 });
 
 describe('phone models', () => {
+  let database;
+  let mockStore;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    database = new Database();
+    database.register(AgentClient, {});
+    database.register(Connection, {});
+    database.register(Contact, {});
+    Vue.use(Vuex);
+
+    // eslint-disable-next-line no-unused-vars
+    mockStore = new Vuex.Store({
+      plugins: [VuexORM.install(database)],
+      modules: {
+        websocket: WebsocketStore,
+        'phone.streams': StreamsStore,
+      },
+    });
+  });
+
   it('creates agent', async () => {
     await AgentClient.create({
       data: mockAgentData(),
@@ -188,17 +208,7 @@ describe('phone models', () => {
   });
 
   it('parse contact attributes correctly', () => {
-    const _attrs = {
-      [ContactAttributes.PDAS]: '1,2,3',
-      [ContactAttributes.WORKSITES]: '0',
-      [ContactAttributes.INCIDENT]: '500,',
-      [ContactAttributes.OUTBOUND_IDS]: '0,2 , 3',
-      [ContactAttributes.LOCALE]: 'en_US',
-      [ContactAttributes.CALLBACK_NUMBER]: '+19999999999',
-      [ContactAttributes.INBOUND_NUMBER]: '+19999999999',
-      [ContactAttributes.CALLER_ID]: '+19999999999',
-    };
-    const attrs = _.mapValues(_attrs, (v) => ({ name: '', value: v }));
+    const attrs = _.mapValues(RawContactAttrs, (v) => ({ name: '', value: v }));
     expect(Contact.parseAttributes(attrs)).toMatchInlineSnapshot(`
       Object {
         "CALLBACK_NUMBER": "+19999999999",
@@ -251,5 +261,151 @@ describe('phone models', () => {
     expect(ACS.setAgentState).toBeCalledWith(false);
     agent.toggleOnline(true);
     expect(ACS.setAgentState).toBeCalledWith(true);
+  });
+  it('should update contact and connection correctly', async () => {
+    const streamsStore = getModule(StreamsStore, mockStore);
+    streamsStore.setConnected(true);
+    streamsStore.setAgentId('123');
+    ACS.getConnectionByContactId.mockClear();
+    ACS.getConnectionByContactId.mockReturnValue(null);
+    await AgentClient.create({ data: mockAgentData() });
+    const attrs = _.mapValues(RawContactAttrs, (v) => ({ name: '', value: v }));
+    await streamsStore.updateContact({
+      contactId: 'contact-123',
+      state: ContactStates.QUEUED,
+      action: ContactActions.ENTER,
+      attributes: attrs,
+    });
+    const agent = await AgentClient.query().withAllRecursive().find('123');
+    expect(agent).toMatchInlineSnapshot(`
+      AgentClient {
+        "$id": "123",
+        "agentId": "123",
+        "connections": Array [
+          Connection {
+            "$id": "connection#contact-123",
+            "connectionId": "connection#contact-123",
+            "contactId": "contact-123",
+            "state": "pending",
+            "streamsConnectionId": "",
+          },
+        ],
+        "contacts": Array [
+          Contact {
+            "$id": "contact-123",
+            "action": "enter_ivr",
+            "agentId": "123",
+            "attributes": Object {
+              "CALLBACK_NUMBER": Object {
+                "name": "",
+                "value": "+19999999999",
+              },
+              "INCIDENT_ID": Object {
+                "name": "",
+                "value": "500,",
+              },
+              "InboundNumber": Object {
+                "name": "",
+                "value": "+19999999999",
+              },
+              "USER_LANGUAGE": Object {
+                "name": "",
+                "value": "en_US",
+              },
+              "callerID": Object {
+                "name": "",
+                "value": "+19999999999",
+              },
+              "ids": Object {
+                "name": "",
+                "value": "0,2 , 3",
+              },
+              "pdas": Object {
+                "name": "",
+                "value": "1,2,3",
+              },
+              "worksites": Object {
+                "name": "",
+                "value": "0",
+              },
+            },
+            "connection": Connection {
+              "$id": "connection#contact-123",
+              "connectionId": "connection#contact-123",
+              "contactId": "contact-123",
+              "state": "pending",
+              "streamsConnectionId": "",
+            },
+            "contactId": "contact-123",
+            "state": "queued",
+          },
+        ],
+        "routeState": "not_routable",
+        "state": "online",
+        "userId": 123,
+      }
+    `);
+    expect(agent.contactState).toBe(ConnectionStates.AGENT_PENDING);
+    expect(agent.isConnecting).toBe(true);
+    ACS.getConnectionByContactId.mockClear();
+  });
+  it('should update existing connection through contact', async () => {
+    const streamsStore = getModule(StreamsStore, mockStore);
+    streamsStore.setConnected(true);
+    streamsStore.setAgentId('123');
+    await AgentClient.create({ data: mockAgentData() });
+    ACS.getConnectionByContactId.mockClear();
+    ACS.getConnectionByContactId.mockReturnValue(null);
+    await streamsStore.updateContact({
+      contactId: 'contact-123',
+      state: ContactStates.QUEUED,
+      action: ContactActions.ENTER,
+    });
+    ACS.getConnectionByContactId.mockReturnValue({
+      getConnectionId: () => 'verified_connection123',
+    });
+    await streamsStore.updateContact({
+      contactId: 'contact-123',
+      state: ContactStates.ROUTED,
+      action: ContactActions.CONNECTING,
+    });
+    const newAgent = await AgentClient.query().withAllRecursive().find('123');
+    expect(newAgent).toMatchInlineSnapshot(`
+      AgentClient {
+        "$id": "123",
+        "agentId": "123",
+        "connections": Array [
+          Connection {
+            "$id": "connection#contact-123",
+            "connectionId": "connection#contact-123",
+            "contactId": "contact-123",
+            "state": "PendingBusy",
+            "streamsConnectionId": "verified_connection123",
+          },
+        ],
+        "contacts": Array [
+          Contact {
+            "$id": "contact-123",
+            "action": "connecting",
+            "agentId": "123",
+            "attributes": null,
+            "connection": Connection {
+              "$id": "connection#contact-123",
+              "connectionId": "connection#contact-123",
+              "contactId": "contact-123",
+              "state": "PendingBusy",
+              "streamsConnectionId": "verified_connection123",
+            },
+            "contactId": "contact-123",
+            "state": "routed",
+          },
+        ],
+        "routeState": "not_routable",
+        "state": "online",
+        "userId": 123,
+      }
+    `);
+    expect(newAgent.contactState).toBe(ConnectionStates.PENDING_CALL);
+    expect(newAgent.routeState).toBe(RouteStates.NOT_ROUTABLE);
   });
 });
