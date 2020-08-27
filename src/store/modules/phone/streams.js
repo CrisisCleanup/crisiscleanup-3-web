@@ -7,10 +7,10 @@
 import _ from 'lodash';
 import {
   Action,
+  config,
   Module,
   Mutation,
   VuexModule,
-  config,
 } from 'vuex-module-decorators';
 import type { AuthState } from '@/store/modules/phone/types';
 import * as ACS from '@/services/connect.service';
@@ -31,8 +31,10 @@ import AgentClient, {
   AgentStates,
   RouteStates,
 } from '@/models/phone/AgentClient';
-import Contact, { ContactActions, ContactStates } from '@/models/phone/Contact';
+import { ContactActions, ContactStates } from '@/models/phone/Contact';
+
 config.rawError = true;
+
 /**
  * Enum of different Connect authentication states.
  * @readonly
@@ -131,7 +133,13 @@ class StreamsStore extends VuexModule {
   @Action
   async updateContact(newData: $Shape<ContactType>) {
     Log.debug('contact update:', newData);
-    await Contact.insertOrUpdate({ data: newData });
+    await AgentClient.update({
+      data: {
+        agentId: this.agentClientId,
+        contacts: [newData],
+      },
+      insertOrUpdate: ['phone/contact'],
+    });
   }
 
   @Action
