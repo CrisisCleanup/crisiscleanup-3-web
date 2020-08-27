@@ -40,9 +40,7 @@ export default {
         {
           name: 'users',
           key: 'user_management',
-          isActive:
-            this.$can('app_stage.development') ||
-            this.$can('app_stage.staging'),
+          isActive: true,
         },
         {
           name: 'teams',

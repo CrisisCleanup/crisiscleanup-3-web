@@ -97,10 +97,7 @@
             class="p-3 px-4 border-b cursor-pointer"
             :class="{ 'border-l-4 border-l-black': currentSection === 'teams' }"
             @click="currentSection = 'teams'"
-            v-if="
-              teams.length &&
-              ($can('app_stage.development') || $can('app_stage.staging'))
-            "
+            v-if="teams.length"
           >
             {{ $t('worksiteFilters.teams') }}
             <span
@@ -126,10 +123,7 @@
                 {{ $t('worksiteFilters.within_my_org_response_area') }}
               </base-checkbox>
             </div>
-            <div
-              class="claim-status mb-2"
-              v-if="($can('app_stage.development') || $can('app_stage.staging'))"
-            >
+            <div class="claim-status mb-2">
               <div class="my-1 text-base">
                 {{ $t('worksiteFilters.team') }}
               </div>

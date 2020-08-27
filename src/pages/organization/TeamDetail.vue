@@ -175,8 +175,8 @@
           <base-button
             class="my-1 text-primary-dark"
             type="link"
-            :text="$t('teams.assign_cases')"
-            :alt="$t('teams.assign_cases')"
+            :text="$t('~~+ Assign Claimed Cases')"
+            :alt="$t('~~+ Assign Claimed Cases')"
             :action="
               () => {
                 showAddCasesModal = true;
