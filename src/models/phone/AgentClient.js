@@ -12,7 +12,7 @@ import type {
   ConnectionType,
   RouteState,
 } from '@/models/phone/types';
-import Contact from '@/models/phone/Contact';
+import Contact, { ContactStates } from '@/models/phone/Contact';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import _ from 'lodash';
 import Logger from '@/utils/log';
@@ -95,6 +95,16 @@ export default class AgentClient extends Model {
       }).then((a) => a);
       return;
     }
+    if (!_.isEmpty(client.contacts)) {
+      const contact = client.contacts[0];
+      if (
+        contact.state === ContactStates.ROUTED &&
+        contact.connection.state === ConnectionStates.AGENT_PENDING
+      ) {
+        Log.info('rechecking if contact is available...');
+        Contact.afterUpdate(contact);
+      }
+    }
     Log.info(`Agent => ${client.contactState}`);
     Log.info(client);
     const payload = {
@@ -103,12 +113,14 @@ export default class AgentClient extends Model {
       routeState: client.routeState,
       contactState: client.contactState,
     };
-    AgentClient.store()
-      .dispatch('websocket/send', {
-        action: ACTIONS.SET_AGENT_STATE,
-        data: payload,
-      })
-      .then(() => Log.debug('agent state pushed'));
+    if (![ConnectionStates.AGENT_PENDING].includes(client.contactState)) {
+      AgentClient.store()
+        .dispatch('websocket/send', {
+          action: ACTIONS.SET_AGENT_STATE,
+          data: payload,
+        })
+        .then(() => Log.debug('agent state pushed'));
+    }
     client
       .heartbeat()
       .then(() => Log.debug('client heartbeat triggered by update'));
