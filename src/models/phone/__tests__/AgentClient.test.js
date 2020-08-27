@@ -445,4 +445,51 @@ describe('phone models', () => {
     `);
     expect(newAgent.contactState).toBe(ConnectionStates.BUSY);
   });
+  it('contact should auto resolve attributes if connect is ready', async () => {
+    const streamsStore = getModule(StreamsStore, mockStore);
+    streamsStore.setConnected(true);
+    streamsStore.setAgentId('123');
+    await AgentClient.create({ data: mockAgentData() });
+    ACS.getConnectionByContactId.mockClear();
+    ACS.getConnectionByContactId.mockReturnValue(null);
+    ACS.getContactById.mockReturnValue({
+      getAttributes: () =>
+        _.mapValues(RawContactAttrs, (v) => ({ name: '', value: v })),
+    });
+    await streamsStore.updateContact({
+      contactId: 'contact-123',
+      state: ContactStates.QUEUED,
+      action: ContactActions.ENTER,
+    });
+    await streamsStore.updateContact({
+      contactId: 'contact-123',
+      state: ContactStates.ROUTED,
+      action: ContactActions.CONNECTED,
+    });
+    const agent = await AgentClient.query().withAllRecursive().first();
+    expect(agent.contacts[0].contactAttributes).toMatchInlineSnapshot(`
+      Object {
+        "CALLBACK_NUMBER": "+19999999999",
+        "INCIDENT_ID": Array [
+          500,
+        ],
+        "InboundNumber": "+19999999999",
+        "USER_LANGUAGE": "en_US",
+        "callerID": "+19999999999",
+        "ids": Array [
+          0,
+          2,
+          3,
+        ],
+        "pdas": Array [
+          1,
+          2,
+          3,
+        ],
+        "worksites": Array [
+          0,
+        ],
+      }
+    `);
+  });
 });
