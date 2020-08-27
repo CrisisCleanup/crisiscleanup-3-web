@@ -91,6 +91,11 @@ export default {
       _users[a.user.id] = { loading: true, result: { value: '' } };
       return a;
     });
+    const { currentUser } = useUser();
+    _users[currentUser.value.id] = {
+      loading: false,
+      result: currentUser.value.profilePictureUrl,
+    };
     const userImages = ref(_users);
 
     watch(
@@ -100,7 +105,7 @@ export default {
         agentRankings.value.map((agent) => {
           if (!Object.keys(userImages).includes(agent.user.id)) {
             _newUsers[agent.user.id] = usePromise(() =>
-              User.fetchOrFindId(agent.user.id).then(
+              User.fetchOrFindId(agent.user.id, false).then(
                 (u) => u.profilePictureUrl,
               ),
             );
@@ -112,7 +117,6 @@ export default {
     );
 
     return {
-      ...useUser(),
       agentRankings,
       userImages,
       getStateFriendlyName(state) {
