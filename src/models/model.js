@@ -39,21 +39,23 @@ export default class CCUModel<T> extends Model {
   /**
    * Fetch and store item by id.
    * @param id - item id.
+   * @param save - save item to database.
    * @returns {T}
    */
-  static fetchById(id: number): T {
-    return this.api().get(`/${this.entity}/${id}`);
+  static fetchById(id: number, save: boolean = true): T {
+    return this.api().get(`/${this.entity}/${id}`, { save });
   }
 
   /**
    * Returns item by Id, ensuring it is in the local database.
    * @param id - ID of item to fetch.
+   * @param save - save item to database.
    * @returns {T}
    */
-  static async fetchOrFindId(id: number): Promise<T> {
+  static async fetchOrFindId(id: number, save: boolean = true): Promise<T> {
     const exists = await this.query().whereId(id).exists();
     if (!exists) {
-      await this.fetchById(id);
+      await this.fetchById(id, save);
     }
     return this.find(id);
   }
