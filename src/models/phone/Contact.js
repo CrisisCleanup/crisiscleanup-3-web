@@ -100,7 +100,7 @@ export default class Contact extends Model {
       contactId: model.contactId,
     };
     Log.debug('Creating initial connection for contact:', initConnection);
-    Connection.insertOrUpdate({ data: initConnection });
+    Connection.insertOrUpdate({ data: initConnection }).then((c) => c);
   }
 
   static afterUpdate(model: Contact): void {
@@ -108,11 +108,7 @@ export default class Contact extends Model {
       .where('contactId', model.contactId)
       .first();
     const voiceConnection = ACS.getConnectionByContactId(model.contactId);
-    if (
-      voiceConnection !== null &&
-      connection.connectionId !== voiceConnection.getConnectionId() &&
-      model.state === ContactStates.ROUTED
-    ) {
+    if (voiceConnection !== null && model.state === ContactStates.ROUTED) {
       // This occurs post verification, since we now have a 'real' connection.
       Log.info('Agent verified connection, updating!');
       Log.info(
@@ -126,7 +122,7 @@ export default class Contact extends Model {
           contactId: model.contactId,
           state: model.initConnectionState,
         }: ConnectionType),
-      });
+      }).then((c) => Log.debug('connection updated => ', c));
     }
   }
 
@@ -167,5 +163,9 @@ export default class Contact extends Model {
       [ContactStates.ROUTED]: ConnectionStates.PENDING_CALL,
     };
     return stateMap[this.state];
+  }
+
+  get contactAttributes(): ContactAttributesType {
+    return Contact.parseAttributes(this.attributes);
   }
 }
