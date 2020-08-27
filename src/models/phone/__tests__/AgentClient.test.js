@@ -262,7 +262,7 @@ describe('phone models', () => {
     agent.toggleOnline(true);
     expect(ACS.setAgentState).toBeCalledWith(true);
   });
-  it('should update contact and connection correctly', async () => {
+  it('should create contact and connection correctly', async () => {
     const streamsStore = getModule(StreamsStore, mockStore);
     streamsStore.setConnected(true);
     streamsStore.setAgentId('123');
@@ -407,5 +407,42 @@ describe('phone models', () => {
     `);
     expect(newAgent.contactState).toBe(ConnectionStates.PENDING_CALL);
     expect(newAgent.routeState).toBe(RouteStates.NOT_ROUTABLE);
+  });
+  it('should update connection state based on contact action', async () => {
+    const streamsStore = getModule(StreamsStore, mockStore);
+    streamsStore.setConnected(true);
+    streamsStore.setAgentId('123');
+    await AgentClient.create({ data: mockAgentData() });
+    ACS.getConnectionByContactId.mockClear();
+    ACS.getConnectionByContactId.mockReturnValue(null);
+    await streamsStore.updateContact({
+      contactId: 'contact-123',
+      state: ContactStates.QUEUED,
+      action: ContactActions.ENTER,
+    });
+    ACS.getConnectionByContactId.mockReturnValue({
+      getConnectionId: () => 'verified_connection123',
+    });
+    await streamsStore.updateContact({
+      contactId: 'contact-123',
+      state: ContactStates.ROUTED,
+      action: ContactActions.CONNECTING,
+    });
+    await streamsStore.updateContact({
+      contactId: 'contact-123',
+      state: ContactStates.ROUTED,
+      action: ContactActions.CONNECTED,
+    });
+    const newAgent = await AgentClient.query().withAllRecursive().find('123');
+    expect(newAgent.connections[0]).toMatchInlineSnapshot(`
+      Connection {
+        "$id": "connection#contact-123",
+        "connectionId": "connection#contact-123",
+        "contactId": "contact-123",
+        "state": "Busy",
+        "streamsConnectionId": "verified_connection123",
+      }
+    `);
+    expect(newAgent.contactState).toBe(ConnectionStates.BUSY);
   });
 });
