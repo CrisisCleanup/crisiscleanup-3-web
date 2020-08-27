@@ -20,6 +20,10 @@ export default {
         return [];
       },
     },
+    polygon: {
+      type: null,
+      default: null,
+    },
   },
   data() {
     return {
@@ -31,6 +35,10 @@ export default {
   },
   async mounted() {
     await this.loadMap();
+    if (this.polygon) {
+      this.polygon.addTo(this.map);
+      this.map.fitBounds(this.polygon.getBounds());
+    }
   },
   methods: {
     async loadMap() {

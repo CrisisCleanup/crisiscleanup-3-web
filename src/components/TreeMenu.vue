@@ -16,7 +16,7 @@
         <Avatar
           :initials="data.first_name"
           :url="profilePictureUrl"
-          class="mr-2"
+          class="mb-4 mr-2"
         />
         {{ data.first_name }} {{ data.last_name }}
       </div>

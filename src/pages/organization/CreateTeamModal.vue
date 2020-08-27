@@ -28,12 +28,12 @@
           @start="drag = true"
           @end="drag = false"
           handle=".handle"
-          class="h-24 overflow-auto w-3/4"
+          class="h-32 overflow-scroll w-3/4 border"
         >
           <div
             v-for="user in team.users"
             :key="user.id"
-            class="border-t last:border-b pt-2 bg-white"
+            class="border-b pt-2 bg-white"
             style="display: grid; grid-template-columns: 25px max-content 1fr;"
           >
             <div class="handle" style="width: 15px; margin-top: 2px;">
@@ -71,12 +71,12 @@
           @start="drag = true"
           @end="drag = false"
           handle=".handle"
-          class="h-24 overflow-auto w-3/4"
+          class="h-32 overflow-scroll w-3/4 border"
         >
           <div
             v-for="worksite in teamWorksites"
             :key="worksite.id"
-            class="border-t last:border-b py-3 px-3 bg-white"
+            class="border-b py-3 px-3 bg-white"
             style="
               display: grid;
               grid-template-columns: 25px max-content 1fr 1fr 1fr;
@@ -168,7 +168,7 @@
             @start="drag = true"
             @end="drag = false"
             handle=".handle"
-            class="h-96 overflow-auto"
+            class="h-96 overflow-scroll"
           >
             <div
               v-for="user in usersList"
@@ -214,7 +214,7 @@
             @start="drag = true"
             @end="drag = false"
             handle=".handle"
-            class="h-96 overflow-auto"
+            class="h-96 overflow-scroll"
           >
             <div
               v-for="worksite in worksites"
