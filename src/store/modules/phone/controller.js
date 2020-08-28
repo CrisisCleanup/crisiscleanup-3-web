@@ -5,12 +5,12 @@
  */
 
 import {
-  VuexModule,
   Action,
-  Module,
-  MutationAction,
   getModule,
+  Module,
   Mutation,
+  MutationAction,
+  VuexModule,
 } from 'vuex-module-decorators';
 import axios from 'axios';
 import { PhoneApi } from '@/utils/api';
@@ -29,7 +29,6 @@ import _ from 'lodash';
 import Agent from '@/models/Agent';
 import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
-import AgentClient from '@/models/phone/AgentClient';
 import Contact from '@/models/phone/Contact';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneInbound from '@/models/PhoneInbound';
@@ -150,11 +149,9 @@ class ControllerStore extends VuexModule {
   }
 
   get activeCaseType() {
-    return this.activeCaseId === -1
-      ? 'new'
-      : this.currentCase instanceof Worksite
-      ? Worksite
-      : Pda;
+    const isNew = _.toNumber(this.activeCaseId) === -1;
+    if (isNew) return 'new';
+    return this.currentCase instanceof Worksite ? Worksite : Pda;
   }
 
   get activeActionTab() {
@@ -201,6 +198,35 @@ class ControllerStore extends VuexModule {
     this.updateStatus({ modified: [newCase] });
     this.setCase(newCase);
   }
+
+  @Action
+  async closeContact({ contact }: { contact: Contact }) {
+    if (!this.status.statusId) {
+      throw new Error('~~You must set a call Status!');
+    }
+    await this.updateStatus({ modified: [this.currentCase] });
+    const { statusId, notes } = this.status;
+    const callStatus = {
+      statusId,
+      notes,
+      agentId: contact.agentId,
+      cases: this.modifiedCaseIds,
+      dnisMeta: {
+        caller_name: this.currentCase ? this.currentCase.name : 'Unknown',
+        cases: this.modifiedCaseIds.join(', '),
+      },
+    };
+    if (contact.outbound) {
+      Log.info('updating outbound status with:', callStatus);
+      await PhoneOutbound.api().updateStatus(contact.outbound.id, callStatus);
+    }
+    if (contact.inbound) {
+      Log.info('updating inbound status with:', callStatus);
+      await PhoneInbound.api().updateStatus(contact.inbound.id, callStatus);
+    }
+    await contact.disconnect();
+  }
+
   @Mutation
   setHistory(newHistory = {}) {
     this.history = { ...this.history, ...newHistory };
