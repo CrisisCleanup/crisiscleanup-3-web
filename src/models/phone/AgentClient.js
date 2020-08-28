@@ -127,6 +127,9 @@ export default class AgentClient extends Model {
   }
 
   static isStateOnline(state: AgentState): AgentState {
+    if (Object.values(ConnectionStates).includes(state)) {
+      return AgentStates.ONLINE;
+    }
     return [AgentStates.ONLINE, RouteStates.ROUTABLE].includes(state)
       ? AgentStates.ONLINE
       : AgentStates.OFFLINE;
