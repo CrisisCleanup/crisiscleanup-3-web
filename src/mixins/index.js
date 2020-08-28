@@ -1,4 +1,3 @@
-import { AgentMixin } from './agent';
 import { DialogsMixin } from './dialogs';
 import { IconsMixin } from './enums';
 import IncidentMixin from './incident';
@@ -15,7 +14,6 @@ export {
   UserMixin,
   LangMixin,
   IconsMixin,
-  AgentMixin,
   WorksitesMixin,
   LangOverrideMixin,
   LocalStorageMixin,
