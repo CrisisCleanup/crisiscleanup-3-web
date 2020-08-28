@@ -179,6 +179,7 @@ export default class Contact extends Model {
     if (connectContact) {
       model.attributes = connectContact.getAttributes();
     }
+    return true;
   }
 
   static beforeDelete(model: Contact): void {
@@ -402,4 +403,25 @@ export default class Contact extends Model {
     return number.formatNational();
   }
 
+  async addCases(cases: CaseType[]) {
+    const wrksites = cases.filter((c) => c instanceof Worksite);
+    const pdas = cases.filter((c) => c instanceof Pda);
+    Contact.commit((state) => {
+      state.worksites = _.unionBy(state.worksites, wrksites, 'id');
+      state.pdas = _.unionBy(state.pdas, pdas, 'id');
+    });
+  }
+
+  async disconnect() {
+    if (this.action === ContactActions.CONNECTED) {
+      Log.debug('agent still in call, hanging up...');
+      const connection = ACS.getConnectionByContactId(this.contactId);
+      if (connection) {
+        connection.destroy({
+          success: () => Log.info('connection has been destroyed!'),
+          failure: (e) => Log.error('failed to destroy contact!', e),
+        });
+      }
+    }
+  }
 }
