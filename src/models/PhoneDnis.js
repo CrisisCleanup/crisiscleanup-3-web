@@ -1,7 +1,8 @@
-import { Model } from '@vuex-orm/core';
+// @flow
 import moment from 'moment';
+import CCUModel from '@/models/model';
 
-export default class PhoneDnis extends Model {
+export default class PhoneDnis extends CCUModel {
   static entity = 'phone_dnis';
 
   static fields() {
@@ -16,6 +17,15 @@ export default class PhoneDnis extends Model {
       last_status: this.attr(),
       meta: this.attr(),
     };
+  }
+
+  static async fetchByDnis(dnis: number) {
+    return this.api().get(`${this.entity}`, {
+      params: {
+        dnis,
+      },
+      dataKey: 'results',
+    });
   }
 
   get totalCalls() {

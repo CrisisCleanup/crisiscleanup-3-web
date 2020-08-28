@@ -3,8 +3,8 @@
  * Language Model
  */
 
-import { Model } from '@vuex-orm/core';
 import detectBrowserLanguage from 'detect-browser-language';
+import CCUModel from '@/models/model';
 
 export type LanguageType = {|
   id: number,
@@ -19,7 +19,7 @@ type LanguageTranslationResponse = {|
   target_subtag: string,
 |};
 
-export default class Language extends Model {
+export default class Language extends CCUModel {
   static entity = 'languages';
 
   static state() {

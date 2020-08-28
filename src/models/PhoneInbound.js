@@ -1,7 +1,7 @@
-import { Model } from '@vuex-orm/core';
 import { isNil, omitBy } from 'lodash';
+import CCUModel from '@/models/model';
 
-export default class PhoneInbound extends Model {
+export default class PhoneInbound extends CCUModel {
   static entity = 'phone_inbound';
 
   static fields() {
