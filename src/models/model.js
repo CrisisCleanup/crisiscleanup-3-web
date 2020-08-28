@@ -37,27 +37,47 @@ export default class CCUModel<T> extends Model {
   static entity = '';
 
   /**
-   * Fetch and store item by id.
-   * @param id - item id.
+   * Fetch and store item(s) by id.
+   * @param id - item id or list of item ids.
    * @param save - save item to database.
    * @returns {T}
    */
-  static fetchById(id: number, save: boolean = true): T {
-    return this.api().get(`/${this.entity}/${id}`, { save });
+  static fetchById(id: number | number[], save: boolean = true): T {
+    if (typeof id === 'number') {
+      return this.api().get(`/${this.entity}/${id}`, { save });
+    }
+    return this.api().get(`/${this.entity}`, {
+      params: {
+        id__in: id.join(','),
+      },
+      dataKey: 'results',
+      save,
+    });
   }
 
   /**
-   * Returns item by Id, ensuring it is in the local database.
-   * @param id - ID of item to fetch.
+   * Returns item(s) by Id, ensuring it is in the local database.
+   * @param id - ID of item(s) to fetch.
    * @param save - save item to database.
    * @returns {T}
    */
-  static async fetchOrFindId(id: number, save: boolean = true): Promise<T> {
-    const exists = await this.query().whereId(id).exists();
-    if (!exists) {
-      await this.fetchById(id, save);
+  static async fetchOrFindId(
+    id: number | number[],
+    save: boolean = true,
+  ): Promise<T> {
+    const _ids = _.castArray(id);
+    const ids = _ids.map((_id) => this.fields().id.make(_id));
+    const resolvedIds = await ids.filter((itemId) =>
+      this.query().whereId(itemId).exists(),
+    );
+    const unresolved = _.difference(ids, resolvedIds);
+    if (!_.isEmpty(unresolved)) {
+      await this.fetchById(unresolved, save);
     }
-    return this.find(id);
+    if (!_.isArray(id)) {
+      return this.find(id);
+    }
+    return ids.map((itemId) => this.find(itemId));
   }
 
   /**
