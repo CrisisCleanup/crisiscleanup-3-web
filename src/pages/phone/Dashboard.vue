@@ -43,7 +43,6 @@
 
 <script>
 import User from '@/models/User';
-import { mapActions, mapGetters } from 'vuex';
 import Loader from '@/components/Loader.vue';
 import Leaderboard from '@/components/phone/Widgets/Leaderboard.vue';
 import PhoneLayout from '@/layouts/Phone.vue';
@@ -75,25 +74,11 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
-    ...mapGetters('phone', [
-      'connectReady',
-      'agentState',
-      'contactState',
-      'callIncoming',
-      'contactMetrics',
-    ]),
   },
   methods: {
-    ...mapActions('phone', ['getRealtimeMetrics']),
     async onTrainingComplete() {
-      await this.loadTrainingData();
       this.$emit('phone:showTrainingModal', false);
     },
-  },
-  async mounted() {
-    this.loading = true;
-    await this.getRealtimeMetrics();
-    this.loading = false;
   },
 };
 </script>
