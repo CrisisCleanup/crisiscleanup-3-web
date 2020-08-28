@@ -283,6 +283,9 @@ describe('phone models', () => {
     agent = await AgentClient.find('123');
     expect(agent.isOnline).toBe(false);
     expect(agent.isRoutable).toBe(false);
+    expect(AgentClient.isStateOnline(ConnectionStates.BUSY)).toBe(
+      AgentStates.ONLINE,
+    );
   });
   it('should auto set routable state on state update', async () => {
     await AgentClient.create({ data: mockAgentData() });
