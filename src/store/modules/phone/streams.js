@@ -140,6 +140,23 @@ class StreamsStore extends VuexModule {
       const agent = await AgentClient.query()
         .withAllRecursive()
         .find(this.agentClientId);
+      if (_.isNil(agent)) {
+        const conAgent = new connect.Agent();
+        if (!conAgent) {
+          Log.info(
+            'tried to update contact w/o any agents! retrying in 3 seconds...',
+          );
+          return _.delay(() => this.updateContact(newData), 3000);
+        }
+        const contact = _.first(conAgent.getContacts());
+        if (!contact) {
+          Log.info(
+            'tried to update contact w/o any contacts! retrying in 3 seconds...',
+          );
+          return _.delay(() => this.updateContact(newData), 3000);
+        }
+        return _.delay(() => this.updateContact(newData), 3000);
+      }
       if (!_.isEmpty(agent.contacts)) {
         newData.contactId = agent.contacts[0].contactId;
         Log.info('had to auto resolve contact id!');
@@ -152,6 +169,7 @@ class StreamsStore extends VuexModule {
       },
       insertOrUpdate: ['phone/contact'],
     });
+    return newData;
   }
 
   @Action
@@ -259,13 +277,26 @@ class StreamsStore extends VuexModule {
           Log.info('Contact => CONNECTING');
         });
       },
-      [ACS.ContactEvents.ON_CONNECTED]: () => {
-        this.updateContact({
+      [ACS.ContactEvents.ON_CONNECTED]: (contact: connect.Contact) => {
+        const payload = {
           action: ContactActions.CONNECTED,
           state: ContactStates.ROUTED,
-        }).then(() => {
-          Log.info('Contact => CONNECTED');
-        });
+          contactId: contact.getInitialContactId(),
+        };
+        if (this.agentClientId === null) {
+          _.delay(
+            (data) =>
+              this.updateContact(data).then(() =>
+                Log.info('Contact => CONNECTED'),
+              ),
+            3000,
+            payload,
+          );
+        } else {
+          this.updateContact(payload).then(() => {
+            Log.info('Contact => CONNECTED');
+          });
+        }
       },
       [ACS.ContactEvents.ON_ENDED]: () => {
         this.updateContact({
