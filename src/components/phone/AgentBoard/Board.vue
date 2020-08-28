@@ -4,10 +4,10 @@
       <board-nav :routes="headerNav" :lang="lang" :active-key="activeKey" />
     </div>
     <div class="grid--callinfo">
-      <call-info :lang="lang" />
+      <call-info v-bind="$attrs" :lang="lang" />
     </div>
     <div class="grid--status">
-      <board-status :lang="lang" />
+      <board-status v-bind="$attrs" :lang="lang" />
     </div>
   </div>
 </template>

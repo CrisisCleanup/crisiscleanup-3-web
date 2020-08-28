@@ -13,29 +13,31 @@
               }}</base-text>
             </div>
             <div class="contact-caller">
-              <ccu-icon with-text size="xs" :type="icons.phone_user">
+              <ccu-icon with-text size="xs" :type="enums.icons.phone_user">
                 <base-text variant="bodysm">{{ c.name }}</base-text>
               </ccu-icon>
-              <ccu-icon with-text size="xs" :type="icons.earth_globe">
+              <ccu-icon with-text size="xs" :type="enums.icons.earth_globe">
                 <base-text variant="bodysm">{{ c.locale }}</base-text>
               </ccu-icon>
             </div>
           </div>
           <div class="contact--actions">
             <div class="timer">
-              <base-text :weight="600" variant="h2">{{ c.time }}</base-text>
+              <base-text :weight="600" variant="h2">{{
+                formatDuration(callDuration)
+              }}</base-text>
               <base-text variant="bodysm">{{ lang.calltime }}</base-text>
             </div>
             <div class="buttons">
               <ccu-icon
                 @click.native="() => setActionTab('resources')"
                 size="xl"
-                :type="icons.phone_contact_add"
+                :type="enums.icons.phone_contact_add"
               />
               <ccu-icon
-                @click.native="() => endCurrentCall({ external: c.external })"
+                @click.native="() => closeContact(currentContact)"
                 size="xl"
-                :type="icons.phone_hangup"
+                :type="enums.icons.phone_hangup"
               />
             </div>
           </div>
@@ -43,9 +45,9 @@
       </div>
       <div v-if="activeCalls.length >= 2" class="confactions">
         <ccu-icon
-          :type="icons.phone_exit"
+          :type="enums.icons.phone_exit"
           size="large"
-          @click.native="endAllCalls"
+          @click.native="() => closeContact(currentContact)"
         />
       </div>
     </div>
@@ -55,21 +57,17 @@
         :per-page-custom="[
           [768, 3],
           [1024, 3],
-          [1400, 4],
+          [1400, 3],
         ]"
         class="carousel"
       >
         <slide class="case" v-for="c in caseCards" :key="c.id">
           <case-card
+            v-bind="c"
             :key="c.caseNumber"
-            :case-number="c.caseNumber"
-            :state="c.state"
-            :worktype="c.worktype"
-            :address="c.address"
             :tile="true"
-            :active="c.id === currentCaseId"
-            :type="c.type"
-            @click.native="setActive(c.id, c.type)"
+            :active="c.id === activeCaseId"
+            @click.native="setActiveCase(c.id, c.type)"
           />
         </slide>
       </carousel>
@@ -78,82 +76,62 @@
 </template>
 
 <script>
+//@flow
+
 import VueTypes from 'vue-types';
-import { AgentMixin, IconsMixin } from '@/mixins';
-import { mapActions, mapGetters } from 'vuex';
-import { EVENTS as CCEvent } from '@/services/acs.service';
-import { mixin as VueTimers } from 'vue-timers';
-import { EventBus } from '@/event-bus';
 import CaseCard from '@/components/cards/Case.vue';
 import { Carousel, Slide } from 'vue-carousel';
+import useEnums from '@/use/useEnums';
+import useContact from '@/use/phone/useContact';
+import { onMounted, computed } from '@vue/composition-api';
+import useController from '@/use/phone/useController';
+import useCaseCards from '@/use/worksites/useCaseCards';
+import useAgent from '@/use/phone/useAgent';
+import { useStore } from '@u3u/vue-hooks';
 
 export default {
   name: 'BoardCallInfo',
-  mixins: [IconsMixin, VueTimers, AgentMixin],
   components: { CaseCard, Carousel, Slide },
-  timers: {
-    syncCallDuration: { time: 1000, autostart: true, repeat: true },
-  },
   props: {
     lang: VueTypes.objectOf(VueTypes.any),
   },
-  methods: {
-    ...mapActions('phone', [
-      'syncCallDuration',
-      'setCurrentCase',
-      'setActionTab',
-    ]),
-    async setActive(id, type) {
-      return this.setCurrentCase({ id, type });
-    },
-    formatTimer(millis) {
-      return this.$moment.duration(millis, 'ms').format('h:mm:ss');
-    },
-    async endAllCalls() {
-      await this.endCurrentCall();
-      await this.endCurrentCall({ external: true });
-    },
-  },
-  computed: {
-    ...mapGetters('phone', [
-      'callerId',
-      'callDuration',
-      'extCallDuration',
-      'currentCase',
-    ]),
-    activeCalls() {
-      const calls = [];
-      calls.push({
-        name: this.callerName,
-        locale: this.callerLocale.name_t.split(' ')[0],
-        time: this.formatTimer(this.callDuration),
-        mobile: this.callerFormattedNumber,
-        external: false,
-      });
-      if (this.currentExternalResource) {
-        calls.push({
-          name: this.currentExternalResource.name_t,
-          locale: this.$t('~~English'),
-          time: this.formatTimer(this.extCallDuration),
-          mobile: this.extResourceFormattedNumber,
-          external: true,
-        });
+  setup(props, context) {
+    const store = useStore();
+    const { agent } = useAgent();
+    const formatDuration = (duration) =>
+      context.root.$moment.duration(duration, 'ms').format('h:mm:ss');
+
+    const { syncDuration, callState, ...contact } = useContact({ agent });
+    const cases = computed(() => [
+      ...callState.pdas.value,
+      ...callState.worksites.value,
+    ]);
+    const { caseCards } = useCaseCards({ cases, addNew: true });
+
+    onMounted(() => syncDuration.start());
+
+    const { actions, getters } = useController();
+
+    const setActiveCase = async (caseId: number, type: string) => {
+      if (type === 'new') {
+        await actions.setCase(null);
+        return;
       }
-      return calls;
-    },
-  },
-  async mounted() {
-    await this.createCaseCards();
-  },
-  created() {
-    EventBus.$on(CCEvent.PAUSED, () => {
-      this.$timer.stop('syncCallDuration');
-    });
-    EventBus.$on(CCEvent.CASE_SAVED, (worksite) => {
-      this.createCaseCards().then(() => {
-        this.setCurrentCase({ id: worksite.id, type: 'worksite' });
-      });
-    });
+      const model = await store.value.$db().model(type);
+      const caseItem = await model.fetchOrFindId(caseId);
+      await actions.setCase(caseItem);
+    };
+
+    return {
+      ...contact,
+      ...useEnums(),
+      ...actions,
+      ...getters,
+      callState,
+      formatDuration,
+      caseCards,
+      setActiveCase,
+    };
   },
 };
 </script>
