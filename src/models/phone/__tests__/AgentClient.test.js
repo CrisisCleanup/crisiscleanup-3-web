@@ -234,6 +234,43 @@ describe('phone models', () => {
       }
     `);
   });
+  it('should parse raw and normal contact attributes correctly', async () => {
+    const _attrs = _.mapValues(RawContactAttrs, (v) => ({
+      name: '',
+      value: v,
+    }));
+    const attrs = {
+      ..._attrs,
+      [ContactAttributes.LOCALE]: 'en_US',
+      [ContactAttributes.WORKSITES]: '1,2,3',
+    };
+    expect(Contact.parseAttributes(attrs)).toMatchInlineSnapshot(`
+      Object {
+        "CALLBACK_NUMBER": "+19999999999",
+        "INCIDENT_ID": Array [
+          500,
+        ],
+        "InboundNumber": "+19999999999",
+        "USER_LANGUAGE": "en_US",
+        "callerID": "+19999999999",
+        "ids": Array [
+          0,
+          2,
+          3,
+        ],
+        "pdas": Array [
+          1,
+          2,
+          3,
+        ],
+        "worksites": Array [
+          1,
+          2,
+          3,
+        ],
+      }
+    `);
+  });
   it('should return online/routable status correctly', async () => {
     await AgentClient.create({ data: mockAgentData() });
     let agent = await AgentClient.find('123');
