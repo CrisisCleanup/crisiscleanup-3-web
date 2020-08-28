@@ -37,7 +37,7 @@ export default {
     worktype: VueTypes.string,
     svg: VueTypes.string,
     active: VueTypes.bool.def(false),
-    type: VueTypes.string,
+    type: VueTypes.any,
   },
 };
 </script>
