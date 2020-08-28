@@ -87,7 +87,10 @@ class StreamsStore extends VuexModule {
   @Action
   async createClient(agentInstance?: connect.Agent) {
     const agent = agentInstance || new connect.Agent();
-    const agentState = agent.getState().type;
+    const agentState =
+      agent.getState().type === 'system'
+        ? agent.getState().name
+        : agent.getState().type;
     const isOnline: AgentState = AgentClient.isStateOnline(agentState);
 
     const agentAvail = agent.getState().name;
