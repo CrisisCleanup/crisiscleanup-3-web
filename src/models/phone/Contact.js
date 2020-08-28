@@ -86,8 +86,14 @@ export const ContactAttributes = Object.freeze({
 });
 
 export const ContactConnectionMap = Object.freeze({
+  [ContactActions.CONNECTING]: ConnectionStates.PENDING_CALL,
   [ContactActions.CONNECTED]: ConnectionStates.BUSY,
   [ContactActions.ENDED]: ConnectionStates.PAUSED,
+});
+
+export const CallType = Object.freeze({
+  INBOUND: 'inbound',
+  OUTBOUND: 'outbound',
 });
 
 const Log = Logger({ name: 'phone.contact' });
@@ -131,9 +137,12 @@ export default class Contact extends Model {
   }
 
   static afterCreate(model: Contact): void {
+    const isNew = model.action === ContactActions.ENTER;
     const initConnection: ConnectionType = {
       connectionId: `connection#${model.contactId}`,
-      state: model.initConnectionState,
+      state: isNew
+        ? model.initConnectionState
+        : ContactConnectionMap[model.action],
       contactId: model.contactId,
     };
     Log.debug('Creating initial connection for contact:', initConnection);
@@ -146,6 +155,17 @@ export default class Contact extends Model {
           Contact.store().state.entities['phone/contact'],
         ),
       );
+    // handle hydrating existing contacts
+    if (model.action === ContactActions.CONNECTED) {
+      Contact.update({
+        where: model.contactId,
+        data: {
+          connection: {
+            state: ConnectionStates.BUSY,
+          },
+        },
+      });
+    }
   }
 
   static beforeUpdate(model: ContactType): void {
@@ -155,9 +175,11 @@ export default class Contact extends Model {
     }
   }
 
+
   static afterUpdate(model: Contact): void {
     const connection: Connection = Connection.query()
       .where('contactId', model.contactId)
+      .withAllRecursive()
       .first();
     const voiceConnection = ACS.getConnectionByContactId(model.contactId);
     // Handle agent pending -> contact connecting
@@ -171,13 +193,16 @@ export default class Contact extends Model {
       Log.info(
         `${connection.connectionId} ==> ${voiceConnection.getConnectionId()}`,
       );
+      const isNew = model.action === ContactActions.ENTER;
       Connection.update({
         where: connection.connectionId,
         data: ({
           connectionId: connection.connectionId,
           streamsConnectionId: voiceConnection.getConnectionId(),
           contactId: model.contactId,
-          state: model.initConnectionState,
+          state: isNew
+            ? model.initConnectionState
+            : ContactConnectionMap[model.action],
         }: ConnectionType),
       }).then((c) => Log.debug('connection updated => ', c));
     }
