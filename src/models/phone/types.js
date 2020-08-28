@@ -7,9 +7,9 @@
 import { AgentStates, RouteStates } from '@/models/phone/AgentClient';
 import { ConnectionStates } from '@/models/phone/Connection';
 import {
-  ContactStates,
   ContactActions,
   ContactAttributes,
+  ContactStates,
 } from '@/models/phone/Contact';
 
 type AgentState = $Values<typeof AgentStates>;
