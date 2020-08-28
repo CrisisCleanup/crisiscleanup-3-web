@@ -1,6 +1,6 @@
 <template>
   <Loader
-    :loading="loading"
+    :loading="false"
     :class="`w-full h-full phone-controller ${
       scriptPopup ? 'popup-active' : ''
     } ${renderPopup ? 'popup' : ''}`"
@@ -9,7 +9,7 @@
       <script-popup
         v-if="renderPopup"
         @dismissed="() => (scriptPopup = false)"
-        :script-name="scriptName"
+        :script-name="callType"
       />
       <phone-layout>
         <template #grid-start>
@@ -27,24 +27,13 @@
             <agent-actions>
               <template #case>
                 <case-form
-                  :key="currentCaseId"
-                  :incident-id="
-                    contactAttributes.incidentId
-                      ? contactAttributes.incidentId
-                      : '199'
-                  "
-                  :pda-id="currentCaseType === 'pda' ? currentCaseId : null"
-                  :worksite-id="
-                    currentCaseType === 'worksite' ? currentCaseId : null
-                  "
+                  v-bind="caseFormProps"
+                  :key="activeCaseId"
+                  :incident-id="String(currentIncident.id)"
                   disable-claim-and-save
-                  :before-save="beforeWorksiteSave"
                   :data-prefill="prefillData"
                   @savedWorksite="savedWorksite"
-                  @closeWorksite="closeWorksite"
-                  @navigateToWorksite="
-                    (id) => setCurrentCase({ id, type: 'worksite' })
-                  "
+                  @navigateToWorksite="(id) => setActiveCase(id)"
                 />
               </template>
               <template #resources>
@@ -59,22 +48,27 @@
 </template>
 
 <script>
+// @flow
 import PhoneLayout from '@/layouts/Phone.vue';
 import AgentBlock from '@/components/phone/blocks/Agent.vue';
 import CaseForm from '@/pages/CaseForm.vue';
 import AgentBoard from '@/components/phone/AgentBoard/Board.vue';
-import { EVENTS as CCEvent, STATES as CCState } from '@/services/acs.service';
-import { EventBus } from '@/event-bus';
 import Loader from '@/components/Loader.vue';
-import { LocalStorageMixin, AgentMixin } from '@/mixins';
 import ScriptPopup from '@/components/phone/ScriptPopup.vue';
 import Pda from '@/models/Pda';
 import AgentActions from '@/components/phone/AgentActions/Actions.vue';
 import PhoneResources from '@/components/phone/AgentActions/Resources.vue';
+import useIncident from '@/use/worksites/useIncident';
+import { computed, ref } from '@vue/composition-api';
+import useContact from '@/use/phone/useContact';
+import useAgent from '@/use/phone/useAgent';
+import Worksite from '@/models/Worksite';
+import { useLocalStorage } from 'vue-composable';
+import _ from 'lodash';
+import useController from '@/use/phone/useController';
 
 export default {
   name: 'Controller',
-  mixins: [AgentMixin, LocalStorageMixin],
   components: {
     PhoneResources,
     AgentActions,
@@ -85,64 +79,65 @@ export default {
     Loader,
     ScriptPopup,
   },
-  data() {
-    return {
-      worksite: null,
-      loading: false,
-      scriptPopup: false,
-      renderPopup: false,
-    };
-  },
-  methods: {
-    closeWorksite() {
-      EventBus.$emit(CCEvent.OFF_CALL);
-      this.setContactState(CCState.POLLING);
-    },
-    async savedWorksite(worksite) {
-      this.worksite = worksite;
-      this.$log.debug('Saved worksite: ', worksite);
-      if (this.currentCaseType === 'pda') {
-        this.$log.debug('associating worksite to pda...');
-        await Pda.api().associateWorksite(this.currentCase.id, worksite.id);
-      }
+  setup(props, context) {
+    const { getters, state, actions } = useController();
 
-      this.addCases({ worksites: [worksite.id] });
-      this.setCaseStatus({ modified: [worksite.id] });
-      EventBus.$emit(CCEvent.CASE_SAVED, worksite);
-    },
-    async beforeWorksiteSave() {
-      if (!this.caseStatusId) {
-        this.$toasted.error(this.$t('~~You must set a Call Status!'));
-        return false;
+    const { agent } = useAgent();
+    const { currentContact, callType } = useContact({ agent });
+
+    const { storage } = useLocalStorage('ccu-ivr-hide-popup');
+    const renderPopup = computed(() => _.isNil(storage.value));
+    const scriptPopup = ref(renderPopup.value);
+
+    const caseFormProps = computed(() => {
+      const isPda = getters.activeCaseType.value === Pda;
+      const isNew = getters.activeCaseId.value === -1;
+      return {
+        pdaId: !isNew && isPda ? getters.activeCaseId.value : null,
+        worksiteId: !isNew && !isPda ? getters.activeCaseId.value : null,
+        beforeSave: () => {
+          if (!state.status.value.statusId) {
+            context.root.$toasted.error(
+              context.root.$t('~~You must set a Call Status!'),
+            );
+            return false;
+          }
+          return true;
+        },
+      };
+    });
+
+    const prefillData = computed(() => ({
+      phone1: currentContact.value ? currentContact.value.callerId : '',
+    }));
+
+    const setActiveCase = async (caseId: number | string) => {
+      const wksite = await Worksite.fetchOrFindId(caseId);
+      if (wksite) {
+        await actions.setCase(wksite);
       }
-      return true;
-    },
-  },
-  computed: {
-    prefillData() {
-      if (this.callerId) {
-        return {
-          phone1: this.callerId,
-        };
-      }
-      return {};
-    },
-    scriptName() {
-      const { incidentId } = this.contactAttributes;
-      if (incidentId === '199' && this.callType === 'outbound') {
-        if (this.pdas.length) {
-          return 'covidPda';
-        }
-        return 'covid';
-      }
-      return this.callType;
-    },
-  },
-  async mounted() {
-    if (!this.existsLocalStorage('ccu-ivr-hide-popup')) {
-      this.renderPopup = true;
-      this.scriptPopup = true;
-    }
+    };
+
+    return {
+      ...useIncident(),
+      ...getters,
+      ...state,
+      ...actions,
+      currentContact,
+      caseFormProps,
+      prefillData,
+      setActiveCase,
+      renderPopup,
+      scriptPopup,
+      callType,
+      async savedWorksite(worksite) {
+        context.root.$log.debug('worksite saved:', worksite);
+        await actions.addCase({
+          contact: currentContact.value,
+          newCase: worksite,
+        });
+      },
+    };
   },
 };
 </script>
