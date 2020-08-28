@@ -19,6 +19,7 @@ import type {
   MetricsStateT,
   PhoneMetric,
   PhoneMetricUpdate,
+  StatusStateT,
   ViewStateT,
 } from '@/store/modules/phone/types';
 import store from '@/store';
@@ -132,6 +133,18 @@ class ControllerStore extends VuexModule {
     );
   }
 
+  get activeCaseId() {
+    return this.currentCase ? this.currentCase.id : -1;
+  }
+
+  get activeCaseType() {
+    return this.activeCaseId === -1
+      ? 'new'
+      : this.currentCase instanceof Worksite
+      ? Worksite
+      : Pda;
+  }
+
   @MutationAction({ mutate: ['contactMetrics'] })
   updateContactMetrics({ contacts } = {}) {
     if (!_.isNull(contacts)) {
@@ -140,6 +153,17 @@ class ControllerStore extends VuexModule {
     return { contactMetrics: contacts };
   }
 
+  @Action
+  async addCase({ contact, newCase }: { contact: Contact, newCase: Worksite }) {
+    Log.info('adding new case:', contact, newCase);
+    if (this.activeCaseType === Pda) {
+      Log.info('associating worksite to pda...');
+      await Pda.api().associateWorksite(this.currentCaseId, newCase.id);
+    }
+    await contact.addCases([newCase]);
+    this.updateStatus({ modified: [newCase] });
+    this.setCase(newCase);
+  }
   @Mutation
   setHistory(newHistory = {}) {
     this.history = { ...this.history, ...newHistory };
@@ -287,11 +311,7 @@ class ControllerStore extends VuexModule {
   @MutationAction({ mutate: ['currentCase'] })
   setCase(newCase: $Shape<CaseType>) {
     Log.debug('updating active case:', newCase);
-    if (this.currentCase === null) {
-      this.currentCase = newCase;
-    } else {
-      this.currentCase = { ...this.currentCase, ...newCase };
-    }
+    return { currentCase: newCase };
   }
 
   @Action
