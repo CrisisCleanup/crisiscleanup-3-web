@@ -26,7 +26,7 @@
       </div>
     </div>
     <tabs class="w-full" ref="tabs">
-      <tab :name="$t('~~Manage Users')">
+      <tab :name="`${$t('~~Manage Users')} (${allTeamUsers.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"
@@ -170,7 +170,7 @@
           </Table>
         </div>
       </tab>
-      <tab :name="$t('~~Manage Cases')">
+      <tab :name="`${$t('~~Manage Cases')} (${assignedWorksites.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"

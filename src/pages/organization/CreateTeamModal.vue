@@ -21,7 +21,9 @@
           :action="generateTeamName"
         />
 
-        <base-text class="mb-2">{{ $t('teams.team_members_list') }}</base-text>
+        <base-text class="mb-2">{{
+          `${$t('teams.team_members_list')} (${team.users.length})`
+        }}</base-text>
         <draggable
           v-model="team.users"
           :options="{ group: 'people' }"
@@ -64,7 +66,9 @@
           "
         />
 
-        <base-text class="mb-2">{{ $t('teams.cases') }}</base-text>
+        <base-text class="mb-2">{{
+          `${$t('teams.cases')} (${teamWorksites.length})`
+        }}</base-text>
         <draggable
           v-model="teamWorksites"
           :options="{ group: 'cases' }"
