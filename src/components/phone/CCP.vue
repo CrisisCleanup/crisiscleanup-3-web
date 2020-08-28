@@ -8,7 +8,6 @@
 <script>
 import { mapGetters } from 'vuex';
 import { EventBus } from '@/event-bus';
-import { EVENTS } from '@/services/acs.service';
 import { getModule } from 'vuex-module-decorators';
 import StreamsStore from '@/store/modules/phone/streams';
 
@@ -32,7 +31,7 @@ export default {
     ...mapGetters('auth', ['isLoggedIn']),
   },
   created() {
-    EventBus.$on(EVENTS.INIT, () => {
+    EventBus.$on('acs:init', () => {
       this.$log.info('event init');
       if (!connect.core.initialized) {
         const htmlEl = document.getElementById('ccp-embed');

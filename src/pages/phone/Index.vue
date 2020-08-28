@@ -10,7 +10,6 @@
 <script>
 // @flow
 import { EventBus } from '@/event-bus';
-import { EVENTS as CCEvent } from '@/services/acs.service';
 import IncomingPopup from '@/components/phone/Popup.vue';
 import { ControllerPages } from '@/store/modules/phone/controller';
 import useAgent from '@/use/phone/useAgent';
@@ -73,7 +72,7 @@ export default {
     );
 
     onMounted(() => {
-      EventBus.$emit(CCEvent.INIT);
+      EventBus.$emit('acs:init');
       updatePage();
     });
 
