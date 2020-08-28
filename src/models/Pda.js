@@ -1,5 +1,5 @@
-import { Model } from '@vuex-orm/core';
-export default class Pda extends Model {
+import CCUModel from '@/models/model';
+export default class Pda extends CCUModel {
   static entity = 'pdas';
 
   static fields() {
