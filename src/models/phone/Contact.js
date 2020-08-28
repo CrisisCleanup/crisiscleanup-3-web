@@ -17,6 +17,14 @@ import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import * as ACS from '@/services/connect.service';
 import Logger from '@/utils/log';
 import _ from 'lodash';
+import Worksite from '@/models/Worksite';
+import CCUModel from '@/models/model';
+import Pda from '@/models/Pda';
+import PhoneOutbound from '@/models/PhoneOutbound';
+import PhoneDnis from '@/models/PhoneDnis';
+import Language from '@/models/Language';
+import type { CaseType } from '@/use/worksites/useCaseCards';
+import PhoneInbound from '@/models/PhoneInbound';
 
 /**
  * Enum of possible contact states.
@@ -202,4 +210,81 @@ export default class Contact extends Model {
   get contactAttributes(): ContactAttributesType {
     return Contact.parseAttributes(this.attributes);
   }
+
+  resolveAttributeModels<T>(
+    attribute: ContactAttribute,
+    model: CCUModel<T>,
+  ): Promise<T[]> {
+    const itemIds = _.get(this.contactAttributes, attribute, []);
+    Log.debug(`resolving <${model.entity}> @ [${itemIds}]`);
+    return model.fetchOrFindId(itemIds);
+  }
+
+  async getCallDuration() {
+    const connectContact = ACS.getContactById(this.contactId);
+    if (connectContact) {
+      return connectContact.getStateDuration();
+    }
+    return 0;
+  }
+
+  async getWorksites(): Promise<Worksite[]> {
+    return this.resolveAttributeModels<Worksite>(
+      ContactAttributes.WORKSITES,
+      Worksite,
+    );
+  }
+
+  async getPdas(): Promise<Pda[]> {
+    return this.resolveAttributeModels<Pda>(ContactAttributes.PDAS, Pda);
+  }
+
+  async getOutbounds(): Promise<PhoneOutbound[]> {
+    return this.resolveAttributeModels<PhoneOutbound>(
+      ContactAttributes.OUTBOUND_IDS,
+      PhoneOutbound,
+    );
+  }
+
+  async getDnis(): Promise<PhoneDnis | null> {
+    const _number = _.get(
+      this.contactAttributes,
+      ContactAttributes.INBOUND_NUMBER,
+      null,
+    );
+    if (!_number) return null;
+    const parsed = parsePhoneNumberFromString(_number);
+    if (!parsed) return null;
+    const rawNumber = Number(String(parsed.number).slice(1));
+    let dnis = await PhoneDnis.query().where('dnis', rawNumber);
+    if (dnis.exists()) {
+      dnis = dnis.first();
+    } else {
+      await PhoneDnis.fetchByDnis(parsed.number);
+      dnis = await PhoneDnis.query().where('dnis', rawNumber).first();
+    }
+    return dnis;
+  }
+
+  async getLocale(): Promise<Language> {
+    let _locale = _.get(
+      this.contactAttributes,
+      ContactAttributes.LOCALE,
+      'en_US',
+    );
+    _locale = _locale.replace('_', '-');
+    return Language.query().where('subtag', _locale).first();
+  }
+
+  get callerId(): string {
+    const _number = _.get(
+      this.contactAttributes,
+      ContactAttributes.CALLER_ID,
+      null,
+    );
+    if (!_number) return '';
+    const number = parsePhoneNumberFromString(_number);
+    return number.formatNational();
+  }
+
 }
