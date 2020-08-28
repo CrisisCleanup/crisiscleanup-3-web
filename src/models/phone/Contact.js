@@ -168,13 +168,34 @@ export default class Contact extends Model {
     }
   }
 
-  static beforeUpdate(model: ContactType): void {
+  static beforeUpdate(model: ContactType): void | boolean {
+    if (model.action === ContactActions.DESTROYED) {
+      Contact.delete(model.contactId).then(() =>
+        Log.info('Contact => DELETED'),
+      );
+      return false;
+    }
     const connectContact = ACS.getContactById(model.contactId);
     if (connectContact) {
       model.attributes = connectContact.getAttributes();
     }
   }
 
+  static beforeDelete(model: Contact): void {
+    Log.debug('contact has been deleted, attempting to clear connect contact.');
+    const connectContact = ACS.getContactById(model.contactId);
+    if (connectContact) {
+      connectContact.clear({
+        success: () => Log.info('successfully cleared contact!'),
+        failure: (e) => Log.error('failed to clear contact!', e),
+      });
+    }
+    if (model.connection) {
+      Connection.delete(model.connection.connectionId)
+        .then(() => Log.info('Connection => DELETED'))
+        .catch((e) => Log.error('failed to delete connection!', e));
+    }
+  }
 
   static afterUpdate(model: Contact): void {
     const connection: Connection = Connection.query()
