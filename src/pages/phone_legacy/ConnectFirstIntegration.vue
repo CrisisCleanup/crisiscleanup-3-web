@@ -404,7 +404,7 @@ import PhoneStatus from '@/models/PhoneStatus';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
 import Pda from '@/models/Pda';
-import { AgentMixin, WorksitesMixin, DialogsMixin } from '@/mixins';
+import { WorksitesMixin, DialogsMixin } from '@/mixins';
 import Logger from '@/utils/log';
 import { parsePhoneNumber } from 'libphonenumber-js';
 import CaseForm from '../CaseForm';
@@ -424,7 +424,7 @@ const Log = Logger({
 export default {
   name: 'ConnectFirstIntegration',
   components: { EditCallerID, CaseForm },
-  mixins: [AgentMixin, WorksitesMixin, DialogsMixin],
+  mixins: [WorksitesMixin, DialogsMixin],
   async mounted() {
     this.remainingCallbacks = await PhoneOutbound.api().getRemainingCallbackCount(
       this.currentIncidentId,
