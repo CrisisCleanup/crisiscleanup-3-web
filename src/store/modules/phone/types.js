@@ -10,6 +10,8 @@ import {
   ControllerPages,
   Metrics,
 } from '@/store/modules/phone/controller';
+import Worksite from '@/models/Worksite';
+import Pda from '@/models/Pda';
 
 type AuthState = $Values<typeof AuthStates>;
 
@@ -17,14 +19,17 @@ type ControllerPage = $Values<typeof ControllerPages>;
 type ControllerActionTab = $Values<typeof ControllerActionTabs>;
 type PhoneMetric = $Keys<typeof Metrics>;
 
-type CaseType = {|
-  id: number,
-  type: 'worksite' | 'pda',
-|};
+type CaseType = Pda | Worksite;
 
 type ViewStateT = {|
   page: ControllerPage,
   actionTab: ControllerActionTab,
+|};
+
+type StatusStateT = {|
+  statusId: number | null,
+  notes: string,
+  modified: CaseType[],
 |};
 
 type MetricsStateT = {
@@ -46,4 +51,5 @@ export type {
   PhoneMetric,
   MetricsStateT,
   PhoneMetricUpdate,
+  StatusStateT,
 };
