@@ -28,6 +28,11 @@ import StreamsStore from '@/store/modules/phone/streams';
 import _ from 'lodash';
 import Agent from '@/models/Agent';
 import Worksite from '@/models/Worksite';
+import Pda from '@/models/Pda';
+import AgentClient from '@/models/phone/AgentClient';
+import Contact from '@/models/phone/Contact';
+import PhoneOutbound from '@/models/PhoneOutbound';
+import PhoneInbound from '@/models/PhoneInbound';
 
 /**
  * Enum of possible controller pages.
@@ -91,6 +96,13 @@ class ControllerStore extends VuexModule {
   // active case
   currentCase: CaseType | null = null;
 
+  // active call status
+  status: StatusStateT = {
+    statusId: null,
+    notes: '',
+    modified: [],
+  };
+
   // user interface state
   view: ViewStateT = {
     page: ControllerPages.DASHBOARD,
@@ -145,12 +157,37 @@ class ControllerStore extends VuexModule {
       : Pda;
   }
 
+  get activeActionTab() {
+    return _.get(this.view, 'actionTab', ControllerActionTabs.CASE);
+  }
+
+  get modifiedCaseIds() {
+    return this.status.modified.map((c) => c.id);
+  }
+
+  @Mutation
+  setStatus(newStatus) {
+    this.status = { ...this.status, ...newStatus };
+  }
+
   @MutationAction({ mutate: ['contactMetrics'] })
   updateContactMetrics({ contacts } = {}) {
     if (!_.isNull(contacts)) {
       return { contactMetrics: contacts };
     }
     return { contactMetrics: contacts };
+  }
+
+  @Action
+  updateStatus({ statusId, notes, modified }: $Shape<StatusStateT> = {}) {
+    Log.debug('updating call status!');
+    this.setStatus({
+      statusId: statusId || this.status.statusId,
+      notes: notes || this.status.notes,
+      modified: modified
+        ? _.unionBy<CaseType>(this.status.modified, modified, 'id')
+        : this.status.modified,
+    });
   }
 
   @Action
