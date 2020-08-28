@@ -3,9 +3,9 @@ import Organization from '@/models/Organization';
 import User from '@/models/User';
 import enums from '@/store/modules/enums';
 import { getQueryString } from '@/utils/urls';
-import { Model } from '@vuex-orm/core';
+import CCUModel from '@/models/model';
 
-export default class Worksite extends Model {
+export default class Worksite extends CCUModel {
   static entity = 'worksites';
 
   static fields() {
