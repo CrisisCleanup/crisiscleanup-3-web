@@ -179,13 +179,16 @@ export default class Contact extends Model {
     ];
     return _.transform(
       rawAttrs,
-      (result, value: RawContactAttribute, key) => {
-        const _val = value.value;
+      (result, value: RawContactAttribute | ContactAttribute, key) => {
+        const _val = _.get(value, 'value', value);
         result[key] = _val; // string values
         if (_.includes(idAttrs, key)) {
           result[key] = [];
           if (!_.isEmpty(_val)) {
-            const ids = _.forEach(value.value.split(','), _.trim);
+            const ids = _.forEach(
+              _.get(value, 'value', value).split(','),
+              _.trim,
+            );
             result[key] = _.reject(_.map(ids, _.parseInt), _.isNaN); // number[] values
           }
         }
