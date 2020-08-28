@@ -138,6 +138,14 @@ export default class Contact extends Model {
     };
     Log.debug('Creating initial connection for contact:', initConnection);
     Connection.insertOrUpdate({ data: initConnection }).then((c) => c);
+    model
+      .updateAttributes()
+      .then(() =>
+        Log.info(
+          'updated attributes =>',
+          Contact.store().state.entities['phone/contact'],
+        ),
+      );
   }
 
   static beforeUpdate(model: ContactType): void {
@@ -173,6 +181,14 @@ export default class Contact extends Model {
         }: ConnectionType),
       }).then((c) => Log.debug('connection updated => ', c));
     }
+    model
+      .updateAttributes()
+      .then(() =>
+        Log.info(
+          'updated attributes =>',
+          Contact.store().state.entities['phone/contact'],
+        ),
+      );
     // Handle connection states on and after actual connection.
     if (
       model.state === ContactStates.ROUTED &&
