@@ -1,9 +1,11 @@
 <template>
   <div class="status">
     <modal
-      v-if="confirmModal"
+      v-if="confirmState.state.value"
       :title="$t('~~Are you sure?')"
       modal-classes="bg-white max-w-md shadow"
+      closeable
+      @close="confirmState.toggle(false)"
     >
       <div class="modal--body">
         <base-text variant="body">
@@ -18,13 +20,13 @@
           <base-button
             size="medium"
             variant="solid"
-            :action="() => (confirmModal = false)"
+            :action="() => confirmState.toggle(false)"
             >{{ $t('~~Keep Editing') }}</base-button
           >
           <base-button
             size="medium"
             variant="solid"
-            :action="() => closeContact(true)"
+            :action="() => endContact(true)"
             >{{ $t('~~End Call') }}</base-button
           >
         </div>
@@ -36,22 +38,21 @@
       :options="selectValues"
       item-key="value"
       label="name_t"
-      :value="status"
-      @input="(value) => setCaseStatus({ id: value })"
+      @input="(value) => updateStatus({ statusId: value })"
       placeholder="Call Status "
     />
     <base-input
       class="notes"
       text-area
       size="large"
-      @input="(value) => setCaseStatus({ notes: value })"
+      @input="(value) => updateStatus({ notes: value })"
       :placeholder="lang.issuesResolved"
     ></base-input>
     <base-button
       class="save-exit"
       size="large"
       variant="solid"
-      :action="() => closeContact()"
+      :action="() => endContact()"
     >
       {{ $t('~~Save & End Call') }}
     </base-button>
@@ -61,46 +62,57 @@
 <script>
 import VueTypes from 'vue-types';
 import PhoneStatus from '@/models/PhoneStatus';
-import { AgentMixin } from '@/mixins';
+import { computed } from '@vue/composition-api';
+import useController from '@/use/phone/useController';
+import useContact from '@/use/phone/useContact';
+import useToggle from '@/use/useToggle';
+import useAgent from '@/use/phone/useAgent';
 
 export default {
   name: 'BoardStatus',
-  mixins: [AgentMixin],
   props: {
     lang: VueTypes.objectOf(VueTypes.any),
   },
-  data() {
-    return {
-      status: null,
-      notes: '',
-      confirmModal: false,
-    };
-  },
-  methods: {
-    async closeContact(force = false) {
-      if (!this.modifiedCases.length && !force) {
-        this.confirmModal = true;
-        return;
+  setup(props, context) {
+    const { agent } = useAgent();
+    const { getters, state, actions } = useController();
+    const { currentContact } = useContact({ agent });
+    const confirmState = useToggle();
+
+    const endContact = async (force = false) => {
+      if (!getters.modifiedCaseIds.value.length && !force) {
+        context.root.$log.debug(
+          'agent tried to end contact w/o making any changes!',
+        );
+        confirmState.toggle(true);
       }
       try {
-        await this.$store.dispatch('phone/closeContact');
+        context.root.$log.info('closing contact!');
+        await actions.closeContact({ contact: currentContact.value });
       } catch (e) {
-        this.$toasted.error(this.$t(e.message));
+        context.root.$toasted.error(context.root.$t(e.message));
       }
-    },
-  },
-  computed: {
-    statuses() {
-      return PhoneStatus.all();
-    },
-    selectValues() {
-      return Object.values(this.statuses).map(({ id, status_name_t }) => {
+    };
+
+    const statuses = computed(() => PhoneStatus.all());
+    const selectValues = computed(() =>
+      Object.values(statuses.value).map(({ id, status_name_t }) => {
         return {
           value: id,
           name_t: status_name_t,
         };
-      });
-    },
+      }),
+    );
+
+    return {
+      ...getters,
+      ...state,
+      ...actions,
+      endContact,
+      statuses,
+      selectValues,
+      confirmState,
+    };
   },
 };
 </script>
