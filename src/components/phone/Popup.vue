@@ -3,18 +3,18 @@
     <template #header>
       <div class="header">
         <DisasterIcon
-          v-if="currentAniIncident && currentAniIncident.incidentImage"
+          v-if="currentIncident && currentIncident.incidentImage"
           :width="50"
-          :current-incident="currentAniIncident"
+          :current-incident="currentIncident"
         />
         <base-text :weight="700" variant="h1"
           >{{ $t('~~Incoming Call for ') }}
-          {{ currentAniIncident.friendlyName }}
+          {{ currentIncident.friendlyName }}
         </base-text>
       </div>
     </template>
 
-    <div class="modal--body">
+    <div v-if="currentContact" class="modal--body">
       <div class="modal-script">
         <base-text variant="body" class="script">
           {{
@@ -31,18 +31,19 @@
       </div>
       <div class="modal-callinfo">
         <div class="caller">
-          <ccu-icon with-text size="md" :type="icons.phone_user">
+          <ccu-icon with-text size="md" :type="enums.icons.phone_user">
             <base-text variant="h1" :weight="400">{{ callerName }}</base-text>
           </ccu-icon>
-          <ccu-icon with-text size="md" :type="icons.earth_globe">
+          <ccu-icon with-text size="md" :type="enums.icons.earth_globe">
             <base-text variant="h1" :weight="400">{{
-              callerLocale.name_t.split(' ')[0]
+              callState.locale.value &&
+              callState.locale.value.name_t.split(' ')[0]
             }}</base-text>
           </ccu-icon>
         </div>
         <div class="stats">
           <base-text class="mobile" :weight="600" variant="h1">{{
-            validatePhoneNumber(callerId).newValue
+            currentContact.callerId
           }}</base-text>
           <tag class="tag">
             <base-text variant="bodysm">
@@ -54,13 +55,13 @@
       </div>
       <div class="modal-divider">
         <base-text variant="h3" :weight="400">
-          <span> {{ previewCaseCards.length }} {{ $t('~~ cases ') }} </span>
+          <span> {{ caseCards.length }} {{ $t('~~ cases ') }} </span>
           {{ $t(' ~~are assigned to this number') }}
         </base-text>
       </div>
       <div class="modal-cases">
         <case-card
-          v-for="c in previewCaseCards"
+          v-for="c in caseCards"
           :key="c.caseNumber"
           :case-number="c.caseNumber"
           :address="c.address"
@@ -76,27 +77,35 @@
 </template>
 
 <script>
-import {
-  IncidentMixin,
-  UserMixin,
-  IconsMixin,
-  AgentMixin,
-  ValidateMixin,
-} from '@/mixins';
 import CaseCard from '@/components/cards/Case.vue';
 import DisasterIcon from '@/components/DisasterIcon.vue';
+import useCaseCards from '@/use/worksites/useCaseCards';
+import VueTypes from 'vue-types';
+import Worksite from '@/models/Worksite';
+import Pda from '@/models/Pda';
+import { toRefs } from '@vue/composition-api';
+import useUser from '@/use/user/useUser';
+import AgentClient from '@/models/phone/AgentClient';
+import useContact from '@/use/phone/useContact';
+import useIncident from '@/use/worksites/useIncident';
+import useEnums from '@/use/useEnums';
 
 export default {
   name: 'IncomingPopup',
-  mixins: [UserMixin, IconsMixin, AgentMixin, ValidateMixin, IncidentMixin],
   components: { CaseCard, DisasterIcon },
-  async mounted() {
-    await this.createCaseCards();
+  props: {
+    cases: VueTypes.arrayOf(VueTypes.oneOfType([Pda, Worksite])),
+    agent: VueTypes.oneOfType([AgentClient]),
   },
-  computed: {
-    previewCaseCards() {
-      return this.caseCards.filter((c) => c.id !== -1);
-    },
+  setup(props) {
+    const { cases, agent } = toRefs(props);
+    return {
+      ...useUser(),
+      ...useCaseCards({ cases: cases.value, addNew: false }),
+      ...useContact({ agent }),
+      ...useIncident(),
+      ...useEnums(),
+    };
   },
 };
 </script>
