@@ -182,14 +182,14 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneStatus from '@/models/PhoneStatus';
 import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
-import { AgentMixin, WorksitesMixin } from '@/mixins';
+import { WorksitesMixin } from '@/mixins';
 import CaseCard from '@/components/cards/case/CaseCard';
 import CaseForm from '../CaseForm';
 
 export default {
   name: 'PhoneLegacy',
   components: { CaseCard, CaseForm },
-  mixins: [AgentMixin, WorksitesMixin],
+  mixins: [WorksitesMixin],
   data() {
     return {
       nextOutbound: null,
