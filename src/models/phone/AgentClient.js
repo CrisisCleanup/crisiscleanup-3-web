@@ -12,7 +12,7 @@ import type {
   ConnectionType,
   RouteState,
 } from '@/models/phone/types';
-import Contact, { ContactStates } from '@/models/phone/Contact';
+import Contact from '@/models/phone/Contact';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import _ from 'lodash';
 import Logger from '@/utils/log';
@@ -95,16 +95,6 @@ export default class AgentClient extends Model {
       }).then((a) => a);
       return;
     }
-    if (!_.isEmpty(client.contacts)) {
-      const contact = client.contacts[0];
-      if (
-        contact.state === ContactStates.ROUTED &&
-        contact.connection.state === ConnectionStates.AGENT_PENDING
-      ) {
-        Log.info('rechecking if contact is available...');
-        Contact.afterUpdate(contact);
-      }
-    }
     Log.info(`Agent => ${client.contactState}`);
     Log.info(client);
     const payload = {
@@ -185,7 +175,14 @@ export default class AgentClient extends Model {
   }
 
   get isConnecting(): boolean {
-    return Object.values(ConnectionStates).includes(this.contactState);
+    return [
+      ConnectionStates.AGENT_PENDING,
+      ConnectionStates.PENDING_CALL,
+    ].includes(this.contactState);
+  }
+
+  get isConnected(): boolean {
+    return [ConnectionStates.BUSY].includes(this.contactState);
   }
 
   get isOnline(): boolean {
@@ -194,6 +191,12 @@ export default class AgentClient extends Model {
 
   get user(): User {
     return User.query().whereId(this.userId).first();
+  }
+
+  get currentContact(): Contact | null {
+    const contact = Contact.query().where('agentId', this.agentId);
+    if (!contact.exists()) return null;
+    return contact.first();
   }
 
   toggleOnline(connected?: boolean): void {
