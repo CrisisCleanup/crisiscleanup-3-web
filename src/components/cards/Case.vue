@@ -34,7 +34,7 @@ export default {
     );
   },
   props: {
-    id: VueTypes.string,
+    id: VueTypes.oneOfType([VueTypes.number, VueTypes.string]),
     caseNumber: VueTypes.string,
     address: VueTypes.string,
     state: VueTypes.string,
