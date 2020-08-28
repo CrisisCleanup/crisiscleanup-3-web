@@ -5,13 +5,15 @@
  */
 
 import { Model } from '@vuex-orm/core';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import type {
-  ConnectionType,
-  ContactType,
   ConnectionState,
-  RawContactAttributes,
-  RawContactAttribute,
+  ConnectionType,
+  ContactAttribute,
   ContactAttributesType,
+  ContactType,
+  RawContactAttribute,
+  RawContactAttributes,
 } from '@/models/phone/types';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import * as ACS from '@/services/connect.service';
@@ -106,6 +108,28 @@ export default class Contact extends Model {
     }: ContactType);
   }
 
+  static state() {
+    return {
+      dnis: null,
+      worksites: [],
+      pdas: [],
+      locale: null,
+      outbounds: [],
+      inbound: null,
+      outbound: null,
+    };
+  }
+
+  get outbound(): PhoneOutbound {
+    const { outbound } = Contact.store().state.entities['phone/contact'];
+    return outbound;
+  }
+
+  get inbound(): PhoneInbound {
+    const { inbound } = Contact.store().state.entities['phone/contact'];
+    return inbound;
+  }
+
   static afterCreate(model: Contact): void {
     const initConnection: ConnectionType = {
       connectionId: `connection#${model.contactId}`,
@@ -198,6 +222,32 @@ export default class Contact extends Model {
       },
       {},
     );
+  }
+
+  async updateAttributes() {
+    Log.debug('updating attributes...');
+    const wrkSites = await this.getWorksites();
+    const pdas = await this.getPdas();
+    const outbounds = await this.getOutbounds();
+    const _state = Contact.store().state.entities['phone/contact'];
+    let { dnis, locale, inbound } = _state;
+    if (!dnis) {
+      dnis = await this.getDnis();
+    }
+    if (!locale) {
+      locale = await this.getLocale();
+    }
+    if (!inbound) {
+      inbound = await PhoneInbound.api().fetchBySessionId(this.contactId);
+    }
+    Contact.commit((state) => {
+      state.dnis = dnis;
+      state.worksites = _.unionBy(state.worksites, wrkSites, 'id');
+      state.pdas = _.unionBy(state.pdas, pdas, 'id');
+      state.locale = locale;
+      state.outbounds = _.unionBy(state.outbounds, outbounds, 'id');
+      state.inbound = inbound;
+    });
   }
 
   get initConnectionState(): ConnectionState {
