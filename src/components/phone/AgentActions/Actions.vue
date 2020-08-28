@@ -2,10 +2,10 @@
   <div class="agent-actions shadow-crisiscleanup-card">
     <div class="tabbar">
       <div
-        @click="() => setActionTab(t.key)"
+        @click="() => setView({ actionTab: t.key })"
         v-for="t in actionTabs"
         :key="t.title"
-        :class="`tab ${t.key === currentActionTab ? 'active' : ''}`"
+        :class="`tab ${t.key === activeActionTab ? 'active' : ''}`"
       >
         <ccu-icon v-if="t.icon" with-text size="medium" :type="t.icon">
           <base-text variant="h3">
@@ -19,7 +19,7 @@
     </div>
     <div
       class="flex flex-grow"
-      v-show="t.key === currentActionTab"
+      v-show="t.key === activeActionTab"
       v-for="t in actionTabs"
       :key="t.key"
     >
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'AgentActions',
   computed: {
-    ...mapGetters('phone', ['currentActionTab']),
+    ...mapGetters('phone.controller', ['activeActionTab']),
     actionTabs() {
       return [
         {
@@ -50,7 +50,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('phone', ['setActionTab']),
+    ...mapActions('phone.controller', ['setView']),
   },
 };
 </script>
