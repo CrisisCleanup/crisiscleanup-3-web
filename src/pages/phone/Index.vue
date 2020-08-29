@@ -2,7 +2,7 @@
   <Loader class="w-full h-full" :loading="loading">
     <template #content>
       <component v-if="!loading" :is="pageComponent" />
-      <IncomingPopup v-show="callPending" :cases="cases" :agent="agent" />
+      <IncomingPopup v-show="callPending" />
     </template>
   </Loader>
 </template>
@@ -27,18 +27,9 @@ export default {
   setup(props, context) {
     const { agent, loading } = useAgent();
     const controller = useController();
-    const {
-      callPending,
-      callConnected,
-      currentContact,
-      callState,
-    } = useContact({
+    const { callPending, callConnected, currentContact } = useContact({
       agent,
     });
-    const cases = computed(() => [
-      ...callState.worksites.value,
-      ...callState.pdas.value,
-    ]);
 
     const { start } = useIntervalFn(() => {
       agent.value.heartbeat().then(() => {
@@ -91,7 +82,6 @@ export default {
       callPending,
       callConnected,
       currentContact,
-      cases,
     };
   },
 };
