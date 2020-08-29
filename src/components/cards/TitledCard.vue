@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card :loading="loading">
     <template #header>
       <div class="left">
         <slot name="left">
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+// @flow
 import VueTypes from 'vue-types';
 import Card from './Card.vue';
 
@@ -25,9 +26,13 @@ export default {
   components: {
     Card,
   },
-  props: {
+  props: ({
     title: VueTypes.string,
-  },
+    loading: VueTypes.bool.def(false),
+  }: {
+    title: string,
+    loading: boolean,
+  }),
 };
 </script>
 

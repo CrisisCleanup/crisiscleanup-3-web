@@ -5,17 +5,27 @@
         <slot name="header"></slot>
       </div>
     </div>
-    <div class="body">
-      <div class="body--inner h-full">
-        <slot></slot>
-      </div>
-    </div>
+    <Loader overlay :loading="loading">
+      <template #content>
+        <div class="body">
+          <div class="body--inner h-full">
+            <slot></slot>
+          </div>
+        </div>
+      </template>
+    </Loader>
   </div>
 </template>
 
 <script>
+import VueTypes from 'vue-types';
+import Loader from '@/components/Loader.vue';
 export default {
   name: 'Card',
+  components: { Loader },
+  props: {
+    loading: VueTypes.bool.def(false),
+  },
 };
 </script>
 
