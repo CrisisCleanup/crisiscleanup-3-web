@@ -246,6 +246,10 @@ export default {
         @apply bg-crisiscleanup-green-300;
       }
 
+      &.connecting {
+        @apply bg-crisiscleanup-lightblue-800;
+      }
+
       &.talking {
         @apply bg-crisiscleanup-dark-blue;
       }
