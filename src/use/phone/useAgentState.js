@@ -58,7 +58,9 @@ export default ({
         _agent.value.contactState,
         _stateAction[_agent.value.routeState],
       ),
-      enabled: _agent.value.isRoutable || _agent.value.isOnline === false,
+      enabled:
+        _agent.value.isConnecting === false &&
+        _agent.value.isConnected === false,
       statusText: _agent.value.isOnline
         ? _agent.value.friendlyState
         : _agent.value.state,
