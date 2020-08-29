@@ -198,6 +198,18 @@ export default class Contact extends Model {
     }
   }
 
+  static afterDelete(model: Contact): void {
+    // connect will already auto-put the agent back into a routable
+    // state, but we also do it to trigger an upstream update.
+    const agentModel = Contact.store().$db().model('phone/agent');
+    const agentClient = agentModel
+      .query()
+      .withAllRecursive()
+      .find(model.agentId);
+    Log.info('forcing agent out of ACW!');
+    agentClient.toggleOnline(true);
+  }
+
   static afterUpdate(model: Contact): void {
     const connection: Connection = Connection.query()
       .where('contactId', model.contactId)
