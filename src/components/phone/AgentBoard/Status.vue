@@ -71,7 +71,7 @@ import useAgent from '@/use/phone/useAgent';
 export default {
   name: 'BoardStatus',
   props: {
-    lang: VueTypes.objectOf(VueTypes.any),
+    lang: VueTypes.any,
   },
   setup(props, context) {
     const { agent } = useAgent();
@@ -90,6 +90,7 @@ export default {
         context.root.$log.info('closing contact!');
         await actions.closeContact({ contact: currentContact.value });
       } catch (e) {
+        context.root.$log.debug(e);
         context.root.$toasted.error(context.root.$t(e.message));
       }
     };
