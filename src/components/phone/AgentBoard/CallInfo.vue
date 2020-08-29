@@ -83,7 +83,7 @@ import CaseCard from '@/components/cards/Case.vue';
 import { Carousel, Slide } from 'vue-carousel';
 import useEnums from '@/use/useEnums';
 import useContact from '@/use/phone/useContact';
-import { onMounted, computed } from '@vue/composition-api';
+import { onMounted } from '@vue/composition-api';
 import useController from '@/use/phone/useController';
 import useCaseCards from '@/use/worksites/useCaseCards';
 import useAgent from '@/use/phone/useAgent';
@@ -101,12 +101,8 @@ export default {
     const formatDuration = (duration) =>
       context.root.$moment.duration(duration, 'ms').format('h:mm:ss');
 
-    const { syncDuration, callState, ...contact } = useContact({ agent });
-    const cases = computed(() => [
-      ...callState.pdas.value,
-      ...callState.worksites.value,
-    ]);
-    const { caseCards } = useCaseCards({ cases, addNew: true });
+    const { syncDuration, callerCases, ...contact } = useContact({ agent });
+    const { caseCards } = useCaseCards({ cases: callerCases, addNew: true });
 
     onMounted(() => syncDuration.start());
 
@@ -127,7 +123,6 @@ export default {
       ...useEnums(),
       ...actions,
       ...getters,
-      callState,
       formatDuration,
       caseCards,
       setActiveCase,

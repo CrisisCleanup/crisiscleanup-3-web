@@ -101,6 +101,11 @@ export default ({ agent }) => {
     },
   ]);
 
+  const callerCases = computed(() => [
+    ...state.pdas.value,
+    ...state.worksites.value,
+  ]);
+
   return {
     callPending,
     callConnected,
@@ -113,5 +118,6 @@ export default ({ agent }) => {
     syncDuration,
     activeCalls,
     callDuration,
+    callerCases,
   };
 };
