@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Basics|BaseButton With Action 1`] = `
+exports[`Storyshots Basics/BaseButton With Action 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -27,7 +27,7 @@ exports[`Storyshots Basics|BaseButton With Action 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseButton With Async Action 1`] = `
+exports[`Storyshots Basics/BaseButton With Async Action 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -54,7 +54,7 @@ exports[`Storyshots Basics|BaseButton With Async Action 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseButton With Custom Icon 1`] = `
+exports[`Storyshots Basics/BaseButton With Custom Icon 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -91,7 +91,7 @@ exports[`Storyshots Basics|BaseButton With Custom Icon 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseButton With Icon 1`] = `
+exports[`Storyshots Basics/BaseButton With Icon 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -133,7 +133,7 @@ exports[`Storyshots Basics|BaseButton With Icon 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseButton With Sizes 1`] = `
+exports[`Storyshots Basics/BaseButton With Sizes 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -206,7 +206,7 @@ exports[`Storyshots Basics|BaseButton With Sizes 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseButton With Text 1`] = `
+exports[`Storyshots Basics/BaseButton With Text 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -233,7 +233,7 @@ exports[`Storyshots Basics|BaseButton With Text 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseButton With Variants 1`] = `
+exports[`Storyshots Basics/BaseButton With Variants 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -306,7 +306,7 @@ exports[`Storyshots Basics|BaseButton With Variants 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseCheckbox Disabled 1`] = `
+exports[`Storyshots Basics/BaseCheckbox Disabled 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -331,7 +331,7 @@ exports[`Storyshots Basics|BaseCheckbox Disabled 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseCheckbox With Text 1`] = `
+exports[`Storyshots Basics/BaseCheckbox With Text 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -355,7 +355,7 @@ exports[`Storyshots Basics|BaseCheckbox With Text 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
+exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -541,7 +541,7 @@ exports[`Storyshots Basics|BaseIcon All Icon Sizes 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
+exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1487,7 +1487,7 @@ exports[`Storyshots Basics|BaseIcon All Icons 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseIcon Simple Icon 1`] = `
+exports[`Storyshots Basics/BaseIcon Simple Icon 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1509,7 +1509,7 @@ exports[`Storyshots Basics|BaseIcon Simple Icon 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseInput Disabled 1`] = `
+exports[`Storyshots Basics/BaseInput Disabled 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1543,7 +1543,7 @@ exports[`Storyshots Basics|BaseInput Disabled 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
+exports[`Storyshots Basics/BaseInput Disabled Break Glass 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1592,7 +1592,7 @@ exports[`Storyshots Basics|BaseInput Disabled Break Glass 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseInput Simple 1`] = `
+exports[`Storyshots Basics/BaseInput Simple 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1625,7 +1625,7 @@ exports[`Storyshots Basics|BaseInput Simple 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseInput With Icon 1`] = `
+exports[`Storyshots Basics/BaseInput With Icon 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1672,7 +1672,7 @@ exports[`Storyshots Basics|BaseInput With Icon 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseInput With Placeholder 1`] = `
+exports[`Storyshots Basics/BaseInput With Placeholder 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1705,7 +1705,7 @@ exports[`Storyshots Basics|BaseInput With Placeholder 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
+exports[`Storyshots Basics/BaseInput With Sizes 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1772,7 +1772,7 @@ exports[`Storyshots Basics|BaseInput With Sizes 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
+exports[`Storyshots Basics/BaseInput With Tooltip 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1820,7 +1820,7 @@ exports[`Storyshots Basics|BaseInput With Tooltip 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseLink As Anchor 1`] = `
+exports[`Storyshots Basics/BaseLink As Anchor 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1843,7 +1843,7 @@ exports[`Storyshots Basics|BaseLink As Anchor 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseLink As Router Link 1`] = `
+exports[`Storyshots Basics/BaseLink As Router Link 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1866,7 +1866,7 @@ exports[`Storyshots Basics|BaseLink As Router Link 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseLink With Defaults 1`] = `
+exports[`Storyshots Basics/BaseLink With Defaults 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1889,7 +1889,7 @@ exports[`Storyshots Basics|BaseLink With Defaults 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseLink With Text Variant 1`] = `
+exports[`Storyshots Basics/BaseLink With Text Variant 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1912,7 +1912,7 @@ exports[`Storyshots Basics|BaseLink With Text Variant 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseRadio With Basics 1`] = `
+exports[`Storyshots Basics/BaseRadio With Basics 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1939,7 +1939,7 @@ exports[`Storyshots Basics|BaseRadio With Basics 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseText With Custom Styles 1`] = `
+exports[`Storyshots Basics/BaseText With Custom Styles 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1955,7 +1955,7 @@ exports[`Storyshots Basics|BaseText With Custom Styles 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseText With Defaults 1`] = `
+exports[`Storyshots Basics/BaseText With Defaults 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -1971,7 +1971,7 @@ exports[`Storyshots Basics|BaseText With Defaults 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseText With Font Weights 1`] = `
+exports[`Storyshots Basics/BaseText With Font Weights 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2034,7 +2034,7 @@ exports[`Storyshots Basics|BaseText With Font Weights 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseText With Fonts 1`] = `
+exports[`Storyshots Basics/BaseText With Fonts 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2065,7 +2065,7 @@ exports[`Storyshots Basics|BaseText With Fonts 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|BaseText With Variants 1`] = `
+exports[`Storyshots Basics/BaseText With Variants 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2141,7 +2141,7 @@ exports[`Storyshots Basics|BaseText With Variants 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|Modal Basic Modal 1`] = `
+exports[`Storyshots Basics/Modal Basic Modal 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2171,7 +2171,7 @@ exports[`Storyshots Basics|Modal Basic Modal 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics|Modal Modal With Custom Header And Footer 1`] = `
+exports[`Storyshots Basics/Modal Modal With Custom Header And Footer 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2201,7 +2201,7 @@ exports[`Storyshots Basics|Modal Modal With Custom Header And Footer 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Accordion With Card 1`] = `
+exports[`Storyshots Elements/Accordion With Card 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2238,100 +2238,106 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
       </div>
        
       <div
-        class="body"
+        class="relative"
       >
+        <!---->
+         
         <div
-          class="body--inner h-full"
+          class="body"
         >
-           
           <div
-            class="m-16"
+            class="body--inner h-full"
           >
+             
             <div
-              class="accordion"
+              class="m-16"
             >
               <div
-                class="accordion__card"
+                class="accordion"
               >
                 <div
-                  class="primary-dark flex items-center base-icon js- with-text  accordion__title"
-                  variant="h3"
+                  class="accordion__card"
                 >
-                  <svg
-                    alt=""
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
-                    data-icon="chevron-down"
-                    data-prefix="fas"
-                    focusable="false"
-                    role="img"
-                    viewBox="0 0 448 512"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <div
+                    class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+                    variant="h3"
                   >
-                    <path
-                      class=""
-                      d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
-                   
-                  <p
-                    class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
-                  >
-                    
+                    <svg
+                      alt=""
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                      data-icon="chevron-down"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 448 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        class=""
+                        d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                     
+                    <p
+                      class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                    >
+                      
           One
         
-                  </p>
-                </div>
-                 
-                <div
-                  class="accordion__body"
-                >
-                  
-        One
-      
-                </div>
-              </div>
-              <div
-                class="accordion__card"
-              >
-                <div
-                  class="primary-dark flex items-center base-icon js- with-text  accordion__title accordion__title--active"
-                  variant="h3"
-                >
-                  <svg
-                    alt=""
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
-                    data-icon="chevron-down"
-                    data-prefix="fas"
-                    focusable="false"
-                    role="img"
-                    viewBox="0 0 448 512"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      class=""
-                      d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
+                    </p>
+                  </div>
                    
-                  <p
-                    class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                  <div
+                    class="accordion__body"
                   >
                     
+        One
+      
+                  </div>
+                </div>
+                <div
+                  class="accordion__card"
+                >
+                  <div
+                    class="primary-dark flex items-center base-icon js- with-text  accordion__title accordion__title--active"
+                    variant="h3"
+                  >
+                    <svg
+                      alt=""
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                      data-icon="chevron-down"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 448 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        class=""
+                        d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                     
+                    <p
+                      class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                    >
+                      
           Two
         
-                  </p>
-                </div>
-                 
-                <div
-                  class="accordion__body--active accordion__body"
-                >
-                  
+                    </p>
+                  </div>
+                   
+                  <div
+                    class="accordion__body--active accordion__body"
+                  >
+                    
         Two
       
+                  </div>
                 </div>
               </div>
             </div>
@@ -2343,7 +2349,7 @@ exports[`Storyshots Elements|Accordion With Card 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Accordion With Components 1`] = `
+exports[`Storyshots Elements/Accordion With Components 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2380,77 +2386,83 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
       </div>
        
       <div
-        class="body"
+        class="relative"
       >
+        <!---->
+         
         <div
-          class="body--inner h-full"
+          class="body"
         >
-           
           <div
-            class="m-16"
+            class="body--inner h-full"
           >
+             
             <div
-              class="accordion"
+              class="m-16"
             >
               <div
-                class="accordion__card"
+                class="accordion"
               >
-                <p
-                  class="bg-blue-500 p-6 text-body font-body text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
-                >
-                  Custom Title Component
-                </p>
-                 
                 <div
-                  class="accordion__body--active accordion__body"
+                  class="accordion__card"
                 >
                   <p
-                    class="text-body font-body text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                    class="bg-blue-500 p-6 text-body font-body text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
                   >
-                    I am a custom component
+                    Custom Title Component
                   </p>
-                </div>
-              </div>
-              <div
-                class="accordion__card"
-              >
-                <div
-                  class="primary-dark flex items-center base-icon js- with-text  accordion__title"
-                  variant="h3"
-                >
-                  <svg
-                    alt=""
-                    aria-hidden="true"
-                    class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
-                    data-icon="chevron-down"
-                    data-prefix="fas"
-                    focusable="false"
-                    role="img"
-                    viewBox="0 0 448 512"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      class=""
-                      d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
-                      fill="currentColor"
-                    />
-                  </svg>
                    
-                  <p
-                    class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                  <div
+                    class="accordion__body--active accordion__body"
                   >
-                    
+                    <p
+                      class="text-body font-body text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                    >
+                      I am a custom component
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="accordion__card"
+                >
+                  <div
+                    class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+                    variant="h3"
+                  >
+                    <svg
+                      alt=""
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                      data-icon="chevron-down"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 448 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        class=""
+                        d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                     
+                    <p
+                      class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                    >
+                      
           Two
         
-                  </p>
-                </div>
-                 
-                <div
-                  class="accordion__body"
-                >
-                  
+                    </p>
+                  </div>
+                   
+                  <div
+                    class="accordion__body"
+                  >
+                    
         Two
       
+                  </div>
                 </div>
               </div>
             </div>
@@ -2462,7 +2474,7 @@ exports[`Storyshots Elements|Accordion With Components 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
+exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2645,7 +2657,7 @@ exports[`Storyshots Elements|Accordion With Dynamic Props 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Badge With Defaults 1`] = `
+exports[`Storyshots Elements/Badge With Defaults 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2664,7 +2676,7 @@ exports[`Storyshots Elements|Badge With Defaults 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Badge With Props 1`] = `
+exports[`Storyshots Elements/Badge With Props 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2683,7 +2695,7 @@ exports[`Storyshots Elements|Badge With Props 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Spinner With Defaults 1`] = `
+exports[`Storyshots Elements/Spinner With Defaults 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2729,7 +2741,7 @@ exports[`Storyshots Elements|Spinner With Defaults 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Spinner With Dynamic Props 1`] = `
+exports[`Storyshots Elements/Spinner With Dynamic Props 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2777,7 +2789,7 @@ exports[`Storyshots Elements|Spinner With Dynamic Props 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Tag Closeable Tag 1`] = `
+exports[`Storyshots Elements/Tag Closeable Tag 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2804,7 +2816,7 @@ exports[`Storyshots Elements|Tag Closeable Tag 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|Tag Simple Tag 1`] = `
+exports[`Storyshots Elements/Tag Simple Tag 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2821,7 +2833,7 @@ exports[`Storyshots Elements|Tag Simple Tag 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements|TitledCard With Defaults 1`] = `
+exports[`Storyshots Elements/TitledCard Basic 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2861,18 +2873,28 @@ exports[`Storyshots Elements|TitledCard With Defaults 1`] = `
         </div>
          
         <div
-          class="body"
+          class="relative"
         >
+          <!---->
+           
           <div
-            class="body--inner h-full"
+            class="body"
           >
-             
             <div
-              class="flex flex-grow bg-white m-6"
+              class="body--inner h-full"
             >
-              <p>
-                Hi
-              </p>
+               
+              <div
+                class="flex flex-grow bg-white m-6 h-full w-full"
+              >
+                <div
+                  class="div h-full w-full m-12"
+                >
+                  <p>
+                    Some content goes here
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -2882,7 +2904,7 @@ exports[`Storyshots Elements|TitledCard With Defaults 1`] = `
 </div>
 `;
 
-exports[`Storyshots Layouts|HomeLayout With All 1`] = `
+exports[`Storyshots Layouts/HomeLayout With All 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -2959,7 +2981,7 @@ exports[`Storyshots Layouts|HomeLayout With All 1`] = `
 </div>
 `;
 
-exports[`Storyshots Layouts|HomeLayout With Basic Content 1`] = `
+exports[`Storyshots Layouts/HomeLayout With Basic Content 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -3017,7 +3039,7 @@ exports[`Storyshots Layouts|HomeLayout With Basic Content 1`] = `
 </div>
 `;
 
-exports[`Storyshots Layouts|HomeLayout With Default Override 1`] = `
+exports[`Storyshots Layouts/HomeLayout With Default Override 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -3056,7 +3078,7 @@ exports[`Storyshots Layouts|HomeLayout With Default Override 1`] = `
 </div>
 `;
 
-exports[`Storyshots Layouts|HomeLayout With Overlay 1`] = `
+exports[`Storyshots Layouts/HomeLayout With Overlay 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -3117,7 +3139,7 @@ exports[`Storyshots Layouts|HomeLayout With Overlay 1`] = `
 </div>
 `;
 
-exports[`Storyshots Layouts|Loader With Custom Spinner 1`] = `
+exports[`Storyshots Layouts/Loader With Custom Spinner 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -3176,7 +3198,7 @@ exports[`Storyshots Layouts|Loader With Custom Spinner 1`] = `
 </div>
 `;
 
-exports[`Storyshots Layouts|Loader With Defaults 1`] = `
+exports[`Storyshots Layouts/Loader With Defaults 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -3233,7 +3255,7 @@ exports[`Storyshots Layouts|Loader With Defaults 1`] = `
 </div>
 `;
 
-exports[`Storyshots Layouts|Loader With Layout 1`] = `
+exports[`Storyshots Layouts/Loader With Layout 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -3290,7 +3312,7 @@ exports[`Storyshots Layouts|Loader With Layout 1`] = `
 </div>
 `;
 
-exports[`Storyshots Layouts|Page With Defaults 1`] = `
+exports[`Storyshots Layouts/Page With Defaults 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -3310,7 +3332,7 @@ exports[`Storyshots Layouts|Page With Defaults 1`] = `
 </div>
 `;
 
-exports[`Storyshots Layouts|Page With Tabs 1`] = `
+exports[`Storyshots Layouts/Page With Tabs 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
@@ -3396,7 +3418,7 @@ exports[`Storyshots Layouts|Page With Tabs 1`] = `
 </div>
 `;
 
-exports[`Storyshots Pages|NotFound With Defaults 1`] = `
+exports[`Storyshots Pages/NotFound With Defaults 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
 >
