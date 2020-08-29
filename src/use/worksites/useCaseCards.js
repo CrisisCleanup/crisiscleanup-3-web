@@ -39,7 +39,10 @@ export default ({ cases, addNew }: UseCaseCardsProps) => {
             caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
             address: c.short_address,
             state: c.state,
-            worktype: c.getWorkType ? c.getWorkType() : 'wellness_check',
+            worktype:
+              c instanceof Worksite
+                ? Worksite.getWorkType(c.work_types).work_type
+                : 'wellness_check',
             fullAddress: c.full_address,
             id: c.id,
             type: c instanceof Worksite ? Worksite.entity : Pda.entity,
