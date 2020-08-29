@@ -89,9 +89,17 @@
             $t('phoneConnectFirst.next_call')
           }}</base-text>
           <div class="flex items-center justify-between">
-            <base-text variant="h1">
-              {{ nextOutbound && nextOutbound.phone_number }}
-            </base-text>
+            <div v-if="nextOutbound">
+              <base-text variant="h1">
+                {{ nextOutbound.phone_number }}
+              </base-text>
+              <base-text variant="bodysm" v-if="nextOutbound.state_name">
+                {{ nextOutbound.state_name }}
+              </base-text>
+              <base-text variant="bodysm" v-if="outboundLocalTime">
+                {{ $t('~~Local Time:') }} {{ outboundLocalTime }}
+              </base-text>
+            </div>
             <base-button
               variant="outline"
               class="ml-2 px-6 text-xs"
@@ -184,6 +192,9 @@ import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
 import { WorksitesMixin } from '@/mixins';
 import CaseCard from '@/components/cards/case/CaseCard';
+import moment from 'moment';
+// eslint-disable-next-line no-unused-vars
+import moment_timezone from 'moment-timezone';
 import CaseForm from '../CaseForm';
 
 export default {
@@ -318,6 +329,13 @@ export default {
         };
       }
       return {};
+    },
+    outboundLocalTime() {
+      if (!this.nextOutbound) {
+        return null;
+      }
+
+      return moment().tz(this.nextOutbound.timezone).format('hh:mma z');
     },
   },
 };
