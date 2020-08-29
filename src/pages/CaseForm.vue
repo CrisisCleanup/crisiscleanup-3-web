@@ -661,23 +661,28 @@ export default {
     async onWorksiteSelect(value) {
       this.$emit('navigateToWorksite', value.id);
     },
+    searchWorksites(search, incident) {
+      return this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,
+      );
+    },
     async geocoderSearch(value) {
       this.geocoderResults = await GeocoderService.getMatchingAddresses(
         value,
         'USA',
       );
-      const searchWorksites = await Worksite.api().searchWorksites(
+      const searchWorksites = await this.searchWorksites(
         value,
         this.incidentId,
       );
-      this.searchWorksitesResults = searchWorksites.entities.worksites;
+      this.searchWorksitesResults = searchWorksites.data.results;
     },
     async worksitesSearch(value) {
-      const searchWorksites = await Worksite.api().searchWorksites(
+      const searchWorksites = await this.searchWorksites(
         value,
         this.incidentId,
       );
-      this.searchWorksitesNameResults = searchWorksites.entities.worksites;
+      this.searchWorksitesNameResults = searchWorksites.data.results;
     },
     async handleOk() {
       this.overlayMapVisible = false;
