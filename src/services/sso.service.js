@@ -3,8 +3,6 @@
  * Single Sign On Service
  */
 
-import AWSSPMetadata from '@/assets/saml/aws-metadata.xml';
-import IDPMetadata from '@/assets/saml/ccu-metadata.xml';
 import { IDPApi } from '@/utils/api';
 import Logger from '@/utils/log';
 import axios from 'axios';
@@ -26,10 +24,11 @@ saml.setSchemaValidator({
   validate: () => new Promise(),
 });
 
-export const SP = saml.ServiceProvider({
-  metadata: AWSSPMetadata,
-  relayState: `https://us-east-1.console.aws.amazon.com/connect/federate/${process.env.VUE_APP_CCP_INSTANCE}?destination=%2Fconnect%2Fccp#/`,
-});
+export const SP = (metadata) =>
+  saml.ServiceProvider({
+    metadata,
+    relayState: `https://us-east-1.console.aws.amazon.com/connect/federate/${process.env.VUE_APP_CCP_INSTANCE}?destination=%2Fconnect%2Fccp#/`,
+  });
 
 export const fetchMetadata = async () => {
   const content = await axios.get(IDPApi('metadata/'));
@@ -44,14 +43,18 @@ export const IDP = (metadata) =>
 
 export const authenticate = async (token) => {
   let metadata;
+  let awsMeta;
   try {
     metadata = await fetchMetadata();
+    awsMeta = await axios.get('/sp/aws-metadata.xml');
   } catch (e) {
     Log.warn('failed to fetch metadata, using local...', e);
-    metadata = IDPMetadata;
+    return '';
   }
+  awsMeta = awsMeta.data;
   const idp = IDP(metadata);
-  const { context } = await SP.createLoginRequest(idp, 'redirect');
+  const sp = SP(awsMeta);
+  const { context } = await sp.createLoginRequest(idp, 'redirect');
   const url = `${context}&jwt=${token}`;
   console.log(url);
   return url;
