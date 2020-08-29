@@ -181,9 +181,9 @@ class ControllerStore extends VuexModule {
     this.setStatus({
       statusId: statusId || this.status.statusId,
       notes: notes || this.status.notes,
-      modified: modified
+      modified: _.filter(modified, _.negate(_.isNil))
         ? _.unionBy<CaseType>(this.status.modified, modified, 'id')
-        : this.status.modified,
+        : _.filter(this.status.modified, _.negate(_.isNil)),
     });
   }
 
@@ -204,7 +204,9 @@ class ControllerStore extends VuexModule {
     if (!this.status.statusId) {
       throw new Error('~~You must set a call Status!');
     }
-    await this.updateStatus({ modified: [this.currentCase] });
+    if (this.currentCase) {
+      await this.updateStatus({ modified: [this.currentCase] });
+    }
     const { statusId, notes } = this.status;
     const callStatus = {
       statusId,
