@@ -81,7 +81,10 @@ export default ({ agent }) => {
   watch(
     () => currentContact.value,
     () => {
-      if (currentContact.value.action === ContactActions.ENDED) {
+      if (
+        currentContact.value &&
+        currentContact.value.action === ContactActions.ENDED
+      ) {
         syncDuration.stop();
       }
     },
