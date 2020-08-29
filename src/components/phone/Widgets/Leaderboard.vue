@@ -12,15 +12,12 @@
         </base-text>
       </div>
     </template>
-    <Loader :loading="false" class="card-container overflow-auto">
+    <Loader :loading="agentMetricsReady" class="card-container overflow-auto">
       <template #content>
         <div v-for="a in agentRankings" :key="a.agent" class="item">
           <div class="item--profile">
             <div class="image">
-              <img
-                class="rounded-full"
-                :src="userImages[a.user.id] ? userImages[a.user.id].result : ''"
-              />
+              <img class="rounded-full" :src="a.user.profilePictureUrl" />
             </div>
             <div class="info">
               <div class="info--user">
@@ -70,12 +67,8 @@
 import TitledCard from '@/components/cards/TitledCard.vue';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 import Loader from '@/components/Loader.vue';
-import useUser from '@/use/user/useUser';
 import { useGetters } from '@u3u/vue-hooks';
 import AgentClient from '@/models/phone/AgentClient';
-import User from '@/models/User';
-import { ref, watch } from '@vue/composition-api';
-import { usePromise } from 'vue-composable';
 
 export default {
   name: 'Leaderboard',
@@ -85,40 +78,8 @@ export default {
     Loader,
   },
   setup() {
-    const { agentRankings } = useGetters('phone.controller', ['agentRankings']);
-    const _users = {};
-    agentRankings.value.map((a) => {
-      _users[a.user.id] = { loading: true, result: { value: '' } };
-      return a;
-    });
-    const { currentUser } = useUser();
-    _users[currentUser.value.id] = {
-      loading: false,
-      result: currentUser.value.profilePictureUrl,
-    };
-    const userImages = ref(_users);
-
-    watch(
-      () => agentRankings.value,
-      () => {
-        const _newUsers = {};
-        agentRankings.value.map((agent) => {
-          if (!Object.keys(userImages).includes(agent.user.id)) {
-            _newUsers[agent.user.id] = usePromise(() =>
-              User.fetchOrFindId(agent.user.id, false).then(
-                (u) => u.profilePictureUrl,
-              ),
-            );
-          }
-          userImages.value = { ...userImages.value, ..._newUsers };
-          return agent;
-        });
-      },
-    );
-
     return {
-      agentRankings,
-      userImages,
+      ...useGetters('phone.controller', ['agentRankings', 'agentMetricsReady']),
       getStateFriendlyName(state) {
         return AgentClient.getFriendlyState(state);
       },

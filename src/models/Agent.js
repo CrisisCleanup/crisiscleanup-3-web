@@ -25,6 +25,13 @@ export default class Agent extends CCUModel {
     };
   }
 
+  static async fetchRealtimeMetrics() {
+    const {
+      response: { data },
+    } = await Agent.api().get('/agents_metrics/realtime', { save: false });
+    return data;
+  }
+
   static apiConfig = {
     actions: {
       async fetch(user) {

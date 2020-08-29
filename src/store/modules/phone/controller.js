@@ -12,8 +12,7 @@ import {
   MutationAction,
   VuexModule,
 } from 'vuex-module-decorators';
-import axios from 'axios';
-import { PhoneApi } from '@/utils/api';
+import AgentClient from '@/models/phone/AgentClient';
 import type {
   CaseType,
   MetricsStateT,
@@ -32,6 +31,7 @@ import Pda from '@/models/Pda';
 import Contact from '@/models/phone/Contact';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneInbound from '@/models/PhoneInbound';
+import User from '@/models/User';
 
 /**
  * Enum of possible controller pages.
@@ -122,6 +122,12 @@ class ControllerStore extends VuexModule {
   // agent metrics
   agentMetrics = {};
 
+  // loading
+  loading = {
+    agentMetrics: true,
+    callerHistory: true,
+  };
+
   get getGeneralMetrics() {
     return (metricOrder: PhoneMetric[]) => {
       const metricMap = new Map<string, number>();
@@ -136,6 +142,10 @@ class ControllerStore extends VuexModule {
     return _.orderBy(
       Object.values(this.agentMetrics, ['total_calls'], ['desc']),
     );
+  }
+
+  get agentMetricsReady() {
+    return this.loading.agentMetrics;
   }
 
   get currentAgentMetrics() {
@@ -245,24 +255,38 @@ class ControllerStore extends VuexModule {
     this.metrics = { ...this.metrics, ...newMetrics };
   }
 
+  @Mutation
+  setLoading(newLoading) {
+    this.loading = { ...this.loading, ...newLoading };
+  }
+
   @Action
   async updateAgentMetrics({ agents = [] } = {}) {
     const agentBoard = {};
+    const agentClient = await AgentClient.query().first();
+    let currentUserMetrics = {};
+    const userIds = _.filter(_.map(agents, 'user.id'), _.negate(_.isNil));
+    if (!_.isEmpty(userIds)) {
+      Log.debug('prefetching user ids:', userIds);
+      await User.fetchOrFindId(userIds);
+      this.setLoading({ agentMetrics: false, callerHistory: false });
+    }
     await Promise.all(
-      agents.map(async ({ agent_id, state, entered_timestamp }) => {
-        try {
-          await Agent.api().get(`/agents/${agent_id}`);
-        } catch (e) {
-          Log.warn(`failed to fetch agent, does it exist? (${agent_id})`);
-          return;
-        }
-        const {
-          recent_contacts,
-          user,
-          ...metrics
-        } = await Agent.api().getMetrics(agent_id);
+      agents.map(async ({ state, entered_timestamp, ...metrics }) => {
         let recentContacts = [];
-        if (this.context.rootGetters['auth/userId'] === user.id) {
+        const agent_id = _.get(metrics, 'agent_id', _.get(metrics, 'agent'));
+        if (metrics.user) {
+          metrics.user = await User.fetchOrFindId(metrics.user.id);
+        }
+        if (
+          _.eq(agent_id, agentClient.agentId) ||
+          _.isNil(agentClient.agentId)
+        ) {
+          const {
+            recent_contacts,
+            ...userMetrics
+          } = await Agent.api().getMetrics(agent_id);
+          currentUserMetrics = userMetrics;
           recentContacts = _.defaultTo(recent_contacts, []);
           // find all unique case ids and prefetch em
           let recentCases = _.uniq(
@@ -296,14 +320,15 @@ class ControllerStore extends VuexModule {
           recentContacts = await Promise.all(recentContacts);
         }
         agentBoard[agent_id] = {
+          ...(currentUserMetrics || {}),
           ...metrics,
-          user,
           currentState: state,
           enteredTimestamp: Date.parse(entered_timestamp),
           recent_contacts: recentContacts,
         };
       }),
     );
+    Log.debug('updating agent metrics:', agentBoard);
     this.setAgentMetrics(agentBoard);
   }
 
@@ -312,9 +337,9 @@ class ControllerStore extends VuexModule {
     let metricData = metrics;
     if (!metrics) {
       Log.debug('falling back to api to fetch metrics...');
-      const resp = await axios.get(PhoneApi('metrics'));
-      const { results }: { results: PhoneMetricUpdate[] } = resp.data;
-      metricData = results;
+      const results = await Agent.fetchRealtimeMetrics();
+      metricData = results.metrics;
+      await this.updateAgentMetrics({ agents: results.agents });
     }
     if (!metricData) {
       return;
