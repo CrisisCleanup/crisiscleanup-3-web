@@ -225,6 +225,9 @@ class ControllerStore extends VuexModule {
       await PhoneInbound.api().updateStatus(contact.inbound.id, callStatus);
     }
     await contact.disconnect();
+    Log.info('agent has ended session, deleting contact!');
+    await Contact.delete(contact.contactId);
+    await this.setView({ page: ControllerPages.DASHBOARD });
   }
 
   @Mutation
