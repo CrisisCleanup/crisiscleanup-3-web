@@ -1,7 +1,7 @@
 import BaseRadio from '@/components/BaseRadio';
 
 export default {
-  title: 'Basics|BaseRadio',
+  title: 'Basics/BaseRadio',
   component: BaseRadio,
 };
 

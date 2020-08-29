@@ -2,7 +2,7 @@ import BaseIcon from '@/components/BaseIcon';
 import { ICONS, ICON_SIZES } from '@/constants';
 
 export default {
-  title: 'Basics|BaseIcon',
+  title: 'Basics/BaseIcon',
   component: BaseIcon,
 };
 

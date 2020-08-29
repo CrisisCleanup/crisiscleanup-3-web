@@ -2,7 +2,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import { action } from '@storybook/addon-actions';
 
 export default {
-  title: 'Basics|BaseButton',
+  title: 'Basics/BaseButton',
   component: BaseButton,
 };
 

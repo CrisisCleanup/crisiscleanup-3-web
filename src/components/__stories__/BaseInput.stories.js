@@ -1,7 +1,7 @@
 import BaseInput from '@/components/BaseInput.vue';
 
 export default {
-  title: 'Basics|BaseInput',
+  title: 'Basics/BaseInput',
   component: BaseInput,
 };
 

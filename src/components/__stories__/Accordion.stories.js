@@ -3,7 +3,7 @@ import TitledCard from '@/components/cards/TitledCard.vue';
 import { withKnobs, boolean } from '@storybook/addon-knobs';
 
 export default {
-  title: 'Elements|Accordion',
+  title: 'Elements/Accordion',
   component: Accordion,
   decorators: [withKnobs],
 };

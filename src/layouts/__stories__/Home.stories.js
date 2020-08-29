@@ -1,7 +1,7 @@
 import HomeLayout from '@/layouts/Home';
 
 export default {
-  title: 'Layouts|HomeLayout',
+  title: 'Layouts/HomeLayout',
   component: HomeLayout,
   parameters: {
     backgrounds: [],

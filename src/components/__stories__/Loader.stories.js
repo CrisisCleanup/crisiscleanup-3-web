@@ -3,7 +3,7 @@
 import Loader from '@/components/Loader';
 
 export default {
-  title: 'Layouts|Loader',
+  title: 'Layouts/Loader',
   component: Loader,
 };
 

@@ -6,7 +6,7 @@ const Tab = (val) => ({
 });
 
 export default {
-  title: 'Layouts|Page',
+  title: 'Layouts/Page',
   component: Page,
   decorators: [
     StoryRouter(

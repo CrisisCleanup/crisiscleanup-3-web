@@ -2,7 +2,7 @@ import BaseText from '@/components/BaseText';
 import { TEXT_VARIANTS as TextVariants } from '@/constants';
 
 export default {
-  title: 'Basics|BaseText',
+  title: 'Basics/BaseText',
   component: BaseText,
 };
 

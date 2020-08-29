@@ -2,7 +2,7 @@ import Spinner from '@/components/Spinner';
 import { text, withKnobs } from '@storybook/addon-knobs';
 
 export default {
-  title: 'Elements|Spinner',
+  title: 'Elements/Spinner',
   component: Spinner,
   decorators: [withKnobs],
 };

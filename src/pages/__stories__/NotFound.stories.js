@@ -1,7 +1,7 @@
 import NotFoundPage from '@/pages/NotFound';
 
 export default {
-  title: 'Pages|NotFound',
+  title: 'Pages/NotFound',
   component: NotFoundPage,
 };
 
