@@ -80,29 +80,22 @@
 import CaseCard from '@/components/cards/Case.vue';
 import DisasterIcon from '@/components/DisasterIcon.vue';
 import useCaseCards from '@/use/worksites/useCaseCards';
-import VueTypes from 'vue-types';
-import Worksite from '@/models/Worksite';
-import Pda from '@/models/Pda';
-import { toRefs } from '@vue/composition-api';
 import useUser from '@/use/user/useUser';
-import AgentClient from '@/models/phone/AgentClient';
 import useContact from '@/use/phone/useContact';
 import useIncident from '@/use/worksites/useIncident';
 import useEnums from '@/use/useEnums';
+import useAgent from '@/use/phone/useAgent';
 
 export default {
   name: 'IncomingPopup',
   components: { CaseCard, DisasterIcon },
-  props: {
-    cases: VueTypes.arrayOf(VueTypes.oneOfType([Pda, Worksite])),
-    agent: VueTypes.oneOfType([AgentClient]),
-  },
-  setup(props) {
-    const { cases, agent } = toRefs(props);
+  setup() {
+    const { agent } = useAgent();
+    const { callerCases, ...contact } = useContact({ agent });
     return {
+      ...contact,
       ...useUser(),
-      ...useCaseCards({ cases: cases.value, addNew: false }),
-      ...useContact({ agent }),
+      ...useCaseCards({ cases: callerCases, addNew: false }),
       ...useIncident(),
       ...useEnums(),
     };
