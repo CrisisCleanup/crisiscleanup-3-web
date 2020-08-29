@@ -8,6 +8,7 @@ import { wrap } from '@/utils/wrap';
 import type { CaseType } from '@/store/modules/phone/types';
 import Pda from '@/models/Pda';
 import Worksite from '@/models/Worksite';
+import _ from 'lodash';
 
 export type UseCaseCardsProps = {|
   cases: CaseType[],
@@ -41,7 +42,11 @@ export default ({ cases, addNew }: UseCaseCardsProps) => {
             state: c.state,
             worktype:
               c instanceof Worksite
-                ? Worksite.getWorkType(c.work_types).work_type
+                ? _.get(
+                    Worksite.getWorkType(c.work_types),
+                    'work_type',
+                    'unknown',
+                  )
                 : 'wellness_check',
             fullAddress: c.full_address,
             id: c.id,
