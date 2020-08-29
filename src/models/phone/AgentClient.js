@@ -12,7 +12,7 @@ import type {
   ConnectionType,
   RouteState,
 } from '@/models/phone/types';
-import Contact from '@/models/phone/Contact';
+import Contact, { ContactActions } from '@/models/phone/Contact';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import _ from 'lodash';
 import Logger from '@/utils/log';
@@ -154,7 +154,11 @@ export default class AgentClient extends Model {
   }
 
   get contactState(): ConnectionState | RouteState {
-    if (!_.isEmpty(this.connections)) {
+    if (
+      !_.isEmpty(this.connections) &&
+      !_.isNil(this.currentContact) &&
+      _.get(this.currentContact, 'action', null) !== ContactActions.DESTROYED
+    ) {
       const initConnection: ConnectionType = this.connections[0];
       return initConnection.state;
     }
