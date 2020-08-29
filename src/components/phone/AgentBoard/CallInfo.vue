@@ -35,7 +35,7 @@
                 :type="enums.icons.phone_contact_add"
               />
               <ccu-icon
-                @click.native="() => closeContact(currentContact)"
+                @click.native="() => currentContact.disconnect()"
                 size="xl"
                 :type="enums.icons.phone_hangup"
               />
@@ -47,7 +47,7 @@
         <ccu-icon
           :type="enums.icons.phone_exit"
           size="large"
-          @click.native="() => closeContact(currentContact)"
+          @click.native="() => currentContact.disconnect()"
         />
       </div>
     </div>
