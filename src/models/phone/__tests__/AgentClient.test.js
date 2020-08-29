@@ -532,4 +532,22 @@ describe('phone models', () => {
       }
     `);
   });
+  it('contact should move agent out of ACW on deletion', async () => {
+    ACS.getConnectionByContactId.mockReturnValue({
+      getConnectionId: () => 'verified_connection123',
+    });
+    ACS.getContactById.mockReturnValue(null);
+    await AgentClient.create({ data: mockAgentData() });
+    await Contact.insert({
+      data: mockContactData({
+        state: ContactStates.ROUTED,
+        action: ContactActions.ENDED, // ended contact, so agent should be in ACW.
+      }),
+    });
+    let agent = await AgentClient.query().withAllRecursive().first();
+    expect(agent.contactState).toBe(ConnectionStates.PAUSED);
+    await Contact.delete(agent.contacts[0].contactId);
+    agent = await AgentClient.query().withAllRecursive().first();
+    expect(agent.contactState).toBe(RouteStates.ROUTABLE);
+  });
 });
