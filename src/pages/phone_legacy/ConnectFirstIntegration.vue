@@ -471,6 +471,7 @@ export default {
           {
             currentAgentId: null,
           },
+          null,
           true,
         );
         return process.env.VUE_APP_PHONE_DEFAULT_USERNAME;
@@ -523,7 +524,7 @@ export default {
         if (clearAgent) {
           stateUpdate.currentAgentId = null;
         }
-        await User.api().updateUserState(stateUpdate, true);
+        await User.api().updateUserState(stateUpdate, null, true);
       }
     },
     async callOutbound() {

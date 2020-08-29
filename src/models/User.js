@@ -167,7 +167,7 @@ export default class User extends CCUModel {
            update top-level with both globalStates and incidentStates
            and then update state for current incident with incidentStates.
         */
-        const currentUser = User.find(AuthService.getUser().user_claims.id);
+        let currentUser = User.find(AuthService.getUser().user_claims.id);
         const currentIncident = currentUser.states.incident;
         let updatedStates = {
           ...currentUser.states,
@@ -185,12 +185,13 @@ export default class User extends CCUModel {
           ...updatedStates,
           ...{ incidents: updatedIncidentStates },
         };
-        User.update({
+        await User.update({
           where: currentUser.id,
           data: {
             states: updatedStates,
           },
         });
+        currentUser = User.find(AuthService.getUser().user_claims.id);
         await this.patch(
           `/users/${currentUser.id}`,
           {

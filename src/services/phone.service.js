@@ -206,6 +206,7 @@ export default class PhoneService {
               currentAgentId: data.agentSettings.agentId,
               loggedInAgents: [...loggedInAgents, data.agentSettings.agentId],
             },
+            null,
             true,
           );
 

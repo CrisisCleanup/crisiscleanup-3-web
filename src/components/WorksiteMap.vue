@@ -72,44 +72,68 @@
         class="w-8 h-8 border border-crisiscleanup-dark-100 my-1 bg-white shadow-xl text-crisiscleanup-dark-400"
       />
     </div>
-    <div
-      v-if="!mapLoading"
-      style="z-index: 1001;"
-      class="legend absolute left-0 bottom-0 w-72 bg-white border-2 p-2"
-    >
-      <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
-      <div class="flex flex-wrap justify-between">
-        <div
-          v-for="entry in displayedWorkTypeSvgs"
-          :key="entry.key"
-          class="flex items-center w-1/2 mb-1"
-        >
-          <div class="map-svg-container" v-html="entry.svg"></div>
-          <span class="text-xs ml-1">{{ entry.key | getWorkTypeName }}</span>
+    <template v-if="!mapLoading">
+      <div
+        style="z-index: 1001;"
+        class="legend absolute left-0 bottom-0 w-72 bg-white border-2 p-2"
+        v-if="showingLegend"
+      >
+        <div class="flex items-center justify-between">
+          <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
+          <font-awesome-icon
+            icon="minus"
+            size="1x"
+            class="cursor-pointer"
+            :title="$t('~~Hide Legend')"
+            @click="() => toggleLegend(false)"
+          ></font-awesome-icon>
         </div>
-      </div>
-      <div class="text-base font-bold my-1">
-        {{ $t('worksiteMap.case_status') }}
-      </div>
-      <div class="flex flex-wrap">
-        <div
-          v-for="(value, key) in legendColors"
-          :key="key"
-          class="flex items-start w-1/2 mb-1"
-        >
-          <span class="w-4 mt-1">
-            <badge class="mx-1" :color="value" />
-          </span>
-          <div class="text-xs ml-1">{{ key }}</div>
+        <div class="flex flex-wrap justify-between">
+          <div
+            v-for="entry in displayedWorkTypeSvgs"
+            :key="entry.key"
+            class="flex items-center w-1/2 mb-1"
+          >
+            <div class="map-svg-container" v-html="entry.svg"></div>
+            <span class="text-xs ml-1">{{ entry.key | getWorkTypeName }}</span>
+          </div>
         </div>
-        <div class="flex items-center w-1/2 mb-1">
-          <span class="w-5 h-5" v-html="templates.plus" />
-          <div class="text-xs ml-1">
-            {{ $t('worksiteMap.multiple_work_types') }}
+        <div class="text-base font-bold my-1">
+          {{ $t('worksiteMap.case_status') }}
+        </div>
+        <div class="flex flex-wrap">
+          <div
+            v-for="(value, key) in legendColors"
+            :key="key"
+            class="flex items-start w-1/2 mb-1"
+          >
+            <span class="w-4 mt-1">
+              <badge class="mx-1" :color="value" />
+            </span>
+            <div class="text-xs ml-1">{{ key }}</div>
+          </div>
+          <div class="flex items-center w-1/2 mb-1">
+            <span class="w-5 h-5" v-html="templates.plus" />
+            <div class="text-xs ml-1">
+              {{ $t('worksiteMap.multiple_work_types') }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <div
+        style="z-index: 1001;"
+        class="legend absolute left-0 bottom-0 w-16 bg-white border-2 p-2 h-24 flex justify-center"
+        v-else
+      >
+        <font-awesome-icon
+          icon="plus"
+          size="1x"
+          :title="$t('~~Show Legend')"
+          class="cursor-pointer"
+          @click="() => toggleLegend(true)"
+        ></font-awesome-icon>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -188,6 +212,7 @@ export default {
           .open_unresponsive_unclaimed.fillColor,
       },
       mapLoading: false,
+      showingLegend: true,
       markerLayer: L.layerGroup(),
       markers: [],
       markerSprites: [],
@@ -256,6 +281,10 @@ export default {
               [31.0, -100.0],
               12,
             );
+          }
+
+          if (this.currentUser.states.showingLegend !== undefined) {
+            this.showingLegend = this.currentUser.states.showingLegend;
           }
           const { map } = this;
           const states = this.currentUser.getStatesForIncident(
@@ -431,6 +460,16 @@ export default {
     workTypesUnclaimed() {
       return this.worksite.work_types.filter(
         (type) => type.claimed_by === null,
+      );
+    },
+    toggleLegend(value) {
+      this.showingLegend = value;
+      User.api().updateUserState(
+        {
+          showingLegend: value,
+        },
+        null,
+        false,
       );
     },
   },
