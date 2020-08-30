@@ -27,8 +27,11 @@
         </div>
         <div class="flex">
           <div class="m-4 pt-2 shadow bg-white w-full">
-            <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('adminDashboard.pending_organizations') }}
+            <div class="py-4 px-4 flex items-center justify-between border-b">
+              <div class="text-gray-500">
+                {{ $t('adminDashboard.pending_organizations') }}
+              </div>
+              <base-button icon="sync" :action="getOrganizationsForApproval" />
             </div>
             <div class="p-4">
               <OrganizationApprovalTable
@@ -40,8 +43,11 @@
         </div>
         <div class="flex">
           <div class="m-4 pt-2 shadow bg-white w-full">
-            <div class="py-4 px-4 text-gray-500 border-b">
-              {{ $t('adminDashboard.redeploy_requests') }}
+            <div class="py-4 px-4 flex items-center justify-between border-b">
+              <div class="text-gray-500">
+                {{ $t('adminDashboard.redeploy_requests') }}
+              </div>
+              <base-button icon="sync" :action="getIncidentRequests" />
             </div>
             <div class="p-4">
               <IncidentApprovalTable
