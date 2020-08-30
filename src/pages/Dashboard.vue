@@ -11,7 +11,10 @@
         </div>
 
         <div class="flex flex-wrap">
-          <div class="w-full md:w-1/2 xl:w-1/4 p-3">
+          <div
+            class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
+            @click="$router.push(`/incident/${currentIncidentId}/cases/new`)"
+          >
             <!--Metric Card-->
             <div
               class="bg-crisiscleanup-lightblue-100 rounded-lg shadow-lg p-5"
@@ -40,7 +43,10 @@
             <!--/Metric Card-->
           </div>
 
-          <div class="w-full md:w-1/2 xl:w-1/4 p-3">
+          <div
+            class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
+            @click="$router.push(`/incident/${currentIncidentId}/cases/new`)"
+          >
             <!--Metric Card-->
             <div class="bg-crisiscleanup-yellow-100 rounded-lg shadow-lg">
               <div class="flex flex-row items-center p-5">
@@ -75,7 +81,10 @@
             <!--/Metric Card-->
           </div>
 
-          <div class="w-full md:w-1/2 xl:w-1/4 p-3">
+          <div
+            class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
+            @click="$router.push(`/incident/${currentIncidentId}/cases/new`)"
+          >
             <!--Metric Card-->
             <div class="bg-orange-400 rounded-lg shadow-lg">
               <div class="flex flex-row items-center p-5">
@@ -112,7 +121,10 @@
             <!--/Metric Card-->
           </div>
 
-          <div class="w-full md:w-1/2 xl:w-1/4 p-3">
+          <div
+            class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
+            @click="$router.push(`/incident/${currentIncidentId}/cases/new`)"
+          >
             <!--Metric Card-->
             <div class="bg-crisiscleanup-green-100 rounded-lg shadow-lg">
               <div class="flex flex-row items-center p-5">
