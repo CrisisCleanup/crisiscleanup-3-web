@@ -168,13 +168,14 @@ export default class User extends CCUModel {
            and then update state for current incident with incidentStates.
         */
         let currentUser = User.find(AuthService.getUser().user_claims.id);
-        const currentIncident = currentUser.states.incident;
+        const states = currentUser.states || {};
+        const currentIncident = states.incident;
         let updatedStates = {
-          ...currentUser.states,
+          ...states,
           ...globalStates,
           ...incidentStates,
         };
-        let updatedIncidentStates = currentUser.states.incidents || {};
+        let updatedIncidentStates = states.incidents || {};
         if (incidentStates) {
           updatedIncidentStates = {
             ...updatedIncidentStates,
@@ -195,7 +196,7 @@ export default class User extends CCUModel {
         await this.patch(
           `/users/${currentUser.id}`,
           {
-            states: currentUser.states,
+            states,
           },
           { save: false },
         );

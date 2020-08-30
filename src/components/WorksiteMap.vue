@@ -283,7 +283,10 @@ export default {
             );
           }
 
-          if (this.currentUser.states.showingLegend !== undefined) {
+          if (
+            this.currentUser.states &&
+            this.currentUser.states.showingLegend !== undefined
+          ) {
             this.showingLegend = this.currentUser.states.showingLegend;
           }
           const { map } = this;
