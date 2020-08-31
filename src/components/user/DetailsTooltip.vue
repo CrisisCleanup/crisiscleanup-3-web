@@ -1,30 +1,42 @@
 <template>
-  <v-popover popover-class="user-popover" placement="top-start">
-    <base-text class="details-name" variant="body">
-      <span
-        variant="body"
-        :class="`${nameClass} tooltip-target cursor-pointer`"
-        >{{ userItem.full_name }}</span
-      >
+  <div class="relative">
+    <base-text
+      v-popover.bottom="{ name: userItem.full_name + '_popover' }"
+      :style="[nameStyle]"
+      class="details-name"
+      variant="body"
+    >
+      <span :class="`${nameClass} tooltip-target cursor-pointer`">{{
+        userItem.full_name
+      }}</span>
       <slot
     /></base-text>
-    <div slot="popover">
-      <div class="text-base">{{ userItem.full_name }}</div>
-      <div class="text-xs">{{ userItem.organization.name }}</div>
-      <div class="mt-2">
-        <font-awesome-icon icon="envelope" />
-        <a :href="`mailto:${userItem.email}`" class="ml-1">{{
-          userItem.email
-        }}</a>
-      </div>
-      <div v-if="userItem.mobile">
-        <font-awesome-icon icon="phone" />
-        <a :href="`tel:${userItem.mobile}`" class="ml-1">{{
-          userItem.mobile
-        }}</a>
-      </div>
+    <div class="user-popover--container absolute">
+      <popover
+        :name="userItem.full_name + '_popover'"
+        popover-class="user-popover"
+        ref="popover"
+        :width="300"
+        :pointer="false"
+        :style="{ left: 0, top: 0 }"
+      >
+        <div class="text-base">{{ userItem.full_name }}</div>
+        <div class="text-xs">{{ userItem.organization.name }}</div>
+        <div class="mt-2">
+          <font-awesome-icon icon="envelope" />
+          <a :href="`mailto:${userItem.email}`" class="ml-1">{{
+            userItem.email
+          }}</a>
+        </div>
+        <div v-if="userItem.mobile">
+          <font-awesome-icon icon="phone" />
+          <a :href="`tel:${userItem.mobile}`" class="ml-1">{{
+            userItem.mobile
+          }}</a>
+        </div>
+      </popover>
     </div>
-  </v-popover>
+  </div>
 </template>
 
 <script>
@@ -37,6 +49,7 @@ export default {
   props: {
     user: VueTypes.number,
     nameClass: VueTypes.string.def('text-yellow-600'),
+    nameStyle: VueTypes.any,
   },
   computed: {
     userItem() {
@@ -47,10 +60,11 @@ export default {
 </script>
 
 <style>
-.user-popover {
-  @apply bg-black text-white p-3 outline-none;
-  width: 230px;
-  left: 0.75rem !important;
-  z-index: 1000;
+.user-popover--container {
+  position: absolute;
+  left: 0;
+  .vue-popover {
+    @apply bg-crisiscleanup-dark-500 text-white p-3 outline-none;
+  }
 }
 </style>
