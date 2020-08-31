@@ -245,7 +245,7 @@ $neg-container-x-pad: calc(0rem - theme('spacing.12'));
 
 .search {
   &__container {
-    @apply h-full w-full m-6;
+    @apply h-full w-full p-6;
   }
 }
 </style>
