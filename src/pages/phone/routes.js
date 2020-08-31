@@ -1,3 +1,5 @@
+import PhoneDashboard from '@/pages/phone/Dashboard.vue';
+import PhoneController from '@/pages/phone/Controller.vue';
 import PhoneLayout from './Index.vue';
 
 const routes = [
@@ -10,6 +12,18 @@ const routes = [
       can: 'phone_agent',
       fail: '$from',
     },
+    children: [
+      {
+        path: '',
+        name: 'nav.phone_dashboard',
+        component: PhoneDashboard,
+      },
+      {
+        path: '',
+        name: 'nav.phone_controller',
+        components: PhoneController,
+      },
+    ],
   },
 ];
 
