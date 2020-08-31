@@ -21,7 +21,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       class="flex flex-wrap"
     >
       <div
-        class="w-full md:w-1/2 xl:w-1/4 p-3"
+        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
       >
         <div
           class="bg-crisiscleanup-lightblue-100 rounded-lg shadow-lg p-5"
@@ -73,7 +73,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       </div>
        
       <div
-        class="w-full md:w-1/2 xl:w-1/4 p-3"
+        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
       >
         <div
           class="bg-crisiscleanup-yellow-100 rounded-lg shadow-lg"
@@ -138,7 +138,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       </div>
        
       <div
-        class="w-full md:w-1/2 xl:w-1/4 p-3"
+        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
       >
         <div
           class="bg-orange-400 rounded-lg shadow-lg"
@@ -203,7 +203,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
       </div>
        
       <div
-        class="w-full md:w-1/2 xl:w-1/4 p-3"
+        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
       >
         <div
           class="bg-crisiscleanup-green-100 rounded-lg shadow-lg"
