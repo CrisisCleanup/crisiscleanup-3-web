@@ -1,20 +1,20 @@
 <template>
-  <div class="bg-white shadow-crisiscleanup-card card">
-    <div class="header" slot="header">
-      <div class="header--inner">
-        <slot name="header"></slot>
-      </div>
-    </div>
-    <Loader overlay :loading="loading">
-      <template #content>
+  <Loader overlay :loading="loading">
+    <template #content>
+      <div class="bg-white shadow-crisiscleanup-card card h-full">
+        <div class="header" slot="header">
+          <div class="header--inner">
+            <slot name="header"></slot>
+          </div>
+        </div>
         <div class="body">
-          <div class="body--inner h-full">
+          <div v-if="!loading" class="body--inner h-full">
             <slot></slot>
           </div>
         </div>
-      </template>
-    </Loader>
-  </div>
+      </div>
+    </template>
+  </Loader>
 </template>
 
 <script>
@@ -31,9 +31,7 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-  flex-grow: 1;
   .header {
-    @apply py-5 px-6;
     position: relative;
     &:after {
       content: '';
@@ -52,11 +50,6 @@ export default {
   }
   .body {
     @apply bg-white;
-    display: flex;
-    &--inner {
-      display: flex;
-      flex-grow: 1;
-    }
   }
 }
 </style>
