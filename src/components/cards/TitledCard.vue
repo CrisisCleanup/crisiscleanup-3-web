@@ -1,9 +1,9 @@
 <template>
   <Card :loading="loading">
     <template #header>
-      <div class="left">
+      <div class="left py-4 px-6">
         <slot name="left">
-          <base-text variant="h2" weight="700">
+          <base-text variant="h3" weight="600">
             {{ $t(title) }}
           </base-text>
         </slot>
