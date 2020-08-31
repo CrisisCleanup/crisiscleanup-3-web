@@ -12,7 +12,6 @@ import {
   MutationAction,
   VuexModule,
 } from 'vuex-module-decorators';
-import AgentClient from '@/models/phone/AgentClient';
 import type {
   CaseType,
   MetricsStateT,
@@ -122,6 +121,9 @@ class ControllerStore extends VuexModule {
   // agent metrics
   agentMetrics = {};
 
+  // caller history
+  callerHistory = [];
+
   // loading
   loading = {
     agentMetrics: true,
@@ -148,7 +150,16 @@ class ControllerStore extends VuexModule {
     return this.loading.agentMetrics;
   }
 
+  get callHistoryReady() {
+    return this.loading.callerHistory;
+  }
+
+  get callHistory() {
+    return this.callerHistory;
+  }
+
   get currentAgentMetrics() {
+    if (this.loading.agentMetrics) return null;
     return this.agentRankings.find(
       (a) => a.user.id === this.context.rootGetters['auth/userId'],
     );
@@ -237,6 +248,7 @@ class ControllerStore extends VuexModule {
       await PhoneInbound.api().updateStatus(contact.inbound.id, callStatus);
     }
     await contact.disconnect();
+    this.setLoading({ callerHistory: true });
     await this.setView({ page: ControllerPages.DASHBOARD });
   }
 
@@ -260,76 +272,100 @@ class ControllerStore extends VuexModule {
     this.loading = { ...this.loading, ...newLoading };
   }
 
+  @Mutation
+  setCallerHistory(newCallerHistory) {
+    this.callerHistory = _.union(this.callerHistory, newCallerHistory);
+  }
+
   @Action
   async updateAgentMetrics({ agents = [] } = {}) {
     const agentBoard = {};
-    const agentClient = await AgentClient.query().first();
-    let currentUserMetrics = {};
     const userIds = _.filter(_.map(agents, 'user.id'), _.negate(_.isNil));
     if (!_.isEmpty(userIds)) {
       Log.debug('prefetching user ids:', userIds);
       await User.fetchOrFindId(userIds);
-      this.setLoading({ agentMetrics: false, callerHistory: false });
     }
     await Promise.all(
       agents.map(async ({ state, entered_timestamp, ...metrics }) => {
-        let recentContacts = [];
         const agent_id = _.get(metrics, 'agent_id', _.get(metrics, 'agent'));
         if (metrics.user) {
           metrics.user = await User.fetchOrFindId(metrics.user.id);
-        }
-        if (
-          _.eq(agent_id, agentClient.agentId) ||
-          _.isNil(agentClient.agentId)
-        ) {
-          const {
-            recent_contacts,
-            ...userMetrics
-          } = await Agent.api().getMetrics(agent_id);
-          currentUserMetrics = userMetrics;
-          recentContacts = _.defaultTo(recent_contacts, []);
-          // find all unique case ids and prefetch em
-          let recentCases = _.uniq(
-            _.flatten(recentContacts.map(({ cases }) => cases)),
-          );
-          recentCases = _.difference(recentCases, this.history.resolvedCases);
-          this.setHistory({
-            resolvedCases: _.union(recentCases, this.history.resolvedCases),
+        } else {
+          await this.updateCallerHistory({
+            ...metrics,
+            agent_id,
+            state,
+            entered_timestamp,
           });
-          Log.debug('found cases in history:', recentCases);
-          await Promise.all(
-            recentCases.map((cId) =>
-              Worksite.api().find_or_fetch(cId, { resolve: false }),
-            ),
-          );
-          recentContacts = recentContacts.map(async ({ cases, ...c }) => {
-            const wkSites = await Promise.all(
-              cases.map(async (cId) => {
-                let caseItem = await Worksite.find(cId);
-                if (_.isNil(caseItem)) {
-                  const {
-                    response: { data },
-                  } = await Worksite.api().get(`/worksites/${cId}`);
-                  caseItem = data;
-                }
-                return caseItem;
-              }),
-            );
-            return { cases: wkSites, ...c };
-          });
-          recentContacts = await Promise.all(recentContacts);
+          return;
         }
+        const existing = _.get(this.agentMetrics, agent_id, {});
         agentBoard[agent_id] = {
-          ...(currentUserMetrics || {}),
+          ...existing,
           ...metrics,
           currentState: state,
           enteredTimestamp: Date.parse(entered_timestamp),
-          recent_contacts: recentContacts,
         };
       }),
     );
     Log.debug('updating agent metrics:', agentBoard);
     this.setAgentMetrics(agentBoard);
+    this.setLoading({ agentMetrics: false });
+  }
+
+  @Action
+  async updateCallerHistory({ agent_id, state, entered_timestamp }) {
+    if (this.loading.callerHistory) {
+      const { recent_contacts } = await Agent.api().getMetrics(agent_id);
+      let recentContacts = recent_contacts;
+      // find all unique case ids and prefetch em
+      let recentCases = _.uniq(
+        _.flatten(recentContacts.map(({ cases }) => cases)),
+      );
+      recentCases = _.difference(recentCases, this.history.resolvedCases);
+      this.setHistory({
+        resolvedCases: _.union(recentCases, this.history.resolvedCases),
+      });
+      Log.debug('found cases in history:', recentCases);
+      await Promise.all(
+        recentCases.map((cId) =>
+          Worksite.api().find_or_fetch(cId, { resolve: false }),
+        ),
+      );
+      recentContacts = recentContacts.map(async ({ cases, ...c }) => {
+        const wkSites = await Promise.all(
+          cases.map(async (cId) => {
+            let caseItem = await Worksite.find(cId);
+            if (_.isNil(caseItem)) {
+              const {
+                response: { data },
+              } = await Worksite.api().get(`/worksites/${cId}`);
+              caseItem = data;
+            }
+            return caseItem;
+          }),
+        );
+        return { cases: wkSites, ...c };
+      });
+      recentContacts = await Promise.all(recentContacts);
+      Log.debug('updating caller history:', recentContacts);
+      this.setCallerHistory(recentContacts);
+      this.setLoading({ callerHistory: false });
+    }
+    Log.debug('looking for current agent...', agent_id, this.agentMetrics);
+    const currentAgentMetrics = _.get(this.agentMetrics, agent_id, null);
+    if (!currentAgentMetrics) {
+      return;
+    }
+    const updatedMetrics = {
+      ...currentAgentMetrics,
+      currentState: state,
+      enteredTimestamp: Date.parse(entered_timestamp),
+    };
+    Log.debug('updating current agent metrics:', updatedMetrics);
+    this.setAgentMetrics({
+      [agent_id]: updatedMetrics,
+    });
   }
 
   @Action
