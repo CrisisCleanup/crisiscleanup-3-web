@@ -1,59 +1,57 @@
 <template>
-  <Loader
-    :loading="false"
-    :class="`w-full h-full phone-controller ${
+  <div
+    :class="`ctrl__container w-full h-full phone-controller ${
       scriptPopup ? 'popup-active' : ''
     } ${renderPopup ? 'popup' : ''}`"
   >
-    <template #content>
-      <script-popup
-        v-if="renderPopup"
-        @dismissed="() => (scriptPopup = false)"
-        :script-name="callType"
-      />
-      <phone-layout>
-        <template #grid-start>
-          <div class="grid-start">
-            <agent-block />
-          </div>
+    <script-popup
+      v-if="renderPopup"
+      @dismissed="() => (scriptPopup = false)"
+      :script-name="callType"
+    />
+
+    <div class="ctrl__agent">
+      <div class="phone__agentcard">
+        <AgentCard />
+      </div>
+      <div class="phone__general">
+        <GeneralStatistics />
+      </div>
+      <div class="phone__agentmetrics">
+        <AgentAnalytics />
+      </div>
+    </div>
+
+    <div class="ctrl__board">
+      <agent-board />
+    </div>
+
+    <div class="ctrl__actions">
+      <agent-actions>
+        <template #case>
+          <case-form
+            v-bind="caseFormProps"
+            :key="activeCaseId"
+            :incident-id="String(currentIncident.id)"
+            disable-claim-and-save
+            :data-prefill="prefillData"
+            @savedWorksite="savedWorksite"
+            @navigateToWorksite="(id) => setActiveCase(id)"
+            class="h-full"
+          />
         </template>
-        <template #grid-main>
-          <div class="grid-main">
-            <agent-board />
-          </div>
+        <template #resources>
+          <phone-resources />
         </template>
-        <template #grid-end>
-          <div class="grid-end flex">
-            <agent-actions>
-              <template #case>
-                <case-form
-                  v-bind="caseFormProps"
-                  :key="activeCaseId"
-                  :incident-id="String(currentIncident.id)"
-                  disable-claim-and-save
-                  :data-prefill="prefillData"
-                  @savedWorksite="savedWorksite"
-                  @navigateToWorksite="(id) => setActiveCase(id)"
-                />
-              </template>
-              <template #resources>
-                <phone-resources />
-              </template>
-            </agent-actions>
-          </div>
-        </template>
-      </phone-layout>
-    </template>
-  </Loader>
+      </agent-actions>
+    </div>
+  </div>
 </template>
 
 <script>
 // @flow
-import PhoneLayout from '@/layouts/Phone.vue';
-import AgentBlock from '@/components/phone/blocks/Agent.vue';
 import CaseForm from '@/pages/CaseForm.vue';
 import AgentBoard from '@/components/phone/AgentBoard/Board.vue';
-import Loader from '@/components/Loader.vue';
 import ScriptPopup from '@/components/phone/ScriptPopup.vue';
 import Pda from '@/models/Pda';
 import AgentActions from '@/components/phone/AgentActions/Actions.vue';
@@ -66,18 +64,21 @@ import Worksite from '@/models/Worksite';
 import { useLocalStorage } from 'vue-composable';
 import _ from 'lodash';
 import useController from '@/use/phone/useController';
+import AgentCard from '@/components/phone/AgentCard.vue';
+import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics.vue';
+import AgentAnalytics from '@/components/phone/Cards/StatsCard.vue';
 
 export default {
-  name: 'Controller',
+  name: 'PhoneController',
   components: {
     PhoneResources,
     AgentActions,
-    PhoneLayout,
     CaseForm,
-    AgentBlock,
     AgentBoard,
-    Loader,
     ScriptPopup,
+    AgentCard,
+    GeneralStatistics,
+    AgentAnalytics,
   },
   setup(props, context) {
     const { getters, state, actions } = useController();
@@ -149,6 +150,39 @@ export default {
   }
   &.popup-active {
     transform: translateY(8rem);
+  }
+}
+</style>
+
+<style scoped lang="postcss">
+@lost flexbox flex;
+$neg-y-pad: calc(0rem - theme('spacing.4'));
+$neg-x-pad: calc(0rem - theme('spacing.5'));
+
+.ctrl {
+  &__container {
+    lost-flex-container: row;
+    ^&__agent {
+      @apply h-full;
+      lost-column: 1/4;
+      @screen xl {
+        lost-column: 1/5;
+      }
+      & > div {
+        margin-bottom: 30px;
+      }
+    }
+    ^&__board {
+      lost-column: 3/5;
+      lost-align: center;
+    }
+    ^&__actions {
+      @apply h-full;
+      lost-column: 1/5;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
   }
 }
 </style>
