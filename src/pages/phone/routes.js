@@ -1,5 +1,3 @@
-import PhoneDashboard from '@/pages/phone/Dashboard.vue';
-import PhoneController from '@/pages/phone/Controller.vue';
 import PhoneLayout from './Index.vue';
 
 const routes = [

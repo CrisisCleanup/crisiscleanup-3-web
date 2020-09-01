@@ -1,8 +1,5 @@
 <template>
-  <TitledCard
-    :loading="callHistoryReady"
-    title="~~Last 10 Calls"
-  >
+  <TitledCard :loading="callHistoryReady" title="~~Last 10 Calls">
     <div class="card-container overflow-auto h-full">
       <Table
         :body-style="{ overflow: 'auto' }"
