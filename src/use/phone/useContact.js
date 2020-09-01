@@ -43,15 +43,21 @@ export default ({ agent }) => {
     ]),
   };
 
-  const callerName = computed(() =>
-    currentCase.value ? currentCase.value.name : 'Unknown',
-  );
-
   const callType = computed(() =>
     state.inbound.value ? CallType.INBOUND : CallType.OUTBOUND,
   );
 
   const callDnis = computed(() => (state.dnis.value ? state.dnis.value : null));
+
+  const callerName = computed(() => {
+    if (currentCase.value) {
+      return currentCase.value.name;
+    }
+    if (callDnis.value) {
+      return _.get(callDnis.value.meta, 'caller_name', 'Unknown');
+    }
+    return 'Unknown';
+  });
 
   const callerHistory = computed(() => {
     if (callDnis.value) {
