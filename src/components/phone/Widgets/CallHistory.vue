@@ -1,7 +1,14 @@
 <template>
-  <TitledCard :loading="callHistoryReady" title="~~Last 10 Calls">
-    <div class="card-container flex flex-grow">
-      <Table :columns="historyCols" :data="historyData">
+  <TitledCard
+    :loading="callHistoryReady"
+    title="~~Last 10 Calls"
+  >
+    <div class="card-container overflow-auto h-full">
+      <Table
+        :body-style="{ overflow: 'auto' }"
+        :columns="historyCols"
+        :data="historyData"
+      >
         <template #completed_at="slotProps">
           <div :title="slotProps.item.completed_at">
             {{ slotProps.item.completed_at | moment('from', 'now') }}

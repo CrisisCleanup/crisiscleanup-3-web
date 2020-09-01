@@ -182,6 +182,7 @@ $neg-x-pad: calc(0rem - theme('spacing.5'));
       position: absolute;
       right: 0;
       top: 0;
+      z-index: 99999;
     }
   }
 }
