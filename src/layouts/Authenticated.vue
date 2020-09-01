@@ -336,7 +336,11 @@ export default {
       User.api().updateUserState({
         incident: null,
       });
-      await this.$router.push(`/`);
+      const incident = Incident.query().orderBy('id', 'desc').first();
+      if (incident) {
+        this.setCurrentIncidentId(incident.id);
+      }
+      await this.$router.push(`/`).catch(() => {});
     }
 
     this.loading = false;
