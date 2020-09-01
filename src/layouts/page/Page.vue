@@ -7,7 +7,7 @@
       <template v-if="tabs">
         <PageTabBar :tabs="tabs" />
       </template>
-      <slot v-else></slot>
+      <slot></slot>
     </template>
   </Loader>
 </template>
