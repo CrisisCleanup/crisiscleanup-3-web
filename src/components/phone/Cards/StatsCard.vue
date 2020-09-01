@@ -1,8 +1,8 @@
 <template>
-  <TitledCard :title="cardTitle">
+  <TitledCard :loading="agentMetricsReady" title="~~My Statistics">
     <div class="flex flex-col flex-grow">
       <div
-        v-for="[title, value] in metrics.entries()"
+        v-for="[title, value] in stats.entries()"
         :key="`metric_${title}`"
         class="metrics--body"
       >
@@ -12,7 +12,7 @@
             <ccu-icon
               with-text
               v-if="title.includes('Total')"
-              :type="icons.phone_plus"
+              :type="enums.icons.phone_plus"
               size="xl"
             >
               <base-text variant="body" :weight="600" class="align-middle">{{
@@ -37,16 +37,48 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { IconsMixin } from '@/mixins';
+import useUser from '@/use/user/useUser';
+import { useGetters } from '@u3u/vue-hooks';
+import { computed } from '@vue/composition-api';
+import useEnums from '@/use/useEnums';
+import _ from 'lodash';
 import TitledCard from '../../cards/TitledCard.vue';
 
 export default {
   name: 'StatsCard',
-  mixins: [IconsMixin],
   components: { TitledCard },
   props: {
     cardTitle: VueTypes.string,
     metrics: VueTypes.any,
+  },
+  setup(props, context) {
+    const {
+      currentAgentMetrics,
+      agentMetricsReady,
+    } = useGetters('phone.controller', [
+      'currentAgentMetrics',
+      'agentMetricsReady',
+    ]);
+
+    const stats = computed(() => {
+      const _stats = new Map();
+      const setStat = (name, key) =>
+        _stats.set(
+          context.root.$t(name),
+          _.get(currentAgentMetrics.value, key, 0),
+        );
+      setStat('~~Received Calls', 'total_inbound');
+      setStat('~~Made Calls', 'total_outbound');
+      setStat('~~Rejected Calls', 'total_rejects');
+      setStat('~~Abandoned Calls', 'total_abandons');
+      return _stats;
+    });
+    return {
+      ...useEnums(),
+      ...useUser(),
+      stats,
+      agentMetricsReady,
+    };
   },
 };
 </script>

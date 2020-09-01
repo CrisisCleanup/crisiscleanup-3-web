@@ -1,5 +1,5 @@
 <template>
-  <TitledCard title="~~Last 10 Calls">
+  <TitledCard :loading="callHistoryReady" title="~~Last 10 Calls">
     <div class="card-container flex flex-grow">
       <Table :columns="historyCols" :data="historyData">
         <template #completed_at="slotProps">
@@ -36,11 +36,13 @@ export default {
   components: { TitledCard, Table },
   mixins: [UserMixin, ValidateMixin],
   computed: {
-    ...mapGetters('phone.controller', ['agentRankings', 'currentAgentMetrics']),
+    ...mapGetters('phone.controller', [
+      'agentRankings',
+      'callHistoryReady',
+      'callHistory',
+    ]),
     historyData() {
-      if (!this.currentAgentMetrics) return [];
-      const { recent_contacts } = this.currentAgentMetrics;
-      const calls = recent_contacts.map(
+      const calls = this.callHistory.map(
         ({ phone_number, caller_name, status, notes, ...metrics }) => ({
           name: caller_name,
           mobile: this.validatePhoneNumber(phone_number).newValue,
