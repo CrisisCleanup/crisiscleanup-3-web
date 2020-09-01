@@ -142,7 +142,7 @@ $tab-x-pad: calc(theme('spacing.5') * 4);
     width: 100%;
   }
   &__tab {
-    @apply py-4 px-5 text-crisiscleanup-dark-300;
+    @apply py-4 px-5 text-crisiscleanup-dark-400;
     cursor: pointer;
     transition: color 250ms ease;
     position: relative;
