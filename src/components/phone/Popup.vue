@@ -1,5 +1,5 @@
 <template>
-  <modal modal-classes="w-108">
+  <modal v-show="!dismissState.state.value" modal-classes="max-w-lg">
     <template #header>
       <div class="header">
         <DisasterIcon
@@ -14,7 +14,7 @@
       </div>
     </template>
 
-    <div v-if="currentContact" class="modal--body">
+    <div class="modal--body">
       <div class="modal-script">
         <base-text variant="body" class="script">
           {{
@@ -36,15 +36,21 @@
           </ccu-icon>
           <ccu-icon with-text size="md" :type="enums.icons.earth_globe">
             <base-text variant="h1" :weight="400">{{
-              callState.locale.value &&
-              callState.locale.value.name_t.split(' ')[0]
+              callState.locale.value
+                ? callState.locale.value.name_t.split(' ')[0]
+                : 'English'
             }}</base-text>
           </ccu-icon>
         </div>
         <div class="stats">
-          <base-text class="mobile" :weight="600" variant="h1">{{
-            currentContact.callerId
-          }}</base-text>
+          <base-text
+            class="mobile text-crisiscleanup-dark-500"
+            semi-bold
+            variant="h1"
+            >{{
+              currentContact ? currentContact.callerId : '(123) 456-7890'
+            }}</base-text
+          >
           <tag class="tag">
             <base-text variant="bodysm">
               {{ callerHistory.total }}
@@ -60,18 +66,28 @@
         </base-text>
       </div>
       <div class="modal-cases">
-        <case-card
-          v-for="c in caseCards"
-          :key="c.caseNumber"
-          :case-number="c.caseNumber"
-          :address="c.address"
-          :state="c.state"
-          :worktype="c.worktype"
-        />
+        <div v-for="c in caseCards">
+          <case-card
+            :key="c.caseNumber"
+            :case-number="c.caseNumber"
+            :address="c.address"
+            :state="c.state"
+            :worktype="c.worktype"
+          />
+          <hr class="cases-divider" />
+        </div>
       </div>
     </div>
     <template #footer>
-      <div />
+      <div class="flex justify-center p-3">
+        <base-button
+          :action="() => dismissState.toggle(true)"
+          variant="solid"
+          size="large"
+        >
+          {{ $t('~~Dismiss') }}
+        </base-button>
+      </div>
     </template>
   </modal>
 </template>
@@ -85,6 +101,7 @@ import useContact from '@/use/phone/useContact';
 import useIncident from '@/use/worksites/useIncident';
 import useEnums from '@/use/useEnums';
 import useAgent from '@/use/phone/useAgent';
+import useToggle from '@/use/useToggle';
 
 export default {
   name: 'IncomingPopup',
@@ -92,12 +109,14 @@ export default {
   setup() {
     const { agent } = useAgent();
     const { callerCases, ...contact } = useContact({ agent });
+    const dismissState = useToggle();
     return {
       ...contact,
       ...useUser(),
       ...useCaseCards({ cases: callerCases, addNew: false }),
       ...useIncident(),
       ...useEnums(),
+      dismissState,
     };
   },
 };
@@ -105,7 +124,8 @@ export default {
 
 <style scoped lang="scss">
 .header {
-  display: flex;
+  display: inline-flex;
+  align-items: center;
   justify-content: space-around;
   @apply pt-6 px-6;
   p {
@@ -127,6 +147,8 @@ export default {
   margin-left: -2rem;
   margin-right: -2rem;
 }
+
+$neg-body-x-pad: calc(0rem - theme('spacing.8'));
 
 .modal {
   &--body {
@@ -175,9 +197,6 @@ export default {
           div {
             @apply px-2;
           }
-          p.mobile {
-            @apply text-xl;
-          }
 
           .tag {
             @apply mx-4;
@@ -192,12 +211,24 @@ export default {
       }
 
       &-cases {
-        @apply my-3 mt-6;
         display: flex;
         flex-direction: column;
+        max-height: 30vh;
+        margin-left: $neg-body-x-pad;
+        margin-right: $neg-body-x-pad;
+        overflow: auto;
+        scrollbar-width: none;
+        & > div {
+          @apply px-8;
+        }
+        div .cases-divider {
+          @apply my-4;
+          @apply bg-crisiscleanup-dark-100;
+          @include fullwidth;
+        }
       }
       &-divider {
-        @apply bg-crisiscleanup-dark-100 px-8;
+        @apply bg-crisiscleanup-dark-100 px-8 mb-6;
         @include fullwidth;
         p span {
           @apply font-bold;
