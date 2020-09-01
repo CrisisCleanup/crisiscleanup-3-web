@@ -1,10 +1,6 @@
 <template>
-  <PageLayout class="h-full w-full" :loading="loading">
-    <div class="h-full w-full">
-      <keep-alive>
-        <router-view />
-      </keep-alive>
-    </div>
+  <PageLayout class="h-full w-full" :is-loading="false">
+    <component :is="pageComponent" />
     <IncomingPopup v-show="callPending" />
   </PageLayout>
 </template>
@@ -20,12 +16,11 @@ import { computed, onMounted, watch } from '@vue/composition-api';
 import { useIntervalFn } from '@vueuse/core';
 import useContact from '@/use/phone/useContact';
 import useController from '@/use/phone/useController';
-import { useRouter } from '@u3u/vue-hooks';
 import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
 
 export default {
-  name: 'Phone',
+  name: 'PhoneRoot',
   components: { IncomingPopup, PageLayout },
   setup(props, context) {
     const { agent, loading } = useAgent();
@@ -33,7 +28,6 @@ export default {
     const { callPending, callConnected, currentContact } = useContact({
       agent,
     });
-    const { route, router } = useRouter();
 
     const { start } = useIntervalFn(() => {
       agent.value.heartbeat().then(() => {
@@ -77,15 +71,6 @@ export default {
     onMounted(() => {
       EventBus.$emit('acs:init');
       updatePage();
-      watch(
-        () => controller.state.view.value,
-        () => {
-          if (route.name !== controller.state.view.value)
-            router.replace({
-              name: `nav.phone_${controller.state.view.value.page}`,
-            });
-        },
-      );
     });
 
     return {
