@@ -1,72 +1,78 @@
 <template>
-  <TitledCard title="~~Leaderboard">
-    <template #right>
-      <div class="metric-details flex">
+  <TitledCard :loading="agentMetricsReady" title="~~Leaderboard">
+    <div class="card-container overflow-auto h-full">
+      <div v-if="!agentMetricsReady" class="metric-title flex justify-end px-6">
         <base-text
-          v-for="t in ['~~In', '~~Out', '~~Total']"
+          class="text-crisiscleanup-dark-200"
+          v-for="t in ['~~Intake', '~~Return', '~~Total']"
           variant="h4"
-          weight="400"
           :key="t"
+          regular
         >
           {{ $t(t) }}
         </base-text>
       </div>
-    </template>
-    <Loader :loading="agentMetricsReady" class="card-container overflow-auto">
-      <template #content>
-        <div v-for="a in agentRankings" :key="a.agent" class="item">
-          <div class="item--profile">
-            <div class="image">
-              <img class="rounded-full" :src="a.user.profilePictureUrl" />
-            </div>
-            <div class="info">
-              <div class="info--user">
-                <UserDetailsTooltip
-                  :name-class="'text-h3 font-h3 pr-2 text-crisiscleanup-dark-500 name-tooltip'"
-                  :user="a.user.id"
-                />
-                <base-text
-                  variant="h3"
-                  weight="400"
-                  :class="`dot ${getStateFriendlyName(a.currentState).replace(
-                    ' ',
-                    '',
-                  )}`"
-                >
-                  &#8226; {{ getStateFriendlyName(a.currentState) }}
-                </base-text>
-                <base-text variant="h4" weight="100">
-                  {{ a.enteredTimestamp | moment('from', 'now') }}
-                </base-text>
-              </div>
-              <div class="info--org">
-                <base-text variant="bodysm">
-                  {{ a.organization.name | truncate(28) }}
-                </base-text>
-              </div>
-            </div>
+      <div v-for="a in agentRankings" :key="a.agent" class="item relative">
+        <div class="item--profile">
+          <div class="image">
+            <img class="rounded-full" :src="a.user.profilePictureUrl" />
           </div>
-          <div class="item--metrics">
-            <div
-              class="metric"
-              v-for="m in ['total_inbound', 'total_outbound', 'total_calls']"
-              :key="m"
-            >
-              <base-text variant="h1" weight="700">
-                {{ a[m] }}
+          <div class="info pl-2">
+            <div class="info--user">
+              <UserDetailsTooltip
+                :name-class="'text-h3 font-h3 pr-2 text-crisiscleanup-dark-400 name-tooltip'"
+                :user="a.user.id"
+                :name-style="nameTextStyle"
+              />
+            </div>
+            <div class="info--state pl-1">
+              <base-text
+                :style="{ lineHeight: '16px' }"
+                variant="h3"
+                weight="400"
+                :class="`dot ${getStateFriendlyName(a.currentState).replace(
+                  ' ',
+                  '',
+                )}`"
+              >
+                &#8226; {{ getStateFriendlyName(a.currentState) }}
+              </base-text>
+              <base-text
+                :style="{ lineHeight: '16px' }"
+                class="pl-2 text-crisiscleanup-dark-300 opacity-50"
+                variant="h4"
+                regular
+              >
+                {{ a.enteredTimestamp | moment('from', 'now') }}
+              </base-text>
+            </div>
+
+            <div class="info--org">
+              <base-text :style="{ lineHeight: '16px' }" variant="h4" regular>
+                {{ a.organization.name | truncate(28) }}
               </base-text>
             </div>
           </div>
         </div>
-      </template>
-    </Loader>
+        <div class="item--metrics">
+          <div
+            class="metric"
+            v-for="m in ['total_inbound', 'total_outbound', 'total_calls']"
+            :key="m"
+          >
+            <base-text variant="h1" semi-bold>
+              {{ a[m] | padStart(2, '0') }}
+            </base-text>
+          </div>
+        </div>
+      </div>
+    </div>
   </TitledCard>
 </template>
 
 <script>
 import TitledCard from '@/components/cards/TitledCard.vue';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
-import Loader from '@/components/Loader.vue';
 import { useGetters } from '@u3u/vue-hooks';
 import AgentClient from '@/models/phone/AgentClient';
 
@@ -75,13 +81,15 @@ export default {
   components: {
     TitledCard,
     UserDetailsTooltip,
-    Loader,
   },
   setup() {
     return {
       ...useGetters('phone.controller', ['agentRankings', 'agentMetricsReady']),
       getStateFriendlyName(state) {
         return AgentClient.getFriendlyState(state);
+      },
+      nameTextStyle: {
+        lineHeight: '1rem',
       },
     };
   },
@@ -120,7 +128,19 @@ $metric-headers: ('In' 'Out' 'Total');
       @apply text-crisiscleanup-dark-400;
     }
     text-align: center;
-    @apply px-4 text-crisiscleanup-dark-300;
+  }
+}
+
+.metric-title {
+  @apply pt-1;
+  text-align: center;
+  p {
+    &:nth-child(2) {
+      @apply px-10;
+    }
+    &:last-child {
+      @apply text-crisiscleanup-dark-400 font-bold #{!important};
+    }
   }
 }
 
@@ -129,7 +149,10 @@ $metric-headers: ('In' 'Out' 'Total');
   flex-grow: 1;
   flex-direction: column;
   scrollbar-width: none;
-  max-height: 15rem;
+
+  .item:first-of-type {
+    padding-top: 0 !important;
+  }
 
   .item {
     &:after {
@@ -142,10 +165,13 @@ $metric-headers: ('In' 'Out' 'Total');
       opacity: 0.2;
       background-color: #979797;
     }
-    position: relative;
     display: flex;
-    flex-grow: 1;
     align-items: baseline;
+
+    &:nth-child(2) {
+      padding-top: 0 !important;
+    }
+
     @apply p-2;
     &--metrics {
       display: flex;
@@ -153,8 +179,10 @@ $metric-headers: ('In' 'Out' 'Total');
       align-self: center;
       justify-content: space-evenly;
       @apply px-4;
-      p {
-        @apply px-4;
+      .metric:nth-child(2) {
+        @apply px-12;
+      }
+      .metric p {
         color: theme('colors.crisiscleanup-dark.300');
       }
       .metric:last-child {
@@ -167,8 +195,10 @@ $metric-headers: ('In' 'Out' 'Total');
       display: flex;
       flex-grow: 1;
       align-items: center;
+      @apply py-1;
       .image {
-        max-width: 2.75rem;
+        @apply shadow;
+        max-width: 2.5vw;
         object-fit: contain;
         border-radius: 50%;
         position: relative;
@@ -176,18 +206,11 @@ $metric-headers: ('In' 'Out' 'Total');
       .info {
         display: flex;
         flex-direction: column;
-        @apply pl-3;
         &--user {
-          @each $state, $color in $dot-colors {
-            .dot.#{$state} {
-              color: theme('colors.crisiscleanup-#{$color}');
-              @include truncate;
-            }
-          }
           display: flex;
           align-items: baseline;
           .v-popover .trigger p span {
-            @apply text-crisiscleanup-dark-500 pr-2;
+            @apply text-crisiscleanup-dark-400 pr-2;
             cursor: pointer;
             @include truncate;
           }
@@ -200,6 +223,17 @@ $metric-headers: ('In' 'Out' 'Total');
               @apply text-crisiscleanup-dark-300;
             }
           }
+        }
+        &--state {
+          display: flex;
+          flex-direction: row;
+          @each $state, $color in $dot-colors {
+            .dot.#{$state} {
+              color: theme('colors.crisiscleanup-#{$color}');
+              @include truncate;
+            }
+          }
+          align-items: baseline;
         }
         &--org {
           p {
