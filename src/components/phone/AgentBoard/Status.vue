@@ -33,16 +33,15 @@
       </template>
     </modal>
     <base-text variant="h3">{{ lang.notes }}</base-text>
-    <form-select
-      class="select"
-      :options="selectValues"
-      item-key="value"
-      label="name_t"
-      @input="(value) => updateStatus({ statusId: value })"
-      placeholder="Call Status "
+    <ModelSelectInput
+      name="status"
+      model="phone_statuses"
+      label="status_name_t"
+      @update:value="(payload) => onStatusSelect(payload)"
     />
     <base-input
-      class="notes"
+      class="notes border-crisiscleanup-dark-100"
+      input-classes="border-crisiscleanup-dark-100"
       text-area
       size="large"
       @input="(value) => updateStatus({ notes: value })"
@@ -61,23 +60,28 @@
 
 <script>
 import VueTypes from 'vue-types';
-import PhoneStatus from '@/models/PhoneStatus';
-import { computed } from '@vue/composition-api';
+import { ref } from '@vue/composition-api';
+import { unwrap } from '@/utils/wrap';
 import useController from '@/use/phone/useController';
 import useContact from '@/use/phone/useContact';
 import useToggle from '@/use/useToggle';
 import useAgent from '@/use/phone/useAgent';
+import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
 
 export default {
   name: 'BoardStatus',
   props: {
     lang: VueTypes.any,
   },
+  components: {
+    ModelSelectInput,
+  },
   setup(props, context) {
     const { agent } = useAgent();
     const { getters, state, actions } = useController();
     const { currentContact } = useContact({ agent });
     const confirmState = useToggle();
+    const selectedStatus = ref(null);
 
     const endContact = async (force = false) => {
       if (!getters.modifiedCaseIds.value.length && !force) {
@@ -85,6 +89,7 @@ export default {
           'agent tried to end contact w/o making any changes!',
         );
         confirmState.toggle(true);
+        return;
       }
       try {
         context.root.$log.info('closing contact!');
@@ -95,24 +100,22 @@ export default {
       }
     };
 
-    const statuses = computed(() => PhoneStatus.all());
-    const selectValues = computed(() =>
-      Object.values(statuses.value).map(({ id, status_name_t }) => {
-        return {
-          value: id,
-          name_t: status_name_t,
-        };
-      }),
-    );
+    const onStatusSelect = async ([, obj]) => {
+      const status = unwrap(obj);
+      if (status && status.id !== selectedStatus.value) {
+        selectedStatus.value = status.id;
+        await actions.updateStatus({ statusId: status.id });
+      }
+    };
 
     return {
       ...getters,
       ...state,
       ...actions,
+      selectedStatus,
       endContact,
-      statuses,
-      selectValues,
       confirmState,
+      onStatusSelect,
     };
   },
 };
@@ -145,8 +148,7 @@ export default {
           }
           .notes {
             @apply py-3;
-            @apply border-crisiscleanup-dark-300 mb-6;
-            border: 1px solid;
+            @apply border-crisiscleanup-dark-100 mb-6;
             outline: none;
             textarea {
               outline: none;
@@ -160,7 +162,7 @@ export default {
           }
           .select {
             @apply py-3;
-            @apply border-crisiscleanup-dark-300 mb-6;
+            @apply border-crisiscleanup-dark-100 mb-6;
             border: 1px solid;
           }
         }
