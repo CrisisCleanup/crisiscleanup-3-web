@@ -1,7 +1,7 @@
 import TitledCard from '@/components/cards/TitledCard.vue';
 
 export default {
-  title: 'Elements/TitledCard',
+  title: 'Elements/Cards/TitledCard',
   component: TitledCard,
   args: {
     title: 'Card Title',
