@@ -129,7 +129,9 @@ export default {
     });
 
     watchEffect(() => {
-      context.emit('update:value', [name, value]);
+      if (name && value) {
+        context.emit('update:value', [name, value]);
+      }
     });
 
     return {

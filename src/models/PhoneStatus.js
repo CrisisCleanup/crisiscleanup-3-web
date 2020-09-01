@@ -1,6 +1,6 @@
-import { Model } from '@vuex-orm/core';
+import CCUModel from '@/models/model';
 
-export default class PhoneStatus extends Model {
+export default class PhoneStatus extends CCUModel {
   static entity = 'phone_statuses';
 
   static fields() {
