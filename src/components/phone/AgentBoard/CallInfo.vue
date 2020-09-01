@@ -52,25 +52,15 @@
       </div>
     </div>
     <div class="contactbar--cases">
-      <carousel
-        :pagination-enabled="false"
-        :per-page-custom="[
-          [768, 3],
-          [1024, 3],
-          [1400, 3],
-        ]"
-        class="carousel"
-      >
-        <slide class="case" v-for="c in caseCards" :key="c.id">
-          <case-card
-            v-bind="c"
-            :key="c.caseNumber"
-            :tile="true"
-            :active="c.id === activeCaseId"
-            @click.native="setActiveCase(c.id, c.type)"
-          />
-        </slide>
-      </carousel>
+      <case-card
+        v-for="c in caseCards"
+        v-bind="c"
+        :key="c.caseNumber"
+        :tile="true"
+        :active="c.id === activeCaseId"
+        @click.native="setActiveCase(c.id, c.type)"
+        class="m-2"
+      />
     </div>
   </div>
 </template>
@@ -80,7 +70,6 @@
 
 import VueTypes from 'vue-types';
 import CaseCard from '@/components/cards/Case.vue';
-import { Carousel, Slide } from 'vue-carousel';
 import useEnums from '@/use/useEnums';
 import useContact from '@/use/phone/useContact';
 import { onMounted } from '@vue/composition-api';
@@ -91,7 +80,7 @@ import { useStore } from '@u3u/vue-hooks';
 
 export default {
   name: 'BoardCallInfo',
-  components: { CaseCard, Carousel, Slide },
+  components: { CaseCard },
   props: {
     lang: VueTypes.objectOf(VueTypes.any),
   },
@@ -261,20 +250,10 @@ export default {
           }
           &--cases {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             flex-grow: 1;
-            align-items: center;
-            align-content: center;
-            @apply py-4 bg-crisiscleanup-light-grey;
-            .VueCarousel {
-              &-slide {
-                @apply px-2;
-                display: flex;
-                justify-content: center;
-                align-content: center;
-                align-items: center;
-              }
-            }
+            flex-wrap: wrap;
+            @apply py-2 px-2 bg-crisiscleanup-light-grey;
           }
         }
       }
