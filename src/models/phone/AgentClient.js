@@ -69,7 +69,17 @@ export default class AgentClient extends Model {
   }
 
   static beforeUpdate(model: AgentClient): void {
-    model.routeState = AgentClient.isStateRoutable(model.contactState);
+    const contactQ = Contact.query()
+      .withAllRecursive()
+      .where('agentId', model.agentId);
+    if (contactQ.exists()) {
+      const contact = contactQ.get();
+      if (contact && contact.connection) {
+        model.routeState = AgentClient.isStateRoutable(
+          contact.connection.state,
+        );
+      }
+    }
   }
 
   static afterUpdate(model: AgentClient): void {
@@ -204,6 +214,9 @@ export default class AgentClient extends Model {
   }
 
   toggleOnline(connected?: boolean): void {
+    if (this.contactState === ConnectionStates.PAUSED) {
+      return ACS.setAgentState(true);
+    }
     if (typeof connected === 'boolean') {
       return ACS.setAgentState(connected);
     }

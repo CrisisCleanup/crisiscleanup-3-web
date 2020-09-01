@@ -317,6 +317,11 @@ class StreamsStore extends VuexModule {
       [ACS.ContactEvents.ON_ACW]: () => {
         Log.info('Contact => ON_ACW');
       },
+      [ACS.ContactEvents.ON_MISSED]: () => {
+        this.updateContact({
+          action: ContactActions.MISSED,
+        }).then(() => Log.info('Contact => MISSED'));
+      },
     });
   }
 }

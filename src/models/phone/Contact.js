@@ -25,7 +25,6 @@ import Pda from '@/models/Pda';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneDnis from '@/models/PhoneDnis';
 import Language from '@/models/Language';
-import type { CaseType } from '@/use/worksites/useCaseCards';
 import PhoneInbound from '@/models/PhoneInbound';
 
 /**
@@ -49,6 +48,7 @@ export const ContactStates = Object.freeze({
  * @prop ENDED - Contact connection has been terminated.
  * @prop DESTROYED - Contact completely closed (post ACW).
  * @prop ERROR - An exception occured at some point.
+ * @prop MISSED - Agent failed to answer inbound, or contact failed to answer outbound.
  * @readonly
  * @enum {string}
  */
@@ -59,6 +59,7 @@ export const ContactActions = Object.freeze({
   ENDED: 'ended',
   DESTROYED: 'destroyed',
   ERROR: 'error',
+  MISSED: 'missed',
 });
 
 /**
@@ -136,6 +137,14 @@ export default class Contact extends Model {
     return inbound;
   }
 
+  static beforeCreate(model: Contact): void | boolean {
+    if (
+      [ContactActions.ENDED, ContactActions.DESTROYED].includes(model.action)
+    ) {
+      return false;
+    }
+  }
+
   static afterCreate(model: Contact): void {
     const isNew = model.action === ContactActions.ENTER;
     const initConnection: ConnectionType = {
@@ -169,7 +178,10 @@ export default class Contact extends Model {
   }
 
   static beforeUpdate(model: ContactType): void | boolean {
-    if (model.action === ContactActions.DESTROYED) {
+    if (
+      [ContactActions.DESTROYED, ContactActions.MISSED].includes(model.action)
+    ) {
+      Log.info(`Contact is: ${model.action}, destroying!`);
       Contact.delete(model.contactId).then(() =>
         Log.info('Contact => DELETED'),
       );
@@ -184,6 +196,10 @@ export default class Contact extends Model {
 
   static beforeDelete(model: Contact): void {
     Log.debug('contact has been deleted, attempting to clear connect contact.');
+    const connection = Connection.query()
+      .withAllRecursive()
+      .where('contactId', model.contactId)
+      .get();
     const connectContact = ACS.getContactById(model.contactId);
     if (connectContact) {
       connectContact.clear({
@@ -191,8 +207,8 @@ export default class Contact extends Model {
         failure: (e) => Log.error('failed to clear contact!', e),
       });
     }
-    if (model.connection) {
-      Connection.delete(model.connection.connectionId)
+    if (connection) {
+      Connection.delete(connection.connectionId)
         .then(() => Log.info('Connection => DELETED'))
         .catch((e) => Log.error('failed to delete connection!', e));
     }
@@ -206,7 +222,14 @@ export default class Contact extends Model {
       .query()
       .withAllRecursive()
       .find(model.agentId);
-    Log.info('forcing agent out of ACW!');
+    Log.info('forcing agent out of ACW! contact:', model);
+    if (model.action === ContactActions.CONNECTING) {
+      // If contact is deleted while it was connecting,
+      // then it failed to connect (agent or contact didn't answer)
+      Log.info('agent missed contact! placing offline!');
+      agentClient.toggleOnline(false);
+      return;
+    }
     agentClient.toggleOnline(true);
   }
 
@@ -343,7 +366,10 @@ export default class Contact extends Model {
     attribute: ContactAttribute,
     model: CCUModel<T>,
   ): Promise<T[]> {
-    const itemIds = _.get(this.contactAttributes, attribute, []);
+    const itemIds = _.filter(
+      _.get(this.contactAttributes, attribute, []),
+      _.negate(_.isNil),
+    );
     Log.debug(`resolving <${model.entity}> @ [${itemIds}]`);
     return model.fetchOrFindId(itemIds);
   }
