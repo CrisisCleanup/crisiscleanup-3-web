@@ -29,18 +29,23 @@ export type UseTabProps = {|
   tabs: Tab[],
   tabContainer: Ref<null | HTMLElement>,
   tabSelector: Ref<null | HTMLElement>,
-  routes?: any,
+  useRoutes?: boolean,
 |};
 
 /**
  * Hook for using a dynamically resizing tab bar.
  * @param tabs - list of tabs to use.
- * @param routes - optionally pass routes to route tabs to.
+ * @param useRoutes - optionally use vue router routes.
  * @param tabContainer - HTML ref to tabs parent container.
  * @param tabSelector - HTML ref to tab selector element.
  * @returns {{activeIndex: Ref<UnwrapRef<number>>, setTab: (function(number, Route=): Promise<void>), route: Ref<Route>, selectorState: UnwrapRef<{transform: number, scale: number}>, selectorStyle: ComputedRef<{transform: string}>, state: UnwrapRef<{tabs: *}>}}
  */
-export default ({ tabs, routes, tabContainer, tabSelector }: UseTabProps) => {
+export default ({
+  tabs,
+  useRoutes = false,
+  tabContainer,
+  tabSelector,
+}: UseTabProps) => {
   const Log = Logger({ name: 'useTabs' });
   const state = reactive({
     tabs: tabs.map(({ key, ...rest }) =>
@@ -89,7 +94,7 @@ export default ({ tabs, routes, tabContainer, tabSelector }: UseTabProps) => {
   // grab router in case tabs are using routes.
   let route: null | Ref<Route>;
   let router: null | VueRouter;
-  if (!_.isNil(routes)) {
+  if (useRoutes) {
     const routerHook = useRouter();
     route = routerHook.route;
     router = routerHook.router;
@@ -97,7 +102,7 @@ export default ({ tabs, routes, tabContainer, tabSelector }: UseTabProps) => {
 
   const setTab = async (idx: number, newRoute?: Route) => {
     activeIndex.value = idx;
-    if (newRoute && router) {
+    if (useRoutes && router && newRoute) {
       try {
         await router.replace(newRoute);
       } catch (e) {
@@ -113,7 +118,7 @@ export default ({ tabs, routes, tabContainer, tabSelector }: UseTabProps) => {
     removeResize = remove;
     watch([width, height], () => updateSelector());
     watchEffect(() => updateSelector());
-    if (!_.isNil(routes) && router) {
+    if (useRoutes && router) {
       router.beforeEach((to, from, next) => {
         updateSelector();
         next();
