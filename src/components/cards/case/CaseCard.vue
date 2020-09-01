@@ -4,9 +4,11 @@
       <div class="case--svg" v-html="svg" />
     </div>
     <div class="case--info">
-      <base-text :weight="600" variant="h2">{{ caseNumber }}</base-text>
-      <base-text variant="body">{{ address }}</base-text>
-      <base-text variant="bodysm">{{ state }}</base-text>
+      <base-text semi-bold variant="h2">{{ caseNumber }}</base-text>
+      <base-text regular variant="h4">{{ address }}</base-text>
+      <base-text regular variant="h4" class="text-crisiscleanup-dark-100">{{
+        state
+      }}</base-text>
     </div>
   </div>
 </template>
@@ -32,7 +34,6 @@ export default {
   &-card {
     display: flex;
     flex-grow: 1;
-    @apply pb-3;
   }
   &--info {
     @apply px-4;

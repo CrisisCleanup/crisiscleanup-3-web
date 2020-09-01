@@ -7,17 +7,23 @@
     <div v-if="type === 'new'" class="case--overlay">
       <ccu-icon
         :alt="$t('actions.create_new')"
-        :type="icons.active"
+        :type="icons.add_orange"
         size="xl"
+        class="pb-1"
       />
+      <base-text variant="h3" class="text-crisiscleanup-dark-500"
+        >New Case</base-text
+      >
     </div>
-    <div class="case--head">
-      <div class="case--svg" v-html="svg" />
-      <base-text variant="h3">{{ caseNumber }}</base-text>
-    </div>
-    <div class="case--body">
-      <base-text variant="bodysm">{{ `${address}, ${state}` }}</base-text>
-    </div>
+    <template v-if="type !== 'new'">
+      <div class="case--head">
+        <div class="case--svg" v-html="svg" />
+        <base-text variant="h3">{{ caseNumber }}</base-text>
+      </div>
+      <div class="case--body">
+        <base-text variant="bodysm">{{ `${address}, ${state}` }}</base-text>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -67,6 +73,7 @@ export default {
       &--overlay {
         position: absolute;
         display: flex;
+        flex-direction: column;
         @apply w-full h-full;
         left: 0;
         justify-content: center;
