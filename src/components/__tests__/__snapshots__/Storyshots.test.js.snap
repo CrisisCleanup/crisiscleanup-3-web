@@ -2209,38 +2209,38 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="bg-white shadow-crisiscleanup-card card"
+      class="relative"
     >
-      <div
-        class="header"
-        slot="header"
-      >
-        <div
-          class="header--inner"
-        >
-          <div
-            class="left"
-          >
-            <p
-              class="text-h2 font-h2 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
-              style="font-weight: 700;"
-            >
-              
-          Example Accordion
-        
-            </p>
-          </div>
-           
-          <div
-            class="right"
-          />
-        </div>
-      </div>
+      <!---->
        
       <div
-        class="relative"
+        class="bg-white shadow-crisiscleanup-card card h-full"
       >
-        <!---->
+        <div
+          class="header"
+          slot="header"
+        >
+          <div
+            class="header--inner"
+          >
+            <div
+              class="left py-4 px-6"
+            >
+              <p
+                class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                style="font-weight: 600;"
+              >
+                
+          Example Accordion
+        
+              </p>
+            </div>
+             
+            <div
+              class="right"
+            />
+          </div>
+        </div>
          
         <div
           class="body"
@@ -2357,38 +2357,38 @@ exports[`Storyshots Elements/Accordion With Components 1`] = `
     style="margin: auto; max-height: 100%;"
   >
     <div
-      class="bg-white shadow-crisiscleanup-card card"
+      class="relative"
     >
-      <div
-        class="header"
-        slot="header"
-      >
-        <div
-          class="header--inner"
-        >
-          <div
-            class="left"
-          >
-            <p
-              class="text-h2 font-h2 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
-              style="font-weight: 700;"
-            >
-              
-          Example with Components
-        
-            </p>
-          </div>
-           
-          <div
-            class="right"
-          />
-        </div>
-      </div>
+      <!---->
        
       <div
-        class="relative"
+        class="bg-white shadow-crisiscleanup-card card h-full"
       >
-        <!---->
+        <div
+          class="header"
+          slot="header"
+        >
+          <div
+            class="header--inner"
+          >
+            <div
+              class="left py-4 px-6"
+            >
+              <p
+                class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                style="font-weight: 600;"
+              >
+                
+          Example with Components
+        
+              </p>
+            </div>
+             
+            <div
+              class="right"
+            />
+          </div>
+        </div>
          
         <div
           class="body"
@@ -2695,6 +2695,225 @@ exports[`Storyshots Elements/Badge With Props 1`] = `
 </div>
 `;
 
+exports[`Storyshots Elements/Cards/TabbedCard Basic 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex flex-grow w-full h-full"
+    >
+      <div
+        class="relative"
+      >
+        <!---->
+         
+        <div
+          class="bg-white shadow-crisiscleanup-card card h-full"
+        >
+          <div
+            class="header"
+            slot="header"
+          >
+            <div
+              class="header--inner"
+            >
+              <div
+                class="left tabs card__tabbar"
+              >
+                <div
+                  class="card__tab tab-item tab-0 active"
+                >
+                  <p
+                    class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                    style="font-weight: 600;"
+                  >
+                    
+          First
+        
+                  </p>
+                </div>
+                <div
+                  class="card__tab tab-item tab-1 "
+                >
+                  <p
+                    class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                    style="font-weight: 600;"
+                  >
+                    
+          Another Page
+        
+                  </p>
+                </div>
+                <div
+                  class="card__tab tab-item tab-2 "
+                >
+                  <p
+                    class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                    style="font-weight: 600;"
+                  >
+                    
+          A Third Tab For You
+        
+                  </p>
+                </div>
+                <div
+                  class="card__tab tab-item tab-3 "
+                >
+                  <p
+                    class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                    style="font-weight: 600;"
+                  >
+                    
+          Last Tab
+        
+                  </p>
+                </div>
+                 
+                <div
+                  class="card__selector"
+                  style="transform: translateX(0px) scaleX(0);"
+                />
+              </div>
+            </div>
+          </div>
+           
+          <div
+            class="body"
+          >
+            <div
+              class="body--inner h-full"
+            >
+               
+              <div
+                class="flex flex-grow flex-col"
+              >
+                <div
+                  class="m-12"
+                >
+                  <p>
+                    Tab Page One
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex flex-grow flex-col"
+                style="display: none;"
+              >
+                <div
+                  class="m-12"
+                >
+                  <p>
+                    Tab Page Two
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex flex-grow flex-col"
+                style="display: none;"
+              >
+                <div
+                  class="m-12"
+                >
+                  <p>
+                    A Third Tab
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex flex-grow flex-col"
+                style="display: none;"
+              >
+                <div
+                  class="m-12"
+                >
+                  <p>
+                    A Final Larger Tab
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements/Cards/TitledCard Basic 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div
+      class="flex flex-grow w-full h-full"
+    >
+      <div
+        class="relative"
+      >
+        <!---->
+         
+        <div
+          class="bg-white shadow-crisiscleanup-card card h-full"
+        >
+          <div
+            class="header"
+            slot="header"
+          >
+            <div
+              class="header--inner"
+            >
+              <div
+                class="left py-4 px-6"
+              >
+                <p
+                  class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                  style="font-weight: 600;"
+                >
+                  
+          Card Title
+        
+                </p>
+              </div>
+               
+              <div
+                class="right"
+              />
+            </div>
+          </div>
+           
+          <div
+            class="body"
+          >
+            <div
+              class="body--inner h-full"
+            >
+               
+              <div
+                class="flex flex-grow bg-white m-6 h-full w-full"
+              >
+                <div
+                  class="div h-full w-full m-12"
+                >
+                  <p>
+                    Some content goes here
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Elements/Spinner With Defaults 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
@@ -2828,77 +3047,6 @@ exports[`Storyshots Elements/Tag Simple Tag 1`] = `
     >
       <!---->
        Do something
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Storyshots Elements/TitledCard Basic 1`] = `
-<div
-  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
->
-  <div
-    style="margin: auto; max-height: 100%;"
-  >
-    <div
-      class="flex flex-grow w-full h-full"
-    >
-      <div
-        class="bg-white shadow-crisiscleanup-card card"
-      >
-        <div
-          class="header"
-          slot="header"
-        >
-          <div
-            class="header--inner"
-          >
-            <div
-              class="left"
-            >
-              <p
-                class="text-h2 font-h2 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
-                style="font-weight: 700;"
-              >
-                
-          Card Title
-        
-              </p>
-            </div>
-             
-            <div
-              class="right"
-            />
-          </div>
-        </div>
-         
-        <div
-          class="relative"
-        >
-          <!---->
-           
-          <div
-            class="body"
-          >
-            <div
-              class="body--inner h-full"
-            >
-               
-              <div
-                class="flex flex-grow bg-white m-6 h-full w-full"
-              >
-                <div
-                  class="div h-full w-full m-12"
-                >
-                  <p>
-                    Some content goes here
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
@@ -3150,7 +3298,7 @@ exports[`Storyshots Layouts/Loader With Custom Spinner 1`] = `
       class="relative"
     >
       <div
-        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center h-full w-full"
         data-cy="overlay.loader"
       >
         <div
@@ -3209,7 +3357,7 @@ exports[`Storyshots Layouts/Loader With Defaults 1`] = `
       class="relative"
     >
       <div
-        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center h-full w-full"
         data-cy="overlay.loader"
       >
         <div
@@ -3266,7 +3414,7 @@ exports[`Storyshots Layouts/Loader With Layout 1`] = `
       class="relative"
     >
       <div
-        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center h-full w-full"
         data-cy="overlay.loader"
       >
         <div
