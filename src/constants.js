@@ -16,6 +16,7 @@ export const TEXT_VARIANTS = [
 ];
 
 export const ICON_MAP = {
+  'add-orange': require('@/assets/icons/add-orange.svg'),
   dashboard: require('@/assets/icons/dashboard.svg'),
   cases: require('@/assets/icons/cases.svg'),
   reports: require('@/assets/icons/reports.svg'),
