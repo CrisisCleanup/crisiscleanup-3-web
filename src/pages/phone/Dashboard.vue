@@ -19,7 +19,7 @@
           @phone:showTraining="($event) => (isShowingTrainingModal = $event)"
         />
       </div>
-      <CallHistory />
+      <CallHistory class="overflow-auto" />
       <ContactTable v-if="currentUser.isAdmin" />
       <TrainingModal
         v-if="isShowingTrainingModal"
