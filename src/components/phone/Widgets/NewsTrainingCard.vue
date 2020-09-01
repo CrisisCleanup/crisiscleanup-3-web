@@ -39,13 +39,9 @@ export default {
       return [
         {
           key: 'news',
-          title: 'News',
-          component: NewsCard,
         },
         {
           key: 'training',
-          title: 'Training',
-          component: TrainingsCard,
         },
       ];
     },
