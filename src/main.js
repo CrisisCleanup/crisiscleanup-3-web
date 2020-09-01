@@ -77,7 +77,7 @@ import Tab from '@/components/tabs/Tab';
 import PhoneService from '@/services/phone.service';
 import VueNumberInput from '@chenfengyuan/vue-number-input';
 import Logger from '@/utils/log';
-import { has } from 'lodash';
+import { has, padStart } from 'lodash';
 import { getModule } from 'vuex-module-decorators';
 import WebsocketStore from '@/store/modules/websocket';
 import App from './App.vue';
@@ -170,6 +170,7 @@ Vue.filter('capitalize', capitalize);
 Vue.filter('truncate', truncateFilter);
 Vue.filter('startCase', startCase);
 Vue.filter('snakeCase', snakeCase);
+Vue.filter('padStart', padStart);
 
 // API & Auth
 if (AuthService.getUser()) {
