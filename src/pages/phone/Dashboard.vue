@@ -20,15 +20,14 @@
         />
       </div>
       <CallHistory />
+      <ContactTable v-if="currentUser.isAdmin" />
+      <TrainingModal
+        v-if="isShowingTrainingModal"
+        :visible="isShowingTrainingModal"
+        @onClose="isShowingTrainingModal = false"
+        @onComplete="onTrainingComplete"
+      ></TrainingModal>
     </div>
-    <div v-if="currentUser.isAdmin" class="contact-container">
-      <ContactTable />
-    </div>
-    <TrainingModal
-      :visible="isShowingTrainingModal"
-      @onClose="isShowingTrainingModal = false"
-      @onComplete="onTrainingComplete"
-    ></TrainingModal>
   </div>
 </template>
 
@@ -75,6 +74,8 @@ export default {
 </script>
 
 <style scoped lang="postcss">
+@lost flexbox flex;
+
 .phone {
   &__container {
     @apply h-full;
@@ -83,23 +84,22 @@ export default {
     .phone__agent {
       @apply h-full;
       lost-column: 1/4;
-      lost-flex-container: column;
       @screen xl {
         lost-column: 1/5;
       }
+      lost-flex-container: column;
       box-sizing: border-box;
       & > div {
         margin-bottom: 30px;
       }
     }
     .phone__main {
-      @apply h-full;
       lost-flex-container: column;
       lost-column: 3/4;
-      box-sizing: border-box;
       @screen xl {
         lost-column: 4/5;
       }
+      box-sizing: border-box;
       & > div {
         lost-row: 1/2;
         &:first-child {
