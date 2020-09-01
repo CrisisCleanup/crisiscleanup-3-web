@@ -31,7 +31,7 @@ export default {
     return {
       ready: false,
       width_: null,
-      height_: null
+      height_: null,
     };
   },
   computed: {

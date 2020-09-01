@@ -137,12 +137,10 @@ export default class Contact extends Model {
     return inbound;
   }
 
-  static beforeCreate(model: Contact): void | boolean {
-    if (
-      [ContactActions.ENDED, ContactActions.DESTROYED].includes(model.action)
-    ) {
-      return false;
-    }
+  static beforeCreate(model: Contact): boolean | vvoid {
+    return ![ContactActions.ENDED, ContactActions.DESTROYED].includes(
+      model.action,
+    );
   }
 
   static afterCreate(model: Contact): void {
