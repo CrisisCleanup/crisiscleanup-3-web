@@ -1,5 +1,5 @@
 <template>
-  <div class="agentcard shadow-crisiscleanup-card">
+  <div class="agentcard shadow-crisiscleanup-card h-full w-full">
     <div class="card-edit">
       <ccu-icon @click.native="() => forceAgentEdit()" size="md" type="edit" />
     </div>
@@ -34,7 +34,7 @@
     </div>
     <div class="action">
       <div class="inline-flex status">
-        <span :class="`dot ${agent.friendlyState}`" />
+        <span :class="`dot ${agent ? agent.friendlyState : ''}`" />
         <base-text :weight="600" variant="body"
           >{{ agentState.statusText | startCase }}
         </base-text>
@@ -202,7 +202,7 @@ export default {
 
     &--img {
       @apply shadow-md;
-      max-width: 30%;
+      max-width: 5vw;
       object-fit: contain;
       border-radius: 50%;
       position: relative;

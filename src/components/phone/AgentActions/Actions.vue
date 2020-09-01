@@ -18,7 +18,7 @@
       </div>
     </div>
     <div
-      class="flex flex-grow"
+      class="flex flex-grow h-full"
       v-show="t.key === activeActionTab"
       v-for="t in actionTabs"
       :key="t.key"
@@ -59,8 +59,7 @@ export default {
 .agent-actions {
   display: flex;
   flex-direction: column;
-  margin-top: -1.5rem;
-  @apply w-full;
+  @apply w-full h-full;
   .tabbar {
     display: flex;
     justify-content: space-around;
