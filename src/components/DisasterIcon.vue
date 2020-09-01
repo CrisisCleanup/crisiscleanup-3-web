@@ -30,6 +30,8 @@ export default {
   data() {
     return {
       ready: false,
+      width_: null,
+      height_: null
     };
   },
   computed: {
@@ -41,8 +43,8 @@ export default {
     setStyle() {
       this.setColor();
       if (this.width !== null || this.height !== null) {
-        this.width = this.width === null ? this.height : this.width;
-        this.height = this.height === null ? this.width : this.height;
+        this.width_ = this.width === null ? this.height : this.width;
+        this.height_ = this.height === null ? this.width : this.height;
         this.setSize();
       }
       this.ready = true;
@@ -56,8 +58,8 @@ export default {
     },
     setSize() {
       const svg = this.$refs.icon.getSVGDocument().activeElement;
-      svg.attributes.width.nodeValue = this.width;
-      svg.attributes.height.nodeValue = this.height;
+      svg.attributes.width.nodeValue = this.width_;
+      svg.attributes.height.nodeValue = this.height_;
     },
   },
 };
