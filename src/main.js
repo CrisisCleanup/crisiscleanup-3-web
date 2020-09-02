@@ -227,7 +227,6 @@ const WS_URL =
 Vue.use(VueNativeSocket, WS_URL, {
   store,
   format: 'json',
-  connectManually: process.env.VUE_APP_STAGE === 'production',
   reconnection: true, // auto reconnect (after initial connection)
   reconnectionAttempts: 5,
   passToStoreHandler: (eventName, event) => {
