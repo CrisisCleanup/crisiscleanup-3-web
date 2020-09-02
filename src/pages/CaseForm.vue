@@ -316,6 +316,7 @@ import { buildForm, groupBy, nest } from '@/utils/form';
 import MessageBox from '@/components/dialogs/MessageBox';
 import WorksiteImageSection from '@/components/WorksiteImageSection';
 import WorksiteReportSection from '@/components/WorksiteReportSection';
+import { StorageService } from '@/services/storage.service';
 import SectionHeading from '../components/SectionHeading';
 import { EventBus } from '../event-bus';
 import { ValidateMixin } from '../mixins';
@@ -433,13 +434,19 @@ export default {
         this.$emit('jumpToCase', this.worksiteId);
       }
     } else {
-      this.worksite = {
-        incident: this.incidentId,
-        form_data: [],
-        notes: [],
-        formFields: {},
-        ...this.dataPrefill,
-      };
+      this.worksite = { ...StorageService.getItem('currentWorksite') };
+
+      if (!this.worksite.incident) {
+        this.worksite = {
+          form_data: [],
+          notes: [],
+          formFields: {},
+          ...this.dataPrefill,
+        };
+      }
+
+      this.worksite.incident = this.incidentId;
+
       if (this.pdaId) {
         const response = await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/pdas/${this.pdaId}`,
@@ -453,6 +460,7 @@ export default {
       return map;
     }, {});
 
+    StorageService.removeItem('currentWorksite');
     this.ready = true;
   },
   methods: {
@@ -486,6 +494,7 @@ export default {
       } else {
         this.worksite[key] = value;
         this.worksite = { ...this.worksite };
+        StorageService.setItem('currentWorksite', this.worksite);
       }
     },
     reloadWorksite() {
@@ -797,6 +806,7 @@ export default {
             skip_duplicate_check: true,
           });
           const worksiteId = savedWorksite.entities.worksites[0].id;
+          StorageService.removeItem('currentWorksite');
           await Promise.all(
             notesToSave.map((n) => Worksite.api().addNote(worksiteId, n)),
           );
