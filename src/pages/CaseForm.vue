@@ -273,6 +273,7 @@
         variant="text"
         :action="
           () => {
+            clearWorksiteStorage();
             $emit('closeWorksite');
           }
         "
@@ -477,6 +478,9 @@ export default {
     },
     getSectionCount(currentField) {
       return currentField.order_label;
+    },
+    clearWorksiteStorage() {
+      StorageService.removeItem('currentWorksite');
     },
     updateDirtyFields(key) {
       this.dirtyFields = new Set(this.dirtyFields.add(key));
