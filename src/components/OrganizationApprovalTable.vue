@@ -20,14 +20,10 @@
     </template>
     <template #incidents="slotProps">
       <div
-        class="w-full flex items-center text-primary-dark link underline"
-        @click="
-          () => {
-            showAssociatedIncidents(slotProps.item.incidents);
-          }
-        "
+        v-if="slotProps.item.incidents.length"
+        class="w-full flex items-center"
       >
-        {{ slotProps.item.incidents.length }}
+        {{ getIncidentName(slotProps.item.incidents[0]) }}
       </div>
     </template>
     <template #actions="slotProps">
@@ -120,6 +116,10 @@ export default {
         },
       });
     },
+    getIncidentName(id) {
+      const incident = Incident.find(id);
+      return incident && incident.name;
+    },
     async showContacts(organization) {
       const contacts = await this.getOrganizationContacts(organization.id);
       const contact = contacts.length ? contacts[0] : null;
@@ -189,7 +189,7 @@ export default {
           width: '2fr',
         },
         {
-          title: this.$t('Associated Incidents'),
+          title: this.$t('~~Incident'),
           dataIndex: 'incidents',
           key: 'incidents',
           width: '1fr',
