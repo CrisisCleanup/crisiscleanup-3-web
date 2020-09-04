@@ -5,7 +5,6 @@ import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
 import WebsocketStore from '@/store/modules/websocket';
-import VuexPersistence from 'vuex-persist';
 import database from './database';
 import auth from './modules/auth';
 import phone_legacy from './modules/phone_legacy';
@@ -30,16 +29,6 @@ VuexORM.use(VuexORMAxios, {
 Vue.use(Vuex);
 Vue.use(VueLog);
 
-const vuexLocal = new VuexPersistence({
-  storage: window.localStorage,
-  modules: [
-    'phone.controller',
-    'entities/phone/contact',
-    'entities/phone/agent',
-    'entities/phone_outbound',
-  ],
-});
-
 const debug = process.env.NODE_ENV !== 'production';
 
 export default new Vuex.Store({
@@ -56,6 +45,6 @@ export default new Vuex.Store({
     'phone.streams': ConnectStores.StreamsStore,
     websocket: WebsocketStore,
   },
-  plugins: [VuexORM.install(database), vuexLocal.plugin],
+  plugins: [VuexORM.install(database)],
   strict: debug,
 });
