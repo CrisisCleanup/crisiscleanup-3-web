@@ -1,8 +1,9 @@
 // @flow
 import moment from 'moment';
 import CCUModel from '@/models/model';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
-export default class PhoneDnis extends CCUModel {
+export default class PhoneDnis extends CCUModel<PhoneDnis> {
   static entity = 'phone_dnis';
 
   static fields() {
@@ -37,5 +38,11 @@ export default class PhoneDnis extends CCUModel {
       return moment(this.last_call_at).fromNow();
     }
     return 'Never';
+  }
+
+  get dnisNational(): string {
+    if (!this.dnis) return '';
+    const number = parsePhoneNumberFromString(String(this.dnis));
+    return number.formatNational();
   }
 }

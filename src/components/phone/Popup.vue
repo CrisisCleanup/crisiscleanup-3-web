@@ -47,9 +47,7 @@
             class="mobile text-crisiscleanup-dark-500"
             semi-bold
             variant="h1"
-            >{{
-              currentContact ? currentContact.callerId : '(123) 456-7890'
-            }}</base-text
+            >{{ callerNumber }}</base-text
           >
           <tag class="tag">
             <base-text variant="bodysm">

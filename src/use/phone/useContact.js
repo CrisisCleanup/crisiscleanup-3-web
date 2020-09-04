@@ -59,6 +59,16 @@ export default ({ agent }) => {
     return 'Unknown';
   });
 
+  const callerNumber = computed(() => {
+    if (currentContact.value) {
+      return currentContact.value.callerId;
+    }
+    if (callDnis.value) {
+      return callDnis.value.dnisNational;
+    }
+    return '(123) 456-7890';
+  });
+
   const callerHistory = computed(() => {
     if (callDnis.value) {
       return {
@@ -125,5 +135,6 @@ export default ({ agent }) => {
     activeCalls,
     callDuration,
     callerCases,
+    callerNumber,
   };
 };
