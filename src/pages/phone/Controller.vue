@@ -84,7 +84,7 @@ export default {
     const { getters, state, actions } = useController();
 
     const { agent } = useAgent();
-    const { currentContact, callType } = useContact({ agent });
+    const { currentContact, callType, callerName } = useContact({ agent });
 
     const { storage } = useLocalStorage('ccu-ivr-hide-popup');
     const renderPopup = computed(() => _.isNil(storage.value));
@@ -110,6 +110,7 @@ export default {
 
     const prefillData = computed(() => ({
       phone1: currentContact.value ? currentContact.value.callerId : '',
+      name: callerName.value === 'Unknown' ? '' : callerName.value,
     }));
 
     const setActiveCase = async (caseId: number | string) => {
@@ -182,7 +183,6 @@ $neg-x-pad: calc(0rem - theme('spacing.5'));
       position: absolute;
       right: 0;
       top: 0;
-      z-index: 99999;
     }
   }
 }
