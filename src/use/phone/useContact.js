@@ -6,7 +6,7 @@
 import { ref, computed, watch } from '@vue/composition-api';
 import { wrap } from '@/utils/wrap';
 import AgentClient from '@/models/phone/AgentClient';
-import { useState } from '@u3u/vue-hooks';
+import { useState, useGetters } from '@u3u/vue-hooks';
 import _ from 'lodash';
 import { CallType, ContactActions } from '@/models/phone/Contact';
 import { useIntervalFn } from '@vueuse/core';
@@ -31,6 +31,7 @@ export default ({ agent }) => {
   );
 
   const { currentCase } = useState('phone.controller', ['currentCase']);
+  const { activeCaseId } = useGetters('phone.controller', ['activeCaseId']);
   const state = {
     ...useState('entities/phone/contact', [
       'dnis',
@@ -43,14 +44,19 @@ export default ({ agent }) => {
     ]),
   };
 
-  const callType = computed(() =>
-    state.inbound.value ? CallType.INBOUND : CallType.OUTBOUND,
-  );
+  const callType = computed(() => {
+    if (currentContact.value) {
+      return currentContact.value.isInbound
+        ? CallType.INBOUND
+        : CallType.OUTBOUND;
+    }
+    return CallType.INBOUND;
+  });
 
   const callDnis = computed(() => (state.dnis.value ? state.dnis.value : null));
 
   const callerName = computed(() => {
-    if (currentCase.value) {
+    if (currentCase.value && activeCaseId.value !== -1) {
       return currentCase.value.name;
     }
     if (callDnis.value) {

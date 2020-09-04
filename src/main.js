@@ -76,6 +76,7 @@ import Tabs from '@/components/tabs/Tabs';
 import Tab from '@/components/tabs/Tab';
 import PhoneService from '@/services/phone.service';
 import VueNumberInput from '@chenfengyuan/vue-number-input';
+import ToggleButton from 'vue-js-toggle-button';
 import Logger from '@/utils/log';
 import { has, padStart } from 'lodash';
 import { getModule } from 'vuex-module-decorators';
@@ -119,6 +120,7 @@ Vue.use(VueCompositionApi);
 
 // 3rd Party Libraries
 Vue.component('number-input', VueNumberInput);
+Vue.use(ToggleButton);
 Vue.use(VueResize);
 Vue.use(VueTimers);
 Vue.use(VueAutosuggest);
