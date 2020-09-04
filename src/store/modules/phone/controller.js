@@ -77,7 +77,7 @@ export const Metrics = Object.freeze({
   CONTACTS_QUEUED: ['contactsInQueue', '~~On hold now'],
   CALLBACKS_QUEUED: ['contactsInQueueOutbound', '~~Remaining Callbacks'],
   AVAILABLE: ['agentsAvailable', '~~Volunteers Available'],
-  AGENTS_ON_CALL: ['agentsOnCall', '~~Volunteers on the phone'],
+  AGENTS_ON_CALL: ['agentsOnCall', '~~Volunteers on the Phone'],
   NEEDED: ['agentsNeeded', '~~Additional Volunteers Needed'],
   TOTAL_WAITING: ['totalWaiting', '~~Total People Waiting'],
   CALLDOWNS_QUEUED: ['calldowns', '~~Remaining Calldowns'],

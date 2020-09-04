@@ -98,9 +98,10 @@ export default {
       return pages[controller.state.view.value.page];
     });
 
-    onMounted(() => {
+    onMounted(async () => {
       EventBus.$emit('acs:init');
-      updatePage();
+      await updatePage();
+      await controller.actions.updateHistoricMetrics();
     });
 
     return {

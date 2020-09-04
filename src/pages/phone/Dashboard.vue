@@ -13,6 +13,12 @@
     </div>
 
     <div class="phone__main">
+      <CallVolumeChart
+        :calls-dataset="totalCalls"
+        :missed-dataset="totalMissed"
+        :cases-dataset="newCases"
+        :loading="!historicMetricsReady"
+      />
       <div>
         <leaderboard />
         <NewsTrainingCard
@@ -41,6 +47,8 @@ import TrainingModal from '@/components/phone/TrainingsModal.vue';
 import AgentCard from '@/components/phone/AgentCard.vue';
 import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics.vue';
 import AgentAnalytics from '@/components/phone/Cards/StatsCard.vue';
+import CallVolumeChart from '@/components/phone/Widgets/CallVolumeChart.vue';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'PhoneDashboard',
@@ -53,6 +61,7 @@ export default {
     ContactTable,
     TrainingModal,
     GeneralStatistics,
+    CallVolumeChart,
   },
   data() {
     return {
@@ -61,13 +70,30 @@ export default {
     };
   },
   computed: {
+    ...mapState('phone.controller', ['historicMetrics']),
+    ...mapGetters('phone.controller', ['historicMetricsReady']),
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
+    },
+    newCases() {
+      return this.buildHistoricDataSet('worksites');
+    },
+    totalCalls() {
+      return this.buildHistoricDataSet('total_calls');
+    },
+    totalMissed() {
+      return this.buildHistoricDataSet('missed');
     },
   },
   methods: {
     async onTrainingComplete() {
       this.$emit('phone:showTrainingModal', false);
+    },
+    buildHistoricDataSet(key) {
+      return this.historicMetrics.daily.map(({ day, ...metric }) => ({
+        x: day,
+        y: metric[key],
+      }));
     },
   },
 };
@@ -101,9 +127,10 @@ export default {
       }
       box-sizing: border-box;
       & > div {
-        lost-row: 1/2;
-        &:first-child {
+        lost-row: 1/3;
+        &:nth-child(2) {
           lost-flex-container: row;
+          lost-row: 1/4;
           & > div {
             lost-column: 1/2;
           }
