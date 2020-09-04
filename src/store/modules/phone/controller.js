@@ -130,6 +130,12 @@ class ControllerStore extends VuexModule {
     callerHistory: true,
   };
 
+  // is serving outbounds
+  isServingOutbounds: boolean = true;
+
+  // current outbound
+  currentOutbound: PhoneOutbound | null = null;
+
   get getGeneralMetrics() {
     return (metricOrder: PhoneMetric[]) => {
       const metricMap = new Map<string, number>();
@@ -186,6 +192,16 @@ class ControllerStore extends VuexModule {
   @Mutation
   setStatus(newStatus) {
     this.status = { ...this.status, ...newStatus };
+  }
+
+  @Mutation
+  setOutbound(newOutbound: PhoneOutbound | null) {
+    this.currentOutbound = newOutbound;
+  }
+
+  @MutationAction({ mutate: ['isServingOutbounds'] })
+  setServingOutbounds(serving: boolean) {
+    return { isServingOutbounds: serving };
   }
 
   @MutationAction({ mutate: ['contactMetrics'] })
@@ -250,6 +266,35 @@ class ControllerStore extends VuexModule {
     await contact.disconnect();
     this.setLoading({ callerHistory: true });
     await this.setView({ page: ControllerPages.DASHBOARD });
+  }
+
+  @Action
+  async serveOutbound({
+    agent,
+    incident,
+  }: {
+    agent: AgentClient,
+    incident: Incident,
+  }) {
+    if (this.isServingOutbounds) {
+      Log.info('attempting to serve outbound call for:', incident);
+      let outbound;
+      try {
+        outbound = await PhoneOutbound.api().getNextOutbound({
+          incidentId: incident.id,
+          agentId: agent.agentId,
+        });
+      } catch (e) {
+        Log.info('no outbounds available!');
+        return;
+      }
+      Log.info('outbound received! calling...', outbound);
+      const outboundObj = await PhoneOutbound.fetchOrFindId(outbound.id);
+      this.setOutbound(outboundObj);
+      await PhoneOutbound.api().callOutbound(outbound.id);
+      return;
+    }
+    Log.info('controller is not currently serving outbounds!');
   }
 
   @Mutation
