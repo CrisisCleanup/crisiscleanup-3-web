@@ -136,11 +136,13 @@ class StreamsStore extends VuexModule {
   @Action
   async updateContact(newData: $Shape<ContactType>) {
     Log.debug('contact update:', newData);
+    const { contactId } = newData;
+    newData.contactId = null;
+    const agent = await AgentClient.query()
+      .withAllRecursive()
+      .find(this.agentClientId);
     if (_.isNil(newData.contactId)) {
-      const agent = await AgentClient.query()
-        .withAllRecursive()
-        .find(this.agentClientId);
-      if (_.isNil(agent)) {
+      if (_.isNil(agent) || _.isNil(agent.currentContact)) {
         const conAgent = new connect.Agent();
         if (!conAgent) {
           Log.info(
@@ -149,17 +151,24 @@ class StreamsStore extends VuexModule {
           return _.delay(() => this.updateContact(newData), 3000);
         }
         const contact = _.first(conAgent.getContacts());
-        if (!contact) {
-          Log.info(
-            'tried to update contact w/o any contacts! retrying in 3 seconds...',
-          );
-          return _.delay(() => this.updateContact(newData), 3000);
+        if (contact) {
+          Log.info('Got contact from connect!');
+          newData.contactId = contact.getContactId();
         }
-        return _.delay(() => this.updateContact(newData), 3000);
-      }
-      if (!_.isEmpty(agent.contacts)) {
+        if (!contact && contactId) {
+          Log.info('no connect contacts found! using provided id!');
+          newData.contactId = contactId;
+        }
+      } else if (!_.isEmpty(agent.contacts)) {
         newData.contactId = agent.contacts[0].contactId;
         Log.info('had to auto resolve contact id!');
+      } else {
+        if (contactId) {
+          Log.info('no connect contacts found! using provided id!');
+          newData.contactId = contactId;
+        }
+        Log.info('could not resolve contact id! trying again in 3 seconds...');
+        return _.delay(() => this.updateContact(newData), 3000);
       }
     }
     await AgentClient.update({
@@ -265,6 +274,7 @@ class StreamsStore extends VuexModule {
       [ACS.ContactEvents.ON_PENDING]: () => {
         this.updateContact({
           state: ContactStates.ROUTED,
+          action: ContactActions.ENTER,
         }).then(() => {
           Log.info('Contact => PENDING');
         });
@@ -277,11 +287,10 @@ class StreamsStore extends VuexModule {
           Log.info('Contact => CONNECTING');
         });
       },
-      [ACS.ContactEvents.ON_CONNECTED]: (contact: connect.Contact) => {
+      [ACS.ContactEvents.ON_CONNECTED]: () => {
         const payload = {
           action: ContactActions.CONNECTED,
           state: ContactStates.ROUTED,
-          contactId: contact.getInitialContactId(),
         };
         if (this.agentClientId === null) {
           _.delay(
@@ -321,6 +330,9 @@ class StreamsStore extends VuexModule {
         this.updateContact({
           action: ContactActions.MISSED,
         }).then(() => Log.info('Contact => MISSED'));
+      },
+      [ACS.ContactEvents.ON_INCOMING]: (contact: connect.Contact) => {
+        contact.accept();
       },
     });
   }
