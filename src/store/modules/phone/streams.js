@@ -324,7 +324,22 @@ class StreamsStore extends VuexModule {
         });
       },
       [ACS.ContactEvents.ON_ACW]: () => {
-        Log.info('Contact => ON_ACW');
+        const payload = {
+          action: ContactActions.ENDED,
+          state: ContactStates.ROUTED,
+        };
+        if (!this.agentClientId) {
+          _.delay(
+            (data) =>
+              this.updateContact(data).then(() =>
+                Log.info('Contact => ON_ACW'),
+              ),
+            3000,
+            payload,
+          );
+        } else {
+          this.updateContact(payload).then(() => Log.info('Contact => ON_ACW'));
+        }
       },
       [ACS.ContactEvents.ON_MISSED]: () => {
         this.updateContact({
