@@ -49,6 +49,7 @@ export const ContactStates = Object.freeze({
  * @prop DESTROYED - Contact completely closed (post ACW).
  * @prop ERROR - An exception occured at some point.
  * @prop MISSED - Agent failed to answer inbound, or contact failed to answer outbound.
+ * @prop PENDING - Agent is calling contact (outbound).
  * @readonly
  * @enum {string}
  */
@@ -60,6 +61,7 @@ export const ContactActions = Object.freeze({
   DESTROYED: 'destroyed',
   ERROR: 'error',
   MISSED: 'missed',
+  PENDING: 'pending',
 });
 
 /**
@@ -72,6 +74,8 @@ export const ContactActions = Object.freeze({
  * @prop INCIDENT - Incident associated with hotline.
  * @prop CALLBACK_NUMBER - Contact's caller Id (only present in callbacks!)
  * @prop INBOUND_NUMBER - Contact's caller Id (only present in inbound calls!)
+ * @prop CALL_TYPE - Type of call.
+ * @prop INBOUND_ID - ID of associated inbound object.
  * @readonly
  * @enum {string}
  */
@@ -87,6 +91,7 @@ export const ContactAttributes = Object.freeze({
 });
 
 export const ContactConnectionMap = Object.freeze({
+  [ContactActions.PENDING]: ConnectionStates.AGENT_CALLING,
   [ContactActions.CONNECTING]: ConnectionStates.PENDING_CALL,
   [ContactActions.CONNECTED]: ConnectionStates.BUSY,
   [ContactActions.ENDED]: ConnectionStates.PAUSED,

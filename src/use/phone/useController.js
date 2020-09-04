@@ -15,7 +15,12 @@ export default () => {
   };
 
   const state = {
-    ...useState('phone.controller', ['status', 'view']),
+    ...useState('phone.controller', [
+      'status',
+      'view',
+      'isServingOutbounds',
+      'currentOutbound',
+    ]),
   };
 
   const actions = {
@@ -25,6 +30,8 @@ export default () => {
       'setView',
       'updateStatus',
       'closeContact',
+      'serveOutbound',
+      'setServingOutbounds',
     ]),
   };
 
