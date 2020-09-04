@@ -1,7 +1,7 @@
 // @flow
 
 /**
- * Phone Controller Store
+ * phone Controller Store
  */
 
 import {
@@ -77,7 +77,7 @@ export const Metrics = Object.freeze({
   CONTACTS_QUEUED: ['contactsInQueue', '~~On hold now'],
   CALLBACKS_QUEUED: ['contactsInQueueOutbound', '~~Remaining Callbacks'],
   AVAILABLE: ['agentsAvailable', '~~Volunteers Available'],
-  AGENTS_ON_CALL: ['agentsOnCall', '~~Volunteers on the Phone'],
+  AGENTS_ON_CALL: ['agentsOnCall', '~~Volunteers on the phone'],
   NEEDED: ['agentsNeeded', '~~Additional Volunteers Needed'],
   TOTAL_WAITING: ['totalWaiting', '~~Total People Waiting'],
   CALLDOWNS_QUEUED: ['calldowns', '~~Remaining Calldowns'],
@@ -130,6 +130,7 @@ class ControllerStore extends VuexModule {
   loading = {
     agentMetrics: true,
     callerHistory: true,
+    historicMetrics: true,
   };
 
   // is serving outbounds
@@ -137,6 +138,16 @@ class ControllerStore extends VuexModule {
 
   // current outbound
   currentOutbound: PhoneOutbound | null = null;
+
+  // historic call metrics
+  historicMetrics = {
+    daily: [],
+    aggregates: {},
+  };
+
+  get historicMetricsReady() {
+    return !this.loading.historicMetrics;
+  }
 
   get getGeneralMetrics() {
     return (metricOrder: PhoneMetric[]) => {
@@ -302,6 +313,18 @@ class ControllerStore extends VuexModule {
       return;
     }
     Log.info('controller is not currently serving outbounds!');
+  }
+
+  @Action
+  async updateHistoricMetrics() {
+    const { daily, aggregates } = await Agent.fetchHistoricMetrics();
+    this.setHistoricMetrics({ daily, aggregates });
+    this.setLoading({ historicMetrics: false });
+  }
+
+  @Mutation
+  setHistoricMetrics(newMetrics) {
+    this.historicMetrics = newMetrics;
   }
 
   @Mutation

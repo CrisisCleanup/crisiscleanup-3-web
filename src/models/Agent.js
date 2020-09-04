@@ -32,6 +32,13 @@ export default class Agent extends CCUModel {
     return data;
   }
 
+  static async fetchHistoricMetrics() {
+    const {
+      response: { data },
+    } = await Agent.api().get('/agents_metrics/history', { save: false });
+    return data;
+  }
+
   static apiConfig = {
     actions: {
       async fetch(user) {

@@ -20,6 +20,7 @@ export default () => {
       'view',
       'isServingOutbounds',
       'currentOutbound',
+      'historicMetrics',
     ]),
   };
 
@@ -32,6 +33,7 @@ export default () => {
       'closeContact',
       'serveOutbound',
       'setServingOutbounds',
+      'updateHistoricMetrics',
     ]),
   };
 
