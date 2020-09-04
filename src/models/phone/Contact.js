@@ -88,6 +88,8 @@ export const ContactAttributes = Object.freeze({
   INCIDENT: 'INCIDENT_ID',
   CALLBACK_NUMBER: 'CALLBACK_NUMBER',
   INBOUND_NUMBER: 'InboundNumber',
+  CALL_TYPE: 'CALL_TYPE',
+  INBOUND_ID: 'TARGET_INBOUND_ID',
 });
 
 export const ContactConnectionMap = Object.freeze({
@@ -99,7 +101,7 @@ export const ContactConnectionMap = Object.freeze({
 
 export const CallType = Object.freeze({
   INBOUND: 'inbound',
-  OUTBOUND: 'outbound',
+  OUTBOUND: 'OUTBOUND',
 });
 
 const Log = Logger({ name: 'phone.contact' });
@@ -301,6 +303,7 @@ export default class Contact extends Model {
       ContactAttributes.INCIDENT,
       ContactAttributes.PDAS,
       ContactAttributes.OUTBOUND_IDS,
+      ContactAttributes.INBOUND_ID,
     ];
     return _.transform(
       rawAttrs,
@@ -330,16 +333,17 @@ export default class Contact extends Model {
     const wrkSites = await this.getWorksites();
     const pdas = await this.getPdas();
     const outbounds = await this.getOutbounds();
+    const inbound = await this.getInbound();
     const _state = Contact.store().state.entities['phone/contact'];
-    let { dnis, locale, inbound } = _state;
+    let { dnis, locale, outbound } = _state;
     if (!dnis) {
       dnis = await this.getDnis();
     }
     if (!locale) {
       locale = await this.getLocale();
     }
-    if (!inbound) {
-      inbound = await PhoneInbound.api().fetchBySessionId(this.contactId);
+    if (!outbound) {
+      outbound = _.first(outbounds);
     }
     Contact.commit((state) => {
       state.dnis = dnis;
@@ -400,6 +404,13 @@ export default class Contact extends Model {
     return this.resolveAttributeModels<PhoneOutbound>(
       ContactAttributes.OUTBOUND_IDS,
       PhoneOutbound,
+    );
+  }
+
+  async getInbound(): Promise<PhoneInbound> {
+    return this.resolveAttributeModels<PhoneInbound>(
+      ContactAttributes.INBOUND_ID,
+      PhoneInbound,
     );
   }
 
