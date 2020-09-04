@@ -6,6 +6,9 @@
 
 import { Model } from '@vuex-orm/core';
 import type { ConnectionType } from '@/models/phone/types';
+import _ from 'lodash';
+import * as ACS from '@/services/connect.service';
+import Logger from '@/utils/log';
 
 /**
  * Enum of states representing the current step or stage of a connection.
@@ -25,6 +28,8 @@ export const ConnectionStates = Object.freeze({
   PAUSED: 'AfterCallWork',
 });
 
+const Log = Logger({ name: 'phone.connection' });
+
 export default class Connection extends Model {
   static entity = 'phone/connection';
 
@@ -37,5 +42,15 @@ export default class Connection extends Model {
       state: this.string(),
       streamsConnectionId: this.string(''),
     }: ConnectionType);
+  }
+
+  static afterUpdate(model: Connection) {
+    if (_.isNil(model.streamsConnectionId)) {
+      const voiceConnection = ACS.getConnectionByContactId(model.contactId);
+      if (voiceConnection) {
+        Log.info('recv streams connection ID during connection update!');
+        model.streamsConnectionId = voiceConnection.getConnectionId();
+      }
+    }
   }
 }
