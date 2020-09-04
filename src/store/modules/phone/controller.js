@@ -12,6 +12,7 @@ import {
   MutationAction,
   VuexModule,
 } from 'vuex-module-decorators';
+import AgentClient from '@/models/phone/AgentClient';
 import type {
   CaseType,
   MetricsStateT,
@@ -31,6 +32,7 @@ import Contact from '@/models/phone/Contact';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneInbound from '@/models/PhoneInbound';
 import User from '@/models/User';
+import Incident from '@/models/Incident';
 
 /**
  * Enum of possible controller pages.
@@ -245,21 +247,26 @@ class ControllerStore extends VuexModule {
       await this.updateStatus({ modified: [this.currentCase] });
     }
     const { statusId, notes } = this.status;
+    let dnisMetaName = _.get(contact.dnis.meta, 'caller_name', 'Unknown');
+    if (this.activeCaseId !== -1) {
+      dnisMetaName = this.currentCase ? this.currentCase.name : dnisMetaName;
+    }
     const callStatus = {
       statusId,
       notes,
       agentId: contact.agentId,
       cases: this.modifiedCaseIds,
       dnisMeta: {
-        caller_name: this.currentCase ? this.currentCase.name : 'Unknown',
+        caller_name: dnisMetaName,
         cases: this.modifiedCaseIds.join(', '),
       },
     };
-    if (contact.outbound) {
+    if (contact.outbound && !contact.isInbound) {
       Log.info('updating outbound status with:', callStatus);
       await PhoneOutbound.api().updateStatus(contact.outbound.id, callStatus);
+      this.setOutbound(null);
     }
-    if (contact.inbound) {
+    if (contact.inbound && contact.isInbound) {
       Log.info('updating inbound status with:', callStatus);
       await PhoneInbound.api().updateStatus(contact.inbound.id, callStatus);
     }
