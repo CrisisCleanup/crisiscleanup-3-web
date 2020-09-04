@@ -16,6 +16,7 @@ export default class PhoneOutbound extends CCUModel {
       created_at: this.attr(),
       updated_at: this.attr(),
       locked_at: this.attr(),
+      locked_by: this.attr(),
       dnis1: this.attr(),
       dnis2: this.attr(),
       ani: this.attr(),
@@ -25,6 +26,8 @@ export default class PhoneOutbound extends CCUModel {
       created_by: this.attr(),
       updated_by: this.attr(),
       latest_status: this.attr(),
+      location_name: this.attr(),
+      priority: this.attr(),
     };
   }
 
@@ -63,21 +66,14 @@ export default class PhoneOutbound extends CCUModel {
       },
       async updateStatus(
         id,
-        {
-          statusId,
-          worksiteId = null,
-          notes = null,
-          dnisMeta = null,
-          agentId = null,
-          cases = null,
-        },
+        { statusId, notes, dnisMeta, agentId, cases, worksiteId },
       ) {
         const body = omitBy(
           {
             status: statusId || null,
-            dnis_meta: dnisMeta || {},
-            agent: agentId,
-            worksite: worksiteId,
+            dnis_meta: dnisMeta || null,
+            agent: agentId || null,
+            worksite: worksiteId || null,
             notes: notes || null,
             cases,
           },
