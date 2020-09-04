@@ -95,16 +95,6 @@ export default class AgentClient extends Model {
           Log.info('client went offline, forcing not_routable route state'),
         );
     }
-    const newRouteState = AgentClient.isStateRoutable(client.contactState);
-    if (newRouteState !== client.routeState) {
-      AgentClient.update({
-        where: client.agentId,
-        data: {
-          routeState: newRouteState,
-        },
-      }).then((a) => a);
-      return;
-    }
     Log.info(`Agent => ${client.contactState}`);
     Log.info(client);
     const payload = {
@@ -113,7 +103,12 @@ export default class AgentClient extends Model {
       routeState: client.routeState,
       contactState: client.contactState,
     };
-    if (![ConnectionStates.AGENT_PENDING].includes(client.contactState)) {
+    const isInbound =
+      client.currentContact === null ? true : client.currentContact.isInbound;
+    if (
+      !isInbound ||
+      ![ConnectionStates.AGENT_PENDING].includes(client.contactState)
+    ) {
       AgentClient.store()
         .dispatch('websocket/send', {
           action: ACTIONS.SET_AGENT_STATE,
@@ -213,9 +208,16 @@ export default class AgentClient extends Model {
     return contact.first();
   }
 
-  toggleOnline(connected?: boolean): void {
-    if (this.contactState === ConnectionStates.PAUSED) {
-      return ACS.setAgentState(true);
+  get fullState(): string {
+    return [this.state, this.routeState, this.contactState].join('#');
+  }
+
+  toggleOnline(connected?: boolean): void | boolean {
+    if (this.contactState === ConnectionStates.PAUSED && this.currentContact) {
+      Contact.delete(this.currentContact.contactId).then(() =>
+        Log.info('Agent exiting ACW!'),
+      );
+      return this.isOnline;
     }
     if (typeof connected === 'boolean') {
       return ACS.setAgentState(connected);
