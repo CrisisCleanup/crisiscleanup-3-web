@@ -144,10 +144,18 @@ export default class Contact extends Model {
     return inbound;
   }
 
-  static beforeCreate(model: Contact): boolean | vvoid {
-    return ![ContactActions.ENDED, ContactActions.DESTROYED].includes(
-      model.action,
+  get dnis(): PhoneDnis {
+    const { dnis } = Contact.store().state.entities['phone/contact'];
+    return dnis;
+  }
+
+  get isInbound(): boolean {
+    const callType = _.get(
+      this.contactAttributes,
+      ContactAttributes.CALL_TYPE,
+      CallType.INBOUND,
     );
+    return callType.toLowerCase() === CallType.INBOUND;
   }
 
   static afterCreate(model: Contact): void {
@@ -182,7 +190,7 @@ export default class Contact extends Model {
     }
   }
 
-  static beforeUpdate(model: ContactType): void | boolean {
+  static beforeUpdate(model: Contact): void | boolean {
     if (
       [ContactActions.DESTROYED, ContactActions.MISSED].includes(model.action)
     ) {
@@ -194,7 +202,16 @@ export default class Contact extends Model {
     }
     const connectContact = ACS.getContactById(model.contactId);
     if (connectContact) {
-      model.attributes = connectContact.getAttributes();
+      const attrs = connectContact.getAttributes();
+      if (!_.isNil(attrs)) {
+        model.attributes = attrs;
+      }
+    }
+    if (_.isNil(model.attributes)) {
+      const outboundAttrs = Contact.getOutboundAttributes(model);
+      if (outboundAttrs) {
+        model.attributes = outboundAttrs;
+      }
     }
     return true;
   }
@@ -278,8 +295,9 @@ export default class Contact extends Model {
       );
     // Handle connection states on and after actual connection.
     if (
-      model.state === ContactStates.ROUTED &&
-      !_.isEmpty(connection.streamsConnectionId)
+      (model.state === ContactStates.ROUTED &&
+        !_.isEmpty(connection.streamsConnectionId)) ||
+      (model.action === ContactActions.CONNECTED && !model.isInbound)
     ) {
       const newState = _.get(
         ContactConnectionMap,
@@ -352,7 +370,30 @@ export default class Contact extends Model {
       state.locale = locale;
       state.outbounds = _.unionBy(state.outbounds, outbounds, 'id');
       state.inbound = inbound;
+      state.outbound = outbound;
     });
+  }
+
+  static getOutboundAttributes(contact: Contact) {
+    const {
+      currentOutbound,
+    }: { currentOutbound: null | PhoneOutbound } = Contact.store().state[
+      'phone.controller'
+    ];
+    if (currentOutbound && _.isNil(contact.attributes)) {
+      Log.info('found current outbound!');
+      return {
+        [ContactAttributes.INBOUND_NUMBER]: currentOutbound.phone_number,
+        [ContactAttributes.INCIDENT]: String(
+          _.first(currentOutbound.incident_id),
+        ),
+        [ContactAttributes.OUTBOUND_IDS]: String(currentOutbound.id),
+        [ContactAttributes.WORKSITES]: '',
+        [ContactAttributes.CALL_TYPE]: CallType.OUTBOUND,
+        [ContactAttributes.PDAS]: '',
+      };
+    }
+    return {};
   }
 
   get initConnectionState(): ConnectionState {
@@ -447,12 +488,16 @@ export default class Contact extends Model {
   get callerId(): string {
     const _number = _.get(
       this.contactAttributes,
-      ContactAttributes.CALLER_ID,
+      ContactAttributes.INBOUND_NUMBER,
       null,
     );
     if (!_number) return '';
     const number = parsePhoneNumberFromString(_number);
     return number.formatNational();
+  }
+
+  get fullState(): string {
+    return [this.state, this.action].join('#');
   }
 
   async addCases(cases: CaseType[]) {
