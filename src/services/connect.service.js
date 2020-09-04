@@ -48,6 +48,7 @@ export const AgentEvents = Object.freeze({
  * @param ON_ENDED - Agent ends call or contact is missed (outbound).
  * @param ON_ACW - Call has been ended, agent & contact -> ACW.
  * @param ON_DESTORY - Contact is completely closed.
+ * @param ON_INCOMING - Outbound callback contact is incoming.
  * @enum {string}
  * @readonly
  */
@@ -59,6 +60,7 @@ export const ContactEvents = Object.freeze({
   ON_ENDED: 'onEnded',
   ON_ACW: 'onACW',
   ON_DESTROY: 'onDestroy',
+  ON_INCOMING: 'onIncoming',
 });
 
 /**
@@ -129,10 +131,31 @@ export const getContactById = (contactId: string): connect.Contact | null => {
   if (_.isEmpty(contacts)) {
     return null;
   }
-  const targContact = contacts.find(
+  let targContact = contacts.find(
     (c: connect.Contact) => c.getInitialContactId() === contactId,
   );
   if (!targContact) {
+    // In the case of an outbound call,
+    // the contact ID changes due to a queue transfer
+    // via the queued callback functionality.
+    // So we will need the current contact ID, rather than the
+    // initial.
+    targContact = contacts.find(
+      (c: connect.Contact) => c.getContactId() === contactId,
+    );
+    if (targContact) {
+      return targContact;
+    }
+    // Finally, if the contact ID is provided over websocket
+    // before connect (and its an outbound), then just use
+    // the current contact who is a queue callback.
+    targContact = contacts.find(
+      (c: connect.Contact) => c.getType() === 'queue_callback',
+    );
+    if (targContact) {
+      return targContact;
+    }
+
     return null;
   }
   return targContact;
