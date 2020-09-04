@@ -39,7 +39,7 @@ type ConnectionType = {|
 |};
 
 type ContactType = {|
-  contactId: string,
+  contactId: string | null,
   agentId: string | null,
   state: ContactState,
   action: ContactAction,
