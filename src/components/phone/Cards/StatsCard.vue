@@ -1,6 +1,6 @@
 <template>
   <TitledCard
-    :loading="agentMetricsReady"
+    :loading="!agentMetricsReady"
     title="~~My Statistics"
     :body-style="{ minHeight: '10vh' }"
   >

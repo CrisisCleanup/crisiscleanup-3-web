@@ -1,8 +1,12 @@
 <template>
-  <TitledCard :loading="agentMetricsReady" title="~~Leaderboard" class="h-full">
+  <TitledCard
+    :loading="!agentMetricsReady"
+    title="~~Leaderboard"
+    class="h-full"
+  >
     <div class="card-container overflow-auto h-full">
       <div
-        v-if="!agentMetricsReady"
+        v-if="agentMetricsReady"
         class="metric-title flex justify-end px-1 lg:px-6"
       >
         <base-text

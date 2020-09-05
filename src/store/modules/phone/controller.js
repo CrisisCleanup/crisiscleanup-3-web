@@ -168,7 +168,7 @@ class ControllerStore extends VuexModule {
   }
 
   get agentMetricsReady() {
-    return this.loading.agentMetrics;
+    return !this.loading.agentMetrics;
   }
 
   get callHistoryReady() {
