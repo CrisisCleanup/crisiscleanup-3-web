@@ -1,55 +1,56 @@
 <template>
-  <div
-    :class="`ctrl__container w-full h-full phone-controller ${
-      scriptPopup ? 'popup-active' : ''
-    } ${renderPopup ? 'popup' : ''}`"
-  >
+  <div class="contents">
     <script-popup
-      v-if="renderPopup"
       @dismissed="() => (scriptPopup = false)"
       :script-name="callType"
+      :active="scriptPopup"
+      v-if="scriptPopup"
     />
-
-    <div class="ctrl__section">
-      <div class="ctrl__agent">
-        <div class="phone__agentcard">
-          <AgentCard />
-        </div>
-        <div class="phone__general">
-          <GeneralStatistics />
-        </div>
-        <div class="phone__agentmetrics">
-          <AgentAnalytics />
+    <div
+      :class="`ctrl__container w-full h-full phone-controller ${
+        scriptPopup ? 'popup-active' : ''
+      }`"
+    >
+      <div class="ctrl__section">
+        <div class="ctrl__agent">
+          <div class="phone__agentcard">
+            <AgentCard />
+          </div>
+          <div class="phone__general">
+            <GeneralStatistics />
+          </div>
+          <div class="phone__agentmetrics">
+            <AgentAnalytics />
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="ctrl__section">
-      <div class="ctrl__board">
-        <agent-board />
+      <div class="ctrl__section">
+        <div class="ctrl__board">
+          <agent-board />
+        </div>
       </div>
-    </div>
 
-    <div class="ctrl__section">
-      <div class="ctrl__actions">
-        <agent-actions>
-          <template #case>
-            <case-form
-              :style="{ maxHeight: '90vh' }"
-              v-bind="caseFormProps"
-              :key="activeCaseId"
-              :incident-id="String(currentIncident.id)"
-              disable-claim-and-save
-              :data-prefill="prefillData"
-              @savedWorksite="savedWorksite"
-              @navigateToWorksite="(id) => setActiveCase(id)"
-              class="h-full"
-            />
-          </template>
-          <template #resources>
-            <phone-resources />
-          </template>
-        </agent-actions>
+      <div class="ctrl__section">
+        <div class="ctrl__actions">
+          <agent-actions>
+            <template #case>
+              <case-form
+                v-bind="caseFormProps"
+                :key="activeCaseId"
+                :incident-id="String(currentIncident.id)"
+                disable-claim-and-save
+                :data-prefill="prefillData"
+                @savedWorksite="savedWorksite"
+                @navigateToWorksite="(id) => setActiveCase(id)"
+                class="h-full"
+              />
+            </template>
+            <template #resources>
+              <phone-resources />
+            </template>
+          </agent-actions>
+        </div>
       </div>
     </div>
   </div>
@@ -69,7 +70,6 @@ import useContact from '@/use/phone/useContact';
 import useAgent from '@/use/phone/useAgent';
 import Worksite from '@/models/Worksite';
 import { useLocalStorage } from 'vue-composable';
-import _ from 'lodash';
 import useController from '@/use/phone/useController';
 import AgentCard from '@/components/phone/AgentCard.vue';
 import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics.vue';
@@ -93,8 +93,8 @@ export default {
     const { agent } = useAgent();
     const { currentContact, callType, callerName } = useContact({ agent });
 
-    const { storage } = useLocalStorage('ccu-ivr-hide-popup');
-    const renderPopup = computed(() => _.isNil(storage.value));
+    const { storage } = useLocalStorage('ccu-ivr-hide-script', false);
+    const renderPopup = computed(() => storage.value === false);
     const scriptPopup = ref(renderPopup.value);
 
     const caseFormProps = computed(() => {
@@ -170,6 +170,11 @@ $neg-x-pad: calc(0rem - theme('spacing.6'));
 .ctrl {
   &__container {
     lost-flex-container: row;
+    transition: transform 300ms easeInOutCirc;
+
+    &.popup-active {
+      transform: translateY(8rem);
+    }
 
     .ctrl__section {
       &:first-child {
@@ -187,12 +192,12 @@ $neg-x-pad: calc(0rem - theme('spacing.6'));
         }
       }
       &:last-child {
-        lost-column: 1/2 0;
+        lost-column: 1/2 0 0;
         @screen xl {
-          lost-column: 1/4 0;
+          lost-column: 1/4 0 0;
         }
 
-        margin: $neg-y-pad $neg-x-pad $neg-y-pad theme('spacing.6') !important;
+        margin: $neg-y-pad calc($neg-x-pad - 30px) $neg-y-pad theme('spacing.6') !important;
       }
 
       .ctrl__agent {
@@ -209,31 +214,4 @@ $neg-x-pad: calc(0rem - theme('spacing.6'));
     }
   }
 }
-
-/*.ctrl {*/
-/*  &__container {*/
-/*    lost-flex-container: row;*/
-/*    ^&__agent {*/
-/*      @apply h-full;*/
-/*      lost-column: 1/4;*/
-/*      @screen xl {*/
-/*        lost-column: 1/5;*/
-/*      }*/
-/*      & > div {*/
-/*        margin-bottom: 30px;*/
-/*      }*/
-/*    }*/
-/*    ^&__board {*/
-/*      lost-column: 3/5;*/
-/*      lost-align: center;*/
-/*    }*/
-/*    ^&__actions {*/
-/*      @apply h-full;*/
-/*      lost-column: 1/5;*/
-/*      position: absolute;*/
-/*      right: 0;*/
-/*      top: 0;*/
-/*    }*/
-/*  }*/
-/*}*/
 </style>
