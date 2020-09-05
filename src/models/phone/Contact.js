@@ -354,9 +354,6 @@ export default class Contact extends Model {
     const outbounds = await this.getOutbounds();
     const _state = Contact.store().state.entities['phone/contact'];
     let { dnis, locale, outbound, inbound } = _state;
-    if (!dnis) {
-      dnis = await this.getDnis();
-    }
     if (!locale) {
       locale = await this.getLocale();
     }
@@ -366,6 +363,9 @@ export default class Contact extends Model {
     if (!inbound) {
       inbound = await this.getInbound();
       inbound = _.isArray(inbound) ? _.first(inbound) : inbound;
+    }
+    if (!dnis) {
+      dnis = await this.getDnis({ inbound, outbound });
     }
     Contact.commit((state) => {
       state.dnis = dnis;
@@ -459,12 +459,29 @@ export default class Contact extends Model {
     );
   }
 
-  async getDnis(): Promise<PhoneDnis | null> {
-    const _number = _.get(
+  async getDnis({
+    inbound,
+    outbound,
+  }: {
+    inbound: PhoneInbound | null,
+    outbound: PhoneOutbound | null,
+  } = {}): Promise<PhoneDnis | null> {
+    // first check for contact attr.
+    let _number = _.get(
       this.contactAttributes,
       ContactAttributes.INBOUND_NUMBER,
       null,
     );
+    if (!_number && outbound) {
+      // if an outbound was found, use
+      // the dnis1 id to resolve
+      return PhoneDnis.fetchOrFindId(outbound.dnis1);
+    }
+    if (!_number && inbound) {
+      // if an inbound was found
+      // use the dnis raw number to resolve.
+      _number = inbound.dnis;
+    }
     if (!_number) return null;
     const parsed = parsePhoneNumberFromString(_number);
     if (!parsed) return null;
