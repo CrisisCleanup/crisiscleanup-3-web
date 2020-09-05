@@ -15,7 +15,7 @@
         <base-text :weight="700" variant="h2">
           {{ currentUser.full_name }}
         </base-text>
-        <base-text :weight="400" variant="h1">
+        <base-text :weight="400" variant="h2">
           {{ currentUser.mobile }}
         </base-text>
         <base-button
@@ -23,7 +23,9 @@
           class="more-info"
           variant="text"
         >
-          {{ showMoreState.state.value ? 'less' : 'more' }}
+          {{
+            showMoreState.state.value ? $t('~~Show Less') : $t('~~Show More')
+          }}
         </base-button>
       </div>
     </div>
@@ -196,9 +198,24 @@ export default {
 
   .profile {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
     flex-grow: 1;
+
+    .profile--details {
+      p {
+        @apply pl-1;
+      }
+    }
+
+    @screen xl {
+      justify-content: space-evenly;
+      .profile--details {
+        p:nth-child(2) {
+          @apply text-h1 font-h1;
+        }
+      }
+    }
 
     &--img {
       @apply shadow-md;

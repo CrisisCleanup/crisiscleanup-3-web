@@ -10,40 +10,47 @@
       :script-name="callType"
     />
 
-    <div class="ctrl__agent">
-      <div class="phone__agentcard">
-        <AgentCard />
-      </div>
-      <div class="phone__general">
-        <GeneralStatistics />
-      </div>
-      <div class="phone__agentmetrics">
-        <AgentAnalytics />
+    <div class="ctrl__section">
+      <div class="ctrl__agent">
+        <div class="phone__agentcard">
+          <AgentCard />
+        </div>
+        <div class="phone__general">
+          <GeneralStatistics />
+        </div>
+        <div class="phone__agentmetrics">
+          <AgentAnalytics />
+        </div>
       </div>
     </div>
 
-    <div class="ctrl__board">
-      <agent-board />
+    <div class="ctrl__section">
+      <div class="ctrl__board">
+        <agent-board />
+      </div>
     </div>
 
-    <div class="ctrl__actions">
-      <agent-actions>
-        <template #case>
-          <case-form
-            v-bind="caseFormProps"
-            :key="activeCaseId"
-            :incident-id="String(currentIncident.id)"
-            disable-claim-and-save
-            :data-prefill="prefillData"
-            @savedWorksite="savedWorksite"
-            @navigateToWorksite="(id) => setActiveCase(id)"
-            class="h-full"
-          />
-        </template>
-        <template #resources>
-          <phone-resources />
-        </template>
-      </agent-actions>
+    <div class="ctrl__section">
+      <div class="ctrl__actions">
+        <agent-actions>
+          <template #case>
+            <case-form
+              :style="{ maxHeight: '90vh' }"
+              v-bind="caseFormProps"
+              :key="activeCaseId"
+              :incident-id="String(currentIncident.id)"
+              disable-claim-and-save
+              :data-prefill="prefillData"
+              @savedWorksite="savedWorksite"
+              @navigateToWorksite="(id) => setActiveCase(id)"
+              class="h-full"
+            />
+          </template>
+          <template #resources>
+            <phone-resources />
+          </template>
+        </agent-actions>
+      </div>
     </div>
   </div>
 </template>
@@ -157,33 +164,76 @@ export default {
 
 <style scoped lang="postcss">
 @lost flexbox flex;
-$neg-y-pad: calc(0rem - theme('spacing.4'));
-$neg-x-pad: calc(0rem - theme('spacing.5'));
+$neg-y-pad: calc(0rem - theme('spacing.6'));
+$neg-x-pad: calc(0rem - theme('spacing.6'));
 
 .ctrl {
   &__container {
     lost-flex-container: row;
-    ^&__agent {
-      @apply h-full;
-      lost-column: 1/4;
-      @screen xl {
-        lost-column: 1/5;
+
+    .ctrl__section {
+      &:first-child {
+        display: none;
+        lost-column: 1/4 0;
+        @screen xl {
+          display: initial;
+          lost-column: 1/4 0;
+        }
       }
-      & > div {
-        margin-bottom: 30px;
+      &:nth-child(2) {
+        lost-column: 1/2 0 0;
+        @screen xl {
+          lost-column: 2/4 0 0;
+        }
       }
-    }
-    ^&__board {
-      lost-column: 3/5;
-      lost-align: center;
-    }
-    ^&__actions {
-      @apply h-full;
-      lost-column: 1/5;
-      position: absolute;
-      right: 0;
-      top: 0;
+      &:last-child {
+        lost-column: 1/2 0;
+        @screen xl {
+          lost-column: 1/4 0;
+        }
+
+        margin: $neg-y-pad $neg-x-pad $neg-y-pad theme('spacing.6') !important;
+      }
+
+      .ctrl__agent {
+        lost-flex-container: column;
+        div {
+          lost-row: 1/3;
+        }
+      }
+
+      .ctrl__actions,
+      .ctrl__board {
+        @apply h-full;
+      }
     }
   }
 }
+
+/*.ctrl {*/
+/*  &__container {*/
+/*    lost-flex-container: row;*/
+/*    ^&__agent {*/
+/*      @apply h-full;*/
+/*      lost-column: 1/4;*/
+/*      @screen xl {*/
+/*        lost-column: 1/5;*/
+/*      }*/
+/*      & > div {*/
+/*        margin-bottom: 30px;*/
+/*      }*/
+/*    }*/
+/*    ^&__board {*/
+/*      lost-column: 3/5;*/
+/*      lost-align: center;*/
+/*    }*/
+/*    ^&__actions {*/
+/*      @apply h-full;*/
+/*      lost-column: 1/5;*/
+/*      position: absolute;*/
+/*      right: 0;*/
+/*      top: 0;*/
+/*    }*/
+/*  }*/
+/*}*/
 </style>
