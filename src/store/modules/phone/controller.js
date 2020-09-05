@@ -161,7 +161,9 @@ class ControllerStore extends VuexModule {
 
   get agentRankings() {
     return _.orderBy(
-      Object.values(this.agentMetrics, ['total_calls'], ['desc']),
+      Object.values(this.agentMetrics),
+      ['total_calls'],
+      ['desc'],
     );
   }
 
