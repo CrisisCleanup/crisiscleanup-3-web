@@ -172,7 +172,7 @@ class ControllerStore extends VuexModule {
   }
 
   get callHistoryReady() {
-    return this.loading.callerHistory;
+    return !this.loading.callerHistory;
   }
 
   get callHistory() {
