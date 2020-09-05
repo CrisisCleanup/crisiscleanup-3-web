@@ -32,13 +32,13 @@
         </div>
       </template>
     </modal>
-    <base-text variant="h3">{{ lang.notes }}</base-text>
     <ModelSelectInput
       name="status"
       model="phone_statuses"
       label="status_name_t"
       @update:value="(payload) => onStatusSelect(payload)"
     />
+    <base-text variant="h3">{{ lang.notes }}</base-text>
     <base-input
       class="notes border-crisiscleanup-dark-100"
       input-classes="border-crisiscleanup-dark-100"
@@ -147,7 +147,7 @@ export default {
             @apply text-crisiscleanup-dark-500 py-3;
           }
           .notes {
-            @apply py-3;
+            @apply pb-3;
             @apply border-crisiscleanup-dark-100 mb-6;
             outline: none;
             textarea {
