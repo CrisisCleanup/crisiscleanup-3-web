@@ -2726,6 +2726,7 @@ exports[`Storyshots Elements/Cards/TabbedCard Basic 1`] = `
     >
       <div
         class="relative"
+        overlay="true"
       >
         <!---->
          
