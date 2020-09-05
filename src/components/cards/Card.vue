@@ -1,5 +1,5 @@
 <template>
-  <Loader overlay :loading="loading">
+  <Loader :overlay="true" :loading="loading">
     <template #content>
       <div class="bg-white shadow-crisiscleanup-card card h-full">
         <div class="header" slot="header">
@@ -8,8 +8,10 @@
           </div>
         </div>
         <div class="body">
-          <div v-if="!loading" class="body--inner h-full">
-            <slot></slot>
+          <div class="body--inner h-full" :style="bodyStyle">
+            <template v-if="!loading">
+              <slot></slot>
+            </template>
           </div>
         </div>
       </div>
@@ -25,6 +27,7 @@ export default {
   components: { Loader },
   props: {
     loading: VueTypes.bool.def(false),
+    bodyStyle: VueTypes.any,
   },
 };
 </script>
@@ -49,7 +52,9 @@ export default {
     }
   }
   .body {
-    @apply bg-white;
+    &--inner {
+      min-height: 23vh;
+    }
   }
 }
 </style>
