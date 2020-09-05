@@ -203,6 +203,7 @@ export default class Contact extends Model {
     const connectContact = ACS.getContactById(model.contactId);
     if (connectContact) {
       const attrs = connectContact.getAttributes();
+      Log.info('got connect attributes:', attrs);
       if (!_.isNil(attrs)) {
         model.attributes = attrs;
       }
@@ -351,9 +352,8 @@ export default class Contact extends Model {
     const wrkSites = await this.getWorksites();
     const pdas = await this.getPdas();
     const outbounds = await this.getOutbounds();
-    const inbound = await this.getInbound();
     const _state = Contact.store().state.entities['phone/contact'];
-    let { dnis, locale, outbound } = _state;
+    let { dnis, locale, outbound, inbound } = _state;
     if (!dnis) {
       dnis = await this.getDnis();
     }
@@ -362,6 +362,10 @@ export default class Contact extends Model {
     }
     if (!outbound) {
       outbound = _.first(outbounds);
+    }
+    if (!inbound) {
+      inbound = await this.getInbound();
+      inbound = _.isArray(inbound) ? _.first(inbound) : inbound;
     }
     Contact.commit((state) => {
       state.dnis = dnis;
