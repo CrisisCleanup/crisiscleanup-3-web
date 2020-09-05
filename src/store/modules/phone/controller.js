@@ -258,7 +258,7 @@ class ControllerStore extends VuexModule {
       await this.updateStatus({ modified: [this.currentCase] });
     }
     const { statusId, notes } = this.status;
-    let dnisMetaName = _.get(contact.dnis.meta, 'caller_name', 'Unknown');
+    let dnisMetaName = _.get(contact.dnis, 'meta.caller_name', 'Unknown');
     if (this.activeCaseId !== -1) {
       dnisMetaName = this.currentCase ? this.currentCase.name : dnisMetaName;
     }

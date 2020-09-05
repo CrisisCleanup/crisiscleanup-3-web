@@ -464,13 +464,22 @@ export default class Contact extends Model {
     if (!_number) return null;
     const parsed = parsePhoneNumberFromString(_number);
     if (!parsed) return null;
-    const rawNumber = Number(String(parsed.number).slice(1));
-    let dnis = await PhoneDnis.query().where('dnis', rawNumber);
+    let rawNumber = String(parsed.number);
+    if (rawNumber.startsWith('+')) {
+      rawNumber = Number(rawNumber.slice(1));
+    }
+    const noCountry = Number(String(rawNumber).slice(1));
+    let dnis = await PhoneDnis.query()
+      .where('dnis', rawNumber)
+      .orWhere('dnis', noCountry);
     if (dnis.exists()) {
       dnis = dnis.first();
     } else {
       await PhoneDnis.fetchByDnis(parsed.number);
-      dnis = await PhoneDnis.query().where('dnis', rawNumber).first();
+      dnis = await PhoneDnis.query()
+        .where('dnis', rawNumber)
+        .orWhere('dnis', noCountry)
+        .first();
     }
     return dnis;
   }
