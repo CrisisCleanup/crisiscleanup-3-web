@@ -1,5 +1,9 @@
 <template>
-  <TitledCard :loading="agentMetricsReady" title="~~My Statistics">
+  <TitledCard
+    :loading="agentMetricsReady"
+    title="~~My Statistics"
+    :body-style="{ minHeight: '10vh' }"
+  >
     <div class="flex flex-col flex-grow">
       <div
         v-for="[title, value] in stats.entries()"

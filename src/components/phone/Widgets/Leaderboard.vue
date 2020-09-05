@@ -1,7 +1,10 @@
 <template>
-  <TitledCard :loading="agentMetricsReady" title="~~Leaderboard">
+  <TitledCard :loading="agentMetricsReady" title="~~Leaderboard" class="h-full">
     <div class="card-container overflow-auto h-full">
-      <div v-if="!agentMetricsReady" class="metric-title flex justify-end px-6">
+      <div
+        v-if="!agentMetricsReady"
+        class="metric-title flex justify-end px-1 lg:px-6"
+      >
         <base-text
           class="text-crisiscleanup-dark-200"
           v-for="t in ['~~Intake', '~~Return', '~~Total']"

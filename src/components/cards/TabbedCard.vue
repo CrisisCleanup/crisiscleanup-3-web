@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card :loading="loading" :overlay="true">
     <template #header>
       <div ref="tabContainer" :class="`left tabs card__tabbar`">
         <div
@@ -41,6 +41,7 @@ export default {
     tabs: VueTypes.any,
     routes: VueTypes.any,
     name: VueTypes.string,
+    loading: VueTypes.bool.def(false),
   },
   setup(props) {
     const tabContainer = ref(null);

@@ -1,6 +1,6 @@
 <template>
-  <TabbedCard :tabs="tabs">
-    <template class="flex flex-grow" #training>
+  <TabbedCard :tabs="tabs" class="h-full">
+    <template #training>
       <TrainingsCard
         v-for="(training, idx) in trainings"
         :key="idx"
@@ -10,8 +10,9 @@
         @onTrainingSelected="$emit('phone:showTraining', true)"
       ></TrainingsCard>
     </template>
-    <template class="flex flex-grow" #news>
+    <template #news>
       <NewsCard
+        class="h-full"
         v-for="(newss, idx) in news"
         :key="idx"
         :image-path="newss.image"

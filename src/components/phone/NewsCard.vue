@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row flex-grow justify-around p-3 news-card">
+  <div class="h-full flex flex-row flex-grow justify-around p-3 news-card">
     <!--- media/picture --->
     <div class="card--img">
       <!-- <img :src="imagePath" alt="Video Preview" /> -->

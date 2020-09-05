@@ -1,32 +1,40 @@
 <template>
   <div class="phone__container">
-    <div class="phone__agent">
-      <div class="phone__agentcard">
-        <AgentCard />
-      </div>
-      <div class="phone__general">
-        <GeneralStatistics />
-      </div>
-      <div class="phone__agentmetrics">
-        <AgentAnalytics />
+    <div class="phone__section">
+      <div class="phone__agent">
+        <div class="phone__agentcard">
+          <AgentCard />
+        </div>
+        <div class="phone__general">
+          <GeneralStatistics />
+        </div>
+        <div class="phone__agentmetrics">
+          <AgentAnalytics />
+        </div>
       </div>
     </div>
 
-    <div class="phone__main">
-      <CallVolumeChart
-        :calls-dataset="totalCalls"
-        :missed-dataset="totalMissed"
-        :cases-dataset="newCases"
-        :loading="!historicMetricsReady"
-      />
-      <div>
-        <leaderboard />
-        <NewsTrainingCard
-          @phone:showTraining="($event) => (isShowingTrainingModal = $event)"
+    <div class="phone__section">
+      <div class="phone__main">
+        <CallVolumeChart
+          :calls-dataset="totalCalls"
+          :missed-dataset="totalMissed"
+          :cases-dataset="newCases"
+          :loading="!historicMetricsReady"
         />
+        <div>
+          <div class="phone__social">
+            <leaderboard />
+            <NewsTrainingCard
+              @phone:showTraining="
+                ($event) => (isShowingTrainingModal = $event)
+              "
+            />
+          </div>
+        </div>
+        <CallHistory />
+        <ContactTable v-if="currentUser.isAdmin" />
       </div>
-      <CallHistory class="overflow-auto" />
-      <ContactTable v-if="currentUser.isAdmin" />
       <TrainingModal
         v-if="isShowingTrainingModal"
         :visible="isShowingTrainingModal"
@@ -104,35 +112,36 @@ export default {
 
 .phone {
   &__container {
-    @apply h-full;
     lost-flex-container: row;
-    @apply w-full h-full;
-    .phone__agent {
-      @apply h-full;
-      lost-column: 1/4;
-      @screen xl {
-        lost-column: 1/5;
+    .phone__section {
+      &:first-child {
+        lost-column: 1/4 0;
       }
-      lost-flex-container: column;
-      box-sizing: border-box;
-      & > div {
-        margin-bottom: 30px;
+      &:last-child {
+        lost-column: 3/4 0;
       }
-    }
-    .phone__main {
-      lost-flex-container: column;
-      lost-column: 3/4;
-      @screen xl {
-        lost-column: 4/5;
+
+      .phone__agent {
+        lost-flex-container: column;
+        div {
+          lost-row: 1/3;
+        }
       }
-      box-sizing: border-box;
-      & > div {
-        lost-row: 1/3;
-        &:nth-child(2) {
-          lost-flex-container: row;
-          lost-row: 1/4;
-          & > div {
-            lost-column: 1/2;
+
+      .phone__main {
+        lost-flex-container: column;
+        div {
+          height: 100%;
+          lost-row: 1/3;
+          &:nth-child(2) {
+            .phone__social {
+              lost-flex-container: row;
+              @apply h-full;
+              div {
+                lost-row: 1/3 0;
+                lost-column: 1/2;
+              }
+            }
           }
         }
       }

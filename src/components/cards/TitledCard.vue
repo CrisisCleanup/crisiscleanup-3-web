@@ -1,5 +1,5 @@
 <template>
-  <Card :loading="loading">
+  <Card :loading="loading" v-bind="$attrs">
     <template #header>
       <div class="left py-4 px-6">
         <slot name="left">

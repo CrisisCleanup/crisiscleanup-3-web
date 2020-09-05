@@ -1,6 +1,12 @@
 <template>
-  <TitledCard :loading="loading" title="~~Daily Phone Calls and New Cases">
-    <LineChart :chartdata="chartData" :options="options" />
+  <TitledCard
+    :loading="loading"
+    title="~~Daily Phone Calls and New Cases"
+    class="h-full"
+  >
+    <div class="h-full">
+      <LineChart :chartdata="chartData" :options="options" />
+    </div>
   </TitledCard>
 </template>
 
