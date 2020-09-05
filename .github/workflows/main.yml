@@ -180,6 +180,8 @@ jobs:
           docker-compose up -d app postgres elasticsearch
 
       - name: Install Dependencies
+        env:
+          CHILD_CONCURRENCY: 1
         run: yarn install
 
       - name: Patch Cypress Director
