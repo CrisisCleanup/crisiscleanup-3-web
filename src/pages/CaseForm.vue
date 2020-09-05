@@ -4,7 +4,9 @@
     ref="form"
     class="bg-white flex flex-col flex-grow w-full intake-form-container"
     @submit.prevent
+    :style="formStyle"
   >
+    <resize-observer @notify="calcFormStyle" />
     <div class="intake-form">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
@@ -395,6 +397,7 @@ export default {
       sectionCounter: 2,
       addAdditionalPhone: false,
       currentNote: '',
+      formStyle: {},
     };
   },
   computed: {
@@ -463,6 +466,7 @@ export default {
 
     StorageService.removeItem('currentWorksite');
     this.ready = true;
+    this.$nextTick(() => this.calcFormStyle());
   },
   methods: {
     async saveNote(currentNote) {
@@ -972,6 +976,15 @@ export default {
     logFormdata() {
       this.$log.debug(new FormData(this.$refs.form));
     },
+    calcFormStyle() {
+      if (!this.$refs.form) return;
+      const topOffset = this.$refs.form.offsetTop;
+      const parentHeight = this.$refs.form.offsetParent.clientHeight;
+      const formHeight = parentHeight - topOffset;
+      this.formStyle = {
+        'grid-template-rows': `${formHeight - 80}px 80px`,
+      };
+    },
   },
 };
 </script>
@@ -985,7 +998,6 @@ export default {
 .intake-form-container {
   --safe-area-inset-bottom: env(safe-area-inset-bottom);
   display: grid;
-  grid-template-rows: calc(100vh - 256px - var(--safe-area-inset-bottom)) 80px;
 }
 
 .intake-form {
