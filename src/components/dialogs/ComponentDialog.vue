@@ -38,14 +38,14 @@
                 <base-button
                   :alt="$t('actions.ok')"
                   variant="solid"
-                  class="px-6 p-3"
+                  size="lg"
                   :action="
                     () => {
                       $close('ok');
                     }
                   "
                 >
-                  {{ $t('actions.ok') }}
+                  {{ $t(actionText) || $t('actions.ok') }}
                 </base-button>
               </div>
             </div>
@@ -61,7 +61,10 @@ export default {
   name: 'ComponentDialog',
   computed: {
     dynamicComponent() {
-      return () => import(`@/components/${this.component}`);
+      if (typeof this.component === 'string') {
+        return () => import(`@/components/${this.component}`);
+      }
+      return this.component;
     },
   },
   props: {
@@ -70,10 +73,14 @@ export default {
       default: '',
     },
     component: {
-      type: String,
+      type: [String, Function],
       default: '',
     },
     classes: {
+      type: String,
+      default: '',
+    },
+    actionText: {
       type: String,
       default: '',
     },
