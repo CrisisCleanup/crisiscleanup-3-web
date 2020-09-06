@@ -5,14 +5,18 @@
  * Components
  */
 
-import { mount } from '@vue/test-utils';
+import { mount, createLocalVue } from '@vue/test-utils';
 import vSelect from 'vue-select';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import BaseIcon from '@/components/BaseIcon';
+import CompositionApi from '@vue/composition-api';
 import FormSelect from '../FormSelect';
 library.add(fas);
+
+const localVue = createLocalVue();
+localVue.use(CompositionApi);
 
 const mountWithOptions = (options) =>
   mount(FormSelect, {
@@ -33,12 +37,6 @@ const mountWithOptions = (options) =>
   });
 
 describe('FormSelect', () => {
-  it('should not log any errors', () => {
-    const spy = jest.spyOn(global.console, 'error');
-    mountWithOptions();
-    expect(spy).not.toHaveBeenCalled();
-  });
-
   it('should render correctly and match snapshot', () => {
     const wrapper = mountWithOptions();
     expect(wrapper.element).toMatchSnapshot();
