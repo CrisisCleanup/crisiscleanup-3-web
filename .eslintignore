@@ -6,3 +6,4 @@ package.json
 dist/
 storybook-static/
 flow-typed/
+src/assets/vendor/
