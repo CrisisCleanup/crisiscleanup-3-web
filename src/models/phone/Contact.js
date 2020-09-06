@@ -91,6 +91,7 @@ export const ContactAttributes = Object.freeze({
   CALL_TYPE: 'CALL_TYPE',
   INBOUND_ID: 'TARGET_INBOUND_ID',
   CALLER_DNIS_ID: 'DNIS_ID',
+  OUTBOUNDS_OLD: 'ids',
 });
 
 export const ContactConnectionMap = Object.freeze({
@@ -209,10 +210,13 @@ export default class Contact extends Model {
         model.attributes = attrs;
       }
     }
-    if (_.isNil(model.attributes)) {
+    if (_.isNil(model.attributes) || !model.isInbound) {
       const outboundAttrs = Contact.getOutboundAttributes(model);
       if (outboundAttrs) {
-        model.attributes = outboundAttrs;
+        model.attributes = {
+          ...model.attributes,
+          ...outboundAttrs,
+        };
       }
     }
     return true;
@@ -323,6 +327,8 @@ export default class Contact extends Model {
       ContactAttributes.INCIDENT,
       ContactAttributes.PDAS,
       ContactAttributes.OUTBOUND_IDS,
+      ContactAttributes.OUTBOUNDS_OLD,
+      ContactAttributes.CALLER_DNIS_ID,
       ContactAttributes.INBOUND_ID,
     ];
     return _.transform(
@@ -393,9 +399,7 @@ export default class Contact extends Model {
           _.first(currentOutbound.incident_id),
         ),
         [ContactAttributes.OUTBOUND_IDS]: String(currentOutbound.id),
-        [ContactAttributes.WORKSITES]: '',
         [ContactAttributes.CALL_TYPE]: CallType.OUTBOUND,
-        [ContactAttributes.PDAS]: '',
       };
     }
     return {};
