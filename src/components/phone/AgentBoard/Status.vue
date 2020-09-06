@@ -33,21 +33,31 @@
       </template>
     </modal>
     <ModelSelectInput
+      :float-label="selectId"
       name="status"
       model="phone_statuses"
       label="status_name_t"
+      :selected="status.statusId"
       @update:value="(payload) => onStatusSelect(payload)"
-    />
-    <base-text variant="h3">{{ lang.notes }}</base-text>
+    >
+      <template #selected-option="{option}">
+        <base-text variant="h2" :style="{ padding: '0px' }">{{
+          option.substatus_name_t ? option.substatus_name_t : ''
+        }}</base-text>
+      </template>
+    </ModelSelectInput>
+    <base-text variant="h3">{{ $t('~~Notes') }}</base-text>
     <base-input
       class="notes border-crisiscleanup-dark-100"
       input-classes="border-crisiscleanup-dark-100"
       text-area
       size="large"
+      :value="status.notes"
       @input="(value) => updateStatus({ notes: value })"
-      :placeholder="lang.issuesResolved"
+      :placeholder="$t('~~Issues Resolved')"
     ></base-input>
     <base-button
+      v-if="!hideEndContact"
       class="save-exit"
       size="large"
       variant="solid"
@@ -67,11 +77,14 @@ import useContact from '@/use/phone/useContact';
 import useToggle from '@/use/useToggle';
 import useAgent from '@/use/phone/useAgent';
 import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
+import _ from 'lodash';
 
 export default {
   name: 'BoardStatus',
   props: {
     lang: VueTypes.any,
+    hideEndContact: VueTypes.bool.def(false),
+    selectId: VueTypes.string,
   },
   components: {
     ModelSelectInput,
@@ -102,9 +115,10 @@ export default {
 
     const onStatusSelect = async ([, obj]) => {
       const status = unwrap(obj);
-      if (status && status.id !== selectedStatus.value) {
-        selectedStatus.value = status.id;
-        await actions.updateStatus({ statusId: status.id });
+      const val = _.get(status, 'id', status);
+      if (val !== selectedStatus.value) {
+        selectedStatus.value = val;
+        await actions.updateStatus({ statusId: val });
       }
     };
 
