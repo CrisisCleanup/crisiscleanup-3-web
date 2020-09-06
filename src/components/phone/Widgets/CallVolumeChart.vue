@@ -35,19 +35,21 @@ export default {
             lineTension: 0,
             borderJoinStyle: 'miter',
             pointRadius: 0,
+            hitRadius: 4,
           },
           {
             label: 'Missed Calls',
             backgroundColor: '#dadada',
-            barPercentage: 0.1,
+            barPercentage: 0.4,
             stack: 'one',
             data: this.missedDataset,
+            borderWidth: 0,
           },
           {
             label: 'Phone Calls',
-            backgroundColor: '#009bff',
-            barPercentage: 0.1,
-            borderWidth: 2,
+            backgroundColor: '#009BFF',
+            barPercentage: 0.4,
+            borderWidth: 0,
             stack: 'one',
             data: this.callsDataset,
           },
@@ -60,11 +62,13 @@ export default {
     const minBound = now.setMonth(now.getMonth() - 3);
     return {
       options: {
+        cornerRadius: 20,
         responsive: true,
         maintainAspectRatio: false,
         ticks: {
           min: minBound,
           max: now,
+          beginAtZero: true,
         },
         scales: {
           xAxes: [
@@ -74,11 +78,13 @@ export default {
               bounds: 'data',
               time: {
                 unit: 'day',
-                stepSize: 2,
               },
               stacked: true,
               gridLines: {
                 display: false,
+              },
+              ticks: {
+                beginAtZero: true,
               },
             },
           ],
