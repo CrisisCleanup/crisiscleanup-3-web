@@ -26,6 +26,9 @@
       <template #option="{option}">
         <slot name="option" :option="option" />
       </template>
+      <template #selected-option="{option}">
+        <slot name="selected-option" :option="option" />
+      </template>
     </FormSelect>
     <slot name="detail" v-bind="{ value }">
       <div class="m-input__detail">
@@ -129,9 +132,7 @@ export default {
     });
 
     watchEffect(() => {
-      if (name && value) {
-        context.emit('update:value', [name, value]);
-      }
+      context.emit('update:value', [name, value]);
     });
 
     return {
