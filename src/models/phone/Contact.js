@@ -81,15 +81,16 @@ export const ContactActions = Object.freeze({
  */
 export const ContactAttributes = Object.freeze({
   CALLER_ID: 'callerID',
-  PDAS: 'pdas',
-  WORKSITES: 'worksites',
-  OUTBOUND_IDS: 'ids',
+  PDAS: 'PDAS',
+  WORKSITES: 'WORKSITES',
+  OUTBOUND_IDS: 'OUTBOUND_IDS',
   LOCALE: 'USER_LANGUAGE',
   INCIDENT: 'INCIDENT_ID',
   CALLBACK_NUMBER: 'CALLBACK_NUMBER',
   INBOUND_NUMBER: 'InboundNumber',
   CALL_TYPE: 'CALL_TYPE',
   INBOUND_ID: 'TARGET_INBOUND_ID',
+  CALLER_DNIS_ID: 'DNIS_ID',
 });
 
 export const ContactConnectionMap = Object.freeze({
