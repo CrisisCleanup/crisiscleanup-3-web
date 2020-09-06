@@ -218,21 +218,21 @@ describe('phone models', () => {
           500,
         ],
         "InboundNumber": "+19999999999",
-        "USER_LANGUAGE": "en_US",
-        "callerID": "+19999999999",
-        "ids": Array [
+        "OUTBOUND_IDS": Array [
           0,
           2,
           3,
         ],
-        "pdas": Array [
+        "PDAS": Array [
           1,
           2,
           3,
         ],
-        "worksites": Array [
+        "USER_LANGUAGE": "en_US",
+        "WORKSITES": Array [
           0,
         ],
+        "callerID": "+19999999999",
       }
     `);
   });
@@ -253,23 +253,23 @@ describe('phone models', () => {
           500,
         ],
         "InboundNumber": "+19999999999",
-        "USER_LANGUAGE": "en_US",
-        "callerID": "+19999999999",
-        "ids": Array [
+        "OUTBOUND_IDS": Array [
           0,
           2,
           3,
         ],
-        "pdas": Array [
+        "PDAS": Array [
           1,
           2,
           3,
         ],
-        "worksites": Array [
+        "USER_LANGUAGE": "en_US",
+        "WORKSITES": Array [
           1,
           2,
           3,
         ],
+        "callerID": "+19999999999",
       }
     `);
   });
