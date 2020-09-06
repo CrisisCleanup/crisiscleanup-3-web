@@ -294,6 +294,9 @@ export default {
   .vs__selected-options.has-float {
     margin-top: 5px;
     margin-bottom: -5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 .form-select .vs__search::placeholder {
@@ -301,8 +304,13 @@ export default {
 }
 
 .form-select {
-  &.vs--single .has-float span {
-    @apply font-bold;
+  &.vs--single .has-float {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    span {
+      @apply font-bold;
+    }
   }
 }
 
