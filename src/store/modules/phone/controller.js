@@ -231,8 +231,8 @@ class ControllerStore extends VuexModule {
   updateStatus({ statusId, notes, modified }: $Shape<StatusStateT> = {}) {
     Log.debug('updating call status!');
     this.setStatus({
-      statusId: statusId || this.status.statusId,
-      notes: notes || this.status.notes,
+      statusId: statusId === null ? statusId : statusId || this.status.statusId,
+      notes: notes === null ? notes : notes || this.status.notes,
       modified: _.filter(modified, _.negate(_.isNil))
         ? _.unionBy<CaseType>(this.status.modified, modified, 'id')
         : _.filter(this.status.modified, _.negate(_.isNil)),
