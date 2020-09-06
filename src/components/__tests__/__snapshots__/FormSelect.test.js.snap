@@ -37,35 +37,20 @@ exports[`FormSelect should match snapshot with props 1`] = `
           title="Clear selection"
           type="button"
         >
-          <div
-            class="flex items-center base-icon js-actions-cancel   mx-1 opacity-50"
-          >
-            <img
-              alt="actions.cancel"
-              class="ccu-icon cursor-pointer medium"
-              src="IMAGE_MOCK"
-              title="actions.cancel"
-            />
-             
-          </div>
+          <ccu-icon
+            alt="actions.cancel"
+            class="mx-1 opacity-50"
+            size="medium"
+            type="cancel"
+          />
         </button>
          
-        <svg
-          aria-hidden="true"
-          class="svg-inline--fa fa-sort fa-w-10 fa-sm mx-1 text-crisiscleanup-dark-400 vs__open-indicator"
-          data-icon="sort"
-          data-prefix="fas"
-          focusable="false"
+        <font-awesome-icon
+          class="mx-1 text-crisiscleanup-dark-400 vs__open-indicator"
+          icon="sort"
           role="presentation"
-          viewBox="0 0 320 512"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            class=""
-            d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
-            fill="currentColor"
-          />
-        </svg>
+          size="sm"
+        />
          
         <div
           class="vs__spinner"
@@ -124,35 +109,20 @@ exports[`FormSelect should render correctly and match snapshot 1`] = `
           title="Clear selection"
           type="button"
         >
-          <div
-            class="flex items-center base-icon js-actions-cancel   mx-1 opacity-50"
-          >
-            <img
-              alt="actions.cancel"
-              class="ccu-icon cursor-pointer medium"
-              src="IMAGE_MOCK"
-              title="actions.cancel"
-            />
-             
-          </div>
+          <ccu-icon
+            alt="actions.cancel"
+            class="mx-1 opacity-50"
+            size="medium"
+            type="cancel"
+          />
         </button>
          
-        <svg
-          aria-hidden="true"
-          class="svg-inline--fa fa-sort fa-w-10 fa-sm mx-1 text-crisiscleanup-dark-400 vs__open-indicator"
-          data-icon="sort"
-          data-prefix="fas"
-          focusable="false"
+        <font-awesome-icon
+          class="mx-1 text-crisiscleanup-dark-400 vs__open-indicator"
+          icon="sort"
           role="presentation"
-          viewBox="0 0 320 512"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            class=""
-            d="M41 288h238c21.4 0 32.1 25.9 17 41L177 448c-9.4 9.4-24.6 9.4-33.9 0L24 329c-15.1-15.1-4.4-41 17-41zm255-105L177 64c-9.4-9.4-24.6-9.4-33.9 0L24 183c-15.1 15.1-4.4 41 17 41h238c21.4 0 32.1-25.9 17-41z"
-            fill="currentColor"
-          />
-        </svg>
+          size="sm"
+        />
          
         <div
           class="vs__spinner"
