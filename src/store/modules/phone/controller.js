@@ -284,6 +284,7 @@ class ControllerStore extends VuexModule {
       await PhoneInbound.api().updateStatus(contact.inbound.id, callStatus);
     }
     await contact.disconnect();
+    this.setStatus({ notes: '', statusId: null, modified: [] });
     this.setLoading({ callerHistory: true });
     await this.setView({ page: ControllerPages.DASHBOARD });
   }
