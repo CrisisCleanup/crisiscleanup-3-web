@@ -66,7 +66,7 @@ describe('WorksiteSearchInput', () => {
         description: 'mock description',
       },
     });
-    expect(suggestion.children[0].context.$el.outerHTML).toMatchSnapshot();
+    expect(suggestion.children[0].context).toMatchSnapshot();
   });
 
   it('should render suggestion', () => {
@@ -78,7 +78,7 @@ describe('WorksiteSearchInput', () => {
         ...MockWorksites[0],
       },
     });
-    expect(suggestion.children[0].context.$el.outerHTML).toMatchSnapshot();
+    expect(suggestion.children[0].context).toMatchSnapshot();
   });
 
   it('should render correctly and match snapshot', () => {

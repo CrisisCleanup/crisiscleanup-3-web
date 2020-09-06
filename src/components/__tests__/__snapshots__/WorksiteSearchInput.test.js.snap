@@ -21,19 +21,199 @@ exports[`WorksiteSearchInput should render correctly and match snapshot 1`] = `
 `;
 
 exports[`WorksiteSearchInput should render geocoder suggestion 1`] = `
-<div class="flex items-center justify-start w-full autocomplete">
-  <vue-autosuggest-stub suggestions="[object Object]" input-props="[object Object]" section-configs="[object Object]" render-suggestion="function () { [native code] }" get-suggestion-value="function () { [native code] }" should-render-suggestions="function () { [native code] }" class="flex-grow relative text-base font-light base"></vue-autosuggest-stub>
-  <!---->
-  <!---->
-</div>
+VueComponent {
+  "$attrs": Object {},
+  "$children": Array [],
+  "$createElement": [Function],
+  "$listeners": Object {},
+  "$options": Object {
+    "_Ctor": Object {
+      "0": [Function],
+    },
+    "_base": [Function],
+    "beforeCreate": Array [
+      [Function],
+      [Function],
+    ],
+    "components": Object {},
+    "directives": Object {},
+    "filters": Object {},
+    "mounted": Array [
+      [Function],
+    ],
+    "updated": Array [
+      [Function],
+    ],
+  },
+  "$parent": undefined,
+  "$refs": Object {},
+  "$root": [Circular],
+  "$scopedSlots": Object {},
+  "$slots": Object {},
+  "$vnode": undefined,
+  "_c": [Function],
+  "_data": Object {},
+  "_directInactive": false,
+  "_events": Object {},
+  "_hasHookEvent": false,
+  "_inactive": null,
+  "_isBeingDestroyed": false,
+  "_isDestroyed": false,
+  "_isMounted": false,
+  "_isVue": true,
+  "_renderProxy": VueComponent {
+    "$attrs": Object {},
+    "$children": Array [],
+    "$createElement": [Function],
+    "$listeners": Object {},
+    "$options": Object {
+      "_Ctor": Object {
+        "0": [Function],
+      },
+      "_base": [Function],
+      "beforeCreate": Array [
+        [Function],
+        [Function],
+      ],
+      "components": Object {},
+      "directives": Object {},
+      "filters": Object {},
+      "mounted": Array [
+        [Function],
+      ],
+      "updated": Array [
+        [Function],
+      ],
+    },
+    "$parent": undefined,
+    "$refs": Object {},
+    "$root": [Circular],
+    "$scopedSlots": Object {},
+    "$slots": Object {},
+    "$vnode": undefined,
+    "_c": [Function],
+    "_data": Object {},
+    "_directInactive": false,
+    "_events": Object {},
+    "_hasHookEvent": false,
+    "_inactive": null,
+    "_isBeingDestroyed": false,
+    "_isDestroyed": false,
+    "_isMounted": false,
+    "_isVue": true,
+    "_renderProxy": [Circular],
+    "_self": [Circular],
+    "_staticTrees": null,
+    "_uid": 20,
+    "_vnode": null,
+    "_watcher": null,
+    "_watchers": Array [],
+  },
+  "_self": [Circular],
+  "_staticTrees": null,
+  "_uid": 20,
+  "_vnode": null,
+  "_watcher": null,
+  "_watchers": Array [],
+}
 `;
 
 exports[`WorksiteSearchInput should render suggestion 1`] = `
-<div class="flex items-center justify-start w-full autocomplete">
-  <vue-autosuggest-stub suggestions="[object Object]" input-props="[object Object]" section-configs="[object Object]" render-suggestion="function () { [native code] }" get-suggestion-value="function () { [native code] }" should-render-suggestions="function () { [native code] }" class="flex-grow relative text-base font-light base"></vue-autosuggest-stub>
-  <!---->
-  <!---->
-</div>
+VueComponent {
+  "$attrs": Object {},
+  "$children": Array [],
+  "$createElement": [Function],
+  "$listeners": Object {},
+  "$options": Object {
+    "_Ctor": Object {
+      "0": [Function],
+    },
+    "_base": [Function],
+    "beforeCreate": Array [
+      [Function],
+      [Function],
+    ],
+    "components": Object {},
+    "directives": Object {},
+    "filters": Object {},
+    "mounted": Array [
+      [Function],
+    ],
+    "updated": Array [
+      [Function],
+    ],
+  },
+  "$parent": undefined,
+  "$refs": Object {},
+  "$root": [Circular],
+  "$scopedSlots": Object {},
+  "$slots": Object {},
+  "$vnode": undefined,
+  "_c": [Function],
+  "_data": Object {},
+  "_directInactive": false,
+  "_events": Object {},
+  "_hasHookEvent": false,
+  "_inactive": null,
+  "_isBeingDestroyed": false,
+  "_isDestroyed": false,
+  "_isMounted": false,
+  "_isVue": true,
+  "_renderProxy": VueComponent {
+    "$attrs": Object {},
+    "$children": Array [],
+    "$createElement": [Function],
+    "$listeners": Object {},
+    "$options": Object {
+      "_Ctor": Object {
+        "0": [Function],
+      },
+      "_base": [Function],
+      "beforeCreate": Array [
+        [Function],
+        [Function],
+      ],
+      "components": Object {},
+      "directives": Object {},
+      "filters": Object {},
+      "mounted": Array [
+        [Function],
+      ],
+      "updated": Array [
+        [Function],
+      ],
+    },
+    "$parent": undefined,
+    "$refs": Object {},
+    "$root": [Circular],
+    "$scopedSlots": Object {},
+    "$slots": Object {},
+    "$vnode": undefined,
+    "_c": [Function],
+    "_data": Object {},
+    "_directInactive": false,
+    "_events": Object {},
+    "_hasHookEvent": false,
+    "_inactive": null,
+    "_isBeingDestroyed": false,
+    "_isDestroyed": false,
+    "_isMounted": false,
+    "_isVue": true,
+    "_renderProxy": [Circular],
+    "_self": [Circular],
+    "_staticTrees": null,
+    "_uid": 20,
+    "_vnode": null,
+    "_watcher": null,
+    "_watchers": Array [],
+  },
+  "_self": [Circular],
+  "_staticTrees": null,
+  "_uid": 20,
+  "_vnode": null,
+  "_watcher": null,
+  "_watchers": Array [],
+}
 `;
 
 exports[`WorksiteSearchInput should retrieve current user 1`] = `
