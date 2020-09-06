@@ -74,6 +74,17 @@ import useController from '@/use/phone/useController';
 import AgentCard from '@/components/phone/AgentCard.vue';
 import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics.vue';
 import AgentAnalytics from '@/components/phone/Cards/StatsCard.vue';
+import { create } from 'vue-modal-dialogs';
+import ComponentDialog from '@/components/dialogs/ComponentDialog';
+import BoardStatus from '@/components/phone/AgentBoard/Status.vue';
+
+const StatusPopup = () => {
+  return () => (
+    <div class="py-12 px-3 flex flex-col">
+      <BoardStatus hide-end-contact select-id="~~Call Status" />
+    </div>
+  );
+};
 
 export default {
   name: 'PhoneController',
@@ -103,12 +114,17 @@ export default {
       return {
         pdaId: !isNew && isPda ? getters.activeCaseId.value : null,
         worksiteId: !isNew && !isPda ? getters.activeCaseId.value : null,
-        beforeSave: () => {
+        beforeSave: async () => {
           if (!state.status.value.statusId) {
+            const compDialog = create(ComponentDialog);
             context.root.$toasted.error(
               context.root.$t('~~You must set a Call Status!'),
             );
-            return false;
+            const val = await compDialog({
+              title: 'Call Status',
+              component: StatusPopup,
+            });
+            return !!(val === 'ok' && state.status.value.statusId);
           }
           return true;
         },
