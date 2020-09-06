@@ -7603,6 +7603,13 @@ babel-preset-jest@^26.3.0:
     babel-plugin-transform-undefined-to-void "^6.9.4"
     lodash "^4.17.11"
 
+babel-preset-vca-jsx@^0.3.6:
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/babel-preset-vca-jsx/-/babel-preset-vca-jsx-0.3.6.tgz#7bafc7e2c990496a742083c7fdd7bc110c6eb5f4"
+  integrity sha512-0MTDmrFX5GqMpF7JtDAcKGCJfSl8prfYwpDYyaFM7BGdnTde2TBXuV6P4ltM2joVUe93jBgJneUiTe0mKbwF/w==
+  dependencies:
+    "@babel/plugin-syntax-jsx" "^7.2.0"
+
 babel-preset-vue@^2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/babel-preset-vue/-/babel-preset-vue-2.0.2.tgz#cfadf1bd736125397481b5f8525ced0049a0c71f"
