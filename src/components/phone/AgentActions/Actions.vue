@@ -2,10 +2,11 @@
   <div class="agent-actions shadow-crisiscleanup-card">
     <div class="tabbar">
       <div
-        @click="() => setView({ actionTab: t.key })"
         v-for="t in actionTabs"
         :key="t.title"
-        :class="`tab ${t.key === activeActionTab ? 'active' : ''}`"
+        :class="`tab ${t.key === activeActionTab ? 'active' : ''} ${
+          t.disabled === true ? 'disabled' : ''
+        } `"
       >
         <ccu-icon v-if="t.icon" with-text size="medium" :type="t.icon">
           <base-text variant="h3">
@@ -45,6 +46,7 @@ export default {
         {
           key: 'resources',
           title: '~~Resources',
+          disabled: true,
         },
       ];
     },
@@ -79,6 +81,9 @@ export default {
       }
       p {
         @apply text-crisiscleanup-dark-500;
+      }
+      &.disabled {
+        @apply bg-crisiscleanup-dark-100;
       }
       &.active:after {
         content: '';
