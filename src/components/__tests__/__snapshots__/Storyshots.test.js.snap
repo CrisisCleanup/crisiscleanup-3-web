@@ -2714,6 +2714,150 @@ exports[`Storyshots Elements/Badge With Props 1`] = `
 </div>
 `;
 
+exports[`Storyshots Elements/Buttons/ProgressButton With Dynamic Progress 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <div
+        class="relative"
+        size="lg"
+        variant="solid"
+      >
+        <button
+          alt="button"
+          class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
+          data-cy="js-button"
+          size="lg"
+          title="button"
+          type="submit"
+        >
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           
+          <div
+            class="loader__content"
+          >
+            
+        Loading 0%
+      
+          </div>
+           
+          <div
+            class="loader__overlay"
+            style="width: 0%;"
+          />
+           
+          <!---->
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements/Buttons/ProgressButton With Total And Step 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <div
+        class="relative"
+        size="lg"
+        variant="solid"
+      >
+        <button
+          alt="button"
+          class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
+          data-cy="js-button"
+          size="lg"
+          title="button"
+          type="submit"
+        >
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           
+          <div
+            class="loader__content"
+          >
+            
+        Loading 0%
+      
+          </div>
+           
+          <div
+            class="loader__overlay"
+            style="width: 100%;"
+          />
+           
+          <!---->
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements/Buttons/ProgressButton With Total Step Reverse 1`] = `
+<div
+  style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
+>
+  <div
+    style="margin: auto; max-height: 100%;"
+  >
+    <div>
+      <div
+        class="relative"
+        size="lg"
+        variant="solid"
+      >
+        <button
+          alt="button"
+          class="large text-h3 font-h3 flex items-center justify-center base-button solid js-button"
+          data-cy="js-button"
+          size="lg"
+          title="button"
+          type="submit"
+        >
+          <!---->
+           
+          <!---->
+           
+          <!---->
+           
+          <div
+            class="loader__content"
+          >
+            
+        Loading 0%
+      
+          </div>
+           
+          <div
+            class="loader__overlay"
+            style="width: 0%;"
+          />
+           
+          <!---->
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Elements/Cards/TabbedCard Basic 1`] = `
 <div
   style="position: fixed; top: 0px; left: 0px; bottom: 0px; right: 0px; display: flex; align-items: center; overflow: auto;"
