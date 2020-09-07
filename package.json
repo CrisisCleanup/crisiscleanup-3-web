@@ -110,7 +110,7 @@
     "vue-composable": "^1.0.0-beta.4",
     "vue-cookies": "^1.7.3",
     "vue-cron-editor-buefy": "^0.1.15",
-    "vue-gtag": "^1.8.0",
+    "vue-gtag": "^1.9.0",
     "vue-highlight-words": "^1.2.0",
     "vue-hotjar": "^1.2.0",
     "vue-i18n": "^8.21.0",
