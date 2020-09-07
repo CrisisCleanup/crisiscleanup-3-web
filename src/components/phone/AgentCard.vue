@@ -41,14 +41,16 @@
           >{{ agentState.statusText | startCase }}
         </base-text>
       </div>
-      <base-button
+      <ProgressButton
         :action="() => handleAgentState()"
         :disabled="!agentState.enabled"
         size="large"
         variant="solid"
+        :total="240"
+        :value="agent ? agent.acwDuration / 1000 : 0"
       >
         {{ $t(agentState.text) }}
-      </base-button>
+      </ProgressButton>
     </div>
     <trainings-modal
       :visible="trainingState.state.value"
@@ -80,6 +82,7 @@ import ControllerStore, {
 import { useStore } from '@u3u/vue-hooks';
 import { getModule } from 'vuex-module-decorators';
 import { unwrap } from '@/utils/wrap';
+import ProgressButton from '@/components/buttons/ProgressButton.vue';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();
@@ -143,6 +146,7 @@ export default {
     moreInfo: ContactMoreInfo,
     'agent-edit-card': CallerIDEditCard,
     TrainingsModal,
+    ProgressButton,
   },
   setup(props, context) {
     const showMoreState = useToggle({ state: true });

@@ -212,6 +212,21 @@ export default class AgentClient extends Model {
     return [this.state, this.routeState, this.contactState].join('#');
   }
 
+  get acwDuration(): number {
+    if (this.contactState !== ConnectionStates.PAUSED) {
+      return 0;
+    }
+    if (this.currentContact) {
+      const conConnection = ACS.getConnectionByContactId(
+        this.currentContact.contactId,
+      );
+      if (conConnection) {
+        return conConnection.getStateDuration();
+      }
+    }
+    return 0;
+  }
+
   toggleOnline(connected?: boolean): void | boolean {
     if (this.contactState === ConnectionStates.PAUSED && this.currentContact) {
       Contact.delete(this.currentContact.contactId).then(() =>
