@@ -1,47 +1,118 @@
 <template>
-  <div class="board board--grid shadow-crisiscleanup-card">
-    <div class="grid--nav">
-      <board-nav :routes="headerNav" :lang="lang" :active-key="activeKey" />
-    </div>
-    <div class="grid--callinfo">
-      <call-info v-bind="$attrs" :lang="lang" />
-    </div>
-    <div class="grid--status">
-      <board-status v-bind="$attrs" :lang="lang" />
-    </div>
-  </div>
+  <TabbedCard :tabs="tabs" class="board board--grid shadow-crisiscleanup-card">
+    <template #status>
+      <div class="grid--callinfo">
+        <call-info v-bind="$attrs" :lang="lang" />
+      </div>
+      <div class="grid--status">
+        <board-status v-bind="$attrs" :lang="lang" />
+      </div>
+    </template>
+    <template #scripts>
+      <div class="scripts__container">
+        <div class="scripts__section">
+          <div class="scripts__config">
+            <base-text variant="h4" class="pr-2" semi-bold>
+              {{ $t('Always show me a script when I enter a call.') }}
+            </base-text>
+            <toggle-button
+              @input="updatePopupConfig"
+              :value="showPopup"
+              :font-size="14"
+              :width="85"
+              :labels="{
+                checked: $t('~~Show'),
+                unchecked: $t('~~Hide'),
+              }"
+            />
+          </div>
+          <div class="scripts__header">
+            <base-text variant="h1">
+              {{ $t('~~Here are some sample scripts to aid your call.') }}
+            </base-text>
+          </div>
+          <div class="scripts__accord">
+            <div>
+              <Accordion :cards="cards">
+                <template v-for="c in cards" v-slot:[c.key]>
+                  <div :key="c.key" class="scripts__card">
+                    {{ renderScript(c.key) }}
+                  </div>
+                </template>
+              </Accordion>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </TabbedCard>
 </template>
 
 <script>
-import { LangMixin } from '@/mixins';
-import BoardNav from './Nav.vue';
-import CallInfo from './CallInfo.vue';
+import { LangMixin, UserMixin, LocalStorageMixin } from '@/mixins';
+import TabbedCard from '@/components/cards/TabbedCard.vue';
+import Accordion from '@/components/accordion/Accordion.vue';
+import _ from 'lodash';
 import BoardStatus from './Status.vue';
-
-const HeaderNav = [
-  {
-    key: 'currentCall',
-  },
-  {
-    key: 'scripts',
-  },
-];
+import CallInfo from './CallInfo.vue';
 
 export default {
   name: 'AgentBoard',
-  mixins: [LangMixin],
+  mixins: [LangMixin, UserMixin, LocalStorageMixin],
   components: {
-    BoardNav,
     CallInfo,
     BoardStatus,
+    TabbedCard,
+    Accordion,
   },
   data() {
     return {
       activeKey: 'currentCall',
-      headerNav: HeaderNav,
+      scripts: {
+        inbound:
+          'This is an inbound call: "Hello, Crisis Cleanup Hotline, my name is <%= name %>, how can I help you?"',
+        callback:
+          'This is a callback and you are returning a missed call: "Hello, my name is <%= name%>". Someone from this number called the Crisis Cleanup hotline and I am calling back.',
+      },
     };
   },
+  methods: {
+    renderScript(key) {
+      return _.template(this.scripts[key])({
+        name: this.currentUser.first_name,
+      });
+    },
+    updatePopupConfig(value) {
+      this.setLocalStorage('ccu-ivr-hide-script', value);
+    },
+  },
   computed: {
+    showPopup() {
+      return this.getLocalStorage('ccu-ivr-hide-script');
+    },
+    tabs() {
+      return [
+        {
+          key: 'status',
+          title: '~~Current Call',
+        },
+        {
+          key: 'scripts',
+        },
+      ];
+    },
+    cards() {
+      return [
+        {
+          title: this.$t('~~Inbound Call'),
+          key: 'inbound',
+        },
+        {
+          title: this.$t('~~Callback'),
+          key: 'callback',
+        },
+      ];
+    },
     lang() {
       return this.getLang({
         currentCall: '~~Current Call',
@@ -61,19 +132,11 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-$areas: nav callinfo status advocate;
-
+<style scoped lang="postcss">
 .board {
   @apply bg-white h-full w-full;
   &--grid {
     .grid {
-      @each $area in $areas {
-        &--#{$area} {
-          grid-area: $area;
-        }
-      }
-
       &--callinfo {
         position: relative;
         &:after {
@@ -85,6 +148,32 @@ $areas: nav callinfo status advocate;
           bottom: 0px;
           opacity: 0.5;
         }
+      }
+    }
+  }
+}
+@lost flexbox flex;
+
+.scripts {
+  &__container {
+    lost-center: 1/1;
+    @apply h-full w-full;
+    .scripts__section {
+      @apply h-full w-full;
+      & > div {
+        lost-row: 1/2;
+      }
+      .scripts__config {
+        lost-flex-container: row;
+        lost-align: top-right;
+        @apply p-3;
+        & > div {
+          lost-column: 1/2;
+          align-items: center;
+        }
+      }
+      .scripts__header {
+        lost-align: center;
       }
     }
   }
