@@ -13,13 +13,14 @@
         </template>
         <template #cases="slotProps">
           <div class="flex flex-wrap w-full">
-            <div
+            <base-link
               v-for="caseItem in slotProps.item.cases"
               :key="caseItem.id"
               class="mx-1"
+              :to="`/incident/${caseItem.incident}/cases/${caseItem.id}?showOnMap=true`"
             >
               {{ caseItem.case_number }}
-            </div>
+            </base-link>
           </div>
         </template>
       </Table>

@@ -20,7 +20,7 @@ export default {
   props: {
     href: VueTypes.string,
     textVariant: VueTypes.string.def('body'),
-    to: VueTypes.string,
+    to: VueTypes.any,
     target: VueTypes.string,
   },
   computed: {
