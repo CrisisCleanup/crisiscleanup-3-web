@@ -80,7 +80,7 @@ export const Metrics = Object.freeze({
   AGENTS_ON_CALL: ['agentsOnCall', '~~Volunteers on the Phone'],
   NEEDED: ['agentsNeeded', '~~Additional Volunteers Needed'],
   TOTAL_WAITING: ['totalWaiting', '~~Total People Waiting'],
-  CALLDOWNS_QUEUED: ['calldowns', '~~Remaining Calldowns'],
+  CALLDOWNS_QUEUED: ['contactsScheduledOutbound', '~~Remaining Calldowns'],
 });
 
 const Log = Logger({ name: 'phone.controller' });
