@@ -79,4 +79,8 @@ export default class Language extends CCUModel<Language> {
     );
     return data;
   }
+
+  get shortName() {
+    return this.name_t.split(' ')[0];
+  }
 }
