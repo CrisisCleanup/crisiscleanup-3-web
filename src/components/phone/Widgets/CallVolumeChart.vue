@@ -59,15 +59,14 @@ export default {
   },
   data() {
     const now = new Date();
-    const minBound = now.setMonth(now.getMonth() - 3);
+    const maxBound = now.setDate(now.getDate() - 1);
     return {
       options: {
         cornerRadius: 20,
         responsive: true,
         maintainAspectRatio: false,
         ticks: {
-          min: minBound,
-          max: now,
+          max: maxBound,
           beginAtZero: true,
         },
         scales: {
