@@ -29,16 +29,12 @@ const Basic = (args, { argTypes }) => ({
   async mounted() {
     while (true) {
       // eslint-disable-next-line no-await-in-loop
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       if (this.currentVal >= 100) {
-        this.dir = -1;
-        // eslint-disable-next-line no-await-in-loop
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        this.currentVal = 0;
+      } else {
+        this.currentVal += 10;
       }
-      if (this.currentVal <= 0) {
-        this.dir = 1;
-      }
-      this.currentVal += 10 * this.dir;
     }
   },
 });
