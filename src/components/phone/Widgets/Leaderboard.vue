@@ -31,6 +31,15 @@
                 :user="a.user.id"
                 :name-style="nameTextStyle"
               />
+              <div class="flex">
+                <div
+                  class="flex flex-col pr-2"
+                  v-for="l in getLanguageTags(a.locale || 'en-US')"
+                  :key="l"
+                >
+                  <LanguageTag class="text-bodyxsm" :language-subtag="l" />
+                </div>
+              </div>
             </div>
             <div class="info--state pl-1">
               <base-text
@@ -82,12 +91,14 @@ import TitledCard from '@/components/cards/TitledCard.vue';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 import { useGetters } from '@u3u/vue-hooks';
 import AgentClient from '@/models/phone/AgentClient';
+import LanguageTag from '@/components/tags/LanguageTag.vue';
 
 export default {
   name: 'Leaderboard',
   components: {
     TitledCard,
     UserDetailsTooltip,
+    LanguageTag,
   },
   setup() {
     return {
@@ -97,6 +108,9 @@ export default {
       },
       nameTextStyle: {
         lineHeight: '1rem',
+      },
+      getLanguageTags(locale) {
+        return locale.split('#');
       },
     };
   },
