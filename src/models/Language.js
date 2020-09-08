@@ -19,7 +19,7 @@ type LanguageTranslationResponse = {|
   target_subtag: string,
 |};
 
-export default class Language extends CCUModel {
+export default class Language extends CCUModel<Language> {
   static entity = 'languages';
 
   static state() {

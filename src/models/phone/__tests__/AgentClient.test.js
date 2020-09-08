@@ -11,6 +11,8 @@ import WebsocketStore from '@/store/modules/websocket';
 import StreamsStore from '@/store/modules/phone/streams';
 import { getModule } from 'vuex-module-decorators';
 import ControllerStore from '@/store/modules/phone/controller';
+import User from '@/models/User';
+import Language from '@/models/Language';
 import AgentClient, { AgentStates, RouteStates } from '../AgentClient';
 import Connection, { ConnectionStates } from '../Connection';
 import Contact, {
@@ -58,6 +60,8 @@ describe('phone models', () => {
     database.register(AgentClient, {});
     database.register(Connection, {});
     database.register(Contact, {});
+    database.register(Language, {});
+    database.register(User, {});
     Vue.use(Vuex);
 
     // eslint-disable-next-line no-unused-vars
@@ -81,6 +85,8 @@ describe('phone models', () => {
               "agentId": "123",
               "connections": Array [],
               "contacts": Array [],
+              "locale": Array [],
+              "localeIds": Array [],
               "routeState": "routable",
               "state": "online",
               "userId": 123,
@@ -133,12 +139,93 @@ describe('phone models', () => {
                     "state": "queued",
                   },
                 ],
+                "locale": Array [],
+                "localeIds": Array [],
                 "routeState": "routable",
                 "state": "online",
                 "userId": 123,
               },
             ]
           `);
+  });
+
+  it('adds language to agent client', async () => {
+    await Language.create({
+      data: {
+        id: 2,
+        subtag: 'en_US',
+        name_t: 'English (US)',
+      },
+    });
+    await AgentClient.create({
+      data: mockAgentData({
+        localeIds: [2],
+      }),
+    });
+    const agent = AgentClient.query().withAllRecursive().whereId('123').first();
+    expect(agent).toMatchInlineSnapshot(`
+      AgentClient {
+        "$id": "123",
+        "agentId": "123",
+        "connections": Array [],
+        "contacts": Array [],
+        "locale": Array [
+          Language {
+            "$id": "2",
+            "id": 2,
+            "name_t": "English (US)",
+            "subtag": "en_US",
+          },
+        ],
+        "localeIds": Array [
+          2,
+        ],
+        "routeState": "routable",
+        "state": "online",
+        "userId": 123,
+      }
+    `);
+    expect(agent.localeMap).toBe('en_US');
+  });
+
+  it('handles bilingual agents correctly', async () => {
+    await Language.create({
+      data: {
+        id: 2,
+        subtag: 'en_US',
+        name_t: 'English (US)',
+      },
+    });
+    await Language.insert({
+      data: {
+        id: 7,
+        subtag: 'es_MX',
+        name_t: 'Spanish (Mexico)',
+      },
+    });
+    await AgentClient.create({
+      data: mockAgentData({
+        localeIds: [2, 7],
+      }),
+    });
+    const agent = AgentClient.query().withAllRecursive().whereId('123').first();
+    expect(agent.locale).toMatchInlineSnapshot(`
+      Array [
+        Language {
+          "$id": "2",
+          "id": 2,
+          "name_t": "English (US)",
+          "subtag": "en_US",
+        },
+        Language {
+          "$id": "7",
+          "id": 7,
+          "name_t": "Spanish (Mexico)",
+          "subtag": "es_MX",
+        },
+      ]
+    `);
+    expect(agent.localeMap).toBe('en_US#es_MX');
   });
 
   it('resolve contact state correctly', async () => {
