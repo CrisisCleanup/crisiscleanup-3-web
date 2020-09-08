@@ -11,6 +11,7 @@ import {
   ContactAttributes,
   ContactStates,
 } from '@/models/phone/Contact';
+import Language from '@/models/Language';
 
 type AgentState = $Values<typeof AgentStates>;
 type RouteState = $Values<typeof RouteStates>;
@@ -54,6 +55,8 @@ type AgentClientType = {|
   routeState: RouteState,
   contacts: ContactType[],
   connections: ConnectionType[],
+  localeIds: number[] | null,
+  locale?: Language[],
 |};
 
 export type {

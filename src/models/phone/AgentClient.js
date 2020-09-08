@@ -19,6 +19,7 @@ import Logger from '@/utils/log';
 import * as ACS from '@/services/connect.service';
 import { ACTIONS } from '@/store/modules/websocket';
 import User from '@/models/User';
+import Language from '@/models/Language';
 
 /**
  * Enum of states that represent whether a client is currently
@@ -65,10 +66,23 @@ export default class AgentClient extends Model {
         'agentId',
         'contactId',
       ),
+      localeIds: this.attr([]),
+      locale: this.hasManyBy(Language, 'localeIds'),
     }: AgentClientType);
   }
 
+  static beforeCreate(model: AgentClient): void {
+    const user = User.find(model.userId);
+    if (user) {
+      model.localeIds = user.languages.map((l) => l.id);
+    }
+  }
+
   static beforeUpdate(model: AgentClient): void {
+    const user = User.find(model.userId);
+    if (user) {
+      model.localeIds = user.languages.map((l) => l.id);
+    }
     const contactQ = Contact.query()
       .withAllRecursive()
       .where('agentId', model.agentId);
@@ -102,6 +116,7 @@ export default class AgentClient extends Model {
       state: client.state,
       routeState: client.routeState,
       contactState: client.contactState,
+      locale: client.localeMap,
     };
     const isInbound =
       client.currentContact === null ? true : client.currentContact.isInbound;
@@ -206,6 +221,10 @@ export default class AgentClient extends Model {
     const contact = Contact.query().where('agentId', this.agentId);
     if (!contact.exists()) return null;
     return contact.first();
+  }
+
+  get localeMap(): string {
+    return this.locale ? this.locale.map((l) => l.subtag).join('#') : '';
   }
 
   get fullState(): string {
