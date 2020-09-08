@@ -110,6 +110,9 @@ export default {
       try {
         await this.saveUser();
         this.$emit('user-updated', this.currentUser);
+        await this.$store.dispatch('phone.streams/updateAgentConfig', {
+          phone_number: this.phoneNumber,
+        });
       } catch (e) {
         this.$log.error('Failed to save user', e);
         this.$toasted.error(e);

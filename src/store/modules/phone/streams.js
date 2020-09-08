@@ -5,6 +5,7 @@
  */
 
 import _ from 'lodash';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import {
   Action,
   config,
@@ -85,6 +86,37 @@ class StreamsStore extends VuexModule {
   }
 
   @Action
+  async updateAgentConfig({ phone_number }) {
+    const number = parsePhoneNumberFromString(String(phone_number), 'US');
+    if (!number) {
+      const client = AgentClient.find(this.context.getters.agentClientId);
+      if (client) {
+        // set new locale if it changed.
+        AgentClient.afterUpdate(client);
+      }
+      return null;
+    }
+    const conAgent = new connect.Agent();
+    const agentConfig = conAgent.getConfiguration();
+    agentConfig.extension = number.format('E.164');
+    conAgent.setConfiguration(agentConfig, {
+      success: () => {
+        Log.info('successfully updated connect extension!');
+        const client = AgentClient.find(this.context.getters.agentClientId);
+        if (client) {
+          // set new locale if it changed.
+          AgentClient.afterUpdate(client);
+        }
+      },
+      failure: (err) => {
+        Log.error('failed to update connect extension!', err);
+        throw new Error(err);
+      },
+    });
+    return number;
+  }
+
+  @Action
   async createClient(agentInstance?: connect.Agent) {
     const agent = agentInstance || new connect.Agent();
     const agentState =
@@ -111,6 +143,7 @@ class StreamsStore extends VuexModule {
       routeState: isRoutable,
       contacts: [],
       connections: [],
+      localeIds: [],
     };
     Log.debug('Creating new agent client: ', agentClient);
     await AgentClient.create({ data: agentClient });
