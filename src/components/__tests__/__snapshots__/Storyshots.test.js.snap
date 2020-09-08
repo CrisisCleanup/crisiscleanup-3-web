@@ -2720,7 +2720,7 @@ exports[`Storyshots Elements/Buttons/ProgressButton With Dynamic Progress 1`] = 
   >
     <div>
       <div
-        class="relative"
+        class="relative overflow-hidden"
         size="lg"
         variant="solid"
       >
@@ -2748,7 +2748,7 @@ exports[`Storyshots Elements/Buttons/ProgressButton With Dynamic Progress 1`] = 
            
           <div
             class="loader__overlay"
-            style="width: 0%;"
+            style="width: 100%; transform: translateX(0%);"
           />
            
           <!---->
@@ -2768,7 +2768,7 @@ exports[`Storyshots Elements/Buttons/ProgressButton With Total And Step 1`] = `
   >
     <div>
       <div
-        class="relative"
+        class="relative overflow-hidden"
         size="lg"
         variant="solid"
       >
@@ -2795,8 +2795,8 @@ exports[`Storyshots Elements/Buttons/ProgressButton With Total And Step 1`] = `
           </div>
            
           <div
-            class="loader__overlay"
-            style="width: 100%;"
+            class="loader__overlay reverse"
+            style="width: 100%; transform: translateX(-100%);"
           />
            
           <!---->
@@ -2816,7 +2816,7 @@ exports[`Storyshots Elements/Buttons/ProgressButton With Total Step Reverse 1`] 
   >
     <div>
       <div
-        class="relative"
+        class="relative overflow-hidden"
         size="lg"
         variant="solid"
       >
@@ -2844,7 +2844,7 @@ exports[`Storyshots Elements/Buttons/ProgressButton With Total Step Reverse 1`] 
            
           <div
             class="loader__overlay"
-            style="width: 0%;"
+            style="width: 100%; transform: translateX(0%);"
           />
            
           <!---->
