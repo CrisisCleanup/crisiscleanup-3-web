@@ -56,9 +56,9 @@ describe('phone.controller store', () => {
         "agentsNeeded": 0,
         "agentsOnCall": 1,
         "agentsOnline": 1,
-        "calldowns": 0,
         "contactsInQueue": 2,
         "contactsInQueueOutbound": 0,
+        "contactsScheduledOutbound": 0,
         "totalWaiting": 2,
       }
     `);
@@ -69,9 +69,9 @@ describe('phone.controller store', () => {
         "agentsNeeded": 0,
         "agentsOnCall": 1,
         "agentsOnline": 1,
-        "calldowns": 0,
         "contactsInQueue": 12,
         "contactsInQueueOutbound": 0,
+        "contactsScheduledOutbound": 0,
         "totalWaiting": 12,
       }
     `);
@@ -85,9 +85,9 @@ describe('phone.controller store', () => {
         "agentsNeeded": 3,
         "agentsOnCall": 1,
         "agentsOnline": 0,
-        "calldowns": 0,
         "contactsInQueue": 35,
         "contactsInQueueOutbound": 0,
+        "contactsScheduledOutbound": 0,
         "totalWaiting": 35,
       }
     `);
@@ -101,9 +101,9 @@ describe('phone.controller store', () => {
         "agentsNeeded": 2,
         "agentsOnCall": 1,
         "agentsOnline": 1,
-        "calldowns": 0,
         "contactsInQueue": 35,
         "contactsInQueueOutbound": 0,
+        "contactsScheduledOutbound": 0,
         "totalWaiting": 35,
       }
     `);
@@ -117,9 +117,9 @@ describe('phone.controller store', () => {
         "agentsNeeded": 0,
         "agentsOnCall": 1,
         "agentsOnline": 1,
-        "calldowns": 0,
         "contactsInQueue": 0,
         "contactsInQueueOutbound": 0,
+        "contactsScheduledOutbound": 0,
         "totalWaiting": 0,
       }
     `);

@@ -1850,7 +1850,6 @@ exports[`Storyshots Basics/BaseLink As Anchor 1`] = `
       class="link"
       href="www.google.com"
       target=""
-      to=""
     >
       <p
         class="text-body font-body text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
@@ -1896,7 +1895,6 @@ exports[`Storyshots Basics/BaseLink With Defaults 1`] = `
       class="link"
       href=""
       target=""
-      to=""
     >
       <p
         class="text-body font-body text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
@@ -1919,7 +1917,6 @@ exports[`Storyshots Basics/BaseLink With Text Variant 1`] = `
       class="link"
       href=""
       target=""
-      to=""
     >
       <p
         class="text-h1 font-h1 text-crisiscleanup-dark-400 font-sans subpixel-antialiased"

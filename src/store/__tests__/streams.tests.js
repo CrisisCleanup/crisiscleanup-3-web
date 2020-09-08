@@ -56,6 +56,7 @@ describe('phone/streams store', () => {
               "agentId": "123",
               "connections": Array [],
               "contacts": Array [],
+              "localeIds": Array [],
               "routeState": "not_routable",
               "state": "offline",
               "userId": undefined,
