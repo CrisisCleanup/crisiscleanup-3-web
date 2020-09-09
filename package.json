@@ -139,7 +139,7 @@
     "vuex-persist": "^2.2.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.1",
+    "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-decorators": "^7.10.5",
     "@babel/plugin-transform-modules-commonjs": "^7.9.0",
     "@babel/plugin-transform-runtime": "^7.11.0",
