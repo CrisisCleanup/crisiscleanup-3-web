@@ -104,6 +104,7 @@ export const ContactConnectionMap = Object.freeze({
 export const CallType = Object.freeze({
   INBOUND: 'inbound',
   OUTBOUND: 'OUTBOUND',
+  CALLDOWN: 'CALLDOWN',
 });
 
 const Log = Logger({ name: 'phone.contact' });

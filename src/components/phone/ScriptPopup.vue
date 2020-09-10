@@ -22,28 +22,18 @@
 </template>
 
 <script>
-import { UserMixin, LocalStorageMixin } from '@/mixins';
+import { UserMixin, LocalStorageMixin, IncidentMixin } from '@/mixins';
 import { template } from 'lodash';
 import VueTypes from 'vue-types';
+import { Scripts } from '@/store/modules/phone/controller';
 
 export default {
   name: 'ScriptPopup',
-  mixins: [UserMixin, LocalStorageMixin],
+  mixins: [UserMixin, LocalStorageMixin, IncidentMixin],
   data() {
     return {
       checkState: false,
-      // To Aaron: do not localize these,
-      // they will not stay hard coded like this.
-      scripts: {
-        inbound:
-          'Crisis Cleanup Hotline. My name is <%= name %>, how may I help you?',
-        outbound:
-          'My name is <%= name %> from the Crisis Cleanup Hotline. Someone from this number called to ask for help cleanup up after a recent disaster. I am returning your call.',
-        covid:
-          'My name is <%= name %> from the Crisis Cleanup Hotline. Someone from this number called to ask for help related to COVID-19. I am returning your call.',
-        covidPda:
-          'My name is <%= name %> from the Crisis Cleanup Hotline. We received a web request for help relating to COVID-19. Do you have a minute to discuss that?',
-      },
+      scripts: Scripts,
     };
   },
   props: {
@@ -83,7 +73,10 @@ export default {
   computed: {
     currentScript() {
       const script = this.scripts[this.scriptName];
-      return template(script)({ name: this.currentUser.first_name });
+      return template(script)({
+        name: this.currentUser.first_name,
+        incidentType: this.currentIncident.incident_type,
+      });
     },
   },
 };

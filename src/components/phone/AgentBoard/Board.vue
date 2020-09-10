@@ -49,16 +49,23 @@
 </template>
 
 <script>
-import { LangMixin, UserMixin, LocalStorageMixin } from '@/mixins';
+import {
+  LangMixin,
+  UserMixin,
+  LocalStorageMixin,
+  IncidentMixin,
+} from '@/mixins';
 import TabbedCard from '@/components/cards/TabbedCard.vue';
 import Accordion from '@/components/accordion/Accordion.vue';
 import _ from 'lodash';
+import { Scripts } from '@/store/modules/phone/controller';
+import { CallType } from '@/models/phone/Contact';
 import BoardStatus from './Status.vue';
 import CallInfo from './CallInfo.vue';
 
 export default {
   name: 'AgentBoard',
-  mixins: [LangMixin, UserMixin, LocalStorageMixin],
+  mixins: [LangMixin, UserMixin, LocalStorageMixin, IncidentMixin],
   components: {
     CallInfo,
     BoardStatus,
@@ -68,18 +75,14 @@ export default {
   data() {
     return {
       activeKey: 'currentCall',
-      scripts: {
-        inbound:
-          'This is an inbound call: "Hello, Crisis Cleanup Hotline, my name is <%= name %>, how can I help you?"',
-        callback:
-          'This is a callback and you are returning a missed call: "Hello, my name is <%= name%>". Someone from this number called the Crisis Cleanup hotline and I am calling back.',
-      },
+      scripts: Scripts,
     };
   },
   methods: {
     renderScript(key) {
       return _.template(this.scripts[key])({
         name: this.currentUser.first_name,
+        incidentType: this.currentIncident.incident_type,
       });
     },
     updatePopupConfig(value) {
@@ -105,11 +108,15 @@ export default {
       return [
         {
           title: this.$t('~~Inbound Call'),
-          key: 'inbound',
+          key: CallType.INBOUND,
         },
         {
-          title: this.$t('~~Callback'),
-          key: 'callback',
+          title: this.$t('~~Outbound Call'),
+          key: CallType.OUTBOUND,
+        },
+        {
+          title: this.$t('~~Calldown'),
+          key: CallType.CALLDOWN,
         },
       ];
     },

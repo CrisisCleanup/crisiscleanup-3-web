@@ -28,7 +28,7 @@ import _ from 'lodash';
 import Agent from '@/models/Agent';
 import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
-import Contact from '@/models/phone/Contact';
+import Contact, { CallType } from '@/models/phone/Contact';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneInbound from '@/models/PhoneInbound';
 import User from '@/models/User';
@@ -67,6 +67,7 @@ export const ControllerActionTabs = Object.freeze({
  * @prop AGENTS_ON_CALL - Number of agents currently talking.
  * @prop NEEDED - Calculated number of agents needed.
  * @prop TOTAL_WAITING - Total number of inbound/outbound contacts waiting.
+ * @prop CALLDOWNS_QUEUED - Total number of calldowns queued.
  * @type {Readonly<{AVAILABLE: [string, string], NEEDED: [string, string], CONTACTS_QUEUED: [string, string], TOTAL_WAITING: [string, string], CALLBACKS_QUEUED: [string, string], AGENTS_ON_CALL: [string, string], ONLINE: [string, string]}>}
  * @readonly
  * @enum {string[]}
@@ -81,6 +82,15 @@ export const Metrics = Object.freeze({
   NEEDED: ['agentsNeeded', '~~Additional Volunteers Needed'],
   TOTAL_WAITING: ['totalWaiting', '~~Total People Waiting'],
   CALLDOWNS_QUEUED: ['contactsScheduledOutbound', '~~Remaining Calldowns'],
+});
+
+export const Scripts = Object.freeze({
+  [CallType.INBOUND]:
+    '~~Hello, Crisis Cleanup Hotline, my name is <%= name %>, how can I help you?',
+  [CallType.OUTBOUND]:
+    '~~Hello, my name is <%= name %>.  Someone from this number called the Crisis Cleanup Hotline probably about getting help cleaning up after the storm.',
+  [CallType.CALLDOWN]:
+    "~~Hello, my name is <%= name %> with the Crisis Cleanup Hotline.  We still have your name on our list for those asking for help after the <%= incidentType %>.  I'm calling to check and see if anyone has come to help you cleanup.",
 });
 
 const Log = Logger({ name: 'phone.controller' });
