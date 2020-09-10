@@ -20,15 +20,15 @@ import { computed } from '@vue/composition-api';
 export default {
   name: 'ProgressButton',
   props: {
-    value: VueTypes.number.def(100),
+    value: VueTypes.oneOfType([VueTypes.number, VueTypes.func]),
     total: VueTypes.number,
     reverse: VueTypes.bool.def(false),
   },
   setup(props) {
     const step = computed(() => {
-      let base = props.value;
+      let base = typeof props.value === 'number' ? props.value : props.value();
       if (props.total && props.total !== 0) {
-        base = (props.value / props.total) * 100;
+        base = (base / props.total) * 100;
       }
       return props.reverse === true ? 100 - base : base;
     });

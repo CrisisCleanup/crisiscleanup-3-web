@@ -231,17 +231,13 @@ export default class AgentClient extends Model {
     return [this.state, this.routeState, this.contactState].join('#');
   }
 
-  get acwDuration(): number {
+  getAcwDuration(): number {
     if (this.contactState !== ConnectionStates.PAUSED) {
       return 0;
     }
-    if (this.currentContact) {
-      const conConnection = ACS.getConnectionByContactId(
-        this.currentContact.contactId,
-      );
-      if (conConnection) {
-        return conConnection.getStateDuration();
-      }
+    const conAgent = new connect.Agent();
+    if (conAgent) {
+      return conAgent.getStateDuration();
     }
     return 0;
   }

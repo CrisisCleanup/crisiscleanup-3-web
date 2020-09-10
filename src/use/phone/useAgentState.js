@@ -82,9 +82,14 @@ export default ({
     _agent.value.toggleOnline();
   };
 
+  const acwDuration = computed(() =>
+    _agent.value ? _agent.value.getAcwDuration() / 1000 : 0,
+  );
+
   return {
     agent: _agent,
     agentState,
     toggleAgentState,
+    acwDuration,
   };
 };

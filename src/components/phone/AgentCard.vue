@@ -47,7 +47,7 @@
         size="large"
         variant="solid"
         :total="240"
-        :value="agent ? agent.acwDuration / 1000 : 0"
+        :value="acwDuration"
       >
         {{ $t(agentState.text) }}
       </ProgressButton>
@@ -158,7 +158,7 @@ export default {
       tests: [2, 3],
     });
 
-    const { agent, agentState, toggleAgentState } = useAgentState({
+    const { agent, agentState, toggleAgentState, acwDuration } = useAgentState({
       ...useAgent(),
       context,
       isTrained: allTrainingCompleted,
@@ -180,6 +180,7 @@ export default {
       agent,
       agentState,
       handleAgentState,
+      acwDuration,
       onTrainingComplete,
       ...useUser(),
       ...useValidations({ currentUser: useUser().currentUser }),
