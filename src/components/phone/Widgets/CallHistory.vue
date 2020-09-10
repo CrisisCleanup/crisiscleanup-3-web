@@ -34,7 +34,7 @@ import Table from '@/components/Table.vue';
 import { mapGetters } from 'vuex';
 import { UserMixin, ValidateMixin } from '@/mixins';
 import PhoneStatus from '@/models/PhoneStatus';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 
 export default {
   name: 'CallHistory',
@@ -47,6 +47,9 @@ export default {
       'callHistory',
     ]),
     historyData() {
+      if (!this.callHistoryReady || isEmpty(this.callHistory)) {
+        return [];
+      }
       const calls = this.callHistory.map(
         ({ phone_number, caller_name, status, notes, ...metrics }) => ({
           name: caller_name,

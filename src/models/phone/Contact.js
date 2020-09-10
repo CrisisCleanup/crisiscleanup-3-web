@@ -391,19 +391,21 @@ export default class Contact extends Model {
     if (currentOutbound) {
       const conContact = ACS.getContactById(contact.contactId);
       if (conContact) {
-        const payload = {
-          phone_number: _.get(
-            conContact.getAttributes(),
-            ContactAttributes.INBOUND_NUMBER,
-          ),
-          contact_id: conContact.getContactId(),
-        };
-
-        Contact.api()
-          .post('phone_connect/resolve_cases', payload)
-          .then((resp) =>
-            Log.info('requested api to resolve cases!', payload, resp),
-          );
+        const phone = _.get(
+          this.contactAttributes,
+          ContactAttributes.INBOUND_NUMBER,
+        );
+        if (phone) {
+          const payload = {
+            phone_number: phone,
+            contact_id: conContact.getContactId(),
+          };
+          Contact.api()
+            .post('phone_connect/resolve_cases', payload)
+            .then((resp) =>
+              Log.info('requested api to resolve cases!', payload, resp),
+            );
+        }
       }
       Log.info('found current outbound!');
       return {
@@ -465,6 +467,14 @@ export default class Contact extends Model {
   }
 
   async getOutbounds(): Promise<PhoneOutbound[]> {
+    const {
+      currentOutbound,
+    }: { currentOutbound: null | PhoneOutbound } = Contact.store().state[
+      'phone.controller'
+    ];
+    if (currentOutbound) {
+      return [currentOutbound];
+    }
     return this.resolveAttributeModels<PhoneOutbound>(
       ContactAttributes.OUTBOUND_IDS,
       PhoneOutbound,
@@ -500,12 +510,12 @@ export default class Contact extends Model {
       ContactAttributes.INBOUND_NUMBER,
       null,
     );
-    if (!_number && outbound) {
+    if (outbound) {
       // if an outbound was found, use
       // the dnis1 id to resolve
       return PhoneDnis.fetchOrFindId(outbound.dnis1);
     }
-    if (!_number && inbound) {
+    if (inbound) {
       // if an inbound was found
       // use the dnis raw number to resolve.
       _number = inbound.dnis;
