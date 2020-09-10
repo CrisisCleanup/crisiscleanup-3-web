@@ -20,7 +20,7 @@
                   :key="`l_${l}`"
                   class="flex flex-col px-2 tag-container"
                 >
-                  <tag class="tag-item">{{ l }}</tag>
+                  <LanguageTag class="tag-item" :language-id="l.id" />
                 </div>
               </div>
             </div>
@@ -34,8 +34,10 @@
 <script>
 import VueTypes from 'vue-types';
 import { LangMixin, UserMixin } from '@/mixins';
+import LanguageTag from '@/components/tags/LanguageTag.vue';
 export default {
   name: 'Info',
+  components: { LanguageTag },
   mixins: [UserMixin, LangMixin],
   props: {
     toggleOpen: VueTypes.bool.def(false),
@@ -47,9 +49,7 @@ export default {
       });
     },
     languages() {
-      return this.currentUser.languages.map(
-        ({ name_t }) => name_t.split(' ')[0],
-      );
+      return this.currentUser.languages;
     },
   },
 };
@@ -60,20 +60,5 @@ export default {
   @apply bg-crisiscleanup-light-grey;
   margin-left: -24px;
   margin-right: -24px;
-}
-
-.tags {
-  .tag {
-    &-container {
-      &:first-child {
-        @apply text-crisiscleanup-red-300;
-        @apply border-crisiscleanup-red-300;
-      }
-      &:last-child {
-        @apply text-crisiscleanup-lightblue-400;
-        @apply border-crisiscleanup-lightblue-400;
-      }
-    }
-  }
 }
 </style>

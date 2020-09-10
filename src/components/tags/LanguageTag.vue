@@ -1,6 +1,6 @@
 <template>
   <tag :style="[styles]" class="tag-item" v-bind="$attrs">
-    {{ language.shortName }}
+    {{ language && language.shortName }}
   </tag>
 </template>
 
