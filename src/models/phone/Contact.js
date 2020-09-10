@@ -375,7 +375,7 @@ export default class Contact extends Model {
       dnis = await this.getDnis({ inbound, outbound });
     }
     Contact.commit((state) => {
-      state.dnis = dnis;
+      state.dnis = _.isArray(dnis) ? _.first(dnis) : dnis;
       state.worksites = _.unionBy(state.worksites, wrkSites, 'id');
       state.pdas = _.unionBy(state.pdas, pdas, 'id');
       state.locale = locale;
@@ -471,6 +471,15 @@ export default class Contact extends Model {
     inbound: PhoneInbound | null,
     outbound: PhoneOutbound | null,
   } = {}): Promise<PhoneDnis | null> {
+    // check for DNIS id in attr
+    const _dnis = _.get(
+      this.contactAttributes,
+      ContactAttributes.CALLER_DNIS_ID,
+      null,
+    );
+    if (_dnis) {
+      return PhoneDnis.fetchOrFindId(_dnis);
+    }
     // first check for contact attr.
     let _number = _.get(
       this.contactAttributes,

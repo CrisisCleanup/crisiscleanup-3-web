@@ -274,7 +274,7 @@ class ControllerStore extends VuexModule {
         cases: this.modifiedCaseIds.join(', '),
       },
     };
-    if (contact.outbound && !contact.isInbound) {
+    if (contact.outbound) {
       Log.info('updating outbound status with:', callStatus);
       await PhoneOutbound.api().updateStatus(contact.outbound.id, callStatus);
       this.setOutbound(null);
