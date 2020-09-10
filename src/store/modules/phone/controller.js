@@ -186,7 +186,11 @@ class ControllerStore extends VuexModule {
   }
 
   get callHistory() {
-    return this.callerHistory;
+    return _.orderBy(
+      _.uniqBy(this.callerHistory, 'completed_at'),
+      ['completed_at'],
+      ['desc'],
+    );
   }
 
   get currentAgentMetrics() {
