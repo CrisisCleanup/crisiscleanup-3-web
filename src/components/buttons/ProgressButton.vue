@@ -1,14 +1,10 @@
 <template>
   <div class="relative overflow-hidden">
     <base-button ref="btn" v-bind="$attrs">
-      <div class="loader__content" :class="value && 'loading'">
+      <div class="loader__content">
         <slot />
       </div>
-      <div
-        :style="loadStyle"
-        class="loader__overlay"
-        :class="reverse && 'reverse'"
-      ></div>
+      <div :style="loadStyle" class="loader__overlay" :class="loadClass"></div>
     </base-button>
   </div>
 </template>
@@ -37,8 +33,13 @@ export default {
       width: '100%',
       transform: `translateX(${-step.value}%)`,
     }));
+    const loadClass = computed(() => ({
+      loading: Math.abs(step.value) > 0,
+      reverse: props.reverse === true,
+    }));
     return {
       loadStyle,
+      loadClass,
     };
   },
 };

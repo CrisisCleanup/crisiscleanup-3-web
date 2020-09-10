@@ -4,10 +4,11 @@
  */
 
 import AgentClient, { RouteStates } from '@/models/phone/AgentClient';
-import { computed, ref } from '@vue/composition-api';
+import { computed, ref, watch } from '@vue/composition-api';
 import { ConnectionStates } from '@/models/phone/Connection';
 import { unwrap } from '@/utils/wrap';
 import _ from 'lodash';
+import { useIntervalFn } from '@vueuse/core';
 
 /**
  * Utilize current agent state to compute UI components.
@@ -26,6 +27,7 @@ export default ({
   isTrained: boolean,
 }) => {
   const _agent = ref<AgentClient>(agent);
+  const _acwElapsed = ref(0);
 
   // UI friendly 'action' string to enact state change.
   const _stateAction = {
@@ -82,9 +84,27 @@ export default ({
     _agent.value.toggleOnline();
   };
 
-  const acwDuration = computed(() =>
-    _agent.value ? _agent.value.getAcwDuration() / 1000 : 0,
+  const acwTimer = useIntervalFn(() => {
+    if (_agent.value) {
+      const val = _agent.value.getAcwDuration();
+      if (val > 0) {
+        _acwElapsed.value = val / 1000;
+      }
+    }
+  }, 1000);
+
+  watch(
+    () => _agent.value.contactState,
+    () => {
+      if (_agent.value.contactState === ConnectionStates.PAUSED) {
+        acwTimer.start();
+      } else {
+        acwTimer.stop();
+      }
+    },
   );
+
+  const acwDuration = computed(() => _acwElapsed.value);
 
   return {
     agent: _agent,
