@@ -2795,7 +2795,7 @@ exports[`Storyshots Elements/Buttons/ProgressButton With Total And Step 1`] = `
           </div>
            
           <div
-            class="loader__overlay reverse"
+            class="loader__overlay loading reverse"
             style="width: 100%; transform: translateX(-100%);"
           />
            
