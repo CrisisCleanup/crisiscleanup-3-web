@@ -207,16 +207,13 @@ export default class Contact extends Model {
       const attrs = connectContact.getAttributes();
       Log.info('got connect attributes:', attrs);
       if (!_.isNil(attrs)) {
-        model.attributes = attrs;
+        model.attributes = _.merge(model.attributes, attrs);
       }
     }
-    if (_.isNil(model.attributes) || !model.isInbound) {
+    if (!model.isInbound) {
       const outboundAttrs = Contact.getOutboundAttributes(model);
       if (outboundAttrs) {
-        model.attributes = {
-          ...model.attributes,
-          ...outboundAttrs,
-        };
+        model.attributes = _.merge(model.attributes, outboundAttrs);
       }
     }
     return true;
@@ -391,7 +388,23 @@ export default class Contact extends Model {
     }: { currentOutbound: null | PhoneOutbound } = Contact.store().state[
       'phone.controller'
     ];
-    if (currentOutbound && _.isNil(contact.attributes)) {
+    if (currentOutbound) {
+      const conContact = ACS.getContactById(contact.contactId);
+      if (conContact) {
+        const payload = {
+          phone_number: _.get(
+            conContact.getAttributes(),
+            ContactAttributes.INBOUND_NUMBER,
+          ),
+          contact_id: conContact.getContactId(),
+        };
+
+        Contact.api()
+          .post('phone_connect/resolve_cases', payload)
+          .then((resp) =>
+            Log.info('requested api to resolve cases!', payload, resp),
+          );
+      }
       Log.info('found current outbound!');
       return {
         [ContactAttributes.INBOUND_NUMBER]: currentOutbound.phone_number,
@@ -400,6 +413,7 @@ export default class Contact extends Model {
         ),
         [ContactAttributes.OUTBOUND_IDS]: String(currentOutbound.id),
         [ContactAttributes.CALL_TYPE]: CallType.OUTBOUND,
+        [ContactAttributes.CALLER_DNIS_ID]: String(currentOutbound.dnis1),
       };
     }
     return {};
