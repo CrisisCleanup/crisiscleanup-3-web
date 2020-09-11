@@ -100,6 +100,7 @@ export default ({
         acwTimer.start();
       } else {
         acwTimer.stop();
+        _acwElapsed.value = 0;
       }
     },
   );
