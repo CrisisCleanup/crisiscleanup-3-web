@@ -1,4 +1,4 @@
-import { isNil, isArray, omitBy, first } from 'lodash';
+import { first, isArray, isNil, omitBy } from 'lodash';
 import CCUModel from '@/models/model';
 
 export default class PhoneOutbound extends CCUModel {
@@ -97,11 +97,7 @@ export default class PhoneOutbound extends CCUModel {
             isNil,
           ),
         );
-        const outbound = first(resp.entities);
-        if (outbound) {
-          await this.callOutbound(outbound.id);
-        }
-        return outbound;
+        return first(resp.entities);
       },
     },
   };

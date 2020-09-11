@@ -6,7 +6,7 @@
     <div class="profile">
       <div class="profile--img">
         <img
-          :src="currentUser.profilePictureUrl"
+          :src="currentUser && currentUser.profilePictureUrl"
           alt="UserProfile"
           class="rounded-full"
         />
@@ -84,7 +84,7 @@ import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
 import useAgentState from '@/use/phone/useAgentState';
 import useAgent from '@/use/phone/useAgent';
-import { reactive, onMounted } from '@vue/composition-api';
+import { reactive, ref, onMounted } from '@vue/composition-api';
 import useToggle from '@/use/useToggle';
 import useUser from '@/use/user/useUser';
 import useTraining from '@/use/user/useTraining';
@@ -97,6 +97,8 @@ import { getModule } from 'vuex-module-decorators';
 import { unwrap } from '@/utils/wrap';
 import ProgressButton from '@/components/buttons/ProgressButton.vue';
 import OutboundDialer from '@/components/phone/Widgets/OutboundDialer.vue';
+import PhoneOutbound from '@/models/PhoneOutbound';
+import useIncident from '@/use/worksites/useIncident';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();
@@ -154,14 +156,6 @@ const useValidations = ({ currentUser }) => {
   };
 };
 
-const OutboundPopup = () => {
-  return () => (
-    <div class="py-12 px-3 flex flex-col">
-      <OutboundDialer />
-    </div>
-  );
-};
-
 export default {
   name: 'AgentCard',
   components: {
@@ -196,16 +190,45 @@ export default {
       toggleAgentState();
     };
 
+    const { currentIncident } = useIncident();
+    const { currentUser } = useUser();
+
+    const _dialerInput = ref({});
     const onDialer = async () => {
+      await ctrlStore.setServingOutbounds(false);
       const compDialog = create(ComponentDialog);
       await compDialog({
         title: context.root.$t('~~Enter a Phone Number'),
-        component: OutboundPopup,
+        component: OutboundDialer,
         actionText: context.root.$t('~~Dial'),
         listeners: {
-          update: (payload) => context.root.$log.info(payload),
+          update: (payload) => {
+            _dialerInput.value = payload;
+          },
+        },
+        props: {
+          class: 'py-12 px-3 flex flex-col',
         },
       });
+      context.root.$log.info('got dialer input:', _dialerInput.value);
+      if (_dialerInput.value) {
+        const { isValid, e164 } = _dialerInput.value;
+        if (isValid) {
+          context.root.$log.info('dialer input valid!', e164);
+          const outbound = await PhoneOutbound.api().createAndCall({
+            number: e164,
+            incidentId: currentIncident.value.id,
+            userId: currentUser.value.id,
+            language: currentUser.value.primary_language.id,
+          });
+          await ctrlStore.setServingOutbounds(true);
+          await ctrlStore.setOutbound(outbound);
+          await PhoneOutbound.api().callOutbound(outbound.id);
+
+          context.root.$toasted.success(context.root.$t('~~Success!'));
+        }
+      }
+      await ctrlStore.setServingOutbounds(true);
     };
 
     return {
@@ -217,7 +240,7 @@ export default {
       acwDuration,
       onTrainingComplete,
       onDialer,
-      ...useUser(),
+      currentUser,
       ...useValidations({ currentUser: useUser().currentUser }),
     };
   },
