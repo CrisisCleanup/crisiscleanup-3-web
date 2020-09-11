@@ -8,7 +8,51 @@
         <form
           ref="form"
           class="form w-108 flex flex-col"
+          @submit.prevent="transfer"
+          v-if="invitation && invitation.existing_user"
+        >
+          <div class="text-2xl font-light">
+            {{ invitation.inviter }}
+            {{ $t('~~is inviting you to transfer from') }}
+            {{ invitation.existing_user.organization | getOrganizationName }}
+            {{ $t('~~would you like to transfer:') }}
+          </div>
+          <form-select
+            v-model="transferOption"
+            :options="[
+              {
+                key: 'users',
+                label: $t('~~Yes, just me (and anyone I\'ve recently invited)'),
+              },
+              {
+                key: 'all',
+                label: $t('~~Yes, me, and all of my claimed cases'),
+              },
+              {
+                key: 'none',
+                label: $t('~~No, do not transfer me'),
+              },
+            ]"
+            :placeholder="$t('~~Select Option')"
+            select-classes="bg-white border w-full h-12"
+            item-key="key"
+            label="label"
+          />
+          <base-button
+            size="large"
+            class="px-5 py-2 m-2 flex-grow"
+            variant="solid"
+            :text="$t('~~Transfer')"
+            :alt="$t('~~Transfer')"
+            :action="transfer"
+            :disabled="!transferOption || transferOption === 'none'"
+          />
+        </form>
+        <form
+          ref="form"
+          class="form w-108 flex flex-col"
           @submit.prevent="acceptInvite"
+          v-else
         >
           <div class="text-2xl font-light">
             {{
@@ -81,11 +125,17 @@
 
 <script>
 import User from '@/models/User';
+import PasswordResetRequest from '@/models/PasswordResetRequest';
+import Organization from '@/models/Organization';
 import Invitation from '../../models/Invitation';
 import HomeLayout from '../../layouts/Home';
+import { DialogsMixin } from '../../mixins';
+import { getErrorMessage } from '../../utils/errors';
+import { getOrganizationName } from '../../filters';
 
 export default {
   name: 'InvitationSignup',
+  mixins: [DialogsMixin],
   components: { HomeLayout },
   data() {
     return {
@@ -96,6 +146,7 @@ export default {
       mobile: '',
       title: '',
       invitation: null,
+      transferOption: null,
     };
   },
   async mounted() {
@@ -104,6 +155,17 @@ export default {
         this.$route.params.token,
       );
       [this.invitation] = results.entities.invitations;
+      if (this.invitation.existing_user) {
+        await Organization.api().get(
+          `/organizations?id__in=${[
+            this.invitation.organization,
+            this.invitation.existing_user.organization,
+          ].join(',')}`,
+          {
+            dataKey: 'results',
+          },
+        );
+      }
     } catch (error) {
       await this.$toasted.error(this.$t('invitationSignup.invitation_dead'));
       this.$router.push('/login');
@@ -123,12 +185,56 @@ export default {
             mobile,
             title,
           });
+          await this.$toasted.success(
+            this.$t('~~Successfully accepted invitation. Please log in'),
+          );
           await this.$router.push('/login?accepted=true');
         } catch (e) {
           await this.$toasted.error(
             this.$t('invitationSignup.invitation_accept_error'),
           );
         }
+      }
+    },
+    async transfer() {
+      try {
+        await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/transfer_requests/invitation`,
+          {
+            invitation_token: this.$route.params.token,
+            transfer_action: this.transferOption,
+          },
+        );
+        const result = await this.$confirm({
+          title: this.$t('~~Move Completed'),
+          content: this.$t(
+            `~~You have been moved to ${getOrganizationName(
+              this.invitation.organization,
+            )}. You may log in now, or reset your password if you have forgotten it.`,
+          ),
+          actions: {
+            forgot: {
+              text: this.$t('~~Forgot Password'),
+              type: 'outline',
+              buttonClass: 'border border-black',
+            },
+            login: {
+              text: this.$t('~~Login'),
+              type: 'solid',
+            },
+          },
+        });
+        if (result === 'login') {
+          await this.$router.push('/login?accepted=true');
+        }
+        if (result === 'forgot') {
+          await PasswordResetRequest.api().post(`/password_reset_requests`, {
+            email: this.invitation.invitee_email,
+          });
+          await this.$toasted.success(this.$t('~~Successfully reset password'));
+        }
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
       }
     },
     validatePassword() {

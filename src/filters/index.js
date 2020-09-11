@@ -2,6 +2,7 @@ import { colors as iconColors, templates } from '@/icons/icons_templates';
 import enums from '@/store/modules/enums';
 import { RRule } from 'rrule';
 import _ from 'lodash';
+import Organization from '@/models/Organization';
 
 export function snakeToTitleCase(value) {
   if (!value) return '';
@@ -25,6 +26,11 @@ export function getStatusName(statusKey) {
 
 export function getRecurrenceString(rule) {
   return RRule.fromString(rule).toText();
+}
+
+export function getOrganizationName(id) {
+  const organization = Organization.find(id);
+  return organization ? organization.name : '';
 }
 
 export function getStatusBadge(status) {

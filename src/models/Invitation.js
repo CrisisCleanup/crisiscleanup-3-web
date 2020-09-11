@@ -12,6 +12,8 @@ export default class Invitation extends Model {
       expires_at: this.attr(null),
       created_at: this.attr(null),
       invited_by: this.attr(null),
+      existing_user: this.attr(null),
+      organization: this.attr(null),
     };
   }
 

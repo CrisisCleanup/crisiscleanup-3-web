@@ -34,6 +34,7 @@ import {
   truncateFilter,
   startCase,
   snakeCase,
+  getOrganizationName,
 } from '@/filters';
 import Authenticated from '@/layouts/Authenticated';
 import Unauthenticated from '@/layouts/Unauthenticated';
@@ -163,6 +164,7 @@ Vue.mixin(LangOverrideMixin);
 Vue.use(vueNumeralFilterInstaller, { locale: 'en-gb' });
 Vue.filter('getWorkTypeName', getWorkTypeName);
 Vue.filter('getStatusName', getStatusName);
+Vue.filter('getOrganizationName', getOrganizationName);
 Vue.filter('snakeToTitleCase', snakeToTitleCase);
 Vue.filter('getColorForWorkType', getColorForWorkType);
 Vue.filter('getWorkTypeImage', getWorkTypeImage);

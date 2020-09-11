@@ -49,6 +49,7 @@ import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 // Import Vue plugins
 import Vuex from 'vuex';
+import { getOrganizationName } from '../src/filters';
 
 library.add(fas);
 
@@ -97,6 +98,7 @@ Vue.component('v-select', vSelect);
 // Filters
 Vue.filter('getWorkTypeName', getWorkTypeName);
 Vue.filter('getStatusName', getStatusName);
+Vue.filter('getOrganizationName', getOrganizationName);
 Vue.filter('snakeToTitleCase', snakeToTitleCase);
 Vue.filter('getColorForWorkType', getColorForWorkType);
 Vue.filter('getWorkTypeImage', getWorkTypeImage);
