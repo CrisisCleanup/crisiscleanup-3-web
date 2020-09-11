@@ -121,6 +121,7 @@
     "vue-mq": "^1.0.1",
     "vue-native-websocket": "^2.0.14",
     "vue-numeral-filter": "^1.1.1",
+    "vue-phone-number-input": "^1.1.10",
     "vue-range-slider": "^0.6.0",
     "vue-responsive": "^1.1.0",
     "vue-router": "^3.2.0",

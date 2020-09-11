@@ -91,6 +91,7 @@ export default {
 
 <style>
 @import '~vue-resize/dist/vue-resize.css';
+@import '~vue-phone-number-input/dist/vue-phone-number-input.css';
 @lost flexbox flex;
 
 html {
