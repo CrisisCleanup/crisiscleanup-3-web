@@ -27,6 +27,7 @@
               <component
                 :is="dynamicComponent"
                 v-bind="props"
+                v-on="listeners"
                 :class="classes"
               />
             </div>
@@ -85,6 +86,12 @@ export default {
       default: '',
     },
     props: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+    listeners: {
       type: Object,
       default: () => {
         return {};
