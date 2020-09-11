@@ -9,7 +9,6 @@
 <script>
 // @flow
 import PageLayout from '@/layouts/page/Page.vue';
-import { EventBus } from '@/event-bus';
 import IncomingPopup from '@/components/phone/Popup.vue';
 import { ControllerPages } from '@/store/modules/phone/controller';
 import useAgent from '@/use/phone/useAgent';
@@ -99,7 +98,6 @@ export default {
     });
 
     onMounted(async () => {
-      EventBus.$emit('acs:init');
       await updatePage();
       await controller.actions.updateHistoricMetrics();
     });

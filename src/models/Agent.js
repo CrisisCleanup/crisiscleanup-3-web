@@ -54,7 +54,7 @@ export default class Agent extends CCUModel {
                 data: { data },
               },
             } = e;
-            let errors = data.errors ? data.errors : [];
+            let errors = data && data.errors ? data.errors : [];
             errors = errors.map(({ type }) => ERRORS[type]);
             if (errors) {
               throw errors;

@@ -83,7 +83,7 @@ export default class PhoneOutbound extends CCUModel {
           save: false,
         });
       },
-      async createAndCall({ number, incidentId, ani, language, userId }) {
+      async createManual({ number, incidentId, ani, language, userId }) {
         const resp = await this.post(
           `/phone_outbound`,
           omitBy(

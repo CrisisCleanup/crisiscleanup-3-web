@@ -119,6 +119,10 @@ class StreamsStore extends VuexModule {
   @Action
   async createClient(agentInstance?: connect.Agent) {
     const agent = agentInstance || new connect.Agent();
+    if (!agent) {
+      Log.info('no agent found! failed to create client!');
+      this.setConnected(false);
+    }
     const agentState =
       agent.getState().type === 'system'
         ? agent.getState().name

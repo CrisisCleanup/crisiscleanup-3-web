@@ -77,6 +77,9 @@ import VueTypes from 'vue-types';
 import { LangMixin, UserMixin, ValidateMixin } from '@/mixins';
 import Agent from '@/models/Agent';
 import Language from '@/models/Language';
+import { getModule } from 'vuex-module-decorators';
+import StreamsStore from '@/store/modules/phone/streams';
+import _ from 'lodash';
 
 export default {
   name: 'EditCallerID',
@@ -110,9 +113,14 @@ export default {
       try {
         await this.saveUser();
         this.$emit('user-updated', this.currentUser);
-        await this.$store.dispatch('phone.streams/updateAgentConfig', {
-          phone_number: this.phoneNumber,
-        });
+        const streamsStore = getModule(StreamsStore, this.$store);
+        await _.delay(
+          () =>
+            streamsStore.updateAgentConfig({
+              phone_number: this.phoneNumber,
+            }),
+          3000,
+        );
       } catch (e) {
         this.$log.error('Failed to save user', e);
         this.$toasted.error(e);

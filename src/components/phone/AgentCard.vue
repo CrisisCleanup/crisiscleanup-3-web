@@ -99,6 +99,7 @@ import ProgressButton from '@/components/buttons/ProgressButton.vue';
 import OutboundDialer from '@/components/phone/Widgets/OutboundDialer.vue';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import useIncident from '@/use/worksites/useIncident';
+import { EventBus } from '@/event-bus';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();
@@ -137,7 +138,9 @@ const useValidations = ({ currentUser }) => {
       if (errs.some(invalidLang)) {
         state.lang = true;
       }
+      return errs;
     }
+    return EventBus.$emit('acs:init');
   };
 
   const forceAgentEdit = () => {
@@ -215,7 +218,7 @@ export default {
         const { isValid, e164 } = _dialerInput.value;
         if (isValid) {
           context.root.$log.info('dialer input valid!', e164);
-          const outbound = await PhoneOutbound.api().createAndCall({
+          const outbound = await PhoneOutbound.api().createManual({
             number: e164,
             incidentId: currentIncident.value.id,
             userId: currentUser.value.id,
