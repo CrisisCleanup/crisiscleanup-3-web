@@ -20,7 +20,7 @@
               variant="bodysm"
               class="justify-between text-crisiscleanup-grey-800 alight-left"
             >
-              {{ timeToComplete }}
+              {{ timeToComplete | moment('m:ss') }}
             </base-text>
           </div>
         </div>
