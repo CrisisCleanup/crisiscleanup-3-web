@@ -24332,10 +24332,10 @@ vue-native-websocket@^2.0.14:
   resolved "https://registry.yarnpkg.com/vue-native-websocket/-/vue-native-websocket-2.0.14.tgz#fddb56f9f93d2ecc861486ee3c8f29506ea2a168"
   integrity sha512-oK8+xG1gmqRs4JngHGwEc4zWoRjsdMB20Sz8pemkh4lW2Vr2676/cDRtd30aGnO2xF7Oxf003wS5JO0kypUsCw==
 
-vue-numeral-filter@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/vue-numeral-filter/-/vue-numeral-filter-1.1.1.tgz#dc717c7d86cb10d2fc370ef992bcac80fb9fc666"
-  integrity sha512-QRrvadev2W0PRWHJbLsnOGq4eK0CQmfdyIFy+A4J8dxPNYe1W1W/AqNLFH7paV0lh0pvVPVczgXuOvA/X12T1A==
+vue-numeral-filter@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/vue-numeral-filter/-/vue-numeral-filter-2.0.0.tgz#a28f4f795d66c8555fb521498ed846418150fa5e"
+  integrity sha512-7k9ALqulfOWbxRFKOR04EPWAxk95FHOeO1uIDn1x8n5+ODmE8DdU2STQ+AO2WFXdf1VNQvZPwQRE7hNOLQQY+Q==
   dependencies:
     numeral "^2.0.6"
 
