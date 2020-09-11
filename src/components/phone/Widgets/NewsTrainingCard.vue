@@ -51,7 +51,7 @@ export default {
         {
           imagePath: require('@/assets/newspicss.png'),
           description: this.$t(
-            `~~For those of you who have ever used our call system in the past (as clunky as it was) You're going to LOVE this new system. It is easier to ever! However it is brand new, so if you find bugs, please let us know.`,
+            `~~For those of you who have ever used our call system in the past (as clunky as it was) You're going to LOVE this new system. It is easier to ever! However, it is brand new, so if you find bugs, please let us know.`,
           ),
           timeToComplete: this.$t('~~15 minutes'),
         },
