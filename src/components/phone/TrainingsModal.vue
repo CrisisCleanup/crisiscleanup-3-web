@@ -40,7 +40,7 @@
             <trainings-card
               v-for="(training, idx) in trainings"
               :key="idx"
-              :image-path="training.imagePath"
+              :image-path="getTrainingThumbnail(training)"
               :description="training.title_t"
               :time-to-complete="training.settings.completion_seconds"
               :completed="isTrainingCompleted(training)"
@@ -93,6 +93,7 @@
 import { TrainingMixin } from '@/mixins';
 import TrainingsCard from '@/components/phone/TrainingsCard.vue';
 import Training from '@/components/phone/Training.vue';
+import _ from 'lodash';
 
 export default {
   name: 'TrainingsModal',
@@ -160,6 +161,14 @@ export default {
     close() {
       this.visible = false;
       this.$emit('onClose', this.visible);
+    },
+    getTrainingThumbnail({ settings: { videos } }) {
+      const video = _.first(videos);
+      if (video) {
+        const videoId = _.last(video.url.split('/'));
+        return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+      }
+      return '';
     },
   },
 };
