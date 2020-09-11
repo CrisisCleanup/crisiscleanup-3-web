@@ -41,16 +41,27 @@
           >{{ agentState.statusText | startCase }}
         </base-text>
       </div>
-      <ProgressButton
-        :action="() => handleAgentState()"
-        :disabled="!agentState.enabled"
-        size="large"
-        variant="solid"
-        :total="240"
-        :value="acwDuration"
-      >
-        {{ $t(agentState.text) }}
-      </ProgressButton>
+      <div class="inline-flex action-btn">
+        <div class="spacer"></div>
+        <ProgressButton
+          :action="() => handleAgentState()"
+          :disabled="!agentState.enabled"
+          size="large"
+          variant="solid"
+          :total="240"
+          :value="acwDuration"
+        >
+          {{ $t(agentState.text) }}
+        </ProgressButton>
+        <base-button
+          :action="onDialer"
+          class="dialer"
+          size="sm"
+          icon-size="md"
+          variant="outline"
+          ccu-icon="dialer"
+        />
+      </div>
     </div>
     <trainings-modal
       :visible="trainingState.state.value"
@@ -66,6 +77,8 @@
 </template>
 
 <script>
+import { create } from 'vue-modal-dialogs';
+import ComponentDialog from '@/components/dialogs/ComponentDialog';
 import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
 import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
@@ -83,6 +96,7 @@ import { useStore } from '@u3u/vue-hooks';
 import { getModule } from 'vuex-module-decorators';
 import { unwrap } from '@/utils/wrap';
 import ProgressButton from '@/components/buttons/ProgressButton.vue';
+import OutboundDialer from '@/components/phone/Widgets/OutboundDialer.vue';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();
@@ -140,6 +154,14 @@ const useValidations = ({ currentUser }) => {
   };
 };
 
+const OutboundPopup = () => {
+  return () => (
+    <div class="py-12 px-3 flex flex-col">
+      <OutboundDialer />
+    </div>
+  );
+};
+
 export default {
   name: 'AgentCard',
   components: {
@@ -174,6 +196,18 @@ export default {
       toggleAgentState();
     };
 
+    const onDialer = async () => {
+      const compDialog = create(ComponentDialog);
+      await compDialog({
+        title: context.root.$t('~~Enter a Phone Number'),
+        component: OutboundPopup,
+        actionText: context.root.$t('~~Dial'),
+        listeners: {
+          update: (payload) => context.root.$log.info(payload),
+        },
+      });
+    };
+
     return {
       trainingState,
       showMoreState,
@@ -182,6 +216,7 @@ export default {
       handleAgentState,
       acwDuration,
       onTrainingComplete,
+      onDialer,
       ...useUser(),
       ...useValidations({ currentUser: useUser().currentUser }),
     };
@@ -255,6 +290,22 @@ export default {
     .status {
       align-items: center;
       @apply pb-2;
+    }
+
+    .action-btn {
+      @apply w-full;
+      justify-content: space-around;
+      button.dialer {
+        @apply px-2;
+        @apply bg-crisiscleanup-dark-500;
+        &:hover {
+          @apply bg-crisiscleanup-dark-400;
+          border: 1px solid transparent;
+        }
+      }
+      .spacer {
+        width: 50px;
+      }
     }
 
     .dot {
