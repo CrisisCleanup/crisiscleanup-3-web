@@ -3,67 +3,41 @@
     class="opreview bg-crisiscleanup-dark-500 text-white shadow-xl opacity-75 w-64 h-128"
     :class="visibleState.state.value ? 'active' : ''"
   >
-    <div
-      @click="() => visibleState.toggle()"
-      class="opreview__tab flex justify-center shadow-xl rounded-tl rounded-bl"
-    >
-      <base-text variant="bodysm">{{
-        visibleState.state.value ? 'Hide' : 'Debugger'
-      }}</base-text>
+    <div class="opreview__tabs">
+      <div
+        @click="() => visibleState.toggle()"
+        class="opreview__tab flex justify-center shadow-xl"
+        :class="visibleState.state.value ? '' : 'rounded-bl'"
+      >
+        <base-text variant="bodysm">{{
+          visibleState.state.value ? 'Hide' : 'Debugger'
+        }}</base-text>
+      </div>
+      <div
+        v-show="visibleState.state.value"
+        v-for="p in Object.keys(pages)"
+        class="opreview__tab flex justify-center shadow-xl"
+        @click="() => (currentPage = p)"
+        :class="currentPage === p && 'active'"
+      >
+        <base-text variant="bodysm" class="py-1">
+          {{ p | startCase }}
+        </base-text>
+      </div>
     </div>
+
     <div class="opreview__current">
       <div class="opreview__item">
         <base-text variant="h1">
           Phone Debugger
         </base-text>
       </div>
-      <div class="opreview__item">
-        <base-text variant="h4">
-          Serving Outbound:
-        </base-text>
-        <base-text variant="bodysm">
-          {{ currentOutbound ? currentOutbound.phone_number : 'None' }}
-        </base-text>
-      </div>
-      <div class="opreview__item">
-        <base-text variant="h4">
-          Priority:
-        </base-text>
-        <base-text variant="bodysm">
-          {{ currentOutbound ? currentOutbound.priority : '0.00' }}
-        </base-text>
-      </div>
-      <div class="opreview__item">
-        <base-text variant="h4">
-          Location:
-        </base-text>
-        <base-text variant="bodysm">
-          {{ currentOutbound ? currentOutbound.location_name : 'None' }}
-        </base-text>
-      </div>
-      <div class="opreview__item">
-        <base-text variant="h4">
-          Agent State:
-        </base-text>
-        <base-text variant="bodysm">
-          {{ agent ? agent.fullState : 'None' }}
-        </base-text>
-      </div>
-      <div class="opreview__item">
-        <base-text variant="h4">
-          Contact State:
-        </base-text>
-        <base-text variant="bodysm">
-          {{ currentContact ? currentContact.fullState : 'None' }}
-        </base-text>
-      </div>
-      <div class="opreview__item">
-        <base-text variant="h4">
-          Call Type:
-        </base-text>
-        <base-text variant="bodysm">
-          {{ currentContact ? callType : 'None' }}
-        </base-text>
+      <div
+        class="opreview__item"
+        v-for="{ title, value } in pages[currentPage]"
+      >
+        <base-text variant="h4"> {{ title }} </base-text>
+        <base-text variant="bodysm"> {{ value }} </base-text>
       </div>
     </div>
     <div class="opreview__config">
@@ -90,6 +64,8 @@ import useController from '@/use/phone/useController';
 import useAgent from '@/use/phone/useAgent';
 import useContact from '@/use/phone/useContact';
 import useToggle from '@/use/useToggle';
+import { computed, ref } from '@vue/composition-api';
+import _ from 'lodash';
 
 export default {
   name: 'PhoneDebugger',
@@ -97,12 +73,83 @@ export default {
     const { actions, state } = useController();
     const { agent } = useAgent();
     const visibleState = useToggle();
+    const { currentOutbound, currentContact } = useContact({ agent });
+    const currentPage = ref('contact');
+
+    const configParams = [
+      'extension',
+      'name',
+      'username',
+      'softphoneEnabled',
+      'softphoneAutoAccept',
+    ];
+
+    const pages = computed(() => ({
+      contact: [
+        {
+          title: 'Agent State',
+          value: _.get(agent, 'value.fullState', 'None'),
+        },
+        {
+          title: 'Contact State',
+          value: _.get(currentContact, 'value.fullState', 'None'),
+        },
+        {
+          title: 'Call Type',
+          value: _.get(currentContact, 'value.callType', 'None'),
+        },
+      ].concat(
+        currentContact.value
+          ? Object.keys(currentContact.value.contactAttributes).map((k) => ({
+              title: k,
+              value: currentContact.value.contactAttributes[k],
+            }))
+          : [],
+      ),
+      outbound: [
+        {
+          title: 'Serving Outbound',
+          value: _.get(currentOutbound, 'value.phone_number', 'None'),
+        },
+        {
+          title: 'Priority',
+          value: _.get(currentOutbound, 'value.priority', '0.00'),
+        },
+        {
+          title: 'Location',
+          value: _.get(currentOutbound, 'value.location_name', 'None'),
+        },
+        {
+          title: 'Agent State',
+          value: _.get(agent, 'value.fullState', 'None'),
+        },
+        {
+          title: 'Contact State',
+          value: _.get(currentContact, 'value.fullState', 'None'),
+        },
+        {
+          title: 'Call Type',
+          value: _.get(currentContact, 'value.callType', 'None'),
+        },
+      ],
+      config: agent.value
+        ? Object.keys(agent.value.connectConfig).map(
+            (k) =>
+              configParams.includes(k) && {
+                title: _.startCase(k),
+                value: _.get(agent, `value.connectConfig.${k}`, 'None'),
+              },
+          )
+        : [],
+    }));
     return {
       visibleState,
       ...actions,
       ...state,
+      currentOutbound,
       agent,
-      ...useContact({ agent }),
+      pages,
+      currentPage,
       async toggleServeState(value) {
         await actions.setServingOutbounds(value);
       },
@@ -124,6 +171,7 @@ $neg-hidden: calc(0rem - theme('width.64'));
   lost-flex-container: column;
   transform: translateX(theme('width.64'));
   transition: transform 250ms easeInOutCirc;
+  min-height: calc(theme('spacing.64') * 1.5);
   &.active {
     transform: translateX(0px);
   }
@@ -150,20 +198,35 @@ $neg-hidden: calc(0rem - theme('width.64'));
       }
     }
   }
-  &__tab {
+  &__tabs {
     position: absolute;
     left: $neg-left;
     top: 0;
-    @apply w-4 h-16 bg-crisiscleanup-dark-400;
-    align-items: center;
-    transition: background-color 250ms easeInOutCirc;
-    cursor: pointer;
-    &:hover {
-      @apply bg-crisiscleanup-dark-500;
-    }
-    p {
-      @apply text-white;
-      writing-mode: vertical-lr;
+
+    .opreview__tab {
+      transition: background-color 250ms easeInOutCirc;
+      @apply w-4 h-16 bg-crisiscleanup-dark-400;
+      align-items: center;
+      cursor: pointer;
+
+      &.active,
+      &:hover {
+        @apply bg-crisiscleanup-dark-500;
+      }
+      &.active p {
+        @apply font-bold;
+      }
+      p {
+        @apply text-white;
+        writing-mode: vertical-rl;
+      }
+      &:first-child {
+        @apply rounded-tl;
+        opacity: 1;
+      }
+      &:last-child {
+        @apply rounded-bl;
+      }
     }
   }
 }

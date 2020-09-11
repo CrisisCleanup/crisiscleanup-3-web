@@ -242,6 +242,14 @@ export default class AgentClient extends Model {
     return 0;
   }
 
+  get connectConfig(): connect.AgentConfiguration | null {
+    const conAgent = new connect.Agent();
+    if (conAgent) {
+      return conAgent.getConfiguration();
+    }
+    return null;
+  }
+
   toggleOnline(connected?: boolean): void | boolean {
     if (this.contactState === ConnectionStates.PAUSED && this.currentContact) {
       Contact.delete(this.currentContact.contactId).then(() =>
