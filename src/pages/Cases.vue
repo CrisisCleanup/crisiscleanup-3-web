@@ -821,7 +821,7 @@
 <script>
 import { gmapApi } from 'vue2-google-maps';
 import { mapState } from 'vuex';
-import { throttle } from 'lodash';
+import { debounce } from 'lodash';
 import * as L from 'leaflet';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
@@ -1378,27 +1378,34 @@ export default {
       this[view] = true;
       this.updateUserState();
     },
-    onSearch: throttle(async function (search) {
-      this.currentSearch = search;
-      this.searchingWorksites = true;
-      if (!search) {
-        this.searchWorksites = [];
-      }
-      const searchData = await hash({
-        tableSearch: this.fetch({
-          pageSize: this.pagination.pageSize,
-          page: this.pagination.current,
-        }),
-        dropdownSearch: await Worksite.api().searchWorksites(
-          search,
-          this.currentIncidentId,
-        ),
-      });
-      this.searchWorksites = search
-        ? searchData.dropdownSearch.entities.worksites
-        : [];
-      this.searchingWorksites = false;
-    }, 1000),
+    onSearch: debounce(
+      async function (search) {
+        this.currentSearch = search;
+        this.searchingWorksites = true;
+        if (!search) {
+          this.searchWorksites = [];
+        }
+        const searchData = await hash({
+          tableSearch: this.fetch({
+            pageSize: this.pagination.pageSize,
+            page: this.pagination.current,
+          }),
+          dropdownSearch: await Worksite.api().searchWorksites(
+            search,
+            this.currentIncidentId,
+          ),
+        });
+        this.searchWorksites = search
+          ? searchData.dropdownSearch.entities.worksites
+          : [];
+        this.searchingWorksites = false;
+      },
+      150,
+      {
+        leading: false,
+        trailing: true,
+      },
+    ),
 
     async handleChange(value) {
       await this.$router.push(
