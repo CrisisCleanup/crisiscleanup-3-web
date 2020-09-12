@@ -34,7 +34,7 @@ export default ({
     // translation takes place in component, no $t here.
     [RouteStates.NOT_ROUTABLE]: '~~Start Taking Calls',
     [RouteStates.ROUTABLE]: '~~Stop Taking Calls',
-    [ConnectionStates.PAUSED]: '~~Ready for Next Call',
+    [ConnectionStates.PAUSED]: '~~Ready for Next Call?',
     NEED_TRAINING: '~~Start Training',
   };
 
@@ -99,7 +99,10 @@ export default ({
       if (_agent.value.contactState === ConnectionStates.PAUSED) {
         acwTimer.start();
       } else {
-        acwTimer.stop();
+        if (_acwElapsed.value) {
+          acwTimer.stop();
+          _agent.value.toggleOnline(true);
+        }
         _acwElapsed.value = 0;
       }
     },
