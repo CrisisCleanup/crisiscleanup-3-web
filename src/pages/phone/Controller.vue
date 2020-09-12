@@ -2,9 +2,10 @@
   <div class="contents">
     <script-popup
       @dismissed="() => (scriptPopup = false)"
-      :script-name="callType"
       :active="scriptPopup"
       v-if="scriptPopup"
+      :script="currentScript"
+      :script-color="currentScriptColor"
     />
     <div
       :class="`ctrl__container w-full h-full phone-controller ${
@@ -77,6 +78,7 @@ import AgentAnalytics from '@/components/phone/Cards/StatsCard.vue';
 import { create } from 'vue-modal-dialogs';
 import ComponentDialog from '@/components/dialogs/ComponentDialog';
 import BoardStatus from '@/components/phone/AgentBoard/Status.vue';
+import useScripts from '@/use/phone/useScripts';
 
 const StatusPopup = () => {
   return () => (
@@ -155,6 +157,7 @@ export default {
       renderPopup,
       scriptPopup,
       callType,
+      ...useScripts({ callType }),
       async savedWorksite(worksite) {
         context.root.$log.debug('worksite saved:', worksite);
         await actions.addCase({
