@@ -42,7 +42,6 @@
         </base-text>
       </div>
       <div class="inline-flex action-btn">
-        <div class="spacer"></div>
         <ProgressButton
           :action="() => handleAgentState()"
           :disabled="!agentState.enabled"
@@ -335,7 +334,7 @@ export default {
 
     .action-btn {
       @apply w-full;
-      justify-content: space-around;
+      justify-content: center;
       button.dialer {
         @apply px-2;
         @apply bg-crisiscleanup-dark-500;
