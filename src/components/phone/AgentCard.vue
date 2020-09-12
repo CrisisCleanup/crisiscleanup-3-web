@@ -199,6 +199,10 @@ export default {
     const _dialerInput = ref({});
     const onDialer = async () => {
       await ctrlStore.setServingOutbounds(false);
+      const wasOnline = agent.value.isOnline;
+      if (wasOnline) {
+        await agent.value.toggleOnline(false);
+      }
       const compDialog = create(ComponentDialog);
       await compDialog({
         title: context.root.$t('~~Enter a Phone Number'),
@@ -224,14 +228,25 @@ export default {
             userId: currentUser.value.id,
             language: currentUser.value.primary_language.id,
           });
+          if (!agent.value.isOnline) {
+            await agent.value.toggleOnline(true);
+          }
           await ctrlStore.setServingOutbounds(true);
-          await ctrlStore.setOutbound(outbound);
-          await PhoneOutbound.api().callOutbound(outbound.id);
-
-          context.root.$toasted.success(context.root.$t('~~Success!'));
+          await ctrlStore.serveOutbound({
+            agent: agent.value,
+            incident: currentIncident.value,
+          });
+          context.root.$toasted.success(
+            context.root.$t('~~Success! Calling momentarily...'),
+          );
+          return outbound;
         }
       }
       await ctrlStore.setServingOutbounds(true);
+      if (wasOnline && !agent.value.isOnline) {
+        await agent.value.toggleOnline(true);
+      }
+      return true;
     };
 
     return {
