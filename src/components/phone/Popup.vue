@@ -1,6 +1,46 @@
 <template>
   <modal v-show="!dismissState.state.value" modal-classes="max-w-lg">
     <template #header>
+      <div
+        class="modal-script"
+        :style="{ backgroundColor: currentScriptColor }"
+      >
+        <div class="script__header">
+          <div class="script__title flex">
+            <base-text variant="h1" semi-bold>
+              {{ $t(currentScriptHeader[0]) }}
+            </base-text>
+            <base-text variant="h1" bold>
+              {{ $t(' ' + currentScriptHeader[1]) }}
+            </base-text>
+          </div>
+          <div class="script__body flex">
+            <base-text variant="body">
+              {{ `"${$t(currentScript)}"` }}
+            </base-text>
+          </div>
+        </div>
+        <div
+          v-if="currentScriptHeader.length >= 2"
+          class="script__footer flex justify-center items-center pt-3 px-2 w-full h-full"
+        >
+          <template v-for="item in currentScriptHeader[2]">
+            <div :key="item.title" class="flex items-center px-2">
+              <base-text variant="h1" :style="{ color: item.accent }" bold>
+                {{ $t(item.title) }}
+              </base-text>
+              <div class="flex flex-col text-crisiscleanup-dark-400 px-3">
+                <base-text variant="bodysm" :style="{ color: item.accent }">
+                  {{ $t(item.body) }}
+                </base-text>
+                <base-text variant="bodysm" class="text-crisiscleanup-dark-400">
+                  {{ $t(item.note) }}
+                </base-text>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
       <div class="header">
         <DisasterIcon
           v-if="currentIncident && currentIncident.incidentImage"
@@ -15,20 +55,6 @@
     </template>
 
     <div class="modal--body">
-      <div class="modal-script">
-        <base-text variant="body" class="script">
-          {{
-            $t(
-              "~~ Press 1 to let us know you're ready, then we will call you right back with the live call.",
-            )
-          }}
-        </base-text>
-        <base-text variant="body" class="script">
-          {{
-            $t("Don't worry, your number will never be shared with the caller.")
-          }}
-        </base-text>
-      </div>
       <div class="modal-callinfo">
         <div class="caller">
           <ccu-icon with-text size="md" :type="enums.icons.phone_user">
@@ -100,20 +126,24 @@ import useIncident from '@/use/worksites/useIncident';
 import useEnums from '@/use/useEnums';
 import useAgent from '@/use/phone/useAgent';
 import useToggle from '@/use/useToggle';
+import useScripts from '@/use/phone/useScripts';
 
 export default {
   name: 'IncomingPopup',
   components: { CaseCard, DisasterIcon },
   setup() {
     const { agent } = useAgent();
-    const { callerCases, ...contact } = useContact({ agent });
+    const { callerCases, callType, ...contact } = useContact({ agent });
     const dismissState = useToggle();
+
     return {
       ...contact,
-      ...useUser(),
       ...useCaseCards({ cases: callerCases, addNew: false }),
       ...useIncident(),
+      ...useUser(),
       ...useEnums(),
+      ...useScripts({ callType }),
+      callType,
       dismissState,
     };
   },
@@ -124,8 +154,9 @@ export default {
 .header {
   display: inline-flex;
   align-items: center;
-  justify-content: space-around;
-  @apply pt-6 px-6;
+  justify-content: center;
+  @apply w-full;
+  @apply py-4 px-6;
   p {
     @apply px-4;
   }
@@ -139,16 +170,52 @@ export default {
 @mixin divider {
   width: 100%;
   height: 1px;
-  @apply bg-crisiscleanup-dark-100;
+  @apply bg-crisiscleanup-dark-300;
+  opacity: 0.25;
   content: '';
   position: absolute;
-  margin-left: -2rem;
-  margin-right: -2rem;
 }
 
 $neg-body-x-pad: calc(0rem - theme('spacing.8'));
 
 .modal {
+  &-script {
+    @apply py-8 w-full shadow-sm;
+    .script {
+      &__header {
+        position: relative;
+        .script__title {
+          justify-content: center;
+          flex-wrap: wrap;
+          text-align: center;
+          p {
+            &:first-child {
+              @apply pr-2;
+            }
+            @apply text-crisiscleanup-dark-500;
+          }
+        }
+        .script__body {
+          @apply h-full w-full;
+          justify-content: center;
+          align-items: stretch;
+          @apply py-4 px-6;
+          &:after {
+            @include divider;
+          }
+          &:before {
+            @include divider;
+            bottom: 0;
+          }
+          p {
+            text-align: center;
+            @apply text-crisiscleanup-dark-400 pt-4 px-4;
+          }
+        }
+      }
+    }
+  }
+
   &--body {
     display: flex;
     flex-direction: column;
@@ -156,24 +223,6 @@ $neg-body-x-pad: calc(0rem - theme('spacing.8'));
     @apply px-8;
     .modal {
       position: relative;
-      &-script {
-        @apply py-4;
-        &:after {
-          @include divider;
-        }
-        &:before {
-          @include divider;
-        }
-        p.script {
-          &:first-child {
-            @apply mt-4 pb-6 px-3;
-          }
-          &:last-child {
-            @apply mb-4 px-3;
-          }
-          @apply text-crisiscleanup-dark-300;
-        }
-      }
       &-callinfo {
         @apply pb-4;
         display: flex;

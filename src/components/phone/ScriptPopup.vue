@@ -1,6 +1,9 @@
 <template>
   <div class="script" ref="script">
-    <div :class="`script--wrapper ${checkState ? 'dismiss' : ''}`">
+    <div
+      :class="`script--wrapper ${checkState ? 'dismiss' : ''}`"
+      :style="{ backgroundColor: scriptColor }"
+    >
       <div class="script-body">
         <div class="title">
           <base-text variant="h1" weight="700"
@@ -9,7 +12,7 @@
         </div>
         <div class="body">
           <base-text>
-            {{ currentScript }}
+            {{ $t(script) }}
           </base-text>
         </div>
         <div class="action">
@@ -23,9 +26,7 @@
 
 <script>
 import { UserMixin, LocalStorageMixin, IncidentMixin } from '@/mixins';
-import { template } from 'lodash';
 import VueTypes from 'vue-types';
-import { Scripts } from '@/store/modules/phone/controller';
 
 export default {
   name: 'ScriptPopup',
@@ -33,11 +34,11 @@ export default {
   data() {
     return {
       checkState: false,
-      scripts: Scripts,
     };
   },
   props: {
-    scriptName: VueTypes.string.def('inbound'),
+    script: VueTypes.string,
+    scriptColor: VueTypes.string,
     active: VueTypes.string.def(false),
   },
   methods: {
@@ -70,15 +71,6 @@ export default {
       this.animateScript(true);
     }
   },
-  computed: {
-    currentScript() {
-      const script = this.scripts[this.scriptName];
-      return template(script)({
-        name: this.currentUser.first_name,
-        incidentType: this.currentIncident.incident_type,
-      });
-    },
-  },
 };
 </script>
 
@@ -91,7 +83,7 @@ export default {
 
   &--wrapper {
     transition: 1s ease;
-    @apply bg-crisiscleanup-lightblue-100  w-full h-32 shadow-lg pt-3 px-16;
+    @apply w-full h-32 shadow-lg pt-3 px-16;
     position: absolute;
     top: 0;
     left: 0;

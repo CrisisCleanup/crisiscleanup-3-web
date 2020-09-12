@@ -36,7 +36,7 @@
               <Accordion :cards="cards">
                 <template v-for="c in cards" v-slot:[c.key]>
                   <div :key="c.key" class="scripts__card">
-                    {{ renderScript(c.key) }}
+                    {{ $t(renderScript(c.key)) }}
                   </div>
                 </template>
               </Accordion>

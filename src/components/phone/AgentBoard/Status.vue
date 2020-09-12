@@ -90,7 +90,6 @@ export default {
         if (resp !== 'end') {
           return;
         }
-        return;
       }
       try {
         context.root.$log.info('closing contact!');
