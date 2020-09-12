@@ -1,37 +1,5 @@
 <template>
   <div class="status">
-    <modal
-      v-if="confirmState.state.value"
-      :title="$t('~~Are you sure?')"
-      modal-classes="bg-white max-w-md shadow"
-      closeable
-      @close="confirmState.toggle(false)"
-    >
-      <div class="modal--body">
-        <base-text variant="body">
-          {{ $t('~~You have not saved any changes to any worksites yet!') }}
-        </base-text>
-        <base-text variant="body">
-          {{ $t('~~Are you sure you want to close this case?') }}
-        </base-text>
-      </div>
-      <template #footer>
-        <div class="modal--footer flex flex-row p-2">
-          <base-button
-            size="medium"
-            variant="solid"
-            :action="() => confirmState.toggle(false)"
-            >{{ $t('~~Keep Editing') }}</base-button
-          >
-          <base-button
-            size="medium"
-            variant="solid"
-            :action="() => endContact(true)"
-            >{{ $t('~~End Call') }}</base-button
-          >
-        </div>
-      </template>
-    </modal>
     <ModelSelectInput
       :float-label="selectId"
       name="status"
@@ -74,10 +42,11 @@ import { ref } from '@vue/composition-api';
 import { unwrap } from '@/utils/wrap';
 import useController from '@/use/phone/useController';
 import useContact from '@/use/phone/useContact';
-import useToggle from '@/use/useToggle';
 import useAgent from '@/use/phone/useAgent';
 import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
 import _ from 'lodash';
+import { create } from 'vue-modal-dialogs';
+import MessageBox from '@/components/dialogs/MessageBox.vue';
 
 export default {
   name: 'BoardStatus',
@@ -93,7 +62,6 @@ export default {
     const { agent } = useAgent();
     const { getters, state, actions } = useController();
     const { currentContact } = useContact({ agent });
-    const confirmState = useToggle();
     const selectedStatus = ref(null);
 
     const endContact = async (force = false) => {
@@ -101,7 +69,27 @@ export default {
         context.root.$log.debug(
           'agent tried to end contact w/o making any changes!',
         );
-        confirmState.toggle(true);
+        const confirmDialog = create(MessageBox);
+        const resp = await confirmDialog({
+          title: context.root.$t('~~Are you sure?'),
+          content: context.root.$t(
+            '~~You have not saved any changes to any worksites yet!\nAre you sure you want to close this case?',
+          ),
+          actions: {
+            stay: {
+              text: context.root.$t('~~Keep Editing'),
+              type: 'solid',
+            },
+            end: {
+              text: context.root.$t('~~End Call'),
+              type: 'solid',
+            },
+          },
+        });
+        context.root.$log.debug('end contact resp:', resp);
+        if (resp !== 'end') {
+          return;
+        }
         return;
       }
       try {
@@ -128,7 +116,6 @@ export default {
       ...actions,
       selectedStatus,
       endContact,
-      confirmState,
       onStatusSelect,
     };
   },
