@@ -176,7 +176,10 @@ $neg-hidden: calc(0rem - theme('width.64'));
     transform: translateX(0px);
   }
   &__current {
+    max-height: 50vh;
+    overflow: auto;
     lost-row: 4/5;
+    scrollbar-width: none;
     ^&__item {
       &:first-child {
         @apply pb-3;
