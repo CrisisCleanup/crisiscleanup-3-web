@@ -5,6 +5,7 @@
 
 import detectBrowserLanguage from 'detect-browser-language';
 import CCUModel from '@/models/model';
+import _ from 'lodash';
 
 export type LanguageType = {|
   id: number,
@@ -36,18 +37,6 @@ export default class Language extends CCUModel<Language> {
     }: LanguageType);
   }
 
-  static fetchById(id: number) {
-    return this.api().get(`/languages/${id}`);
-  }
-
-  static async fetchOrFindId(id: number) {
-    const exists = await this.query().whereId(id).exists();
-    if (!exists) {
-      await this.fetchById(id);
-    }
-    return this.find(id);
-  }
-
   static get browserLanguage() {
     return Language.query()
       .where(
@@ -55,6 +44,23 @@ export default class Language extends CCUModel<Language> {
         Language.store().state.entities.languages._browserLanguage,
       )
       .first();
+  }
+
+  static async fetchBySubtags(subtags: string | string[]) {
+    const _subtags = _.castArray(subtags);
+    const resolved = await _subtags.filter((s) =>
+      this.query().where('subtag', s).exists(),
+    );
+    const unresolved = _.difference(_subtags, resolved);
+    if (!_.isEmpty(unresolved)) {
+      await this.api().get('/languages', {
+        params: {
+          subtag: unresolved.join(','),
+        },
+        dataKey: 'results',
+      });
+    }
+    return subtags.map((s) => this.query().where('subtag', s).first());
   }
 
   /**
