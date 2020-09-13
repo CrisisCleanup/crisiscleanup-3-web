@@ -537,8 +537,7 @@ class ControllerStore extends VuexModule {
       newState[locale] = subState;
     });
 
-    newState.all = {};
-    _.map(localeKeys, (locale) => _.merge(newState.all, newState[locale]));
+    newState.all = _.mergeWith(newState.all, ..._.values(newState), _.add);
 
     Log.debug('new metrics:', newState);
     this.context.commit('setMetrics', newState);
