@@ -27,6 +27,7 @@
       @search:focus="open"
       @search:blur="onBlur"
       @search="(payload) => $emit('search', payload)"
+      v-bind="$attrs"
     >
       <template #selected-option="option">
         <slot name="selected-option" :option="option" />
@@ -277,6 +278,7 @@ export default {
     },
     handleResize() {
       this.currentHeight_ = this.inputRef.parentElement.clientHeight;
+      this.$emit('resize', this.currentHeight_);
     },
   },
 };
