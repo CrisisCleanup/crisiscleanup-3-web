@@ -15,8 +15,10 @@
             {{
               $t('invitationSignup.inviting_to_transfer_confirm', {
                 user: invitation.inviter,
-                fromOrg: invitation.existing_user.organization | getOrganizationName,
-                toOrg: ***,
+                fromOrg: getOrganizationName(
+                  invitation.existing_user.organization,
+                ),
+                toOrg: getOrganizationName(invitation.organization),
               })
             }}
           </div>
@@ -150,6 +152,7 @@ export default {
       title: '',
       invitation: null,
       transferOption: null,
+      getOrganizationName,
     };
   },
   async mounted() {
@@ -210,11 +213,9 @@ export default {
         );
         const result = await this.$confirm({
           title: this.$t('invitationSignup.move_completed'),
-          content: this.$t(
-            `invitationSignup.congrats_move_complete ~~You have been moved to ${getOrganizationName(
-              this.invitation.organization,
-            )}. You may log in now, or reset your password if you have forgotten it.`,
-          ),
+          content: this.$t(`invitationSignup.congrats_move_complete`, {
+            toOrg: getOrganizationName(this.invitation.organization),
+          }),
           actions: {
             forgot: {
               text: this.$t('invitationSignup.forgot_password'),
@@ -234,7 +235,9 @@ export default {
           await PasswordResetRequest.api().post(`/password_reset_requests`, {
             email: this.invitation.invitee_email,
           });
-          await this.$toasted.success(this.$t('invitationSignup.success_reset_password'));
+          await this.$toasted.success(
+            this.$t('invitationSignup.success_reset_password'),
+          );
         }
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
