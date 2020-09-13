@@ -634,14 +634,14 @@
               v-if="currentWorksite && currentWorksite.isHighPriority"
               class="svg-container cursor-pointer"
               v-html="highPrioritySvgActive"
-              :title="$t('~~Unmark as High Priority')"
+              :title="$t('actions.unmark_high_priority')"
               @click="() => toggleHighPriority(false)"
             ></div>
             <div
               v-else
               class="svg-container cursor-pointer"
               v-html="highPrioritySvgInactive"
-              :title="$t('~~Mark as High Priority')"
+              :title="$t('actions.mark_high_priority')"
               @click="() => toggleHighPriority(true)"
             ></div>
           </div>

@@ -189,7 +189,7 @@ export default {
           width: '2fr',
         },
         {
-          title: this.$t('~~Incident'),
+          title: this.$t('incidentApprovalTable.incident'),
           dataIndex: 'incidents',
           key: 'incidents',
           width: '1fr',

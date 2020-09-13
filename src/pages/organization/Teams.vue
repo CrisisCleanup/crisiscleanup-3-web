@@ -15,7 +15,7 @@
     >
       <div class="border bg-white">
         <div class="flex items-center justify-between px-2 py-3">
-          <span>{{ $t('~~Team Management') }}</span>
+          <span>{{ $t('teams.team_management') }}</span>
           <base-button
             :text="$t('teams.create_new_team')"
             variant="solid"

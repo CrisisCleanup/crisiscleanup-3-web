@@ -2,7 +2,7 @@
   <div class="events__container">
     <div class="events__header">
       <base-text variant="h1" bold>
-        {{ $t('~~Event Management') }}
+        {{ $t('adminDashboard.event_management') }}
       </base-text>
     </div>
     <div class="events__body">
