@@ -1,5 +1,10 @@
 <template>
-  <TitledCard title="~~General Statistics" class="agent-metrics">
+  <TitledCard
+    title="~~General Statistics"
+    class="agent-metrics"
+    :dropdown="dropdownProps"
+    @update:dropdown="onDropdownUpdate"
+  >
     <div class="flex flex-grow flex-col">
       <div
         v-for="[title, value] in generalMetrics.entries()"
@@ -41,12 +46,14 @@ import usePhoneMetrics from '@/use/phone/usePhoneMetrics';
 import { Metrics } from '@/store/modules/phone/controller';
 import { useIntervalFn } from '@vueuse/core';
 import TitledCard from '@/components/cards/TitledCard.vue';
+import { ref, onBeforeMount, reactive, set, watch } from '@vue/composition-api';
 
 export default {
   name: 'GeneralStatistics',
   components: { TitledCard },
-  setup() {
-    const { generalMetrics, updateGenMetrics } = usePhoneMetrics({
+  setup(props, context) {
+    const category = ref('all');
+    const { generalMetrics, updateGenMetrics, locales } = usePhoneMetrics({
       metrics: [
         Metrics.CONTACTS_QUEUED,
         Metrics.CALLBACKS_QUEUED,
@@ -57,19 +64,59 @@ export default {
         Metrics.AGENTS_ON_CALL,
         Metrics.NEEDED,
       ],
+      category,
     });
 
     useIntervalFn(
       async () => {
         await updateGenMetrics();
       },
-      20000,
+      31000,
       true,
+    );
+
+    onBeforeMount(() => updateGenMetrics());
+
+    const dropdownProps = reactive({
+      label: 'shortName',
+      itemKey: 'id',
+      value: 0,
+      placeholder: context.root.$t('~~All'),
+      options: [
+        {
+          id: 0,
+          shortName: context.root.$t('~~All'),
+        },
+      ],
+    });
+
+    watch(
+      () => locales.value,
+      () => {
+        if (dropdownProps.options.length === 1) {
+          set(dropdownProps, 'options', [
+            ...dropdownProps.options,
+            ...locales.value.map((l) => ({
+              id: l.id,
+              shortName: l.shortName,
+            })),
+          ]);
+        }
+      },
     );
 
     return {
       ...useUser(),
       generalMetrics,
+      dropdownProps,
+      locales,
+      onDropdownUpdate(value) {
+        if (value === 0) {
+          category.value = 'all';
+        } else {
+          category.value = locales.value.find((l) => l.id === value).subtag;
+        }
+      },
     };
   },
 };
