@@ -86,6 +86,11 @@ class StreamsStore extends VuexModule {
   }
 
   @Action
+  async receivePong() {
+    Log.debug('Pong!');
+  }
+
+  @Action
   async updateAgentConfig({ phone_number }) {
     const number = parsePhoneNumberFromString(String(phone_number), 'US');
     if (!number) {
