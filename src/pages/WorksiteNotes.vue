@@ -77,7 +77,7 @@
         <base-button
           class="my-1 text-primary-dark"
           type="link"
-          :text="$t('~~Add')"
+          :text="$t('actions.add')"
           :action="saveNote"
         />
       </div>

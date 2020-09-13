@@ -12,28 +12,33 @@
           v-if="invitation && invitation.existing_user"
         >
           <div class="text-2xl font-light">
-            {{ invitation.inviter }}
-            {{ $t('~~is inviting you to transfer from') }}
-            {{ invitation.existing_user.organization | getOrganizationName }}
-            {{ $t('~~would you like to transfer:') }}
+            {{
+              $t('invitationSignup.inviting_to_transfer_confirm', {
+                user: invitation.inviter,
+                fromOrg: getOrganizationName(
+                  invitation.existing_user.organization,
+                ),
+                toOrg: getOrganizationName(invitation.organization),
+              })
+            }}
           </div>
           <form-select
             v-model="transferOption"
             :options="[
               {
                 key: 'users',
-                label: $t('~~Yes, just me (and anyone I\'ve recently invited)'),
+                label: $t('invitationSignup.yes_transfer_just_me'),
               },
               {
                 key: 'all',
-                label: $t('~~Yes, me, and all of my claimed cases'),
+                label: $t('invitationSignup.yes_transfer_me_and_cases'),
               },
               {
                 key: 'none',
-                label: $t('~~No, do not transfer me'),
+                label: $t('invitationSignup.no_transfer'),
               },
             ]"
-            :placeholder="$t('~~Select Option')"
+            :placeholder="$t('actions.choose_one_select')"
             select-classes="bg-white border w-full h-12"
             item-key="key"
             label="label"
@@ -42,8 +47,8 @@
             size="large"
             class="px-5 py-2 m-2 flex-grow"
             variant="solid"
-            :text="$t('~~Transfer')"
-            :alt="$t('~~Transfer')"
+            :text="$t('actions.transfer')"
+            :alt="$t('actions.transfer')"
             :action="transfer"
             :disabled="!transferOption || transferOption === 'none'"
           />
@@ -147,6 +152,7 @@ export default {
       title: '',
       invitation: null,
       transferOption: null,
+      getOrganizationName,
     };
   },
   async mounted() {
@@ -186,7 +192,7 @@ export default {
             title,
           });
           await this.$toasted.success(
-            this.$t('~~Successfully accepted invitation. Please log in'),
+            this.$t('invitationSignup.success_accept_invitation'),
           );
           await this.$router.push('/login?accepted=true');
         } catch (e) {
@@ -206,20 +212,18 @@ export default {
           },
         );
         const result = await this.$confirm({
-          title: this.$t('~~Move Completed'),
-          content: this.$t(
-            `~~You have been moved to ${getOrganizationName(
-              this.invitation.organization,
-            )}. You may log in now, or reset your password if you have forgotten it.`,
-          ),
+          title: this.$t('invitationSignup.move_completed'),
+          content: this.$t(`invitationSignup.congrats_move_complete`, {
+            toOrg: getOrganizationName(this.invitation.organization),
+          }),
           actions: {
             forgot: {
-              text: this.$t('~~Forgot Password'),
+              text: this.$t('invitationSignup.forgot_password'),
               type: 'outline',
               buttonClass: 'border border-black',
             },
             login: {
-              text: this.$t('~~Login'),
+              text: this.$t('actions.login'),
               type: 'solid',
             },
           },
@@ -231,7 +235,9 @@ export default {
           await PasswordResetRequest.api().post(`/password_reset_requests`, {
             email: this.invitation.invitee_email,
           });
-          await this.$toasted.success(this.$t('~~Successfully reset password'));
+          await this.$toasted.success(
+            this.$t('invitationSignup.success_reset_password'),
+          );
         }
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));

@@ -26,7 +26,7 @@
       </div>
     </div>
     <tabs class="w-full" ref="tabs">
-      <tab :name="`${$t('~~Manage Users')} (${allTeamUsers.length})`">
+      <tab :name="`${$t('teams.manage_users')} (${allTeamUsers.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"
@@ -43,7 +43,7 @@
             <base-button
               variant="outline"
               class="px-2 py-1"
-              :text="$t('~~Remove from Team')"
+              :text="$t('teams.remove_from_team')"
               :disabled="selectedUsers.length === 0"
               :action="
                 () => {
@@ -170,13 +170,13 @@
           </Table>
         </div>
       </tab>
-      <tab :name="`${$t('~~Manage Cases')} (${assignedWorksites.length})`">
+      <tab :name="`${$t('teams.manage_cases')} (${assignedWorksites.length})`">
         <div class="flex items-center justify-between py-2">
           <base-button
             class="my-1 text-primary-dark"
             type="link"
-            :text="$t('~~+ Assign Claimed Cases')"
-            :alt="$t('~~+ Assign Claimed Cases')"
+            :text="$t('teams.assigned_claimed_cases_plus')"
+            :alt="$t('teams.assigned_claimed_cases_plus')"
             :action="
               () => {
                 showAddCasesModal = true;
@@ -186,7 +186,7 @@
           <base-button
             variant="outline"
             class="px-2 py-1"
-            :text="$t('~~Remove from Team')"
+            :text="$t('teams.remove_from_team')"
             :disabled="selectedWorksites.length === 0"
             :action="
               () => {
@@ -345,7 +345,7 @@
           ></WorkTypeMap>
         </div>
       </tab>
-      <tab :name="$t('~~Notes')">
+      <tab :name="$t('teams.notes')">
         <base-input
           :value="team.notes"
           text-area
@@ -428,7 +428,7 @@
     </modal>
     <modal
       v-if="showAddCasesModal"
-      :title="$t('~~Assign Cases')"
+      :title="$t('teams.assign_cases')"
       closeable
       @close="showAddCasesModal = false"
       modal-classes="max-w-4xl"

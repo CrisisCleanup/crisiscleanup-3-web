@@ -13,7 +13,7 @@
           @click.native="isEditing = true"
         />
         <ccu-icon
-          :alt="$t('actions.delete')"
+          :alt="$t('userView.remove_user')"
           type="trash"
           class="mx-2"
           size="small"
