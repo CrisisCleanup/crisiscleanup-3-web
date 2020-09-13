@@ -8,7 +8,7 @@
     @change="$emit('change', $event)"
     @rowClick="showContacts"
   >
-    <template #profile_completed="slotProps">
+    <template #statuses="slotProps">
       <div class="w-full flex items-center text-primary-dark">
         <font-awesome-icon
           class="mx-1"
@@ -16,6 +16,22 @@
           icon="check-circle"
           v-if="slotProps.item.profile_completed"
         />
+        <badge
+          v-if="slotProps.item.org_verified"
+          width="18px"
+          height="18px"
+          class="text-white bg-green-500 mx-1"
+          :title="$t('~~Org Verified')"
+          >V</badge
+        >
+        <badge
+          v-if="slotProps.item.is_active"
+          width="18px"
+          height="18px"
+          class="text-white bg-green-500 mx-1"
+          :title="$t('~~Active')"
+          >A</badge
+        >
       </div>
     </template>
     <template #incidents="slotProps">
@@ -171,9 +187,9 @@ export default {
           width: '1.5fr',
         },
         {
-          title: this.$t('orgApprovalTable.profile_complete'),
-          dataIndex: 'profile_completed',
-          key: 'profile_completed',
+          title: this.$t('~~Statuses'),
+          dataIndex: 'statuses',
+          key: 'statuses',
           width: '0.75fr',
         },
         {

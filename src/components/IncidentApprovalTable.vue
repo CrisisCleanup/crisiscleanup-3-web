@@ -13,14 +13,30 @@
         {{ slotProps.item.created_at | moment('from', 'now') }}
       </div>
     </template>
-    <template #organization_profile_completed="slotProps">
-      <div class="w-full flex items-center text-primary-dark">
+    <template #organization_statuses="slotProps">
+      <div class="w-full flex items-center">
         <font-awesome-icon
-          class="mx-1"
+          class="mx-1 text-primary-dark"
           size="lg"
           icon="check-circle"
           v-if="slotProps.item.organization_profile_completed"
         />
+        <badge
+          v-if="slotProps.item.org_verified"
+          width="18px"
+          height="18px"
+          class="text-white bg-green-500 mx-1"
+          :title="$t('~~Org Verified')"
+          >V</badge
+        >
+        <badge
+          v-if="slotProps.item.is_active"
+          width="18px"
+          height="18px"
+          class="text-white bg-green-500 mx-1"
+          :title="$t('~~Active')"
+          >A</badge
+        >
       </div>
     </template>
     <template #actions="slotProps">
@@ -126,9 +142,9 @@ export default {
           width: '1fr',
         },
         {
-          title: this.$t('incidentApprovalTable.profile_completed'),
-          dataIndex: 'organization_profile_completed',
-          key: 'organization_profile_completed',
+          title: this.$t('~~Org Statuses'),
+          dataIndex: 'organization_statuses',
+          key: 'organization_statuses',
           width: '1fr',
         },
         {

@@ -8,14 +8,30 @@
     @change="$emit('change', $event)"
     enable-pagination
   >
-    <template #profile_completed="slotProps">
-      <div class="w-full flex items-center text-primary-dark">
+    <template #statuses="slotProps">
+      <div class="w-full flex items-center">
         <font-awesome-icon
-          class="mx-1"
+          class="mx-1 text-primary-dark"
           size="lg"
           icon="check-circle"
           v-if="slotProps.item.profile_completed"
         />
+        <badge
+          v-if="slotProps.item.org_verified"
+          :title="$t('~~Org Verified')"
+          width="18px"
+          height="18px"
+          class="text-white bg-green-500 mx-1"
+          >V</badge
+        >
+        <badge
+          v-if="slotProps.item.is_active"
+          :title="$t('~~Active')"
+          width="18px"
+          height="18px"
+          class="text-white bg-green-500 mx-1"
+          >A</badge
+        >
       </div>
     </template>
     <template #actions="slotProps">
@@ -144,55 +160,37 @@ export default {
           title: this.$t('orgTable.id'),
           dataIndex: 'id',
           key: 'id',
-          width: '0.5fr',
+          width: '5%',
         },
         {
           title: this.$t('orgTable.name'),
           dataIndex: 'name',
           key: 'name',
-          width: '2fr',
+          width: '30%',
         },
         {
-          title: this.$t('orgTable.profile_complete'),
-          dataIndex: 'profile_completed',
-          key: 'profile_completed',
-          width: '0.75fr',
-        },
-        {
-          title: this.$t('orgTable.is_active'),
-          dataIndex: 'is_active',
-          key: 'is_active',
-          width: '0.75fr',
-        },
-        {
-          title: this.$t('orgTable.org_verified'),
-          dataIndex: 'org_verified',
-          key: 'org_verified',
-          width: '0.75fr',
-        },
-        {
-          title: this.$t('orgTable.type_t'),
-          dataIndex: 'type_t',
-          key: 'type_t',
-          width: '1.5fr',
+          title: this.$t('~~Statuses'),
+          dataIndex: 'statuses',
+          key: 'statuses',
+          width: '15%',
         },
         {
           title: this.$t('orgTable.approved_roles'),
           dataIndex: 'approved_roles',
           key: 'approved_roles',
-          width: '1.5fr',
+          width: '15%',
         },
         {
           title: this.$t('orgTable.approved_incidents'),
           dataIndex: 'approved_incidents',
           key: 'approved_incidents',
-          width: '1.5fr',
+          width: '15%',
         },
         {
           title: '',
           dataIndex: 'actions',
           key: 'actions',
-          width: '1.5fr',
+          width: '20%',
         },
       ],
     };
