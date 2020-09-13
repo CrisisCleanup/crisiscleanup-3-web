@@ -264,7 +264,7 @@ export default class AgentClient extends Model {
   }
 
   async heartbeat() {
-    Log.info('pushing client heartbeat');
+    Log.info('Ping!');
     await AgentClient.store().dispatch('websocket/send', {
       action: ACTIONS.CLIENT_HEARTBEAT,
       data: {

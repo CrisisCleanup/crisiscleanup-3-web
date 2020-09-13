@@ -160,10 +160,13 @@ class ControllerStore extends VuexModule {
   }
 
   get getGeneralMetrics() {
-    return (metricOrder: PhoneMetric[]) => {
+    return (metricOrder: PhoneMetric[], category = 'all') => {
       const metricMap = new Map<string, number>();
       metricOrder.map(([name, description]) => {
-        return metricMap.set(description, _.get(this.metrics, name, 0));
+        return metricMap.set(
+          description,
+          _.get(this.metrics[category], name, 0),
+        );
       });
       return metricMap;
     };
@@ -476,48 +479,67 @@ class ControllerStore extends VuexModule {
     // custom metrics
     const metricNames = Object.keys(Metrics);
     metricData.map(({ name, value }, idx) => {
-      let metricName = name;
+      if (!name.includes('#')) {
+        // filter out old non locale specific metrics
+        Log.warn('metric name is deprecated!', name);
+        return null;
+      }
+      let [metricName, metricLocale] = name.split('#');
       if (!metricName) {
         metricName = metricNames[idx];
       }
+      metricLocale = metricLocale || 'en-US';
+      const subState = _.get(newState, metricLocale, {});
       const parsedValue = parseFloat(value) || 0;
       // prevents 'fake' realtime values from going negative
       // till the true metrics come in
-      newState[_.camelCase(metricName)] = parsedValue >= 0 ? parsedValue : 0;
+      subState[_.camelCase(metricName)] = parsedValue >= 0 ? parsedValue : 0;
+      newState[metricLocale] = subState;
       return newState;
     });
-    // set default values of 0
-    newState[Metrics.TOTAL_WAITING[0]] = _.defaultTo(
-      newState[Metrics.TOTAL_WAITING[0]],
-      0,
-    );
-    newState[Metrics.NEEDED[0]] = _.defaultTo(newState[Metrics.NEEDED[0]], 0);
-    newState[Metrics.CALLDOWNS_QUEUED[0]] = _.defaultTo(
-      newState[Metrics.CALLDOWNS_QUEUED[0]],
-      0,
-    );
+    const localeKeys = _.keys(newState);
 
-    const updatedKeys = Object.keys(newState);
-    const getOrUpdate = (metricName: string) =>
-      updatedKeys.includes(metricName)
-        ? newState[metricName]
-        : this.metrics[metricName];
-    const [numCallbacks, numQueued, numOnline, numCalldowns] = [
-      Metrics.CALLBACKS_QUEUED,
-      Metrics.CONTACTS_QUEUED,
-      Metrics.ONLINE,
-      Metrics.CALLDOWNS_QUEUED,
-    ].map((m) => getOrUpdate(m[0]));
+    _.map(localeKeys, (locale) => {
+      const subState = _.get(newState, locale, {});
+      // set default values of 0
+      subState[Metrics.TOTAL_WAITING[0]] = _.defaultTo(
+        subState[Metrics.TOTAL_WAITING[0]],
+        0,
+      );
+      subState[Metrics.NEEDED[0]] = _.defaultTo(subState[Metrics.NEEDED[0]], 0);
+      subState[Metrics.CALLDOWNS_QUEUED[0]] = _.defaultTo(
+        subState[Metrics.CALLDOWNS_QUEUED[0]],
+        0,
+      );
 
-    // count up needed and total if required values exists
-    const totalWaiting = numCallbacks + numQueued + numCalldowns;
-    newState[Metrics.TOTAL_WAITING[0]] =
-      typeof totalWaiting === 'number' ? totalWaiting : 0;
-    const agentCapacity = 12 * numOnline; // each agent can take 12 calls
-    const queueOverflow = totalWaiting - agentCapacity; // number of callers over the capacity
-    Log.debug('current queue capacity overflow:', queueOverflow);
-    const needed = queueOverflow >= 1 ? Math.ceil(queueOverflow / 12) : 0;
-    newState[Metrics.NEEDED[0]] = needed;
+      const updatedKeys = Object.keys(subState);
+      const getOrUpdate = (metricName: string) =>
+        updatedKeys.includes(metricName)
+          ? subState[metricName]
+          : _.get(this.metrics, `${locale}.${metricName}`, 0);
+      const [numCallbacks, numQueued, numOnline, numCalldowns] = [
+        Metrics.CALLBACKS_QUEUED,
+        Metrics.CONTACTS_QUEUED,
+        Metrics.ONLINE,
+        Metrics.CALLDOWNS_QUEUED,
+      ].map((m) => getOrUpdate(m[0]));
+
+      // count up needed and total if required values exists
+      const totalWaiting = numCallbacks + numQueued + numCalldowns;
+      subState[Metrics.TOTAL_WAITING[0]] =
+        typeof totalWaiting === 'number' ? totalWaiting : 0;
+      const agentCapacity = 12 * numOnline; // each agent can take 12 calls
+      const queueOverflow = totalWaiting - agentCapacity; // number of callers over the capacity
+      Log.debug('current queue capacity overflow:', queueOverflow);
+      const needed = queueOverflow >= 1 ? Math.ceil(queueOverflow / 12) : 0;
+      subState[Metrics.NEEDED[0]] = needed;
+
+      newState[locale] = subState;
+    });
+
+    newState.all = {};
+    _.map(localeKeys, (locale) => _.merge(newState.all, newState[locale]));
+
     Log.debug('new metrics:', newState);
     this.context.commit('setMetrics', newState);
   }
