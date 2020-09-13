@@ -29,7 +29,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTagsInput from '@johmun/vue-tags-input';
 import { withA11y } from '@storybook/addon-a11y';
-import centered from '@storybook/addon-centered/vue';
+import VueResize from 'vue-resize';
 import { addDecorator, addParameters, configure } from '@storybook/vue';
 // Import your global components.
 import axios from 'axios';
@@ -77,6 +77,7 @@ Vue.component('unauthenticated-layout', Unauthenticated);
 Vue.config.productionTip = false;
 
 // 3rd Party Libraries
+Vue.use(VueResize);
 Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
 Vue.use(ModalDialogs);
@@ -113,7 +114,6 @@ const i18n = new VueI18n({
 });
 
 // Decorators
-addDecorator(centered);
 addDecorator(withA11y);
 addDecorator(() => ({
   template: '<story/>',
