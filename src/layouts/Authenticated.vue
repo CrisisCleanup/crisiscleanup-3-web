@@ -138,6 +138,7 @@ import { parsePhoneNumber } from 'libphonenumber-js';
 import DisasterIcon from '../components/DisasterIcon';
 import PhoneStatus from '../models/PhoneStatus';
 import CompletedTransferModal from '../components/CompletedTransferModal';
+import { AuthService } from '../services/auth.service';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
@@ -279,8 +280,11 @@ export default {
   async mounted() {
     this.loading = true;
     this.setCurrentIncidentId(null);
+    await User.api().get('/users/me', {});
+    AuthService.updateUser(
+      User.find(this.$store.getters['auth/userId']).$toJson(),
+    );
     await Promise.all([
-      User.api().get('/users/me', {}),
       Incident.api().get(
         '/incidents?fields=id,name,short_name,geofence,locations&limit=150&ordering=-start_at',
         {

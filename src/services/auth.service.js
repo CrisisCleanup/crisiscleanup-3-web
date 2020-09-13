@@ -25,6 +25,17 @@ const AuthService = {
     localStorage.setItem('user', JSON.stringify(user));
     axios.defaults.headers.common.Authorization = `Bearer ${user.access_token}`;
   },
+  updateUser(userClaims) {
+    const user = this.getUser();
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        ...user,
+        user_claims: userClaims,
+      }),
+    );
+    axios.defaults.headers.common.Authorization = `Bearer ${user.access_token}`;
+  },
   removeUser() {
     localStorage.removeItem('user');
     axios.defaults.headers.common.Authorization = null;
