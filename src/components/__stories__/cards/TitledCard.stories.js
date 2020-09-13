@@ -6,6 +6,7 @@ export default {
   args: {
     title: 'Card Title',
     loading: false,
+    dropdown: null,
   },
 };
 
@@ -14,13 +15,30 @@ export const Basic = (args, { argTypes }) => ({
   props: Object.keys(argTypes),
   template: `
   <div class="flex flex-grow w-full h-full">
-     <TitledCard :title="title" :loading="loading">
-      <div class="flex flex-grow bg-white m-6 h-full w-full">
-        <div class="div h-full w-full m-12">
+     <TitledCard :title="title" :loading="loading" :dropdown="dropdown">
+        <div class="div h-full w-full m-24">
           <p>Some content goes here</p>
         </div>
-      </div>
     </TitledCard>
 </div>
   `,
 });
+
+export const WithDropdown = Basic.bind({});
+WithDropdown.args = {
+  title: 'With Dropdown',
+  dropdown: {
+    label: 'name',
+    itemKey: 'name',
+    value: 'One',
+    placeholder: 'One',
+    options: [
+      {
+        name: 'One',
+      },
+      {
+        name: 'Two',
+      },
+    ],
+  },
+};
