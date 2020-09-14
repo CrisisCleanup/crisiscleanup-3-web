@@ -2,13 +2,14 @@
   <TitledCard
     title="~~General Statistics"
     class="agent-metrics"
+    :loading="genMetrics === null"
     :dropdown="dropdownProps"
     @update:dropdown="onDropdownUpdate"
   >
-    <div class="flex flex-grow flex-col">
+    <div v-if="genMetrics !== null" class="flex flex-grow flex-col">
       <div
-        v-for="[title, value] in generalMetrics.entries()"
-        :key="`metric_${title}`"
+        v-for="k in Object.keys(genMetrics)"
+        :key="`metric_${k}_${category}_${genMetrics[k]}`"
         class="metrics--body"
       >
         <hr />
@@ -16,24 +17,26 @@
           <div>
             <ccu-icon
               with-text
-              v-if="title.includes('Total')"
+              v-if="k.includes('Total')"
               type="phone-plus"
               size="xl"
             >
               <base-text variant="body" :weight="600" class="align-middle">{{
-                $t(title)
+                $t(k)
               }}</base-text>
             </ccu-icon>
 
             <base-text
-              v-if="!title.includes('Total')"
+              v-if="!k.includes('Total')"
               variant="bodysm"
               :weight="500"
               class="align-middle"
-              >{{ $t(title) }}</base-text
+              >{{ $t(k) }}</base-text
             >
           </div>
-          <base-text variant="h1">{{ value }}</base-text>
+          <base-text :key="`${k}_${category}_${genMetrics[k]}`" variant="h1">{{
+            genMetrics[k]
+          }}</base-text>
         </div>
       </div>
     </div>
@@ -46,26 +49,22 @@ import usePhoneMetrics from '@/use/phone/usePhoneMetrics';
 import { Metrics } from '@/store/modules/phone/controller';
 import { useIntervalFn } from '@vueuse/core';
 import TitledCard from '@/components/cards/TitledCard.vue';
-import { ref, onBeforeMount, reactive, set, watch } from '@vue/composition-api';
+import {
+  ref,
+  onMounted,
+  reactive,
+  set,
+  watch,
+  computed,
+} from '@vue/composition-api';
+import { useState } from '@u3u/vue-hooks';
 
 export default {
   name: 'GeneralStatistics',
   components: { TitledCard },
   setup(props, context) {
     const category = ref('all');
-    const { generalMetrics, updateGenMetrics, locales } = usePhoneMetrics({
-      metrics: [
-        Metrics.CONTACTS_QUEUED,
-        Metrics.CALLBACKS_QUEUED,
-        Metrics.CALLDOWNS_QUEUED,
-        Metrics.TOTAL_WAITING,
-        Metrics.ONLINE,
-        Metrics.AVAILABLE,
-        Metrics.AGENTS_ON_CALL,
-        Metrics.NEEDED,
-      ],
-      category,
-    });
+    const { updateGenMetrics, locales, loading } = usePhoneMetrics();
 
     useIntervalFn(
       async () => {
@@ -75,7 +74,7 @@ export default {
       true,
     );
 
-    onBeforeMount(() => updateGenMetrics());
+    onMounted(() => updateGenMetrics());
 
     const dropdownProps = reactive({
       label: 'shortName',
@@ -105,11 +104,44 @@ export default {
       },
     );
 
+    const state = {
+      ...useState('phone.controller', ['metrics', 'loading']),
+    };
+
+    const metricOrder = [
+      Metrics.CONTACTS_QUEUED,
+      Metrics.CALLBACKS_QUEUED,
+      Metrics.CALLDOWNS_QUEUED,
+      Metrics.TOTAL_WAITING,
+      Metrics.ONLINE,
+      Metrics.AVAILABLE,
+      Metrics.AGENTS_ON_CALL,
+      Metrics.NEEDED,
+    ];
+
+    const genMetrics = computed(() => {
+      if (!state.loading.value.generalMetrics) {
+        const metrics = state.metrics.value[category.value];
+        if (!metrics) {
+          return null;
+        }
+        const _metrics = {};
+        metricOrder.map((m) => {
+          _metrics[m[1]] = metrics[m[0]];
+          return m;
+        });
+        return _metrics;
+      }
+      return null;
+    });
+
     return {
       ...useUser(),
-      generalMetrics,
       dropdownProps,
       locales,
+      category,
+      loading,
+      genMetrics,
       onDropdownUpdate(value) {
         if (value === 0) {
           category.value = 'all';
