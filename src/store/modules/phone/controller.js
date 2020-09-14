@@ -477,7 +477,7 @@ class ControllerStore extends VuexModule {
     }
     const newState = {};
     // custom metrics
-    const metricNames = Object.keys(Metrics);
+    const metricNames = _.map(Metrics, '0');
     metricData.map(({ name, value }, idx) => {
       if (!name.includes('#')) {
         // filter out old non locale specific metrics
@@ -497,8 +497,8 @@ class ControllerStore extends VuexModule {
       newState[metricLocale] = subState;
       return newState;
     });
-    const localeKeys = _.keys(newState);
 
+    const localeKeys = _.keys(newState);
     _.map(localeKeys, (locale) => {
       const subState = _.get(newState, locale, {});
       // set default values of 0
@@ -537,7 +537,16 @@ class ControllerStore extends VuexModule {
       newState[locale] = subState;
     });
 
-    newState.all = _.mergeWith(newState.all, ..._.values(newState), _.add);
+    const totals = {};
+    const toBeState = _.omit({ ...this.metrics, ...newState }, ['all']);
+    _.map(metricNames, (mName) => {
+      totals[_.camelCase(mName)] = _.reduce(
+        toBeState,
+        (sum, value) => sum + value[_.camelCase(mName)],
+        0,
+      );
+    });
+    newState.all = totals;
 
     Log.debug('new metrics:', newState);
     this.context.commit('setMetrics', newState);
