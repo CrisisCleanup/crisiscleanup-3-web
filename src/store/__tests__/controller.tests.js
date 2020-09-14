@@ -225,6 +225,50 @@ describe('phone.controller store', () => {
     `);
   });
 
+  it('updateMetrics is additive to current state', async () => {
+    const ctrlStore = getModule(ControllerStore, mockStore);
+    await ctrlStore.updateMetrics({
+      metrics: MockMetrics({ queueCount: 1, online: 1 }),
+    });
+    await ctrlStore.updateMetrics({
+      metrics: MockMetrics({ queueCount: 2, online: 1, locale: 'es-MX' }),
+    });
+    expect(ctrlStore.metrics).toMatchInlineSnapshot(`
+      Object {
+        "all": Object {
+          "agentsAvailable": 2,
+          "agentsNeeded": 0,
+          "agentsOnCall": 2,
+          "agentsOnline": 2,
+          "contactsInQueue": 3,
+          "contactsInQueueOutbound": 0,
+          "contactsScheduledOutbound": 0,
+          "totalWaiting": 3,
+        },
+        "en-US": Object {
+          "agentsAvailable": 1,
+          "agentsNeeded": 0,
+          "agentsOnCall": 1,
+          "agentsOnline": 1,
+          "contactsInQueue": 1,
+          "contactsInQueueOutbound": 0,
+          "contactsScheduledOutbound": 0,
+          "totalWaiting": 1,
+        },
+        "es-MX": Object {
+          "agentsAvailable": 1,
+          "agentsNeeded": 0,
+          "agentsOnCall": 1,
+          "agentsOnline": 1,
+          "contactsInQueue": 2,
+          "contactsInQueueOutbound": 0,
+          "contactsScheduledOutbound": 0,
+          "totalWaiting": 2,
+        },
+      }
+    `);
+  });
+
   it('getGeneralMetrics', async () => {
     const ctrlStore = getModule(ControllerStore, mockStore);
     await ctrlStore.updateMetrics({
