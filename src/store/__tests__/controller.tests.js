@@ -269,6 +269,60 @@ describe('phone.controller store', () => {
     `);
   });
 
+  it('updateMetrics supports partial updates', async () => {
+    const ctrlStore = getModule(ControllerStore, mockStore);
+    await ctrlStore.updateMetrics({
+      metrics: [
+        ...MockMetrics({ queueCount: 0, online: 1 }),
+        ...MockMetrics({ queueCount: 12, online: 1, locale: 'es-MX' }),
+      ],
+    });
+
+    await ctrlStore.updateMetrics({
+      metrics: [
+        {
+          name: 'AGENTS_ONLINE#en-US',
+          type: 'realtime',
+          value: 10,
+        },
+      ],
+    });
+    expect(ctrlStore.metrics).toMatchInlineSnapshot(`
+      Object {
+        "all": Object {
+          "agentsAvailable": 2,
+          "agentsNeeded": 0,
+          "agentsOnCall": 2,
+          "agentsOnline": 11,
+          "contactsInQueue": 12,
+          "contactsInQueueOutbound": 0,
+          "contactsScheduledOutbound": 0,
+          "totalWaiting": 12,
+        },
+        "en-US": Object {
+          "agentsAvailable": 1,
+          "agentsNeeded": 0,
+          "agentsOnCall": 1,
+          "agentsOnline": 10,
+          "contactsInQueue": 0,
+          "contactsInQueueOutbound": 0,
+          "contactsScheduledOutbound": 0,
+          "totalWaiting": 0,
+        },
+        "es-MX": Object {
+          "agentsAvailable": 1,
+          "agentsNeeded": 0,
+          "agentsOnCall": 1,
+          "agentsOnline": 1,
+          "contactsInQueue": 12,
+          "contactsInQueueOutbound": 0,
+          "contactsScheduledOutbound": 0,
+          "totalWaiting": 12,
+        },
+      }
+    `);
+  });
+
   it('getGeneralMetrics', async () => {
     const ctrlStore = getModule(ControllerStore, mockStore);
     await ctrlStore.updateMetrics({

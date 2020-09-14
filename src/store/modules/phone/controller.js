@@ -359,7 +359,18 @@ class ControllerStore extends VuexModule {
 
   @Mutation
   setMetrics(newMetrics: $Shape<MetricsStateT>) {
-    this.metrics = { ...this.metrics, ...newMetrics };
+    const _metrics = _.merge(this.metrics, newMetrics);
+    const totals = {};
+    const metricNames = _.map(Metrics, '0');
+    _.map(metricNames, (mName) => {
+      totals[_.camelCase(mName)] = _.reduce(
+        _.omit(_metrics, ['all']),
+        (sum, value) => sum + value[_.camelCase(mName)],
+        0,
+      );
+    });
+    _metrics.all = totals;
+    this.metrics = _metrics;
   }
 
   @Mutation
@@ -536,17 +547,6 @@ class ControllerStore extends VuexModule {
 
       newState[locale] = subState;
     });
-
-    const totals = {};
-    const toBeState = _.omit({ ...this.metrics, ...newState }, ['all']);
-    _.map(metricNames, (mName) => {
-      totals[_.camelCase(mName)] = _.reduce(
-        toBeState,
-        (sum, value) => sum + value[_.camelCase(mName)],
-        0,
-      );
-    });
-    newState.all = totals;
 
     Log.debug('new metrics:', newState);
     this.context.commit('setMetrics', newState);
