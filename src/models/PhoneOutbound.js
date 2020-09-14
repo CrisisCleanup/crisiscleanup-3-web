@@ -33,10 +33,17 @@ export default class PhoneOutbound extends CCUModel {
 
   static apiConfig = {
     actions: {
-      async getNextOutbound({ incidentId = 199, agentId = '' }) {
+      async getNextOutbound({
+        incidentId = 199,
+        agentId = '',
+        useCalldowns = false,
+      }) {
         let queryUrl = `/phone_outbound?next=${incidentId}`;
         if (agentId) {
           queryUrl = `${queryUrl}&agent=${agentId}`;
+        }
+        if (useCalldowns) {
+          queryUrl = `${queryUrl}&=use_calldowns=1`;
         }
         const phoneOutbound = await this.get(queryUrl);
         const {

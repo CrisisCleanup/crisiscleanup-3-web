@@ -322,6 +322,7 @@ class ControllerStore extends VuexModule {
         outbound = await PhoneOutbound.api().getNextOutbound({
           incidentId: incident.id,
           agentId: agent.agentId,
+          useCalldowns: true,
         });
       } catch (e) {
         Log.info('no outbounds available!');
