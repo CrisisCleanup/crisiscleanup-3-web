@@ -52,16 +52,6 @@ describe('phone.controller store', () => {
     await ctrlStore.updateMetrics({ metrics: metricsIn });
     expect(ctrlStore.metrics).toMatchInlineSnapshot(`
       Object {
-        "all": Object {
-          "agentsAvailable": 1,
-          "agentsNeeded": 0,
-          "agentsOnCall": 1,
-          "agentsOnline": 1,
-          "contactsInQueue": 2,
-          "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
-          "totalWaiting": 2,
-        },
         "en-US": Object {
           "agentsAvailable": 1,
           "agentsNeeded": 0,
@@ -77,16 +67,6 @@ describe('phone.controller store', () => {
     await ctrlStore.updateMetrics({ metrics: MockMetrics({ queueCount: 12 }) });
     expect(ctrlStore.metrics).toMatchInlineSnapshot(`
       Object {
-        "all": Object {
-          "agentsAvailable": 1,
-          "agentsNeeded": 0,
-          "agentsOnCall": 1,
-          "agentsOnline": 1,
-          "contactsInQueue": 12,
-          "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
-          "totalWaiting": 12,
-        },
         "en-US": Object {
           "agentsAvailable": 1,
           "agentsNeeded": 0,
@@ -105,16 +85,6 @@ describe('phone.controller store', () => {
     });
     expect(ctrlStore.metrics).toMatchInlineSnapshot(`
       Object {
-        "all": Object {
-          "agentsAvailable": 0,
-          "agentsNeeded": 3,
-          "agentsOnCall": 1,
-          "agentsOnline": 0,
-          "contactsInQueue": 35,
-          "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
-          "totalWaiting": 35,
-        },
         "en-US": Object {
           "agentsAvailable": 0,
           "agentsNeeded": 3,
@@ -133,16 +103,6 @@ describe('phone.controller store', () => {
     });
     expect(ctrlStore.metrics).toMatchInlineSnapshot(`
       Object {
-        "all": Object {
-          "agentsAvailable": 1,
-          "agentsNeeded": 2,
-          "agentsOnCall": 1,
-          "agentsOnline": 1,
-          "contactsInQueue": 35,
-          "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
-          "totalWaiting": 35,
-        },
         "en-US": Object {
           "agentsAvailable": 1,
           "agentsNeeded": 2,
@@ -161,16 +121,6 @@ describe('phone.controller store', () => {
     });
     expect(ctrlStore.metrics).toMatchInlineSnapshot(`
       Object {
-        "all": Object {
-          "agentsAvailable": 1,
-          "agentsNeeded": 0,
-          "agentsOnCall": 1,
-          "agentsOnline": 1,
-          "contactsInQueue": 0,
-          "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
-          "totalWaiting": 0,
-        },
         "en-US": Object {
           "agentsAvailable": 1,
           "agentsNeeded": 0,
@@ -191,16 +141,6 @@ describe('phone.controller store', () => {
     });
     expect(ctrlStore.metrics).toMatchInlineSnapshot(`
       Object {
-        "all": Object {
-          "agentsAvailable": 6,
-          "agentsNeeded": 0,
-          "agentsOnCall": 2,
-          "agentsOnline": 6,
-          "contactsInQueue": 4,
-          "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
-          "totalWaiting": 4,
-        },
         "en-US": Object {
           "agentsAvailable": 2,
           "agentsNeeded": 0,
@@ -235,16 +175,6 @@ describe('phone.controller store', () => {
     });
     expect(ctrlStore.metrics).toMatchInlineSnapshot(`
       Object {
-        "all": Object {
-          "agentsAvailable": 2,
-          "agentsNeeded": 0,
-          "agentsOnCall": 2,
-          "agentsOnline": 2,
-          "contactsInQueue": 3,
-          "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
-          "totalWaiting": 3,
-        },
         "en-US": Object {
           "agentsAvailable": 1,
           "agentsNeeded": 0,
@@ -289,16 +219,6 @@ describe('phone.controller store', () => {
     });
     expect(ctrlStore.metrics).toMatchInlineSnapshot(`
       Object {
-        "all": Object {
-          "agentsAvailable": 2,
-          "agentsNeeded": 0,
-          "agentsOnCall": 2,
-          "agentsOnline": 11,
-          "contactsInQueue": 12,
-          "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
-          "totalWaiting": 12,
-        },
         "en-US": Object {
           "agentsAvailable": 1,
           "agentsNeeded": 0,
@@ -345,11 +265,11 @@ describe('phone.controller store', () => {
     // should default to ALL
     expect(ctrlStore.getGeneralMetrics(metricOrder)).toMatchInlineSnapshot(`
       Map {
-        "~~On hold now" => 12,
+        "~~On hold now" => 0,
         "~~Remaining Callbacks" => 0,
-        "~~Total People Waiting" => 12,
-        "~~Volunteers Online" => 2,
-        "~~Volunteers on the Phone" => 2,
+        "~~Total People Waiting" => 0,
+        "~~Volunteers Online" => 0,
+        "~~Volunteers on the Phone" => 0,
         "~~Additional Volunteers Needed" => 0,
       }
     `);
