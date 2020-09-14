@@ -60,12 +60,12 @@ export default class Organization extends Model {
         );
       },
 
-      reject(id, reason) {
-        return this.post(
-          `/organizations/${id}/reject`,
-          { approve_reject_reason_t: reason },
-          { save: false },
-        );
+      reject(id, reason, note = null) {
+        const data = { approve_reject_reason_t: reason };
+        if (note) {
+          data.rejection_note = note;
+        }
+        return this.post(`/organizations/${id}/reject`, data, { save: false });
       },
     },
   };

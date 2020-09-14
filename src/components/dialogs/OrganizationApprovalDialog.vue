@@ -6,7 +6,7 @@
           <div class="modal-header flex-shrink">
             <div class="title p-3 flex items-center justify-between border-b">
               <span class="text-base font-bold">{{
-                $t('actions.approve_organization')
+                $t('~~Approve/Reject Organization')
               }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
@@ -26,10 +26,21 @@
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
               class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
               :options="approveRejectReasons"
-              v-model="response"
+              v-model="response.reason"
               item-key="key"
               label="label"
             ></form-select>
+            <base-input
+              class="my-2"
+              text-area
+              v-model="response.note"
+              :rows="3"
+              :placeholder="
+                $t(
+                  '~~In the case of rejection, please add a note to be emailed to the requestor',
+                )
+              "
+            />
           </div>
 
           <div class="modal-footer flex-shrink">
@@ -70,7 +81,10 @@ export default {
   name: 'OrganizationApprovalDialog',
   data() {
     return {
-      response: '',
+      response: {
+        reason: '',
+        note: '',
+      },
       approveRejectReasons: [
         'approveRejectReasons.approve_none',
         'approveRejectReasons.approve_public',

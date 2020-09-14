@@ -137,7 +137,7 @@ export default {
         content: this.$t('orgTable.give_approve_reason'),
       });
       if (result) {
-        await Organization.api().approve(organizationId, result);
+        await Organization.api().approve(organizationId, result.reason);
         this.$emit('reload');
       }
     },
@@ -147,7 +147,11 @@ export default {
         content: this.$t('orgTable.give_reject_reason'),
       });
       if (result) {
-        await Organization.api().reject(organizationId, result);
+        await Organization.api().reject(
+          organizationId,
+          result.reason,
+          result.note,
+        );
         this.$emit('reload');
       }
     },

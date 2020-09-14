@@ -234,7 +234,15 @@ input:disabled {
   background-color: #f7f7f7;
 }
 
+textarea:disabled {
+  background-color: #f7f7f7;
+}
+
 input::placeholder {
+  @apply text-crisiscleanup-dark-200;
+}
+
+textarea::placeholder {
   @apply text-crisiscleanup-dark-200;
 }
 
