@@ -487,12 +487,13 @@ class ControllerStore extends VuexModule {
       if (name.includes('#')) {
         [metricName, metricLocale] = name.split('#');
       }
-      const subState = _.get(newState, metricLocale, {});
+      const subState = _.get(this.metrics, metricLocale, {});
       const parsedValue = parseFloat(value) || 0;
       // prevents 'fake' realtime values from going negative
       // till the true metrics come in
       subState[_.camelCase(metricName)] = parsedValue >= 0 ? parsedValue : 0;
       newState[metricLocale] = subState;
+
       return newState;
     });
 
@@ -514,13 +515,28 @@ class ControllerStore extends VuexModule {
       const getOrUpdate = (metricName: string) =>
         updatedKeys.includes(metricName)
           ? subState[metricName]
-          : _.get(this.metrics, `${locale}.${metricName}`, 0);
-      const [numCallbacks, numQueued, numOnline, numCalldowns] = [
+          : _.get(this.metrics[locale], metricName, 0);
+      const [
+        numCallbacks,
+        numQueued,
+        numOnline,
+        numCalldowns,
+        numAvailable,
+        numOnCall,
+      ] = [
         Metrics.CALLBACKS_QUEUED,
         Metrics.CONTACTS_QUEUED,
         Metrics.ONLINE,
         Metrics.CALLDOWNS_QUEUED,
+        Metrics.AVAILABLE,
+        Metrics.AGENTS_ON_CALL,
       ].map((m) => getOrUpdate(m[0]));
+
+      subState[Metrics.CONTACTS_QUEUED[0]] = numQueued;
+      subState[Metrics.AVAILABLE[0]] = numAvailable;
+      subState[Metrics.AGENTS_ON_CALL[0]] = numOnCall;
+      subState[Metrics.ONLINE[0]] = numOnline;
+      subState[Metrics.CALLBACKS_QUEUED[0]] = numCallbacks;
 
       // count up needed and total if required values exists
       const totalWaiting = numCallbacks + numQueued + numCalldowns;

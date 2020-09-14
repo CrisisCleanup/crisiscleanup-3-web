@@ -53,14 +53,14 @@ describe('phone.controller store', () => {
     expect(ctrlStore.metrics).toMatchInlineSnapshot(`
       Object {
         "en-US": Object {
-          "agentsAvailable": 1,
+          "agentsAvailable": 0,
           "agentsNeeded": 0,
-          "agentsOnCall": 1,
-          "agentsOnline": 1,
-          "contactsInQueue": 2,
+          "agentsOnCall": 0,
+          "agentsOnline": 0,
+          "contactsInQueue": 0,
           "contactsInQueueOutbound": 0,
           "contactsScheduledOutbound": 0,
-          "totalWaiting": 2,
+          "totalWaiting": 0,
         },
       }
     `);
@@ -152,14 +152,14 @@ describe('phone.controller store', () => {
           "totalWaiting": 1,
         },
         "es-MX": Object {
-          "agentsAvailable": 4,
+          "agentsAvailable": 0,
           "agentsNeeded": 0,
-          "agentsOnCall": 1,
-          "agentsOnline": 4,
-          "contactsInQueue": 3,
+          "agentsOnCall": 0,
+          "agentsOnline": 0,
+          "contactsInQueue": 0,
           "contactsInQueueOutbound": 0,
           "contactsScheduledOutbound": 0,
-          "totalWaiting": 3,
+          "totalWaiting": 0,
         },
       }
     `);

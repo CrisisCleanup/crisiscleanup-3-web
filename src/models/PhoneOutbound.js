@@ -43,7 +43,7 @@ export default class PhoneOutbound extends CCUModel {
           queryUrl = `${queryUrl}&agent=${agentId}`;
         }
         if (useCalldowns) {
-          queryUrl = `${queryUrl}&=use_calldowns=1`;
+          queryUrl = `${queryUrl}&use_calldowns=1`;
         }
         const phoneOutbound = await this.get(queryUrl);
         const {
