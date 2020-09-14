@@ -141,6 +141,7 @@ class ControllerStore extends VuexModule {
     agentMetrics: true,
     callerHistory: true,
     historicMetrics: true,
+    generalMetrics: true,
   };
 
   // is serving outbounds
@@ -360,16 +361,6 @@ class ControllerStore extends VuexModule {
   @Mutation
   setMetrics(newMetrics: $Shape<MetricsStateT>) {
     const _metrics = _.merge(this.metrics, newMetrics);
-    const totals = {};
-    const metricNames = _.map(Metrics, '0');
-    _.map(metricNames, (mName) => {
-      totals[_.camelCase(mName)] = _.reduce(
-        _.omit(_metrics, ['all']),
-        (sum, value) => sum + value[_.camelCase(mName)],
-        0,
-      );
-    });
-    _metrics.all = totals;
     this.metrics = _metrics;
   }
 
@@ -476,6 +467,7 @@ class ControllerStore extends VuexModule {
 
   @Action
   async updateMetrics({ metrics }: { metrics?: PhoneMetricUpdate[] } = {}) {
+    this.setLoading({ generalMetrics: false });
     let metricData = metrics;
     if (!metrics) {
       Log.debug('falling back to api to fetch metrics...');
@@ -488,18 +480,12 @@ class ControllerStore extends VuexModule {
     }
     const newState = {};
     // custom metrics
-    const metricNames = _.map(Metrics, '0');
-    metricData.map(({ name, value }, idx) => {
-      if (!name.includes('#')) {
-        // filter out old non locale specific metrics
-        Log.warn('metric name is deprecated!', name);
-        return null;
+    metricData.map(({ name, value }) => {
+      let metricName = name;
+      let metricLocale = 'all';
+      if (name.includes('#')) {
+        [metricName, metricLocale] = name.split('#');
       }
-      let [metricName, metricLocale] = name.split('#');
-      if (!metricName) {
-        metricName = metricNames[idx];
-      }
-      metricLocale = metricLocale || 'en-US';
       const subState = _.get(newState, metricLocale, {});
       const parsedValue = parseFloat(value) || 0;
       // prevents 'fake' realtime values from going negative
@@ -549,7 +535,8 @@ class ControllerStore extends VuexModule {
     });
 
     Log.debug('new metrics:', newState);
-    this.context.commit('setMetrics', newState);
+    this.setMetrics(newState);
+    this.setLoading({ generalMetrics: false });
   }
 
   @MutationAction({ mutate: ['view'] })
