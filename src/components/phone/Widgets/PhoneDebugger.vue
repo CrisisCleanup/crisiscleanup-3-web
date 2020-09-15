@@ -66,6 +66,7 @@ import useContact from '@/use/phone/useContact';
 import useToggle from '@/use/useToggle';
 import { computed, ref } from '@vue/composition-api';
 import _ from 'lodash';
+import { useState } from '@u3u/vue-hooks';
 
 export default {
   name: 'PhoneDebugger',
@@ -75,6 +76,17 @@ export default {
     const visibleState = useToggle();
     const { currentOutbound, currentContact } = useContact({ agent });
     const currentPage = ref('contact');
+    const contactState = {
+      ...useState('entities/phone/contact', [
+        'dnis',
+        'worksites',
+        'pdas',
+        'locale',
+        'outbounds',
+        'inbound',
+        'outbound',
+      ]),
+    };
 
     const configParams = [
       'extension',
@@ -106,6 +118,10 @@ export default {
             }))
           : [],
       ),
+      state: Object.keys(contactState).map((k) => ({
+        title: k,
+        value: _.get(contactState.value, k, 'None'),
+      })),
       outbound: [
         {
           title: 'Serving Outbound',
@@ -120,6 +136,10 @@ export default {
           value: _.get(currentOutbound, 'value.location_name', 'None'),
         },
         {
+          title: 'Controller Outbound',
+          value: _.get(state, 'outbound', 'None'),
+        },
+        {
           title: 'Agent State',
           value: _.get(agent, 'value.fullState', 'None'),
         },
@@ -130,6 +150,22 @@ export default {
         {
           title: 'Call Type',
           value: _.get(currentContact, 'value.callType', 'None'),
+        },
+        {
+          title: 'Total Outbounds',
+          value: _.get(
+            state.metrics,
+            'value.all.contactsInQueueOutboundAll',
+            'None',
+          ),
+        },
+        {
+          title: 'Total Callbacks',
+          value: _.get(
+            state.metrics,
+            'value.all.contactsScheduledOutboundAll',
+            'None',
+          ),
         },
       ],
       config: agent.value
