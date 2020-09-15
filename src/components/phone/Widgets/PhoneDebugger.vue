@@ -120,7 +120,7 @@ export default {
       ),
       state: Object.keys(contactState).map((k) => ({
         title: k,
-        value: _.get(contactState.value, k, 'None'),
+        value: _.get(contactState, `${k}.value`, 'None'),
       })),
       outbound: [
         {

@@ -520,7 +520,8 @@ export default class Contact extends Model {
       ContactAttributes.CALLER_DNIS_ID,
       null,
     );
-    if (_dnis) {
+    if (_dnis !== null) {
+      Log.debug('resolving DNIS using dnis attribute!', _dnis);
       return PhoneDnis.fetchOrFindId(_dnis);
     }
     // first check for contact attr.
@@ -532,12 +533,14 @@ export default class Contact extends Model {
     if (outbound) {
       // if an outbound was found, use
       // the dnis1 id to resolve
+      Log.debug('resolving DNIS using current outbound!', outbound.dnis1);
       return PhoneDnis.fetchOrFindId(outbound.dnis1);
     }
     if (inbound) {
       // if an inbound was found
       // use the dnis raw number to resolve.
       _number = inbound.dnis;
+      Log.debug('resolving DNIS using current current!', inbound.dnis);
     }
     if (!_number) return null;
     const parsed = parsePhoneNumberFromString(_number);
