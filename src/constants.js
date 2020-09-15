@@ -66,6 +66,7 @@ export const ICON_MAP = {
   otherorg: require('@/assets/icons/other-org.svg'),
   dialer: require('@/assets/icons/dialer.svg'),
   hangup: require('@/assets/icons/hangup.svg'),
+  time: require('@/assets/icons/time.svg'),
 };
 /* eslint-enable global-require */
 

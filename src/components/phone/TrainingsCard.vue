@@ -11,14 +11,12 @@
           {{ description }}
         </base-text>
         <div class="flex flex-row justify-start">
-          <div class="flex flex-col">
-            <img src="@/assets/tempclockicon.jpg" class="h-5" />
-          </div>
-          <div class="flex flex-col">
+          <div class="flex">
+            <ccu-icon type="time" size="sm" />
             <!--- Date --->
             <base-text
               variant="bodysm"
-              class="justify-between text-crisiscleanup-grey-800 alight-left"
+              class="pl-1 justify-between text-crisiscleanup-grey-800 alight-left"
             >
               {{ timeToComplete | moment('m:ss') }}
             </base-text>
