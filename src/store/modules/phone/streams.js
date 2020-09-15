@@ -11,6 +11,7 @@ import {
   config,
   Module,
   Mutation,
+  MutationAction,
   VuexModule,
 } from 'vuex-module-decorators';
 import type { AuthState } from '@/store/modules/phone/types';
@@ -60,6 +61,12 @@ class StreamsStore extends VuexModule {
   // streams socket connection status
   connected: boolean = false;
 
+  // heartbeat timestamp
+  lastHeartbeatRecv: number | null = null;
+
+  // heartbeat timestamp sent
+  lastHeartbeatSent: number | null = null;
+
   // streams authentication status
   authed: AuthState = AuthStates.FAIL;
 
@@ -85,9 +92,34 @@ class StreamsStore extends VuexModule {
     this.agentId = agentId;
   }
 
-  @Action
+  @MutationAction({ mutate: ['lastHeartbeatSent', 'connected'] })
+  setHeartbeatTime() {
+    const sentAt = Date.now();
+    let isConnected = this.connected;
+    if (typeof this.lastHeartbeatRecv === 'number') {
+      const threshold = 60; // 1 minute
+      const elapsed = (this.lastHeartbeatRecv - sentAt) / 1000;
+      if (elapsed >= threshold) {
+        // we expect a heartbeat every 30s
+        // if we have not recv one in over a minute
+        // something is wrong.
+        Log.error('heartbeat missed!');
+        isConnected = false;
+      }
+    }
+    return {
+      lastHeartbeatSent: sentAt,
+      connected: isConnected,
+    };
+  }
+
+  @MutationAction({ mutate: ['lastHeartbeatRecv', 'connected'] })
   async receivePong() {
     Log.debug('Pong!');
+    return {
+      lastHeartbeatRecv: Date.now(),
+      connected: true,
+    };
   }
 
   @Action
