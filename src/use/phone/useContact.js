@@ -46,9 +46,7 @@ export default ({ agent }) => {
 
   const callType = computed(() => {
     if (currentContact.value) {
-      return currentContact.value.isInbound
-        ? CallType.INBOUND
-        : CallType.OUTBOUND;
+      return currentContact.value.callType;
     }
     return CallType.INBOUND;
   });
