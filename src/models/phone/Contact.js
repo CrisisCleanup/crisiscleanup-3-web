@@ -161,6 +161,14 @@ export default class Contact extends Model {
     return callType.toLowerCase() === CallType.INBOUND;
   }
 
+  get callType(): $Values<typeof CallType> {
+    return _.get(
+      this.contactAttributes,
+      ContactAttributes.CALL_TYPE,
+      CallType.INBOUND,
+    );
+  }
+
   static afterCreate(model: Contact): void {
     const isNew = model.action === ContactActions.ENTER;
     const initConnection: ConnectionType = {
@@ -221,6 +229,16 @@ export default class Contact extends Model {
   }
 
   static beforeDelete(model: Contact): void {
+    Log.debug('clearing contact state!');
+    Contact.commit((state) => {
+      state.dnis = null;
+      state.worksites = [];
+      state.pdas = [];
+      state.locale = null;
+      state.outbounds = [];
+      state.inbound = null;
+      state.outbound = null;
+    });
     Log.debug('contact has been deleted, attempting to clear connect contact.');
     const connection = Connection.query()
       .withAllRecursive()
