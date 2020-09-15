@@ -13,6 +13,7 @@
 <script>
 import TitledCard from '@/components/cards/TitledCard.vue';
 import LineChart from '@/components/charts/BarLineChart.vue';
+import { theme } from '@/../tailwind.config';
 
 export default {
   name: 'CallVolumeChart',
@@ -58,16 +59,18 @@ export default {
     },
   },
   data() {
-    const now = new Date();
-    const maxBound = now.setDate(now.getDate() - 1);
     return {
       options: {
         cornerRadius: 20,
         responsive: true,
         maintainAspectRatio: false,
         ticks: {
-          max: maxBound,
-          beginAtZero: true,
+          beginAtZero: false,
+        },
+        legend: {
+          align: 'end',
+          fontFamily: theme.extend.fontFamily.sans.join(','),
+          fontColor: theme.extend.colors['crisiscleanup-dark']['300'],
         },
         scales: {
           xAxes: [
@@ -77,19 +80,29 @@ export default {
               bounds: 'data',
               time: {
                 unit: 'day',
+                stepSize: 1,
+                tooltipFormat: 'dddd, MMMM Do',
+              },
+              ticks: {
+                source: 'data',
               },
               stacked: true,
               gridLines: {
                 display: false,
               },
-              ticks: {
-                beginAtZero: true,
+              scaleLabel: {
+                fontFamily: theme.extend.fontFamily.sans.join(','),
+                fontColor: theme.extend.colors['crisiscleanup-dark']['300'],
               },
             },
           ],
           yAxes: [
             {
               stacked: false,
+              scaleLabel: {
+                fontFamily: theme.extend.fontFamily.sans.join(','),
+                fontColor: theme.extend.colors['crisiscleanup-dark']['300'],
+              },
             },
           ],
         },
