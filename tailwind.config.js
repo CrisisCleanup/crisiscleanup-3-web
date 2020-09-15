@@ -44,6 +44,12 @@ module.exports = {
           light: '#fece09',
           dark: '#f79820',
         },
+        // until maria sets us up w/ colors
+        scripts: {
+          inbound: '#CCEBFF',
+          outbound: '#13E768',
+          calldown: '#FFDC68',
+        },
         'crisiscleanup-dark': {
           100: '#dadada',
           200: '#b8b8b8',

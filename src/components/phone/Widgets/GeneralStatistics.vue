@@ -154,7 +154,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .agent-metrics .metrics {
   &--title {
     p {
@@ -166,11 +166,18 @@ export default {
       padding: 0;
       margin: 0;
     }
-    &:nth-child(-n + 4) {
-      @apply bg-crisiscleanup-light-grey;
+    &:nth-child(1) {
+      @apply bg-scripts-inbound;
+    }
+    &:nth-child(2) {
+      @apply bg-scripts-outbound;
+    }
+    &:nth-child(3) {
+      @apply bg-scripts-calldown;
     }
     &:nth-child(4) {
       .metric {
+        @apply bg-crisiscleanup-light-grey;
         div p {
           @apply text-crisiscleanup-dark-500;
         }
