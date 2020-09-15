@@ -11,7 +11,6 @@ import {
   config,
   Module,
   Mutation,
-  MutationAction,
   VuexModule,
 } from 'vuex-module-decorators';
 import type { AuthState } from '@/store/modules/phone/types';
@@ -92,10 +91,20 @@ class StreamsStore extends VuexModule {
     this.agentId = agentId;
   }
 
-  @MutationAction({ mutate: ['lastHeartbeatSent', 'connected'] })
+  @Mutation
+  setBeatTimestamps({ recv, sent } = {}) {
+    if (recv) {
+      this.lastHeartbeatRecv = recv;
+    }
+    if (sent) {
+      this.lastHeartbeatSent = sent;
+    }
+  }
+
+  @Action
   setHeartbeatTime() {
     const sentAt = Date.now();
-    let isConnected = this.connected;
+    let connection = this.connected;
     if (typeof this.lastHeartbeatRecv === 'number') {
       const threshold = 60; // 1 minute
       const elapsed = (this.lastHeartbeatRecv - sentAt) / 1000;
@@ -104,22 +113,22 @@ class StreamsStore extends VuexModule {
         // if we have not recv one in over a minute
         // something is wrong.
         Log.error('heartbeat missed!');
-        isConnected = false;
+        connection = false;
       }
     }
-    return {
-      lastHeartbeatSent: sentAt,
-      connected: isConnected,
-    };
+    this.setConnected(connection);
+    this.setBeatTimestamps({
+      sent: sentAt,
+    });
   }
 
-  @MutationAction({ mutate: ['lastHeartbeatRecv', 'connected'] })
+  @Action
   async receivePong() {
     Log.debug('Pong!');
-    return {
-      lastHeartbeatRecv: Date.now(),
-      connected: true,
-    };
+    this.setConnected(true);
+    this.setBeatTimestamps({
+      recv: Date.now(),
+    });
   }
 
   @Action
