@@ -35,10 +35,10 @@
             </base-text>
           </div>
         </div>
-        <template v-if="trainings.length">
+        <template v-if="trainingItems.length">
           <div class="shadow m-5">
             <trainings-card
-              v-for="(training, idx) in trainings"
+              v-for="(training, idx) in trainingItems"
               :key="idx"
               :image-path="getTrainingThumbnail(training)"
               :description="training.title_t"
@@ -143,7 +143,7 @@ export default {
   methods: {
     isTrainingCompleted(training) {
       return Boolean(
-        this.userTrainings.find(
+        this.userTrainingItems.find(
           (userTraining) => userTraining.training === training.id,
         ),
       );
@@ -151,6 +151,8 @@ export default {
     async onTrainingCompleted() {
       await this.loadTrainingData({ force: true });
       this.selectedTraining = null;
+      this.userTrainingItems = this.userTrainings;
+      this.trainingItems = this.trainings;
     },
     finishTraining() {
       this.$emit('onComplete', true);

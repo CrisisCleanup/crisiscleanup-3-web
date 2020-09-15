@@ -65,7 +65,7 @@ export default {
       ];
     },
     trainingCards() {
-      return this.trainings.map((tr) => ({
+      return this.trainingItems.map((tr) => ({
         imagePath: this.getTrainingThumbnail(tr),
         description: this.$t(tr.title_t),
         timeToComplete: tr.settings.completion_seconds,
