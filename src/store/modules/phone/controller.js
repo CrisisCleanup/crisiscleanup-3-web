@@ -68,6 +68,8 @@ export const ControllerActionTabs = Object.freeze({
  * @prop NEEDED - Calculated number of agents needed.
  * @prop TOTAL_WAITING - Total number of inbound/outbound contacts waiting.
  * @prop CALLDOWNS_QUEUED - Total number of calldowns queued.
+ * @prop CALLBACKS_QUEUED_ALL - Total number of locked+unlocked callbacks.
+ * @prop CALLDOWNS_QUEUED_ALL - Total number of locked+unlocked calldowns.
  * @type {Readonly<{AVAILABLE: [string, string], NEEDED: [string, string], CONTACTS_QUEUED: [string, string], TOTAL_WAITING: [string, string], CALLBACKS_QUEUED: [string, string], AGENTS_ON_CALL: [string, string], ONLINE: [string, string]}>}
  * @readonly
  * @enum {string[]}
@@ -82,6 +84,15 @@ export const Metrics = Object.freeze({
   NEEDED: ['agentsNeeded', '~~Additional Volunteers Needed'],
   TOTAL_WAITING: ['totalWaiting', '~~Total People Waiting'],
   CALLDOWNS_QUEUED: ['contactsScheduledOutbound', '~~Remaining Calldowns'],
+  // admin metrics (includes unlocked+locked)
+  CALLBACKS_QUEUED_ALL: [
+    'contactsInQueueOutboundAll',
+    '~~All Remaining Callbacks',
+  ],
+  CALLDOWNS_QUEUED_ALL: [
+    'contactsScheduledOutboundAll',
+    '~~All Remaining Calldowns',
+  ],
 });
 
 export const Scripts = Object.freeze({
@@ -479,6 +490,7 @@ class ControllerStore extends VuexModule {
     if (!metricData) {
       return;
     }
+    Log.debug('incoming metrics!', metricData);
     const newState = {};
     // custom metrics
     metricData.map(({ name, value }) => {
@@ -506,10 +518,6 @@ class ControllerStore extends VuexModule {
         0,
       );
       subState[Metrics.NEEDED[0]] = _.defaultTo(subState[Metrics.NEEDED[0]], 0);
-      subState[Metrics.CALLDOWNS_QUEUED[0]] = _.defaultTo(
-        subState[Metrics.CALLDOWNS_QUEUED[0]],
-        0,
-      );
 
       const updatedKeys = Object.keys(subState);
       const getOrUpdate = (metricName: string) =>
@@ -523,6 +531,8 @@ class ControllerStore extends VuexModule {
         numCalldowns,
         numAvailable,
         numOnCall,
+        numCallbacksAll,
+        numCalldownsAll,
       ] = [
         Metrics.CALLBACKS_QUEUED,
         Metrics.CONTACTS_QUEUED,
@@ -530,6 +540,8 @@ class ControllerStore extends VuexModule {
         Metrics.CALLDOWNS_QUEUED,
         Metrics.AVAILABLE,
         Metrics.AGENTS_ON_CALL,
+        Metrics.CALLBACKS_QUEUED_ALL,
+        Metrics.CALLDOWNS_QUEUED_ALL,
       ].map((m) => getOrUpdate(m[0]));
 
       subState[Metrics.CONTACTS_QUEUED[0]] = numQueued;
@@ -537,6 +549,8 @@ class ControllerStore extends VuexModule {
       subState[Metrics.AGENTS_ON_CALL[0]] = numOnCall;
       subState[Metrics.ONLINE[0]] = numOnline;
       subState[Metrics.CALLBACKS_QUEUED[0]] = numCallbacks;
+      subState[Metrics.CALLBACKS_QUEUED_ALL[0]] = numCallbacksAll;
+      subState[Metrics.CALLDOWNS_QUEUED_ALL[0]] = numCalldownsAll;
 
       // count up needed and total if required values exists
       const totalWaiting = numCallbacks + numQueued + numCalldowns;
@@ -551,9 +565,9 @@ class ControllerStore extends VuexModule {
       newState[locale] = subState;
     });
 
-    Log.debug('new metrics:', newState);
     this.setMetrics(newState);
     this.setLoading({ generalMetrics: false });
+    Log.debug('new metrics:', this.metrics);
   }
 
   @MutationAction({ mutate: ['view'] })
