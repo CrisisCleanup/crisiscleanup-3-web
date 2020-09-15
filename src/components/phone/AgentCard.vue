@@ -36,7 +36,11 @@
     </div>
     <div class="action">
       <div class="inline-flex status">
-        <span :class="`dot ${agent ? agent.friendlyState : ''}`" />
+        <span
+          :class="`dot ${!connected && 'disconnected'}  ${
+            agent ? agent.friendlyState : ''
+          }`"
+        />
         <base-text :weight="600" variant="body"
           >{{ agentState.statusText | startCase }}
         </base-text>
@@ -59,6 +63,7 @@
           icon-size="md"
           variant="outline"
           ccu-icon="dialer"
+          :disabled="!agentState.enabled"
         />
       </div>
     </div>
@@ -176,7 +181,13 @@ export default {
       tests: [2, 3],
     });
 
-    const { agent, agentState, toggleAgentState, acwDuration } = useAgentState({
+    const {
+      agent,
+      agentState,
+      toggleAgentState,
+      acwDuration,
+      connected,
+    } = useAgentState({
       ...useAgent(),
       context,
       isTrained: allTrainingCompleted,
@@ -249,6 +260,7 @@ export default {
     };
 
     return {
+      connected,
       trainingState,
       showMoreState,
       agent,
@@ -369,6 +381,9 @@ export default {
 
       &.paused {
         @apply bg-crisiscleanup-yellow-500;
+      }
+      &.disconnected {
+        @apply bg-crisiscleanup-grey-600;
       }
     }
   }

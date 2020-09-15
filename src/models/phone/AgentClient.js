@@ -273,5 +273,6 @@ export default class AgentClient extends Model {
         agentId: this.agentId,
       },
     });
+    await AgentClient.store().dispatch('phone.streams/setHeartbeatTime');
   }
 }

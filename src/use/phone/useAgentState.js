@@ -9,6 +9,7 @@ import { ConnectionStates } from '@/models/phone/Connection';
 import { unwrap } from '@/utils/wrap';
 import _ from 'lodash';
 import { useIntervalFn } from '@vueuse/core';
+import { useState } from '@u3u/vue-hooks';
 
 /**
  * Utilize current agent state to compute UI components.
@@ -28,6 +29,9 @@ export default ({
 }) => {
   const _agent = ref<AgentClient>(agent);
   const _acwElapsed = ref(0);
+  const streamsState = {
+    ...useState('phone.streams', ['connected']),
+  };
 
   // UI friendly 'action' string to enact state change.
   const _stateAction = {
@@ -36,10 +40,18 @@ export default ({
     [RouteStates.ROUTABLE]: '~~Stop Taking Calls',
     [ConnectionStates.PAUSED]: '~~Ready for Next Call?',
     NEED_TRAINING: '~~Start Training',
+    DISCONNECTED: '~~No Connection',
   };
 
   // Computed UI friendly values from current state.
   const agentState = computed(() => {
+    if (!streamsState.connected.value) {
+      return {
+        text: _stateAction.DISCONNECTED,
+        enabled: false,
+        statusText: '~~Disconnected',
+      };
+    }
     if (!unwrap(isTrained)) {
       return {
         text: _stateAction.NEED_TRAINING,
@@ -115,5 +127,6 @@ export default ({
     agentState,
     toggleAgentState,
     acwDuration,
+    connected: streamsState.connected,
   };
 };
