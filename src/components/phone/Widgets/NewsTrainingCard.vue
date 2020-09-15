@@ -2,7 +2,7 @@
   <TabbedCard :tabs="tabs" class="h-auto">
     <template #training>
       <TrainingsCard
-        v-for="(training, idx) in trainingItems"
+        v-for="(training, idx) in trainingCards"
         :key="idx"
         :image-path="training.imagePath"
         :description="training.description"
@@ -39,8 +39,8 @@ export default {
     TabbedCard,
   },
   props: {
-    trainings: VueTypes.array,
-    userTrainings: VueTypes.array,
+    trainingItems: VueTypes.array,
+    userTrainingItems: VueTypes.array,
   },
   computed: {
     tabs() {
@@ -64,7 +64,7 @@ export default {
         },
       ];
     },
-    trainingItems() {
+    trainingCards() {
       return this.trainings.map((tr) => ({
         imagePath: this.getTrainingThumbnail(tr),
         description: this.$t(tr.title_t),

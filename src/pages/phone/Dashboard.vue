@@ -26,8 +26,8 @@
           <div class="phone__social">
             <leaderboard />
             <NewsTrainingCard
-              :trainings="trainings"
-              :user-trainings="userTrainings"
+              :training-items="trainings"
+              :user-training-items="userTrainings"
               @phone:showTraining="
                 ($event) => (isShowingTrainingModal = $event)
               "
@@ -39,8 +39,8 @@
       </div>
       <TrainingModal
         v-if="isShowingTrainingModal"
-        :trainings="trainings"
-        :user-trainings="userTrainings"
+        :training-items="trainings"
+        :user-training-items="userTrainings"
         :visible="isShowingTrainingModal"
         @onClose="isShowingTrainingModal = false"
         @onComplete="onTrainingComplete"

@@ -105,8 +105,8 @@ export default {
   },
   props: {
     visible: VueTypes.bool.def(false),
-    trainings: VueTypes.array,
-    userTrainings: VueTypes.array,
+    trainingItems: VueTypes.array,
+    userTrainingItems: VueTypes.array,
   },
   data() {
     return {
