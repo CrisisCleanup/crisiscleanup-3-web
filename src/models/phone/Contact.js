@@ -534,7 +534,10 @@ export default class Contact extends Model {
       // if an outbound was found, use
       // the dnis1 id to resolve
       Log.debug('resolving DNIS using current outbound!', outbound.dnis1);
-      return PhoneDnis.fetchOrFindId(outbound.dnis1);
+      const outDnis = await PhoneDnis.fetchOrFindId(outbound.dnis1);
+      if (!outDnis || _.isEmpty(outDnis)) {
+        Log.info('failed to resolve dnis from outbound!', outDnis);
+      }
     }
     if (inbound) {
       // if an inbound was found
