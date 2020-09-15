@@ -59,7 +59,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 0,
           "contactsInQueue": 0,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 0,
         },
       }
@@ -74,7 +75,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 1,
           "contactsInQueue": 12,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 12,
         },
       }
@@ -92,7 +94,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 0,
           "contactsInQueue": 35,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 35,
         },
       }
@@ -110,7 +113,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 1,
           "contactsInQueue": 35,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 35,
         },
       }
@@ -128,7 +132,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 1,
           "contactsInQueue": 0,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 0,
         },
       }
@@ -148,7 +153,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 2,
           "contactsInQueue": 1,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 1,
         },
         "es-MX": Object {
@@ -158,7 +164,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 0,
           "contactsInQueue": 0,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 0,
         },
       }
@@ -182,7 +189,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 1,
           "contactsInQueue": 1,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 1,
         },
         "es-MX": Object {
@@ -192,7 +200,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 1,
           "contactsInQueue": 2,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 2,
         },
       }
@@ -226,7 +235,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 10,
           "contactsInQueue": 0,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 0,
         },
         "es-MX": Object {
@@ -236,7 +246,8 @@ describe('phone.controller store', () => {
           "agentsOnline": 1,
           "contactsInQueue": 12,
           "contactsInQueueOutbound": 0,
-          "contactsScheduledOutbound": 0,
+          "contactsInQueueOutboundAll": 0,
+          "contactsScheduledOutboundAll": 0,
           "totalWaiting": 12,
         },
       }
