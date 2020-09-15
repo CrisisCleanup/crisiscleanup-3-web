@@ -94,27 +94,25 @@ import { TrainingMixin } from '@/mixins';
 import TrainingsCard from '@/components/phone/TrainingsCard.vue';
 import Training from '@/components/phone/Training.vue';
 import _ from 'lodash';
+import VueTypes from 'vue-types';
 
 export default {
   name: 'TrainingsModal',
+  mixins: [TrainingMixin],
   components: {
     'trainings-card': TrainingsCard,
     'training-detail': Training,
   },
-  mixins: [TrainingMixin],
   props: {
-    visible: Boolean,
-  },
-  async mounted() {
-    await this.loadTrainingData();
+    visible: VueTypes.bool.def(false),
+    trainings: VueTypes.array,
+    userTrainings: VueTypes.array,
   },
   data() {
     return {
       isShowingTrainingModal: false,
       ready: false,
       selectedTraining: null,
-      trainings: [],
-      userTrainings: [],
     };
   },
   computed: {
@@ -151,7 +149,7 @@ export default {
       );
     },
     async onTrainingCompleted() {
-      await this.loadTrainingData();
+      await this.loadTrainingData({ force: true });
       this.selectedTraining = null;
     },
     finishTraining() {

@@ -2,7 +2,7 @@
   <TabbedCard :tabs="tabs" class="h-full">
     <template #training>
       <TrainingsCard
-        v-for="(training, idx) in trainings"
+        v-for="(training, idx) in trainingItems"
         :key="idx"
         :image-path="training.imagePath"
         :description="training.description"
@@ -27,13 +27,20 @@
 import NewsCard from '@/components/phone/NewsCard.vue';
 import TrainingsCard from '@/components/phone/TrainingsCard.vue';
 import TabbedCard from '@/components/cards/TabbedCard.vue';
+import { TrainingMixin } from '@/mixins';
+import VueTypes from 'vue-types';
 
 export default {
   name: 'NewsTrainingCard',
+  mixins: [TrainingMixin],
   components: {
     NewsCard,
     TrainingsCard,
     TabbedCard,
+  },
+  props: {
+    trainings: VueTypes.array,
+    userTrainings: VueTypes.array,
   },
   computed: {
     tabs() {
@@ -57,19 +64,12 @@ export default {
         },
       ];
     },
-    trainings() {
-      return [
-        {
-          imagePath: require('@/assets/crisiscleanuphand_training.png'),
-          description: this.$t(' ~~Crisis Cleanup Basic Training'),
-          timeToComplete: this.$t('~~10 minutes'),
-        },
-        {
-          imagePath: require('@/assets/crisiscleanupphone_training.png'),
-          description: this.$t('~~Phone System Basic Training'),
-          timeToComplete: this.$t('~~15 minutes'),
-        },
-      ];
+    trainingItems() {
+      return this.trainings.map((tr) => ({
+        imagePath: this.getTrainingThumbnail(tr),
+        description: this.$t(tr.title_t),
+        timeToComplete: tr.settings.completion_seconds,
+      }));
     },
   },
 };

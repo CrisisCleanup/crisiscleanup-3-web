@@ -26,6 +26,8 @@
           <div class="phone__social">
             <leaderboard />
             <NewsTrainingCard
+              :trainings="trainings"
+              :user-trainings="userTrainings"
               @phone:showTraining="
                 ($event) => (isShowingTrainingModal = $event)
               "
@@ -37,6 +39,8 @@
       </div>
       <TrainingModal
         v-if="isShowingTrainingModal"
+        :trainings="trainings"
+        :user-trainings="userTrainings"
         :visible="isShowingTrainingModal"
         @onClose="isShowingTrainingModal = false"
         @onComplete="onTrainingComplete"
@@ -57,9 +61,11 @@ import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics.vue'
 import AgentAnalytics from '@/components/phone/Cards/StatsCard.vue';
 import CallVolumeChart from '@/components/phone/Widgets/CallVolumeChart.vue';
 import { mapState, mapGetters } from 'vuex';
+import { TrainingMixin } from '@/mixins';
 
 export default {
   name: 'PhoneDashboard',
+  mixins: [TrainingMixin],
   components: {
     AgentAnalytics,
     AgentCard,
@@ -92,6 +98,9 @@ export default {
     totalMissed() {
       return this.buildHistoricDataSet('missed');
     },
+  },
+  async mounted() {
+    await this.loadTrainingData();
   },
   methods: {
     async onTrainingComplete() {
