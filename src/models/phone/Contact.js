@@ -229,16 +229,6 @@ export default class Contact extends Model {
   }
 
   static beforeDelete(model: Contact): void {
-    Log.debug('clearing contact state!');
-    Contact.commit((state) => {
-      state.dnis = null;
-      state.worksites = [];
-      state.pdas = [];
-      state.locale = null;
-      state.outbounds = [];
-      state.inbound = null;
-      state.outbound = null;
-    });
     Log.debug('contact has been deleted, attempting to clear connect contact.');
     const connection = Connection.query()
       .withAllRecursive()
@@ -275,6 +265,16 @@ export default class Contact extends Model {
       return;
     }
     agentClient.toggleOnline(true);
+    Log.debug('clearing contact state!');
+    Contact.commit((state) => {
+      state.dnis = null;
+      state.worksites = [];
+      state.pdas = [];
+      state.locale = null;
+      state.outbounds = [];
+      state.inbound = null;
+      state.outbound = null;
+    });
   }
 
   static afterUpdate(model: Contact): void {
