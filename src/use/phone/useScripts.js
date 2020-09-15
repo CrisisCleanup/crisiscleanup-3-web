@@ -55,7 +55,9 @@ export default ({ callType }: UseScriptsProps) => {
     ],
   };
 
-  const currentScriptHeader = computed(() => scriptHeaders[_callType.value]);
+  const currentScriptHeader = computed(
+    () => scriptHeaders[_callType.value ? _callType.value : CallType.INBOUND],
+  );
 
   const { currentUser } = useUser();
   const { currentIncident } = useIncident();
@@ -63,15 +65,19 @@ export default ({ callType }: UseScriptsProps) => {
   const currentScript = computed(
     () =>
       currentUser.value &&
-      _.template(Scripts[_callType.value])({
-        name: currentUser.value ? currentUser.value.first_name : '',
-        incidentType: currentIncident.value
-          ? currentIncident.value.incident_type
-          : '',
-      }),
+      _.template(Scripts[_callType.value ? _callType.value : CallType.INBOUND])(
+        {
+          name: currentUser.value ? currentUser.value.first_name : '',
+          incidentType: currentIncident.value
+            ? currentIncident.value.incident_type
+            : '',
+        },
+      ),
   );
 
-  const currentScriptColor = computed(() => scriptColors[_callType.value]);
+  const currentScriptColor = computed(
+    () => scriptColors[_callType.value ? _callType.value : CallType.INBOUND],
+  );
 
   return {
     callType: _callType,
