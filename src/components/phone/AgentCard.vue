@@ -183,7 +183,7 @@ export default {
     });
 
     const handleAgentState = () => {
-      if (ctrlStore.view === ControllerPages.CONTROLLER) {
+      if (ctrlStore.view.page === ControllerPages.CONTROLLER) {
         context.root.$toasted.error(
           context.root.$t('~~You must complete the open call to take another!'),
         );
