@@ -21,6 +21,7 @@ export default () => {
       'isServingOutbounds',
       'currentOutbound',
       'historicMetrics',
+      'metrics',
     ]),
   };
 

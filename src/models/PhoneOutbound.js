@@ -68,7 +68,7 @@ export default class PhoneOutbound extends CCUModel {
         return data;
       },
       async callOutbound(id) {
-        const result = this.post(`/phone_outbound/${id}/call`);
+        const result = this.post(`/phone_outbound/${id}/call`, { save: false });
         return result;
       },
       async updateStatus(

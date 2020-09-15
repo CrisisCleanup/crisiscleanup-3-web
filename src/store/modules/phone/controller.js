@@ -342,7 +342,19 @@ class ControllerStore extends VuexModule {
       Log.info('outbound received! calling...', outbound);
       const outboundObj = await PhoneOutbound.fetchOrFindId(outbound.id);
       this.setOutbound(outboundObj);
-      await PhoneOutbound.api().callOutbound(outbound.id);
+      try {
+        await PhoneOutbound.api().callOutbound(outbound.id);
+      } catch (e) {
+        if (e.response) {
+          if (e.response.status === 421) {
+            Log.info('Failed to call outbound, its been completed!');
+            this.setOutbound(null);
+          } else {
+            Log.error('Failed to call outbound! Unexpected error!');
+            Log.error(e);
+          }
+        }
+      }
       return;
     }
     Log.info('controller is not currently serving outbounds!');
