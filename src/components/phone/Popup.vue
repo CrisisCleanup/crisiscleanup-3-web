@@ -124,7 +124,6 @@ import useUser from '@/use/user/useUser';
 import useContact from '@/use/phone/useContact';
 import useIncident from '@/use/worksites/useIncident';
 import useEnums from '@/use/useEnums';
-import useAgent from '@/use/phone/useAgent';
 import useToggle from '@/use/useToggle';
 import useScripts from '@/use/phone/useScripts';
 
@@ -132,8 +131,7 @@ export default {
   name: 'IncomingPopup',
   components: { CaseCard, DisasterIcon },
   setup() {
-    const { agent } = useAgent();
-    const { callerCases, callType, ...contact } = useContact({ agent });
+    const { callerCases, callType, ...contact } = useContact();
     const dismissState = useToggle();
 
     return {

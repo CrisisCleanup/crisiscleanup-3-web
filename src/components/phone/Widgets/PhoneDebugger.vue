@@ -74,7 +74,7 @@ export default {
     const { actions, state } = useController();
     const { agent } = useAgent();
     const visibleState = useToggle();
-    const { currentOutbound, currentContact } = useContact({ agent });
+    const { currentOutbound, currentContact } = useContact();
     const currentPage = ref('contact');
     const contactState = {
       ...useState('entities/phone/contact', [

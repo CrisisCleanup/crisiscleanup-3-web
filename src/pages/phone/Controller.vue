@@ -68,7 +68,6 @@ import PhoneResources from '@/components/phone/AgentActions/Resources.vue';
 import useIncident from '@/use/worksites/useIncident';
 import { computed, ref } from '@vue/composition-api';
 import useContact from '@/use/phone/useContact';
-import useAgent from '@/use/phone/useAgent';
 import Worksite from '@/models/Worksite';
 import { useLocalStorage } from 'vue-composable';
 import useController from '@/use/phone/useController';
@@ -103,8 +102,7 @@ export default {
   setup(props, context) {
     const { getters, state, actions } = useController();
 
-    const { agent } = useAgent();
-    const { currentContact, callType, callerName } = useContact({ agent });
+    const { currentContact, callType, callerName } = useContact();
 
     const { storage } = useLocalStorage('ccu-ivr-hide-script', false);
     const renderPopup = computed(() => storage.value === false);

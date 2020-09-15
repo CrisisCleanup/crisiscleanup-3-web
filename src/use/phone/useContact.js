@@ -4,19 +4,14 @@
  */
 
 import { ref, computed, watch } from '@vue/composition-api';
-import { wrap } from '@/utils/wrap';
-import AgentClient from '@/models/phone/AgentClient';
 import { useState, useGetters } from '@u3u/vue-hooks';
 import _ from 'lodash';
 import { CallType, ContactActions } from '@/models/phone/Contact';
 import { useIntervalFn } from '@vueuse/core';
+import useAgent from '@/use/phone/useAgent';
 
-export type UseContactProps = {|
-  agent: AgentClient,
-|};
-
-export default ({ agent }) => {
-  const _agent = wrap<AgentClient>(agent);
+export default () => {
+  const _agent = useAgent().agent;
 
   const callPending = computed(() =>
     _agent.value ? _agent.value.isConnecting : false,

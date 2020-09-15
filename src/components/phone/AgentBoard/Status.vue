@@ -42,7 +42,6 @@ import { ref } from '@vue/composition-api';
 import { unwrap } from '@/utils/wrap';
 import useController from '@/use/phone/useController';
 import useContact from '@/use/phone/useContact';
-import useAgent from '@/use/phone/useAgent';
 import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
 import _ from 'lodash';
 import { create } from 'vue-modal-dialogs';
@@ -59,9 +58,8 @@ export default {
     ModelSelectInput,
   },
   setup(props, context) {
-    const { agent } = useAgent();
     const { getters, state, actions } = useController();
-    const { currentContact } = useContact({ agent });
+    const { currentContact } = useContact();
     const selectedStatus = ref(null);
 
     const endContact = async (force = false) => {

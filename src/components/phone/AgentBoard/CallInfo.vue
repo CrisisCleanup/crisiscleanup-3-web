@@ -75,7 +75,6 @@ import useContact from '@/use/phone/useContact';
 import { onMounted } from '@vue/composition-api';
 import useController from '@/use/phone/useController';
 import useCaseCards from '@/use/worksites/useCaseCards';
-import useAgent from '@/use/phone/useAgent';
 import { useStore } from '@u3u/vue-hooks';
 
 export default {
@@ -86,11 +85,10 @@ export default {
   },
   setup(props, context) {
     const store = useStore();
-    const { agent } = useAgent();
     const formatDuration = (duration) =>
       context.root.$moment.duration(duration, 'ms').format('h:mm:ss');
 
-    const { syncDuration, callerCases, ...contact } = useContact({ agent });
+    const { syncDuration, callerCases, ...contact } = useContact();
     const { caseCards } = useCaseCards({ cases: callerCases, addNew: true });
 
     onMounted(() => syncDuration.start());
