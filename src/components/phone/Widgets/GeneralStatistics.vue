@@ -13,7 +13,10 @@
         class="metrics--body"
       >
         <hr />
-        <div class="flex flex-row justify-between p-2 px-5 metric">
+        <div
+          class="flex flex-row justify-between p-2 px-5 metric"
+          :class="isCritical && 'critical'"
+        >
           <div>
             <ccu-icon
               with-text
@@ -21,9 +24,12 @@
               type="phone-plus"
               size="xl"
             >
-              <base-text variant="body" :weight="600" class="align-middle">{{
-                $t(k)
-              }}</base-text>
+              <base-text
+                variant="body"
+                :weight="600"
+                class="metric-text align-middle"
+                >{{ $t(k) }}</base-text
+              >
             </ccu-icon>
 
             <base-text
@@ -58,12 +64,14 @@ import {
   computed,
 } from '@vue/composition-api';
 import { useState } from '@u3u/vue-hooks';
+import _ from 'lodash';
 
 export default {
   name: 'GeneralStatistics',
   components: { TitledCard },
   setup(props, context) {
     const category = ref('all');
+    const isCritical = ref(false);
     const { updateGenMetrics, locales, loading } = usePhoneMetrics();
 
     useIntervalFn(
@@ -130,6 +138,10 @@ export default {
           _metrics[m[1]] = metrics[m[0]];
           return m;
         });
+        const needed = _.get(metrics, Metrics.NEEDED[0], 0);
+        if (needed > 5) {
+          isCritical.value = true;
+        }
         return _metrics;
       }
       return null;
@@ -142,6 +154,7 @@ export default {
       category,
       loading,
       genMetrics,
+      isCritical,
       onDropdownUpdate(value) {
         if (value === 0) {
           category.value = 'all';
@@ -183,6 +196,19 @@ export default {
         }
         p {
           @apply text-crisiscleanup-red-400;
+        }
+      }
+    }
+    &:last-child {
+      .metric.critical {
+        div p {
+          @apply text-crisiscleanup-dark-500;
+          font-weight: 700 !important;
+          animation: none;
+        }
+        p {
+          @apply text-crisiscleanup-red-400 font-bold;
+          animation: pulse 2s infinite;
         }
       }
     }
