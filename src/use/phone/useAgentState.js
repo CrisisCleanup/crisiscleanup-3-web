@@ -57,7 +57,7 @@ export default ({
     return {
       text: _.get(
         _stateAction,
-        _agent.value.contactState,
+        _agent.value ? _agent.value.contactState : RouteStates.NOT_ROUTABLE,
         _stateAction[_agent.value.routeState],
       ),
       enabled:
@@ -94,7 +94,7 @@ export default ({
   }, 1000);
 
   watch(
-    () => _agent.value.contactState,
+    () => (_agent.value ? _agent.value.contactState : _agent.value),
     () => {
       if (_agent.value.contactState === ConnectionStates.PAUSED) {
         acwTimer.start();
