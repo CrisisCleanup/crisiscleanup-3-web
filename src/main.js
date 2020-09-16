@@ -35,6 +35,7 @@ import {
   startCase,
   snakeCase,
   getOrganizationName,
+  formatNationalNumber,
 } from '@/filters';
 import Authenticated from '@/layouts/Authenticated';
 import Unauthenticated from '@/layouts/Unauthenticated';
@@ -177,6 +178,7 @@ Vue.filter('truncate', truncateFilter);
 Vue.filter('startCase', startCase);
 Vue.filter('snakeCase', snakeCase);
 Vue.filter('padStart', padStart);
+Vue.filter('formatNationalNumber', formatNationalNumber);
 
 // API & Auth
 if (AuthService.getUser()) {

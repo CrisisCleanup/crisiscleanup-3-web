@@ -28,6 +28,7 @@ export const ICON_MAP = {
   print: require('@/assets/icons/print-big.svg'),
   pin: require('@/assets/icons/pin.svg'),
   phone: require('@/assets/icons/phone.svg'),
+  'phone-classic': require('@/assets/icons/phone-classic.svg'),
   'phone-user': require('@/assets/icons/phone-user.svg'),
   'phone-hangup': require('@/assets/icons/phone-hangup.svg'),
   'phone-plus': require('@/assets/icons/phone-plus.svg'),

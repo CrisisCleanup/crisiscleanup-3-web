@@ -2,6 +2,7 @@
   <TitledCard :loading="!callHistoryReady" title="~~Last 10 Calls">
     <div class="card-container overflow-auto h-full">
       <Table
+        @rowClick="(payload) => $emit('row:click', payload)"
         :body-style="{ overflow: 'auto' }"
         :columns="historyCols"
         :data="historyData"
@@ -15,16 +16,38 @@
             />
           </div>
         </template>
+        <template #mobile="{item}">
+          <div class="inline-flex items-center">
+            <ccu-icon type="phone-classic" size="sm" />
+            <base-text class="pl-1">
+              {{ item.mobile | formatNationalNumber }}
+            </base-text>
+          </div>
+        </template>
         <template #cases="slotProps">
-          <div class="flex flex-wrap w-full">
-            <base-link
+          <div class="flex flex-col">
+            <div
+              class="inline-flex items-center flex-row py-1"
               v-for="caseItem in slotProps.item.cases"
-              :key="caseItem.id"
-              class="mx-1"
-              :to="`/incident/${caseItem.incident}/cases/${caseItem.id}?showOnMap=true`"
             >
-              {{ caseItem.case_number }}
-            </base-link>
+              <base-link
+                :key="caseItem.id"
+                class="mx-1"
+                :to="`/incident/${caseItem.incident}/cases/${caseItem.id}?showOnMap=true`"
+              >
+                {{ caseItem.case_number }}
+              </base-link>
+              <div
+                class="case-svg-container rounded-full p-1 shadow-sm"
+                v-html="getWorkTypeImg(caseItem)"
+                :style="getWorkTypeStyle(caseItem)"
+              />
+            </div>
+          </div>
+        </template>
+        <template #completed_at="slotProps">
+          <div :title="slotProps.item.completed_at">
+            {{ slotProps.item.completed_at | moment('from', 'now') }}
           </div>
         </template>
       </Table>
@@ -39,11 +62,28 @@ import { mapGetters } from 'vuex';
 import { UserMixin, ValidateMixin } from '@/mixins';
 import PhoneStatus from '@/models/PhoneStatus';
 import { get } from 'lodash';
+import DisasterIcon from '@/components/DisasterIcon.vue';
+import Worksite from '@/models/Worksite';
+import { getWorkTypeImage, getColorForWorkType } from '@/filters';
+import Color from 'color';
 
 export default {
   name: 'CallHistory',
-  components: { TitledCard, Table },
+  components: { TitledCard, Table, DisasterIcon },
   mixins: [UserMixin, ValidateMixin],
+  methods: {
+    getWorkTypeStyle(worksite) {
+      const _color = Color(
+        getColorForWorkType(Worksite.getWorkType(worksite.work_types)),
+      );
+      return {
+        backgroundColor: _color.fade(0.8).string(),
+      };
+    },
+    getWorkTypeImg(worksite) {
+      return getWorkTypeImage(Worksite.getWorkType(worksite.work_types));
+    },
+  },
   computed: {
     ...mapGetters('phone.controller', [
       'agentRankings',
@@ -66,15 +106,21 @@ export default {
     historyCols() {
       return [
         {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
-          width: '1fr',
+          title: '',
+          dataIndex: 'incident',
+          key: 'incident',
+          width: '.5fr',
         },
         {
           title: 'Phone Number',
           dataIndex: 'mobile',
           key: 'mobile',
+          width: '1.25fr',
+        },
+        {
+          title: 'Name',
+          dataIndex: 'name',
+          key: 'name',
           width: '1fr',
         },
         {
