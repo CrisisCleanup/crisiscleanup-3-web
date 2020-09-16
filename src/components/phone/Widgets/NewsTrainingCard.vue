@@ -1,5 +1,5 @@
 <template>
-  <TabbedCard :tabs="tabs" class="h-auto">
+  <TabbedCard :tabs="tabs" class="h-auto" :style="{ height: 'auto' }">
     <template #training>
       <TrainingsCard
         v-for="(training, idx) in trainingCards"
