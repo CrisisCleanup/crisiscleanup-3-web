@@ -18,11 +18,16 @@
 </template>
 
 <script>
+import VueTypes from 'vue-types';
+
 export default {
   name: 'OutboundDialer',
+  props: {
+    initialValue: VueTypes.string,
+  },
   data() {
     return {
-      phoneInput: '',
+      phoneInput: this.initialValue,
     };
   },
 };

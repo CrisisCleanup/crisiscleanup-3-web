@@ -3,7 +3,7 @@
     <div class="phone__section">
       <div class="phone__agent">
         <div class="phone__agentcard">
-          <AgentCard />
+          <AgentCard :number-to-dial="numberToDial" />
         </div>
         <div class="phone__general">
           <GeneralStatistics />
@@ -34,7 +34,7 @@
             />
           </div>
         </div>
-        <CallHistory />
+        <CallHistory @row:click="({ mobile }) => (numberToDial = mobile)" />
         <ContactTable v-if="currentUser.isAdmin" />
       </div>
       <TrainingModal
@@ -81,6 +81,7 @@ export default {
     return {
       loading: false,
       isShowingTrainingModal: false,
+      numberToDial: null,
     };
   },
   computed: {

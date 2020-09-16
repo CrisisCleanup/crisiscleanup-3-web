@@ -1,4 +1,5 @@
 import { colors as iconColors, templates } from '@/icons/icons_templates';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import enums from '@/store/modules/enums';
 import { RRule } from 'rrule';
 import _ from 'lodash';
@@ -124,3 +125,11 @@ export const truncateFilter = (value, length, ...args) =>
 export const startCase = (value) => _.startCase(value);
 
 export const snakeCase = (value) => _.snakeCase(value);
+
+export const formatNationalNumber = (mobile) => {
+  const _number = parsePhoneNumberFromString(mobile);
+  if (_number) {
+    return _number.formatNational();
+  }
+  return mobile;
+};

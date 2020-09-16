@@ -88,7 +88,13 @@ import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
 import useAgentState from '@/use/phone/useAgentState';
 import useAgent from '@/use/phone/useAgent';
-import { reactive, ref, onMounted } from '@vue/composition-api';
+import {
+  reactive,
+  ref,
+  onMounted,
+  watch,
+  computed,
+} from '@vue/composition-api';
 import useToggle from '@/use/useToggle';
 import useUser from '@/use/user/useUser';
 import useTraining from '@/use/user/useTraining';
@@ -104,6 +110,7 @@ import OutboundDialer from '@/components/phone/Widgets/OutboundDialer.vue';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import useIncident from '@/use/worksites/useIncident';
 import { EventBus } from '@/event-bus';
+import VueTypes from 'vue-types';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();
@@ -171,6 +178,9 @@ export default {
     TrainingsModal,
     ProgressButton,
   },
+  props: {
+    numberToDial: VueTypes.string,
+  },
   setup(props, context) {
     const showMoreState = useToggle({ state: true });
     const store = useStore();
@@ -207,7 +217,8 @@ export default {
     const { currentUser } = useUser();
 
     const _dialerInput = ref({});
-    const onDialer = async () => {
+
+    const onDialer = async (initialValue = '') => {
       await ctrlStore.setServingOutbounds(false);
       const wasOnline = agent.value.isOnline;
       if (wasOnline) {
@@ -225,6 +236,7 @@ export default {
         },
         props: {
           class: 'py-12 px-3 flex flex-col',
+          initialValue,
         },
       });
       context.root.$log.info('got dialer input:', _dialerInput.value);
@@ -259,7 +271,22 @@ export default {
       return true;
     };
 
+    watch(
+      () => props.numberToDial,
+      async () => {
+        if (props.numberToDial && props.numberToDial !== _dialerInput.value) {
+          _dialerInput.value = props.numberToDial;
+          await onDialer(props.numberToDial);
+        }
+      },
+    );
+
+    const dialerValue = computed(() =>
+      _dialerInput.value ? _dialerInput.value : '',
+    );
+
     return {
+      dialerValue,
       connected,
       trainingState,
       showMoreState,
