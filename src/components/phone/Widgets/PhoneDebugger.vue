@@ -99,8 +99,12 @@ export default {
     const pages = computed(() => ({
       contact: [
         {
-          title: 'Agent State',
-          value: _.get(agent, 'value.fullState', 'None'),
+          title: 'Contact ID (Store)',
+          value: _.get(currentContact, 'value.contactId', 'None'),
+        },
+        {
+          title: 'Contact ID (Connect)',
+          value: _.get(currentContact, 'value.connectContactId', 'None'),
         },
         {
           title: 'Contact State',
@@ -109,6 +113,10 @@ export default {
         {
           title: 'Call Type',
           value: _.get(currentContact, 'value.callType', 'None'),
+        },
+        {
+          title: 'Agent State',
+          value: _.get(agent, 'value.fullState', 'None'),
         },
       ].concat(
         currentContact.value
