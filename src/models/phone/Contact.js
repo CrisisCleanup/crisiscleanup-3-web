@@ -323,7 +323,8 @@ export default class Contact extends Model {
       );
     // Handle connection states on and after actual connection.
     if (
-      (model.state === ContactStates.ROUTED &&
+      (model.action !== ContactActions.DESTROYED &&
+        model.state === ContactStates.ROUTED &&
         !_.isEmpty(connection.streamsConnectionId)) ||
       (model.action === ContactActions.CONNECTED && !model.isInbound)
     ) {
@@ -378,6 +379,10 @@ export default class Contact extends Model {
 
   async updateAttributes() {
     Log.debug('updating attributes...');
+    if (this.action === ContactActions.DESTROYED) {
+      Log.debug('not updating attributes cause destroyed!');
+      return;
+    }
     const wrkSites = await this.getWorksites();
     const pdas = await this.getPdas();
     const outbounds = await this.getOutbounds();
