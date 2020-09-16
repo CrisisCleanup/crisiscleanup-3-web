@@ -3,6 +3,8 @@
     :loading="!agentMetricsReady"
     title="~~Leaderboard"
     class="h-full"
+    :dropdown="dropdownProps"
+    @update:dropdown="onDropdownUpdate"
   >
     <div class="card-container overflow-auto h-full">
       <div
@@ -19,7 +21,11 @@
           {{ $t(t) }}
         </base-text>
       </div>
-      <div v-for="a in agentRankings" :key="a.agent" class="item relative">
+      <div
+        v-for="a in agentRankings.filter(rankFilter)"
+        :key="a.agent"
+        class="item relative"
+      >
         <div class="item--profile">
           <div class="image">
             <img class="rounded-full" :src="a.user.profilePictureUrl" />
@@ -92,6 +98,8 @@ import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 import { useGetters } from '@u3u/vue-hooks';
 import AgentClient from '@/models/phone/AgentClient';
 import LanguageTag from '@/components/tags/LanguageTag.vue';
+import { reactive, ref } from '@vue/composition-api';
+import useUser from '@/use/user/useUser';
 
 export default {
   name: 'Leaderboard',
@@ -100,9 +108,54 @@ export default {
     UserDetailsTooltip,
     LanguageTag,
   },
-  setup() {
-    return {
+  setup(props, context) {
+    const getters = {
       ...useGetters('phone.controller', ['agentRankings', 'agentMetricsReady']),
+    };
+
+    const { currentUser } = useUser();
+
+    const rankFilter = ref((ag) => ag);
+
+    const dropdownProps = reactive({
+      label: 'name',
+      itemKey: 'key',
+      value: 'all',
+      options: [
+        {
+          key: 'all',
+          name: context.root.$t('~~All'),
+        },
+        {
+          key: 'online',
+          name: context.root.$t('~~Online'),
+        },
+        {
+          key: 'my-org',
+          name: context.root.$t('~~My Organization'),
+        },
+      ],
+    });
+
+    const onDropdownUpdate = (value) => {
+      switch (value) {
+        case 'online':
+          rankFilter.value = (ag) => ag.currentState.includes('online');
+          break;
+        case 'my-org':
+          rankFilter.value = (ag) =>
+            ag.organization.id === currentUser.value.organization.id;
+          break;
+        default:
+          rankFilter.value = (ag) => ag;
+      }
+    };
+
+    return {
+      ...getters,
+      dropdownProps,
+      rankFilter,
+      onDropdownUpdate,
       getStateFriendlyName(state) {
         return AgentClient.getFriendlyState(state);
       },

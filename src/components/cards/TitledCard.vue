@@ -105,7 +105,7 @@ export default {
 }
 
 .left {
-  flex: 3;
+  flex: 2;
 }
 
 .right {
