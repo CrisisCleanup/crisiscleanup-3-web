@@ -76,6 +76,7 @@ export const ContactActions = Object.freeze({
  * @param INBOUND_NUMBER - Contact's caller Id (only present in inbound calls!)
  * @param CALL_TYPE - Type of call.
  * @param INBOUND_ID - ID of associated inbound object.
+ * @param OUTBOUND_TYPE - Type of outbound (calldown/callback).
  * @readonly
  * @enum {string}
  */
@@ -92,6 +93,7 @@ export const ContactAttributes = Object.freeze({
   INBOUND_ID: 'TARGET_INBOUND_ID',
   CALLER_DNIS_ID: 'DNIS_ID',
   OUTBOUNDS_OLD: 'ids',
+  OUTBOUND_TYPE: 'OUTBOUND_TYPE',
 });
 
 export const ContactConnectionMap = Object.freeze({
@@ -163,10 +165,18 @@ export default class Contact extends Model {
   }
 
   get callType(): $Values<typeof CallType> {
-    return _.get(
+    const _ctype = _.get(
       this.contactAttributes,
       ContactAttributes.CALL_TYPE,
       CallType.INBOUND,
+    );
+    if (_ctype === CallType.INBOUND) {
+      return CallType.INBOUND;
+    }
+    return _.get(
+      this.contactAttributes,
+      ContactAttributes.OUTBOUND_TYPE,
+      CallType.OUTBOUND,
     );
   }
 
