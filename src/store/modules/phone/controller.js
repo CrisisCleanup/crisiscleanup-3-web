@@ -475,7 +475,7 @@ class ControllerStore extends VuexModule {
           Worksite.api().find_or_fetch(cId, { resolve: false }),
         ),
       );
-      recentContacts = recentContacts.map(async ({ cases, ...c }) => {
+      recentContacts = recentContacts.map(async ({ cases, incident, ...c }) => {
         const wkSites = await Promise.all(
           cases.map(async (cId) => {
             let caseItem = await Worksite.find(cId);
@@ -488,7 +488,8 @@ class ControllerStore extends VuexModule {
             return caseItem;
           }),
         );
-        return { cases: wkSites, ...c };
+        const _incident = await Incident.fetchOrFindId(incident);
+        return { cases: wkSites, incident: _incident, ...c };
       });
       recentContacts = await Promise.all(recentContacts);
       Log.debug('updating caller history:', recentContacts);

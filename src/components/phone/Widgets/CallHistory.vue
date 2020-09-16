@@ -7,9 +7,12 @@
         :data="historyData"
         v-if="callHistoryReady"
       >
-        <template #completed_at="slotProps">
-          <div :title="slotProps.item.completed_at">
-            {{ slotProps.item.completed_at | moment('from', 'now') }}
+        <template #incident="{item}">
+          <div class="justify-center flex flex-grow">
+            <DisasterIcon
+              v-if="item.incident"
+              :current-incident="item.incident"
+            />
           </div>
         </template>
         <template #cases="slotProps">

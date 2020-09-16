@@ -1,7 +1,7 @@
 import Location from '@/models/Location';
-import { Model } from '@vuex-orm/core';
+import CCUModel from '@/models/model';
 
-export default class Incident extends Model {
+export default class Incident extends CCUModel {
   static entity = 'incidents';
 
   static fields() {
