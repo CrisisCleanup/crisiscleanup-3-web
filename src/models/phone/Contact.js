@@ -127,6 +127,7 @@ export default class Contact extends Model {
 
   static state() {
     return {
+      resolveRequested: false,
       dnis: null,
       worksites: [],
       pdas: [],
@@ -418,24 +419,35 @@ export default class Contact extends Model {
     }: { currentOutbound: null | PhoneOutbound } = Contact.store().state[
       'phone.controller'
     ];
+    const { resolveRequested } = Contact.store().state.entities[
+      'phone/contact'
+    ];
+    if (resolveRequested) {
+      Log.debug('case resolution already requested, checking for updates...');
+      const connectContact = ACS.getContactById(contact.contactId);
+      if (connectContact) {
+        const attrs = connectContact.getAttributes();
+        Log.debug('got resolved attributes!', attrs);
+        if (!_.isNil(attrs)) {
+          return attrs;
+        }
+      }
+    }
     if (currentOutbound) {
       const conContact = ACS.getContactById(contact.contactId);
-      if (conContact) {
-        const phone = _.get(
-          this.contactAttributes,
-          ContactAttributes.INBOUND_NUMBER,
-        );
-        if (phone) {
-          const payload = {
-            phone_number: phone,
-            contact_id: conContact.getContactId(),
-          };
-          Contact.api()
-            .post('phone_connect/resolve_cases', payload)
-            .then((resp) =>
-              Log.info('requested api to resolve cases!', payload, resp),
-            );
-        }
+      if (conContact && !resolveRequested) {
+        const payload = {
+          phone_number: currentOutbound.phone_number,
+          contact_id: conContact.getContactId(),
+        };
+        Contact.api()
+          .post('phone_connect/resolve_cases', payload, { save: false })
+          .then((resp) =>
+            Log.info('requested api to resolve cases!', payload, resp),
+          );
+        Contact.commit((state) => {
+          state.resolveRequested = true;
+        });
       }
       Log.info('found current outbound!');
       return {
