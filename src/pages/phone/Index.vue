@@ -34,9 +34,13 @@ export default {
     const { currentIncident } = useIncident();
 
     const { start } = useIntervalFn(() => {
-      agent.value.heartbeat().then(() => {
-        context.root.$log.debug('triggering heartbeat');
-      });
+      if (!agent.value) {
+        context.root.$log.debug('no client to send heartbeat with!');
+      } else {
+        agent.value.heartbeat().then(() => {
+          context.root.$log.debug('triggering heartbeat');
+        });
+      }
     }, 30000);
 
     watch(
