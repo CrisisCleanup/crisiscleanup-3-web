@@ -213,7 +213,7 @@ export default class AgentClient extends Model {
     return AgentClient.isStateOnline(this.state) === AgentStates.ONLINE;
   }
 
-  get user(): User {
+  get user(): typeof User {
     return User.query().whereId(this.userId).first();
   }
 

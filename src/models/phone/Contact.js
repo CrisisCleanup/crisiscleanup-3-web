@@ -26,6 +26,7 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneDnis from '@/models/PhoneDnis';
 import Language from '@/models/Language';
 import PhoneInbound from '@/models/PhoneInbound';
+import type { CaseType } from '@/store/modules/phone/types';
 
 /**
  * Enum of possible contact states.
@@ -137,17 +138,17 @@ export default class Contact extends Model {
     };
   }
 
-  get outbound(): PhoneOutbound {
+  get outbound(): typeof PhoneOutbound {
     const { outbound } = Contact.store().state.entities['phone/contact'];
     return outbound;
   }
 
-  get inbound(): PhoneInbound {
+  get inbound(): typeof PhoneInbound {
     const { inbound } = Contact.store().state.entities['phone/contact'];
     return inbound;
   }
 
-  get dnis(): PhoneDnis {
+  get dnis(): typeof PhoneDnis {
     const { dnis } = Contact.store().state.entities['phone/contact'];
     return dnis;
   }
@@ -178,6 +179,12 @@ export default class Contact extends Model {
         : ContactConnectionMap[model.action],
       contactId: model.contactId,
     };
+    if (model.action === ContactActions.DESTROYED) {
+      Log.debug(
+        'Avoided creating connection for contact b/c its been deleted!',
+      );
+      return;
+    }
     Log.debug('Creating initial connection for contact:', initConnection);
     Connection.insertOrUpdate({ data: initConnection }).then((c) => c);
     model
@@ -454,6 +461,14 @@ export default class Contact extends Model {
     return Contact.parseAttributes(this.attributes);
   }
 
+  get connectContactId(): string | null {
+    const connectContact = ACS.getContactById(this.contactId);
+    if (connectContact) {
+      return connectContact.getContactId();
+    }
+    return null;
+  }
+
   resolveAttributeModels<T>(
     attribute: ContactAttribute,
     model: CCUModel<T>,
@@ -474,34 +489,34 @@ export default class Contact extends Model {
     return 0;
   }
 
-  async getWorksites(): Promise<Worksite[]> {
-    return this.resolveAttributeModels<Worksite>(
+  async getWorksites(): Promise<typeof Worksite[]> {
+    return this.resolveAttributeModels<typeof Worksite>(
       ContactAttributes.WORKSITES,
       Worksite,
     );
   }
 
-  async getPdas(): Promise<Pda[]> {
-    return this.resolveAttributeModels<Pda>(ContactAttributes.PDAS, Pda);
+  async getPdas(): Promise<typeof Pda[]> {
+    return this.resolveAttributeModels<typeof Pda>(ContactAttributes.PDAS, Pda);
   }
 
-  async getOutbounds(): Promise<PhoneOutbound[]> {
+  async getOutbounds(): Promise<typeof PhoneOutbound[]> {
     const {
       currentOutbound,
-    }: { currentOutbound: null | PhoneOutbound } = Contact.store().state[
+    }: { currentOutbound: null | typeof PhoneOutbound } = Contact.store().state[
       'phone.controller'
     ];
     if (currentOutbound) {
       return [currentOutbound];
     }
-    return this.resolveAttributeModels<PhoneOutbound>(
+    return this.resolveAttributeModels<typeof PhoneOutbound>(
       ContactAttributes.OUTBOUND_IDS,
       PhoneOutbound,
     );
   }
 
-  async getInbound(): Promise<PhoneInbound> {
-    return this.resolveAttributeModels<PhoneInbound>(
+  async getInbound(): Promise<typeof PhoneInbound> {
+    return this.resolveAttributeModels<typeof PhoneInbound>(
       ContactAttributes.INBOUND_ID,
       PhoneInbound,
     );
@@ -511,8 +526,8 @@ export default class Contact extends Model {
     inbound,
     outbound,
   }: {
-    inbound: PhoneInbound | null,
-    outbound: PhoneOutbound | null,
+    inbound: typeof PhoneInbound | null,
+    outbound: typeof PhoneOutbound | null,
   } = {}): Promise<PhoneDnis | null> {
     // check for DNIS id in attr
     const _dnis = _.get(

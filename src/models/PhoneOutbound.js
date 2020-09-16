@@ -28,6 +28,7 @@ export default class PhoneOutbound extends CCUModel {
       latest_status: this.attr(),
       location_name: this.attr(),
       priority: this.attr(),
+      external_id: this.attr(),
     };
   }
 

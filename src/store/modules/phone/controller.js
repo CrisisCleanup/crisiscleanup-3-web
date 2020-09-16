@@ -28,7 +28,11 @@ import _ from 'lodash';
 import Agent from '@/models/Agent';
 import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
-import Contact, { CallType } from '@/models/phone/Contact';
+import Contact, {
+  CallType,
+  ContactActions,
+  ContactStates,
+} from '@/models/phone/Contact';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneInbound from '@/models/PhoneInbound';
 import User from '@/models/User';
@@ -323,8 +327,8 @@ class ControllerStore extends VuexModule {
     agent,
     incident,
   }: {
-    agent: AgentClient,
-    incident: Incident,
+    agent: typeof AgentClient,
+    incident: typeof Incident,
   }) {
     if (this.isServingOutbounds) {
       Log.info('attempting to serve outbound call for:', incident);
@@ -344,6 +348,22 @@ class ControllerStore extends VuexModule {
       this.setOutbound(outboundObj);
       try {
         await PhoneOutbound.api().callOutbound(outbound.id);
+        const contactId = outboundObj.external_id
+          ? outboundObj.external_id
+          : `${agent.agentId}#manual-outbound`;
+        const contactPayload = {
+          contactId,
+          action: ContactActions.PENDING,
+          state: ContactStates.QUEUED,
+        };
+        Log.debug('creating outbound contact!', contactPayload);
+        await this.context.dispatch(
+          'phone.streams/updateContact',
+          contactPayload,
+          {
+            root: true,
+          },
+        );
       } catch (e) {
         if (e.response) {
           if (e.response.status === 421) {
