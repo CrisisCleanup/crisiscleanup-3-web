@@ -30,8 +30,8 @@ import type { CaseType } from '@/store/modules/phone/types';
 
 /**
  * Enum of possible contact states.
- * @prop QUEUED - Currently waiting in the primary queue.
- * @prop ROUTED - Currently has a target agent (*Does NOT imply an active connection!)
+ * @param QUEUED - Currently waiting in the primary queue.
+ * @param ROUTED - Currently has a target agent (*Does NOT imply an active connection!)
  * @readonly
  * @enum {string}
  */
@@ -42,15 +42,14 @@ export const ContactStates = Object.freeze({
 
 /**
  * Enum of possible contact actions.
- * Primarily used for metric purpose.
- * @prop ENTER - Contact has entered primary queue.
- * @prop CONNECTING - Contact has been accepted by an agent.
- * @prop CONNECTED - Contact has an active connection with at least 1 agent.
- * @prop ENDED - Contact connection has been terminated.
- * @prop DESTROYED - Contact completely closed (post ACW).
- * @prop ERROR - An exception occured at some point.
- * @prop MISSED - Agent failed to answer inbound, or contact failed to answer outbound.
- * @prop PENDING - Agent is calling contact (outbound).
+ * @param ENTER - Contact has entered primary queue.
+ * @param CONNECTING - Contact has been accepted by an agent.
+ * @param CONNECTED - Contact has an active connection with at least 1 agent.
+ * @param ENDED - Contact connection has been terminated.
+ * @param DESTROYED - Contact completely closed (post ACW).
+ * @param ERROR - An exception occured at some point.
+ * @param MISSED - Agent failed to answer inbound, or contact failed to answer outbound.
+ * @param PENDING - Agent is calling contact (outbound).
  * @readonly
  * @enum {string}
  */
@@ -67,16 +66,16 @@ export const ContactActions = Object.freeze({
 
 /**
  * Enum of possible contact attributes.
- * @prop CALLER_ID - Deprecated: Contact's Caller Id.
- * @prop PDAS - PDAs associated with contact.
- * @prop WORKSITES - Worksites associated with contact.
- * @prop OUTBOUND_IDS - Outbounds associated with contact.
- * @prop LOCALE - Contact's selected locale.
- * @prop INCIDENT - Incident associated with hotline.
- * @prop CALLBACK_NUMBER - Contact's caller Id (only present in callbacks!)
- * @prop INBOUND_NUMBER - Contact's caller Id (only present in inbound calls!)
- * @prop CALL_TYPE - Type of call.
- * @prop INBOUND_ID - ID of associated inbound object.
+ * @param CALLER_ID - Deprecated: Contact's Caller Id.
+ * @param PDAS - PDAs associated with contact.
+ * @param WORKSITES - Worksites associated with contact.
+ * @param OUTBOUND_IDS - Outbounds associated with contact.
+ * @param LOCALE - Contact's selected locale.
+ * @param INCIDENT - Incident associated with hotline.
+ * @param CALLBACK_NUMBER - Contact's caller Id (only present in callbacks!)
+ * @param INBOUND_NUMBER - Contact's caller Id (only present in inbound calls!)
+ * @param CALL_TYPE - Type of call.
+ * @param INBOUND_ID - ID of associated inbound object.
  * @readonly
  * @enum {string}
  */
