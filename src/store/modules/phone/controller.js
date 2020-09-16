@@ -318,8 +318,10 @@ class ControllerStore extends VuexModule {
     }
     await contact.disconnect();
     this.setStatus({ notes: '', statusId: null, modified: [] });
+    this.setCase(null);
     this.setLoading({ callerHistory: true });
     await this.setView({ page: ControllerPages.DASHBOARD });
+    await this.updateMetrics();
   }
 
   @Action
@@ -608,7 +610,7 @@ class ControllerStore extends VuexModule {
   }
 
   @MutationAction({ mutate: ['currentCase'] })
-  setCase(newCase: $Shape<CaseType>) {
+  setCase(newCase: $Shape<CaseType> | null) {
     Log.debug('updating active case:', newCase);
     return { currentCase: newCase };
   }
