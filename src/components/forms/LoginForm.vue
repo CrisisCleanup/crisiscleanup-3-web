@@ -98,13 +98,13 @@ export default {
     async userLogin() {
       try {
         await this.login({ email: this.email, password: this.password });
-        if (this.$route.query.from) {
-          await this.$router.replace(this.$route.query.from);
-        } else {
-          await this.$router.push('/');
-        }
       } catch (e) {
         await this.$toasted.error(this.lang.invalidCreds);
+      }
+      if (this.$route.query.from) {
+        await this.$router.replace(this.$route.query.from);
+      } else {
+        await this.$router.push('/');
       }
     },
   },
