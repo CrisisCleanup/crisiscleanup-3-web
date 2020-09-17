@@ -74,7 +74,7 @@ export default {
     const { actions, state } = useController();
     const { agent } = useAgent();
     const visibleState = useToggle();
-    const { currentOutbound, currentContact } = useContact();
+    const { currentContact } = useContact();
     const currentPage = ref('contact');
     const contactState = {
       ...useState('entities/phone/contact', [
@@ -133,15 +133,22 @@ export default {
       outbound: [
         {
           title: 'Serving Outbound',
-          value: _.get(currentOutbound, 'value.phone_number', 'None'),
+          value: _.get(state.currentOutbound, 'value.phone_number', 'None'),
+        },
+        {
+          title: 'Outbound ID / Completion',
+          value: [
+            _.get(state.currentOutbound, 'value.id', 'None'),
+            _.get(state.currentOutbound, 'value.completion', 'None'),
+          ].join(' / '),
         },
         {
           title: 'Priority',
-          value: _.get(currentOutbound, 'value.priority', '0.00'),
+          value: _.get(state.currentOutbound, 'value.priority', '0.00'),
         },
         {
           title: 'Location',
-          value: _.get(currentOutbound, 'value.location_name', 'None'),
+          value: _.get(state.currentOutbound, 'value.location_name', 'None'),
         },
         {
           title: 'Controller Outbound',
@@ -190,7 +197,6 @@ export default {
       visibleState,
       ...actions,
       ...state,
-      currentOutbound,
       agent,
       pages,
       currentPage,
