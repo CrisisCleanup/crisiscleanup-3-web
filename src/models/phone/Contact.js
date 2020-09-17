@@ -233,13 +233,17 @@ export default class Contact extends Model {
       const attrs = connectContact.getAttributes();
       Log.info('got connect attributes:', attrs);
       if (!_.isNil(attrs)) {
-        model.attributes = _.merge(model.attributes, attrs);
+        Contact.commit(() => {
+          model.attributes = _.merge(model.attributes, attrs);
+        });
       }
     }
     if (!model.isInbound) {
       const outboundAttrs = Contact.getOutboundAttributes(model);
       if (outboundAttrs) {
-        model.attributes = _.merge(model.attributes, outboundAttrs);
+        Contact.commit(() => {
+          model.attributes = _.merge(model.attributes, outboundAttrs);
+        });
       }
     }
     return true;
