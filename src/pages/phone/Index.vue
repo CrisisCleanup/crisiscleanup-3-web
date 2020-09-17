@@ -89,6 +89,32 @@ export default {
     );
 
     watch(
+      () => [callPending.value, agent.value ? agent.value.isRoutable : false],
+      () => {
+        if (
+          callPending.value === true ||
+          callConnected.value === true ||
+          agent.value
+            ? agent.value.isRoutable === false
+            : false
+        ) {
+          context.root.$log.debug('Outbound Polling: PAUSED');
+          pollOutbound.stop();
+        }
+        if (
+          callPending.value === false &&
+          callConnected.value === false &&
+          agent.value
+            ? agent.value.isRoutable
+            : false
+        ) {
+          context.root.$log.debug('Outbound Polling: ACTIVE');
+          pollOutbound.start();
+        }
+      },
+    );
+
+    watch(
       () => callConnected.value,
       async () => updatePage(),
     );
