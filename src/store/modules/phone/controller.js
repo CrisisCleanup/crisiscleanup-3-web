@@ -163,7 +163,7 @@ class ControllerStore extends VuexModule {
   isServingOutbounds: boolean = true;
 
   // current outbound
-  currentOutbound: PhoneOutbound | null = null;
+  currentOutbound: typeof PhoneOutbound | null = null;
 
   // historic call metrics
   historicMetrics = {
@@ -368,18 +368,43 @@ class ControllerStore extends VuexModule {
         );
       } catch (e) {
         if (e.response) {
-          if (e.response.status === 421) {
+          if (e.response.status === 423) {
             Log.info('Failed to call outbound, its been completed!');
             this.setOutbound(null);
+            if (agent.currentContact) {
+              await agent.currentContact.disconnect();
+            }
           } else {
             Log.error('Failed to call outbound! Unexpected error!');
             Log.error(e);
+            this.setOutbound(null);
+            if (agent.currentContact) {
+              await agent.currentContact.disconnect();
+            }
           }
         }
       }
       return;
     }
     Log.info('controller is not currently serving outbounds!');
+  }
+
+  @Action
+  async skipOutbound({ agent }: { agent: typeof AgentClient }) {
+    if (this.currentOutbound !== null) {
+      Log.info('skipping current outbound call...', this.currentOutbound);
+      await this.currentOutbound.skipOutbound();
+      this.setOutbound(null);
+      if (agent.currentContact) {
+        await agent.currentContact.disconnect();
+      }
+      await this.context.dispatch('phone.streams/updateContact', {
+        action: ContactActions.DESTROYED,
+      });
+      agent.toggleOnline(false);
+    } else {
+      Log.error('there is not a current outbound to skip!');
+    }
   }
 
   @Action

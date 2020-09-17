@@ -32,6 +32,12 @@ export default class PhoneOutbound extends CCUModel {
     };
   }
 
+  async skipOutbound() {
+    await this.api().post(`/phone_outbound/${this.id}/unlock`, {
+      skipped: true,
+    });
+  }
+
   static apiConfig = {
     actions: {
       async getNextOutbound({
