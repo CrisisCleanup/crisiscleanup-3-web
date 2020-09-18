@@ -26,7 +26,7 @@
           width="18px"
           height="18px"
           class="text-white bg-green-500 mx-1"
-          :title="$t('~~Org Verified')"
+          :title="$t('adminOrganization.org_verified')"
           >V</badge
         >
         <badge
@@ -34,7 +34,7 @@
           width="18px"
           height="18px"
           class="text-white bg-green-500 mx-1"
-          :title="$t('~~Active')"
+          :title="$t('adminOrganization.org_active')"
           >A</badge
         >
       </div>
@@ -142,7 +142,7 @@ export default {
           width: '1fr',
         },
         {
-          title: this.$t('~~Org Statuses'),
+          title: this.$t('orgApprovalTable.org_statuses'),
           dataIndex: 'organization_statuses',
           key: 'organization_statuses',
           width: '1fr',

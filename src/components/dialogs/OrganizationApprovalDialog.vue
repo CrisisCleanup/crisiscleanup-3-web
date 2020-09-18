@@ -6,7 +6,7 @@
           <div class="modal-header flex-shrink">
             <div class="title p-3 flex items-center justify-between border-b">
               <span class="text-base font-bold">{{
-                $t('~~Approve/Reject Organization')
+                $t('adminOrganization.approve_or_reject')
               }}</span>
               <ccu-icon
                 :alt="$t('actions.cancel')"
@@ -35,11 +35,7 @@
               text-area
               v-model="response.note"
               :rows="3"
-              :placeholder="
-                $t(
-                  '~~In the case of rejection, please add a note to be emailed to the requestor',
-                )
-              "
+              :placeholder="$t('adminOrganization.rejection_note')"
             />
           </div>
 
