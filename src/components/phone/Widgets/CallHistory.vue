@@ -37,11 +37,14 @@
               >
                 {{ caseItem.case_number }}
               </base-link>
-              <div
-                class="case-svg-container rounded-full p-1 shadow-sm"
-                v-html="getWorkTypeImg(caseItem)"
-                :style="getWorkTypeStyle(caseItem)"
-              />
+              <div class="flex space-evenly">
+                <div
+                  v-for="worktype in caseItem.work_types"
+                  class="case-svg-container rounded-full p-1 mr-1 shadow-sm"
+                  v-html="getWorkTypeImg(worktype)"
+                  :style="getWorkTypeStyle(worktype)"
+                />
+              </div>
             </div>
           </div>
         </template>
@@ -59,29 +62,26 @@
 import TitledCard from '@/components/cards/TitledCard.vue';
 import Table from '@/components/Table.vue';
 import { mapGetters } from 'vuex';
-import { UserMixin, ValidateMixin } from '@/mixins';
+import { UserMixin, ValidateMixin, WorksitesMixin } from '@/mixins';
 import PhoneStatus from '@/models/PhoneStatus';
 import { get } from 'lodash';
 import DisasterIcon from '@/components/DisasterIcon.vue';
-import Worksite from '@/models/Worksite';
-import { getWorkTypeImage, getColorForWorkType } from '@/filters';
 import Color from 'color';
 
 export default {
   name: 'CallHistory',
   components: { TitledCard, Table, DisasterIcon },
-  mixins: [UserMixin, ValidateMixin],
+  mixins: [UserMixin, ValidateMixin, WorksitesMixin],
   methods: {
-    getWorkTypeStyle(worksite) {
-      const _color = Color(
-        getColorForWorkType(Worksite.getWorkType(worksite.work_types)),
-      );
+    getWorkTypeStyle(worktype) {
+      const { fillColor } = this.getWorktypeColors(worktype);
+      const _color = Color(fillColor);
       return {
         backgroundColor: _color.fade(0.8).string(),
       };
     },
-    getWorkTypeImg(worksite) {
-      return getWorkTypeImage(Worksite.getWorkType(worksite.work_types));
+    getWorkTypeImg(worktype) {
+      return this.getWorktypeSVG(worktype, '32');
     },
   },
   computed: {
