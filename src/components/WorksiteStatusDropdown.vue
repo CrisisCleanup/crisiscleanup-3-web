@@ -4,14 +4,24 @@
     placement="bottom-end"
     class="text-xs"
   >
-    <div class="badge-holder rounded-lg px-2" :style="dropdownStyle">
+    <div
+      class="badge-holder rounded-lg"
+      :class="size === 'sm' ? 'px-1' : 'px-2'"
+      :style="dropdownStyle"
+    >
       <div
         v-if="useIcon"
-        class="case-svg-container mr-1"
+        class="case-svg-container mr-1 flex"
+        ref="svgContainer"
         v-html="workTypeImage"
       ></div>
       <div v-if="!hideName">{{ currentWorkType.status | getStatusName }}</div>
-      <font-awesome-icon class="mx-1" size="sm" icon="chevron-down" />
+      <font-awesome-icon
+        class=""
+        :class="size === 'sm' ? '' : 'mx-1'"
+        size="sm"
+        icon="chevron-down"
+      />
     </div>
     <div
       slot="popover"
@@ -44,9 +54,11 @@
 <script>
 import { getColorForStatus, getWorkTypeImage } from '@/filters';
 import { mapState } from 'vuex';
+import { WorksitesMixin } from '@/mixins';
 
 export default {
   name: 'WorksiteStatusDropdown',
+  mixins: [WorksitesMixin],
   props: {
     currentWorkType: {
       type: Object,
@@ -65,6 +77,14 @@ export default {
     phase: {
       type: Number,
       default: null,
+    },
+    iconSize: {
+      type: Number,
+      default: 0,
+    },
+    size: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -89,6 +109,9 @@ export default {
         });
     },
     workTypeImage() {
+      if (this.iconSize) {
+        return this.getWorktypeSVG(this.currentWorkType, this.iconSize);
+      }
       return this.getWorkTypeImage(this.currentWorkType);
     },
     dropdownStyle() {
@@ -106,6 +129,7 @@ export default {
   },
   mounted() {
     document.addEventListener('keyup', this.nextItem);
+    this.$nextTick(() => this.setSVGStyles());
   },
   methods: {
     nextItem(e) {
@@ -116,6 +140,13 @@ export default {
         this.currentItem < this.displayStatuses.length
       ) {
         this.currentItem += 1;
+      }
+    },
+    setSVGStyles() {
+      if (!this.$refs.svgContainer) return;
+      if (this.iconSize) {
+        this.$refs.svgContainer.style.minHeight = `${this.iconSize}px`;
+        this.$refs.svgContainer.style.minWidth = `${this.iconSize}px`;
       }
     },
   },
