@@ -31,6 +31,7 @@ import Pda from '@/models/Pda';
 import Contact, {
   CallType,
   ContactActions,
+  ContactAttributes,
   ContactStates,
 } from '@/models/phone/Contact';
 import PhoneOutbound from '@/models/PhoneOutbound';
@@ -357,6 +358,9 @@ class ControllerStore extends VuexModule {
           contactId,
           action: ContactActions.PENDING,
           state: ContactStates.QUEUED,
+          attributes: {
+            [ContactAttributes.CALL_TYPE]: CallType.OUTBOUND,
+          },
         };
         Log.debug('creating outbound contact!', contactPayload);
         await this.context.dispatch(
