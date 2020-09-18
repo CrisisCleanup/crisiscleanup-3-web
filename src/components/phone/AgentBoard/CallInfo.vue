@@ -60,6 +60,9 @@
         :active="c.id === activeCaseId"
         @click.native="setActiveCase(c.id, c.type)"
         class="m-2"
+        @update:worktype="
+          (value, workType) => updateWorkTypeStatus(value, workType, c.id)
+        "
       />
     </div>
   </div>
@@ -76,6 +79,8 @@ import { onMounted } from '@vue/composition-api';
 import useController from '@/use/phone/useController';
 import useCaseCards from '@/use/worksites/useCaseCards';
 import { useStore } from '@u3u/vue-hooks';
+import Worksite from '@/models/Worksite';
+import { getErrorMessage } from '@/utils/errors';
 
 export default {
   name: 'BoardCallInfo',
@@ -113,6 +118,15 @@ export default {
       formatDuration,
       caseCards,
       setActiveCase,
+      async updateWorkTypeStatus(value, workType, worksiteId) {
+        try {
+          await Worksite.api().updateWorkTypeStatus(workType.id, value);
+        } catch (e) {
+          await context.root.$toasted.error(getErrorMessage(e));
+        } finally {
+          await Worksite.fetchById(worksiteId);
+        }
+      },
     };
   },
 };

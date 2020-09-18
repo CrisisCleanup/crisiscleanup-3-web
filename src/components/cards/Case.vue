@@ -10,6 +10,7 @@
     :svg="svg"
     :active="active"
     :type="type"
+    v-on="$listeners"
   />
 </template>
 

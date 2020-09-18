@@ -17,7 +17,11 @@
     </div>
     <template v-if="type !== 'new'">
       <div class="case--head">
-        <div v-if="worktype" class="case--svg" v-html="svg" />
+        <div
+          v-if="worktype && !(worktypes && worktypes.length)"
+          class="case--svg"
+          v-html="svg"
+        />
         <div v-if="worktypes && worktypes.length" class="case--svgs">
           <WorksiteStatusDropdown
             v-for="(w, idx) in worktypes"
@@ -27,6 +31,7 @@
             hide-name
             :icon-size="16"
             size="sm"
+            @input="(value) => $emit('update:worktype', value, w)"
           />
         </div>
         <div class="case--title flex">
