@@ -79,8 +79,7 @@ jobs:
         run: |
           cd "$GITHUB_WORKSPACE/cc3api"
           echo "CI=1" >> "$GITHUB_WORKSPACE/cc3api/compose/envs/.env-dev"
-          docker-compose build --pull app
-          docker-compose up -d app postgres elasticsearch
+          docker-compose up -d app-dev postgres elasticsearch redis
 
       - name: Install Dependencies
         env:
@@ -95,7 +94,7 @@ jobs:
       - uses: zcong1993/setup-dockerize@v1.2.0
 
       - name: Wait for Api
-        run: 'dockerize -wait-retry-interval 30s -timeout 640s -wait http://localhost:5000/health'
+        run: 'dockerize -wait-retry-interval 10s -timeout 640s -wait http://localhost:5000/health'
 
       - name: Dump Api Logs
         if: ${{ always() }}
