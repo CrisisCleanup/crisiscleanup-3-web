@@ -128,7 +128,6 @@ const useValidations = ({ currentUser }) => {
       await Agent.api().fetch({
         user: {
           id: unwrap(currentUser).id,
-          email: unwrap(currentUser).email,
         },
       });
     } catch (errs) {
