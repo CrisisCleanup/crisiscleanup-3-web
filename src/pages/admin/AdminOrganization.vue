@@ -939,11 +939,11 @@ export default {
         text += `${user.first_name}\t${user.last_name}\t${user.email}\t${user.mobile}\t\n`;
       });
       await this.$copyText(text);
-      this.$toasted.success('info.users_copied');
+      this.$toasted.success(this.$t('info.users_copied'));
     },
     async copyApiKey() {
       await this.$copyText(this.apiKey);
-      this.$toasted.success('adminOrganization.api_key_copied');
+      this.$toasted.success(this.$t('adminOrganization.api_key_copied'));
     },
     async generateApiKey() {
       const result = await this.$selection({
