@@ -274,7 +274,7 @@ export default {
       this.currentType = null;
     },
     getSVG(worktype) {
-      return this.getWorktypeSVG(worktype, this.$t('worksiteMap.unclaimed'));
+      return this.getWorktypeSVG(worktype);
     },
     async createCards() {
       if (this.nextOutbound) {
