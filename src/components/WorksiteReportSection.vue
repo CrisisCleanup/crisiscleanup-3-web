@@ -1,27 +1,30 @@
 <template>
   <section class="px-3 pb-3">
-    <form ref="timeForm" class="flex items-center justify-between w-full">
+    <form ref="timeForm" class="w-full grid grid-cols-7 gap-2">
       <base-input
         v-model="volunteersToAdd"
-        input-style="width: 6rem"
         input-classes="text-xs"
         :placeholder="$t('caseView.volunteers')"
         required
         pattern="\d*"
+        class="col-span-2"
+        width="85"
       />
       <base-input
         v-model="hoursPerVolunteer"
         :placeholder="$t('caseView.hours_per_volunteer')"
         input-classes="text-xs"
-        input-style="width: 11rem;"
         required
-        pattern="\d*"
+        pattern="^\d*(\.\d{0,2})?$"
+        class="col-span-2"
+        width="140"
       />
+      <div class="col-span-1"></div>
       <base-button
         :text="$t('actions.add')"
         :alt="$t('actions.add')"
         variant="solid"
-        class="p-3"
+        class="p-1 col-span-2"
         :action="addTime"
       />
     </form>

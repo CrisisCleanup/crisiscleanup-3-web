@@ -8,7 +8,7 @@
       ref="input"
       :class="[inputClasses, defaultInputClasses, selector]"
       :data-cy="selector"
-      :style="inputStyle"
+      :style="[cssVars, inputStyle]"
       :type="passwordView || type || 'search'"
       :value.prop="value"
       :disabled="disabled || (breakGlass && !glassBroken)"
@@ -156,6 +156,14 @@ export default {
       type: [Function, Boolean],
       default: false,
     },
+    width: {
+      type: String,
+      default: '300',
+    },
+    height: {
+      type: String,
+      default: '40',
+    },
   },
   data() {
     return {
@@ -177,6 +185,12 @@ export default {
         'border-crisiscleanup-red-100': this.topLabel && this.isInvalid,
         'flex-col items-start border': Boolean(this.topLabel),
         'items-center': !this.topLabel,
+      };
+    },
+    cssVars() {
+      return {
+        '--height': `${this.height}px`,
+        '--width': `${this.width}px`,
       };
     },
     defaultInputClasses() {
@@ -252,8 +266,8 @@ input.invalid {
 
 input {
   outline: none;
-  width: 300px;
-  height: 40px;
+  width: var(--width);
+  height: var(--height);
   border-radius: 0;
   @apply border border-crisiscleanup-dark-100;
 }
