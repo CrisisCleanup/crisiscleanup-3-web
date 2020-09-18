@@ -180,6 +180,40 @@ export default class Contact extends Model {
     );
   }
 
+  get hasResolvedCases() {
+    return Object.keys(this.contactAttributes).includes(
+      ContactAttributes.WORKSITES,
+    );
+  }
+
+  static syncAttributes(contactId: string): void {
+    const contact: typeof Contact = Contact.query()
+      .withAllRecursive()
+      .find(contactId);
+    if (!contact) {
+      Log.info('no contact found! cannot sync attributes.');
+      return;
+    }
+    const connectContact = ACS.getContactById(contact.contactId);
+    if (connectContact) {
+      const attrs = connectContact.getAttributes();
+      Log.info('got connect attributes:', attrs);
+      if (!_.isNil(attrs)) {
+        Contact.commit(() => {
+          contact.attributes = _.merge(contact.attributes, attrs);
+        });
+      }
+    }
+    if (!contact.isInbound) {
+      const outboundAttrs = Contact.getOutboundAttributes(contact);
+      if (outboundAttrs) {
+        Contact.commit(() => {
+          contact.attributes = _.merge(contact.attributes, outboundAttrs);
+        });
+      }
+    }
+  }
+
   static afterCreate(model: Contact): void {
     const isNew = model.action === ContactActions.ENTER;
     const initConnection: ConnectionType = {
@@ -228,24 +262,7 @@ export default class Contact extends Model {
       );
       return false;
     }
-    const connectContact = ACS.getContactById(model.contactId);
-    if (connectContact) {
-      const attrs = connectContact.getAttributes();
-      Log.info('got connect attributes:', attrs);
-      if (!_.isNil(attrs)) {
-        Contact.commit(() => {
-          model.attributes = _.merge(model.attributes, attrs);
-        });
-      }
-    }
-    if (!model.isInbound) {
-      const outboundAttrs = Contact.getOutboundAttributes(model);
-      if (outboundAttrs) {
-        Contact.commit(() => {
-          model.attributes = _.merge(model.attributes, outboundAttrs);
-        });
-      }
-    }
+    Contact.syncAttributes(model.contactId);
     return true;
   }
 
@@ -427,10 +444,10 @@ export default class Contact extends Model {
     });
   }
 
-  static getOutboundAttributes(contact: Contact) {
+  static getOutboundAttributes(contact: typeof Contact) {
     const {
       currentOutbound,
-    }: { currentOutbound: null | PhoneOutbound } = Contact.store().state[
+    }: { currentOutbound: null | typeof PhoneOutbound } = Contact.store().state[
       'phone.controller'
     ];
     const { resolveRequested } = Contact.store().state.entities[
