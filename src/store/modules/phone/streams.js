@@ -32,6 +32,7 @@ import AgentClient, {
   AgentStates,
   RouteStates,
 } from '@/models/phone/AgentClient';
+import Agent from '@/models/Agent';
 import { ContactActions, ContactStates } from '@/models/phone/Contact';
 
 config.rawError = true;
@@ -181,11 +182,7 @@ class StreamsStore extends VuexModule {
         ? AgentClient.isStateRoutable(agentAvail)
         : RouteStates.NOT_ROUTABLE;
 
-    const {
-      routingProfile: { queues },
-    } = agent.getConfiguration();
-    const agentQueue = queues.find((q) => q.queueId.includes('agent'));
-    const agentId: string = agentQueue.queueId.split('agent/').pop();
+    const { agent_id: agentId } = Agent.query().first();
     const agentClient: AgentClientType = {
       agentId,
       userId: this.context.rootGetters['auth/userId'],
