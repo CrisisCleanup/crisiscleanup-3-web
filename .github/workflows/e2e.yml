@@ -95,7 +95,7 @@ jobs:
       - uses: zcong1993/setup-dockerize@v1.2.0
 
       - name: Wait for Api
-        run: 'dockerize -wait-retry-interval 5s -timeout 320s -wait http://localhost:5000/health'
+        run: 'dockerize -wait-retry-interval 30s -timeout 640s -wait http://localhost:5000/health'
 
       - name: Dump Api Logs
         if: ${{ always() }}
