@@ -75,7 +75,7 @@ exports[`WorksiteStatusDropdown should render correctly and match snapshot when 
     style="color: rgb(208, 2, 27);"
   >
     <div
-      class="case-svg-container mr-1"
+      class="case-svg-container mr-1 flex"
     />
      
     <div>
