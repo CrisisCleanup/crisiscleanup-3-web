@@ -225,7 +225,7 @@ export default {
         await agent.value.toggleOnline(false);
       }
       const compDialog = create(ComponentDialog);
-      await compDialog({
+      const modalAction = await compDialog({
         title: context.root.$t('~~Enter a Phone Number'),
         component: OutboundDialer,
         actionText: context.root.$t('~~Dial'),
@@ -240,7 +240,7 @@ export default {
         },
       });
       context.root.$log.info('got dialer input:', _dialerInput.value);
-      if (_dialerInput.value) {
+      if (_dialerInput.value && modalAction !== 'cancel') {
         const { isValid, e164 } = _dialerInput.value;
         if (isValid) {
           context.root.$log.info('dialer input valid!', e164);
