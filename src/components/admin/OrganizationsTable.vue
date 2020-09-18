@@ -18,7 +18,7 @@
         />
         <badge
           v-if="slotProps.item.org_verified"
-          :title="$t('~~Org Verified')"
+          :title="$t('adminOrganization.org_verified')"
           width="18px"
           height="18px"
           class="text-white bg-green-500 mx-1"
@@ -26,7 +26,7 @@
         >
         <badge
           v-if="slotProps.item.is_active"
-          :title="$t('~~Active')"
+          :title="$t('adminOrganization.org_active')"
           width="18px"
           height="18px"
           class="text-white bg-green-500 mx-1"
@@ -173,7 +173,7 @@ export default {
           width: '30%',
         },
         {
-          title: this.$t('~~Statuses'),
+          title: this.$t('orgApprovalTable.org_statuses'),
           dataIndex: 'statuses',
           key: 'statuses',
           width: '15%',
