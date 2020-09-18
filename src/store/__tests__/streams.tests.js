@@ -14,6 +14,7 @@ import * as ACS from '@/services/connect.service';
 
 jest.mock('@/models/User');
 jest.mock('@/models/phone/AgentClient');
+jest.mock('@/models/Agent');
 jest.mock('@crisiscleanup/amazon-connect-streams');
 jest.mock('@/services/sso.service');
 

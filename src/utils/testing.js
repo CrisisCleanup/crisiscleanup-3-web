@@ -199,7 +199,7 @@ export const MockPhoneStatus = [
 
 export const MockAgents = [
   {
-    agent_id: 'xxxx',
+    agent_id: '123',
     instance_id: 'instance',
     arn: 'agentarn',
     user: MockUsers[0],
