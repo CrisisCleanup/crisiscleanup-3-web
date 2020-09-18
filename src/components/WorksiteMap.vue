@@ -84,7 +84,7 @@
             icon="minus"
             size="1x"
             class="cursor-pointer"
-            :title="$t('~~Hide Legend')"
+            :title="$t('worksiteMap.hide_legend')"
             @click="() => toggleLegend(false)"
           ></font-awesome-icon>
         </div>
@@ -128,7 +128,7 @@
         <font-awesome-icon
           icon="plus"
           size="1x"
-          :title="$t('~~Show Legend')"
+          :title="$t('worksiteMap.show_legend')"
           class="cursor-pointer"
           @click="() => toggleLegend(true)"
         ></font-awesome-icon>
