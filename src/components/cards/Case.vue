@@ -6,6 +6,7 @@
     :full-address="fullAddress"
     :state="state"
     :worktype="worktype"
+    :worktypes="worktypes"
     :svg="svg"
     :active="active"
     :type="type"
@@ -27,18 +28,19 @@ export default {
     };
   },
   mounted() {
-    this.svg = this.getWorktypeSVG(
-      this.worktype,
-      this.$t('worksiteMap.unclaimed'),
-      this.svgSize,
-    );
+    if (this.worktype) {
+      this.svg = this.getWorktypeSVG(this.worktype, this.svgSize);
+    }
   },
   props: {
     id: VueTypes.oneOfType([VueTypes.number, VueTypes.string]),
     caseNumber: VueTypes.string,
     address: VueTypes.string,
     state: VueTypes.string,
+    /* Primary worktype. */
     worktype: VueTypes.string,
+    /* List of worktypes to display. */
+    worktypes: VueTypes.arrayOf(VueTypes.object),
     fullAddress: VueTypes.string,
     tile: VueTypes.bool.def(false),
     active: VueTypes.bool.def(false),
