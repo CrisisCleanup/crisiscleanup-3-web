@@ -312,6 +312,7 @@ export default class Contact extends Model {
       state.outbounds = [];
       state.inbound = null;
       state.outbound = null;
+      state.resolveRequested = false;
     });
   }
 
