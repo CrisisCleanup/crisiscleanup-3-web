@@ -20,6 +20,7 @@ export type CaseCardType = {|
   address: string,
   state: string,
   worktype: string,
+  worktypes?: any[],
   fullAddress: string,
   id: number,
   type: CaseType,
@@ -48,6 +49,7 @@ export default ({ cases, addNew }: UseCaseCardsProps) => {
                     'unknown',
                   )
                 : 'wellness_check',
+            worktypes: _.get(c, 'work_types', []),
             fullAddress: c.full_address,
             id: c.id,
             type: c instanceof Worksite ? Worksite.entity : Pda.entity,

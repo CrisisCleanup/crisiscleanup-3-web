@@ -17,8 +17,21 @@
     </div>
     <template v-if="type !== 'new'">
       <div class="case--head">
-        <div class="case--svg" v-html="svg" />
-        <base-text variant="h3">{{ caseNumber }}</base-text>
+        <div v-if="worktype" class="case--svg" v-html="svg" />
+        <div v-if="worktypes && worktypes.length" class="case--svgs">
+          <WorksiteStatusDropdown
+            v-for="(w, idx) in worktypes"
+            :key="`${w}_${idx}`"
+            :current-work-type="w"
+            use-icon
+            hide-name
+            :icon-size="16"
+            size="sm"
+          />
+        </div>
+        <div class="case--title flex">
+          <base-text variant="h3">{{ caseNumber }}</base-text>
+        </div>
       </div>
       <div class="case--body">
         <base-text variant="bodysm">{{ `${address}, ${state}` }}</base-text>
@@ -30,9 +43,11 @@
 <script>
 import VueTypes from 'vue-types';
 import { IconsMixin } from '@/mixins';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown';
 
 export default {
   name: 'CaseTile',
+  components: { WorksiteStatusDropdown },
   mixins: [IconsMixin],
 
   props: {
@@ -41,6 +56,7 @@ export default {
     address: VueTypes.string,
     state: VueTypes.string,
     worktype: VueTypes.string,
+    worktypes: VueTypes.array,
     svg: VueTypes.string,
     active: VueTypes.bool.def(false),
     type: VueTypes.any,
@@ -48,7 +64,8 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="postcss">
+@lost flexbox flex;
 .case-card {
   @apply bg-white p-4;
   @apply border-gray-300;
@@ -87,9 +104,21 @@ export default {
   }
   .case {
     &--head {
-      display: flex;
+      display: inline-flex;
+      align-items: center;
       p {
         @apply px-3 text-crisiscleanup-dark-400;
+      }
+    }
+    &--title {
+      display: flex;
+      flex: 1;
+    }
+    &--svgs {
+      flex: 1;
+      lost-flex-container: row;
+      div {
+        lost-waffle: 1/2 2 0;
       }
     }
     &--body {
