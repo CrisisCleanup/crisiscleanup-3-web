@@ -27,6 +27,7 @@
             v-for="(w, idx) in worktypes"
             :key="`${w}_${idx}`"
             :current-work-type="w"
+            :phase="w.phase"
             use-icon
             hide-name
             :icon-size="16"
@@ -117,7 +118,7 @@ export default {
     }
     &--title {
       display: flex;
-      flex: 1;
+      flex: 0.5;
     }
     &--svgs {
       flex: 1;
