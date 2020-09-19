@@ -115,6 +115,10 @@ export default {
           value: _.get(currentContact, 'value.callType', 'None'),
         },
         {
+          title: 'Has Resolved Cases',
+          value: _.get(currentContact, 'value.hasResolvedCases', 'No'),
+        },
+        {
           title: 'Agent State',
           value: _.get(agent, 'value.fullState', 'None'),
         },
@@ -149,10 +153,6 @@ export default {
         {
           title: 'Location',
           value: _.get(state.currentOutbound, 'value.location_name', 'None'),
-        },
-        {
-          title: 'Controller Outbound',
-          value: _.get(state, 'outbound', 'None'),
         },
         {
           title: 'Agent State',
