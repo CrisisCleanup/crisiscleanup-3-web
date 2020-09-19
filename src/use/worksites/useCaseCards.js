@@ -68,10 +68,11 @@ export default ({ cases, addNew }: UseCaseCardsProps) => {
   };
 
   const caseCards = computed(() => {
+    let cards = _cards.value;
     if (_addNew.value) {
-      return [..._cards.value, newCard];
+      cards = [..._cards.value, newCard];
     }
-    return _cards.value;
+    return _.orderBy(cards, ['id'], ['desc']);
   });
 
   return {
