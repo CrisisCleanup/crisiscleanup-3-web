@@ -16,7 +16,7 @@ export const WorksitesMixin = {
       const colorsKey = `${worktype.status}_${
         worktype.claimed_by ? 'claimed' : 'unclaimed'
       }`;
-      return colors[colorsKey];
+      return colors[colorsKey] || colors.open_assigned_unclaimed;
     },
   },
 };

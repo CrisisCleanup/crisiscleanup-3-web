@@ -660,8 +660,8 @@ export default class Contact extends Model {
     const wrksites = cases.filter((c) => c instanceof Worksite);
     const pdas = cases.filter((c) => c instanceof Pda);
     Contact.commit((state) => {
-      state.worksites = _.unionBy(state.worksites, wrksites, 'id');
-      state.pdas = _.unionBy(state.pdas, pdas, 'id');
+      state.worksites = _.unionBy(wrksites, state.worksites, 'id');
+      state.pdas = _.unionBy(pdas, state.pdas, 'id');
     });
   }
 
