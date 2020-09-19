@@ -24,6 +24,7 @@ export default {
     fullAddress: VueTypes.string,
     state: VueTypes.string,
     worktype: VueTypes.string,
+    worktypes: VueTypes.string,
     svg: VueTypes.string,
   },
 };
