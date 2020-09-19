@@ -42,8 +42,11 @@ export default class CCUModel<T> extends Model {
    * @param save - save item to database.
    * @returns {T}
    */
-  static fetchById(id: number | number[], save: boolean = true): T {
-    if (typeof id === 'number') {
+  static fetchById(
+    id: number | number[] | string | string[],
+    save: boolean = true,
+  ): T {
+    if (typeof id === 'number' || typeof id === 'string') {
       return this.api().get(`/${this.entity}/${id}`, { save });
     }
     return this.api().get(`/${this.entity}`, {
