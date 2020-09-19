@@ -200,6 +200,7 @@ export default class AgentClient extends Model {
 
   get isConnecting(): boolean {
     return [
+      ConnectionStates.AGENT_CALLING,
       ConnectionStates.AGENT_PENDING,
       ConnectionStates.PENDING_CALL,
     ].includes(this.contactState);

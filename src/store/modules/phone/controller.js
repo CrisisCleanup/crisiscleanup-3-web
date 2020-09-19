@@ -274,7 +274,13 @@ class ControllerStore extends VuexModule {
   }
 
   @Action
-  async addCase({ contact, newCase }: { contact: Contact, newCase: Worksite }) {
+  async addCase({
+    contact,
+    newCase,
+  }: {
+    contact: Contact,
+    newCase: typeof Worksite,
+  }) {
     Log.info('adding new case:', contact, newCase);
     if (this.activeCaseType === Pda) {
       Log.info('associating worksite to pda...');
@@ -354,12 +360,20 @@ class ControllerStore extends VuexModule {
         const contactId = outboundObj.external_id
           ? outboundObj.external_id
           : `${agent.agentId}#manual-outbound`;
+        const outboundTypeMap = {
+          callback: CallType.OUTBOUND,
+          calldown: CallType.CALLDOWN,
+        };
         const contactPayload = {
           contactId,
           action: ContactActions.PENDING,
           state: ContactStates.QUEUED,
           attributes: {
             [ContactAttributes.CALL_TYPE]: CallType.OUTBOUND,
+            [ContactAttributes.CALLER_ID]: outbound.phone_number,
+            [ContactAttributes.CALLER_DNIS_ID]: outbound.dnis1,
+            [ContactAttributes.OUTBOUND_TYPE]:
+              outboundTypeMap[outbound.call_type],
           },
         };
         Log.debug('creating outbound contact!', contactPayload);
