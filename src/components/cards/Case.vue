@@ -32,6 +32,9 @@ export default {
     if (this.worktype) {
       this.svg = this.getWorktypeSVG(this.worktype, this.svgSize);
     }
+    if (this.worktypes && this.worktypes.length) {
+      this.svg = this.getWorktypeSVG(this.worktypes[0], this.svgSize);
+    }
   },
   props: {
     id: VueTypes.oneOfType([VueTypes.number, VueTypes.string]),
