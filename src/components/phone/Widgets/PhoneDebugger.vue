@@ -34,10 +34,13 @@
       </div>
       <div
         class="opreview__item"
-        v-for="{ title, value } in pages[currentPage]"
+        v-for="{ title, value, action } in pages[currentPage]"
       >
         <base-text variant="h4"> {{ title }} </base-text>
         <base-text variant="bodysm"> {{ value }} </base-text>
+        <base-button variant="outline" v-if="action" :action="action.method">{{
+          action.label
+        }}</base-button>
       </div>
     </div>
     <div class="opreview__config">
@@ -67,6 +70,8 @@ import useToggle from '@/use/useToggle';
 import { computed, ref } from '@vue/composition-api';
 import _ from 'lodash';
 import { useState } from '@u3u/vue-hooks';
+import { ControllerPages } from '@/store/modules/phone/controller';
+import { useLocalStorage } from 'vue-composable';
 
 export default {
   name: 'PhoneDebugger',
@@ -76,6 +81,7 @@ export default {
     const visibleState = useToggle();
     const { currentContact } = useContact();
     const currentPage = ref('contact');
+    const scriptStorage = useLocalStorage('ccu-ivr-hide-script');
     const contactState = {
       ...useState('entities/phone/contact', [
         'dnis',
@@ -192,6 +198,32 @@ export default {
               },
           )
         : [],
+      debug: [
+        {
+          title: 'Controller Page',
+          value: state.view.value.page,
+          action: {
+            label: 'Toggle',
+            method: () =>
+              actions.setView({
+                page:
+                  state.view.value.page === ControllerPages.DASHBOARD
+                    ? ControllerPages.CONTROLLER
+                    : ControllerPages.DASHBOARD,
+              }),
+          },
+        },
+        {
+          title: 'Script Popup',
+          value: scriptStorage.storage.value,
+          action: {
+            label: 'Toggle',
+            method: () => {
+              scriptStorage.storage.value = !scriptStorage.storage.value;
+            },
+          },
+        },
+      ],
     }));
     return {
       visibleState,
@@ -221,7 +253,7 @@ $neg-hidden: calc(0rem - theme('width.64'));
   lost-flex-container: column;
   transform: translateX(theme('width.64'));
   transition: transform 250ms easeInOutCirc;
-  min-height: calc(theme('spacing.64') * 1.5);
+  min-height: calc(theme('spacing.64') * 1.75);
   &.active {
     transform: translateX(0px);
   }
