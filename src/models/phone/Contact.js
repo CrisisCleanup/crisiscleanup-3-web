@@ -130,6 +130,7 @@ export default class Contact extends Model {
   static state() {
     return {
       resolveRequested: false,
+      resolveTask: '',
       dnis: null,
       worksites: [],
       pdas: [],
@@ -170,14 +171,14 @@ export default class Contact extends Model {
       ContactAttributes.CALL_TYPE,
       CallType.INBOUND,
     );
-    if (_ctype === CallType.INBOUND) {
-      return CallType.INBOUND;
+    if (_ctype === CallType.OUTBOUND) {
+      return _.get(
+        this.contactAttributes,
+        ContactAttributes.OUTBOUND_TYPE,
+        CallType.OUTBOUND,
+      );
     }
-    return _.get(
-      this.contactAttributes,
-      ContactAttributes.OUTBOUND_TYPE,
-      CallType.OUTBOUND,
-    );
+    return _ctype;
   }
 
   get hasResolvedCases() {
@@ -250,6 +251,7 @@ export default class Contact extends Model {
         },
       });
     }
+    Contact.syncAttributes(model.contactId);
   }
 
   static beforeUpdate(model: Contact): void | boolean {
@@ -313,6 +315,7 @@ export default class Contact extends Model {
       state.inbound = null;
       state.outbound = null;
       state.resolveRequested = false;
+      state.resolveTask = '';
     });
   }
 
@@ -326,7 +329,7 @@ export default class Contact extends Model {
     if (
       voiceConnection !== null &&
       model.state === ContactStates.ROUTED &&
-      _.isEmpty(connection.streamsConnectionId)
+      (!connection || _.isEmpty(connection.streamsConnectionId))
     ) {
       // This occurs post verification, since we now have a 'real' connection.
       Log.info('Agent verified connection, updating!');
@@ -451,7 +454,7 @@ export default class Contact extends Model {
     }: { currentOutbound: null | typeof PhoneOutbound } = Contact.store().state[
       'phone.controller'
     ];
-    const { resolveRequested } = Contact.store().state.entities[
+    const { resolveRequested, resolveTask } = Contact.store().state.entities[
       'phone/contact'
     ];
     if (resolveRequested) {
@@ -460,26 +463,54 @@ export default class Contact extends Model {
       if (connectContact) {
         const attrs = connectContact.getAttributes();
         Log.debug('got resolved attributes!', attrs);
-        if (!_.isNil(attrs)) {
+        if (!_.isNil(attrs) && contact.hasResolvedCases) {
           return attrs;
         }
       }
+      if (!_.isEmpty(resolveTask)) {
+        Contact.api()
+          .get('phone_connect/resolve_cases', {
+            save: false,
+            params: {
+              task_id: resolveTask,
+            },
+          })
+          .then(({ response }) => {
+            Log.info('case resolution task response:', response);
+            const {
+              data: { status, results },
+            } = response;
+            if (status === 'SUCCESS') {
+              Log.info('success! cases have been resolved from api.', response);
+              Contact.commit(() => {
+                contact.attributes = _.merge(contact.attributes || {}, results);
+              });
+            }
+          });
+      }
+    }
+    if (contact.hasResolvedCases) {
+      return {};
     }
     if (currentOutbound) {
-      const conContact = ACS.getContactById(contact.contactId);
-      if (conContact && !resolveRequested) {
+      if (!resolveRequested) {
         const payload = {
           phone_number: currentOutbound.phone_number,
-          contact_id: conContact.getContactId(),
         };
         Contact.api()
           .post('phone_connect/resolve_cases', payload, { save: false })
-          .then((resp) =>
-            Log.info('requested api to resolve cases!', payload, resp),
-          );
-        Contact.commit((state) => {
-          state.resolveRequested = true;
-        });
+          .then((resp) => {
+            Log.info('requested api to resolve cases!', payload, resp);
+            const {
+              response: {
+                data: { task_id },
+              },
+            } = resp;
+            Contact.commit((state) => {
+              state.resolveRequested = true;
+              state.resolveTask = task_id;
+            });
+          });
       }
       Log.info('found current outbound!');
       return {
