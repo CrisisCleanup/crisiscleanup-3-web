@@ -124,7 +124,16 @@ export default {
         } catch (e) {
           await context.root.$toasted.error(getErrorMessage(e));
         } finally {
-          await Worksite.fetchById(worksiteId);
+          const wkSite = await Worksite.fetchById(worksiteId);
+          await Worksite.update({
+            where: worksiteId,
+            data: wkSite,
+          });
+          const updWksite = await Worksite.fetchOrFindId(worksiteId);
+          await actions.addCase({
+            contact: contact.currentContact.value,
+            newCase: updWksite,
+          });
         }
       },
     };
