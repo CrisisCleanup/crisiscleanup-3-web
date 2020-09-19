@@ -124,7 +124,7 @@ export default {
       flex: 1;
       lost-flex-container: row;
       div {
-        lost-waffle: 1/2 2 0;
+        lost-waffle: 1/2 2 2px;
       }
     }
     &--body {
