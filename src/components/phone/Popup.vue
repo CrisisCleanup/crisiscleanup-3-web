@@ -96,7 +96,7 @@
             :case-number="c.caseNumber"
             :address="c.address"
             :state="c.state"
-            :worktype="c.worktype"
+            :worktypes="c.worktypes"
           />
           <hr class="cases-divider" />
         </div>
