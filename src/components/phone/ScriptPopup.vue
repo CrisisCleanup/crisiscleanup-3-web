@@ -5,16 +5,40 @@
       :style="{ backgroundColor: scriptColor }"
     >
       <div class="script-body">
-        <div class="title">
-          <base-text variant="h1" weight="700"
-            >{{ $t('~~A Sample Script would be:') }}
-          </base-text>
+        <div class="info">
+          <base-text variant="h4">{{
+            $t('phoneConnectFirst.hotline_1_title')
+          }}</base-text>
+          <base-text class="bodysm">{{
+            $t('phoneConnectFirst.hotline_1_number')
+          }}</base-text>
+          <base-text variant="h4">{{
+            $t('phoneConnectFirst.hotline_2_title')
+          }}</base-text>
+          <base-text class="bodysm">{{
+            $t('phoneConnectFirst.hotline_2_number')
+          }}</base-text>
+          <base-text variant="h4">{{
+            $t('phoneConnectFirst.disaster_distress_helpline')
+          }}</base-text>
+          <base-text variant="bodysm">{{
+            $t('phoneConnectFirst.disaster_distress_helpline_number')
+          }}</base-text>
         </div>
-        <div class="body">
-          <base-text>
-            {{ $t(script) }}
-          </base-text>
+
+        <div class="main h-100 flex flex-col text-center">
+          <div class="title">
+            <base-text variant="h1" weight="700"
+              >{{ $t('~~A Sample Script would be:') }}
+            </base-text>
+          </div>
+          <div class="body">
+            <base-text>
+              {{ $t(script) }}
+            </base-text>
+          </div>
         </div>
+
         <div class="action">
           <base-checkbox :checked="checkState" @change="onChange" />
           <base-text>{{ $t('~~Do not show this again.') }}</base-text>
@@ -74,28 +98,33 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
+$neg-body-x-pad: calc(0rem - theme('spacing.6'));
+
 .script {
-  @apply w-full bg-crisiscleanup-light-grey h-32;
+  @apply bg-crisiscleanup-light-grey h-32;
   z-index: 999;
   position: absolute;
   top: 0;
+  width: 100%;
 
   &--wrapper {
     transition: 1s ease;
-    @apply w-full h-32 shadow-lg pt-3 px-16;
+    @apply h-32 shadow-lg;
     position: absolute;
     top: 0;
     left: 0;
     border-top: 1px solid;
+    width: 100%;
+    margin: 0 $neg-body-x-pad 0 $neg-body-x-pad;
   }
 
   &-body {
-    @apply h-full;
+    @apply h-full px-6;
     display: flex;
     flex-grow: 1;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
 
     .action {
@@ -108,9 +137,16 @@ export default {
       @apply text-xl;
     }
 
-    .title p {
+    .main .title p {
       @apply text-3xl;
     }
+  }
+
+  &--tab {
+    background-color: red;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
   }
 }
 </style>
