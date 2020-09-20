@@ -81,7 +81,7 @@ export default {
     const visibleState = useToggle();
     const { currentContact } = useContact();
     const currentPage = ref('contact');
-    const scriptStorage = useLocalStorage('ccu-ivr-hide-script');
+    const scriptStorage = useLocalStorage('ccu-ivr-hide-script', false);
     const contactState = {
       ...useState('entities/phone/contact', [
         'dnis',
