@@ -195,6 +195,7 @@ class StreamsStore extends VuexModule {
     Log.debug('Creating new agent client: ', agentClient);
     await AgentClient.create({ data: agentClient });
     this.context.commit('setAgentId', agentId);
+    await this.updateAgentClient({ state: isOnline, routeState: isRoutable });
   }
 
   @Action
