@@ -1,7 +1,7 @@
 <template>
   <modal
     :title="$t('termsConditionsModal.terms_conditions_title')"
-    modal-classes="max-w-lg h-64"
+    modal-classes="max-w-lg h-64 terms-modal"
   >
     <div
       class="p-3"
@@ -32,4 +32,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.terms-modal a {
+  @apply text-primary-dark underline;
+}
+</style>

@@ -12,7 +12,7 @@
       <div class="grid--survivors">
         <div class="homegrid-survivors">
           <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
-          <base-text font="display" variant="h2">
+          <base-text font="display" variant="h2" class="help-contact">
             <span v-html="$t('homeVue.phone_or_website')"></span>
           </base-text>
         </div>
@@ -45,7 +45,6 @@ export default {
 
 <style scoped lang="scss">
 $areas: main nav logo actions overlay survivors globe footer;
-
 .homegrid {
   overflow: auto;
   &.grid-container {
@@ -117,5 +116,11 @@ $areas: main nav logo actions overlay survivors globe footer;
       }
     }
   }
+}
+</style>
+
+<style>
+.homegrid-survivors a {
+  @apply underline;
 }
 </style>
