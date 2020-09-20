@@ -5,8 +5,11 @@ export default class UserLocationsFilter extends Filter {
   packFunction() {
     const currentUser = User.find(window.vue.$store.getters['auth/userId']);
     const packed = {};
-    if (this.data.organization_bounds) {
-      packed.organization_bounds = currentUser.organization.id;
+    if (this.data.organization_primary_location) {
+      packed.organization_primary_location = currentUser.organization.id;
+    }
+    if (this.data.organization_secondary_location) {
+      packed.organization_secondary_location = currentUser.organization.id;
     }
     return packed;
   }
@@ -26,9 +29,14 @@ export default class UserLocationsFilter extends Filter {
       })
       .forEach(([key]) => {
         labels[key] = key;
-        if (key === 'organization_bounds') {
+        if (key === 'organization_primary_location') {
           labels[key] = window.vue.$t(
-            'worksiteFilters.within_my_org_response_area',
+            '~~Within My Organization Primary Response Area',
+          );
+        }
+        if (key === 'organization_secondary_location') {
+          labels[key] = window.vue.$t(
+            '~~Within My Organization Secondary Response Area',
           );
         }
       });

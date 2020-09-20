@@ -117,10 +117,20 @@
                 {{ $t('worksiteFilters.location') }}
               </div>
               <base-checkbox
-                v-model="filters.locations.data['organization_bounds']"
+                v-model="
+                  filters.locations.data['organization_primary_location']
+                "
                 class="block my-1"
               >
-                {{ $t('worksiteFilters.within_my_org_response_area') }}
+                {{ $t('~~Within My Organization Primary Response Area') }}
+              </base-checkbox>
+              <base-checkbox
+                v-model="
+                  filters.locations.data['organization_secondary_location']
+                "
+                class="block my-1"
+              >
+                {{ $t('~~Within My Organization Secondary Response Area') }}
               </base-checkbox>
             </div>
             <div class="claim-status mb-2">
