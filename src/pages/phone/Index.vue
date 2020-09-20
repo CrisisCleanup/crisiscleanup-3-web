@@ -84,7 +84,7 @@ export default {
           context.root.$log.debug('outbound requested!'),
         );
       },
-      60000,
+      20000,
       true,
     );
 
