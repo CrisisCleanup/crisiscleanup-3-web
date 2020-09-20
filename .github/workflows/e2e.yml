@@ -27,6 +27,7 @@ env:
 
 jobs:
   cypress:
+    if: false
     name: E2E // Cypress
     runs-on: ubuntu-16.04
     timeout-minutes: 30
