@@ -12,6 +12,7 @@
 
 <script>
 import * as L from 'leaflet';
+import { mapAttribution, mapTileLayer } from '../utils/map';
 
 export default {
   props: {
@@ -25,16 +26,14 @@ export default {
   data() {
     return {
       selected: {},
-      tileLayer: L.tileLayer(
-        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
-        {
-          attribution:
-            '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-          detectRetina: false,
-          maxZoom: 18,
-          noWrap: false,
-        },
-      ),
+      tileLayer: L.tileLayer(mapTileLayer, {
+        tileSize: 512,
+        zoomOffset: -1,
+        attribution: mapAttribution,
+        detectRetina: false,
+        maxZoom: 18,
+        noWrap: false,
+      }),
       markers: L.layerGroup(),
     };
   },

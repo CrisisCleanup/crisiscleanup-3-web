@@ -446,6 +446,7 @@ import LocationType from '@/models/LocationType';
 import { ValidateMixin } from '@/mixins';
 import DragDrop from '../../components/DragDrop';
 import LocationTool from '../../components/LocationTool';
+import { mapTileLayer } from '../../utils/map';
 
 export default {
   name: 'Profile',
@@ -642,12 +643,11 @@ export default {
       }
     },
     createTileLayer() {
-      return L.tileLayer(
-        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
-        {
-          maxZoom: 19,
-        },
-      );
+      return L.tileLayer(mapTileLayer, {
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 19,
+      });
     },
     updateOrganization(value, key) {
       Organization.update({

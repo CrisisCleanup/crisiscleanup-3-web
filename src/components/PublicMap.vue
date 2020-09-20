@@ -51,7 +51,7 @@
 import * as L from 'leaflet';
 import { Loader } from 'pixi.js';
 import { colors, templates } from '@/icons/icons_templates';
-import { getWorksiteLayer } from '../utils/map';
+import { getWorksiteLayer, mapAttribution, mapTileLayer } from '../utils/map';
 
 export default {
   name: 'PublicMap',
@@ -217,16 +217,14 @@ export default {
           const { map } = this;
           this.markerLayer.addTo(this.map);
 
-          L.tileLayer(
-            'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
-            {
-              attribution:
-                '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-              detectRetina: false,
-              maxZoom: 18,
-              noWrap: false,
-            },
-          ).addTo(map);
+          L.tileLayer(mapTileLayer, {
+            tileSize: 512,
+            zoomOffset: -1,
+            attribution: mapAttribution,
+            detectRetina: false,
+            maxZoom: 18,
+            noWrap: false,
+          }).addTo(map);
           map.attributionControl.setPosition('bottomright');
           const worksiteLayer = getWorksiteLayer(markers, map, this);
           worksiteLayer.addTo(map);

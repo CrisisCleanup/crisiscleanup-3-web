@@ -265,7 +265,7 @@ import Location from '@/models/Location';
 import Organization from '@/models/Organization';
 import LocationType from '@/models/LocationType';
 import User from '@/models/User';
-import { getWorksiteLayer } from '@/utils/map';
+import { getWorksiteLayer, mapAttribution, mapTileLayer } from '@/utils/map';
 import LayerUploadTool from '@/components/LayerUploadTool';
 import { throttle, debounce } from 'lodash';
 import MapButton from './MapButton';
@@ -368,16 +368,14 @@ export default {
       zoomControl: false,
     }).setView([35.7465122599185, -96.41150963125656], 5);
 
-    L.tileLayer(
-      'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
-      {
-        attribution:
-          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-        detectRetina: false,
-        maxZoom: 18,
-        noWrap: false,
-      },
-    ).addTo(map);
+    L.tileLayer(mapTileLayer, {
+      tileSize: 512,
+      zoomOffset: -1,
+      attribution: mapAttribution,
+      detectRetina: false,
+      maxZoom: 18,
+      noWrap: false,
+    }).addTo(map);
 
     L.DomEvent.on(this.$refs.buttons, 'click', function (ev) {
       L.DomEvent.stopPropagation(ev);

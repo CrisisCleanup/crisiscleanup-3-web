@@ -583,6 +583,7 @@ import { getErrorMessage } from '../../utils/errors';
 import LocationTool from '../../components/LocationTool';
 import { hash } from '../../utils/promise';
 import { DialogsMixin } from '../../mixins';
+import { mapTileLayer } from '../../utils/map';
 
 export default {
   name: 'AdminOrganization',
@@ -763,12 +764,11 @@ export default {
       }
     },
     createTileLayer() {
-      return L.tileLayer(
-        'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
-        {
-          maxZoom: 19,
-        },
-      );
+      return L.tileLayer(mapTileLayer, {
+        tileSize: 512,
+        zoomOffset: -1,
+        maxZoom: 19,
+      });
     },
     async saveCurrentLocation() {
       let { geometry } = this.currentPolygon.toGeoJSON();
