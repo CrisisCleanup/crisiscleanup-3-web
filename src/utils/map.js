@@ -15,6 +15,9 @@ const INTERACTIVE_ZOOM_LEVEL = 12;
 export const mapTileLayer =
   'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=XRraqrzAJz6cK5Jndbuv';
 
+export const mapTileLayerSatellite =
+  'https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=XRraqrzAJz6cK5Jndbuv';
+
 export const mapAttribution =
   '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>';
 

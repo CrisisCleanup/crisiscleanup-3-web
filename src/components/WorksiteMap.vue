@@ -72,6 +72,53 @@
         class="w-8 h-8 border border-crisiscleanup-dark-100 my-1 bg-white shadow-xl text-crisiscleanup-dark-400"
       />
     </div>
+    <div
+      class="flex flex-col absolute"
+      style="z-index: 1001; top: 10px; right: 10px;"
+    >
+      <div class="zoom-control flex flex-col mb-5">
+        <base-button
+          text=""
+          icon="map"
+          icon-size="xs"
+          :title="$t('~~Satellite Map')"
+          :alt="$t('~~Satellite Map')"
+          :action="
+            () => {
+              map.removeLayer(mapTileLayerSatellite);
+              map.addLayer(mapTileLayer);
+              selectedLayer = mapTileLayer;
+            }
+          "
+          class="w-8 h-8 border-crisiscleanup-dark-100 border-t border-l border-r shadow-xl text-xl"
+          :class="
+            selectedLayer === mapTileLayer
+              ? 'bg-crisiscleanup-dark-400 text-white'
+              : 'bg-white text-crisiscleanup-dark-400'
+          "
+        />
+        <base-button
+          text=""
+          icon="satellite"
+          icon-size="xs"
+          :title="$t('~~Street Map')"
+          :alt="$t('~~Street Map')"
+          :action="
+            () => {
+              map.removeLayer(mapTileLayer);
+              map.addLayer(mapTileLayerSatellite);
+              selectedLayer = mapTileLayerSatellite;
+            }
+          "
+          class="w-8 h-8 border border-crisiscleanup-dark-100 shadow-xl text-xl"
+          :class="
+            selectedLayer === mapTileLayerSatellite
+              ? 'bg-crisiscleanup-dark-400 text-white'
+              : 'bg-white text-crisiscleanup-dark-400'
+          "
+        />
+      </div>
+    </div>
     <template v-if="!mapLoading">
       <div
         style="z-index: 1001;"
@@ -150,6 +197,7 @@ import {
   getWorksiteLayer,
   mapAttribution,
   mapTileLayer,
+  mapTileLayerSatellite,
 } from '@/utils/map';
 import { colors, templates } from '@/icons/icons_templates';
 import { groupBy } from '@/utils/array';
@@ -222,6 +270,9 @@ export default {
       markers: [],
       markerSprites: [],
       showInteractivePopover: false,
+      mapTileLayerSatellite: null,
+      mapTileLayer: null,
+      selectedLayer: null,
       templates,
     };
   },
@@ -309,14 +360,24 @@ export default {
           }
           this.markerLayer.addTo(this.map);
 
-          L.tileLayer(mapTileLayer, {
+          this.mapTileLayer = L.tileLayer(mapTileLayer, {
             tileSize: 512,
             zoomOffset: -1,
             attribution: mapAttribution,
             detectRetina: false,
             maxZoom: 18,
             noWrap: false,
-          }).addTo(map);
+          });
+          this.mapTileLayerSatellite = L.tileLayer(mapTileLayerSatellite, {
+            tileSize: 512,
+            zoomOffset: -1,
+            attribution: mapAttribution,
+            detectRetina: false,
+            maxZoom: 18,
+            noWrap: false,
+          });
+          this.mapTileLayer.addTo(map);
+          this.selectedLayer = this.mapTileLayer;
           map.attributionControl.setPosition('bottomright');
           const worksiteLayer = getWorksiteLayer(markers, map, this);
           worksiteLayer.addTo(map);
