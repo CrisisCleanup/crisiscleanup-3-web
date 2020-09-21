@@ -111,12 +111,19 @@ export default class AgentClient extends Model {
     }
     Log.info(`Agent => ${client.contactState}`);
     Log.info(client);
+    let curContactId = null;
+    if (client.currentContact) {
+      curContactId = client.currentContact.connectContactId
+        ? client.currentContact.connectContactId
+        : client.currentContact.contactId;
+    }
     const payload = {
       agentId: client.agentId,
       state: client.state,
       routeState: client.routeState,
       contactState: client.contactState,
       locale: client.localeMap,
+      currentContactId: curContactId,
     };
     const isInbound =
       client.currentContact === null ? true : client.currentContact.isInbound;
