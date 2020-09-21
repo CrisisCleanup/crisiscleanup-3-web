@@ -115,20 +115,40 @@ export default {
 
     const { currentUser } = useUser();
 
-    const rankFilter = ref((ag) => ag);
+    const rankFilter = ref((ag) => ag.currentState.includes('online'));
 
     const dropdownProps = reactive({
       label: 'name',
       itemKey: 'key',
-      value: 'all',
+      value: 'online',
       options: [
-        {
-          key: 'all',
-          name: context.root.$t('~~All'),
-        },
         {
           key: 'online',
           name: context.root.$t('~~Online'),
+        },
+        {
+          key: 'today',
+          name: context.root.$t('~~Today'),
+        },
+        {
+          key: 'week',
+          name: context.root.$t('~~This Week'),
+        },
+        {
+          key: 'month',
+          name: context.root.$t('~~This Month'),
+        },
+        {
+          key: 'all',
+          name: context.root.$t('~~All Time'),
+        },
+        {
+          key: 'english',
+          name: context.root.$t('~~English'),
+        },
+        {
+          key: 'spanish',
+          name: context.root.$t('~~Spanish'),
         },
         {
           key: 'my-org',
@@ -138,6 +158,12 @@ export default {
     });
 
     const onDropdownUpdate = (value) => {
+      const oneDay = new Date();
+      const oneWeek = new Date();
+      const oneMonth = new Date();
+      oneDay.setDate(oneDay.getDate() - 1);
+      oneWeek.setDate(oneWeek.getDate() - 7);
+      oneMonth.setMonth(oneMonth.getMonth() - 1);
       switch (value) {
         case 'online':
           rankFilter.value = (ag) => ag.currentState.includes('online');
@@ -145,6 +171,21 @@ export default {
         case 'my-org':
           rankFilter.value = (ag) =>
             ag.organization.id === currentUser.value.organization.id;
+          break;
+        case 'today':
+          rankFilter.value = (ag) => ag.enteredTimestamp >= oneDay;
+          break;
+        case 'week':
+          rankFilter.value = (ag) => ag.enteredTimestamp >= oneWeek;
+          break;
+        case 'month':
+          rankFilter.value = (ag) => ag.enteredTimestamp >= oneMonth;
+          break;
+        case 'english':
+          rankFilter.value = (ag) => ag.locale.includes('en');
+          break;
+        case 'spanish':
+          rankFilter.value = (ag) => ag.locale.includes('es');
           break;
         default:
           rankFilter.value = (ag) => ag;
