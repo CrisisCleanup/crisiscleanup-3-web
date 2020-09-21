@@ -297,14 +297,16 @@ export default class Contact extends Model {
       .withAllRecursive()
       .find(model.agentId);
     Log.info('forcing agent out of ACW! contact:', model);
-    if (model.action === ContactActions.CONNECTING) {
+    if (
+      [ContactActions.CONNECTING, ContactActions.MISSED].includes(model.action)
+    ) {
       // If contact is deleted while it was connecting,
       // then it failed to connect (agent or contact didn't answer)
       Log.info('agent missed contact! placing offline!');
       agentClient.toggleOnline(false);
-      return;
+    } else {
+      agentClient.toggleOnline(true);
     }
-    agentClient.toggleOnline(true);
     Log.debug('clearing contact state!');
     Contact.commit((state) => {
       state.dnis = null;
