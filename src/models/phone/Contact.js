@@ -205,13 +205,11 @@ export default class Contact extends Model {
         });
       }
     }
-    if (!contact.isInbound) {
-      const outboundAttrs = Contact.getOutboundAttributes(contact);
-      if (outboundAttrs) {
-        Contact.commit(() => {
-          contact.attributes = _.merge(contact.attributes, outboundAttrs);
-        });
-      }
+    const resolvedAttr = Contact.resolveAttributes(contact);
+    if (resolvedAttr) {
+      Contact.commit(() => {
+        contact.attributes = _.merge(contact.attributes, resolvedAttr);
+      });
     }
   }
 
@@ -477,7 +475,7 @@ export default class Contact extends Model {
     });
   }
 
-  static getOutboundAttributes(contact: typeof Contact) {
+  static resolveAttributes(contact: typeof Contact) {
     const {
       currentOutbound,
     }: { currentOutbound: null | typeof PhoneOutbound } = Contact.store().state[
@@ -529,14 +527,25 @@ export default class Contact extends Model {
     if (contact.hasResolvedCases) {
       return {};
     }
-    if (currentOutbound) {
-      if (!resolveRequested) {
+    if (!resolveRequested) {
+      let payload = {
+        phone_number: _.get(
+          this.contactAttributes,
+          ContactAttributes.INBOUND_NUMBER,
+          currentOutbound ? currentOutbound.phone_number : null,
+        ),
+      };
+      if (contact.isInbound) {
+        payload = { ...payload, contact_id: contact.contactId };
+        if (payload.phone_number === null && contact.dnis) {
+          payload.phone_number = contact.dnis.dnis;
+        }
+      }
+      Log.debug('resolve payload:', payload);
+      if (payload.phone_number) {
         Contact.commit((state) => {
           state.resolveRequested = true;
         });
-        const payload = {
-          phone_number: currentOutbound.phone_number,
-        };
         Contact.api()
           .post('phone_connect/resolve_cases', payload, { save: false })
           .then((resp) => {
@@ -551,6 +560,8 @@ export default class Contact extends Model {
             });
           });
       }
+    }
+    if (currentOutbound) {
       Log.info('found current outbound!');
       return {
         [ContactAttributes.INBOUND_NUMBER]: currentOutbound.phone_number,
