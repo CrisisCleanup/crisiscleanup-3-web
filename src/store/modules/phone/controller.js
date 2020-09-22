@@ -333,6 +333,18 @@ class ControllerStore extends VuexModule {
   }
 
   @Action
+  async clearState({ agentId }: { agentId: string } = {}) {
+    Log.info('clearing controller state!');
+    this.setOutbound(null);
+    this.setCase(null);
+    this.setStatus({ notes: '', statusId: null, modified: [] });
+    await this.updateMetrics();
+    if (agentId) {
+      await this.updateCallerHistory({ agent_id: agentId });
+    }
+  }
+
+  @Action
   async serveOutbound({
     agent,
     incident,

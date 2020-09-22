@@ -313,20 +313,27 @@ export default class Contact extends Model {
       Log.info('agent missed contact! placing offline!');
       agentClient.toggleOnline(false);
     } else {
+      // ensure upstream ACW exit is sent.
       agentClient.toggleOnline(true);
     }
-    Log.debug('clearing contact state!');
-    Contact.commit((state) => {
-      state.dnis = null;
-      state.worksites = [];
-      state.pdas = [];
-      state.locale = null;
-      state.outbounds = [];
-      state.inbound = null;
-      state.outbound = null;
-      state.resolveRequested = false;
-      state.resolveTask = '';
-    });
+    Contact.store()
+      .dispatch('phone.controller/clearState', {
+        agentId: agentClient.agentId,
+      })
+      .then(() => {
+        Log.debug('clearing contact state!');
+        Contact.commit((state) => {
+          state.dnis = null;
+          state.worksites = [];
+          state.pdas = [];
+          state.locale = null;
+          state.outbounds = [];
+          state.inbound = null;
+          state.outbound = null;
+          state.resolveRequested = false;
+          state.resolveTask = '';
+        });
+      });
   }
 
   static afterUpdate(model: Contact): void {
