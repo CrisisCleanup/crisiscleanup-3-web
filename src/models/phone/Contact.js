@@ -459,13 +459,21 @@ export default class Contact extends Model {
       dnis = await this.getDnis({ inbound, outbound });
     }
     Contact.commit((state) => {
-      state.dnis = _.isArray(dnis) ? _.first(dnis) : dnis;
-      state.worksites = _.unionBy(state.worksites, wrkSites, 'id');
-      state.pdas = _.unionBy(state.pdas, pdas, 'id');
-      state.locale = locale;
-      state.outbounds = _.unionBy(state.outbounds, outbounds, 'id');
-      state.inbound = inbound;
-      state.outbound = outbound;
+      if (dnis && !_.isEmpty(dnis)) {
+        state.dnis = _.isArray(dnis) ? _.first(dnis) : dnis;
+      }
+      state.worksites = _.isEmpty(wrkSites)
+        ? state.worksites
+        : _.unionBy(state.worksites, wrkSites, 'id');
+      state.pdas = _.isEmpty(state.pdas)
+        ? state.pdas
+        : _.unionBy(state.pdas, pdas, 'id');
+      state.locale = locale || state.locale;
+      state.outbounds = _.isEmpty(outbounds)
+        ? state.outbounds
+        : _.unionBy(state.outbounds, outbounds, 'id');
+      state.inbound = inbound || state.inbound;
+      state.outbound = outbound || state.outbound;
     });
   }
 
@@ -506,6 +514,14 @@ export default class Contact extends Model {
               Contact.commit(() => {
                 contact.attributes = _.merge(contact.attributes || {}, results);
               });
+              contact
+                .updateAttributes()
+                .then(() =>
+                  Log.info(
+                    'updated attributes =>',
+                    Contact.store().state.entities['phone/contact'],
+                  ),
+                );
             }
           });
       }
@@ -515,6 +531,9 @@ export default class Contact extends Model {
     }
     if (currentOutbound) {
       if (!resolveRequested) {
+        Contact.commit((state) => {
+          state.resolveRequested = true;
+        });
         const payload = {
           phone_number: currentOutbound.phone_number,
         };
@@ -528,7 +547,6 @@ export default class Contact extends Model {
               },
             } = resp;
             Contact.commit((state) => {
-              state.resolveRequested = true;
               state.resolveTask = task_id;
             });
           });

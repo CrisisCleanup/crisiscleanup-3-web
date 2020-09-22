@@ -6,7 +6,7 @@
 import { ref, computed, watch } from '@vue/composition-api';
 import { useState, useGetters } from '@u3u/vue-hooks';
 import _ from 'lodash';
-import { CallType, ContactActions } from '@/models/phone/Contact';
+import Contact, { CallType, ContactActions } from '@/models/phone/Contact';
 import { useIntervalFn } from '@vueuse/core';
 import useAgent from '@/use/phone/useAgent';
 
@@ -93,6 +93,16 @@ export default () => {
     }
   }, 1000);
 
+  const syncAttributes = useIntervalFn(() => {
+    if (
+      callPending.value &&
+      currentContact.value &&
+      !currentContact.value.hasResolvedCases
+    ) {
+      Contact.syncAttributes(currentContact.value.contactId);
+    }
+  }, 1000);
+
   watch(
     () => currentContact.value,
     () => {
@@ -101,6 +111,12 @@ export default () => {
         currentContact.value.action === ContactActions.ENDED
       ) {
         syncDuration.stop();
+      }
+      if (currentContact.value && currentContact.value.hasResolvedCases) {
+        syncAttributes.stop();
+      }
+      if (currentContact.value && !currentContact.value.hasResolvedCases) {
+        syncAttributes.start();
       }
     },
   );
