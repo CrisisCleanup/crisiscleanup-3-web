@@ -428,7 +428,11 @@ class ControllerStore extends VuexModule {
   @Action
   async updateHistoricMetrics() {
     const { daily, aggregates } = await Agent.fetchHistoricMetrics();
-    this.setHistoricMetrics({ daily, aggregates });
+    const _byDate = daily.map(({ day, ...m }) => ({
+      day: day.split('T')[0],
+      ...m,
+    }));
+    this.setHistoricMetrics({ daily: _byDate, aggregates });
     this.setLoading({ historicMetrics: false });
   }
 
