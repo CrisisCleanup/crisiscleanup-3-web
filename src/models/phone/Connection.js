@@ -44,6 +44,14 @@ export default class Connection extends Model {
     }: ConnectionType);
   }
 
+  static beforeCreate(model: Connection): void | boolean {
+    if (model.connectionId.includes('$')) {
+      Log.error('Invalid connection!', model);
+      return false;
+    }
+    return true;
+  }
+
   static afterUpdate(model: Connection) {
     if (_.isNil(model.streamsConnectionId)) {
       const voiceConnection = ACS.getConnectionByContactId(model.contactId);
