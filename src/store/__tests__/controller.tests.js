@@ -254,6 +254,46 @@ describe('phone.controller store', () => {
     `);
   });
 
+  it('calculates agents needed over 3 day span', async () => {
+    const ctrlStore = getModule(ControllerStore, mockStore);
+    // no historic metrics yet should default to avg of 1
+    await ctrlStore.updateMetrics({
+      metrics: MockMetrics({ queueCount: 1600, online: 3 }),
+    });
+    expect(ctrlStore.metrics['en-US']).toMatchInlineSnapshot(`
+      Object {
+        "agentsAvailable": 3,
+        "agentsNeeded": 44,
+        "agentsOnCall": 1,
+        "agentsOnline": 3,
+        "contactsInQueue": 1600,
+        "contactsInQueueOutbound": 0,
+        "contactsInQueueOutboundAll": 0,
+        "contactsScheduledOutboundAll": 0,
+        "totalWaiting": 1600,
+      }
+    `);
+    await ctrlStore.setHistoricMetrics({ aggregates: { outbound__avg: 11 } });
+    await ctrlStore.updateMetrics({
+      metrics: MockMetrics({ queueCount: 1600, online: 1 }),
+    });
+    expect(ctrlStore.metrics['en-US'].agentsNeeded).toMatchInlineSnapshot(
+      `133`,
+    );
+    await ctrlStore.updateMetrics({
+      metrics: MockMetrics({ queueCount: 1600, online: 5 }),
+    });
+    expect(ctrlStore.metrics['en-US'].agentsNeeded).toMatchInlineSnapshot(`26`);
+    await ctrlStore.updateMetrics({
+      metrics: MockMetrics({ queueCount: 1600, online: 10 }),
+    });
+    expect(ctrlStore.metrics['en-US'].agentsNeeded).toMatchInlineSnapshot(`13`);
+    await ctrlStore.updateMetrics({
+      metrics: MockMetrics({ queueCount: 1600, online: 40 }),
+    });
+    expect(ctrlStore.metrics['en-US'].agentsNeeded).toMatchInlineSnapshot(`3`);
+  });
+
   it('getGeneralMetrics', async () => {
     const ctrlStore = getModule(ControllerStore, mockStore);
     await ctrlStore.updateMetrics({

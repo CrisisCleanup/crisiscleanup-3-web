@@ -637,8 +637,9 @@ class ControllerStore extends VuexModule {
       const agentCapacity = 12 * numOnline; // each agent can take 12 calls
       const queueOverflow = totalWaiting - agentCapacity; // number of callers over the capacity
       Log.debug('current queue capacity overflow:', queueOverflow);
-      const needed = queueOverflow >= 1 ? Math.ceil(queueOverflow / 12) : 0;
-      subState[Metrics.NEEDED[0]] = needed;
+      let needed = queueOverflow >= 1 ? Math.ceil(queueOverflow / 12) : 0;
+      needed /= numOnline > 0 ? numOnline : 1;
+      subState[Metrics.NEEDED[0]] = needed >= 1 ? Math.ceil(needed) : 0;
 
       newState[locale] = subState;
     });
