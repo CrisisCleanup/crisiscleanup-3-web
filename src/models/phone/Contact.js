@@ -306,7 +306,11 @@ export default class Contact extends Model {
       .find(model.agentId);
     Log.info('forcing agent out of ACW! contact:', model);
     if (
-      [ContactActions.CONNECTING, ContactActions.MISSED].includes(model.action)
+      [
+        ContactActions.CONNECTING,
+        ContactActions.MISSED,
+        ContactActions.ENTER,
+      ].includes(model.action)
     ) {
       // If contact is deleted while it was connecting,
       // then it failed to connect (agent or contact didn't answer)
