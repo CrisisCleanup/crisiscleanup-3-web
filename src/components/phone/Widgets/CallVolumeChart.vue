@@ -22,7 +22,6 @@ export default {
   computed: {
     chartData() {
       return {
-        labels: ['July', 'Aug', 'Sept'],
         datasets: [
           {
             label: 'New Cases',
@@ -76,6 +75,7 @@ export default {
           xAxes: [
             {
               type: 'time',
+              offset: true,
               distribution: 'series',
               bounds: 'data',
               time: {
