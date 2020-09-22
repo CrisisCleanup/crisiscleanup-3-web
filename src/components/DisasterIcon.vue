@@ -3,12 +3,14 @@
     ref="icon"
     type="image/svg+xml"
     class="disaster-icon"
-    :data="currentIncident.incidentImage"
+    :data="incidentImage"
     :style="style"
     @load="setStyle"
   ></object>
 </template>
 <script>
+import Incident from '@/models/Incident';
+
 export default {
   name: 'DisasterIcon',
   props: {
@@ -38,6 +40,18 @@ export default {
     style() {
       return { visibility: this.ready ? 'visible' : 'hidden' };
     },
+    incidentImage() {
+      if (this.currentIncident && this.currentIncident.incidentImage) {
+        return this.currentIncident.incidentImage;
+      }
+      return Incident.getIncidentImage(this.currentIncident.incident_type);
+    },
+    svgDocument() {
+      if (!this.$refs.icon) return null;
+      const svgDoc = this.$refs.icon.getSVGDocument();
+      if (!svgDoc) return null;
+      return svgDoc;
+    },
   },
   methods: {
     setStyle() {
@@ -50,14 +64,14 @@ export default {
       this.ready = true;
     },
     setColor() {
-      this.$refs.icon
-        .getSVGDocument()
-        .getElementsByTagName(
-          'path',
-        )[0].style.fill = this.currentIncident.color;
+      if (!this.svgDocument) return;
+      this.svgDocument.getElementsByTagName(
+        'path',
+      )[0].style.fill = this.currentIncident.color;
     },
     setSize() {
-      const svg = this.$refs.icon.getSVGDocument().activeElement;
+      if (!this.svgDocument) return;
+      const svg = this.svgDocument.activeElement;
       svg.attributes.width.nodeValue = this.width_;
       svg.attributes.height.nodeValue = this.height_;
     },

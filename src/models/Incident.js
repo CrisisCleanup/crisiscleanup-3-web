@@ -21,16 +21,20 @@ export default class Incident extends CCUModel {
     };
   }
 
-  get incidentImage() {
-    if (this.incident_type) {
+  static getIncidentImage(incidentType) {
+    if (incidentType) {
       try {
-        const incidentKey = this.incident_type.replace('_', '-');
+        const incidentKey = incidentType.replace('_', '-');
         return require(`@/assets/disaster_icons/${incidentKey}.svg`);
       } catch (e) {
         window.vue.$log.error(e);
       }
     }
     return null;
+  }
+
+  get incidentImage() {
+    return Incident.getIncidentImage(this.incident_type);
   }
 
   get locationModels() {
