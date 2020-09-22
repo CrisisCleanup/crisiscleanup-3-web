@@ -45,8 +45,11 @@ export default {
 
     watch(
       () => loading.value,
-      () => {
+      async () => {
         if (!loading.value) {
+          await controller.actions.updateCallerHistory({
+            agent_id: agent.value.agentId,
+          });
           agent.value.heartbeat().then(() => start());
         }
       },

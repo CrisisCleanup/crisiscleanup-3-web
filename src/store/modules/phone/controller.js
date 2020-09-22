@@ -323,12 +323,13 @@ class ControllerStore extends VuexModule {
       Log.info('updating inbound status with:', callStatus);
       await PhoneInbound.api().updateStatus(contact.inbound.id, callStatus);
     }
+    const { agentId } = contact;
     await contact.disconnect();
     this.setStatus({ notes: '', statusId: null, modified: [] });
     this.setCase(null);
-    this.setLoading({ callerHistory: true });
     await this.setView({ page: ControllerPages.DASHBOARD });
     await this.updateMetrics();
+    await this.updateCallerHistory({ agent_id: agentId });
   }
 
   @Action
@@ -481,11 +482,18 @@ class ControllerStore extends VuexModule {
         if (metrics.user) {
           metrics.user = await User.fetchOrFindId(metrics.user.id);
         } else {
-          await this.updateCallerHistory({
-            ...metrics,
-            agent_id,
-            state,
-            entered_timestamp,
+          const currentAgentMetrics = _.get(this.agentMetrics, agent_id, null);
+          if (!currentAgentMetrics) {
+            return;
+          }
+          const updatedMetrics = {
+            ...currentAgentMetrics,
+            currentState: state,
+            enteredTimestamp: Date.parse(entered_timestamp),
+          };
+          Log.debug('updating current agent metrics:', updatedMetrics);
+          this.setAgentMetrics({
+            [agent_id]: updatedMetrics,
           });
           return;
         }
@@ -504,44 +512,48 @@ class ControllerStore extends VuexModule {
   }
 
   @Action
-  async updateCallerHistory({ agent_id, state, entered_timestamp }) {
-    if (this.loading.callerHistory) {
-      const { recent_contacts } = await Agent.api().getMetrics(agent_id);
-      let recentContacts = recent_contacts;
-      // find all unique case ids and prefetch em
-      let recentCases = _.uniq(
-        _.flatten(recentContacts.map(({ cases }) => cases)),
+  async updateCallerHistory({ agent_id }) {
+    this.setLoading({ callerHistory: true });
+    const {
+      recent_contacts,
+      state,
+      entered_timestamp,
+      locale,
+    } = await Agent.api().getMetrics(agent_id);
+    let recentContacts = recent_contacts;
+    // find all unique case ids and prefetch em
+    let recentCases = _.uniq(
+      _.flatten(recentContacts.map(({ cases }) => cases)),
+    );
+    recentCases = _.difference(recentCases, this.history.resolvedCases);
+    this.setHistory({
+      resolvedCases: _.union(recentCases, this.history.resolvedCases),
+    });
+    Log.debug('found cases in history:', recentCases);
+    await Promise.all(
+      recentCases.map((cId) =>
+        Worksite.api().find_or_fetch(cId, { resolve: false }),
+      ),
+    );
+    recentContacts = recentContacts.map(async ({ cases, ...c }) => {
+      const wkSites = await Promise.all(
+        cases.map(async (cId) => {
+          let caseItem = await Worksite.find(cId);
+          if (_.isNil(caseItem)) {
+            const {
+              response: { data },
+            } = await Worksite.api().get(`/worksites/${cId}`);
+            caseItem = data;
+          }
+          return caseItem;
+        }),
       );
-      recentCases = _.difference(recentCases, this.history.resolvedCases);
-      this.setHistory({
-        resolvedCases: _.union(recentCases, this.history.resolvedCases),
-      });
-      Log.debug('found cases in history:', recentCases);
-      await Promise.all(
-        recentCases.map((cId) =>
-          Worksite.api().find_or_fetch(cId, { resolve: false }),
-        ),
-      );
-      recentContacts = recentContacts.map(async ({ cases, ...c }) => {
-        const wkSites = await Promise.all(
-          cases.map(async (cId) => {
-            let caseItem = await Worksite.find(cId);
-            if (_.isNil(caseItem)) {
-              const {
-                response: { data },
-              } = await Worksite.api().get(`/worksites/${cId}`);
-              caseItem = data;
-            }
-            return caseItem;
-          }),
-        );
-        return { cases: wkSites, ...c };
-      });
-      recentContacts = await Promise.all(recentContacts);
-      Log.debug('updating caller history:', recentContacts);
-      this.setCallerHistory(recentContacts);
-      this.setLoading({ callerHistory: false });
-    }
+      return { cases: wkSites, ...c };
+    });
+    recentContacts = await Promise.all(recentContacts);
+    Log.debug('updating caller history:', recentContacts);
+    this.setCallerHistory(recentContacts);
+    this.setLoading({ callerHistory: false });
     Log.debug('looking for current agent...', agent_id, this.agentMetrics);
     const currentAgentMetrics = _.get(this.agentMetrics, agent_id, null);
     if (!currentAgentMetrics) {
@@ -551,6 +563,7 @@ class ControllerStore extends VuexModule {
       ...currentAgentMetrics,
       currentState: state,
       enteredTimestamp: Date.parse(entered_timestamp),
+      locale,
     };
     Log.debug('updating current agent metrics:', updatedMetrics);
     this.setAgentMetrics({
