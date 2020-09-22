@@ -266,8 +266,10 @@ export default class AgentClient extends Model {
       return this.isOnline;
     }
     if (typeof connected === 'boolean') {
+      Log.debug(`Setting agent state: ${connected}`);
       return ACS.setAgentState(connected);
     }
+    Log.debug(`Toggling agent state: ${!this.isOnline}`);
     return ACS.setAgentState(!this.isOnline);
   }
 
