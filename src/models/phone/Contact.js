@@ -215,6 +215,14 @@ export default class Contact extends Model {
     }
   }
 
+  static beforeCreate(model: Contact): void | boolean {
+    if (model.contactId.includes('$')) {
+      Log.error('Invalid contact!', model);
+      return false;
+    }
+    return true;
+  }
+
   static afterCreate(model: Contact): void {
     const isNew = model.action === ContactActions.ENTER;
     const initConnection: ConnectionType = {
