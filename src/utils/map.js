@@ -13,13 +13,13 @@ import Worksite from '@/models/Worksite';
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
 export const mapTileLayer =
-  'https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=XRraqrzAJz6cK5Jndbuv';
+  'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
 
 export const mapTileLayerSatellite =
-  'https://api.maptiler.com/maps/hybrid/{z}/{x}/{y}.jpg?key=XRraqrzAJz6cK5Jndbuv';
+  'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
 
 export const mapAttribution =
-  '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>';
+  '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
 export const getGoogleMapsLocation = (url) => {
   const regex = new RegExp('@(.*),(.*),');
