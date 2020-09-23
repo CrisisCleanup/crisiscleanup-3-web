@@ -369,8 +369,8 @@ export default {
     }).setView([35.7465122599185, -96.41150963125656], 5);
 
     L.tileLayer(mapTileLayer, {
-      tileSize: 512,
-      zoomOffset: -1,
+      // tileSize: 512,
+      // zoomOffset: -1,
       attribution: mapAttribution,
       detectRetina: false,
       maxZoom: 18,

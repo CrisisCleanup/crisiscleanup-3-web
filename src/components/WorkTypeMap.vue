@@ -64,8 +64,8 @@ export default {
       const { map } = this;
 
       L.tileLayer(mapTileLayer, {
-        tileSize: 512,
-        zoomOffset: -1,
+        // tileSize: 512,
+        // zoomOffset: -1,
         attribution: mapAttribution,
         detectRetina: false,
         maxZoom: 18,
