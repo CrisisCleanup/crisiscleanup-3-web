@@ -14,7 +14,7 @@ module.exports = {
     node: true,
     'cypress/globals': true,
   },
-  plugins: ['flowtype', 'cypress'],
+  plugins: ['vue', 'flowtype', 'cypress'],
   extends: [
     'airbnb-base',
     'plugin:vue/strongly-recommended',
@@ -22,7 +22,6 @@ module.exports = {
     'prettier/babel',
     'prettier/vue',
     'plugin:cypress/recommended',
-    'plugin:vue-types/strongly-recommended',
     'plugin:flowtype/recommended',
   ],
   globals: {
@@ -48,18 +47,15 @@ module.exports = {
     'import/prefer-default-export': 0,
     'class-methods-use-this': 0,
     'prettier/prettier': ['error', prettierOptions],
-    'vue/require-v-for-key': 1,
-    'vue/no-use-v-if-with-v-for': 1,
     'new-cap': 0,
     'no-underscore-dangle': 0,
     'no-plusplus': 0,
-    radix: 0,
+    'radix': 0,
     // TODO: mitigate in the future
     'no-param-reassign': ['error', { props: false }],
-    camelcase: 1,
+    'camelcase': 1,
     'global-require': 0,
     'func-names': 0,
-    // ----
   },
   settings: {
     'import/resolver': {
