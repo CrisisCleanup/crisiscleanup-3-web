@@ -264,6 +264,7 @@ $metric-headers: ('In' 'Out' 'Total');
   flex-grow: 1;
   flex-direction: column;
   scrollbar-width: none;
+  max-height: 50vh;
 
   .item:first-of-type {
     padding-top: 0 !important;

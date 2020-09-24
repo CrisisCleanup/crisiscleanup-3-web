@@ -50,6 +50,7 @@ export default {
           await controller.actions.updateCallerHistory({
             agent_id: agent.value.agentId,
           });
+          await controller.actions.updateMetrics();
           agent.value.heartbeat().then(() => start());
         }
       },

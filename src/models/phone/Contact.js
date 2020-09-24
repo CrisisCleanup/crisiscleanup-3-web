@@ -205,14 +205,20 @@ export default class Contact extends Model {
         });
       }
     }
-    if (!contact.isInbound) {
-      const outboundAttrs = Contact.getOutboundAttributes(contact);
-      if (outboundAttrs) {
-        Contact.commit(() => {
-          contact.attributes = _.merge(contact.attributes, outboundAttrs);
-        });
-      }
+    const resolvedAttr = Contact.resolveAttributes(contact);
+    if (resolvedAttr) {
+      Contact.commit(() => {
+        contact.attributes = _.merge(contact.attributes, resolvedAttr);
+      });
     }
+  }
+
+  static beforeCreate(model: Contact): void | boolean {
+    if (model.contactId.includes('$')) {
+      Log.error('Invalid contact!', model);
+      return false;
+    }
+    return true;
   }
 
   static afterCreate(model: Contact): void {
@@ -298,27 +304,38 @@ export default class Contact extends Model {
       .find(model.agentId);
     Log.info('forcing agent out of ACW! contact:', model);
     if (
-      [ContactActions.CONNECTING, ContactActions.MISSED].includes(model.action)
+      [
+        ContactActions.CONNECTING,
+        ContactActions.MISSED,
+        ContactActions.ENTER,
+      ].includes(model.action)
     ) {
       // If contact is deleted while it was connecting,
       // then it failed to connect (agent or contact didn't answer)
       Log.info('agent missed contact! placing offline!');
       agentClient.toggleOnline(false);
     } else {
+      // ensure upstream ACW exit is sent.
       agentClient.toggleOnline(true);
     }
-    Log.debug('clearing contact state!');
-    Contact.commit((state) => {
-      state.dnis = null;
-      state.worksites = [];
-      state.pdas = [];
-      state.locale = null;
-      state.outbounds = [];
-      state.inbound = null;
-      state.outbound = null;
-      state.resolveRequested = false;
-      state.resolveTask = '';
-    });
+    Contact.store()
+      .dispatch('phone.controller/clearState', {
+        agentId: agentClient.agentId,
+      })
+      .then(() => {
+        Log.debug('clearing contact state!');
+        Contact.commit((state) => {
+          state.dnis = null;
+          state.worksites = [];
+          state.pdas = [];
+          state.locale = null;
+          state.outbounds = [];
+          state.inbound = null;
+          state.outbound = null;
+          state.resolveRequested = false;
+          state.resolveTask = '';
+        });
+      });
   }
 
   static afterUpdate(model: Contact): void {
@@ -440,17 +457,25 @@ export default class Contact extends Model {
       dnis = await this.getDnis({ inbound, outbound });
     }
     Contact.commit((state) => {
-      state.dnis = _.isArray(dnis) ? _.first(dnis) : dnis;
-      state.worksites = _.unionBy(state.worksites, wrkSites, 'id');
-      state.pdas = _.unionBy(state.pdas, pdas, 'id');
-      state.locale = locale;
-      state.outbounds = _.unionBy(state.outbounds, outbounds, 'id');
-      state.inbound = inbound;
-      state.outbound = outbound;
+      if (dnis && !_.isEmpty(dnis)) {
+        state.dnis = _.isArray(dnis) ? _.first(dnis) : dnis;
+      }
+      state.worksites = _.isEmpty(wrkSites)
+        ? state.worksites
+        : _.unionBy(state.worksites, wrkSites, 'id');
+      state.pdas = _.isEmpty(state.pdas)
+        ? state.pdas
+        : _.unionBy(state.pdas, pdas, 'id');
+      state.locale = locale || state.locale;
+      state.outbounds = _.isEmpty(outbounds)
+        ? state.outbounds
+        : _.unionBy(state.outbounds, outbounds, 'id');
+      state.inbound = inbound || state.inbound;
+      state.outbound = outbound || state.outbound;
     });
   }
 
-  static getOutboundAttributes(contact: typeof Contact) {
+  static resolveAttributes(contact: typeof Contact) {
     const {
       currentOutbound,
     }: { currentOutbound: null | typeof PhoneOutbound } = Contact.store().state[
@@ -487,6 +512,14 @@ export default class Contact extends Model {
               Contact.commit(() => {
                 contact.attributes = _.merge(contact.attributes || {}, results);
               });
+              contact
+                .updateAttributes()
+                .then(() =>
+                  Log.info(
+                    'updated attributes =>',
+                    Contact.store().state.entities['phone/contact'],
+                  ),
+                );
             }
           });
       }
@@ -494,11 +527,25 @@ export default class Contact extends Model {
     if (contact.hasResolvedCases) {
       return {};
     }
-    if (currentOutbound) {
-      if (!resolveRequested) {
-        const payload = {
-          phone_number: currentOutbound.phone_number,
-        };
+    if (!resolveRequested) {
+      let payload = {
+        phone_number: _.get(
+          this.contactAttributes,
+          ContactAttributes.INBOUND_NUMBER,
+          currentOutbound ? currentOutbound.phone_number : null,
+        ),
+      };
+      if (contact.isInbound) {
+        payload = { ...payload, contact_id: contact.contactId };
+        if (payload.phone_number === null && contact.dnis) {
+          payload.phone_number = contact.dnis.dnis;
+        }
+      }
+      Log.debug('resolve payload:', payload);
+      if (payload.phone_number) {
+        Contact.commit((state) => {
+          state.resolveRequested = true;
+        });
         Contact.api()
           .post('phone_connect/resolve_cases', payload, { save: false })
           .then((resp) => {
@@ -509,11 +556,12 @@ export default class Contact extends Model {
               },
             } = resp;
             Contact.commit((state) => {
-              state.resolveRequested = true;
               state.resolveTask = task_id;
             });
           });
       }
+    }
+    if (currentOutbound) {
       Log.info('found current outbound!');
       return {
         [ContactAttributes.INBOUND_NUMBER]: currentOutbound.phone_number,

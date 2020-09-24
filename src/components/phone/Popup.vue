@@ -44,7 +44,6 @@
       <div class="header">
         <DisasterIcon
           v-if="currentIncident && currentIncident.incidentImage"
-          :width="50"
           :current-incident="currentIncident"
         />
         <base-text :weight="700" variant="h1"

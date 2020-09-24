@@ -783,8 +783,8 @@ export default {
     },
     createTileLayer() {
       return L.tileLayer(mapTileLayer, {
-        tileSize: 512,
-        zoomOffset: -1,
+        // tileSize: 512,
+        // zoomOffset: -1,
         maxZoom: 19,
       });
     },

@@ -27,7 +27,7 @@
         <template #cases="slotProps">
           <div class="flex flex-col">
             <div
-              class="inline-flex items-center flex-row py-1"
+              class="inline-flex items-center flex-row py-1 justify-start"
               v-for="caseItem in slotProps.item.cases"
               :key="`${caseItem.id}`"
             >
@@ -37,11 +37,11 @@
               >
                 {{ caseItem.case_number }}
               </base-link>
-              <div class="flex space-evenly">
+              <div class="flex space-evenly justify-start">
                 <div
                   v-for="worktype in caseItem.work_types"
                   :key="`${worktype.id}`"
-                  class="case-svg-container rounded-full p-1 mr-1 shadow-sm"
+                  class="svg-container rounded-full p-1 mr-1 shadow-sm"
                   v-html="getWorkTypeImg(worktype)"
                   :style="getWorkTypeStyle(worktype)"
                 />
@@ -82,7 +82,7 @@ export default {
       };
     },
     getWorkTypeImg(worktype) {
-      return this.getWorktypeSVG(worktype, '32');
+      return this.getWorktypeSVG(worktype, '26');
     },
   },
   computed: {
@@ -110,25 +110,25 @@ export default {
           title: '',
           dataIndex: 'incident',
           key: 'incident',
-          width: '.5fr',
+          width: '.4fr',
         },
         {
           title: 'Phone Number',
           dataIndex: 'mobile',
           key: 'mobile',
-          width: '1.25fr',
+          width: '1fr',
         },
         {
           title: 'Name',
           dataIndex: 'name',
           key: 'name',
-          width: '1fr',
+          width: '.8fr',
         },
         {
           title: 'Case #',
           dataIndex: 'cases',
           key: 'cases',
-          width: '1fr',
+          width: '1.35fr',
         },
         {
           title: 'Call Status',
@@ -146,7 +146,7 @@ export default {
           title: 'Completed',
           dataIndex: 'completed_at',
           key: 'completed_at',
-          width: '1fr',
+          width: '.75fr',
         },
       ];
     },
@@ -154,8 +154,13 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .cell {
   @apply text-crisiscleanup-dark-300;
+}
+
+.svg-container svg {
+  width: 26px !important;
+  height: 26px !important;
 }
 </style>

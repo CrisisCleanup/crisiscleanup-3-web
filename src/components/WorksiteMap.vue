@@ -361,16 +361,16 @@ export default {
           this.markerLayer.addTo(this.map);
 
           this.mapTileLayer = L.tileLayer(mapTileLayer, {
-            tileSize: 512,
-            zoomOffset: -1,
+            // tileSize: 512,
+            // zoomOffset: -1,
             attribution: mapAttribution,
             detectRetina: false,
             maxZoom: 18,
             noWrap: false,
           });
           this.mapTileLayerSatellite = L.tileLayer(mapTileLayerSatellite, {
-            tileSize: 512,
-            zoomOffset: -1,
+            // tileSize: 512,
+            // zoomOffset: -1,
             attribution: mapAttribution,
             detectRetina: false,
             maxZoom: 18,
