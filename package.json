@@ -60,7 +60,7 @@
     "@vuex-orm/plugin-axios": "^0.9.3",
     "@vuex-orm/plugin-change-flags": "^1.2.3",
     "aws-sdk": "^2.725.0",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "cf-agent-library": "git+https://git@github.com/CrisisCleanup/cf-agent-library.git",
     "chart.js": "^2.9.3",
     "circle-to-polygon": "^2.0.2",
