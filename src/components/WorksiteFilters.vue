@@ -264,8 +264,9 @@
                       <div>
                         <div>
                           <div
-                            v-for="option in field.values"
-                            v-if="Boolean(option.value)"
+                            v-for="option in field.values.filter(
+                              (option) => !!option.value,
+                            )"
                             :key="option.value"
                             :span="8"
                           >
@@ -283,8 +284,9 @@
                       <div>
                         <div>
                           <div
-                            v-for="option in field.values"
-                            v-if="Boolean(option.value)"
+                            v-for="option in field.values.filter(
+                              (option) => !!option.value,
+                            )"
                             :key="option.value"
                             :span="8"
                           >

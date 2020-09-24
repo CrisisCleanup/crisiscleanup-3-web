@@ -29,9 +29,9 @@
             <div
               class="inline-flex items-center flex-row py-1"
               v-for="caseItem in slotProps.item.cases"
+              :key="`${caseItem.id}`"
             >
               <base-link
-                :key="caseItem.id"
                 class="mx-1"
                 :to="`/incident/${caseItem.incident}/cases/${caseItem.id}?showOnMap=true`"
               >
@@ -40,6 +40,7 @@
               <div class="flex space-evenly">
                 <div
                   v-for="worktype in caseItem.work_types"
+                  :key="`${worktype.id}`"
                   class="case-svg-container rounded-full p-1 mr-1 shadow-sm"
                   v-html="getWorkTypeImg(worktype)"
                   :style="getWorkTypeStyle(worktype)"

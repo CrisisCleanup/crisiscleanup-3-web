@@ -123,6 +123,7 @@
               }}</base-text>
               <div
                 v-for="organization in relatedOrganizations"
+                :key="`${organization.id}`"
                 class="my-1 flex items-center justify-between"
               >
                 {{ organization.name }}
@@ -144,6 +145,7 @@
               }}</base-text>
               <div
                 v-for="incident in relatedIncidents"
+                :key="`${incident.id}`"
                 class="my-1 flex items-center justify-between"
               >
                 {{ incident.name }}
@@ -199,7 +201,10 @@
             {{ $t('locationVue.organization_incidents') }}
           </div>
           <div class="h-48 overflow-auto">
-            <div v-for="incident in selectedOrganization.incident_list">
+            <div
+              v-for="incident in selectedOrganization.incident_list"
+              :key="`${incident.id}`"
+            >
               {{ incident.name }}
             </div>
           </div>

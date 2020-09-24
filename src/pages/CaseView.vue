@@ -460,8 +460,8 @@ export default {
     worksiteAddress() {
       if (this.worksite) {
         // eslint-disable-next-line camelcase
-        const { address, city, state, postal_code } = this.worksite;
-        return `${address}, ${city}, ${state} ${postal_code}`;
+        const { address, city, state, postal_code: postalCode } = this.worksite;
+        return `${address}, ${city}, ${state} ${postalCode}`;
       }
       return '';
     },

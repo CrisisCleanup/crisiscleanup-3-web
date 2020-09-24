@@ -381,6 +381,7 @@
             v-for="user in userResults.filter(
               (user) => !team.users.includes(user.id),
             )"
+            :key="`${user.id}`"
             class="border-t pt-2"
           >
             <base-checkbox

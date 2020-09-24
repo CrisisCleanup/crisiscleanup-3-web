@@ -152,23 +152,23 @@ export default {
         subaction,
         patient,
         recipient,
-        user_badge,
-        required_attr,
+        user_badge: userBadge,
+        required_attr: requiredAttr,
       } = unwrap(eventInputs);
       let data = {};
-      let badge_key = _.get(user_badge, 'key', null);
-      badge_key = badge_key === -1 ? null : badge_key;
+      let badgeKey = _.get(userBadge, 'key', null);
+      badgeKey = badgeKey === -1 ? null : badgeKey;
       try {
         data = {
           key: unwrap(eventKey),
-          required_attr: Object.values(required_attr || {}).map((a) => a.key),
+          required_attr: Object.values(requiredAttr || {}).map((a) => a.key),
           points: unwrap(eventPoints),
           actor_key: actor.key,
           action_key: action.key,
           subaction_key: _.get(subaction, 'key', null),
           patient_key: _.get(patient, 'key', null),
           recipient_key: _.get(recipient, 'key', null),
-          badge_key,
+          badge_key: badgeKey,
           localizations: eventTranslations,
           ...localeKeys,
         };

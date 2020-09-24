@@ -37,6 +37,7 @@
         >
           <div
             v-for="team in teams"
+            :key="`${team.id}`"
             class="h-full px-4 pt-2 pb-6 hover:bg-crisiscleanup-light-grey cursor-pointer"
             :class="
               String(team.id) === String($route.params.team_id)

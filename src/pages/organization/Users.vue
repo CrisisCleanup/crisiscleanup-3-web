@@ -92,7 +92,7 @@
                 <div class="w-64 p-2">
                   <div v-if="currentFilterSection === 'role'">
                     Role
-                    <div v-for="role in roles">
+                    <div v-for="role in roles" :key="`${role.id}`">
                       <base-checkbox
                         v-model="filters.roles.data[role.id]"
                         class="block my-1"

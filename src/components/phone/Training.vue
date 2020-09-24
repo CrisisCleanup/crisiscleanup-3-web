@@ -34,7 +34,7 @@
         </p>
       </div>
 
-      <div v-for="(test, testIdx) in tests">
+      <div v-for="(test, testIdx) in tests" :key="`${testIdx}`">
         <!-- Questions -->
         <div
           v-for="(question, questionIdx) in test.questions"

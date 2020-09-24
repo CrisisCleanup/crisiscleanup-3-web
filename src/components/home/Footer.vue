@@ -1,6 +1,6 @@
 <template>
   <div class="grid--footer self-center">
-    <span v-for="item in routes">
+    <span v-for="item in routes" :key="item.key">
       <a
         v-if="item.external"
         :href="item.route"
@@ -11,7 +11,6 @@
       </a>
       <router-link
         v-if="!item.external"
-        :key="item.key"
         :to="item.route || '#'"
         class="font-body font-display text-h3 text-crisiscleanup-dark-300"
       >

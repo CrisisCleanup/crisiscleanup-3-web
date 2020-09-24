@@ -23,10 +23,14 @@
                 <div>{{ $t('printToken.address') }}: {{ fullAddress }}</div>
               </div>
               <div class="flex">
-                <div v-for="work_type in printToken.work_types" class="mx-1">
-                  <span class="text-sm">{{
-                    work_type.work_type | getWorkTypeName
-                  }}</span>
+                <div
+                  v-for="work_type in printToken.work_types"
+                  :key="work_type.work_type"
+                  class="mx-1"
+                >
+                  <span class="text-sm">
+                    {{ work_type.work_type | getWorkTypeName }}
+                  </span>
                   <WorksiteStatusDropdown
                     class="block"
                     :current-work-type="work_type"
@@ -112,8 +116,8 @@ export default {
   },
   computed: {
     fullAddress() {
-      const { address, city, state, postal_code } = this.printToken;
-      return `${address}, ${city}, ${state} ${postal_code}`;
+      const { address, city, state, postal_code: postalCode } = this.printToken;
+      return `${address}, ${city}, ${state} ${postalCode}`;
     },
   },
   methods: {
@@ -122,8 +126,8 @@ export default {
         const data = {
           ...this.printToken,
         };
-        data.work_types.forEach((work_type) => {
-          delete work_type.work_type;
+        data.work_types.forEach((workType) => {
+          delete workType.work_type;
         });
         await this.$http.patch(
           `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,

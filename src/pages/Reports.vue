@@ -22,7 +22,7 @@
       <!-- Report Library -->
       <h1 class="text-xl font-bold m-2 ml-3 pt-5">Report Library</h1>
       <div class="report-grid">
-        <div v-for="r in reports">
+        <div v-for="r in reports" :key="`${r.id}`">
           <div
             class="my-4 mx-2 bg-white shadow h-auto content-center flex-wrap cursor-pointer"
             @click="() => requestReport(r.name_t)"

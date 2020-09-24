@@ -337,6 +337,7 @@
                   >
                     <div
                       v-for="(value, key) in notifications"
+                      :key="key"
                       class="flex w-1/2"
                     >
                       <base-checkbox

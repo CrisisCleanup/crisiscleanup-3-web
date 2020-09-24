@@ -16,6 +16,7 @@ module.exports = {
   },
   plugins: ['vue', 'flowtype', 'cypress'],
   extends: [
+    'eslint:recommended',
     'airbnb-base',
     'plugin:vue/strongly-recommended',
     'plugin:prettier/recommended',
@@ -35,7 +36,6 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'spaced-comment': 0,
     'import/imports-first': 0,
     'import/extensions': 0,
     'import/newline-after-import': 0,
@@ -51,11 +51,14 @@ module.exports = {
     'no-underscore-dangle': 0,
     'no-plusplus': 0,
     'radix': 0,
+    'no-console': 0,
     // TODO: mitigate in the future
     'no-param-reassign': ['error', { props: false }],
-    'camelcase': 1,
+    'camelcase': 0,
     'global-require': 0,
     'func-names': 0,
+    // Vue specific rules
+    'vue/max-attributes-per-line': 'off',
   },
   settings: {
     'import/resolver': {

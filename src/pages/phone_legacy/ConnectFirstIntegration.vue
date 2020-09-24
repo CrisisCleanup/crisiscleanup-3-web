@@ -505,7 +505,7 @@ export default {
         await this.$toasted.error(
           this.$t('phoneDashboard.phone_system_login_error'),
         );
-        throw e; //Rethrow for sentry
+        throw e; // Rethrow for sentry
       }
       Log.debug(`Logged in agents ${username}`);
       await this.getNextCall();
