@@ -12,12 +12,14 @@
           :routes="routes"
           :logo-route="logoRoute"
           class="sidebar--grid"
+          :key="JSON.stringify(currentUser && currentUser.permissions)"
         />
         <Slide width="150" v-else>
           <NavMenu
             :routes="routes"
             :logo-route="logoRoute"
             class="flex flex-col text-sm"
+            :key="JSON.stringify(currentUser && currentUser.permissions)"
           />
         </Slide>
         <div class="shadow header--grid bg-white">
@@ -32,6 +34,7 @@
               </div>
               <div class="flex flex-col ml-2 md:w-84 lg:w-84">
                 <form-select
+                  :key="currentIncidentId"
                   :value="currentIncident"
                   :options="incidents"
                   :clearable="false"
