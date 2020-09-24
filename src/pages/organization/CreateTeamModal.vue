@@ -34,7 +34,7 @@
         >
           <div
             v-for="user in team.users"
-            :key="user.id"
+            :key="`${user.id}`"
             class="border-b pt-2 bg-white"
             style="display: grid; grid-template-columns: 25px max-content 1fr;"
           >
@@ -79,7 +79,7 @@
         >
           <div
             v-for="worksite in teamWorksites"
-            :key="worksite.id"
+            :key="`${worksite.id}`"
             class="border-b py-3 px-3 bg-white"
             style="
               display: grid;
@@ -99,7 +99,7 @@
             <div class="flex flex-wrap w-full">
               <div
                 v-for="work_type in worksite.work_types"
-                :key="work_type.id"
+                :key="`${work_type.id}`"
                 class="mx-1"
               >
                 <WorksiteStatusDropdown
@@ -176,7 +176,7 @@
           >
             <div
               v-for="user in usersList"
-              :key="user.id"
+              :key="`${user.id}`"
               class="border-t last:border-b pt-2 bg-white"
               style="
                 display: grid;
@@ -222,7 +222,7 @@
           >
             <div
               v-for="worksite in worksites"
-              :key="worksite.id"
+              :key="`${worksite.id}`"
               class="border-t last:border-b py-3 px-3 bg-white"
               style="
                 display: grid;
@@ -242,7 +242,7 @@
               <div class="flex flex-wrap w-full">
                 <div
                   v-for="work_type in worksite.work_types"
-                  :key="work_type.id"
+                  :key="`${work_type.id}`"
                   class="mx-1"
                 >
                   <WorksiteStatusDropdown

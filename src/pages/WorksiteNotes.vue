@@ -24,7 +24,7 @@
     <template v-for="(note, index) in sortedNotes">
       <div
         v-if="index < 4 || showingAllNotes"
-        :key="note.id"
+        :key="`${note.id}`"
         class="notes my-1 p-1 flex items-start"
         @click="
           () => {

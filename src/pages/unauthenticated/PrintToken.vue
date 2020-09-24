@@ -25,7 +25,7 @@
               <div class="flex">
                 <div
                   v-for="work_type in printToken.work_types"
-                  :key="work_type.work_type"
+                  :key="`${work_type.id}`"
                   class="mx-1"
                 >
                   <span class="text-sm">

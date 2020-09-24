@@ -116,7 +116,10 @@
                       "
                     />
 
-                    <div v-for="user in filters.invitedBy.data" :key="user.id">
+                    <div
+                      v-for="user in filters.invitedBy.data"
+                      :key="`${user.id}`"
+                    >
                       {{ user.full_name }}
                     </div>
                   </div>

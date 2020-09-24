@@ -63,7 +63,7 @@
             <div class="mt-2 flex">
               <Avatar
                 v-for="user in team.users.map((u) => getUser(u))"
-                :key="user.id"
+                :key="`${user.id}`"
                 :initials="user.first_name"
                 :url="user.profilePictureUrl"
                 class="mr-2"

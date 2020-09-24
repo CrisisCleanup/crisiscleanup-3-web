@@ -57,9 +57,8 @@
               }}</base-text>
             </div>
             <div class="h-32 overflow-auto">
-              <div class="case" v-for="c in cards" :key="c.id">
+              <div class="case" v-for="c in cards" :key="`${c.caseNumber}`">
                 <case-card
-                  :key="c.caseNumber"
                   :case-number="c.caseNumber"
                   :state="c.state"
                   :worktype="c.worktype"

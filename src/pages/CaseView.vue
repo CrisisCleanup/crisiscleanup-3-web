@@ -76,7 +76,7 @@
           >
           <div
             v-for="organization in Object.keys(workTypesClaimedByOthers)"
-            :key="organization.id"
+            :key="`${organization.id}`"
             class="my-1"
           >
             {{ getOrganizationName(organization) }}

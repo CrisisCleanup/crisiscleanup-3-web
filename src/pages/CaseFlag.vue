@@ -205,7 +205,7 @@
           <div class="py-5">
             <div
               v-for="organization in selectedOrganizations"
-              :key="organization.id"
+              :key="`${organization.id}`"
             >
               {{ organization.name }}
             </div>

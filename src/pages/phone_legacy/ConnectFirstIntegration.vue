@@ -148,7 +148,7 @@
                 {{ nextOutbound && nextOutbound.phone_number }}
               </base-text>
               <div class="flex py-2">
-                <div class="pr-2" v-for="c in cards" :key="c.id">
+                <div class="pr-2" v-for="c in cards" :key="`${c.id}`">
                   <div
                     class="cursor-pointer bg-crisiscleanup-light-grey p-2 w-40"
                     @click="() => setCase(c)"
@@ -224,7 +224,7 @@
                 </div>
               </div>
               <div class="flex py-2" v-if="cards.length && isOutboundCall">
-                <div class="pr-2" v-for="c in cards" :key="c.id">
+                <div class="pr-2" v-for="c in cards" :key="`${c.id}`">
                   <div
                     class="cursor-pointer bg-crisiscleanup-light-grey p-2 w-40"
                     @click="() => setCase(c)"
@@ -376,7 +376,7 @@
           <div class="text-xs bg-crisiscleanup-light-grey py-1 px-3">
             {{ cards.length }} {{ $t('phoneDashboard.cases_assigned_to_dnis') }}
           </div>
-          <div class="pr-2" v-for="c in cards" :key="c.id">
+          <div class="pr-2" v-for="c in cards" :key="`${c.id}`">
             <div class="p-2">
               <div class="flex items-center">
                 <div
