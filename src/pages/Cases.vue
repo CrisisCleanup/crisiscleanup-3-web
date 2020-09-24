@@ -724,7 +724,7 @@
       <router-view
         v-if="!spinning"
         :key="$route.params.id"
-        :incident-id="currentIncidentId"
+        :incident-id="`${currentIncidentId}`"
         :worksite-id="$route.params.id"
         :incident="currentIncident"
         :is-editing="isEditingWorksite"

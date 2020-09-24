@@ -168,7 +168,7 @@ export default class User extends CCUModel {
            and then update state for current incident with incidentStates.
         */
         let currentUser = User.find(AuthService.getUser().user_claims.id);
-        const states = currentUser.states || {};
+        const states = (currentUser && currentUser.states) || {};
         const currentIncident = states.incident;
         let updatedStates = {
           ...states,

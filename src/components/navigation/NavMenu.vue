@@ -20,7 +20,7 @@ const routeShape = VueTypes.shape({
   key: VueTypes.string,
   text: VueTypes.string,
   to: VueTypes.string,
-  icon: VueTypes.string,
+  icon: VueTypes.oneOfType([VueTypes.string, VueTypes.object]),
   iconSize: VueTypes.string,
   disabled: VueTypes.bool,
 });
