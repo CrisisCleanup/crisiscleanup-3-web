@@ -58,7 +58,7 @@
                 >
                 <div
                   v-for="contact in organization.incident_primary_contacts"
-                  :key="`${contact.id}`"
+                  :key="contact.email"
                   class="pb-1"
                 >
                   <div class="text-base">
@@ -84,7 +84,7 @@
                 >
                 <div
                   v-for="contact in organization.primary_contacts"
-                  :key="`${contact.id}`"
+                  :key="contact.email"
                   class="pb-1"
                 >
                   <div class="text-base">

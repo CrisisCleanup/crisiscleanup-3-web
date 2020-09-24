@@ -132,16 +132,16 @@
               class="border px-2 py-1"
             >
               <template v-for="contact in organization.primary_contacts">
-                <span class="inline-block" :key="`${contact.id}`">
+                <span class="inline-block" :key="contact.email">
                   {{ contact.first_name }} {{ contact.last_name }}
                 </span>
-                <span class="inline-block" :key="`${contact.id}`">
+                <span class="inline-block" :key="contact.email">
                   {{ contact.title ? contact.title : '' }}
                 </span>
-                <span class="inline-block" :key="`${contact.id}`">
+                <span class="inline-block" :key="contact.email">
                   {{ contact.email }}
                 </span>
-                <span class="inline-block" :key="`${contact.id}`">
+                <span class="inline-block" :key="contact.email">
                   {{ contact.mobile }}
                 </span>
               </template>
@@ -158,16 +158,16 @@
               class="max-h-xl overflow-auto border px-2 py-1"
             >
               <template v-for="contact in ghostUsers">
-                <span class="inline-block" :key="`${contact.id}`">
+                <span class="inline-block" :key="contact.email">
                   {{ contact.first_name }} {{ contact.last_name }}
                 </span>
-                <span class="inline-block" :key="`${contact.id}`">
+                <span class="inline-block" :key="contact.email">
                   {{ contact.title ? contact.title : '' }}
                 </span>
-                <span class="inline-block" :key="`${contact.id}`">
+                <span class="inline-block" :key="contact.email">
                   {{ contact.email }}
                 </span>
-                <span class="inline-block" :key="`${contact.id}`">
+                <span class="inline-block" :key="contact.email">
                   {{ contact.mobile }}
                 </span>
               </template>

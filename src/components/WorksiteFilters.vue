@@ -196,7 +196,7 @@
               </div>
               <div
                 v-for="status in allStatuses"
-                :key="status.id"
+                :key="`${status.id}`"
                 :value="status.status"
               >
                 <base-checkbox
@@ -338,7 +338,7 @@
               </div>
               <base-checkbox
                 v-for="team in teams"
-                :key="team.id"
+                :key="`${team.id}`"
                 class="block my-1"
                 :value="filters.teams.data[team.id]"
                 @input="

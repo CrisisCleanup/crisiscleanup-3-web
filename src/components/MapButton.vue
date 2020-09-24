@@ -20,7 +20,7 @@
     >
       <base-button
         v-for="action in actions"
-        :key="action.id"
+        :key="`${action.id}`"
         :text="action.text"
         :alt="action.text"
         :action="
