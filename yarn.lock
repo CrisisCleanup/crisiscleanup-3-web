@@ -24001,10 +24001,10 @@ vue-composable@^1.0.0-beta.4:
   resolved "https://registry.yarnpkg.com/vue-composable/-/vue-composable-1.0.0-beta.4.tgz#5e15e10677ddc875e52406daebdcff92d2aeda57"
   integrity sha512-XFSpYLNwH0EwxMmZz1I1WbBFebRSTcxy2cnomwKUTYMGqPtrxJu1B/qi38Ms5C6YJQK9i/n4dfOI88c/XIEtlg==
 
-vue-cookies@^1.7.3:
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.7.3.tgz#de8da757ecb01cd4c5731fcff7f3f86781acc5e8"
-  integrity sha512-94AhF6LDHuZkrkWe1miDFkMALD6r9sKYZ+kT0TV9e6L97HST+Ozj+cKaWf97+fWSadJu50a2w/Cgo0iKQhNtKg==
+vue-cookies@^1.7.4:
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/vue-cookies/-/vue-cookies-1.7.4.tgz#d241d0a0431da0795837651d10b4d73e7c8d3e8d"
+  integrity sha512-mOS5Btr8V9zvAtkmQ7/TfqJIropOx7etDAgBywPCmHjvfJl2gFbH2XgoMghleLoyyMTi5eaJss0mPN7arMoslA==
 
 vue-cron-editor-buefy@^0.1.15:
   version "0.1.15"
