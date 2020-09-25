@@ -46,7 +46,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="entry in timeEnteredByMyOrganization">
+          <tr v-for="entry in timeEnteredByMyOrganization" :key="`${entry.id}`">
             <td class="text-left border p-1 break-all">
               {{ entry.created_by_name }}
             </td>

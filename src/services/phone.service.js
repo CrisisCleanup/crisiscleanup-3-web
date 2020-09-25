@@ -35,7 +35,7 @@ export default class PhoneService {
     );
     this.cf = new AgentLibrary({
       // Caution, this is prod
-      socketDest: 'wss://c01-con.vacd.biz:8080/', //'ws://d01-test.cf.dev:8080',
+      socketDest: 'wss://c01-con.vacd.biz:8080/', // 'ws://d01-test.cf.dev:8080',
       callbacks: {
         closeResponse: this.onCloseFunction,
         openResponse: this.onOpenFunction,
@@ -318,7 +318,7 @@ export default class PhoneService {
   hangup() {
     return new Promise((resolve) => {
       this.cf.hangup(this.callInfo.sessionId);
-      //TODO: inbound calls are not handling this hangup function correctly, I suspect we need to handle offhookTerm differently!
+      // TODO: inbound calls are not handling this hangup function correctly, I suspect we need to handle offhookTerm differently!
       this.store.commit('phone_legacy/setState', 'AVAILABLE');
       Log.debug(this.store.callstate);
       this.cf.offhookTerm((offhookTermResponse) => {

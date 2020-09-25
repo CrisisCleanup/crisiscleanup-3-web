@@ -87,7 +87,7 @@
                         }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
-                            <li v-for="state in usStates" :key="state.id">
+                            <li v-for="state in usStates" :key="`${state.id}`">
                               <base-checkbox
                                 :value="appliedLocations.has(state.id)"
                                 @input="
@@ -142,7 +142,10 @@
                         }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
-                            <li v-for="county in counties" :key="county.id">
+                            <li
+                              v-for="county in counties"
+                              :key="`${county.id}`"
+                            >
                               <base-checkbox
                                 :value="appliedLocations.has(county.id)"
                                 @input="
@@ -168,7 +171,7 @@
                         }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
-                            <li v-for="team in teams" :key="team.id">
+                            <li v-for="team in teams" :key="`${team.id}`">
                               <base-checkbox
                                 :value="appliedLocations.has(team.id)"
                                 @input="
@@ -721,7 +724,7 @@
       <router-view
         v-if="!spinning"
         :key="$route.params.id"
-        :incident-id="currentIncidentId"
+        :incident-id="`${currentIncidentId}`"
         :worksite-id="$route.params.id"
         :incident="currentIncident"
         :is-editing="isEditingWorksite"

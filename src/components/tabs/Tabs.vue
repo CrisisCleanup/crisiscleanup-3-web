@@ -4,6 +4,7 @@
       <ul class="flex">
         <li
           v-for="tab in tabs"
+          :key="tab.name"
           :class="{ 'is-active': tab.isActive, disabled: tab.disabled }"
           class="py-1 px-3 border-b-2 last:flex-grow"
         >

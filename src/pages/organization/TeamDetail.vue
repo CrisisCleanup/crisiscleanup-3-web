@@ -276,7 +276,7 @@
               <div class="flex flex-wrap w-full">
                 <div
                   v-for="work_type in slotProps.item.work_types"
-                  :key="work_type.id"
+                  :key="`${work_type.id}`"
                   class="mx-1"
                 >
                   <WorksiteStatusDropdown
@@ -381,6 +381,7 @@
             v-for="user in userResults.filter(
               (user) => !team.users.includes(user.id),
             )"
+            :key="`${user.id}`"
             class="border-t pt-2"
           >
             <base-checkbox
@@ -454,7 +455,7 @@
           <div class="h-64 overflow-auto">
             <div
               v-for="worksite in assignableWorksites"
-              :key="worksite.id"
+              :key="`${worksite.id}`"
               class="border-t last:border-b py-3 px-3 bg-white"
               style="
                 display: grid;
@@ -483,7 +484,7 @@
               <div class="flex flex-wrap w-full">
                 <div
                   v-for="work_type in worksite.work_types"
-                  :key="work_type.id"
+                  :key="`${work_type.id}`"
                   class="mx-1"
                 >
                   <WorksiteStatusDropdown

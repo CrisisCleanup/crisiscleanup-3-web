@@ -42,7 +42,10 @@
               >{{ $t('caseHistory.do_not_share_contact_explanation') }}
             </span>
           </div>
-          <div v-for="organization in organizationsWithClaimsInArea">
+          <div
+            v-for="organization in organizationsWithClaimsInArea"
+            :key="`${organization.id}`"
+          >
             <v-popover popover-class="contact-popover" placement="top-end">
               <span class="text-yellow-600 tooltip-target cursor-pointer">{{
                 organization.name
@@ -55,6 +58,7 @@
                 >
                 <div
                   v-for="contact in organization.incident_primary_contacts"
+                  :key="contact.email"
                   class="pb-1"
                 >
                   <div class="text-base">
@@ -80,6 +84,7 @@
                 >
                 <div
                   v-for="contact in organization.primary_contacts"
+                  :key="contact.email"
                   class="pb-1"
                 >
                   <div class="text-base">
@@ -200,7 +205,7 @@
           <div class="py-5">
             <div
               v-for="organization in selectedOrganizations"
-              :key="organization.id"
+              :key="`${organization.id}`"
             >
               {{ organization.name }}
             </div>

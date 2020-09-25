@@ -14,15 +14,16 @@ module.exports = {
     node: true,
     'cypress/globals': true,
   },
-  plugins: ['flowtype', 'cypress'],
+  plugins: ['vue', 'flowtype', 'cypress'],
   extends: [
+    'eslint:recommended',
     'airbnb-base',
     'plugin:vue/strongly-recommended',
     'plugin:prettier/recommended',
     'prettier/babel',
     'prettier/vue',
     'plugin:cypress/recommended',
-    'plugin:vue-types/strongly-recommended',
+    'plugin:vue-types/recommended',
     'plugin:flowtype/recommended',
   ],
   globals: {
@@ -36,7 +37,6 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    'spaced-comment': 0,
     'import/imports-first': 0,
     'import/extensions': 0,
     'import/newline-after-import': 0,
@@ -48,18 +48,18 @@ module.exports = {
     'import/prefer-default-export': 0,
     'class-methods-use-this': 0,
     'prettier/prettier': ['error', prettierOptions],
-    'vue/require-v-for-key': 1,
-    'vue/no-use-v-if-with-v-for': 1,
     'new-cap': 0,
     'no-underscore-dangle': 0,
     'no-plusplus': 0,
     radix: 0,
+    'no-console': 0,
     // TODO: mitigate in the future
     'no-param-reassign': ['error', { props: false }],
-    camelcase: 1,
+    camelcase: 0,
     'global-require': 0,
     'func-names': 0,
-    // ----
+    // Vue specific rules
+    'vue/max-attributes-per-line': 'off',
   },
   settings: {
     'import/resolver': {

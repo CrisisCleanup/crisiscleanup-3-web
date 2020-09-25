@@ -14,6 +14,7 @@
     <div class="flex w-64 overflow-x-auto">
       <div
         v-for="file in worksite.files"
+        :key="file"
         class="relative image-container"
         style="min-width: 90px;"
       >

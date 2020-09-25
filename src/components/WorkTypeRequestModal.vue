@@ -34,7 +34,10 @@
         {{ $t('workTypeRequestModal.contacts') }}
       </div>
       <template v-for="organization in organizations">
-        <div v-for="contact in organization.incident_primary_contacts">
+        <div
+          v-for="contact in organization.incident_primary_contacts"
+          :key="contact.email"
+        >
           {{ contact.first_name }} {{ contact.last_name }} ({{
             organization.name
           }}) {{ contact.email }} {{ contact.mobile }}
@@ -43,7 +46,10 @@
       <div class="font-xs my-2 font-bold">
         {{ $t('workTypeRequestModal.choose_work_types') }}
       </div>
-      <div v-for="work_type_to_request in workTypes">
+      <div
+        v-for="work_type_to_request in workTypes"
+        :key="work_type_to_request.work_type"
+      >
         <base-checkbox
           class="mb-3"
           :value="requestedWorkTypes.has(work_type_to_request.work_type)"

@@ -92,7 +92,7 @@
               v-model="organization.type_t"
               item-key="key"
               label="label"
-            ></form-select>
+            />
             <form-select
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
               class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
@@ -100,7 +100,7 @@
               v-model="organization.approve_reject_reason_t"
               item-key="key"
               label="label"
-            ></form-select>
+            />
 
             <div class="flex items-center justify-between">
               <base-text variant="h2" :weight="600">
@@ -114,7 +114,7 @@
               />
             </div>
             <template v-if="apiKeys.length">
-              <div v-for="key in apiKeys">
+              <div v-for="key in apiKeys" :key="key">
                 {{ key.api_key }} ({{ key.type }})
               </div>
             </template>
@@ -132,14 +132,18 @@
               class="border px-2 py-1"
             >
               <template v-for="contact in organization.primary_contacts">
-                <span class="inline-block"
-                  >{{ contact.first_name }} {{ contact.last_name }}</span
-                >
-                <span class="inline-block">{{
-                  contact.title ? contact.title : ''
-                }}</span>
-                <span class="inline-block">{{ contact.email }}</span>
-                <span class="inline-block">{{ contact.mobile }}</span>
+                <span class="inline-block" :key="contact.email">
+                  {{ contact.first_name }} {{ contact.last_name }}
+                </span>
+                <span class="inline-block" :key="contact.email">
+                  {{ contact.title ? contact.title : '' }}
+                </span>
+                <span class="inline-block" :key="contact.email">
+                  {{ contact.email }}
+                </span>
+                <span class="inline-block" :key="contact.email">
+                  {{ contact.mobile }}
+                </span>
               </template>
             </div>
             <base-text variant="h3">
@@ -154,14 +158,18 @@
               class="max-h-xl overflow-auto border px-2 py-1"
             >
               <template v-for="contact in ghostUsers">
-                <span class="inline-block"
-                  >{{ contact.first_name }} {{ contact.last_name }}</span
-                >
-                <span class="inline-block">{{
-                  contact.title ? contact.title : ''
-                }}</span>
-                <span class="inline-block">{{ contact.email }}</span>
-                <span class="inline-block">{{ contact.mobile }}</span>
+                <span class="inline-block" :key="contact.email">
+                  {{ contact.first_name }} {{ contact.last_name }}
+                </span>
+                <span class="inline-block" :key="contact.email">
+                  {{ contact.title ? contact.title : '' }}
+                </span>
+                <span class="inline-block" :key="contact.email">
+                  {{ contact.email }}
+                </span>
+                <span class="inline-block" :key="contact.email">
+                  {{ contact.mobile }}
+                </span>
               </template>
             </div>
             <div class="flex items-center justify-between my-1">
@@ -173,7 +181,7 @@
                 :text="$t('actions.copy_users')"
                 variant="solid"
                 size="small"
-              ></base-button>
+              />
             </div>
             <div
               style="
@@ -184,16 +192,20 @@
               class="max-h-xl overflow-auto border px-2 py-1"
             >
               <template v-for="user in users">
-                <span class="inline-block"
-                  >{{ user.first_name }} {{ user.last_name }}</span
-                >
-                <span class="inline-block">{{
-                  user.title ? user.title : ''
-                }}</span>
-                <span class="inline-block">{{ user.email }}</span>
-                <span class="inline-block">{{ user.mobile }}</span>
+                <span class="inline-block" :key="`${user.id}`">
+                  {{ user.first_name }} {{ user.last_name }}
+                </span>
+                <span class="inline-block" :key="`${user.id}`">
+                  {{ user.title ? user.title : '' }}
+                </span>
+                <span class="inline-block" :key="`${user.id}`">
+                  {{ user.email }}
+                </span>
+                <span class="inline-block" :key="`${user.id}`">
+                  {{ user.mobile }}
+                </span>
                 <base-link
-                  :key="user.id"
+                  :key="`${user.id}`"
                   target="_blank"
                   :href="`${apiUrl}/ccadmin/users/user/${user.id}/change/`"
                 >
@@ -209,11 +221,11 @@
             <base-text> Referral: {{ organization.referral }}</base-text>
             <base-text> Url: {{ organization.url }}</base-text>
             <base-text>
-              Accepted Terms: {{ organization.accepted_terms }}</base-text
-            >
+              Accepted Terms: {{ organization.accepted_terms }}
+            </base-text>
             <base-text>
-              Accepted At: {{ organization.accepted_terms_at }}</base-text
-            >
+              Accepted At: {{ organization.accepted_terms_at }}
+            </base-text>
             <base-text variant="h3">
               {{ $t('adminOrganization.activities') }}
             </base-text>
@@ -279,7 +291,7 @@
           item-key="id"
           label="name_t"
           searchable
-        ></form-select>
+        />
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
         <base-text variant="h2" :weight="600">
@@ -309,7 +321,7 @@
                     capabilityToAdd = value;
                   }
                 "
-              ></form-select>
+              />
               <base-button
                 :text="$t('actions.add')"
                 size="large"
@@ -322,8 +334,13 @@
                 "
               />
             </div>
-            <base-text variant="h3">New Capabilties</base-text>
-            <div v-for="capability in newCapabilities">
+            <base-text variant="h3">
+              New Capabilties
+            </base-text>
+            <div
+              v-for="capability in newCapabilities"
+              :key="`${capability.id}`"
+            >
               {{ capability | getCapabilityName(capabilities) }}
             </div>
           </div>
@@ -332,7 +349,11 @@
               {{ $t('adminOrganization.current_capabilities') }}
             </base-text>
             <div style="display: grid; grid-column-gap: 10px;">
-              <div class="pr-3" v-for="capability in organization.capabilities">
+              <div
+                class="pr-3"
+                v-for="capability in organization.capabilities"
+                :key="`${capability.id}`"
+              >
                 {{ capability | getCapabilityName(capabilities) }}
               </div>
             </div>
@@ -361,7 +382,7 @@
                     incidentToAdd = value;
                   }
                 "
-              ></form-select>
+              />
               <base-button
                 :text="$t('actions.add')"
                 size="large"
@@ -377,7 +398,7 @@
             <base-text variant="h3">
               {{ $t('adminOrganization.new_incidents') }}
             </base-text>
-            <div v-for="incident in newIncidents">
+            <div v-for="incident in newIncidents" :key="`${incident.id}`">
               {{ incident | getIncidentName(incidents) }}
             </div>
 
@@ -392,7 +413,7 @@
               "
             >
               <template v-for="request in incidentRequests">
-                <div class="flex items-center">
+                <div class="flex items-center" :key="`${request.id}`">
                   <div
                     v-tooltip="{
                       content: getContactView(request),
@@ -409,7 +430,7 @@
                   </div>
                   {{ request.incident | getIncidentName(incidents) }}
                 </div>
-                <div class="flex">
+                <div class="flex" :key="`${request.id}`">
                   <base-button
                     v-if="request.org_verified"
                     :text="$t('actions.approve')"
@@ -452,6 +473,7 @@
               <div
                 class="pr-3"
                 v-for="incident in organization.approved_incidents"
+                :key="`${incident.id}`"
               >
                 {{ incident | getIncidentName(incidents) }}
               </div>
@@ -477,7 +499,7 @@
                   settingLocation = 'primary_location';
                 }
               "
-            ></base-button>
+            />
             <base-button
               v-else
               class="px-2 py-1"
@@ -489,9 +511,9 @@
                   settingLocation = 'primary_location';
                 }
               "
-            ></base-button>
+            />
           </div>
-          <div id="primary-location" ref="primaryMap" class="w-full h-84"></div>
+          <div id="primary-location" ref="primaryMap" class="w-full h-84" />
         </div>
         <div class="w-1/2 bg-white shadow mt-6">
           <div class="border-b px-8 py-4 font-semibold">
@@ -509,7 +531,7 @@
                   settingLocation = 'secondary_location';
                 }
               "
-            ></base-button>
+            />
             <base-button
               v-else
               class="px-2 py-1"
@@ -521,13 +543,9 @@
                   settingLocation = 'secondary_location';
                 }
               "
-            ></base-button>
+            />
           </div>
-          <div
-            id="secondary-location"
-            ref="secondaryMap"
-            class="w-full h-84"
-          ></div>
+          <div id="secondary-location" ref="secondaryMap" class="w-full h-84" />
         </div>
         <modal
           v-if="showingLocationModal"
@@ -564,7 +582,7 @@
               variant="solid"
               size="medium"
               class="my-2"
-            ></base-button>
+            />
           </div>
         </modal>
       </div>
@@ -812,17 +830,20 @@ export default {
       this.currentPolygon = location;
     },
     async reloadMaps() {
-      const { primary_location, secondary_location } = this.organization;
+      const {
+        primary_location: primaryLocation,
+        secondary_location: secondaryLocation,
+      } = this.organization;
 
-      if (primary_location) {
+      if (primaryLocation) {
         this.primaryLocationMap.eachLayer((layer) => {
           if (layer instanceof L.TileLayer) {
             return;
           }
           this.primaryLocationMap.removeLayer(layer);
         });
-        await Location.api().fetchById(primary_location);
-        const location = Location.find(primary_location);
+        await Location.api().fetchById(primaryLocation);
+        const location = Location.find(primaryLocation);
         const geojsonFeature = {
           type: 'Feature',
           properties: location.attr,
@@ -832,15 +853,15 @@ export default {
           weight: '1',
         }).addTo(this.primaryLocationMap);
       }
-      if (secondary_location) {
+      if (secondaryLocation) {
         this.secondaryLocationMap.eachLayer((layer) => {
           if (layer instanceof L.TileLayer) {
             return;
           }
           this.secondaryLocationMap.removeLayer(layer);
         });
-        await Location.api().fetchById(secondary_location);
-        const location = Location.find(secondary_location);
+        await Location.api().fetchById(secondaryLocation);
+        const location = Location.find(secondaryLocation);
         const geojsonFeature = {
           type: 'Feature',
           properties: location.attr,
@@ -959,8 +980,8 @@ export default {
             type: result,
           },
         );
-        const { api_key } = response.data;
-        this.apiKey = api_key;
+        const { api_key: apiKey } = response.data;
+        this.apiKey = apiKey;
         this.showingApiKeyModal = true;
         this.loadPageData();
       }

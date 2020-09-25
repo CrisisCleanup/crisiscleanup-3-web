@@ -36,7 +36,7 @@
       <div class="flex flex-col">
         <div
           v-for="work_type in slotProps.item.work_types"
-          :key="work_type.id"
+          :key="`${work_type.id}`"
           class="badge-holder flex items-center"
         >
           <badge

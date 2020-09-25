@@ -2,10 +2,14 @@
   <div class="flex items-center">
     <span>{{ $t('reportsVue.examples') }}</span>
     <div class="flex">
-      <template v-for="format in formats">
-        <a :href="file.url" v-for="file in getFilesForFormat(format)" download>
+      <div v-for="format in formats" :key="format">
+        <a
+          :href="file.url"
+          v-for="file in getFilesForFormat(format)"
+          :key="file"
+          download
+        >
           <font-awesome-icon
-            :key="file"
             @click.stop="
               () => {
                 $emit('download', format);
@@ -17,7 +21,7 @@
             :icon="`file-${format}`"
           />
         </a>
-      </template>
+      </div>
     </div>
   </div>
 </template>

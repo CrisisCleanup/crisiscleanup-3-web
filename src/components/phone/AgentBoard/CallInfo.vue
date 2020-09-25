@@ -69,7 +69,7 @@
 </template>
 
 <script>
-//@flow
+// @flow
 
 import VueTypes from 'vue-types';
 import CaseCard from '@/components/cards/Case.vue';

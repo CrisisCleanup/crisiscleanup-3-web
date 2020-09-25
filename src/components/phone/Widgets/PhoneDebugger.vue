@@ -16,6 +16,7 @@
       <div
         v-show="visibleState.state.value"
         v-for="p in Object.keys(pages)"
+        :key="p"
         class="opreview__tab flex justify-center shadow-xl"
         @click="() => (currentPage = p)"
         :class="currentPage === p && 'active'"
@@ -35,6 +36,7 @@
       <div
         class="opreview__item"
         v-for="{ title, value, action } in pages[currentPage]"
+        :key="`${title}-${value}-${action}`"
       >
         <base-text variant="h4"> {{ title }} </base-text>
         <base-text variant="bodysm"> {{ value }} </base-text>

@@ -19,20 +19,24 @@
           class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
           >{{ $t('caseHistory.claimed_by') }}</label
         >
-        <div v-for="org in organizationsWithClaims" :key="org.id" class="my-1">
+        <div
+          v-for="org in organizationsWithClaims"
+          :key="`${org.id}`"
+          class="my-1"
+        >
           {{ getOrganizationName(org) }}
         </div>
       </div>
       <div class="">
         <div
           v-for="(events, user) in users"
-          :key="user.id"
+          :key="`${user.id}`"
           class="py-5 border-b"
         >
           <UserDetailTooltip :user="user">
             made {{ events.length }} edits
           </UserDetailTooltip>
-          <div v-for="event in events" :key="event.id">
+          <div v-for="event in events" :key="`${event.id}`">
             {{ event.created_at | moment('MM/DD/YYYY, h:mm:ss A') }}:
             {{ event.event.event_name_t }}
           </div>

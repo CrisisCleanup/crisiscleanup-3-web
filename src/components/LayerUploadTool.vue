@@ -9,7 +9,7 @@
           @files="handleFileUpload"
         >
           <template v-if="shapefileStructure">
-            <div v-for="key in Object.keys(shapefileStructure)">
+            <div v-for="key in Object.keys(shapefileStructure)" :key="key">
               {{ key }}
             </div>
 
@@ -23,7 +23,7 @@
         v-if="shapefileStructure"
         class="bg-white px-2 border-t border-b border-r w-1/2"
       >
-        <div v-for="data in shapefiles" class="">
+        <div v-for="data in shapefiles" :key="data.filename">
           <div
             class="border-b font-semibold flex justify-between items-center h-10"
           >

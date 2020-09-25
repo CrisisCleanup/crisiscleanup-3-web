@@ -62,7 +62,7 @@
               }}</base-checkbox>
               <tree-menu
                 v-for="user in nestedUsers"
-                :key="user.id"
+                :key="`${user.id}`"
                 :children="user.children"
                 :label="user.label"
                 :data="user"
@@ -105,7 +105,7 @@
                     >
                     <div
                       v-for="work_type in cases"
-                      :key="work_type.id"
+                      :key="`${work_type.id}`"
                       class="border-t py-1"
                     >
                       <base-checkbox

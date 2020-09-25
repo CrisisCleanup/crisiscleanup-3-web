@@ -41,11 +41,10 @@
         Add the whole {{ data.first_name }} branch
       </base-checkbox>
     </li>
-    <li v-for="child in children">
+    <li v-for="child in children" :key="`${child.id}`">
       <tree-menu
         :children="child.children"
         :label="child.label"
-        :key="child.id"
         :indent="indent + 1"
         :data="child"
         :selected-users="selectedUsers"

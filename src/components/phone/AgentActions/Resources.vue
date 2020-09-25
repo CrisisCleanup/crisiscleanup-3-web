@@ -13,7 +13,7 @@
       <div class="items">
         <div
           v-for="r in items"
-          :key="r.id"
+          :key="`${r.id}`"
           :class="`item flex ${selected === r.id ? 'active' : ''}`"
         >
           <div class="card shadow">

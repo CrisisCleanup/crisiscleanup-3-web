@@ -67,7 +67,7 @@ export default {
         (ur) => ur.user_role === role[0],
       );
       if (currentUserRole) {
-        //This is the deletion_case case
+        // This is the deletion_case case
         await UserRole.api().delete(`/user_roles/${currentUserRole.id}`, {});
       } else {
         await UserRole.api().post(`/user_roles`, {

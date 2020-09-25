@@ -89,9 +89,8 @@
         </base-text>
       </div>
       <div class="modal-cases">
-        <div v-for="c in caseCards">
+        <div v-for="c in caseCards" :key="`${c.caseNumber}`">
           <case-card
-            :key="c.caseNumber"
             :case-number="c.caseNumber"
             :address="c.address"
             :state="c.state"
