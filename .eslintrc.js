@@ -23,6 +23,7 @@ module.exports = {
     'prettier/babel',
     'prettier/vue',
     'plugin:cypress/recommended',
+    'plugin:vue-types/recommended',
     'plugin:flowtype/recommended',
   ],
   globals: {
@@ -50,11 +51,11 @@ module.exports = {
     'new-cap': 0,
     'no-underscore-dangle': 0,
     'no-plusplus': 0,
-    'radix': 0,
+    radix: 0,
     'no-console': 0,
     // TODO: mitigate in the future
     'no-param-reassign': ['error', { props: false }],
-    'camelcase': 0,
+    camelcase: 0,
     'global-require': 0,
     'func-names': 0,
     // Vue specific rules
