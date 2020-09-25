@@ -139,7 +139,7 @@
     "vuejs-datepicker": "^1.6.2",
     "vuex": "^3.5.1",
     "vuex-module-decorators": "^0.17.0",
-    "vuex-persist": "^2.2.0"
+    "vuex-persist": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
