@@ -49,7 +49,7 @@
     "@johmun/vue-tags-input": "^2.1.0",
     "@pixi/filter-outline": "^3.1.1",
     "@popperjs/core": "^2.4.4",
-    "@ringcentral/sdk": "^4.3.2",
+    "@ringcentral/sdk": "^4.3.3",
     "@turf/turf": "^5.1.6",
     "@u3u/vue-hooks": "^2.0.1",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
