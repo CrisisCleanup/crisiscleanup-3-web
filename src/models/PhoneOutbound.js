@@ -40,6 +40,9 @@ export default class PhoneOutbound extends CCUModel {
 
   static apiConfig = {
     actions: {
+      async skipCall(id) {
+        await this.post(`/phone_outbound/${id}/skip`, { save: false });
+      },
       async getNextOutbound({
         incidentId = 199,
         agentId = '',

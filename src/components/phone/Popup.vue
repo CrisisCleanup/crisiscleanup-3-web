@@ -136,6 +136,8 @@ import useScripts from '@/use/phone/useScripts';
 import { useActions } from '@u3u/vue-hooks';
 import { ContactActions, ContactStates } from '@/models/phone/Contact';
 import PhoneInbound from '@/models/PhoneInbound';
+import PhoneOutbound from '@/models/PhoneOutbound';
+import useAgent from '@/use/phone/useAgent';
 
 export default {
   name: 'IncomingPopup',
@@ -143,14 +145,22 @@ export default {
   setup() {
     const { callerCases, callType, callState, ...contact } = useContact();
     const { updateContact } = useActions('phone.streams', ['updateContact']);
+    const { clearState } = useActions('phone.controller', ['clearState']);
+    const { agent } = useAgent();
     const dismissState = useToggle();
 
     const skipCall = async () => {
-      await PhoneInbound.api().skipCall(callState.inbound.value.id);
+      if (callState.inbound.value) {
+        await PhoneInbound.api().skipCall(callState.inbound.value.id);
+      }
+      if (callState.outbound.value) {
+        await PhoneOutbound.api().skipCall(callState.outbound.value.id);
+      }
       await updateContact({
         action: ContactActions.MISSED,
         state: ContactStates.ROUTED,
       });
+      await clearState({ agentId: agent.value.agentId });
     };
 
     return {
