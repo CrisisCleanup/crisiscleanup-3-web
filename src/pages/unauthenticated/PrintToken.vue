@@ -63,7 +63,7 @@
                   $t('printToken.hours_per_volunteer')
                 }}</span>
                 <base-input
-                  type="number"
+                  pattern="^\d*(\.\d{0,2})?$"
                   v-model="printToken.hours_per_volunteer"
                 />
 
