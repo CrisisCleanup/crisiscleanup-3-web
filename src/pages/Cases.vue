@@ -255,6 +255,33 @@
                         </template>
                       </base-dropdown>
                     </li>
+                    <li class="py-2">
+                      <base-dropdown
+                        :trigger="'hover'"
+                        :role="'sublist'"
+                        :align="'right'"
+                      >
+                        <template slot="btn">{{ $t('~~My Layers') }}</template>
+                        <template slot="body">
+                          <ul class="h-64 overflow-auto">
+                            <li
+                              v-for="location in organizationLocations"
+                              :key="`${location.id}`"
+                            >
+                              <base-checkbox
+                                :value="appliedLocations.has(location.id)"
+                                @input="
+                                  (value) => {
+                                    applyLocation(location.id, value);
+                                  }
+                                "
+                                >{{ location.name }}</base-checkbox
+                              >
+                            </li>
+                          </ul>
+                        </template>
+                      </base-dropdown>
+                    </li>
                   </ul>
                 </template>
               </base-dropdown>
@@ -896,6 +923,7 @@ export default {
       showingUpdateStatusModal: false,
       statusForUpdate: null,
       noClaimReason: null,
+      organizationLocations: [],
     };
   },
   computed: {
@@ -1113,6 +1141,7 @@ export default {
     }
     await Promise.all([
       this.getLocations(),
+      this.getOrganizationLocations(),
       LocationType.api().get('/location_types', {
         dataKey: 'results',
       }),
@@ -1135,6 +1164,18 @@ export default {
       await Location.api().get(`/locations?${queryString}`, {
         dataKey: 'results',
       });
+    },
+    async getOrganizationLocations() {
+      const locationParams = {
+        limit: 200,
+        created_by__organization: this.currentUser.organization.id,
+        fields: 'id,name,type',
+      };
+      const queryString = getQueryString(locationParams);
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/locations?${queryString}`,
+      );
+      this.organizationLocations = response.data.results;
     },
     handleTableChange({ pagination, filters, sorter }) {
       this.fetch({
