@@ -77,7 +77,7 @@
           <tag class="tag">
             <base-text variant="bodysm">
               {{ callerHistory.total }}
-              {{ `${$t(' Calls ')} | ${callerHistory.recent}` }}
+              {{ `${$t(' Calls ')} | ${$t(callerHistory.recent)}` }}
             </base-text>
           </tag>
         </div>
@@ -101,13 +101,21 @@
       </div>
     </div>
     <template #footer>
-      <div class="flex justify-center p-3">
+      <div class="flex justify-around p-6">
         <base-button
           :action="() => dismissState.toggle(true)"
           variant="solid"
           size="large"
         >
           {{ $t('~~Dismiss') }}
+        </base-button>
+        <base-button
+          :action="() => skipCall()"
+          variant="solid"
+          size="large"
+          class="btn-danger"
+        >
+          {{ $t('~~Skip Call') }}
         </base-button>
       </div>
     </template>
@@ -124,15 +132,28 @@ import useIncident from '@/use/worksites/useIncident';
 import useEnums from '@/use/useEnums';
 import useToggle from '@/use/useToggle';
 import useScripts from '@/use/phone/useScripts';
+import { useActions } from '@u3u/vue-hooks';
+import { ContactActions, ContactStates } from '@/models/phone/Contact';
+import PhoneInbound from '@/models/PhoneInbound';
 
 export default {
   name: 'IncomingPopup',
   components: { CaseCard, DisasterIcon },
   setup() {
-    const { callerCases, callType, ...contact } = useContact();
+    const { callerCases, callType, callState, ...contact } = useContact();
+    const { updateContact } = useActions('phone.streams', ['updateContact']);
     const dismissState = useToggle();
 
+    const skipCall = async () => {
+      await PhoneInbound.api().skipCall(callState.inbound.value.id);
+      await updateContact({
+        action: ContactActions.MISSED,
+        state: ContactStates.ROUTED,
+      });
+    };
+
     return {
+      callState,
       ...contact,
       ...useCaseCards({ cases: callerCases, addNew: false }),
       ...useIncident(),
@@ -141,6 +162,7 @@ export default {
       ...useScripts({ callType }),
       callType,
       dismissState,
+      skipCall,
     };
   },
 };
@@ -279,5 +301,8 @@ $neg-body-x-pad: calc(0rem - theme('spacing.8'));
       }
     }
   }
+}
+.btn-danger {
+  @apply bg-crisiscleanup-red-300 #{!important};
 }
 </style>
