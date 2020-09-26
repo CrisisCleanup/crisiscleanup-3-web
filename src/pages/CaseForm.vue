@@ -339,7 +339,7 @@ export default {
   mixins: [ValidateMixin],
   created() {
     EventBus.$on('updatedWorksiteLocation', (latLng) => {
-      this.geocodeWorksite(latLng.lat, latLng.lng);
+      this.geocodeWorksite(latLng.lat, latLng.lng, true);
     });
     EventBus.$on('clearWorksite', () => {
       this.worksite = {
@@ -937,15 +937,23 @@ export default {
         );
       });
     },
-    async geocodeWorksite(latitude, longitude) {
+    async geocodeWorksite(latitude, longitude, skipAddress = false) {
       const geocode = await GeocoderService.getLocationDetails({
         latitude,
         longitude,
       });
-      const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
-      geocodeKeys.forEach((key) =>
-        this.updateWorksite(geocode.address_components[key], key),
-      );
+      if (!skipAddress) {
+        const geocodeKeys = [
+          'address',
+          'city',
+          'county',
+          'state',
+          'postal_code',
+        ];
+        geocodeKeys.forEach((key) =>
+          this.updateWorksite(geocode.address_components[key], key),
+        );
+      }
       this.updateWorksite(
         {
           type: 'Point',
