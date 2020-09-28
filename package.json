@@ -237,7 +237,7 @@
     "start-server-and-test": "^1.11.3",
     "storybook-addon-vue-info": "^1.4.2",
     "storybook-vue-router": "^1.0.7",
-    "tailwindcss": "^1.7.1",
+    "tailwindcss": "^1.8.10",
     "thread-loader": "^2.1.3",
     "vue-cli-plugin-cypress-experimental": "~1.1.0",
     "vue-docgen-api": "^4.31.1",
