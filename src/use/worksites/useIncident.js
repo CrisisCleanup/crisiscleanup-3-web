@@ -6,8 +6,12 @@
 import { useGetters } from '@u3u/vue-hooks';
 
 export default () => {
-  const { currentIncident } = useGetters('incident', ['currentIncident']);
+  const { currentIncident, currentIncidentId } = useGetters('incident', [
+    'currentIncident',
+    'currentIncidentId',
+  ]);
   return {
     currentIncident,
+    currentIncidentId,
   };
 };

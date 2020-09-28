@@ -22,79 +22,17 @@
             :key="JSON.stringify(currentUser && currentUser.permissions)"
           />
         </Slide>
-        <div class="shadow header--grid bg-white">
-          <div class="flex justify-between h-full items-center">
-            <div class="flex items-center ml-2">
-              <div class="h-10 w-10 flex items-center">
-                <DisasterIcon
-                  v-show="$mq !== 'sm'"
-                  v-if="currentIncident && currentIncident.incidentImage"
-                  :current-incident="currentIncident"
-                />
-              </div>
-              <div class="flex flex-col ml-2 md:w-84 lg:w-84">
-                <form-select
-                  :key="currentIncidentId"
-                  :value="currentIncident"
-                  :options="incidents"
-                  :clearable="false"
-                  searchable
-                  select-classes="h-12"
-                  item-key="id"
-                  label="name"
-                  @input="handleChange"
-                />
-                <div class="flex ml-2 font-bold">
-                  <span>{{ selectedRoute }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="flex items-center overflow-hidden">
-              <v-popover
-                popover-class="menu-popover"
-                placement="bottom-end"
-                data-cy="auth.userprofile"
-              >
-                <div class="flex cursor-pointer items-center">
-                  <img
-                    :src="currentUser && currentUser.profilePictureUrl"
-                    class="rounded-full w-10 h-10"
-                  />
-                  <span class="p-3">
-                    {{ name }}
-                    <font-awesome-icon
-                      class="cursor-pointer"
-                      icon="caret-down"
-                    />
-                  </span>
-                </div>
-                <div slot="popover" class="flex flex-col">
-                  <base-button
-                    data-cy="auth.userprofile.profile"
-                    class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-                    :text="$t('actions.profile')"
-                    :action="
-                      () => {
-                        $router.push(`/profile`);
-                      }
-                    "
-                  />
-                  <base-button
-                    data-cy="auth.userprofile.logout"
-                    class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-                    :text="$t('actions.logout')"
-                    :action="
-                      () => {
-                        logoutByPhoneNumber();
-                        $store.dispatch('auth/logout');
-                      }
-                    "
-                  />
-                </div>
-              </v-popover>
-            </div>
-          </div>
-        </div>
+        <Header
+          :current-incident="currentIncident"
+          :incidents="incidents"
+          @update:incident="handleChange"
+          @auth:logout="
+            () => {
+              logoutByPhoneNumber();
+              $store.dispatch('auth/logout');
+            }
+          "
+        />
         <div
           v-if="ready"
           class="main--grid"
@@ -135,7 +73,7 @@ import Loader from '@/components/Loader';
 import TermsandConditionsModal from '@/components/TermsandConditionsModal';
 import { Slide } from 'vue-burger-menu';
 import { parsePhoneNumber } from 'libphonenumber-js';
-import DisasterIcon from '../components/DisasterIcon';
+import Header from '@/components/header/Header.vue';
 import PhoneStatus from '../models/PhoneStatus';
 import CompletedTransferModal from '../components/CompletedTransferModal';
 import { AuthService } from '../services/auth.service';
@@ -146,11 +84,11 @@ export default {
   name: 'Authenticated',
   components: {
     CompletedTransferModal,
-    DisasterIcon,
     NavMenu,
     Loader,
     TermsandConditionsModal,
     Slide,
+    Header,
   },
   data() {
     return {
@@ -161,15 +99,6 @@ export default {
     };
   },
   computed: {
-    name() {
-      if (this.currentUser) {
-        return `${this.currentUser.first_name} ${this.currentUser.last_name}`;
-      }
-      return '';
-    },
-    selectedRoute() {
-      return this.$t(this.$route.name);
-    },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
