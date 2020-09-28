@@ -9,6 +9,17 @@
   dependencies:
     "@authenio/xsd-schema-validator" "^0.7.1"
 
+"@authenio/xml-encryption@^0.11.3":
+  version "0.11.3"
+  resolved "https://registry.yarnpkg.com/@authenio/xml-encryption/-/xml-encryption-0.11.3.tgz#35379a8a87bbed3f34907a0359e8e1c30ce24bdd"
+  integrity sha512-zFLGBw/iNmLq5Udg+OJfsuERsTjcfvWtP6ZzL55EVwGu3bYsxuq1ARRNfNLHCXv4cNP49o8nLwpgA6VmXzRp/w==
+  dependencies:
+    async "^2.1.5"
+    ejs "^2.5.6"
+    node-forge "^0.7.4"
+    xmldom "~0.1.15"
+    xpath "0.0.27"
+
 "@authenio/xsd-schema-validator@^0.7.1":
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@authenio/xsd-schema-validator/-/xsd-schema-validator-0.7.1.tgz#3264c1b781d5192fe46cb5207d6ce51a706eed07"
@@ -7248,7 +7259,7 @@ async@2.6.1:
   dependencies:
     lodash "^4.17.10"
 
-async@^2.6.1, async@^2.6.2:
+async@^2.1.5, async@^2.6.1, async@^2.6.2:
   version "2.6.3"
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.3.tgz#d72625e2344a3656e3a3ad4fa749fa83299d82ff"
   integrity sha512-zflvls11DCy+dQWzTW2dzuilv8Z5X/pjfmZOWba6TNIVDm+2UDaJmXSOXlasHKfNBs8oo3M0aT50fDEWfKZjXg==
@@ -10919,7 +10930,7 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
-ejs@^2.6.1:
+ejs@^2.5.6, ejs@^2.6.1:
   version "2.7.4"
   resolved "https://registry.yarnpkg.com/ejs/-/ejs-2.7.4.tgz#48661287573dcc53e366c7a1ae52c3a120eec9ba"
   integrity sha512-7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==
@@ -17468,10 +17479,15 @@ node-forge@0.9.0:
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.9.0.tgz#d624050edbb44874adca12bb9a52ec63cb782579"
   integrity sha512-7ASaDa3pD+lJ3WvXFsxekJQelBKRpne+GOVbLbtHYdd7pFspyeuJHnWfLplGf3SwKGbfs/aYl5V/JCIaHVUKKQ==
 
-node-forge@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.10.0.tgz#32dea2afb3e9926f02ee5ce8794902691a676bf3"
-  integrity sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==
+node-forge@^0.7.4:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.6.tgz#fdf3b418aee1f94f0ef642cd63486c77ca9724ac"
+  integrity sha512-sol30LUpz1jQFBjOKwbjxijiE3b6pjd74YwfD0fJOKPjF+fONKb2Yg8rYgS6+bK6VDl+/wfr4IYpC7jDzLUIfw==
+
+node-forge@^0.8.5:
+  version "0.8.5"
+  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.8.5.tgz#57906f07614dc72762c84cef442f427c0e1b86ee"
+  integrity sha512-vFMQIWt+J/7FLNyKouZ9TazT74PRV3wgv9UT4cRjC8BffxFbKXkgIWR42URCPSnHm/QDz6BOlb2Q0U4+VQT67Q==
 
 node-gyp@^3.8.0:
   version "3.8.0"
@@ -21316,19 +21332,19 @@ safe-regex@^1.1.0:
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==
 
-samlify@^2.7.5:
-  version "2.7.5"
-  resolved "https://registry.yarnpkg.com/samlify/-/samlify-2.7.5.tgz#bf32fb037bc171c2988c301f75ca16a02d0e1070"
-  integrity sha512-sf2tmD6sVxeAOldT0/gWX+bORLUN11Hi5TTz7h6IG4Xx3e10tsR6K36INewVLJ769mc33rj2Q5IpOagBlVR3OA==
+samlify@^2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/samlify/-/samlify-2.7.1.tgz#163bde3a799ba6f9572e7702e520bda1c7f1c367"
+  integrity sha512-ESxWU55Ulw82kZQeubM0SP7KUDczsGO6H6tKlLATEjSjng0leMcgOV9QR0+m7IJ/Ez7lgKLJ8uwpOaNRhSQrJw==
   dependencies:
+    "@authenio/xml-encryption" "^0.11.3"
     camelcase "^5.3.1"
-    node-forge "^0.10.0"
+    node-forge "^0.8.5"
     node-rsa "^1.0.5"
     pako "^1.0.10"
     uuid "^3.3.2"
     xml "^1.0.1"
-    xml-crypto "^1.5.3"
-    xml-encryption "^1.1.1"
+    xml-crypto "^1.4.0"
     xmldom "^0.1.27"
     xpath "^0.0.27"
 
@@ -25078,22 +25094,12 @@ xdg-basedir@^4.0.0:
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-4.0.0.tgz#4bc8d9984403696225ef83a1573cbbcb4e79db13"
   integrity sha512-PSNhEJDejZYV7h50BohL09Er9VaIefr2LMAf3OEmpCkjOi34eYyQYAXUTjEQtZJTKcF0E2UKTh+osDLsgNim9Q==
 
-xml-crypto@^1.5.3:
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/xml-crypto/-/xml-crypto-1.5.3.tgz#a8f500b90f0dfaf0efa3331c345ecb0fff993c34"
-  integrity sha512-uHkmpUtX15xExe5iimPmakAZN+6CqIvjmaJTy4FwqGzaTjrKRBNeqMh8zGEzVNgW0dk6beFYpyQSgqV/J6C5xA==
+xml-crypto@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/xml-crypto/-/xml-crypto-1.4.0.tgz#de1cec8cd31cbd689cd90d3d6e8a27d4ae807de7"
+  integrity sha512-K8FRdRxICVulK4WhiTUcJrRyAIJFPVOqxfurA3x/JlmXBTxy+SkEENF6GeRt7p/rB6WSOUS9g0gXNQw5n+407g==
   dependencies:
     xmldom "0.1.27"
-    xpath "0.0.27"
-
-xml-encryption@^1.1.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/xml-encryption/-/xml-encryption-1.2.1.tgz#e6d18817c4309fd07ca7793cca93c3fd06745baa"
-  integrity sha512-hn5w3l5p2+nGjlmM0CAhMChDzVGhW+M37jH35Z+GJIipXbn9PUlAIRZ6I5Wm7ynlqZjFrMAr83d/CIp9VZJMTA==
-  dependencies:
-    escape-html "^1.0.3"
-    node-forge "^0.10.0"
-    xmldom "~0.1.15"
     xpath "0.0.27"
 
 xml-name-validator@^3.0.0:
