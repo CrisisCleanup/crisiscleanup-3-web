@@ -10,7 +10,7 @@
   >
     <template #organization_name="slotProps">
       <base-link
-        v-if="currentUser.isAdmin"
+        v-if="currentUser && currentUser.isAdmin"
         :href="`/admin/organization/${slotProps.item.organization}`"
         text-variant="bodysm"
         class="px-2"

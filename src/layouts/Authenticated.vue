@@ -140,6 +140,7 @@ export default {
           text: this.$t('nav.phone'),
           to: '/phone',
           disabled:
+            !this.$can ||
             !this.$can('phone_agent') ||
             !this.$can('beta_feature.aws_connect_phone'),
         },
@@ -149,6 +150,7 @@ export default {
           text: this.$t('nav.phone_beta'),
           to: '/caller',
           disabled:
+            !this.$can ||
             !this.$can('phone_agent') ||
             this.$can('beta_feature.connect_first_integration'),
         },
@@ -158,6 +160,7 @@ export default {
           text: this.$t('nav.phone_alpha'),
           to: '/connect_first',
           disabled:
+            !this.$can ||
             !this.$can('phone_agent') ||
             !this.$can('beta_feature.connect_first_integration'),
         },
@@ -181,7 +184,7 @@ export default {
           icon: 'admin',
           text: this.$t('nav.admin'),
           to: '/admin',
-          disabled: !this.currentUser.isAdmin,
+          disabled: !(this.currentUser && this.currentUser.isAdmin),
         },
       ];
     },
@@ -343,9 +346,13 @@ export default {
         return request.user === this.currentUser.id;
       });
     },
+    async logout() {
+      await this.logoutByPhoneNumber();
+      await this.$store.dispatch('auth/logout');
+    },
     async logoutByPhoneNumber() {
       const parsedNumber = parsePhoneNumber(this.currentUser.mobile, 'US');
-      if (this.currentUser.mobile) {
+      if (this.currentUser && this.currentUser.mobile) {
         await Promise.all(
           this.$phoneService.queueIds.map((queueId) =>
             this.$phoneService

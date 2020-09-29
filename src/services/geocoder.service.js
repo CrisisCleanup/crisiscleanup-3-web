@@ -72,15 +72,20 @@ export default {
             input: text,
             sessionToken,
           },
-          (results) =>
-            resolve(
-              results.map((result) => {
-                return {
-                  description: result.description,
-                  data: result,
-                };
-              }),
-            ),
+          (results) => {
+            if (results) {
+              resolve(
+                results.map((result) => {
+                  return {
+                    description: result.description,
+                    data: result,
+                  };
+                }),
+              );
+            } else {
+              resolve([]);
+            }
+          },
         );
       });
     } else {

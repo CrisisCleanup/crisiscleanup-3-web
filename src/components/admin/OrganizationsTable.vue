@@ -63,7 +63,7 @@
           v-if="!slotProps.item.approved_by && !slotProps.item.rejected_by"
         />
         <base-link
-          v-if="currentUser.isAdmin"
+          v-if="currentUser && currentUser.isAdmin"
           :href="`/admin/organization/${slotProps.item.id}`"
           text-variant="bodysm"
           class="px-2"

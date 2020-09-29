@@ -2,7 +2,7 @@
   <PageLayout class="h-full w-full" :is-loading="false">
     <component :is="pageComponent" />
     <IncomingPopup v-show="callPending" />
-    <PhoneDebugger v-if="currentUser.isAdmin" />
+    <PhoneDebugger v-if="currentUser && currentUser.isAdmin" />
   </PageLayout>
 </template>
 

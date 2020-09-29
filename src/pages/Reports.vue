@@ -42,7 +42,7 @@
                   v-if="
                     $can('app_stage.development') ||
                     $can('app_stage.staging') ||
-                    currentUser.isAdmin
+                    (currentUser && currentUser.isAdmin)
                   "
                   :formats="r.output_formats"
                   :files="r.files"

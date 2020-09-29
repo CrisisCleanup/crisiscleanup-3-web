@@ -216,4 +216,23 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+function patchRouterMethod(r, methodName) {
+  r[`old${methodName}`] = r[methodName];
+  r[methodName] = async function (location) {
+    return r[`old${methodName}`](location).catch((error) => {
+      if (
+        error.message.includes(
+          'Avoided redundant navigation to current location',
+        )
+      ) {
+        return this.currentRoute;
+      }
+      throw error;
+    });
+  };
+}
+
+patchRouterMethod(router, 'push');
+patchRouterMethod(router, 'replace');
+
 export default router;

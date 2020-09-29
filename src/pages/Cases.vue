@@ -211,7 +211,12 @@
                                 >{{ location.name }}</base-checkbox
                               >
                             </li>
-                            <li v-if="currentOrganization.primary_location">
+                            <li
+                              v-if="
+                                currentOrganization &&
+                                currentOrganization.primary_location
+                              "
+                            >
                               <base-checkbox
                                 :value="
                                   appliedLocations.has(
@@ -231,7 +236,12 @@
                                 }}</base-checkbox
                               >
                             </li>
-                            <li v-if="currentOrganization.secondary_location">
+                            <li
+                              v-if="
+                                currentOrganization &&
+                                currentOrganization.secondary_location
+                              "
+                            >
                               <base-checkbox
                                 :value="
                                   appliedLocations.has(
@@ -1061,7 +1071,10 @@ export default {
       return User.find(this.$store.getters['auth/userId']);
     },
     currentOrganization() {
-      return Organization.find(this.currentUser.organization.id);
+      if (this.currentUser) {
+        return Organization.find(this.currentUser.organization.id);
+      }
+      return null;
     },
     markers() {
       if (this.data) {

@@ -216,6 +216,10 @@
             <base-text variant="h3">
               {{ $t('adminOrganization.general_info') }}
             </base-text>
+            <base-text>
+              Where are you working:
+              {{ organization.where_are_you_working }}</base-text
+            >
             <base-text> Facebook: {{ organization.facebook }}</base-text>
             <base-text> Twitter: {{ organization.twitter }}</base-text>
             <base-text> Referral: {{ organization.referral }}</base-text>

@@ -35,7 +35,7 @@
           </div>
         </div>
         <CallHistory @row:click="({ mobile }) => (numberToDial = mobile)" />
-        <ContactTable v-if="currentUser.isAdmin" />
+        <ContactTable v-if="currentUser && currentUser.isAdmin" />
       </div>
       <TrainingModal
         v-if="isShowingTrainingModal"

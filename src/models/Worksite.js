@@ -61,10 +61,13 @@ export default class Worksite extends CCUModel {
   }
 
   get total_time() {
-    const seconds = this.time.reduce((total, obj) => {
-      return total + obj.seconds * obj.volunteers;
-    }, 0);
-    return secondsToHm(seconds);
+    if (this.time) {
+      const seconds = this.time.reduce((total, obj) => {
+        return total + obj.seconds * obj.volunteers;
+      }, 0);
+      return secondsToHm(seconds);
+    }
+    return null;
   }
 
   get formFields() {

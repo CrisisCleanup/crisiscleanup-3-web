@@ -204,26 +204,30 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             const layerPoint = project(ll);
             const quadTree = quadTrees[currentMap.getZoom()];
             let marker;
-            const { rMax } = quadTree;
-            let found = false;
-            quadTree.visit(function (quad, x1, y1, x2, y2) {
-              if (!quad.length) {
-                const dx = quad.data.x - layerPoint.x;
-                const dy = quad.data.y - layerPoint.y;
-                const r = quad.data.scale.x * 16;
-                if (dx * dx + dy * dy <= r * r) {
-                  marker = quad.data;
-                  found = true;
+            try {
+              const { rMax } = quadTree;
+              let found = false;
+              quadTree.visit(function (quad, x1, y1, x2, y2) {
+                if (!quad.length) {
+                  const dx = quad.data.x - layerPoint.x;
+                  const dy = quad.data.y - layerPoint.y;
+                  const r = quad.data.scale.x * 16;
+                  if (dx * dx + dy * dy <= r * r) {
+                    marker = quad.data;
+                    found = true;
+                  }
                 }
-              }
-              return (
-                found ||
-                x1 > layerPoint.x + rMax ||
-                x2 + rMax < layerPoint.x ||
-                y1 > layerPoint.y + rMax ||
-                y2 + rMax < layerPoint.y
-              );
-            });
+                return (
+                  found ||
+                  x1 > layerPoint.x + rMax ||
+                  x2 + rMax < layerPoint.x ||
+                  y1 > layerPoint.y + rMax ||
+                  y2 + rMax < layerPoint.y
+                );
+              });
+            } catch {
+              return null;
+            }
             return marker;
           };
 
