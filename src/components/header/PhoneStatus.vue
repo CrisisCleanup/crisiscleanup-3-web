@@ -83,8 +83,6 @@ export default {
     };
 
     const setStyle = () => {
-      console.log('setting style!');
-      console.log(icon.value);
       const svgDoc = icon.value.getSVGDocument();
       if (svgDoc) {
         svgDoc.getElementsByTagName('path')[0].style.fill = iconColor.value;
