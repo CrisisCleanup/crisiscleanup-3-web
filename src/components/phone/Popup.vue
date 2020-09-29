@@ -142,17 +142,23 @@ export default {
   name: 'IncomingPopup',
   components: { CaseCard, DisasterIcon },
   setup() {
-    const { callerCases, callType, callState, ...contact } = useContact();
+    const {
+      callerCases,
+      callType,
+      callState,
+      currentContact,
+      ...contact
+    } = useContact();
     const { updateContact } = useActions('phone.streams', ['updateContact']);
     const { clearState } = useActions('phone.controller', ['clearState']);
     const { agent } = useAgent();
     const dismissState = useToggle();
 
     const skipCall = async () => {
-      if (callState.inbound.value) {
+      if (callState.inbound.value && currentContact.value.isInbound) {
         await PhoneInbound.api().skipCall(callState.inbound.value.id);
       }
-      if (callState.outbound.value) {
+      if (callState.outbound.value && !currentContact.value.isInbound) {
         await PhoneOutbound.api().skipCall(callState.outbound.value.id);
       }
       await updateContact({
@@ -163,6 +169,7 @@ export default {
     };
 
     return {
+      currentContact,
       callState,
       ...contact,
       ...useCaseCards({ cases: callerCases, addNew: false }),
