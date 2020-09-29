@@ -3,12 +3,13 @@
  * Enums Hook
  */
 
-import { ICONS } from '@/constants';
+import { ICONS, ICON_MAP } from '@/constants';
 
 export default () => {
   return {
     enums: {
       icons: ICONS,
+      iconSvgs: ICON_MAP,
     },
   };
 };

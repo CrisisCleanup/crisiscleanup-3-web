@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow header--grid bg-white">
+  <div class="shadow header header--grid bg-white">
     <div class="flex justify-between h-full items-center">
       <div class="flex items-center ml-2">
         <div class="h-10 w-10 flex items-center">
@@ -26,41 +26,55 @@
           </div>
         </div>
       </div>
-      <div class="flex items-center overflow-hidden">
-        <v-popover
-          popover-class="menu-popover"
-          placement="bottom-end"
-          data-cy="auth.userprofile"
+
+      <div class="flex h-full">
+        <div
+          v-if="$can('phone_agent') && $can('beta_feature.aws_connect_phone')"
+          class="flex items-center header-item h-full"
         >
-          <div class="flex cursor-pointer items-center">
-            <img
-              :src="currentUser && currentUser.profilePictureUrl"
-              class="rounded-full w-10 h-10"
-            />
-            <span class="p-3">
-              {{ currentUser && currentUser.full_name }}
-              <font-awesome-icon class="cursor-pointer" icon="caret-down" />
-            </span>
-          </div>
-          <div slot="popover" class="flex flex-col">
-            <base-button
-              data-cy="auth.userprofile.profile"
-              class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-              :text="$t('actions.profile')"
-              :action="
-                () => {
-                  $router.push(`/profile`);
-                }
-              "
-            />
-            <base-button
-              data-cy="auth.userprofile.logout"
-              class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
-              :text="$t('actions.logout')"
-              :action="() => $emit('auth:logout')"
-            />
-          </div>
-        </v-popover>
+          <PhoneStatus />
+        </div>
+
+        <div class="flex items-center header-item overflow-hidden h-full">
+          <v-popover
+            popover-class="menu-popover"
+            placement="bottom-end"
+            data-cy="auth.userprofile"
+          >
+            <div class="flex cursor-pointer items-center">
+              <img
+                :src="currentUser && currentUser.profilePictureUrl"
+                class="rounded-full w-10 h-10 shadow"
+              />
+              <base-text
+                variant="h3"
+                class="p-3 text-crisiscleanup-dark-300"
+                regular
+              >
+                {{ currentUser && currentUser.full_name }}
+                <font-awesome-icon class="cursor-pointer" icon="caret-down" />
+              </base-text>
+            </div>
+            <div slot="popover" class="flex flex-col">
+              <base-button
+                data-cy="auth.userprofile.profile"
+                class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
+                :text="$t('actions.profile')"
+                :action="
+                  () => {
+                    $router.push(`/profile`);
+                  }
+                "
+              />
+              <base-button
+                data-cy="auth.userprofile.logout"
+                class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
+                :text="$t('actions.logout')"
+                :action="() => $emit('auth:logout')"
+              />
+            </div>
+          </v-popover>
+        </div>
       </div>
     </div>
   </div>
@@ -71,11 +85,13 @@ import DisasterIcon from '@/components/DisasterIcon.vue';
 import VueTypes from 'vue-types';
 import useUser from '@/use/user/useUser';
 import { useRouter } from '@u3u/vue-hooks';
+import PhoneStatus from '@/components/header/PhoneStatus.vue';
 
 export default {
   name: 'Header',
   components: {
     DisasterIcon,
+    PhoneStatus,
   },
   props: {
     incidents: VueTypes.array,
@@ -90,4 +106,15 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="postcss">
+.header {
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);
+  border: 1px solid #efefef;
+}
+
+.header-item {
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);
+  border: 1px solid rgb(151, 151, 151, 0.1);
+  @apply px-2;
+}
+</style>
