@@ -104,7 +104,7 @@ export const ContactConnectionMap = Object.freeze({
 });
 
 export const CallType = Object.freeze({
-  INBOUND: 'inbound',
+  INBOUND: 'INBOUND',
   OUTBOUND: 'OUTBOUND',
   CALLDOWN: 'CALLDOWN',
 });
@@ -162,7 +162,7 @@ export default class Contact extends Model {
       ContactAttributes.CALL_TYPE,
       CallType.INBOUND,
     );
-    return callType.toLowerCase() === CallType.INBOUND;
+    return callType.toLowerCase() === CallType.INBOUND.toLowerCase();
   }
 
   get callType(): $Values<typeof CallType> {
@@ -260,18 +260,12 @@ export default class Contact extends Model {
     Contact.syncAttributes(model.contactId);
   }
 
-  static beforeUpdate(model: Contact): void | boolean {
+  static beforeUpdate(model: Contact): void {
     if (
-      [ContactActions.DESTROYED, ContactActions.MISSED].includes(model.action)
+      ![ContactActions.DESTROYED, ContactActions.MISSED].includes(model.action)
     ) {
-      Log.info(`Contact is: ${model.action}, destroying!`);
-      Contact.delete(model.contactId).then(() =>
-        Log.info('Contact => DELETED'),
-      );
-      return false;
+      Contact.syncAttributes(model.contactId);
     }
-    Contact.syncAttributes(model.contactId);
-    return true;
   }
 
   static beforeDelete(model: Contact): void {
@@ -338,7 +332,16 @@ export default class Contact extends Model {
       });
   }
 
-  static afterUpdate(model: Contact): void {
+  static afterUpdate(model: Contact): void | boolean {
+    if (
+      [ContactActions.DESTROYED, ContactActions.MISSED].includes(model.action)
+    ) {
+      Log.info(`Contact is: ${model.action}, destroying!`);
+      Contact.delete(model.contactId).then(() =>
+        Log.info('Contact => DELETED'),
+      );
+      return false;
+    }
     const connection: Connection = Connection.query()
       .where('contactId', model.contactId)
       .withAllRecursive()
@@ -395,6 +398,7 @@ export default class Contact extends Model {
         .then(() => Log.info(`Connection state => ${newState}`))
         .catch((e) => Log.error(`failed to update connection state!`, e));
     }
+    return true;
   }
 
   static parseAttributes(
