@@ -111,6 +111,7 @@ export default {
     });
 
     return {
+      connected,
       handleAgentState,
       toggleAgentState,
       ...useEnums(),

@@ -93,7 +93,7 @@ Vue.use(Toasted, {
 Vue.use(VueI18n);
 Vue.use(VueLog);
 Vue.use(Popover);
-Vue.use(VueCompositionApi);
+// Vue.use(VueCompositionApi);
 Vue.component('v-select', vSelect);
 
 // Filters
