@@ -9,7 +9,7 @@ import { ConnectionStates } from '@/models/phone/Connection';
 import { unwrap } from '@/utils/wrap';
 import _ from 'lodash';
 import { useIntervalFn } from '@vueuse/core';
-import { useState } from '@u3u/vue-hooks';
+import { useState, useGetters } from '@u3u/vue-hooks';
 
 /**
  * Utilize current agent state to compute UI components.
@@ -31,6 +31,9 @@ export default ({
   const _acwElapsed = ref(0);
   const streamsState = {
     ...useState('phone.streams', ['connected']),
+  };
+  const ctrlGetters = {
+    ...useGetters('phone.controller', ['isCallActive']),
   };
 
   // UI friendly 'action' string to enact state change.
@@ -92,6 +95,11 @@ export default ({
       );
       context.root.$log.error(_agent);
       return;
+    }
+    if (ctrlGetters.isCallActive.value) {
+      context.root.$toasted.error(
+        context.root.$t('~~You must complete the open call to take another!'),
+      );
     }
     _agent.value.toggleOnline();
   };

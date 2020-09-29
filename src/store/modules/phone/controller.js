@@ -238,6 +238,10 @@ class ControllerStore extends VuexModule {
     return this.status.modified.map((c) => c.id);
   }
 
+  get isCallActive() {
+    return this.view.page === ControllerPages.CONTROLLER;
+  }
+
   @Mutation
   setStatus(newStatus) {
     this.status = { ...this.status, ...newStatus };

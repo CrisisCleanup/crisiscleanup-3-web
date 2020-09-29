@@ -47,7 +47,7 @@
       </div>
       <div class="inline-flex action-btn">
         <ProgressButton
-          :action="() => handleAgentState()"
+          :action="() => toggleAgentState()"
           :disabled="!agentState.enabled"
           size="large"
           variant="solid"
@@ -99,9 +99,6 @@ import useToggle from '@/use/useToggle';
 import useUser from '@/use/user/useUser';
 import useTraining from '@/use/user/useTraining';
 import Agent, { ERRORS as AgentErrors } from '@/models/Agent';
-import ControllerStore, {
-  ControllerPages,
-} from '@/store/modules/phone/controller';
 import { useStore } from '@u3u/vue-hooks';
 import { getModule } from 'vuex-module-decorators';
 import { unwrap } from '@/utils/wrap';
@@ -111,6 +108,7 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import useIncident from '@/use/worksites/useIncident';
 import { EventBus } from '@/event-bus';
 import VueTypes from 'vue-types';
+import ControllerStore from '@/store/modules/phone/controller';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();
@@ -202,16 +200,6 @@ export default {
       isTrained: allTrainingCompleted,
     });
 
-    const handleAgentState = () => {
-      if (ctrlStore.view.page === ControllerPages.CONTROLLER) {
-        context.root.$toasted.error(
-          context.root.$t('~~You must complete the open call to take another!'),
-        );
-        return;
-      }
-      toggleAgentState();
-    };
-
     const { currentIncident } = useIncident();
     const { currentUser } = useUser();
 
@@ -285,13 +273,13 @@ export default {
     );
 
     return {
+      toggleAgentState,
       dialerValue,
       connected,
       trainingState,
       showMoreState,
       agent,
       agentState,
-      handleAgentState,
       acwDuration,
       onTrainingComplete,
       onDialer,
