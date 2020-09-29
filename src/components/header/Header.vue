@@ -11,7 +11,7 @@
         </div>
         <div class="flex flex-col ml-2 md:w-84 lg:w-84">
           <form-select
-            :key="String(currentIncident.id)"
+            :key="String(currentIncident && currentIncident.id)"
             :value="currentIncident"
             :options="incidents"
             :clearable="false"
@@ -29,7 +29,11 @@
 
       <div class="flex h-full">
         <div
-          v-if="$can('phone_agent') && $can('beta_feature.aws_connect_phone')"
+          v-if="
+            $can &&
+            $can('phone_agent') &&
+            $can('beta_feature.aws_connect_phone')
+          "
           class="flex items-center header-item h-full"
         >
           <PhoneStatus />
