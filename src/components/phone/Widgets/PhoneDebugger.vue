@@ -7,7 +7,10 @@
       <div
         @click="() => visibleState.toggle()"
         class="opreview__tab flex justify-center shadow-xl"
-        :class="visibleState.state.value ? '' : 'rounded-bl'"
+        :class="[
+          visibleState.state.value ? '' : 'rounded-bl',
+          pageError !== '' && '--has-error',
+        ]"
       >
         <base-text variant="bodysm">{{
           visibleState.state.value ? 'Hide' : 'Debugger'
@@ -19,7 +22,10 @@
         :key="p"
         class="opreview__tab flex justify-center shadow-xl"
         @click="() => (currentPage = p)"
-        :class="currentPage === p && 'active'"
+        :class="[
+          currentPage === p && '--active',
+          pageError === p && '--has-error',
+        ]"
       >
         <base-text variant="bodysm" class="py-1">
           {{ p | startCase }}
@@ -69,11 +75,12 @@ import useController from '@/use/phone/useController';
 import useAgent from '@/use/phone/useAgent';
 import useContact from '@/use/phone/useContact';
 import useToggle from '@/use/useToggle';
-import { computed, ref } from '@vue/composition-api';
+import { computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
 import { useState } from '@u3u/vue-hooks';
 import { ControllerPages } from '@/store/modules/phone/controller';
 import { useLocalStorage } from 'vue-composable';
+import useUser from '@/use/user/useUser';
 
 export default {
   name: 'PhoneDebugger',
@@ -82,7 +89,9 @@ export default {
     const { agent } = useAgent();
     const visibleState = useToggle();
     const { currentContact } = useContact();
+    const { currentUser } = useUser();
     const currentPage = ref('contact');
+    const pageError = ref('');
     const scriptStorage = useLocalStorage('ccu-ivr-hide-script', false);
     const contactState = {
       ...useState('entities/phone/contact', [
@@ -103,6 +112,25 @@ export default {
       'softphoneEnabled',
       'softphoneAutoAccept',
     ];
+
+    const isIAMUser = computed(() => {
+      if (agent.value) {
+        const conUsername = agent.value.connectConfig.username;
+        return conUsername !== currentUser.value.email;
+      }
+      return false;
+    });
+
+    watch(
+      () => isIAMUser.value,
+      () => {
+        if (isIAMUser.value === true) {
+          pageError.value = 'config';
+        } else {
+          pageError.value = '';
+        }
+      },
+    );
 
     const pages = computed(() => ({
       contact: [
@@ -192,13 +220,19 @@ export default {
         },
       ],
       config: agent.value
-        ? Object.keys(agent.value.connectConfig).map(
-            (k) =>
-              configParams.includes(k) && {
-                title: _.startCase(k),
-                value: _.get(agent, `value.connectConfig.${k}`, 'None'),
-              },
-          )
+        ? [
+            ...Object.keys(agent.value.connectConfig).map(
+              (k) =>
+                configParams.includes(k) && {
+                  title: _.startCase(k),
+                  value: _.get(agent, `value.connectConfig.${k}`, 'None'),
+                },
+            ),
+            {
+              title: 'Is IAM User',
+              value: isIAMUser.value,
+            },
+          ]
         : [],
       debug: [
         {
@@ -228,6 +262,7 @@ export default {
       ],
     }));
     return {
+      pageError,
       visibleState,
       ...actions,
       ...state,
@@ -296,12 +331,16 @@ $neg-hidden: calc(0rem - theme('width.64'));
       align-items: center;
       cursor: pointer;
 
-      &.active,
+      &.--active,
       &:hover {
         @apply bg-crisiscleanup-dark-500;
       }
-      &.active p {
+      &.--active p {
         @apply font-bold;
+      }
+      &.--has-error p {
+        @apply text-crisiscleanup-red-600 font-bold;
+        animation: pulse 1s infinite;
       }
       p {
         @apply text-white;
