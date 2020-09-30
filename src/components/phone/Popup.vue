@@ -43,12 +43,12 @@
       </div>
       <div class="header">
         <DisasterIcon
-          v-if="currentIncident && currentIncident.incidentImage"
-          :current-incident="currentIncident"
+          v-if="activeIncident && activeIncident.incidentImage"
+          :current-incident="activeIncident"
         />
         <base-text :weight="700" variant="h1"
           >{{ $t('~~Incoming Call for ') }}
-          {{ currentIncident.friendlyName }}
+          {{ activeIncident && activeIncident.friendlyName }}
         </base-text>
       </div>
     </template>
@@ -137,6 +137,7 @@ import { ContactActions, ContactStates } from '@/models/phone/Contact';
 import PhoneInbound from '@/models/PhoneInbound';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import useAgent from '@/use/phone/useAgent';
+import { computed } from '@vue/composition-api';
 
 export default {
   name: 'IncomingPopup',
@@ -153,6 +154,13 @@ export default {
     const { clearState } = useActions('phone.controller', ['clearState']);
     const { agent } = useAgent();
     const dismissState = useToggle();
+    const { currentIncident } = useIncident();
+    const activeIncident = computed(() => {
+      if (currentContact.value && currentContact.value.incident) {
+        return currentContact.value.incident;
+      }
+      return currentIncident.value;
+    });
 
     const skipCall = async () => {
       if (callState.inbound.value && currentContact.value.isInbound) {
@@ -169,11 +177,12 @@ export default {
     };
 
     return {
+      currentIncident,
+      activeIncident,
       currentContact,
       callState,
       ...contact,
       ...useCaseCards({ cases: callerCases, addNew: false }),
-      ...useIncident(),
       ...useUser(),
       ...useEnums(),
       ...useScripts({ callType }),
