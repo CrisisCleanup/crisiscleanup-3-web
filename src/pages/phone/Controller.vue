@@ -39,7 +39,7 @@
               <case-form
                 v-bind="caseFormProps"
                 :key="activeCaseId"
-                :incident-id="String(currentIncident.id)"
+                :incident-id="String(activeIncidentId || currentIncident.id)"
                 disable-claim-and-save
                 :data-prefill="prefillData"
                 @savedWorksite="savedWorksite"

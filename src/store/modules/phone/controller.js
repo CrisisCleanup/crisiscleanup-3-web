@@ -230,6 +230,10 @@ class ControllerStore extends VuexModule {
     return this.currentCase instanceof Worksite ? Worksite : Pda;
   }
 
+  get activeIncidentId() {
+    return this.currentCase ? this.currentCase.incident : null;
+  }
+
   get activeActionTab() {
     return _.get(this.view, 'actionTab', ControllerActionTabs.CASE);
   }

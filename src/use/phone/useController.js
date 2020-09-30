@@ -10,6 +10,7 @@ export default () => {
     ...useGetters('phone.controller', [
       'activeCaseId',
       'activeCaseType',
+      'activeIncidentId',
       'modifiedCaseIds',
     ]),
   };

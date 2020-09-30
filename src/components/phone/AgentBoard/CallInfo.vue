@@ -81,6 +81,7 @@ import useCaseCards from '@/use/worksites/useCaseCards';
 import { useStore } from '@u3u/vue-hooks';
 import Worksite from '@/models/Worksite';
 import { getErrorMessage } from '@/utils/errors';
+import useIncident from '@/use/worksites/useIncident';
 
 export default {
   name: 'BoardCallInfo',
@@ -95,6 +96,7 @@ export default {
 
     const { syncDuration, callerCases, ...contact } = useContact();
     const { caseCards } = useCaseCards({ cases: callerCases, addNew: true });
+    const { setCurrentIncident } = useIncident();
 
     onMounted(() => syncDuration.start());
 
@@ -108,6 +110,7 @@ export default {
       const model = await store.value.$db().model(type);
       const caseItem = await model.fetchOrFindId(caseId);
       await actions.setCase(caseItem);
+      await setCurrentIncident(caseItem.incident);
     };
 
     return {
