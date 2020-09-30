@@ -287,7 +287,7 @@ export default {
       this.ready = false;
       await Incident.api().fetchById(value);
       this.ready = true;
-      User.api().updateUserState({
+      await User.api().updateUserState({
         incident: value,
       });
       this.setCurrentIncidentId(value);
