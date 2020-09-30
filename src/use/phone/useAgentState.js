@@ -98,8 +98,11 @@ export default ({
     }
     if (ctrlGetters.isCallActive.value) {
       context.root.$toasted.error(
-        context.root.$t('~~You must complete the open call to take another!'),
+        context.root.$t(
+          '~~You must close out the current call before we can send you the next call.',
+        ),
       );
+      return;
     }
     _agent.value.toggleOnline();
   };

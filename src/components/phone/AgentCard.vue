@@ -63,7 +63,7 @@
           icon-size="md"
           variant="outline"
           ccu-icon="dialer"
-          :disabled="!agentState.enabled"
+          :disabled="!agentState.enabled || isCallActive"
         />
       </div>
     </div>
@@ -273,6 +273,7 @@ export default {
     );
 
     return {
+      isCallActive: ctrlStore.isCallActive,
       toggleAgentState,
       dialerValue,
       connected,
