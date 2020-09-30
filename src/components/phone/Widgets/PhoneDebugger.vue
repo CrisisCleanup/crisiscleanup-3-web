@@ -102,8 +102,22 @@ export default {
         'outbounds',
         'inbound',
         'outbound',
+        'incident',
+        'resolveTask',
+        'resolveRequested',
       ]),
     };
+
+    const contactStateInfo = computed(() => {
+      return _.map(contactState, (stateItem, key) => {
+        if (stateItem.value) {
+          return _.isArray(stateItem.value)
+            ? [key, _.map(stateItem.value, 'id')]
+            : [key, _.get(stateItem.value, 'id', stateItem.value)];
+        }
+        return [key, 'None'];
+      });
+    });
 
     const configParams = [
       'extension',
@@ -166,9 +180,9 @@ export default {
             }))
           : [],
       ),
-      state: Object.keys(contactState).map((k) => ({
+      state: contactStateInfo.value.map(([k, v]) => ({
         title: k,
-        value: _.get(contactState, `${k}.value`, 'None'),
+        value: v,
       })),
       outbound: [
         {
