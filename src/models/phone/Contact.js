@@ -27,6 +27,7 @@ import PhoneDnis from '@/models/PhoneDnis';
 import Language from '@/models/Language';
 import PhoneInbound from '@/models/PhoneInbound';
 import type { CaseType } from '@/store/modules/phone/types';
+import Incident from '@/models/Incident';
 
 /**
  * Enum of possible contact states.
@@ -135,6 +136,7 @@ export default class Contact extends Model {
       worksites: [],
       pdas: [],
       locale: null,
+      incident: null,
       outbounds: [],
       inbound: null,
       outbound: null,
@@ -154,6 +156,11 @@ export default class Contact extends Model {
   get dnis(): typeof PhoneDnis {
     const { dnis } = Contact.store().state.entities['phone/contact'];
     return dnis;
+  }
+
+  get incident(): typeof Incident {
+    const { incident } = Contact.store().state.entities['phone/contact'];
+    return incident;
   }
 
   get isInbound(): boolean {
@@ -326,6 +333,7 @@ export default class Contact extends Model {
           state.outbounds = [];
           state.inbound = null;
           state.outbound = null;
+          state.incident = null;
           state.resolveRequested = false;
           state.resolveTask = '';
         });
@@ -446,7 +454,7 @@ export default class Contact extends Model {
     const pdas = await this.getPdas();
     const outbounds = await this.getOutbounds();
     const _state = Contact.store().state.entities['phone/contact'];
-    let { dnis, locale, outbound, inbound } = _state;
+    let { dnis, locale, outbound, inbound, incident } = _state;
     if (!locale) {
       locale = await this.getLocale();
     }
@@ -459,6 +467,10 @@ export default class Contact extends Model {
     }
     if (!dnis) {
       dnis = await this.getDnis({ inbound, outbound });
+    }
+    if (!incident) {
+      const incidents = await this.getIncidents();
+      incident = _.maxBy(incidents, 'id');
     }
     Contact.commit((state) => {
       if (dnis && !_.isEmpty(dnis)) {
@@ -474,6 +486,7 @@ export default class Contact extends Model {
       state.outbounds = _.isEmpty(outbounds)
         ? state.outbounds
         : _.unionBy(state.outbounds, outbounds, 'id');
+      state.incident = incident || state.incident;
       state.inbound = inbound || state.inbound;
       state.outbound = outbound || state.outbound;
     });
@@ -570,7 +583,7 @@ export default class Contact extends Model {
       return {
         [ContactAttributes.INBOUND_NUMBER]: currentOutbound.phone_number,
         [ContactAttributes.INCIDENT]: String(
-          _.first(currentOutbound.incident_id),
+          _.max(currentOutbound.incident_id),
         ),
         [ContactAttributes.OUTBOUND_IDS]: String(currentOutbound.id),
         [ContactAttributes.CALL_TYPE]: CallType.OUTBOUND,
@@ -652,6 +665,13 @@ export default class Contact extends Model {
     return this.resolveAttributeModels<typeof PhoneInbound>(
       ContactAttributes.INBOUND_ID,
       PhoneInbound,
+    );
+  }
+
+  async getIncidents(): Promise<typeof Incident[]> {
+    return this.resolveAttributeModels<typeof Incident>(
+      ContactAttributes.INCIDENT,
+      Incident,
     );
   }
 
