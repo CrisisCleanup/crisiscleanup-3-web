@@ -281,6 +281,7 @@ $metric-headers: ('In' 'Out' 'Total');
       opacity: 0.2;
       background-color: #979797;
     }
+    max-height: 91px;
     display: flex;
     align-items: baseline;
 
@@ -314,10 +315,14 @@ $metric-headers: ('In' 'Out' 'Total');
       @apply py-1;
       .image {
         @apply shadow;
-        max-width: 2.5vw;
-        object-fit: contain;
         border-radius: 50%;
         position: relative;
+        img {
+          @apply rounded-full;
+          height: 64px;
+          width: 64px;
+          object-fit: cover;
+        }
       }
       .info {
         display: flex;
