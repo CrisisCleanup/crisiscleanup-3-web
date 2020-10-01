@@ -21,7 +21,7 @@ const routes = [
             return (
               <BetaBanner
                 text={
-                  '~~Try out the new beta phone system. You can switch back anytime. '
+                  '~~Try out the new phone system. You can switch back anytime. '
                 }
                 beta-feature="aws_connect_phone"
               />
