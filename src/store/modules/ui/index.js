@@ -16,6 +16,7 @@ const getStateDefaults = () => ({
   siteBanner: {
     enabled: false,
     text: '',
+    component: null,
     type: types.BannerTypes.ERROR,
   },
 });
