@@ -18,7 +18,7 @@
         </template>
         <template #mobile="{item}">
           <div class="inline-flex items-center">
-            <ccu-icon type="phone-classic" size="sm" :alt="$t('phoneDashboard.last_10_calls')"/>
+            <ccu-icon type="phone-classic" size="sm" :title="$t('phoneDashboard.last_10_calls')"/>
             <base-text class="pl-1">
               {{ item.mobile | formatNationalNumber }}
             </base-text>

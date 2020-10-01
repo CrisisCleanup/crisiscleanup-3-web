@@ -98,9 +98,7 @@ export default ({
     }
     if (ctrlGetters.isCallActive.value) {
       context.root.$toasted.error(
-        context.root.$t(
-          '~~You must close out the current call before we can send you the next call.',
-        ),
+        context.root.$t('phoneDashboard.call_status_required_before_next'),
       );
       return;
     }

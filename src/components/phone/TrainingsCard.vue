@@ -12,7 +12,7 @@
         </base-text>
         <div class="flex flex-row justify-start">
           <div class="flex">
-            <ccu-icon type="time" size="sm" :alt="$t('phoneDashboard.clock_icon')" />
+            <ccu-icon type="time" size="sm" :title="$t('phoneDashboard.clock_icon')" />
             <!--- Date --->
             <base-text
               variant="bodysm"

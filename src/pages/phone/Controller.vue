@@ -82,7 +82,7 @@ import useScripts from '@/use/phone/useScripts';
 const StatusPopup = () => {
   return () => (
     <div class="py-12 px-3 flex flex-col">
-      <BoardStatus hide-end-contact select-id="~~Call Status" />
+      <BoardStatus hide-end-contact select-id={{ $t('phoneDashboard.call_status') }} />
     </div>
   );
 };
@@ -118,7 +118,7 @@ export default {
           if (!state.status.value.statusId) {
             const compDialog = create(ComponentDialog);
             context.root.$toasted.error(
-              context.root.$t('~~You must set a Call Status!'),
+              context.root.$t('phoneDashboard.call_status_required'),
             );
             const val = await compDialog({
               title: 'Call Status',
