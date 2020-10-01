@@ -152,7 +152,8 @@ export default {
           disabled:
             !this.$can ||
             !this.$can('phone_agent') ||
-            this.$can('beta_feature.connect_first_integration'),
+            this.$can('beta_feature.connect_first_integration') ||
+            this.$can('beta_feature.aws_connect_phone'),
         },
         {
           key: 'connect_first',
