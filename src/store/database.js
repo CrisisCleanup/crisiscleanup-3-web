@@ -26,6 +26,7 @@ import ConnectIntegration from '@/models/phone';
 import { Database } from '@vuex-orm/core';
 import EventComponent from '@/models/EventComponent';
 import UserBadge from '@/models/UserBadge';
+import BetaFeature from '@/models/BetaFeature';
 
 const database = new Database();
 
@@ -55,6 +56,7 @@ database.register(Team, {});
 database.register(Event, {});
 database.register(EventComponent, {});
 database.register(UserBadge, {});
+database.register(BetaFeature, {});
 database.register(ConnectIntegration.AgentClient, {});
 database.register(ConnectIntegration.Connection, {});
 database.register(ConnectIntegration.Contact, {});
