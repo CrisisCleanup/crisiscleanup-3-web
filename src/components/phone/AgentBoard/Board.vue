@@ -13,7 +13,7 @@
         <div class="scripts__section">
           <div class="scripts__config">
             <base-text variant="h4" class="pr-2" semi-bold>
-              {{ $t('Always show me a script when I enter a call.') }}
+              {{ $t('phoneDashboard.always_show_script') }}
             </base-text>
             <toggle-button
               @input="updatePopupConfig"
@@ -21,14 +21,14 @@
               :font-size="14"
               :width="85"
               :labels="{
-                checked: $t('~~Show'),
-                unchecked: $t('~~Hide'),
+                checked: $t('actions.show'),
+                unchecked: $t('actions.hide'),
               }"
             />
           </div>
           <div class="scripts__header">
             <base-text variant="h1">
-              {{ $t('~~Here are some sample scripts to aid your call.') }}
+              {{ $t('phoneDashboard.here_are_sample_scripts') }}
             </base-text>
           </div>
           <div class="scripts__accord">
@@ -97,7 +97,7 @@ export default {
       return [
         {
           key: 'status',
-          title: '~~Current Call',
+          title: 'phoneDashboard.current_call',
         },
         {
           key: 'scripts',
@@ -107,32 +107,32 @@ export default {
     cards() {
       return [
         {
-          title: this.$t('~~Inbound Call'),
+          title: this.$t('phoneDashboard.inbound_call'),
           key: CallType.INBOUND,
         },
         {
-          title: this.$t('~~Outbound Call'),
+          title: this.$t('phoneDashboard.outbound_call'),
           key: CallType.OUTBOUND,
         },
         {
-          title: this.$t('~~Calldown'),
+          title: this.$t('phoneDashboard.calldown'),
           key: CallType.CALLDOWN,
         },
       ];
     },
     lang() {
       return this.getLang({
-        currentCall: '~~Current Call',
-        scripts: '~~Scripts',
-        calltime: '~~Call Time',
-        english: '~~English',
+        currentCall: 'phoneDashboard.current_call',
+        scripts: 'phoneDashboard.scripts',
+        calltime: 'phoneDashboard.call_time',
+        english: 'phoneDashboard.english',
         callStat: {
-          calls: '~~Calls',
-          days: '~~Days',
+          calls: 'phoneDashboard.calls',
+          days: 'phoneDashboard.days',
         },
-        notes: '~~Notes',
-        callStatus: '~~Call Status *',
-        issuesResolved: '~~Issues resolved',
+        notes: 'phoneDashboard.notes',
+        callStatus: 'phoneDashboard.call_status_star',
+        issuesResolved: 'phoneDashboard.issues_resolved',
       });
     },
   },

@@ -8,7 +8,8 @@
           t.disabled === true ? 'disabled' : ''
         } `"
       >
-        <ccu-icon v-if="t.icon" with-text size="medium" :type="t.icon">
+        <ccu-icon v-if="t.icon" with-text size="medium" :type="t.icon" :alt="$t('phoneDashboard.no_idea')"
+>
           <base-text variant="h3">
             {{ $t(t.title) }}
           </base-text>
@@ -41,11 +42,11 @@ export default {
         {
           key: 'case',
           icon: 'active',
-          title: '~~New Case',
+          title: 'phoneDashboard.new_case',
         },
         {
           key: 'resources',
-          title: '~~Resources',
+          title: 'phoneDashboard.resources',
           disabled: true,
         },
       ];
