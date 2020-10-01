@@ -10,7 +10,7 @@
       :font-size="14"
       :labels="{
         checked: 'Opt Out',
-        unchecked: 'Opt In',
+        unchecked: 'Try it!',
       }"
       @input="handleToggle"
     />
@@ -23,7 +23,6 @@ import BetaFeature from '@/models/BetaFeature';
 import { onMounted, watch, ref } from '@vue/composition-api';
 import useUser from '@/use/user/useUser';
 import { getErrorMessage } from '@/utils/errors';
-import { useRouter } from '@u3u/vue-hooks';
 
 export default {
   name: 'BetaBanner',
@@ -34,7 +33,6 @@ export default {
   setup(props, context) {
     const { currentUser } = useUser();
     const isOpted = ref(false);
-    const { router } = useRouter();
 
     watch(
       () => currentUser.value && currentUser.value.beta_features,
@@ -51,7 +49,7 @@ export default {
       await BetaFeature.fetchAll();
     });
 
-    const handleToggle = async () => {
+    const handleToggle = async (value) => {
       const featureQ = await BetaFeature.query().where(
         'name',
         props.betaFeature,
@@ -65,7 +63,7 @@ export default {
       const feature = featureQ.first();
       try {
         await feature.optIn();
-        await router.push({ name: 'nav.dashboard' });
+        context.emit('change', value);
         window.location.reload();
       } catch (e) {
         await context.root.$toasted.error(getErrorMessage(e));

@@ -2,6 +2,19 @@ import Index from '@/pages/phone_legacy/Index';
 import ConnectFirstIntegration from '@/pages/phone_legacy/ConnectFirstIntegration';
 import { BannerTypes } from '@/store/modules/ui/types';
 import BetaBanner from '@/components/notifications/BetaBanner';
+import { useRouter } from '@u3u/vue-hooks';
+
+const LegacyBetaBanner = () => {
+  const { router } = useRouter();
+  const onToggle = () => router.push({ name: 'nav.phone' });
+  return () => (
+    <BetaBanner
+      text={'~~Try out the new phone system. You can switch back anytime.'}
+      beta-feature="aws_connect_phone"
+      vOn:change={onToggle}
+    />
+  );
+};
 
 const routes = [
   {
@@ -16,18 +29,7 @@ const routes = [
       banner: {
         type: BannerTypes.INFO,
         enabled: true,
-        component: {
-          render() {
-            return (
-              <BetaBanner
-                text={
-                  '~~Try out the new phone system. You can switch back anytime. '
-                }
-                beta-feature="aws_connect_phone"
-              />
-            );
-          },
-        },
+        component: LegacyBetaBanner,
       },
     },
   },

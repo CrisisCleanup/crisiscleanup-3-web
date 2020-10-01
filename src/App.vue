@@ -1,14 +1,19 @@
 <template>
   <div id="app">
     <BannerOverlay v-bind="currentBanner" />
-    <component :is="layout">
+    <component
+      class="main"
+      :class="currentBanner.enabled && 'banner--active'"
+      :is="layout"
+    >
       <router-view v-if="$route.meta.id !== 'caller'" />
       <PhoneLegacy
         class="main-content"
         v-if="
           $store.getters['auth/isLoggedIn'] &&
           this.$can &&
-          !this.$can('beta_feature.connect_first_integration')
+          (!this.$can('beta_feature.connect_first_integration') ||
+            this.$can('beta_feature.aws_connect_phone'))
         "
         v-show="$route.meta.id === 'caller'"
       ></PhoneLegacy>
@@ -214,5 +219,12 @@ body {
 
 .main-content {
   height: 100%;
+}
+
+.main {
+  transition: transform 0.3s ease;
+  &.banner--active {
+    transform: translateY(3rem);
+  }
 }
 </style>
