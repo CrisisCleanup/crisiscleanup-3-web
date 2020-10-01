@@ -27,6 +27,7 @@ import Reports from '@/pages/Reports';
 import OtherOrganizations from '@/pages/OtherOrganizations';
 import Teams from '@/pages/organization/Teams';
 import TeamDetail from '@/pages/organization/TeamDetail';
+import * as UITypes from '@/store/modules/ui/types';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -207,7 +208,12 @@ router.beforeEach((to, from, next) => {
         next({ name: 'nav.request_access', query: { orphan: true } });
         return;
       }
-
+      if (to.matched.some((record) => record.meta.banner)) {
+        const record = to.matched.find((r) => r.meta.banner);
+        store.commit(`ui/${UITypes.SET_BANNER}`, record.meta.banner);
+      } else {
+        store.commit(`ui/${UITypes.SET_BANNER}`, { enabled: false });
+      }
       next();
       return;
     }
