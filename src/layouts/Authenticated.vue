@@ -123,18 +123,6 @@ export default {
           to: `/incident/${this.currentIncidentId}/cases/new`,
         },
         {
-          key: 'my_organization',
-          icon: 'organization',
-          iconSize: 'large',
-          to: '/organization/invitations',
-        },
-        {
-          key: 'other_organizations',
-          icon: 'otherorg',
-          iconSize: 'xl',
-          to: '/other_organizations',
-        },
-        {
           key: 'phone',
           icon: 'phone',
           text: this.$t('nav.phone'),
@@ -164,6 +152,18 @@ export default {
             !this.$can ||
             !this.$can('phone_agent') ||
             !this.$can('beta_feature.connect_first_integration'),
+        },
+        {
+          key: 'my_organization',
+          icon: 'organization',
+          iconSize: 'large',
+          to: '/organization/invitations',
+        },
+        {
+          key: 'other_organizations',
+          icon: 'otherorg',
+          iconSize: 'xl',
+          to: '/other_organizations',
         },
         {
           key: 'reports',
