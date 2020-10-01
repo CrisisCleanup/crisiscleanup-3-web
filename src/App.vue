@@ -1,10 +1,6 @@
 <template>
   <div id="app">
-    <BannerOverlay
-      :enabled="currentBanner.enabled"
-      :type="currentBanner.type"
-      :text="currentBanner.text"
-    />
+    <BannerOverlay v-bind="currentBanner" />
     <component :is="layout">
       <router-view v-if="$route.meta.id !== 'caller'" />
       <PhoneLegacy
