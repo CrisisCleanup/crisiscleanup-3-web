@@ -128,6 +128,27 @@
           <div v-if="currentSection === 'general'" class="flex flex-col">
             <div class="claim-status mb-2">
               <div class="my-1 text-base">
+                {{ $t('worksiteFilters.location') }}
+              </div>
+              <base-checkbox
+                v-model="
+                  filters.locations.data['organization_primary_location']
+                "
+                class="block my-1"
+              >
+                {{ $t('worksiteFilters.in_primary_response_area') }}
+              </base-checkbox>
+              <base-checkbox
+                v-model="
+                  filters.locations.data['organization_secondary_location']
+                "
+                class="block my-1"
+              >
+                {{ $t('worksiteFilters.in_secondary_response_area') }}
+              </base-checkbox>
+            </div>
+            <div class="claim-status mb-2">
+              <div class="my-1 text-base">
                 {{ $t('worksiteFilters.team') }}
               </div>
               <base-checkbox

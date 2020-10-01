@@ -271,7 +271,7 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{ $t('~~My Layers') }}</template>
+                        <template slot="btn">{{ $t('casesVue.my_layers') }}</template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
                             <li

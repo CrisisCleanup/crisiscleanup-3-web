@@ -23,11 +23,7 @@
               weight="700"
               class="mt-4 mb-1"
             >
-              {{
-                $t(
-                  '~~Someone from your previous organization has removed you from that organization. If that was an error, or if you would like to join a new organization, enter the email address of someone you know from the organization you want to join.',
-                )
-              }}
+              {{ $t('requestAccess.already_removed_enter_email_for_new_org') }}
             </base-text>
             <base-text v-else variant="body" weight="700" class="mt-4 mb-1">
               {{ $t('requestAccess.enter_existing_user_email_msg') }}
