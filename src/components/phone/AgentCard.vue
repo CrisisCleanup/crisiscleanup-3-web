@@ -1,7 +1,7 @@
 <template>
   <div class="agentcard shadow-crisiscleanup-card h-full w-full">
     <div class="card-edit">
-      <ccu-icon @click.native="() => forceAgentEdit()" size="md" type="edit" />
+      <ccu-icon @click.native="() => forceAgentEdit()" size="md" type="edit" :alt="$t('phoneDashboard.edit_user_phone_number')"/>
     </div>
     <div class="profile">
       <div class="profile--img">

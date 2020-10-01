@@ -56,10 +56,10 @@
     <div class="modal--body">
       <div class="modal-callinfo">
         <div class="caller">
-          <ccu-icon with-text size="md" :type="enums.icons.phone_user">
+          <ccu-icon with-text size="md" :type="enums.icons.phone_user" :alt="$t('phoneDashboard.caller_name')">
             <base-text variant="h1" :weight="400">{{ callerName }}</base-text>
           </ccu-icon>
-          <ccu-icon with-text size="md" :type="enums.icons.earth_globe">
+          <ccu-icon with-text size="md" :type="enums.icons.earth_globe" :alt="$t('phoneDashboard.locale')">
             <base-text variant="h1" :weight="400">{{
               callState.locale.value
                 ? callState.locale.value.name_t.split(' ')[0]
@@ -77,7 +77,7 @@
           <tag class="tag">
             <base-text variant="bodysm">
               {{ callerHistory.total }}
-              {{ `${$t(' Calls ')} | ${$t(callerHistory.recent)}` }}
+              {{ `${$t(' phoneDashboard.calls ')} | ${$t(callerHistory.recent)}` }}
             </base-text>
           </tag>
         </div>

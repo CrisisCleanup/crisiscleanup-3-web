@@ -1,7 +1,7 @@
 <template>
   <TitledCard
     :loading="!agentMetricsReady"
-    title="~~My Statistics"
+    :title="$t('phoneDashboard.my_statistics')"
     :body-style="{ minHeight: '10vh' }"
   >
     <div class="flex flex-col flex-grow">
@@ -18,6 +18,7 @@
               v-if="title.includes('Total')"
               :type="enums.icons.phone_plus"
               size="xl"
+              :alt="$t('phoneDashboard.my_statistics')"
             >
               <base-text variant="body" :weight="600" class="align-middle">{{
                 $t(title)

@@ -1,5 +1,5 @@
 <template>
-  <TitledCard :loading="!callHistoryReady" title="~~Last 10 Calls">
+  <TitledCard :loading="!callHistoryReady" :title="$t('phoneDashboard.last_10_calls')">
     <div class="card-container overflow-auto h-full">
       <Table
         @rowClick="(payload) => $emit('row:click', payload)"
@@ -18,7 +18,7 @@
         </template>
         <template #mobile="{item}">
           <div class="inline-flex items-center">
-            <ccu-icon type="phone-classic" size="sm" />
+            <ccu-icon type="phone-classic" size="sm" :alt="$t('phoneDashboard.last_10_calls')"/>
             <base-text class="pl-1">
               {{ item.mobile | formatNationalNumber }}
             </base-text>
