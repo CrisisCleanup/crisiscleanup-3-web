@@ -23,6 +23,7 @@
               v-if="k.includes('Total')"
               type="phone-plus"
               size="xl"
+              :alt="$t('phoneDashboard.total_people_waiting')"
             >
               <base-text
                 variant="body"
