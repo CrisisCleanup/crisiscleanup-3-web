@@ -5,6 +5,7 @@
         <base-text variant="h2">
           {{ $t(text) }}
         </base-text>
+        <component :is="component" />
         <ccu-icon
           @click.native="dismissBanner"
           :type="icons.cancel"
@@ -27,6 +28,7 @@ export default {
   props: {
     type: VueTypes.oneOf(['ERROR', 'INFO', 'WARN', 'SUCCESS']),
     text: VueTypes.string.def('Banner Message'),
+    component: VueTypes.any,
     enabled: VueTypes.bool.def(false),
   },
   computed: {
