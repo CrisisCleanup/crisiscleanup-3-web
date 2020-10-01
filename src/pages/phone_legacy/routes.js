@@ -6,7 +6,10 @@ import { useRouter } from '@u3u/vue-hooks';
 
 const LegacyBetaBanner = () => {
   const { router } = useRouter();
-  const onToggle = () => router.push({ name: 'nav.phone' });
+  const onToggle = async () => {
+    await router.push({ name: 'nav.phone' });
+    window.location.reload();
+  };
   return () => (
     <BetaBanner
       text={'~~Try out the new phone system. You can switch back anytime.'}

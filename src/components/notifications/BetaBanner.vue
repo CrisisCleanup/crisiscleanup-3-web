@@ -64,7 +64,6 @@ export default {
       try {
         await feature.optIn();
         context.emit('change', value);
-        window.location.reload();
       } catch (e) {
         await context.root.$toasted.error(getErrorMessage(e));
       }

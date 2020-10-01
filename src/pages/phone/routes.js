@@ -5,7 +5,10 @@ import PhoneLayout from './Index.vue';
 
 const NewSystemBetaBanner = () => {
   const { router } = useRouter();
-  const onToggle = () => router.push({ name: 'nav.dashboard' });
+  const onToggle = async () => {
+    await router.push({ name: 'nav.dashboard' });
+    window.location.reload();
+  };
   return () => (
     <BetaBanner
       text={'~~Having issues? Switch back to the old system.'}
