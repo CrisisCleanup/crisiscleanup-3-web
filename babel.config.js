@@ -3,12 +3,7 @@ module.exports = {
     '@babel/preset-flow',
     ['@babel/preset-env'],
     'vca-jsx',
-    [
-      '@vue/app',
-      {
-        useBuiltIns: 'usage',
-      },
-    ],
+    '@vue/cli-plugin-babel/preset',
   ],
   plugins: [
     // @compat: decorators needs to come
