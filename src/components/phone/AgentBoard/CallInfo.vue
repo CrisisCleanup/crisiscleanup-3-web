@@ -13,10 +13,10 @@
               }}</base-text>
             </div>
             <div class="contact-caller">
-              <ccu-icon with-text size="xs" :type="enums.icons.phone_user" :alt="$t('phoneDashboard.user_name')">
+              <ccu-icon with-text size="xs" :type="enums.icons.phone_user" :title="$t('phoneDashboard.user_name')">
                 <base-text variant="bodysm">{{ c.name }}</base-text>
               </ccu-icon>
-              <ccu-icon with-text size="xs" :type="enums.icons.earth_globe" :alt="$t('phoneDashboard.locale')">
+              <ccu-icon with-text size="xs" :type="enums.icons.earth_globe" :title="$t('phoneDashboard.locale')">
                 <base-text variant="bodysm">{{ c.locale }}</base-text>
               </ccu-icon>
             </div>
@@ -33,13 +33,13 @@
                 @click.native="() => setActionTab('resources')"
                 size="xl"
                 :type="enums.icons.phone_contact_add"
-                :alt="$t('actions.call_someone')"
+                :title="$t('actions.call_someone')"
               />
               <ccu-icon
                 @click.native="() => currentContact.disconnect()"
                 size="xl"
                 :type="enums.icons.phone_hangup"
-                :alt="$t('actions.hangup')"
+                :title="$t('actions.hangup')"
               />
             </div>
           </div>
@@ -48,7 +48,7 @@
       <div v-if="activeCalls.length >= 2" class="confactions">
         <ccu-icon
           :type="enums.icons.phone_exit"
-          :alt="$t('phoneDashboard.exit_phone')"
+          :title="$t('phoneDashboard.exit_phone')"
           size="large"
           @click.native="() => currentContact.disconnect()"
         />

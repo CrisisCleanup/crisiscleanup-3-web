@@ -137,15 +137,13 @@ export default {
   computed: {
     lang() {
       return this.getLang({
-        title: `~~Welcome`,
-        body:
-          '~~Please confirm the following details for usage in the Crisis Cleanup Virtual Call Center.',
-        bodyPhone:
-          "Don't worry, we will hide your phone number on all inbound and outbound calls for your protection.",
-        confirm: '~~Confirm',
+        title: this.$t('phoneDashboard.welcome'),
+        body: this.$t('phoneDashboard.please_confirm_details_because'),
+        bodyPhone: this.$t('phoneDashboard.dont_worry_caller_id_hidden'),
+        confirm: this.$t('actions.confirm'),
         inputs: {
-          phone: '~~Enter a valid phone number',
-          lang: '~~Choose the languages you work with',
+          phone: this.$t('phoneDashboard.enter_valid_phone'),
+          lang: this.$t('phoneDashboard.choose_service_languages'),
         },
       });
     },

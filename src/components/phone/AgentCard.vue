@@ -1,13 +1,13 @@
 <template>
   <div class="agentcard shadow-crisiscleanup-card h-full w-full">
     <div class="card-edit">
-      <ccu-icon @click.native="() => forceAgentEdit()" size="md" type="edit" :alt="$t('phoneDashboard.edit_user_phone_number')"/>
+      <ccu-icon @click.native="() => forceAgentEdit()" size="md" type="edit" :title="$t('phoneDashboard.edit_user_phone_number')"/>
     </div>
     <div class="profile">
       <div class="profile--img">
         <img
           :src="currentUser && currentUser.profilePictureUrl"
-          alt="UserProfile"
+          alt="{{ $t('phoneDashboard.user_profile') }}"
           class="rounded-full"
         />
       </div>
@@ -246,7 +246,7 @@ export default {
             incident: currentIncident.value,
           });
           context.root.$toasted.success(
-            context.root.$t('~~Success! Calling momentarily...'),
+            context.root.$t('phoneDashboard.success_calling_momentarily'),
           );
           return outbound;
         }

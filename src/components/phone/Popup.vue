@@ -56,10 +56,10 @@
     <div class="modal--body">
       <div class="modal-callinfo">
         <div class="caller">
-          <ccu-icon with-text size="md" :type="enums.icons.phone_user" :alt="$t('phoneDashboard.caller_name')">
+          <ccu-icon with-text size="md" :type="enums.icons.phone_user" :title="$t('phoneDashboard.caller_name')">
             <base-text variant="h1" :weight="400">{{ callerName }}</base-text>
           </ccu-icon>
-          <ccu-icon with-text size="md" :type="enums.icons.earth_globe" :alt="$t('phoneDashboard.locale')">
+          <ccu-icon with-text size="md" :type="enums.icons.earth_globe" :title="$t('phoneDashboard.locale')">
             <base-text variant="h1" :weight="400">{{
               callState.locale.value
                 ? callState.locale.value.name_t.split(' ')[0]
