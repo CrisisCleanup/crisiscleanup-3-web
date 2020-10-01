@@ -437,7 +437,7 @@
                     modal-classes="bg-white max-w-lg shadow"
                   >
                     <div slot="header" class="text-lg border-b p-3">
-                      {{ $t('actions.actions.update_status') }}
+                      {{ $t('actions.update_status') }}
                     </div>
                     <div class="p-3 flex flex-col">
                       <StatusDropdown
