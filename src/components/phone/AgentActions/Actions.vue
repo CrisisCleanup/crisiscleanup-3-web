@@ -8,7 +8,7 @@
           t.disabled === true ? 'disabled' : ''
         } `"
       >
-        <ccu-icon v-if="t.icon" with-text size="medium" :type="t.icon" :alt="$t('phoneDashboard.no_idea')"
+        <ccu-icon v-if="t.icon" with-text size="medium" :type="t.icon" :title="$t(t.title)"
 >
           <base-text variant="h3">
             {{ $t(t.title) }}
