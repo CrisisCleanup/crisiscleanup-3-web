@@ -82,8 +82,8 @@
           text=""
           icon="map"
           icon-size="xs"
-          :title="$t('~~Satellite Map')"
-          :alt="$t('~~Satellite Map')"
+          :title="$t('worksiteMap.satellite_map')"
+          :alt="$t('worksiteMap.satellite_map')"
           :action="
             () => {
               map.removeLayer(mapTileLayerSatellite);
@@ -102,8 +102,8 @@
           text=""
           icon="satellite"
           icon-size="xs"
-          :title="$t('~~Street Map')"
-          :alt="$t('~~Street Map')"
+          :title="$t('worksiteMap.street_map')"
+          :alt="$t('worksiteMap.street_map')"
           :action="
             () => {
               map.removeLayer(mapTileLayer);

@@ -33,13 +33,13 @@
                 @click.native="() => setActionTab('resources')"
                 size="xl"
                 :type="enums.icons.phone_contact_add"
-                :alt="$t('phoneDashboard.call_someone')"
+                :alt="$t('actions.call_someone')"
               />
               <ccu-icon
                 @click.native="() => currentContact.disconnect()"
                 size="xl"
                 :type="enums.icons.phone_hangup"
-                :alt="$t('phoneDashboard.hangup')"
+                :alt="$t('actions.hangup')"
               />
             </div>
           </div>
