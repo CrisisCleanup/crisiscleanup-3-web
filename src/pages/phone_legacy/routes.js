@@ -1,5 +1,7 @@
 import Index from '@/pages/phone_legacy/Index';
 import ConnectFirstIntegration from '@/pages/phone_legacy/ConnectFirstIntegration';
+import { BannerTypes } from '@/store/modules/ui/types';
+import BetaBanner from '@/components/notifications/BetaBanner';
 
 const routes = [
   {
@@ -11,6 +13,22 @@ const routes = [
       layout: 'authenticated',
       can: 'phone_agent',
       fail: '$from',
+      banner: {
+        type: BannerTypes.INFO,
+        enabled: true,
+        component: {
+          render() {
+            return (
+              <BetaBanner
+                text={
+                  '~~Try out the new beta phone system. You can switch back anytime. '
+                }
+                beta-feature="aws_connect_phone"
+              />
+            );
+          },
+        },
+      },
     },
   },
   {
