@@ -470,7 +470,7 @@
             <div
               style="
                 display: grid;
-                grid-template-columns: max-content max-content max-content max-content;
+                grid-template-columns: max-content max-content;
                 grid-column-gap: 10px;
               "
             >
@@ -486,6 +486,49 @@
         </div>
       </div>
 
+      <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
+        <base-text variant="h2" :weight="600">
+          Groups
+        </base-text>
+        <div class="flex item-start">
+          <div>
+            <div class="flex items-center justify-start">
+              <GroupSearchInput
+                @selectedGroup="groupToAdd = $event"
+                class="w-108"
+                size="large"
+              />
+              <base-button
+                :text="$t('actions.add')"
+                size="large"
+                variant="solid"
+                :action="
+                  () => {
+                    newGroups = [...newGroups, ...groupToAdd];
+                    groupToAdd = null;
+                  }
+                "
+              />
+            </div>
+            <base-text variant="h3" class="pt-2">
+              {{ $t('~~New Groups') }}
+            </base-text>
+            <div v-for="group in newGroups" :key="`${group.id}`">
+              {{ group.name }}
+            </div>
+          </div>
+          <div class="mx-3">
+            <base-text variant="h3">
+              {{ $t('~~Current Groups') }}
+            </base-text>
+            <div>
+              <div class="pr-3" v-for="group in groups" :key="`${group.id}`">
+                {{ group.name }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="flex">
         <div class="w-1/2 bg-white shadow mt-6 mr-3">
           <div class="border-b px-8 py-4 font-semibold">
@@ -606,10 +649,11 @@ import LocationTool from '../../components/LocationTool';
 import { hash } from '../../utils/promise';
 import { DialogsMixin } from '../../mixins';
 import { mapTileLayer } from '../../utils/map';
+import GroupSearchInput from '../../components/GroupSearchInput';
 
 export default {
   name: 'AdminOrganization',
-  components: { Loader, LocationTool },
+  components: { GroupSearchInput, Loader, LocationTool },
   mixins: [DialogsMixin],
   filters: {
     getCapabilityName(value, capabilities) {
@@ -750,6 +794,15 @@ export default {
         this.incidents = pageData.incidents.data.results;
         this.ghostUsers = pageData.ghostUsers;
         this.apiKeys = pageData.apiKeys.data;
+
+        if (this.organization.approved_groups) {
+          const groupsResponse = await this.$http.get(
+            `${
+              process.env.VUE_APP_API_BASE_URL
+            }/groups?id__in=${this.organization.approved_groups.join(',')}`,
+          );
+          this.groups = groupsResponse.data.results;
+        }
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -939,6 +992,33 @@ export default {
         }
       }
     },
+    async saveGroups() {
+      if (this.newGroups.length) {
+        try {
+          await Promise.all(
+            this.newGroups.map((group) =>
+              this.$http.post(
+                `${process.env.VUE_APP_API_BASE_URL}/groups/${group.id}/organizations`,
+                {
+                  organization: this.organization.id,
+                },
+              ),
+            ),
+          );
+          this.newGroups = [];
+        } catch (error) {
+          await this.$toasted.error(getErrorMessage(error));
+        }
+      }
+    },
+    async deleteGroup(group) {
+      await this.$http.delete(
+        `${process.env.VUE_APP_API_BASE_URL}/groups/${group.id}/organizations`,
+        {
+          organization: this.organization.id,
+        },
+      );
+    },
     async saveOrganization() {
       try {
         await this.$http.put(
@@ -951,6 +1031,7 @@ export default {
           this.saveRole(),
           this.saveCapabilities(),
           this.saveIncidents(),
+          this.saveGroups(),
         ]);
         await this.loadPageData();
         await this.$toasted.success(this.$t('info.success_saved_organization'));
@@ -999,6 +1080,7 @@ export default {
       roleToAdd: null,
       capabilityToAdd: null,
       incidentToAdd: null,
+      groupToAdd: null,
       showingLocationModal: false,
       showingApiKeyModal: false,
       apiKey: false,
@@ -1016,6 +1098,8 @@ export default {
       incidents: [],
       newCapabilities: [],
       newIncidents: [],
+      groups: [],
+      newGroups: [],
       organizationTypes: [
         'orgType.survivor_client_services',
         'orgType.voad',
