@@ -1,6 +1,7 @@
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 import moment from 'moment';
+import _ from 'lodash';
 
 const AuthService = {
   getUser() {
@@ -38,7 +39,9 @@ const AuthService = {
   },
   removeUser() {
     localStorage.removeItem('user');
-    axios.defaults.headers.common.Authorization = null;
+    axios.defaults.headers.common = _.omit(axios.defaults.headers.common, [
+      'Authorization',
+    ]);
   },
 };
 
