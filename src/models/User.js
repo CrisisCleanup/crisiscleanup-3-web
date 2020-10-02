@@ -32,6 +32,10 @@ export default class User extends CCUModel {
     };
   }
 
+  static afterUpdate(model) {
+    AuthService.updateUser(model.$toJson());
+  }
+
   get profilePictureUrl() {
     if (this.files && this.files.length) {
       const profilePictures = this.files.filter(
@@ -196,12 +200,12 @@ export default class User extends CCUModel {
         await this.patch(
           `/users/${currentUser.id}`,
           {
-            states,
+            states: updatedStates,
           },
           { save: false },
         );
         if (reload) {
-          await this.get('/users/me', {});
+          await this.get('/users/me');
         }
       },
       async updateUserPreferences(preferences, reload = false) {
