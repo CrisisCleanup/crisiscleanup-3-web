@@ -28,27 +28,27 @@ export default ({ callType }: UseScriptsProps) => {
 
   const scriptHeaders = {
     // note: translated later, no $t here.
-    [CallType.INBOUND]: ['~~This person is calling you ', '~~(inbound-call)'],
+    [CallType.INBOUND]: ['phoneDashboard.inbound_description', 'phoneDashboard.inbound_call_parenthesis'],
     [CallType.OUTBOUND]: [
-      '~~You are calling this person back.',
-      '~~(call-back)',
+      'phoneDashboard.callback_description',
+      'phoneDashboard.callback_parenthesis',
     ],
     [CallType.CALLDOWN]: [
-      '~~This person has case you calling to check if they still need help.',
-      '~~(call-down)',
+      'phoneDashboard.calldown_description',
+      'phoneDashboard.calldown_parenthesis',
       [
         {
-          title: '~~YES',
+          title: 'IF THEY ST',
           body:
-            '~~You are still on the map. There are no guarantees. It may take a long time.',
-          note: '~~(Add a note about your call)',
+            'phoneDashboard.if_yes_instructions_say',
+          note: 'phoneDashboard.if_yes_instructions_do',
           accent: theme.extend.colors['crisiscleanup-green']['900'],
         },
         {
-          title: '~~NO',
-          body: '~~Thank you.',
+          title: 'phoneDashboard.if_no',
+          body: 'phoneDashboard.if_no_instructions_say',
           note:
-            '~~(Change Status on all work to: "closed done by others." Add a note about your call.)',
+            'phoneDashboard.if_no_instructions_do',
           accent: theme.extend.colors['crisiscleanup-red']['600'],
         },
       ],
