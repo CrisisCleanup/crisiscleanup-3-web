@@ -72,10 +72,10 @@ export default {
           context.root.$t(name),
           _.get(currentAgentMetrics.value, key, 0),
         );
-      setStat('~~Received Calls', 'total_inbound');
-      setStat('~~Made Calls', 'total_outbound');
-      setStat('~~Rejected Calls', 'total_rejects');
-      setStat('~~Abandoned Calls', 'total_abandons');
+      setStat('phoneDashboard.inbound_calls', 'total_inbound');
+      setStat('phoneDashboard.outbound_calls', 'total_outbound');
+      setStat('phoneDashboard.rejected_calls', 'total_rejects');
+      setStat('phoneDashboard.abandoned_calls', 'total_abandons');
       return _stats;
     });
     return {

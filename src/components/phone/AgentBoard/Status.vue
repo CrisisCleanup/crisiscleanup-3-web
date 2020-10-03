@@ -14,7 +14,7 @@
         }}</base-text>
       </template>
     </ModelSelectInput>
-    <base-text variant="h3">{{ $t('~~Notes') }}</base-text>
+    <base-text variant="h3">{{ $t('phoneDashboard.notes') }}</base-text>
     <base-input
       class="notes border-crisiscleanup-dark-100"
       input-classes="border-crisiscleanup-dark-100"
@@ -22,7 +22,7 @@
       size="large"
       :value="status.notes"
       @input="(value) => updateStatus({ notes: value })"
-      :placeholder="$t('~~Issues Resolved')"
+      :placeholder="$t('phoneDashboard.issues_resolved')"
     ></base-input>
     <base-button
       v-if="!hideEndContact"
@@ -31,7 +31,7 @@
       variant="solid"
       :action="() => endContact()"
     >
-      {{ $t('~~Save & End Call') }}
+      {{ $t('actions.save_end_call') }}
     </base-button>
   </div>
 </template>
@@ -70,16 +70,14 @@ export default {
         const confirmDialog = create(MessageBox);
         const resp = await confirmDialog({
           title: context.root.$t('~~Are you sure?'),
-          content: context.root.$t(
-            '~~You have not saved any changes to any worksites yet!\nAre you sure you want to close this case?',
-          ),
+          content: context.root.$t('phoneDashboard.confirm_changes_to_worksite'),
           actions: {
             stay: {
-              text: context.root.$t('~~Keep Editing'),
+              text: context.root.$t('actions.keep_editing'),
               type: 'solid',
             },
             end: {
-              text: context.root.$t('~~End Call'),
+              text: context.root.$t('actions.end_call'),
               type: 'solid',
             },
           },

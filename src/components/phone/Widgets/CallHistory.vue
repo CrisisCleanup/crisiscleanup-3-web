@@ -107,43 +107,43 @@ export default {
     historyCols() {
       return [
         {
-          title: '',
+          title: 'phoneDashboard.incident',
           dataIndex: 'incident',
           key: 'incident',
           width: '.4fr',
         },
         {
-          title: 'Phone Number',
+          title: 'phoneDashboard.phone_number',
           dataIndex: 'mobile',
           key: 'mobile',
           width: '1fr',
         },
         {
-          title: 'Name',
+          title: 'phoneDashboard.name',
           dataIndex: 'name',
           key: 'name',
           width: '.8fr',
         },
         {
-          title: 'Case #',
+          title: 'phoneDashboard.case_num',
           dataIndex: 'cases',
           key: 'cases',
           width: '1.35fr',
         },
         {
-          title: 'Call Status',
+          title: 'phoneDashboard.call_status',
           dataIndex: 'status',
           key: 'status',
           width: '1fr',
         },
         {
-          title: 'Notes',
+          title: 'phoneDashboard.notes',
           dataIndex: 'notes',
           key: 'notes',
           width: '1fr',
         },
         {
-          title: 'Completed',
+          title: 'phoneDashboard.completed',
           dataIndex: 'completed_at',
           key: 'completed_at',
           width: '.75fr',
