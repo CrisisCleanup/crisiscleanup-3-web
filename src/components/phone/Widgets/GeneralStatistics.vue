@@ -1,6 +1,6 @@
 <template>
   <TitledCard
-    title="~~General Statistics"
+    :title="$t('phoneDashboard.general_statistics')"
     class="agent-metrics"
     :loading="genMetrics === null"
     :dropdown="dropdownProps"
@@ -17,7 +17,7 @@
           class="flex flex-row justify-between p-2 px-5 metric"
           :class="isCritical && 'critical'"
         >
-          <div>
+          <div> <!-- TO DO: This section includes a test for the English word, "Total". This should be removed -->
             <ccu-icon
               with-text
               v-if="k.includes('Total')"
@@ -30,7 +30,7 @@
                 :weight="600"
                 class="metric-text align-middle"
                 >{{ $t(k) }}</base-text
-              >
+              ><!-- TO DO: This component translates a non-translated string. This should be removed -->
             </ccu-icon>
 
             <base-text
@@ -39,7 +39,8 @@
               :weight="500"
               class="align-middle"
               >{{ $t(k) }}</base-text
-            >
+            ><!-- TO DO: This component translates a non-translated string. This should be removed -->
+            <!-- TO DO: This section includes a test for the English word, "Total". This should be removed -->
           </div>
           <base-text :key="`${k}_${category}_${genMetrics[k]}`" variant="h1">{{
             genMetrics[k]
@@ -89,11 +90,11 @@ export default {
       label: 'shortName',
       itemKey: 'id',
       value: 0,
-      placeholder: context.root.$t('~~All'),
+      placeholder: context.root.$t('phoneDashboard.all_remaining_callbacks'),
       options: [
         {
           id: 0,
-          shortName: context.root.$t('~~All'),
+          shortName: context.root.$t('phoneDashboard.all_remaining_callbacks'),
         },
       ],
     });
