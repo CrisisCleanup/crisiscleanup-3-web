@@ -81,32 +81,32 @@ export const ControllerActionTabs = Object.freeze({
  */
 export const Metrics = Object.freeze({
   // note: translation takes place in component, $t not needed here.
-  ONLINE: ['agentsOnline', '~~Volunteers Online'],
-  CONTACTS_QUEUED: ['contactsInQueue', '~~On hold now'],
-  CALLBACKS_QUEUED: ['contactsInQueueOutbound', '~~Remaining Callbacks'],
-  AVAILABLE: ['agentsAvailable', '~~Volunteers Available'],
-  AGENTS_ON_CALL: ['agentsOnCall', '~~Volunteers on the Phone'],
-  NEEDED: ['agentsNeeded', '~~Additional Volunteers Needed'],
-  TOTAL_WAITING: ['totalWaiting', '~~Total People Waiting'],
-  CALLDOWNS_QUEUED: ['contactsScheduledOutbound', '~~Remaining Calldowns'],
+  ONLINE: ['agentsOnline', 'phoneDashboard.volunteers_online'],
+  CONTACTS_QUEUED: ['contactsInQueue', 'phoneDashboard.on_hold_now'],
+  CALLBACKS_QUEUED: ['contactsInQueueOutbound', 'phoneDashboard.remaining_callbacks'],
+  AVAILABLE: ['agentsAvailable', 'phoneDashboard.volunteers_available'],
+  AGENTS_ON_CALL: ['agentsOnCall', 'phoneDashboard.volunteers_on_phone'],
+  NEEDED: ['agentsNeeded', 'phoneDashboard.additional_volunteers_needed'],
+  TOTAL_WAITING: ['totalWaiting', 'phoneDashboard.total_people_waiting'],
+  CALLDOWNS_QUEUED: ['contactsScheduledOutbound', 'phoneDashboard.remaining_calldowns'],
   // admin metrics (includes unlocked+locked)
   CALLBACKS_QUEUED_ALL: [
     'contactsInQueueOutboundAll',
-    '~~All Remaining Callbacks',
+    'phoneDashboard.all_remaining_callbacks',
   ],
   CALLDOWNS_QUEUED_ALL: [
     'contactsScheduledOutboundAll',
-    '~~All Remaining Calldowns',
+    'phoneDashboard.all_remaining_callbacks',
   ],
 });
 
 export const Scripts = Object.freeze({
   [CallType.INBOUND]:
-    '~~Hello, Crisis Cleanup Hotline, my name is <%= name %>, how can I help you?',
+    'phoneDashboard.inbound_script', // TO DO: Braden, you will need to define the variable, "{name}": Hello. This is the Crisis Cleanup Hotline, my name is {name}, how can I help you?
   [CallType.OUTBOUND]:
-    '~~Hello, my name is <%= name %>.  Someone from this number called the Crisis Cleanup Hotline probably about getting help cleaning up after the storm.',
+    'phoneDashboard.outbound_script', // TO DO: Braden, you will need to define the variable, "{name}": Hello, my name is {name}. Someone from this number recently called the Crisis Cleanup Hotline, probably about getting help cleaning up after the storm. Do you still need help?
   [CallType.CALLDOWN]:
-    "~~Hello, my name is <%= name %> with the Crisis Cleanup Hotline.  We still have your name on our list for those asking for help after the <%= incidentType %>.  I'm calling to check and see if anyone has come to help you cleanup.",
+    'phoneDashboard.calldown_script', // TO DO: Braden, you will need to define the variables, "{name}", "{incidentType}" and "{timeAgo}": Hello. My name is {name} with the Crisis Cleanup Hotline. We noticed that you asked for help cleaning up after the {incidentType} about {timeAgo}. I'm calling to see if you still need help, or if someone has already helped you clean up.
 });
 
 const Log = Logger({ name: 'phone.controller' });
@@ -302,7 +302,7 @@ class ControllerStore extends VuexModule {
   @Action
   async closeContact({ contact }: { contact: Contact }) {
     if (!this.status.statusId) {
-      throw new Error('~~You must set a call Status!');
+      throw new Error(window.vue.$t('phoneDashboard.call_status_required');
     }
     if (this.currentCase) {
       await this.updateStatus({ modified: [this.currentCase] });

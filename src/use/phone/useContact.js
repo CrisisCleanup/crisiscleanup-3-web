@@ -77,7 +77,7 @@ export default () => {
     }
     return {
       total: 1,
-      recent: '~~First Call',
+      recent: 'phoneDashboard.first_call',
     };
   });
 
