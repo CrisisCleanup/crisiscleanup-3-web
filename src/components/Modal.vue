@@ -43,7 +43,9 @@
                 }
               "
             />
-            <slot></slot>
+            <div :class="modalBodyClasses">
+              <slot></slot>
+            </div>
           </div>
 
           <div class="modal-footer flex-shrink">
@@ -76,6 +78,10 @@ export default {
   name: 'Modal',
   props: {
     modalClasses: {
+      type: null,
+      default: null,
+    },
+    modalBodyClasses: {
       type: null,
       default: null,
     },

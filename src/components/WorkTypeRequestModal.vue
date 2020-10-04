@@ -2,6 +2,7 @@
   <modal
     :title="$t('workTypeRequestModal.work_type_request')"
     modal-classes="w-2/3"
+    modal-body-classes="h-72 overflow-scroll border-b"
     @close="$emit('onCancel')"
   >
     <div class="px-6 py-3">
