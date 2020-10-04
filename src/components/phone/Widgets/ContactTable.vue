@@ -1,5 +1,5 @@
 <template>
-  <TitledCard title="~~Active Calls">
+  <TitledCard  :title="$t('phoneDashboard.active_calls')">
     <div class="card-container">
       <Table :columns="contactCols" :data="contactMetrics" />
     </div>
@@ -23,31 +23,31 @@ export default {
         {
           dataIndex: 'contact_id',
           key: 'contact_id',
-          title: 'Contact',
+          title: 'phoneDashboard.contact_id',
           width: '1fr',
         },
         {
           dataIndex: 'state',
           key: 'state',
-          title: 'State',
+          title: 'phoneDashboard.state',
           width: '1fr',
         },
         {
           dataIndex: 'action',
           key: 'action',
-          title: 'Action',
+          title: 'phoneDashboard.action',
           width: '1fr',
         },
         {
           dataIndex: 'entered_timestamp',
           key: 'entered_timestamp',
-          title: 'Timestamp',
+          title: 'phoneDashboard.timestamp',
           width: '1fr',
         },
         {
           dataIndex: 'agent_id',
           key: 'agent_id',
-          title: 'Agent',
+          title: 'phoneDashboard.agent',
           width: '1fr',
         },
       ];

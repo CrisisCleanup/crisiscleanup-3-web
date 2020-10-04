@@ -21,13 +21,13 @@ export default {
   name: 'PeopleStoriesCard',
   components: {
     TitledCard,
-    'Stories from people you helped': IndividualStoriesCard,
-    'Last 10 people I talk to': CallHistory,
+    'phoneDashboard.stories_from_people_you_helped': IndividualStoriesCard,
+    'phoneDashboard.last_10_people': CallHistory,
   },
   data() {
     return {
-      tabs: ['Last 10 people I talk to'],
-      selected: 'Last 10 people I talk to',
+      tabs: ['phoneDashboard.last_10_people'],
+      selected: 'phoneDashboard.last_10_people',
     };
   },
 };

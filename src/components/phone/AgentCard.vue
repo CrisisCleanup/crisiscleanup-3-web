@@ -7,7 +7,7 @@
       <div class="profile--img">
         <img
           :src="currentUser && currentUser.profilePictureUrl"
-          alt="{{ $t('phoneDashboard.user_profile') }}"
+          :alt="{{ $t('phoneDashboard.user_profile') }}"
           class="rounded-full"
         />
       </div>
@@ -24,7 +24,7 @@
           variant="text"
         >
           {{
-            showMoreState.state.value ? $t('~~Show Less') : $t('~~Show More')
+            showMoreState.state.value ? $t('actions.show_less') : $t('actions.show_more')
           }}
         </base-button>
       </div>
@@ -213,9 +213,9 @@ export default {
       }
       const compDialog = create(ComponentDialog);
       const modalAction = await compDialog({
-        title: context.root.$t('~~Enter a Phone Number'),
+        title: context.root.$t('phoneDashboard.enter_phone_number'),
         component: OutboundDialer,
-        actionText: context.root.$t('~~Dial'),
+        actionText: context.root.$t('actions.dial'),
         listeners: {
           update: (payload) => {
             _dialerInput.value = payload;

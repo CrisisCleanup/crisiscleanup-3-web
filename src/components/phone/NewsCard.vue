@@ -1,18 +1,14 @@
 <template>
+  <!-- News 1 -->
   <div class="h-full flex flex-row flex-grow justify-around p-3 news-card">
     <!--- media/picture --->
     <div class="card--img">
       <!-- <img :src="imagePath" alt="Video Preview" /> -->
-      <img src="@/assets/newspicss.png" class="news-img shadow" />
+      <img src="@/assets/news/hurricane.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_1_img_title') }}" />
     </div>
     <div class="card--body">
       <!--- body blurb --->
-      <base-text variant="bodysm">
-        <!-- {{ description }} -->
-        {{ this.$t( `~~For those of you who have ever used our call system in the
-          past (as clunky as it was) You're going to LOVE this new system. It is
-          easier to ever! However it is brand new, so if you find bugs, please
-          let us know.`), }}
+      <base-text variant="bodysm" v-html="$t('phoneDashboard.news_1')">
       </base-text>
       <div class="flex flex-row justify-between">
         <div class="flex-col">
@@ -21,12 +17,118 @@
             variant="bodysm"
             class="justify-between text-crisiscleanup-grey-800 alight-left"
           >
-            {{ [timeToComplete, ''] | duration('humanize') }}
+            {{ $t('phoneDashboard.news_1_date') }}
+            <!--{{ [timeToComplete, ''] | duration('humanize') }}-->
           </base-text>
         </div>
       </div>
     </div>
   </div>
+  <!-- End News -->
+  <!-- News 2 -->
+  <div class="h-full flex flex-row flex-grow justify-around p-3 news-card">
+    <!--- media/picture --->
+    <div class="card--img">
+      <!-- <img :src="imagePath" alt="Video Preview" /> -->
+      <img src="@/assets/news/list.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_2_img_title') }}" />
+    </div>
+    <div class="card--body">
+      <!--- body blurb --->
+      <base-text variant="bodysm" v-html="$t('phoneDashboard.news_2')">
+      </base-text>
+      <div class="flex flex-row justify-between">
+        <div class="flex-col">
+          <!--- Date --->
+          <base-text
+            variant="bodysm"
+            class="justify-between text-crisiscleanup-grey-800 alight-left"
+          >
+            {{ $t('phoneDashboard.news_2_date') }}
+            <!--{{ [timeToComplete, ''] | duration('humanize') }}-->
+          </base-text>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End News -->
+  <!-- News 3 -->
+  <div class="h-full flex flex-row flex-grow justify-around p-3 news-card">
+    <!--- media/picture --->
+    <div class="card--img">
+      <!-- <img :src="imagePath" alt="Video Preview" /> -->
+      <img src="@/assets/news/char_3_phone_blue.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_3_img_title') }}" />
+    </div>
+    <div class="card--body">
+      <!--- body blurb --->
+      <base-text variant="bodysm" v-html="$t('phoneDashboard.news_3')">
+      </base-text>
+      <div class="flex flex-row justify-between">
+        <div class="flex-col">
+          <!--- Date --->
+          <base-text
+            variant="bodysm"
+            class="justify-between text-crisiscleanup-grey-800 alight-left"
+          >
+            {{ $t('phoneDashboard.news_3_date') }}
+            <!--{{ [timeToComplete, ''] | duration('humanize') }}-->
+          </base-text>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End News -->
+  <!-- News 4 -->
+  <div class="h-full flex flex-row flex-grow justify-around p-3 news-card">
+    <!--- media/picture --->
+    <div class="card--img">
+      <!-- <img :src="imagePath" alt="Video Preview" /> -->
+      <img src="@/assets/news/smart_phone.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_4_img_title') }}" />
+    </div>
+    <div class="card--body">
+      <!--- body blurb --->
+      <base-text variant="bodysm" v-html="$t('phoneDashboard.news_4')">
+      </base-text>
+      <div class="flex flex-row justify-between">
+        <div class="flex-col">
+          <!--- Date --->
+          <base-text
+            variant="bodysm"
+            class="justify-between text-crisiscleanup-grey-800 alight-left"
+          >
+            {{ $t('phoneDashboard.news_4_date') }}
+            <!--{{ [timeToComplete, ''] | duration('humanize') }}-->
+          </base-text>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End News -->
+  <!-- News 5 -->
+  <div class="h-full flex flex-row flex-grow justify-around p-3 news-card">
+    <!--- media/picture --->
+    <div class="card--img">
+      <!-- <img :src="imagePath" alt="Video Preview" /> -->
+      <img src="@/assets/news/photo_lady_phone_computer.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_5_img_title') }}" />
+    </div>
+    <div class="card--body">
+      <!--- body blurb --->
+      <base-text variant="bodysm" v-html="$t('phoneDashboard.news_5')">
+      </base-text>
+      <div class="flex flex-row justify-between">
+        <div class="flex-col">
+          <!--- Date --->
+          <base-text
+            variant="bodysm"
+            class="justify-between text-crisiscleanup-grey-800 alight-left"
+          >
+            {{ $t('phoneDashboard.news_5_date') }}
+            <!--{{ [timeToComplete, ''] | duration('humanize') }}-->
+          </base-text>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End News -->
 </template>
 
 <script>

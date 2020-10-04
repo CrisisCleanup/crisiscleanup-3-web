@@ -56,12 +56,30 @@ export default {
     news() {
       return [
         {
-          imagePath: require('@/assets/newspicss.png'),
-          description: this.$t(
-            `~~For those of you who have ever used our call system in the past (as clunky as it was) You're going to LOVE this new system. It is easier to ever! However, it is brand new, so if you find bugs, please let us know.`,
-          ),
-          timeToComplete: this.$t('~~15 minutes'),
-        },
+          imagePath: require('@/assets/news/hurricane.png'),
+          description: this.$t('phoneDashboard.news_1'),
+          //timeToComplete: this.$t('~~15 minutes'),
+        },// TO DO: Ensure that the translation will accept html.
+        {
+          imagePath: require('@/assets/news/list.png'),
+          description: this.$t('phoneDashboard.news_2'),
+          //timeToComplete: this.$t('~~15 minutes'),
+        },// TO DO: Ensure that the translation will accept html.
+        {
+          imagePath: require('@/assets/news/char_3_phone_blue.png'),
+          description: this.$t('phoneDashboard.news_3'),
+          //timeToComplete: this.$t('~~15 minutes'),
+        },// TO DO: Ensure that the translation will accept html.
+        {
+          imagePath: require('@/assets/news/smartphone.png'),
+          description: this.$t('phoneDashboard.news_4'),
+          //timeToComplete: this.$t('~~15 minutes'),
+        },// TO DO: Ensure that the translation will accept html.
+        {
+          imagePath: require('@/assets/news/photo_lady_phone_computer.png'),
+          description: this.$t('phoneDashboard.news_5'),
+          //timeToComplete: this.$t('~~15 minutes'),
+        },// TO DO: Ensure that the translation will accept html.
       ];
     },
     trainingCards() {

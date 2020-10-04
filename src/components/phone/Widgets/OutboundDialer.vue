@@ -1,14 +1,14 @@
 <template>
   <div class="dialer">
     <base-text variant="body" class="pb-2">
-      {{ $t('~~Enter a Phone Number to manually dial an outbound call.') }}
+      {{ $t('phoneDashboard.enter_number_to_call') }}
     </base-text>
     <vue-phone-number-input
       :translations="{
-        countrySelectorLabel: $t('~~Country Code'),
-        countrySelectorError: $t('~~Choose a Country'),
-        phoneNumberLabel: $t('~~Phone number'),
-        example: $t('~~Example:'),
+        countrySelectorLabel: $t('phoneDashboard.country_code'),
+        countrySelectorError: $t('phoneDashboard.choose_country'),
+        phoneNumberLabel: $t('phoneDashboard.phone_number'),
+        example: $t('phoneDashboard.example'),
       }"
       size="lg"
       v-model="phoneInput"

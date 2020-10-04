@@ -11,7 +11,7 @@
         <base-text
           variant="h2"
           class="justify-between font-bold text-crisiscleanup-dark-400 pb-1"
-          >Jane Smith Story</base-text
+          >{{ $t('~~Jane Smith Story') }}</base-text
         >
         <!--- Date --->
         <base-text
