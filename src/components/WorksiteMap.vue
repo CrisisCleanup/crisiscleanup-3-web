@@ -75,6 +75,7 @@
     <div
       class="flex flex-col absolute"
       style="z-index: 1001; top: 10px; right: 10px;"
+      v-show="false"
     >
       <div class="zoom-control flex flex-col mb-5">
         <base-button
@@ -197,7 +198,6 @@ import {
   getWorksiteLayer,
   mapAttribution,
   mapTileLayer,
-  mapTileLayerSatellite,
 } from '@/utils/map';
 import { colors, templates } from '@/icons/icons_templates';
 import { groupBy } from '@/utils/array';
@@ -360,23 +360,12 @@ export default {
           }
           this.markerLayer.addTo(this.map);
 
-          this.mapTileLayer = L.tileLayer(mapTileLayer, {
-            // tileSize: 512,
-            // zoomOffset: -1,
+          L.tileLayer(mapTileLayer, {
             attribution: mapAttribution,
             detectRetina: false,
             maxZoom: 18,
             noWrap: false,
-          });
-          this.mapTileLayerSatellite = L.tileLayer(mapTileLayerSatellite, {
-            // tileSize: 512,
-            // zoomOffset: -1,
-            attribution: mapAttribution,
-            detectRetina: false,
-            maxZoom: 18,
-            noWrap: false,
-          });
-          this.mapTileLayer.addTo(map);
+          }).addTo(map);
           this.selectedLayer = this.mapTileLayer;
           map.attributionControl.setPosition('bottomright');
           const worksiteLayer = getWorksiteLayer(markers, map, this);
