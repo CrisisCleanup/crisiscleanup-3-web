@@ -9,14 +9,25 @@
                 c.mobile
               }}</base-text>
               <base-text :weight="400" variant="h4">{{
-                `${callerHistory.total} {{ $t('phoneDashboard.calls') }} | ${callerHistory.recent}`
+                `${callerHistory.total} ${$t('phoneDashboard.calls')}
+                | ${callerHistory.recent}`
               }}</base-text>
             </div>
             <div class="contact-caller">
-              <ccu-icon with-text size="xs" :type="enums.icons.phone_user" :title="$t('phoneDashboard.user_name')">
+              <ccu-icon
+                with-text
+                size="xs"
+                :type="enums.icons.phone_user"
+                :title="$t('phoneDashboard.user_name')"
+              >
                 <base-text variant="bodysm">{{ c.name }}</base-text>
               </ccu-icon>
-              <ccu-icon with-text size="xs" :type="enums.icons.earth_globe" :title="$t('phoneDashboard.locale')">
+              <ccu-icon
+                with-text
+                size="xs"
+                :type="enums.icons.earth_globe"
+                :title="$t('phoneDashboard.locale')"
+              >
                 <base-text variant="bodysm">{{ c.locale }}</base-text>
               </ccu-icon>
             </div>
