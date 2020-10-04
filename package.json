@@ -21,7 +21,7 @@
     "lint-staged": "lint-staged",
     "postinstall": "yarn cache clean",
     "prettify": "prettier --write {.,**}/*.js **/*.vue **/**/*.{vue,js}",
-    "serve-dev": "cross-env NODE_ENV=development vue-cli-service serve --mode development",
+    "serve-dev": "cross-env NODE_ENV=development NODE_IS_WATCH=1 vue-cli-service serve --mode development",
     "storybook": "cross-env NODE_ENV=storybook start-storybook -p 6006",
     "test": "yarn test:unit && yarn test:e2e",
     "test:components": "vue-cli-service test:components",

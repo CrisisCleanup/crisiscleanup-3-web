@@ -1,12 +1,17 @@
 const threadLoader = require('thread-loader');
 // const LodashPlugin = require('lodash-webpack-plugin');
 const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+const CPUS = require('os').cpus();
 const Version = require('./package.json').version;
+
 const basicPool = {
+  workers: CPUS ? CPUS.length - 1 : 2,
   workerParallelJobs: 200,
+  poolTimeout: process.env.NODE_IS_WATCH ? 10000 : 500,
+  workerNodeArgs: ['--max-old-space-size=1024'],
   name: 'basicPool',
 };
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' && !process.env.CI) {
   threadLoader.warmup(basicPool, ['babel-loader', 'vue-loader']);
 }
 module.exports = {
