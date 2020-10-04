@@ -83,12 +83,18 @@ export const Metrics = Object.freeze({
   // note: translation takes place in component, $t not needed here.
   ONLINE: ['agentsOnline', 'phoneDashboard.volunteers_online'],
   CONTACTS_QUEUED: ['contactsInQueue', 'phoneDashboard.on_hold_now'],
-  CALLBACKS_QUEUED: ['contactsInQueueOutbound', 'phoneDashboard.remaining_callbacks'],
+  CALLBACKS_QUEUED: [
+    'contactsInQueueOutbound',
+    'phoneDashboard.remaining_callbacks',
+  ],
   AVAILABLE: ['agentsAvailable', 'phoneDashboard.volunteers_available'],
   AGENTS_ON_CALL: ['agentsOnCall', 'phoneDashboard.volunteers_on_phone'],
   NEEDED: ['agentsNeeded', 'phoneDashboard.additional_volunteers_needed'],
   TOTAL_WAITING: ['totalWaiting', 'phoneDashboard.total_people_waiting'],
-  CALLDOWNS_QUEUED: ['contactsScheduledOutbound', 'phoneDashboard.remaining_calldowns'],
+  CALLDOWNS_QUEUED: [
+    'contactsScheduledOutbound',
+    'phoneDashboard.remaining_calldowns',
+  ],
   // admin metrics (includes unlocked+locked)
   CALLBACKS_QUEUED_ALL: [
     'contactsInQueueOutboundAll',
@@ -101,12 +107,9 @@ export const Metrics = Object.freeze({
 });
 
 export const Scripts = Object.freeze({
-  [CallType.INBOUND]:
-    'phoneDashboard.inbound_script', // TO DO: Braden, you will need to define the variable, "{name}": Hello. This is the Crisis Cleanup Hotline, my name is {name}, how can I help you?
-  [CallType.OUTBOUND]:
-    'phoneDashboard.outbound_script', // TO DO: Braden, you will need to define the variable, "{name}": Hello, my name is {name}. Someone from this number recently called the Crisis Cleanup Hotline, probably about getting help cleaning up after the storm. Do you still need help?
-  [CallType.CALLDOWN]:
-    'phoneDashboard.calldown_script', // TO DO: Braden, you will need to define the variables, "{name}", "{incidentType}" and "{timeAgo}": Hello. My name is {name} with the Crisis Cleanup Hotline. We noticed that you asked for help cleaning up after the {incidentType} about {timeAgo}. I'm calling to see if you still need help, or if someone has already helped you clean up.
+  [CallType.INBOUND]: 'phoneDashboard.inbound_script', // TO DO: Braden, you will need to define the variable, "{name}": Hello. This is the Crisis Cleanup Hotline, my name is {name}, how can I help you?
+  [CallType.OUTBOUND]: 'phoneDashboard.outbound_script', // TO DO: Braden, you will need to define the variable, "{name}": Hello, my name is {name}. Someone from this number recently called the Crisis Cleanup Hotline, probably about getting help cleaning up after the storm. Do you still need help?
+  [CallType.CALLDOWN]: 'phoneDashboard.calldown_script', // TO DO: Braden, you will need to define the variables, "{name}", "{incidentType}" and "{timeAgo}": Hello. My name is {name} with the Crisis Cleanup Hotline. We noticed that you asked for help cleaning up after the {incidentType} about {timeAgo}. I'm calling to see if you still need help, or if someone has already helped you clean up.
 });
 
 const Log = Logger({ name: 'phone.controller' });
@@ -302,7 +305,7 @@ class ControllerStore extends VuexModule {
   @Action
   async closeContact({ contact }: { contact: Contact }) {
     if (!this.status.statusId) {
-      throw new Error(window.vue.$t('phoneDashboard.call_status_required');
+      throw new Error(window.vue.$t('phoneDashboard.call_status_required'));
     }
     if (this.currentCase) {
       await this.updateStatus({ modified: [this.currentCase] });
