@@ -47,6 +47,7 @@ env:
   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
   SENTRY_PROPERTIES: sentry.properties
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  CI: 1
   CYPRESS_INSTALL_BINARY: 0
 
 jobs:
