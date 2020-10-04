@@ -487,6 +487,15 @@ export default {
       );
 
       await this.getWorksiteRequests();
+
+      if (
+        Number(this.worksite.incident) !==
+        Number(this.$route.params.incident_id)
+      ) {
+        await this.$router.push(
+          `/incident/${this.$route.params.incident_id}/cases/new`,
+        );
+      }
     } catch (e) {
       await this.$router.push(
         `/incident/${this.$route.params.incident_id}/cases/new`,
