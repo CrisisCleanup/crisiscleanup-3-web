@@ -1,13 +1,18 @@
 <template>
   <div class="agentcard shadow-crisiscleanup-card h-full w-full">
     <div class="card-edit">
-      <ccu-icon @click.native="() => forceAgentEdit()" size="md" type="edit" :title="$t('phoneDashboard.edit_user_phone_number')"/>
+      <ccu-icon
+        @click.native="() => forceAgentEdit()"
+        size="md"
+        type="edit"
+        :title="$t('phoneDashboard.edit_user_phone_number')"
+      />
     </div>
     <div class="profile">
       <div class="profile--img">
         <img
           :src="currentUser && currentUser.profilePictureUrl"
-          :alt="{{ $t('phoneDashboard.user_profile') }}"
+          :alt="$t('phoneDashboard.user_profile')"
           class="rounded-full"
         />
       </div>
@@ -24,7 +29,9 @@
           variant="text"
         >
           {{
-            showMoreState.state.value ? $t('actions.show_less') : $t('actions.show_more')
+            showMoreState.state.value
+              ? $t('actions.show_less')
+              : $t('actions.show_more')
           }}
         </base-button>
       </div>

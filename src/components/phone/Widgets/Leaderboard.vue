@@ -13,7 +13,11 @@
       >
         <base-text
           class="text-crisiscleanup-dark-200"
-          v-for="t in ['phoneDashboard.inbound', 'phoneDashboard.return', 'phoneDashboard.total']"
+          v-for="t in [
+            'phoneDashboard.inbound',
+            'phoneDashboard.return',
+            'phoneDashboard.total',
+          ]"
           variant="h4"
           :key="t"
           regular
