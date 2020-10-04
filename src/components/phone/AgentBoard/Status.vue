@@ -69,7 +69,7 @@ export default {
         );
         const confirmDialog = create(MessageBox);
         const resp = await confirmDialog({
-          title: context.root.$t('~~Are you sure?'),
+          title: context.root.$t('phoneDashboard.are_you_sure'),
           content: context.root.$t('phoneDashboard.confirm_changes_to_worksite'),
           actions: {
             stay: {

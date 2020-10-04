@@ -4,11 +4,11 @@
     <!--- media/picture --->
     <div class="card--img">
       <!-- <img :src="imagePath" alt="Video Preview" /> -->
-      <img src="@/assets/news/hurricane.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_1_img_title') }}" />
+      <img src="@/assets/news/hurricane.png" class="news-img shadow" :title="$t('phoneDashboard.news_1_img_title')" />
     </div>
     <div class="card--body">
       <!--- body blurb --->
-      <base-text variant="bodysm" v-html="$t('phoneDashboard.news_1')">
+      <base-text variant="bodysm" :v-html="$t('phoneDashboard.news_1')">
       </base-text>
       <div class="flex flex-row justify-between">
         <div class="flex-col">
@@ -30,7 +30,7 @@
     <!--- media/picture --->
     <div class="card--img">
       <!-- <img :src="imagePath" alt="Video Preview" /> -->
-      <img src="@/assets/news/list.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_2_img_title') }}" />
+      <img src="@/assets/news/list.png" class="news-img shadow" :title="$t('phoneDashboard.news_2_img_title')" />
     </div>
     <div class="card--body">
       <!--- body blurb --->
@@ -56,7 +56,7 @@
     <!--- media/picture --->
     <div class="card--img">
       <!-- <img :src="imagePath" alt="Video Preview" /> -->
-      <img src="@/assets/news/char_3_phone_blue.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_3_img_title') }}" />
+      <img src="@/assets/news/char_3_phone_blue.png" class="news-img shadow" :title="$t('phoneDashboard.news_3_img_title')" />
     </div>
     <div class="card--body">
       <!--- body blurb --->
@@ -82,7 +82,7 @@
     <!--- media/picture --->
     <div class="card--img">
       <!-- <img :src="imagePath" alt="Video Preview" /> -->
-      <img src="@/assets/news/smart_phone.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_4_img_title') }}" />
+      <img src="@/assets/news/smart_phone.png" class="news-img shadow" :title="$t('phoneDashboard.news_4_img_title')" />
     </div>
     <div class="card--body">
       <!--- body blurb --->
@@ -108,7 +108,7 @@
     <!--- media/picture --->
     <div class="card--img">
       <!-- <img :src="imagePath" alt="Video Preview" /> -->
-      <img src="@/assets/news/photo_lady_phone_computer.png" class="news-img shadow" title="{{ $t('phoneDashboard.news_5_img_title') }}" />
+      <img src="@/assets/news/photo_lady_phone_computer.png" class="news-img shadow" :title="$t('phoneDashboard.news_5_img_title')" />
     </div>
     <div class="card--body">
       <!--- body blurb --->

@@ -39,11 +39,11 @@ export default ({
   // UI friendly 'action' string to enact state change.
   const _stateAction = {
     // translation takes place in component, no $t here.
-    [RouteStates.NOT_ROUTABLE]: '~~Start Taking Calls',
-    [RouteStates.ROUTABLE]: '~~Stop Taking Calls',
-    [ConnectionStates.PAUSED]: '~~Ready for Next Call?',
-    NEED_TRAINING: '~~Start Training',
-    DISCONNECTED: '~~No Connection',
+    [RouteStates.NOT_ROUTABLE]: 'actions.start_taking_calls',
+    [RouteStates.ROUTABLE]: 'actions.stop_taking_calls',
+    [ConnectionStates.PAUSED]: 'actions.ready_for_next_call',
+    NEED_TRAINING: 'actions.start_training',
+    DISCONNECTED: 'actions.no_connection',
   };
 
   // Computed UI friendly values from current state.
@@ -52,7 +52,7 @@ export default ({
       return {
         text: _stateAction.DISCONNECTED,
         enabled: false,
-        statusText: '~~Disconnected',
+        statusText: 'phoneDashboard.disconnected',
       };
     }
     if (!unwrap(isTrained)) {

@@ -17,14 +17,14 @@
     >
       <div class="flex justify-center flex-col p-3">
         <base-text variant="h3" v-if="agent && agent.isOnline">{{
-          $t('~~You are currently online and receiving phone calls.')
+          $t('phoneDashboard.you_are_online')
         }}</base-text>
         <base-text variant="h3" v-else>
-          {{ $t('~~You are currently offline and not receiving phone calls.') }}
+          {{ $t('phoneDashboard.you_are_offline') }}
         </base-text>
         <base-text variant="h4" class="pt-1">
           {{
-            $t('~~Click to go {0}.', [
+            $t('phoneDashboard.click_to_go', [
               agent && agent.isOnline ? 'offline' : 'online',
             ])
           }}

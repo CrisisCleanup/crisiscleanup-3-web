@@ -22,7 +22,7 @@
               src="@/assets/call_center_people.png"
               width="100%"
               height="auto"
-              alt="~~Call Center Users"
+              :title="$t('phoneDashboard.call_center_users')"
             />
           </div>
           <div class="flex-col ml-3 mr-3 mt-5 my-8 items-center w-3/4">
@@ -123,19 +123,15 @@ export default {
             text: this.$t('actions.cancel'),
           },
           complete: {
-            text: this.$t('~~Complete'),
+            text: this.$t('actions.complete'),
           },
         },
         header: {
-          text: this.$t('~~Mandatory Training Videos'),
+          text: this.$t('phoneDashboard.mandatory_training_videos'),
         },
         subHeader: {
-          text: this.$t(
-            '~~Thank you so much for becoming a call center volunteer. Please watch the following short training videos to help familiarize you with the system.',
-          ),
-          secondaryText: this.$t(
-            '~~Answer the questions after each video. After you get all of the questions correct, you can start answering calls. (Hint: you can change your answers).',
-          ),
+          text: this.$t('phoneDashboard.watch_these_videos'),
+          secondaryText: this.$t('phoneDashboard.answer_questions_after_videos'),
         },
       };
     },

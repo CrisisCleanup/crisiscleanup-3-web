@@ -29,7 +29,7 @@
         <div class="main h-100 flex flex-col text-center">
           <div class="title">
             <base-text variant="h1" weight="700"
-              >{{ $t('~~A Sample Script would be:') }}
+              >{{ $t('phoneDashboard.sample_script') }}
             </base-text>
           </div>
           <div class="body">
@@ -41,7 +41,7 @@
 
         <div class="action">
           <base-checkbox :checked="checkState" @change="onChange" />
-          <base-text>{{ $t('~~Do not show this again.') }}</base-text>
+          <base-text>{{ $t('phoneDashboard.do_not_show_again') }}</base-text>
         </div>
       </div>
     </div>
