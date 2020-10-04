@@ -149,14 +149,14 @@ export default {
       return {
         actions: {
           cancel: {
-            text: this.$t('~~Cancel'),
+            text: this.$t('actions.cancel'),
           },
           complete: {
-            text: this.$t('~~Complete'),
+            text: this.$t('actions.complete'),
           },
         },
         header: {
-          text: this.$t('~~Start Training'),
+          text: this.$t('actions.start_training'),
         },
       };
     },

@@ -47,8 +47,11 @@
           :current-incident="activeIncident"
         />
         <base-text :weight="700" variant="h1"
-          >{{ $t('~~Incoming Call for ') }}
-          {{ activeIncident && activeIncident.friendlyName }}
+          >{{
+            $t('phoneDashboard.incoming_call_for_incident', {
+              incidentName: activeIncident && activeIncident.friendlyName,
+            }) 
+          }}
         </base-text>
       </div>
     </template>
@@ -84,8 +87,7 @@
       </div>
       <div class="modal-divider">
         <base-text variant="h3" :weight="400">
-          <span> {{ caseCards.length }} {{ $t('~~ cases ') }} </span>
-          {{ $t(' ~~are assigned to this number') }}
+          <span> {{ caseCards.length }}: {{ $t('phoneDashboard.cases_assigned_to_number') }} </span>
         </base-text>
       </div>
       <div class="modal-cases">
@@ -107,7 +109,7 @@
           variant="solid"
           size="large"
         >
-          {{ $t('~~Dismiss') }}
+          {{ $t('actions.hide') }}
         </base-button>
         <base-button
           :action="() => skipCall()"
@@ -115,7 +117,7 @@
           size="large"
           class="btn-danger"
         >
-          {{ $t('~~Skip Call') }}
+          {{ $t('actions.skip_call') }}
         </base-button>
       </div>
     </template>

@@ -1,7 +1,7 @@
 <template>
   <TitledCard
     :loading="loading"
-    title="~~Daily Phone Calls and New Cases"
+    :title="$t('phoneDashboard.daily_phone_calls_new_cases')"
     class="h-full"
   >
     <div class="h-full">

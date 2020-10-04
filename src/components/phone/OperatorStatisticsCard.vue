@@ -6,28 +6,28 @@
     <div class="h-0 w-auto border" />
     <div class="flex-col p-2">
       <div class="justify-between flex flex-row my-2">
-        <p class="text-sm">Calls I have received</p>
+        <p class="text-sm">{{ $t('phoneDashboard.inbound_calls') }}</p>
         <div class="font-semifold" :callsReceived="callsReceived">
           {{ callsReceived }}
         </div>
       </div>
       <div class="h-0 w-auto border" />
       <div class="justify-between flex flex-row my-2">
-        <p class="text-sm">Calls I have made</p>
+        <p class="text-sm">{{ $t('phoneDashboard.outbound_calls') }}</p>
         <div class="font-semifold" :callsMade="callsMade">
           {{ callsMade }}
         </div>
       </div>
       <div class="h-0 w-auto border" />
       <div class="justify-between flex flex-row my-2">
-        <p class="text-sm">Total Login Time this week</p>
+        <p class="text-sm">{{ $t('phoneDashboard.total_login_time_this_week') }}</p>
         <div class="font-semibold" :totalLoggedTime="totalLoggedTime">
           {{ totalLoggedTime }}
         </div>
       </div>
       <div class="h-0 w-auto border" />
       <div class="justify-between flex flex-row my-2">
-        <p class="text-sm">Total Talk Time this week</p>
+        <p class="text-sm">{{ $t('phoneDashboard.total_talk_time_this_week') }}</p>
         <div
           class="font-semibold"
           :totalConversationTime="totalConversationTime"

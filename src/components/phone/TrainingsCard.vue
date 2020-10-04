@@ -3,7 +3,7 @@
     <div class="flex flex-row justify-between flex-grow p-3">
       <!--- media/picture --->
       <div class="w-1/6">
-        <img :src="imagePath" alt="Video Preview" class="shadow" />
+        <img :src="imagePath" :title="$t('phoneDashboard.video_preview')" class="shadow" />
       </div>
       <div class="w-4/6 pl-4">
         <!--- body blurb --->
@@ -58,7 +58,7 @@ export default {
       return {
         actions: {
           start: {
-            text: this.$t('~~Start'),
+            text: this.$t('actions.start'),
           },
         },
       };
