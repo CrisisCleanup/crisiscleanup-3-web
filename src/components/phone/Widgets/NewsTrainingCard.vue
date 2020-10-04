@@ -13,11 +13,9 @@
     <template #news>
       <NewsCard
         class="h-full"
-        v-for="(newss, idx) in news"
-        :key="idx"
-        :image-path="newss.image"
-        :description="newss.description"
-        :time-to-complete="newss.timeToComplete"
+        v-for="newss in news"
+        :key="newss.date"
+        v-bind="newss"
       />
     </template>
   </TabbedCard>
@@ -56,30 +54,45 @@ export default {
     news() {
       return [
         {
-          imagePath: require('@/assets/news/hurricane.png'),
-          description: this.$t('phoneDashboard.news_1'),
-          //timeToComplete: this.$t('~~15 minutes'),
-        },// TO DO: Ensure that the translation will accept html.
+          media: {
+            path: require('@/assets/news/hurricane.png'),
+            alt: this.$t('phoneDashboard.news_1_img_title'),
+          },
+          content: this.$t('phoneDashboard.news_1'),
+          date: this.$t('phoneDashboard.news_1_date'),
+        },
         {
-          imagePath: require('@/assets/news/list.png'),
-          description: this.$t('phoneDashboard.news_2'),
-          //timeToComplete: this.$t('~~15 minutes'),
-        },// TO DO: Ensure that the translation will accept html.
+          media: {
+            path: require('@/assets/news/list.png'),
+            alt: this.$t('phoneDashboard.news_2_img_title'),
+          },
+          content: this.$t('phoneDashboard.news_2'),
+          date: this.$t('phoneDashboard.news_2_date'),
+        },
         {
-          imagePath: require('@/assets/news/char_3_phone_blue.png'),
-          description: this.$t('phoneDashboard.news_3'),
-          //timeToComplete: this.$t('~~15 minutes'),
-        },// TO DO: Ensure that the translation will accept html.
+          media: {
+            path: require('@/assets/news/char_3_phone_blue.png'),
+            alt: this.$t('phoneDashboard.news_3_img_title'),
+          },
+          content: this.$t('phoneDashboard.news_3'),
+          date: this.$t('phoneDashboard.news_3_date'),
+        },
         {
-          imagePath: require('@/assets/news/smartphone.png'),
-          description: this.$t('phoneDashboard.news_4'),
-          //timeToComplete: this.$t('~~15 minutes'),
-        },// TO DO: Ensure that the translation will accept html.
+          media: {
+            path: require('@/assets/news/smart_phone.png'),
+            alt: this.$t('phoneDashboard.news_4_img_title'),
+          },
+          content: this.$t('phoneDashboard.news_4'),
+          date: this.$t('phoneDashboard.news_4_date'),
+        },
         {
-          imagePath: require('@/assets/news/photo_lady_phone_computer.png'),
-          description: this.$t('phoneDashboard.news_5'),
-          //timeToComplete: this.$t('~~15 minutes'),
-        },// TO DO: Ensure that the translation will accept html.
+          media: {
+            path: require('@/assets/news/photo_lady_phone_computer.png'),
+            alt: this.$t('phoneDashboard.news_5_img_title'),
+          },
+          content: this.$t('phoneDashboard.news_5'),
+          date: this.$t('phoneDashboard.news_5_date'),
+        },
       ];
     },
     trainingCards() {
