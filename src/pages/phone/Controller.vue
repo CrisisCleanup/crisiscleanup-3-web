@@ -79,10 +79,13 @@ import ComponentDialog from '@/components/dialogs/ComponentDialog';
 import BoardStatus from '@/components/phone/AgentBoard/Status.vue';
 import useScripts from '@/use/phone/useScripts';
 
-const StatusPopup = () => {
+const StatusPopup = (props, { root }) => {
   return () => (
     <div class="py-12 px-3 flex flex-col">
-      <BoardStatus hide-end-contact select-id={{ $t('phoneDashboard.call_status') }} />
+      <BoardStatus
+        hide-end-contact
+        select-id={root.$t('phoneDashboard.call_status')}
+      />
     </div>
   );
 };
