@@ -13,7 +13,7 @@
         ]"
       >
         <base-text variant="bodysm">{{
-          visibleState.state.value ? 'Hide' : 'Debugger'
+          visibleState.state.value ? 'phoneDashboard.hide' : 'phoneDashboard.debugger'
         }}</base-text>
       </div>
       <div
@@ -60,8 +60,8 @@
           :font-size="14"
           :width="85"
           :labels="{
-            checked: 'Polling',
-            unchecked: 'Disabled',
+            checked: 'phoneDashboard.polling',
+            unchecked: 'phoneDashboard.disabled',
           }"
           @input="toggleServeState"
         />
@@ -149,27 +149,27 @@ export default {
     const pages = computed(() => ({
       contact: [
         {
-          title: 'Contact ID (Store)',
+          title: 'phoneDashboard.contact_id_store',
           value: _.get(currentContact, 'value.contactId', 'None'),
         },
         {
-          title: 'Contact ID (Connect)',
+          title: 'phoneDashboard.contact_id_connect',
           value: _.get(currentContact, 'value.connectContactId', 'None'),
         },
         {
-          title: 'Contact State',
+          title: 'phoneDashboard.contact_state',
           value: _.get(currentContact, 'value.fullState', 'None'),
         },
         {
-          title: 'Call Type',
+          title: 'phoneDashboard.call_type',
           value: _.get(currentContact, 'value.callType', 'None'),
         },
         {
-          title: 'Has Resolved Cases',
+          title: 'phoneDashboard.has_resolved_cases',
           value: _.get(currentContact, 'value.hasResolvedCases', 'No'),
         },
         {
-          title: 'Agent State',
+          title: 'phoneDashboard.agent_state',
           value: _.get(agent, 'value.fullState', 'None'),
         },
       ].concat(
@@ -186,38 +186,38 @@ export default {
       })),
       outbound: [
         {
-          title: 'Serving Outbound',
+          title: 'phoneDashboard.serving_outbound',
           value: _.get(state.currentOutbound, 'value.phone_number', 'None'),
         },
         {
-          title: 'Outbound ID / Completion',
+          title: 'phoneDashboard.outbound_id_completion',
           value: [
             _.get(state.currentOutbound, 'value.id', 'None'),
             _.get(state.currentOutbound, 'value.completion', 'None'),
           ].join(' / '),
         },
         {
-          title: 'Priority',
+          title: 'phoneDashboard.priority',
           value: _.get(state.currentOutbound, 'value.priority', '0.00'),
         },
         {
-          title: 'Location',
+          title: 'phoneDashboard.location',
           value: _.get(state.currentOutbound, 'value.location_name', 'None'),
         },
         {
-          title: 'Agent State',
+          title: 'phoneDashboard.agent_state',
           value: _.get(agent, 'value.fullState', 'None'),
         },
         {
-          title: 'Contact State',
+          title: 'phoneDashboard.contact_state',
           value: _.get(currentContact, 'value.fullState', 'None'),
         },
         {
-          title: 'Call Type',
+          title: 'phoneDashboard.call_type',
           value: _.get(currentContact, 'value.callType', 'None'),
         },
         {
-          title: 'Total Outbounds',
+          title: 'phoneDashboard.total_outbounds',
           value: _.get(
             state.metrics,
             'value.all.contactsInQueueOutboundAll',
@@ -225,7 +225,7 @@ export default {
           ),
         },
         {
-          title: 'Total Callbacks',
+          title: 'phoneDashboard.total_callbacks',
           value: _.get(
             state.metrics,
             'value.all.contactsScheduledOutboundAll',
@@ -250,10 +250,10 @@ export default {
         : [],
       debug: [
         {
-          title: 'Controller Page',
+          title: 'phoneDashboard.controller_page',
           value: state.view.value.page,
           action: {
-            label: 'Toggle',
+            label: 'phoneDashboard.toggle',
             method: () =>
               actions.setView({
                 page:
@@ -264,10 +264,10 @@ export default {
           },
         },
         {
-          title: 'Script Popup',
+          title: 'phoneDashboard.script_popup',
           value: scriptStorage.storage.value,
           action: {
-            label: 'Toggle',
+            label: 'phoneDashboard.toggle',
             method: () => {
               scriptStorage.storage.value = !scriptStorage.storage.value;
             },

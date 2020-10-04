@@ -1,7 +1,7 @@
 <template>
   <TitledCard
     :loading="!agentMetricsReady"
-    title="~~Leaderboard"
+    :title="$t('phoneDashboard.leaderboard')"
     class="h-full"
     :dropdown="dropdownProps"
     @update:dropdown="onDropdownUpdate"
@@ -13,7 +13,7 @@
       >
         <base-text
           class="text-crisiscleanup-dark-200"
-          v-for="t in ['~~Intake', '~~Return', '~~Total']"
+          v-for="t in ['phoneDashboard.inbound', 'phoneDashboard.return', 'phoneDashboard.total']"
           variant="h4"
           :key="t"
           regular
@@ -124,35 +124,35 @@ export default {
       options: [
         {
           key: 'online',
-          name: context.root.$t('~~Online'),
+          name: context.root.$t('phoneDashboard.online'),
         },
         {
           key: 'today',
-          name: context.root.$t('~~Today'),
+          name: context.root.$t('phoneDashboard.today'),
         },
         {
           key: 'week',
-          name: context.root.$t('~~This Week'),
+          name: context.root.$t('phoneDashboard.this_week'),
         },
         {
           key: 'month',
-          name: context.root.$t('~~This Month'),
+          name: context.root.$t('phoneDashboard.this_month'),
         },
         {
           key: 'all',
-          name: context.root.$t('~~All Time'),
+          name: context.root.$t('phoneDashboard.all_time'),
         },
         {
           key: 'english',
-          name: context.root.$t('~~English'),
+          name: context.root.$t('phoneDashboard.english'),
         },
         {
           key: 'spanish',
-          name: context.root.$t('~~Spanish'),
+          name: context.root.$t('phoneDashboard.spanish'),
         },
         {
           key: 'my-org',
-          name: context.root.$t('~~My Organization'),
+          name: context.root.$t('phoneDashboard.my_organization'),
         },
       ],
     });

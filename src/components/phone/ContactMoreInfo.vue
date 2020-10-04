@@ -45,7 +45,7 @@ export default {
   computed: {
     lang() {
       return this.getLang({
-        languages: '~~Languages',
+        languages: 'phoneDashboard.languages',
       });
     },
     languages() {
