@@ -2,6 +2,7 @@
 
 exports[`WorkTypeRequestModal show modal with options 1`] = `
 <modal-stub
+  modal-body-classes="h-72 overflow-scroll border-b"
   modal-classes="w-2/3"
   title="workTypeRequestModal.work_type_request"
 >
