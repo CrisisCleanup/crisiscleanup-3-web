@@ -17,10 +17,10 @@
           class="flex flex-row justify-between p-2 px-5 metric"
           :class="isCritical && 'critical'"
         >
-          <div> <!-- TO DO: This section includes a test for the English word, "Total". This should be removed -->
+          <div>
             <ccu-icon
               with-text
-              v-if="k.includes('Total')"
+              v-if="isTotalWaiting(k)"
               type="phone-plus"
               size="xl"
               :title="$t('phoneDashboard.total_people_waiting')"
@@ -30,17 +30,16 @@
                 :weight="600"
                 class="metric-text align-middle"
                 >{{ $t(k) }}</base-text
-              ><!-- TO DO: This component translates a non-translated string. This should be removed -->
+              >
             </ccu-icon>
 
             <base-text
-              v-if="!k.includes('Total')"
+              v-if="!isTotalWaiting(k)"
               variant="bodysm"
               :weight="500"
               class="align-middle"
               >{{ $t(k) }}</base-text
-            ><!-- TO DO: This component translates a non-translated string. This should be removed -->
-            <!-- TO DO: This section includes a test for the English word, "Total". This should be removed -->
+            >
           </div>
           <base-text :key="`${k}_${category}_${genMetrics[k]}`" variant="h1">{{
             genMetrics[k]
@@ -157,6 +156,9 @@ export default {
       loading,
       genMetrics,
       isCritical,
+      isTotalWaiting(value) {
+        return value === Metrics.TOTAL_WAITING[1];
+      },
       onDropdownUpdate(value) {
         if (value === 0) {
           category.value = 'all';
