@@ -8,7 +8,6 @@ exports[`BaseIcon should render correctly and match snapshot 1`] = `
     alt=""
     class="ccu-icon cursor-pointer small"
     src="IMAGE_MOCK"
-    title=""
   />
    
 </div>

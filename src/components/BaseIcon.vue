@@ -8,15 +8,13 @@
       v-if="!fa"
       :class="[iconClasses, styles]"
       :src="iconMap[type]"
-      :alt="alt"
-      :title="alt"
+      :alt="alt || title"
     />
     <font-awesome-icon
       v-else
       :class="[iconClasses, styles]"
       :icon="type"
-      :alt="alt"
-      :title="alt"
+      :alt="alt || title"
       :size="size"
     />
     <slot></slot>
@@ -38,6 +36,7 @@ export default {
     ]),
     fa: VueTypes.bool.def(false),
     alt: VueTypes.string,
+    title: VueTypes.string,
     size: VueTypes.oneOf(ICON_SIZES).def('large'),
     selector: VueTypes.string,
     withText: VueTypes.bool.def(false),
