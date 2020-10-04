@@ -316,24 +316,24 @@ describe('phone.controller store', () => {
     // should default to ALL
     expect(ctrlStore.getGeneralMetrics(metricOrder)).toMatchInlineSnapshot(`
       Map {
-        "~~On hold now" => 0,
-        "~~Remaining Callbacks" => 0,
-        "~~Total People Waiting" => 0,
-        "~~Volunteers Online" => 0,
-        "~~Volunteers on the Phone" => 0,
-        "~~Additional Volunteers Needed" => 0,
+        "phoneDashboard.on_hold_now" => 0,
+        "phoneDashboard.remaining_callbacks" => 0,
+        "phoneDashboard.total_people_waiting" => 0,
+        "phoneDashboard.volunteers_online" => 0,
+        "phoneDashboard.volunteers_on_phone" => 0,
+        "phoneDashboard.additional_volunteers_needed" => 0,
       }
     `);
     // should scope to given locale
     expect(ctrlStore.getGeneralMetrics(metricOrder, 'en-US'))
       .toMatchInlineSnapshot(`
       Map {
-        "~~On hold now" => 0,
-        "~~Remaining Callbacks" => 0,
-        "~~Total People Waiting" => 0,
-        "~~Volunteers Online" => 1,
-        "~~Volunteers on the Phone" => 1,
-        "~~Additional Volunteers Needed" => 0,
+        "phoneDashboard.on_hold_now" => 0,
+        "phoneDashboard.remaining_callbacks" => 0,
+        "phoneDashboard.total_people_waiting" => 0,
+        "phoneDashboard.volunteers_online" => 1,
+        "phoneDashboard.volunteers_on_phone" => 1,
+        "phoneDashboard.additional_volunteers_needed" => 0,
       }
     `);
   });
