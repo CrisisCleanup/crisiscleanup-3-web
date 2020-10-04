@@ -795,7 +795,7 @@ export default {
         this.ghostUsers = pageData.ghostUsers;
         this.apiKeys = pageData.apiKeys.data;
 
-        if (this.organization.approved_groups) {
+        if (this.organization.approved_groups.length) {
           const groupsResponse = await this.$http.get(
             `${
               process.env.VUE_APP_API_BASE_URL
