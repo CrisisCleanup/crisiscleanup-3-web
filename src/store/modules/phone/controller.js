@@ -106,10 +106,10 @@ export const Metrics = Object.freeze({
   ],
 });
 
-export const Scripts = Object.freeze({
-  [CallType.INBOUND]: 'phoneDashboard.inbound_script', // TO DO: Braden, you will need to define the variable, "{name}": Hello. This is the Crisis Cleanup Hotline, my name is {name}, how can I help you?
-  [CallType.OUTBOUND]: 'phoneDashboard.outbound_script', // TO DO: Braden, you will need to define the variable, "{name}": Hello, my name is {name}. Someone from this number recently called the Crisis Cleanup Hotline, probably about getting help cleaning up after the storm. Do you still need help?
-  [CallType.CALLDOWN]: 'phoneDashboard.calldown_script', // TO DO: Braden, you will need to define the variables, "{name}", "{incidentType}" and "{timeAgo}": Hello. My name is {name} with the Crisis Cleanup Hotline. We noticed that you asked for help cleaning up after the {incidentType} about {timeAgo}. I'm calling to see if you still need help, or if someone has already helped you clean up.
+export const Scripts: { [$Values<typeof CallType>]: string } = Object.freeze({
+  [CallType.INBOUND]: 'phoneDashboard.inbound_script',
+  [CallType.OUTBOUND]: 'phoneDashboard.outbound_script',
+  [CallType.CALLDOWN]: 'phoneDashboard.calldown_script',
 });
 
 const Log = Logger({ name: 'phone.controller' });
