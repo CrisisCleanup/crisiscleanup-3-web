@@ -2,7 +2,8 @@
   <TitledCard
     :loading="!agentMetricsReady"
     :title="$t('phoneDashboard.leaderboard')"
-    class="h-full"
+    class="h-auto leaderboard__card"
+    :style="{ height: 'auto' }"
     :dropdown="dropdownProps"
     @update:dropdown="onDropdownUpdate"
   >

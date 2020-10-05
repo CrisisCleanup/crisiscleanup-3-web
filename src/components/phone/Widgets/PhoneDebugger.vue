@@ -14,8 +14,8 @@
       >
         <base-text variant="bodysm">{{
           visibleState.state.value
-            ? 'phoneDashboard.hide'
-            : 'phoneDashboard.debugger'
+            ? $t('phoneDashboard.hide')
+            : $t('phoneDashboard.debugger')
         }}</base-text>
       </div>
       <div
@@ -46,10 +46,10 @@
         v-for="{ title, value, action } in pages[currentPage]"
         :key="`${title}-${value}-${action}`"
       >
-        <base-text variant="h4"> {{ title }} </base-text>
+        <base-text variant="h4"> {{ $t(title) }} </base-text>
         <base-text variant="bodysm"> {{ value }} </base-text>
         <base-button variant="outline" v-if="action" :action="action.method">{{
-          action.label
+          $t(action.label)
         }}</base-button>
       </div>
     </div>
@@ -62,8 +62,8 @@
           :font-size="14"
           :width="85"
           :labels="{
-            checked: 'phoneDashboard.polling',
-            unchecked: 'phoneDashboard.disabled',
+            checked: $t('phoneDashboard.polling'),
+            unchecked: $t('phoneDashboard.disabled'),
           }"
           @input="toggleServeState"
         />
@@ -182,10 +182,17 @@ export default {
             }))
           : [],
       ),
-      state: contactStateInfo.value.map(([k, v]) => ({
-        title: k,
-        value: v,
-      })),
+      state: contactStateInfo.value
+        .map(([k, v]) => ({
+          title: k,
+          value: v,
+        }))
+        .concat([
+          {
+            title: 'Recent Worksite',
+            value: _.get(currentContact, 'value.mostRecentWorksite', 'None'),
+          },
+        ]),
       outbound: [
         {
           title: 'phoneDashboard.serving_outbound',

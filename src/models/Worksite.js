@@ -33,6 +33,7 @@ export default class Worksite extends CCUModel {
       phone1: this.attr(null),
       phone2: this.attr(null),
       email: this.attr(null),
+      updated_at: this.attr(null),
     };
   }
 
