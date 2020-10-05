@@ -79,10 +79,16 @@ export default {
     };
   },
   mounted() {
-    this.cards.map((c) => {
-      const svgRef = this.$refs[`icon-${c.key}`][0].$el.firstChild;
-      svgRef.firstChild.style.fill = theme.extend.colors.primary.dark;
-      return svgRef;
+    this.$nextTick(() => {
+      this.cards.map((c) => {
+        const compRef = this.$refs[`icon-${c.key}`];
+        if (compRef) {
+          const svgRef = compRef[0].$el.firstChild;
+          svgRef.firstChild.style.fill = theme.extend.colors.primary.dark;
+          return svgRef;
+        }
+        return null;
+      });
     });
   },
   methods: {
