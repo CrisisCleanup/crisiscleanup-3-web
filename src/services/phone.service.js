@@ -189,7 +189,9 @@ export default class PhoneService {
     const currentUser = User.find(this.store.getters['auth/userId']);
     return new Promise((resolve, reject) => {
       if (!currentUser.mobile) {
-        throw new Error(window.vue.$t('phoneDashboard.please_set_valid_phone_number'));
+        throw new Error(
+          window.vue.$t('phoneDashboard.please_set_valid_phone_number'),
+        );
       }
       this.cf.loginAgent(
         username,

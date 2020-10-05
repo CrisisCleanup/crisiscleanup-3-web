@@ -42,10 +42,14 @@ export default class UserLocationsFilter extends Filter {
       .forEach(([key]) => {
         labels[key] = `Location: ${key}`;
         if (key === 'organization_primary_location') {
-          labels[key] = window.vue.$t('worksiteFilters.in_primary_response_area');
+          labels[key] = window.vue.$t(
+            'worksiteFilters.in_primary_response_area',
+          );
         }
         if (key === 'organization_secondary_location') {
-          labels[key] = window.vue.$t('worksiteFilters.in_secondary_response_area');
+          labels[key] = window.vue.$t(
+            'worksiteFilters.in_secondary_response_area',
+          );
         }
       });
     return labels;

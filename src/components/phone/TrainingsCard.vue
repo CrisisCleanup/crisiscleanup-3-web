@@ -3,7 +3,11 @@
     <div class="flex flex-row justify-between flex-grow p-3">
       <!--- media/picture --->
       <div class="w-1/6">
-        <img :src="imagePath" :alt="$t('phoneDashboard.video_preview')" class="shadow" />
+        <img
+          :src="imagePath"
+          :alt="$t('phoneDashboard.video_preview')"
+          class="shadow"
+        />
       </div>
       <div class="w-4/6 pl-4">
         <!--- body blurb --->
@@ -12,7 +16,11 @@
         </base-text>
         <div class="flex flex-row justify-start">
           <div class="flex">
-            <ccu-icon type="time" size="sm" :alt="$t('phoneDashboard.clock_icon')" />
+            <ccu-icon
+              type="time"
+              size="sm"
+              :alt="$t('phoneDashboard.clock_icon')"
+            />
             <!--- Date --->
             <base-text
               variant="bodysm"
