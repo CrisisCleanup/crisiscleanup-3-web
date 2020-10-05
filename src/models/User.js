@@ -172,6 +172,11 @@ export default class User extends CCUModel {
            and then update state for current incident with incidentStates.
         */
         let currentUser = User.find(AuthService.getUser().user_claims.id);
+
+        if (!currentUser) {
+          return;
+        }
+
         const states = (currentUser && currentUser.states) || {};
         const currentIncident = states.incident;
         let updatedStates = {
@@ -210,6 +215,9 @@ export default class User extends CCUModel {
       },
       async updateUserPreferences(preferences, reload = false) {
         const currentUser = User.find(AuthService.getUser().user_claims.id);
+        if (!currentUser) {
+          return;
+        }
         const newPreferences = {
           ...currentUser.preferences,
           ...preferences,
