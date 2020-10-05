@@ -105,7 +105,12 @@ export default {
   setup(props, context) {
     const { getters, state, actions } = useController();
 
-    const { currentContact, callType, callerName } = useContact();
+    const {
+      currentContact,
+      callType,
+      callerName,
+      activeIncident,
+    } = useContact();
 
     const { storage } = useLocalStorage('ccu-ivr-hide-script', false);
     const renderPopup = computed(() => storage.value === false);
@@ -158,7 +163,13 @@ export default {
       renderPopup,
       scriptPopup,
       callType,
-      ...useScripts({ callType }),
+      ...useScripts({
+        callType,
+        incident: activeIncident,
+        recentWorksite: currentContact.value
+          ? currentContact.value.mostRecentWorksite
+          : null,
+      }),
       async savedWorksite(worksite) {
         context.root.$log.debug('worksite saved:', worksite);
         await actions.addCase({

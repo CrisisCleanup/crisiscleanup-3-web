@@ -50,7 +50,7 @@
           >{{
             $t('phoneDashboard.incoming_call_for_incident', {
               incidentName: activeIncident && activeIncident.friendlyName,
-            }) 
+            })
           }}
         </base-text>
       </div>
@@ -59,10 +59,20 @@
     <div class="modal--body">
       <div class="modal-callinfo">
         <div class="caller">
-          <ccu-icon with-text size="md" :type="enums.icons.phone_user" :alt="$t('phoneDashboard.caller_name')">
+          <ccu-icon
+            with-text
+            size="md"
+            :type="enums.icons.phone_user"
+            :alt="$t('phoneDashboard.caller_name')"
+          >
             <base-text variant="h1" :weight="400">{{ callerName }}</base-text>
           </ccu-icon>
-          <ccu-icon with-text size="md" :type="enums.icons.earth_globe" :alt="$t('phoneDashboard.locale')">
+          <ccu-icon
+            with-text
+            size="md"
+            :type="enums.icons.earth_globe"
+            :alt="$t('phoneDashboard.locale')"
+          >
             <base-text variant="h1" :weight="400">{{
               callState.locale.value
                 ? callState.locale.value.name_t.split(' ')[0]
@@ -80,14 +90,19 @@
           <tag class="tag">
             <base-text variant="bodysm">
               {{ callerHistory.total }}
-              {{ `${$t(' phoneDashboard.calls ')} | ${$t(callerHistory.recent)}` }}
+              {{
+                `${$t(' phoneDashboard.calls ')} | ${$t(callerHistory.recent)}`
+              }}
             </base-text>
           </tag>
         </div>
       </div>
       <div class="modal-divider">
         <base-text variant="h3" :weight="400">
-          <span> {{ caseCards.length }}: {{ $t('phoneDashboard.cases_assigned_to_number') }} </span>
+          <span>
+            {{ caseCards.length }}:
+            {{ $t('phoneDashboard.cases_assigned_to_number') }}
+          </span>
         </base-text>
       </div>
       <div class="modal-cases">
@@ -139,7 +154,6 @@ import { ContactActions, ContactStates } from '@/models/phone/Contact';
 import PhoneInbound from '@/models/PhoneInbound';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import useAgent from '@/use/phone/useAgent';
-import { computed } from '@vue/composition-api';
 
 export default {
   name: 'IncomingPopup',
@@ -150,6 +164,7 @@ export default {
       callType,
       callState,
       currentContact,
+      activeIncident,
       ...contact
     } = useContact();
     const { updateContact } = useActions('phone.streams', ['updateContact']);
@@ -157,12 +172,6 @@ export default {
     const { agent } = useAgent();
     const dismissState = useToggle();
     const { currentIncident } = useIncident();
-    const activeIncident = computed(() => {
-      if (currentContact.value && currentContact.value.incident) {
-        return currentContact.value.incident;
-      }
-      return currentIncident.value;
-    });
 
     const skipCall = async () => {
       if (callState.inbound.value && currentContact.value.isInbound) {
@@ -179,15 +188,21 @@ export default {
     };
 
     return {
-      currentIncident,
       activeIncident,
+      currentIncident,
       currentContact,
       callState,
       ...contact,
       ...useCaseCards({ cases: callerCases, addNew: false }),
       ...useUser(),
       ...useEnums(),
-      ...useScripts({ callType }),
+      ...useScripts({
+        callType,
+        incident: activeIncident,
+        recentWorksite: currentContact.value
+          ? currentContact.value.recentWorksite
+          : null,
+      }),
       callType,
       dismissState,
       skipCall,
