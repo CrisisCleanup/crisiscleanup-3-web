@@ -1,6 +1,5 @@
 const webpackConfig = require('@vue/cli-service/webpack.config');
 const path = require('path');
-
 module.exports = {
   stories: ['../src/**/*.stories.@(js|mdx)'],
   addons: [
@@ -13,6 +12,14 @@ module.exports = {
     '@storybook/addon-docs',
     '@storybook/addon-controls',
   ],
+  parameters: {
+    backgrounds: [
+      { name: 'CrisisCleanup Gray', value: '#f9f9f9', default: true },
+      { name: 'White', value: '#fff' },
+      { name: 'Dark', value: '#4a4a4a' },
+    ],
+  },
+  decorators: [require('@storybook/addon-a11y').withA11y],
   webpackFinal: (config) => {
     return {
       ...config,
