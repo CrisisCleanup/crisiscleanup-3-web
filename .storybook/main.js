@@ -13,6 +13,7 @@ module.exports = {
     '@storybook/addon-controls',
   ],
   parameters: {
+    layout: 'centered',
     backgrounds: [
       { name: 'CrisisCleanup Gray', value: '#f9f9f9', default: true },
       { name: 'White', value: '#fff' },
