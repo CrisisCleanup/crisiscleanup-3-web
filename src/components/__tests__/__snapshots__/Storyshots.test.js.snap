@@ -1433,7 +1433,45 @@ exports[`Storyshots Basics/BaseInput Disabled 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics/BaseInput Disabled Break Glass 1`] = `<!---->`;
+exports[`Storyshots Basics/BaseInput Disabled Break Glass 1`] = `
+<div
+  class="flex justify-start relative items-center"
+>
+  <!---->
+   
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large"
+    data-cy=""
+    disabled="disabled"
+    pattern=".*"
+    placeholder=""
+    rows="0"
+    type="search"
+  />
+   
+  <div
+    class="icon-container flex items-center justify-center large"
+  >
+    <div
+      class="js-break-glass flex items-center base-icon js-actions-edit  "
+      data-cy="js-break-glass"
+    >
+      <img
+        alt="actions.edit"
+        class="ccu-icon cursor-pointer small"
+        src="IMAGE_MOCK"
+      />
+       
+    </div>
+  </div>
+   
+  <!---->
+   
+  <!---->
+   
+</div>
+`;
 
 exports[`Storyshots Basics/BaseInput Simple 1`] = `
 <div
@@ -1460,7 +1498,43 @@ exports[`Storyshots Basics/BaseInput Simple 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics/BaseInput With Icon 1`] = `<!---->`;
+exports[`Storyshots Basics/BaseInput With Icon 1`] = `
+<div
+  class="flex justify-start relative items-center"
+>
+  <!---->
+   
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large has-icon"
+    data-cy=""
+    pattern=".*"
+    placeholder=""
+    rows="0"
+    type="search"
+  />
+   
+  <!---->
+   
+  <div
+    class="icon-container flex items-center justify-center large"
+  >
+    <div
+      class="flex items-center base-icon js-actions-help-alt  "
+    >
+      <img
+        alt="actions.help_alt"
+        class="ccu-icon cursor-pointer small"
+        src="IMAGE_MOCK"
+      />
+       
+    </div>
+  </div>
+   
+  <!---->
+   
+</div>
+`;
 
 exports[`Storyshots Basics/BaseInput With Placeholder 1`] = `
 <div
@@ -1546,7 +1620,44 @@ exports[`Storyshots Basics/BaseInput With Sizes 1`] = `
 </div>
 `;
 
-exports[`Storyshots Basics/BaseInput With Tooltip 1`] = `<!---->`;
+exports[`Storyshots Basics/BaseInput With Tooltip 1`] = `
+<div
+  class="flex justify-start relative items-center"
+>
+  <!---->
+   
+  <input
+    autocomplete="off"
+    class="flex-grow p-1 text-base large has-tooltip"
+    data-cy=""
+    pattern=".*"
+    placeholder=""
+    rows="0"
+    type="search"
+  />
+   
+  <!---->
+   
+  <div
+    class="icon-container flex items-center justify-center large has-tooltip"
+    data-original-title="null"
+  >
+    <div
+      class="flex items-center base-icon js-actions-help-alt  "
+    >
+      <img
+        alt="actions.help_alt"
+        class="ccu-icon cursor-pointer small"
+        src="IMAGE_MOCK"
+      />
+       
+    </div>
+  </div>
+   
+  <!---->
+   
+</div>
+`;
 
 exports[`Storyshots Basics/BaseLink As Anchor 1`] = `
 <a
@@ -1624,9 +1735,270 @@ exports[`Storyshots Basics/BaseRadio With Basics 1`] = `
 </label>
 `;
 
-exports[`Storyshots Elements/Accordion With Card 1`] = `<!---->`;
+exports[`Storyshots Elements/Accordion With Card 1`] = `
+<div
+  class="relative"
+>
+  <!---->
+   
+  <div
+    class="bg-white shadow-crisiscleanup-card card h-full"
+  >
+    <div
+      class="header"
+      slot="header"
+    >
+      <div
+        class="header--inner"
+      >
+        <div
+          class="left py-4 px-6"
+        >
+          <p
+            class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+            style="font-weight: 700;"
+          >
+            
+          [
+  "Example Accordion"
+]
+        
+          </p>
+        </div>
+         
+        <div
+          class="right"
+        >
+          <!---->
+        </div>
+      </div>
+    </div>
+     
+    <div
+      class="body"
+    >
+      <div
+        class="body--inner h-full"
+      >
+         
+        <div
+          class="m-16"
+        >
+          <div
+            class="accordion"
+          >
+            <div
+              class="accordion__card"
+            >
+              <div
+                class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+                variant="h3"
+              >
+                <svg
+                  alt="actions.show_details"
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                  data-icon="chevron-down"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 448 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    class=""
+                    d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                    fill="currentColor"
+                  />
+                </svg>
+                 
+                <p
+                  class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                >
+                  
+          One
+        
+                </p>
+              </div>
+               
+              <div
+                class="accordion__body"
+              >
+                
+        One
+      
+              </div>
+            </div>
+            <div
+              class="accordion__card"
+            >
+              <div
+                class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title accordion__title--active"
+                variant="h3"
+              >
+                <svg
+                  alt="actions.show_details"
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                  data-icon="chevron-down"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 448 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    class=""
+                    d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                    fill="currentColor"
+                  />
+                </svg>
+                 
+                <p
+                  class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                >
+                  
+          Two
+        
+                </p>
+              </div>
+               
+              <div
+                class="accordion__body--active accordion__body"
+              >
+                
+        Two
+      
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
 
-exports[`Storyshots Elements/Accordion With Components 1`] = `<!---->`;
+exports[`Storyshots Elements/Accordion With Components 1`] = `
+<div
+  class="relative"
+>
+  <!---->
+   
+  <div
+    class="bg-white shadow-crisiscleanup-card card h-full"
+  >
+    <div
+      class="header"
+      slot="header"
+    >
+      <div
+        class="header--inner"
+      >
+        <div
+          class="left py-4 px-6"
+        >
+          <p
+            class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+            style="font-weight: 700;"
+          >
+            
+          [
+  "Example with Components"
+]
+        
+          </p>
+        </div>
+         
+        <div
+          class="right"
+        >
+          <!---->
+        </div>
+      </div>
+    </div>
+     
+    <div
+      class="body"
+    >
+      <div
+        class="body--inner h-full"
+      >
+         
+        <div
+          class="m-16"
+        >
+          <div
+            class="accordion"
+          >
+            <div
+              class="accordion__card"
+            >
+              <p
+                class="bg-blue-500 p-6 text-body font-body text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+              >
+                Custom Title Component
+              </p>
+               
+              <div
+                class="accordion__body--active accordion__body"
+              >
+                <p
+                  class="text-body font-body text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                >
+                  I am a custom component
+                </p>
+              </div>
+            </div>
+            <div
+              class="accordion__card"
+            >
+              <div
+                class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+                variant="h3"
+              >
+                <svg
+                  alt="actions.show_details"
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                  data-icon="chevron-down"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 448 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    class=""
+                    d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                    fill="currentColor"
+                  />
+                </svg>
+                 
+                <p
+                  class="crisiscleanup-dark-400 text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+                >
+                  
+          Two
+        
+                </p>
+              </div>
+               
+              <div
+                class="accordion__body"
+              >
+                
+        Two
+      
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
 
 exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
 <div
@@ -1636,11 +2008,11 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
     class="accordion__card"
   >
     <div
-      class="primary-dark flex items-center base-icon js- with-text  accordion__title accordion__title--active"
+      class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title accordion__title--active"
       variant="h3"
     >
       <svg
-        alt=""
+        alt="actions.show_details"
         aria-hidden="true"
         class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
@@ -1678,11 +2050,11 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
     class="accordion__card"
   >
     <div
-      class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+      class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
       variant="h3"
     >
       <svg
-        alt=""
+        alt="actions.show_details"
         aria-hidden="true"
         class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
@@ -1720,11 +2092,11 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
     class="accordion__card"
   >
     <div
-      class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+      class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
       variant="h3"
     >
       <svg
-        alt=""
+        alt="actions.show_details"
         aria-hidden="true"
         class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
@@ -1762,11 +2134,11 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
     class="accordion__card"
   >
     <div
-      class="primary-dark flex items-center base-icon js- with-text  accordion__title"
+      class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
       variant="h3"
     >
       <svg
-        alt=""
+        alt="actions.show_details"
         aria-hidden="true"
         class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
