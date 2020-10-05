@@ -13,8 +13,8 @@
     <template #news>
       <NewsCard
         class="h-full"
-        v-for="newss in news"
-        :key="newss.date"
+        v-for="(newss, idx) in news"
+        :key="`${newss.date}_${idx}`"
         v-bind="newss"
       />
     </template>

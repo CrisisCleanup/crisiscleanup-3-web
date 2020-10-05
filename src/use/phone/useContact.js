@@ -78,7 +78,7 @@ export default () => {
     }
     return {
       total: 1,
-      recent: 'phoneDashboard.first_call',
+      recent: window.vue.$t('phoneDashboard.first_call'),
     };
   });
 
