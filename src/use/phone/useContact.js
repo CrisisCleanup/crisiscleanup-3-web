@@ -9,6 +9,7 @@ import _ from 'lodash';
 import Contact, { CallType, ContactActions } from '@/models/phone/Contact';
 import { useIntervalFn } from '@vueuse/core';
 import useAgent from '@/use/phone/useAgent';
+import useIncident from '@/use/worksites/useIncident';
 
 export default () => {
   const _agent = useAgent().agent;
@@ -137,7 +138,17 @@ export default () => {
     ...state.worksites.value,
   ]);
 
+  const { currentIncident } = useIncident();
+
+  const activeIncident = computed(() => {
+    if (currentContact.value && currentContact.value.incident) {
+      return currentContact.value.incident;
+    }
+    return currentIncident.value;
+  });
+
   return {
+    activeIncident,
     callPending,
     callConnected,
     currentContact,

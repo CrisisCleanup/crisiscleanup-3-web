@@ -1,6 +1,9 @@
 <template>
   <!-- News 1 -->
-  <div class="h-full flex flex-row flex-grow justify-start p-3 news-card">
+  <div
+    v-if="content"
+    class="h-full flex flex-row flex-grow justify-start p-3 news-card"
+  >
     <!--- media/picture --->
     <div class="card--img w-1/6">
       <img :src="media.path" class="news-img shadow" :alt="media.alt" />

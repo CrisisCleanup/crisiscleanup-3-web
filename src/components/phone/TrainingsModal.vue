@@ -22,7 +22,7 @@
               src="@/assets/call_center_people.png"
               width="100%"
               height="auto"
-              :title="$t('phoneDashboard.call_center_users')"
+              :alt="$t('phoneDashboard.call_center_users')"
             />
           </div>
           <div class="flex-col ml-3 mr-3 mt-5 my-8 items-center w-3/4">
@@ -131,7 +131,9 @@ export default {
         },
         subHeader: {
           text: this.$t('phoneDashboard.watch_these_videos'),
-          secondaryText: this.$t('phoneDashboard.answer_questions_after_videos'),
+          secondaryText: this.$t(
+            'phoneDashboard.answer_questions_after_videos',
+          ),
         },
       };
     },
