@@ -69,6 +69,7 @@ const mocks = {
 const mountWithOptions = () =>
   shallowMount(Dashboard, {
     stubs: {
+      'base-text': true,
       'base-button': true,
       'base-input': true,
       'form-select': true,

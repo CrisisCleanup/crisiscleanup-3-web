@@ -36,6 +36,7 @@ const mountWithOptions = ({ props } = {}) =>
       'base-checkbox': BaseCheckbox,
       'form-select': true,
       'base-button': true,
+      'base-text': true,
     },
     propsData: {
       columns: TestColumns,
