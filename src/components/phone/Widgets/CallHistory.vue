@@ -118,6 +118,7 @@ export default {
           dataIndex: 'incident',
           key: 'incident',
           width: '.4fr',
+          headerClass: 'justify-center',
         },
         {
           title: 'phoneDashboard.phone_number',
