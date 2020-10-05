@@ -5,7 +5,7 @@
         @click.native="() => forceAgentEdit()"
         size="md"
         type="edit"
-        :title="$t('phoneDashboard.edit_user_phone_number')"
+        :alt="$t('phoneDashboard.edit_user_phone_number')"
       />
     </div>
     <div class="profile">

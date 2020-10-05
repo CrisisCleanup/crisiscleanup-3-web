@@ -12,6 +12,7 @@
           fa
           size="sm"
           type="chevron-down"
+          :alt="$t('actions.show_details')"
           :ref="`icon-${card.key}`"
           class="primary-dark"
           :class="[

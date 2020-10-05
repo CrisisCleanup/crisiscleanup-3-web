@@ -11,6 +11,7 @@
           :type="icons.cancel"
           :invert-color="true"
           size="sm"
+          :alt="$t('actions.cancel')"
         />
       </div>
     </div>
