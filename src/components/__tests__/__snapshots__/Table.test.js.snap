@@ -71,17 +71,31 @@ exports[`Table should render correctly and match snapshot 1`] = `
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
-      
-      One
-      
+      <base-text-stub
+        class="text-crisiscleanup-grey-700"
+        regular=""
+        variant="h3"
+      >
+        
+          One
+        
+      </base-text-stub>
+       
       <!---->
     </div>
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
-      
-      Two
-      
+      <base-text-stub
+        class="text-crisiscleanup-grey-700"
+        regular=""
+        variant="h3"
+      >
+        
+          Two
+        
+      </base-text-stub>
+       
       <!---->
     </div>
      
@@ -183,17 +197,31 @@ exports[`Table should render correctly with selection 1`] = `
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
-      
-      One
-      
+      <base-text-stub
+        class="text-crisiscleanup-grey-700"
+        regular=""
+        variant="h3"
+      >
+        
+          One
+        
+      </base-text-stub>
+       
       <!---->
     </div>
     <div
       class="p-2 border-b flex items-center cursor-pointer"
     >
-      
-      Two
-      
+      <base-text-stub
+        class="text-crisiscleanup-grey-700"
+        regular=""
+        variant="h3"
+      >
+        
+          Two
+        
+      </base-text-stub>
+       
       <!---->
     </div>
      

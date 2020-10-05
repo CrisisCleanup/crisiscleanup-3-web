@@ -291,9 +291,16 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.no
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.no
+        
+                </base-text-stub>
+                 
                 <div>
                   <ccu-icon-stub
                     alt="actions.sortable"
@@ -305,17 +312,31 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.work_type
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.work_type
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.name
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.name
+        
+                </base-text-stub>
+                 
                 <div>
                   <ccu-icon-stub
                     alt="actions.sortable"
@@ -327,25 +348,46 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.full_address
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.full_address
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.phone
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.phone
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
                
@@ -908,9 +950,16 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.no
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.no
+        
+                </base-text-stub>
+                 
                 <div>
                   <ccu-icon-stub
                     alt="actions.sortable"
@@ -922,49 +971,91 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.work_type
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.work_type
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.status
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.status
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.org_label
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.org_label
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.last_action
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.last_action
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      dashboard.next_action
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.next_action
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
               <div
                 class="p-2 border-b flex items-center cursor-pointer"
               >
-                
-      
-      
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          
+        
+                </base-text-stub>
+                 
                 <!---->
               </div>
                
