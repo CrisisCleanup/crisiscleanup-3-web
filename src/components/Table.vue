@@ -28,7 +28,16 @@
           }
         "
       >
-        {{ column.title }}
+        <slot :name="`${column.key}-title`" :column="column">
+          <base-text
+            class="text-crisiscleanup-grey-700"
+            :class="column.titleClass && column.titleClass"
+            variant="h3"
+            regular
+          >
+            {{ $t(column.title) }}
+          </base-text>
+        </slot>
         <div v-if="column.sortable">
           <ccu-icon
             v-if="
