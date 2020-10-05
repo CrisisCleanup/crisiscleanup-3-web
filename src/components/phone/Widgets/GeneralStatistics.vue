@@ -89,11 +89,11 @@ export default {
       label: 'shortName',
       itemKey: 'id',
       value: 0,
-      placeholder: context.root.$t('phoneDashboard.all_remaining_callbacks'),
+      placeholder: context.root.$t('phoneDashboard.all'),
       options: [
         {
           id: 0,
-          shortName: context.root.$t('phoneDashboard.all_remaining_callbacks'),
+          shortName: context.root.$t('phoneDashboard.all'),
         },
       ],
     });
