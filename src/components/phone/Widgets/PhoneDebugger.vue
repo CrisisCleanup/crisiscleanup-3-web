@@ -13,7 +13,9 @@
         ]"
       >
         <base-text variant="bodysm">{{
-          visibleState.state.value ? 'phoneDashboard.hide' : 'phoneDashboard.debugger'
+          visibleState.state.value
+            ? 'phoneDashboard.hide'
+            : 'phoneDashboard.debugger'
         }}</base-text>
       </div>
       <div

@@ -1,5 +1,5 @@
 <template>
-  <TitledCard  :title="$t('phoneDashboard.active_calls')">
+  <TitledCard :title="$t('phoneDashboard.active_calls')">
     <div class="card-container">
       <Table :columns="contactCols" :data="contactMetrics" />
     </div>

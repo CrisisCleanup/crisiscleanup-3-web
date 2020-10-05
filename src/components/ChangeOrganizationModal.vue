@@ -23,14 +23,24 @@
             @click="page = 'new'"
           >
             {{ $t('userTransfer.move_new_organization') }}
-            <ccu-icon size="lg" type="right" class="mt-3" :alt="$t('userTransfer.move_new_organization')" />
+            <ccu-icon
+              size="lg"
+              type="right"
+              class="mt-3"
+              :alt="$t('userTransfer.move_new_organization')"
+            />
           </div>
           <div
             class="h-40 w-40 mx-4 border p-2 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-crisiscleanup-light-grey"
             @click="page = 'existing'"
           >
             {{ $t('userTransfer.move_existing_organization') }}
-            <ccu-icon size="lg" type="right" class="mt-3" :alt="$t('userTransfer.move_existing_organization')" />
+            <ccu-icon
+              size="lg"
+              type="right"
+              class="mt-3"
+              :alt="$t('userTransfer.move_existing_organization')"
+            />
           </div>
         </div>
       </div>
