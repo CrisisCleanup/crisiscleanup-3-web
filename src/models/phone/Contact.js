@@ -4,11 +4,12 @@
  * Phone Contact model.
  */
 
-import { Model } from '@vuex-orm/core';
+import { Fields, Model } from '@vuex-orm/core';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import type {
   ConnectionState,
   ConnectionType,
+  ContactAction,
   ContactAttribute,
   ContactAttributesType,
   ContactType,
@@ -97,7 +98,9 @@ export const ContactAttributes = Object.freeze({
   OUTBOUND_TYPE: 'OUTBOUND_TYPE',
 });
 
-export const ContactConnectionMap = Object.freeze({
+export const ContactConnectionMap: {
+  [ContactAction]: ConnectionState,
+} = Object.freeze({
   [ContactActions.PENDING]: ConnectionStates.AGENT_CALLING,
   [ContactActions.CONNECTING]: ConnectionStates.PENDING_CALL,
   [ContactActions.CONNECTED]: ConnectionStates.BUSY,
@@ -113,11 +116,11 @@ export const CallType = Object.freeze({
 const Log = Logger({ name: 'phone.contact' });
 
 export default class Contact extends Model {
-  static entity = 'phone/contact';
+  static entity: string = 'phone/contact';
 
-  static primaryKey = 'contactId';
+  static primaryKey: string = 'contactId';
 
-  static fields() {
+  static fields(): typeof Fields {
     return ({
       contactId: this.string(),
       agentId: this.string(),
@@ -141,6 +144,11 @@ export default class Contact extends Model {
       inbound: null,
       outbound: null,
     };
+  }
+
+  get worksites(): typeof Worksite[] {
+    const { worksites } = Contact.store().state.entities['phone/contact'];
+    return worksites;
   }
 
   get outbound(): typeof PhoneOutbound {
@@ -192,6 +200,10 @@ export default class Contact extends Model {
     return Object.keys(this.contactAttributes).includes(
       ContactAttributes.WORKSITES,
     );
+  }
+
+  get mostRecentWorksite(): typeof Worksite | null {
+    return _.maxBy(this.worksites, (wk) => Date.parse(wk.updated_at));
   }
 
   static syncAttributes(contactId: string): void {
