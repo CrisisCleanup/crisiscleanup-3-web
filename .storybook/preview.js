@@ -13,6 +13,7 @@ import Modal from '@/components/Modal';
 import Spinner from '@/components/Spinner';
 import Tag from '@/components/Tag';
 import VueCompositionApi from '@vue/composition-api';
+import VueI18n from 'vue-i18n';
 import {
   getColorForWorkType,
   getStatusName,
@@ -30,7 +31,6 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VueTagsInput from '@johmun/vue-tags-input';
 import { withA11y } from '@storybook/addon-a11y';
 import VueResize from 'vue-resize';
-import { addDecorator, addParameters, configure } from '@storybook/vue';
 // Import your global components.
 import axios from 'axios';
 import moment from 'moment';
@@ -42,7 +42,6 @@ import VTooltip from 'v-tooltip';
 import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 import VueAxios from 'vue-axios';
-import VueI18n from 'vue-i18n';
 import Popover from 'vue-js-popover';
 import * as ModalDialogs from 'vue-modal-dialogs';
 import vSelect from 'vue-select';
@@ -109,25 +108,23 @@ Vue.filter('secondsToHm', secondsToHm);
 // Install Vue plugins.
 Vue.use(Vuex);
 
-const i18n = new VueI18n({
-  locale: 'en-US',
-  messages: {},
-});
+const LangMockMixin = {
+  created() {
+    this.$t = (...args) => args;
+  },
+};
+Vue.mixin(LangMockMixin);
 
-// Decorators
-addDecorator(withA11y);
-addDecorator(() => ({
-  template: '<story/>',
-  i18n,
-}));
+// Default Decorators
+export const decorators = [withA11y];
 
-// Global Params
-addParameters({
-  backgrounds: [
-    { name: 'CrisisCleanup Gray', value: '#f9f9f9', default: true },
-    { name: 'White', value: '#fff' },
-    { name: 'Dark', value: '#4a4a4a' },
-  ],
-});
-
-configure(require.context('../src', true, /\.stories\.js$/), module);
+// Global Default Params
+export const parameters = {
+  backgrounds: {
+    values: [
+      { name: 'CrisisCleanup Gray', value: '#f9f9f9', default: true },
+      { name: 'White', value: '#fff' },
+      { name: 'Dark', value: '#4a4a4a' },
+    ],
+  },
+};
