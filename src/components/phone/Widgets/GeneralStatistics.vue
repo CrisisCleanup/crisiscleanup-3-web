@@ -23,7 +23,7 @@
               v-if="isTotalWaiting(k)"
               type="phone-plus"
               size="xl"
-              :title="$t('phoneDashboard.total_people_waiting')"
+              :alt="$t('phoneDashboard.total_people_waiting')"
             >
               <base-text
                 variant="body"

@@ -32,7 +32,7 @@
                 @click.native="() => conferenceCall(r)"
                 size="md"
                 :type="icons.call"
-                :title="$t('phoneDashboard.conference_call')"
+                :alt="$t('phoneDashboard.conference_call')"
               />
             </div>
           </div>

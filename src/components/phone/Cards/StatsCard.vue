@@ -18,7 +18,7 @@
               v-if="title.includes('Total')"
               :type="enums.icons.phone_plus"
               size="xl"
-              :title="$t('phoneDashboard.my_statistics')"
+              :alt="$t('phoneDashboard.my_statistics')"
             >
               <base-text variant="body" :weight="600" class="align-middle">{{
                 $t(title)
