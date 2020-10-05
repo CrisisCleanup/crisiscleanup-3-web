@@ -106,33 +106,26 @@
               >{{ teamsCount }}</span
             >
           </div>
+          <div
+            class="p-3 px-4 border-b cursor-pointer"
+            :class="{
+              'border-l-4 border-l-black': currentSection === 'locations',
+            }"
+            @click="currentSection = 'locations'"
+          >
+            {{ $t('~~Locations') }}
+            <span
+              v-if="locationsCount > 0"
+              class="rounded-full px-1 bg-black text-white text-xs"
+              >{{ locationsCount }}</span
+            >
+          </div>
         </div>
         <div
           class="w-3/4 ml-4 mt-2 flex-grow"
           style="height: 450px; overflow: auto;"
         >
           <div v-if="currentSection === 'general'" class="flex flex-col">
-            <div class="claim-status mb-2">
-              <div class="my-1 text-base">
-                {{ $t('worksiteFilters.location') }}
-              </div>
-              <base-checkbox
-                v-model="
-                  filters.locations.data['organization_primary_location']
-                "
-                class="block my-1"
-              >
-                {{ $t('~~Within My Organization Primary Response Area') }}
-              </base-checkbox>
-              <base-checkbox
-                v-model="
-                  filters.locations.data['organization_secondary_location']
-                "
-                class="block my-1"
-              >
-                {{ $t('~~Within My Organization Secondary Response Area') }}
-              </base-checkbox>
-            </div>
             <div class="claim-status mb-2">
               <div class="my-1 text-base">
                 {{ $t('worksiteFilters.team') }}
@@ -351,6 +344,51 @@
               </base-checkbox>
             </div>
           </div>
+          <div v-if="currentSection === 'locations'" class="flex flex-col">
+            <div class="mb-2">
+              <div class="claim-status mb-2" v-if="filters.locations">
+                <div class="my-1 text-base">
+                  {{ $t('~~Response Area') }}
+                </div>
+                <base-checkbox
+                  v-model="
+                    filters.locations.data['organization_primary_location']
+                  "
+                  class="block my-1"
+                >
+                  {{ $t('~~Within My Organization Primary Response Area') }}
+                </base-checkbox>
+                <base-checkbox
+                  v-model="
+                    filters.locations.data['organization_secondary_location']
+                  "
+                  class="block my-1"
+                >
+                  {{ $t('~~Within My Organization Secondary Response Area') }}
+                </base-checkbox>
+              </div>
+              <div class="mb-2">
+                <div class="my-1 text-base">
+                  {{ $t('~~My Locations') }}
+                </div>
+                <div v-for="location in locations" :key="`${location.id}`">
+                  <base-checkbox
+                    class="block my-1"
+                    :value="filters.locations.data[location.id]"
+                    @input="
+                      (value) => {
+                        filters.locations.data[location.id] = value;
+                        filters.locations.data = {
+                          ...filters.locations.data,
+                        };
+                      }
+                    "
+                    >{{ location.name }}
+                  </base-checkbox>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -408,6 +446,12 @@ export default {
       type: Object,
       default: () => {
         return {};
+      },
+    },
+    locations: {
+      type: Array,
+      default: () => {
+        return [];
       },
     },
     show: {

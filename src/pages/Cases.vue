@@ -373,6 +373,7 @@
                 :show="showingFilters"
                 :current-filters="filters"
                 :incident="currentIncident"
+                :locations="organizationLocations"
                 @closedFilters="showingFilters = false"
                 @updatedFilters="onUpdatedFilters"
               />

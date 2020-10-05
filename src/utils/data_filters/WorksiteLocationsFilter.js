@@ -11,6 +11,18 @@ export default class UserLocationsFilter extends Filter {
     if (this.data.organization_secondary_location) {
       packed.organization_secondary_location = currentUser.organization.id;
     }
+    const locationEntries = Object.entries(this.data).filter(([key, value]) => {
+      return (
+        Boolean(value) &&
+        ![
+          'organization_primary_location',
+          'organization_secondary_location',
+        ].includes(key)
+      );
+    });
+    if (locationEntries.length) {
+      packed.locations = locationEntries.map(([id]) => id).join(',');
+    }
     return packed;
   }
 
@@ -28,7 +40,7 @@ export default class UserLocationsFilter extends Filter {
         return Boolean(value);
       })
       .forEach(([key]) => {
-        labels[key] = key;
+        labels[key] = `Location: ${key}`;
         if (key === 'organization_primary_location') {
           labels[key] = window.vue.$t(
             '~~Within My Organization Primary Response Area',
