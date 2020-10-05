@@ -57,9 +57,8 @@ import {
 } from '@/mixins';
 import TabbedCard from '@/components/cards/TabbedCard.vue';
 import Accordion from '@/components/accordion/Accordion.vue';
-import _ from 'lodash';
 import { Scripts } from '@/store/modules/phone/controller';
-import { CallType } from '@/models/phone/Contact';
+import Contact, { CallType } from '@/models/phone/Contact';
 import BoardStatus from './Status.vue';
 import CallInfo from './CallInfo.vue';
 
@@ -80,9 +79,12 @@ export default {
   },
   methods: {
     renderScript(key) {
-      return _.template(this.scripts[key])({
+      return this.$t(this.scripts[key], {
         name: this.currentUser.first_name,
         incidentType: this.currentIncident.incident_type,
+        timeAgo: this.recentWorksite
+          ? this.$moment(this.recentWorksite.updated_at).fromNow()
+          : '',
       });
     },
     updatePopupConfig(value) {
@@ -90,6 +92,13 @@ export default {
     },
   },
   computed: {
+    recentWorksite() {
+      const contact = Contact.query().first();
+      if (contact) {
+        return contact.mostRecentWorksite;
+      }
+      return null;
+    },
     showPopup() {
       return this.getLocalStorage('ccu-ivr-hide-script');
     },
