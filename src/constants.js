@@ -78,6 +78,7 @@ export const ICONS = Object.fromEntries(
 export const ICON_SIZES = [
   'xxs',
   'xs',
+  'tiny',
   'sm',
   'small',
   'md',

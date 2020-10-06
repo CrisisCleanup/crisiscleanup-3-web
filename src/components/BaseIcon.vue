@@ -52,6 +52,7 @@ export default {
         large: ['lg', 'large'].includes(this.size),
         medium: ['md', 'medium'].includes(this.size),
         small: ['sm', 'small'].includes(this.size),
+        tiny: this.size === 'tiny',
         xs: this.size === 'xs',
         xxs: this.size === 'xxs',
         xl: this.size === 'xl',
@@ -84,6 +85,10 @@ export default {
 .ccu-icon.small {
   height: 16px;
   width: 16px;
+}
+.ccu-icon.tiny {
+  height: 13px;
+  width: 13px;
 }
 .ccu-icon.xs {
   height: 10px;
