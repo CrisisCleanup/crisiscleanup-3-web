@@ -1,6 +1,10 @@
 module.exports = {
   collectCoverage: true,
-  collectCoverageFrom: ['src/**/*.{js,vue}', '!**/node_modules/**'],
+  collectCoverageFrom: [
+    'src/**/*.{js,vue}',
+    '!**/node_modules/**',
+    '!src/**/__stories__/**',
+  ],
   modulePathIgnorePatterns: ['<rootDir>/tests'], // cypress tests
   moduleFileExtensions: ['js', 'json', 'vue', 'node'],
   moduleNameMapper: {

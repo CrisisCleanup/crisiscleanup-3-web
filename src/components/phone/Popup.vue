@@ -1,5 +1,5 @@
 <template>
-  <modal v-show="!dismissState.state.value" modal-classes="max-w-lg">
+  <modal v-show="!dismissState.state.value" modal-classes="max-w-xl">
     <template #header>
       <div
         class="modal-script"
@@ -25,7 +25,7 @@
           class="script__footer flex justify-center items-center pt-3 px-2 w-full h-full"
         >
           <template v-for="item in currentScriptHeader[2]">
-            <div :key="item.title" class="flex items-center px-2">
+            <div :key="item.title" class="flex items-center px-2 flex-1">
               <base-text variant="h1" :style="{ color: item.accent }" bold>
                 {{ $t(item.title) }}
               </base-text>
