@@ -47,6 +47,7 @@ export const ICON_MAP = {
   map: require('@/assets/icons/notactive.svg'),
   layers: require('@/assets/icons/layers.svg'),
   info: require('@/assets/icons/inform.svg'),
+  information: require('@/assets/icons/information.svg'),
   trash: require('@/assets/icons/delete.svg'),
   organization: require('@/assets/icons/my-organization.svg'),
   admin: require('@/assets/icons/admin.svg'),
