@@ -11,7 +11,7 @@
               {{ $t(currentScriptHeader[0]) }}
             </base-text>
             <base-text variant="h1" bold>
-              {{ $t(' ' + currentScriptHeader[1]) }}
+              {{ ' ' + $t(currentScriptHeader[1]) }}
             </base-text>
           </div>
           <div class="script__body flex">
@@ -91,7 +91,7 @@
             <base-text variant="bodysm">
               {{ callerHistory.total }}
               {{
-                `${$t(' phoneDashboard.calls ')} | ${$t(callerHistory.recent)}`
+                ` ${$t('phoneDashboard.calls')} | ${$t(callerHistory.recent)}`
               }}
             </base-text>
           </tag>
