@@ -5,12 +5,12 @@
     class="h-full flex flex-row flex-grow justify-start p-3 news-card"
   >
     <!--- media/picture --->
-    <div class="card--img w-1/6">
-      <img :src="media.path" class="news-img shadow" :alt="media.alt" />
+    <div class="card--img">
+      <img :src="media.path" class="news-img shadow-md" :alt="media.alt" />
     </div>
     <div class="card--body">
       <!--- body blurb --->
-      <div :v-html="content" />
+      <base-text v-html="content" variant="bodysm" />
       <div class="flex flex-row justify-between">
         <div class="flex-col">
           <!--- Date --->
@@ -51,7 +51,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .news-card {
   align-items: center;
   position: relative;
@@ -67,6 +67,7 @@ export default {
   }
   .card {
     &--img {
+      min-width: 128px;
       img {
         object-fit: cover;
         width: 128px;
