@@ -33,13 +33,28 @@
               >
             </ccu-icon>
 
-            <base-text
-              v-if="!isTotalWaiting(k)"
-              variant="bodysm"
-              :weight="500"
-              class="align-middle"
-              >{{ $t(k) }}</base-text
-            >
+            <div v-if="!isTotalWaiting(k)" class="inline-flex metric-row">
+              <base-text variant="bodysm" :weight="500" class="align-middle">{{
+                $t(k)
+              }}</base-text>
+              <template v-if="getMoreInfo(k)">
+                <v-popover trigger="hover">
+                  <ccu-icon
+                    class="tooltip-target metric-info pl-1"
+                    type="information"
+                    alt="~~More Info"
+                    size="tiny"
+                  />
+                  <template #popover>
+                    <div class="tooltip-content max-w-lg">
+                      <base-text variant="bodysm">
+                        {{ $t(getMoreInfo(k)) }}
+                      </base-text>
+                    </div>
+                  </template>
+                </v-popover>
+              </template>
+            </div>
           </div>
           <base-text :key="`${k}_${category}_${genMetrics[k]}`" variant="h1">{{
             genMetrics[k]
@@ -166,6 +181,10 @@ export default {
           category.value = locales.value.find((l) => l.id === value).subtag;
         }
       },
+      getMoreInfo(name) {
+        const metricKey = _.findKey(Metrics, ['1', name]);
+        return Metrics[metricKey].length >= 3 ? Metrics[metricKey][2] : null;
+      },
     };
   },
 };
@@ -179,6 +198,12 @@ export default {
     }
   }
   &--body {
+    .metric-info {
+      filter: brightness(0.7);
+    }
+    .metric-row {
+      align-items: last baseline;
+    }
     hr {
       padding: 0;
       margin: 0;
