@@ -94,7 +94,10 @@ module.exports = {
       useBasicTPool(vueRule, 'vue-loader');
     }
     // config.plugin('lodash').use(LodashPlugin);
-    if (['staging', 'production'].includes(process.env.VUE_APP_STAGE)) {
+    if (
+      ['staging', 'production'].includes(process.env.VUE_APP_STAGE) &&
+      !process.env.VUE_APP_IS_LOCAL
+    ) {
       config.plugin('sentry').use(SentryWebpackPlugin, [
         {
           include: '.',
