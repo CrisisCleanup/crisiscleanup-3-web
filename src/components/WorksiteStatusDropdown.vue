@@ -1,6 +1,6 @@
 <template>
   <v-popover
-    popover-class="status-dropdown"
+    popover-class="popover menu"
     placement="bottom-end"
     class="text-xs"
   >
@@ -17,37 +17,38 @@
       ></div>
       <div v-if="!hideName">{{ currentWorkType.status | getStatusName }}</div>
       <font-awesome-icon
-        class=""
+        class="tooltip-target"
         :class="size === 'sm' ? '' : 'mx-1'"
         size="sm"
         icon="chevron-down"
       />
     </div>
-    <div
-      slot="popover"
-      class="bg-white border outline-none h-84 w-56 overflow-auto"
-      @keyup="nextItem"
-    >
+    <template #popover>
       <div
-        v-for="status in displayStatuses"
-        :key="`${status.id}`"
-        :value="status.status"
-        class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey"
-        :class="{ selected: currentItem === status.selectionKey }"
+        class="bg-white border outline-none h-84 w-56 overflow-auto tooltip-content"
+        @keyup="nextItem"
       >
         <div
-          class="badge-holder text-xs"
-          @click="
-            () => {
-              $emit('input', status.status);
-            }
-          "
+          v-for="status in displayStatuses"
+          :key="`${status.id}`"
+          :value="status.status"
+          class="cursor-pointer py-1 hover:bg-crisiscleanup-light-grey"
+          :class="{ selected: currentItem === status.selectionKey }"
         >
-          <badge class="mx-1" :color="getColorForStatus(status.status)" />
-          <div>{{ status.status_name_t }}</div>
+          <div
+            class="badge-holder text-xs"
+            @click="
+              () => {
+                $emit('input', status.status);
+              }
+            "
+          >
+            <badge class="mx-1" :color="getColorForStatus(status.status)" />
+            <div>{{ status.status_name_t }}</div>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
   </v-popover>
 </template>
 
@@ -155,8 +156,6 @@ export default {
 
 <style>
 .status-dropdown {
-  @apply outline-none;
-  z-index: 10000000;
 }
 </style>
 

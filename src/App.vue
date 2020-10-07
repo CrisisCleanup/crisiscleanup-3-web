@@ -336,6 +336,11 @@ body {
         border-color: $color-dark;
       }
     }
+    &.menu {
+      .popover-inner {
+        padding: 0;
+      }
+    }
   }
 
   &[aria-hidden='true'] {
