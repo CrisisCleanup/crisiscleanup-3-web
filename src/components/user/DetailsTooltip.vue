@@ -1,25 +1,17 @@
 <template>
-  <div class="relative">
-    <base-text
-      v-popover.bottom="{ name: userItem.full_name + '_popover' }"
-      :style="[nameStyle]"
-      class="details-name"
-      variant="body"
-    >
+  <v-popover
+    :popover-class="['popover', dark && 'dark']"
+    trigger="hover click"
+    popover-inner-class="popover-inner max-w-sm"
+  >
+    <base-text :style="[nameStyle]" class="details-name" variant="body">
       <span :class="`${nameClass} tooltip-target cursor-pointer`">{{
         userItem.full_name
       }}</span>
       <slot
     /></base-text>
-    <div class="user-popover--container absolute">
-      <popover
-        :name="userItem.full_name + '_popover'"
-        popover-class="user-popover"
-        ref="popover"
-        :width="300"
-        :pointer="false"
-        :style="{ left: 0, top: 0 }"
-      >
+    <template #popover>
+      <div class="tooltip-content">
         <div class="text-base">{{ userItem.full_name }}</div>
         <div class="text-xs">{{ userItem.organization.name }}</div>
         <div class="mt-2">
@@ -34,9 +26,9 @@
             userItem.mobile
           }}</a>
         </div>
-      </popover>
-    </div>
-  </div>
+      </div>
+    </template>
+  </v-popover>
 </template>
 
 <script>
@@ -50,6 +42,7 @@ export default {
     user: VueTypes.number,
     nameClass: VueTypes.string.def('text-yellow-600'),
     nameStyle: VueTypes.any,
+    dark: VueTypes.bool.def(true),
   },
   computed: {
     userItem() {
@@ -59,12 +52,4 @@ export default {
 };
 </script>
 
-<style>
-.user-popover--container {
-  position: absolute;
-  left: 0;
-  .vue-popover {
-    @apply bg-crisiscleanup-dark-500 text-white p-3 outline-none;
-  }
-}
-</style>
+<style></style>
