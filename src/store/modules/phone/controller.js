@@ -336,6 +336,13 @@ class ControllerStore extends VuexModule {
       Log.info('updating inbound status with:', callStatus);
       await PhoneInbound.api().updateStatus(contact.inbound.id, callStatus);
     }
+    if (this.status.notes) {
+      await Promise.all(
+        this.modifiedCaseIds.map((id) =>
+          Worksite.api().addNote(id, this.status.notes),
+        ),
+      );
+    }
     const { agentId } = contact;
     await contact.disconnect();
     this.setStatus({ notes: '', statusId: null, modified: [] });
