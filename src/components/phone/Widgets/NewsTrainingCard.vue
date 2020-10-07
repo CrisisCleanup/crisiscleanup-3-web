@@ -27,6 +27,7 @@ import TrainingsCard from '@/components/phone/TrainingsCard.vue';
 import TabbedCard from '@/components/cards/TabbedCard.vue';
 import { TrainingMixin } from '@/mixins';
 import VueTypes from 'vue-types';
+import _ from 'lodash';
 
 export default {
   name: 'NewsTrainingCard',
@@ -96,11 +97,13 @@ export default {
       ];
     },
     trainingCards() {
-      return this.trainingItems.map((tr) => ({
-        imagePath: this.getTrainingThumbnail(tr),
-        description: this.$t(tr.title_t),
-        timeToComplete: tr.settings.completion_seconds,
-      }));
+      return _.orderBy(this.trainingItems, ['settings.order'], ['asc']).map(
+        (tr) => ({
+          imagePath: this.getTrainingThumbnail(tr),
+          description: this.$t(tr.title_t),
+          timeToComplete: tr.settings.completion_seconds,
+        }),
+      );
     },
   },
 };

@@ -200,17 +200,18 @@ export default {
     } = useAgentState({
       ...useAgent(),
       context,
-      isTrained: props.trainingComplete,
+      // isTrained: props.trainingComplete,
+      isTrained: true,
     });
 
     const handleStateChange = async () => {
-      if (!props.trainingComplete) {
-        if (agent.value && agent.value.isOnline) {
-          await agent.value.toggleOnline(false);
-        }
-        context.emit('phone:showTraining', true);
-        return;
-      }
+      // if (!props.trainingComplete) {
+      //   if (agent.value && agent.value.isOnline) {
+      //     await agent.value.toggleOnline(false);
+      //   }
+      //   context.emit('phone:showTraining', true);
+      //   return;
+      // }
       await toggleAgentState();
     };
 
