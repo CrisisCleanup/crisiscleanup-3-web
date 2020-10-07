@@ -51,6 +51,7 @@ export default ({
     if (!streamsState.connected.value) {
       return {
         text: _stateAction.DISCONNECTED,
+        alt: _stateAction.DISCONNECTED,
         enabled: false,
         statusText: 'phoneDashboard.disconnected',
       };
@@ -58,6 +59,7 @@ export default ({
     if (!unwrap(isTrained)) {
       return {
         text: _stateAction.NEED_TRAINING,
+        alt: _stateAction.NEED_TRAINING,
         enabled: true,
         statusText: _stateAction.NEED_TRAINING,
       };
@@ -65,6 +67,7 @@ export default ({
     if (!_agent.value) {
       return {
         text: _stateAction[RouteStates.NOT_ROUTABLE],
+        alt: _stateAction[RouteStates.NOT_ROUTABLE],
         enabled: true,
         statusText: _stateAction[RouteStates.NOT_ROUTABLE],
       };
