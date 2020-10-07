@@ -11,7 +11,7 @@ const NewSystemBetaBanner = () => {
   };
   return () => (
     <BetaBanner
-      text={'~~Having issues? Switch back to the old system.'}
+      text={'info.banner_problems_switch_back'}
       beta-feature="aws_connect_phone"
       vOn:change={onToggle}
     />
