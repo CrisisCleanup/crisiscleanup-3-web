@@ -310,19 +310,31 @@ body {
 
   &.popover {
     $color: #f9f9f9;
+    $color-dark: theme('colors.crisiscleanup-dark.500');
+
     box-shadow: 0 1px 15px 0 rgba(164, 177, 184, 0.35);
     border: 1px solid theme('colors.crisiscleanup-dark.100');
     border-radius: 5px;
 
     .popover-inner {
       background: $color;
-      color: black;
+      color: theme('colors.crisiscleanup-dark-500');
       padding: 24px;
       border-radius: 5px;
     }
 
     .popover-arrow {
       border-color: $color;
+    }
+
+    &.dark {
+      .popover-inner {
+        background: $color-dark;
+        color: white;
+      }
+      .popover-arrow {
+        border-color: $color-dark;
+      }
     }
   }
 
