@@ -1,5 +1,10 @@
 <template>
-  <div v-popover:phone-status @click="handleAgentState" class="pstatus">
+  <v-popover
+    popover-inner-class="popover-inner max-w-xs"
+    @click="handleAgentState"
+    class="pstatus"
+    trigger="hover"
+  >
     <object
       class="pstatus__icon"
       :class="[!connected && 'disconnected', agent && agent.friendlyState]"
@@ -9,12 +14,7 @@
       @loadeddata="setStyle"
       @load="setStyle"
     />
-    <popover
-      @click.native="handleAgentState"
-      transition="fade"
-      event="hover"
-      name="phone-status"
-    >
+    <template #popover>
       <div class="flex justify-center flex-col p-3">
         <base-text variant="h3" v-if="agent && agent.isOnline">{{
           $t('phoneDashboard.you_are_online')
@@ -30,8 +30,8 @@
           }}
         </base-text>
       </div>
-    </popover>
-  </div>
+    </template>
+  </v-popover>
 </template>
 
 <script>

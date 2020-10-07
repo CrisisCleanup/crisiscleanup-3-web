@@ -318,7 +318,7 @@ body {
 
     .popover-inner {
       background: $color;
-      color: theme('colors.crisiscleanup-dark-500');
+      color: theme('colors.crisiscleanup-dark.500');
       padding: 24px;
       border-radius: 5px;
     }
