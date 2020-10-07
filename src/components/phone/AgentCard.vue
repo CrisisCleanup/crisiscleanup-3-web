@@ -49,12 +49,12 @@
           }`"
         />
         <base-text :weight="600" variant="body"
-          >{{ agentState.statusText | startCase }}
+          >{{ $t(agentState.statusText) }}
         </base-text>
       </div>
       <div class="inline-flex action-btn">
         <ProgressButton
-          :action="() => toggleAgentState()"
+          :action="() => handleStateChange()"
           :disabled="!agentState.enabled"
           size="large"
           variant="solid"
@@ -74,11 +74,6 @@
         />
       </div>
     </div>
-    <trainings-modal
-      :visible="trainingState.state.value"
-      @onClose="() => trainingState.toggle(false)"
-      @onComplete="onTrainingComplete"
-    ></trainings-modal>
     <agent-edit-card
       :active="editCardState.state.value"
       :request="validations"
@@ -91,7 +86,6 @@
 import { create } from 'vue-modal-dialogs';
 import ComponentDialog from '@/components/dialogs/ComponentDialog';
 import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
-import TrainingsModal from '@/components/phone/TrainingsModal.vue';
 import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
 import useAgentState from '@/use/phone/useAgentState';
 import useAgent from '@/use/phone/useAgent';
@@ -179,7 +173,6 @@ export default {
   components: {
     moreInfo: ContactMoreInfo,
     'agent-edit-card': CallerIDEditCard,
-    TrainingsModal,
     ProgressButton,
   },
   props: {
@@ -192,7 +185,7 @@ export default {
     const trainingState = useToggle();
 
     const { allTrainingCompleted, onTrainingComplete } = useTraining({
-      tests: [2, 3],
+      tests: [2, 3, 4],
     });
 
     const {
@@ -204,8 +197,19 @@ export default {
     } = useAgentState({
       ...useAgent(),
       context,
-      isTrained: allTrainingCompleted,
+      isTrained: allTrainingCompleted.value,
     });
+
+    const handleStateChange = async () => {
+      if (!allTrainingCompleted.value) {
+        if (agent.value && agent.value.isOnline) {
+          await agent.value.toggleOnline(false);
+        }
+        context.emit('phone:showTraining', true);
+        return;
+      }
+      await toggleAgentState();
+    };
 
     const { currentIncident } = useIncident();
     const { currentUser } = useUser();
@@ -281,7 +285,7 @@ export default {
 
     return {
       isCallActive: ctrlStore.isCallActive,
-      toggleAgentState,
+      handleStateChange,
       dialerValue,
       connected,
       trainingState,

@@ -3,7 +3,10 @@
     <div class="phone__section">
       <div class="phone__agent">
         <div class="phone__agentcard">
-          <AgentCard :number-to-dial="numberToDial" />
+          <AgentCard
+            @phone:showTraining="($event) => (isShowingTrainingModal = $event)"
+            :number-to-dial="numberToDial"
+          />
         </div>
         <div class="phone__general">
           <GeneralStatistics />

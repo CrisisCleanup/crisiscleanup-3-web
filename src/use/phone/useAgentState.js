@@ -59,7 +59,7 @@ export default ({
       return {
         text: _stateAction.NEED_TRAINING,
         enabled: true,
-        statusText: _stateAction[RouteStates.NOT_ROUTABLE],
+        statusText: _stateAction.NEED_TRAINING,
       };
     }
     if (!_agent.value) {
