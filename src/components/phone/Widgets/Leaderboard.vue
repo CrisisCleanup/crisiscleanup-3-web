@@ -38,6 +38,7 @@
           <div class="info pl-2">
             <div class="info--user">
               <UserDetailsTooltip
+                :dark="false"
                 :name-class="'text-h3 font-h3 pr-2 text-crisiscleanup-dark-400 name-tooltip'"
                 :user="a.user.id"
                 :name-style="nameTextStyle"
