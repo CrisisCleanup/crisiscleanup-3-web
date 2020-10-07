@@ -24,7 +24,7 @@ export type UseTrainingProps = {
  * @returns {{onTrainingComplete: onTrainingComplete, outstandingTrainings: (function(): ComputedRef<Array<$NonMaybeType<T>>|Array<T>>), loadTrainingData: loadTrainingData, trainings: Ref<UnwrapRef<{trainings: [], userTrainings: []}>["trainings"]>, allTrainingCompleted: (function(): ComputedRef<boolean>), userTrainings: Ref<UnwrapRef<{trainings: [], userTrainings: []}>["userTrainings"]>}}
  */
 export default ({ tests }: UseTrainingProps = {}) => {
-  const _tests = tests || [2, 3];
+  const _tests = tests || [2, 3, 4];
 
   const state = reactive({
     trainings: [],

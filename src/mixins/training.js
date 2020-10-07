@@ -21,7 +21,7 @@ export const TrainingMixin = {
         });
         this.userTrainings = pageData.userTrainings.data.results;
         this.trainings = pageData.trainings.data.results.filter((training) =>
-          [2, 3].includes(training.id),
+          [2, 3, 4].includes(training.id),
         );
       }
     },
