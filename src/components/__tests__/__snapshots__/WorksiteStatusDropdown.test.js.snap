@@ -12,8 +12,12 @@ exports[`WorksiteStatusDropdown should render correctly and match snapshot 1`] =
   >
     <!---->
      
-    <div>
+    <div
+      class="tooltip-target"
+    >
+      
       status.open_unassigned
+    
     </div>
      
     <font-awesome-icon-stub
@@ -39,8 +43,12 @@ exports[`WorksiteStatusDropdown should render correctly and match snapshot when 
       class="case-svg-container mr-1 flex"
     />
      
-    <div>
+    <div
+      class="tooltip-target"
+    >
+      
       status.open_unassigned
+    
     </div>
      
     <font-awesome-icon-stub
