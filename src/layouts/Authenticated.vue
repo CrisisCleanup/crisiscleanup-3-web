@@ -213,10 +213,16 @@ export default {
   async mounted() {
     this.loading = true;
     this.setCurrentIncidentId(null);
-    await User.api().get('/users/me', {});
-    AuthService.updateUser(
-      User.find(this.$store.getters['auth/userId']).$toJson(),
-    );
+    let user;
+    try {
+      await User.api().get('/users/me', {});
+      user = User.find(this.$store.getters['auth/userId']);
+      AuthService.updateUser(user.$toJson());
+    } catch {
+      await AuthService.removeUser();
+      await this.$store.dispatch('auth/logout');
+      return;
+    }
     await Promise.all([
       Incident.api().get(
         '/incidents?fields=id,name,short_name,geofence,locations&limit=150&ordering=-start_at',
