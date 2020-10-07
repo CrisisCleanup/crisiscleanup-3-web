@@ -12,7 +12,7 @@ const LegacyBetaBanner = () => {
   };
   return () => (
     <BetaBanner
-      text={'~~Try out the new phone system. You can switch back anytime.'}
+      text={'info.banner_try_new_phone_system'}
       beta-feature="aws_connect_phone"
       vOn:change={onToggle}
     />
