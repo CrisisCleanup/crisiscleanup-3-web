@@ -15,7 +15,9 @@
         ref="svgContainer"
         v-html="workTypeImage"
       ></div>
-      <div v-if="!hideName">{{ currentWorkType.status | getStatusName }}</div>
+      <div class="tooltip-target" v-if="!hideName">
+        {{ currentWorkType.status | getStatusName }}
+      </div>
       <font-awesome-icon
         class="tooltip-target"
         :class="size === 'sm' ? '' : 'mx-1'"
@@ -36,6 +38,7 @@
           :class="{ selected: currentItem === status.selectionKey }"
         >
           <div
+            v-close-popover
             class="badge-holder text-xs"
             @click="
               () => {
