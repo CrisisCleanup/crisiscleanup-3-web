@@ -38,8 +38,8 @@
           href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
           :action="() => startTraining()"
         >
-          {{ completed ? 'Review' : lang.actions.start.text }}
-        </base-button>
+          {{ completed ? text = this.$t('actions.review'), alt = this.$t('actions.review') : text = this.$t('actions.start'), alt = this.$t('actions.start') }} 
+        </base-button> <!-- TO DO: Obviously, this button needs some help. Instead of half-refering to the lang() function, I placed everything up here. And the button needs alt text as well. I'm sure my syntax is wrong -->
       </div>
     </div>
   </div>
