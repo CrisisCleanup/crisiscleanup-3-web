@@ -4,6 +4,9 @@
       <div class="phone__agent">
         <div class="phone__agentcard">
           <AgentCard
+            :training-complete="allTrainingCompleted"
+            :training-items="trainings"
+            :user-training-items="userTrainings"
             @phone:showTraining="($event) => (isShowingTrainingModal = $event)"
             :number-to-dial="numberToDial"
           />
@@ -45,7 +48,12 @@
         :training-items="trainings"
         :user-training-items="userTrainings"
         :visible="isShowingTrainingModal"
-        @onClose="isShowingTrainingModal = false"
+        @onClose="
+          () => {
+            isShowingTrainingModal = false;
+            onTrainingComplete();
+          }
+        "
         @onComplete="onTrainingComplete"
       ></TrainingModal>
     </div>
@@ -109,6 +117,7 @@ export default {
   methods: {
     async onTrainingComplete() {
       this.$emit('phone:showTrainingModal', false);
+      await this.loadTrainingData();
     },
     buildHistoricDataSet(key) {
       return this.historicMetrics.daily.map(({ day, ...metric }) => ({

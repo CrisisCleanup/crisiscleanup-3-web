@@ -2,17 +2,17 @@
   <div class="agentcard shadow-crisiscleanup-card h-full w-full">
     <div class="card-edit">
       <ccu-icon
+        :alt="$t('phoneDashboard.edit_user_phone_number')"
         @click.native="() => forceAgentEdit()"
         size="md"
         type="edit"
-        :alt="$t('phoneDashboard.edit_user_phone_number')"
       />
     </div>
     <div class="profile">
       <div class="profile--img">
         <img
-          :src="currentUser && currentUser.profilePictureUrl"
           :alt="$t('phoneDashboard.user_profile')"
+          :src="currentUser && currentUser.profilePictureUrl"
           class="rounded-full"
         />
       </div>
@@ -49,28 +49,28 @@
           }`"
         />
         <base-text :weight="600" variant="body"
-          >{{ $t(agentState.statusText) }}
+          >{{ $t(agentState.statusText) | startCase }}
         </base-text>
       </div>
       <div class="inline-flex action-btn">
         <ProgressButton
           :action="() => handleStateChange()"
           :disabled="!agentState.enabled"
-          size="large"
-          variant="solid"
           :total="240"
           :value="acwDuration"
+          size="large"
+          variant="solid"
         >
           {{ $t(agentState.text) }}
         </ProgressButton>
         <base-button
           :action="onDialer"
-          class="dialer"
-          size="sm"
-          icon-size="md"
-          variant="outline"
-          ccu-icon="dialer"
           :disabled="!agentState.enabled || isCallActive"
+          ccu-icon="dialer"
+          class="dialer"
+          icon-size="md"
+          size="sm"
+          variant="outline"
         />
       </div>
     </div>
@@ -177,6 +177,9 @@ export default {
   },
   props: {
     numberToDial: VueTypes.string,
+    userTrainingItems: VueTypes.array,
+    trainingItems: VueTypes.array,
+    trainingComplete: VueTypes.bool,
   },
   setup(props, context) {
     const showMoreState = useToggle({ state: true });
@@ -184,7 +187,7 @@ export default {
     const ctrlStore = getModule(ControllerStore, store.value);
     const trainingState = useToggle();
 
-    const { allTrainingCompleted, onTrainingComplete } = useTraining({
+    const { onTrainingComplete } = useTraining({
       tests: [2, 3, 4],
     });
 
@@ -197,11 +200,11 @@ export default {
     } = useAgentState({
       ...useAgent(),
       context,
-      isTrained: allTrainingCompleted.value,
+      isTrained: props.trainingComplete,
     });
 
     const handleStateChange = async () => {
-      if (!allTrainingCompleted.value) {
+      if (!props.trainingComplete) {
         if (agent.value && agent.value.isOnline) {
           await agent.value.toggleOnline(false);
         }
@@ -373,6 +376,7 @@ export default {
     .action-btn {
       @apply w-full;
       justify-content: center;
+
       button.dialer {
         @apply px-2;
         @apply bg-crisiscleanup-dark-500;
@@ -381,6 +385,7 @@ export default {
           border: 1px solid transparent;
         }
       }
+
       .spacer {
         width: 50px;
       }
@@ -408,6 +413,7 @@ export default {
       &.paused {
         @apply bg-crisiscleanup-yellow-500;
       }
+
       &.disconnected {
         @apply bg-crisiscleanup-grey-600;
       }
