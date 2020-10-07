@@ -511,7 +511,7 @@
               />
             </div>
             <base-text variant="h3" class="pt-2">
-              {{ $t('~~New Groups') }}
+              {{ $t('adminOrganization.new_groups') }}
             </base-text>
             <div v-for="group in newGroups" :key="`${group.id}`">
               {{ group.name }}
@@ -519,7 +519,7 @@
           </div>
           <div class="mx-3">
             <base-text variant="h3">
-              {{ $t('~~Current Groups') }}
+              {{ $t('adminOrganization.current_groups') }}
             </base-text>
             <div>
               <div class="pr-3" v-for="group in groups" :key="`${group.id}`">

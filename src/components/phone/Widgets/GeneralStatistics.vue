@@ -42,7 +42,7 @@
                   <ccu-icon
                     class="tooltip-target metric-info pl-1"
                     type="information"
-                    alt="~~More Info"
+                    :alt="$t('phoneDashboard.more_stats_info')"
                     size="tiny"
                   />
                   <template #popover>

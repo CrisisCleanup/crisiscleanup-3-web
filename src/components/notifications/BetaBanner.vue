@@ -56,7 +56,7 @@ export default {
       );
       if (!featureQ.exists()) {
         await context.root.$toasted.error(
-          context.root.$t('~~Failed to opt in!'),
+          context.root.$t('info.error_unable_switch_phone_system'),
         );
         return;
       }

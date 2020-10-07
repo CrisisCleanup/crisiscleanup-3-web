@@ -113,7 +113,7 @@
             }"
             @click="currentSection = 'locations'"
           >
-            {{ $t('~~Locations') }}
+            {{ $t('worksiteFilters.locations') }}
             <span
               v-if="locationsCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
@@ -369,7 +369,7 @@
             <div class="mb-2">
               <div class="claim-status mb-2" v-if="filters.locations">
                 <div class="my-1 text-base">
-                  {{ $t('~~Response Area') }}
+                  {{ $t('worksiteFilters.response_areas') }}
                 </div>
                 <base-checkbox
                   v-model="
@@ -377,7 +377,7 @@
                   "
                   class="block my-1"
                 >
-                  {{ $t('~~Within My Organization Primary Response Area') }}
+                  {{ $t('worksiteFilters.in_primary_response_area') }}
                 </base-checkbox>
                 <base-checkbox
                   v-model="
@@ -385,12 +385,12 @@
                   "
                   class="block my-1"
                 >
-                  {{ $t('~~Within My Organization Secondary Response Area') }}
+                  {{ $t('worksiteFilters.in_secondary_response_area') }}
                 </base-checkbox>
               </div>
               <div class="mb-2">
                 <div class="my-1 text-base">
-                  {{ $t('~~My Locations') }}
+                  {{ $t('worksiteFilters.my_locations') }}
                 </div>
                 <div v-for="location in locations" :key="`${location.id}`">
                   <base-checkbox
