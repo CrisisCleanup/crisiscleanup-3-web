@@ -24426,10 +24426,10 @@ vue-hotjar@^1.2.0:
   resolved "https://registry.yarnpkg.com/vue-hotjar/-/vue-hotjar-1.2.0.tgz#528ca196076e91469dae894085ad99b7edf8bf75"
   integrity sha512-SmR9TtkEw1kZVDCymntLcY5poc6HHAOTLlqC12CicPso2UfoEbYIRp06H+xwmBMOLd+oRhZFADaetuZR+SpjvQ==
 
-vue-i18n@^8.21.1:
-  version "8.21.1"
-  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.21.1.tgz#afa8e6390a5de3b65bd17533c4269181f86f1d61"
-  integrity sha512-KEakJLI7R6+UCmhJOMZ0K7C+Zf5FcMh7QDkBRaEq39V7d9JgSrTDBf/9HuHU3TaxQYXx4fUi5PTIPdwLXq+iow==
+vue-i18n@^8.22.0:
+  version "8.22.0"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.22.0.tgz#6403381a6eab1d229e515a62addb29b2ff3abfed"
+  integrity sha512-2tYS0bYDPJHKAWPy01aDe5h3wcXDGjhJmboHKOfi2OEYR+6gyXaIzdua1smZCQwOeWdlGsLntwdIgkXWrnLjxg==
 
 vue-inbrowser-compiler-utils@^4.31.1:
   version "4.31.1"
