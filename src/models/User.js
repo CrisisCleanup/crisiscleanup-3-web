@@ -33,7 +33,9 @@ export default class User extends CCUModel {
   }
 
   static afterUpdate(model) {
-    AuthService.updateUser(model.$toJson());
+    if (model.id === User.store().getters['auth/userId']) {
+      AuthService.updateUser(model.$toJson());
+    }
   }
 
   get profilePictureUrl() {
@@ -171,7 +173,7 @@ export default class User extends CCUModel {
            update top-level with both globalStates and incidentStates
            and then update state for current incident with incidentStates.
         */
-        let currentUser = User.find(AuthService.getUser().user_claims.id);
+        let currentUser = User.find(User.store().getters['auth/userId']);
 
         if (!currentUser) {
           return;
