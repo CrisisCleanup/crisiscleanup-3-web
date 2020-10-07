@@ -95,7 +95,7 @@ export const Metrics = Object.freeze({
   CALLDOWNS_QUEUED: [
     'contactsScheduledOutbound',
     'phoneDashboard.remaining_calldowns',
-    '~~This is the current total of calldowns waiting to be made. A calldown is an outbound call to a survivor with an open case to check if they still require help. This helps keep the map clean and minimize the time that volunteers must spend calling to find work.',
+    '~~A calldown is an outbound call to a survivor with an open case to check if they still require help. This helps keep the map clean and minimize the time that volunteers must spend calling to find work or else they quit early and go home.  Your job is to update the case with a note as well as change the status of work items if they are already completed.',
   ],
   // admin metrics (includes unlocked+locked)
   CALLBACKS_QUEUED_ALL: [
