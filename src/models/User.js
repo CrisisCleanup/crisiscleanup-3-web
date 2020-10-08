@@ -3,6 +3,7 @@ import Language from '@/models/Language';
 import Role from '@/models/Role';
 import moment from 'moment';
 import CCUModel from '@/models/model';
+import Bowser from 'bowser';
 
 export default class User extends CCUModel {
   static entity = 'users';
@@ -196,6 +197,7 @@ export default class User extends CCUModel {
         updatedStates = {
           ...updatedStates,
           ...{ incidents: updatedIncidentStates },
+          userAgent: Bowser.parse(window.navigator.userAgent),
         };
         await User.update({
           where: currentUser.id,
