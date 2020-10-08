@@ -9,8 +9,8 @@
       :width="85"
       :font-size="14"
       :labels="{
-        checked: 'Opt Out',
-        unchecked: 'Try it!',
+        checked: $t(translations.labelChecked),
+        unchecked: $t(translations.labelUnchecked),
       }"
       @input="handleToggle"
     />
@@ -29,6 +29,11 @@ export default {
   props: {
     text: VueTypes.string,
     betaFeature: VueTypes.string,
+    translations: VueTypes.shape({
+      labelChecked: VueTypes.string.def('~~Opt Out'),
+      labelUnchecked: VueTypes.string.def('~~Try it!'),
+      onError: VueTypes.string.def('~~Failed to opt out!'),
+    }),
   },
   setup(props, context) {
     const { currentUser } = useUser();
@@ -56,7 +61,7 @@ export default {
       );
       if (!featureQ.exists()) {
         await context.root.$toasted.error(
-          context.root.$t('info.error_unable_switch_phone_system'),
+          context.root.$t(props.translations.onError),
         );
         return;
       }
