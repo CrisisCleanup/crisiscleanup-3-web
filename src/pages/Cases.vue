@@ -1021,7 +1021,10 @@ export default {
         .where('key', 'boundary_political_us_state')
         .get();
       if (locationTypes.length) {
-        return Location.query().where('type', locationTypes[0].id).get();
+        return Location.query()
+          .where('type', locationTypes[0].id)
+          .orderBy('name', 'asc')
+          .get();
       }
       return [];
     },
@@ -1030,7 +1033,10 @@ export default {
         .where('key', 'boundary_political_us_congress')
         .get();
       if (locationTypes.length) {
-        return Location.query().where('type', locationTypes[0].id).get();
+        return Location.query()
+          .where('type', locationTypes[0].id)
+          .orderBy('name', 'asc')
+          .get();
       }
       return [];
     },
@@ -1039,7 +1045,10 @@ export default {
         .where('key', 'boundary_political_us_county')
         .get();
       if (locationTypes.length) {
-        return Location.query().where('type', locationTypes[0].id).get();
+        return Location.query()
+          .where('type', locationTypes[0].id)
+          .orderBy('name', 'asc')
+          .get();
       }
       return [];
     },
