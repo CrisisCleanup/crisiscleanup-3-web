@@ -23,6 +23,7 @@ import BetaFeature from '@/models/BetaFeature';
 import { onMounted, watch, ref } from '@vue/composition-api';
 import useUser from '@/use/user/useUser';
 import { getErrorMessage } from '@/utils/errors';
+import * as Sentry from '@sentry/browser';
 
 export default {
   name: 'BetaBanner',
@@ -69,7 +70,13 @@ export default {
       try {
         await feature.optIn();
         context.emit('change', value);
+        Sentry.addBreadcrumb({
+          category: 'user.beta_feature',
+          message: `Toggled ${props.betaFeature} beta feature: ${value}`,
+          level: Sentry.Severity.Info,
+        });
       } catch (e) {
+        Sentry.captureException(e);
         await context.root.$toasted.error(getErrorMessage(e));
       }
     };
