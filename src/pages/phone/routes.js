@@ -14,6 +14,9 @@ const NewSystemBetaBanner = () => {
       text={'info.banner_problems_switch_back'}
       beta-feature="aws_connect_phone"
       vOn:change={onToggle}
+      translations={{
+        onError: 'info.error_unable_switch_phone_system',
+      }}
     />
   );
 };
