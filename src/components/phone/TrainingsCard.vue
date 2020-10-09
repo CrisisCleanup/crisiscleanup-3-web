@@ -37,9 +37,10 @@
           class="bg-crisiscleanup-yellow-300 hover:bg-crisiscleanup-yellow-100 text-black px-4 py-1"
           href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
           :action="() => startTraining()"
+          :alt="completed ? $t('actions.review') : $t('actions.start')"
         >
-          {{ completed ? text = this.$t('actions.review'), alt = this.$t('actions.review') : text = this.$t('actions.start'), alt = this.$t('actions.start') }} 
-        </base-button> <!-- TO DO: Obviously, this button needs some help. Instead of half-refering to the lang() function, I placed everything up here. And the button needs alt text as well. I'm sure my syntax is wrong -->
+          {{ completed ? $t('actions.review') : $t('actions.start') }}
+        </base-button>
       </div>
     </div>
   </div>
