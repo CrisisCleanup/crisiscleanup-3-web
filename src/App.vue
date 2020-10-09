@@ -13,7 +13,7 @@
           $store.getters['auth/isLoggedIn'] &&
           this.$can &&
           (!this.$can('beta_feature.connect_first_integration') ||
-            this.$can('beta_feature.aws_connect_phone'))
+            !this.$can('beta_feature.aws_connect_phone'))
         "
         v-show="$route.meta.id === 'caller'"
       ></PhoneLegacy>
