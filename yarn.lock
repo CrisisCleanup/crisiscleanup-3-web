@@ -24187,10 +24187,10 @@ vue-docgen-api@^3.11.4:
     typescript "^3.2.2"
     vue-template-compiler "^2.0.0"
 
-vue-docgen-api@^4.29.1, vue-docgen-api@^4.31.1:
-  version "4.31.1"
-  resolved "https://registry.yarnpkg.com/vue-docgen-api/-/vue-docgen-api-4.31.1.tgz#583e92f0624790157b5081107a8b122373812644"
-  integrity sha512-8VupOkpn1UMsowOrXn5B4ITvS1u+DDBdBOpmIzXOnA0yqEcO4Hjzi1LRPRKSctv7Oa+gei3/z+Run0FDK69bQg==
+vue-docgen-api@^4.29.1, vue-docgen-api@^4.32.4:
+  version "4.32.4"
+  resolved "https://registry.yarnpkg.com/vue-docgen-api/-/vue-docgen-api-4.32.4.tgz#a74f4dfce99a078a4a87dcb779c6cdd480eeab01"
+  integrity sha512-dtPOg9uCnclBOiWASMDMBjYhrXbRDlADZNTMkc5NtF1eSXzltN7GvB7P3YO92M5IvUeHwq84A9BqGBBbye5oWg==
   dependencies:
     "@babel/parser" "^7.6.0"
     "@babel/types" "^7.6.0"
@@ -24202,7 +24202,7 @@ vue-docgen-api@^4.29.1, vue-docgen-api@^4.31.1:
     pug "^3.0.0"
     recast "0.19.1"
     ts-map "^1.0.3"
-    vue-inbrowser-compiler-utils "^4.31.1"
+    vue-inbrowser-compiler-utils "^4.32.1"
 
 vue-docgen-loader@^1.5.0:
   version "1.5.0"
@@ -24253,10 +24253,10 @@ vue-i18n@^8.22.0:
   resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-8.22.0.tgz#6403381a6eab1d229e515a62addb29b2ff3abfed"
   integrity sha512-2tYS0bYDPJHKAWPy01aDe5h3wcXDGjhJmboHKOfi2OEYR+6gyXaIzdua1smZCQwOeWdlGsLntwdIgkXWrnLjxg==
 
-vue-inbrowser-compiler-utils@^4.31.1:
-  version "4.31.1"
-  resolved "https://registry.yarnpkg.com/vue-inbrowser-compiler-utils/-/vue-inbrowser-compiler-utils-4.31.1.tgz#ae7fce6a61c72c3afbe3817afd2c5990ab19c964"
-  integrity sha512-va31nLth5Ux1Fvbw0rFJ0dWv3XxBKI1u1ZmCceJ+Minun7XeKOk69sowIyV+DkxB7sZJCTHrf818BdIcg58zAA==
+vue-inbrowser-compiler-utils@^4.32.1:
+  version "4.32.1"
+  resolved "https://registry.yarnpkg.com/vue-inbrowser-compiler-utils/-/vue-inbrowser-compiler-utils-4.32.1.tgz#d8774a4b7e91677d4d17d441485f5eafc77bc65d"
+  integrity sha512-IL8rBV3lCyHErqD8sBdQhWz3zJ/wLzG6JfoSzZ3K6HShS5QqIQfJN0GESvzIos6EGvmtByEf4TTJnjm12b51VQ==
   dependencies:
     camelcase "^5.3.1"
 
