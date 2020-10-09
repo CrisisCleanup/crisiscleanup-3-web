@@ -78,6 +78,12 @@ export default <T: typeof CCUModel>({
       itemId.map(onSelected);
       return;
     }
+    if (itemId === -1) {
+      selected.value.push(itemId);
+      _value.value = multi ? selected.value : _.last(selected.value);
+      context.root.$log.debug('selected: ', itemId);
+      return;
+    }
     const _resolveFromId = resolveFromId || model.fetchOrFindId;
     const item = await _.bind(_resolveFromId, model)(itemId);
     selected.value.push(translate ? item.withTrans() : item);
