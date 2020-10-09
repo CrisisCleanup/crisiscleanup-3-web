@@ -34,7 +34,7 @@ export default () => {
   });
 
   const calcEventPoints = (inputs: EventInputMap) =>
-    _.reduce(inputs, (result, value) => result * _.get(value, 'points', 1), 0);
+    _.reduce(inputs, (result, value) => result * _.get(value, 'points', 1), 1);
 
   const updateEventKeys = (inputs: EventInputMap) => {
     const keyInputs = _.omit(inputs, ['user_badge']);
