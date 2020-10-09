@@ -9,14 +9,16 @@ const SentryLevelMap = {
   error: Sentry.Severity.Error,
 };
 
-const SentryMiddleware = (result, { level, config }) => {
-  Sentry.addBreadcrumb({
-    category: result[0], // logger name
-    message: result.toString ? result.toString() : '',
-    level: SentryLevelMap[level] || Sentry.Severity.Critical,
-    data: JSON.parse(JSON.stringify(config.context)),
-  });
-  return result;
+const SentryMiddleware = (name) => {
+  return (result, { level, config }) => {
+    Sentry.addBreadcrumb({
+      category: name,
+      message: result.join(','),
+      level: SentryLevelMap[level] || Sentry.Severity.Critical,
+      data: JSON.parse(JSON.stringify(config.context)),
+    });
+    return result;
+  };
 };
 
 export default ({ name, ...params }) => {
@@ -30,7 +32,7 @@ export default ({ name, ...params }) => {
         result.unshift(`[${name}] `);
         return result;
       },
-      SentryMiddleware,
+      SentryMiddleware(name),
     ],
     ...params,
   };

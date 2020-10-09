@@ -49,16 +49,17 @@ const actions = {
 const mutations = {
   setUser(state, user) {
     state.user = user;
-    Sentry.setUser({
-      ...state.user,
-      id: state.user.user_claims.id,
-      username: state.user.email,
-      email: state.user.email,
-    });
     if (!user) {
+      Sentry.setUser(null);
       AuthService.removeUser();
     } else {
       AuthService.saveUser(user);
+      Sentry.setUser({
+        ...state.user,
+        id: state.user.user_claims.id,
+        username: state.user.email,
+        email: state.user.email,
+      });
     }
   },
   setAcl(state, router) {
