@@ -6444,10 +6444,10 @@
   resolved "https://registry.yarnpkg.com/@vue/web-component-wrapper/-/web-component-wrapper-1.2.0.tgz#bb0e46f1585a7e289b4ee6067dcc5a6ae62f1dd1"
   integrity sha512-Xn/+vdm9CjuC9p3Ae+lTClNutrVhsXpzxvoTXXtoys6kVRX9FkueSUAqSWAyZntmVLlR4DosBV4pH8y5Z/HbUw==
 
-"@vueuse/core@^4.0.0-beta.9":
-  version "4.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-4.0.0-beta.9.tgz#d5791d7624993df0917d94bcff5787e2957e7868"
-  integrity sha512-7qGDQkCCCnGZAXF+xAjnUCsYNjYmYcoRxeb0IsopJAPbtWL0Q/mD3Wgkysdl88qpUxaHNd7uzS762cLnFqJc7A==
+"@vueuse/core@^4.0.0-beta.21":
+  version "4.0.0-beta.21"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-4.0.0-beta.21.tgz#c2532b52d976287c19b2d7ef458c5005b2bff2ac"
+  integrity sha512-94YZdfcGqPljz2iAz2ZlBS5AtHjyRMqBlxvOD43zdX+Trq/BDSvO90FfIsomCkWBUFUZWE0U0zx2j7C6jLYaYQ==
   dependencies:
     vue-demi latest
 
