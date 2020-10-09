@@ -54,6 +54,7 @@
       </div>
       <div class="inline-flex action-btn">
         <ProgressButton
+          :alt="$t(agentState.text)"
           :action="() => handleStateChange()"
           :disabled="!agentState.enabled"
           :total="240"
@@ -71,6 +72,7 @@
           icon-size="md"
           size="sm"
           variant="outline"
+          :alt="$t('~~Manual Dialer')"
         />
       </div>
     </div>
