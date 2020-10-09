@@ -55,7 +55,7 @@ export default {
     completed: VueTypes.bool,
     imagePath: VueTypes.string,
     description: VueTypes.string,
-    timeToComplete: VueTypes.string,
+    timeToComplete: VueTypes.oneOfType([VueTypes.string, VueTypes.number]),
   },
   data() {
     return {

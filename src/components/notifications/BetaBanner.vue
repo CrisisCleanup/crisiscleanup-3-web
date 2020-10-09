@@ -9,8 +9,8 @@
       :width="85"
       :font-size="14"
       :labels="{
-        checked: $t(translations.labelChecked),
-        unchecked: $t(translations.labelUnchecked),
+        checked: $t(translations.labelChecked || '~~Opt Out'),
+        unchecked: $t(translations.labelUnchecked || '~~Try it!'),
       }"
       @input="handleToggle"
     />
@@ -31,10 +31,10 @@ export default {
     text: VueTypes.string,
     betaFeature: VueTypes.string,
     translations: VueTypes.shape({
-      labelChecked: VueTypes.string.def('~~Opt Out'),
-      labelUnchecked: VueTypes.string.def('~~Try it!'),
-      onError: VueTypes.string.def('~~Failed to opt out!'),
-    }),
+      labelChecked: VueTypes.string,
+      labelUnchecked: VueTypes.string,
+      onError: VueTypes.string,
+    }).loose,
   },
   setup(props, context) {
     const { currentUser } = useUser();
@@ -62,7 +62,7 @@ export default {
       );
       if (!featureQ.exists()) {
         await context.root.$toasted.error(
-          context.root.$t(props.translations.onError),
+          context.root.$t(props.translations.onError || '~~Failed to opt out!'),
         );
         return;
       }
