@@ -20,6 +20,7 @@ import * as ACS from '@/services/connect.service';
 import { ACTIONS } from '@/store/modules/websocket';
 import User from '@/models/User';
 import Language from '@/models/Language';
+import * as Sentry from '@sentry/browser';
 
 /**
  * Enum of states that represent whether a client is currently
@@ -141,6 +142,7 @@ export default class AgentClient extends Model {
     client
       .heartbeat()
       .then(() => Log.debug('client heartbeat triggered by update'));
+    Sentry.setContext(AgentClient.entity, client.$toJson());
   }
 
   static isStateOnline(state: AgentState): AgentState {

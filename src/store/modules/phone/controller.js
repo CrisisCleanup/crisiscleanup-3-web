@@ -3,7 +3,7 @@
 /**
  * phone Controller Store
  */
-
+import * as Sentry from '@sentry/browser';
 import {
   Action,
   getModule,
@@ -254,11 +254,13 @@ class ControllerStore extends VuexModule {
   @Mutation
   setStatus(newStatus) {
     this.status = { ...this.status, ...newStatus };
+    Sentry.setContext('phone.controller.status', this.status);
   }
 
   @Mutation
   setOutbound(newOutbound: PhoneOutbound | null) {
     this.currentOutbound = newOutbound;
+    Sentry.setContext('phone.controller.outbound', this.currentOutbound);
   }
 
   @MutationAction({ mutate: ['isServingOutbounds'] })
@@ -327,6 +329,7 @@ class ControllerStore extends VuexModule {
         cases: this.modifiedCaseIds.join(', '),
       },
     };
+    Sentry.setContext('phone.controller.status', callStatus);
     if (contact.outbound) {
       Log.info('updating outbound status with:', callStatus);
       await PhoneOutbound.api().updateStatus(contact.outbound.id, callStatus);
@@ -354,6 +357,7 @@ class ControllerStore extends VuexModule {
 
   @Action
   async clearState({ agentId }: { agentId: string } = {}) {
+    Sentry.setContext('phone.controller.status', null);
     Log.info('clearing controller state!');
     this.setOutbound(null);
     this.setCase(null);
@@ -428,6 +432,7 @@ class ControllerStore extends VuexModule {
           } else {
             Log.error('Failed to call outbound! Unexpected error!');
             Log.error(e);
+            Sentry.captureException(e);
             this.setOutbound(null);
             if (agent.currentContact) {
               await agent.currentContact.disconnect();

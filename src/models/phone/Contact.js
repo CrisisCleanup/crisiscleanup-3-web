@@ -29,6 +29,7 @@ import Language from '@/models/Language';
 import PhoneInbound from '@/models/PhoneInbound';
 import type { CaseType } from '@/store/modules/phone/types';
 import Incident from '@/models/Incident';
+import * as Sentry from '@sentry/browser';
 
 /**
  * Enum of possible contact states.
@@ -277,6 +278,7 @@ export default class Contact extends Model {
       });
     }
     Contact.syncAttributes(model.contactId);
+    Sentry.setContext(Contact.entity, model.$toJson());
   }
 
   static beforeUpdate(model: Contact): void {
@@ -348,11 +350,14 @@ export default class Contact extends Model {
           state.incident = null;
           state.resolveRequested = false;
           state.resolveTask = '';
+          Sentry.setContext(`${Contact.entity}-state`, null);
         });
       });
+    Sentry.setContext(Contact.entity, null);
   }
 
   static afterUpdate(model: Contact): void | boolean {
+    Sentry.setContext(Contact.entity, model.$toJson());
     if (
       [ContactActions.DESTROYED, ContactActions.MISSED].includes(model.action)
     ) {
@@ -418,6 +423,7 @@ export default class Contact extends Model {
         .then(() => Log.info(`Connection state => ${newState}`))
         .catch((e) => Log.error(`failed to update connection state!`, e));
     }
+    Sentry.setContext(Contact.entity, model.$toJson());
     return true;
   }
 
@@ -501,6 +507,7 @@ export default class Contact extends Model {
       state.incident = incident || state.incident;
       state.inbound = inbound || state.inbound;
       state.outbound = outbound || state.outbound;
+      Sentry.setContext(`${Contact.entity}-state`, state);
     });
   }
 
