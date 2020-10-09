@@ -49,7 +49,12 @@ const actions = {
 const mutations = {
   setUser(state, user) {
     state.user = user;
-    Sentry.setUser(state.user);
+    Sentry.setUser({
+      ...state.user,
+      id: state.user.user_claims.id,
+      username: state.user.email,
+      email: state.user.email,
+    });
     if (!user) {
       AuthService.removeUser();
     } else {
@@ -58,7 +63,12 @@ const mutations = {
   },
   setAcl(state, router) {
     const user = User.find(state.user.user_claims.id);
-    Sentry.setUser(state.user);
+    Sentry.setUser({
+      ...state.user,
+      id: user.id,
+      username: user.email,
+      email: user.email,
+    });
     Vue.use(
       Acl,
       user,

@@ -4,6 +4,7 @@ import Role from '@/models/Role';
 import moment from 'moment';
 import CCUModel from '@/models/model';
 import Bowser from 'bowser';
+import * as Sentry from '@sentry/browser';
 
 export default class User extends CCUModel {
   static entity = 'users';
@@ -36,6 +37,9 @@ export default class User extends CCUModel {
   static afterUpdate(model) {
     if (model.id === User.store().getters['auth/userId']) {
       AuthService.updateUser(model.$toJson());
+      Sentry.setUser(model.$toJson());
+      Sentry.setContext('user_states', model.states);
+      Sentry.setContext('user_preferences', model.preferences);
     }
   }
 
