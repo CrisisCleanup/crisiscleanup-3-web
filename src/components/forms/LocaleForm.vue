@@ -13,6 +13,7 @@
               size="medium"
               :value="fields[fieldKey].key"
               break-glass
+              @change="(value) => (fields[fieldKey].key = value)"
             />
             <base-input
               class="pb-3"
