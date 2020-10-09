@@ -6,7 +6,7 @@
         weight="700"
         class="text-crisiscleanup-dark-500"
       >
-        Training
+        {{ $t('phoneDashboard.training') }}
       </base-text>
     </header>
 
