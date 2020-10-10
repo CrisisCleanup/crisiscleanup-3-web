@@ -28,10 +28,15 @@ export default {
   setup(props, context) {
     const { agent, loading } = useAgent();
     const controller = useController();
-    const { callPending, callConnected, currentContact } = useContact({
+    const {
+      callPending,
+      callConnected,
+      currentContact,
+      activeIncident,
+    } = useContact({
       agent,
     });
-    const { currentIncident } = useIncident();
+    const { currentIncident, setCurrentIncident } = useIncident();
 
     const { start } = useIntervalFn(() => {
       if (!agent.value) {
@@ -57,6 +62,9 @@ export default {
     );
 
     const updatePage = async () => {
+      if (currentContact.value && activeIncident.value) {
+        await setCurrentIncident(activeIncident.value.id);
+      }
       if (callConnected.value) {
         await controller.actions.setView({
           page: ControllerPages.CONTROLLER,
