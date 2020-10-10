@@ -91,7 +91,9 @@
             <base-text variant="bodysm">
               {{ callerHistory.total }}
               {{
-                ` ${$t('phoneDashboard.calls')} | ${$t('phoneDashboard.most_recent')} ${$t(callerHistory.recent)}`
+                ` ${$t('phoneDashboard.calls')} | ${$t(
+                  'phoneDashboard.most_recent',
+                )} ${$t(callerHistory.recent)}`
               }}
             </base-text>
           </tag>
