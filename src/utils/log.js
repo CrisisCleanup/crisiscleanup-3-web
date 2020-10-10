@@ -10,10 +10,10 @@ const SentryLevelMap = {
 };
 
 const SentryMiddleware = (name) => {
-  return (result, { level, config }) => {
+  return (result, { level, config, statements }) => {
     Sentry.addBreadcrumb({
       category: name,
-      message: result.join(','),
+      message: statements.toString ? statements.toString() : '',
       level: SentryLevelMap[level] || Sentry.Severity.Critical,
       data: JSON.parse(JSON.stringify(config.context)),
     });
@@ -27,10 +27,11 @@ export default ({ name, ...params }) => {
   }
   const opts = {
     name,
+    proxy: false,
     middlewares: [
-      (result) => {
+      (result, { statements }) => {
         result.unshift(`[${name}] `);
-        return result;
+        return [...result, ...statements];
       },
       SentryMiddleware(name),
     ],
