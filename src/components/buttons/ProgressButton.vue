@@ -11,7 +11,7 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { computed } from '@vue/composition-api';
+import { computed, watch, ref } from '@vue/composition-api';
 
 export default {
   name: 'ProgressButton',
@@ -20,7 +20,8 @@ export default {
     total: VueTypes.number,
     reverse: VueTypes.bool.def(false),
   },
-  setup(props) {
+  setup(props, context) {
+    const _complete = ref(false);
     const step = computed(() => {
       let base = typeof props.value === 'number' ? props.value : props.value();
       if (props.total && props.total !== 0) {
@@ -34,10 +35,22 @@ export default {
       transform: `translateX(${-step.value}%)`,
     }));
     const loadClass = computed(() => ({
-      loading: Math.abs(step.value) > 0,
+      loading: Math.abs(step.value) > 0 && Math.abs(step.value) < 100,
       reverse: props.reverse === true,
     }));
+    watch(
+      () => step.value,
+      () => {
+        if (Math.abs(step.value) >= 100 && _complete.value === false) {
+          context.emit('update:done', true);
+          _complete.value = true;
+        } else if (Math.abs(step.value) < 100 && _complete.value !== false) {
+          _complete.value = false;
+        }
+      },
+    );
     return {
+      step,
       loadStyle,
       loadClass,
     };
