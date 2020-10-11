@@ -53,6 +53,7 @@ export const ContactStates = Object.freeze({
  * @param ERROR - An exception occured at some point.
  * @param MISSED - Agent failed to answer inbound, or contact failed to answer outbound.
  * @param PENDING - Agent is calling contact (outbound).
+ * @param ABANDON - Contact abandoned the call (inbound).
  * @readonly
  * @enum {string}
  */
@@ -65,6 +66,7 @@ export const ContactActions = Object.freeze({
   ERROR: 'error',
   MISSED: 'missed',
   PENDING: 'pending',
+  ABANDON: 'abandon',
 });
 
 /**
@@ -283,9 +285,16 @@ export default class Contact extends Model {
 
   static beforeUpdate(model: Contact): void {
     if (
-      ![ContactActions.DESTROYED, ContactActions.MISSED].includes(model.action)
+      ![
+        ContactActions.DESTROYED,
+        ContactActions.MISSED,
+        ContactActions.ABANDON,
+      ].includes(model.action)
     ) {
       Contact.syncAttributes(model.contactId);
+    }
+    if (model.action === ContactActions.ABANDON) {
+      window.vue.$toasted.error(window.vue.$t('~~Survivor ended the call!'));
     }
   }
 
@@ -323,6 +332,7 @@ export default class Contact extends Model {
         ContactActions.CONNECTING,
         ContactActions.MISSED,
         ContactActions.ENTER,
+        ContactActions.ABANDON,
       ].includes(model.action)
     ) {
       // If contact is deleted while it was connecting,
@@ -359,7 +369,11 @@ export default class Contact extends Model {
   static afterUpdate(model: Contact): void | boolean {
     Sentry.setContext(Contact.entity, model.$toJson());
     if (
-      [ContactActions.DESTROYED, ContactActions.MISSED].includes(model.action)
+      [
+        ContactActions.DESTROYED,
+        ContactActions.MISSED,
+        ContactActions.ABANDON,
+      ].includes(model.action)
     ) {
       Log.info(`Contact is: ${model.action}, destroying!`);
       Contact.delete(model.contactId).then(() =>
