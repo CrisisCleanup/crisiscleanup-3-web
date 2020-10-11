@@ -2,7 +2,7 @@
   <!-- News 1 -->
   <div
     v-if="content"
-    class="h-full flex flex-row flex-grow justify-start p-3 news-card"
+    class="flex flex-row flex-grow justify-start p-3 news-card"
   >
     <!--- media/picture --->
     <div class="card--img">

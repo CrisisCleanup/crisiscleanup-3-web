@@ -1,22 +1,25 @@
 <template>
   <TabbedCard :tabs="tabs" class="h-auto" :style="{ height: 'auto' }">
     <template #training>
-      <TrainingsCard
-        v-for="(training, idx) in trainingCards"
-        :key="idx"
-        :image-path="training.imagePath"
-        :description="training.description"
-        :time-to-complete="training.timeToComplete"
-        @onTrainingSelected="$emit('phone:showTraining', true)"
-      ></TrainingsCard>
+      <div class="card-container h-full overflow-auto">
+        <TrainingsCard
+          v-for="(training, idx) in trainingCards"
+          :key="idx"
+          :image-path="training.imagePath"
+          :description="training.description"
+          :time-to-complete="training.timeToComplete"
+          @onTrainingSelected="$emit('phone:showTraining', true)"
+        ></TrainingsCard>
+      </div>
     </template>
     <template #news>
-      <NewsCard
-        class="h-full"
-        v-for="(newss, idx) in news"
-        :key="`${newss.date}_${idx}`"
-        v-bind="newss"
-      />
+      <div class="card-container h-full overflow-auto">
+        <NewsCard
+          v-for="(newss, idx) in news"
+          :key="`${newss.date}_${idx}`"
+          v-bind="newss"
+        />
+      </div>
     </template>
   </TabbedCard>
 </template>
@@ -109,4 +112,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.card-container {
+  max-height: 60vh;
+}
+</style>
