@@ -88,7 +88,9 @@ export default ({
    * Toggle agent connection state.
    * @returns {Promise<void>}
    */
-  const toggleAgentState = async () => {
+  const toggleAgentState = async ({
+    userInitiated = false,
+  }: { userInitiated: boolean } = {}) => {
     if (!_agent.value) {
       context.root.$log.error(
         'tried to change agent state, but no agent available!',
@@ -97,9 +99,11 @@ export default ({
       return;
     }
     if (ctrlGetters.isCallActive.value) {
-      context.root.$toasted.error(
-        context.root.$t('phoneDashboard.call_status_required_before_next'),
-      );
+      if (userInitiated) {
+        context.root.$toasted.error(
+          context.root.$t('phoneDashboard.call_status_required_before_next'),
+        );
+      }
       return;
     }
     _agent.value.toggleOnline();
