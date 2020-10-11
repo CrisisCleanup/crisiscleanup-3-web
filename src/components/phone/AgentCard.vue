@@ -262,6 +262,7 @@ export default {
           await ctrlStore.serveOutbound({
             agent: agent.value,
             incident: currentIncident.value,
+            manual: true,
           });
           context.root.$toasted.success(
             context.root.$t('phoneDashboard.success_calling_momentarily'),

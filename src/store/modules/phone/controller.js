@@ -372,10 +372,12 @@ class ControllerStore extends VuexModule {
   async serveOutbound({
     agent,
     incident,
+    manual = false,
   }: {
     agent: typeof AgentClient,
     incident: typeof Incident,
-  }) {
+    manual: boolean,
+  } = {}) {
     if (this.isServingOutbounds) {
       Log.info('attempting to serve outbound call for:', incident);
       let outbound;
@@ -384,6 +386,7 @@ class ControllerStore extends VuexModule {
           incidentId: incident.id,
           agentId: agent.agentId,
           useCalldowns: true,
+          isManual: manual,
         });
       } catch (e) {
         Log.info('no outbounds available!');
@@ -393,7 +396,9 @@ class ControllerStore extends VuexModule {
       const outboundObj = await PhoneOutbound.fetchOrFindId(outbound.id);
       this.setOutbound(outboundObj);
       try {
-        await PhoneOutbound.api().callOutbound(outbound.id);
+        await PhoneOutbound.api().callOutbound(outbound.id, {
+          isManual: manual,
+        });
         const contactId = outboundObj.external_id
           ? outboundObj.external_id
           : `${agent.agentId}#manual-outbound`;
