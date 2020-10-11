@@ -79,7 +79,7 @@ export default {
       if (!connected.value) {
         return router.push('/phone');
       }
-      return toggleAgentState();
+      return toggleAgentState({ userInitiated: true });
     };
 
     const setStyle = () => {

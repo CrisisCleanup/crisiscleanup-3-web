@@ -55,12 +55,13 @@
       <div class="inline-flex action-btn">
         <ProgressButton
           :alt="$t(agentState.text)"
-          :action="() => handleStateChange()"
+          :action="() => handleStateChange({ userInitiated: true })"
           :disabled="!agentState.enabled"
           :total="240"
           :value="acwDuration"
           size="large"
           variant="solid"
+          @update:done="() => handleStateChange()"
         >
           {{ $t(agentState.text) }}
         </ProgressButton>
@@ -206,7 +207,7 @@ export default {
       isTrained: true,
     });
 
-    const handleStateChange = async () => {
+    const handleStateChange = async (args) => {
       // if (!props.trainingComplete) {
       //   if (agent.value && agent.value.isOnline) {
       //     await agent.value.toggleOnline(false);
@@ -214,7 +215,7 @@ export default {
       //   context.emit('phone:showTraining', true);
       //   return;
       // }
-      await toggleAgentState();
+      await toggleAgentState(args);
     };
 
     const { currentIncident } = useIncident();
