@@ -283,7 +283,7 @@ export default class Contact extends Model {
     Sentry.setContext(Contact.entity, model.$toJson());
   }
 
-  static beforeUpdate(model: Contact): void {
+  static beforeUpdate(model: Contact): void | boolean {
     if (
       ![
         ContactActions.DESTROYED,
@@ -296,6 +296,16 @@ export default class Contact extends Model {
     if (model.action === ContactActions.ABANDON) {
       window.vue.$toasted.error(window.vue.$t('~~Survivor ended the call!'));
     }
+    if ([ContactActions.DESTROYED].includes(model.action)) {
+      const isCallActive = Contact.store().getters[
+        'phone.controller/isCallActive'
+      ];
+      if (isCallActive) {
+        Log.info('Agent has not closed contact! Preventing ACW exit...');
+        return false;
+      }
+    }
+    return true;
   }
 
   static beforeDelete(model: Contact): void {
