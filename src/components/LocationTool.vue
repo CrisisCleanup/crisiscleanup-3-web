@@ -1,6 +1,6 @@
 <template>
   <div style="display: grid; grid-template-rows: auto 1fr;">
-    <div class="h-16 flex items-center" style="z-index: 10000;">
+    <div class="h-16 flex items-center w-full" style="z-index: 10000;">
       <autocomplete
         icon="search"
         :suggestions="locationResults"
@@ -765,4 +765,8 @@ export default {
 <style scoped>
 @import '~leaflet/dist/leaflet.css';
 @import '~@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
+
+.select__container {
+  @apply w-full;
+}
 </style>

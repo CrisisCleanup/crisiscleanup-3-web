@@ -53,13 +53,13 @@
       <form
         v-if="currentLocation"
         ref="form"
-        class="form flex-grow flex flex-col justify-between"
+        class="form flex-grow flex flex-col justify-between w-full"
       >
         <div class="flex flex-col">
           <base-input
             v-model="currentLocation.name"
             type="text"
-            class="input form-field"
+            class="input my-2"
             size="large"
             required
             :placeholder="$t('locationVue.location_name')"
@@ -72,7 +72,7 @@
             label="name_t"
             :required="true"
             :placeholder="$t('locationVue.location_type')"
-            select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
+            select-classes="bg-white border border-crisiscleanup-dark-100 h-12"
             @input="
               (type) => {
                 currentLocation.type = type;
@@ -85,7 +85,7 @@
           <div v-if="!currentLocation.id" class="extra-actions">
             <div v-if="isPrimaryResponseArea || isSecondaryResponseArea">
               <autocomplete
-                class="form-field"
+                class="my-2"
                 icon="search"
                 :suggestions="organizationResults"
                 display-property="name"
@@ -99,7 +99,7 @@
             <div v-if="isIncidentRelated">
               <form-select
                 :value="selectedIncidentId"
-                class="form-field"
+                class="my-2"
                 :options="incidents"
                 searchable
                 select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12 mb-3"
@@ -165,7 +165,7 @@
 
           <textarea
             v-model="currentLocation.notes"
-            class="text-base form-field border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
+            class="text-base my-2 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
             rows="4"
             :placeholder="$t('locationVue.notes')"
           />

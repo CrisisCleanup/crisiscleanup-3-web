@@ -43,6 +43,7 @@
           :readonly="false"
           v-bind="attributes"
           v-on="events"
+          :placeholder="placeholder"
         />
       </template>
     </v-select>

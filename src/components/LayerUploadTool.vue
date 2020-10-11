@@ -133,6 +133,13 @@
               </div>
             </div>
           </div>
+          <div>
+            <base-checkbox
+              v-model="shapefileInfo[data.filename].combineLocations"
+            >
+              {{ $t('~~Combine into Single Object') }}
+            </base-checkbox>
+          </div>
           <code v-if="shapefileInfo[data.filename].shapefileCustomName">{{
             customSample(data.filename)
           }}</code>
@@ -259,6 +266,10 @@ export default {
       formData.append('type', this.shapefileInfo[filename].shapefileType);
       formData.append('filename', filename);
       formData.append('shared', this.shapefileAccess || 'shared');
+      formData.append(
+        'combine_locations',
+        this.shapefileInfo[filename].combineLocations || false,
+      );
       if (this.shapefileInfo[filename].shapefileCustomName) {
         formData.append(
           'name_template',
@@ -300,6 +311,6 @@ export default {
 
 <style scoped>
 .form-field {
-  @apply my-1;
+  @apply my-1 w-full;
 }
 </style>
