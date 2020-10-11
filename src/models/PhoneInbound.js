@@ -18,7 +18,7 @@ export default class PhoneInbound extends CCUModel {
   static apiConfig = {
     actions: {
       async skipCall(id) {
-        await this.post(`/phone_inbound/${id}/skip`, { save: false });
+        await this.post(`/phone_inbound/${id}/skip`, {}, { save: false });
       },
       async fetchById(id) {
         const inbound = await this.get(`/phone_inbound/${id}`);

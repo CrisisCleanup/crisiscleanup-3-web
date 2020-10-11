@@ -47,6 +47,7 @@ export default class PhoneOutbound extends CCUModel {
         incidentId = 199,
         agentId = '',
         useCalldowns = false,
+        isManual = false,
       }) {
         let queryUrl = `/phone_outbound?next=${incidentId}`;
         if (agentId) {
@@ -54,6 +55,9 @@ export default class PhoneOutbound extends CCUModel {
         }
         if (useCalldowns) {
           queryUrl = `${queryUrl}&use_calldowns=1`;
+        }
+        if (isManual) {
+          queryUrl = `${queryUrl}&manual=1`;
         }
         const phoneOutbound = await this.get(queryUrl);
         const {
@@ -77,8 +81,14 @@ export default class PhoneOutbound extends CCUModel {
         } = phoneOutbound;
         return data;
       },
-      async callOutbound(id) {
-        const result = this.post(`/phone_outbound/${id}/call`, { save: false });
+      async callOutbound(id, { isManual = false } = {}) {
+        const result = this.post(
+          `/phone_outbound/${id}/call`,
+          {
+            manual: isManual,
+          },
+          { save: false },
+        );
         return result;
       },
       async updateStatus(
