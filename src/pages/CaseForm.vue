@@ -376,6 +376,13 @@ export default {
       type: Object,
       default: () => {},
     },
+    resizeMethod: {
+      // one of:
+      // parent: resize based on intake container.
+      // screen: resize based on scrollable screen.
+      type: String,
+      default: 'parent',
+    },
   },
   data() {
     return {
@@ -987,7 +994,10 @@ export default {
     calcFormStyle() {
       if (!this.$refs.form) return;
       const topOffset = this.$refs.form.offsetTop;
-      const parentHeight = this.$refs.form.offsetParent.clientHeight;
+      let parentHeight = this.$refs.form.offsetParent.clientHeight;
+      if (this.resizeMethod === 'screen') {
+        parentHeight = window.screen.availHeight;
+      }
       const formHeight = parentHeight - topOffset;
       this.formStyle = {
         'grid-template-rows': `${formHeight - 80}px 80px`,
