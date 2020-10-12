@@ -10,8 +10,7 @@
               }}</base-text>
               <base-text :weight="400" variant="h4">{{
                 `${callerHistory.total} ${$t('phoneDashboard.calls')}
-                ${$t('phoneDashboard.most_recent')}
-                | ${callerHistory.recent}`
+                | ${$t('phoneDashboard.most_recent')} ${callerHistory.recent}`
               }}</base-text>
             </div>
             <div class="contact-caller">
