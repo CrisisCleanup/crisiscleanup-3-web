@@ -45,6 +45,7 @@
                     prefillData,
                   })
                 "
+                resize-method="screen"
                 :incident-id="String(activeIncidentId || currentIncident.id)"
                 disable-claim-and-save
                 :data-prefill="prefillData"
