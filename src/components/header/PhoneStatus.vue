@@ -86,8 +86,10 @@ export default {
       const svgDoc = icon.value.getSVGDocument();
       if (svgDoc) {
         svgDoc.getElementsByTagName('path')[0].style.fill = iconColor.value;
-        svgDoc.activeElement.attributes.width.nodeValue = 14 * 1.8;
-        svgDoc.activeElement.attributes.height.nodeValue = 19 * 1.8;
+        if (svgDoc.activeElement) {
+          svgDoc.activeElement.attributes.width.nodeValue = 14 * 1.8;
+          svgDoc.activeElement.attributes.height.nodeValue = 19 * 1.8;
+        }
         svgDoc.addEventListener('click', handleAgentState);
       }
     };
