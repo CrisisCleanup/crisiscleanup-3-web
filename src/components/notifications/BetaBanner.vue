@@ -43,11 +43,10 @@ export default {
     watch(
       () => currentUser.value && currentUser.value.beta_features,
       () => {
-        if (currentUser.value.beta_features.includes(props.betaFeature)) {
-          isOpted.value = true;
-        } else {
-          isOpted.value = false;
-        }
+        isOpted.value = !!(
+          currentUser &&
+          currentUser.value.beta_features.includes(props.betaFeature)
+        );
       },
     );
 
