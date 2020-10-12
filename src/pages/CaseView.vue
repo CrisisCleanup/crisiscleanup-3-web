@@ -55,17 +55,34 @@
               }
             "
           />
-          <base-button
-            v-if="workTypesClaimedByOthersUnrequested.length > 0"
-            class="ml-2 p-1 px-3 border-black border-2 border-black text-xs"
-            :text="$t('actions.request_all')"
-            :action="
-              () => {
-                requestingWorkTypes = true;
-                initialWorkTypeRequestSelection = [];
-              }
-            "
-          />
+          <template v-if="workTypesClaimedByOthersUnrequested.length > 0">
+            <base-button
+              v-if="incident.turn_on_release"
+              class="ml-2 p-1 px-3 text-xs"
+              variant="solid"
+              :text="$t('~~Release All')"
+              :action="
+                () => {
+                  return releaseWorkType(
+                    workTypesClaimedByOthersUnrequested
+                      .filter((workType) => isStaleCase(workType))
+                      .map((workType) => workType.work_type),
+                  );
+                }
+              "
+            />
+            <base-button
+              v-else
+              class="ml-2 p-1 px-3 border-black border-2 border-black text-xs"
+              :text="$t('actions.request_all')"
+              :action="
+                () => {
+                  requestingWorkTypes = true;
+                  initialWorkTypeRequestSelection = [];
+                }
+              "
+            />
+          </template>
         </template>
       </SectionHeading>
       <section class="px-3 pb-3">
@@ -107,21 +124,38 @@
                       }
                     "
                   />
+
                   <base-button
-                    v-if="!worksiteRequestWorkTypeIds.has(work_type.id)"
-                    type="link"
+                    v-if="incident.turn_on_release && isStaleCase(work_type)"
+                    class="ml-2 p-1 px-3 text-xs"
+                    variant="solid"
+                    :text="$t('~~Release')"
                     :action="
                       () => {
-                        requestingWorkTypes = true;
-                        initialWorkTypeRequestSelection = [work_type.work_type];
+                        return releaseWorkType([work_type.work_type]);
                       }
                     "
-                    :text="$t('actions.request')"
-                    class="ml-2 p-1 px-3 text-xs"
                   />
-                  <div v-else class="ml-2 p-1 px-3 text-xs">
-                    {{ $t('caseView.requested') }}
-                  </div>
+
+                  <template v-else>
+                    <base-button
+                      v-if="!worksiteRequestWorkTypeIds.has(work_type.id)"
+                      type="link"
+                      :action="
+                        () => {
+                          requestingWorkTypes = true;
+                          initialWorkTypeRequestSelection = [
+                            work_type.work_type,
+                          ];
+                        }
+                      "
+                      :text="$t('actions.request')"
+                      class="ml-2 p-1 px-3 text-xs"
+                    />
+                    <div v-else class="ml-2 p-1 px-3 text-xs">
+                      {{ $t('caseView.requested') }}
+                    </div>
+                  </template>
                   <div class="work-list">
                     {{
                       getFieldsForType(work_type.work_type)
@@ -386,6 +420,7 @@ import { LocaleMixin } from '@/mixins/locale';
 import SectionHeading from '@/components/SectionHeading';
 import WorksiteImageSection from '@/components/WorksiteImageSection';
 import WorksiteReportSection from '@/components/WorksiteReportSection';
+import { DialogsMixin } from '@/mixins';
 import Flag from './Flag';
 import WorksiteNotes from './WorksiteNotes';
 
@@ -400,7 +435,7 @@ export default {
     WorkTypeRequestModal,
     WorksiteStatusDropdown,
   },
-  mixins: [LocaleMixin],
+  mixins: [LocaleMixin, DialogsMixin],
   data() {
     return {
       addingNotes: false,
@@ -514,6 +549,11 @@ export default {
       }
       this.workTypesToClaim = new Set(this.workTypesToClaim);
     },
+    isStaleCase(workType) {
+      return this.$moment(workType.created_at).isBefore(
+        this.$moment().add(-30, 'days'),
+      );
+    },
     async getWorksiteRequests() {
       const worksiteRequestParams = {
         worksite_work_type__worksite: this.$route.params.id,
@@ -534,6 +574,30 @@ export default {
         this.$emit('reloadTable');
         this.showingClaimModal = false;
         this.workTypesToClaim = new Set();
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
+    },
+    async releaseWorkType(workTypes = []) {
+      try {
+        const result = await this.$prompt({
+          title: this.$t('~~Release Cases'),
+          content: this.$t(
+            '~~Please explain why you are releasing these work types',
+          ),
+        });
+        if (!result) {
+          return;
+        }
+
+        await Worksite.api().releaseWorkType(
+          this.worksite.id,
+          workTypes,
+          result,
+        );
+        await Worksite.api().fetch(this.worksite.id);
+        this.$emit('reloadMap', this.worksite.id);
+        this.$emit('reloadTable');
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

@@ -219,6 +219,15 @@ export default class Worksite extends CCUModel {
         }
         return this.post(`/worksites/${id}/unclaim`, data, { save: false });
       },
+      releaseWorkType(id, workTypes, unclaimReason = '') {
+        const data = {
+          work_types: workTypes,
+        };
+        if (unclaimReason) {
+          data.unclaim_reason = unclaimReason;
+        }
+        return this.post(`/worksites/${id}/release`, data, { save: false });
+      },
       requestWorksite(id, workTypes, reason) {
         return this.post(
           `/worksites/${id}/request_take`,

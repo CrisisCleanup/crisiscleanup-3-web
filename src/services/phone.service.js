@@ -150,7 +150,7 @@ export default class PhoneService {
         this.store.commit('phone_legacy/setOutgoingCall', null);
       }
       await Incident.api().get(
-        '/incidents?fields=id,name,short_name,geofence,locations&limit=150&ordering=-start_at',
+        '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release&limit=150&ordering=-start_at',
         {
           dataKey: 'results',
         },

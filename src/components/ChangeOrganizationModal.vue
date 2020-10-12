@@ -250,7 +250,7 @@ export default {
           },
         ),
         incidents: await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
+          `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,turn_on_release&limit=200&sort=-start_at`,
         ),
       });
       this.lineageUsers = pageData.lineageUsers.entities.users;
