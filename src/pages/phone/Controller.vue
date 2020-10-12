@@ -38,7 +38,13 @@
             <template #case>
               <case-form
                 v-bind="caseFormProps"
-                :key="activeCaseId"
+                :key="
+                  JSON.stringify({
+                    activeCaseId,
+                    activeIncidentId,
+                    prefillData,
+                  })
+                "
                 :incident-id="String(activeIncidentId || currentIncident.id)"
                 disable-claim-and-save
                 :data-prefill="prefillData"
