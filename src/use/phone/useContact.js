@@ -102,7 +102,7 @@ export default () => {
     ) {
       Contact.syncAttributes(currentContact.value.contactId);
     }
-  }, 1000);
+  }, 2500);
 
   watch(
     () => currentContact.value,
