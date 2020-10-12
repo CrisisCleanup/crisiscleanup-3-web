@@ -21,7 +21,7 @@ export default () => {
 
   const setCurrentIncident = async (id: number | string) => {
     if (parseInt(id) !== parseInt(currentIncidentId.value)) {
-      await Incident.fetchOrFindId(id);
+      await Incident.fetchById(id);
       await User.api().updateUserState({
         incident: id,
       });
