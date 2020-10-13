@@ -57,16 +57,14 @@
           />
           <template v-if="workTypesClaimedByOthersUnrequested.length > 0">
             <base-button
-              v-if="incident.turn_on_release"
+              v-if="incident.turn_on_release && workTypesReleaseable.length > 0"
               class="ml-2 p-1 px-3 text-xs"
               variant="solid"
               :text="$t('~~Release All')"
               :action="
                 () => {
                   return releaseWorkType(
-                    workTypesClaimedByOthersUnrequested
-                      .filter((workType) => isStaleCase(workType))
-                      .map((workType) => workType.work_type),
+                    workTypesReleaseable.map((workType) => workType.work_type),
                   );
                 }
               "
@@ -482,6 +480,11 @@ export default {
           type.claimed_by &&
           type.claimed_by !== this.currentUser.organization.id &&
           !this.worksiteRequestWorkTypeIds.has(type.id),
+      );
+    },
+    workTypesReleaseable() {
+      return this.workTypesClaimedByOthersUnrequested.filter((type) =>
+        this.isStaleCase(type),
       );
     },
     workTypesUnclaimed() {
