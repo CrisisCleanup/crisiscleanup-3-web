@@ -80,3 +80,19 @@ export default {
   }
 }
 </style>
+
+<style>
+.news-card {
+  .card {
+    &--body {
+      p > a {
+        @apply text-primary-dark;
+        text-decoration: underline;
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+</style>
