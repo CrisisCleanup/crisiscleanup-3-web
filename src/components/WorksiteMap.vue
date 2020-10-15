@@ -145,6 +145,14 @@
             <div class="map-svg-container" v-html="entry.svg"></div>
             <span class="text-xs ml-1">{{ entry.key | getWorkTypeName }}</span>
           </div>
+          <div
+            v-for="entry in defaultWorkTypeSvgs"
+            :key="entry.name"
+            class="flex items-center w-1/2 mb-1"
+          >
+            <div class="map-svg-container" v-html="entry.svg"></div>
+            <span class="text-xs ml-1">{{ entry.name }}</span>
+          </div>
         </div>
         <div class="text-base font-bold my-1">
           {{ $t('worksiteMap.case_status') }}
@@ -242,6 +250,16 @@ export default {
     return {
       displayedWorkTypes: {},
       displayedWorkTypeSvgs: [],
+      defaultWorkTypeSvgs: [
+        {
+          svg: templates.important.replace('{{fillColor}}', 'black'),
+          name: this.$t(`~~High Priority`),
+        },
+        {
+          svg: templates.favorite.replace('{{fillColor}}', 'black'),
+          name: this.$t(`~~Member of My Organization`),
+        },
+      ],
       timeout: null,
       legendColors: {
         [this.$t('worksiteMap.unclaimed')]: colors.open_unassigned_unclaimed
@@ -410,7 +428,9 @@ export default {
         const isHighPriority = Boolean(
           flags.filter((flag) => flag.is_high_priority).length,
         );
-        if (isHighPriority) {
+        if (worksite.favorite || worksite.favorite_id) {
+          detailedTemplate = templates.favorite;
+        } else if (isHighPriority) {
           detailedTemplate = templates.important;
         }
         const worksiteTemplate =

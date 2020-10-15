@@ -34,6 +34,7 @@ export default class Worksite extends CCUModel {
       phone2: this.attr(null),
       email: this.attr(null),
       updated_at: this.attr(null),
+      favorite: this.attr(null),
     };
   }
 
@@ -86,6 +87,10 @@ export default class Worksite extends CCUModel {
 
   get isHighPriority() {
     return Boolean(this.flags.filter((flag) => flag.is_high_priority).length);
+  }
+
+  get isFavorite() {
+    return Boolean(this.favorite);
   }
 
   static getWorkType(workTypes, filters, organization) {
@@ -294,6 +299,22 @@ export default class Worksite extends CCUModel {
           `/worksites/${id}/flags`,
           {
             data: { flag_id: flag.id },
+          },
+          { save: false },
+        );
+      },
+      favorite(id, type = 'favorite') {
+        return this.post(
+          `/worksites/${id}/favorite`,
+          { type_t: type },
+          { save: false },
+        );
+      },
+      unfavorite(id, favoriteId) {
+        return this.delete(
+          `/worksites/${id}/favorite`,
+          {
+            data: { favorite_id: favoriteId },
           },
           { save: false },
         );

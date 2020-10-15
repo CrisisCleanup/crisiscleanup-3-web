@@ -178,6 +178,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             markerSprite.name = marker.name;
             markerSprite.address = marker.address;
             markerSprite.flags = marker.flags || [];
+            markerSprite.favorite_id = marker.favorite_id;
             markerSprite.case_number = marker.case_number;
             markerSprite.work_types = marker.work_types;
             markerSprite.active_work_type = workType;
@@ -292,7 +293,9 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
                   markerSprite.flags.filter((flag) => flag.is_high_priority)
                     .length,
                 );
-                if (isHighPriority) {
+                if (markerSprite.favorite_id) {
+                  detailedTemplate = templates.favorite;
+                } else if (isHighPriority) {
                   detailedTemplate = templates.important;
                 }
                 if (spriteColors) {

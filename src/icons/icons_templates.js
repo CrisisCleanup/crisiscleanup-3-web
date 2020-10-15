@@ -362,6 +362,10 @@ const escort = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.
     </g>{{multiple}}
 </svg>`;
 
+const favorite = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24">
+  <path fill="{{fillColor}}" d="M12 4.435c-1.989-5.399-12-4.597-12 3.568 0 4.068 3.06 9.481 12 14.997 8.94-5.516 12-10.929 12-14.997 0-8.118-10-8.999-12-3.568z"/>{{multiple}}
+</svg>`;
+
 const fence = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="53" height="53" viewBox="0 0 53 53">
     <defs>
         <path id="b" d="M599.21 46l4.19 5.148v6.897h3.6a1 1 0 0 1 1 1v2.76a1 1 0 0 1-1 1l-3.6-.001v10.398h3.6a1 1 0 0 1 1 1v2.759a1 1 0 0 1-1 1l-3.6-.001V90a1 1 0 0 1-1 1h-6.382a1 1 0 0 1-1-1l-.001-12.04h-5.326V90a1 1 0 0 1-1 1h-6.382a1 1 0 0 1-1-1l-.001-12.04h-5.326V90a1 1 0 0 1-1 1H568.6a1 1 0 0 1-1-1V77.96H564a1 1 0 0 1-1-1v-2.758a1 1 0 0 1 1-1h3.599V62.804H564a1 1 0 0 1-1-1v-2.758a1 1 0 0 1 1-1l3.599-.001v-6.897L571.791 46l4.191 5.148v6.897h5.326v-6.897L585.5 46l4.191 5.148v6.897h5.326v-6.897L599.21 46zm-4.193 27.202V62.804h-5.326v10.398h5.326zm-13.709-10.398h-5.326v10.398h5.326V62.804z"/>
@@ -898,6 +902,7 @@ const templates = {
   domestic_services,
   erosion,
   escort,
+  favorite,
   fence,
   fire,
   important,

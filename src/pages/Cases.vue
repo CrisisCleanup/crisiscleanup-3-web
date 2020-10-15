@@ -673,20 +673,38 @@
             <div class="mt-1 mr-1">
               {{ currentWorksite && currentWorksite.case_number }}
             </div>
-            <div
-              v-if="currentWorksite && currentWorksite.isHighPriority"
-              class="svg-container cursor-pointer"
-              v-html="highPrioritySvgActive"
-              :title="$t('actions.unmark_high_priority')"
-              @click="() => toggleHighPriority(false)"
-            ></div>
-            <div
-              v-else
-              class="svg-container cursor-pointer"
-              v-html="highPrioritySvgInactive"
-              :title="$t('actions.mark_high_priority')"
-              @click="() => toggleHighPriority(true)"
-            ></div>
+            <div class="mr-1">
+              <div
+                v-if="currentWorksite && currentWorksite.isFavorite"
+                class="svg-container cursor-pointer"
+                v-html="favoriteSvgActive"
+                :title="$t('~~Not member of my Organization')"
+                @click="() => toggleFavorite(false)"
+              ></div>
+              <div
+                v-else
+                class="svg-container cursor-pointer"
+                v-html="favoriteSvgInactive"
+                :title="$t('~~Member of my Organization')"
+                @click="() => toggleFavorite(true)"
+              ></div>
+            </div>
+            <div class="mr-1">
+              <div
+                v-if="currentWorksite && currentWorksite.isHighPriority"
+                class="svg-container cursor-pointer"
+                v-html="highPrioritySvgActive"
+                :title="$t('actions.unmark_high_priority')"
+                @click="() => toggleHighPriority(false)"
+              ></div>
+              <div
+                v-else
+                class="svg-container cursor-pointer"
+                v-html="highPrioritySvgInactive"
+                :title="$t('actions.mark_high_priority')"
+                @click="() => toggleHighPriority(true)"
+              ></div>
+            </div>
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">
             <router-link
@@ -950,6 +968,21 @@ export default {
     },
     highPrioritySvgActive() {
       const template = templates.important;
+      const svg = template
+        .replace('{{fillColor}}', 'red')
+        .replace('{{strokeColor}}', 'white')
+        .replace('{{multple}}', '');
+      return svg;
+    },
+    favoriteSvgInactive() {
+      const template = templates.favorite;
+      return template
+        .replace('{{fillColor}}', 'grey')
+        .replace('{{strokeColor}}', 'white')
+        .replace('{{multple}}', '');
+    },
+    favoriteSvgActive() {
+      const template = templates.favorite;
       const svg = template
         .replace('{{fillColor}}', 'red')
         .replace('{{strokeColor}}', 'white')
@@ -1696,6 +1729,17 @@ export default {
           highPriorityFlags.map((f) =>
             Worksite.api().deleteFlag(this.currentWorksite.id, f),
           ),
+        );
+      }
+      await Worksite.api().fetch(this.currentWorksite.id);
+    },
+    async toggleFavorite(toggle) {
+      if (toggle) {
+        await Worksite.api().favorite(this.currentWorksite.id);
+      } else {
+        await Worksite.api().unfavorite(
+          this.currentWorksite.id,
+          this.currentWorksite.favorite.id,
         );
       }
       await Worksite.api().fetch(this.currentWorksite.id);
