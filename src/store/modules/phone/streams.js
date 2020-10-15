@@ -346,8 +346,19 @@ class StreamsStore extends VuexModule {
           Log.info('Agent Client => ACW');
         });
       },
-      [ACS.AgentEvents.ON_ERROR]: () => {
-        Log.error('connect agent error!');
+      [ACS.AgentEvents.ON_ERROR]: (agent: connect.Agent) => {
+        agent.getContacts().forEach((c) =>
+          c.clear({
+            success: () => Log.info('successfully cleared agent contact!'),
+            failure: () => Log.info('failed to clear agent contact!'),
+          }),
+        );
+        this.updateAgentClient({
+          routeState: RouteStates.NOT_ROUTABLE,
+          state: AgentStates.OFFLINE,
+        }).then(() =>
+          Log.error('agent error! Cleared contacts and placed agent offline!'),
+        );
       },
     });
     // Bind Contact Events
