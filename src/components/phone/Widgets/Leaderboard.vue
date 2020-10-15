@@ -75,7 +75,7 @@
               </base-text>
             </div>
 
-            <div class="info--org">
+            <div class="info--org" v-if="a.organization">
               <base-text :style="{ lineHeight: '16px' }" variant="h4" regular>
                 {{ a.organization.name | truncate(28) }}
               </base-text>
