@@ -176,6 +176,7 @@ export default {
           break;
         case 'my-org':
           rankFilter.value = (ag) =>
+            ag.organization &&
             ag.organization.id === currentUser.value.organization.id;
           break;
         case 'today':
