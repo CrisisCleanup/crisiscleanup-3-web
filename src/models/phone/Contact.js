@@ -294,7 +294,7 @@ export default class Contact extends Model {
       Contact.syncAttributes(model.contactId);
     }
     if (model.action === ContactActions.ABANDON) {
-      window.vue.$toasted.error(window.vue.$t('~~Survivor ended the call!'));
+      window.vue.$toasted.error(window.vue.$t('phoneDashboard.survivor_ended_call'));
     }
     if ([ContactActions.DESTROYED].includes(model.action)) {
       const isCallActive = Contact.store().getters[

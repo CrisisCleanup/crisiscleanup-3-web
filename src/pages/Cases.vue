@@ -678,14 +678,14 @@
                 v-if="currentWorksite && currentWorksite.isFavorite"
                 class="svg-container cursor-pointer"
                 v-html="favoriteSvgActive"
-                :title="$t('~~Not member of my Organization')"
+                :title="$t('actions.not_member_of_my_org')"
                 @click="() => toggleFavorite(false)"
               ></div>
               <div
                 v-else
                 class="svg-container cursor-pointer"
                 v-html="favoriteSvgInactive"
-                :title="$t('~~Member of my Organization')"
+                :title="$t('actions.member_of_my_org')"
                 @click="() => toggleFavorite(true)"
               ></div>
             </div>

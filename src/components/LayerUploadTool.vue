@@ -137,7 +137,7 @@
             <base-checkbox
               v-model="shapefileInfo[data.filename].combineLocations"
             >
-              {{ $t('~~Combine into Single Object') }}
+              {{ $t('layersVue.combine_to_single_object') }}
             </base-checkbox>
           </div>
           <code v-if="shapefileInfo[data.filename].shapefileCustomName">{{

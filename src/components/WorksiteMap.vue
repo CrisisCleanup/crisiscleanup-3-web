@@ -253,11 +253,11 @@ export default {
       defaultWorkTypeSvgs: [
         {
           svg: templates.important.replace('{{fillColor}}', 'black'),
-          name: this.$t(`~~High Priority`),
+          name: this.$t(`worksiteMap.high_priority`),
         },
         {
           svg: templates.favorite.replace('{{fillColor}}', 'black'),
-          name: this.$t(`~~Member of My Organization`),
+          name: this.$t(`worksiteMap.member_of_my_orgnaization`),
         },
       ],
       timeout: null,

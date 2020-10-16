@@ -60,7 +60,7 @@
               v-if="incident.turn_on_release && workTypesReleaseable.length > 0"
               class="ml-2 p-1 px-3 text-xs"
               variant="solid"
-              :text="$t('~~Release All')"
+              :text="$t('actions.release_all')"
               :action="
                 () => {
                   return releaseWorkType(
@@ -127,7 +127,7 @@
                     v-if="incident.turn_on_release && isStaleCase(work_type)"
                     class="ml-2 p-1 px-3 text-xs"
                     variant="solid"
-                    :text="$t('~~Release')"
+                    :text="$t('actions.release')"
                     :action="
                       () => {
                         return releaseWorkType([work_type.work_type]);
@@ -584,10 +584,8 @@ export default {
     async releaseWorkType(workTypes = []) {
       try {
         const result = await this.$prompt({
-          title: this.$t('~~Release Cases'),
-          content: this.$t(
-            '~~Please explain why you are releasing these work types',
-          ),
+          title: this.$t('actions.release_cases'),
+          content: this.$t('caseView.please_justify_release'),
         });
         if (!result) {
           return;

@@ -73,7 +73,7 @@
           icon-size="md"
           size="sm"
           variant="outline"
-          :alt="$t('~~Manual Dialer')"
+          :alt="$t('actions.manual_dialer')"
         />
       </div>
     </div>
