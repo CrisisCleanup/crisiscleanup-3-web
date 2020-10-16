@@ -34,7 +34,7 @@ export default class CCUModel<T> extends Model {
       omit,
     );
 
-  static entity = '';
+  static entity: string = '';
 
   /**
    * Fetch and store item(s) by id.
@@ -52,6 +52,7 @@ export default class CCUModel<T> extends Model {
     return this.api().get(`/${this.entity}`, {
       params: {
         id__in: id.join(','),
+        limit: id.length,
       },
       dataKey: 'results',
       save,
