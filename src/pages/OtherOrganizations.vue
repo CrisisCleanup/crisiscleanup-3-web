@@ -128,7 +128,7 @@
             }
           "
         >
-          {{ slotProps.item.overdue_count }}
+          {{ slotProps.item.overdue_count || 0 }}
         </base-button>
       </template>
     </Table>
@@ -168,6 +168,9 @@ export default {
           title: this.$t('otherOrganizations.incidents'),
           dataIndex: 'incident_count',
           key: 'incident_count',
+          transformer: (item) => {
+            return item || 0;
+          },
           class: 'justify-center',
           headerClass: 'justify-center',
         },
@@ -175,6 +178,9 @@ export default {
           title: this.$t('otherOrganizations.cases_reported'),
           dataIndex: 'reported_count',
           key: 'reported_count',
+          transformer: (item) => {
+            return item || 0;
+          },
           class: 'justify-center',
           headerClass: 'justify-center',
         },
@@ -182,6 +188,9 @@ export default {
           title: this.$t('otherOrganizations.cases_claimed'),
           dataIndex: 'claimed_count',
           key: 'claimed_count',
+          transformer: (item) => {
+            return item || 0;
+          },
           class: 'justify-center',
           headerClass: 'justify-center',
         },
@@ -189,6 +198,9 @@ export default {
           title: this.$t('otherOrganizations.cases_closed'),
           dataIndex: 'closed_count',
           key: 'closed_count',
+          transformer: (item) => {
+            return item || 0;
+          },
           class: 'justify-center',
           headerClass: 'justify-center',
         },
