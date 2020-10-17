@@ -257,7 +257,7 @@ export default {
         },
         {
           svg: templates.favorite.replace('{{fillColor}}', 'black'),
-          name: this.$t(`worksiteMap.member_of_my_orgnaization`),
+          name: this.$t(`worksiteMap.member_of_my_organization`),
         },
       ],
       timeout: null,
