@@ -618,7 +618,7 @@
           isViewingWorksiteFlag ||
           isNewWorksite
         "
-        class="text-crisiscleanup-grey-700 text-lg flex p-2 bg-white justify-between items-center border-b"
+        class="text-crisiscleanup-grey-700 text-lg flex p-2 bg-white justify-between items-start border-b"
         data-cy="worksiteview_actions"
       >
         <template v-if="isViewingWorksiteHistory">
@@ -669,41 +669,50 @@
           />
         </template>
         <template v-else>
-          <div class="text-left text-black flex items-center">
-            <div class="mt-1 mr-1">
-              {{ currentWorksite && currentWorksite.case_number }}
+          <div>
+            <div class="text-left text-black flex items-center">
+              <div class="mt-1 mr-1">
+                {{ currentWorksite && currentWorksite.case_number }}
+              </div>
+              <div class="mr-1">
+                <div
+                  v-if="currentWorksite && currentWorksite.isFavorite"
+                  class="svg-container cursor-pointer"
+                  v-html="favoriteSvgActive"
+                  :title="$t('actions.not_member_of_my_org')"
+                  @click="() => toggleFavorite(false)"
+                ></div>
+                <div
+                  v-else
+                  class="svg-container cursor-pointer"
+                  v-html="favoriteSvgInactive"
+                  :title="$t('actions.member_of_my_org')"
+                  @click="() => toggleFavorite(true)"
+                ></div>
+              </div>
+              <div class="mr-1">
+                <div
+                  v-if="currentWorksite && currentWorksite.isHighPriority"
+                  class="svg-container cursor-pointer"
+                  v-html="highPrioritySvgActive"
+                  :title="$t('actions.unmark_high_priority')"
+                  @click="() => toggleHighPriority(false)"
+                ></div>
+                <div
+                  v-else
+                  class="svg-container cursor-pointer"
+                  v-html="highPrioritySvgInactive"
+                  :title="$t('actions.mark_high_priority')"
+                  @click="() => toggleHighPriority(true)"
+                ></div>
+              </div>
             </div>
-            <div class="mr-1">
-              <div
-                v-if="currentWorksite && currentWorksite.isFavorite"
-                class="svg-container cursor-pointer"
-                v-html="favoriteSvgActive"
-                :title="$t('actions.not_member_of_my_org')"
-                @click="() => toggleFavorite(false)"
-              ></div>
-              <div
-                v-else
-                class="svg-container cursor-pointer"
-                v-html="favoriteSvgInactive"
-                :title="$t('actions.member_of_my_org')"
-                @click="() => toggleFavorite(true)"
-              ></div>
-            </div>
-            <div class="mr-1">
-              <div
-                v-if="currentWorksite && currentWorksite.isHighPriority"
-                class="svg-container cursor-pointer"
-                v-html="highPrioritySvgActive"
-                :title="$t('actions.unmark_high_priority')"
-                @click="() => toggleHighPriority(false)"
-              ></div>
-              <div
-                v-else
-                class="svg-container cursor-pointer"
-                v-html="highPrioritySvgInactive"
-                :title="$t('actions.mark_high_priority')"
-                @click="() => toggleHighPriority(true)"
-              ></div>
+            <div
+              v-if="!isNewWorksite && currentWorksite"
+              class="text-xs text-crisiscleanup-grey-700"
+            >
+              {{ $t('~~Updated') }}
+              {{ currentWorksite.updated_at | moment('from', 'now') }}
             </div>
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">
@@ -1820,7 +1829,7 @@ export default {
 }
 
 .svg-container svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 }
 </style>

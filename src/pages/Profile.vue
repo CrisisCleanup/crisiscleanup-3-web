@@ -6,50 +6,13 @@
           class="border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
         >
           {{ currentUser.full_name }}
-          <div v-if="isEditing" class="flex justify-end">
-            <base-button
-              class="px-4 py-2 border border-black mr-1"
-              :text="$t('actions.cancel')"
-              :alt="$t('actions.cancel')"
-              :action="
-                () => {
-                  mode = 'view';
-                }
-              "
-            />
+          <div class="flex justify-end">
             <base-button
               variant="solid"
               class="px-4 py-2"
               :text="$t('actions.save')"
               :alt="$t('actions.save')"
               :action="saveUser"
-            />
-          </div>
-          <div v-else class="flex">
-            <ccu-icon
-              :alt="$t('actions.edit')"
-              size="small"
-              class="p-1 py-2 bg-crisiscleanup-yellow-200"
-              type="edit"
-              @click.native="mode = 'edit'"
-            />
-            <ccu-icon
-              :alt="$t('actions.print')"
-              size="small"
-              class="p-1 py-2"
-              type="print"
-            />
-            <ccu-icon
-              :alt="$t('actions.share')"
-              size="small"
-              class="p-1 py-2"
-              type="share"
-            />
-            <ccu-icon
-              :alt="$t('actions.trash')"
-              size="small"
-              class="p-1 py-2"
-              type="trash"
             />
           </div>
         </div>
@@ -80,7 +43,7 @@
               </base-button>
             </div>
             <div class="user-form p-8">
-              <form v-if="isEditing" ref="form" @submit.prevent="handleSubmit">
+              <form ref="form" @submit.prevent="handleSubmit">
                 <div class="user-details">
                   <div class="flex pb-4">
                     <base-input
@@ -234,43 +197,6 @@
                 </div>
                 <hr class="my-3 m-auto" />
               </form>
-              <div v-else>
-                <h1 class="text-2xl">{{ name }}</h1>
-                <div
-                  v-if="userRoles.length"
-                  class="text-crisiscleanup-grey-700"
-                >
-                  {{ userRoles[0].name_t }}
-                </div>
-                <div class="flex mt-4">
-                  <img
-                    src="https://simpleicons.org/icons/facebook.svg"
-                    class="w-8 mr-2"
-                  />
-                  <img
-                    src="https://simpleicons.org/icons/twitter.svg"
-                    class="w-8 mr-2"
-                  />
-                </div>
-                <div class="mt-4 text-crisiscleanup-dark-400">
-                  <div class="py-1">
-                    <font-awesome-icon
-                      size="lg"
-                      class="mr-3"
-                      icon="phone-alt"
-                    />
-                    <a :href="`tel:${currentUser.mobile}`">{{
-                      currentUser.mobile
-                    }}</a>
-                  </div>
-                  <div class="py-1">
-                    <font-awesome-icon size="lg" class="mr-3" icon="envelope" />
-                    <a :href="`mailto:${currentUser.email}`">{{
-                      currentUser.email
-                    }}</a>
-                  </div>
-                </div>
-              </div>
               <div class="my-2">
                 <base-button
                   variant="solid"
@@ -310,7 +236,7 @@
                   />
                 </div>
               </div>
-              <div v-if="isEditing" class="mt-6">
+              <div class="mt-6">
                 <h3>{{ $t('profileUser.notification_settings') }}</h3>
                 <div class="flex flex-col py-3">
                   <base-radio
@@ -350,6 +276,27 @@
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="mt-2">
+                <h3 class="pb-4">{{ $t('~~Troubleshooting') }}</h3>
+                <base-button
+                  :text="$t('~~Reset User States')"
+                  variant="solid"
+                  class="px-4 py-1"
+                  :action="resetStates"
+                />
+                <p class="my-3">
+                  {{ $t('~~Clear map settings and viewport') }}
+                </p>
+                <base-button
+                  :text="$t('~~Reset Settings and Favorites')"
+                  variant="solid"
+                  class="px-4 py-1"
+                  :action="resetPreferences"
+                />
+                <p class="my-3">
+                  {{ $t('~~Clear all favourites and user settings') }}
+                </p>
               </div>
             </div>
           </div>
@@ -433,9 +380,6 @@ export default {
     },
     userRoles() {
       return Role.query().whereIdIn(this.currentUser.roles).get();
-    },
-    isEditing() {
-      return this.mode === 'edit';
     },
     languages() {
       return Language.all();
@@ -562,6 +506,12 @@ export default {
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
+    },
+    async resetStates() {
+      await User.api().clearUserStates();
+    },
+    async resetPreferences() {
+      await User.api().clearUserPreferences();
     },
   },
 };

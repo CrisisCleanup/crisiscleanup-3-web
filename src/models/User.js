@@ -171,6 +171,28 @@ export default class User extends CCUModel {
           { save: false },
         );
       },
+      async clearUserStates() {
+        const currentUser = User.find(User.store().getters['auth/userId']);
+        await this.patch(
+          `/users/${currentUser.id}`,
+          {
+            states: {},
+          },
+          { save: false },
+        );
+        await this.get('/users/me');
+      },
+      async clearUserPreferences() {
+        const currentUser = User.find(User.store().getters['auth/userId']);
+        await this.patch(
+          `/users/${currentUser.id}`,
+          {
+            preferences: {},
+          },
+          { save: false },
+        );
+        await this.get('/users/me');
+      },
       async updateUserState(globalStates, incidentStates, reload = false) {
         /* Update user states JSON with new states.
 
