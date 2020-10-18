@@ -7,6 +7,7 @@ import RequestAccess from './RequestAccess.vue';
 import RequestPasswordReset from './RequestPasswordReset';
 import Terms from './Terms.vue';
 import Training from './Training.vue';
+import Contributions from './Contributions.vue';
 
 export default [
   {
@@ -62,6 +63,12 @@ export default [
     path: '/password/new',
     component: RequestPasswordReset,
     name: 'nav.request_password_reset',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/contributions',
+    component: Contributions,
+    name: 'nav.contributions',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];
