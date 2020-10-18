@@ -42,6 +42,14 @@ export default {
       return `${this.$route.meta.layout || defaultLayout}-layout`;
     },
   },
+  watch: {
+    $route: {
+      immediate: true,
+      handler(to) {
+        document.title = `${this.$t(to.name)}: Crisis Cleanup`;
+      },
+    },
+  },
   methods: {
     ...mapActions('auth', ['login', 'logout']),
     ...mapActions('ui', ['validateBrowser']),
