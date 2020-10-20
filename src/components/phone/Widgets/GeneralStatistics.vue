@@ -69,7 +69,6 @@
 import useUser from '@/use/user/useUser';
 import usePhoneMetrics from '@/use/phone/usePhoneMetrics';
 import { Metrics } from '@/store/modules/phone/controller';
-import { useIntervalFn } from '@vueuse/core';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import {
   ref,
@@ -89,14 +88,6 @@ export default {
     const category = ref('all');
     const isCritical = ref(false);
     const { updateGenMetrics, locales, loading } = usePhoneMetrics();
-
-    useIntervalFn(
-      async () => {
-        await updateGenMetrics();
-      },
-      31000,
-      true,
-    );
 
     onMounted(() => updateGenMetrics());
 

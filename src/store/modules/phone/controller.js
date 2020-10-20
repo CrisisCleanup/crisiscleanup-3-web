@@ -413,6 +413,7 @@ class ControllerStore extends VuexModule {
           attributes: {
             [ContactAttributes.CALL_TYPE]: CallType.OUTBOUND,
             [ContactAttributes.CALLER_ID]: outbound.phone_number,
+            [ContactAttributes.INBOUND_NUMBER]: outbound.phone_number,
             [ContactAttributes.CALLER_DNIS_ID]: outbound.dnis1,
             [ContactAttributes.OUTBOUND_TYPE]:
               outboundTypeMap[outbound.call_type],
