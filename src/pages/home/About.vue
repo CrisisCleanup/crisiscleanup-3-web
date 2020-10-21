@@ -723,23 +723,6 @@
             </ul>
           </div>
         </div>
-        <!-- Info Card w/ Sketch pt2 -->
-        <div
-          class="my-2 mx-3 bg-white shadow w-70 h-70 content-center flex-wrap align-middle pt-15"
-        >
-          <div class="flex flex-row justify-around">
-            <div class="flex-col w-1/4">
-              <img src="@/assets/supportteamsketchss.jpg" class="m-5" />
-            </div>
-            <div class="flex-col w-3/4 m-7">
-              <h1
-                class="m-5 px-5 py-5 text-center text-2xl text-crisiscleanup-dark-400 font-hairline"
-              >
-                {{ $t('about.innovation_is_coordination') }}
-              </h1>
-            </div>
-          </div>
-        </div>
         <!-- End Helpful Links -->
       </div>
     </template>
