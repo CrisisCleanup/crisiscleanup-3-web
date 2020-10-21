@@ -22,8 +22,9 @@ Other Project Stats (As of 2020-10-17)
 How we calculate these statistics: http://blog.crisiscleanup.org/2017/10/how-we-calculate-value-of-services.html
 
 # Contributing
+To preserve our ability to provide open source humanitarian disaster software, all contributions are subject to the terms of the relevant [Contributor License Agreement (CLA)](http://en.wikipedia.org/wiki/Contributor_License_Agreement) downloadable at [crisiscleanup.org/contributions](https://www.crisiscleanup.org/contributions).
 
-Please read CONTRIBUTING.md for important terms and conditions.
+Please read [CONTRIBUTING.md](https://github.com/CrisisCleanup/crisiscleanup-3-web/blob/master/CONTRIBUTING.md) for important details.
 
 # Getting Started
 
