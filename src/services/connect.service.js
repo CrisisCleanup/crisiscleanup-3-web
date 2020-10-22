@@ -224,3 +224,31 @@ export const setAgentState = (online: boolean = true) => {
     },
   });
 };
+
+/**
+ * Connect agent to a phone number via outbound flow.
+ * @param phoneNumber - phone number to manually dial.
+ */
+export const connectEndpoint = (phoneNumber: string) => {
+  const endpoint = connect.Endpoint.byPhoneNumber(phoneNumber);
+  const agent = new connect.Agent();
+  if (!agent) {
+    Log.error('cannot dial number because there is no agent!');
+    return;
+  }
+
+  const client = connect.core.getClient();
+  const endpointOut = new connect.Endpoint(endpoint);
+  delete endpointOut.endpointId;
+  client.call(
+    connect.ClientMethods.CREATE_OUTBOUND_CONTACT,
+    {
+      endpoint: connect.assertNotNull(endpointOut, 'endpoint'),
+      queueARN: agent.getRoutingProfile().defaultOutboundQueue.queueARN,
+    },
+    {
+      success: () => Log.info('outbound call placed successfully!'),
+      failure: (e) => Log.error('failed to place outbound call:', e),
+    },
+  );
+};
