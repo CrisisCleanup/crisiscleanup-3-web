@@ -61,6 +61,7 @@ export const ContactEvents = Object.freeze({
   ON_ACW: 'onACW',
   ON_DESTROY: 'onDestroy',
   ON_INCOMING: 'onIncoming',
+  ON_REFRESH: 'onRefresh',
 });
 
 /**
