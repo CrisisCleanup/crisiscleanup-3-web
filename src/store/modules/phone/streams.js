@@ -262,6 +262,17 @@ class StreamsStore extends VuexModule {
     return newData;
   }
 
+  /**
+   * Begins an outbound call from the current agent.
+   * @param phoneNumber - number to dial.
+   * @returns {Promise<void>}
+   */
+  @Action
+  async connectEndpoint({ phoneNumber }: { phoneNumber: string }) {
+    Log.info(`Dialing phone number: ${phoneNumber}`);
+    ACS.connectEndpoint(phoneNumber);
+  }
+
   @Action
   async init({ element }: { element: HTMLElement }) {
     Log.info('Initializing ACS streams store!');
