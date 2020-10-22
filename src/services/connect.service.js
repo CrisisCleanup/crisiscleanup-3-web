@@ -268,10 +268,13 @@ export const getAgentVerificationEndpoint = (
     success: (data) => {
       Log.info('retrieved agent endpoints!', data);
       Log.info('queues:', agent.getAllQueueARNs());
-      contact.addConnection(data.endpoints[2], {
-        success: () => Log.info('successfully transferred!'),
-        failure: () => Log.error('failed to transfer!'),
-      });
+      contact.addConnection(
+        data.endpoints.find((e) => e.name === 'VERIFYQUEUE'),
+        {
+          success: () => Log.info('successfully transferred!'),
+          failure: () => Log.error('failed to transfer!'),
+        },
+      );
 
       eps = data.endpoints;
     },
