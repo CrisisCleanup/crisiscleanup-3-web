@@ -471,6 +471,30 @@ class StreamsStore extends VuexModule {
       [ACS.ContactEvents.ON_INCOMING]: (contact: connect.Contact) => {
         contact.accept();
       },
+      [ACS.ContactEvents.ON_REFRESH]: (contact: connect.Contact) => {
+        const transferCon = contact.getSingleActiveThirdPartyConnection();
+        if (transferCon) {
+          Log.info('found transfer connection for contact!', transferCon);
+          const initCon = contact.getInitialConnection();
+          if (!initCon.isOnHold()) {
+            Log.info(
+              'Initial connection no longer on hold! ending transfer connection!',
+            );
+            transferCon.destroy({
+              success: () => {
+                this.updateContact({
+                  action: ContactActions.CONNECTED,
+                  state: ContactStates.ROUTED,
+                }).then(() => {
+                  Log.info('Contact => CONNECTED');
+                });
+                Log.info('successfully destroyed transfer con!');
+              },
+              failure: () => Log.error('failed to end transfer conf!'),
+            });
+          }
+        }
+      },
     });
   }
 }
