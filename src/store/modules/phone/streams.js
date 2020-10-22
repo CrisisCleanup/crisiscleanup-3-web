@@ -390,9 +390,9 @@ class StreamsStore extends VuexModule {
           Log.info('Contact => CONNECTING');
         });
       },
-      [ACS.ContactEvents.ON_CONNECTED]: () => {
+      [ACS.ContactEvents.ON_CONNECTED]: (contact: connect.Contact) => {
         const payload = {
-          action: ContactActions.CONNECTED,
+          action: ContactActions.CONNECTING,
           state: ContactStates.ROUTED,
         };
         if (this.agentClientId === null) {
@@ -402,11 +402,30 @@ class StreamsStore extends VuexModule {
                 Log.info('Contact => CONNECTED'),
               ),
             3000,
-            payload,
+            {
+              action: ContactActions.CONNECTED,
+              state: ContactStates.ROUTED,
+            },
           );
         } else {
           this.updateContact(payload).then(() => {
             Log.info('Contact => CONNECTED');
+            const voiceConn: connect.VoiceConnection = ACS.getConnectionByContactId(
+              contact.contactId,
+            );
+            if (voiceConn) {
+              if (voiceConn.getType() === 'inbound') {
+                Log.info('inbound connection connected! placing on hold!');
+                voiceConn.hold({
+                  success: () => {
+                    Log.info('connection successfully placed on hold!');
+                    ACS.getAgentVerificationEndpoint(contact);
+                  },
+                  failure: () =>
+                    Log.error('failed to place connection on hold!'),
+                });
+              }
+            }
           });
         }
       },
