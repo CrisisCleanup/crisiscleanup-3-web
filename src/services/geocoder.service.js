@@ -3,8 +3,29 @@
 
 const GEOCODER_BASE_URL = 'https://api.pitneybowes.com';
 const GEOCODER = 'google';
+import store from '@/store';
 
 export default {
+  getGooglePlaceDetails(placeId) {
+    const sessionToken = store.getters['map/autocompleteToken'];
+    return new Promise((resolve) => {
+      const div = document.createElement('div');
+      const map = new google.maps.Map(div, {
+        center: { lat: -33.866, lng: 151.196 },
+        zoom: 15,
+      });
+      const request = {
+        placeId: placeId,
+        fields: ['address_components', 'geometry'],
+        sessionToken,
+      };
+      const service = new google.maps.places.PlacesService(map);
+      service.getDetails(request, (place, status) => {
+        resolve(place);
+        div.remove();
+      });
+    });
+  },
   getOauthToken() {
     const tokenUrl = `${GEOCODER_BASE_URL}/oauth/token`;
     const params = {
@@ -63,8 +84,13 @@ export default {
       });
     } else if (GEOCODER === 'google') {
       return new Promise((resolve) => {
-        const sessionToken = new google.maps.places.AutocompleteSessionToken();
-
+        let sessionToken;
+        if (store.getters['map/autocompleteToken']) {
+          sessionToken = store.getters['map/autocompleteToken'];
+        } else {
+          sessionToken = new google.maps.places.AutocompleteSessionToken();
+          store.commit('map/setAutocompleteToken', sessionToken);
+        }
         // Pass the token to the autocomplete service.
         const autocompleteService = new google.maps.places.AutocompleteService();
         autocompleteService.getPlacePredictions(
@@ -93,46 +119,58 @@ export default {
     }
   },
 
-  async getPlaceDetails(address) {
+  getAddress(address_components, location) {
+    const data = {
+      address_components: {
+        address: `${this.extractFromAddress(
+          address_components,
+          'street_number',
+        )} ${this.extractFromAddress(address_components, 'route')}`,
+        city: `${
+          this.extractFromAddress(address_components, 'locality') ||
+          this.extractFromAddress(address_components, 'sublocality_level_1')
+        }`,
+        county: `${this.extractFromAddress(
+          address_components,
+          'administrative_area_level_2',
+        )}`,
+        state: `${this.extractFromAddress(
+          address_components,
+          'administrative_area_level_1',
+        )}`,
+        postal_code: `${this.extractFromAddress(
+          address_components,
+          'postal_code',
+        )}`,
+      },
+      location: {
+        lat: location.geometry.location.lat(),
+        lng: location.geometry.location.lng(),
+      },
+    };
+    return data;
+  },
+  async getPlaceDetails(address, placeId = null) {
     if (GEOCODER === 'google') {
       return new Promise((resolve, reject) => {
-        const geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ address }, (results, status) => {
-          if (status === google.maps.GeocoderStatus.OK) {
-            const location = results[0];
-            const { address_components } = location;
-            resolve({
-              address_components: {
-                address: `${this.extractFromAddress(
-                  address_components,
-                  'street_number',
-                )} ${this.extractFromAddress(address_components, 'route')}`,
-                city: `${this.extractFromAddress(
-                  address_components,
-                  'locality',
-                )}`,
-                county: `${this.extractFromAddress(
-                  address_components,
-                  'administrative_area_level_2',
-                )}`,
-                state: `${this.extractFromAddress(
-                  address_components,
-                  'administrative_area_level_1',
-                )}`,
-                postal_code: `${this.extractFromAddress(
-                  address_components,
-                  'postal_code',
-                )}`,
-              },
-              location: {
-                lat: location.geometry.location.lat(),
-                lng: location.geometry.location.lng(),
-              },
-            });
-          } else {
-            reject(`Can't find address: ${status}`);
-          }
-        });
+        if (placeId) {
+          this.getGooglePlaceDetails(placeId).then((place) => {
+            const { address_components } = place;
+            resolve(this.getAddress(address_components, place));
+          });
+        } else {
+          const geocoder = new google.maps.Geocoder();
+          geocoder.geocode({ address }, (results, status) => {
+            if (status === google.maps.GeocoderStatus.OK) {
+              const location = results[0];
+              const { address_components } = location;
+              resolve(this.getAddress(address_components, location));
+            } else {
+              reject(`Can't find address: ${status}`);
+            }
+          });
+          store.commit('map/setAutocompleteToken', null);
+        }
       });
     } else if (GEOCODER === 'pitney-bowes') {
       const [result] = await this.getMatchingAddresses(address, 'USA', 1);
@@ -167,10 +205,13 @@ export default {
                   address_components,
                   'street_number',
                 )} ${this.extractFromAddress(address_components, 'route')}`,
-                city: `${this.extractFromAddress(
-                  address_components,
-                  'locality',
-                )}`,
+                city: `${
+                  this.extractFromAddress(address_components, 'locality') ||
+                  this.extractFromAddress(
+                    address_components,
+                    'sublocality_level_1',
+                  )
+                }`,
                 county: `${this.extractFromAddress(
                   address_components,
                   'administrative_area_level_2',

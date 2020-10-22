@@ -657,7 +657,10 @@ export default {
     },
 
     async onGeocodeSelect(value) {
-      const geocode = await GeocoderService.getPlaceDetails(value.description);
+      const geocode = await GeocoderService.getPlaceDetails(
+        value.description,
+        value.data.place_id,
+      );
       const { lat, lng } = geocode.location;
       const isWithinCurrentIncident = this.checkGeocodeLocation({ lat, lng });
       if (!isWithinCurrentIncident) {

@@ -15,6 +15,7 @@ import locale from './modules/locale';
 import rc from './modules/rc';
 import socket from './modules/socket';
 import ui from './modules/ui';
+import map from './modules/map';
 import ConnectStores from './modules/phone/index';
 
 VuexORM.use(VuexORMAxios, {
@@ -41,6 +42,7 @@ export default new Vuex.Store({
     rc,
     socket,
     phone_legacy,
+    map,
     ui,
     'phone.streams': ConnectStores.StreamsStore,
     websocket: WebsocketStore,
