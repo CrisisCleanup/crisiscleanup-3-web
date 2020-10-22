@@ -252,3 +252,32 @@ export const connectEndpoint = (phoneNumber: string) => {
     },
   );
 };
+
+/**
+ * Add agent verification endpoint to current connection.
+ * @param contact - contact of current connection.
+ * @returns {*}
+ */
+export const getAgentVerificationEndpoint = (
+  contact: typeof connect.Contact,
+) => {
+  const agent = new connect.Agent();
+  let eps;
+  agent.getEndpoints(agent.getAllQueueARNs(), {
+    success: (data) => {
+      Log.info('retrieved agent endpoints!', data);
+      Log.info('queues:', agent.getAllQueueARNs());
+      contact.addConnection(data.endpoints[2], {
+        success: () => Log.info('successfully transferred!'),
+        failure: () => Log.error('failed to transfer!'),
+      });
+
+      eps = data.endpoints;
+    },
+    failure: (e) => Log.error('Failed to retrieve agent endpoints!', e),
+  });
+  if (eps) {
+    return eps.find((e) => e.type === 'queue');
+  }
+  return null;
+};
