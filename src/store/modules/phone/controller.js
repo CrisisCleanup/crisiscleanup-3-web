@@ -28,12 +28,7 @@ import _ from 'lodash';
 import Agent from '@/models/Agent';
 import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
-import Contact, {
-  CallType,
-  ContactActions,
-  ContactAttributes,
-  ContactStates,
-} from '@/models/phone/Contact';
+import Contact, { CallType, ContactActions } from '@/models/phone/Contact';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneInbound from '@/models/PhoneInbound';
 import User from '@/models/User';
@@ -399,34 +394,6 @@ class ControllerStore extends VuexModule {
         await PhoneOutbound.api().callOutbound(outbound.id, {
           isManual: manual,
         });
-        const contactId = outboundObj.external_id
-          ? outboundObj.external_id
-          : `${agent.agentId}#manual-outbound`;
-        const outboundTypeMap = {
-          callback: CallType.OUTBOUND,
-          calldown: CallType.CALLDOWN,
-        };
-        const contactPayload = {
-          contactId,
-          action: ContactActions.PENDING,
-          state: ContactStates.QUEUED,
-          attributes: {
-            [ContactAttributes.CALL_TYPE]: CallType.OUTBOUND,
-            [ContactAttributes.CALLER_ID]: outbound.phone_number,
-            [ContactAttributes.INBOUND_NUMBER]: outbound.phone_number,
-            [ContactAttributes.CALLER_DNIS_ID]: outbound.dnis1,
-            [ContactAttributes.OUTBOUND_TYPE]:
-              outboundTypeMap[outbound.call_type],
-          },
-        };
-        Log.debug('creating outbound contact!', contactPayload);
-        await this.context.dispatch(
-          'phone.streams/updateContact',
-          contactPayload,
-          {
-            root: true,
-          },
-        );
       } catch (e) {
         if (e.response) {
           if (e.response.status === 423) {
