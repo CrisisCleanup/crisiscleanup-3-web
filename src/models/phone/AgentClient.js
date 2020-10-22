@@ -50,9 +50,9 @@ export const RouteStates = Object.freeze({
 const Log = Logger({ name: 'phone.agent' });
 
 export default class AgentClient extends Model {
-  static entity = 'phone/agent';
+  static entity: string = 'phone/agent';
 
-  static primaryKey = 'agentId';
+  static primaryKey: string = 'agentId';
 
   static fields() {
     return ({

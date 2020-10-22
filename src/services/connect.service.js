@@ -125,14 +125,16 @@ export const initConnect = ({
  * @param contactId - ID of contact to retrieve.
  * @returns {null|connect.Contact}
  */
-export const getContactById = (contactId: string): connect.Contact | null => {
-  const agent: connect.Agent = new connect.Agent();
-  const contacts: connect.Contact[] = agent.getContacts();
+export const getContactById = (
+  contactId: string,
+): typeof connect.Contact | null => {
+  const agent: typeof connect.Agent = new connect.Agent();
+  const contacts: typeof connect.Contact[] = agent.getContacts();
   if (_.isEmpty(contacts)) {
     return null;
   }
   let targContact = contacts.find(
-    (c: connect.Contact) => c.getInitialContactId() === contactId,
+    (c: typeof connect.Contact) => c.getInitialContactId() === contactId,
   );
   if (!targContact) {
     // In the case of an outbound call,
@@ -141,7 +143,7 @@ export const getContactById = (contactId: string): connect.Contact | null => {
     // So we will need the current contact ID, rather than the
     // initial.
     targContact = contacts.find(
-      (c: connect.Contact) => c.getContactId() === contactId,
+      (c: typeof connect.Contact) => c.getContactId() === contactId,
     );
     if (targContact) {
       return targContact;
@@ -150,7 +152,7 @@ export const getContactById = (contactId: string): connect.Contact | null => {
     // before connect (and its an outbound), then just use
     // the current contact who is a queue callback.
     targContact = contacts.find(
-      (c: connect.Contact) => c.getType() === 'queue_callback',
+      (c: typeof connect.Contact) => c.getType() === 'queue_callback',
     );
     if (targContact) {
       return targContact;
@@ -169,10 +171,10 @@ export const getContactById = (contactId: string): connect.Contact | null => {
  */
 export const getConnectionByContactId = (
   contactId: string,
-): connect.Connection | null => {
+): typeof connect.Connection | null => {
   const targContact = getContactById(contactId);
   if (targContact === null) return null;
-  const targConnection: void | connect.ConnectionType = targContact.getInitialConnection();
+  const targConnection: typeof connect.ConnectionType = targContact.getInitialConnection();
   return targConnection || null;
 };
 
