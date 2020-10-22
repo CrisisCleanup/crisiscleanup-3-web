@@ -164,12 +164,7 @@ export default {
     });
 
     const onDropdownUpdate = (value) => {
-      const oneDay = new Date();
-      const oneWeek = new Date();
-      const oneMonth = new Date();
-      oneDay.setDate(oneDay.getDate() - 1);
-      oneWeek.setDate(oneWeek.getDate() - 7);
-      oneMonth.setMonth(oneMonth.getMonth() - 1);
+      const now = context.root.$moment();
       switch (value) {
         case 'online':
           rankFilter.value = (ag) => ag.currentState.includes('online');
@@ -180,13 +175,16 @@ export default {
             ag.organization.id === currentUser.value.organization.id;
           break;
         case 'today':
-          rankFilter.value = (ag) => ag.enteredTimestamp >= oneDay;
+          rankFilter.value = (ag) =>
+            context.root.$moment(ag.enteredTimestamp).isSame(now, 'day');
           break;
         case 'week':
-          rankFilter.value = (ag) => ag.enteredTimestamp >= oneWeek;
+          rankFilter.value = (ag) =>
+            context.root.$moment(ag.enteredTimestamp).isSame(now, 'week');
           break;
         case 'month':
-          rankFilter.value = (ag) => ag.enteredTimestamp >= oneMonth;
+          rankFilter.value = (ag) =>
+            context.root.$moment(ag.enteredTimestamp).isSame(now, 'month');
           break;
         case 'english':
           rankFilter.value = (ag) => ag.locale.includes('en');
