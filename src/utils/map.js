@@ -255,8 +255,10 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
                 const marker = findMarker(e.latlng);
                 if (marker) {
                   L.DomUtil.addClass(this._container, 'cursor-pointer');
+                  this._container.setAttribute('title', marker.case_number);
                 } else {
                   L.DomUtil.removeClass(this._container, 'cursor-pointer');
+                  this._container.setAttribute('title', '');
                 }
               }, 32),
             );
