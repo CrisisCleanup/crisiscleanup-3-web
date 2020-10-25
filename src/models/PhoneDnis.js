@@ -43,6 +43,7 @@ export default class PhoneDnis extends CCUModel<PhoneDnis> {
   get dnisNational(): string {
     if (!this.dnis) return '';
     const number = parsePhoneNumberFromString(String(this.dnis), 'US');
+    if (!number) return '';
     return number.formatNational();
   }
 }

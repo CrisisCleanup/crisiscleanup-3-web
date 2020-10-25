@@ -792,14 +792,10 @@ export default class Contact extends Model {
   }
 
   get callerId(): string {
-    const _number = _.get(
-      this.contactAttributes,
-      ContactAttributes.INBOUND_NUMBER,
-      null,
-    );
-    if (!_number) return '';
-    const number = parsePhoneNumberFromString(_number);
-    return number.formatNational();
+    if (this.dnis) {
+      return this.dnis.dnisNational;
+    }
+    return '';
   }
 
   get fullState(): string {
