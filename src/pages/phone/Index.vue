@@ -1,7 +1,7 @@
 <template>
   <PageLayout class="h-full w-full" :is-loading="false">
     <component :is="pageComponent" />
-    <IncomingPopup v-show="callPending" />
+    <IncomingPopup v-show="callPending && isReady" />
     <PhoneDebugger v-if="currentUser && currentUser.isAdmin" />
   </PageLayout>
 </template>
@@ -33,6 +33,7 @@ export default {
       callConnected,
       currentContact,
       activeIncident,
+      isReady,
     } = useContact({
       agent,
     });
@@ -140,6 +141,7 @@ export default {
       callConnected,
       currentContact,
       pollOutbound,
+      isReady,
       ...useUser(),
     };
   },

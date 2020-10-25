@@ -31,9 +31,9 @@ export const ConnectionStates = Object.freeze({
 const Log = Logger({ name: 'phone.connection' });
 
 export default class Connection extends Model {
-  static entity = 'phone/connection';
+  static entity: string = 'phone/connection';
 
-  static primaryKey = 'connectionId';
+  static primaryKey: string = 'connectionId';
 
   static fields() {
     return ({

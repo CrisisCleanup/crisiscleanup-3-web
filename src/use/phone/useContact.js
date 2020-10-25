@@ -26,6 +26,10 @@ export default () => {
     _agent.value ? _agent.value.currentContact : null,
   );
 
+  const isReady = computed(() =>
+    currentContact.value ? currentContact.value.hasResolvedCases : false,
+  );
+
   const { currentCase } = useState('phone.controller', ['currentCase']);
   const { activeCaseId } = useGetters('phone.controller', ['activeCaseId']);
   const state = {
@@ -151,6 +155,7 @@ export default () => {
     activeIncident,
     callPending,
     callConnected,
+    isReady,
     currentContact,
     callDnis,
     callerHistory,
