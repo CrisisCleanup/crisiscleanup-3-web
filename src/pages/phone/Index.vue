@@ -130,6 +130,7 @@ export default {
 
     onMounted(async () => {
       await updatePage();
+      await controller.actions.updateMetrics();
       await controller.actions.updateHistoricMetrics();
     });
 
