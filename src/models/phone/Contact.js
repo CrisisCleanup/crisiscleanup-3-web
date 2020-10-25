@@ -99,6 +99,7 @@ export const ContactAttributes = Object.freeze({
   CALLER_DNIS_ID: 'DNIS_ID',
   OUTBOUNDS_OLD: 'ids',
   OUTBOUND_TYPE: 'OUTBOUND_TYPE',
+  PROMPT_STATUS: 'PROMPT_STATUS',
 });
 
 export const ContactConnectionMap: {
@@ -209,13 +210,18 @@ export default class Contact extends Model {
     return _.maxBy(this.worksites, (wk) => Date.parse(wk.updated_at));
   }
 
-  static syncAttributes(contactId: string): void {
+  static syncAttributes(contactId: string, externalAttrs: any) {
     const contact: typeof Contact = Contact.query()
       .withAllRecursive()
       .find(contactId);
     if (!contact) {
       Log.info('no contact found! cannot sync attributes.');
-      return;
+      return externalAttrs || {};
+    }
+    if (externalAttrs) {
+      Contact.commit(() => {
+        contact.attributes = _.merge(contact.attributes, externalAttrs);
+      });
     }
     const connectContact = ACS.getContactById(contact.contactId);
     if (connectContact) {
@@ -233,6 +239,7 @@ export default class Contact extends Model {
         contact.attributes = _.merge(contact.attributes, resolvedAttr);
       });
     }
+    return contact.attributes;
   }
 
   static beforeCreate(model: Contact): void | boolean {
@@ -291,7 +298,10 @@ export default class Contact extends Model {
         ContactActions.ABANDON,
       ].includes(model.action)
     ) {
-      Contact.syncAttributes(model.contactId);
+      model.attributes = Contact.syncAttributes(
+        model.contactId,
+        model.attributes,
+      );
     }
     if (model.action === ContactActions.ABANDON) {
       window.vue.$toasted.error(
