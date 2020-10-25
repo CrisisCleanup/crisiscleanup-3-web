@@ -12,7 +12,7 @@
       <div class="w-4/6 pl-4">
         <!--- body blurb --->
         <base-text variant="bodysm" class="justify-between">
-          {{ description }}
+          {{ $t(description) }}
         </base-text>
         <div class="flex flex-row justify-start">
           <div class="flex">
