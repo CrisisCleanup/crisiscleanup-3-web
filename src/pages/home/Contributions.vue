@@ -11,27 +11,49 @@
           {{ $t('contrib.ccu_contributor_agreements') }}
         </div>
         <div class="row mb-6">
-          <base-text v-html="$t('contrib.ccu_uses_agreements_for_contributions')" />
+          <base-text
+            v-html="$t('contrib.ccu_uses_agreements_for_contributions')"
+          />
           <base-text v-html="$t('contrib.purpose_goals_of_agreements')" />
-          <base-text variant="h3">{{ $t('contrib.contributor_license_agreements') }}</base-text>
+          <base-text variant="h3">{{
+            $t('contrib.contributor_license_agreements')
+          }}</base-text>
           <ul>
-            <li><base-link href="/icla.pdf"><base-text v-html="$t('contrib.icla')" /></base-link></li>
-            <li><base-link href="/ccla.pdf"><base-text v-html="$t('contrib.ccla')" /></base-link></li>
+            <li>
+              <base-link href="/icla.pdf"
+                ><base-text v-html="$t('contrib.icla')"
+              /></base-link>
+            </li>
+            <li>
+              <base-link href="/ccla.pdf"
+                ><base-text v-html="$t('contrib.ccla')"
+              /></base-link>
+            </li>
           </ul>
           <base-text v-html="$t('contrib.everyone_should_sign_cla')" />
           <base-text v-html="$t('contrib.purpose_of_cla')" />
           <base-text v-html="$t('contrib.corporations_sign_ccla')" />
-          <base-text v-html="$t('contrib.developers_sign_icla_even_with_ccla')" />
+          <base-text
+            v-html="$t('contrib.developers_sign_icla_even_with_ccla')"
+          />
           <base-text v-html="$t('contrib.someone_with_authority_signs_ccla')" />
           <base-text v-html="$t('contrib.icla_independent_of_employer')" />
-          <base-text variant="h3">{{ $t('contrib.software_license_grant') }}</base-text>
+          <base-text variant="h3">{{
+            $t('contrib.software_license_grant')
+          }}</base-text>
           <ul>
-            <li><base-link href="/sgla.pdf"><base-text v-html="$t('contrib.sgla')" /></base-link></li>
+            <li>
+              <base-link href="/sgla.pdf"
+                ><base-text v-html="$t('contrib.sgla')"
+              /></base-link>
+            </li>
           </ul>
           <base-text v-html="$t('contrib.sgla_required_for_code_donation')" />
           <base-text variant="h3">{{ $t('contrib.how_to_submit') }}</base-text>
           <base-text v-html="$t('contrib.must_be_emailed')" />
-          <base-text v-html="$t('contrib.complete_scan_all_pages_then_email')" />
+          <base-text
+            v-html="$t('contrib.complete_scan_all_pages_then_email')"
+          />
           <base-text v-html="$t('contrib.please_use_email_in_doc')" />
           <base-text v-html="$t('contrib.attachments_only_no_links')" />
           <base-text v-html="$t('contrib.define_signing')" />
