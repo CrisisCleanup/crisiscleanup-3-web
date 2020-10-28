@@ -260,19 +260,46 @@ export default class AgentClient extends Model {
     return null;
   }
 
-  toggleOnline(connected?: boolean): void | boolean {
-    if (this.contactState === ConnectionStates.PAUSED && this.currentContact) {
-      Contact.delete(this.currentContact.contactId).then(() =>
-        Log.info('Agent exiting ACW!'),
+  /**
+   * Ensure requested state is reached by retrying.
+   * @param newState - target state.
+   * @param retries - max num of times to retry.
+   * @private
+   */
+  _ensureState(newState: boolean, retries: number = 25) {
+    const reAttempt = (agent, targState, retry, maxRetry) => {
+      Log.info(
+        `Retrying agent state: (${retry}/${maxRetry}) [${
+          agent().isOnline
+        } -> ${targState}] `,
       );
-      return this.isOnline;
+      ACS.setAgentState(targState);
+      if (targState !== agent().isOnline && retry < maxRetry) {
+        return _.delay(reAttempt, 250, agent, newState, retry + 1, maxRetry);
+      }
+      return targState;
+    };
+    ACS.setAgentState(newState);
+    reAttempt(() => AgentClient.query().first(), newState, 0, retries);
+  }
+
+  toggleOnline(
+    connected?: boolean,
+    userInitiated: boolean = false,
+  ): void | boolean {
+    if (this.contactState === ConnectionStates.PAUSED && this.currentContact) {
+      Contact.delete(this.currentContact.contactId).then(() => {
+        Log.info('Agent exiting ACW!');
+        this._ensureState(userInitiated);
+      });
+      return this._ensureState(userInitiated);
     }
     if (typeof connected === 'boolean') {
       Log.debug(`Setting agent state: ${connected}`);
-      return ACS.setAgentState(connected);
+      return this._ensureState(connected);
     }
     Log.debug(`Toggling agent state: ${!this.isOnline}`);
-    return ACS.setAgentState(!this.isOnline);
+    return this._ensureState(!this.isOnline);
   }
 
   async heartbeat() {
