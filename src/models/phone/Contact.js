@@ -351,7 +351,6 @@ export default class Contact extends Model {
     Log.info('forcing agent out of ACW! contact:', model);
     if (
       [
-        ContactActions.CONNECTING,
         ContactActions.MISSED,
         ContactActions.ENTER,
         ContactActions.ABANDON,
@@ -361,9 +360,6 @@ export default class Contact extends Model {
       // then it failed to connect (agent or contact didn't answer)
       Log.info('agent missed contact! placing offline!');
       agentClient.toggleOnline(false);
-    } else {
-      // ensure upstream ACW exit is sent.
-      agentClient.toggleOnline(true);
     }
     Contact.store()
       .dispatch('phone.controller/clearState', {

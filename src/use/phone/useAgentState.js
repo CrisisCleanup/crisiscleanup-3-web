@@ -106,7 +106,7 @@ export default ({
       }
       return;
     }
-    _agent.value.toggleOnline();
+    _agent.value.toggleOnline(null, userInitiated);
   };
 
   const acwTimer = useIntervalFn(() => {
