@@ -38,7 +38,7 @@
         <template v-if="trainingItems.length">
           <div class="shadow m-5">
             <trainings-card
-              v-for="(training, idx) in trainingItems"
+              v-for="(training, idx) in sortedTrainings"
               :key="idx"
               :image-path="getTrainingThumbnail(training)"
               :description="training.title_t"
@@ -136,6 +136,9 @@ export default {
           ),
         },
       };
+    },
+    sortedTrainings() {
+      return _.orderBy(this.trainingItems, ['settings.order'], ['asc']);
     },
   },
   methods: {
