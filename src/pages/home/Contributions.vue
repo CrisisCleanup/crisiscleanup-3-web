@@ -72,8 +72,8 @@ export default {
   computed: {
     contrib() {
       return {
-        title: this.$t('~~Example Title'),
-        subtitle1_intro: this.$t('Example Subtitle1 Intro'),
+        title: this.$t('nav.contributions'),
+        subtitle1_intro: this.$t('nav.contributions'),
       };
     },
   },
