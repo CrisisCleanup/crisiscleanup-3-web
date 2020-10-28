@@ -8,7 +8,6 @@ import 'leaflet.heat';
 import * as moment from 'moment';
 import { solveCollision } from '@/utils/easing';
 import { colors, templates } from '@/icons/icons_templates';
-import Worksite from '@/models/Worksite';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -138,15 +137,10 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             ]);
 
             const markerSprite = new Sprite();
-            const workType = Worksite.getWorkType(
-              marker.work_types,
-              context.currentFilters,
-              context.currentUser && context.currentUser.organization,
-            );
+            const workType = marker.key_work_type;
 
             if (context.displayedWorkTypes) {
               context.displayedWorkTypes[workType.work_type] = true;
-              context.displayedWorkTypes = { ...context.displayedWorkTypes };
             }
 
             const colorsKey = `${workType.status}_${
@@ -186,6 +180,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             markerSprite.id = marker.id;
             markerSprite.alpha = getOpacity(marker.updated_at);
           });
+          context.displayedWorkTypes = { ...context.displayedWorkTypes };
 
           const quadTrees = {};
           if (interactive) {
@@ -277,11 +272,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
                     markerSprite.location.coordinates[0],
                   ])
               ) {
-                const workType = Worksite.getWorkType(
-                  markerSprite.work_types,
-                  context.currentFilters,
-                  context.currentUser && context.currentUser.organization,
-                );
+                const workType = markerSprite.active_work_type;
 
                 const colorsKey = `${workType.status}_${
                   workType.claimed_by ? 'claimed' : 'unclaimed'
