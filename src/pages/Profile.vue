@@ -278,24 +278,24 @@
                 </div>
               </div>
               <div class="mt-2">
-                <h3 class="pb-4">{{ $t('~~Troubleshooting') }}</h3>
+                <h3 class="pb-4">{{ $t('profileUser.troubleshooting') }}</h3>
                 <base-button
-                  :text="$t('~~Reset User States')"
+                  :text="$t('profileUser.reset_user_states')"
                   variant="solid"
                   class="px-4 py-1"
                   :action="resetStates"
                 />
                 <p class="my-3">
-                  {{ $t('~~Clear map settings and viewport') }}
+                  {{ $t('profileUser.clear_map_settings_viewport') }}
                 </p>
                 <base-button
-                  :text="$t('~~Reset Settings and Favorites')"
+                  :text="$t('profileUser.reset_user_preferences')"
                   variant="solid"
                   class="px-4 py-1"
                   :action="resetPreferences"
                 />
                 <p class="my-3">
-                  {{ $t('~~Clear all favourites and user settings') }}
+                  {{ $t('profileUser.clear_favorites_user_settings') }}
                 </p>
               </div>
             </div>
