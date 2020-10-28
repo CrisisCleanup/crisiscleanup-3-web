@@ -711,7 +711,7 @@
               v-if="!isNewWorksite && currentWorksite"
               class="text-xs text-crisiscleanup-grey-700"
             >
-              {{ $t('~~Updated') }}
+              {{ $t('casesVue.updated') }}
               {{ currentWorksite.updated_at | moment('from', 'now') }}
             </div>
           </div>
