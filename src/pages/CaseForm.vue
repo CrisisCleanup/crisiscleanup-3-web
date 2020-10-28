@@ -3,11 +3,12 @@
     v-if="ready"
     ref="form"
     class="bg-white flex flex-col flex-grow w-full intake-form-container"
+    :class="noGrid && 'no-grid'"
     @submit.prevent
     :style="formStyle"
   >
     <resize-observer @notify="calcFormStyle" />
-    <div class="intake-form">
+    <div class="intake-form" :class="noGrid && 'no-grid'">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
@@ -382,6 +383,10 @@ export default {
       // screen: resize based on scrollable screen.
       type: String,
       default: 'parent',
+    },
+    noGrid: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -996,6 +1001,7 @@ export default {
     },
     calcFormStyle() {
       if (!this.$refs.form) return;
+      if (this.resizeMethod === 'none' || this.resizeMethod === null) return;
       const topOffset = this.$refs.form.offsetTop;
       let parentHeight = this.$refs.form.offsetParent.clientHeight;
       if (this.resizeMethod === 'screen') {
@@ -1019,6 +1025,9 @@ export default {
 .intake-form-container {
   --safe-area-inset-bottom: env(safe-area-inset-bottom);
   display: grid;
+  &.no-grid {
+    display: inherit;
+  }
 }
 
 .intake-form {

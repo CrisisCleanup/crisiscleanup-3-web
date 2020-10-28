@@ -51,6 +51,7 @@
                 @savedWorksite="savedWorksite"
                 @navigateToWorksite="(id) => setActiveCase(id)"
                 class="h-full"
+                no-grid
               />
             </template>
             <template #resources>
