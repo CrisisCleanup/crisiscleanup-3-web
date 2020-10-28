@@ -27,6 +27,7 @@ const routes = [
     path: '/caller',
     component: Index,
     name: 'nav.caller',
+    redirect: '/phone',
     meta: {
       id: 'caller',
       layout: 'authenticated',

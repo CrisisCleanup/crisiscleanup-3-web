@@ -32,7 +32,7 @@ const routes = [
       fail: '$from',
       banner: {
         type: BannerTypes.INFO,
-        enabled: true,
+        enabled: false,
         component: NewSystemBetaBanner,
       },
     },

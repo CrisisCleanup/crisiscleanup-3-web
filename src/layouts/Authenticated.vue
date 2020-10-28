@@ -127,21 +127,14 @@ export default {
           icon: 'phone',
           text: this.$t('nav.phone'),
           to: '/phone',
-          disabled:
-            !this.$can ||
-            !this.$can('phone_agent') ||
-            !this.$can('beta_feature.aws_connect_phone'),
+          disabled: !this.$can || !this.$can('phone_agent'),
         },
         {
           key: 'caller',
           icon: 'phone',
           text: this.$t('nav.phone_beta'),
           to: '/caller',
-          disabled:
-            !this.$can ||
-            !this.$can('phone_agent') ||
-            this.$can('beta_feature.connect_first_integration') ||
-            this.$can('beta_feature.aws_connect_phone'),
+          disabled: true,
         },
         {
           key: 'connect_first',

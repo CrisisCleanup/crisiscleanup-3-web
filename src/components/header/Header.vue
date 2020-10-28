@@ -29,11 +29,7 @@
 
       <div class="flex h-full">
         <div
-          v-if="
-            $can &&
-            $can('phone_agent') &&
-            $can('beta_feature.aws_connect_phone')
-          "
+          v-if="$can && $can('phone_agent')"
           class="flex items-center header-item h-full"
         >
           <PhoneStatus />
