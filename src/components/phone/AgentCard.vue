@@ -244,6 +244,7 @@ export default {
           initialValue,
         },
       });
+      context.emit('dialer:close');
       context.root.$log.info('got dialer input:', _dialerInput.value);
       if (_dialerInput.value && modalAction !== 'cancel') {
         const { isValid, e164 } = _dialerInput.value;

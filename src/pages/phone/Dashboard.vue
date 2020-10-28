@@ -8,6 +8,7 @@
             :training-items="trainings"
             :user-training-items="userTrainings"
             @phone:showTraining="($event) => (isShowingTrainingModal = $event)"
+            @dialer:close="() => (numberToDial = null)"
             :number-to-dial="numberToDial"
           />
         </div>
