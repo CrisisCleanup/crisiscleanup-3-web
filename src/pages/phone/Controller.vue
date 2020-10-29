@@ -1,5 +1,5 @@
 <template>
-  <div class="contents">
+  <div>
     <script-popup
       @dismissed="() => (scriptPopup = false)"
       :active="scriptPopup"
@@ -204,38 +204,40 @@ export default {
 @lost flexbox flex;
 $neg-y-pad: calc(0rem - theme('spacing.6'));
 $neg-x-pad: calc(0rem - theme('spacing.6'));
+$neg-tab-height: calc(0rem - theme('spacing.8'));
 
 .ctrl {
   &__container {
+    max-height: calc(100vh - 4.5rem);
     lost-flex-container: row;
     transition: transform 300ms easeInOutCirc;
+    @apply pl-6;
 
     &.popup-active {
       transform: translateY(8rem);
     }
 
     .ctrl__section {
+      lost-column: 1/2 0;
+      @screen xl {
+        lost-column: 1/4 0;
+      }
+      @apply pt-6;
+
       &:first-child {
         display: none;
-        lost-column: 1/4 0;
         @screen xl {
           display: initial;
-          lost-column: 1/4 0;
         }
       }
-      &:nth-child(2) {
-        lost-column: 1/2 0 0;
-        @screen xl {
-          lost-column: 2/4 0 0;
-        }
-      }
-      &:last-child {
-        lost-column: 1/2 0 0;
-        @screen xl {
-          lost-column: 1/4 0 0;
-        }
 
-        margin: $neg-y-pad calc($neg-x-pad - 30px) $neg-y-pad theme('spacing.6') !important;
+      &:nth-child(2) {
+        lost-column: 1/2 0;
+      }
+
+      &:last-child {
+        padding-top: 0;
+        max-height: calc(100vh + $neg-tab-height - 80px + $neg-y-pad);
       }
 
       .ctrl__agent {

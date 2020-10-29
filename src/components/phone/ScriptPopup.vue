@@ -116,7 +116,7 @@ $neg-body-x-pad: calc(0rem - theme('spacing.6'));
     left: 0;
     border-top: 1px solid;
     width: 100%;
-    margin: 0 $neg-body-x-pad 0 $neg-body-x-pad;
+    margin: 0;
   }
 
   &-body {

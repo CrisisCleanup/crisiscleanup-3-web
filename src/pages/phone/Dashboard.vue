@@ -1,5 +1,5 @@
 <template>
-  <div class="phone__container">
+  <div class="phone__container p-6">
     <div class="phone__section">
       <div class="phone__agent">
         <div class="phone__agentcard">

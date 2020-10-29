@@ -1,5 +1,5 @@
 <template>
-  <PageLayout class="h-full w-full" :is-loading="false">
+  <PageLayout class="h-full w-full phone__wrapper" :is-loading="false">
     <component :is="pageComponent" />
     <IncomingPopup v-show="callPending && isReady" />
     <PhoneDebugger v-if="currentUser && currentUser.isAdmin" />
@@ -149,4 +149,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.phone__wrapper {
+  padding: 0 !important;
+}
+</style>
