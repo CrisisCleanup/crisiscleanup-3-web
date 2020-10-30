@@ -182,7 +182,10 @@ export default {
           width: '1.5fr',
           transformer: (_, item) => {
             const user = User.find(item.user);
-            return user.email;
+            if (user) {
+              return user.email;
+            }
+            return '';
           },
         },
         {
@@ -192,7 +195,10 @@ export default {
           width: '1.5fr',
           transformer: (_, item) => {
             const user = User.find(item.user);
-            return `${user.first_name} ${user.last_name}`;
+            if (user) {
+              return `${user.first_name} ${user.last_name}`;
+            }
+            return '';
           },
         },
         {

@@ -79,7 +79,7 @@
     "google-maps-api-loader": "^1.1.1",
     "handlebars": "^4.7.6",
     "jwt-decode": "^2.2.0",
-    "leaflet": "^1.6.0",
+    "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
     "leaflet-loading": "^0.1.24",
     "leaflet-pixi-overlay": "^1.8.1",

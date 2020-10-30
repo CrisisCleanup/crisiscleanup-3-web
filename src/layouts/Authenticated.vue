@@ -284,9 +284,7 @@ export default {
   },
   methods: {
     async handleChange(value) {
-      this.ready = false;
       await Incident.api().fetchById(value);
-      this.ready = true;
       await User.api().updateUserState({
         incident: value,
       });
