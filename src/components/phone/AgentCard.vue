@@ -10,10 +10,16 @@
     </div>
     <div class="profile">
       <div class="profile--img">
-        <img
+        <avatar
           :alt="$t('phoneDashboard.user_profile')"
-          :src="currentUser && currentUser.profilePictureUrl"
-          class="rounded-full"
+          :username="currentUser && currentUser.full_name"
+          :size="68"
+          :src="
+            currentUser &&
+            currentUser.hasProfilePicture &&
+            currentUser.profilePictureUrl
+          "
+          rounded
         />
       </div>
       <div class="profile--details">
@@ -113,6 +119,7 @@ import useIncident from '@/use/worksites/useIncident';
 import { EventBus } from '@/event-bus';
 import VueTypes from 'vue-types';
 import ControllerStore from '@/store/modules/phone/controller';
+import Avatar from 'vue-avatar';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();
@@ -177,6 +184,7 @@ export default {
     moreInfo: ContactMoreInfo,
     'agent-edit-card': CallerIDEditCard,
     ProgressButton,
+    Avatar,
   },
   props: {
     numberToDial: VueTypes.string,
@@ -346,8 +354,6 @@ export default {
 
     &--img {
       @apply shadow-md;
-      max-width: 5vw;
-      object-fit: contain;
       border-radius: 50%;
       position: relative;
     }

@@ -42,9 +42,15 @@
             data-cy="auth.userprofile"
           >
             <div class="flex cursor-pointer items-center">
-              <img
-                :src="currentUser && currentUser.profilePictureUrl"
-                class="rounded-full w-10 h-10 shadow"
+              <avatar
+                :src="
+                  currentUser &&
+                  currentUser.hasProfilePicture &&
+                  currentUser.profilePictureUrl
+                "
+                :size="31"
+                :username="currentUser && currentUser.full_name"
+                rounded
               />
               <base-text
                 variant="h3"
@@ -86,12 +92,14 @@ import VueTypes from 'vue-types';
 import useUser from '@/use/user/useUser';
 import { useRouter } from '@u3u/vue-hooks';
 import PhoneStatus from '@/components/header/PhoneStatus.vue';
+import Avatar from 'vue-avatar';
 
 export default {
   name: 'Header',
   components: {
     DisasterIcon,
     PhoneStatus,
+    Avatar,
   },
   props: {
     incidents: VueTypes.array,

@@ -33,7 +33,11 @@
       >
         <div class="item--profile">
           <div class="image">
-            <img class="rounded-full" :src="a.user.profilePictureUrl" />
+            <avatar
+              :username="a.user.full_name"
+              :src="a.user.hasProfilePicture && a.user.profilePictureUrl"
+              rounded
+            />
           </div>
           <div class="info pl-2">
             <div class="info--user">
@@ -106,6 +110,7 @@ import AgentClient from '@/models/phone/AgentClient';
 import LanguageTag from '@/components/tags/LanguageTag.vue';
 import { reactive, ref } from '@vue/composition-api';
 import useUser from '@/use/user/useUser';
+import Avatar from 'vue-avatar';
 
 export default {
   name: 'Leaderboard',
@@ -113,6 +118,7 @@ export default {
     TitledCard,
     UserDetailsTooltip,
     LanguageTag,
+    Avatar,
   },
   setup(props, context) {
     const getters = {
@@ -320,13 +326,6 @@ $metric-headers: ('In' 'Out' 'Total');
       .image {
         @apply shadow;
         border-radius: 50%;
-        position: relative;
-        img {
-          @apply rounded-full;
-          height: 64px;
-          width: 64px;
-          object-fit: cover;
-        }
       }
       .info {
         display: flex;

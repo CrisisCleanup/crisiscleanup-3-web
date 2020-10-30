@@ -43,6 +43,16 @@ export default class User extends CCUModel {
     }
   }
 
+  get hasProfilePicture() {
+    if (this.files && this.files.length) {
+      const profilePictures = this.files.filter(
+        (file) => file.file_type_t === 'fileTypes.user_profile_picture',
+      );
+      return profilePictures.length;
+    }
+    return false;
+  }
+
   get profilePictureUrl() {
     if (this.files && this.files.length) {
       const profilePictures = this.files.filter(
