@@ -4,7 +4,7 @@
  * Phone store types.
  */
 
-import { AuthStates } from '@/store/modules/phone/streams';
+import { AuthStates, InboundActions } from '@/store/modules/phone/streams';
 import {
   ControllerActionTabs,
   ControllerPages,
@@ -14,6 +14,7 @@ import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
 
 type AuthState = $Values<typeof AuthStates>;
+type InboundAction = $Values<typeof InboundActions>;
 
 type ControllerPage = $Values<typeof ControllerPages>;
 type ControllerActionTab = $Values<typeof ControllerActionTabs>;
@@ -44,6 +45,7 @@ type PhoneMetricUpdate = {|
 
 export type {
   AuthState,
+  InboundAction,
   CaseType,
   ControllerActionTab,
   ControllerPage,

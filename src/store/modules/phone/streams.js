@@ -13,7 +13,7 @@ import {
   Mutation,
   VuexModule,
 } from 'vuex-module-decorators';
-import type { AuthState } from '@/store/modules/phone/types';
+import type { AuthState, InboundAction } from '@/store/modules/phone/types';
 import * as ACS from '@/services/connect.service';
 import Logger from '@/utils/log';
 import * as SSO from '@/services/sso.service';
@@ -49,6 +49,16 @@ export const AuthStates = Object.freeze({
   ERROR: 'error',
 });
 
+/**
+ * Enum of different actions for handling inbounds.
+ * @readonly
+ * @enum {string}
+ */
+export const InboundActions = Object.freeze({
+  VERIFY: 'verify',
+  SKIP: 'skip',
+});
+
 const Log = Logger({ name: 'phone.streams' });
 
 @Module({
@@ -73,6 +83,9 @@ class StreamsStore extends VuexModule {
   // agent id
   agentId: string | null = null;
 
+  // next inbound action
+  nextInboundAction: InboundAction = InboundActions.VERIFY;
+
   get agentClientId(): string | null {
     return this.agentId ? this.agentId : null;
   }
@@ -90,6 +103,11 @@ class StreamsStore extends VuexModule {
   @Mutation
   setAgentId(agentId: string) {
     this.agentId = agentId;
+  }
+
+  @Mutation
+  setNextInboundAction(nextAction: InboundAction) {
+    this.nextInboundAction = nextAction;
   }
 
   @Mutation
@@ -415,15 +433,48 @@ class StreamsStore extends VuexModule {
             );
             if (voiceConn) {
               if (voiceConn.getType() === 'inbound') {
-                Log.info('inbound connection connected! placing on hold!');
-                voiceConn.hold({
-                  success: () => {
-                    Log.info('connection successfully placed on hold!');
-                    ACS.getAgentVerificationEndpoint(contact);
-                  },
-                  failure: () =>
-                    Log.error('failed to place connection on hold!'),
-                });
+                if (this.nextInboundAction === InboundActions.SKIP) {
+                  voiceConn.destroy({
+                    success: () => {
+                      this.updateContact({
+                        action: ContactActions.MISSED,
+                        state: ContactStates.ROUTED,
+                      }).then(() => {
+                        this.updateAgentClient({
+                          routeState: RouteStates.NOT_ROUTABLE,
+                          state: AgentStates.OFFLINE,
+                        }).then(() => {
+                          Log.info('connection successfully destroyed!');
+                          this.setNextInboundAction(InboundActions.VERIFY);
+                        });
+                      });
+                    },
+                    failure: () => {
+                      this.updateContact({
+                        action: ContactActions.MISSED,
+                        state: ContactStates.ROUTED,
+                      }).then(() => {
+                        this.updateAgentClient({
+                          routeState: RouteStates.NOT_ROUTABLE,
+                          state: AgentStates.OFFLINE,
+                        }).then(() => {
+                          Log.info('connection failed to destroy!');
+                          this.setNextInboundAction(InboundActions.VERIFY);
+                        });
+                      });
+                    },
+                  });
+                } else {
+                  Log.info('inbound connection connected! placing on hold!');
+                  voiceConn.hold({
+                    success: () => {
+                      Log.info('connection successfully placed on hold!');
+                      ACS.getAgentVerificationEndpoint(contact);
+                    },
+                    failure: () =>
+                      Log.error('failed to place connection on hold!'),
+                  });
+                }
               }
             }
           });
