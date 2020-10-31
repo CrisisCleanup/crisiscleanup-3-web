@@ -151,11 +151,12 @@ import useIncident from '@/use/worksites/useIncident';
 import useEnums from '@/use/useEnums';
 import useToggle from '@/use/useToggle';
 import useScripts from '@/use/phone/useScripts';
-import { useActions } from '@u3u/vue-hooks';
+import { useActions, useMutations } from '@u3u/vue-hooks';
 import { ContactActions, ContactStates } from '@/models/phone/Contact';
 import PhoneInbound from '@/models/PhoneInbound';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import useAgent from '@/use/phone/useAgent';
+import { InboundActions } from '@/store/modules/phone/streams';
 
 export default {
   name: 'IncomingPopup',
@@ -169,6 +170,9 @@ export default {
       activeIncident,
       ...contact
     } = useContact();
+    const { setNextInboundAction } = useMutations('phone.streams', [
+      'setNextInboundAction',
+    ]);
     const { updateContact } = useActions('phone.streams', ['updateContact']);
     const { clearState } = useActions('phone.controller', ['clearState']);
     const { agent } = useAgent();
@@ -177,6 +181,7 @@ export default {
 
     const skipCall = async () => {
       if (callState.inbound.value && currentContact.value.isInbound) {
+        setNextInboundAction(InboundActions.SKIP);
         await PhoneInbound.api().skipCall(callState.inbound.value.id);
       }
       if (callState.outbound.value && !currentContact.value.isInbound) {
