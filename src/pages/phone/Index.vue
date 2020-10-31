@@ -19,6 +19,7 @@ import useController from '@/use/phone/useController';
 import PhoneDebugger from '@/components/phone/Widgets/PhoneDebugger.vue';
 import useIncident from '@/use/worksites/useIncident';
 import useUser from '@/use/user/useUser';
+import { RouteStates } from '@/models/phone/AgentClient';
 import Dashboard from './Dashboard.vue';
 import Controller from './Controller.vue';
 
@@ -82,7 +83,7 @@ export default {
         !callConnected.value &&
         !currentContact.value &&
         !callPending.value &&
-        agent.value.isRoutable
+        agent.value.contactState === RouteStates.ROUTABLE
       ) {
         await controller.actions.serveOutbound({
           agent: agent.value,
