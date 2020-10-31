@@ -266,7 +266,7 @@ export default class AgentClient extends Model {
    * @param retries - max num of times to retry.
    * @private
    */
-  _ensureState(newState: boolean, retries: number = 25) {
+  _ensureState(newState: boolean, retries: number = 80) {
     const reAttempt = (agent, targState, retry, maxRetry) => {
       Log.info(
         `Retrying agent state: (${retry}/${maxRetry}) [${
