@@ -17,6 +17,7 @@
           :initials="data.first_name"
           :url="profilePictureUrl"
           class="mb-4 mr-2"
+          size="xsmall"
         />
         {{ data.first_name }} {{ data.last_name }}
       </div>
@@ -70,7 +71,7 @@ export default {
           (file) => file.file_type_t === 'fileTypes.user_profile_picture',
         );
         if (profilePictures.length) {
-          return profilePictures[0].url;
+          return profilePictures[0].small_thumbnail_url;
         }
       }
       return `https://api.adorable.io/avatars/285/ccu-user-${this.data.id}.png`;

@@ -97,6 +97,7 @@
                   :initials="slotProps.item.first_name"
                   :url="slotProps.item.profilePictureUrl"
                   classes="mb-1"
+                  size="xsmall"
                 />
                 <span class="ml-2">{{ slotProps.item.full_name }}</span>
               </div>
@@ -401,6 +402,7 @@
                   :initials="user.first_name"
                   :url="user.profilePictureUrl"
                   class="mr-2 mb-4"
+                  size="xsmall"
                 />
                 {{ user.full_name }}
               </div>

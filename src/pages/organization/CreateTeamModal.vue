@@ -50,6 +50,7 @@
               :initials="user.first_name"
               :url="user.profilePictureUrl"
               class="mr-2"
+              size="xsmall"
             />
             <span>{{ user.full_name }}</span>
           </div>
@@ -195,6 +196,7 @@
                 :initials="user.first_name"
                 :url="user.profilePictureUrl"
                 class="mr-2"
+                size="xsmall"
               />
               <span>{{ user.full_name }}</span>
             </div>

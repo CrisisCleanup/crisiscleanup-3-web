@@ -1,7 +1,7 @@
 <template>
   <div :class="classes">
     <div
-      class="group w-full h-full rounded-full overflow-hidden shadow-inner text-center bg-purple table cursor-pointer"
+      class="rounded-full w-full h-full overflow-hidden shadow-inner text-center bg-purple flex cursor-pointer"
     >
       <span
         class="hidden group-hover:table-cell text-white font-bold align-middle"
@@ -30,22 +30,39 @@ export default {
       type: String,
       default: '',
     },
-    size: VueTypes.oneOf(['small', 'medium', 'large', 'xl']).def('small'),
+    size: VueTypes.oneOf(['xsmall', 'small', 'medium', 'large', 'xl']).def(
+      'small',
+    ),
   },
   computed: {
     classes() {
       return {
-        'w-6 h-6': this.size === 'small',
-        'w-12 h-12': this.size === 'medium',
-        'w-16 h-16': this.size === 'large',
-        'w-24 h-24': this.size === 'xl',
-        'w-32 h-32': this.size === '2xl',
-        'w-40 h-40': this.size === '3xl',
-        relative: true,
+        [this.size]: true,
       };
     },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.xsmall {
+  width: 50px;
+  height: 50px;
+}
+.small {
+  width: 60px;
+  height: 60px;
+}
+.medium {
+  width: 150px;
+  height: 150px;
+}
+.large {
+  width: 200px;
+  height: 200px;
+}
+.xl {
+  width: 300px;
+  height: 300px;
+}
+</style>

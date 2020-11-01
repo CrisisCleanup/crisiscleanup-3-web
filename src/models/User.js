@@ -59,7 +59,7 @@ export default class User extends CCUModel {
         (file) => file.file_type_t === 'fileTypes.user_profile_picture',
       );
       if (profilePictures.length) {
-        return profilePictures[0].url;
+        return profilePictures[0].large_thumbnail_url;
       }
     }
     return `https://api.adorable.io/avatars/285/ccu-user-${this.id}.png`;

@@ -23,7 +23,7 @@
                 :initials="currentUser.first_name"
                 :url="currentUser.profilePictureUrl"
                 class="p-1"
-                size="3xl"
+                size="large"
               />
               <DragDrop
                 class="text-primary-dark cursor-pointer"

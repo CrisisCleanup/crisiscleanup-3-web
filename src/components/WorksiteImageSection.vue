@@ -20,7 +20,7 @@
       >
         <img
           class="image-box w-20 h-20 mx-2 cursor-pointer"
-          :src="file.url"
+          :src="file.small_thumbnail_url"
           :alt="file.filename_original"
           :title="file.filename_original"
           @click="viewingImage = file"
@@ -41,7 +41,7 @@
       @close="viewingImage = null"
     >
       <img
-        :src="viewingImage.url"
+        :src="viewingImage.full_url"
         :alt="viewingImage.filename_original"
         :title="viewingImage.filename_original"
       />

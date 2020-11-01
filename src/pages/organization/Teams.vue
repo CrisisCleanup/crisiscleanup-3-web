@@ -67,6 +67,7 @@
                 :initials="user.first_name"
                 :url="user.profilePictureUrl"
                 class="mr-2"
+                size="xsmall"
               />
             </div>
           </div>

@@ -499,7 +499,7 @@ export default {
           (file) => file.file_type_t === 'fileTypes.logo',
         );
         if (logos.length) {
-          return logos[0].url;
+          return logos[0].small_thumbnail_url;
         }
       }
       return '';

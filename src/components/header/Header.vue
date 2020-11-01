@@ -42,7 +42,7 @@
             data-cy="auth.userprofile"
           >
             <div class="flex cursor-pointer items-center">
-              <avatar
+              <Avatar
                 :src="
                   currentUser &&
                   currentUser.hasProfilePicture &&
