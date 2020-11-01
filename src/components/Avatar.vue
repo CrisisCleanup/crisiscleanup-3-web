@@ -1,7 +1,8 @@
 <template>
   <div :class="classes">
     <div
-      class="rounded-full w-full h-full overflow-hidden shadow-inner text-center bg-purple flex cursor-pointer"
+      class="rounded-full w-full h-full overflow-hidden text-center bg-purple flex cursor-pointer"
+      :class="innerClasses"
     >
       <span
         class="hidden group-hover:table-cell text-white font-bold align-middle"
@@ -33,6 +34,7 @@ export default {
     size: VueTypes.oneOf(['xsmall', 'small', 'medium', 'large', 'xl']).def(
       'small',
     ),
+    innerClasses: VueTypes.string.def('shadow-inner'),
   },
   computed: {
     classes() {
