@@ -104,7 +104,7 @@
     "vue": "2.6.12",
     "vue-autosuggest": "^2.2.0",
     "vue-axios": "^2.1.5",
-    "vue-browser-acl": "^0.13.5",
+    "vue-browser-acl": "^0.15.2",
     "vue-burger-menu": "^2.0.5",
     "vue-carousel": "^0.18.0",
     "vue-chartjs": "^3.5.1",

@@ -8138,10 +8138,10 @@ brorand@^1.0.1:
   resolved "https://registry.yarnpkg.com/brorand/-/brorand-1.1.0.tgz#12c25efe40a45e3c323eb8675a0a0ce57b22371f"
   integrity sha1-EsJe/kCkXjwyPrhnWgoM5XsiNx8=
 
-browser-acl@^0.7.3:
-  version "0.7.5"
-  resolved "https://registry.yarnpkg.com/browser-acl/-/browser-acl-0.7.5.tgz#615cf07f49774656897e955e5f8dafe1f7514b5f"
-  integrity sha512-SWGL2YEOf6g/doUk2EVvaNNqqHUD6rCQcl9LIwyk+X6LZgss6zo1cNqcrk9fQ+WXgfMYqqUlCbbijGBrcANz7g==
+browser-acl@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/browser-acl/-/browser-acl-0.9.1.tgz#616d68aa2a13b57fca619649fd3c57242ab5131d"
+  integrity sha512-25qUsqIiOJMXb524opmNyR+FEe/LHBEdH+aiwDDBo3IxUgPaW1uVTW535KhJPygHp/WlqZirJTGOMbSoLXxEyw==
 
 browser-pack@^6.0.1:
   version "6.1.0"
@@ -24071,22 +24071,17 @@ vue-autosuggest@^2.2.0:
   resolved "https://registry.yarnpkg.com/vue-autosuggest/-/vue-autosuggest-2.2.0.tgz#0202b9aaeeef6a3a4357bf401a73be2ecbe166f1"
   integrity sha512-cHgEakpoRUOaqXXEo8RcRrbSTM3eAaCu9b55ZXiKbaS6IUD8ewqffQrMy/A1DXqHSQbyEEGui4oAsCbRge29Jg==
 
-vue-avatar@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/vue-avatar/-/vue-avatar-2.3.1.tgz#01f552f8e1ab8662344c1e628e03a02822c96a53"
-  integrity sha512-wQV/osXTf7oBKS4gAATHXCbvXStXg7xfCuwyzvXJwCnP+J5qzpuBKH3Gg93jRtwuD5i9n8JkvQuTSqAjOPJoaA==
-
 vue-axios@^2.1.5:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/vue-axios/-/vue-axios-2.1.5.tgz#1af4bf1218ed71309c76afb38d0f683e312c24a7"
   integrity sha512-th5xVbInVoyIoe+qY+9GCflEVezxAvztD4xpFF39SRQYqpoKD2qkmX8yv08jJG9a2SgNOCjirjJGSwg/wTrbmA==
 
-vue-browser-acl@^0.13.5:
-  version "0.13.5"
-  resolved "https://registry.yarnpkg.com/vue-browser-acl/-/vue-browser-acl-0.13.5.tgz#ab84559b654be4226186398d427bbb45ababc935"
-  integrity sha512-Bkdd7IUBcUCAp4Pz/YVHLnApBPZ4hiyFKH5yBEdDZgKOm3/zm76CpwSMzt31jSl3PdWLZP3e6suNzJurIDNvMA==
+vue-browser-acl@^0.15.2:
+  version "0.15.2"
+  resolved "https://registry.yarnpkg.com/vue-browser-acl/-/vue-browser-acl-0.15.2.tgz#6373b5fef15571e2e7a0cce11b641724183d4984"
+  integrity sha512-wP2sNe7oJ65qIEiDkYKoWfAxd6PM0vjjBRAg0HimMIOHADGwjjKmuXDTU9cq4GEtTGdi2xh1DC5to+zx2PwJZQ==
   dependencies:
-    browser-acl "^0.7.3"
+    browser-acl "^0.9.1"
 
 vue-burger-menu@^2.0.5:
   version "2.0.5"
