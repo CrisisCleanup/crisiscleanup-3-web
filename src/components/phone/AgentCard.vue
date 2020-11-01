@@ -10,16 +10,15 @@
     </div>
     <div class="profile">
       <div class="profile--img">
-        <avatar
-          :alt="$t('phoneDashboard.user_profile')"
-          :username="currentUser && currentUser.full_name"
-          :size="68"
-          :src="
+        <Avatar
+          :initials="currentUser && currentUser.first_name"
+          :url="
             currentUser &&
             currentUser.hasProfilePicture &&
             currentUser.profilePictureUrl
           "
-          rounded
+          class="p-1"
+          size="small"
         />
       </div>
       <div class="profile--details">
@@ -119,7 +118,7 @@ import useIncident from '@/use/worksites/useIncident';
 import { EventBus } from '@/event-bus';
 import VueTypes from 'vue-types';
 import ControllerStore from '@/store/modules/phone/controller';
-import Avatar from 'vue-avatar';
+import Avatar from '@/components/Avatar';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();

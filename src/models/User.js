@@ -62,7 +62,7 @@ export default class User extends CCUModel {
         return profilePictures[0].large_thumbnail_url;
       }
     }
-    return `https://api.adorable.io/avatars/285/ccu-user-${this.id}.png`;
+    return `https://avatars.dicebear.com/api/bottts/${this.full_name}.svg`;
   }
 
   get currentRole() {

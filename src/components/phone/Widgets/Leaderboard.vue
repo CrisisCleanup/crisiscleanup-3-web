@@ -33,10 +33,11 @@
       >
         <div class="item--profile">
           <div class="image">
-            <avatar
-              :username="a.user.full_name"
-              :src="a.user.hasProfilePicture && a.user.profilePictureUrl"
-              rounded
+            <Avatar
+              :initials="a.user.full_name"
+              :url="a.user.hasProfilePicture && a.user.profilePictureUrl"
+              class="p-1"
+              size="xsmall"
             />
           </div>
           <div class="info pl-2">
@@ -110,7 +111,7 @@ import AgentClient from '@/models/phone/AgentClient';
 import LanguageTag from '@/components/tags/LanguageTag.vue';
 import { reactive, ref } from '@vue/composition-api';
 import useUser from '@/use/user/useUser';
-import Avatar from 'vue-avatar';
+import Avatar from '@/components/Avatar';
 
 export default {
   name: 'Leaderboard',

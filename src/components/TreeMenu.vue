@@ -74,7 +74,7 @@ export default {
           return profilePictures[0].small_thumbnail_url;
         }
       }
-      return `https://api.adorable.io/avatars/285/ccu-user-${this.data.id}.png`;
+      return `https://avatars.dicebear.com/api/bottts/${this.data.first_name}.svg`;
     },
   },
 };
