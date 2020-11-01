@@ -12,13 +12,9 @@
       <div class="profile--img">
         <Avatar
           :initials="currentUser && currentUser.first_name"
-          :url="
-            currentUser &&
-            currentUser.hasProfilePicture &&
-            currentUser.profilePictureUrl
-          "
-          class="p-1"
+          :url="currentUser && currentUser.profilePictureUrl"
           size="small"
+          inner-classes="shadow"
         />
       </div>
       <div class="profile--details">
