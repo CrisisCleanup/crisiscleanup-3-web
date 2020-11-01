@@ -35,9 +35,9 @@
           <div class="image">
             <Avatar
               :initials="a.user.full_name"
-              :url="a.user.hasProfilePicture && a.user.profilePictureUrl"
-              class="p-1"
+              :url="a.user && a.user.profilePictureUrl"
               size="xsmall"
+              inner-classes="shadow"
             />
           </div>
           <div class="info pl-2">
@@ -325,7 +325,6 @@ $metric-headers: ('In' 'Out' 'Total');
       align-items: center;
       @apply py-1;
       .image {
-        @apply shadow;
         border-radius: 50%;
       }
       .info {
