@@ -43,14 +43,10 @@
           >
             <div class="flex cursor-pointer items-center">
               <Avatar
-                :src="
-                  currentUser &&
-                  currentUser.hasProfilePicture &&
-                  currentUser.profilePictureUrl
-                "
-                :size="31"
-                :username="currentUser && currentUser.full_name"
-                rounded
+                :initials="currentUser && currentUser.first_name"
+                :url="currentUser && currentUser.profilePictureUrl"
+                class="p-1"
+                size="small"
               />
               <base-text
                 variant="h3"
@@ -92,14 +88,14 @@ import VueTypes from 'vue-types';
 import useUser from '@/use/user/useUser';
 import { useRouter } from '@u3u/vue-hooks';
 import PhoneStatus from '@/components/header/PhoneStatus.vue';
-import Avatar from 'vue-avatar';
+import Avatar from '@/components/Avatar';
 
 export default {
   name: 'Header',
   components: {
+    Avatar,
     DisasterIcon,
     PhoneStatus,
-    Avatar,
   },
   props: {
     incidents: VueTypes.array,
