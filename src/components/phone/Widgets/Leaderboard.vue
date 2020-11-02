@@ -9,24 +9,6 @@
   >
     <div class="card-container overflow-auto h-full">
       <div
-        v-if="agentMetricsReady"
-        class="metric-title flex justify-end px-1 lg:px-6"
-      >
-        <base-text
-          class="text-crisiscleanup-dark-200"
-          v-for="t in [
-            'phoneDashboard.inbound',
-            'phoneDashboard.return',
-            'phoneDashboard.total',
-          ]"
-          variant="h4"
-          :key="t"
-          regular
-        >
-          {{ $t(t) }}
-        </base-text>
-      </div>
-      <div
         v-for="a in agentRankings.filter(rankFilter)"
         :key="a.agent"
         class="item relative"
@@ -44,13 +26,13 @@
             <div class="info--user">
               <UserDetailsTooltip
                 :dark="false"
-                :name-class="'text-h3 font-h3 pr-2 text-crisiscleanup-dark-400 name-tooltip'"
+                :name-class="'text-h3 font-h3 text-crisiscleanup-dark-500 name-tooltip'"
                 :user="a.user.id"
                 :name-style="nameTextStyle"
               />
               <div class="flex">
                 <div
-                  class="flex flex-col pr-2"
+                  class="flex flex-col pl-1"
                   v-for="l in getLanguageTags(a.locale || 'en-US')"
                   :key="l"
                 >
@@ -214,6 +196,8 @@ export default {
       },
       nameTextStyle: {
         lineHeight: '1rem',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
       },
       getLanguageTags(locale) {
         return locale.split('#');
@@ -240,6 +224,17 @@ $metric-headers: ('In' 'Out' 'Total');
   text-overflow: ellipsis;
 }
 
+@mixin metric-header($text) {
+  content: $text;
+  position: absolute;
+  top: -25px;
+  width: 100%;
+  text-align: center;
+  @apply text-crisiscleanup-dark-400 font-h4 text-h4 subpixel-antialiased;
+  font-weight: 400;
+  z-index: 10000;
+}
+
 .metric-details {
   .right & {
     margin-bottom: -1.25rem;
@@ -258,19 +253,6 @@ $metric-headers: ('In' 'Out' 'Total');
   }
 }
 
-.metric-title {
-  @apply pt-1;
-  text-align: center;
-  p {
-    &:nth-child(2) {
-      @apply px-10;
-    }
-    &:last-child {
-      @apply text-crisiscleanup-dark-400 font-bold #{!important};
-    }
-  }
-}
-
 .card-container {
   display: flex;
   flex-grow: 1;
@@ -278,7 +260,7 @@ $metric-headers: ('In' 'Out' 'Total');
   max-height: 60vh;
 
   .item:first-of-type {
-    padding-top: 0 !important;
+    @apply pt-3;
   }
 
   .item {
@@ -295,9 +277,23 @@ $metric-headers: ('In' 'Out' 'Total');
     max-height: 91px;
     display: flex;
     align-items: baseline;
+    justify-content: space-between;
 
-    &:nth-child(2) {
-      padding-top: 0 !important;
+    &:first-child .item--metrics {
+      .metric {
+        position: relative;
+        &:first-child:before {
+          @include metric-header('Inbound');
+          left: -50%;
+        }
+        &:nth-child(2):before {
+          @include metric-header('Return');
+        }
+        &:last-child:before {
+          @include metric-header('Total');
+          @apply text-crisiscleanup-dark-400 font-bold;
+        }
+      }
     }
 
     @apply p-2;
@@ -306,10 +302,9 @@ $metric-headers: ('In' 'Out' 'Total');
       align-content: center;
       align-self: center;
       justify-content: space-evenly;
-      @apply px-4;
-      .metric:nth-child(2) {
-        @apply px-12;
-      }
+      flex: 1.5;
+      position: relative;
+
       .metric p {
         color: theme('colors.crisiscleanup-dark.300');
       }
@@ -321,8 +316,8 @@ $metric-headers: ('In' 'Out' 'Total');
     }
     &--profile {
       display: flex;
-      flex-grow: 1;
       align-items: center;
+      flex: 2;
       @apply py-1;
       .image {
         border-radius: 50%;
@@ -334,7 +329,7 @@ $metric-headers: ('In' 'Out' 'Total');
           display: flex;
           align-items: baseline;
           .v-popover .trigger p span {
-            @apply text-crisiscleanup-dark-400 pr-2;
+            @apply text-crisiscleanup-dark-500 pr-2;
             cursor: pointer;
             @include truncate;
           }

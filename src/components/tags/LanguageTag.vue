@@ -1,5 +1,5 @@
 <template>
-  <tag :style="[styles]" class="tag-item" v-bind="$attrs">
+  <tag :style="[styles]" class="tag-item tag--language" v-bind="$attrs">
     {{ language && language.shortName }}
   </tag>
 </template>
@@ -53,3 +53,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.tag--language {
+  line-height: 14px;
+}
+</style>
