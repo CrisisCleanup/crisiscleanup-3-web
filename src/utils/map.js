@@ -102,7 +102,13 @@ PixiSettings.SPRITE_MAX_TEXTURES = Math.min(
   16,
 );
 
-export function getWorksiteLayer(worksites, map, context, interactive = true) {
+export function getWorksiteLayer(
+  worksites,
+  map,
+  context,
+  interactive = true,
+  filtered = null,
+) {
   const pixiContainer = new Container();
   context.pixiContainer = pixiContainer;
 
@@ -137,6 +143,7 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             ]);
 
             const markerSprite = new Sprite();
+            markerSprite.filtered = filtered && !filtered.has(marker.id);
             const workType = marker.key_work_type;
 
             if (context.displayedWorkTypes) {
@@ -148,11 +155,15 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
             }`;
             const worksiteTemplate = templates.circle;
             const spriteColors = colors[colorsKey];
-
             if (spriteColors) {
+              let { fillColor } = spriteColors;
+              const { strokeColor } = spriteColors;
+              if (markerSprite.filtered) {
+                fillColor = 'white';
+              }
               const svg = worksiteTemplate
-                .replace('{{fillColor}}', spriteColors.fillColor)
-                .replace('{{strokeColor}}', spriteColors.strokeColor)
+                .replace('{{fillColor}}', fillColor)
+                .replace('{{strokeColor}}', strokeColor)
                 .replace(
                   '{{multple}}',
                   marker.work_types.length > 1 ? templates.plus : '',
@@ -292,10 +303,14 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
                   detailedTemplate = templates.important;
                 }
                 if (spriteColors) {
-                  const template = detailedTemplate;
-                  const typeSvg = template
-                    .replace('{{fillColor}}', spriteColors.fillColor)
-                    .replace('{{strokeColor}}', spriteColors.strokeColor)
+                  let { fillColor } = spriteColors;
+                  const { strokeColor } = spriteColors;
+                  if (markerSprite.filtered) {
+                    fillColor = 'white';
+                  }
+                  const typeSvg = detailedTemplate
+                    .replace('{{fillColor}}', fillColor)
+                    .replace('{{strokeColor}}', strokeColor)
                     .replace(
                       '{{multiple}}',
                       markerSprite.work_types.length > 1 ? templates.plus : '',
@@ -308,10 +323,15 @@ export function getWorksiteLayer(worksites, map, context, interactive = true) {
               const { colorsKey } = markerSprite;
               const spriteColors = colors[colorsKey];
               if (spriteColors) {
+                let { fillColor } = spriteColors;
+                const { strokeColor } = spriteColors;
+                if (markerSprite.filtered) {
+                  fillColor = 'white';
+                }
                 const template = templates.circle;
                 const typeSvg = template
-                  .replace('{{fillColor}}', spriteColors.fillColor)
-                  .replace('{{strokeColor}}', spriteColors.strokeColor)
+                  .replace('{{fillColor}}', fillColor)
+                  .replace('{{strokeColor}}', strokeColor)
                   .replace(
                     '{{multiple}}',
                     markerSprite.work_types.length > 1 ? templates.plus : '',

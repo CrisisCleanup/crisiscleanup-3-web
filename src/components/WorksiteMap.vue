@@ -323,6 +323,15 @@ export default {
       return;
     }
     this.mapLoading = true;
+    const allCases = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
+      {
+        params: { incident: this.query.incident },
+      },
+    );
+
+    this.markers = allCases.data.results;
+
     const response = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
       {
@@ -330,8 +339,11 @@ export default {
       },
     );
 
-    this.markers = response.data.results;
-    await this.loadMap(response.data.results);
+    const filtered = response.data.results;
+    await this.loadMap(
+      allCases.data.results,
+      new Set(filtered.map((f) => f.id)),
+    );
 
     this.$nextTick(() => {
       // Add this slight pan to re-render map
@@ -340,7 +352,7 @@ export default {
     this.mapLoading = false;
   },
   methods: {
-    async loadMap(markers) {
+    async loadMap(markers, filtered = []) {
       await new Promise((resolve) => {
         const loader = new Loader();
         loader.add('circle', '/circle.svg');
@@ -386,7 +398,13 @@ export default {
           }).addTo(map);
           this.selectedLayer = this.mapTileLayer;
           map.attributionControl.setPosition('bottomright');
-          const worksiteLayer = getWorksiteLayer(markers, map, this);
+          const worksiteLayer = getWorksiteLayer(
+            markers,
+            map,
+            this,
+            true,
+            filtered,
+          );
           worksiteLayer.addTo(map);
           resolve();
         });
