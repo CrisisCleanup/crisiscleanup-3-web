@@ -139,7 +139,7 @@ const colors = {
 };
 
 const circle = `<svg xmlns="http://www.w3.org/2000/svg" height="18" width="18">
-                <circle cx="9" cy="9" r="9" stroke="white" stroke-width="0.5" fill="{{fillColor}}" />
+                <circle cx="9" cy="9" r="9" stroke="{{strokeColor}}" stroke-width="1" fill="{{fillColor}}" />
               </svg>`;
 
 const plus = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="30" y="30">

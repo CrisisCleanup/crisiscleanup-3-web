@@ -156,10 +156,11 @@ export function getWorksiteLayer(
             const worksiteTemplate = templates.circle;
             const spriteColors = colors[colorsKey];
             if (spriteColors) {
-              let { fillColor } = spriteColors;
-              const { strokeColor } = spriteColors;
+              let { fillColor, strokeColor } = spriteColors;
               if (markerSprite.filtered) {
                 fillColor = 'white';
+              } else {
+                strokeColor = 'white';
               }
               const svg = worksiteTemplate
                 .replace('{{fillColor}}', fillColor)
@@ -323,10 +324,11 @@ export function getWorksiteLayer(
               const { colorsKey } = markerSprite;
               const spriteColors = colors[colorsKey];
               if (spriteColors) {
-                let { fillColor } = spriteColors;
-                const { strokeColor } = spriteColors;
+                let { fillColor, strokeColor } = spriteColors;
                 if (markerSprite.filtered) {
                   fillColor = 'white';
+                } else {
+                  strokeColor = 'white';
                 }
                 const template = templates.circle;
                 const typeSvg = template
