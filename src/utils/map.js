@@ -186,6 +186,7 @@ export function getWorksiteLayer(
             markerSprite.flags = marker.flags || [];
             markerSprite.favorite_id = marker.favorite_id;
             markerSprite.case_number = marker.case_number;
+            markerSprite.svi = marker.svi;
             markerSprite.work_types = marker.work_types;
             markerSprite.active_work_type = workType;
             markerSprite.colorsKey = colorsKey;
@@ -193,7 +194,6 @@ export function getWorksiteLayer(
             markerSprite.alpha = getOpacity(marker.updated_at);
           });
           context.displayedWorkTypes = { ...context.displayedWorkTypes };
-
           const quadTrees = {};
           if (interactive) {
             for (let z = INTERACTIVE_ZOOM_LEVEL; z <= map.getMaxZoom(); z++) {

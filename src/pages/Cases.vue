@@ -59,13 +59,14 @@
                   @clear="onSearch"
                 />
               </div>
+              <svi-slider v-if="showSviSlider" @input="filterSvi"></svi-slider>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d;">
               <base-dropdown class-name="borderless">
                 <base-button
                   slot="btn"
                   variant="text"
-                  class="text-base font-thin mx-4"
+                  class="text-base font-thin mx-2"
                   :text="$t('casesVue.layers')"
                   :alt="$t('casesVue.layers')"
                   ccu-icon="layers"
@@ -298,7 +299,7 @@
                 </template>
               </base-dropdown>
               <base-button
-                class="text-base font-thin mx-4"
+                class="text-base font-thin mx-2"
                 ccu-icon="filters"
                 icon-size="medium"
                 :alt="$t('casesVue.filters')"
@@ -316,7 +317,7 @@
                 >
               </base-button>
               <base-button
-                class="text-base font-thin mx-4"
+                class="text-base font-thin mx-2"
                 ccu-icon="download"
                 icon-size="medium"
                 :alt="$t('actions.download')"
@@ -340,7 +341,7 @@
                   <ul class="text-base">
                     <li class="py-1">
                       <base-button
-                        class="text-base font-thin mx-4"
+                        class="text-base font-thin mx-2"
                         :text="$t('actions.download')"
                         :alt="$t('actions.download')"
                         :action="downloadCsv"
@@ -349,7 +350,7 @@
                     </li>
                     <li class="py-1">
                       <base-button
-                        class="text-base font-thin mx-4"
+                        class="text-base font-thin mx-2"
                         :text="$t('actions.print')"
                         :alt="$t('actions.print')"
                         :action="
@@ -362,7 +363,7 @@
                     </li>
                     <li class="py-1">
                       <base-button
-                        class="text-base font-thin mx-4"
+                        class="text-base font-thin mx-2"
                         :text="$t('actions.share')"
                         :alt="$t('actions.share')"
                       />
@@ -393,6 +394,7 @@
               :current-filters="filters"
               @mapMoved="onMapMoved"
               @onSelectmarker="displayWorksite"
+              @onSviList="setSviList"
             />
           </template>
           <template v-if="showingTable">
@@ -907,15 +909,17 @@ import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
 import Team from '@/models/Team';
 import { templates } from '@/icons/icons_templates';
-import { EventBus } from '../event-bus';
+import SviSlider from '@/components/SviSlider';
+import { EventBus } from '@/event-bus';
+import { hash } from '@/utils/promise';
 import WorksiteTable from './WorksiteTable';
-import { hash } from '../utils/promise';
 import WorksiteSearchInput from '../components/WorksiteSearchInput';
 import StatusDropdown from '../components/StatusDropdown';
 
 export default {
   name: 'Cases',
   components: {
+    SviSlider,
     StatusDropdown,
     WorksiteSearchInput,
     WorksiteTable,
@@ -937,6 +941,8 @@ export default {
       totalWorksites: 0,
       searchingWorksites: false,
       data: [],
+      sviList: [],
+      showSviSlider: false,
       pagination: {
         pageSize: 100,
         page: 1,
@@ -952,6 +958,7 @@ export default {
       newMarker: null,
       map: null,
       currentSearch: '',
+      sviLevel: null,
       currentCaseView: '',
       getColorForStatus,
       appliedLocations: new Set(),
@@ -1354,6 +1361,10 @@ export default {
         search: this.currentSearch,
       };
 
+      if (this.sviLevel) {
+        query.svi_level = this.sviLevel;
+      }
+
       this.currentQuery = {
         ...query,
         ...this.appliedFilters,
@@ -1753,6 +1764,34 @@ export default {
       }
       await Worksite.api().fetch(this.currentWorksite.id);
     },
+    setSviList(sviList) {
+      this.showSviSlider = new Set(sviList.map((w) => w.svi)).size >= 5;
+      sviList.sort((a, b) => {
+        return a.svi - b.svi || this.$moment(a.svi) - this.$moment(b.svi);
+      });
+      this.$log.debug(sviList);
+      this.sviList = sviList;
+    },
+    filterSvi(value) {
+      const count = Math.floor((this.sviList.length * Number(value)) / 100);
+      this.$refs.worksiteMap.filterSvi(
+        new Set(this.sviList.slice(0, count).map((w) => w.id)),
+      );
+    },
+    filterSviAsync: debounce(
+      async function (value) {
+        this.sviLevel = value;
+        await this.fetch({
+          pageSize: this.pagination.pageSize,
+          page: 1,
+        });
+      },
+      150,
+      {
+        leading: false,
+        trailing: true,
+      },
+    ),
   },
 };
 </script>

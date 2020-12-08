@@ -331,6 +331,14 @@ export default {
     );
 
     this.markers = allCases.data.results;
+    const sviList = this.markers.map((marker) => {
+      return {
+        id: marker.id,
+        created_at: marker.created_at,
+        svi: marker.svi,
+      };
+    });
+    this.$emit('onSviList', sviList);
 
     const response = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
@@ -410,6 +418,14 @@ export default {
         });
       });
     },
+    filterSvi(ids) {
+      this.pixiContainer.children.forEach((markerSprite) => {
+        markerSprite.visible = Boolean(ids.has(markerSprite.id));
+      });
+      this.$nextTick(() => {
+        this.map.panBy([0, 0]);
+      });
+    },
     async updateMap(worksiteId) {
       const markerSprite = this.pixiContainer.children.find(
         (ms) => parseInt(ms.id) === parseInt(worksiteId),
@@ -423,7 +439,7 @@ export default {
         if (worksite.incident !== this.currentIncidentId) {
           this.pixiContainer.removeChild(markerSprite);
           this.$nextTick(() => {
-            this.map.panBy([1, 0]);
+            this.map.panBy([0, 0]);
           });
           return;
         }
