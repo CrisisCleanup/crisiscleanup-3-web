@@ -59,7 +59,11 @@
                   @clear="onSearch"
                 />
               </div>
-              <svi-slider v-if="showSviSlider" @input="filterSvi"></svi-slider>
+              <svi-slider
+                v-if="showSviSlider"
+                @input="filterSvi"
+                :value="sviLevel"
+              ></svi-slider>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d;">
               <base-dropdown class-name="borderless">
@@ -958,7 +962,7 @@ export default {
       newMarker: null,
       map: null,
       currentSearch: '',
-      sviLevel: null,
+      sviLevel: 100,
       currentCaseView: '',
       getColorForStatus,
       appliedLocations: new Set(),
@@ -1195,6 +1199,9 @@ export default {
       if (states.appliedFilters) {
         this.appliedFilters = states.appliedFilters;
       }
+      if (states.sviLevel) {
+        this.sviLevel = states.sviLevel;
+      }
       if (states.filters) {
         this.filters = {
           ...states.filters,
@@ -1275,6 +1282,7 @@ export default {
           filters: this.filters,
           showingMap: this.showingMap,
           showingTable: this.showingTable,
+          sviLevel: this.sviLevel,
           ...data,
         },
       );
@@ -1766,13 +1774,21 @@ export default {
     },
     setSviList(sviList) {
       this.showSviSlider = new Set(sviList.map((w) => w.svi)).size >= 5;
+      // Sort svi values treating nulls as 1 (Most Vulnerable)
       sviList.sort((a, b) => {
-        return a.svi - b.svi || this.$moment(a.svi) - this.$moment(b.svi);
+        return (
+          (b.svi || 1) - (a.svi || 1) ||
+          this.$moment(a.svi) - this.$moment(b.svi)
+        );
       });
       this.$log.debug(sviList);
       this.sviList = sviList;
+      if (this.sviLevel) {
+        this.filterSvi(this.sviLevel);
+      }
     },
     filterSvi(value) {
+      this.sviLevel = Number(value);
       const count = Math.floor((this.sviList.length * Number(value)) / 100);
       this.$refs.worksiteMap.filterSvi(
         new Set(this.sviList.slice(0, count).map((w) => w.id)),

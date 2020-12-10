@@ -331,15 +331,6 @@ export default {
     );
 
     this.markers = allCases.data.results;
-    const sviList = this.markers.map((marker) => {
-      return {
-        id: marker.id,
-        created_at: marker.created_at,
-        svi: marker.svi,
-      };
-    });
-    this.$emit('onSviList', sviList);
-
     const response = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
       {
@@ -353,6 +344,14 @@ export default {
       new Set(filtered.map((f) => f.id)),
     );
 
+    const sviList = this.markers.map((marker) => {
+      return {
+        id: marker.id,
+        created_at: marker.created_at,
+        svi: marker.svi,
+      };
+    });
+    this.$emit('onSviList', sviList);
     this.$nextTick(() => {
       // Add this slight pan to re-render map
       this.map.panBy([1, 0]);

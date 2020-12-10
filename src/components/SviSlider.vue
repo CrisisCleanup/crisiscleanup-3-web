@@ -1,14 +1,28 @@
 <template>
-  <div class="flex flex-col w-56 ml-4 px-2">
+  <div class="flex flex-col w-64 ml-4 px-2">
     <div class="flex justify-between">
-      <span class="text-crisiscleanup-grey-900 text-sm">{{
-        $t('~~Most Vulnerable')
-      }}</span>
-      <span class="text-crisiscleanup-grey-900 text-sm">{{
-        $t('~~Everyone')
-      }}</span>
+      <span
+        class="text-crisiscleanup-grey-900 text-sm flex items-center justify-start"
+        >{{ $t('~~Most Vulnerable') }}
+        <ccu-icon
+          v-tooltip="{
+            content: $t(
+              `~~ Learn more about svi and how we use it <a target='_blank' class='underline' href='http://blog.crisiscleanup.org/2020/11/social-vulnerability-indexing-how-svi.html'>here</a>`,
+            ),
+            trigger: 'click',
+            classes: 'interactive-tooltip w-auto',
+          }"
+          :alt="$t('actions.help_alt')"
+          type="help"
+          size="medium"
+        />
+      </span>
+      <span
+        class="text-crisiscleanup-grey-900 text-sm items-center justify-start"
+        >{{ $t('~~Everyone') }}</span
+      >
     </div>
-    <div class="range-slider">
+    <div class="range-slider" :title="value">
       <input
         class="range-slider__range"
         type="range"
@@ -25,16 +39,16 @@
 <script>
 export default {
   name: 'SviSlider',
-  data() {
-    return {
-      value: 100,
-    };
+  props: {
+    value: {
+      type: Number,
+      default: 100,
+    },
   },
   methods: {
     update(e) {
       const { value } = e.target;
-      this.value = value;
-      this.$emit('input', value);
+      this.$emit('input', Number(value));
     },
   },
 };
