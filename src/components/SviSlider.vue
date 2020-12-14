@@ -3,12 +3,10 @@
     <div class="flex justify-between">
       <span
         class="text-crisiscleanup-grey-900 text-sm flex items-center justify-start"
-        >{{ $t('~~Most Vulnerable') }}
+        >{{ $t('svi.most_vulnerable') }}
         <ccu-icon
           v-tooltip="{
-            content: $t(
-              `~~ Learn more about svi and how we use it <a target='_blank' class='underline' href='http://blog.crisiscleanup.org/2020/11/social-vulnerability-indexing-how-svi.html'>here</a>`,
-            ),
+            content: $t(`svi.svi_more_info_link`),
             trigger: 'click',
             classes: 'interactive-tooltip w-auto',
           }"
@@ -19,7 +17,7 @@
       </span>
       <span
         class="text-crisiscleanup-grey-900 text-sm items-center justify-start"
-        >{{ $t('~~Everyone') }}</span
+        >{{ $t('svi.everyone') }}</span
       >
     </div>
     <div class="range-slider" :title="value">
