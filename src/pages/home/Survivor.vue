@@ -7,19 +7,27 @@
       <home-nav />
       <home-actions />
       <div class="grid--main">
-        <h1 class="text-4xl" v-html="$t('survivor.info_for_survivors"></h1>
+        <h1 class="text-4xl" v-html="$t('survivor.info_for_survivors')"></h1>
         <div class="row mb-6">
           <p v-html="$t('survivor.intro')"></p>
-          <h3>{{ $t('survivor.what_is_ccu') }}</h3>
+          <h3 class="text-lg font-bold text-crisiscleanup-dark-500">
+            {{ $t('survivor.what_is_ccu') }}
+          </h3>
           <p v-html="$t('survivor.ccu_for_relief_agencies')"></p>
 
-          <h3>{{ $t('survivor.can_i_ask_for_help') }}</h3>
-          <p v-html="$t('survivor.yes_call_number_at_top')')"></p>
+          <h3 class="text-lg font-bold text-crisiscleanup-dark-500">
+            {{ $t('survivor.can_i_ask_for_help') }}
+          </h3>
+          <p v-html="$t('survivor.yes_call_number_at_top')"></p>
 
-          <h3>{{ $t('survivor.when') }}</h3>
+          <h3 class="text-lg font-bold text-crisiscleanup-dark-500">
+            {{ $t('survivor.when') }}
+          </h3>
           <p v-html="$t('survivor.we_dont_know')"></p>
 
-          <h3>{{ $t('survivor.is_it_in_scope') }}</h3>
+          <h3 class="text-lg font-bold text-crisiscleanup-dark-500">
+            {{ $t('survivor.is_it_in_scope') }}
+          </h3>
           <p v-html="$t('survivor.in_scope')"></p>
           <ul>
             <li v-html="$t('survivor.small_tree')"></li>
@@ -35,16 +43,24 @@
             <li v-html="$t('survivor.debris_to_landfill')"></li>
           </ul>
 
-          <h3>{{ $t('survivor.guarantee_good_job') }}</h3>
+          <h3 class="text-lg font-bold text-crisiscleanup-dark-500">
+            {{ $t('survivor.guarantee_good_job') }}
+          </h3>
           <p v-html="$t('survivor.non_professional_volunteers')"></p>
 
-          <h3>{{ $t('survivor.can_i_view') }}</h3>
+          <h3 class="text-lg font-bold text-crisiscleanup-dark-500">
+            {{ $t('survivor.can_i_view') }}
+          </h3>
           <p v-html="$t('survivor.cannot_view_can_request_delete')"></p>
 
-          <h3>{{ $t('survivor.relief_agencies_using_ccu') }}</h3>
+          <h3 class="text-lg font-bold text-crisiscleanup-dark-500">
+            {{ $t('survivor.relief_agencies_using_ccu') }}
+          </h3>
           <p v-html="$t('survivor.just_ask')"></p>
 
-          <h3>{{ $t('survivor.what_can_i_do') }}</h3>
+          <h3 class="text-lg font-bold text-crisiscleanup-dark-500">
+            {{ $t('survivor.what_can_i_do') }}
+          </h3>
           <p v-html="$t('survivor.be_patient')"></p>
           <p v-html="$t('survivor.be_persistent')"></p>
           <p v-html="$t('survivor.never_give_up_hope')"></p>
@@ -58,18 +74,15 @@
 import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
 
 export default {
-  name: 'survivor',
+  name: 'Survivor',
   components: { HomeLayout, HomeNav, HomeActions },
   data() {
-    return {
-    };
+    return {};
   },
 };
 </script>
 
 <style scoped lang="scss">
-@import '../../assets/css/_survivor.privacy.scss';
-
 .homegrid {
   &.grid-container {
     grid-template-areas:
