@@ -8,7 +8,7 @@ import RequestPasswordReset from './RequestPasswordReset';
 import Terms from './Terms.vue';
 import Training from './Training.vue';
 import Contributions from './Contributions.vue';
-import Survivor FROM './Survivor.vue';
+import Survivor from './Survivor.vue';
 
 export default [
   {
