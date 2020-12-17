@@ -46,6 +46,10 @@ export const HomeNavigation = [
     route: '/training',
   },
   {
+    key: 'survivor',
+    route: '/survivor',
+  },
+  {
     key: 'contact',
     route: 'https://crisiscleanup.zendesk.com/hc/en-us/requests/new',
     external: true,
@@ -74,6 +78,7 @@ export default {
           blog: this.$t('publicNav.blog'),
           map: this.$t('publicNav.map'),
           training: this.$t('publicNav.training'),
+          survivor: this.$t('publicNav.survivor'),
           contact: this.$t('publicNav.contact'),
           ...this.translations,
         },

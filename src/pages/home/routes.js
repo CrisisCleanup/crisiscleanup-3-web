@@ -8,6 +8,7 @@ import RequestPasswordReset from './RequestPasswordReset';
 import Terms from './Terms.vue';
 import Training from './Training.vue';
 import Contributions from './Contributions.vue';
+import Survivor from './Survivor.vue';
 
 export default [
   {
@@ -69,6 +70,12 @@ export default [
     path: '/contributions',
     component: Contributions,
     name: 'nav.contributions',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/survivor',
+    component: Survivor,
+    name: 'nav.survivor',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];
