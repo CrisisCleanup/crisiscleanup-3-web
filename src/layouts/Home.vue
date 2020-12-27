@@ -44,6 +44,29 @@ export default {
 </script>
 
 <style scoped lang="scss">
+h1 {
+  @apply text-2xl font-bold;
+}
+h2 {
+  @apply text-xl font-bold;
+}
+
+h3 {
+  @apply text-lg font-semibold;
+}
+
+h4 {
+  @apply text-base;
+}
+
+h5 {
+  @apply text-sm;
+}
+
+h6 {
+  @apply text-xs;
+}
+
 $areas: main nav logo actions overlay survivors globe footer;
 .homegrid {
   overflow: auto;
