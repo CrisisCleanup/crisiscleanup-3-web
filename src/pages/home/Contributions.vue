@@ -20,14 +20,14 @@
           }}</base-text>
           <ul>
             <li>
-              <base-link href="/icla.pdf"
-                ><base-text v-html="$t('contrib.icla')"
-              /></base-link>
+              <a class="doc-link" href="/icla.pdf" target="_blank">{{
+                $t('contrib.icla')
+              }}</a>
             </li>
             <li>
-              <base-link href="/ccla.pdf"
-                ><base-text v-html="$t('contrib.ccla')"
-              /></base-link>
+              <a class="doc-link" href="/ccla.pdf" target="_blank">{{
+                $t('contrib.ccla')
+              }}</a>
             </li>
           </ul>
           <base-text v-html="$t('contrib.everyone_should_sign_cla')" />
@@ -43,9 +43,9 @@
           }}</base-text>
           <ul>
             <li>
-              <base-link href="/sgla.pdf"
-                ><base-text v-html="$t('contrib.sgla')"
-              /></base-link>
+              <a class="doc-link" href="/sgla.pdf" target="_blank">{{
+                $t('contrib.sgla')
+              }}</a>
             </li>
           </ul>
           <base-text v-html="$t('contrib.sgla_required_for_code_donation')" />
@@ -82,7 +82,9 @@ export default {
 
 <style scoped>
 @import '../../assets/css/_terms-privacy.scss';
-
+.doc-link {
+  @apply text-base;
+}
 .homegrid {
   &.grid-container {
     grid-template-areas:

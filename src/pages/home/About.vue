@@ -755,10 +755,6 @@ export default {
   padding-top: 56.25%;
   justify-content: right;
 }
-li::before {
-  content: '\2022';
-  color: #fece09;
-}
 .images-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
