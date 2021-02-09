@@ -238,6 +238,22 @@
 
           <!-- StartCard -->
           <div class="flex flex-col">
+            <img src="@/assets/headshots/alenamariukha.jpg" class="m-5" />
+            <p class="text-3xl px-0.5 pb-5">
+              <span class="font-bold">Alena Mariukha</span><br />
+              {{ $t('about.alena_mariukha_title') }}
+            </p>
+            <base-text
+              variant="body"
+              class="pt-2"
+              v-html="$t('about.alena_mariukha_bio')"
+            >
+            </base-text>
+          </div>
+          <!-- End Card -->
+
+          <!-- StartCard -->
+          <div class="flex flex-col">
             <img src="@/assets/headshots/bradenmars.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Braden Mars</span><br />
@@ -678,7 +694,7 @@
                   target="_blank"
                   :title="$t('about.ccu_demo')"
                   >{{ $t('about.ccu_demo') }}</a
-                >
+                > {{ $t('about.ccu_demo_un_pw') }}
               </li>
               <br />
               <li>
