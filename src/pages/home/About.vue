@@ -694,7 +694,8 @@
                   target="_blank"
                   :title="$t('about.ccu_demo')"
                   >{{ $t('about.ccu_demo') }}</a
-                > {{ $t('about.ccu_demo_un_pw') }}
+                >
+                {{ $t('about.ccu_demo_un_pw') }}
               </li>
               <br />
               <li>
