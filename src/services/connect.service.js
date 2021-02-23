@@ -100,6 +100,13 @@ const ConfigDefaults: ACSConfig = {
   },
   loginPopup: true,
   loginPopupAutoClose: true,
+  loginOptions: {
+    autoClose: true,
+    height: 600,
+    width: 400,
+    top: 0,
+    left: 0,
+  },
 };
 
 /**

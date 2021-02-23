@@ -23,6 +23,13 @@ type ACSConfig = {|
   loginPopup: boolean,
   loginPopupAutoClose: boolean,
   loginUrl?: string,
+  loginOptions?: {|
+    autoClose: boolean,
+    height: number,
+    width: number,
+    top: number,
+    left: number,
+  |},
 |};
 
 export type {
