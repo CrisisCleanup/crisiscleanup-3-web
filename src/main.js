@@ -2,7 +2,7 @@ import { version } from '@/../package.json';
 import '@/assets/css/tailwind.css';
 import 'vue-resize/dist/vue-resize.css';
 import '@crisiscleanup/amazon-connect-streams';
-import '@crisiscleanup/connect-rtc';
+// import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
 import Autocomplete from '@/components/Autocomplete';
 import Badge from '@/components/Badge';
