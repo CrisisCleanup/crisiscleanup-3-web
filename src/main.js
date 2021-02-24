@@ -2,6 +2,10 @@ import { version } from '@/../package.json';
 import '@/assets/css/tailwind.css';
 import 'vue-resize/dist/vue-resize.css';
 import '@crisiscleanup/amazon-connect-streams';
+import VueHooks from '@u3u/vue-hooks';
+import VueCompositionApi from '@vue/composition-api';
+import Vue from 'vue';
+
 // import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
 import Autocomplete from '@/components/Autocomplete';
@@ -55,7 +59,6 @@ import moment from 'moment';
 import momentWithDurations from 'moment-duration-format';
 import 'moment/min/locales';
 import VTooltip from 'v-tooltip';
-import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 import VueResize from 'vue-resize';
 import VueAxios from 'vue-axios';
@@ -72,8 +75,6 @@ import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
 import VueRouterMultiView from 'vue-router-multi-view';
-import VueCompositionApi from '@vue/composition-api';
-import VueHooks from '@u3u/vue-hooks';
 import Tabs from '@/components/tabs/Tabs';
 import Tab from '@/components/tabs/Tab';
 import PhoneService from '@/services/phone.service';
@@ -87,6 +88,9 @@ import WebsocketStore from '@/store/modules/websocket';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
+// Vue 3.x backports
+Vue.use(VueHooks);
+Vue.use(VueCompositionApi);
 
 // Base Components
 Vue.component('base-link', BaseLink);
@@ -117,10 +121,6 @@ Vue.component('authenticated-layout', Authenticated);
 Vue.component('unauthenticated-layout', Unauthenticated);
 
 Vue.config.productionTip = false;
-
-// Vue 3.x backports
-Vue.use(VueHooks);
-Vue.use(VueCompositionApi);
 
 // 3rd Party Libraries
 Vue.component('number-input', VueNumberInput);
