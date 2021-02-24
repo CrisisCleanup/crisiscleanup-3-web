@@ -22,7 +22,7 @@
             @input="(payload) => $emit('update:incident', payload)"
           />
           <div class="flex ml-2 font-bold">
-            <span>{{ $t(route.name) }}</span>
+            <span>{{ $t($route.name) }}</span>
           </div>
         </div>
       </div>
@@ -86,7 +86,6 @@
 import DisasterIcon from '@/components/DisasterIcon.vue';
 import VueTypes from 'vue-types';
 import useUser from '@/use/user/useUser';
-import { useRouter } from '@u3u/vue-hooks';
 import PhoneStatus from '@/components/header/PhoneStatus.vue';
 import Avatar from '@/components/Avatar';
 
@@ -104,7 +103,6 @@ export default {
   setup() {
     return {
       ...useUser(),
-      ...useRouter(),
     };
   },
 };
