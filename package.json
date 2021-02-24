@@ -66,7 +66,7 @@
     "concaveman": "^1.2.0",
     "connect-rtc-js": "git+https://github.com/aws/connect-rtc-js.git#58d40bad962cbe968849712286236105fc1b3a92",
     "d3-array": "^2.8.0",
-    "d3-color": "^1.4.1",
+    "d3-color": "^2.0.0",
     "d3-interpolate": "^1.4.0",
     "d3-quadtree": "^1.0.7",
     "d3-scale": "^3.2.1",
