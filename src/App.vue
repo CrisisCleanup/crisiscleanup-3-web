@@ -36,7 +36,10 @@ export default {
     $route: {
       immediate: true,
       handler(to) {
-        document.title = `${this.$t(to.name)}: Crisis Cleanup`;
+        const newTitle = `${this.$t(to.name)}: Crisis Cleanup`;
+        if (document.title !== newTitle) {
+          document.title = newTitle;
+        }
       },
     },
   },
