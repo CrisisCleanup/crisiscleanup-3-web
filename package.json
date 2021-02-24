@@ -57,7 +57,7 @@
     "@vuex-orm/core": "^0.36.3",
     "@vuex-orm/plugin-axios": "^0.9.3",
     "@vuex-orm/plugin-change-flags": "^1.2.3",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "bowser": "^2.11.0",
     "cf-agent-library": "git+https://git@github.com/CrisisCleanup/cf-agent-library.git",
     "chart.js": "^2.9.3",
