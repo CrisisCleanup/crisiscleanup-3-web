@@ -7,7 +7,7 @@ import { ref, computed, watch } from '@vue/composition-api';
 import { useState, useGetters } from '@u3u/vue-hooks';
 import _ from 'lodash';
 import Contact, { CallType, ContactActions } from '@/models/phone/Contact';
-import { useIntervalFn } from '@vueuse/core';
+import { useIntervalFn } from '@/use/useIntervalFn';
 import useAgent from '@/use/phone/useAgent';
 import useIncident from '@/use/worksites/useIncident';
 

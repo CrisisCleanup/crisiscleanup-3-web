@@ -13,7 +13,7 @@ import IncomingPopup from '@/components/phone/Popup.vue';
 import { ControllerPages } from '@/store/modules/phone/controller';
 import useAgent from '@/use/phone/useAgent';
 import { computed, onMounted, watch } from '@vue/composition-api';
-import { useIntervalFn } from '@vueuse/core';
+import { useIntervalFn } from '@/use/useIntervalFn';
 import useContact from '@/use/phone/useContact';
 import useController from '@/use/phone/useController';
 import PhoneDebugger from '@/components/phone/Widgets/PhoneDebugger.vue';

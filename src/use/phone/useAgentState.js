@@ -8,7 +8,7 @@ import { computed, ref, watch } from '@vue/composition-api';
 import { ConnectionStates } from '@/models/phone/Connection';
 import { unwrap } from '@/utils/wrap';
 import _ from 'lodash';
-import { useIntervalFn } from '@vueuse/core';
+import { useIntervalFn } from '@/use/useIntervalFn';
 import { useState, useGetters } from '@u3u/vue-hooks';
 
 /**
