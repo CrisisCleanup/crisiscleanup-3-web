@@ -59,6 +59,14 @@ export default {
       return [
         {
           media: {
+            path: require('@/assets/news/pipes.jpg'),
+            alt: this.$t('phoneDashboard.news_6_img_title'),
+          },
+          content: this.$t('phoneDashboard.news_6'),
+          date: this.$t('phoneDashboard.news_6_date'),
+        },
+        {
+          media: {
             path: require('@/assets/news/hurricane.png'),
             alt: this.$t('phoneDashboard.news_1_img_title'),
           },
