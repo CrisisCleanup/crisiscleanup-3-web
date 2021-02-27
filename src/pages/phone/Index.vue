@@ -105,7 +105,11 @@ export default {
     watch(
       () => agent.value && agent.value.isRoutable,
       () => {
-        if (!agent.value) return;
+        if (!agent.value) {
+          context.root.$log.debug('Outbound Polling: PAUSED (NO AGENT)');
+          pollOutbound.stop();
+          return;
+        }
         if (!agent.value.isRoutable) {
           context.root.$log.debug('Outbound Polling: PAUSED');
           pollOutbound.stop();
