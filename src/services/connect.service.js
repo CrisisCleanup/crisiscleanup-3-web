@@ -248,17 +248,23 @@ export const connectEndpoint = (phoneNumber: string) => {
   const client = connect.core.getClient();
   const endpointOut = new connect.Endpoint(endpoint);
   delete endpointOut.endpointId;
-  client.call(
+  const resp = client.call(
     connect.ClientMethods.CREATE_OUTBOUND_CONTACT,
     {
       endpoint: connect.assertNotNull(endpointOut, 'endpoint'),
       queueARN: agent.getRoutingProfile().defaultOutboundQueue.queueARN,
     },
     {
-      success: () => Log.info('outbound call placed successfully!'),
+      success: (data) => {
+        Log.info('outbound call placed successfully!');
+        Log.info('ACS client call success resp:', data);
+        Log.info('ACS client snapshot:', agent.toSnapshot());
+        Log.info('ACS client contacts:', agent.getContacts());
+      },
       failure: (e) => Log.error('failed to place outbound call:', e),
     },
   );
+  Log.info('post ACS resp call resp:', resp);
 };
 
 /**
