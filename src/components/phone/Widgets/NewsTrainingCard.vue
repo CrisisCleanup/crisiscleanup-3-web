@@ -60,14 +60,6 @@ export default {
         {
           media: {
             path: require('@/assets/news/pipes.jpg'),
-            alt: this.$t('phoneDashboard.news_6_img_title'),
-          },
-          content: this.$t('phoneDashboard.news_6'),
-          date: this.$t('phoneDashboard.news_6_date'),
-        },
-        {
-          media: {
-            path: require('@/assets/news/hurricane.png'),
             alt: this.$t('phoneDashboard.news_1_img_title'),
           },
           content: this.$t('phoneDashboard.news_1'),
@@ -75,7 +67,7 @@ export default {
         },
         {
           media: {
-            path: require('@/assets/news/list.png'),
+            path: require('@/assets/news/hurricane.png'),
             alt: this.$t('phoneDashboard.news_2_img_title'),
           },
           content: this.$t('phoneDashboard.news_2'),
@@ -83,7 +75,7 @@ export default {
         },
         {
           media: {
-            path: require('@/assets/news/char_3_phone_blue.png'),
+            path: require('@/assets/news/list.png'),
             alt: this.$t('phoneDashboard.news_3_img_title'),
           },
           content: this.$t('phoneDashboard.news_3'),
@@ -91,7 +83,7 @@ export default {
         },
         {
           media: {
-            path: require('@/assets/news/smart_phone.png'),
+            path: require('@/assets/news/char_3_phone_blue.png'),
             alt: this.$t('phoneDashboard.news_4_img_title'),
           },
           content: this.$t('phoneDashboard.news_4'),
@@ -99,11 +91,19 @@ export default {
         },
         {
           media: {
-            path: require('@/assets/news/photo_lady_phone_computer.png'),
+            path: require('@/assets/news/smart_phone.png'),
             alt: this.$t('phoneDashboard.news_5_img_title'),
           },
           content: this.$t('phoneDashboard.news_5'),
           date: this.$t('phoneDashboard.news_5_date'),
+        },
+        {
+          media: {
+            path: require('@/assets/news/photo_lady_phone_computer.png'),
+            alt: this.$t('phoneDashboard.news_6_img_title'),
+          },
+          content: this.$t('phoneDashboard.news_6'),
+          date: this.$t('phoneDashboard.news_6_date'),
         },
       ];
     },
