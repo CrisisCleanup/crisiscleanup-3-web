@@ -64,7 +64,7 @@ export default () => {
   });
 
   const callerNumber = computed(() => {
-    if (currentContact.value) {
+    if (currentContact.value && currentContact.value.callerId) {
       return currentContact.value.callerId;
     }
     if (callDnis.value) {
