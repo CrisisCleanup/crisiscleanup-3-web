@@ -465,14 +465,10 @@ class StreamsStore extends VuexModule {
                     },
                   });
                 } else {
-                  Log.info('inbound connection connected! placing on hold!');
-                  voiceConn.hold({
-                    success: () => {
-                      Log.info('connection successfully placed on hold!');
-                      ACS.getAgentVerificationEndpoint(contact);
-                    },
-                    failure: () =>
-                      Log.error('failed to place connection on hold!'),
+                  Log.info('inbound connection connected!');
+                  this.updateContact({
+                    action: ContactActions.CONNECTED,
+                    state: ContactStates.ROUTED,
                   });
                 }
               } else if (voiceConn.getType() === 'outbound') {
