@@ -475,6 +475,12 @@ class StreamsStore extends VuexModule {
                       Log.error('failed to place connection on hold!'),
                   });
                 }
+              } else if (voiceConn.getType() === 'outbound') {
+                Log.info('outbound connection connected!');
+                this.updateContact({
+                  action: ContactActions.CONNECTED,
+                  state: ContactStates.ROUTED,
+                });
               }
             }
           });
