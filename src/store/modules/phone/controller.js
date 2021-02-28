@@ -483,7 +483,6 @@ class ControllerStore extends VuexModule {
     const agentBoard = {};
     const userIds = _.filter(_.map(agents, 'user.id'), _.negate(_.isNil));
     if (!_.isEmpty(userIds)) {
-      Log.debug('prefetching user ids:', userIds);
       await User.fetchOrFindId(userIds);
     }
     await Promise.all(
@@ -516,7 +515,6 @@ class ControllerStore extends VuexModule {
         };
       }),
     );
-    Log.debug('updating agent metrics:', agentBoard);
     this.setAgentMetrics(agentBoard);
     this.setLoading({ agentMetrics: false });
   }
@@ -564,7 +562,6 @@ class ControllerStore extends VuexModule {
     Log.debug('updating caller history:', recentContacts);
     this.setCallerHistory(recentContacts);
     this.setLoading({ callerHistory: false });
-    Log.debug('looking for current agent...', agent_id, this.agentMetrics);
     const currentAgentMetrics = _.get(this.agentMetrics, agent_id, null);
     if (!currentAgentMetrics) {
       return;
@@ -575,7 +572,6 @@ class ControllerStore extends VuexModule {
       enteredTimestamp: Date.parse(entered_timestamp),
       locale,
     };
-    Log.debug('updating current agent metrics:', updatedMetrics);
     this.setAgentMetrics({
       [agent_id]: updatedMetrics,
     });
@@ -586,7 +582,6 @@ class ControllerStore extends VuexModule {
     this.setLoading({ generalMetrics: false });
     let metricData = metrics;
     if (!metrics) {
-      Log.debug('falling back to api to fetch metrics...');
       const results = await Agent.fetchRealtimeMetrics();
       metricData = results.metrics;
       await this.updateAgentMetrics({ agents: results.agents });
@@ -594,7 +589,6 @@ class ControllerStore extends VuexModule {
     if (!metricData) {
       return;
     }
-    Log.debug('incoming metrics!', metricData);
     const newState = {};
     // custom metrics
     metricData.map(({ name, value }) => {
@@ -662,7 +656,6 @@ class ControllerStore extends VuexModule {
         typeof totalWaiting === 'number' ? totalWaiting : 0;
       const agentCapacity = 12 * numOnline; // each agent can take 12 calls
       const queueOverflow = totalWaiting - agentCapacity; // number of callers over the capacity
-      Log.debug('current queue capacity overflow:', queueOverflow);
       let needed = queueOverflow >= 1 ? Math.ceil(queueOverflow / 12) : 0;
       needed /= numOnline > 0 ? numOnline : 1;
       subState[Metrics.NEEDED[0]] = needed >= 1 ? Math.ceil(needed) : 0;
@@ -672,7 +665,6 @@ class ControllerStore extends VuexModule {
 
     this.setMetrics(newState);
     this.setLoading({ generalMetrics: false });
-    Log.debug('new metrics:', this.metrics);
   }
 
   @MutationAction({ mutate: ['view'] })
