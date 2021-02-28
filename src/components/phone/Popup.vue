@@ -183,7 +183,7 @@ export default {
      */
     active: VueTypes.bool.def(false),
   },
-  setup(props) {
+  setup(props, context) {
     const {
       callerCases,
       callType,
@@ -266,8 +266,18 @@ export default {
       if (hasResponded.value) return;
       hasResponded.value = 'accept';
       acceptTime.value = 0;
+      context.root.$log.info(
+        'user accepted call!',
+        callState,
+        currentContact.value,
+      );
       if (callState.outbound.value && !currentContact.value.isInbound) {
+        context.root.$log.info('accepting outbound!');
         await PhoneOutbound.api().acceptCall(callState.outbound.value.id);
+      } else {
+        context.root.$log.info('accepting inbound!');
+        setNextInboundAction(InboundActions.VERIFY);
+        await PhoneInbound.api().acceptCall(callState.inbound.value.id);
       }
     };
 
