@@ -232,7 +232,7 @@ $metric-headers: ('In' 'Out' 'Total');
   text-align: center;
   @apply text-crisiscleanup-dark-400 font-h4 text-h4 subpixel-antialiased;
   font-weight: 400;
-  z-index: 10000;
+  z-index: 1000;
 }
 
 .metric-details {
