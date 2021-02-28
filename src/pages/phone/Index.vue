@@ -1,7 +1,10 @@
 <template>
   <PageLayout class="h-full w-full phone__wrapper" :is-loading="false">
     <component :is="pageComponent" />
-    <IncomingPopup v-show="callPending && isReady" />
+    <IncomingPopup
+      v-show="callPending && isReady"
+      :active="callPending && isReady"
+    />
     <PhoneDebugger v-if="currentUser && currentUser.isAdmin" />
   </PageLayout>
 </template>
