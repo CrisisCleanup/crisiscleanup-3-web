@@ -122,20 +122,32 @@
     <template #footer>
       <div class="flex justify-around p-6">
         <base-button
-          :action="() => dismissState.toggle(true)"
-          variant="solid"
-          size="large"
-        >
-          {{ $t('actions.hide') }}
-        </base-button>
-        <base-button
           :action="() => skipCall()"
           variant="solid"
           size="large"
           class="btn-danger"
+          :disabled="hasResponded !== null"
+          :show-spinner="hasResponded === 'skip'"
         >
           {{ $t('actions.skip_call') }}
         </base-button>
+        <ProgressButton
+          :total="25"
+          :action="() => acceptCall()"
+          @update:done="() => skipCall()"
+          variant="solid"
+          size="large"
+          class="btn-success"
+          :value="acceptTime"
+          :show-spinner="hasResponded === 'accept'"
+          reverse
+        >
+          {{
+            hasResponded === 'accept'
+              ? $t('~~Accepted')
+              : $t('~~Accept') + ` (${acceptTime}s)`
+          }}
+        </ProgressButton>
       </div>
     </template>
   </modal>
@@ -157,11 +169,21 @@ import PhoneInbound from '@/models/PhoneInbound';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import useAgent from '@/use/phone/useAgent';
 import { InboundActions } from '@/store/modules/phone/streams';
+import ProgressButton from '@/components/buttons/ProgressButton.vue';
+import { useIntervalFn } from '@/use/useIntervalFn';
+import { ref, watch } from '@vue/composition-api';
+import VueTypes from 'vue-types';
 
 export default {
   name: 'IncomingPopup',
-  components: { CaseCard, DisasterIcon },
-  setup() {
+  components: { CaseCard, DisasterIcon, ProgressButton },
+  props: {
+    /**
+     * Whether the popup is active or not.
+     */
+    active: VueTypes.bool.def(false),
+  },
+  setup(props) {
     const {
       callerCases,
       callType,
@@ -179,7 +201,53 @@ export default {
     const dismissState = useToggle();
     const { currentIncident } = useIncident();
 
+    /**
+     * Time left to accept.
+     * @type {Ref<UnwrapRef<number>>}
+     */
+    const acceptTime = ref(0);
+    /**
+     * Current action user responded with.
+     * @type {null}
+     */
+    const hasResponded = ref(null);
+
+    /**
+     * Timer controller for allotted accept time.
+     * @type {{resume: resume, stop: pause, start: resume, isActive: Ref<UnwrapRef<boolean>>, pause: pause}}
+     */
+    const acceptTimer = useIntervalFn(
+      () => {
+        if (acceptTime.value >= 1) {
+          acceptTime.value -= 1;
+        }
+      },
+      1000,
+      false,
+    );
+
+    /**
+     * Reset/Start timer depending on the active prop.
+     */
+    watch(
+      () => props.active,
+      (active, prevActive) => {
+        if (active && !prevActive) {
+          acceptTime.value = 25;
+          hasResponded.value = null;
+          acceptTimer.start();
+        } else {
+          acceptTimer.stop();
+        }
+      },
+    );
+
+    // Stop the accept timer on user response.
+    watch(hasResponded, (responded) => responded && acceptTimer.stop());
+
     const skipCall = async () => {
+      if (hasResponded.value) return;
+      hasResponded.value = 'skip';
       if (callState.inbound.value && currentContact.value.isInbound) {
         setNextInboundAction(InboundActions.SKIP);
         await PhoneInbound.api().skipCall(callState.inbound.value.id);
@@ -192,6 +260,15 @@ export default {
         state: ContactStates.ROUTED,
       });
       await clearState({ agentId: agent.value.agentId });
+    };
+
+    const acceptCall = async () => {
+      if (hasResponded.value) return;
+      hasResponded.value = 'accept';
+      acceptTime.value = 0;
+      if (callState.outbound.value && !currentContact.value.isInbound) {
+        await PhoneOutbound.api().acceptCall(callState.outbound.value.id);
+      }
     };
 
     return {
@@ -212,7 +289,11 @@ export default {
       }),
       callType,
       dismissState,
+      hasResponded,
       skipCall,
+      acceptCall,
+      acceptTime,
+      acceptTimer,
     };
   },
 };
