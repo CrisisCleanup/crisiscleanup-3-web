@@ -47,7 +47,7 @@
         :key="`${title}-${value}-${action}`"
       >
         <base-text variant="h4"> {{ $t(title) }} </base-text>
-        <base-text variant="bodysm"> {{ value }} </base-text>
+        <base-text v-if="value" variant="bodysm"> {{ value }} </base-text>
         <base-button variant="outline" v-if="action" :action="action.method">{{
           $t(action.label)
         }}</base-button>
@@ -86,7 +86,7 @@ import useUser from '@/use/user/useUser';
 
 export default {
   name: 'PhoneDebugger',
-  setup() {
+  setup(props, context) {
     const { actions, state } = useController();
     const { agent } = useAgent();
     const visibleState = useToggle();
@@ -169,6 +169,14 @@ export default {
         {
           title: 'phoneDashboard.has_resolved_cases',
           value: _.get(currentContact, 'value.hasResolvedCases', 'No'),
+        },
+        {
+          title: '~~Call Pending',
+          value: _.get(currentContact, 'value.callPending', 'No'),
+        },
+        {
+          title: '~~Contact Ready',
+          value: _.get(currentContact, 'value.isReady', 'No'),
         },
         {
           title: 'phoneDashboard.agent_state',
@@ -279,6 +287,16 @@ export default {
             label: 'phoneDashboard.toggle',
             method: () => {
               scriptStorage.storage.value = !scriptStorage.storage.value;
+            },
+          },
+        },
+        {
+          title: '~~Dump Phone Store',
+          action: {
+            label: '~~Execute',
+            method: () => {
+              context.root.$log.info(agent.value);
+              context.root.$log.info(currentContact.value);
             },
           },
         },
