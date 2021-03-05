@@ -931,6 +931,7 @@ const templates = {
   muck_out,
   other,
   oxygen,
+  pipe,
   ppe,
   prescription,
   rebuild_total,
