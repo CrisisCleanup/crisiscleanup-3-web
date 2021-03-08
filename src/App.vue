@@ -8,7 +8,6 @@
     >
       <router-view v-if="$route.meta.id !== 'caller'" />
     </component>
-    <Version />
     <CCP />
     <dialogs-wrapper />
   </div>

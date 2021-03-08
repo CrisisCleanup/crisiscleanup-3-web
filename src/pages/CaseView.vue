@@ -1,5 +1,9 @@
 <template>
-  <div v-if="worksite" class="bg-white flex flex-col intake-view-container">
+  <div
+    v-if="worksite"
+    class="bg-white flex flex-col intake-view-container"
+    :style="cssVars"
+  >
     <div class="flex p-1">
       <flag
         v-for="flag in worksite.flags"
@@ -449,6 +453,12 @@ export default {
     };
   },
   computed: {
+    cssVars() {
+      const formHeight = `${this.worksite.flags.length ? '325' : '300'}px`;
+      return {
+        'grid-template-rows': `auto calc(100vh - ${formHeight} - var(--safe-area-inset-bottom)) 80px`,
+      };
+    },
     worksite() {
       return Worksite.find(this.$route.params.id);
     },
@@ -727,6 +737,5 @@ export default {
 .intake-view-container {
   --safe-area-inset-bottom: env(safe-area-inset-bottom);
   display: grid;
-  grid-template-rows: auto calc(100vh - 280px - var(--safe-area-inset-bottom)) 80px;
 }
 </style>

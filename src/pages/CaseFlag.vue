@@ -464,7 +464,7 @@ export default {
   --safe-area-inset-bottom: env(safe-area-inset-bottom);
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: calc(100vh - 320px - var(--safe-area-inset-bottom)) 80px;
+  grid-template-rows: calc(100vh - 370px - var(--safe-area-inset-bottom)) 80px;
 }
 </style>
 
