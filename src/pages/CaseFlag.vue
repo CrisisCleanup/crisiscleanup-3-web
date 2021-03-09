@@ -316,7 +316,6 @@
 import User from '@/models/User';
 import Worksite from '@/models/Worksite';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput';
-import Incident from '@/models/Incident';
 import Organization from '@/models/Organization';
 import { getGoogleMapsLocation } from '@/utils/map';
 import GeocoderService from '@/services/geocoder.service';
@@ -328,6 +327,7 @@ export default {
   data() {
     return {
       worksite: {},
+      incidents: [],
       ready: false,
       selectedOrganizations: new Set(),
       organizationsWithClaimsInArea: [],
@@ -359,9 +359,6 @@ export default {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
-    incidents() {
-      return Incident.query().orderBy('id', 'desc').get();
-    },
   },
   async mounted() {
     this.ready = false;
@@ -389,6 +386,14 @@ export default {
     );
     this.organizationsWithClaimsInArea =
       organizationResults.entities.organizations;
+
+    const response = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name&move_case=true`,
+      {
+        save: false,
+      },
+    );
+    this.incidents = response.data.results;
   },
   methods: {
     async flagWorksite() {
