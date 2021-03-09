@@ -1,7 +1,8 @@
 name: CrisisCleanup
 
 on:
-  create: ~
+  workflow_dispatch:
+  create:
   release:
     types: [published]
   pull_request:
@@ -15,6 +16,7 @@ on:
   push:
     branches:
       - master
+      - develop
     tags:
       - 'v**'
     paths:
@@ -112,7 +114,7 @@ jobs:
     name: Deploy Site
     runs-on: ubuntu-latest
     needs: [test, lint]
-    if: "github.event_name != 'pull_request'"
+    if: "github.event_name != 'pull_request' && github.ref == 'refs/heads/develop'"
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
