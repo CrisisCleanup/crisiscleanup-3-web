@@ -34,7 +34,6 @@ import AgentClient, {
 } from '@/models/phone/AgentClient';
 import Agent from '@/models/Agent';
 import { ContactActions, ContactStates } from '@/models/phone/Contact';
-import { ContactState } from '@/models/phone/types';
 
 config.rawError = true;
 
