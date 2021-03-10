@@ -34,6 +34,7 @@ import AgentClient, {
 } from '@/models/phone/AgentClient';
 import Agent from '@/models/Agent';
 import { ContactActions, ContactStates } from '@/models/phone/Contact';
+import { ContactState } from '@/models/phone/types';
 
 config.rawError = true;
 
@@ -434,35 +435,16 @@ class StreamsStore extends VuexModule {
             if (voiceConn) {
               if (voiceConn.getType() === 'inbound') {
                 if (this.nextInboundAction === InboundActions.SKIP) {
-                  voiceConn.destroy({
-                    success: () => {
-                      this.updateContact({
-                        action: ContactActions.MISSED,
-                        state: ContactStates.ROUTED,
-                      }).then(() => {
-                        this.updateAgentClient({
-                          routeState: RouteStates.NOT_ROUTABLE,
-                          state: AgentStates.OFFLINE,
-                        }).then(() => {
-                          Log.info('connection successfully destroyed!');
-                          this.setNextInboundAction(InboundActions.VERIFY);
-                        });
-                      });
-                    },
-                    failure: () => {
-                      this.updateContact({
-                        action: ContactActions.MISSED,
-                        state: ContactStates.ROUTED,
-                      }).then(() => {
-                        this.updateAgentClient({
-                          routeState: RouteStates.NOT_ROUTABLE,
-                          state: AgentStates.OFFLINE,
-                        }).then(() => {
-                          Log.info('connection failed to destroy!');
-                          this.setNextInboundAction(InboundActions.VERIFY);
-                        });
-                      });
-                    },
+                  this.updateContact({
+                    action: ContactActions.MISSED,
+                    state: ContactStates.ROUTED,
+                  }).then(() => {
+                    this.updateAgentClient({
+                      routeState: RouteStates.NOT_ROUTABLE,
+                      state: AgentStates.OFFLINE,
+                    }).then(() => {
+                      Log.info('contact successfully skipped!');
+                    });
                   });
                 } else {
                   Log.info('inbound connection connected!');
