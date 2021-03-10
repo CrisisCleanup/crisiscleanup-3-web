@@ -18490,6 +18490,13 @@ parents@^1.0.0, parents@^1.0.1:
   dependencies:
     path-platform "~0.11.15"
 
+parse-address@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/parse-address/-/parse-address-1.1.2.tgz#6c28c29de95d4c675c7ff450be6f60be49dcfe58"
+  integrity sha512-EnqetXieqyTlDzuuy+oT/pjjkWoI80MgFawDA/Z9LZBAMy+Iy6piURuX+Lr1iZNm7exD+V/B9IRjHaSj33adJw==
+  dependencies:
+    xregexp "^3.1.1"
+
 parse-asn1@^5.0.0:
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/parse-asn1/-/parse-asn1-5.1.5.tgz#003271343da58dc94cace494faef3d2147ecea0e"
@@ -25383,6 +25390,11 @@ xpath@0.0.27, xpath@^0.0.27:
   version "0.0.27"
   resolved "https://registry.yarnpkg.com/xpath/-/xpath-0.0.27.tgz#dd3421fbdcc5646ac32c48531b4d7e9d0c2cfa92"
   integrity sha512-fg03WRxtkCV6ohClePNAECYsmpKKTv5L8y/X3Dn1hQrec3POx2jHZ/0P2qQ6HvsrU1BmeqXcof3NGGueG6LxwQ==
+
+xregexp@^3.1.1:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/xregexp/-/xregexp-3.2.0.tgz#cb3601987bfe2695b584000c18f1c4a8c322878e"
+  integrity sha1-yzYBmHv+JpW1hAAMGPHEqMMih44=
 
 "xtend@>=4.0.0 <4.1.0-0", xtend@^4.0.0, xtend@^4.0.1, xtend@^4.0.2, xtend@~4.0.0, xtend@~4.0.1:
   version "4.0.2"

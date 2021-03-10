@@ -4,6 +4,7 @@
 const GEOCODER_BASE_URL = 'https://api.pitneybowes.com';
 const GEOCODER = 'google';
 import store from '@/store';
+import * as parser from 'parse-address';
 
 export default {
   getGooglePlaceDetails(placeId) {
@@ -119,36 +120,42 @@ export default {
     }
   },
 
-  getAddress(address_components, location) {
-    const data = {
+  getAddress(address_components, location, addressText) {
+    const parsedAddress = parser.parseLocation(addressText);
+    const streetNumber =
+      this.extractFromAddress(address_components, 'street_number') ||
+      parsedAddress.number;
+    const streetName =
+      this.extractFromAddress(address_components, 'route') ||
+      `${parsedAddress.prefix} ${parsedAddress.street}`;
+    const city =
+      this.extractFromAddress(address_components, 'locality') ||
+      this.extractFromAddress(address_components, 'sublocality_level_1') ||
+      parsedAddress.city;
+    const state =
+      this.extractFromAddress(
+        address_components,
+        'administrative_area_level_1',
+      ) || parsedAddress.state;
+    const postal_code =
+      this.extractFromAddress(address_components, 'postal_code') ||
+      parsedAddress.zip;
+    return {
       address_components: {
-        address: `${this.extractFromAddress(
-          address_components,
-          'street_number',
-        )} ${this.extractFromAddress(address_components, 'route')}`,
-        city: `${
-          this.extractFromAddress(address_components, 'locality') ||
-          this.extractFromAddress(address_components, 'sublocality_level_1')
-        }`,
+        address: `${streetNumber} ${streetName}`,
+        city,
         county: `${this.extractFromAddress(
           address_components,
           'administrative_area_level_2',
         )}`,
-        state: `${this.extractFromAddress(
-          address_components,
-          'administrative_area_level_1',
-        )}`,
-        postal_code: `${this.extractFromAddress(
-          address_components,
-          'postal_code',
-        )}`,
+        state,
+        postal_code,
       },
       location: {
         lat: location.geometry.location.lat(),
         lng: location.geometry.location.lng(),
       },
     };
-    return data;
   },
   async getPlaceDetails(address, placeId = null) {
     if (GEOCODER === 'google') {
@@ -156,7 +163,7 @@ export default {
         if (placeId) {
           this.getGooglePlaceDetails(placeId).then((place) => {
             const { address_components } = place;
-            resolve(this.getAddress(address_components, place));
+            resolve(this.getAddress(address_components, place, address));
           });
         } else {
           const geocoder = new google.maps.Geocoder();
@@ -164,7 +171,7 @@ export default {
             if (status === google.maps.GeocoderStatus.OK) {
               const location = results[0];
               const { address_components } = location;
-              resolve(this.getAddress(address_components, location));
+              resolve(this.getAddress(address_components, location, address));
             } else {
               reject(`Can't find address: ${status}`);
             }
