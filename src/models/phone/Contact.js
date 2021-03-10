@@ -189,7 +189,7 @@ export default class Contact extends Model {
       this.contactAttributes,
       ContactAttributes.CALL_TYPE,
       CallType.INBOUND,
-    );
+    ).toUpperCase();
     if (_ctype === CallType.OUTBOUND) {
       return _.get(
         this.contactAttributes,
