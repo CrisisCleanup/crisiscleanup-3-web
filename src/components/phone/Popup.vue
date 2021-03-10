@@ -144,7 +144,7 @@
         >
           {{
             hasResponded === 'accept'
-              ? $t('~~Accepted')
+              ? $t('~~Connecting')
               : $t('~~Accept') + ` (${acceptTime}s)`
           }}
         </ProgressButton>
