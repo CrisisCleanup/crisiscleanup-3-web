@@ -388,7 +388,7 @@ export default {
       organizationResults.entities.organizations;
 
     const response = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name&move_case=true`,
+      `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name&move_case=true&limit=200`,
       {
         save: false,
       },
