@@ -434,47 +434,30 @@ class StreamsStore extends VuexModule {
             if (voiceConn) {
               if (voiceConn.getType() === 'inbound') {
                 if (this.nextInboundAction === InboundActions.SKIP) {
-                  voiceConn.destroy({
-                    success: () => {
-                      this.updateContact({
-                        action: ContactActions.MISSED,
-                        state: ContactStates.ROUTED,
-                      }).then(() => {
-                        this.updateAgentClient({
-                          routeState: RouteStates.NOT_ROUTABLE,
-                          state: AgentStates.OFFLINE,
-                        }).then(() => {
-                          Log.info('connection successfully destroyed!');
-                          this.setNextInboundAction(InboundActions.VERIFY);
-                        });
-                      });
-                    },
-                    failure: () => {
-                      this.updateContact({
-                        action: ContactActions.MISSED,
-                        state: ContactStates.ROUTED,
-                      }).then(() => {
-                        this.updateAgentClient({
-                          routeState: RouteStates.NOT_ROUTABLE,
-                          state: AgentStates.OFFLINE,
-                        }).then(() => {
-                          Log.info('connection failed to destroy!');
-                          this.setNextInboundAction(InboundActions.VERIFY);
-                        });
-                      });
-                    },
+                  this.updateContact({
+                    action: ContactActions.MISSED,
+                    state: ContactStates.ROUTED,
+                  }).then(() => {
+                    this.updateAgentClient({
+                      routeState: RouteStates.NOT_ROUTABLE,
+                      state: AgentStates.OFFLINE,
+                    }).then(() => {
+                      Log.info('contact successfully skipped!');
+                    });
                   });
                 } else {
-                  Log.info('inbound connection connected! placing on hold!');
-                  voiceConn.hold({
-                    success: () => {
-                      Log.info('connection successfully placed on hold!');
-                      ACS.getAgentVerificationEndpoint(contact);
-                    },
-                    failure: () =>
-                      Log.error('failed to place connection on hold!'),
+                  Log.info('inbound connection connected!');
+                  this.updateContact({
+                    action: ContactActions.CONNECTED,
+                    state: ContactStates.ROUTED,
                   });
                 }
+              } else if (voiceConn.getType() === 'outbound') {
+                Log.info('outbound connection connected!');
+                this.updateContact({
+                  action: ContactActions.CONNECTED,
+                  state: ContactStates.ROUTED,
+                });
               }
             }
           });

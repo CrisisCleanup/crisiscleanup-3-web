@@ -158,10 +158,11 @@ export const getContactById = (
     }
     // Finally, if the contact ID is provided over websocket
     // before connect (and its an outbound), then just use
-    // the current contact who is a queue callback.
-    targContact = contacts.find(
-      (c: typeof connect.Contact) => c.getType() === 'queue_callback',
-    );
+    // the current contact who is an outbound.
+    targContact = contacts.find((c: typeof connect.Contact) => {
+      const con = c.getInitialConnection();
+      return con && con.getType() === 'outbound';
+    });
     if (targContact) {
       return targContact;
     }
