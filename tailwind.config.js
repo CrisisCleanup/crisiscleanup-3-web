@@ -46,7 +46,7 @@ module.exports = {
         },
         'phone-inbound': {
           light: '#C9EBF5',
-          dark: '#848F99',
+          dark: '#05A4D2',
         },
         'phone-outbound': {
           light: '#C6F0CF',
@@ -123,6 +123,7 @@ module.exports = {
         'crisiscleanup-dark-blue': '#009bff',
         'crisiscleanup-light-grey': '#f9f9f9',
         'crisiscleanup-light-smoke': '#f2f3f4',
+        'crisiscleanup-smoke': '#f7f7f7',
       },
       spacing: {
         '72': '18rem',
