@@ -11,6 +11,7 @@ export default {
     address: '123 New Street',
     state: 'NY',
     fullAddress: '123 New Street',
+    interactive: true,
     worktype: {
       work_type: 'muck_out',
       status: 'open_unassigned',
@@ -35,7 +36,19 @@ export const Basic = (args, { argTypes }) => ({
     },
   }),
   template: `
-    <div>
+    <div class="flex">
+      <case-card
+        class="mx-3"
+        tile
+        :key="caseNumber"
+        :case-number="caseNumber"
+        :address="address"
+        :full-address="fullAddress"
+        :worktype="worktype"
+        :worktypes="worktypes"
+        :state="state"
+        :interactive="interactive"
+      />
       <case-card
         tile
         :key="caseNumber"
@@ -45,10 +58,18 @@ export const Basic = (args, { argTypes }) => ({
         :worktype="worktype"
         :worktypes="worktypes"
         :state="state"
+        :interactive="interactive"
+        :small="true"
       />
     </div>
   `,
 });
+
+export const AsStatic = Basic.bind({});
+AsStatic.args = {
+  ...Basic.args,
+  interactive: false,
+};
 
 export const WithWorkTypes = Basic.bind({});
 WithWorkTypes.args = {
