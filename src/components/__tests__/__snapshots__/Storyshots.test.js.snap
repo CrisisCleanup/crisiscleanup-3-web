@@ -2233,11 +2233,134 @@ exports[`Storyshots Elements/Badge With Props 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements/Cards/CaseCard Basic 1`] = `
-<div>
+exports[`Storyshots Elements/Cards/CaseCard As Static 1`] = `
+<div
+  class="flex"
+>
   <div
-    class="case-card  "
+    class="mx-3 case-card"
     full-address="123 New Street"
+  >
+    <!---->
+     
+    <div
+      class="case--head"
+    >
+      <div
+        class="case--svg"
+      />
+       
+      <!---->
+       
+      <div
+        class="case--title flex"
+      >
+        <p
+          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+        >
+          X23
+        </p>
+      </div>
+    </div>
+     
+    <div
+      class="case--body"
+    >
+      <p
+        class="text-bodysm font-bodysm font-sans subpixel-antialiased"
+      >
+        123 New Street, NY
+      </p>
+    </div>
+  </div>
+   
+  <div
+    class="case-card small"
+    full-address="123 New Street"
+    small="true"
+  >
+    <!---->
+     
+    <div
+      class="case--head"
+    >
+      <div
+        class="case--svg"
+      />
+       
+      <!---->
+       
+      <div
+        class="case--title flex"
+      >
+        <p
+          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+        >
+          X23
+        </p>
+      </div>
+    </div>
+     
+    <div
+      class="case--body"
+    >
+      <p
+        class="text-bodysm font-bodysm font-sans subpixel-antialiased"
+      >
+        123 New Street, NY
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements/Cards/CaseCard Basic 1`] = `
+<div
+  class="flex"
+>
+  <div
+    class="mx-3 case-card interactive"
+    full-address="123 New Street"
+    interactive="true"
+  >
+    <!---->
+     
+    <div
+      class="case--head"
+    >
+      <div
+        class="case--svg"
+      />
+       
+      <!---->
+       
+      <div
+        class="case--title flex"
+      >
+        <p
+          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+        >
+          X23
+        </p>
+      </div>
+    </div>
+     
+    <div
+      class="case--body"
+    >
+      <p
+        class="text-bodysm font-bodysm font-sans subpixel-antialiased"
+      >
+        123 New Street, NY
+      </p>
+    </div>
+  </div>
+   
+  <div
+    class="case-card interactive small"
+    full-address="123 New Street"
+    interactive="true"
+    small="true"
   >
     <!---->
      
