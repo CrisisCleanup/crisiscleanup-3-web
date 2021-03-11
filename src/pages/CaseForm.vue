@@ -300,7 +300,7 @@
       />
     </div>
   </form>
-  <div v-else class="flex items-center justify-center h-full">
+  <div v-else class="flex items-center justify-center h-full w-full">
     <spinner />
   </div>
 </template>
