@@ -1,8 +1,12 @@
 <template>
   <div
-    :class="`case-card ${active ? 'active' : ''} ${
-      type === 'new' ? 'new' : ''
-    }`"
+    :class="[
+      'case-card',
+      active && 'active',
+      type === 'new' && 'new',
+      interactive && 'interactive',
+      small && 'small'
+    ]"
   >
     <div v-if="type === 'new'" class="case--overlay">
       <ccu-icon
@@ -18,11 +22,14 @@
     <template v-if="type !== 'new'">
       <div class="case--head">
         <div
-          v-if="worktype && !(worktypes && worktypes.length)"
+          v-if="worktype && (!(worktypes && worktypes.length) || !interactive)"
           class="case--svg"
           v-html="svg"
         />
-        <div v-if="worktypes && worktypes.length" class="case--svgs">
+        <div
+          v-if="interactive && worktypes && worktypes.length"
+          class="case--svgs"
+        >
           <WorksiteStatusDropdown
             v-for="(w, idx) in worktypes"
             :key="`${w}_${idx}`"
@@ -63,6 +70,8 @@ export default {
     state: VueTypes.string,
     worktype: VueTypes.string,
     worktypes: VueTypes.array,
+    interactive: VueTypes.bool.def(true),
+    small: VueTypes.bool.def(false),
     svg: VueTypes.string,
     active: VueTypes.bool.def(false),
     type: VueTypes.any,
@@ -73,19 +82,28 @@ export default {
 <style scoped lang="postcss">
 @lost flexbox flex;
 .case-card {
-  @apply bg-white p-4;
-  @apply border-gray-300;
-  border-width: 1px;
+  @apply bg-crisiscleanup-smoke p-4;
   display: flex;
   justify-content: space-around;
   flex-direction: column;
   width: 12rem;
   height: 8rem;
-  cursor: pointer;
-  transition: box-shadow 300ms ease;
-  &:hover {
-    @apply shadow-lg;
+  user-select: none;
+
+  &.small {
+    width: 10rem;
+    height: 7rem;
   }
+
+  &.interactive {
+    cursor: pointer;
+    @apply border-gray-300;
+    transition: box-shadow 300ms ease;
+    &:hover {
+      @apply shadow-lg;
+    }
+  }
+
   &.active {
     @apply border-primary-light;
     border-width: 2px;
