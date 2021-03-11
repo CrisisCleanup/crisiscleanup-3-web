@@ -200,13 +200,13 @@ export default {
       margin: 0;
     }
     &:nth-child(1) {
-      @apply bg-scripts-inbound;
+      @apply bg-phone-inbound-light;
     }
     &:nth-child(2) {
-      @apply bg-scripts-outbound;
+      @apply bg-phone-outbound-light;
     }
     &:nth-child(3) {
-      @apply bg-scripts-calldown;
+      @apply bg-phone-calldown-light;
     }
     &:nth-child(4) {
       .metric {
@@ -235,7 +235,7 @@ export default {
     .metric {
       align-items: center;
       p {
-        @apply text-crisiscleanup-dark-400;
+        @apply text-crisiscleanup-dark-500;
       }
     }
   }
