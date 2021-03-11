@@ -171,7 +171,7 @@ import useAgent from '@/use/phone/useAgent';
 import { InboundActions } from '@/store/modules/phone/streams';
 import ProgressButton from '@/components/buttons/ProgressButton.vue';
 import { useIntervalFn } from '@/use/useIntervalFn';
-import { ref, watch } from '@vue/composition-api';
+import { ref, watch, watchEffect } from '@vue/composition-api';
 import VueTypes from 'vue-types';
 
 export default {
@@ -245,6 +245,51 @@ export default {
     // Stop the accept timer on user response.
     watch(hasResponded, (responded) => responded && acceptTimer.stop());
 
+    /**
+     * Inbound contact connection poll response.
+     */
+    const inboundResponse = ref(null);
+    /**
+     * Interval for polling inbound contact connection status.
+     * @type {{resume: resume, stop: pause, start: resume, isActive: Ref<UnwrapRef<boolean>>, pause: pause}}
+     */
+    const inboundPollTimer = useIntervalFn(
+      async () => {
+        context.root.$log.info('polling inbound connection...');
+        if (callState.inbound.value) {
+          inboundResponse.value = await PhoneInbound.api().pollConnection(
+            callState.inbound.value.id,
+          );
+        } else {
+          context.root.$log.warn(
+            'Tried to poll inbound, but there is no active ID!',
+            callState,
+          );
+        }
+      },
+      5000,
+      false,
+    );
+
+    /**
+     * Watches for completed connection.
+     * Ends status polling + indicates received call.
+     */
+    watchEffect(() => {
+      if (
+        inboundResponse.value === true &&
+        contact.callConnected.value === true
+      ) {
+        context.root.$log.info('Contact has been routed!');
+        PhoneInbound.api()
+          .receiveConnection(callState.inbound.value.id)
+          .then((resp) => {
+            context.root.$log.info(`Ending inbound response poll: ${resp}`);
+            inboundPollTimer.stop();
+          });
+      }
+    });
+
     const skipCall = async () => {
       if (hasResponded.value) return;
       hasResponded.value = 'skip';
@@ -278,6 +323,7 @@ export default {
         context.root.$log.info('accepting inbound!');
         setNextInboundAction(InboundActions.VERIFY);
         await PhoneInbound.api().acceptCall(callState.inbound.value.id);
+        inboundPollTimer.start();
       }
     };
 
