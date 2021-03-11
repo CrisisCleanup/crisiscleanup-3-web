@@ -107,7 +107,7 @@ export const secondsToHm = (seconds) => {
 export const capitalize = (value) => {
   // "two words" -> "Two Words"
   if (!value) return '';
-  const casted = value.toString();
+  const casted = value.toString().toLowerCase();
   const words = casted.split(' ');
   const cappedWords = words.map((w) => w.charAt(0).toUpperCase() + w.slice(1));
   const final = cappedWords.join(' ');
