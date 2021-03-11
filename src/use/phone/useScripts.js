@@ -29,9 +29,9 @@ export default ({
   const _recentWorksite = wrap(recentWorksite);
 
   const scriptColors = {
-    [CallType.INBOUND]: '#CCEBFF',
-    [CallType.OUTBOUND]: '#13E768',
-    [CallType.CALLDOWN]: theme.extend.colors['crisiscleanup-yellow']['100'],
+    [CallType.INBOUND]: theme.extend.colors['phone-inbound-light'],
+    [CallType.OUTBOUND]: theme.extend.colors['phone-outbound-light'],
+    [CallType.CALLDOWN]: theme.extend.colors['phone-calldown-light'],
   };
 
   const scriptHeaders = {
