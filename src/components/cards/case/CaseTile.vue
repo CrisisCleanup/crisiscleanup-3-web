@@ -5,7 +5,7 @@
       active && 'active',
       type === 'new' && 'new',
       interactive && 'interactive',
-      small && 'small'
+      small && 'small',
     ]"
   >
     <div v-if="type === 'new'" class="case--overlay">
