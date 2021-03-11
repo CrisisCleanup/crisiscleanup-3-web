@@ -291,7 +291,7 @@ export default {
             justify-content: flex-start;
             flex-grow: 1;
             flex-wrap: wrap;
-            @apply py-2 px-2 bg-crisiscleanup-light-grey;
+            @apply py-2 px-2;
           }
         }
       }
