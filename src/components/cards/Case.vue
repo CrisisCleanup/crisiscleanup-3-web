@@ -1,6 +1,7 @@
 <template>
   <component
     :is="cardType"
+    v-bind="$attrs"
     :case-number="caseNumber"
     :address="address"
     :full-address="fullAddress"
@@ -55,7 +56,7 @@ export default {
       return this.tile ? CaseTile : CaseCard;
     },
     svgSize() {
-      return this.tile ? '26' : '46';
+      return this.tile ? '32' : '46';
     },
   },
 };
