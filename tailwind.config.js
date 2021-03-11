@@ -44,11 +44,17 @@ module.exports = {
           light: '#fece09',
           dark: '#f79820',
         },
-        // until maria sets us up w/ colors
-        scripts: {
-          inbound: '#CCEBFF',
-          outbound: '#13E768',
-          calldown: '#FFDC68',
+        'phone-inbound': {
+          light: '#C9EBF5',
+          dark: '#848F99',
+        },
+        'phone-outbound': {
+          light: '#C6F0CF',
+          dark: '#419954',
+        },
+        'phone-calldown': {
+          light: '#F9CEDA',
+          dark: '#973752',
         },
         'crisiscleanup-dark': {
           100: '#dadada',
