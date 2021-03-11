@@ -1,161 +1,176 @@
 <template>
-  <modal v-show="!dismissState.state.value" modal-classes="max-w-xl">
+  <modal
+    v-show="!dismissState.state.value"
+    modal-classes="max-w-2xl max-h-screen overflow-auto"
+  >
     <template #header>
-      <div
-        class="modal-script"
-        :style="{ backgroundColor: currentScriptColor }"
-      >
-        <div class="script__header">
-          <div class="script__title flex">
-            <base-text variant="h1" semi-bold>
-              {{ $t(currentScriptHeader[0]) }}
-            </base-text>
-            <base-text variant="h1" bold>
-              {{ ' ' + $t(currentScriptHeader[1]) }}
-            </base-text>
-          </div>
-          <div class="script__body flex">
-            <base-text variant="body">
-              {{ `"${$t(currentScript)}"` }}
-            </base-text>
-          </div>
-        </div>
-        <div
-          v-if="currentScriptHeader.length >= 2"
-          class="script__footer flex justify-center items-center pt-3 px-2 w-full h-full"
-        >
-          <template v-for="item in currentScriptHeader[2]">
-            <div :key="item.title" class="flex items-center px-2 flex-1">
-              <base-text variant="h1" :style="{ color: item.accent }" bold>
-                {{ $t(item.title) }}
-              </base-text>
-              <div class="flex flex-col text-crisiscleanup-dark-400 px-3">
-                <base-text variant="bodysm" :style="{ color: item.accent }">
-                  {{ $t(item.body) }}
-                </base-text>
-                <base-text variant="bodysm" class="text-crisiscleanup-dark-400">
-                  {{ $t(item.note) }}
-                </base-text>
-              </div>
-            </div>
-          </template>
-        </div>
-      </div>
-      <div class="header">
-        <DisasterIcon
-          v-if="activeIncident && activeIncident.incidentImage"
-          :current-incident="activeIncident"
-        />
-        <base-text :weight="700" variant="h1"
-          >{{
-            $t('phoneDashboard.incoming_call_for_incident', {
-              incidentName: activeIncident && activeIncident.friendlyName,
-            })
-          }}
-        </base-text>
-      </div>
+      <div></div>
     </template>
 
-    <div class="modal--body">
-      <div class="modal-callinfo">
-        <div class="caller">
-          <ccu-icon
-            with-text
-            size="md"
-            :type="enums.icons.phone_user"
-            :alt="$t('phoneDashboard.caller_name')"
-          >
-            <base-text variant="h1" :weight="400">{{ callerName }}</base-text>
-          </ccu-icon>
-          <ccu-icon
-            with-text
-            size="md"
-            :type="enums.icons.earth_globe"
-            :alt="$t('phoneDashboard.locale')"
-          >
-            <base-text variant="h1" :weight="400">{{
-              callState.locale.value
-                ? callState.locale.value.name_t.split(' ')[0]
-                : 'English'
+    <div class="popup">
+      <div class="popup__header">
+        <div
+          class="header__title"
+          :class="`header__title--${callType.toLowerCase()}`"
+        >
+          <div class="inline-flex align-center">
+            <base-text bold variant="h2">{{
+              $t(currentScriptHeader[1]).replace('(', '').replace(')', '')
             }}</base-text>
-          </ccu-icon>
+          </div>
         </div>
-        <div class="stats">
-          <base-text
-            class="mobile text-crisiscleanup-dark-500"
-            semi-bold
-            variant="h1"
-            >{{ callerNumber }}</base-text
+
+        <div
+          class="header__body"
+          :class="`header__body--${callType.toLowerCase()}`"
+        >
+          <base-text variant="h3">{{ $t(currentScriptHeader[0]) }}</base-text>
+          <base-text variant="bodysm">
+            {{ `"${$t(currentScript)}"` }}
+          </base-text>
+        </div>
+        <div
+          class="header__footer"
+          :class="`header__footer--${callType.toLowerCase()}`"
+          v-if="currentScriptHeader.length > 2"
+        >
+          <div
+            v-for="item in currentScriptHeader[2]"
+            class="item"
+            :key="item.title"
           >
-          <tag class="tag">
-            <base-text variant="bodysm">
-              {{ callerHistory.total }}
-              {{
-                ` ${$t('phoneDashboard.calls')} | ${$t(
-                  'phoneDashboard.most_recent',
-                )} ${$t(callerHistory.recent)}`
-              }}
-            </base-text>
-          </tag>
+            <div class="item__left" :style="{ backgroundColor: item.accent }">
+              <base-text variant="h3" bold>
+                {{ $t(item.title).replace('IF', '') | capitalize }}
+              </base-text>
+            </div>
+            <div class="item__right">
+              <base-text variant="bodysm" :style="{ color: item.accent }">
+                {{ $t(item.body) }}
+              </base-text>
+              <base-text variant="bodysm" class="text-crisiscleanup-dark-400">
+                {{ $t(item.note).replace('(', '').replace(')', '') }}
+              </base-text>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="modal-divider">
-        <base-text variant="h3" :weight="400">
-          <span>
-            {{ caseCards.length }}:
-            {{ $t('phoneDashboard.cases_assigned_to_number') }}
-          </span>
-        </base-text>
+
+      <div class="popup__body">
+        <div class="body__caller">
+          <div class="caller__left">
+            <base-text
+              variant="h1"
+              class="text-crisiscleanup-dark-500 pr-3"
+              normal
+            >
+              {{ callerNumber }}
+            </base-text>
+            <tag class="tag">
+              <base-text variant="bodysm">
+                {{ callerHistory.total }}
+                {{
+                  ` ${$t('phoneDashboard.calls')} | ${$t(
+                    'phoneDashboard.most_recent',
+                  )} ${$t(callerHistory.recent)}`
+                }}
+              </base-text>
+            </tag>
+          </div>
+          <div class="caller__right">
+            <ccu-icon
+              class="pr-3"
+              with-text
+              size="sm"
+              :type="enums.icons.phone_user"
+              :alt="$t('phoneDashboard.caller_name')"
+            >
+              <base-text variant="h3" :weight="400">{{ callerName }}</base-text>
+            </ccu-icon>
+            <ccu-icon
+              with-text
+              size="sm"
+              :type="enums.icons.earth_globe"
+              :alt="$t('phoneDashboard.locale')"
+            >
+              <base-text variant="h3" :weight="400">{{
+                callState.locale.value
+                  ? callState.locale.value.name_t.split(' ')[0]
+                  : 'English'
+              }}</base-text>
+            </ccu-icon>
+          </div>
+        </div>
+
+        <div class="body__cases">
+          <div class="cases__title">
+            <base-text variant="h3" :weight="400">
+              <span class="font-bold">
+                {{ caseCards.length }}
+              </span>
+              {{ $t('phoneDashboard.cases_assigned_to_number') }}
+            </base-text>
+          </div>
+          <div class="cases__body overflow-hidden">
+            <div v-for="c in caseCards.slice(0, 3)" :key="`${c.caseNumber}`">
+              <case-card
+                class="case-card"
+                v-bind="c"
+                :tile="true"
+                :interactive="false"
+                :small="true"
+              />
+            </div>
+            <div v-if="caseCards.length > 3" class="case-card-extra">
+              <base-text>
+                {{ `+${caseCards.length - 3}` }}
+              </base-text>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-cases">
-        <div v-for="c in caseCards" :key="`${c.caseNumber}`">
-          <case-card
-            :case-number="c.caseNumber"
-            :address="c.address"
-            :state="c.state"
-            :worktypes="c.worktypes"
-          />
-          <hr class="cases-divider" />
+
+      <div class="popup__footer">
+        <div class="footer__actions">
+          <base-button
+            :action="() => skipCall()"
+            variant="solid"
+            size="large"
+            class="btn-danger text-white"
+            :disabled="hasResponded !== null"
+            :show-spinner="hasResponded === 'skip'"
+          >
+            {{ $t('actions.skip_call') }}
+          </base-button>
+          <ProgressButton
+            :total="25"
+            :action="() => acceptCall()"
+            @update:done="() => skipCall()"
+            variant="solid"
+            size="large"
+            class="btn-success"
+            :value="acceptTime"
+            :show-spinner="hasResponded === 'accept'"
+            reverse
+          >
+            {{
+              hasResponded === 'accept'
+                ? $t('~~Connecting')
+                : $t('~~Accept') + ` (${acceptTime}s)`
+            }}
+          </ProgressButton>
         </div>
       </div>
     </div>
+
     <template #footer>
-      <div class="flex justify-around p-6">
-        <base-button
-          :action="() => skipCall()"
-          variant="solid"
-          size="large"
-          class="btn-danger"
-          :disabled="hasResponded !== null"
-          :show-spinner="hasResponded === 'skip'"
-        >
-          {{ $t('actions.skip_call') }}
-        </base-button>
-        <ProgressButton
-          :total="25"
-          :action="() => acceptCall()"
-          @update:done="() => skipCall()"
-          variant="solid"
-          size="large"
-          class="btn-success"
-          :value="acceptTime"
-          :show-spinner="hasResponded === 'accept'"
-          reverse
-        >
-          {{
-            hasResponded === 'accept'
-              ? $t('~~Connecting')
-              : $t('~~Accept') + ` (${acceptTime}s)`
-          }}
-        </ProgressButton>
-      </div>
+      <div></div>
     </template>
   </modal>
 </template>
 
 <script>
 import CaseCard from '@/components/cards/Case.vue';
-import DisasterIcon from '@/components/DisasterIcon.vue';
 import useCaseCards from '@/use/worksites/useCaseCards';
 import useUser from '@/use/user/useUser';
 import useContact from '@/use/phone/useContact';
@@ -176,7 +191,7 @@ import VueTypes from 'vue-types';
 
 export default {
   name: 'IncomingPopup',
-  components: { CaseCard, DisasterIcon, ProgressButton },
+  components: { CaseCard, ProgressButton },
   props: {
     /**
      * Whether the popup is active or not.
@@ -355,103 +370,106 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.header {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  @apply w-full;
-  @apply py-4 px-6;
-  p {
-    @apply px-4;
+<style scoped lang="postcss">
+.popup {
+  &__header {
+    flex: 1;
+  }
+  &__body {
+    flex: 3;
+  }
+  &__footer {
+    flex: 3;
   }
 }
 
-@mixin fullwidth {
-  margin-left: -2rem;
-  margin-right: -2rem;
-}
+.popup__header {
+  .header {
+    &__title {
+      @apply p-3 px-6;
+      &--inbound {
+        @apply bg-phone-inbound-dark;
+      }
+      &--outbound {
+        @apply bg-phone-outbound-dark;
+      }
+      &--calldown {
+        @apply bg-phone-calldown-dark;
+      }
+      p {
+        @apply text-white;
+      }
+    }
 
-@mixin divider {
-  width: 100%;
-  height: 1px;
-  @apply bg-crisiscleanup-dark-300;
-  opacity: 0.25;
-  content: '';
-  position: absolute;
-}
+    &__body {
+      @apply p-3 px-6;
+      &--inbound {
+        @apply bg-phone-inbound-light;
+      }
+      &--outbound {
+        @apply bg-phone-outbound-light;
+      }
+      &--calldown {
+        @apply bg-phone-calldown-light;
+      }
+    }
 
-$neg-body-x-pad: calc(0rem - theme('spacing.8'));
-
-.modal {
-  &-script {
-    @apply py-8 w-full shadow-sm;
-    .script {
-      &__header {
-        position: relative;
-        .script__title {
+    &__footer {
+      @apply p-3 px-6 pb-4;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      &--inbound {
+        @apply bg-phone-inbound-light;
+      }
+      &--outbound {
+        @apply bg-phone-outbound-light;
+      }
+      &--calldown {
+        @apply bg-phone-calldown-light;
+      }
+      .item {
+        display: flex;
+        flex-direction: row;
+        flex: 1;
+        &:first-child {
+          @apply pr-3;
+        }
+        &__left {
+          flex: 1;
+          display: flex;
+          align-items: center;
           justify-content: center;
-          flex-wrap: wrap;
-          text-align: center;
           p {
-            &:first-child {
-              @apply pr-2;
-            }
-            @apply text-crisiscleanup-dark-500;
+            @apply text-white;
           }
         }
-        .script__body {
-          @apply h-full w-full;
-          justify-content: center;
-          align-items: stretch;
-          @apply py-4 px-6;
-          &:after {
-            @include divider;
-          }
-          &:before {
-            @include divider;
-            bottom: 0;
-          }
-          p {
-            text-align: center;
-            @apply text-crisiscleanup-dark-400 pt-4 px-4;
-          }
+        &__right {
+          flex: 3;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          @apply bg-white p-1;
         }
       }
     }
   }
+}
 
-  &--body {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    @apply px-8;
-    .modal {
-      position: relative;
-      &-callinfo {
-        @apply pb-4;
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        .caller {
-          display: flex;
-          @apply pt-2;
-          div {
-            @apply pr-4;
-            p {
-              @apply text-crisiscleanup-dark-300;
-            }
-          }
-        }
-        .stats {
-          @apply py-2;
-          display: flex;
-          div {
-            @apply px-2;
-          }
-
+.popup__body {
+  @apply p-3 px-6;
+  .body {
+    &__caller {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .caller {
+        &__left {
+          display: inline-flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
           .tag {
-            @apply mx-4;
             @apply border-primary-dark;
             border-radius: 500px;
             p {
@@ -460,36 +478,53 @@ $neg-body-x-pad: calc(0rem - theme('spacing.8'));
             }
           }
         }
+        &__right {
+          display: inline-flex;
+          flex-direction: row;
+          align-items: center;
+        }
       }
+    }
 
-      &-cases {
-        display: flex;
-        flex-direction: column;
-        max-height: 30vh;
-        margin-left: $neg-body-x-pad;
-        margin-right: $neg-body-x-pad;
-        overflow: auto;
-        scrollbar-width: none;
-        & > div {
-          @apply px-8;
+    &__cases {
+      @apply py-3;
+      .cases {
+        &__title {
+          display: inline-flex;
+          align-items: center;
+          flex-direction: row;
+          @apply pb-2;
         }
-        div .cases-divider {
-          @apply my-4;
-          @apply bg-crisiscleanup-dark-100;
-          @include fullwidth;
-        }
-      }
-      &-divider {
-        @apply bg-crisiscleanup-dark-100 px-8 mb-6;
-        @include fullwidth;
-        p span {
-          @apply font-bold;
+        &__body {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: row;
+          .case-card {
+            @apply mr-2;
+          }
+          .case-card-extra {
+            @apply rounded-full bg-crisiscleanup-smoke p-2 ml-2;
+            justify-self: flex-end;
+          }
         }
       }
     }
   }
 }
+
+.popup__footer {
+  @apply p-3 px-6;
+  .footer {
+    &__actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+    }
+  }
+}
+
 .btn-danger {
-  @apply bg-crisiscleanup-red-300 #{!important};
+  @apply bg-crisiscleanup-red-300 !important;
 }
 </style>
