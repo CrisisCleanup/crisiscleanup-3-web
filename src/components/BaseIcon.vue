@@ -9,12 +9,14 @@
       :class="[iconClasses, styles]"
       :src="iconMap[type]"
       :alt="alt || title"
+      :title="alt || title"
     />
     <font-awesome-icon
       v-else
       :class="[iconClasses, styles]"
       :icon="type"
       :alt="alt || title"
+      :title="alt || title"
       :size="size"
     />
     <slot></slot>
