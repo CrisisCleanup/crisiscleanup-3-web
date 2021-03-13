@@ -58,6 +58,7 @@ exports[`Storyshots Basics/BaseButton With Custom Icon 1`] = `
       alt=""
       class="ccu-icon cursor-pointer medium"
       src="IMAGE_MOCK"
+      title=""
     />
      
   </div>
@@ -296,6 +297,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xxs"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -314,6 +316,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xs"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -332,6 +335,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer tiny"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -350,6 +354,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -368,6 +373,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -386,6 +392,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer medium"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -404,6 +411,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer medium"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -422,6 +430,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer large"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -440,6 +449,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer large"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -458,6 +468,7 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -483,6 +494,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -501,6 +513,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -519,6 +532,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -537,6 +551,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -555,6 +570,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -573,6 +589,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -591,6 +608,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -609,6 +627,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -627,6 +646,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -645,6 +665,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -663,6 +684,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -681,6 +703,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -699,6 +722,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -717,6 +741,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -735,6 +760,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -753,6 +779,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -771,6 +798,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -789,6 +817,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -807,6 +836,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -825,6 +855,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -843,6 +874,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -861,6 +893,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -879,6 +912,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -897,6 +931,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -915,6 +950,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -933,6 +969,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -951,6 +988,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -969,6 +1007,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -987,6 +1026,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1005,6 +1045,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1023,6 +1064,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1041,6 +1083,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1059,6 +1102,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1077,6 +1121,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1095,6 +1140,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1113,6 +1159,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1131,6 +1178,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1149,6 +1197,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1167,6 +1216,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1185,6 +1235,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1203,6 +1254,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1221,6 +1273,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1239,6 +1292,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1257,6 +1311,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1275,6 +1330,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1293,6 +1349,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1311,6 +1368,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1329,6 +1387,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1347,6 +1406,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1365,6 +1425,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1383,6 +1444,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1401,6 +1463,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1419,6 +1482,7 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
+        title=""
       />
        
     </div>
@@ -1438,6 +1502,7 @@ exports[`Storyshots Basics/BaseIcon Simple Icon 1`] = `
     alt=""
     class="ccu-icon cursor-pointer large"
     src="IMAGE_MOCK"
+    title=""
   />
    
 </div>
@@ -1497,6 +1562,7 @@ exports[`Storyshots Basics/BaseInput Disabled Break Glass 1`] = `
         alt="actions.edit"
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
+        title="actions.edit"
       />
        
     </div>
@@ -1562,6 +1628,7 @@ exports[`Storyshots Basics/BaseInput With Icon 1`] = `
         alt="actions.help_alt"
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
+        title="actions.help_alt"
       />
        
     </div>
@@ -1685,6 +1752,7 @@ exports[`Storyshots Basics/BaseInput With Tooltip 1`] = `
         alt="actions.help_alt"
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
+        title="actions.help_alt"
       />
        
     </div>
@@ -1832,15 +1900,20 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
               >
                 <svg
                   alt="actions.show_details"
-                  aria-hidden="true"
+                  aria-labelledby="svg-inline--fa-title-WxyVuuMYZ1Ws"
                   class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
                   data-icon="chevron-down"
                   data-prefix="fas"
-                  focusable="false"
                   role="img"
                   viewBox="0 0 448 512"
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title
+                    class=""
+                    id="svg-inline--fa-title-WxyVuuMYZ1Ws"
+                  >
+                    <!---->
+                  </title>
                   <path
                     class=""
                     d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
@@ -1874,15 +1947,20 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
               >
                 <svg
                   alt="actions.show_details"
-                  aria-hidden="true"
+                  aria-labelledby="svg-inline--fa-title-mRpk2o7eYazs"
                   class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
                   data-icon="chevron-down"
                   data-prefix="fas"
-                  focusable="false"
                   role="img"
                   viewBox="0 0 448 512"
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title
+                    class=""
+                    id="svg-inline--fa-title-mRpk2o7eYazs"
+                  >
+                    <!---->
+                  </title>
                   <path
                     class=""
                     d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
@@ -1995,15 +2073,20 @@ exports[`Storyshots Elements/Accordion With Components 1`] = `
               >
                 <svg
                   alt="actions.show_details"
-                  aria-hidden="true"
+                  aria-labelledby="svg-inline--fa-title-AG5rwoNy4TOP"
                   class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
                   data-icon="chevron-down"
                   data-prefix="fas"
-                  focusable="false"
                   role="img"
                   viewBox="0 0 448 512"
                   xmlns="http://www.w3.org/2000/svg"
                 >
+                  <title
+                    class=""
+                    id="svg-inline--fa-title-AG5rwoNy4TOP"
+                  >
+                    <!---->
+                  </title>
                   <path
                     class=""
                     d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
@@ -2049,15 +2132,20 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
     >
       <svg
         alt="actions.show_details"
-        aria-hidden="true"
+        aria-labelledby="svg-inline--fa-title-dTaWy2lP5wJ1"
         class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
         data-prefix="fas"
-        focusable="false"
         role="img"
         viewBox="0 0 448 512"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <title
+          class=""
+          id="svg-inline--fa-title-dTaWy2lP5wJ1"
+        >
+          <!---->
+        </title>
         <path
           class=""
           d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
@@ -2091,15 +2179,20 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
     >
       <svg
         alt="actions.show_details"
-        aria-hidden="true"
+        aria-labelledby="svg-inline--fa-title-lKB5cOcC1SvQ"
         class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
         data-prefix="fas"
-        focusable="false"
         role="img"
         viewBox="0 0 448 512"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <title
+          class=""
+          id="svg-inline--fa-title-lKB5cOcC1SvQ"
+        >
+          <!---->
+        </title>
         <path
           class=""
           d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
@@ -2133,15 +2226,20 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
     >
       <svg
         alt="actions.show_details"
-        aria-hidden="true"
+        aria-labelledby="svg-inline--fa-title-SXp2HV5qKQwH"
         class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
         data-prefix="fas"
-        focusable="false"
         role="img"
         viewBox="0 0 448 512"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <title
+          class=""
+          id="svg-inline--fa-title-SXp2HV5qKQwH"
+        >
+          <!---->
+        </title>
         <path
           class=""
           d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
@@ -2175,15 +2273,20 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
     >
       <svg
         alt="actions.show_details"
-        aria-hidden="true"
+        aria-labelledby="svg-inline--fa-title-EAxWT5PvQsLY"
         class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
         data-prefix="fas"
-        focusable="false"
         role="img"
         viewBox="0 0 448 512"
         xmlns="http://www.w3.org/2000/svg"
       >
+        <title
+          class=""
+          id="svg-inline--fa-title-EAxWT5PvQsLY"
+        >
+          <!---->
+        </title>
         <path
           class=""
           d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
