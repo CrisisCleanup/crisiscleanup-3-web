@@ -3,13 +3,13 @@
     :class="`flex items-center base-icon ${iconSelector} ${
       withText ? 'with-text' : ''
     } `"
+    :title="alt || title"
   >
     <img
       v-if="!fa"
       :class="[iconClasses, styles]"
       :src="iconMap[type]"
       :alt="alt || title"
-      :title="alt || title"
     />
     <font-awesome-icon
       v-else

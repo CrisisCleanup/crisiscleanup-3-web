@@ -53,12 +53,12 @@ exports[`Storyshots Basics/BaseButton With Custom Icon 1`] = `
    
   <div
     class="m-1 flex items-center base-icon js-  "
+    title=""
   >
     <img
       alt=""
       class="ccu-icon cursor-pointer medium"
       src="IMAGE_MOCK"
-      title=""
     />
      
   </div>
@@ -292,12 +292,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xxs"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -311,12 +311,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xs"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -330,12 +330,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer tiny"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -349,12 +349,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -368,12 +368,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -387,12 +387,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer medium"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -406,12 +406,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer medium"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -425,12 +425,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer large"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -444,12 +444,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer large"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -463,12 +463,12 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   >
     <div
       class="m-6 flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -489,12 +489,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -508,12 +508,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -527,12 +527,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -546,12 +546,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -565,12 +565,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -584,12 +584,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -603,12 +603,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -622,12 +622,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -641,12 +641,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -660,12 +660,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -679,12 +679,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -698,12 +698,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -717,12 +717,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -736,12 +736,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -755,12 +755,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -774,12 +774,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -793,12 +793,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -812,12 +812,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -831,12 +831,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -850,12 +850,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -869,12 +869,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -888,12 +888,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -907,12 +907,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -926,12 +926,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -945,12 +945,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -964,12 +964,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -983,12 +983,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1002,12 +1002,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1021,12 +1021,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1040,12 +1040,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1059,12 +1059,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1078,12 +1078,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1097,12 +1097,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1116,12 +1116,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1135,12 +1135,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1154,12 +1154,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1173,12 +1173,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1192,12 +1192,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1211,12 +1211,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1230,12 +1230,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1249,12 +1249,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1268,12 +1268,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1287,12 +1287,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1306,12 +1306,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1325,12 +1325,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1344,12 +1344,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1363,12 +1363,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1382,12 +1382,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1401,12 +1401,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1420,12 +1420,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1439,12 +1439,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1458,12 +1458,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1477,12 +1477,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   >
     <div
       class="m-8 align-self-center flex items-center base-icon js-  "
+      title=""
     >
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
-        title=""
       />
        
     </div>
@@ -1497,12 +1497,12 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
 exports[`Storyshots Basics/BaseIcon Simple Icon 1`] = `
 <div
   class="flex items-center base-icon js-  "
+  title=""
 >
   <img
     alt=""
     class="ccu-icon cursor-pointer large"
     src="IMAGE_MOCK"
-    title=""
   />
    
 </div>
@@ -1557,12 +1557,12 @@ exports[`Storyshots Basics/BaseInput Disabled Break Glass 1`] = `
     <div
       class="js-break-glass flex items-center base-icon js-actions-edit  "
       data-cy="js-break-glass"
+      title="actions.edit"
     >
       <img
         alt="actions.edit"
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
-        title="actions.edit"
       />
        
     </div>
@@ -1623,12 +1623,12 @@ exports[`Storyshots Basics/BaseInput With Icon 1`] = `
   >
     <div
       class="flex items-center base-icon js-actions-help-alt  "
+      title="actions.help_alt"
     >
       <img
         alt="actions.help_alt"
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
-        title="actions.help_alt"
       />
        
     </div>
@@ -1747,12 +1747,12 @@ exports[`Storyshots Basics/BaseInput With Tooltip 1`] = `
   >
     <div
       class="flex items-center base-icon js-actions-help-alt  "
+      title="actions.help_alt"
     >
       <img
         alt="actions.help_alt"
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
-        title="actions.help_alt"
       />
        
     </div>
@@ -1896,6 +1896,7 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
             >
               <div
                 class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+                title="actions.show_details"
                 variant="h3"
               >
                 <svg
@@ -1938,6 +1939,7 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
             >
               <div
                 class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title accordion__title--active"
+                title="actions.show_details"
                 variant="h3"
               >
                 <svg
@@ -2059,6 +2061,7 @@ exports[`Storyshots Elements/Accordion With Components 1`] = `
             >
               <div
                 class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+                title="actions.show_details"
                 variant="h3"
               >
                 <svg
@@ -2113,6 +2116,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
   >
     <div
       class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title accordion__title--active"
+      title="actions.show_details"
       variant="h3"
     >
       <svg
@@ -2155,6 +2159,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
   >
     <div
       class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+      title="actions.show_details"
       variant="h3"
     >
       <svg
@@ -2197,6 +2202,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
   >
     <div
       class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+      title="actions.show_details"
       variant="h3"
     >
       <svg
@@ -2239,6 +2245,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
   >
     <div
       class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+      title="actions.show_details"
       variant="h3"
     >
       <svg
