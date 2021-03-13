@@ -16,7 +16,6 @@
       :class="[iconClasses, styles]"
       :icon="type"
       :alt="alt || title"
-      :title="alt || title"
       :size="size"
     />
     <slot></slot>
