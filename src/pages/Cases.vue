@@ -63,6 +63,7 @@
                 v-if="showSviSlider"
                 @input="filterSvi"
                 :value="sviLevel"
+                :title="sviTitle"
               ></svi-slider>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d;">
@@ -963,6 +964,7 @@ export default {
       map: null,
       currentSearch: '',
       sviLevel: 100,
+      sviTitle: '',
       currentCaseView: '',
       getColorForStatus,
       appliedLocations: new Set(),
@@ -1790,9 +1792,10 @@ export default {
     filterSvi(value) {
       this.sviLevel = Number(value);
       const count = Math.floor((this.sviList.length * Number(value)) / 100);
-      this.$refs.worksiteMap.filterSvi(
-        new Set(this.sviList.slice(0, count).map((w) => w.id)),
-      );
+      const filteredSvi = this.sviList.slice(0, count);
+      const minSvi = Math.min(...filteredSvi.map((o) => o.svi), 1);
+      this.sviTitle = `${minSvi}`;
+      this.$refs.worksiteMap.filterSvi(new Set(filteredSvi.map((w) => w.id)));
     },
     filterSviAsync: debounce(
       async function (value) {
