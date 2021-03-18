@@ -8,6 +8,7 @@ import 'leaflet.heat';
 import * as moment from 'moment';
 import { solveCollision } from '@/utils/easing';
 import { colors, templates } from '@/icons/icons_templates';
+import Worksite from '@/models/Worksite';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -144,7 +145,13 @@ export function getWorksiteLayer(
 
             const markerSprite = new Sprite();
             markerSprite.filtered = filtered && !filtered.has(marker.id);
-            const workType = marker.key_work_type;
+            const workType =
+              marker.key_work_type ||
+              Worksite.getWorkType(
+                marker.work_types,
+                context.currentFilters,
+                context.currentUser && context.currentUser.organization,
+              );
 
             if (context.displayedWorkTypes) {
               context.displayedWorkTypes[workType.work_type] = true;
