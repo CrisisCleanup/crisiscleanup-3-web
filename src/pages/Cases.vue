@@ -986,14 +986,14 @@ export default {
       return template
         .replace('{{fillColor}}', 'grey')
         .replace('{{strokeColor}}', 'white')
-        .replace('{{multple}}', '');
+        .replace('{{multiple}}', '');
     },
     highPrioritySvgActive() {
       const template = templates.important;
       const svg = template
         .replace('{{fillColor}}', 'red')
         .replace('{{strokeColor}}', 'white')
-        .replace('{{multple}}', '');
+        .replace('{{multiple}}', '');
       return svg;
     },
     favoriteSvgInactive() {
@@ -1001,14 +1001,14 @@ export default {
       return template
         .replace('{{fillColor}}', 'grey')
         .replace('{{strokeColor}}', 'white')
-        .replace('{{multple}}', '');
+        .replace('{{multiple}}', '');
     },
     favoriteSvgActive() {
       const template = templates.favorite;
       const svg = template
         .replace('{{fillColor}}', 'red')
         .replace('{{strokeColor}}', 'white')
-        .replace('{{multple}}', '');
+        .replace('{{multiple}}', '');
       return svg;
     },
     columns() {

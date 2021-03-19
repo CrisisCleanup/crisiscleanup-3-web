@@ -173,7 +173,7 @@ export function getWorksiteLayer(
                 .replace('{{fillColor}}', fillColor)
                 .replace('{{strokeColor}}', strokeColor)
                 .replace(
-                  '{{multple}}',
+                  '{{multiple}}',
                   marker.work_types.length > 1 ? templates.plus : '',
                 );
               markerSprite.texture = Texture.from(svg);

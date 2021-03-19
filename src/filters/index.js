@@ -89,7 +89,7 @@ export const getWorkTypeImage = (workType) => {
     return worksiteTemplate
       .replace('{{fillColor}}', svgColors.fillColor)
       .replace('{{strokeColor}}', svgColors.strokeColor)
-      .replace('{{multple}}', '');
+      .replace('{{multiple}}', '');
   }
   return '';
 };

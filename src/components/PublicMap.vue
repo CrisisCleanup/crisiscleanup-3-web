@@ -138,7 +138,7 @@ export default {
           const svg = template
             .replace('{{fillColor}}', 'black')
             .replace('{{strokeColor}}', 'black')
-            .replace('{{multple}}', '');
+            .replace('{{multiple}}', '');
           return {
             svg,
             key: workType,
