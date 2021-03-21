@@ -23,6 +23,7 @@ export default class Worksite extends CCUModel {
       name: this.attr(null),
       state: this.attr(null),
       work_types: this.attr(null),
+      key_work_type: this.attr(null),
       what3words: this.attr(null),
       notes: this.attr([]),
       files: this.attr(null),

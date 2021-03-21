@@ -359,7 +359,7 @@ export default {
     this.mapLoading = false;
   },
   methods: {
-    async loadMap(markers, filtered = []) {
+    async loadMap(markers, filtered = [], center = true) {
       await new Promise((resolve) => {
         const loader = new Loader();
         loader.add('circle', '/circle.svg');
@@ -387,13 +387,15 @@ export default {
             this.currentIncidentId,
             true,
           );
-          this.goToIncidentCenter();
-          if (states && states.mapViewPort) {
-            const { _northEast, _southWest } = states.mapViewPort;
-            this.map.fitBounds([
-              [_northEast.lat, _northEast.lng],
-              [_southWest.lat, _southWest.lng],
-            ]);
+          if (center) {
+            this.goToIncidentCenter();
+            if (states && states.mapViewPort) {
+              const { _northEast, _southWest } = states.mapViewPort;
+              this.map.fitBounds([
+                [_northEast.lat, _northEast.lng],
+                [_southWest.lat, _southWest.lng],
+              ]);
+            }
           }
           this.markerLayer.addTo(this.map);
 
@@ -410,7 +412,7 @@ export default {
             map,
             this,
             true,
-            filtered,
+            new Set(filtered),
           );
           worksiteLayer.addTo(map);
           resolve();
@@ -433,7 +435,15 @@ export default {
       const worksite = Worksite.find(worksiteId);
       if (!markerSprite) {
         this.markers.push(worksite);
-        await this.loadMap(this.markers);
+        const filtered = this.pixiContainer.children
+          .filter((sprite) => {
+            return !sprite.filtered;
+          })
+          .map((sprite) => {
+            return sprite.id;
+          });
+        filtered.push(worksite.id);
+        await this.loadMap(this.markers, filtered, false);
       } else {
         if (worksite.incident !== this.currentIncidentId) {
           this.pixiContainer.removeChild(markerSprite);
