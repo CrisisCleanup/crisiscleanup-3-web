@@ -1794,7 +1794,7 @@ export default {
       const count = Math.floor((this.sviList.length * Number(value)) / 100);
       const filteredSvi = this.sviList.slice(0, count);
       const minSvi = Math.min(...filteredSvi.map((o) => o.svi), 1);
-      this.sviTitle = `${minSvi}`;
+      this.sviTitle = `${minSvi.toFixed(1)}`;
       this.$refs.worksiteMap.filterSvi(new Set(filteredSvi.map((w) => w.id)));
     },
     filterSviAsync: debounce(
