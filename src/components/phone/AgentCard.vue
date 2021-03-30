@@ -104,7 +104,7 @@ import useToggle from '@/use/useToggle';
 import useUser from '@/use/user/useUser';
 import useTraining from '@/use/user/useTraining';
 import Agent, { ERRORS as AgentErrors } from '@/models/Agent';
-import { useStore } from '@u3u/vue-hooks';
+import { useStore, useRouter } from '@u3u/vue-hooks';
 import { getModule } from 'vuex-module-decorators';
 import { unwrap } from '@/utils/wrap';
 import ProgressButton from '@/components/buttons/ProgressButton.vue';
@@ -290,6 +290,16 @@ export default {
         }
       },
     );
+
+    const { route } = useRouter();
+    watch([route, connected], async () => {
+      if (route.value.query && route.value.query.dialNumber) {
+        if (route.value.query.dialNumber !== _dialerInput.value) {
+          _dialerInput.value = route.value.query.dialNumber;
+          await onDialer(_dialerInput.value);
+        }
+      }
+    });
 
     const dialerValue = computed(() =>
       _dialerInput.value ? _dialerInput.value : '',
