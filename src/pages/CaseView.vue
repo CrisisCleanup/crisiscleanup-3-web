@@ -27,11 +27,26 @@
             <div>{{ worksite.name }}</div>
           </div>
           <div class="flex-1">
-            <label
-              class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
-              >{{ $t('formLabels.phone1') }}</label
-            >
-            <div>{{ worksite.phone1 }}</div>
+            <div class="flex flex-row">
+              <div class="flex-1">
+                <label
+                  class="my-1 text-xs font-bold text-crisiscleanup-grey-700 block"
+                  >{{ $t('formLabels.phone1') }}</label
+                >
+                <div>{{ worksite.phone1 }}</div>
+              </div>
+              <div v-if="$can && $can('phone_agent')" class="flex-1">
+                <base-button
+                  ccu-icon="phone-classic"
+                  icon-size="md"
+                  size="xxs"
+                  variant="outline"
+                  class="worksite__dialer"
+                  v-tooltip="{ content: 'Call Number' }"
+                  :action="() => openDialerTab(worksite.phone1)"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -698,6 +713,15 @@ export default {
       }
       return [];
     },
+    openDialerTab(phoneNumber) {
+      return window.open(
+        this.$router.resolve({
+          name: 'nav.phone',
+          query: { dialNumber: phoneNumber },
+        }).href,
+        '_blank',
+      );
+    },
   },
 };
 </script>
@@ -732,6 +756,18 @@ export default {
   word-wrap: break-word;
   overflow: hidden;
   max-height: 5em;
+}
+
+button.worksite__dialer {
+  @apply rounded-full;
+}
+
+button.worksite__dialer >>> img.ccu-icon {
+  transition: filter 300ms ease;
+}
+
+button.worksite__dialer:hover >>> img.ccu-icon {
+  filter: brightness(0) invert(1);
 }
 
 .intake-view-container {
