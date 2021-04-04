@@ -7,7 +7,11 @@
     v-if="!route.disabled"
   >
     <div :key="route.key" class="flex flex-col items-center">
-      <ccu-icon :alt="$t(`nav.${route.key}`)" v-bind="iconProps" />
+      <ccu-icon
+        :alt="$t(`nav.${route.key}`)"
+        v-bind="iconProps"
+        :linked="true"
+      />
       <div class="menu-text mt-1">
         {{ route.text || $t(`nav.${route.key}`) }}
       </div>

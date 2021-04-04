@@ -42,8 +42,20 @@ export default {
       },
     },
   },
+  created() {
+    if (process.env.NODE_ENV === 'development') {
+      this.eventsInterval = setInterval(this.pushCurrentEvents, 2000);
+    }
+  },
+  beforeDestroy() {
+    if (this.eventsInterval) {
+      clearInterval(this.eventsInterval);
+      this.eventsInterval = undefined;
+    }
+  },
   methods: {
     ...mapActions('auth', ['login', 'logout']),
+    ...mapActions('events', ['pushEvents']),
     ...mapActions('ui', ['validateBrowser']),
     ...mapGetters('auth', ['isLoggedIn']),
     ...mapMutations('enums', [
@@ -82,10 +94,20 @@ export default {
       this.setWorkTypes(enums.workTypes.data.results);
       this.setLocationTypes(enums.locationTypes.data.results);
     },
+    async pushCurrentEvents() {
+      if (this.isLoggedIn()) {
+        await this.pushEvents();
+      }
+    },
   },
   async mounted() {
     await this.validateBrowser();
     await this.getEnums();
+  },
+  data() {
+    return {
+      eventsInterval: null,
+    };
   },
 };
 </script>

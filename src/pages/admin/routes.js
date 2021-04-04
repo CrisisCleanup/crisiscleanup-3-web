@@ -2,6 +2,7 @@ import AdminPage from '@/pages/admin/Index.vue';
 import AdminDashboard from '@/pages/admin/AdminDashboard.vue';
 import AdminOrganization from '@/pages/admin/AdminOrganization.vue';
 import AdminEvents from '@/pages/admin/AdminEvents.vue';
+import AdminEventStream from '@/pages/admin/AdminEventStream.vue';
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
         path: 'events',
         name: 'nav.admin_events',
         component: AdminEvents,
+      },
+      {
+        path: 'event_stream',
+        name: 'nav.admin_event_stream',
+        component: AdminEventStream,
       },
     ],
   },

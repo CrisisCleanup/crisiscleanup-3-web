@@ -207,6 +207,7 @@
                         size="medium"
                         class="p-1 py-2 w-8"
                         type="go-case"
+                        :linked="true"
                       />
                     </router-link>
                     <ccu-icon

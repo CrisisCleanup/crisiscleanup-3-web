@@ -28,6 +28,7 @@ import OtherOrganizations from '@/pages/OtherOrganizations';
 import Teams from '@/pages/organization/Teams';
 import TeamDetail from '@/pages/organization/TeamDetail';
 import * as UITypes from '@/store/modules/ui/types';
+import * as moment from 'moment';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -193,6 +194,14 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  store.commit(`events/addEvent`, {
+    event_key: 'user_ui-read_page',
+    created_at: moment().toISOString(),
+    attr: {
+      api_endpoint: to.fullPath,
+    },
+  });
+
   if (to.matched.some((record) => record.meta.noAuth)) {
     next();
   } else if (to.matched.some((record) => record.meta.admin)) {

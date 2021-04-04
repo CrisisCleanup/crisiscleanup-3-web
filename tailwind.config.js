@@ -135,6 +135,14 @@ module.exports = {
       boxShadow: {
         'crisiscleanup-card': '0 0 14px 0 rgba(164, 177, 184, 0.18)',
       },
+      gridRow: {
+        'span-7': 'span 7 / span 7',
+        'span-8': 'span 8 / span 8',
+      },
+      gridTemplateRows: {
+        '12': 'repeat(12, minmax(0, 1fr))',
+        '30': 'repeat(30, 1fr)',
+      },
     },
   },
   variants: {},

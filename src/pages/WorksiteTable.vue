@@ -28,6 +28,7 @@
             size="medium"
             class="p-1 py-2"
             type="flag-filled"
+            :linked="true"
           />
         </router-link>
       </div>

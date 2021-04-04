@@ -30,6 +30,7 @@
         "
         type="bare"
         class="p-1 px-2 border-r text-xs"
+        :ccu-event="ccuEvent"
       />
     </div>
   </v-popover>
@@ -43,6 +44,10 @@ export default {
       default: '',
     },
     buttonText: {
+      type: String,
+      default: '',
+    },
+    ccuEvent: {
       type: String,
       default: '',
     },
