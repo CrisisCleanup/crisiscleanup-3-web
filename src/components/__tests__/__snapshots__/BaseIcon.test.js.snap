@@ -1,8 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`BaseIcon should render correctly and match snapshot 1`] = `
-<div
+<base-button
+  alt=""
+  ccu-event=""
   class="flex items-center base-icon js-  "
+  title=""
 >
   <img
     alt=""
@@ -10,5 +13,5 @@ exports[`BaseIcon should render correctly and match snapshot 1`] = `
     src="IMAGE_MOCK"
   />
    
-</div>
+</base-button>
 `;

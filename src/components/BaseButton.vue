@@ -26,9 +26,11 @@
 import { kebabCase } from 'lodash';
 import VueTypes from 'vue-types';
 import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from '@/constants';
+import { EventsMixin } from '@/mixins';
 
 export default {
   name: 'BaseButton',
+  mixins: [EventsMixin],
   props: {
     action: VueTypes.func,
     disabled: VueTypes.bool.def(false),
@@ -88,10 +90,13 @@ export default {
       this.loading = true;
 
       try {
-        await this.action();
+        if (this.action) {
+          await this.action();
+        }
       } catch (e) {
         // TODO: expose method for handling button exceptions
       } finally {
+        this.logEvent();
         this.loading = false;
       }
     },

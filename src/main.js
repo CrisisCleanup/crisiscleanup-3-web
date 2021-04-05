@@ -75,6 +75,7 @@ import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
 import VueRouterMultiView from 'vue-router-multi-view';
+import MarqueeText from 'vue-marquee-text-component';
 import Tabs from '@/components/tabs/Tabs';
 import Tab from '@/components/tabs/Tab';
 import PhoneService from '@/services/phone.service';
@@ -115,6 +116,7 @@ Vue.component('badge', Badge);
 Vue.component('tag-input', VueTagsInput);
 Vue.component('datepicker', Datepicker);
 Vue.component('vue-phone-number-input', VuePhoneNumberInput);
+Vue.component('marquee-text', MarqueeText);
 
 // Layouts
 Vue.component('authenticated-layout', Authenticated);

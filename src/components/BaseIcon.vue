@@ -1,8 +1,12 @@
 <template>
-  <div
+  <component
+    :is="linked ? 'div' : 'base-button'"
     :class="`flex items-center base-icon ${iconSelector} ${
       withText ? 'with-text' : ''
     } `"
+    :title="alt || title"
+    :alt="alt || title"
+    :ccu-event="ccuEvent"
   >
     <img
       v-if="!fa"
@@ -18,7 +22,7 @@
       :size="size"
     />
     <slot></slot>
-  </div>
+  </component>
 </template>
 
 <script>
@@ -26,9 +30,12 @@
 import { kebabCase } from 'lodash';
 import VueTypes from 'vue-types';
 import { ICON_MAP, ICONS, ICON_SIZES } from '@/constants';
+import { EventsMixin } from '@/mixins';
 
 export default {
   name: 'BaseIcon',
+  mixins: [EventsMixin],
+
   props: {
     type: VueTypes.oneOfType([
       VueTypes.oneOf(Object.values(ICONS)),
@@ -41,6 +48,7 @@ export default {
     selector: VueTypes.string,
     withText: VueTypes.bool.def(false),
     invertColor: VueTypes.bool.def(false),
+    linked: VueTypes.bool.def(false),
     iconClasses: VueTypes.string.def(''),
   },
   data() {

@@ -6,6 +6,8 @@
  */
 
 import { shallowMount } from '@vue/test-utils';
+import { Store } from 'vuex-mock-store';
+import moment from 'moment';
 import BaseCheckbox from '../BaseCheckbox';
 import Table from '../Table';
 
@@ -26,6 +28,16 @@ const TestColumns = [
 
 const mocks = {
   $t: (key) => key,
+  $moment: moment,
+  $store: new Store({
+    state: {
+      events: {
+        state: { events: [] },
+        getters: { getEvents: 0 },
+        actions: { addEvent: () => {} },
+      },
+    },
+  }),
 };
 
 const TestData = [{ id: 'one_index' }, { id: 'two_index' }];

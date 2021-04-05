@@ -7,6 +7,7 @@ import Vuex from 'vuex';
 import WebsocketStore from '@/store/modules/websocket';
 import database from './database';
 import auth from './modules/auth';
+import events from './modules/events';
 import phone_legacy from './modules/phone_legacy';
 import enums from './modules/enums';
 import incident from './modules/incident';
@@ -35,6 +36,7 @@ const debug = process.env.NODE_ENV !== 'production';
 export default new Vuex.Store({
   modules: {
     auth,
+    events,
     incident,
     loading,
     locale,

@@ -44,11 +44,17 @@ module.exports = {
           light: '#fece09',
           dark: '#f79820',
         },
-        // until maria sets us up w/ colors
-        scripts: {
-          inbound: '#CCEBFF',
-          outbound: '#13E768',
-          calldown: '#FFDC68',
+        'phone-inbound': {
+          light: '#C9EBF5',
+          dark: '#05A4D2',
+        },
+        'phone-outbound': {
+          light: '#C6F0CF',
+          dark: '#419954',
+        },
+        'phone-calldown': {
+          light: '#F9CEDA',
+          dark: '#973752',
         },
         'crisiscleanup-dark': {
           100: '#dadada',
@@ -117,6 +123,7 @@ module.exports = {
         'crisiscleanup-dark-blue': '#009bff',
         'crisiscleanup-light-grey': '#f9f9f9',
         'crisiscleanup-light-smoke': '#f2f3f4',
+        'crisiscleanup-smoke': '#f7f7f7',
       },
       spacing: {
         '72': '18rem',
@@ -127,6 +134,14 @@ module.exports = {
       },
       boxShadow: {
         'crisiscleanup-card': '0 0 14px 0 rgba(164, 177, 184, 0.18)',
+      },
+      gridRow: {
+        'span-7': 'span 7 / span 7',
+        'span-8': 'span 8 / span 8',
+      },
+      gridTemplateRows: {
+        '12': 'repeat(12, minmax(0, 1fr))',
+        '30': 'repeat(30, 1fr)',
       },
     },
   },

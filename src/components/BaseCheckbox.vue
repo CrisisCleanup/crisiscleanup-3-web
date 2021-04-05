@@ -16,8 +16,11 @@
   </label>
 </template>
 <script>
+import { EventsMixin } from '@/mixins';
+
 export default {
   name: 'BaseCheckbox',
+  mixins: [EventsMixin],
   data() {
     return {
       isInvalid: false,
@@ -51,6 +54,7 @@ export default {
     update(e) {
       this.$emit('input', e.target.checked);
       this.isInvalid = !this.$refs.input.checkValidity();
+      this.logEvent();
     },
     change(e) {
       this.$emit('change', e.target.checked);

@@ -23,6 +23,24 @@ export default class PhoneInbound extends CCUModel {
       async skipCall(id) {
         await this.post(`/phone_inbound/${id}/skip`, {}, { save: false });
       },
+      async pollConnection(id) {
+        try {
+          const results = await this.post(
+            `/phone_inbound/${id}/poll_connection`,
+            {},
+            { save: false },
+          );
+          console.log('Poll results:', results);
+          return results.response.data.status;
+        } catch (e) {
+          console.log('failed to poll connection!');
+          console.error(e);
+          return true;
+        }
+      },
+      async receiveConnection(id) {
+        await this.post(`/phone_inbound/${id}/receive`);
+      },
       async fetchById(id) {
         const inbound = await this.get(`/phone_inbound/${id}`);
         const {

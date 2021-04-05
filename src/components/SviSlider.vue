@@ -20,9 +20,10 @@
         >{{ $t('svi.everyone') }}</span
       >
     </div>
-    <div class="range-slider" :title="value">
+    <div class="range-slider" :title="title || value">
       <input
         class="range-slider__range"
+        :class="{ activated: value < 100 }"
         type="range"
         @input="update"
         :value="value"
@@ -42,6 +43,10 @@ export default {
       type: Number,
       default: 100,
     },
+    title: {
+      type: String,
+      default: '',
+    },
   },
   methods: {
     update(e) {
@@ -59,6 +64,33 @@ $range-track-height: 8px !default;
 
 .range-slider {
   @apply w-full;
+}
+
+.activated.range-slider__range {
+  // Range Handle
+  &::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px white, 0 0 0 6px #fece09;
+    @apply bg-primary-light;
+    &:hover {
+      @apply bg-primary-light;
+    }
+  }
+
+  &:active::-webkit-slider-thumb {
+    @apply bg-primary-light;
+  }
+
+  &::-moz-range-thumb {
+    box-shadow: 0 0 0 3px white, 0 0 0 6px #fece09;
+    @apply bg-primary-light;
+    &:hover {
+      @apply bg-primary-light;
+    }
+  }
+
+  &:active::-moz-range-thumb {
+    @apply bg-primary-light;
+  }
 }
 
 .range-slider__range {

@@ -17,6 +17,7 @@
                   class="mr-4 cursor-pointer"
                   :class="showingMap ? 'filter-yellow' : 'filter-gray'"
                   type="map"
+                  ccu-event="user_ui-view-map"
                   @click.native="toggleView('showingMap')"
                   data-cy="cases.mapButton"
                 />
@@ -26,6 +27,7 @@
                   class="mr-4 cursor-pointer"
                   :class="showingTable ? 'filter-yellow' : 'filter-gray'"
                   type="table"
+                  ccu-event="user_ui-view-table"
                   @click.native="toggleView('showingTable')"
                   data-cy="cases.tableButton"
                 />
@@ -63,6 +65,7 @@
                 v-if="showSviSlider"
                 @input="filterSvi"
                 :value="sviLevel"
+                :title="sviTitle"
               ></svi-slider>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d;">
@@ -95,6 +98,11 @@
                             <li v-for="state in usStates" :key="`${state.id}`">
                               <base-checkbox
                                 :value="appliedLocations.has(state.id)"
+                                :ccu-event="
+                                  appliedLocations.has(state.id)
+                                    ? 'user_ui-turn-off_layer'
+                                    : 'user_ui-turn-on_layer'
+                                "
                                 @input="
                                   (value) => {
                                     applyLocation(state.id, value);
@@ -124,6 +132,11 @@
                             >
                               <base-checkbox
                                 :value="appliedLocations.has(district.id)"
+                                :ccu-event="
+                                  appliedLocations.has(district.id)
+                                    ? 'user_ui-turn-off_layer'
+                                    : 'user_ui-turn-on_layer'
+                                "
                                 @input="
                                   (value) => {
                                     applyLocation(district.id, value);
@@ -158,6 +171,11 @@
                                     applyLocation(county.id, value);
                                   }
                                 "
+                                :ccu-event="
+                                  appliedLocations.has(county.id)
+                                    ? 'user_ui-turn-off_layer'
+                                    : 'user_ui-turn-on_layer'
+                                "
                                 >{{ county.name }}</base-checkbox
                               >
                             </li>
@@ -179,6 +197,11 @@
                             <li v-for="team in teams" :key="`${team.id}`">
                               <base-checkbox
                                 :value="appliedLocations.has(team.id)"
+                                :ccu-event="
+                                  appliedLocations.has(team.id)
+                                    ? 'user_ui-turn-off_layer'
+                                    : 'user_ui-turn-on_layer'
+                                "
                                 @input="
                                   (value) => {
                                     applyTeamGeoJson(team, value);
@@ -213,6 +236,11 @@
                                     applyLocation(location.id, value);
                                   }
                                 "
+                                :ccu-event="
+                                  appliedLocations.has(location.id)
+                                    ? 'user_ui-turn-off_layer'
+                                    : 'user_ui-turn-on_layer'
+                                "
                                 >{{ location.name }}</base-checkbox
                               >
                             </li>
@@ -227,6 +255,13 @@
                                   appliedLocations.has(
                                     currentOrganization.primary_location,
                                   )
+                                "
+                                :ccu-event="
+                                  appliedLocations.has(
+                                    currentOrganization.primary_location,
+                                  )
+                                    ? 'user_ui-turn-off_layer'
+                                    : 'user_ui-turn-on_layer'
                                 "
                                 @input="
                                   (value) => {
@@ -252,6 +287,13 @@
                                   appliedLocations.has(
                                     currentOrganization.secondary_location,
                                   )
+                                "
+                                :ccu-event="
+                                  appliedLocations.has(
+                                    currentOrganization.secondary_location,
+                                  )
+                                    ? 'user_ui-turn-off_layer'
+                                    : 'user_ui-turn-on_layer'
                                 "
                                 @input="
                                   (value) => {
@@ -287,6 +329,11 @@
                             >
                               <base-checkbox
                                 :value="appliedLocations.has(location.id)"
+                                :ccu-event="
+                                  appliedLocations.has(location.id)
+                                    ? 'user_ui-turn-off_layer'
+                                    : 'user_ui-turn-on_layer'
+                                "
                                 @input="
                                   (value) => {
                                     applyLocation(location.id, value);
@@ -680,7 +727,7 @@
               <div class="mt-1 mr-1">
                 {{ currentWorksite && currentWorksite.case_number }}
               </div>
-              <div class="mr-1">
+              <base-button class="mr-1">
                 <div
                   v-if="currentWorksite && currentWorksite.isFavorite"
                   class="svg-container cursor-pointer"
@@ -695,8 +742,8 @@
                   :title="$t('actions.member_of_my_org')"
                   @click="() => toggleFavorite(true)"
                 ></div>
-              </div>
-              <div class="mr-1">
+              </base-button>
+              <base-button class="mr-1">
                 <div
                   v-if="currentWorksite && currentWorksite.isHighPriority"
                   class="svg-container cursor-pointer"
@@ -711,7 +758,7 @@
                   :title="$t('actions.mark_high_priority')"
                   @click="() => toggleHighPriority(true)"
                 ></div>
-              </div>
+              </base-button>
             </div>
             <div
               v-if="!isNewWorksite && currentWorksite"
@@ -722,16 +769,19 @@
             </div>
           </div>
           <div v-if="!isNewWorksite" class="flex items-center">
-            <router-link
-              :to="`/incident/${currentIncidentId}/cases/${$route.params.id}/flag`"
-            >
-              <ccu-icon
-                :alt="$t('actions.flag')"
-                size="small"
-                class="p-1 py-2"
-                type="flag"
-              />
-            </router-link>
+            <ccu-icon
+              :alt="$t('actions.flag')"
+              size="small"
+              class="p-1 py-2"
+              type="flag"
+              @click.native="
+                () => {
+                  $router.push(
+                    `/incident/${currentIncidentId}/cases/${$route.params.id}/flag`,
+                  );
+                }
+              "
+            />
             <ccu-icon
               :alt="$t('actions.jump_to_case')"
               size="small"
@@ -739,16 +789,19 @@
               type="go-case"
               @click.native="jumpToCase"
             />
-            <router-link
-              :to="`/incident/${currentIncidentId}/cases/${$route.params.id}/history`"
-            >
-              <ccu-icon
-                :alt="$t('actions.history')"
-                size="small"
-                class="p-1 py-2"
-                type="history"
-              />
-            </router-link>
+            <ccu-icon
+              :alt="$t('actions.history')"
+              size="small"
+              class="p-1 py-2"
+              type="history"
+              @click.native="
+                () => {
+                  $router.push(
+                    `/incident/${currentIncidentId}/cases/${$route.params.id}/history`,
+                  );
+                }
+              "
+            />
             <ccu-icon
               :alt="$t('actions.download')"
               size="small"
@@ -789,6 +842,7 @@
                 class="border p-2 bg-primary-light"
                 size="small"
                 type="edit"
+                :linked="true"
               />
             </router-link>
           </div>
@@ -963,6 +1017,7 @@ export default {
       map: null,
       currentSearch: '',
       sviLevel: 100,
+      sviTitle: '',
       currentCaseView: '',
       getColorForStatus,
       appliedLocations: new Set(),
@@ -984,14 +1039,14 @@ export default {
       return template
         .replace('{{fillColor}}', 'grey')
         .replace('{{strokeColor}}', 'white')
-        .replace('{{multple}}', '');
+        .replace('{{multiple}}', '');
     },
     highPrioritySvgActive() {
       const template = templates.important;
       const svg = template
         .replace('{{fillColor}}', 'red')
         .replace('{{strokeColor}}', 'white')
-        .replace('{{multple}}', '');
+        .replace('{{multiple}}', '');
       return svg;
     },
     favoriteSvgInactive() {
@@ -999,14 +1054,14 @@ export default {
       return template
         .replace('{{fillColor}}', 'grey')
         .replace('{{strokeColor}}', 'white')
-        .replace('{{multple}}', '');
+        .replace('{{multiple}}', '');
     },
     favoriteSvgActive() {
       const template = templates.favorite;
       const svg = template
         .replace('{{fillColor}}', 'red')
         .replace('{{strokeColor}}', 'white')
-        .replace('{{multple}}', '');
+        .replace('{{multiple}}', '');
       return svg;
     },
     columns() {
@@ -1790,9 +1845,10 @@ export default {
     filterSvi(value) {
       this.sviLevel = Number(value);
       const count = Math.floor((this.sviList.length * Number(value)) / 100);
-      this.$refs.worksiteMap.filterSvi(
-        new Set(this.sviList.slice(0, count).map((w) => w.id)),
-      );
+      const filteredSvi = this.sviList.slice(0, count);
+      const minSvi = Math.min(...filteredSvi.map((o) => o.svi), 1);
+      this.sviTitle = `${minSvi.toFixed(1)}`;
+      this.$refs.worksiteMap.filterSvi(new Set(filteredSvi.map((w) => w.id)));
     },
     filterSviAsync: debounce(
       async function (value) {

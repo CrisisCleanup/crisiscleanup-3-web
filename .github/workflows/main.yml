@@ -114,7 +114,7 @@ jobs:
     name: Deploy Site
     runs-on: ubuntu-latest
     needs: [test, lint]
-    if: "github.event_name != 'pull_request' && github.ref == 'refs/heads/develop'"
+    if: "github.event_name != 'pull_request'"
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
@@ -182,6 +182,7 @@ jobs:
           releaseNamePrefix: crisiscleanup-3-web@
 
       - name: Deploy Development
+        if: "github.event_name != 'pull_request' && github.ref == 'refs/heads/develop'"
         env:
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
           VUE_APP_STAGE: development

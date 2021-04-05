@@ -18,7 +18,7 @@
       <div
         v-for="column of columns"
         :key="column.key"
-        class="p-2 border-b flex items-center cursor-pointer"
+        class="p-2 border-b flex items-center cursor-pointer header-column"
         :class="column.headerClass || []"
         @click="
           () => {
@@ -249,10 +249,12 @@
 </template>
 
 <script>
+import { EventsMixin } from '@/mixins';
 import { exportCSVFile } from '../utils/downloads';
 
 export default {
   name: 'Table',
+  mixins: [EventsMixin],
   props: {
     columns: {
       type: Array,
@@ -472,6 +474,9 @@ export default {
         ...this.pagination,
       };
       const filter = {};
+      this.logEvent(
+        sorter.direction === 'asc' ? 'user_ui-sort-asc' : 'user_ui-sort-desc',
+      );
       this.$emit('change', { pagination, filter, sorter, columnSearch });
     },
     onSearch() {

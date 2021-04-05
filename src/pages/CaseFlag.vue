@@ -320,6 +320,7 @@ import Organization from '@/models/Organization';
 import { getGoogleMapsLocation } from '@/utils/map';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
+import { orderBy } from 'lodash';
 
 export default {
   name: 'CaseFlag',
@@ -388,12 +389,12 @@ export default {
       organizationResults.entities.organizations;
 
     const response = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name&move_case=true`,
+      `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,start_at&move_case=true&limit=200&ordering=-start_at`,
       {
         save: false,
       },
     );
-    this.incidents = response.data.results;
+    this.incidents = orderBy(response.data.results, ['id'], ['desc']);
   },
   methods: {
     async flagWorksite() {

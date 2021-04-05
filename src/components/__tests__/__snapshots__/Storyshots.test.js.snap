@@ -51,16 +51,27 @@ exports[`Storyshots Basics/BaseButton With Custom Icon 1`] = `
    
   <!---->
    
-  <div
-    class="m-1 flex items-center base-icon js-  "
+  <button
+    alt=""
+    class="m-1 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+    data-cy="js-"
+    title=""
+    type="submit"
   >
+    <!---->
+     
+    <!---->
+     
+    <!---->
+     
     <img
       alt=""
       class="ccu-icon cursor-pointer medium"
       src="IMAGE_MOCK"
     />
-     
-  </div>
+      
+    <!---->
+  </button>
    Button 
   <!---->
 </button>
@@ -289,16 +300,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xxs"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       xxs
@@ -307,16 +329,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xs"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       xs
@@ -325,16 +358,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer tiny"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       tiny
@@ -343,16 +387,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       sm
@@ -361,16 +416,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       small
@@ -379,16 +445,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer medium"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       md
@@ -397,16 +474,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer medium"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       medium
@@ -415,16 +503,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer large"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       lg
@@ -433,16 +532,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer large"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       large
@@ -451,16 +561,27 @@ exports[`Storyshots Basics/BaseIcon All Icon Sizes 1`] = `
   <div
     class="flex flex-col border-2 text-center justify-end"
   >
-    <div
-      class="m-6 flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-6 flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       xl
@@ -476,16 +597,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       add-orange
@@ -494,16 +626,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       dashboard
@@ -512,16 +655,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       cases
@@ -530,16 +684,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       reports
@@ -548,16 +713,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       calendar
@@ -566,16 +742,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       call
@@ -584,16 +771,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       chat
@@ -602,16 +800,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       drag
@@ -620,16 +829,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       settings
@@ -638,16 +858,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       print
@@ -656,16 +887,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       pin
@@ -674,16 +916,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       phone
@@ -692,16 +945,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       phone-classic
@@ -710,16 +974,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       phone-user
@@ -728,16 +1003,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       phone-hangup
@@ -746,16 +1032,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       phone-plus
@@ -764,16 +1061,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       earth-globe
@@ -782,16 +1090,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       phone-contact-add
@@ -800,16 +1119,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       phone-exit
@@ -818,16 +1148,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       share
@@ -836,16 +1177,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       download
@@ -854,16 +1206,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       active
@@ -872,16 +1235,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       edit
@@ -890,16 +1264,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       flag
@@ -908,16 +1293,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       filters
@@ -926,16 +1322,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       flag-filled
@@ -944,16 +1351,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       search
@@ -962,16 +1380,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       table
@@ -980,16 +1409,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       map
@@ -998,16 +1438,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       layers
@@ -1016,16 +1467,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       info
@@ -1034,16 +1496,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       information
@@ -1052,16 +1525,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       trash
@@ -1070,16 +1554,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       organization
@@ -1088,16 +1583,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       admin
@@ -1106,16 +1612,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       history
@@ -1124,16 +1641,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       cancel
@@ -1142,16 +1670,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       help
@@ -1160,16 +1699,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       up
@@ -1178,16 +1728,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       down
@@ -1196,16 +1757,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       updown
@@ -1214,16 +1786,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       go-case
@@ -1232,16 +1815,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       map-buffer
@@ -1250,16 +1844,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       map-circle
@@ -1268,16 +1873,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       map-poly
@@ -1286,16 +1902,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       map-rect
@@ -1304,16 +1931,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       map-sweep
@@ -1322,16 +1960,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       map-undo
@@ -1340,16 +1989,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       map-redo
@@ -1358,16 +2018,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       otherorg
@@ -1376,16 +2047,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       dialer
@@ -1394,16 +2076,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       hangup
@@ -1412,16 +2105,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
   <div
     class="flex flex-col border-2 text-center"
   >
-    <div
-      class="m-8 align-self-center flex items-center base-icon js-  "
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt=""
         class="ccu-icon cursor-pointer xl"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
      
     <p>
       time
@@ -1431,16 +2135,27 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
 `;
 
 exports[`Storyshots Basics/BaseIcon Simple Icon 1`] = `
-<div
-  class="flex items-center base-icon js-  "
+<button
+  alt=""
+  class="flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+  data-cy="js-"
+  title=""
+  type="submit"
 >
+  <!---->
+   
+  <!---->
+   
+  <!---->
+   
   <img
     alt=""
     class="ccu-icon cursor-pointer large"
     src="IMAGE_MOCK"
   />
-   
-</div>
+    
+  <!---->
+</button>
 `;
 
 exports[`Storyshots Basics/BaseInput Disabled 1`] = `
@@ -1489,17 +2204,27 @@ exports[`Storyshots Basics/BaseInput Disabled Break Glass 1`] = `
   <div
     class="icon-container flex items-center justify-center large"
   >
-    <div
-      class="js-break-glass flex items-center base-icon js-actions-edit  "
+    <button
+      alt="actions.edit"
+      class="js-break-glass flex items-center justify-center base-button undefined js-actions-edit flex items-center base-icon js-actions-edit  "
       data-cy="js-break-glass"
+      title="actions.edit"
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt="actions.edit"
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
   </div>
    
   <!---->
@@ -1555,16 +2280,27 @@ exports[`Storyshots Basics/BaseInput With Icon 1`] = `
   <div
     class="icon-container flex items-center justify-center large"
   >
-    <div
-      class="flex items-center base-icon js-actions-help-alt  "
+    <button
+      alt="actions.help_alt"
+      class="flex items-center justify-center base-button undefined js-actions-help-alt flex items-center base-icon js-actions-help-alt  "
+      data-cy="js-actions-help-alt"
+      title="actions.help_alt"
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt="actions.help_alt"
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
   </div>
    
   <!---->
@@ -1678,16 +2414,27 @@ exports[`Storyshots Basics/BaseInput With Tooltip 1`] = `
     class="icon-container flex items-center justify-center large has-tooltip"
     data-original-title="null"
   >
-    <div
-      class="flex items-center base-icon js-actions-help-alt  "
+    <button
+      alt="actions.help_alt"
+      class="flex items-center justify-center base-button undefined js-actions-help-alt flex items-center base-icon js-actions-help-alt  "
+      data-cy="js-actions-help-alt"
+      title="actions.help_alt"
+      type="submit"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <img
         alt="actions.help_alt"
         class="ccu-icon cursor-pointer small"
         src="IMAGE_MOCK"
       />
-       
-    </div>
+        
+      <!---->
+    </button>
   </div>
    
   <!---->
@@ -1826,10 +2573,20 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
             <div
               class="accordion__card"
             >
-              <div
-                class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+              <button
+                alt="actions.show_details"
+                class="primary-dark flex items-center justify-center base-button undefined js-actions-show-details flex items-center base-icon js-actions-show-details with-text  accordion__title"
+                data-cy="js-actions-show-details"
+                title="actions.show_details"
+                type="submit"
                 variant="h3"
               >
+                <!---->
+                 
+                <!---->
+                 
+                <!---->
+                 
                 <svg
                   alt="actions.show_details"
                   aria-hidden="true"
@@ -1855,7 +2612,9 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
           One
         
                 </p>
-              </div>
+                 
+                <!---->
+              </button>
                
               <div
                 class="accordion__body"
@@ -1868,10 +2627,20 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
             <div
               class="accordion__card"
             >
-              <div
-                class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title accordion__title--active"
+              <button
+                alt="actions.show_details"
+                class="primary-dark flex items-center justify-center base-button undefined js-actions-show-details flex items-center base-icon js-actions-show-details with-text  accordion__title accordion__title--active"
+                data-cy="js-actions-show-details"
+                title="actions.show_details"
+                type="submit"
                 variant="h3"
               >
+                <!---->
+                 
+                <!---->
+                 
+                <!---->
+                 
                 <svg
                   alt="actions.show_details"
                   aria-hidden="true"
@@ -1897,7 +2666,9 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
           Two
         
                 </p>
-              </div>
+                 
+                <!---->
+              </button>
                
               <div
                 class="accordion__body--active accordion__body"
@@ -1989,10 +2760,20 @@ exports[`Storyshots Elements/Accordion With Components 1`] = `
             <div
               class="accordion__card"
             >
-              <div
-                class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+              <button
+                alt="actions.show_details"
+                class="primary-dark flex items-center justify-center base-button undefined js-actions-show-details flex items-center base-icon js-actions-show-details with-text  accordion__title"
+                data-cy="js-actions-show-details"
+                title="actions.show_details"
+                type="submit"
                 variant="h3"
               >
+                <!---->
+                 
+                <!---->
+                 
+                <!---->
+                 
                 <svg
                   alt="actions.show_details"
                   aria-hidden="true"
@@ -2018,7 +2799,9 @@ exports[`Storyshots Elements/Accordion With Components 1`] = `
           Two
         
                 </p>
-              </div>
+                 
+                <!---->
+              </button>
                
               <div
                 class="accordion__body"
@@ -2043,10 +2826,20 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
   <div
     class="accordion__card"
   >
-    <div
-      class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title accordion__title--active"
+    <button
+      alt="actions.show_details"
+      class="primary-dark flex items-center justify-center base-button undefined js-actions-show-details flex items-center base-icon js-actions-show-details with-text  accordion__title accordion__title--active"
+      data-cy="js-actions-show-details"
+      title="actions.show_details"
+      type="submit"
       variant="h3"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <svg
         alt="actions.show_details"
         aria-hidden="true"
@@ -2072,7 +2865,9 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
           One
         
       </p>
-    </div>
+       
+      <!---->
+    </button>
      
     <div
       class="accordion__body--active accordion__body"
@@ -2085,10 +2880,20 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
   <div
     class="accordion__card"
   >
-    <div
-      class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+    <button
+      alt="actions.show_details"
+      class="primary-dark flex items-center justify-center base-button undefined js-actions-show-details flex items-center base-icon js-actions-show-details with-text  accordion__title"
+      data-cy="js-actions-show-details"
+      title="actions.show_details"
+      type="submit"
       variant="h3"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <svg
         alt="actions.show_details"
         aria-hidden="true"
@@ -2114,7 +2919,9 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
           Two
         
       </p>
-    </div>
+       
+      <!---->
+    </button>
      
     <div
       class="accordion__body"
@@ -2127,10 +2934,20 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
   <div
     class="accordion__card"
   >
-    <div
-      class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+    <button
+      alt="actions.show_details"
+      class="primary-dark flex items-center justify-center base-button undefined js-actions-show-details flex items-center base-icon js-actions-show-details with-text  accordion__title"
+      data-cy="js-actions-show-details"
+      title="actions.show_details"
+      type="submit"
       variant="h3"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <svg
         alt="actions.show_details"
         aria-hidden="true"
@@ -2156,7 +2973,9 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
           Three
         
       </p>
-    </div>
+       
+      <!---->
+    </button>
      
     <div
       class="accordion__body"
@@ -2169,10 +2988,20 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
   <div
     class="accordion__card"
   >
-    <div
-      class="primary-dark flex items-center base-icon js-actions-show-details with-text  accordion__title"
+    <button
+      alt="actions.show_details"
+      class="primary-dark flex items-center justify-center base-button undefined js-actions-show-details flex items-center base-icon js-actions-show-details with-text  accordion__title"
+      data-cy="js-actions-show-details"
+      title="actions.show_details"
+      type="submit"
       variant="h3"
     >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
       <svg
         alt="actions.show_details"
         aria-hidden="true"
@@ -2198,7 +3027,9 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
           Four
         
       </p>
-    </div>
+       
+      <!---->
+    </button>
      
     <div
       class="accordion__body"
@@ -2233,11 +3064,134 @@ exports[`Storyshots Elements/Badge With Props 1`] = `
 </div>
 `;
 
-exports[`Storyshots Elements/Cards/CaseCard Basic 1`] = `
-<div>
+exports[`Storyshots Elements/Cards/CaseCard As Static 1`] = `
+<div
+  class="flex"
+>
   <div
-    class="case-card  "
+    class="mx-3 case-card"
     full-address="123 New Street"
+  >
+    <!---->
+     
+    <div
+      class="case--head"
+    >
+      <div
+        class="case--svg"
+      />
+       
+      <!---->
+       
+      <div
+        class="case--title flex"
+      >
+        <p
+          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+        >
+          X23
+        </p>
+      </div>
+    </div>
+     
+    <div
+      class="case--body"
+    >
+      <p
+        class="text-bodysm font-bodysm font-sans subpixel-antialiased"
+      >
+        123 New Street, NY
+      </p>
+    </div>
+  </div>
+   
+  <div
+    class="case-card small"
+    full-address="123 New Street"
+    small="true"
+  >
+    <!---->
+     
+    <div
+      class="case--head"
+    >
+      <div
+        class="case--svg"
+      />
+       
+      <!---->
+       
+      <div
+        class="case--title flex"
+      >
+        <p
+          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+        >
+          X23
+        </p>
+      </div>
+    </div>
+     
+    <div
+      class="case--body"
+    >
+      <p
+        class="text-bodysm font-bodysm font-sans subpixel-antialiased"
+      >
+        123 New Street, NY
+      </p>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots Elements/Cards/CaseCard Basic 1`] = `
+<div
+  class="flex"
+>
+  <div
+    class="mx-3 case-card interactive"
+    full-address="123 New Street"
+    interactive="true"
+  >
+    <!---->
+     
+    <div
+      class="case--head"
+    >
+      <div
+        class="case--svg"
+      />
+       
+      <!---->
+       
+      <div
+        class="case--title flex"
+      >
+        <p
+          class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
+        >
+          X23
+        </p>
+      </div>
+    </div>
+     
+    <div
+      class="case--body"
+    >
+      <p
+        class="text-bodysm font-bodysm font-sans subpixel-antialiased"
+      >
+        123 New Street, NY
+      </p>
+    </div>
+  </div>
+   
+  <div
+    class="case-card interactive small"
+    full-address="123 New Street"
+    interactive="true"
+    small="true"
   >
     <!---->
      
