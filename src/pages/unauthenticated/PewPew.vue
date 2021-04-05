@@ -280,12 +280,7 @@ import * as L from 'leaflet';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
 
-import {
-  getMarkerLayer,
-  mapAttribution,
-  mapTileLayerDark,
-  mapTileLayer,
-} from '@/utils/map';
+import { getMarkerLayer, mapAttribution, mapTileLayer } from '@/utils/map';
 import { HomeNavigation } from '@/components/home/SideNav';
 import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';

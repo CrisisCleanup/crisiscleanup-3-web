@@ -15,8 +15,8 @@ const INTERACTIVE_ZOOM_LEVEL = 12;
 export const mapTileLayer =
   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
 
-export const mapTileLayerDark =
-  'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
+// export const mapTileLayerDark =
+//   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
 
 export const mapTileLayerSatellite =
   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
