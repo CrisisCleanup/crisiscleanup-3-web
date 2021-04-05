@@ -15,7 +15,7 @@ const getters = {
 const actions = {
   async pushEvents({ commit, getters: { getEvents } }) {
     const events = getEvents;
-    if (events.length === 0 || process.env.NODE_ENV === 'development') {
+    if (events.length === 0 || process.env.NODE_ENV !== 'development') {
       return null;
     }
     const response = await axios.post(
