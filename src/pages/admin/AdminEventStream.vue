@@ -15,11 +15,10 @@
               <span>{{ stream.attr.actor_organization_name }}</span>
             </span>
             <span>
-              <strong
-                >{{ getTranslation(stream.past_tense_t, stream.attr) }} ({{
-                  stream.actor_location_name
-                }}</strong
-              >
+              <strong>{{
+                getTranslation(stream.past_tense_t, stream.attr)
+              }}</strong>
+              ({{ stream.actor_location_name }}
               {{ stream.patient_location_name }}
               {{ stream.recipient_location_name }})
             </span>
