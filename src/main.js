@@ -5,8 +5,7 @@ import '@crisiscleanup/amazon-connect-streams';
 import VueHooks from '@u3u/vue-hooks';
 import VueCompositionApi from '@vue/composition-api';
 import Vue from 'vue';
-import JsonViewer from 'vue-json-viewer'
-
+import JsonViewer from 'vue-json-viewer';
 // import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
 import Autocomplete from '@/components/Autocomplete';
