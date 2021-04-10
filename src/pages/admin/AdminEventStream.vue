@@ -4,16 +4,22 @@
     <ul class="list-none m-0 p-0">
       <li :key="stream.event_key" v-for="stream in eventStream" class="mb-2">
         <div class="grid grid-flow-col auto-cols-max">
-          <div class="bg-gray-500 rounded-full h-4 w-4"></div>
+          <div class="bg-gray-500 rounded-full h-4 w-4 mr-2"></div>
           <span class=""
             ><span v-if="showUser"
-              >{{ stream.attr.actor_first_name }} from
-              {{ stream.attr.actor_organization_name }}
+              ><span
+                >{{ stream.attr.actor_first_name }}
+                {{ stream.attr.actor_last_name }}</span
+              >
+              from
+              <span>{{ stream.attr.actor_organization_name }}</span>
             </span>
             <span>
-              {{ getTranslation(stream.past_tense_t, stream.attr) }} ({{
-                stream.actor_location_name
-              }}
+              <strong
+                >{{ getTranslation(stream.past_tense_t, stream.attr) }} ({{
+                  stream.actor_location_name
+                }}</strong
+              >
               {{ stream.patient_location_name }}
               {{ stream.recipient_location_name }})
             </span>
@@ -46,7 +52,7 @@ export default {
   data() {
     return {
       eventStream: [],
-      showUser: false,
+      showUser: true,
     };
   },
   mixins: [DialogsMixin],
@@ -77,4 +83,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+strong {
+  @apply font-bold;
+}
+</style>
