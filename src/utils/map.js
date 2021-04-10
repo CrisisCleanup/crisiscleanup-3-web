@@ -15,6 +15,9 @@ const INTERACTIVE_ZOOM_LEVEL = 12;
 export const mapTileLayer =
   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
 
+// export const mapTileLayerDark =
+//   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
+
 export const mapTileLayerSatellite =
   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
 
@@ -395,5 +398,111 @@ export function getWorksiteLayer(
     );
   })();
   layer.key = 'worksite_layer';
+  return layer;
+}
+
+export function getMarkerLayer(markers, map, context) {
+  const pixiContainer = new Container();
+  context.pixiContainer = pixiContainer;
+
+  const layer = (function () {
+    let firstDraw = true;
+    let prevZoom;
+    let prevCenter;
+    const markerSprites = [];
+    let frame = null;
+    const doubleBuffering =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    return L.pixiOverlay(
+      function (utils) {
+        const zoom = utils.getMap().getZoom();
+        const center = utils.getMap().getCenter();
+        if (frame) {
+          cancelAnimationFrame(frame);
+          frame = null;
+        }
+        const container = utils.getContainer();
+        const renderer = utils.getRenderer();
+        const project = utils.latLngToLayerPoint;
+        const scale = utils.getScale();
+        const invScale = 0.75 / scale;
+        if (firstDraw) {
+          prevZoom = zoom;
+          prevCenter = center;
+          markers.forEach(function (marker) {
+            marker.location = marker.patient_location;
+            const coords = project([
+              marker.location.coordinates[1],
+              marker.location.coordinates[0],
+            ]);
+
+            const markerSprite = new Sprite();
+            const markerTemplate = templates.circle;
+            markerSprite.x = coords.x;
+            markerSprite.y = coords.y;
+            markerSprite.x0 = coords.x;
+            markerSprite.y0 = coords.y;
+            markerSprite.interactive = true;
+            markerSprite.anchor.set(0.5, 0.5);
+            markerSprite.on('click', function () {
+              alert();
+            });
+            const svg = markerTemplate
+              .replace('{{fillColor}}', 'red')
+              .replace('{{strokeColor}}', 'black');
+            markerSprite.texture = Texture.from(svg);
+            container.addChild(markerSprite);
+            markerSprites.push(markerSprite);
+          });
+        }
+        if (firstDraw || prevZoom !== zoom || prevCenter !== center) {
+          context.$emit('mapMoved', map.getBounds());
+          markerSprites.forEach(function (markerSprite) {
+            if (firstDraw) {
+              markerSprite.scale.set(invScale);
+            } else {
+              markerSprite.currentScale = markerSprite.scale.x;
+              markerSprite.targetScale = invScale;
+            }
+          });
+        }
+
+        let start = null;
+        const delta = 250;
+
+        function animate(timestamp) {
+          if (start === null) start = timestamp;
+          const progress = timestamp - start;
+          let lambda = progress / delta;
+          if (lambda > 1) lambda = 1;
+          lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
+          markerSprites.forEach(function (markerSprite) {
+            markerSprite.scale.set(
+              markerSprite.currentScale +
+                lambda * (markerSprite.targetScale - markerSprite.currentScale),
+            );
+          });
+          renderer.render(container);
+          if (progress < delta) {
+            frame = requestAnimationFrame(animate);
+          }
+        }
+
+        if (!firstDraw && prevZoom !== zoom) {
+          frame = requestAnimationFrame(animate);
+        }
+        firstDraw = false;
+        prevZoom = zoom;
+        prevCenter = center;
+        renderer.render(container);
+      },
+      pixiContainer,
+      {
+        doubleBuffering,
+        destroyInteractionManager: true,
+      },
+    );
+  })();
+  layer.key = 'marker_layer';
   return layer;
 }

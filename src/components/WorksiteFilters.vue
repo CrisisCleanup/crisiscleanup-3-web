@@ -431,6 +431,7 @@
       <base-button
         :text="$t('actions.apply_filters')"
         :alt="$t('actions.apply_filters')"
+        ccu-event="user_ui-turn-on_filter"
         size="medium"
         class="m-1 p-3 px-6"
         variant="solid"

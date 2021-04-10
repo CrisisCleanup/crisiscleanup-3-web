@@ -1,11 +1,15 @@
 <template>
   <div>
-    <div class="tabs">
-      <ul class="flex">
+    <div class="tabs" :class="classes">
+      <ul class="flex items-center h-full">
         <li
           v-for="tab in tabs"
           :key="tab.name"
-          :class="{ 'is-active': tab.isActive, disabled: tab.disabled }"
+          :class="{
+            'is-active': tab.isActive,
+            disabled: tab.disabled,
+            [tabClasses]: true,
+          }"
           class="py-1 px-3 border-b-2 last:flex-grow"
         >
           <a :href="tab.href" @click="selectTab(tab)">{{ tab.name }}</a>
@@ -22,6 +26,16 @@
 <script>
 export default {
   name: 'Tabs',
+  props: {
+    classes: {
+      type: String,
+      default: '',
+    },
+    tabClasses: {
+      type: String,
+      default: '',
+    },
+  },
   data() {
     return { tabs: [] };
   },
@@ -49,6 +63,7 @@ export default {
       this.tabs.forEach((tab) => {
         tab.isActive = tab.name === selectedTab.name;
       });
+      this.$emit('tabSelected', selectedTab.name);
     },
     nextTab() {
       for (let i = 0; i < this.tabs.length; i++) {

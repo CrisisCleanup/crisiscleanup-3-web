@@ -289,7 +289,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <!---->
                
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -310,7 +310,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -325,7 +325,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -346,7 +346,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -361,7 +361,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -376,7 +376,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -502,6 +502,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
                         class="p-1 py-2 w-8"
+                        linked="true"
                         size="medium"
                         type="go-case"
                       />
@@ -574,6 +575,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
                         class="p-1 py-2 w-8"
+                        linked="true"
                         size="medium"
                         type="go-case"
                       />
@@ -646,6 +648,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
                         class="p-1 py-2 w-8"
+                        linked="true"
                         size="medium"
                         type="go-case"
                       />
@@ -718,6 +721,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
                         class="p-1 py-2 w-8"
+                        linked="true"
                         size="medium"
                         type="go-case"
                       />
@@ -790,6 +794,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
                         class="p-1 py-2 w-8"
+                        linked="true"
                         size="medium"
                         type="go-case"
                       />
@@ -862,6 +867,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
                         class="p-1 py-2 w-8"
+                        linked="true"
                         size="medium"
                         type="go-case"
                       />
@@ -948,7 +954,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <!---->
                
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -969,7 +975,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 </div>
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -984,7 +990,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -999,7 +1005,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -1014,7 +1020,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -1029,7 +1035,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"
@@ -1044,7 +1050,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer"
+                class="p-2 border-b flex items-center cursor-pointer header-column"
               >
                 <base-text-stub
                   class="text-crisiscleanup-grey-700"

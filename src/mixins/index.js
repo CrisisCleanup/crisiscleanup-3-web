@@ -7,6 +7,7 @@ import RCMixin from './rc';
 import { TrainingMixin } from './training';
 import UserMixin from './user';
 import ValidateMixin from './validate.js';
+import EventsMixin from './events.js';
 import { WorksitesMixin } from './worksite';
 
 export {
@@ -22,4 +23,5 @@ export {
   RCMixin,
   DialogsMixin,
   IncidentMixin,
+  EventsMixin,
 };

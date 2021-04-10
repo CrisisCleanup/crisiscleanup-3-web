@@ -15,6 +15,9 @@ describe('BaseIcon', () => {
       mocks: {
         $t: (key) => key,
       },
+      stubs: {
+        'base-button': true,
+      },
     });
     expect(spy).not.toHaveBeenCalled();
   });

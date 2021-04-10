@@ -54,6 +54,7 @@
             :disabled="!canUndo"
             :title="$t('actions.undo')"
             @click="undo"
+            ccu-event="user_ui-draw-undo"
           />
           <MapButton
             button-class="border bg-white"
@@ -230,6 +231,7 @@
         <div class="flex text-primary-dark">
           <base-button
             :text="$t('actions.add')"
+            ccu-event="user_ui-draw-add"
             :action="
               () => {
                 handleMapEvent('add', 'Location');
@@ -240,6 +242,7 @@
           />
           <base-button
             :text="$t('actions.subtract')"
+            ccu-event="user_ui-draw-subtract"
             :action="
               () => {
                 handleMapEvent('exclude', 'Location');
@@ -268,13 +271,14 @@ import User from '@/models/User';
 import { getWorksiteLayer, mapAttribution, mapTileLayer } from '@/utils/map';
 import LayerUploadTool from '@/components/LayerUploadTool';
 import { throttle, debounce } from 'lodash';
+import { EventsMixin } from '@/mixins';
 import MapButton from './MapButton';
 import { getQueryString } from '../utils/urls';
 
 export default {
   name: 'LocationTool',
   components: { LayerUploadTool, MapButton },
-  mixins: [vueUndoRedo],
+  mixins: [vueUndoRedo, EventsMixin],
   props: {
     locations: {
       type: Array,
@@ -430,6 +434,7 @@ export default {
       this.$nextTick(() => {
         this.showPopup(layer.getBounds().getCenter());
       });
+      this.logEvent('user_ui-draw');
     });
 
     this.map = map;
