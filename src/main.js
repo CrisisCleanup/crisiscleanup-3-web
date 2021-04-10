@@ -5,6 +5,7 @@ import '@crisiscleanup/amazon-connect-streams';
 import VueHooks from '@u3u/vue-hooks';
 import VueCompositionApi from '@vue/composition-api';
 import Vue from 'vue';
+import JsonViewer from 'vue-json-viewer'
 
 // import '@crisiscleanup/connect-rtc';
 import AssessmentTree from '@/components/AssessmentTree';
@@ -157,6 +158,7 @@ Vue.use(Toasted, {
 
 Vue.use(VueI18n);
 Vue.use(Popover);
+Vue.use(JsonViewer);
 Vue.component('base-dropdown', Dropdown);
 Vue.component('v-select', vSelect);
 
@@ -218,6 +220,12 @@ if (!process.env.VUE_APP_IS_LOCAL) {
     isProduction: process.env.NODE_ENV === 'production',
   });
 }
+
+// Add a request interceptor
+axios.interceptors.request.use(function (config) {
+  config.headers.CCU_WEB_URL = window.location.href;
+  return config;
+});
 
 // Intercept and handle unauthenticated requests
 axios.interceptors.response.use(
