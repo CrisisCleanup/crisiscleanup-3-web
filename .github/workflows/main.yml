@@ -41,6 +41,7 @@ env:
   VUE_APP_API_BASE_URL: 'https://api.dev.crisiscleanup.io'
   VUE_APP_BASE_URL: 'https://app.dev.crisiscleanup.io'
   VUE_APP_WS_URL: 'wss://socket.dev.crisiscleanup.io'
+  VUE_APP_PORTAL_KEY: 'crisiscleanup_demo'
   VUE_APP_AWS_CCP_REGION: 'us-east-1'
   VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccudev'
   VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUDevConnectRole'
@@ -205,6 +206,7 @@ jobs:
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
           VUE_APP_WS_URL: 'wss://socket.staging.crisiscleanup.io'
           VUE_APP_STAGE: staging
+          VUE_APP_PORTAL_KEY: 'crisiscleanup_staging'
         run: yarn deploy-staging
 
       - name: Deploy Production
@@ -224,6 +226,7 @@ jobs:
           VUE_APP_CCP_INSTANCE: cd54a377-8223-4c43-8524-a21d2837b7c5
           VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
           VUE_APP_STAGE: production
+          VUE_APP_PORTAL_KEY: 'crisiscleanup_us'
         run: yarn deploy-production
 
       - name: Post Notify Staging

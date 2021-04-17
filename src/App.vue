@@ -9,7 +9,7 @@
       <router-view v-if="$route.meta.id !== 'caller'" />
     </component>
     <CCP />
-    <dialogs-wrapper />
+    <dialogs-wrapper wrapper-name="default" />
   </div>
 </template>
 
@@ -46,6 +46,11 @@ export default {
     if (process.env.NODE_ENV === 'development') {
       this.eventsInterval = setInterval(this.pushCurrentEvents, 2000);
     }
+    this.$http.interceptors.request.use(function (config) {
+      config.headers.CCU_WEB_URL = window.location.href;
+      config.headers.CCU_PORTAL_KEY = process.env.VUE_APP_PORTAL_KEY;
+      return config;
+    });
   },
   beforeDestroy() {
     if (this.eventsInterval) {

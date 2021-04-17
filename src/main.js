@@ -223,6 +223,7 @@ if (!process.env.VUE_APP_IS_LOCAL) {
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
   config.headers.CCU_WEB_URL = window.location.href;
+  config.headers.CCU_PORTAL_KEY = process.env.VUE_APP_PORTAL_KEY;
   return config;
 });
 
