@@ -35,8 +35,8 @@
             variant="solid"
             size="small"
             class="text-xs"
-            :text="$t('~~Show Attrs')"
-            :alt="$t('~~Show Attrs')"
+            :text="$t('adminDashboard.show_attrs')"
+            :alt="$t('adminDashboard.show_attrs')"
           />
         </div>
       </li>

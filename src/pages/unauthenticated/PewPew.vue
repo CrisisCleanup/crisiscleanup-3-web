@@ -8,7 +8,7 @@
         <div class="h-32 px-4 py-2 border-b">
           <img
             src="@/assets/ccu-logo-black-500w.png"
-            alt="Crisis Cleanup"
+            alt="~~Crisis Cleanup"
             class="h-16"
           />
           <div class="mt-2 font-semibold">
@@ -28,13 +28,13 @@
                 :key="x"
                 class="flex px-2 py-3 items-center justify-between text-xs border-b"
               >
-                <div>{{ $t('Volunteer Hours') }}</div>
+                <div>{{ $t('~~Volunteer Hours') }}</div>
                 <div>{{ x }}</div>
               </div>
               <div class="flex grid grid-cols-2 border-b">
                 <div class="p-2 border-r">
                   <div class="underline text-primary-dark">
-                    {{ $t('More Statistics') }}
+                    {{ $t('~~More Statistics') }}
                   </div>
                 </div>
                 <div class="p-2 flex items-start justify-center">
@@ -146,7 +146,7 @@
                   <base-text variant="h3">{{
                     incidentStats.worksite_count
                   }}</base-text>
-                  <div class="text-xs">All Cases</div>
+                  <div class="text-xs">~~All Cases</div>
                 </div>
               </div>
               <div class="border-b border-r">
@@ -166,7 +166,7 @@
                   <base-text variant="h3"
                     >{{ incidentStats.claimed_count }}
                   </base-text>
-                  <div class="text-xs">Claimed</div>
+                  <div class="text-xs">~~Claimed</div>
                 </div>
               </div>
               <div class="border-b border-r">
@@ -176,7 +176,7 @@
                   <base-text variant="h3"
                     >{{ incidentStats.assigned_count }}
                   </base-text>
-                  <div class="text-xs">Assinged</div>
+                  <div class="text-xs">~~Assinged</div>
                 </div>
               </div>
               <div class="border-b border-r">
@@ -186,7 +186,7 @@
                   <base-text variant="h3"
                     >{{ incidentStats.partial_count }}
                   </base-text>
-                  <div class="text-xs">Partly Completed</div>
+                  <div class="text-xs">~~Partly Completed</div>
                 </div>
               </div>
               <div class="border-b border-r">
@@ -196,7 +196,7 @@
                   <base-text variant="h3"
                     >{{ incidentStats.closed_count }}
                   </base-text>
-                  <div class="text-xs">Closed</div>
+                  <div class="text-xs">~~Closed</div>
                 </div>
               </div>
               <div class="border-b border-r">
@@ -206,7 +206,7 @@
                   <base-text variant="h3"
                     >{{ incidentStats.overdue_count }}
                   </base-text>
-                  <div class="text-xs">Overdue</div>
+                  <div class="text-xs">~~Overdue</div>
                 </div>
               </div>
               <div class="border-b border-r">
@@ -216,7 +216,7 @@
                   <base-text variant="h3">
                     {{ organizations.length }}</base-text
                   >
-                  <div class="text-xs">Total Orgs</div>
+                  <div class="text-xs">~~Total Orgs</div>
                 </div>
               </div>
               <div class="border-b border-r">
@@ -224,7 +224,7 @@
                   class="p-1 flex flex-col items-start justify-center h-full"
                 >
                   <base-text variant="h3">0</base-text>
-                  <div class="text-xs">Counties</div>
+                  <div class="text-xs">~~Counties</div>
                 </div>
               </div>
               <div class="border-b border-r">
@@ -232,7 +232,7 @@
                   class="p-1 flex flex-col items-start justify-center h-full"
                 >
                   <base-text variant="h3">0</base-text>
-                  <div class="text-xs">Volunteers</div>
+                  <div class="text-xs">~~Volunteers</div>
                 </div>
               </div>
               <div class="border-b border-r">
@@ -240,7 +240,7 @@
                   class="p-1 flex flex-col items-start justify-center h-full"
                 >
                   <base-text variant="h3">0</base-text>
-                  <div class="text-xs">Households</div>
+                  <div class="text-xs">~~Households</div>
                 </div>
               </div>
             </div>
@@ -256,7 +256,7 @@
             </div>
             <div class="row-span-5 border">
               <tabs class="" ref="tabs" tab-classes="text-xs">
-                <tab :name="$t('Completion Rate')">
+                <tab :name="$t('~~Completion Rate')">
                   <BarChart
                     v-if="charts.completion.options"
                     :chart-data="charts.completion.data"
@@ -264,8 +264,8 @@
                     class="h-56"
                   />
                 </tab>
-                <tab :name="$t('Total Cases')"></tab>
-                <tab :name="$t('Case Status')"></tab>
+                <tab :name="$t('~~Total Cases')"></tab>
+                <tab :name="$t('~~Case Status')"></tab>
               </tabs>
             </div>
           </div>
