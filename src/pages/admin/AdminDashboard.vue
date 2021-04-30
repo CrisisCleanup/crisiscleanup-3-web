@@ -146,6 +146,46 @@
                   class="text-4xl mx-3"
                   :action="
                     () => {
+                      users.visible = !users.visible;
+                    }
+                  "
+                  >-</base-button
+                >
+                {{ 'Tickets' }}
+              </span>
+              <base-input
+                :value="users.search"
+                icon="search"
+                class="w-72 mx-4"
+                :placeholder="$t('actions.search')"
+                @input="
+                  (value) => {
+                    users.search = value;
+                    throttle(getUsers, 1000)();
+                  }
+                "
+              ></base-input>
+              <base-button class="p-4 bg-black" @click="dataConversion" />
+            </div>
+
+            <div class="p-4" v-if="Tickets.visible">
+              <TicketsTable
+                :users="Tickets.data"
+                :meta="Tickets.meta"
+                @change="getUsers"
+                @reload="getUsers"
+              ></TicketsTable>
+            </div>
+          </div>
+        </div>
+        <div class="flex">
+          <div class="m-4 pt-2 shadow bg-white w-full">
+            <div class="p2-4 px-2 border-b flex items-center">
+              <span class="flex items-center">
+                <base-button
+                  class="text-4xl mx-3"
+                  :action="
+                    () => {
                       ghostUsers.visible = !ghostUsers.visible;
                     }
                   "
@@ -276,6 +316,7 @@ import UsersTable from '../../components/admin/UsersTable';
 import GhostUsersTable from '../../components/admin/GhostUsersTable';
 import MergeOrganizations from '../../components/MergeOrganizations';
 import DatabaseAccess from '../../components/DatabaseAccess';
+import TicketsTable from '../../components/admin/TicketsTable';
 
 export default {
   name: 'AdminDashboard',
@@ -293,9 +334,91 @@ export default {
     OrganizationApprovalTable,
     InviteUsers,
     Loader,
+    TicketsTable,
   },
   data() {
     return {
+      newData: [],
+      dataFromApi: [
+        {
+          allow_attachments: true,
+          allow_channelback: false,
+          assignee_id: 484643688,
+          brand_id: 1290926,
+          collaborator_ids: [],
+          created_at: '2016-03-30T01:59:26Z',
+          description:
+            'When I attempt to Edit a case file from the browse screen, there is no data shown on the form when it is displayed on the screen.  I am unable to update the address in a test case to see what is happening.  Frustrating for all my users.',
+          due_at: null,
+          email_cc_ids: [],
+          external_id: null,
+          follower_ids: [],
+          followup_ids: [],
+          forum_topic_id: null,
+          group_id: 21259708,
+          has_incidents: false,
+          id: 308,
+          is_public: true,
+          organization_id: null,
+          priority: null,
+          problem_id: null,
+          raw_subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          recipient: null,
+          requester_id: 5257853367,
+          result_type: 'ticket',
+          satisfaction_rating: null,
+          sharing_agreement_ids: [],
+          status: 'closed',
+          subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          submitter_id: 5257853367,
+          tags: [],
+          type: null,
+          updated_at: '2016-04-03T05:02:26Z',
+          url: 'https://crisiscleanup.zendesk.com/api/v2/tickets/308.json',
+          via: { channel: 'web' },
+        },
+        {
+          allow_attachments: true,
+          allow_channelback: false,
+          assignee_id: 234234234,
+          brand_id: 1290926,
+          collaborator_ids: [],
+          created_at: '2016-03-30T01:59:26Z',
+          description:
+            'When I attempt to Edit a case file from the browse screen, there is no data shown on the form when it is displayed on the screen.  I am unable to update the address in a test case to see what is happening.  Frustrating for all my users.',
+          due_at: null,
+          email_cc_ids: [],
+          external_id: null,
+          follower_ids: [],
+          followup_ids: [],
+          forum_topic_id: null,
+          group_id: 234234,
+          has_incidents: false,
+          id: 234234,
+          is_public: true,
+          organization_id: null,
+          priority: null,
+          problem_id: null,
+          raw_subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          recipient: null,
+          requester_id: 234234,
+          result_type: 'ticket',
+          satisfaction_rating: null,
+          sharing_agreement_ids: [],
+          status: 'closed',
+          subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          submitter_id: 234234,
+          tags: [],
+          type: null,
+          updated_at: '2016-04-03T05:02:26Z',
+          url: 'https://crisiscleanup.zendesk.com/api/v2/tickets/308.json',
+          via: { channel: 'web' },
+        },
+      ],
       usersToInvite: '',
       globalSearch: '',
       organizations: {
@@ -312,6 +435,19 @@ export default {
       },
       users: {
         data: [],
+        meta: {
+          pagination: {
+            pageSize: 20,
+            page: 1,
+            current: 1,
+          },
+        },
+        search: '',
+        visible: true,
+      },
+      Tickets: {
+        // data: [{ id: 1, first_name: 'Triston', last_name: 'Lewis', ticket_id: 6000, launch_ticket: 'wow' }],
+        data: this.dataConversion(),
         meta: {
           pagination: {
             pageSize: 20,
@@ -376,9 +512,18 @@ export default {
   async mounted() {
     this.loading = true;
     await this.reloadDashBoard();
+    await this.dataConversion();
     this.loading = false;
   },
   methods: {
+    async dataConversion() {
+      for (let i = 0; i < this.dataFromApi.length; i++) {
+        this.newData[i] = {
+          id: this.dataFromApi[i].id,
+        };
+      }
+      return this.newData;
+    },
     async reloadDashBoard() {
       await Promise.all([
         this.getOrganizationsForApproval(),
