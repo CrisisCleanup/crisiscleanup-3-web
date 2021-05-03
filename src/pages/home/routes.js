@@ -45,7 +45,7 @@ export default [
   {
     path: '/map',
     component: Map,
-    name: 'nav.privacy',
+    name: 'nav.public_map',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
