@@ -62,7 +62,7 @@
     "axios": "^0.21.1",
     "bowser": "^2.11.0",
     "cf-agent-library": "git+https://git@github.com/CrisisCleanup/cf-agent-library.git",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "circle-to-polygon": "^2.0.2",
     "color": "^3.1.2",
     "concaveman": "^1.2.0",
