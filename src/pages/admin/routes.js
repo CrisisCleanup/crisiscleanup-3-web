@@ -3,7 +3,7 @@ import AdminDashboard from '@/pages/admin/AdminDashboard.vue';
 import AdminOrganization from '@/pages/admin/AdminOrganization.vue';
 import AdminEvents from '@/pages/admin/AdminEvents.vue';
 import AdminEventStream from '@/pages/admin/AdminEventStream.vue';
-
+import AdminTicketDashboard from '@/pages/admin/AdminTicketDashboard.vue';
 const routes = [
   {
     path: '/admin',
@@ -34,6 +34,11 @@ const routes = [
         path: 'event_stream',
         name: 'nav.admin_event_stream',
         component: AdminEventStream,
+      },
+      {
+        path: 'Tickets',
+        name: 'nav.admin_ticket_dashboard',
+        component: AdminTicketDashboard,
       },
     ],
   },

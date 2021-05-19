@@ -142,82 +142,6 @@
           <div class="m-4 pt-2 shadow bg-white w-full">
             <div class="p2-4 px-2 border-b flex items-center">
               <span class="flex items-center">
-                <!--                <base-button-->
-                <!--                  class="text-4xl mx-3"-->
-                <!--                  :action="-->
-                <!--                    () => {-->
-                <!--                      Tickets.visible = !Tickets.visible;-->
-                <!--                    }-->
-                <!--                  "-->
-                <!--                  >-</base-button-->
-                <!--                >-->
-                {{ 'Tickets' }}
-              </span>
-            </div>
-
-            <!--            <div class='p-4' v-if='Tickets.visible'>-->
-            <!--              <TicketsTable-->
-            <!--                :tickets='Tickets.data'-->
-            <!--                :meta='Tickets.meta'-->
-            <!--              ></TicketsTable>-->
-            <!--            </div>-->
-            <div>
-              <table id="customers">
-                <div>
-                  <base-button title="wow" text="wow" @click="dataConversion" />
-                </div>
-                <tr>
-                  <th
-                    style="color: darkgrey;"
-                    v-for="(headers, idx) in [
-                      'Ticket Id',
-                      'Requester Id',
-                      'Created',
-                      'Description',
-                      'Via',
-                      'Launch Ticket',
-                    ]"
-                    :key="idx"
-                  >
-                    {{ headers }}
-                  </th>
-                </tr>
-                <tr :key="idx" class="text-" v-for="(items, idx) in newData">
-                  <th style="width: 7%;">{{ items.id }}</th>
-
-                  <th style="width: 8%;">{{ items.requester_id }}</th>
-
-                  <th style="width: 10%;">{{ items.created }}</th>
-
-                  <th style="width: 65%;">{{ items.description }}</th>
-
-                  <th style="width: 5%;">{{ items.via }}</th>
-
-                  <th>
-                    <div
-                      class="text-center flex justify-center"
-                      style="background-color: #fece09; padding: 2px;"
-                    >
-                      <a
-                        class="flex"
-                        :href="
-                          'http://crisiscleanup.zendesk.com/agent/tickets/' +
-                          items.id
-                        "
-                        target="_blank"
-                        >Launch Ticket</a
-                      >
-                    </div>
-                  </th>
-                </tr>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="flex">
-          <div class="m-4 pt-2 shadow bg-white w-full">
-            <div class="p2-4 px-2 border-b flex items-center">
-              <span class="flex items-center">
                 <base-button
                   class="text-4xl mx-3"
                   :action="
@@ -353,7 +277,6 @@ import GhostUsersTable from '../../components/admin/GhostUsersTable';
 import MergeOrganizations from '../../components/MergeOrganizations';
 import DatabaseAccess from '../../components/DatabaseAccess';
 
-const axios = require('axios');
 export default {
   name: 'AdminDashboard',
   components: {
@@ -373,33 +296,6 @@ export default {
   },
   data() {
     return {
-      ticketTableHeaders: [
-        'Ticket Id',
-        'Requester Id',
-        'Created',
-        'Description',
-        'Via',
-        'Launch Ticket',
-      ],
-      newData: [
-        {
-          id: 1,
-          description: 'test',
-          via: 'test web',
-          url: 'http://crisiscleanup.zendesk.com',
-          created: 'this date',
-          requester_id: '8900',
-        },
-        {
-          id: 2,
-          description: 'test',
-          via: 'test web',
-          url: 'http://crisiscleanup.zendesk.com',
-          created: 'this date',
-          requester_id: '8900',
-        },
-      ],
-      dataFromApi: [],
       usersToInvite: '',
       globalSearch: '',
       organizations: {
@@ -415,21 +311,6 @@ export default {
         visible: true,
       },
       users: {
-        data: [],
-        meta: {
-          pagination: {
-            pageSize: 20,
-            page: 1,
-            current: 1,
-          },
-        },
-        search: '',
-        visible: true,
-      },
-      Tickets: {
-        // data: [{ id: 1, first_name: 'Triston', last_name: 'Lewis', ticket_id: 6000, launch_ticket: 'wow' },{ id: 2, first_name: 'zach', last_name: 'Lewis', ticket_id: 6000, launch_ticket: 'wow' },{ id: 3, first_name: 'braden', last_name: 'Lewis', ticket_id: 6000, launch_ticket: 'wow' }],
-        // data: this.dataConversion(),
-        // data: this.newData,
         data: [],
         meta: {
           pagination: {
@@ -495,34 +376,9 @@ export default {
   async mounted() {
     this.loading = true;
     await this.reloadDashBoard();
-    // await this.dataConversion();
     this.loading = false;
   },
   methods: {
-    async dataConversion() {
-      const headers = {
-        Authorization:
-          'Bearer 759bfc68240739458c76c58cf4ce7d8eb8b9336916eb32d953afaa34a4d2b676',
-      };
-      axios
-        .get(
-          'https://crisiscleanup.zendesk.com/api/v2/search.json?query=status<solved',
-          { headers },
-        )
-        // eslint-disable-next-line no-return-assign
-        .then((response) => (this.dataFromApi = response));
-      for (let i = 0; i < this.dataFromApi.data.results.length; i++) {
-        this.newData[i] = {
-          id: this.dataFromApi.data.results[i].id,
-          description: this.dataFromApi.data.results[i].description,
-          via: this.dataFromApi.data.results[i].via.channel,
-          url: this.dataFromApi.data.results[i].url,
-          created: this.dataFromApi.data.results[i].created_at,
-          requester_id: this.dataFromApi.data.results[i].requester_id,
-        };
-      }
-      return this.newData;
-    },
     async reloadDashBoard() {
       await Promise.all([
         this.getOrganizationsForApproval(),
