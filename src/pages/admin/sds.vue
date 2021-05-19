@@ -163,21 +163,18 @@
             <!--            </div>-->
             <div>
               <table id="customers">
-                <div>
-                  <base-button title="wow" text="wow" @click="dataConversion" />
-                </div>
                 <tr>
                   <th
-                    style="color: darkgrey;"
-                    v-for="(headers, idx) in [
-                      'Ticket Id',
-                      'Requester Id',
-                      'Created',
-                      'Description',
-                      'Via',
-                      'Launch Ticket',
-                    ]"
                     :key="idx"
+                    style="color: darkgrey;"
+                    v-for="(headers,idx )in [
+                      'Ticket Id',
+        'Requester Id',
+        'Created',
+        'Description',
+        'Via',
+        'Launch Ticket',
+               ]"
                   >
                     {{ headers }}
                   </th>
@@ -354,6 +351,7 @@ import MergeOrganizations from '../../components/MergeOrganizations';
 import DatabaseAccess from '../../components/DatabaseAccess';
 
 const axios = require('axios');
+
 export default {
   name: 'AdminDashboard',
   components: {
@@ -390,16 +388,127 @@ export default {
           created: 'this date',
           requester_id: '8900',
         },
-        {
-          id: 2,
-          description: 'test',
-          via: 'test web',
-          url: 'http://crisiscleanup.zendesk.com',
-          created: 'this date',
-          requester_id: '8900',
-        },
       ],
       dataFromApi: [],
+      dataForApi: [
+        {
+          allow_attachments: true,
+          allow_channelback: false,
+          assignee_id: 484643688,
+          brand_id: 1290926,
+          collaborator_ids: [],
+          created_at: '2016-03-30T01:59:26Z',
+          description:
+            'When I attempt to Edit a case file from the browse screen, there is no data shown on the form when it is displayed on the screen.  I am unable to update the address in a test case to see what is happening.  Frustrating for all my users.',
+          due_at: null,
+          email_cc_ids: [],
+          external_id: null,
+          follower_ids: [],
+          followup_ids: [],
+          forum_topic_id: null,
+          group_id: 21259708,
+          has_incidents: false,
+          id: 308,
+          is_public: true,
+          organization_id: null,
+          priority: null,
+          problem_id: null,
+          raw_subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          recipient: null,
+          requester_id: 5257853367,
+          result_type: 'ticket',
+          satisfaction_rating: null,
+          sharing_agreement_ids: [],
+          status: 'closed',
+          subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          submitter_id: 5257853367,
+          tags: [],
+          type: null,
+          updated_at: '2016-04-03T05:02:26Z',
+          url: 'https://crisiscleanup.zendesk.com/api/v2/tickets/308.json',
+          via: { channel: 'web' },
+        },
+        {
+          allow_attachments: true,
+          allow_channelback: false,
+          assignee_id: 234234234,
+          brand_id: 1290926,
+          collaborator_ids: [],
+          created_at: '2016-03-30T01:59:26Z',
+          description:
+            'When I attempt to Edit a case file from the browse screen, there is no data shown on the form when it is displayed on the screen.  I am unable to update the address in a test case to see what is happening.  Frustrating for all my users.',
+          due_at: null,
+          email_cc_ids: [],
+          external_id: null,
+          follower_ids: [],
+          followup_ids: [],
+          forum_topic_id: null,
+          group_id: 234234,
+          has_incidents: false,
+          id: 234234,
+          is_public: true,
+          organization_id: null,
+          priority: null,
+          problem_id: null,
+          raw_subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          recipient: null,
+          requester_id: 234234,
+          result_type: 'ticket',
+          satisfaction_rating: null,
+          sharing_agreement_ids: [],
+          status: 'closed',
+          subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          submitter_id: 234234,
+          tags: [],
+          type: null,
+          updated_at: '2016-04-03T05:02:26Z',
+          url: 'https://crisiscleanup.zendesk.com/api/v2/tickets/308.json',
+          via: { channel: 'web' },
+        },
+        {
+          allow_attachments: true,
+          allow_channelback: false,
+          assignee_id: 484643688,
+          brand_id: 1290926,
+          collaborator_ids: [],
+          created_at: '2016-03-30T01:59:26Z',
+          description:
+            'When I attempt to Edit a case file from the browse screen, there is no data shown on the form when it is displayed on the screen.  I am unable to update the address in a test case to see what is happening.  Frustrating for all my users.',
+          due_at: null,
+          email_cc_ids: [],
+          external_id: null,
+          follower_ids: [],
+          followup_ids: [],
+          forum_topic_id: null,
+          group_id: 21259708,
+          has_incidents: false,
+          id: 8233,
+          is_public: true,
+          organization_id: null,
+          priority: null,
+          problem_id: null,
+          raw_subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          recipient: null,
+          requester_id: 5257853367,
+          result_type: 'ticket',
+          satisfaction_rating: null,
+          sharing_agreement_ids: [],
+          status: 'closed',
+          subject:
+            'error correcting on submitted data and reviewing submitted data in the dataenry screen',
+          submitter_id: 5257853367,
+          tags: [],
+          type: null,
+          updated_at: '2016-04-03T05:02:26Z',
+          url: 'https://crisiscleanup.zendesk.com/api/v2/tickets/308.json',
+          via: { channel: 'web' },
+        },
+      ],
       usersToInvite: '',
       globalSearch: '',
       organizations: {
@@ -495,7 +604,8 @@ export default {
   async mounted() {
     this.loading = true;
     await this.reloadDashBoard();
-    // await this.dataConversion();
+    await this.dataConversion();
+
     this.loading = false;
   },
   methods: {
@@ -595,6 +705,27 @@ export default {
         total: response.data.count,
       };
       this.users.meta = {
+        pagination: newPagination,
+      };
+    },
+    async getTickets(data = {}) {
+      const pagination = data.pagination || this.Tickets.meta.pagination;
+      const params = {
+        offset: pagination.pageSize * (pagination.page - 1),
+        limit: pagination.pageSize,
+      };
+      if (this.Tickets.search || this.globalSearch) {
+        params.search = this.globalSearch || this.Tickets.search;
+      }
+      // const queryString = getQueryString(params);
+
+      const response = this.dataFromApi;
+      this.Tickets.data = response;
+      const newPagination = {
+        ...pagination,
+        total: response.data.count,
+      };
+      this.Tickets.meta = {
         pagination: newPagination,
       };
     },
@@ -700,4 +831,32 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#customers {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#customers td,
+#customers th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#customers tr:hover {
+  background-color: #ddd;
+}
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: white;
+  color: black;
+}
+</style>
