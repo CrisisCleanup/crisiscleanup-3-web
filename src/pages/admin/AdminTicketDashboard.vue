@@ -89,15 +89,10 @@ export default {
     };
   },
   async mounted() {
-    // await this.dataConversion();
+    await this.dataConversion();
   },
   methods: {
     async dataConversion() {
-      // const cookie = await browser.cookie.get();
-      // console.log(cookie);
-
-      // axios.defaults.headers.common.Authorization =
-      //   'Bearer 759bfc68240739458c76c58cf4ce7d8eb8b9336916eb32d953afaa34a4d2b676';
       const headers = {
         Authorization:
           'Bearer 759bfc68240739458c76c58cf4ce7d8eb8b9336916eb32d953afaa34a4d2b676',
