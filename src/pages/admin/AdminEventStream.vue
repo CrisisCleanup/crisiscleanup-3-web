@@ -38,6 +38,18 @@
             :text="$t('~~Show Attrs')"
             :alt="$t('~~Show Attrs')"
           />
+          <base-button
+            :action="
+              () => {
+                showAll(stream);
+              }
+            "
+            variant="solid"
+            size="small"
+            class="text-xs mx-2"
+            :text="$t('~~Show All Fields')"
+            :alt="$t('~~Show All Fields')"
+          />
         </div>
       </li>
     </ul>
@@ -75,6 +87,19 @@ export default {
         classes: 'w-full h-96',
         props: {
           jsonData: stream.attr,
+        },
+      });
+    },
+    async showAll(stream) {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/event_stream/${stream.id}`,
+      );
+      await this.$component({
+        title: `All Fields for Log: ${stream.id} | Key: ${stream.event_key}`,
+        component: 'JsonWrapper',
+        classes: 'w-full h-96',
+        props: {
+          jsonData: response.data,
         },
       });
     },
