@@ -13,7 +13,7 @@ export default class WorksiteRequest extends Model {
       requested_by: this.attr(null),
       requested_by_org: this.attr(null),
       requested_to_org: this.attr(null),
-      expires_at: this.attr(null),
+      token_expiration: this.attr(null),
       created_at: this.attr(null),
       approved_at: this.attr(null),
       rejected_at: this.attr(null),
@@ -22,7 +22,7 @@ export default class WorksiteRequest extends Model {
   }
 
   get status() {
-    return moment(this.expires_at) > moment() ? 'Requested' : 'Expired';
+    return moment(this.token_expiration) > moment() ? 'Requested' : 'Expired';
   }
 
   get last_action() {
@@ -38,7 +38,7 @@ export default class WorksiteRequest extends Model {
       )} (Rejected)`;
     }
 
-    if (moment(this.expires_at) > moment()) {
+    if (moment(this.token_expiration) > moment()) {
       return `${moment(this.created_at).format('DD/MM/YYYY hh:mm')} (Created)`;
     }
 
@@ -54,8 +54,8 @@ export default class WorksiteRequest extends Model {
       return '';
     }
 
-    if (moment(this.expires_at) > moment()) {
-      return `${moment(this.created_at).format(
+    if (moment(this.token_expiration) > moment()) {
+      return `${moment(this.token_expiration).format(
         'DD/MM/YYYY hh:mm',
       )} (Auto approval)`;
     }
