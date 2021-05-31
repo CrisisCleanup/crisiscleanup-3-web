@@ -25,7 +25,7 @@
 
           <th style="width: 8%;">{{ items.requester_id }}</th>
 
-          <th style="width: 10%;">{{ items.created }}</th>
+          <th style="width: 10%;">{{ items.created_at }}</th>
 
           <th style="width: 65%;">{{ items.description }}</th>
 
@@ -49,6 +49,15 @@
         </tr>
       </tbody>
     </table>
+    <div>
+      <base-button
+        variant="solid"
+        class="px-4 py-2"
+        :text="$t('actions.save')"
+        :alt="$t('actions.save')"
+        :action="console"
+      />
+    </div>
   </div>
 </template>
 
@@ -57,6 +66,7 @@ const axios = require('axios');
 
 export default {
   name: 'TicketDashboard',
+  components: {},
   data() {
     return {
       ticketTableHeaders: [
@@ -67,54 +77,36 @@ export default {
         'Via',
         'Launch Ticket',
       ],
-      newData: [
-        {
-          id: 1,
-          description: 'test',
-          via: 'test web',
-          url: 'http://crisiscleanup.zendesk.com',
-          created: 'this date',
-          requester_id: '8900',
-        },
-        {
-          id: 2,
-          description: 'test',
-          via: 'test web',
-          url: 'http://crisiscleanup.zendesk.com',
-          created: 'this date',
-          requester_id: '8900',
-        },
-      ],
+      newData: [],
       dataFromApi: [],
     };
   },
-  async mounted() {
+  async onMounted() {
     await this.dataConversion();
   },
   methods: {
+    console() {
+      this.dataConversion();
+    },
     async dataConversion() {
-      const headers = {
-        Authorization:
-          'Bearer 759bfc68240739458c76c58cf4ce7d8eb8b9336916eb32d953afaa34a4d2b676',
-        cors: false,
-      };
       axios
         .get(
-          'https://crisiscleanup.zendesk.com/api/v2/search.json?query=status<solved',
-          { headers },
+          'https://api.dev.crisiscleanup.io/zendesk/search?query=status<solved',
         )
         // eslint-disable-next-line no-return-assign
-        .then((response) => (this.dataFromApi = response));
-      for (let i = 0; i < this.dataFromApi.data.results.length; i++) {
+        .then((response) => (this.dataFromApi = response.data.results));
+      console.log(this.dataFromApi);
+      for (let i = 0; i < this.dataFromApi.length; i++) {
         this.newData[i] = {
-          id: this.dataFromApi.data.results[i].id,
-          description: this.dataFromApi.data.results[i].description,
-          via: this.dataFromApi.data.results[i].via.channel,
-          url: this.dataFromApi.data.results[i].url,
-          created: this.dataFromApi.data.results[i].created_at,
-          requester_id: this.dataFromApi.data.results[i].requester_id,
+          id: this.dataFromApi[i].id,
+          description: this.dataFromApi[i].description,
+          via: 'test',
+          url: this.dataFromApi[i].url,
+          created_at: this.dataFromApi[i].created_at,
+          requester_id: this.dataFromApi[i].requester_id,
         };
       }
+      console.log(this.newData);
       return this.newData;
     },
   },
