@@ -49,21 +49,10 @@
         </tr>
       </tbody>
     </table>
-    <div>
-      <base-button
-        variant="solid"
-        class="px-4 py-2"
-        :text="$t('actions.save')"
-        :alt="$t('actions.save')"
-        :action="console"
-      />
-    </div>
   </div>
 </template>
 
 <script>
-const axios = require('axios');
-
 export default {
   name: 'TicketDashboard',
   components: {},
@@ -78,35 +67,32 @@ export default {
         'Launch Ticket',
       ],
       newData: [],
-      dataFromApi: [],
     };
   },
-  async onMounted() {
+  computed: {},
+  async mounted() {
     await this.dataConversion();
+    this.newData = [...this.newData];
   },
   methods: {
     console() {
       this.dataConversion();
     },
     async dataConversion() {
-      axios
-        .get(
-          'https://api.dev.crisiscleanup.io/zendesk/search?query=status<solved',
-        )
-        // eslint-disable-next-line no-return-assign
-        .then((response) => (this.dataFromApi = response.data.results));
-      console.log(this.dataFromApi);
-      for (let i = 0; i < this.dataFromApi.length; i++) {
-        this.newData[i] = {
-          id: this.dataFromApi[i].id,
-          description: this.dataFromApi[i].description,
-          via: 'test',
-          url: this.dataFromApi[i].url,
-          created_at: this.dataFromApi[i].created_at,
-          requester_id: this.dataFromApi[i].requester_id,
+      const response = await this.$http.get(
+        'https://api.dev.crisiscleanup.io/zendesk/search?query=status<solved',
+      );
+      const { results } = response.data;
+      this.newData = results.map((result) => {
+        return {
+          id: result.id,
+          description: result.description,
+          via: result.via.channel,
+          url: result.url,
+          created_at: result.created_at,
+          requester_id: result.requester_id,
         };
-      }
-      console.log(this.newData);
+      });
       return this.newData;
     },
   },
