@@ -21,6 +21,10 @@ export default {
       reactive({
         key: 'nav.admin_event_stream',
       }),
+      reactive({
+        title: 'Tickets',
+        key: 'nav.admin_ticket_dashboard',
+      }),
     ]);
     return { tabs };
   },
