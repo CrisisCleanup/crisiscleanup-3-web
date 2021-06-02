@@ -1,89 +1,46 @@
 <template>
-  <div>
-    <table class="styled-table" id="customers">
-      <thead>
-        <tr>
-          <th
-            style="color: black;"
-            v-for="(headers, idx) in [
-              'Ticket Id',
-              'Requester Id',
-              'Created',
-              'Description',
-              'Via',
-              'Launch Ticket',
-            ]"
-            :key="idx"
-          >
-            {{ headers }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr :key="idx" class="text-" v-for="(items, idx) in newData">
-          <th style="width: 7%;">{{ items.id }}</th>
-
-          <th style="width: 8%;">{{ items.requester_id }}</th>
-
-          <th style="width: 10%;">{{ items.created_at }}</th>
-
-          <th style="width: 65%;">{{ items.description }}</th>
-
-          <th style="width: 5%;">{{ items.via }}</th>
-
-          <th>
-            <div
-              class="text-center flex justify-center"
-              style="background-color: #fece09; padding: 2px;"
-            >
-              <a
-                class="flex"
-                :href="
-                  'http://crisiscleanup.zendesk.com/agent/tickets/' + items.id
-                "
-                target="_blank"
-                >Launch Ticket</a
-              >
-            </div>
-          </th>
-        </tr>
-      </tbody>
-    </table>
+  <div class="my-2">
+    <Table
+      :columns="ticketTable.columns"
+      :data="tickets"
+      style="height: 450px;"
+      :body-style="{ maxHeight: '450px' }"
+    >
+      <template #url="slotProps">
+        <base-link
+          :href="`http://crisiscleanup.zendesk.com/agent/tickets/${slotProps.item.id}`"
+          text-variant="bodysm"
+          class="px-2"
+          target="_blank"
+          >{{ $t('~~Link') }}</base-link
+        >
+      </template>
+    </Table>
   </div>
 </template>
 
 <script>
+import { makeTableColumns } from '@/utils/table';
+import Table from '@/components/Table';
+
 export default {
   name: 'TicketDashboard',
-  components: {},
+  components: { Table },
   data() {
     return {
-      ticketTableHeaders: [
-        'Ticket Id',
-        'Requester Id',
-        'Created',
-        'Description',
-        'Via',
-        'Launch Ticket',
-      ],
-      newData: [],
+      tickets: [],
     };
   },
-  computed: {},
   async mounted() {
-    await this.dataConversion();
-    this.newData = [...this.newData];
+    await this.getTickets();
   },
   methods: {
-    console() {
-      this.dataConversion();
-    },
-    async dataConversion() {
+    async getTickets() {
       const response = await this.$http.get(
-        'https://api.dev.crisiscleanup.io/zendesk/search?query=status<solved',
+        `${process.env.VUE_APP_API_BASE_URL}/zendesk/search?query=status<solved`,
       );
       const { results } = response.data;
-      this.newData = results.map((result) => {
+      this.tickets = results.map((result) => {
         return {
           id: result.id,
           description: result.description,
@@ -93,47 +50,27 @@ export default {
           requester_id: result.requester_id,
         };
       });
-      return this.newData;
+      return this.tickets;
+    },
+  },
+  computed: {
+    ticketTable() {
+      const columns = makeTableColumns([
+        ['id', '5%', 'Id'],
+        ['requester_id', '15%', 'Requester Id'],
+        ['created_at', '20%', 'Created'],
+        ['description', '50%', 'Description'],
+        ['via', '5%', 'Via'],
+        ['url', '5%', ''],
+      ]);
+      columns.forEach((column) => {
+        column.titleClass = 'small-font';
+        column.class = 'small-font';
+      });
+      return {
+        columns,
+      };
     },
   },
 };
 </script>
-
-<style scoped>
-.styled-table {
-  border-collapse: collapse;
-  margin: 25px 0;
-  font-size: 0.9em;
-  font-family: sans-serif;
-  min-width: 400px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-}
-
-.styled-table thead tr {
-  background-color: #fece09;
-  color: #ffffff;
-  text-align: left;
-}
-
-.styled-table th,
-.styled-table td {
-  padding: 12px 15px;
-}
-
-.styled-table tbody tr {
-  border-bottom: 1px solid #dddddd;
-}
-
-.styled-table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
-}
-
-.styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #fece09;
-}
-
-.styled-table tbody tr.active-row {
-  font-weight: bold;
-  color: #fece09;
-}
-</style>
