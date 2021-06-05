@@ -234,10 +234,6 @@
             </div>
             <div class="py-4 px-4 border-b flex items-center">
               <base-button
-                v-if="
-                  $can('approve_work_type_transfers') ||
-                  $can('receive_work_type_transfer_requests')
-                "
                 class="mr-2 border-r pr-2"
                 size="medium"
                 :text="$t('dashboard.inbound_requests')"
@@ -413,11 +409,7 @@ export default {
       loading: false,
       datacollection: null,
       pendingViewLoading: false,
-      pendingView:
-        this.$can('approve_work_type_transfers') ||
-        this.$can('receive_work_type_transfer_requests')
-          ? 'inbound'
-          : 'outbound',
+      pendingView: 'inbound',
       colors,
       sorter: {
         key: null,
@@ -748,20 +740,16 @@ export default {
         title: this.$t('actions.approve_worksite_request'),
         content: this.$t('dashboard.approve_worksite_request_reason'),
       });
-      if (result) {
-        await WorksiteRequest.api().acceptRequest(id, result);
-        await this.getWorksiteRequests();
-      }
+      await WorksiteRequest.api().acceptRequest(id, result);
+      await this.getWorksiteRequests();
     },
     async rejectRequest(id) {
       const result = await this.$prompt({
         title: this.$t('actions.reject_worksite_request'),
         content: this.$t('dashboard.reject_worksite_request_reason'),
       });
-      if (result) {
-        await WorksiteRequest.api().rejectRequest(id, result);
-        await this.getWorksiteRequests();
-      }
+      await WorksiteRequest.api().rejectRequest(id, result);
+      await this.getWorksiteRequests();
     },
     async cancelRequest(id) {
       await WorksiteRequest.api().cancelRequest(id);
