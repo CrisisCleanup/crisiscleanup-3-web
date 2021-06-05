@@ -75,10 +75,11 @@ export default {
       return this.$t(tag, attr);
     },
     async getEvents() {
+      this.eventStream = [];
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/event_stream?limit=500`,
       );
-      this.eventStream = response.data.results;
+      this.eventStream = [...response.data.results];
     },
     async showEventAttrs(stream) {
       await this.$component({

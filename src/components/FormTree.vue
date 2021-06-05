@@ -13,11 +13,13 @@
         <div class="form-field flex items-center">
           <base-checkbox
             :value="
-              !!worksite.formFields[field.field_key] || hasSelectedChildren
+              Boolean(worksite.formFields[field.field_key]) ||
+              hasSelectedChildren
             "
             @input="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });
+                updateChildren(field, value);
                 showChildren = !showChildren;
               }
             "
@@ -281,6 +283,16 @@ export default {
           name_t: this.$t(defaultValues[key]),
         };
       });
+    },
+    updateChildren(field, value) {
+      if (!value) {
+        field.children.forEach((child) => {
+          this.$emit('updateField', {
+            key: child.field_key,
+            value: child.html_type === 'checkbox' ? false : '',
+          });
+        });
+      }
     },
   },
 };
