@@ -1,5 +1,5 @@
 <template>
-  <div class="my-2">
+  <div class="my-2 justify-center items-center">
     <Table
       :columns="ticketTable.columns"
       :data="tickets"
@@ -16,16 +16,32 @@
         >
       </template>
     </Table>
+
+    <div class="gridContainer">
+      <TicketCards status="New" ticket-data="" />
+      <TicketCards status="Open" ticket-data="" />
+      <TicketCards status="Pending" ticket-data="" />
+      <TicketCards status="Solved" ticket-data="" />
+      <TicketCards status="New" ticket-data="" />
+      <TicketCards status="Open" ticket-data="" />
+      <TicketCards status="Pending" ticket-data="" />
+      <TicketCards status="Solved" ticket-data="" />
+      <TicketCards status="New" ticket-data="" />
+      <TicketCards status="Open" ticket-data="" />
+      <TicketCards status="Pending" ticket-data="" />
+      <TicketCards status="Solved" ticket-data="" />
+    </div>
   </div>
 </template>
 
 <script>
 import { makeTableColumns } from '@/utils/table';
 import Table from '@/components/Table';
+import TicketCards from './TicketCards.vue';
 
 export default {
   name: 'TicketDashboard',
-  components: { Table },
+  components: { Table, TicketCards },
   data() {
     return {
       tickets: [],
@@ -74,3 +90,15 @@ export default {
   },
 };
 </script>
+
+<style>
+.gridContainer {
+  justify-content: center;
+  display: grid;
+  justify-items: stretch;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+
+  row-gap: 20px;
+}
+</style>
