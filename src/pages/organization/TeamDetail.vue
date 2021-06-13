@@ -326,7 +326,7 @@
                         class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
                         @click="
                           () => {
-                            removeWorksiteFromTeam(slotProps.item);
+                            removeWorksiteFromTeam(slotProps.item.id);
                           }
                         "
                       >
@@ -350,7 +350,7 @@
         <base-input
           :value="team.notes"
           text-area
-          rows="4"
+          :rows="4"
           :placeholder="$t('teams.notes')"
           @input="updateNotes"
           @blur="updateCurrentTeam"
@@ -682,6 +682,12 @@ export default {
     async updateTeam(id, data) {
       await Team.api().patch(`/teams/${id}`, data);
     },
+    async getWorksite(id) {
+      const {
+        response: { data },
+      } = await Worksite.api().get(`/worksites/${id}`);
+      return data;
+    },
     async addCases() {
       if (this.casesToAdd.length) {
         await Promise.all(
@@ -713,7 +719,9 @@ export default {
       await this.updateCurrentTeam();
       this.$emit('reload');
     },
-    async removeWorksiteFromTeam(worksite) {
+    async removeWorksiteFromTeam(worksiteId) {
+      const worksite = await this.getWorksite(worksiteId);
+
       const ids = worksite.work_types
         .filter((type) => type.claimed_by === this.currentUser.organization.id)
         .map((wt) => wt.id);
