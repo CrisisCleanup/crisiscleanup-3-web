@@ -2,6 +2,7 @@
 
 exports[`BaseIcon should render correctly and match snapshot 1`] = `
 <base-button
+  action="function func() {}"
   alt=""
   ccu-event=""
   class="flex items-center base-icon js-  "
