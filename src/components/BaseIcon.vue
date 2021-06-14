@@ -6,6 +6,7 @@
     } `"
     :title="alt || title"
     :alt="alt || title"
+    :action="action"
     :ccu-event="ccuEvent"
   >
     <img
@@ -50,6 +51,7 @@ export default {
     invertColor: VueTypes.bool.def(false),
     linked: VueTypes.bool.def(false),
     iconClasses: VueTypes.string.def(''),
+    action: VueTypes.func,
   },
   data() {
     return {

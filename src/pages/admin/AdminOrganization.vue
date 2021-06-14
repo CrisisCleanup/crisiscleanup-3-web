@@ -522,8 +522,23 @@
               {{ $t('adminOrganization.current_groups') }}
             </base-text>
             <div>
-              <div class="pr-3" v-for="group in groups" :key="`${group.id}`">
+              <div
+                class="pr-3 flex items-center"
+                v-for="group in groups"
+                :key="`${group.id}`"
+              >
                 {{ group.name }}
+                <ccu-icon
+                  :alt="$t('actions.delete')"
+                  class="ml-1"
+                  size="xs"
+                  type="cancel"
+                  :action="
+                    () => {
+                      return deleteGroup(group);
+                    }
+                  "
+                />
               </div>
             </div>
           </div>
@@ -802,6 +817,8 @@ export default {
             }/groups?id__in=${this.organization.approved_groups.join(',')}`,
           );
           this.groups = groupsResponse.data.results;
+        } else {
+          this.groups = [];
         }
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -1012,12 +1029,34 @@ export default {
       }
     },
     async deleteGroup(group) {
+      const result = await this.$confirm({
+        title: this.$t('~~Remove Organization From Group'),
+        content: this.$t(
+          '~~Do you want to remove this organization from this group?',
+        ),
+        actions: {
+          no: {
+            text: this.$t('actions.cancel'),
+            type: 'outline',
+            buttonClass: 'border border-black',
+          },
+          yes: {
+            text: this.$t('actions.ok'),
+            type: 'solid',
+          },
+        },
+      });
+      if (result === 'no' || result === 'cancel') {
+        return;
+      }
+
       await this.$http.delete(
         `${process.env.VUE_APP_API_BASE_URL}/groups/${group.id}/organizations`,
         {
-          organization: this.organization.id,
+          data: { organization: this.organization.id },
         },
       );
+      await this.loadPageData();
     },
     async saveOrganization() {
       try {
