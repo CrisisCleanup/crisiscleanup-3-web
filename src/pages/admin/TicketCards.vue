@@ -1,35 +1,61 @@
 <template>
   <div>
-    <div class="w-6/12 bg-white p-2 shadow rounded z-1">
+    <div class="min-w-6/12 w-84 bg-white p-2 shadow rounded z-1">
       <div name="info" class="flex flex-col">
         <div class="flex flex-row justify-between pb-2">
           <div class="mr-2">
-            <div class="font-bold">Triston Lewis</div>
+            <div class="font-bold">{{ ticketData.requester_id }}</div>
             <div>Triston@arroyodev.com</div>
           </div>
           <div
             class="flex text-center items-center rounded h-2/12 w-2/12 justify-center text-md flex-wrap"
-            :class="status"
+            :class="ticketData.status"
           >
-            {{ status }}
+            {{ ticketData.status }}
           </div>
         </div>
 
         <hr />
-        <div class="font-bold">Created on 3/05/2021</div>
-        <div>
-          I really don’t know what is going on with the phone system at the
-          moment. My calls keep Disconnecting every other minute.
+        <div class="font-bold">Created on {{ ticketData.created_at }}</div>
+        <div :class="truncateState ? 'truncate' : ''">
+          {{ ticketData.description }}
+          <div
+            v-if="truncateState"
+            @click="toggleTruncate"
+            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
+          >
+            Read more
+          </div>
+          <div
+            v-else
+            @click="toggleTruncate"
+            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
+          >
+            Read Less
+          </div>
         </div>
         <hr />
         <div class="flex flex-row justify-between">
           <div>
-            <div>picture</div>
-            <div>assigned to: arron titus</div>
+            <div>
+              <div>picture</div>
+              assigned to:
+              <div v-if="ticketData.assignee_id">
+                {{ ticketData.assignee_id }}
+              </div>
+              <div v-else>No user Assigned</div>
+            </div>
           </div>
-          <div>
-            <base-button text="Login" variant="solid" class="m-2" />
-            <base-button text="Launch" variant="solid" class="m-2" />
+          <div class="flex items-center">
+            <base-button text="Login" variant="solid" class="m-2 p-1" />
+
+            <base-link
+              :href="`http://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
+              text-variant="bodysm"
+              class="px-2"
+              target="_blank "
+              >{{ $t('~~Launch Ticket') }}
+            </base-link>
           </div>
         </div>
       </div>
@@ -39,6 +65,8 @@
       </div>
 
       <div v-show="dropDownState" class="h-62">
+        <hr />
+
         <div class="flex flex-row justify-between">
           <div>Organization Name:</div>
           <div>Southeast Baptist Helpers</div>
@@ -72,10 +100,6 @@
 export default {
   name: 'TicketCards',
   props: {
-    status: {
-      type: String,
-      default: null,
-    },
     ticketData: {
       type: Object,
       default: null,
@@ -83,10 +107,14 @@ export default {
   },
   data() {
     return {
+      truncateState: true,
       dropDownState: false,
     };
   },
   methods: {
+    toggleTruncate() {
+      this.truncateState = !this.truncateState;
+    },
     changeDropDownState() {
       this.dropDownState = !this.dropDownState;
     },
@@ -95,22 +123,22 @@ export default {
 </script>
 
 <style scoped>
-.New {
+.new {
   color: #c19700;
   background: #fff59c;
 }
 
-.Open {
+.open {
   color: #0042ed;
   background: #9cb8ff;
 }
 
-.Pending {
+.pending {
   color: #f21b1b;
   background: #ffa296;
 }
 
-.Solved {
+.solved {
   color: #6b6b6b;
   background: #e8e4e4;
 }

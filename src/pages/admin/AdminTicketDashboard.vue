@@ -18,18 +18,11 @@
     </Table>
 
     <div class="gridContainer">
-      <TicketCards status="New" ticket-data="" />
-      <TicketCards status="Open" ticket-data="" />
-      <TicketCards status="Pending" ticket-data="" />
-      <TicketCards status="Solved" ticket-data="" />
-      <TicketCards status="New" ticket-data="" />
-      <TicketCards status="Open" ticket-data="" />
-      <TicketCards status="Pending" ticket-data="" />
-      <TicketCards status="Solved" ticket-data="" />
-      <TicketCards status="New" ticket-data="" />
-      <TicketCards status="Open" ticket-data="" />
-      <TicketCards status="Pending" ticket-data="" />
-      <TicketCards status="Solved" ticket-data="" />
+      <TicketCards
+        :key="idx"
+        v-for="(items, idx) in tickets.length"
+        :ticket-data="tickets[idx]"
+      />
     </div>
   </div>
 </template>
@@ -56,6 +49,7 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/search?query=status<solved`,
       );
       const { results } = response.data;
+      console.log(results);
       this.tickets = results.map((result) => {
         return {
           id: result.id,
@@ -64,8 +58,11 @@ export default {
           url: result.url,
           created_at: result.created_at,
           requester_id: result.requester_id,
+          status: result.status,
+          assignee_id: result.assignee_id,
         };
       });
+
       return this.tickets;
     },
   },
@@ -96,9 +93,18 @@ export default {
   justify-content: center;
   display: grid;
   justify-items: stretch;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: auto;
-
+  column-gap: 20px;
   row-gap: 20px;
+  &-mobile {
+    justify-content: center;
+    display: grid;
+    justify-items: stretch;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    column-gap: 20px;
+    row-gap: 20px;
+  }
 }
 </style>
