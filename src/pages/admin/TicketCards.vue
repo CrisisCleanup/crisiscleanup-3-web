@@ -37,8 +37,8 @@
         <hr />
         <div class="flex flex-row justify-between">
           <div>
-            <div>
-              <div>picture</div>
+            <div class="p-2">
+              <img src="https://via.placeholder.com/50" />
               assigned to:
               <div v-if="ticketData.assignee_id">
                 {{ ticketData.assignee_id }}
