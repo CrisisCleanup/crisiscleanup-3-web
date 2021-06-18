@@ -4,11 +4,19 @@
       <div name="info" class="flex flex-col">
         <div class="flex flex-row justify-between pb-2">
           <div class="mr-2">
-            <div class="font-bold">{{ ticketData.requester_id }}</div>
-            <div>Triston@arroyodev.com</div>
+            <div class="font-bold">{{ ticketData.name }}</div>
+            <div>{{ ticketData.email }}</div>
+            <div>{{ ticketData.phone }}</div>
           </div>
+          <base-link
+            :href="`http://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
+            text-variant="bodysm"
+            class="px-2"
+            target="_blank "
+            >{{ $t('~~Launch Ticket') }}
+          </base-link>
           <div
-            class="flex text-center items-center rounded h-2/12 w-2/12 justify-center text-md flex-wrap"
+            class="flex text-center items-center rounded h-6 w-12 justify-center text-md flex-wrap"
             :class="ticketData.status"
           >
             {{ ticketData.status }}
@@ -39,23 +47,23 @@
           <div>
             <div class="p-2">
               <img src="https://via.placeholder.com/50" />
-              assigned to:
+              Assigned To:
               <div v-if="ticketData.assignee_id">
-                {{ ticketData.assignee_id }}
+                {{ assignWho }}
               </div>
               <div v-else>No user Assigned</div>
+              <form-select
+                class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
+                :options="userList"
+                :value="selectedUser"
+                v-model="selectedUser"
+                item-key="key"
+                label="label"
+              />
             </div>
           </div>
           <div class="flex items-center">
             <base-button text="Login" variant="solid" class="m-2 p-1" />
-
-            <base-link
-              :href="`http://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
-              text-variant="bodysm"
-              class="px-2"
-              target="_blank "
-              >{{ $t('~~Launch Ticket') }}
-            </base-link>
           </div>
         </div>
       </div>
@@ -69,7 +77,7 @@
 
         <div class="flex flex-row justify-between">
           <div>Organization Name:</div>
-          <div>Southeast Baptist Helpers</div>
+          <div>{{ ticketData.organization.name }}</div>
         </div>
 
         <div class="flex flex-row justify-between">
@@ -97,6 +105,7 @@
 </template>
 
 <script>
+import FormSelect from '../../components/FormSelect.vue';
 export default {
   name: 'TicketCards',
   props: {
@@ -105,11 +114,46 @@ export default {
       default: null,
     },
   },
+  components: { FormSelect },
   data() {
     return {
       truncateState: true,
       dropDownState: false,
+      selectedUser: '',
+      userList: ['Arron Titus', 'Triston Lewis', 'Ross Arroyo', 'Gina'],
     };
+  },
+  computed: {
+    assignWho() {
+      if (this.ticketData.assignee_id === 484643688) {
+        return 'Arron titus';
+      }
+      if (this.ticketData.assignee_id === 411677450351) {
+        return 'Triston Lewis';
+      }
+      if (this.ticketData.assignee_id === 114709872451) {
+        return 'Ross Arroyo';
+      }
+      if (this.ticketData.assignee_id === 403645788712) {
+        return 'Gina';
+      }
+      return this.ticketData.assignee_id;
+    },
+    assignWhoPicture() {
+      if (this.ticketData.assignee_id === 484643688) {
+        return 'Arron titus';
+      }
+      if (this.ticketData.assignee_id === 411677450351) {
+        return 'Triston Lewis';
+      }
+      if (this.ticketData.assignee_id === 114709872451) {
+        return 'Ross Arroyo';
+      }
+      if (this.ticketData.assignee_id === 403645788712) {
+        return 'Gina';
+      }
+      return this.ticketData.assignee_id;
+    },
   },
   methods: {
     toggleTruncate() {
@@ -122,7 +166,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="postcss">
 .new {
   color: #c19700;
   background: #fff59c;
