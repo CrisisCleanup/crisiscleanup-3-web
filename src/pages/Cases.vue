@@ -1495,7 +1495,7 @@ export default {
 
     async getWorksiteCount() {
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/worksites`,
+        `${process.env.VUE_APP_API_BASE_URL}/worksites/count`,
         {
           params: {
             incident: this.currentIncidentId,
