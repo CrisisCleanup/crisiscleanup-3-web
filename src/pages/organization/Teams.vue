@@ -61,14 +61,16 @@
               {{ getCaseCompletion(team) }} {{ $t('teams.cases_completed') }}
             </div>
             <div class="mt-2 flex">
-              <Avatar
-                v-for="user in team.users.map((u) => getUser(u))"
-                :key="`${user.id}`"
-                :initials="user.first_name"
-                :url="user.profilePictureUrl"
-                class="mr-2"
-                size="xsmall"
-              />
+              <template v-for="user in team.users.map((u) => getUser(u))">
+                <Avatar
+                  v-if="user"
+                  :key="`${user.id}`"
+                  :initials="user.first_name"
+                  :url="user.profilePictureUrl"
+                  class="mr-2"
+                  size="xsmall"
+                />
+              </template>
             </div>
           </div>
         </div>
