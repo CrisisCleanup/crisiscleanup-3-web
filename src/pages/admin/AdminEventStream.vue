@@ -1,6 +1,20 @@
 <template>
   <div>
-    <base-button icon="sync" :action="getEvents" />
+    <form-select
+      :value="filterEvents"
+      multiple
+      searchable
+      :options="events.map((e) => e.key)"
+      class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
+      @input="
+        (value) => {
+          filterEvents = [];
+          filterEvents = [...value];
+        }
+      "
+      :placeholder="$t('~~Filter By Event')"
+    />
+    <base-button icon="sync" :action="getEventLogs" />
     <ul class="list-none m-0 p-0">
       <li :key="stream.event_key" v-for="stream in eventStream" class="mb-2">
         <div v-if="stream.attr" class="grid grid-flow-col auto-cols-max">
@@ -58,17 +72,25 @@
 
 <script>
 import { DialogsMixin } from '@/mixins';
+import VueTypes from 'vue-types';
+import { getQueryString } from '@/utils/urls';
 
 export default {
+  props: {
+    user: VueTypes.number,
+  },
   data() {
     return {
       eventStream: [],
+      events: [],
+      filterEvents: [],
       showUser: true,
     };
   },
   mixins: [DialogsMixin],
   async mounted() {
     await this.getEvents();
+    await this.getEventLogs();
   },
   methods: {
     getTranslation(tag, attr) {
@@ -81,9 +103,24 @@ export default {
       return this.$t(tag, translated_attrs);
     },
     async getEvents() {
-      this.eventStream = [];
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/event_stream?limit=500`,
+        `${process.env.VUE_APP_API_BASE_URL}/events?limit=500`,
+      );
+      this.events = [...response.data.results];
+    },
+    async getEventLogs() {
+      this.eventStream = [];
+      const query = {
+        limit: 100,
+        event_key__in: this.filterEvents.join(','),
+      };
+      if (this.user) {
+        query.created_by = this.user;
+      }
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${getQueryString(
+          query,
+        )}`,
       );
       this.eventStream = [...response.data.results];
     },
