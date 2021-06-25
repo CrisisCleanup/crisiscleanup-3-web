@@ -2,6 +2,7 @@
   <HomeLayout>
     <template #grid-content>
       <div class="grid--main h-screen">
+        <OrganizationActivity :organization-info="test" />
         <div class="cover-image"></div>
       </div>
     </template>
@@ -10,9 +11,19 @@
 
 <script>
 import HomeLayout from '@/layouts/Home';
+import OrganizationActivity from '@/pages/unauthenticated/OrganizationActivity.vue';
 export default {
   name: 'NotFound',
-  components: { HomeLayout },
+  components: { HomeLayout, OrganizationActivity },
+  data() {
+    return {
+      test: {
+        name: 'Southeastern WI COAD',
+        orgType: 'Humanitarian Service',
+        availability: 'Works in all 50 States',
+      },
+    };
+  },
 };
 </script>
 
