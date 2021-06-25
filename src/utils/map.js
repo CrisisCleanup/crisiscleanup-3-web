@@ -15,8 +15,8 @@ const INTERACTIVE_ZOOM_LEVEL = 12;
 export const mapTileLayer =
   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
 
-// export const mapTileLayerDark =
-//   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
+export const mapTileLayerDark =
+  'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png';
 
 export const mapTileLayerSatellite =
   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
@@ -429,43 +429,16 @@ export function getMarkerLayer(markers, map, context) {
         if (firstDraw) {
           prevZoom = zoom;
           prevCenter = center;
-          markers.forEach(function (marker) {
-            marker.location = marker.patient_location;
-            const coords = project([
-              marker.location.coordinates[1],
-              marker.location.coordinates[0],
-            ]);
-
-            const markerSprite = new Sprite();
-            const markerTemplate = templates.circle;
-            markerSprite.x = coords.x;
-            markerSprite.y = coords.y;
-            markerSprite.x0 = coords.x;
-            markerSprite.y0 = coords.y;
-            markerSprite.interactive = true;
-            markerSprite.anchor.set(0.5, 0.5);
-            markerSprite.on('click', function () {
-              alert();
-            });
-            const svg = markerTemplate
-              .replace('{{fillColor}}', 'red')
-              .replace('{{strokeColor}}', 'black');
-            markerSprite.texture = Texture.from(svg);
-            container.addChild(markerSprite);
-            markerSprites.push(markerSprite);
-          });
         }
-        if (firstDraw || prevZoom !== zoom || prevCenter !== center) {
-          context.$emit('mapMoved', map.getBounds());
-          markerSprites.forEach(function (markerSprite) {
-            if (firstDraw) {
-              markerSprite.scale.set(invScale);
-            } else {
-              markerSprite.currentScale = markerSprite.scale.x;
-              markerSprite.targetScale = invScale;
-            }
-          });
-        }
+        container.children.forEach(function (markerSprite) {
+          // if (!markerSprite.type === 'line') return;
+          if (firstDraw) {
+            markerSprite.scale.set(invScale);
+          } else {
+            markerSprite.currentScale = markerSprite.scale.x;
+            markerSprite.targetScale = invScale;
+          }
+        });
 
         let start = null;
         const delta = 250;
@@ -476,11 +449,60 @@ export function getMarkerLayer(markers, map, context) {
           let lambda = progress / delta;
           if (lambda > 1) lambda = 1;
           lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
-          markerSprites.forEach(function (markerSprite) {
-            markerSprite.scale.set(
-              markerSprite.currentScale +
-                lambda * (markerSprite.targetScale - markerSprite.currentScale),
-            );
+          container.children.forEach(function (markerSprite) {
+            if (markerSprite.type === 'line') {
+              if (markerSprite.currentPoint === 0) markerSprite.clear();
+              markerSprite.lineStyle(50, 0x61d5f8);
+              // markerSprite.moveTo(...markerSprite.mid);
+              // markerSprite.lineTo(...markerSprite.to);
+
+              markerSprite.currentPoint++;
+              if (
+                markerSprite.currentPoint >
+                markerSprite.wayPoints.length - 1
+              ) {
+                return;
+              }
+              // // draw a line segment from the last waypoint
+              // // to the current waypoint
+              // ctx.beginPath();
+              markerSprite.moveTo(
+                markerSprite.wayPoints[markerSprite.currentPoint - 1].x,
+                markerSprite.wayPoints[markerSprite.currentPoint - 1].y,
+              );
+              markerSprite.lineTo(
+                markerSprite.wayPoints[markerSprite.currentPoint].x,
+                markerSprite.wayPoints[markerSprite.currentPoint].y,
+              );
+              requestAnimationFrame(animate);
+              // ctx.stroke();
+              // // increment "t" to get the next waypoint
+              // t++;
+              // const newX =
+              //   markerSprite.from.x -
+              //   (markerSprite.from.x - markerSprite.to.x) / 1000;
+              // const newY =
+              //   markerSprite.from.y -
+              //   (markerSprite.from.y - markerSprite.to.y) / 1000;
+              // // markerSprite.lineTo(...markerSprite.to);
+              // markerSprite.lineTo(newX, newY);
+              // markerSprite.from = [newX, newY];
+
+              // markerSprite.bezierCurveTo(
+              //   markerSprite.from.x,
+              //   markerSprite.from.y,
+              //   markerSprite.mid.x,
+              //   markerSprite.mid.y,
+              //   markerSprite.to.x,
+              //   markerSprite.to.y,
+              // );
+            } else {
+              markerSprite.scale.set(
+                markerSprite.currentScale +
+                  lambda *
+                    (markerSprite.targetScale - markerSprite.currentScale),
+              );
+            }
           });
           renderer.render(container);
           if (progress < delta) {
@@ -488,7 +510,7 @@ export function getMarkerLayer(markers, map, context) {
           }
         }
 
-        if (!firstDraw && prevZoom !== zoom) {
+        if (!firstDraw) {
           frame = requestAnimationFrame(animate);
         }
         firstDraw = false;
@@ -505,4 +527,20 @@ export function getMarkerLayer(markers, map, context) {
   })();
   layer.key = 'marker_layer';
   return layer;
+}
+
+export function calcWaypoints(vertices) {
+  const waypoints = [];
+  for (let i = 1; i < vertices.length; i++) {
+    const pt0 = vertices[i - 1];
+    const pt1 = vertices[i];
+    const dx = pt1.x - pt0.x;
+    const dy = pt1.y - pt0.y;
+    for (let j = 0; j < 200; j++) {
+      const x = pt0.x + (dx * j) / 200;
+      const y = pt0.y + (dy * j) / 200;
+      waypoints.push({ x, y });
+    }
+  }
+  return waypoints;
 }
