@@ -452,7 +452,7 @@ export function getMarkerLayer(markers, map, context) {
           container.children.forEach(function (markerSprite) {
             if (markerSprite.type === 'line') {
               if (markerSprite.currentPoint === 0) markerSprite.clear();
-              markerSprite.lineStyle(50, 0x61d5f8);
+              markerSprite.lineStyle(20, 0x61d5f8);
               // markerSprite.moveTo(...markerSprite.mid);
               // markerSprite.lineTo(...markerSprite.to);
 
