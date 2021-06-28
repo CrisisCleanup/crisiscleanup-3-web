@@ -90,9 +90,21 @@
     >
       More
     </div>
-    <div class="row-span-3" v-if="isMore">
-      <IncidentList :incident-list="organizationInfo.incidents" />
-      <Capability :capability-info="organizationInfo.capabilityInfo" />
+    <div class="row-span-3 rounded" v-if="isMore">
+      <TabbedCard :tabs="tabs">
+        <template #incident>
+          <IncidentList
+            :incident-list="organizationInfo.incidents"
+            class="bg-gray-700 px-5 py-2"
+          />
+        </template>
+        <template #capability>
+          <Capability
+            :capability-info="organizationInfo.capabilityInfo"
+            class="bg-gray-700 px-5 py-2"
+          />
+        </template>
+      </TabbedCard>
     </div>
     <div
       class="row-span-1 text-center text-blue-500 underline"
@@ -106,10 +118,11 @@
 <script>
 import IncidentList from '@/pages/unauthenticated/IncidentList.vue';
 import Capability from '@/pages/unauthenticated/Capability.vue';
+import TabbedCard from '@/components/cards/TabbedCard.vue';
 
 export default {
   name: 'OrganizationActivity',
-  components: { IncidentList, Capability },
+  components: { IncidentList, Capability, TabbedCard },
   props: {
     organizationInfo: {
       type: Object,
@@ -125,6 +138,18 @@ export default {
     return {
       isMore: false,
     };
+  },
+  computed: {
+    tabs() {
+      return [
+        {
+          key: 'incident',
+        },
+        {
+          key: 'capability',
+        },
+      ];
+    },
   },
 };
 </script>
