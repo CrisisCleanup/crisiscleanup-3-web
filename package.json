@@ -235,7 +235,7 @@
     "postcss-responsive-type": "^1.0.0",
     "postcss-will-change": "^3.0.0",
     "postcss-will-change-transition": "^1.2.0",
-    "prettier": "^2.0.5",
+    "prettier": "^2.3.2",
     "raw-loader": "^4.0.1",
     "sass-loader": "^10.0.1",
     "shelljs": "^0.8.4",
