@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded bg-gray-700 text-white grid grid-rows-5 justify-center items-center w-full"
+    class="rounded bg-gray-700 text-white grid grid-rows-7 justify-center items-center w-full"
   >
     <div class="grid grid-cols-4 pt-5 ml-3 row-span-1">
       <div class="flex items-center">
@@ -50,7 +50,7 @@
         <div>{{ (organizationInfo.value/1000000) }}M</div>
       </div>
     </div>
-    <div class="row-span-1" v-if="!isMore">
+    <div class="row-span-2" v-if="!isMore">
       <div class="grid grid-cols-6 text-gray-500">
         <div class="text-xs text-center">NORMAL</div>
         <div class="text-xs text-center">WARNING</div>
@@ -90,8 +90,9 @@
     >
       More
     </div>
-    <div class="row-span-2" v-if="isMore">
+    <div class="row-span-3" v-if="isMore">
       <IncidentList :incident-list="organizationInfo.incidents" />
+      <Capability :capability-info="organizationInfo.capabilityInfo" />
     </div>
     <div
       class="row-span-1 text-center text-blue-500 underline"
@@ -104,10 +105,11 @@
 </template>
 <script>
 import IncidentList from '@/pages/unauthenticated/IncidentList.vue';
+import Capability from '@/pages/unauthenticated/Capability.vue';
 
 export default {
   name: 'OrganizationActivity',
-  components: { IncidentList },
+  components: { IncidentList, Capability },
   props: {
     organizationInfo: {
       type: Object,

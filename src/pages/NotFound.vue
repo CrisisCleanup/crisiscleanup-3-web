@@ -56,6 +56,17 @@ export default {
             value: 2700000,
           },
         ],
+        capabilityInfo: {
+          businessFinancialAssistance: [true, false, true, true, false, false],
+          sbaLoans: [true, false, true, true, false, false],
+          communityMonitoring: [true, false, true, true, false, false],
+          contingencyPlanning: [true, false, true, true, false, false],
+          grantWriting: [true, false, true, true, false, false],
+          preparation: [true, false, true, true, false, false],
+          relationshipBuilding: [true, false, true, true, false, false],
+          systemsMonitoring: [true, false, true, true, false, false],
+          vulnerabilityAssessment: [true, false, true, true, false, false],
+        },
       },
       testImage:
         'https://assets.fireside.fm/file/fireside-images/podcasts/images/b/bc7f1faf-8aad-4135-bb12-83a8af679756/cover.jpg?v=3',

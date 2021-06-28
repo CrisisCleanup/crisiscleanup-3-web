@@ -21,7 +21,7 @@
     </div>
     <div v-for="(incident, index) in incidentList" :key="index">
       <div class="grid grid-cols-6 items-center justify-center">
-        <div class="col-span-2 pr-3">{{ incident.name }}</div>
+        <div class="col-span-2">{{ incident.name }}</div>
         <div class="col-span-1 text-center">
           <div class="text-gray-500">Cases</div>
           <div>{{ incident.cases }}</div>
