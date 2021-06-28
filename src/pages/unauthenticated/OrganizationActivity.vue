@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <div class="row-span-1 grid grid-rows-2 items-center justify-center">
+    <div class="row-span-1 grid grid-rows-2 items-center py-5">
       <div class="row-span-1 flex flex-row mb-1">
         <img src="@/assets/icons/pin.svg" class="mr-1" />
         <span>{{ organizationInfo.address }}</span>
@@ -90,12 +90,12 @@
     >
       More
     </div>
-    <div class="row-span-3 rounded" v-if="isMore">
+    <div class="row-span-3 w-full" v-if="isMore">
       <TabbedCard :tabs="tabs">
         <template #incident>
           <IncidentList
             :incident-list="organizationInfo.incidents"
-            class="bg-gray-700 px-5 py-2"
+            class="bg-gray-700 px-5 py-20 sm:py-5"
           />
         </template>
         <template #capability>
@@ -137,6 +137,7 @@ export default {
   data() {
     return {
       isMore: false,
+      currentView: 'incident',
     };
   },
   computed: {
