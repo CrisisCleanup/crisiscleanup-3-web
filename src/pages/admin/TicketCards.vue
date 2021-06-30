@@ -46,7 +46,8 @@
         <div class="flex flex-row justify-between">
           <div>
             <div class="p-2">
-              <img src="https://via.placeholder.com/50" />
+              <img :src="assignWhoPicture" />
+              <img src="src/assets/triston.png" />
               Assigned To:
               <div v-if="ticketData.assignee_id">
                 {{ assignWho }}
@@ -144,7 +145,7 @@ export default {
         return 'Arron titus';
       }
       if (this.ticketData.assignee_id === 411677450351) {
-        return 'Triston Lewis';
+        return 'src/assets/triston.png';
       }
       if (this.ticketData.assignee_id === 114709872451) {
         return 'Ross Arroyo';
