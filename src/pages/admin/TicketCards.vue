@@ -1,12 +1,17 @@
 <template>
   <div>
-    <div class="min-w-6/12 w-84 bg-white p-2 shadow rounded z-1">
+    <div
+      class="min-w-6/12 bg-white p-2 shadow rounded z-1"
+      style="width: 30rem;"
+    >
       <div name="info" class="flex flex-col">
         <div class="flex flex-row justify-between pb-2">
           <div class="mr-2">
             <div class="font-bold">{{ ticketData.name }}</div>
             <div>{{ ticketData.email }}</div>
             <div>{{ ticketData.phone }}</div>
+            <a href="www.google.com">{{ ticketData.organization.name }}</a>
+            <div>Tobi Addition</div>
           </div>
           <base-link
             :href="`http://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
@@ -46,8 +51,7 @@
         <div class="flex flex-row justify-between">
           <div>
             <div class="p-2">
-              <img :src="assignWhoPicture" />
-              <img src="src/assets/triston.png" />
+              <img style="width: 50px; height: 50px;" :src="assignWhoPicture" />
               Assigned To:
               <div v-if="ticketData.assignee_id">
                 {{ assignWho }}
@@ -57,9 +61,9 @@
                 class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
                 :options="userList"
                 :value="selectedUser"
-                v-model="selectedUser"
                 item-key="key"
                 label="label"
+                @input="(input) => assignUser(input)"
               />
             </div>
           </div>
@@ -68,45 +72,45 @@
           </div>
         </div>
       </div>
-      <div v-if="!dropDownState" @click="changeDropDownState" class="arrow">
-        <div class="arrow-top"></div>
-        <div class="arrow-bottom"></div>
-      </div>
+      <!--      <div v-if='!dropDownState' @click='changeDropDownState' class='arrow'>-->
+      <!--        <div class='arrow-top'></div>-->
+      <!--        <div class='arrow-bottom'></div>-->
+      <!--      </div>-->
 
-      <div v-show="dropDownState" class="h-62">
-        <hr />
+      <!--      <div v-show='dropDownState' class='h-62'>-->
+      <!--        <hr />-->
 
-        <div class="flex flex-row justify-between">
-          <div>Organization Name:</div>
-          <div>{{ ticketData.organization.name }}</div>
-        </div>
+      <!--        <div class='flex flex-row justify-between'>-->
+      <!--          <div>Organization Name:</div>-->
+      <!--          <div>{{ ticketData.organization.name }}</div>-->
+      <!--        </div>-->
 
-        <div class="flex flex-row justify-between">
-          <div>Login Activity:</div>
-          <div>Southeast Baptist Helpers</div>
-        </div>
+      <!--        <div class="flex flex-row justify-between">-->
+      <!--          <div>Login Activity:</div>-->
+      <!--          <div>Southeast Baptist Helpers</div>-->
+      <!--        </div>-->
 
-        <div class="flex flex-row justify-between">
-          <div>Browser Type:</div>
-          <div>Southeast Baptist Helpers</div>
-        </div>
+      <!--        <div class="flex flex-row justify-between">-->
+      <!--          <div>Browser Type:</div>-->
+      <!--          <div>Southeast Baptist Helpers</div>-->
+      <!--        </div>-->
 
-        <div class="flex flex-row justify-between">
-          <div>Operating System:</div>
-          <div>Southeast Baptist Helpers</div>
-        </div>
+      <!--        <div class="flex flex-row justify-between">-->
+      <!--          <div>Operating System:</div>-->
+      <!--          <div>Southeast Baptist Helpers</div>-->
+      <!--        </div>-->
 
-        <div v-if="dropDownState" @click="changeDropDownState" class="arrow-up">
-          <div class="arrow-top"></div>
-          <div class="arrow-bottom"></div>
-        </div>
-      </div>
+      <!--        <div v-if='dropDownState' @click='changeDropDownState' class='arrow-up'>-->
+      <!--          <div class='arrow-top'></div>-->
+      <!--          <div class='arrow-bottom'></div>-->
+      <!--        </div>-->
     </div>
   </div>
 </template>
 
 <script>
 import FormSelect from '../../components/FormSelect.vue';
+
 export default {
   name: 'TicketCards',
   props: {
@@ -116,11 +120,15 @@ export default {
     },
   },
   components: { FormSelect },
+  created() {
+    // this.selectedUser = this.assignWho;
+  },
   data() {
     return {
+      test: null,
       truncateState: true,
       dropDownState: false,
-      selectedUser: '',
+      selectedUser: null,
       userList: ['Arron Titus', 'Triston Lewis', 'Ross Arroyo', 'Gina'],
     };
   },
@@ -142,21 +150,35 @@ export default {
     },
     assignWhoPicture() {
       if (this.ticketData.assignee_id === 484643688) {
-        return 'Arron titus';
+        return require('@/assets/headshots/aarontitus.jpg');
       }
       if (this.ticketData.assignee_id === 411677450351) {
-        return 'src/assets/triston.png';
+        return require('@/assets/headshots/triston.png');
       }
       if (this.ticketData.assignee_id === 114709872451) {
-        return 'Ross Arroyo';
+        return require('@/assets/headshots/rossarroyo.jpeg');
       }
       if (this.ticketData.assignee_id === 403645788712) {
-        return 'Gina';
+        return require('@/assets/headshots/ginanewby.jpg');
       }
       return this.ticketData.assignee_id;
     },
   },
   methods: {
+    async assignUser() {
+      // if (input === 'Triston Lewis') {
+      console.log(this.ticketData.id);
+      const response = await this.$http.put(
+        `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}`,
+        {
+          ticket: {
+            assignee_id: 411677450351,
+          },
+        },
+      );
+      console.log(response);
+      // }
+    },
     toggleTruncate() {
       this.truncateState = !this.truncateState;
     },
