@@ -1,23 +1,6 @@
 <template>
-  <div class="my-2 justify-center items-center">
-    <Table
-      :columns="ticketTable.columns"
-      :data="tickets"
-      style="height: 450px"
-      :body-style="{ maxHeight: '450px' }"
-    >
-      <template #url="slotProps">
-        <base-link
-          :href="`http://crisiscleanup.zendesk.com/agent/tickets/${slotProps.item.id}`"
-          text-variant="bodysm"
-          class="px-2"
-          target="_blank"
-          >{{ $t('adminDashboard.link') }}</base-link
-        >
-      </template>
-    </Table>
-
-    <div class="gridContainer">
+  <div class="">
+    <div class="gridContainer sm:gridContainer-mobile">
       <TicketCards
         :key="`${item.id}-${idx}`"
         v-for="(item, idx) in ticketWithCCData"
@@ -228,14 +211,24 @@ export default {
 </script>
 
 <style>
+@media (min-width: 600px) {
+  .gridContainer {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+
+@media (min-width: 900px) {
+  .gridContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .gridContainer {
-  justify-content: center;
+  @apply mt-6;
+  max-width: 600px;
+
   display: grid;
-  justify-items: stretch;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: auto;
-  column-gap: 20px;
-  row-gap: 20px;
+  grid-gap: 1rem;
 
   &-mobile {
     justify-content: center;
