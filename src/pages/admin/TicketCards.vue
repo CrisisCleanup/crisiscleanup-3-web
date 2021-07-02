@@ -10,8 +10,10 @@
             <div class="font-bold">{{ ticketData.name }}</div>
             <div>{{ ticketData.email }}</div>
             <div>{{ ticketData.phone }}</div>
-            <a href="www.google.com">{{ ticketData.organization.name }}</a>
-            <div>Tobi Addition</div>
+            <base-link text-variant="bodysm" class="px-2" target="_blank "
+              >{{ ticketData.organization.name }}
+            </base-link>
+            <base-button text="Tobi Events" variant="solid" class="m-2 p-1" />
           </div>
           <base-link
             :href="`http://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
@@ -20,55 +22,74 @@
             target="_blank "
             >{{ $t('~~Launch Ticket') }}
           </base-link>
-          <div
-            class="flex text-center items-center rounded h-6 w-12 justify-center text-md flex-wrap"
-            :class="ticketData.status"
-          >
-            {{ ticketData.status }}
+          <div class="flex flex-col">
+            <div
+              class="flex text-center items-center rounded h-6 w-12 justify-center text-md flex-wrap"
+              :class="ticketData.status"
+            >
+              {{ ticketData.status }}
+            </div>
+            <base-button text="Login" variant="solid" class="m-2 p-1" />
           </div>
         </div>
 
         <hr />
-        <div class="font-bold">Created on {{ ticketData.created_at }}</div>
-        <div :class="truncateState ? 'truncate' : ''">
-          {{ ticketData.description }}
-          <div
-            v-if="truncateState"
-            @click="toggleTruncate"
-            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
-          >
-            Read more
+        <div class="font-bold">
+          Created on {{ ticketData.created_at | formatDate }}
+        </div>
+        <div :class="truncateState ? '' : ''">
+          <div v-if="truncateState">
+            {{ ticketData.description | truncate(200) }}
           </div>
-          <div
-            v-else
-            @click="toggleTruncate"
-            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
-          >
-            Read Less
+          <div v-if="!truncateState">{{ ticketData.description }}</div>
+          <div v-if="ticketData.description.length > 200">
+            <div
+              v-if="truncateState"
+              @click="toggleTruncate"
+              class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
+            >
+              Read more
+            </div>
+            <div
+              v-else
+              @click="toggleTruncate"
+              class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
+            >
+              Read Less
+            </div>
           </div>
         </div>
         <hr />
-        <div class="flex flex-row justify-between">
+        <div class="flex justify-between">
           <div>
-            <div class="p-2">
-              <img style="width: 50px; height: 50px;" :src="assignWhoPicture" />
-              Assigned To:
-              <div v-if="ticketData.assignee_id">
-                {{ assignWho }}
+            <div class="flex justify-between p-2">
+              <img
+                class="mr-4"
+                style="width: 50px; height: 50px;"
+                :src="assignWhoPicture"
+              />
+              <div class="flex flex-col mr-4">
+                Assigned To:
+                <div v-if="ticketData.assignee_id">
+                  {{ assignWho }}
+                </div>
+                <div v-else>No user Assigned</div>
               </div>
-              <div v-else>No user Assigned</div>
+
               <form-select
-                class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
+                class="w-auto h-12 flex-grow border border-crisiscleanup-dark-100 select"
                 :options="userList"
                 :value="selectedUser"
                 item-key="key"
                 label="label"
-                @input="(input) => assignUser(input)"
+              />
+              <base-button
+                text="Reassign Ticket"
+                variant="solid"
+                class="m-2 p-1"
+                :action="getComments"
               />
             </div>
-          </div>
-          <div class="flex items-center">
-            <base-button text="Login" variant="solid" class="m-2 p-1" />
           </div>
         </div>
       </div>
@@ -105,14 +126,29 @@
       <!--          <div class='arrow-bottom'></div>-->
       <!--        </div>-->
     </div>
+    <div v-if="true"></div>
   </div>
 </template>
 
 <script>
+import moment from 'moment';
+
 import FormSelect from '../../components/FormSelect.vue';
 
 export default {
   name: 'TicketCards',
+  filters: {
+    formatDate(value) {
+      if (value) {
+        return moment(String(value)).format('MM/DD/YYYY hh:mm');
+      }
+      return null;
+    },
+    truncate(data, num) {
+      const reqdString = data.split('').slice(0, num).join('');
+      return reqdString;
+    },
+  },
   props: {
     ticketData: {
       type: Object,
@@ -120,11 +156,13 @@ export default {
     },
   },
   components: { FormSelect },
-  created() {
+  async mounted() {
     // this.selectedUser = this.assignWho;
+    await this.getComments;
   },
   data() {
     return {
+      comments: null,
       test: null,
       truncateState: true,
       dropDownState: false,
@@ -165,6 +203,17 @@ export default {
     },
   },
   methods: {
+    async getComments() {
+      console.log('comments for get comments');
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}/comments`,
+      );
+      // const { results } = response.data;
+      this.comments = response;
+      console.log(this.comments);
+      console.log(this.comments[0].attachments);
+      console.log(this.comments[0].attachments[0]);
+    },
     async assignUser() {
       // if (input === 'Triston Lewis') {
       console.log(this.ticketData.id);
@@ -223,8 +272,8 @@ export default {
 
   $transition-time: 0.15 s;
   ,
-  &-top,
-  &-bottom {
+  & -top,
+  & -bottom {
     background-color: #666;
     height: 4px;
     left: -5px;
@@ -290,8 +339,8 @@ export default {
 
   $transition-time: 0.15 s;
   ,
-  &-top,
-  &-bottom {
+  & -top,
+  & -bottom {
     background-color: #666;
     height: 4px;
     left: -5px;
