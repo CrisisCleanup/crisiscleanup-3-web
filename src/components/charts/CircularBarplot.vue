@@ -1,7 +1,6 @@
 <template>
   <div class="chart">
     <div class="chart__circular-barplot" id="circular-barplot"></div>
-    <div class="chart__circular-barplot" id="advanced-circular-barplot"></div>
   </div>
 </template>
 
@@ -31,6 +30,7 @@ export type ChartDataT = {|
 |};
 
 export default {
+  name: 'CircularBarplot',
   props: {
     chartData: VueTypes.arrayOf<ChartDataT[]>(
       VueTypes.shape<ChartDataT>({
@@ -62,22 +62,28 @@ export default {
   },
 
   mounted() {
-    this.renderChart(this.chartData);
+    if (this.chartData) {
+      this.renderChart(this.chartData);
+    } else {
+      console.log('No data found');
+    }
   },
 
   watch: {
-    chartData: (newData) => {
-      this.renderChart(newData);
+    chartData: {
+      handler(data) {
+        if (data) {
+          this.destroyChart();
+          this.renderChart(data);
+        } else {
+          console.log('No data found');
+        }
+      },
     },
   },
 
   methods: {
     renderChart(data) {
-      if (!data) {
-        console.log('No data found');
-        return;
-      }
-
       // set the dimensions and margins of the graph
       const margin = {
         top: 20,
@@ -99,7 +105,7 @@ export default {
         .attr('height', height + margin.top + margin.bottom)
         .style(
           'background',
-          'linear-gradient(180deg, #2C3741 44.7%, rgba(44, 55, 65, 0) 100%)',
+          'linear-gradient(rgb(44, 55, 65, 0.85) 0%, rgba(44, 55, 65, 0.95) 100%)',
         )
         .append('g')
         .attr(
@@ -266,16 +272,16 @@ export default {
           .call((g2) =>
             g2
               .selectAll('g')
-              .data(y.ticks(3).slice(1))
+              .data(y.ticks(4).slice(1))
               .join('g')
               .attr('fill', 'none')
               .call((g3) =>
                 g3
                   .append('circle')
-                  .attr('stroke', '#45535F')
+                  .attr('stroke', '#5d717f')
                   .style('stroke-dasharray', '6, 6')
                   .attr('stroke-width', 3)
-                  .attr('stroke-opacity', 0.5)
+                  .attr('stroke-opacity', 0.8)
                   .attr('r', y),
               )
               .call((g4) =>
@@ -403,6 +409,10 @@ export default {
         .style('font-size', '11px')
         .style('fill', 'white')
         .attr('alignment-baseline', 'middle');
+    },
+
+    destroyChart() {
+      d3.select('#circular-barplot svg').remove();
     },
   },
 };
