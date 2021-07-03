@@ -443,6 +443,41 @@ export function getMarkerLayer(markers, map, context) {
         let start = null;
         const delta = 250;
 
+        function createLineAnimation(markerSprite, type = 'arc') {
+          if (markerSprite.frame) {
+            cancelAnimationFrame(markerSprite.frame);
+            markerSprite.frame = null;
+          }
+          if (markerSprite.currentPoint === 0) markerSprite.clear();
+          markerSprite.lineStyle(4 / scale, 0x61d5f8);
+          markerSprite.currentPoint++;
+          if (markerSprite.currentPoint > markerSprite.wayPoints.length - 1) {
+            setTimeout(() => {
+              markerSprite.clear();
+              container.removeChild(markerSprite);
+            }, 250);
+            return;
+          }
+          markerSprite.moveTo(
+            markerSprite.wayPoints[markerSprite.currentPoint - 1].x,
+            markerSprite.wayPoints[markerSprite.currentPoint - 1].y,
+          );
+          if (type === 'arc') {
+            markerSprite.arc(
+              markerSprite.wayPoints[markerSprite.currentPoint].x,
+              markerSprite.wayPoints[markerSprite.currentPoint].y,
+              0.25,
+              0,
+              Math.PI * 2,
+            );
+          } else {
+            markerSprite.lineTo(
+              markerSprite.wayPoints[markerSprite.currentPoint].x,
+              markerSprite.wayPoints[markerSprite.currentPoint].y,
+            );
+          }
+        }
+
         function animate(timestamp) {
           if (start === null) start = timestamp;
           const progress = timestamp - start;
@@ -451,51 +486,8 @@ export function getMarkerLayer(markers, map, context) {
           lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
           container.children.forEach(function (markerSprite) {
             if (markerSprite.type === 'line') {
-              if (markerSprite.currentPoint === 0) markerSprite.clear();
-              markerSprite.lineStyle(20, 0x61d5f8);
-              // markerSprite.moveTo(...markerSprite.mid);
-              // markerSprite.lineTo(...markerSprite.to);
-
-              markerSprite.currentPoint++;
-              if (
-                markerSprite.currentPoint >
-                markerSprite.wayPoints.length - 1
-              ) {
-                return;
-              }
-              // // draw a line segment from the last waypoint
-              // // to the current waypoint
-              // ctx.beginPath();
-              markerSprite.moveTo(
-                markerSprite.wayPoints[markerSprite.currentPoint - 1].x,
-                markerSprite.wayPoints[markerSprite.currentPoint - 1].y,
-              );
-              markerSprite.lineTo(
-                markerSprite.wayPoints[markerSprite.currentPoint].x,
-                markerSprite.wayPoints[markerSprite.currentPoint].y,
-              );
-              requestAnimationFrame(animate);
-              // ctx.stroke();
-              // // increment "t" to get the next waypoint
-              // t++;
-              // const newX =
-              //   markerSprite.from.x -
-              //   (markerSprite.from.x - markerSprite.to.x) / 1000;
-              // const newY =
-              //   markerSprite.from.y -
-              //   (markerSprite.from.y - markerSprite.to.y) / 1000;
-              // // markerSprite.lineTo(...markerSprite.to);
-              // markerSprite.lineTo(newX, newY);
-              // markerSprite.from = [newX, newY];
-
-              // markerSprite.bezierCurveTo(
-              //   markerSprite.from.x,
-              //   markerSprite.from.y,
-              //   markerSprite.mid.x,
-              //   markerSprite.mid.y,
-              //   markerSprite.to.x,
-              //   markerSprite.to.y,
-              // );
+              createLineAnimation(markerSprite);
+              markerSprite.frame = requestAnimationFrame(animate);
             } else {
               markerSprite.scale.set(
                 markerSprite.currentScale +
@@ -536,11 +528,74 @@ export function calcWaypoints(vertices) {
     const pt1 = vertices[i];
     const dx = pt1.x - pt0.x;
     const dy = pt1.y - pt0.y;
-    for (let j = 0; j < 200; j++) {
-      const x = pt0.x + (dx * j) / 200;
-      const y = pt0.y + (dy * j) / 200;
+    for (let j = 0; j < 250; j++) {
+      const x = pt0.x + (dx * j) / 250;
+      const y = pt0.y + (dy * j) / 250;
       waypoints.push({ x, y });
     }
   }
   return waypoints;
+}
+
+export function degreesToRadians(degrees) {
+  const pi = Math.PI;
+  return degrees * (pi / 180);
+}
+
+function getCubicBezierXYatPercent(
+  startPt,
+  controlPt1,
+  controlPt2,
+  endPt,
+  percent,
+) {
+  // cubic helper formula
+  function CubicN(T, a, b, c, d) {
+    const t2 = T * T;
+    const t3 = t2 * T;
+    return (
+      a +
+      (-a * 3 + T * (3 * a - a * T)) * T +
+      (3 * b + T * (-6 * b + b * 3 * T)) * T +
+      (c * 3 - c * 3 * T) * t2 +
+      d * t3
+    );
+  }
+
+  const x = CubicN(percent, startPt.x, controlPt1.x, controlPt2.x, endPt.x);
+  const y = CubicN(percent, startPt.y, controlPt1.y, controlPt2.y, endPt.y);
+  return {
+    x,
+    y,
+  };
+}
+
+export function findBezierPoints(b) {
+  const startPt = b[0];
+  const controlPt1 = b[1];
+  const controlPt2 = b[2];
+  const endPt = b[3];
+  const pts = [b[0]];
+  let lastPt = b[0];
+  const tests = 70;
+  for (let t = 0; t <= tests; t++) {
+    // calc another point along the curve
+    const pt = getCubicBezierXYatPercent(
+      startPt,
+      controlPt1,
+      controlPt2,
+      endPt,
+      t / tests,
+    );
+    // add the pt if it's not already in the pts[] array
+    const dx = pt.x - lastPt.x;
+    const dy = pt.y - lastPt.y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+    const dInt = parseInt(d);
+    if (dInt > 0 || t === tests) {
+      lastPt = pt;
+      pts.push(pt);
+    }
+  }
+  return pts;
 }

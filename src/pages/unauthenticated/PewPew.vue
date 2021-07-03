@@ -291,6 +291,7 @@ import { makeTableColumns } from '@/utils/table';
 
 import {
   calcWaypoints,
+  degreesToRadians, findBezierPoints,
   getMarkerLayer,
   mapAttribution,
   mapTileLayerDark as mapTileLayer,
@@ -323,7 +324,7 @@ export default {
           data: null,
         },
       },
-      incidentStats: null,
+      incidentStats: {},
     };
   },
   async mounted() {
@@ -367,8 +368,8 @@ export default {
         this.map = L.map('map', {
           zoomControl: false,
         }).fitBounds([
-          [36.870832155646326, -78.57421875000001],
-          [36.870832155646326, -78.57421875000001],
+          [17.644022027872726, -122.78314470293876],
+          [50.792047064406866, -69.87298845293874],
         ]);
       }
       const { map } = this;
@@ -384,8 +385,21 @@ export default {
 
       this.incidents = await this.getRecentIncidents();
       this.organizations = await this.getOrganizations();
+      const events = [
+        'user_create_worksite',
+        // 'user_join_wwwtsp_with_organization',
+        'user_update_worksite',
+        'user_read_worksite',
+      ];
+      const params = {
+        limit: 500,
+        event_key__in: events.join(','),
+        sort: 'created_at',
+        incident: 222,
+      };
+      const queryString = getQueryString(params);
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/event_stream?limit=100`,
+        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
       );
       this.markers = response.data.results;
       [this.currentEvent] = this.markers;
@@ -393,6 +407,61 @@ export default {
       worksiteLayer.addTo(map);
 
       map.attributionControl.setPosition('bottomright');
+    },
+    createCurve(actorMarkerSprite, patientMarkerSprite) {
+      const x1 = actorMarkerSprite.x; // in pixels
+      const y1 = actorMarkerSprite.y;
+      const x2 = patientMarkerSprite.x;
+      const y2 = patientMarkerSprite.y;
+      const ang1 = degreesToRadians(30); // in radians
+      const ang2 = degreesToRadians(60);
+
+      const len = Math.hypot(x2 - x1, y2 - y1);
+      const ax1 = Math.cos(ang1) * len * (1 / 4);
+      const ay1 = Math.sin(ang1) * len * (1 / 4);
+
+      const ax2 = Math.cos(ang2) * len * (1 / 4);
+      const ay2 = Math.sin(ang2) * len * (1 / 4);
+      const linksGraphics = new Graphics();
+      linksGraphics.x1 = x1;
+      linksGraphics.y1 = y1;
+      linksGraphics.bezierParams = [
+        x1 + ax1,
+        y1 + ay1,
+        x2 - ax2,
+        y2 - ay2,
+        x2,
+        y2,
+      ];
+      linksGraphics.type = 'line';
+      linksGraphics.lineStyle(15, 0x61d5f8);
+      linksGraphics.moveTo(x1, y1);
+      linksGraphics.bezierCurveTo(...linksGraphics.bezierParams);
+      linksGraphics.wayPoints = findBezierPoints([
+        { x: actorMarkerSprite.x, y: actorMarkerSprite.y },
+        { x: x1 + ax1, y: y1 + ay1 },
+        { x: x1 + ax1, y: y1 + ay1 },
+        { x: patientMarkerSprite.x, y: patientMarkerSprite.y },
+      ]);
+      linksGraphics.currentPoint = 0;
+      return linksGraphics;
+    },
+    createLine(actorMarkerSprite, patientMarkerSprite) {
+      const linksGraphics = new Graphics();
+      const midX = (actorMarkerSprite.x + patientMarkerSprite.x) / 2;
+      const midY = (actorMarkerSprite.y + patientMarkerSprite.y) / 2;
+      linksGraphics.moveTo(actorMarkerSprite.x, actorMarkerSprite.y);
+      linksGraphics.lineTo(patientMarkerSprite.x, patientMarkerSprite.y);
+      linksGraphics.from = [actorMarkerSprite.x, actorMarkerSprite.y];
+      linksGraphics.to = [patientMarkerSprite.x, patientMarkerSprite.y];
+      linksGraphics.mid = [midX, midY];
+      linksGraphics.type = 'line';
+      linksGraphics.wayPoints = calcWaypoints([
+        actorMarkerSprite,
+        patientMarkerSprite,
+      ]);
+      linksGraphics.currentPoint = 0;
+      return linksGraphics;
     },
     generateMarker() {
       this.map.eachLayer((layer) => {
@@ -417,17 +486,19 @@ export default {
             actorMarkerSprite.interactive = true;
             actorMarkerSprite.anchor.set(0.5, 0.5);
             const svg = markerTemplate
-              .replace('{{fillColor}}', 'red')
+              .replace('{{fillColor}}', '#61D5F8')
               .replace('{{strokeColor}}', 'black');
             actorMarkerSprite.texture = Texture.from(svg);
             actorMarkerSprite.visible = true;
             layer._pixiContainer.addChild(actorMarkerSprite);
           }
 
-          if (marker.patient_location) {
+          if (marker.patient_location || marker.recipient_location) {
+            const location =
+              marker.patient_location || marker.recipient_location;
             const patientCoords = layer.utils.latLngToLayerPoint([
-              marker.patient_location.coordinates[1],
-              marker.patient_location.coordinates[0],
+              location.coordinates[1],
+              location.coordinates[0],
             ]);
 
             patientMarkerSprite = new Sprite();
@@ -437,11 +508,8 @@ export default {
             patientMarkerSprite.y0 = patientCoords.y;
             patientMarkerSprite.interactive = false;
             patientMarkerSprite.anchor.set(0.5, 0.5);
-            // patientMarkerSprite.on('click', function () {
-            //   alert();
-            // });
             const svg = markerTemplate
-              .replace('{{fillColor}}', '#61D5F8')
+              .replace('{{fillColor}}', 'red')
               .replace('{{strokeColor}}', 'black');
             patientMarkerSprite.texture = Texture.from(svg);
             patientMarkerSprite.visible = true;
@@ -452,23 +520,10 @@ export default {
           layer.redraw();
 
           if (actorMarkerSprite && patientMarkerSprite) {
-            const midX = (actorMarkerSprite.x + patientMarkerSprite.x) / 2;
-            const midY = (actorMarkerSprite.y + patientMarkerSprite.y) / 2;
-
-            const linksGraphics = new Graphics();
-            linksGraphics.lineStyle(20, 0x61d5f8);
-            linksGraphics.moveTo(actorMarkerSprite.x, actorMarkerSprite.y);
-            linksGraphics.lineTo(patientMarkerSprite.x, patientMarkerSprite.y);
-            linksGraphics.from = [actorMarkerSprite.x, actorMarkerSprite.y];
-            linksGraphics.to = [patientMarkerSprite.x, patientMarkerSprite.y];
-            linksGraphics.mid = [midX, midY];
-            linksGraphics.type = 'line';
-            linksGraphics.wayPoints = calcWaypoints([
+            const linksGraphics = this.createCurve(
               actorMarkerSprite,
               patientMarkerSprite,
-            ]);
-            linksGraphics.currentPoint = 0;
-
+            );
             setTimeout(() => {
               layer._pixiContainer.addChild(linksGraphics);
               layer._renderer.render(layer._pixiContainer);
@@ -479,7 +534,7 @@ export default {
       });
     },
     generatePoints() {
-      this.eventsInterval = setInterval(this.generateMarker, 2000);
+      this.eventsInterval = setInterval(this.generateMarker, 200);
     },
     pauseGeneratePoints() {
       clearInterval(this.eventsInterval);
