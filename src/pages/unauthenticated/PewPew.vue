@@ -291,7 +291,8 @@ import { makeTableColumns } from '@/utils/table';
 
 import {
   calcWaypoints,
-  degreesToRadians, findBezierPoints,
+  degreesToRadians,
+  findBezierPoints,
   getMarkerLayer,
   mapAttribution,
   mapTileLayerDark as mapTileLayer,
@@ -302,7 +303,6 @@ import { getQueryString } from '@/utils/urls';
 import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics } from 'pixi.js';
 
-const locations = [];
 export default {
   name: 'PewPew',
   components: { Table, BarChart },
