@@ -309,11 +309,13 @@ export default {
   data() {
     return {
       markers: [],
+      events: [],
       incidents: [],
       organizations: [],
       templates,
       colors,
       map: null,
+      lastEventTimestamp: null,
       colorMode: 'Light Mode',
       routes: HomeNavigation,
       currentEvent: null,
@@ -363,6 +365,30 @@ export default {
 
       this.mapLoading = false;
     },
+    async getAllEvents() {
+      const params = {
+        limit: 500,
+        event_key__in: this.events.join(','),
+        sort: 'created_at',
+        incident: 222,
+      };
+      const queryString = getQueryString(params);
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
+      );
+      this.markers = response.data.results;
+      [this.currentEvent] = this.markers;
+
+      // let next;
+      // next = response.data.next;
+      // while (next) {
+      //   // eslint-disable-next-line no-await-in-loop
+      //   const chunk = await this.$http.get(next);
+      //   this.markers.push(...chunk.data.results);
+      //   next = chunk.data.next;
+      // }
+      // this.pollNewEvents();
+    },
     async renderMap() {
       if (!this.map) {
         this.map = L.map('map', {
@@ -385,24 +411,14 @@ export default {
 
       this.incidents = await this.getRecentIncidents();
       this.organizations = await this.getOrganizations();
-      const events = [
+      this.events = [
         'user_create_worksite',
         // 'user_join_wwwtsp_with_organization',
         'user_update_worksite',
-        'user_read_worksite',
+        // 'user_read_worksite',
       ];
-      const params = {
-        limit: 500,
-        event_key__in: events.join(','),
-        sort: 'created_at',
-        incident: 222,
-      };
-      const queryString = getQueryString(params);
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
-      );
-      this.markers = response.data.results;
-      [this.currentEvent] = this.markers;
+      await this.getAllEvents();
+      this.lastEventTimestamp = this.$moment().toISOString();
       const worksiteLayer = getMarkerLayer([], map, this);
       worksiteLayer.addTo(map);
 
@@ -414,14 +430,14 @@ export default {
       const x2 = patientMarkerSprite.x;
       const y2 = patientMarkerSprite.y;
       const ang1 = degreesToRadians(30); // in radians
-      const ang2 = degreesToRadians(60);
+      const ang2 = degreesToRadians(30);
 
       const len = Math.hypot(x2 - x1, y2 - y1);
-      const ax1 = Math.cos(ang1) * len * (1 / 4);
-      const ay1 = Math.sin(ang1) * len * (1 / 4);
+      const ax1 = Math.cos(ang1) * len * (1 / 3);
+      const ay1 = Math.sin(ang1) * len * (1 / 3);
 
-      const ax2 = Math.cos(ang2) * len * (1 / 4);
-      const ay2 = Math.sin(ang2) * len * (1 / 4);
+      const ax2 = Math.cos(ang2) * len * (1 / 3);
+      const ay2 = Math.sin(ang2) * len * (1 / 3);
       const linksGraphics = new Graphics();
       linksGraphics.x1 = x1;
       linksGraphics.y1 = y1;
@@ -485,7 +501,8 @@ export default {
             actorMarkerSprite.y0 = actorCoords.y;
             actorMarkerSprite.interactive = true;
             actorMarkerSprite.anchor.set(0.5, 0.5);
-            const svg = markerTemplate
+            actorMarkerSprite.type = 'actor'
+            const svg = templates.orb
               .replace('{{fillColor}}', '#61D5F8')
               .replace('{{strokeColor}}', 'black');
             actorMarkerSprite.texture = Texture.from(svg);
@@ -534,7 +551,7 @@ export default {
       });
     },
     generatePoints() {
-      this.eventsInterval = setInterval(this.generateMarker, 200);
+      this.eventsInterval = setInterval(this.generateMarker, 1000);
     },
     pauseGeneratePoints() {
       clearInterval(this.eventsInterval);
@@ -619,6 +636,26 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/reports_data/incident_statistics?incident=60`,
       );
       this.incidentStats = response.data;
+    },
+    pollNewEvents() {
+      setInterval(() => {
+        const params = {
+          limit: 500,
+          event_key__in: this.events.join(','),
+          sort: 'created_at',
+          incident: 222,
+          created_at__gt: this.lastEventTimestamp,
+        };
+        const queryString = getQueryString(params);
+        this.$http
+          .get(
+            `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
+          )
+          .then(({ data }) => {
+            this.markers.push(...data.results);
+            this.lastEventTimestamp = this.$moment().toISOString();
+          });
+      }, 50000);
     },
   },
   computed: {

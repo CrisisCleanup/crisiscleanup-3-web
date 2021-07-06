@@ -906,8 +906,16 @@ const wellness_check = `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="htt
     </g>{{multiple}}
 </svg>`;
 
+const orb = `<svg width="30" height="30" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="10" cy="10.2568" r="10" fill="#61D5F8" fill-opacity="0.2"/>
+<circle cx="10" cy="10.2568" r="7" fill="#61D5F8" fill-opacity="0.2"/>
+<circle cx="10" cy="10.2568" r="3" fill="#61D5F8"/>
+</svg>
+`
+
 const templates = {
   circle,
+  orb,
   plus,
   animal_services,
   catchment_gutters,

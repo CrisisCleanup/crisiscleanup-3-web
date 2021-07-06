@@ -9,6 +9,8 @@ import * as moment from 'moment';
 import { solveCollision } from '@/utils/easing';
 import { colors, templates } from '@/icons/icons_templates';
 import Worksite from '@/models/Worksite';
+import { GlowFilter } from '@pixi/filter-glow';
+
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -448,14 +450,20 @@ export function getMarkerLayer(markers, map, context) {
             cancelAnimationFrame(markerSprite.frame);
             markerSprite.frame = null;
           }
-          if (markerSprite.currentPoint === 0) markerSprite.clear();
-          markerSprite.lineStyle(4 / scale, 0x61d5f8);
+          if (markerSprite.currentPoint === 0) {
+            markerSprite.clear();
+            // markerSprite.filters = [new GlowFilter({ distance: 12, outerStrength: 1, color: 0x61d5f8})];
+          }
+          markerSprite.lineStyle(2.5 / scale, 0x61d5f8);
           markerSprite.currentPoint++;
           if (markerSprite.currentPoint > markerSprite.wayPoints.length - 1) {
-            setTimeout(() => {
-              markerSprite.clear();
-              container.removeChild(markerSprite);
-            }, 250);
+            markerSprite.alpha -= 0.0025;
+            if (markerSprite.alpha === 0) {
+              setTimeout(() => {
+                markerSprite.clear();
+                container.removeChild(markerSprite);
+              }, 3000);
+            }
             return;
           }
           markerSprite.moveTo(
@@ -466,7 +474,7 @@ export function getMarkerLayer(markers, map, context) {
             markerSprite.arc(
               markerSprite.wayPoints[markerSprite.currentPoint].x,
               markerSprite.wayPoints[markerSprite.currentPoint].y,
-              0.25,
+              0,
               0,
               Math.PI * 2,
             );
@@ -489,6 +497,15 @@ export function getMarkerLayer(markers, map, context) {
               createLineAnimation(markerSprite);
               markerSprite.frame = requestAnimationFrame(animate);
             } else {
+              if (markerSprite.type === 'actor') {
+                markerSprite.alpha -= 0.0015;
+                if (markerSprite.alpha === 0) {
+                  setTimeout(() => {
+                    markerSprite.clear();
+                    container.removeChild(markerSprite);
+                  }, 3000);
+                }
+              }
               markerSprite.scale.set(
                 markerSprite.currentScale +
                   lambda *
