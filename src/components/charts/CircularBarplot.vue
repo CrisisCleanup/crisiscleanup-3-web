@@ -1,7 +1,5 @@
 <template>
-  <div class="chart">
-    <div class="chart__circular-barplot" id="circular-barplot"></div>
-  </div>
+  <div id="circular-barplot" v-bind="$attrs"></div>
 </template>
 
 <script>
@@ -40,7 +38,7 @@ export default {
         closed: VueTypes.number,
       }),
     ).def(() =>
-      Array.from({ length: 24 * 4 }, (v, i) => ({
+      Array.from({ length: 24 * 6 }, (v, i) => ({
         name: `id-${i}`,
         timestamp: new Date(
           +new Date() - Math.floor(Math.random() * 100000000),
@@ -59,6 +57,45 @@ export default {
       required: false,
       default: true,
     },
+
+    /**
+     * top, bottom, left, right margins
+     */
+    margin: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+  },
+
+  data() {
+    return {};
+  },
+
+  computed: {
+    width() {
+      const w = +d3.select('#circular-barplot').style('width').slice(0, -2);
+      console.log(w);
+      return w - this.margin * 2;
+    },
+
+    height() {
+      const h = +d3.select('#circular-barplot').style('height').slice(0, -2);
+      console.log(h);
+      return h - this.margin * 2;
+    },
+
+    innerRadius() {
+      return Math.min(this.width, this.height) / 6;
+    },
+
+    outerRadius() {
+      return Math.min(this.width, this.height) / 2;
+    },
+
+    labelFontSize() {
+      return 10;
+    },
   },
 
   mounted() {
@@ -71,6 +108,7 @@ export default {
 
   watch: {
     chartData: {
+      immediate: true,
       handler(data) {
         if (data) {
           this.destroyChart();
@@ -80,29 +118,31 @@ export default {
         }
       },
     },
+
+    isStacked: {
+      handler() {
+        this.destroyChart();
+        this.renderChart(this.chartData);
+      },
+    },
   },
 
   methods: {
-    renderChart(data) {
-      // set the dimensions and margins of the graph
-      const margin = {
-        top: 20,
-        right: 20,
-        bottom: 20,
-        left: 20,
-      };
-      const width = 600 - margin.left - margin.right;
-      const height = 600 - margin.top - margin.bottom;
-      const innerRadius = Math.min(width, height) / 6;
-      const outerRadius = Math.min(width, height) / 2; // the outerRadius goes from the middle of the SVG area to the border
-      const textLabelFontSize = 14;
+    renderInnerCircle(svg) {
+      return svg
+        .append('g')
+        .append('circle')
+        .attr('r', this.innerRadius)
+        .attr('fill', '#13141Eaa');
+    },
 
+    renderChart(data) {
       // append the svg object
       const svg = d3
         .select('#circular-barplot')
         .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
+        .attr('width', this.width + this.margin * 2)
+        .attr('height', this.height + this.margin * 2)
         .style(
           'background',
           'linear-gradient(rgb(44, 55, 65, 0.85) 0%, rgba(44, 55, 65, 0.95) 100%)',
@@ -110,92 +150,15 @@ export default {
         .append('g')
         .attr(
           'transform',
-          `translate(${width / 2 + margin.left}, ${height / 2 + margin.top})`,
+          `translate(${this.width / 2 + this.margin}, ${
+            this.height / 2 + this.margin
+          })`,
         );
 
       // Add inner circle
-      svg
-        .append('g')
-        .append('circle')
-        .attr('r', innerRadius)
-        .attr('fill', '#13141Eaa');
+      this.renderInnerCircle(svg);
 
-      const textbox = svg
-        .append('g')
-        .attr('class', 'text-label')
-        .attr('transform', `translate(0, ${innerRadius * 0.1})`)
-        .append('text')
-        .attr('text-anchor', 'middle')
-        .attr('font-size', `${textLabelFontSize}px`)
-        .attr('fill', '#fefefe');
-
-      function showBarInfo(info) {
-        // remove existing tspan
-        textbox.selectAll('tspan').remove();
-
-        const textContainer = textbox
-          .selectAll('tspan')
-          .data([info], (d) => d.name)
-          .enter();
-
-        textContainer
-          .append('tspan')
-          .text('Cases')
-          .attr('font-size', `${textLabelFontSize + 8}px`)
-          .attr('x', 0)
-          .attr('y', '-2.5rem');
-
-        textContainer
-          .append('tspan')
-          .text('Open')
-          .attr('x', 0)
-          .attr('y', '-1rem');
-
-        textContainer
-          .append('tspan')
-          .text((d) => d.open)
-          .attr('x', 0)
-          .attr('font-size', `${textLabelFontSize + 4}px`)
-          .attr('y', '0rem');
-
-        textContainer
-          .append('tspan')
-          .text('Closed')
-          .attr('x', 0)
-          .attr('y', '1.5rem');
-
-        textContainer
-          .append('tspan')
-          .text((d) => d.closed)
-          .attr('font-size', `${textLabelFontSize + 4}px`)
-          .attr('x', 0)
-          .attr('y', '2.5rem');
-      }
-
-      function handleMouseOver(event, d) {
-        d3.select(this)
-          .style('filter', 'brightness(70%)')
-          .style('transform', 'scale(1.015)')
-          .style('opacity', '1')
-          .style('transition', 'all 200ms');
-
-        showBarInfo(d);
-      }
-
-      function handleMouseOut() {
-        d3.select(this)
-          .style('filter', 'brightness(100%)')
-          .style('transform', 'scale(1)')
-          .style('transition', 'all 200ms');
-
-        showBarInfo({
-          name: 'Overall Info',
-          timestamp: new Date(),
-          closed: d3.sum(data.map((d) => d.closed)),
-          open: d3.sum(data.map((d) => d.open)),
-        });
-      }
-
+      // add x and y scales
       const x = d3
         .scaleBand()
         .range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
@@ -204,7 +167,7 @@ export default {
 
       const y = d3
         .scaleRadial()
-        .range([innerRadius, outerRadius]) // Domain will be define later.
+        .range([this.innerRadius, this.outerRadius]) // Domain will be define later.
         .domain([
           0,
           this.isStacked
@@ -215,13 +178,160 @@ export default {
               ),
         ]); // set domain based on chart type (stacked | unstacked)
 
+      const textContainer = svg
+        .append('g')
+        .attr('class', 'text-label')
+        .attr('transform', `translate(0, ${this.innerRadius * 0.1})`)
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('font-size', `${this.labelFontSize}px`)
+        .attr('fill', '#fefefe');
+
+      this.renderOverallInfo(textContainer, data);
+
+      this.renderOpenCases(svg, data, x, y, textContainer);
+
+      this.renderClosedCases(svg, data, x, y, textContainer);
+
+      this.renderAxesAndLabels(svg, data, x, y);
+    },
+
+    renderOverallInfo(textContainer, data) {
+      this.renderCaseInfo(textContainer, {
+        name: 'Overall Info',
+        timestamp: new Date(),
+        closed: d3.sum(data.map((d) => d.closed)),
+        open: d3.sum(data.map((d) => d.open)),
+      });
+    },
+
+    renderOpenCases(svg, data, x, y, textContainer) {
+      const vm = this;
+      svg
+        .append('g')
+        .selectAll('path')
+        .data(data, (d) => d.name)
+        .join('path')
+        .attr('fill', '#728091')
+        .attr('transform', 'scale(1.4)')
+        .classed('open-case-path', true)
+        .attr(
+          'd',
+          d3
+            .arc()
+            .innerRadius(y(0))
+            .outerRadius((d) => y(d.closed))
+            .startAngle((d) => x(d.name))
+            .endAngle(x(0) + x.bandwidth())
+            .padAngle(0.015)
+            .padRadius((d) => y(d.closed)),
+        )
+        .on('mouseover', function (event, d) {
+          d3.select(this)
+            .style('filter', 'brightness(70%)')
+            .style('transform', 'scale(1.015)')
+            .style('opacity', '1')
+            .style('transition', 'all 200ms');
+          vm.renderCaseInfo(textContainer, d);
+        })
+        .on('mouseout', function (event, d) {
+          d3.select(this)
+            .style('filter', 'brightness(100%)')
+            .style('transform', 'scale(1)')
+            .style('transition', 'all 200ms');
+
+          vm.renderOverallInfo(textContainer, d);
+        })
+        .transition()
+        .delay((d, i) => i * 15)
+        .duration(500)
+        .attr(
+          'd',
+          this.isStacked
+            ? d3
+                .arc()
+                .innerRadius((d) => y(d.closed))
+                .outerRadius((d) => y(d.closed + d.open))
+                .startAngle((d) => x(d.name))
+                .endAngle((d) => x(d.name) + x.bandwidth())
+                .padAngle(0.015)
+                .padRadius((d) => y(d.closed))
+            : d3
+                .arc()
+                .innerRadius(this.innerRadius)
+                .outerRadius((d) => y(d.open))
+                .startAngle((d) => x(d.name))
+                .endAngle((d) => x(d.name) + x.bandwidth())
+                .padAngle(0.003)
+                .padRadius(this.innerRadius),
+        )
+        .attr('transform', 'scale(1)');
+    },
+
+    renderClosedCases(svg, data, x, y, textContainer) {
+      const vm = this;
+
+      svg
+        .append('g')
+        .selectAll('path')
+        .data(data, (d) => d.name)
+        .join('path')
+        .attr('fill', '#61D5F8')
+        .attr('class', 'closed-case-path')
+        .attr('transform', 'scale(1.2)')
+        .attr(
+          'd',
+          d3
+            .arc()
+            .innerRadius(y(0))
+            .outerRadius(y(0))
+            .startAngle((d) => x(d.name))
+            .endAngle(x(0) + x.bandwidth())
+            .padAngle(0.03)
+            .padRadius(this.innerRadius),
+        )
+        .on('mouseover', function (event, d) {
+          d3.select(this)
+            .style('filter', 'brightness(70%)')
+            .style('transform', 'scale(1.015)')
+            .style('opacity', '1')
+            .style('transition', 'all 200ms');
+
+          vm.renderCaseInfo(textContainer, d);
+        })
+        .on('mouseout', function () {
+          d3.select(this)
+            .style('filter', 'brightness(100%)')
+            .style('transform', 'scale(1)')
+            .style('transition', 'all 200ms');
+
+          vm.renderOverallInfo(textContainer, data);
+        })
+        .transition()
+        .delay((d, i) => i * 15)
+        .duration(500)
+        .attr(
+          'd',
+          d3
+            .arc()
+            .innerRadius(this.innerRadius)
+            .outerRadius((d) => y(d.closed))
+            .startAngle((d) => x(d.name))
+            .endAngle((d) => x(d.name) + x.bandwidth())
+            .padAngle(0.03)
+            .padRadius(this.innerRadius),
+        )
+        .attr('transform', 'scale(1)');
+    },
+
+    renderAxesAndLabels(svg, data, x, y) {
       const xTimeLabels = Array.from({ length: 24 }, (v, i) => i + 1);
 
       const timeScale = d3
         .scaleBand()
         .range([0, 2 * Math.PI])
         .align(0)
-        .domain(Array.from(xTimeLabels.map((d) => d)));
+        .domain(xTimeLabels);
 
       const xAxis = (g) =>
         g.attr('text-anchor', 'middle').call((g1) =>
@@ -233,9 +343,9 @@ export default {
               'transform',
               (d) => `
           rotate(${
-            ((timeScale(d) + timeScale.bandwidth() / 2) * 180) / Math.PI - 90
+            ((timeScale(d) + timeScale.bandwidth() / 2) * 180) / Math.PI - 81
           })
-          translate(${innerRadius},0)
+          translate(${this.innerRadius}, 0)
         `,
             )
             .call((g2) =>
@@ -244,7 +354,7 @@ export default {
             .call((g3) =>
               g3
                 .append('text')
-                .attr('font-size', '12px')
+                .attr('font-size', '9px')
                 .attr('fill', '#fefefe')
                 .attr('transform', (d) =>
                   (timeScale(d) + timeScale.bandwidth() / 2 + Math.PI / 2) %
@@ -298,88 +408,54 @@ export default {
                   .attr('stroke', 'none'),
               ),
           );
-
-      // Add bars for new cases
-      svg
-        .append('g')
-        .selectAll('path')
-        .data(data, (d) => d.name)
-        .join('path')
-        .attr('fill', '#728091')
-        .attr('class', 'open-case-path')
-        .attr(
-          'd',
-          d3
-            .arc()
-            .innerRadius(y(0))
-            .outerRadius(y(0))
-            .startAngle((d) => x(d.name))
-            .endAngle(x(0) + x.bandwidth()),
-        )
-        .on('mouseover', handleMouseOver)
-        .on('mouseout', handleMouseOut)
-        .transition()
-        .delay((d, i) => i * 15)
-        .duration(500)
-        .attr(
-          'd',
-          d3
-            .arc()
-            .innerRadius((d) => y(d.closed))
-            .outerRadius((d) => y(d.closed + d.open))
-            .startAngle((d) => x(d.name))
-            .endAngle((d) => x(d.name) + x.bandwidth())
-            .padAngle(0.015)
-            .padRadius((d) => y(d.closed)),
-        );
-
-      // Add bars for closed cases
-      svg
-        .append('g')
-        .selectAll('path')
-        .data(data, (d) => d.name)
-        .join('path')
-        .attr('fill', '#61D5F8')
-        .attr('class', 'closed-case-path')
-        .attr(
-          'd',
-          d3
-            .arc()
-            .innerRadius(y(0))
-            .outerRadius(y(0))
-            .startAngle((d) => x(d.name))
-            .endAngle(x(0) + x.bandwidth()),
-        )
-        .on('mouseover', handleMouseOver)
-        .on('mouseout', handleMouseOut)
-        .transition()
-        .delay((d, i) => i * 15)
-        .duration(500)
-        .attr(
-          'd',
-          d3
-            .arc()
-            .innerRadius(innerRadius)
-            .outerRadius((d) => y(d.closed))
-            .startAngle((d) => x(d.name))
-            .endAngle((d) => x(d.name) + x.bandwidth())
-            .padAngle(0.03)
-            .padRadius(innerRadius),
-        );
-
-      showBarInfo({
-        name: 'Overall Info',
-        timestamp: new Date(),
-        closed: d3.sum(data.map((d) => d.closed)),
-        open: d3.sum(data.map((d) => d.open)),
-      });
-
       svg.append('g').call(xAxis);
       svg.append('g').call(yAxis);
     },
 
+    renderCaseInfo(textbox, info) {
+      // remove existing tspan
+      textbox.selectAll('tspan').remove();
+
+      const textContainer = textbox
+        .selectAll('tspan')
+        .data([info], (d) => d.name)
+        .enter();
+
+      textContainer
+        .append('tspan')
+        .text('Cases')
+        .attr('font-size', `${this.labelFontSize + 8}px`)
+        .attr('x', 0)
+        .attr('y', '-2rem');
+
+      textContainer
+        .append('tspan')
+        .text('Open')
+        .attr('x', 0)
+        .attr('y', '-1rem');
+
+      textContainer
+        .append('tspan')
+        .text((d) => d.open)
+        .attr('x', 0)
+        .attr('font-size', `${this.labelFontSize + 4}px`)
+        .attr('y', '0rem');
+
+      textContainer
+        .append('tspan')
+        .text('Closed')
+        .attr('x', 0)
+        .attr('y', '1rem');
+
+      textContainer
+        .append('tspan')
+        .text((d) => d.closed)
+        .attr('font-size', `${this.labelFontSize + 4}px`)
+        .attr('x', 0)
+        .attr('y', '2rem');
+    },
+
     renderOpenCaseLabels(svg, data, x, y) {
-      // Add the labels
       svg
         .append('g')
         .selectAll('g')
@@ -418,10 +494,4 @@ export default {
 };
 </script>
 
-<style scoped lang="postcss">
-.chart {
-  @apply flex justify-center items-center;
-  &__circular-barplot {
-  }
-}
-</style>
+<style scoped lang="postcss"></style>
