@@ -85,12 +85,15 @@ export default {
       events: [],
       filterEvents: [],
       showUser: true,
+      loading: false,
     };
   },
   mixins: [DialogsMixin],
   async mounted() {
+    this.loading = true;
     await this.getEvents();
     await this.getEventLogs();
+    this.loading = false;
   },
   methods: {
     getTranslation(tag, attr) {

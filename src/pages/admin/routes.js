@@ -2,7 +2,7 @@ import AdminPage from '@/pages/admin/Index.vue';
 import AdminDashboard from '@/pages/admin/AdminDashboard.vue';
 import AdminOrganization from '@/pages/admin/AdminOrganization.vue';
 import AdminEvents from '@/pages/admin/AdminEvents.vue';
-import AdminEventStream from '@/pages/admin/AdminEventStream.vue';
+import AdminEventStream from '@/components/AdminEventStream.vue';
 import AdminTicketDashboard from '@/pages/admin/AdminTicketDashboard.vue';
 const routes = [
   {

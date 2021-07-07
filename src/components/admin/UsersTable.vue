@@ -21,6 +21,18 @@
           }
         "
       />
+      <base-button
+        :text="$t('~~See Events')"
+        :alt="$t('~~See Events')"
+        variant="solid"
+        size="small"
+        class="mx-2"
+        :action="
+          () => {
+            showUserEvents(slotProps.item);
+          }
+        "
+      />
     </template>
     <template #active_roles="slotProps">
       {{ getHighestRole(slotProps.item.active_roles) }}
@@ -43,10 +55,12 @@ import User from '@/models/User';
 import axios from 'axios';
 import { mapMutations } from 'vuex';
 import Role from '@/models/Role';
+import { DialogsMixin } from '@/mixins';
 
 export default {
   name: 'UsersTable',
   components: { Table },
+  mixins: [DialogsMixin],
   props: {
     users: {
       type: Array,
@@ -86,6 +100,17 @@ export default {
       );
       this.setUser(response.data);
       window.location.reload();
+    },
+    async showUserEvents(user) {
+      await this.$component({
+        title: `Events for User ${user.id}: ${user.first_name} ${user.last_name} ${user.email}`,
+        component: 'AdminEventStream',
+        classes: 'w-full h-96 overflow-auto',
+        modalClasses: 'bg-white max-w-3xl shadow',
+        props: {
+          user: user.id,
+        },
+      });
     },
   },
   data() {

@@ -2,7 +2,11 @@
   <transition name="modal">
     <div class="modal-mask">
       <div class="modal-wrapper">
-        <div class="modal-container bg-white flex flex-col justify-between">
+        <div
+          class="modal-container bg-white flex flex-col justify-between"
+          :class="modalClasses"
+          :style="modalStyle"
+        >
           <div class="modal-header flex-shrink">
             <div
               v-if="title"
@@ -23,7 +27,7 @@
           </div>
 
           <div class="modal-body flex-grow">
-            <div>
+            <div :class="modalBodyClasses">
               <component
                 :is="dynamicComponent"
                 v-bind="props"
@@ -85,6 +89,18 @@ export default {
       type: String,
       default: '',
     },
+    modalClasses: {
+      type: null,
+      default: 'max-w-lg',
+    },
+    modalBodyClasses: {
+      type: null,
+      default: null,
+    },
+    modalStyle: {
+      type: null,
+      default: null,
+    },
     props: {
       type: Object,
       default: () => {
@@ -122,7 +138,6 @@ export default {
 .modal-container {
   margin: 0 auto;
   transition: all 0.3s ease;
-  @apply max-w-lg;
 }
 
 .modal-default-button {
