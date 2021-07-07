@@ -22,6 +22,15 @@
           <span class=""
             ><span v-if="showUser"
               ><span
+                @click="
+                  () => {
+                    showUserEvents(
+                      stream.actor_id,
+                      `${stream.attr.actor_first_name} ${stream.attr.actor_last_name}`,
+                    );
+                  }
+                "
+                class="underline text-primary-dark cursor-pointer"
                 >{{ stream.attr.actor_first_name }}
                 {{ stream.attr.actor_last_name }}</span
               >
@@ -78,6 +87,7 @@ import { getQueryString } from '@/utils/urls';
 export default {
   props: {
     user: VueTypes.number,
+    limit: VueTypes.number.def(100),
   },
   data() {
     return {
@@ -114,7 +124,7 @@ export default {
     async getEventLogs() {
       this.eventStream = [];
       const query = {
-        limit: 100,
+        limit: this.limit,
         event_key__in: this.filterEvents.join(','),
       };
       if (this.user) {
@@ -126,6 +136,18 @@ export default {
         )}`,
       );
       this.eventStream = [...response.data.results];
+    },
+    async showUserEvents(userId, name) {
+      await this.$component({
+        title: `Events for User ${userId}: ${name}`,
+        component: 'AdminEventStream',
+        classes: 'w-full h-96 overflow-auto',
+        modalClasses: 'bg-white max-w-3xl shadow',
+        props: {
+          user: userId,
+          limit: 200,
+        },
+      });
     },
     async showEventAttrs(stream) {
       await this.$component({

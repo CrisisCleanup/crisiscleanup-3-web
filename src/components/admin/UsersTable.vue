@@ -109,6 +109,7 @@ export default {
         modalClasses: 'bg-white max-w-3xl shadow',
         props: {
           user: user.id,
+          limit: 200,
         },
       });
     },
