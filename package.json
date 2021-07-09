@@ -90,7 +90,7 @@
     "lodash": "^4.17.21",
     "marker-clusterer-plus": "^2.1.4",
     "moment-duration-format": "^2.3.2",
-    "moment-timezone": "^0.5.31",
+    "moment-timezone": "^0.5.33",
     "parse-address": "^1.1.2",
     "pixi-filters": "^3.1.1",
     "pixi.js": "^5.3.3",
