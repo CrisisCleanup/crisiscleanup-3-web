@@ -85,7 +85,7 @@
     "leaflet-pixi-overlay": "^1.8.1",
     "leaflet.gridlayer.googlemutant": "^0.8.0",
     "leaflet.heat": "^0.2.0",
-    "leaflet.markercluster": "^1.4.1",
+    "leaflet.markercluster": "^1.5.0",
     "libphonenumber-js": "^1.7.57",
     "lodash": "^4.17.21",
     "marker-clusterer-plus": "^2.1.4",
