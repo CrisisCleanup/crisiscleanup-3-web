@@ -23676,10 +23676,10 @@ typeface-montserrat@^0.0.75:
   resolved "https://registry.yarnpkg.com/typeface-montserrat/-/typeface-montserrat-0.0.75.tgz#b796d9c767ab8ed1343271985beb1e44b382b7b3"
   integrity sha512-8ski20t3hdwu2T85pVfjK4jsDbwW8yWzd+LAKxYEmu+JVLVlB7G2yfmdKZz06pUwYCLVFvHvup+NYYulHDpE+w==
 
-typeface-nunito-sans@^0.0.72:
-  version "0.0.72"
-  resolved "https://registry.yarnpkg.com/typeface-nunito-sans/-/typeface-nunito-sans-0.0.72.tgz#c99198a8d62ebdda0399dbe8cd81586a0976a01c"
-  integrity sha512-b58R4movZchZJNe5pWvqMVoJzKRs7GP09iIri4WWQOs9+G+yjoTSIpOUMU2xtLmxuyXUo1F8XhnOHY06kSDhuQ==
+typeface-nunito-sans@^1.1.13:
+  version "1.1.13"
+  resolved "https://registry.yarnpkg.com/typeface-nunito-sans/-/typeface-nunito-sans-1.1.13.tgz#c27635416b7c8df7414a5ce087ed9e3a9f16772d"
+  integrity sha512-wpRTCwHdHcq4CKBBGzTDNAjck64O1prpCjKiUJyMFHn+E9k1aELJuSVeMBsgScdR1b5u7HFP1Px7Gi2OUMu33w==
 
 typescript-compiler@^1.4.1-2:
   version "1.4.1-2"
