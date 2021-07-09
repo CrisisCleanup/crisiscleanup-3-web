@@ -158,7 +158,7 @@
     "@sentry/browser": "^5.21.1",
     "@sentry/integrations": "^5.21.1",
     "@sentry/webpack-plugin": "^1.14.1",
-    "@storybook/addon-a11y": "^6.0.26",
+    "@storybook/addon-a11y": "^6.3.4",
     "@storybook/addon-actions": "^6.0.20",
     "@storybook/addon-backgrounds": "^6.0.26",
     "@storybook/addon-centered": "^5.3.21",
