@@ -166,7 +166,7 @@
                 <tr>
                   <th
                     :key="idx"
-                    style="color: darkgrey;"
+                    style="color: darkgrey"
                     v-for="(headers,idx )in [
                       'Ticket Id',
         'Requester Id',
@@ -180,20 +180,20 @@
                   </th>
                 </tr>
                 <tr :key="idx" class="text-" v-for="(items, idx) in newData">
-                  <th style="width: 7%;">{{ items.id }}</th>
+                  <th style="width: 7%">{{ items.id }}</th>
 
-                  <th style="width: 8%;">{{ items.requester_id }}</th>
+                  <th style="width: 8%">{{ items.requester_id }}</th>
 
-                  <th style="width: 10%;">{{ items.created }}</th>
+                  <th style="width: 10%">{{ items.created }}</th>
 
-                  <th style="width: 65%;">{{ items.description }}</th>
+                  <th style="width: 65%">{{ items.description }}</th>
 
-                  <th style="width: 5%;">{{ items.via }}</th>
+                  <th style="width: 5%">{{ items.via }}</th>
 
                   <th>
                     <div
                       class="text-center flex justify-center"
-                      style="background-color: #fece09; padding: 2px;"
+                      style="background-color: #fece09; padding: 2px"
                     >
                       <a
                         class="flex"

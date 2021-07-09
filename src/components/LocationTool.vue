@@ -1,6 +1,6 @@
 <template>
-  <div style="display: grid; grid-template-rows: auto 1fr;">
-    <div class="h-16 flex items-center w-full" style="z-index: 10000;">
+  <div style="display: grid; grid-template-rows: auto 1fr">
+    <div class="h-16 flex items-center w-full" style="z-index: 10000">
       <autocomplete
         icon="search"
         :suggestions="locationResults"
@@ -13,7 +13,15 @@
       >
         <template #result="slotProps">
           <div
-            class="flex justify-between text-sm p-2 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
+            class="
+              flex
+              justify-between
+              text-sm
+              p-2
+              cursor-pointer
+              hover:bg-crisiscleanup-light-grey
+              border-b
+            "
           >
             <span>{{ slotProps.suggestion.item.name }}</span>
             <span class="text-crisiscleanup-grey-700">{{
@@ -40,12 +48,12 @@
     </div>
     <div
       class="layers-tool flex-grow relative"
-      style="position: relative; min-height: 400px;"
+      style="position: relative; min-height: 400px"
     >
       <div
         ref="buttons"
         class="absolute w-full h-8 ml-4 mt-4 flex"
-        style="z-index: 1001;"
+        style="z-index: 1001"
       >
         <div class="flex mr-4">
           <MapButton
@@ -124,8 +132,18 @@
           />
         </div>
         <base-button
-          class="bg-white p-1 border ml-5 flex items-center justify-center px-2 text-crisiscleanup-lightblue-900"
-          style="height: 37px;"
+          class="
+            bg-white
+            p-1
+            border
+            ml-5
+            flex
+            items-center
+            justify-center
+            px-2
+            text-crisiscleanup-lightblue-900
+          "
+          style="height: 37px"
           :text="$t('locationTool.upload_layer_plus')"
           :action="
             () => {
@@ -175,7 +193,7 @@
         <div
           v-if="incident || organization"
           class="bg-white p-1 border ml-5 flex items-center justify-center"
-          style="height: 37px;"
+          style="height: 37px"
         >
           <base-checkbox :disabled="worksitesLoading" @input="toggleWorksites">
             {{ $t('locationTool.show_cases') }}
@@ -184,7 +202,7 @@
         <div
           v-if="organization"
           class="bg-white p-1 border ml-5 flex items-center justify-center"
-          style="height: 37px;"
+          style="height: 37px"
         >
           <base-checkbox @input="toggleIncidents">
             {{ $t('locationTool.show_incidents') }}

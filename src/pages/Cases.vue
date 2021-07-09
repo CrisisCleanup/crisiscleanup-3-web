@@ -10,7 +10,7 @@
         <div class="p-3 border border-gray-300 card-header bg-white">
           <div class="flex items-center flex-wrap justify-between">
             <div class="flex items-center">
-              <div class="flex" style="min-width: 80px;">
+              <div class="flex" style="min-width: 80px">
                 <ccu-icon
                   :alt="$t('casesVue.map_view')"
                   size="medium"
@@ -68,7 +68,7 @@
                 :title="sviTitle"
               ></svi-slider>
             </div>
-            <div class="flex worksite-actions" style="color: #4c4c4d;">
+            <div class="flex worksite-actions" style="color: #4c4c4d">
               <base-dropdown class-name="borderless">
                 <base-button
                   slot="btn"
@@ -507,18 +507,40 @@
                     </div>
                     <div
                       slot="footer"
-                      class="flex items-center justify-center p-2 bg-white border-t"
+                      class="
+                        flex
+                        items-center
+                        justify-center
+                        p-2
+                        bg-white
+                        border-t
+                      "
                     >
                       <base-button
                         variant="solid"
-                        class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
+                        class="
+                          border
+                          text-base
+                          p-2
+                          px-4
+                          mx-2
+                          text-black
+                          border-primary-light
+                        "
                         :action="updateStatusSelected"
                         :text="$t('actions.ok')"
                         :alt="$t('actions.ok')"
                       />
                       <base-button
                         type="bare"
-                        class="border border-black mx-2 text-base p-2 px-4 text-black"
+                        class="
+                          border border-black
+                          mx-2
+                          text-base
+                          p-2
+                          px-4
+                          text-black
+                        "
                         :action="
                           () => {
                             showingUpdateStatusModal = false;
@@ -549,7 +571,8 @@
                         :value="unchangedStatusOnUnclaim"
                         @input="
                           () => {
-                            unchangedStatusOnUnclaim = !unchangedStatusOnUnclaim;
+                            unchangedStatusOnUnclaim =
+                              !unchangedStatusOnUnclaim;
                             updateStatusOnUnclaim = !unchangedStatusOnUnclaim;
                           }
                         "
@@ -569,18 +592,40 @@
                     </div>
                     <div
                       slot="footer"
-                      class="flex items-center justify-center p-2 bg-white border-t"
+                      class="
+                        flex
+                        items-center
+                        justify-center
+                        p-2
+                        bg-white
+                        border-t
+                      "
                     >
                       <base-button
                         variant="solid"
-                        class="border text-base p-2 px-4 mx-2 text-black border-primary-light"
+                        class="
+                          border
+                          text-base
+                          p-2
+                          px-4
+                          mx-2
+                          text-black
+                          border-primary-light
+                        "
                         :action="unclaimSelected"
                         :text="$t('actions.ok')"
                         :alt="$t('actions.ok')"
                       />
                       <base-button
                         type="bare"
-                        class="border border-black mx-2 text-base p-2 px-4 text-black"
+                        class="
+                          border border-black
+                          mx-2
+                          text-base
+                          p-2
+                          px-4
+                          text-black
+                        "
                         :action="
                           () => {
                             showingUnclaimModal = false;
@@ -625,11 +670,24 @@
       data-cy="worksiteview"
     >
       <div
-        style="background-color: white;"
-        class="border border-r-0 border-l-0 border-gray-300 card-header flex items-center"
+        style="background-color: white"
+        class="
+          border border-r-0 border-l-0 border-gray-300
+          card-header
+          flex
+          items-center
+        "
       >
         <div
-          class="w-1/2 h-full p-3 flex items-center justify-center cursor-pointer"
+          class="
+            w-1/2
+            h-full
+            p-3
+            flex
+            items-center
+            justify-center
+            cursor-pointer
+          "
           :class="{ 'tab-active': isNewWorksite }"
           @click="createNewWorksite"
         >
@@ -671,7 +729,15 @@
           isViewingWorksiteFlag ||
           isNewWorksite
         "
-        class="text-crisiscleanup-grey-700 text-lg flex p-2 bg-white justify-between items-start border-b"
+        class="
+          text-crisiscleanup-grey-700 text-lg
+          flex
+          p-2
+          bg-white
+          justify-between
+          items-start
+          border-b
+        "
         data-cy="worksiteview_actions"
       >
         <template v-if="isViewingWorksiteHistory">
@@ -894,7 +960,14 @@
         <textarea
           v-model="noClaimReason"
           rows="4"
-          class="text-base form-field border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none resize-none"
+          class="
+            text-base
+            form-field
+            border border-crisiscleanup-dark-100
+            placeholder-crisiscleanup-dark-200
+            outline-none
+            resize-none
+          "
         />
       </div>
       <div

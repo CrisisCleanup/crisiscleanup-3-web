@@ -2,7 +2,12 @@
   <div class="flex flex-col w-64 ml-4 px-2">
     <div class="flex justify-between">
       <span
-        class="text-crisiscleanup-grey-900 text-sm flex items-center justify-start"
+        class="
+          text-crisiscleanup-grey-900 text-sm
+          flex
+          items-center
+          justify-start
+        "
         >{{ $t('svi.most_vulnerable') }}
         <ccu-icon
           v-tooltip="{

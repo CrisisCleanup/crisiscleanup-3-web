@@ -102,13 +102,8 @@ export default {
     fieldErrors: VueTypes.any.def([]),
   },
   setup(props, context) {
-    const {
-      eventKey,
-      eventPoints,
-      eventLocale,
-      requiredAttr,
-      fieldErrors,
-    } = toRefs(props);
+    const { eventKey, eventPoints, eventLocale, requiredAttr, fieldErrors } =
+      toRefs(props);
 
     const eventData = reactive({
       key: eventKey,

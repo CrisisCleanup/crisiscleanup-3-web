@@ -2,8 +2,19 @@
   <div class="flex h-full relative">
     <div
       v-if="loading"
-      style="z-index: 1001;"
-      class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+      style="z-index: 1001"
+      class="
+        absolute
+        bottom-0
+        left-0
+        right-0
+        top-0
+        bg-crisiscleanup-light-grey
+        opacity-75
+        flex
+        items-center
+        justify-center
+      "
     >
       <spinner />
     </div>
@@ -165,7 +176,15 @@
 
           <textarea
             v-model="currentLocation.notes"
-            class="text-base my-2 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
+            class="
+              text-base
+              my-2
+              border border-crisiscleanup-dark-100
+              placeholder-crisiscleanup-dark-200
+              outline-none
+              p-2
+              resize-none
+            "
             rows="4"
             :placeholder="$t('locationVue.notes')"
           />

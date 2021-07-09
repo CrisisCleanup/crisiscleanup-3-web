@@ -13,7 +13,7 @@
         v-bind="{ ...i, ...getEventFetchProps(i.type) }"
         @update:value="(payload) => updateValue(payload)"
       >
-        <template #option="{option}">
+        <template #option="{ option }">
           <base-text variant="h3">{{ option.name_t }}</base-text>
           <base-text variant="h4" regular>{{ option.key }}</base-text>
         </template>
@@ -32,7 +32,7 @@
           (options) => [...options, { id: -1, name_t: $t('eventBuilder.none') }]
         "
       >
-        <template #option="{option}">
+        <template #option="{ option }">
           <base-text variant="h3">{{ option.name_t }}</base-text>
           <base-text variant="h4" regular>{{ option.key }}</base-text>
         </template>

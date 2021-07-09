@@ -522,12 +522,8 @@ class ControllerStore extends VuexModule {
   @Action
   async updateCallerHistory({ agent_id }) {
     this.setLoading({ callerHistory: true });
-    const {
-      recent_contacts,
-      state,
-      entered_timestamp,
-      locale,
-    } = await Agent.api().getMetrics(agent_id);
+    const { recent_contacts, state, entered_timestamp, locale } =
+      await Agent.api().getMetrics(agent_id);
     let recentContacts = recent_contacts;
     // find all unique case ids and prefetch em
     let recentCases = _.uniq(

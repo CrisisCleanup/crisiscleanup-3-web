@@ -9,13 +9,24 @@
     <div
       v-if="mapLoading"
       data-cy="worksitemap-loader"
-      class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+      class="
+        absolute
+        bottom-0
+        left-0
+        right-0
+        top-0
+        bg-crisiscleanup-light-grey
+        opacity-75
+        flex
+        items-center
+        justify-center
+      "
     >
       <spinner />
     </div>
     <div
       class="flex flex-col absolute"
-      style="z-index: 1001; top: 10px; left: 10px;"
+      style="z-index: 1001; top: 10px; left: 10px"
     >
       <div class="zoom-control flex flex-col mb-5">
         <base-button
@@ -30,7 +41,14 @@
               map.zoomIn();
             }
           "
-          class="w-8 h-8 border-crisiscleanup-dark-100 border-t border-l border-r bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
+          class="
+            w-8
+            h-8
+            border-crisiscleanup-dark-100 border-t border-l border-r
+            bg-white
+            shadow-xl
+            text-xl text-crisiscleanup-dark-400
+          "
         />
         <base-button
           text=""
@@ -44,7 +62,14 @@
               map.zoomOut();
             }
           "
-          class="w-8 h-8 border border-crisiscleanup-dark-100 bg-white shadow-xl text-xl text-crisiscleanup-dark-400"
+          class="
+            w-8
+            h-8
+            border border-crisiscleanup-dark-100
+            bg-white
+            shadow-xl
+            text-xl text-crisiscleanup-dark-400
+          "
         />
       </div>
       <base-button
@@ -62,7 +87,16 @@
         :action="goToInteractive"
         icon="tree"
         icon-size="lg"
-        class="w-8 h-8 border my-1 border-crisiscleanup-dark-100 bg-white shadow-xl text-crisiscleanup-dark-400"
+        class="
+          w-8
+          h-8
+          border
+          my-1
+          border-crisiscleanup-dark-100
+          bg-white
+          shadow-xl
+          text-crisiscleanup-dark-400
+        "
         @mouseenter.native="enableInteractiveTooltip"
       />
       <base-button
@@ -73,12 +107,20 @@
         ccu-event="user_ui-zoom-all"
         icon-size="lg"
         :action="goToIncidentCenter"
-        class="w-8 h-8 border border-crisiscleanup-dark-100 my-1 bg-white shadow-xl text-crisiscleanup-dark-400"
+        class="
+          w-8
+          h-8
+          border border-crisiscleanup-dark-100
+          my-1
+          bg-white
+          shadow-xl
+          text-crisiscleanup-dark-400
+        "
       />
     </div>
     <div
       class="flex flex-col absolute"
-      style="z-index: 1001; top: 10px; right: 10px;"
+      style="z-index: 1001; top: 10px; right: 10px"
       v-show="false"
     >
       <div class="zoom-control flex flex-col mb-5">
@@ -95,7 +137,13 @@
               selectedLayer = mapTileLayer;
             }
           "
-          class="w-8 h-8 border-crisiscleanup-dark-100 border-t border-l border-r shadow-xl text-xl"
+          class="
+            w-8
+            h-8
+            border-crisiscleanup-dark-100 border-t border-l border-r
+            shadow-xl
+            text-xl
+          "
           :class="
             selectedLayer === mapTileLayer
               ? 'bg-crisiscleanup-dark-400 text-white'
@@ -126,7 +174,7 @@
     </div>
     <template v-if="!mapLoading">
       <div
-        style="z-index: 1001;"
+        style="z-index: 1001"
         class="legend absolute left-0 bottom-0 w-72 bg-white border-2 p-2"
         v-if="showingLegend"
       >
@@ -181,8 +229,20 @@
         </div>
       </div>
       <div
-        style="z-index: 1001;"
-        class="legend absolute left-0 bottom-0 w-16 bg-white border-2 p-2 h-24 flex justify-center"
+        style="z-index: 1001"
+        class="
+          legend
+          absolute
+          left-0
+          bottom-0
+          w-16
+          bg-white
+          border-2
+          p-2
+          h-24
+          flex
+          justify-center
+        "
         v-else
       >
         <font-awesome-icon
@@ -266,25 +326,22 @@ export default {
       ],
       timeout: null,
       legendColors: {
-        [this.$t('worksiteMap.unclaimed')]: colors.open_unassigned_unclaimed
-          .fillColor,
-        [this.$t('worksiteMap.claimed_not_started')]: colors
-          .open_unassigned_claimed.fillColor,
-        [this.$t('worksiteMap.in_progress')]: colors.open_assigned_claimed
-          .fillColor,
-        [this.$t('worksiteMap.partially_completed')]: colors[
-          'open_partially-completed_claimed'
-        ].fillColor,
-        [this.$t('worksiteMap.needs_follow_up')]: colors[
-          'open_needs-follow-up_claimed'
-        ].fillColor,
-        [this.$t('worksiteMap.completed')]: colors.closed_completed_claimed
-          .fillColor,
-        [this.$t('worksiteMap.done_by_others_no_help_wanted')]: colors[
-          'closed_done-by-others_unclaimed'
-        ].fillColor,
-        [this.$t('worksiteMap.out_of_scope_duplicate_unresponsive')]: colors
-          .open_unresponsive_unclaimed.fillColor,
+        [this.$t('worksiteMap.unclaimed')]:
+          colors.open_unassigned_unclaimed.fillColor,
+        [this.$t('worksiteMap.claimed_not_started')]:
+          colors.open_unassigned_claimed.fillColor,
+        [this.$t('worksiteMap.in_progress')]:
+          colors.open_assigned_claimed.fillColor,
+        [this.$t('worksiteMap.partially_completed')]:
+          colors['open_partially-completed_claimed'].fillColor,
+        [this.$t('worksiteMap.needs_follow_up')]:
+          colors['open_needs-follow-up_claimed'].fillColor,
+        [this.$t('worksiteMap.completed')]:
+          colors.closed_completed_claimed.fillColor,
+        [this.$t('worksiteMap.done_by_others_no_help_wanted')]:
+          colors['closed_done-by-others_unclaimed'].fillColor,
+        [this.$t('worksiteMap.out_of_scope_duplicate_unresponsive')]:
+          colors.open_unresponsive_unclaimed.fillColor,
       },
       mapLoading: false,
       showingLegend: true,

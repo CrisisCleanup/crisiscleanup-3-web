@@ -134,13 +134,30 @@
         </div>
         <!-- Info Card w/ Sketch -->
         <div
-          class="my-2 mx-3 bg-white shadow w-70 h-70 text-center align-middle flex-wrap"
+          class="
+            my-2
+            mx-3
+            bg-white
+            shadow
+            w-70
+            h-70
+            text-center
+            align-middle
+            flex-wrap
+          "
         >
           <div class="flex flex-row">
             <div class="flex flex-col w-3/4 justify-around">
               <div class="m-5">
                 <h1
-                  class="text-center pt-50% px-5 py-5 text-2xl text-crisiscleanup-dark-400 font-hairline"
+                  class="
+                    text-center
+                    pt-50%
+                    px-5
+                    py-5
+                    text-2xl text-crisiscleanup-dark-400
+                    font-hairline
+                  "
                 >
                   {{ $t('about.transparent_collaborative_privacy') }}
                 </h1>
@@ -450,7 +467,7 @@
             <img
               src="@/assets/partners/aws_logo.png"
               class="m-5"
-              style="width: 12rem; height: 8rem;"
+              style="width: 12rem; height: 8rem"
             />
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
@@ -636,7 +653,18 @@
         </div>
         <!-- Info Card w/ Sketch pt2 -->
         <div
-          class="my-2 mx-3 bg-white shadow w-70 h-70 content-center flex-wrap align-middle pt-15"
+          class="
+            my-2
+            mx-3
+            bg-white
+            shadow
+            w-70
+            h-70
+            content-center
+            flex-wrap
+            align-middle
+            pt-15
+          "
         >
           <div class="flex flex-row justify-around">
             <div class="flex-col w-1/4">
@@ -644,7 +672,13 @@
             </div>
             <div class="flex-col w-3/4 m-7">
               <h1
-                class="m-5 px-5 py-5 text-center text-2xl text-crisiscleanup-dark-400 font-hairline"
+                class="
+                  m-5
+                  px-5
+                  py-5
+                  text-center text-2xl text-crisiscleanup-dark-400
+                  font-hairline
+                "
               >
                 {{ $t('about.innovation_is_coordination') }}
               </h1>

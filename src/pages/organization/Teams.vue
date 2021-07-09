@@ -9,10 +9,7 @@
         @input="onSearch"
       ></base-input>
     </div>
-    <div
-      style="display: grid; grid-template-columns: 0.75fr 2fr;"
-      class="h-120"
-    >
+    <div style="display: grid; grid-template-columns: 0.75fr 2fr" class="h-120">
       <div class="border bg-white">
         <div class="flex items-center justify-between px-2 py-3">
           <span>{{ $t('teams.team_management') }}</span>
@@ -38,7 +35,14 @@
           <div
             v-for="team in teams"
             :key="`${team.id}`"
-            class="h-full px-4 pt-2 pb-6 hover:bg-crisiscleanup-light-grey cursor-pointer"
+            class="
+              h-full
+              px-4
+              pt-2
+              pb-6
+              hover:bg-crisiscleanup-light-grey
+              cursor-pointer
+            "
             :class="
               String(team.id) === String($route.params.team_id)
                 ? 'bg-crisiscleanup-light-grey'

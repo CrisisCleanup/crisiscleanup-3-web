@@ -428,9 +428,8 @@ class StreamsStore extends VuexModule {
         } else {
           this.updateContact(payload).then(() => {
             Log.info('Contact => CONNECTED');
-            const voiceConn: connect.VoiceConnection = ACS.getConnectionByContactId(
-              contact.contactId,
-            );
+            const voiceConn: connect.VoiceConnection =
+              ACS.getConnectionByContactId(contact.contactId);
             if (voiceConn) {
               if (voiceConn.getType() === 'inbound') {
                 if (this.nextInboundAction === InboundActions.SKIP) {

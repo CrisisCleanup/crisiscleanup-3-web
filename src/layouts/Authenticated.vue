@@ -4,7 +4,7 @@
       <div class="layout" :class="{ 'layout--mobile': $mq === 'sm' }">
         <router-link v-if="$mq !== 'sm'" :to="logoRoute.to" class="logo--grid">
           <div class="logo flex justify-center p-3">
-            <img src="@/assets/crisiscleanup_logo.png" style="height: 53px;" />
+            <img src="@/assets/crisiscleanup_logo.png" style="height: 53px" />
           </div>
         </router-link>
         <NavMenu
@@ -312,9 +312,8 @@ export default {
           if (size(translations) > 0) {
             this.$i18n.setLocaleMessage(currentLanguage, translations);
             this.$i18n.locale = currentLanguage;
-            this.$http.defaults.headers.common[
-              'Accept-Language'
-            ] = currentLanguage;
+            this.$http.defaults.headers.common['Accept-Language'] =
+              currentLanguage;
             document
               .querySelector('html')
               .setAttribute('lang', currentLanguage);

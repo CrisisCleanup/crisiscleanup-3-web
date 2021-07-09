@@ -1,9 +1,18 @@
 <template>
-  <div style="height: 85%;" class="h-full flex justify-center">
+  <div style="height: 85%" class="h-full flex justify-center">
     <div class="h-full flex flex-col w-3/4 shadow my-6">
       <div class="h-full w-full bg-white flex flex-col">
         <div
-          class="border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
+          class="
+            border-b
+            px-4
+            py-2
+            font-semibold
+            flex
+            justify-between
+            items-center
+            h-16
+          "
         >
           {{ currentUser.full_name }}
           <div class="flex justify-end">
@@ -102,7 +111,12 @@
                 <hr class="p-2 m-auto" />
                 <div class="flex pb-4">
                   <UserRolesSelect
-                    class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
+                    class="
+                      w-1/2
+                      flex-grow
+                      mr-2
+                      border border-crisiscleanup-dark-100
+                    "
                     :user="currentUser"
                   />
                   <form-select
@@ -214,7 +228,13 @@
                 <h3>{{ $t('profileUser.your_organization') }}</h3>
                 <div class="py-3 flex items-center">
                   <div
-                    class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300 border border-black"
+                    class="
+                      w-8
+                      h-8
+                      rounded-full
+                      bg-crisiscleanup-grey-300
+                      border border-black
+                    "
                   />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
@@ -476,9 +496,8 @@ export default {
           if (size(translations) > 0) {
             this.$i18n.setLocaleMessage(currentLanguage, translations);
             this.$i18n.locale = currentLanguage;
-            this.$http.defaults.headers.common[
-              'Accept-Language'
-            ] = currentLanguage;
+            this.$http.defaults.headers.common['Accept-Language'] =
+              currentLanguage;
             document
               .querySelector('html')
               .setAttribute('lang', currentLanguage);

@@ -3,7 +3,7 @@
     <Table
       :columns="ticketTable.columns"
       :data="tickets"
-      style="height: 450px;"
+      style="height: 450px"
       :body-style="{ maxHeight: '450px' }"
     >
       <template #url="slotProps">

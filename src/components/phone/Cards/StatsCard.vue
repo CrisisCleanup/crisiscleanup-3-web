@@ -57,13 +57,10 @@ export default {
     metrics: VueTypes.any,
   },
   setup(props, context) {
-    const {
-      currentAgentMetrics,
-      agentMetricsReady,
-    } = useGetters('phone.controller', [
-      'currentAgentMetrics',
-      'agentMetricsReady',
-    ]);
+    const { currentAgentMetrics, agentMetricsReady } = useGetters(
+      'phone.controller',
+      ['currentAgentMetrics', 'agentMetricsReady'],
+    );
 
     const stats = computed(() => {
       const _stats = new Map();

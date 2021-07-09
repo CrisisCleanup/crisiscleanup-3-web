@@ -120,7 +120,16 @@
           <textarea
             rows="3"
             v-model="currentNotes"
-            class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
+            class="
+              text-base
+              border border-crisiscleanup-dark-100
+              placeholder-crisiscleanup-dark-200
+              outline-none
+              p-2
+              my-2
+              resize-none
+              w-full
+            "
             :placeholder="$t('phoneConnectFirst.notes')"
           ></textarea>
           <base-button
@@ -148,7 +157,7 @@
           @savedWorksite="clearCase"
           @closeWorksite="clearCase"
           class="border shadow mb-4"
-          style="grid-template-rows: 600px 80px; height: 700px;"
+          style="grid-template-rows: 600px 80px; height: 700px"
           @navigateToWorksite="
             (id) => {
               currentType = 'worksite';

@@ -60,7 +60,12 @@
             <div slot="popover" class="flex flex-col">
               <base-button
                 data-cy="auth.userprofile.profile"
-                class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
+                class="
+                  text-base
+                  p-2
+                  hover:bg-crisiscleanup-light-grey
+                  cursor-pointer
+                "
                 :text="$t('actions.profile')"
                 :action="
                   () => {
@@ -70,7 +75,12 @@
               />
               <base-button
                 data-cy="auth.userprofile.logout"
-                class="text-base p-2 hover:bg-crisiscleanup-light-grey cursor-pointer"
+                class="
+                  text-base
+                  p-2
+                  hover:bg-crisiscleanup-light-grey
+                  cursor-pointer
+                "
                 :text="$t('actions.logout')"
                 :action="() => $emit('auth:logout')"
               />

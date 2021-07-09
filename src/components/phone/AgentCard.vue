@@ -197,18 +197,13 @@ export default {
       tests: [2, 3, 4],
     });
 
-    const {
-      agent,
-      agentState,
-      toggleAgentState,
-      acwDuration,
-      connected,
-    } = useAgentState({
-      ...useAgent(),
-      context,
-      // isTrained: props.trainingComplete,
-      isTrained: true,
-    });
+    const { agent, agentState, toggleAgentState, acwDuration, connected } =
+      useAgentState({
+        ...useAgent(),
+        context,
+        // isTrained: props.trainingComplete,
+        isTrained: true,
+      });
 
     const handleStateChange = async (args) => {
       // if (!props.trainingComplete) {

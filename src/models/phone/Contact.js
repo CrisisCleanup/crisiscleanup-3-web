@@ -309,9 +309,8 @@ export default class Contact extends Model {
       );
     }
     if ([ContactActions.DESTROYED].includes(model.action)) {
-      const isCallActive = Contact.store().getters[
-        'phone.controller/isCallActive'
-      ];
+      const isCallActive =
+        Contact.store().getters['phone.controller/isCallActive'];
       if (isCallActive) {
         Log.info('Agent has not closed contact! Preventing ACW exit...');
         return false;
@@ -546,12 +545,10 @@ export default class Contact extends Model {
   static resolveAttributes(contact: typeof Contact) {
     const {
       currentOutbound,
-    }: { currentOutbound: null | typeof PhoneOutbound } = Contact.store().state[
-      'phone.controller'
-    ];
-    const { resolveRequested, resolveTask } = Contact.store().state.entities[
-      'phone/contact'
-    ];
+    }: { currentOutbound: null | typeof PhoneOutbound } =
+      Contact.store().state['phone.controller'];
+    const { resolveRequested, resolveTask } =
+      Contact.store().state.entities['phone/contact'];
     if (resolveRequested) {
       Log.debug('case resolution already requested, checking for updates...');
       const connectContact = ACS.getContactById(contact.contactId);
@@ -700,9 +697,8 @@ export default class Contact extends Model {
   async getOutbounds(): Promise<typeof PhoneOutbound[]> {
     const {
       currentOutbound,
-    }: { currentOutbound: null | typeof PhoneOutbound } = Contact.store().state[
-      'phone.controller'
-    ];
+    }: { currentOutbound: null | typeof PhoneOutbound } =
+      Contact.store().state['phone.controller'];
     if (currentOutbound) {
       return [currentOutbound];
     }

@@ -1,7 +1,15 @@
 <template>
   <div class="flex flex-col h-full" data-cy="myorg-dashboard">
     <div
-      class="h-12 bg-white mx-5 border-t flex justify-center text-crisiscleanup-grey-700"
+      class="
+        h-12
+        bg-white
+        mx-5
+        border-t
+        flex
+        justify-center
+        text-crisiscleanup-grey-700
+      "
     >
       <template v-for="r in routes">
         <router-link

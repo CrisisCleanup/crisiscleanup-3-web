@@ -2,7 +2,7 @@
   <div>
     <form
       v-if="showSchedule"
-      style="z-index: 1001;"
+      style="z-index: 1001"
       class="p-2 border"
       :class="containerClass"
       @change="logChange"
@@ -36,7 +36,14 @@
             <div class="flex items-center">
               {{ $t('recurringSchedule.every') }}
               <input
-                class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
+                class="
+                  w-10
+                  border border-crisiscleanup-dark-100
+                  placeholder-crisiscleanup-dark-200
+                  outline-none
+                  mx-2
+                  text-center
+                "
                 v-model="dayInterval"
               />
               {{ $t('recurringSchedule.day_s') }}
@@ -59,7 +66,14 @@
           <div class="py-2">
             {{ $t('recurringSchedule.recur_every') }}
             <input
-              class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none mx-2 text-center"
+              class="
+                w-10
+                border border-crisiscleanup-dark-100
+                placeholder-crisiscleanup-dark-200
+                outline-none
+                mx-2
+                text-center
+              "
               v-model="weekInterval"
               @input="logChange"
             />

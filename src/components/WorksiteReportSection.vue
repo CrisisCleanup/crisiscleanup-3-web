@@ -53,7 +53,13 @@
             <td class="text-right border p-1">
               <div v-if="currentTimeEdit.id === entry.id">
                 <input
-                  class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none text-center"
+                  class="
+                    w-10
+                    border border-crisiscleanup-dark-100
+                    placeholder-crisiscleanup-dark-200
+                    outline-none
+                    text-center
+                  "
                   :value="entry.volunteers"
                   @input="currentTimeEdit.volunteers = $event.target.value"
                 />
@@ -65,7 +71,13 @@
             <td class="text-right border p-1">
               <div v-if="currentTimeEdit.id === entry.id">
                 <input
-                  class="w-10 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none text-center"
+                  class="
+                    w-10
+                    border border-crisiscleanup-dark-100
+                    placeholder-crisiscleanup-dark-200
+                    outline-none
+                    text-center
+                  "
                   :value="entry.seconds / 3600"
                   @input="currentTimeEdit.seconds = $event.target.value * 3600"
                 />

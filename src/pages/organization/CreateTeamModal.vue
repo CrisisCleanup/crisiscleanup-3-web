@@ -4,10 +4,19 @@
     modal-classes="max-w-6xl"
     @close="$emit('close')"
   >
-    <div style="display: grid; grid-template-columns: 50% 50%;" class="p-2">
+    <div style="display: grid; grid-template-columns: 50% 50%" class="p-2">
       <div class="p-2 flex flex-col justify-between items-start w-full">
         <input
-          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-108"
+          class="
+            text-base
+            border border-crisiscleanup-dark-100
+            placeholder-crisiscleanup-dark-200
+            outline-none
+            p-2
+            my-2
+            resize-none
+            w-108
+          "
           :required="true"
           type="search"
           v-model="team.name"
@@ -36,9 +45,9 @@
             v-for="user in team.users"
             :key="`${user.id}`"
             class="border-b pt-2 bg-white"
-            style="display: grid; grid-template-columns: 25px max-content 1fr;"
+            style="display: grid; grid-template-columns: 25px max-content 1fr"
           >
-            <div class="handle" style="width: 15px; margin-top: 2px;">
+            <div class="handle" style="width: 15px; margin-top: 2px">
               <ccu-icon
                 icon-classes="cursor-move"
                 :alt="$t('actions.drag')"
@@ -88,7 +97,7 @@
               grid-gap: 10px;
             "
           >
-            <div class="handle" style="width: 15px; margin-top: 2px;">
+            <div class="handle" style="width: 15px; margin-top: 2px">
               <ccu-icon
                 icon-classes="cursor-move"
                 :alt="$t('actions.drag')"
@@ -179,12 +188,9 @@
               v-for="user in usersList"
               :key="`${user.id}`"
               class="border-t last:border-b pt-2 bg-white"
-              style="
-                display: grid;
-                grid-template-columns: 25px max-content 1fr;
-              "
+              style="display: grid; grid-template-columns: 25px max-content 1fr"
             >
-              <div class="handle" style="width: 15px; margin-top: 2px;">
+              <div class="handle" style="width: 15px; margin-top: 2px">
                 <ccu-icon
                   icon-classes="cursor-move"
                   :alt="$t('actions.drag')"
@@ -232,7 +238,7 @@
                 grid-gap: 10px;
               "
             >
-              <div class="handle" style="width: 15px; margin-top: 2px;">
+              <div class="handle" style="width: 15px; margin-top: 2px">
                 <ccu-icon
                   icon-classes="cursor-move"
                   :alt="$t('actions.drag')"

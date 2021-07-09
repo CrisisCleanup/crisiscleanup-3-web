@@ -14,19 +14,24 @@
       :float-label="$t(floatLabel) || name"
       :multiple="multi"
     >
-      <template #float-label="{isFloated}">
+      <template #float-label="{ isFloated }">
         {{ $t(floatLabel) || name | startCase }}
         <span
           v-if="description"
-          class="transition transition-opacity duration-150 ease-in-out text-h4 text-crisiscleanup-dark-200"
+          class="
+            transition transition-opacity
+            duration-150
+            ease-in-out
+            text-h4 text-crisiscleanup-dark-200
+          "
           :class="[isFloated && 'opacity-0']"
           >({{ description }})</span
         >
       </template>
-      <template #option="{option}">
+      <template #option="{ option }">
         <slot name="option" :option="option" />
       </template>
-      <template #selected-option="{option}">
+      <template #selected-option="{ option }">
         <slot name="selected-option" :option="option" />
       </template>
     </FormSelect>

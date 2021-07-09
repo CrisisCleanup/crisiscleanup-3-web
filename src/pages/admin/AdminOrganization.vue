@@ -53,9 +53,7 @@
         <div class="flex">
           <div class="w-1/2 bg-white p-3 shadow text-sm mr-4">
             <div class="flex items-center justify-between">
-              <base-text variant="h2" :weight="600">
-                Info
-              </base-text>
+              <base-text variant="h2" :weight="600"> Info </base-text>
             </div>
             <base-input
               v-model="organization.name"
@@ -66,7 +64,13 @@
             />
             <textarea
               v-model="organization.admin_notes"
-              class="border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none resize-none w-full"
+              class="
+                border border-crisiscleanup-dark-100
+                placeholder-crisiscleanup-dark-200
+                outline-none
+                resize-none
+                w-full
+              "
               rows="4"
               :placeholder="$t('adminOrganization.admin_notes')"
             />
@@ -87,7 +91,12 @@
             </base-checkbox>
             <form-select
               :placeholder="$t('profileOrg.organization_type')"
-              class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
+              class="
+                w-auto
+                flex-grow
+                border border-crisiscleanup-dark-100
+                select
+              "
               :options="organizationTypes"
               v-model="organization.type_t"
               item-key="key"
@@ -95,7 +104,12 @@
             />
             <form-select
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
-              class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
+              class="
+                w-auto
+                flex-grow
+                border border-crisiscleanup-dark-100
+                select
+              "
               :options="approveRejectReasons"
               v-model="organization.approve_reject_reason_t"
               item-key="key"
@@ -233,7 +247,7 @@
             <base-text variant="h3">
               {{ $t('adminOrganization.activities') }}
             </base-text>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
               <div>
                 <span>{{ $t('registerOrg.damage_assessment') }}</span>
                 <span>{{ organization.does_damage_assessment }}</span>
@@ -283,9 +297,7 @@
         </div>
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
-        <base-text variant="h2" :weight="600">
-          Roles
-        </base-text>
+        <base-text variant="h2" :weight="600"> Roles </base-text>
         <form-select
           :value="organization.approved_roles[0]"
           :placeholder="$t('adminOrganization.role')"
@@ -313,7 +325,12 @@
               <form-select
                 :placeholder="$t('adminOrganization.capability')"
                 :value="capabilityToAdd"
-                class="w-auto border border-crisiscleanup-dark-100 multi-select mr-1"
+                class="
+                  w-auto
+                  border border-crisiscleanup-dark-100
+                  multi-select
+                  mr-1
+                "
                 select-classes="h-full"
                 :options="selectableCapabilities"
                 multiple
@@ -338,9 +355,7 @@
                 "
               />
             </div>
-            <base-text variant="h3">
-              New Capabilties
-            </base-text>
+            <base-text variant="h3"> New Capabilties </base-text>
             <div
               v-for="capability in newCapabilities"
               :key="`${capability.id}`"
@@ -352,7 +367,7 @@
             <base-text variant="h3">
               {{ $t('adminOrganization.current_capabilities') }}
             </base-text>
-            <div style="display: grid; grid-column-gap: 10px;">
+            <div style="display: grid; grid-column-gap: 10px">
               <div
                 class="pr-3"
                 v-for="capability in organization.capabilities"
@@ -365,16 +380,19 @@
         </div>
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
-        <base-text variant="h2" :weight="600">
-          Incidents
-        </base-text>
+        <base-text variant="h2" :weight="600"> Incidents </base-text>
         <div class="flex item-start">
           <div>
             <div class="flex items-center justify-start">
               <form-select
                 :placeholder="$t('adminOrganization.incident')"
                 :value="incidentToAdd"
-                class="w-auto border border-crisiscleanup-dark-100 multi-select mr-1"
+                class="
+                  w-auto
+                  border border-crisiscleanup-dark-100
+                  multi-select
+                  mr-1
+                "
                 select-classes="h-full"
                 :options="selectableIncidents"
                 multiple
@@ -487,9 +505,7 @@
       </div>
 
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
-        <base-text variant="h2" :weight="600">
-          Groups
-        </base-text>
+        <base-text variant="h2" :weight="600"> Groups </base-text>
         <div class="flex item-start">
           <div>
             <div class="flex items-center justify-start">

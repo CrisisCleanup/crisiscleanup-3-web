@@ -69,7 +69,14 @@
         <div
           v-for="column of columns"
           :key="`search-${column.key}`"
-          class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+          class="
+            p-2
+            border-b
+            flex
+            items-center
+            cursor-pointer
+            bg-crisiscleanup-light-grey
+          "
         >
           <template v-if="column.searchable">
             <form-select
@@ -105,7 +112,18 @@
     <div class="body bg-white relative" :style="gridStyleBody">
       <div
         v-if="loading"
-        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center"
+        class="
+          absolute
+          bottom-0
+          left-0
+          right-0
+          top-0
+          bg-crisiscleanup-light-grey
+          opacity-75
+          flex
+          items-center
+          justify-center
+        "
       >
         <spinner />
       </div>

@@ -4,7 +4,20 @@
       <div
         v-if="loading"
         data-cy="overlay.loader"
-        class="absolute bottom-0 left-0 right-0 top-0 bg-crisiscleanup-light-grey opacity-75 flex items-center justify-center h-full w-full"
+        class="
+          absolute
+          bottom-0
+          left-0
+          right-0
+          top-0
+          bg-crisiscleanup-light-grey
+          opacity-75
+          flex
+          items-center
+          justify-center
+          h-full
+          w-full
+        "
       >
         <slot name="element">
           <spinner />

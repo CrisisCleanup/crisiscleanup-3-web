@@ -183,7 +183,8 @@ export const getConnectionByContactId = (
 ): typeof connect.Connection | null => {
   const targContact = getContactById(contactId);
   if (targContact === null) return null;
-  const targConnection: typeof connect.ConnectionType = targContact.getInitialConnection();
+  const targConnection: typeof connect.ConnectionType =
+    targContact.getInitialConnection();
   return targConnection || null;
 };
 

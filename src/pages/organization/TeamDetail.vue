@@ -115,7 +115,7 @@
               </span>
             </template>
             <template #actions="slotProps">
-              <div style="margin-top: 2px;" class="flex justify-end">
+              <div style="margin-top: 2px" class="flex justify-end">
                 <base-dropdown
                   :trigger="'click'"
                   class-name="team-detail-user"
@@ -130,21 +130,33 @@
                   <template slot="body">
                     <ul class="overflow-auto w-40">
                       <li
-                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        class="
+                          py-2
+                          cursor-pointer
+                          hover:bg-crisiscleanup-light-grey
+                        "
                       >
                         <a :href="`mailto:${slotProps.item.email}`">{{
                           $t('teams.send_email')
                         }}</a>
                       </li>
                       <li
-                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        class="
+                          py-2
+                          cursor-pointer
+                          hover:bg-crisiscleanup-light-grey
+                        "
                       >
                         <a :href="`/organization/users/${slotProps.item.id}`">
                           {{ $t('teams.view_full_profile') }}
                         </a>
                       </li>
                       <li
-                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        class="
+                          py-2
+                          cursor-pointer
+                          hover:bg-crisiscleanup-light-grey
+                        "
                         @click="
                           () => {
                             moveToDifferentTeam(slotProps.item.id);
@@ -154,7 +166,11 @@
                         {{ $t('teams.move_to_another_team') }}
                       </li>
                       <li
-                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        class="
+                          py-2
+                          cursor-pointer
+                          hover:bg-crisiscleanup-light-grey
+                        "
                         @click="
                           () => {
                             removeFromTeam(slotProps.item.id);
@@ -198,7 +214,7 @@
             "
           ></base-button>
         </div>
-        <div class="flex" style="min-width: 80px;">
+        <div class="flex" style="min-width: 80px">
           <ccu-icon
             :alt="$t('casesVue.map_view')"
             size="medium"
@@ -308,7 +324,7 @@
                   "
                 />
               </div>
-              <div style="margin-top: 2px;" class="flex justify-end">
+              <div style="margin-top: 2px" class="flex justify-end">
                 <base-dropdown
                   :trigger="'click'"
                   class-name="team-detail-case"
@@ -323,7 +339,11 @@
                   <template slot="body">
                     <ul class="overflow-auto w-40">
                       <li
-                        class="py-2 cursor-pointer hover:bg-crisiscleanup-light-grey"
+                        class="
+                          py-2
+                          cursor-pointer
+                          hover:bg-crisiscleanup-light-grey
+                        "
                         @click="
                           () => {
                             removeWorksiteFromTeam(slotProps.item.id);

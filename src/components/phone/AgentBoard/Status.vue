@@ -8,7 +8,7 @@
       :selected="status.statusId"
       @update:value="(payload) => onStatusSelect(payload)"
     >
-      <template #selected-option="{option}">
+      <template #selected-option="{ option }">
         <base-text variant="h2" :style="{ padding: '0px' }">{{
           option.substatus_name_t ? option.substatus_name_t : ''
         }}</base-text>

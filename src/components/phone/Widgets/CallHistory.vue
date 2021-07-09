@@ -11,7 +11,7 @@
         :data="historyData"
         v-if="callHistoryReady"
       >
-        <template #incident="{item}">
+        <template #incident="{ item }">
           <div class="justify-center flex flex-grow">
             <DisasterIcon
               v-if="item.incident"
@@ -19,7 +19,7 @@
             />
           </div>
         </template>
-        <template #mobile="{item}">
+        <template #mobile="{ item }">
           <div class="inline-flex items-center">
             <ccu-icon
               type="phone-classic"

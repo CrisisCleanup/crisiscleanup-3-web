@@ -112,12 +112,8 @@ export default {
   setup(props, context) {
     const { getters, state, actions } = useController();
 
-    const {
-      currentContact,
-      callType,
-      callerName,
-      activeIncident,
-    } = useContact();
+    const { currentContact, callType, callerName, activeIncident } =
+      useContact();
 
     const { storage } = useLocalStorage('ccu-ivr-hide-script', false);
     const renderPopup = computed(() => storage.value === false);

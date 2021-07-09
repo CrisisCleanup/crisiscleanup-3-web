@@ -1,7 +1,14 @@
 <template>
   <div
     v-if="ready"
-    class="bg-white flex flex-col flex-grow justify-between p-3 main-container w-full"
+    class="
+      bg-white
+      flex flex-col flex-grow
+      justify-between
+      p-3
+      main-container
+      w-full
+    "
   >
     <div class="w-full overflow-auto">
       <form-select

@@ -3,7 +3,7 @@
     <div class="grid grid-cols-5">
       <div
         class="col-span-1 shadow-lg h-screen flex flex-col"
-        style="z-index: 1000;"
+        style="z-index: 1000"
       >
         <div class="h-32 px-4 py-2 border-b">
           <img
@@ -26,7 +26,15 @@
               <div
                 v-for="x in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
                 :key="x"
-                class="flex px-2 py-3 items-center justify-between text-xs border-b"
+                class="
+                  flex
+                  px-2
+                  py-3
+                  items-center
+                  justify-between
+                  text-xs
+                  border-b
+                "
               >
                 <div>{{ $t('Volunteer Hours') }}</div>
                 <div>{{ x }}</div>
@@ -137,7 +145,7 @@
             </div>
             <div
               class="h-32 border-t grid grid-rows-2 grid-cols-6"
-              style="grid-gap: 1px;"
+              style="grid-gap: 1px"
             >
               <div class="border-b border-r">
                 <div
@@ -250,7 +258,7 @@
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
-                style="height: 450px;"
+                style="height: 450px"
                 :body-style="{ maxHeight: '450px' }"
               ></Table>
             </div>

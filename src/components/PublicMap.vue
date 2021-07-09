@@ -9,7 +9,7 @@
     ></div>
     <div
       v-if="!mapLoading && !hideLegend"
-      style="z-index: 1001;"
+      style="z-index: 1001"
       class="legend absolute right-0 bottom-0 w-64 bg-white border-2 p-1"
     >
       <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
@@ -82,25 +82,22 @@ export default {
       displayedWorkTypeSvgs: [],
       timeout: null,
       legendColors: {
-        [this.$t('worksiteMap.unclaimed')]: colors.open_unassigned_unclaimed
-          .fillColor,
-        [this.$t('worksiteMap.claimed_not_started')]: colors
-          .open_unassigned_claimed.fillColor,
-        [this.$t('worksiteMap.in_progress')]: colors.open_assigned_claimed
-          .fillColor,
-        [this.$t('worksiteMap.partially_completed')]: colors[
-          'open_partially-completed_claimed'
-        ].fillColor,
-        [this.$t('worksiteMap.needs_follow_up')]: colors[
-          'open_needs-follow-up_claimed'
-        ].fillColor,
-        [this.$t('worksiteMap.completed')]: colors.closed_completed_claimed
-          .fillColor,
-        [this.$t('worksiteMap.done_by_others_no_help_wanted')]: colors[
-          'closed_done-by-others_unclaimed'
-        ].fillColor,
-        [this.$t('worksiteMap.out_of_scope_duplicate_unresponsive')]: colors
-          .open_unresponsive_unclaimed.fillColor,
+        [this.$t('worksiteMap.unclaimed')]:
+          colors.open_unassigned_unclaimed.fillColor,
+        [this.$t('worksiteMap.claimed_not_started')]:
+          colors.open_unassigned_claimed.fillColor,
+        [this.$t('worksiteMap.in_progress')]:
+          colors.open_assigned_claimed.fillColor,
+        [this.$t('worksiteMap.partially_completed')]:
+          colors['open_partially-completed_claimed'].fillColor,
+        [this.$t('worksiteMap.needs_follow_up')]:
+          colors['open_needs-follow-up_claimed'].fillColor,
+        [this.$t('worksiteMap.completed')]:
+          colors.closed_completed_claimed.fillColor,
+        [this.$t('worksiteMap.done_by_others_no_help_wanted')]:
+          colors['closed_done-by-others_unclaimed'].fillColor,
+        [this.$t('worksiteMap.out_of_scope_duplicate_unresponsive')]:
+          colors.open_unresponsive_unclaimed.fillColor,
       },
       mapLoading: false,
       markerLayer: L.layerGroup(),

@@ -27,7 +27,15 @@
     </div>
     <template #popover>
       <div
-        class="bg-white border outline-none h-84 w-56 overflow-auto tooltip-content"
+        class="
+          bg-white
+          border
+          outline-none
+          h-84
+          w-56
+          overflow-auto
+          tooltip-content
+        "
         @keyup="nextItem"
       >
         <div

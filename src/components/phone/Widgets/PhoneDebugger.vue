@@ -1,6 +1,14 @@
 <template>
   <div
-    class="opreview bg-crisiscleanup-dark-500 text-white shadow-xl opacity-75 w-64 h-128"
+    class="
+      opreview
+      bg-crisiscleanup-dark-500
+      text-white
+      shadow-xl
+      opacity-75
+      w-64
+      h-128
+    "
     :class="visibleState.state.value ? 'active' : ''"
   >
     <div class="opreview__tabs">
@@ -37,9 +45,7 @@
 
     <div class="opreview__current">
       <div class="opreview__item">
-        <base-text variant="h1">
-          Phone Debugger
-        </base-text>
+        <base-text variant="h1"> Phone Debugger </base-text>
       </div>
       <div
         class="opreview__item"
