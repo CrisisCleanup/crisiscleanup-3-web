@@ -86,15 +86,15 @@ export default {
     },
 
     innerRadius() {
-      return Math.min(this.width, this.height) / 6;
+      return Math.abs(Math.min(this.width, this.height) / 6);
     },
 
     outerRadius() {
-      return Math.min(this.width, this.height) / 2;
+      return Math.abs(Math.min(this.width, this.height) / 2);
     },
 
     labelFontSize() {
-      return 10;
+      return (this.width + this.height) * 0.012;
     },
   },
 
@@ -354,7 +354,7 @@ export default {
             .call((g3) =>
               g3
                 .append('text')
-                .attr('font-size', '9px')
+                .attr('font-size', `${this.labelFontSize}px`)
                 .attr('fill', '#fefefe')
                 .attr('transform', (d) =>
                   (timeScale(d) + timeScale.bandwidth() / 2 + Math.PI / 2) %
@@ -373,7 +373,7 @@ export default {
           .call((g1) =>
             g1
               .append('text')
-              .attr('font-size', '12px')
+              .attr('font-size', `${this.labelFontSize}px`)
               .attr('fill', '#fff')
               .attr('y', -y(y.ticks(3).pop()))
               .attr('dy', '-1em')
@@ -402,7 +402,7 @@ export default {
                   .attr('stroke', '#fff')
                   .attr('stroke-width', 2)
                   .text(y.tickFormat(4, 's'))
-                  .attr('font-size', '12px')
+                  .attr('font-size', `${this.labelFontSize}px`)
                   .clone(true)
                   .attr('fill', '#000')
                   .attr('stroke', 'none'),
@@ -424,35 +424,35 @@ export default {
       textContainer
         .append('tspan')
         .text('Cases')
-        .attr('font-size', `${this.labelFontSize + 8}px`)
+        .attr('font-size', `${this.labelFontSize}px`)
         .attr('x', 0)
-        .attr('y', '-2rem');
+        .attr('y', `${-2.5 * this.labelFontSize}px`);
 
       textContainer
         .append('tspan')
         .text('Open')
         .attr('x', 0)
-        .attr('y', '-1rem');
+        .attr('y', `${-1 * this.labelFontSize}px`);
 
       textContainer
         .append('tspan')
         .text((d) => d.open)
         .attr('x', 0)
-        .attr('font-size', `${this.labelFontSize + 4}px`)
-        .attr('y', '0rem');
+        .attr('font-size', `${this.labelFontSize}px`)
+        .attr('y', `${0 * this.labelFontSize}px`);
 
       textContainer
         .append('tspan')
         .text('Closed')
         .attr('x', 0)
-        .attr('y', '1rem');
+        .attr('y', `${1.5 * this.labelFontSize}px`);
 
       textContainer
         .append('tspan')
         .text((d) => d.closed)
-        .attr('font-size', `${this.labelFontSize + 4}px`)
+        .attr('font-size', `${this.labelFontSize}px`)
         .attr('x', 0)
-        .attr('y', '2rem');
+        .attr('y', `${2.5 * this.labelFontSize}px`);
     },
 
     renderOpenCaseLabels(svg, data, x, y) {
@@ -482,7 +482,7 @@ export default {
             ? 'rotate(180)'
             : 'rotate(0)';
         })
-        .style('font-size', '11px')
+        .style('font-size', `${this.labelFontSize}px`)
         .style('fill', 'white')
         .attr('alignment-baseline', 'middle');
     },
