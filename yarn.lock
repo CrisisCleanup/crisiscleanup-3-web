@@ -1730,6 +1730,11 @@
     "@turf/line-intersect" "^6.0.2"
     lodash "^4.17.15"
 
+"@google/markerclustererplus@^5.1.0":
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/@google/markerclustererplus/-/markerclustererplus-5.1.3.tgz#dd7ddbb2a17c977e0b0252c3d8e61fcf502b1bf2"
+  integrity sha512-2wQGO6GGbKPC2tNmTz8ei1zBa64zV3QBBvgLHiPvYqUA63230qNqfQpN+nzsrl1RM40NJtty4Y1CEQKxq6MBGg==
+
 "@gulp-sourcemaps/map-sources@1.X":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@gulp-sourcemaps/map-sources/-/map-sources-1.0.0.tgz#890ae7c5d8c877f6d384860215ace9d7ec945bda"
@@ -13200,6 +13205,13 @@ globule@^1.0.0:
     glob "~7.1.1"
     lodash "~4.17.12"
     minimatch "~3.0.2"
+
+gmap-vue@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/gmap-vue/-/gmap-vue-1.5.0.tgz#43de7cba85c61280bfa65e6450b9d55657e9a82f"
+  integrity sha512-WE0VnSM1EsaTFVsnq53WGnre9cP1Q9DPCr0IiPmaoqsQioAKtTNBNyomrEvg0NIsVuxrdC2qvbgZPXCa8v/mBA==
+  dependencies:
+    "@google/markerclustererplus" "^5.1.0"
 
 good-listener@^1.2.2:
   version "1.2.2"
@@ -24721,15 +24733,15 @@ vue-virtual-scroller@^1.0.10:
     vue-observe-visibility "^0.4.4"
     vue-resize "^0.4.5"
 
-vue2-gmap-custom-marker@^5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/vue2-gmap-custom-marker/-/vue2-gmap-custom-marker-5.6.0.tgz#e64d6f7e30cf202eeb2edd444e6aa3c71e5ccafa"
-  integrity sha512-seEHsvb6/rSQyirIhWplZh6SjFoKrQ8DCRFqKcYWBBQuluzgincXT8tdO6LNreRmQ8bRxAFVIwgN1vVn5OQOSg==
+vue2-gmap-custom-marker@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/vue2-gmap-custom-marker/-/vue2-gmap-custom-marker-6.0.1.tgz#eab36675745d7e5026303c3e6d982b8076ca064e"
+  integrity sha512-oYzH3Pdydu7n+GJsGfhxeCUasg8z+9YvthZ0OyNjmUgyyPaxjDjR+eX6RhFD1bcOGQstwi6ZaeEOjqAiuuorhg==
   dependencies:
-    vue "^2.5.17"
-    vue2-google-maps "^0.10.2"
+    gmap-vue "^1.5.0"
+    vue "^2.x"
 
-vue2-google-maps@^0.10.2, vue2-google-maps@^0.10.7:
+vue2-google-maps@^0.10.7:
   version "0.10.7"
   resolved "https://registry.yarnpkg.com/vue2-google-maps/-/vue2-google-maps-0.10.7.tgz#2e4c1239386001bd47777d8c6a0475e5320cc3a8"
   integrity sha512-y5aBJTAsfGvpsbfgPaeWU7o7QbOeINZKsP6SB9qrBe8U8EYBFO/bTWo3rcMq/NOtgT/XssV3Nwg/2u3no6jWbw==
@@ -24737,10 +24749,15 @@ vue2-google-maps@^0.10.2, vue2-google-maps@^0.10.7:
     babel-runtime "^6.26.0"
     marker-clusterer-plus "^2.1.4"
 
-vue@2.6.12, vue@^2.5.13, vue@^2.5.17, vue@^2.6.10, vue@^2.6.11, vue@^2.6.9:
+vue@2.6.12:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
+
+vue@^2.5.13, vue@^2.5.17, vue@^2.6.10, vue@^2.6.11, vue@^2.6.9, vue@^2.x:
+  version "2.6.14"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
+  integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
 
 vuedraggable@^2.24.3:
   version "2.24.3"

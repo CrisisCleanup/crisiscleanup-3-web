@@ -138,7 +138,7 @@
     "vue-timers": "^2.0.4",
     "vue-toasted": "^1.1.28",
     "vue-types": "^1.7.0",
-    "vue2-gmap-custom-marker": "^5.6.0",
+    "vue2-gmap-custom-marker": "^6.0.1",
     "vue2-google-maps": "^0.10.7",
     "vuedraggable": "^2.24.3",
     "vuejs-datepicker": "^1.6.2",
