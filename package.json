@@ -137,7 +137,7 @@
     "vue-socket.io": "^3.0.10",
     "vue-timers": "^2.0.4",
     "vue-toasted": "^1.1.28",
-    "vue-types": "^1.7.0",
+    "vue-types": "^4.0.0",
     "vue2-gmap-custom-marker": "^5.6.0",
     "vue2-google-maps": "^0.10.7",
     "vuedraggable": "^2.24.3",
