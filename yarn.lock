@@ -6862,12 +6862,12 @@
   dependencies:
     normalizr "^3.6.0"
 
-"@vuex-orm/plugin-axios@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@vuex-orm/plugin-axios/-/plugin-axios-0.9.3.tgz#c50a00f110484c21bae3626f3823b5a310b1487b"
-  integrity sha512-czZpRq7g15Bb7jpvP2V6m6fisovTa/qdpAQ0gq7TflaJXq3dhsgG9ca+nHAYmV5Ogga43fE/k4ELd29R5sMuJg==
+"@vuex-orm/plugin-axios@^0.9.4":
+  version "0.9.4"
+  resolved "https://registry.yarnpkg.com/@vuex-orm/plugin-axios/-/plugin-axios-0.9.4.tgz#7f20a9780b8910cd0636201c049f7975d640d0e4"
+  integrity sha512-l7gGwodIovXPMLW9UZFgFuy7Cqy+h5eDF7B65Tz2lHDt1eQbt+gL0oB6uTD1NgMTTEGWGjMbbKwPfcFxnNwgJw==
   dependencies:
-    axios "^0.19.2"
+    axios "^0.21.1"
 
 "@vuex-orm/plugin-change-flags@^1.2.3":
   version "1.2.3"
@@ -7716,7 +7716,7 @@ axe-core@^4.2.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.2.3.tgz#2a3afc332f0031b42f602f4a3de03c211ca98f72"
   integrity sha512-pXnVMfJKSIWU2Ml4JHP7pZEPIrgBO1Fd3WGx+fPBsS+KRGhE4vxooD8XBGWbQOIVSZsVK7pUDBBkCicNu80yzQ==
 
-axios@^0.19.0, axios@^0.19.2:
+axios@^0.19.0:
   version "0.19.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
   integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
