@@ -1,4 +1,10 @@
-import { Container, settings as PixiSettings, Sprite, Texture } from 'pixi.js';
+import {
+  Container,
+  settings as PixiSettings,
+  Sprite,
+  Texture,
+  utils as pixiUtils,
+} from 'pixi.js';
 
 import * as L from 'leaflet';
 import 'leaflet-loading';
@@ -9,8 +15,7 @@ import * as moment from 'moment';
 import { solveCollision } from '@/utils/easing';
 import { colors, templates } from '@/icons/icons_templates';
 import Worksite from '@/models/Worksite';
-import { GlowFilter } from '@pixi/filter-glow';
-
+// import { GlowFilter } from '@pixi/filter-glow';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -409,28 +414,26 @@ export function getMarkerLayer(markers, map, context) {
 
   const layer = (function () {
     let firstDraw = true;
-    let prevZoom;
-    let prevCenter;
-    const markerSprites = [];
+    // let prevZoom;
+    // let prevCenter;
     let frame = null;
     const doubleBuffering =
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     return L.pixiOverlay(
       function (utils) {
-        const zoom = utils.getMap().getZoom();
-        const center = utils.getMap().getCenter();
+        // const zoom = utils.getMap().getZoom();
+        // const center = utils.getMap().getCenter();
         if (frame) {
           cancelAnimationFrame(frame);
           frame = null;
         }
         const container = utils.getContainer();
         const renderer = utils.getRenderer();
-        const project = utils.latLngToLayerPoint;
         const scale = utils.getScale();
         const invScale = 0.75 / scale;
         if (firstDraw) {
-          prevZoom = zoom;
-          prevCenter = center;
+          // prevZoom = zoom;
+          // prevCenter = center;
         }
         container.children.forEach(function (markerSprite) {
           // if (!markerSprite.type === 'line') return;
@@ -454,7 +457,8 @@ export function getMarkerLayer(markers, map, context) {
             markerSprite.clear();
             // markerSprite.filters = [new GlowFilter({ distance: 12, outerStrength: 1, color: 0x61d5f8})];
           }
-          markerSprite.lineStyle(2.5 / scale, 0x61d5f8);
+          const lineColor = pixiUtils.string2hex(markerSprite.color);
+          markerSprite.lineStyle(2.5 / scale, lineColor);
           markerSprite.currentPoint++;
           if (markerSprite.currentPoint > markerSprite.wayPoints.length - 1) {
             markerSprite.alpha -= 0.0025;
@@ -523,8 +527,8 @@ export function getMarkerLayer(markers, map, context) {
           frame = requestAnimationFrame(animate);
         }
         firstDraw = false;
-        prevZoom = zoom;
-        prevCenter = center;
+        // prevZoom = zoom;
+        // prevCenter = center;
         renderer.render(container);
       },
       pixiContainer,

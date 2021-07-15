@@ -31,7 +31,7 @@
                 <div>{{ $t('Volunteer Hours') }}</div>
                 <div>{{ x }}</div>
               </div>
-              <div class="flex grid grid-cols-2 border-b">
+              <div class="grid grid-cols-2 border-b">
                 <div class="p-2 border-r">
                   <div class="underline text-primary-dark">
                     {{ $t('More Statistics') }}
@@ -49,6 +49,8 @@
           <div v-if="currentEvent">
             <div class="flex items-center mb-1">
               <div class="flex-1 ml-2 font-medium text-xs">
+                {{ currentEvent.id }}: {{ currentEvent.attr.patient_status }},
+                {{ currentEvent.attr.recipient_status }}
                 <span
                   >{{ currentEvent.attr.actor_first_name }} from
                   {{ currentEvent.attr.actor_organization_name }}
@@ -142,6 +144,24 @@
                   ref="map"
                   class="absolute top-0 left-0 right-0 bottom-0"
                 ></div>
+                <div
+                  style="z-index: 1001;"
+                  class="legend absolute left-0 bottom-0 w-72 h-40 bg-white opacity-25 border-2 p-1"
+                >
+                  <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
+                  <div class="flex flex-wrap justify-between">
+                    <div
+                      v-for="entry in displayedWorkTypeSvgs"
+                      :key="entry.key"
+                      class="flex items-center w-1/2 mb-1"
+                    >
+                      <div class="map-svg-container" v-html="entry.svg"></div>
+                      <span class="text-xs ml-1">{{
+                        entry.key | getWorkTypeName
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div
@@ -301,7 +321,8 @@ import { HomeNavigation } from '@/components/home/SideNav';
 import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
 import BarChart from '@/components/charts/BarChart';
-import { Sprite, Texture, Graphics } from 'pixi.js';
+import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
+import Incident from '@/models/Incident';
 
 export default {
   name: 'PewPew',
@@ -309,7 +330,7 @@ export default {
   data() {
     return {
       markers: [],
-      events: [],
+      events: {},
       incidents: [],
       organizations: [],
       templates,
@@ -326,10 +347,39 @@ export default {
           data: null,
         },
       },
+      incidentId: 222,
+      incident: null,
       incidentStats: {},
+      displayedWorkTypeSvgs: [],
+      defaultWorkTypeSvgs: [
+        {
+          svg: templates.important.replace('{{fillColor}}', 'black'),
+          name: this.$t(`worksiteMap.high_priority`),
+        },
+        {
+          svg: templates.favorite.replace('{{fillColor}}', 'black'),
+          name: this.$t(`worksiteMap.member_of_my_organization`),
+        },
+      ],
     };
   },
   async mounted() {
+    await Incident.api().fetchById(this.incidentId);
+    this.incident = Incident.find(this.incidentId);
+
+    this.displayedWorkTypeSvgs = this.incident.created_work_types.map(
+      (workType) => {
+        const template = templates[workType] || templates.unknown;
+        const svg = template
+          .replace('{{fillColor}}', 'black')
+          .replace('{{strokeColor}}', 'black')
+          .replace('{{multiple}}', '');
+        return {
+          svg,
+          key: workType,
+        };
+      },
+    );
     await this.getIncidentStats();
     const { options, data } = await this.getCompletionRateData();
     this.charts.completion.options = options;
@@ -351,7 +401,7 @@ export default {
       const queryString = getQueryString(params);
 
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents/60/organizations?${queryString}`,
+        `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.incidentId}/organizations?${queryString}`,
       );
       const { results } = response.data;
       return results;
@@ -368,9 +418,9 @@ export default {
     async getAllEvents() {
       const params = {
         limit: 500,
-        event_key__in: this.events.join(','),
-        sort: 'created_at',
-        incident: 222,
+        event_key__in: Object.keys(this.events).join(','),
+        sort: '-created_at',
+        incident: this.incidentId,
       };
       const queryString = getQueryString(params);
       const response = await this.$http.get(
@@ -411,12 +461,10 @@ export default {
 
       this.incidents = await this.getRecentIncidents();
       this.organizations = await this.getOrganizations();
-      this.events = [
-        'user_create_worksite',
-        // 'user_join_wwwtsp_with_organization',
-        'user_update_worksite',
-        // 'user_read_worksite',
-      ];
+      this.events = {
+        user_join_wwwtsp_with_organization: 'patient',
+        'user_join_work-type-status_with_wwwtsp': 'recipient',
+      };
       await this.getAllEvents();
       this.lastEventTimestamp = this.$moment().toISOString();
       const worksiteLayer = getMarkerLayer([], map, this);
@@ -450,7 +498,11 @@ export default {
         y2,
       ];
       linksGraphics.type = 'line';
-      linksGraphics.lineStyle(15, 0x61d5f8);
+      linksGraphics.lineStyle(
+        15,
+        pixiUtils.string2hex(patientMarkerSprite.color),
+      );
+      linksGraphics.color = patientMarkerSprite.color;
       linksGraphics.moveTo(x1, y1);
       linksGraphics.bezierCurveTo(...linksGraphics.bezierParams);
       linksGraphics.wayPoints = findBezierPoints([
@@ -476,6 +528,7 @@ export default {
         actorMarkerSprite,
         patientMarkerSprite,
       ]);
+      linksGraphics.color = patientMarkerSprite.color;
       linksGraphics.currentPoint = 0;
       return linksGraphics;
     },
@@ -501,7 +554,7 @@ export default {
             actorMarkerSprite.y0 = actorCoords.y;
             actorMarkerSprite.interactive = true;
             actorMarkerSprite.anchor.set(0.5, 0.5);
-            actorMarkerSprite.type = 'actor'
+            actorMarkerSprite.type = 'actor';
             const svg = templates.orb
               .replace('{{fillColor}}', '#61D5F8')
               .replace('{{strokeColor}}', 'black');
@@ -510,13 +563,34 @@ export default {
             layer._pixiContainer.addChild(actorMarkerSprite);
           }
 
-          if (marker.patient_location || marker.recipient_location) {
+          if (marker.recipient_location || marker.patient_location) {
             const location =
-              marker.patient_location || marker.recipient_location;
+              marker[`${this.events[marker.event_key]}_location`];
             const patientCoords = layer.utils.latLngToLayerPoint([
               location.coordinates[1],
               location.coordinates[0],
             ]);
+
+            const wwtsp = marker.attr[`${this.events[marker.event_key]}_wwtsp`];
+            let color = 'red';
+            if (wwtsp && wwtsp.length > 0) {
+              const workType = wwtsp[0];
+              const colorsKey = `${workType.status}_${
+                workType.claimed_by ? 'claimed' : 'unclaimed'
+              }`;
+              // const worksiteTemplate = templates.circle;
+              const spriteColors = colors[colorsKey];
+              color = spriteColors.fillColor;
+            } else if (
+              marker.attr.recipient_status ||
+              marker.attr.patient_status
+            ) {
+              const statusProp =
+                marker.attr[`${this.events[marker.event_key]}_status`];
+              const colorsKey = `${statusProp}_${'unclaimed'}`;
+              const spriteColors = colors[colorsKey];
+              color = spriteColors.fillColor;
+            }
 
             patientMarkerSprite = new Sprite();
             patientMarkerSprite.x = patientCoords.x;
@@ -526,10 +600,11 @@ export default {
             patientMarkerSprite.interactive = false;
             patientMarkerSprite.anchor.set(0.5, 0.5);
             const svg = markerTemplate
-              .replace('{{fillColor}}', 'red')
+              .replace('{{fillColor}}', color)
               .replace('{{strokeColor}}', 'black');
             patientMarkerSprite.texture = Texture.from(svg);
             patientMarkerSprite.visible = true;
+            patientMarkerSprite.color = color;
             layer._pixiContainer.addChild(patientMarkerSprite);
           }
 
@@ -559,7 +634,7 @@ export default {
     },
     async getCompletionRateData() {
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?start_date=2017-8-27&end_date=2017-10-27`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?start_date=2021-06-15&end_date=2021-07-15`,
       );
       const chart = response.data;
 
@@ -633,7 +708,7 @@ export default {
     },
     async getIncidentStats() {
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/reports_data/incident_statistics?incident=60`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/incident_statistics?incident=${this.incidentId}`,
       );
       this.incidentStats = response.data;
     },
@@ -641,9 +716,9 @@ export default {
       setInterval(() => {
         const params = {
           limit: 500,
-          event_key__in: this.events.join(','),
+          event_key__in: Object.keys(this.events).join(','),
           sort: 'created_at',
-          incident: 222,
+          incident: this.incidentId,
           created_at__gt: this.lastEventTimestamp,
         };
         const queryString = getQueryString(params);
