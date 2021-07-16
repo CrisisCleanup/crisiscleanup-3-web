@@ -29,7 +29,11 @@
             >
               {{ ticketData.status }}
             </div>
-            <base-button text="Login" variant="solid" class="m-2 p-1" />
+            <base-button
+              text="Login"
+              variant="solid"
+              class="mt-2 mr-6 pl-2 pr-2"
+            />
           </div>
         </div>
 
@@ -89,42 +93,16 @@
                 class="m-2 p-1"
                 :action="getComments"
               />
+              <base-button
+                text="Reply"
+                variant="solid"
+                class="m-2 p-1"
+                :action="replyToTicket"
+              />
             </div>
           </div>
         </div>
       </div>
-      <!--      <div v-if='!dropDownState' @click='changeDropDownState' class='arrow'>-->
-      <!--        <div class='arrow-top'></div>-->
-      <!--        <div class='arrow-bottom'></div>-->
-      <!--      </div>-->
-
-      <!--      <div v-show='dropDownState' class='h-62'>-->
-      <!--        <hr />-->
-
-      <!--        <div class='flex flex-row justify-between'>-->
-      <!--          <div>Organization Name:</div>-->
-      <!--          <div>{{ ticketData.organization.name }}</div>-->
-      <!--        </div>-->
-
-      <!--        <div class="flex flex-row justify-between">-->
-      <!--          <div>Login Activity:</div>-->
-      <!--          <div>Southeast Baptist Helpers</div>-->
-      <!--        </div>-->
-
-      <!--        <div class="flex flex-row justify-between">-->
-      <!--          <div>Browser Type:</div>-->
-      <!--          <div>Southeast Baptist Helpers</div>-->
-      <!--        </div>-->
-
-      <!--        <div class="flex flex-row justify-between">-->
-      <!--          <div>Operating System:</div>-->
-      <!--          <div>Southeast Baptist Helpers</div>-->
-      <!--        </div>-->
-
-      <!--        <div v-if='dropDownState' @click='changeDropDownState' class='arrow-up'>-->
-      <!--          <div class='arrow-top'></div>-->
-      <!--          <div class='arrow-bottom'></div>-->
-      <!--        </div>-->
     </div>
     <div v-if="true"></div>
   </div>
@@ -203,6 +181,20 @@ export default {
     },
   },
   methods: {
+    async replyToTicket() {
+      const response = await this.$http.put(
+        `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}/comments`,
+        {
+          ticket: {
+            comment: {
+              body: 'The smoke is very colorful.',
+              author_id: 411677450351,
+            },
+          },
+        },
+      );
+      console.log(response);
+    },
     async getComments() {
       console.log('comments for get comments');
       const response = await this.$http.get(
@@ -257,139 +249,5 @@ export default {
 .solved {
   color: #6b6b6b;
   background: #e8e4e4;
-}
-
-.arrow {
-  cursor: pointer;
-  height: 20px;
-  left: 50%;
-  position: relative;
-  top: 50%;
-  transform: translateX(-45%) translateY(270%) rotate(90deg);
-
-  transition: transform 0.1s;
-  width: 80px;
-
-  $transition-time: 0.15 s;
-  ,
-  & -top,
-  & -bottom {
-    background-color: #666;
-    height: 4px;
-    left: -5px;
-    position: absolute;
-    top: 50%;
-    width: 20%;
-
-    &:after {
-      background-color: gold;
-      content: '';
-      height: 100%;
-      position: absolute;
-      top: 0;
-      transition: all $transition-time;
-    }
-  }
-
-  &-top {
-    transform: rotate(45deg);
-    transform-origin: bottom right;
-
-    &:after {
-      left: 100%;
-      right: 0;
-      transition-delay: 0s;
-    }
-  }
-
-  &-bottom {
-    transform: rotate(-45deg);
-    transform-origin: top right;
-
-    &:after {
-      left: 0;
-      right: 100%;
-      transition-delay: $transition-time;
-    }
-  }
-
-  &:hover & {
-    &-top:after {
-      left: 0;
-      transition-delay: $transition-time;
-    }
-
-    &-bottom:after {
-      right: 0;
-      transition-delay: 0s;
-    }
-  }
-}
-
-.arrow-up {
-  cursor: pointer;
-  height: 20px;
-  left: 50%;
-  position: relative;
-  top: 50%;
-  transform: translateX(-62%) translateY(-50%) rotate(-90deg);
-
-  transition: transform 0.1s;
-  width: 80px;
-
-  $transition-time: 0.15 s;
-  ,
-  & -top,
-  & -bottom {
-    background-color: #666;
-    height: 4px;
-    left: -5px;
-    position: absolute;
-    top: 50%;
-    width: 20%;
-
-    &:after {
-      background-color: gold;
-      content: '';
-      height: 100%;
-      position: absolute;
-      top: 0;
-      transition: all $transition-time;
-    }
-  }
-
-  &-top {
-    transform: rotate(45deg);
-    transform-origin: bottom right;
-
-    &:after {
-      left: 100%;
-      right: 0;
-      transition-delay: 0s;
-    }
-  }
-
-  &-bottom {
-    transform: rotate(-45deg);
-    transform-origin: top right;
-
-    &:after {
-      left: 0;
-      right: 100%;
-      transition-delay: $transition-time;
-    }
-  }
-
-  &:hover & {
-    &-top:after {
-      left: 0;
-      transition-delay: $transition-time;
-    }
-
-    &-bottom:after {
-      right: 0;
-      transition-delay: 0s;
-    }
-  }
 }
 </style>
