@@ -298,6 +298,12 @@ export default {
         return {};
       },
     },
+    headerStyle: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {
@@ -377,6 +383,7 @@ export default {
       return {
         display: 'grid',
         'grid-template-columns': this.gridTemplate,
+        ...this.headerStyle,
       };
     },
     gridStyleBody() {

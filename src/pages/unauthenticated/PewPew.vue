@@ -1,13 +1,13 @@
 <template>
-  <div class="h-screen">
-    <div class="grid grid-cols-5">
+  <div class="h-screen" style="background-color: #232323; color: white;">
+    <div class="grid grid-cols-6">
       <div
         class="col-span-1 shadow-lg h-screen flex flex-col"
         style="z-index: 1000;"
       >
         <div class="h-32 px-4 py-2 border-b">
           <img
-            src="@/assets/ccu-logo-black-500w.png"
+            src="@/assets/crisiscleanup_logo.png"
             alt="Crisis Cleanup"
             class="h-16"
           />
@@ -26,13 +26,13 @@
               <div
                 v-for="x in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
                 :key="x"
-                class="flex px-2 py-3 items-center justify-between text-xs border-b"
+                class="flex px-2 py-3 items-center justify-between text-xs"
               >
                 <div>{{ $t('Volunteer Hours') }}</div>
                 <div>{{ x }}</div>
               </div>
-              <div class="grid grid-cols-2 border-b">
-                <div class="p-2 border-r">
+              <div class="grid grid-cols-2">
+                <div class="p-2">
                   <div class="underline text-primary-dark">
                     {{ $t('More Statistics') }}
                   </div>
@@ -65,14 +65,15 @@
           </div>
         </div>
       </div>
-      <div class="col-span-4 h-screen flex flex-col">
-        <div class="h-12 border-b grid grid-cols-10">
+      <div class="col-span-5 h-screen flex flex-col">
+        <div class="h-12 grid grid-cols-10">
           <div class="col-span-2 flex items-center">
             <form-select
               :value="colorMode"
               indicator-icon="caret-down"
               :options="['Dark Mode', 'Light Mode']"
               :clearable="false"
+              class="text-white"
               select-classes="w-40 ml-2 text-xs"
               @input="
                 (value) => {
@@ -113,7 +114,7 @@
             />
           </div>
         </div>
-        <div class="h-12 border-b flex items-center justify-start">
+        <div class="h-12 flex items-center justify-start">
           <span class="mx-4 h-full flex items-center">
             {{ $t('All') }}
           </span>
@@ -144,146 +145,66 @@
                   ref="map"
                   class="absolute top-0 left-0 right-0 bottom-0"
                 ></div>
-                <div
-                  style="z-index: 1001;"
-                  class="legend absolute left-0 bottom-0 w-72 h-40 bg-white opacity-25 border-2 p-1"
-                >
-                  <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
-                  <div class="flex flex-wrap justify-between">
+                <div style="z-index: 1001;" class="absolute left-0 bottom-0">
+                  <div
+                    class="legend w-108 h-auto bg-crisiscleanup-dark-400 p-2 mb-5 ml-3 bg-opacity-25"
+                  >
+                    <div class="font-bold my-1 text-white text-sm">
+                      {{ $t('Legend') }}
+                    </div>
+                    <div class="flex flex-wrap justify-between">
+                      <div
+                        v-for="entry in displayedWorkTypeSvgs"
+                        :key="entry.key"
+                        class="flex items-center w-1/2 mb-1 cursor-pointer hover:border-2"
+                        :class="entry.selected ? 'selected border-2' : 'my-1'"
+                        @click="
+                          () => {
+                            entry.selected = !entry.selected;
+                            displayedWorkTypeSvgs = {
+                              ...displayedWorkTypeSvgs,
+                            };
+                            refresh();
+                          }
+                        "
+                      >
+                        <div class="map-svg-container" v-html="entry.svg"></div>
+                        <span class="text-xs ml-1 text-white">{{
+                          entry.key | getWorkTypeName
+                        }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="stats grid grid-flow-col mb-10 ml-3">
                     <div
-                      v-for="entry in displayedWorkTypeSvgs"
-                      :key="entry.key"
-                      class="flex items-center w-1/2 mb-1"
+                      class="p-1 border mx-1 bg-opacity-25 bg-crisiscleanup-dark-400 rounded-md w-18"
+                      v-for="item in mapStatistics"
+                      :style="item['style']"
+                      :key="item['title']"
                     >
-                      <div class="map-svg-container" v-html="entry.svg"></div>
-                      <span class="text-xs ml-1">{{
-                        entry.key | getWorkTypeName
-                      }}</span>
+                      <div class="text-white text-xs opacity-50">
+                        {{ item['title'] | capitalize }}
+                      </div>
+                      <div class="text-white text-sm">
+                        {{ item['count'] }}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div
-              class="h-32 border-t grid grid-rows-2 grid-cols-6"
-              style="grid-gap: 1px;"
-            >
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3">{{
-                    incidentStats.worksite_count
-                  }}</base-text>
-                  <div class="text-xs">All Cases</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3"
-                    >{{ incidentStats.unclaimed_count }}
-                  </base-text>
-                  <div class="text-xs">Unclaimed</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3"
-                    >{{ incidentStats.claimed_count }}
-                  </base-text>
-                  <div class="text-xs">Claimed</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3"
-                    >{{ incidentStats.assigned_count }}
-                  </base-text>
-                  <div class="text-xs">Assinged</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3"
-                    >{{ incidentStats.partial_count }}
-                  </base-text>
-                  <div class="text-xs">Partly Completed</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3"
-                    >{{ incidentStats.closed_count }}
-                  </base-text>
-                  <div class="text-xs">Closed</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3"
-                    >{{ incidentStats.overdue_count }}
-                  </base-text>
-                  <div class="text-xs">Overdue</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3">
-                    {{ organizations.length }}</base-text
-                  >
-                  <div class="text-xs">Total Orgs</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3">0</base-text>
-                  <div class="text-xs">Counties</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3">0</base-text>
-                  <div class="text-xs">Volunteers</div>
-                </div>
-              </div>
-              <div class="border-b border-r">
-                <div
-                  class="p-1 flex flex-col items-start justify-center h-full"
-                >
-                  <base-text variant="h3">0</base-text>
-                  <div class="text-xs">Households</div>
-                </div>
-              </div>
-            </div>
           </div>
-          <div class="col-span-1 border grid grid-rows-12">
+          <div class="col-span-1 grid grid-rows-12">
             <div class="row-span-7">
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
                 style="height: 450px;"
-                :body-style="{ maxHeight: '450px' }"
+                :body-style="{ maxHeight: '450px', backgroundColor: '#232323' }"
+                :header-style="{ backgroundColor: '#232323' }"
               ></Table>
             </div>
-            <div class="row-span-5 border">
+            <div class="row-span-5">
               <tabs class="" ref="tabs" tab-classes="text-xs">
                 <tab :name="$t('Completion Rate')">
                   <BarChart
@@ -323,6 +244,7 @@ import { getQueryString } from '@/utils/urls';
 import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
+import { orderBy } from 'lodash';
 
 export default {
   name: 'PewPew',
@@ -348,19 +270,13 @@ export default {
         },
       },
       incidentId: 222,
+      markerSpeed: 2000,
       incident: null,
       incidentStats: {},
+      mapStatistics: [],
       displayedWorkTypeSvgs: [],
-      defaultWorkTypeSvgs: [
-        {
-          svg: templates.important.replace('{{fillColor}}', 'black'),
-          name: this.$t(`worksiteMap.high_priority`),
-        },
-        {
-          svg: templates.favorite.replace('{{fillColor}}', 'black'),
-          name: this.$t(`worksiteMap.member_of_my_organization`),
-        },
-      ],
+      orbTexture: null,
+      textureMap: {},
     };
   },
   async mounted() {
@@ -371,16 +287,79 @@ export default {
       (workType) => {
         const template = templates[workType] || templates.unknown;
         const svg = template
-          .replace('{{fillColor}}', 'black')
+          .replace('{{fillColor}}', '#61D5F8')
           .replace('{{strokeColor}}', 'black')
           .replace('{{multiple}}', '');
         return {
           svg,
           key: workType,
+          selected: false,
         };
       },
     );
+
+    const svg = templates.orb
+      .replace('{{fillColor}}', '#61D5F8')
+      .replace('{{strokeColor}}', 'black');
+    this.orbTexture = Texture.from(svg);
     await this.getIncidentStats();
+    this.mapStatistics = [
+      {
+        count: this.incidentStats.worksite_count,
+        style: `border-color: white`,
+        title: this.$t('~~All Cases'),
+      },
+      {
+        count: this.incidentStats.unclaimed_count,
+        style: `border-color: #d0021b`,
+        title: this.$t('~~Unclaimed'),
+      },
+      {
+        count: this.incidentStats.claimed_count,
+        style: `border-color: #fab92e`,
+        title: this.$t('~~Claimed'),
+      },
+      {
+        count: this.incidentStats.assigned_count,
+        style: `border-color: #f0f032`,
+        title: this.$t('~~Assinged'),
+      },
+      {
+        count: this.incidentStats.partial_count,
+        style: `border-color: #0054bb`,
+        title: this.$t('~~Partly Done'),
+      },
+      {
+        count: this.incidentStats.closed_count,
+        style: `border-color: #0FA355`,
+        title: this.$t('~~Closed'),
+      },
+      {
+        count: this.incidentStats.overdue_count,
+        style: `border: none`,
+        title: this.$t('~~Overdue'),
+      },
+      {
+        count: this.organizations.length,
+        style: `border: none`,
+        title: this.$t('~~Total Orgs'),
+      },
+      {
+        count: 0,
+        style: `border: none`,
+        title: this.$t('~~Counties'),
+      },
+      {
+        count: 0,
+        style: `border: none`,
+        title: this.$t('~~Volunteers'),
+      },
+      {
+        count: 0,
+        style: `border: none`,
+        title: this.$t('~~Households'),
+      },
+    ];
     const { options, data } = await this.getCompletionRateData();
     this.charts.completion.options = options;
     this.charts.completion.data = data;
@@ -417,9 +396,9 @@ export default {
     },
     async getAllEvents() {
       const params = {
-        limit: 500,
+        limit: 1500,
         event_key__in: Object.keys(this.events).join(','),
-        sort: '-created_at',
+        sort: 'created_at',
         incident: this.incidentId,
       };
       const queryString = getQueryString(params);
@@ -464,6 +443,7 @@ export default {
       this.events = {
         user_join_wwwtsp_with_organization: 'patient',
         'user_join_work-type-status_with_wwwtsp': 'recipient',
+        user_create_worksite: 'recipient',
       };
       await this.getAllEvents();
       this.lastEventTimestamp = this.$moment().toISOString();
@@ -503,6 +483,8 @@ export default {
         pixiUtils.string2hex(patientMarkerSprite.color),
       );
       linksGraphics.color = patientMarkerSprite.color;
+      linksGraphics.workTypeKey = patientMarkerSprite.workTypeKey;
+      linksGraphics.visible = this.getMarkerVisibility(linksGraphics);
       linksGraphics.moveTo(x1, y1);
       linksGraphics.bezierCurveTo(...linksGraphics.bezierParams);
       linksGraphics.wayPoints = findBezierPoints([
@@ -529,8 +511,37 @@ export default {
         patientMarkerSprite,
       ]);
       linksGraphics.color = patientMarkerSprite.color;
+      linksGraphics.workTypeKey = patientMarkerSprite.workTypeKey;
       linksGraphics.currentPoint = 0;
       return linksGraphics;
+    },
+    getMarkerVisibility(sprite) {
+      let visible = true;
+      if (!this.visibleWorkTypes) {
+        return true;
+      }
+      if (
+        this.visibleWorkTypes &&
+        this.visibleWorkTypes.indexOf(sprite.workTypeKey) !== -1
+      ) {
+        visible = true;
+      } else {
+        visible = false;
+      }
+      return visible;
+    },
+    refresh() {
+      this.map.eachLayer((layer) => {
+        if (layer.key === 'marker_layer') {
+          const container = layer._pixiContainer;
+          container.children.forEach((markerSprite) => {
+            markerSprite.visible = this.getMarkerVisibility(markerSprite);
+          });
+
+          layer._renderer.render(container);
+          layer.redraw();
+        }
+      });
     },
     generateMarker() {
       this.map.eachLayer((layer) => {
@@ -541,10 +552,10 @@ export default {
           const markerTemplate = templates.circle;
           let actorMarkerSprite = null;
           let patientMarkerSprite = null;
-          if (marker.actor_location) {
+          if (marker.actor_blurred_location) {
             const actorCoords = layer.utils.latLngToLayerPoint([
-              marker.actor_location.coordinates[1],
-              marker.actor_location.coordinates[0],
+              marker.actor_blurred_location.coordinates[1],
+              marker.actor_blurred_location.coordinates[0],
             ]);
 
             actorMarkerSprite = new Sprite();
@@ -552,44 +563,60 @@ export default {
             actorMarkerSprite.y = actorCoords.y;
             actorMarkerSprite.x0 = actorCoords.x;
             actorMarkerSprite.y0 = actorCoords.y;
-            actorMarkerSprite.interactive = true;
+            actorMarkerSprite.interactive = false;
             actorMarkerSprite.anchor.set(0.5, 0.5);
             actorMarkerSprite.type = 'actor';
-            const svg = templates.orb
-              .replace('{{fillColor}}', '#61D5F8')
-              .replace('{{strokeColor}}', 'black');
-            actorMarkerSprite.texture = Texture.from(svg);
+            actorMarkerSprite.texture = this.orbTexture;
             actorMarkerSprite.visible = true;
             layer._pixiContainer.addChild(actorMarkerSprite);
           }
 
-          if (marker.recipient_location || marker.patient_location) {
+          if (
+            marker.recipient_blurred_location ||
+            marker.patient_blurred_location
+          ) {
             const location =
-              marker[`${this.events[marker.event_key]}_location`];
+              marker[`${marker.map_destination}_blurred_location`];
             const patientCoords = layer.utils.latLngToLayerPoint([
               location.coordinates[1],
               location.coordinates[0],
             ]);
 
-            const wwtsp = marker.attr[`${this.events[marker.event_key]}_wwtsp`];
-            let color = 'red';
+            const wwtsp = marker.attr[`${marker.map_destination}_wwtsp`];
+            let color = '#d0021b';
+            let strokeColor = '#e30001';
+            let workTypeKey = null;
             if (wwtsp && wwtsp.length > 0) {
-              const workType = wwtsp[0];
+              const workType = orderBy(
+                wwtsp,
+                ['commercial_value'],
+                ['desc'],
+              )[0];
+              workTypeKey = workType.work_type_key;
               const colorsKey = `${workType.status}_${
                 workType.claimed_by ? 'claimed' : 'unclaimed'
               }`;
               // const worksiteTemplate = templates.circle;
               const spriteColors = colors[colorsKey];
               color = spriteColors.fillColor;
+              strokeColor = spriteColors.strokeColor;
             } else if (
               marker.attr.recipient_status ||
               marker.attr.patient_status
             ) {
               const statusProp =
-                marker.attr[`${this.events[marker.event_key]}_status`];
-              const colorsKey = `${statusProp}_${'unclaimed'}`;
+                marker.attr[`${marker.map_destination}_status`];
+              const claimed = marker.attr[
+                `${marker.map_destination}_claimed_by`
+              ]
+                ? 'claimed'
+                : 'unclaimed';
+              const colorsKey = `${statusProp}_${claimed}`;
               const spriteColors = colors[colorsKey];
               color = spriteColors.fillColor;
+              strokeColor = spriteColors.strokeColor;
+              workTypeKey =
+                marker.attr[`${marker.map_destination}_work_type_key`];
             }
 
             patientMarkerSprite = new Sprite();
@@ -602,9 +629,27 @@ export default {
             const svg = markerTemplate
               .replace('{{fillColor}}', color)
               .replace('{{strokeColor}}', 'black');
-            patientMarkerSprite.texture = Texture.from(svg);
+            let texture = this.textureMap[color];
+            if (!texture) {
+              this.textureMap[color] = Texture.from(svg);
+              texture = this.textureMap[color];
+            }
+            patientMarkerSprite.texture = texture;
             patientMarkerSprite.visible = true;
             patientMarkerSprite.color = color;
+            patientMarkerSprite.strokeColor = strokeColor;
+            patientMarkerSprite.workTypeKey = workTypeKey;
+            patientMarkerSprite.type = 'patient';
+
+            const detailedTemplate =
+              templates[workTypeKey] || templates.unknown;
+            const typeSvg = detailedTemplate
+              .replace('{{fillColor}}', color)
+              .replace('{{strokeColor}}', 'black');
+
+            patientMarkerSprite.basicTexture = texture;
+            patientMarkerSprite.detailedTexture = Texture.from(typeSvg);
+
             layer._pixiContainer.addChild(patientMarkerSprite);
           }
 
@@ -614,6 +659,13 @@ export default {
           if (actorMarkerSprite && patientMarkerSprite) {
             const linksGraphics = this.createCurve(
               actorMarkerSprite,
+              patientMarkerSprite,
+            );
+            actorMarkerSprite.workTypeKey = patientMarkerSprite.workTypeKey;
+            actorMarkerSprite.visible = this.getMarkerVisibility(
+              actorMarkerSprite,
+            );
+            patientMarkerSprite.visible = this.getMarkerVisibility(
               patientMarkerSprite,
             );
             setTimeout(() => {
@@ -626,7 +678,7 @@ export default {
       });
     },
     generatePoints() {
-      this.eventsInterval = setInterval(this.generateMarker, 1000);
+      this.eventsInterval = setInterval(this.generateMarker, this.markerSpeed);
     },
     pauseGeneratePoints() {
       clearInterval(this.eventsInterval);
@@ -734,6 +786,15 @@ export default {
     },
   },
   computed: {
+    visibleWorkTypes() {
+      const selectedWorkTypes = Object.values(this.displayedWorkTypeSvgs)
+        .filter((s) => s.selected)
+        .map((s) => s.key);
+      if (selectedWorkTypes.length > 0) {
+        return selectedWorkTypes;
+      }
+      return null;
+    },
     orgTable() {
       const columns = makeTableColumns([
         ['name', '2fr'],
@@ -767,5 +828,10 @@ export default {
 
 .small-font {
   font-size: 11px;
+}
+
+.map-svg-container svg {
+  width: 16px;
+  height: 16px;
 }
 </style>

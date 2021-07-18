@@ -421,7 +421,7 @@ export function getMarkerLayer(markers, map, context) {
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     return L.pixiOverlay(
       function (utils) {
-        // const zoom = utils.getMap().getZoom();
+        const zoom = utils.getMap().getZoom();
         // const center = utils.getMap().getCenter();
         if (frame) {
           cancelAnimationFrame(frame);
@@ -461,9 +461,10 @@ export function getMarkerLayer(markers, map, context) {
           markerSprite.lineStyle(2.5 / scale, lineColor);
           markerSprite.currentPoint++;
           if (markerSprite.currentPoint > markerSprite.wayPoints.length - 1) {
-            markerSprite.alpha -= 0.0025;
+            markerSprite.alpha -= 0.0035;
             if (markerSprite.alpha === 0) {
               setTimeout(() => {
+                markerSprite.texture.destroy();
                 markerSprite.clear();
                 container.removeChild(markerSprite);
               }, 3000);
@@ -502,12 +503,20 @@ export function getMarkerLayer(markers, map, context) {
               markerSprite.frame = requestAnimationFrame(animate);
             } else {
               if (markerSprite.type === 'actor') {
-                markerSprite.alpha -= 0.0015;
+                markerSprite.alpha -= 0.0025;
                 if (markerSprite.alpha === 0) {
                   setTimeout(() => {
+                    markerSprite.texture.destroy();
                     markerSprite.clear();
                     container.removeChild(markerSprite);
                   }, 3000);
+                }
+              } else if (markerSprite.type === 'patient') {
+                if (zoom >= INTERACTIVE_ZOOM_LEVEL) {
+                  markerSprite.texture =
+                    markerSprite.detailedTexture || markerSprite.basicTexture;
+                } else {
+                  markerSprite.texture = markerSprite.basicTexture;
                 }
               }
               markerSprite.scale.set(
