@@ -32,13 +32,15 @@
               :image="post.image"
             >
               <template #header>{{ post.title }}</template>
-              <template #corner>5 min ago</template>
+              <template #corner>{{
+                getDateDifference(post.timeStamp)
+              }}</template>
               <template #content>{{ post.content }}</template>
             </newspost>
           </div>
         </div>
         <div class="flex-grow">
-          <div class="flex flex-col mb-5">
+          <div class="flex flex-col">
             <div class="p-3">
               <div class="mb-2">
                 <div>Total Big Number</div>
@@ -46,19 +48,19 @@
               </div>
               <div class="mb-2">
                 <div>Volunteer Hours</div>
-                <div>2348020</div>
+                <div class="text-lg">2348020</div>
               </div>
               <div class="mb-2">
                 <div>Value per Volunteer</div>
-                <div>$237</div>
+                <div class="text-lg">$237</div>
               </div>
               <div class="mb-2">
                 <div>Volunteer Hours Dollars</div>
-                <div>$467</div>
+                <div class="text-lg">$467</div>
               </div>
               <div class="mb-2">
                 <div>Total Market Value</div>
-                <div>$41283437</div>
+                <div class="text-lg">$41283437</div>
               </div>
               <div class="underline text-primary-dark">
                 {{ $t('More Statistics') }}
@@ -335,7 +337,7 @@ export default {
           title: 'Test 2',
           userInfo: null,
           content: 'This is a test post',
-          timeStamp: new Date(),
+          timeStamp: new Date('December 17, 1995 03:24:00'),
         },
         {
           title: 'Test 3',
@@ -343,7 +345,7 @@ export default {
           content: 'This is a test post',
           image:
             'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          timeStamp: new Date(),
+          timeStamp: new Date('November 11, 2020'),
         },
         {
           title: 'Test 4',
@@ -356,7 +358,7 @@ export default {
           content: 'This is a test post',
           image:
             'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          timeStamp: new Date(),
+          timeStamp: new Date('July 19, 2021 11:00:00'),
         },
       ],
     };
@@ -776,6 +778,38 @@ export default {
     pauseGeneratePoints() {
       clearInterval(this.eventsInterval);
       this.eventsInterval = null;
+    },
+    getDateDifference(date) {
+      const dateDifference = Math.abs(new Date() - date);
+      let difference;
+      // convert it to different measurements based on how much time passed
+      if (dateDifference < 1000) {
+        difference = 'now';
+      } else {
+        difference = Math.floor(Math.abs(dateDifference / 1000));
+        if (difference >= 60) {
+          difference = Math.floor(Math.abs(difference / 60));
+          if (difference >= 60) {
+            difference = Math.floor(Math.abs(difference / 60));
+            if (difference >= 24) {
+              difference = Math.floor(Math.abs(difference / 24));
+              if (difference >= 365) {
+                difference = Math.floor(Math.abs(difference / 365));
+                difference += ' years ago';
+              } else {
+                difference += ' days ago';
+              }
+            } else {
+              difference += ' hours ago';
+            }
+          } else {
+            difference += ' minutes ago';
+          }
+        } else {
+          difference += ' seconds ago';
+        }
+      }
+      return difference;
     },
     async getCompletionRateData() {
       const response = await this.$http.get(
