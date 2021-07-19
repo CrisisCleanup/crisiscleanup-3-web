@@ -234,8 +234,8 @@
               </div>
             </div>
           </div>
-          <div class="col-span-1 border grid grid-rows-12">
-            <div class="row-span-7 overflow-y-scroll p-2">
+          <div class="col-span-1 border overflow-y-scroll">
+            <div class="h-40">
               <div class="grid grid-cols-6">
                 <div class="col-span-2 truncate">Organization Name</div>
                 <div class="col-span-1 text-center truncate">Cases</div>
@@ -245,19 +245,19 @@
               </div>
 
               <div v-for="(organization, index) in organizations" :key="index">
-                <div class="grid grid-cols-6 hover:bg-gray-200 p-2 rounded">
+                <OrganizationActivity class="w-full" v-if="organization.showAdvanced" :organizationInfo="organization" :organizationImage="organization.image" @close="organization.showAdvanced = false" />
+                <div class="grid grid-cols-6 hover:bg-gray-200 p-2 rounded" @click="organization.showAdvanced = true" v-else>
                   <div class="col-span-2 truncate flex flex-row"><img :src="organization.avatar" class="w-5 h-5 rounded-full mr-2"/> {{ organization.name }}</div>
                   <div class="col-span-1 text-center">
-                    {{ organization.reported_count }}
+                    {{ organization.cases }}
                   </div>
                   <div class="col-span-1 text-center">
-                    {{ organization.claimed_count }}
+                    {{ organization.claimed }}
                   </div>
                   <div class="col-span-1 text-center">{{ organization.calls }}</div>
                   <div class="col-span-1 text-center">{{ organization.value }}</div>
                 </div>
               </div>
-              <!-- <OrganizationActivity /> -->
             </div>
             <div class="row-span-5">
               <tabs class="" ref="tabs" tab-classes="text-xs">
@@ -272,7 +272,7 @@
                 <tab :name="$t('Total Cases')"></tab>
                 <tab :name="$t('Case Status')"></tab>
               </tabs>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -317,34 +317,58 @@ export default {
         {
           avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
           name: 'test 1',
-          reported_count: '12',
-          claimed_count: '13',
+          cases: '12',
+          claimed: '13',
           calls: '14',
           value: '15',
+          showAdvanced: false,
+          orgType: "test",
+          availability: "test",
+          address: "test",
+          type: "test",
+          role: "test",
         },
         {
           avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
           name: 'test 2',
-          reported_count: '16',
-          claimed_count: '17',
+          cases: '16',
+          claimed: '17',
           calls: '4',
           value: '14',
+          showAdvanced: false,
+          orgType: "test",
+          availability: "test",
+          address: "test",
+          type: "test",
+          role: "test",
         },
         {
           avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
           name: 'test 3',
-          reported_count: '3',
-          claimed_count: '17',
+          cases: '3',
+          claimed: '17',
           calls: '1',
           value: '5',
+          showAdvanced: false,
+          orgType: "test",
+          availability: "test",
+          address: "test",
+          type: "test",
+          role: "test",
         },
         {
           avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
           name: 'test 4',
-          reported_count: '12',
-          claimed_count: '13',
+          cases: '12',
+          claimed: '13',
           calls: '14',
           value: '15',
+          showAdvanced: false,
+          orgType: "test",
+          availability: "test",
+          address: "test",
+          type: "test",
+          role: "test",
         },
       ],
       templates,
