@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute top-0 right-0 left-0 bottom-0" :style="styles">
+  <div class="h-screen" :style="styles">
     <div class="grid grid-cols-6">
       <div
         class="col-span-1 shadow-lg h-screen flex flex-col"
@@ -20,6 +20,21 @@
           />
           <div class="mt-2 font-semibold">
             {{ $t('~~We help volunteers to help more people after disasters') }}
+          </div>
+        </div>
+        <div class="h-1/3 overflow-y-scroll">
+          <div v-for="(post, index) in newsposts" :key="index">
+            <newspost
+              class="text-white my-2"
+              :is-user-post="post.userInfo"
+              :user-info="post.userInfo"
+              :avatar-icon="post.avatarIcon"
+              :image="post.image"
+            >
+              <template #header>{{ post.title }}</template>
+              <template #corner>5 min ago</template>
+              <template #content>{{ post.content }}</template>
+            </newspost>
           </div>
         </div>
         <div class="flex-grow">
@@ -123,26 +138,17 @@
             />
           </div>
         </div>
-        <div class="h-12 grid grid-flow-col text-xs">
-          <div
-            class="flex items-center justify-center w-30 h-12"
-            :class="incident ? '' : 'border-l border-t border-r rounded-t'"
-          >
-            {{ $t('~~All') }}
-          </div>
-          <div
+        <div class="h-12 flex items-center justify-start">
+          <span class="mx-4 h-full flex items-center">
+            {{ $t('All') }}
+          </span>
+          <span
+            class="mx-4 h-full flex items-center"
             v-for="incident in incidents"
             :key="incident.id"
-            class="flex items-center justify-start w-30 h-12"
-            :class="
-              String(incident.id) === String(incidentId)
-                ? 'border-l border-t border-r rounded-t'
-                : ''
-            "
           >
-            <DisasterIcon class="mx-2" :current-incident="incident" />
-            {{ incident.short_name }}
-          </div>
+            {{ incident.name }}
+          </span>
         </div>
         <div class="flex-grow grid grid-cols-4">
           <div class="col-span-3 flex flex-col">
@@ -155,23 +161,9 @@
                 ></div>
                 <div
                   style="z-index: 1001;"
-                  class="absolute top-0 right-0 h-32 w-auto overflow-hidden mt-3 mr-3"
-                  ref="incidentScroll"
-                >
-                  <div
-                    v-for="incident in liveIncidents"
-                    :key="incident"
-                    class="bg-crisiscleanup-dark-400 p-1 my-2 bg-opacity-25"
-                  >
-                    {{ incident }}
-                  </div>
-                </div>
-                <div
-                  style="z-index: 1001;"
                   class="absolute left-0 bottom-0 right-0"
                 >
                   <div
-                    v-if="displayedWorkTypeSvgs.length > 0"
                     class="legend w-108 h-auto bg-crisiscleanup-dark-400 p-2 mb-5 ml-3 bg-opacity-25"
                   >
                     <div class="font-bold my-1 text-white text-sm">
@@ -186,7 +178,9 @@
                         @click="
                           () => {
                             entry.selected = !entry.selected;
-                            displayedWorkTypeSvgs = [...displayedWorkTypeSvgs];
+                            displayedWorkTypeSvgs = {
+                              ...displayedWorkTypeSvgs,
+                            };
                             refresh();
                           }
                         "
@@ -214,7 +208,7 @@
                     </div>
                   </div>
                   <div
-                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-2 bg-opacity-25 flex mb-8"
+                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-2 bg-opacity-25 flex"
                   >
                     <div class="flex justify-center items-center mr-2">
                       <base-button
@@ -234,20 +228,7 @@
                       >
                       </base-button>
                     </div>
-                    <Slider
-                      v-if="markers.length"
-                      class="w-120"
-                      @input="
-                        (value) => {
-                          throttle(() => {
-                            refreshTimeline(value);
-                          }, 1000)();
-                        }
-                      "
-                      :value="markers.length - 1"
-                      :min="0"
-                      :max="markers.length - 1"
-                    ></Slider>
+                    <Slider class="w-120" @input="() => {}" :value="0"></Slider>
                   </div>
                 </div>
               </div>
@@ -288,17 +269,16 @@
 import * as L from 'leaflet';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
+import Newspost from '@/components/Newspost.vue';
 
 import {
   calcWaypoints,
   degreesToRadians,
   findBezierPoints,
   getMarkerLayer,
-  getLiveLayer,
   mapAttribution,
   mapTileLayerDark,
   mapTileLayer,
-  randomIntFromInterval,
 } from '@/utils/map';
 import { HomeNavigation } from '@/components/home/SideNav';
 import Table from '@/components/Table';
@@ -306,18 +286,15 @@ import { getQueryString } from '@/utils/urls';
 import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
-import { orderBy, throttle } from 'lodash';
+import { orderBy } from 'lodash';
 import Slider from '@/components/Slider';
-import DisasterIcon from '@/components/DisasterIcon';
 
 export default {
   name: 'PewPew',
-  components: { DisasterIcon, Slider, Table, BarChart },
+  components: { Slider, Table, BarChart, Newspost },
   data() {
     return {
       markers: [],
-      liveEvents: [],
-      liveIncidents: [],
       events: {},
       incidents: [],
       organizations: [],
@@ -335,8 +312,8 @@ export default {
           data: null,
         },
       },
-      incidentId: null,
-      markerSpeed: 1600,
+      incidentId: 222,
+      markerSpeed: 2000,
       incident: null,
       incidentStats: {},
       mapStatistics: [],
@@ -344,30 +321,66 @@ export default {
       orbTexture: null,
       eventsInterval: null,
       textureMap: {},
-      queryFilter: {
-        start_date: null,
-        end_date: null,
-        incident: null,
-      },
-      throttle,
+      newsposts: [
+        {
+          title: 'Test 1',
+          userInfo: {
+            name: 'Angelo Pablo',
+            organization: 'ArroyoDev',
+          },
+          avatarIcon:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          content: 'This is a test post',
+          timeStamp: new Date(),
+        },
+        {
+          title: 'Test 2',
+          userInfo: null,
+          content: 'This is a test post',
+          timeStamp: new Date(),
+        },
+        {
+          title: 'Test 3',
+          userInfo: null,
+          content: 'This is a test post',
+          image:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          timeStamp: new Date(),
+        },
+        {
+          title: 'Test 4',
+          userInfo: {
+            name: 'Angelo Pablo',
+            organization: 'ArroyoDev',
+          },
+          avatarIcon:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          content: 'This is a test post',
+          image:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          timeStamp: new Date(),
+        },
+      ],
     };
   },
   async mounted() {
-    this.incidentId = this.$route.query.incident;
+    await Incident.api().fetchById(this.incidentId);
+    this.incident = Incident.find(this.incidentId);
 
-    this.queryFilter.start_date = this.$moment().add(-60, 'days');
-    this.queryFilter.end_date = this.$moment();
-
-    if (this.incidentId) {
-      await Incident.api().fetchById(this.incidentId);
-      this.incident = Incident.find(this.incidentId);
-      this.queryFilter.start_date = this.incident.start_at_moment;
-      this.queryFilter.end_date = this.incident.start_at_moment.add(60, 'days');
-      this.setLegend();
-    }
-
-    this.incidents = await this.getRecentIncidents();
-    this.organizations = await this.getOrganizations();
+    this.displayedWorkTypeSvgs = this.incident.created_work_types.map(
+      (workType) => {
+        const template = templates[workType] || templates.unknown;
+        const svg = template
+          .replace('{{fillColor}}', '#61D5F8')
+          .replace('{{strokeColor}}', 'black')
+          .replace('{{multiple}}', '');
+        return {
+          svg,
+          key: workType,
+          selected: false,
+        };
+      },
+    );
 
     const svg = templates.orb
       .replace('{{fillColor}}', '#61D5F8')
@@ -376,37 +389,37 @@ export default {
     await this.getIncidentStats();
     this.mapStatistics = [
       {
-        count: this.incidentStats.all.total,
+        count: this.incidentStats.worksite_count,
         style: `border-color: white`,
         title: this.$t('~~All Cases'),
       },
       {
-        count: this.incidentStats.unclaimed.total,
+        count: this.incidentStats.unclaimed_count,
         style: `border-color: #d0021b`,
         title: this.$t('~~Unclaimed'),
       },
       {
-        count: this.incidentStats.claimed.total,
+        count: this.incidentStats.claimed_count,
         style: `border-color: #fab92e`,
         title: this.$t('~~Claimed'),
       },
       {
-        count: this.incidentStats.assigned.total,
+        count: this.incidentStats.assigned_count,
         style: `border-color: #f0f032`,
         title: this.$t('~~Assinged'),
       },
       {
-        count: this.incidentStats.partial.total,
+        count: this.incidentStats.partial_count,
         style: `border-color: #0054bb`,
         title: this.$t('~~Partly Done'),
       },
       {
-        count: this.incidentStats.closed.total,
+        count: this.incidentStats.closed_count,
         style: `border-color: #0FA355`,
         title: this.$t('~~Closed'),
       },
       {
-        count: this.incidentStats.overdue.total,
+        count: this.incidentStats.overdue_count,
         style: `border: none`,
         title: this.$t('~~Overdue'),
       },
@@ -437,44 +450,24 @@ export default {
     await this.loadMap();
   },
   methods: {
-    setLegend() {
-      this.displayedWorkTypeSvgs = this.incident.created_work_types.map(
-        (workType) => {
-          const template = templates[workType] || templates.unknown;
-          const svg = template
-            .replace('{{fillColor}}', '#61D5F8')
-            .replace('{{strokeColor}}', 'black')
-            .replace('{{multiple}}', '');
-          return {
-            svg,
-            key: workType,
-            selected: false,
-          };
-        },
-      );
-    },
     async getRecentIncidents() {
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,incident_type,color,turn_on_release&limit=8&sort=-start_at`,
+        `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,turn_on_release&limit=8&sort=-start_at`,
       );
       const { results } = response.data;
       return results;
     },
     async getOrganizations() {
-      const { start_date, end_date, incident } = this.queryFilter;
       const params = {
-        start_date: start_date.format('YYYY-MM-DD'),
-        end_date: end_date.format('YYYY-MM-DD'),
+        limit: 20,
       };
-      if (incident) {
-        params.incident = incident;
-      }
       const queryString = getQueryString(params);
 
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/reports_data/organization_statistics?${queryString}`,
+        `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.incidentId}/organizations?${queryString}`,
       );
-      return response.data;
+      const { results } = response.data;
+      return results;
     },
     async loadMap() {
       this.mapLoading = true;
@@ -487,19 +480,17 @@ export default {
     },
     async getAllEvents() {
       const params = {
-        limit: 60000,
+        limit: 1500,
         event_key__in: Object.keys(this.events).join(','),
         sort: 'created_at',
-        incident: this.queryFilter.incident || '',
-        created_at__gte: this.queryFilter.start_date.toISOString(),
-        created_at__lte: this.queryFilter.end_date.toISOString(),
+        incident: this.incidentId,
       };
       const queryString = getQueryString(params);
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
       );
       this.markers = response.data.results;
-      // [this.currentEvent] = this.markers;
+      [this.currentEvent] = this.markers;
 
       // let next;
       // next = response.data.next;
@@ -511,22 +502,6 @@ export default {
       // }
       // this.pollNewEvents();
     },
-    async getLatestEvents() {
-      const params = {
-        limit: 100,
-        created_at__gt: this.$moment().add(-24, 'hours').toISOString(),
-        'event_key__in!': `${[
-          'user_join_worksite-data_with_worksite',
-          'user_unjoin_worksite-data_from_worksite',
-        ].join(',')}`,
-      };
-      const queryString = getQueryString(params);
-      const { data } = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
-      );
-      this.liveEvents = data.results;
-    },
-
     async renderMap() {
       if (!this.map) {
         this.map = L.map('map', {
@@ -558,26 +533,17 @@ export default {
 
       this.setLayer();
 
+      this.incidents = await this.getRecentIncidents();
+      this.organizations = await this.getOrganizations();
       this.events = {
-        user_create_worksite: true,
+        user_join_wwwtsp_with_organization: 'patient',
+        'user_join_work-type-status_with_wwwtsp': 'recipient',
+        user_create_worksite: 'recipient',
       };
       await this.getAllEvents();
       this.lastEventTimestamp = this.$moment().toISOString();
       const worksiteLayer = getMarkerLayer([], map, this);
       worksiteLayer.addTo(map);
-
-      // Initial Draw
-      for (let i = 0; i < this.markers.length; i++) {
-        this.addMarker(this.markers[i], i);
-      }
-
-      worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
-      worksiteLayer.redraw();
-
-      // Last 2 hours
-      await this.getLatestEvents();
-      const liveLayer = getLiveLayer();
-      liveLayer.addTo(map);
 
       map.attributionControl.setPosition('bottomright');
     },
@@ -586,15 +552,15 @@ export default {
       const y1 = actorMarkerSprite.y;
       const x2 = patientMarkerSprite.x;
       const y2 = patientMarkerSprite.y;
-      const ang1 = degreesToRadians(randomIntFromInterval(30, 45)); // in radians
-      const ang2 = degreesToRadians(randomIntFromInterval(45, 60));
+      const ang1 = degreesToRadians(30); // in radians
+      const ang2 = degreesToRadians(30);
 
       const len = Math.hypot(x2 - x1, y2 - y1);
-      const ax1 = Math.cos(ang1) * len * (1 / randomIntFromInterval(2, 5));
-      const ay1 = Math.sin(ang1) * len * (1 / randomIntFromInterval(2, 5));
+      const ax1 = Math.cos(ang1) * len * (1 / 3);
+      const ay1 = Math.sin(ang1) * len * (1 / 3);
 
-      const ax2 = Math.cos(ang2) * len * (1 / randomIntFromInterval(2, 5));
-      const ay2 = Math.sin(ang2) * len * (1 / randomIntFromInterval(2, 5));
+      const ax2 = Math.cos(ang2) * len * (1 / 3);
+      const ay2 = Math.sin(ang2) * len * (1 / 3);
       const linksGraphics = new Graphics();
       linksGraphics.x1 = x1;
       linksGraphics.y1 = y1;
@@ -661,7 +627,7 @@ export default {
     },
     refresh() {
       this.map.eachLayer((layer) => {
-        if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
+        if (layer.key === 'marker_layer') {
           const container = layer._pixiContainer;
           container.children.forEach((markerSprite) => {
             markerSprite.visible = this.getMarkerVisibility(markerSprite);
@@ -672,122 +638,12 @@ export default {
         }
       });
     },
-    refreshTimeline(index) {
-      this.map.eachLayer((layer) => {
-        if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
-          const container = layer._pixiContainer;
-          container.children.forEach((markerSprite) => {
-            markerSprite.visible = markerSprite.index <= index;
-          });
-
-          layer._renderer.render(container);
-          layer.redraw();
-        }
-      });
-    },
-    addMarker(marker, index) {
-      this.map.eachLayer((layer) => {
-        if (layer.key === 'marker_layer') {
-          const markerTemplate = templates.circle;
-          let patientMarkerSprite = null;
-          if (
-            marker.recipient_blurred_location ||
-            marker.patient_blurred_location
-          ) {
-            const location =
-              marker[`${marker.map_destination}_blurred_location`];
-            const patientCoords = layer.utils.latLngToLayerPoint([
-              location.coordinates[1],
-              location.coordinates[0],
-            ]);
-
-            const wwtsp = marker.attr[`${marker.map_destination}_wwtsp`];
-            let color = '#d0021b';
-            let strokeColor = '#e30001';
-            let workTypeKey = null;
-            if (wwtsp && wwtsp.length > 0) {
-              const workType = orderBy(
-                wwtsp,
-                ['commercial_value'],
-                ['desc'],
-              )[0];
-              workTypeKey = workType.work_type_key;
-              const colorsKey = `${workType.status}_${
-                workType.claimed_by ? 'claimed' : 'unclaimed'
-              }`;
-              // const worksiteTemplate = templates.circle;
-              const spriteColors = colors[colorsKey];
-              color = spriteColors.fillColor;
-              strokeColor = spriteColors.strokeColor;
-            } else if (
-              marker.attr.recipient_status ||
-              marker.attr.patient_status
-            ) {
-              const statusProp =
-                marker.attr[`${marker.map_destination}_status`];
-              const claimed = marker.attr[
-                `${marker.map_destination}_claimed_by`
-              ]
-                ? 'claimed'
-                : 'unclaimed';
-              const colorsKey = `${statusProp}_${claimed}`;
-              const spriteColors = colors[colorsKey];
-              color = spriteColors.fillColor;
-              strokeColor = spriteColors.strokeColor;
-              workTypeKey =
-                marker.attr[`${marker.map_destination}_work_type_key`];
-            }
-
-            patientMarkerSprite = new Sprite();
-            patientMarkerSprite.index = index;
-            patientMarkerSprite.x = patientCoords.x;
-            patientMarkerSprite.y = patientCoords.y;
-            patientMarkerSprite.x0 = patientCoords.x;
-            patientMarkerSprite.y0 = patientCoords.y;
-            patientMarkerSprite.interactive = false;
-            patientMarkerSprite.anchor.set(0.5, 0.5);
-            const svg = markerTemplate
-              .replace('{{fillColor}}', color)
-              .replace('{{strokeColor}}', 'black');
-            let texture = this.textureMap[color];
-            if (!texture) {
-              this.textureMap[color] = Texture.from(svg);
-              texture = this.textureMap[color];
-            }
-            patientMarkerSprite.texture = texture;
-            patientMarkerSprite.visible = true;
-            patientMarkerSprite.color = color;
-            patientMarkerSprite.strokeColor = strokeColor;
-            patientMarkerSprite.workTypeKey = workTypeKey;
-            patientMarkerSprite.type = 'patient';
-
-            const detailedTemplate =
-              templates[workTypeKey] || templates.unknown;
-            const typeSvg = detailedTemplate
-              .replace('{{fillColor}}', color)
-              .replace('{{strokeColor}}', 'black');
-
-            patientMarkerSprite.basicTexture = texture;
-            patientMarkerSprite.detailedTexture = Texture.from(typeSvg);
-
-            layer._pixiContainer.addChild(patientMarkerSprite);
-          }
-        }
-      });
-    },
     generateMarker() {
       this.map.eachLayer((layer) => {
-        if (layer.key === 'live_layer') {
-          const marker = this.liveEvents[this.currentEventIndex];
-          this.currentEventIndex++;
-          if (!marker) {
-            layer._renderer.render(layer._pixiContainer);
-            layer.redraw();
-            return;
-          }
+        if (layer.key === 'marker_layer') {
+          const marker = this.markers[this.currentEventIndex];
           this.currentEvent = marker;
-          this.liveIncidents.push(this.currentEvent.attr.incident_name);
-          this.$refs.incidentScroll.scrollTop = this.$refs.incidentScroll.scrollHeight;
+          this.currentEventIndex++;
           const markerTemplate = templates.circle;
           let actorMarkerSprite = null;
           let patientMarkerSprite = null;
@@ -805,7 +661,6 @@ export default {
             actorMarkerSprite.interactive = false;
             actorMarkerSprite.anchor.set(0.5, 0.5);
             actorMarkerSprite.type = 'actor';
-            actorMarkerSprite.live = true;
             actorMarkerSprite.texture = this.orbTexture;
             actorMarkerSprite.visible = true;
             layer._pixiContainer.addChild(actorMarkerSprite);
@@ -866,7 +721,6 @@ export default {
             patientMarkerSprite.y0 = patientCoords.y;
             patientMarkerSprite.interactive = false;
             patientMarkerSprite.anchor.set(0.5, 0.5);
-            patientMarkerSprite.live = true;
             const svg = markerTemplate
               .replace('{{fillColor}}', color)
               .replace('{{strokeColor}}', 'black');
@@ -902,7 +756,6 @@ export default {
               actorMarkerSprite,
               patientMarkerSprite,
             );
-            linksGraphics.live = true;
             actorMarkerSprite.workTypeKey = patientMarkerSprite.workTypeKey;
             actorMarkerSprite.visible = this.getMarkerVisibility(
               actorMarkerSprite,
@@ -927,18 +780,8 @@ export default {
       this.eventsInterval = null;
     },
     async getCompletionRateData() {
-      const { start_date, end_date, incident } = this.queryFilter;
-      const params = {
-        start_date: start_date.format('YYYY-MM-DD'),
-        end_date: end_date.format('YYYY-MM-DD'),
-      };
-      if (incident) {
-        params.incident = incident;
-      }
-      const queryString = getQueryString(params);
-
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?${queryString}`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?start_date=2021-06-15&end_date=2021-07-15`,
       );
       const chart = response.data;
 
@@ -1011,18 +854,8 @@ export default {
       return { options, data };
     },
     async getIncidentStats() {
-      const { start_date, end_date, incident } = this.queryFilter;
-      const params = {
-        start_date: start_date.format('YYYY-MM-DD'),
-        end_date: end_date.format('YYYY-MM-DD'),
-      };
-      if (incident) {
-        params.incident = incident;
-      }
-      const queryString = getQueryString(params);
-
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/reports_data/worksite_statistics?${queryString}`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/incident_statistics?incident=${this.incidentId}`,
       );
       this.incidentStats = response.data;
     },
@@ -1058,7 +891,7 @@ export default {
   },
   computed: {
     visibleWorkTypes() {
-      const selectedWorkTypes = this.displayedWorkTypeSvgs
+      const selectedWorkTypes = Object.values(this.displayedWorkTypeSvgs)
         .filter((s) => s.selected)
         .map((s) => s.key);
       if (selectedWorkTypes.length > 0) {
