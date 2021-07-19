@@ -1,5 +1,8 @@
 <template>
-  <div class="flex flex-col relative p-2 rounded" :class="'bg-' + bgColor">
+  <div
+    class="flex flex-col relative p-2 rounded"
+    :class="isUserPost ? 'bg-gray-500' : 'bg-red-800 border-2 border-red-600'"
+  >
     <div class="absolute top-1 right-0 text-xs mr-2">
       <slot name="corner"></slot>
     </div>
@@ -37,10 +40,6 @@ export default {
     userInfo: {
       type: Object,
       default: () => ({}),
-    },
-    bgColor: {
-      type: String,
-      default: 'gray-500',
     },
   },
 };

@@ -22,6 +22,21 @@
             {{ $t('~~We help volunteers to help more people after disasters') }}
           </div>
         </div>
+        <div class="h-1/3 overflow-y-scroll">
+          <div v-for="(post, index) in newsposts" :key="index">
+            <newspost
+              class="text-white my-2"
+              :is-user-post="post.userInfo"
+              :user-info="post.userInfo"
+              :avatar-icon="post.avatarIcon"
+              :image="post.image"
+            >
+              <template #header>{{ post.title }}</template>
+              <template #corner>5 min ago</template>
+              <template #content>{{ post.content }}</template>
+            </newspost>
+          </div>
+        </div>
         <div class="flex-grow">
           <div class="flex flex-col mb-5">
             <div class="p-3">
@@ -254,6 +269,7 @@
 import * as L from 'leaflet';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
+import Newspost from '@/components/Newspost.vue';
 
 import {
   calcWaypoints,
@@ -275,7 +291,7 @@ import Slider from '@/components/Slider';
 
 export default {
   name: 'PewPew',
-  components: { Slider, Table, BarChart },
+  components: { Slider, Table, BarChart, Newspost },
   data() {
     return {
       markers: [],
@@ -305,6 +321,46 @@ export default {
       orbTexture: null,
       eventsInterval: null,
       textureMap: {},
+      newsposts: [
+        {
+          title: 'Test 1',
+          userInfo: {
+            name: 'Angelo Pablo',
+            organization: 'ArroyoDev',
+          },
+          avatarIcon:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          content: 'This is a test post',
+          timeStamp: new Date(),
+        },
+        {
+          title: 'Test 2',
+          userInfo: null,
+          content: 'This is a test post',
+          timeStamp: new Date(),
+        },
+        {
+          title: 'Test 3',
+          userInfo: null,
+          content: 'This is a test post',
+          image:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          timeStamp: new Date(),
+        },
+        {
+          title: 'Test 4',
+          userInfo: {
+            name: 'Angelo Pablo',
+            organization: 'ArroyoDev',
+          },
+          avatarIcon:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          content: 'This is a test post',
+          image:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          timeStamp: new Date(),
+        },
+      ],
     };
   },
   async mounted() {
