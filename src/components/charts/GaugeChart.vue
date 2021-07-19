@@ -11,48 +11,41 @@ export type GaugeT = {|
   radius: number,
   fillPercent: number,
   gradients?: string[],
+  leftLabel: string,
+  rightLabel: string,
 |};
 
 export default {
   name: 'GaugeChart',
   components: {},
   props: {
-    gauges: VueTypes.arrayOf<GaugeT[]>(
+    gauges: VueTypes.arrayOf(
       VueTypes.shape<GaugeT>({
         radius: VueTypes.number.isRequired,
-        fillPercent: VueTypes.number.isRequired,
-        gradients: VueTypes.arrayOf(String).isRequired,
-      }),
+        fillPercent: VueTypes.oneOfType([VueTypes.number, VueTypes.string])
+          .isRequired,
+        gradients: VueTypes.arrayOf(VueTypes.string),
+        leftLabel: VueTypes.string,
+        rightLabel: VueTypes.string,
+      }).isRequired,
     ).def(() => [
       {
         radius: 100,
         fillPercent: 50,
-        gradients: [
-          'rgba(238, 40, 218, 1)',
-          'rgba(97, 213, 248, 1)',
-          'rgba(97, 213, 248, 1)',
-          'rgba(97, 247, 150, 0.984165)',
-        ],
+        leftLabel: 'Low 1',
+        rightLabel: 'High 1',
       },
       {
         radius: 170,
         fillPercent: 70,
-        gradients: [
-          'rgba(238, 40, 218, 1)',
-          'rgba(97, 213, 248, 1)',
-          'rgba(97, 213, 248, 1)',
-          'rgba(97, 247, 150, 0.984165)',
-        ],
+        leftLabel: 'Low 2',
+        rightLabel: 'High 2',
       },
       {
         radius: 250,
         fillPercent: 0,
-        gradients: [
-          'rgba(238, 40, 218, 1)',
-          'rgba(97, 213, 248, 1)',
-          'rgba(97, 213, 248, 1)',
-          'rgba(97, 247, 150, 0.984165)',
-        ],
+        leftLabel: 'Low 3',
+        rightLabel: 'High 3',
       },
     ]),
     /**
@@ -63,14 +56,6 @@ export default {
       required: false,
       default: 0,
     },
-    /**
-     * Percent Value to move knob around the arc
-     */
-    fillPercent: {
-      type: [String, Number],
-      required: true,
-      default: 0,
-    },
   },
 
   data() {
@@ -78,21 +63,21 @@ export default {
       chartId: 'velocity-gauge-chart',
       svg: null,
       scale: null,
-      radius: null,
     };
   },
 
   watch: {
-    fillPercent: {
-      handler(data) {
-        this.renderKnob(this.radius, this.scale(+data));
+    gauges: {
+      deep: true,
+      handler(data: GaugeT[]) {
+        this.redrawKnob(data);
       },
     },
   },
 
   mounted() {
+    this.destroyChart();
     this.renderChart();
-    console.log(this.gauges);
   },
 
   computed: {
@@ -105,12 +90,6 @@ export default {
       const h = +d3.select(`#${this.chartId}`).style('height').slice(0, -2);
       console.log(h);
       return h - this.margin * 2;
-    },
-    innerRadius() {
-      return Math.abs(Math.min(this.width, this.height) / 6);
-    },
-    outerRadius() {
-      return Math.abs(Math.min(this.width, this.height) / 2);
     },
     labelFontSize() {
       return (this.width + this.height) * 0.012;
@@ -136,7 +115,7 @@ export default {
         .attr(
           'transform',
           `translate(${this.width / 2 + this.margin}, ${
-            this.height / 2 + this.margin
+            this.height / 1.5 + this.margin
           })`,
         );
 
@@ -148,48 +127,63 @@ export default {
         .range([-Math.PI / 2, Math.PI / 2])
         .clamp(true); // prevent values from going out of domain
 
-      this.radius = 200;
-
       this.gauges.forEach((gauge: GaugeT, index: number) => {
-        console.log(gauge);
+        console.log(JSON.stringify(gauge));
+        console.log(this.scale.ticks(1));
         this.svg
           .append('path')
+          .attr('transform', 'scale(0)')
+          .attr(
+            'd',
+            d3
+              .arc()
+              .outerRadius(0)
+              .innerRadius(0)
+              .startAngle(-Math.PI / 2)
+              .endAngle(-Math.PI / 2),
+          )
+          .transition()
+          .duration(500)
+          .delay(gauge.radius * 2)
           .attr('d', this.getInnerSemiCircle(gauge.radius))
+          .attr('transform', 'scale(1)')
           .attr('fill', `url(#gauge-gradient-${index})`);
-
-        this.renderKnob(gauge.radius, this.scale(+gauge.fillPercent));
       });
+
+      this.redrawKnob(this.gauges);
     },
 
     getInnerSemiCircle(radius: number) {
       return d3
         .arc()
         .outerRadius(radius)
-        .innerRadius(radius - 30)
+        .innerRadius(radius - 10)
         .cornerRadius(radius * 0.2)
         .startAngle(-Math.PI / 2)
         .endAngle(Math.PI / 2);
     },
 
-    renderKnob(radius: number, angle: number) {
-      d3.selectAll('path.gauge-knob').remove();
+    redrawKnob(data: GaugeT[]) {
+      const knob = this.svg.selectAll('path.gauge-knob');
 
-      this.gauges.forEach((gauge: GaugeT) => {
-        this.svg
-          .append('path')
-          .classed('gauge-knob', true)
-          .attr(
-            'd',
-            d3
-              .arc()
-              .outerRadius(gauge.radius + gauge.radius * 0.22)
-              .innerRadius(gauge.radius - gauge.radius * 0.022)
-              .cornerRadius(9999)
-              .startAngle(angle - 110 / 1000)
-              .endAngle(angle + 110 / 1000),
-          )
-          .attr('fill', '#fff');
-      });
+      knob
+        .data(data)
+        .join('path')
+        .classed(`gauge-knob`, true)
+        .attr('fill', '#fff')
+        .transition()
+        .duration(1000)
+        .delay((d: GaugeT) => d.radius * 5)
+        .attr('d', (d: GaugeT) =>
+          d3
+            .arc()
+            .outerRadius(d.radius + 4)
+            .innerRadius(d.radius - 14)
+            .cornerRadius(999)({
+            startAngle: this.scale(+d.fillPercent),
+            endAngle: this.scale(+d.fillPercent + 10),
+          }),
+        );
     },
 
     addDefs() {
@@ -204,22 +198,35 @@ export default {
         linGradient
           .append('stop')
           .attr('offset', '0%')
-          .attr('stop-color', gauge.gradients[0]);
+          .attr(
+            'stop-color',
+            (gauge.gradients && gauge.gradients[0]) || 'rgba(238, 40, 218, 1)',
+          );
 
         linGradient
           .append('stop')
           .attr('offset', '40%')
-          .attr('stop-color', gauge.gradients[1]);
+          .attr(
+            'stop-color',
+            (gauge.gradients && gauge.gradients[1]) || 'rgba(97, 213, 248, 1)',
+          );
 
         linGradient
           .append('stop')
           .attr('offset', '60%')
-          .attr('stop-color', gauge.gradients[2]);
+          .attr(
+            'stop-color',
+            (gauge.gradients && gauge.gradients[2]) || 'rgba(97, 213, 248, 1)',
+          );
 
         linGradient
           .append('stop')
           .attr('offset', '100%')
-          .attr('stop-color', gauge.gradients[3]);
+          .attr(
+            'stop-color',
+            (gauge.gradients && gauge.gradients[3]) ||
+              'rgba(97, 247, 150, 0.984165)',
+          );
       });
     },
   },
