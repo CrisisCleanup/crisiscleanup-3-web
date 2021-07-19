@@ -164,9 +164,8 @@ export default {
     },
 
     redrawKnob(data: GaugeT[]) {
-      const knob = this.svg.selectAll('path.gauge-knob');
-
-      knob
+      const knobs = this.svg
+        .selectAll('path.gauge-knob')
         .data(data)
         .join('path')
         .classed(`gauge-knob`, true)
@@ -184,6 +183,8 @@ export default {
             endAngle: this.scale(+d.fillPercent + 10),
           }),
         );
+
+      this.animateKnobs(knobs);
     },
 
     addDefs() {
@@ -228,6 +229,58 @@ export default {
               'rgba(97, 247, 150, 0.984165)',
           );
       });
+    },
+
+    animateKnobs(knobs) {
+      const { scale } = this;
+      knobs
+        .transition()
+        .delay(function (d, i) {
+          return i * 500;
+        })
+        .on('start', function repeat() {
+          d3.active(this)
+            .attr('d', (d: GaugeT) =>
+              d3
+                .arc()
+                .outerRadius(d.radius + 4)
+                .innerRadius(d.radius - 14)
+                .cornerRadius(999)({
+                startAngle: scale(+d.fillPercent + 1),
+                endAngle: scale(+d.fillPercent + 10 + 1),
+              }),
+            )
+            .transition()
+            .duration(1000)
+            .delay(Math.random() * 5000)
+            .attr('d', (d: GaugeT) =>
+              d3
+                .arc()
+                .outerRadius(d.radius + 4)
+                .innerRadius(d.radius - 14)
+                .cornerRadius(999)({
+                startAngle: scale(+d.fillPercent - 2),
+                endAngle: scale(+d.fillPercent + 10 - 2),
+              }),
+            )
+            .transition()
+            .duration(1000)
+            .delay(Math.random() * 5000)
+            .attr('d', (d: GaugeT) =>
+              d3
+                .arc()
+                .outerRadius(d.radius + 4)
+                .innerRadius(d.radius - 14)
+                .cornerRadius(999)({
+                startAngle: scale(+d.fillPercent + 3),
+                endAngle: scale(+d.fillPercent + 10 + 3),
+              }),
+            )
+            .transition()
+            .duration(1000)
+            .delay(Math.random() * 5000)
+            .on('start', repeat);
+        });
     },
   },
 };
