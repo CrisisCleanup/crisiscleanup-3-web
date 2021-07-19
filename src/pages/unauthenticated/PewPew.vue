@@ -1,13 +1,20 @@
 <template>
-  <div class="h-screen" style="background-color: #232323; color: white;">
+  <div class="h-screen" :style="styles">
     <div class="grid grid-cols-6">
       <div
         class="col-span-1 shadow-lg h-screen flex flex-col"
         style="z-index: 1000;"
       >
-        <div class="h-32 px-4 py-2 border-b">
+        <div class="h-32 px-4 py-2">
           <img
+            v-if="colorMode === 'Dark Mode'"
             src="@/assets/crisiscleanup_logo.png"
+            alt="Crisis Cleanup"
+            class="h-16"
+          />
+          <img
+            v-else
+            src="@/assets/ccu-logo-black-500w.png"
             alt="Crisis Cleanup"
             class="h-16"
           />
@@ -18,10 +25,11 @@
         <div class="flex-grow">
           <div class="flex flex-col mb-5">
             <div class="p-3">
-              <base-text variant="h1">$1.1 billion</base-text>
+              <base-text variant="h1" class="pew-pew-blue"
+                >$1.1 billion</base-text
+              >
               <div>Total Big Number</div>
             </div>
-            <hr />
             <div class="flex flex-col">
               <div
                 v-for="x in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
@@ -33,7 +41,7 @@
               </div>
               <div class="grid grid-cols-2">
                 <div class="p-2">
-                  <div class="underline text-primary-dark">
+                  <div class="underline pew-pew-blue">
                     {{ $t('More Statistics') }}
                   </div>
                 </div>
@@ -78,6 +86,7 @@
               @input="
                 (value) => {
                   colorMode = value;
+                  setLayer();
                 }
               "
             />
@@ -128,16 +137,6 @@
         </div>
         <div class="flex-grow grid grid-cols-4">
           <div class="col-span-3 flex flex-col">
-            <div class="h-10">
-              <base-button
-                :action="pauseGeneratePoints"
-                :text="$t('~~Pause')"
-              ></base-button>
-              <base-button
-                :action="generatePoints"
-                :text="$t('~~Start')"
-              ></base-button>
-            </div>
             <div class="flex-grow">
               <div class="relative h-full">
                 <div
@@ -145,7 +144,10 @@
                   ref="map"
                   class="absolute top-0 left-0 right-0 bottom-0"
                 ></div>
-                <div style="z-index: 1001;" class="absolute left-0 bottom-0">
+                <div
+                  style="z-index: 1001;"
+                  class="absolute left-0 bottom-0 right-0"
+                >
                   <div
                     class="legend w-108 h-auto bg-crisiscleanup-dark-400 p-2 mb-5 ml-3 bg-opacity-25"
                   >
@@ -177,7 +179,7 @@
                   </div>
                   <div class="stats grid grid-flow-col mb-10 ml-3">
                     <div
-                      class="p-1 border mx-1 bg-opacity-25 bg-crisiscleanup-dark-400 rounded-md w-18"
+                      class="p-1 border mx-1 bg-opacity-25 bg-crisiscleanup-dark-400 rounded-md w-auto"
                       v-for="item in mapStatistics"
                       :style="item['style']"
                       :key="item['title']"
@@ -190,6 +192,29 @@
                       </div>
                     </div>
                   </div>
+                  <div
+                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-2 bg-opacity-25 flex"
+                  >
+                    <div class="flex justify-center items-center mr-2">
+                      <base-button
+                        v-if="eventsInterval"
+                        class="w-6 h-6 rounded-full focus:outline-none border p-3"
+                        :action="pauseGeneratePoints"
+                        icon="pause"
+                        icon-size="xs"
+                      >
+                      </base-button>
+                      <base-button
+                        v-else
+                        class="w-6 h-6 rounded-full focus:outline-none border p-3"
+                        :action="generatePoints"
+                        icon="play"
+                        icon-size="xs"
+                      >
+                      </base-button>
+                    </div>
+                    <Slider class="w-120" @input="() => {}" :value="0"></Slider>
+                  </div>
                 </div>
               </div>
             </div>
@@ -200,8 +225,8 @@
                 :columns="orgTable.columns"
                 :data="organizations"
                 style="height: 450px;"
-                :body-style="{ maxHeight: '450px', backgroundColor: '#232323' }"
-                :header-style="{ backgroundColor: '#232323' }"
+                :body-style="{ maxHeight: '450px', ...styles }"
+                :header-style="styles"
               ></Table>
             </div>
             <div class="row-span-5">
@@ -236,7 +261,8 @@ import {
   findBezierPoints,
   getMarkerLayer,
   mapAttribution,
-  mapTileLayerDark as mapTileLayer,
+  mapTileLayerDark,
+  mapTileLayer,
 } from '@/utils/map';
 import { HomeNavigation } from '@/components/home/SideNav';
 import Table from '@/components/Table';
@@ -245,10 +271,11 @@ import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
 import { orderBy } from 'lodash';
+import Slider from '@/components/Slider';
 
 export default {
   name: 'PewPew',
-  components: { Table, BarChart },
+  components: { Slider, Table, BarChart },
   data() {
     return {
       markers: [],
@@ -259,7 +286,7 @@ export default {
       colors,
       map: null,
       lastEventTimestamp: null,
-      colorMode: 'Light Mode',
+      colorMode: 'Dark Mode',
       routes: HomeNavigation,
       currentEvent: null,
       currentEventIndex: 0,
@@ -276,6 +303,7 @@ export default {
       mapStatistics: [],
       displayedWorkTypeSvgs: [],
       orbTexture: null,
+      eventsInterval: null,
       textureMap: {},
     };
   },
@@ -429,14 +457,25 @@ export default {
       }
       const { map } = this;
 
-      L.tileLayer(mapTileLayer, {
+      this.darkTileLayer = L.tileLayer(mapTileLayerDark, {
         // tileSize: 512,
         // zoomOffset: -1,
         attribution: mapAttribution,
         detectRetina: false,
         maxZoom: 18,
         noWrap: false,
-      }).addTo(map);
+      });
+
+      this.lightTileLayer = L.tileLayer(mapTileLayer, {
+        // tileSize: 512,
+        // zoomOffset: -1,
+        attribution: mapAttribution,
+        detectRetina: false,
+        maxZoom: 18,
+        noWrap: false,
+      });
+
+      this.setLayer();
 
       this.incidents = await this.getRecentIncidents();
       this.organizations = await this.getOrganizations();
@@ -784,6 +823,15 @@ export default {
           });
       }, 50000);
     },
+    setLayer() {
+      if (this.colorMode === 'Dark Mode') {
+        this.map.addLayer(this.darkTileLayer);
+        this.map.removeLayer(this.lightTileLayer);
+      } else {
+        this.map.addLayer(this.lightTileLayer);
+        this.map.removeLayer(this.darkTileLayer);
+      }
+    },
   },
   computed: {
     visibleWorkTypes() {
@@ -794,6 +842,18 @@ export default {
         return selectedWorkTypes;
       }
       return null;
+    },
+    styles() {
+      if (this.colorMode === 'Dark Mode') {
+        return {
+          color: 'white',
+          backgroundColor: '#232323',
+        };
+      }
+      return {
+        color: '#232323',
+        backgroundColor: 'white',
+      };
     },
     orgTable() {
       const columns = makeTableColumns([
@@ -833,5 +893,9 @@ export default {
 .map-svg-container svg {
   width: 16px;
   height: 16px;
+}
+
+.pew-pew-blue {
+  color: #61d5f8;
 }
 </style>
