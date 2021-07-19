@@ -234,15 +234,30 @@
               </div>
             </div>
           </div>
-          <div class="col-span-1 grid grid-rows-12">
-            <div class="row-span-7">
-              <!-- <Table
-                :columns="orgTable.columns"
-                :data="organizations"
-                style="height: 450px;"
-                :body-style="{ maxHeight: '450px' }"
-              ></Table> -->
-              <OrganizationActivity />
+          <div class="col-span-1 border grid grid-rows-12">
+            <div class="row-span-7 overflow-y-scroll p-2">
+              <div class="grid grid-cols-6">
+                <div class="col-span-2 truncate">Organization Name</div>
+                <div class="col-span-1 text-center truncate">Cases</div>
+                <div class="col-span-1 text-center truncate">Claimed</div>
+                <div class="col-span-1 text-center truncate">Calls</div>
+                <div class="col-span-1 text-center truncate">Value</div>
+              </div>
+
+              <div v-for="(organization, index) in organizations" :key="index">
+                <div class="grid grid-cols-6 hover:bg-gray-200 p-2 rounded">
+                  <div class="col-span-2 truncate flex flex-row"><img :src="organization.avatar" class="w-5 h-5 rounded-full mr-2"/> {{ organization.name }}</div>
+                  <div class="col-span-1 text-center">
+                    {{ organization.reported_count }}
+                  </div>
+                  <div class="col-span-1 text-center">
+                    {{ organization.claimed_count }}
+                  </div>
+                  <div class="col-span-1 text-center">{{ organization.calls }}</div>
+                  <div class="col-span-1 text-center">{{ organization.value }}</div>
+                </div>
+              </div>
+              <!-- <OrganizationActivity /> -->
             </div>
             <div class="row-span-5">
               <tabs class="" ref="tabs" tab-classes="text-xs">
@@ -298,7 +313,40 @@ export default {
       markers: [],
       events: {},
       incidents: [],
-      organizations: [],
+      organizations: [
+        {
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          name: 'test 1',
+          reported_count: '12',
+          claimed_count: '13',
+          calls: '14',
+          value: '15',
+        },
+        {
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          name: 'test 2',
+          reported_count: '16',
+          claimed_count: '17',
+          calls: '4',
+          value: '14',
+        },
+        {
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          name: 'test 3',
+          reported_count: '3',
+          claimed_count: '17',
+          calls: '1',
+          value: '5',
+        },
+        {
+          avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          name: 'test 4',
+          reported_count: '12',
+          claimed_count: '13',
+          calls: '14',
+          value: '15',
+        },
+      ],
       templates,
       colors,
       map: null,
@@ -336,13 +384,11 @@ export default {
         },
         {
           title: 'Test 2',
-          userInfo: null,
           content: 'This is a test post',
           timeStamp: new Date('December 17, 1995 03:24:00'),
         },
         {
           title: 'Test 3',
-          userInfo: null,
           content: 'This is a test post',
           image:
             'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
