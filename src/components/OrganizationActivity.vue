@@ -1,12 +1,15 @@
 <template>
   <div
-    class="rounded bg-gray-700 text-white grid grid-rows-7 justify-center items-center w-full"
+    class="rounded relative bg-gray-700 text-white grid grid-rows-7 justify-center items-center w-full"
   >
+    <div class="absolute top-0 right-0 text-center rounded-full hover:bg-gray-600 py-1 px-2 m-1" @click="$emit('close')">
+      X
+    </div>
     <div class="grid grid-cols-4 pt-5 ml-3 row-span-1">
       <div class="flex items-center">
         <img
           :src="organizationImage"
-          class="col-span-1 rounded-full w-20 justify-self-center"
+          class="col-span-1 rounded-full w-20 h-20 object-contain bg-black justify-self-center"
         />
       </div>
       <div class="grid-rows-2 col-span-3 sm:ml-2">
@@ -91,7 +94,7 @@
       More
     </div>
     <div class="row-span-3 w-full" v-if="isMore">
-      <TabbedCard :tabs="tabs">
+      <TabbedCard :tabs="tabs" class="w-full">
         <template #incident>
           <IncidentList
             :incident-list="organizationInfo.incidents"
