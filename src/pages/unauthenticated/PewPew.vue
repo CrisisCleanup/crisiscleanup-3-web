@@ -40,30 +40,28 @@
         <div class="flex-grow">
           <div class="flex flex-col mb-5">
             <div class="p-3">
-              <base-text variant="h1" class="pew-pew-blue"
-                >$1.1 billion</base-text
-              >
-              <div>Total Big Number</div>
-            </div>
-            <div class="flex flex-col">
-              <div
-                v-for="x in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
-                :key="x"
-                class="flex px-2 py-3 items-center justify-between text-xs"
-              >
-                <div>{{ $t('Volunteer Hours') }}</div>
-                <div>{{ x }}</div>
+              <div class="mb-2">
+                <div>Total Big Number</div>
+                <div class="text-xl text-blue-600">$1.1 Billion</div>
               </div>
-              <div class="grid grid-cols-2">
-                <div class="p-2">
-                  <div class="underline pew-pew-blue">
-                    {{ $t('More Statistics') }}
-                  </div>
-                </div>
-                <div class="p-2 flex items-start justify-center">
-                  <font-awesome-icon size="lg" icon="question-circle" />
-                  <a class="ml-2">FAQ</a>
-                </div>
+              <div class="mb-2">
+                <div>Volunteer Hours</div>
+                <div>2348020</div>
+              </div>
+              <div class="mb-2">
+                <div>Value per Volunteer</div>
+                <div>$237</div>
+              </div>
+              <div class="mb-2">
+                <div>Volunteer Hours Dollars</div>
+                <div>$467</div>
+              </div>
+              <div class="mb-2">
+                <div>Total Market Value</div>
+                <div>$41283437</div>
+              </div>
+              <div class="underline text-primary-dark">
+                {{ $t('More Statistics') }}
               </div>
             </div>
           </div>
