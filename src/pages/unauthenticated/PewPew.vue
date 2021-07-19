@@ -236,13 +236,13 @@
           </div>
           <div class="col-span-1 grid grid-rows-12">
             <div class="row-span-7">
-              <Table
+              <!-- <Table
                 :columns="orgTable.columns"
                 :data="organizations"
                 style="height: 450px;"
-                :body-style="{ maxHeight: '450px', ...styles }"
-                :header-style="styles"
-              ></Table>
+                :body-style="{ maxHeight: '450px' }"
+              ></Table> -->
+              <OrganizationActivity />
             </div>
             <div class="row-span-5">
               <tabs class="" ref="tabs" tab-classes="text-xs">
@@ -286,12 +286,13 @@ import { getQueryString } from '@/utils/urls';
 import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
+import OrganizationActivity from "@/components/OrganizationActivity.vue";
 import { orderBy } from 'lodash';
 import Slider from '@/components/Slider';
 
 export default {
   name: 'PewPew',
-  components: { Slider, Table, BarChart, Newspost },
+  components: { Table, BarChart, Newspost, OrganizationActivity, Newspost },
   data() {
     return {
       markers: [],
