@@ -1,8 +1,8 @@
 <template>
   <div
-    class="rounded relative bg-gray-700 text-white grid grid-rows-7 justify-center items-center w-full"
+    class="rounded relative text-white grid grid-rows-7 justify-center items-center w-full"
   >
-    <div class="absolute top-0 right-0 text-center rounded-full hover:bg-gray-600 py-1 px-2 m-1" @click="$emit('close')">
+    <div class="absolute top-0 right-0 text-center rounded-full hover:bg-gray-500 w-5 h-5 m-1" @click="$emit('close')">
       X
     </div>
     <div class="grid grid-cols-4 pt-5 ml-3 row-span-1">
