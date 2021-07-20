@@ -2,7 +2,7 @@
   <div class="h-screen" :style="styles">
     <div class="grid grid-cols-6">
       <div
-        class="col-span-1 shadow-lg h-screen flex flex-col"
+        class="col-span-1 shadow-lg h-screen flex flex-col px-1"
         style="z-index: 1000;"
       >
         <div class="h-32 px-4 py-2">
@@ -18,27 +18,31 @@
             alt="Crisis Cleanup"
             class="h-16"
           />
+          <base-button text="press me" :action="makeNewPost" />
           <div class="mt-2 font-semibold">
             {{ $t('~~We help volunteers to help more people after disasters') }}
           </div>
         </div>
-        <div class="h-1/3 overflow-y-scroll">
-          <div v-for="(post, index) in newsposts" :key="index">
-            <newspost
-              class="text-white my-2"
-              :is-user-post="post.userInfo"
-              :user-info="post.userInfo"
-              :avatar-icon="post.avatarIcon"
-              :image="post.image"
-            >
-              <template #header>{{ post.title }}</template>
-              <template #corner>{{
-                getDateDifference(post.timeStamp)
-              }}</template>
-              <template #content>{{ post.content }}</template>
-            </newspost>
+        <div class="text-lg">Site Activity</div>
+        <!-- <transition-group tag="div" name="slide"> -->
+          <div class="h-1/3 overflow-y-scroll">
+            <div v-for="(post, index) in newsposts" :key="index">
+              <newspost
+                class="text-white my-2"
+                :is-user-post="post.userInfo !== undefined"
+                :user-info="post.userInfo"
+                :avatar-icon="post.avatarIcon"
+                :image="post.image"
+              >
+                <template #header>{{ post.title }}</template>
+                <template #corner>{{
+                  getDateDifference(post.timeStamp)
+                }}</template>
+                <template #content>{{ post.content }}</template>
+              </newspost>
+            </div>
+        <!-- </transition-group> -->
           </div>
-        </div>
         <div class="flex-grow">
           <div class="flex flex-col">
             <div class="p-3">
@@ -62,7 +66,7 @@
                 <div>Total Market Value</div>
                 <div class="text-lg">$41283437</div>
               </div>
-              <div class="underline text-primary-dark">
+              <div class="underline text-blue-600">
                 {{ $t('More Statistics') }}
               </div>
             </div>
@@ -234,8 +238,12 @@
               </div>
             </div>
           </div>
-          <div class="col-span-1 border overflow-y-scroll">
-            <div class="h-40">
+          <div class="col-span-1 border grid grid-rows-12">
+            <div
+              class="row-span-7 p-2"
+              style="max-height: 450px; overflow: auto;"
+            >
+              <div class="text-lg">Organizations Activity</div>
               <div class="grid grid-cols-6">
                 <div class="col-span-2 truncate">Organization Name</div>
                 <div class="col-span-1 text-center truncate">Cases</div>
@@ -244,18 +252,50 @@
                 <div class="col-span-1 text-center truncate">Value</div>
               </div>
 
-              <div v-for="(organization, index) in organizations" :key="index">
-                <OrganizationActivity class="w-full" v-if="organization.showAdvanced" :organizationInfo="organization" :organizationImage="organization.image" @close="organization.showAdvanced = false" />
-                <div class="grid grid-cols-6 hover:bg-gray-200 p-2 rounded" @click="organization.showAdvanced = true" v-else>
-                  <div class="col-span-2 truncate flex flex-row"><img :src="organization.avatar" class="w-5 h-5 rounded-full mr-2"/> {{ organization.name }}</div>
+              <div
+                v-for="(organization, index) in organizations"
+                :key="index"
+                class="p-2"
+              >
+                <OrganizationActivity
+                  class="w-full mb-2"
+                  :class="
+                    colorMode === 'Dark Mode' ? 'bg-gray-800' : 'bg-gray-600'
+                  "
+                  v-if="organization.showAdvanced"
+                  :organization-info="organization"
+                  :organization-image="organization.image"
+                  @close="organization.showAdvanced = false"
+                />
+                <div
+                  class="grid grid-cols-6 p-2 rounded"
+                  :class="
+                    colorMode === 'Dark Mode'
+                      ? 'hover:bg-gray-800'
+                      : 'hover:bg-gray-200'
+                  "
+                  @click="organization.showAdvanced = true"
+                  v-else
+                >
+                  <div class="col-span-2 truncate flex flex-row">
+                    <img
+                      :src="organization.avatar"
+                      class="w-5 h-5 rounded-full mr-2"
+                    />
+                    {{ organization.name }}
+                  </div>
                   <div class="col-span-1 text-center">
                     {{ organization.cases }}
                   </div>
                   <div class="col-span-1 text-center">
                     {{ organization.claimed }}
                   </div>
-                  <div class="col-span-1 text-center">{{ organization.calls }}</div>
-                  <div class="col-span-1 text-center">{{ organization.value }}</div>
+                  <div class="col-span-1 text-center">
+                    {{ organization.calls / 1000 }}K
+                  </div>
+                  <div class="col-span-1 text-center">
+                    {{ organization.value / 1000000 }}M
+                  </div>
                 </div>
               </div>
             </div>
@@ -272,7 +312,7 @@
                 <tab :name="$t('Total Cases')"></tab>
                 <tab :name="$t('Case Status')"></tab>
               </tabs>
-            </div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -296,7 +336,6 @@ import {
   mapTileLayer,
 } from '@/utils/map';
 import { HomeNavigation } from '@/components/home/SideNav';
-import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
 import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
@@ -315,60 +354,64 @@ export default {
       incidents: [],
       organizations: [
         {
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          avatar:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
           name: 'test 1',
           cases: '12',
           claimed: '13',
-          calls: '14',
-          value: '15',
+          calls: '14000',
+          value: '15000000',
           showAdvanced: false,
-          orgType: "test",
-          availability: "test",
-          address: "test",
-          type: "test",
-          role: "test",
+          orgType: 'test',
+          availability: 'test',
+          address: 'test',
+          type: 'test',
+          role: 'test',
         },
         {
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          avatar:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
           name: 'test 2',
           cases: '16',
           claimed: '17',
-          calls: '4',
-          value: '14',
+          calls: '4000',
+          value: '14000000',
           showAdvanced: false,
-          orgType: "test",
-          availability: "test",
-          address: "test",
-          type: "test",
-          role: "test",
+          orgType: 'test',
+          availability: 'test',
+          address: 'test',
+          type: 'test',
+          role: 'test',
         },
         {
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          avatar:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
           name: 'test 3',
           cases: '3',
           claimed: '17',
-          calls: '1',
-          value: '5',
+          calls: '1000',
+          value: '5000000',
           showAdvanced: false,
-          orgType: "test",
-          availability: "test",
-          address: "test",
-          type: "test",
-          role: "test",
+          orgType: 'test',
+          availability: 'test',
+          address: 'test',
+          type: 'test',
+          role: 'test',
         },
         {
-          avatar: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+          avatar:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
           name: 'test 4',
           cases: '12',
           claimed: '13',
-          calls: '14',
-          value: '15',
+          calls: '14000',
+          value: '15000000',
           showAdvanced: false,
-          orgType: "test",
-          availability: "test",
-          address: "test",
-          type: "test",
-          role: "test",
+          orgType: 'test',
+          availability: 'test',
+          address: 'test',
+          type: 'test',
+          role: 'test',
         },
       ],
       templates,
@@ -882,6 +925,13 @@ export default {
       }
       return difference;
     },
+    makeNewPost() {
+      this.newsposts.splice(0, 0, {
+        title: 'Test 2',
+        content: 'This is a test post',
+        timeStamp: new Date('December 17, 1995 03:24:00'),
+      });
+    },
     async getCompletionRateData() {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?start_date=2021-06-15&end_date=2021-07-15`,
@@ -1056,5 +1106,31 @@ export default {
 
 .pew-pew-blue {
   color: #61d5f8;
+}
+
+.site-items {
+  position: relative;
+}
+
+@keyframes slidein {
+  from {
+    top: -20px;
+    opacity: 0;
+  }
+  to {
+    top: 0px;
+    opacity: 1;
+  }
+}
+
+.slide-leave-active,
+.slide-enter-active {
+  transition: 1s;
+}
+.slide-enter {
+  transform: translate(100%, 0);
+}
+.slide-leave-to {
+  transform: translate(-100%, 0);
 }
 </style>
