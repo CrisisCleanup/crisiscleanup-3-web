@@ -7,7 +7,11 @@
       <slot name="corner"></slot>
     </div>
     <div v-if="isUserPost" class="flex flex-row items-center">
-      <img :src="avatarIcon" class="rounded-full w-8 h-8 mr-2" />
+      <img
+        :src="avatarIcon"
+        class="rounded-full w-8 h-8 mr-2"
+        v-if="avatarIcon"
+      />
       <div class="flex flex-col w-2/3">
         <div class="font-bold text-lg">{{ userInfo.name }}</div>
         <div class="truncate">{{ userInfo.organization }}</div>
