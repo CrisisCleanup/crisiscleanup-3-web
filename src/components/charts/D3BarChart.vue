@@ -9,7 +9,7 @@ import VueTypes from 'vue-types';
 import _ from 'lodash';
 
 export type BarChartT = {|
-  group: Date,
+  group: Date | number | string,
   newCases: number,
   closedCases: number,
 |};
@@ -118,8 +118,6 @@ export default {
 
     renderChart() {
       console.log(this.chartData);
-      const xValues = (d) => d.x;
-      const yValues = (d) => d.cases;
       const groups = this.chartData.map((d) => d.group);
       const subgroups = _.filter(this.chartData.columns, (c) => c !== 'group');
 
@@ -130,7 +128,7 @@ export default {
       // set x scale
       this.x = d3
         .scaleBand()
-        .domain(this.chartData.map(xValues))
+        .domain(groups)
         .range([this.margin.left, this.getInnerWidth()])
         .padding(0.2);
 
@@ -138,8 +136,10 @@ export default {
       this.y = d3
         .scaleLinear()
         .domain([
-          d3.min(this.chartData.map(yValues)),
-          d3.max(this.chartData.map(yValues)),
+          0,
+          d3.max(
+            this.chartData.map((c: BarChartT) => c.newCases + c.closedCases),
+          ),
         ])
         .range([this.getInnerHeight(), this.margin.top])
         .nice();
@@ -150,6 +150,7 @@ export default {
         .domain(subgroups)
         .range(['#61D5F8', '#00C4FF']);
 
+      // render svg with translated group
       this.svg = d3
         .select(`#${this.chartId}`)
         .append('svg')
@@ -165,8 +166,6 @@ export default {
           `translate(${this.margin.left}, ${this.margin.top})`,
         );
 
-      this.addDefs();
-
       this.svg
         .append('g')
         .attr('class', 'x-axis')
@@ -179,24 +178,7 @@ export default {
         .attr('transform', `translate(${this.margin.left}, ${-10})`)
         .call(d3.axisLeft(this.y));
 
-      // this.svg
-      //   .selectAll('.bar')
-      //   .data(this.chartData)
-      //   .enter()
-      //   .append('rect')
-      //   .attr('x', (d) => this.x(d.x))
-      //   .attr('y', (d) => this.getInnerHeight() - 10)
-      //   .attr('width', this.x.bandwidth())
-      //   .transition()
-      //   .duration(1000)
-      //   .delay((d, i) => i * 20)
-      //   .attr('x', (d) => this.x(d.x))
-      //   .attr('y', (d) => -this.y(d.cases) + this.getInnerHeight() - 10)
-      //   .attr('width', this.x.bandwidth())
-      //   .attr('height', (d) => this.y(d.cases))
-      //   .attr('fill', (d) => this.colorScale(d.group));
-
-      // Show the bars
+      // render bars
       this.svg
         .append('g')
         .selectAll('g')
@@ -208,45 +190,34 @@ export default {
         // enter a second time = loop subgroup per subgroup to add all rectangles
         .data((d) => d)
         .join('rect')
-        .attr('x', (d) => this.x(d.data.x))
+        .attr('x', (d) => this.x(d.data.group))
         .attr('y', this.getInnerHeight() - 10)
         .attr('width', this.x.bandwidth())
         .transition()
         .duration(1000)
-        .delay((d, i) => i * 20)
-        .attr('x', (d) => this.x(d.data.x))
-        .attr('y', (d) => this.y(d[1]) - this.margin.bottom - 10)
+        .delay((d, i) => i * 50)
+        .ease(d3.easeCubicInOut)
+        .attr('x', (d) => this.x(d.data.group))
+        .attr('y', (d) => this.y(d[1]) - 10)
         .attr('height', (d) => this.y(d[0]) - this.y(d[1]))
-        .attr('width', this.x.bandwidth());
-    },
-
-    addDefs() {
-      const defs = this.svg.append('defs');
-
-      const linGradient = defs
-        .append('linearGradient')
-        .attr('id', `bar-gradient`)
-        .attr('gradient-transform', 'rotate(90)');
-
-      linGradient
-        .append('stop')
-        .attr('offset', '0%')
-        .attr('stop-color', 'rgba(238, 40, 218, 1)');
-
-      linGradient
-        .append('stop')
-        .attr('offset', '40%')
-        .attr('stop-color', 'rgba(97, 213, 248, 1)');
-
-      linGradient
-        .append('stop')
-        .attr('offset', '60%')
-        .attr('stop-color', 'rgba(97, 213, 248, 1)');
-
-      linGradient
-        .append('stop')
-        .attr('offset', '100%')
-        .attr('stop-color', 'rgba(97, 247, 150, 0.984165)');
+        .attr('width', this.x.bandwidth())
+        .on('end', function () {
+          d3.select(this)
+            .on('mouseover', function () {
+              d3.select(this)
+                .transition()
+                .duration(10)
+                .attr('stroke', 'white')
+                .attr('stroke-width', 2);
+            })
+            .on('mouseout', function () {
+              d3.select(this)
+                .transition()
+                .duration(500)
+                .attr('stroke', 'transparent')
+                .attr('stroke-width', 0);
+            });
+        });
     },
   },
 };
