@@ -29,7 +29,7 @@ export default {
     /**
      * top, bottom, left, right margins
      */
-    marginAll: VueTypes.number.def(30),
+    marginAll: VueTypes.number.def(25),
   },
 
   data() {
@@ -117,13 +117,11 @@ export default {
     },
 
     renderChart() {
-      console.log(this.chartData);
       const groups = this.chartData.map((d) => d.group);
       const subgroups = _.filter(this.chartData.columns, (c) => c !== 'group');
 
       // stack per subgroup
       const stackedData = d3.stack().keys(subgroups)(this.chartData);
-      console.log(stackedData);
 
       // set x scale
       this.x = d3
@@ -228,9 +226,7 @@ export default {
         .attr('class', 'legend-container')
         .attr(
           'transform',
-          `translate(${this.getInnerWidth() / 2 - 50}, ${
-            this.getInnerHeight() + 10
-          })`,
+          `translate(${this.getInnerWidth() / 2 - 50}, ${-10})`,
         );
 
       const colors = _.zipWith(
@@ -238,7 +234,6 @@ export default {
         this.colorScale.range(),
         (domain, range) => [domain, range],
       );
-      console.log(colors);
 
       legend
         .append('g')
