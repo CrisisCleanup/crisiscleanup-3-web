@@ -29,7 +29,7 @@ export default {
     /**
      * top, bottom, left, right margins
      */
-    marginAll: VueTypes.number.def(5),
+    marginAll: VueTypes.number.def(30),
   },
 
   data() {
@@ -130,7 +130,7 @@ export default {
         .scaleBand()
         .domain(groups)
         .range([this.margin.left, this.getInnerWidth()])
-        .padding(0.2);
+        .padding(0.4);
 
       // set y scale
       this.y = d3
@@ -218,6 +218,48 @@ export default {
                 .attr('stroke-width', 0);
             });
         });
+
+      this.renderLegend(stackedData);
+    },
+
+    renderLegend(data) {
+      const legend = this.svg
+        .append('g')
+        .attr('class', 'legend-container')
+        .attr(
+          'transform',
+          `translate(${this.getInnerWidth() / 2 - 50}, ${
+            this.getInnerHeight() + 10
+          })`,
+        );
+
+      const colors = _.zipWith(
+        this.colorScale.domain(),
+        this.colorScale.range(),
+        (domain, range) => [domain, range],
+      );
+      console.log(colors);
+
+      legend
+        .append('g')
+        .selectAll('g')
+        .data(this.colorScale.range())
+        .join('rect')
+        .attr('width', '10px')
+        .attr('height', '10px')
+        .attr('transform', (d, i) => `translate(${i * 70}, ${0})`)
+        .attr('fill', (d) => d);
+
+      legend
+        .append('g')
+        .selectAll('g')
+        .data(this.colorScale.domain())
+        .join('text')
+        .text((d) => _.startCase(d))
+        .attr('transform', (d, i) => `translate(${i * 70 + 15}, ${5})`)
+        .attr('dominant-baseline', 'middle')
+        .style('font-size', '8px')
+        .attr('fill', 'white');
     },
   },
 };
