@@ -18,60 +18,131 @@
             alt="Crisis Cleanup"
             class="h-16"
           />
-          <base-button text="press me" :action="makeNewPost" />
           <div class="mt-2 font-semibold">
             {{ $t('~~We help volunteers to help more people after disasters') }}
           </div>
         </div>
-        <div class="text-lg">Site Activity</div>
-        <!-- <transition-group tag="div" name="slide"> -->
-          <div class="h-1/3 overflow-y-scroll">
-            <div v-for="(post, index) in newsposts" :key="index">
-              <newspost
-                class="text-white my-2"
-                :is-user-post="post.userInfo !== undefined"
-                :user-info="post.userInfo"
-                :avatar-icon="post.avatarIcon"
-                :image="post.image"
-              >
-                <template #header>{{ post.title }}</template>
-                <template #corner>{{
-                  getDateDifference(post.timeStamp)
-                }}</template>
-                <template #content>{{ post.content }}</template>
-              </newspost>
+        <tabs tab-classes="text-xs">
+          <tab :name="$t('Site Activity')">
+            <div class="text-lg">Site Activity</div>
+            <div class="relative h-full mt-72">
+              <div class="overflow-y-hidden py-3">
+                <div v-for="(post, index) in eventStreamData" :key="index">
+                  <div
+                    class="mx-2 -mb-1 rounded-md relative"
+                    :class="index > 0 ? 'group-top' : 'y-translated'"
+                  >
+                    <newspost
+                      class="text-white transform duration-300 hover:scale-105 ease-in-out"
+                      :is-user-post="post.attr !== undefined"
+                      :user-info="{
+                        name: post.attr.actor_first_name,
+                        organization: post.attr.actor_organization_name,
+                      }"
+                      :avatar-icon="post.avatarIcon"
+                      :image="post.image"
+                    >
+                      <template #header>{{ post.title }}</template>
+                      <template #corner>{{
+                        getDateDifference(post.timeStamp)
+                      }}</template>
+                      <template #content>
+                        <div>
+                          Patient Location: {{ post.patient_location_name }}
+                        </div>
+                        <div>
+                          Patient Status: {{ post.attr.patient_status }}
+                        </div>
+                        <div>
+                          Recipient Name: {{ post.attr.actor_first_name }}
+                        </div>
+                        <div>
+                          Recipient Location: {{ post.recipient_location_name }}
+                        </div>
+                        <div>
+                          Recipient Status: {{ post.attr.recipient_status }}
+                        </div>
+                      </template>
+                    </newspost>
+                  </div>
+                </div>
+                <div
+                  v-if="currentPost"
+                  class="absolute bottom-0 w-full transform duration-300 hover:scale-105 ease-in-out"
+                >
+                  <div class="enter-left">
+                    <newspost
+                      class="text-white my-2"
+                      :is-user-post="currentPost.attr !== undefined"
+                      :user-info="{
+                        name: currentPost.attr.actor_first_name,
+                        organization: currentPost.attr.actor_organization_name,
+                      }"
+                      :avatar-icon="currentPost.avatarIcon"
+                      :image="currentPost.image"
+                    >
+                      <template #header>{{ currentPost.title }}</template>
+                      <template #corner>{{
+                        getDateDifference(currentPost.timeStamp)
+                      }}</template>
+                      <template #content>
+                        <div>
+                          Patient Location:
+                          {{ currentPost.patient_location_name }}
+                        </div>
+                        <div>
+                          Patient Status: {{ currentPost.attr.patient_status }}
+                        </div>
+                        <div>
+                          Recipient Name:
+                          {{ currentPost.attr.actor_first_name }}
+                        </div>
+                        <div>
+                          Recipient Location:
+                          {{ currentPost.recipient_location_name }}
+                        </div>
+                        <div>
+                          Recipient Status:
+                          {{ currentPost.attr.recipient_status }}
+                        </div>
+                      </template>
+                    </newspost>
+                  </div>
+                </div>
+              </div>
+            </div> </tab
+          ><tab :name="$t('Stats')">
+            <div class="flex-grow">
+              <div class="flex flex-col">
+                <div class="p-3">
+                  <div class="mb-2">
+                    <div>Total Big Number</div>
+                    <div class="text-xl text-blue-600 stats">$1.1 Billion</div>
+                  </div>
+                  <div class="mb-2">
+                    <div>Volunteer Hours</div>
+                    <div class="text-lg stats">2348020</div>
+                  </div>
+                  <div class="mb-2">
+                    <div>Value per Volunteer</div>
+                    <div class="text-lg stats">$237</div>
+                  </div>
+                  <div class="mb-2">
+                    <div>Volunteer Hours Dollars</div>
+                    <div class="text-lg stats">$467</div>
+                  </div>
+                  <div class="mb-2">
+                    <div>Total Market Value</div>
+                    <div class="text-lg stats">$41283437</div>
+                  </div>
+                  <div class="underline text-blue-600">
+                    {{ $t('More Statistics') }}
+                  </div>
+                </div>
+              </div>
             </div>
-        <!-- </transition-group> -->
-          </div>
-        <div class="flex-grow">
-          <div class="flex flex-col">
-            <div class="p-3">
-              <div class="mb-2">
-                <div>Total Big Number</div>
-                <div class="text-xl text-blue-600">$1.1 Billion</div>
-              </div>
-              <div class="mb-2">
-                <div>Volunteer Hours</div>
-                <div class="text-lg">2348020</div>
-              </div>
-              <div class="mb-2">
-                <div>Value per Volunteer</div>
-                <div class="text-lg">$237</div>
-              </div>
-              <div class="mb-2">
-                <div>Volunteer Hours Dollars</div>
-                <div class="text-lg">$467</div>
-              </div>
-              <div class="mb-2">
-                <div>Total Market Value</div>
-                <div class="text-lg">$41283437</div>
-              </div>
-              <div class="underline text-blue-600">
-                {{ $t('More Statistics') }}
-              </div>
-            </div>
-          </div>
-        </div>
+          </tab>
+        </tabs>
         <div class="h-32">
           <div v-if="currentEvent">
             <div class="flex items-center mb-1">
@@ -239,10 +310,7 @@
             </div>
           </div>
           <div class="col-span-1 border grid grid-rows-12">
-            <div
-              class="row-span-7 p-2"
-              style="max-height: 450px; overflow: auto;"
-            >
+            <div class="row-span-1 p-2">
               <div class="text-lg">Organizations Activity</div>
               <div class="grid grid-cols-6">
                 <div class="col-span-2 truncate">Organization Name</div>
@@ -251,7 +319,11 @@
                 <div class="col-span-1 text-center truncate">Calls</div>
                 <div class="col-span-1 text-center truncate">Value</div>
               </div>
-
+            </div>
+            <div
+              class="row-span-6 px-2"
+              style="max-height: 450px; overflow: auto;"
+            >
               <div
                 v-for="(organization, index) in organizations"
                 :key="index"
@@ -340,15 +412,17 @@ import { getQueryString } from '@/utils/urls';
 import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
-import OrganizationActivity from "@/components/OrganizationActivity.vue";
-import { orderBy } from 'lodash';
+import OrganizationActivity from '@/components/OrganizationActivity.vue';
+import _, { orderBy } from 'lodash';
 import Slider from '@/components/Slider';
 
 export default {
   name: 'PewPew',
-  components: { Table, BarChart, Newspost, OrganizationActivity, Newspost },
+  components: { BarChart, Newspost, OrganizationActivity, Slider },
   data() {
     return {
+      eventStreamData: [],
+      currentPost: null,
       markers: [],
       events: {},
       incidents: [],
@@ -437,47 +511,82 @@ export default {
       orbTexture: null,
       eventsInterval: null,
       textureMap: {},
-      newsposts: [
-        {
-          title: 'Test 1',
-          userInfo: {
-            name: 'Angelo Pablo',
-            organization: 'ArroyoDev',
-          },
-          avatarIcon:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          content: 'This is a test post',
-          timeStamp: new Date(),
-        },
-        {
-          title: 'Test 2',
-          content: 'This is a test post',
-          timeStamp: new Date('December 17, 1995 03:24:00'),
-        },
-        {
-          title: 'Test 3',
-          content: 'This is a test post',
-          image:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          timeStamp: new Date('November 11, 2020'),
-        },
-        {
-          title: 'Test 4',
-          userInfo: {
-            name: 'Angelo Pablo',
-            organization: 'ArroyoDev',
-          },
-          avatarIcon:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          content: 'This is a test post',
-          image:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          timeStamp: new Date('July 19, 2021 11:00:00'),
-        },
-      ],
     };
   },
   async mounted() {
+    setInterval(() => {
+      const random = Math.floor(Math.random() * 5).toString();
+      this.eventStreamData.splice(
+        0,
+        0,
+        _.set(
+          {
+            id: 123,
+            attr: {
+              patient_status: 'Active',
+              recipient_status: 'Active',
+              actor_first_name: random,
+              actor_organization_name: 'Test Organization',
+            },
+            past_tense_t: 'test',
+            patient_location_name: 'Test Place',
+            recipient_location_name: 'Test Place',
+          },
+          'timeStamp',
+          new Date(),
+        ),
+      );
+      // moves card to out of view
+      const card = document.querySelector('div.y-translated');
+      // moves the other two cards up to simulate no change
+      const cardGroup = document.querySelectorAll('div.group-top');
+      // moves the card group to its orginial position
+      const groupSettled = document.querySelectorAll('div.card-group');
+      // moves top card to its original position
+      const settledCard = document.querySelector('div.settle');
+      // moves sticky card out of frame
+      const stickyCard = document.querySelector('div.enter-left');
+      // moves sticky card to its original position
+      const stuck = document.querySelector('div.sticky-settle');
+      if (cardGroup) {
+        cardGroup.forEach((group) => {
+          group.classList.add('card-group');
+          group.classList.remove('group-top');
+        });
+        if (
+          this.currentPost &&
+          Math.abs(new Date() - this.currentPost.timeStamp) / 1000 > 10
+        ) {
+          stuck.classList.add('enter-left');
+          stuck.classList.remove('sticky-settle');
+        }
+      }
+      if (card) {
+        card.classList.add('settle');
+        card.classList.remove('y-translated');
+      } else {
+        settledCard.classList.remove('settle');
+        settledCard.classList.add('y-translated');
+        groupSettled.forEach((group) => {
+          group.classList.remove('card-group');
+          group.classList.add('group-top');
+        });
+        if (stickyCard) {
+          stickyCard.classList.add('sticky-settle');
+          stickyCard.classList.remove('enter-left');
+        }
+      }
+
+      if (this.eventStreamData.length > 3) {
+        if (
+          this.currentPost === null ||
+          Math.abs(new Date() - this.currentPost.timeStamp) / 1000 > 10
+        ) {
+          this.currentPost = _.nth(this.eventStreamData, 2);
+        }
+        this.eventStreamData = this.eventStreamData.slice(0, 3);
+      }
+    }, 1500);
     await Incident.api().fetchById(this.incidentId);
     this.incident = Incident.find(this.incidentId);
 
@@ -925,13 +1034,6 @@ export default {
       }
       return difference;
     },
-    makeNewPost() {
-      this.newsposts.splice(0, 0, {
-        title: 'Test 2',
-        content: 'This is a test post',
-        timeStamp: new Date('December 17, 1995 03:24:00'),
-      });
-    },
     async getCompletionRateData() {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?start_date=2021-06-15&end_date=2021-07-15`,
@@ -1108,29 +1210,51 @@ export default {
   color: #61d5f8;
 }
 
-.site-items {
-  position: relative;
+.stats:hover {
+  text-shadow: 1px 1px 2px lightblue, 0 0 1em lightblue, 0 0 0.2em lightblue;
 }
 
-@keyframes slidein {
-  from {
-    top: -20px;
-    opacity: 0;
-  }
-  to {
-    top: 0px;
-    opacity: 1;
-  }
+.y-translated {
+  transform: translate(0px, -1000px);
 }
 
-.slide-leave-active,
-.slide-enter-active {
-  transition: 1s;
+.settle {
+  box-shadow: 0 -1rem 3rem #000;
+  transition: all 400ms ease;
+  transform: translate(0px, 0px);
 }
-.slide-enter {
-  transform: translate(100%, 0);
+
+.card-group {
+  box-shadow: 0 -1rem 3rem #000;
+  transform: translate(0px, 0px);
+  transition: all 400ms ease;
 }
-.slide-leave-to {
-  transform: translate(-100%, 0);
+
+.group-top {
+  box-shadow: 0 -1rem 3rem #000;
+  transform: translate(0px, -180px);
+}
+
+.card-group:hover {
+  z-index: 10;
+  box-shadow: 0 1rem 3rem #000;
+}
+.group-top:hover {
+  z-index: 10;
+  box-shadow: 0 1rem 3rem #000;
+}
+.settle:hover {
+  z-index: 10;
+  box-shadow: 0 1rem 3rem #000;
+}
+
+.sticky-settle {
+  box-shadow: 0 -1rem 2rem #000;
+  transform: translate(0px, 0px);
+}
+
+.enter-left {
+  transition: all 400ms ease;
+  transform: translate(0px, 1000px);
 }
 </style>
