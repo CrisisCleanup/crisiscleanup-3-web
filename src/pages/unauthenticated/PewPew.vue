@@ -25,7 +25,8 @@
         <tabs tab-classes="text-xs">
           <tab :name="$t('Site Activity')">
             <div class="text-lg">Site Activity</div>
-            <div class="relative h-full mt-72">
+            <div class="h-96"></div>
+            <div class="relative site-container" v-if="currentEvent">
               <div class="overflow-y-hidden py-3">
                 <div v-for="(post, index) in eventStreamData" :key="index">
                   <div
@@ -33,8 +34,7 @@
                     :class="index > 0 ? 'group-top' : 'y-translated'"
                   >
                     <newspost
-                      class="text-white transform duration-300 hover:scale-105 ease-in-out"
-                      :is-user-post="post.attr !== undefined"
+                      class="text-white transform duration-300 hover:scale-105 ease-in-out site-item"
                       :user-info="{
                         name: post.attr.actor_first_name,
                         organization: post.attr.actor_organization_name,
@@ -42,25 +42,34 @@
                       :avatar-icon="post.avatarIcon"
                       :image="post.image"
                     >
-                      <template #header>{{ post.title }}</template>
+                      <template #header>{{
+                        post.attr.patient_work_type_key.toUpperCase()
+                      }}</template>
                       <template #corner>{{
-                        getDateDifference(post.timeStamp)
+                        getDateDifference(Date.parse(post.created_at))
                       }}</template>
                       <template #content>
-                        <div>
-                          Patient Location: {{ post.patient_location_name }}
-                        </div>
-                        <div>
-                          Patient Status: {{ post.attr.patient_status }}
-                        </div>
-                        <div>
-                          Recipient Name: {{ post.attr.actor_first_name }}
-                        </div>
-                        <div>
-                          Recipient Location: {{ post.recipient_location_name }}
-                        </div>
-                        <div>
-                          Recipient Status: {{ post.attr.recipient_status }}
+                        <div class="flex-1 ml-2 font-medium text-xs">
+                          <span
+                            >{{
+                              post.attr.actor_first_name
+                                ? post.attr.actor_first_name
+                                : 'Anonymous'
+                            }}
+                            from
+                            {{
+                              post.attr.actor_organization_name
+                                ? post.attr.actor_organization_name +
+                                  ' (' +
+                                  post.actor_location_name +
+                                  ') '
+                                : 'Unknown'
+                            }}
+                            {{ post.attr.button_text_t.toLowerCase() }}ed case
+                            {{ post.attr.patient_case_number }} ({{
+                              post.patient_location_name
+                            }})
+                          </span>
                         </div>
                       </template>
                     </newspost>
@@ -68,12 +77,12 @@
                 </div>
                 <div
                   v-if="currentPost"
-                  class="absolute bottom-0 w-full transform duration-300 hover:scale-105 ease-in-out"
+                  class="absolute w-full bottom-0 transform duration-300 hover:scale-105 ease-in-out"
                 >
-                  <div class="enter-left">
+                  <div class="sticky-settle mx-2 rounded-md">
                     <newspost
-                      class="text-white my-2"
-                      :is-user-post="currentPost.attr !== undefined"
+                      class="text-white site-item"
+                      :is-user-post="currentPost.actor_id"
                       :user-info="{
                         name: currentPost.attr.actor_first_name,
                         organization: currentPost.attr.actor_organization_name,
@@ -81,29 +90,34 @@
                       :avatar-icon="currentPost.avatarIcon"
                       :image="currentPost.image"
                     >
-                      <template #header>{{ currentPost.title }}</template>
+                      <template #header>{{
+                        currentPost.attr.patient_work_type_key.toUpperCase()
+                      }}</template>
                       <template #corner>{{
-                        getDateDifference(currentPost.timeStamp)
+                        getDateDifference(Date.parse(currentPost.created_at))
                       }}</template>
                       <template #content>
-                        <div>
-                          Patient Location:
-                          {{ currentPost.patient_location_name }}
-                        </div>
-                        <div>
-                          Patient Status: {{ currentPost.attr.patient_status }}
-                        </div>
-                        <div>
-                          Recipient Name:
-                          {{ currentPost.attr.actor_first_name }}
-                        </div>
-                        <div>
-                          Recipient Location:
-                          {{ currentPost.recipient_location_name }}
-                        </div>
-                        <div>
-                          Recipient Status:
-                          {{ currentPost.attr.recipient_status }}
+                        <div class="flex-1 ml-2 font-medium text-xs">
+                          <span
+                            >{{
+                              currentPost.attr.actor_first_name
+                                ? currentPost.attr.actor_first_name
+                                : 'Anonymous'
+                            }}
+                            from
+                            {{
+                              currentPost.attr.actor_organization_name
+                                ? currentPost.attr.actor_organization_name +
+                                  ' (' +
+                                  currentPost.actor_location_name +
+                                  ') '
+                                : 'Unknown'
+                            }}
+                            {{ currentPost.attr.button_text_t.toLowerCase() }}ed
+                            case {{ currentPost.attr.patient_case_number }} ({{
+                              currentPost.patient_location_name
+                            }})
+                          </span>
                         </div>
                       </template>
                     </newspost>
@@ -143,25 +157,7 @@
             </div>
           </tab>
         </tabs>
-        <div class="h-32">
-          <div v-if="currentEvent">
-            <div class="flex items-center mb-1">
-              <div class="flex-1 ml-2 font-medium text-xs">
-                {{ currentEvent.id }}: {{ currentEvent.attr.patient_status }},
-                {{ currentEvent.attr.recipient_status }}
-                <span
-                  >{{ currentEvent.attr.actor_first_name }} from
-                  {{ currentEvent.attr.actor_organization_name }}
-                </span>
-                {{ $t(currentEvent.past_tense_t, currentEvent.attr) }} ({{
-                  currentEvent.actor_location_name
-                }}
-                {{ currentEvent.patient_location_name }}
-                {{ currentEvent.recipient_location_name }})
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="h-32"></div>
       </div>
       <div class="col-span-5 h-screen flex flex-col">
         <div class="h-12 grid grid-cols-10">
@@ -292,6 +288,7 @@
                         :action="pauseGeneratePoints"
                         icon="pause"
                         icon-size="xs"
+                        @click="animateList"
                       >
                       </base-button>
                       <base-button
@@ -423,6 +420,7 @@ export default {
     return {
       eventStreamData: [],
       currentPost: null,
+      startTime: new Date(),
       markers: [],
       events: {},
       incidents: [],
@@ -502,7 +500,7 @@ export default {
           data: null,
         },
       },
-      incidentId: 222,
+      incidentId: 199,
       markerSpeed: 2000,
       incident: null,
       incidentStats: {},
@@ -514,79 +512,6 @@ export default {
     };
   },
   async mounted() {
-    setInterval(() => {
-      const random = Math.floor(Math.random() * 5).toString();
-      this.eventStreamData.splice(
-        0,
-        0,
-        _.set(
-          {
-            id: 123,
-            attr: {
-              patient_status: 'Active',
-              recipient_status: 'Active',
-              actor_first_name: random,
-              actor_organization_name: 'Test Organization',
-            },
-            past_tense_t: 'test',
-            patient_location_name: 'Test Place',
-            recipient_location_name: 'Test Place',
-          },
-          'timeStamp',
-          new Date(),
-        ),
-      );
-      // moves card to out of view
-      const card = document.querySelector('div.y-translated');
-      // moves the other two cards up to simulate no change
-      const cardGroup = document.querySelectorAll('div.group-top');
-      // moves the card group to its orginial position
-      const groupSettled = document.querySelectorAll('div.card-group');
-      // moves top card to its original position
-      const settledCard = document.querySelector('div.settle');
-      // moves sticky card out of frame
-      const stickyCard = document.querySelector('div.enter-left');
-      // moves sticky card to its original position
-      const stuck = document.querySelector('div.sticky-settle');
-      if (cardGroup) {
-        cardGroup.forEach((group) => {
-          group.classList.add('card-group');
-          group.classList.remove('group-top');
-        });
-        if (
-          this.currentPost &&
-          Math.abs(new Date() - this.currentPost.timeStamp) / 1000 > 10
-        ) {
-          stuck.classList.add('enter-left');
-          stuck.classList.remove('sticky-settle');
-        }
-      }
-      if (card) {
-        card.classList.add('settle');
-        card.classList.remove('y-translated');
-      } else {
-        settledCard.classList.remove('settle');
-        settledCard.classList.add('y-translated');
-        groupSettled.forEach((group) => {
-          group.classList.remove('card-group');
-          group.classList.add('group-top');
-        });
-        if (stickyCard) {
-          stickyCard.classList.add('sticky-settle');
-          stickyCard.classList.remove('enter-left');
-        }
-      }
-
-      if (this.eventStreamData.length > 3) {
-        if (
-          this.currentPost === null ||
-          Math.abs(new Date() - this.currentPost.timeStamp) / 1000 > 10
-        ) {
-          this.currentPost = _.nth(this.eventStreamData, 2);
-        }
-        this.eventStreamData = this.eventStreamData.slice(0, 3);
-      }
-    }, 1500);
     await Incident.api().fetchById(this.incidentId);
     this.incident = Incident.find(this.incidentId);
 
@@ -993,6 +918,7 @@ export default {
             }, 50);
           }
         }
+        this.generateList();
       });
     },
     generatePoints() {
@@ -1001,6 +927,80 @@ export default {
     pauseGeneratePoints() {
       clearInterval(this.eventsInterval);
       this.eventsInterval = null;
+    },
+    generateList() {
+      // duplicate prevention
+      if (this.currentEvent !== this.eventStreamData[0]) {
+        this.eventStreamData.splice(0, 0, this.currentEvent);
+        // 10 second timer to replace current post
+        if (this.eventStreamData.length > 3) {
+          if (
+            this.currentPost === null ||
+            Math.abs(this.startTime - new Date()) / 1000 > 10
+          ) {
+            this.currentPost = _.nth(this.eventStreamData, 3);
+            this.startTime = new Date();
+          }
+          this.eventStreamData = this.eventStreamData.slice(0, -1);
+        }
+        console.log(this.eventStreamData);
+        // set start state
+        setTimeout(() => {
+          this.animateList();
+        }, 250);
+        // set settled set
+        this.animateList();
+      }
+    },
+    animateList() {
+      // moves card to out of view
+      const card = document.querySelector('div.y-translated');
+      // moves the other two cards up to simulate no change
+      const cardGroup = document.querySelectorAll('div.group-top');
+      // moves sticky card out of frame
+      const stickyCard = document.querySelector('div.move-down');
+      // moves sticky card to its original position
+      const settledSticky = document.querySelector('div.sticky-settle');
+      // moves the card group to its orginial position
+      const settledGroup = document.querySelectorAll('div.card-group');
+      // moves top card to its original position
+      const settledCard = document.querySelector('div.settle');
+
+      // set origin of transition - everything up since the new item being added
+      // is now the first item
+      if (settledCard) {
+        settledCard.classList.remove('settle');
+        settledCard.classList.add('y-translated');
+      }
+      if (settledGroup) {
+        settledGroup.forEach((group) => {
+          group.classList.remove('card-group');
+          group.classList.add('group-top');
+        });
+      }
+      if (stickyCard) {
+        stickyCard.classList.remove('move-down');
+        stickyCard.classList.add('sticky-settle');
+      }
+
+      // move everything down
+      if (card) {
+        card.classList.remove('y-translated');
+        card.classList.add('settle');
+      }
+      if (cardGroup) {
+        cardGroup.forEach((group) => {
+          group.classList.remove('group-top');
+          group.classList.add('card-group');
+        });
+      }
+      // if ten seconds have passed
+      if (settledSticky) {
+        if (Math.abs(this.startTime - new Date()) / 1000 > 10) {
+          settledSticky.classList.remove('sticky-settle');
+          settledSticky.classList.add('move-down');
+        }
+      }
     },
     getDateDifference(date) {
       const dateDifference = Math.abs(new Date() - date);
@@ -1226,13 +1226,13 @@ export default {
 
 .card-group {
   box-shadow: 0 -1rem 3rem #000;
-  transform: translate(0px, 0px);
   transition: all 400ms ease;
+  transform: translate(0px, 0px);
 }
 
 .group-top {
   box-shadow: 0 -1rem 3rem #000;
-  transform: translate(0px, -180px);
+  transform: translate(0px, -140px);
 }
 
 .card-group:hover {
@@ -1250,11 +1250,20 @@ export default {
 
 .sticky-settle {
   box-shadow: 0 -1rem 2rem #000;
-  transform: translate(0px, 0px);
+  transform: translate(0px, 10px);
 }
 
-.enter-left {
-  transition: all 400ms ease;
+.move-down {
+  transition: all 600ms ease;
   transform: translate(0px, 1000px);
+}
+
+.site-container {
+  height: 440px;
+  overflow: hidden;
+}
+
+.site-item {
+  height: 150px;
 }
 </style>

@@ -1,11 +1,5 @@
 <template>
-  <div
-    class="flex flex-col relative p-2 rounded"
-    :class="isUserPost ? 'bg-gray-600' : 'bg-red-800 border-2 border-red-600'"
-  >
-    <div class="absolute top-1 right-0 text-xs mr-2">
-      <slot name="corner"></slot>
-    </div>
+  <div class="flex flex-col relative p-2 rounded bg-gray-800">
     <div v-if="isUserPost" class="flex flex-row items-center">
       <img
         :src="avatarIcon"
@@ -13,15 +7,18 @@
         v-if="avatarIcon"
       />
       <div class="flex flex-col w-2/3">
-        <div class="font-bold text-lg">{{ userInfo.name }}</div>
-        <div class="truncate">{{ userInfo.organization }}</div>
+        <div class="font-bold text-base">{{ userInfo.name }}</div>
+        <div class="truncate text-sm">{{ userInfo.organization }}</div>
       </div>
     </div>
     <div class="font-bold text-lg" v-else>
       <slot name="header"></slot>
     </div>
-    <slot name="content"></slot>
+    <div class="text-xs"><slot name="content"></slot></div>
     <img v-if="image" :src="image" />
+    <div class="text-xs ml-auto">
+      <slot name="corner"></slot>
+    </div>
   </div>
 </template>
 
