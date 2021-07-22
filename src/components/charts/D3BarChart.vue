@@ -71,8 +71,10 @@ export default {
     this.renderChart();
 
     window.addEventListener('resize', () => {
-      this.destroyChart();
-      this.renderChart();
+      setTimeout(() => {
+        this.destroyChart();
+        this.renderChart();
+      }, 2000);
     });
   },
 
@@ -128,7 +130,7 @@ export default {
         .scaleBand()
         .domain(groups)
         .range([this.margin.left, this.getInnerWidth()])
-        .padding(0.4);
+        .padding(0.2);
 
       // set y scale
       this.y = d3
@@ -176,6 +178,13 @@ export default {
         .attr('transform', `translate(${this.margin.left}, ${-10})`)
         .call(d3.axisLeft(this.y));
 
+      d3.selectAll('#bar-chart-tooltip').remove();
+      d3.select('body')
+        .append('div')
+        .attr('id', 'bar-chart-tooltip')
+        .attr('class', 'text-xs px-2 py bg-white rounded-md font-bold')
+        .attr('style', 'position: absolute; opacity: 0;');
+
       // render bars
       this.svg
         .append('g')
@@ -199,14 +208,22 @@ export default {
         .attr('y', (d) => this.y(d[1]) - 10)
         .attr('height', (d) => this.y(d[0]) - this.y(d[1]))
         .attr('width', this.x.bandwidth())
-        .on('end', function () {
+        .on('end', function (d) {
           d3.select(this)
-            .on('mouseover', function () {
+            .on('mouseover', function (event) {
               d3.select(this)
                 .transition()
                 .duration(10)
                 .attr('stroke', 'white')
                 .attr('stroke-width', 2);
+
+              d3.select('#bar-chart-tooltip')
+                .transition()
+                .duration(20)
+                .style('opacity', 1)
+                .style('left', `${event.pageX + 10}px`)
+                .style('top', `${event.pageY + 10}px`)
+                .text(d[1] - d[0]);
             })
             .on('mouseout', function () {
               d3.select(this)
@@ -214,26 +231,28 @@ export default {
                 .duration(500)
                 .attr('stroke', 'transparent')
                 .attr('stroke-width', 0);
+
+              d3.select('#bar-chart-tooltip').style('opacity', 0);
+            })
+            .on('mousemove', function (event) {
+              d3.select('#bar-chart-tooltip')
+                .transition()
+                .duration(50)
+                .style('opacity', 1)
+                .style('left', `${event.pageX + 10}px`)
+                .style('top', `${event.pageY + 10}px`)
+                .text(d[1] - d[0]);
             });
         });
 
-      this.renderLegend(stackedData);
+      this.renderLegend();
     },
 
-    renderLegend(data) {
+    renderLegend() {
       const legend = this.svg
         .append('g')
         .attr('class', 'legend-container')
-        .attr(
-          'transform',
-          `translate(${this.getInnerWidth() / 2 - 50}, ${-10})`,
-        );
-
-      const colors = _.zipWith(
-        this.colorScale.domain(),
-        this.colorScale.range(),
-        (domain, range) => [domain, range],
-      );
+        .attr('transform', `translate(${this.getInnerWidth() * 0.1}, ${-10})`);
 
       legend
         .append('g')
