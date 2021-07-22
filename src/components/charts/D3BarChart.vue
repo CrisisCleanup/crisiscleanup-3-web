@@ -1,5 +1,5 @@
 <template>
-  <div :id="chartId" v-bind="$attrs"></div>
+  <div :id="chartId" v-bind="$attrs" class="stacked-bar-chart"></div>
 </template>
 
 <script>
@@ -25,7 +25,20 @@ export default {
     /**
      * Data for Bar chart
      */
-    chartData: VueTypes.arrayOf(VueTypes.shape({}).isRequired).def(() => []),
+    chartData: VueTypes.arrayOf(
+      VueTypes.shape<BarChartT>({
+        group: VueTypes.number,
+        newCases: VueTypes.number,
+        closedCases: VueTypes.number,
+      }).def(() => ({ group: 0, newCases: 0, closedCases: 0 })).isRequired,
+    ).def((): BarChartT[] => [
+      { group: 0, newCases: 28, closedCases: 30 },
+      { group: 1, newCases: 43, closedCases: 38 },
+      { group: 2, newCases: 81, closedCases: 30 },
+      { group: 3, newCases: 19, closedCases: 80 },
+      { group: 4, newCases: 52, closedCases: 30 },
+      { group: 5, newCases: 24, closedCases: 35 },
+    ]),
     /**
      * top, bottom, left, right margins
      */
@@ -74,7 +87,7 @@ export default {
       setTimeout(() => {
         this.destroyChart();
         this.renderChart();
-      }, 2000);
+      }, 1500);
     });
   },
 
@@ -186,7 +199,7 @@ export default {
         .attr('style', 'position: absolute; opacity: 0;');
 
       // render bars
-      this.svg
+      const bars = this.svg
         .append('g')
         .selectAll('g')
         // Enter in the stack data = loop key per key = group per group
@@ -211,12 +224,7 @@ export default {
         .on('end', function (d) {
           d3.select(this)
             .on('mouseover', function (event) {
-              d3.select(this)
-                .transition()
-                .duration(10)
-                .attr('stroke', 'white')
-                .attr('stroke-width', 2);
-
+              d3.select(this).attr('class', 'stroke--active');
               d3.select('#bar-chart-tooltip')
                 .transition()
                 .duration(20)
@@ -226,13 +234,8 @@ export default {
                 .text(d[1] - d[0]);
             })
             .on('mouseout', function () {
-              d3.select(this)
-                .transition()
-                .duration(500)
-                .attr('stroke', 'transparent')
-                .attr('stroke-width', 0);
-
               d3.select('#bar-chart-tooltip').style('opacity', 0);
+              d3.select(this).attr('class', null);
             })
             .on('mousemove', function (event) {
               d3.select('#bar-chart-tooltip')
@@ -246,6 +249,7 @@ export default {
         });
 
       this.renderLegend();
+      this.animateBars(bars);
     },
 
     renderLegend() {
@@ -275,8 +279,42 @@ export default {
         .style('font-size', '8px')
         .attr('fill', 'white');
     },
+
+    animateBars(bars) {
+      bars
+        .transition()
+        .delay(function (d, i) {
+          return i * 50;
+        })
+        .on('start', function repeat() {
+          d3.active(this)
+            .attr('stroke', 'white')
+            .attr('stroke-width', 2)
+            .transition()
+            .duration(500)
+            .delay(300)
+            .attr('stroke', 'transparent')
+            .attr('stroke-width', 0)
+            .transition()
+            .duration(500)
+            .delay(5000)
+            .on('start', repeat);
+        });
+    },
   },
 };
 </script>
 
-<style scoped lang="postcss"></style>
+<style scoped lang="postcss">
+::v-deep .stroke--active {
+  stroke: #ffffff;
+  stroke-width: 2px;
+  transition: all 10ms;
+}
+
+::v-deep .stroke--inactive {
+  stroke: transparent;
+  stroke-width: 0;
+  transition: all 500ms;
+}
+</style>
