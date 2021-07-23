@@ -25,7 +25,7 @@
         <tabs tab-classes="text-xs">
           <tab :name="$t('Site Activity')">
             <div class="text-lg">Site Activity</div>
-            <div class="h-96"></div>
+            <div class="h-40"></div>
             <div class="relative site-container" v-if="currentEvent">
               <div class="overflow-y-hidden py-3">
                 <div v-for="(post, index) in eventStreamData" :key="index">
@@ -36,14 +36,18 @@
                     <newspost
                       class="text-white transform duration-300 hover:scale-105 ease-in-out site-item"
                       :user-info="{
-                        name: post.attr.actor_first_name,
+                        name:
+                          post.attr.actor_first_name +
+                          '.' +
+                          post.attr.actor_last_name,
                         organization: post.attr.actor_organization_name,
                       }"
                       :avatar-icon="post.avatarIcon"
                       :image="post.image"
+                      :variant="post.attr.button_text_t.toLowerCase()"
                     >
                       <template #header>{{
-                        post.attr.patient_work_type_key.toUpperCase()
+                        $t(post.attr.button_text_t.toUpperCase() + 'ED CASE')
                       }}</template>
                       <template #corner>{{
                         getDateDifference(Date.parse(post.created_at))
@@ -53,21 +57,32 @@
                           <span
                             >{{
                               post.attr.actor_first_name
-                                ? post.attr.actor_first_name
-                                : 'Anonymous'
+                                ? $t(
+                                    post.attr.actor_first_name +
+                                      '.' +
+                                      post.attr.actor_last_name,
+                                  )
+                                : $t('Anonymous')
                             }}
                             from
                             {{
                               post.attr.actor_organization_name
-                                ? post.attr.actor_organization_name +
-                                  ' (' +
-                                  post.actor_location_name +
-                                  ') '
-                                : 'Unknown'
+                                ? $t(
+                                    post.attr.actor_organization_name +
+                                      ' (' +
+                                      post.actor_location_name +
+                                      ') ',
+                                  )
+                                : $t('Unknown')
                             }}
-                            {{ post.attr.button_text_t.toLowerCase() }}ed case
-                            {{ post.attr.patient_case_number }} ({{
-                              post.patient_location_name
+                            {{
+                              $t(
+                                post.attr.button_text_t.toLowerCase() +
+                                  'ed case ',
+                              )
+                            }}
+                            {{ $t(post.attr.patient_case_number) }} ({{
+                              $t(post.patient_location_name)
                             }})
                           </span>
                         </div>
@@ -84,14 +99,21 @@
                       class="text-white site-item"
                       :is-user-post="currentPost.actor_id"
                       :user-info="{
-                        name: currentPost.attr.actor_first_name,
+                        name:
+                          currentPost.attr.actor_first_name +
+                          '.' +
+                          currentPost.attr.actor_last_name,
                         organization: currentPost.attr.actor_organization_name,
                       }"
                       :avatar-icon="currentPost.avatarIcon"
                       :image="currentPost.image"
+                      :variant="currentPost.attr.button_text_t.toLowerCase()"
                     >
                       <template #header>{{
-                        currentPost.attr.patient_work_type_key.toUpperCase()
+                        $t(
+                          currentPost.attr.button_text_t.toUpperCase() +
+                            'ED CASE',
+                        )
                       }}</template>
                       <template #corner>{{
                         getDateDifference(Date.parse(currentPost.created_at))
@@ -101,21 +123,31 @@
                           <span
                             >{{
                               currentPost.attr.actor_first_name
-                                ? currentPost.attr.actor_first_name
-                                : 'Anonymous'
+                                ? $t(
+                                    currentPost.attr.actor_first_name +
+                                      '.' +
+                                      currentPost.attr.actor_last_name,
+                                  )
+                                : $t('Anonymous')
                             }}
                             from
                             {{
                               currentPost.attr.actor_organization_name
-                                ? currentPost.attr.actor_organization_name +
-                                  ' (' +
-                                  currentPost.actor_location_name +
-                                  ') '
-                                : 'Unknown'
+                                ? $t(
+                                    currentPost.attr.actor_organization_name +
+                                      ' (' +
+                                      currentPost.actor_location_name +
+                                      ') ',
+                                  )
+                                : $t('Unknown')
                             }}
-                            {{ currentPost.attr.button_text_t.toLowerCase() }}ed
-                            case {{ currentPost.attr.patient_case_number }} ({{
-                              currentPost.patient_location_name
+                            {{
+                              $t(
+                                currentPost.attr.button_text_t.toLowerCase() +
+                                  'ed case ',
+                              )
+                            }}{{ $t(currentPost.attr.patient_case_number) }} ({{
+                              $t(currentPost.patient_location_name)
                             }})
                           </span>
                         </div>
@@ -130,23 +162,23 @@
               <div class="flex flex-col">
                 <div class="p-3">
                   <div class="mb-2">
-                    <div>Total Big Number</div>
+                    <div>{{ $t('Total Big Number') }}</div>
                     <div class="text-xl text-blue-600 stats">$1.1 Billion</div>
                   </div>
                   <div class="mb-2">
-                    <div>Volunteer Hours</div>
+                    <div>{{ $t('Volunteer Hours') }}</div>
                     <div class="text-lg stats">2348020</div>
                   </div>
                   <div class="mb-2">
-                    <div>Value per Volunteer</div>
+                    <div>{{ $t('Value per Volunteer') }}</div>
                     <div class="text-lg stats">$237</div>
                   </div>
                   <div class="mb-2">
-                    <div>Volunteer Hours Dollars</div>
+                    <div>{{ $t('Volunteer Hours Dollars') }}</div>
                     <div class="text-lg stats">$467</div>
                   </div>
                   <div class="mb-2">
-                    <div>Total Market Value</div>
+                    <div>{{ $t('Total Market Value') }}</div>
                     <div class="text-lg stats">$41283437</div>
                   </div>
                   <div class="underline text-blue-600">
@@ -410,7 +442,7 @@ import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
 import OrganizationActivity from '@/components/OrganizationActivity.vue';
-import _, { orderBy } from 'lodash';
+import _ from 'lodash';
 import Slider from '@/components/Slider';
 
 export default {
@@ -830,7 +862,7 @@ export default {
             let strokeColor = '#e30001';
             let workTypeKey = null;
             if (wwtsp && wwtsp.length > 0) {
-              const workType = orderBy(
+              const workType = _.orderBy(
                 wwtsp,
                 ['commercial_value'],
                 ['desc'],
@@ -1003,36 +1035,7 @@ export default {
       }
     },
     getDateDifference(date) {
-      const dateDifference = Math.abs(new Date() - date);
-      let difference;
-      // convert it to different measurements based on how much time passed
-      if (dateDifference < 1000) {
-        difference = 'now';
-      } else {
-        difference = Math.floor(Math.abs(dateDifference / 1000));
-        if (difference >= 60) {
-          difference = Math.floor(Math.abs(difference / 60));
-          if (difference >= 60) {
-            difference = Math.floor(Math.abs(difference / 60));
-            if (difference >= 24) {
-              difference = Math.floor(Math.abs(difference / 24));
-              if (difference >= 365) {
-                difference = Math.floor(Math.abs(difference / 365));
-                difference += ' years ago';
-              } else {
-                difference += ' days ago';
-              }
-            } else {
-              difference += ' hours ago';
-            }
-          } else {
-            difference += ' minutes ago';
-          }
-        } else {
-          difference += ' seconds ago';
-        }
-      }
-      return difference;
+      return this.$moment(date).fromNow();
     },
     async getCompletionRateData() {
       const response = await this.$http.get(

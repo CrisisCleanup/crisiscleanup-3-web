@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col relative p-2 rounded bg-gray-800">
+  <div class="flex flex-col relative p-2 rounded" :class="variant">
     <div v-if="isUserPost" class="flex flex-row items-center">
       <img
         :src="avatarIcon"
@@ -42,6 +42,57 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    variant: {
+      type: String,
+      default: 'default',
+    },
   },
 };
 </script>
+<style>
+.unclaim {
+  border-style: solid;
+  border-width: 2px;
+  border-color: #ed4747;
+  background: #442a2a;
+  border-radius: 4px;
+}
+.close {
+  border-style: solid;
+  border-width: 2px;
+  border-color: #0fa355;
+  background: #21382c;
+  border-radius: 4px;
+}
+.assigned {
+  border-style: solid;
+  border-width: 2px;
+  border-color: #fece09;
+  background: #473f20;
+  border-radius: 4px;
+}
+.claim {
+  border-color: #fab92e;
+  background: #463c26;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 2px;
+}
+.partly_done {
+  border-color: #0054bb;
+  background: #3a4758;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 2px;
+}
+.login {
+  border-color: #61d5f8;
+  background: #495c62;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 2px;
+}
+.default {
+  background: #2a3138;
+}
+</style>
