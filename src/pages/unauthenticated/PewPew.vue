@@ -149,6 +149,7 @@
                   class="absolute left-0 bottom-0 right-0"
                 >
                   <div
+                    v-if="displayedWorkTypeSvgs.length > 0"
                     class="legend w-108 h-auto bg-crisiscleanup-dark-400 p-2 mb-5 ml-3 bg-opacity-25"
                   >
                     <div class="font-bold my-1 text-white text-sm">
@@ -279,6 +280,7 @@ export default {
   data() {
     return {
       markers: [],
+      liveEvents: [],
       events: {},
       incidents: [],
       organizations: [],
@@ -297,7 +299,7 @@ export default {
         },
       },
       incidentId: 222,
-      markerSpeed: 2000,
+      markerSpeed: 2500,
       incident: null,
       incidentStats: {},
       mapStatistics: [],
@@ -305,26 +307,23 @@ export default {
       orbTexture: null,
       eventsInterval: null,
       textureMap: {},
+      queryFilter: {
+        start_date: null,
+        end_date: null,
+        incident: null,
+      },
     };
   },
   async mounted() {
+    this.queryFilter.start_date = this.$moment().add(-60, 'days');
+    this.queryFilter.end_date = this.$moment();
+
     await Incident.api().fetchById(this.incidentId);
     this.incident = Incident.find(this.incidentId);
 
-    this.displayedWorkTypeSvgs = this.incident.created_work_types.map(
-      (workType) => {
-        const template = templates[workType] || templates.unknown;
-        const svg = template
-          .replace('{{fillColor}}', '#61D5F8')
-          .replace('{{strokeColor}}', 'black')
-          .replace('{{multiple}}', '');
-        return {
-          svg,
-          key: workType,
-          selected: false,
-        };
-      },
-    );
+    this.incidents = await this.getRecentIncidents();
+    this.organizations = await this.getOrganizations();
+    this.setLegend();
 
     const svg = templates.orb
       .replace('{{fillColor}}', '#61D5F8')
@@ -333,37 +332,37 @@ export default {
     await this.getIncidentStats();
     this.mapStatistics = [
       {
-        count: this.incidentStats.worksite_count,
+        count: this.incidentStats.all.total,
         style: `border-color: white`,
         title: this.$t('~~All Cases'),
       },
       {
-        count: this.incidentStats.unclaimed_count,
+        count: this.incidentStats.unclaimed.total,
         style: `border-color: #d0021b`,
         title: this.$t('~~Unclaimed'),
       },
       {
-        count: this.incidentStats.claimed_count,
+        count: this.incidentStats.claimed.total,
         style: `border-color: #fab92e`,
         title: this.$t('~~Claimed'),
       },
       {
-        count: this.incidentStats.assigned_count,
+        count: this.incidentStats.assigned.total,
         style: `border-color: #f0f032`,
         title: this.$t('~~Assinged'),
       },
       {
-        count: this.incidentStats.partial_count,
+        count: this.incidentStats.partial.total,
         style: `border-color: #0054bb`,
         title: this.$t('~~Partly Done'),
       },
       {
-        count: this.incidentStats.closed_count,
+        count: this.incidentStats.closed.total,
         style: `border-color: #0FA355`,
         title: this.$t('~~Closed'),
       },
       {
-        count: this.incidentStats.overdue_count,
+        count: this.incidentStats.overdue.total,
         style: `border: none`,
         title: this.$t('~~Overdue'),
       },
@@ -394,6 +393,22 @@ export default {
     await this.loadMap();
   },
   methods: {
+    setLegend() {
+      this.displayedWorkTypeSvgs = this.incident.created_work_types.map(
+        (workType) => {
+          const template = templates[workType] || templates.unknown;
+          const svg = template
+            .replace('{{fillColor}}', '#61D5F8')
+            .replace('{{strokeColor}}', 'black')
+            .replace('{{multiple}}', '');
+          return {
+            svg,
+            key: workType,
+            selected: false,
+          };
+        },
+      );
+    },
     async getRecentIncidents() {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,turn_on_release&limit=8&sort=-start_at`,
@@ -402,16 +417,20 @@ export default {
       return results;
     },
     async getOrganizations() {
+      const { start_date, end_date, incident } = this.queryFilter;
       const params = {
-        limit: 20,
+        start_date: start_date.format('YYYY-MM-DD'),
+        end_date: end_date.format('YYYY-MM-DD'),
       };
+      if (incident) {
+        params.incident = incident;
+      }
       const queryString = getQueryString(params);
 
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.incidentId}/organizations?${queryString}`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/organization_statistics?${queryString}`,
       );
-      const { results } = response.data;
-      return results;
+      return response.data;
     },
     async loadMap() {
       this.mapLoading = true;
@@ -427,14 +446,16 @@ export default {
         limit: 1500,
         event_key__in: Object.keys(this.events).join(','),
         sort: 'created_at',
-        incident: this.incidentId,
+        // incident: this.incidentId,
+        created_at__gte: this.queryFilter.start_date.toISOString(),
+        created_at__lte: this.queryFilter.end_date.toISOString(),
       };
       const queryString = getQueryString(params);
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
       );
       this.markers = response.data.results;
-      [this.currentEvent] = this.markers;
+      // [this.currentEvent] = this.markers;
 
       // let next;
       // next = response.data.next;
@@ -446,6 +467,19 @@ export default {
       // }
       // this.pollNewEvents();
     },
+    async getLatestEvents() {
+      const params = {
+        limit: 100,
+        sort: '-created_at',
+        created_at__gt: this.$moment().add(-24, 'hours').toISOString(),
+      };
+      const queryString = getQueryString(params);
+      const { data } = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
+      );
+      this.liveEvents = data.results;
+    },
+
     async renderMap() {
       if (!this.map) {
         this.map = L.map('map', {
@@ -477,17 +511,26 @@ export default {
 
       this.setLayer();
 
-      this.incidents = await this.getRecentIncidents();
-      this.organizations = await this.getOrganizations();
       this.events = {
-        user_join_wwwtsp_with_organization: 'patient',
-        'user_join_work-type-status_with_wwwtsp': 'recipient',
+        // user_join_wwwtsp_with_organization: 'patient',
+        // 'user_join_work-type-status_with_wwwtsp': 'recipient',
         user_create_worksite: 'recipient',
       };
       await this.getAllEvents();
       this.lastEventTimestamp = this.$moment().toISOString();
       const worksiteLayer = getMarkerLayer([], map, this);
       worksiteLayer.addTo(map);
+
+      // Initial Draw
+      this.markers.forEach((marker) => {
+        this.addMarker(marker);
+      });
+
+      worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
+      worksiteLayer.redraw();
+
+      // Last 2 hours
+      await this.getLatestEvents();
 
       map.attributionControl.setPosition('bottomright');
     },
@@ -582,34 +625,11 @@ export default {
         }
       });
     },
-    generateMarker() {
+    addMarker(marker) {
       this.map.eachLayer((layer) => {
         if (layer.key === 'marker_layer') {
-          const marker = this.markers[this.currentEventIndex];
-          this.currentEvent = marker;
-          this.currentEventIndex++;
           const markerTemplate = templates.circle;
-          let actorMarkerSprite = null;
           let patientMarkerSprite = null;
-          if (marker.actor_blurred_location) {
-            const actorCoords = layer.utils.latLngToLayerPoint([
-              marker.actor_blurred_location.coordinates[1],
-              marker.actor_blurred_location.coordinates[0],
-            ]);
-
-            actorMarkerSprite = new Sprite();
-            actorMarkerSprite.x = actorCoords.x;
-            actorMarkerSprite.y = actorCoords.y;
-            actorMarkerSprite.x0 = actorCoords.x;
-            actorMarkerSprite.y0 = actorCoords.y;
-            actorMarkerSprite.interactive = false;
-            actorMarkerSprite.anchor.set(0.5, 0.5);
-            actorMarkerSprite.type = 'actor';
-            actorMarkerSprite.texture = this.orbTexture;
-            actorMarkerSprite.visible = true;
-            layer._pixiContainer.addChild(actorMarkerSprite);
-          }
-
           if (
             marker.recipient_blurred_location ||
             marker.patient_blurred_location
@@ -691,6 +711,125 @@ export default {
 
             layer._pixiContainer.addChild(patientMarkerSprite);
           }
+        }
+      });
+    },
+    generateMarker() {
+      this.map.eachLayer((layer) => {
+        if (layer.key === 'marker_layer') {
+          const marker = this.liveEvents[this.currentEventIndex];
+          this.currentEventIndex++;
+          if (!marker) {
+            layer._renderer.render(layer._pixiContainer);
+            layer.redraw();
+            return;
+          }
+          this.currentEvent = marker;
+          const markerTemplate = templates.circle;
+          let actorMarkerSprite = null;
+          let patientMarkerSprite = null;
+          if (marker.actor_blurred_location) {
+            const actorCoords = layer.utils.latLngToLayerPoint([
+              marker.actor_blurred_location.coordinates[1],
+              marker.actor_blurred_location.coordinates[0],
+            ]);
+
+            actorMarkerSprite = new Sprite();
+            actorMarkerSprite.x = actorCoords.x;
+            actorMarkerSprite.y = actorCoords.y;
+            actorMarkerSprite.x0 = actorCoords.x;
+            actorMarkerSprite.y0 = actorCoords.y;
+            actorMarkerSprite.interactive = false;
+            actorMarkerSprite.anchor.set(0.5, 0.5);
+            actorMarkerSprite.type = 'actor';
+            actorMarkerSprite.live = true;
+            actorMarkerSprite.texture = this.orbTexture;
+            actorMarkerSprite.visible = true;
+            layer._pixiContainer.addChild(actorMarkerSprite);
+          }
+
+          if (
+            marker.recipient_blurred_location ||
+            marker.patient_blurred_location
+          ) {
+            const location =
+              marker[`${marker.map_destination}_blurred_location`];
+            const patientCoords = layer.utils.latLngToLayerPoint([
+              location.coordinates[1],
+              location.coordinates[0],
+            ]);
+
+            const wwtsp = marker.attr[`${marker.map_destination}_wwtsp`];
+            let color = '#d0021b';
+            let strokeColor = '#e30001';
+            let workTypeKey = null;
+            if (wwtsp && wwtsp.length > 0) {
+              const workType = orderBy(
+                wwtsp,
+                ['commercial_value'],
+                ['desc'],
+              )[0];
+              workTypeKey = workType.work_type_key;
+              const colorsKey = `${workType.status}_${
+                workType.claimed_by ? 'claimed' : 'unclaimed'
+              }`;
+              // const worksiteTemplate = templates.circle;
+              const spriteColors = colors[colorsKey];
+              color = spriteColors.fillColor;
+              strokeColor = spriteColors.strokeColor;
+            } else if (
+              marker.attr.recipient_status ||
+              marker.attr.patient_status
+            ) {
+              const statusProp =
+                marker.attr[`${marker.map_destination}_status`];
+              const claimed = marker.attr[
+                `${marker.map_destination}_claimed_by`
+              ]
+                ? 'claimed'
+                : 'unclaimed';
+              const colorsKey = `${statusProp}_${claimed}`;
+              const spriteColors = colors[colorsKey];
+              color = spriteColors.fillColor;
+              strokeColor = spriteColors.strokeColor;
+              workTypeKey =
+                marker.attr[`${marker.map_destination}_work_type_key`];
+            }
+
+            patientMarkerSprite = new Sprite();
+            patientMarkerSprite.x = patientCoords.x;
+            patientMarkerSprite.y = patientCoords.y;
+            patientMarkerSprite.x0 = patientCoords.x;
+            patientMarkerSprite.y0 = patientCoords.y;
+            patientMarkerSprite.interactive = false;
+            patientMarkerSprite.anchor.set(0.5, 0.5);
+            patientMarkerSprite.live = true;
+            const svg = markerTemplate
+              .replace('{{fillColor}}', color)
+              .replace('{{strokeColor}}', 'black');
+            let texture = this.textureMap[color];
+            if (!texture) {
+              this.textureMap[color] = Texture.from(svg);
+              texture = this.textureMap[color];
+            }
+            patientMarkerSprite.texture = texture;
+            patientMarkerSprite.visible = true;
+            patientMarkerSprite.color = color;
+            patientMarkerSprite.strokeColor = strokeColor;
+            patientMarkerSprite.workTypeKey = workTypeKey;
+            patientMarkerSprite.type = 'patient';
+
+            const detailedTemplate =
+              templates[workTypeKey] || templates.unknown;
+            const typeSvg = detailedTemplate
+              .replace('{{fillColor}}', color)
+              .replace('{{strokeColor}}', 'black');
+
+            patientMarkerSprite.basicTexture = texture;
+            patientMarkerSprite.detailedTexture = Texture.from(typeSvg);
+
+            layer._pixiContainer.addChild(patientMarkerSprite);
+          }
 
           layer._renderer.render(layer._pixiContainer);
           layer.redraw();
@@ -700,6 +839,7 @@ export default {
               actorMarkerSprite,
               patientMarkerSprite,
             );
+            linksGraphics.live = true;
             actorMarkerSprite.workTypeKey = patientMarkerSprite.workTypeKey;
             actorMarkerSprite.visible = this.getMarkerVisibility(
               actorMarkerSprite,
@@ -724,8 +864,18 @@ export default {
       this.eventsInterval = null;
     },
     async getCompletionRateData() {
+      const { start_date, end_date, incident } = this.queryFilter;
+      const params = {
+        start_date: start_date.format('YYYY-MM-DD'),
+        end_date: end_date.format('YYYY-MM-DD'),
+      };
+      if (incident) {
+        params.incident = incident;
+      }
+      const queryString = getQueryString(params);
+
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?start_date=2021-06-15&end_date=2021-07-15`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?${queryString}`,
       );
       const chart = response.data;
 
@@ -798,8 +948,18 @@ export default {
       return { options, data };
     },
     async getIncidentStats() {
+      const { start_date, end_date, incident } = this.queryFilter;
+      const params = {
+        start_date: start_date.format('YYYY-MM-DD'),
+        end_date: end_date.format('YYYY-MM-DD'),
+      };
+      if (incident) {
+        params.incident = incident;
+      }
+      const queryString = getQueryString(params);
+
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/reports_data/incident_statistics?incident=${this.incidentId}`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/worksite_statistics?${queryString}`,
       );
       this.incidentStats = response.data;
     },

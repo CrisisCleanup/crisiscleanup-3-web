@@ -607,7 +607,7 @@ export function findBezierPoints(b) {
   const endPt = b[3];
   const pts = [b[0]];
   let lastPt = b[0];
-  const tests = 70;
+  const tests = 25;
   for (let t = 0; t <= tests; t++) {
     // calc another point along the curve
     const pt = getCubicBezierXYatPercent(
