@@ -1304,7 +1304,7 @@ export default {
         ['reported_count', '0.5fr', 'Cases'],
         ['claimed_count', '0.5fr', 'Claimed'],
         ['calls', '0.5fr'],
-        ['commercial_value', '0.5fr'],
+        ['commercial_value', '0.5fr', 'Value'],
       ]);
       columns.forEach((column) => {
         column.titleClass = 'small-font';
