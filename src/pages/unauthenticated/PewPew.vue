@@ -346,16 +346,23 @@
               </div>
             </div>
           </div>
-          <div class="col-span-1 border grid grid-rows-12">
-            <div class="row-span-1 p-2">
-              <div class="text-lg">Organizations Activity</div>
-              <div class="grid grid-cols-6">
-                <div class="col-span-2 truncate">Organization Name</div>
-                <div class="col-span-1 text-center truncate">Cases</div>
-                <div class="col-span-1 text-center truncate">Claimed</div>
-                <div class="col-span-1 text-center truncate">Calls</div>
-                <div class="col-span-1 text-center truncate">Value</div>
+          <div class="col-span-1 grid grid-rows-12">
+            <div class="row-span-7 relative">
+              <div v-if="isModalOpen" class="absolute top-1 w-full">
+                <OrganizationActivityModal
+                  @close="isModalOpen = false"
+                  :general-info="orgInfo.generalInfo"
+                  class="z-50"
+                />
               </div>
+              <Table
+                :columns="orgTable.columns"
+                :data="organizations"
+                style="height: 450px;"
+                :body-style="{ maxHeight: '450px', ...styles }"
+                :header-style="styles"
+                @rowClick="onRowClick"
+              ></Table>
             </div>
             <div
               class="row-span-6 px-2"
@@ -483,6 +490,8 @@ import Incident from '@/models/Incident';
 import OrganizationActivity from '@/components/OrganizationActivity.vue';
 import _ from 'lodash';
 import Slider from '@/components/Slider';
+import DisasterIcon from '@/components/DisasterIcon';
+import OrganizationActivityModal from '@/components/OrganizationActivityModal.vue';
 import LightTab from '@/components/tabs/LightTab';
 import SiteActivityGauge from '@/components/charts/SiteActivityGauge';
 import CircularBarplot from '@/components/charts/CircularBarplot';
@@ -500,12 +509,21 @@ export default {
     Newspost,
     OrganizationActivity,
     Slider,
+    DisasterIcon,
+    Table,
+    OrganizationActivityModal,
   },
   data() {
     return {
       eventStreamData: [],
       currentPost: null,
       startTime: new Date(),
+      orgInfo: {
+        generalInfo: {},
+        incidents: [],
+        capability: [],
+      },
+      isModalOpen: false,
       markers: [],
       events: {},
       incidents: [],
@@ -1252,6 +1270,11 @@ export default {
         this.map.removeLayer(this.darkTileLayer);
       }
     },
+    onRowClick(item) {
+      console.log(item);
+      this.orgInfo.generalInfo = item;
+      this.isModalOpen = true;
+    },
   },
   computed: {
     visibleWorkTypes() {
@@ -1281,7 +1304,7 @@ export default {
         ['reported_count', '0.5fr', 'Cases'],
         ['claimed_count', '0.5fr', 'Claimed'],
         ['calls', '0.5fr'],
-        ['value', '0.5fr'],
+        ['commercial_value', '0.5fr'],
       ]);
       columns.forEach((column) => {
         column.titleClass = 'small-font';
