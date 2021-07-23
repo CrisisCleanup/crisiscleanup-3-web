@@ -348,7 +348,7 @@
           </div>
           <div class="col-span-1 grid grid-rows-12">
             <div class="row-span-7 relative">
-              <div v-if="isModalOpen" class="absolute top-1 w-full">
+              <div v-if="isModalOpen" class="absolute top-1 w-full px-1">
                 <OrganizationActivityModal
                   @close="isModalOpen = false"
                   :general-info="orgInfo.generalInfo"

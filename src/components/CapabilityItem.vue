@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>{{ $t(capability.name) }}</div>
+    <div class="my-2">{{ $t(capability.name) }}</div>
     <div class="grid grid-cols-6 gap-1">
       <div
         class="col-span-1 h-3 rounded"

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="(capability, index) in capabilities" :key="index">
-      <div>{{ capability.name }}</div>
+      <div class="text-center bg-gradient-to-r from-transparent via-gray-500 to-transparent my-2">{{ capability.name }}</div>
       <div class="grid grid-cols-5">
         <div class="col-span-1 text-crisiscleanup-dark-300">
           {{ $t('NORMAL') }}
@@ -19,8 +19,10 @@
           {{ $t('LONGTERM') }}
         </div>
       </div>
+      <div class="mb-5">
       <div v-for="(item, idx) in capability.items" :key="idx">
         <CapabilityItem :capability="item" />
+      </div>
       </div>
     </div>
   </div>
