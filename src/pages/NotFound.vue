@@ -14,15 +14,6 @@ import HomeLayout from '@/layouts/Home';
 export default {
   name: 'NotFound',
   components: { HomeLayout },
-  data() {
-    return {
-      userInfo: {
-        name: 'Angelo Pablo',
-        organization:
-          'A Really long Organization Name for no reason just as to test truncating a string',
-      },
-    };
-  },
 };
 </script>
 
