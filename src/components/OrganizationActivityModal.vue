@@ -57,7 +57,8 @@
         >
           <div class="mt-2">{{ $t('INCIDENTS') }}</div>
           <div class="ml-auto text-lg">
-            &#8964;
+            <div v-if="!showIncidents">&#8964;</div>
+            <div v-else>&#8963;</div>
           </div>
         </div>
         <Incidents
@@ -74,7 +75,8 @@
         >
           <div class="mt-2">{{ $t('CAPABILITY') }}</div>
           <div class="ml-auto text-lg">
-            &#8964;
+            <div v-if="!showCapability">&#8964;</div>
+            <div v-else>&#8963;</div>
           </div>
         </div>
         <Capability :capabilities="testCapabilities" v-if="showCapability" />
