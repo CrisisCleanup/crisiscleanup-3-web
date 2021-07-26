@@ -6,6 +6,7 @@
 // @flow
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
+import _ from 'lodash';
 
 export type GaugeT = {|
   radius: number,
@@ -49,18 +50,21 @@ export default {
       },
     ]),
     /**
+     * Unique chart ID
+     */
+    chartId: VueTypes.string.def('d3-velocity-gauge-chart'),
+    /**
      * top, bottom, left, right margins
      */
-    margin: {
-      type: Number,
-      required: false,
-      default: 0,
-    },
+    margin: VueTypes.number.def(5),
+    /**
+     * background color / gradient
+     */
+    bgColor: VueTypes.string.def('#232323'),
   },
 
   data() {
     return {
-      chartId: 'velocity-gauge-chart',
       svg: null,
       scale: null,
     };
@@ -76,8 +80,18 @@ export default {
   },
 
   mounted() {
-    this.destroyChart();
-    this.renderChart();
+    this.$nextTick(() => {
+      this.destroyChart();
+      this.renderChart();
+    });
+
+    window.addEventListener(
+      'resize',
+      _.debounce(() => {
+        this.destroyChart();
+        this.renderChart();
+      }, 1500),
+    );
   },
 
   computed: {
@@ -107,10 +121,7 @@ export default {
         .append('svg')
         .attr('width', this.width + this.margin * 2)
         .attr('height', this.height + this.margin * 2)
-        .style(
-          'background',
-          'linear-gradient(rgb(44, 55, 65, 0.85) 0%, rgba(44, 55, 65, 0.95) 100%)',
-        )
+        .style('background', this.bgColor)
         .append('g')
         .attr(
           'transform',
