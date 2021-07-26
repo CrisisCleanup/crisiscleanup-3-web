@@ -266,6 +266,42 @@ export default {
             endAngle: this.scale(d + 1),
           }),
         );
+
+      // label group
+      const labelGroup = this.svg.append('g').attr('fill', '#fefefe');
+      const labelHeightOffset = this.getInnerHeight() * 0.1;
+
+      // left label
+      labelGroup
+        .append('text')
+        .attr('fill', '#fff')
+        .attr('dominant-baseline', 'middle')
+        .attr('text-anchor', 'middle')
+        .attr('font-size', this.getFontSize())
+        .attr('font-weight', 'bold')
+        .attr(
+          'transform',
+          `translate(${
+            -(radius * 1.1 + radius * 0.7) / 2
+          }, ${labelHeightOffset})`,
+        )
+        .text('Slow');
+
+      // right label
+      labelGroup
+        .append('text')
+        .attr('fill', '#fff')
+        .attr('dominant-baseline', 'middle')
+        .attr('text-anchor', 'middle')
+        .attr('font-size', this.getFontSize())
+        .attr('font-weight', 'bold')
+        .attr(
+          'transform',
+          `translate(${
+            (radius * 1.1 + radius * 0.7) / 2
+          }, ${labelHeightOffset})`,
+        )
+        .text('Strong');
     },
 
     addDefs() {
