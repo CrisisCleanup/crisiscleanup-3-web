@@ -30,14 +30,14 @@ export type ChartDataT = {|
 export default {
   name: 'CircularBarplot',
   props: {
-    chartData: VueTypes.arrayOf<ChartDataT[]>(
+    chartData: VueTypes.arrayOf(
       VueTypes.shape<ChartDataT>({
         name: VueTypes.string.isRequired,
         timestamp: VueTypes.date.isRequired,
         open: VueTypes.number,
         closed: VueTypes.number,
       }),
-    ).def(() =>
+    ).def((): ChartDataT =>
       Array.from({ length: 24 * 6 }, (v, i) => ({
         name: `id-${i}`,
         timestamp: new Date(
