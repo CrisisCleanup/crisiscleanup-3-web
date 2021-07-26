@@ -239,36 +239,38 @@ export default {
         .attr('r', radius * 0.1)
         .attr('fill', '#fefefe');
 
+      // set initial arrow arc at 0
+      const arrowArc = d3
+        .arc()
+        .innerRadius(0)
+        .outerRadius(radius * 1.1)
+        .startAngle(this.scale(0))
+        .endAngle(this.scale(1));
+
+      // gauge arrow
       const arrow = this.svg
         .selectAll('path.arrow')
         .data([this.chartData])
         .join('path')
-        .classed('arrow', true)
+        .attr('class', 'arrow')
         .attr('fill', '#fff');
-      arrow.append('title').text(`${this.chartData}%`);
 
+      // transition arrow to endAngle
       arrow
-        .attr('d', (d) =>
-          d3
-            .arc()
-            .innerRadius(0)
-            .outerRadius(radius * 1.1)({
-            startAngle: this.scale(0),
-            endAngle: this.scale(1),
-          }),
-        )
         .transition()
         .duration(2000)
-        .attrTween('d', arcTween)
-        .attr('d', (d) =>
-          d3
-            .arc()
-            .innerRadius(0)
-            .outerRadius(radius * 1.1)({
-            startAngle: this.scale(d),
-            endAngle: this.scale(d + 1),
-          }),
-        );
+        .attrTween('d', (d) => {
+          const interpolateStart = d3.interpolate(this.scale(0), this.scale(d));
+          const interpolateEnd = d3.interpolate(
+            this.scale(1),
+            this.scale(d + 1),
+          );
+          return (t) => {
+            arrowArc.startAngle(interpolateStart(t));
+            arrowArc.endAngle(interpolateEnd(t));
+            return arrowArc();
+          };
+        });
 
       // label group
       const labelGroup = this.svg.append('g').attr('fill', '#fefefe');
