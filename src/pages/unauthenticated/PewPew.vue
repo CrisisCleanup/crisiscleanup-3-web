@@ -1,7 +1,7 @@
 <template>
   <div class="absolute top-0 right-0 left-0 bottom-0" :style="styles">
     <div class="grid grid-cols-6 relative">
-      <div class="absolute top-0 right-0 px-1 w-full mt-24 sm:w-1/4 sm:mt-16">
+      <div class="absolute top-0 right-0 px-1 w-full mt-24 sm:w-1/4 sm:mt-20">
         <OrganizationActivityModal
           @close="closeModal"
           :general-info="orgInfo.generalInfo"
