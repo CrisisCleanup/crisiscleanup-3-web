@@ -27,9 +27,7 @@ export default {
     /**
      * background color / gradient
      */
-    bgColor: VueTypes.string.def(
-      'linear-gradient(rgb(44, 55, 65, 0.85) 0%, rgba(44, 55, 65, 0.95) 100%)',
-    ),
+    bgColor: VueTypes.string.def('#232323'),
   },
 
   data() {
@@ -106,7 +104,7 @@ export default {
     },
 
     getFontSize(): number {
-      return Math.min(this.getInnerWidth(), this.getInnerHeight()) * 0.25;
+      return Math.min(this.getInnerWidth(), this.getInnerHeight()) * 0.065;
     },
 
     destroyChart() {
@@ -141,7 +139,6 @@ export default {
         );
 
       this.addDefs();
-      this.svg.append('circle').attr('r', 10).attr('fill', '#fff');
 
       const spikes = this.svg.selectAll('path').data(spikesData).join('path');
       spikes.append('title').text((d) => `${d}%`);
@@ -165,7 +162,9 @@ export default {
           }),
         )
         .attr('fill', (d) =>
-          this.scale(d) < this.scale(this.chartData) ? '#61D5F8' : '#728090',
+          this.scale(d) < this.scale(this.chartData)
+            ? 'url(#active-spike-grad)'
+            : 'url(#inactive-spike-grad)',
         )
         .transition()
         .delay(function (d, i) {
@@ -203,6 +202,43 @@ export default {
           });
       }
 
+      // inner semicircle for shadow glow effect
+      this.svg
+        .append('path')
+        .classed('shadow-semicircle', true)
+        .attr(
+          'd',
+          d3
+            .arc()
+            .innerRadius(0)
+            .outerRadius(radius * 0.71)
+            .startAngle(this.scale(0))
+            .endAngle(this.scale(101)),
+        )
+        .attr('fill', '#13141E')
+        .attr('filter', 'url(#shadow-glow)');
+
+      // inner arc to display filled gray semicircle
+      this.svg
+        .append('path')
+        .classed('filled-semicircle', true)
+        .attr(
+          'd',
+          d3
+            .arc()
+            .innerRadius(0)
+            .outerRadius(radius * 0.68)
+            .startAngle(this.scale(0))
+            .endAngle(this.scale(this.chartData)),
+        )
+        .attr('fill', '#242C36');
+
+      // circle for attaching arrow
+      this.svg
+        .append('circle')
+        .attr('r', radius * 0.1)
+        .attr('fill', '#fefefe');
+
       const arrow = this.svg
         .selectAll('path.arrow')
         .data([this.chartData])
@@ -215,7 +251,7 @@ export default {
             .innerRadius(0)
             .outerRadius(radius * 1.1)({
             startAngle: this.scale(0),
-            endAngle: this.scale(0 + 1),
+            endAngle: this.scale(1),
           }),
         )
         .transition()
@@ -236,9 +272,65 @@ export default {
       // defs container
       const defs = this.svg.append('defs');
 
+      // radical gradient for the active (filled up) spikes
+      const activeRadialGrad = defs
+        .append('radialGradient')
+        .attr('id', 'active-spike-grad');
+      activeRadialGrad
+        .append('stop')
+        .attr('offset', '10%')
+        .attr('stop-color', '#61D5F8');
+      activeRadialGrad
+        .append('stop')
+        .attr('offset', '95%')
+        .attr('stop-color', '#61D5F8AA');
+
+      // radical gradient for the inactive spikes
+      const inactiveRadialGrad = defs
+        .append('radialGradient')
+        .attr('id', 'inactive-spike-grad');
+      inactiveRadialGrad
+        .append('stop')
+        .attr('offset', '10%')
+        .attr('stop-color', '#728090');
+      inactiveRadialGrad
+        .append('stop')
+        .attr('offset', '95%')
+        .attr('stop-color', '#728090AA');
+
       // glow filters
+      const shadowFilter = defs
+        .append('filter')
+        .attr('id', 'shadow-glow')
+        .attr('x', '-500%')
+        .attr('y', '-500%')
+        .attr('width', '1000%')
+        .attr('height', '1000%');
       const glowFilter = defs.append('filter').attr('id', 'spike-glow');
       const noGlowFilter = defs.append('filter').attr('id', 'spike-noglow');
+
+      shadowFilter
+        .append('feFlood')
+        .attr('result', 'flood')
+        .attr('flood-color', '#000')
+        .attr('flood-opacity', '1');
+      shadowFilter
+        .append('feComposite')
+        .attr('in', 'flood')
+        .attr('result', 'mask')
+        .attr('in2', 'SourceGraphic')
+        .attr('operator', 'in');
+      shadowFilter
+        .append('feMorphology')
+        .attr('in', 'mask')
+        .attr('result', 'dilated')
+        .attr('operator', 'dilate')
+        .attr('radius', 2);
+      shadowFilter
+        .append('feGaussianBlur')
+        .attr('stdDeviation', '15')
+        .attr('in', 'dilated')
+        .attr('result', 'blurred');
 
       glowFilter
         .append('feGaussianBlur')
@@ -249,6 +341,10 @@ export default {
         .append('feGaussianBlur')
         .attr('stdDeviation', '0')
         .attr('result', 'coloredBlur');
+
+      const shadowFeMerge = shadowFilter.append('feMerge');
+      shadowFeMerge.append('feMergeNode').attr('in', 'blurred');
+      shadowFeMerge.append('feMergeNode').attr('in', 'SourceGraphic');
 
       const glowFeMerge = glowFilter.append('feMerge');
       glowFeMerge.append('feMergeNode').attr('in', 'coloredBlur');
