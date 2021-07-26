@@ -377,26 +377,6 @@ export default {
       noGlowFeMerge.append('feMergeNode').attr('in', 'coloredBlur');
       noGlowFeMerge.append('feMergeNode').attr('in', 'SourceGraphic');
     },
-
-    animateSpikes(spikes) {
-      spikes
-        .transition()
-        .delay(function (d, i) {
-          return i * 50;
-        })
-        .on('start', function repeat() {
-          d3.selectAll(this)
-            .attr('filter', 'url(#spike-noglow)')
-            .transition()
-            .duration(500)
-            .delay(50)
-            .attr('filter', 'url(#spike-glow)')
-            .transition()
-            .duration(500)
-            .delay(5000)
-            .on('start', repeat);
-        });
-    },
   },
 };
 </script>
