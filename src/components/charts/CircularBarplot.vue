@@ -1,5 +1,5 @@
 <template>
-  <div id="circular-barplot" v-bind="$attrs"></div>
+  <div :id="chartId" v-bind="$attrs"></div>
 </template>
 
 <script>
@@ -59,13 +59,17 @@ export default {
     },
 
     /**
+     * Unique chart ID
+     */
+    chartId: VueTypes.string.def('d3-circular-barplot'),
+    /**
      * top, bottom, left, right margins
      */
-    margin: {
-      type: Number,
-      required: false,
-      default: 0,
-    },
+    margin: VueTypes.number.def(5),
+    /**
+     * background color / gradient
+     */
+    bgColor: VueTypes.string.def('#232323'),
   },
 
   data() {
@@ -74,13 +78,13 @@ export default {
 
   computed: {
     width() {
-      const w = +d3.select('#circular-barplot').style('width').slice(0, -2);
+      const w = +d3.select(`#${this.chartId}`).style('width').slice(0, -2);
       console.log(w);
       return w - this.margin * 2;
     },
 
     height() {
-      const h = +d3.select('#circular-barplot').style('height').slice(0, -2);
+      const h = +d3.select(`#${this.chartId}`).style('height').slice(0, -2);
       console.log(h);
       return h - this.margin * 2;
     },
@@ -139,14 +143,11 @@ export default {
     renderChart(data) {
       // append the svg object
       const svg = d3
-        .select('#circular-barplot')
+        .select(`#${this.chartId}`)
         .append('svg')
         .attr('width', this.width + this.margin * 2)
         .attr('height', this.height + this.margin * 2)
-        .style(
-          'background',
-          'linear-gradient(rgb(44, 55, 65, 0.85) 0%, rgba(44, 55, 65, 0.95) 100%)',
-        )
+        .style('background', this.bgColor)
         .append('g')
         .attr(
           'transform',
@@ -488,7 +489,7 @@ export default {
     },
 
     destroyChart() {
-      d3.select('#circular-barplot svg').remove();
+      d3.select(`#${this.chartId} svg`).remove();
     },
   },
 };
