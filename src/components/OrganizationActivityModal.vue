@@ -1,7 +1,7 @@
 <template>
   <div class="relative w-full rounded p-2 popup--container">
     <div
-      class="absolute top-1 right-0 cursor-pointer px-2"
+      class="absolute h-7 top-1 right-0 cursor-pointer px-2 hover:bg-gray-500 rounded-full text-center"
       @click="closeModal()"
     >
       X
@@ -19,8 +19,8 @@
         </div>
       </div>
       <hr />
-      <div class="py-2">
-        <div class="grid grid-cols-2 ml-5">
+      <div class="p-2">
+        <div class="grid grid-cols-2">
           <div class="col-span-1">
             <div class="text-crisiscleanup-dark-300">{{ $t('TYPE') }}</div>
             <div>{{ $t(generalInfo.type ? generalInfo.type : 'Unknown') }}</div>
@@ -30,21 +30,29 @@
             <div>{{ $t(generalInfo.role ? generalInfo.role : 'Unknown') }}</div>
           </div>
         </div>
-        <div class="grid grid-cols-4 text-center">
+        <div class="grid grid-cols-4">
           <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300">{{ $t('INCIDENTS') }}</div>
+            <div class="text-crisiscleanup-dark-300 truncate">
+              {{ $t('INCIDENTS') }}
+            </div>
             <div>{{ $t(generalInfo.reported_count) }}</div>
           </div>
           <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300">{{ $t('CLAIMED') }}</div>
+            <div class="text-crisiscleanup-dark-300 truncate">
+              {{ $t('CLAIMED') }}
+            </div>
             <div>{{ $t(generalInfo.claimed_count) }}</div>
           </div>
           <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300">{{ $t('CALLS') }}</div>
+            <div class="text-crisiscleanup-dark-300 truncate">
+              {{ $t('CALLS') }}
+            </div>
             <div>{{ $t(generalInfo.calls) }}</div>
           </div>
           <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300">{{ $t('VALUE') }}</div>
+            <div class="text-crisiscleanup-dark-300 truncate">
+              {{ $t('VALUE') }}
+            </div>
             <div>{{ $t(generalInfo.commercial_value) }}</div>
           </div>
         </div>
@@ -53,33 +61,38 @@
       <div class="py-2">
         <div
           class="flex flex-row cursor-pointer"
-          @click="showIncidents = !showIncidents"
+          @click="onDropDown('incident')"
         >
           <div class="mt-2">{{ $t('INCIDENTS') }}</div>
           <div class="ml-auto text-lg">
-            <div v-if="!showIncidents">&#8964;</div>
-            <div v-else>&#8963;</div>
+            <div class="chevron-down">&#8964;</div>
           </div>
         </div>
-        <Incidents
-          v-if="showIncidents"
-          :incidents="testIncidents"
-          class="pt-2"
-        />
+        <div class="overflow-hidden" :class="showIncidents ? 'h-full' : 'h-0'">
+          <Incidents
+            :incidents="testIncidents"
+            class="pt-2"
+            :class="showIncidents ? 'drawer-open' : 'drawer-close'"
+          />
+        </div>
       </div>
       <hr class="mt-2" />
       <div class="py-2">
         <div
           class="flex flex-row cursor-pointer"
-          @click="showCapability = !showCapability"
+          @click="onDropDown('capability')"
         >
           <div class="mt-2">{{ $t('CAPABILITY') }}</div>
           <div class="ml-auto text-lg">
-            <div v-if="!showCapability">&#8964;</div>
-            <div v-else>&#8963;</div>
+            <div class="chevron-down">&#8964;</div>
           </div>
         </div>
-        <Capability :capabilities="testCapabilities" v-if="showCapability" />
+        <div class="overflow-hidden" :class="showCapability ? 'h-full' : 'h-0'">
+          <Capability
+            :capabilities="testCapabilities"
+            :class="showCapability ? 'drawer-open' : 'drawer-close'"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -160,7 +173,7 @@ export default {
           name: 'Capacity-Building',
           items: [
             {
-              name: 'Community Monitoringand Evaluation',
+              name: 'Community Monitoring and Evaluation',
               normal: false,
               warning: false,
               impact: true,
@@ -195,11 +208,57 @@ export default {
     closeModal() {
       this.$emit('close');
     },
+    onDropDown(item) {
+      const chevronUp = document.querySelectorAll('div.chevron-up');
+      const chevronDown = document.querySelectorAll('div.chevron-down');
+      if (item === 'incident') {
+        if (this.showIncidents) {
+          if (chevronUp) {
+            chevronUp[0].classList.remove('chevron-up');
+            chevronUp[0].classList.add('chevron-down');
+          }
+        } else {
+          chevronDown[0].classList.remove('chevron-down');
+          chevronDown[0].classList.add('chevron-up');
+        }
+        this.showIncidents = !this.showIncidents;
+      } else {
+        if (this.showCapability) {
+          chevronUp[chevronUp.length - 1].classList.remove('chevron-up');
+          chevronUp[chevronUp.length - 1].classList.add('chevron-down');
+          this.showCapability = false;
+        } else {
+          chevronDown[chevronDown.length - 1].classList.remove('chevron-down');
+          chevronDown[chevronDown.length - 1].classList.add('chevron-up');
+          this.showCapability = true;
+        }
+      }
+    },
   },
 };
 </script>
 <style scoped>
 .popup--container {
   background: #2e343b;
+  overflow-y: scroll;
+  max-height: 100vh;
+}
+.chevron-up {
+  transform: rotate(180deg);
+  transition: all 300ms ease;
+}
+.chevron-down {
+  transform: rotate(0deg);
+  transition: all 300ms ease;
+}
+.drawer-close {
+  top: -1000px;
+}
+.drawer-open {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 0;
+  transition: top 400ms ease;
 }
 </style>
