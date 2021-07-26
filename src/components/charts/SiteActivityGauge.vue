@@ -59,13 +59,15 @@ export default {
   },
 
   mounted() {
-    this.margin.top = this.marginAll;
-    this.margin.bottom = this.marginAll;
-    this.margin.left = this.marginAll;
-    this.margin.right = this.marginAll;
+    this.$nextTick(() => {
+      this.margin.top = this.marginAll;
+      this.margin.bottom = this.marginAll;
+      this.margin.left = this.marginAll;
+      this.margin.right = this.marginAll;
 
-    this.destroyChart();
-    this.renderChart();
+      this.destroyChart();
+      this.renderChart();
+    });
 
     window.addEventListener(
       'resize',
