@@ -239,6 +239,8 @@ export default {
         .attr('class', 'arrow')
         .attr('fill', '#fff');
 
+      arrow.append('title').text(`${this.chartData}%`);
+
       // transition arrow to endAngle
       arrow
         .transition()
