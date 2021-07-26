@@ -72,7 +72,7 @@ export default {
       _.debounce(() => {
         this.destroyChart();
         this.renderChart();
-      }, 10000),
+      }, 1500),
     );
   },
 
@@ -185,22 +185,6 @@ export default {
             .delay(5000)
             .on('start', repeat);
         });
-      const { scale } = this;
-
-      function arcTween(d) {
-        let maxAngArc = d.endAngle;
-        let minAngArc = d.startAngle;
-        d3.select(this)
-          .transition()
-          .duration(1000)
-          .attrTween('d', function (d) {
-            const interpolate = d3.interpolate(d.endAngle, d.startAngle);
-            return function (t) {
-              maxAngArc = interpolate(t);
-              return arc(d);
-            };
-          });
-      }
 
       // inner semicircle for shadow glow effect
       this.svg
@@ -279,7 +263,6 @@ export default {
       // left label
       labelGroup
         .append('text')
-        .attr('fill', '#fff')
         .attr('dominant-baseline', 'middle')
         .attr('text-anchor', 'middle')
         .attr('font-size', this.getFontSize())
@@ -295,7 +278,6 @@ export default {
       // right label
       labelGroup
         .append('text')
-        .attr('fill', '#fff')
         .attr('dominant-baseline', 'middle')
         .attr('text-anchor', 'middle')
         .attr('font-size', this.getFontSize())
