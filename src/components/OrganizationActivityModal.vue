@@ -201,6 +201,38 @@ export default {
             },
           ],
         },
+        {
+          name: 'test 3',
+          items: [
+            {
+              name: 'Community Monitoring and Evaluation',
+              normal: false,
+              warning: false,
+              impact: true,
+              rescue: false,
+              cleanup: true,
+              longterm: false,
+            },
+            {
+              name: 'Contingency Planning',
+              normal: false,
+              warning: true,
+              impact: true,
+              rescue: true,
+              cleanup: true,
+              longterm: false,
+            },
+            {
+              name: 'Grant Writing',
+              normal: false,
+              warning: true,
+              impact: true,
+              rescue: true,
+              cleanup: true,
+              longterm: false,
+            },
+          ],
+        },
       ],
     };
   },
@@ -241,7 +273,7 @@ export default {
 .popup--container {
   background: #2e343b;
   overflow-y: scroll;
-  max-height: 100vh;
+  max-height: 90vh;
 }
 .chevron-up {
   transform: rotate(180deg);
