@@ -1,6 +1,14 @@
 <template>
-  <div class="h-screen" :style="styles">
-    <div class="grid grid-cols-6">
+  <div class="absolute top-0 right-0 left-0 bottom-0" :style="styles">
+    <div class="grid grid-cols-6 relative">
+      <div class="absolute top-0 right-0 px-1 w-full mt-24 sm:w-1/4 sm:mt-16">
+        <OrganizationActivityModal
+          @close="closeModal"
+          :general-info="orgInfo.generalInfo"
+          class="x-translate"
+          style="z-index: 1001;"
+        />
+      </div>
       <div
         class="col-span-1 shadow-lg h-screen flex flex-col px-1"
         style="z-index: 1000;"
@@ -261,7 +269,7 @@
             {{ incident.name }}
           </span>
         </div>
-        <div class="flex-grow grid grid-cols-4">
+        <div class="flex-grow grid grid-cols-4 z-0">
           <div class="col-span-3 flex flex-col">
             <div class="flex-grow">
               <div class="relative h-full">
@@ -348,13 +356,6 @@
           </div>
           <div class="col-span-1 grid grid-rows-12">
             <div class="row-span-7 relative">
-              <div v-if="isModalOpen" class="absolute top-1 w-full px-1">
-                <OrganizationActivityModal
-                  @close="isModalOpen = false"
-                  :general-info="orgInfo.generalInfo"
-                  class="z-50"
-                />
-              </div>
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
@@ -523,7 +524,6 @@ export default {
         incidents: [],
         capability: [],
       },
-      isModalOpen: false,
       markers: [],
       events: {},
       incidents: [],
@@ -1271,10 +1271,20 @@ export default {
       }
     },
     onRowClick(item) {
-      console.log(item);
       this.orgInfo.generalInfo = item;
-      this.isModalOpen = true;
+      const modal = document.querySelector('div.x-translate');
+      if (modal) {
+        modal.classList.remove('x-translate');
+        modal.classList.add('x-settle');
+      }
     },
+    closeModal() {
+      const modal = document.querySelector('div.settle');
+      if (modal) {
+        modal.classList.add('x-translate');
+        modal.classList.remove('x-settle');
+      }
+    }
   },
   computed: {
     visibleWorkTypes() {
@@ -1340,6 +1350,16 @@ export default {
 
 .pew-pew-blue {
   color: #61d5f8;
+}
+
+.x-translate {
+  transform: translateX(1000px);
+  transition: all 400ms ease;
+}
+
+.x-settle {
+  transform: translateX(0px);
+  transition: all 400ms ease;
 }
 
 .stats:hover {
