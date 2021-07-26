@@ -248,6 +248,10 @@ export default {
             });
         });
 
+      d3.select('#bar-chart-tooltip').on('mouseover', function () {
+        d3.select(this).style('opacity', 0);
+      });
+
       this.renderLegend();
       this.animateBars(bars);
     },
@@ -281,6 +285,7 @@ export default {
     },
 
     animateBars(bars) {
+      const { x, y } = this;
       bars
         .transition()
         .delay(function (d, i) {
@@ -290,11 +295,15 @@ export default {
           d3.active(this)
             .attr('stroke', 'white')
             .attr('stroke-width', 2)
+            .attr('y', (d) => y(d[1]) - 15)
+            .attr('height', (d) => y(d[0]) - y(d[1] + 5))
             .transition()
             .duration(500)
-            .delay(300)
+            .delay(50)
             .attr('stroke', 'transparent')
             .attr('stroke-width', 0)
+            .attr('y', (d) => y(d[1]) - 10)
+            .attr('height', (d) => y(d[0]) - y(d[1]))
             .transition()
             .duration(500)
             .delay(5000)
