@@ -244,7 +244,10 @@ export default {
         .data([this.chartData])
         .join('path')
         .classed('arrow', true)
-        .attr('fill', '#fff')
+        .attr('fill', '#fff');
+      arrow.append('title').text(`${this.chartData}%`);
+
+      arrow
         .attr('d', (d) =>
           d3
             .arc()
