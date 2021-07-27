@@ -79,7 +79,7 @@
       <hr class="mt-2" />
       <div class="py-2">
         <div
-          class="flex flex-row cursor-pointer"
+          class="flex flex-row cursor-pointer no-ripple"
           @click="onDropDown('capability')"
         >
           <div class="mt-2">{{ $t('CAPABILITY') }}</div>
@@ -87,7 +87,10 @@
             <div class="chevron-down">&#8964;</div>
           </div>
         </div>
-        <div class="overflow-hidden" :class="showCapability ? 'h-full' : 'h-0'">
+        <div
+          class="overflow-y-hidden"
+          :class="showCapability ? 'h-full' : 'h-0'"
+        >
           <Capability
             :capabilities="testCapabilities"
             :class="showCapability ? 'drawer-open' : 'drawer-close'"
