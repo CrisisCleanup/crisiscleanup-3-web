@@ -47,6 +47,10 @@ export default {
      * background color / gradient
      */
     bgColor: VueTypes.string.def('#232323'),
+    /**
+     * Stacked | Unstacked
+     */
+    isStacked: VueTypes.bool.def(false),
   },
 
   data() {
@@ -54,8 +58,6 @@ export default {
       svg: null,
       x: null,
       y: null,
-      xScale: null,
-      yScale: null,
       colorScale: null,
       margin: {
         left: 0,
@@ -139,6 +141,175 @@ export default {
     },
 
     renderChart() {
+      if (this.isStacked) {
+        this.renderStackedChart();
+      } else {
+        this.renderUnstackedChart();
+      }
+    },
+
+    renderUnstackedChart() {
+      const newCases = this.chartData.map((d: BarChartT) => d.newCases);
+      const closedCases = this.chartData.map((d: BarChartT) => d.closedCases);
+      const groups = this.chartData.map((d: BarChartT) => d.group);
+      const subgroups = _.filter(this.chartData.columns, (c) => c !== 'group');
+
+      // set x scale
+      this.x = d3
+        .scaleBand()
+        .domain(groups)
+        .range([this.margin.left, this.getInnerWidth()])
+        .padding(0.2);
+
+      // set y scale
+      this.y = d3
+        .scaleLinear()
+        .domain([0, d3.max([d3.max(newCases), d3.max(closedCases)])])
+        .range([this.getInnerHeight(), this.margin.top])
+        .nice();
+
+      // set color scale for groups
+      this.colorScale = d3
+        .scaleOrdinal()
+        .domain(subgroups)
+        .range(['#61D5F8', '#00C4FF']);
+
+      // render svg with translated group
+      this.svg = d3
+        .select(`#${this.chartId}`)
+        .append('svg')
+        .attr('width', this.getWidth())
+        .attr('height', this.getHeight())
+        .style('background', this.bgColor)
+        .append('g')
+        .attr(
+          'transform',
+          `translate(${this.margin.left}, ${this.margin.top})`,
+        );
+
+      this.svg
+        .append('g')
+        .attr('class', 'x-axis')
+        .attr('transform', `translate(0, ${this.getInnerHeight()})`)
+        .call(d3.axisBottom(this.x).tickSizeOuter(0));
+
+      this.svg
+        .append('g')
+        .attr('class', 'y-axis')
+        .attr('transform', `translate(${this.margin.left}, ${0})`)
+        .call(d3.axisLeft(this.y));
+
+      d3.selectAll('#bar-chart-tooltip').remove();
+      d3.select('body')
+        .append('div')
+        .attr('id', 'bar-chart-tooltip')
+        .attr('class', 'text-xs px-2 py bg-white rounded-md font-bold')
+        .attr('style', 'position: absolute; opacity: 0;');
+
+      const closedCaseBars = this.svg
+        .append('g')
+        .selectAll('g')
+        .data(this.chartData)
+        .join('rect')
+        .attr('x', (d) => this.x(d.group))
+        .attr('y', this.getInnerHeight())
+        .attr('width', this.x.bandwidth())
+        .transition()
+        .duration(1000)
+        .delay((d, i) => i * 50)
+        .ease(d3.easeCubicInOut)
+        .attr('x', (d: BarChartT) => this.x(d.group))
+        .attr('y', (d: BarChartT) => this.y(d.closedCases))
+        .attr('width', this.x.bandwidth())
+        .attr('height', (d) => {
+          console.log(d.closedCases);
+          return this.getInnerHeight() - this.y(d.closedCases);
+        })
+        .attr('fill', this.colorScale('closedCases'))
+        .on('end', function (d: BarChartT) {
+          d3.select(this)
+            .on('mouseover', function (event) {
+              d3.select(this).attr('class', 'stroke--active');
+              d3.select('#bar-chart-tooltip')
+                .transition()
+                .duration(20)
+                .style('opacity', 1)
+                .style('left', `${event.pageX + 10}px`)
+                .style('top', `${event.pageY + 10}px`)
+                .text(d.closedCases);
+            })
+            .on('mouseout', function () {
+              d3.select('#bar-chart-tooltip').style('opacity', 0);
+              d3.select(this).attr('class', null);
+            })
+            .on('mousemove', function (event) {
+              d3.select('#bar-chart-tooltip')
+                .transition()
+                .duration(50)
+                .style('opacity', 1)
+                .style('left', `${event.pageX + 10}px`)
+                .style('top', `${event.pageY + 10}px`)
+                .text(d.closedCases);
+            });
+        });
+
+      const newCaseBars = this.svg
+        .append('g')
+        .selectAll('g')
+        .data(this.chartData)
+        .join('rect')
+        .attr('x', (d) => this.x(d.group))
+        .attr('y', this.getInnerHeight())
+        .attr('width', this.x.bandwidth())
+        .transition()
+        .duration(1000)
+        .delay((d, i) => i * 50)
+        .ease(d3.easeCubicInOut)
+        .attr('x', (d: BarChartT) => this.x(d.group))
+        .attr('y', (d: BarChartT) => this.y(d.newCases))
+        .attr('width', this.x.bandwidth())
+        .attr('height', (d) => {
+          console.log(d.newCases);
+          return this.getInnerHeight() - this.y(d.newCases);
+        })
+        .attr('fill', this.colorScale('newCases'))
+        .on('end', function (d: BarChartT) {
+          d3.select(this)
+            .on('mouseover', function (event) {
+              d3.select(this).attr('class', 'stroke--active');
+              d3.select('#bar-chart-tooltip')
+                .transition()
+                .duration(20)
+                .style('opacity', 1)
+                .style('left', `${event.pageX + 10}px`)
+                .style('top', `${event.pageY + 10}px`)
+                .text(d.newCases);
+            })
+            .on('mouseout', function () {
+              d3.select('#bar-chart-tooltip').style('opacity', 0);
+              d3.select(this).attr('class', null);
+            })
+            .on('mousemove', function (event) {
+              d3.select('#bar-chart-tooltip')
+                .transition()
+                .duration(50)
+                .style('opacity', 1)
+                .style('left', `${event.pageX + 10}px`)
+                .style('top', `${event.pageY + 10}px`)
+                .text(d.newCases);
+            });
+        });
+
+      d3.select('#bar-chart-tooltip').on('mouseover', function () {
+        d3.select(this).style('opacity', 0);
+      });
+
+      this.renderLegend();
+      this.animateBars(closedCaseBars);
+      this.animateBars(newCaseBars);
+    },
+
+    renderStackedChart() {
       const groups = this.chartData.map((d) => d.group);
       const subgroups = _.filter(this.chartData.columns, (c) => c !== 'group');
 
@@ -186,13 +357,13 @@ export default {
       this.svg
         .append('g')
         .attr('class', 'x-axis')
-        .attr('transform', `translate(0, ${this.getInnerHeight() - 10})`)
+        .attr('transform', `translate(0, ${this.getInnerHeight()})`)
         .call(d3.axisBottom(this.x).tickSizeOuter(0));
 
       this.svg
         .append('g')
         .attr('class', 'y-axis')
-        .attr('transform', `translate(${this.margin.left}, ${-10})`)
+        .attr('transform', `translate(${this.margin.left}, ${0})`)
         .call(d3.axisLeft(this.y));
 
       d3.selectAll('#bar-chart-tooltip').remove();
@@ -215,14 +386,14 @@ export default {
         .data((d) => d)
         .join('rect')
         .attr('x', (d) => this.x(d.data.group))
-        .attr('y', this.getInnerHeight() - 10)
+        .attr('y', this.getInnerHeight())
         .attr('width', this.x.bandwidth())
         .transition()
         .duration(1000)
         .delay((d, i) => i * 50)
         .ease(d3.easeCubicInOut)
         .attr('x', (d) => this.x(d.data.group))
-        .attr('y', (d) => this.y(d[1]) - 10)
+        .attr('y', (d) => this.y(d[1]))
         .attr('height', (d) => this.y(d[0]) - this.y(d[1]))
         .attr('width', this.x.bandwidth())
         .on('end', function (d) {
@@ -264,7 +435,7 @@ export default {
       const legend = this.svg
         .append('g')
         .attr('class', 'legend-container')
-        .attr('transform', `translate(${this.getInnerWidth() * 0.1}, ${-10})`);
+        .attr('transform', `translate(${this.getInnerWidth() * 0.1}, ${0})`);
 
       legend
         .append('g')
@@ -289,7 +460,6 @@ export default {
     },
 
     animateBars(bars) {
-      const { x, y } = this;
       bars
         .transition()
         .delay(function (d, i) {
@@ -299,15 +469,11 @@ export default {
           d3.active(this)
             .attr('stroke', 'white')
             .attr('stroke-width', 2)
-            .attr('y', (d) => y(d[1]) - 15)
-            .attr('height', (d) => y(d[0]) - y(d[1] + 5))
             .transition()
             .duration(500)
             .delay(50)
             .attr('stroke', 'transparent')
             .attr('stroke-width', 0)
-            .attr('y', (d) => y(d[1]) - 10)
-            .attr('height', (d) => y(d[0]) - y(d[1]))
             .transition()
             .duration(500)
             .delay(5000)
