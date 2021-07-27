@@ -25,7 +25,14 @@
         <tabs tab-classes="text-xs">
           <tab :name="$t('Site Activity')">
             <div class="text-lg">Site Activity</div>
-            <div class="h-40"></div>
+            <div class="h-40 w-full">
+              <SiteActivityGauge
+                class="h-full w-full"
+                :chart-data="65"
+                :margin-all="10"
+                chart-id="site-activity-gauge"
+              />
+            </div>
             <div class="relative site-container" v-if="currentEvent">
               <div class="overflow-y-hidden py-3">
                 <div v-for="(post, index) in eventStreamData" :key="index">
@@ -156,8 +163,9 @@
                   </div>
                 </div>
               </div>
-            </div> </tab
-          ><tab :name="$t('Stats')">
+            </div>
+          </tab>
+          <tab :name="$t('Stats')">
             <div class="flex-grow">
               <div class="flex flex-col">
                 <div class="p-3">
@@ -401,17 +409,49 @@
               </div>
             </div>
             <div class="row-span-5">
-              <tabs class="" ref="tabs" tab-classes="text-xs">
-                <tab :name="$t('Completion Rate')">
-                  <BarChart
-                    v-if="charts.completion.options"
-                    :chart-data="charts.completion.data"
-                    :options="charts.completion.options"
-                    class="h-56"
-                  />
-                </tab>
-                <tab :name="$t('Total Cases')"></tab>
-                <tab :name="$t('Case Status')"></tab>
+              <tabs class="relative h-full" ref="tabs" tab-classes="text-xs">
+                <LightTab
+                  :name="$t('Call Volume')"
+                  class="absolute left-0 right-0"
+                  style="top: 10%; bottom: 5%;"
+                  selected
+                >
+                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <CircularBarplot
+                      v-if="circularBarplotData.length !== 0"
+                      class="h-full h-full"
+                      :chart-data="circularBarplotData"
+                      :margin="20"
+                      :is-stacked="false"
+                    />
+                  </div>
+                </LightTab>
+                <LightTab
+                  :name="$t('Velocity')"
+                  class="absolute left-0 right-0"
+                  style="top: 10%; bottom: 5%;"
+                >
+                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <GaugeChart
+                      class="h-full w-full"
+                      :gauges="gaugeChartData"
+                    />
+                  </div>
+                </LightTab>
+                <LightTab
+                  :name="$t('Total cases')"
+                  class="absolute bottom-0 left-0 right-0"
+                  style="top: 10%; bottom: 5%;"
+                >
+                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <D3BarChart
+                      class="h-full w-full"
+                      chart-id="completion-rate"
+                      :chart-data="barChartData"
+                      :is-stacked='false'
+                    />
+                  </div>
+                </LightTab>
               </tabs>
             </div>
           </div>
@@ -438,16 +478,29 @@ import {
 } from '@/utils/map';
 import { HomeNavigation } from '@/components/home/SideNav';
 import { getQueryString } from '@/utils/urls';
-import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
 import OrganizationActivity from '@/components/OrganizationActivity.vue';
 import _ from 'lodash';
 import Slider from '@/components/Slider';
+import LightTab from '@/components/tabs/LightTab';
+import SiteActivityGauge from '@/components/charts/SiteActivityGauge';
+import CircularBarplot from '@/components/charts/CircularBarplot';
+import GaugeChart from '@/components/charts/GaugeChart';
+import D3BarChart from '@/components/charts/D3BarChart';
 
 export default {
   name: 'PewPew',
-  components: { BarChart, Newspost, OrganizationActivity, Slider },
+  components: {
+    LightTab,
+    D3BarChart,
+    GaugeChart,
+    CircularBarplot,
+    SiteActivityGauge,
+    Newspost,
+    OrganizationActivity,
+    Slider,
+  },
   data() {
     return {
       eventStreamData: [],
@@ -532,6 +585,40 @@ export default {
           data: null,
         },
       },
+      circularBarplotData: [],
+      gaugeChartData: [
+        {
+          radius: 30,
+          fillPercent: 50,
+          leftLabel: 'Low 1',
+          rightLabel: 'High 1',
+        },
+        {
+          radius: 60,
+          fillPercent: 70,
+          leftLabel: 'Low 2',
+          rightLabel: 'High 2',
+        },
+        {
+          radius: 100,
+          fillPercent: 0,
+          leftLabel: 'Low 3',
+          rightLabel: 'High 3',
+        },
+      ],
+      barChartData: [
+        { group: 0, newCases: 28, closedCases: 30 },
+        { group: 1, newCases: 43, closedCases: 38 },
+        { group: 2, newCases: 81, closedCases: 30 },
+        { group: 3, newCases: 19, closedCases: 80 },
+        { group: 4, newCases: 52, closedCases: 30 },
+        { group: 5, newCases: 24, closedCases: 35 },
+        { group: 6, newCases: 87, closedCases: 70 },
+        { group: 7, newCases: 17, closedCases: 30 },
+        { group: 8, newCases: 68, closedCases: 47 },
+        { group: 9, newCases: 49, closedCases: 32 },
+        { group: 10, newCases: 69, closedCases: 42 },
+      ],
       incidentId: 199,
       markerSpeed: 2000,
       incident: null,
@@ -628,8 +715,27 @@ export default {
     this.charts.completion.options = options;
     this.charts.completion.data = data;
     await this.loadMap();
+
+    // fetch data for all charts
+    this.fetchCircularBarplotData(new Date(), 30);
   },
   methods: {
+    async fetchCircularBarplotData(date, interval) {
+      console.log('fetching...');
+      this.circularBarplotData = [];
+      this.circularBarplotData = this.circularBarplotData.slice();
+      const d = [
+        date.getFullYear(),
+        (date.getMonth() + 1).toString().padStart(2, '0'),
+        date.getDate().toString().padStart(2, '0'),
+      ].join('-');
+
+      const url = `https://api.crisiscleanup.org/reports_data/daily_completion?&date=${d}&interval=${interval}`;
+      const response = await this.$http.get(url);
+      this.circularBarplotData = response.data;
+      this.circularBarplotData = this.circularBarplotData.slice();
+      console.log('response: ', this.circularBarplotData);
+    },
     async getRecentIncidents() {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,turn_on_release&limit=8&sort=-start_at`,
