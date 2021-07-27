@@ -6,6 +6,7 @@
 // @flow
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
+import _ from 'lodash';
 
 // add proper Date type validator to VueTypes
 VueTypes.extend({
@@ -65,7 +66,7 @@ export default {
     /**
      * top, bottom, left, right margins
      */
-    margin: VueTypes.number.def(5),
+    marginAll: VueTypes.number.def(5),
     /**
      * background color / gradient
      */
@@ -73,48 +74,47 @@ export default {
   },
 
   data() {
-    return {};
-  },
-
-  computed: {
-    width() {
-      const w = +d3.select(`#${this.chartId}`).style('width').slice(0, -2);
-      console.log(w);
-      return w - this.margin * 2;
-    },
-
-    height() {
-      const h = +d3.select(`#${this.chartId}`).style('height').slice(0, -2);
-      console.log(h);
-      return h - this.margin * 2;
-    },
-
-    innerRadius() {
-      return Math.abs(Math.min(this.width, this.height) / 6);
-    },
-
-    outerRadius() {
-      return Math.abs(Math.min(this.width, this.height) / 2);
-    },
-
-    labelFontSize() {
-      return (this.width + this.height) * 0.012;
-    },
+    return {
+      margin: {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+      },
+    };
   },
 
   mounted() {
-    if (this.chartData) {
-      this.renderChart(this.chartData);
+    if (!_.isEmpty(this.chartData)) {
+      this.$nextTick(() => {
+        this.margin.top = this.marginAll;
+        this.margin.bottom = this.marginAll;
+        this.margin.left = this.marginAll;
+        this.margin.right = this.marginAll;
+
+        this.destroyChart();
+        this.renderChart(this.chartData);
+      });
     } else {
       console.log('No data found');
     }
+
+    window.addEventListener(
+      'resize',
+      _.debounce(() => {
+        if (!_.isEmpty(this.chartData)) {
+          this.destroyChart();
+          this.renderChart(this.chartData);
+        }
+      }, 1500),
+    );
   },
 
   watch: {
     chartData: {
       immediate: true,
       handler(data) {
-        if (data) {
+        if (!_.isEmpty(data)) {
           this.destroyChart();
           this.renderChart(data);
         } else {
@@ -132,11 +132,39 @@ export default {
   },
 
   methods: {
+    getWidth(): number {
+      return +d3.select(`#${this.chartId}`).style('width').slice(0, -2) || 0;
+    },
+
+    getHeight(): number {
+      return +d3.select(`#${this.chartId}`).style('height').slice(0, -2) || 0;
+    },
+
+    getInnerWidth(): number {
+      return this.getWidth() - this.margin.left - this.margin.right;
+    },
+
+    getInnerHeight(): number {
+      return this.getHeight() - this.margin.top - this.margin.bottom;
+    },
+
+    getInnerRadius(): number {
+      return Math.min(this.getInnerWidth(), this.getInnerHeight()) / 5;
+    },
+
+    getOuterRadius(): number {
+      return Math.min(this.getInnerWidth(), this.getInnerHeight()) / 2;
+    },
+
+    getFontSize(): number {
+      return Math.min(this.getInnerWidth(), this.getInnerHeight()) * 0.026;
+    },
+
     renderInnerCircle(svg) {
       return svg
         .append('g')
         .append('circle')
-        .attr('r', this.innerRadius)
+        .attr('r', this.getInnerRadius())
         .attr('fill', '#13141Eaa');
     },
 
@@ -145,15 +173,13 @@ export default {
       const svg = d3
         .select(`#${this.chartId}`)
         .append('svg')
-        .attr('width', this.width + this.margin * 2)
-        .attr('height', this.height + this.margin * 2)
+        .attr('width', this.getWidth())
+        .attr('height', this.getHeight())
         .style('background', this.bgColor)
         .append('g')
         .attr(
           'transform',
-          `translate(${this.width / 2 + this.margin}, ${
-            this.height / 2 + this.margin
-          })`,
+          `translate(${this.getWidth() / 2}, ${this.getHeight() / 2})`,
         );
 
       // Add inner circle
@@ -168,7 +194,7 @@ export default {
 
       const y = d3
         .scaleRadial()
-        .range([this.innerRadius, this.outerRadius]) // Domain will be define later.
+        .range([this.getInnerRadius(), this.getOuterRadius()]) // Domain will be define later.
         .domain([
           0,
           this.isStacked
@@ -182,10 +208,10 @@ export default {
       const textContainer = svg
         .append('g')
         .attr('class', 'text-label')
-        .attr('transform', `translate(0, ${this.innerRadius * 0.1})`)
+        .attr('transform', `translate(0, ${this.getInnerRadius() * 0.1})`)
         .append('text')
         .attr('text-anchor', 'middle')
-        .attr('font-size', `${this.labelFontSize}px`)
+        .attr('font-size', `${this.getFontSize()}px`)
         .attr('fill', '#fefefe');
 
       this.renderOverallInfo(textContainer, data);
@@ -259,12 +285,12 @@ export default {
                 .padRadius((d) => y(d.closed))
             : d3
                 .arc()
-                .innerRadius(this.innerRadius)
+                .innerRadius(this.getInnerRadius())
                 .outerRadius((d) => y(d.open))
                 .startAngle((d) => x(d.name))
                 .endAngle((d) => x(d.name) + x.bandwidth())
                 .padAngle(0.003)
-                .padRadius(this.innerRadius),
+                .padRadius(this.getInnerRadius()),
         )
         .attr('transform', 'scale(1)');
     },
@@ -289,7 +315,7 @@ export default {
             .startAngle((d) => x(d.name))
             .endAngle(x(0) + x.bandwidth())
             .padAngle(0.03)
-            .padRadius(this.innerRadius),
+            .padRadius(this.getInnerRadius()),
         )
         .on('mouseover', function (event, d) {
           d3.select(this)
@@ -315,12 +341,12 @@ export default {
           'd',
           d3
             .arc()
-            .innerRadius(this.innerRadius)
+            .innerRadius(this.getInnerRadius())
             .outerRadius((d) => y(d.closed))
             .startAngle((d) => x(d.name))
             .endAngle((d) => x(d.name) + x.bandwidth())
             .padAngle(0.03)
-            .padRadius(this.innerRadius),
+            .padRadius(this.getInnerRadius()),
         )
         .attr('transform', 'scale(1)');
     },
@@ -346,7 +372,7 @@ export default {
           rotate(${
             ((timeScale(d) + timeScale.bandwidth() / 2) * 180) / Math.PI - 81
           })
-          translate(${this.innerRadius}, 0)
+          translate(${this.getInnerRadius()}, 0)
         `,
             )
             .call((g2) =>
@@ -355,7 +381,7 @@ export default {
             .call((g3) =>
               g3
                 .append('text')
-                .attr('font-size', `${this.labelFontSize}px`)
+                .attr('font-size', `${this.getFontSize()}px`)
                 .attr('fill', '#fefefe')
                 .attr('transform', (d) =>
                   (timeScale(d) + timeScale.bandwidth() / 2 + Math.PI / 2) %
@@ -374,10 +400,10 @@ export default {
           .call((g1) =>
             g1
               .append('text')
-              .attr('font-size', `${this.labelFontSize}px`)
+              .attr('font-size', `${this.getFontSize()}px`)
               .attr('fill', '#fff')
               .attr('y', -y(y.ticks(3).pop()))
-              .attr('dy', '-1em')
+              .attr('dy', '-8')
               .text('Call Volumes'),
           )
           .call((g2) =>
@@ -403,7 +429,7 @@ export default {
                   .attr('stroke', '#fff')
                   .attr('stroke-width', 2)
                   .text(y.tickFormat(4, 's'))
-                  .attr('font-size', `${this.labelFontSize}px`)
+                  .attr('font-size', `${this.getFontSize()}px`)
                   .clone(true)
                   .attr('fill', '#000')
                   .attr('stroke', 'none'),
@@ -425,35 +451,35 @@ export default {
       textContainer
         .append('tspan')
         .text('Cases')
-        .attr('font-size', `${this.labelFontSize}px`)
+        .attr('font-size', `${this.getFontSize()}px`)
         .attr('x', 0)
-        .attr('y', `${-2.5 * this.labelFontSize}px`);
+        .attr('y', `${-2.5 * this.getFontSize()}px`);
 
       textContainer
         .append('tspan')
         .text('Open')
         .attr('x', 0)
-        .attr('y', `${-1 * this.labelFontSize}px`);
+        .attr('y', `${-1 * this.getFontSize()}px`);
 
       textContainer
         .append('tspan')
         .text((d) => d.open)
         .attr('x', 0)
-        .attr('font-size', `${this.labelFontSize}px`)
-        .attr('y', `${0 * this.labelFontSize}px`);
+        .attr('font-size', `${this.getFontSize()}px`)
+        .attr('y', `${0}px`);
 
       textContainer
         .append('tspan')
         .text('Closed')
         .attr('x', 0)
-        .attr('y', `${1.5 * this.labelFontSize}px`);
+        .attr('y', `${1.5 * this.getFontSize()}px`);
 
       textContainer
         .append('tspan')
         .text((d) => d.closed)
-        .attr('font-size', `${this.labelFontSize}px`)
+        .attr('font-size', `${this.getFontSize()}px`)
         .attr('x', 0)
-        .attr('y', `${2.5 * this.labelFontSize}px`);
+        .attr('y', `${2.5 * this.getFontSize()}px`);
     },
 
     renderOpenCaseLabels(svg, data, x, y) {
@@ -483,7 +509,7 @@ export default {
             ? 'rotate(180)'
             : 'rotate(0)';
         })
-        .style('font-size', `${this.labelFontSize}px`)
+        .style('font-size', `${this.getFontSize()}px`)
         .style('fill', 'white')
         .attr('alignment-baseline', 'middle');
     },
