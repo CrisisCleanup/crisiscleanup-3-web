@@ -140,6 +140,47 @@ export default {
       d3.select(`#${this.chartId} svg`).remove();
     },
 
+    loadSvg() {
+      // render svg with translated group
+      this.svg = d3
+        .select(`#${this.chartId}`)
+        .append('svg')
+        .attr('width', this.getWidth())
+        .attr('height', this.getHeight())
+        .style('background', this.bgColor)
+        .append('g')
+        .attr(
+          'transform',
+          `translate(${this.margin.left}, ${this.margin.top})`,
+        );
+    },
+
+    loadAxes() {
+      this.svg
+        .append('g')
+        .attr('class', 'x-axis')
+        .attr('transform', `translate(0, ${this.getInnerHeight()})`)
+        .call(d3.axisBottom(this.x).tickSizeOuter(0));
+      this.svg
+        .append('g')
+        .attr('class', 'y-axis')
+        .attr('transform', `translate(${this.margin.left}, ${0})`)
+        .call(d3.axisLeft(this.y));
+    },
+
+    loadTooltip() {
+      d3.selectAll('#bar-chart-tooltip').remove();
+      d3.select('body')
+        .append('div')
+        .attr('id', 'bar-chart-tooltip')
+        .attr('class', 'text-xs px-2 py bg-white rounded-md font-bold')
+        .attr('style', 'position: absolute; opacity: 0;')
+        .on('mouseover', function () {
+          // remove ghosted tooltip on mouseover
+          d3.select(this).style('opacity', 0);
+        });
+    },
+
     renderChart() {
       if (this.isStacked) {
         this.renderStackedChart();
@@ -153,6 +194,7 @@ export default {
       const closedCases = this.chartData.map((d: BarChartT) => d.closedCases);
       const groups = this.chartData.map((d: BarChartT) => d.group);
       const subgroups = _.filter(this.chartData.columns, (c) => c !== 'group');
+      const { addHoverEffects } = this;
 
       // set x scale
       this.x = d3
@@ -174,40 +216,13 @@ export default {
         .domain(subgroups)
         .range(['#61D5F8', '#00C4FF']);
 
-      // render svg with translated group
-      this.svg = d3
-        .select(`#${this.chartId}`)
-        .append('svg')
-        .attr('width', this.getWidth())
-        .attr('height', this.getHeight())
-        .style('background', this.bgColor)
-        .append('g')
-        .attr(
-          'transform',
-          `translate(${this.margin.left}, ${this.margin.top})`,
-        );
-
-      this.svg
-        .append('g')
-        .attr('class', 'x-axis')
-        .attr('transform', `translate(0, ${this.getInnerHeight()})`)
-        .call(d3.axisBottom(this.x).tickSizeOuter(0));
-
-      this.svg
-        .append('g')
-        .attr('class', 'y-axis')
-        .attr('transform', `translate(${this.margin.left}, ${0})`)
-        .call(d3.axisLeft(this.y));
-
-      d3.selectAll('#bar-chart-tooltip').remove();
-      d3.select('body')
-        .append('div')
-        .attr('id', 'bar-chart-tooltip')
-        .attr('class', 'text-xs px-2 py bg-white rounded-md font-bold')
-        .attr('style', 'position: absolute; opacity: 0;');
+      this.loadSvg();
+      this.loadAxes();
+      this.loadTooltip();
 
       const closedCaseBars = this.svg
         .append('g')
+        .attr('class', 'closed-case-bars')
         .selectAll('g')
         .data(this.chartData)
         .join('rect')
@@ -227,34 +242,12 @@ export default {
         })
         .attr('fill', this.colorScale('closedCases'))
         .on('end', function (d: BarChartT) {
-          d3.select(this)
-            .on('mouseover', function (event) {
-              d3.select(this).attr('class', 'stroke--active');
-              d3.select('#bar-chart-tooltip')
-                .transition()
-                .duration(20)
-                .style('opacity', 1)
-                .style('left', `${event.pageX + 10}px`)
-                .style('top', `${event.pageY + 10}px`)
-                .text(d.closedCases);
-            })
-            .on('mouseout', function () {
-              d3.select('#bar-chart-tooltip').style('opacity', 0);
-              d3.select(this).attr('class', null);
-            })
-            .on('mousemove', function (event) {
-              d3.select('#bar-chart-tooltip')
-                .transition()
-                .duration(50)
-                .style('opacity', 1)
-                .style('left', `${event.pageX + 10}px`)
-                .style('top', `${event.pageY + 10}px`)
-                .text(d.closedCases);
-            });
+          addHoverEffects(this, d.closedCases);
         });
 
       const newCaseBars = this.svg
         .append('g')
+        .attr('class', 'new-case-bars')
         .selectAll('g')
         .data(this.chartData)
         .join('rect')
@@ -268,41 +261,11 @@ export default {
         .attr('x', (d: BarChartT) => this.x(d.group))
         .attr('y', (d: BarChartT) => this.y(d.newCases))
         .attr('width', this.x.bandwidth())
-        .attr('height', (d) => {
-          console.log(d.newCases);
-          return this.getInnerHeight() - this.y(d.newCases);
-        })
+        .attr('height', (d) => this.getInnerHeight() - this.y(d.newCases))
         .attr('fill', this.colorScale('newCases'))
         .on('end', function (d: BarChartT) {
-          d3.select(this)
-            .on('mouseover', function (event) {
-              d3.select(this).attr('class', 'stroke--active');
-              d3.select('#bar-chart-tooltip')
-                .transition()
-                .duration(20)
-                .style('opacity', 1)
-                .style('left', `${event.pageX + 10}px`)
-                .style('top', `${event.pageY + 10}px`)
-                .text(d.newCases);
-            })
-            .on('mouseout', function () {
-              d3.select('#bar-chart-tooltip').style('opacity', 0);
-              d3.select(this).attr('class', null);
-            })
-            .on('mousemove', function (event) {
-              d3.select('#bar-chart-tooltip')
-                .transition()
-                .duration(50)
-                .style('opacity', 1)
-                .style('left', `${event.pageX + 10}px`)
-                .style('top', `${event.pageY + 10}px`)
-                .text(d.newCases);
-            });
+          addHoverEffects(this, d.newCases);
         });
-
-      d3.select('#bar-chart-tooltip').on('mouseover', function () {
-        d3.select(this).style('opacity', 0);
-      });
 
       this.renderLegend();
       this.animateBars(closedCaseBars);
@@ -312,6 +275,7 @@ export default {
     renderStackedChart() {
       const groups = this.chartData.map((d) => d.group);
       const subgroups = _.filter(this.chartData.columns, (c) => c !== 'group');
+      const { addHoverEffects } = this;
 
       // stack per subgroup
       const stackedData = d3.stack().keys(subgroups)(this.chartData);
@@ -341,37 +305,9 @@ export default {
         .domain(subgroups)
         .range(['#61D5F8', '#00C4FF']);
 
-      // render svg with translated group
-      this.svg = d3
-        .select(`#${this.chartId}`)
-        .append('svg')
-        .attr('width', this.getWidth())
-        .attr('height', this.getHeight())
-        .style('background', this.bgColor)
-        .append('g')
-        .attr(
-          'transform',
-          `translate(${this.margin.left}, ${this.margin.top})`,
-        );
-
-      this.svg
-        .append('g')
-        .attr('class', 'x-axis')
-        .attr('transform', `translate(0, ${this.getInnerHeight()})`)
-        .call(d3.axisBottom(this.x).tickSizeOuter(0));
-
-      this.svg
-        .append('g')
-        .attr('class', 'y-axis')
-        .attr('transform', `translate(${this.margin.left}, ${0})`)
-        .call(d3.axisLeft(this.y));
-
-      d3.selectAll('#bar-chart-tooltip').remove();
-      d3.select('body')
-        .append('div')
-        .attr('id', 'bar-chart-tooltip')
-        .attr('class', 'text-xs px-2 py bg-white rounded-md font-bold')
-        .attr('style', 'position: absolute; opacity: 0;');
+      this.loadSvg();
+      this.loadAxes();
+      this.loadTooltip();
 
       // render bars
       const bars = this.svg
@@ -397,35 +333,8 @@ export default {
         .attr('height', (d) => this.y(d[0]) - this.y(d[1]))
         .attr('width', this.x.bandwidth())
         .on('end', function (d) {
-          d3.select(this)
-            .on('mouseover', function (event) {
-              d3.select(this).attr('class', 'stroke--active');
-              d3.select('#bar-chart-tooltip')
-                .transition()
-                .duration(20)
-                .style('opacity', 1)
-                .style('left', `${event.pageX + 10}px`)
-                .style('top', `${event.pageY + 10}px`)
-                .text(d[1] - d[0]);
-            })
-            .on('mouseout', function () {
-              d3.select('#bar-chart-tooltip').style('opacity', 0);
-              d3.select(this).attr('class', null);
-            })
-            .on('mousemove', function (event) {
-              d3.select('#bar-chart-tooltip')
-                .transition()
-                .duration(50)
-                .style('opacity', 1)
-                .style('left', `${event.pageX + 10}px`)
-                .style('top', `${event.pageY + 10}px`)
-                .text(d[1] - d[0]);
-            });
+          addHoverEffects(this, d[1] - d[0]);
         });
-
-      d3.select('#bar-chart-tooltip').on('mouseover', function () {
-        d3.select(this).style('opacity', 0);
-      });
 
       this.renderLegend();
       this.animateBars(bars);
@@ -457,6 +366,33 @@ export default {
         .attr('dominant-baseline', 'middle')
         .style('font-size', '8px')
         .attr('fill', 'white');
+    },
+
+    addHoverEffects(ctx, tooltipText) {
+      d3.select(ctx)
+        .on('mouseover', function (event) {
+          d3.select(this).attr('class', 'stroke--active');
+          d3.select('#bar-chart-tooltip')
+            .transition()
+            .duration(20)
+            .style('opacity', 1)
+            .style('left', `${event.pageX + 10}px`)
+            .style('top', `${event.pageY + 10}px`)
+            .text(tooltipText);
+        })
+        .on('mouseout', function () {
+          d3.select('#bar-chart-tooltip').style('opacity', 0);
+          d3.select(this).attr('class', null);
+        })
+        .on('mousemove', function (event) {
+          d3.select('#bar-chart-tooltip')
+            .transition()
+            .duration(50)
+            .style('opacity', 1)
+            .style('left', `${event.pageX + 10}px`)
+            .style('top', `${event.pageY + 10}px`)
+            .text(tooltipText);
+        });
     },
 
     animateBars(bars) {
