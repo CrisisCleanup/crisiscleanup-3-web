@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen" :style="styles">
+  <div class="absolute top-0 right-0 left-0 bottom-0" :style="styles">
     <div class="grid grid-cols-6">
       <div
         class="col-span-1 shadow-lg h-screen flex flex-col"
@@ -123,17 +123,26 @@
             />
           </div>
         </div>
-        <div class="h-12 flex items-center justify-start">
-          <span class="mx-4 h-full flex items-center">
-            {{ $t('All') }}
-          </span>
-          <span
-            class="mx-4 h-full flex items-center"
+        <div class="h-12 grid grid-flow-col text-xs">
+          <div
+            class="flex items-center justify-center w-30 h-12"
+            :class="incident ? '' : 'border-l border-t border-r rounded-t'"
+          >
+            {{ $t('~~All') }}
+          </div>
+          <div
             v-for="incident in incidents"
             :key="incident.id"
+            class="flex items-center justify-start w-30 h-12"
+            :class="
+              String(incident.id) === String(incidentId)
+                ? 'border-l border-t border-r rounded-t'
+                : ''
+            "
           >
-            {{ incident.name }}
-          </span>
+            <DisasterIcon class="mx-2" :current-incident="incident" />
+            {{ incident.short_name }}
+          </div>
         </div>
         <div class="flex-grow grid grid-cols-4">
           <div class="col-span-3 flex flex-col">
@@ -144,6 +153,19 @@
                   ref="map"
                   class="absolute top-0 left-0 right-0 bottom-0"
                 ></div>
+                <div
+                  style="z-index: 1001;"
+                  class="absolute top-0 right-0 h-32 w-auto overflow-hidden mt-3 mr-3"
+                  ref="incidentScroll"
+                >
+                  <div
+                    v-for="incident in liveIncidents"
+                    :key="incident"
+                    class="bg-crisiscleanup-dark-400 p-1 my-2 bg-opacity-25"
+                  >
+                    {{ incident }}
+                  </div>
+                </div>
                 <div
                   style="z-index: 1001;"
                   class="absolute left-0 bottom-0 right-0"
@@ -164,9 +186,7 @@
                         @click="
                           () => {
                             entry.selected = !entry.selected;
-                            displayedWorkTypeSvgs = {
-                              ...displayedWorkTypeSvgs,
-                            };
+                            displayedWorkTypeSvgs = [...displayedWorkTypeSvgs];
                             refresh();
                           }
                         "
@@ -194,7 +214,7 @@
                     </div>
                   </div>
                   <div
-                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-2 bg-opacity-25 flex"
+                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-2 bg-opacity-25 flex mb-8"
                   >
                     <div class="flex justify-center items-center mr-2">
                       <base-button
@@ -214,7 +234,20 @@
                       >
                       </base-button>
                     </div>
-                    <Slider class="w-120" @input="() => {}" :value="0"></Slider>
+                    <Slider
+                      v-if="markers.length"
+                      class="w-120"
+                      @input="
+                        (value) => {
+                          throttle(() => {
+                            refreshTimeline(value);
+                          }, 1000)();
+                        }
+                      "
+                      :value="markers.length - 1"
+                      :min="0"
+                      :max="markers.length - 1"
+                    ></Slider>
                   </div>
                 </div>
               </div>
@@ -261,9 +294,11 @@ import {
   degreesToRadians,
   findBezierPoints,
   getMarkerLayer,
+  getLiveLayer,
   mapAttribution,
   mapTileLayerDark,
   mapTileLayer,
+  randomIntFromInterval,
 } from '@/utils/map';
 import { HomeNavigation } from '@/components/home/SideNav';
 import Table from '@/components/Table';
@@ -271,16 +306,18 @@ import { getQueryString } from '@/utils/urls';
 import BarChart from '@/components/charts/BarChart';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
-import { orderBy } from 'lodash';
+import { orderBy, throttle } from 'lodash';
 import Slider from '@/components/Slider';
+import DisasterIcon from '@/components/DisasterIcon';
 
 export default {
   name: 'PewPew',
-  components: { Slider, Table, BarChart },
+  components: { DisasterIcon, Slider, Table, BarChart },
   data() {
     return {
       markers: [],
       liveEvents: [],
+      liveIncidents: [],
       events: {},
       incidents: [],
       organizations: [],
@@ -298,8 +335,8 @@ export default {
           data: null,
         },
       },
-      incidentId: 222,
-      markerSpeed: 2500,
+      incidentId: null,
+      markerSpeed: 1600,
       incident: null,
       incidentStats: {},
       mapStatistics: [],
@@ -312,18 +349,25 @@ export default {
         end_date: null,
         incident: null,
       },
+      throttle,
     };
   },
   async mounted() {
+    this.incidentId = this.$route.query.incident;
+
     this.queryFilter.start_date = this.$moment().add(-60, 'days');
     this.queryFilter.end_date = this.$moment();
 
-    await Incident.api().fetchById(this.incidentId);
-    this.incident = Incident.find(this.incidentId);
+    if (this.incidentId) {
+      await Incident.api().fetchById(this.incidentId);
+      this.incident = Incident.find(this.incidentId);
+      this.queryFilter.start_date = this.incident.start_at_moment;
+      this.queryFilter.end_date = this.incident.start_at_moment.add(60, 'days');
+      this.setLegend();
+    }
 
     this.incidents = await this.getRecentIncidents();
     this.organizations = await this.getOrganizations();
-    this.setLegend();
 
     const svg = templates.orb
       .replace('{{fillColor}}', '#61D5F8')
@@ -411,7 +455,7 @@ export default {
     },
     async getRecentIncidents() {
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,turn_on_release&limit=8&sort=-start_at`,
+        `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,incident_type,color,turn_on_release&limit=8&sort=-start_at`,
       );
       const { results } = response.data;
       return results;
@@ -443,10 +487,10 @@ export default {
     },
     async getAllEvents() {
       const params = {
-        limit: 1500,
+        limit: 60000,
         event_key__in: Object.keys(this.events).join(','),
         sort: 'created_at',
-        // incident: this.incidentId,
+        incident: this.queryFilter.incident || '',
         created_at__gte: this.queryFilter.start_date.toISOString(),
         created_at__lte: this.queryFilter.end_date.toISOString(),
       };
@@ -470,8 +514,11 @@ export default {
     async getLatestEvents() {
       const params = {
         limit: 100,
-        sort: '-created_at',
         created_at__gt: this.$moment().add(-24, 'hours').toISOString(),
+        'event_key__in!': `${[
+          'user_join_worksite-data_with_worksite',
+          'user_unjoin_worksite-data_from_worksite',
+        ].join(',')}`,
       };
       const queryString = getQueryString(params);
       const { data } = await this.$http.get(
@@ -512,9 +559,7 @@ export default {
       this.setLayer();
 
       this.events = {
-        // user_join_wwwtsp_with_organization: 'patient',
-        // 'user_join_work-type-status_with_wwwtsp': 'recipient',
-        user_create_worksite: 'recipient',
+        user_create_worksite: true,
       };
       await this.getAllEvents();
       this.lastEventTimestamp = this.$moment().toISOString();
@@ -522,15 +567,17 @@ export default {
       worksiteLayer.addTo(map);
 
       // Initial Draw
-      this.markers.forEach((marker) => {
-        this.addMarker(marker);
-      });
+      for (let i = 0; i < this.markers.length; i++) {
+        this.addMarker(this.markers[i], i);
+      }
 
       worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
       worksiteLayer.redraw();
 
       // Last 2 hours
       await this.getLatestEvents();
+      const liveLayer = getLiveLayer();
+      liveLayer.addTo(map);
 
       map.attributionControl.setPosition('bottomright');
     },
@@ -539,15 +586,15 @@ export default {
       const y1 = actorMarkerSprite.y;
       const x2 = patientMarkerSprite.x;
       const y2 = patientMarkerSprite.y;
-      const ang1 = degreesToRadians(30); // in radians
-      const ang2 = degreesToRadians(30);
+      const ang1 = degreesToRadians(randomIntFromInterval(30, 45)); // in radians
+      const ang2 = degreesToRadians(randomIntFromInterval(45, 60));
 
       const len = Math.hypot(x2 - x1, y2 - y1);
-      const ax1 = Math.cos(ang1) * len * (1 / 3);
-      const ay1 = Math.sin(ang1) * len * (1 / 3);
+      const ax1 = Math.cos(ang1) * len * (1 / randomIntFromInterval(2, 5));
+      const ay1 = Math.sin(ang1) * len * (1 / randomIntFromInterval(2, 5));
 
-      const ax2 = Math.cos(ang2) * len * (1 / 3);
-      const ay2 = Math.sin(ang2) * len * (1 / 3);
+      const ax2 = Math.cos(ang2) * len * (1 / randomIntFromInterval(2, 5));
+      const ay2 = Math.sin(ang2) * len * (1 / randomIntFromInterval(2, 5));
       const linksGraphics = new Graphics();
       linksGraphics.x1 = x1;
       linksGraphics.y1 = y1;
@@ -614,7 +661,7 @@ export default {
     },
     refresh() {
       this.map.eachLayer((layer) => {
-        if (layer.key === 'marker_layer') {
+        if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
           const container = layer._pixiContainer;
           container.children.forEach((markerSprite) => {
             markerSprite.visible = this.getMarkerVisibility(markerSprite);
@@ -625,7 +672,20 @@ export default {
         }
       });
     },
-    addMarker(marker) {
+    refreshTimeline(index) {
+      this.map.eachLayer((layer) => {
+        if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
+          const container = layer._pixiContainer;
+          container.children.forEach((markerSprite) => {
+            markerSprite.visible = markerSprite.index <= index;
+          });
+
+          layer._renderer.render(container);
+          layer.redraw();
+        }
+      });
+    },
+    addMarker(marker, index) {
       this.map.eachLayer((layer) => {
         if (layer.key === 'marker_layer') {
           const markerTemplate = templates.circle;
@@ -679,6 +739,7 @@ export default {
             }
 
             patientMarkerSprite = new Sprite();
+            patientMarkerSprite.index = index;
             patientMarkerSprite.x = patientCoords.x;
             patientMarkerSprite.y = patientCoords.y;
             patientMarkerSprite.x0 = patientCoords.x;
@@ -716,7 +777,7 @@ export default {
     },
     generateMarker() {
       this.map.eachLayer((layer) => {
-        if (layer.key === 'marker_layer') {
+        if (layer.key === 'live_layer') {
           const marker = this.liveEvents[this.currentEventIndex];
           this.currentEventIndex++;
           if (!marker) {
@@ -725,6 +786,8 @@ export default {
             return;
           }
           this.currentEvent = marker;
+          this.liveIncidents.push(this.currentEvent.attr.incident_name);
+          this.$refs.incidentScroll.scrollTop = this.$refs.incidentScroll.scrollHeight;
           const markerTemplate = templates.circle;
           let actorMarkerSprite = null;
           let patientMarkerSprite = null;
@@ -995,7 +1058,7 @@ export default {
   },
   computed: {
     visibleWorkTypes() {
-      const selectedWorkTypes = Object.values(this.displayedWorkTypeSvgs)
+      const selectedWorkTypes = this.displayedWorkTypeSvgs
         .filter((s) => s.selected)
         .map((s) => s.key);
       if (selectedWorkTypes.length > 0) {

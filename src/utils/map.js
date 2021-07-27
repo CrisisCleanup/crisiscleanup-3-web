@@ -435,6 +435,89 @@ export function getMarkerLayer(markers, map, context) {
           // prevZoom = zoom;
           // prevCenter = center;
         }
+
+        let start = null;
+        const delta = 250;
+
+        container.children.forEach(function (markerSprite) {
+          // if (!markerSprite.type === 'line') return;
+          if (firstDraw) {
+            markerSprite.scale.set(invScale);
+          } else {
+            markerSprite.currentScale = markerSprite.scale.x;
+            markerSprite.targetScale = invScale;
+          }
+        });
+
+        function animate(timestamp) {
+          if (start === null) start = timestamp;
+          const progress = timestamp - start;
+          let lambda = progress / delta;
+          if (lambda > 1) lambda = 1;
+          lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
+          container.children.forEach(function (markerSprite) {
+            if (zoom >= INTERACTIVE_ZOOM_LEVEL) {
+              markerSprite.texture =
+                markerSprite.detailedTexture || markerSprite.basicTexture;
+            } else {
+              markerSprite.texture = markerSprite.basicTexture;
+            }
+            markerSprite.scale.set(
+              markerSprite.currentScale +
+                lambda * (markerSprite.targetScale - markerSprite.currentScale),
+            );
+          });
+          renderer.render(container);
+          if (progress < delta) {
+            frame = requestAnimationFrame(animate);
+          }
+        }
+
+        if (!firstDraw) {
+          frame = requestAnimationFrame(animate);
+        }
+        firstDraw = false;
+        // prevZoom = zoom;
+        // prevCenter = center;
+        renderer.render(container);
+      },
+      pixiContainer,
+      {
+        doubleBuffering,
+        destroyInteractionManager: true,
+      },
+    );
+  })();
+  layer.key = 'marker_layer';
+  return layer;
+}
+
+export function getLiveLayer() {
+  const pixiContainer = new Container();
+
+  const layer = (function () {
+    let firstDraw = true;
+    let prevZoom;
+    // let prevCenter;
+    let frame = null;
+    const doubleBuffering =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    return L.pixiOverlay(
+      function (utils) {
+        const zoom = utils.getMap().getZoom();
+        // const center = utils.getMap().getCenter();
+        if (frame) {
+          cancelAnimationFrame(frame);
+          frame = null;
+        }
+        const container = utils.getContainer();
+        const renderer = utils.getRenderer();
+        const scale = utils.getScale();
+        const invScale = 0.75 / scale;
+        if (firstDraw) {
+          prevZoom = zoom;
+          // prevCenter = center;
+        }
         container.children.forEach(function (markerSprite) {
           // if (!markerSprite.type === 'line') return;
           if (firstDraw) {
@@ -499,6 +582,9 @@ export function getMarkerLayer(markers, map, context) {
           lambda *= 0.4 + lambda * (2.2 + lambda * -1.6);
           container.children.forEach(function (markerSprite) {
             if (markerSprite.type === 'line') {
+              if (zoom !== prevZoom) {
+                markerSprite.clear();
+              }
               createLineAnimation(markerSprite);
               markerSprite.frame = requestAnimationFrame(animate);
             } else {
@@ -536,7 +622,7 @@ export function getMarkerLayer(markers, map, context) {
           frame = requestAnimationFrame(animate);
         }
         firstDraw = false;
-        // prevZoom = zoom;
+        prevZoom = zoom;
         // prevCenter = center;
         renderer.render(container);
       },
@@ -547,7 +633,7 @@ export function getMarkerLayer(markers, map, context) {
       },
     );
   })();
-  layer.key = 'marker_layer';
+  layer.key = 'live_layer';
   return layer;
 }
 
@@ -628,4 +714,8 @@ export function findBezierPoints(b) {
     }
   }
   return pts;
+}
+
+export function randomIntFromInterval(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
