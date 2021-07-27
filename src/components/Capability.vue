@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-for="(capability, index) in capabilities" :key="index">
-      <div class="selected mx-2 rounded">
-        <div class="text-center header my-2">
+      <div class="selected rounded mx-2 pb-2">
+        <div class="text-center header my-2 rounded-t">
           {{ capability.name }}
         </div>
         <div
@@ -113,7 +113,7 @@ export default {
 
 .selected:hover {
   transform: scale(1.01) translateY(-5px);
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.5);
   transition: all 500ms ease;
 }
 </style>

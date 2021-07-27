@@ -15,7 +15,7 @@
       <div class="pb-2">
         <div class="text-h2">{{ generalInfo.name }}</div>
         <div v-if="generalInfo.website" class="text-bodysm">
-          {{ generalInfo.website }}
+          <a :href="generalInfo.website">{{ generalInfo.website }}</a>
         </div>
       </div>
       <hr />
@@ -35,25 +35,41 @@
             <div class="text-crisiscleanup-dark-300 truncate">
               {{ $t('INCIDENTS') }}
             </div>
-            <div>{{ $t(generalInfo.reported_count) }}</div>
+            <div>
+              {{
+                $t(generalInfo.reported_count ? generalInfo.reported_count : 0)
+              }}
+            </div>
           </div>
           <div class="col-span-1">
             <div class="text-crisiscleanup-dark-300 truncate">
               {{ $t('CLAIMED') }}
             </div>
-            <div>{{ $t(generalInfo.claimed_count) }}</div>
+            <div>
+              {{
+                $t(generalInfo.claimed_count ? generalInfo.claimed_count : 0)
+              }}
+            </div>
           </div>
           <div class="col-span-1">
             <div class="text-crisiscleanup-dark-300 truncate">
               {{ $t('CALLS') }}
             </div>
-            <div>{{ $t(generalInfo.calls) }}</div>
+            <div>{{ $t(generalInfo.calls ? generalInfo.calls : 0) }}</div>
           </div>
           <div class="col-span-1">
             <div class="text-crisiscleanup-dark-300 truncate">
               {{ $t('VALUE') }}
             </div>
-            <div>{{ $t(generalInfo.commercial_value) }}</div>
+            <div>
+              {{
+                $t(
+                  generalInfo.commercial_value
+                    ? generalInfo.commercial_value
+                    : 0,
+                )
+              }}
+            </div>
           </div>
         </div>
       </div>
@@ -259,14 +275,15 @@ export default {
         this.showIncidents = !this.showIncidents;
       } else {
         if (this.showCapability) {
-          chevronUp[chevronUp.length - 1].classList.remove('chevron-up');
-          chevronUp[chevronUp.length - 1].classList.add('chevron-down');
-          this.showCapability = false;
+          if (chevronUp) {
+            chevronUp[chevronUp.length - 1].classList.remove('chevron-up');
+            chevronUp[chevronUp.length - 1].classList.add('chevron-down');
+          }
         } else {
           chevronDown[chevronDown.length - 1].classList.remove('chevron-down');
           chevronDown[chevronDown.length - 1].classList.add('chevron-up');
-          this.showCapability = true;
         }
+        this.showCapability = !this.showCapability;
       }
     },
   },
