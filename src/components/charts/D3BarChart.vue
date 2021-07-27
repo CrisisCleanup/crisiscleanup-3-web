@@ -43,6 +43,10 @@ export default {
      * top, bottom, left, right margins
      */
     marginAll: VueTypes.number.def(25),
+    /**
+     * background color / gradient
+     */
+    bgColor: VueTypes.string.def('#232323'),
   },
 
   data() {
@@ -74,21 +78,24 @@ export default {
   },
 
   mounted() {
-    this.margin.top = this.marginAll;
-    this.margin.bottom = this.marginAll;
-    this.margin.left = this.marginAll;
-    this.margin.right = this.marginAll;
+    this.$nextTick(() => {
+      this.margin.top = this.marginAll;
+      this.margin.bottom = this.marginAll;
+      this.margin.left = this.marginAll;
+      this.margin.right = this.marginAll;
 
-    this.addHeaderCol();
-    this.destroyChart();
-    this.renderChart();
+      this.addHeaderCol();
+      this.destroyChart();
+      this.renderChart();
+    });
 
-    window.addEventListener('resize', () => {
-      setTimeout(() => {
+    window.addEventListener(
+      'resize',
+      _.debounce(() => {
         this.destroyChart();
         this.renderChart();
-      }, 1500);
-    });
+      }, 1500),
+    );
   },
 
   beforeDestroy() {
@@ -169,10 +176,7 @@ export default {
         .append('svg')
         .attr('width', this.getWidth())
         .attr('height', this.getHeight())
-        .style(
-          'background',
-          'linear-gradient(rgb(44, 55, 65, 0.85) 0%, rgba(44, 55, 65, 0.95) 100%)',
-        )
+        .style('background', this.bgColor)
         .append('g')
         .attr(
           'transform',
