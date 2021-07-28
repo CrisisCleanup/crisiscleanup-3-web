@@ -5,6 +5,7 @@
         :key="`${item.id}-${idx}`"
         v-for="(item, idx) in ticketWithCCData"
         :ticket-data="item"
+        @reFetchTicket="reFetchAllTickets"
       />
     </div>
   </div>
@@ -33,6 +34,15 @@ export default {
     // await this.getTickets();
   },
   methods: {
+    reFetchAllTickets() {
+      this.ticketWithCCData = [];
+      this.fetchTickets();
+    },
+    reFetchTicket(payload, ticketId) {
+      console.log('refetch emitted');
+      _.remove(this.ticketWithCCData, (o) => o.id === ticketId);
+      this.ticketWithCCData.push(payload);
+    },
     async fetchTickets() {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/search?query=status<solved`,
@@ -98,95 +108,6 @@ export default {
         },
       );
     },
-    // async fetchTickets() {
-    //   const response = await this.$http.get(
-    //     `${process.env.VUE_APP_API_BASE_URL}/zendesk/search?query=status<solved`,
-    //   );
-    //   const { results } = response.data;
-    //   console.log(results);
-    //   _.map(
-    //     _.map(results, (obj) =>
-    //       _.pick(obj, [
-    //         'id',
-    //         'description',
-    //         'via',
-    //         'url',
-    //         'created_at',
-    //         'requester_id',
-    //         'status',
-    //         'assignee_id',
-    //       ]),
-    //     ),
-    //     async (t) => {
-    //       console.log(
-    //         'this is what deep wanted',
-    //         await this.$http.get(
-    //           `${process.env.VUE_APP_API_BASE_URL}/zendesk/users/${t.requester_id}`,
-    //         ),
-    //       );
-    //       const {
-    //         data: {
-    //           ccu_user: {
-    //             mobile,
-    //             last_sign_in_at,
-    //             primary_language,
-    //             organization,
-    //           },
-    //           user: { name, phone, role, email, photo },
-    //         },
-    //       } = await this.$http.get(
-    //         `${process.env.VUE_APP_API_BASE_URL}/zendesk/users/${t.requester_id}`,
-    //       );
-    //       const obj = _.merge(t, {
-    //         name,
-    //         phone: mobile || phone,
-    //         last_sign_in_at: last_sign_in_at || '',
-    //         role,
-    //         email,
-    //         photo,
-    //         primary_language: primary_language || '',
-    //         organization: organization || '',
-    //       });
-    //       console.log(obj);
-    //       this.ticketWithCCData.push(obj);
-    //       return obj;
-    //     },
-    //   );
-    // },
-
-    // async fetchTickets() {
-    //   const response = await this.$http.get(
-    //     `${process.env.VUE_APP_API_BASE_URL}/zendesk/search?query=status<solved`,
-    //   );
-    //   const { results } = response.data;
-    //   console.log(results);
-    //   _.map(
-    //     _.map(results, (obj) => _.pick(obj, ['id', 'description', 'via', 'url', 'created_at', 'requester_id', 'status', 'assignee_id'])),
-    //     async (t) => {
-    //       console.log('this is what deep wanted',
-    //         await this.$http.get(
-    //           `${process.env.VUE_APP_API_BASE_URL}/zendesk/users/${t.requester_id}`,
-    //         ),
-    //       );
-    //       const {
-    //         data: {
-    //           user: {
-    //             name,
-    //             phone,
-    //             role,
-    //             email,
-    //             photo,
-    //           },
-    //         },
-    //       } = await this.$http.get(`${process.env.VUE_APP_API_BASE_URL}/zendesk/users/${t.requester_id}`);
-    //       // const aa = await this.$http.get(`${process.env.VUE_APP_API_BASE_URL}/zendesk/users/484643688`);
-    //       // console.log('user with phone', aa);
-    //       const obj = _.merge(t, { name, phone, role, email, photo });
-    //       console.log(obj);
-    //       this.ticketWithCCData.push(obj);
-    //       return obj;
-    //     });
-    // },
   },
   computed: {
     ticketTable() {
