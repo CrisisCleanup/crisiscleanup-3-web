@@ -49,7 +49,7 @@
                     :class="index > 0 ? 'group-top' : 'y-translated'"
                   >
                     <newspost
-                      class="text-white transform duration-300 hover:scale-105 ease-in-out site-item"
+                      class="text-white transform duration-300 hover:scale-105 ease-in-out site-item text-xs"
                       :user-info="{
                         name:
                           post.attr.actor_first_name +
@@ -59,17 +59,21 @@
                       }"
                       :avatar-icon="post.avatarIcon"
                       :image="post.image"
-                      :variant="post.attr.button_text_t.toLowerCase()"
+                      :variant="post.attr.button_text_t.split('.')[1]"
                     >
-                      <template #header>{{
-                        $t(post.attr.button_text_t.toUpperCase() + 'ED CASE')
-                      }}</template>
+                      <template #header>
+                        {{
+                          $t(
+                            getPastTense(post.attr.button_text_t.split('.')[1]),
+                          ) | upper
+                        }}
+                      </template>
                       <template #corner>{{
                         getDateDifference(Date.parse(post.created_at))
                       }}</template>
                       <template #content>
-                        <div class="flex-1 ml-2 font-medium text-xs">
-                          <span
+                        <div class="flex-1 ml-2">
+                          <span class="text-xs"
                             >{{
                               post.attr.actor_first_name
                                 ? $t(
@@ -92,8 +96,9 @@
                             }}
                             {{
                               $t(
-                                post.attr.button_text_t.toLowerCase() +
-                                  'ed case ',
+                                getPastTense(
+                                  post.attr.button_text_t.split('.')[1],
+                                ),
                               )
                             }}
                             {{ $t(post.attr.patient_case_number) }} ({{
@@ -122,20 +127,21 @@
                       }"
                       :avatar-icon="currentPost.avatarIcon"
                       :image="currentPost.image"
-                      :variant="currentPost.attr.button_text_t.toLowerCase()"
+                      :variant="currentPost.attr.button_text_t.split('.')[1]"
                     >
                       <template #header>{{
                         $t(
-                          currentPost.attr.button_text_t.toUpperCase() +
-                            'ED CASE',
-                        )
+                          getPastTense(
+                            currentPost.attr.button_text_t.split('/')[1],
+                          ),
+                        ) | upper
                       }}</template>
                       <template #corner>{{
                         getDateDifference(Date.parse(currentPost.created_at))
                       }}</template>
                       <template #content>
-                        <div class="flex-1 ml-2 font-medium text-xs">
-                          <span
+                        <div class="flex-1 ml-2">
+                          <span class='text-xs'
                             >{{
                               currentPost.attr.actor_first_name
                                 ? $t(
@@ -158,8 +164,9 @@
                             }}
                             {{
                               $t(
-                                currentPost.attr.button_text_t.toLowerCase() +
-                                  'ed case ',
+                                getPastTense(
+                                  currentPost.attr.button_text_t.split('/')[1],
+                                ),
                               )
                             }}{{ $t(currentPost.attr.patient_case_number) }} ({{
                               $t(currentPost.patient_location_name)
@@ -405,7 +412,7 @@
                       class="h-full w-full"
                       chart-id="completion-rate"
                       :chart-data="barChartData"
-                      :is-stacked='false'
+                      :is-stacked="false"
                     />
                   </div>
                 </LightTab>
@@ -447,7 +454,7 @@ import SiteActivityGauge from '@/components/charts/SiteActivityGauge';
 import CircularBarplot from '@/components/charts/CircularBarplot';
 import GaugeChart from '@/components/charts/GaugeChart';
 import D3BarChart from '@/components/charts/D3BarChart';
-import Table from "@/components/Table.vue";
+import Table from '@/components/Table.vue';
 
 export default {
   name: 'PewPew',
@@ -1109,6 +1116,12 @@ export default {
     },
     getDateDifference(date) {
       return this.$moment(date).fromNow();
+    },
+    getPastTense(word) {
+      return `${word
+        .replace(/([^aeiouy])y$/, '$1i')
+        .replace(/([^aeiouy][aeiou])([^aeiouy])$/, '$1$2$2')
+        .replace(/e$/, '')}ed`;
     },
     async getCompletionRateData() {
       const response = await this.$http.get(
