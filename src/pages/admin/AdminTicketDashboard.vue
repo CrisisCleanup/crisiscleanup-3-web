@@ -140,12 +140,28 @@ export default {
 
 @media (min-width: 900px) {
   .gridContainer {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
+.gridContainer {
+  @media (min-width: 1300px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
+@media (min-width: 1920px) {
+  .gridContainer {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 2560px) {
+  .gridContainer {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
 .gridContainer {
-  @apply mt-6;
+  @apply mt-6 mb-6;
   max-width: 600px;
 
   display: grid;
