@@ -15,7 +15,17 @@
           <div class="text-crisiscleanup-dark-300 truncate">
             {{ $t('CLAIMED') }}
           </div>
-          <div>{{ incident.claimed }}</div>
+          <div class="w-full h-10">
+            <CaseDonutChart
+              class="w-full h-full"
+              :chartId="`case-donut-chart-${index}`"
+              :chartData="{
+                reportedCases: incident.cases,
+                claimedCases: incident.claimed,
+                completedCases: incident.completed,
+              }"
+            />
+          </div>
         </div>
         <div class="col-span-1 flex flex-col text-center">
           <div class="text-crisiscleanup-dark-300 truncate">
@@ -34,8 +44,11 @@
   </div>
 </template>
 <script>
+import CaseDonutChart from '@/components/charts/CaseDonutChart.vue';
+
 export default {
   name: 'Incidents',
+  components: { CaseDonutChart },
   props: {
     incidents: {
       type: Array,
