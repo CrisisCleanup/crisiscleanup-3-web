@@ -1,6 +1,8 @@
 <template>
-  <div>
+  <div class="">
     <div
+      :class="expandState ? '' : 'overflow-y-scroll'"
+      :style="expandState ? '' : 'height: 40rem'"
       class="min-w-6/12 bg-white p-2 shadow rounded z-1"
       style="width: 30rem;"
     >
@@ -69,13 +71,25 @@
         <div class="font-bold">Comments</div>
 
         <div
-          class="m-4 bg-crisiscleanup-dark-100 shadow-md rounded-md p-2"
+          :class="assignWhoColor(item.author_id)"
+          class="m-4 bg-crisiscleanup-dark-100 shadow-lg rounded-md p-2"
           :key="`${idx}-${item.author_id}`"
           v-for="(item, idx) in comments"
         >
           <div class="font-bold">{{ assignWhoComments(item.author_id) }}</div>
           {{ item.body }}
         </div>
+
+        <base-input
+          :text-area="true"
+          :value="TicketReply"
+          class="w-11/12 m-4"
+          @input="
+            (value) => {
+              TicketReply = value;
+            }
+          "
+        ></base-input>
 
         <hr />
         <div class="flex justify-between">
@@ -111,7 +125,14 @@
                 :action="assignUser"
               />
               <base-button
-                text="Reply"
+                text="Reply as Open"
+                variant="solid"
+                class="m-2 p-1"
+                :action="replyToTicket"
+              />
+
+              <base-button
+                text="Reply as Closed"
                 variant="solid"
                 class="m-2 p-1"
                 :action="replyToTicket"
@@ -121,13 +142,13 @@
         </div>
       </div>
     </div>
-    <div v-if="true"></div>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
 
+import User from '@/models/User';
 import FormSelect from '../../components/FormSelect.vue';
 
 export default {
@@ -152,11 +173,17 @@ export default {
   },
   components: { FormSelect },
   async mounted() {
+    await this.currentUser();
     // this.selectedUser = this.assignWho;
     await this.getComments();
   },
   data() {
     return {
+      expandState: false,
+      currentLoggedinUser: '',
+      currentLoggedinUserId: 0,
+      replyState: false,
+      TicketReply: '',
       userToAssign: 0,
       comments: [],
       test: null,
@@ -199,6 +226,27 @@ export default {
     },
   },
   methods: {
+    assignWhoColor(author) {
+      if (author === 484643688) {
+        return 'bg-crisiscleanup-yellow-300';
+      }
+      if (author === 411677450351) {
+        return 'bg-crisiscleanup-yellow-300';
+      }
+      if (author === 114709872451) {
+        return 'bg-crisiscleanup-yellow-300';
+      }
+      if (author === 403645788712) {
+        return 'bg-crisiscleanup-yellow-300';
+      }
+      return '';
+    },
+
+    async currentUser() {
+      this.currentLoggedinUser = `${
+        User.find(this.$store.getters['auth/userId']).first_name
+      } ${User.find(this.$store.getters['auth/userId']).last_name}`;
+    },
     assignWhoComments(author) {
       if (author === 484643688) {
         return 'Arron titus';
@@ -216,17 +264,33 @@ export default {
     },
 
     async replyToTicket() {
+      if (this.currentLoggedinUser === 'Arron Titus') {
+        this.currentLoggedinUserId = 484643688;
+      }
+      if (this.currentLoggedinUser === 'Triston Lewis') {
+        this.currentLoggedinUserId = 411677450351;
+      }
+      if (this.currentLoggedinUser === 'Ross Arroyo') {
+        this.currentLoggedinUserId = 114709872451;
+      }
+      if (this.currentLoggedinUser === 'Gina') {
+        this.currentLoggedinUserId = 403645788712;
+      }
+
       const response = await this.$http.put(
-        `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}/comments`,
+        `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}`,
         {
           ticket: {
             comment: {
-              body: 'The smoke is very colorful.',
-              author_id: 411677450351,
+              body: this.TicketReply,
+              author_id: this.currentLoggedinUserId,
             },
           },
         },
       );
+
+      this.$emit('reFetchTicket');
+
       console.log(response);
     },
 
