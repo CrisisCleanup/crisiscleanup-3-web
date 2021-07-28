@@ -4,7 +4,7 @@
       class="absolute h-7 top-1 right-0 cursor-pointer px-2 hover:bg-gray-500 rounded-full text-center"
       @click="closeModal()"
     >
-      X
+      <font-awesome-icon icon="times" />
     </div>
     <img
       :src="generalInfo.avatar"
@@ -14,8 +14,8 @@
     <div class="flex flex-col">
       <div class="pb-2">
         <div class="text-h2">{{ generalInfo.name }}</div>
-        <div v-if="generalInfo.website" class="text-bodysm">
-          <a :href="generalInfo.website">{{ generalInfo.website }}</a>
+        <div v-if="generalInfo.url" class="text-bodysm">
+          <a :href="generalInfo.url">{{ generalInfo.url }}</a>
         </div>
       </div>
       <hr />
@@ -23,7 +23,7 @@
         <div class="grid grid-cols-2">
           <div class="col-span-1">
             <div class="text-crisiscleanup-dark-300">{{ $t('TYPE') }}</div>
-            <div>{{ $t(generalInfo.type ? generalInfo.type : 'Unknown') }}</div>
+            <div>{{ $t(generalInfo.type_t ? generalInfo.type_t : 'Unknown') }}</div>
           </div>
           <div class="col-span-1">
             <div class="text-crisiscleanup-dark-300">{{ $t('ROLE') }}</div>
@@ -37,7 +37,7 @@
             </div>
             <div>
               {{
-                $t(generalInfo.reported_count ? generalInfo.reported_count : 0)
+                $t(generalInfo.reported_count !== null ? generalInfo.reported_count : 0)
               }}
             </div>
           </div>
@@ -81,7 +81,7 @@
         >
           <div class="mt-2">{{ $t('INCIDENTS') }}</div>
           <div class="ml-auto text-lg">
-            <div class="chevron-down">&#8964;</div>
+            <div class="chevron-down"><font-awesome-icon icon="chevron-down" /></div>
           </div>
         </div>
         <div class="overflow-hidden" :class="showIncidents ? 'h-full' : 'h-0'">
@@ -100,7 +100,7 @@
         >
           <div class="mt-2">{{ $t('CAPABILITY') }}</div>
           <div class="ml-auto text-lg">
-            <div class="chevron-down">&#8964;</div>
+            <div class="chevron-down"><font-awesome-icon icon="chevron-down" /></div>
           </div>
         </div>
         <div
@@ -148,6 +148,7 @@ export default {
           claimed: 103,
           calls: '25.2K',
           value: '2.7M',
+          completed: 103,
         },
         {
           name: 'Hurricane Irma',
@@ -155,6 +156,7 @@ export default {
           claimed: 103,
           calls: '25.2K',
           value: '2.7M',
+          completed: 103,
         },
         {
           name: 'Flint Michigan Water Crisis',
@@ -162,6 +164,7 @@ export default {
           claimed: 103,
           calls: '25.2K',
           value: '2.7M',
+          completed: 103,
         },
       ],
       testCapabilities: [

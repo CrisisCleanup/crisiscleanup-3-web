@@ -365,57 +365,6 @@
                 @rowClick="onRowClick"
               ></Table>
             </div>
-            <div
-              class="row-span-6 px-2"
-              style="max-height: 450px; overflow: auto;"
-            >
-              <div
-                v-for="(organization, index) in organizations"
-                :key="index"
-                class="p-2"
-              >
-                <OrganizationActivity
-                  class="w-full mb-2"
-                  :class="
-                    colorMode === 'Dark Mode' ? 'bg-gray-800' : 'bg-gray-600'
-                  "
-                  v-if="organization.showAdvanced"
-                  :organization-info="organization"
-                  :organization-image="organization.image"
-                  @close="organization.showAdvanced = false"
-                />
-                <div
-                  class="grid grid-cols-6 p-2 rounded"
-                  :class="
-                    colorMode === 'Dark Mode'
-                      ? 'hover:bg-gray-800'
-                      : 'hover:bg-gray-200'
-                  "
-                  @click="organization.showAdvanced = true"
-                  v-else
-                >
-                  <div class="col-span-2 truncate flex flex-row">
-                    <img
-                      :src="organization.avatar"
-                      class="w-5 h-5 rounded-full mr-2"
-                    />
-                    {{ organization.name }}
-                  </div>
-                  <div class="col-span-1 text-center">
-                    {{ organization.cases }}
-                  </div>
-                  <div class="col-span-1 text-center">
-                    {{ organization.claimed }}
-                  </div>
-                  <div class="col-span-1 text-center">
-                    {{ organization.calls / 1000 }}K
-                  </div>
-                  <div class="col-span-1 text-center">
-                    {{ organization.value / 1000000 }}M
-                  </div>
-                </div>
-              </div>
-            </div>
             <div class="row-span-5">
               <tabs class="relative h-full" ref="tabs" tab-classes="text-xs">
                 <LightTab
@@ -498,6 +447,7 @@ import SiteActivityGauge from '@/components/charts/SiteActivityGauge';
 import CircularBarplot from '@/components/charts/CircularBarplot';
 import GaugeChart from '@/components/charts/GaugeChart';
 import D3BarChart from '@/components/charts/D3BarChart';
+import Table from "@/components/Table.vue";
 
 export default {
   name: 'PewPew',
@@ -691,7 +641,7 @@ export default {
       {
         count: this.incidentStats.assigned_count,
         style: `border-color: #f0f032`,
-        title: this.$t('~~Assinged'),
+        title: this.$t('~~Assigned'),
       },
       {
         count: this.incidentStats.partial_count,
@@ -1099,7 +1049,6 @@ export default {
           }
           this.eventStreamData = this.eventStreamData.slice(0, -1);
         }
-        console.log(this.eventStreamData);
         // set start state
         setTimeout(() => {
           this.animateList();
@@ -1279,7 +1228,7 @@ export default {
       }
     },
     closeModal() {
-      const modal = document.querySelector('div.settle');
+      const modal = document.querySelector('div.x-settle');
       if (modal) {
         modal.classList.add('x-translate');
         modal.classList.remove('x-settle');
