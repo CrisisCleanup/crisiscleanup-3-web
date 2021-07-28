@@ -11,12 +11,12 @@
         <div class="truncate text-sm">{{ userInfo.organization }}</div>
       </div>
     </div>
-    <div class="font-bold text-lg" v-else>
+    <div class="font-bold text-sm" v-else>
       <slot name="header"></slot>
     </div>
-    <div class="text-xs"><slot name="content"></slot></div>
+    <div><slot name="content"></slot></div>
     <img v-if="image" :src="image" />
-    <div class="text-xs ml-auto">
+    <div class="ml-auto">
       <slot name="corner"></slot>
     </div>
   </div>
@@ -81,6 +81,13 @@ export default {
 .partly_done {
   border-color: #0054bb;
   background: #3a4758;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 2px;
+}
+.save {
+  border-color: #a0f861;
+  background: #495c62;
   border-radius: 4px;
   border-style: solid;
   border-width: 2px;
