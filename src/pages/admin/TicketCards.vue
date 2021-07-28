@@ -45,8 +45,10 @@
           <div v-if="truncateState">
             {{ ticketData.description | truncate(200) }}
           </div>
+
           <div v-if="!truncateState">{{ ticketData.description }}</div>
-          <div v-if="ticketData.description.length > 200">
+
+          <div v-if="ticketData.description.length > 400">
             <div
               v-if="truncateState"
               @click="toggleTruncate"
@@ -63,6 +65,18 @@
             </div>
           </div>
         </div>
+        <hr />
+        <div class="font-bold">Comments</div>
+
+        <div
+          class="m-4 bg-crisiscleanup-dark-100 shadow-md rounded-md p-2"
+          :key="`${idx}-${item.author_id}`"
+          v-for="(item, idx) in comments"
+        >
+          <div class="font-bold">{{ assignWhoComments(item.author_id) }}</div>
+          {{ item.body }}
+        </div>
+
         <hr />
         <div class="flex justify-between">
           <div>
@@ -84,14 +98,17 @@
                 class="w-auto h-12 flex-grow border border-crisiscleanup-dark-100 select"
                 :options="userList"
                 :value="selectedUser"
-                item-key="key"
-                label="label"
+                @input="
+                  (value) => {
+                    selectedUser = value;
+                  }
+                "
               />
               <base-button
                 text="Reassign Ticket"
                 variant="solid"
                 class="m-2 p-1"
-                :action="getComments"
+                :action="assignUser"
               />
               <base-button
                 text="Reply"
@@ -136,15 +153,16 @@ export default {
   components: { FormSelect },
   async mounted() {
     // this.selectedUser = this.assignWho;
-    await this.getComments;
+    await this.getComments();
   },
   data() {
     return {
-      comments: null,
+      userToAssign: 0,
+      comments: [],
       test: null,
       truncateState: true,
       dropDownState: false,
-      selectedUser: null,
+      selectedUser: '',
       userList: ['Arron Titus', 'Triston Lewis', 'Ross Arroyo', 'Gina'],
     };
   },
@@ -181,6 +199,22 @@ export default {
     },
   },
   methods: {
+    assignWhoComments(author) {
+      if (author === 484643688) {
+        return 'Arron titus';
+      }
+      if (author === 411677450351) {
+        return 'Triston Lewis';
+      }
+      if (author === 114709872451) {
+        return 'Ross Arroyo';
+      }
+      if (author === 403645788712) {
+        return 'Gina';
+      }
+      return this.ticketData.name;
+    },
+
     async replyToTicket() {
       const response = await this.$http.put(
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}/comments`,
@@ -195,29 +229,40 @@ export default {
       );
       console.log(response);
     },
+
     async getComments() {
-      console.log('comments for get comments');
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}/comments`,
       );
-      // const { results } = response.data;
-      this.comments = response;
-      console.log(this.comments);
-      console.log(this.comments[0].attachments);
-      console.log(this.comments[0].attachments[0]);
+      this.comments = response.data.comments;
+      this.comments = this.comments.slice();
     },
+
     async assignUser() {
-      // if (input === 'Triston Lewis') {
-      console.log(this.ticketData.id);
+      if (this.selectedUser === 'Arron Titus') {
+        this.userToAssign = 484643688;
+      }
+      if (this.selectedUser === 'Triston Lewis') {
+        this.userToAssign = 411677450351;
+      }
+      if (this.selectedUser === 'Ross Arroyo') {
+        this.userToAssign = 114709872451;
+      }
+      if (this.selectedUser === 'Gina') {
+        this.userToAssign = 403645788712;
+      }
+
       const response = await this.$http.put(
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}`,
         {
           ticket: {
-            assignee_id: 411677450351,
+            assignee_id: this.userToAssign,
           },
         },
       );
-      console.log(response);
+
+      this.$emit('reFetchTicket', response, this.ticketData.id);
+
       // }
     },
     toggleTruncate() {
