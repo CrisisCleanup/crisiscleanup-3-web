@@ -1,7 +1,13 @@
 <template>
   <div class="">
     <div
-      :class="expandState ? '' : 'overflow-y-scroll'"
+      :class="
+        expandState
+          ? ''
+          : 'overflow-y-scroll' && this.ticketData.status === 'solved'
+          ? 'opacity-25 disabled'
+          : ''
+      "
       :style="expandState ? '' : 'height: 40rem'"
       class="min-w-6/12 bg-white p-2 shadow rounded z-1"
       style="width: 30rem;"
@@ -93,7 +99,7 @@
 
         <hr />
         <div class="flex justify-between">
-          <div>
+          <div class="flex flex-col">
             <div class="flex justify-between p-2">
               <img
                 class="mr-4"
@@ -124,18 +130,30 @@
                 class="m-2 p-1"
                 :action="assignUser"
               />
+            </div>
+            <div class="flex justify-evenly">
               <base-button
+                style="background: #9cb8ff;"
                 text="Reply as Open"
                 variant="solid"
                 class="m-2 p-1"
-                :action="replyToTicket"
+                :action="replyToTicketOpen"
               />
 
               <base-button
-                text="Reply as Closed"
+                style="background: #e8e4e4;"
+                text="Reply as Pending"
                 variant="solid"
                 class="m-2 p-1"
-                :action="replyToTicket"
+                :action="replyToTicketPending"
+              />
+
+              <base-button
+                style="background: #ffa296;"
+                text="Reply as Solved/Closed"
+                variant="solid"
+                class="m-2 p-1"
+                :action="replyToTicketSolved"
               />
             </div>
           </div>
@@ -170,6 +188,10 @@ export default {
       type: Object,
       default: null,
     },
+    expandState: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: { FormSelect },
   async mounted() {
@@ -179,7 +201,6 @@ export default {
   },
   data() {
     return {
-      expandState: false,
       currentLoggedinUser: '',
       currentLoggedinUserId: 0,
       replyState: false,
@@ -263,7 +284,7 @@ export default {
       return this.ticketData.name;
     },
 
-    async replyToTicket() {
+    async replyToTicketOpen() {
       if (this.currentLoggedinUser === 'Arron Titus') {
         this.currentLoggedinUserId = 484643688;
       }
@@ -281,6 +302,74 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}`,
         {
           ticket: {
+            status: 'open',
+
+            comment: {
+              body: this.TicketReply,
+              author_id: this.currentLoggedinUserId,
+            },
+          },
+        },
+      );
+
+      this.$emit('reFetchTicket');
+
+      console.log(response);
+    },
+
+    async replyToTicketPending() {
+      if (this.currentLoggedinUser === 'Arron Titus') {
+        this.currentLoggedinUserId = 484643688;
+      }
+      if (this.currentLoggedinUser === 'Triston Lewis') {
+        this.currentLoggedinUserId = 411677450351;
+      }
+      if (this.currentLoggedinUser === 'Ross Arroyo') {
+        this.currentLoggedinUserId = 114709872451;
+      }
+      if (this.currentLoggedinUser === 'Gina') {
+        this.currentLoggedinUserId = 403645788712;
+      }
+
+      const response = await this.$http.put(
+        `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}`,
+        {
+          ticket: {
+            status: 'pending',
+
+            comment: {
+              body: this.TicketReply,
+              author_id: this.currentLoggedinUserId,
+            },
+          },
+        },
+      );
+
+      this.$emit('reFetchTicket');
+
+      console.log(response);
+    },
+
+    async replyToTicketSolved() {
+      if (this.currentLoggedinUser === 'Arron Titus') {
+        this.currentLoggedinUserId = 484643688;
+      }
+      if (this.currentLoggedinUser === 'Triston Lewis') {
+        this.currentLoggedinUserId = 411677450351;
+      }
+      if (this.currentLoggedinUser === 'Ross Arroyo') {
+        this.currentLoggedinUserId = 114709872451;
+      }
+      if (this.currentLoggedinUser === 'Gina') {
+        this.currentLoggedinUserId = 403645788712;
+      }
+
+      const response = await this.$http.put(
+        `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}`,
+        {
+          ticket: {
+            status: 'solved',
+
             comment: {
               body: this.TicketReply,
               author_id: this.currentLoggedinUserId,
