@@ -1,11 +1,18 @@
 <template>
   <div class="">
+    <base-button
+      text="Expand All Tickets"
+      variant="solid"
+      class="m-2 p-1"
+      :action="() => (expandState = !expandState)"
+    />
     <div class="gridContainer sm:gridContainer-mobile">
       <TicketCards
         :key="`${item.id}-${idx}`"
         v-for="(item, idx) in ticketWithCCData"
         :ticket-data="item"
         @reFetchTicket="reFetchAllTickets"
+        :expand-state="expandState"
       />
     </div>
   </div>
@@ -21,6 +28,8 @@ export default {
   components: { TicketCards },
   data() {
     return {
+      expandState: false,
+
       tickets: [],
 
       ticketWithCCData: [],
@@ -143,6 +152,7 @@ export default {
     grid-template-columns: repeat(1, 1fr);
   }
 }
+
 .gridContainer {
   @media (min-width: 1300px) {
     grid-template-columns: repeat(2, 1fr);
@@ -160,6 +170,7 @@ export default {
     grid-template-columns: repeat(6, 1fr);
   }
 }
+
 .gridContainer {
   @apply mt-6 mb-6;
   max-width: 600px;
