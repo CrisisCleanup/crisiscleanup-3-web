@@ -305,10 +305,9 @@ export default {
           },
         },
       );
-
+      console.log(response);
       this.$emit('reFetchTicket');
       this.$toasted.success('Ticket Status Changed to OPEN');
-      console.log(response);
     },
 
     async replyToTicketPending() {
@@ -338,11 +337,10 @@ export default {
           },
         },
       );
+      console.log(response);
 
       this.$emit('reFetchTicket');
       this.$toasted.success('Ticket Status Changed to PENDING');
-
-      console.log(response);
     },
 
     async replyToTicketSolved() {
@@ -372,11 +370,10 @@ export default {
           },
         },
       );
+      console.log(response);
 
       this.$emit('reFetchTicket');
       this.$toasted.success('Ticket Status Changed to SOLVED/CLOSED');
-
-      console.log(response);
     },
 
     async getComments() {
@@ -419,7 +416,6 @@ export default {
         this.$toasted.success(
           `Successfully Assigned ticket to user: ${this.selectedUser}`,
         );
-      // }
     },
     toggleTruncate() {
       this.truncateState = !this.truncateState;

@@ -36,11 +36,7 @@ export default {
     };
   },
   async mounted() {
-    // await this.getTickets();
-    // const x = await this.fetchTickets();
-    // console.log(x);
     await this.fetchTickets();
-    // await this.getTickets();
   },
   methods: {
     reFetchAllTickets() {
@@ -48,7 +44,6 @@ export default {
       this.fetchTickets();
     },
     reFetchTicket(payload, ticketId) {
-      console.log('refetch emitted');
       _.remove(this.ticketWithCCData, (o) => o.id === ticketId);
       this.ticketWithCCData.push(payload);
     },
@@ -57,7 +52,6 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/search?query=status<solved`,
       );
       const { results } = response.data;
-      console.log(results);
       _.map(
         _.map(results, (obj) =>
           _.pick(obj, [
@@ -72,11 +66,6 @@ export default {
           ]),
         ),
         async (t) => {
-          // console.log('this is what deep wanted',
-          //   await this.$http.get(
-          //     `${process.env.VUE_APP_API_BASE_URL}/zendesk/users/${t.requester_id}`,
-          //   ),
-          // );
           const {
             data: {
               user: { name, phone, role, email, photo },
@@ -111,7 +100,6 @@ export default {
             obj.primary_language = primary_language;
             obj.organization = organization;
           }
-          console.log(obj);
           this.ticketWithCCData.push(obj);
           return obj;
         },
