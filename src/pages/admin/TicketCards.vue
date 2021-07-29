@@ -307,7 +307,7 @@ export default {
       );
 
       this.$emit('reFetchTicket');
-
+      this.$toasted.success('Ticket Status Changed to OPEN');
       console.log(response);
     },
 
@@ -340,6 +340,7 @@ export default {
       );
 
       this.$emit('reFetchTicket');
+      this.$toasted.success('Ticket Status Changed to PENDING');
 
       console.log(response);
     },
@@ -373,6 +374,7 @@ export default {
       );
 
       this.$emit('reFetchTicket');
+      this.$toasted.success('Ticket Status Changed to SOLVED/CLOSED');
 
       console.log(response);
     },
@@ -409,7 +411,14 @@ export default {
       );
 
       this.$emit('reFetchTicket', response, this.ticketData.id);
-
+      if (this.selectedUser === '') {
+        this.$toasted.error(
+          'ERROR please select a user to assign a ticket to!',
+        );
+      } else
+        this.$toasted.success(
+          `Successfully Assigned ticket to user: ${this.selectedUser}`,
+        );
       // }
     },
     toggleTruncate() {
