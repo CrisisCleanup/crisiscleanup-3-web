@@ -1,14 +1,8 @@
 <template>
   <div class="">
     <div
-      :class="
-        expandState
-          ? ''
-          : 'overflow-y-scroll' && this.ticketData.status === 'solved'
-          ? 'opacity-25 disabled'
-          : ''
-      "
-      :style="expandState ? '' : 'height: 40rem'"
+      :class="this.ticketData.status === 'solved' ? 'opacity-25' : ''"
+      :style="expandState ? '' : ' overflow-y: scroll;height: 40rem'"
       class="min-w-6/12 bg-white p-2 shadow rounded z-1"
       style="width: 30rem;"
     >
