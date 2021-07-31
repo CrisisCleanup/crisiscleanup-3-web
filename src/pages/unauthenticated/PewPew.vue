@@ -47,68 +47,7 @@
                   <div
                     class="mx-2 -mb-1 rounded-md relative"
                     :class="index > 0 ? 'group-top' : 'y-translated'"
-                  >
-                    <newspost
-                      class="text-white transform duration-300 hover:scale-105 ease-in-out site-item text-xs"
-                      :user-info="{
-                        name:
-                          post.attr.actor_first_name +
-                          '.' +
-                          post.attr.actor_last_name,
-                        organization: post.attr.actor_organization_name,
-                      }"
-                      :avatar-icon="post.avatarIcon"
-                      :image="post.image"
-                      :variant="post.attr.button_text_t.split('.')[1]"
-                    >
-                      <template #header>
-                        {{
-                          $t(
-                            getPastTense(post.attr.button_text_t.split('.')[1]),
-                          ) | upper
-                        }}
-                      </template>
-                      <template #corner>{{
-                        getDateDifference(Date.parse(post.created_at))
-                      }}</template>
-                      <template #content>
-                        <div class="flex-1 ml-2">
-                          <span class="text-xs"
-                            >{{
-                              post.attr.actor_first_name
-                                ? $t(
-                                    post.attr.actor_first_name +
-                                      '.' +
-                                      post.attr.actor_last_name,
-                                  )
-                                : $t('Anonymous')
-                            }}
-                            from
-                            {{
-                              post.attr.actor_organization_name
-                                ? $t(
-                                    post.attr.actor_organization_name +
-                                      ' (' +
-                                      post.actor_location_name +
-                                      ') ',
-                                  )
-                                : $t('Unknown')
-                            }}
-                            {{
-                              $t(
-                                getPastTense(
-                                  post.attr.button_text_t.split('.')[1],
-                                ),
-                              )
-                            }}
-                            {{ $t(post.attr.patient_case_number) }} ({{
-                              $t(post.patient_location_name)
-                            }})
-                          </span>
-                        </div>
-                      </template>
-                    </newspost>
-                  </div>
+                  ></div>
                 </div>
                 <div
                   v-if="currentPost"
@@ -127,7 +66,6 @@
                       }"
                       :avatar-icon="currentPost.avatarIcon"
                       :image="currentPost.image"
-                      :variant="currentPost.attr.button_text_t.split('.')[1]"
                     >
                       <template #header>{{
                         $t(
@@ -141,7 +79,7 @@
                       }}</template>
                       <template #content>
                         <div class="flex-1 ml-2">
-                          <span class='text-xs'
+                          <span class="text-xs"
                             >{{
                               currentPost.attr.actor_first_name
                                 ? $t(
@@ -264,19 +202,28 @@
             />
           </div>
         </div>
-        <div class="h-12 flex items-center justify-start">
-          <span class="mx-4 h-full flex items-center">
-            {{ $t('All') }}
-          </span>
-          <span
-            class="mx-4 h-full flex items-center"
+        <div class="h-12 grid grid-flow-col text-xs">
+          <div
+            class="flex items-center justify-center w-30 h-12"
+            :class="incident ? '' : 'border-l border-t border-r rounded-t'"
+          >
+            {{ $t('~~All') }}
+          </div>
+          <div
             v-for="incident in incidents"
             :key="incident.id"
+            class="flex items-center justify-start w-30 h-12"
+            :class="
+              String(incident.id) === String(incidentId)
+                ? 'border-l border-t border-r rounded-t'
+                : ''
+            "
           >
-            {{ incident.name }}
-          </span>
+            <DisasterIcon class="mx-2" :current-incident="incident" />
+            {{ incident.short_name }}
+          </div>
         </div>
-        <div class="flex-grow grid grid-cols-4 z-0">
+        <div class="flex-grow grid grid-cols-4">
           <div class="col-span-3 flex flex-col">
             <div class="flex-grow">
               <div class="relative h-full">
@@ -287,9 +234,23 @@
                 ></div>
                 <div
                   style="z-index: 1001;"
+                  class="absolute top-0 right-0 h-32 w-auto overflow-hidden mt-3 mr-3"
+                  ref="incidentScroll"
+                >
+                  <div
+                    v-for="incident in liveIncidents"
+                    :key="incident"
+                    class="bg-crisiscleanup-dark-400 p-1 my-2 bg-opacity-25"
+                  >
+                    {{ incident }}
+                  </div>
+                </div>
+                <div
+                  style="z-index: 1001;"
                   class="absolute left-0 bottom-0 right-0"
                 >
                   <div
+                    v-if="displayedWorkTypeSvgs.length > 0"
                     class="legend w-108 h-auto bg-crisiscleanup-dark-400 p-2 mb-5 ml-3 bg-opacity-25"
                   >
                     <div class="font-bold my-1 text-white text-sm">
@@ -304,9 +265,7 @@
                         @click="
                           () => {
                             entry.selected = !entry.selected;
-                            displayedWorkTypeSvgs = {
-                              ...displayedWorkTypeSvgs,
-                            };
+                            displayedWorkTypeSvgs = [...displayedWorkTypeSvgs];
                             refresh();
                           }
                         "
@@ -334,7 +293,7 @@
                     </div>
                   </div>
                   <div
-                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-2 bg-opacity-25 flex"
+                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-2 bg-opacity-25 flex mb-8"
                   >
                     <div class="flex justify-center items-center mr-2">
                       <base-button
@@ -343,7 +302,6 @@
                         :action="pauseGeneratePoints"
                         icon="pause"
                         icon-size="xs"
-                        @click="animateList"
                       >
                       </base-button>
                       <base-button
@@ -355,21 +313,33 @@
                       >
                       </base-button>
                     </div>
-                    <Slider class="w-120" @input="() => {}" :value="0"></Slider>
+                    <Slider
+                      v-if="markers.length"
+                      class="w-120"
+                      @input="
+                        (value) => {
+                          throttle(() => {
+                            refreshTimeline(value);
+                          }, 1000)();
+                        }
+                      "
+                      :value="markers.length - 1"
+                      :min="0"
+                      :max="markers.length - 1"
+                    ></Slider>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="col-span-1 grid grid-rows-12">
-            <div class="row-span-7 relative">
+            <div class="row-span-7">
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
                 style="height: 450px;"
                 :body-style="{ maxHeight: '450px', ...styles }"
                 :header-style="styles"
-                @rowClick="onRowClick"
               ></Table>
             </div>
             <div class="row-span-5">
@@ -436,16 +406,18 @@ import {
   degreesToRadians,
   findBezierPoints,
   getMarkerLayer,
+  getLiveLayer,
   mapAttribution,
   mapTileLayerDark,
   mapTileLayer,
+  randomIntFromInterval,
 } from '@/utils/map';
 import { HomeNavigation } from '@/components/home/SideNav';
+import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
-import OrganizationActivity from '@/components/OrganizationActivity.vue';
-import _ from 'lodash';
+import { orderBy, throttle, nth } from 'lodash';
 import Slider from '@/components/Slider';
 import DisasterIcon from '@/components/DisasterIcon';
 import OrganizationActivityModal from '@/components/OrganizationActivityModal.vue';
@@ -454,7 +426,6 @@ import SiteActivityGauge from '@/components/charts/SiteActivityGauge';
 import CircularBarplot from '@/components/charts/CircularBarplot';
 import GaugeChart from '@/components/charts/GaugeChart';
 import D3BarChart from '@/components/charts/D3BarChart';
-import Table from '@/components/Table.vue';
 
 export default {
   name: 'PewPew',
@@ -465,7 +436,6 @@ export default {
     CircularBarplot,
     SiteActivityGauge,
     Newspost,
-    OrganizationActivity,
     Slider,
     DisasterIcon,
     Table,
@@ -482,70 +452,11 @@ export default {
         capability: [],
       },
       markers: [],
+      liveEvents: [],
+      liveIncidents: [],
       events: {},
       incidents: [],
-      organizations: [
-        {
-          avatar:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          name: 'test 1',
-          cases: '12',
-          claimed: '13',
-          calls: '14000',
-          value: '15000000',
-          showAdvanced: false,
-          orgType: 'test',
-          availability: 'test',
-          address: 'test',
-          type: 'test',
-          role: 'test',
-        },
-        {
-          avatar:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          name: 'test 2',
-          cases: '16',
-          claimed: '17',
-          calls: '4000',
-          value: '14000000',
-          showAdvanced: false,
-          orgType: 'test',
-          availability: 'test',
-          address: 'test',
-          type: 'test',
-          role: 'test',
-        },
-        {
-          avatar:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          name: 'test 3',
-          cases: '3',
-          claimed: '17',
-          calls: '1000',
-          value: '5000000',
-          showAdvanced: false,
-          orgType: 'test',
-          availability: 'test',
-          address: 'test',
-          type: 'test',
-          role: 'test',
-        },
-        {
-          avatar:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
-          name: 'test 4',
-          cases: '12',
-          claimed: '13',
-          calls: '14000',
-          value: '15000000',
-          showAdvanced: false,
-          orgType: 'test',
-          availability: 'test',
-          address: 'test',
-          type: 'test',
-          role: 'test',
-        },
-      ],
+      organizations: [],
       templates,
       colors,
       map: null,
@@ -594,7 +505,7 @@ export default {
         { group: 9, newCases: 49, closedCases: 32 },
         { group: 10, newCases: 69, closedCases: 42 },
       ],
-      incidentId: 199,
+      incidentId: null,
       markerSpeed: 2000,
       incident: null,
       incidentStats: {},
@@ -603,26 +514,30 @@ export default {
       orbTexture: null,
       eventsInterval: null,
       textureMap: {},
+      queryFilter: {
+        start_date: null,
+        end_date: null,
+        incident: null,
+      },
+      throttle,
     };
   },
   async mounted() {
-    await Incident.api().fetchById(this.incidentId);
-    this.incident = Incident.find(this.incidentId);
+    this.incidentId = this.$route.query.incident;
 
-    this.displayedWorkTypeSvgs = this.incident.created_work_types.map(
-      (workType) => {
-        const template = templates[workType] || templates.unknown;
-        const svg = template
-          .replace('{{fillColor}}', '#61D5F8')
-          .replace('{{strokeColor}}', 'black')
-          .replace('{{multiple}}', '');
-        return {
-          svg,
-          key: workType,
-          selected: false,
-        };
-      },
-    );
+    this.queryFilter.start_date = this.$moment().add(-60, 'days');
+    this.queryFilter.end_date = this.$moment();
+
+    if (this.incidentId) {
+      await Incident.api().fetchById(this.incidentId);
+      this.incident = Incident.find(this.incidentId);
+      this.queryFilter.start_date = this.incident.start_at_moment;
+      this.queryFilter.end_date = this.incident.start_at_moment.add(60, 'days');
+      this.setLegend();
+    }
+
+    this.incidents = await this.getRecentIncidents();
+    this.organizations = await this.getOrganizations();
 
     const svg = templates.orb
       .replace('{{fillColor}}', '#61D5F8')
@@ -631,37 +546,37 @@ export default {
     await this.getIncidentStats();
     this.mapStatistics = [
       {
-        count: this.incidentStats.worksite_count,
+        count: this.incidentStats.all.total,
         style: `border-color: white`,
         title: this.$t('~~All Cases'),
       },
       {
-        count: this.incidentStats.unclaimed_count,
+        count: this.incidentStats.unclaimed.total,
         style: `border-color: #d0021b`,
         title: this.$t('~~Unclaimed'),
       },
       {
-        count: this.incidentStats.claimed_count,
+        count: this.incidentStats.claimed.total,
         style: `border-color: #fab92e`,
         title: this.$t('~~Claimed'),
       },
       {
-        count: this.incidentStats.assigned_count,
+        count: this.incidentStats.assigned.total,
         style: `border-color: #f0f032`,
-        title: this.$t('~~Assigned'),
+        title: this.$t('~~Assinged'),
       },
       {
-        count: this.incidentStats.partial_count,
+        count: this.incidentStats.partial.total,
         style: `border-color: #0054bb`,
         title: this.$t('~~Partly Done'),
       },
       {
-        count: this.incidentStats.closed_count,
+        count: this.incidentStats.closed.total,
         style: `border-color: #0FA355`,
         title: this.$t('~~Closed'),
       },
       {
-        count: this.incidentStats.overdue_count,
+        count: this.incidentStats.overdue.total,
         style: `border: none`,
         title: this.$t('~~Overdue'),
       },
@@ -695,6 +610,22 @@ export default {
     this.fetchCircularBarplotData(new Date(), 30);
   },
   methods: {
+    setLegend() {
+      this.displayedWorkTypeSvgs = this.incident.created_work_types.map(
+        (workType) => {
+          const template = templates[workType] || templates.unknown;
+          const svg = template
+            .replace('{{fillColor}}', '#61D5F8')
+            .replace('{{strokeColor}}', 'black')
+            .replace('{{multiple}}', '');
+          return {
+            svg,
+            key: workType,
+            selected: false,
+          };
+        },
+      );
+    },
     async fetchCircularBarplotData(date, interval) {
       console.log('fetching...');
       this.circularBarplotData = [];
@@ -713,22 +644,26 @@ export default {
     },
     async getRecentIncidents() {
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,turn_on_release&limit=8&sort=-start_at`,
+        `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,incident_type,color,turn_on_release&limit=8&sort=-start_at`,
       );
       const { results } = response.data;
       return results;
     },
     async getOrganizations() {
+      const { start_date, end_date, incident } = this.queryFilter;
       const params = {
-        limit: 20,
+        start_date: start_date.format('YYYY-MM-DD'),
+        end_date: end_date.format('YYYY-MM-DD'),
       };
+      if (incident) {
+        params.incident = incident;
+      }
       const queryString = getQueryString(params);
 
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.incidentId}/organizations?${queryString}`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/organization_statistics?${queryString}`,
       );
-      const { results } = response.data;
-      return results;
+      return response.data;
     },
     async loadMap() {
       this.mapLoading = true;
@@ -741,17 +676,19 @@ export default {
     },
     async getAllEvents() {
       const params = {
-        limit: 1500,
+        limit: 60000,
         event_key__in: Object.keys(this.events).join(','),
         sort: 'created_at',
-        incident: this.incidentId,
+        incident: this.queryFilter.incident || '',
+        created_at__gte: this.queryFilter.start_date.toISOString(),
+        created_at__lte: this.queryFilter.end_date.toISOString(),
       };
       const queryString = getQueryString(params);
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
       );
       this.markers = response.data.results;
-      [this.currentEvent] = this.markers;
+      // [this.currentEvent] = this.markers;
 
       // let next;
       // next = response.data.next;
@@ -763,6 +700,22 @@ export default {
       // }
       // this.pollNewEvents();
     },
+    async getLatestEvents() {
+      const params = {
+        limit: 100,
+        created_at__gt: this.$moment().add(-24, 'hours').toISOString(),
+        'event_key__in!': `${[
+          'user_join_worksite-data_with_worksite',
+          'user_unjoin_worksite-data_from_worksite',
+        ].join(',')}`,
+      };
+      const queryString = getQueryString(params);
+      const { data } = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
+      );
+      this.liveEvents = data.results;
+    },
+
     async renderMap() {
       if (!this.map) {
         this.map = L.map('map', {
@@ -794,17 +747,26 @@ export default {
 
       this.setLayer();
 
-      this.incidents = await this.getRecentIncidents();
-      this.organizations = await this.getOrganizations();
       this.events = {
-        user_join_wwwtsp_with_organization: 'patient',
-        'user_join_work-type-status_with_wwwtsp': 'recipient',
-        user_create_worksite: 'recipient',
+        user_create_worksite: true,
       };
       await this.getAllEvents();
       this.lastEventTimestamp = this.$moment().toISOString();
       const worksiteLayer = getMarkerLayer([], map, this);
       worksiteLayer.addTo(map);
+
+      // Initial Draw
+      for (let i = 0; i < this.markers.length; i++) {
+        this.addMarker(this.markers[i], i);
+      }
+
+      worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
+      worksiteLayer.redraw();
+
+      // Last 2 hours
+      await this.getLatestEvents();
+      const liveLayer = getLiveLayer();
+      liveLayer.addTo(map);
 
       map.attributionControl.setPosition('bottomright');
     },
@@ -813,15 +775,15 @@ export default {
       const y1 = actorMarkerSprite.y;
       const x2 = patientMarkerSprite.x;
       const y2 = patientMarkerSprite.y;
-      const ang1 = degreesToRadians(30); // in radians
-      const ang2 = degreesToRadians(30);
+      const ang1 = degreesToRadians(randomIntFromInterval(30, 45)); // in radians
+      const ang2 = degreesToRadians(randomIntFromInterval(45, 60));
 
       const len = Math.hypot(x2 - x1, y2 - y1);
-      const ax1 = Math.cos(ang1) * len * (1 / 3);
-      const ay1 = Math.sin(ang1) * len * (1 / 3);
+      const ax1 = Math.cos(ang1) * len * (1 / randomIntFromInterval(2, 5));
+      const ay1 = Math.sin(ang1) * len * (1 / randomIntFromInterval(2, 5));
 
-      const ax2 = Math.cos(ang2) * len * (1 / 3);
-      const ay2 = Math.sin(ang2) * len * (1 / 3);
+      const ax2 = Math.cos(ang2) * len * (1 / randomIntFromInterval(2, 5));
+      const ay2 = Math.sin(ang2) * len * (1 / randomIntFromInterval(2, 5));
       const linksGraphics = new Graphics();
       linksGraphics.x1 = x1;
       linksGraphics.y1 = y1;
@@ -888,7 +850,7 @@ export default {
     },
     refresh() {
       this.map.eachLayer((layer) => {
-        if (layer.key === 'marker_layer') {
+        if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
           const container = layer._pixiContainer;
           container.children.forEach((markerSprite) => {
             markerSprite.visible = this.getMarkerVisibility(markerSprite);
@@ -899,12 +861,122 @@ export default {
         }
       });
     },
-    generateMarker() {
+    refreshTimeline(index) {
+      this.map.eachLayer((layer) => {
+        if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
+          const container = layer._pixiContainer;
+          container.children.forEach((markerSprite) => {
+            markerSprite.visible = markerSprite.index <= index;
+          });
+
+          layer._renderer.render(container);
+          layer.redraw();
+        }
+      });
+    },
+    addMarker(marker, index) {
       this.map.eachLayer((layer) => {
         if (layer.key === 'marker_layer') {
-          const marker = this.markers[this.currentEventIndex];
-          this.currentEvent = marker;
+          const markerTemplate = templates.circle;
+          let patientMarkerSprite = null;
+          if (
+            marker.recipient_blurred_location ||
+            marker.patient_blurred_location
+          ) {
+            const location =
+              marker[`${marker.map_destination}_blurred_location`];
+            const patientCoords = layer.utils.latLngToLayerPoint([
+              location.coordinates[1],
+              location.coordinates[0],
+            ]);
+
+            const wwtsp = marker.attr[`${marker.map_destination}_wwtsp`];
+            let color = '#d0021b';
+            let strokeColor = '#e30001';
+            let workTypeKey = null;
+            if (wwtsp && wwtsp.length > 0) {
+              const workType = orderBy(
+                wwtsp,
+                ['commercial_value'],
+                ['desc'],
+              )[0];
+              workTypeKey = workType.work_type_key;
+              const colorsKey = `${workType.status}_${
+                workType.claimed_by ? 'claimed' : 'unclaimed'
+              }`;
+              // const worksiteTemplate = templates.circle;
+              const spriteColors = colors[colorsKey];
+              color = spriteColors.fillColor;
+              strokeColor = spriteColors.strokeColor;
+            } else if (
+              marker.attr.recipient_status ||
+              marker.attr.patient_status
+            ) {
+              const statusProp =
+                marker.attr[`${marker.map_destination}_status`];
+              const claimed = marker.attr[
+                `${marker.map_destination}_claimed_by`
+              ]
+                ? 'claimed'
+                : 'unclaimed';
+              const colorsKey = `${statusProp}_${claimed}`;
+              const spriteColors = colors[colorsKey];
+              color = spriteColors.fillColor;
+              strokeColor = spriteColors.strokeColor;
+              workTypeKey =
+                marker.attr[`${marker.map_destination}_work_type_key`];
+            }
+
+            patientMarkerSprite = new Sprite();
+            patientMarkerSprite.index = index;
+            patientMarkerSprite.x = patientCoords.x;
+            patientMarkerSprite.y = patientCoords.y;
+            patientMarkerSprite.x0 = patientCoords.x;
+            patientMarkerSprite.y0 = patientCoords.y;
+            patientMarkerSprite.interactive = false;
+            patientMarkerSprite.anchor.set(0.5, 0.5);
+            const svg = markerTemplate
+              .replace('{{fillColor}}', color)
+              .replace('{{strokeColor}}', 'black');
+            let texture = this.textureMap[color];
+            if (!texture) {
+              this.textureMap[color] = Texture.from(svg);
+              texture = this.textureMap[color];
+            }
+            patientMarkerSprite.texture = texture;
+            patientMarkerSprite.visible = true;
+            patientMarkerSprite.color = color;
+            patientMarkerSprite.strokeColor = strokeColor;
+            patientMarkerSprite.workTypeKey = workTypeKey;
+            patientMarkerSprite.type = 'patient';
+
+            const detailedTemplate =
+              templates[workTypeKey] || templates.unknown;
+            const typeSvg = detailedTemplate
+              .replace('{{fillColor}}', color)
+              .replace('{{strokeColor}}', 'black');
+
+            patientMarkerSprite.basicTexture = texture;
+            patientMarkerSprite.detailedTexture = Texture.from(typeSvg);
+
+            layer._pixiContainer.addChild(patientMarkerSprite);
+          }
+        }
+      });
+    },
+    generateMarker() {
+      this.map.eachLayer((layer) => {
+        if (layer.key === 'live_layer') {
+          const marker = this.liveEvents[this.currentEventIndex];
           this.currentEventIndex++;
+          if (!marker) {
+            layer._renderer.render(layer._pixiContainer);
+            layer.redraw();
+            return;
+          }
+          this.currentEvent = marker;
+          this.liveIncidents.push(this.currentEvent.attr.incident_name);
+          this.$refs.incidentScroll.scrollTop = this.$refs.incidentScroll.scrollHeight;
           const markerTemplate = templates.circle;
           let actorMarkerSprite = null;
           let patientMarkerSprite = null;
@@ -922,6 +994,7 @@ export default {
             actorMarkerSprite.interactive = false;
             actorMarkerSprite.anchor.set(0.5, 0.5);
             actorMarkerSprite.type = 'actor';
+            actorMarkerSprite.live = true;
             actorMarkerSprite.texture = this.orbTexture;
             actorMarkerSprite.visible = true;
             layer._pixiContainer.addChild(actorMarkerSprite);
@@ -943,7 +1016,7 @@ export default {
             let strokeColor = '#e30001';
             let workTypeKey = null;
             if (wwtsp && wwtsp.length > 0) {
-              const workType = _.orderBy(
+              const workType = orderBy(
                 wwtsp,
                 ['commercial_value'],
                 ['desc'],
@@ -982,6 +1055,7 @@ export default {
             patientMarkerSprite.y0 = patientCoords.y;
             patientMarkerSprite.interactive = false;
             patientMarkerSprite.anchor.set(0.5, 0.5);
+            patientMarkerSprite.live = true;
             const svg = markerTemplate
               .replace('{{fillColor}}', color)
               .replace('{{strokeColor}}', 'black');
@@ -1017,6 +1091,7 @@ export default {
               actorMarkerSprite,
               patientMarkerSprite,
             );
+            linksGraphics.live = true;
             actorMarkerSprite.workTypeKey = patientMarkerSprite.workTypeKey;
             actorMarkerSprite.visible = this.getMarkerVisibility(
               actorMarkerSprite,
@@ -1051,7 +1126,7 @@ export default {
             this.currentPost === null ||
             Math.abs(this.startTime - new Date()) / 1000 > 10
           ) {
-            this.currentPost = _.nth(this.eventStreamData, 3);
+            this.currentPost = nth(this.eventStreamData, 3);
             this.startTime = new Date();
           }
           this.eventStreamData = this.eventStreamData.slice(0, -1);
@@ -1124,8 +1199,18 @@ export default {
         .replace(/e$/, '')}ed`;
     },
     async getCompletionRateData() {
+      const { start_date, end_date, incident } = this.queryFilter;
+      const params = {
+        start_date: start_date.format('YYYY-MM-DD'),
+        end_date: end_date.format('YYYY-MM-DD'),
+      };
+      if (incident) {
+        params.incident = incident;
+      }
+      const queryString = getQueryString(params);
+
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?start_date=2021-06-15&end_date=2021-07-15`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/completion_rate?${queryString}`,
       );
       const chart = response.data;
 
@@ -1198,8 +1283,18 @@ export default {
       return { options, data };
     },
     async getIncidentStats() {
+      const { start_date, end_date, incident } = this.queryFilter;
+      const params = {
+        start_date: start_date.format('YYYY-MM-DD'),
+        end_date: end_date.format('YYYY-MM-DD'),
+      };
+      if (incident) {
+        params.incident = incident;
+      }
+      const queryString = getQueryString(params);
+
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/reports_data/incident_statistics?incident=${this.incidentId}`,
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/worksite_statistics?${queryString}`,
       );
       this.incidentStats = response.data;
     },
@@ -1250,7 +1345,7 @@ export default {
   },
   computed: {
     visibleWorkTypes() {
-      const selectedWorkTypes = Object.values(this.displayedWorkTypeSvgs)
+      const selectedWorkTypes = this.displayedWorkTypeSvgs
         .filter((s) => s.selected)
         .map((s) => s.key);
       if (selectedWorkTypes.length > 0) {
@@ -1276,7 +1371,7 @@ export default {
         ['reported_count', '0.5fr', 'Cases'],
         ['claimed_count', '0.5fr', 'Claimed'],
         ['calls', '0.5fr'],
-        ['commercial_value', '0.5fr', 'Value'],
+        ['value', '0.5fr'],
       ]);
       columns.forEach((column) => {
         column.titleClass = 'small-font';

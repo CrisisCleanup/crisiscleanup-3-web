@@ -23,7 +23,9 @@
         <div class="grid grid-cols-2">
           <div class="col-span-1">
             <div class="text-crisiscleanup-dark-300">{{ $t('TYPE') }}</div>
-            <div>{{ $t(generalInfo.type_t ? generalInfo.type_t : 'Unknown') }}</div>
+            <div>
+              {{ $t(generalInfo.type_t ? generalInfo.type_t : 'Unknown') }}
+            </div>
           </div>
           <div class="col-span-1">
             <div class="text-crisiscleanup-dark-300">{{ $t('ROLE') }}</div>
@@ -37,7 +39,11 @@
             </div>
             <div>
               {{
-                $t(generalInfo.reported_count !== null ? generalInfo.reported_count : 0)
+                $t(
+                  generalInfo.reported_count !== null
+                    ? generalInfo.reported_count
+                    : 0,
+                )
               }}
             </div>
           </div>
@@ -81,7 +87,9 @@
         >
           <div class="mt-2">{{ $t('INCIDENTS') }}</div>
           <div class="ml-auto text-lg">
-            <div class="chevron-down"><font-awesome-icon icon="chevron-down" /></div>
+            <div class="chevron-down">
+              <font-awesome-icon icon="chevron-down" />
+            </div>
           </div>
         </div>
         <div class="overflow-hidden" :class="showIncidents ? 'h-full' : 'h-0'">
@@ -100,7 +108,9 @@
         >
           <div class="mt-2">{{ $t('CAPABILITY') }}</div>
           <div class="ml-auto text-lg">
-            <div class="chevron-down"><font-awesome-icon icon="chevron-down" /></div>
+            <div class="chevron-down">
+              <font-awesome-icon icon="chevron-down" />
+            </div>
           </div>
         </div>
         <div

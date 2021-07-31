@@ -18,8 +18,8 @@
           <div class="w-full h-10">
             <CaseDonutChart
               class="w-full h-full"
-              :chartId="`case-donut-chart-${index}`"
-              :chartData="{
+              :chart-id="`case-donut-chart-${index}`"
+              :chart-data="{
                 reportedCases: incident.cases,
                 claimedCases: incident.claimed,
                 completedCases: incident.completed,

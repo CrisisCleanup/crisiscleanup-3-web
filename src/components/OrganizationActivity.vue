@@ -2,7 +2,10 @@
   <div
     class="rounded relative text-white grid grid-rows-7 justify-center items-center w-full"
   >
-    <div class="absolute top-0 right-0 text-center rounded-full hover:bg-gray-500 w-5 h-5 m-1" @click="$emit('close')">
+    <div
+      class="absolute top-0 right-0 text-center rounded-full hover:bg-gray-500 w-5 h-5 m-1"
+      @click="$emit('close')"
+    >
       X
     </div>
     <div class="grid grid-cols-4 pt-5 ml-3 row-span-1">
@@ -133,8 +136,9 @@ export default {
     },
     organizationImage: {
       type: String,
-      default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png'
-      },
+      default:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Test-Logo.svg/783px-Test-Logo.svg.png',
+    },
   },
   data() {
     return {
