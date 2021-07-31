@@ -17,7 +17,7 @@
       </ul>
     </div>
 
-    <div class="tabs-details p-3">
+    <div :class="details ? 'tabs-details p-3' : ''">
       <slot></slot>
     </div>
   </div>
@@ -34,6 +34,10 @@ export default {
     tabClasses: {
       type: String,
       default: '',
+    },
+    details: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

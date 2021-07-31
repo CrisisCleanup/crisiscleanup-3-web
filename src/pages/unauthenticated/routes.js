@@ -3,6 +3,7 @@ import InvitationSignup from './InvitationSignup.vue';
 import PreliminaryAssessment from './PreliminaryAssessment.vue';
 import PrintToken from './PrintToken.vue';
 import ResetPassword from './ResetPassword';
+import PewPew from './PewPew';
 
 export default [
   {
@@ -33,6 +34,12 @@ export default [
     path: '/password/reset/:token',
     component: ResetPassword,
     name: 'nav.reset_password',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/pew-pew',
+    component: PewPew,
+    name: 'nav.pew',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];

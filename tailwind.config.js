@@ -126,6 +126,7 @@ module.exports = {
         'crisiscleanup-smoke': '#f7f7f7',
       },
       spacing: {
+        '18': '4.5rem',
         '72': '18rem',
         '84': '21rem',
         '96': '24rem',
