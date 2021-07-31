@@ -5,7 +5,7 @@ import PrintToken from './PrintToken.vue';
 import ResetPassword from './ResetPassword';
 import PewPew from './PewPew';
 
-export default [
+const routes = [
   {
     path: '/invitation_token/:token',
     component: InvitationSignup,
@@ -36,10 +36,15 @@ export default [
     name: 'nav.reset_password',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
-  {
+];
+
+if (process.env.NODE_ENV !== 'production') {
+  routes.push({
     path: '/pew-pew',
     component: PewPew,
     name: 'nav.pew',
     meta: { layout: 'unauthenticated', noAuth: true },
-  },
-];
+  });
+}
+
+export default routes;
