@@ -2,12 +2,14 @@ const AppState = {
   statuses: [],
   workTypes: [],
   locationTypes: [],
+  phases: [],
 };
 
 // getters
 const getters = {
   statuses: (state) => state.statuses,
   workTypes: (state) => state.workTypes,
+  phases: (state) => state.phases,
   locationTypes: (state) => state.locationTypes,
   workTypeCommercialValues: (state) => {
     return Object.assign(
@@ -30,6 +32,9 @@ const mutations = {
   },
   setLocationTypes(state, locationTypes) {
     state.locationTypes = locationTypes;
+  },
+  setPhases(state, phases) {
+    state.phases = phases;
   },
 };
 

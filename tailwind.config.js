@@ -105,7 +105,7 @@ module.exports = {
           600: '#35CDF0',
           700: '#24C7ED',
           800: '#12C1EA',
-          900: '#00BBE7',
+          900: '#CFE9F7',
         },
         'crisiscleanup-grey': {
           100: '#D8D8D8',
@@ -124,6 +124,9 @@ module.exports = {
         'crisiscleanup-light-grey': '#f9f9f9',
         'crisiscleanup-light-smoke': '#f2f3f4',
         'crisiscleanup-smoke': '#f7f7f7',
+        'crisiscleanup-grid-blue': '#CFE9F7',
+        'crisiscleanup-grid-grey': '#F2F4F4',
+        'crisiscleanup-grid-yellow': '#FECE09',
       },
       spacing: {
         '18': '4.5rem',

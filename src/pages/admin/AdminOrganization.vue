@@ -307,62 +307,16 @@
         >
           {{ $t('adminOrganization.see_in_django') }}
         </base-link>
-        <div class="flex item-start">
-          <div>
-            <div class="flex items-center justify-start">
-              <form-select
-                :placeholder="$t('adminOrganization.capability')"
-                :value="capabilityToAdd"
-                class="w-auto border border-crisiscleanup-dark-100 multi-select mr-1"
-                select-classes="h-full"
-                :options="selectableCapabilities"
-                multiple
-                item-key="id"
-                label="name_t"
-                searchable
-                @input="
-                  (value) => {
-                    capabilityToAdd = value;
-                  }
-                "
-              />
-              <base-button
-                :text="$t('actions.add')"
-                size="large"
-                variant="solid"
-                :action="
-                  () => {
-                    newCapabilities = [...newCapabilities, ...capabilityToAdd];
-                    capabilityToAdd = null;
-                  }
-                "
-              />
-            </div>
-            <base-text variant="h3">
-              New Capabilties
-            </base-text>
-            <div
-              v-for="capability in newCapabilities"
-              :key="`${capability.id}`"
-            >
-              {{ capability | getCapabilityName(capabilities) }}
-            </div>
-          </div>
-          <div class="mx-3">
-            <base-text variant="h3">
-              {{ $t('adminOrganization.current_capabilities') }}
-            </base-text>
-            <div style="display: grid; grid-column-gap: 10px;">
-              <div
-                class="pr-3"
-                v-for="capability in organization.capabilities"
-                :key="`${capability.id}`"
-              >
-                {{ capability | getCapabilityName(capabilities) }}
-              </div>
-            </div>
-          </div>
-        </div>
+        <capability
+          class="mt-3"
+          :organization-capabilities="organizationCapabilities"
+          :key="JSON.stringify(organizationCapabilities)"
+          @updated="
+            (matrix) => {
+              updatedOrganizationCapabilitiesMatrix = matrix;
+            }
+          "
+        />
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
         <base-text variant="h2" :weight="600">
@@ -658,6 +612,7 @@ import Location from '@/models/Location';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
 import LocationType from '@/models/LocationType';
+import Capability from '@/pages/unauthenticated/Capability';
 import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
 import LocationTool from '../../components/LocationTool';
@@ -668,7 +623,7 @@ import GroupSearchInput from '../../components/GroupSearchInput';
 
 export default {
   name: 'AdminOrganization',
-  components: { GroupSearchInput, Loader, LocationTool },
+  components: { Capability, GroupSearchInput, Loader, LocationTool },
   mixins: [DialogsMixin],
   filters: {
     getCapabilityName(value, capabilities) {
@@ -782,6 +737,9 @@ export default {
           capabilities: await this.$http.get(
             `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
           ),
+          organizationCapabilities: await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/admins/organization_organizations_capabilities?organization=${this.$route.params.organization_id}`,
+          ),
           roleRequests: await this.$http.get(
             `${process.env.VUE_APP_API_BASE_URL}/admins/organization_role_requests?organization=${this.$route.params.organization_id}`,
           ),
@@ -802,6 +760,8 @@ export default {
 
         this.organization = pageData.organization.data;
         this.capabilities = pageData.capabilities.data.results;
+        this.organizationCapabilities =
+          pageData.organizationCapabilities.data.results;
         this.roles = pageData.roles.data.results;
         this.roleRequests = pageData.roleRequests.data.results;
         this.incidentRequests = pageData.incidentRequests.data.results;
@@ -967,20 +927,64 @@ export default {
       }
     },
     async saveCapabilities() {
-      if (this.newCapabilities.length) {
+      const capabilitiesToAdd = [];
+      const capabilitiesToRemove = [];
+
+      this.organizationCapabilities.forEach((org_capability) => {
+        if (
+          this.updatedOrganizationCapabilitiesMatrix[org_capability.phase] &&
+          this.updatedOrganizationCapabilitiesMatrix[org_capability.phase].has(
+            org_capability.capability,
+          )
+        ) {
+          this.updatedOrganizationCapabilitiesMatrix[
+            org_capability.phase
+          ].delete(org_capability.capability);
+        } else {
+          capabilitiesToRemove.push(org_capability);
+        }
+      });
+
+      // eslint-disable-next-line no-restricted-syntax
+      for (const [phase, value] of Object.entries(
+        this.updatedOrganizationCapabilitiesMatrix,
+      )) {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const capability of Array.from(value)) {
+          capabilitiesToAdd.push({
+            organization: this.organization.id,
+            capability,
+            phase,
+          });
+        }
+      }
+
+      if (capabilitiesToRemove.length) {
         try {
           await Promise.all(
-            this.newCapabilities.map((id) =>
-              this.$http.post(
-                `${process.env.VUE_APP_API_BASE_URL}/admins/organization_organizations_capabilities`,
-                {
-                  organization: this.organization.id,
-                  capability: id,
-                },
+            capabilitiesToRemove.map((item) =>
+              this.$http.delete(
+                `${process.env.VUE_APP_API_BASE_URL}/admins/organization_organizations_capabilities/${item.id}`,
               ),
             ),
           );
-          this.newCapabilities = [];
+          this.updatedOrganizationCapabilitiesMatrix = {};
+        } catch (error) {
+          await this.$toasted.error(getErrorMessage(error));
+        }
+      }
+
+      if (capabilitiesToAdd.length) {
+        try {
+          await Promise.all(
+            capabilitiesToAdd.map((item) =>
+              this.$http.post(
+                `${process.env.VUE_APP_API_BASE_URL}/admins/organization_organizations_capabilities`,
+                item,
+              ),
+            ),
+          );
+          this.updatedOrganizationCapabilitiesMatrix = {};
         } catch (error) {
           await this.$toasted.error(getErrorMessage(error));
         }
@@ -1134,6 +1138,8 @@ export default {
       users: [],
       ghostUsers: [],
       capabilities: [],
+      organizationCapabilities: [],
+      updatedOrganizationCapabilitiesMatrix: {},
       incidents: [],
       newCapabilities: [],
       newIncidents: [],

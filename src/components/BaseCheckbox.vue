@@ -1,5 +1,5 @@
 <template>
-  <label class="checkbox-container">
+  <label class="checkbox-container" :style="containerStyle">
     <slot></slot>
     <input
       type="checkbox"
@@ -12,7 +12,7 @@
       @change="change"
       :required="required"
     />
-    <span class="checkmark"></span>
+    <span class="checkmark" :style="checkmarkStyle"></span>
   </label>
 </template>
 <script>
@@ -49,6 +49,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    checkmarkStyle: {
+      type: String,
+      default: 'top: 0;left: 0;',
+    },
+    containerStyle: {
+      type: String,
+      default: 'display: block; padding-left: 30px;',
+    },
   },
   methods: {
     update(e) {
@@ -67,9 +75,7 @@ export default {
 <style scoped>
 /* Customize the label (the container) */
 .checkbox-container {
-  display: block;
   position: relative;
-  padding-left: 30px;
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -89,8 +95,6 @@ export default {
 /* Create a custom checkbox */
 .checkmark {
   position: absolute;
-  top: 0;
-  left: 0;
   height: 20px;
   width: 20px;
   border: solid 1px #c8cacf;

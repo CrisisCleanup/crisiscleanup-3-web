@@ -67,6 +67,7 @@ export default {
       'setStatuses',
       'setWorkTypes',
       'setLocationTypes',
+      'setPhases',
     ]),
     async getEnums() {
       const enums = await hash({
@@ -86,6 +87,14 @@ export default {
             },
           },
         ),
+        phases: this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/incidents_phases`,
+          {
+            headers: {
+              Authorization: null,
+            },
+          },
+        ),
         locationTypes: this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/location_types`,
           {
@@ -98,6 +107,7 @@ export default {
       this.setStatuses(enums.statuses.data.results);
       this.setWorkTypes(enums.workTypes.data.results);
       this.setLocationTypes(enums.locationTypes.data.results);
+      this.setPhases(enums.phases.data.results);
     },
     async pushCurrentEvents() {
       if (this.isLoggedIn()) {

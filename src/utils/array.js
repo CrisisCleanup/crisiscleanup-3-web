@@ -8,3 +8,11 @@ export function groupBy(array, key) {
   });
   return result;
 }
+
+export function childrenBy(dict, key) {
+  const array = dict.null;
+  array.forEach((item) => {
+    item.children = dict[item[key]];
+  });
+  return array;
+}
