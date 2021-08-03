@@ -8,7 +8,7 @@ exports[`DragDrop should render correctly and match snapshot 1`] = `
     class="w-full h-full"
   >
     <div
-      class="relative w-full h-full flex flex-col items-center justify-center"
+      class="relative w-full h-full flex items-center justify-center relative w-full h-full flex flex-col"
     >
       <div
         class="p-2 text-crisiscleanup-grey-700"

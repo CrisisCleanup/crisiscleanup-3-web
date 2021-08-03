@@ -179,6 +179,7 @@ exports[`Table should render correctly with selection 1`] = `
     >
       <label
         class="checkbox-container mb-5"
+        style="display: block; padding-left: 30px;"
       >
          
         <input
@@ -188,6 +189,7 @@ exports[`Table should render correctly with selection 1`] = `
          
         <span
           class="checkmark"
+          style="top: 0px; left: 0px;"
         />
       </label>
     </div>
@@ -244,6 +246,7 @@ exports[`Table should render correctly with selection 1`] = `
         <label
           class="checkbox-container mb-5"
           data-cy="tableview_actionSelect"
+          style="display: block; padding-left: 30px;"
         >
            
           <input
@@ -253,6 +256,7 @@ exports[`Table should render correctly with selection 1`] = `
            
           <span
             class="checkmark"
+            style="top: 0px; left: 0px;"
           />
         </label>
       </div>
@@ -286,6 +290,7 @@ exports[`Table should render correctly with selection 1`] = `
         <label
           class="checkbox-container mb-5"
           data-cy="tableview_actionSelect"
+          style="display: block; padding-left: 30px;"
         >
            
           <input
@@ -295,6 +300,7 @@ exports[`Table should render correctly with selection 1`] = `
            
           <span
             class="checkmark"
+            style="top: 0px; left: 0px;"
           />
         </label>
       </div>

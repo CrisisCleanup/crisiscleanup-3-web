@@ -263,6 +263,7 @@ exports[`Storyshots Basics/BaseButton With Variants 1`] = `
 exports[`Storyshots Basics/BaseCheckbox Disabled 1`] = `
 <label
   class="checkbox-container"
+  style="display: block; padding-left: 30px;"
 >
   Disabled 
   <input
@@ -273,6 +274,7 @@ exports[`Storyshots Basics/BaseCheckbox Disabled 1`] = `
    
   <span
     class="checkmark"
+    style="top: 0px; left: 0px;"
   />
 </label>
 `;
@@ -280,6 +282,7 @@ exports[`Storyshots Basics/BaseCheckbox Disabled 1`] = `
 exports[`Storyshots Basics/BaseCheckbox With Text 1`] = `
 <label
   class="checkbox-container"
+  style="display: block; padding-left: 30px;"
 >
   Check Me 
   <input
@@ -289,6 +292,7 @@ exports[`Storyshots Basics/BaseCheckbox With Text 1`] = `
    
   <span
     class="checkmark"
+    style="top: 0px; left: 0px;"
   />
 </label>
 `;

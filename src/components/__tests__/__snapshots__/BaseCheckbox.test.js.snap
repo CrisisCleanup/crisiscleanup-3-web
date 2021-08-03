@@ -3,6 +3,7 @@
 exports[`BaseCheckbox should match snapshot with props 1`] = `
 <label
   class="checkbox-container"
+  style="display: block; padding-left: 30px;"
 >
    
   <input
@@ -12,6 +13,7 @@ exports[`BaseCheckbox should match snapshot with props 1`] = `
    
   <span
     class="checkmark"
+    style="top: 0px; left: 0px;"
   />
 </label>
 `;
@@ -19,6 +21,7 @@ exports[`BaseCheckbox should match snapshot with props 1`] = `
 exports[`BaseCheckbox should render correctly and match snapshot 1`] = `
 <label
   class="checkbox-container"
+  style="display: block; padding-left: 30px;"
 >
    
   <input
@@ -28,6 +31,7 @@ exports[`BaseCheckbox should render correctly and match snapshot 1`] = `
    
   <span
     class="checkmark"
+    style="top: 0px; left: 0px;"
   />
 </label>
 `;
