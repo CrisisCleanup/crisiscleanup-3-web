@@ -1,12 +1,12 @@
 <template>
-  <div class="absolute top-0 right-0 left-0 bottom-0" :style="styles">
+  <div class="pewpew absolute top-0 right-0 left-0 bottom-0" :style="styles">
     <div class="grid grid-cols-6 relative">
-      <div class="absolute top-0 right-0 px-1 w-full mt-24 sm:w-1/3 sm:mt-20">
+      <div class="absolute right-0 px-1 w-full sm:w-1/3" style="top: 10%;">
         <OrganizationActivityModal
           @close="closeModal"
           :general-info="orgInfo.generalInfo"
           class="x-translate"
-          style="z-index: 1001;"
+          style="z-index: 1002;"
         />
       </div>
       <div
@@ -1386,7 +1386,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="postcss">
 @import '~leaflet/dist/leaflet.css';
 
 .leaflet-data-marker svg {
@@ -1475,5 +1475,26 @@ export default {
 
 .site-item {
   height: 150px;
+}
+
+.pewpew {
+  ::-webkit-scrollbar {
+    width: 20px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #d6dee1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #a8bbbf;
+  }
 }
 </style>
