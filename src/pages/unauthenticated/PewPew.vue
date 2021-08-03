@@ -340,6 +340,7 @@
                 style="height: 450px;"
                 :body-style="{ maxHeight: '450px', ...styles }"
                 :header-style="styles"
+                @rowClick="onRowClick"
               ></Table>
             </div>
             <div class="row-span-5">
