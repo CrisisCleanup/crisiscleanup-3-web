@@ -2,7 +2,7 @@
   <div class="flex items-center justify-center">
     <form ref="fileform" class="w-full h-full">
       <div
-        class="relative w-full h-full flex flex-col"
+        class="relative w-full h-full flex"
         :class="containerClass || defaultClasses"
       >
         <slot>
@@ -50,7 +50,8 @@ export default {
   data() {
     return {
       dragAndDropCapable: false,
-      defaultClasses: 'items-center justify-center',
+      defaultClasses:
+        'items-center justify-center relative w-full h-full flex flex-col',
     };
   },
   mounted() {

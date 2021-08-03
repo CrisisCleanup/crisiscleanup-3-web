@@ -1,9 +1,12 @@
 <template>
-  <div class="capability-grid">
+  <div
+    class="grid"
+    :style="`grid-template-columns: 250px repeat(${phases.length}, 1fr);`"
+  >
     <template v-for="capability in capabilitiesTree">
       <template v-if="capability.children && capability.children.length > 0">
         <div
-          class="top-level bg-crisiscleanup-grid-grey p-3 flex items-center"
+          class="top-level bg-crisiscleanup-grid-grey p-3 flex items-center mb-1"
           :key="capability.id"
         >
           <font-awesome-icon
@@ -30,7 +33,7 @@
         <div
           v-for="phase in phases"
           :key="`${capability.id}:${phase.phase_key}`"
-          class="text-xs text-center bg-crisiscleanup-grid-grey flex items-center justify-center"
+          class="text-xs text-center bg-crisiscleanup-grid-grey flex items-center justify-center mb-1"
         >
           <span v-if="capability.showChildren">{{
             $t(phase.phase_name_t)
@@ -58,7 +61,7 @@
                 @input="
                   (value) => {
                     setMatrixValue(value, phase.id, child.id);
-                    $emit('updated', { ...organizationCapabilityMatrix })
+                    $emit('updated', { ...organizationCapabilityMatrix });
                   }
                 "
                 :value="isCapabilitySelected(phase.id, child.id)"
@@ -149,15 +152,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.capability-grid {
-  display: grid;
-  /*grid-gap: 2px;*/
-  grid-template-columns: 250px repeat(10, 1fr);
-}
-
-/*.top-level {*/
-/*  grid-column-start: span 11;*/
-/*}*/
-</style>

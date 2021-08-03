@@ -38,7 +38,7 @@ const routes = [
   },
 ];
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.VUE_APP_STAGE !== 'production') {
   routes.push({
     path: '/pew-pew',
     component: PewPew,

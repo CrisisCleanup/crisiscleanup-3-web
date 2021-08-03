@@ -1,70 +1,66 @@
 <template>
   <div class="flex flex-col w-3/4 m-auto">
-    <div class="w-full bg-white shadow mt-6">
-      <div
-        class="border-b px-4 py-2 font-semibold flex justify-between items-center"
-      >
-        {{ $t('profileOrg.general_information') }}
-        <base-button
-          variant="solid"
-          class="px-4 py-2"
-          :text="$t('actions.save')"
-          :alt="$t('actions.save')"
-          :action="saveOrganization"
-        />
-      </div>
-      <div class="px-8 pb-6 mt-2">
-        <div class="flex">
-          <div v-if="!logoUrl" class="flex">
-            <DragDrop
-              class="w-48 h-32 text-center mr-6 border border-dashed"
-              :choose-title="$t('profileOrg.upload_org_logo')"
-              :drag-title="$t('profileOrg.logo_specs')"
-              :multiple="false"
-              @files="
-                (files) => {
-                  handleFileUpload(files, 'fileTypes.logo');
-                }
-              "
-            ></DragDrop>
-
-            <div class="mt-4">
-              <div class="py-1">{{ $t('profileOrg.provide_logo') }}</div>
-              <div class="text-xs py-1 text-crisiscleanup-grey-700">
-                {{ $t('profileOrg.logo_customizes_website') }}
+    <base-button
+      variant="solid"
+      class="px-4 py-2 self-end mt-6"
+      :text="$t('actions.save')"
+      :alt="$t('actions.save')"
+      :action="saveOrganization"
+    />
+    <div class="mt-6 grid grid-cols-2 gap-x-6">
+      <Card>
+        <template #header>
+          <base-text class="px-5 py-3">{{
+            $t('~~Main Information')
+          }}</base-text>
+        </template>
+        <div class="px-5 py-3">
+          <div class="logo-field form-row">
+            <div>{{ $t('~~Logo') }}</div>
+            <div class="flex">
+              <div v-if="!logoUrl">
+                <DragDrop
+                  class="w-84 h-16 text-center mr-6 border border-dashed"
+                  container-class="flex-row items-center justify-center"
+                  :choose-title="$t('profileOrg.upload_org_logo')"
+                  :drag-title="$t('profileOrg.logo_specs')"
+                  :multiple="false"
+                  @files="
+                    (files) => {
+                      handleFileUpload(files, 'fileTypes.logo');
+                    }
+                  "
+                ></DragDrop>
+              </div>
+              <div v-else>
+                <img
+                  class="w-84"
+                  :src="logoUrl"
+                  :alt="$t('profileOrg.organization_logo')"
+                />
+                <DragDrop
+                  class="text-primary-dark cursor-pointer"
+                  :disabled="uploading"
+                  :multiple="false"
+                  @files="
+                    (files) => {
+                      handleFileUpload(files, 'fileTypes.logo');
+                    }
+                  "
+                >
+                  <base-button
+                    class="text-center pb-4 cursor-pointer"
+                    :show-spinner="uploading"
+                    :disabled="uploading"
+                    >{{ $t('actions.update_logo') }}
+                  </base-button>
+                </DragDrop>
               </div>
             </div>
           </div>
-          <div v-else>
-            <img
-              class="w-48 h-32"
-              :src="logoUrl"
-              :alt="$t('profileOrg.organization_logo')"
-            />
-            <DragDrop
-              class="text-primary-dark cursor-pointer"
-              :disabled="uploading"
-              :multiple="false"
-              @files="
-                (files) => {
-                  handleFileUpload(files, 'fileTypes.logo');
-                }
-              "
-            >
-              <base-button
-                class="text-center pb-4 cursor-pointer"
-                :show-spinner="uploading"
-                :disabled="uploading"
-                >{{ $t('actions.update_logo') }}
-              </base-button>
-            </DragDrop>
-          </div>
-        </div>
-        <div class="divider" />
-        <form ref="form" class="org-form">
           <div class="form-row">
-            <base-input
-              class="mr-2 w-1/2"
+            <FloatingInput
+              class="mr-2 w-84"
               :placeholder="$t('profileOrg.organization_name')"
               :value="currentOrganization.name"
               required
@@ -73,10 +69,65 @@
                   updateOrganization(value, 'name');
                 }
               "
-            ></base-input>
+            />
+          </div>
+          <div class="form-row">
+            <FloatingInput
+              class="mr-2 w-84"
+              :placeholder="$t('profileOrg.address')"
+              :value="currentOrganization.address"
+              required
+              @input="
+                (value) => {
+                  updateOrganization(value, 'address');
+                }
+              "
+            />
+          </div>
+          <div class="form-row">
+            <FloatingInput
+              class="mr-2 w-84"
+              :placeholder="$t('profileOrg.url')"
+              :value="currentOrganization.url"
+              required
+              @input="
+                (value) => {
+                  updateOrganization(value, 'url');
+                }
+              "
+            />
+          </div>
+          <div class="form-row">
+            <FloatingInput
+              class="mr-2 w-84"
+              :placeholder="$t('profileOrg.email')"
+              :value="currentOrganization.email"
+              required
+              @input="
+                (value) => {
+                  updateOrganization(value, 'email');
+                }
+              "
+            />
+          </div>
+          <div class="form-row">
+            <FloatingInput
+              class="mr-2 w-84"
+              :placeholder="$t('profileOrg.phone')"
+              :value="currentOrganization.phone"
+              required
+              @input="
+                (value) => {
+                  updateOrganization(value, 'phone');
+                }
+              "
+            />
+          </div>
+          <div class="form-row">
             <form-select
               :placeholder="$t('profileOrg.organization_type')"
-              class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
+              select-classes="h-12"
+              class="w-84 flex-grow border border-crisiscleanup-dark-100"
               :options="organizationTypes"
               :value="currentOrganization.type_t"
               item-key="key"
@@ -88,114 +139,105 @@
               "
             ></form-select>
           </div>
-          <div class="form-row">
-            <base-input
-              class="mr-2 w-1/2"
-              :placeholder="$t('profileOrg.address')"
-              :value="currentOrganization.address"
-              @input="
-                (value) => {
-                  updateOrganization(value, 'address');
-                }
-              "
-            ></base-input>
-            <base-input
-              class="mr-2 w-1/2"
-              :placeholder="$t('profileOrg.url')"
-              :value="currentOrganization.url"
-              @input="
-                (value) => {
-                  updateOrganization(value, 'url');
-                }
-              "
-            ></base-input>
-          </div>
-          <div class="form-row">
-            <base-input
-              class="mr-2 w-1/2"
-              :placeholder="$t('profileOrg.email')"
-              :value="currentOrganization.email"
-              @input="
-                (value) => {
-                  updateOrganization(value, 'email');
-                }
-              "
-            ></base-input>
-          </div>
-          <div class="divider" />
-          <div class="form-row">
-            <base-input
-              class="mr-2 w-1/2"
-              :placeholder="$t('profileOrg.phone')"
-              :value="currentOrganization.phone"
-              :validator="validatePhoneNumber"
-              @input="
-                (value) => {
-                  updateOrganization(value, 'phone');
-                }
-              "
-            ></base-input>
-          </div>
-          <div class="divider" />
-          <div class="pb-2">{{ $t('profileOrg.linkedin') }}</div>
-          <div class="form-row">
-            <div class="w-32 flex items-center">
-              <img
-                src="https://simpleicons.org/icons/facebook.svg"
-                class="w-8 mr-2"
-              />
-              <label class="pr-3">{{ $t('profileOrg.facebook') }}</label>
-            </div>
-            <base-input
-              size="small"
-              :value="currentOrganization.facebook"
-              :placeholder="$t('profileOrg.facebook')"
-              @input="
-                (value) => {
-                  updateOrganization(value, 'facebook');
-                }
-              "
-            />
-          </div>
-          <div class="form-row">
-            <div class="w-32 flex items-center">
-              <img
-                src="https://simpleicons.org/icons/twitter.svg"
-                class="w-8 mr-2"
-              />
-              <label class="pr-3">{{ $t('profileOrg.twitter') }}</label>
-            </div>
-            <base-input
-              size="small"
-              :value="currentOrganization.twitter"
-              :placeholder="$t('profileOrg.twitter')"
-              @input="
-                (value) => {
-                  updateOrganization(value, 'twitter');
-                }
-              "
-            />
-          </div>
-          <div class="divider" />
-          <div class="form-row">
-            <UserSearchInput :placeholder="$t('profileOrg.primary_contact')" />
-          </div>
-        </form>
-      </div>
-    </div>
-    <div class="w-full bg-white shadow mt-6">
-      <div
-        class="border-b px-4 py-2 font-semibold flex justify-between items-center"
-      >
-        {{ $t('profileOrg.incident_information') }}
-      </div>
-      <div class="px-8 pb-6 mt-2"></div>
-    </div>
-    <div class="flex">
-      <div class="w-1/2 bg-white shadow mt-6 mr-3">
-        <div class="border-b px-8 py-4 font-semibold">
-          {{ $t('profileOrg.primary_response_area') }}
         </div>
+      </Card>
+      <Card>
+        <template #header>
+          <base-text class="px-5 py-3">{{
+            $t('~~General Information')
+          }}</base-text>
+        </template>
+        <div class="px-5 py-3">
+          <div class="form-row">
+            <div>{{ $t('~~Primary Contact') }}</div>
+            <UserSearchInput
+              class="h-12 w-84"
+              :placeholder="$t('profileOrg.primary_contact')"
+            />
+          </div>
+          <div class="form-row">
+            <div>{{ $t('~~Linked Account') }}</div>
+            <div class="form-row flex">
+              <div class="w-32 flex items-center">
+                <img src="@/assets/facebook.svg" class="w-8 mr-2" />
+                <label class="pr-3 text-xs">{{
+                  $t('profileOrg.facebook')
+                }}</label>
+              </div>
+              <base-input
+                class="w-84"
+                size="small"
+                :value="currentOrganization.facebook"
+                :placeholder="$t('profileOrg.facebook')"
+                @input="
+                  (value) => {
+                    updateOrganization(value, 'facebook');
+                  }
+                "
+              />
+            </div>
+            <div class="form-row flex">
+              <div class="w-32 flex items-center">
+                <img src="@/assets/twitter.svg" class="ml-1 w-6 mr-2" />
+                <label class="pr-3 text-xs">{{
+                  $t('profileOrg.twitter')
+                }}</label>
+              </div>
+              <base-input
+                class="w-84"
+                size="small"
+                :value="currentOrganization.twitter"
+                :placeholder="$t('profileOrg.twitter')"
+                @input="
+                  (value) => {
+                    updateOrganization(value, 'twitter');
+                  }
+                "
+              />
+            </div>
+          </div>
+        </div>
+      </Card>
+    </div>
+    <div class="mt-6" v-if="false">
+      <Card>
+        <template #header>
+          <base-text class="px-5 py-3">{{ $t('~~Capabilities') }}</base-text>
+        </template>
+        <Capability class="px-5 py-3" />
+      </Card>
+    </div>
+    <div class="mt-6 grid grid-cols-2 gap-x-6">
+      <Card>
+        <template #header>
+          <base-text class="px-5 py-3">
+            {{ $t('~~Request Redeploy') }}
+          </base-text>
+        </template>
+      </Card>
+      <Card>
+        <template #header>
+          <base-text class="px-5 py-3">
+            {{ $t('~~Current Incidents') }}
+          </base-text>
+        </template>
+        <div class="px-5 py-3 grid grid-cols-2 gap-x-6">
+          <div
+            v-for="incident in currentOrganization.approved_incidents"
+            :key="`${incident}`"
+          >
+            {{ incident | getIncidentName }}
+          </div>
+        </div>
+      </Card>
+    </div>
+    <div class="mt-6 grid grid-cols-2 gap-x-6">
+      <Card>
+        <template #header>
+          <base-text class="px-5 py-3">
+            {{ $t('profileOrg.primary_response_area') }}
+          </base-text>
+        </template>
         <div class="py-2 flex items-center justify-center">
           <base-button
             v-if="currentOrganization.primary_location"
@@ -225,11 +267,13 @@
           ></base-button>
         </div>
         <div id="primary-location" class="w-full h-64"></div>
-      </div>
-      <div class="w-1/2 bg-white shadow mt-6">
-        <div class="border-b px-8 py-4 font-semibold">
-          {{ $t('profileOrg.secondary_response_area') }}
-        </div>
+      </Card>
+      <Card>
+        <template #header>
+          <base-text class="px-5 py-3">
+            {{ $t('profileOrg.secondary_response_area') }}
+          </base-text>
+        </template>
         <div class="py-2 flex items-center justify-center">
           <base-button
             v-if="currentOrganization.secondary_location"
@@ -259,7 +303,7 @@
           ></base-button>
         </div>
         <div id="secondary-location" class="w-full h-64"></div>
-      </div>
+      </Card>
       <modal
         v-if="showingLocationModal"
         :title="$t('profileOrg.select_location')"
@@ -280,8 +324,7 @@
       <div
         class="border-b px-4 py-2 font-semibold flex justify-between items-center"
       >
-        {{ $t('profileOrg.custom_terms_waivers') }}
-        {{ $t('profileOrg.custom_terms_waivers_description') }}
+        {{ $t('Documents and Materials') }}
         <base-button
           variant="solid"
           class="px-4 py-2"
@@ -439,18 +482,35 @@
 import * as L from 'leaflet';
 import Organization from '@/models/Organization';
 import Location from '@/models/Location';
+import Incident from '@/models/Incident';
 import User from '@/models/User';
 import { getErrorMessage } from '@/utils/errors';
 import UserSearchInput from '@/components/UserSearchInput';
 import LocationType from '@/models/LocationType';
 import { ValidateMixin } from '@/mixins';
+import FloatingInput from '@/components/FloatingInput';
+import Card from '@/components/cards/Card';
+import Capability from '@/pages/unauthenticated/Capability';
 import DragDrop from '../../components/DragDrop';
 import LocationTool from '../../components/LocationTool';
 import { mapTileLayer } from '../../utils/map';
 
 export default {
   name: 'Profile',
-  components: { UserSearchInput, DragDrop, LocationTool },
+  components: {
+    Capability,
+    Card,
+    FloatingInput,
+    UserSearchInput,
+    DragDrop,
+    LocationTool,
+  },
+  filters: {
+    getIncidentName(value) {
+      const incident = Incident.query().where('id', value).first();
+      return incident ? incident.name : '';
+    },
+  },
   mixins: [ValidateMixin],
   data() {
     return {
@@ -728,6 +788,21 @@ export default {
 }
 
 .form-row {
-  @apply flex pb-4;
+  @apply pb-4;
+}
+</style>
+
+<style>
+.form-row #autosuggest__input {
+  height: 3rem !important;
+}
+
+.form-row .icon-container {
+  height: 3rem !important;
+}
+
+.form-row .form-field {
+  padding: 0 !important;
+  margin: 0 !important;
 }
 </style>
