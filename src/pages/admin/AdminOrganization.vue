@@ -680,6 +680,7 @@ import Organization from '@/models/Organization';
 import User from '@/models/User';
 import LocationType from '@/models/LocationType';
 import Capability from '@/pages/unauthenticated/Capability';
+import DragDrop from '@/components/DragDrop';
 import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
 import LocationTool from '../../components/LocationTool';
@@ -687,7 +688,6 @@ import { hash } from '../../utils/promise';
 import { DialogsMixin, CapabilityMixin } from '../../mixins';
 import { mapTileLayer } from '../../utils/map';
 import GroupSearchInput from '../../components/GroupSearchInput';
-import DragDrop from '@/components/DragDrop';
 
 export default {
   name: 'AdminOrganization',
