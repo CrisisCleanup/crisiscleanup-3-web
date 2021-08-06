@@ -8,6 +8,7 @@ import { TrainingMixin } from './training';
 import UserMixin from './user';
 import ValidateMixin from './validate.js';
 import EventsMixin from './events.js';
+import CapabilityMixin from './capability.js';
 import { WorksitesMixin } from './worksite';
 
 export {
@@ -24,4 +25,5 @@ export {
   DialogsMixin,
   IncidentMixin,
   EventsMixin,
+  CapabilityMixin,
 };

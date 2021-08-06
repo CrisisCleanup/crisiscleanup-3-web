@@ -1,7 +1,7 @@
 <template>
   <div
     class="grid"
-    :style="`grid-template-columns: 250px repeat(${phases.length}, 1fr);`"
+    :style="`grid-template-columns: max-content repeat(${phases.length}, [col-start] minmax(auto, 200px) [col-end])`"
   >
     <template v-for="capability in capabilitiesTree">
       <template v-if="capability.children && capability.children.length > 0">

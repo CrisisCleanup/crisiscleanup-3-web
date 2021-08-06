@@ -114,11 +114,11 @@
             <FloatingInput
               class="mr-2 w-84"
               :placeholder="$t('profileOrg.phone')"
-              :value="currentOrganization.phone"
+              :value="currentOrganization.phone1"
               required
               @input="
                 (value) => {
-                  updateOrganization(value, 'phone');
+                  updateOrganization(value, 'phone1');
                 }
               "
             />
@@ -196,15 +196,37 @@
               />
             </div>
           </div>
+          <div class="form-row">
+            <FloatingInput
+              class="mr-2 w-84"
+              :placeholder="$t('~~Donation URL')"
+              :value="currentOrganization.donate_url"
+              required
+              @input="
+                (value) => {
+                  updateOrganization(value, 'donate_url');
+                }
+              "
+            />
+          </div>
         </div>
       </Card>
     </div>
-    <div class="mt-6" v-if="false">
+    <div class="mt-6">
       <Card>
         <template #header>
           <base-text class="px-5 py-3">{{ $t('~~Capabilities') }}</base-text>
         </template>
-        <Capability class="px-5 py-3" />
+        <Capability
+          class="px-5 py-3"
+          :organization-capabilities="organizationCapabilities"
+          :key="JSON.stringify(organizationCapabilities)"
+          @updated="
+            (matrix) => {
+              updatedOrganizationCapabilitiesMatrix = matrix;
+            }
+          "
+        />
       </Card>
     </div>
     <div class="mt-6 grid grid-cols-2 gap-x-6">
@@ -214,6 +236,7 @@
             {{ $t('~~Request Redeploy') }}
           </base-text>
         </template>
+        <RequestRedeploy />
       </Card>
       <Card>
         <template #header>
@@ -221,9 +244,19 @@
             {{ $t('~~Current Incidents') }}
           </base-text>
         </template>
-        <div class="px-5 py-3 grid grid-cols-2 gap-x-6">
+        <div class="px-5 py-1 font-semibold">{{ $t('~~Approved') }}</div>
+        <div class="px-5 py-1 grid grid-cols-2 gap-x-6">
           <div
             v-for="incident in currentOrganization.approved_incidents"
+            :key="`${incident}`"
+          >
+            {{ incident | getIncidentName }}
+          </div>
+        </div>
+        <div class="px-5 py-1 font-semibold">{{ $t('~~Pending') }}</div>
+        <div class="px-5 py-1 grid grid-cols-2 gap-x-6">
+          <div
+            v-for="incident in currentOrganization.pending_incidents"
             :key="`${incident}`"
           >
             {{ incident | getIncidentName }}
@@ -487,10 +520,11 @@ import User from '@/models/User';
 import { getErrorMessage } from '@/utils/errors';
 import UserSearchInput from '@/components/UserSearchInput';
 import LocationType from '@/models/LocationType';
-import { ValidateMixin } from '@/mixins';
+import { ValidateMixin, CapabilityMixin } from '@/mixins';
 import FloatingInput from '@/components/FloatingInput';
 import Card from '@/components/cards/Card';
 import Capability from '@/pages/unauthenticated/Capability';
+import RequestRedeploy from '@/components/RequestRedeploy';
 import DragDrop from '../../components/DragDrop';
 import LocationTool from '../../components/LocationTool';
 import { mapTileLayer } from '../../utils/map';
@@ -498,6 +532,7 @@ import { mapTileLayer } from '../../utils/map';
 export default {
   name: 'Profile',
   components: {
+    RequestRedeploy,
     Capability,
     Card,
     FloatingInput,
@@ -507,11 +542,11 @@ export default {
   },
   filters: {
     getIncidentName(value) {
-      const incident = Incident.query().where('id', value).first();
+      const incident = Incident.query().where('id', Number(value)).first();
       return incident ? incident.name : '';
     },
   },
-  mixins: [ValidateMixin],
+  mixins: [ValidateMixin, CapabilityMixin],
   data() {
     return {
       showingLocationModal: false,
@@ -519,6 +554,8 @@ export default {
       primaryLocationMap: null,
       secondaryLocationMap: null,
       settingLocation: '',
+      organizationCapabilities: [],
+      updatedOrganizationCapabilitiesMatrix: null,
       organizationTypes: [
         'orgType.survivor_client_services',
         'orgType.voad',
@@ -537,6 +574,9 @@ export default {
       return User.find(this.$store.getters['auth/userId']);
     },
     currentOrganization() {
+      return Organization.find(this.currentUser.organization.id);
+    },
+    organization() {
       return Organization.find(this.currentUser.organization.id);
     },
     existingLocation() {
@@ -591,8 +631,15 @@ export default {
     this.createTileLayer().addTo(this.primaryLocationMap);
     this.createTileLayer().addTo(this.secondaryLocationMap);
     await this.reloadMaps();
+    await this.getOrganizationCapabilities();
   },
   methods: {
+    async getOrganizationCapabilities() {
+      const organizationCapabilities = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/organization_organizations_capabilities`,
+      );
+      this.organizationCapabilities = organizationCapabilities.data.results;
+    },
     setCurrentLocation(location) {
       this.currentPolygon = location;
     },
@@ -637,15 +684,13 @@ export default {
       }
     },
     async saveOrganization() {
-      const isValid = this.$refs.form.reportValidity();
-      if (!isValid) {
-        return;
-      }
       try {
         await Organization.api().patch(
           `/organizations/${this.currentOrganization.id}`,
           this.currentOrganization.$toJson(),
         );
+        await this.saveCapabilities();
+        await this.getOrganizationCapabilities();
         await this.$toasted.success(
           this.$t('profileOrg.sucessfully_saved_organization'),
         );

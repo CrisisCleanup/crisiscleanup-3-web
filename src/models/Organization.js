@@ -18,12 +18,21 @@ export default class Organization extends Model {
       user_count: this.attr(null),
       incidents: this.attr(null),
       approved_incidents: this.attr(null),
+      pending_incidents: this.attr(null),
       incident_primary_contacts: this.attr(null),
       primary_contacts: this.attr(null),
       files: this.attr(null),
       custom_ops_message: this.attr(null),
       custom_legal_tos: this.attr(null),
       custom_legal_survivor_waiver: this.attr(null),
+      address: this.attr(null),
+      city: this.attr(null),
+      state: this.attr(null),
+      postal_code: this.attr(null),
+      phone1: this.attr(null),
+      phone2: this.attr(null),
+      email: this.attr(null),
+      donate_url: this.attr(null),
     };
   }
 

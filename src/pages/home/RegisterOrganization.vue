@@ -242,28 +242,40 @@
                 :placeholder="$t('registerOrg.where_working')"
                 required
               />
-
-              <base-checkbox
-                v-model="organization.publish"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.publish_profile') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.accepted_terms"
-                class="text-base activities-checkbox"
-                required
-              >
-                <div
-                  v-html="
-                    $t('registerOrg') ? $t('registerOrg.tos_priv_agree') : ''
-                  "
-                ></div>
-              </base-checkbox>
             </li>
+
+            <li class="text-xl form-item">
+              {{ $t('~~Capabilities') }}
+              <capability
+                @updated="
+                  (matrix) => {
+                    updatedOrganizationCapabilitiesMatrix = matrix;
+                  }
+                "
+                class="text-sm mt-3"
+              />
+            </li>
+
+            <base-checkbox
+              v-model="organization.publish"
+              class="text-base activities-checkbox"
+            >
+              <div>
+                {{ $t('registerOrg.publish_profile') }}
+              </div>
+            </base-checkbox>
+
+            <base-checkbox
+              v-model="organization.accepted_terms"
+              class="text-base activities-checkbox"
+              required
+            >
+              <div
+                v-html="
+                  $t('registerOrg') ? $t('registerOrg.tos_priv_agree') : ''
+                "
+              ></div>
+            </base-checkbox>
           </ol>
           <base-button
             size="large"
@@ -284,12 +296,19 @@ import Organization from '@/models/Organization';
 import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
 import { getErrorMessage } from '@/utils/errors';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput';
-import { ValidateMixin } from '@/mixins';
+import { CapabilityMixin, ValidateMixin } from '@/mixins';
+import Capability from '@/pages/unauthenticated/Capability';
 
 export default {
   name: 'Register',
-  components: { HomeLayout, HomeNav, HomeActions, OrganizationSearchInput },
-  mixins: [ValidateMixin],
+  components: {
+    Capability,
+    HomeLayout,
+    HomeNav,
+    HomeActions,
+    OrganizationSearchInput,
+  },
+  mixins: [ValidateMixin, CapabilityMixin],
 
   async mounted() {
     const incidentsResponse = await this.$http.get(
@@ -330,6 +349,8 @@ export default {
         mobile: '',
       },
       incidents: [],
+      organizationCapabilities: [],
+      updatedOrganizationCapabilitiesMatrix: null,
       selectedIncidentId: null,
       organizationTypes: [
         'orgType.survivor_client_services',
@@ -351,17 +372,22 @@ export default {
       }
 
       try {
-        await Organization.api().post('/organizations', {
-          ...this.organization,
-          contact: { ...this.user },
-        });
+        const savedOrganization = await Organization.api().post(
+          '/organizations',
+          {
+            ...this.organization,
+            contact: { ...this.user },
+          },
+        );
+        [this.organization] = savedOrganization.entities.organizations;
+        await this.saveCapabilities();
         this.$toasted.success(this.$t('registerOrg.org_registration_success'), {
           duration: 7000,
         });
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
+        return;
       }
-
       await this.$router.push('/');
     },
   },

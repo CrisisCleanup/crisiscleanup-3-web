@@ -64,6 +64,27 @@
               size="large"
               :placeholder="$t('adminOrganization.name_org')"
             />
+            <base-input
+              v-model="organization.email"
+              type="text"
+              class="input text-sm"
+              size="large"
+              :placeholder="$t('adminOrganization.email')"
+            />
+            <base-input
+              v-model="organization.phone1"
+              type="text"
+              class="input text-sm"
+              size="large"
+              :placeholder="$t('adminOrganization.phone1')"
+            />
+            <base-input
+              v-model="organization.address"
+              type="text"
+              class="input text-sm"
+              size="large"
+              :placeholder="$t('adminOrganization.address')"
+            />
             <textarea
               v-model="organization.admin_notes"
               class="border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none resize-none w-full"
@@ -118,6 +139,52 @@
                 {{ key.api_key }} ({{ key.type }})
               </div>
             </template>
+
+            <div class="logo-field form-row mt-3">
+              <base-text variant="h2" :weight="600">
+                {{ $t('~~Logo') }}
+              </base-text>
+              <div class="flex">
+                <div v-if="!logoUrl">
+                  <DragDrop
+                    class="w-84 h-16 text-center mr-6 border border-dashed"
+                    container-class="flex-row items-center justify-center"
+                    :choose-title="$t('profileOrg.upload_org_logo')"
+                    :drag-title="$t('profileOrg.logo_specs')"
+                    :multiple="false"
+                    @files="
+                      (files) => {
+                        handleFileUpload(files, 'fileTypes.logo');
+                      }
+                    "
+                  ></DragDrop>
+                </div>
+                <div v-else>
+                  <img
+                    class="w-84"
+                    :src="logoUrl"
+                    :alt="$t('profileOrg.organization_logo')"
+                  />
+                  <DragDrop
+                    class="text-primary-dark cursor-pointer"
+                    :disabled="uploading"
+                    :multiple="false"
+                    @files="
+                      (files) => {
+                        handleFileUpload(files, 'fileTypes.logo');
+                      }
+                    "
+                  >
+                    <base-button
+                      class="text-center pb-4 cursor-pointer"
+                      :show-spinner="uploading"
+                      :disabled="uploading"
+                      >{{ $t('actions.update_logo') }}
+                    </base-button>
+                  </DragDrop>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="w-1/2 bg-white p-3 shadow text-sm">
             <base-text variant="h3">
@@ -617,14 +684,15 @@ import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
 import LocationTool from '../../components/LocationTool';
 import { hash } from '../../utils/promise';
-import { DialogsMixin } from '../../mixins';
+import { DialogsMixin, CapabilityMixin } from '../../mixins';
 import { mapTileLayer } from '../../utils/map';
 import GroupSearchInput from '../../components/GroupSearchInput';
+import DragDrop from '@/components/DragDrop';
 
 export default {
   name: 'AdminOrganization',
-  components: { Capability, GroupSearchInput, Loader, LocationTool },
-  mixins: [DialogsMixin],
+  components: { DragDrop, Capability, GroupSearchInput, Loader, LocationTool },
+  mixins: [DialogsMixin, CapabilityMixin],
   filters: {
     getCapabilityName(value, capabilities) {
       return (
@@ -638,6 +706,17 @@ export default {
   computed: {
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
+    },
+    logoUrl() {
+      if (this.organization.files.length) {
+        const logos = this.organization.files.filter(
+          (file) => file.file_type_t === 'fileTypes.logo',
+        );
+        if (logos.length) {
+          return logos[0].small_thumbnail_url;
+        }
+      }
+      return '';
     },
     existingLocation() {
       if (this.settingLocation === 'primary_location') {
@@ -694,6 +773,48 @@ export default {
     });
   },
   methods: {
+    async handleFileUpload(fileList, type, deleteOldFiles = true) {
+      if (fileList.length === 0) {
+        this.uploading = false;
+        return;
+      }
+      const formData = new FormData();
+      formData.append('upload', fileList[fileList.length - 1]);
+      formData.append('type_t', type);
+      this.uploading = true;
+      try {
+        const result = await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/files`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            },
+          },
+        );
+        const file = result.data.id;
+
+        const files = this.organization.files.filter(
+          (picture) => picture.file_type_t === type,
+        );
+
+        if (deleteOldFiles) {
+          const oldFiles = files.map((picture) =>
+            Organization.api().deleteFile(this.organization.id, picture.file),
+          );
+          await Promise.all(oldFiles);
+        }
+
+        await Organization.api().addFile(this.organization.id, file, type);
+        this.loadPageData();
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.uploading = false;
+      }
+    },
+
     getContactView(request) {
       const contact = request.requested_by_contact;
       if (!request.requested_by_contact) {
@@ -926,70 +1047,6 @@ export default {
         );
       }
     },
-    async saveCapabilities() {
-      const capabilitiesToAdd = [];
-      const capabilitiesToRemove = [];
-
-      this.organizationCapabilities.forEach((org_capability) => {
-        if (
-          this.updatedOrganizationCapabilitiesMatrix[org_capability.phase] &&
-          this.updatedOrganizationCapabilitiesMatrix[org_capability.phase].has(
-            org_capability.capability,
-          )
-        ) {
-          this.updatedOrganizationCapabilitiesMatrix[
-            org_capability.phase
-          ].delete(org_capability.capability);
-        } else {
-          capabilitiesToRemove.push(org_capability);
-        }
-      });
-
-      // eslint-disable-next-line no-restricted-syntax
-      for (const [phase, value] of Object.entries(
-        this.updatedOrganizationCapabilitiesMatrix,
-      )) {
-        // eslint-disable-next-line no-restricted-syntax
-        for (const capability of Array.from(value)) {
-          capabilitiesToAdd.push({
-            organization: this.organization.id,
-            capability,
-            phase,
-          });
-        }
-      }
-
-      if (capabilitiesToRemove.length) {
-        try {
-          await Promise.all(
-            capabilitiesToRemove.map((item) =>
-              this.$http.delete(
-                `${process.env.VUE_APP_API_BASE_URL}/admins/organization_organizations_capabilities/${item.id}`,
-              ),
-            ),
-          );
-          this.updatedOrganizationCapabilitiesMatrix = {};
-        } catch (error) {
-          await this.$toasted.error(getErrorMessage(error));
-        }
-      }
-
-      if (capabilitiesToAdd.length) {
-        try {
-          await Promise.all(
-            capabilitiesToAdd.map((item) =>
-              this.$http.post(
-                `${process.env.VUE_APP_API_BASE_URL}/admins/organization_organizations_capabilities`,
-                item,
-              ),
-            ),
-          );
-          this.updatedOrganizationCapabilitiesMatrix = {};
-        } catch (error) {
-          await this.$toasted.error(getErrorMessage(error));
-        }
-      }
-    },
     async saveIncidents() {
       if (this.newIncidents.length) {
         try {
@@ -1072,7 +1129,7 @@ export default {
         );
         await Promise.all([
           this.saveRole(),
-          this.saveCapabilities(),
+          this.saveCapabilities(true),
           this.saveIncidents(),
           this.saveGroups(),
         ]);
@@ -1139,12 +1196,13 @@ export default {
       ghostUsers: [],
       capabilities: [],
       organizationCapabilities: [],
-      updatedOrganizationCapabilitiesMatrix: {},
+      updatedOrganizationCapabilitiesMatrix: null,
       incidents: [],
       newCapabilities: [],
       newIncidents: [],
       groups: [],
       newGroups: [],
+      uploading: false,
       organizationTypes: [
         'orgType.survivor_client_services',
         'orgType.voad',
