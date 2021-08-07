@@ -6,20 +6,20 @@
     <template v-for="capability in capabilitiesTree">
       <template v-if="capability.children && capability.children.length > 0">
         <div
-          class="top-level bg-crisiscleanup-grid-grey p-3 flex items-center mb-1"
+          class="top-level bg-crisiscleanup-grid-grey p-3 flex items-center mb-1 cursor-pointer"
           :key="capability.id"
+          @click="
+            () => {
+              capability.showChildren = !capability.showChildren;
+              $forceUpdate();
+            }
+          "
         >
           <font-awesome-icon
-            icon="plus"
+            :icon="capability.showChildren ? 'minus' : 'plus'"
             size="lg"
             :title="$t('~~Show Capabilities')"
             class="cursor-pointer text-crisiscleanup-grid-yellow mr-2"
-            @click="
-              () => {
-                capability.showChildren = !capability.showChildren;
-                $forceUpdate();
-              }
-            "
           ></font-awesome-icon>
           {{ capability.name_t }}
           <badge
@@ -33,7 +33,13 @@
         <div
           v-for="phase in phases"
           :key="`${capability.id}:${phase.phase_key}`"
-          class="text-xs text-center bg-crisiscleanup-grid-grey flex items-center justify-center mb-1"
+          class="text-xs text-center bg-crisiscleanup-grid-grey flex items-center justify-center mb-1 cursor-pointer"
+          @click="
+            () => {
+              capability.showChildren = !capability.showChildren;
+              $forceUpdate();
+            }
+          "
         >
           <span v-if="capability.showChildren">{{
             $t(phase.phase_name_t)
@@ -49,9 +55,28 @@
             </div>
             <template v-for="phase in phases">
               <base-checkbox
+                draggable="true"
+                @dragstart.native="
+                  (e) => {
+                    e.dataTransfer.setDragImage($refs.dragImage, null, null);
+                    dragValue = !isCapabilitySelected(phase.id, child.id);
+                    setMatrixValue(
+                      !isCapabilitySelected(phase.id, child.id),
+                      phase.id,
+                      child.id,
+                    );
+                  }
+                "
+                @dragenter.native="
+                  (e) => {
+                    e.dataTransfer.setDragImage($refs.dragImage, null, null);
+                    setMatrixValue(dragValue, phase.id, child.id);
+                    $emit('updated', { ...organizationCapabilityMatrix });
+                  }
+                "
                 checkmark-style=""
                 container-style=""
-                class="border-b p-2 py-4 flex items-center justify-center"
+                class="border-b p-2 py-4 flex items-center justify-center cursor-pointer"
                 :class="
                   isCapabilitySelected(phase.id, child.id)
                     ? 'bg-crisiscleanup-grid-blue border-2 border-white'
@@ -71,6 +96,13 @@
         </template>
       </template>
     </template>
+    <img
+      ref="dragImage"
+      src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs="
+      width="0"
+      height="0"
+      alt=""
+    />
   </div>
 </template>
 <script>
@@ -83,6 +115,7 @@ export default {
     return {
       capabilitiesTree: [],
       organizationCapabilityMatrix: {},
+      dragValue: true,
     };
   },
   props: {

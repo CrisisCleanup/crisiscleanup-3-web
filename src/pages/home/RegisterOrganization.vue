@@ -115,126 +115,6 @@
 
             <li class="text-xl form-item">
               {{ $t('registerOrg.org_roles') }}
-              <base-checkbox
-                v-model="organization.review_other_organizations"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.review_approve') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.review_approve_msg') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.does_damage_assessment"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.damage_assessment') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.damage_assessment_msg') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.does_cleanup"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.cleanup') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.cleanup_msg') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.does_follow_up"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.follow_up') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.follow_up_msg') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.does_minor_repairs"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.minor_repairs') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.minor_repairs_msg') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.does_rebuilding"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.rebuilding') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.rebuilding_msg') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.does_coordination"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.coordination') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.coordination_msg') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.government"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.government') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.government_msg') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.does_other_activity"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.other_activity') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.other_activity_msg') }}
-                </div>
-              </base-checkbox>
-
-              <base-checkbox
-                v-model="organization.not_an_org"
-                class="text-base activities-checkbox"
-              >
-                <div>
-                  {{ $t('registerOrg.not_organization') }}
-                </div>
-                <div>
-                  {{ $t('registerOrg.not_organization_msg') }}
-                </div>
-              </base-checkbox>
-
               <textarea
                 v-model="organization.where_are_you_working"
                 class="text-base w-4/5 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none m-3 p-2 resize-none"
@@ -242,10 +122,6 @@
                 :placeholder="$t('registerOrg.where_working')"
                 required
               />
-            </li>
-
-            <li class="text-xl form-item">
-              {{ $t('~~Capabilities') }}
               <capability
                 @updated="
                   (matrix) => {
