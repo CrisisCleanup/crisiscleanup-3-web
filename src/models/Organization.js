@@ -18,6 +18,7 @@ export default class Organization extends Model {
       user_count: this.attr(null),
       incidents: this.attr(null),
       approved_incidents: this.attr(null),
+      approved_roles: this.attr(null),
       pending_incidents: this.attr(null),
       incident_primary_contacts: this.attr(null),
       primary_contacts: this.attr(null),

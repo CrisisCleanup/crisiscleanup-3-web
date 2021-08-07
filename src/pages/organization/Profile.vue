@@ -149,10 +149,63 @@
         </template>
         <div class="px-5 py-3">
           <div class="form-row">
-            <div>{{ $t('~~Primary Contact') }}</div>
+            <div class="font-semibold">{{ $t('~~Primary Contacts') }}</div>
+            <div
+              style="
+                display: grid;
+                grid-template-columns: max-content max-content max-content max-content;
+                grid-column-gap: 15px;
+                grid-row-gap: 5px;
+              "
+              class="py-1"
+            >
+              <template v-for="contact in organization.primary_contacts">
+                <span class="inline-block" :key="contact.id">
+                  {{ contact.first_name }} {{ contact.last_name }}
+                </span>
+                <div :key="contact.email">
+                  <a
+                    :href="`mailto:${contact.email}`"
+                    :title="contact.email"
+                    :alt="contact.email"
+                  >
+                    <font-awesome-icon icon="envelope" />
+                  </a>
+                </div>
+                <div :key="`phone:${contact.id}`">
+                  <a
+                    :href="`tel:${contact.mobile}`"
+                    v-show="contact.mobile"
+                    :title="contact.mobile"
+                    :alt="contact.mobile"
+                  >
+                    <font-awesome-icon icon="phone" />
+                  </a>
+                </div>
+                <ccu-icon
+                  :key="`delete:${contact.id}`"
+                  :alt="$t('actions.delete')"
+                  class="ml-1"
+                  size="xs"
+                  type="cancel"
+                  :action="
+                    () => {
+                      return deletePrimaryContact(contact);
+                    }
+                  "
+                />
+              </template>
+            </div>
+
             <UserSearchInput
               class="h-12 w-84"
-              :placeholder="$t('profileOrg.primary_contact')"
+              :placeholder="$t('~~Add Primary Contact')"
+              :key="JSON.stringify(organization.primary_contacts)"
+              @selectedUser="
+                (user) => {
+                  makePrimaryContact(user);
+                }
+              "
             />
           </div>
           <div class="form-row">
@@ -271,7 +324,10 @@
             {{ $t('profileOrg.primary_response_area') }}
           </base-text>
         </template>
-        <div class="py-2 flex items-center justify-center">
+        <div
+          v-if="canEditLocation"
+          class="py-2 flex items-center justify-center"
+        >
           <base-button
             v-if="currentOrganization.primary_location"
             :text="$t('profileOrg.edit_response_area')"
@@ -299,6 +355,15 @@
             "
           ></base-button>
         </div>
+        <div v-else class="py-2 flex items-center justify-center">
+          <base-button
+            :text="$t('~~Please contact helpdesk to change your response area.')"
+            :alt="$t('~~Please contact helpdesk to change your response area.')"
+            variant="solid"
+            class="px-2 py-1"
+            disabled
+          ></base-button>
+        </div>
         <div id="primary-location" class="w-full h-64"></div>
       </Card>
       <Card>
@@ -307,7 +372,10 @@
             {{ $t('profileOrg.secondary_response_area') }}
           </base-text>
         </template>
-        <div class="py-2 flex items-center justify-center">
+        <div
+          v-if="canEditLocation"
+          class="py-2 flex items-center justify-center"
+        >
           <base-button
             v-if="currentOrganization.secondary_location"
             :text="$t('profileOrg.edit_response_area')"
@@ -333,6 +401,15 @@
                 settingLocation = 'secondary_location';
               }
             "
+          ></base-button>
+        </div>
+        <div v-else class="py-2 flex items-center justify-center">
+          <base-button
+            :text="$t('~~Please contact helpdesk to change your response area.')"
+            :alt="$t('~~Please contact helpdesk to change your response area.')"
+            variant="solid"
+            class="px-2 py-1"
+            disabled
           ></base-button>
         </div>
         <div id="secondary-location" class="w-full h-64"></div>
@@ -514,6 +591,8 @@
 <script>
 import * as L from 'leaflet';
 import Organization from '@/models/Organization';
+import Role from '@/models/Role';
+import UserRole from '@/models/UserRole';
 import Location from '@/models/Location';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
@@ -570,6 +649,15 @@ export default {
     };
   },
   computed: {
+    roles() {
+      return Role.all();
+    },
+    canEditLocation() {
+      return (
+        this.organization.approved_roles &&
+        this.organization.approved_roles.some((role) => [11, 8].includes(role))
+      );
+    },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
     },
@@ -642,6 +730,25 @@ export default {
     },
     setCurrentLocation(location) {
       this.currentPolygon = location;
+    },
+    async makePrimaryContact(user) {
+      await UserRole.api().post(`/user_roles`, {
+        user_role: Role.query().where('id', 3).first().id,
+        user: user.id,
+      });
+      await this.saveOrganization();
+    },
+    async deletePrimaryContact(user) {
+      const results = await UserRole.api().get(`/user_roles?user=${user.id}`, {
+        dataKey: 'results',
+      });
+      let { user_roles } = results.entities;
+      user_roles = user_roles || [];
+
+      const currentUserRole = user_roles.find((ur) => ur.user_role === 3);
+
+      await UserRole.api().delete(`/user_roles/${currentUserRole.id}`, {});
+      await this.saveOrganization();
     },
     async reloadMaps() {
       const { primary_location, secondary_location } = this.currentOrganization;

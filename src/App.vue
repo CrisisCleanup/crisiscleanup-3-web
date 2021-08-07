@@ -68,6 +68,7 @@ export default {
       'setWorkTypes',
       'setLocationTypes',
       'setPhases',
+      'setPortal',
     ]),
     async getEnums() {
       const enums = await hash({
@@ -103,11 +104,20 @@ export default {
             },
           },
         ),
+        portal: this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/portals/current`,
+          {
+            headers: {
+              Authorization: null,
+            },
+          },
+        ),
       });
       this.setStatuses(enums.statuses.data.results);
       this.setWorkTypes(enums.workTypes.data.results);
       this.setLocationTypes(enums.locationTypes.data.results);
       this.setPhases(enums.phases.data.results);
+      this.setPortal(enums.portal.data);
     },
     async pushCurrentEvents() {
       if (this.isLoggedIn()) {

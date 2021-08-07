@@ -41,7 +41,10 @@
           <slot />
         </div>
         <div v-if="showAcceptTermsModal">
-          <TermsandConditionsModal @acceptedTerms="acceptTermsAndConditions" />
+          <TermsandConditionsModal
+            @acceptedTerms="acceptTermsAndConditions"
+            :organization="currentOrganization"
+          />
         </div>
         <div v-if="transferRequest">
           <CompletedTransferModal
@@ -74,6 +77,7 @@ import TermsandConditionsModal from '@/components/TermsandConditionsModal';
 import { Slide } from 'vue-burger-menu';
 import { parsePhoneNumber } from 'libphonenumber-js';
 import Header from '@/components/header/Header.vue';
+import OrganizationRole from '@/models/OrganizationRole';
 import PhoneStatus from '../models/PhoneStatus';
 import CompletedTransferModal from '../components/CompletedTransferModal';
 import { AuthService } from '../services/auth.service';
@@ -191,6 +195,7 @@ export default {
     },
     ...mapState('incident', ['currentIncidentId']),
     ...mapState('auth', ['user']),
+    ...mapState('enums', ['portal']),
   },
   watch: {
     '$route.params.incident_id': {
@@ -232,6 +237,9 @@ export default {
       Role.api().get('/roles', {
         dataKey: 'results',
       }),
+      OrganizationRole.api().get('/organization_roles', {
+        dataKey: 'results',
+      }),
       PhoneStatus.api().get('/phone_statuses', {
         dataKey: 'results',
       }),
@@ -260,7 +268,11 @@ export default {
       !this.currentUser.accepted_terms_timestamp ||
       this.$moment(VERSION_3_LAUNCH_DATE).isAfter(
         this.$moment(this.currentUser.accepted_terms_timestamp),
-      )
+      ) ||
+      (this.portal.tos_updated_at &&
+        this.$moment(this.portal.tos_updated_at).isAfter(
+          this.currentUser.accepted_terms_timestamp,
+        ))
     ) {
       this.showAcceptTermsModal = true;
     }

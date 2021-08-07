@@ -3,12 +3,14 @@ const AppState = {
   workTypes: [],
   locationTypes: [],
   phases: [],
+  portal: null,
 };
 
 // getters
 const getters = {
   statuses: (state) => state.statuses,
   workTypes: (state) => state.workTypes,
+  portal: (state) => state.portal,
   phases: (state) => state.phases,
   locationTypes: (state) => state.locationTypes,
   workTypeCommercialValues: (state) => {
@@ -35,6 +37,9 @@ const mutations = {
   },
   setPhases(state, phases) {
     state.phases = phases;
+  },
+  setPortal(state, portal) {
+    state.portal = portal;
   },
 };
 
