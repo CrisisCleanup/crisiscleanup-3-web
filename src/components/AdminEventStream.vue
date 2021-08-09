@@ -131,7 +131,7 @@ export default {
         query.created_by = this.user;
       }
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${getQueryString(
+        `${process.env.VUE_APP_API_BASE_URL}/all_events?${getQueryString(
           query,
         )}`,
       );

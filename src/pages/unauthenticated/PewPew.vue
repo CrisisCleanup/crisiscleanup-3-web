@@ -676,19 +676,10 @@ export default {
       this.mapLoading = false;
     },
     async getAllEvents() {
-      const params = {
-        limit: 60000,
-        event_key__in: Object.keys(this.events).join(','),
-        sort: 'created_at',
-        incident: this.queryFilter.incident || '',
-        created_at__gte: this.queryFilter.start_date.toISOString(),
-        created_at__lte: this.queryFilter.end_date.toISOString(),
-      };
-      const queryString = getQueryString(params);
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
+        `${process.env.VUE_APP_API_BASE_URL}/recent_events`,
       );
-      this.markers = response.data.results;
+      this.markers = response.data;
       // [this.currentEvent] = this.markers;
 
       // let next;
@@ -704,15 +695,10 @@ export default {
     async getLatestEvents() {
       const params = {
         limit: 100,
-        created_at__gt: this.$moment().add(-24, 'hours').toISOString(),
-        'event_key__in!': `${[
-          'user_join_worksite-data_with_worksite',
-          'user_unjoin_worksite-data_from_worksite',
-        ].join(',')}`,
       };
       const queryString = getQueryString(params);
       const { data } = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
+        `${process.env.VUE_APP_API_BASE_URL}/live_events?${queryString}`,
       );
       this.liveEvents = data.results;
     },
@@ -758,7 +744,14 @@ export default {
 
       // Initial Draw
       for (let i = 0; i < this.markers.length; i++) {
-        this.addMarker(this.markers[i], i);
+        try {
+          this.addMarker(this.markers[i], i);
+        } catch (e) {
+          this.$log.error(
+            `Could not add marker for ${JSON.stringify(this.markers[i])}`,
+          );
+          this.$log.error(e);
+        }
       }
 
       worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
