@@ -113,7 +113,7 @@
         v-for="item of data"
         :key="item.id"
         :style="gridStyleRow"
-        class="hover:bg-crisiscleanup-light-grey"
+        class="hover:bg-crisiscleanup-light-grey hover:text-black"
         :class="{ 'bg-crisiscleanup-light-grey': selectedItems.has(item.id) }"
         @click="rowClick(item, $event)"
       >
