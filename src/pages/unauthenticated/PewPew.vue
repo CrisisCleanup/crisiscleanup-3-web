@@ -276,11 +276,13 @@
               class="text-xs p-2 w-20"
               variant="solid"
               :text="$t('Register')"
+              :action="() => $router.push('/register')"
             />
             <base-button
               class="text-xs ml-2 p-2 w-20"
               variant="outline"
               :text="$t('Login')"
+              :action="() => $router.push('/login')"
             />
           </div>
         </div>
