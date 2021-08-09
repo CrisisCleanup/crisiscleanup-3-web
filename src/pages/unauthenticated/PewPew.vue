@@ -236,42 +236,16 @@
       </div>
       <div class="col-span-5 h-screen flex flex-col">
         <div class="h-12 grid grid-cols-10">
-          <div class="col-span-2 flex items-center">
-            <form-select
-              :value="colorMode"
-              indicator-icon="caret-down"
-              :options="['Dark Mode', 'Light Mode']"
-              :clearable="false"
-              class="text-white"
-              select-classes="w-40 ml-2 text-xs"
-              @input="
-                (value) => {
-                  colorMode = value;
-                  setLayer();
-                }
-              "
-            />
+          <div
+            class="my-2 col-span-8 flex justify-center items-center text-black font-bold ribbon-gradient"
+          >
+            {{
+              $t(
+                '~~For Help, Call: 800-451-1954 (COVID), 844-965-1386 (Tornadoes)',
+              )
+            }}
           </div>
-          <div class="col-span-6 flex items-center justify-evenly">
-            <span v-for="item in routes" :key="item.key">
-              <a
-                v-if="item.external"
-                :href="item.route"
-                class=""
-                target="_blank"
-              >
-                {{ item.key }}
-              </a>
-              <router-link
-                v-if="!item.external"
-                :to="item.route || '#'"
-                class=""
-              >
-                {{ item.key }}
-              </router-link>
-            </span>
-          </div>
-          <div class="col-span-2 flex items-center justify-end">
+          <div class="col-span-2 flex items-center justify-center">
             <base-button
               class="text-xs p-2 w-20"
               variant="solid"
@@ -1581,6 +1555,16 @@ export default {
     &:hover {
       @apply bg-white bg-opacity-25;
     }
+  }
+
+  .ribbon-gradient {
+    background: linear-gradient(
+      270deg,
+      rgba(129, 154, 176, 0) 0.27%,
+      #819ab0 25.98%,
+      #819ab0 75.52%,
+      rgba(129, 154, 176, 0) 100.43%
+    );
   }
 
   ::-webkit-scrollbar {
