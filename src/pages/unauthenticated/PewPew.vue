@@ -10,195 +10,253 @@
         />
       </div>
       <div
-        class="col-span-1 shadow-lg h-screen flex flex-col px-1"
+        class="grid grid-cols-7 col-span-1 shadow-lg h-screen flex flex-col pr-1"
         style="z-index: 1000;"
       >
-        <div class="h-32 px-4 py-2">
-          <img
-            v-if="colorMode === 'Dark Mode'"
-            src="@/assets/crisiscleanup_logo.png"
-            alt="Crisis Cleanup"
-            class="h-16"
-          />
-          <img
-            v-else
-            src="@/assets/ccu-logo-black-500w.png"
-            alt="Crisis Cleanup"
-            class="h-16"
-          />
-          <div class="mt-2 font-semibold">
-            {{ $t('~~We help volunteers to help more people after disasters') }}
-          </div>
+        <div class="pewpew__nav">
+          <router-link :to="{ name: 'nav.pew' }" class="pewpew__navheader">
+            <img
+              v-if="colorMode === 'Dark Mode'"
+              src="@/assets/crisiscleanup_logo.png"
+              alt="Crisis Cleanup"
+              class="h-8"
+            />
+            <img
+              v-else
+              src="@/assets/ccu-logo-black-500w.png"
+              alt="Crisis Cleanup"
+              class="h-16"
+            />
+          </router-link>
+
+          <router-link :to="{ name: 'nav.dashboard' }" class="pewpew__navlink">
+            <img src="@/assets/icons/home.svg" alt="home-icon" />
+            {{ $t('Home') }}
+          </router-link>
+
+          <router-link :to="{ name: 'nav.dashboard' }" class="pewpew__navlink">
+            <img
+              src="@/assets/icons/current-disaster.svg"
+              alt="current-disaster-icon"
+            />
+            {{ $t('Current Disasters') }}
+          </router-link>
+
+          <router-link :to="{ name: 'nav.about' }" class="pewpew__navlink">
+            <img src="@/assets/icons/about-us.svg" alt="about-us-icon" />
+            {{ $t('About us') }}
+          </router-link>
+
+          <a
+            href="https://crisiscleanup.zendesk.com/hc/en-us/requests/new"
+            class="pewpew__navlink"
+          >
+            <img src="@/assets/icons/contact-us.svg" alt="contact-us-icon" />
+            {{ $t('Contact') }}
+          </a>
+
+          <router-link :to="{ name: 'nav.training' }" class="pewpew__navlink">
+            <img src="@/assets/icons/training.svg" alt="training-icon" />
+            {{ $t('Training') }}
+          </router-link>
+
+          <a href="http://blog.crisiscleanup.org" class="pewpew__navlink">
+            <img src="@/assets/icons/notepad.svg" alt="blogs-icon" />
+            {{ $t('Blogs') }}
+          </a>
+
+          <router-link :to="{ name: 'nav.terms' }" class="pewpew__navlink">
+            <img src="@/assets/icons/terms.svg" alt="terms-icon" />
+            {{ $t('Terms') }}
+          </router-link>
+
+          <router-link :to="{ name: 'nav.privacy' }" class="pewpew__navlink">
+            <img
+              src="@/assets/icons/privacy-policy.svg"
+              alt="privacy-policy-icon"
+            />
+            {{ $t('Privacy Policy') }}
+          </router-link>
+
+          <router-link :to="{ name: 'nav.about' }" class="pewpew__navlink">
+            <img src="@/assets/icons/faq.svg" alt="faq-icon" />
+            {{ $t('FAQ') }}
+          </router-link>
         </div>
-        <tabs tab-classes="text-xs">
-          <tab :name="$t('Site Activity')">
-            <div class="text-lg">Site Activity</div>
-            <div class="h-40 w-full">
-              <SiteActivityGauge
-                class="h-full w-full"
-                :chart-data="65"
-                :margin-all="10"
-                chart-id="site-activity-gauge"
-              />
-            </div>
-            <div class="relative site-container" v-if="currentEvent">
-              <div class="overflow-y-hidden py-3">
-                <div v-for="(post, index) in eventStreamData" :key="index">
+        <div class="col-span-5">
+          <tabs tab-classes="text-xs">
+            <tab :name="$t('Site Activity')">
+              <div class="text-lg">Site Activity</div>
+              <div class="h-40 w-full">
+                <SiteActivityGauge
+                  class="h-full w-full"
+                  :chart-data="65"
+                  :margin-all="10"
+                  chart-id="site-activity-gauge"
+                />
+              </div>
+              <div class="relative site-container" v-if="currentEvent">
+                <div class="overflow-y-hidden py-3">
+                  <div v-for="(post, index) in eventStreamData" :key="index">
+                    <div
+                      class="mx-2 -mb-1 rounded-md relative"
+                      :class="index > 0 ? 'group-top' : 'y-translated'"
+                    ></div>
+                  </div>
                   <div
-                    class="mx-2 -mb-1 rounded-md relative"
-                    :class="index > 0 ? 'group-top' : 'y-translated'"
-                  ></div>
+                    v-if="currentPost"
+                    class="absolute w-full bottom-0 transform duration-300 hover:scale-105 ease-in-out"
+                  >
+                    <div class="sticky-settle mx-2 rounded-md">
+                      <newspost
+                        class="text-white site-item"
+                        :is-user-post="currentPost.actor_id"
+                        :user-info="{
+                          name:
+                            currentPost.attr.actor_first_name +
+                            '.' +
+                            currentPost.attr.actor_last_name,
+                          organization:
+                            currentPost.attr.actor_organization_name,
+                        }"
+                        :avatar-icon="currentPost.avatarIcon"
+                        :image="currentPost.image"
+                      >
+                        <template #header>{{
+                          $t(
+                            getPastTense(
+                              currentPost.attr.button_text_t.split('/')[1],
+                            ),
+                          ) | upper
+                        }}</template>
+                        <template #corner>{{
+                          getDateDifference(Date.parse(currentPost.created_at))
+                        }}</template>
+                        <template #content>
+                          <div class="flex-1 ml-2">
+                            <span class="text-xs"
+                              >{{
+                                currentPost.attr.actor_first_name
+                                  ? $t(
+                                      currentPost.attr.actor_first_name +
+                                        '.' +
+                                        currentPost.attr.actor_last_name,
+                                    )
+                                  : $t('Anonymous')
+                              }}
+                              from
+                              {{
+                                currentPost.attr.actor_organization_name
+                                  ? $t(
+                                      currentPost.attr.actor_organization_name +
+                                        ' (' +
+                                        currentPost.actor_location_name +
+                                        ') ',
+                                    )
+                                  : $t('Unknown')
+                              }}
+                              {{
+                                $t(
+                                  getPastTense(
+                                    currentPost.attr.button_text_t.split(
+                                      '/',
+                                    )[1],
+                                  ),
+                                )
+                              }}{{
+                                $t(currentPost.attr.patient_case_number)
+                              }}
+                              ({{ $t(currentPost.patient_location_name) }})
+                            </span>
+                          </div>
+                        </template>
+                      </newspost>
+                    </div>
+                  </div>
                 </div>
-                <div
-                  v-if="currentPost"
-                  class="absolute w-full bottom-0 transform duration-300 hover:scale-105 ease-in-out"
-                >
-                  <div class="sticky-settle mx-2 rounded-md">
-                    <newspost
-                      class="text-white site-item"
-                      :is-user-post="currentPost.actor_id"
-                      :user-info="{
-                        name:
-                          currentPost.attr.actor_first_name +
-                          '.' +
-                          currentPost.attr.actor_last_name,
-                        organization: currentPost.attr.actor_organization_name,
-                      }"
-                      :avatar-icon="currentPost.avatarIcon"
-                      :image="currentPost.image"
-                    >
-                      <template #header>{{
+              </div>
+            </tab>
+            <tab :name="$t('Stats')">
+              <div class="flex-grow">
+                <div class="flex flex-col">
+                  <div class="p-2 mb-2 border-b">
+                    <img
+                      v-if="colorMode === 'Dark Mode'"
+                      src="@/assets/crisiscleanup_logo.png"
+                      alt="Crisis Cleanup"
+                      class="h-16"
+                    />
+                    <img
+                      v-else
+                      src="@/assets/ccu-logo-black-500w.png"
+                      alt="Crisis Cleanup"
+                      class="h-16"
+                    />
+                    <div class="mt-2 font-semibold">
+                      {{
                         $t(
-                          getPastTense(
-                            currentPost.attr.button_text_t.split('/')[1],
-                          ),
-                        ) | upper
-                      }}</template>
-                      <template #corner>{{
-                        getDateDifference(Date.parse(currentPost.created_at))
-                      }}</template>
-                      <template #content>
-                        <div class="flex-1 ml-2">
-                          <span class="text-xs"
-                            >{{
-                              currentPost.attr.actor_first_name
-                                ? $t(
-                                    currentPost.attr.actor_first_name +
-                                      '.' +
-                                      currentPost.attr.actor_last_name,
-                                  )
-                                : $t('Anonymous')
-                            }}
-                            from
-                            {{
-                              currentPost.attr.actor_organization_name
-                                ? $t(
-                                    currentPost.attr.actor_organization_name +
-                                      ' (' +
-                                      currentPost.actor_location_name +
-                                      ') ',
-                                  )
-                                : $t('Unknown')
-                            }}
-                            {{
-                              $t(
-                                getPastTense(
-                                  currentPost.attr.button_text_t.split('/')[1],
-                                ),
-                              )
-                            }}{{ $t(currentPost.attr.patient_case_number) }} ({{
-                              $t(currentPost.patient_location_name)
-                            }})
-                          </span>
-                        </div>
-                      </template>
-                    </newspost>
+                          '~~We help volunteers to help more people after disasters',
+                        )
+                      }}
+                    </div>
+                  </div>
+                  <div class="p-3">
+                    <div class="mb-2">
+                      <div>{{ $t('Total Big Number') }}</div>
+                      <div class="text-xl text-blue-600 stats">
+                        $1.1 Billion
+                      </div>
+                    </div>
+                    <div class="mb-2">
+                      <div>{{ $t('Volunteer Hours') }}</div>
+                      <div class="text-lg stats">2348020</div>
+                    </div>
+                    <div class="mb-2">
+                      <div>{{ $t('Value per Volunteer') }}</div>
+                      <div class="text-lg stats">$237</div>
+                    </div>
+                    <div class="mb-2">
+                      <div>{{ $t('Volunteer Hours Dollars') }}</div>
+                      <div class="text-lg stats">$467</div>
+                    </div>
+                    <div class="mb-2">
+                      <div>{{ $t('Total Market Value') }}</div>
+                      <div class="text-lg stats">$41283437</div>
+                    </div>
+                    <div class="underline text-blue-600">
+                      {{ $t('More Statistics') }}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </tab>
-          <tab :name="$t('Stats')">
-            <div class="flex-grow">
-              <div class="flex flex-col">
-                <div class="p-3">
-                  <div class="mb-2">
-                    <div>{{ $t('Total Big Number') }}</div>
-                    <div class="text-xl text-blue-600 stats">$1.1 Billion</div>
-                  </div>
-                  <div class="mb-2">
-                    <div>{{ $t('Volunteer Hours') }}</div>
-                    <div class="text-lg stats">2348020</div>
-                  </div>
-                  <div class="mb-2">
-                    <div>{{ $t('Value per Volunteer') }}</div>
-                    <div class="text-lg stats">$237</div>
-                  </div>
-                  <div class="mb-2">
-                    <div>{{ $t('Volunteer Hours Dollars') }}</div>
-                    <div class="text-lg stats">$467</div>
-                  </div>
-                  <div class="mb-2">
-                    <div>{{ $t('Total Market Value') }}</div>
-                    <div class="text-lg stats">$41283437</div>
-                  </div>
-                  <div class="underline text-blue-600">
-                    {{ $t('More Statistics') }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </tab>
-        </tabs>
-        <div class="h-32"></div>
+            </tab>
+          </tabs>
+          <div class="h-32"></div>
+        </div>
       </div>
       <div class="col-span-5 h-screen flex flex-col">
         <div class="h-12 grid grid-cols-10">
-          <div class="col-span-2 flex items-center">
-            <form-select
-              :value="colorMode"
-              indicator-icon="caret-down"
-              :options="['Dark Mode', 'Light Mode']"
-              :clearable="false"
-              class="text-white"
-              select-classes="w-40 ml-2 text-xs"
-              @input="
-                (value) => {
-                  colorMode = value;
-                  setLayer();
-                }
-              "
-            />
+          <div
+            class="my-2 col-span-8 flex justify-center items-center text-black font-bold ribbon-gradient"
+          >
+            {{
+              $t(
+                '~~For Help, Call: 800-451-1954 (COVID), 844-965-1386 (Tornadoes)',
+              )
+            }}
           </div>
-          <div class="col-span-6 flex items-center justify-evenly">
-            <span v-for="item in routes" :key="item.key">
-              <a
-                v-if="item.external"
-                :href="item.route"
-                class=""
-                target="_blank"
-              >
-                {{ item.key }}
-              </a>
-              <router-link
-                v-if="!item.external"
-                :to="item.route || '#'"
-                class=""
-              >
-                {{ item.key }}
-              </router-link>
-            </span>
-          </div>
-          <div class="col-span-2 flex items-center justify-end">
+          <div class="col-span-2 flex items-center justify-center">
             <base-button
               class="text-xs p-2 w-20"
               variant="solid"
               :text="$t('Register')"
+              :action="() => $router.push('/register')"
             />
             <base-button
               class="text-xs ml-2 p-2 w-20"
               variant="outline"
               :text="$t('Login')"
+              :action="() => $router.push('/login')"
             />
           </div>
         </div>
@@ -1471,6 +1529,44 @@ export default {
 }
 
 .pewpew {
+  &__nav {
+    @apply col-span-2 flex flex-col text-xs text-center break-words;
+    background: #242c36;
+  }
+
+  &__navheader {
+    @apply flex justify-center items-center m-2;
+
+    img {
+      @apply h-6;
+    }
+  }
+
+  &__navlink {
+    @apply flex flex-col justify-center items-center m-1 p-2 rounded-lg;
+    font-size: 0.55rem;
+    transition: background-color 300ms;
+
+    img {
+      @apply w-4 h-4;
+    }
+
+    &:focus,
+    &:hover {
+      @apply bg-white bg-opacity-25;
+    }
+  }
+
+  .ribbon-gradient {
+    background: linear-gradient(
+      270deg,
+      rgba(129, 154, 176, 0) 0.27%,
+      #819ab0 25.98%,
+      #819ab0 75.52%,
+      rgba(129, 154, 176, 0) 100.43%
+    );
+  }
+
   ::-webkit-scrollbar {
     width: 20px;
   }
