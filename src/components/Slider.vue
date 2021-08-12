@@ -1,12 +1,10 @@
 <template>
-  <div class="flex justify-between items-end">
-    <span
-      class="text-crisiscleanup-grey-900 text-sm flex items-center justify-start mx-1"
-      >{{ from }}
-    </span>
+  <div class="grid grid-flow-col items-center" :style="[cssVars]">
+    <span class="text-crisiscleanup-grey-900 text-sm mx-1">{{ from }} </span>
     <div class="range-slider mx-2 mb-1" :title="value">
       <input
-        class="range-slider__range"
+        class="range-slider__range flex-auto"
+        :class="sliderClass"
         type="range"
         @input="update"
         :value="value"
@@ -50,11 +48,31 @@ export default {
       type: String,
       default: '100',
     },
+    primaryColor: {
+      type: String,
+      default: '#61d5f8',
+    },
+    secondaryColor: {
+      type: String,
+      default: 'rgba(0, 0, 0, 0.5)',
+    },
+    sliderClass: {
+      type: String,
+      default: 'w-84',
+    },
   },
   methods: {
     update(e) {
       const { value } = e.target;
       this.$emit('input', Number(value));
+    },
+  },
+  computed: {
+    cssVars() {
+      return {
+        '--primary-color': this.primaryColor,
+        '--secondary-color': this.secondaryColor,
+      };
     },
   },
 };
@@ -65,14 +83,13 @@ export default {
 $range-handle-size: 5px !default;
 $range-track-height: 3px !default;
 
-.range-slider {
-  @apply w-full;
-}
+$primary: var(--primary-color);
+$secondary: var(--secondary-color);
 
 .range-slider__range {
   // Range Handle
   &::-webkit-slider-thumb {
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.5), 0 0 0 5px #61d5f8;
+    box-shadow: 0 0 0 3px $secondary, 0 0 0 5px $primary;
     @apply bg-primary-light;
     &:hover {
       @apply bg-primary-light;
@@ -84,7 +101,7 @@ $range-track-height: 3px !default;
   }
 
   &::-moz-range-thumb {
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.5), 0 0 0 5px #61d5f8;
+    box-shadow: 0 0 0 3px $secondary, 0 0 0 5px $primary;
     @apply bg-primary-light;
     &:hover {
       @apply bg-primary-light;
@@ -98,9 +115,8 @@ $range-track-height: 3px !default;
 
 .range-slider__range {
   -webkit-appearance: none;
-  width: 100%;
   height: $range-track-height;
-  background-color: #61d5f8;
+  background-color: $primary;
   outline: none;
   padding: 0;
   margin: 0;
@@ -110,19 +126,19 @@ $range-track-height: 3px !default;
     appearance: none;
     width: $range-handle-size;
     height: $range-handle-size;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.5), 0 0 0 5px #61d5f8;
+    box-shadow: 0 0 0 3px $secondary, 0 0 0 5px $primary;
     border-radius: 50%;
-    background-color: #61d5f8;
+    background-color: $primary;
     cursor: pointer;
     transition: background 0.15s ease-in-out;
 
     &:hover {
-      background-color: #61d5f8;
+      background-color: $primary;
     }
   }
 
   &:active::-webkit-slider-thumb {
-    background-color: #61d5f8;
+    background-color: $primary;
   }
 
   &::-moz-range-thumb {
@@ -130,24 +146,24 @@ $range-track-height: 3px !default;
     height: $range-handle-size;
     border: 0;
     border-radius: 50%;
-    background-color: #61d5f8;
+    background-color: $primary;
     cursor: pointer;
     transition: background 0.15s ease-in-out;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3), 0 0 0 5px #61d5f8;
+    box-shadow: 0 0 0 3px $secondary, 0 0 0 5px $primary;
 
     &:hover {
-      background-color: #61d5f8;
+      background-color: $primary;
     }
   }
 
   &:active::-moz-range-thumb {
-    background-color: #61d5f8;
+    background-color: $primary;
   }
 }
 
 // Firefox Overrides
 ::-moz-range-track {
-  background-color: #61d5f8;
+  background-color: $primary;
   border: 0;
 }
 

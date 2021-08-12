@@ -155,6 +155,24 @@ button.outline.disabled:hover {
   @apply text-crisiscleanup-grey-900;
 }
 
+button.outline-dark {
+  background-color: transparent;
+  border: 1px solid white;
+}
+
+button.outline-dark:hover {
+  @apply bg-crisiscleanup-dark-500;
+  @apply text-gray-100;
+}
+
+button.outline-dark.disabled {
+  @apply text-crisiscleanup-grey-900;
+}
+
+button.outline-dark.disabled:hover {
+  @apply text-crisiscleanup-grey-900;
+}
+
 button.text {
   background-color: transparent;
 }

@@ -83,155 +83,130 @@
             {{ $t('FAQ') }}
           </router-link>
         </div>
-        <div class="col-span-5">
-          <tabs tab-classes="text-xs">
-            <tab :name="$t('Site Activity')">
-              <div class="text-lg">Site Activity</div>
-              <div class="h-40 w-full">
-                <SiteActivityGauge
-                  class="h-full w-full"
-                  :chart-data="65"
-                  :margin-all="10"
-                  chart-id="site-activity-gauge"
-                />
-              </div>
-              <div class="relative site-container" v-if="currentEvent">
-                <div class="overflow-y-hidden py-3">
-                  <div v-for="(post, index) in eventStreamData" :key="index">
-                    <div
-                      class="mx-2 -mb-1 rounded-md relative"
-                      :class="index > 0 ? 'group-top' : 'y-translated'"
-                    ></div>
-                  </div>
+        <div class="col-span-5 flex flex-col justify-between items-center">
+          <div :name="$t('Site Activity')" class="w-full mt-12">
+            <div class="text-xs px-5 text-center">
+              {{ $t('~~SITE ACTIVITY') }}
+            </div>
+            <div class="h-40 w-full">
+              <SiteActivityGauge
+                class="h-full w-full"
+                :chart-data="65"
+                :margin-all="10"
+                chart-id="site-activity-gauge"
+              />
+            </div>
+            <div class="relative site-container" v-if="currentEvent">
+              <div class="overflow-y-hidden py-3">
+                <div v-for="(post, index) in eventStreamData" :key="index">
                   <div
-                    v-if="currentPost"
-                    class="absolute w-full bottom-0 transform duration-300 hover:scale-105 ease-in-out"
-                  >
-                    <div class="sticky-settle mx-2 rounded-md">
-                      <newspost
-                        class="text-white site-item"
-                        :is-user-post="currentPost.actor_id"
-                        :user-info="{
-                          name:
-                            currentPost.attr.actor_first_name +
-                            '.' +
-                            currentPost.attr.actor_last_name,
-                          organization:
-                            currentPost.attr.actor_organization_name,
-                        }"
-                        :avatar-icon="currentPost.avatarIcon"
-                        :image="currentPost.image"
-                      >
-                        <template #header>{{
-                          $t(
-                            getPastTense(
-                              currentPost.attr.button_text_t.split('/')[1],
-                            ),
-                          ) | upper
-                        }}</template>
-                        <template #corner>{{
-                          getDateDifference(Date.parse(currentPost.created_at))
-                        }}</template>
-                        <template #content>
-                          <div class="flex-1 ml-2">
-                            <span class="text-xs"
-                              >{{
-                                currentPost.attr.actor_first_name
-                                  ? $t(
-                                      currentPost.attr.actor_first_name +
-                                        '.' +
-                                        currentPost.attr.actor_last_name,
-                                    )
-                                  : $t('Anonymous')
-                              }}
-                              from
-                              {{
-                                currentPost.attr.actor_organization_name
-                                  ? $t(
-                                      currentPost.attr.actor_organization_name +
-                                        ' (' +
-                                        currentPost.actor_location_name +
-                                        ') ',
-                                    )
-                                  : $t('Unknown')
-                              }}
-                              {{
-                                $t(
-                                  getPastTense(
-                                    currentPost.attr.button_text_t.split(
-                                      '/',
-                                    )[1],
-                                  ),
-                                )
-                              }}{{
-                                $t(currentPost.attr.patient_case_number)
-                              }}
-                              ({{ $t(currentPost.patient_location_name) }})
-                            </span>
-                          </div>
-                        </template>
-                      </newspost>
-                    </div>
-                  </div>
+                    class="mx-2 -mb-1 rounded-md relative"
+                    :class="index > 0 ? 'group-top' : 'y-translated'"
+                  ></div>
                 </div>
-              </div>
-            </tab>
-            <tab :name="$t('Stats')">
-              <div class="flex-grow">
-                <div class="flex flex-col">
-                  <div class="p-2 mb-2 border-b">
-                    <img
-                      v-if="colorMode === 'Dark Mode'"
-                      src="@/assets/crisiscleanup_logo.png"
-                      alt="Crisis Cleanup"
-                      class="h-16"
-                    />
-                    <img
-                      v-else
-                      src="@/assets/ccu-logo-black-500w.png"
-                      alt="Crisis Cleanup"
-                      class="h-16"
-                    />
-                    <div class="mt-2 font-semibold">
-                      {{
+                <div
+                  v-if="currentPost"
+                  class="absolute w-full bottom-0 transform duration-300 hover:scale-105 ease-in-out"
+                >
+                  <div class="sticky-settle mx-2 rounded-md">
+                    <newspost
+                      class="text-white site-item"
+                      :is-user-post="currentPost.actor_id"
+                      :user-info="{
+                        name:
+                          currentPost.attr.actor_first_name +
+                          '.' +
+                          currentPost.attr.actor_last_name,
+                        organization: currentPost.attr.actor_organization_name,
+                      }"
+                      :avatar-icon="currentPost.avatarIcon"
+                      :image="currentPost.image"
+                    >
+                      <template #header>{{
                         $t(
-                          '~~We help volunteers to help more people after disasters',
-                        )
-                      }}
-                    </div>
-                  </div>
-                  <div class="p-3">
-                    <div class="mb-2">
-                      <div>{{ $t('Total Big Number') }}</div>
-                      <div class="text-xl text-blue-600 stats">
-                        $1.1 Billion
-                      </div>
-                    </div>
-                    <div class="mb-2">
-                      <div>{{ $t('Volunteer Hours') }}</div>
-                      <div class="text-lg stats">2348020</div>
-                    </div>
-                    <div class="mb-2">
-                      <div>{{ $t('Value per Volunteer') }}</div>
-                      <div class="text-lg stats">$237</div>
-                    </div>
-                    <div class="mb-2">
-                      <div>{{ $t('Volunteer Hours Dollars') }}</div>
-                      <div class="text-lg stats">$467</div>
-                    </div>
-                    <div class="mb-2">
-                      <div>{{ $t('Total Market Value') }}</div>
-                      <div class="text-lg stats">$41283437</div>
-                    </div>
-                    <div class="underline text-blue-600">
-                      {{ $t('More Statistics') }}
-                    </div>
+                          getPastTense(
+                            currentPost.attr.button_text_t.split('/')[1],
+                          ),
+                        ) | upper
+                      }}</template>
+                      <template #corner>{{
+                        getDateDifference(Date.parse(currentPost.created_at))
+                      }}</template>
+                      <template #content>
+                        <div class="flex-1 ml-2">
+                          <span class="text-xs"
+                            >{{
+                              currentPost.attr.actor_first_name
+                                ? $t(
+                                    currentPost.attr.actor_first_name +
+                                      '.' +
+                                      currentPost.attr.actor_last_name,
+                                  )
+                                : $t('Anonymous')
+                            }}
+                            from
+                            {{
+                              currentPost.attr.actor_organization_name
+                                ? $t(
+                                    currentPost.attr.actor_organization_name +
+                                      ' (' +
+                                      currentPost.actor_location_name +
+                                      ') ',
+                                  )
+                                : $t('Unknown')
+                            }}
+                            {{
+                              $t(
+                                getPastTense(
+                                  currentPost.attr.button_text_t.split('/')[1],
+                                ),
+                              )
+                            }}{{ $t(currentPost.attr.patient_case_number) }} ({{
+                              $t(currentPost.patient_location_name)
+                            }})
+                          </span>
+                        </div>
+                      </template>
+                    </newspost>
                   </div>
                 </div>
               </div>
-            </tab>
-          </tabs>
-          <div class="h-32"></div>
+            </div>
+          </div>
+          <div></div>
+          <div :name="$t('Stats')">
+            <div class="flex-grow">
+              <div class="flex flex-col">
+                <div class="p-3">
+                  <div class="mb-2">
+                    <div>{{ $t('Total Big Number') }}</div>
+                    <div class="text-xl text-blue-600 stats">
+                      $1.1 Billion
+                    </div>
+                  </div>
+                  <div class="mb-2">
+                    <div>{{ $t('Volunteer Hours') }}</div>
+                    <div class="text-lg stats">2348020</div>
+                  </div>
+                  <div class="mb-2">
+                    <div>{{ $t('Value per Volunteer') }}</div>
+                    <div class="text-lg stats">$237</div>
+                  </div>
+                  <div class="mb-2">
+                    <div>{{ $t('Volunteer Hours Dollars') }}</div>
+                    <div class="text-lg stats">$467</div>
+                  </div>
+                  <div class="mb-2">
+                    <div>{{ $t('Total Market Value') }}</div>
+                    <div class="text-lg stats">$41283437</div>
+                  </div>
+                  <div class="underline text-blue-600">
+                    {{ $t('More Statistics') }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="col-span-5 h-screen flex flex-col">
@@ -247,33 +222,37 @@
           </div>
           <div class="col-span-2 flex items-center justify-center">
             <base-button
-              class="text-xs p-2 w-20"
+              class="text-xs p-1 w-20 text-black rounded"
               variant="solid"
               :text="$t('Register')"
               :action="() => $router.push('/register')"
             />
             <base-button
-              class="text-xs ml-2 p-2 w-20"
-              variant="outline"
+              class="text-xs ml-2 p-1 w-20 rounded"
+              variant="outline-dark"
               :text="$t('Login')"
               :action="() => $router.push('/login')"
             />
           </div>
         </div>
-        <div class="h-12 grid grid-flow-col text-xs">
+        <div class="h-12 mt-3 flex text-xs">
           <div
-            class="flex items-center justify-center w-30 h-12"
-            :class="incident ? '' : 'border-l border-t border-r rounded-t'"
+            class="flex items-center justify-center h-12 px-6 cursor-pointer"
+            :class="
+              incident
+                ? ''
+                : 'bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t'
+            "
           >
-            {{ $t('~~All') }}
+            {{ $t('~~Live') }}
           </div>
           <div
             v-for="incident in incidents"
             :key="incident.id"
-            class="flex items-center justify-start w-30 h-12"
+            class="flex items-center justify-start h-12 px-2 cursor-pointer"
             :class="
               String(incident.id) === String(incidentId)
-                ? 'border-l border-t border-r rounded-t'
+                ? 'bg-gradient-to-b from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t'
                 : ''
             "
           >
@@ -290,6 +269,22 @@
                   ref="map"
                   class="absolute top-0 left-0 right-0 bottom-0"
                 ></div>
+                <div
+                  style="z-index: 1001;"
+                  class="absolute top-0 left-0 m-2 p-2 bg-opacity-25 bg-crisiscleanup-dark-400 rounded-md"
+                >
+                  <Slider
+                    primary-color="#FECE09"
+                    :value="100"
+                    @input="
+                      (value) => {
+                        refreshSvi(value);
+                      }
+                    "
+                    :from="$t('~~Most vulnerable')"
+                    :to="$t('~~Everyone')"
+                  ></Slider>
+                </div>
                 <div
                   style="z-index: 1001;"
                   class="absolute top-0 right-0 h-32 w-auto overflow-hidden mt-3 mr-3"
@@ -373,7 +368,6 @@
                     </div>
                     <Slider
                       v-if="markers.length"
-                      class="w-120"
                       @input="
                         (value) => {
                           throttle(() => {
@@ -926,6 +920,31 @@ export default {
         }
       });
     },
+    refreshSvi(value) {
+      this.map.eachLayer((layer) => {
+        if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
+          const container = layer._pixiContainer;
+          const sviList = container.children.map((marker) => {
+            return {
+              id: marker.id,
+              svi: marker.svi,
+            };
+          });
+          sviList.sort((a, b) => {
+            return (b.svi || 1) - (a.svi || 1);
+          });
+          const count = Math.floor((sviList.length * Number(value)) / 100);
+          const filteredSvi = sviList.slice(0, count);
+          const minSvi = filteredSvi[filteredSvi.length - 1].svi;
+          container.children.forEach((markerSprite) => {
+            markerSprite.visible = markerSprite.svi > minSvi;
+          });
+
+          layer._renderer.render(container);
+          layer.redraw();
+        }
+      });
+    },
     addMarker(marker, index) {
       this.map.eachLayer((layer) => {
         if (layer.key === 'marker_layer') {
@@ -941,6 +960,9 @@ export default {
               location.coordinates[1],
               location.coordinates[0],
             ]);
+
+            const address =
+              marker.attr[`${marker.map_destination}_redacted_address`];
 
             const wwtsp = marker.attr[`${marker.map_destination}_wwtsp`];
             let color = '#d0021b';
@@ -981,6 +1003,7 @@ export default {
 
             patientMarkerSprite = new Sprite();
             patientMarkerSprite.index = index;
+            patientMarkerSprite.id = marker.id;
             patientMarkerSprite.x = patientCoords.x;
             patientMarkerSprite.y = patientCoords.y;
             patientMarkerSprite.x0 = patientCoords.x;
@@ -1001,6 +1024,9 @@ export default {
             patientMarkerSprite.strokeColor = strokeColor;
             patientMarkerSprite.workTypeKey = workTypeKey;
             patientMarkerSprite.type = 'patient';
+            if (address) {
+              patientMarkerSprite.svi = Number(address.svi);
+            }
 
             const detailedTemplate =
               templates[workTypeKey] || templates.unknown;
