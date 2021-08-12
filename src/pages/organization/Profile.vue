@@ -357,7 +357,9 @@
         </div>
         <div v-else class="py-2 flex items-center justify-center">
           <base-button
-            :text="$t('~~Please contact helpdesk to change your response area.')"
+            :text="
+              $t('~~Please contact helpdesk to change your response area.')
+            "
             :alt="$t('~~Please contact helpdesk to change your response area.')"
             variant="solid"
             class="px-2 py-1"
@@ -405,7 +407,9 @@
         </div>
         <div v-else class="py-2 flex items-center justify-center">
           <base-button
-            :text="$t('~~Please contact helpdesk to change your response area.')"
+            :text="
+              $t('~~Please contact helpdesk to change your response area.')
+            "
             :alt="$t('~~Please contact helpdesk to change your response area.')"
             variant="solid"
             class="px-2 py-1"
