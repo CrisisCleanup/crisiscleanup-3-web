@@ -1,7 +1,7 @@
 <template>
-  <div class="relative w-full rounded p-2 popup--container">
+  <div class="relative w-full rounded p-2 popup--container" :style="styles">
     <div
-      class="absolute h-7 top-1 right-0 cursor-pointer px-2 hover:bg-gray-500 rounded-full text-center"
+      class="absolute h-7 top-1 right-0 cursor-pointer px-2 rounded-full text-center"
       @click="closeModal()"
     >
       <font-awesome-icon icon="times" />
@@ -23,8 +23,14 @@
         <div class="grid grid-cols-2">
           <div class="col-span-1">
             <div class="text-crisiscleanup-dark-300">{{ $t('TYPE') }}</div>
-            <div>
-              {{ $t(generalInfo.type_t ? generalInfo.type_t : 'Unknown') }}
+            <div v-if="generalInfo.organization">
+              {{
+                $t(
+                  generalInfo.organization.type_t
+                    ? generalInfo.organization.type_t
+                    : 'Unknown',
+                )
+              }}
             </div>
           </div>
           <div class="col-span-1">
@@ -68,13 +74,7 @@
               {{ $t('VALUE') }}
             </div>
             <div>
-              {{
-                $t(
-                  generalInfo.commercial_value
-                    ? generalInfo.commercial_value
-                    : 0,
-                )
-              }}
+              {{ nFormatter(generalInfo.commercial_value) }}
             </div>
           </div>
         </div>
@@ -93,11 +93,33 @@
           </div>
         </div>
         <div class="overflow-hidden" :class="showIncidents ? 'h-full' : 'h-0'">
-          <Incidents
-            :incidents="testIncidents"
-            class="pt-2"
-            :class="showIncidents ? 'drawer-open' : 'drawer-close'"
-          />
+          <Table
+            :columns="incidentTable.columns"
+            :data="generalInfo.statistics"
+            style="height: 20rem;"
+            :body-style="{ maxHeight: '40vh', ...styles }"
+            :header-style="styles"
+            :row-style="{ backgroundColor: 'unset' }"
+          >
+            <template #name="slotProps">
+              {{ slotProps.item.name }}
+            </template>
+            <template #commercial_value="slotProps">
+              {{ nFormatter(slotProps.item.commercial_value) }}
+            </template>
+            <template #reported_count="slotProps">
+              <CaseDonutChart
+                class="w-8 h-8"
+                :chart-id="`case-donut-chart-${slotProps.item.id}`"
+                :chart-data="{
+                  reportedCases: slotProps.item.reported_count || 0,
+                  claimedCases: slotProps.item.claimed_count || 0,
+                  completedCases: slotProps.item.closed_count || 0,
+                }"
+                bg-color="#232323"
+              />
+            </template>
+          </Table>
         </div>
       </div>
       <hr class="mt-2" />
@@ -127,14 +149,23 @@
   </div>
 </template>
 <script>
-import Incidents from '@/components/Incidents.vue';
 import Capability from '@/components/Capability.vue';
+import { makeTableColumns } from '@/utils/table';
+import CaseDonutChart from '@/components/charts/CaseDonutChart';
+import { nFormatter } from '@/utils/helpers';
+import Table from '@/components/Table';
+import { CapabilityMixin } from '@/mixins';
 
 export default {
   name: 'OrganizationActivityModal',
-  components: { Incidents, Capability },
+  components: { Table, CaseDonutChart, Capability },
+  mixins: [CapabilityMixin],
   props: {
     generalInfo: {
+      type: Object,
+      default: null,
+    },
+    styles: {
       type: Object,
       default: null,
     },
@@ -150,6 +181,7 @@ export default {
   data() {
     return {
       showIncidents: false,
+      nFormatter,
       showCapability: false,
       testIncidents: [
         {
@@ -300,11 +332,34 @@ export default {
       }
     },
   },
+  computed: {
+    incidentTable() {
+      const columns = makeTableColumns([
+        ['name', '50%'],
+        ['reported_count', '25%', 'Cases'],
+        // ['claimed_count', '0.5fr', 'Claimed'],
+        // ['calls', '0.5fr'],
+        ['commercial_value', '25%', 'Value'],
+      ]);
+      columns.forEach((column) => {
+        column.titleClass = 'small-font';
+        column.class = 'small-font';
+        column.style = {
+          border: 0,
+        };
+        column.headerStyle = {
+          border: 0,
+        };
+      });
+      return {
+        columns,
+      };
+    },
+  },
 };
 </script>
 <style scoped>
 .popup--container {
-  background: #2e343b;
   overflow-y: scroll;
   max-height: 90vh;
 }

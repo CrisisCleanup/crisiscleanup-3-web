@@ -20,6 +20,7 @@
         :key="column.key"
         class="p-2 border-b flex items-center cursor-pointer header-column"
         :class="column.headerClass || []"
+        :style="column.headerStyle || []"
         @click="
           () => {
             if (column.sortable) {
@@ -148,6 +149,7 @@
           :key="column.key"
           class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
           :class="column.class || []"
+          :style="column.style || []"
           @click="handleColumnAction(column, item[column.key], item)"
         >
           <slot :name="column.key" :item="item">
@@ -298,6 +300,12 @@ export default {
         return {};
       },
     },
+    rowStyle: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
     headerStyle: {
       type: Object,
       default: () => {
@@ -397,6 +405,7 @@ export default {
       return {
         display: 'grid',
         'grid-template-columns': this.$mq === 'sm' ? 'auto' : this.gridTemplate,
+        ...this.rowStyle,
       };
     },
   },

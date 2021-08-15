@@ -41,6 +41,18 @@ export default class Organization extends Model {
     return Incident.query().whereIdIn(this.incidents).get();
   }
 
+  get logo_url() {
+    if (this.files.length) {
+      const logos = this.files.filter(
+        (file) => file.file_type_t === 'fileTypes.logo',
+      );
+      if (logos.length) {
+        return logos[0].small_thumbnail_url;
+      }
+    }
+    return '';
+  }
+
   static apiConfig = {
     actions: {
       addFile(id, file, type) {

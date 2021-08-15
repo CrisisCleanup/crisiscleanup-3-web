@@ -9,8 +9,10 @@
             'is-active': tab.isActive,
             disabled: tab.disabled,
             [tabClasses]: true,
+            [tabActiveClasses]: tab.isActive,
+            [tabDefaultClasses]: true,
           }"
-          class="py-1 px-3 border-b-2 last:flex-grow"
+          class=""
         >
           <a :href="tab.href" @click="selectTab(tab)">{{ tab.name }}</a>
         </li>
@@ -31,9 +33,17 @@ export default {
       type: String,
       default: '',
     },
+    tabDefaultClasses: {
+      type: String,
+      default: 'py-1 px-3 border-b-2 last:flex-grow',
+    },
     tabClasses: {
       type: String,
       default: '',
+    },
+    tabActiveClasses: {
+      type: String,
+      default: 'border-b-2 border-primary-light',
     },
     details: {
       type: Boolean,
@@ -88,9 +98,6 @@ export default {
 </script>
 
 <style scoped>
-.is-active {
-  @apply border-b-2 border-primary-light;
-}
 .disabled {
   @apply text-crisiscleanup-grey-900;
 }

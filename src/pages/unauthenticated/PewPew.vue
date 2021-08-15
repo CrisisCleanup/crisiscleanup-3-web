@@ -1,16 +1,17 @@
 <template>
   <div class="pewpew absolute top-0 right-0 left-0 bottom-0" :style="styles">
-    <div class="grid grid-cols-6 relative">
+    <div class="grid grid-cols-10 relative">
       <div class="absolute right-0 px-1 w-full sm:w-1/3" style="top: 10%;">
         <OrganizationActivityModal
           @close="closeModal"
           :general-info="orgInfo.generalInfo"
           class="x-translate"
           style="z-index: 1002;"
+          :styles="styles"
         />
       </div>
       <div
-        class="grid grid-cols-7 col-span-1 shadow-lg h-screen flex flex-col pr-1"
+        class="grid grid-cols-8 col-span-2 shadow-lg h-screen flex flex-col pr-1"
         style="z-index: 1000;"
       >
         <div class="pewpew__nav">
@@ -83,101 +84,47 @@
             {{ $t('FAQ') }}
           </router-link>
         </div>
-        <div class="col-span-5 flex flex-col justify-between items-center">
-          <div :name="$t('Site Activity')" class="w-full mt-12">
-            <div class="text-xs px-5 text-center">
-              {{ $t('~~SITE ACTIVITY') }}
-            </div>
-            <div class="h-40 w-full">
-              <SiteActivityGauge
-                class="h-full w-full"
-                :chart-data="65"
-                :margin-all="10"
-                chart-id="site-activity-gauge"
-              />
-            </div>
-            <div class="relative site-container" v-if="currentEvent">
-              <div class="overflow-y-hidden py-3">
-                <div v-for="(post, index) in eventStreamData" :key="index">
-                  <div
-                    class="mx-2 -mb-1 rounded-md relative"
-                    :class="index > 0 ? 'group-top' : 'y-translated'"
-                  ></div>
+        <div class="col-span-6 flex flex-col justify-between items-center">
+          <tabs
+            class="relative h-full w-full px-1 mt-10"
+            ref="tabs"
+            tab-classes="text-xs"
+            tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
+            tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t"
+          >
+            <tab :name="$t('Live')" selected>
+              <div :name="$t('Site Activity')" class="w-full">
+                <div class="text-xs px-5 text-center">
+                  {{ $t('~~SITE ACTIVITY') }}
                 </div>
-                <div
-                  v-if="currentPost"
-                  class="absolute w-full bottom-0 transform duration-300 hover:scale-105 ease-in-out"
-                >
-                  <div class="sticky-settle mx-2 rounded-md">
-                    <newspost
-                      class="text-white site-item"
-                      :is-user-post="currentPost.actor_id"
-                      :user-info="{
-                        name:
-                          currentPost.attr.actor_first_name +
-                          '.' +
-                          currentPost.attr.actor_last_name,
-                        organization: currentPost.attr.actor_organization_name,
-                      }"
-                      :avatar-icon="currentPost.avatarIcon"
-                      :image="currentPost.image"
-                    >
-                      <template #header>{{
-                        $t(
-                          getPastTense(
-                            currentPost.attr.button_text_t.split('/')[1],
-                          ),
-                        ) | upper
-                      }}</template>
-                      <template #corner>{{
-                        getDateDifference(Date.parse(currentPost.created_at))
-                      }}</template>
-                      <template #content>
-                        <div class="flex-1 ml-2">
-                          <span class="text-xs"
-                            >{{
-                              currentPost.attr.actor_first_name
-                                ? $t(
-                                    currentPost.attr.actor_first_name +
-                                      '.' +
-                                      currentPost.attr.actor_last_name,
-                                  )
-                                : $t('Anonymous')
-                            }}
-                            from
-                            {{
-                              currentPost.attr.actor_organization_name
-                                ? $t(
-                                    currentPost.attr.actor_organization_name +
-                                      ' (' +
-                                      currentPost.actor_location_name +
-                                      ') ',
-                                  )
-                                : $t('Unknown')
-                            }}
-                            {{
-                              $t(
-                                getPastTense(
-                                  currentPost.attr.button_text_t.split('/')[1],
-                                ),
-                              )
-                            }}{{ $t(currentPost.attr.patient_case_number) }} ({{
-                              $t(currentPost.patient_location_name)
-                            }})
-                          </span>
-                        </div>
-                      </template>
-                    </newspost>
-                  </div>
+                <div class="h-40 w-full">
+                  <SiteActivityGauge
+                    class="h-full w-full"
+                    :chart-data="65"
+                    :margin-all="10"
+                    chart-id="site-activity-gauge"
+                  />
                 </div>
               </div>
-            </div>
-          </div>
-          <div></div>
-          <div :name="$t('Stats')">
-            <div class="flex-grow">
-              <div class="flex flex-col">
-                <div class="p-3">
+              <div class="h-full p-2 w-full">
+                <CardStack ref="cards" />
+                <transition name="show">
+                  <EventCard
+                    v-if="currentEvent"
+                    :key="currentEvent.event.id"
+                    :current-event="currentEvent.event"
+                    :class="`bg-${getNearestColor(currentEvent.color).name}`"
+                    :style="{
+                      borderColor: currentEvent.strokeColor,
+                    }"
+                    class="stacked-card bg-current bg-opacity-25 border w-full h-auto rounded my-2 p-3 bg-red-200"
+                  ></EventCard>
+                </transition>
+              </div>
+            </tab>
+            <tab :name="$t('Statistics')" class="p-2">
+              <div class="flex flex-col items-start justify-start w-full">
+                <div class="">
                   <div class="mb-2">
                     <div>{{ $t('Total Big Number') }}</div>
                     <div class="text-xl text-blue-600 stats">
@@ -205,11 +152,11 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </tab>
+          </tabs>
         </div>
       </div>
-      <div class="col-span-5 h-screen flex flex-col">
+      <div class="col-span-8 h-screen flex flex-col">
         <div class="h-12 grid grid-cols-10">
           <div
             class="my-2 col-span-8 flex justify-center items-center text-black font-bold ribbon-gradient"
@@ -221,6 +168,7 @@
             }}
           </div>
           <div class="col-span-2 flex items-center justify-center">
+            <Toggle v-model="isDarkMode" v-if="false" />
             <base-button
               class="text-xs p-1 w-20 text-black rounded"
               variant="solid"
@@ -237,22 +185,18 @@
         </div>
         <div class="h-12 mt-3 flex text-xs">
           <div
-            class="flex items-center justify-center h-12 px-6 cursor-pointer"
-            :class="
-              incident
-                ? ''
-                : 'bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t'
-            "
+            class="live-tab px-6"
+            :class="incident ? '' : 'live-tab--selected'"
           >
             {{ $t('~~Live') }}
           </div>
           <div
             v-for="incident in incidents"
             :key="incident.id"
-            class="flex items-center justify-start h-12 px-2 cursor-pointer"
+            class="live-tab px-2"
             :class="
               String(incident.id) === String(incidentId)
-                ? 'bg-gradient-to-b from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t'
+                ? 'live-tab--selected'
                 : ''
             "
           >
@@ -260,8 +204,8 @@
             {{ incident.short_name }}
           </div>
         </div>
-        <div class="flex-grow grid grid-cols-4">
-          <div class="col-span-3 flex flex-col">
+        <div class="flex-grow grid grid-cols-10">
+          <div class="col-span-7 flex flex-col">
             <div class="flex-grow">
               <div class="relative h-full">
                 <div
@@ -346,12 +290,12 @@
                     </div>
                   </div>
                   <div
-                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-2 bg-opacity-25 flex mb-8"
+                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-3 bg-opacity-25 flex mb-8 mx-3 rounded"
                   >
                     <div class="flex justify-center items-center mr-2">
                       <base-button
                         v-if="eventsInterval"
-                        class="w-6 h-6 rounded-full focus:outline-none border p-3"
+                        class="w-8 h-8 rounded-full focus:outline-none border p-2"
                         :action="pauseGeneratePoints"
                         icon="pause"
                         icon-size="xs"
@@ -359,7 +303,7 @@
                       </base-button>
                       <base-button
                         v-else
-                        class="w-6 h-6 rounded-full focus:outline-none border p-3"
+                        class="w-8 h-8 rounded-full focus:outline-none border p-2"
                         :action="generatePoints"
                         icon="play"
                         icon-size="xs"
@@ -378,25 +322,58 @@
                       :value="markers.length - 1"
                       :min="0"
                       :max="markers.length - 1"
+                      :from="queryFilter.start_date.format('MMM Do YYYY')"
+                      :to="queryFilter.end_date.format('MMM Do YYYY')"
                     ></Slider>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="col-span-1 grid grid-rows-12">
+          <div class="col-span-3 grid grid-rows-12">
             <div class="row-span-7">
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
-                style="height: 450px;"
-                :body-style="{ maxHeight: '450px', ...styles }"
+                style="height: 20rem;"
+                :body-style="{ maxHeight: '40vh', ...styles }"
                 :header-style="styles"
+                :row-style="{ backgroundColor: 'unset' }"
                 @rowClick="onRowClick"
-              ></Table>
+              >
+                <template #name="slotProps">
+                  <img
+                    class="w-4 mr-2"
+                    :src="getLogoUrl(slotProps.item.id)"
+                    :alt="$t('profileOrg.organization_logo')"
+                  />
+                  {{ slotProps.item.name }}
+                </template>
+                <template #commercial_value="slotProps">
+                  {{ nFormatter(slotProps.item.commercial_value) }}
+                </template>
+                <template #reported_count="slotProps">
+                  <CaseDonutChart
+                    class="w-8 h-8"
+                    :chart-id="`case-donut-chart-${slotProps.item.id}`"
+                    :chart-data="{
+                      reportedCases: slotProps.item.reported_count || 0,
+                      claimedCases: slotProps.item.claimed_count || 0,
+                      completedCases: slotProps.item.closed_count || 0,
+                    }"
+                    :bg-color="styles.backgroundColor"
+                  />
+                </template>
+              </Table>
             </div>
             <div class="row-span-5">
-              <tabs class="relative h-full" ref="tabs" tab-classes="text-xs">
+              <tabs
+                class="relative h-full"
+                ref="tabs"
+                tab-classes="text-xs"
+                tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
+                tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t"
+              >
                 <LightTab
                   :name="$t('Call Volume')"
                   class="absolute left-0 right-0"
@@ -452,7 +429,7 @@
 import * as L from 'leaflet';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
-import Newspost from '@/components/Newspost.vue';
+import { nFormatter } from '@/utils/helpers';
 
 import {
   calcWaypoints,
@@ -470,7 +447,7 @@ import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
-import { orderBy, throttle, nth } from 'lodash';
+import { orderBy, throttle } from 'lodash';
 import Slider from '@/components/Slider';
 import DisasterIcon from '@/components/DisasterIcon';
 import OrganizationActivityModal from '@/components/OrganizationActivityModal.vue';
@@ -479,16 +456,26 @@ import SiteActivityGauge from '@/components/charts/SiteActivityGauge';
 import CircularBarplot from '@/components/charts/CircularBarplot';
 import GaugeChart from '@/components/charts/GaugeChart';
 import D3BarChart from '@/components/charts/D3BarChart';
+import CardStack from '@/components/CardStack';
+import EventCard from '@/components/EventCard';
+import { getNearestColor } from '@/utils/colors';
+import { hash } from '@/utils/promise';
+import CaseDonutChart from '@/components/charts/CaseDonutChart';
+import Organization from '@/models/Organization';
+import Toggle from '@/components/Toggle';
 
 export default {
   name: 'PewPew',
   components: {
+    Toggle,
+    CaseDonutChart,
+    EventCard,
+    CardStack,
     LightTab,
     D3BarChart,
     GaugeChart,
     CircularBarplot,
     SiteActivityGauge,
-    Newspost,
     Slider,
     DisasterIcon,
     Table,
@@ -496,9 +483,12 @@ export default {
   },
   data() {
     return {
+      getNearestColor,
+      nFormatter,
       eventStreamData: [],
       currentPost: null,
       startTime: new Date(),
+      loading: false,
       orgInfo: {
         generalInfo: {},
         incidents: [],
@@ -513,8 +503,8 @@ export default {
       templates,
       colors,
       map: null,
+      isDarkMode: true,
       lastEventTimestamp: null,
-      colorMode: 'Dark Mode',
       routes: HomeNavigation,
       currentEvent: null,
       currentEventIndex: 0,
@@ -589,78 +579,23 @@ export default {
       this.setLegend();
     }
 
-    this.incidents = await this.getRecentIncidents();
-    this.organizations = await this.getOrganizations();
+    this.loading = true;
+    const pageData = await hash({
+      incidents: await this.getRecentIncidents(),
+      organizations: await this.getOrganizations(),
+      incidentStats: await this.getIncidentStats(),
+      completion: await this.getCompletionRateData(),
+      circularBarplotData: await this.fetchCircularBarplotData(new Date(), 30),
+    });
+    await this.loadMap();
+    this.loading = false;
+    this.incidents = pageData.incidents;
+    this.organizations = pageData.organizations;
 
     const svg = templates.orb
       .replace('{{fillColor}}', '#61D5F8')
       .replace('{{strokeColor}}', 'black');
     this.orbTexture = Texture.from(svg);
-    await this.getIncidentStats();
-    this.mapStatistics = [
-      {
-        count: this.incidentStats.all.total,
-        style: `border-color: white`,
-        title: this.$t('~~All Cases'),
-      },
-      {
-        count: this.incidentStats.unclaimed.total,
-        style: `border-color: #d0021b`,
-        title: this.$t('~~Unclaimed'),
-      },
-      {
-        count: this.incidentStats.claimed.total,
-        style: `border-color: #fab92e`,
-        title: this.$t('~~Claimed'),
-      },
-      {
-        count: this.incidentStats.assigned.total,
-        style: `border-color: #f0f032`,
-        title: this.$t('~~Assinged'),
-      },
-      {
-        count: this.incidentStats.partial.total,
-        style: `border-color: #0054bb`,
-        title: this.$t('~~Partly Done'),
-      },
-      {
-        count: this.incidentStats.closed.total,
-        style: `border-color: #0FA355`,
-        title: this.$t('~~Closed'),
-      },
-      {
-        count: this.incidentStats.overdue.total,
-        style: `border: none`,
-        title: this.$t('~~Overdue'),
-      },
-      {
-        count: this.organizations.length,
-        style: `border: none`,
-        title: this.$t('~~Total Orgs'),
-      },
-      {
-        count: 0,
-        style: `border: none`,
-        title: this.$t('~~Counties'),
-      },
-      {
-        count: 0,
-        style: `border: none`,
-        title: this.$t('~~Volunteers'),
-      },
-      {
-        count: 0,
-        style: `border: none`,
-        title: this.$t('~~Households'),
-      },
-    ];
-    const { options, data } = await this.getCompletionRateData();
-    this.charts.completion.options = options;
-    this.charts.completion.data = data;
-    await this.loadMap();
-
-    // fetch data for all charts
-    this.fetchCircularBarplotData(new Date(), 30);
   },
   methods: {
     setLegend() {
@@ -715,6 +650,44 @@ export default {
 
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/reports_data/organization_statistics?${queryString}`,
+      );
+      await Organization.api().get(
+        `/organizations?id__in=${response.data.map((o) => o.id).join(',')}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      return response.data;
+    },
+
+    async getOrganization(organization_id) {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/organizations/${organization_id}`,
+        {
+          headers: {
+            Authorization: null,
+          },
+        },
+      );
+      return response.data;
+    },
+    async getOrganizationCapabilities(organization_id) {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/organization_organizations_capabilities?organization=${organization_id}&limit=200`,
+      );
+      return response.data.results;
+    },
+    async getOrganizationStatisticsByIncident(organization_id) {
+      const { start_date, end_date } = this.queryFilter;
+      const params = {
+        start_date: start_date.format('YYYY-MM-DD'),
+        end_date: end_date.format('YYYY-MM-DD'),
+        organization: organization_id,
+      };
+      const queryString = getQueryString(params);
+
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/organization_incident_statistics?${queryString}`,
       );
       return response.data;
     },
@@ -789,7 +762,9 @@ export default {
       this.events = {
         user_create_worksite: true,
       };
-      await this.getAllEvents();
+
+      await Promise.all([this.getAllEvents(), this.getLatestEvents()]);
+
       this.lastEventTimestamp = this.$moment().toISOString();
       const worksiteLayer = getMarkerLayer([], map, this);
       worksiteLayer.addTo(map);
@@ -810,7 +785,6 @@ export default {
       worksiteLayer.redraw();
 
       // Last 2 hours
-      await this.getLatestEvents();
       const liveLayer = getLiveLayer();
       liveLayer.addTo(map);
 
@@ -1052,8 +1026,11 @@ export default {
             layer.redraw();
             return;
           }
-          this.currentEvent = marker;
-          this.liveIncidents.push(this.currentEvent.attr.incident_name);
+          const card = {
+            classes: 'border w-full h-32 rounded my-2',
+            event: marker,
+          };
+          this.liveIncidents.push(marker.attr.incident_name);
           this.$refs.incidentScroll.scrollTop = this.$refs.incidentScroll.scrollHeight;
           const markerTemplate = templates.circle;
           let actorMarkerSprite = null;
@@ -1075,6 +1052,8 @@ export default {
             actorMarkerSprite.live = true;
             actorMarkerSprite.texture = this.orbTexture;
             actorMarkerSprite.visible = true;
+            card.color = '#61D5F8';
+            card.strokeColor = '#61D5F8';
             layer._pixiContainer.addChild(actorMarkerSprite);
           }
 
@@ -1093,6 +1072,9 @@ export default {
             let color = '#d0021b';
             let strokeColor = '#e30001';
             let workTypeKey = null;
+            card.color = color;
+            card.strokeColor = strokeColor;
+
             if (wwtsp && wwtsp.length > 0) {
               const workType = orderBy(
                 wwtsp,
@@ -1107,6 +1089,8 @@ export default {
               const spriteColors = colors[colorsKey];
               color = spriteColors.fillColor;
               strokeColor = spriteColors.strokeColor;
+              card.color = color;
+              card.strokeColor = strokeColor;
             } else if (
               marker.attr.recipient_status ||
               marker.attr.patient_status
@@ -1124,6 +1108,8 @@ export default {
               strokeColor = spriteColors.strokeColor;
               workTypeKey =
                 marker.attr[`${marker.map_destination}_work_type_key`];
+              card.color = color;
+              card.strokeColor = strokeColor;
             }
 
             patientMarkerSprite = new Sprite();
@@ -1160,6 +1146,10 @@ export default {
 
             layer._pixiContainer.addChild(patientMarkerSprite);
           }
+          this.$refs.cards.addCardComponent(card);
+          if (this.currentEventIndex % 5 === 0) {
+            this.currentEvent = card;
+          }
 
           layer._renderer.render(layer._pixiContainer);
           layer.redraw();
@@ -1184,7 +1174,6 @@ export default {
             }, 50);
           }
         }
-        this.generateList();
       });
     },
     generatePoints() {
@@ -1193,88 +1182,6 @@ export default {
     pauseGeneratePoints() {
       clearInterval(this.eventsInterval);
       this.eventsInterval = null;
-    },
-    generateList() {
-      // duplicate prevention
-      if (this.currentEvent !== this.eventStreamData[0]) {
-        this.eventStreamData.splice(0, 0, this.currentEvent);
-        // 10 second timer to replace current post
-        if (this.eventStreamData.length > 3) {
-          if (
-            this.currentPost === null ||
-            Math.abs(this.startTime - new Date()) / 1000 > 10
-          ) {
-            this.currentPost = nth(this.eventStreamData, 3);
-            this.startTime = new Date();
-          }
-          this.eventStreamData = this.eventStreamData.slice(0, -1);
-        }
-        // set start state
-        setTimeout(() => {
-          this.animateList();
-        }, 250);
-        // set settled set
-        this.animateList();
-      }
-    },
-    animateList() {
-      // moves card to out of view
-      const card = document.querySelector('div.y-translated');
-      // moves the other two cards up to simulate no change
-      const cardGroup = document.querySelectorAll('div.group-top');
-      // moves sticky card out of frame
-      const stickyCard = document.querySelector('div.move-down');
-      // moves sticky card to its original position
-      const settledSticky = document.querySelector('div.sticky-settle');
-      // moves the card group to its orginial position
-      const settledGroup = document.querySelectorAll('div.card-group');
-      // moves top card to its original position
-      const settledCard = document.querySelector('div.settle');
-
-      // set origin of transition - everything up since the new item being added
-      // is now the first item
-      if (settledCard) {
-        settledCard.classList.remove('settle');
-        settledCard.classList.add('y-translated');
-      }
-      if (settledGroup) {
-        settledGroup.forEach((group) => {
-          group.classList.remove('card-group');
-          group.classList.add('group-top');
-        });
-      }
-      if (stickyCard) {
-        stickyCard.classList.remove('move-down');
-        stickyCard.classList.add('sticky-settle');
-      }
-
-      // move everything down
-      if (card) {
-        card.classList.remove('y-translated');
-        card.classList.add('settle');
-      }
-      if (cardGroup) {
-        cardGroup.forEach((group) => {
-          group.classList.remove('group-top');
-          group.classList.add('card-group');
-        });
-      }
-      // if ten seconds have passed
-      if (settledSticky) {
-        if (Math.abs(this.startTime - new Date()) / 1000 > 10) {
-          settledSticky.classList.remove('sticky-settle');
-          settledSticky.classList.add('move-down');
-        }
-      }
-    },
-    getDateDifference(date) {
-      return this.$moment(date).fromNow();
-    },
-    getPastTense(word) {
-      return `${word
-        .replace(/([^aeiouy])y$/, '$1i')
-        .replace(/([^aeiouy][aeiou])([^aeiouy])$/, '$1$2$2')
-        .replace(/e$/, '')}ed`;
     },
     async getCompletionRateData() {
       const { start_date, end_date, incident } = this.queryFilter;
@@ -1358,7 +1265,9 @@ export default {
           },
         ],
       };
-      return { options, data };
+      // return { options, data };
+      this.charts.completion.options = options;
+      this.charts.completion.data = data;
     },
     async getIncidentStats() {
       const { start_date, end_date, incident } = this.queryFilter;
@@ -1375,6 +1284,63 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/reports_data/worksite_statistics?${queryString}`,
       );
       this.incidentStats = response.data;
+      this.mapStatistics = [
+        {
+          count: this.incidentStats.all.total,
+          style: `border-color: white`,
+          title: this.$t('~~All Cases'),
+        },
+        {
+          count: this.incidentStats.unclaimed.total,
+          style: `border-color: #d0021b`,
+          title: this.$t('~~Unclaimed'),
+        },
+        {
+          count: this.incidentStats.claimed.total,
+          style: `border-color: #fab92e`,
+          title: this.$t('~~Claimed'),
+        },
+        {
+          count: this.incidentStats.assigned.total,
+          style: `border-color: #f0f032`,
+          title: this.$t('~~Assinged'),
+        },
+        {
+          count: this.incidentStats.partial.total,
+          style: `border-color: #0054bb`,
+          title: this.$t('~~Partly Done'),
+        },
+        {
+          count: this.incidentStats.closed.total,
+          style: `border-color: #0FA355`,
+          title: this.$t('~~Closed'),
+        },
+        {
+          count: this.incidentStats.overdue.total,
+          style: `border: none`,
+          title: this.$t('~~Overdue'),
+        },
+        {
+          count: this.organizations.length,
+          style: `border: none`,
+          title: this.$t('~~Total Orgs'),
+        },
+        {
+          count: 0,
+          style: `border: none`,
+          title: this.$t('~~Counties'),
+        },
+        {
+          count: 0,
+          style: `border: none`,
+          title: this.$t('~~Volunteers'),
+        },
+        {
+          count: 0,
+          style: `border: none`,
+          title: this.$t('~~Households'),
+        },
+      ];
     },
     pollNewEvents() {
       setInterval(() => {
@@ -1405,8 +1371,16 @@ export default {
         this.map.removeLayer(this.darkTileLayer);
       }
     },
-    onRowClick(item) {
+    async onRowClick(item) {
+      const organization = await this.getOrganization(item.id);
       this.orgInfo.generalInfo = item;
+      this.orgInfo.generalInfo.organization = organization;
+      this.orgInfo.generalInfo.capabilites = await this.getOrganizationCapabilities(
+        item.id,
+      );
+      this.orgInfo.generalInfo.statistics = await this.getOrganizationStatisticsByIncident(
+        item.id,
+      );
       const modal = document.querySelector('div.x-translate');
       if (modal) {
         modal.classList.remove('x-translate');
@@ -1420,8 +1394,14 @@ export default {
         modal.classList.remove('x-settle');
       }
     },
+    getLogoUrl(organization_id) {
+      return Organization.find(organization_id).logo_url;
+    },
   },
   computed: {
+    colorMode() {
+      return this.isDarkMode ? 'Dark Mode' : 'Light Mode';
+    },
     visibleWorkTypes() {
       const selectedWorkTypes = this.displayedWorkTypeSvgs
         .filter((s) => s.selected)
@@ -1445,15 +1425,21 @@ export default {
     },
     orgTable() {
       const columns = makeTableColumns([
-        ['name', '2fr'],
-        ['reported_count', '0.5fr', 'Cases'],
-        ['claimed_count', '0.5fr', 'Claimed'],
-        ['calls', '0.5fr'],
-        ['value', '0.5fr'],
+        ['name', '50%'],
+        ['reported_count', '25%', 'Cases'],
+        // ['claimed_count', '0.5fr', 'Claimed'],
+        // ['calls', '0.5fr'],
+        ['commercial_value', '25%', 'Value'],
       ]);
       columns.forEach((column) => {
         column.titleClass = 'small-font';
         column.class = 'small-font';
+        column.style = {
+          border: 0,
+        };
+        column.headerStyle = {
+          border: 0,
+        };
       });
       return {
         columns,
@@ -1465,6 +1451,24 @@ export default {
 
 <style lang="postcss">
 @import '~leaflet/dist/leaflet.css';
+
+.show-enter-active,
+.show-leave-enter {
+  transform: translateY(0);
+  transition: all 0.3s linear;
+}
+.show-enter,
+.show-leave-to {
+  transform: translateY(-100%);
+}
+
+.live-tab {
+  @apply flex items-center justify-center h-12 cursor-pointer;
+}
+
+.live-tab--selected {
+  @apply bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t;
+}
 
 .leaflet-data-marker svg {
   width: 30px;
