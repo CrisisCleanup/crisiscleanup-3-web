@@ -117,7 +117,7 @@
                     :style="{
                       borderColor: currentEvent.strokeColor,
                     }"
-                    class="stacked-card bg-current bg-opacity-25 border w-full h-auto rounded my-2 p-3 bg-red-200"
+                    class="stacked-card bg-opacity-25 border w-full h-auto rounded my-2 p-3 bg-red-200"
                   ></EventCard>
                 </transition>
               </div>
