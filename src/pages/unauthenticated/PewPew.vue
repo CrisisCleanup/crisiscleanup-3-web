@@ -585,9 +585,9 @@ export default {
       organizations: await this.getOrganizations(),
       incidentStats: await this.getIncidentStats(),
       completion: await this.getCompletionRateData(),
-      circularBarplotData: await this.fetchCircularBarplotData(new Date(), 30),
     });
     await this.loadMap();
+    this.fetchCircularBarplotData(new Date(), 30);
     this.loading = false;
     this.incidents = pageData.incidents;
     this.organizations = pageData.organizations;
@@ -1268,6 +1268,14 @@ export default {
       // return { options, data };
       this.charts.completion.options = options;
       this.charts.completion.data = data;
+
+      this.barChartData = chart.labels.map((item, index) => {
+        return {
+          group: item,
+          newCases: chart.datasets[0].data[index],
+          closedCases: chart.datasets[1].data[index],
+        };
+      });
     },
     async getIncidentStats() {
       const { start_date, end_date, incident } = this.queryFilter;
