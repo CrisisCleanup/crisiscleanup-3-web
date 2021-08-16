@@ -59,6 +59,7 @@ export default {
       x: null,
       y: null,
       colorScale: null,
+      colorRange: ['#00C4FF', '#728090'],
       margin: {
         left: 0,
         right: 0,
@@ -160,7 +161,16 @@ export default {
         .append('g')
         .attr('class', 'x-axis')
         .attr('transform', `translate(0, ${this.getInnerHeight()})`)
-        .call(d3.axisBottom(this.x).tickSizeOuter(0));
+        .call(d3.axisBottom(this.x).tickSizeOuter(0))
+        .selectAll('text')
+        .style('font-size', '5px')
+        .style('text-anchor', 'end')
+        .attr('dx', '-.8em')
+        .attr('dy', '.15em')
+        .attr('transform', 'translate(-5, 0) rotate(-65)')
+        .append('title')
+        .text((d) => d);
+
       this.svg
         .append('g')
         .attr('class', 'y-axis')
@@ -214,7 +224,7 @@ export default {
       this.colorScale = d3
         .scaleOrdinal()
         .domain(subgroups)
-        .range(['#61D5F8', '#00C4FF']);
+        .range(this.colorRange);
 
       this.loadSvg();
       this.loadAxes();
@@ -303,7 +313,7 @@ export default {
       this.colorScale = d3
         .scaleOrdinal()
         .domain(subgroups)
-        .range(['#61D5F8', '#00C4FF']);
+        .range(this.colorRange);
 
       this.loadSvg();
       this.loadAxes();
