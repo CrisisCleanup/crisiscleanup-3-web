@@ -696,6 +696,7 @@ export default {
           rightLabel: 'High 3',
         },
       ],
+      barChartData: [],
       incidentId: null,
       markerSpeed: 2000,
       incident: null,
