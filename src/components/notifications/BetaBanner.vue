@@ -19,11 +19,11 @@
 
 <script>
 import VueTypes from 'vue-types';
-import BetaFeature from '@/models/BetaFeature';
 import { onMounted, watch, ref } from '@vue/composition-api';
+import * as Sentry from '@sentry/browser';
+import BetaFeature from '@/models/BetaFeature';
 import useUser from '@/use/user/useUser';
 import { getErrorMessage } from '@/utils/errors';
-import * as Sentry from '@sentry/browser';
 
 export default {
   name: 'BetaBanner',

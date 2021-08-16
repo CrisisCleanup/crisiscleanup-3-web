@@ -6,7 +6,15 @@
     <template v-for="capability in capabilitiesTree">
       <template v-if="capability.children && capability.children.length > 0">
         <div
-          class="top-level bg-crisiscleanup-grid-grey p-3 flex items-center mb-1 cursor-pointer"
+          class="
+            top-level
+            bg-crisiscleanup-grid-grey
+            p-3
+            flex
+            items-center
+            mb-1
+            cursor-pointer
+          "
           :key="capability.id"
           @click="
             () => {
@@ -33,7 +41,15 @@
         <div
           v-for="phase in phases"
           :key="`${capability.id}:${phase.phase_key}`"
-          class="text-xs text-center bg-crisiscleanup-grid-grey flex items-center justify-center mb-1 cursor-pointer"
+          class="
+            text-xs text-center
+            bg-crisiscleanup-grid-grey
+            flex
+            items-center
+            justify-center
+            mb-1
+            cursor-pointer
+          "
           @click="
             () => {
               capability.showChildren = !capability.showChildren;
@@ -76,7 +92,15 @@
                 "
                 checkmark-style=""
                 container-style=""
-                class="border-b p-2 py-4 flex items-center justify-center cursor-pointer"
+                class="
+                  border-b
+                  p-2
+                  py-4
+                  flex
+                  items-center
+                  justify-center
+                  cursor-pointer
+                "
                 :class="
                   isCapabilitySelected(phase.id, child.id)
                     ? 'bg-crisiscleanup-grid-blue border-2 border-white'

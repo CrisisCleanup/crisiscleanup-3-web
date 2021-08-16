@@ -1,10 +1,10 @@
+import moment from 'moment';
+import Bowser from 'bowser';
+import * as Sentry from '@sentry/browser';
 import { AuthService } from '@/services/auth.service';
 import Language from '@/models/Language';
 import Role from '@/models/Role';
-import moment from 'moment';
 import CCUModel from '@/models/model';
-import Bowser from 'bowser';
-import * as Sentry from '@sentry/browser';
 
 export default class User extends CCUModel {
   static entity = 'users';

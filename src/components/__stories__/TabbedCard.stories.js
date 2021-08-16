@@ -1,5 +1,5 @@
-import TabbedCard from '@/components/cards/TabbedCard.vue';
 import StoryRouter from 'storybook-vue-router';
+import TabbedCard from '@/components/cards/TabbedCard.vue';
 
 export default {
   title: 'Elements/Cards/TabbedCard',

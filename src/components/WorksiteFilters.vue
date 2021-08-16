@@ -15,10 +15,22 @@
       </div>
       <div
         v-if="filtersCount > 0"
-        class="flex items-center justify-between bg-crisiscleanup-light-grey p-1 px-2"
+        class="
+          flex
+          items-center
+          justify-between
+          bg-crisiscleanup-light-grey
+          p-1
+          px-2
+        "
       >
         <div
-          class="applied-filters flex flex-wrap justify-start bg-crisiscleanup-light-grey"
+          class="
+            applied-filters
+            flex flex-wrap
+            justify-start
+            bg-crisiscleanup-light-grey
+          "
         >
           <template v-for="(filter, key) in filters">
             <template v-for="(label, identifier) in filter.labels">
@@ -123,7 +135,7 @@
         </div>
         <div
           class="w-3/4 ml-4 mt-2 flex-grow"
-          style="height: 450px; overflow: auto;"
+          style="height: 450px; overflow: auto"
         >
           <div v-if="currentSection === 'general'" class="flex flex-col">
             <div class="claim-status mb-2">

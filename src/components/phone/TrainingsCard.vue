@@ -24,7 +24,12 @@
             <!--- Date --->
             <base-text
               variant="bodysm"
-              class="pl-1 justify-between text-crisiscleanup-grey-800 alight-left"
+              class="
+                pl-1
+                justify-between
+                text-crisiscleanup-grey-800
+                alight-left
+              "
             >
               {{ timeToComplete | moment('m:ss') }}
             </base-text>
@@ -34,7 +39,13 @@
       <div class="flex w-2/6 items-center">
         <!--- Training Start Button --->
         <base-button
-          class="bg-crisiscleanup-yellow-300 hover:bg-crisiscleanup-yellow-100 text-black px-4 py-1"
+          class="
+            bg-crisiscleanup-yellow-300
+            hover:bg-crisiscleanup-yellow-100
+            text-black
+            px-4
+            py-1
+          "
           href="https://crisiscleanup.zendesk.com/hc/en-us/articles/360033226251-Mandatory-Phone-System-Training"
           :action="() => startTraining()"
           :alt="completed ? $t('actions.review') : $t('actions.start')"

@@ -1,6 +1,6 @@
+import moment from 'moment';
 import Location from '@/models/Location';
 import CCUModel from '@/models/model';
-import moment from 'moment';
 
 export default class Incident extends CCUModel {
   static entity = 'incidents';

@@ -4,9 +4,9 @@
  */
 
 import { getModule } from 'vuex-module-decorators';
-import WebsocketStore, { ACTIONS } from '@/store/modules/websocket';
 import Vuex from 'vuex';
 import Vue from 'vue';
+import WebsocketStore, { ACTIONS } from '@/store/modules/websocket';
 
 Vue.use(Vuex);
 

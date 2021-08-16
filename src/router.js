@@ -1,3 +1,7 @@
+import Vue from 'vue';
+import VueCookies from 'vue-cookies';
+import VueRouter from 'vue-router';
+import * as moment from 'moment';
 import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
@@ -20,15 +24,11 @@ import AdminRoutes from '@/pages/admin/routes';
 import Profile from '@/pages/Profile';
 import unAuthedRoutes from '@/pages/unauthenticated/routes';
 import store from '@/store/index';
-import Vue from 'vue';
-import VueCookies from 'vue-cookies';
-import VueRouter from 'vue-router';
 import Reports from '@/pages/Reports';
 import OtherOrganizations from '@/pages/OtherOrganizations';
 import Teams from '@/pages/organization/Teams';
 import TeamDetail from '@/pages/organization/TeamDetail';
 import * as UITypes from '@/store/modules/ui/types';
-import * as moment from 'moment';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);

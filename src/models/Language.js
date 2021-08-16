@@ -4,8 +4,8 @@
  */
 
 import detectBrowserLanguage from 'detect-browser-language';
-import CCUModel from '@/models/model';
 import _ from 'lodash';
+import CCUModel from '@/models/model';
 
 export type LanguageType = {|
   id: number,

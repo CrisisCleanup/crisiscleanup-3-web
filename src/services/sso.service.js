@@ -3,10 +3,10 @@
  * Single Sign On Service
  */
 
-import { IDPApi } from '@/utils/api';
-import Logger from '@/utils/log';
 import axios from 'axios';
 import * as saml from 'samlify';
+import { IDPApi } from '@/utils/api';
+import Logger from '@/utils/log';
 
 const Log = Logger({
   name: 'sso.service',

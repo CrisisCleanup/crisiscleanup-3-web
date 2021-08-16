@@ -5,7 +5,15 @@
       <div
         @mouseover="hoverEffect('normal')"
         @mouseleave="hoverEffect('')"
-        class="col-span-1 h-3 rounded transform duration-100 hover:scale-105 shadow"
+        class="
+          col-span-1
+          h-3
+          rounded
+          transform
+          duration-100
+          hover:scale-105
+          shadow
+        "
         :class="
           capability.normal
             ? 'border-2 border-white light-box'
@@ -15,7 +23,15 @@
       <div
         @mouseover="hoverEffect('warning')"
         @mouseleave="hoverEffect('')"
-        class="col-span-1 h-3 rounded transform duration-100 hover:scale-105 shadow"
+        class="
+          col-span-1
+          h-3
+          rounded
+          transform
+          duration-100
+          hover:scale-105
+          shadow
+        "
         :class="
           capability.warning
             ? 'border-2 border-white  light-box'
@@ -25,7 +41,15 @@
       <div
         @mouseover="hoverEffect('impact')"
         @mouseleave="hoverEffect('')"
-        class="col-span-1 h-3 rounded transform duration-100 hover:scale-105 shadow"
+        class="
+          col-span-1
+          h-3
+          rounded
+          transform
+          duration-100
+          hover:scale-105
+          shadow
+        "
         :class="
           capability.impact
             ? 'border-2 border-white  light-box'
@@ -35,7 +59,15 @@
       <div
         @mouseover="hoverEffect('rescue')"
         @mouseleave="hoverEffect('')"
-        class="col-span-1 h-3 rounded transform duration-100 hover:scale-105 shadow"
+        class="
+          col-span-1
+          h-3
+          rounded
+          transform
+          duration-100
+          hover:scale-105
+          shadow
+        "
         :class="
           capability.rescue
             ? 'border-2 border-white  light-box'
@@ -45,7 +77,15 @@
       <div
         @mouseover="hoverEffect('cleanup')"
         @mouseleave="hoverEffect('')"
-        class="col-span-1 h-3 rounded transform duration-100 hover:scale-105 shadow"
+        class="
+          col-span-1
+          h-3
+          rounded
+          transform
+          duration-100
+          hover:scale-105
+          shadow
+        "
         :class="
           capability.cleanup
             ? 'border-2 border-white  light-box'
@@ -55,7 +95,15 @@
       <div
         @mouseover="hoverEffect('longterm')"
         @mouseleave="hoverEffect('')"
-        class="col-span-1 h-3 rounded transform duration-100 hover:scale-105 shadow"
+        class="
+          col-span-1
+          h-3
+          rounded
+          transform
+          duration-100
+          hover:scale-105
+          shadow
+        "
         :class="
           capability.longterm
             ? 'border-2 border-white light-box'

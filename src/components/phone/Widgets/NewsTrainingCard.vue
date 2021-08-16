@@ -25,12 +25,12 @@
 </template>
 
 <script>
+import VueTypes from 'vue-types';
+import _ from 'lodash';
 import NewsCard from '@/components/phone/NewsCard.vue';
 import TrainingsCard from '@/components/phone/TrainingsCard.vue';
 import TabbedCard from '@/components/cards/TabbedCard.vue';
 import { TrainingMixin } from '@/mixins';
-import VueTypes from 'vue-types';
-import _ from 'lodash';
 
 export default {
   name: 'NewsTrainingCard',

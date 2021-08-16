@@ -5,10 +5,10 @@
  * Components
  */
 
-import User from '@/models/__mocks__/User';
-import UserEditModal from '@/pages/organization/UserEditModal';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
+import User from '@/models/__mocks__/User';
+import UserEditModal from '@/pages/organization/UserEditModal';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

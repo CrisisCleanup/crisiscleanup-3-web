@@ -80,8 +80,8 @@
 </template>
 
 <script>
-import { DialogsMixin } from '@/mixins';
 import VueTypes from 'vue-types';
+import { DialogsMixin } from '@/mixins';
 import { getQueryString } from '@/utils/urls';
 
 export default {

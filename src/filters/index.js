@@ -1,8 +1,8 @@
-import { colors as iconColors, templates } from '@/icons/icons_templates';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
-import enums from '@/store/modules/enums';
 import { RRule } from 'rrule';
 import _ from 'lodash';
+import enums from '@/store/modules/enums';
+import { colors as iconColors, templates } from '@/icons/icons_templates';
 import Organization from '@/models/Organization';
 
 export function snakeToTitleCase(value) {

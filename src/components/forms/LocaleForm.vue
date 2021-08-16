@@ -32,10 +32,10 @@
 
 <script>
 // @flow
-import Accordion from '@/components/accordion/Accordion.vue';
-import Language from '@/models/Language';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
+import Accordion from '@/components/accordion/Accordion.vue';
+import Language from '@/models/Language';
 
 export type LocaleFormFieldsT = {
   [key: string]: {

@@ -258,7 +258,16 @@
                 <textarea
                   :value="callNotes"
                   rows="3"
-                  class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
+                  class="
+                    text-base
+                    border border-crisiscleanup-dark-100
+                    placeholder-crisiscleanup-dark-200
+                    outline-none
+                    p-2
+                    my-2
+                    resize-none
+                    w-full
+                  "
                   :placeholder="$t('phoneDashboard.notes')"
                   @input="updateNotes"
                   required
@@ -292,7 +301,7 @@
           @savedWorksite="clearCase"
           @closeWorksite="clearCase"
           class="border shadow"
-          style="grid-template-rows: 600px 80px;"
+          style="grid-template-rows: 600px 80px"
           @navigateToWorksite="
             (id) => {
               currentType = 'worksite';
@@ -399,6 +408,7 @@
 
 <script>
 import { mapGetters, mapMutations, mapState } from 'vuex';
+import { parsePhoneNumber } from 'libphonenumber-js';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneStatus from '@/models/PhoneStatus';
 import Worksite from '@/models/Worksite';
@@ -406,7 +416,6 @@ import User from '@/models/User';
 import Pda from '@/models/Pda';
 import { WorksitesMixin, DialogsMixin } from '@/mixins';
 import Logger from '@/utils/log';
-import { parsePhoneNumber } from 'libphonenumber-js';
 import CaseForm from '../CaseForm';
 import EditCallerID from '../../components/phone/CallerIDEditCard';
 import { getErrorMessage } from '../../utils/errors';
@@ -426,9 +435,10 @@ export default {
   components: { EditCallerID, CaseForm },
   mixins: [WorksitesMixin, DialogsMixin],
   async mounted() {
-    this.remainingCallbacks = await PhoneOutbound.api().getRemainingCallbackCount(
-      this.currentIncidentId,
-    );
+    this.remainingCallbacks =
+      await PhoneOutbound.api().getRemainingCallbackCount(
+        this.currentIncidentId,
+      );
     await this.logoutByPhoneNumber();
   },
   data() {

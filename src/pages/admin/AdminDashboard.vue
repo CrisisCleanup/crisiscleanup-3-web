@@ -259,8 +259,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import User from '@/models/User';
 import { throttle } from 'lodash';
+import User from '@/models/User';
 import InvitationRequestTable from '@/components/admin/InvitationRequestTable';
 import InvitationTable from '@/components/admin/InvitationTable';
 import IncidentApprovalTable from '../../components/IncidentApprovalTable';

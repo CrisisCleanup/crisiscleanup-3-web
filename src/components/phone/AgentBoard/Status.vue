@@ -8,7 +8,7 @@
       :selected="status.statusId"
       @update:value="(payload) => onStatusSelect(payload)"
     >
-      <template #selected-option="{option}">
+      <template #selected-option="{ option }">
         <base-text variant="h2" :style="{ padding: '0px' }">{{
           option.substatus_name_t ? option.substatus_name_t : ''
         }}</base-text>
@@ -39,12 +39,12 @@
 <script>
 import VueTypes from 'vue-types';
 import { ref } from '@vue/composition-api';
+import _ from 'lodash';
+import { create } from 'vue-modal-dialogs';
 import { unwrap } from '@/utils/wrap';
 import useController from '@/use/phone/useController';
 import useContact from '@/use/phone/useContact';
 import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
-import _ from 'lodash';
-import { create } from 'vue-modal-dialogs';
 import MessageBox from '@/components/dialogs/MessageBox.vue';
 
 export default {

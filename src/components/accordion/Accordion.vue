@@ -46,8 +46,8 @@
 <script>
 // @flow
 import VueTypes from 'vue-types';
-import { theme } from '@/../tailwind.config';
 import _ from 'lodash';
+import { theme } from '@/../tailwind.config';
 
 export type AccordionCardT = {|
   title: string,

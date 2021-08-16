@@ -14,7 +14,12 @@
       />
     </div>
     <span
-      class="text-crisiscleanup-grey-900 text-sm items-center justify-start mx-1"
+      class="
+        text-crisiscleanup-grey-900 text-sm
+        items-center
+        justify-start
+        mx-1
+      "
       >{{ to }}</span
     >
   </div>

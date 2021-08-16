@@ -5,11 +5,11 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexORM, { Database } from '@vuex-orm/core';
-import * as ACS from '@/services/connect.service';
 import _ from 'lodash';
+import { getModule } from 'vuex-module-decorators';
+import * as ACS from '@/services/connect.service';
 import WebsocketStore from '@/store/modules/websocket';
 import StreamsStore from '@/store/modules/phone/streams';
-import { getModule } from 'vuex-module-decorators';
 import ControllerStore from '@/store/modules/phone/controller';
 import User from '@/models/User';
 import Language from '@/models/Language';

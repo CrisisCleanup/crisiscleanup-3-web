@@ -65,9 +65,8 @@ export default {
     },
     setColor() {
       if (!this.svgDocument) return;
-      this.svgDocument.getElementsByTagName(
-        'path',
-      )[0].style.fill = this.currentIncident.color;
+      this.svgDocument.getElementsByTagName('path')[0].style.fill =
+        this.currentIncident.color;
     },
     setSize() {
       if (!this.svgDocument) return;

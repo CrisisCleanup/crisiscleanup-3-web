@@ -16,7 +16,7 @@
       v-if="actions.length"
       slot="popover"
       class="flex text-primary-dark"
-      style="z-index: 1001;"
+      style="z-index: 1001"
     >
       <base-button
         v-for="action in actions"

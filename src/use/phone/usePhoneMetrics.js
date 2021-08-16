@@ -4,11 +4,11 @@
  */
 
 import { computed, ref } from '@vue/composition-api';
-import ControllerStore from '@/store/modules/phone/controller';
 import { getModule } from 'vuex-module-decorators';
 import { useStore } from '@u3u/vue-hooks';
-import Language from '@/models/Language';
 import _ from 'lodash';
+import Language from '@/models/Language';
+import ControllerStore from '@/store/modules/phone/controller';
 
 export default () => {
   const store = useStore();

@@ -4,8 +4,8 @@
 
 import { createLocalVue } from '@vue/test-utils';
 import VueCompositionApi from '@vue/composition-api';
-import useUser from '@/use/user/useUser';
 import { useGetters } from '@u3u/vue-hooks';
+import useUser from '@/use/user/useUser';
 
 jest.mock('@/models/User');
 jest.mock('@u3u/vue-hooks');

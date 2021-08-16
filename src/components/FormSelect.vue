@@ -35,7 +35,7 @@
       <template #option="option">
         <slot name="option" :option="option" />
       </template>
-      <template v-if="required" #search="{attributes, events}">
+      <template v-if="required" #search="{ attributes, events }">
         <input
           ref="input"
           class="vs__search"

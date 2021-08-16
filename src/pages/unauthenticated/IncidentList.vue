@@ -12,11 +12,11 @@
       </div>
       <div class="col-span-1 text-center">
         <div class="text-gray-500">Calls</div>
-        <div>{{ (totalCalls/1000) }}K</div>
+        <div>{{ totalCalls / 1000 }}K</div>
       </div>
       <div class="col-span-1 text-center">
         <div class="text-gray-500">Value</div>
-        <div>{{ (totalValue/1000000) }}M</div>
+        <div>{{ totalValue / 1000000 }}M</div>
       </div>
     </div>
     <div v-for="(incident, index) in incidentList" :key="index">
@@ -32,11 +32,11 @@
         </div>
         <div class="col-span-1 text-center">
           <div class="text-gray-500">Calls</div>
-          <div>{{ (incident.calls/1000) }}K</div>
+          <div>{{ incident.calls / 1000 }}K</div>
         </div>
         <div class="col-span-1 text-center">
           <div class="text-gray-500">Value</div>
-          <div>{{ (incident.value/1000000) }}M</div>
+          <div>{{ incident.value / 1000000 }}M</div>
         </div>
       </div>
     </div>

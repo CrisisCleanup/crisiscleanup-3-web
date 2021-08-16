@@ -74,12 +74,12 @@
 
 <script>
 import VueTypes from 'vue-types';
+import { getModule } from 'vuex-module-decorators';
+import _ from 'lodash';
 import { LangMixin, UserMixin, ValidateMixin } from '@/mixins';
 import Agent from '@/models/Agent';
 import Language from '@/models/Language';
-import { getModule } from 'vuex-module-decorators';
 import StreamsStore from '@/store/modules/phone/streams';
-import _ from 'lodash';
 
 export default {
   name: 'EditCallerID',

@@ -3,9 +3,9 @@
  * useAgent Hook
  */
 
-import AgentClient from '@/models/phone/AgentClient';
 import { computed, ref, watch } from '@vue/composition-api';
 import { useGetters } from '@u3u/vue-hooks';
+import AgentClient from '@/models/phone/AgentClient';
 
 /**
  * Hook for utilizing connect agent.

@@ -5,8 +5,8 @@
  */
 
 import { Model } from '@vuex-orm/core';
-import type { ConnectionType } from '@/models/phone/types';
 import _ from 'lodash';
+import type { ConnectionType } from '@/models/phone/types';
 import * as ACS from '@/services/connect.service';
 import Logger from '@/utils/log';
 

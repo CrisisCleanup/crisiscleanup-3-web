@@ -68,7 +68,16 @@
               </div>
               <textarea
                 v-model="organization.referral"
-                class="text-base w-4/5 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none m-3 p-2 resize-none"
+                class="
+                  text-base
+                  w-4/5
+                  border border-crisiscleanup-dark-100
+                  placeholder-crisiscleanup-dark-200
+                  outline-none
+                  m-3
+                  p-2
+                  resize-none
+                "
                 rows="4"
                 :placeholder="$t('registerOrg.referral')"
                 required
@@ -117,7 +126,16 @@
               {{ $t('registerOrg.org_roles') }}
               <textarea
                 v-model="organization.where_are_you_working"
-                class="text-base w-4/5 border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none m-3 p-2 resize-none"
+                class="
+                  text-base
+                  w-4/5
+                  border border-crisiscleanup-dark-100
+                  placeholder-crisiscleanup-dark-200
+                  outline-none
+                  m-3
+                  p-2
+                  resize-none
+                "
                 rows="4"
                 :placeholder="$t('registerOrg.where_working')"
                 required
@@ -155,7 +173,17 @@
           </ol>
           <base-button
             size="large"
-            class="px-5 py-2 m-1 self-center md:w-108 lg:w-108 m-auto mb-20 sm:w-full"
+            class="
+              px-5
+              py-2
+              m-1
+              self-center
+              md:w-108
+              lg:w-108
+              m-auto
+              mb-20
+              sm:w-full
+            "
             variant="solid"
             :text="$t('actions.sign_up')"
             :alt="$t('actions.sign_up')"

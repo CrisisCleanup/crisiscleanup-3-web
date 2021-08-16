@@ -5,11 +5,11 @@
  * Components
  */
 
-import BaseButton from '@/components/BaseButton';
-import BaseCheckbox from '@/components/BaseCheckbox';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import { Store } from 'vuex-mock-store';
+import BaseCheckbox from '@/components/BaseCheckbox';
+import BaseButton from '@/components/BaseButton';
 import WorkTypeRequestModal from '../WorkTypeRequestModal';
 
 jest.mock('@/models/User');

@@ -10,7 +10,7 @@
       </base-text>
     </header>
 
-    <div class="overflow-y-visible overflow-y-scroll" style="height: 80vh;">
+    <div class="overflow-y-visible overflow-y-scroll" style="height: 80vh">
       <!--- Training Video --->
       <div class="video-container">
         <iframe

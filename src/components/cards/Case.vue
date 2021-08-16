@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import { WorksitesMixin } from '@/mixins';
 import VueTypes from 'vue-types';
+import { WorksitesMixin } from '@/mixins';
 import CaseCard from '@/components/cards/case/CaseCard.vue';
 import CaseTile from '@/components/cards/case/CaseTile.vue';
 

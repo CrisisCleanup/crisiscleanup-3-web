@@ -27,7 +27,15 @@
     </div>
     <template #popover>
       <div
-        class="bg-white border outline-none h-84 w-56 overflow-auto tooltip-content"
+        class="
+          bg-white
+          border
+          outline-none
+          h-84
+          w-56
+          overflow-auto
+          tooltip-content
+        "
         @keyup="nextItem"
       >
         <div
@@ -56,8 +64,8 @@
 </template>
 
 <script>
-import { getColorForStatus, getWorkTypeImage } from '@/filters';
 import { mapState } from 'vuex';
+import { getColorForStatus, getWorkTypeImage } from '@/filters';
 import { WorksitesMixin } from '@/mixins';
 
 export default {

@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import { UserMixin } from '@/mixins';
 import VueTypes from 'vue-types';
+import { UserMixin } from '@/mixins';
 
 export default {
   name: 'UserDetailsTooltip',

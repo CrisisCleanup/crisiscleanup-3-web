@@ -78,12 +78,12 @@
 
 import VueTypes from 'vue-types';
 import { toRefs, reactive, computed, watch } from '@vue/composition-api';
+import _ from 'lodash';
 import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
 import EventComponent, { EventComponentTypes } from '@/models/EventComponent';
 import useSearchEvents from '@/use/events/useSearchEvents';
 import { makeTableColumns } from '@/utils/table';
 import Table from '@/components/Table.vue';
-import _ from 'lodash';
 
 // Renders dirty new event data for preview.
 export default {
@@ -102,13 +102,8 @@ export default {
     fieldErrors: VueTypes.any.def([]),
   },
   setup(props, context) {
-    const {
-      eventKey,
-      eventPoints,
-      eventLocale,
-      requiredAttr,
-      fieldErrors,
-    } = toRefs(props);
+    const { eventKey, eventPoints, eventLocale, requiredAttr, fieldErrors } =
+      toRefs(props);
 
     const eventData = reactive({
       key: eventKey,
@@ -191,7 +186,7 @@ export default {
   .click-cap {
     &:hover {
       + .epreview__key {
-        @apply shadow-outline;
+        @apply ring;
         box-shadow: 0 0 0 3px rgba(254, 206, 9, 0.4);
       }
     }
@@ -200,7 +195,7 @@ export default {
     transition: box-shadow 250ms easeInOutCirc;
     cursor: pointer;
     &:hover {
-      @apply shadow-outline;
+      @apply ring;
       box-shadow: 0 0 0 3px rgba(254, 206, 9, 0.4);
     }
   }

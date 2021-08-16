@@ -22,7 +22,7 @@
               <div class="flex flex-row items-center">
                 <div class="flex-shrink pr-4">
                   <div class="rounded-full p-1 bg-crisiscleanup-lightblue-900">
-                    <img src="@/assets/icons/cases.svg" style="height: 50px;" />
+                    <img src="@/assets/icons/cases.svg" style="height: 50px" />
                   </div>
                 </div>
                 <div class="flex-1 text-right md:text-center">
@@ -52,7 +52,7 @@
               <div class="flex flex-row items-center p-5">
                 <div class="flex-shrink pr-4">
                   <div class="rounded-full p-1 bg-crisiscleanup-yellow-900">
-                    <img src="@/assets/icons/cases.svg" style="height: 50px;" />
+                    <img src="@/assets/icons/cases.svg" style="height: 50px" />
                   </div>
                 </div>
                 <div class="flex-1 text-right md:text-center">
@@ -74,7 +74,13 @@
                 </div>
               </div>
               <div
-                class="bottom-0 left-0 border-b-4 rounded-b-lg border-yellow-600"
+                class="
+                  bottom-0
+                  left-0
+                  border-b-4
+                  rounded-b-lg
+                  border-yellow-600
+                "
                 :style="{ width: `${(totalClaimed / totalWorksites) * 100}%` }"
               ></div>
             </div>
@@ -90,7 +96,7 @@
               <div class="flex flex-row items-center p-5">
                 <div class="flex-shrink pr-4">
                   <div class="rounded-full p-1 bg-orange-600">
-                    <img src="@/assets/icons/cases.svg" style="height: 50px;" />
+                    <img src="@/assets/icons/cases.svg" style="height: 50px" />
                   </div>
                 </div>
                 <div class="flex-1 text-right md:text-center">
@@ -112,7 +118,13 @@
                 </div>
               </div>
               <div
-                class="bottom-0 left-0 border-b-4 rounded-b-lg border-orange-600"
+                class="
+                  bottom-0
+                  left-0
+                  border-b-4
+                  rounded-b-lg
+                  border-orange-600
+                "
                 :style="{
                   width: `${(totalInProgess / totalWorksites) * 100}%`,
                 }"
@@ -130,7 +142,7 @@
               <div class="flex flex-row items-center p-5">
                 <div class="flex-shrink pr-4">
                   <div class="rounded-full p-1 bg-crisiscleanup-green-900">
-                    <img src="@/assets/icons/cases.svg" style="height: 50px;" />
+                    <img src="@/assets/icons/cases.svg" style="height: 50px" />
                   </div>
                 </div>
                 <div class="flex-1 text-right md:text-center">
@@ -307,19 +319,37 @@
                       class="flex items-center justify-start"
                     >
                       <base-button
-                        class="px-2 py-1 mx-2 bg-crisiscleanup-green-700 text-white"
+                        class="
+                          px-2
+                          py-1
+                          mx-2
+                          bg-crisiscleanup-green-700
+                          text-white
+                        "
                         :text="$t('actions.accept')"
                         :action="() => acceptRequest(slotProps.item.id)"
                       />
                       <base-button
-                        class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
+                        class="
+                          px-2
+                          py-1
+                          mx-2
+                          bg-crisiscleanup-red-700
+                          text-white
+                        "
                         :text="$t('actions.reject')"
                         :action="() => rejectRequest(slotProps.item.id)"
                       />
                     </div>
                     <div v-if="pendingView === 'outbound'">
                       <base-button
-                        class="px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white"
+                        class="
+                          px-2
+                          py-1
+                          mx-2
+                          bg-crisiscleanup-red-700
+                          text-white
+                        "
                         :text="$t('actions.cancel')"
                         :action="() => cancelRequest(slotProps.item.id)"
                       />

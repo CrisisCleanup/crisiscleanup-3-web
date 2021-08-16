@@ -1,10 +1,10 @@
-import { AuthService } from '@/services/auth.service';
 import axios from 'axios';
 import moment from 'moment';
 import Vue from 'vue';
 import Acl from 'vue-browser-acl';
-import User from '@/models/User';
 import * as Sentry from '@sentry/browser';
+import User from '@/models/User';
+import { AuthService } from '@/services/auth.service';
 
 const AuthState = {
   user: AuthService.getUser(),

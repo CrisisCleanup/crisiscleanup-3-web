@@ -90,11 +90,11 @@
 </template>
 
 <script>
+import _ from 'lodash';
+import VueTypes from 'vue-types';
 import { TrainingMixin } from '@/mixins';
 import TrainingsCard from '@/components/phone/TrainingsCard.vue';
 import Training from '@/components/phone/Training.vue';
-import _ from 'lodash';
-import VueTypes from 'vue-types';
 
 export default {
   name: 'TrainingsModal',

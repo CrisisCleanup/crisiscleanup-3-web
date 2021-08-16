@@ -25,7 +25,14 @@
       >
         <div v-for="data in shapefiles" :key="data.filename">
           <div
-            class="border-b font-semibold flex justify-between items-center h-10"
+            class="
+              border-b
+              font-semibold
+              flex
+              justify-between
+              items-center
+              h-10
+            "
           >
             {{ data.filename }}
             <div class="flex">
@@ -91,7 +98,16 @@
                 "
                 :placeholder="$t('layersVue.custom_name_template')"
                 rows="2"
-                class="form-field text-base w-full border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none"
+                class="
+                  form-field
+                  text-base
+                  w-full
+                  border border-crisiscleanup-dark-100
+                  placeholder-crisiscleanup-dark-200
+                  outline-none
+                  p-1
+                  resize-none
+                "
               />
             </div>
             <div class="w-1/2">
@@ -210,9 +226,8 @@ export default {
   methods: {
     customSample(filename) {
       let returnString = this.shapefileInfo[filename].shapefileCustomName;
-      const matches = this.shapefileInfo[filename].shapefileCustomName.match(
-        /{.+?}/g,
-      );
+      const matches =
+        this.shapefileInfo[filename].shapefileCustomName.match(/{.+?}/g);
       if (matches) {
         const replaceArray = matches.map((match) =>
           match.replace('{', '').replace('}', ''),

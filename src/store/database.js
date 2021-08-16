@@ -1,3 +1,4 @@
+import { Database } from '@vuex-orm/core';
 import Affiliate from '@/models/Affiliate';
 import Agent from '@/models/Agent';
 import Incident from '@/models/Incident';
@@ -24,7 +25,6 @@ import Report from '@/models/Report';
 import Team from '@/models/Team';
 import Event from '@/models/Event';
 import ConnectIntegration from '@/models/phone';
-import { Database } from '@vuex-orm/core';
 import EventComponent from '@/models/EventComponent';
 import UserBadge from '@/models/UserBadge';
 import BetaFeature from '@/models/BetaFeature';

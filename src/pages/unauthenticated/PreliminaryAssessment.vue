@@ -1,7 +1,17 @@
 <template>
   <div
     v-if="completedForm"
-    class="bg-gray-100 flex flex-col flex-grow w-full h-full border max-w-md self-center items-center justify-center"
+    class="
+      bg-gray-100
+      flex flex-col flex-grow
+      w-full
+      h-full
+      border
+      max-w-md
+      self-center
+      items-center
+      justify-center
+    "
   >
     <font-awesome-icon
       icon="check-circle"
@@ -21,7 +31,7 @@
     v-else-if="ready"
     ref="form"
     class="bg-gray-100 flex flex-col w-full h-full border max-w-md self-center"
-    style="display: grid;"
+    style="display: grid"
     @submit.prevent
   >
     <div class="pda-form flex-grow">
@@ -95,7 +105,15 @@
         />
       </div>
       <div
-        class="text-base font-semibold my-1 mx-3 flex justify-between items-center"
+        class="
+          text-base
+          font-semibold
+          my-1
+          mx-3
+          flex
+          justify-between
+          items-center
+        "
       >
         {{ $t('formLabels.location') }}
         <ccu-icon
@@ -206,7 +224,14 @@
       ></assessment-tree>
     </div>
     <div
-      class="bg-white p-3 border-t border-gray-300 card-footer flex justify-between"
+      class="
+        bg-white
+        p-3
+        border-t border-gray-300
+        card-footer
+        flex
+        justify-between
+      "
     >
       <base-button
         size="medium"

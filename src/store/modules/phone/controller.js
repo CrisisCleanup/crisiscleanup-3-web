@@ -12,6 +12,7 @@ import {
   MutationAction,
   VuexModule,
 } from 'vuex-module-decorators';
+import _ from 'lodash';
 import AgentClient from '@/models/phone/AgentClient';
 import type {
   CaseType,
@@ -24,7 +25,6 @@ import type {
 import store from '@/store';
 import Logger from '@/utils/log';
 import StreamsStore from '@/store/modules/phone/streams';
-import _ from 'lodash';
 import Agent from '@/models/Agent';
 import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
@@ -522,12 +522,8 @@ class ControllerStore extends VuexModule {
   @Action
   async updateCallerHistory({ agent_id }) {
     this.setLoading({ callerHistory: true });
-    const {
-      recent_contacts,
-      state,
-      entered_timestamp,
-      locale,
-    } = await Agent.api().getMetrics(agent_id);
+    const { recent_contacts, state, entered_timestamp, locale } =
+      await Agent.api().getMetrics(agent_id);
     let recentContacts = recent_contacts;
     // find all unique case ids and prefetch em
     let recentCases = _.uniq(

@@ -86,13 +86,13 @@
 // @flow
 
 import VueTypes from 'vue-types';
+import { onMounted } from '@vue/composition-api';
+import { useStore } from '@u3u/vue-hooks';
 import CaseCard from '@/components/cards/Case.vue';
 import useEnums from '@/use/useEnums';
 import useContact from '@/use/phone/useContact';
-import { onMounted } from '@vue/composition-api';
 import useController from '@/use/phone/useController';
 import useCaseCards from '@/use/worksites/useCaseCards';
-import { useStore } from '@u3u/vue-hooks';
 import Worksite from '@/models/Worksite';
 import { getErrorMessage } from '@/utils/errors';
 import useIncident from '@/use/worksites/useIncident';

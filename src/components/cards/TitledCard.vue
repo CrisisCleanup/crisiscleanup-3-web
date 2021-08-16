@@ -24,7 +24,7 @@
                 @input="(payload) => $emit('update:dropdown', payload)"
                 v-bind="dropdown"
               >
-                <template #selected-option="{option}">
+                <template #selected-option="{ option }">
                   <base-text
                     variant="h3"
                     class="text-crisiscleanup-dark-300"

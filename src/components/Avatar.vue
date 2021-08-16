@@ -1,7 +1,16 @@
 <template>
   <div :class="classes">
     <div
-      class="rounded-full w-full h-full overflow-hidden text-center bg-purple flex cursor-pointer"
+      class="
+        rounded-full
+        w-full
+        h-full
+        overflow-hidden
+        text-center
+        bg-purple
+        flex
+        cursor-pointer
+      "
       :class="innerClasses"
     >
       <span
@@ -11,7 +20,13 @@
       <img
         :src="url"
         :alt="initials"
-        class="object-cover object-center w-full h-full visible group-hover:hidden"
+        class="
+          object-cover object-center
+          w-full
+          h-full
+          visible
+          group-hover:hidden
+        "
       />
     </div>
   </div>

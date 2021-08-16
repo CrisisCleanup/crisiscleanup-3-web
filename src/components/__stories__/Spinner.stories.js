@@ -1,5 +1,5 @@
-import Spinner from '@/components/Spinner';
 import { text, withKnobs } from '@storybook/addon-knobs';
+import Spinner from '@/components/Spinner';
 
 export default {
   title: 'Elements/Spinner',

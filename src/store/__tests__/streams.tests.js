@@ -3,13 +3,13 @@
  */
 
 import { getModule } from 'vuex-module-decorators';
+import Vuex from 'vuex';
+import Vue from 'vue';
 import StreamsStore from '@/store/modules/phone/streams';
 import AgentClient, {
   AgentStates,
   RouteStates,
 } from '@/models/phone/AgentClient';
-import Vuex from 'vuex';
-import Vue from 'vue';
 import * as ACS from '@/services/connect.service';
 
 jest.mock('@/models/User');

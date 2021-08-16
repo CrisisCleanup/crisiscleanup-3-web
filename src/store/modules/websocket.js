@@ -5,8 +5,8 @@
  */
 
 import { Module, MutationAction, VuexModule } from 'vuex-module-decorators';
-import Logger from '@/utils/log';
 import _ from 'lodash';
+import Logger from '@/utils/log';
 
 const Log = Logger({ name: 'WS' });
 

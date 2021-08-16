@@ -4,9 +4,9 @@
  * Use Event Preview Hook.
  */
 
-import EventComponent, { EventParts } from '@/models/EventComponent';
 import _ from 'lodash';
 import { ref, computed, reactive } from '@vue/composition-api';
+import EventComponent, { EventParts } from '@/models/EventComponent';
 import type { EventPart, EventPartT } from '@/models/EventComponent';
 
 export type EventInputMap = {

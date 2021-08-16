@@ -3,13 +3,13 @@
  * useAgentState Hook
  */
 
-import AgentClient, { RouteStates } from '@/models/phone/AgentClient';
 import { computed, ref, watch } from '@vue/composition-api';
+import _ from 'lodash';
+import { useState, useGetters } from '@u3u/vue-hooks';
+import AgentClient, { RouteStates } from '@/models/phone/AgentClient';
 import { ConnectionStates } from '@/models/phone/Connection';
 import { unwrap } from '@/utils/wrap';
-import _ from 'lodash';
 import { useIntervalFn } from '@/use/useIntervalFn';
-import { useState, useGetters } from '@u3u/vue-hooks';
 
 /**
  * Utilize current agent state to compute UI components.

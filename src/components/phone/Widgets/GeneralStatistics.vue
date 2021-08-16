@@ -66,10 +66,6 @@
 </template>
 
 <script>
-import useUser from '@/use/user/useUser';
-import usePhoneMetrics from '@/use/phone/usePhoneMetrics';
-import { Metrics } from '@/store/modules/phone/controller';
-import TitledCard from '@/components/cards/TitledCard.vue';
 import {
   ref,
   onMounted,
@@ -80,6 +76,10 @@ import {
 } from '@vue/composition-api';
 import { useState } from '@u3u/vue-hooks';
 import _ from 'lodash';
+import useUser from '@/use/user/useUser';
+import usePhoneMetrics from '@/use/phone/usePhoneMetrics';
+import { Metrics } from '@/store/modules/phone/controller';
+import TitledCard from '@/components/cards/TitledCard.vue';
 
 export default {
   name: 'GeneralStatistics',

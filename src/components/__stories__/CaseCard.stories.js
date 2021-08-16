@@ -1,7 +1,7 @@
-import CaseCard from '@/components/cards/Case.vue';
-import { colors, templates } from '@/icons/icons_templates';
 import _ from 'lodash';
 import Vuex from 'vuex';
+import CaseCard from '@/components/cards/Case.vue';
+import { colors, templates } from '@/icons/icons_templates';
 
 export default {
   title: 'Elements/Cards/CaseCard',

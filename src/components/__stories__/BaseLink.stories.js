@@ -1,5 +1,5 @@
-import BaseLink from '@/components/BaseLink';
 import StoryRouter from 'storybook-vue-router';
+import BaseLink from '@/components/BaseLink';
 
 export default {
   title: 'Basics/BaseLink',

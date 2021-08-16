@@ -79,8 +79,8 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
 import { create } from 'vue-modal-dialogs';
+import Table from '@/components/Table';
 import MessageBox from '@/components/dialogs/MessageBox';
 
 const messageBox = create(MessageBox);

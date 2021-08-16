@@ -59,15 +59,15 @@
 </template>
 
 <script>
+import { ref, computed, unref } from '@vue/composition-api';
+import _ from 'lodash';
 import EventSearchTable from '@/components/admin/events/EventSearchTable.vue';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import EventForm from '@/components/admin/events/EventForm.vue';
 import EventPreview from '@/components/admin/events/EventPreview.vue';
-import { ref, computed, unref } from '@vue/composition-api';
 import useEventPreview from '@/use/events/useEventPreview';
 import LocaleForm from '@/components/forms/LocaleForm';
 import { makeLocaleInputs } from '@/utils/form';
-import _ from 'lodash';
 import Event from '@/models/Event';
 import { unwrap } from '@/utils/wrap';
 

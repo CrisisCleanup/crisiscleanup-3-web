@@ -15,7 +15,12 @@
         </div>
         <div
           v-if="organization.custom_legal_tos"
-          class="h-64 terms-modal overflow-auto border border-crisiscleanup-dark-100"
+          class="
+            h-64
+            terms-modal
+            overflow-auto
+            border border-crisiscleanup-dark-100
+          "
           v-html="organization.custom_legal_tos"
         ></div>
       </div>

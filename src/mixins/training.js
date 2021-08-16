@@ -1,5 +1,5 @@
-import { hash } from '@/utils/promise';
 import _ from 'lodash';
+import { hash } from '@/utils/promise';
 
 export const TrainingMixin = {
   data() {

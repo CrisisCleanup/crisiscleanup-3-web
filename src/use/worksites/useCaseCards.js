@@ -4,11 +4,11 @@
  */
 
 import { ref, computed, watch, onMounted } from '@vue/composition-api';
+import _ from 'lodash';
 import { wrap } from '@/utils/wrap';
 import type { CaseType } from '@/store/modules/phone/types';
 import Pda from '@/models/Pda';
 import Worksite from '@/models/Worksite';
-import _ from 'lodash';
 
 export type UseCaseCardsProps = {|
   cases: CaseType[],

@@ -29,7 +29,16 @@
             <div>
               <form-select
                 :placeholder="placeholder"
-                class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
+                class="
+                  text-base
+                  border border-crisiscleanup-dark-100
+                  placeholder-crisiscleanup-dark-200
+                  outline-none
+                  p-2
+                  my-2
+                  resize-none
+                  w-full
+                "
                 :options="options"
                 v-model="response"
                 :label="label"

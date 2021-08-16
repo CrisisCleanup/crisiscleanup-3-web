@@ -3,7 +3,6 @@
  * Use Training Hook
  */
 
-import { hash } from '@/utils/promise';
 import {
   ref,
   reactive,
@@ -12,6 +11,7 @@ import {
   toRefs,
 } from '@vue/composition-api';
 import axios from 'axios';
+import { hash } from '@/utils/promise';
 import { TrainingApi, UserTrainingApi } from '@/utils/api';
 
 export type UseTrainingProps = {

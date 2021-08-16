@@ -68,11 +68,11 @@
   </div>
 </template>
 <script>
+import { createTags } from '@johmun/vue-tags-input';
+import _ from 'lodash';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
-import { createTags } from '@johmun/vue-tags-input';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput';
-import _ from 'lodash';
 import { getErrorMessage } from '../../utils/errors';
 
 const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;

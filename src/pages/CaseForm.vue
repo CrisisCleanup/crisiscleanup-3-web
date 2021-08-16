@@ -89,7 +89,15 @@
         />
       </div>
       <div
-        class="text-base font-semibold my-1 mx-3 flex justify-between items-center"
+        class="
+          text-base
+          font-semibold
+          my-1
+          mx-3
+          flex
+          justify-between
+          items-center
+        "
       >
         {{ $t('formLabels.location') }}
         <ccu-icon
@@ -268,7 +276,14 @@
       </template>
     </div>
     <div
-      class="bg-white p-3 border border-r-0 border-gray-300 card-footer flex justify-between"
+      class="
+        bg-white
+        p-3
+        border border-r-0 border-gray-300
+        card-footer
+        flex
+        justify-between
+      "
     >
       <base-button
         size="medium"

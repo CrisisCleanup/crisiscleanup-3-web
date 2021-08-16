@@ -30,8 +30,8 @@
 
 <script>
 import VueTypes from 'vue-types';
-import useTabs from '@/use/useTabs';
 import { ref } from '@vue/composition-api';
+import useTabs from '@/use/useTabs';
 import Card from './Card.vue';
 
 export default {

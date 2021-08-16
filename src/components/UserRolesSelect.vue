@@ -17,10 +17,10 @@
 </template>
 <script>
 import VueTypes from 'vue-types';
+import { mapMutations } from 'vuex';
 import Role from '@/models/Role';
 import UserRole from '@/models/UserRole';
 import User from '@/models/User';
-import { mapMutations } from 'vuex';
 
 export default {
   name: 'UserRolesSelect',

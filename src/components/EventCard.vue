@@ -2,7 +2,7 @@
   <div class="text-xs">
     <div class="flex items-center justify-between">
       <span class="text-sm">{{ $t(`events.${currentEvent.event_key}`) }}</span>
-      <span style="font-size: 10px;">{{
+      <span style="font-size: 10px">{{
         currentEvent.created_at | moment('from', 'now')
       }}</span>
     </div>

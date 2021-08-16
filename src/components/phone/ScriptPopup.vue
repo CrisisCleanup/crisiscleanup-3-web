@@ -49,8 +49,8 @@
 </template>
 
 <script>
-import { UserMixin, LocalStorageMixin, IncidentMixin } from '@/mixins';
 import VueTypes from 'vue-types';
+import { UserMixin, LocalStorageMixin, IncidentMixin } from '@/mixins';
 
 export default {
   name: 'ScriptPopup',

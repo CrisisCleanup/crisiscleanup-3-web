@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex';
 import User from '@/models/User';
 import Leaderboard from '@/components/phone/Widgets/Leaderboard.vue';
 import CallHistory from '@/components/phone/Widgets/CallHistory.vue';
@@ -72,7 +73,6 @@ import AgentCard from '@/components/phone/AgentCard.vue';
 import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics.vue';
 import AgentAnalytics from '@/components/phone/Cards/StatsCard.vue';
 import CallVolumeChart from '@/components/phone/Widgets/CallVolumeChart.vue';
-import { mapState, mapGetters } from 'vuex';
 import { TrainingMixin } from '@/mixins';
 
 export default {

@@ -10,8 +10,8 @@ import vSelect from 'vue-select';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import BaseIcon from '@/components/BaseIcon';
 import CompositionApi from '@vue/composition-api';
+import BaseIcon from '@/components/BaseIcon';
 import FormSelect from '../FormSelect';
 library.add(fas);
 

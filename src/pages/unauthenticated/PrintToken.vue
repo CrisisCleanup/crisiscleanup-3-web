@@ -48,7 +48,15 @@
                 <textarea
                   v-model="printToken.status_notes"
                   rows="3"
-                  class="text-base form-field border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 resize-none"
+                  class="
+                    text-base
+                    form-field
+                    border border-crisiscleanup-dark-100
+                    placeholder-crisiscleanup-dark-200
+                    outline-none
+                    p-2
+                    resize-none
+                  "
                 />
 
                 <span class="text-sm">{{

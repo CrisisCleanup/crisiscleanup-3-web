@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import Loader from '@/components/Loader.vue';
 import VueTypes from 'vue-types';
+import Loader from '@/components/Loader.vue';
 import PageTabBar from './PageTabBar.vue';
 
 export default {

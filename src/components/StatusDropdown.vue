@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import { getColorForStatus, getWorkTypeImage } from '@/filters';
 import { mapState } from 'vuex';
+import { getColorForStatus, getWorkTypeImage } from '@/filters';
 
 export default {
   name: 'StatusDropdown',

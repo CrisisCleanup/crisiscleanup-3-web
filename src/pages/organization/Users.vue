@@ -16,7 +16,17 @@
             placement="bottom-start"
           >
             <div
-              class="flex items-center bg-white border p-1 px-4 cursor-pointer mr-64 h-10"
+              class="
+                flex
+                items-center
+                bg-white
+                border
+                p-1
+                px-4
+                cursor-pointer
+                mr-64
+                h-10
+              "
               @click="() => {}"
             >
               <div>
@@ -32,10 +42,18 @@
             <div
               slot="popover"
               class="bg-white shadow w-108"
-              style="z-index: 1001;"
+              style="z-index: 1001"
             >
               <div
-                class="flex items-center bg-crisiscleanup-light-grey p-1 px-2 w-full flex-wrap"
+                class="
+                  flex
+                  items-center
+                  bg-crisiscleanup-light-grey
+                  p-1
+                  px-2
+                  w-full
+                  flex-wrap
+                "
               >
                 {{ $t('usersVue.filters') }}
                 <template v-for="(filter, key) in filters">

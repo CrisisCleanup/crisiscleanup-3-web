@@ -13,7 +13,7 @@
         v-bind="{ ...i, ...getEventFetchProps(i.type) }"
         @update:value="(payload) => updateValue(payload)"
       >
-        <template #option="{option}">
+        <template #option="{ option }">
           <base-text variant="h3">{{ option.name_t }}</base-text>
           <base-text variant="h4" regular>{{ option.key }}</base-text>
         </template>
@@ -32,7 +32,7 @@
           (options) => [...options, { id: -1, name_t: $t('eventBuilder.none') }]
         "
       >
-        <template #option="{option}">
+        <template #option="{ option }">
           <base-text variant="h3">{{ option.name_t }}</base-text>
           <base-text variant="h4" regular>{{ option.key }}</base-text>
         </template>
@@ -43,12 +43,6 @@
 
 <script>
 // @flow
-import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
-import UserBadge from '@/models/UserBadge';
-import EventComponent, {
-  EventComponentTypes,
-  EventParts,
-} from '@/models/EventComponent';
 import {
   reactive,
   ref,
@@ -57,6 +51,12 @@ import {
   computed,
 } from '@vue/composition-api';
 import _ from 'lodash';
+import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
+import UserBadge from '@/models/UserBadge';
+import EventComponent, {
+  EventComponentTypes,
+  EventParts,
+} from '@/models/EventComponent';
 import Event from '@/models/Event';
 import { unwrap } from '@/utils/wrap';
 

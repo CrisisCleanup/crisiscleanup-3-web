@@ -2,8 +2,8 @@
  * UI Store Actions.
  *
  */
-import Logger from '@/utils/log';
 import * as Sentry from '@sentry/browser';
+import Logger from '@/utils/log';
 import * as types from './types';
 
 const Log = Logger({

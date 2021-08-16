@@ -1,7 +1,7 @@
+import { mapGetters } from 'vuex';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
 import { getErrorMessage } from '@/utils/errors';
-import { mapGetters } from 'vuex';
 
 export default {
   methods: {

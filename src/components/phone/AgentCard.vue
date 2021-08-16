@@ -88,11 +88,6 @@
 
 <script>
 import { create } from 'vue-modal-dialogs';
-import ComponentDialog from '@/components/dialogs/ComponentDialog';
-import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
-import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
-import useAgentState from '@/use/phone/useAgentState';
-import useAgent from '@/use/phone/useAgent';
 import {
   reactive,
   ref,
@@ -100,19 +95,24 @@ import {
   watch,
   computed,
 } from '@vue/composition-api';
+import { useStore, useRouter } from '@u3u/vue-hooks';
+import { getModule } from 'vuex-module-decorators';
+import VueTypes from 'vue-types';
+import ComponentDialog from '@/components/dialogs/ComponentDialog';
+import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
+import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
+import useAgentState from '@/use/phone/useAgentState';
+import useAgent from '@/use/phone/useAgent';
 import useToggle from '@/use/useToggle';
 import useUser from '@/use/user/useUser';
 import useTraining from '@/use/user/useTraining';
 import Agent, { ERRORS as AgentErrors } from '@/models/Agent';
-import { useStore, useRouter } from '@u3u/vue-hooks';
-import { getModule } from 'vuex-module-decorators';
 import { unwrap } from '@/utils/wrap';
 import ProgressButton from '@/components/buttons/ProgressButton.vue';
 import OutboundDialer from '@/components/phone/Widgets/OutboundDialer.vue';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import useIncident from '@/use/worksites/useIncident';
 import { EventBus } from '@/event-bus';
-import VueTypes from 'vue-types';
 import ControllerStore from '@/store/modules/phone/controller';
 import Avatar from '@/components/Avatar';
 
@@ -197,18 +197,13 @@ export default {
       tests: [2, 3, 4],
     });
 
-    const {
-      agent,
-      agentState,
-      toggleAgentState,
-      acwDuration,
-      connected,
-    } = useAgentState({
-      ...useAgent(),
-      context,
-      // isTrained: props.trainingComplete,
-      isTrained: true,
-    });
+    const { agent, agentState, toggleAgentState, acwDuration, connected } =
+      useAgentState({
+        ...useAgent(),
+        context,
+        // isTrained: props.trainingComplete,
+        isTrained: true,
+      });
 
     const handleStateChange = async (args) => {
       // if (!props.trainingComplete) {

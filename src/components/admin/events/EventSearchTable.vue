@@ -26,9 +26,9 @@
 <script>
 // @flow
 
+import { computed } from '@vue/composition-api';
 import useSearchEvents from '@/use/events/useSearchEvents';
 import { makeTableColumns } from '@/utils/table';
-import { computed } from '@vue/composition-api';
 import Table from '@/components/Table.vue';
 
 export default {

@@ -11,11 +11,11 @@
 
 <script>
 // @flow
+import { computed, onMounted, watch } from '@vue/composition-api';
 import PageLayout from '@/layouts/page/Page.vue';
 import IncomingPopup from '@/components/phone/Popup.vue';
 import { ControllerPages } from '@/store/modules/phone/controller';
 import useAgent from '@/use/phone/useAgent';
-import { computed, onMounted, watch } from '@vue/composition-api';
 import { useIntervalFn } from '@/use/useIntervalFn';
 import useContact from '@/use/phone/useContact';
 import useController from '@/use/phone/useController';

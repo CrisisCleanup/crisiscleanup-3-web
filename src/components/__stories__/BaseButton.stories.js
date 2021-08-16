@@ -1,5 +1,5 @@
-import BaseButton from '@/components/BaseButton.vue';
 import { action } from '@storybook/addon-actions';
+import BaseButton from '@/components/BaseButton.vue';
 
 export default {
   title: 'Basics/BaseButton',

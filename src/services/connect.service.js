@@ -4,8 +4,8 @@
  * AWS Connect Service
  */
 
-import type { ACSEventTopic, ACSCallback, ACSConfig } from '@/services/types';
 import _ from 'lodash';
+import type { ACSEventTopic, ACSCallback, ACSConfig } from '@/services/types';
 import Logger from '@/utils/log';
 
 const Log = Logger({ name: 'connect.service' });
@@ -183,7 +183,8 @@ export const getConnectionByContactId = (
 ): typeof connect.Connection | null => {
   const targContact = getContactById(contactId);
   if (targContact === null) return null;
-  const targConnection: typeof connect.ConnectionType = targContact.getInitialConnection();
+  const targConnection: typeof connect.ConnectionType =
+    targContact.getInitialConnection();
   return targConnection || null;
 };
 

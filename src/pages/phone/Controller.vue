@@ -66,6 +66,9 @@
 
 <script>
 // @flow
+import { computed, ref } from '@vue/composition-api';
+import { useLocalStorage } from 'vue-composable';
+import { create } from 'vue-modal-dialogs';
 import CaseForm from '@/pages/CaseForm.vue';
 import AgentBoard from '@/components/phone/AgentBoard/Board.vue';
 import ScriptPopup from '@/components/phone/ScriptPopup.vue';
@@ -73,15 +76,12 @@ import Pda from '@/models/Pda';
 import AgentActions from '@/components/phone/AgentActions/Actions.vue';
 import PhoneResources from '@/components/phone/AgentActions/Resources.vue';
 import useIncident from '@/use/worksites/useIncident';
-import { computed, ref } from '@vue/composition-api';
 import useContact from '@/use/phone/useContact';
 import Worksite from '@/models/Worksite';
-import { useLocalStorage } from 'vue-composable';
 import useController from '@/use/phone/useController';
 import AgentCard from '@/components/phone/AgentCard.vue';
 import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics.vue';
 import AgentAnalytics from '@/components/phone/Cards/StatsCard.vue';
-import { create } from 'vue-modal-dialogs';
 import ComponentDialog from '@/components/dialogs/ComponentDialog';
 import BoardStatus from '@/components/phone/AgentBoard/Status.vue';
 import useScripts from '@/use/phone/useScripts';
@@ -112,12 +112,8 @@ export default {
   setup(props, context) {
     const { getters, state, actions } = useController();
 
-    const {
-      currentContact,
-      callType,
-      callerName,
-      activeIncident,
-    } = useContact();
+    const { currentContact, callType, callerName, activeIncident } =
+      useContact();
 
     const { storage } = useLocalStorage('ccu-ivr-hide-script', false);
     const renderPopup = computed(() => storage.value === false);

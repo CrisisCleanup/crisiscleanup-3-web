@@ -53,9 +53,9 @@
   </Table>
 </template>
 <script>
+import VueTypes from 'vue-types';
 import Table from '@/components/Table';
 import { getColorForStatus } from '@/filters';
-import VueTypes from 'vue-types';
 
 export default {
   name: 'WorksiteTable',

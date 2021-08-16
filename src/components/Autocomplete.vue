@@ -20,7 +20,15 @@
         <span class="my-suggestion-item" />
         <slot name="result" :suggestion="suggestion">
           <div
-            class="flex justify-between text-sm p-2 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
+            class="
+              flex
+              justify-between
+              text-sm
+              p-2
+              cursor-pointer
+              hover:bg-crisiscleanup-light-grey
+              border-b
+            "
           >
             {{ suggestion.item[displayProperty] }}
           </div>

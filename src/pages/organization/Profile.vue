@@ -436,7 +436,15 @@
     </div>
     <div class="w-full bg-white shadow mt-6 mb-32">
       <div
-        class="border-b px-4 py-2 font-semibold flex justify-between items-center"
+        class="
+          border-b
+          px-4
+          py-2
+          font-semibold
+          flex
+          justify-between
+          items-center
+        "
       >
         {{ $t('Documents and Materials') }}
         <base-button
@@ -460,7 +468,15 @@
           "
           :placeholder="$t('profileOrg.add_work_order_instructions')"
           rows="4"
-          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-72"
+          class="
+            text-base
+            border border-crisiscleanup-dark-100
+            placeholder-crisiscleanup-dark-200
+            outline-none
+            p-1
+            resize-none
+            w-72
+          "
         />
       </div>
       <hr />
@@ -521,7 +537,15 @@
           "
           :placeholder="$t('profileOrg.add_tos_text')"
           rows="4"
-          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-72"
+          class="
+            text-base
+            border border-crisiscleanup-dark-100
+            placeholder-crisiscleanup-dark-200
+            outline-none
+            p-1
+            resize-none
+            w-72
+          "
         />
       </div>
       <hr />
@@ -585,7 +609,15 @@
           "
           :placeholder="$t('profileOrg.add_survivor_waiver_text')"
           rows="4"
-          class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-1 resize-none w-72"
+          class="
+            text-base
+            border border-crisiscleanup-dark-100
+            placeholder-crisiscleanup-dark-200
+            outline-none
+            p-1
+            resize-none
+            w-72
+          "
         />
       </div>
     </div>

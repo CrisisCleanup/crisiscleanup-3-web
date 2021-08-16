@@ -7,10 +7,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import Table from '@/components/Table.vue';
 import { UserMixin } from '@/mixins';
-import { mapState } from 'vuex';
 
 export default {
   name: 'ContactTable',

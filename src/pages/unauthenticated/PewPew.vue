@@ -1,18 +1,25 @@
 <template>
   <div class="pewpew absolute top-0 right-0 left-0 bottom-0" :style="styles">
     <div class="grid grid-cols-10 relative">
-      <div class="absolute right-0 px-1 w-full sm:w-1/3" style="top: 10%;">
+      <div class="absolute right-0 px-1 w-full sm:w-1/3" style="top: 10%">
         <OrganizationActivityModal
           @close="closeModal"
           :general-info="orgInfo.generalInfo"
           class="x-translate"
-          style="z-index: 1002;"
+          style="z-index: 1002"
           :styles="styles"
         />
       </div>
       <div
-        class="grid grid-cols-8 col-span-2 shadow-lg h-screen flex flex-col pr-1"
-        style="z-index: 1000;"
+        class="
+          grid grid-cols-8
+          col-span-2
+          shadow-lg
+          h-screen
+          flex flex-col
+          pr-1
+        "
+        style="z-index: 1000"
       >
         <div class="pewpew__nav">
           <router-link :to="{ name: 'nav.pew' }" class="pewpew__navheader">
@@ -117,7 +124,17 @@
                     :style="{
                       borderColor: currentEvent.strokeColor,
                     }"
-                    class="stacked-card bg-opacity-25 border w-full h-auto rounded my-2 p-3 bg-red-200"
+                    class="
+                      stacked-card
+                      bg-opacity-25
+                      border
+                      w-full
+                      h-auto
+                      rounded
+                      my-2
+                      p-3
+                      bg-red-200
+                    "
                   ></EventCard>
                 </transition>
               </div>
@@ -127,9 +144,7 @@
                 <div class="">
                   <div class="mb-2">
                     <div>{{ $t('Total Big Number') }}</div>
-                    <div class="text-xl text-blue-600 stats">
-                      $1.1 Billion
-                    </div>
+                    <div class="text-xl text-blue-600 stats">$1.1 Billion</div>
                   </div>
                   <div class="mb-2">
                     <div>{{ $t('Volunteer Hours') }}</div>
@@ -159,7 +174,16 @@
       <div class="col-span-8 h-screen flex flex-col">
         <div class="h-12 grid grid-cols-10">
           <div
-            class="my-2 col-span-8 flex justify-center items-center text-black font-bold ribbon-gradient"
+            class="
+              my-2
+              col-span-8
+              flex
+              justify-center
+              items-center
+              text-black
+              font-bold
+              ribbon-gradient
+            "
           >
             {{
               $t(
@@ -214,8 +238,16 @@
                   class="absolute top-0 left-0 right-0 bottom-0"
                 ></div>
                 <div
-                  style="z-index: 1001;"
-                  class="absolute top-0 left-0 m-2 p-2 bg-opacity-25 bg-crisiscleanup-dark-400 rounded-md"
+                  style="z-index: 1001"
+                  class="
+                    absolute
+                    top-0
+                    left-0
+                    m-2
+                    p-2
+                    bg-opacity-25 bg-crisiscleanup-dark-400
+                    rounded-md
+                  "
                 >
                   <Slider
                     primary-color="#FECE09"
@@ -230,8 +262,17 @@
                   ></Slider>
                 </div>
                 <div
-                  style="z-index: 1001;"
-                  class="absolute top-0 right-0 h-32 w-auto overflow-hidden mt-3 mr-3"
+                  style="z-index: 1001"
+                  class="
+                    absolute
+                    top-0
+                    right-0
+                    h-32
+                    w-auto
+                    overflow-hidden
+                    mt-3
+                    mr-3
+                  "
                   ref="incidentScroll"
                 >
                   <div
@@ -243,12 +284,21 @@
                   </div>
                 </div>
                 <div
-                  style="z-index: 1001;"
+                  style="z-index: 1001"
                   class="absolute left-0 bottom-0 right-0"
                 >
                   <div
                     v-if="displayedWorkTypeSvgs.length > 0"
-                    class="legend w-108 h-auto bg-crisiscleanup-dark-400 p-2 mb-5 ml-3 bg-opacity-25"
+                    class="
+                      legend
+                      w-108
+                      h-auto
+                      bg-crisiscleanup-dark-400
+                      p-2
+                      mb-5
+                      ml-3
+                      bg-opacity-25
+                    "
                   >
                     <div class="font-bold my-1 text-white text-sm">
                       {{ $t('Legend') }}
@@ -257,7 +307,14 @@
                       <div
                         v-for="entry in displayedWorkTypeSvgs"
                         :key="entry.key"
-                        class="flex items-center w-1/2 mb-1 cursor-pointer hover:border-2"
+                        class="
+                          flex
+                          items-center
+                          w-1/2
+                          mb-1
+                          cursor-pointer
+                          hover:border-2
+                        "
                         :class="entry.selected ? 'selected border-2' : 'my-1'"
                         @click="
                           () => {
@@ -276,7 +333,14 @@
                   </div>
                   <div class="stats grid grid-flow-col mb-10 ml-3">
                     <div
-                      class="p-1 border mx-1 bg-opacity-25 bg-crisiscleanup-dark-400 rounded-md w-auto"
+                      class="
+                        p-1
+                        border
+                        mx-1
+                        bg-opacity-25 bg-crisiscleanup-dark-400
+                        rounded-md
+                        w-auto
+                      "
                       v-for="item in mapStatistics"
                       :style="item['style']"
                       :key="item['title']"
@@ -290,12 +354,29 @@
                     </div>
                   </div>
                   <div
-                    class="w-auto h-auto bg-crisiscleanup-dark-400 p-3 bg-opacity-25 flex mb-8 mx-3 rounded"
+                    class="
+                      w-auto
+                      h-auto
+                      bg-crisiscleanup-dark-400
+                      p-3
+                      bg-opacity-25
+                      flex
+                      mb-8
+                      mx-3
+                      rounded
+                    "
                   >
                     <div class="flex justify-center items-center mr-2">
                       <base-button
                         v-if="eventsInterval"
-                        class="w-8 h-8 rounded-full focus:outline-none border p-2"
+                        class="
+                          w-8
+                          h-8
+                          rounded-full
+                          focus:outline-none
+                          border
+                          p-2
+                        "
                         :action="pauseGeneratePoints"
                         icon="pause"
                         icon-size="xs"
@@ -303,7 +384,14 @@
                       </base-button>
                       <base-button
                         v-else
-                        class="w-8 h-8 rounded-full focus:outline-none border p-2"
+                        class="
+                          w-8
+                          h-8
+                          rounded-full
+                          focus:outline-none
+                          border
+                          p-2
+                        "
                         :action="generatePoints"
                         icon="play"
                         icon-size="xs"
@@ -335,7 +423,7 @@
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
-                style="height: 20rem;"
+                style="height: 20rem"
                 :body-style="{ maxHeight: '40vh', ...styles }"
                 :header-style="styles"
                 :row-style="{ backgroundColor: 'unset' }"
@@ -377,7 +465,7 @@
                 <LightTab
                   :name="$t('Call Volume')"
                   class="absolute left-0 right-0"
-                  style="top: 10%; bottom: 5%;"
+                  style="top: 10%; bottom: 5%"
                   selected
                 >
                   <div class="absolute top-0 bottom-0 left-0 right-0">
@@ -393,7 +481,7 @@
                 <LightTab
                   :name="$t('Velocity')"
                   class="absolute left-0 right-0"
-                  style="top: 10%; bottom: 5%;"
+                  style="top: 10%; bottom: 5%"
                 >
                   <div class="absolute top-0 bottom-0 left-0 right-0">
                     <GaugeChart
@@ -405,7 +493,7 @@
                 <LightTab
                   :name="$t('Total cases')"
                   class="absolute bottom-0 left-0 right-0"
-                  style="top: 10%; bottom: 5%;"
+                  style="top: 10%; bottom: 5%"
                 >
                   <div class="absolute top-0 bottom-0 left-0 right-0">
                     <D3BarChart
@@ -427,6 +515,8 @@
 
 <script>
 import * as L from 'leaflet';
+import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
+import { orderBy, throttle } from 'lodash';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
 import { nFormatter } from '@/utils/helpers';
@@ -445,9 +535,7 @@ import {
 import { HomeNavigation } from '@/components/home/SideNav';
 import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
-import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
 import Incident from '@/models/Incident';
-import { orderBy, throttle } from 'lodash';
 import Slider from '@/components/Slider';
 import DisasterIcon from '@/components/DisasterIcon';
 import OrganizationActivityModal from '@/components/OrganizationActivityModal.vue';
@@ -535,24 +623,12 @@ export default {
           rightLabel: 'High 3',
         },
       ],
-      barChartData: [
-        { group: 0, newCases: 28, closedCases: 30 },
-        { group: 1, newCases: 43, closedCases: 38 },
-        { group: 2, newCases: 81, closedCases: 30 },
-        { group: 3, newCases: 19, closedCases: 80 },
-        { group: 4, newCases: 52, closedCases: 30 },
-        { group: 5, newCases: 24, closedCases: 35 },
-        { group: 6, newCases: 87, closedCases: 70 },
-        { group: 7, newCases: 17, closedCases: 30 },
-        { group: 8, newCases: 68, closedCases: 47 },
-        { group: 9, newCases: 49, closedCases: 32 },
-        { group: 10, newCases: 69, closedCases: 42 },
-      ],
       incidentId: null,
       markerSpeed: 2000,
       incident: null,
       incidentStats: {},
       mapStatistics: [],
+      displayedWorkTypes: [],
       displayedWorkTypeSvgs: [],
       orbTexture: null,
       eventsInterval: null,
@@ -598,21 +674,20 @@ export default {
     this.orbTexture = Texture.from(svg);
   },
   methods: {
-    setLegend() {
-      this.displayedWorkTypeSvgs = this.incident.created_work_types.map(
-        (workType) => {
-          const template = templates[workType] || templates.unknown;
-          const svg = template
-            .replace('{{fillColor}}', '#61D5F8')
-            .replace('{{strokeColor}}', 'black')
-            .replace('{{multiple}}', '');
-          return {
-            svg,
-            key: workType,
-            selected: false,
-          };
-        },
-      );
+    setLegend(createdWorkTypes) {
+      const workTypes = createdWorkTypes || this.incident.created_work_types;
+      this.displayedWorkTypeSvgs = workTypes.map((workType) => {
+        const template = templates[workType] || templates.unknown;
+        const svg = template
+          .replace('{{fillColor}}', '#61D5F8')
+          .replace('{{strokeColor}}', 'black')
+          .replace('{{multiple}}', '');
+        return {
+          svg,
+          key: workType,
+          selected: false,
+        };
+      });
     },
     async fetchCircularBarplotData(date, interval) {
       console.log('fetching...');
@@ -780,6 +855,9 @@ export default {
           this.$log.error(e);
         }
       }
+
+      const displayedWorkTypes = new Set(this.displayedWorkTypes);
+      this.setLegend(Array.from(displayedWorkTypes));
 
       worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
       worksiteLayer.redraw();
@@ -956,6 +1034,7 @@ export default {
               const spriteColors = colors[colorsKey];
               color = spriteColors.fillColor;
               strokeColor = spriteColors.strokeColor;
+              this.displayedWorkTypes.push(workTypeKey);
             } else if (
               marker.attr.recipient_status ||
               marker.attr.patient_status
@@ -973,6 +1052,7 @@ export default {
               strokeColor = spriteColors.strokeColor;
               workTypeKey =
                 marker.attr[`${marker.map_destination}_work_type_key`];
+              this.displayedWorkTypes.push(workTypeKey);
             }
 
             patientMarkerSprite = new Sprite();
@@ -1031,7 +1111,8 @@ export default {
             event: marker,
           };
           this.liveIncidents.push(marker.attr.incident_name);
-          this.$refs.incidentScroll.scrollTop = this.$refs.incidentScroll.scrollHeight;
+          this.$refs.incidentScroll.scrollTop =
+            this.$refs.incidentScroll.scrollHeight;
           const markerTemplate = templates.circle;
           let actorMarkerSprite = null;
           let patientMarkerSprite = null;
@@ -1161,12 +1242,10 @@ export default {
             );
             linksGraphics.live = true;
             actorMarkerSprite.workTypeKey = patientMarkerSprite.workTypeKey;
-            actorMarkerSprite.visible = this.getMarkerVisibility(
-              actorMarkerSprite,
-            );
-            patientMarkerSprite.visible = this.getMarkerVisibility(
-              patientMarkerSprite,
-            );
+            actorMarkerSprite.visible =
+              this.getMarkerVisibility(actorMarkerSprite);
+            patientMarkerSprite.visible =
+              this.getMarkerVisibility(patientMarkerSprite);
             setTimeout(() => {
               layer._pixiContainer.addChild(linksGraphics);
               layer._renderer.render(layer._pixiContainer);
@@ -1383,12 +1462,10 @@ export default {
       const organization = await this.getOrganization(item.id);
       this.orgInfo.generalInfo = item;
       this.orgInfo.generalInfo.organization = organization;
-      this.orgInfo.generalInfo.capabilites = await this.getOrganizationCapabilities(
-        item.id,
-      );
-      this.orgInfo.generalInfo.statistics = await this.getOrganizationStatisticsByIncident(
-        item.id,
-      );
+      this.orgInfo.generalInfo.capabilites =
+        await this.getOrganizationCapabilities(item.id);
+      this.orgInfo.generalInfo.statistics =
+        await this.getOrganizationStatisticsByIncident(item.id);
       const modal = document.querySelector('div.x-translate');
       if (modal) {
         modal.classList.remove('x-translate');

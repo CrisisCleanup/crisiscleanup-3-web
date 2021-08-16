@@ -29,7 +29,16 @@
             <div>
               <textarea
                 v-model="response"
-                class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
+                class="
+                  text-base
+                  border border-crisiscleanup-dark-100
+                  placeholder-crisiscleanup-dark-200
+                  outline-none
+                  p-2
+                  my-2
+                  resize-none
+                  w-full
+                "
                 rows="4"
               />
             </div>

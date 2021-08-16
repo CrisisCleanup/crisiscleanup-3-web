@@ -1,7 +1,16 @@
 <template>
   <div class="relative w-full rounded p-2 popup--container" :style="styles">
     <div
-      class="absolute h-7 top-1 right-0 cursor-pointer px-2 rounded-full text-center"
+      class="
+        absolute
+        h-7
+        top-1
+        right-0
+        cursor-pointer
+        px-2
+        rounded-full
+        text-center
+      "
       @click="closeModal()"
     >
       <font-awesome-icon icon="times" />
@@ -96,7 +105,7 @@
           <Table
             :columns="incidentTable.columns"
             :data="generalInfo.statistics"
-            style="height: 20rem;"
+            style="height: 20rem"
             :body-style="{ maxHeight: '40vh', ...styles }"
             :header-style="styles"
             :row-style="{ backgroundColor: 'unset' }"

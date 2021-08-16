@@ -1,7 +1,14 @@
 <template>
   <div
     v-if="ready"
-    class="bg-white flex flex-col flex-grow justify-between p-3 main-container w-full"
+    class="
+      bg-white
+      flex flex-col flex-grow
+      justify-between
+      p-3
+      main-container
+      w-full
+    "
   >
     <div class="w-full overflow-auto">
       <form-select
@@ -313,6 +320,7 @@
 </template>
 
 <script>
+import { orderBy } from 'lodash';
 import User from '@/models/User';
 import Worksite from '@/models/Worksite';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput';
@@ -320,7 +328,6 @@ import Organization from '@/models/Organization';
 import { getGoogleMapsLocation } from '@/utils/map';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
-import { orderBy } from 'lodash';
 
 export default {
   name: 'CaseFlag',

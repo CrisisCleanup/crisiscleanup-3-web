@@ -50,10 +50,10 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
-import User from '@/models/User';
 import axios from 'axios';
 import { mapMutations } from 'vuex';
+import Table from '@/components/Table';
+import User from '@/models/User';
 import Role from '@/models/Role';
 import { DialogsMixin } from '@/mixins';
 

@@ -5,10 +5,10 @@
 import { createLocalVue } from '@vue/test-utils';
 import VueCompositionApi from '@vue/composition-api';
 import { useGetters } from '@u3u/vue-hooks';
-import AgentClient from '@/models/phone/AgentClient';
-import useAgent from '@/use/phone/useAgent';
 import VuexORM, { Database } from '@vuex-orm/core';
 import Vuex from 'vuex';
+import AgentClient from '@/models/phone/AgentClient';
+import useAgent from '@/use/phone/useAgent';
 
 // jest.mock('@/models/phone/AgentClient');
 jest.mock('@u3u/vue-hooks');

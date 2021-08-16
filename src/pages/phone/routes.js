@@ -1,6 +1,6 @@
+import { useRouter } from '@u3u/vue-hooks';
 import { BannerTypes } from '@/store/modules/ui/types';
 import BetaBanner from '@/components/notifications/BetaBanner.vue';
-import { useRouter } from '@u3u/vue-hooks';
 import PhoneLayout from './Index.vue';
 
 const NewSystemBetaBanner = () => {

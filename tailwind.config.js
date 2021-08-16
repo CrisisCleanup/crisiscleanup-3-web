@@ -1,6 +1,6 @@
 const _ = require('lodash');
-const flattenColorPalette = require('tailwindcss/lib/util/flattenColorPalette')
-  .default;
+const flattenColorPalette =
+  require('tailwindcss/lib/util/flattenColorPalette').default;
 
 module.exports = {
   purge: ['./src/**/*.html', './src/**/*.vue'],
@@ -129,14 +129,14 @@ module.exports = {
         'crisiscleanup-grid-yellow': '#FECE09',
       },
       spacing: {
-        '18': '4.5rem',
-        '72': '18rem',
-        '84': '21rem',
-        '96': '24rem',
-        '108': '27rem',
-        '120': '30rem',
-        '132': '33rem',
-        '144': '36rem',
+        18: '4.5rem',
+        72: '18rem',
+        84: '21rem',
+        96: '24rem',
+        108: '27rem',
+        120: '30rem',
+        132: '33rem',
+        144: '36rem',
       },
       boxShadow: {
         'crisiscleanup-card': '0 0 14px 0 rgba(164, 177, 184, 0.18)',
@@ -146,8 +146,8 @@ module.exports = {
         'span-8': 'span 8 / span 8',
       },
       gridTemplateRows: {
-        '12': 'repeat(12, minmax(0, 1fr))',
-        '30': 'repeat(30, 1fr)',
+        12: 'repeat(12, minmax(0, 1fr))',
+        30: 'repeat(30, 1fr)',
       },
     },
   },

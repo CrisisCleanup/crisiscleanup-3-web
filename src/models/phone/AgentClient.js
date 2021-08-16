@@ -5,6 +5,8 @@
  */
 
 import { Model } from '@vuex-orm/core';
+import _ from 'lodash';
+import * as Sentry from '@sentry/browser';
 import type {
   AgentClientType,
   AgentState,
@@ -14,13 +16,11 @@ import type {
 } from '@/models/phone/types';
 import Contact, { ContactActions } from '@/models/phone/Contact';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
-import _ from 'lodash';
 import Logger from '@/utils/log';
 import * as ACS from '@/services/connect.service';
 import { ACTIONS } from '@/store/modules/websocket';
 import User from '@/models/User';
 import Language from '@/models/Language';
-import * as Sentry from '@sentry/browser';
 
 /**
  * Enum of states that represent whether a client is currently

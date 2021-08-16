@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay-map" style="position: relative;">
+  <div class="overlay-map" style="position: relative">
     <div ref="map" class="home-map"></div>
   </div>
 </template>

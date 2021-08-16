@@ -1,7 +1,7 @@
+import SDK from '@ringcentral/sdk';
 import Logger from '@/utils/log';
 // import { SDK } from '@ringcentral/sdk';
 // const { SDK } = require('@ringcentral/sdk');
-import SDK from '@ringcentral/sdk';
 
 const Log = Logger({
   name: 'rc.service',

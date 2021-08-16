@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import PageLayout from '@/layouts/page/Page.vue';
 import { reactive } from '@vue/composition-api';
+import PageLayout from '@/layouts/page/Page.vue';
 
 export default {
   name: 'AdminPage',

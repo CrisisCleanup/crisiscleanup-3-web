@@ -1,5 +1,5 @@
-import Page from '@/layouts/page/Page.vue';
 import StoryRouter from 'storybook-vue-router';
+import Page from '@/layouts/page/Page.vue';
 
 const Tab = (val) => ({
   template: `<div>${val}</div>`,

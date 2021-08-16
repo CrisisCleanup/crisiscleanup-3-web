@@ -24,7 +24,12 @@
           <div class="modal-body flex-grow p-3">
             <form-select
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
-              class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
+              class="
+                w-auto
+                flex-grow
+                border border-crisiscleanup-dark-100
+                select
+              "
               :options="approveRejectReasons"
               v-model="response.reason"
               item-key="key"

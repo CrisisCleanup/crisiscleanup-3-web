@@ -81,11 +81,11 @@
 </template>
 
 <script>
+import { create } from 'vue-modal-dialogs';
 import Table from '@/components/Table';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
 import OrganizationApprovalDialog from '@/components/dialogs/OrganizationApprovalDialog';
-import { create } from 'vue-modal-dialogs';
 import MessageBox from '@/components/dialogs/MessageBox';
 import { DialogsMixin } from '../mixins';
 import Incident from '../models/Incident';

@@ -7,8 +7,8 @@
 
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import { MockWorksites } from '@/utils/testing';
 import CompositionApi from '@vue/composition-api';
+import { MockWorksites } from '@/utils/testing';
 import WorksiteSearchInput from '../WorksiteSearchInput';
 
 const localVue = createLocalVue();

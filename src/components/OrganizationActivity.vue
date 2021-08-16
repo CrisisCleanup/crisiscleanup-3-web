@@ -1,9 +1,27 @@
 <template>
   <div
-    class="rounded relative text-white grid grid-rows-7 justify-center items-center w-full"
+    class="
+      rounded
+      relative
+      text-white
+      grid grid-rows-7
+      justify-center
+      items-center
+      w-full
+    "
   >
     <div
-      class="absolute top-0 right-0 text-center rounded-full hover:bg-gray-500 w-5 h-5 m-1"
+      class="
+        absolute
+        top-0
+        right-0
+        text-center
+        rounded-full
+        hover:bg-gray-500
+        w-5
+        h-5
+        m-1
+      "
       @click="$emit('close')"
     >
       X
@@ -12,7 +30,15 @@
       <div class="flex items-center">
         <img
           :src="organizationImage"
-          class="col-span-1 rounded-full w-20 h-20 object-contain bg-black justify-self-center"
+          class="
+            col-span-1
+            rounded-full
+            w-20
+            h-20
+            object-contain
+            bg-black
+            justify-self-center
+          "
         />
       </div>
       <div class="grid-rows-2 col-span-3 sm:ml-2">
@@ -49,11 +75,11 @@
       </div>
       <div class="col-span-1">
         <div>CALLS</div>
-        <div>{{ (organizationInfo.calls/1000) }}K</div>
+        <div>{{ organizationInfo.calls / 1000 }}K</div>
       </div>
       <div class="col-span-1">
         <div>VALUE</div>
-        <div>{{ (organizationInfo.value/1000000) }}M</div>
+        <div>{{ organizationInfo.value / 1000000 }}M</div>
       </div>
     </div>
     <div class="row-span-2" v-if="!isMore">
@@ -67,7 +93,14 @@
       </div>
       <div
         v-if="!isMore"
-        class="text-center bg-gradient-to-r from-transparent via-gray-500 to-transparent my-2"
+        class="
+          text-center
+          bg-gradient-to-r
+          from-transparent
+          via-gray-500
+          to-transparent
+          my-2
+        "
       >
         Business Services
       </div>

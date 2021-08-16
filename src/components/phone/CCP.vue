@@ -7,8 +7,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { EventBus } from '@/event-bus';
 import { getModule } from 'vuex-module-decorators';
+import { EventBus } from '@/event-bus';
 import StreamsStore from '@/store/modules/phone/streams';
 
 export default {

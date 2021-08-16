@@ -35,7 +35,6 @@
 </template>
 
 <script>
-import useEnums from '@/use/useEnums';
 import {
   computed,
   ref,
@@ -43,10 +42,11 @@ import {
   watch,
   onBeforeUnmount,
 } from '@vue/composition-api';
+import { useRouter } from '@u3u/vue-hooks';
+import useEnums from '@/use/useEnums';
 import { theme } from '@/../tailwind.config';
 import useAgentState from '@/use/phone/useAgentState';
 import useAgent from '@/use/phone/useAgent';
-import { useRouter } from '@u3u/vue-hooks';
 
 export default {
   name: 'PhoneStatus',

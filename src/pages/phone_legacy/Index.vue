@@ -120,7 +120,16 @@
           <textarea
             rows="3"
             v-model="currentNotes"
-            class="text-base border border-crisiscleanup-dark-100 placeholder-crisiscleanup-dark-200 outline-none p-2 my-2 resize-none w-full"
+            class="
+              text-base
+              border border-crisiscleanup-dark-100
+              placeholder-crisiscleanup-dark-200
+              outline-none
+              p-2
+              my-2
+              resize-none
+              w-full
+            "
             :placeholder="$t('phoneConnectFirst.notes')"
           ></textarea>
           <base-button
@@ -148,7 +157,7 @@
           @savedWorksite="clearCase"
           @closeWorksite="clearCase"
           class="border shadow mb-4"
-          style="grid-template-rows: 600px 80px; height: 700px;"
+          style="grid-template-rows: 600px 80px; height: 700px"
           @navigateToWorksite="
             (id) => {
               currentType = 'worksite';
@@ -185,15 +194,14 @@
 
 <script>
 import { mapState } from 'vuex';
+import moment from 'moment';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import PhoneStatus from '@/models/PhoneStatus';
 import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
 import { WorksitesMixin } from '@/mixins';
 import CaseCard from '@/components/cards/case/CaseCard';
-import moment from 'moment';
 // eslint-disable-next-line no-unused-vars
-import moment_timezone from 'moment-timezone';
 import CaseForm from '../CaseForm';
 
 export default {

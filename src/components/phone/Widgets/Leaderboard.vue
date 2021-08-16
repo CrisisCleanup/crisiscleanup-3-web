@@ -86,12 +86,12 @@
 </template>
 
 <script>
+import { useGetters } from '@u3u/vue-hooks';
+import { reactive, ref } from '@vue/composition-api';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
-import { useGetters } from '@u3u/vue-hooks';
 import AgentClient from '@/models/phone/AgentClient';
 import LanguageTag from '@/components/tags/LanguageTag.vue';
-import { reactive, ref } from '@vue/composition-api';
 import useUser from '@/use/user/useUser';
 import Avatar from '@/components/Avatar';
 

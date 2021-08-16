@@ -1,6 +1,14 @@
 <template>
   <div
-    class="opreview bg-crisiscleanup-dark-500 text-white shadow-xl opacity-75 w-64 h-128"
+    class="
+      opreview
+      bg-crisiscleanup-dark-500
+      text-white
+      shadow-xl
+      opacity-75
+      w-64
+      h-128
+    "
     :class="visibleState.state.value ? 'active' : ''"
   >
     <div class="opreview__tabs">
@@ -37,9 +45,7 @@
 
     <div class="opreview__current">
       <div class="opreview__item">
-        <base-text variant="h1">
-          Phone Debugger
-        </base-text>
+        <base-text variant="h1"> Phone Debugger </base-text>
       </div>
       <div
         class="opreview__item"
@@ -73,15 +79,15 @@
 </template>
 
 <script>
+import { computed, ref, watch } from '@vue/composition-api';
+import _ from 'lodash';
+import { useState } from '@u3u/vue-hooks';
+import { useLocalStorage } from 'vue-composable';
 import useController from '@/use/phone/useController';
 import useAgent from '@/use/phone/useAgent';
 import useContact from '@/use/phone/useContact';
 import useToggle from '@/use/useToggle';
-import { computed, ref, watch } from '@vue/composition-api';
-import _ from 'lodash';
-import { useState } from '@u3u/vue-hooks';
 import { ControllerPages } from '@/store/modules/phone/controller';
-import { useLocalStorage } from 'vue-composable';
 import useUser from '@/use/user/useUser';
 
 export default {

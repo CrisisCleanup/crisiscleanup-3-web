@@ -3,8 +3,8 @@
  * Decorators for Vuex-ORM Models.
  */
 
-import mixin from '@/utils/mixin';
 import _ from 'lodash';
+import mixin from '@/utils/mixin';
 
 export const Localized = mixin({
   /**

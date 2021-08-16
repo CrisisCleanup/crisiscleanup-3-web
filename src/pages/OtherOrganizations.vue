@@ -136,10 +136,10 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
-import User from '@/models/User';
 import { mapState } from 'vuex';
 import { throttle } from 'lodash';
+import Table from '@/components/Table';
+import User from '@/models/User';
 import { getQueryString } from '../utils/urls';
 import enums from '../store/modules/enums';
 

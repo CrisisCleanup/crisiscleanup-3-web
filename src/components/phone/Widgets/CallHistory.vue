@@ -11,7 +11,7 @@
         :data="historyData"
         v-if="callHistoryReady"
       >
-        <template #incident="{item}">
+        <template #incident="{ item }">
           <div class="justify-center flex flex-grow">
             <DisasterIcon
               v-if="item.incident"
@@ -19,7 +19,7 @@
             />
           </div>
         </template>
-        <template #mobile="{item}">
+        <template #mobile="{ item }">
           <div class="inline-flex items-center">
             <ccu-icon
               type="phone-classic"
@@ -67,14 +67,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+import { get } from 'lodash';
+import Color from 'color';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import Table from '@/components/Table.vue';
-import { mapGetters } from 'vuex';
 import { UserMixin, ValidateMixin, WorksitesMixin } from '@/mixins';
 import PhoneStatus from '@/models/PhoneStatus';
-import { get } from 'lodash';
 import DisasterIcon from '@/components/DisasterIcon.vue';
-import Color from 'color';
 
 export default {
   name: 'CallHistory',

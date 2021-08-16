@@ -170,6 +170,9 @@
 </template>
 
 <script>
+import { useActions, useMutations } from '@u3u/vue-hooks';
+import { ref, watch, watchEffect } from '@vue/composition-api';
+import VueTypes from 'vue-types';
 import CaseCard from '@/components/cards/Case.vue';
 import useCaseCards from '@/use/worksites/useCaseCards';
 import useUser from '@/use/user/useUser';
@@ -178,7 +181,6 @@ import useIncident from '@/use/worksites/useIncident';
 import useEnums from '@/use/useEnums';
 import useToggle from '@/use/useToggle';
 import useScripts from '@/use/phone/useScripts';
-import { useActions, useMutations } from '@u3u/vue-hooks';
 import { ContactActions, ContactStates } from '@/models/phone/Contact';
 import PhoneInbound from '@/models/PhoneInbound';
 import PhoneOutbound from '@/models/PhoneOutbound';
@@ -186,8 +188,6 @@ import useAgent from '@/use/phone/useAgent';
 import { InboundActions } from '@/store/modules/phone/streams';
 import ProgressButton from '@/components/buttons/ProgressButton.vue';
 import { useIntervalFn } from '@/use/useIntervalFn';
-import { ref, watch, watchEffect } from '@vue/composition-api';
-import VueTypes from 'vue-types';
 
 export default {
   name: 'IncomingPopup',

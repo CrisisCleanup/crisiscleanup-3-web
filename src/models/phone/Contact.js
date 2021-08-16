@@ -6,6 +6,8 @@
 
 import { Fields, Model } from '@vuex-orm/core';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import _ from 'lodash';
+import * as Sentry from '@sentry/browser';
 import type {
   ConnectionState,
   ConnectionType,
@@ -19,7 +21,6 @@ import type {
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import * as ACS from '@/services/connect.service';
 import Logger from '@/utils/log';
-import _ from 'lodash';
 import Worksite from '@/models/Worksite';
 import CCUModel from '@/models/model';
 import Pda from '@/models/Pda';
@@ -29,7 +30,6 @@ import Language from '@/models/Language';
 import PhoneInbound from '@/models/PhoneInbound';
 import type { CaseType } from '@/store/modules/phone/types';
 import Incident from '@/models/Incident';
-import * as Sentry from '@sentry/browser';
 
 /**
  * Enum of possible contact states.
@@ -309,9 +309,8 @@ export default class Contact extends Model {
       );
     }
     if ([ContactActions.DESTROYED].includes(model.action)) {
-      const isCallActive = Contact.store().getters[
-        'phone.controller/isCallActive'
-      ];
+      const isCallActive =
+        Contact.store().getters['phone.controller/isCallActive'];
       if (isCallActive) {
         Log.info('Agent has not closed contact! Preventing ACW exit...');
         return false;
@@ -546,12 +545,10 @@ export default class Contact extends Model {
   static resolveAttributes(contact: typeof Contact) {
     const {
       currentOutbound,
-    }: { currentOutbound: null | typeof PhoneOutbound } = Contact.store().state[
-      'phone.controller'
-    ];
-    const { resolveRequested, resolveTask } = Contact.store().state.entities[
-      'phone/contact'
-    ];
+    }: { currentOutbound: null | typeof PhoneOutbound } =
+      Contact.store().state['phone.controller'];
+    const { resolveRequested, resolveTask } =
+      Contact.store().state.entities['phone/contact'];
     if (resolveRequested) {
       Log.debug('case resolution already requested, checking for updates...');
       const connectContact = ACS.getContactById(contact.contactId);
@@ -700,9 +697,8 @@ export default class Contact extends Model {
   async getOutbounds(): Promise<typeof PhoneOutbound[]> {
     const {
       currentOutbound,
-    }: { currentOutbound: null | typeof PhoneOutbound } = Contact.store().state[
-      'phone.controller'
-    ];
+    }: { currentOutbound: null | typeof PhoneOutbound } =
+      Contact.store().state['phone.controller'];
     if (currentOutbound) {
       return [currentOutbound];
     }

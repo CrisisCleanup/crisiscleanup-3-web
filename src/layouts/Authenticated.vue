@@ -4,7 +4,7 @@
       <div class="layout" :class="{ 'layout--mobile': $mq === 'sm' }">
         <router-link v-if="$mq !== 'sm'" :to="logoRoute.to" class="logo--grid">
           <div class="logo flex justify-center p-3">
-            <img src="@/assets/crisiscleanup_logo.png" style="height: 53px;" />
+            <img src="@/assets/crisiscleanup_logo.png" style="height: 53px" />
           </div>
         </router-link>
         <NavMenu
@@ -65,6 +65,8 @@
 import { mapActions, mapMutations, mapState } from 'vuex';
 import detectBrowserLanguage from 'detect-browser-language';
 import { size } from 'lodash';
+import { Slide } from 'vue-burger-menu';
+import { parsePhoneNumber } from 'libphonenumber-js';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
@@ -74,8 +76,6 @@ import { i18nService } from '@/services/i18n.service';
 import NavMenu from '@/components/navigation/NavMenu';
 import Loader from '@/components/Loader';
 import TermsandConditionsModal from '@/components/TermsandConditionsModal';
-import { Slide } from 'vue-burger-menu';
-import { parsePhoneNumber } from 'libphonenumber-js';
 import Header from '@/components/header/Header.vue';
 import OrganizationRole from '@/models/OrganizationRole';
 import PhoneStatus from '../models/PhoneStatus';
@@ -324,9 +324,8 @@ export default {
           if (size(translations) > 0) {
             this.$i18n.setLocaleMessage(currentLanguage, translations);
             this.$i18n.locale = currentLanguage;
-            this.$http.defaults.headers.common[
-              'Accept-Language'
-            ] = currentLanguage;
+            this.$http.defaults.headers.common['Accept-Language'] =
+              currentLanguage;
             document
               .querySelector('html')
               .setAttribute('lang', currentLanguage);

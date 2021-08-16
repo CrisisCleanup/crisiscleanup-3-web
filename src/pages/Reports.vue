@@ -24,7 +24,16 @@
       <div class="report-grid">
         <div v-for="r in reports" :key="`${r.id}`">
           <div
-            class="my-4 mx-2 bg-white shadow h-auto content-center flex-wrap cursor-pointer"
+            class="
+              my-4
+              mx-2
+              bg-white
+              shadow
+              h-auto
+              content-center
+              flex-wrap
+              cursor-pointer
+            "
             @click="() => requestReport(r.name_t)"
           >
             <div class="flex flex-col justify-around">
@@ -58,10 +67,10 @@
 </template>
 
 <script>
-import User from '@/models/User';
 import { mapState } from 'vuex';
-import Loader from '@/components/Loader.vue';
 import VueTypes from 'vue-types';
+import User from '@/models/User';
+import Loader from '@/components/Loader.vue';
 import EventLog from '../models/EventLog';
 import Report from '../models/Report';
 import ExampleReports from '../components/reports/ExampleReports';

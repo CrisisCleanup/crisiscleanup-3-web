@@ -4,9 +4,9 @@
  */
 
 import { useGetters, useMutations } from '@u3u/vue-hooks';
+import { computed } from '@vue/composition-api';
 import User from '@/models/User';
 import Incident from '@/models/Incident';
-import { computed } from '@vue/composition-api';
 
 export default () => {
   const { currentIncident } = useGetters('incident', ['currentIncident']);

@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/order
 import { version } from '@/../package.json';
 import '@/assets/css/tailwind.css';
 import 'vue-resize/dist/vue-resize.css';
@@ -7,45 +8,7 @@ import VueCompositionApi from '@vue/composition-api';
 import Vue from 'vue';
 import JsonViewer from 'vue-json-viewer';
 // import '@crisiscleanup/connect-rtc';
-import AssessmentTree from '@/components/AssessmentTree';
-import Autocomplete from '@/components/Autocomplete';
-import Badge from '@/components/Badge';
-import BaseButton from '@/components/BaseButton';
-import BaseCheckbox from '@/components/BaseCheckbox';
-import BaseIcon from '@/components/BaseIcon';
-import BaseInput from '@/components/BaseInput';
-import BaseLink from '@/components/BaseLink';
-import BaseRadio from '@/components/BaseRadio';
-import BaseText from '@/components/BaseText';
-import FormSelect from '@/components/FormSelect';
-import FormTree from '@/components/FormTree';
-import TreeMenu from '@/components/TreeMenu';
-import Modal from '@/components/Modal';
-import Spinner from '@/components/Spinner';
-import Tag from '@/components/Tag';
 import VueTimers from 'vue-timers';
-import {
-  capitalize,
-  getColorForStatus,
-  getColorForWorkType,
-  getRecurrenceString,
-  getStatusName,
-  getWorkTypeImage,
-  getWorkTypeName,
-  secondsToHm,
-  snakeToTitleCase,
-  toUpper,
-  truncateFilter,
-  startCase,
-  snakeCase,
-  getOrganizationName,
-  formatNationalNumber,
-} from '@/filters';
-import Authenticated from '@/layouts/Authenticated';
-import Unauthenticated from '@/layouts/Unauthenticated';
-import { LangOverrideMixin } from '@/mixins';
-import { AuthService } from '@/services/auth.service';
-import { i18nService } from '@/services/i18n.service';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -76,15 +39,53 @@ import Toasted from 'vue-toasted';
 import Datepicker from 'vuejs-datepicker';
 import VueRouterMultiView from 'vue-router-multi-view';
 import MarqueeText from 'vue-marquee-text-component';
-import Tabs from '@/components/tabs/Tabs';
-import Tab from '@/components/tabs/Tab';
-import PhoneService from '@/services/phone.service';
 import VueNumberInput from '@chenfengyuan/vue-number-input';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import ToggleButton from 'vue-js-toggle-button';
-import Logger from '@/utils/log';
 import { has, padStart } from 'lodash';
 import { getModule } from 'vuex-module-decorators';
+import Logger from '@/utils/log';
+import PhoneService from '@/services/phone.service';
+import Tab from '@/components/tabs/Tab';
+import Tabs from '@/components/tabs/Tabs';
+import { i18nService } from '@/services/i18n.service';
+import { AuthService } from '@/services/auth.service';
+import { LangOverrideMixin } from '@/mixins';
+import Unauthenticated from '@/layouts/Unauthenticated';
+import Authenticated from '@/layouts/Authenticated';
+import {
+  capitalize,
+  getColorForStatus,
+  getColorForWorkType,
+  getRecurrenceString,
+  getStatusName,
+  getWorkTypeImage,
+  getWorkTypeName,
+  secondsToHm,
+  snakeToTitleCase,
+  toUpper,
+  truncateFilter,
+  startCase,
+  snakeCase,
+  getOrganizationName,
+  formatNationalNumber,
+} from '@/filters';
+import Tag from '@/components/Tag';
+import Spinner from '@/components/Spinner';
+import Modal from '@/components/Modal';
+import TreeMenu from '@/components/TreeMenu';
+import FormTree from '@/components/FormTree';
+import FormSelect from '@/components/FormSelect';
+import BaseText from '@/components/BaseText';
+import BaseRadio from '@/components/BaseRadio';
+import BaseLink from '@/components/BaseLink';
+import BaseInput from '@/components/BaseInput';
+import BaseIcon from '@/components/BaseIcon';
+import BaseCheckbox from '@/components/BaseCheckbox';
+import BaseButton from '@/components/BaseButton';
+import Badge from '@/components/Badge';
+import Autocomplete from '@/components/Autocomplete';
+import AssessmentTree from '@/components/AssessmentTree';
 import WebsocketStore from '@/store/modules/websocket';
 import App from './App.vue';
 import router from './router';

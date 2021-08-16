@@ -15,7 +15,15 @@
   >
     <template #result="slotProps" v-if="isAdmin">
       <div
-        class="flex justify-between text-sm p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b"
+        class="
+          flex
+          justify-between
+          text-sm
+          p-1
+          cursor-pointer
+          hover:bg-crisiscleanup-light-grey
+          border-b
+        "
       >
         <span
           >{{ slotProps.suggestion.item.id }} -

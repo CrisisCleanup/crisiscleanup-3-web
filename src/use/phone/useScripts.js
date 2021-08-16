@@ -4,9 +4,9 @@
  * Hook for Phone Scripts
  */
 
+import { computed } from '@vue/composition-api';
 import { Scripts } from '@/store/modules/phone/controller';
 import { CallType } from '@/models/phone/Contact';
-import { computed } from '@vue/composition-api';
 import { wrap } from '@/utils/wrap';
 import { theme } from '@/../tailwind.config';
 import useUser from '@/use/user/useUser';
