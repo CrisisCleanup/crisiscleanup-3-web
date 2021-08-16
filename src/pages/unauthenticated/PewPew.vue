@@ -573,7 +573,7 @@
                       class="h-full w-full"
                       chart-id="completion-rate"
                       :chart-data="barChartData"
-                      :is-stacked="false"
+                      :is-stacked="true"
                     />
                   </div>
                 </LightTab>
@@ -696,6 +696,7 @@ export default {
           rightLabel: 'High 3',
         },
       ],
+      barChartData: [],
       incidentId: null,
       markerSpeed: 2000,
       incident: null,

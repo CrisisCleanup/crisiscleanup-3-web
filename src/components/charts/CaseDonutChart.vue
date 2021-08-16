@@ -163,9 +163,6 @@ export default {
         .join('path');
 
       chart
-        .attr('d', d3.arc().innerRadius(50).outerRadius(100))
-        .transition()
-        .duration(500)
         .attr(
           'd',
           d3
@@ -175,12 +172,11 @@ export default {
         )
         .attr('fill', (d) => this.colorScale(d.data[0]))
         .attr('filter', 'url(#glow)')
-        .on('end', function () {
-          d3.select(this)
-            .on('mouseover', () => d3.select(this).attr('stroke', 'white'))
-            .on('mouseout', () =>
-              d3.select(this).attr('stroke', 'transparent'),
-            );
+        .on('mouseover', function () {
+          d3.select(this).attr('stroke', 'white');
+        })
+        .on('mouseout', function () {
+          d3.select(this).attr('stroke', 'transparent');
         });
 
       chart
