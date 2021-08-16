@@ -163,9 +163,6 @@ export default {
         .join('path');
 
       chart
-        .attr('d', d3.arc().innerRadius(50).outerRadius(100))
-        .transition()
-        .duration(500)
         .attr(
           'd',
           d3
