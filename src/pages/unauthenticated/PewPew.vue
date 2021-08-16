@@ -211,12 +211,25 @@
           <div
             class="live-tab px-6"
             :class="incident ? '' : 'live-tab--selected'"
+            @click="
+              $router.push({
+                name: 'nav.pew',
+              });
+              $router.go();
+            "
           >
             {{ $t('~~Live') }}
           </div>
           <div
             v-for="incident in incidents"
             :key="incident.id"
+            @click="
+              $router.push({
+                name: 'nav.pew',
+                query: { incident: incident.id },
+              });
+              $router.go();
+            "
             class="live-tab px-2"
             :class="
               String(incident.id) === String(incidentId)
@@ -711,6 +724,7 @@ export default {
       await Incident.api().fetchById(this.incidentId);
       this.incident = Incident.find(this.incidentId);
       this.queryFilter.start_date = this.incident.start_at_moment;
+      this.queryFilter.incident = this.incidentId;
       this.queryFilter.end_date = this.incident.start_at_moment.add(60, 'days');
       this.setLegend();
     }
@@ -836,10 +850,26 @@ export default {
       this.mapLoading = false;
     },
     async getAllEvents() {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/recent_events`,
-      );
-      this.markers = response.data;
+      if (this.queryFilter.incident) {
+        const params = {
+          limit: 60000,
+          event_key__in: Object.keys(this.events).join(','),
+          sort: 'created_at',
+          incident_id: this.queryFilter.incident || '',
+          created_at__gte: this.queryFilter.start_date.toISOString(),
+          created_at__lte: this.queryFilter.end_date.toISOString(),
+        };
+        const queryString = getQueryString(params);
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/all_events?${queryString}`,
+        );
+        this.markers = response.data.results;
+      } else {
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/recent_events`,
+        );
+        this.markers = response.data;
+      }
       // [this.currentEvent] = this.markers;
 
       // let next;

@@ -8,11 +8,11 @@ exports[`Autocomplete should render correctly and match snapshot 1`] = `
     class="flex-grow relative text-base font-light base"
     componentattridautosuggest="autosuggest"
     componentattrprefix="autosuggest"
-    getsuggestionvalue="function () { [native code] }"
+    getsuggestionvalue="[Function]"
     inputprops="[object Object]"
     limit="Infinity"
     sectionconfigs="[object Object]"
-    shouldrendersuggestions="function () { [native code] }"
+    shouldrendersuggestions="[Function]"
     suggestions="[object Object]"
   />
    
