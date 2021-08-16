@@ -58,7 +58,7 @@ jobs:
         with:
           repository: 'CrisisCleanup/crisiscleanup-3-api'
           path: 'cc3api'
-          token: ${{ secrets.GITHUB_PAT }}
+          token: ${{ secrets.GHCR_PAT }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
