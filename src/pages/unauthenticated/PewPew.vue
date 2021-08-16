@@ -573,7 +573,7 @@
                       class="h-full w-full"
                       chart-id="completion-rate"
                       :chart-data="barChartData"
-                      :is-stacked="false"
+                      :is-stacked="true"
                     />
                   </div>
                 </LightTab>
