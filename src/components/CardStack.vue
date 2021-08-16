@@ -11,7 +11,7 @@
         :key="card.event.id"
         :current-event="card.event"
         class="stacked-card bg-opacity-25 border w-full h-auto rounded my-2 p-3"
-        :class="`bg-${getNearestColor(card.color).name}`"
+        :class="{ [`bg-${getNearestColor(card.color).name}`]: true }"
         :style="{
           // backgroundColor: card.color,
           borderColor: card.strokeColor,
