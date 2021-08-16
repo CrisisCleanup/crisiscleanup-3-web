@@ -266,6 +266,66 @@
                   class="
                     absolute
                     top-0
+                    left-0
+                    m-2
+                    p-2
+                    rounded-md
+                    mt-12
+                    flex flex-col
+                    absolute
+                  "
+                >
+                  <div class="zoom-control flex flex-col mb-5">
+                    <base-button
+                      text=""
+                      icon="plus"
+                      icon-size="xs"
+                      ccu-event="user_ui-zoom-in"
+                      :title="$t('worksiteMap.zoom_in')"
+                      :alt="$t('worksiteMap.zoom_in')"
+                      :action="
+                        () => {
+                          map.zoomIn();
+                        }
+                      "
+                      class="
+                        w-8
+                        h-8
+                        border-crisiscleanup-dark-100 border-b
+                        bg-opacity-25 bg-crisiscleanup-dark-400
+                        shadow-xl
+                        text-white text-xl
+                        rounded-t
+                      "
+                    />
+                    <base-button
+                      text=""
+                      icon="minus"
+                      icon-size="xs"
+                      ccu-event="user_ui-zoom-out"
+                      :title="$t('worksiteMap.zoom_out')"
+                      :alt="$t('worksiteMap.zoom_out')"
+                      :action="
+                        () => {
+                          map.zoomOut();
+                        }
+                      "
+                      class="
+                        w-8
+                        h-8
+                        bg-opacity-25 bg-crisiscleanup-dark-400
+                        shadow-xl
+                        text-white text-xl
+                        rounded-b
+                      "
+                    />
+                  </div>
+                </div>
+                <div
+                  style="z-index: 1001"
+                  class="
+                    absolute
+                    top-0
                     right-0
                     h-32
                     w-auto

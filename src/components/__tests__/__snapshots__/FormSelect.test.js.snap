@@ -10,20 +10,27 @@ exports[`FormSelect should match snapshot with props 1`] = `
     class="v-select form-select text-base vs--single vs--searchable"
     dir="auto"
   >
+     
     <div
+      aria-expanded="false"
+      aria-label="Search for option"
+      aria-owns="vs2__listbox"
       class="vs__dropdown-toggle"
+      id="vs2__combobox"
+      role="combobox"
     >
       <div
         class="vs__selected-options"
       >
          
         <input
-          aria-label="Search for option"
+          aria-autocomplete="list"
+          aria-controls="vs2__listbox"
+          aria-labelledby="vs2__combobox"
           autocomplete="off"
           class="vs__search"
           id="select-id-"
           placeholder="Some Value"
-          role="combobox"
           type="search"
         />
       </div>
@@ -32,9 +39,10 @@ exports[`FormSelect should match snapshot with props 1`] = `
         class="vs__actions"
       >
         <button
+          aria-label="Clear Selected"
           class="vs__clear"
           style="display: none;"
-          title="Clear selection"
+          title="Clear Selected"
           type="button"
         >
           <ccu-icon
@@ -64,8 +72,13 @@ exports[`FormSelect should match snapshot with props 1`] = `
     <transition-stub
       name="vs__fade"
     >
-      <!---->
+      <ul
+        id="vs2__listbox"
+        role="listbox"
+        style="display: none; visibility: hidden;"
+      />
     </transition-stub>
+     
   </div>
    
   <!---->
@@ -82,20 +95,27 @@ exports[`FormSelect should render correctly and match snapshot 1`] = `
     class="v-select form-select text-base vs--single vs--searchable"
     dir="auto"
   >
+     
     <div
+      aria-expanded="false"
+      aria-label="Search for option"
+      aria-owns="vs1__listbox"
       class="vs__dropdown-toggle"
+      id="vs1__combobox"
+      role="combobox"
     >
       <div
         class="vs__selected-options"
       >
          
         <input
-          aria-label="Search for option"
+          aria-autocomplete="list"
+          aria-controls="vs1__listbox"
+          aria-labelledby="vs1__combobox"
           autocomplete="off"
           class="vs__search"
           id="select-id-"
           placeholder="Some Value"
-          role="combobox"
           type="search"
         />
       </div>
@@ -104,9 +124,10 @@ exports[`FormSelect should render correctly and match snapshot 1`] = `
         class="vs__actions"
       >
         <button
+          aria-label="Clear Selected"
           class="vs__clear"
           style="display: none;"
-          title="Clear selection"
+          title="Clear Selected"
           type="button"
         >
           <ccu-icon
@@ -136,8 +157,13 @@ exports[`FormSelect should render correctly and match snapshot 1`] = `
     <transition-stub
       name="vs__fade"
     >
-      <!---->
+      <ul
+        id="vs1__listbox"
+        role="listbox"
+        style="display: none; visibility: hidden;"
+      />
     </transition-stub>
+     
   </div>
    
   <!---->

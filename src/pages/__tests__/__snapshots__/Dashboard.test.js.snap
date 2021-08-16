@@ -132,7 +132,13 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           </div>
            
           <div
-            class="bottom-0 left-0 border-b-4 rounded-b-lg border-yellow-600"
+            class="
+                bottom-0
+                left-0
+                border-b-4
+                rounded-b-lg
+                border-yellow-600
+              "
           />
         </div>
       </div>
@@ -197,7 +203,13 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           </div>
            
           <div
-            class="bottom-0 left-0 border-b-4 rounded-b-lg border-orange-600"
+            class="
+                bottom-0
+                left-0
+                border-b-4
+                rounded-b-lg
+                border-orange-600
+              "
           />
         </div>
       </div>
@@ -392,7 +404,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               </div>
                
               <div
-                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
               >
                 <base-input-stub
                   input-style="width: 100%"
@@ -400,7 +419,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 />
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
               >
                 <form-select-stub
                   class="w-64 bg-white border h-10 border-crisiscleanup-dark-100"
@@ -410,7 +436,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 />
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
               >
                 <base-input-stub
                   input-style="width: 100%"
@@ -418,7 +451,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 />
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
               >
                 <base-input-stub
                   input-style="width: 100%"
@@ -426,7 +466,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 />
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
               >
                 <base-input-stub
                   input-style="width: 100%"
@@ -434,7 +481,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 />
               </div>
               <div
-                class="p-2 border-b flex items-center cursor-pointer bg-crisiscleanup-light-grey"
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
               >
                 <!---->
               </div>
