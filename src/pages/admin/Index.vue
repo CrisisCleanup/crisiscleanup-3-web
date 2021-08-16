@@ -13,7 +13,6 @@ export default {
     const tabs = reactive([
       reactive({
         key: 'nav.admin_dashboard',
-        title: 'Home',
       }),
       reactive({
         key: 'nav.admin_events',
@@ -22,7 +21,6 @@ export default {
         key: 'nav.admin_event_stream',
       }),
       reactive({
-        title: 'Tickets',
         key: 'nav.admin_ticket_dashboard',
       }),
     ]);

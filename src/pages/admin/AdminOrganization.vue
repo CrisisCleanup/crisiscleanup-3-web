@@ -193,7 +193,7 @@
 
             <div class="logo-field form-row mt-3">
               <base-text variant="h2" :weight="600">
-                {{ $t('~~Logo') }}
+                {{ $t('profileOrg.organization_logo') }}
               </base-text>
               <div class="flex">
                 <div v-if="!logoUrl">
@@ -441,7 +441,7 @@
         />
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
-        <base-text variant="h2" :weight="600"> Incidents </base-text>
+        <base-text variant="h2" :weight="600"> {{ $t('adminOrganization.incidents') }} </base-text>
         <div class="flex item-start">
           <div>
             <div class="flex items-center justify-start">

@@ -12,7 +12,7 @@
       style="z-index: 1001"
       class="legend absolute right-0 bottom-0 w-64 bg-white border-2 p-1"
     >
-      <div class="text-base font-bold my-1">{{ $t('Legend') }}</div>
+      <div class="text-base font-bold my-1">{{ $t('worksiteMap.legend') }}</div>
       <div class="flex flex-wrap justify-between">
         <div
           v-for="entry in displayedWorkTypeSvgs"

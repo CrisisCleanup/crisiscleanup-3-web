@@ -15,71 +15,71 @@
         <div class="pewpew__nav">
           <router-link :to="{ name: 'nav.pew' }" class="pewpew__navheader">
             <img
-              v-if="colorMode === 'Dark Mode'"
+              v-if="colorMode === 'pewPew.dark_mode'"
               src="@/assets/cc-pew-pew-logo.gif"
-              alt="Crisis Cleanup"
+              :alt="$t('nav.crisis_cleanup')"
               class="h-8"
             />
             <img
               v-else
               src="@/assets/ccu-logo-black-500w.png"
-              alt="Crisis Cleanup"
+              :alt="$t('nav.crisis_cleanup')"
               class="h-16"
             />
           </router-link>
 
           <router-link :to="{ name: 'nav.dashboard' }" class="pewpew__navlink">
-            <img src="@/assets/icons/home.svg" alt="home-icon" />
-            {{ $t('Home') }}
+            <img src="@/assets/icons/home.svg" :alt="$t('publicNav.home')" />
+            {{ $t('publicNav.home') }}
           </router-link>
 
           <router-link :to="{ name: 'nav.dashboard' }" class="pewpew__navlink">
             <img
               src="@/assets/icons/current-disaster.svg"
-              alt="current-disaster-icon"
+              :alt="$t('publicNav.current_disasters')"
             />
-            {{ $t('Current Disasters') }}
+            {{ $t('publicNav.current_disasters') }}
           </router-link>
 
           <router-link :to="{ name: 'nav.about' }" class="pewpew__navlink">
-            <img src="@/assets/icons/about-us.svg" alt="about-us-icon" />
-            {{ $t('About us') }}
+            <img src="@/assets/icons/about-us.svg" :alt="$t('publicNav.about_us')" />
+            {{ $t('publicNav.about_us') }}
           </router-link>
 
           <a
             href="https://crisiscleanup.zendesk.com/hc/en-us/requests/new"
             class="pewpew__navlink"
           >
-            <img src="@/assets/icons/contact-us.svg" alt="contact-us-icon" />
-            {{ $t('Contact') }}
+            <img src="@/assets/icons/contact-us.svg" :alt="$t('publicNav.contact')" />
+            {{ $t('publicNav.contact') }}
           </a>
 
           <router-link :to="{ name: 'nav.training' }" class="pewpew__navlink">
-            <img src="@/assets/icons/training.svg" alt="training-icon" />
-            {{ $t('Training') }}
+            <img src="@/assets/icons/training.svg" :alt="$t('publicNav.training')" />
+            {{ $t('publicNav.training') }}
           </router-link>
 
           <a href="http://blog.crisiscleanup.org" class="pewpew__navlink">
-            <img src="@/assets/icons/notepad.svg" alt="blogs-icon" />
-            {{ $t('Blogs') }}
+            <img src="@/assets/icons/notepad.svg" :alt="$t('publicNav.blog')" />
+            {{ $t('publicNav.blog') }}
           </a>
 
           <router-link :to="{ name: 'nav.terms' }" class="pewpew__navlink">
-            <img src="@/assets/icons/terms.svg" alt="terms-icon" />
-            {{ $t('Terms') }}
+            <img src="@/assets/icons/terms.svg" :alt="$t('publicNav.terms')" />
+            {{ $t('publicNav.terms') }}
           </router-link>
 
           <router-link :to="{ name: 'nav.privacy' }" class="pewpew__navlink">
             <img
               src="@/assets/icons/privacy-policy.svg"
-              alt="privacy-policy-icon"
+              :alt="$t('publicNav.privacy')"
             />
-            {{ $t('Privacy Policy') }}
+            {{ $t('publicNav.privacy') }}
           </router-link>
 
           <router-link :to="{ name: 'nav.about' }" class="pewpew__navlink">
-            <img src="@/assets/icons/faq.svg" alt="faq-icon" />
-            {{ $t('FAQ') }}
+            <img src="@/assets/icons/faq.svg":alt="$t('publicNav.faq')" />
+            {{ $t('publicNav.faq') }}
           </router-link>
         </div>
         <div class="col-span-6 flex flex-col justify-between items-center">
@@ -98,9 +98,9 @@
                 siteInfoTimerData.activeInfoTab === 0
               "
             >
-              <div :name="$t('Site Activity')" class="w-full">
+              <div :name="$t('reports.pp_engagement_title')" class="w-full">
                 <div class="text-xs px-5 text-center">
-                  {{ $t('~~SITE ACTIVITY') }}
+                  {{ $t('reports.pp_engagement_title') }}
                 </div>
                 <div class="h-40 w-full">
                   <SiteActivityGauge
@@ -116,7 +116,7 @@
               </div>
             </LightTab>
             <LightTab
-              :name="$t('Statistics')"
+              :name="$t('reports.pp_site_stats_title')"
               class="p-2"
               :selected="
                 siteInfoTimerData.isTimerActive &&
@@ -126,27 +126,82 @@
               <div class="flex flex-col items-start justify-start w-full">
                 <div class="">
                   <div class="mb-2">
-                    <div>{{ $t('Total Big Number') }}</div>
-                    <div class="text-xl text-blue-600 stats">$1.1 Billion</div>
+                    <div>{{ $t('reports.pp_site_stats_total_services') }}
+                      <ccu-icon
+                        v-tooltip="{
+                          content: $t(`reports.pp_site_stats_total_services_d`),
+                          trigger: 'click',
+                          classes: 'interactive-tooltip w-auto',
+                        }"
+                        :alt="$t('actions.help_alt')"
+                        type="help"
+                        size="medium"
+                      />
+                    </div>
+                    <div class="text-xl text-blue-600 stats">***$1.1 Billion</div>
                   </div>
                   <div class="mb-2">
-                    <div>{{ $t('Volunteer Hours') }}</div>
-                    <div class="text-lg stats">2348020</div>
+                    <div>{{ $t('reports.pp_site_stats_disasters') }}
+                      <ccu-icon
+                        v-tooltip="{
+                          content: $t(`reports.pp_site_stats_disasters_d`),
+                          trigger: 'click',
+                          classes: 'interactive-tooltip w-auto',
+                        }"
+                        :alt="$t('actions.help_alt')"
+                        type="help"
+                        size="medium"
+                      />
+                    </div>
+                    <div class="text-lg stats">***170</div>
                   </div>
                   <div class="mb-2">
-                    <div>{{ $t('Value per Volunteer') }}</div>
-                    <div class="text-lg stats">$237</div>
+                    <div>{{ $t('reports.pp_site_stats_est_hours') }}
+                      <ccu-icon
+                        v-tooltip="{
+                          content: $t(`reports.pp_site_stats_est_hours_d`),
+                          trigger: 'click',
+                          classes: 'interactive-tooltip w-auto',
+                        }"
+                        :alt="$t('actions.help_alt')"
+                        type="help"
+                        size="medium"
+                      />
+                    </div>
+                    <div class="text-lg stats">***7.3 Million</div>
                   </div>
                   <div class="mb-2">
-                    <div>{{ $t('Volunteer Hours Dollars') }}</div>
-                    <div class="text-lg stats">$467</div>
+                    <div>{{ $t('reports.pp_site_stats_households_helped') }}
+                      <ccu-icon
+                        v-tooltip="{
+                          content: $t(`reports.pp_site_stats_households_helped_d`),
+                          trigger: 'click',
+                          classes: 'interactive-tooltip w-auto',
+                        }"
+                        :alt="$t('actions.help_alt')"
+                        type="help"
+                        size="medium"
+                      />
+                    </div>
+                    <div class="text-lg stats">***142,921</div>
                   </div>
                   <div class="mb-2">
-                    <div>{{ $t('Total Market Value') }}</div>
-                    <div class="text-lg stats">$41283437</div>
+                    <div>{{ $t('reports.pp_site_stats_volunteer_value') }}
+                      <ccu-icon
+                        v-tooltip="{
+                          content: $t(`reports.pp_site_stats_volunteer_value_d`),
+                          trigger: 'click',
+                          classes: 'interactive-tooltip w-auto',
+                        }"
+                        :alt="$t('actions.help_alt')"
+                        type="help"
+                        size="medium"
+                      />
+                    </div>
+                    <div class="text-lg stats">***$849</div>
                   </div>
                   <div class="underline text-blue-600">
-                    {{ $t('More Statistics') }}
+                    {{ $t('reports.pp_site_stats_more_stats') }}
                   </div>
                 </div>
               </div>
@@ -168,24 +223,20 @@
               ribbon-gradient
             "
           >
-            {{
-              $t(
-                '~~For Help, Call: 800-451-1954 (COVID), 844-965-1386 (Tornadoes)',
-              )
-            }}
+            {{ $t('homeVue.pew_pew_banner') }}
           </div>
           <div class="col-span-2 flex items-center justify-center">
             <Toggle v-model="isDarkMode" v-if="false" />
             <base-button
               class="text-xs p-1 w-20 text-black rounded"
               variant="solid"
-              :text="$t('Register')"
+              :text="$t('actions.register')"
               :action="() => $router.push('/register')"
             />
             <base-button
               class="text-xs ml-2 p-1 w-20 rounded"
               variant="outline-dark"
-              :text="$t('Login')"
+              :text="$t('actions.login')"
               :action="() => $router.push('/login')"
             />
           </div>
@@ -200,7 +251,7 @@
               })
             "
           >
-            {{ $t('~~Live') }}
+            {{ $t('pewPew.current') }}
           </div>
           <div
             v-for="i in incidents"
@@ -265,8 +316,8 @@
                         refreshSvi(value);
                       }
                     "
-                    :from="$t('~~Most vulnerable')"
-                    :to="$t('~~Everyone')"
+                    :from="$t('svi.most_vulnerable')"
+                    :to="$t('svi.everyone')"
                   ></Slider>
                 </div>
                 <div
@@ -383,7 +434,7 @@
                     "
                   >
                     <div class="font-bold my-1 text-white text-sm">
-                      {{ $t('Legend') }}
+                      {{ $t('worksiteMap.legend') }}
                     </div>
                     <div class="flex flex-wrap justify-between">
                       <div
@@ -504,6 +555,7 @@
                       :max="markersLength - 1"
                       :from="queryFilter.start_date.format('MMM Do YYYY')"
                       :to="queryFilter.end_date.format('MMM Do YYYY')"
+                      :alt="$t('actions.play')"
                     ></Slider>
                   </div>
                 </div>
@@ -566,7 +618,8 @@
                 @tabSelected="stopChartTabCirculationTimer"
               >
                 <LightTab
-                  :name="$t('~~Call Volume')"
+                  :name="$t('reports.pp_call_volume_title')"
+                  :alt="$t('reports.pp_call_volume_description')"
                   class="absolute left-0 right-0"
                   style="top: 10%; bottom: 5%"
                   :selected="
@@ -581,6 +634,29 @@
                       :chart-data="circularBarplotData"
                       :margin="20"
                       :is-stacked="false"
+                    />
+                  </div>
+                </LightTab>
+                <LightTab
+                  :name="$t('~~Total Cases')"
+                  class="absolute left-0 right-0"
+                  style="top: 10%; bottom: 5%"
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 2
+                  "
+                >
+                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <TotalCases
+                      class="h-full w-full"
+                      :margin-all="30"
+                      :chart-data="{
+                        open: incidentStats.unclaimed.total,
+                        closed: incidentStats.closed.total,
+                        inProgress:
+                          incidentStats.claimed.total -
+                          incidentStats.closed.total,
+                      }"
                     />
                   </div>
                 </LightTab>
@@ -603,30 +679,8 @@
                   </div>
                 </LightTab>
                 <LightTab
-                  :name="$t('~~Total Cases')"
-                  class="absolute bottom-0 left-0 right-0"
-                  style="top: 10%; bottom: 5%"
-                  :selected="
-                    chartCirculationTimerData.isTimerActive &&
-                    chartCirculationTimerData.activeChartTab === 2
-                  "
-                >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
-                    <TotalCases
-                      class="h-full w-full"
-                      :margin-all="30"
-                      :chart-data="{
-                        open: incidentStats.unclaimed.total,
-                        closed: incidentStats.closed.total,
-                        inProgress:
-                          incidentStats.claimed.total -
-                          incidentStats.closed.total,
-                      }"
-                    />
-                  </div>
-                </LightTab>
-                <LightTab
-                  :name="$t('~~Weeks To Completion')"
+                  :name="$t('reports.pp_total_cases_title')"
+                  :alt="$t('reports.pp_total_cases_description')"
                   class="absolute bottom-0 left-0 right-0"
                   style="top: 10%; bottom: 5%"
                   :selected="
@@ -1598,62 +1652,62 @@ export default {
         {
           count: this.incidentStats.all.total,
           style: `border-color: white`,
-          title: this.$t('~~All Cases'),
+          title: this.$t('pewPew.all_cases'),
         },
         {
           count: this.incidentStats.unclaimed.total,
           style: `border-color: #d0021b`,
-          title: this.$t('~~Unclaimed'),
+          title: this.$t('pewPew.unclaimed'),
         },
         {
           count: this.incidentStats.claimed.total,
           style: `border-color: #fab92e`,
-          title: this.$t('~~Claimed'),
+          title: this.$t('pewPew.claimed'),
         },
         {
           count: this.incidentStats.assigned.total,
           style: `border-color: #f0f032`,
-          title: this.$t('~~Assinged'),
+          title: this.$t('pewPew.in_progress'),
         },
         {
           count: this.incidentStats.partial.total,
           style: `border-color: #0054bb`,
-          title: this.$t('~~Partly Done'),
+          title: this.$t('pewPew.partly_done'),
         },
         {
           count: this.incidentStats.closed.total,
           style: `border-color: #0FA355`,
-          title: this.$t('~~Closed'),
+          title: this.$t('pewPew.closed'),
         },
         {
           count: this.incidentStats.overdue.total,
           style: `border: none`,
-          title: this.$t('~~Overdue'),
+          title: this.$t('pewPew.overdue'),
         },
         {
           count: this.organizations.length,
           style: `border: none`,
-          title: this.$t('~~Total Orgs'),
+          title: this.$t('pewPew.total_orgs'),
         },
         {
           count: 0,
           style: `border: none`,
-          title: this.$t('~~Counties'),
+          title: this.$t('pewPew.counties_parishes'),
         },
         {
           count: 0,
           style: `border: none`,
-          title: this.$t('~~Volunteers'),
+          title: this.$t('pewPew.volunteers'),
         },
         {
           count: 0,
           style: `border: none`,
-          title: this.$t('~~Households'),
+          title: this.$t('pewPew.households'),
         },
       ];
     },
     setLayer() {
-      if (this.colorMode === 'Dark Mode') {
+      if (this.colorMode === 'pewPew.dark_mode') {
         this.map.addLayer(this.darkTileLayer);
         this.map.removeLayer(this.lightTileLayer);
       } else {
@@ -1690,7 +1744,7 @@ export default {
   },
   computed: {
     colorMode() {
-      return this.isDarkMode ? 'Dark Mode' : 'Light Mode';
+      return this.isDarkMode ? 'pewPew.dark_mode' : 'pewPew.light_mode';
     },
     visibleWorkTypes() {
       const selectedWorkTypes = this.displayedWorkTypeSvgs
@@ -1702,7 +1756,7 @@ export default {
       return null;
     },
     styles() {
-      if (this.colorMode === 'Dark Mode') {
+      if (this.colorMode === 'pewPew.dark_mode') {
         return {
           color: 'white',
           backgroundColor: '#232323',
