@@ -179,9 +179,11 @@ export default {
           d3.select(this).attr('stroke', 'transparent');
         });
 
-      chart
-        .append('title')
-        .text((d) => `${_.startCase(d.data[0])}: ${d.data[1]}`);
+      chart.append('title').text(
+        // d.data[0] represents labels i.e. Reported Cases, Closed Cases, etc
+        // d.data[1] represents total number of Reported/Closed cases
+        (d) => `${this.$t(_.startCase(d.data[0]))}: ${this.$t(d.data[1])}`,
+      );
 
       this.svg
         .append('text')
