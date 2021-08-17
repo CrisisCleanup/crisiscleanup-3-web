@@ -246,10 +246,7 @@ export default {
         .attr('x', (d: BarChartT) => this.x(d.group))
         .attr('y', (d: BarChartT) => this.y(d.closedCases))
         .attr('width', this.x.bandwidth())
-        .attr('height', (d) => {
-          console.log(d.closedCases);
-          return this.getInnerHeight() - this.y(d.closedCases);
-        })
+        .attr('height', (d) => this.getInnerHeight() - this.y(d.closedCases))
         .attr('fill', this.colorScale('closedCases'))
         .on('end', function (d: BarChartT) {
           addHoverEffects(this, d.closedCases);
