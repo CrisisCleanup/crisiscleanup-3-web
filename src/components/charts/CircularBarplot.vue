@@ -390,7 +390,7 @@ export default {
                     ? 'rotate(90) translate(0, 16)'
                     : 'rotate(-90) translate(0, -9)',
                 )
-                .text((d) => this.$t(`~~${d}`)),
+                .text((d) => this.$t(`${d}`)),
             ),
         );
 
@@ -404,7 +404,7 @@ export default {
               .attr('fill', '#fff')
               .attr('y', -y(y.ticks(3).pop()))
               .attr('dy', '-8')
-              .text(this.$t('~~Call Volumes')),
+              .text(this.$t('reports.pp_call_volume_call_volume')),
           )
           .call((g2) =>
             g2
@@ -450,33 +450,33 @@ export default {
 
       textContainer
         .append('tspan')
-        .text(this.$t('~~Cases'))
+        .text(this.$t('reports.pp_call_volume_cases'))
         .attr('font-size', `${this.getFontSize()}px`)
         .attr('x', 0)
         .attr('y', `${-2.5 * this.getFontSize()}px`);
 
       textContainer
         .append('tspan')
-        .text(this.$t('~~Open'))
+        .text(this.$t('reports.pp_call_volume_open'))
         .attr('x', 0)
         .attr('y', `${-1 * this.getFontSize()}px`);
 
       textContainer
         .append('tspan')
-        .text((d) => this.$t(`~~${d.open}`))
+        .text((d) => this.$t(`${d.open}`))
         .attr('x', 0)
         .attr('font-size', `${this.getFontSize()}px`)
         .attr('y', `${0}px`);
 
       textContainer
         .append('tspan')
-        .text(this.$t('~~Closed'))
+        .text(this.$t('reports.pp_call_volume_closed'))
         .attr('x', 0)
         .attr('y', `${1.5 * this.getFontSize()}px`);
 
       textContainer
         .append('tspan')
-        .text((d) => this.$t(`~~${d.closed}`))
+        .text((d) => this.$t(`${d.closed}`))
         .attr('font-size', `${this.getFontSize()}px`)
         .attr('x', 0)
         .attr('y', `${2.5 * this.getFontSize()}px`);
@@ -500,7 +500,7 @@ export default {
           })translate(${y(d.closed) - 50},0)`;
         })
         .append('text')
-        .text((d) => this.$t(`~~${d.closed}`))
+        .text((d) => this.$t(`${d.closed}`))
         .attr('transform', function (d) {
           return (x(d.name) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) <
             Math.PI
