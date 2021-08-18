@@ -277,7 +277,7 @@ export default {
             -(radius * 1.1 + radius * 0.7) / 2
           }, ${labelHeightOffset})`,
         )
-        .text('Slow');
+        .text(this.$t('reports.pp_engagement_slow'));
 
       // right label
       labelGroup
@@ -292,7 +292,7 @@ export default {
             (radius * 1.1 + radius * 0.7) / 2
           }, ${labelHeightOffset})`,
         )
-        .text('Strong');
+        .text(this.$t('reports.pp_engagement_strong'));
     },
 
     addDefs() {

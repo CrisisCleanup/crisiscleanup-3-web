@@ -169,7 +169,7 @@ export default {
         .attr('dy', '.15em')
         .attr('transform', 'translate(-5, 0) rotate(-65)')
         .append('title')
-        .text((d) => d);
+        .text((d) => this.$t(`~~${d}`));
 
       this.svg
         .append('g')
@@ -246,10 +246,7 @@ export default {
         .attr('x', (d: BarChartT) => this.x(d.group))
         .attr('y', (d: BarChartT) => this.y(d.closedCases))
         .attr('width', this.x.bandwidth())
-        .attr('height', (d) => {
-          console.log(d.closedCases);
-          return this.getInnerHeight() - this.y(d.closedCases);
-        })
+        .attr('height', (d) => this.getInnerHeight() - this.y(d.closedCases))
         .attr('fill', this.colorScale('closedCases'))
         .on('end', function (d: BarChartT) {
           addHoverEffects(this, d.closedCases);
@@ -371,7 +368,7 @@ export default {
         .selectAll('g')
         .data(this.colorScale.domain())
         .join('text')
-        .text((d) => _.startCase(d))
+        .text((d) => this.$t(`~~${_.startCase(d)}`))
         .attr('transform', (d, i) => `translate(${i * 70 + 15}, ${5})`)
         .attr('dominant-baseline', 'middle')
         .style('font-size', '8px')
@@ -379,6 +376,7 @@ export default {
     },
 
     addHoverEffects(ctx, tooltipText) {
+      const { $t } = this;
       d3.select(ctx)
         .on('mouseover', function (event) {
           d3.select(this).attr('class', 'stroke--active');
@@ -388,7 +386,7 @@ export default {
             .style('opacity', 1)
             .style('left', `${event.pageX + 10}px`)
             .style('top', `${event.pageY + 10}px`)
-            .text(tooltipText);
+            .text($t(`~~${tooltipText}`));
         })
         .on('mouseout', function () {
           d3.select('#bar-chart-tooltip').style('opacity', 0);
@@ -401,7 +399,7 @@ export default {
             .style('opacity', 1)
             .style('left', `${event.pageX + 10}px`)
             .style('top', `${event.pageY + 10}px`)
-            .text(tooltipText);
+            .text($t(`~~${tooltipText}`));
         });
     },
 
