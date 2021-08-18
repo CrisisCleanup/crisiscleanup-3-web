@@ -3,7 +3,15 @@ const flattenColorPalette =
   require('tailwindcss/lib/util/flattenColorPalette').default;
 
 module.exports = {
-  purge: ['./src/**/*.html', './src/**/*.vue'],
+  purge: {
+    content: ['./src/**/*.html', './src/**/*.vue'],
+    // These options are passed through directly to PurgeCSS
+    options: {
+      safelist: {
+        standard: [/^bg/],
+      },
+    },
+  },
   theme: {
     extend: {
       fontFamily: {
