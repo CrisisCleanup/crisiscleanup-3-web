@@ -97,12 +97,10 @@ export default {
   computed: {
     width() {
       const w = +d3.select(`#${this.chartId}`).style('width').slice(0, -2);
-      console.log(w);
       return w - this.margin * 2;
     },
     height() {
       const h = +d3.select(`#${this.chartId}`).style('height').slice(0, -2);
-      console.log(h);
       return h - this.margin * 2;
     },
     labelFontSize() {
@@ -139,8 +137,6 @@ export default {
         .clamp(true); // prevent values from going out of domain
 
       this.gauges.forEach((gauge: GaugeT, index: number) => {
-        console.log(JSON.stringify(gauge));
-        console.log(this.scale.ticks(1));
         this.svg
           .append('path')
           .attr('transform', 'scale(0)')

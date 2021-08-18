@@ -781,7 +781,6 @@ export default {
       });
     },
     async fetchCircularBarplotData(date, interval) {
-      console.log('fetching...');
       this.circularBarplotData = [];
       this.circularBarplotData = this.circularBarplotData.slice();
       const d = [
@@ -794,7 +793,6 @@ export default {
       const response = await this.$http.get(url);
       this.circularBarplotData = response.data;
       this.circularBarplotData = this.circularBarplotData.slice();
-      console.log('response: ', this.circularBarplotData);
     },
     async getRecentIncidents() {
       const response = await this.$http.get(
