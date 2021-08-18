@@ -607,7 +607,6 @@ import CircularBarplot from '@/components/charts/CircularBarplot';
 import GaugeChart from '@/components/charts/GaugeChart';
 import D3BarChart from '@/components/charts/D3BarChart';
 import CardStack from '@/components/CardStack';
-import EventCard from '@/components/EventCard';
 import { getNearestColor } from '@/utils/colors';
 import { hash } from '@/utils/promise';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
@@ -619,7 +618,6 @@ export default {
   components: {
     Toggle,
     CaseDonutChart,
-    EventCard,
     CardStack,
     LightTab,
     D3BarChart,
@@ -1192,7 +1190,8 @@ export default {
           };
           if (
             this.liveIncidents.length === 0 ||
-            (this.liveIncidents[0].name !== marker.attr.incident_name && marker.attr.incident_name)
+            (this.liveIncidents[0].name !== marker.attr.incident_name &&
+              marker.attr.incident_name)
           ) {
             this.liveIncidents.unshift({
               name: marker.attr.incident_name,

@@ -4,16 +4,8 @@
     :style="styles"
   >
     <div
-        class="
-        absolute
-        h-7
-        top-1
-        right-0
-        cursor-pointer
-        rounded-full
-        text-center
-      "
-        @click="closeModal()"
+      class="absolute h-7 top-1 right-0 cursor-pointer rounded-full text-center"
+      @click="closeModal()"
     >
       <font-awesome-icon icon="times" />
     </div>
@@ -32,7 +24,9 @@
     <div class="p-2 border-b border-crisiscleanup-dark-300">
       <div class="grid grid-cols-2">
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 text-xs">{{ $t('TYPE') }}</div>
+          <div class="text-crisiscleanup-dark-300 text-xs">
+            {{ $t('TYPE') }}
+          </div>
           <div v-if="generalInfo.organization">
             {{
               $t(
@@ -44,7 +38,9 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 text-xs">{{ $t('ROLE') }}</div>
+          <div class="text-crisiscleanup-dark-300 text-xs">
+            {{ $t('ROLE') }}
+          </div>
           <div>{{ $t(generalInfo.role ? generalInfo.role : 'Unknown') }}</div>
         </div>
       </div>
