@@ -138,7 +138,8 @@
       </div>
       <div class="overflow-y-hidden" :class="showCapability ? 'h-full' : 'h-0'">
         <Capability
-          :capabilities="testCapabilities"
+          :capabilities="capabilities"
+          :organization-capabilities="generalInfo.capabilities"
           :class="showCapability ? 'drawer-open' : 'drawer-close'"
         />
       </div>
@@ -151,12 +152,10 @@ import { makeTableColumns } from '@/utils/table';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
 import { nFormatter } from '@/utils/helpers';
 import Table from '@/components/Table';
-import { CapabilityMixin } from '@/mixins';
 
 export default {
   name: 'OrganizationActivityModal',
   components: { Table, CaseDonutChart, Capability },
-  mixins: [CapabilityMixin],
   props: {
     generalInfo: {
       type: Object,
@@ -175,126 +174,18 @@ export default {
       default: () => [],
     },
   },
+  async mounted() {
+    const capabilities = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
+    );
+    this.capabilities = capabilities.data.results;
+  },
   data() {
     return {
       showIncidents: false,
       nFormatter,
       showCapability: false,
-      testIncidents: [
-        {
-          name: 'Hurricane Florence',
-          cases: 45,
-          claimed: 103,
-          calls: '25.2K',
-          value: '2.7M',
-          completed: 103,
-        },
-        {
-          name: 'Hurricane Irma',
-          cases: 45,
-          claimed: 103,
-          calls: '25.2K',
-          value: '2.7M',
-          completed: 103,
-        },
-        {
-          name: 'Flint Michigan Water Crisis',
-          cases: 45,
-          claimed: 103,
-          calls: '25.2K',
-          value: '2.7M',
-          completed: 103,
-        },
-      ],
-      testCapabilities: [
-        {
-          name: 'Business Services',
-          items: [
-            {
-              name: 'Business Financial Assistance',
-              normal: true,
-              warning: false,
-              impact: false,
-              rescue: true,
-              cleanup: true,
-              longterm: false,
-            },
-            {
-              name: 'SBA Loans',
-              normal: false,
-              warning: true,
-              impact: true,
-              rescue: true,
-              cleanup: true,
-              longterm: false,
-            },
-          ],
-        },
-        {
-          name: 'Capacity-Building',
-          items: [
-            {
-              name: 'Community Monitoring and Evaluation',
-              normal: false,
-              warning: false,
-              impact: true,
-              rescue: false,
-              cleanup: true,
-              longterm: false,
-            },
-            {
-              name: 'Contingency Planning',
-              normal: false,
-              warning: true,
-              impact: true,
-              rescue: true,
-              cleanup: true,
-              longterm: false,
-            },
-            {
-              name: 'Grant Writing',
-              normal: false,
-              warning: true,
-              impact: true,
-              rescue: true,
-              cleanup: true,
-              longterm: false,
-            },
-          ],
-        },
-        {
-          name: 'test 3',
-          items: [
-            {
-              name: 'Community Monitoring and Evaluation',
-              normal: false,
-              warning: false,
-              impact: true,
-              rescue: false,
-              cleanup: true,
-              longterm: false,
-            },
-            {
-              name: 'Contingency Planning',
-              normal: false,
-              warning: true,
-              impact: true,
-              rescue: true,
-              cleanup: true,
-              longterm: false,
-            },
-            {
-              name: 'Grant Writing',
-              normal: false,
-              warning: true,
-              impact: true,
-              rescue: true,
-              cleanup: true,
-              longterm: false,
-            },
-          ],
-        },
-      ],
+      capabilities: [],
     };
   },
   methods: {

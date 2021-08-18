@@ -1575,7 +1575,7 @@ export default {
       this.orgInfo.generalInfo = item;
       this.orgInfo.generalInfo.avatar = this.getLogoUrl(item.id);
       this.orgInfo.generalInfo.organization = organization;
-      this.orgInfo.generalInfo.capabilites =
+      this.orgInfo.generalInfo.capabilities =
         await this.getOrganizationCapabilities(item.id);
       this.orgInfo.generalInfo.statistics =
         await this.getOrganizationStatisticsByIncident(item.id);

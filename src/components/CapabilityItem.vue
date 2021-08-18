@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div class="my-2">{{ $t(capability.name) }}</div>
-    <div class="grid grid-cols-6 gap-1">
+    <div class="my-2">{{ $t(capability.name_t) }}</div>
+    <div class="grid gap-1" :class="`grid-cols-${phases.length}`">
       <div
-        @mouseover="hoverEffect('normal')"
+        v-for="phase in phases"
+        :key="phase.id"
+        @mouseover="hoverEffect($t(phase.name_t))"
         @mouseleave="hoverEffect('')"
         class="
           col-span-1
@@ -15,97 +17,7 @@
           shadow
         "
         :class="
-          capability.normal
-            ? 'border-2 border-white light-box'
-            : 'bg-crisiscleanup-dark-400'
-        "
-      ></div>
-      <div
-        @mouseover="hoverEffect('warning')"
-        @mouseleave="hoverEffect('')"
-        class="
-          col-span-1
-          h-3
-          rounded
-          transform
-          duration-100
-          hover:scale-105
-          shadow
-        "
-        :class="
-          capability.warning
-            ? 'border-2 border-white  light-box'
-            : 'bg-crisiscleanup-dark-400'
-        "
-      ></div>
-      <div
-        @mouseover="hoverEffect('impact')"
-        @mouseleave="hoverEffect('')"
-        class="
-          col-span-1
-          h-3
-          rounded
-          transform
-          duration-100
-          hover:scale-105
-          shadow
-        "
-        :class="
-          capability.impact
-            ? 'border-2 border-white  light-box'
-            : 'bg-crisiscleanup-dark-400'
-        "
-      ></div>
-      <div
-        @mouseover="hoverEffect('rescue')"
-        @mouseleave="hoverEffect('')"
-        class="
-          col-span-1
-          h-3
-          rounded
-          transform
-          duration-100
-          hover:scale-105
-          shadow
-        "
-        :class="
-          capability.rescue
-            ? 'border-2 border-white  light-box'
-            : 'bg-crisiscleanup-dark-400'
-        "
-      ></div>
-      <div
-        @mouseover="hoverEffect('cleanup')"
-        @mouseleave="hoverEffect('')"
-        class="
-          col-span-1
-          h-3
-          rounded
-          transform
-          duration-100
-          hover:scale-105
-          shadow
-        "
-        :class="
-          capability.cleanup
-            ? 'border-2 border-white  light-box'
-            : 'bg-crisiscleanup-dark-400'
-        "
-      ></div>
-      <div
-        @mouseover="hoverEffect('longterm')"
-        @mouseleave="hoverEffect('')"
-        class="
-          col-span-1
-          h-3
-          rounded
-          transform
-          duration-100
-          hover:scale-105
-          shadow
-        "
-        :class="
-          capability.longterm
+          hasCapabilityForPhase(phase.id)
             ? 'border-2 border-white light-box'
             : 'bg-crisiscleanup-dark-400'
         "
@@ -114,30 +26,34 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
+
 export default {
   name: 'CapabilityItem',
   props: {
     capability: {
       type: Object,
-      default: () => ({
-        name: '',
-        normal: false,
-        warning: false,
-        impact: false,
-        rescue: false,
-        cleanup: false,
-        longterm: false,
-      }),
+      default: () => ({}),
     },
     index: {
       type: Number,
       default: 0,
+    },
+    availableCapabilities: {
+      type: Array,
+      default: () => [],
     },
   },
   methods: {
     hoverEffect(item) {
       this.$emit('onHover', item + this.index);
     },
+    hasCapabilityForPhase(phase) {
+      return this.availableCapabilities.some((item) => item.phase === phase);
+    },
+  },
+  computed: {
+    ...mapState('enums', ['phases']),
   },
 };
 </script>

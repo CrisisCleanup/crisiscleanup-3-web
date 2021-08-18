@@ -1,72 +1,59 @@
 <template>
-  <div>
-    <div v-for="(capability, index) in capabilities" :key="index">
-      <div class="selected rounded mx-2 pb-2">
-        <div class="text-center header my-2 rounded-t">
-          {{ capability.name }}
-        </div>
-        <div
-          class="grid grid-cols-6 text-center"
-          :class="$mq === 'sm' ? '' : 'text-bodyxsm'"
-        >
-          <div
-            class="col-span-1 text-crisiscleanup-dark-300 truncate"
-            :class="hoverItem === 'normal' + index ? 'light' : ''"
-          >
-            {{ $t('NORMAL') }}
+  <div v-if="capabilities.length">
+    <div v-for="(capability, index) in capabilitiesTree" :key="index">
+      <template v-if="hasParent(capability)">
+        <div class="selected rounded mx-2 pb-2">
+          <div class="text-center header my-2 rounded-t">
+            {{ capability.name_t }}
           </div>
           <div
-            class="col-span-1 text-crisiscleanup-dark-300 truncate"
-            :class="hoverItem === 'warning' + index ? 'light' : ''"
+            class="grid text-center"
+            :class="[
+              $mq === 'sm' ? '' : 'text-bodyxsm',
+              `grid-cols-${phases.length}`,
+            ]"
           >
-            {{ $t('WARNING') }}
+            <div
+              v-for="phase in phases"
+              :key="phase.id"
+              class="col-span-1 text-crisiscleanup-dark-300 truncate"
+              :class="hoverItem === 'normal' + index ? 'light' : ''"
+            >
+              {{ $t(phase.phase_name_t) | upper }}
+            </div>
           </div>
-          <div
-            class="col-span-1 text-crisiscleanup-dark-300 truncate"
-            :class="hoverItem === 'impact' + index ? 'light' : ''"
-          >
-            {{ $t('IMPACT') }}
-          </div>
-          <div
-            class="col-span-1 text-crisiscleanup-dark-300 truncate"
-            :class="hoverItem === 'rescue' + index ? 'light' : ''"
-          >
-            {{ $t('RESCUE') }}
-          </div>
-          <div
-            class="col-span-1 text-crisiscleanup-dark-300 truncate"
-            :class="hoverItem === 'cleanup' + index ? 'light' : ''"
-          >
-            {{ $t('CLEANUP') }}
-          </div>
-          <div
-            class="col-span-1 text-crisiscleanup-dark-300 truncate"
-            :class="hoverItem === 'longterm' + index ? 'light' : ''"
-          >
-            {{ $t('LONGTERM') }}
+          <div class="mb-5">
+            <div v-for="(item, idx) in capability.children" :key="idx">
+              <CapabilityItem
+                :capability="item"
+                :available-capabilities="organizationCapabilitiesForChild(item)"
+                v-if="hasCapability(item)"
+                :index="index"
+                @onHover="changeHover"
+              />
+            </div>
           </div>
         </div>
-        <div class="mb-5">
-          <div v-for="(item, idx) in capability.items" :key="idx">
-            <CapabilityItem
-              :capability="item"
-              :index="index"
-              @onHover="changeHover"
-            />
-          </div>
-        </div>
-      </div>
+      </template>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 import CapabilityItem from '@/components/CapabilityItem.vue';
+import { CapabilityMixin } from '@/mixins';
+import { childrenBy, groupBy } from '@/utils/array';
 
 export default {
   name: 'Capability',
   components: { CapabilityItem },
+  mixins: [CapabilityMixin],
   props: {
     capabilities: {
+      type: Array,
+      default: () => [],
+    },
+    organizationCapabilities: {
       type: Array,
       default: () => [],
     },
@@ -76,9 +63,32 @@ export default {
       hoverItem: '',
     };
   },
+  computed: {
+    ...mapState('enums', ['phases']),
+    capabilitiesTree() {
+      return childrenBy(groupBy(this.capabilities, 'parent_id'), 'id');
+    },
+  },
   methods: {
     changeHover(hoverItem) {
       this.hoverItem = hoverItem;
+    },
+    organizationCapabilitiesForChild(capability) {
+      return this.organizationCapabilities.filter(
+        (item) => item.capability === capability.id,
+      );
+    },
+    hasCapability(capability) {
+      return this.organizationCapabilities.some(
+        (item) => item.capability === capability.id,
+      );
+    },
+    hasParent(capability) {
+      return (
+        capability.children &&
+        capability.children.length &&
+        capability.children.some((item) => this.hasCapability(item))
+      );
     },
   },
 };
