@@ -7,6 +7,12 @@
       }}</span>
     </div>
     <div>
+      <span
+        >{{ currentEvent.attr.actor_first_name }}
+        {{ currentEvent.attr.actor_last_name }}</span
+      >
+      from
+      <span>{{ currentEvent.attr.actor_organization_name }}</span>
       {{ getTranslation(currentEvent.past_tense_t, currentEvent.attr) }}
     </div>
   </div>

@@ -1,158 +1,148 @@
 <template>
-  <div class="relative w-full rounded p-2 popup--container" :style="styles">
+  <div
+    class="flex flex-col w-full rounded-md pl-3 py-3 popup--container shadow-md"
+    :style="styles"
+  >
     <div
-      class="
+        class="
         absolute
         h-7
         top-1
         right-0
         cursor-pointer
-        px-2
         rounded-full
         text-center
       "
-      @click="closeModal()"
+        @click="closeModal()"
     >
       <font-awesome-icon icon="times" />
     </div>
-    <img
-      :src="generalInfo.avatar"
-      v-if="generalInfo.avatar"
-      class="w-10 h-10 rounded-full"
-    />
-    <div class="flex flex-col">
-      <div class="pb-2">
-        <div class="text-h2">{{ generalInfo.name }}</div>
-        <div v-if="generalInfo.url" class="text-bodysm">
-          <a :href="generalInfo.url">{{ generalInfo.url }}</a>
+    <div class="mt-2 pb-3 flex border-b border-crisiscleanup-dark-300">
+      <img
+        :src="generalInfo.avatar"
+        v-if="generalInfo.avatar"
+        class="w-10 h-10 rounded-full mr-3"
+      />
+      <div class="text-xs">{{ generalInfo.name }}</div>
+      <div v-if="generalInfo.url" class="text-bodysm">
+        <a :href="generalInfo.url">{{ generalInfo.url }}</a>
+      </div>
+    </div>
+
+    <div class="p-2 border-b border-crisiscleanup-dark-300">
+      <div class="grid grid-cols-2">
+        <div class="col-span-1">
+          <div class="text-crisiscleanup-dark-300 text-xs">{{ $t('TYPE') }}</div>
+          <div v-if="generalInfo.organization">
+            {{
+              $t(
+                generalInfo.organization.type_t
+                  ? generalInfo.organization.type_t
+                  : 'Unknown',
+              )
+            }}
+          </div>
+        </div>
+        <div class="col-span-1">
+          <div class="text-crisiscleanup-dark-300 text-xs">{{ $t('ROLE') }}</div>
+          <div>{{ $t(generalInfo.role ? generalInfo.role : 'Unknown') }}</div>
         </div>
       </div>
-      <hr />
-      <div class="p-2">
-        <div class="grid grid-cols-2">
-          <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300">{{ $t('TYPE') }}</div>
-            <div v-if="generalInfo.organization">
-              {{
-                $t(
-                  generalInfo.organization.type_t
-                    ? generalInfo.organization.type_t
-                    : 'Unknown',
-                )
-              }}
-            </div>
+      <div class="grid grid-cols-4">
+        <div class="col-span-1">
+          <div class="text-crisiscleanup-dark-300 truncate text-xs">
+            {{ $t('INCIDENTS') }}
           </div>
-          <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300">{{ $t('ROLE') }}</div>
-            <div>{{ $t(generalInfo.role ? generalInfo.role : 'Unknown') }}</div>
+          <div>
+            {{
+              $t(
+                generalInfo.reported_count !== null
+                  ? generalInfo.reported_count
+                  : 0,
+              )
+            }}
           </div>
         </div>
-        <div class="grid grid-cols-4">
-          <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300 truncate">
-              {{ $t('INCIDENTS') }}
-            </div>
-            <div>
-              {{
-                $t(
-                  generalInfo.reported_count !== null
-                    ? generalInfo.reported_count
-                    : 0,
-                )
-              }}
-            </div>
+        <div class="col-span-1">
+          <div class="text-crisiscleanup-dark-300 truncate text-xs">
+            {{ $t('CLAIMED') }}
           </div>
-          <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300 truncate">
-              {{ $t('CLAIMED') }}
-            </div>
-            <div>
-              {{
-                $t(generalInfo.claimed_count ? generalInfo.claimed_count : 0)
-              }}
-            </div>
+          <div>
+            {{ $t(generalInfo.claimed_count ? generalInfo.claimed_count : 0) }}
           </div>
-          <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300 truncate">
-              {{ $t('CALLS') }}
-            </div>
-            <div>{{ $t(generalInfo.calls ? generalInfo.calls : 0) }}</div>
+        </div>
+        <div class="col-span-1">
+          <div class="text-crisiscleanup-dark-300 truncate text-xs">
+            {{ $t('CALLS') }}
           </div>
-          <div class="col-span-1">
-            <div class="text-crisiscleanup-dark-300 truncate">
-              {{ $t('VALUE') }}
-            </div>
-            <div>
-              {{ nFormatter(generalInfo.commercial_value) }}
-            </div>
+          <div>{{ $t(generalInfo.calls ? generalInfo.calls : 0) }}</div>
+        </div>
+        <div class="col-span-1">
+          <div class="text-crisiscleanup-dark-300 truncate text-xs">
+            {{ $t('VALUE') }}
+          </div>
+          <div>
+            {{ nFormatter(generalInfo.commercial_value) }}
           </div>
         </div>
       </div>
-      <hr />
-      <div class="py-2">
-        <div
-          class="flex flex-row cursor-pointer"
-          @click="onDropDown('incident')"
-        >
-          <div class="mt-2">{{ $t('INCIDENTS') }}</div>
-          <div class="ml-auto text-lg">
-            <div class="chevron-down">
-              <font-awesome-icon icon="chevron-down" />
-            </div>
+    </div>
+    <div class="py-2 border-b border-crisiscleanup-dark-300 text-xs">
+      <div class="flex flex-row cursor-pointer" @click="onDropDown('incident')">
+        <div class="mt-2">{{ $t('INCIDENTS') }}</div>
+        <div class="ml-auto text-lg">
+          <div class="chevron-down">
+            <font-awesome-icon icon="chevron-down" />
           </div>
-        </div>
-        <div class="overflow-hidden" :class="showIncidents ? 'h-full' : 'h-0'">
-          <Table
-            :columns="incidentTable.columns"
-            :data="generalInfo.statistics"
-            style="height: 20rem"
-            :body-style="{ maxHeight: '40vh', ...styles }"
-            :header-style="styles"
-            :row-style="{ backgroundColor: 'unset' }"
-          >
-            <template #name="slotProps">
-              {{ slotProps.item.name }}
-            </template>
-            <template #commercial_value="slotProps">
-              {{ nFormatter(slotProps.item.commercial_value) }}
-            </template>
-            <template #reported_count="slotProps">
-              <CaseDonutChart
-                class="w-8 h-8"
-                :chart-id="`case-donut-chart-${slotProps.item.id}`"
-                :chart-data="{
-                  reportedCases: slotProps.item.reported_count || 0,
-                  claimedCases: slotProps.item.claimed_count || 0,
-                  completedCases: slotProps.item.closed_count || 0,
-                }"
-                bg-color="#232323"
-              />
-            </template>
-          </Table>
         </div>
       </div>
-      <hr class="mt-2" />
-      <div class="py-2">
-        <div
-          class="flex flex-row cursor-pointer no-ripple"
-          @click="onDropDown('capability')"
+      <div class="overflow-hidden" :class="showIncidents ? 'h-full' : 'h-0'">
+        <Table
+          :columns="incidentTable.columns"
+          :data="generalInfo.statistics"
+          style="height: 20rem"
+          :body-style="{ maxHeight: '40vh', ...styles }"
+          :header-style="styles"
+          :row-style="{ backgroundColor: 'unset' }"
         >
-          <div class="mt-2">{{ $t('CAPABILITY') }}</div>
-          <div class="ml-auto text-lg">
-            <div class="chevron-down">
-              <font-awesome-icon icon="chevron-down" />
-            </div>
+          <template #name="slotProps">
+            {{ slotProps.item.name }}
+          </template>
+          <template #commercial_value="slotProps">
+            {{ nFormatter(slotProps.item.commercial_value) }}
+          </template>
+          <template #reported_count="slotProps">
+            <CaseDonutChart
+              class="w-8 h-8"
+              :chart-id="`case-donut-chart-${slotProps.item.id}`"
+              :chart-data="{
+                reportedCases: slotProps.item.reported_count || 0,
+                claimedCases: slotProps.item.claimed_count || 0,
+                completedCases: slotProps.item.closed_count || 0,
+              }"
+              :bg-color="styles.backgroundColor"
+            />
+          </template>
+        </Table>
+      </div>
+    </div>
+    <div class="py-2 text-xs">
+      <div
+        class="flex flex-row cursor-pointer no-ripple"
+        @click="onDropDown('capability')"
+      >
+        <div class="mt-2">{{ $t('CAPABILITY') }}</div>
+        <div class="ml-auto text-lg">
+          <div class="chevron-down">
+            <font-awesome-icon icon="chevron-down" />
           </div>
         </div>
-        <div
-          class="overflow-y-hidden"
-          :class="showCapability ? 'h-full' : 'h-0'"
-        >
-          <Capability
-            :capabilities="testCapabilities"
-            :class="showCapability ? 'drawer-open' : 'drawer-close'"
-          />
-        </div>
+      </div>
+      <div class="overflow-y-hidden" :class="showCapability ? 'h-full' : 'h-0'">
+        <Capability
+          :capabilities="testCapabilities"
+          :class="showCapability ? 'drawer-open' : 'drawer-close'"
+        />
       </div>
     </div>
   </div>

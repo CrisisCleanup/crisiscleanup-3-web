@@ -1,15 +1,6 @@
 <template>
   <div class="pewpew absolute top-0 right-0 left-0 bottom-0" :style="styles">
     <div class="grid grid-cols-10 relative">
-      <div class="absolute right-0 px-1 w-full sm:w-1/3" style="top: 10%">
-        <OrganizationActivityModal
-          @close="closeModal"
-          :general-info="orgInfo.generalInfo"
-          class="x-translate"
-          style="z-index: 1002"
-          :styles="styles"
-        />
-      </div>
       <div
         class="
           grid grid-cols-8
@@ -115,28 +106,6 @@
               </div>
               <div class="h-full p-2 w-full">
                 <CardStack ref="cards" />
-                <transition name="show">
-                  <EventCard
-                    v-if="currentEvent"
-                    :key="currentEvent.event.id"
-                    :current-event="currentEvent.event"
-                    :class="`bg-${getNearestColor(currentEvent.color).name}`"
-                    :style="{
-                      borderColor: currentEvent.strokeColor,
-                    }"
-                    class="
-                      stacked-card
-                      bg-opacity-25
-                      border
-                      w-full
-                      h-auto
-                      rounded
-                      my-2
-                      p-3
-                      bg-red-200
-                    "
-                  ></EventCard>
-                </transition>
               </div>
             </tab>
             <tab :name="$t('Statistics')" class="p-2">
@@ -241,8 +210,8 @@
             {{ incident.short_name }}
           </div>
         </div>
-        <div class="flex-grow grid grid-cols-10">
-          <div class="col-span-7 flex flex-col">
+        <div class="flex-grow grid grid-cols-12">
+          <div class="col-span-9 flex flex-col">
             <div class="flex-grow">
               <div class="relative h-full">
                 <div
@@ -346,15 +315,27 @@
                     mt-3
                     mr-3
                   "
-                  ref="incidentScroll"
                 >
-                  <div
-                    v-for="incident in liveIncidents"
-                    :key="incident"
-                    class="bg-crisiscleanup-dark-400 p-1 my-2 bg-opacity-25"
+                  <transition-group
+                    name="incidentScroll"
+                    tag="div"
+                    ref="incidentScroll"
                   >
-                    {{ incident }}
-                  </div>
+                    <div
+                      v-for="i in liveIncidents"
+                      :key="i.key"
+                      class="
+                        bg-crisiscleanup-dark-400
+                        p-1
+                        my-2
+                        bg-opacity-25
+                        w-56
+                        text-center
+                      "
+                    >
+                      {{ i.name }}
+                    </div>
+                  </transition-group>
                 </div>
                 <div
                   style="z-index: 1001"
@@ -404,7 +385,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="stats grid grid-flow-col mb-10 ml-3">
+                  <div class="mapStats grid grid-flow-col mb-10 ml-3 h-12">
                     <div
                       class="
                         p-1
@@ -419,7 +400,7 @@
                       :key="item['title']"
                     >
                       <div class="text-white text-xs opacity-50">
-                        {{ item['title'] | capitalize }}
+                        {{ item['title'] | upper }}
                       </div>
                       <div class="text-white text-sm">
                         {{ item['count'] }}
@@ -492,7 +473,14 @@
             </div>
           </div>
           <div class="col-span-3 grid grid-rows-12">
-            <div class="row-span-7">
+            <div class="row-span-7 relative">
+              <OrganizationActivityModal
+                @close="closeModal"
+                :general-info="orgInfo.generalInfo"
+                class="x-translate absolute right-0 top-0 w-full"
+                style="z-index: 1002"
+                :styles="overlayStyles"
+              />
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
@@ -501,14 +489,15 @@
                 :header-style="styles"
                 :row-style="{ backgroundColor: 'unset' }"
                 @rowClick="onRowClick"
+                class="ml-1"
               >
                 <template #name="slotProps">
                   <img
-                    class="w-4 mr-2"
+                    class="w-6 mr-2 rounded-full"
                     :src="getLogoUrl(slotProps.item.id)"
                     :alt="$t('profileOrg.organization_logo')"
                   />
-                  {{ slotProps.item.name }}
+                  <span class="truncate w-32">{{ slotProps.item.name }}</span>
                 </template>
                 <template #commercial_value="slotProps">
                   {{ nFormatter(slotProps.item.commercial_value) }}
@@ -1201,9 +1190,15 @@ export default {
             classes: 'border w-full h-32 rounded my-2',
             event: marker,
           };
-          this.liveIncidents.push(marker.attr.incident_name);
-          this.$refs.incidentScroll.scrollTop =
-            this.$refs.incidentScroll.scrollHeight;
+          if (
+            this.liveIncidents.length === 0 ||
+            (this.liveIncidents[0].name !== marker.attr.incident_name && marker.attr.incident_name)
+          ) {
+            this.liveIncidents.unshift({
+              name: marker.attr.incident_name,
+              key: marker.id,
+            });
+          }
           const markerTemplate = templates.circle;
           let actorMarkerSprite = null;
           let patientMarkerSprite = null;
@@ -1552,6 +1547,7 @@ export default {
     async onRowClick(item) {
       const organization = await this.getOrganization(item.id);
       this.orgInfo.generalInfo = item;
+      this.orgInfo.generalInfo.avatar = this.getLogoUrl(item.id);
       this.orgInfo.generalInfo.organization = organization;
       this.orgInfo.generalInfo.capabilites =
         await this.getOrganizationCapabilities(item.id);
@@ -1571,7 +1567,8 @@ export default {
       }
     },
     getLogoUrl(organization_id) {
-      return Organization.find(organization_id).logo_url;
+      const organization = Organization.find(organization_id);
+      return organization ? organization.logo_url : '';
     },
   },
   computed: {
@@ -1592,6 +1589,18 @@ export default {
         return {
           color: 'white',
           backgroundColor: '#232323',
+        };
+      }
+      return {
+        color: '#232323',
+        backgroundColor: 'white',
+      };
+    },
+    overlayStyles() {
+      if (this.colorMode === 'Dark Mode') {
+        return {
+          color: 'white',
+          backgroundColor: '#242C36',
         };
       }
       return {
@@ -1636,6 +1645,14 @@ export default {
 .show-enter,
 .show-leave-to {
   transform: translateY(-100%);
+}
+
+.incidentScroll-move {
+  transition: transform 1s;
+}
+
+.mapStats > div:hover {
+  @apply border-2 cursor-pointer;
 }
 
 .live-tab {
