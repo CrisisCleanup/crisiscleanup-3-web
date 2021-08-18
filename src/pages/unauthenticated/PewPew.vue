@@ -184,7 +184,6 @@
               $router.push({
                 name: 'nav.pew',
               });
-              $router.go();
             "
           >
             {{ $t('~~Live') }}
@@ -197,7 +196,6 @@
                 name: 'nav.pew',
                 query: { incident: incident.id },
               });
-              $router.go();
             "
             class="live-tab px-2"
             :class="
@@ -719,38 +717,51 @@ export default {
     };
   },
   async mounted() {
-    this.incidentId = this.$route.query.incident;
-
-    this.queryFilter.start_date = this.$moment().add(-60, 'days');
-    this.queryFilter.end_date = this.$moment();
-
-    if (this.incidentId) {
-      await Incident.api().fetchById(this.incidentId);
-      this.incident = Incident.find(this.incidentId);
-      this.queryFilter.start_date = this.incident.start_at_moment;
-      this.queryFilter.incident = this.incidentId;
-      this.queryFilter.end_date = this.incident.start_at_moment.add(60, 'days');
-      this.setLegend();
-    }
-
-    this.getIncidentStats().then(() => {});
-    this.getCompletionRateData().then(() => {});
-    this.fetchCircularBarplotData(new Date(), 30).then(() => {});
-
-    const pageData = await hash({
-      incidents: await this.getRecentIncidents(),
-      organizations: await this.getOrganizations(),
-    });
-    this.loadMap().then(() => {});
-    this.incidents = pageData.incidents;
-    this.organizations = pageData.organizations;
-
-    const svg = templates.orb
-      .replace('{{fillColor}}', '#61D5F8')
-      .replace('{{strokeColor}}', 'black');
-    this.orbTexture = Texture.from(svg);
+    await this.loadPageData();
   },
   methods: {
+    async loadPageData() {
+      this.incidentId = this.$route.query.incident;
+
+      this.queryFilter.start_date = this.$moment().add(-60, 'days');
+      this.queryFilter.end_date = this.$moment();
+
+      if (this.incidentId) {
+        await Incident.api().fetchById(this.incidentId);
+        this.incident = Incident.find(this.incidentId);
+        this.queryFilter.start_date = this.incident.start_at_moment;
+        this.queryFilter.incident = this.incidentId;
+        this.queryFilter.end_date = this.incident.start_at_moment.add(
+          60,
+          'days',
+        );
+        this.setLegend();
+      }
+
+      this.getIncidentStats().then(() => {});
+      this.getCompletionRateData().then(() => {});
+      this.fetchCircularBarplotData(new Date(), 30).then(() => {});
+
+      const pageData = await hash({
+        incidents: await this.getRecentIncidents(),
+        organizations: await this.getOrganizations(),
+      });
+      this.loadMap().then(() => {});
+      this.incidents = pageData.incidents;
+      this.organizations = pageData.organizations;
+
+      const svg = templates.orb
+        .replace('{{fillColor}}', '#61D5F8')
+        .replace('{{strokeColor}}', 'black');
+      this.orbTexture = Texture.from(svg);
+    },
+    async clearMap() {
+      this.map.eachLayer((layer) => {
+        if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
+          this.map.removeLayer(layer);
+        }
+      });
+    },
     setLegend(createdWorkTypes) {
       const workTypes = createdWorkTypes || this.incident.created_work_types;
       this.displayedWorkTypeSvgs = workTypes.map((workType) => {
@@ -1643,6 +1654,16 @@ export default {
       return {
         columns,
       };
+    },
+  },
+  watch: {
+    '$route.query.incident': {
+      handler() {
+        this.clearMap();
+        this.loadPageData();
+      },
+      deep: true,
+      immediate: true,
     },
   },
 };
