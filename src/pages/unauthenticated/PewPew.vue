@@ -183,7 +183,7 @@
             @click="
               $router.push({
                 name: 'nav.pew',
-              });
+              })
             "
           >
             {{ $t('~~Live') }}
@@ -195,7 +195,7 @@
               $router.push({
                 name: 'nav.pew',
                 query: { incident: incident.id },
-              });
+              })
             "
             class="live-tab px-2"
             :class="
@@ -522,7 +522,9 @@
                     :chart-id="`case-donut-chart-${slotProps.item.id}`"
                     :chart-data="{
                       reportedCases: slotProps.item.reported_count || 0,
-                      claimedCases: slotProps.item.claimed_count || 0,
+                      claimedCases:
+                        (slotProps.item.claimed_count || 0) -
+                        (slotProps.item.closed_count || 0),
                       completedCases: slotProps.item.closed_count || 0,
                     }"
                     :bg-color="styles.backgroundColor"
@@ -725,6 +727,7 @@ export default {
 
       this.queryFilter.start_date = this.$moment().add(-60, 'days');
       this.queryFilter.end_date = this.$moment();
+      this.queryFilter.incident = null;
 
       if (this.incidentId) {
         await Incident.api().fetchById(this.incidentId);
@@ -1658,7 +1661,9 @@ export default {
   },
   watch: {
     '$route.query.incident': {
-      handler() {
+      handler(value) {
+        this.incident = null;
+        this.incidentId = value;
         this.clearMap();
         this.loadPageData();
       },

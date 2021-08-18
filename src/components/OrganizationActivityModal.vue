@@ -113,7 +113,9 @@
               :chart-id="`case-donut-chart-${slotProps.item.id}`"
               :chart-data="{
                 reportedCases: slotProps.item.reported_count || 0,
-                claimedCases: slotProps.item.claimed_count || 0,
+                claimedCases:
+                  (slotProps.item.claimed_count || 0) -
+                  (slotProps.item.closed_count || 0),
                 completedCases: slotProps.item.closed_count || 0,
               }"
               :bg-color="styles.backgroundColor"
