@@ -220,6 +220,22 @@
                   class="absolute top-0 left-0 right-0 bottom-0"
                 ></div>
                 <div
+                  v-if="mapLoading"
+                  style="z-index: 1001"
+                  class="
+                    absolute
+                    top-0
+                    left-0
+                    right-0
+                    bottom-0
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+                  <spinner :color="styles.color" />
+                </div>
+                <div
                   style="z-index: 1001"
                   class="
                     absolute
@@ -636,7 +652,7 @@ export default {
       eventStreamData: [],
       currentPost: null,
       startTime: new Date(),
-      loading: false,
+      mapLoading: false,
       orgInfo: {
         generalInfo: {},
         incidents: [],
@@ -717,16 +733,15 @@ export default {
       this.setLegend();
     }
 
-    this.loading = true;
+    this.getIncidentStats().then(() => {});
+    this.getCompletionRateData().then(() => {});
+    this.fetchCircularBarplotData(new Date(), 30).then(() => {});
+
     const pageData = await hash({
       incidents: await this.getRecentIncidents(),
       organizations: await this.getOrganizations(),
-      incidentStats: await this.getIncidentStats(),
-      completion: await this.getCompletionRateData(),
     });
-    await this.loadMap();
-    this.fetchCircularBarplotData(new Date(), 30);
-    this.loading = false;
+    this.loadMap().then(() => {});
     this.incidents = pageData.incidents;
     this.organizations = pageData.organizations;
 

@@ -24,7 +24,7 @@
     <div class="p-2 border-b border-crisiscleanup-dark-300">
       <div class="grid grid-cols-2">
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 text-xs">
+          <div class="text-crisiscleanup-dark-300 text-bodyxsm">
             {{ $t('TYPE') }}
           </div>
           <div v-if="generalInfo.organization">
@@ -38,15 +38,15 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 text-xs">
+          <div class="text-crisiscleanup-dark-300 text-bodyxsm">
             {{ $t('ROLE') }}
           </div>
           <div>{{ $t(generalInfo.role ? generalInfo.role : 'Unknown') }}</div>
         </div>
       </div>
-      <div class="grid grid-cols-4">
+      <div class="grid grid-cols-4 mt-2">
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 truncate text-xs">
+          <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('INCIDENTS') }}
           </div>
           <div>
@@ -60,7 +60,7 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 truncate text-xs">
+          <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('CLAIMED') }}
           </div>
           <div>
@@ -68,13 +68,13 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 truncate text-xs">
+          <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('CALLS') }}
           </div>
           <div>{{ $t(generalInfo.calls ? generalInfo.calls : 0) }}</div>
         </div>
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 truncate text-xs">
+          <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('VALUE') }}
           </div>
           <div>
