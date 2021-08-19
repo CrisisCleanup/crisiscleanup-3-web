@@ -83,6 +83,34 @@
               size="large"
               :placeholder="$t('adminOrganization.address')"
             />
+            <div class="flex">
+              <div class="w-32 flex items-center">
+                <img src="@/assets/facebook.svg" class="w-8 mr-2" />
+                <label class="pr-3 text-xs">{{
+                  $t('profileOrg.facebook')
+                }}</label>
+              </div>
+              <base-input
+                class="w-84"
+                size="small"
+                v-model="organization.facebook"
+                :placeholder="$t('profileOrg.facebook')"
+              />
+            </div>
+            <div class="flex">
+              <div class="w-32 flex items-center">
+                <img src="@/assets/twitter.svg" class="ml-1 w-6 mr-2" />
+                <label class="pr-3 text-xs">{{
+                  $t('profileOrg.twitter')
+                }}</label>
+              </div>
+              <base-input
+                class="w-84"
+                size="small"
+                v-model="organization.twitter"
+                :placeholder="$t('profileOrg.twitter')"
+              />
+            </div>
             <textarea
               v-model="organization.admin_notes"
               class="
