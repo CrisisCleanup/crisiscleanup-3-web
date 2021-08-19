@@ -3,7 +3,7 @@
     <transition-group
       name="list"
       tag="div"
-      class="stacked-cards h-84 overflow-hidden"
+      class="stacked-cards overflow-hidden"
       ref="stackedCards"
     >
       <EventCard
@@ -36,6 +36,9 @@ export default {
   methods: {
     addCardComponent(card) {
       this.cards.unshift(card);
+    },
+    clearCards() {
+      this.cards = [];
     },
   },
 };

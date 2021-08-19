@@ -467,7 +467,7 @@
                       </base-button>
                     </div>
                     <Slider
-                      v-if="markers.length"
+                      v-if="markersLength > 0"
                       @input="
                         (value) => {
                           throttle(() => {
@@ -475,9 +475,9 @@
                           }, 1000)();
                         }
                       "
-                      :value="markers.length - 1"
+                      :value="markersLength - 1"
                       :min="0"
-                      :max="markers.length - 1"
+                      :max="markersLength - 1"
                       :from="queryFilter.start_date.format('MMM Do YYYY')"
                       :to="queryFilter.end_date.format('MMM Do YYYY')"
                     ></Slider>
@@ -658,7 +658,7 @@ export default {
         incidents: [],
         capability: [],
       },
-      markers: [],
+      markersLength: 0,
       liveEvents: [],
       liveIncidents: [],
       events: {},
@@ -761,6 +761,13 @@ export default {
     async clearMap() {
       this.map.eachLayer((layer) => {
         if (layer.key === 'marker_layer' || layer.key === 'live_layer') {
+          this.map.removeLayer(layer);
+        }
+      });
+    },
+    removeLayer(key) {
+      this.map.eachLayer((layer) => {
+        if (layer.key === key) {
           this.map.removeLayer(layer);
         }
       });
@@ -878,24 +885,16 @@ export default {
         const response = await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/all_events?${queryString}`,
         );
-        this.markers = response.data.results;
-      } else {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/recent_events`,
-        );
-        this.markers = response.data;
+        return response.data.results;
       }
-      // [this.currentEvent] = this.markers;
-
-      // let next;
-      // next = response.data.next;
-      // while (next) {
-      //   // eslint-disable-next-line no-await-in-loop
-      //   const chunk = await this.$http.get(next);
-      //   this.markers.push(...chunk.data.results);
-      //   next = chunk.data.next;
-      // }
-      // this.pollNewEvents();
+      const params = {
+        sort: '-created_at',
+      };
+      const queryString = getQueryString(params);
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/recent_events?${queryString}`,
+      );
+      return response.data;
     },
     async getLatestEvents() {
       const params = {
@@ -943,19 +942,24 @@ export default {
         user_create_worksite: true,
       };
 
-      await Promise.all([this.getAllEvents(), this.getLatestEvents()]);
+      const [markers] = await Promise.all([
+        this.getAllEvents(),
+        this.getLatestEvents(),
+      ]);
 
       this.lastEventTimestamp = this.$moment().toISOString();
+      this.markersLength = markers.length;
+      this.removeLayer('worksite_layer');
       const worksiteLayer = getMarkerLayer([], map, this);
       worksiteLayer.addTo(map);
 
       // Initial Draw
-      for (let i = 0; i < this.markers.length; i++) {
+      for (let i = 0; i < markers.length; i++) {
         try {
-          this.addMarker(this.markers[i], i);
+          this.addMarker(markers[i], i);
         } catch (e) {
           this.$log.error(
-            `Could not add marker for ${JSON.stringify(this.markers[i])}`,
+            `Could not add marker for ${JSON.stringify(markers[i])}`,
           );
           this.$log.error(e);
         }
@@ -968,6 +972,7 @@ export default {
       worksiteLayer.redraw();
 
       // Last 2 hours
+      this.removeLayer('live_layer');
       const liveLayer = getLiveLayer();
       liveLayer.addTo(map);
 
@@ -1201,11 +1206,25 @@ export default {
         }
       });
     },
-    generateMarker() {
-      this.map.eachLayer((layer) => {
+    async restartLiveEvents() {
+      this.currentEventIndex = 0;
+      await this.getLatestEvents();
+      this.removeLayer('live_layer');
+      const liveLayer = getLiveLayer();
+      liveLayer.addTo(this.map);
+      this.$refs.cards.clearCards();
+    },
+    async generateMarker() {
+      this.map.eachLayer(async (layer) => {
         if (layer.key === 'live_layer') {
-          const marker = this.liveEvents[this.currentEventIndex];
           this.currentEventIndex++;
+          const marker = this.liveEvents[this.currentEventIndex];
+
+          if (this.currentEventIndex > this.liveEvents.length) {
+            await this.restartLiveEvents();
+            return;
+          }
+
           if (!marker) {
             layer._renderer.render(layer._pixiContainer);
             layer.redraw();
@@ -1340,9 +1359,6 @@ export default {
             layer._pixiContainer.addChild(patientMarkerSprite);
           }
           this.$refs.cards.addCardComponent(card);
-          if (this.currentEventIndex % 5 === 0) {
-            this.currentEvent = card;
-          }
 
           layer._renderer.render(layer._pixiContainer);
           layer.redraw();
@@ -1540,26 +1556,6 @@ export default {
           title: this.$t('~~Households'),
         },
       ];
-    },
-    pollNewEvents() {
-      setInterval(() => {
-        const params = {
-          limit: 500,
-          event_key__in: Object.keys(this.events).join(','),
-          sort: 'created_at',
-          incident: this.incidentId,
-          created_at__gt: this.lastEventTimestamp,
-        };
-        const queryString = getQueryString(params);
-        this.$http
-          .get(
-            `${process.env.VUE_APP_API_BASE_URL}/event_stream?${queryString}`,
-          )
-          .then(({ data }) => {
-            this.markers.push(...data.results);
-            this.lastEventTimestamp = this.$moment().toISOString();
-          });
-      }, 50000);
     },
     setLayer() {
       if (this.colorMode === 'Dark Mode') {

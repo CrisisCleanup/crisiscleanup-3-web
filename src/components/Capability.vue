@@ -1,13 +1,13 @@
 <template>
-  <div v-if="capabilities.length">
+  <div v-if="capabilities.length" class="mt-1">
     <div v-for="(capability, index) in capabilitiesTree" :key="index">
       <template v-if="hasParent(capability)">
-        <div class="selected rounded mx-2 pb-2">
+        <div class="selected rounded mx-2 p-2">
           <div class="text-center header my-2 rounded-t">
             {{ capability.name_t }}
           </div>
           <div
-            class="grid text-center"
+            class="grid text-center p-1"
             :class="[
               $mq === 'sm' ? '' : 'text-bodyxsm',
               `grid-cols-${phases.length}`,
