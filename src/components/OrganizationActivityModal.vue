@@ -1,24 +1,36 @@
 <template>
   <div
-    class="flex flex-col w-full rounded-md pl-3 py-3 popup--container shadow-md"
+    class="
+      flex flex-col
+      w-11/12
+      p-3
+      overflow-y-auto
+      rounded-lg
+      shadow-lg
+      relative
+    "
     :style="styles"
+    style="max-height: 85vh"
   >
-    <div
-      class="absolute h-7 top-1 right-0 cursor-pointer rounded-full text-center"
-      @click="closeModal()"
-    >
-      <font-awesome-icon icon="times" />
-    </div>
-    <div class="mt-2 pb-3 flex border-b border-crisiscleanup-dark-300">
+    <div class="grid grid-cols-8">
       <img
         :src="generalInfo.avatar"
         v-if="generalInfo.avatar"
-        class="w-10 h-10 rounded-full mr-3"
+        class="col-span-2 w-10 h-10 rounded-full mr-3"
       />
-      <div class="text-xs">{{ generalInfo.name }}</div>
-      <div v-if="generalInfo.url" class="text-bodysm">
-        <a :href="generalInfo.url">{{ generalInfo.url }}</a>
+
+      <div class="col-span-5">
+        <div class="text-xs">{{ generalInfo.name }}</div>
+        <div v-if="generalInfo.url" class="text-bodysm">
+          <a :href="generalInfo.url">{{ generalInfo.url }}</a>
+        </div>
       </div>
+
+      <font-awesome-icon
+        class="col-span-1 justify-self-end cursor-pointer rounded-full m-1"
+        @click="closeModal()"
+        icon="times"
+      />
     </div>
 
     <div class="p-2 border-b border-crisiscleanup-dark-300">
@@ -85,7 +97,8 @@
         </div>
       </div>
     </div>
-    <div class="py-2 border-b border-crisiscleanup-dark-300 text-xs">
+
+    <div class="p-2 border-b border-crisiscleanup-dark-300 text-xs">
       <div class="flex flex-row cursor-pointer" @click="onDropDown('incident')">
         <div class="mt-2">{{ $t('INCIDENTS') }}</div>
         <div class="ml-auto text-lg">
@@ -125,7 +138,8 @@
         </Table>
       </div>
     </div>
-    <div class="py-2 text-xs">
+
+    <div class="p-2 text-xs">
       <div
         class="flex flex-row cursor-pointer no-ripple"
         @click="onDropDown('capability')"
