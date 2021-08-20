@@ -88,7 +88,7 @@
             ref="tabs"
             tab-classes="text-xs"
             tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
-            tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t"
+            tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
           >
             <tab :name="$t('Live')" selected>
               <div :name="$t('Site Activity')" class="w-full">
@@ -104,7 +104,7 @@
                   />
                 </div>
               </div>
-              <div class="h-full p-2 w-full">
+              <div class="h-full p-2 w-full" v-if="liveEvents.length > 0">
                 <CardStack ref="cards" />
               </div>
             </tab>
@@ -179,7 +179,7 @@
         <div class="h-12 mt-3 flex text-xs">
           <div
             class="live-tab px-6"
-            :class="incident ? '' : 'live-tab--selected'"
+            :class="incidentId ? '' : 'live-tab--selected'"
             @click="
               $router.push({
                 name: 'nav.pew',
@@ -189,23 +189,21 @@
             {{ $t('~~Live') }}
           </div>
           <div
-            v-for="incident in incidents"
-            :key="incident.id"
+            v-for="i in incidents"
+            :key="i.id"
             @click="
               $router.push({
                 name: 'nav.pew',
-                query: { incident: incident.id },
+                query: { incident: i.id },
               })
             "
             class="live-tab px-2"
             :class="
-              String(incident.id) === String(incidentId)
-                ? 'live-tab--selected'
-                : ''
+              String(i.id) === String(incidentId) ? 'live-tab--selected' : ''
             "
           >
-            <DisasterIcon class="mx-2" :current-incident="incident" />
-            {{ incident.short_name }}
+            <DisasterIcon class="mx-2" :current-incident="i" />
+            {{ i.short_name }}
           </div>
         </div>
         <div class="flex-grow grid grid-cols-12">
@@ -323,12 +321,13 @@
                     absolute
                     top-0
                     right-0
-                    h-32
+                    h-48
                     w-auto
                     overflow-hidden
                     mt-3
                     mr-3
                   "
+                  v-if="liveEvents.length > 0"
                 >
                   <transition-group
                     name="incidentScroll"
@@ -434,7 +433,7 @@
                       rounded
                     "
                   >
-                    <div class="flex justify-center items-center mr-2">
+                    <div class="flex justify-center items-center mr-2" v-if="liveEvents.length > 0">
                       <base-button
                         v-if="eventsInterval"
                         class="
@@ -538,7 +537,7 @@
                 ref="tabs"
                 tab-classes="text-xs"
                 tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
-                tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t"
+                tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
               >
                 <LightTab
                   :name="$t('Call Volume')"
@@ -899,6 +898,8 @@ export default {
     async getLatestEvents() {
       const params = {
         limit: 100,
+        sort: '-created_at',
+        incident_id: this.queryFilter.incident || ''
       };
       const queryString = getQueryString(params);
       const { data } = await this.$http.get(

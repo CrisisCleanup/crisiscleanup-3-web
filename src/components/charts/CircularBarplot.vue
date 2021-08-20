@@ -21,33 +21,10 @@ VueTypes.extend({
   },
 });
 
-export type ChartDataT = {|
-  name: string,
-  timestamp: Date,
-  open: number,
-  closed: number,
-|};
-
 export default {
   name: 'CircularBarplot',
   props: {
-    chartData: VueTypes.arrayOf(
-      VueTypes.shape<ChartDataT>({
-        name: VueTypes.string.isRequired,
-        timestamp: VueTypes.date.isRequired,
-        open: VueTypes.number,
-        closed: VueTypes.number,
-      }),
-    ).def((): ChartDataT =>
-      Array.from({ length: 24 * 6 }, (v, i) => ({
-        name: `id-${i}`,
-        timestamp: new Date(
-          +new Date() - Math.floor(Math.random() * 100000000),
-        ).getTime(),
-        closed: Math.floor(Math.random() * 200 + 25),
-        open: Math.floor(Math.random() * 200 + 25),
-      })),
-    ),
+    chartData: VueTypes.arrayOf(VueTypes.object),
 
     /**
      * Chart type for

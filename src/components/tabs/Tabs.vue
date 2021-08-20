@@ -14,7 +14,7 @@
           }"
           class=""
         >
-          <a :href="tab.href" @click="selectTab(tab)">{{ tab.name }}</a>
+          <div @click="selectTab(tab)">{{ tab.name }}</div>
         </li>
       </ul>
     </div>

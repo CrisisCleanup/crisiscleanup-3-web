@@ -100,6 +100,7 @@ export const BUTTON_SIZES = {
 export const BUTTON_VARIANTS = {
   SOLID: 'solid',
   OUTLINE: 'outline',
+  OUTLINE_DARK: 'outline-dark',
   TEXT: 'text',
 };
 
