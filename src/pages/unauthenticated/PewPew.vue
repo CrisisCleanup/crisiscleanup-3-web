@@ -89,8 +89,15 @@
             tab-classes="text-xs"
             tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
             tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
+            @tabSelected="stopSiteInfoTabCirculationTimer"
           >
-            <tab :name="$t('Live')" selected>
+            <LightTab
+              :name="$t('Live')"
+              :selected="
+                siteInfoTimerData.isTimerActive &&
+                siteInfoTimerData.activeInfoTab === 0
+              "
+            >
               <div :name="$t('Site Activity')" class="w-full">
                 <div class="text-xs px-5 text-center">
                   {{ $t('~~SITE ACTIVITY') }}
@@ -107,8 +114,15 @@
               <div class="h-full p-2 w-full" v-if="liveEvents.length > 0">
                 <CardStack ref="cards" :key="incidentId" />
               </div>
-            </tab>
-            <tab :name="$t('Statistics')" class="p-2">
+            </LightTab>
+            <LightTab
+              :name="$t('Statistics')"
+              class="p-2"
+              :selected="
+                siteInfoTimerData.isTimerActive &&
+                siteInfoTimerData.activeInfoTab === 1
+              "
+            >
               <div class="flex flex-col items-start justify-start w-full">
                 <div class="">
                   <div class="mb-2">
@@ -136,7 +150,7 @@
                   </div>
                 </div>
               </div>
-            </tab>
+            </LightTab>
           </tabs>
         </div>
       </div>
@@ -626,7 +640,6 @@ import OrganizationActivityModal from '@/components/OrganizationActivityModal.vu
 import LightTab from '@/components/tabs/LightTab';
 import SiteActivityGauge from '@/components/charts/SiteActivityGauge';
 import CircularBarplot from '@/components/charts/CircularBarplot';
-import GaugeChart from '@/components/charts/GaugeChart';
 import D3BarChart from '@/components/charts/D3BarChart';
 import CardStack from '@/components/CardStack';
 import { getNearestColor } from '@/utils/colors';
@@ -643,7 +656,6 @@ export default {
     CardStack,
     LightTab,
     D3BarChart,
-    GaugeChart,
     CircularBarplot,
     SiteActivityGauge,
     Slider,
@@ -685,27 +697,12 @@ export default {
         },
       },
       circularBarplotData: [],
-      gaugeChartData: [
-        {
-          radius: 30,
-          fillPercent: 50,
-          leftLabel: 'Low 1',
-          rightLabel: 'High 1',
-        },
-        {
-          radius: 60,
-          fillPercent: 70,
-          leftLabel: 'Low 2',
-          rightLabel: 'High 2',
-        },
-        {
-          radius: 100,
-          fillPercent: 0,
-          leftLabel: 'Low 3',
-          rightLabel: 'High 3',
-        },
-      ],
       barChartData: [],
+      siteInfoTimerData: {
+        timerId: null,
+        activeInfoTab: 0,
+        isTimerActive: true,
+      },
       chartCirculationTimerData: {
         timerId: null,
         activeChartTab: 0,
@@ -731,6 +728,8 @@ export default {
   },
   async mounted() {
     await this.loadPageData();
+    // rotate through site info tabs after every 6 seconds
+    this.startSiteInfoTabCirculationTimer(6000);
     // rotate through d3 chart tabs after every 10 seconds
     this.startTabCirculationTimer(10000);
   },
@@ -813,6 +812,20 @@ export default {
       const response = await this.$http.get(url);
       this.circularBarplotData = response.data;
       this.circularBarplotData = this.circularBarplotData.slice();
+    },
+    // timer handler functions for circulating through site info tabs
+    startSiteInfoTabCirculationTimer(ms) {
+      const totalTabs = 2;
+      this.siteInfoTimerData.timerId = setInterval(() => {
+        this.siteInfoTimerData.activeInfoTab =
+          (this.siteInfoTimerData.activeInfoTab + 1) % totalTabs;
+      }, ms);
+    },
+    stopSiteInfoTabCirculationTimer() {
+      if (this.siteInfoTimerData.isTimerActive) {
+        clearInterval(this.siteInfoTimerData.timerId);
+        this.siteInfoTimerData.isTimerActive = false;
+      }
     },
     // timer handler functions for circulating through d3 charts
     startTabCirculationTimer(ms) {
