@@ -571,28 +571,12 @@
                   </div>
                 </LightTab>
                 <LightTab
-                  :name="$t('Velocity')"
-                  class="absolute left-0 right-0"
-                  style="top: 10%; bottom: 5%"
-                  :selected="
-                    chartCirculationTimerData.isTimerActive &&
-                    chartCirculationTimerData.activeChartTab === 1
-                  "
-                >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
-                    <GaugeChart
-                      class="h-full w-full"
-                      :gauges="gaugeChartData"
-                    />
-                  </div>
-                </LightTab>
-                <LightTab
                   :name="$t('~~Completion Rate')"
                   class="absolute bottom-0 left-0 right-0"
                   style="top: 10%; bottom: 5%"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
-                    chartCirculationTimerData.activeChartTab === 2
+                    chartCirculationTimerData.activeChartTab === 1
                   "
                 >
                   <div class="absolute top-0 bottom-0 left-0 right-0">
@@ -832,10 +816,10 @@ export default {
     },
     // timer handler functions for circulating through d3 charts
     startTabCirculationTimer(ms) {
+      const totalTabs = 2; // total tabs present inside tabs component
       this.chartCirculationTimerData.timerId = setInterval(() => {
         this.chartCirculationTimerData.activeChartTab =
-          (this.chartCirculationTimerData.activeChartTab + 1) % 3;
-        console.log(this.chartCirculationTimerData.activeChartTab);
+          (this.chartCirculationTimerData.activeChartTab + 1) % totalTabs;
       }, ms);
     },
     stopChartTabCirculationTimer() {
