@@ -530,13 +530,15 @@
           </div>
           <div class="col-span-4 grid grid-rows-12">
             <div class="row-span-7 relative">
-              <OrganizationActivityModal
-                @close="closeModal"
-                :general-info="orgInfo.generalInfo"
-                class="x-translate absolute right-0 top-0 w-full"
-                style="z-index: 1002"
-                :styles="overlayStyles"
-              />
+              <div class="w-full absolute top-0 right-0 flex justify-center">
+                <OrganizationActivityModal
+                  @close="closeModal"
+                  :general-info="orgInfo.generalInfo"
+                  class="x-translate right-0 top-0"
+                  style="z-index: 1002"
+                  :styles="overlayStyles"
+                />
+              </div>
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
@@ -1858,6 +1860,10 @@ export default {
         ['commercial_value', '15%', 'Value'],
       ]);
       columns.forEach((column) => {
+        // overwrite default column title from `Name` to `Organization`
+        if (column.key === 'name') {
+          column.title = 'Organization';
+        }
         column.titleClass = 'small-font';
         column.class = 'small-font text-center';
         column.style = {
