@@ -248,10 +248,12 @@
         :key="field.field_key"
         :field="field"
         :worksite="worksite"
+        :dynamic-fields="dynamicFields"
         @updateField="
           ({ key, value }) => {
             updateDirtyFields(key);
             dynamicFields[key] = value;
+            dynamicFields = { ...dynamicFields };
           }
         "
       ></form-tree>

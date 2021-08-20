@@ -13,8 +13,7 @@
         <div class="form-field flex items-center">
           <base-checkbox
             :value="
-              Boolean(worksite.formFields[field.field_key]) ||
-              hasSelectedChildren
+              Boolean(dynamicFields[field.field_key]) || hasSelectedChildren
             "
             @input="
               (value) => {
@@ -47,7 +46,7 @@
             />
           </span>
           <form-select
-            :value="worksite.formFields[field.field_key]"
+            :value="dynamicFields[field.field_key]"
             :options="
               field.values || getSelectValuesList(field.values_default_t)
             "
@@ -80,8 +79,8 @@
           </span>
           <form-select
             :value="
-              worksite.formFields[field.field_key] &&
-              worksite.formFields[field.field_key].split(',')
+              dynamicFields[field.field_key] &&
+              dynamicFields[field.field_key].split(',')
             "
             multiple
             :options="
@@ -104,7 +103,7 @@
       <template v-if="field.html_type === 'text'">
         <div :key="field.field_key" class="form-field">
           <base-input
-            :value="worksite.formFields[field.field_key]"
+            :value="dynamicFields[field.field_key]"
             :tooltip="field.help_t"
             size="large"
             :break-glass="field.read_only_break_glass"
@@ -121,8 +120,8 @@
         <div class="form-field">
           <div class="mb-1">{{ field.label_t }}</div>
           <RecurringSchedule
-            :value="worksite.formFields[field.field_key] || field.recur_default"
-            :is-default="!worksite.formFields[field.field_key]"
+            :value="dynamicFields[field.field_key] || field.recur_default"
+            :is-default="!dynamicFields[field.field_key]"
             @input="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });
@@ -134,7 +133,7 @@
       <template v-if="field.html_type === 'suggest'">
         <div :key="field.field_key" class="form-field">
           <autocomplete
-            :value="worksite.formFields[field.field_key]"
+            :value="dynamicFields[field.field_key]"
             :default-value="getValue(field.field_key)"
             tooltip="info"
             display-property="description"
@@ -167,7 +166,7 @@
             text-area
             :disabled="false"
             :rows="4"
-            :value="worksite.formFields[field.field_key]"
+            :value="dynamicFields[field.field_key]"
             :placeholder="field.placeholder_t || field.label_t"
             @input="
               (value) => {
@@ -180,7 +179,7 @@
       <template v-if="field.html_type === 'checkbox'">
         <div :key="field.field_key" class="form-field flex items-center">
           <base-checkbox
-            :value="worksite.formFields[field.field_key]"
+            :value="dynamicFields[field.field_key]"
             @input="
               (value) => {
                 $emit('updateField', { key: field.field_key, value });
@@ -209,6 +208,7 @@
       :field="item"
       :key="item.field_key"
       :worksite="worksite"
+      :dynamic-fields="dynamicFields"
       @updateField="
         ({ key, value }) => {
           $emit('updateField', { key, value });
@@ -222,7 +222,24 @@ import SectionHeading from './SectionHeading';
 import RecurringSchedule from './RecurringSchedule';
 
 export default {
-  props: ['field', 'children', 'worksite'],
+  props: {
+    worksite: {
+      type: Object,
+      default: () => ({}),
+    },
+    dynamicFields: {
+      type: Object,
+      default: () => ({}),
+    },
+    children: {
+      type: Array,
+      default: () => [],
+    },
+    field: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
   components: { SectionHeading, RecurringSchedule },
   name: 'FormTree',
   data() {
@@ -232,15 +249,13 @@ export default {
   },
   mounted() {
     if (this.field.if_selected_then_work_type) {
-      this.showChildren = Boolean(
-        this.worksite.formFields[this.field.field_key],
-      );
+      this.showChildren = Boolean(this.dynamicFields[this.field.field_key]);
     }
 
     const hasSelectedChildren = this.field.children.some((childField) => {
       return (
         childField.if_selected_then_work_type &&
-        Boolean(this.worksite.formFields[childField.field_key])
+        Boolean(this.dynamicFields[childField.field_key])
       );
     });
     if (hasSelectedChildren) {
@@ -252,7 +267,7 @@ export default {
       return this.field.children.some((childField) => {
         return (
           childField.if_selected_then_work_type &&
-          Boolean(this.worksite.formFields[childField.field_key])
+          Boolean(this.dynamicFields[childField.field_key])
         );
       });
     },
