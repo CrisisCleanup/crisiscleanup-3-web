@@ -5,7 +5,7 @@
 
 <script>
 export default {
-  name: 'Tab',
+  name: 'LightTab',
   props: {
     name: { required: true, type: String },
     selected: { type: Boolean },
@@ -16,6 +16,14 @@ export default {
     return {
       isActive: false,
     };
+  },
+
+  watch: {
+    selected: {
+      handler() {
+        this.isActive = this.selected;
+      },
+    },
   },
 
   computed: {
