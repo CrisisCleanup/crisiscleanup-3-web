@@ -37,14 +37,14 @@
       <div class="grid grid-cols-2">
         <div class="col-span-1">
           <div class="text-crisiscleanup-dark-300 text-bodyxsm">
-            {{ $t('TYPE') }}
+            {{ $t('~~TYPE') }}
           </div>
           <div v-if="generalInfo.organization">
             {{
               $t(
                 generalInfo.organization.type_t
                   ? generalInfo.organization.type_t
-                  : 'Unknown',
+                  : '~~Unknown',
               )
             }}
           </div>
@@ -53,13 +53,13 @@
           <div class="text-crisiscleanup-dark-300 text-bodyxsm">
             {{ $t('ROLE') }}
           </div>
-          <div>{{ $t(generalInfo.role ? generalInfo.role : 'Unknown') }}</div>
+          <div>{{ $t(generalInfo.role ? generalInfo.role : '~~Unknown') }}</div>
         </div>
       </div>
       <div class="grid grid-cols-4 mt-2">
         <div class="col-span-1">
           <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('INCIDENTS') }}
+            {{ $t('~~INCIDENTS') }}
           </div>
           <div>
             {{
@@ -73,7 +73,7 @@
         </div>
         <div class="col-span-1">
           <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('CLAIMED') }}
+            {{ $t('~~CLAIMED') }}
           </div>
           <div>
             {{ $t(generalInfo.claimed_count ? generalInfo.claimed_count : 0) }}
@@ -81,7 +81,7 @@
         </div>
         <div class="col-span-1">
           <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('CALLS') }}
+            {{ $t('~~CALLS') }}
           </div>
           <div>
             {{ $t(generalInfo.calls_count ? generalInfo.calls_count : 0) }}
@@ -89,7 +89,7 @@
         </div>
         <div class="col-span-1">
           <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('VALUE') }}
+            {{ $t('~~VALUE') }}
           </div>
           <div>
             {{ nFormatter(generalInfo.commercial_value) }}
@@ -100,7 +100,7 @@
 
     <div class="p-2 border-b border-crisiscleanup-dark-300 text-xs">
       <div class="flex flex-row cursor-pointer" @click="onDropDown('incident')">
-        <div class="mt-2">{{ $t('INCIDENTS') }}</div>
+        <div class="mt-2">{{ $t('~~INCIDENTS') }}</div>
         <div class="ml-auto text-lg">
           <div class="chevron-down">
             <font-awesome-icon icon="chevron-down" />
