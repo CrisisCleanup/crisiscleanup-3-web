@@ -1853,7 +1853,7 @@ export default {
     },
     orgTable() {
       const columns = makeTableColumns([
-        ['name', '30%'],
+        ['name', '30%', 'Organization'],
         ['incident_count', '15%', 'Incidents'],
         ['reported_count', '15%', 'Cases'],
         ['calls_count', '15%', 'Calls'],
