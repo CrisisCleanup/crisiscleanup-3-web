@@ -433,7 +433,10 @@
                       rounded
                     "
                   >
-                    <div class="flex justify-center items-center mr-2" v-if="liveEvents.length > 0">
+                    <div
+                      class="flex justify-center items-center mr-2"
+                      v-if="liveEvents.length > 0"
+                    >
                       <base-button
                         v-if="eventsInterval"
                         class="
@@ -899,7 +902,7 @@ export default {
       const params = {
         limit: 100,
         sort: '-created_at',
-        incident_id: this.queryFilter.incident || ''
+        incident_id: this.queryFilter.incident || '',
       };
       const queryString = getQueryString(params);
       const { data } = await this.$http.get(
