@@ -55,33 +55,40 @@
             <div class="flex items-center justify-between">
               <base-text variant="h2" :weight="600"> Info </base-text>
             </div>
-            <base-input
+            <FloatingInput
               v-model="organization.name"
               type="text"
               class="input text-sm"
               size="large"
               :placeholder="$t('adminOrganization.name_org')"
             />
-            <base-input
+            <FloatingInput
               v-model="organization.email"
               type="text"
               class="input text-sm"
               size="large"
               :placeholder="$t('adminOrganization.email')"
             />
-            <base-input
+            <FloatingInput
               v-model="organization.phone1"
               type="text"
               class="input text-sm"
               size="large"
               :placeholder="$t('adminOrganization.phone1')"
             />
-            <base-input
+            <FloatingInput
               v-model="organization.address"
               type="text"
               class="input text-sm"
               size="large"
               :placeholder="$t('adminOrganization.address')"
+            />
+            <FloatingInput
+              v-model="organization.url"
+              type="text"
+              class="input text-sm"
+              size="large"
+              :placeholder="$t('adminOrganization.url')"
             />
             <div class="flex">
               <div class="w-32 flex items-center">
@@ -123,7 +130,7 @@
               rows="4"
               :placeholder="$t('adminOrganization.admin_notes')"
             />
-            <base-input
+            <FloatingInput
               v-model="organization.automatically_approve_user_domain"
               :placeholder="$t('adminOrganization.auto_approve_domain')"
               class="input text-sm"
@@ -148,6 +155,7 @@
               "
               :options="organizationTypes"
               v-model="organization.type_t"
+              select-classes="p-1"
               item-key="key"
               label="label"
             />
@@ -163,6 +171,7 @@
               v-model="organization.approve_reject_reason_t"
               item-key="key"
               label="label"
+              select-classes="p-1"
             />
 
             <div class="flex items-center justify-between">
@@ -394,11 +403,17 @@
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
         <base-text variant="h2" :weight="600"> Roles </base-text>
         <form-select
-          :value="organization.approved_roles[0]"
+          :value="currentRole"
           :placeholder="$t('adminOrganization.role')"
           class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
           :options="roles"
-          @input="roleToAdd = $event"
+          @input="
+            (e) => {
+              roleToAdd = e;
+              currentRole = e;
+            }
+          "
+          select-classes="p-1"
           item-key="id"
           label="name_t"
           searchable
@@ -439,7 +454,7 @@
                   multi-select
                   mr-1
                 "
-                select-classes="h-full"
+                select-classes="h-full p-1"
                 :options="selectableIncidents"
                 multiple
                 item-key="id"
@@ -694,7 +709,7 @@
           closeable
         >
           <div class="flex flex-col items-center justify-center p-3">
-            <base-input
+            <FloatingInput
               :value="apiKey"
               disabled
               class="w-full"
@@ -729,10 +744,18 @@ import { hash } from '../../utils/promise';
 import { DialogsMixin, CapabilityMixin } from '../../mixins';
 import { mapTileLayer } from '../../utils/map';
 import GroupSearchInput from '../../components/GroupSearchInput';
+import FloatingInput from '@/components/FloatingInput';
 
 export default {
   name: 'AdminOrganization',
-  components: { DragDrop, Capability, GroupSearchInput, Loader, LocationTool },
+  components: {
+    FloatingInput,
+    DragDrop,
+    Capability,
+    GroupSearchInput,
+    Loader,
+    LocationTool,
+  },
   mixins: [DialogsMixin, CapabilityMixin],
   filters: {
     getCapabilityName(value, capabilities) {
@@ -848,7 +871,7 @@ export default {
         }
 
         await Organization.api().addFile(this.organization.id, file, type);
-        this.loadPageData();
+        await this.saveOrganization();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
@@ -931,6 +954,8 @@ export default {
         this.incidents = pageData.incidents.data.results;
         this.ghostUsers = pageData.ghostUsers;
         this.apiKeys = pageData.apiKeys.data;
+
+        [this.currentRole] = this.organization.approved_roles;
 
         if (this.organization.approved_groups.length) {
           const groupsResponse = await this.$http.get(
@@ -1230,6 +1255,7 @@ export default {
       secondaryLocationMap: null,
       settingLocation: '',
       incidentRequests: [],
+      currentRole: null,
       roles: [],
       apiKeys: [],
       roleRequests: [],
@@ -1292,7 +1318,7 @@ textarea {
   @apply w-120 my-1;
 }
 .select {
-  @apply w-120 my-2 h-12 text-sm;
+  @apply w-120 my-2 h-16 text-sm;
 }
 .multi-select {
   @apply w-120 my-2 text-sm;
