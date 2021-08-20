@@ -549,12 +549,16 @@
                 tab-classes="text-xs"
                 tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
                 tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
+                @tabSelected="stopChartTabCirculationTimer"
               >
                 <LightTab
                   :name="$t('~~Call Volume')"
                   class="absolute left-0 right-0"
                   style="top: 10%; bottom: 5%"
-                  selected
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 0
+                  "
                 >
                   <div class="absolute top-0 bottom-0 left-0 right-0">
                     <CircularBarplot
@@ -570,6 +574,10 @@
                   :name="$t('Velocity')"
                   class="absolute left-0 right-0"
                   style="top: 10%; bottom: 5%"
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 1
+                  "
                 >
                   <div class="absolute top-0 bottom-0 left-0 right-0">
                     <GaugeChart
@@ -582,6 +590,10 @@
                   :name="$t('~~Completion Rate')"
                   class="absolute bottom-0 left-0 right-0"
                   style="top: 10%; bottom: 5%"
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 2
+                  "
                 >
                   <div class="absolute top-0 bottom-0 left-0 right-0">
                     <D3BarChart
@@ -710,6 +722,11 @@ export default {
         },
       ],
       barChartData: [],
+      chartCirculationTimerData: {
+        timerId: null,
+        activeChartTab: 0,
+        isTimerActive: true,
+      },
       incidentId: null,
       markerSpeed: 2000,
       incident: null,
@@ -730,6 +747,8 @@ export default {
   },
   async mounted() {
     await this.loadPageData();
+    // rotate through d3 chart tabs after every 10 seconds
+    this.startTabCirculationTimer(10000);
   },
   methods: {
     async loadPageData() {
@@ -810,6 +829,20 @@ export default {
       const response = await this.$http.get(url);
       this.circularBarplotData = response.data;
       this.circularBarplotData = this.circularBarplotData.slice();
+    },
+    // timer handler functions for circulating through d3 charts
+    startTabCirculationTimer(ms) {
+      this.chartCirculationTimerData.timerId = setInterval(() => {
+        this.chartCirculationTimerData.activeChartTab =
+          (this.chartCirculationTimerData.activeChartTab + 1) % 3;
+        console.log(this.chartCirculationTimerData.activeChartTab);
+      }, ms);
+    },
+    stopChartTabCirculationTimer() {
+      if (this.chartCirculationTimerData.isTimerActive) {
+        clearInterval(this.chartCirculationTimerData.timerId);
+        this.chartCirculationTimerData.isTimerActive = false;
+      }
     },
     async getRecentIncidents() {
       const response = await this.$http.get(
