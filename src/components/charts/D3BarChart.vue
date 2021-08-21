@@ -161,7 +161,12 @@ export default {
         .append('g')
         .attr('class', 'x-axis')
         .attr('transform', `translate(0, ${this.getInnerHeight()})`)
-        .call(d3.axisBottom(this.x).tickSizeOuter(0))
+        .call(
+          d3
+            .axisBottom(this.x)
+            .tickValues(this.x.domain().filter((d, i) => !(i % 5))) // render ticks with 5 day gaps
+            .tickSizeOuter(0),
+        )
         .selectAll('text')
         .style('font-size', '5px')
         .style('text-anchor', 'end')
