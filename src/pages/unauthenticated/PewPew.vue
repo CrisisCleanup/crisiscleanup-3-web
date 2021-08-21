@@ -544,7 +544,7 @@
                 tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
               >
                 <LightTab
-                  :name="$t('Call Volume')"
+                  :name="$t('~~Call Volume')"
                   class="absolute left-0 right-0"
                   style="top: 10%; bottom: 5%"
                   selected
@@ -572,7 +572,7 @@
                   </div>
                 </LightTab>
                 <LightTab
-                  :name="$t('Total cases')"
+                  :name="$t('~~Completion Rate')"
                   class="absolute bottom-0 left-0 right-0"
                   style="top: 10%; bottom: 5%"
                 >

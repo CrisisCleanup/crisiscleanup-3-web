@@ -83,7 +83,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.margin.top = this.marginAll;
-      this.margin.bottom = this.marginAll;
+      this.margin.bottom = this.marginAll + 10;
       this.margin.left = this.marginAll;
       this.margin.right = this.marginAll;
 
@@ -161,13 +161,18 @@ export default {
         .append('g')
         .attr('class', 'x-axis')
         .attr('transform', `translate(0, ${this.getInnerHeight()})`)
-        .call(d3.axisBottom(this.x).tickSizeOuter(0))
+        .call(
+          d3
+            .axisBottom(this.x)
+            .tickValues(this.x.domain().filter((d, i) => !(i % 5))) // render ticks with 5 day gaps
+            .tickSizeOuter(0),
+        )
         .selectAll('text')
-        .style('font-size', '5px')
+        .style('font-size', '6px')
         .style('text-anchor', 'end')
         .attr('dx', '-.8em')
         .attr('dy', '.15em')
-        .attr('transform', 'translate(-5, 0) rotate(-65)')
+        .attr('transform', 'rotate(-35)')
         .append('title')
         .text((d) => this.$t(`~~${d}`));
 
