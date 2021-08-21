@@ -399,6 +399,13 @@
                       </div>
                     </div>
                   </div>
+                  <div class="relative">
+                    <img
+                      src="@/assets/cc-logo.svg"
+                      alt="crisis-cleanup-logo"
+                      class="absolute p-3 h-16 right-0 bottom-0 opacity-20"
+                    />
+                  </div>
                   <div class="mapStats grid grid-flow-col mb-10 ml-3 h-12">
                     <div
                       class="
