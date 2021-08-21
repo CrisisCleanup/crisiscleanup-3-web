@@ -99,7 +99,7 @@
           :columns="incidentTable.columns"
           :data="generalInfo.statistics"
           :body-style="{ maxHeight: '40vh', ...styles }"
-          :header-style="styles"
+          :header-style="{ ...styles, marginBottom: '-10px' }"
           :row-style="{ backgroundColor: 'unset' }"
         >
           <template #name="slotProps">
