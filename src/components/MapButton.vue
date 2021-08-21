@@ -3,7 +3,7 @@
     :auto-hide="false"
     popover-class="layer-action-popover"
     placement="bottom-end"
-    :disabled="disabled"
+    :disabled="disabled || !actions.length"
   >
     <ccu-icon
       :alt="title || buttonText"
@@ -29,7 +29,7 @@
           }
         "
         type="bare"
-        class="p-1 px-2 border-r text-xs"
+        class="p-1 px-2 text-xs"
         :ccu-event="ccuEvent"
       />
     </div>

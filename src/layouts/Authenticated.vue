@@ -423,7 +423,7 @@ body {
 }
 
 .menu-popover {
-  @apply bg-white text-black outline-none w-full border mt-4 shadow w-48;
+  @apply bg-white text-black outline-none border mt-4 shadow w-48;
   left: 0.75rem !important;
   z-index: 100;
 }
