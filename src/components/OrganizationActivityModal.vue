@@ -71,7 +71,9 @@
           <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('CALLS') }}
           </div>
-          <div>{{ $t(generalInfo.calls_count ? generalInfo.calls_count : 0) }}</div>
+          <div>
+            {{ $t(generalInfo.calls_count ? generalInfo.calls_count : 0) }}
+          </div>
         </div>
         <div class="col-span-1">
           <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
