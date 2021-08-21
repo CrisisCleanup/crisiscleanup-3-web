@@ -52,8 +52,8 @@
           <div>
             {{
               $t(
-                generalInfo.reported_count !== null
-                  ? generalInfo.reported_count
+                generalInfo.incident_count !== null
+                  ? generalInfo.incident_count
                   : 0,
               )
             }}
@@ -71,7 +71,7 @@
           <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('CALLS') }}
           </div>
-          <div>{{ $t(generalInfo.calls ? generalInfo.calls : 0) }}</div>
+          <div>{{ $t(generalInfo.calls_count ? generalInfo.calls_count : 0) }}</div>
         </div>
         <div class="col-span-1">
           <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
@@ -92,11 +92,10 @@
           </div>
         </div>
       </div>
-      <div class="overflow-hidden" :class="showIncidents ? 'h-full' : 'h-0'">
+      <div class="overflow-hidden" :class="showIncidents ? 'h-auto' : 'h-0'">
         <Table
           :columns="incidentTable.columns"
           :data="generalInfo.statistics"
-          style="height: 20rem"
           :body-style="{ maxHeight: '40vh', ...styles }"
           :header-style="styles"
           :row-style="{ backgroundColor: 'unset' }"
@@ -136,7 +135,7 @@
           </div>
         </div>
       </div>
-      <div class="overflow-y-hidden" :class="showCapability ? 'h-full' : 'h-0'">
+      <div class="overflow-y-hidden" :class="showCapability ? 'h-auto' : 'h-0'">
         <Capability
           :capabilities="capabilities"
           :organization-capabilities="generalInfo.capabilities"
@@ -223,11 +222,10 @@ export default {
   computed: {
     incidentTable() {
       const columns = makeTableColumns([
-        ['name', '50%'],
-        ['reported_count', '25%', 'Cases'],
-        // ['claimed_count', '0.5fr', 'Claimed'],
-        // ['calls', '0.5fr'],
-        ['commercial_value', '25%', 'Value'],
+        ['name', '40%'],
+        ['reported_count', '20%', 'Cases'],
+        ['calls', '20%', 'Calls'],
+        ['commercial_value', '20%', 'Value'],
       ]);
       columns.forEach((column) => {
         column.titleClass = 'small-font';

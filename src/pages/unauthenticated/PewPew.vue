@@ -105,7 +105,7 @@
                 </div>
               </div>
               <div class="h-full p-2 w-full" v-if="liveEvents.length > 0">
-                <CardStack ref="cards" />
+                <CardStack ref="cards" :key="incidentId" />
               </div>
             </tab>
             <tab :name="$t('Statistics')" class="p-2">
@@ -328,6 +328,7 @@
                     mr-3
                   "
                   v-if="liveEvents.length > 0"
+                  :key="incidentId"
                 >
                   <transition-group
                     name="incidentScroll"
@@ -1636,15 +1637,15 @@ export default {
     },
     orgTable() {
       const columns = makeTableColumns([
-        ['name', '50%'],
-        ['reported_count', '25%', 'Cases'],
-        // ['claimed_count', '0.5fr', 'Claimed'],
-        // ['calls', '0.5fr'],
-        ['commercial_value', '25%', 'Value'],
+        ['name', '40%'],
+        ['incident_count', '15%', 'Incidents'],
+        ['reported_count', '15%', 'Cases'],
+        ['calls_count', '15%', 'Calls'],
+        ['commercial_value', '15%', 'Value'],
       ]);
       columns.forEach((column) => {
         column.titleClass = 'small-font';
-        column.class = 'small-font';
+        column.class = 'small-font text-center';
         column.style = {
           border: 0,
         };
@@ -1662,6 +1663,7 @@ export default {
       handler(value) {
         this.incident = null;
         this.incidentId = value;
+        this.liveIncidents = [];
         this.clearMap();
         this.loadPageData();
       },

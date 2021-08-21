@@ -35,7 +35,28 @@ export default {
   },
   methods: {
     addCardComponent(card) {
+      if (this.cards.length) {
+        const currentCardText = this.getTranslation(
+          card.event.past_tense_t,
+          card.event.attr,
+        );
+        const previousCardText = this.getTranslation(
+          this.cards[0].event.past_tense_t,
+          this.cards[0].event.attr,
+        );
+
+        if (currentCardText === previousCardText) return;
+      }
       this.cards.unshift(card);
+    },
+    getTranslation(tag, attr) {
+      const translated_attrs = Object.fromEntries(
+        Object.entries(attr).map(([key, value]) => [
+          key,
+          key.endsWith('_t') ? this.$t(value) : value,
+        ]),
+      );
+      return this.$t(tag, translated_attrs);
     },
     clearCards() {
       this.cards = [];

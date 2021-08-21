@@ -37,6 +37,9 @@
       </template>
     </div>
   </div>
+  <div v-else class="p-2 text-crisiscleanup-grey-700 italic">
+    {{ $t('info.no_items_found') }}
+  </div>
 </template>
 <script>
 import { mapState } from 'vuex';
