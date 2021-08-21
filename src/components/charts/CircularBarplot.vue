@@ -8,10 +8,26 @@ import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
 
+export type CallVolumeDataT = {|
+  id: number,
+  total: number,
+  missed: number,
+  open: number,
+|};
+
 export default {
   name: 'CircularBarplot',
   props: {
-    chartData: VueTypes.arrayOf(VueTypes.object),
+    /**
+     * Data for Donut chart
+     */
+    chartData: VueTypes.arrayOf(
+      VueTypes.shape<CallVolumeDataT>({
+        total: VueTypes.number,
+        missed: VueTypes.number,
+        open: VueTypes.number,
+      }),
+    ).def((): CallVolumeDataT => []),
 
     /**
      * Chart type for
@@ -52,6 +68,11 @@ export default {
       colorScale: null,
       textContainer: null,
       xTimeLabels: null,
+      // helper mapping functions
+      mappedIds: null,
+      mappedTotalCalls: null,
+      mappedMissedCalls: null,
+      mappedOpenCases: null,
     };
   },
 
@@ -139,6 +160,11 @@ export default {
     },
 
     renderChart() {
+      this.mappedIds = (d) => d.id;
+      this.mappedTotalCalls = (d) => d.total;
+      this.mappedMissedCalls = (d) => d.missed;
+      this.mappedOpenCases = (d) => d.open;
+
       // append the svg object
       this.svg = d3
         .select(`#${this.chartId}`)
