@@ -83,7 +83,7 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.margin.top = this.marginAll;
-      this.margin.bottom = this.marginAll;
+      this.margin.bottom = this.marginAll + 10;
       this.margin.left = this.marginAll;
       this.margin.right = this.marginAll;
 
@@ -168,11 +168,11 @@ export default {
             .tickSizeOuter(0),
         )
         .selectAll('text')
-        .style('font-size', '5px')
+        .style('font-size', '6px')
         .style('text-anchor', 'end')
         .attr('dx', '-.8em')
         .attr('dy', '.15em')
-        .attr('transform', 'translate(-5, 0) rotate(-65)')
+        .attr('transform', 'rotate(-35)')
         .append('title')
         .text((d) => this.$t(`~~${d}`));
 
