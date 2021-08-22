@@ -144,6 +144,8 @@ export default {
         .append('path')
         .datum(this.chartData)
         .attr('fill', 'none')
+        .transition()
+        .duration(1000)
         .attr('stroke', 'url(#line-gradient)')
         .attr('stroke-width', 3)
         .attr('stroke-linecap', 'round')
