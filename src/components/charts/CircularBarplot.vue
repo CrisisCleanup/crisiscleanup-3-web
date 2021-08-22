@@ -26,7 +26,7 @@ export default {
         name: `id=${i}`,
         timestamp: new Date(),
         calls: Math.floor(Math.random() * (100 - 50 + 1) + 50),
-        missed: Math.floor(Math.random() * (40 - 0 + 1) + 0),
+        missed: Math.floor(Math.random() * (40 - 10 + 1) + 10),
       })),
     ),
 
@@ -235,15 +235,18 @@ export default {
 
     renderTotalCalls() {
       const vm = this;
-      this.svg
+      const totalCallsGroup = this.svg
         .append('g')
         .selectAll('path')
         .data(this.chartData, (d) => d.name)
         .join('path')
         .attr('fill', this.colorScale('calls'))
+        .attr('class', 'total-call-path');
+
+      // initial transition
+      totalCallsGroup
         .attr('transform', 'scale(1.4)')
         .style('opacity', '0')
-        .attr('class', 'total-call-path')
         .attr(
           'd',
           d3
@@ -255,22 +258,6 @@ export default {
             .padAngle(0.015)
             .padRadius((d) => this.y(d.calls)),
         )
-        .on('mouseover', function (event, d) {
-          d3.select(this)
-            .style('filter', 'brightness(70%)')
-            .style('transform', 'scale(1.015)')
-            .style('opacity', '1')
-            .style('transition', 'all 200ms');
-          vm.renderCaseInfo(d);
-        })
-        .on('mouseout', function (event, d) {
-          d3.select(this)
-            .style('filter', 'brightness(100%)')
-            .style('transform', 'scale(1)')
-            .style('transition', 'all 200ms');
-
-          vm.renderOverallInfo(d);
-        })
         .transition()
         .delay((d, i) => i * 15)
         .duration(500)
@@ -287,18 +274,39 @@ export default {
         )
         .style('opacity', '1')
         .attr('transform', 'scale(1)');
+
+      totalCallsGroup
+        .on('mouseover', function (event, d) {
+          d3.select(this)
+            .style('stroke', '#fff')
+            .style('stroke-width', 2)
+            .style('transform', 'scale(1.015)')
+            .style('opacity', '1')
+            .style('transition', 'all 200ms');
+          vm.renderCaseInfo(d);
+        })
+        .on('mouseout', function (event, d) {
+          d3.select(this)
+            .style('stroke', 'none')
+            .style('transform', 'scale(1)')
+            .style('transition', 'all 200ms');
+
+          vm.renderOverallInfo(d);
+        });
     },
 
     renderMissedCalls() {
       const vm = this;
 
-      this.svg
+      const missedCallsGroup = this.svg
         .append('g')
         .selectAll('path')
         .data(this.chartData, (d) => d.name)
         .join('path')
         .attr('fill', this.colorScale('missed'))
-        .attr('class', 'missed-call-path')
+        .attr('class', 'missed-call-path');
+
+      missedCallsGroup
         .attr('transform', 'scale(1.2)')
         .style('opacity', '0')
         .attr(
@@ -312,23 +320,6 @@ export default {
             .padAngle(0.05)
             .padRadius(this.getInnerRadius()),
         )
-        .on('mouseover', function (event, d) {
-          d3.select(this)
-            .style('filter', 'brightness(70%)')
-            .style('transform', 'scale(1.015)')
-            .style('opacity', '1')
-            .style('transition', 'all 200ms');
-
-          vm.renderCaseInfo(d);
-        })
-        .on('mouseout', function () {
-          d3.select(this)
-            .style('filter', 'brightness(100%)')
-            .style('transform', 'scale(1)')
-            .style('transition', 'all 200ms');
-
-          vm.renderOverallInfo();
-        })
         .transition()
         .delay((d, i) => i * 15)
         .duration(500)
@@ -345,6 +336,25 @@ export default {
         )
         .style('opacity', '1')
         .attr('transform', 'scale(1)');
+
+      missedCallsGroup
+        .on('mouseover', function (event, d) {
+          d3.select(this)
+            .style('stroke', '#fff')
+            .style('stroke-width', 2)
+            .style('transform', 'scale(1.015)')
+            .style('transition', 'all 200ms');
+
+          vm.renderCaseInfo(d);
+        })
+        .on('mouseout', function () {
+          d3.select(this)
+            .style('stroke', 'none')
+            .style('transform', 'scale(1)')
+            .style('transition', 'all 200ms');
+
+          vm.renderOverallInfo();
+        });
     },
 
     renderAxesAndLabels() {
