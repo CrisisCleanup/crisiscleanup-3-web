@@ -9,10 +9,10 @@ import VueTypes from 'vue-types';
 import _ from 'lodash';
 
 export type CallVolumeDataT = {|
-  id: number,
-  total: number,
+  name: string,
+  timestamp: number,
+  calls: number,
   missed: number,
-  open: number,
 |};
 
 export default {
@@ -21,13 +21,14 @@ export default {
     /**
      * Data for Donut chart
      */
-    chartData: VueTypes.arrayOf(
-      VueTypes.shape<CallVolumeDataT>({
-        total: VueTypes.number,
-        missed: VueTypes.number,
-        open: VueTypes.number,
-      }),
-    ).def((): CallVolumeDataT => []),
+    chartData: VueTypes.arrayOf(VueTypes.object).def((): CallVolumeDataT =>
+      Array.from({ length: 24 * 2 }, (v, i) => ({
+        name: `id=${i}`,
+        timestamp: new Date(),
+        calls: Math.floor(Math.random() * (100 - 50 + 1) + 50),
+        missed: Math.floor(Math.random() * (40 - 0 + 1) + 0),
+      })),
+    ),
 
     /**
      * Chart type for
@@ -69,10 +70,10 @@ export default {
       textContainer: null,
       xTimeLabels: null,
       // helper mapping functions
-      mappedIds: null,
+      mappedNames: null,
       mappedTotalCalls: null,
       mappedMissedCalls: null,
-      mappedOpenCases: null,
+      mappedTimestamps: null,
     };
   },
 
@@ -160,10 +161,12 @@ export default {
     },
 
     renderChart() {
-      this.mappedIds = (d) => d.id;
-      this.mappedTotalCalls = (d) => d.total;
+      this.mappedNames = (d) => d.name;
+      this.mappedTimestamps = (d) => d.timestamp;
+      this.mappedTotalCalls = (d) => d.calls;
       this.mappedMissedCalls = (d) => d.missed;
-      this.mappedOpenCases = (d) => d.open;
+
+      console.log(this.chartData);
 
       // append the svg object
       this.svg = d3
@@ -186,21 +189,17 @@ export default {
         .scaleBand()
         .range([0, 2 * Math.PI]) // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
         .align(0) // This does nothing
-        .domain(this.chartData.map((d) => d.name)); // The domain of the X axis is the list of states.
+        .domain(this.chartData.map(this.mappedNames)); // The domain of the X axis is the list of states.
 
       this.y = d3
         .scaleRadial()
-        .range([this.getInnerRadius(), this.getOuterRadius()]) // Domain will be define later.
-        .domain([
-          0,
-          this.isStacked
-            ? d3.max(this.chartData, (d) => d.open) +
-              d3.max(this.chartData, (d) => d.closed)
-            : Math.max(
-                d3.max(this.chartData, (d) => d.closed),
-                d3.max(this.chartData, (d) => d.open),
-              ),
-        ]); // set domain based on chart type (stacked | unstacked)
+        .range([this.getInnerRadius(), this.getOuterRadius()])
+        .domain([0, d3.max(this.chartData, this.mappedTotalCalls)]);
+
+      this.colorScale = d3
+        .scaleOrdinal()
+        .domain(['missed', 'calls'])
+        .range(['#728091', '#61D5F8']);
 
       this.xTimeLabels = Array.from({ length: 24 }, (v, i) => i + 1);
 
@@ -220,8 +219,8 @@ export default {
         .attr('fill', '#fefefe');
 
       this.renderOverallInfo();
-      this.renderOpenCases();
-      this.renderClosedCases();
+      this.renderTotalCalls();
+      this.renderMissedCalls();
       this.renderAxesAndLabels();
     },
 
@@ -229,31 +228,32 @@ export default {
       this.renderCaseInfo({
         name: 'Overall Info',
         timestamp: new Date(),
-        closed: d3.sum(this.chartData.map((d) => d.closed)),
-        open: d3.sum(this.chartData.map((d) => d.open)),
+        calls: d3.sum(this.chartData.map(this.mappedTotalCalls)),
+        missed: d3.sum(this.chartData.map(this.mappedMissedCalls)),
       });
     },
 
-    renderOpenCases() {
+    renderTotalCalls() {
       const vm = this;
       this.svg
         .append('g')
         .selectAll('path')
         .data(this.chartData, (d) => d.name)
         .join('path')
-        .attr('fill', '#728091')
+        .attr('fill', this.colorScale('calls'))
         .attr('transform', 'scale(1.4)')
-        .classed('open-case-path', true)
+        .style('opacity', '0')
+        .attr('class', 'total-call-path')
         .attr(
           'd',
           d3
             .arc()
             .innerRadius(this.y(0))
-            .outerRadius((d) => this.y(d.closed))
+            .outerRadius((d) => this.y(d.calls))
             .startAngle((d) => this.x(d.name))
-            .endAngle(this.x(0) + this.x.bandwidth())
+            .endAngle((d) => this.x(d.name) + this.x.bandwidth())
             .padAngle(0.015)
-            .padRadius((d) => this.y(d.closed)),
+            .padRadius((d) => this.y(d.calls)),
         )
         .on('mouseover', function (event, d) {
           d3.select(this)
@@ -276,28 +276,20 @@ export default {
         .duration(500)
         .attr(
           'd',
-          this.isStacked
-            ? d3
-                .arc()
-                .innerRadius((d) => this.y(d.closed))
-                .outerRadius((d) => this.y(d.closed + d.open))
-                .startAngle((d) => this.x(d.name))
-                .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-                .padAngle(0.015)
-                .padRadius((d) => this.y(d.closed))
-            : d3
-                .arc()
-                .innerRadius(this.getInnerRadius())
-                .outerRadius((d) => this.y(d.open))
-                .startAngle((d) => this.x(d.name))
-                .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-                .padAngle(0.003)
-                .padRadius(this.getInnerRadius()),
+          d3
+            .arc()
+            .innerRadius(this.getInnerRadius())
+            .outerRadius((d) => this.y(d.calls))
+            .startAngle((d) => this.x(d.name))
+            .endAngle((d) => this.x(d.name) + this.x.bandwidth())
+            .padAngle(0.05)
+            .padRadius(this.getInnerRadius()),
         )
+        .style('opacity', '1')
         .attr('transform', 'scale(1)');
     },
 
-    renderClosedCases() {
+    renderMissedCalls() {
       const vm = this;
 
       this.svg
@@ -305,18 +297,19 @@ export default {
         .selectAll('path')
         .data(this.chartData, (d) => d.name)
         .join('path')
-        .attr('fill', '#61D5F8')
-        .attr('class', 'closed-case-path')
+        .attr('fill', this.colorScale('missed'))
+        .attr('class', 'missed-call-path')
         .attr('transform', 'scale(1.2)')
+        .style('opacity', '0')
         .attr(
           'd',
           d3
             .arc()
             .innerRadius(this.y(0))
-            .outerRadius(this.y(0))
+            .outerRadius((d) => this.y(d.missed))
             .startAngle((d) => this.x(d.name))
-            .endAngle(this.x(0) + this.x.bandwidth())
-            .padAngle(0.03)
+            .endAngle((d) => this.x(d.name) + this.x.bandwidth())
+            .padAngle(0.05)
             .padRadius(this.getInnerRadius()),
         )
         .on('mouseover', function (event, d) {
@@ -344,12 +337,13 @@ export default {
           d3
             .arc()
             .innerRadius(this.getInnerRadius())
-            .outerRadius((d) => this.y(d.closed))
+            .outerRadius((d) => this.y(d.missed))
             .startAngle((d) => this.x(d.name))
             .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-            .padAngle(0.03)
+            .padAngle(0.05)
             .padRadius(this.getInnerRadius()),
         )
+        .style('opacity', '1')
         .attr('transform', 'scale(1)');
     },
 
@@ -393,46 +387,36 @@ export default {
         );
 
       const yAxis = (g) =>
-        g
-          .attr('text-anchor', 'middle')
-          .call((g1) =>
-            g1
-              .append('text')
-              .attr('font-size', `${this.getFontSize()}px`)
-              .attr('fill', '#fff')
-              .attr('y', -this.y(this.y.ticks(3).pop()))
-              .attr('dy', '-8')
-              .text(this.$t('reports.pp_call_volume_call_volume')),
-          )
-          .call((g2) =>
-            g2
-              .selectAll('g')
-              .data(this.y.ticks(4).slice(1))
-              .join('g')
-              .attr('fill', 'none')
-              .call((g3) =>
-                g3
-                  .append('circle')
-                  .attr('stroke', '#5d717f')
-                  .style('stroke-dasharray', '6, 6')
-                  .attr('stroke-width', 3)
-                  .attr('stroke-opacity', 0.8)
-                  .attr('r', this.y),
-              )
-              .call((g4) =>
-                g4
-                  .append('text')
-                  .attr('y', (d) => -this.y(d))
-                  .attr('dy', '0.35em')
-                  .attr('stroke', '#fff')
-                  .attr('stroke-width', 2)
-                  .text(this.y.tickFormat(4, 's'))
-                  .attr('font-size', `${this.getFontSize()}px`)
-                  .clone(true)
-                  .attr('fill', '#000')
-                  .attr('stroke', 'none'),
-              ),
-          );
+        g.attr('text-anchor', 'middle').call((g2) =>
+          g2
+            .selectAll('g')
+            .data(this.y.ticks(4).slice(1))
+            .join('g')
+            .attr('fill', 'none')
+            .call((g3) =>
+              g3
+                .append('circle')
+                .attr('stroke', '#5d717f')
+                .style('stroke-dasharray', '6, 6')
+                .attr('stroke-width', 3)
+                .attr('stroke-opacity', 0.8)
+                .attr('r', this.y),
+            )
+            .call((g4) =>
+              g4
+                .append('text')
+                .attr('y', (d) => -this.y(d))
+                .attr('dy', '0.35em')
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 2)
+                .text(this.y.tickFormat(4, 's'))
+                .attr('font-size', `${this.getFontSize()}px`)
+                .clone(true)
+                .attr('fill', '#000')
+                .attr('stroke', 'none'),
+            ),
+        );
+
       this.svg.append('g').call(xAxis);
       this.svg.append('g').call(yAxis);
     },
@@ -448,68 +432,36 @@ export default {
 
       innerTextContainer
         .append('tspan')
-        .text(this.$t('reports.pp_call_volume_cases'))
+        .text(this.$t('~~Call Volume'))
         .attr('font-size', `${this.getFontSize()}px`)
         .attr('x', 0)
         .attr('y', `${-2.5 * this.getFontSize()}px`);
 
       innerTextContainer
         .append('tspan')
-        .text(this.$t('reports.pp_call_volume_open'))
+        .text(this.$t('~~Total'))
         .attr('x', 0)
         .attr('y', `${-1 * this.getFontSize()}px`);
 
       innerTextContainer
         .append('tspan')
-        .text((d) => this.$t(`${d.open}`))
+        .text((d) => this.$t(`${d.calls}`))
         .attr('x', 0)
         .attr('font-size', `${this.getFontSize()}px`)
         .attr('y', `${0}px`);
 
       innerTextContainer
         .append('tspan')
-        .text(this.$t('reports.pp_call_volume_closed'))
+        .text(this.$t('~~Missed'))
         .attr('x', 0)
         .attr('y', `${1.5 * this.getFontSize()}px`);
 
       innerTextContainer
         .append('tspan')
-        .text((d) => this.$t(`${d.closed}`))
+        .text((d) => this.$t(`${d.missed}`))
         .attr('font-size', `${this.getFontSize()}px`)
         .attr('x', 0)
         .attr('y', `${2.5 * this.getFontSize()}px`);
-    },
-
-    renderOpenCaseLabels() {
-      this.svg
-        .append('g')
-        .selectAll('g')
-        .data(this.chartData)
-        .join('g')
-        .attr('text-anchor', function (d) {
-          return (this.x(d.name) + this.x.bandwidth() / 2 + Math.PI) %
-            (2 * Math.PI) <
-            Math.PI
-            ? 'end'
-            : 'start';
-        })
-        .attr('transform', function (d) {
-          return `rotate(${
-            ((this.x(d.name) + this.x.bandwidth() / 2) * 180) / Math.PI - 90
-          })translate(${this.y(d.closed) - 50},0)`;
-        })
-        .append('text')
-        .text((d) => this.$t(`${d.closed}`))
-        .attr('transform', function (d) {
-          return (this.x(d.name) + this.x.bandwidth() / 2 + Math.PI) %
-            (2 * Math.PI) <
-            Math.PI
-            ? 'rotate(180)'
-            : 'rotate(0)';
-        })
-        .style('font-size', `${this.getFontSize()}px`)
-        .style('fill', 'white')
-        .attr('alignment-baseline', 'middle');
     },
 
     destroyChart() {
