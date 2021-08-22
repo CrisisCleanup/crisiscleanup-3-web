@@ -66,7 +66,7 @@ export default {
             .text((d) => d),
         );
 
-      const { x, y, width: w, height: h } = text.node().getBBox();
+      const { y, width: w, height: h } = text.node().getBBox();
 
       text.attr('transform', `translate(${-w / 2},${15 - y})`);
       path.attr(
