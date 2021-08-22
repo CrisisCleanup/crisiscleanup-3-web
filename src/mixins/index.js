@@ -10,6 +10,7 @@ import ValidateMixin from './validate.js';
 import EventsMixin from './events.js';
 import CapabilityMixin from './capability.js';
 import { WorksitesMixin } from './worksite';
+import { D3BaseChartMixin } from './d3BaseChart';
 
 export {
   LocaleMixin,
@@ -26,4 +27,5 @@ export {
   IncidentMixin,
   EventsMixin,
   CapabilityMixin,
+  D3BaseChartMixin,
 };
