@@ -16,7 +16,7 @@
           <router-link :to="{ name: 'nav.pew' }" class="pewpew__navheader">
             <img
               v-if="colorMode === 'Dark Mode'"
-              src="@/assets/crisiscleanup_logo.png"
+              src="@/assets/cc-pew-pew-logo.gif"
               alt="Crisis Cleanup"
               class="h-8"
             />
@@ -1808,7 +1808,7 @@ export default {
     @apply flex justify-center items-center m-2;
 
     img {
-      @apply h-6;
+      @apply h-10;
     }
   }
 
