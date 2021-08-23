@@ -114,7 +114,7 @@
                 <div class="h-40 w-full">
                   <SiteActivityGauge
                     class="h-full w-full"
-                    :chart-data="65"
+                    :chart-data="currentEngagement"
                     :margin-all="10"
                     chart-id="site-activity-gauge"
                   />
@@ -850,6 +850,7 @@ export default {
         end_date: null,
         incident: null,
       },
+      currentEngagement: 0,
       throttle,
     };
   },
@@ -882,7 +883,8 @@ export default {
 
       this.getIncidentStats().then(() => {});
       this.getCompletionRateData().then(() => {});
-      this.fetchCircularBarplotData(new Date(), 30).then(() => {});
+      this.fetchEngagementData().then(() => {});
+      this.fetchCircularBarplotData(this.$moment(), 30).then(() => {});
 
       const pageData = await hash({
         incidents: await this.getRecentIncidents(),
@@ -926,16 +928,30 @@ export default {
         };
       });
     },
+    async fetchEngagementData() {
+      const { start_date, end_date, incident } = this.queryFilter;
+      const params = {
+        start_date: start_date.format('YYYY-MM-DD'),
+        end_date: end_date.format('YYYY-MM-DD'),
+      };
+      if (incident) {
+        params.incident = incident;
+      }
+      const queryString = getQueryString(params);
+
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/pp_engagement?${queryString}`,
+      );
+      if (response.data.length) {
+        this.currentEngagement = response.data[0].three_day_velocity * 100;
+      }
+    },
     async fetchCircularBarplotData(date, interval) {
       this.circularBarplotData = [];
       this.circularBarplotData = this.circularBarplotData.slice();
-      const d = [
-        date.getFullYear(),
-        (date.getMonth() + 1).toString().padStart(2, '0'),
-        date.getDate().toString().padStart(2, '0'),
-      ].join('-');
+      const d = date.format('YYYY-MM-DD');
 
-      const url = `https://api.crisiscleanup.org/reports_data/daily_calls?&date=${d}&interval=${interval}`;
+      const url = `${process.env.VUE_APP_API_BASE_URL}/reports_data/daily_calls?&date=${d}&interval=${interval}`;
       const response = await this.$http.get(url);
       this.circularBarplotData = response.data;
       this.circularBarplotData = this.circularBarplotData.slice();
@@ -1806,7 +1822,7 @@ export default {
     },
     orgTable() {
       const columns = makeTableColumns([
-        ['name', '40%'],
+        ['name', '30%'],
         ['incident_count', '15%', 'Incidents'],
         ['reported_count', '15%', 'Cases'],
         ['calls_count', '15%', 'Calls'],
