@@ -806,7 +806,7 @@ export default {
         date.getDate().toString().padStart(2, '0'),
       ].join('-');
 
-      const url = `https://api.crisiscleanup.org/reports_data/daily_completion?&date=${d}&interval=${interval}`;
+      const url = `https://api.crisiscleanup.org/reports_data/daily_calls?&date=${d}&interval=${interval}`;
       const response = await this.$http.get(url);
       this.circularBarplotData = response.data;
       this.circularBarplotData = this.circularBarplotData.slice();
