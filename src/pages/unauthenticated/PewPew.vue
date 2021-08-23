@@ -630,24 +630,23 @@
             </div>
             <div class="row-span-5">
               <tabs
-                class="relative h-full"
+                class="relative h-full m-1"
                 ref="tabs"
                 tab-classes="text-xs"
-                tab-default-classes="flex items-center justify-center text-center h-8 cursor-pointer px-2"
-                tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
+                tab-default-classes="flex items-center justify-center text-center h-10 cursor-pointer px-2"
+                tab-active-classes="bg-crisiscleanup-dark-400 rounded-t-xl"
                 @tabSelected="stopChartTabCirculationTimer"
               >
                 <LightTab
                   :name="$t('reports.pp_call_volume_title')"
                   :alt="$t('reports.pp_call_volume_description')"
-                  class="absolute left-0 right-0"
-                  style="top: 10%; bottom: 5%"
+                  class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
                     chartCirculationTimerData.activeChartTab === 0
                   "
                 >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                  <div class="chart-container rounded-tr-xl">
                     <CircularBarplot
                       v-if="circularBarplotData.length !== 0"
                       class="h-full h-full"
@@ -660,14 +659,13 @@
                 <LightTab
                   :name="$t('reports.pp_total_cases_title')"
                   :alt="$t('reports.pp_total_cases_description')"
-                  class="absolute left-0 right-0"
-                  style="top: 10%; bottom: 5%"
+                  class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
                     chartCirculationTimerData.activeChartTab === 2
                   "
                 >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                  <div class="chart-container rounded-t-xl">
                     <TotalCases
                       class="h-full w-full"
                       :margin-all="30"
@@ -683,14 +681,13 @@
                 </LightTab>
                 <LightTab
                   :name="$t('~~Completion Rate')"
-                  class="absolute bottom-0 left-0 right-0"
-                  style="top: 10%; bottom: 5%"
+                  class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
                     chartCirculationTimerData.activeChartTab === 1
                   "
                 >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                  <div class="chart-container rounded-t-xl">
                     <D3BarChart
                       class="h-full w-full"
                       chart-id="completion-rate"
@@ -701,14 +698,13 @@
                 </LightTab>
                 <LightTab
                   :name="$t('~~Weeks To Completion')"
-                  class="absolute bottom-0 left-0 right-0"
-                  style="top: 10%; bottom: 5%"
+                  class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
                     chartCirculationTimerData.activeChartTab === 3
                   "
                 >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                  <div class="chart-container rounded-tl-xl">
                     <WeeksToCompletion
                       :margin-all="30"
                       class="h-full w-full"
@@ -1997,6 +1993,24 @@ export default {
       #819ab0 75.52%,
       rgba(129, 154, 176, 0) 100.43%
     );
+  }
+
+  /* set top to 2.5rem to place it after tab headers which has a h-10 = 2.5rem */
+  .chart-tab {
+    @apply absolute left-0 right-0;
+    top: 2.5rem;
+    bottom: 0;
+  }
+
+  .chart-container {
+    @apply absolute
+      top-0
+      bottom-0
+      left-0
+      right-0
+      bg-gradient-to-b
+      from-crisiscleanup-dark-400
+      via-crisiscleanup-dark-500;
   }
 
   ::-webkit-scrollbar {
