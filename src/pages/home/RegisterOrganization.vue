@@ -67,6 +67,22 @@
                 />
               </div>
               <textarea
+                v-model="organization.where_are_you_working"
+                class="
+                  text-base
+                  w-4/5
+                  border border-crisiscleanup-dark-100
+                  placeholder-crisiscleanup-dark-200
+                  outline-none
+                  m-3
+                  p-2
+                  resize-none
+                "
+                rows="4"
+                :placeholder="$t('registerOrg.where_working')"
+                required
+              />
+              <textarea
                 v-model="organization.referral"
                 class="
                   text-base
@@ -124,22 +140,9 @@
 
             <li class="text-xl form-item">
               {{ $t('registerOrg.org_roles') }}
-              <textarea
-                v-model="organization.where_are_you_working"
-                class="
-                  text-base
-                  w-4/5
-                  border border-crisiscleanup-dark-100
-                  placeholder-crisiscleanup-dark-200
-                  outline-none
-                  m-3
-                  p-2
-                  resize-none
-                "
-                rows="4"
-                :placeholder="$t('registerOrg.where_working')"
-                required
-              />
+              <div class="text-base w-3/5">
+                {{ $t('registerOrg.capability_explanation') }}
+              </div>
               <capability
                 @updated="
                   (matrix) => {
