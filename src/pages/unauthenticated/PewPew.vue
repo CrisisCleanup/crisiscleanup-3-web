@@ -15,7 +15,7 @@
         <div class="pewpew__nav">
           <router-link :to="{ name: 'nav.pew' }" class="pewpew__navheader">
             <img
-              v-if="colorMode === 'pewPew.dark_mode'"
+              v-if="colorMode === 'dark'"
               src="@/assets/cc-pew-pew-logo.gif"
               :alt="$t('nav.crisis_cleanup')"
               class="h-8"
@@ -42,7 +42,10 @@
           </router-link>
 
           <router-link :to="{ name: 'nav.about' }" class="pewpew__navlink">
-            <img src="@/assets/icons/about-us.svg" :alt="$t('publicNav.about_us')" />
+            <img
+              src="@/assets/icons/about-us.svg"
+              :alt="$t('publicNav.about_us')"
+            />
             {{ $t('publicNav.about_us') }}
           </router-link>
 
@@ -50,12 +53,18 @@
             href="https://crisiscleanup.zendesk.com/hc/en-us/requests/new"
             class="pewpew__navlink"
           >
-            <img src="@/assets/icons/contact-us.svg" :alt="$t('publicNav.contact')" />
+            <img
+              src="@/assets/icons/contact-us.svg"
+              :alt="$t('publicNav.contact')"
+            />
             {{ $t('publicNav.contact') }}
           </a>
 
           <router-link :to="{ name: 'nav.training' }" class="pewpew__navlink">
-            <img src="@/assets/icons/training.svg" :alt="$t('publicNav.training')" />
+            <img
+              src="@/assets/icons/training.svg"
+              :alt="$t('publicNav.training')"
+            />
             {{ $t('publicNav.training') }}
           </router-link>
 
@@ -78,7 +87,7 @@
           </router-link>
 
           <router-link :to="{ name: 'nav.about' }" class="pewpew__navlink">
-            <img src="@/assets/icons/faq.svg":alt="$t('publicNav.faq')" />
+            <img src="@/assets/icons/faq.svg" :alt="$t('publicNav.faq')" />
             {{ $t('publicNav.faq') }}
           </router-link>
         </div>
@@ -126,7 +135,8 @@
               <div class="flex flex-col items-start justify-start w-full">
                 <div class="">
                   <div class="mb-2">
-                    <div>{{ $t('reports.pp_site_stats_total_services') }}
+                    <div>
+                      {{ $t('reports.pp_site_stats_total_services') }}
                       <ccu-icon
                         v-tooltip="{
                           content: $t(`reports.pp_site_stats_total_services_d`),
@@ -138,10 +148,13 @@
                         size="medium"
                       />
                     </div>
-                    <div class="text-xl text-blue-600 stats">***$1.1 Billion</div>
+                    <div class="text-xl text-blue-600 stats">
+                      ***$1.1 Billion
+                    </div>
                   </div>
                   <div class="mb-2">
-                    <div>{{ $t('reports.pp_site_stats_disasters') }}
+                    <div>
+                      {{ $t('reports.pp_site_stats_disasters') }}
                       <ccu-icon
                         v-tooltip="{
                           content: $t(`reports.pp_site_stats_disasters_d`),
@@ -156,7 +169,8 @@
                     <div class="text-lg stats">***170</div>
                   </div>
                   <div class="mb-2">
-                    <div>{{ $t('reports.pp_site_stats_est_hours') }}
+                    <div>
+                      {{ $t('reports.pp_site_stats_est_hours') }}
                       <ccu-icon
                         v-tooltip="{
                           content: $t(`reports.pp_site_stats_est_hours_d`),
@@ -171,10 +185,13 @@
                     <div class="text-lg stats">***7.3 Million</div>
                   </div>
                   <div class="mb-2">
-                    <div>{{ $t('reports.pp_site_stats_households_helped') }}
+                    <div>
+                      {{ $t('reports.pp_site_stats_households_helped') }}
                       <ccu-icon
                         v-tooltip="{
-                          content: $t(`reports.pp_site_stats_households_helped_d`),
+                          content: $t(
+                            `reports.pp_site_stats_households_helped_d`,
+                          ),
                           trigger: 'click',
                           classes: 'interactive-tooltip w-auto',
                         }"
@@ -186,10 +203,13 @@
                     <div class="text-lg stats">***142,921</div>
                   </div>
                   <div class="mb-2">
-                    <div>{{ $t('reports.pp_site_stats_volunteer_value') }}
+                    <div>
+                      {{ $t('reports.pp_site_stats_volunteer_value') }}
                       <ccu-icon
                         v-tooltip="{
-                          content: $t(`reports.pp_site_stats_volunteer_value_d`),
+                          content: $t(
+                            `reports.pp_site_stats_volunteer_value_d`,
+                          ),
                           trigger: 'click',
                           classes: 'interactive-tooltip w-auto',
                         }"
@@ -638,7 +658,8 @@
                   </div>
                 </LightTab>
                 <LightTab
-                  :name="$t('~~Total Cases')"
+                  :name="$t('reports.pp_total_cases_title')"
+                  :alt="$t('reports.pp_total_cases_description')"
                   class="absolute left-0 right-0"
                   style="top: 10%; bottom: 5%"
                   :selected="
@@ -679,8 +700,7 @@
                   </div>
                 </LightTab>
                 <LightTab
-                  :name="$t('reports.pp_total_cases_title')"
-                  :alt="$t('reports.pp_total_cases_description')"
+                  :name="$t('~~Weeks To Completion')"
                   class="absolute bottom-0 left-0 right-0"
                   style="top: 10%; bottom: 5%"
                   :selected="
@@ -1707,7 +1727,7 @@ export default {
       ];
     },
     setLayer() {
-      if (this.colorMode === 'pewPew.dark_mode') {
+      if (this.colorMode === 'dark') {
         this.map.addLayer(this.darkTileLayer);
         this.map.removeLayer(this.lightTileLayer);
       } else {
@@ -1744,7 +1764,12 @@ export default {
   },
   computed: {
     colorMode() {
-      return this.isDarkMode ? 'pewPew.dark_mode' : 'pewPew.light_mode';
+      return this.isDarkMode ? 'dark' : 'light';
+    },
+    colorModeText() {
+      return this.isDarkMode
+        ? this.$t('pewPew.dark_mode')
+        : this.$t('pewPew.light_mode');
     },
     visibleWorkTypes() {
       const selectedWorkTypes = this.displayedWorkTypeSvgs
@@ -1756,7 +1781,7 @@ export default {
       return null;
     },
     styles() {
-      if (this.colorMode === 'pewPew.dark_mode') {
+      if (this.colorMode === 'dark') {
         return {
           color: 'white',
           backgroundColor: '#232323',
@@ -1768,7 +1793,7 @@ export default {
       };
     },
     overlayStyles() {
-      if (this.colorMode === 'Dark Mode') {
+      if (this.colorMode === 'dark') {
         return {
           color: 'white',
           backgroundColor: '#242C36',

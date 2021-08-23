@@ -149,7 +149,9 @@
         </template>
         <div class="px-5 py-3">
           <div class="form-row">
-            <div class="font-semibold">{{ $t('profileOrg.primary_contacts') }}</div>
+            <div class="font-semibold">
+              {{ $t('profileOrg.primary_contacts') }}
+            </div>
             <div
               style="
                 display: grid;
@@ -268,7 +270,9 @@
     <div class="mt-6">
       <Card>
         <template #header>
-          <base-text class="px-5 py-3">{{ $t('profileOrg.capabilities') }}</base-text>
+          <base-text class="px-5 py-3">{{
+            $t('profileOrg.capabilities')
+          }}</base-text>
         </template>
         <Capability
           class="px-5 py-3"
@@ -297,7 +301,9 @@
             {{ $t('profileOrg.current_incidents') }}
           </base-text>
         </template>
-        <div class="px-5 py-1 font-semibold">{{ $t('profileOrg.approved') }}</div>
+        <div class="px-5 py-1 font-semibold">
+          {{ $t('profileOrg.approved') }}
+        </div>
         <div class="px-5 py-1 grid grid-cols-2 gap-x-6">
           <div
             v-for="incident in currentOrganization.approved_incidents"
@@ -306,7 +312,9 @@
             {{ incident | getIncidentName }}
           </div>
         </div>
-        <div class="px-5 py-1 font-semibold">{{ $t('profileOrg.pending') }}</div>
+        <div class="px-5 py-1 font-semibold">
+          {{ $t('profileOrg.pending') }}
+        </div>
         <div class="px-5 py-1 grid grid-cols-2 gap-x-6">
           <div
             v-for="incident in currentOrganization.pending_incidents"
@@ -357,9 +365,7 @@
         </div>
         <div v-else class="py-2 flex items-center justify-center">
           <base-button
-            :text="
-              $t('profileOrg.contact_help_change_response')
-            "
+            :text="$t('profileOrg.contact_help_change_response')"
             :alt="$t('profileOrg.contact_help_change_response')"
             variant="solid"
             class="px-2 py-1"
@@ -407,9 +413,7 @@
         </div>
         <div v-else class="py-2 flex items-center justify-center">
           <base-button
-            :text="
-              $t('profileOrg.contact_help_change_response')
-            "
+            :text="$t('profileOrg.contact_help_change_response')"
             :alt="$t('profileOrg.contact_help_change_response')"
             variant="solid"
             class="px-2 py-1"

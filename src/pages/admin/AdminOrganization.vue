@@ -441,7 +441,9 @@
         />
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
-        <base-text variant="h2" :weight="600"> {{ $t('adminOrganization.incidents') }} </base-text>
+        <base-text variant="h2" :weight="600">
+          {{ $t('adminOrganization.incidents') }}
+        </base-text>
         <div class="flex item-start">
           <div>
             <div class="flex items-center justify-start">
