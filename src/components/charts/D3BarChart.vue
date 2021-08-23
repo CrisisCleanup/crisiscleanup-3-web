@@ -292,8 +292,17 @@ export default {
       const subgroups = _.filter(this.chartData.columns, (c) => c !== 'group');
       const { addHoverEffects } = this;
 
+      // normalize data to filter out falsy values
+      const normalizedData = this.chartData.map(
+        (item: BarChartT): BarChartT => ({
+          group: new Date(item.group) ? item.group : '',
+          newCases: item.newCases ?? 0,
+          closedCases: item.closedCases ?? 0,
+        }),
+      );
+
       // stack per subgroup
-      const stackedData = d3.stack().keys(subgroups)(this.chartData);
+      const stackedData = d3.stack().keys(subgroups)(normalizedData);
 
       // set x scale
       this.x = d3
@@ -428,7 +437,7 @@ export default {
             .attr('stroke-width', 0)
             .transition()
             .duration(500)
-            .delay(5000)
+            .delay(10000)
             .on('start', repeat);
         });
     },
