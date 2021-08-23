@@ -561,7 +561,7 @@
                 class="relative h-full"
                 ref="tabs"
                 tab-classes="text-xs"
-                tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
+                tab-default-classes="flex items-center justify-center text-center h-8 cursor-pointer px-2"
                 tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
                 @tabSelected="stopChartTabCirculationTimer"
               >
@@ -599,6 +599,53 @@
                       chart-id="completion-rate"
                       :chart-data="barChartData"
                       :is-stacked="true"
+                    />
+                  </div>
+                </LightTab>
+                <LightTab
+                  :name="$t('~~Total Cases')"
+                  class="absolute bottom-0 left-0 right-0"
+                  style="top: 10%; bottom: 5%"
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 2
+                  "
+                >
+                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <TotalCases
+                      class="h-full w-full"
+                      :margin-all="30"
+                      :chart-data="{
+                        open: incidentStats.unclaimed.total,
+                        closed: incidentStats.closed.total,
+                        inProgress: incidentStats.claimed.total,
+                      }"
+                    />
+                  </div>
+                </LightTab>
+                <LightTab
+                  :name="$t('~~Weeks To Completion')"
+                  class="absolute bottom-0 left-0 right-0"
+                  style="top: 10%; bottom: 5%"
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 3
+                  "
+                >
+                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <WeeksToCompletion
+                      :margin-all="30"
+                      class="h-full w-full"
+                      :chart-data="[
+                        { date: new Date('2021-04-22'), velocity: 19 },
+                        { date: new Date('2021-04-23'), velocity: 30 },
+                        { date: new Date('2021-04-24'), velocity: 40 },
+                        { date: new Date('2021-04-25'), velocity: 20 },
+                        { date: new Date('2021-04-26'), velocity: 15 },
+                        { date: new Date('2021-04-27'), velocity: 5 },
+                        { date: new Date('2021-04-28'), velocity: 12 },
+                        { date: new Date('2021-04-29'), velocity: 10 },
+                      ]"
                     />
                   </div>
                 </LightTab>
@@ -647,10 +694,14 @@ import { hash } from '@/utils/promise';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
 import Organization from '@/models/Organization';
 import Toggle from '@/components/Toggle';
+import TotalCases from '@/components/charts/TotalCases';
+import WeeksToCompletion from '@/components/charts/WeeksToCompletion';
 
 export default {
   name: 'PewPew',
   components: {
+    WeeksToCompletion,
+    TotalCases,
     Toggle,
     CaseDonutChart,
     CardStack,
@@ -728,8 +779,8 @@ export default {
   },
   async mounted() {
     await this.loadPageData();
-    // rotate through site info tabs after every 6 seconds
-    this.startSiteInfoTabCirculationTimer(6000);
+    // rotate through site info tabs after every 15 seconds
+    this.startSiteInfoTabCirculationTimer(15000);
     // rotate through d3 chart tabs after every 10 seconds
     this.startTabCirculationTimer(10000);
   },
@@ -829,7 +880,7 @@ export default {
     },
     // timer handler functions for circulating through d3 charts
     startTabCirculationTimer(ms) {
-      const totalTabs = 2; // total tabs present inside tabs component
+      const totalTabs = 4; // total tabs present inside tabs component
       this.chartCirculationTimerData.timerId = setInterval(() => {
         this.chartCirculationTimerData.activeChartTab =
           (this.chartCirculationTimerData.activeChartTab + 1) % totalTabs;
