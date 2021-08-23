@@ -17,6 +17,14 @@ export default {
     };
   },
 
+  watch: {
+    selected: {
+      handler() {
+        this.isActive = this.selected;
+      },
+    },
+  },
+
   computed: {
     href() {
       return `#${this.name.toLowerCase().replace(/ /g, '-')}`;
