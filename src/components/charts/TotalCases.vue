@@ -147,7 +147,7 @@ export default {
       this.svg
         .transition()
         .duration(750)
-        .tween('zoom', (d) => {
+        .tween('zoom', () => {
           const i = d3.interpolateZoom(this.view, [
             this.focus.x,
             this.focus.y,
