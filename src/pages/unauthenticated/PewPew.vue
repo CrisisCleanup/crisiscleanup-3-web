@@ -662,7 +662,7 @@
                   class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
-                    chartCirculationTimerData.activeChartTab === 2
+                    chartCirculationTimerData.activeChartTab === 1
                   "
                 >
                   <div class="chart-container rounded-t-xl">
@@ -684,7 +684,7 @@
                   class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
-                    chartCirculationTimerData.activeChartTab === 1
+                    chartCirculationTimerData.activeChartTab === 2
                   "
                 >
                   <div class="chart-container rounded-t-xl">
