@@ -165,10 +165,13 @@ export default {
           d3
             .axisBottom(this.x)
             .tickValues(this.x.domain().filter((d, i) => !(i % 5))) // render ticks with 5 day gaps
+            .tickFormat((d) =>
+              d3.timeFormat('%b %d')(new Date(d) || new Date()),
+            )
             .tickSizeOuter(0),
         )
         .selectAll('text')
-        .style('font-size', '6px')
+        .style('font-size', '8px')
         .style('text-anchor', 'end')
         .attr('dx', '-.8em')
         .attr('dy', '.15em')
