@@ -46,7 +46,7 @@ export default {
     /**
      * background color / gradient
      */
-    bgColor: VueTypes.string.def('#232323'),
+    bgColor: VueTypes.string.def('transparent'),
     /**
      * Stacked | Unstacked
      */
