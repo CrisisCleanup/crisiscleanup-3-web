@@ -26,7 +26,7 @@
           <font-awesome-icon
             :icon="capability.showChildren ? 'minus' : 'plus'"
             size="lg"
-            :title="$t('~~Show Capabilities')"
+            :title="$t('capabilities.show_capabilities')"
             class="cursor-pointer text-crisiscleanup-grid-yellow mr-2"
           ></font-awesome-icon>
           {{ capability.name_t }}

@@ -151,7 +151,7 @@
                 <!--                  "-->
                 <!--                  >-</base-button-->
                 <!--                >-->
-                {{ 'Tickets' }}
+                {{ $t('adminDashboard.tickets') }}
               </span>
             </div>
 
@@ -168,12 +168,12 @@
                     :key="idx"
                     style="color: darkgrey"
                     v-for="(headers,idx )in [
-                      'Ticket Id',
-        'Requester Id',
-        'Created',
-        'Description',
-        'Via',
-        'Launch Ticket',
+                      'adminDashboard.ticket_id',
+        'adminDashboard.requester_id',
+        'adminDashboard.created',
+        'adminDashboard.description',
+        'adminDashboard.via',
+        'adminDashboard.launch_ticket',
                ]"
                   >
                     {{ headers }}
@@ -202,7 +202,7 @@
                           items.id
                         "
                         target="_blank"
-                        >Launch Ticket</a
+                        >{{ $t('adminDashboard.launch_ticket') }}</a
                       >
                     </div>
                   </th>

@@ -312,12 +312,6 @@ export default {
     enablePagination: Boolean,
     enableColumnSearch: Boolean,
     hasRowDetails: Boolean,
-    bodyStyle: {
-      type: Object,
-      default: () => {
-        return {};
-      },
-    },
     rowStyle: {
       type: Object,
       default: () => {
@@ -325,6 +319,12 @@ export default {
       },
     },
     headerStyle: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+    bodyStyle: {
       type: Object,
       default: () => {
         return {};

@@ -11,12 +11,12 @@
       <Card>
         <template #header>
           <base-text class="px-5 py-3">{{
-            $t('~~Main Information')
+            $t('profileOrg.main_info')
           }}</base-text>
         </template>
         <div class="px-5 py-3">
           <div class="logo-field form-row">
-            <div>{{ $t('~~Logo') }}</div>
+            <div>{{ $t('profileOrg.logo') }}</div>
             <div class="flex">
               <div v-if="!logoUrl">
                 <DragDrop
@@ -144,12 +144,14 @@
       <Card>
         <template #header>
           <base-text class="px-5 py-3">{{
-            $t('~~General Information')
+            $t('profileOrg.general_information')
           }}</base-text>
         </template>
         <div class="px-5 py-3">
           <div class="form-row">
-            <div class="font-semibold">{{ $t('~~Primary Contacts') }}</div>
+            <div class="font-semibold">
+              {{ $t('profileOrg.primary_contacts') }}
+            </div>
             <div
               style="
                 display: grid;
@@ -199,7 +201,7 @@
 
             <UserSearchInput
               class="h-12 w-84"
-              :placeholder="$t('~~Add Primary Contact')"
+              :placeholder="$t('profileOrg.add_primary_contacts')"
               :key="JSON.stringify(organization.primary_contacts)"
               @selectedUser="
                 (user) => {
@@ -209,7 +211,7 @@
             />
           </div>
           <div class="form-row">
-            <div>{{ $t('~~Linked Account') }}</div>
+            <div>{{ $t('profileOrg.social_media') }}</div>
             <div class="form-row flex">
               <div class="w-32 flex items-center">
                 <img src="@/assets/facebook.svg" class="w-8 mr-2" />
@@ -252,7 +254,7 @@
           <div class="form-row">
             <FloatingInput
               class="mr-2 w-84"
-              :placeholder="$t('~~Donation URL')"
+              :placeholder="$t('profileOrg.donation_url')"
               :value="currentOrganization.donate_url"
               required
               @input="
@@ -268,7 +270,9 @@
     <div class="mt-6">
       <Card>
         <template #header>
-          <base-text class="px-5 py-3">{{ $t('~~Capabilities') }}</base-text>
+          <base-text class="px-5 py-3">{{
+            $t('profileOrg.capabilities')
+          }}</base-text>
         </template>
         <Capability
           class="px-5 py-3"
@@ -286,7 +290,7 @@
       <Card>
         <template #header>
           <base-text class="px-5 py-3">
-            {{ $t('~~Request Redeploy') }}
+            {{ $t('requestRedeploy.request_redeploy') }}
           </base-text>
         </template>
         <RequestRedeploy />
@@ -294,10 +298,12 @@
       <Card>
         <template #header>
           <base-text class="px-5 py-3">
-            {{ $t('~~Current Incidents') }}
+            {{ $t('profileOrg.current_incidents') }}
           </base-text>
         </template>
-        <div class="px-5 py-1 font-semibold">{{ $t('~~Approved') }}</div>
+        <div class="px-5 py-1 font-semibold">
+          {{ $t('profileOrg.approved') }}
+        </div>
         <div class="px-5 py-1 grid grid-cols-2 gap-x-6">
           <div
             v-for="incident in currentOrganization.approved_incidents"
@@ -306,7 +312,9 @@
             {{ incident | getIncidentName }}
           </div>
         </div>
-        <div class="px-5 py-1 font-semibold">{{ $t('~~Pending') }}</div>
+        <div class="px-5 py-1 font-semibold">
+          {{ $t('profileOrg.pending') }}
+        </div>
         <div class="px-5 py-1 grid grid-cols-2 gap-x-6">
           <div
             v-for="incident in currentOrganization.pending_incidents"
@@ -357,10 +365,8 @@
         </div>
         <div v-else class="py-2 flex items-center justify-center">
           <base-button
-            :text="
-              $t('~~Please contact helpdesk to change your response area.')
-            "
-            :alt="$t('~~Please contact helpdesk to change your response area.')"
+            :text="$t('profileOrg.contact_help_change_response')"
+            :alt="$t('profileOrg.contact_help_change_response')"
             variant="solid"
             class="px-2 py-1"
             disabled
@@ -407,10 +413,8 @@
         </div>
         <div v-else class="py-2 flex items-center justify-center">
           <base-button
-            :text="
-              $t('~~Please contact helpdesk to change your response area.')
-            "
-            :alt="$t('~~Please contact helpdesk to change your response area.')"
+            :text="$t('profileOrg.contact_help_change_response')"
+            :alt="$t('profileOrg.contact_help_change_response')"
             variant="solid"
             class="px-2 py-1"
             disabled
@@ -446,7 +450,7 @@
           items-center
         "
       >
-        {{ $t('Documents and Materials') }}
+        {{ $t('profileOrg.custom_materials') }}
         <base-button
           variant="solid"
           class="px-4 py-2"
