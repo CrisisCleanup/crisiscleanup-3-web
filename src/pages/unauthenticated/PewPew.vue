@@ -100,8 +100,8 @@
             tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
             @tabSelected="stopSiteInfoTabCirculationTimer"
           >
-            <LightTab
-              :name="$t('Live')"
+            <tab
+              :name="$t('~~Live')"
               :selected="
                 siteInfoTimerData.isTimerActive &&
                 siteInfoTimerData.activeInfoTab === 0
@@ -123,8 +123,8 @@
               <div class="h-full p-2 w-full" v-if="liveEvents.length > 0">
                 <CardStack ref="cards" :key="incidentId" />
               </div>
-            </LightTab>
-            <LightTab
+            </tab>
+            <tab
               :name="$t('reports.pp_site_stats_title')"
               class="p-2"
               :selected="
@@ -225,7 +225,7 @@
                   </div>
                 </div>
               </div>
-            </LightTab>
+            </tab>
           </tabs>
         </div>
       </div>
