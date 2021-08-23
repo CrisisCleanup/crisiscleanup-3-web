@@ -292,7 +292,7 @@
           </div>
         </div>
         <div class="flex-grow grid grid-cols-12">
-          <div class="col-span-9 flex flex-col">
+          <div class="col-span-8 flex flex-col">
             <div class="flex-grow">
               <div class="relative h-full">
                 <div
@@ -582,7 +582,7 @@
               </div>
             </div>
           </div>
-          <div class="col-span-3 grid grid-rows-12">
+          <div class="col-span-4 grid grid-rows-12">
             <div class="row-span-7 relative">
               <OrganizationActivityModal
                 @close="closeModal"
