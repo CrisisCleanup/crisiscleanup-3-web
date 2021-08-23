@@ -58,19 +58,21 @@ export const D3BaseChartMixin = {
   },
 
   methods: {
-    getWidth(): number {
+    getWidth() {
+      // eslint-disable-next-line no-undef
       return +d3.select(`#${this.chartId}`).style('width').slice(0, -2) || 0;
     },
 
-    getHeight(): number {
+    getHeight() {
+      // eslint-disable-next-line no-undef
       return +d3.select(`#${this.chartId}`).style('height').slice(0, -2) || 0;
     },
 
-    getInnerWidth(): number {
+    getInnerWidth() {
       return this.getWidth() - this.margin.left - this.margin.right;
     },
 
-    getInnerHeight(): number {
+    getInnerHeight() {
       return this.getHeight() - this.margin.top - this.margin.bottom;
     },
 
@@ -79,6 +81,7 @@ export const D3BaseChartMixin = {
     },
 
     destroyChart() {
+      // eslint-disable-next-line no-undef
       d3.select(`#${this.chartId} svg`).remove();
     },
   },
