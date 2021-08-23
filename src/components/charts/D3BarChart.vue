@@ -165,10 +165,13 @@ export default {
           d3
             .axisBottom(this.x)
             .tickValues(this.x.domain().filter((d, i) => !(i % 5))) // render ticks with 5 day gaps
+            .tickFormat((d) =>
+              d3.timeFormat('%b %d')(new Date(d) || new Date()),
+            )
             .tickSizeOuter(0),
         )
         .selectAll('text')
-        .style('font-size', '6px')
+        .style('font-size', '8px')
         .style('text-anchor', 'end')
         .attr('dx', '-.8em')
         .attr('dy', '.15em')
@@ -289,8 +292,17 @@ export default {
       const subgroups = _.filter(this.chartData.columns, (c) => c !== 'group');
       const { addHoverEffects } = this;
 
+      // normalize data to filter out falsy values
+      const normalizedData = this.chartData.map(
+        (item: BarChartT): BarChartT => ({
+          group: new Date(item.group) ? item.group : '',
+          newCases: item.newCases ?? 0,
+          closedCases: item.closedCases ?? 0,
+        }),
+      );
+
       // stack per subgroup
-      const stackedData = d3.stack().keys(subgroups)(this.chartData);
+      const stackedData = d3.stack().keys(subgroups)(normalizedData);
 
       // set x scale
       this.x = d3
@@ -425,7 +437,7 @@ export default {
             .attr('stroke-width', 0)
             .transition()
             .duration(500)
-            .delay(5000)
+            .delay(10000)
             .on('start', repeat);
         });
     },
