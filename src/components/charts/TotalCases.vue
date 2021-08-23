@@ -47,7 +47,7 @@ export default {
       return d3
         .pack()
         .size([this.getInnerWidth(), this.getInnerHeight()])
-        .padding(3)(
+        .padding(8)(
         d3
           .hierarchy(data)
           .sum((d) => d.value)
@@ -84,13 +84,13 @@ export default {
 
       this.colorScale = d3
         .scaleOrdinal()
-        .domain(_.keys(this.chartData))
-        .range(['#e15554', '#3bb273', '#f08700']);
+        .domain([..._.keys(this.chartData), 'Total Cases'])
+        .range(['#e15554', '#3bb273', '#f08700', '#ffffff22']);
 
       this.node = this.svg
         .append('g')
         .selectAll('circle')
-        .data(root.descendants().slice(1))
+        .data(root.descendants())
         .join('circle')
         .attr('fill', (d) => this.colorScale(d.data.name))
         .style('cursor', 'pointer');
@@ -124,7 +124,7 @@ export default {
         .style('display', (d) => (d.parent === root ? 'inline' : 'none'))
         .text((d) => `${_.startCase(d.data.name)} (${d.data.value})`);
 
-      this.zoomTo([root.x, root.y, root.r * 2]);
+      this.zoomTo([root.x, root.y, root.r * 2.5]);
     },
 
     zoomTo(v) {
@@ -151,7 +151,7 @@ export default {
           const i = d3.interpolateZoom(this.view, [
             this.focus.x,
             this.focus.y,
-            this.focus.r * 2,
+            this.focus.r * 2.5,
           ]);
           return (t) => this.zoomTo(i(t));
         });

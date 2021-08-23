@@ -34,6 +34,7 @@ export const D3BaseChartMixin = {
   },
 
   mounted() {
+    this.d3 = require('d3');
     this.$nextTick(() => {
       this.margin.top = this.marginAll;
       this.margin.bottom = this.marginAll;
@@ -60,12 +61,16 @@ export const D3BaseChartMixin = {
   methods: {
     getWidth() {
       // eslint-disable-next-line no-undef
-      return +d3.select(`#${this.chartId}`).style('width').slice(0, -2) || 0;
+      return (
+        +this.d3.select(`#${this.chartId}`).style('width').slice(0, -2) || 0
+      );
     },
 
     getHeight() {
       // eslint-disable-next-line no-undef
-      return +d3.select(`#${this.chartId}`).style('height').slice(0, -2) || 0;
+      return (
+        +this.d3.select(`#${this.chartId}`).style('height').slice(0, -2) || 0
+      );
     },
 
     getInnerWidth() {
@@ -82,7 +87,7 @@ export const D3BaseChartMixin = {
 
     destroyChart() {
       // eslint-disable-next-line no-undef
-      d3.select(`#${this.chartId} svg`).remove();
+      this.d3.select(`#${this.chartId} svg`).remove();
     },
   },
 };

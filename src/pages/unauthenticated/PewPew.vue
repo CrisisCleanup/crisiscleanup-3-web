@@ -89,8 +89,15 @@
             tab-classes="text-xs"
             tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
             tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
+            @tabSelected="stopSiteInfoTabCirculationTimer"
           >
-            <tab :name="$t('Live')" selected>
+            <LightTab
+              :name="$t('Live')"
+              :selected="
+                siteInfoTimerData.isTimerActive &&
+                siteInfoTimerData.activeInfoTab === 0
+              "
+            >
               <div :name="$t('Site Activity')" class="w-full">
                 <div class="text-xs px-5 text-center">
                   {{ $t('~~SITE ACTIVITY') }}
@@ -107,8 +114,15 @@
               <div class="h-full p-2 w-full" v-if="liveEvents.length > 0">
                 <CardStack ref="cards" :key="incidentId" />
               </div>
-            </tab>
-            <tab :name="$t('Statistics')" class="p-2">
+            </LightTab>
+            <LightTab
+              :name="$t('Statistics')"
+              class="p-2"
+              :selected="
+                siteInfoTimerData.isTimerActive &&
+                siteInfoTimerData.activeInfoTab === 1
+              "
+            >
               <div class="flex flex-col items-start justify-start w-full">
                 <div class="">
                   <div class="mb-2">
@@ -136,7 +150,7 @@
                   </div>
                 </div>
               </div>
-            </tab>
+            </LightTab>
           </tabs>
         </div>
       </div>
@@ -547,14 +561,18 @@
                 class="relative h-full"
                 ref="tabs"
                 tab-classes="text-xs"
-                tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
+                tab-default-classes="flex items-center justify-center text-center h-8 cursor-pointer px-2"
                 tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
+                @tabSelected="stopChartTabCirculationTimer"
               >
                 <LightTab
                   :name="$t('~~Call Volume')"
                   class="absolute left-0 right-0"
                   style="top: 10%; bottom: 5%"
-                  selected
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 0
+                  "
                 >
                   <div class="absolute top-0 bottom-0 left-0 right-0">
                     <CircularBarplot
@@ -567,21 +585,13 @@
                   </div>
                 </LightTab>
                 <LightTab
-                  :name="$t('Velocity')"
-                  class="absolute left-0 right-0"
-                  style="top: 10%; bottom: 5%"
-                >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
-                    <GaugeChart
-                      class="h-full w-full"
-                      :gauges="gaugeChartData"
-                    />
-                  </div>
-                </LightTab>
-                <LightTab
                   :name="$t('~~Completion Rate')"
                   class="absolute bottom-0 left-0 right-0"
                   style="top: 10%; bottom: 5%"
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 1
+                  "
                 >
                   <div class="absolute top-0 bottom-0 left-0 right-0">
                     <D3BarChart
@@ -589,6 +599,55 @@
                       chart-id="completion-rate"
                       :chart-data="barChartData"
                       :is-stacked="true"
+                    />
+                  </div>
+                </LightTab>
+                <LightTab
+                  :name="$t('~~Total Cases')"
+                  class="absolute bottom-0 left-0 right-0"
+                  style="top: 10%; bottom: 5%"
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 2
+                  "
+                >
+                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <TotalCases
+                      class="h-full w-full"
+                      :margin-all="30"
+                      :chart-data="{
+                        open: incidentStats.unclaimed.total,
+                        closed: incidentStats.closed.total,
+                        inProgress:
+                          incidentStats.claimed.total -
+                          incidentStats.closed.total,
+                      }"
+                    />
+                  </div>
+                </LightTab>
+                <LightTab
+                  :name="$t('~~Weeks To Completion')"
+                  class="absolute bottom-0 left-0 right-0"
+                  style="top: 10%; bottom: 5%"
+                  :selected="
+                    chartCirculationTimerData.isTimerActive &&
+                    chartCirculationTimerData.activeChartTab === 3
+                  "
+                >
+                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                    <WeeksToCompletion
+                      :margin-all="30"
+                      class="h-full w-full"
+                      :chart-data="[
+                        { date: new Date('2021-04-22'), velocity: 19 },
+                        { date: new Date('2021-04-23'), velocity: 30 },
+                        { date: new Date('2021-04-24'), velocity: 40 },
+                        { date: new Date('2021-04-25'), velocity: 20 },
+                        { date: new Date('2021-04-26'), velocity: 15 },
+                        { date: new Date('2021-04-27'), velocity: 5 },
+                        { date: new Date('2021-04-28'), velocity: 12 },
+                        { date: new Date('2021-04-29'), velocity: 10 },
+                      ]"
                     />
                   </div>
                 </LightTab>
@@ -630,7 +689,6 @@ import OrganizationActivityModal from '@/components/OrganizationActivityModal.vu
 import LightTab from '@/components/tabs/LightTab';
 import SiteActivityGauge from '@/components/charts/SiteActivityGauge';
 import CircularBarplot from '@/components/charts/CircularBarplot';
-import GaugeChart from '@/components/charts/GaugeChart';
 import D3BarChart from '@/components/charts/D3BarChart';
 import CardStack from '@/components/CardStack';
 import { getNearestColor } from '@/utils/colors';
@@ -638,16 +696,19 @@ import { hash } from '@/utils/promise';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
 import Organization from '@/models/Organization';
 import Toggle from '@/components/Toggle';
+import TotalCases from '@/components/charts/TotalCases';
+import WeeksToCompletion from '@/components/charts/WeeksToCompletion';
 
 export default {
   name: 'PewPew',
   components: {
+    WeeksToCompletion,
+    TotalCases,
     Toggle,
     CaseDonutChart,
     CardStack,
     LightTab,
     D3BarChart,
-    GaugeChart,
     CircularBarplot,
     SiteActivityGauge,
     Slider,
@@ -689,27 +750,17 @@ export default {
         },
       },
       circularBarplotData: [],
-      gaugeChartData: [
-        {
-          radius: 30,
-          fillPercent: 50,
-          leftLabel: 'Low 1',
-          rightLabel: 'High 1',
-        },
-        {
-          radius: 60,
-          fillPercent: 70,
-          leftLabel: 'Low 2',
-          rightLabel: 'High 2',
-        },
-        {
-          radius: 100,
-          fillPercent: 0,
-          leftLabel: 'Low 3',
-          rightLabel: 'High 3',
-        },
-      ],
       barChartData: [],
+      siteInfoTimerData: {
+        timerId: null,
+        activeInfoTab: 0,
+        isTimerActive: true,
+      },
+      chartCirculationTimerData: {
+        timerId: null,
+        activeChartTab: 0,
+        isTimerActive: true,
+      },
       incidentId: null,
       markerSpeed: 2000,
       incident: null,
@@ -730,6 +781,10 @@ export default {
   },
   async mounted() {
     await this.loadPageData();
+    // rotate through site info tabs after every 15 seconds
+    this.startSiteInfoTabCirculationTimer(15000);
+    // rotate through d3 chart tabs after every 10 seconds
+    this.startTabCirculationTimer(10000);
   },
   methods: {
     async loadPageData() {
@@ -810,6 +865,34 @@ export default {
       const response = await this.$http.get(url);
       this.circularBarplotData = response.data;
       this.circularBarplotData = this.circularBarplotData.slice();
+    },
+    // timer handler functions for circulating through site info tabs
+    startSiteInfoTabCirculationTimer(ms) {
+      const totalTabs = 2;
+      this.siteInfoTimerData.timerId = setInterval(() => {
+        this.siteInfoTimerData.activeInfoTab =
+          (this.siteInfoTimerData.activeInfoTab + 1) % totalTabs;
+      }, ms);
+    },
+    stopSiteInfoTabCirculationTimer() {
+      if (this.siteInfoTimerData.isTimerActive) {
+        clearInterval(this.siteInfoTimerData.timerId);
+        this.siteInfoTimerData.isTimerActive = false;
+      }
+    },
+    // timer handler functions for circulating through d3 charts
+    startTabCirculationTimer(ms) {
+      const totalTabs = 4; // total tabs present inside tabs component
+      this.chartCirculationTimerData.timerId = setInterval(() => {
+        this.chartCirculationTimerData.activeChartTab =
+          (this.chartCirculationTimerData.activeChartTab + 1) % totalTabs;
+      }, ms);
+    },
+    stopChartTabCirculationTimer() {
+      if (this.chartCirculationTimerData.isTimerActive) {
+        clearInterval(this.chartCirculationTimerData.timerId);
+        this.chartCirculationTimerData.isTimerActive = false;
+      }
     },
     async getRecentIncidents() {
       const response = await this.$http.get(
