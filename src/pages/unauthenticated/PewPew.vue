@@ -618,7 +618,9 @@
                       :chart-data="{
                         open: incidentStats.unclaimed.total,
                         closed: incidentStats.closed.total,
-                        inProgress: incidentStats.claimed.total,
+                        inProgress:
+                          incidentStats.claimed.total -
+                          incidentStats.closed.total,
                       }"
                     />
                   </div>
