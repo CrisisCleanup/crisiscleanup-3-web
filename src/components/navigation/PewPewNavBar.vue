@@ -15,7 +15,6 @@
       />
     </router-link>
 
-
     <template v-for="r in navRoutes">
       <a
         v-if="r.external"
@@ -27,7 +26,12 @@
         <ccu-icon v-bind="r.iconProps" />
         {{ r.title }}
       </a>
-      <router-link v-else :to="r.routeProps" class="pewpew__navlink">
+      <router-link
+        v-else
+        :key="r.title"
+        :to="r.routeProps"
+        class="pewpew__navlink"
+      >
         <ccu-icon v-bind="r.iconProps" />
         {{ r.title }}
       </router-link>
@@ -36,10 +40,10 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import { UserMixin } from '@/mixins';
 import { HomeNavigation } from '@/components/home/SideNav.vue';
 import { FooterNavigation } from '@/components/home/Footer.vue';
-import _ from 'lodash';
 
 export default {
   name: 'PewPewNavBar',
