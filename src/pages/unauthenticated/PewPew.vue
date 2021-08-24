@@ -93,11 +93,11 @@
         </div>
         <div class="col-span-6 flex flex-col justify-between items-center">
           <tabs
-            class="relative h-full w-full px-1 mt-10"
+            class="relative h-full w-full px-1 mt-10 mx-1"
             ref="tabs"
             tab-classes="text-xs"
             tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
-            tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
+            tab-active-classes="bg-crisiscleanup-dark-400 rounded-t-xl"
             @tabSelected="stopSiteInfoTabCirculationTimer"
           >
             <tab
@@ -106,8 +106,18 @@
                 siteInfoTimerData.isTimerActive &&
                 siteInfoTimerData.activeInfoTab === 0
               "
+              class="absolute mx-1 left-0 right-0"
+              :style="{ top: '2rem', bottom: 0 }"
             >
-              <div :name="$t('reports.pp_engagement_title')" class="w-full">
+              <div
+                class="
+                  rounded-tr-xl
+                  bg-gradient-to-b
+                  from-crisiscleanup-dark-400
+                  via-crisiscleanup-dark-500
+                "
+                :name="$t('reports.pp_engagement_title')"
+              >
                 <div class="text-xs px-5 text-center">
                   {{ $t('reports.pp_engagement_title') }}
                 </div>
@@ -126,13 +136,26 @@
             </tab>
             <tab
               :name="$t('reports.pp_site_stats_title')"
-              class="p-2"
               :selected="
                 siteInfoTimerData.isTimerActive &&
                 siteInfoTimerData.activeInfoTab === 1
               "
+              class="absolute mx-1 left-0 right-0"
+              :style="{ top: '2rem', bottom: 0 }"
             >
-              <div class="flex flex-col items-start justify-start w-full">
+              <div
+                class="
+                  flex flex-col
+                  items-start
+                  justify-start
+                  p-2
+                  w-full
+                  rounded-t-xl
+                  bg-gradient-to-b
+                  from-crisiscleanup-dark-400
+                  via-crisiscleanup-dark-500
+                "
+              >
                 <div class="">
                   <div class="mb-2">
                     <div>
