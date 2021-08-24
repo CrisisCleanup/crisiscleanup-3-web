@@ -40,7 +40,7 @@
                 "
                 :name="$t('reports.pp_engagement_title')"
               >
-                <div class="text-xs px-5 text-center">
+                <div class="text-xs px-5 text-center pt-4">
                   {{ $t('reports.pp_engagement_title') }}
                 </div>
                 <div class="h-40 w-full">
@@ -687,31 +687,6 @@
                     />
                   </div>
                 </LightTab>
-                <LightTab
-                  :name="$t('~~Weeks To Completion')"
-                  class="chart-tab"
-                  :selected="
-                    chartCirculationTimerData.isTimerActive &&
-                    chartCirculationTimerData.activeChartTab === 3
-                  "
-                >
-                  <div class="chart-container rounded-tl-xl">
-                    <WeeksToCompletion
-                      :margin-all="30"
-                      class="h-full w-full"
-                      :chart-data="[
-                        { date: new Date('2021-04-22'), velocity: 19 },
-                        { date: new Date('2021-04-23'), velocity: 30 },
-                        { date: new Date('2021-04-24'), velocity: 40 },
-                        { date: new Date('2021-04-25'), velocity: 20 },
-                        { date: new Date('2021-04-26'), velocity: 15 },
-                        { date: new Date('2021-04-27'), velocity: 5 },
-                        { date: new Date('2021-04-28'), velocity: 12 },
-                        { date: new Date('2021-04-29'), velocity: 10 },
-                      ]"
-                    />
-                  </div>
-                </LightTab>
               </tabs>
             </div>
           </div>
@@ -827,6 +802,7 @@ export default {
         isTimerActive: true,
       },
       incidentId: null,
+      cadence: 2000,
       markerSpeed: 2000,
       incident: null,
       incidentStats: {},
@@ -848,8 +824,6 @@ export default {
   },
   async mounted() {
     await this.loadPageData();
-    // rotate through site info tabs after every 15 seconds
-    this.startSiteInfoTabCirculationTimer(15000);
     // rotate through d3 chart tabs after every 10 seconds
     this.startTabCirculationTimer(10000);
   },
@@ -1395,9 +1369,9 @@ export default {
       const liveLayer = getLiveLayer();
       liveLayer.addTo(this.map);
       this.$refs.cards.clearCards();
-      const speed =
-        Number(100 / this.liveEvents.length).toFixed(0) * this.markerSpeed;
-      this.generatePoints(speed);
+      this.markerSpeed =
+        Number(100 / this.liveEvents.length).toFixed(0) * this.cadence;
+      this.generatePoints();
     },
     async generateMarker() {
       this.map.eachLayer(async (layer) => {
@@ -1569,11 +1543,8 @@ export default {
         }
       });
     },
-    generatePoints(speed) {
-      this.eventsInterval = setInterval(
-        this.generateMarker,
-        speed || this.markerSpeed,
-      );
+    generatePoints() {
+      this.eventsInterval = setInterval(this.generateMarker, this.markerSpeed);
     },
     pauseGeneratePoints() {
       clearInterval(this.eventsInterval);
