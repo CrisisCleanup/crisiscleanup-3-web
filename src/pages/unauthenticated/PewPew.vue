@@ -920,10 +920,10 @@ export default {
       return results;
     },
     async getOrganizations() {
-      const { start_date, end_date, incident } = this.queryFilter;
+      const { start_date, incident } = this.queryFilter;
       const params = {
         start_date: start_date.format('YYYY-MM-DD'),
-        end_date: end_date.format('YYYY-MM-DD'),
+        end_date: this.$moment().format('YYYY-MM-DD'),
       };
       if (incident) {
         params.incident = incident;
@@ -1013,11 +1013,17 @@ export default {
         sort: '-created_at',
         incident_id: this.queryFilter.incident || '',
       };
+
+      if (this.lastEventTimestamp) {
+        params.created_at__gte = this.lastEventTimestamp;
+      }
+
       const queryString = getQueryString(params);
       const { data } = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/live_events?${queryString}`,
       );
       this.liveEvents = data.results;
+      this.lastEventTimestamp = this.$moment().toISOString();
     },
 
     async renderMap() {
@@ -1060,7 +1066,6 @@ export default {
         this.getLatestEvents(),
       ]);
 
-      this.lastEventTimestamp = this.$moment().toISOString();
       this.markersLength = markers.length;
       this.removeLayer('worksite_layer');
       const worksiteLayer = getMarkerLayer([], map, this);
@@ -1326,6 +1331,9 @@ export default {
       const liveLayer = getLiveLayer();
       liveLayer.addTo(this.map);
       this.$refs.cards.clearCards();
+      const speed =
+        Number(100 / this.liveEvents.length).toFixed(0) * this.markerSpeed;
+      this.generatePoints(speed);
     },
     async generateMarker() {
       this.map.eachLayer(async (layer) => {
@@ -1334,6 +1342,7 @@ export default {
           const marker = this.liveEvents[this.currentEventIndex];
 
           if (this.currentEventIndex > this.liveEvents.length) {
+            this.pauseGeneratePoints();
             await this.restartLiveEvents();
             return;
           }
@@ -1496,8 +1505,11 @@ export default {
         }
       });
     },
-    generatePoints() {
-      this.eventsInterval = setInterval(this.generateMarker, this.markerSpeed);
+    generatePoints(speed) {
+      this.eventsInterval = setInterval(
+        this.generateMarker,
+        speed || this.markerSpeed,
+      );
     },
     pauseGeneratePoints() {
       clearInterval(this.eventsInterval);
@@ -1598,10 +1610,10 @@ export default {
       });
     },
     async getIncidentStats() {
-      const { start_date, end_date, incident } = this.queryFilter;
+      const { start_date, incident } = this.queryFilter;
       const params = {
         start_date: start_date.format('YYYY-MM-DD'),
-        end_date: end_date.format('YYYY-MM-DD'),
+        end_date: this.$moment().format('YYYY-MM-DD'),
       };
       if (incident) {
         params.incident = incident;
@@ -1777,11 +1789,12 @@ export default {
         this.incident = null;
         this.incidentId = value;
         this.liveIncidents = [];
+        this.lastEventTimestamp = null;
         this.clearMap();
         this.loadPageData();
       },
       deep: true,
-      immediate: true,
+      immediate: false,
     },
   },
 };
