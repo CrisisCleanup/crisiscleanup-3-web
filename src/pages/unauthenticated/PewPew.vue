@@ -467,7 +467,7 @@
                     v-if="displayedWorkTypeSvgs.length > 0"
                     class="
                       legend
-                      w-108
+                      w-56
                       h-auto
                       bg-crisiscleanup-dark-400
                       p-2
@@ -492,40 +492,50 @@
                         class="cursor-pointer"
                         @click="isLegendHidden = !isLegendHidden"
                       >
-                        <font-awesome-icon v-if="!isLegendHidden" icon="minus" />
+                        <font-awesome-icon
+                          v-if="!isLegendHidden"
+                          icon="minus"
+                        />
                         <font-awesome-icon v-else icon="plus" />
                       </span>
                     </div>
-                    <div
-                      class="flex flex-wrap justify-between"
-                      v-if="!isLegendHidden"
-                    >
+                    <transition name="fade">
                       <div
-                        v-for="entry in displayedWorkTypeSvgs"
-                        :key="entry.key"
-                        class="
-                          flex
-                          items-center
-                          w-1/2
-                          mb-1
-                          cursor-pointer
-                          hover:border-2
-                        "
-                        :class="entry.selected ? 'selected border-2' : 'my-1'"
-                        @click="
-                          () => {
-                            entry.selected = !entry.selected;
-                            displayedWorkTypeSvgs = [...displayedWorkTypeSvgs];
-                            refresh();
-                          }
-                        "
+                        class="flex flex-wrap justify-between"
+                        v-if="!isLegendHidden"
                       >
-                        <div class="map-svg-container" v-html="entry.svg"></div>
-                        <span class="text-xs ml-1 text-white">{{
-                          entry.key | getWorkTypeName
-                        }}</span>
+                        <div
+                          v-for="entry in displayedWorkTypeSvgs"
+                          :key="entry.key"
+                          class="
+                            flex
+                            items-center
+                            w-1/2
+                            mb-1
+                            cursor-pointer
+                            hover:border-2
+                          "
+                          :class="entry.selected ? 'selected border-2' : 'my-1'"
+                          @click="
+                            () => {
+                              entry.selected = !entry.selected;
+                              displayedWorkTypeSvgs = [
+                                ...displayedWorkTypeSvgs,
+                              ];
+                              refresh();
+                            }
+                          "
+                        >
+                          <div
+                            class="map-svg-container"
+                            v-html="entry.svg"
+                          ></div>
+                          <span class="text-xs ml-1 text-white">{{
+                            entry.key | getWorkTypeName
+                          }}</span>
+                        </div>
                       </div>
-                    </div>
+                    </transition>
                   </div>
                   <div class="relative">
                     <img
