@@ -733,7 +733,6 @@ import CaseDonutChart from '@/components/charts/CaseDonutChart';
 import Organization from '@/models/Organization';
 import Toggle from '@/components/Toggle';
 import TotalCases from '@/components/charts/TotalCases';
-import WeeksToCompletion from '@/components/charts/WeeksToCompletion';
 import PewPewNavBar from '@/components/navigation/PewPewNavBar';
 import { UserMixin } from '@/mixins';
 
@@ -742,7 +741,6 @@ export default {
   mixins: [UserMixin],
   components: {
     PewPewNavBar,
-    WeeksToCompletion,
     TotalCases,
     Toggle,
     CaseDonutChart,
