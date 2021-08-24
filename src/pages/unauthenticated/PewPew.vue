@@ -12,85 +12,7 @@
         "
         style="z-index: 1000"
       >
-        <div class="pewpew__nav">
-          <router-link :to="{ name: 'nav.pew' }" class="pewpew__navheader">
-            <img
-              v-if="colorMode === 'dark'"
-              src="@/assets/cc-pew-pew-logo.gif"
-              :alt="$t('nav.crisis_cleanup')"
-              class="h-8"
-            />
-            <img
-              v-else
-              src="@/assets/ccu-logo-black-500w.png"
-              :alt="$t('nav.crisis_cleanup')"
-              class="h-16"
-            />
-          </router-link>
-
-          <router-link :to="{ name: 'nav.dashboard' }" class="pewpew__navlink">
-            <img src="@/assets/icons/home.svg" :alt="$t('publicNav.home')" />
-            {{ $t('publicNav.home') }}
-          </router-link>
-
-          <router-link :to="{ name: 'nav.dashboard' }" class="pewpew__navlink">
-            <img
-              src="@/assets/icons/current-disaster.svg"
-              :alt="$t('publicNav.current_disasters')"
-            />
-            {{ $t('publicNav.current_disasters') }}
-          </router-link>
-
-          <router-link :to="{ name: 'nav.about' }" class="pewpew__navlink">
-            <img
-              src="@/assets/icons/about-us.svg"
-              :alt="$t('publicNav.about_us')"
-            />
-            {{ $t('publicNav.about_us') }}
-          </router-link>
-
-          <a
-            href="https://crisiscleanup.zendesk.com/hc/en-us/requests/new"
-            class="pewpew__navlink"
-          >
-            <img
-              src="@/assets/icons/contact-us.svg"
-              :alt="$t('publicNav.contact')"
-            />
-            {{ $t('publicNav.contact') }}
-          </a>
-
-          <router-link :to="{ name: 'nav.training' }" class="pewpew__navlink">
-            <img
-              src="@/assets/icons/training.svg"
-              :alt="$t('publicNav.training')"
-            />
-            {{ $t('publicNav.training') }}
-          </router-link>
-
-          <a href="http://blog.crisiscleanup.org" class="pewpew__navlink">
-            <img src="@/assets/icons/notepad.svg" :alt="$t('publicNav.blog')" />
-            {{ $t('publicNav.blog') }}
-          </a>
-
-          <router-link :to="{ name: 'nav.terms' }" class="pewpew__navlink">
-            <img src="@/assets/icons/terms.svg" :alt="$t('publicNav.terms')" />
-            {{ $t('publicNav.terms') }}
-          </router-link>
-
-          <router-link :to="{ name: 'nav.privacy' }" class="pewpew__navlink">
-            <img
-              src="@/assets/icons/privacy-policy.svg"
-              :alt="$t('publicNav.privacy')"
-            />
-            {{ $t('publicNav.privacy') }}
-          </router-link>
-
-          <router-link :to="{ name: 'nav.about' }" class="pewpew__navlink">
-            <img src="@/assets/icons/faq.svg" :alt="$t('publicNav.faq')" />
-            {{ $t('publicNav.faq') }}
-          </router-link>
-        </div>
+        <PewPewNavBar :color-mode="colorMode"/>
         <div class="col-span-6 flex flex-col justify-between items-center">
           <tabs
             class="relative h-full w-full px-1 mt-10"
@@ -772,10 +694,12 @@ import Organization from '@/models/Organization';
 import Toggle from '@/components/Toggle';
 import TotalCases from '@/components/charts/TotalCases';
 import WeeksToCompletion from '@/components/charts/WeeksToCompletion';
+import PewPewNavBar from '@/components/navigation/PewPewNavBar';
 
 export default {
   name: 'PewPew',
   components: {
+    PewPewNavBar,
     WeeksToCompletion,
     TotalCases,
     Toggle,
@@ -1977,34 +1901,6 @@ export default {
 }
 
 .pewpew {
-  &__nav {
-    @apply col-span-2 flex flex-col text-xs text-center break-words;
-    background: #242c36;
-  }
-
-  &__navheader {
-    @apply flex justify-center items-center m-2;
-
-    img {
-      @apply h-10;
-    }
-  }
-
-  &__navlink {
-    @apply flex flex-col justify-center items-center m-1 p-2 rounded-lg;
-    font-size: 0.55rem;
-    transition: background-color 300ms;
-
-    img {
-      @apply w-4 h-4;
-    }
-
-    &:focus,
-    &:hover {
-      @apply bg-white bg-opacity-25;
-    }
-  }
-
   .ribbon-gradient {
     background: linear-gradient(
       270deg,
