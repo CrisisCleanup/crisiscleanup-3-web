@@ -187,10 +187,18 @@ export default {
       ];
     },
     logoRoute() {
+      let target = `/incident/${this.currentIncidentId}/dashboard`;
+      const navRoutes = this.$router.getRoutes();
+      const pewRoute = navRoutes.find((r) => r.name === 'nav.pew');
+      if (pewRoute) {
+        // when pew-pew goes live, automatically
+        // start routing logo to it.
+        target = pewRoute.path;
+      }
       return {
         key: 'dashboard',
         text: this.$t('nav.dashboard'),
-        to: `/incident/${this.currentIncidentId}/dashboard`,
+        to: target,
       };
     },
     ...mapState('incident', ['currentIncidentId']),
