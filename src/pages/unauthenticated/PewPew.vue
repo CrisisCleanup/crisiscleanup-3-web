@@ -100,7 +100,8 @@
                         />
                       </div>
                       <div :key="stat.id" class="text-xl text-blue-600 stats">
-                        {{ stat.currency_symbol }}{{ formatStatValue(stat.value) }}
+                        {{ stat.currency_symbol
+                        }}{{ formatStatValue(stat.value) }}
                       </div>
                     </template>
                     <template v-else>
@@ -119,7 +120,8 @@
                         />
                       </div>
                       <div class="text-base stats" :key="stat.id">
-                        {{ stat.currency_symbol }}{{ formatStatValue(stat.value) }}
+                        {{ stat.currency_symbol
+                        }}{{ formatStatValue(stat.value) }}
                       </div>
                     </template>
                   </div>
