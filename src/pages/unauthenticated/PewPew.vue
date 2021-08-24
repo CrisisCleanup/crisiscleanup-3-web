@@ -15,21 +15,31 @@
         <PewPewNavBar :color-mode="colorMode" />
         <div class="col-span-6 flex flex-col justify-between items-center">
           <tabs
-            class="relative h-full w-full px-1 mt-10"
+            class="relative h-full w-full px-1 mt-10 mx-1"
             ref="tabs"
             tab-classes="text-xs"
             tab-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
-            tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
+            tab-active-classes="bg-crisiscleanup-dark-400 rounded-t-xl"
             @tabSelected="stopSiteInfoTabCirculationTimer"
           >
-            <LightTab
-              :name="$t('Live')"
+            <tab
+              :name="$t('~~Live')"
               :selected="
                 siteInfoTimerData.isTimerActive &&
                 siteInfoTimerData.activeInfoTab === 0
               "
+              class="absolute mx-1 left-0 right-0"
+              :style="{ top: '2rem', bottom: 0 }"
             >
-              <div :name="$t('reports.pp_engagement_title')" class="w-full">
+              <div
+                class="
+                  rounded-tr-xl
+                  bg-gradient-to-b
+                  from-crisiscleanup-dark-400
+                  via-crisiscleanup-dark-500
+                "
+                :name="$t('reports.pp_engagement_title')"
+              >
                 <div class="text-xs px-5 text-center">
                   {{ $t('reports.pp_engagement_title') }}
                 </div>
@@ -45,16 +55,29 @@
               <div class="h-full p-2 w-full" v-if="liveEvents.length > 0">
                 <CardStack ref="cards" :key="incidentId" />
               </div>
-            </LightTab>
-            <LightTab
+            </tab>
+            <tab
               :name="$t('reports.pp_site_stats_title')"
-              class="p-2"
               :selected="
                 siteInfoTimerData.isTimerActive &&
                 siteInfoTimerData.activeInfoTab === 1
               "
+              class="absolute mx-1 left-0 right-0"
+              :style="{ top: '2rem', bottom: 0 }"
             >
-              <div class="flex flex-col items-start justify-start w-full">
+              <div
+                class="
+                  flex flex-col
+                  items-start
+                  justify-start
+                  p-2
+                  w-full
+                  rounded-t-xl
+                  bg-gradient-to-b
+                  from-crisiscleanup-dark-400
+                  via-crisiscleanup-dark-500
+                "
+              >
                 <div class="">
                   <div class="mb-2">
                     <div>
@@ -147,7 +170,7 @@
                   </div>
                 </div>
               </div>
-            </LightTab>
+            </tab>
           </tabs>
         </div>
       </div>
@@ -216,7 +239,7 @@
           </div>
         </div>
         <div class="flex-grow grid grid-cols-12">
-          <div class="col-span-9 flex flex-col">
+          <div class="col-span-8 flex flex-col">
             <div class="flex-grow">
               <div class="relative h-full">
                 <div
@@ -368,7 +391,7 @@
                     v-if="displayedWorkTypeSvgs.length > 0"
                     class="
                       legend
-                      w-108
+                      w-56
                       h-auto
                       bg-crisiscleanup-dark-400
                       p-2
@@ -377,36 +400,66 @@
                       bg-opacity-25
                     "
                   >
-                    <div class="font-bold my-1 text-white text-sm">
-                      {{ $t('worksiteMap.legend') }}
-                    </div>
-                    <div class="flex flex-wrap justify-between">
-                      <div
-                        v-for="entry in displayedWorkTypeSvgs"
-                        :key="entry.key"
-                        class="
-                          flex
-                          items-center
-                          w-1/2
-                          mb-1
-                          cursor-pointer
-                          hover:border-2
-                        "
-                        :class="entry.selected ? 'selected border-2' : 'my-1'"
-                        @click="
-                          () => {
-                            entry.selected = !entry.selected;
-                            displayedWorkTypeSvgs = [...displayedWorkTypeSvgs];
-                            refresh();
-                          }
-                        "
+                    <div
+                      class="
+                        flex
+                        justify-between
+                        font-bold
+                        my-1
+                        text-white text-sm
+                      "
+                    >
+                      <span>
+                        {{ $t('worksiteMap.legend') }}
+                      </span>
+                      <span
+                        class="cursor-pointer"
+                        @click="isLegendHidden = !isLegendHidden"
                       >
-                        <div class="map-svg-container" v-html="entry.svg"></div>
-                        <span class="text-xs ml-1 text-white">{{
-                          entry.key | getWorkTypeName
-                        }}</span>
-                      </div>
+                        <font-awesome-icon
+                          v-if="!isLegendHidden"
+                          icon="minus"
+                        />
+                        <font-awesome-icon v-else icon="plus" />
+                      </span>
                     </div>
+                    <transition name="fade">
+                      <div
+                        class="flex flex-wrap justify-between"
+                        v-if="!isLegendHidden"
+                      >
+                        <div
+                          v-for="entry in displayedWorkTypeSvgs"
+                          :key="entry.key"
+                          class="
+                            flex
+                            items-center
+                            w-1/2
+                            mb-1
+                            cursor-pointer
+                            hover:border-2
+                          "
+                          :class="entry.selected ? 'selected border-2' : 'my-1'"
+                          @click="
+                            () => {
+                              entry.selected = !entry.selected;
+                              displayedWorkTypeSvgs = [
+                                ...displayedWorkTypeSvgs,
+                              ];
+                              refresh();
+                            }
+                          "
+                        >
+                          <div
+                            class="map-svg-container"
+                            v-html="entry.svg"
+                          ></div>
+                          <span class="text-xs ml-1 text-white">{{
+                            entry.key | getWorkTypeName
+                          }}</span>
+                        </div>
+                      </div>
+                    </transition>
                   </div>
                   <div class="relative">
                     <img
@@ -506,7 +559,7 @@
               </div>
             </div>
           </div>
-          <div class="col-span-3 grid grid-rows-12">
+          <div class="col-span-4 grid grid-rows-12">
             <div class="row-span-7 relative">
               <OrganizationActivityModal
                 @close="closeModal"
@@ -533,45 +586,58 @@
                   />
                   <span class="truncate w-32">{{ slotProps.item.name }}</span>
                 </template>
+                <template #incident_count="slotProps">
+                  <span class="w-full flex justify-end">
+                    {{ nFormatter(slotProps.item.incident_count) }}
+                  </span>
+                </template>
                 <template #commercial_value="slotProps">
-                  {{ nFormatter(slotProps.item.commercial_value) }}
+                  <span class="w-full flex justify-end">
+                    ${{ nFormatter(slotProps.item.commercial_value) }}
+                  </span>
+                </template>
+                <template #calls_count="slotProps">
+                  <span class="w-full flex justify-end">
+                    ${{ nFormatter(slotProps.item.calls_count) }}
+                  </span>
                 </template>
                 <template #reported_count="slotProps">
-                  <CaseDonutChart
-                    class="w-8 h-8"
-                    :chart-id="`case-donut-chart-${slotProps.item.id}`"
-                    :chart-data="{
-                      reportedCases: slotProps.item.reported_count || 0,
-                      claimedCases:
-                        (slotProps.item.claimed_count || 0) -
-                        (slotProps.item.closed_count || 0),
-                      completedCases: slotProps.item.closed_count || 0,
-                    }"
-                    :bg-color="styles.backgroundColor"
-                  />
+                  <div class="w-full flex justify-end">
+                    <CaseDonutChart
+                      class="w-8 h-8"
+                      :chart-id="`case-donut-chart-${slotProps.item.id}`"
+                      :chart-data="{
+                        reportedCases: slotProps.item.reported_count || 0,
+                        claimedCases:
+                          (slotProps.item.claimed_count || 0) -
+                          (slotProps.item.closed_count || 0),
+                        completedCases: slotProps.item.closed_count || 0,
+                      }"
+                      :bg-color="styles.backgroundColor"
+                    />
+                  </div>
                 </template>
               </Table>
             </div>
             <div class="row-span-5">
               <tabs
-                class="relative h-full"
+                class="relative h-full m-1"
                 ref="tabs"
                 tab-classes="text-xs"
-                tab-default-classes="flex items-center justify-center text-center h-8 cursor-pointer px-2"
-                tab-active-classes="bg-gradient-to-t from-crisiscleanup-dark-500 to-crisiscleanup-dark-400 rounded-t-xl"
+                tab-default-classes="flex items-center justify-center text-center h-10 cursor-pointer px-2"
+                tab-active-classes="bg-crisiscleanup-dark-400 rounded-t-xl"
                 @tabSelected="stopChartTabCirculationTimer"
               >
                 <LightTab
                   :name="$t('reports.pp_call_volume_title')"
                   :alt="$t('reports.pp_call_volume_description')"
-                  class="absolute left-0 right-0"
-                  style="top: 10%; bottom: 5%"
+                  class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
                     chartCirculationTimerData.activeChartTab === 0
                   "
                 >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                  <div class="chart-container rounded-tr-xl">
                     <CircularBarplot
                       v-if="circularBarplotData.length !== 0"
                       class="h-full h-full"
@@ -584,14 +650,13 @@
                 <LightTab
                   :name="$t('reports.pp_total_cases_title')"
                   :alt="$t('reports.pp_total_cases_description')"
-                  class="absolute left-0 right-0"
-                  style="top: 10%; bottom: 5%"
+                  class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
-                    chartCirculationTimerData.activeChartTab === 2
+                    chartCirculationTimerData.activeChartTab === 1
                   "
                 >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                  <div class="chart-container rounded-t-xl">
                     <TotalCases
                       class="h-full w-full"
                       :margin-all="30"
@@ -607,14 +672,13 @@
                 </LightTab>
                 <LightTab
                   :name="$t('~~Completion Rate')"
-                  class="absolute bottom-0 left-0 right-0"
-                  style="top: 10%; bottom: 5%"
+                  class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
-                    chartCirculationTimerData.activeChartTab === 1
+                    chartCirculationTimerData.activeChartTab === 2
                   "
                 >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                  <div class="chart-container rounded-t-xl">
                     <D3BarChart
                       class="h-full w-full"
                       chart-id="completion-rate"
@@ -625,14 +689,13 @@
                 </LightTab>
                 <LightTab
                   :name="$t('~~Weeks To Completion')"
-                  class="absolute bottom-0 left-0 right-0"
-                  style="top: 10%; bottom: 5%"
+                  class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&
                     chartCirculationTimerData.activeChartTab === 3
                   "
                 >
-                  <div class="absolute top-0 bottom-0 left-0 right-0">
+                  <div class="chart-container rounded-tl-xl">
                     <WeeksToCompletion
                       :margin-all="30"
                       class="h-full w-full"
@@ -773,6 +836,7 @@ export default {
       orbTexture: null,
       eventsInterval: null,
       textureMap: {},
+      isLegendHidden: false,
       queryFilter: {
         start_date: null,
         end_date: null,
@@ -1926,6 +1990,24 @@ export default {
       #819ab0 75.52%,
       rgba(129, 154, 176, 0) 100.43%
     );
+  }
+
+  /* set top to 2.5rem to place it after tab headers which has a h-10 = 2.5rem */
+  .chart-tab {
+    @apply absolute left-0 right-0;
+    top: 2.5rem;
+    bottom: 0;
+  }
+
+  .chart-container {
+    @apply absolute
+      top-0
+      bottom-0
+      left-0
+      right-0
+      bg-gradient-to-b
+      from-crisiscleanup-dark-400
+      via-crisiscleanup-dark-500;
   }
 
   ::-webkit-scrollbar {
