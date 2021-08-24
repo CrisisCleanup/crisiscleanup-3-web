@@ -12,7 +12,7 @@
         "
         style="z-index: 1000"
       >
-        <PewPewNavBar :color-mode="colorMode"/>
+        <PewPewNavBar :color-mode="colorMode" />
         <div class="col-span-6 flex flex-col justify-between items-center">
           <tabs
             class="relative h-full w-full px-1 mt-10"
@@ -169,18 +169,20 @@
           </div>
           <div class="col-span-2 flex items-center justify-center">
             <Toggle v-model="isDarkMode" v-if="false" />
-            <base-button
-              class="text-xs p-1 w-20 text-black rounded"
-              variant="solid"
-              :text="$t('actions.register')"
-              :action="() => $router.push('/register')"
-            />
-            <base-button
-              class="text-xs ml-2 p-1 w-20 rounded"
-              variant="outline-dark"
-              :text="$t('actions.login')"
-              :action="() => $router.push('/login')"
-            />
+            <template v-if="!isLoggedIn">
+              <base-button
+                class="text-xs p-1 w-20 text-black rounded"
+                variant="solid"
+                :text="$t('actions.register')"
+                :action="() => $router.push('/register')"
+              />
+              <base-button
+                class="text-xs ml-2 p-1 w-20 rounded"
+                variant="outline-dark"
+                :text="$t('actions.login')"
+                :action="() => $router.push('/login')"
+              />
+            </template>
           </div>
         </div>
         <div class="h-12 mt-3 flex text-xs">
@@ -695,9 +697,11 @@ import Toggle from '@/components/Toggle';
 import TotalCases from '@/components/charts/TotalCases';
 import WeeksToCompletion from '@/components/charts/WeeksToCompletion';
 import PewPewNavBar from '@/components/navigation/PewPewNavBar';
+import { UserMixin } from '@/mixins';
 
 export default {
   name: 'PewPew',
+  mixins: [UserMixin],
   components: {
     PewPewNavBar,
     WeeksToCompletion,
