@@ -79,91 +79,49 @@
                 "
               >
                 <div class="">
-                  <div class="mb-2">
-                    <div>
-                      {{ $t('reports.pp_site_stats_total_services') }}
-                      <ccu-icon
-                        v-tooltip="{
-                          content: $t(`reports.pp_site_stats_total_services_d`),
-                          trigger: 'click',
-                          classes: 'interactive-tooltip w-auto',
-                        }"
-                        :alt="$t('actions.help_alt')"
-                        type="help"
-                        size="medium"
-                      />
-                    </div>
-                    <div class="text-xl text-blue-600 stats">
-                      ***$1.1 Billion
-                    </div>
-                  </div>
-                  <div class="mb-2">
-                    <div>
-                      {{ $t('reports.pp_site_stats_disasters') }}
-                      <ccu-icon
-                        v-tooltip="{
-                          content: $t(`reports.pp_site_stats_disasters_d`),
-                          trigger: 'click',
-                          classes: 'interactive-tooltip w-auto',
-                        }"
-                        :alt="$t('actions.help_alt')"
-                        type="help"
-                        size="medium"
-                      />
-                    </div>
-                    <div class="text-lg stats">***170</div>
-                  </div>
-                  <div class="mb-2">
-                    <div>
-                      {{ $t('reports.pp_site_stats_est_hours') }}
-                      <ccu-icon
-                        v-tooltip="{
-                          content: $t(`reports.pp_site_stats_est_hours_d`),
-                          trigger: 'click',
-                          classes: 'interactive-tooltip w-auto',
-                        }"
-                        :alt="$t('actions.help_alt')"
-                        type="help"
-                        size="medium"
-                      />
-                    </div>
-                    <div class="text-lg stats">***7.3 Million</div>
-                  </div>
-                  <div class="mb-2">
-                    <div>
-                      {{ $t('reports.pp_site_stats_households_helped') }}
-                      <ccu-icon
-                        v-tooltip="{
-                          content: $t(
-                            `reports.pp_site_stats_households_helped_d`,
-                          ),
-                          trigger: 'click',
-                          classes: 'interactive-tooltip w-auto',
-                        }"
-                        :alt="$t('actions.help_alt')"
-                        type="help"
-                        size="medium"
-                      />
-                    </div>
-                    <div class="text-lg stats">***142,921</div>
-                  </div>
-                  <div class="mb-2">
-                    <div>
-                      {{ $t('reports.pp_site_stats_volunteer_value') }}
-                      <ccu-icon
-                        v-tooltip="{
-                          content: $t(
-                            `reports.pp_site_stats_volunteer_value_d`,
-                          ),
-                          trigger: 'click',
-                          classes: 'interactive-tooltip w-auto',
-                        }"
-                        :alt="$t('actions.help_alt')"
-                        type="help"
-                        size="medium"
-                      />
-                    </div>
-                    <div class="text-lg stats">***$849</div>
+                  <div
+                    class="mb-2"
+                    v-for="(stat, index) in currentSiteStats"
+                    :key="stat.id"
+                  >
+                    <template v-if="index === 0">
+                      <div :key="stat.id" class="flex">
+                        {{ $t(stat.name_t) }}
+                        <ccu-icon
+                          v-tooltip="{
+                            content: $t(stat.description_t),
+                            trigger: 'click',
+                            classes: 'interactive-tooltip w-auto',
+                          }"
+                          :invert-color="true"
+                          :alt="$t('actions.help_alt')"
+                          type="help"
+                          size="medium"
+                        />
+                      </div>
+                      <div :key="stat.id" class="text-xl text-blue-600 stats">
+                        {{ stat.currency_symbol }}{{ formatStatValue(stat.value) }}
+                      </div>
+                    </template>
+                    <template v-else>
+                      <div :key="stat.id" class="flex">
+                        {{ $t(stat.name_t) }}
+                        <ccu-icon
+                          v-tooltip="{
+                            content: $t(stat.description_t),
+                            trigger: 'click',
+                            classes: 'interactive-tooltip w-auto',
+                          }"
+                          :invert-color="true"
+                          :alt="$t('actions.help_alt')"
+                          type="help"
+                          size="medium"
+                        />
+                      </div>
+                      <div class="text-base stats" :key="stat.id">
+                        {{ stat.currency_symbol }}{{ formatStatValue(stat.value) }}
+                      </div>
+                    </template>
                   </div>
                   <div class="underline text-blue-600">
                     {{ $t('reports.pp_site_stats_more_stats') }}
@@ -809,6 +767,7 @@ export default {
       displayedWorkTypeSvgs: [],
       orbTexture: null,
       eventsInterval: null,
+      statsInterval: null,
       textureMap: {},
       isLegendHidden: false,
       queryFilter: {
@@ -817,6 +776,7 @@ export default {
         incident: null,
       },
       currentEngagement: 0,
+      currentSiteStats: [],
       throttle,
     };
   },
@@ -848,6 +808,7 @@ export default {
       this.getIncidentStats().then(() => {});
       this.getCompletionRateData().then(() => {});
       this.fetchEngagementData().then(() => {});
+      this.fetchSiteStatistics().then(() => {});
       this.fetchCircularBarplotData(this.$moment(), 30).then(() => {});
 
       const pageData = await hash({
@@ -908,6 +869,33 @@ export default {
       );
       if (response.data.length) {
         this.currentEngagement = response.data[0].three_day_velocity * 100;
+      }
+    },
+    formatStatValue(value) {
+      return Number(value).toFixed(0);
+    },
+    countUpStats() {
+      this.currentSiteStats.forEach((stat) => {
+        stat.value += stat.change_per_second;
+      });
+    },
+    async fetchSiteStatistics() {
+      clearInterval(this.statsInterval);
+      this.statsInterval = null;
+
+      const { incident } = this.queryFilter;
+      const params = {};
+      if (incident) {
+        params.incident = incident;
+      }
+      const queryString = getQueryString(params);
+
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/pp_site_stats?${queryString}`,
+      );
+      if (response.data.length) {
+        this.currentSiteStats = response.data;
+        this.statsInterval = setInterval(this.countUpStats, 1000);
       }
     },
     async fetchCircularBarplotData(date, interval) {
