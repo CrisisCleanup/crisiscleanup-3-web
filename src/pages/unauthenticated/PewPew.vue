@@ -609,22 +609,36 @@
                   />
                   <span class="truncate w-32">{{ slotProps.item.name }}</span>
                 </template>
+                <template #incident_count="slotProps">
+                  <span class="w-full flex justify-end">
+                    {{ nFormatter(slotProps.item.incident_count) }}
+                  </span>
+                </template>
                 <template #commercial_value="slotProps">
-                  {{ nFormatter(slotProps.item.commercial_value) }}
+                  <span class="w-full flex justify-end">
+                    ${{ nFormatter(slotProps.item.commercial_value) }}
+                  </span>
+                </template>
+                <template #calls_count="slotProps">
+                  <span class="w-full flex justify-end">
+                    ${{ nFormatter(slotProps.item.calls_count) }}
+                  </span>
                 </template>
                 <template #reported_count="slotProps">
-                  <CaseDonutChart
-                    class="w-8 h-8"
-                    :chart-id="`case-donut-chart-${slotProps.item.id}`"
-                    :chart-data="{
-                      reportedCases: slotProps.item.reported_count || 0,
-                      claimedCases:
-                        (slotProps.item.claimed_count || 0) -
-                        (slotProps.item.closed_count || 0),
-                      completedCases: slotProps.item.closed_count || 0,
-                    }"
-                    :bg-color="styles.backgroundColor"
-                  />
+                  <div class="w-full flex justify-end">
+                    <CaseDonutChart
+                      class="w-8 h-8"
+                      :chart-id="`case-donut-chart-${slotProps.item.id}`"
+                      :chart-data="{
+                        reportedCases: slotProps.item.reported_count || 0,
+                        claimedCases:
+                          (slotProps.item.claimed_count || 0) -
+                          (slotProps.item.closed_count || 0),
+                        completedCases: slotProps.item.closed_count || 0,
+                      }"
+                      :bg-color="styles.backgroundColor"
+                    />
+                  </div>
                 </template>
               </Table>
             </div>
