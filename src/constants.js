@@ -17,8 +17,16 @@ export const TEXT_VARIANTS = [
 
 export const ICON_MAP = {
   'add-orange': require('@/assets/icons/add-orange.svg'),
+  about: require('@/assets/icons/about-us.svg'),
   dashboard: require('@/assets/icons/dashboard.svg'),
+  home: require('@/assets/icons/home.svg'),
   cases: require('@/assets/icons/cases.svg'),
+  'current-disasters': require('@/assets/icons/current-disaster.svg'),
+  contact: require('@/assets/icons/contact-us.svg'),
+  training: require('@/assets/icons/training.svg'),
+  notepad: require('@/assets/icons/notepad.svg'),
+  terms: require('@/assets/icons/terms.svg'),
+  privacy: require('@/assets/icons/privacy-policy.svg'),
   reports: require('@/assets/icons/reports.svg'),
   calendar: require('@/assets/icons/calendar.svg'),
   call: require('@/assets/icons/call.svg'),
