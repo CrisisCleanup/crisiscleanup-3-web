@@ -476,10 +476,30 @@
                       bg-opacity-25
                     "
                   >
-                    <div class="font-bold my-1 text-white text-sm">
-                      {{ $t('worksiteMap.legend') }}
+                    <div
+                      class="
+                        flex
+                        justify-between
+                        font-bold
+                        my-1
+                        text-white text-sm
+                      "
+                    >
+                      <span>
+                        {{ $t('worksiteMap.legend') }}
+                      </span>
+                      <span
+                        class="cursor-pointer"
+                        @click="isLegendHidden = !isLegendHidden"
+                      >
+                        <font-awesome-icon v-if="!isLegendHidden" icon="minus" />
+                        <font-awesome-icon v-else icon="plus" />
+                      </span>
                     </div>
-                    <div class="flex flex-wrap justify-between">
+                    <div
+                      class="flex flex-wrap justify-between"
+                      v-if="!isLegendHidden"
+                    >
                       <div
                         v-for="entry in displayedWorkTypeSvgs"
                         :key="entry.key"
@@ -878,6 +898,7 @@ export default {
       orbTexture: null,
       eventsInterval: null,
       textureMap: {},
+      isLegendHidden: false,
       queryFilter: {
         start_date: null,
         end_date: null,
