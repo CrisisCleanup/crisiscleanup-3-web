@@ -7,46 +7,30 @@
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
+import { D3BaseChartMixin } from '@/mixins';
 
 export type BarChartT = {|
-  group: Date | number | string,
+  group: Date,
   newCases: number,
   closedCases: number,
 |};
 
 export default {
   name: 'D3BarChart',
+  mixins: [D3BaseChartMixin],
   components: {},
   props: {
     /**
-     * Unique chart ID
-     */
-    chartId: VueTypes.string.def('d3-bar-chart'),
-    /**
      * Data for Bar chart
      */
-    chartData: VueTypes.arrayOf(
-      VueTypes.shape<BarChartT>({
-        group: VueTypes.number,
-        newCases: VueTypes.number,
-        closedCases: VueTypes.number,
-      }).def(() => ({ group: 0, newCases: 0, closedCases: 0 })).isRequired,
-    ).def((): BarChartT[] => [
-      { group: 0, newCases: 28, closedCases: 30 },
-      { group: 1, newCases: 43, closedCases: 38 },
-      { group: 2, newCases: 81, closedCases: 30 },
-      { group: 3, newCases: 19, closedCases: 80 },
-      { group: 4, newCases: 52, closedCases: 30 },
-      { group: 5, newCases: 24, closedCases: 35 },
+    chartData: VueTypes.arrayOf(VueTypes.object).def((): BarChartT[] => [
+      { group: new Date('2021-08-15'), newCases: 28, closedCases: 30 },
+      { group: new Date('2021-08-16'), newCases: 43, closedCases: 38 },
+      { group: new Date('2021-08-17'), newCases: 81, closedCases: 30 },
+      { group: new Date('2021-08-18'), newCases: 19, closedCases: 80 },
+      { group: new Date('2021-08-19'), newCases: 52, closedCases: 30 },
+      { group: new Date('2021-08-20'), newCases: 24, closedCases: 35 },
     ]),
-    /**
-     * top, bottom, left, right margins
-     */
-    marginAll: VueTypes.number.def(25),
-    /**
-     * background color / gradient
-     */
-    bgColor: VueTypes.string.def('transparent'),
     /**
      * Stacked | Unstacked
      */
@@ -55,90 +39,26 @@ export default {
 
   data() {
     return {
-      svg: null,
-      x: null,
-      y: null,
       colorScale: null,
       colorRange: ['#00C4FF', '#728090'],
-      margin: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-      },
     };
   },
 
   watch: {
     chartData: {
-      deep: true,
-      handler() {
-        this.addHeaderCol();
-        this.destroyChart();
-        this.renderChart();
+      handler(newValue, oldValue) {
+        if (!_.isEmpty(newValue) && _.isEmpty(oldValue)) {
+          this.doRerender();
+        } else {
+          console.log('No data found');
+        }
       },
     },
   },
 
-  mounted() {
-    this.$nextTick(() => {
-      this.margin.top = this.marginAll;
-      this.margin.bottom = this.marginAll + 10;
-      this.margin.left = this.marginAll;
-      this.margin.right = this.marginAll;
-
-      this.addHeaderCol();
-      this.destroyChart();
-      this.renderChart();
-    });
-
-    window.addEventListener(
-      'resize',
-      _.debounce(() => {
-        this.destroyChart();
-        this.renderChart();
-      }, 1500),
-    );
-  },
-
-  beforeDestroy() {
-    window.removeEventListener('resize', () => {});
-  },
-
-  computed: {},
-
   methods: {
-    getWidth(): number {
-      return +d3.select(`#${this.chartId}`).style('width').slice(0, -2) || 0;
-    },
-
-    getHeight(): number {
-      return +d3.select(`#${this.chartId}`).style('height').slice(0, -2) || 0;
-    },
-
-    getInnerWidth(): number {
-      return this.getWidth() - this.margin.left - this.margin.right;
-    },
-
-    getInnerHeight(): number {
-      return this.getHeight() - this.margin.top - this.margin.bottom;
-    },
-
     getFontSize(): number {
       return (this.getWidth() + this.getHeight()) * 0.012;
-    },
-
-    // add header columns to chartData array for d3 stacking
-    addHeaderCol() {
-      if (!_.isEmpty(this.chartData)) {
-        this.chartData.columns = _.keys(this.chartData[0]);
-      } else {
-        this.chartData.columns = [];
-      }
-    },
-
-    destroyChart() {
-      d3.select(`#${this.chartId} svg`).remove();
     },
 
     loadSvg() {
@@ -200,6 +120,14 @@ export default {
     },
 
     renderChart() {
+      // override default bottom margin to make space for x-axis
+      this.margin.bottom = 40;
+      // add header columns to chartData array for d3 stacking
+      if (!_.isEmpty(this.chartData)) {
+        this.chartData.columns = _.keys(this.chartData[0]);
+      } else {
+        this.chartData.columns = [];
+      }
       if (this.isStacked) {
         this.renderStackedChart();
       } else {
