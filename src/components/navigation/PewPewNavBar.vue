@@ -29,6 +29,18 @@
         </div>
       </router-link>
     </template>
+
+    <div class="pewpew__navactions flex flex-col m-1 mt-6">
+      <base-text class="flex text-white">{{
+        $t('publicNav.relief_orgs_only')
+      }}</base-text>
+      <base-button
+        class="text-black text-xs font-semibold flex flex-grow p-1"
+        variant="solid"
+      >
+        {{ $t('actions.register') }}
+      </base-button>
+    </div>
   </div>
 </template>
 
@@ -129,6 +141,7 @@ export default {
 
   &__navlink {
     @apply flex flex-col justify-center items-center m-1 p-2 rounded-lg;
+    /** this is against accessiblity standards. */
     font-size: 0.55rem;
     transition: background-color 300ms;
 
@@ -139,6 +152,17 @@ export default {
     &:focus,
     &:hover {
       @apply bg-white bg-opacity-25;
+    }
+  }
+
+  &__navactions {
+    & > p {
+      @apply text-white font-bold;
+      /** this is against accessiblity standards. */
+      font-size: 0.55rem;
+    }
+    & > *:last-child {
+      @apply mt-2;
     }
   }
 }
