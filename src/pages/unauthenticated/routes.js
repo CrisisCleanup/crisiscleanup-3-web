@@ -36,15 +36,12 @@ const routes = [
     name: 'nav.reset_password',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
-];
-
-if (process.env.VUE_APP_STAGE !== 'production') {
-  routes.push({
+  {
     path: '/pew-pew',
     component: PewPew,
     name: 'nav.pew',
     meta: { layout: 'unauthenticated', noAuth: true },
-  });
-}
+  },
+];
 
 export default routes;
