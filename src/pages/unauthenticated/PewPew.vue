@@ -166,6 +166,9 @@
                 :action="() => $router.push('/login')"
               />
             </template>
+            <template v-else>
+              <UserProfileMenu invert />
+            </template>
           </div>
         </div>
         <div class="h-12 mt-3 flex text-xs">
@@ -692,11 +695,13 @@ import Toggle from '@/components/Toggle';
 import TotalCases from '@/components/charts/TotalCases';
 import PewPewNavBar from '@/components/navigation/PewPewNavBar';
 import { UserMixin } from '@/mixins';
+import UserProfileMenu from '@/components/header/UserProfileMenu';
 
 export default {
   name: 'PewPew',
   mixins: [UserMixin],
   components: {
+    UserProfileMenu,
     PewPewNavBar,
     TotalCases,
     Toggle,
