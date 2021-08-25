@@ -30,7 +30,7 @@
       </router-link>
     </template>
 
-    <div class="pewpew__navactions flex flex-col m-1 mt-6">
+    <div v-if="!isLoggedIn" class="pewpew__navactions flex flex-col m-1 mt-6">
       <base-text class="flex text-white">{{
         $t('publicNav.relief_orgs_only')
       }}</base-text>
