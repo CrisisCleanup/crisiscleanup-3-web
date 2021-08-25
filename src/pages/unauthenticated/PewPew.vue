@@ -940,7 +940,7 @@ export default {
     },
     // timer handler functions for circulating through d3 charts
     startTabCirculationTimer(ms) {
-      const totalTabs = 4; // total tabs present inside tabs component
+      const totalTabs = 3; // total tabs present inside tabs component
       this.chartCirculationTimerData.timerId = setInterval(() => {
         this.chartCirculationTimerData.activeChartTab =
           (this.chartCirculationTimerData.activeChartTab + 1) % totalTabs;
