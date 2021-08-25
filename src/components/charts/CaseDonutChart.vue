@@ -7,6 +7,7 @@
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
+import { D3BaseChartMixin } from '@/mixins';
 
 export type DonutChartDataT = {|
   reportedCases: number,
@@ -16,12 +17,8 @@ export type DonutChartDataT = {|
 
 export default {
   name: 'CaseDonutChart',
-  components: {},
+  mixins: [D3BaseChartMixin],
   props: {
-    /**
-     * Unique chart ID
-     */
-    chartId: VueTypes.string.def('d3-case-donut-chart'),
     /**
      * Data for Donut chart
      */
@@ -34,41 +31,21 @@ export default {
       completedCases: 20,
       claimedCases: 10,
     })),
-    /**
-     * top, bottom, left, right margins
-     */
-    marginAll: VueTypes.number.def(5),
-    /**
-     * background color / gradient
-     */
-    bgColor: VueTypes.string.def(
-      'linear-gradient(rgb(44, 55, 65, 0.85) 0%, rgba(44, 55, 65, 0.95) 100%)',
-    ),
   },
 
   data() {
     return {
-      svg: null,
-      x: null,
-      y: null,
-      xScale: null,
-      yScale: null,
       colorScale: null,
-      margin: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-      },
     };
   },
 
   watch: {
     chartData: {
       deep: true,
-      handler() {
-        this.destroyChart();
-        this.renderChart();
+      handler(newData, oldData) {
+        if (!_.isEqual(newData, oldData)) {
+          this.doRerender();
+        }
       },
     },
   },
@@ -82,48 +59,16 @@ export default {
     this.destroyChart();
     this.renderChart();
 
-    window.addEventListener(
-      'resize',
-      _.debounce(() => {
-        this.destroyChart();
-        this.renderChart();
-      }, 1500),
-    );
+    window.addEventListener('resize', this.doRerender);
   },
-
-  beforeDestroy() {
-    window.removeEventListener('resize', _.noop);
-  },
-
-  computed: {},
 
   methods: {
-    getWidth(): number {
-      return +d3.select(`#${this.chartId}`).style('width').slice(0, -2) || 0;
-    },
-
-    getHeight(): number {
-      return +d3.select(`#${this.chartId}`).style('height').slice(0, -2) || 0;
-    },
-
-    getInnerWidth(): number {
-      return this.getWidth() - this.margin.left - this.margin.right;
-    },
-
-    getInnerHeight(): number {
-      return this.getHeight() - this.margin.top - this.margin.bottom;
-    },
-
     getInnerRadius(): number {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) / 2;
     },
 
     getFontSize(): number {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) * 0.25;
-    },
-
-    destroyChart() {
-      d3.select(`#${this.chartId} svg`).remove();
     },
 
     renderChart() {
