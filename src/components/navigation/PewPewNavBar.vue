@@ -80,12 +80,16 @@ export default {
         phone: {
           disabled: !this.$can || !this.$can('phone_agent'),
         },
-        organization: { title: 'nav.my_organization' },
+        organization: {
+          title: 'nav.my_organization',
+          route: { name: 'nav.organization_invitations' },
+        },
         other_organizations: { icon: 'otherorg' },
         reports: {},
         training: { icon: { type: 'info', invertColor: true } },
         admin: {
           disabled: !(this.currentUser && this.currentUser.isAdmin),
+          route: { name: 'nav.admin_dashboard' },
         },
       };
     },
