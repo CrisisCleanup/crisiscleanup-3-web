@@ -9,7 +9,7 @@ module.exports = {
     options: {
       safelist: {
         standard: [/^bg/],
-        greedy: [/^grid/],
+        greedy: [/grid/],
       },
     },
   },
