@@ -30,17 +30,39 @@ export const D3BaseChartMixin = {
       svg: null,
       x: null,
       y: null,
+      resizeObserver: null,
     };
   },
 
   mounted() {
     this.d3 = require('d3');
-    this.$nextTick(this.doRerender);
-    window.addEventListener('resize', this.doRerender);
+    this.$nextTick(() => {
+      /**
+       * ResizeObserver to rerender chart
+       * when dimensions of chart's parent container changes
+       *
+       * @see https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API
+       */
+
+      this.resizeObserver = new ResizeObserver(
+        _.debounce(() => {
+          this.margin.top = this.marginAll;
+          this.margin.bottom = this.marginAll;
+          this.margin.left = this.marginAll;
+          this.margin.right = this.marginAll;
+
+          this.destroyChart();
+          this.renderChart();
+          console.log('rerender', this.chartId);
+        }, 1500),
+      );
+
+      this.resizeObserver.observe(document.querySelector(`#${this.chartId}`));
+    });
   },
 
   beforeDestroy() {
-    window.removeEventListener('resize', this.doRerender);
+    this.resizeObserver.disconnect();
   },
 
   methods: {
