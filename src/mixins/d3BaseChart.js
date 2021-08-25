@@ -44,7 +44,7 @@ export const D3BaseChartMixin = {
   },
 
   methods: {
-    doRerender: _.debounce(() => {
+    doRerender: _.debounce(function () {
       this.margin.top = this.marginAll;
       this.margin.bottom = this.marginAll;
       this.margin.left = this.marginAll;
