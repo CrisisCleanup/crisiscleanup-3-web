@@ -57,7 +57,13 @@
               </div>
             </tab>
             <tab
-              :name="$t('reports.pp_site_stats_title')"
+              :name="
+                currentSiteStats.length > 0
+                  ? `${currentSiteStats[0].currency_symbol}${formatStatValue(
+                      currentSiteStats[0].value,
+                    )}`
+                  : $t('reports.pp_site_stats_title')
+              "
               :selected="
                 siteInfoTimerData.isTimerActive &&
                 siteInfoTimerData.activeInfoTab === 1
