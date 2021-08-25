@@ -53,14 +53,8 @@ export default {
       const _homeFooterRoutes = _.keyBy(FooterNavigation, 'key');
       const homeRoutes = { ..._homeSideRoutes, ..._homeFooterRoutes };
       return {
-        home: { route: { name: 'nav.dashboard' } },
-        'current-disasters': {
-          title: 'publicNav.current_disasters',
-          route: { name: 'nav.cases' },
-        },
-        survivor: { ...homeRoutes.survivor, icon: 'earth-globe' },
+        survivor: { ...homeRoutes.survivor, icon: 'contact' },
         training: homeRoutes.training,
-        contact: homeRoutes.contact,
         about: { title: 'publicNav.about_us', route: { name: 'nav.about' } },
         blog: { ...homeRoutes.blog, icon: 'notepad' },
         terms: homeRoutes.terms,
