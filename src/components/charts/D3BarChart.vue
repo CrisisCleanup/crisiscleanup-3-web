@@ -25,19 +25,13 @@ export default {
     /**
      * Data for Bar chart
      */
-    chartData: VueTypes.arrayOf(
-      VueTypes.shape<BarChartT>({
-        group: VueTypes.number,
-        newCases: VueTypes.number,
-        closedCases: VueTypes.number,
-      }).def(() => ({ group: 0, newCases: 0, closedCases: 0 })).isRequired,
-    ).def((): BarChartT[] => [
-      { group: 0, newCases: 28, closedCases: 30 },
-      { group: 1, newCases: 43, closedCases: 38 },
-      { group: 2, newCases: 81, closedCases: 30 },
-      { group: 3, newCases: 19, closedCases: 80 },
-      { group: 4, newCases: 52, closedCases: 30 },
-      { group: 5, newCases: 24, closedCases: 35 },
+    chartData: VueTypes.arrayOf(VueTypes.object).def((): BarChartT[] => [
+      { group: new Date('2021-08-15'), newCases: 28, closedCases: 30 },
+      { group: new Date('2021-08-16'), newCases: 43, closedCases: 38 },
+      { group: new Date('2021-08-17'), newCases: 81, closedCases: 30 },
+      { group: new Date('2021-08-18'), newCases: 19, closedCases: 80 },
+      { group: new Date('2021-08-19'), newCases: 52, closedCases: 30 },
+      { group: new Date('2021-08-20'), newCases: 24, closedCases: 35 },
     ]),
     /**
      * top, bottom, left, right margins
