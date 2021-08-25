@@ -959,9 +959,9 @@ export default {
       return results;
     },
     async getOrganizations() {
-      const { start_date, incident } = this.queryFilter;
+      const { incident } = this.queryFilter;
       const params = {
-        start_date: start_date.format('YYYY-MM-DD'),
+        start_date: this.$moment().add(-120, 'days').format('YYYY-MM-DD'),
         end_date: this.$moment().format('YYYY-MM-DD'),
       };
       if (incident) {
