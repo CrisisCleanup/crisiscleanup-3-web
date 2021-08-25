@@ -55,17 +55,19 @@ export const D3BaseChartMixin = {
     }, 1500),
 
     getWidth() {
-      // eslint-disable-next-line no-undef
-      return (
-        +this.d3.select(`#${this.chartId}`).style('width').slice(0, -2) || 0
-      );
+      const chartContainer = this.d3.select(`#${this.chartId}`);
+      if (chartContainer) {
+        return +chartContainer.style('width').slice(0, -2) || 0;
+      }
+      return 0;
     },
 
     getHeight() {
-      // eslint-disable-next-line no-undef
-      return (
-        +this.d3.select(`#${this.chartId}`).style('height').slice(0, -2) || 0
-      );
+      const chartContainer = this.d3.select(`#${this.chartId}`);
+      if (chartContainer) {
+        return +chartContainer.style('height').slice(0, -2) || 0;
+      }
+      return 0;
     },
 
     getInnerWidth() {
