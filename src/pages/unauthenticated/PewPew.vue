@@ -574,6 +574,7 @@
                         completedCases: slotProps.item.closed_count || 0,
                       }"
                       :bg-color="styles.backgroundColor"
+                      :margin-all="5"
                     />
                   </div>
                 </template>
