@@ -35,58 +35,7 @@
           <PhoneStatus />
         </div>
 
-        <div class="flex items-center header-item overflow-hidden h-full">
-          <v-popover
-            popover-class="menu-popover"
-            placement="bottom-end"
-            data-cy="auth.userprofile"
-          >
-            <div class="flex cursor-pointer items-center">
-              <Avatar
-                :initials="currentUser && currentUser.first_name"
-                :url="currentUser && currentUser.profilePictureUrl"
-                class="p-1"
-                size="small"
-              />
-              <base-text
-                variant="h3"
-                class="p-3 text-crisiscleanup-dark-300"
-                regular
-              >
-                {{ currentUser && currentUser.full_name }}
-                <font-awesome-icon class="cursor-pointer" icon="caret-down" />
-              </base-text>
-            </div>
-            <div slot="popover" class="flex flex-col">
-              <base-button
-                data-cy="auth.userprofile.profile"
-                class="
-                  text-base
-                  p-2
-                  hover:bg-crisiscleanup-light-grey
-                  cursor-pointer
-                "
-                :text="$t('actions.profile')"
-                :action="
-                  () => {
-                    $router.push(`/profile`);
-                  }
-                "
-              />
-              <base-button
-                data-cy="auth.userprofile.logout"
-                class="
-                  text-base
-                  p-2
-                  hover:bg-crisiscleanup-light-grey
-                  cursor-pointer
-                "
-                :text="$t('actions.logout')"
-                :action="() => $emit('auth:logout')"
-              />
-            </div>
-          </v-popover>
-        </div>
+        <UserProfileMenu class="header-item" />
       </div>
     </div>
   </div>
@@ -97,12 +46,12 @@ import VueTypes from 'vue-types';
 import DisasterIcon from '@/components/DisasterIcon.vue';
 import useUser from '@/use/user/useUser';
 import PhoneStatus from '@/components/header/PhoneStatus.vue';
-import Avatar from '@/components/Avatar';
+import UserProfileMenu from '@/components/header/UserProfileMenu.vue';
 
 export default {
   name: 'Header',
   components: {
-    Avatar,
+    UserProfileMenu,
     DisasterIcon,
     PhoneStatus,
   },
@@ -126,7 +75,7 @@ export default {
 
 .header-item {
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);
-  border: 1px solid rgb(151, 151, 151, 0.1);
+  border: 1px solid rgba(151, 151, 151, 0.1);
   @apply px-2;
 }
 </style>
