@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { D3BaseChartMixin } from '@/mixins';
 
 export type BarChartT = {|
-  group: Date | number | string,
+  group: Date,
   newCases: number,
   closedCases: number,
 |};
@@ -46,11 +46,12 @@ export default {
 
   watch: {
     chartData: {
-      deep: true,
-      handler() {
-        this.addHeaderCol();
-        this.destroyChart();
-        this.renderChart();
+      handler(newValue, oldValue) {
+        if (!_.isEmpty(newValue) && _.isEmpty(oldValue)) {
+          this.doRerender();
+        } else {
+          console.log('No data found');
+        }
       },
     },
   },
@@ -119,6 +120,8 @@ export default {
     },
 
     renderChart() {
+      // override default bottom margin to make space for x-axis
+      this.margin.bottom = 40;
       // add header columns to chartData array for d3 stacking
       if (!_.isEmpty(this.chartData)) {
         this.chartData.columns = _.keys(this.chartData[0]);
