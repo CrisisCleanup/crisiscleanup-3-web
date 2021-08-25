@@ -35,7 +35,16 @@ export const D3BaseChartMixin = {
 
   mounted() {
     this.d3 = require('d3');
-    this.$nextTick(() => {
+    this.$nextTick(this.doRerender);
+    window.addEventListener('resize', this.doRerender);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('resize', this.doRerender);
+  },
+
+  methods: {
+    doRerender: _.debounce(() => {
       this.margin.top = this.marginAll;
       this.margin.bottom = this.marginAll;
       this.margin.left = this.marginAll;
@@ -43,22 +52,8 @@ export const D3BaseChartMixin = {
 
       this.destroyChart();
       this.renderChart();
-    });
+    }, 1500),
 
-    window.addEventListener(
-      'resize',
-      _.debounce(() => {
-        this.destroyChart();
-        this.renderChart();
-      }, 1500),
-    );
-  },
-
-  beforeDestroy() {
-    window.removeEventListener('resize', _.noop);
-  },
-
-  methods: {
     getWidth() {
       // eslint-disable-next-line no-undef
       return (
