@@ -178,17 +178,6 @@ export default {
       totalCallsGroup
         .attr('transform', 'scale(1.4)')
         .style('opacity', '0')
-        .attr(
-          'd',
-          d3
-            .arc()
-            .innerRadius(this.y(0))
-            .outerRadius((d) => this.y(d.calls))
-            .startAngle((d) => this.x(d.name))
-            .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-            .padAngle(0.015)
-            .padRadius((d) => this.y(d.calls)),
-        )
         .transition()
         .delay((d, i) => i * 15)
         .duration(500)
@@ -200,8 +189,7 @@ export default {
             .outerRadius((d) => this.y(d.calls))
             .startAngle((d) => this.x(d.name))
             .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-            .padAngle(0.05)
-            .padRadius(this.getInnerRadius()),
+            .padAngle(0.05),
         )
         .style('opacity', '1')
         .attr('transform', 'scale(1)');
@@ -240,17 +228,6 @@ export default {
       missedCallsGroup
         .attr('transform', 'scale(1.2)')
         .style('opacity', '0')
-        .attr(
-          'd',
-          d3
-            .arc()
-            .innerRadius(this.y(0))
-            .outerRadius((d) => this.y(d.missed))
-            .startAngle((d) => this.x(d.name))
-            .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-            .padAngle(0.05)
-            .padRadius(this.getInnerRadius()),
-        )
         .transition()
         .delay((d, i) => i * 15)
         .duration(500)
@@ -262,8 +239,7 @@ export default {
             .outerRadius((d) => this.y(d.missed))
             .startAngle((d) => this.x(d.name))
             .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-            .padAngle(0.05)
-            .padRadius(this.getInnerRadius()),
+            .padAngle(0.05),
         )
         .style('opacity', '1')
         .attr('transform', 'scale(1)');
