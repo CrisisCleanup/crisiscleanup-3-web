@@ -7,6 +7,7 @@
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
+import { D3BaseChartMixin } from '@/mixins';
 
 export type CallVolumeDataT = {|
   name: string,
@@ -17,6 +18,7 @@ export type CallVolumeDataT = {|
 
 export default {
   name: 'CircularBarplot',
+  mixins: [D3BaseChartMixin],
   props: {
     /**
      * Data for Donut chart
@@ -39,32 +41,10 @@ export default {
       required: false,
       default: true,
     },
-
-    /**
-     * Unique chart ID
-     */
-    chartId: VueTypes.string.def('d3-circular-barplot'),
-    /**
-     * top, bottom, left, right margins
-     */
-    marginAll: VueTypes.number.def(5),
-    /**
-     * background color / gradient
-     */
-    bgColor: VueTypes.string.def('transparent'),
   },
 
   data() {
     return {
-      margin: {
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-      },
-      svg: null,
-      x: null,
-      y: null,
       timeScale: null,
       colorScale: null,
       textContainer: null,
@@ -75,32 +55,6 @@ export default {
       mappedMissedCalls: null,
       mappedTimestamps: null,
     };
-  },
-
-  mounted() {
-    if (!_.isEmpty(this.chartData)) {
-      this.$nextTick(() => {
-        this.margin.top = this.marginAll;
-        this.margin.bottom = this.marginAll;
-        this.margin.left = this.marginAll;
-        this.margin.right = this.marginAll;
-
-        this.destroyChart();
-        this.renderChart();
-      });
-    } else {
-      console.log('No data found');
-    }
-
-    window.addEventListener(
-      'resize',
-      _.debounce(() => {
-        if (!_.isEmpty(this.chartData)) {
-          this.destroyChart();
-          this.renderChart();
-        }
-      }, 1500),
-    );
   },
 
   watch: {
@@ -114,32 +68,9 @@ export default {
         }
       },
     },
-
-    isStacked: {
-      handler() {
-        this.destroyChart();
-        this.renderChart();
-      },
-    },
   },
 
   methods: {
-    getWidth(): number {
-      return +d3.select(`#${this.chartId}`).style('width').slice(0, -2) || 0;
-    },
-
-    getHeight(): number {
-      return +d3.select(`#${this.chartId}`).style('height').slice(0, -2) || 0;
-    },
-
-    getInnerWidth(): number {
-      return this.getWidth() - this.margin.left - this.margin.right;
-    },
-
-    getInnerHeight(): number {
-      return this.getHeight() - this.margin.top - this.margin.bottom;
-    },
-
     getInnerRadius(): number {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) / 5;
     },
@@ -472,10 +403,6 @@ export default {
         .attr('font-size', `${this.getFontSize()}px`)
         .attr('x', 0)
         .attr('y', `${2.5 * this.getFontSize()}px`);
-    },
-
-    destroyChart() {
-      d3.select(`#${this.chartId} svg`).remove();
     },
   },
 };
