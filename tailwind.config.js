@@ -8,7 +8,8 @@ module.exports = {
     // These options are passed through directly to PurgeCSS
     options: {
       safelist: {
-        standard: [/^bg/, /^grid/],
+        standard: [/^bg/],
+        greedy: [/^grid/],
       },
     },
   },
