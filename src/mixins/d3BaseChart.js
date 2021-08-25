@@ -12,7 +12,7 @@ export const D3BaseChartMixin = {
     /**
      * top, bottom, left, right margins
      */
-    marginAll: VueTypes.number.def(5),
+    marginAll: VueTypes.number.def(20),
     /**
      * background color / gradient
      */
