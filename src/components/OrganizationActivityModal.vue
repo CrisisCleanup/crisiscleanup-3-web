@@ -101,6 +101,7 @@
           :body-style="{ maxHeight: '40vh', ...styles }"
           :header-style="{ ...styles, marginBottom: '-10px' }"
           :row-style="{ backgroundColor: 'unset' }"
+          :key="generalInfo.id"
         >
           <template #name="slotProps">
             {{ slotProps.item.name }}
@@ -139,6 +140,7 @@
       </div>
       <div class="overflow-y-hidden" :class="showCapability ? 'h-auto' : 'h-0'">
         <Capability
+          :key="generalInfo.id"
           :capabilities="capabilities"
           :organization-capabilities="generalInfo.capabilities"
           :class="showCapability ? 'drawer-open' : 'drawer-close'"

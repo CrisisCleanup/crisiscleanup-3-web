@@ -463,10 +463,7 @@
                       rounded
                     "
                   >
-                    <div
-                      class="flex justify-center items-center mr-2"
-                      v-if="liveEvents.length > 0"
-                    >
+                    <div class="flex justify-center items-center mr-2">
                       <base-button
                         v-if="eventsInterval"
                         class="
@@ -901,12 +898,23 @@ export default {
       }
     },
     async fetchCircularBarplotData(date, interval) {
+      const { incident } = this.queryFilter;
       this.circularBarplotData = [];
       this.circularBarplotData = this.circularBarplotData.slice();
       const d = date.format('YYYY-MM-DD');
 
-      const url = `${process.env.VUE_APP_API_BASE_URL}/reports_data/daily_calls?&date=${d}&interval=${interval}`;
-      const response = await this.$http.get(url);
+      const params = {
+        date: d,
+        interval,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      };
+      if (incident) {
+        params.incident = incident;
+      }
+      const queryString = getQueryString(params);
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/daily_calls?${queryString}`,
+      );
       this.circularBarplotData = response.data;
       this.circularBarplotData = this.circularBarplotData.slice();
     },
@@ -1401,6 +1409,16 @@ export default {
               marker.actor_blurred_location.coordinates[0],
             ]);
 
+            const isOrg = (element) =>
+              element.name === marker.attr.actor_organization_name;
+
+            const index = this.organizations.findIndex(isOrg);
+            if (index !== -1) {
+              this.organizations.unshift(
+                this.organizations.splice(index, 1)[0],
+              );
+            }
+
             actorMarkerSprite = new Sprite();
             actorMarkerSprite.x = actorCoords.x;
             actorMarkerSprite.y = actorCoords.y;
@@ -1723,6 +1741,12 @@ export default {
         await this.getOrganizationCapabilities(item.id);
       this.orgInfo.generalInfo.statistics =
         await this.getOrganizationStatisticsByIncident(item.id);
+      this.orgInfo.generalInfo.statistics = {
+        ...this.orgInfo.generalInfo.statistics,
+      };
+      this.orgInfo.generalInfo.capabilities = {
+        ...this.orgInfo.generalInfo.capabilities,
+      };
       const modal = document.querySelector('div.x-translate');
       if (modal) {
         modal.classList.remove('x-translate');
