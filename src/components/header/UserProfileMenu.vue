@@ -16,8 +16,12 @@
           size="small"
         />
         <base-text variant="h3" class="p-3" regular :class="[...styles.title]">
-          {{ currentUser && currentUser.full_name }}
-          <font-awesome-icon class="cursor-pointer" icon="caret-down" />
+          <span
+            class="font-h3 text-h3 font-normal subpixel-antialiased"
+            :class="styles.title"
+            >{{ currentUser && currentUser.full_name }}
+            <font-awesome-icon class="cursor-pointer" icon="caret-down" />
+          </span>
         </base-text>
       </div>
       <div slot="popover" class="flex flex-col">
