@@ -16,24 +16,17 @@
     </router-link>
 
     <template v-for="r in navRoutes">
-      <a
-        v-if="r.external"
-        :key="r.title"
-        class="pewpew__navlink"
-        :alt="r.title"
-        :href="r.route"
-      >
-        <ccu-icon v-bind="r.iconProps" />
-        {{ r.title }}
+      <a v-if="r.external" :key="r.title" :alt="r.title" :href="r.route">
+        <div class="pewpew__navlink">
+          <ccu-icon v-bind="r.iconProps" />
+          {{ r.title }}
+        </div>
       </a>
-      <router-link
-        v-else
-        :key="r.title"
-        :to="r.routeProps"
-        class="pewpew__navlink"
-      >
-        <ccu-icon v-bind="r.iconProps" />
-        {{ r.title }}
+      <router-link v-else :key="r.title" :to="r.routeProps">
+        <div class="pewpew__navlink">
+          <ccu-icon v-bind="r.iconProps" />
+          {{ r.title }}
+        </div>
       </router-link>
     </template>
   </div>
