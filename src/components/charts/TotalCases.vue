@@ -113,6 +113,12 @@ export default {
         .style('cursor', 'pointer');
 
       this.node
+        .style('opacity', 0)
+        .transition()
+        .duration(850)
+        .style('opacity', 1);
+
+      this.node
         .on('mouseover mousemove', function (event, d) {
           d3.select(this).attr('stroke', '#fefefe').attr('stroke-width', 3);
           d3.select('#total-cases-chart-tooltip')
@@ -129,7 +135,6 @@ export default {
         })
         .on('click', (event, d) => {
           if (this.focus !== d) {
-            console.log(d);
             this.zoom(event, d);
             event.stopPropagation();
           }
