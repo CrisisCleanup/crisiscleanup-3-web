@@ -567,7 +567,7 @@
                 </template>
                 <template #calls_count="slotProps">
                   <span class="w-full flex justify-end">
-                    ${{ nFormatter(slotProps.item.calls_count) }}
+                    {{ nFormatter(slotProps.item.calls_count) }}
                   </span>
                 </template>
                 <template #reported_count="slotProps">
