@@ -18,13 +18,13 @@
     <template v-for="r in navRoutes">
       <a v-if="r.external" :key="r.title" :alt="r.title" :href="r.route">
         <div class="pewpew__navlink">
-          <ccu-icon v-bind="r.iconProps" />
+          <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
         </div>
       </a>
       <router-link v-else :key="r.title" :to="r.routeProps">
         <div class="pewpew__navlink">
-          <ccu-icon v-bind="r.iconProps" />
+          <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
         </div>
       </router-link>
