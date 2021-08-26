@@ -1802,7 +1802,9 @@ export default {
     },
     getLogoUrl(organization_id) {
       const organization = Organization.find(organization_id);
-      return organization ? organization.logo_url : '';
+      return organization
+        ? organization.logo_url
+        : require('@/assets/icons/earth-globe.svg');
     },
   },
   computed: {
