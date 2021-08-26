@@ -630,13 +630,7 @@
                     <TotalCases
                       class="h-full w-full"
                       :margin-all="30"
-                      :chart-data="{
-                        open: incidentStats.unclaimed.total,
-                        closed: incidentStats.closed.total,
-                        inProgress:
-                          incidentStats.claimed.total -
-                          incidentStats.closed.total,
-                      }"
+                      :chart-data="mapStatistics"
                     />
                   </div>
                 </LightTab>
@@ -797,7 +791,7 @@ export default {
   async mounted() {
     await this.loadPageData();
     // rotate through d3 chart tabs after every 10 seconds
-    this.startTabCirculationTimer(10000);
+    // this.startTabCirculationTimer(10000);
   },
   methods: {
     async loadPageData() {
@@ -1680,58 +1674,89 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/reports_data/worksite_statistics?${queryString}`,
       );
       this.incidentStats = response.data;
+      const mapStatisticsColors = [
+        '#ffffff',
+        '#d0021b',
+        '#fab92e',
+        '#f0f032',
+        '#0054bb',
+        '#0fa355',
+        '#d3d3d3',
+      ];
       this.mapStatistics = [
         {
+          name: 'All Cases',
+          color: mapStatisticsColors[0],
           count: this.incidentStats.all.total,
-          style: `border-color: white`,
+          style: `border-color: ${mapStatisticsColors[0]}`,
           title: this.$t('pewPew.all_cases'),
         },
         {
+          name: 'Unclaimed',
+          color: mapStatisticsColors[1],
           count: this.incidentStats.unclaimed.total,
-          style: `border-color: #d0021b`,
+          style: `border-color: ${mapStatisticsColors[1]}`,
           title: this.$t('pewPew.unclaimed'),
         },
         {
+          name: 'Claimed',
+          color: mapStatisticsColors[2],
           count: this.incidentStats.claimed.total,
-          style: `border-color: #fab92e`,
+          style: `border-color: ${mapStatisticsColors[2]}`,
           title: this.$t('pewPew.claimed'),
         },
         {
+          name: 'In Progress',
+          color: mapStatisticsColors[3],
           count: this.incidentStats.assigned.total,
-          style: `border-color: #f0f032`,
+          style: `border-color: ${mapStatisticsColors[3]}`,
           title: this.$t('pewPew.in_progress'),
         },
         {
+          name: 'Partly Done',
+          color: mapStatisticsColors[4],
           count: this.incidentStats.partial.total,
-          style: `border-color: #0054bb`,
+          style: `border-color: ${mapStatisticsColors[4]}`,
           title: this.$t('pewPew.partly_done'),
         },
         {
+          name: 'Closed',
+          color: mapStatisticsColors[5],
           count: this.incidentStats.closed.total,
-          style: `border-color: #0FA355`,
+          style: `border-color: ${mapStatisticsColors[5]}`,
           title: this.$t('pewPew.closed'),
         },
         {
+          name: 'Overdue',
+          color: mapStatisticsColors[6],
           count: this.incidentStats.overdue.total,
           style: `border: none`,
           title: this.$t('pewPew.overdue'),
         },
         {
+          name: 'Total Orgs',
+          color: mapStatisticsColors[6],
           count: this.organizations.length,
           style: `border: none`,
           title: this.$t('pewPew.total_orgs'),
         },
         {
+          name: 'Counties Parishes',
+          color: mapStatisticsColors[6],
           count: 0,
           style: `border: none`,
           title: this.$t('pewPew.counties_parishes'),
         },
         {
+          name: 'Volunteers',
+          color: mapStatisticsColors[6],
           count: 0,
           style: `border: none`,
           title: this.$t('pewPew.volunteers'),
         },
         {
+          name: 'Households',
+          color: mapStatisticsColors[6],
           count: 0,
           style: `border: none`,
           title: this.$t('pewPew.households'),
