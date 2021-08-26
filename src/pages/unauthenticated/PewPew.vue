@@ -440,24 +440,34 @@
                       class="absolute p-3 h-16 right-0 bottom-0 opacity-20"
                     />
                   </div>
-                  <div class="mapStats grid grid-flow-col mb-10 ml-3 h-12">
+                  <div
+                    class="
+                      mapStats
+                      flex flex-nowrap
+                      items-center
+                      overflow-x-auto
+                      mb-2
+                      px-3
+                    "
+                  >
                     <div
                       class="
+                        w-auto
                         p-1
+                        px-3
                         border
                         mx-1
                         bg-opacity-25 bg-crisiscleanup-dark-400
                         rounded-md
-                        w-auto
                       "
                       v-for="item in mapStatistics"
                       :style="item['style']"
                       :key="item['title']"
                     >
-                      <div class="text-white text-xs opacity-50">
+                      <div class="text-center text-white text-xs opacity-50">
                         {{ item['title'] | upper }}
                       </div>
-                      <div class="text-white text-sm">
+                      <div class="text-center text-white text-sm">
                         {{ item['count'] }}
                       </div>
                     </div>
