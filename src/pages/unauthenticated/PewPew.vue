@@ -552,7 +552,6 @@
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
-                style="height: 20rem"
                 :body-style="{ maxHeight: '40vh', ...styles }"
                 :header-style="styles"
                 :row-style="{ backgroundColor: 'unset' }"
@@ -569,12 +568,12 @@
                 </template>
                 <template #incident_count="slotProps">
                   <span class="w-full flex justify-end">
-                    {{ nFormatter(slotProps.item.incident_count) }}
+                    {{ nFormatter(slotProps.item.incident_count) }}*
                   </span>
                 </template>
                 <template #commercial_value="slotProps">
                   <span class="w-full flex justify-end">
-                    ${{ nFormatter(slotProps.item.commercial_value) }}
+                    ${{ nFormatter(slotProps.item.commercial_value) }}*
                   </span>
                 </template>
                 <template #calls_count="slotProps">
@@ -600,6 +599,17 @@
                   </div>
                 </template>
               </Table>
+              <small
+                v-if="organizations.length > 0"
+                class="italic text-xs p-3 absolute bottom-0"
+                :style="{ fontSize: '10px' }"
+              >
+                {{
+                  $t(
+                    '~~* Only reflects what is documented in Crisis Cleanup. This organization may deploy to other disasters, and provide other services not documented here.',
+                  )
+                }}
+              </small>
             </div>
             <div class="row-span-5">
               <tabs
