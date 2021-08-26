@@ -37,6 +37,7 @@
       <base-button
         class="text-black text-xs font-semibold flex flex-grow p-1"
         variant="solid"
+        :action="() => $router.push({ name: 'nav.register' })"
       >
         {{ $t('actions.register') }}
       </base-button>
