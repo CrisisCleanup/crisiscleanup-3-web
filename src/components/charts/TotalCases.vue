@@ -159,6 +159,54 @@ export default {
         .text((d) => `${_.startCase(d.data.name)} (${d.data.value})`);
 
       this.zoomTo([root.x, root.y, root.r * 2.0]);
+
+      const ctx = this;
+
+      const simulation = d3
+        .forceSimulation()
+        .force(
+          'forceX',
+          d3
+            .forceX()
+            .strength(0.01)
+            .x(this.getInnerWidth() * 0.5),
+        )
+        .force(
+          'forceY',
+          d3
+            .forceY()
+            .strength(0.01)
+            .y(this.getInnerHeight() * 0.5),
+        )
+        .force(
+          'center',
+          d3
+            .forceCenter()
+            .x(this.getInnerWidth() * 0.5)
+            .y(this.getInnerHeight() * 0.5),
+        )
+        .force('charge', d3.forceManyBody().strength(0.5))
+        .force(
+          'collide',
+          d3
+            .forceCollide()
+            .strength(0.05)
+            .radius((d) => d.r + 3)
+            .iterations(1),
+        );
+
+      // Apply these forces to the nodes and update their positions.
+      simulation.nodes(root.descendants().slice(1)).on('tick', (d) => {
+        const k = this.getInnerWidth() / (root.r * 2);
+        this.label.attr(
+          'transform',
+          (d) => `translate(${(d.x - root.x) * k},${(d.y - root.y) * k})`,
+        );
+        this.node.attr(
+          'transform',
+          (d) => `translate(${(d.x - root.x) * k},${(d.y - root.y) * k})`,
+        );
+      });
     },
 
     zoomTo(v) {
