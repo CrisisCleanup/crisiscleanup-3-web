@@ -173,7 +173,10 @@
               />
             </template>
             <template v-else>
-              <UserProfileMenu invert />
+              <UserProfileMenu
+                @auth:logout="() => $store.dispatch('auth/logout')"
+                invert
+              />
             </template>
           </div>
         </div>

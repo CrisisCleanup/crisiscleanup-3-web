@@ -35,7 +35,10 @@
           <PhoneStatus />
         </div>
 
-        <UserProfileMenu class="header-item" />
+        <UserProfileMenu
+          @auth:logout="() => $emit('auth:logout')"
+          class="header-item"
+        />
       </div>
     </div>
   </div>
