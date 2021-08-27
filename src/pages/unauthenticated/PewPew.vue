@@ -616,8 +616,17 @@
                 </template>
               </Table>
               <small
-                v-if="organizations.length > 0"
-                class="small-font italic leading-3 p-3 absolute bottom-0"
+                class="
+                  py-1
+                  px-8
+                  small-font
+                  italic
+                  leading-3
+                  text-center text-black
+                  absolute
+                  bottom-0
+                  ribbon-gradient
+                "
               >
                 {{
                   $t(
