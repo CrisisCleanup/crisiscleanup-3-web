@@ -501,7 +501,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
               <!---->
                
               <div
-                class="hover:bg-crisiscleanup-light-grey hover:text-black"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
@@ -574,7 +574,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey hover:text-black"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
@@ -647,7 +647,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey hover:text-black"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
@@ -720,7 +720,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey hover:text-black"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
@@ -793,7 +793,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey hover:text-black"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->
@@ -866,7 +866,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <!---->
               </div>
               <div
-                class="hover:bg-crisiscleanup-light-grey hover:text-black"
+                class="hover:bg-crisiscleanup-light-grey"
                 style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
               >
                 <!---->

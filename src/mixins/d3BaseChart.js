@@ -76,7 +76,7 @@ export const D3BaseChartMixin = {
       this.renderChart();
     }, 1500),
 
-    getWidth() {
+    getWidth(): number {
       const chartContainer = this.d3.select(`#${this.chartId}`);
       if (chartContainer) {
         return +chartContainer.style('width').slice(0, -2) || 0;
@@ -84,7 +84,7 @@ export const D3BaseChartMixin = {
       return 0;
     },
 
-    getHeight() {
+    getHeight(): number {
       const chartContainer = this.d3.select(`#${this.chartId}`);
       if (chartContainer) {
         return +chartContainer.style('height').slice(0, -2) || 0;
@@ -92,11 +92,11 @@ export const D3BaseChartMixin = {
       return 0;
     },
 
-    getInnerWidth() {
+    getInnerWidth(): number {
       return this.getWidth() - this.margin.left - this.margin.right;
     },
 
-    getInnerHeight() {
+    getInnerHeight(): number {
       return this.getHeight() - this.margin.top - this.margin.bottom;
     },
 
