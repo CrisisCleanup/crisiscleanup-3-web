@@ -440,24 +440,34 @@
                       class="absolute p-3 h-16 right-0 bottom-0 opacity-20"
                     />
                   </div>
-                  <div class="mapStats grid grid-flow-col mb-10 ml-3 h-12">
+                  <div
+                    class="
+                      mapStats
+                      flex flex-nowrap
+                      items-center
+                      overflow-x-auto
+                      mb-2
+                      px-3
+                    "
+                  >
                     <div
                       class="
+                        w-auto
                         p-1
+                        px-3
                         border
                         mx-1
                         bg-opacity-25 bg-crisiscleanup-dark-400
                         rounded-md
-                        w-auto
                       "
                       v-for="item in mapStatistics"
                       :style="item['style']"
                       :key="item['title']"
                     >
-                      <div class="text-white text-xs opacity-50">
+                      <div class="text-center text-white text-xs opacity-50">
                         {{ item['title'] | upper }}
                       </div>
-                      <div class="text-white text-sm">
+                      <div class="text-center text-white text-sm">
                         {{ item['count'] }}
                       </div>
                     </div>
@@ -530,19 +540,34 @@
           </div>
           <div class="col-span-4 grid grid-rows-12">
             <div class="row-span-7 relative">
-              <div class="w-full absolute top-0 right-0 flex justify-center">
+              <div
+                :class="
+                  isOrgActivityModalHidden
+                    ? 'translate-x-full'
+                    : 'translate-x-0'
+                "
+                class="
+                  w-full
+                  absolute
+                  top-0
+                  right-0
+                  flex
+                  justify-center
+                  transform
+                  transition
+                  duration-500
+                "
+                style="z-index: 1002"
+              >
                 <OrganizationActivityModal
-                  @close="closeModal"
+                  @close="isOrgActivityModalHidden = true"
                   :general-info="orgInfo.generalInfo"
-                  class="x-translate right-0 top-0"
-                  style="z-index: 1002"
                   :styles="overlayStyles"
                 />
               </div>
               <Table
                 :columns="orgTable.columns"
                 :data="organizations"
-                style="height: 20rem"
                 :body-style="{ maxHeight: '40vh', ...styles }"
                 :header-style="styles"
                 :row-style="{ backgroundColor: 'unset' }"
@@ -559,12 +584,12 @@
                 </template>
                 <template #incident_count="slotProps">
                   <span class="w-full flex justify-end">
-                    {{ nFormatter(slotProps.item.incident_count) }}
+                    {{ nFormatter(slotProps.item.incident_count) }}*
                   </span>
                 </template>
                 <template #commercial_value="slotProps">
                   <span class="w-full flex justify-end">
-                    ${{ nFormatter(slotProps.item.commercial_value) }}
+                    ${{ nFormatter(slotProps.item.commercial_value) }}*
                   </span>
                 </template>
                 <template #calls_count="slotProps">
@@ -590,6 +615,25 @@
                   </div>
                 </template>
               </Table>
+              <small
+                class="
+                  py-1
+                  px-8
+                  small-font
+                  italic
+                  leading-3
+                  text-center text-black
+                  absolute
+                  bottom-0
+                  ribbon-gradient
+                "
+              >
+                {{
+                  $t(
+                    '~~* Only reflects what is documented in Crisis Cleanup. This organization may deploy to other disasters, and provide other services not documented here.',
+                  )
+                }}
+              </small>
             </div>
             <div class="row-span-5">
               <tabs
@@ -735,6 +779,7 @@ export default {
         incidents: [],
         capability: [],
       },
+      isOrgActivityModalHidden: true,
       markersLength: 0,
       liveEvents: [],
       liveIncidents: [],
@@ -793,7 +838,7 @@ export default {
   async mounted() {
     await this.loadPageData();
     // rotate through d3 chart tabs after every 10 seconds
-    // this.startTabCirculationTimer(10000);
+    this.startTabCirculationTimer(10000);
   },
   methods: {
     async loadPageData() {
@@ -1781,28 +1826,17 @@ export default {
       this.orgInfo.generalInfo = item;
       this.orgInfo.generalInfo.avatar = this.getLogoUrl(item.id);
       this.orgInfo.generalInfo.organization = organization;
-      this.orgInfo.generalInfo.capabilities =
-        await this.getOrganizationCapabilities(item.id);
-      this.orgInfo.generalInfo.statistics =
-        await this.getOrganizationStatisticsByIncident(item.id);
-      this.orgInfo.generalInfo.statistics = {
-        ...this.orgInfo.generalInfo.statistics,
-      };
-      this.orgInfo.generalInfo.capabilities = {
-        ...this.orgInfo.generalInfo.capabilities,
-      };
-      const modal = document.querySelector('div.x-translate');
-      if (modal) {
-        modal.classList.remove('x-translate');
-        modal.classList.add('x-settle');
-      }
-    },
-    closeModal() {
-      const modal = document.querySelector('div.x-settle');
-      if (modal) {
-        modal.classList.add('x-translate');
-        modal.classList.remove('x-settle');
-      }
+
+      // fetch statistics object and convert it into array
+      this.orgInfo.generalInfo.capabilities = Object.values(
+        await this.getOrganizationCapabilities(item.id),
+      );
+
+      // fetch capabilities object and convert it into array
+      this.orgInfo.generalInfo.statistics = Object.values(
+        await this.getOrganizationStatisticsByIncident(item.id),
+      );
+      this.isOrgActivityModalHidden = false;
     },
     getLogoUrl(organization_id) {
       const organization = Organization.find(organization_id);
@@ -1947,71 +1981,8 @@ export default {
   color: #61d5f8;
 }
 
-.x-translate {
-  transform: translateX(1000px);
-  transition: all 600ms ease;
-}
-
-.x-settle {
-  transform: translateX(0px);
-  transition: all 600ms ease;
-}
-
 .stats:hover {
   text-shadow: 1px 1px 2px lightblue, 0 0 1em lightblue, 0 0 0.2em lightblue;
-}
-
-.y-translated {
-  transform: translate(0px, -1000px);
-}
-
-.settle {
-  box-shadow: 0 -1rem 3rem #000;
-  transition: all 400ms ease;
-  transform: translate(0px, 0px);
-}
-
-.card-group {
-  box-shadow: 0 -1rem 3rem #000;
-  transition: all 400ms ease;
-  transform: translate(0px, 0px);
-}
-
-.group-top {
-  box-shadow: 0 -1rem 3rem #000;
-  transform: translate(0px, -140px);
-}
-
-.card-group:hover {
-  z-index: 10;
-  box-shadow: 0 1rem 3rem #000;
-}
-.group-top:hover {
-  z-index: 10;
-  box-shadow: 0 1rem 3rem #000;
-}
-.settle:hover {
-  z-index: 10;
-  box-shadow: 0 1rem 3rem #000;
-}
-
-.sticky-settle {
-  box-shadow: 0 -1rem 2rem #000;
-  transform: translate(0px, 10px);
-}
-
-.move-down {
-  transition: all 600ms ease;
-  transform: translate(0px, 1000px);
-}
-
-.site-container {
-  height: 440px;
-  overflow: hidden;
-}
-
-.site-item {
-  height: 150px;
 }
 
 .pewpew {

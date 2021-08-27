@@ -1,6 +1,20 @@
 <template>
   <div>
-    <div class="my-2">{{ $t(capability.name_t) }}</div>
+    <div class="flex my-2">
+      {{ $t(capability.name_t) }}
+      <ccu-icon
+        v-tooltip="{
+          content: $t(capability.description_t),
+          trigger: 'click',
+          classes: 'interactive-tooltip w-auto',
+        }"
+        :invert-color="true"
+        :alt="$t('actions.help_alt')"
+        type="help"
+        size="medium"
+      />
+    </div>
+
     <div class="grid gap-1" :class="`grid-cols-${phases.length}`">
       <div
         v-for="phase in phases"

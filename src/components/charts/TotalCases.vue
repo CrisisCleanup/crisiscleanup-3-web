@@ -166,14 +166,14 @@ export default {
           'forceX',
           d3
             .forceX()
-            .strength(0.01)
+            .strength(0.05)
             .x(this.getInnerWidth() * 0.5),
         )
         .force(
           'forceY',
           d3
             .forceY()
-            .strength(0.01)
+            .strength(0.05)
             .y(this.getInnerHeight() * 0.5),
         )
         .force(
@@ -183,7 +183,7 @@ export default {
             .x(this.getInnerWidth() * 0.5)
             .y(this.getInnerHeight() * 0.5),
         )
-        .force('charge', d3.forceManyBody().strength(0.5))
+        .force('charge', d3.forceManyBody().strength(1))
         .force(
           'collide',
           d3
