@@ -159,7 +159,7 @@
         class="flex justify-between items-center cursor-pointer"
         @click="isCapabilityHidden = !isCapabilityHidden"
       >
-        <span>{{ $t('~~CAPABILITY') }}</span>
+        <span>{{ $t('~~CAPABILITIES') }}</span>
         <font-awesome-icon
           class="transition duration-500 transform"
           :class="isCapabilityHidden ? 'rotate-0' : 'rotate-180'"
