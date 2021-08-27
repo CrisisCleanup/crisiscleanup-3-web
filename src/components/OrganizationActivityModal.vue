@@ -28,7 +28,7 @@
 
       <font-awesome-icon
         class="col-span-1 justify-self-end cursor-pointer rounded-full m-1"
-        @click="closeModal()"
+        @click="$emit('close')"
         icon="times"
       />
     </div>
@@ -98,34 +98,47 @@
       </div>
     </div>
 
-    <div class="p-2 border-b border-crisiscleanup-dark-300 text-xs">
-      <div class="flex flex-row cursor-pointer" @click="onDropDown('incident')">
-        <div class="mt-2">{{ $t('~~INCIDENTS') }}</div>
-        <div class="ml-auto text-lg">
-          <div class="chevron-down">
-            <font-awesome-icon icon="chevron-down" />
-          </div>
-        </div>
+    <section class="incidents-section">
+      <div
+        class="flex justify-between items-center cursor-pointer"
+        @click="isIncidentHidden = !isIncidentHidden"
+      >
+        <span>{{ $t('~~INCIDENTS') }}</span>
+        <font-awesome-icon
+          class="transition duration-500 transform"
+          :class="isIncidentHidden ? 'rotate-0' : 'rotate-180'"
+          icon="chevron-down"
+          size="lg"
+        />
       </div>
-      <div class="overflow-hidden" :class="showIncidents ? 'h-auto' : 'h-0'">
+
+      <transition name="fade">
         <Table
+          v-show="!isIncidentHidden"
           :columns="incidentTable.columns"
           :data="generalInfo.statistics"
           :body-style="{ maxHeight: '40vh', ...styles }"
-          :header-style="{ ...styles, marginBottom: '-10px' }"
+          :header-style="{ ...styles }"
           :row-style="{ backgroundColor: 'unset' }"
           :key="generalInfo.id"
         >
           <template #name="slotProps">
             {{ slotProps.item.name }}
           </template>
+          <template #calls="slotProps">
+            <span class="w-full flex justify-center">
+              {{ nFormatter(slotProps.item.calls || 0) }}*
+            </span>
+          </template>
           <template #commercial_value="slotProps">
-            {{ nFormatter(slotProps.item.commercial_value) }}
+            <span class="w-full flex justify-end">
+              ${{ nFormatter(slotProps.item.commercial_value || 0) }}*
+            </span>
           </template>
           <template #reported_count="slotProps">
             <CaseDonutChart
               class="w-8 h-8"
-              :chart-id="`case-donut-chart-${slotProps.item.id}`"
+              :chart-id="`case-donut-org-modal-${slotProps.item.id}`"
               :chart-data="{
                 reportedCases: slotProps.item.reported_count || 0,
                 claimedCases:
@@ -134,33 +147,35 @@
                 completedCases: slotProps.item.closed_count || 0,
               }"
               :bg-color="styles.backgroundColor"
+              :margin-all="5"
             />
           </template>
         </Table>
-      </div>
-    </div>
+      </transition>
+    </section>
 
-    <div class="p-2 text-xs">
+    <section class="capabilities-section">
       <div
-        class="flex flex-row cursor-pointer no-ripple"
-        @click="onDropDown('capability')"
+        class="flex justify-between items-center cursor-pointer"
+        @click="isCapabilityHidden = !isCapabilityHidden"
       >
-        <div class="mt-2">{{ $t('CAPABILITY') }}</div>
-        <div class="ml-auto text-lg">
-          <div class="chevron-down">
-            <font-awesome-icon icon="chevron-down" />
-          </div>
-        </div>
-      </div>
-      <div class="overflow-y-hidden" :class="showCapability ? 'h-auto' : 'h-0'">
-        <Capability
-          :key="generalInfo.id"
-          :capabilities="capabilities"
-          :organization-capabilities="generalInfo.capabilities"
-          :class="showCapability ? 'drawer-open' : 'drawer-close'"
+        <span>{{ $t('~~CAPABILITY') }}</span>
+        <font-awesome-icon
+          class="transition duration-500 transform"
+          :class="isCapabilityHidden ? 'rotate-0' : 'rotate-180'"
+          icon="chevron-down"
+          size="lg"
         />
       </div>
-    </div>
+
+      <transition name="fade">
+        <Capability
+          v-show="!isCapabilityHidden"
+          :capabilities="capabilities"
+          :organization-capabilities="generalInfo.capabilities"
+        />
+      </transition>
+    </section>
   </div>
 </template>
 <script>
@@ -199,43 +214,11 @@ export default {
   },
   data() {
     return {
-      showIncidents: false,
+      isIncidentHidden: true,
+      isCapabilityHidden: true,
       nFormatter,
-      showCapability: false,
       capabilities: [],
     };
-  },
-  methods: {
-    closeModal() {
-      this.$emit('close');
-    },
-    onDropDown(item) {
-      const chevronUp = document.querySelectorAll('div.chevron-up');
-      const chevronDown = document.querySelectorAll('div.chevron-down');
-      if (item === 'incident') {
-        if (this.showIncidents) {
-          if (chevronUp) {
-            chevronUp[0].classList.remove('chevron-up');
-            chevronUp[0].classList.add('chevron-down');
-          }
-        } else {
-          chevronDown[0].classList.remove('chevron-down');
-          chevronDown[0].classList.add('chevron-up');
-        }
-        this.showIncidents = !this.showIncidents;
-      } else {
-        if (this.showCapability) {
-          if (chevronUp) {
-            chevronUp[chevronUp.length - 1].classList.remove('chevron-up');
-            chevronUp[chevronUp.length - 1].classList.add('chevron-down');
-          }
-        } else {
-          chevronDown[chevronDown.length - 1].classList.remove('chevron-down');
-          chevronDown[chevronDown.length - 1].classList.add('chevron-up');
-        }
-        this.showCapability = !this.showCapability;
-      }
-    },
   },
   computed: {
     incidentTable() {
@@ -262,27 +245,9 @@ export default {
   },
 };
 </script>
-<style scoped>
-.popup--container {
-  overflow-y: scroll;
-  max-height: 90vh;
-}
-.chevron-up {
-  transform: rotate(180deg);
-  transition: all 300ms ease;
-}
-.chevron-down {
-  transform: rotate(0deg);
-  transition: all 300ms ease;
-}
-.drawer-close {
-  top: -1000px;
-}
-.drawer-open {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  top: 0;
-  transition: top 400ms ease;
+<style lang="postcss" scoped>
+.incidents-section,
+.capabilities-section {
+  @apply p-2 border-b border-crisiscleanup-dark-300;
 }
 </style>
