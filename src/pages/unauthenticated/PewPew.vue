@@ -540,12 +540,28 @@
           </div>
           <div class="col-span-4 grid grid-rows-12">
             <div class="row-span-7 relative">
-              <div class="w-full absolute top-0 right-0 flex justify-center">
+              <div
+                :class="
+                  isOrgActivityModalHidden
+                    ? 'translate-x-full'
+                    : 'translate-x-0'
+                "
+                class="
+                  w-full
+                  absolute
+                  top-0
+                  right-0
+                  flex
+                  justify-center
+                  transform
+                  transition
+                  duration-500
+                "
+                style="z-index: 1002"
+              >
                 <OrganizationActivityModal
-                  @close="closeModal"
+                  @close="isOrgActivityModalHidden = true"
                   :general-info="orgInfo.generalInfo"
-                  class="x-translate right-0 top-0"
-                  style="z-index: 1002"
                   :styles="overlayStyles"
                 />
               </div>
@@ -601,8 +617,7 @@
               </Table>
               <small
                 v-if="organizations.length > 0"
-                class="italic text-xs p-3 absolute bottom-0"
-                :style="{ fontSize: '10px' }"
+                class="small-font italic leading-3 p-3 absolute bottom-0"
               >
                 {{
                   $t(
@@ -755,6 +770,7 @@ export default {
         incidents: [],
         capability: [],
       },
+      isOrgActivityModalHidden: true,
       markersLength: 0,
       liveEvents: [],
       liveIncidents: [],
@@ -1811,19 +1827,7 @@ export default {
       this.orgInfo.generalInfo.statistics = Object.values(
         await this.getOrganizationStatisticsByIncident(item.id),
       );
-
-      const modal = document.querySelector('div.x-translate');
-      if (modal) {
-        modal.classList.remove('x-translate');
-        modal.classList.add('x-settle');
-      }
-    },
-    closeModal() {
-      const modal = document.querySelector('div.x-settle');
-      if (modal) {
-        modal.classList.add('x-translate');
-        modal.classList.remove('x-settle');
-      }
+      this.isOrgActivityModalHidden = false;
     },
     getLogoUrl(organization_id) {
       const organization = Organization.find(organization_id);
@@ -1968,71 +1972,8 @@ export default {
   color: #61d5f8;
 }
 
-.x-translate {
-  transform: translateX(1000px);
-  transition: all 600ms ease;
-}
-
-.x-settle {
-  transform: translateX(0px);
-  transition: all 600ms ease;
-}
-
 .stats:hover {
   text-shadow: 1px 1px 2px lightblue, 0 0 1em lightblue, 0 0 0.2em lightblue;
-}
-
-.y-translated {
-  transform: translate(0px, -1000px);
-}
-
-.settle {
-  box-shadow: 0 -1rem 3rem #000;
-  transition: all 400ms ease;
-  transform: translate(0px, 0px);
-}
-
-.card-group {
-  box-shadow: 0 -1rem 3rem #000;
-  transition: all 400ms ease;
-  transform: translate(0px, 0px);
-}
-
-.group-top {
-  box-shadow: 0 -1rem 3rem #000;
-  transform: translate(0px, -140px);
-}
-
-.card-group:hover {
-  z-index: 10;
-  box-shadow: 0 1rem 3rem #000;
-}
-.group-top:hover {
-  z-index: 10;
-  box-shadow: 0 1rem 3rem #000;
-}
-.settle:hover {
-  z-index: 10;
-  box-shadow: 0 1rem 3rem #000;
-}
-
-.sticky-settle {
-  box-shadow: 0 -1rem 2rem #000;
-  transform: translate(0px, 10px);
-}
-
-.move-down {
-  transition: all 600ms ease;
-  transform: translate(0px, 1000px);
-}
-
-.site-container {
-  height: 440px;
-  overflow: hidden;
-}
-
-.site-item {
-  height: 150px;
 }
 
 .pewpew {
