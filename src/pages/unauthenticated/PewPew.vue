@@ -983,7 +983,9 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/reports_data/organization_statistics?${queryString}`,
       );
       await Organization.api().get(
-        `/organizations?id__in=${response.data.map((o) => o.id).join(',')}&limit=${response.data.length}`,
+        `/organizations?id__in=${response.data
+          .map((o) => o.id)
+          .join(',')}&limit=${response.data.length}`,
         {
           dataKey: 'results',
         },
