@@ -160,8 +160,6 @@ export default {
 
       this.zoomTo([root.x, root.y, root.r * 2.0]);
 
-      const ctx = this;
-
       const simulation = d3
         .forceSimulation()
         .force(
@@ -196,7 +194,7 @@ export default {
         );
 
       // Apply these forces to the nodes and update their positions.
-      simulation.nodes(root.descendants().slice(1)).on('tick', (d) => {
+      simulation.nodes(root.descendants().slice(1)).on('tick', () => {
         const k = this.getInnerWidth() / (root.r * 2);
         this.label.attr(
           'transform',
