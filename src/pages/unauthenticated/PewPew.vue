@@ -813,7 +813,7 @@ export default {
   async mounted() {
     await this.loadPageData();
     // rotate through d3 chart tabs after every 10 seconds
-    // this.startTabCirculationTimer(10000);
+    this.startTabCirculationTimer(10000);
   },
   methods: {
     async loadPageData() {
@@ -1801,16 +1801,17 @@ export default {
       this.orgInfo.generalInfo = item;
       this.orgInfo.generalInfo.avatar = this.getLogoUrl(item.id);
       this.orgInfo.generalInfo.organization = organization;
-      this.orgInfo.generalInfo.capabilities =
-        await this.getOrganizationCapabilities(item.id);
-      this.orgInfo.generalInfo.statistics =
-        await this.getOrganizationStatisticsByIncident(item.id);
-      this.orgInfo.generalInfo.statistics = {
-        ...this.orgInfo.generalInfo.statistics,
-      };
-      this.orgInfo.generalInfo.capabilities = {
-        ...this.orgInfo.generalInfo.capabilities,
-      };
+
+      // fetch statistics object and convert it into array
+      this.orgInfo.generalInfo.capabilities = Object.values(
+        await this.getOrganizationCapabilities(item.id),
+      );
+
+      // fetch capabilities object and convert it into array
+      this.orgInfo.generalInfo.statistics = Object.values(
+        await this.getOrganizationStatisticsByIncident(item.id),
+      );
+
       const modal = document.querySelector('div.x-translate');
       if (modal) {
         modal.classList.remove('x-translate');
