@@ -1425,7 +1425,7 @@ export default {
       this.removeLayer('live_layer');
       const liveLayer = getLiveLayer();
       liveLayer.addTo(this.map);
-      this.$refs.cards.clearCards();
+      // this.$refs.cards.clearCards();
       this.markerSpeed =
         Number(100 / this.liveEvents.length).toFixed(0) * this.cadence;
       this.generatePoints();
