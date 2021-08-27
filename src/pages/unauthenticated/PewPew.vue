@@ -1114,7 +1114,10 @@ export default {
       const { data } = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/live_events?${queryString}`,
       );
-      this.liveEvents = data.results;
+      const liveEvents = [...data.results];
+      liveEvents.reverse();
+      this.liveEvents = liveEvents;
+
       this.lastEventTimestamp = this.$moment().toISOString();
     },
 
