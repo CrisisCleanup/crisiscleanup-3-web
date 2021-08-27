@@ -33,11 +33,19 @@
       />
     </div>
 
-    <div class="p-2 border-b border-crisiscleanup-dark-300">
+    <div class="p-1 border-b border-crisiscleanup-dark-300">
       <div class="grid grid-cols-2">
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 text-bodyxsm">
+          <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
             {{ $t('~~TYPE') }}
+            <ccu-icon
+              v-tooltip="{
+                content: $t('~~Type Description'),
+                trigger: 'click',
+                classes: 'interactive-tooltip w-auto',
+              }"
+              v-bind="helpTooltipAttrs"
+            />
           </div>
           <div v-if="generalInfo.organization">
             {{
@@ -50,16 +58,32 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 text-bodyxsm">
+          <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
             {{ $t('ROLE') }}
+            <ccu-icon
+              v-tooltip="{
+                content: $t('~~Role Description'),
+                trigger: 'click',
+                classes: 'interactive-tooltip w-auto',
+              }"
+              v-bind="helpTooltipAttrs"
+            />
           </div>
           <div>{{ $t(generalInfo.role ? generalInfo.role : '~~Unknown') }}</div>
         </div>
       </div>
-      <div class="grid grid-cols-4 mt-2">
+      <div class="grid grid-cols-4 gap-1 mt-2">
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
+          <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('~~INCIDENTS') }}
+            <ccu-icon
+              v-tooltip="{
+                content: $t('~~Incidents Description'),
+                trigger: 'click',
+                classes: 'interactive-tooltip w-auto',
+              }"
+              v-bind="helpTooltipAttrs"
+            />
           </div>
           <div>
             {{
@@ -72,24 +96,48 @@
           </div>
         </div>
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
+          <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('~~CLAIMED') }}
+            <ccu-icon
+              v-tooltip="{
+                content: $t('~~Claimed Description'),
+                trigger: 'click',
+                classes: 'interactive-tooltip w-auto',
+              }"
+              v-bind="helpTooltipAttrs"
+            />
           </div>
           <div>
             {{ $t(generalInfo.claimed_count ? generalInfo.claimed_count : 0) }}
           </div>
         </div>
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
+          <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('~~CALLS') }}
+            <ccu-icon
+              v-tooltip="{
+                content: $t('~~Calls Description'),
+                trigger: 'click',
+                classes: 'interactive-tooltip w-auto',
+              }"
+              v-bind="helpTooltipAttrs"
+            />
           </div>
           <div>
             {{ $t(generalInfo.calls_count ? generalInfo.calls_count : 0) }}
           </div>
         </div>
         <div class="col-span-1">
-          <div class="text-crisiscleanup-dark-300 truncate text-bodyxsm">
+          <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
             {{ $t('~~VALUE') }}
+            <ccu-icon
+              v-tooltip="{
+                content: $t('~~Value Description'),
+                trigger: 'click',
+                classes: 'interactive-tooltip w-auto',
+              }"
+              v-bind="helpTooltipAttrs"
+            />
           </div>
           <div>
             {{ nFormatter(generalInfo.commercial_value) }}
@@ -221,6 +269,14 @@ export default {
     };
   },
   computed: {
+    helpTooltipAttrs() {
+      return {
+        invertColor: true,
+        alt: this.$t('actions.help_alt'),
+        type: 'help',
+        size: 'medium',
+      };
+    },
     incidentTable() {
       const columns = makeTableColumns([
         ['name', '40%'],
