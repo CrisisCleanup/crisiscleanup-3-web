@@ -110,7 +110,7 @@
             />
           </div>
           <div>
-            {{ $t(generalInfo.claimed_count ? generalInfo.claimed_count : 0) }}
+            {{ $t(getTotalCases() || 0) }}
           </div>
         </div>
         <div class="col-span-1">
@@ -280,6 +280,15 @@ export default {
     };
   },
   methods: {
+    getTotalCases() {
+      return _.sumBy(
+        this.generalInfo.statistics,
+        (stat) =>
+          (stat.reported_count || 0) +
+          ((stat.claimed_count || 0) - (stat.closed_count || 0)) +
+          (stat.closed_count || 0),
+      );
+    },
     getRoleNames(roleIds) {
       return _.join(
         _.map(
