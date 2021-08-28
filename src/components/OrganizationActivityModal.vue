@@ -94,13 +94,7 @@
             />
           </div>
           <div>
-            {{
-              $t(
-                generalInfo.incident_count !== null
-                  ? generalInfo.incident_count
-                  : 0,
-              )
-            }}
+            {{ $t(generalInfo.statistics ? generalInfo.statistics.length : 0) }}
           </div>
         </div>
         <div class="col-span-1">
