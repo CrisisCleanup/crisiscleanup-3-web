@@ -69,7 +69,13 @@
               v-bind="helpTooltipAttrs"
             />
           </div>
-          <div>{{ $t(generalInfo.role ? generalInfo.role : 'pewPew.role_description') }}</div>
+          <div>
+            {{
+              $t(
+                generalInfo.role ? generalInfo.role : 'pewPew.role_description',
+              )
+            }}
+          </div>
         </div>
       </div>
       <div class="grid grid-cols-4 gap-1 mt-2">
