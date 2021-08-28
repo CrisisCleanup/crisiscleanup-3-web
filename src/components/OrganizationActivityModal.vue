@@ -141,9 +141,7 @@
               v-bind="helpTooltipAttrs"
             />
           </div>
-          <div>
-            ${{ nFormatter(getTotalValue()) }}
-          </div>
+          <div>${{ nFormatter(getTotalValue()) }}</div>
         </div>
       </div>
     </div>
@@ -189,6 +187,7 @@
           </template>
           <template #reported_count="slotProps">
             <CaseDonutChart
+              v-if="!isDataEmpty(slotProps.item)"
               class="w-8 h-8"
               :chart-id="`case-donut-org-modal-${slotProps.item.id}`"
               :chart-data="{
@@ -201,6 +200,9 @@
               :bg-color="styles.backgroundColor"
               :margin-all="5"
             />
+            <span v-else class="w-8 h-8 flex items-center justify-center">
+              0<span class="pew-pew-blue">*</span>
+            </span>
           </template>
         </Table>
       </transition>
@@ -322,6 +324,13 @@ export default {
       this.$emit('close');
       this.isIncidentHidden = true;
       this.isCapabilityHidden = true;
+    },
+    isDataEmpty(data) {
+      return (
+        (data.reported_count || 0) <= 0 &&
+        (data.claimed_count || 0) - (data.closed_count || 0) <= 0 &&
+        (data.closed_count || 0) <= 0
+      );
     },
   },
   computed: {
