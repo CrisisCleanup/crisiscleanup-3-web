@@ -23,7 +23,7 @@
             @tabSelected="stopSiteInfoTabCirculationTimer"
           >
             <tab
-              :name="$t('~~Live')"
+              :name="$t('pewPew.live')"
               :selected="
                 siteInfoTimerData.isTimerActive &&
                 siteInfoTimerData.activeInfoTab === 0
@@ -627,11 +627,7 @@
                   ribbon-gradient
                 "
               >
-                {{
-                  $t(
-                    '~~* Only reflects what is documented in Crisis Cleanup. This organization may deploy to other disasters, and provide other services not documented here.',
-                  )
-                }}
+                {{ $t('pewPew.org_disclaimer') }}
               </small>
             </div>
             <div class="row-span-5">
@@ -680,7 +676,7 @@
                   </div>
                 </LightTab>
                 <LightTab
-                  :name="$t('~~Completion Rate')"
+                  :name="$t('reports.completion_rate')"
                   class="chart-tab"
                   :selected="
                     chartCirculationTimerData.isTimerActive &&

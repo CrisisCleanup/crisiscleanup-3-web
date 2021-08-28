@@ -1159,10 +1159,8 @@ export default {
     },
     async deleteGroup(group) {
       const result = await this.$confirm({
-        title: this.$t('~~Remove Organization From Group'),
-        content: this.$t(
-          '~~Do you want to remove this organization from this group?',
-        ),
+        title: this.$t('adminOrganization.remove_org_from_group'),
+        content: this.$t('adminOrganization.remove_org_from_group_confirm'),
         actions: {
           no: {
             text: this.$t('actions.cancel'),

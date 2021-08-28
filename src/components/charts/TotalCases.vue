@@ -127,7 +127,7 @@ export default {
             .style('opacity', 1)
             .style('left', `${event.pageX + 10}px`)
             .style('top', `${event.pageY + 10}px`)
-            .text($t(`~~${_.startCase(d.data.name)}: ${d.data.value}`));
+            .text($t(`${_.startCase(d.data.name)}: ${d.data.value}`));
         })
         .on('mouseout', function () {
           d3.select(this).attr('stroke', null);

@@ -97,7 +97,7 @@ export default {
         .attr('dy', '.15em')
         .attr('transform', 'rotate(-35)')
         .append('title')
-        .text((d) => this.$t(`~~${d}`));
+        .text((d) => this.$t(`${d}`));
 
       this.svg
         .append('g')
@@ -313,7 +313,7 @@ export default {
         .selectAll('g')
         .data(this.colorScale.domain())
         .join('text')
-        .text((d) => this.$t(`~~${_.startCase(d)}`))
+        .text((d) => this.$t(`${_.startCase(d)}`))
         .attr('transform', (d, i) => `translate(${i * 70 + 15}, ${5})`)
         .attr('dominant-baseline', 'middle')
         .style('font-size', '8px')

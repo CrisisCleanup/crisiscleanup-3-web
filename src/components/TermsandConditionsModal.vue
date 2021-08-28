@@ -11,7 +11,7 @@
 
       <div class="p-3" v-if="organization.custom_legal_tos">
         <div class="text-base py-1 font-semibold">
-          {{ $t(`~~Your Organization's Terms of Service`) }}
+          {{ $t(`termsConditionsModal.your_organization_terms_conditions`) }}
         </div>
         <div
           v-if="organization.custom_legal_tos"

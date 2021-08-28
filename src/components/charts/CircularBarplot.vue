@@ -349,14 +349,14 @@ export default {
 
       innerTextContainer
         .append('tspan')
-        .text(this.$t('~~Call Volume'))
+        .text(this.$t('pewPew.call_volume'))
         .attr('font-size', `${this.getFontSize()}px`)
         .attr('x', 0)
         .attr('y', `${-2.5 * this.getFontSize()}px`);
 
       innerTextContainer
         .append('tspan')
-        .text(this.$t('~~Total'))
+        .text(this.$t('pewPew.total'))
         .attr('x', 0)
         .attr('y', `${-1 * this.getFontSize()}px`);
 
@@ -369,7 +369,7 @@ export default {
 
       innerTextContainer
         .append('tspan')
-        .text(this.$t('~~Missed'))
+        .text(this.$t('pewPew.missed'))
         .attr('x', 0)
         .attr('y', `${1.5 * this.getFontSize()}px`);
 

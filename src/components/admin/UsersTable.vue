@@ -22,8 +22,8 @@
         "
       />
       <base-button
-        :text="$t('~~See Events')"
-        :alt="$t('~~See Events')"
+        :text="$t('actions.see_events')"
+        :alt="$t('actions.see_events')"
         variant="solid"
         size="small"
         class="mx-2"

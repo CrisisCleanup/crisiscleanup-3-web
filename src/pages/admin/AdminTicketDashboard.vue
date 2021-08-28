@@ -12,7 +12,7 @@
           text-variant="bodysm"
           class="px-2"
           target="_blank"
-          >{{ $t('~~Link') }}</base-link
+          >{{ $t('adminDashboard.link') }}</base-link
         >
       </template>
     </Table>
