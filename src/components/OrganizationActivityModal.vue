@@ -228,8 +228,15 @@
         />
       </transition>
     </section>
+    <div
+      v-if="isLoading"
+      class="absolute inset-0 opacity-75 flex items-center justify-center"
+    >
+      <spinner color="#d3d3d3" />
+    </div>
   </div>
 </template>
+
 <script>
 import _ from 'lodash';
 import Capability from '@/components/Capability.vue';
@@ -257,6 +264,10 @@ export default {
     capability: {
       type: Array,
       default: () => [],
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   async mounted() {
