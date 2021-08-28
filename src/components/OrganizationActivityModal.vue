@@ -99,10 +99,10 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.claimed_upper') }}
+            {{ $t('pewPew.cases_upper') }}
             <ccu-icon
               v-tooltip="{
-                content: $t('pewPew.claimed_description'),
+                content: $t('pewPew.cases_description'),
                 trigger: 'click',
                 classes: 'interactive-tooltip w-auto',
               }"
