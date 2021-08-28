@@ -576,7 +576,7 @@
                 <template #name="slotProps">
                   <img
                     class="w-6 mr-2 rounded-full"
-                    :src="getLogoUrl(slotProps.item.id)"
+                    :src="getLogoUrl(slotProps.item)"
                     :alt="$t('profileOrg.organization_logo')"
                   />
                   <span class="truncate w-32">{{ slotProps.item.name }}</span>
@@ -735,7 +735,6 @@ import CardStack from '@/components/CardStack';
 import { getNearestColor } from '@/utils/colors';
 import { delay } from '@/utils/promise';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
-import Organization from '@/models/Organization';
 import Toggle from '@/components/Toggle';
 import TotalCases from '@/components/charts/TotalCases';
 import PewPewNavBar from '@/components/navigation/PewPewNavBar';
@@ -1022,14 +1021,6 @@ export default {
 
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/reports_data/organization_statistics?${queryString}`,
-      );
-      await Organization.api().get(
-        `/organizations?id__in=${response.data
-          .map((o) => o.id)
-          .join(',')}&limit=${response.data.length}`,
-        {
-          dataKey: 'results',
-        },
       );
       return response.data;
     },
@@ -1823,7 +1814,7 @@ export default {
     async onRowClick(item) {
       const organization = await this.getOrganization(item.id);
       this.orgInfo.generalInfo = item;
-      this.orgInfo.generalInfo.avatar = this.getLogoUrl(item.id);
+      this.orgInfo.generalInfo.avatar = this.getLogoUrl(item);
       this.orgInfo.generalInfo.organization = organization;
 
       // fetch statistics object and convert it into array
@@ -1837,11 +1828,16 @@ export default {
       );
       this.isOrgActivityModalHidden = false;
     },
-    getLogoUrl(organization_id) {
-      const organization = Organization.find(organization_id);
-      return organization
-        ? organization.logo_url
-        : require('@/assets/icons/earth-globe.svg');
+    getLogoUrl(organization) {
+      if (organization.files.length) {
+        const logos = organization.files.filter(
+          (file) => file.file_type_t === 'fileTypes.logo',
+        );
+        if (logos.length) {
+          return logos[0].small_thumbnail_url;
+        }
+      }
+      return require('@/assets/icons/earth-globe.svg');
     },
   },
   computed: {
