@@ -142,7 +142,7 @@
             />
           </div>
           <div>
-            {{ nFormatter(generalInfo.commercial_value) }}
+            {{ nFormatter(getTotalValue()) }}
           </div>
         </div>
       </div>
@@ -280,6 +280,12 @@ export default {
     };
   },
   methods: {
+    getTotalValue() {
+      return _.sumBy(
+        this.generalInfo.statistics,
+        (stat) => stat.commercial_value || 0,
+      );
+    },
     getTotalCalls() {
       return _.sumBy(this.generalInfo.statistics, (stat) => stat.calls || 0);
     },
