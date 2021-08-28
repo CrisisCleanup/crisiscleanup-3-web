@@ -28,7 +28,7 @@
 
       <font-awesome-icon
         class="col-span-1 justify-self-end cursor-pointer rounded-full m-1"
-        @click="$emit('close')"
+        @click="closeModalAndResetState"
         icon="times"
       />
     </div>
@@ -317,6 +317,11 @@ export default {
         ),
         ', ',
       );
+    },
+    closeModalAndResetState() {
+      this.$emit('close');
+      this.isIncidentHidden = true;
+      this.isCapabilityHidden = true;
     },
   },
   computed: {
