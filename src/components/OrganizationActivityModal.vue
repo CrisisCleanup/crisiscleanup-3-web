@@ -142,7 +142,7 @@
             />
           </div>
           <div>
-            {{ nFormatter(getTotalValue()) }}
+            ${{ nFormatter(getTotalValue()) }}
           </div>
         </div>
       </div>
