@@ -558,6 +558,7 @@
                 style="z-index: 1002"
               >
                 <OrganizationActivityModal
+                  :is-loading="isOrgActivityModalLoading"
                   @close="isOrgActivityModalHidden = true"
                   :general-info="orgInfo.generalInfo"
                   :styles="overlayStyles"
@@ -583,12 +584,14 @@
                 </template>
                 <template #incident_count="slotProps">
                   <span class="w-full flex justify-end">
-                    {{ nFormatter(slotProps.item.incident_count) }}*
+                    {{ nFormatter(slotProps.item.incident_count)
+                    }}<span class="pew-pew-blue">*</span>
                   </span>
                 </template>
                 <template #commercial_value="slotProps">
                   <span class="w-full flex justify-end">
-                    ${{ nFormatter(slotProps.item.commercial_value) }}*
+                    ${{ nFormatter(slotProps.item.commercial_value)
+                    }}<span class="pew-pew-blue">*</span>
                   </span>
                 </template>
                 <template #calls_count="slotProps">
@@ -599,6 +602,7 @@
                 <template #reported_count="slotProps">
                   <div class="w-full flex justify-end">
                     <CaseDonutChart
+                      v-if="!isCaseDonutChartDataEmpty(slotProps.item)"
                       class="w-8 h-8"
                       :chart-id="`case-donut-chart-${slotProps.item.id}`"
                       :chart-data="{
@@ -611,6 +615,12 @@
                       :bg-color="styles.backgroundColor"
                       :margin-all="5"
                     />
+                    <span
+                      v-else
+                      class="w-8 h-8 flex items-center justify-center"
+                    >
+                      0<span class="pew-pew-blue">*</span>
+                    </span>
                   </div>
                 </template>
               </Table>
@@ -671,7 +681,7 @@
                     <TotalCases
                       class="h-full w-full"
                       :margin-all="30"
-                      :chart-data="mapStatistics"
+                      :chart-data="totalCasesChartData"
                     />
                   </div>
                 </LightTab>
@@ -774,6 +784,7 @@ export default {
         incidents: [],
         capability: [],
       },
+      isOrgActivityModalLoading: false,
       isOrgActivityModalHidden: true,
       markersLength: 0,
       liveEvents: [],
@@ -1000,6 +1011,14 @@ export default {
         clearInterval(this.chartCirculationTimerData.timerId);
         this.chartCirculationTimerData.isTimerActive = false;
       }
+    },
+    isCaseDonutChartDataEmpty(data) {
+      // check if chart data is 0 for all sections
+      return (
+        (data.reported_count || 0) <= 0 &&
+        (data.claimed_count || 0) - (data.closed_count || 0) <= 0 &&
+        (data.closed_count || 0) <= 0
+      );
     },
     async getRecentIncidents() {
       const response = await this.$http.get(
@@ -1812,10 +1831,12 @@ export default {
       }
     },
     async onRowClick(item) {
+      this.isOrgActivityModalLoading = true;
       const organization = await this.getOrganization(item.id);
       this.orgInfo.generalInfo = item;
       this.orgInfo.generalInfo.avatar = this.getLogoUrl(item);
       this.orgInfo.generalInfo.organization = organization;
+      this.isOrgActivityModalHidden = false;
 
       // fetch statistics object and convert it into array
       this.orgInfo.generalInfo.capabilities = Object.values(
@@ -1826,7 +1847,7 @@ export default {
       this.orgInfo.generalInfo.statistics = Object.values(
         await this.getOrganizationStatisticsByIncident(item.id),
       );
-      this.isOrgActivityModalHidden = false;
+      this.isOrgActivityModalLoading = false;
     },
     getLogoUrl(organization) {
       if (organization.files.length) {
@@ -1907,6 +1928,9 @@ export default {
       return {
         columns,
       };
+    },
+    totalCasesChartData() {
+      return this.mapStatistics.filter((stat) => stat.name !== 'All Cases');
     },
   },
   watch: {

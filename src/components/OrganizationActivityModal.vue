@@ -28,7 +28,7 @@
 
       <font-awesome-icon
         class="col-span-1 justify-self-end cursor-pointer rounded-full m-1"
-        @click="$emit('close')"
+        @click="closeModalAndResetState"
         icon="times"
       />
     </div>
@@ -72,7 +72,9 @@
           <div>
             {{
               $t(
-                generalInfo.role ? generalInfo.role : 'pewPew.role_description',
+                generalInfo.approved_roles
+                  ? getRoleNames(generalInfo.approved_roles)
+                  : 'pewPew.unknown',
               )
             }}
           </div>
@@ -92,21 +94,15 @@
             />
           </div>
           <div>
-            {{
-              $t(
-                generalInfo.incident_count !== null
-                  ? generalInfo.incident_count
-                  : 0,
-              )
-            }}
+            {{ $t(generalInfo.statistics ? generalInfo.statistics.length : 0) }}
           </div>
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.claimed_upper') }}
+            {{ $t('pewPew.cases_upper') }}
             <ccu-icon
               v-tooltip="{
-                content: $t('pewPew.claimed_description'),
+                content: $t('pewPew.cases_description'),
                 trigger: 'click',
                 classes: 'interactive-tooltip w-auto',
               }"
@@ -114,7 +110,7 @@
             />
           </div>
           <div>
-            {{ $t(generalInfo.claimed_count ? generalInfo.claimed_count : 0) }}
+            {{ getTotalCases() || 0 }}
           </div>
         </div>
         <div class="col-span-1">
@@ -130,7 +126,7 @@
             />
           </div>
           <div>
-            {{ $t(generalInfo.calls_count ? generalInfo.calls_count : 0) }}
+            {{ getTotalCalls() || 0 }}
           </div>
         </div>
         <div class="col-span-1">
@@ -145,9 +141,7 @@
               v-bind="helpTooltipAttrs"
             />
           </div>
-          <div>
-            {{ nFormatter(generalInfo.commercial_value) }}
-          </div>
+          <div>${{ nFormatter(getTotalValue()) }}</div>
         </div>
       </div>
     </div>
@@ -181,16 +175,19 @@
           </template>
           <template #calls="slotProps">
             <span class="w-full flex justify-center">
-              {{ nFormatter(slotProps.item.calls || 0) }}*
+              {{ nFormatter(slotProps.item.calls || 0)
+              }}<span class="pew-pew-blue">*</span>
             </span>
           </template>
           <template #commercial_value="slotProps">
             <span class="w-full flex justify-end">
-              ${{ nFormatter(slotProps.item.commercial_value || 0) }}*
+              ${{ nFormatter(slotProps.item.commercial_value || 0)
+              }}<span class="pew-pew-blue">*</span>
             </span>
           </template>
           <template #reported_count="slotProps">
             <CaseDonutChart
+              v-if="!isDataEmpty(slotProps.item)"
               class="w-8 h-8"
               :chart-id="`case-donut-org-modal-${slotProps.item.id}`"
               :chart-data="{
@@ -203,6 +200,9 @@
               :bg-color="styles.backgroundColor"
               :margin-all="5"
             />
+            <span v-else class="w-8 h-8 flex items-center justify-center">
+              0<span class="pew-pew-blue">*</span>
+            </span>
           </template>
         </Table>
       </transition>
@@ -230,9 +230,17 @@
         />
       </transition>
     </section>
+    <div
+      v-if="isLoading"
+      class="absolute inset-0 opacity-75 flex items-center justify-center"
+    >
+      <spinner color="#d3d3d3" />
+    </div>
   </div>
 </template>
+
 <script>
+import _ from 'lodash';
 import Capability from '@/components/Capability.vue';
 import { makeTableColumns } from '@/utils/table';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
@@ -259,12 +267,21 @@ export default {
       type: Array,
       default: () => [],
     },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
   },
   async mounted() {
     const capabilities = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
     );
     this.capabilities = capabilities.data.results;
+
+    const roles = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
+    );
+    this.roles = roles.data.results;
   },
   data() {
     return {
@@ -272,7 +289,49 @@ export default {
       isCapabilityHidden: true,
       nFormatter,
       capabilities: [],
+      roles: [],
     };
+  },
+  methods: {
+    getTotalValue() {
+      return _.sumBy(
+        this.generalInfo.statistics,
+        (stat) => stat.commercial_value || 0,
+      );
+    },
+    getTotalCalls() {
+      return _.sumBy(this.generalInfo.statistics, (stat) => stat.calls || 0);
+    },
+    getTotalCases() {
+      return _.sumBy(
+        this.generalInfo.statistics,
+        (stat) =>
+          (stat.reported_count || 0) +
+          ((stat.claimed_count || 0) - (stat.closed_count || 0)) +
+          (stat.closed_count || 0),
+      );
+    },
+    getRoleNames(roleIds) {
+      return _.join(
+        _.map(
+          roleIds,
+          (id) => _.filter(this.roles, (role) => role.id === id)[0].name_t,
+        ),
+        ', ',
+      );
+    },
+    closeModalAndResetState() {
+      this.$emit('close');
+      this.isIncidentHidden = true;
+      this.isCapabilityHidden = true;
+    },
+    isDataEmpty(data) {
+      return (
+        (data.reported_count || 0) <= 0 &&
+        (data.claimed_count || 0) - (data.closed_count || 0) <= 0 &&
+        (data.closed_count || 0) <= 0
+      );
+    },
   },
   computed: {
     helpTooltipAttrs() {
@@ -308,6 +367,10 @@ export default {
 };
 </script>
 <style lang="postcss" scoped>
+.pew-pew-blue {
+  color: #61d5f8;
+}
+
 .incidents-section,
 .capabilities-section {
   @apply p-2 border-b border-crisiscleanup-dark-300;
