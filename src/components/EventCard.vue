@@ -1,7 +1,7 @@
 <template>
   <div class="text-xs">
     <div class="flex items-center justify-between">
-      <span class="text-sm">{{ $t(`events.${currentEvent.event_key}`) }}</span>
+      <span class="text-sm">{{ getEventTitle(currentEvent.event_key) }}</span>
       <span style="font-size: 10px">{{
         currentEvent.created_at | moment('from', 'now')
       }}</span>
@@ -30,6 +30,12 @@ export default {
     },
   },
   methods: {
+    getEventTitle(event_key) {
+      if (event_key) {
+        return this.$t(`events.${event_key.replace(':', '_')}`);
+      }
+      return event_key;
+    },
     getTranslation(tag, attr) {
       const translated_attrs = Object.fromEntries(
         Object.entries(attr).map(([key, value]) => [

@@ -192,15 +192,13 @@
           >
             {{ $t('pewPew.current') }}
           </div>
-          <div
+          <router-link
             v-for="i in incidents"
             :key="i.id"
-            @click="
-              $router.push({
-                name: 'nav.pew',
-                query: { incident: i.id },
-              })
-            "
+            :to="{
+              name: 'nav.pew',
+              query: { incident: i.id },
+            }"
             class="live-tab px-2"
             :class="
               String(i.id) === String(incidentId) ? 'live-tab--selected' : ''
@@ -208,7 +206,7 @@
           >
             <DisasterIcon class="mx-2" :current-incident="i" />
             {{ i.short_name }}
-          </div>
+          </router-link>
         </div>
         <div class="flex-grow grid grid-cols-12">
           <div class="col-span-8 flex flex-col">
@@ -738,7 +736,7 @@ import CircularBarplot from '@/components/charts/CircularBarplot';
 import D3BarChart from '@/components/charts/D3BarChart';
 import CardStack from '@/components/CardStack';
 import { getNearestColor } from '@/utils/colors';
-import { hash } from '@/utils/promise';
+import { delay } from '@/utils/promise';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
 import Organization from '@/models/Organization';
 import Toggle from '@/components/Toggle';
@@ -864,15 +862,17 @@ export default {
       this.getCompletionRateData().then(() => {});
       this.fetchEngagementData().then(() => {});
       this.fetchSiteStatistics().then(() => {});
+      this.getLatestEvents().then(() => {});
       this.fetchCircularBarplotData(this.$moment(), 30).then(() => {});
-
-      const pageData = await hash({
-        incidents: await this.getRecentIncidents(),
-        organizations: await this.getOrganizations(),
+      this.getRecentIncidents().then((incidents) => {
+        this.incidents = incidents;
       });
-      this.loadMap().then(() => {});
-      this.incidents = pageData.incidents;
-      this.organizations = pageData.organizations;
+      this.getOrganizations().then((organizations) => {
+        this.organizations = organizations;
+      });
+      this.getAllEvents().then((markers) => {
+        this.loadMap(markers).then(() => {});
+      });
 
       const svg = templates.orb
         .replace('{{fillColor}}', '#61D5F8')
@@ -1065,9 +1065,37 @@ export default {
       );
       return response.data;
     },
-    async loadMap() {
+    async loadMap(markers) {
+      if (!this.map) {
+        this.map = L.map('map', {
+          zoomControl: false,
+        }).fitBounds([
+          [17.644022027872726, -122.78314470293876],
+          [50.792047064406866, -69.87298845293874],
+        ]);
+      }
+
+      this.darkTileLayer = L.tileLayer(mapTileLayerDark, {
+        // tileSize: 512,
+        // zoomOffset: -1,
+        attribution: mapAttribution,
+        detectRetina: false,
+        maxZoom: 18,
+        noWrap: false,
+      });
+
+      this.lightTileLayer = L.tileLayer(mapTileLayer, {
+        // tileSize: 512,
+        // zoomOffset: -1,
+        attribution: mapAttribution,
+        detectRetina: false,
+        maxZoom: 18,
+        noWrap: false,
+      });
+      this.setLayer();
+
       this.mapLoading = true;
-      await this.renderMap();
+      await this.renderMap(markers);
       this.$nextTick(() => {
         this.map.panBy([0, 0]);
       });
@@ -1111,55 +1139,20 @@ export default {
       }
 
       const queryString = getQueryString(params);
+      this.lastEventTimestamp = this.$moment().toISOString();
       const { data } = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/live_events?${queryString}`,
       );
       const liveEvents = [...data.results];
       liveEvents.reverse();
       this.liveEvents = liveEvents;
-
-      this.lastEventTimestamp = this.$moment().toISOString();
     },
 
-    async renderMap() {
-      if (!this.map) {
-        this.map = L.map('map', {
-          zoomControl: false,
-        }).fitBounds([
-          [17.644022027872726, -122.78314470293876],
-          [50.792047064406866, -69.87298845293874],
-        ]);
-      }
+    async renderMap(markers) {
       const { map } = this;
-
-      this.darkTileLayer = L.tileLayer(mapTileLayerDark, {
-        // tileSize: 512,
-        // zoomOffset: -1,
-        attribution: mapAttribution,
-        detectRetina: false,
-        maxZoom: 18,
-        noWrap: false,
-      });
-
-      this.lightTileLayer = L.tileLayer(mapTileLayer, {
-        // tileSize: 512,
-        // zoomOffset: -1,
-        attribution: mapAttribution,
-        detectRetina: false,
-        maxZoom: 18,
-        noWrap: false,
-      });
-
-      this.setLayer();
-
       this.events = {
         user_create_worksite: true,
       };
-
-      const [markers] = await Promise.all([
-        this.getAllEvents(),
-        this.getLatestEvents(),
-      ]);
 
       this.markersLength = markers.length;
       this.removeLayer('worksite_layer');
@@ -1437,8 +1430,10 @@ export default {
           const marker = this.liveEvents[this.currentEventIndex];
 
           if (this.currentEventIndex > this.liveEvents.length) {
-            this.pauseGeneratePoints();
             await this.restartLiveEvents();
+            if (this.liveEvents.length === 0) {
+              await delay(5000);
+            }
             return;
           }
 
@@ -1611,6 +1606,7 @@ export default {
       });
     },
     generatePoints() {
+      clearInterval(this.eventsInterval);
       this.eventsInterval = setInterval(this.generateMarker, this.markerSpeed);
     },
     pauseGeneratePoints() {

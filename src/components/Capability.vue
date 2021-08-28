@@ -8,10 +8,8 @@
           </div>
           <div
             class="grid text-center p-1"
-            :class="[
-              $mq === 'sm' ? '' : 'text-bodyxsm',
-              `grid-cols-${phases.length}`,
-            ]"
+            :class="[$mq === 'sm' ? '' : 'text-bodyxsm']"
+            :style="`grid-template-columns: repeat(${phases.length}, minmax(0, 1fr));`"
           >
             <div
               v-for="phase in phases"

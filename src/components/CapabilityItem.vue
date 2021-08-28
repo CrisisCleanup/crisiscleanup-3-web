@@ -15,7 +15,10 @@
       />
     </div>
 
-    <div class="grid gap-1" :class="`grid-cols-${phases.length}`">
+    <div
+      class="grid gap-1"
+      :style="`grid-template-columns: repeat(${phases.length}, minmax(0, 1fr));`"
+    >
       <div
         v-for="phase in phases"
         :key="phase.id"

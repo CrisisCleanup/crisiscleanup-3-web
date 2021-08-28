@@ -7,3 +7,5 @@ export async function hash(hashOfPromises) {
 
   return zipObject(keys, values);
 }
+
+export const delay = async (ms) => new Promise((res) => setTimeout(res, ms));

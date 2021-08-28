@@ -38,7 +38,10 @@ export default {
   },
   computed: {
     style() {
-      return { visibility: this.ready ? 'visible' : 'hidden' };
+      return {
+        visibility: this.ready ? 'visible' : 'hidden',
+        pointerEvents: 'none',
+      };
     },
     incidentImage() {
       if (this.currentIncident && this.currentIncident.incidentImage) {

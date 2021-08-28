@@ -78,8 +78,12 @@ export const D3BaseChartMixin = {
 
     getWidth(): number {
       const chartContainer = this.d3.select(`#${this.chartId}`);
-      if (chartContainer) {
-        return +chartContainer.style('width').slice(0, -2) || 0;
+      try {
+        if (chartContainer) {
+          return +chartContainer.style('width').slice(0, -2) || 0;
+        }
+      } catch (e) {
+        return 0;
       }
       return 0;
     },
