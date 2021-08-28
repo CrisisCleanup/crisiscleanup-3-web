@@ -564,6 +564,7 @@
                 />
               </div>
               <Table
+                :loading="orgsLoading"
                 :columns="orgTable.columns"
                 :data="organizations"
                 :body-style="{ maxHeight: '40vh', ...styles }"
@@ -772,6 +773,7 @@ export default {
       currentPost: null,
       startTime: new Date(),
       mapLoading: false,
+      orgsLoading: false,
       orgInfo: {
         generalInfo: {},
         incidents: [],
@@ -857,6 +859,7 @@ export default {
         );
         this.setLegend();
       }
+      this.orgsLoading = true;
 
       this.getIncidentStats().then(() => {});
       this.getCompletionRateData().then(() => {});
@@ -869,6 +872,7 @@ export default {
       });
       this.getOrganizations().then((organizations) => {
         this.organizations = organizations;
+        this.orgsLoading = false;
       });
       this.getAllEvents().then((markers) => {
         this.loadMap(markers).then(() => {});
