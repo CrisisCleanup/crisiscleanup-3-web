@@ -110,7 +110,7 @@
             />
           </div>
           <div>
-            {{ $t(getTotalCases() || 0) }}
+            {{ getTotalCases() || 0 }}
           </div>
         </div>
         <div class="col-span-1">
@@ -126,7 +126,7 @@
             />
           </div>
           <div>
-            {{ $t(generalInfo.calls_count ? generalInfo.calls_count : 0) }}
+            {{ getTotalCalls() || 0 }}
           </div>
         </div>
         <div class="col-span-1">
@@ -280,6 +280,9 @@ export default {
     };
   },
   methods: {
+    getTotalCalls() {
+      return _.sumBy(this.generalInfo.statistics, (stat) => stat.calls || 0);
+    },
     getTotalCases() {
       return _.sumBy(
         this.generalInfo.statistics,
