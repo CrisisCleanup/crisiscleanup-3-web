@@ -602,6 +602,7 @@
                 <template #reported_count="slotProps">
                   <div class="w-full flex justify-end">
                     <CaseDonutChart
+                      v-if="!isCaseDonutChartDataEmpty(slotProps.item)"
                       class="w-8 h-8"
                       :chart-id="`case-donut-chart-${slotProps.item.id}`"
                       :chart-data="{
@@ -614,6 +615,12 @@
                       :bg-color="styles.backgroundColor"
                       :margin-all="5"
                     />
+                    <span
+                      v-else
+                      class="w-8 h-8 flex items-center justify-center"
+                    >
+                      0<span class="pew-pew-blue">*</span>
+                    </span>
                   </div>
                 </template>
               </Table>
@@ -1004,6 +1011,14 @@ export default {
         clearInterval(this.chartCirculationTimerData.timerId);
         this.chartCirculationTimerData.isTimerActive = false;
       }
+    },
+    isCaseDonutChartDataEmpty(data) {
+      // check if chart data is 0 for all sections
+      return (
+        (data.reported_count || 0) <= 0 &&
+        (data.claimed_count || 0) - (data.closed_count || 0) <= 0 &&
+        (data.closed_count || 0) <= 0
+      );
     },
     async getRecentIncidents() {
       const response = await this.$http.get(
