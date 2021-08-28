@@ -52,7 +52,7 @@
                   />
                 </div>
               </div>
-              <div class="h-full p-2 w-full" v-if="liveEvents.length > 0">
+              <div class="h-full p-2 w-full">
                 <CardStack ref="cards" :key="incidentId" />
               </div>
             </tab>
@@ -329,7 +329,6 @@
                     mt-3
                     mr-3
                   "
-                  v-if="liveEvents.length > 0"
                   :key="incidentId"
                 >
                   <transition-group
@@ -1429,6 +1428,9 @@ export default {
       });
     },
     async restartLiveEvents() {
+      if (this.liveEvents.length === 0) {
+        await delay(5000);
+      }
       this.currentEventIndex = 0;
       await this.getLatestEvents();
       this.removeLayer('live_layer');
@@ -1447,9 +1449,6 @@ export default {
 
           if (this.currentEventIndex > this.liveEvents.length) {
             await this.restartLiveEvents();
-            if (this.liveEvents.length === 0) {
-              await delay(5000);
-            }
             return;
           }
 
