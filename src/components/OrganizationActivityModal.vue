@@ -72,7 +72,9 @@
           <div>
             {{
               $t(
-                generalInfo.role ? generalInfo.role : 'pewPew.role_description',
+                generalInfo.approved_roles
+                  ? getRoleNames(generalInfo.approved_roles)
+                  : 'pewPew.unknown',
               )
             }}
           </div>
@@ -235,6 +237,7 @@
   </div>
 </template>
 <script>
+import _ from 'lodash';
 import Capability from '@/components/Capability.vue';
 import { makeTableColumns } from '@/utils/table';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
@@ -267,6 +270,11 @@ export default {
       `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
     );
     this.capabilities = capabilities.data.results;
+
+    const roles = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
+    );
+    this.roles = roles.data.results;
   },
   data() {
     return {
@@ -274,7 +282,19 @@ export default {
       isCapabilityHidden: true,
       nFormatter,
       capabilities: [],
+      roles: [],
     };
+  },
+  methods: {
+    getRoleNames(roleIds) {
+      return _.join(
+        _.map(
+          roleIds,
+          (id) => _.filter(this.roles, (role) => role.id === id)[0].name_t,
+        ),
+        ', ',
+      );
+    },
   },
   computed: {
     helpTooltipAttrs() {
