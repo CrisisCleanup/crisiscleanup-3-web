@@ -674,7 +674,7 @@
                     <TotalCases
                       class="h-full w-full"
                       :margin-all="30"
-                      :chart-data="mapStatistics"
+                      :chart-data="totalCasesChartData"
                     />
                   </div>
                 </LightTab>
@@ -1913,6 +1913,9 @@ export default {
       return {
         columns,
       };
+    },
+    totalCasesChartData() {
+      return this.mapStatistics.filter((stat) => stat.name !== 'All Cases');
     },
   },
   watch: {
