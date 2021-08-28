@@ -37,10 +37,10 @@
       <div class="grid grid-cols-2">
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
-            {{ $t('~~TYPE') }}
+            {{ $t('pewPew.type') }}
             <ccu-icon
               v-tooltip="{
-                content: $t('~~Type Description'),
+                content: $t('pewPew.type_description'),
                 trigger: 'click',
                 classes: 'interactive-tooltip w-auto',
               }"
@@ -52,33 +52,33 @@
               $t(
                 generalInfo.organization.type_t
                   ? generalInfo.organization.type_t
-                  : '~~Unknown',
+                  : 'pewPew.unknown',
               )
             }}
           </div>
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
-            {{ $t('ROLE') }}
+            {{ $t('pewPew.role') }}
             <ccu-icon
               v-tooltip="{
-                content: $t('~~Role Description'),
+                content: $t('pewPew.role_description'),
                 trigger: 'click',
                 classes: 'interactive-tooltip w-auto',
               }"
               v-bind="helpTooltipAttrs"
             />
           </div>
-          <div>{{ $t(generalInfo.role ? generalInfo.role : '~~Unknown') }}</div>
+          <div>{{ $t(generalInfo.role ? generalInfo.role : 'pewPew.role_description') }}</div>
         </div>
       </div>
       <div class="grid grid-cols-4 gap-1 mt-2">
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('~~INCIDENTS') }}
+            {{ $t('pewPew.incidents') }}
             <ccu-icon
               v-tooltip="{
-                content: $t('~~Incidents Description'),
+                content: $t('pewPew.incidents_description'),
                 trigger: 'click',
                 classes: 'interactive-tooltip w-auto',
               }"
@@ -97,10 +97,10 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('~~CLAIMED') }}
+            {{ $t('pewPew.claimed_upper') }}
             <ccu-icon
               v-tooltip="{
-                content: $t('~~Claimed Description'),
+                content: $t('pewPew.claimed_description'),
                 trigger: 'click',
                 classes: 'interactive-tooltip w-auto',
               }"
@@ -113,10 +113,10 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('~~CALLS') }}
+            {{ $t('pewPew.calls') }}
             <ccu-icon
               v-tooltip="{
-                content: $t('~~Calls Description'),
+                content: $t('pewPew.call_description'),
                 trigger: 'click',
                 classes: 'interactive-tooltip w-auto',
               }"
@@ -129,10 +129,10 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('~~VALUE') }}
+            {{ $t('pewPew.value') }}
             <ccu-icon
               v-tooltip="{
-                content: $t('~~Value Description'),
+                content: $t('pewPew.value_description'),
                 trigger: 'click',
                 classes: 'interactive-tooltip w-auto',
               }"
@@ -151,7 +151,7 @@
         class="flex justify-between items-center cursor-pointer"
         @click="isIncidentHidden = !isIncidentHidden"
       >
-        <span>{{ $t('~~INCIDENTS') }}</span>
+        <span>{{ $t('pewPew.incidents') }}</span>
         <font-awesome-icon
           class="transition duration-500 transform"
           :class="isIncidentHidden ? 'rotate-0' : 'rotate-180'"
@@ -207,7 +207,7 @@
         class="flex justify-between items-center cursor-pointer"
         @click="isCapabilityHidden = !isCapabilityHidden"
       >
-        <span>{{ $t('~~CAPABILITIES') }}</span>
+        <span>{{ $t('pewPew.capabilities') }}</span>
         <font-awesome-icon
           class="transition duration-500 transform"
           :class="isCapabilityHidden ? 'rotate-0' : 'rotate-180'"

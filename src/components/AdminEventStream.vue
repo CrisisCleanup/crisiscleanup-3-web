@@ -12,7 +12,7 @@
           filterEvents = [...value];
         }
       "
-      :placeholder="$t('~~Filter By Event')"
+      :placeholder="$t('adminDashboard.filter_by_event')"
     />
     <base-button icon="sync" :action="getEventLogs" />
     <ul class="list-none m-0 p-0">
@@ -58,8 +58,8 @@
             variant="solid"
             size="small"
             class="text-xs"
-            :text="$t('~~Show Attrs')"
-            :alt="$t('~~Show Attrs')"
+            :text="$t('adminDashboard.show_attrs')"
+            :alt="$t('adminDashboard.show_attrs')"
           />
           <base-button
             :action="
@@ -70,8 +70,8 @@
             variant="solid"
             size="small"
             class="text-xs mx-2"
-            :text="$t('~~Show All Fields')"
-            :alt="$t('~~Show All Fields')"
+            :text="$t('adminDashboard.show_all_fields')"
+            :alt="$t('adminDashboard.show_all_fields')"
           />
         </div>
       </li>
