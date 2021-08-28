@@ -104,7 +104,7 @@ export default {
       if (this.$route.query.from) {
         await this.$router.replace(this.$route.query.from);
       } else {
-        await this.$router.push('/');
+        await this.$router.push('/dashboard');
       }
     },
   },

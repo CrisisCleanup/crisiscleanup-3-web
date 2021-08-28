@@ -841,6 +841,11 @@ export default {
       throttle,
     };
   },
+  created() {
+    if (window.screen.width <= 760) {
+      this.$router.push('/login');
+    }
+  },
   async mounted() {
     await this.loadPageData();
     // rotate through d3 chart tabs after every 10 seconds
@@ -881,9 +886,10 @@ export default {
         this.orgsLoading = false;
       });
       this.getAllEvents().then((markers) => {
-        this.loadMap(markers).then(() => {});
+        this.loadMap(markers).then(() => {
+          this.generatePoints();
+        });
       });
-
       const svg = templates.orb
         .replace('{{fillColor}}', '#61D5F8')
         .replace('{{strokeColor}}', 'black');
