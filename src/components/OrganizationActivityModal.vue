@@ -181,12 +181,14 @@
           </template>
           <template #calls="slotProps">
             <span class="w-full flex justify-center">
-              {{ nFormatter(slotProps.item.calls || 0) }}*
+              {{ nFormatter(slotProps.item.calls || 0)
+              }}<span class="pew-pew-blue">*</span>
             </span>
           </template>
           <template #commercial_value="slotProps">
             <span class="w-full flex justify-end">
-              ${{ nFormatter(slotProps.item.commercial_value || 0) }}*
+              ${{ nFormatter(slotProps.item.commercial_value || 0)
+              }}<span class="pew-pew-blue">*</span>
             </span>
           </template>
           <template #reported_count="slotProps">
@@ -308,6 +310,10 @@ export default {
 };
 </script>
 <style lang="postcss" scoped>
+.pew-pew-blue {
+  color: #61d5f8;
+}
+
 .incidents-section,
 .capabilities-section {
   @apply p-2 border-b border-crisiscleanup-dark-300;

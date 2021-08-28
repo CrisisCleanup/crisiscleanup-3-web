@@ -583,12 +583,14 @@
                 </template>
                 <template #incident_count="slotProps">
                   <span class="w-full flex justify-end">
-                    {{ nFormatter(slotProps.item.incident_count) }}*
+                    {{ nFormatter(slotProps.item.incident_count)
+                    }}<span class="pew-pew-blue">*</span>
                   </span>
                 </template>
                 <template #commercial_value="slotProps">
                   <span class="w-full flex justify-end">
-                    ${{ nFormatter(slotProps.item.commercial_value) }}*
+                    ${{ nFormatter(slotProps.item.commercial_value)
+                    }}<span class="pew-pew-blue">*</span>
                   </span>
                 </template>
                 <template #calls_count="slotProps">
