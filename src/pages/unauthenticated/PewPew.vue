@@ -558,6 +558,7 @@
                 style="z-index: 1002"
               >
                 <OrganizationActivityModal
+                  :is-loading="isOrgActivityModalLoading"
                   @close="isOrgActivityModalHidden = true"
                   :general-info="orgInfo.generalInfo"
                   :styles="overlayStyles"
@@ -776,6 +777,7 @@ export default {
         incidents: [],
         capability: [],
       },
+      isOrgActivityModalLoading: false,
       isOrgActivityModalHidden: true,
       markersLength: 0,
       liveEvents: [],
@@ -1814,10 +1816,12 @@ export default {
       }
     },
     async onRowClick(item) {
+      this.isOrgActivityModalLoading = true;
       const organization = await this.getOrganization(item.id);
       this.orgInfo.generalInfo = item;
       this.orgInfo.generalInfo.avatar = this.getLogoUrl(item);
       this.orgInfo.generalInfo.organization = organization;
+      this.isOrgActivityModalHidden = false;
 
       // fetch statistics object and convert it into array
       this.orgInfo.generalInfo.capabilities = Object.values(
@@ -1828,7 +1832,7 @@ export default {
       this.orgInfo.generalInfo.statistics = Object.values(
         await this.getOrganizationStatisticsByIncident(item.id),
       );
-      this.isOrgActivityModalHidden = false;
+      this.isOrgActivityModalLoading = false;
     },
     getLogoUrl(organization) {
       if (organization.files.length) {
