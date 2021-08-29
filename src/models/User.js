@@ -40,6 +40,7 @@ export default class User extends CCUModel {
       Sentry.setUser(model.$toJson());
       Sentry.setContext('user_states', model.states);
       Sentry.setContext('user_preferences', model.preferences);
+      User.store().commit('auth/setAcl', window.vue.$router);
     }
   }
 
