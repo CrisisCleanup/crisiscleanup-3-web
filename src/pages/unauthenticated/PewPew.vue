@@ -1525,8 +1525,8 @@ export default {
             ]);
 
             const wwtsp = marker.attr[`${marker.map_destination}_wwtsp`];
-            let color = '#d0021b';
-            let strokeColor = '#e30001';
+            let color = '#61D5F8';
+            let strokeColor = '#61D5F8';
             let workTypeKey = null;
             card.color = color;
             card.strokeColor = strokeColor;
