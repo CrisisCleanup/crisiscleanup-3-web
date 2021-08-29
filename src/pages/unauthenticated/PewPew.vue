@@ -715,7 +715,7 @@
 <script>
 import * as L from 'leaflet';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
-import { orderBy, throttle } from 'lodash';
+import { orderBy, throttle, shuffle } from 'lodash';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
 import { nFormatter } from '@/utils/helpers';
@@ -882,7 +882,7 @@ export default {
         this.incidents = incidents;
       });
       this.getOrganizations().then((organizations) => {
-        this.organizations = organizations;
+        this.organizations = shuffle(organizations);
         this.orgsLoading = false;
       });
       this.getAllEvents().then((markers) => {
