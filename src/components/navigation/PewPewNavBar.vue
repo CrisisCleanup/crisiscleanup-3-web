@@ -28,7 +28,7 @@
           {{ r.title }}
         </div>
       </a>
-      <router-link v-else :key="r.title" :to="r.routeProps" target="_blank">
+      <router-link v-else :key="r.title" :to="r.routeProps">
         <div class="pewpew__navlink">
           <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
@@ -43,7 +43,7 @@
       <base-button
         class="text-black text-xs font-semibold flex flex-grow p-1"
         variant="solid"
-        :action="() => routeNewTab({ name: 'nav.register' })"
+        :action="() => $router.push({ name: 'nav.register' })"
       >
         {{ $t('actions.register') }}
       </base-button>
@@ -64,14 +64,6 @@ export default {
     colorMode: {
       type: String,
       required: true,
-    },
-  },
-  methods: {
-    routeNewTab(routeLocation) {
-      const route = this.$router.resolve(routeLocation);
-      if (route && route.href) {
-        window.open(route.href, '_blank');
-      }
     },
   },
   computed: {

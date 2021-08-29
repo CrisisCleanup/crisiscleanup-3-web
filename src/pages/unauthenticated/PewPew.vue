@@ -713,7 +713,7 @@
 <script>
 import * as L from 'leaflet';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
-import { orderBy, throttle }  from 'lodash';
+import { orderBy, throttle } from 'lodash';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
 import { nFormatter } from '@/utils/helpers';
