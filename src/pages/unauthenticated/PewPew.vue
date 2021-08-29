@@ -713,7 +713,7 @@
 <script>
 import * as L from 'leaflet';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
-import { orderBy, throttle } from 'lodash';
+import { orderBy, throttle, delay } from 'lodash';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
 import { nFormatter } from '@/utils/helpers';
@@ -742,7 +742,6 @@ import CircularBarplot from '@/components/charts/CircularBarplot';
 import D3BarChart from '@/components/charts/D3BarChart';
 import CardStack from '@/components/CardStack';
 import { getNearestColor } from '@/utils/colors';
-import { delay } from '@/utils/promise';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
 import Toggle from '@/components/Toggle';
 import TotalCases from '@/components/charts/TotalCases';
@@ -1429,7 +1428,7 @@ export default {
     },
     async restartLiveEvents() {
       if (this.liveEvents.length === 0) {
-        await delay(5000);
+        return delay(this.restartLiveEvents, 5000);
       }
       this.currentEventIndex = 0;
       await this.getLatestEvents();
@@ -1440,6 +1439,7 @@ export default {
       this.markerSpeed =
         Number(100 / this.liveEvents.length).toFixed(0) * this.cadence;
       this.generatePoints();
+      return undefined;
     },
     async generateMarker() {
       this.map.eachLayer(async (layer) => {
