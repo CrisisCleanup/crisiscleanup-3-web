@@ -2,6 +2,7 @@ import { mapGetters } from 'vuex';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
 import { getErrorMessage } from '@/utils/errors';
+import { AuthService } from '@/services/auth.service';
 
 export default {
   methods: {
@@ -31,11 +32,28 @@ export default {
     getUser(id) {
       return User.find(id);
     },
+    async getCurrentUser() {
+      let user;
+      try {
+        await User.api().get('/users/me', {});
+        user = User.find(this.$store.getters['auth/userId']);
+        AuthService.updateUser(user.$toJson());
+        return user;
+      } catch {
+        await AuthService.removeUser();
+        await this.$store.dispatch('auth/logout');
+        return null;
+      }
+    },
   },
   computed: {
     ...mapGetters('auth', ['isLoggedIn', 'isOrphan', 'userId']),
     currentUser() {
-      return User.find(this.userId);
+      let user = User.find(this.userId);
+      if (!user) {
+        user = this.getCurrentUser().then((u) => u);
+      }
+      return user;
     },
   },
 };
