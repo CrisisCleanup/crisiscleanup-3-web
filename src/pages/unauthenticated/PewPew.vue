@@ -713,7 +713,7 @@
 <script>
 import * as L from 'leaflet';
 import { Sprite, Texture, Graphics, utils as pixiUtils } from 'pixi.js';
-import { orderBy, throttle, delay } from 'lodash';
+import { orderBy, throttle }  from 'lodash';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
 import { nFormatter } from '@/utils/helpers';
@@ -1426,21 +1426,26 @@ export default {
         }
       });
     },
-    async restartLiveEvents() {
-      if (this.liveEvents.length === 0) {
-        return delay(this.restartLiveEvents, 5000);
-      }
-      this.currentEventIndex = 0;
-      await this.getLatestEvents();
-      this.removeLayer('live_layer');
-      const liveLayer = getLiveLayer();
-      liveLayer.addTo(this.map);
-      // this.$refs.cards.clearCards();
-      this.markerSpeed =
-        Number(100 / this.liveEvents.length).toFixed(0) * this.cadence;
-      this.generatePoints();
-      return undefined;
-    },
+    restartLiveEvents: throttle(
+      async function () {
+        this.$log.debug('restarting live events');
+        if (this.liveEvents.length === 0) {
+          return this.restartLiveEvents();
+        }
+        this.currentEventIndex = 0;
+        await this.getLatestEvents();
+        this.removeLayer('live_layer');
+        const liveLayer = getLiveLayer();
+        liveLayer.addTo(this.map);
+        // this.$refs.cards.clearCards();
+        this.markerSpeed =
+          Number(100 / this.liveEvents.length).toFixed(0) * this.cadence;
+        this.generatePoints();
+        return undefined;
+      },
+      5000,
+      { trailing: false },
+    ),
     async generateMarker() {
       this.map.eachLayer(async (layer) => {
         if (layer.key === 'live_layer') {
