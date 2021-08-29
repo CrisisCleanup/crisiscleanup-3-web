@@ -53,6 +53,7 @@
 
 <script>
 import _ from 'lodash';
+import { mapGetters } from 'vuex';
 import { UserMixin } from '@/mixins';
 import { HomeNavigation } from '@/components/home/SideNav.vue';
 import { FooterNavigation } from '@/components/home/Footer.vue';
@@ -67,6 +68,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('incident', ['currentIncident']),
     publicRoutes() {
       const _homeSideRoutes = _.keyBy(HomeNavigation, 'key');
       const _homeFooterRoutes = _.keyBy(FooterNavigation, 'key');
@@ -83,7 +85,14 @@ export default {
     routes() {
       return {
         dashboard: {},
-        cases: {},
+        cases: {
+          route: {
+            name: 'nav.new_case',
+            params: {
+              incidentId: this.currentIncident && this.currentIncident.id,
+            },
+          },
+        },
         phone: {
           disabled: !this.$can || !this.$can('phone_agent'),
         },
