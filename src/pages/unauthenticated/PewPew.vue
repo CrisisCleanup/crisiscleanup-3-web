@@ -131,9 +131,11 @@
                       </div>
                     </template>
                   </div>
+                  <!-- Add future statistics stub
                   <div class="underline text-blue-600">
                     {{ $t('reports.pp_site_stats_more_stats') }}
                   </div>
+                  -->
                 </div>
               </div>
             </tab>
