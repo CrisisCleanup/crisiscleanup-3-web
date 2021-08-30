@@ -143,11 +143,11 @@ export default {
       this.textContainer = this.svg
         .append('g')
         .attr('class', 'text-label')
-        .attr('transform', `translate(0, ${this.getInnerRadius() * 0.1})`)
+        .attr('transform', `translate(0, ${-this.getInnerRadius() / 3})`)
         .append('text')
         .attr('text-anchor', 'middle')
-        .attr('font-size', `${this.getFontSize()}px`)
-        .attr('fill', '#fefefe');
+        .attr('x', 0)
+        .attr('y', 0);
 
       this.renderOverallInfo();
       this.renderTotalCalls();
@@ -349,36 +349,39 @@ export default {
 
       innerTextContainer
         .append('tspan')
-        .text(this.$t('pewPew.call_volume'))
-        .attr('font-size', `${this.getFontSize()}px`)
+        .attr('font-size', this.getInnerRadius() * 0.2)
+        .attr('font-weight', 'bold')
+        .attr('fill', '#ffffff')
         .attr('x', 0)
-        .attr('y', `${-2.5 * this.getFontSize()}px`);
+        .attr('dy', `${0}em`)
+        .text(this.$t('pewPew.calls'));
 
       innerTextContainer
         .append('tspan')
-        .text(this.$t('pewPew.total'))
+        .attr('font-size', this.getInnerRadius() * 0.23)
+        .attr('font-weight', 'bold')
+        .attr('fill', this.colorScale('calls'))
         .attr('x', 0)
-        .attr('y', `${-1 * this.getFontSize()}px`);
+        .attr('dy', `${1.1}em`)
+        .text((d) => this.$t(`${d.calls}`));
 
       innerTextContainer
         .append('tspan')
-        .text((d) => this.$t(`${d.calls}`))
+        .attr('font-size', this.getInnerRadius() * 0.2)
+        .attr('font-weight', 'bold')
+        .attr('fill', '#ffffff')
         .attr('x', 0)
-        .attr('font-size', `${this.getFontSize()}px`)
-        .attr('y', `${0}px`);
+        .attr('dy', `${1.5}em`)
+        .text(this.$t('pewPew.missed'));
 
       innerTextContainer
         .append('tspan')
-        .text(this.$t('pewPew.missed'))
+        .attr('font-size', this.getInnerRadius() * 0.23)
+        .attr('font-weight', 'bold')
+        .attr('fill', this.colorScale('missed'))
         .attr('x', 0)
-        .attr('y', `${1.5 * this.getFontSize()}px`);
-
-      innerTextContainer
-        .append('tspan')
-        .text((d) => this.$t(`${d.missed}`))
-        .attr('font-size', `${this.getFontSize()}px`)
-        .attr('x', 0)
-        .attr('y', `${2.5 * this.getFontSize()}px`);
+        .attr('dy', `${1.1}em`)
+        .text((d) => this.$t(`${d.missed}`));
     },
   },
 };
