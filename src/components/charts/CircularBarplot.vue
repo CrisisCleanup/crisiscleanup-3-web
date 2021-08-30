@@ -189,7 +189,7 @@ export default {
             .outerRadius((d) => this.y(d.calls))
             .startAngle((d) => this.x(d.name))
             .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-            .padAngle(0.05),
+            .padAngle(0.025),
         )
         .style('opacity', '1')
         .attr('transform', 'scale(1)');
@@ -239,7 +239,7 @@ export default {
             .outerRadius((d) => this.y(d.missed))
             .startAngle((d) => this.x(d.name))
             .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-            .padAngle(0.05),
+            .padAngle(0.03),
         )
         .style('opacity', '1')
         .attr('transform', 'scale(1)');
