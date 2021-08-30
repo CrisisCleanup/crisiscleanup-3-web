@@ -355,83 +355,77 @@
                   </transition-group>
                 </div>
                 <div
+                  v-if="displayedWorkTypeSvgs.length > 0"
+                  class="
+                    absolute
+                    bottom-0
+                    left-0
+                    w-1/3
+                    h-auto
+                    bg-crisiscleanup-dark-400
+                    p-2
+                    ml-3
+                    bg-opacity-25
+                  "
+                  style="z-index: 1001; bottom: 25%"
+                >
+                  <div
+                    class="
+                      flex
+                      justify-between
+                      font-bold
+                      my-1
+                      text-white text-sm
+                    "
+                  >
+                    <span>
+                      {{ $t('worksiteMap.legend') }}
+                    </span>
+                    <span
+                      class="cursor-pointer"
+                      @click="isLegendHidden = !isLegendHidden"
+                    >
+                      <font-awesome-icon v-if="!isLegendHidden" icon="minus" />
+                      <font-awesome-icon v-else icon="plus" />
+                    </span>
+                  </div>
+                  <transition name="fade">
+                    <div
+                      class="flex flex-wrap justify-between"
+                      v-if="!isLegendHidden"
+                    >
+                      <div
+                        v-for="entry in displayedWorkTypeSvgs"
+                        :key="entry.key"
+                        class="
+                          flex
+                          items-center
+                          w-1/2
+                          mb-1
+                          cursor-pointer
+                          hover:border-2
+                        "
+                        :class="entry.selected ? 'selected border-2' : 'my-1'"
+                        @click="
+                          () => {
+                            entry.selected = !entry.selected;
+                            displayedWorkTypeSvgs = [...displayedWorkTypeSvgs];
+                            refresh();
+                          }
+                        "
+                      >
+                        <div class="map-svg-container" v-html="entry.svg"></div>
+                        <span class="text-xs ml-1 text-white">{{
+                          entry.key | getWorkTypeName
+                        }}</span>
+                      </div>
+                    </div>
+                  </transition>
+                </div>
+                <div
                   style="z-index: 1001"
                   class="absolute left-0 bottom-0 right-0"
                 >
-                  <div
-                    v-if="displayedWorkTypeSvgs.length > 0"
-                    class="
-                      legend
-                      w-56
-                      h-auto
-                      bg-crisiscleanup-dark-400
-                      p-2
-                      mb-5
-                      ml-3
-                      bg-opacity-25
-                    "
-                  >
-                    <div
-                      class="
-                        flex
-                        justify-between
-                        font-bold
-                        my-1
-                        text-white text-sm
-                      "
-                    >
-                      <span>
-                        {{ $t('worksiteMap.legend') }}
-                      </span>
-                      <span
-                        class="cursor-pointer"
-                        @click="isLegendHidden = !isLegendHidden"
-                      >
-                        <font-awesome-icon
-                          v-if="!isLegendHidden"
-                          icon="minus"
-                        />
-                        <font-awesome-icon v-else icon="plus" />
-                      </span>
-                    </div>
-                    <transition name="fade">
-                      <div
-                        class="flex flex-wrap justify-between"
-                        v-if="!isLegendHidden"
-                      >
-                        <div
-                          v-for="entry in displayedWorkTypeSvgs"
-                          :key="entry.key"
-                          class="
-                            flex
-                            items-center
-                            w-1/2
-                            mb-1
-                            cursor-pointer
-                            hover:border-2
-                          "
-                          :class="entry.selected ? 'selected border-2' : 'my-1'"
-                          @click="
-                            () => {
-                              entry.selected = !entry.selected;
-                              displayedWorkTypeSvgs = [
-                                ...displayedWorkTypeSvgs,
-                              ];
-                              refresh();
-                            }
-                          "
-                        >
-                          <div
-                            class="map-svg-container"
-                            v-html="entry.svg"
-                          ></div>
-                          <span class="text-xs ml-1 text-white">{{
-                            entry.key | getWorkTypeName
-                          }}</span>
-                        </div>
-                      </div>
-                    </transition>
-                  </div>
                   <div class="relative">
                     <img
                       src="@/assets/cc-logo.svg"
