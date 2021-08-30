@@ -37,7 +37,7 @@
       <div class="grid grid-cols-2">
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
-            {{ $t('pewPew.type') }}
+            {{ $t('pewPew.type') | upper }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.type_description'),
@@ -59,7 +59,7 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 text-bodyxsm">
-            {{ $t('pewPew.role') }}
+            {{ $t('pewPew.role') | upper }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.role_description'),
@@ -83,7 +83,7 @@
       <div class="grid grid-cols-4 gap-1 mt-2">
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.incidents') }}
+            {{ $t('pewPew.incidents') | upper }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.incidents_description'),
@@ -99,7 +99,7 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.cases_upper') }}
+            {{ $t('pewPew.cases') | upper }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.cases_description'),
@@ -115,7 +115,7 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.calls') }}
+            {{ $t('pewPew.calls') | upper }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.call_description'),
@@ -131,7 +131,7 @@
         </div>
         <div class="col-span-1">
           <div class="flex text-crisiscleanup-dark-300 truncate text-bodyxsm">
-            {{ $t('pewPew.value') }}
+            {{ $t('pewPew.value') | upper }}
             <ccu-icon
               v-tooltip="{
                 content: $t('pewPew.value_description'),
@@ -151,7 +151,7 @@
         class="flex justify-between items-center cursor-pointer"
         @click="isIncidentHidden = !isIncidentHidden"
       >
-        <span>{{ $t('pewPew.incidents') }}</span>
+        <span>{{ $t('pewPew.incidents') | upper }}</span>
         <font-awesome-icon
           class="transition duration-500 transform"
           :class="isIncidentHidden ? 'rotate-0' : 'rotate-180'"
@@ -213,7 +213,7 @@
         class="flex justify-between items-center cursor-pointer"
         @click="isCapabilityHidden = !isCapabilityHidden"
       >
-        <span>{{ $t('pewPew.capabilities') }}</span>
+        <span>{{ $t('pewPew.capabilities') | upper }}</span>
         <font-awesome-icon
           class="transition duration-500 transform"
           :class="isCapabilityHidden ? 'rotate-0' : 'rotate-180'"
