@@ -28,7 +28,7 @@
           style="
             display: grid;
             grid-template-columns: auto;
-            grid-template-rows: repeat(auto-fill, 125px);
+            grid-auto-rows: min-content;
           "
           class="overflow-auto h-120"
         >
@@ -64,7 +64,7 @@
             <div>
               {{ getCaseCompletion(team) }} {{ $t('teams.cases_completed') }}
             </div>
-            <div class="mt-2 flex">
+            <div class="mt-2 grid users-avatars-list">
               <template v-for="user in team.users.map((u) => getUser(u))">
                 <Avatar
                   v-if="user"
@@ -237,4 +237,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.users-avatars-list {
+  grid-template-columns: repeat(auto-fill, 3.5rem);
+}
+</style>

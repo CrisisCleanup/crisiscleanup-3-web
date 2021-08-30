@@ -1602,7 +1602,9 @@ export default {
 
             layer._pixiContainer.addChild(patientMarkerSprite);
           }
-          this.$refs.cards.addCardComponent(card);
+          if (this.$refs.cards) {
+            this.$refs.cards.addCardComponent(card);
+          }
 
           layer._renderer.render(layer._pixiContainer);
           layer.redraw();
