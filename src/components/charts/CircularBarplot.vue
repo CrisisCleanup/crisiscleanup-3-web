@@ -339,16 +339,12 @@ export default {
     },
 
     renderCaseInfo(info) {
-      // remove existing tspan
-      this.textContainer.selectAll('tspan').remove();
-
       const innerTextContainer = this.textContainer
         .selectAll('tspan')
-        .data([info], (d) => d.name)
-        .enter();
+        .data([info], (d) => d.name);
 
       innerTextContainer
-        .append('tspan')
+        .join('tspan')
         .attr('font-size', this.getInnerRadius() * 0.2)
         .attr('font-weight', 'bold')
         .attr('fill', '#ffffff')
@@ -357,16 +353,18 @@ export default {
         .text(this.$t('pewPew.calls'));
 
       innerTextContainer
-        .append('tspan')
+        .join('tspan')
         .attr('font-size', this.getInnerRadius() * 0.23)
         .attr('font-weight', 'bold')
         .attr('fill', this.colorScale('calls'))
         .attr('x', 0)
         .attr('dy', `${1.1}em`)
-        .text((d) => this.$t(`${d.calls}`));
+        .transition()
+        .duration(400)
+        .textTween((d) => d3.interpolateRound(0, this.$t(`${d.calls}`)));
 
       innerTextContainer
-        .append('tspan')
+        .join('tspan')
         .attr('font-size', this.getInnerRadius() * 0.2)
         .attr('font-weight', 'bold')
         .attr('fill', '#ffffff')
@@ -375,13 +373,15 @@ export default {
         .text(this.$t('pewPew.missed'));
 
       innerTextContainer
-        .append('tspan')
+        .join('tspan')
         .attr('font-size', this.getInnerRadius() * 0.23)
         .attr('font-weight', 'bold')
         .attr('fill', this.colorScale('missed'))
         .attr('x', 0)
         .attr('dy', `${1.1}em`)
-        .text((d) => this.$t(`${d.missed}`));
+        .transition()
+        .duration(400)
+        .textTween((d) => d3.interpolateRound(0, this.$t(`${d.missed}`)));
     },
   },
 };
