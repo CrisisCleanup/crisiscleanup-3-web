@@ -246,6 +246,7 @@ import { makeTableColumns } from '@/utils/table';
 import CaseDonutChart from '@/components/charts/CaseDonutChart';
 import { nFormatter } from '@/utils/helpers';
 import Table from '@/components/Table';
+import { cachedGet } from '@/utils/promise';
 
 export default {
   name: 'OrganizationActivityModal',
@@ -273,13 +274,17 @@ export default {
     },
   },
   async mounted() {
-    const capabilities = await this.$http.get(
+    const capabilities = await cachedGet(
       `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
+      {},
+      'organization_capabilities',
     );
     this.capabilities = capabilities.data.results;
 
-    const roles = await this.$http.get(
+    const roles = await cachedGet(
       `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
+      {},
+      'organizations_roles',
     );
     this.roles = roles.data.results;
   },

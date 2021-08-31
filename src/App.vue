@@ -18,7 +18,7 @@ import { mapActions, mapGetters, mapMutations } from 'vuex';
 import CCP from '@/components/phone/CCP.vue';
 import Version from '@/components/Version.vue';
 import BannerOverlay from '@/components/notifications/BannerOverlay';
-import { hash } from '@/utils/promise';
+import { cachedGet, hash } from '@/utils/promise';
 import PhoneLegacy from './pages/phone_legacy/Index';
 
 const defaultLayout = 'authenticated';
@@ -72,45 +72,50 @@ export default {
     ]),
     async getEnums() {
       const enums = await hash({
-        statuses: this.$http.get(
+        statuses: cachedGet(
           `${process.env.VUE_APP_API_BASE_URL}/statuses`,
           {
             headers: {
               Authorization: null,
             },
           },
+          'statuses',
         ),
-        workTypes: this.$http.get(
+        workTypes: cachedGet(
           `${process.env.VUE_APP_API_BASE_URL}/work_types`,
           {
             headers: {
               Authorization: null,
             },
           },
+          'work_types',
         ),
-        phases: this.$http.get(
+        phases: cachedGet(
           `${process.env.VUE_APP_API_BASE_URL}/incidents_phases`,
           {
             headers: {
               Authorization: null,
             },
           },
+          'incidents_phases',
         ),
-        locationTypes: this.$http.get(
+        locationTypes: cachedGet(
           `${process.env.VUE_APP_API_BASE_URL}/location_types`,
           {
             headers: {
               Authorization: null,
             },
           },
+          'location_types',
         ),
-        portal: this.$http.get(
+        portal: cachedGet(
           `${process.env.VUE_APP_API_BASE_URL}/portals/current`,
           {
             headers: {
               Authorization: null,
             },
           },
+          'portal',
         ),
       });
       this.setStatuses(enums.statuses.data.results);

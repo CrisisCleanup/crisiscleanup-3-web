@@ -77,7 +77,6 @@ import NavMenu from '@/components/navigation/NavMenu';
 import Loader from '@/components/Loader';
 import TermsandConditionsModal from '@/components/TermsandConditionsModal';
 import Header from '@/components/header/Header.vue';
-import OrganizationRole from '@/models/OrganizationRole';
 import PhoneStatus from '../models/PhoneStatus';
 import CompletedTransferModal from '../components/CompletedTransferModal';
 import { AuthService } from '../services/auth.service';
@@ -234,16 +233,17 @@ export default {
       Language.api().get('/languages', {
         dataKey: 'results',
       }),
+    ]);
+    try {
       Role.api().get('/roles', {
         dataKey: 'results',
-      }),
-      OrganizationRole.api().get('/organization_roles', {
-        dataKey: 'results',
-      }),
+      });
       PhoneStatus.api().get('/phone_statuses', {
         dataKey: 'results',
-      }),
-    ]);
+      });
+    } catch (e) {
+      // TODO(tobi): Empty for now make this better
+    }
     await this.getUserTransferRequests();
     await this.setupLanguage();
     this.setAcl(this.$router);

@@ -742,7 +742,7 @@ import DragDrop from '@/components/DragDrop';
 import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
 import LocationTool from '../../components/LocationTool';
-import { hash } from '../../utils/promise';
+import { hash, cachedGet } from '../../utils/promise';
 import { DialogsMixin, CapabilityMixin } from '../../mixins';
 import { mapTileLayer } from '../../utils/map';
 import GroupSearchInput from '../../components/GroupSearchInput';
@@ -918,11 +918,15 @@ export default {
           organization: await this.$http.get(
             `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}`,
           ),
-          roles: await this.$http.get(
+          roles: await cachedGet(
             `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
+            {},
+            'organizations_roles',
           ),
-          capabilities: await this.$http.get(
+          capabilities: await cachedGet(
             `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
+            {},
+            'organization_capabilities',
           ),
           organizationCapabilities: await this.$http.get(
             `${process.env.VUE_APP_API_BASE_URL}/admins/organization_organizations_capabilities?organization=${this.$route.params.organization_id}`,

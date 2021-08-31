@@ -86,6 +86,7 @@ import Table from '@/components/Table';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
 import OrganizationApprovalDialog from '@/components/dialogs/OrganizationApprovalDialog';
+import { cachedGet } from '@/utils/promise';
 
 const responseDialog = create(OrganizationApprovalDialog);
 
@@ -111,8 +112,10 @@ export default {
     },
   },
   async mounted() {
-    const organizationRolesResponse = await this.$http.get(
+    const organizationRolesResponse = await cachedGet(
       `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
+      {},
+      'organizations_roles',
     );
     this.organizationRoles = organizationRolesResponse.data.results;
   },

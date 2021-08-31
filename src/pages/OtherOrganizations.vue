@@ -142,6 +142,7 @@ import Table from '@/components/Table';
 import User from '@/models/User';
 import { getQueryString } from '../utils/urls';
 import enums from '../store/modules/enums';
+import { cachedGet } from '@/utils/promise';
 
 export default {
   name: 'OtherOrganizations',
@@ -227,8 +228,10 @@ export default {
     ...mapState('incident', ['currentIncidentId']),
   },
   async mounted() {
-    const organizationRolesResponse = await this.$http.get(
+    const organizationRolesResponse = await cachedGet(
       `${process.env.VUE_APP_API_BASE_URL}/organization_roles`,
+      {},
+      'organizations_roles',
     );
     this.organizationRoles = organizationRolesResponse.data.results;
 

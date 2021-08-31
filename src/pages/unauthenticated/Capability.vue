@@ -132,6 +132,7 @@
 <script>
 import { mapState } from 'vuex';
 import { childrenBy, groupBy } from '@/utils/array';
+import { cachedGet } from '@/utils/promise';
 
 export default {
   name: 'Capability',
@@ -149,8 +150,10 @@ export default {
     },
   },
   async mounted() {
-    const capabilities = await this.$http.get(
+    const capabilities = await cachedGet(
       `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
+      {},
+      'organization_capabilities',
     );
     this.capabilitiesTree = childrenBy(
       groupBy(capabilities.data.results, 'parent_id'),
