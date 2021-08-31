@@ -54,20 +54,20 @@ export default {
       );
     },
     loadTooltip() {
-      d3.selectAll('#total-cases-chart-tooltip').remove();
-      d3.selectAll('#bar-chart-tooltip').remove();
+      d3.selectAll(`#${this.chartId}-tooltip`).remove();
       d3.select('body')
         .append('div')
-        .attr('id', 'total-cases-chart-tooltip')
+        .attr('id', `${this.chartId}-tooltip`)
         .attr('class', 'text-xs px-2 py bg-white rounded-md font-bold')
-        .attr('style', 'position: absolute; opacity: 0;')
+        .style('position', 'absolute')
+        .style('opacity', 0)
         .on('mouseover', function () {
           // remove ghosted tooltip on mouseover
           d3.select(this).style('opacity', 0);
         });
     },
     renderChart() {
-      const { $t } = this;
+      const ctx = this;
       // normalize incoming data
       const root = this.pack({
         name: 'Total',
@@ -79,8 +79,6 @@ export default {
           color: d.color,
         })),
       });
-
-      console.log(root);
 
       // render svg with translated group
       this.svg = d3
@@ -121,17 +119,17 @@ export default {
       this.node
         .on('mouseover mousemove', function (event, d) {
           d3.select(this).attr('stroke', '#fefefe').attr('stroke-width', 3);
-          d3.select('#total-cases-chart-tooltip')
+          d3.select(`#${ctx.chartId}-tooltip`)
             .transition()
             .duration(20)
             .style('opacity', 1)
             .style('left', `${event.pageX + 10}px`)
             .style('top', `${event.pageY + 10}px`)
-            .text($t(`${_.startCase(d.data.name)}: ${d.data.value}`));
+            .text(ctx.$t(`${_.startCase(d.data.name)}: ${d.data.value}`));
         })
         .on('mouseout', function () {
           d3.select(this).attr('stroke', null);
-          d3.select('#bar-chart-tooltip').style('opacity', 0);
+          d3.select(`#${ctx.chartId}-tooltip`).style('opacity', '0');
         })
         .on('click', (event, d) => {
           if (this.focus !== d) {
@@ -183,7 +181,7 @@ export default {
             .x(this.getInnerWidth() * 0.5)
             .y(this.getInnerHeight() * 0.5),
         )
-        .force('charge', d3.forceManyBody().strength(1))
+        .force('charge', d3.forceManyBody().strength(0.1))
         .force(
           'collide',
           d3
