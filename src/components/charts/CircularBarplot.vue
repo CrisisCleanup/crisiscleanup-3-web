@@ -143,11 +143,11 @@ export default {
       this.textContainer = this.svg
         .append('g')
         .attr('class', 'text-label')
-        .attr('transform', `translate(0, ${this.getInnerRadius() * 0.1})`)
+        .attr('transform', `translate(0, ${-this.getInnerRadius() / 3})`)
         .append('text')
         .attr('text-anchor', 'middle')
-        .attr('font-size', `${this.getFontSize()}px`)
-        .attr('fill', '#fefefe');
+        .attr('x', 0)
+        .attr('y', 0);
 
       this.renderOverallInfo();
       this.renderTotalCalls();
@@ -189,7 +189,7 @@ export default {
             .outerRadius((d) => this.y(d.calls))
             .startAngle((d) => this.x(d.name))
             .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-            .padAngle(0.05),
+            .padAngle(0.025),
         )
         .style('opacity', '1')
         .attr('transform', 'scale(1)');
@@ -239,7 +239,7 @@ export default {
             .outerRadius((d) => this.y(d.missed))
             .startAngle((d) => this.x(d.name))
             .endAngle((d) => this.x(d.name) + this.x.bandwidth())
-            .padAngle(0.05),
+            .padAngle(0.03),
         )
         .style('opacity', '1')
         .attr('transform', 'scale(1)');
@@ -325,9 +325,9 @@ export default {
                 .attr('y', (d) => -this.y(d))
                 .attr('dy', '0.35em')
                 .attr('stroke', '#fff')
-                .attr('stroke-width', 2)
+                .attr('stroke-width', 4)
                 .text(this.y.tickFormat(4, 's'))
-                .attr('font-size', `${this.getFontSize()}px`)
+                .attr('font-size', `${0.85}em`)
                 .clone(true)
                 .attr('fill', '#000')
                 .attr('stroke', 'none'),
@@ -339,46 +339,49 @@ export default {
     },
 
     renderCaseInfo(info) {
-      // remove existing tspan
-      this.textContainer.selectAll('tspan').remove();
-
       const innerTextContainer = this.textContainer
         .selectAll('tspan')
-        .data([info], (d) => d.name)
-        .enter();
+        .data([info], (d) => d.name);
 
       innerTextContainer
-        .append('tspan')
-        .text(this.$t('pewPew.call_volume'))
-        .attr('font-size', `${this.getFontSize()}px`)
+        .join('tspan')
+        .attr('font-size', this.getInnerRadius() * 0.2)
+        .attr('font-weight', 'bold')
+        .attr('fill', '#ffffff')
         .attr('x', 0)
-        .attr('y', `${-2.5 * this.getFontSize()}px`);
+        .attr('dy', `${0}em`)
+        .text(this.$t('pewPew.calls'));
 
       innerTextContainer
-        .append('tspan')
-        .text(this.$t('pewPew.total'))
+        .join('tspan')
+        .attr('font-size', this.getInnerRadius() * 0.23)
+        .attr('font-weight', 'bold')
+        .attr('fill', this.colorScale('calls'))
         .attr('x', 0)
-        .attr('y', `${-1 * this.getFontSize()}px`);
+        .attr('dy', `${1.1}em`)
+        .transition()
+        .duration(400)
+        .textTween((d) => d3.interpolateRound(0, this.$t(`${d.calls}`)));
 
       innerTextContainer
-        .append('tspan')
-        .text((d) => this.$t(`${d.calls}`))
+        .join('tspan')
+        .attr('font-size', this.getInnerRadius() * 0.2)
+        .attr('font-weight', 'bold')
+        .attr('fill', '#ffffff')
         .attr('x', 0)
-        .attr('font-size', `${this.getFontSize()}px`)
-        .attr('y', `${0}px`);
+        .attr('dy', `${1.5}em`)
+        .text(this.$t('pewPew.missed'));
 
       innerTextContainer
-        .append('tspan')
-        .text(this.$t('pewPew.missed'))
+        .join('tspan')
+        .attr('font-size', this.getInnerRadius() * 0.23)
+        .attr('font-weight', 'bold')
+        .attr('fill', this.colorScale('missed'))
         .attr('x', 0)
-        .attr('y', `${1.5 * this.getFontSize()}px`);
-
-      innerTextContainer
-        .append('tspan')
-        .text((d) => this.$t(`${d.missed}`))
-        .attr('font-size', `${this.getFontSize()}px`)
-        .attr('x', 0)
-        .attr('y', `${2.5 * this.getFontSize()}px`);
+        .attr('dy', `${1.1}em`)
+        .transition()
+        .duration(400)
+        .textTween((d) => d3.interpolateRound(0, this.$t(`${d.missed}`)));
     },
   },
 };
