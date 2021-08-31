@@ -158,7 +158,7 @@ export default {
         .style('display', (d) => (d.parent === root ? 'inline' : 'none'))
         .text((d) => `${_.startCase(d.data.name)} (${d.data.value})`);
 
-      this.zoomTo([root.x, root.y, root.r * 2.0]);
+      this.zoomTo([root.x, root.y, root.r * 2.5]);
 
       const simulation = d3
         .forceSimulation()
@@ -231,7 +231,7 @@ export default {
           const i = d3.interpolateZoom(this.view, [
             this.focus.x,
             this.focus.y,
-            this.focus.r * 2.0,
+            this.focus.r * 2.5,
           ]);
           return (t) => this.zoomTo(i(t));
         });
