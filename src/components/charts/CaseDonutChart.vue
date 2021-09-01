@@ -41,25 +41,12 @@ export default {
 
   watch: {
     chartData: {
-      deep: true,
       handler(newData, oldData) {
         if (!_.isEqual(newData, oldData)) {
           this.doRerender();
         }
       },
     },
-  },
-
-  mounted() {
-    this.margin.top = this.marginAll;
-    this.margin.bottom = this.marginAll;
-    this.margin.left = this.marginAll;
-    this.margin.right = this.marginAll;
-
-    this.destroyChart();
-    this.renderChart();
-
-    window.addEventListener('resize', this.doRerender);
   },
 
   methods: {
