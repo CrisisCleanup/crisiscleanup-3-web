@@ -28,6 +28,14 @@ export const D3BaseChartMixin = {
       default: 'transparent',
       required: false,
     },
+    /**
+     * enable/disable auto rerender on page resize
+     */
+    hasAutoResizing: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
   },
 
   data() {
@@ -51,32 +59,40 @@ export const D3BaseChartMixin = {
     this.d3 = require('d3');
     this.$nextTick(() => {
       this.chartContainer = document.querySelector(`#${this.chartId}`);
-      /**
-       * ResizeObserver to rerender chart
-       * when dimensions of chart's parent container changes
-       *
-       * @see https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API
-       */
-      this.resizeObserver = new ResizeObserver(
-        _.debounce((entries) => {
-          this.dimensions = entries[0];
-          console.log(this.chartId, this.dimensions);
-          this.doRerender();
-          console.log(this.chartId, 'handle resize');
-        }, 1500),
-      );
 
-      if (this.chartContainer) {
-        this.resizeObserver.observe(this.chartContainer);
+      // define and attach ResizeObserver only if `hasAutoResizing` prop is true
+      if (this.hasAutoResizing) {
+        /**
+         * ResizeObserver to rerender chart
+         * when dimensions of chart's parent container changes
+         *
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API
+         */
+        this.resizeObserver = new ResizeObserver(
+          _.debounce((entries) => {
+            const [first] = entries;
+            this.dimensions = first;
+            console.log(this.chartId, this.dimensions);
+            this.doRerender();
+          }, 1500),
+        );
+
+        if (this.chartContainer) {
+          this.resizeObserver.observe(this.chartContainer);
+        } else {
+          console.error(`Cannot find chart with ${this.chartId}`);
+        }
       } else {
-        console.error(`Cannot find chart with ${this.chartId}`);
+        this.doRerender();
       }
     });
   },
 
   beforeDestroy() {
-    this.resizeObserver.unobserve(this.chartContainer);
-    this.resizeObserver.disconnect();
+    if (this.resizeObserver) {
+      this.resizeObserver.unobserve(this.chartContainer);
+      this.resizeObserver.disconnect();
+    }
   },
 
   methods: {
