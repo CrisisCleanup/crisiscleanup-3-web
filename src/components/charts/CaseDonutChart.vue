@@ -8,6 +8,7 @@ import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
 import { D3BaseChartMixin } from '@/mixins';
+import { nFormatter } from '@/utils/helpers';
 
 export type DonutChartDataT = {|
   reportedCases: number,
@@ -124,7 +125,7 @@ export default {
         .attr('dominant-baseline', 'middle')
         .attr('text-anchor', 'middle')
         .attr('font-size', this.getFontSize())
-        .text(totalCases) // calculate sum of all values
+        .text(nFormatter(totalCases)) // calculate sum of all values
         .append('title')
         .text(totalCases);
     },
