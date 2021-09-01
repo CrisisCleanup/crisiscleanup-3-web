@@ -134,7 +134,7 @@ export default {
       const filter = defs.append('filter').attr('id', 'glow');
       filter
         .append('feGaussianBlur')
-        .attr('stdDeviation', '0.5')
+        .attr('stdDeviation', '1.5')
         .attr('result', 'coloredBlur');
 
       const feMerge = filter.append('feMerge');
