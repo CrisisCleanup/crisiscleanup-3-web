@@ -213,7 +213,7 @@
         <div class="flex-grow grid grid-cols-12">
           <div class="col-span-8 flex flex-col">
             <div class="flex-grow">
-              <div class="relative h-full">
+              <div class="relative h-full select-none">
                 <div
                   id="map"
                   ref="map"

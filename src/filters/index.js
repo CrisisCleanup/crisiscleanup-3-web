@@ -17,7 +17,8 @@ export function snakeToTitleCase(value) {
 }
 
 export function getWorkTypeName(workType) {
-  return enums.state.workTypes.find((type) => type.key === workType).name_t;
+  const wType = enums.state.workTypes.find((type) => type.key === workType);
+  return wType && wType.name_t ? wType.name_t : '';
 }
 
 export function getStatusName(statusKey) {

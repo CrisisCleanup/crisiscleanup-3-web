@@ -327,7 +327,7 @@ export default {
                 .attr('stroke', '#fff')
                 .attr('stroke-width', 4)
                 .text(this.y.tickFormat(4, 's'))
-                .attr('font-size', `${0.85}em`)
+                .attr('font-size', `${0.67}em`)
                 .clone(true)
                 .attr('fill', '#000')
                 .attr('stroke', 'none'),

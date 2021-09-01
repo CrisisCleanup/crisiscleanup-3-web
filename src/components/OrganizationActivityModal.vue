@@ -20,9 +20,16 @@
       />
 
       <div class="col-span-5">
-        <div class="text-xs">{{ generalInfo.name }}</div>
-        <div v-if="generalInfo.url" class="text-bodysm">
-          <a :href="generalInfo.url">{{ generalInfo.url }}</a>
+        <div class="text-xs">
+          {{ generalInfo.name }}
+          <a
+            v-if="generalInfo.url"
+            :href="generalInfo.url"
+            class="ml-1"
+            target="_blank"
+          >
+            <font-awesome-icon icon="external-link-alt" />
+          </a>
         </div>
       </div>
 
