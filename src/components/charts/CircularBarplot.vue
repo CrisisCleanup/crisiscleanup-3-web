@@ -61,8 +61,7 @@ export default {
     chartData: {
       handler() {
         if (!_.isEmpty(this.chartData)) {
-          this.destroyChart();
-          this.renderChart();
+          this.doRerender();
         } else {
           console.log('No data found');
         }
