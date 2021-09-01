@@ -1,6 +1,5 @@
 // @flow
 import _ from 'lodash';
-import VueTypes from 'vue-types';
 
 export const D3BaseChartMixin = {
   props: {
@@ -8,15 +7,27 @@ export const D3BaseChartMixin = {
      * Unique chart ID
      * Defaults to component name with suffixing unique id
      */
-    chartId: VueTypes.string.def(`d3-chart-${_.uniqueId()}`),
+    chartId: {
+      type: String,
+      default: `d3-chart-${_.uniqueId()}`,
+      required: false,
+    },
     /**
      * top, bottom, left, right margins
      */
-    marginAll: VueTypes.number.def(20),
+    marginAll: {
+      type: Number,
+      default: 20,
+      required: false,
+    },
     /**
      * background color / gradient
      */
-    bgColor: VueTypes.string.def('transparent'),
+    bgColor: {
+      type: String,
+      default: 'transparent',
+      required: false,
+    },
   },
 
   data() {
@@ -31,42 +42,45 @@ export const D3BaseChartMixin = {
       x: null,
       y: null,
       resizeObserver: null,
+      dimensions: null,
+      chartContainer: null,
     };
   },
 
   mounted() {
     this.d3 = require('d3');
     this.$nextTick(() => {
+      this.chartContainer = document.querySelector(`#${this.chartId}`);
       /**
        * ResizeObserver to rerender chart
        * when dimensions of chart's parent container changes
        *
        * @see https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API
        */
-
       this.resizeObserver = new ResizeObserver(
-        _.debounce(() => {
-          this.margin.top = this.marginAll;
-          this.margin.bottom = this.marginAll;
-          this.margin.left = this.marginAll;
-          this.margin.right = this.marginAll;
-
-          this.destroyChart();
-          this.renderChart();
-          console.log('rerender', this.chartId);
+        _.debounce((entries) => {
+          this.dimensions = entries[0];
+          console.log(this.chartId, this.dimensions);
+          this.doRerender();
+          console.log(this.chartId, 'handle resize');
         }, 1500),
       );
 
-      this.resizeObserver.observe(document.querySelector(`#${this.chartId}`));
+      if (this.chartContainer) {
+        this.resizeObserver.observe(this.chartContainer);
+      } else {
+        console.error(`Cannot find chart with ${this.chartId}`);
+      }
     });
   },
 
   beforeDestroy() {
+    this.resizeObserver.unobserve(this.chartContainer);
     this.resizeObserver.disconnect();
   },
 
   methods: {
-    doRerender: _.debounce(function () {
+    doRerender() {
       this.margin.top = this.marginAll;
       this.margin.bottom = this.marginAll;
       this.margin.left = this.marginAll;
@@ -74,7 +88,7 @@ export const D3BaseChartMixin = {
 
       this.destroyChart();
       this.renderChart();
-    }, 1500),
+    },
 
     getWidth(): number {
       const chartContainer = this.d3.select(`#${this.chartId}`);
