@@ -87,6 +87,7 @@ export default {
         .value((d) => d[1]);
 
       const data_ready = pie(_.entries(this.chartData));
+      const totalCases = d3.sum(d3.map(data_ready, (d) => d.data[1]));
 
       // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
       const chart = this.svg
@@ -123,7 +124,9 @@ export default {
         .attr('dominant-baseline', 'middle')
         .attr('text-anchor', 'middle')
         .attr('font-size', this.getFontSize())
-        .text(d3.sum(d3.map(data_ready, (d) => d.data[1]))); // calculate sum of all values
+        .text(totalCases) // calculate sum of all values
+        .append('title')
+        .text(totalCases);
     },
 
     addGlowDefs() {
