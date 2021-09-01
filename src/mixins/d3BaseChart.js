@@ -36,6 +36,14 @@ export const D3BaseChartMixin = {
       default: true,
       required: false,
     },
+    /**
+     * render timeout (in ms)
+     */
+    renderTimeout: {
+      type: Number,
+      default: 1500,
+      required: false,
+    },
   },
 
   data() {
@@ -74,7 +82,7 @@ export const D3BaseChartMixin = {
             this.dimensions = first;
             console.log(this.chartId, this.dimensions);
             this.doRerender();
-          }, 1500),
+          }, this.renderTimeout),
         );
 
         if (this.chartContainer) {
