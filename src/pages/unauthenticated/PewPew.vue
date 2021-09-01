@@ -609,6 +609,7 @@
                       }"
                       :bg-color="styles.backgroundColor"
                       :margin-all="5"
+                      :has-auto-resizing="false"
                     />
                     <span
                       v-else
