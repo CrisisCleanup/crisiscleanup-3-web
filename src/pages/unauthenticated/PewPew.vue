@@ -872,7 +872,7 @@ export default {
       this.fetchEngagementData().then(() => {});
       this.fetchSiteStatistics().then(() => {});
       this.getLatestEvents().then(() => {});
-      this.fetchCircularBarplotData(this.$moment(), 30).then(() => {});
+      this.fetchCircularBarplotData(this.$moment(), 60).then(() => {});
       this.getRecentIncidents().then((incidents) => {
         this.incidents = incidents;
       });
