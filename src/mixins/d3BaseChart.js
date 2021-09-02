@@ -1,5 +1,6 @@
 // @flow
 import _ from 'lodash';
+import { useResizeObserver } from '@/use/useResizeObserver';
 
 export const D3BaseChartMixin = {
   props: {
@@ -76,19 +77,17 @@ export const D3BaseChartMixin = {
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API
          */
-        this.resizeObserver = new ResizeObserver(
-          _.debounce((entries) => {
+        this.resizeObserver = useResizeObserver(
+          ((this.chartContainer: any): HTMLElement),
+          _.debounce((entries: any) => {
             const [first] = entries;
             this.dimensions = first;
-            console.log(this.chartId, this.dimensions);
             this.doRerender();
           }, this.renderTimeout),
         );
 
-        if (this.chartContainer) {
-          this.resizeObserver.observe(this.chartContainer);
-        } else {
-          console.error(`Cannot find chart with ${this.chartId}`);
+        if (!this.resizeObserver.isSupported) {
+          console.error('Resize Observer is not supported on this browser');
         }
       } else {
         this.doRerender();
@@ -98,8 +97,7 @@ export const D3BaseChartMixin = {
 
   beforeDestroy() {
     if (this.resizeObserver) {
-      this.resizeObserver.unobserve(this.chartContainer);
-      this.resizeObserver.disconnect();
+      this.resizeObserver.stop();
     }
   },
 
