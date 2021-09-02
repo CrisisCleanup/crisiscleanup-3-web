@@ -96,8 +96,6 @@ export default {
       this.mappedTotalCalls = (d) => d.calls;
       this.mappedMissedCalls = (d) => d.missed;
 
-      console.log(this.chartData);
-
       // append the svg object
       this.svg = d3
         .select(`#${this.chartId}`)
