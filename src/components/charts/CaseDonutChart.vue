@@ -122,7 +122,7 @@ export default {
       this.svg
         .append('text')
         .attr('fill', '#fff')
-        .attr('dominant-baseline', 'middle')
+        .attr('dominant-baseline', 'central')
         .attr('text-anchor', 'middle')
         .attr('font-size', this.getFontSize())
         .text(nFormatter(totalCases)) // calculate sum of all values
