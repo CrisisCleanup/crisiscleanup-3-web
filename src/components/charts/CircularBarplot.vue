@@ -369,7 +369,7 @@ export default {
         .attr('fill', '#ffffff')
         .attr('x', 0)
         .attr('dy', `${1.5}em`)
-        .text(this.$t('pewPew.missed'));
+        .text(this.$t('pewPew.callbacks'));
 
       innerTextContainer
         .join('tspan')
