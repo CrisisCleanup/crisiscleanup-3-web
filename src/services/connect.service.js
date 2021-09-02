@@ -47,7 +47,7 @@ export const AgentEvents = Object.freeze({
  * @param ON_MISSED - Agent fails to answer or rejects.
  * @param ON_ENDED - Agent ends call or contact is missed (outbound).
  * @param ON_ACW - Call has been ended, agent & contact -> ACW.
- * @param ON_DESTORY - Contact is completely closed.
+ * @param ON_DESTROY - Contact is completely closed.
  * @param ON_INCOMING - Outbound callback contact is incoming.
  * @enum {string}
  * @readonly

@@ -1320,11 +1320,6 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@crisiscleanup/amazon-connect-streams@^1.6.4":
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/@crisiscleanup/amazon-connect-streams/-/amazon-connect-streams-1.6.4.tgz#b497bf3b81e7f8b2edfa06a0084c1fbac1512a8d"
-  integrity sha512-pjHs/PjB3SBmRtV0BSZniUG9QRAr3O6Arykd+xDQSIP2vY1WUWEGncg79qtV6kAiwVuUz3J9+05b7FAYM8JOhQ==
-
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
@@ -6596,6 +6591,11 @@ alphanum-sort@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
+
+amazon-connect-streams@^1.6.10:
+  version "1.6.10"
+  resolved "https://registry.yarnpkg.com/amazon-connect-streams/-/amazon-connect-streams-1.6.10.tgz#f1faf3950c0593e5fcd9eb1fa88d87c1385b0176"
+  integrity sha512-/LpU6LblnXWbCAAWkJC114iZPp8zcGfi0rmAQNx9LkR7lw9Jh/FGP48WH80v3ffVP5du22+Sp5RyKMbykAYUjg==
 
 amdefine@>=0.0.4:
   version "1.0.1"

@@ -5,7 +5,7 @@
  */
 
 import * as ACS from './connect.service';
-import '@crisiscleanup/amazon-connect-streams';
+import 'amazon-connect-streams';
 
 type ACSEventTopic = $Values<typeof ACS.EventTopics>;
 type ACSAgentEvent = $Values<typeof ACS.AgentEvents>;

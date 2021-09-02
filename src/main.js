@@ -2,7 +2,7 @@
 import { version } from '@/../package.json';
 import '@/assets/css/tailwind.css';
 import 'vue-resize/dist/vue-resize.css';
-import '@crisiscleanup/amazon-connect-streams';
+import 'amazon-connect-streams';
 import VueHooks from '@u3u/vue-hooks';
 import VueCompositionApi from '@vue/composition-api';
 import Vue from 'vue';
