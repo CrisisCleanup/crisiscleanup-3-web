@@ -728,13 +728,10 @@ export default {
       return [];
     },
     openDialerTab(phoneNumber) {
-      return window.open(
-        this.$router.resolve({
-          name: 'nav.phone',
-          query: { dialNumber: phoneNumber },
-        }).href,
-        '_blank',
-      );
+      return this.$router.push({
+        name: 'nav.phone',
+        query: { dialNumber: phoneNumber },
+      });
     },
   },
 };
