@@ -1,4 +1,4 @@
-require('@crisiscleanup/amazon-connect-streams');
+require('amazon-connect-streams');
 
 global.connect.RTCSession = function () {};
 global.connect.core.agent = jest.fn();
