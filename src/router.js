@@ -29,7 +29,6 @@ import OtherOrganizations from '@/pages/OtherOrganizations';
 import Teams from '@/pages/organization/Teams';
 import TeamDetail from '@/pages/organization/TeamDetail';
 import * as UITypes from '@/store/modules/ui/types';
-import PewPew from '@/pages/unauthenticated/PewPew';
 
 Vue.use(VueRouter);
 Vue.use(VueCookies);
@@ -37,7 +36,7 @@ Vue.use(VueCookies);
 const routes = [
   {
     path: '/',
-    component: PewPew,
+    component: Dashboard,
     name: 'nav.pew',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
