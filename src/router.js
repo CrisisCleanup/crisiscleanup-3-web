@@ -38,7 +38,7 @@ const routes = [
     path: '/',
     component: Dashboard,
     name: 'nav.pew',
-    meta: { layout: 'unauthenticated', noAuth: true },
+    meta: { layout: 'authenticated' },
   },
   {
     path: '/dashboard',
