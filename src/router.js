@@ -208,33 +208,38 @@ router.beforeEach((to, from, next) => {
     },
   });
 
-  if (to.matched.some((record) => record.meta.noAuth)) {
+  if (to.name === 'nav.site_maintenance') {
     next();
-  } else if (to.matched.some((record) => record.meta.admin)) {
-    if (!store.getters['auth/isAdmin']) {
-      next({ name: 'nav.dashboard' });
-      return;
-    }
-    next();
-  } else {
-    if (store.getters['auth/isLoggedIn']) {
-      // Orphaned Users can't really login this will navigate to a public landing page once it is built
-      if (store.getters['auth/isOrphan']) {
-        next({ name: 'nav.request_access', query: { orphan: true } });
-        return;
-      }
-      if (to.matched.some((record) => record.meta.banner)) {
-        const record = to.matched.find((r) => r.meta.banner);
-        store.commit(`ui/${UITypes.SET_BANNER}`, record.meta.banner);
-      } else {
-        store.commit(`ui/${UITypes.SET_BANNER}`, { enabled: false });
-      }
-      next();
-      return;
-    }
-    const loginpath = window.location.pathname;
-    next({ name: 'nav.login', query: { from: loginpath } });
   }
+  next({ name: 'nav.site_maintenance' });
+
+  // if (to.matched.some((record) => record.meta.noAuth)) {
+  //   next();
+  // } else if (to.matched.some((record) => record.meta.admin)) {
+  //   if (!store.getters['auth/isAdmin']) {
+  //     next({ name: 'nav.dashboard' });
+  //     return;
+  //   }
+  //   next();
+  // } else {
+  //   if (store.getters['auth/isLoggedIn']) {
+  //     // Orphaned Users can't really login this will navigate to a public landing page once it is built
+  //     if (store.getters['auth/isOrphan']) {
+  //       next({ name: 'nav.request_access', query: { orphan: true } });
+  //       return;
+  //     }
+  //     if (to.matched.some((record) => record.meta.banner)) {
+  //       const record = to.matched.find((r) => r.meta.banner);
+  //       store.commit(`ui/${UITypes.SET_BANNER}`, record.meta.banner);
+  //     } else {
+  //       store.commit(`ui/${UITypes.SET_BANNER}`, { enabled: false });
+  //     }
+  //     next();
+  //     return;
+  //   }
+  //   const loginpath = window.location.pathname;
+  //   next({ name: 'nav.login', query: { from: loginpath } });
+  // }
 });
 
 function patchRouterMethod(r, methodName) {
