@@ -4,6 +4,7 @@ import PreliminaryAssessment from './PreliminaryAssessment.vue';
 import PrintToken from './PrintToken.vue';
 import ResetPassword from './ResetPassword';
 import PewPew from './PewPew';
+import DownForMaintenance from './DownForMaintenance.vue';
 
 const routes = [
   {
@@ -40,6 +41,16 @@ const routes = [
     path: '/pew-pew',
     component: PewPew,
     name: 'nav.pew',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/maintenance',
+    // component: () =>
+    //   import(
+    //     /* webpackChunkName: "down-for-maintenance" */ './DownForMaintenance.vue'
+    //   ),
+    component: DownForMaintenance,
+    name: 'nav.site_maintenance',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
 ];
