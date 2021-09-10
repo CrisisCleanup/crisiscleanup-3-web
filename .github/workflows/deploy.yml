@@ -8,7 +8,6 @@ on:
         required: true
         default: 'development'
 
-
 jobs:
   deploy:
     name: Deploy Site
@@ -54,6 +53,7 @@ jobs:
           role-duration-seconds: 1200
           role-session-name: GithubActions
           aws-region: us-east-1
+          role-skip-session-tagging: true
 
       - name: Configure Prod AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
