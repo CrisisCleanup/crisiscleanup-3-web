@@ -1,17 +1,4 @@
-node_modules
-npm-debug.log
-Dockerfile*
-docker-compose*
-.dockerignore
-.git
-README.md
-LICENSE
-.vscode
-.env*
-
-
 # Ignore
-.git
 .github
 .idea
 .jest
@@ -72,3 +59,4 @@ Dockerfile
 !babel.config.js
 # for sentry plugin
 !.gitignore
+!.git
