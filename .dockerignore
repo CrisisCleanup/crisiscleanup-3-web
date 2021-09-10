@@ -31,7 +31,6 @@ out
 .eslintrc.js
 .flowconfig
 .gitattributes
-.gitignore
 .prettierignore
 .prettierrc
 .restyled.yaml
@@ -71,3 +70,5 @@ Dockerfile
 !jest.config.js
 !jsconfig.json
 !babel.config.js
+# for sentry plugin
+!.gitignore
