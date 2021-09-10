@@ -116,63 +116,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: [test, lint]
     if: "github.event_name != 'pull_request'"
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.aws_access_key_id }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_secret_access_key }}
-      AWS_DEFAULT_REGION: ${{ secrets.aws_default_region }}
     steps:
       - uses: actions/checkout@v2
-
-      - name: Determine Yarn Cache
-        id: yarn-cache-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Determine Build Number
-        id: build-num
-        run: echo "::set-output name=build-id::$(echo ${{ github.sha }} | cut -c 1-7)"
-
-      - name: Determine Stage
-        id: find-stage
-        run: echo "::set-output name=stage::$(if [ '${{ github.event_name }}' = 'create' ]; then echo 'staging'; else echo 'production';fi)"
-
-      - name: Cache Node Modules
-        uses: actions/cache@v2.1.0
-        with:
-          path: ${{ steps.yarn-cache-path.outputs.dir }}
-          key: yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            yarn-
-
-      - name: Notify Staging
-        if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
-        uses: rtCamp/action-slack-notify@v2.0.1
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: 'core'
-          SLACK_USERNAME: 'CrisisCleanup Bot'
-          SLACK_ICON: ${{ secrets.SLACK_ICON }}
-          SLACK_COLOR: '#fece09'
-          SLACK_TITLE: 'New Release'
-          SLACK_MESSAGE: "Heads up, I'm currently releasing to staging! You can watch my progress at the url above."
-
-      - name: Notify Production
-        if: "github.event_name == 'release'"
-        uses: rtCamp/action-slack-notify@v2.0.1
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: 'core'
-          SLACK_USERNAME: 'CrisisCleanup Bot'
-          SLACK_ICON: ${{ secrets.SLACK_ICON }}
-          SLACK_COLOR: '#fece09'
-          SLACK_TITLE: 'New Release'
-          SLACK_MESSAGE: "Heads up, I'm currently releasing to production! You can watch my progress at the url above."
-
-      - name: Install Dependencies
-        run: yarn install
 
       - name: Create Sentry Release
         if: "github.event_name == 'release' || (github.event_name == 'create' && github.event.ref_type == 'tag')"
         uses: tclindner/sentry-releases-action@v1.1.1
+        continue-on-error: true
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_PROPERTIES: sentry.properties
@@ -182,85 +132,27 @@ jobs:
           environment: ${{ steps.find-stage.outputs.stage }}
           releaseNamePrefix: crisiscleanup-3-web@
 
-      - name: Deploy Development
+      - name: Invoke Development Deploy
         if: "github.event_name != 'pull_request' && github.ref == 'refs/heads/develop'"
-        env:
-          VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
-          VUE_APP_STAGE: development
-        run: yarn deploy-development
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Deploy
+          token: ${{ secrets.GHCR_PAT }}
+          inputs: '{ "stage": "development" }'
 
-      - name: Deploy Staging
+      - name: Invoke Staging Deploy
         if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
-        env:
-          VUE_APP_API_BASE_URL: 'https://api.staging.crisiscleanup.io'
-          VUE_APP_BASE_URL: 'https://app.staging.crisiscleanup.io'
-          VUE_APP_AWS_CCP_URL: https://ccustaging.awsapps.com/connect/ccp-v2/
-          VUE_APP_PHONE_DEFAULT_USERNAME: 'covid'
-          VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
-          VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
-          VUE_APP_SPANISH_PHONE_GATEWAY: '114659'
-          VUE_APP_DEFAULT_CALLER_ID: '8004511954'
-          VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccustaging'
-          VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUStagingConnectRole'
-          VUE_APP_CCP_INSTANCE: 414df788-cd99-4580-ad07-f8af22246ce5
-          VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
-          VUE_APP_WS_URL: 'wss://socket.staging.crisiscleanup.io'
-          VUE_APP_STAGE: staging
-          VUE_APP_PORTAL_KEY: 'crisiscleanup_staging'
-        run: yarn deploy-staging
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Deploy
+          token: ${{ secrets.GHCR_PAT }}
+          inputs: '{ "stage": "staging" }'
 
-      - name: Deploy Production
+      - name: Invoke Production Deploy
         if: "github.event_name == 'release'"
-        env:
-          VUE_APP_API_BASE_URL: 'https://api.crisiscleanup.org'
-          VUE_APP_BASE_URL: 'https://crisiscleanup.org'
-          VUE_APP_AWS_CCP_URL: https://cculive.awsapps.com/connect/ccp-v2/
-          VUE_APP_PHONE_DEFAULT_USERNAME: 'covid'
-          VUE_APP_PHONE_DEFAULT_PASSWORD: 'covid'
-          VUE_APP_ENGLISH_PHONE_GATEWAY: '109989'
-          VUE_APP_SPANISH_PHONE_GATEWAY: '114659'
-          VUE_APP_DEFAULT_CALLER_ID: '8004511954'
-          VUE_APP_WS_URL: 'wss://socket.crisiscleanup.org'
-          VUE_APP_CCP_PRINCIPAL: 'arn:aws:iam::240937704012:saml-provider/ccuproduction'
-          VUE_APP_CCP_ROLE: 'arn:aws:iam::240937704012:role/CCUProductionConnectRole'
-          VUE_APP_CCP_INSTANCE: cd54a377-8223-4c43-8524-a21d2837b7c5
-          VUE_APP_BUILD: ${{ steps.build-num.outputs.build-id }}
-          VUE_APP_STAGE: production
-          VUE_APP_PORTAL_KEY: 'crisiscleanup_us'
-        run: yarn deploy-production
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Deploy
+          token: ${{ secrets.GHCR_PAT }}
+          inputs: '{ "stage": "production" }'
 
-      - name: Post Notify Staging
-        if: "github.event_name == 'create' && github.event.ref_type == 'tag'"
-        uses: rtCamp/action-slack-notify@v2.0.1
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: 'core'
-          SLACK_USERNAME: 'CrisisCleanup Bot'
-          SLACK_ICON: ${{ secrets.SLACK_ICON }}
-          SLACK_COLOR: '#fece09'
-          SLACK_TITLE: 'Live Release'
-          SLACK_MESSAGE: ':rocket: Staging is live! Check it out at: https://app.staging.crisiscleanup.io'
-
-      - name: Post Notify Production
-        if: "github.event_name == 'release'"
-        uses: rtCamp/action-slack-notify@v2.0.1
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: 'core'
-          SLACK_USERNAME: 'CrisisCleanup Bot'
-          SLACK_ICON: ${{ secrets.SLACK_ICON }}
-          SLACK_COLOR: '#fece09'
-          SLACK_TITLE: 'Live Release'
-          SLACK_MESSAGE: ':rocket: Production is live! Check it out at: https://crisiscleanup.org'
-
-      - name: Notify Failed
-        if: "((github.event_name == 'release') || (github.event_name == 'create' && github.event.ref_type == 'tag')) && failure()"
-        uses: rtCamp/action-slack-notify@v2.0.1
-        env:
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-          SLACK_CHANNEL: 'core'
-          SLACK_USERNAME: 'CrisisCleanup Bot'
-          SLACK_ICON: ${{ secrets.SLACK_ICON }}
-          SLACK_COLOR: '#D94F37'
-          SLACK_TITLE: 'Deploy Failed!'
-          SLACK_MESSAGE: 'Failed to deploy... someone broke something! :frowning:'
