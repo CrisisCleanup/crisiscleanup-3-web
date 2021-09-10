@@ -4,13 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       stage:
-        description: 'App stage to deploy (dev|staging|prod).'
+        description: 'App stage to deploy (development|staging|production).'
         required: true
-        default: 'dev'
-
-
-env:
-  CYPRESS_INSTALL_BINARY: 0
+        default: 'development'
 
 
 jobs:
@@ -25,6 +21,29 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Notify Deploy
+        if: "github.event.inputs.stage == 'staging' || github.event.inputs.stage == 'production'"
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: 'core'
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
+          SLACK_COLOR: '#fece09'
+          SLACK_TITLE: 'New Release'
+          SLACK_MESSAGE: "Heads up, I'm currently releasing to ${{ github.event.inputs.stage }}! You can watch my progress at the url above."
+
+      - name: Configure Development AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        if: github.event.inputs.stage == 'development'
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_DEV }}
+          role-duration-seconds: 1200
+          role-session-name: GithubActions
+          aws-region: us-east-1
+
       - name: Configure Staging AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         if: github.event.inputs.stage == 'staging'
@@ -38,7 +57,7 @@ jobs:
 
       - name: Configure Prod AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
-        if: github.event.inputs.stage == 'prod'
+        if: github.event.inputs.stage == 'production'
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -59,18 +78,32 @@ jobs:
           echo "BUILD_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
           echo "IMAGE=${{ steps.login-ecr.outputs.registry }}/crisiscleanup-web" >> $GITHUB_ENV
 
-      - name: Setup Production Env
-        if: github.event.inputs.stage == 'prod'
+      - name: Setup Development Env
+        if: github.event.inputs.stage == 'development'
+        run: |
+          echo "VUE_APP_API_BASE_URL=https://api.dev.crisiscleanup.io" >> $GITHUB_ENV
+          echo "VUE_APP_BASE_URL=https://app.dev.crisiscleanup.io" >> $GITHUB_ENV
+          echo "VUE_APP_WS_URL=wss://socket.dev.crisiscleanup.io" >> $GITHUB_ENV
+          echo "VUE_APP_AWS_CCP_URL=https://ccudev.awsapps.com/connect/ccp-v2/" >> $GITHUB_ENV
+          echo "VUE_APP_CCP_INSTANCE=87fbcad4-9f58-4153-84e8-d5b7202693e8" >> $GITHUB_ENV
+          echo "VUE_APP_STAGE=development" >> $GITHUB_ENV
+          echo "VUE_APP_PORTAL_KEY=crisiscleanup_demo" >> $GITHUB_ENV
+          echo "NODE_ENV=development" >> $GITHUB_ENV
+
+      - name: Setup Staging Env
+        if: github.event.inputs.stage == 'staging'
         run: |
           echo "VUE_APP_API_BASE_URL=https://api.staging.crisiscleanup.io" >> $GITHUB_ENV
           echo "VUE_APP_BASE_URL=https://app.staging.crisiscleanup.io" >> $GITHUB_ENV
           echo "VUE_APP_WS_URL=wss://socket.staging.crisiscleanup.io" >> $GITHUB_ENV
           echo "VUE_APP_STAGE=staging" >> $GITHUB_ENV
           echo "VUE_APP_AWS_CCP_URL=https://ccustaging.awsapps.com/connect/ccp-v2/" >> $GITHUB_ENV
+          echo "VUE_APP_PORTAL_KEY=crisiscleanup_staging" >> $GITHUB_ENV
           echo "VUE_APP_CCP_INSTANCE=414df788-cd99-4580-ad07-f8af22246ce5" >> $GITHUB_ENV
+          echo "NODE_ENV=production" >> $GITHUB_ENV
 
       - name: Setup Production Env
-        if: github.event.inputs.stage == 'prod'
+        if: github.event.inputs.stage == 'production'
         run: |
           echo "VUE_APP_API_BASE_URL=https://api.crisiscleanup.org" >> $GITHUB_ENV
           echo "VUE_APP_BASE_URL=https://crisiscleanup.org" >> $GITHUB_ENV
@@ -79,6 +112,7 @@ jobs:
           echo "VUE_APP_AWS_CCP_URL=https://cculive.awsapps.com/connect/ccp-v2/" >> $GITHUB_ENV
           echo "VUE_APP_CCP_INSTANCE=cd54a377-8223-4c43-8524-a21d2837b7c5" >> $GITHUB_ENV
           echo "VUE_APP_PORTAL_KEY=crisiscleanup_us" >> $GITHUB_ENV
+          echo "NODE_ENV=production" >> $GITHUB_ENV
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -96,6 +130,7 @@ jobs:
             VUE_APP_AWS_CCP_URL=${{ env.VUE_APP_AWS_CCP_URL }}
             VUE_APP_CCP_INSTANCE=${{ env.VUE_APP_CCP_INSTANCE }}
             VUE_APP_PORTAL_KEY=${{ env.VUE_APP_PORTAL_KEY }}
+            NODE_ENV=${{ env.NODE_ENV }}
             VUE_APP_WHAT_3_WORDS_API_KEY=${{ secrets.VUE_APP_WHAT_3_WORDS_API_KEY }}
             VUE_APP_GOOGLE_MAPS_API_KEY=${{ secrets.VUE_APP_GOOGLE_MAPS_API_KEY }}
             VUE_APP_PITNEYBOWES_API_KEY=${{ secrets.VUE_APP_PITNEYBOWES_API_KEY }}
@@ -108,3 +143,27 @@ jobs:
             ${{ env.IMAGE }}:${{ github.event.inputs.stage }}
             ${{ env.IMAGE }}:${{ env.GIT_REF }}
           push: true
+
+      - name: Post Notify Deploy
+        if: "github.event.inputs.stage == 'staging' || github.event.inputs.stage == 'production'"
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: 'core'
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
+          SLACK_COLOR: '#fece09'
+          SLACK_TITLE: 'Live Release'
+          SLACK_MESSAGE: ':rocket: ${{ github.event.inputs.stage }} is live! Check it out at: https://crisiscleanup.org'
+
+      - name: Notify Failed
+        if: "(github.event.inputs.stage == 'staging' || github.event.inputs.stage == 'production') && failure()"
+        uses: rtCamp/action-slack-notify@v2.0.1
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: 'core'
+          SLACK_USERNAME: 'CrisisCleanup Bot'
+          SLACK_ICON: ${{ secrets.SLACK_ICON }}
+          SLACK_COLOR: '#D94F37'
+          SLACK_TITLE: 'Deploy Failed!'
+          SLACK_MESSAGE: 'Failed to deploy... someone broke something! :frowning:'
