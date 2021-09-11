@@ -119,6 +119,7 @@ jobs:
         with:
           workflow: Rollout Deployments
           token: ${{ secrets.GHCR_PAT }}
+          repo: CrisisCleanup/crisiscleanup-3-api
           inputs: '{ "stage": "${{ github.event.inputs.stage }}", "targets": "crisiscleanup-web-frontend" }'
 
       - name: Post Notify Deploy
