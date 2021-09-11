@@ -76,7 +76,7 @@ jobs:
           echo "GIT_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
           echo "GIT_REF=$(git symbolic-ref -q --short HEAD || git describe --tags --exact-match)" >> $GITHUB_ENV
           echo "BUILD_SHA=$(echo ${{ github.sha }} | cut -c1-7)" >> $GITHUB_ENV
-          echo "IMAGE=${{ steps.login-ecr.outputs.registry }}/crisiscleanup-web" >> $GITHUB_ENV
+          echo "IMAGE=${{ secrets.AWS_ECR_REPOSITORY }}/crisiscleanup-web" >> $GITHUB_ENV
 
       - name: Setup Development Env
         if: github.event.inputs.stage == 'development'
