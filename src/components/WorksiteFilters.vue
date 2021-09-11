@@ -159,6 +159,17 @@
                 {{ $t('worksiteFilters.in_secondary_response_area') }}
               </base-checkbox>
             </div>
+            <div class="survivors mb-2">
+              <div class="my-1 text-base">
+                {{ $t('~~Survivors') }}
+              </div>
+              <base-checkbox
+                v-model="filters.survivors.data.member_of_my_organization"
+                class="block my-1"
+              >
+                {{ $t('actions.member_of_my_org') }}
+              </base-checkbox>
+            </div>
             <div class="claim-status mb-2">
               <div class="my-1 text-base">
                 {{ $t('worksiteFilters.team') }}
@@ -463,6 +474,7 @@ import WorksiteStatusFilter from '../utils/data_filters/WorksiteStatusFilter';
 import WorksiteLocationsFilter from '../utils/data_filters/WorksiteLocationsFilter';
 import WorksiteMissingWorkTypeFilter from '../utils/data_filters/WorksiteMissingWorkTypeFilter';
 import WorksiteMyTeamFilter from '../utils/data_filters/WorksiteMyTeamFilter';
+import SurvivorFilter from '../utils/data_filters/SurvivorFilter';
 import WorksiteTeamsFilter from '../utils/data_filters/WorksiteTeamsFilter';
 import { UserMixin } from '../mixins';
 
@@ -499,6 +511,7 @@ export default {
         statuses: {},
         teams: {},
         my_team: {},
+        survivors: {},
         statusGroups: {},
         flags: {},
         sub_fields: {},
@@ -559,6 +572,9 @@ export default {
     myTeamCount() {
       return this.filters.my_team.count;
     },
+    survivorCount() {
+      return this.filters.survivors.count;
+    },
     filtersCount() {
       return (
         this.fieldsCount +
@@ -568,6 +584,7 @@ export default {
         this.flagsCount +
         this.missingWorkTypeCount +
         this.teamsCount +
+        this.survivorCount +
         this.myTeamCount
       );
     },
@@ -615,6 +632,12 @@ export default {
         my_team: new WorksiteMyTeamFilter(
           'my_team',
           (this.currentFilters.my_team && this.currentFilters.my_team.data) ||
+            {},
+        ),
+        survivors: new SurvivorFilter(
+          'survivors',
+          (this.currentFilters.survivors &&
+            this.currentFilters.survivors.data) ||
             {},
         ),
         teams: new WorksiteTeamsFilter(
@@ -687,6 +710,7 @@ export default {
         locations: new WorksiteLocationsFilter('locations', {}),
         teams: new WorksiteTeamsFilter('teams', {}),
         my_team: new WorksiteMyTeamFilter('my_team', {}),
+        survivors: new SurvivorFilter('survivors', {}),
         missingWorkType: new WorksiteMissingWorkTypeFilter(
           'missingWorkType',
           {},

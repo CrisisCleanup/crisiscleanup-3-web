@@ -242,6 +242,14 @@
             {{ $t('flag.flag_high_priority') }}
           </base-checkbox>
         </div>
+        <div class="my-1 py-1" v-if="!worksite.isFavorite">
+          <base-checkbox
+            v-model="isFavorite"
+            class="text-crisiscleanup-red-700"
+          >
+            {{ $t('actions.member_of_my_org') }}
+          </base-checkbox>
+        </div>
       </div>
       <form-tree
         v-for="field in fieldTree"
@@ -411,6 +419,7 @@ export default {
       showAllFields: true,
       ready: false,
       isHighPriority: false,
+      isFavorite: false,
       gettingLocation: false,
       location: null,
       what3words: null,
@@ -839,6 +848,9 @@ export default {
               requested_action: '',
             });
           }
+          if (this.isFavorite) {
+            await Worksite.api().favorite(this.worksite.id);
+          }
         } else {
           const savedWorksite = await Worksite.api().post('/worksites', {
             ...this.worksite,
@@ -857,6 +869,9 @@ export default {
               notes: '',
               requested_action: '',
             });
+          }
+          if (this.isFavorite) {
+            await Worksite.api().favorite(worksiteId);
           }
           this.worksite = Worksite.find(worksiteId);
         }
