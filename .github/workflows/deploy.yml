@@ -113,6 +113,14 @@ jobs:
             ${{ env.IMAGE }}:${{ env.GIT_REF }}
           push: true
 
+      - name: Invoke Web Rollout
+        uses: benc-uk/workflow-dispatch@v1
+        continue-on-error: true
+        with:
+          workflow: Rollout Deployments
+          token: ${{ secrets.GHCR_PAT }}
+          inputs: '{ "stage": "${{ github.event.inputs.stage }}", "targets": "crisiscleanup-web-frontend" }'
+
       - name: Post Notify Deploy
         if: "github.event.inputs.stage == 'staging' || github.event.inputs.stage == 'production'"
         uses: rtCamp/action-slack-notify@v2.0.1
