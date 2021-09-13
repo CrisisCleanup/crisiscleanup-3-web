@@ -161,13 +161,13 @@
             </div>
             <div class="survivors mb-2">
               <div class="my-1 text-base">
-                {{ $t('~~Survivors') }}
+                {{ $t('worksiteFilters.survivors') }}
               </div>
               <base-checkbox
                 v-model="filters.survivors.data.member_of_my_organization"
                 class="block my-1"
               >
-                {{ $t('actions.member_of_my_org') }}
+                {{ $t('worksiteFilters.member_of_my_org') }}
               </base-checkbox>
             </div>
             <div class="claim-status mb-2">
