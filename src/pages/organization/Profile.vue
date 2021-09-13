@@ -471,6 +471,7 @@
             }
           "
           :placeholder="$t('profileOrg.add_work_order_instructions')"
+          :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
           rows="4"
           class="
             text-base
@@ -515,7 +516,9 @@
         <DragDrop
           class="cursor-pointer w-64 py-2"
           container-class="items-start"
-          :disabled="uploading"
+          :disabled="
+            uploading || (!currentUser.isPrimaryContact && !currentUser.isAdmin)
+          "
           :multiple="false"
           @files="
             (files) => {
@@ -529,7 +532,10 @@
             :text="$t('actions.add_terms')"
             :alt="$t('actions.add_terms')"
             :show-spinner="uploading"
-            :disabled="uploading"
+            :disabled="
+              uploading ||
+              (!currentUser.isPrimaryContact && !currentUser.isAdmin)
+            "
           />
         </DragDrop>
         <textarea
@@ -539,6 +545,7 @@
               updateOrganization(event.target.value, 'custom_legal_tos');
             }
           "
+          :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
           :placeholder="$t('profileOrg.add_tos_text')"
           rows="4"
           class="
@@ -584,7 +591,9 @@
         <DragDrop
           class="cursor-pointer w-64 py-2"
           container-class="items-start"
-          :disabled="uploading"
+          :disabled="
+            uploading || (!currentUser.isPrimaryContact && !currentUser.isAdmin)
+          "
           :multiple="false"
           @files="
             (files) => {
@@ -598,7 +607,10 @@
             :text="$t('profileOrg.custom_survivor_waiver')"
             :alt="$t('profileOrg.custom_survivor_waiver')"
             :show-spinner="uploading"
-            :disabled="uploading"
+            :disabled="
+              uploading ||
+              (!currentUser.isPrimaryContact && !currentUser.isAdmin)
+            "
           />
         </DragDrop>
         <textarea
@@ -611,6 +623,7 @@
               );
             }
           "
+          :disabled="!currentUser.isPrimaryContact && !currentUser.isAdmin"
           :placeholder="$t('profileOrg.add_survivor_waiver_text')"
           rows="4"
           class="

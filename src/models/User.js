@@ -111,6 +111,10 @@ export default class User extends CCUModel {
     return this.active_roles.includes(1);
   }
 
+  get isPrimaryContact() {
+    return this.active_roles.includes(3);
+  }
+
   getStatesForIncident(incidentId, fallback = true) {
     if (
       this.states &&
