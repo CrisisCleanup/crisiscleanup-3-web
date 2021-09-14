@@ -35,6 +35,9 @@
       <template #option="option">
         <slot name="option" :option="option" />
       </template>
+      <template #list-header>
+        <slot name="list-header" />
+      </template>
       <template v-if="required" #search="{ attributes, events }">
         <input
           ref="input"
@@ -324,6 +327,10 @@ export default {
 .vue-select-up.form-select .vs__dropdown-menu {
   top: auto !important;
   bottom: calc(100% - 3px);
+}
+
+.vs__dropdown-option--highlight {
+  @apply bg-gray-300;
 }
 </style>
 

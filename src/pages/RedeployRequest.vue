@@ -1,6 +1,7 @@
 <template>
   <div>
     <base-button
+      v-if="!hideTrigger"
       variant="outline"
       class="mx-1 px-3 py-1"
       :text="$t('requestRedeploy.request_redeploy')"
@@ -15,6 +16,7 @@
       @close="
         () => {
           showRedeployModal = false;
+          $emit('close');
         }
       "
     >
@@ -42,6 +44,7 @@
           :action="
             () => {
               showRedeployModal = false;
+              $emit('close');
             }
           "
         />
@@ -63,6 +66,16 @@ import { getErrorMessage } from '../utils/errors';
 
 export default {
   name: 'RedeployRequest',
+  props: {
+    openModal: {
+      type: Boolean,
+      default: false,
+    },
+    hideTrigger: {
+      type: Boolean,
+      default: false,
+    },
+  },
   async mounted() {
     const response = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
@@ -72,6 +85,7 @@ export default {
     );
     this.incidents = response.data.results;
     this.incidentRequests = incidentRequestsResponse.data.results;
+    this.showRedeployModal = this.openModal;
   },
   computed: {
     currentUser() {
@@ -109,6 +123,7 @@ export default {
         await this.$toasted.success(
           this.$t('requestRedeploy.request_redeploy_success'),
         );
+        this.$emit('close');
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

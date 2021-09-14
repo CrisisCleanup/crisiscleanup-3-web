@@ -20,7 +20,29 @@
             item-key="id"
             label="name"
             @input="(payload) => $emit('update:incident', payload)"
-          />
+          >
+            <template #list-header>
+              <div
+                class="
+                  px-5
+                  py-1
+                  cursor-pointer
+                  flex
+                  items-center
+                  hover:bg-gray-300 hover:text-white
+                "
+                @click="showRedeployModal = true"
+              >
+                <ccu-icon
+                  :alt="$t('actions.add_incident')"
+                  type="active"
+                  size="small"
+                  class="mr-1"
+                />
+                {{ $t('actions.add_incident') }}
+              </div>
+            </template>
+          </form-select>
           <div class="flex ml-2 font-bold">
             <span>{{ $t($route.name) }}</span>
           </div>
@@ -41,6 +63,12 @@
         />
       </div>
     </div>
+    <RedeployRequest
+      v-if="showRedeployModal"
+      :hide-trigger="true"
+      :open-modal="true"
+      @close="showRedeployModal = false"
+    />
   </div>
 </template>
 
@@ -50,10 +78,12 @@ import DisasterIcon from '@/components/DisasterIcon.vue';
 import useUser from '@/use/user/useUser';
 import PhoneStatus from '@/components/header/PhoneStatus.vue';
 import UserProfileMenu from '@/components/header/UserProfileMenu.vue';
+import RedeployRequest from '@/pages/RedeployRequest';
 
 export default {
   name: 'Header',
   components: {
+    RedeployRequest,
     UserProfileMenu,
     DisasterIcon,
     PhoneStatus,
@@ -61,6 +91,11 @@ export default {
   props: {
     incidents: VueTypes.array,
     currentIncident: VueTypes.object,
+  },
+  data() {
+    return {
+      showRedeployModal: false,
+    };
   },
   setup() {
     return {
