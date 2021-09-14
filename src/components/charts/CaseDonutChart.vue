@@ -8,6 +8,7 @@ import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
 import { D3BaseChartMixin } from '@/mixins';
+import { nFormatter } from '@/utils/helpers';
 
 export type DonutChartDataT = {|
   reportedCases: number,
@@ -41,25 +42,12 @@ export default {
 
   watch: {
     chartData: {
-      deep: true,
       handler(newData, oldData) {
         if (!_.isEqual(newData, oldData)) {
           this.doRerender();
         }
       },
     },
-  },
-
-  mounted() {
-    this.margin.top = this.marginAll;
-    this.margin.bottom = this.marginAll;
-    this.margin.left = this.marginAll;
-    this.margin.right = this.marginAll;
-
-    this.destroyChart();
-    this.renderChart();
-
-    window.addEventListener('resize', this.doRerender);
   },
 
   methods: {
@@ -100,6 +88,7 @@ export default {
         .value((d) => d[1]);
 
       const data_ready = pie(_.entries(this.chartData));
+      const totalCases = d3.sum(d3.map(data_ready, (d) => d.data[1]));
 
       // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
       const chart = this.svg
@@ -133,10 +122,12 @@ export default {
       this.svg
         .append('text')
         .attr('fill', '#fff')
-        .attr('dominant-baseline', 'middle')
+        .attr('dominant-baseline', 'central')
         .attr('text-anchor', 'middle')
         .attr('font-size', this.getFontSize())
-        .text(d3.sum(d3.map(data_ready, (d) => d.data[1]))); // calculate sum of all values
+        .text(nFormatter(totalCases)) // calculate sum of all values
+        .append('title')
+        .text(totalCases);
     },
 
     addGlowDefs() {
@@ -147,7 +138,7 @@ export default {
       const filter = defs.append('filter').attr('id', 'glow');
       filter
         .append('feGaussianBlur')
-        .attr('stdDeviation', '0.5')
+        .attr('stdDeviation', '1.5')
         .attr('result', 'coloredBlur');
 
       const feMerge = filter.append('feMerge');

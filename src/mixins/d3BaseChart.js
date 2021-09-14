@@ -1,6 +1,6 @@
 // @flow
 import _ from 'lodash';
-import VueTypes from 'vue-types';
+import { useResizeObserver } from '@/use/useResizeObserver';
 
 export const D3BaseChartMixin = {
   props: {
@@ -8,15 +8,43 @@ export const D3BaseChartMixin = {
      * Unique chart ID
      * Defaults to component name with suffixing unique id
      */
-    chartId: VueTypes.string.def(`d3-chart-${_.uniqueId()}`),
+    chartId: {
+      type: String,
+      default: `d3-chart-${_.uniqueId()}`,
+      required: false,
+    },
     /**
      * top, bottom, left, right margins
      */
-    marginAll: VueTypes.number.def(20),
+    marginAll: {
+      type: Number,
+      default: 20,
+      required: false,
+    },
     /**
      * background color / gradient
      */
-    bgColor: VueTypes.string.def('transparent'),
+    bgColor: {
+      type: String,
+      default: 'transparent',
+      required: false,
+    },
+    /**
+     * enable/disable auto rerender on page resize
+     */
+    hasAutoResizing: {
+      type: Boolean,
+      default: true,
+      required: false,
+    },
+    /**
+     * render timeout (in ms)
+     */
+    renderTimeout: {
+      type: Number,
+      default: 1500,
+      required: false,
+    },
   },
 
   data() {
@@ -31,42 +59,50 @@ export const D3BaseChartMixin = {
       x: null,
       y: null,
       resizeObserver: null,
+      dimensions: null,
+      chartContainer: null,
     };
   },
 
   mounted() {
     this.d3 = require('d3');
     this.$nextTick(() => {
-      /**
-       * ResizeObserver to rerender chart
-       * when dimensions of chart's parent container changes
-       *
-       * @see https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API
-       */
+      this.chartContainer = document.querySelector(`#${this.chartId}`);
 
-      this.resizeObserver = new ResizeObserver(
-        _.debounce(() => {
-          this.margin.top = this.marginAll;
-          this.margin.bottom = this.marginAll;
-          this.margin.left = this.marginAll;
-          this.margin.right = this.marginAll;
+      // define and attach ResizeObserver only if `hasAutoResizing` prop is true
+      if (this.hasAutoResizing) {
+        /**
+         * ResizeObserver to rerender chart
+         * when dimensions of chart's parent container changes
+         *
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API
+         */
+        this.resizeObserver = useResizeObserver(
+          ((this.chartContainer: any): HTMLElement),
+          _.debounce((entries: any) => {
+            const [first] = entries;
+            this.dimensions = first;
+            this.doRerender();
+          }, this.renderTimeout),
+        );
 
-          this.destroyChart();
-          this.renderChart();
-          console.log('rerender', this.chartId);
-        }, 1500),
-      );
-
-      this.resizeObserver.observe(document.querySelector(`#${this.chartId}`));
+        if (!this.resizeObserver.isSupported) {
+          console.error('Resize Observer is not supported on this browser');
+        }
+      } else {
+        this.doRerender();
+      }
     });
   },
 
   beforeDestroy() {
-    this.resizeObserver.disconnect();
+    if (this.resizeObserver) {
+      this.resizeObserver.stop();
+    }
   },
 
   methods: {
-    doRerender: _.debounce(function () {
+    doRerender() {
       this.margin.top = this.marginAll;
       this.margin.bottom = this.marginAll;
       this.margin.left = this.marginAll;
@@ -74,7 +110,7 @@ export const D3BaseChartMixin = {
 
       this.destroyChart();
       this.renderChart();
-    }, 1500),
+    },
 
     getWidth(): number {
       const chartContainer = this.d3.select(`#${this.chartId}`);

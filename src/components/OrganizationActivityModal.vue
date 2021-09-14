@@ -206,6 +206,7 @@
               }"
               :bg-color="styles.backgroundColor"
               :margin-all="5"
+              :has-auto-resizing="false"
             />
             <span v-else class="w-8 h-8 flex items-center justify-center">
               0<span class="pew-pew-blue">*</span>

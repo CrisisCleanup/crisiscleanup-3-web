@@ -286,8 +286,8 @@ export default {
       type: Boolean,
     },
     data: {
-      type: null,
-      default: null,
+      type: Array,
+      default: () => [],
     },
     pagination: {
       type: Object,

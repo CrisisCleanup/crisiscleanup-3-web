@@ -609,6 +609,7 @@
                       }"
                       :bg-color="styles.backgroundColor"
                       :margin-all="5"
+                      :has-auto-resizing="false"
                     />
                     <span
                       v-else
@@ -871,7 +872,7 @@ export default {
       this.fetchEngagementData().then(() => {});
       this.fetchSiteStatistics().then(() => {});
       this.getLatestEvents().then(() => {});
-      this.fetchCircularBarplotData(this.$moment(), 30).then(() => {});
+      this.fetchCircularBarplotData(this.$moment(), 60).then(() => {});
       this.getRecentIncidents().then((incidents) => {
         this.incidents = incidents;
       });

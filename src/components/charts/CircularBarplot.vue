@@ -61,8 +61,7 @@ export default {
     chartData: {
       handler() {
         if (!_.isEmpty(this.chartData)) {
-          this.destroyChart();
-          this.renderChart();
+          this.doRerender();
         } else {
           console.log('No data found');
         }
@@ -96,8 +95,6 @@ export default {
       this.mappedTimestamps = (d) => d.timestamp;
       this.mappedTotalCalls = (d) => d.calls;
       this.mappedMissedCalls = (d) => d.missed;
-
-      console.log(this.chartData);
 
       // append the svg object
       this.svg = d3
@@ -370,7 +367,7 @@ export default {
         .attr('fill', '#ffffff')
         .attr('x', 0)
         .attr('dy', `${1.5}em`)
-        .text(this.$t('pewPew.missed'));
+        .text(this.$t('pewPew.callbacks'));
 
       innerTextContainer
         .join('tspan')
