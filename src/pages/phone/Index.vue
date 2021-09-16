@@ -95,14 +95,11 @@ export default {
       }
     };
 
-    const pollOutbound = useIntervalFn(
-      () => {
-        requestOutbound().then(() =>
-          context.root.$log.debug('outbound requested!'),
-        );
-      },
-      20000
-    );
+    const pollOutbound = useIntervalFn(() => {
+      requestOutbound().then(() =>
+        context.root.$log.debug('outbound requested!'),
+      );
+    }, 20000);
 
     watch(
       () => agent.value && agent.value.isRoutable,
