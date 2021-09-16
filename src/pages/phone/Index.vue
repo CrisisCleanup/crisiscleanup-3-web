@@ -101,8 +101,7 @@ export default {
           context.root.$log.debug('outbound requested!'),
         );
       },
-      20000,
-      true,
+      20000
     );
 
     watch(
