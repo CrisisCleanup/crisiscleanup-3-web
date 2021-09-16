@@ -230,7 +230,7 @@ export default class AgentClient extends Model {
   get currentContact(): Contact | null {
     const contact = Contact.query().where('agentId', this.agentId);
     if (!contact.exists()) return null;
-    return contact.first();
+    return contact.last();
   }
 
   get localeMap(): string {
