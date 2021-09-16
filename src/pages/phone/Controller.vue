@@ -143,7 +143,9 @@ export default {
     });
 
     const prefillData = computed(() => ({
-      phone1: currentContact.value ? currentContact.value.callerId : '',
+      // TODO: ensure stale contact data is properly flushed.
+      // phone1: currentContact.value ? currentContact.value.callerId : '',
+      phone1: '',
       name: callerName.value === 'Unknown' ? '' : callerName.value,
     }));
 
