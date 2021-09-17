@@ -70,7 +70,7 @@ export default () => {
     if (callDnis.value) {
       return callDnis.value.dnisNational;
     }
-    return '(123) 456-7890';
+    return '(000) 000-0000';
   });
 
   const callerHistory = computed(() => {
