@@ -36,7 +36,7 @@
         <base-input
           :value="phoneNumber"
           size="medium"
-          placeholder="+1 (123) 456-7890"
+          placeholder="+1 (000) 000-0000"
           :validator="validatePhoneNumber"
           @input="(value) => (phoneNumber = value)"
         />
