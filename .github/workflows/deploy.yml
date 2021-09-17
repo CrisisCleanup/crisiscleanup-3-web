@@ -115,11 +115,11 @@ jobs:
 
       - name: Invoke Web Rollout
         uses: benc-uk/workflow-dispatch@v1
-        continue-on-error: true
         with:
           workflow: Rollout Deployments
           token: ${{ secrets.GHCR_PAT }}
           repo: CrisisCleanup/crisiscleanup-3-api
+          ref: master
           inputs: '{ "stage": "${{ github.event.inputs.stage }}", "targets": "crisiscleanup-web-frontend" }'
 
       - name: Post Notify Deploy
