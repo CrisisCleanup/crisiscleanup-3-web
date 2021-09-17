@@ -119,18 +119,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Create Sentry Release
-        if: "github.event_name == 'release' || (github.event_name == 'create' && github.event.ref_type == 'tag')"
-        uses: tclindner/sentry-releases-action@v1.1.1
-        continue-on-error: true
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_PROPERTIES: sentry.properties
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-        with:
-          tagName: ${{ github.ref }}
-          environment: ${{ steps.find-stage.outputs.stage }}
-          releaseNamePrefix: crisiscleanup-3-web@
 
       - name: Invoke Development Deploy
         if: "github.event_name != 'pull_request' && github.ref == 'refs/heads/develop'"

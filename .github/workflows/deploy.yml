@@ -83,6 +83,18 @@ jobs:
           echo "VUE_APP_PORTAL_KEY=crisiscleanup_us" >> $GITHUB_ENV
           echo "NODE_ENV=production" >> $GITHUB_ENV
 
+      - name: Create Sentry Release
+        uses: tclindner/sentry-releases-action@v1.2.0
+        continue-on-error: true
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_PROPERTIES: sentry.properties
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        with:
+          tagName: ${{ github.ref }}
+          environment: ${{ github.event.inputs.stage }}
+          releaseNamePrefix: crisiscleanup-3-web@
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v1
 
