@@ -76,8 +76,19 @@
               >{{ statusCount + statusGroupCount }}</span
             >
           </div>
-          <div class="p-3 px-4 border-b cursor-pointer">
+          <div
+            class="p-3 px-4 border-b cursor-pointer"
+            :class="{
+              'border-l-4 border-l-black': currentSection === 'personal',
+            }"
+            @click="currentSection = 'personal'"
+          >
             {{ $t('worksiteFilters.personal_info') }}
+            <span
+              v-if="formDataCount + survivorCount > 0"
+              class="rounded-full px-1 bg-black text-white text-xs"
+            >{{ formDataCount + survivorCount }}</span
+            >
           </div>
           <div
             class="p-3 px-4 border-b cursor-pointer"
@@ -157,17 +168,6 @@
                 class="block my-1"
               >
                 {{ $t('worksiteFilters.in_secondary_response_area') }}
-              </base-checkbox>
-            </div>
-            <div class="survivors mb-2">
-              <div class="my-1 text-base">
-                {{ $t('worksiteFilters.survivors') }}
-              </div>
-              <base-checkbox
-                v-model="filters.survivors.data.member_of_my_organization"
-                class="block my-1"
-              >
-                {{ $t('worksiteFilters.member_of_my_org') }}
               </base-checkbox>
             </div>
             <div class="claim-status mb-2">
@@ -269,6 +269,42 @@
                   }
                 "
                 >{{ $t(flag) }}
+              </base-checkbox>
+            </div>
+          </div>
+          <div v-if="currentSection === 'personal'" class="flex flex-col">
+            <div class="survivors mb-2">
+              <div class="my-1 text-base">
+                {{ $t('My Organization') }}
+              </div>
+              <base-checkbox
+                v-model="filters.survivors.data.member_of_my_organization"
+                class="block my-1"
+              >
+                {{ $t('worksiteFilters.member_of_my_org') }}
+              </base-checkbox>
+            </div>
+            <div class="status-group mb-2">
+              <div class="my-1 text-base">
+                {{ $t('~~Personal Information') }}
+              </div>
+              <base-checkbox
+                v-for="data in [
+                  'older_than_60',
+                  'children_in_home',
+                  'first_responder',
+                  'veteran',
+                ]"
+                :key="data"
+                class="block my-1"
+                :value="filters.form_data.data[data]"
+                @input="
+                  (value) => {
+                    filters.form_data.data[data] = value;
+                    filters.form_data.data = { ...filters.form_data.data };
+                  }
+                "
+                >{{ $t(`formLabels.${data}`) }}
               </base-checkbox>
             </div>
           </div>
@@ -469,6 +505,7 @@ import { mapState } from 'vuex';
 import Team from '@/models/Team';
 import WorksiteFieldsFilter from '../utils/data_filters/WorksiteFieldsFilter';
 import WorksiteFlagsFilter from '../utils/data_filters/WorksiteFlagsFilter';
+import FormDataFilter from '../utils/data_filters/FormDataFilter';
 import WorksiteStatusGroupFilter from '../utils/data_filters/WorksiteStatusGroupFilter';
 import WorksiteStatusFilter from '../utils/data_filters/WorksiteStatusFilter';
 import WorksiteLocationsFilter from '../utils/data_filters/WorksiteLocationsFilter';
@@ -514,6 +551,7 @@ export default {
         survivors: {},
         statusGroups: {},
         flags: {},
+        form_data: {},
         sub_fields: {},
         locations: {},
         missingWorkType: {},
@@ -560,6 +598,9 @@ export default {
     flagsCount() {
       return this.filters.flags.count;
     },
+    formDataCount() {
+      return this.filters.form_data.count;
+    },
     locationsCount() {
       return this.filters.locations.count;
     },
@@ -582,6 +623,7 @@ export default {
         this.statusGroupCount +
         this.locationsCount +
         this.flagsCount +
+        this.formDataCount +
         this.missingWorkTypeCount +
         this.teamsCount +
         this.survivorCount +
@@ -617,6 +659,12 @@ export default {
         flags: new WorksiteFlagsFilter(
           'flags',
           (this.currentFilters.flags && this.currentFilters.flags.data) || {},
+        ),
+        form_data: new FormDataFilter(
+          'flags',
+          (this.currentFilters.form_data &&
+            this.currentFilters.form_data.data) ||
+            {},
         ),
         locations: new WorksiteLocationsFilter(
           'locations',
@@ -706,6 +754,7 @@ export default {
         fields: new WorksiteFieldsFilter('fields', {}),
         statusGroups: new WorksiteStatusGroupFilter('statusGroups', {}),
         flags: new WorksiteFlagsFilter('flags', {}),
+        form_data: new FormDataFilter('form_data', {}),
         statuses: new WorksiteStatusFilter('statuses', {}),
         locations: new WorksiteLocationsFilter('locations', {}),
         teams: new WorksiteTeamsFilter('teams', {}),

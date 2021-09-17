@@ -25,8 +25,8 @@ export default class SurvivorFilter extends Filter {
     };
   }
 
-  removeField(identifier) {
-    this.data[identifier] = false;
+  removeField() {
+    this.data.member_of_my_organization = false;
     this.data = { ...this.data };
   }
 }
