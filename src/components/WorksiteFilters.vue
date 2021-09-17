@@ -87,7 +87,7 @@
             <span
               v-if="formDataCount + survivorCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
-            >{{ formDataCount + survivorCount }}</span
+              >{{ formDataCount + survivorCount }}</span
             >
           </div>
           <div
