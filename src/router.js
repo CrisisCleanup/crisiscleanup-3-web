@@ -37,7 +37,7 @@ const routes = [
   {
     path: '/',
     component: Dashboard,
-    name: 'nav.pew',
+    name: 'nav.dashboard',
     meta: { layout: 'authenticated' },
   },
   {

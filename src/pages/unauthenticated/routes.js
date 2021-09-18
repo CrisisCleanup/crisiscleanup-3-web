@@ -44,6 +44,12 @@ const routes = [
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
+    path: '/live',
+    component: PewPew,
+    name: 'nav.pew',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
     path: '/maintenance',
     // component: () =>
     //   import(
