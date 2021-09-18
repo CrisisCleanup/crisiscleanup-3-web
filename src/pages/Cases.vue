@@ -1324,6 +1324,10 @@ export default {
         this.showingMap = true;
         this.showingTable = false;
       }
+      if (states.showingTable) {
+        this.showingTable = true;
+        this.showingMap = false;
+      }
       if (states.appliedFilters) {
         this.appliedFilters = states.appliedFilters;
       }
