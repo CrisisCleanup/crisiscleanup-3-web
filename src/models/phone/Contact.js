@@ -206,11 +206,16 @@ export default class Contact extends Model {
     );
   }
 
+  get isReady(): boolean {
+    return this.hasResolvedCases && this.dnis !== null;
+  }
+
   get mostRecentWorksite(): typeof Worksite | null {
     return _.maxBy(this.worksites, (wk) => Date.parse(wk.updated_at));
   }
 
   static syncAttributes(contactId: string, externalAttrs: any) {
+    Log.info('syncing contact attributes!');
     const contact: typeof Contact = Contact.query()
       .withAllRecursive()
       .find(contactId);
@@ -672,7 +677,8 @@ export default class Contact extends Model {
       _.negate(_.isNil),
     );
     Log.debug(`resolving <${model.entity}> @ [${itemIds}]`);
-    return model.fetchOrFindId(itemIds);
+    // TODO: Implement stale-while-revalidate caching method.
+    return model.fetchById(itemIds);
   }
 
   async getCallDuration() {
@@ -729,37 +735,30 @@ export default class Contact extends Model {
     inbound: typeof PhoneInbound | null,
     outbound: typeof PhoneOutbound | null,
   } = {}): Promise<PhoneDnis | null> {
-    // check for DNIS id in attr
-    const _dnis = _.get(
-      this.contactAttributes,
-      ContactAttributes.CALLER_DNIS_ID,
-      null,
-    );
-    if (_dnis !== null) {
-      Log.debug('resolving DNIS using dnis attribute!', _dnis);
-      return PhoneDnis.fetchOrFindId(_dnis);
-    }
     // first check for contact attr.
     let _number = _.get(
       this.contactAttributes,
       ContactAttributes.INBOUND_NUMBER,
       null,
     );
-    if (outbound) {
+
+    if (outbound && !this.isInbound) {
       // if an outbound was found, use
       // the dnis1 id to resolve
       Log.debug('resolving DNIS using current outbound!', outbound.dnis1);
-      const outDnis = await PhoneDnis.fetchOrFindId(outbound.dnis1);
+      const outDnis = await PhoneDnis.fetchById(outbound.dnis1);
       if (!outDnis || _.isEmpty(outDnis)) {
         Log.info('failed to resolve dnis from outbound!', outDnis);
       }
     }
-    if (inbound) {
+
+    if (inbound && this.isInbound) {
       // if an inbound was found
       // use the dnis raw number to resolve.
       _number = inbound.dnis;
       Log.debug('resolving DNIS using current current!', inbound.dnis);
     }
+
     if (!_number) return null;
     const parsed = parsePhoneNumberFromString(_number);
     if (!parsed) return null;
