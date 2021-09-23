@@ -184,7 +184,6 @@ import useScripts from '@/use/phone/useScripts';
 import { ContactActions, ContactStates } from '@/models/phone/Contact';
 import PhoneInbound from '@/models/PhoneInbound';
 import PhoneOutbound from '@/models/PhoneOutbound';
-import useAgent from '@/use/phone/useAgent';
 import { InboundActions } from '@/store/modules/phone/streams';
 import ProgressButton from '@/components/buttons/ProgressButton.vue';
 import { useIntervalFn } from '@/use/useIntervalFn';
@@ -211,8 +210,6 @@ export default {
       'setNextInboundAction',
     ]);
     const { updateContact } = useActions('phone.streams', ['updateContact']);
-    const { clearState } = useActions('phone.controller', ['clearState']);
-    const { agent } = useAgent();
     const dismissState = useToggle();
     const { currentIncident } = useIncident();
 
