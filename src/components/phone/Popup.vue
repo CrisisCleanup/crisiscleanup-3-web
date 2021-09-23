@@ -319,7 +319,6 @@ export default {
         action: ContactActions.MISSED,
         state: ContactStates.ROUTED,
       });
-      await clearState({ agentId: agent.value.agentId });
     };
 
     const acceptCall = async () => {
