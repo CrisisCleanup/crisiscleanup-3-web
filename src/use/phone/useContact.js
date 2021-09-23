@@ -27,7 +27,7 @@ export default () => {
   );
 
   const isReady = computed(() =>
-    currentContact.value ? currentContact.value.hasResolvedCases : false,
+    currentContact.value ? currentContact.value.isReady : false,
   );
 
   const { currentCase } = useState('phone.controller', ['currentCase']);
@@ -113,7 +113,11 @@ export default () => {
     () => {
       if (
         currentContact.value &&
-        currentContact.value.action === ContactActions.ENDED
+        [
+          ContactActions.MISSED,
+          ContactActions.ENDED,
+          ContactActions.ABANDON,
+        ].includes(currentContact.value.action)
       ) {
         syncDuration.stop();
       }
