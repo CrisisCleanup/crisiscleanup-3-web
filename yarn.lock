@@ -6183,10 +6183,10 @@
   optionalDependencies:
     prettier "^1.18.2"
 
-"@vue/composition-api@^1.0.0-rc.13":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.1.1.tgz#e0ed16d8449ad717329167b9f4b0d2005515df4b"
-  integrity sha512-LduQZICuBuwij541PgLsuxY/W/TA51xkSy2mBrRgnwQuqvb9YHdFguc0TwWTCAFq/EiwHWqsCb/SDYMkf01tCA==
+"@vue/composition-api@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@vue/composition-api/-/composition-api-1.2.1.tgz#88ffd9eb7c9ca8989d4ee65f55f2fd2303b20d6c"
+  integrity sha512-Gea21Vyl2PVDLc6Fq1rr5poI2qU+1WjGze6oykWDSiGEII72n11XdZOSqF6BA53CXZZVs27cz3S3mfJM0a59Vw==
   dependencies:
     tslib "^2.3.0"
 
@@ -6592,10 +6592,10 @@ alphanum-sort@^1.0.0:
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
 
-amazon-connect-streams@^1.6.10:
-  version "1.6.10"
-  resolved "https://registry.yarnpkg.com/amazon-connect-streams/-/amazon-connect-streams-1.6.10.tgz#f1faf3950c0593e5fcd9eb1fa88d87c1385b0176"
-  integrity sha512-/LpU6LblnXWbCAAWkJC114iZPp8zcGfi0rmAQNx9LkR7lw9Jh/FGP48WH80v3ffVP5du22+Sp5RyKMbykAYUjg==
+amazon-connect-streams@^1.6.11:
+  version "1.6.11"
+  resolved "https://registry.yarnpkg.com/amazon-connect-streams/-/amazon-connect-streams-1.6.11.tgz#021884cc2c9a913665fca0595631db37fcd9fabb"
+  integrity sha512-zJDjfHxE2e93ub6l8wJDQwQGMVc6oxYfxpG1UyGTvwE8B7Fgd28cK7v68VXmDfd/TElaD3Ny7cct9rAF47r3ug==
 
 amdefine@>=0.0.4:
   version "1.0.1"
