@@ -166,6 +166,7 @@ export default {
             },
           },
         );
+        await this.getPrintToken();
         await this.$toasted.success(this.$t('printToken.success_update_case'));
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
