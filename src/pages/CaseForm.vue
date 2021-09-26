@@ -279,6 +279,7 @@
           >{{ $t('caseForm.photos') }}
         </SectionHeading>
         <WorksiteImageSection
+          class="px-3 pb-3"
           :worksite="worksite"
           :key="worksite.files"
           @photosChanged="reloadWorksite"

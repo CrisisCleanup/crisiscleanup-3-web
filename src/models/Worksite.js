@@ -283,6 +283,15 @@ export default class Worksite extends CCUModel {
           { save: false },
         );
       },
+      addFileWithToken(token, file) {
+        return this.post(
+          `/print_tokens/${token}/files`,
+          {
+            file,
+          },
+          { save: false },
+        );
+      },
       deleteFile(id, file) {
         return this.delete(
           `/worksites/${id}/files`,

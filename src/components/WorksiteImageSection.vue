@@ -1,5 +1,5 @@
 <template>
-  <section class="px-3 pb-3 flex">
+  <section class="flex">
     <DragDrop
       class="w-20 h-20 border-solid border-2"
       :disabled="uploading"
@@ -66,6 +66,7 @@ export default {
   },
   props: {
     worksite: VueTypes.object,
+    isPrintToken: VueTypes.bool.def(false),
   },
   methods: {
     async handleFileUpload(fileList) {
@@ -88,8 +89,12 @@ export default {
           },
         );
         const file = result.data.id;
-        await Worksite.api().addFile(this.worksite.id, file);
-        await Worksite.api().fetch(this.worksite.id);
+        if (this.isPrintToken) {
+          await Worksite.api().addFileWithToken(this.worksite.token, file);
+        } else {
+          await Worksite.api().addFile(this.worksite.id, file);
+          await Worksite.api().fetch(this.worksite.id);
+        }
         this.$emit('photosChanged');
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));

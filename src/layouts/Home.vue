@@ -1,6 +1,7 @@
 <template>
   <div class="homegrid grid-container">
     <slot name="grid-overlay" />
+    <slot name="grid-top" />
     <slot name="grid-logo">
       <div class="grid--logo logo my-8">
         <a href="/">
@@ -100,7 +101,7 @@ a {
   }
 }
 
-$areas: main nav logo actions overlay survivors globe footer;
+$areas: main nav logo actions overlay survivors globe footer top;
 .homegrid {
   overflow: auto;
   &.grid-container {

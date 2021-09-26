@@ -3,25 +3,29 @@
     <template #grid-overlay>
       <div class="grid--overlay homegrid-backdrop" />
     </template>
+    <template #grid-overlay>
+      <div class="grid--top">
+        <div class="text-5xl">
+          {{ $t('printToken.thank_you_for_helping') }}
+        </div>
+        <div class="text-2xl font-light">
+          <div>
+            {{ $t('printToken.case_number') }}:
+            {{ printToken.case_number }}
+          </div>
+          <div>
+            {{ $t('printToken.resident_name') }}:
+            {{ printToken.case_name }}
+          </div>
+          <div>{{ $t('printToken.address') }}: {{ fullAddress }}</div>
+        </div>
+      </div>
+    </template>
     <template #grid-content>
       <div class="grid--main">
         <Loader :loading="loading">
           <template #content>
-            <div class="w-2/3">
-              <div class="text-5xl">
-                {{ $t('printToken.thank_you_for_helping') }}
-              </div>
-              <div class="text-2xl font-light">
-                <div>
-                  {{ $t('printToken.case_number') }}:
-                  {{ printToken.case_number }}
-                </div>
-                <div>
-                  {{ $t('printToken.resident_name') }}:
-                  {{ printToken.case_name }}
-                </div>
-                <div>{{ $t('printToken.address') }}: {{ fullAddress }}</div>
-              </div>
+            <div class="w-2/3 sm:w-screen">
               <div class="flex">
                 <div
                   v-for="work_type in printToken.work_types"
@@ -32,7 +36,7 @@
                     {{ work_type.work_type | getWorkTypeName }}
                   </span>
                   <WorksiteStatusDropdown
-                    class="block"
+                    class="block text-xl"
                     :current-work-type="work_type"
                     use-icon
                     @input="
@@ -50,7 +54,6 @@
                   rows="3"
                   class="
                     text-base
-                    form-field
                     border border-crisiscleanup-dark-100
                     placeholder-crisiscleanup-dark-200
                     outline-none
@@ -78,14 +81,22 @@
                 <span class="text-sm">{{ $t('printToken.your_email') }}</span>
                 <base-input type="email" v-model="printToken.email" />
 
-                <base-button
-                  variant="solid"
-                  :action="save"
-                  class="my-2 font-light p-3"
-                  :text="$t('actions.save')"
-                  :alt="$t('actions.save')"
-                />
+                <div>
+                  <base-text>{{ $t('~~Photos') }}</base-text>
+                  <WorksiteImageSection
+                    :worksite="printToken"
+                    :key="printToken.files"
+                    :is-print-token="true"
+                  />
+                </div>
               </form>
+              <base-button
+                variant="solid"
+                :action="save"
+                class="my-2 font-light p-5 w-120"
+                :text="$t('actions.save')"
+                :alt="$t('actions.save')"
+              />
             </div>
           </template>
         </Loader>
@@ -99,28 +110,18 @@ import HomeLayout from '@/layouts/Home';
 import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
 import Loader from '../../components/Loader';
 import { getErrorMessage } from '../../utils/errors';
+import WorksiteImageSection from '@/components/WorksiteImageSection';
 
 export default {
-  components: { HomeLayout, WorksiteStatusDropdown, Loader },
+  components: {
+    WorksiteImageSection,
+    HomeLayout,
+    WorksiteStatusDropdown,
+    Loader,
+  },
   name: 'PrintToken',
   async mounted() {
-    this.loading = true;
-    try {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
-        {
-          headers: {
-            Authorization: null,
-          },
-        },
-      );
-      this.printToken = response.data;
-    } catch (error) {
-      await this.$toasted.error(getErrorMessage(error));
-      this.$log.debug(error);
-    } finally {
-      this.loading = false;
-    }
+    await this.getPrintToken();
   },
   computed: {
     fullAddress() {
@@ -129,6 +130,25 @@ export default {
     },
   },
   methods: {
+    async getPrintToken() {
+      this.loading = true;
+      try {
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
+          {
+            headers: {
+              Authorization: null,
+            },
+          },
+        );
+        this.printToken = response.data;
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+        this.$log.debug(error);
+      } finally {
+        this.loading = false;
+      }
+    },
     async save() {
       try {
         const data = {
@@ -166,6 +186,7 @@ export default {
   &.grid-container {
     grid-template-areas:
       'logo . . . . survivors'
+      '. top top top top top'
       '. main main main main main'
       '. main main main main main'
       '. main main main main main';

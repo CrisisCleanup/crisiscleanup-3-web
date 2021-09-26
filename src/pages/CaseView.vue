@@ -312,7 +312,11 @@
       <SectionHeading :count="6" class="mb-3">{{
         $t('caseForm.photos')
       }}</SectionHeading>
-      <WorksiteImageSection :worksite="worksite" :key="worksite.files" />
+      <WorksiteImageSection
+        :worksite="worksite"
+        :key="worksite.files"
+        class="px-3 pb-3"
+      />
     </div>
     <div
       class="

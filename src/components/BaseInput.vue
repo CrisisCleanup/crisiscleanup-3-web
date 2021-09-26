@@ -278,6 +278,11 @@ textarea {
   border-radius: 0;
 }
 
+input:not([type='radio']):not([type='checkbox']) {
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
 input.xlarge {
   height: 60px;
 }
