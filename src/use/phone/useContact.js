@@ -102,7 +102,7 @@ export default () => {
     if (
       callPending.value &&
       currentContact.value &&
-      !currentContact.value.hasResolvedCases
+      !currentContact.value.isReady
     ) {
       Contact.syncAttributes(currentContact.value.contactId);
     }
@@ -121,10 +121,10 @@ export default () => {
       ) {
         syncDuration.stop();
       }
-      if (currentContact.value && currentContact.value.hasResolvedCases) {
+      if (currentContact.value && currentContact.value.isReady) {
         syncAttributes.stop();
       }
-      if (currentContact.value && !currentContact.value.hasResolvedCases) {
+      if (currentContact.value && !currentContact.value.isReady) {
         syncAttributes.start();
       }
     },

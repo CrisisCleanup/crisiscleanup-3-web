@@ -314,7 +314,7 @@ export default class AgentClient extends Model {
     });
     await AgentClient.store().dispatch('phone.streams/setHeartbeatTime');
     if (this.currentContact) {
-      if (!this.currentContact.hasResolvedCases) {
+      if (!this.currentContact.isReady) {
         Contact.syncAttributes(this.currentContact.contactId);
       }
     }
