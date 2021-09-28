@@ -1640,6 +1640,11 @@ export default {
       this[view] = true;
       this.updateUserState();
     },
+    search(search, incident) {
+      return this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,
+      );
+    },
     onSearch: debounce(
       async function (search) {
         this.currentSearch = search;
@@ -1647,22 +1652,11 @@ export default {
         if (!search) {
           this.searchWorksites = [];
         }
-        const searchData = await hash({
-          tableSearch: this.fetch({
-            pageSize: this.pagination.pageSize,
-            page: this.pagination.current,
-          }),
-          dropdownSearch: await Worksite.api().searchWorksites(
-            search,
-            this.currentIncidentId,
-          ),
-        });
-        this.searchWorksites = search
-          ? searchData.dropdownSearch.entities.worksites
-          : [];
+        const searchData = await this.search(search, this.currentIncidentId);
+        this.searchWorksites = search ? searchData.data.results : [];
         this.searchingWorksites = false;
       },
-      150,
+      250,
       {
         leading: false,
         trailing: true,

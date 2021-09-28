@@ -277,7 +277,7 @@ export default {
   background: white;
   padding: 0;
   overflow: auto;
-  max-height: 200px;
+  max-height: 400px;
 }
 
 .full .autosuggest__results {
