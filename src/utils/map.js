@@ -140,6 +140,7 @@ export function getWorksiteLayer(
           frame = null;
         }
         const container = utils.getContainer();
+        container.sortableChildren = true;
         const renderer = utils.getRenderer();
         const project = utils.latLngToLayerPoint;
         const scale = utils.getScale();
@@ -155,6 +156,11 @@ export function getWorksiteLayer(
 
             const markerSprite = new Sprite();
             markerSprite.filtered = filtered && !filtered.has(marker.id);
+            if (markerSprite.filtered) {
+              markerSprite.zIndex = 0;
+            } else {
+              markerSprite.zIndex = 2;
+            }
             const workType =
               marker.key_work_type ||
               Worksite.getWorkType(
