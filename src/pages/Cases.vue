@@ -1042,7 +1042,6 @@ import Team from '@/models/Team';
 import { templates } from '@/icons/icons_templates';
 import SviSlider from '@/components/SviSlider';
 import { EventBus } from '@/event-bus';
-import { hash } from '@/utils/promise';
 import WorksiteTable from './WorksiteTable';
 import WorksiteSearchInput from '../components/WorksiteSearchInput';
 import StatusDropdown from '../components/StatusDropdown';
