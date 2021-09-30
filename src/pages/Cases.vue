@@ -1654,6 +1654,12 @@ export default {
         const searchData = await this.search(search, this.currentIncidentId);
         this.searchWorksites = search ? searchData.data.results : [];
         this.searchingWorksites = false;
+        if (this.showingTable) {
+          this.fetch({
+            pageSize: this.pagination.pageSize,
+            page: this.pagination.current,
+          }).then(() => {});
+        }
       },
       250,
       {
