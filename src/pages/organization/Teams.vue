@@ -125,7 +125,7 @@ export default {
     },
     async getTeams() {
       const results = await Team.api().get(
-        `/teams?search=${this.currentSearch || ''}`,
+        `/teams?search=${this.currentSearch || ''}&limit=500`,
         {
           dataKey: 'results',
         },
@@ -152,6 +152,7 @@ export default {
       const params = {
         incident: this.currentIncidentId,
         work_type__claimed_by: this.currentUser.organization.id,
+        limit: 500,
         fields:
           'id,name,address,case_number,work_types,city,state,county,flags,location,incident,postal_code,reported_by,form_data',
       };
@@ -162,13 +163,13 @@ export default {
     },
     async getData() {
       const results = await User.api().get(
-        `/users?organization=${this.currentUser.organization.id}`,
+        `/users?organization=${this.currentUser.organization.id}&limit=500`,
         {
           dataKey: 'results',
         },
       );
       const usersWithoutTeamsResults = await User.api().get(
-        `/users?organization=${this.currentUser.organization.id}&has_team=false`,
+        `/users?organization=${this.currentUser.organization.id}&has_team=false&limit=500`,
         {
           dataKey: 'results',
         },
