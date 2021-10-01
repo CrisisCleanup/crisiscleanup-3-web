@@ -158,6 +158,7 @@ export function getWorksiteLayer(
             markerSprite.filtered = filtered && !filtered.has(marker.id);
             if (markerSprite.filtered) {
               markerSprite.zIndex = 0;
+              markerSprite.alpha = 0.3;
             } else {
               markerSprite.zIndex = 2;
             }
@@ -214,7 +215,7 @@ export function getWorksiteLayer(
             markerSprite.active_work_type = workType;
             markerSprite.colorsKey = colorsKey;
             markerSprite.id = marker.id;
-            markerSprite.alpha = getOpacity(marker.updated_at);
+            // markerSprite.alpha = getOpacity(marker.updated_at);
           });
           context.displayedWorkTypes = { ...context.displayedWorkTypes };
           const quadTrees = {};
