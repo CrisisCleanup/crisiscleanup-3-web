@@ -14,6 +14,7 @@
       :disabled="disabled || (breakGlass && !glassBroken)"
       :placeholder="placeholder"
       :required="required"
+      :hidden="hidden"
       :pattern="pattern"
       :autocomplete="autocomplete"
       :readonly="readonly"
@@ -23,7 +24,7 @@
       :rows="rows"
     />
     <div
-      v-if="breakGlass && !glassBroken"
+      v-if="breakGlass && !glassBroken && !hidden"
       class="icon-container flex items-center justify-center"
       :class="iconClasses"
       @click="glassBroken = true"
@@ -93,6 +94,10 @@ export default {
       default: null,
     },
     disabled: {
+      type: Boolean,
+      default: false,
+    },
+    hidden: {
       type: Boolean,
       default: false,
     },

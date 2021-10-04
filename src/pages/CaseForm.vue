@@ -100,15 +100,49 @@
         "
       >
         {{ $t('formLabels.location') }}
-        <ccu-icon
-          type="trash"
-          size="small"
-          :alt="$t('caseView.clear_location')"
-          @click.native="clearLocationFields"
-        />
       </div>
       <div class="form-field">
+        <div
+          v-if="addressSet"
+          class="
+            rounded-lg
+            shadow-lg
+            p-5
+            border
+            flex
+            justify-between
+            items-center
+          "
+        >
+          <div class="flex items-start">
+            <ccu-icon
+              type="pin"
+              class="mr-1"
+              size="small"
+              style="margin-top: 3px"
+              :alt="$t('~~Location')"
+            />
+            <span v-html="worksiteAddress"></span>
+          </div>
+          <div class="flex">
+            <ccu-icon
+              type="trash"
+              size="small"
+              class="mx-1"
+              :alt="$t('caseView.clear_location')"
+              @click.native="clearLocationFields"
+            />
+            <ccu-icon
+              type="edit"
+              size="small"
+              class="mx-1"
+              :alt="$t('~~Manually edit address')"
+              @click.native="unlockLocationFields"
+            />
+          </div>
+        </div>
         <WorksiteSearchInput
+          v-else
           :value="worksite.address"
           selector="js-worksite-address"
           :suggestions="[
@@ -130,7 +164,11 @@
             }
           "
           display-property="description"
-          :placeholder="$t('formLabels.address')"
+          :placeholder="
+            hideDetailedAddressFields
+              ? $t('~~Full Address')
+              : $t('formLabels.address')
+          "
           size="large"
           :required="true"
           @input="
@@ -143,26 +181,27 @@
           @search="geocoderSearch"
         />
       </div>
-      <div class="form-field">
+      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
         <base-input
           :value="worksite.city"
           selector="js-worksite-city"
           size="large"
           :placeholder="$t('formLabels.city')"
           required
+          :hidden="hideDetailedAddressFields"
           @input="
             (value) => {
               updateWorksite(value, 'city');
             }
           "
-          @change="findPotentialGeocode"
         />
       </div>
-      <div class="form-field">
+      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
         <base-input
           :value="worksite.county"
           selector="js-worksite-county"
           size="large"
+          :hidden="hideDetailedAddressFields"
           :placeholder="$t('formLabels.county')"
           :break-glass="true"
           required
@@ -171,12 +210,12 @@
               updateWorksite(value, 'county');
             }
           "
-          @change="findPotentialGeocode"
         />
       </div>
-      <div class="form-field">
+      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
         <base-input
           :value="worksite.state"
+          :hidden="hideDetailedAddressFields"
           selector="js-worksite-state"
           size="large"
           :placeholder="$t('formLabels.state')"
@@ -186,17 +225,16 @@
               updateWorksite(value, 'state');
             }
           "
-          @change="findPotentialGeocode"
         />
       </div>
-      <div class="form-field">
+      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
         <base-input
           :value="worksite.postal_code"
           selector="js-worksite-postal-code"
           size="large"
           :placeholder="$t('formLabels.postal_code')"
           required
-          @change="findPotentialGeocode"
+          :hidden="hideDetailedAddressFields"
         />
       </div>
       <div class="form-field">
@@ -437,6 +475,8 @@ export default {
       addAdditionalPhone: false,
       currentNote: '',
       formStyle: {},
+      hideDetailedAddressFields: true,
+      addressSet: false,
     };
   },
   computed: {
@@ -462,6 +502,22 @@ export default {
     fieldsArray() {
       return this.fields.map((field) => field.field_key);
     },
+    worksiteAddress() {
+      if (this.worksite) {
+        // eslint-disable-next-line camelcase
+        const {
+          address,
+          city,
+          state,
+          postal_code: postalCode,
+          county,
+        } = this.worksite;
+        return `${address} <br> ${city}, ${state}, ${
+          county || ''
+        } <br> ${postalCode}`;
+      }
+      return '';
+    },
   },
   async mounted() {
     this.ready = false;
@@ -473,6 +529,7 @@ export default {
         return;
       }
       this.worksite = Worksite.find(this.worksiteId);
+      this.addressSet = true;
       if (this.$route.query.showOnMap) {
         this.$emit('jumpToCase', this.worksiteId);
       }
@@ -672,6 +729,13 @@ export default {
       const what3words = await What3wordsService.getWords(lat, lng);
       this.updateWorksite(what3words, 'what3words');
       this.$emit('geocoded', geocode.location);
+      this.addressSet = true;
+    },
+
+    unlockLocationFields() {
+      this.hideDetailedAddressFields = false;
+      this.addressSet = false;
+      this.$emit('clearMarkers');
     },
 
     clearLocationFields() {
@@ -684,8 +748,9 @@ export default {
         'location',
         'what3words',
       ];
-      geocodeKeys.forEach((key) => this.updateWorksite(null, key));
+      geocodeKeys.forEach((key) => this.updateWorksite('', key));
       this.$emit('clearMarkers');
+      this.addressSet = false;
     },
 
     async onGeocodeSelect(value) {
