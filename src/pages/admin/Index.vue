@@ -23,6 +23,9 @@ export default {
       reactive({
         key: 'nav.admin_ticket_dashboard',
       }),
+      reactive({
+        key: 'nav.costs',
+      }),
     ]);
     return { tabs };
   },

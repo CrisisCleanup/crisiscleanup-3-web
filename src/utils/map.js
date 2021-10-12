@@ -43,30 +43,6 @@ export const getGoogleMapsLocation = (url) => {
   };
 };
 
-const getOpacity = (date) => {
-  // let opacityBuckets = [100, 75, 60, 35, 20, 10]
-  const opacityBuckets = [100, 85, 70, 45, 30, 20];
-  const today = moment();
-  const sixtyDaysAgo = moment().subtract(60, 'days');
-
-  const currentDate = moment(date);
-  // if (currentDate.isBefore(sixtyDaysAgo)) {
-  //     return 0.1;
-  // }
-
-  const spread = today.unix() - sixtyDaysAgo.unix();
-  const percentage =
-    ((currentDate.unix() - sixtyDaysAgo.unix()) / spread) * 100.0;
-
-  // TODO: refactor
-  // eslint-disable-next-line no-unused-vars
-  const closestOpacity = opacityBuckets.reduce((prev, curr) =>
-    Math.abs(curr - percentage) < Math.abs(prev - percentage) ? curr : prev,
-  );
-  // return closestOpacity / 100;
-  return 1;
-};
-
 /**
  * Calculate the center/average of multiple GeoLocation coordinates
  * Expects an array of objects with .latitude and .longitude properties
