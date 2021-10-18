@@ -134,7 +134,15 @@ export default {
         tooltips: {
           displayColors: true,
           callbacks: {
-            mode: 'x',
+            mode: 'label',
+            footer(items, data) {
+              const { datasets } = data;
+              const total = datasets.reduce(
+                (a, b) => a + Number(b.data[items[0].index]),
+                0,
+              );
+              return `Total: ${total.toFixed(2)}`;
+            },
           },
         },
         scales: {
