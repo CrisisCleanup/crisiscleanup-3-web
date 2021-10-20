@@ -88,7 +88,7 @@
           {{ slotProps.item.affiliate_organization.name }}
         </template>
         <template #type_t="slotProps">
-          {{ slotProps.item.affiliate_organization.type_t }}
+          {{ $t(slotProps.item.affiliate_organization.type_t) }}
         </template>
         <template #user_count="slotProps">
           <div class="text-center">
