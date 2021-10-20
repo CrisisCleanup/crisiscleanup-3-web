@@ -113,6 +113,16 @@ export default {
         .filter((status) =>
           this.phase ? status.phases.includes(this.phase) : true,
         )
+        .filter((status) => {
+          if (
+            this.currentWorkType &&
+            !this.currentWorkType.recur_default &&
+            status.primary_state === 'need'
+          ) {
+            return false;
+          }
+          return true;
+        })
         .map((status, index) => {
           return {
             ...status,
