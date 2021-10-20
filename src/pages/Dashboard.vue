@@ -207,11 +207,47 @@
                     </div>
                   </div>
                 </template>
+                <template #case_number="slotProps">
+                  <router-link
+                    class=""
+                    :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
+                    tag="div"
+                  >
+                    {{ slotProps.item.case_number }}
+                  </router-link>
+                </template>
+                <template #phone="slotProps">
+                  <router-link
+                    class=""
+                    :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
+                    tag="div"
+                  >
+                    {{ slotProps.item.phone }}
+                  </router-link>
+                </template>
+                <template #full_address="slotProps">
+                  <router-link
+                    class=""
+                    :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
+                    tag="div"
+                  >
+                    {{ slotProps.item.full_address }}
+                  </router-link>
+                </template>
+                <template #name="slotProps">
+                  <router-link
+                    class=""
+                    :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
+                    tag="div"
+                  >
+                    {{ slotProps.item.name }}
+                  </router-link>
+                </template>
                 <template #actions="slotProps">
                   <div class="flex">
                     <router-link
                       class=""
-                      :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}/edit?showOnMap=true`"
+                      :to="`/incident/${$route.params.incident_id}/cases/${slotProps.item.id}?showOnMap=true`"
                       tag="div"
                     >
                       <ccu-icon
