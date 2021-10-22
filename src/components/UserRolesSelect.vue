@@ -1,5 +1,6 @@
 <template>
   <form-select
+    :key="user.id"
     class="w-64 border border-crisiscleanup-dark-100"
     :value="selectedRoles"
     @changed="requestUserRole"

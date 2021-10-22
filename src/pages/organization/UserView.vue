@@ -82,7 +82,10 @@
             </div>
           </div>
           <div>
-            <UserRolesSelect :user="selectedUser" />
+            <UserRolesSelect
+              :user="selectedUser"
+              :key="JSON.stringify(selectedUser)"
+            />
           </div>
         </div>
       </div>
@@ -109,6 +112,9 @@ const messageBox = create(MessageBox);
 export default {
   name: 'UserView',
   components: { UserEditModal, UserRolesSelect },
+  async mounted() {
+    await User.fetchOrFindId(this.$route.params.user_id);
+  },
   data() {
     return {
       isEditing: false,
