@@ -1722,19 +1722,20 @@ export default {
           ? Array.from(siteId)
           : [this.currentWorksite.id];
       try {
-        const file = await Worksite.api().downloadWorksite(siteIds);
-        forceFileDownload(file.response);
-        this.reloadTable();
+        await this.downloadCsv({
+          id__in: siteIds.join(','),
+        });
+        this.reloadTable().then(() => {});
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
         this.spinning = false;
       }
     },
-    async downloadCsv() {
+    async downloadCsv(query) {
       this.spinning = true;
       try {
-        const params = { ...this.currentQuery };
+        const params = query || { ...this.currentQuery };
         delete params.fields;
         const response = await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/worksites_download/download_csv`,
