@@ -511,9 +511,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -525,9 +530,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -551,7 +561,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   >
                     <router-link-stub
                       tag="div"
-                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                      to="/incident/99/cases/undefined?showOnMap=true"
                     >
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
@@ -584,9 +594,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -598,9 +613,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -624,7 +644,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   >
                     <router-link-stub
                       tag="div"
-                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                      to="/incident/99/cases/undefined?showOnMap=true"
                     >
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
@@ -657,9 +677,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -671,9 +696,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -697,7 +727,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   >
                     <router-link-stub
                       tag="div"
-                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                      to="/incident/99/cases/undefined?showOnMap=true"
                     >
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
@@ -730,9 +760,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -744,9 +779,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -770,7 +810,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   >
                     <router-link-stub
                       tag="div"
-                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                      to="/incident/99/cases/undefined?showOnMap=true"
                     >
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
@@ -803,9 +843,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -817,9 +862,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -843,7 +893,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   >
                     <router-link-stub
                       tag="div"
-                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                      to="/incident/99/cases/undefined?showOnMap=true"
                     >
                       <ccu-icon-stub
                         alt="actions.jump_to_case"
@@ -876,9 +926,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -890,9 +945,14 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
                 >
-                  <!---->
-                   
-                  <!---->
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
                 </div>
                 <div
                   class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
@@ -916,7 +976,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
                   >
                     <router-link-stub
                       tag="div"
-                      to="/incident/99/cases/undefined/edit?showOnMap=true"
+                      to="/incident/99/cases/undefined?showOnMap=true"
                     >
                       <ccu-icon-stub
                         alt="actions.jump_to_case"

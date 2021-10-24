@@ -11,7 +11,6 @@ import 'leaflet-loading';
 import 'leaflet.gridlayer.googlemutant';
 import 'leaflet-pixi-overlay';
 import 'leaflet.heat';
-import * as moment from 'moment';
 import { solveCollision } from '@/utils/easing';
 import { colors, templates } from '@/icons/icons_templates';
 import Worksite from '@/models/Worksite';
