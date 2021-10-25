@@ -8,7 +8,7 @@ export default class UserRoleFilter extends Filter {
       return Boolean(value);
     });
     if (filteredRoles.length) {
-      packed.roles__id__in = filteredRoles.map(([roleId]) => roleId).join(',');
+      packed.role = filteredRoles.map(([roleId]) => roleId).join(',');
     }
     return packed;
   }

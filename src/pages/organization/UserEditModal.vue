@@ -1,6 +1,6 @@
 <template>
   <modal
-    modal-classes="w-1/3"
+    modal-classes="max-w-xl"
     :title="$t('profileUser.edit_user')"
     closeable
     @close="$emit('close')"
