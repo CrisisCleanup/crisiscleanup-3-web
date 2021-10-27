@@ -185,9 +185,12 @@ export default class Worksite extends CCUModel {
             dataKey: 'results',
           },
         );
-        const eventUserIds = worksite.response.data.events.map(
-          (event) => event.created_by,
-        );
+        const eventUserIds = worksite.response.data.events
+          .map((event) => event.created_by)
+          .filter(
+            (userId) =>
+              Number(userId) !== Number(User.store().getters['auth/userId']),
+          );
         await User.api().get(`/users?id__in=${eventUserIds.join(',')}`, {
           dataKey: 'results',
         });
