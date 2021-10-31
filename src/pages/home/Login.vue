@@ -4,6 +4,14 @@
       <div class="grid--overlay homegrid-backdrop" />
     </template>
     <template #grid-content>
+      <div
+        v-if="showDevCredentials"
+        class="absolute left-0 right-0 p-2 shadow-lg bg-white"
+      >
+        <span class="text-2xl"
+          >Username: demo@crisiscleanup.org Password: demodemo1</span
+        >
+      </div>
       <home-nav />
       <home-actions />
       <div class="grid--main">
@@ -30,6 +38,11 @@ import LoginForm from '@/components/forms/LoginForm.vue';
 export default {
   name: 'LoginPage',
   components: { HomeLayout, LoginForm, HomeNav, HomeFooter, HomeActions },
+  computed: {
+    showDevCredentials() {
+      return process.env.VUE_APP_STAGE === 'development';
+    },
+  },
 };
 </script>
 
