@@ -18,6 +18,9 @@ const getters = {
   isOrphan: (state) => {
     return state.user && !state.user.user_claims.organization;
   },
+  isOrganizationInactive: (state) => {
+    return state.user && !state.user.user_claims.organization?.is_active;
+  },
   isAdmin: (state) => {
     return state.user && state.user.user_claims.active_roles.includes(1);
   },

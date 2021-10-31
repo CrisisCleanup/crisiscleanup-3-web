@@ -223,6 +223,11 @@ router.beforeEach((to, from, next) => {
         next({ name: 'nav.request_access', query: { orphan: true } });
         return;
       }
+      if (store.getters['auth/isOrganizationInactive']) {
+        next({ name: 'nav.login' });
+        Vue.toasted.error(window.vue.$t('info.login_org_inactive'));
+        return;
+      }
       if (to.matched.some((record) => record.meta.banner)) {
         const record = to.matched.find((r) => r.meta.banner);
         store.commit(`ui/${UITypes.SET_BANNER}`, record.meta.banner);
