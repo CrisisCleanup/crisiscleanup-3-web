@@ -186,6 +186,8 @@ export function getWorksiteLayer(
             markerSprite.favorite_id = marker.favorite_id;
             markerSprite.case_number = marker.case_number;
             markerSprite.svi = marker.svi;
+            markerSprite.created_at = marker.created_at;
+            markerSprite.updated_at = marker.updated_at;
             markerSprite.work_types = marker.work_types;
             markerSprite.active_work_type = workType;
             markerSprite.colorsKey = colorsKey;

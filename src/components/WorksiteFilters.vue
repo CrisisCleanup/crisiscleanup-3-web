@@ -143,6 +143,20 @@
               >{{ locationsCount }}</span
             >
           </div>
+          <div
+            class="p-3 px-4 border-b cursor-pointer"
+            :class="{
+              'border-l-4 border-l-black': currentSection === 'dates',
+            }"
+            @click="currentSection = 'dates'"
+          >
+            {{ $t('~~Dates') }}
+            <span
+              v-if="datesCount > 0"
+              class="rounded-full px-1 bg-black text-white text-xs"
+              >{{ datesCount }}</span
+            >
+          </div>
         </div>
         <div
           class="w-3/4 ml-4 mt-2 flex-grow"
@@ -469,6 +483,47 @@
               </div>
             </div>
           </div>
+          <div v-if="currentSection === 'dates'" class="flex flex-col">
+            <div class="mb-2">
+              <div class="mb-2">
+                <div class="my-1 text-base">
+                  {{ $t('~~Created') }}
+                </div>
+                <datepicker
+                  input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
+                  wrapper-class="flex-grow"
+                  :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
+                  :placeholder="$t('~~Start Date')"
+                  v-model="filters.dates.data.created_start"
+                ></datepicker>
+                <datepicker
+                  input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm"
+                  wrapper-class="flex-grow"
+                  :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
+                  :placeholder="$t('~~End Date')"
+                  v-model="filters.dates.data.created_end"
+                ></datepicker>
+
+                <div class="my-1 text-base">
+                  {{ $t('~~Updated') }}
+                </div>
+                <datepicker
+                  input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
+                  wrapper-class="flex-grow"
+                  :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
+                  :placeholder="$t('~~Start Date')"
+                  v-model="filters.dates.data.updated_start"
+                ></datepicker>
+                <datepicker
+                  input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm"
+                  wrapper-class="flex-grow"
+                  :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
+                  :placeholder="$t('~~End Date')"
+                  v-model="filters.dates.data.updated_end"
+                ></datepicker>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -514,6 +569,7 @@ import WorksiteMyTeamFilter from '../utils/data_filters/WorksiteMyTeamFilter';
 import SurvivorFilter from '../utils/data_filters/SurvivorFilter';
 import WorksiteTeamsFilter from '../utils/data_filters/WorksiteTeamsFilter';
 import { UserMixin } from '../mixins';
+import WorksiteDatesFilter from '@/utils/data_filters/WorksiteDatesFilter';
 
 export default {
   name: 'WorksiteFilters',
@@ -547,6 +603,7 @@ export default {
         fields: {},
         statuses: {},
         teams: {},
+        dates: {},
         my_team: {},
         survivors: {},
         statusGroups: {},
@@ -613,6 +670,9 @@ export default {
     myTeamCount() {
       return this.filters.my_team.count;
     },
+    datesCount() {
+      return this.filters.dates.count;
+    },
     survivorCount() {
       return this.filters.survivors.count;
     },
@@ -627,6 +687,7 @@ export default {
         this.missingWorkTypeCount +
         this.teamsCount +
         this.survivorCount +
+        this.datesCount +
         this.myTeamCount
       );
     },
@@ -681,6 +742,10 @@ export default {
           'my_team',
           (this.currentFilters.my_team && this.currentFilters.my_team.data) ||
             {},
+        ),
+        dates: new WorksiteDatesFilter(
+          'dates',
+          (this.currentFilters.dates && this.currentFilters.dates.data) || {},
         ),
         survivors: new SurvivorFilter(
           'survivors',
@@ -759,6 +824,7 @@ export default {
         locations: new WorksiteLocationsFilter('locations', {}),
         teams: new WorksiteTeamsFilter('teams', {}),
         my_team: new WorksiteMyTeamFilter('my_team', {}),
+        dates: new WorksiteDatesFilter('dates', {}),
         survivors: new SurvivorFilter('survivors', {}),
         missingWorkType: new WorksiteMissingWorkTypeFilter(
           'missingWorkType',

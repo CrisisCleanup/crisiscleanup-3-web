@@ -412,7 +412,7 @@ export default {
         svi: marker.svi,
       };
     });
-    this.$emit('onSviList', sviList);
+    this.$emit('onLoadedMarkers', sviList);
     this.$nextTick(() => {
       // Add this slight pan to re-render map
       this.map.panBy([1, 0]);
@@ -483,6 +483,14 @@ export default {
     filterSvi(ids) {
       this.pixiContainer.children.forEach((markerSprite) => {
         markerSprite.visible = Boolean(ids.has(markerSprite.id));
+      });
+      this.$nextTick(() => {
+        this.map.panBy([0, 0]);
+      });
+    },
+    filterDates(date) {
+      this.pixiContainer.children.forEach((markerSprite) => {
+        markerSprite.visible = this.$moment(markerSprite.created_at).isBefore(date);
       });
       this.$nextTick(() => {
         this.map.panBy([0, 0]);

@@ -67,6 +67,20 @@
                 :value="sviLevel"
                 :title="sviTitle"
               ></svi-slider>
+              <Slider
+                v-if="datesList.length && false"
+                @input="filterDates"
+                :value="dateLevel"
+                :min="0"
+                :max="datesList.length - 1"
+                :from="$moment(datesList[0].created_at).format('MMM Do YYYY')"
+                :to="
+                  $moment(datesList[datesList.length - 1].created_at).format(
+                    'MMM Do YYYY',
+                  )
+                "
+                :alt="$t('actions.play')"
+              ></Slider>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d">
               <base-dropdown class-name="borderless">
@@ -445,7 +459,7 @@
               :current-filters="filters"
               @mapMoved="onMapMoved"
               @onSelectmarker="displayWorksite"
-              @onSviList="setSviList"
+              @onLoadedMarkers="setFilterLists"
             />
           </template>
           <template v-if="showingTable">
@@ -1045,10 +1059,12 @@ import { EventBus } from '@/event-bus';
 import WorksiteTable from './WorksiteTable';
 import WorksiteSearchInput from '../components/WorksiteSearchInput';
 import StatusDropdown from '../components/StatusDropdown';
+import Slider from '@/components/Slider';
 
 export default {
   name: 'Cases',
   components: {
+    Slider,
     SviSlider,
     StatusDropdown,
     WorksiteSearchInput,
@@ -1072,6 +1088,7 @@ export default {
       searchingWorksites: false,
       data: [],
       sviList: [],
+      datesList: [],
       showSviSlider: false,
       pagination: {
         pageSize: 100,
@@ -1089,6 +1106,7 @@ export default {
       map: null,
       currentSearch: '',
       sviLevel: 100,
+      dateLevel: 0,
       sviTitle: '',
       currentCaseView: '',
       getColorForStatus,
@@ -1333,6 +1351,9 @@ export default {
       if (states.sviLevel) {
         this.sviLevel = states.sviLevel;
       }
+      if (states.dateLevel) {
+        this.dateLevel = states.dateLevel;
+      }
       if (states.filters) {
         this.filters = {
           ...states.filters,
@@ -1414,6 +1435,7 @@ export default {
           showingMap: this.showingMap,
           showingTable: this.showingTable,
           sviLevel: this.sviLevel,
+          dateLevel: this.dateLevel,
           ...data,
         },
       );
@@ -1904,20 +1926,35 @@ export default {
       }
       await Worksite.api().fetch(this.currentWorksite.id);
     },
-    setSviList(sviList) {
-      this.showSviSlider = new Set(sviList.map((w) => w.svi)).size >= 5;
+    setSviList(filterList) {
+      this.showSviSlider = new Set(filterList.map((w) => w.svi)).size >= 5;
       // Sort svi values treating nulls as 1 (Most Vulnerable)
-      sviList.sort((a, b) => {
+      filterList.sort((a, b) => {
         return (
           (b.svi || 1) - (a.svi || 1) ||
-          this.$moment(a.svi) - this.$moment(b.svi)
+          this.$moment(a.created_at) - this.$moment(b.created_at)
         );
       });
-      this.$log.debug(sviList);
-      this.sviList = sviList;
+      this.sviList = filterList;
       if (this.sviLevel) {
         this.filterSvi(this.sviLevel);
       }
+    },
+    setDatesList(filterList) {
+      const datesOrdered = [...filterList];
+      datesOrdered.sort((a, b) => {
+        return this.$moment(a.created_at) - this.$moment(b.created_at);
+      });
+      this.datesList = datesOrdered;
+      if (this.dateLevel) {
+        this.filterDates(this.dateLevel);
+      } else {
+        this.dateLevel = this.datesList.length - 1;
+      }
+    },
+    setFilterLists(filterList) {
+      this.setSviList(filterList);
+      this.setDatesList(filterList);
     },
     filterSvi(value) {
       this.sviLevel = Number(value);
@@ -1926,6 +1963,11 @@ export default {
       const minSvi = Math.min(...filteredSvi.map((o) => o.svi), 1);
       this.sviTitle = `${minSvi.toFixed(1)}`;
       this.$refs.worksiteMap.filterSvi(new Set(filteredSvi.map((w) => w.id)));
+    },
+    filterDates(value) {
+      this.dateLevel = Number(value);
+      const date = this.$moment(this.datesList[value].created_at);
+      this.$refs.worksiteMap.filterDates(date);
     },
     filterSviAsync: debounce(
       async function (value) {
