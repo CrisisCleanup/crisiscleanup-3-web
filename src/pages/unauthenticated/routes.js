@@ -50,6 +50,13 @@ const routes = [
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
+    path: '/donate',
+    redirect: () => {
+      window.location.href = 'https://www.paypal.com/paypalme/crisiscleanup';
+    },
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
     path: '/maintenance',
     // component: () =>
     //   import(
