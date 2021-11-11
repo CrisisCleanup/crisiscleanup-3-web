@@ -4,7 +4,7 @@
     :suggestions="organizationResults"
     :size="size"
     display-property="name"
-    placeholder="Organizations"
+    :placeholder="$t('Organization (optional)')"
     clear-on-selected
     @selected="
       (value) => {
@@ -51,6 +51,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    allowedOrganizationIds: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -69,6 +73,10 @@ export default {
 
       if (!this.includeInactive) {
         params.is_active = true;
+      }
+
+      if (this.allowedOrganizationIds.length > 0) {
+        params.id__in = this.allowedOrganizationIds.join(',');
       }
 
       const results = await Organization.api().get(

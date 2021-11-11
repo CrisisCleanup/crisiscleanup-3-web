@@ -38,10 +38,12 @@
             @tags-changed="(newTags) => (usersToInvite = newTags)"
           />
         </div>
-        <div v-if="isAdmin">
+        <div v-if="isAdmin || currentOrganization.affiliates.length > 1">
           <OrganizationSearchInput
             @selectedOrganization="selectedOrganization = $event.id"
             class="w-108"
+            :allowed-organization-ids="currentOrganization.affiliates"
+            :is-admin="isAdmin"
           />
         </div>
       </div>
@@ -84,6 +86,14 @@ export default {
     isAdmin: {
       type: Boolean,
       default: false,
+    },
+  },
+  computed: {
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
+    },
+    currentOrganization() {
+      return Organization.find(this.currentUser.organization.id);
     },
   },
   data() {
