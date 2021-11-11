@@ -409,6 +409,7 @@ export default {
       return {
         id: marker.id,
         created_at: marker.created_at,
+        updated_at: marker.updated_at,
         svi: marker.svi,
       };
     });
@@ -490,7 +491,7 @@ export default {
     },
     filterDates(date) {
       this.pixiContainer.children.forEach((markerSprite) => {
-        markerSprite.visible = this.$moment(markerSprite.created_at).isBefore(date);
+        markerSprite.visible = this.$moment(markerSprite.updated_at).isBefore(date);
       });
       this.$nextTick(() => {
         this.map.panBy([0, 0]);

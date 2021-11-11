@@ -1,10 +1,28 @@
 <template>
-  <div class="grid grid-flow-col items-center" :style="[cssVars]">
-    <span class="text-crisiscleanup-grey-900 text-sm mx-1">{{ from }} </span>
+  <div class="flex flex-col" :style="[cssVars]">
+    <div class="flex justify-between">
+      <span class="text-crisiscleanup-grey-900 text-sm mx-1">{{ from }} </span>
+      <div>
+        <span
+          class="text-crisiscleanup-grey-900 text-sm mx-1 font-bold"
+          v-if="title"
+          >{{ title }}</span
+        >
+      </div>
+      <span
+        class="
+          text-crisiscleanup-grey-900 text-sm
+          items-center
+          justify-start
+          mx-1
+        "
+        >{{ to }}</span
+      >
+    </div>
     <div class="range-slider mx-2 mb-1" :title="value">
       <input
         class="range-slider__range flex-auto"
-        :class="sliderClass"
+        :class="[sliderClass, { activated: value < max }]"
         type="range"
         @input="update"
         :value="value"
@@ -13,15 +31,6 @@
         :step="step"
       />
     </div>
-    <span
-      class="
-        text-crisiscleanup-grey-900 text-sm
-        items-center
-        justify-start
-        mx-1
-      "
-      >{{ to }}</span
-    >
   </div>
 </template>
 
@@ -61,9 +70,21 @@ export default {
       type: String,
       default: 'rgba(0, 0, 0, 0.5)',
     },
+    handleSize: {
+      type: String,
+      default: '5px',
+    },
+    trackSize: {
+      type: String,
+      default: '3px',
+    },
     sliderClass: {
       type: String,
       default: 'w-84',
+    },
+    title: {
+      type: String,
+      default: '',
     },
   },
   methods: {
@@ -77,6 +98,8 @@ export default {
       return {
         '--primary-color': this.primaryColor,
         '--secondary-color': this.secondaryColor,
+        '--handle-size': this.handleSize,
+        '--track-size': this.trackSize,
       };
     },
   },
@@ -85,11 +108,41 @@ export default {
 
 <style scoped lang="scss">
 // Range Slider
-$range-handle-size: 5px !default;
-$range-track-height: 3px !default;
+$handle-size: var(--handle-size);
+$track-size: var(--track-size);
+
+$range-handle-size: $handle-size !default;
+$range-track-height: $track-size !default;
 
 $primary: var(--primary-color);
 $secondary: var(--secondary-color);
+
+.activated.range-slider__range {
+  // Range Handle
+  &::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px white, 0 0 0 6px #fece09;
+    @apply bg-primary-light;
+    &:hover {
+      @apply bg-primary-light;
+    }
+  }
+
+  &:active::-webkit-slider-thumb {
+    @apply bg-primary-light;
+  }
+
+  &::-moz-range-thumb {
+    box-shadow: 0 0 0 3px white, 0 0 0 6px #fece09;
+    @apply bg-primary-light;
+    &:hover {
+      @apply bg-primary-light;
+    }
+  }
+
+  &:active::-moz-range-thumb {
+    @apply bg-primary-light;
+  }
+}
 
 .range-slider__range {
   // Range Handle

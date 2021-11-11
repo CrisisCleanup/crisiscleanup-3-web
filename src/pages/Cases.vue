@@ -68,18 +68,26 @@
                 :title="sviTitle"
               ></svi-slider>
               <Slider
-                v-if="datesList.length && false"
+                v-if="datesList.length"
+                track-size="8px"
+                handle-size="12px"
+                primary-color="#dadada"
+                secondary-color="white"
+                class="pt-1 ml-4"
+                slider-class="w-84"
+                :title="$t('~~Last Updated')"
                 @input="filterDates"
                 :value="dateLevel"
                 :min="0"
                 :max="datesList.length - 1"
-                :from="$moment(datesList[0].created_at).format('MMM Do YYYY')"
-                :to="
-                  $moment(datesList[datesList.length - 1].created_at).format(
-                    'MMM Do YYYY',
-                  )
-                "
-                :alt="$t('actions.play')"
+                :from="`${$moment({ hours: 0 }).diff(
+                  $moment(datesList[0].updated_at),
+                  'days',
+                )} days ago`"
+                :to="`${$moment({ hours: 0 }).diff(
+                  $moment(datesList[datesList.length - 1].updated_at),
+                  'days',
+                )} days ago`"
               ></Slider>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d">
@@ -1943,7 +1951,7 @@ export default {
     setDatesList(filterList) {
       const datesOrdered = [...filterList];
       datesOrdered.sort((a, b) => {
-        return this.$moment(a.created_at) - this.$moment(b.created_at);
+        return this.$moment(a.updated_at) - this.$moment(b.updated_at);
       });
       this.datesList = datesOrdered;
       if (this.dateLevel) {
@@ -1966,7 +1974,7 @@ export default {
     },
     filterDates(value) {
       this.dateLevel = Number(value);
-      const date = this.$moment(this.datesList[value].created_at);
+      const date = this.$moment(this.datesList[value].updated_at);
       this.$refs.worksiteMap.filterDates(date);
     },
     filterSviAsync: debounce(
