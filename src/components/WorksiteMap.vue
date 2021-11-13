@@ -491,7 +491,9 @@ export default {
     },
     filterDates(date) {
       this.pixiContainer.children.forEach((markerSprite) => {
-        markerSprite.visible = this.$moment(markerSprite.updated_at).isBefore(date);
+        markerSprite.visible = this.$moment(markerSprite.updated_at).isAfter(
+          date,
+        );
       });
       this.$nextTick(() => {
         this.map.panBy([0, 0]);

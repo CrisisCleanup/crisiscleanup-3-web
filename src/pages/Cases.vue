@@ -61,34 +61,6 @@
                   @clear="onSearch"
                 />
               </div>
-              <svi-slider
-                v-if="showSviSlider"
-                @input="filterSvi"
-                :value="sviLevel"
-                :title="sviTitle"
-              ></svi-slider>
-              <Slider
-                v-if="datesList.length"
-                track-size="8px"
-                handle-size="12px"
-                primary-color="#dadada"
-                secondary-color="white"
-                class="pt-1 ml-4"
-                slider-class="w-84"
-                :title="$t('~~Last Updated')"
-                @input="filterDates"
-                :value="dateLevel"
-                :min="0"
-                :max="datesList.length - 1"
-                :from="`${$moment({ hours: 0 }).diff(
-                  $moment(datesList[0].updated_at),
-                  'days',
-                )} days ago`"
-                :to="`${$moment({ hours: 0 }).diff(
-                  $moment(datesList[datesList.length - 1].updated_at),
-                  'days',
-                )} days ago`"
-              ></Slider>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d">
               <base-dropdown class-name="borderless">
@@ -454,6 +426,36 @@
                 @updatedFilters="onUpdatedFilters"
               />
             </div>
+          </div>
+          <div class="flex items-center flex-wrap justify-center">
+            <svi-slider
+              v-if="showSviSlider"
+              @input="filterSvi"
+              :value="sviLevel"
+              :title="sviTitle"
+            ></svi-slider>
+            <Slider
+              v-if="datesList.length"
+              track-size="8px"
+              handle-size="12px"
+              primary-color="#dadada"
+              secondary-color="white"
+              class="pt-1 ml-4"
+              slider-class="w-84"
+              :title="$t('~~Last Updated')"
+              @input="filterDates"
+              :value="dateLevel"
+              :min="0"
+              :max="datesList.length - 1"
+              :from="`${$moment({ hours: 0 }).diff(
+                $moment(datesList[0].updated_at),
+                'days',
+              )} days ago`"
+              :to="`${$moment({ hours: 0 }).diff(
+                $moment(datesList[datesList.length - 1].updated_at),
+                'days',
+              )} days ago`"
+            ></Slider>
           </div>
         </div>
         <div class="flex-grow bg-crisiscleanup-light-grey">
@@ -1951,7 +1953,7 @@ export default {
     setDatesList(filterList) {
       const datesOrdered = [...filterList];
       datesOrdered.sort((a, b) => {
-        return this.$moment(a.updated_at) - this.$moment(b.updated_at);
+        return this.$moment(b.updated_at) - this.$moment(a.updated_at);
       });
       this.datesList = datesOrdered;
       if (this.dateLevel) {

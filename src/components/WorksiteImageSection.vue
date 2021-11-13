@@ -11,19 +11,25 @@
       </div>
     </DragDrop>
 
-    <div class="flex w-64 overflow-x-auto">
+    <vue-easy-lightbox
+      :visible="viewingImage"
+      :imgs="worksite.files.map((file) => file.large_thumbnail_url)"
+      :index="index"
+      @hide="handleHide"
+    ></vue-easy-lightbox>
+
+    <div class="flex flex-wrap">
       <div
-        v-for="file in worksite.files"
-        :key="file"
-        class="relative image-container"
-        style="min-width: 90px"
+        v-for="(file, idx) in worksite.files"
+        :key="idx"
+        class="relative image-container mb-2"
       >
         <img
           class="image-box w-20 h-20 mx-2 cursor-pointer"
           :src="file.small_thumbnail_url"
           :alt="file.filename_original"
           :title="file.filename_original"
-          @click="viewingImage = file"
+          @click="() => showImg(idx)"
         />
         <ccu-icon
           :alt="$t('actions.delete')"
@@ -34,19 +40,6 @@
         />
       </div>
     </div>
-    <modal
-      v-if="viewingImage"
-      modal-classes="bg-white w-1/3 shadow"
-      closeable
-      @close="viewingImage = null"
-    >
-      <img
-        :src="viewingImage.full_url"
-        :alt="viewingImage.filename_original"
-        :title="viewingImage.filename_original"
-      />
-      <div slot="footer"></div>
-    </modal>
   </section>
 </template>
 <script>
@@ -61,7 +54,8 @@ export default {
   data() {
     return {
       uploading: false,
-      viewingImage: null,
+      viewingImage: false,
+      index: null,
     };
   },
   props: {
@@ -69,6 +63,13 @@ export default {
     isPrintToken: VueTypes.bool.def(false),
   },
   methods: {
+    showImg(index) {
+      this.index = index;
+      this.viewingImage = true;
+    },
+    handleHide() {
+      this.viewingImage = false;
+    },
     async handleFileUpload(fileList) {
       if (fileList.length === 0) {
         this.uploading = false;

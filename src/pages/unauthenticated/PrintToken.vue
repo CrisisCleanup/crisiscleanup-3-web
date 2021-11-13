@@ -87,6 +87,7 @@
                     :worksite="printToken"
                     :key="printToken.files"
                     :is-print-token="true"
+                    @photosChanged="reloadFiles"
                   />
                 </div>
               </form>
@@ -130,6 +131,22 @@ export default {
     },
   },
   methods: {
+    async reloadFiles() {
+      try {
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/print_tokens/${this.$route.params.token}`,
+          {
+            headers: {
+              Authorization: null,
+            },
+          },
+        );
+        this.printToken.files = response.data.files;
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+        this.$log.debug(error);
+      }
+    },
     async getPrintToken() {
       this.loading = true;
       try {

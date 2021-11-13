@@ -18728,6 +18728,11 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
+photoswipe@^4.1.2:
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/photoswipe/-/photoswipe-4.1.3.tgz#59f49494eeb9ddab5888d03392926a19bc197550"
+  integrity sha512-89Z43IRUyw7ycTolo+AaiDn3W1EEIfox54hERmm9bI12IB9cvRfHSHez3XhAyU8XW2EAFrC+2sKMhh7SJwn0bA==
+
 picomatch@^2.0.4, picomatch@^2.2.1, picomatch@^2.2.3:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.3.0.tgz#f1f061de8f6a4bf022892e2d128234fb98302972"
@@ -24524,6 +24529,11 @@ vue-docgen-loader@^1.5.0:
     loader-utils "^1.2.3"
     querystring "^0.2.0"
 
+vue-easy-lightbox@^0.16.2:
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/vue-easy-lightbox/-/vue-easy-lightbox-0.16.2.tgz#4390c5ac2aaaa60300d1f51969eaeedd21dd8f88"
+  integrity sha512-pkfLBk9dZ9T+fk6bRgehDpIvaS81hOgDqsGpVEDgw8cGtO9FLfAT8hakaqNQOgMTCwrnkQcdfLTLqnad2rq46w==
+
 vue-eslint-parser@^7.0.0:
   version "7.10.0"
   resolved "https://registry.yarnpkg.com/vue-eslint-parser/-/vue-eslint-parser-7.10.0.tgz#ea4e4b10fd10aa35c8a79ac783488d8abcd29be8"
@@ -24693,6 +24703,14 @@ vue-phone-number-input@^1.1.10:
     vue "^2.6.11"
     vue-virtual-scroller "^1.0.10"
 
+vue-picture-swipe@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/vue-picture-swipe/-/vue-picture-swipe-2.1.0.tgz#5147d744e28a6a704a8e6df35d0c4578f3bf9089"
+  integrity sha512-LsEeIfBmaByQBIRKbr95a28m0FjcrQZMka2cgCtfPT637JfVYu53EvhL+H5zxh8n8ZWYI2rWJZiXVE0d+7J/9A==
+  dependencies:
+    photoswipe "^4.1.2"
+    vue "^2.5.16"
+
 vue-property-decorator@8.3.0:
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-8.3.0.tgz#536f027dc7d626f37c8d85a2dc02f0a6cb979440"
@@ -24825,7 +24843,7 @@ vue@2.6.12:
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
 
-vue@^2.5.13, vue@^2.5.17, vue@^2.6.10, vue@^2.6.11, vue@^2.6.9:
+vue@^2.5.13, vue@^2.5.16, vue@^2.5.17, vue@^2.6.10, vue@^2.6.11, vue@^2.6.9:
   version "2.6.14"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
