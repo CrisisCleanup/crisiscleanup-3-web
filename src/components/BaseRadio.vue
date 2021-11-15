@@ -7,7 +7,7 @@
       :name="name"
       :class="{ checked: type === 'boolean' ? value : label === value }"
     />
-    <span>
+    <span :class="labelClass">
       <slot>
         {{ name }}
       </slot>
@@ -32,6 +32,10 @@ export default {
       default: '',
     },
     type: {
+      type: String,
+      default: 'text',
+    },
+    labelClass: {
       type: String,
       default: 'text',
     },

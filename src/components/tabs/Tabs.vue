@@ -13,8 +13,9 @@
             [tabDefaultClasses]: true,
           }"
           class=""
+          @click="selectTab(tab)"
         >
-          <div @click="selectTab(tab)">{{ tab.name }}</div>
+          <div>{{ tab.name }}</div>
         </li>
       </ul>
     </div>

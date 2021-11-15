@@ -295,6 +295,15 @@ export default class Worksite extends CCUModel {
           { save: false },
         );
       },
+      addFileWithSurvivorToken(token, file) {
+        return this.post(
+          `/survivor_tokens/${token}/files`,
+          {
+            file,
+          },
+          { save: false },
+        );
+      },
       deleteFile(id, file) {
         return this.delete(
           `/worksites/${id}/files`,

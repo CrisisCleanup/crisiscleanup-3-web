@@ -2,6 +2,7 @@ import EmbedMap from '@/pages/unauthenticated/EmbedMap';
 import InvitationSignup from './InvitationSignup.vue';
 import PreliminaryAssessment from './PreliminaryAssessment.vue';
 import PrintToken from './PrintToken.vue';
+import Survivors from './Survivors.vue';
 import ResetPassword from './ResetPassword';
 import PewPew from './PewPew';
 import DownForMaintenance from './DownForMaintenance.vue';
@@ -17,6 +18,12 @@ const routes = [
     path: '/print_token/:token',
     component: PrintToken,
     name: 'nav.print_token',
+    meta: { layout: 'unauthenticated', noAuth: true },
+  },
+  {
+    path: '/survivors/:token',
+    component: Survivors,
+    name: 'nav.survivors',
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {

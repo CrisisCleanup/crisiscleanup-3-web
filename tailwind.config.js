@@ -18,6 +18,7 @@ module.exports = {
         sans: ['Nunito Sans', 'sans-serif'],
         display: ['Montserrat', 'sans-serif'],
       },
+      rounded: ['first', 'last'],
       fontSize: {
         h1: '1.25rem', //         ~18px
         h2: '1rem', //            ~16px

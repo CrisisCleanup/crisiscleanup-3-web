@@ -61,6 +61,7 @@ export default {
   props: {
     worksite: VueTypes.object,
     isPrintToken: VueTypes.bool.def(false),
+    isSurvivorToken: VueTypes.bool.def(false),
   },
   methods: {
     showImg(index) {
@@ -92,6 +93,8 @@ export default {
         const file = result.data.id;
         if (this.isPrintToken) {
           await Worksite.api().addFileWithToken(this.worksite.token, file);
+        } else if (this.isSurvivorToken) {
+          await Worksite.api().addFileWithSurvivorToken(this.worksite.token, file);
         } else {
           await Worksite.api().addFile(this.worksite.id, file);
           await Worksite.api().fetch(this.worksite.id);
