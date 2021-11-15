@@ -2746,7 +2746,9 @@ exports[`Storyshots Basics/BaseRadio With Basics 1`] = `
     value="radio1"
   />
    
-  <span>
+  <span
+    class="text"
+  >
     
       My Radio
     
