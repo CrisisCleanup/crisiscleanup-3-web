@@ -1,14 +1,39 @@
 import { mount } from '@vue/test-utils';
+import { Store } from 'vuex-mock-store';
 import User from '@/models/User';
 import InviteUsers from '../InviteUsers.vue';
 
 jest.mock('@/models/User');
+jest.mock('@/models/Organization');
+
+const store = new Store({
+  state: {
+    incident: {
+      currentIncidentId: 99,
+    },
+    enums: {
+      statuses: [],
+    },
+    auth: {
+      user: {
+        id: 1,
+        first_name: 'First',
+        last_name: 'Last',
+        organization: {
+          id: 1,
+          name: 'Test Organization',
+        },
+      },
+    },
+  },
+});
 
 const mocks = {
   $t: (key) => key,
   $toasted: {
     error: jest.fn(),
   },
+  $store: store,
 };
 
 const mountWithOptions = ({ props, data, ...opts } = {}) =>

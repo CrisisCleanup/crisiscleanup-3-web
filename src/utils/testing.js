@@ -14,6 +14,7 @@ export const MockOrganizations = [
     org_verified: null,
     created_at: '2019-12-25T18:24:05Z',
     updated_at: '2019-12-25T18:24:05Z',
+    affiliates: [],
   },
 ];
 
