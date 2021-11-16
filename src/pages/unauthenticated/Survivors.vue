@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full overflow-auto">
+  <div class="h-full overflow-auto main">
     <div class="logo flex justify-center p-3 border border-b">
       <img src="@/assets/ccu-logo-black-500w.png" style="height: 53px" />
     </div>
@@ -356,11 +356,16 @@ export default {
         value.description,
         value.data.place_id,
       );
-      // const { lat, lng } = geocode.location;
+      const { lat, lng } = geocode.location;
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];
       geocodeKeys.forEach((key) => {
         this.survivorToken.worksite[key] = geocode.address_components[key];
       });
+
+      this.survivorToken.worksite.location = {
+        type: 'Point',
+        coordinates: [lng, lat],
+      };
 
       this.hideDetailedAddressFields = true;
       this.addressSet = true;
@@ -398,6 +403,9 @@ export default {
           `${process.env.VUE_APP_API_BASE_URL}/survivor_tokens/${this.$route.params.token}`,
           this.survivorToken,
         );
+        await this.$toasted.success(
+          this.$t('~~Your case was updated successfully'),
+        );
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
         this.$log.debug(error);
@@ -409,4 +417,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.main {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+</style>
