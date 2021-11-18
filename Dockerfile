@@ -1,26 +1,36 @@
 # syntax=docker/dockerfile:1.3
-FROM node:14-alpine3.13 as dependencies
+FROM node:14-bullseye as dependencies
 
 # CI
 ARG CI
 ENV CI=${CI:-1}
 
-RUN apk update && apk add --no-cache git openjdk8
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        openjdk-11-jdk \
+      # needed for puppeteer peer dep
+      # on arm64
+      chromium \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # make the 'app' folder the current working directory
 WORKDIR /app
 
 COPY package.json yarn.lock /app/
 
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 ENV PATH="$JAVA_HOME/bin:${PATH}"
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # install project and build
 RUN CYPRESS_INSTALL_BINARY=0 yarn install && yarn cache clean
 
 
 # build stage
-FROM node:14-alpine3.13 as build
+FROM node:14-bullseye as build
 
 WORKDIR /app
 
