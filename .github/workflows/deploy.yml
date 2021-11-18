@@ -95,6 +95,11 @@ jobs:
           environment: ${{ github.event.inputs.stage }}
           releaseNamePrefix: crisiscleanup-3-web@
 
+      # Installs qemu static binaries so we can emulate
+      # an arm64 platform for deployment on graviton instances
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v1
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v1
 
@@ -103,6 +108,7 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
           build-args: |
             VUE_APP_API_BASE_URL=${{ env.VUE_APP_API_BASE_URL }}
             VUE_APP_BASE_URL=${{ env.VUE_APP_BASE_URL }}
