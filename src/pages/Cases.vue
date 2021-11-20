@@ -450,7 +450,7 @@
               secondary-color="white"
               class="pt-1 ml-4"
               slider-class="w-84"
-              :title="$t('casesVue.last_updated')"
+              :title="$t('casesVue.updated')"
               @input="filterDates"
               :value="dateLevel"
               :min="0"
