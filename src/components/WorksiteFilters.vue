@@ -150,7 +150,7 @@
             }"
             @click="currentSection = 'dates'"
           >
-            {{ $t('~~Dates') }}
+            {{ $t('worksiteFilters.dates') }}
             <span
               v-if="datesCount > 0"
               class="rounded-full px-1 bg-black text-white text-xs"
@@ -289,7 +289,7 @@
           <div v-if="currentSection === 'personal'" class="flex flex-col">
             <div class="survivors mb-2">
               <div class="my-1 text-base">
-                {{ $t('My Organization') }}
+                {{ $t('worksiteFilters.my_organization') }}
               </div>
               <base-checkbox
                 v-model="filters.survivors.data.member_of_my_organization"
@@ -300,7 +300,7 @@
             </div>
             <div class="status-group mb-2">
               <div class="my-1 text-base">
-                {{ $t('~~Personal Information') }}
+                {{ $t('worksiteFilters.personal_info') }}
               </div>
               <base-checkbox
                 v-for="data in [
@@ -487,38 +487,38 @@
             <div class="mb-2">
               <div class="mb-2">
                 <div class="my-1 text-base">
-                  {{ $t('~~Created') }}
+                  {{ $t('worksiteFilters.created') }}
                 </div>
                 <datepicker
                   input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
                   wrapper-class="flex-grow"
                   :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
-                  :placeholder="$t('~~Start Date')"
+                  :placeholder="$t('worksiteFilters.start_date')"
                   v-model="filters.dates.data.created_start"
                 ></datepicker>
                 <datepicker
                   input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm"
                   wrapper-class="flex-grow"
                   :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
-                  :placeholder="$t('~~End Date')"
+                  :placeholder="$t('worksiteFilters.end_date')"
                   v-model="filters.dates.data.created_end"
                 ></datepicker>
 
                 <div class="my-1 text-base">
-                  {{ $t('~~Updated') }}
+                  {{ $t('worksiteFilters.updated') }}
                 </div>
                 <datepicker
                   input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
                   wrapper-class="flex-grow"
                   :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
-                  :placeholder="$t('~~Start Date')"
+                  :placeholder="$t('worksiteFilters.start_date')"
                   v-model="filters.dates.data.updated_start"
                 ></datepicker>
                 <datepicker
                   input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm"
                   wrapper-class="flex-grow"
                   :format="(date) => $moment(date).format('ddd MMMM Do YYYY')"
-                  :placeholder="$t('~~End Date')"
+                  :placeholder="$t('worksiteFilters.end_date')"
                   v-model="filters.dates.data.updated_end"
                 ></datepicker>
               </div>
