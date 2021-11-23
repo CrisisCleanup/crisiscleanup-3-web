@@ -17,60 +17,96 @@
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
             :class="[
-              survivorToken.status === 'help_needed'
+              survivorToken.status_t === 'survivorContact.help_needed'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
                 : '',
             ]"
             label-class="pt-1 text-xl"
-            label="help_needed"
+            label="survivorContact.help_needed"
             :name="$t('~~I still need help')"
-            :value="survivorToken.status"
-            @change="survivorToken.status = $event"
+            :value="survivorToken.status_t"
+            @change="survivorToken.status_t = $event"
           />
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
             :class="[
-              survivorToken.status === 'help_not_needed'
+              survivorToken.status_t === 'survivorContact.help_not_needed'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
                 : '',
             ]"
             label-class="pt-1 text-xl"
-            label="help_not_needed"
+            label="survivorContact.help_not_needed"
             :name="$t('~~I do not need help')"
-            :value="survivorToken.status"
-            @change="survivorToken.status = $event"
+            :value="survivorToken.status_t"
+            @change="survivorToken.status_t = $event"
           />
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
             :class="[
-              survivorToken.status === 'already_helped'
+              survivorToken.status_t === 'survivorContact.already_helped'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
                 : '',
             ]"
             label-class="pt-1 text-xl"
-            label="already_helped"
+            label="survivorContact.already_helped"
             :name="$t('~~Someone already helped me')"
-            :value="survivorToken.status"
-            @change="survivorToken.status = $event"
+            :value="survivorToken.status_t"
+            @change="survivorToken.status_t = $event"
           />
           <base-radio
             class="mb-3 border pt-2 pb-4 px-2"
             :class="[
-              survivorToken.status === 'already_helped_help_needed'
+              survivorToken.status_t ===
+              'survivorContact.already_helped_help_needed'
                 ? 'bg-primary-light border-primary-light bg-opacity-25'
                 : '',
             ]"
             label-class="pt-1 text-xl"
-            label="already_helped_help_needed"
+            label="survivorContact.already_helped_help_needed"
             :name="$t('~~Someone already helped me, but I need more help')"
-            :value="survivorToken.status"
-            @change="survivorToken.status = $event"
+            :value="survivorToken.status_t"
+            @change="survivorToken.status_t = $event"
           />
+          <div
+            v-if="
+              survivorToken.work_types &&
+              survivorToken.work_types.length > 0 &&
+              survivorToken.status_t ===
+                'survivorContact.already_helped_help_needed'
+            "
+          >
+            <div class="p-3">
+              <div class="my-2">
+                {{ $t('~~What do you need help with?') }}
+              </div>
+              <base-checkbox
+                v-for="work_type_help_needed in survivorToken.work_types"
+                class="mb-3"
+                :value="workTypeHelpNeeded.has(work_type_help_needed.id)"
+                :key="work_type_help_needed.id"
+                @input="
+                  (value) => {
+                    updateWorkTypesHelpNeeded(value, work_type_help_needed);
+                  }
+                "
+              >
+                <div class="flex items-center">
+                  <div
+                    class="svg-container mr-3"
+                    v-html="getWorkTypeImage(work_type_help_needed)"
+                  ></div>
+                  <span class="text-sm">{{
+                    work_type_help_needed.work_type | getWorkTypeName
+                  }}</span>
+                </div>
+              </base-checkbox>
+            </div>
+          </div>
         </div>
       </div>
       <hr class="my-4" />
 
-      <div class="pt-2">
+      <div class="pt-2" v-if="!survivorToken.address_confirmed_at">
         <div>
           <div class="text-lg my-2 font-bold">
             {{ $t('~~Check your property location') }}
@@ -98,6 +134,14 @@
               <span v-html="worksiteAddress"></span>
             </div>
             <div class="flex">
+              <ccu-icon
+                :fa="true"
+                type="check"
+                size="small"
+                class="mx-3"
+                :alt="$t('~~Confirm address')"
+                @click.native="confirmAddress"
+              />
               <ccu-icon
                 type="edit"
                 size="small"
@@ -145,6 +189,32 @@
           @updatedLocation="(latLng) => geocodeWorksite(latLng.lat, latLng.lng)"
         />
       </div>
+
+      <div v-else class="pt-2">
+        <div
+          class="
+            rounded-lg
+            shadow-lg
+            p-5
+            border
+            flex
+            justify-center
+            items-center
+            bg-crisiscleanup-green-600
+            text-white
+          "
+        >
+          <ccu-icon
+            type="privacy"
+            class="mr-2"
+            size="small"
+            style="margin-top: 3px"
+            :alt="$t('~~Address Confirmed')"
+          />
+          {{ $t('~~Address Confirmed') }}
+        </div>
+      </div>
+
       <hr class="my-4" />
 
       <div>
@@ -217,8 +287,15 @@
             )
           }}
         </div>
+
+        <WorksiteNotes
+          :can-add="false"
+          :worksite="survivorToken"
+          v-if="survivorToken.notes.length > 0"
+        />
+
         <textarea
-          v-model="survivorToken.notes"
+          v-model="currentNote"
           rows="5"
           class="
             text-base
@@ -235,9 +312,20 @@
         ></textarea>
       </div>
 
+      <base-checkbox
+        v-model="survivorToken.accept_terms"
+        class="block my-1 text-xl"
+        v-if="!survivorToken.tos_accepted_at"
+      >
+        <div class="privacy" v-html="$t('registerOrg.tos_priv_agree')"></div>
+      </base-checkbox>
+
       <base-button
         class="w-full p-5 mt-5 text-2xl"
         variant="solid"
+        :disabled="
+          !survivorToken.accept_terms && !survivorToken.tos_accepted_at
+        "
         :action="saveSurvivorToken"
         :text="$t('Save')"
       />
@@ -251,10 +339,13 @@ import WorksiteSearchInput from '@/components/WorksiteSearchInput';
 import GeocoderService from '@/services/geocoder.service';
 import LocationViewer from '@/components/LocationViewer';
 import WorksiteImageSection from '@/components/WorksiteImageSection';
+import WorksiteNotes from '@/pages/WorksiteNotes';
+import { getWorkTypeImage } from '@/filters';
 
 export default {
   name: 'Survivors',
   components: {
+    WorksiteNotes,
     WorksiteImageSection,
     LocationViewer,
     WorksiteSearchInput,
@@ -270,6 +361,9 @@ export default {
       hideDetailedAddressFields: true,
       survivorToken: null,
       geocoderResults: [],
+      workTypeHelpNeeded: new Set(),
+      currentNote: '',
+      getWorkTypeImage,
     };
   },
   computed: {
@@ -291,9 +385,21 @@ export default {
     },
   },
   methods: {
+    updateWorkTypesHelpNeeded(value, workTypeToClaim) {
+      if (value) {
+        this.workTypeHelpNeeded.add(workTypeToClaim.id);
+      } else {
+        this.workTypeHelpNeeded.delete(workTypeToClaim.id);
+      }
+      this.workTypeHelpNeeded = new Set(this.workTypeHelpNeeded);
+    },
     unlockLocationFields() {
       this.hideDetailedAddressFields = false;
       this.addressSet = false;
+    },
+    async confirmAddress() {
+      this.survivorToken.confirm_address = true;
+      await this.saveSurvivorToken();
     },
     async locateMe() {
       this.gettingLocation = true;
@@ -401,11 +507,22 @@ export default {
       try {
         await this.$http.put(
           `${process.env.VUE_APP_API_BASE_URL}/survivor_tokens/${this.$route.params.token}`,
-          this.survivorToken,
+          {
+            ...this.survivorToken,
+            help_needed_work_types: Array.from(this.workTypeHelpNeeded),
+          },
         );
+        if (this.currentNote) {
+          await this.$http.post(
+            `${process.env.VUE_APP_API_BASE_URL}/survivor_tokens/${this.$route.params.token}/notes`,
+            { note: this.currentNote },
+          );
+          this.currentNote = '';
+        }
         await this.$toasted.success(
           this.$t('~~Your case was updated successfully'),
         );
+        await this.getSurvivorToken();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
         this.$log.debug(error);
@@ -420,5 +537,19 @@ export default {
 <style scoped>
 .main {
   padding-bottom: calc(50px + env(safe-area-inset-bottom));
+}
+.svg-container svg {
+  width: 26px !important;
+  height: 26px !important;
+}
+</style>
+
+<style>
+.privacy > a {
+  @apply text-primary-dark;
+  text-decoration: underline !important;
+  &:hover {
+    text-decoration: none;
+  }
 }
 </style>

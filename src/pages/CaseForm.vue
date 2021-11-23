@@ -922,6 +922,7 @@ export default {
             ...this.worksite,
             incident: this.incidentId,
             skip_duplicate_check: true,
+            send_sms: true,
           });
           const worksiteId = savedWorksite.entities.worksites[0].id;
           StorageService.removeItem('currentWorksite');

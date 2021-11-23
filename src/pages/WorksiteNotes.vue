@@ -43,7 +43,7 @@
       </div>
     </template>
     <base-button
-      v-if="!addingNotes"
+      v-if="!addingNotes && canAdd"
       class="my-1 text-primary-dark"
       type="link"
       :text="$t('caseView.add_note')"
@@ -93,6 +93,10 @@ export default {
       default: () => {
         return {};
       },
+    },
+    canAdd: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {

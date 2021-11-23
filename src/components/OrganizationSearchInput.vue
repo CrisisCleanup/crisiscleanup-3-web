@@ -75,7 +75,7 @@ export default {
         params.is_active = true;
       }
 
-      if (this.allowedOrganizationIds.length > 0) {
+      if (this.allowedOrganizationIds.length > 0 && !this.isAdmin) {
         params.id__in = this.allowedOrganizationIds.join(',');
       }
 
