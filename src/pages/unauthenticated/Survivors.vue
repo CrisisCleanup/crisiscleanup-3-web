@@ -7,8 +7,8 @@
       <div class="text-2xl text-center mb-3 font-bold">
         Case Number: {{ survivorToken.worksite.case_number }}
       </div>
-
-      <div class="text-lg">Hi {{ survivorToken.worksite.name }}</div>
+      <div class="text-lg mb-1">Hi {{ survivorToken.worksite.name }},</div>
+      <div class="text-lg">{{ $t(survivorToken.survivor_message) }}</div>
       <div>
         <div class="text-lg font-bold my-2">
           {{ $t('~~Let us know if you still need help') }}
@@ -70,9 +70,11 @@
           <div
             v-if="
               survivorToken.work_types &&
-              survivorToken.work_types.length > 0 &&
-              survivorToken.status_t ===
-                'survivorContact.already_helped_help_needed'
+              closedWorkTypes.length === survivorToken.work_types.length &&
+              [
+                'survivorContact.already_helped_help_needed',
+                'survivorContact.help_needed',
+              ].includes(survivorToken.status_t)
             "
           >
             <div class="p-3">
@@ -238,35 +240,47 @@
           <div
             class="w-1/3 border-t border-b border-r rounded-l-xl p-3"
             :class="
-              survivorToken.update_frequency === 'often'
+              survivorToken.worksite.auto_contact_frequency_t ===
+              'formOptions.often'
                 ? 'bg-primary-light'
                 : ''
             "
-            @click="survivorToken.update_frequency = 'often'"
+            @click="
+              survivorToken.worksite.auto_contact_frequency_t =
+                'formOptions.often'
+            "
           >
-            {{ $t('~~Often') }}
+            {{ $t('~~formOptions.often') }}
           </div>
           <div
             class="w-1/3 border-t border-b border-r p-3"
             :class="
-              survivorToken.update_frequency === 'not_often'
+              survivorToken.worksite.auto_contact_frequency_t ===
+              'formOptions.not_often'
                 ? 'bg-primary-light'
                 : ''
             "
-            @click="survivorToken.update_frequency = 'not_often'"
+            @click="
+              survivorToken.worksite.auto_contact_frequency_t =
+                'formOptions.not_often'
+            "
           >
-            {{ $t('~~Not Often') }}
+            {{ $t('formOptions.not_often') }}
           </div>
           <div
             class="w-1/3 border rounded-r-xl p-3"
             :class="
-              survivorToken.update_frequency === 'never'
+              survivorToken.worksite.auto_contact_frequency_t ===
+              'formOptions.never'
                 ? 'bg-primary-light'
                 : ''
             "
-            @click="survivorToken.update_frequency = 'never'"
+            @click="
+              survivorToken.worksite.auto_contact_frequency_t =
+                'formOptions.never'
+            "
           >
-            {{ $t('~~Never') }}
+            {{ $t('formOptions.never') }}
           </div>
         </div>
         <div class="text-lg mt-2">
@@ -382,6 +396,20 @@ export default {
         }`;
       }
       return '';
+    },
+    closedWorkTypes() {
+      return (
+        this.survivorToken &&
+        this.survivorToken.work_types.filter((wt) =>
+          wt.status.includes('closed'),
+        )
+      );
+    },
+    openWorkTypes() {
+      return (
+        this.survivorToken &&
+        this.survivorToken.work_types.filter((wt) => wt.status.includes('open'))
+      );
     },
   },
   methods: {

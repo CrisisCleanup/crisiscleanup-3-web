@@ -88,6 +88,31 @@
           "
         />
       </div>
+      <div class="form-field">
+        <span slot="label" class="flex items-center">
+          <span>{{ $t('casesVue.auto_contact_frequency') }}</span>
+          <ccu-icon
+            v-tooltip="{
+              content: $t('casesVue.auto_contact_frequency_help'),
+              trigger: 'hover',
+              classes: 'interactive-tooltip w-72',
+            }"
+            :alt="$t('casesVue.auto_contact_frequency_help')"
+            type="help"
+            size="large"
+          />
+        </span>
+        <form-select
+          :value="worksite.auto_contact_frequency_t"
+          :options="contactFrequencyOptions"
+          class="bg-white"
+          @input="(value) => (worksite.auto_contact_frequency_t = value)"
+          select-classes="h-12 border"
+          item-key="value"
+          label="name_t"
+          :placeholder="$t('casesVue.auto_contact_frequency')"
+        />
+      </div>
       <div
         class="
           text-base
@@ -392,6 +417,12 @@ import WorksiteNotes from './WorksiteNotes';
 
 const messageBox = create(MessageBox);
 
+const AUTO_CONTACT_FREQUENCY_OPTIONS = [
+  'formOptions.often',
+  'formOptions.not_often',
+  'formOptions.never',
+];
+
 export default {
   name: 'CaseForm',
   components: {
@@ -480,6 +511,14 @@ export default {
     };
   },
   computed: {
+    contactFrequencyOptions() {
+      return AUTO_CONTACT_FREQUENCY_OPTIONS.map((key) => {
+        return {
+          value: key,
+          name_t: this.$t(key),
+        };
+      });
+    },
     fields() {
       if (this.currentIncident && this.currentIncident.form_fields) {
         const formFields = this.currentIncident.form_fields;

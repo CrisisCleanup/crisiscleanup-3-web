@@ -36,6 +36,7 @@ export default class Worksite extends CCUModel {
       email: this.attr(null),
       updated_at: this.attr(null),
       favorite: this.attr(null),
+      auto_contact_frequency_t: this.attr(null),
     };
   }
 
