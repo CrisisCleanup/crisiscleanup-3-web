@@ -26,6 +26,9 @@ export default {
       reactive({
         key: 'nav.costs',
       }),
+      reactive({
+        key: 'nav.cms',
+      }),
     ]);
     return { tabs };
   },

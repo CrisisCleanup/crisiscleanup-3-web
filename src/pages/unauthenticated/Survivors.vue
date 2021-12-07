@@ -136,20 +136,18 @@
               <span v-html="worksiteAddress"></span>
             </div>
             <div class="flex">
-              <ccu-icon
-                :fa="true"
-                type="check"
-                size="small"
-                class="mx-3"
+              <base-button
+                class="px-3 py-1 bg-crisiscleanup-green-700 text-white mx-1"
+                :text="$t('~~Confirm address')"
                 :alt="$t('~~Confirm address')"
-                @click.native="confirmAddress"
+                :action="confirmAddress"
               />
-              <ccu-icon
-                type="edit"
-                size="small"
-                class="mx-1"
+              <base-button
+                variant="solid"
+                class="px-3 py-1 mx-1"
+                :text="$t('~~Edit address')"
                 :alt="$t('~~Edit address')"
-                @click.native="unlockLocationFields"
+                :action="unlockLocationFields"
               />
             </div>
           </div>
@@ -343,6 +341,16 @@
         :action="saveSurvivorToken"
         :text="$t('Save')"
       />
+
+      <div class="text-xl my-2 font-bold">
+        {{ $t('~~Faqs') }}
+      </div>
+      <ul>
+        <li v-for="faq in faqs" :key="faq.id">
+          <div class="text-lg my-1 font-bold" v-html="$t(faq.title)"></div>
+          <div class="text-lg" v-html="$t(faq.content)"></div>
+        </li>
+      </ul>
     </section>
   </div>
 </template>
@@ -365,6 +373,7 @@ export default {
     WorksiteSearchInput,
   },
   async mounted() {
+    await this.getFaqs();
     await this.getSurvivorToken();
   },
   data() {
@@ -375,6 +384,7 @@ export default {
       hideDetailedAddressFields: true,
       survivorToken: null,
       geocoderResults: [],
+      faqs: [],
       workTypeHelpNeeded: new Set(),
       currentNote: '',
       getWorkTypeImage,
@@ -557,6 +567,12 @@ export default {
       } finally {
         this.loading = false;
       }
+    },
+    async getFaqs() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/cms?tags=faq`,
+      );
+      this.faqs = response.data.results;
     },
   },
 };

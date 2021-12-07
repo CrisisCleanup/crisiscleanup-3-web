@@ -1,0 +1,108 @@
+<template>
+  <div>
+    <base-input
+      :value="search"
+      v-if="enableSearch"
+      icon="search"
+      class="w-72 mx-4"
+      :placeholder="$t('~~Search Items')"
+      @input="
+        (value) => {
+          search = value;
+          meta.pagination.page = 1;
+          throttle(getData, 1000)();
+        }
+      "
+    ></base-input>
+    <Table
+      :columns="columns"
+      :data="data"
+      :body-style="{ height: '300px' }"
+      :pagination="meta.pagination"
+      :sorter="meta.sorter"
+      enable-pagination
+      @change="getData"
+      @rowClick="(payload) => $emit('row:click', payload)"
+    >
+      <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope"
+        ><slot :name="slot" v-bind="scope"
+      /></template>
+    </Table>
+  </div>
+</template>
+
+<script>
+import { throttle } from 'lodash';
+import Table from '@/components/Table';
+import { getQueryString } from '@/utils/urls';
+
+export default {
+  name: 'AjaxTable',
+  components: { Table },
+  props: {
+    url: {
+      type: String,
+      default: '',
+      required: true,
+    },
+    enableSearch: {
+      type: Boolean,
+    },
+    columns: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
+  },
+  async mounted() {
+    await this.getData();
+  },
+  methods: {
+    async getData(data = {}) {
+      const pagination = data.pagination || this.meta.pagination;
+      const sorter = data.sorter || this.meta.sorter;
+      const params = {
+        offset: pagination.pageSize * (pagination.page - 1),
+        limit: pagination.pageSize,
+      };
+      params.search = this.search;
+      if (sorter && sorter.key) {
+        params.sort = `${sorter.direction === 'desc' ? '-' : ''}${sorter.key}`;
+      }
+      const queryString = getQueryString(params);
+
+      const response = await this.$http.get(`${this.url}?${queryString}`);
+      this.data = response.data.results;
+      this.meta.pagination = {
+        ...pagination,
+        total: response.data.count,
+      };
+      this.meta.sorter = {
+        ...sorter,
+      };
+    },
+  },
+  data() {
+    return {
+      data: [],
+      meta: {
+        pagination: {
+          pageSize: 10,
+          page: 1,
+          current: 1,
+        },
+        sorter: {
+          key: null,
+          direction: null,
+        },
+      },
+      search: '',
+      visible: true,
+      throttle,
+    };
+  },
+};
+</script>
+
+<style scoped></style>

@@ -5,6 +5,7 @@ import AdminEvents from '@/pages/admin/AdminEvents.vue';
 import AdminEventStream from '@/components/AdminEventStream.vue';
 import AdminTicketDashboard from '@/pages/admin/AdminTicketDashboard.vue';
 import AdminCosts from '@/pages/admin/AdminCosts.vue';
+import AdminCms from '@/pages/admin/AdminCms';
 const routes = [
   {
     path: '/admin',
@@ -45,6 +46,11 @@ const routes = [
         path: 'costs',
         name: 'nav.costs',
         component: AdminCosts,
+      },
+      {
+        path: 'cms',
+        name: 'nav.cms',
+        component: AdminCms,
       },
     ],
   },
