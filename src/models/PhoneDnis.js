@@ -1,3 +1,4 @@
+// @flow
 import moment from 'moment';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import CCUModel from '@/models/model';
