@@ -10,8 +10,6 @@ export type ColumnT = {|
   key: string,
   title: string,
   width?: string,
-  sortable?: boolean,
-  sortKey?: string,
 |};
 
 /**
@@ -20,8 +18,7 @@ export type ColumnT = {|
  * @param name - general name of column.
  * @param width - width of column.
  * @param title - Rendered title of column.
- * @param sortable
- * @param sortKey
+ * @param options - Additional table options
  * @returns {{dataIndex: string, width: *, title: (*|string), key: string}}
  */
 const makeColumn = ([name, width = '1fr', title, options = {}]): ColumnT => ({
