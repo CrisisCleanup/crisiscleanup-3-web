@@ -207,7 +207,8 @@ export default class Contact extends Model {
   }
 
   get isReady(): boolean {
-    return this.hasResolvedCases && this.dnis !== null;
+    const target = this.isInbound ? this.inbound : this.outbound;
+    return this.hasResolvedCases && !_.isNil(target) && !_.isNil(this.dnis);
   }
 
   get mostRecentWorksite(): typeof Worksite | null {
@@ -678,7 +679,12 @@ export default class Contact extends Model {
     );
     Log.debug(`resolving <${model.entity}> @ [${itemIds}]`);
     // TODO: Implement stale-while-revalidate caching method.
-    return model.fetchById(itemIds);
+    return model.fetchById(itemIds).then(() =>
+      model
+        .query()
+        .findIn(itemIds)
+        .filter((i) => !_.isNil(i)),
+    );
   }
 
   async getCallDuration() {
@@ -735,7 +741,14 @@ export default class Contact extends Model {
     inbound: typeof PhoneInbound | null,
     outbound: typeof PhoneOutbound | null,
   } = {}): Promise<PhoneDnis | null> {
-    // first check for contact attr.
+    const _dnis = await this.resolveAttributeModels<typeof PhoneDnis>(
+      ContactAttributes.CALLER_DNIS_ID,
+      PhoneDnis,
+    );
+    if (!_.isNil(_dnis)) {
+      return _dnis;
+    }
+    // check for contact attr.
     let _number = _.get(
       this.contactAttributes,
       ContactAttributes.INBOUND_NUMBER,

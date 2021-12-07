@@ -1,9 +1,8 @@
-// @flow
 import moment from 'moment';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import CCUModel from '@/models/model';
 
-export default class PhoneDnis extends CCUModel<PhoneDnis> {
+export default class PhoneDnis extends CCUModel {
   static entity = 'phone_dnis';
 
   static fields() {
