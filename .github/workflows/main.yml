@@ -61,18 +61,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Determine Yarn Cache
-        id: yarn-cache-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Cache Node Modules
-        id: yarn-cache
-        uses: actions/cache@v2.1.0
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
-          path: ${{ steps.yarn-cache-path.outputs.dir }}
-          key: yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            yarn-
+          node-version: '14'
+          cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn install
@@ -92,18 +85,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Determine Yarn Cache
-        id: yarn-cache-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Cache Node Modules
-        uses: actions/cache@v2.1.0
-        id: yarn-cache
+      - name: Setup Node
+        uses: actions/setup-node@v2
         with:
-          path: ${{ steps.yarn-cache-path.outputs.dir }}
-          key: yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            yarn-
+          node-version: '14'
+          cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn install
