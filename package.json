@@ -244,6 +244,7 @@
     "postcss-will-change": "^3.0.0",
     "postcss-will-change-transition": "^1.2.0",
     "prettier": "^2.0.5",
+    "quill": "^1.3.7",
     "raw-loader": "^4.0.1",
     "sass": "^1.43.4",
     "sass-loader": "^10.0.1",
