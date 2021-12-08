@@ -553,7 +553,7 @@ export default {
           this.currentNote = '';
         }
         await this.$toasted.success(
-          this.$t('~~Your case was updated successfully'),
+          this.$t('survivorContact.case_update_success'),
         );
         await this.getSurvivorToken();
       } catch (error) {
