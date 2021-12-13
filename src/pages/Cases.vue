@@ -446,7 +446,7 @@
               @input="filterDates"
               :value="dateLevel"
               :min="0"
-              :max="datesList.length - 1"
+              :max="1000"
               :from="`${$moment({ hours: 0 }).diff(
                 $moment(datesList[0].updated_at),
                 'days',
@@ -1976,7 +1976,11 @@ export default {
     },
     filterDates(value) {
       this.dateLevel = Number(value);
-      const date = this.$moment(this.datesList[value].updated_at);
+      const count = Math.floor((this.datesList.length * Number(value)) / 1000);
+      const filteredDates = this.datesList.slice(0, count);
+      const date = this.$moment(
+        filteredDates[filteredDates.length - 1].updated_at,
+      );
       this.$refs.worksiteMap.filterDates(date);
     },
     filterSviAsync: debounce(
