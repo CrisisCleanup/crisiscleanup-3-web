@@ -20,7 +20,10 @@
         webWidget: {
           color: { theme: '#fece09' },
           position: { horizontal: 'left', vertical: 'bottom' },
-          offset: { horizontal: '-0.5rem' }
+          offset: { horizontal: '-0.5rem' },
+          contactForm: {
+            suppress: /\/s\/(.*)/gm.exec(window.location.pathname) !== null
+          },
         }
       };
     </script>

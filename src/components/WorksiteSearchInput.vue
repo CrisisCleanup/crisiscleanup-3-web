@@ -156,7 +156,7 @@ export default {
     renderSuggestion(suggestion) {
       if (suggestion.name === 'geocoder') {
         return (
-          <div class="flex flex-col text-sm p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b">
+          <div class="flex flex-col sm:text-lg text-base p-1 cursor-pointer hover:bg-crisiscleanup-light-grey border-b">
             <div>{suggestion.item.description}</div>
           </div>
         );

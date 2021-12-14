@@ -88,7 +88,7 @@
           "
         />
       </div>
-      <div class="form-field">
+      <div class="form-field" v-if="currentIncident.auto_contact">
         <span slot="label" class="flex items-center">
           <span>{{ $t('casesVue.auto_contact_frequency') }}</span>
           <ccu-icon
@@ -106,7 +106,11 @@
           :value="worksite.auto_contact_frequency_t"
           :options="contactFrequencyOptions"
           class="bg-white"
-          @input="(value) => (worksite.auto_contact_frequency_t = value)"
+          @input="
+            (value) => {
+              updateWorksite(value, 'auto_contact_frequency_t');
+            }
+          "
           select-classes="h-12 border"
           item-key="value"
           label="name_t"

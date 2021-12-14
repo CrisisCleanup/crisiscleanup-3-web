@@ -8,7 +8,7 @@
         Case Number: {{ survivorToken.worksite.case_number }}
       </div>
       <div class="text-lg mb-1">Hi {{ survivorToken.worksite.name }},</div>
-      <div class="text-lg">{{ $t(survivorToken.survivor_message) }}</div>
+      <div class="text-lg" v-html="$t(survivorToken.survivor_message)"></div>
       <div>
         <div class="text-lg font-bold my-2">
           {{ $t('~~Let us know if you still need help') }}

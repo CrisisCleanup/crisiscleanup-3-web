@@ -21,7 +21,7 @@ const routes = [
     meta: { layout: 'unauthenticated', noAuth: true },
   },
   {
-    path: '/survivors/:token',
+    path: '/s/:token',
     component: Survivors,
     name: 'nav.survivors',
     meta: { layout: 'unauthenticated', noAuth: true },
