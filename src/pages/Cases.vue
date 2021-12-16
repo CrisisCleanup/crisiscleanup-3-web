@@ -1116,7 +1116,7 @@ export default {
       map: null,
       currentSearch: '',
       sviLevel: 100,
-      dateLevel: 0,
+      dateLevel: 1000,
       sviTitle: '',
       currentCaseView: '',
       getColorForStatus,
