@@ -1361,9 +1361,6 @@ export default {
       if (states.sviLevel) {
         this.sviLevel = states.sviLevel;
       }
-      if (states.dateLevel) {
-        this.dateLevel = states.dateLevel;
-      }
       if (states.filters) {
         this.filters = {
           ...states.filters,
