@@ -51,7 +51,7 @@ export default class PhoneService {
 
   async apiLogoutAgent(agentId) {
     await window.vue.$http.post(
-      `https://frronrxz66.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agent/${agentId}/logout`,
+      `https://3vmevqhqra.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agent/${agentId}/logout`,
       {},
       {
         headers: {
@@ -63,7 +63,7 @@ export default class PhoneService {
 
   async apiLogoutByUsername(username) {
     await window.vue.$http.post(
-      `https://frronrxz66.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/username/${username}/logout`,
+      `https://3vmevqhqra.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/username/${username}/logout`,
       {},
       {
         headers: {
@@ -75,7 +75,7 @@ export default class PhoneService {
 
   async apiLoginsByPhone(phone, queue) {
     return window.vue.$http.get(
-      `https://frronrxz66.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agentLogins?phone=${phone}&queue=${queue}`,
+      `https://3vmevqhqra.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agentLogins?phone=${phone}&queue=${queue}`,
       {
         headers: {
           Authorization: null,

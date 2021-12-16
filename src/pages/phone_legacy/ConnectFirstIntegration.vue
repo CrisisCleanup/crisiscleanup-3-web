@@ -468,7 +468,7 @@ export default {
     async getUserNameForAgent(agentId) {
       try {
         const response = await this.$http.get(
-          `https://frronrxz66.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agent/${agentId}`,
+          `https://3vmevqhqra.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agent/${agentId}`,
           {
             headers: {
               Authorization: null,
