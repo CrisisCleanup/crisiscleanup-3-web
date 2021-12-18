@@ -346,6 +346,7 @@ export default {
       mapLoading: false,
       showingLegend: true,
       markerLayer: L.layerGroup(),
+      heatMapLayer: null,
       markers: [],
       markerSprites: [],
       showInteractivePopover: false,
@@ -662,6 +663,13 @@ export default {
         null,
         false,
       );
+    },
+    addHeatMap(points) {
+      this.heatMapLayer = L.heatLayer(points, { radius: 35 });
+      this.heatMapLayer.addTo(this.map);
+    },
+    removeHeatMap() {
+      this.map.removeLayer(this.heatMapLayer);
     },
   },
 };

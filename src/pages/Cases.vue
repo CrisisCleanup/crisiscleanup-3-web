@@ -61,6 +61,14 @@
                   @clear="onSearch"
                 />
               </div>
+              <div class="mt-2" v-if="heatMapEnabled">
+                <base-checkbox
+                  class="pb-2"
+                  :value="showingHeatMap"
+                  @input="toggleHeatMap"
+                  >{{ $t('Show Heat Map') }}</base-checkbox
+                >
+              </div>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d">
               <base-dropdown class-name="borderless">
@@ -469,7 +477,7 @@
               :current-filters="filters"
               @mapMoved="onMapMoved"
               @onSelectmarker="displayWorksite"
-              @onLoadedMarkers="setFilterLists"
+              @onLoadedMarkers="onLoadedMarkers"
             />
           </template>
           <template v-if="showingTable">
@@ -1130,6 +1138,8 @@ export default {
       statusForUpdate: null,
       noClaimReason: null,
       organizationLocations: [],
+      pdas: [],
+      showingHeatMap: true,
     };
   },
   computed: {
@@ -1140,6 +1150,13 @@ export default {
         .replace('{{fillColor}}', 'grey')
         .replace('{{strokeColor}}', 'white')
         .replace('{{multiple}}', '');
+    },
+    heatMapEnabled() {
+      return (
+        this.$can('app_stage.development') ||
+        this.$can('app_stage.staging') ||
+        [235].includes(Number(this.currentIncidentId))
+      );
     },
     highPrioritySvgActive() {
       const template = templates.important;
@@ -1388,6 +1405,7 @@ export default {
       Team.api().get('/teams', {
         dataKey: 'results',
       }),
+      this.getPdas(),
     ]);
     this.isMounted = JSON.stringify(this.appliedFilters);
   },
@@ -1404,6 +1422,17 @@ export default {
       await Location.api().get(`/locations?${queryString}`, {
         dataKey: 'results',
       });
+    },
+    async getPdas() {
+      if (this.heatMapEnabled) {
+        const response = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/pdas`,
+          {
+            params: { incident: this.currentIncidentId },
+          },
+        );
+        this.pdas = response.data;
+      }
     },
     async getOrganizationLocations() {
       const locationParams = {
@@ -1956,12 +1985,23 @@ export default {
       if (this.dateLevel) {
         this.filterDates(this.dateLevel);
       } else {
-        this.dateLevel = this.datesList.length - 1;
+        this.dateLevel = 1000;
       }
     },
-    setFilterLists(filterList) {
+    toggleHeatMap() {
+      this.showingHeatMap = !this.showingHeatMap;
+      if (this.showingHeatMap) {
+        this.setHeatMap();
+      } else {
+        this.$refs.worksiteMap.removeHeatMap();
+      }
+    },
+    onLoadedMarkers(filterList) {
       this.setSviList(filterList);
       this.setDatesList(filterList);
+      if (this.heatMapEnabled) {
+        this.setHeatMap();
+      }
     },
     filterSvi(value) {
       this.sviLevel = Number(value);
@@ -1979,6 +2019,13 @@ export default {
         filteredDates[filteredDates.length - 1].updated_at,
       );
       this.$refs.worksiteMap.filterDates(date);
+    },
+    setHeatMap() {
+      this.$refs.worksiteMap.addHeatMap(
+        this.pdas
+          .filter((p) => Boolean(p.location))
+          .map((p) => [p.location.coordinates[1], p.location.coordinates[0]]),
+      );
     },
     filterSviAsync: debounce(
       async function (value) {
