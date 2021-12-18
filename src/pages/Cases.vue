@@ -66,7 +66,7 @@
                   class="pb-2"
                   :value="showingHeatMap"
                   @input="toggleHeatMap"
-                  >{{ $t('Show Heat Map') }}</base-checkbox
+                  >{{ $t('casesVue.show_damaged_areas') }}</base-checkbox
                 >
               </div>
             </div>
@@ -450,7 +450,7 @@
               secondary-color="white"
               class="pt-1 ml-4"
               slider-class="w-84"
-              :title="$t('~~Last Updated')"
+              :title="$t('casesVue.last_updated')"
               @input="filterDates"
               :value="dateLevel"
               :min="0"
