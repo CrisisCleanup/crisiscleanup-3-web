@@ -23,23 +23,21 @@
 
     <div class="phone__section">
       <div class="phone__main">
-        <CallVolumeChart
-          :calls-dataset="totalCalls"
-          :missed-dataset="totalMissed"
-          :cases-dataset="newCases"
-          :loading="!historicMetricsReady"
-        />
-        <div>
-          <div class="phone__social">
-            <leaderboard />
-            <NewsTrainingCard
-              :training-items="trainings"
-              :user-training-items="userTrainings"
-              @phone:showTraining="
-                ($event) => (isShowingTrainingModal = $event)
-              "
-            />
-          </div>
+        <div class="grid grid-cols-2 gap-3">
+          <CircularBarplot
+            class="phone__chart"
+            :chart-data="phoneCallData"
+            bg-color="#fff"
+            :is-stacked="false"
+          />
+          <leaderboard />
+        </div>
+        <div class="phone__social">
+          <NewsTrainingCard
+            :training-items="trainings"
+            :user-training-items="userTrainings"
+            @phone:showTraining="($event) => (isShowingTrainingModal = $event)"
+          />
         </div>
         <CallHistory @row:click="({ mobile }) => (numberToDial = mobile)" />
         <ContactTable v-if="currentUser && currentUser.isAdmin" />
@@ -72,13 +70,16 @@ import TrainingModal from '@/components/phone/TrainingsModal.vue';
 import AgentCard from '@/components/phone/AgentCard.vue';
 import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics.vue';
 import AgentAnalytics from '@/components/phone/Cards/StatsCard.vue';
-import CallVolumeChart from '@/components/phone/Widgets/CallVolumeChart.vue';
 import { TrainingMixin } from '@/mixins';
+import useIncident from '@/use/worksites/useIncident';
+import CircularBarplot from '@/components/charts/CircularBarplot.vue';
+import { getQueryString } from '@/utils/urls';
 
 export default {
   name: 'PhoneDashboard',
   mixins: [TrainingMixin],
   components: {
+    CircularBarplot,
     AgentAnalytics,
     AgentCard,
     CallHistory,
@@ -87,13 +88,13 @@ export default {
     ContactTable,
     TrainingModal,
     GeneralStatistics,
-    CallVolumeChart,
   },
   data() {
     return {
       loading: false,
       isShowingTrainingModal: false,
       numberToDial: null,
+      phoneCallData: [],
     };
   },
   computed: {
@@ -114,8 +115,30 @@ export default {
   },
   async mounted() {
     await this.loadTrainingData();
+    this.fetchCircularBarplotData(this.$moment(), 60).then(() => {});
   },
   methods: {
+    async fetchCircularBarplotData(date, interval) {
+      const { currentIncidentId } = useIncident();
+      this.phoneCallData = [];
+      this.phoneCallData = this.phoneCallData.slice();
+      const d = date.format('YYYY-MM-DD');
+
+      const params = {
+        date: d,
+        interval,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      };
+      if (currentIncidentId.value) {
+        params.incident = currentIncidentId.value;
+      }
+      const queryString = getQueryString(params);
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/reports_data/daily_calls?${queryString}`,
+      );
+      this.phoneCallData = response.data;
+      this.phoneCallData = this.phoneCallData.slice();
+    },
     async onTrainingComplete() {
       this.$emit('phone:showTrainingModal', false);
       await this.loadTrainingData();
@@ -166,6 +189,12 @@ export default {
               }
             }
           }
+        }
+
+        .phone__chart {
+          @apply shadow-sm;
+          margin-bottom: 0;
+          height: 28rem;
         }
       }
     }
