@@ -1471,7 +1471,6 @@ export default {
           showingMap: this.showingMap,
           showingTable: this.showingTable,
           sviLevel: this.sviLevel,
-          dateLevel: this.dateLevel,
           ...data,
         },
       );
