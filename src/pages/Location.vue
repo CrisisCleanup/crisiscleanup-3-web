@@ -493,7 +493,7 @@ export default {
       }
 
       if (!this.currentPolygon) {
-        this.$toasted.error('locationVue.no_valid_drawing_found');
+        this.$toasted.error(this.$t('locationVue.no_valid_drawing_found'));
         return;
       }
 
