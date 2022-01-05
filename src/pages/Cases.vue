@@ -61,7 +61,7 @@
                   @clear="onSearch"
                 />
               </div>
-              <div class="mt-2" v-if="heatMapEnabled">
+              <div class="mt-2" v-if="pdas.length > 0">
                 <base-checkbox
                   class="pb-2"
                   :value="showingHeatMap"
@@ -1152,11 +1152,7 @@ export default {
         .replace('{{multiple}}', '');
     },
     heatMapEnabled() {
-      return (
-        this.$can('app_stage.development') ||
-        this.$can('app_stage.staging') ||
-        [235].includes(Number(this.currentIncidentId))
-      );
+      return true;
     },
     highPrioritySvgActive() {
       const template = templates.important;
@@ -1349,6 +1345,8 @@ export default {
           page: 1,
         });
         this.getLocations();
+        this.$refs.worksiteMap.removeHeatMap();
+        this.getPdas().then(() => this.setHeatMap());
       }
     },
   },
