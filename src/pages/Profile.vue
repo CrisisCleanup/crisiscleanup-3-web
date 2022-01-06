@@ -521,7 +521,8 @@ export default {
         });
         await this.$toasted.success(this.$t('profileUser.save_user_success'));
         this.mode = 'view';
-        this.updateUserLanguage();
+        await this.updateUserLanguage();
+        window.location.reload();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
