@@ -23,6 +23,12 @@
             <MergeOrganizations is-admin />
             <FileUpload class="mx-3 my-1" />
             <DatabaseAccess class="mx-3 my-1" />
+            <base-button
+              :text="$t('~~ArcGis Upload')"
+              variant="solid"
+              size="medium"
+              :action="showArcGisUploader"
+            />
           </div>
         </div>
         <div class="flex">
@@ -276,9 +282,11 @@ import UsersTable from '../../components/admin/UsersTable';
 import GhostUsersTable from '../../components/admin/GhostUsersTable';
 import MergeOrganizations from '../../components/MergeOrganizations';
 import DatabaseAccess from '../../components/DatabaseAccess';
+import { DialogsMixin } from '@/mixins';
 
 export default {
   name: 'AdminDashboard',
+  mixins: [DialogsMixin],
   components: {
     DatabaseAccess,
     MergeOrganizations,
@@ -389,6 +397,13 @@ export default {
         this.getInvitationRequests({ pagination: this.defaultPagination }),
         this.getInvitations({ pagination: this.defaultPagination }),
       ]);
+    },
+    async showArcGisUploader() {
+      await this.$component({
+        title: this.$t('~~ArcGis Upload'),
+        component: 'ArcGisUploader',
+        classes: 'w-full h-56 p-3',
+      });
     },
     async getOrganizationsForApproval() {
       if (this.$can('approve_orgs_full')) {
