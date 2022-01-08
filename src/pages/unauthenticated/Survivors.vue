@@ -23,7 +23,7 @@
             ]"
             label-class="pt-1 text-xl"
             label="survivorContact.help_needed"
-            :name="$t('survivorContact.still_need_help')"
+            :name="$t('survivorContact.help_needed')"
             :value="survivorToken.status_t"
             @change="survivorToken.status_t = $event"
           />
