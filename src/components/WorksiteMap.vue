@@ -682,4 +682,7 @@ export default {
   width: 25px;
   height: 25px;
 }
+.leaflet-heatmap-layer {
+  opacity: 0.5;
+}
 </style>
