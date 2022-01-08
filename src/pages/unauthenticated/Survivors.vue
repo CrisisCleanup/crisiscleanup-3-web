@@ -5,13 +5,13 @@
     </div>
     <section class="main p-5" v-if="survivorToken">
       <div class="text-2xl text-center mb-3 font-bold">
-        Case Number: {{ survivorToken.worksite.case_number }}
+        {{ $t('survivorContact.case_number') }}: {{ survivorToken.worksite.case_number }}
       </div>
-      <div class="text-lg mb-1">Hi {{ survivorToken.worksite.name }},</div>
+      <div class="text-lg mb-1">{{ survivorToken.worksite.name }}:</div>
       <div class="text-lg" v-html="$t(survivorToken.survivor_message)"></div>
       <div>
         <div class="text-lg font-bold my-2">
-          {{ $t('~~Let us know if you still need help') }}
+          {{ $t('survivorContact.do_you_need_help') }}
         </div>
         <div class="flex flex-col mt-2">
           <base-radio
@@ -23,7 +23,7 @@
             ]"
             label-class="pt-1 text-xl"
             label="survivorContact.help_needed"
-            :name="$t('~~I still need help')"
+            :name="$t('survivorContact.still_need_help')"
             :value="survivorToken.status_t"
             @change="survivorToken.status_t = $event"
           />
@@ -36,7 +36,7 @@
             ]"
             label-class="pt-1 text-xl"
             label="survivorContact.help_not_needed"
-            :name="$t('~~I do not need help')"
+            :name="$t('survivorContact.help_not_needed')"
             :value="survivorToken.status_t"
             @change="survivorToken.status_t = $event"
           />
@@ -49,7 +49,7 @@
             ]"
             label-class="pt-1 text-xl"
             label="survivorContact.already_helped"
-            :name="$t('~~Someone already helped me')"
+            :name="$t('survivorContact.already_helped')"
             :value="survivorToken.status_t"
             @change="survivorToken.status_t = $event"
           />
@@ -63,7 +63,7 @@
             ]"
             label-class="pt-1 text-xl"
             label="survivorContact.already_helped_help_needed"
-            :name="$t('~~Someone already helped me, but I need more help')"
+            :name="$t('survivorContact.already_helped_help_needed')"
             :value="survivorToken.status_t"
             @change="survivorToken.status_t = $event"
           />
@@ -111,7 +111,7 @@
       <div class="pt-2" v-if="!survivorToken.address_confirmed_at">
         <div>
           <div class="text-lg my-2 font-bold">
-            {{ $t('~~Check your property location') }}
+            {{ $t('survivorContact.confirm_address') }}
           </div>
           <div
             v-if="addressSet"
@@ -131,7 +131,7 @@
                 class="mr-1"
                 size="small"
                 style="margin-top: 3px"
-                :alt="$t('~~Location')"
+                :alt="$t('survivorContact.location')"
               />
               <span v-html="worksiteAddress"></span>
             </div>
@@ -145,8 +145,8 @@
               <base-button
                 variant="solid"
                 class="px-3 py-1 mx-1"
-                :text="$t('~~Edit address')"
-                :alt="$t('~~Edit address')"
+                :text="$t('survivorContact.edit_address')"
+                :alt="$t('survivorContact.edit_address')"
                 :action="unlockLocationFields"
               />
             </div>
@@ -168,7 +168,7 @@
               }
             "
             display-property="description"
-            :placeholder="$t('~~Full Address')"
+            :placeholder="$t('survivorContact.full_address')"
             size="large"
             @input="() => {}"
             @selectedGeocode="onGeocodeSelect"
@@ -219,7 +219,7 @@
 
       <div>
         <div class="text-lg my-2 font-bold">
-          {{ $t('~~Please upload pictures of damage to your property') }}
+          {{ $t('survivorContact.upload_photos') }}
         </div>
         <WorksiteImageSection
           :worksite="survivorToken"
@@ -228,11 +228,14 @@
           @photosChanged="() => getSurvivorToken(true)"
         />
       </div>
+        <div class="text-lg my-2 font-bold">
+          {{ $t('survivorContact.more_photos') }}
+        </div>
       <hr class="my-4" />
 
       <div>
         <div class="text-lg my-2 font-bold">
-          {{ $t('~~How often can we ask to update your status') }}
+          {{ $t('survivorContact.how_often_update') }}
         </div>
         <div class="w-full flex text-center text-lg">
           <div
@@ -248,7 +251,7 @@
                 'formOptions.often'
             "
           >
-            {{ $t('~~formOptions.often') }}
+            {{ $t('survivorContact.often') }}
           </div>
           <div
             class="w-1/3 border-t border-b border-r p-3"
@@ -263,7 +266,7 @@
                 'formOptions.not_often'
             "
           >
-            {{ $t('formOptions.not_often') }}
+            {{ $t('survivorContact.not_often') }}
           </div>
           <div
             class="w-1/3 border rounded-r-xl p-3"
@@ -278,26 +281,18 @@
                 'formOptions.never'
             "
           >
-            {{ $t('formOptions.never') }}
+            {{ $t('survivorContact.never') }}
           </div>
         </div>
         <div class="text-lg mt-2">
-          {{
-            $t(
-              '~~In the beginning, we may ask you for an update every day. After a week or so, that will decrease to every other day, and then down to once a week. We will stop asking once most of the volunteers go home, which is typically 3-5 weeks after the disaster.',
-            )
-          }}
+          {{ $t('survivorContact.frequency_statement') }}
         </div>
       </div>
       <hr class="my-4" />
 
       <div>
         <div class="text-lg my-2 font-bold">
-          {{
-            $t(
-              '~~Please share any details you would like volunteers to know about your situation. Please do not include sensitive personal information, such as social security numbers or health information.',
-            )
-          }}
+          {{ $t('survivorContact.notes_instructions') }}
         </div>
 
         <WorksiteNotes
@@ -319,7 +314,7 @@
             resize-none
             w-full
           "
-          :placeholder="$t('phoneDashboard.notes')"
+          :placeholder="$t('survivorContact.notes')"
           required
         ></textarea>
       </div>
@@ -339,7 +334,7 @@
           !survivorToken.accept_terms && !survivorToken.tos_accepted_at
         "
         :action="saveSurvivorToken"
-        :text="$t('Save')"
+        :text="$t('actions.save')"
       />
 
       <div class="text-xl my-2 font-bold">
@@ -558,7 +553,7 @@ export default {
           this.currentNote = '';
         }
         await this.$toasted.success(
-          this.$t('~~Your case was updated successfully'),
+          this.$t('survivorContact.case_update_success'),
         );
         await this.getSurvivorToken();
       } catch (error) {

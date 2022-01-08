@@ -149,7 +149,7 @@
               class="mr-1"
               size="small"
               style="margin-top: 3px"
-              :alt="$t('~~Location')"
+              :alt="$t('formLabels.location')"
             />
             <span v-html="worksiteAddress"></span>
           </div>
@@ -158,14 +158,14 @@
               type="trash"
               size="small"
               class="mx-1"
-              :alt="$t('caseView.clear_location')"
+              :alt="$t('actions.clear_location')"
               @click.native="clearLocationFields"
             />
             <ccu-icon
               type="edit"
               size="small"
               class="mx-1"
-              :alt="$t('~~Manually edit address')"
+              :alt="$t('caseView.manually_edit_address')"
               @click.native="unlockLocationFields"
             />
           </div>
@@ -195,7 +195,7 @@
           display-property="description"
           :placeholder="
             hideDetailedAddressFields
-              ? $t('~~Full Address')
+              ? $t('caseView.full_address')
               : $t('formLabels.address')
           "
           size="large"

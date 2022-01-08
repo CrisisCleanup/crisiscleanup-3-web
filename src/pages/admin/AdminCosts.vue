@@ -9,7 +9,7 @@
         :options="['stacked', 'split']"
         select-classes="bg-white border w-64 m-2"
         class="mb-2"
-        :placeholder="$t('~~Chart Style')"
+        :placeholder="$t('adminDashboard.chart_style')"
       />
 
       <template v-if="style === 'split'">

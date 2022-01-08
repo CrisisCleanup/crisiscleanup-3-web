@@ -82,7 +82,7 @@
                 <base-input type="email" v-model="printToken.email" />
 
                 <div>
-                  <base-text>{{ $t('~~Photos') }}</base-text>
+                  <base-text>{{ $t('printToken.photos') }}</base-text>
                   <WorksiteImageSection
                     :worksite="printToken"
                     :key="printToken.files"
