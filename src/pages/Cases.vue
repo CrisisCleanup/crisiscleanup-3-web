@@ -1139,7 +1139,7 @@ export default {
       noClaimReason: null,
       organizationLocations: [],
       pdas: [],
-      showingHeatMap: true,
+      showingHeatMap: false,
     };
   },
   computed: {
@@ -1346,7 +1346,7 @@ export default {
         });
         this.getLocations();
         this.$refs.worksiteMap.removeHeatMap();
-        this.getPdas().then(() => this.setHeatMap());
+        this.getPdas();
       }
     },
   },
@@ -1996,7 +1996,7 @@ export default {
     onLoadedMarkers(filterList) {
       this.setSviList(filterList);
       this.setDatesList(filterList);
-      if (this.heatMapEnabled) {
+      if (this.heatMapEnabled && this.showingHeatMap) {
         this.setHeatMap();
       }
     },

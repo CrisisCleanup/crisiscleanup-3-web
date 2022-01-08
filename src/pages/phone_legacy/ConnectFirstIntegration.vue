@@ -468,7 +468,7 @@ export default {
     async getUserNameForAgent(agentId) {
       try {
         const response = await this.$http.get(
-          `https://3vmevqhqra.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agent/${agentId}`,
+          `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}`,
           {
             headers: {
               Authorization: null,
