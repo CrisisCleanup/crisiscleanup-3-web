@@ -110,8 +110,15 @@ export default {
       }
     },
     async deleteFile(fileId) {
-      await Worksite.api().deleteFile(this.worksite.id, fileId);
-      await Worksite.api().fetch(this.worksite.id);
+      if (this.isSurvivorToken) {
+        await Worksite.api().deleteFileWithSurvivorToken(
+          this.worksite.token,
+          fileId,
+        );
+      } else {
+        await Worksite.api().deleteFile(this.worksite.id, fileId);
+        await Worksite.api().fetch(this.worksite.id);
+      }
       this.$emit('photosChanged');
     },
   },
