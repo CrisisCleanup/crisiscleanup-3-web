@@ -5,7 +5,8 @@
     </div>
     <section class="main p-5" v-if="survivorToken">
       <div class="text-2xl text-center mb-3 font-bold">
-        {{ $t('survivorContact.case_number') }}: {{ survivorToken.worksite.case_number }}
+        {{ $t('survivorContact.case_number') }}:
+        {{ survivorToken.worksite.case_number }}
       </div>
       <div class="text-lg mb-1">{{ survivorToken.worksite.name }}:</div>
       <div class="text-lg" v-html="$t(survivorToken.survivor_message)"></div>
@@ -228,15 +229,17 @@
           @photosChanged="() => getSurvivorToken(true)"
         />
       </div>
-        <div class="text-lg my-2 font-bold">
-          {{ $t('survivorContact.more_photos') }}
-        </div>
+      <div
+        class="text-lg my-2 font-bold"
+        v-html="$t('survivorContact.more_photos')"
+      ></div>
       <hr class="my-4" />
 
       <div>
-        <div class="text-lg my-2 font-bold">
-          {{ $t('survivorContact.how_often_update') }}
-        </div>
+        <div
+          class="text-lg my-2 font-bold"
+          v-html="$t('survivorContact.how_often_update')"
+        ></div>
         <div class="w-full flex text-center text-lg">
           <div
             class="w-1/3 border-t border-b border-r rounded-l-xl p-3"
@@ -251,7 +254,7 @@
                 'formOptions.often'
             "
           >
-            {{ $t('survivorContact.often') }}
+            {{ $t('formOptions.often') }}
           </div>
           <div
             class="w-1/3 border-t border-b border-r p-3"
@@ -266,7 +269,7 @@
                 'formOptions.not_often'
             "
           >
-            {{ $t('survivorContact.not_often') }}
+            {{ $t('formOptions.not_often') }}
           </div>
           <div
             class="w-1/3 border rounded-r-xl p-3"
@@ -281,19 +284,21 @@
                 'formOptions.never'
             "
           >
-            {{ $t('survivorContact.never') }}
+            {{ $t('formOptions.never') }}
           </div>
         </div>
-        <div class="text-lg mt-2">
-          {{ $t('survivorContact.frequency_statement') }}
-        </div>
+        <div
+          class="text-lg mt-2"
+          v-html="$t('survivorContact.frequency_statement')"
+        ></div>
       </div>
       <hr class="my-4" />
 
       <div>
-        <div class="text-lg my-2 font-bold">
-          {{ $t('survivorContact.notes_instructions') }}
-        </div>
+        <div
+          class="text-lg my-2 font-bold"
+          v-html="$t('survivorContact.notes_instructions')"
+        ></div>
 
         <WorksiteNotes
           :can-add="false"
