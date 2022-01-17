@@ -4,7 +4,7 @@
       <base-input
         v-model="url"
         class="w-full"
-        :placeholder="$t('~~ArcGis Url')"
+        :placeholder="$t('arcGisUploader.arcgis_url')"
       ></base-input>
       <form-select
         :value="incident"
@@ -14,19 +14,19 @@
         select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-10"
         item-key="id"
         label="name"
-        :placeholder="$t('~~Select Incident')"
+        :placeholder="$t('arcGisUploader.select_incident')"
         @input="incident = $event"
       />
       <base-input
         v-model="prefix"
         class="w-full"
-        :placeholder="$t('~~Unique ID Prefix')"
+        :placeholder="$t('arcGisUploader.unique_id_prefix')"
       ></base-input>
     </section>
     <base-button
       variant="solid"
       :action="importGis"
-      :text="$t('~~Import')"
+      :text="$t('actions.import')"
       class="p-3 px-6 text-xs"
     />
   </div>
@@ -54,7 +54,7 @@ export default {
             incident: this.incident,
           },
         );
-        await this.$toasted.success(this.$t('~~Gis Import Successful'));
+        await this.$toasted.success(this.$t('arcGisUploader.gis_import_success'));
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

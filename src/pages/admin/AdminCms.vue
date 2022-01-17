@@ -1,7 +1,7 @@
 <template>
   <div id="cms" class="bg-white p-3 cms">
     <base-input
-      :placeholder="$t('Title')"
+      :placeholder="$t('adminCMS.title')"
       v-model="cmsItem.title"
       class="mb-2"
     />
@@ -10,13 +10,13 @@
     </template>
     <base-input
       v-else
-      :placeholder="$t('Content')"
+      :placeholder="$t('adminCMS.content')"
       v-model="cmsItem.content"
       class="mb-2"
     />
     <base-button
       class="mb-2"
-      :text="showHtml ? 'Toggle Regular Mode' : 'Toggle Advanced Mode'"
+      :text="showHtml ? $t('adminCMS.toggle_regular_mode') : $t('adminCMS.toggle_advanced_mode')"
       variant="link"
       :action="
         () => {
@@ -28,11 +28,11 @@
       input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
       wrapper-class="flex-grow"
       :format="(date) => $moment(date).format('YYYY-MM-DD h:mm:ss')"
-      :placeholder="$t('~~Publish At')"
+      :placeholder="$t('adminCMS.publish_at')"
       v-model="cmsItem.publish_at"
     ></datepicker>
     <base-input
-      :placeholder="$t('~~List order')"
+      :placeholder="$t('adminCMS.list_order')"
       v-model="cmsItem.list_order"
       class="mb-2 w-40"
       type="number"
@@ -40,7 +40,7 @@
     <tag-input
       v-model="tags"
       :tags.sync="tagsToAdd"
-      :placeholder="$t('~~Add Tags')"
+      :placeholder="$t('actions.add_tags')"
       :autocomplete-items="tagsAutoComplete"
       :add-on-key="[13, 32, ',']"
       :separators="[';', ',', ', ']"
@@ -48,7 +48,7 @@
       class="my-4"
     />
     <base-checkbox class="pb-2" v-model="cmsItem.is_active">{{
-      $t('~~Active')
+      $t('adminCMS.is_active')
     }}</base-checkbox>
     <div class="flex justify-end">
       <base-button
@@ -56,21 +56,21 @@
         class="p-3 w-32 mr-3"
         variant="outline"
         :action="clearItem"
-        :text="$t('~~Clear')"
+        :text="$t('actions.clear')"
       />
       <base-button
         type="bare"
         class="p-3 w-32 mr-3"
         variant="solid"
         :action="showPreview"
-        :text="$t('~~Show Preview')"
+        :text="$t('actions.show_preview')"
       />
       <base-button
         type="bare"
         class="p-3 w-32"
         variant="solid"
         :action="saveItem"
-        :text="$t('~~Save')"
+        :text="$t('actions.save')"
       />
     </div>
 
@@ -145,16 +145,16 @@ export default {
   computed: {
     columns() {
       return makeTableColumns([
-        ['title', '30%', 'Title'],
-        ['publish_at', '20%', 'Publish Date'],
+        ['title', '30%', 'adminCMS.title'],
+        ['publish_at', '20%', 'adminCMS.publish_date'],
         [
           'list_order',
           '10%',
-          'List Order',
+          'adminCMS.list_order',
           { sortKey: 'list_order', sortable: true },
         ],
-        ['is_active', '10%', 'Active'],
-        ['tags', '20%', 'Tags'],
+        ['is_active', '10%', 'adminCMS.is_active'],
+        ['tags', '20%', 'adminCMS.tags'],
         ['actions', '10%', ''],
       ]);
     },
@@ -171,7 +171,7 @@ export default {
   methods: {
     async showPreview() {
       await this.$component({
-        title: `Preview`,
+        title: `adminCMS.preview`,
         component: 'HtmlPreview',
         classes: 'w-full h-96 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
@@ -206,7 +206,7 @@ export default {
             },
           );
         }
-        await this.$toasted.success(this.$t('~~Saved Item'));
+        await this.$toasted.success(this.$t('adminCMS.saved_item'));
         this.$refs.table.getData();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -216,7 +216,7 @@ export default {
       await this.$http.delete(
         `${process.env.VUE_APP_API_BASE_URL}/admins/cms/${id}`,
       );
-      await this.$toasted.success(this.$t('~~Deleted Item'));
+      await this.$toasted.success(this.$t('adminCMS.deleted_item'));
       this.$refs.table.getData();
     },
     clearItem() {

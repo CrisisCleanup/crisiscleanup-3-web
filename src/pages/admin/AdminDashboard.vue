@@ -24,7 +24,7 @@
             <FileUpload class="mx-3 my-1" />
             <DatabaseAccess class="mx-3 my-1" />
             <base-button
-              :text="$t('~~ArcGis Upload')"
+              :text="$t('adminDashboard.arcgis_upload')"
               variant="solid"
               size="medium"
               :action="showArcGisUploader"
@@ -400,7 +400,7 @@ export default {
     },
     async showArcGisUploader() {
       await this.$component({
-        title: this.$t('~~ArcGis Upload'),
+        title: this.$t('adminDashboard.arcgis_upload'),
         component: 'ArcGisUploader',
         classes: 'w-full h-56 p-3',
       });

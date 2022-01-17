@@ -155,8 +155,8 @@
           >
             {{
               hasResponded === 'accept'
-                ? $t('~~Connecting')
-                : $t('~~Accept') + ` (${acceptTime}s)`
+                ? $t('phoneDashboard.connecting')
+                : $t('actions.accept') + ` (${acceptTime}s)`
             }}
           </ProgressButton>
         </div>
