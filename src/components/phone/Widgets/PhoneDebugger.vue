@@ -45,7 +45,7 @@
 
     <div class="opreview__current">
       <div class="opreview__item">
-        <base-text variant="h1"> Phone Debugger </base-text>
+        <base-text variant="h1"> {{ $t('phoneDashboard.phone_debugger') }} </base-text>
       </div>
       <div
         class="opreview__item"
@@ -61,7 +61,7 @@
     </div>
     <div class="opreview__config">
       <div class="flex h-full">
-        <base-text variant="h3">Enable Outbounds:</base-text>
+        <base-text variant="h3"> {{ $t('phoneDashboard.enable_outbounds') }} </base-text>
         <toggle-button
           :value="isServingOutbounds"
           sync
@@ -177,11 +177,11 @@ export default {
           value: _.get(currentContact, 'value.hasResolvedCases', 'No'),
         },
         {
-          title: '~~Call Pending',
+          title: 'phoneDashboard.call_pending',
           value: _.get(currentContact, 'value.callPending', 'No'),
         },
         {
-          title: '~~Contact Ready',
+          title: 'phoneDashboard.contact_ready',
           value: _.get(currentContact, 'value.isReady', 'No'),
         },
         {
@@ -203,7 +203,7 @@ export default {
         }))
         .concat([
           {
-            title: 'Recent Worksite',
+            title: 'phoneDashboard.recent_worksite',
             value: _.get(currentContact, 'value.mostRecentWorksite', 'None'),
           },
         ]),
@@ -266,7 +266,7 @@ export default {
                 },
             ),
             {
-              title: 'Is IAM User',
+              title: 'phoneDashboard.is_iam_user',
               value: isIAMUser.value,
             },
           ]
@@ -297,9 +297,9 @@ export default {
           },
         },
         {
-          title: '~~Dump Phone Store',
+          title: 'phoneDashboard.dump_phone_store',
           action: {
-            label: '~~Execute',
+            label: 'phoneDashboard.execute',
             method: () => {
               context.root.$log.info(agent.value);
               context.root.$log.info(currentContact.value);

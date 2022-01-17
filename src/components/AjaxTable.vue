@@ -5,7 +5,7 @@
       v-if="enableSearch"
       icon="search"
       class="w-72 mx-4"
-      :placeholder="$t('~~Search Items')"
+      :placeholder="$t('info.search_items')"
       @input="
         (value) => {
           search = value;
