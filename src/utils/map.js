@@ -246,6 +246,9 @@ export function getWorksiteLayer(
               const marker = findMarker(e.latlng);
               if (marker) {
                 context.$emit('onSelectmarker', marker);
+                if (context.onSelectMarker) {
+                  context.onSelectMarker(marker);
+                }
               } else {
                 map.closePopup();
               }
