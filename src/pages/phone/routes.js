@@ -2,6 +2,7 @@ import { useRouter } from '@u3u/vue-hooks';
 import { BannerTypes } from '@/store/modules/ui/types';
 import BetaBanner from '@/components/notifications/BetaBanner.vue';
 import PhoneLayout from './Index.vue';
+import PhoneNew from './PhoneNew.vue';
 
 const NewSystemBetaBanner = () => {
   const { router } = useRouter();
@@ -35,6 +36,14 @@ const routes = [
         enabled: false,
         component: NewSystemBetaBanner,
       },
+    },
+  },
+  {
+    path: '/phone-new',
+    component: PhoneNew,
+    name: 'nav.phone',
+    meta: {
+      layout: 'authenticated',
     },
   },
 ];

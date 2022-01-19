@@ -23,6 +23,9 @@ const getters = {
   isTakingCalls: (state) => {
     return state.callState !== 'AWAY';
   },
+  isNotTakingCalls: (state) => {
+    return !(state.callState !== 'AWAY');
+  },
   isOnCall: (state) => {
     return (
       state.callState === 'ENGAGED-INBOUND' ||

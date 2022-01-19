@@ -7,6 +7,7 @@ import RCMixin from './rc';
 import { TrainingMixin } from './training';
 import UserMixin from './user';
 import ValidateMixin from './validate.js';
+import ConnectFirstMixin from './connect_first.js';
 import EventsMixin from './events.js';
 import CapabilityMixin from './capability.js';
 import { WorksitesMixin } from './worksite';
@@ -28,4 +29,5 @@ export {
   EventsMixin,
   CapabilityMixin,
   D3BaseChartMixin,
+  ConnectFirstMixin,
 };

@@ -17,7 +17,7 @@
     <Table
       :columns="columns"
       :data="data"
-      :body-style="{ height: '300px' }"
+      :body-style="bodyStyle"
       :pagination="meta.pagination"
       :sorter="meta.sorter"
       enable-pagination
@@ -54,6 +54,18 @@ export default {
         return [];
       },
     },
+    query: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+    bodyStyle: {
+      type: Object,
+      default: () => {
+        return { height: '300px' };
+      },
+    },
   },
   async mounted() {
     await this.getData();
@@ -65,6 +77,7 @@ export default {
       const params = {
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
+        ...this.query,
       };
       params.search = this.search;
       if (sorter && sorter.key) {
