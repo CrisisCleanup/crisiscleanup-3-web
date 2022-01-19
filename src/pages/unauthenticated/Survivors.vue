@@ -80,7 +80,7 @@
           >
             <div class="p-3">
               <div class="my-2">
-                {{ $t('~~What do you need help with?') }}
+                {{ $t('survivorContact.unmet_need') }}
               </div>
               <base-checkbox
                 v-for="work_type_help_needed in survivorToken.work_types"
@@ -112,7 +112,7 @@
       <div class="pt-2" v-if="!survivorToken.address_confirmed_at">
         <div>
           <div class="text-lg my-2 font-bold">
-            {{ $t('survivorContact.confirm_address') }}
+            {{ $t('survivorContact.confirm_address_instructions') }}
           </div>
           <div
             v-if="addressSet"
@@ -139,8 +139,8 @@
             <div class="flex">
               <base-button
                 class="px-3 py-1 bg-crisiscleanup-green-700 text-white mx-1"
-                :text="$t('~~Confirm address')"
-                :alt="$t('~~Confirm address')"
+                :text="$t('survivorContact.confirm_address')"
+                :alt="$t('survivorContact.confirm_address')"
                 :action="confirmAddress"
               />
               <base-button
@@ -210,9 +210,9 @@
             class="mr-2"
             size="small"
             style="margin-top: 3px"
-            :alt="$t('~~Address Confirmed')"
+            :alt="$t('survivorContact.address_confirmed')"
           />
-          {{ $t('~~Address Confirmed') }}
+          {{ $t('survivorContact.address_confirmed') }}
         </div>
       </div>
 
@@ -229,10 +229,6 @@
           @photosChanged="() => getSurvivorToken(true)"
         />
       </div>
-      <div
-        class="text-lg my-2 font-bold"
-        v-html="$t('survivorContact.more_photos')"
-      ></div>
       <hr class="my-4" />
 
       <div>
@@ -343,7 +339,7 @@
       />
 
       <div class="text-xl my-2 font-bold">
-        {{ $t('~~Faqs') }}
+        {{ $t('survivorContact.faqs') }}
       </div>
       <ul>
         <li v-for="faq in faqs" :key="faq.id">
