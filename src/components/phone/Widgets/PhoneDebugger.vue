@@ -45,7 +45,9 @@
 
     <div class="opreview__current">
       <div class="opreview__item">
-        <base-text variant="h1"> {{ $t('phoneDashboard.phone_debugger') }} </base-text>
+        <base-text variant="h1">
+          {{ $t('phoneDashboard.phone_debugger') }}
+        </base-text>
       </div>
       <div
         class="opreview__item"
@@ -61,7 +63,9 @@
     </div>
     <div class="opreview__config">
       <div class="flex h-full">
-        <base-text variant="h3"> {{ $t('phoneDashboard.enable_outbounds') }} </base-text>
+        <base-text variant="h3">
+          {{ $t('phoneDashboard.enable_outbounds') }}
+        </base-text>
         <toggle-button
           :value="isServingOutbounds"
           sync

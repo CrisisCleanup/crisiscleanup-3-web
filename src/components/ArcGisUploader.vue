@@ -54,7 +54,9 @@ export default {
             incident: this.incident,
           },
         );
-        await this.$toasted.success(this.$t('arcGisUploader.gis_import_success'));
+        await this.$toasted.success(
+          this.$t('arcGisUploader.gis_import_success'),
+        );
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

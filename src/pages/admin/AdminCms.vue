@@ -16,7 +16,11 @@
     />
     <base-button
       class="mb-2"
-      :text="showHtml ? $t('adminCMS.toggle_regular_mode') : $t('adminCMS.toggle_advanced_mode')"
+      :text="
+        showHtml
+          ? $t('adminCMS.toggle_regular_mode')
+          : $t('adminCMS.toggle_advanced_mode')
+      "
       variant="link"
       :action="
         () => {
