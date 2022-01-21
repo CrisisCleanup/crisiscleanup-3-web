@@ -448,7 +448,7 @@ export default {
         formFields: {},
         auto_contact_frequency_t: this.currentIncident.auto_contact
           ? 'formOptions.often'
-          : '',
+          : 'formOptions.never',
       };
     });
   },
@@ -589,7 +589,7 @@ export default {
           formFields: {},
           auto_contact_frequency_t: this.currentIncident.auto_contact
             ? 'formOptions.often'
-            : '',
+            : 'formOptions.never',
           ...this.dataPrefill,
         };
       }
