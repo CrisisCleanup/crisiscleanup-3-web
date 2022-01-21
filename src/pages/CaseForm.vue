@@ -1024,6 +1024,9 @@ export default {
       this.worksite = new Worksite({
         incident: this.incidentId,
         form_data: [],
+        auto_contact_frequency_t: this.currentIncident.auto_contact
+          ? 'formOptions.often'
+          : 'formOptions.never',
       });
     },
     getValue(fieldKey) {
