@@ -25,7 +25,12 @@
       <div
         v-if="index < 4 || showingAllNotes"
         :key="`${note.id}`"
-        class="notes my-1 p-1 flex items-start"
+        class="my-1 p-1 flex items-start bg-opacity-50 rounded"
+        :class="
+          note.is_survivor
+            ? 'bg-crisiscleanup-yellow-100'
+            : 'bg-crisiscleanup-light-grey'
+        "
         @click="
           () => {
             expandedNotes[note.id] = !expandedNotes[note.id];
@@ -42,18 +47,32 @@
         >
       </div>
     </template>
-    <base-button
-      v-if="!addingNotes && canAdd"
-      class="my-1 text-primary-dark"
-      type="link"
-      :text="$t('caseView.add_note')"
-      :alt="$t('caseView.add_note_alt')"
-      :action="
-        () => {
-          addingNotes = true;
-        }
-      "
-    />
+    <div v-if="canAdd" class="flex items-center justify-between">
+      <base-button
+        v-if="!addingNotes"
+        class="my-1 text-primary-dark"
+        type="link"
+        :text="$t('caseView.add_note')"
+        :alt="$t('caseView.add_note_alt')"
+        :action="
+          () => {
+            addingNotes = true;
+          }
+        "
+      />
+
+      <div class="flex my-1">
+        <badge
+          width="16px"
+          height="16px"
+          class="text-white bg-crisiscleanup-yellow-100 bg-opacity-50 mx-1"
+          :title="$t('adminOrganization.org_verified')"
+        />
+        <div class="text-xs opacity-25">
+          {{ $t('~~Survivor entered notes') }}
+        </div>
+      </div>
+    </div>
     <div v-if="addingNotes">
       {{ $t('caseView.note') }}
       <base-input
@@ -136,10 +155,6 @@ export default {
 };
 </script>
 <style scoped>
-.notes {
-  background-color: rgba(216, 216, 216, 0.15);
-}
-
 .notes-time {
   color: #848f99;
 }
