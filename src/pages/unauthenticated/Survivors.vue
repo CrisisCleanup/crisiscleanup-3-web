@@ -3,7 +3,7 @@
     <div class="logo flex justify-center p-3 border border-b">
       <img src="@/assets/ccu-logo-black-500w.png" style="height: 53px" />
     </div>
-    <section class="main p-5" v-if="survivorToken">
+    <section class="main p-8" v-if="survivorToken">
       <div class="text-2xl text-center mb-3 font-bold">
         {{ $t('survivorContact.case_number') }}:
         {{ survivorToken.worksite.case_number }}
