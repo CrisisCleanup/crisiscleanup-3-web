@@ -331,6 +331,11 @@
             dynamicFields = { ...dynamicFields };
           }
         "
+        @updateWorkTypeStatus="
+          ({ work_type, status }) => {
+            statusValueChange(status, work_type);
+          }
+        "
       ></form-tree>
 
       <template v-if="isEditing">
@@ -633,6 +638,22 @@ export default {
     },
     updateDirtyFields(key) {
       this.dirtyFields = new Set(this.dirtyFields.add(key));
+    },
+    async statusValueChange(value, workTypeKey) {
+      try {
+        await Worksite.api().updateWorkTypeStatus(
+          this.worksite.work_types.find((wt) => wt.work_type === workTypeKey)
+            ?.id,
+          value,
+        );
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        const { data } = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/worksites/${this.worksite.id}?fields=work_types`,
+        );
+        this.updateWorksite(data.work_types, 'work_types');
+      }
     },
     updateWorksite(value, key) {
       this.updateDirtyFields(key);

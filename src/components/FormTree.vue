@@ -10,7 +10,7 @@
         >
       </template>
       <template v-if="['h5'].includes(field.html_type)">
-        <div class="form-field flex items-center">
+        <div class="form-field flex items-center justify-between">
           <base-checkbox
             :value="
               Boolean(dynamicFields[field.field_key]) || hasSelectedChildren
@@ -27,6 +27,20 @@
               {{ field.label_t }}
             </div>
           </base-checkbox>
+          <WorksiteStatusDropdown
+            v-if="worksite.id && canChangeStatus && currentWorkType"
+            class="block"
+            :phase="incident.phase"
+            :current-work-type="currentWorkType"
+            @input="
+              (value) => {
+                $emit('updateWorkTypeStatus', {
+                  work_type: field.if_selected_then_work_type,
+                  status: value,
+                });
+              }
+            "
+          />
         </div>
       </template>
       <template v-if="field.html_type === 'select'">
@@ -214,12 +228,21 @@
           $emit('updateField', { key, value });
         }
       "
+      @updateWorkTypeStatus="
+        ({ work_type, status }) => {
+          $emit('updateWorkTypeStatus', { work_type, status });
+        }
+      "
     />
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 import SectionHeading from './SectionHeading';
 import RecurringSchedule from './RecurringSchedule';
+import Incident from '@/models/Incident';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown';
+import User from '@/models/User';
 
 export default {
   props: {
@@ -240,7 +263,7 @@ export default {
       default: () => ({}),
     },
   },
-  components: { SectionHeading, RecurringSchedule },
+  components: { WorksiteStatusDropdown, SectionHeading, RecurringSchedule },
   name: 'FormTree',
   data() {
     return {
@@ -263,6 +286,24 @@ export default {
     }
   },
   computed: {
+    ...mapState('incident', ['currentIncidentId']),
+    incident() {
+      return Incident.find(this.currentIncidentId);
+    },
+    currentUser() {
+      return User.find(this.$store.getters['auth/userId']);
+    },
+    canChangeStatus() {
+      return (
+        !this.currentWorkType?.claimed_by ||
+        this.currentWorkType?.claimed_by === this.currentUser.organization.id
+      );
+    },
+    currentWorkType() {
+      return this.worksite.work_types.find(
+        (wt) => wt.work_type === this.field.if_selected_then_work_type,
+      );
+    },
     hasSelectedChildren() {
       return this.field.children.some((childField) => {
         return (
