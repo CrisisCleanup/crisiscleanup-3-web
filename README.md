@@ -42,7 +42,7 @@ Clone the repository to your machine and install the dependencies via:
 
 To enable all of Crisis Cleanup's features, you must create and populate a `.env` file.
 
-A sample of what this should look like can be found [here](.env.sample).
+A sample of what this should look like can be found [here](.env).
 
 ## Running Locally
 
