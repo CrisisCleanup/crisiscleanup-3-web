@@ -5,8 +5,8 @@ node_modules
 /public/map_icons/*.svg
 
 # Environment Files
-.env*
-!.env.sample
+.env
+!.env
 
 # Log files
 npm-debug.log*
