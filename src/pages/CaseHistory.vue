@@ -27,21 +27,7 @@
           {{ getOrganizationName(org) }}
         </div>
       </div>
-      <div class="">
-        <div
-          v-for="(events, user) in users"
-          :key="`${user.id}`"
-          class="py-5 border-b"
-        >
-          <UserDetailTooltip :user="user">
-            made {{ events.length }} edits
-          </UserDetailTooltip>
-          <div v-for="event in events" :key="`${event.id}`">
-            {{ event.created_at | moment('MM/DD/YYYY, h:mm:ss A') }}:
-            {{ event.event.event_name_t }}
-          </div>
-        </div>
-      </div>
+      <Timeline :events="worksite.events" />
     </div>
   </div>
   <div v-else class="flex items-center justify-center h-full">
@@ -55,10 +41,11 @@ import Organization from '@/models/Organization';
 import { groupBy } from '@/utils/array';
 import Worksite from '@/models/Worksite';
 import UserDetailTooltip from '@/components/user/DetailsTooltip.vue';
+import Timeline from '@/components/Timeline';
 
 export default {
   name: 'CaseHistory',
-  components: { UserDetailTooltip },
+  components: { Timeline, UserDetailTooltip },
   props: {
     worksiteId: {
       type: Number,
