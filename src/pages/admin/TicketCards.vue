@@ -1,155 +1,168 @@
 <template>
-  <div class="">
-    <div
-      :class="this.ticketData.status === 'solved' ? 'opacity-25' : ''"
-      :style="expandState ? '' : ' overflow-y: scroll;height: 40rem'"
-      class="min-w-6/12 bg-white p-2 shadow rounded z-1"
-      style="width: 30rem;"
-    >
-      <div name="info" class="flex flex-col">
-        <div class="flex flex-row justify-between pb-2">
-          <div class="mr-2">
-            <div class="font-bold">{{ ticketData.name }}</div>
-            <div>{{ ticketData.email }}</div>
-            <div>{{ ticketData.phone }}</div>
-            <base-link text-variant="bodysm" class="px-2" target="_blank "
-              >{{ ticketData.organization.name }}
-            </base-link>
-            <base-button text="Tobi Events" variant="solid" class="m-2 p-1" />
-          </div>
-          <base-link
-            :href="`http://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
-            text-variant="bodysm"
-            class="px-2"
-            target="_blank "
-            >{{ $t('~~Launch Ticket') }}
+  <div
+    :class="this.ticketData.status === 'solved' ? 'opacity-25' : ''"
+    :style="expandState ? '' : ' overflow-y: scroll;height: 40rem'"
+    class="bg-white p-2 shadow rounded z-1"
+  >
+    <div name="info" class="flex flex-col">
+      <div class="flex flex-row justify-between pb-2">
+        <div class="mr-2">
+          <div class="font-bold">{{ ticketData.name }}asdasdasdasdasd</div>
+          <div>{{ ticketData.email }}</div>
+          <div>{{ ticketData.phone }}</div>
+          <base-link text-variant="bodysm" class="px-2" target="_blank "
+            >{{ ticketData.organization.name }}
           </base-link>
-          <div class="flex flex-col">
-            <div
-              class="flex text-center items-center rounded h-6 w-12 justify-center text-md flex-wrap"
-              :class="ticketData.status"
-            >
-              {{ ticketData.status }}
+          <base-button text="Tobi Events" variant="solid" class="m-2 p-1" />
+        </div>
+        <base-link
+          :href="`http://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
+          text-variant="bodysm"
+          class="px-2"
+          target="_blank "
+          >{{ $t('~~Launch Ticket') }}
+        </base-link>
+        <div class="flex flex-col">
+          <div
+            class="
+              flex
+              text-center
+              items-center
+              rounded
+              h-6
+              w-12
+              justify-center
+              text-md
+              flex-wrap
+            "
+            :class="ticketData.status"
+          >
+            {{ ticketData.status }}
+          </div>
+          <base-button
+            text="Login"
+            variant="solid"
+            class="mt-2 mr-6 pl-2 pr-2"
+          />
+        </div>
+      </div>
+
+      <hr />
+      <div class="font-bold">
+        Created on {{ ticketData.created_at | formatDate }}
+      </div>
+      <div :class="truncateState ? '' : ''">
+        <div v-if="truncateState">
+          {{ ticketData.description | truncate(200) }}
+        </div>
+
+        <div v-if="!truncateState">{{ ticketData.description }}</div>
+
+        <div v-if="ticketData.description.length > 400">
+          <div
+            v-if="truncateState"
+            @click="toggleTruncate"
+            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
+          >
+            Read more
+          </div>
+          <div
+            v-else
+            @click="toggleTruncate"
+            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
+          >
+            Read Less
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="font-bold">Comments</div>
+
+      <div
+        :class="assignWhoColor(item.author_id)"
+        class="m-4 bg-crisiscleanup-dark-100 shadow-lg rounded-md p-2"
+        :key="`${idx}-${item.author_id}`"
+        v-for="(item, idx) in comments"
+      >
+        <div class="font-bold">{{ assignWhoComments(item.author_id) }}</div>
+        {{ item.body }}
+      </div>
+
+      <base-input
+        :text-area="true"
+        :value="TicketReply"
+        class="w-11/12 m-4"
+        @input="
+          (value) => {
+            TicketReply = value;
+          }
+        "
+      ></base-input>
+
+      <hr />
+      <div class="flex justify-between">
+        <div class="flex flex-col">
+          <div class="flex justify-between p-2">
+            <img
+              class="mr-4"
+              style="width: 50px; height: 50px"
+              :src="assignWhoPicture"
+            />
+            <div class="flex flex-col mr-4">
+              Assigned To:
+              <div v-if="ticketData.assignee_id">
+                {{ assignWho }}
+              </div>
+              <div v-else>No user Assigned</div>
             </div>
+
+            <form-select
+              class="
+                w-auto
+                h-12
+                flex-grow
+                border border-crisiscleanup-dark-100
+                select
+              "
+              :options="userList"
+              :value="selectedUser"
+              @input="
+                (value) => {
+                  selectedUser = value;
+                }
+              "
+            />
             <base-button
-              text="Login"
+              text="Reassign Ticket"
               variant="solid"
-              class="mt-2 mr-6 pl-2 pr-2"
+              class="m-2 p-1"
+              :action="assignUser"
             />
           </div>
-        </div>
+          <div class="flex justify-evenly">
+            <base-button
+              style="background: #9cb8ff"
+              text="Reply as Open"
+              variant="solid"
+              class="m-2 p-1"
+              :action="replyToTicketOpen"
+            />
 
-        <hr />
-        <div class="font-bold">
-          Created on {{ ticketData.created_at | formatDate }}
-        </div>
-        <div :class="truncateState ? '' : ''">
-          <div v-if="truncateState">
-            {{ ticketData.description | truncate(200) }}
-          </div>
+            <base-button
+              style="background: #e8e4e4"
+              text="Reply as Pending"
+              variant="solid"
+              class="m-2 p-1"
+              :action="replyToTicketPending"
+            />
 
-          <div v-if="!truncateState">{{ ticketData.description }}</div>
-
-          <div v-if="ticketData.description.length > 400">
-            <div
-              v-if="truncateState"
-              @click="toggleTruncate"
-              class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
-            >
-              Read more
-            </div>
-            <div
-              v-else
-              @click="toggleTruncate"
-              class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
-            >
-              Read Less
-            </div>
-          </div>
-        </div>
-        <hr />
-        <div class="font-bold">Comments</div>
-
-        <div
-          :class="assignWhoColor(item.author_id)"
-          class="m-4 bg-crisiscleanup-dark-100 shadow-lg rounded-md p-2"
-          :key="`${idx}-${item.author_id}`"
-          v-for="(item, idx) in comments"
-        >
-          <div class="font-bold">{{ assignWhoComments(item.author_id) }}</div>
-          {{ item.body }}
-        </div>
-
-        <base-input
-          :text-area="true"
-          :value="TicketReply"
-          class="w-11/12 m-4"
-          @input="
-            (value) => {
-              TicketReply = value;
-            }
-          "
-        ></base-input>
-
-        <hr />
-        <div class="flex justify-between">
-          <div class="flex flex-col">
-            <div class="flex justify-between p-2">
-              <img
-                class="mr-4"
-                style="width: 50px; height: 50px;"
-                :src="assignWhoPicture"
-              />
-              <div class="flex flex-col mr-4">
-                Assigned To:
-                <div v-if="ticketData.assignee_id">
-                  {{ assignWho }}
-                </div>
-                <div v-else>No user Assigned</div>
-              </div>
-
-              <form-select
-                class="w-auto h-12 flex-grow border border-crisiscleanup-dark-100 select"
-                :options="userList"
-                :value="selectedUser"
-                @input="
-                  (value) => {
-                    selectedUser = value;
-                  }
-                "
-              />
-              <base-button
-                text="Reassign Ticket"
-                variant="solid"
-                class="m-2 p-1"
-                :action="assignUser"
-              />
-            </div>
-            <div class="flex justify-evenly">
-              <base-button
-                style="background: #9cb8ff;"
-                text="Reply as Open"
-                variant="solid"
-                class="m-2 p-1"
-                :action="replyToTicketOpen"
-              />
-
-              <base-button
-                style="background: #e8e4e4;"
-                text="Reply as Pending"
-                variant="solid"
-                class="m-2 p-1"
-                :action="replyToTicketPending"
-              />
-
-              <base-button
-                style="background: #ffa296;"
-                text="Reply as Solved/Closed"
-                variant="solid"
-                class="m-2 p-1"
-                :action="replyToTicketSolved"
-              />
-            </div>
+            <base-button
+              style="background: #ffa296"
+              text="Reply as Solved/Closed"
+              variant="solid"
+              class="m-2 p-1"
+              :action="replyToTicketSolved"
+            />
           </div>
         </div>
       </div>
