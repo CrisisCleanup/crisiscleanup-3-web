@@ -59,6 +59,16 @@ import UserDetailTooltip from '@/components/user/DetailsTooltip.vue';
 export default {
   name: 'CaseHistory',
   components: { UserDetailTooltip },
+  props: {
+    worksiteId: {
+      type: Number,
+      default: null,
+    },
+    incidentId: {
+      type: Number,
+      default: null,
+    },
+  },
   data() {
     return {
       worksite: {},
@@ -84,19 +94,21 @@ export default {
     this.ready = false;
     try {
       await Worksite.api().fetch(
-        this.$route.params.id,
-        this.$route.params.incident_id,
+        this.worksiteId || this.$route.params.id,
+        this.incidentId || this.$route.params.incident_id,
       );
     } catch (e) {
       await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/new`,
+        `/incident/${
+          this.incidentId || this.$route.params.incident_id
+        }/cases/new`,
       );
     } finally {
       this.ready = true;
     }
-    this.worksite = Worksite.find(this.$route.params.id);
+    this.worksite = Worksite.find(this.worksiteId || this.$route.params.id);
     if (this.$route.query.showOnMap) {
-      this.$emit('jumpToCase', this.$route.params.id);
+      this.$emit('jumpToCase', this.worksiteId || this.$route.params.id);
     }
   },
   methods: {

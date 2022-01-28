@@ -95,101 +95,133 @@
         </div>
       </div>
     </div>
-    <div class="flex" @mouseover="hover = true" @mouseleave="hover = false">
-      <case-form
-        ref="worksiteForm"
-        :incident-id="String(currentIncidentId)"
-        :worksite-id="worksiteId"
-        :key="worksiteId"
-        disable-claim-and-save
-        :data-prefill="() => {}"
-        :is-editing="isEditing"
-        @savedWorksite="() => {}"
-        @closeWorksite="
-          () => {
-            isEditing = false;
-            worksiteId = null;
-          }
-        "
-        class="border shadow"
-        @navigateToWorksite="
-          (id) => {
-            worksiteId = id;
-            isEditing = true;
-          }
-        "
+    <div>
+      <CaseHeader
+        v-if="worksite"
+        :worksite="worksite"
+        class="p-2 border-l border-r"
+        can-edit
+        :is-viewing-worksite="false"
+        @onJumpToCase="jumpToCase"
+        @onDownloadWorksite="() => {}"
+        @onPrintWorksite="() => {}"
+        @onShowHistory="showHistory = true"
       />
-      <transition name="slide-fade">
-        <div
-          class="absolute flex flex-col -ml-12 mt-12"
-          style="z-index: 1002"
-          v-if="hover"
-        >
-          <PhoneComponentButton class="phone-button">
-            <template v-slot:button>
-              <div class="w-full h-full flex items-center justify-center">
-                <div
-                  class="
-                    bg-primary-light
-                    h-7
-                    w-7
-                    rounded
-                    flex
-                    items-center
-                    justify-center
-                    relative
-                  "
-                >
-                  {{ $t('~~GO') }}
-                  <span class="absolute inset-0 top-0 left-0">
-                    <div
-                      :class="{
-                        'bg-green-500': isTakingCalls,
-                        'bg-red-500': isNotTakingCalls,
-                      }"
-                      class="
-                        flex
-                        items-center
-                        justify-center
-                        border border-white
-                        rounded-full
-                        w-3
-                        h-3
-                        -mt-1.5
-                        -ml-1.5
-                        p-1.5
-                        leading-4
-                      "
-                    ></div>
-                  </span>
-                </div>
-              </div>
-            </template>
-            <template v-slot:component>
-              <AgentCalls />
-            </template>
-          </PhoneComponentButton>
-          <PhoneComponentButton
-            class="phone-button"
-            icon="dialer"
-            icon-size="small"
-            icon-class="bg-black p-1"
+      <div v-if="showHistory" class="flex items-center justify-between px-2">
+        <base-button
+          icon="arrow-left"
+          :icon-size="medium"
+          :action="
+            () => {
+              showHistory = false;
+            }
+          "
+        />
+
+        <span class="text-base">{{ $t('~~History') }}</span>
+        <div></div>
+      </div>
+      <div class="flex">
+        <CaseHistory
+          v-if="showHistory"
+          :incident-id="currentIncidentId"
+          :worksite-id="worksiteId"
+        ></CaseHistory>
+        <case-form
+          v-else
+          ref="worksiteForm"
+          :incident-id="String(currentIncidentId)"
+          :worksite-id="worksiteId"
+          :key="worksiteId"
+          disable-claim-and-save
+          :data-prefill="() => {}"
+          :is-editing="isEditing"
+          @savedWorksite="() => {}"
+          @closeWorksite="
+            () => {
+              isEditing = false;
+              worksiteId = null;
+            }
+          "
+          class="border shadow"
+          @navigateToWorksite="
+            (id) => {
+              worksiteId = id;
+              isEditing = true;
+            }
+          "
+        />
+        <transition name="slide-fade">
+          <div
+            class="absolute flex flex-col -ml-12 mt-12"
+            style="z-index: 1002"
           >
-            <template v-slot:component>
-              <ManualDialer
-                class="bg-white w-72 p-2"
-                style="z-index: 1002"
-                @onDial="dialPhoneNumber"
-              ></ManualDialer>
-            </template>
-          </PhoneComponentButton>
-          <PhoneComponentButton class="phone-button"></PhoneComponentButton>
-          <PhoneComponentButton class="phone-button"></PhoneComponentButton>
-          <PhoneComponentButton class="phone-button"></PhoneComponentButton>
-          <PhoneComponentButton class="phone-button"></PhoneComponentButton>
-          <PhoneComponentButton class="phone-button"></PhoneComponentButton>
-        </div>
-      </transition>
+            <PhoneComponentButton class="phone-button">
+              <template v-slot:button>
+                <div class="w-full h-full flex items-center justify-center">
+                  <div
+                    class="
+                      bg-primary-light
+                      h-7
+                      w-7
+                      rounded
+                      flex
+                      items-center
+                      justify-center
+                      relative
+                    "
+                  >
+                    {{ $t('~~GO') }}
+                    <span class="absolute inset-0 top-0 left-0">
+                      <div
+                        :class="{
+                          'bg-green-500': isTakingCalls,
+                          'bg-red-500': isNotTakingCalls,
+                        }"
+                        class="
+                          flex
+                          items-center
+                          justify-center
+                          border border-white
+                          rounded-full
+                          w-3
+                          h-3
+                          -mt-1.5
+                          -ml-1.5
+                          p-1.5
+                          leading-4
+                        "
+                      ></div>
+                    </span>
+                  </div>
+                </div>
+              </template>
+              <template v-slot:component>
+                <AgentCalls />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              class="phone-button"
+              icon="dialer"
+              icon-size="small"
+              icon-class="bg-black p-1"
+            >
+              <template v-slot:component>
+                <ManualDialer
+                  class="bg-white w-72 p-2"
+                  style="z-index: 1002"
+                  @onDial="dialPhoneNumber"
+                ></ManualDialer>
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
+            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
+            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
+            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
+            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
+          </div>
+        </transition>
+      </div>
     </div>
   </div>
 </template>
@@ -204,10 +236,15 @@ import { ConnectFirstMixin } from '@/mixins';
 import AgentCalls from '@/components/phone/AgentCalls';
 import AjaxTable from '@/components/AjaxTable';
 import { getColorForStatus } from '@/filters';
+import CaseHeader from '@/components/CaseHeader';
+import Worksite from '@/models/Worksite';
+import CaseHistory from '@/pages/CaseHistory';
 
 export default {
   name: 'PhoneNew',
   components: {
+    CaseHistory,
+    CaseHeader,
     AjaxTable,
     AgentCalls,
     ManualDialer,
@@ -227,6 +264,7 @@ export default {
       allWorksiteCount: 0,
       getColorForStatus,
       viewCase: false,
+      showHistory: false,
     };
   },
   async mounted() {
@@ -285,6 +323,12 @@ export default {
         },
       ];
     },
+    worksite() {
+      if (this.worksiteId) {
+        return Worksite.find(this.worksiteId);
+      }
+      return null;
+    },
   },
   methods: {
     toggleView(view) {
@@ -292,6 +336,24 @@ export default {
       this.showingTable = false;
       this[view] = true;
     },
+    async jumpToCase() {
+      this.toggleView('showingMap');
+
+      if (this.map) {
+        this.map.setView([this.worksite.latitude, this.worksite.longitude], 18);
+        const popup = L.popup({ className: 'pixi-popup' });
+        popup
+          .setLatLng([this.worksite.latitude, this.worksite.longitude])
+          .setContent(
+            `<b>${this.worksite.name} (${this.worksite.case_number}</b>)`,
+          )
+          .openOn(this.map);
+        setTimeout(() => {
+          this.map.closePopup();
+        }, 5000);
+      }
+    },
+
     onSelectMarker(marker) {
       this.isEditing = true;
       this.worksiteId = marker.id;

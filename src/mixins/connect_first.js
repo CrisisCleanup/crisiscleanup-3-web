@@ -3,6 +3,21 @@ import User from '@/models/User';
 import PhoneStatus from '@/models/PhoneStatus';
 
 export default {
+  data() {
+    return {
+      currentAgent: null,
+    };
+  },
+  async mounted() {
+    try {
+      const { data } = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/phone_agents/me`,
+      );
+      this.currentAgent = data;
+    } catch {
+      this.currentAgent = null;
+    }
+  },
   computed: {
     ...mapGetters('phone_legacy', [
       'isTakingCalls',
@@ -57,12 +72,13 @@ export default {
 
       await this.logoutPhone();
       let username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME;
-      const { currentAgentId } = this.currentUser.states;
-      if (currentAgentId) {
-        username = await this.getUserNameForAgent(currentAgentId);
+      const password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD;
+      const agent_username = this.currentAgent?.agent_username;
+      if (agent_username) {
+        username = agent_username;
       }
       try {
-        await this.$phoneService.login(username);
+        await this.$phoneService.login(username, password, this.currentAgent);
       } catch (e) {
         this.logoutPhone(true);
         await this.$toasted.error(
@@ -74,20 +90,19 @@ export default {
       // await this.getNextCall();
     },
     async logoutPhone(clearAgent = false) {
-      this.$phoneService.changeState('AWAY');
-      const { loggedInAgents } = this.currentUser.states;
-      if (loggedInAgents && loggedInAgents.length) {
-        await Promise.all(
-          loggedInAgents.map((agentId) => this.$phoneService.logout(agentId)),
+      await this.$phoneService.changeState('AWAY');
+      const agent_id = this.currentAgent?.agent_id;
+      if (agent_id) {
+        await this.$phoneService.logout(agent_id);
+      }
+      if (clearAgent) {
+        await this.$http.patch(
+          `${process.env.VUE_APP_API_BASE_URL}/phone_agents/${this.currentAgent.id}`,
+          {
+            agent_id: null,
+            agent_username: null,
+          },
         );
-        // Log.debug(`Logged out agents ${loggedInAgents}`);
-        const stateUpdate = {
-          loggedInAgents: [],
-        };
-        if (clearAgent) {
-          stateUpdate.currentAgentId = null;
-        }
-        await User.api().updateUserState(stateUpdate, null, true);
       }
     },
     async getUserNameForAgent(agentId) {
