@@ -185,6 +185,7 @@ export default class PhoneService {
   login(
     username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME,
     password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD,
+    currentAgent = null,
   ) {
     const currentUser = User.find(this.store.getters['auth/userId']);
     return new Promise((resolve, reject) => {
@@ -202,15 +203,25 @@ export default class PhoneService {
             throw new Error(window.vue.$t('phoneDashboard.phone_no_log_in'));
           }
           this.loggedInAgentId = data.agentSettings.agentId;
-          const loggedInAgents = currentUser.states.loggedInAgents || [];
-          User.api().updateUserState(
-            {
-              currentAgentId: data.agentSettings.agentId,
-              loggedInAgents: [...loggedInAgents, data.agentSettings.agentId],
-            },
-            null,
-            true,
-          );
+
+          if (currentAgent) {
+            this.$http.patch(
+              `${process.env.VUE_APP_API_BASE_URL}/phone_agents/${currentAgent.id}`,
+              {
+                agent_id: data.agentSettings.agentId,
+                agent_username: data.agentSettings.username,
+              },
+            );
+          } else {
+            this.$http.post(
+              `${process.env.VUE_APP_API_BASE_URL}/phone_agents`,
+              {
+                user: currentUser.id,
+                agent_id: data.agentSettings.agentId,
+                agent_username: data.agentSettings.username,
+              },
+            );
+          }
 
           const queueIds = [];
 

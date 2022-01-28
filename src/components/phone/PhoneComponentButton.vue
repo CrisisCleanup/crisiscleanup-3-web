@@ -49,7 +49,7 @@ export default {
 
 <style scoped>
 .phone-component {
-  margin-left: 3rem;
+  margin-right: 100%;
   margin-top: -3rem;
   @apply shadow bg-white;
 }

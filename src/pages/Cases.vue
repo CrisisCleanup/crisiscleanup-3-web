@@ -761,15 +761,7 @@
           isViewingWorksiteFlag ||
           isNewWorksite
         "
-        class="
-          text-crisiscleanup-grey-700 text-lg
-          flex
-          p-2
-          bg-white
-          justify-between
-          items-start
-          border-b
-        "
+        class="text-crisiscleanup-grey-700 text-lg p-2 bg-white border-b"
         data-cy="worksiteview_actions"
       >
         <template v-if="isViewingWorksiteHistory">
@@ -820,130 +812,29 @@
           />
         </template>
         <template v-else>
-          <div>
-            <div class="text-left text-black flex items-center">
-              <div class="mt-1 mr-1">
-                {{ currentWorksite && currentWorksite.case_number }}
-              </div>
-              <base-button class="mr-1">
-                <div
-                  v-if="currentWorksite && currentWorksite.isFavorite"
-                  class="svg-container cursor-pointer"
-                  v-html="favoriteSvgActive"
-                  :title="$t('actions.not_member_of_my_org')"
-                  @click="() => toggleFavorite(false)"
-                ></div>
-                <div
-                  v-else
-                  class="svg-container cursor-pointer"
-                  v-html="favoriteSvgInactive"
-                  :title="$t('actions.member_of_my_org')"
-                  @click="() => toggleFavorite(true)"
-                ></div>
-              </base-button>
-              <base-button class="mr-1">
-                <div
-                  v-if="currentWorksite && currentWorksite.isHighPriority"
-                  class="svg-container cursor-pointer"
-                  v-html="highPrioritySvgActive"
-                  :title="$t('actions.unmark_high_priority')"
-                  @click="() => toggleHighPriority(false)"
-                ></div>
-                <div
-                  v-else
-                  class="svg-container cursor-pointer"
-                  v-html="highPrioritySvgInactive"
-                  :title="$t('actions.mark_high_priority')"
-                  @click="() => toggleHighPriority(true)"
-                ></div>
-              </base-button>
-            </div>
-            <div
-              v-if="!isNewWorksite && currentWorksite"
-              class="text-xs text-crisiscleanup-grey-700"
-            >
-              {{ $t('casesVue.updated') }}
-              {{ currentWorksite.updated_at | moment('from', 'now') }}
-            </div>
-          </div>
-          <div v-if="!isNewWorksite" class="flex items-center">
-            <ccu-icon
-              :alt="$t('actions.flag')"
-              size="small"
-              class="p-1 py-2"
-              type="flag"
-              @click.native="
-                () => {
-                  $router.push(
-                    `/incident/${currentIncidentId}/cases/${$route.params.id}/flag`,
-                  );
+          <CaseHeader
+            :worksite="currentWorksite"
+            can-edit
+            :is-viewing-worksite="isViewingWorksite"
+            @onJumpToCase="jumpToCase"
+            @onDownloadWorksite="downloadWorksite"
+            @onShowHistory="
+              () => {
+                $router.push(
+                  `/incident/${currentIncidentId}/cases/${$route.params.id}/history`,
+                );
+              }
+            "
+            @onPrintWorksite="
+              () => {
+                if (workTypesClaimedByOrganization.length > 0) {
+                  printWorksite();
+                } else {
+                  showingPrintWorksiteModal = true;
                 }
-              "
-            />
-            <ccu-icon
-              :alt="$t('actions.jump_to_case')"
-              size="small"
-              class="p-1 py-2"
-              type="go-case"
-              @click.native="jumpToCase"
-            />
-            <ccu-icon
-              :alt="$t('actions.history')"
-              size="small"
-              class="p-1 py-2"
-              type="history"
-              @click.native="
-                () => {
-                  $router.push(
-                    `/incident/${currentIncidentId}/cases/${$route.params.id}/history`,
-                  );
-                }
-              "
-            />
-            <ccu-icon
-              :alt="$t('actions.download')"
-              size="small"
-              class="p-1 py-2"
-              type="download"
-              @click.native="downloadWorksite"
-              data-cy="cases.icons.download"
-            />
-            <ccu-icon
-              :alt="$t('actions.share')"
-              size="small"
-              class="p-1 py-2"
-              type="share"
-              data-cy="cases.icons.share"
-            />
-            <ccu-icon
-              :alt="$t('actions.print')"
-              size="small"
-              class="p-1 py-2"
-              type="print"
-              @click.native="
-                () => {
-                  if (workTypesClaimedByOrganization.length > 0) {
-                    printWorksite();
-                  } else {
-                    showingPrintWorksiteModal = true;
-                  }
-                }
-              "
-              data-cy="cases.icons.print"
-            />
-            <router-link
-              v-if="isViewingWorksite"
-              :to="`/incident/${currentIncidentId}/cases/${$route.params.id}/edit`"
-            >
-              <ccu-icon
-                :alt="$t('actions.edit')"
-                class="border p-2 bg-primary-light"
-                size="small"
-                type="edit"
-                :linked="true"
-              />
-            </router-link>
-          </div>
+              }
+            "
+          />
         </template>
       </div>
       <router-view
@@ -1078,10 +969,12 @@ import WorksiteTable from './WorksiteTable';
 import WorksiteSearchInput from '../components/WorksiteSearchInput';
 import StatusDropdown from '../components/StatusDropdown';
 import Slider from '@/components/Slider';
+import CaseHeader from '@/components/CaseHeader';
 
 export default {
   name: 'Cases',
   components: {
+    CaseHeader,
     Slider,
     SviSlider,
     StatusDropdown,
@@ -1807,9 +1700,7 @@ export default {
         this.spinning = false;
       }
     },
-    // TODO: refactor, id param is unused
-    // eslint-disable-next-line no-unused-vars
-    async jumpToCase(id) {
+    async jumpToCase() {
       this.toggleView('showingMap');
 
       const waitForMap = () => {
