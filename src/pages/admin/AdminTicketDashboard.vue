@@ -6,7 +6,7 @@
       class="m-2 p-1"
       :action="() => (expandState = !expandState)"
     />
-    <div class="gridContainer sm:gridContainer-mobile">
+    <div class="grid grid-cols-1 md:grid-cols-3">
       <TicketCards
         :key="`${item.id}-${idx}`"
         v-for="(item, idx) in ticketWithCCData"
