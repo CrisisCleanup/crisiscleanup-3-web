@@ -136,3 +136,9 @@ modules.xml
 
 # Quokka
 .quokka
+
+.envrc
+
+.env.staging
+
+.env
