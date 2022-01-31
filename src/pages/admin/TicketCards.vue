@@ -1,43 +1,78 @@
 <template>
   <div
-    :class="this.ticketData.status === 'solved' ? 'opacity-25' : ''"
-    :style="expandState ? '' : ' overflow-y: scroll;height: 40rem'"
-    class="bg-white p-2 shadow rounded z-1"
+    :class="[
+      this.ticketData.status === 'solved' ? 'opacity-25' : '',
+      expandState ? '' : 'height: 50rem',
+    ]"
+    class="bg-white p-2 shadow rounded-xl z-1 m-4"
   >
     <div name="info" class="flex flex-col">
       <div class="flex flex-row justify-between pb-2">
         <div class="mr-2">
-          <div class="font-bold">{{ ticketData.name }}asdasdasdasdasd</div>
+          <div class="font-bold">{{ ticketData.name }}</div>
           <div>{{ ticketData.email }}</div>
           <div>{{ ticketData.phone }}</div>
           <base-link text-variant="bodysm" class="px-2" target="_blank "
             >{{ ticketData.organization.name }}
           </base-link>
-          <base-button text="Tobi Events" variant="solid" class="m-2 p-1" />
-        </div>
-        <base-link
-          :href="`http://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
-          text-variant="bodysm"
-          class="px-2"
-          target="_blank "
-          >{{ $t('~~Launch Ticket') }}
-        </base-link>
-        <div class="flex flex-col">
-          <div
-            class="
-              flex
-              text-center
-              items-center
-              rounded
-              h-6
-              w-12
-              justify-center
-              text-md
-              flex-wrap
+          <base-button
+            disabled
+            text="Events"
+            variant="solid"
+            class="m-2 p-2 rounded"
+            @click="
+              () => {
+                showUserEvents(
+                  stream.actor_id,
+                  `${stream.attr.actor_first_name} ${stream.attr.actor_last_name}`,
+                );
+              }
             "
-            :class="ticketData.status"
-          >
-            {{ ticketData.status }}
+          />
+        </div>
+        <div class="flex flex-col lg:flex-row">
+          <base-link
+            :href="`http://crisiscleanup.zendesk.com/agent/tickets/${ticketData.id}`"
+            text-variant="bodysm"
+            class="px-2"
+            target="_blank "
+            >{{ $t('~~Launch Ticket') }}
+          </base-link>
+          <div class="flex flex-col">
+            <div
+              class="
+                flex
+                justify-center
+                text-center
+                rounded
+                text-md
+                flex-wrap
+                p-2
+              "
+              :class="ticketData.status"
+            >
+              {{ ticketData.status }}
+            </div>
+            <base-button
+              text="Login"
+              variant="solid"
+              class="mt-2 mr-6 pl-2 pr-2 rounded p-2"
+              :action="
+                () => {
+                  loginAs(slotProps.item.id);
+                }
+              "
+            />
+            <base-button
+              text="Login 2"
+              variant="solid"
+              class="mt-2 mr-6 pl-2 pr-2 rounded p-2"
+              :action="
+                () => {
+                  findByEmail(ticketData.email);
+                }
+              "
+            />
           </div>
           <base-button
             text="Login"
@@ -62,30 +97,33 @@
           <div
             v-if="truncateState"
             @click="toggleTruncate"
-            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
+            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1 text-center"
           >
             Read more
           </div>
           <div
             v-else
             @click="toggleTruncate"
-            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1"
+            class="p-1 bg-blue-500 w-1/4 h-1/2 rounded m-1 text-center"
           >
             Read Less
           </div>
         </div>
       </div>
       <hr />
-      <div class="font-bold">Comments</div>
+      <div class="overflow-y-scroll h-80">
+        <div class="font-bold">Comments</div>
 
-      <div
-        :class="assignWhoColor(item.author_id)"
-        class="m-4 bg-crisiscleanup-dark-100 shadow-lg rounded-md p-2"
-        :key="`${idx}-${item.author_id}`"
-        v-for="(item, idx) in comments"
-      >
-        <div class="font-bold">{{ assignWhoComments(item.author_id) }}</div>
-        {{ item.body }}
+        <div
+          id="comments"
+          :class="assignWhoColor(item.author_id)"
+          class="m-4 bg-crisiscleanup-dark-100 shadow-lg rounded-md p-2"
+          :key="`${idx}-${item.author_id}`"
+          v-for="(item, idx) in comments"
+        >
+          <div class="font-bold">{{ assignWhoComments(item.author_id) }}</div>
+          {{ item.body }}
+        </div>
       </div>
 
       <base-input
@@ -100,70 +138,58 @@
       ></base-input>
 
       <hr />
-      <div class="flex justify-between">
-        <div class="flex flex-col">
-          <div class="flex justify-between p-2">
-            <img
-              class="mr-4"
-              style="width: 50px; height: 50px"
-              :src="assignWhoPicture"
-            />
-            <div class="flex flex-col mr-4">
-              Assigned To:
-              <div v-if="ticketData.assignee_id">
-                {{ assignWho }}
-              </div>
-              <div v-else>No user Assigned</div>
+      <div class="flex flex-col">
+        <div class="flex justify-between p-2 items-center">
+          <img class="mr-4 h-10 w-10" :src="assignWhoPicture" />
+          <div class="flex flex-col mr-4">
+            Assigned To:
+            <div v-if="ticketData.assignee_id" class="font-bold">
+              {{ assignWho }}
             </div>
-
-            <form-select
-              class="
-                w-auto
-                h-12
-                flex-grow
-                border border-crisiscleanup-dark-100
-                select
-              "
-              :options="userList"
-              :value="selectedUser"
-              @input="
-                (value) => {
-                  selectedUser = value;
-                }
-              "
-            />
-            <base-button
-              text="Reassign Ticket"
-              variant="solid"
-              class="m-2 p-1"
-              :action="assignUser"
-            />
+            <div v-else class="font-bold">No user Assigned</div>
           </div>
-          <div class="flex justify-evenly">
-            <base-button
-              style="background: #9cb8ff"
-              text="Reply as Open"
-              variant="solid"
-              class="m-2 p-1"
-              :action="replyToTicketOpen"
-            />
 
-            <base-button
-              style="background: #e8e4e4"
-              text="Reply as Pending"
-              variant="solid"
-              class="m-2 p-1"
-              :action="replyToTicketPending"
-            />
+          <form-select
+            class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
+            :options="userList"
+            :value="selectedUser"
+            @input="
+              (value) => {
+                selectedUser = value;
+              }
+            "
+          />
+          <base-button
+            text="Reassign Ticket"
+            variant="solid"
+            class="m-2 p-2 rounded"
+            :action="assignUser"
+          />
+        </div>
+        <div class="flex justify-evenly">
+          <base-button
+            style="background: #9cb8ff"
+            text="Reply as Open"
+            variant="solid"
+            class="m-2 p-1 rounded p-2"
+            :action="replyToTicketOpen"
+          />
 
-            <base-button
-              style="background: #ffa296"
-              text="Reply as Solved/Closed"
-              variant="solid"
-              class="m-2 p-1"
-              :action="replyToTicketSolved"
-            />
-          </div>
+          <base-button
+            style="background: #e8e4e4"
+            text="Reply as Pending"
+            variant="solid"
+            class="m-2 p-1 rounded p-2"
+            :action="replyToTicketPending"
+          />
+
+          <base-button
+            style="background: #ffa296"
+            text="Reply as Solved/Closed"
+            variant="solid"
+            class="m-2 p-1 rounded p-2"
+            :action="replyToTicketSolved"
+          />
         </div>
       </div>
     </div>
@@ -171,11 +197,14 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 import moment from 'moment';
+import { DialogsMixin } from '@/mixins';
+import { getQueryString } from '@/utils/urls';
 
 import User from '@/models/User';
 import FormSelect from '../../components/FormSelect.vue';
-
 export default {
   name: 'TicketCards',
   filters: {
@@ -202,12 +231,30 @@ export default {
   },
   components: { FormSelect },
   async mounted() {
+    this.loading = true;
     await this.currentUser();
-    // this.selectedUser = this.assignWho;
     await this.getComments();
+    await this.getEvents();
+    await this.getEventLogs();
+    await Promise.all([this.getUsers({ pagination: this.defaultPagination })]);
   },
   data() {
     return {
+      loading: false,
+      filterEvents: [],
+      users: {
+        data: [],
+        meta: {
+          pagination: {
+            pageSize: 20,
+            page: 1,
+            current: 1,
+          },
+        },
+        search: '',
+        visible: true,
+      },
+      eventStream: [],
       currentLoggedinUser: '',
       currentLoggedinUserId: 0,
       replyState: false,
@@ -219,8 +266,16 @@ export default {
       dropDownState: false,
       selectedUser: '',
       userList: ['Arron Titus', 'Triston Lewis', 'Ross Arroyo', 'Gina'],
+      ticketAgents: {
+        'Arron Titus': 484643688,
+        'Triston Lewis': 411677450351,
+        'Ross Arroyo': 114709872451,
+        Gina: 403645788712,
+      },
     };
   },
+  mixins: [DialogsMixin],
+
   computed: {
     assignWho() {
       if (this.ticketData.assignee_id === 484643688) {
@@ -254,6 +309,76 @@ export default {
     },
   },
   methods: {
+    findByEmail(query) {
+      console.log(this.users.data.find((o) => o.email === query));
+    },
+    async loginAs(userId) {
+      const response = await axios.post(
+        `${process.env.VUE_APP_API_BASE_URL}/admins/users/login_as`,
+        {
+          user: userId,
+        },
+      );
+      this.setUser(response.data);
+      window.location.reload();
+    },
+    async showUserEvents(userId, name) {
+      await this.$component({
+        title: `Events for User ${userId}: ${name}`,
+        component: 'AdminEventStream',
+        classes: 'w-full h-96 overflow-auto',
+        modalClasses: 'bg-white max-w-3xl shadow',
+        props: {
+          user: userId,
+          limit: 200,
+        },
+      });
+    },
+    async getEvents() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/events?limit=500`,
+      );
+      this.events = [...response.data.results];
+    },
+    async getEventLogs() {
+      this.eventStream = [];
+      const query = {
+        limit: this.limit,
+        event_key__in: this.filterEvents.join(','),
+      };
+      if (this.user) {
+        query.created_by = this.user;
+      }
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/all_events?${getQueryString(
+          query,
+        )}`,
+      );
+      this.eventStream = [...response.data.results];
+    },
+    async getUsers(data = {}) {
+      const pagination = data.pagination || this.users.meta.pagination;
+      const params = {
+        offset: pagination.pageSize * (pagination.page - 1),
+        limit: pagination.pageSize,
+      };
+      if (this.users.search || this.globalSearch) {
+        params.search = this.globalSearch || this.users.search;
+      }
+      const queryString = getQueryString(params);
+
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/users?${queryString}`,
+      );
+      this.users.data = response.data.results;
+      const newPagination = {
+        ...pagination,
+        total: response.data.count,
+      };
+      this.users.meta = {
+        pagination: newPagination,
+      };
+    },
     assignWhoColor(author) {
       if (author === 484643688) {
         return 'bg-crisiscleanup-yellow-300';
@@ -292,19 +417,7 @@ export default {
     },
 
     async replyToTicketOpen() {
-      if (this.currentLoggedinUser === 'Arron Titus') {
-        this.currentLoggedinUserId = 484643688;
-      }
-      if (this.currentLoggedinUser === 'Triston Lewis') {
-        this.currentLoggedinUserId = 411677450351;
-      }
-      if (this.currentLoggedinUser === 'Ross Arroyo') {
-        this.currentLoggedinUserId = 114709872451;
-      }
-      if (this.currentLoggedinUser === 'Gina') {
-        this.currentLoggedinUserId = 403645788712;
-      }
-
+      this.currentLoggedinUserId = this.ticketAgents[this.currentLoggedinUser];
       const response = await this.$http.put(
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}`,
         {
@@ -324,18 +437,7 @@ export default {
     },
 
     async replyToTicketPending() {
-      if (this.currentLoggedinUser === 'Arron Titus') {
-        this.currentLoggedinUserId = 484643688;
-      }
-      if (this.currentLoggedinUser === 'Triston Lewis') {
-        this.currentLoggedinUserId = 411677450351;
-      }
-      if (this.currentLoggedinUser === 'Ross Arroyo') {
-        this.currentLoggedinUserId = 114709872451;
-      }
-      if (this.currentLoggedinUser === 'Gina') {
-        this.currentLoggedinUserId = 403645788712;
-      }
+      this.currentLoggedinUserId = this.ticketAgents[this.currentLoggedinUser];
 
       const response = await this.$http.put(
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}`,
@@ -357,18 +459,7 @@ export default {
     },
 
     async replyToTicketSolved() {
-      if (this.currentLoggedinUser === 'Arron Titus') {
-        this.currentLoggedinUserId = 484643688;
-      }
-      if (this.currentLoggedinUser === 'Triston Lewis') {
-        this.currentLoggedinUserId = 411677450351;
-      }
-      if (this.currentLoggedinUser === 'Ross Arroyo') {
-        this.currentLoggedinUserId = 114709872451;
-      }
-      if (this.currentLoggedinUser === 'Gina') {
-        this.currentLoggedinUserId = 403645788712;
-      }
+      this.currentLoggedinUserId = this.ticketAgents[this.currentLoggedinUser];
 
       const response = await this.$http.put(
         `${process.env.VUE_APP_API_BASE_URL}/zendesk/tickets/${this.ticketData.id}`,
@@ -459,5 +550,27 @@ export default {
 .solved {
   color: #6b6b6b;
   background: #e8e4e4;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  @apply rounded-r-xl;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  @apply rounded-r-xl;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #ffce50;
+  @apply rounded-r-xl;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ffb249;
 }
 </style>

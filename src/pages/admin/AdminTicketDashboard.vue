@@ -1,12 +1,12 @@
 <template>
   <div class="">
-    <base-button
-      text="Expand All Tickets"
-      variant="solid"
-      class="m-2 p-1"
-      :action="() => (expandState = !expandState)"
-    />
-    <div class="grid grid-cols-1 md:grid-cols-3">
+    <!--    <base-button-->
+    <!--      text="Expand All Tickets"-->
+    <!--      variant="solid"-->
+    <!--      class="mx-4 my-2 p-2 rounded"-->
+    <!--      :action="() => (expandState = !expandState)"-->
+    <!--    />-->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       <TicketCards
         :key="`${item.id}-${idx}`"
         v-for="(item, idx) in ticketWithCCData"
@@ -20,7 +20,6 @@
 
 <script>
 import _ from 'lodash';
-import { makeTableColumns } from '@/utils/table';
 import TicketCards from './TicketCards.vue';
 
 export default {
@@ -106,74 +105,8 @@ export default {
       );
     },
   },
-  computed: {
-    ticketTable() {
-      const columns = makeTableColumns([
-        ['id', '5%', 'Id'],
-        ['requester_id', '15%', 'Requester Id'],
-        ['created_at', '20%', 'Created'],
-        ['description', '50%', 'Description'],
-        ['via', '5%', 'Via'],
-        ['url', '5%', ''],
-      ]);
-      columns.forEach((column) => {
-        column.titleClass = 'small-font';
-        column.class = 'small-font';
-      });
-      return {
-        columns,
-      };
-    },
-  },
+  computed: {},
 };
 </script>
 
-<style>
-@media (min-width: 600px) {
-  .gridContainer {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-@media (min-width: 900px) {
-  .gridContainer {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-.gridContainer {
-  @media (min-width: 1300px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1920px) {
-  .gridContainer {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (min-width: 2560px) {
-  .gridContainer {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-.gridContainer {
-  @apply mt-6 mb-6;
-  max-width: 600px;
-
-  display: grid;
-  grid-gap: 1rem;
-
-  &-mobile {
-    justify-content: center;
-    display: grid;
-    justify-items: stretch;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    column-gap: 20px;
-    row-gap: 20px;
-  }
-}
-</style>
+<style scoped></style>

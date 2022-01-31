@@ -65,6 +65,12 @@ module.exports = {
           light: '#F9CEDA',
           dark: '#973752',
         },
+        tickets: {
+          red: '#f21b1b',
+          yellow: '#c19700',
+          blue: '#0042ed',
+          gray: '#6b6b6b',
+        },
         'crisiscleanup-dark': {
           100: '#dadada',
           200: '#b8b8b8',
