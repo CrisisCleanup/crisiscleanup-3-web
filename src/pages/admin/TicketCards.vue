@@ -64,18 +64,17 @@
                 }
               "
             />
-<!--            <base-button-->
-<!--              text="Login 2"-->
-<!--              variant="solid"-->
-<!--              class="mt-2 mr-6 pl-2 pr-2 rounded p-2"-->
-<!--              :action="-->
-<!--                () => {-->
-<!--                  findByEmail(ticketData.email);-->
-<!--                }-->
-<!--              "-->
-<!--            />-->
+            <!--            <base-button-->
+            <!--              text="Login 2"-->
+            <!--              variant="solid"-->
+            <!--              class="mt-2 mr-6 pl-2 pr-2 rounded p-2"-->
+            <!--              :action="-->
+            <!--                () => {-->
+            <!--                  findByEmail(ticketData.email);-->
+            <!--                }-->
+            <!--              "-->
+            <!--            />-->
           </div>
-
         </div>
       </div>
 
