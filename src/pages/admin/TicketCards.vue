@@ -54,6 +54,7 @@
               {{ ticketData.status }}
             </div>
             <base-button
+              disabled
               text="Login"
               variant="solid"
               class="mt-2 mr-6 pl-2 pr-2 rounded p-2"
