@@ -1,7 +1,7 @@
 <template>
   <div class="flex-grow page-grid h-full">
     <div class="flex flex-col">
-      <div class="flex items-center">
+      <div class="flex items-center justify-between">
         <div class="flex py-3 px-2" style="min-width: 80px">
           <ccu-icon
             :alt="$t('casesVue.map_view')"
@@ -30,7 +30,32 @@
             {{ allWorksiteCount | numeral('0,0') }}
           </span>
         </span>
-        <div class="flex justify-start w-auto"></div>
+        <div class="flex justify-start w-auto">
+          <WorksiteSearchInput
+            width="300px"
+            icon="search"
+            :suggestions="[
+              {
+                name: 'worksites',
+                data: searchWorksites || [],
+                key: 'name',
+              },
+            ]"
+            display-property="name"
+            :placeholder="$t('actions.search')"
+            size="medium"
+            class="mx-2"
+            @selectedExisting="
+              (w) => {
+                $router.push({ query: { showOnMap: true } });
+                worksiteId = w.id;
+                isEditing = true;
+              }
+            "
+            @search="onSearch"
+            @clear="onSearch"
+          />
+        </div>
       </div>
       <div class="flex-grow">
         <div v-show="showingMap" class="relative h-full select-none">
@@ -107,13 +132,14 @@
         @onPrintWorksite="() => {}"
         @onShowHistory="showHistory = true"
       />
-      <div v-if="showHistory" class="flex items-center justify-between px-2">
+      <div v-if="showingDetails" class="flex items-center justify-between px-2">
         <base-button
           icon="arrow-left"
           :icon-size="medium"
           :action="
             () => {
               showHistory = false;
+              showFlags = false;
             }
           "
         />
@@ -133,6 +159,7 @@
           :incident-id="String(currentIncidentId)"
           :worksite-id="worksiteId"
           :key="worksiteId"
+          @jumpToCase="jumpToCase"
           disable-claim-and-save
           :data-prefill="() => {}"
           :is-editing="isEditing"
@@ -214,8 +241,24 @@
                 ></ManualDialer>
               </template>
             </PhoneComponentButton>
-            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
-            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
+            <PhoneComponentButton
+              class="phone-button"
+              icon="dialer"
+              icon-size="small"
+            >
+              <template v-slot:component>
+                <GeneralStatistics />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              class="phone-button"
+              icon="dialer"
+              icon-size="small"
+            >
+              <template v-slot:component>
+                <Leaderboard />
+              </template>
+            </PhoneComponentButton>
             <PhoneComponentButton class="phone-button"></PhoneComponentButton>
             <PhoneComponentButton class="phone-button"></PhoneComponentButton>
             <PhoneComponentButton class="phone-button"></PhoneComponentButton>
@@ -228,6 +271,7 @@
 
 <script>
 import * as L from 'leaflet';
+import { debounce } from 'lodash';
 import CaseForm from '@/pages/CaseForm';
 import { getWorksiteLayer, mapAttribution, mapTileLayer } from '@/utils/map';
 import PhoneComponentButton from '@/components/phone/PhoneComponentButton';
@@ -239,10 +283,16 @@ import { getColorForStatus } from '@/filters';
 import CaseHeader from '@/components/CaseHeader';
 import Worksite from '@/models/Worksite';
 import CaseHistory from '@/pages/CaseHistory';
+import WorksiteSearchInput from '@/components/WorksiteSearchInput';
+import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics';
+import Leaderboard from '@/components/phone/Widgets/Leaderboard';
 
 export default {
   name: 'PhoneNew',
   components: {
+    Leaderboard,
+    GeneralStatistics,
+    WorksiteSearchInput,
     CaseHistory,
     CaseHeader,
     AjaxTable,
@@ -265,6 +315,9 @@ export default {
       getColorForStatus,
       viewCase: false,
       showHistory: false,
+      showFlags: false,
+      searchWorksites: [],
+      searchingWorksites: false,
     };
   },
   async mounted() {
@@ -272,6 +325,9 @@ export default {
     this.loadMap(markers);
   },
   computed: {
+    showingDetails() {
+      return this.showHistory || this.showFlags;
+    },
     tableUrl() {
       return `${process.env.VUE_APP_API_BASE_URL}/worksites`;
     },
@@ -336,6 +392,27 @@ export default {
       this.showingTable = false;
       this[view] = true;
     },
+    onSearch: debounce(
+      async function (search) {
+        this.searchingWorksites = true;
+        if (!search) {
+          this.searchWorksites = [];
+        }
+        const searchData = await this.search(search, this.currentIncidentId);
+        this.searchWorksites = search ? searchData.data.results : [];
+        this.searchingWorksites = false;
+      },
+      250,
+      {
+        leading: false,
+        trailing: true,
+      },
+    ),
+    search(search, incident) {
+      return this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,
+      );
+    },
     async jumpToCase() {
       this.toggleView('showingMap');
 
@@ -378,6 +455,10 @@ export default {
       }
       const worksiteLayer = getWorksiteLayer(markers, this.map, this, true);
       worksiteLayer.addTo(this.map);
+      this.$nextTick(() => {
+        // Add this slight pan to re-render map
+        this.map.panBy([1, 0]);
+      });
     },
     async getWorksites() {
       this.mapLoading = true;
