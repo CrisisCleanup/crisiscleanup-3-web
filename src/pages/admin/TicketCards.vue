@@ -20,14 +20,6 @@
             text="Events"
             variant="solid"
             class="m-2 p-2 rounded"
-            @click="
-              () => {
-                showUserEvents(
-                  stream.actor_id,
-                  `${stream.attr.actor_first_name} ${stream.attr.actor_last_name}`,
-                );
-              }
-            "
           />
         </div>
         <div class="flex flex-col lg:flex-row">
@@ -58,22 +50,8 @@
               text="Login"
               variant="solid"
               class="mt-2 mr-6 pl-2 pr-2 rounded p-2"
-              :action="
-                () => {
-                  loginAs(slotProps.item.id);
-                }
-              "
             />
-            <!--            <base-button-->
-            <!--              text="Login 2"-->
-            <!--              variant="solid"-->
-            <!--              class="mt-2 mr-6 pl-2 pr-2 rounded p-2"-->
-            <!--              :action="-->
-            <!--                () => {-->
-            <!--                  findByEmail(ticketData.email);-->
-            <!--                }-->
-            <!--              "-->
-            <!--            />-->
+
           </div>
         </div>
       </div>
@@ -89,7 +67,7 @@
 
         <div v-if="!truncateState">{{ ticketData.description }}</div>
 
-        <div v-if="ticketData.description.length > 400">
+        <div v-if="ticketData.description.length > 200">
           <div
             v-if="truncateState"
             @click="toggleTruncate"
@@ -230,9 +208,6 @@ export default {
     this.loading = true;
     await this.currentUser();
     await this.getComments();
-    await this.getEvents();
-    await this.getEventLogs();
-    await Promise.all([this.getUsers({ pagination: this.defaultPagination })]);
   },
   data() {
     return {
@@ -318,63 +293,8 @@ export default {
       this.setUser(response.data);
       window.location.reload();
     },
-    async showUserEvents(userId, name) {
-      await this.$component({
-        title: `Events for User ${userId}: ${name}`,
-        component: 'AdminEventStream',
-        classes: 'w-full h-96 overflow-auto',
-        modalClasses: 'bg-white max-w-3xl shadow',
-        props: {
-          user: userId,
-          limit: 200,
-        },
-      });
-    },
-    async getEvents() {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/events?limit=500`,
-      );
-      this.events = [...response.data.results];
-    },
-    async getEventLogs() {
-      this.eventStream = [];
-      const query = {
-        limit: this.limit,
-        event_key__in: this.filterEvents.join(','),
-      };
-      if (this.user) {
-        query.created_by = this.user;
-      }
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/all_events?${getQueryString(
-          query,
-        )}`,
-      );
-      this.eventStream = [...response.data.results];
-    },
-    async getUsers(data = {}) {
-      const pagination = data.pagination || this.users.meta.pagination;
-      const params = {
-        offset: pagination.pageSize * (pagination.page - 1),
-        limit: pagination.pageSize,
-      };
-      if (this.users.search || this.globalSearch) {
-        params.search = this.globalSearch || this.users.search;
-      }
-      const queryString = getQueryString(params);
 
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/users?${queryString}`,
-      );
-      this.users.data = response.data.results;
-      const newPagination = {
-        ...pagination,
-        total: response.data.count,
-      };
-      this.users.meta = {
-        pagination: newPagination,
-      };
-    },
+
     assignWhoColor(author) {
       if (author === 484643688) {
         return 'bg-crisiscleanup-yellow-300';
