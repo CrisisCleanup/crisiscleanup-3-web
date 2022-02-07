@@ -94,11 +94,7 @@
         size="small"
         class="p-1 py-2"
         type="print"
-        @click.native="
-          () => {
-            this.$emit('onPrintWorksite');
-          }
-        "
+        @click.native="$emit('onPrintWorksite')"
         data-cy="cases.icons.print"
       />
       <router-link
