@@ -40,12 +40,11 @@ import User from '@/models/User';
 import Organization from '@/models/Organization';
 import { groupBy } from '@/utils/array';
 import Worksite from '@/models/Worksite';
-import UserDetailTooltip from '@/components/user/DetailsTooltip.vue';
 import Timeline from '@/components/Timeline';
 
 export default {
   name: 'CaseHistory',
-  components: { Timeline, UserDetailTooltip },
+  components: { Timeline },
   props: {
     worksiteId: {
       type: Number,
