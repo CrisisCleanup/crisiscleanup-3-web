@@ -26,7 +26,7 @@ ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # install project and build
-RUN CYPRESS_INSTALL_BINARY=0 yarn install && yarn cache clean
+RUN CYPRESS_INSTALL_BINARY=0 yarn install --network-timeout 1000000 && yarn cache clean
 
 
 # build stage
