@@ -12,7 +12,7 @@
         </div>
       </slot>
     </div>
-    <div class="phone-component absolute" v-show="showComponent">
+    <div class="phone-component absolute w-84" v-show="showComponent">
       <slot name="component"></slot>
     </div>
   </div>
@@ -26,6 +26,12 @@ export default {
     EventBus.$on('phone_component:close', () => {
       this.showComponent = false;
     });
+    EventBus.$on('phone_component:open', (name) => {
+      if (this.name === name) {
+        EventBus.$emit('phone_component:close');
+        this.showComponent = true;
+      }
+    });
   },
   data() {
     return {
@@ -33,6 +39,7 @@ export default {
     };
   },
   props: {
+    name: { type: String, default: null, required: true },
     icon: { type: String, default: null, required: false },
     iconClass: { type: String, default: null, required: false },
     iconSize: { type: String, default: null, required: false },
@@ -49,7 +56,7 @@ export default {
 
 <style scoped>
 .phone-component {
-  margin-left: -18rem;
+  margin-left: -21rem;
   margin-top: -3rem;
   @apply shadow bg-white;
 }

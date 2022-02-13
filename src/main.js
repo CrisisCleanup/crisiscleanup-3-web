@@ -70,6 +70,7 @@ import {
   snakeCase,
   getOrganizationName,
   formatNationalNumber,
+  formatSeconds,
 } from '@/filters';
 import Tag from '@/components/Tag';
 import Spinner from '@/components/Spinner';
@@ -176,6 +177,7 @@ Vue.filter('snakeToTitleCase', snakeToTitleCase);
 Vue.filter('getColorForWorkType', getColorForWorkType);
 Vue.filter('getWorkTypeImage', getWorkTypeImage);
 Vue.filter('secondsToHm', secondsToHm);
+Vue.filter('formatSeconds', formatSeconds);
 Vue.filter('getColorForStatus', getColorForStatus);
 Vue.filter('getRecurrenceString', getRecurrenceString);
 Vue.filter('upper', toUpper);

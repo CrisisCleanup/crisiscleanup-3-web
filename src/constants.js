@@ -39,6 +39,8 @@ export const ICON_MAP = {
   'phone-classic': require('@/assets/icons/phone-classic.svg'),
   'phone-user': require('@/assets/icons/phone-user.svg'),
   'phone-hangup': require('@/assets/icons/phone-hangup.svg'),
+  'phone-history': require('@/assets/icons/phone-history.svg'),
+  'phone-stats': require('@/assets/icons/phone-stats.svg'),
   'phone-plus': require('@/assets/icons/phone-plus.svg'),
   'earth-globe': require('@/assets/icons/earth-globe.svg'),
   'phone-contact-add': require('@/assets/icons/phone-contact-add.svg'),
@@ -77,6 +79,7 @@ export const ICON_MAP = {
   dialer: require('@/assets/icons/dialer.svg'),
   hangup: require('@/assets/icons/hangup.svg'),
   time: require('@/assets/icons/time.svg'),
+  logout: require('@/assets/icons/logout.svg'),
 };
 /* eslint-enable global-require */
 

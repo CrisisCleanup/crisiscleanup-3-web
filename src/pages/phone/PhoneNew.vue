@@ -132,6 +132,10 @@
         @onPrintWorksite="() => {}"
         @onShowHistory="showHistory = true"
       />
+      <div v-else class="h-12 flex items-center cursor-pointer px-2 border">
+        <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
+        <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
+      </div>
       <div v-if="showingDetails" class="flex items-center justify-between px-2">
         <base-button
           icon="arrow-left"
@@ -161,15 +165,15 @@
           :key="worksiteId"
           @jumpToCase="jumpToCase"
           disable-claim-and-save
-          :data-prefill="() => {}"
+          :data-prefill="prefillData"
           :is-editing="isEditing"
-          @savedWorksite="() => {}"
-          @closeWorksite="
-            () => {
-              isEditing = false;
-              worksiteId = null;
+          @savedWorksite="
+            (worksite) => {
+              worksiteId = worksite.id;
+              isEditing = true;
             }
           "
+          @closeWorksite="clearCase"
           class="border shadow"
           @navigateToWorksite="
             (id) => {
@@ -177,13 +181,14 @@
               isEditing = true;
             }
           "
+          @geocoded="addMarkerToMap"
         />
         <transition name="slide-fade">
           <div
             class="absolute flex flex-col -ml-12 mt-12"
             style="z-index: 1002"
           >
-            <PhoneComponentButton class="phone-button">
+            <PhoneComponentButton class="phone-button" name="agent">
               <template v-slot:button>
                 <div class="w-full h-full flex items-center justify-center">
                   <div
@@ -224,10 +229,32 @@
                 </div>
               </template>
               <template v-slot:component>
-                <AgentCalls />
+                <div>
+                  <Agent @onLoggedIn="onLoggedIn" />
+                  <tabs
+                    :details="false"
+                    v-if="caller"
+                    class="w-full"
+                    ref="tabs"
+                  >
+                    <tab :name="$t('~~Active Call')">
+                      <ActiveCall
+                        :case-id="worksiteId"
+                        @setCase="worksiteId = $event"
+                      />
+                    </tab>
+                    <tab :name="$t('~~Call Status')">
+                      <UpdateStatus
+                        class="p-2"
+                        @onCompleteCall="completeCall"
+                      />
+                    </tab>
+                  </tabs>
+                </div>
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
+              name="dialer"
               class="phone-button"
               icon="dialer"
               icon-size="small"
@@ -235,33 +262,59 @@
             >
               <template v-slot:component>
                 <ManualDialer
-                  class="bg-white w-72 p-2"
+                  class="bg-white w-84 p-2"
                   style="z-index: 1002"
-                  @onDial="dialPhoneNumber"
+                  @onDial="dialManualOutbound"
+                  :dialing="dialing"
                 ></ManualDialer>
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
+              v-if="stats.inQueue"
+              name="stats"
               class="phone-button"
-              icon="dialer"
-              icon-size="small"
             >
+              <template v-slot:button>
+                <div class="w-full h-full flex items-center justify-center">
+                  <div class="text-xl">
+                    {{ stats.inQueue || 0 }}
+                  </div>
+                </div>
+              </template>
               <template v-slot:component>
-                <GeneralStatistics />
+                <GeneralStats class="w-84" />
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
+              name="my-stats"
               class="phone-button"
-              icon="dialer"
+              icon="phone-user"
               icon-size="small"
+              icon-class="p-1"
+              v-if="agentStats.agentId"
             >
               <template v-slot:component>
-                <Leaderboard />
+                <AgentStats class="w-84" />
               </template>
             </PhoneComponentButton>
-            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
-            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
-            <PhoneComponentButton class="phone-button"></PhoneComponentButton>
+            <PhoneComponentButton
+              name="reset"
+              class="phone-button"
+              icon="logout"
+              icon-size="small"
+              icon-class="p-1"
+            >
+              <template v-slot:component>
+                <div class="w-84 flex items-center justify-center p-3">
+                  <base-button
+                    size="medium"
+                    :text="$t('~~Reset Phone System')"
+                    :action="resetPhoneSystem"
+                    class="text-white bg-crisiscleanup-red-200"
+                  ></base-button>
+                </div>
+              </template>
+            </PhoneComponentButton>
           </div>
         </transition>
       </div>
@@ -276,32 +329,39 @@ import CaseForm from '@/pages/CaseForm';
 import { getWorksiteLayer, mapAttribution, mapTileLayer } from '@/utils/map';
 import PhoneComponentButton from '@/components/phone/PhoneComponentButton';
 import ManualDialer from '@/components/phone/ManualDialer';
-import { ConnectFirstMixin } from '@/mixins';
-import AgentCalls from '@/components/phone/AgentCalls';
+import { ConnectFirstMixin, DialogsMixin } from '@/mixins';
+import Agent from '@/components/phone/Agent';
 import AjaxTable from '@/components/AjaxTable';
 import { getColorForStatus } from '@/filters';
 import CaseHeader from '@/components/CaseHeader';
 import Worksite from '@/models/Worksite';
 import CaseHistory from '@/pages/CaseHistory';
 import WorksiteSearchInput from '@/components/WorksiteSearchInput';
-import GeneralStatistics from '@/components/phone/Widgets/GeneralStatistics';
-import Leaderboard from '@/components/phone/Widgets/Leaderboard';
+import ActiveCall from '@/components/phone/ActiveCall';
+import { getErrorMessage } from '@/utils/errors';
+import UpdateStatus from '@/components/phone/UpdateStatus';
+import PhoneOutbound from '@/models/PhoneOutbound';
+import { EventBus } from '@/event-bus';
+import GeneralStats from '@/components/phone/GeneralStats';
+import AgentStats from '@/components/phone/AgentStats';
 
 export default {
   name: 'PhoneNew',
   components: {
-    Leaderboard,
-    GeneralStatistics,
+    AgentStats,
+    GeneralStats,
+    UpdateStatus,
+    ActiveCall,
     WorksiteSearchInput,
     CaseHistory,
     CaseHeader,
     AjaxTable,
-    AgentCalls,
+    Agent,
     ManualDialer,
     PhoneComponentButton,
     CaseForm,
   },
-  mixins: [ConnectFirstMixin],
+  mixins: [ConnectFirstMixin, DialogsMixin],
   data() {
     return {
       worksiteId: null,
@@ -318,6 +378,7 @@ export default {
       showFlags: false,
       searchWorksites: [],
       searchingWorksites: false,
+      dialing: false,
     };
   },
   async mounted() {
@@ -325,6 +386,14 @@ export default {
     this.loadMap(markers);
   },
   computed: {
+    prefillData() {
+      if (this.caller?.dnis) {
+        return {
+          phone1: this.caller?.dnis,
+        };
+      }
+      return {};
+    },
     showingDetails() {
       return this.showHistory || this.showFlags;
     },
@@ -387,6 +456,58 @@ export default {
     },
   },
   methods: {
+    async completeCall({ status, notes }) {
+      if (this.$refs.worksiteForm.dirtyFields.size) {
+        const result = await this.$confirm({
+          title: this.$t('phoneDashboard.complete_call'),
+          content: this.$t('phoneDashboard.unsaved_changes_error'),
+          actions: {
+            no: {
+              text: this.$t('actions.do_not_save'),
+              type: 'outline',
+              buttonClass: 'border border-black',
+            },
+            yes: {
+              text: this.$t('actions.continue'),
+              type: 'solid',
+            },
+          },
+        });
+        if (result === 'no' || result === 'cancel') {
+          return;
+        }
+      }
+
+      try {
+        if (this.$phoneService.callInfo.callType === 'OUTBOUND') {
+          await PhoneOutbound.api().updateStatus(this.call.id, {
+            statusId: status,
+            worksiteId: this.worksiteId,
+            notes,
+          });
+        }
+
+        if (this.$phoneService.callInfo.callType === 'INBOUND') {
+          await this.$http.post(
+            `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/${this.call.id}/update_status`,
+            {
+              status,
+              notes,
+            },
+          );
+        }
+
+        await this.$toasted.success(this.$t('~~Successfully Updated'));
+        this.clearCall();
+        this.clearCase();
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
+    },
+    clearCase() {
+      this.caseId = null;
+      this.isEditing = false;
+    },
     toggleView(view) {
       this.showingMap = false;
       this.showingTable = false;
@@ -412,6 +533,26 @@ export default {
       return this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,
       );
+    },
+    async addMarkerToMap(location) {
+      let markerLocation = location;
+      if (!markerLocation) {
+        markerLocation = this.map.getCenter();
+      }
+
+      const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
+        this.map,
+      );
+      marker.on('dragend', function (event) {
+        EventBus.$emit('updatedWorksiteLocation', event.target.getLatLng());
+      });
+      this.map.setView([markerLocation.lat, markerLocation.lng], 15);
+      marker
+        .bindTooltip(this.$t('casesVue.drag_pin_to_correct_location'), {
+          direction: 'top',
+        })
+        .openTooltip();
+      this.toggleView('showingMap');
     },
     async jumpToCase() {
       this.toggleView('showingMap');
@@ -474,14 +615,17 @@ export default {
       this.allWorksiteCount = response.data.results.length;
       return response.data.results;
     },
-    async dialPhoneNumber(number) {
-      const dnisResponse = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis__contains=${number}&sort=-created_at&limit=1`,
-      );
-      const [caller] = dnisResponse.data.results;
-      this.setOutgoingCall({});
-      this.setCaller(caller);
-      await this.$phoneService.dial(number);
+    async onLoggedIn() {
+      if (Number(this.stats.inQueue || this.stats.routing || 0) === 0) {
+        await this.dialNextOutbound();
+      }
+    },
+  },
+  watch: {
+    caller(newValue, oldValue) {
+      if (!oldValue && newValue) {
+        EventBus.$emit('phone_component:open', 'agent');
+      }
     },
   },
 };
@@ -491,17 +635,6 @@ export default {
 .page-grid {
   display: grid;
   grid-template-columns: auto 350px;
-}
-.slide-fade-enter-active {
-  transition: all 0.8s ease;
-}
-.slide-fade-leave-active {
-  transition: all 0.8s ease;
-}
-.slide-fade-enter,
-.slide-fade-leave-to {
-  transform: translateY(3rem);
-  opacity: 0;
 }
 .phone-button {
   @apply shadow w-12 h-12 my-1 bg-white cursor-pointer;

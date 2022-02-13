@@ -9,12 +9,14 @@ const AppState = {
   gateway: {},
   needsWelcome: true,
   callState: 'AWAY',
+  callType: null,
   languages: [],
 };
 
 // getters
 const getters = {
   getCallState: (state) => state.callState,
+  getCallType: (state) => state.callType,
   getCaller: (state) => state.caller,
   getIncomingCall: (state) => state.incomingCall,
   getOutgoingCall: (state) => state.outgoingCall,
@@ -37,6 +39,9 @@ const getters = {
   },
   isOutboundCall: (state) => {
     return state.callState === 'ENGAGED-OUTBOUND';
+  },
+  isTransitioning: (state) => {
+    return state.callState === 'TRANSITION';
   },
   getLanguages: (state) => state.languages,
 };
@@ -72,6 +77,16 @@ const mutations = {
   },
   setState(state, newState) {
     state.callState = newState;
+  },
+  setCallType(state, newType) {
+    state.callType = newType;
+  },
+  clearCall(state) {
+    state.call = null;
+    state.incomingCall = null;
+    state.outgoingCall = null;
+    state.caller = null;
+    state.callType = null;
   },
   setGeneralStats(state, stats) {
     state.stats = stats;

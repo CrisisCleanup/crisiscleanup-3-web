@@ -539,7 +539,7 @@ export default {
     },
     async callOutbound() {
       const dnisResponse = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis__contains=${this.nextOutbound.phone_number}&sort=-created_at&limit=1`,
+        `${process.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis=${this.nextOutbound.phone_number}&sort=-created_at&limit=1`,
       );
       const [caller] = dnisResponse.data.results;
       this.setOutgoingCall(this.nextOutbound);

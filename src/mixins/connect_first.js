@@ -1,34 +1,32 @@
 import { mapGetters, mapMutations, mapState } from 'vuex';
+import { parsePhoneNumber } from 'libphonenumber-js';
 import User from '@/models/User';
 import PhoneStatus from '@/models/PhoneStatus';
+import Incident from '@/models/Incident';
+import PhoneOutbound from '@/models/PhoneOutbound';
+import { getErrorMessage } from '@/utils/errors';
+import { CallType } from '@/models/phone/Contact';
 
 export default {
   data() {
     return {
       currentAgent: null,
+      dialing: false,
     };
-  },
-  async mounted() {
-    try {
-      const { data } = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/phone_agents/me`,
-      );
-      this.currentAgent = data;
-    } catch {
-      this.currentAgent = null;
-    }
   },
   computed: {
     ...mapGetters('phone_legacy', [
       'isTakingCalls',
       'isNotTakingCalls',
       'isOnCall',
+      'isTransitioning',
       'isInboundCall',
       'isOutboundCall',
     ]),
     ...mapState('incident', ['currentIncidentId']),
     ...mapState('phone_legacy', [
       'callState',
+      'callType',
       'call',
       'caller',
       'incomingCall',
@@ -37,9 +35,7 @@ export default {
       'agentStats',
     ]),
     languages() {
-      return this.currentUser.languages.map(
-        ({ name_t }) => name_t.split(' ')[0],
-      );
+      return this.currentUser.languages;
     },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
@@ -47,15 +43,33 @@ export default {
     statuses() {
       return PhoneStatus.all();
     },
+    currentIncident() {
+      return Incident.find(this.currentIncidentId);
+    },
   },
   methods: {
     ...mapMutations('phone_legacy', [
       'setOutgoingCall',
       'setIncomingCall',
+      'setCurrentCall',
       'setCaller',
       'setState',
+      'setCallType',
+      'clearCall',
     ]),
-    async loginPhone() {
+    async loadAgent() {
+      try {
+        const { data } = await this.$http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/phone_agents/me`,
+        );
+        this.currentAgent = data;
+      } catch (e) {
+        const { data } = await this.$phoneService.createAgent();
+        this.currentAgent = data;
+      }
+    },
+    async loginPhone(retry = true) {
+      await this.loadAgent();
       if (!this.languages.length) {
         await this.$toasted.error(
           this.$t('phoneDashboard.select_language_error'),
@@ -70,61 +84,105 @@ export default {
         return;
       }
 
-      await this.logoutPhone();
-      let username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME;
-      const password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD;
-      const agent_username = this.currentAgent?.agent_username;
-      if (agent_username) {
-        username = agent_username;
+      if (!this.$phoneService.loggedInAgentId) {
+        const password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD;
+        const agent_username = this.currentAgent?.agent_username;
+        try {
+          await this.$phoneService.login(agent_username, password);
+          this.$emit('onLoggedIn');
+        } catch (e) {
+          this.$log.debug(e);
+          if (retry) {
+            await this.logoutPhone();
+            await this.loginPhone(false);
+          }
+          throw e; // Rethrow for sentry
+        }
+      } else {
+        await this.setAvailable();
       }
-      try {
-        await this.$phoneService.login(username, password, this.currentAgent);
-      } catch (e) {
-        this.logoutPhone(true);
-        await this.$toasted.error(
-          this.$t('phoneDashboard.phone_system_login_error'),
-        );
-        throw e; // Rethrow for sentry
-      }
-      // Log.debug(`Logged in agents ${username}`);
-      // await this.getNextCall();
     },
-    async logoutPhone(clearAgent = false) {
+    async setAvailable() {
+      return this.$phoneService.changeState('AVAILABLE');
+    },
+    async setAway() {
+      return this.$phoneService.changeState('AWAY');
+    },
+    async resetPhoneSystem() {
+      this.clearCall();
+      await this.logoutPhone();
+    },
+    async logoutPhone() {
       await this.$phoneService.changeState('AWAY');
+      await this.logoutByPhoneNumber();
       const agent_id = this.currentAgent?.agent_id;
       if (agent_id) {
         await this.$phoneService.logout(agent_id);
       }
-      if (clearAgent) {
-        await this.$http.patch(
-          `${process.env.VUE_APP_API_BASE_URL}/phone_agents/${this.currentAgent.id}`,
-          {
-            agent_id: null,
-            agent_username: null,
-          },
+      await this.loadAgent();
+    },
+    async logoutByPhoneNumber() {
+      const parsedNumber = parsePhoneNumber(this.currentUser.mobile, 'US');
+      if (this.currentUser.mobile) {
+        await Promise.all(
+          this.$phoneService.queueIds.map((queueId) =>
+            this.$phoneService
+              .apiLoginsByPhone(
+                parsedNumber.formatNational().replace(/[^\d.]/g, ''),
+                queueId,
+              )
+              .then(async ({ data }) => {
+                if (data.length) {
+                  await Promise.all(
+                    data.map((login) =>
+                      this.$phoneService.apiLogoutAgent(login.agentId),
+                    ),
+                  );
+                  this.$phoneService.initPhoneService();
+                }
+                return null;
+              })
+              .catch(() => {}),
+          ),
         );
       }
     },
-    async getUserNameForAgent(agentId) {
+    async createOutboundCall(outbound, number) {
+      const dnisResponse = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/phone_dnis/${outbound.dnis1}`,
+      );
+      const caller = dnisResponse.data;
+      this.setCallType(CallType.OUTBOUND);
+      this.setOutgoingCall(outbound);
+      this.setCurrentCall(outbound);
+      this.setCaller(caller);
+      await this.$phoneService.dial(number);
+    },
+    async dialManualOutbound(number) {
+      this.dialing = true;
       try {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}`,
-          {
-            headers: {
-              Authorization: null,
-            },
-          },
-        );
-        return response.data.username;
-      } catch (e) {
-        await User.api().updateUserState(
-          {
-            currentAgentId: null,
-          },
-          null,
-          true,
-        );
-        return process.env.VUE_APP_PHONE_DEFAULT_USERNAME;
+        const outbound = await PhoneOutbound.api().createManual({
+          number,
+          incidentId: this.currentIncidentId,
+          userId: this.currentUser.id,
+          language: this.currentUser.primary_language.id,
+        });
+        await this.createOutboundCall(outbound, number);
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.dialing = false;
+      }
+    },
+    async dialNextOutbound() {
+      this.dialing = true;
+      try {
+        const outbound = await PhoneOutbound.api().getNextOutbound({
+          incidentId: this.currentIncidentId,
+        });
+        await this.createOutboundCall(outbound, outbound.phone_number);
+      } finally {
+        this.dialing = false;
       }
     },
   },

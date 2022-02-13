@@ -3,6 +3,7 @@ import store from '@/store';
 import Logger from '@/utils/log';
 import User from '@/models/User';
 import Incident from '@/models/Incident';
+import { CallType } from '@/models/phone/Contact';
 
 const LANGUAGE_ID_MAPPING = {
   2: process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
@@ -11,12 +12,6 @@ const LANGUAGE_ID_MAPPING = {
 
 const Log = Logger({
   name: 'phoneLegacy',
-  middlewares: [
-    (result) => {
-      result.unshift('[phoneLegacy] ');
-      return result;
-    },
-  ],
 });
 export default class PhoneService {
   constructor() {
@@ -37,7 +32,7 @@ export default class PhoneService {
       // Caution, this is prod
       socketDest: 'wss://c01-con.vacd.biz:8080/', // 'ws://d01-test.cf.dev:8080',
       callbacks: {
-        closeResponse: this.onCloseFunction,
+        closeResponse: this.onCloseFunction.bind(this),
         openResponse: this.onOpenFunction,
         newCallNotification: this.onNewCall.bind(this),
         addSessionNotification: this.onNewSession.bind(this),
@@ -51,37 +46,41 @@ export default class PhoneService {
 
   async apiLogoutAgent(agentId) {
     await window.vue.$http.post(
-      `https://3vmevqhqra.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agent/${agentId}/logout`,
+      `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}/logout`,
       {},
-      {
-        headers: {
-          Authorization: null,
-        },
-      },
-    );
-  }
-
-  async apiLogoutByUsername(username) {
-    await window.vue.$http.post(
-      `https://3vmevqhqra.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/username/${username}/logout`,
-      {},
-      {
-        headers: {
-          Authorization: null,
-        },
-      },
     );
   }
 
   async apiLoginsByPhone(phone, queue) {
     return window.vue.$http.get(
-      `https://3vmevqhqra.execute-api.us-east-1.amazonaws.com/dev/api/connectfirst/agentLogins?phone=${phone}&queue=${queue}`,
-      {
-        headers: {
-          Authorization: null,
-        },
-      },
+      `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/logins?phone=${phone}&queue=${queue}`,
     );
+  }
+
+  async createAgent() {
+    const response = await window.vue.$http.post(
+      `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents`,
+      {},
+    );
+    return response.data;
+  }
+
+  async getUserNameForAgent(agentId) {
+    try {
+      const response = await window.vue.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}`,
+      );
+      return response.data.username;
+    } catch (e) {
+      await User.api().updateUserState(
+        {
+          currentAgentId: null,
+        },
+        null,
+        true,
+      );
+      return process.env.VUE_APP_PHONE_DEFAULT_USERNAME;
+    }
   }
 
   async onNewCall(info) {
@@ -124,7 +123,7 @@ export default class PhoneService {
 
     this.store.commit('phone_legacy/setState', state);
     const dnisResponse = await window.vue.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis__contains=${info.ani}&sort=-created_at&limit=1`,
+      `${process.env.VUE_APP_API_BASE_URL}/phone_dnis?dnis=${info.ani}&sort=-created_at&limit=1`,
     );
     const [caller] = dnisResponse.data.results;
     this.store.commit('phone_legacy/setCaller', caller);
@@ -132,6 +131,7 @@ export default class PhoneService {
 
   onCloseFunction() {
     Log.debug('AgentLibrary closed');
+    this.initPhoneService();
   }
 
   async onNewSession(info) {
@@ -141,6 +141,7 @@ export default class PhoneService {
           'phone_legacy/setCurrentCall',
           this.store.getters['phone_legacy/getIncomingCall'],
         );
+        this.store.commit('phone_legacy/setCallType', CallType.INBOUND);
         this.store.commit('phone_legacy/setIncomingCall', null);
       } else {
         this.store.commit(
@@ -165,9 +166,13 @@ export default class PhoneService {
 
   endCallFunction(info) {
     Log.debug(info);
-    this.store.commit('phone_legacy/setIncomingCall', null);
-    this.store.commit('phone_legacy/setOutgoingCall', null);
-    this.changeState('AWAY');
+    if (Number(info.duration) === 0) {
+      this.store.commit('phone_legacy/clearCall');
+    } else {
+      this.store.commit('phone_legacy/setIncomingCall', null);
+      this.store.commit('phone_legacy/setOutgoingCall', null);
+      this.changeState('AWAY').then(() => {});
+    }
   }
 
   onGetStatsAgent(info) {
@@ -185,7 +190,6 @@ export default class PhoneService {
   login(
     username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME,
     password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD,
-    currentAgent = null,
   ) {
     const currentUser = User.find(this.store.getters['auth/userId']);
     return new Promise((resolve, reject) => {
@@ -197,31 +201,13 @@ export default class PhoneService {
       this.cf.loginAgent(
         username,
         password,
-        (data) => {
+        async (data) => {
           Log.debug('Logged in agent', data);
           if (data.status === 'FAILURE') {
-            throw new Error(window.vue.$t('phoneDashboard.phone_no_log_in'));
+            reject(new Error(window.vue.$t('phoneDashboard.phone_no_log_in')));
+            return;
           }
-          this.loggedInAgentId = data.agentSettings.agentId;
-
-          if (currentAgent) {
-            this.$http.patch(
-              `${process.env.VUE_APP_API_BASE_URL}/phone_agents/${currentAgent.id}`,
-              {
-                agent_id: data.agentSettings.agentId,
-                agent_username: data.agentSettings.username,
-              },
-            );
-          } else {
-            this.$http.post(
-              `${process.env.VUE_APP_API_BASE_URL}/phone_agents`,
-              {
-                user: currentUser.id,
-                agent_id: data.agentSettings.agentId,
-                agent_username: data.agentSettings.username,
-              },
-            );
-          }
+          this.loggedInAgentId = data.agentSettings?.agentId;
 
           const queueIds = [];
 
@@ -255,16 +241,14 @@ export default class PhoneService {
                   )
                 ) {
                   Log.debug('Existing login found. Setting status');
-                  this.changeState('AVAILABLE');
-                  resolve();
+                  this.changeState('AVAILABLE').then(() => resolve());
                 } else {
                   this.logout(data.agentSettings.agentId);
                   reject();
                 }
               } else {
                 Log.debug('AgentLibrary successfully logged in');
-                this.changeState('AVAILABLE');
-                resolve();
+                this.changeState('AVAILABLE').then(() => resolve());
               }
             },
           );
@@ -297,11 +281,14 @@ export default class PhoneService {
             state = 'ENGAGED-OUTBOUND';
           }
         } else {
-          state = newState;
+          state = setAgentStateResponse.currentState;
         }
 
         this.store.commit('phone_legacy/setState', state);
-        Log.debug('Set agent state response', setAgentStateResponse);
+        window.vue.$log.debug(
+          'Set agent state response',
+          setAgentStateResponse,
+        );
         resolve();
       });
     });
@@ -332,11 +319,10 @@ export default class PhoneService {
     return new Promise((resolve) => {
       this.cf.hangup(this.callInfo.sessionId);
       // TODO: inbound calls are not handling this hangup function correctly, I suspect we need to handle offhookTerm differently!
-      this.store.commit('phone_legacy/setState', 'AVAILABLE');
       Log.debug(this.store.callstate);
       this.cf.offhookTerm((offhookTermResponse) => {
         Log.debug('Offhook term response', offhookTermResponse);
-        resolve();
+        this.changeState('AWAY').then(() => resolve());
       });
     });
   }

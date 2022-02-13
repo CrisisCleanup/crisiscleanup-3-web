@@ -1,6 +1,7 @@
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import { RRule } from 'rrule';
 import _ from 'lodash';
+import * as moment from 'moment';
 import enums from '@/store/modules/enums';
 import { colors as iconColors, templates } from '@/icons/icons_templates';
 import Organization from '@/models/Organization';
@@ -103,6 +104,12 @@ export const secondsToHm = (seconds) => {
   const hDisplay = `${h}h `;
   const mDisplay = `${m}m`;
   return hDisplay + mDisplay;
+};
+
+export const formatSeconds = (seconds) => {
+  return moment.duration(seconds, 's').format('hh:mm:ss', {
+    trim: false,
+  });
 };
 
 export const capitalize = (value) => {

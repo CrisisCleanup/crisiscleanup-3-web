@@ -1,4 +1,4 @@
-import { first, isArray, isNil, omitBy } from 'lodash';
+import { isArray, isNil, omitBy } from 'lodash';
 import CCUModel from '@/models/model';
 
 export default class PhoneOutbound extends CCUModel {
@@ -85,14 +85,13 @@ export default class PhoneOutbound extends CCUModel {
         return data;
       },
       async callOutbound(id, { isManual = false } = {}) {
-        const result = this.post(
+        return this.post(
           `/phone_outbound/${id}/call`,
           {
             manual: isManual,
           },
           { save: false },
         );
-        return result;
       },
       async updateStatus(
         id,
@@ -118,7 +117,7 @@ export default class PhoneOutbound extends CCUModel {
           `/phone_outbound`,
           omitBy(
             {
-              dnis1: number,
+              phone_number: number,
               incident_id: isArray(incidentId) ? incidentId : [incidentId],
               ani,
               language,
@@ -127,7 +126,8 @@ export default class PhoneOutbound extends CCUModel {
             isNil,
           ),
         );
-        return first(resp.entities);
+        const [outbound] = resp.entities.phone_outbound || [];
+        return outbound;
       },
     },
   };

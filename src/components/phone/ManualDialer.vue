@@ -35,7 +35,8 @@
     <base-button
       variant="solid"
       class="px-5 py-1 my-3"
-      :text="$t('~~Dial')"
+      :text="dialing ? $t('~~Dialing') : $t('~~Dial')"
+      :disabled="dialing"
       :action="() => $emit('onDial', `${countryCode}${phoneNumber}`)"
     ></base-button>
   </div>
@@ -44,6 +45,12 @@
 <script>
 export default {
   name: 'ManualDialer',
+  props: {
+    dialing: {
+      type: Boolean,
+      default: false,
+    },
+  },
   data() {
     return {
       countryCode: null,
