@@ -230,7 +230,10 @@
               </template>
               <template v-slot:component>
                 <div>
-                  <Agent @onLoggedIn="onLoggedIn" />
+                  <Agent
+                    @onLoggedIn="onLoggedIn"
+                    @onToggleOutbounds="onToggleOutbounds"
+                  />
                   <tabs
                     :details="false"
                     v-if="caller"
@@ -379,6 +382,7 @@ export default {
       searchWorksites: [],
       searchingWorksites: false,
       dialing: false,
+      serveOutbounds: false,
     };
   },
   async mounted() {
@@ -616,9 +620,15 @@ export default {
       return response.data.results;
     },
     async onLoggedIn() {
-      if (Number(this.stats.inQueue || this.stats.routing || 0) === 0) {
+      if (
+        this.serveOutbounds &&
+        Number(this.stats.inQueue || this.stats.routing || 0) === 0
+      ) {
         await this.dialNextOutbound();
       }
+    },
+    onToggleOutbounds(value) {
+      this.serveOutbounds = value;
     },
   },
   watch: {
