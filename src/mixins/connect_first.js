@@ -85,7 +85,8 @@ export default {
       }
 
       if (!this.$phoneService.loggedInAgentId) {
-        const password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD;
+        const password =
+          process.env.VUE_APP_PHONE_DEFAULT_PASSWORD || 'volunteer';
         const agent_username = this.currentAgent?.agent_username;
         try {
           await this.$phoneService.login(agent_username, password);
@@ -96,7 +97,6 @@ export default {
             await this.logoutPhone();
             await this.loginPhone(false);
           }
-          throw e; // Rethrow for sentry
         }
       } else {
         await this.setAvailable();
