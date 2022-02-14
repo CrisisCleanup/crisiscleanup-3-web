@@ -127,6 +127,11 @@ jobs:
             SENTRY_DSN=${{ secrets.SENTRY_DSN }}
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
             SENTRY_PROPERTIES="sentry.properties"
+            VUE_APP_PHONE_DEFAULT_USERNAME="english"
+            VUE_APP_PHONE_DEFAULT_PASSWORD="volunteer"
+            VUE_APP_ENGLISH_PHONE_GATEWAY="109989"
+            VUE_APP_SPANISH_PHONE_GATEWAY="109989"
+            VUE_APP_DEFAULT_CALLER_ID="2722003211"
           tags: |
             ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ github.event.inputs.stage }}
