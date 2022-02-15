@@ -11,6 +11,7 @@ const AppState = {
   callState: 'AWAY',
   callType: null,
   languages: [],
+  callHistory: null,
 };
 
 // getters
@@ -96,6 +97,9 @@ const mutations = {
   },
   setLanguages(state, languages) {
     state.languages = languages;
+  },
+  setCallHistory(state, callHistory) {
+    state.callHistory = callHistory;
   },
 };
 

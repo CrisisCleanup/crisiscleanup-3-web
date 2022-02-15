@@ -273,6 +273,23 @@
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
+              name="history"
+              class="phone-button"
+              icon="phone-history"
+              icon-size="large"
+              icon-class="p-1"
+              component-class="w-144 -ml-144"
+              v-if="callHistory"
+            >
+              <template v-slot:component>
+                <CallHistory
+                  :table-body-style="{ height: '300px' }"
+                  :calls="callHistory"
+                  @row:click="({ mobile }) => {}"
+                />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
               v-if="stats.inQueue"
               name="stats"
               class="phone-button"
@@ -347,10 +364,12 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import { EventBus } from '@/event-bus';
 import GeneralStats from '@/components/phone/GeneralStats';
 import AgentStats from '@/components/phone/AgentStats';
+import CallHistory from '@/components/phone/Widgets/CallHistory';
 
 export default {
   name: 'PhoneNew',
   components: {
+    CallHistory,
     AgentStats,
     GeneralStats,
     UpdateStatus,
@@ -504,6 +523,7 @@ export default {
         await this.$toasted.success(this.$t('~~Successfully Updated'));
         this.clearCall();
         this.clearCase();
+        await this.loadAgent();
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

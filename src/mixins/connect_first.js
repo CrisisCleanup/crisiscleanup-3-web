@@ -33,6 +33,7 @@ export default {
       'outgoingCall',
       'stats',
       'agentStats',
+      'callHistory',
     ]),
     languages() {
       return this.currentUser.languages;
@@ -55,6 +56,7 @@ export default {
       'setCaller',
       'setState',
       'setCallType',
+      'setCallHistory',
       'clearCall',
     ]),
     async loadAgent() {
@@ -67,6 +69,11 @@ export default {
         const { data } = await this.$phoneService.createAgent();
         this.currentAgent = data;
       }
+
+      const callHistoryResponse = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/phone_agents/call_history`,
+      );
+      this.setCallHistory(callHistoryResponse.data);
     },
     async loginPhone(retry = true) {
       await this.loadAgent();
@@ -86,9 +93,17 @@ export default {
 
       if (!this.$phoneService.loggedInAgentId) {
         const password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD;
-        const agent_username = this.currentAgent?.agent_username;
+
+        if (!this.currentAgent?.agent_username) {
+          const { data } = await this.$phoneService.createAgent();
+          this.currentAgent = data;
+        }
+
         try {
-          await this.$phoneService.login(agent_username, password);
+          await this.$phoneService.login(
+            this.currentAgent.agent_username,
+            password,
+          );
           this.$emit('onLoggedIn');
         } catch (e) {
           this.$log.debug(e);

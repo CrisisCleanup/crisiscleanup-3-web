@@ -1,15 +1,15 @@
 <template>
   <TitledCard
-    :loading="!callHistoryReady"
+    :loading="!callHistoryReady && !calls"
     :title="$t('phoneDashboard.last_10_calls')"
   >
     <div class="card-container overflow-auto h-full">
       <Table
         @rowClick="(payload) => $emit('row:click', payload)"
-        :body-style="{ overflow: 'auto' }"
+        :body-style="{ overflow: 'auto', ...tableBodyStyle }"
         :columns="historyCols"
         :data="historyData"
-        v-if="callHistoryReady"
+        v-if="callHistoryReady || calls"
       >
         <template #incident="{ item }">
           <div class="justify-center flex flex-grow">
@@ -80,6 +80,18 @@ export default {
   name: 'CallHistory',
   components: { TitledCard, Table, DisasterIcon },
   mixins: [UserMixin, ValidateMixin, WorksitesMixin],
+  props: {
+    calls: {
+      type: Array,
+      default: null,
+    },
+    tableBodyStyle: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
+  },
   methods: {
     getWorkTypeStyle(worktype) {
       const { fillColor } = this.getWorktypeColors(worktype);
@@ -99,8 +111,9 @@ export default {
       'callHistory',
     ]),
     historyData() {
-      if (!this.callHistoryReady) return [];
-      const calls = this.callHistory.map(
+      if (!this.callHistoryReady && !this.calls) return [];
+      const calls = this.calls || this.callHistory;
+      return calls.map(
         ({ phone_number, caller_name, status, notes, ...metrics }) => ({
           name: caller_name,
           mobile: this.validatePhoneNumber(phone_number).newValue,
@@ -109,7 +122,6 @@ export default {
           ...metrics,
         }),
       );
-      return calls;
     },
     historyCols() {
       return [

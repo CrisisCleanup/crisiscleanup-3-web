@@ -12,7 +12,11 @@
         </div>
       </slot>
     </div>
-    <div class="phone-component absolute w-84" v-show="showComponent">
+    <div
+      class="phone-component absolute w-84 -ml-84"
+      :class="componentClass"
+      v-show="showComponent"
+    >
       <slot name="component"></slot>
     </div>
   </div>
@@ -42,6 +46,7 @@ export default {
     name: { type: String, default: null, required: true },
     icon: { type: String, default: null, required: false },
     iconClass: { type: String, default: null, required: false },
+    componentClass: { type: String, default: null, required: false },
     iconSize: { type: String, default: null, required: false },
   },
   methods: {
@@ -56,7 +61,6 @@ export default {
 
 <style scoped>
 .phone-component {
-  margin-left: -21rem;
   margin-top: -3rem;
   @apply shadow bg-white;
 }
