@@ -41,7 +41,7 @@ const routes = [
   {
     path: '/phone-new',
     component: PhoneNew,
-    name: 'nav.phone',
+    name: 'nav.phone_new',
     meta: {
       layout: 'authenticated',
     },

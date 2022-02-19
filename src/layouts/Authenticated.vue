@@ -14,7 +14,7 @@
           class="sidebar--grid"
           :key="JSON.stringify(currentUser && currentUser.permissions)"
         />
-        <Slide width="150" v-else>
+        <Slide width="125" v-else>
           <NavMenu
             :routes="routes"
             :logo-route="logoRoute"
@@ -23,6 +23,7 @@
           />
         </Slide>
         <Header
+          :class="$mq === 'sm' ? 'ml-6' : ''"
           :current-incident="currentIncident"
           :incidents="incidents"
           @update:incident="handleChange"
@@ -469,7 +470,7 @@ body {
   height: 20px;
   left: 15px;
   position: absolute;
-  top: 30px;
+  top: 15px;
   width: 25px;
 }
 

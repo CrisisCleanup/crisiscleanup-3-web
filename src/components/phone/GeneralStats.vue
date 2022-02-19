@@ -44,6 +44,7 @@ export default {
       await PhoneOutbound.api().getRemainingCallbackCount(
         this.currentIncidentId,
       );
+    this.$emit('onRemainingCallbacks', this.remainingCallbacks);
   },
 };
 </script>

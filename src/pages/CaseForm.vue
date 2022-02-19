@@ -571,54 +571,61 @@ export default {
     },
   },
   async mounted() {
-    this.ready = false;
-    if (this.worksiteId) {
-      try {
-        await Worksite.api().fetch(this.worksiteId, this.incidentId);
-      } catch (e) {
-        this.$emit('clearWorksite');
-        return;
-      }
-      this.worksite = Worksite.find(this.worksiteId);
-      this.addressSet = true;
-      if (this.$route.query.showOnMap) {
-        this.$emit('jumpToCase', this.worksiteId);
-      }
-    } else {
-      this.worksite = { ...StorageService.getItem('currentWorksite') };
-
-      if (!this.worksite.incident) {
-        this.worksite = {
-          form_data: [],
-          notes: [],
-          formFields: {},
-          auto_contact_frequency_t: this.currentIncident.auto_contact
-            ? 'formOptions.often'
-            : 'formOptions.never',
-          ...this.dataPrefill,
-        };
-      }
-
-      this.worksite.incident = this.incidentId;
-
-      if (this.pdaId) {
-        const response = await this.$http.get(
-          `${process.env.VUE_APP_API_BASE_URL}/pdas/${this.pdaId}`,
-        );
-        this.worksite = new Worksite(response.data);
-        delete this.worksite.id;
-      }
-    }
-    this.dynamicFields = this.worksite.form_data.reduce(function (map, obj) {
-      map[obj.field_key] = obj.field_value;
-      return map;
-    }, {});
-
-    StorageService.removeItem('currentWorksite');
-    this.ready = true;
-    this.$nextTick(() => this.calcFormStyle());
+    await this.initForm();
   },
   methods: {
+    async initForm() {
+      this.ready = false;
+      if (this.worksiteId) {
+        try {
+          await Worksite.api().fetch(this.worksiteId, this.incidentId);
+        } catch (e) {
+          this.$emit('clearWorksite');
+          return;
+        }
+        this.worksite = Worksite.find(this.worksiteId);
+        this.addressSet = true;
+        if (this.$route.query.showOnMap) {
+          this.$emit('jumpToCase', this.worksiteId);
+        }
+      } else {
+        this.worksite = {
+          ...StorageService.getItem('currentWorksite'),
+          ...this.dataPrefill,
+        };
+
+        if (!this.worksite.incident) {
+          this.worksite = {
+            form_data: [],
+            notes: [],
+            formFields: {},
+            auto_contact_frequency_t: this.currentIncident.auto_contact
+              ? 'formOptions.often'
+              : 'formOptions.never',
+            ...this.dataPrefill,
+          };
+        }
+
+        this.worksite.incident = this.incidentId;
+
+        if (this.pdaId) {
+          const response = await this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/pdas/${this.pdaId}`,
+          );
+          this.worksite = new Worksite(response.data);
+          delete this.worksite.id;
+        }
+      }
+      this.dynamicFields = this.worksite.form_data.reduce(function (map, obj) {
+        map[obj.field_key] = obj.field_value;
+        return map;
+      }, {});
+
+      StorageService.removeItem('currentWorksite');
+      this.ready = true;
+      this.$nextTick(() => this.calcFormStyle());
+    },
+
     async saveNote(currentNote) {
       const notes = [...this.worksite.notes];
       notes.push({

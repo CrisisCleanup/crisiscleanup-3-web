@@ -13,8 +13,8 @@
       </slot>
     </div>
     <div
-      class="phone-component absolute w-84 -ml-84"
-      :class="componentClass"
+      class="phone-component absolute"
+      :class="[componentClass, $mq === 'sm' ? 'w-144 -ml-144' : 'w-84 -ml-84']"
       v-show="showComponent"
     >
       <slot name="component"></slot>

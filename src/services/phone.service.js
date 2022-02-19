@@ -114,6 +114,15 @@ export default class PhoneService {
             );
           }),
         );
+
+        await Incident.api().fetchById(response.data.incident_id[0]);
+        await User.api().updateUserState({
+          incident: response.data.incident_id[0],
+        });
+        this.store.commit(
+          'incident/setCurrentIncidentId',
+          response.data.incident_id[0],
+        );
       } catch (error) {
         Log.debug('Error requesting incident access: ', error);
       }
@@ -166,7 +175,7 @@ export default class PhoneService {
 
   endCallFunction(info) {
     Log.debug(info);
-    if (Number(info.duration) === 0) {
+    if (!info.callDts) {
       this.store.commit('phone_legacy/clearCall');
     } else {
       this.store.commit('phone_legacy/setIncomingCall', null);

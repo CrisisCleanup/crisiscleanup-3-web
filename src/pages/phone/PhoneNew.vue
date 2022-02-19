@@ -1,6 +1,9 @@
 <template>
-  <div class="flex-grow page-grid h-full">
-    <div class="flex flex-col">
+  <div
+    class="flex-grow h-full"
+    :class="$mq === 'sm' ? 'page-grid-mobile' : 'page-grid'"
+  >
+    <div v-if="$mq !== 'sm'" class="flex flex-col">
       <div class="flex items-center justify-between">
         <div class="flex py-3 px-2" style="min-width: 80px">
           <ccu-icon
@@ -59,27 +62,7 @@
       </div>
       <div class="flex-grow">
         <div v-show="showingMap" class="relative h-full select-none">
-          <div
-            id="map"
-            ref="map"
-            class="absolute top-0 left-0 right-0 bottom-0"
-          ></div>
-          <div
-            v-if="mapLoading"
-            style="z-index: 1001"
-            class="
-              absolute
-              top-0
-              left-0
-              right-0
-              bottom-0
-              flex
-              items-center
-              justify-center
-            "
-          >
-            <spinner />
-          </div>
+          <PhoneMap :map-loading="mapLoading" />
         </div>
         <div v-show="showingTable" class="p-2 h-full shadow">
           <AjaxTable
@@ -132,9 +115,22 @@
         @onPrintWorksite="() => {}"
         @onShowHistory="showHistory = true"
       />
-      <div v-else class="h-12 flex items-center cursor-pointer px-2 border">
-        <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
-        <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
+      <div v-else class="h-12 px-2 border flex items-center justify-between">
+        <div class="flex items-center cursor-pointer">
+          <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
+          <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
+        </div>
+        <base-button
+          type="bare"
+          icon="map"
+          class="text-gray-700 pt-2"
+          :action="
+            () => {
+              showMobileMap = true;
+            }
+          "
+          :text="$t('~~Show Map')"
+        />
       </div>
       <div v-if="showingDetails" class="flex items-center justify-between px-2">
         <base-button
@@ -185,7 +181,8 @@
         />
         <transition name="slide-fade">
           <div
-            class="absolute flex flex-col -ml-12 mt-12"
+            class="absolute flex flex-col"
+            :class="$mq === 'sm' ? 'right-0' : '-ml-12 mt-12'"
             style="z-index: 1002"
           >
             <PhoneComponentButton class="phone-button" name="agent">
@@ -239,6 +236,7 @@
                     v-if="caller"
                     class="w-full"
                     ref="tabs"
+                    @mounted="setTabs"
                   >
                     <tab :name="$t('~~Active Call')">
                       <ActiveCall
@@ -265,7 +263,7 @@
             >
               <template v-slot:component>
                 <ManualDialer
-                  class="bg-white w-84 p-2"
+                  class="bg-white p-2"
                   style="z-index: 1002"
                   @onDial="dialManualOutbound"
                   :dialing="dialing"
@@ -285,7 +283,11 @@
                 <CallHistory
                   :table-body-style="{ height: '300px' }"
                   :calls="callHistory"
-                  @row:click="({ mobile }) => {}"
+                  @row:click="
+                    ({ mobile }) => {
+                      dialManualOutbound(mobile);
+                    }
+                  "
                 />
               </template>
             </PhoneComponentButton>
@@ -297,12 +299,14 @@
               <template v-slot:button>
                 <div class="w-full h-full flex items-center justify-center">
                   <div class="text-xl">
-                    {{ stats.inQueue || 0 }}
+                    {{ Number(stats.inQueue) + remainingCallbacks || 0 }}
                   </div>
                 </div>
               </template>
               <template v-slot:component>
-                <GeneralStats class="w-84" />
+                <GeneralStats
+                  @onRemainingCallbacks="remainingCallbacks = $event"
+                />
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
@@ -314,7 +318,7 @@
               v-if="agentStats.agentId"
             >
               <template v-slot:component>
-                <AgentStats class="w-84" />
+                <AgentStats />
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
@@ -325,7 +329,7 @@
               icon-class="p-1"
             >
               <template v-slot:component>
-                <div class="w-84 flex items-center justify-center p-3">
+                <div class="flex items-center justify-center p-3">
                   <base-button
                     size="medium"
                     :text="$t('~~Reset Phone System')"
@@ -337,6 +341,26 @@
             </PhoneComponentButton>
           </div>
         </transition>
+      </div>
+      <div
+        v-show="$mq === 'sm' && showMobileMap"
+        class="absolute right-0 top-0 left-0 bottom-0"
+      >
+        <PhoneMap></PhoneMap>
+        <div class="absolute w-full flex items-center justify-center bottom-0">
+          <base-button
+            class="mb-12"
+            variant="solid"
+            size="lg"
+            style="z-index: 1002"
+            :text="$t('Close Map')"
+            :action="
+              () => {
+                showMobileMap = false;
+              }
+            "
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -365,10 +389,12 @@ import { EventBus } from '@/event-bus';
 import GeneralStats from '@/components/phone/GeneralStats';
 import AgentStats from '@/components/phone/AgentStats';
 import CallHistory from '@/components/phone/Widgets/CallHistory';
+import PhoneMap from '@/pages/phone/PhoneMap';
 
 export default {
   name: 'PhoneNew',
   components: {
+    PhoneMap,
     CallHistory,
     AgentStats,
     GeneralStats,
@@ -402,6 +428,9 @@ export default {
       searchingWorksites: false,
       dialing: false,
       serveOutbounds: false,
+      tabs: null,
+      showMobileMap: false,
+      remainingCallbacks: 0,
     };
   },
   async mounted() {
@@ -529,8 +558,11 @@ export default {
       }
     },
     clearCase() {
-      this.caseId = null;
+      this.worksiteId = null;
       this.isEditing = false;
+    },
+    setTabs(tabs) {
+      this.tabs = tabs;
     },
     toggleView(view) {
       this.showingMap = false;
@@ -657,6 +689,25 @@ export default {
         EventBus.$emit('phone_component:open', 'agent');
       }
     },
+    isOnCall(newValue, oldValue) {
+      if (oldValue && !newValue) {
+        this.tabs.nextTab();
+      }
+    },
+    currentIncidentId(value) {
+      if (value) {
+        if (this.map) {
+          this.map.eachLayer((layer) => {
+            if (layer.key === 'worksite_layer') {
+              this.map.removeLayer(layer);
+            }
+          });
+          this.getWorksites().then((markers) => {
+            this.loadMap(markers);
+          });
+        }
+      }
+    },
   },
 };
 </script>
@@ -666,6 +717,11 @@ export default {
   display: grid;
   grid-template-columns: auto 350px;
 }
+
+.page-grid-mobile {
+  grid-template-columns: auto;
+}
+
 .phone-button {
   @apply shadow w-12 h-12 my-1 bg-white cursor-pointer;
 }
