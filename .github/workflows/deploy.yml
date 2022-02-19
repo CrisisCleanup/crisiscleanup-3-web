@@ -59,8 +59,8 @@ jobs:
           echo "VUE_APP_PORTAL_KEY=crisiscleanup_demo" >> $GITHUB_ENV
           echo "VUE_APP_PHONE_DEFAULT_USERNAME=english" >> $GITHUB_ENV
           echo "VUE_APP_PHONE_DEFAULT_PASSWORD=volunteer" >> $GITHUB_ENV
-          echo "VUE_APP_ENGLISH_PHONE_GATEWAY=109989" >> $GITHUB_ENV
-          echo "VUE_APP_SPANISH_PHONE_GATEWAY=109989" >> $GITHUB_ENV
+          echo "VUE_APP_ENGLISH_PHONE_GATEWAY=216961" >> $GITHUB_ENV
+          echo "VUE_APP_SPANISH_PHONE_GATEWAY=216962" >> $GITHUB_ENV
           echo "VUE_APP_DEFAULT_CALLER_ID=2722003211" >> $GITHUB_ENV
           echo "NODE_ENV=development" >> $GITHUB_ENV
 
@@ -76,8 +76,8 @@ jobs:
           echo "VUE_APP_CCP_INSTANCE=414df788-cd99-4580-ad07-f8af22246ce5" >> $GITHUB_ENV
           echo "VUE_APP_PHONE_DEFAULT_USERNAME=english" >> $GITHUB_ENV
           echo "VUE_APP_PHONE_DEFAULT_PASSWORD=volunteer" >> $GITHUB_ENV
-          echo "VUE_APP_ENGLISH_PHONE_GATEWAY=109989" >> $GITHUB_ENV
-          echo "VUE_APP_SPANISH_PHONE_GATEWAY=109989" >> $GITHUB_ENV
+          echo "VUE_APP_ENGLISH_PHONE_GATEWAY=216961" >> $GITHUB_ENV
+          echo "VUE_APP_SPANISH_PHONE_GATEWAY=216962" >> $GITHUB_ENV
           echo "VUE_APP_DEFAULT_CALLER_ID=2722003211" >> $GITHUB_ENV
           echo "NODE_ENV=production" >> $GITHUB_ENV
 
@@ -93,8 +93,8 @@ jobs:
           echo "VUE_APP_PORTAL_KEY=crisiscleanup_us" >> $GITHUB_ENV
           echo "VUE_APP_PHONE_DEFAULT_USERNAME=english" >> $GITHUB_ENV
           echo "VUE_APP_PHONE_DEFAULT_PASSWORD=volunteer" >> $GITHUB_ENV
-          echo "VUE_APP_ENGLISH_PHONE_GATEWAY=109989" >> $GITHUB_ENV
-          echo "VUE_APP_SPANISH_PHONE_GATEWAY=109989" >> $GITHUB_ENV
+          echo "VUE_APP_ENGLISH_PHONE_GATEWAY=216961" >> $GITHUB_ENV
+          echo "VUE_APP_SPANISH_PHONE_GATEWAY=216962" >> $GITHUB_ENV
           echo "VUE_APP_DEFAULT_CALLER_ID=2722003211" >> $GITHUB_ENV
           echo "NODE_ENV=production" >> $GITHUB_ENV
 
