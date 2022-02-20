@@ -803,13 +803,17 @@
           />
         </template>
         <template v-else-if="isNewWorksite">
-          <div class="text-left text-black">{{ $t('casesVue.new_case') }}</div>
-          <ccu-icon
-            :alt="$t('actions.cancel')"
-            size="xs"
-            type="cancel"
-            @click.native="clearWorksite"
-          />
+          <div class="flex items-center justify-between">
+            <div class="text-left text-black">
+              {{ $t('casesVue.new_case') }}
+            </div>
+            <ccu-icon
+              :alt="$t('actions.cancel')"
+              size="xs"
+              type="cancel"
+              @click.native="clearWorksite"
+            />
+          </div>
         </template>
         <template v-else>
           <CaseHeader

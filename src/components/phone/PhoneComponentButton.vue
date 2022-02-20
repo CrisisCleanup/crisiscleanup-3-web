@@ -14,9 +14,22 @@
     </div>
     <div
       class="phone-component absolute"
-      :class="[componentClass, $mq === 'sm' ? 'w-144 -ml-144' : 'w-84 -ml-84']"
+      :class="[componentClass, $mq === 'sm' ? 'w-120 -ml-120' : 'w-84 -ml-84']"
       v-show="showComponent"
     >
+      <div class="w-full relative mb-2">
+        <ccu-icon
+          :alt="$t('actions.cancel')"
+          size="xs"
+          type="cancel"
+          class="absolute right-0 p-2"
+          @click.native="
+            () => {
+              showComponent = false;
+            }
+          "
+        />
+      </div>
       <slot name="component"></slot>
     </div>
   </div>

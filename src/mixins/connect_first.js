@@ -114,6 +114,7 @@ export default {
         }
       } else {
         await this.setAvailable();
+        this.$emit('onLoggedIn');
       }
     },
     async setAvailable() {

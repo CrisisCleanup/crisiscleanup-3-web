@@ -8,7 +8,7 @@
     :style="formStyle"
   >
     <resize-observer @notify="calcFormStyle" />
-    <div class="intake-form" :class="noGrid && 'no-grid'">
+    <div class="intake-form" :class="(noGrid || $mq === 'sm') && 'no-grid'">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
@@ -367,6 +367,7 @@
         flex
         justify-between
       "
+      :class="$mq === 'sm' ? 'absolute w-2/3 bottom-0 mb-36 right-0' : ''"
     >
       <base-button
         size="medium"
@@ -1188,7 +1189,9 @@ export default {
       }
       const formHeight = parentHeight - topOffset;
       this.formStyle = {
-        'grid-template-rows': `${formHeight - 80}px 80px`,
+        'grid-template-rows': `calc(${
+          formHeight - 80
+        }px - var(--safe-area-inset-bottom)) 80px`,
       };
     },
   },
@@ -1203,6 +1206,8 @@ export default {
 
 .intake-form-container {
   --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  grid-template-columns: 1fr;
+  grid-template-rows: calc(100vh - 240px - var(--safe-area-inset-bottom));
   display: grid;
   &.no-grid {
     display: inherit;

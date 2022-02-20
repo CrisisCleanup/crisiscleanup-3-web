@@ -121,12 +121,16 @@
           <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
         </div>
         <base-button
+          v-if="$mq === 'sm'"
           type="bare"
           icon="map"
           class="text-gray-700 pt-2"
           :action="
             () => {
               showMobileMap = true;
+              $nextTick(() => {
+                map.invalidateSize();
+              });
             }
           "
           :text="$t('~~Show Map')"
@@ -434,8 +438,7 @@ export default {
     };
   },
   async mounted() {
-    const markers = await this.getWorksites();
-    this.loadMap(markers);
+    await this.init();
   },
   computed: {
     prefillData() {
@@ -508,6 +511,10 @@ export default {
     },
   },
   methods: {
+    async init() {
+      const markers = await this.getWorksites();
+      this.loadMap(markers);
+    },
     async completeCall({ status, notes }) {
       if (this.$refs.worksiteForm.dirtyFields.size) {
         const result = await this.$confirm({
@@ -684,6 +691,11 @@ export default {
     },
   },
   watch: {
+    worksiteId(newValue, oldValue) {
+      if (oldValue !== newValue) {
+        this.showMobileMap = false;
+      }
+    },
     caller(newValue, oldValue) {
       if (!oldValue && newValue) {
         EventBus.$emit('phone_component:open', 'agent');
