@@ -35,7 +35,6 @@
 import { throttle } from 'lodash';
 import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
-import { makeTableColumns } from '@/utils/table';
 
 export default {
   name: 'AjaxTable',

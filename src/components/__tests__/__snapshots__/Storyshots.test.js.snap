@@ -1291,6 +1291,64 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
     </button>
      
     <p>
+      phone-history
+    </p>
+  </div>
+  <div
+    class="flex flex-col border-2 text-center"
+  >
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
+      <img
+        alt=""
+        class="ccu-icon cursor-pointer xl"
+        src="IMAGE_MOCK"
+      />
+        
+      <!---->
+    </button>
+     
+    <p>
+      phone-stats
+    </p>
+  </div>
+  <div
+    class="flex flex-col border-2 text-center"
+  >
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
+      <img
+        alt=""
+        class="ccu-icon cursor-pointer xl"
+        src="IMAGE_MOCK"
+      />
+        
+      <!---->
+    </button>
+     
+    <p>
       phone-plus
     </p>
   </div>
@@ -2365,6 +2423,35 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
      
     <p>
       time
+    </p>
+  </div>
+  <div
+    class="flex flex-col border-2 text-center"
+  >
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
+      <img
+        alt=""
+        class="ccu-icon cursor-pointer xl"
+        src="IMAGE_MOCK"
+      />
+        
+      <!---->
+    </button>
+     
+    <p>
+      logout
     </p>
   </div>
 </div>
