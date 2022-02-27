@@ -65,7 +65,8 @@ export default {
           query: {
             incident_id: this.currentIncidentId,
             completion__lt: 1,
-            limit: this.remainingCallbacks || 1,
+            filter_ani: 1,
+            locked_at__isnull: true,
           },
         },
       });

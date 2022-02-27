@@ -70,7 +70,7 @@ export default class PhoneOutbound extends CCUModel {
       },
       async getRemainingCallbackCount(incidentId) {
         const phoneOutbound = await this.get(
-          `/phone_outbound?incident_id=${incidentId}&&completion__lt=1&limit=1`,
+          `/phone_outbound?incident_id=${incidentId}&completion__lt=1&limit=1&filter_ani=1&locked_at__isnull=True`,
         );
         const {
           response: { data },
@@ -122,6 +122,7 @@ export default class PhoneOutbound extends CCUModel {
               ani,
               language,
               locked_by: userId,
+              completion: 1,
             },
             isNil,
           ),

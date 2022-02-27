@@ -51,6 +51,19 @@ export default class PhoneService {
     );
   }
 
+  async apiUpdateStats(agentId) {
+    await window.vue.$http.post(
+      `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/${agentId}/update_stats`,
+      {},
+    );
+  }
+
+  async apiGetQueueStats() {
+    return window.vue.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/connect_first/stats`,
+    );
+  }
+
   async apiLoginsByPhone(phone, queue) {
     return window.vue.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents/logins?phone=${phone}&queue=${queue}`,
@@ -58,11 +71,10 @@ export default class PhoneService {
   }
 
   async createAgent() {
-    const response = await window.vue.$http.post(
+    await window.vue.$http.post(
       `${process.env.VUE_APP_API_BASE_URL}/connect_first/agents`,
       {},
     );
-    return response.data;
   }
 
   async getUserNameForAgent(agentId) {
@@ -182,6 +194,7 @@ export default class PhoneService {
       this.store.commit('phone_legacy/setOutgoingCall', null);
       this.changeState('AWAY').then(() => {});
     }
+    this.apiUpdateStats(this.loggedInAgentId).catch(() => {});
   }
 
   onGetStatsAgent(info) {

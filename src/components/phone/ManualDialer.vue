@@ -9,7 +9,7 @@
     <div class="grid grid-cols-3 my-1">
       <form-select
         v-model="countryCode"
-        :options="[$t('+1'), $t('+234')]"
+        :options="[$t('+1')]"
         indicator-icon="caret-down"
         select-classes="h-8 border bg-white text-sm"
         class="col-span-1 text-sm"
@@ -53,7 +53,7 @@ export default {
   },
   data() {
     return {
-      countryCode: null,
+      countryCode: this.$t('+1'),
       phoneNumber: null,
     };
   },

@@ -45,6 +45,7 @@
         :text="$t('~~Stop Taking Calls')"
       ></base-button>
       <base-checkbox
+        v-if="currentUser.isAdmin"
         class="p-0.5"
         @input="$emit('onToggleOutbounds', $event)"
         >{{ $t('Serve Outbound Calls') }}</base-checkbox

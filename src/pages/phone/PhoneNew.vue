@@ -171,6 +171,7 @@
             (worksite) => {
               worksiteId = worksite.id;
               isEditing = true;
+              tabs.selectTab(this.$refs.statusTab);
             }
           "
           @closeWorksite="clearCase"
@@ -192,40 +193,16 @@
             <PhoneComponentButton class="phone-button" name="agent">
               <template v-slot:button>
                 <div class="w-full h-full flex items-center justify-center">
-                  <div
-                    class="
-                      bg-primary-light
-                      h-7
-                      w-7
-                      rounded
-                      flex
-                      items-center
-                      justify-center
-                      relative
-                    "
-                  >
-                    {{ $t('~~GO') }}
-                    <span class="absolute inset-0 top-0 left-0">
-                      <div
-                        :class="{
-                          'bg-green-500': isTakingCalls,
-                          'bg-red-500': isNotTakingCalls,
-                        }"
-                        class="
-                          flex
-                          items-center
-                          justify-center
-                          border border-white
-                          rounded-full
-                          w-3
-                          h-3
-                          -mt-1.5
-                          -ml-1.5
-                          p-1.5
-                          leading-4
-                        "
-                      ></div>
-                    </span>
+                  <div class="flex items-center justify-center relative">
+                    <object
+                      :key="isTakingCalls"
+                      class="cursor-pointer"
+                      ref="icon"
+                      type="image/svg+xml"
+                      :data="ICON_MAP[ICONS.phone]"
+                      @loadeddata="setSvgStyle"
+                      @load="setSvgStyle"
+                    />
                   </div>
                 </div>
               </template>
@@ -248,7 +225,7 @@
                         @setCase="worksiteId = $event"
                       />
                     </tab>
-                    <tab :name="$t('~~Call Status')">
+                    <tab :name="$t('~~Call Status')" ref="statusTab">
                       <UpdateStatus
                         class="p-2"
                         @onCompleteCall="completeCall"
@@ -296,7 +273,7 @@
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
-              v-if="stats.inQueue"
+              v-if="Object.keys(stats).length"
               name="stats"
               class="phone-button"
             >
@@ -394,6 +371,8 @@ import GeneralStats from '@/components/phone/GeneralStats';
 import AgentStats from '@/components/phone/AgentStats';
 import CallHistory from '@/components/phone/Widgets/CallHistory';
 import PhoneMap from '@/pages/phone/PhoneMap';
+import { ICONS, ICON_MAP } from '@/constants';
+import { theme } from '@/../tailwind.config';
 
 export default {
   name: 'PhoneNew',
@@ -431,13 +410,18 @@ export default {
       searchWorksites: [],
       searchingWorksites: false,
       dialing: false,
-      serveOutbounds: false,
+      serveOutbounds: true,
       tabs: null,
       showMobileMap: false,
       remainingCallbacks: 0,
+      ICONS,
+      ICON_MAP,
     };
   },
   async mounted() {
+    if (this.currentUser.isAdmin) {
+      this.serveOutbounds = false;
+    }
     await this.init();
   },
   computed: {
@@ -512,6 +496,9 @@ export default {
   },
   methods: {
     async init() {
+      this.$phoneService.apiGetQueueStats().then((response) => {
+        this.setGeneralStats({ ...response.data });
+      });
       const markers = await this.getWorksites();
       this.loadMap(markers);
     },
@@ -538,7 +525,7 @@ export default {
       }
 
       try {
-        if (this.$phoneService.callInfo.callType === 'OUTBOUND') {
+        if (this.$phoneService.callInfo.callType === 'OUTBOUND' && status) {
           await PhoneOutbound.api().updateStatus(this.call.id, {
             statusId: status,
             worksiteId: this.worksiteId,
@@ -689,6 +676,22 @@ export default {
     onToggleOutbounds(value) {
       this.serveOutbounds = value;
     },
+    setSvgStyle() {
+      const svgDoc = this.$refs.icon.getSVGDocument();
+      const iconColor = this.isTakingCalls
+        ? theme.extend.colors['crisiscleanup-green']['500']
+        : theme.extend.colors['crisiscleanup-red']['500'];
+      if (svgDoc) {
+        svgDoc.getElementsByTagName('path')[0].style.fill = iconColor;
+        if (svgDoc.activeElement) {
+          svgDoc.activeElement.attributes.width.nodeValue = 14 * 1.8;
+          svgDoc.activeElement.attributes.height.nodeValue = 19 * 1.8;
+        }
+        svgDoc.addEventListener('click', () => {
+          EventBus.$emit('phone_component:open', 'agent');
+        });
+      }
+    },
   },
   watch: {
     worksiteId(newValue, oldValue) {
@@ -703,7 +706,7 @@ export default {
     },
     isOnCall(newValue, oldValue) {
       if (oldValue && !newValue) {
-        this.tabs.nextTab();
+        this.tabs.selectTab(this.$refs.statusTab);
       }
     },
     currentIncidentId(value) {

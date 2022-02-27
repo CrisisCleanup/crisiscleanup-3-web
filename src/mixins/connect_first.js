@@ -57,6 +57,7 @@ export default {
       'setState',
       'setCallType',
       'setCallHistory',
+      'setGeneralStats',
       'clearCall',
     ]),
     async loadAgent() {
@@ -116,6 +117,9 @@ export default {
         await this.setAvailable();
         this.$emit('onLoggedIn');
       }
+      this.$phoneService
+        .apiUpdateStats(this.$phoneService.loggedInAgentId)
+        .catch(() => {});
     },
     async setAvailable() {
       return this.$phoneService.changeState('AVAILABLE');
@@ -174,6 +178,7 @@ export default {
       await this.$phoneService.dial(number);
     },
     async dialManualOutbound(number) {
+      await this.loginPhone();
       this.dialing = true;
       try {
         const outbound = await PhoneOutbound.api().createManual({
