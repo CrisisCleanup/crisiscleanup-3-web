@@ -69,7 +69,7 @@
           :title="$t('adminOrganization.org_verified')"
         />
         <div class="text-xs opacity-25">
-          {{ $t('~~Survivor entered notes') }}
+          {{ $t('formLabels.survivor_notes') }}
         </div>
       </div>
     </div>

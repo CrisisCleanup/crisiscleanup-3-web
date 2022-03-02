@@ -4,17 +4,17 @@
       class="px-2 py-1 w-full text-white bg-crisiscleanup-lightblue-800"
       v-if="isTransitioning || (isTakingCalls && !isOnCall)"
     >
-      {{ $t('~~Connecting....') }}
+      {{ $t('phoneDashboard.connecting') }}
     </div>
     <div
       v-else-if="isOnCall"
       class="px-2 py-1 w-full text-white bg-crisiscleanup-dark-blue"
     >
-      <div v-if="isInboundCall">{{ $t('~~Inbound Call') }}</div>
-      <div v-if="isOutboundCall">{{ $t('~~Outbound Call') }}</div>
+      <div v-if="isInboundCall">{{ $t('phoneDashboard.inbound_call') }}</div>
+      <div v-if="isOutboundCall">{{ $t('phoneDashboard.outbound_call') }}</div>
     </div>
     <div class="px-2 py-1 w-full text-white bg-crisiscleanup-green-300" v-else>
-      {{ $t('~~Call Completed') }}
+      {{ $t('phoneDashboard.completed') }}
     </div>
 
     <div
@@ -44,12 +44,14 @@
       >
         {{
           `${caller.number_of_inbound_calls} ${$t(
-            '~~Calls',
-          )} | ${$moment().diff($moment(caller.created_at), 'days')} days`
+            'phoneDashboard.calls',
+          )} | ${$moment().diff($moment(caller.created_at), 'days')} | ${$t(
+            'phoneDashboard.days',
+          )}`
         }}
       </div>
     </div>
-    <div v-if="cards.length">{{ $t('~~Existing Cases') }}</div>
+    <div v-if="cards.length">{{ $t('phoneDashboard.existing_cases') }}</div>
     <div class="grid grid-cols-2 p-2 gap-2" v-if="cards.length">
       <div class="" v-for="c in cards" :key="`${c.id}`">
         <div

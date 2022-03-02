@@ -27,7 +27,7 @@
         v-if="isOnCall || caller"
         size="medium"
         :disabled="true"
-        :text="$t('~~On Call')"
+        :text="$t('phoneDashboard.on_call')"
         class="text-white bg-crisiscleanup-light-grey"
       ></base-button>
       <base-button
@@ -35,20 +35,20 @@
         variant="solid"
         size="medium"
         :action="loginPhone"
-        :text="$t('~~Start Taking Calls')"
+        :text="$t('phoneDashboard.start_taking_calls')"
       ></base-button>
       <base-button
         v-else-if="!isOnCall"
         variant="solid"
         size="medium"
         :action="setAway"
-        :text="$t('~~Stop Taking Calls')"
+        :text="$t('phoneDashboard.stop_taking_calls')"
       ></base-button>
       <base-checkbox
         v-if="currentUser.isAdmin"
         class="p-0.5"
         @input="$emit('onToggleOutbounds', $event)"
-        >{{ $t('Serve Outbound Calls') }}</base-checkbox
+        >{{ $t('phoneDashboard.serve_outbound_calls') }}</base-checkbox
       >
     </div>
   </div>

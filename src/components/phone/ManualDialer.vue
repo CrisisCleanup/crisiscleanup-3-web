@@ -2,9 +2,7 @@
   <div class="text-center flex flex-col items-center">
     <base-text variant="h2" class="my-1">{{ $t('~~Manual Dialer') }}</base-text>
     <base-text class="my-1">{{
-      $t(
-        '~~Enter a phone number to manually dial an outbound call.  Your caller ID will be hidden',
-      )
+      $t('phoneDashboard.manual_dial_hidden_caller_id')
     }}</base-text>
     <div class="grid grid-cols-3 my-1">
       <form-select
@@ -13,7 +11,7 @@
         indicator-icon="caret-down"
         select-classes="h-8 border bg-white text-sm"
         class="col-span-1 text-sm"
-        :placeholder="$t('~~Code')"
+        :placeholder="$t('phoneDashboard.code')"
       />
       <input
         type="text"
@@ -29,13 +27,13 @@
         "
         size="large"
         v-model="phoneNumber"
-        :placeholder="$t('~~Phone Number')"
+        :placeholder="$t('phoneDashboard.phone_number')"
       />
     </div>
     <base-button
       variant="solid"
       class="px-5 py-1 my-3"
-      :text="dialing ? $t('~~Dialing') : $t('~~Dial')"
+      :text="dialing ? $t('phoneDashboard.dialing') : $t('phoneDashboard.dial')"
       :disabled="dialing"
       :action="() => $emit('onDial', `${countryCode}${phoneNumber}`)"
     ></base-button>
