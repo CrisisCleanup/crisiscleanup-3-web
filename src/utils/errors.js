@@ -3,12 +3,16 @@ import * as Sentry from '@sentry/browser';
 export function getErrorMessage(error) {
   if (!error.response || !error.response.status) {
     Sentry.captureException(error);
-    window.vue.$log.debug(error);
+    if (window.vue.$log) {
+      window.vue.$log.debug(error);
+    }
     return window.vue.$i18n.t('info.unknown_error');
   }
   if (error.response.status === 500) {
     Sentry.captureException(error);
-    window.vue.$log.debug(error);
+    if (window.vue.$log) {
+      window.vue.$log.debug(error);
+    }
     return window.vue.$i18n.t('info.error_500');
   }
 

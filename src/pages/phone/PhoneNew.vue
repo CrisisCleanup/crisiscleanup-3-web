@@ -225,7 +225,10 @@
                         @setCase="worksiteId = $event"
                       />
                     </tab>
-                    <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
+                    <tab
+                      :name="$t('phoneDashboard.call_status')"
+                      ref="statusTab"
+                    >
                       <UpdateStatus
                         class="p-2"
                         @onCompleteCall="completeCall"

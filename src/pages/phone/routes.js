@@ -25,23 +25,8 @@ const NewSystemBetaBanner = () => {
 const routes = [
   {
     path: '/phone',
-    component: PhoneLayout,
-    name: 'nav.phone',
-    meta: {
-      layout: 'authenticated',
-      can: 'phone_agent',
-      fail: '$from',
-      banner: {
-        type: BannerTypes.INFO,
-        enabled: false,
-        component: NewSystemBetaBanner,
-      },
-    },
-  },
-  {
-    path: '/phone-new',
     component: PhoneNew,
-    name: 'nav.phone_new',
+    name: 'nav.phone',
     meta: {
       layout: 'authenticated',
     },

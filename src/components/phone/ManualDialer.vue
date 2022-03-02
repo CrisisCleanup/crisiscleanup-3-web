@@ -1,7 +1,9 @@
 <template>
   <div class="text-center flex flex-col items-center">
     <base-text variant="h2" class="my-1">{{ $t('~~Manual Dialer') }}</base-text>
-    <base-text class="my-1">{{ $t('phoneDashboard.manual_dial_hidden_caller_id') }}</base-text>
+    <base-text class="my-1">{{
+      $t('phoneDashboard.manual_dial_hidden_caller_id')
+    }}</base-text>
     <div class="grid grid-cols-3 my-1">
       <form-select
         v-model="countryCode"
