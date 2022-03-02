@@ -7,7 +7,7 @@
       label="name_t"
       :value="status"
       @input="updateStatus"
-      :placeholder="$t('~~Call Status')"
+      :placeholder="$t('phoneDashboard.call_status')"
       select-classes="border border-crisiscleanup-dark-100 text-xs h-12"
     />
     <textarea
@@ -39,7 +39,7 @@
           })
       "
     >
-      {{ $t('~~Complete Call') }}
+      {{ $t('phoneDashboard.complete_call') }}
     </base-button>
   </form>
 </template>

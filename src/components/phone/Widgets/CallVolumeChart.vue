@@ -24,7 +24,7 @@ export default {
       return {
         datasets: [
           {
-            label: 'New Cases',
+            label: '~~New Cases',
             data: this.casesDataset,
             type: 'line',
             fill: false,
@@ -38,7 +38,7 @@ export default {
             hitRadius: 4,
           },
           {
-            label: 'Missed Calls',
+            label: '~~Missed Calls',
             backgroundColor: '#F35154',
             barPercentage: 0.4,
             stack: 'one',
@@ -46,7 +46,7 @@ export default {
             borderWidth: 0,
           },
           {
-            label: 'Phone Calls',
+            label: '~~Phone Calls',
             backgroundColor: '#009BFF',
             barPercentage: 0.4,
             borderWidth: 0,

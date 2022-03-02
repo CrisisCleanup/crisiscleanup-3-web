@@ -56,7 +56,7 @@ export default {
   methods: {
     async showOutboundsModal() {
       await this.$component({
-        title: this.$t(`~~Remaining Outbounds`),
+        title: this.$t(`phoneDashboard.remaining_outbounds`),
         component: 'AjaxTable',
         classes: 'w-full h-96',
         props: {

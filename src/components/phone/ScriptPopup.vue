@@ -7,29 +7,19 @@
       <div class="script-body">
         <div class="info">
           <base-text variant="h4">{{
-            $t('phoneConnectFirst.hotline_1_title')
-          }}</base-text>
-          <base-text class="bodysm">{{
-            $t('phoneConnectFirst.hotline_1_number')
+            $t('homeVue.phone_or_website')
           }}</base-text>
           <base-text variant="h4">{{
-            $t('phoneConnectFirst.hotline_2_title')
-          }}</base-text>
-          <base-text class="bodysm">{{
-            $t('phoneConnectFirst.hotline_2_number')
-          }}</base-text>
-          <base-text variant="h4">{{
-            $t('phoneConnectFirst.disaster_distress_helpline')
-          }}</base-text>
-          <base-text variant="bodysm">{{
-            $t('phoneConnectFirst.disaster_distress_helpline_number')
+            $t('phoneDashboard.disaster_distress_helpline')
           }}</base-text>
         </div>
 
         <div class="main h-100 flex flex-col text-center">
           <div class="title">
             <base-text variant="h1" weight="700"
-              >{{ $t('phoneDashboard.sample_script') }}
+              >{{ $t('phoneDashboard.inbound_script') }}
+              {{ $t('phoneDashboard.outbound_script') }}
+              {{ $t('phoneDashboard.calldown_script') }}
             </base-text>
           </div>
           <div class="body">

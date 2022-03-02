@@ -7,19 +7,19 @@
     <div>
       <div class="flex flex-col">
         <div class="flex p-2 items-center justify-between">
-          <base-text>{{ $t('~~Inbound Count') }}</base-text>
+          <base-text>{{ $t('phoneDashboard.inbound_count') }}</base-text>
           {{ agentStats.totalCallsHandled - agentStats.totalManualDials || 0 }}
         </div>
         <div class="flex p-2 items-center justify-between">
-          <base-text>{{ $t('~~Outbound Count') }}</base-text>
+          <base-text>{{ $t('phoneDashboard.outbound_count') }}</base-text>
           {{ agentStats.totalManualDials || 0 }}
         </div>
         <div class="flex p-2 items-center justify-between">
-          <base-text>{{ $t('~~Total Login Time') }}</base-text>
+          <base-text>{{ $t('phoneDashboard.total_login_time') }}</base-text>
           {{ (agentStats.totalLoginTime || 0) | formatSeconds }}
         </div>
         <div class="flex p-2 items-center justify-between">
-          <base-text>{{ $t('~~Total Call Time') }}</base-text>
+          <base-text>{{ $t('phoneDashboard.total_call_time') }}</base-text>
           {{ (agentStats.totalTalkTime || 0) | formatSeconds }}
         </div>
       </div>
