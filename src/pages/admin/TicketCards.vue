@@ -91,7 +91,7 @@
         <div
           id="comments"
           :class="assignWhoColor(item.author_id)"
-          class="m-4 bg-crisiscleanup-dark-100 shadow-lg rounded-md p-2"
+          class="m-4 bg-crisiscleanup-dark-100 shadow-lg rounded-md p-2 break-all"
           :key="`${idx}-${item.author_id}`"
           v-for="(item, idx) in comments"
         >

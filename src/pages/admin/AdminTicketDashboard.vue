@@ -67,7 +67,7 @@ export default {
       selectedTicketStatusFilter: '',
       selectedAssigneeFilter: '',
       selectedFilters: { ticketStatusFilter: '', assigneeFilter: '' },
-      ticketStatus: ['new', 'pending', 'solved'],
+      ticketStatus: ['new', 'open', 'pending', 'solved'],
       expandState: false,
 
       tickets: [],
