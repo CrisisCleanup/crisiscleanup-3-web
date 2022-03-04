@@ -78,6 +78,7 @@ export default {
   },
   async mounted() {
     await this.fetchTickets();
+    await this.fetchMacros();
   },
   computed: {
     computedTicketData() {
@@ -229,6 +230,14 @@ export default {
         },
       );
     },
+    // async fetchMacros() {
+    //   const response = await this.$http.get(
+    //     `${process.env.VUE_APP_API_BASE_URL}/zendesk/macros`,
+    //   );
+    //   const { results } = response.data;
+    //
+    //   console.log(results ,'theses are the available macros currently')
+    // },
   },
 };
 </script>

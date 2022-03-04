@@ -12,10 +12,24 @@
           <div class="font-bold">{{ ticketData.name }}</div>
           <div>{{ ticketData.email }}</div>
           <div>{{ ticketData.phone }}</div>
-
+          <div class="flex">
+          Organization:
           <base-link text-variant="bodysm" class="px-2" target="_blank "
-            >{{ ticketData.organization.name }}
+          >{{ ticketData.organization.name || '----'}}
           </base-link>
+        </div>
+          <div class='flex gap-2'>
+          Roles:
+        <div>{{ '----'}}</div>
+          </div>
+          <div class='flex gap-2'>
+            OS:
+            <div>{{ '----'}}</div>
+          </div>
+          <div class='flex gap-2'>
+            Logins:
+            <div>{{ '----'}}</div>
+          </div>
           <base-button
             disabled
             text="Events"
@@ -97,6 +111,20 @@
         >
           <div class="font-bold">{{ assignWhoComments(item.author_id) }}</div>
           {{ item.body }}
+          <div class='flex gap-4 m-4' v-if='item.attachments[0]'>
+            <div v-for='attachment,idx in item.attachments' class='flex flex-col items-center justify-center'>
+
+              <img :src='attachment.content_url' class='w-18 h-18'/>
+              <base-link
+                :href="attachment.content_url"
+                text-variant="bodysm"
+                class="px-2"
+                target="_blank "
+              >{{ $t('~~Launch Attachment') }}
+              </base-link>
+            </div>
+
+          </div>
         </div>
       </div>
 
