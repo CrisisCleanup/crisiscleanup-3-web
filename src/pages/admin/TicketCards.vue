@@ -12,6 +12,7 @@
           <div class="font-bold">{{ ticketData.name }}</div>
           <div>{{ ticketData.email }}</div>
           <div>{{ ticketData.phone }}</div>
+
           <base-link text-variant="bodysm" class="px-2" target="_blank "
             >{{ ticketData.organization.name }}
           </base-link>
@@ -49,9 +50,8 @@
               disabled
               text="Login"
               variant="solid"
-              class="mt-2 mr-6 pl-2 pr-2 rounded p-2"
+              class="mt-2 mr-6 pl-2 pr-2 rounded p-2 w-full"
             />
-
           </div>
         </div>
       </div>
@@ -202,6 +202,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    filter: {
+      type: String,
+      default: '',
+    },
   },
   components: { FormSelect },
   async mounted() {
@@ -293,7 +297,6 @@ export default {
       this.setUser(response.data);
       window.location.reload();
     },
-
 
     assignWhoColor(author) {
       if (author === 484643688) {

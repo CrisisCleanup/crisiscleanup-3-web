@@ -1,45 +1,55 @@
 <template>
   <div class="">
-    <!--    <base-button-->
-    <!--      text="Expand All Tickets"-->
-    <!--      variant="solid"-->
-    <!--      class="mx-4 my-2 p-2 rounded"-->
-    <!--      :action="() => (expandState = !expandState)"-->
-    <!--    />-->
-    <div class="p-4 m-4 bg-white rounded-xl border">
+    <div class="p-4 m-4 bg-white rounded-xl border gap-4 flex flex-col">
       <form-select
         class="border border-crisiscleanup-dark-100 select"
-        :options="filters"
-        placeholder="Please Select A Filter"
-        :value="selectedFilter"
+        :options="ticketStatus"
+        placeholder="Ticket Status"
+        :value="selectedTicketStatusFilter"
         @input="
           (value) => {
-            selectedFilter = value;
+            selectedTicketStatusFilter = value;
+            selectedFilters.ticketStatusFilter = selectedTicketStatusFilter;
+            if (allowed.includes('status')) {
+              return null;
+            } else allowed.push('status');
           }
         "
       />
+<!--      <form-select-->
+<!--        class="border border-crisiscleanup-dark-100 select"-->
+<!--        :options="userList"-->
+<!--        placeholder="Assignee"-->
+<!--        :value="selectedAssigneeFilter"-->
+<!--        @input="-->
+<!--          (value) => {-->
+<!--            selectedAssigneeFilter = value;-->
+<!--            selectedFilters.assigneeFilter = selectedAssigneeFilter;-->
+<!--          }-->
+<!--        "-->
+<!--      />-->
+
       <base-button
         text="Download Tickets"
         variant="solid"
         class="m-2 p-1 rounded p-2 bg-crisiscleanup-yellow-300"
-        :action="() => downloadTickets()"
-        @click="() => console.log('hello')"
+        :action="() => computedTicketData(ticketWithCCData)"
       />
-      <div
-        class="bg-crisiscleanup-yellow-300 rounded-xl text-center w-22"
-        @click="downloadTickets"
-      >
-        test
-      </div>
+
+<!--      {{ticketWithCCData[0]}}-->
     </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            <TicketCards
-              :key="`${item.id}-${idx}`"
-              v-for="(item, idx) in ticketWithCCData"
-              :ticket-data="item"
-              @reFetchTicket="reFetchAllTickets"
-              :expand-state="expandState"
-            />
+      <TicketCards
+        :filter="selectedFilter"
+        :key="`${item.id}-${idx}`"
+        v-for="(item, idx) in allowed.length > 0
+          ? computedTicketData
+          : ticketWithCCData"
+        :ticket-data="item"
+        @reFetchTicket="reFetchAllTickets"
+        :expand-state="expandState"
+      />
     </div>
   </div>
 </template>
@@ -53,24 +63,49 @@ export default {
   components: { TicketCards, downloads },
   data() {
     return {
-      selectedFilter: '',
-      filters: [
-        'All Tickets',
-        'New Tickets',
-        'Pending Tickets',
-        'Solved Tickets',
-      ],
+      userList: ['Arron Titus', 'Triston Lewis', 'Ross Arroyo', 'Gina'],
+      selectedTicketStatusFilter: '',
+      selectedAssigneeFilter: '',
+      selectedFilters: { ticketStatusFilter: '', assigneeFilter: '' },
+      ticketStatus: ['new', 'pending', 'solved'],
       expandState: false,
 
       tickets: [],
-
+      allowed: [],
       ticketWithCCData: [],
+      filteredTicketWithCCData: [],
     };
   },
   async mounted() {
     await this.fetchTickets();
   },
+  computed: {
+    computedTicketData() {
+      const raw = {
+        status: this.selectedTicketStatusFilter,
+        assignee_id: this.selectedAssigneeFilter,
+        item3: { key: 'sdfd', value: 'sdfd' },
+      };
+      // const allowed = ['status'];
+      this.arrayRemove();
+      const filtered = Object.keys(raw)
+        .filter((key) => this.allowed.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = raw[key];
+          return obj;
+        }, {});
+
+      console.log(filtered);
+      return _.filter(this.ticketWithCCData, filtered);
+    },
+  },
   methods: {
+    arrayRemove(arr, value) {
+      if (this.selectedTicketStatusFilter === 'null') {
+        this.allowed = _.remove(this.allowed, 'status');
+      }
+      console.log('removing!');
+    },
     async downloadTickets() {
       // bellow is an example of what a ticket might look like in json
       //   {
@@ -195,7 +230,6 @@ export default {
       );
     },
   },
-  computed: {},
 };
 </script>
 
