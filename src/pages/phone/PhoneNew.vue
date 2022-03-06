@@ -312,6 +312,18 @@
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
+              name="leaderboard"
+              class="phone-button"
+              icon="leaderboard"
+              icon-size="small"
+              icon-class="p-1"
+              component-class="w-120 -ml-120"
+            >
+              <template v-slot:component>
+                <Leaderboard />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
               name="reset"
               class="phone-button"
               icon="logout"
@@ -382,10 +394,12 @@ import CallHistory from '@/components/phone/Widgets/CallHistory';
 import PhoneMap from '@/pages/phone/PhoneMap';
 import { ICONS, ICON_MAP } from '@/constants';
 import { theme } from '@/../tailwind.config';
+import Leaderboard from '@/components/phone/Leaderboard';
 
 export default {
   name: 'PhoneNew',
   components: {
+    Leaderboard,
     PhoneMap,
     CallHistory,
     AgentStats,

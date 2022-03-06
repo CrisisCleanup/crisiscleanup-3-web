@@ -58,6 +58,7 @@ export const ICON_MAP = {
   layers: require('@/assets/icons/layers.svg'),
   info: require('@/assets/icons/inform.svg'),
   information: require('@/assets/icons/information.svg'),
+  leaderboard: require('@/assets/icons/leaderboard.svg'),
   trash: require('@/assets/icons/delete.svg'),
   organization: require('@/assets/icons/my-organization.svg'),
   admin: require('@/assets/icons/admin.svg'),
