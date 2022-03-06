@@ -52,7 +52,7 @@
       </div>
     </div>
     <div v-if="cards.length">{{ $t('phoneDashboard.existing_cases') }}</div>
-    <div class="grid grid-cols-2 p-2 gap-2">
+    <div class="grid grid-cols-2 p-2 gap-2 w-full">
       <div class="" v-for="c in cards" :key="`${c.id}`">
         <div
           class="cursor-pointer bg-crisiscleanup-light-grey p-1"
