@@ -315,7 +315,7 @@
               name="leaderboard"
               class="phone-button"
               icon="leaderboard"
-              icon-size="small"
+              icon-size="medium"
               icon-class="p-1"
               component-class="w-120 -ml-120"
             >
