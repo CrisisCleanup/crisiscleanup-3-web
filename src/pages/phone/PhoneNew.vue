@@ -117,7 +117,12 @@
       />
       <div v-else class="h-12 px-2 border flex items-center justify-between">
         <div class="flex items-center cursor-pointer">
-          <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
+          <ccu-icon
+            :alt="$t('casesVue.new_case')"
+            type="active"
+            size="small"
+            :action="() => selectCase(null)"
+          />
           <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
         </div>
         <base-button
@@ -188,9 +193,13 @@
           <div
             class="absolute flex flex-col"
             :class="$mq === 'sm' ? 'right-0' : '-ml-12 mt-12'"
-            style="z-index: 1002"
+            style="z-index: 1003"
           >
-            <PhoneComponentButton class="phone-button" name="agent">
+            <PhoneComponentButton
+              class="phone-button"
+              name="agent"
+              :keep-open="isOnCall"
+            >
               <template v-slot:button>
                 <div class="w-full h-full flex items-center justify-center">
                   <div class="flex items-center justify-center relative">
@@ -220,10 +229,7 @@
                     @mounted="setTabs"
                   >
                     <tab :name="$t('phoneDashboard.active_call')">
-                      <ActiveCall
-                        :case-id="worksiteId"
-                        @setCase="worksiteId = $event"
-                      />
+                      <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
                     </tab>
                     <tab
                       :name="$t('phoneDashboard.call_status')"
@@ -695,6 +701,14 @@ export default {
         });
       }
     },
+    selectCase(worksite) {
+      if (worksite) {
+        this.setCurrentIncidentId(worksite.incident);
+        this.worksiteId = worksite.id;
+      } else {
+        this.worksiteId = null;
+      }
+    },
   },
   watch: {
     worksiteId(newValue, oldValue) {
@@ -703,6 +717,11 @@ export default {
       }
     },
     caller(newValue, oldValue) {
+      if (!oldValue && newValue) {
+        EventBus.$emit('phone_component:open', 'agent');
+      }
+    },
+    call(newValue, oldValue) {
       if (!oldValue && newValue) {
         EventBus.$emit('phone_component:open', 'agent');
       }

@@ -192,8 +192,8 @@ export default class PhoneService {
     } else {
       this.store.commit('phone_legacy/setIncomingCall', null);
       this.store.commit('phone_legacy/setOutgoingCall', null);
-      this.changeState('AWAY').then(() => {});
     }
+    this.changeState('AWAY').then(() => {});
     this.apiUpdateStats(this.loggedInAgentId).catch(() => {});
   }
 

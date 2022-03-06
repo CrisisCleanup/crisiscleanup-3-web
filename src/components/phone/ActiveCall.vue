@@ -52,7 +52,7 @@
       </div>
     </div>
     <div v-if="cards.length">{{ $t('phoneDashboard.existing_cases') }}</div>
-    <div class="grid grid-cols-2 p-2 gap-2" v-if="cards.length">
+    <div class="grid grid-cols-2 p-2 gap-2">
       <div class="" v-for="c in cards" :key="`${c.id}`">
         <div
           class="cursor-pointer bg-crisiscleanup-light-grey p-1"
@@ -70,6 +70,23 @@
           <div class="text-xs text-crisiscleanup-dark-200 p-1">
             {{ c.address }} {{ c.state }}
           </div>
+        </div>
+      </div>
+      <div
+        class="cursor-pointer bg-crisiscleanup-light-grey p-1"
+        @click="() => setCase(null)"
+        :class="Boolean(caseId) ? '' : 'border'"
+      >
+        <div class="flex flex-col items-center justify-center h-full">
+          <ccu-icon
+            :alt="$t('actions.create_new')"
+            type="add-orange"
+            size="xl"
+            class="pb-1"
+          />
+          <base-text variant="h3" class="text-crisiscleanup-dark-400"
+            >{{ $t('~~New Case') }}
+          </base-text>
         </div>
       </div>
     </div>
@@ -111,7 +128,7 @@ export default {
       return this.getWorktypeSVG(worktype);
     },
     setCase(caseObject) {
-      this.$emit('setCase', caseObject.id);
+      this.$emit('setCase', caseObject);
     },
     async createCards() {
       if (this.caller) {
@@ -127,6 +144,7 @@ export default {
             fullAddress: c.full_address,
             id: c.id,
             type: c.case_number ? 'worksite' : 'pda',
+            incident: c.incident,
           };
         });
       }

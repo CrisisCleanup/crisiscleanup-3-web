@@ -41,7 +41,7 @@ export default {
   name: 'PhoneComponentButton',
   created() {
     EventBus.$on('phone_component:close', () => {
-      this.showComponent = false;
+      this.showComponent = this.keepOpen;
     });
     EventBus.$on('phone_component:open', (name) => {
       if (this.name === name) {
@@ -61,12 +61,22 @@ export default {
     iconClass: { type: String, default: null, required: false },
     componentClass: { type: String, default: null, required: false },
     iconSize: { type: String, default: null, required: false },
+    keepOpen: { type: Boolean, default: false, required: false },
   },
   methods: {
+    mounted() {
+      if (this.keepOpen) {
+        this.showComponent = true;
+      }
+    },
     toggleComponent() {
-      const newState = !this.showComponent;
-      EventBus.$emit('phone_component:close');
-      this.showComponent = newState;
+      if (this.keepOpen) {
+        this.showComponent = true;
+      } else {
+        const newState = !this.showComponent;
+        EventBus.$emit('phone_component:close');
+        this.showComponent = newState;
+      }
     },
   },
 };

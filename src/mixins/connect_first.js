@@ -60,6 +60,7 @@ export default {
       'setGeneralStats',
       'clearCall',
     ]),
+    ...mapMutations('incident', ['setCurrentIncidentId']),
     async loadAgent() {
       try {
         const { data } = await this.$http.get(
