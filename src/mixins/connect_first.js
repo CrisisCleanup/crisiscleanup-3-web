@@ -180,7 +180,10 @@ export default {
       this.setOutgoingCall(outbound);
       this.setCurrentCall(outbound);
       this.setCaller(caller);
-      await this.$phoneService.dial(number);
+      await this.$phoneService.dial(
+        number,
+        this.currentIncident.active_phone_number,
+      );
     },
     async dialManualOutbound(number) {
       await this.loginPhone();

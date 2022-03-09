@@ -21,6 +21,7 @@ export default class Incident extends CCUModel {
       locations: this.attr(null),
       turn_on_release: this.attr(false),
       auto_contact: this.attr(false),
+      active_phone_number: this.attr(null),
       created_work_types: this.attr([]),
     };
   }
@@ -74,7 +75,7 @@ export default class Incident extends CCUModel {
     actions: {
       async fetchById(id) {
         const incident = await this.get(
-          `/incidents/${id}?fields=id,case_label,form_fields,geofence,short_name,name,start_at,uuid,incident_type,color,locations,turn_on_release,created_work_types,auto_contact`,
+          `/incidents/${id}?fields=id,case_label,form_fields,geofence,short_name,name,start_at,uuid,incident_type,color,locations,turn_on_release,created_work_types,auto_contact,active_phone_number`,
         );
 
         if (incident.response.data.locations.length) {
