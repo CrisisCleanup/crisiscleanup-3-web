@@ -101,6 +101,23 @@ const mutations = {
   setCallHistory(state, callHistory) {
     state.callHistory = callHistory;
   },
+  resetState(state) {
+    Object.assign(state, {
+      user: {},
+      call: null,
+      incomingCall: null,
+      outgoingCall: null,
+      stats: {},
+      agentStats: {},
+      caller: null,
+      gateway: {},
+      needsWelcome: true,
+      callState: 'AWAY',
+      callType: null,
+      languages: [],
+      callHistory: null,
+    });
+  },
 };
 
 export default {

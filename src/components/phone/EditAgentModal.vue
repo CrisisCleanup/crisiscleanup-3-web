@@ -72,7 +72,7 @@ export default {
   },
   mounted() {
     this.phoneNumber = this.currentUser.mobile;
-    this.languages = this.currentUser.languages;
+    this.languages = this.currentUser.languages.map((l) => l.id);
   },
   methods: {
     async updateUserNeeded() {

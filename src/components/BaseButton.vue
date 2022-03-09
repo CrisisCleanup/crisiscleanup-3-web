@@ -27,6 +27,7 @@ import { kebabCase } from 'lodash';
 import VueTypes from 'vue-types';
 import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from '@/constants';
 import { EventsMixin } from '@/mixins';
+import { delay } from '@/utils/promise';
 
 export default {
   name: 'BaseButton',
@@ -86,12 +87,16 @@ export default {
     },
   },
   methods: {
+    async timeout() {
+      await delay(5000);
+      return Promise.reject();
+    },
     async performAction() {
       this.loading = true;
 
       try {
         if (this.action) {
-          await this.action();
+          await Promise.race([this.action(), this.timeout()]);
         }
       } catch (e) {
         // TODO: expose method for handling button exceptions

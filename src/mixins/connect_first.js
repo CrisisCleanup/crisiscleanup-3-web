@@ -59,6 +59,7 @@ export default {
       'setCallHistory',
       'setGeneralStats',
       'clearCall',
+      'resetState',
     ]),
     ...mapMutations('incident', ['setCurrentIncidentId']),
     async loadAgent() {
@@ -129,12 +130,15 @@ export default {
       return this.$phoneService.changeState('AWAY');
     },
     async resetPhoneSystem() {
-      this.clearCall();
-      await this.logoutPhone();
+      await this.$phoneService
+        .apiLogoutAgent(this.currentAgent?.agent_id)
+        .then(() => {
+          this.clearCall();
+          this.resetState();
+        });
     },
     async logoutPhone() {
-      await this.$phoneService.changeState('AWAY');
-      await this.logoutByPhoneNumber();
+      // await this.$phoneService.changeState('AWAY');
       const agent_id = this.currentAgent?.agent_id;
       if (agent_id) {
         await this.$phoneService.logout(agent_id);

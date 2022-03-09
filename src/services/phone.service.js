@@ -152,6 +152,8 @@ export default class PhoneService {
 
   onCloseFunction() {
     Log.debug('AgentLibrary closed');
+    this.loggedInAgentId = null;
+    this.store.commit('phone_legacy/resetState');
     this.initPhoneService();
   }
 
@@ -263,19 +265,25 @@ export default class PhoneService {
                   )
                 ) {
                   Log.debug('Existing login found. Setting status');
-                  this.changeState('AVAILABLE').then(() => resolve());
+                  this.apiLogoutAgent(this.loggedInAgentId).then(() => {
+                    this.loggedInAgentId = null;
+                    reject();
+                  });
                 } else {
                   this.logout(data.agentSettings.agentId);
                   reject();
                 }
               } else {
                 Log.debug('AgentLibrary successfully logged in');
-                this.changeState('AVAILABLE').then(() => resolve());
+                this.changeState('AVAILABLE')
+                  .then(() => resolve())
+                  .catch(() => reject());
               }
             },
           );
         },
         (e) => {
+          reject(e);
           Log.debug(e);
         },
       );
