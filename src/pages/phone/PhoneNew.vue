@@ -4,7 +4,7 @@
     :class="$mq === 'sm' ? 'page-grid-mobile' : 'page-grid'"
   >
     <div v-if="$mq !== 'sm'" class="flex flex-col">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center">
         <div class="flex py-3 px-2" style="min-width: 80px">
           <ccu-icon
             :alt="$t('casesVue.map_view')"
@@ -58,6 +58,14 @@
             @search="onSearch"
             @clear="onSearch"
           />
+        </div>
+        <div
+          v-for="incident in incidentsWithActivePhones"
+          :key="incident.id"
+          class="ml-2"
+        >
+          {{ incident.name }}:
+          {{ String(incident.active_phone_number) | formatNationalNumber }}
         </div>
       </div>
       <div class="flex-grow">
@@ -395,6 +403,7 @@ import PhoneMap from '@/pages/phone/PhoneMap';
 import { ICONS, ICON_MAP } from '@/constants';
 import { theme } from '@/../tailwind.config';
 import Leaderboard from '@/components/phone/Leaderboard';
+import Incident from '@/models/Incident';
 
 export default {
   name: 'PhoneNew',
@@ -515,6 +524,11 @@ export default {
         return Worksite.find(this.worksiteId);
       }
       return null;
+    },
+    incidentsWithActivePhones() {
+      return Incident.query()
+        .where('active_phone_number', (number) => Boolean(number))
+        .get();
     },
   },
   methods: {

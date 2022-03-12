@@ -1023,7 +1023,7 @@ export default {
     },
     async getRecentIncidents() {
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,incident_type,color,turn_on_release&limit=8&sort=-start_at`,
+        `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,incident_type,color,turn_on_release,active_phone_number&limit=8&sort=-start_at`,
       );
       const { results } = response.data;
       return results;

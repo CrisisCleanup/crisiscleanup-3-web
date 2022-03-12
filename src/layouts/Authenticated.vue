@@ -223,7 +223,7 @@ export default {
     }
     await Promise.all([
       Incident.api().get(
-        '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release&limit=250&ordering=-start_at',
+        '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
         {
           dataKey: 'results',
         },

@@ -270,9 +270,11 @@ export default {
       this.$refs.invitationRequestsTable.exportTableCSV();
     },
     async deleteExpiredInvitations() {
-      const invitations = Invitation.query()
-        .where('status', (status) => status === 'Expired')
-        .get();
+      const invitations = Invitation.query().where(
+        'status',
+        (status) => status === 'Expired',
+      );
+
       await this.deleteInvitations(invitations);
     },
     async loadAllInvitations() {

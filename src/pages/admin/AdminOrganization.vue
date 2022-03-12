@@ -941,7 +941,7 @@ export default {
             `${process.env.VUE_APP_API_BASE_URL}/users?organization=${this.$route.params.organization_id}`,
           ),
           incidents: await this.$http.get(
-            `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations&limit=200&sort=-start_at`,
+            `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,active_phone_number&limit=200&sort=-start_at`,
           ),
           apiKeys: await this.$http.get(
             `${process.env.VUE_APP_API_BASE_URL}/admins/organizations/${this.$route.params.organization_id}/get_api_keys`,
