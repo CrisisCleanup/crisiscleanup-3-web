@@ -36,6 +36,7 @@
 import { ConnectFirstMixin, DialogsMixin } from '@/mixins';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import { makeTableColumns } from '@/utils/table';
+import Incident from '@/models/Incident';
 
 export default {
   name: 'GeneralStats',
@@ -59,8 +60,47 @@ export default {
         title: this.$t(`phoneDashboard.remaining_outbounds`),
         component: 'AjaxTable',
         classes: 'w-full h-96',
+        modalClasses: 'bg-white max-w-3xl shadow',
         props: {
-          columns: makeTableColumns([['id'], ['phone_number'], ['updated_at']]),
+          columns: makeTableColumns([
+            ['id', '0.5fr', this.$t('~~ID')],
+            ['phone_number', '1fr', this.$t('~~Phone Number')],
+            ['number_of_inbound_calls', '0.5fr', this.$t('~~Calls')],
+            [
+              'location',
+              '1fr',
+              this.$t('~~Location'),
+              {
+                transformer: (_, item) => {
+                  return `${item.location_name || ''} ${item.state_name}`;
+                },
+              },
+            ],
+            [
+              'incident_id',
+              '1fr',
+              this.$t('~~Incident'),
+              {
+                transformer: (field) => {
+                  const incident = Incident.find(field[0]);
+                  if (incident) {
+                    return `${incident.name}`;
+                  }
+                  return '';
+                },
+              },
+            ],
+            [
+              'updated_at',
+              '1fr',
+              this.$t('~~Last Called At'),
+              {
+                transformer: (field) => {
+                  return this.$moment(field).fromNow();
+                },
+              },
+            ],
+          ]),
           url: `${process.env.VUE_APP_API_BASE_URL}/phone_outbound`,
           query: {
             incident_id: this.currentIncidentId,

@@ -90,15 +90,6 @@
         </div>
       </div>
     </div>
-
-    <div class="py-1">
-      <ccu-icon
-        @click.native="$phoneService.hangup"
-        v-if="isOnCall && isOutboundCall"
-        size="lg"
-        type="hangup"
-      ></ccu-icon>
-    </div>
   </div>
 </template>
 <script>

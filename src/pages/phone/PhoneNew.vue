@@ -274,7 +274,7 @@
               icon="phone-history"
               icon-size="large"
               icon-class="p-1"
-              component-class="w-144 -ml-144"
+              component-class="w-156 -ml-156"
               v-if="callHistory"
             >
               <template v-slot:component>
@@ -283,14 +283,14 @@
                   :calls="callHistory"
                   @row:click="
                     ({ mobile }) => {
-                      dialManualOutbound(mobile);
+                      setManualOutbound(mobile);
                     }
                   "
                 />
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
-              v-if="Object.keys(stats).length"
+              v-if="Object.keys(stats).length || true"
               name="stats"
               class="phone-button"
             >
@@ -386,7 +386,7 @@ import ManualDialer from '@/components/phone/ManualDialer';
 import { ConnectFirstMixin, DialogsMixin } from '@/mixins';
 import Agent from '@/components/phone/Agent';
 import AjaxTable from '@/components/AjaxTable';
-import { getColorForStatus } from '@/filters';
+import { formatNationalNumber, getColorForStatus } from '@/filters';
 import CaseHeader from '@/components/CaseHeader';
 import Worksite from '@/models/Worksite';
 import CaseHistory from '@/pages/CaseHistory';
@@ -587,6 +587,10 @@ export default {
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
+    },
+    setManualOutbound(phone) {
+      EventBus.$emit('phone_component:open', 'dialer');
+      EventBus.$emit('dialer:set_phone_number', formatNationalNumber(phone));
     },
     clearCase() {
       this.worksiteId = null;

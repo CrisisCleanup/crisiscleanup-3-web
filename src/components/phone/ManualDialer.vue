@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import { EventBus } from '@/event-bus';
+
 export default {
   name: 'ManualDialer',
   props: {
@@ -48,6 +50,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  created() {
+    EventBus.$on('dialer:set_phone_number', (phone) => {
+      this.phoneNumber = phone;
+    });
   },
   data() {
     return {

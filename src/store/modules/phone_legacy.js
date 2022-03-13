@@ -11,7 +11,7 @@ const AppState = {
   callState: 'AWAY',
   callType: null,
   languages: [],
-  callHistory: null,
+  callHistory: [],
 };
 
 // getters
@@ -115,7 +115,7 @@ const mutations = {
       callState: 'AWAY',
       callType: null,
       languages: [],
-      callHistory: null,
+      callHistory: [],
     });
   },
 };

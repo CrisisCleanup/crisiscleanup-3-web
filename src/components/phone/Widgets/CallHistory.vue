@@ -5,14 +5,16 @@
   >
     <div class="card-container overflow-auto h-full">
       <Table
-        @rowClick="(payload) => $emit('row:click', payload)"
         :body-style="{ overflow: 'auto', ...tableBodyStyle }"
         :columns="historyCols"
         :data="historyData"
         v-if="callHistoryReady || calls"
       >
         <template #incident="{ item }">
-          <div class="justify-center flex flex-grow">
+          <div
+            class="justify-center flex flex-grow"
+            :title="item.incident && item.incident.name"
+          >
             <DisasterIcon
               v-if="item.incident"
               :current-incident="item.incident"
@@ -20,7 +22,10 @@
           </div>
         </template>
         <template #mobile="{ item }">
-          <div class="inline-flex items-center">
+          <div
+            class="inline-flex items-center"
+            @click="$emit('row:click', item)"
+          >
             <ccu-icon
               type="phone-classic"
               size="sm"
@@ -137,18 +142,6 @@ export default {
           dataIndex: 'mobile',
           key: 'mobile',
           width: '1fr',
-        },
-        {
-          title: 'phoneDashboard.name',
-          dataIndex: 'name',
-          key: 'name',
-          width: '.8fr',
-        },
-        {
-          title: 'phoneDashboard.case_num',
-          dataIndex: 'cases',
-          key: 'cases',
-          width: '1.35fr',
         },
         {
           title: 'phoneDashboard.call_status',

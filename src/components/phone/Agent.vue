@@ -48,7 +48,7 @@
         size="medium"
         :disabled="true"
         :text="$t('phoneDashboard.on_call')"
-        class="text-white bg-crisiscleanup-light-grey"
+        class="text-white bg-crisiscleanup-dark-400 bg-opacity-40"
       ></base-button>
       <base-button
         v-else-if="isNotTakingCalls"
@@ -70,6 +70,12 @@
         @input="$emit('onToggleOutbounds', $event)"
         >{{ $t('phoneDashboard.serve_outbound_calls') }}</base-checkbox
       >
+      <ccu-icon
+        @click.native="$phoneService.hangup"
+        v-if="(isOnCall || caller) && isOutboundCall"
+        size="lg"
+        type="hangup"
+      ></ccu-icon>
     </div>
     <EditAgentModal @cancel="editingAgent = false" v-if="editingAgent" />
   </div>
