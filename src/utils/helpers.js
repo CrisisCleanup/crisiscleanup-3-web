@@ -25,3 +25,9 @@ export function nFormatter(num) {
   }
   return num;
 }
+
+export function formatCmsItem(text) {
+  return text.replace(/{(.*)\}/g, (m, translation) => {
+    return window.vue.$t(translation);
+  });
+}

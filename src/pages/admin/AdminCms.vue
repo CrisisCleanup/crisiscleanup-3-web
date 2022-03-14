@@ -14,20 +14,31 @@
       v-model="cmsItem.content"
       class="mb-2"
     />
-    <base-button
-      class="mb-2"
-      :text="
-        showHtml
-          ? $t('adminCMS.toggle_regular_mode')
-          : $t('adminCMS.toggle_advanced_mode')
-      "
-      variant="link"
-      :action="
-        () => {
-          showHtml = !showHtml;
-        }
-      "
-    />
+    <div class="mb-2 flex items-center">
+      <base-button
+        :text="
+          showHtml
+            ? $t('adminCMS.toggle_regular_mode')
+            : $t('adminCMS.toggle_advanced_mode')
+        "
+        variant="link"
+        :action="
+          () => {
+            showHtml = !showHtml;
+          }
+        "
+      />
+      <ccu-icon
+        v-tooltip="{
+          content: $t(`adminCMS.cms_help`),
+          trigger: 'click',
+          classes: 'interactive-tooltip w-auto',
+        }"
+        :alt="$t('actions.help_alt')"
+        type="help"
+        size="large"
+      />
+    </div>
     <datepicker
       input-class="h-10 p-1 outline-none w-56 border border-crisiscleanup-dark-100 text-sm mb-2"
       wrapper-class="flex-grow"
@@ -82,10 +93,29 @@
       :enable-search="true"
       :columns="columns"
       :url="tableUrl"
+      :query="query"
       ref="table"
       class="mt-6 shadow-lg"
       @row:click="(payload) => editItem(payload)"
     >
+      <template #header-actions>
+        <div class="px-4 py-2">
+          <base-checkbox
+            class="pb-2"
+            @input="
+              (value) => {
+                if (value) {
+                  query = { ...query, is_active: true };
+                } else {
+                  delete query.is_active;
+                  query = { ...query };
+                }
+              }
+            "
+            >{{ $t('~~Active Only') }}
+          </base-checkbox>
+        </div>
+      </template>
       <template
         #actions="slotProps"
         v-if="columns.find((c) => c.key === 'actions')"
@@ -122,6 +152,7 @@ import { makeTableColumns } from '@/utils/table';
 import AjaxTable from '@/components/AjaxTable';
 import Editor from '@/components/Editor';
 import { DialogsMixin } from '@/mixins';
+import { formatCmsItem } from '@/utils/helpers';
 
 export default {
   data() {
@@ -139,6 +170,7 @@ export default {
       tagsToAdd: [],
       tagsAutoComplete: [],
       showHtml: false,
+      query: {},
     };
   },
   components: {
@@ -149,8 +181,18 @@ export default {
   computed: {
     columns() {
       return makeTableColumns([
-        ['title', '30%', 'adminCMS.title'],
-        ['publish_at', '20%', 'adminCMS.publish_date'],
+        [
+          'title',
+          '30%',
+          'adminCMS.title',
+          { sortKey: 'title', sortable: true },
+        ],
+        [
+          'publish_at',
+          '20%',
+          'adminCMS.publish_date',
+          { sortKey: 'publish_at', sortable: true },
+        ],
         [
           'list_order',
           '10%',
@@ -167,12 +209,15 @@ export default {
     },
   },
   async mounted() {
-    const response = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/admins/cms/tags`,
-    );
-    this.tagsAutoComplete = response.data;
+    await this.loadTags();
   },
   methods: {
+    async loadTags() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/admins/cms/tags`,
+      );
+      this.tagsAutoComplete = response.data.map((t) => t.replaceAll('"', ''));
+    },
     async showPreview() {
       await this.$component({
         title: `adminCMS.preview`,
@@ -180,8 +225,8 @@ export default {
         classes: 'w-full h-96 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         props: {
-          title: this.cmsItem.title,
-          content: this.cmsItem.content,
+          title: formatCmsItem(this.cmsItem.title),
+          content: formatCmsItem(this.cmsItem.content),
         },
       });
     },
@@ -211,7 +256,8 @@ export default {
           );
         }
         await this.$toasted.success(this.$t('adminCMS.saved_item'));
-        this.$refs.table.getData();
+        this.$refs.table.getData().catch(() => {});
+        this.loadTags().catch(() => {});
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }

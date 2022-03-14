@@ -290,7 +290,7 @@
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
-              v-if="Object.keys(stats).length || true"
+              v-if="Object.keys(stats).length"
               name="stats"
               class="phone-button"
             >
