@@ -42,6 +42,20 @@
                 {{ rank.user.organization.name | truncate(28) }}
               </base-text>
             </div>
+            <div
+              :style="{ lineHeight: '16px' }"
+              :class="`${rank.state[1]}`"
+            >
+              &#8226; {{ rank.state[0] }}
+            </div>
+            <base-text
+              :style="{ lineHeight: '16px' }"
+              class="pl-2 text-crisiscleanup-dark-300 opacity-50"
+              variant="h4"
+              regular
+            >
+              {{ rank.state_at | moment('from', 'now') }}
+            </base-text>
           </div>
         </div>
         <div class="grid grid-cols-3 gap-x-4">
@@ -78,6 +92,14 @@ const LEADERBOARD_RESOLUTIONS = Object.freeze({
   ALL_TIME: 'all_time',
 });
 
+const AGENT_STATES = Object.freeze({
+  AWAY: ['away', 'text-red-500'],
+  AVAILABLE: ['online', 'text-green-300'],
+  OFFLINE: ['offline', 'text-dark-blue'],
+  TRANSITION: ['connecting', 'text-yellow-500'],
+  ENGAGED: ['talking', 'text-crisiscleanup-teal'],
+});
+
 export default {
   name: 'Leaderboard',
   components: { TitledCard, LanguageTag, UserDetailsTooltip, Avatar },
@@ -90,10 +112,33 @@ export default {
         textOverflow: 'ellipsis',
         whiteSpace: 'nowrap',
       },
+      socket: null,
+      agentStats: null,
+    };
+  },
+  async created() {
+    const endpoint = process.env.VUE_APP_API_BASE_URL.replace('http', 'ws');
+    const url = `${endpoint}/ws/phone_stats`;
+    this.socket = new WebSocket(url);
+
+    this.socket.onmessage = (e) => {
+      this.agentStats = JSON.parse(e.data);
+    };
+    this.socket.onopen = (e) => {
+      this.$log.debug('open connection with phone stats socket', e);
+    };
+    this.socket.onerror = (e) => {
+      this.$log.error(e);
+    };
+    this.socket.onclose = (e) => {
+      console.log('closed connection with phone stats socket', e);
     };
   },
   async mounted() {
     await this.loadLeaderboard(this.resolution);
+  },
+  unmounted() {
+    this.socket.close();
   },
   methods: {
     async loadLeaderboard(resolution) {
@@ -106,14 +151,27 @@ export default {
       this.leaderboard = data;
       this.leaderboard.forEach((ranking) => {
         ranking.user = this.getUser(ranking.user);
-        ranking.total = ranking.inbound_calls + ranking.outbound_calls;
       });
-      this.leaderboard.sort((a, b) => b.total - a.total);
+      this.buildLeaderboard();
     },
     async getUsers(userIds) {
       await User.api().get(`/users?id__in=${userIds.join(',')}`, {
         dataKey: 'results',
       });
+    },
+    buildLeaderboard() {
+      this.leaderboard.forEach((ranking) => {
+        if (this.agentStats) {
+          const agentState = this.agentStats.find(
+            (u) => String(u.user) === String(ranking.user.id),
+          );
+          ranking.state =
+            AGENT_STATES[agentState ? agentState.state : 'OFFLINE'];
+          ranking.state_at = agentState.state_at;
+        }
+        ranking.total = ranking.inbound_calls + ranking.outbound_calls;
+      });
+      this.leaderboard.sort((a, b) => b.total - a.total);
     },
     getLanguageTags(locale) {
       return locale.split('#');
@@ -146,6 +204,11 @@ export default {
           },
         ],
       };
+    },
+  },
+  watch: {
+    agentStats() {
+      this.buildLeaderboard();
     },
   },
 };
