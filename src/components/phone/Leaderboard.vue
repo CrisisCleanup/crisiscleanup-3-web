@@ -43,12 +43,14 @@
               </base-text>
             </div>
             <div
+              v-if="rank.state"
               :style="{ lineHeight: '16px' }"
               :class="`${rank.state[1]}`"
             >
               &#8226; {{ rank.state[0] }}
             </div>
             <base-text
+              v-if="rank.state_at"
               :style="{ lineHeight: '16px' }"
               class="pl-2 text-crisiscleanup-dark-300 opacity-50"
               variant="h4"
@@ -167,11 +169,12 @@ export default {
           );
           ranking.state =
             AGENT_STATES[agentState ? agentState.state : 'OFFLINE'];
-          ranking.state_at = agentState.state_at;
+          ranking.state_at = agentState ? agentState.state_at : null;
         }
         ranking.total = ranking.inbound_calls + ranking.outbound_calls;
       });
       this.leaderboard.sort((a, b) => b.total - a.total);
+      this.leaderboard = [...this.leaderboard];
     },
     getLanguageTags(locale) {
       return locale.split('#');
