@@ -34,10 +34,12 @@
               </div>
               <span v-if="totalWorksites" class="font-thin">
                 <span v-if="pagination.total === totalWorksites">
-                  Cases: {{ pagination.total | numeral('0,0') }}
+                  {{ $t('casesVue.cases') }}
+                  {{ pagination.total | numeral('0,0') }}
                 </span>
                 <span v-else>
-                  Cases: {{ pagination.total | numeral('0,0') }} of
+                  {{ $t('casesVue.cases') }}
+                  {{ pagination.total | numeral('0,0') }} of
                   {{ totalWorksites | numeral('0,0') }}
                 </span>
               </span>

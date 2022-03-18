@@ -29,7 +29,7 @@
         </div>
         <span v-if="allWorksiteCount" class="font-thin">
           <span>
-            {{ $t('~~Number of Cases:') }}
+            {{ $t('casesVue.cases') }}
             {{ allWorksiteCount | numeral('0,0') }}
           </span>
         </span>
