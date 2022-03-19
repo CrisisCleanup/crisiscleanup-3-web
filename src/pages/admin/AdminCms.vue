@@ -220,7 +220,7 @@ export default {
     },
     async showPreview() {
       await this.$component({
-        title: `adminCMS.preview`,
+        title: this.$t(`adminCMS.preview`),
         component: 'HtmlPreview',
         classes: 'w-full h-96 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
