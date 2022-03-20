@@ -343,8 +343,11 @@
       </div>
       <ul>
         <li v-for="faq in faqs" :key="faq.id">
-          <div class="text-lg my-1 font-bold" v-html="$t(faq.title)"></div>
-          <div class="text-lg" v-html="$t(faq.content)"></div>
+          <div
+            class="text-lg my-1 font-bold"
+            v-html="$t(formatCmsItem(faq.title))"
+          ></div>
+          <div class="text-lg" v-html="$t(formatCmsItem(faq.content))"></div>
         </li>
       </ul>
     </section>
@@ -359,6 +362,7 @@ import LocationViewer from '@/components/LocationViewer';
 import WorksiteImageSection from '@/components/WorksiteImageSection';
 import WorksiteNotes from '@/pages/WorksiteNotes';
 import { getWorkTypeImage } from '@/filters';
+import { formatCmsItem } from '@/utils/helpers';
 
 export default {
   name: 'Survivors',
@@ -384,6 +388,7 @@ export default {
       workTypeHelpNeeded: new Set(),
       currentNote: '',
       getWorkTypeImage,
+      formatCmsItem,
     };
   },
   computed: {

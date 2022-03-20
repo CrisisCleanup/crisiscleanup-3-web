@@ -87,6 +87,7 @@ import Avatar from '@/components/Avatar';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip';
 import LanguageTag from '@/components/tags/LanguageTag';
 import TitledCard from '@/components/cards/TitledCard';
+import { useWebSockets } from '@/use/useWebSockets';
 
 const LEADERBOARD_RESOLUTIONS = Object.freeze({
   DAILY: 'daily',
@@ -119,22 +120,14 @@ export default {
     };
   },
   async created() {
-    const endpoint = process.env.VUE_APP_API_BASE_URL.replace('http', 'ws');
-    const url = `${endpoint}/ws/phone_stats`;
-    this.socket = new WebSocket(url);
-
-    this.socket.onmessage = (e) => {
-      this.agentStats = JSON.parse(e.data);
-    };
-    this.socket.onopen = (e) => {
-      this.$log.debug('open connection with phone stats socket', e);
-    };
-    this.socket.onerror = (e) => {
-      this.$log.error(e);
-    };
-    this.socket.onclose = (e) => {
-      console.log('closed connection with phone stats socket', e);
-    };
+    const { socket } = useWebSockets(
+      '/ws/phone_stats',
+      'phone_stats',
+      (data) => {
+        this.agentStats = data;
+      },
+    );
+    this.socket = socket;
   },
   async mounted() {
     await this.loadLeaderboard(this.resolution);

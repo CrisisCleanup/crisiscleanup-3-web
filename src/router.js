@@ -22,6 +22,7 @@ import PhoneRoutes from '@/pages/phone/routes';
 import PhoneLegacyRoutes from '@/pages/phone_legacy/routes';
 import AdminRoutes from '@/pages/admin/routes';
 import Profile from '@/pages/Profile';
+import Chat from '@/components/chat/Chat';
 import unAuthedRoutes from '@/pages/unauthenticated/routes';
 import store from '@/store/index';
 import Reports from '@/pages/Reports';
@@ -44,6 +45,12 @@ const routes = [
     path: '/dashboard',
     component: Dashboard,
     name: 'nav.dashboard',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/chat',
+    component: Chat,
+    name: 'nav.chat',
     meta: { layout: 'authenticated' },
   },
   {
