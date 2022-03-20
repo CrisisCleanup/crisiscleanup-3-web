@@ -6,6 +6,8 @@
     <div
       id="messages"
       ref="messages"
+      @wheel="handleWheel"
+      @ontouchmove="handleWheel"
       class="
         flex flex-col flex-grow
         space-y-4
@@ -26,7 +28,11 @@
     </div>
     <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
       <div class="relative flex">
-        <base-input class="flex-1" v-model="currentMessage" />
+        <base-input
+          @enter="sendMessage"
+          class="flex-1"
+          v-model="currentMessage"
+        />
         <base-button
           variant="solid"
           class="w-24"
@@ -40,9 +46,12 @@
 </template>
 
 <script>
+import { uniqWith } from 'lodash/array';
+import { isEqual } from 'lodash/lang';
 import { UserMixin } from '@/mixins';
 import ChatMessage from '@/components/chat/ChatMessage';
 import { useWebSockets } from '@/use/useWebSockets';
+import { getQueryString } from '@/utils/urls';
 
 export default {
   name: 'Chat',
@@ -78,6 +87,7 @@ export default {
       messages: [],
       currentMessage: '',
       send: () => {},
+      loadingMessages: false,
     };
   },
   mixins: [UserMixin],
@@ -85,18 +95,39 @@ export default {
     sortedMessages() {
       const sortedMessages = [...this.messages];
       sortedMessages.sort((a, b) => Number(a.timestamp) - Number(b.timestamp));
-      return sortedMessages;
+      return uniqWith(sortedMessages, isEqual);
     },
   },
   methods: {
-    async getMessages() {
+    handleWheel() {
+      if (
+        this.$refs.messages.scrollTop === 0 &&
+        this.sortedMessages.length &&
+        !this.loadingMessages
+      ) {
+        this.getMessages(this.sortedMessages[0].created_at, false);
+      }
+    },
+    async getMessages(before = null, scroll = true) {
+      this.loadingMessages = true;
+      const params = {
+        message_group: this.groupId,
+        limit: 5,
+      };
+      if (before && this.messages.length) {
+        params.created_at__lte = before;
+      }
+      const queryString = getQueryString(params);
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/chat_messages?message_group=${this.groupId}`,
+        `${process.env.VUE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
-      this.messages = [...response.data.results];
-      this.$nextTick(() => {
-        this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
-      });
+      this.messages = [...this.messages, ...response.data.results];
+      if (scroll) {
+        this.$nextTick(() => {
+          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+        });
+      }
+      this.loadingMessages = false;
     },
     sendMessage() {
       this.send({

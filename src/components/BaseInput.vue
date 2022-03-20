@@ -21,6 +21,7 @@
       @input="update"
       @change="change"
       @blur="$emit('blur')"
+      @keyup.enter="$emit('enter')"
       :rows="rows"
     />
     <div

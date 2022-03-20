@@ -28,8 +28,9 @@
         </div>
       </div>
       <img
-        src="https://images.unsplash.com/photo-1549078642-b2ba4bda0cdb?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-        alt="My profile"
+        :src="message.profile_picture_file"
+        :alt="message.full_name"
+        :title="message.full_name"
         class="w-6 h-6 rounded-full order-1"
       />
     </div>
@@ -55,8 +56,9 @@
         </div>
       </div>
       <img
-        src="https://images.unsplash.com/photo-1590031905470-a1a1feacbb0b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=144&amp;h=144"
-        alt="My profile"
+        :src="message.profile_picture_file"
+        :alt="message.full_name"
+        :title="message.full_name"
         class="w-6 h-6 rounded-full order-2"
       />
     </div>
