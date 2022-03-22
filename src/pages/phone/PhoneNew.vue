@@ -200,7 +200,7 @@
         <transition name="slide-fade">
           <div
             class="absolute flex flex-col"
-            :class="$mq === 'sm' ? 'right-0' : '-ml-12 mt-12'"
+            :class="$mq === 'sm' ? 'right-0' : '-ml-12'"
             style="z-index: 1003"
           >
             <PhoneComponentButton
@@ -269,6 +269,18 @@
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
+              v-if="$can('beta_feature.phone_chat')"
+              name="chat"
+              class="phone-button"
+              icon="chat"
+              icon-size="large"
+              icon-class="p-1"
+            >
+              <template v-slot:component>
+                <Chat class="h-108" />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
               name="history"
               class="phone-button"
               icon="phone-history"
@@ -308,18 +320,6 @@
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
-              name="my-stats"
-              class="phone-button"
-              icon="phone-user"
-              icon-size="small"
-              icon-class="p-1"
-              v-if="agentStats.agentId"
-            >
-              <template v-slot:component>
-                <AgentStats />
-              </template>
-            </PhoneComponentButton>
-            <PhoneComponentButton
               name="leaderboard"
               class="phone-button"
               icon="leaderboard"
@@ -333,7 +333,7 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="reset"
-              class="phone-button"
+              class="phone-button hidden"
               icon="logout"
               icon-size="small"
               icon-class="p-1"
@@ -404,10 +404,12 @@ import { ICONS, ICON_MAP } from '@/constants';
 import { theme } from '@/../tailwind.config';
 import Leaderboard from '@/components/phone/Leaderboard';
 import Incident from '@/models/Incident';
+import Chat from '@/components/chat/Chat';
 
 export default {
   name: 'PhoneNew',
   components: {
+    Chat,
     Leaderboard,
     PhoneMap,
     CallHistory,

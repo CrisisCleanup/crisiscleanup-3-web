@@ -140,6 +140,7 @@ module.exports = {
         'crisiscleanup-light-grey': '#f9f9f9',
         'crisiscleanup-light-smoke': '#f2f3f4',
         'crisiscleanup-smoke': '#f7f7f7',
+        'crisiscleanup-chat-blue': '#E4F5FF',
         'crisiscleanup-grid-blue': '#CFE9F7',
         'crisiscleanup-grid-grey': '#F2F4F4',
         'crisiscleanup-grid-yellow': '#FECE09',

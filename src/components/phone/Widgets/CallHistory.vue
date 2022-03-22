@@ -1,9 +1,10 @@
 <template>
   <TitledCard
     :loading="!callHistoryReady && !calls"
-    :title="$t('phoneDashboard.last_10_calls')"
+    :title="$t('~~My Calls')"
   >
     <div class="card-container overflow-auto h-full">
+      <AgentStats />
       <Table
         :body-style="{ overflow: 'auto', ...tableBodyStyle }"
         :columns="historyCols"
@@ -80,10 +81,11 @@ import Table from '@/components/Table.vue';
 import { UserMixin, ValidateMixin, WorksitesMixin } from '@/mixins';
 import PhoneStatus from '@/models/PhoneStatus';
 import DisasterIcon from '@/components/DisasterIcon.vue';
+import AgentStats from '@/components/phone/AgentStats';
 
 export default {
   name: 'CallHistory',
-  components: { TitledCard, Table, DisasterIcon },
+  components: { AgentStats, TitledCard, Table, DisasterIcon },
   mixins: [UserMixin, ValidateMixin, WorksitesMixin],
   props: {
     calls: {

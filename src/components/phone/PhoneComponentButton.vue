@@ -84,7 +84,7 @@ export default {
 
 <style scoped>
 .phone-component {
-  margin-top: -3rem;
+  transform: translateY(-3rem);
   @apply shadow bg-white;
 }
 </style>

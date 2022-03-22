@@ -1,65 +1,36 @@
 <template>
-  <div v-if="message.created_by === currentUser.id" class="chat-message">
-    <div class="flex items-end">
-      <div
-        class="
-          flex flex-col
-          space-y-2
-          text-xs
-          max-w-xs
-          mx-2
-          order-2
-          items-start
+  <div class="chat-message w-full">
+    <div class="flex items-start justify-start w-full">
+      <div class="flex flex-col space-y-2 text-sm mx-2 w-full">
+        <div class="flex flex-col w-full">
+          <div class="ml-1">
+            <span>{{ message.full_name }}</span>
+            <span class="opacity-40 text-xs ml-1">{{
+              message.created_at | moment('h:mm A')
+            }}</span>
+          </div>
+          <div
+            class="
+              px-4
+              py-2
+              inline-block
+              bg-crisiscleanup-chat-blue
+              text-black
+              w-full
+            "
+          >
+            {{ message.content }}
+          </div>
+        </div>
+      </div>
+      <img
+        :src="
+          message.profile_picture_file ||
+          `https://avatars.dicebear.com/api/bottts/${message.full_name}.svg`
         "
-      >
-        <div>
-          <span
-            class="
-              px-4
-              py-2
-              rounded-lg
-              inline-block
-              rounded-bl-none
-              bg-gray-300
-              text-gray-600
-            "
-            >{{ message.content }}</span
-          >
-        </div>
-      </div>
-      <img
-        :src="message.profile_picture_file"
         :alt="message.full_name"
         :title="message.full_name"
-        class="w-6 h-6 rounded-full order-1"
-      />
-    </div>
-  </div>
-  <div v-else class="chat-message">
-    <div class="flex items-end justify-end">
-      <div
-        class="flex flex-col space-y-2 text-xs max-w-xs mx-2 order-1 items-end"
-      >
-        <div>
-          <span
-            class="
-              px-4
-              py-2
-              rounded-lg
-              inline-block
-              rounded-br-none
-              bg-blue-600
-              text-white
-            "
-            >{{ message.content }}</span
-          >
-        </div>
-      </div>
-      <img
-        :src="message.profile_picture_file"
-        :alt="message.full_name"
-        :title="message.full_name"
-        class="w-6 h-6 rounded-full order-2"
+        class="w-6 h-6 rounded-full order-2 hidden"
       />
     </div>
   </div>

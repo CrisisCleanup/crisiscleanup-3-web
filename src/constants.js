@@ -81,6 +81,7 @@ export const ICON_MAP = {
   hangup: require('@/assets/icons/hangup.svg'),
   time: require('@/assets/icons/time.svg'),
   logout: require('@/assets/icons/logout.svg'),
+  plane: require('@/assets/icons/plane.svg'),
 };
 /* eslint-enable global-require */
 

@@ -1,7 +1,7 @@
 <template>
-  <div class="flex-1 p:2 sm:p-6 flex flex-col h-full">
-    <div class="flex sm:items-center py-3 border-b-2 border-gray-200">
-      <div class="text-xl">Group</div>
+  <div class="flex-1 p:2 sm:p-6 flex flex-col w-full">
+    <div class="flex sm:items-center py-1 border-b border-gray-200">
+      <div class="text-lg">Phone Live Chat</div>
     </div>
     <div
       id="messages"
@@ -10,8 +10,8 @@
       @ontouchmove="handleWheel"
       class="
         flex flex-col flex-grow
-        space-y-4
-        p-3
+        py-2
+        space-y-5
         overflow-y-auto
         scrollbar-thumb-blue
         scrollbar-thumb-rounded
@@ -26,20 +26,20 @@
         :key="message.id"
       />
     </div>
-    <div class="border-t-2 border-gray-200 px-4 pt-4 mb-2 sm:mb-0">
-      <div class="relative flex">
-        <base-input
-          @enter="sendMessage"
-          class="flex-1"
-          v-model="currentMessage"
-        />
-        <base-button
-          variant="solid"
-          class="w-24"
-          :disabled="!Boolean(currentMessage)"
-          :text="$t('Send')"
-          :action="sendMessage"
-        />
+    <div class="border-t-2 border-gray-200 pt-4 mb-2 sm:mb-0">
+      <div class="flex flex-col">
+        <base-input @enter="sendMessage" class="" v-model="currentMessage" />
+        <div class="flex items-center justify-between py-2">
+          <base-link href="" text-variant="bodysm" class="px-2">{{
+            $t('~~Need help?')
+          }}</base-link>
+          <base-button
+            class="h-8 w-8 bg-crisiscleanup-dark-blue"
+            :disabled="!Boolean(currentMessage)"
+            ccu-icon="plane"
+            :action="sendMessage"
+          />
+        </div>
       </div>
     </div>
   </div>
