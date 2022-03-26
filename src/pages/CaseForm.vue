@@ -1195,6 +1195,11 @@ export default {
       };
     },
   },
+  watch: {
+    dataPrefill(newValue) {
+      this.worksite = { ...this.worksite, ...newValue };
+    },
+  },
 };
 </script>
 

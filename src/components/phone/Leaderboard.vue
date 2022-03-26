@@ -88,6 +88,7 @@ import UserDetailsTooltip from '@/components/user/DetailsTooltip';
 import LanguageTag from '@/components/tags/LanguageTag';
 import TitledCard from '@/components/cards/TitledCard';
 import { useWebSockets } from '@/use/useWebSockets';
+import { EventBus } from '@/event-bus';
 
 const LEADERBOARD_RESOLUTIONS = Object.freeze({
   DAILY: 'daily',
@@ -203,8 +204,14 @@ export default {
     },
   },
   watch: {
-    agentStats() {
+    agentStats(agents) {
       this.buildLeaderboard();
+      if (agents) {
+        EventBus.$emit(
+          'phone:agents_online',
+          agents.filter((agent) => agent.state !== 'OFFLINE').length,
+        );
+      }
     },
   },
 };

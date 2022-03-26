@@ -79,6 +79,13 @@ export default {
       }
     },
   },
+  watch: {
+    showComponent(newValue, oldValue) {
+      if (newValue && !oldValue) {
+        this.$emit('open');
+      }
+    },
+  },
 };
 </script>
 

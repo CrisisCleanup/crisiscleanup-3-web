@@ -25,6 +25,9 @@ export default {
         },
       });
     },
+    updateUserState(state) {
+      User.api().updateUserState(state);
+    },
     getOrganizationName(id) {
       const organization = Organization.find(id);
       return organization.name;

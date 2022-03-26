@@ -65,6 +65,38 @@
     <base-checkbox class="pb-2" v-model="cmsItem.is_active">{{
       $t('adminCMS.is_active')
     }}</base-checkbox>
+
+    <div class="flex items-center">
+      <DragDrop
+        class="cursor-pointer py-2"
+        container-class="items-start"
+        :multiple="false"
+        @files="
+          (files) => {
+            handleFileUpload(files);
+          }
+        "
+      >
+        <base-button
+          class="cursor-pointer px-3 py-1"
+          variant="solid"
+          :text="$t('~~Upload Thumbnail')"
+          :alt="$t('~~Upload Thumbnail')"
+          :show-spinner="uploading"
+          :disabled="uploading"
+        />
+      </DragDrop>
+
+      <a
+        v-if="cmsItem.thumbnail_file"
+        :href="cmsItem.thumbnail_file.blog_url"
+        target="_blank"
+        :title="cmsItem.thumbnail_file.filename"
+        class="truncate w-40 text-primary-dark ml-2"
+        >{{ cmsItem.thumbnail_file.filename }}</a
+      >
+    </div>
+
     <div class="flex justify-end">
       <base-button
         type="bare"
@@ -96,7 +128,7 @@
       :query="query"
       ref="table"
       class="mt-6 shadow-lg"
-      @row:click="(payload) => editItem(payload)"
+      @rowClick="(payload) => editItem(payload)"
     >
       <template #header-actions>
         <div class="px-4 py-2">
@@ -153,6 +185,7 @@ import AjaxTable from '@/components/AjaxTable';
 import Editor from '@/components/Editor';
 import { DialogsMixin } from '@/mixins';
 import { formatCmsItem } from '@/utils/helpers';
+import DragDrop from '@/components/DragDrop';
 
 export default {
   data() {
@@ -165,6 +198,8 @@ export default {
         publish_at: null,
         list_order: null,
         is_active: true,
+        thumbnail: null,
+        thumbnail_file: null,
       },
       tags: '',
       tagsToAdd: [],
@@ -174,6 +209,7 @@ export default {
     };
   },
   components: {
+    DragDrop,
     Editor,
     AjaxTable,
   },
@@ -221,12 +257,13 @@ export default {
     async showPreview() {
       await this.$component({
         title: this.$t(`adminCMS.preview`),
-        component: 'HtmlPreview',
+        component: 'CmsViewer',
         classes: 'w-full h-96 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         props: {
           title: formatCmsItem(this.cmsItem.title),
           content: formatCmsItem(this.cmsItem.content),
+          image: this.cmsItem.thumbnail_file?.blog_url,
         },
       });
     },
@@ -277,9 +314,41 @@ export default {
         publish_at: null,
         list_order: null,
         is_active: true,
+        thumbnail: null,
+        thumbnail_file: null,
       };
       this.showHtml = false;
       this.tagsToAdd = [];
+    },
+    async handleFileUpload(fileList) {
+      this.fileList = fileList;
+
+      if (this.fileList.length === 0) {
+        return;
+      }
+      this.file = this.fileList[0].originFileObj;
+      const formData = new FormData();
+      formData.append('upload', fileList[fileList.length - 1]);
+      formData.append('type_t', 'fileTypes.other_file');
+      this.uploading = true;
+      try {
+        const result = await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/files`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
+            },
+          },
+        );
+        this.cmsItem.thumbnail = result.data.id;
+        this.cmsItem.thumbnail_file = result.data;
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      } finally {
+        this.uploading = false;
+      }
     },
   },
 };

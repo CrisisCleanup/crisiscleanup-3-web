@@ -23,6 +23,10 @@
         0
       </div>
       <div class="flex p-2 items-center justify-between">
+        <base-text>{{ $t('~~Agents Online') }}</base-text>
+        {{ agentsOnline || 0 }}
+      </div>
+      <div class="flex p-2 items-center justify-between">
         <ccu-icon with-text type="phone-plus" size="xl">
           <base-text>{{ $t('phoneDashboard.total_people_waiting') }}</base-text>
         </ccu-icon>
@@ -37,6 +41,8 @@ import { ConnectFirstMixin, DialogsMixin } from '@/mixins';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import { makeTableColumns } from '@/utils/table';
 import Incident from '@/models/Incident';
+import { EventBus } from '@/event-bus';
+import { formatNationalNumber } from '@/filters';
 
 export default {
   name: 'GeneralStats',
@@ -44,12 +50,16 @@ export default {
   data() {
     return {
       remainingCallbacks: 0,
+      agentsOnline: 0,
     };
   },
   created() {
     setInterval(() => {
       this.updateCallbacks();
     }, 30000);
+    EventBus.$on('phone:agents_online', (count) => {
+      this.agentsOnline = count;
+    });
   },
   async mounted() {
     await this.updateCallbacks();
@@ -61,6 +71,18 @@ export default {
         component: 'AjaxTable',
         classes: 'w-full h-96',
         modalClasses: 'bg-white max-w-3xl shadow',
+        id: 'outbound_list',
+        listeners: {
+          rowClick: (payload) => {
+            EventBus.$emit('phone_component:close');
+            EventBus.$emit('modal_component:close', 'outbound_list');
+            EventBus.$emit('phone_component:open', 'dialer');
+            EventBus.$emit(
+              'dialer:set_phone_number',
+              formatNationalNumber(payload.phone_number),
+            );
+          },
+        },
         props: {
           columns: makeTableColumns([
             ['id', '0.5fr', this.$t('~~ID')],
@@ -103,7 +125,6 @@ export default {
           ]),
           url: `${process.env.VUE_APP_API_BASE_URL}/phone_outbound`,
           query: {
-            incident_id: this.currentIncidentId,
             completion__lt: 1,
             filter_ani: 1,
             locked_at__isnull: true,
@@ -114,9 +135,7 @@ export default {
 
     async updateCallbacks() {
       this.remainingCallbacks =
-        await PhoneOutbound.api().getRemainingCallbackCount(
-          this.currentIncidentId,
-        );
+        await PhoneOutbound.api().getRemainingCallbackCount('');
       this.$emit('onRemainingCallbacks', this.remainingCallbacks);
     },
   },

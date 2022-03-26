@@ -80,7 +80,7 @@
             ref="table"
             class="mt-6 shadow-lg"
             :query="worksiteQuery"
-            @row:click="
+            @rowClick="
               (worksite) => {
                 worksiteId = worksite.id;
                 isEditing = true;
@@ -272,12 +272,102 @@
               v-if="$can('beta_feature.phone_chat')"
               name="chat"
               class="phone-button"
-              icon="chat"
-              icon-size="large"
-              icon-class="p-1"
+              @open="
+                () => {
+                  updateUserState({ chat_last_seen: $moment().toISOString() });
+                  unreadChatCount = 0;
+                }
+              "
             >
+              <template v-slot:button>
+                <div
+                  class="
+                    w-full
+                    h-full
+                    flex
+                    items-center
+                    justify-center
+                    relative
+                  "
+                >
+                  <div v-if="unreadChatCount" class="absolute top-0 left-0 m-1">
+                    <span
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        px-1
+                        py-0.5
+                        mr-2
+                        text-xs
+                        font-bold
+                        leading-none
+                        text-red-100
+                        bg-red-600
+                        rounded-full
+                      "
+                      >{{ unreadChatCount }}</span
+                    >
+                  </div>
+                  <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
+                </div>
+              </template>
               <template v-slot:component>
-                <Chat class="h-108" />
+                <Chat
+                  @unreadCount="unreadChatCount = $event"
+                  class="h-108"
+                  @onNewMessage="unreadChatCount += 1"
+                />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              name="news"
+              class="phone-button"
+              @open="
+                () => {
+                  updateUserState({ news_last_seen: $moment().toISOString() });
+                  unreadNewsCount = 0;
+                }
+              "
+            >
+              <template v-slot:button>
+                <div
+                  class="
+                    w-full
+                    h-full
+                    flex
+                    items-center
+                    justify-center
+                    relative
+                  "
+                >
+                  <div v-if="unreadNewsCount" class="absolute top-0 left-0 m-1">
+                    <span
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        px-1
+                        py-0.5
+                        mr-2
+                        text-xs
+                        font-bold
+                        leading-none
+                        text-red-100
+                        bg-red-600
+                        rounded-full
+                      "
+                      >{{ unreadNewsCount }}</span
+                    >
+                  </div>
+                  <ccu-icon type="news" class="p-1 ml-1.5" size="large" />
+                </div>
+              </template>
+              <template v-slot:component>
+                <PhoneNews
+                  @unreadCount="unreadNewsCount = $event"
+                  class="h-108"
+                />
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
@@ -293,7 +383,7 @@
                 <CallHistory
                   :table-body-style="{ height: '300px' }"
                   :calls="callHistory"
-                  @row:click="
+                  @rowClick="
                     ({ mobile }) => {
                       setManualOutbound(mobile);
                     }
@@ -302,7 +392,6 @@
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
-              v-if="Object.keys(stats).length"
               name="stats"
               class="phone-button"
             >
@@ -383,7 +472,7 @@ import CaseForm from '@/pages/CaseForm';
 import { getWorksiteLayer, mapAttribution, mapTileLayer } from '@/utils/map';
 import PhoneComponentButton from '@/components/phone/PhoneComponentButton';
 import ManualDialer from '@/components/phone/ManualDialer';
-import { ConnectFirstMixin, DialogsMixin } from '@/mixins';
+import { ConnectFirstMixin, DialogsMixin, UserMixin } from '@/mixins';
 import Agent from '@/components/phone/Agent';
 import AjaxTable from '@/components/AjaxTable';
 import { formatNationalNumber, getColorForStatus } from '@/filters';
@@ -397,7 +486,6 @@ import UpdateStatus from '@/components/phone/UpdateStatus';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import { EventBus } from '@/event-bus';
 import GeneralStats from '@/components/phone/GeneralStats';
-import AgentStats from '@/components/phone/AgentStats';
 import CallHistory from '@/components/phone/Widgets/CallHistory';
 import PhoneMap from '@/pages/phone/PhoneMap';
 import { ICONS, ICON_MAP } from '@/constants';
@@ -405,15 +493,16 @@ import { theme } from '@/../tailwind.config';
 import Leaderboard from '@/components/phone/Leaderboard';
 import Incident from '@/models/Incident';
 import Chat from '@/components/chat/Chat';
+import PhoneNews from '@/components/phone/PhoneNews';
 
 export default {
-  name: 'PhoneNew',
+  name: 'PhoneSysyem',
   components: {
+    PhoneNews,
     Chat,
     Leaderboard,
     PhoneMap,
     CallHistory,
-    AgentStats,
     GeneralStats,
     UpdateStatus,
     ActiveCall,
@@ -426,7 +515,7 @@ export default {
     PhoneComponentButton,
     CaseForm,
   },
-  mixins: [ConnectFirstMixin, DialogsMixin],
+  mixins: [ConnectFirstMixin, DialogsMixin, UserMixin],
   data() {
     return {
       worksiteId: null,
@@ -448,6 +537,8 @@ export default {
       tabs: null,
       showMobileMap: false,
       remainingCallbacks: 0,
+      unreadNewsCount: 0,
+      unreadChatCount: 0,
       ICONS,
       ICON_MAP,
     };

@@ -52,6 +52,7 @@
     "@pixi/mesh-extras": "^6.0.4",
     "@popperjs/core": "^2.5.3",
     "@ringcentral/sdk": "^4.3.3",
+    "@tailwindcss/line-clamp": "^0.3.1",
     "@turf/turf": "^5.1.6",
     "@u3u/vue-hooks": "^2.0.1",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.2.1",

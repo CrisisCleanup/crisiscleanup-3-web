@@ -25,7 +25,7 @@
       :sorter="meta.sorter"
       enable-pagination
       @change="getData"
-      @rowClick="(payload) => $emit('row:click', payload)"
+      @rowClick="(payload) => $emit('rowClick', payload)"
     >
       <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope"
         ><slot :name="slot" v-bind="scope"

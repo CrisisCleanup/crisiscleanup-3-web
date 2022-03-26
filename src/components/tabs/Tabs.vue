@@ -20,7 +20,7 @@
       </ul>
     </div>
 
-    <div :class="details ? 'tabs-details p-3' : ''">
+    <div :class="[details ? tabDetailsClasses : '']">
       <slot></slot>
     </div>
   </div>
@@ -45,6 +45,10 @@ export default {
     tabActiveClasses: {
       type: String,
       default: 'border-b-2 border-primary-light',
+    },
+    tabDetailsClasses: {
+      type: String,
+      default: 'tabs-details p-3',
     },
     details: {
       type: Boolean,

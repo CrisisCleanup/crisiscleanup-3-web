@@ -39,7 +39,7 @@
             @phone:showTraining="($event) => (isShowingTrainingModal = $event)"
           />
         </div>
-        <CallHistory @row:click="({ mobile }) => (numberToDial = mobile)" />
+        <CallHistory @rowClick="({ mobile }) => (numberToDial = mobile)" />
         <ContactTable v-if="currentUser && currentUser.isAdmin" />
       </div>
       <TrainingModal

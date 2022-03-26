@@ -5,11 +5,40 @@
         <div class="flex flex-col w-full">
           <div class="ml-1">
             <span>{{ message.full_name }}</span>
-            <span class="opacity-40 text-xs ml-1">{{
-              message.created_at | moment('h:mm A')
+            <span
+              v-if="$moment(message.created_at).isSame($moment(), 'day')"
+              class="opacity-40 text-xs ml-1"
+              :title="message.created_at"
+              >{{ message.created_at | moment('h:mm A') }}</span
+            >
+            <span v-else class="opacity-40 text-xs ml-1">{{
+              message.created_at | moment('MMM Do h:mm A')
             }}</span>
           </div>
           <div
+            v-if="message.is_urgent"
+            class="
+              px-4
+              py-2
+              inline-block
+              bg-crisiscleanup-chat-red bg-opacity-40
+              text-crisiscleanup-dark-400
+              w-full
+            "
+          >
+            <div class="text-crisiscleanup-chat-red flex items-center">
+              <ccu-icon
+                :alt="$t('~~Urgent')"
+                size="small"
+                type="attention-red"
+                class="mr-1"
+              />
+              {{ $t('~~URGENT') }}
+            </div>
+            {{ message.content }}
+          </div>
+          <div
+            v-else
             class="
               px-4
               py-2

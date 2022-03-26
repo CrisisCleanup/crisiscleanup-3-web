@@ -1,8 +1,5 @@
 <template>
-  <TitledCard
-    :loading="!callHistoryReady && !calls"
-    :title="$t('~~My Calls')"
-  >
+  <TitledCard :loading="!callHistoryReady && !calls" :title="$t('~~My Calls')">
     <div class="card-container overflow-auto h-full">
       <AgentStats />
       <Table
@@ -25,7 +22,7 @@
         <template #mobile="{ item }">
           <div
             class="inline-flex items-center"
-            @click="$emit('row:click', item)"
+            @click="$emit('rowClick', item)"
           >
             <ccu-icon
               type="phone-classic"

@@ -16,8 +16,9 @@ export const TEXT_VARIANTS = [
 ];
 
 export const ICON_MAP = {
-  'add-orange': require('@/assets/icons/add-orange.svg'),
+  'attention-red': require('@/assets/icons/attention-red.svg'),
   about: require('@/assets/icons/about-us.svg'),
+  attention: require('@/assets/icons/attention.svg'),
   dashboard: require('@/assets/icons/dashboard.svg'),
   home: require('@/assets/icons/home.svg'),
   cases: require('@/assets/icons/cases.svg'),
@@ -82,6 +83,7 @@ export const ICON_MAP = {
   time: require('@/assets/icons/time.svg'),
   logout: require('@/assets/icons/logout.svg'),
   plane: require('@/assets/icons/plane.svg'),
+  news: require('@/assets/icons/news.svg'),
 };
 /* eslint-enable global-require */
 

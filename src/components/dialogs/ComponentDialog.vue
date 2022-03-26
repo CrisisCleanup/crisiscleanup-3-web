@@ -62,8 +62,17 @@
 </template>
 
 <script>
+import { EventBus } from '@/event-bus';
+
 export default {
   name: 'ComponentDialog',
+  created() {
+    EventBus.$on('modal_component:close', (key) => {
+      if (key === this.id) {
+        this.$close();
+      }
+    });
+  },
   computed: {
     dynamicComponent() {
       if (typeof this.component === 'string') {
@@ -73,6 +82,10 @@ export default {
     },
   },
   props: {
+    id: {
+      type: String,
+      default: '',
+    },
     title: {
       type: String,
       default: '',

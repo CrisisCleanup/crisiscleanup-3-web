@@ -26,19 +26,44 @@
         :key="message.id"
       />
     </div>
-    <div class="border-t-2 border-gray-200 pt-4 mb-2 sm:mb-0">
+    <div
+      class="border-t-2 pt-1 sm:mb-0"
+      :class="urgent ? 'border-crisiscleanup-chat-red' : 'border-gray-200'"
+    >
+      <div
+        v-if="urgent"
+        class="text-crisiscleanup-chat-red flex items-center mb-1"
+      >
+        <ccu-icon
+          :alt="$t('~~Urgent')"
+          size="small"
+          type="attention-red"
+          class="mr-1"
+        />
+        {{ $t('~~URGENT') }}
+      </div>
       <div class="flex flex-col">
         <base-input @enter="sendMessage" class="" v-model="currentMessage" />
         <div class="flex items-center justify-between py-2">
           <base-link href="" text-variant="bodysm" class="px-2">{{
             $t('~~Need help?')
           }}</base-link>
-          <base-button
-            class="h-8 w-8 bg-crisiscleanup-dark-blue"
-            :disabled="!Boolean(currentMessage)"
-            ccu-icon="plane"
-            :action="sendMessage"
-          />
+          <div class="flex">
+            <ccu-icon
+              :alt="$t('~~Urgent')"
+              size="small"
+              type="attention"
+              class="mx-1 w-8 h-8"
+              :class="urgent ? 'bg-crisiscleanup-light-smoke' : ''"
+              @click.native="urgent = !urgent"
+            />
+            <base-button
+              class="h-8 w-8 bg-crisiscleanup-dark-blue"
+              :disabled="!Boolean(currentMessage)"
+              ccu-icon="plane"
+              :action="sendMessage"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -63,12 +88,17 @@ export default {
     },
   },
   async mounted() {
+    await this.getUnreadMessagesCount();
     await this.getMessages();
     const { socket, send } = useWebSockets(
       `/ws/chat/${this.groupId}`,
       'chat',
       (data) => {
         this.messages = [data, ...this.messages];
+        if (data.created_by !== this.currentUser.id) {
+          this.$emit('onNewMessage');
+        }
+
         this.$nextTick(() => {
           this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
         });
@@ -86,6 +116,7 @@ export default {
       groupId: 1,
       messages: [],
       currentMessage: '',
+      urgent: false,
       send: () => {},
       loadingMessages: false,
     };
@@ -129,11 +160,28 @@ export default {
       }
       this.loadingMessages = false;
     },
+    async getUnreadMessagesCount() {
+      this.loadingMessages = true;
+      const params = {
+        message_group: this.groupId,
+        limit: 1,
+      };
+      if (this.currentUser.states.chat_last_seen) {
+        params.created_at__gte = this.currentUser.states.chat_last_seen;
+      }
+      const queryString = getQueryString(params);
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/chat_messages?${queryString}`,
+      );
+      this.$emit('unreadCount', response.data.count);
+    },
     sendMessage() {
       this.send({
         content: this.currentMessage,
+        is_urgent: this.urgent,
       });
       this.currentMessage = '';
+      this.urgent = false;
     },
   },
 };
