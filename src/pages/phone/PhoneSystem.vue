@@ -391,10 +391,7 @@
                 />
               </template>
             </PhoneComponentButton>
-            <PhoneComponentButton
-              name="stats"
-              class="phone-button"
-            >
+            <PhoneComponentButton name="stats" class="phone-button">
               <template v-slot:button>
                 <div class="w-full h-full flex items-center justify-center">
                   <div class="text-xl">
