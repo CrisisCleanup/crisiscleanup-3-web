@@ -18,6 +18,8 @@ export const TEXT_VARIANTS = [
 export const ICON_MAP = {
   'attention-red': require('@/assets/icons/attention-red.svg'),
   about: require('@/assets/icons/about-us.svg'),
+  'arrow-left': require('@/assets/icons/arrow-left.svg'),
+  'arrow-right': require('@/assets/icons/arrow-right.svg'),
   attention: require('@/assets/icons/attention.svg'),
   dashboard: require('@/assets/icons/dashboard.svg'),
   home: require('@/assets/icons/home.svg'),

@@ -4,7 +4,7 @@
     :dropdown="dropdownProps"
     @update:dropdown="onDropdownUpdate"
   >
-    <div class="h-64 overflow-y-scroll">
+    <div class="h-56 overflow-y-scroll">
       <div
         class="flex items-center justify-between p-2"
         v-for="rank in leaderboard"
@@ -78,6 +78,27 @@
         </div>
       </div>
     </div>
+    <div
+      class="flex items-center justify-between p-2 border-t"
+      v-if="previous || next"
+    >
+      <base-button
+        :disabled="!previous"
+        class="bg-crisiscleanup-light-smoke w-6 h-6"
+        variant="solid"
+        icon-size="xs"
+        ccu-icon="arrow-left"
+        :action="() => loadLeaderboard(null, previous)"
+      />
+      <base-button
+        ccu-icon="arrow-right"
+        icon-size="xs"
+        class="bg-crisiscleanup-light-smoke w-6 h-6"
+        variant="solid"
+        :disabled="!next"
+        :action="() => loadLeaderboard(null, next)"
+      />
+    </div>
   </TitledCard>
 </template>
 
@@ -110,6 +131,8 @@ export default {
   data() {
     return {
       leaderboard: [],
+      previous: null,
+      next: null,
       resolution: LEADERBOARD_RESOLUTIONS.DAILY,
       nameTextStyle: {
         lineHeight: '1rem',
@@ -137,13 +160,16 @@ export default {
     this.socket.close();
   },
   methods: {
-    async loadLeaderboard(resolution) {
+    async loadLeaderboard(resolution, url) {
       this.resolution = resolution;
       const { data } = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/phone/leaderboard?resolution=${resolution}`,
+        url ||
+          `${process.env.VUE_APP_API_BASE_URL}/phone/leaderboard?resolution=${resolution}`,
       );
 
       const leaderboard = data.results || data;
+      this.next = data.next;
+      this.previous = data.previous;
 
       await this.getUsers(leaderboard.map((ranking) => ranking.user));
       this.leaderboard = leaderboard;

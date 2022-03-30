@@ -2,13 +2,15 @@ import { AuthService } from '@/services/auth.service';
 
 export function useWebSockets(url, name, cb) {
   const endpoint = process.env.VUE_APP_API_BASE_URL.replace('http', 'ws');
+  let socket;
+  let send;
 
   function connect() {
-    const socket = new WebSocket(
+    socket = new WebSocket(
       `${endpoint}${url}?bearer=${AuthService.getToken()}`,
     );
 
-    const send = (msg) => {
+    const sendMessage = (msg) => {
       socket.send(JSON.stringify(msg));
     };
 
@@ -27,13 +29,17 @@ export function useWebSockets(url, name, cb) {
         e,
       );
       setTimeout(function () {
-        connect();
+        const websocket = connect();
+        send = websocket.send;
+        socket = websocket.socket;
       }, 1000);
     };
-    return { socket, send };
+    return { socket, send: sendMessage };
   }
 
-  const { socket, send } = connect();
+  const websocket = connect();
+  send = websocket.send;
+  socket = websocket.socket;
 
   return {
     socket,

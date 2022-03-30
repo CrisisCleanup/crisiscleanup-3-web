@@ -182,6 +182,7 @@ export default {
       });
       this.currentMessage = '';
       this.urgent = false;
+      this.updateUserState({ chat_last_seen: this.$moment().toISOString() });
     },
   },
 };
