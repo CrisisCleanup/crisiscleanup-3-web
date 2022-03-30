@@ -13,7 +13,7 @@
         >
       </div>
       <home-nav />
-      <home-actions />
+      <home-actions class="mt-10" />
       <div class="grid--main">
         <LoginForm />
       </div>
