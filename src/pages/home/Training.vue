@@ -6,7 +6,7 @@
     <template #grid-content>
       <home-nav />
       <home-actions />
-      <div class="grid--main">
+      <div class="grid--main mb-60 sm:mb-0">
         <!--- Title --->
         <div class="flex flex-col m-5 pb-8">
           <h1 class="text-5xl px-0.5 text-crisiscleanup-dark-500 font-bold">
@@ -18,9 +18,9 @@
           </p>
         </div>
         <!--- Content --->
-        <div class="flex flex-row justify-between m-5">
+        <div class="flex flex-col sm:flex-row justify-between sm:m-5">
           <!--- Training Video --->
-          <div class="flex-col w-1/2">
+          <div class="flex-col sm:w-1/2">
             <div class="video-container">
               <iframe
                 class="resp-video"
@@ -34,7 +34,7 @@
             </div>
           </div>
           <!--- Training Video Description --->
-          <div class="flex-col w-1/2">
+          <div class="flex-col sm:w-1/2">
             <h1 class="px-10 text-3xl font-bold text-crisiscleanup-dark-500">
               {{ $t('training.mandatory_training_video') }}
             </h1>
@@ -47,9 +47,9 @@
         <!--- /Content --->
 
         <!--- Content --->
-        <div class="flex flex-row justify-between m-5">
+        <div class="flex flex-col sm:flex-row justify-between sm:m-5">
           <!--- Training Video --->
-          <div class="flex-col w-1/2">
+          <div class="flex-col sm:w-1/2">
             <div class="video-container">
               <iframe
                 class="resp-video"
@@ -63,7 +63,7 @@
             </div>
           </div>
           <!--- Training Video Description --->
-          <div class="flex-col w-1/2">
+          <div class="flex-col sm:w-1/2">
             <h1 class="px-10 text-3xl font-bold text-crisiscleanup-dark-500">
               {{ $t('training.suppliment_phone_training') }}
             </h1>
@@ -76,9 +76,9 @@
         <!--- /Content --->
 
         <!--- Content --->
-        <div class="flex flex-row justify-between m-5">
+        <div class="flex flex-col sm:flex-row justify-between m-5">
           <!--- Training Video --->
-          <div class="flex-col w-1/2">
+          <div class="flex-col sm:w-1/2">
             <div class="video-container">
               <iframe
                 class="resp-video"
@@ -92,7 +92,7 @@
             </div>
           </div>
           <!--- Training Video Description --->
-          <div class="flex-col w-1/2">
+          <div class="flex-col sm:w-1/2">
             <h1 class="px-10 text-3xl font-bold text-crisiscleanup-dark-500">
               {{ $t('training.calldown_training') }}
             </h1>
@@ -105,9 +105,9 @@
         <!--- /Content --->
 
         <!--- Content --->
-        <div class="flex flex-row justify-between m-5">
+        <div class="flex flex-col sm:flex-row justify-between m-5">
           <!--- Training Video --->
-          <div class="flex-col w-1/2">
+          <div class="flex-col sm:w-1/2">
             <div class="video-container">
               <iframe
                 class="resp-video"
@@ -121,7 +121,7 @@
             </div>
           </div>
           <!--- Training Video Description --->
-          <div class="flex-col w-1/2">
+          <div class="flex-col sm:w-1/2">
             <h1 class="px-10 text-3xl font-bold text-crisiscleanup-dark-500">
               {{ $t('training.ccu_during_covid') }}
             </h1>
@@ -165,9 +165,8 @@ export default {
     .grid {
       &--main {
         align-self: center;
-        @apply mx-10 h-full;
+        @apply sm:mx-10 h-full;
         overflow: auto;
-        grid-column: logo-end / span main-end;
         grid-row: main-start / span actions-end;
       }
       &--overlay {
@@ -179,6 +178,20 @@ export default {
         justify-content: space-evenly;
         @apply my-1;
       }
+    }
+  }
+}
+@media only screen and (max-width: 640px) {
+  .homegrid {
+    height: 100vh;
+    &.grid-container {
+      grid:
+        [r1] 'logo survivors' [r1end]
+        [r4] 'nav nav' [r4end]
+        [r2] 'main main' [r2end]
+        [r3] 'actions actions' [r3end]
+        / auto;
+      grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
     }
   }
 }
