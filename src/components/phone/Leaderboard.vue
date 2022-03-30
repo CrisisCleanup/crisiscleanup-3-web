@@ -143,8 +143,10 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/phone/leaderboard?resolution=${resolution}`,
       );
 
-      await this.getUsers(data.map((ranking) => ranking.user));
-      this.leaderboard = data;
+      const leaderboard = data.results || data;
+
+      await this.getUsers(leaderboard.map((ranking) => ranking.user));
+      this.leaderboard = leaderboard;
       this.leaderboard.forEach((ranking) => {
         ranking.user = this.getUser(ranking.user);
       });
