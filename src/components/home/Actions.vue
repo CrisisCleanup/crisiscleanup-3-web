@@ -1,5 +1,5 @@
 <template>
-  <div class="grid--actions">
+  <div class="grid--actions mb-4">
     <base-text
       font="display"
       variant="h2"
