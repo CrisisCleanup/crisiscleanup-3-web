@@ -53,13 +53,13 @@
         <div class="flex">
           <div class="w-1/2 bg-white p-3 shadow text-sm mr-4">
             <div class="flex items-center justify-between">
-              <base-text variant="h2" :weight="600"> Info </base-text>
+              <base-text variant="h2" :weight="600"> Info</base-text>
             </div>
             <FloatingInput
               v-model="organization.name"
               type="text"
               class="input text-sm"
-              size="large"
+              size="small"
               :placeholder="$t('adminOrganization.name_org')"
             />
             <FloatingInput
@@ -90,29 +90,27 @@
               size="large"
               :placeholder="$t('adminOrganization.url')"
             />
-            <div class="flex">
-              <div class="w-32 flex items-center">
+            <div class="sm:flex mb-2 sm:mb-1">
+              <div class="flex items-center">
                 <img src="@/assets/facebook.svg" class="w-8 mr-2" />
                 <label class="pr-3 text-xs">{{
                   $t('profileOrg.facebook')
                 }}</label>
               </div>
               <base-input
-                class="w-84"
                 size="small"
                 v-model="organization.facebook"
                 :placeholder="$t('profileOrg.facebook')"
               />
             </div>
-            <div class="flex">
-              <div class="w-32 flex items-center">
-                <img src="@/assets/twitter.svg" class="ml-1 w-6 mr-2" />
+            <div class="sm:flex mb-2 sm:mb-0">
+              <div class="flex items-center">
+                <img src="@/assets/twitter.svg" class="ml-1 w-6 mr-2 mb-1" />
                 <label class="pr-3 text-xs">{{
                   $t('profileOrg.twitter')
                 }}</label>
               </div>
               <base-input
-                class="w-84"
                 size="small"
                 v-model="organization.twitter"
                 :placeholder="$t('profileOrg.twitter')"
@@ -133,13 +131,19 @@
             <FloatingInput
               v-model="organization.automatically_approve_user_domain"
               :placeholder="$t('adminOrganization.auto_approve_domain')"
-              class="input text-sm"
+              class="input text-sm pb-4 sm:pb-0"
               size="large"
             />
-            <base-checkbox v-model="organization.is_active">
+            <base-checkbox
+              class="mb-1 sm:mb-0"
+              v-model="organization.is_active"
+            >
               Is Active
             </base-checkbox>
-            <base-checkbox v-model="organization.org_verified">
+            <base-checkbox
+              class="mb-1 sm:mb-0"
+              v-model="organization.org_verified"
+            >
               Org Verified
             </base-checkbox>
             <base-checkbox v-model="organization.publish">
@@ -198,7 +202,12 @@
               <div class="flex">
                 <div v-if="!logoUrl">
                   <DragDrop
-                    class="w-84 h-16 text-center mr-6 border border-dashed"
+                    class="
+                      sm:w-84 sm:h-16
+                      text-center
+                      mr-6
+                      border border-dashed
+                    "
                     container-class="flex-row items-center justify-center"
                     :choose-title="$t('profileOrg.upload_org_logo')"
                     :drag-title="$t('profileOrg.logo_specs')"
@@ -336,8 +345,8 @@
             </base-text>
             <base-text>
               Where are you working:
-              {{ organization.where_are_you_working }}</base-text
-            >
+              {{ organization.where_are_you_working }}
+            </base-text>
             <base-text> Facebook: {{ organization.facebook }}</base-text>
             <base-text> Twitter: {{ organization.twitter }}</base-text>
             <base-text> Referral: {{ organization.referral }}</base-text>
@@ -401,7 +410,7 @@
         </div>
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
-        <base-text variant="h2" :weight="600"> Roles </base-text>
+        <base-text variant="h2" :weight="600"> Roles</base-text>
         <form-select
           :value="currentRole"
           :placeholder="$t('adminOrganization.role')"
@@ -568,7 +577,7 @@
       </div>
 
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
-        <base-text variant="h2" :weight="600"> Groups </base-text>
+        <base-text variant="h2" :weight="600"> Groups</base-text>
         <div class="flex item-start">
           <div>
             <div class="flex items-center justify-start">
@@ -1316,16 +1325,19 @@ export default {
 
 <style scoped>
 .input {
-  @apply w-120 my-1;
+  @apply my-1;
 }
+
 textarea {
-  @apply w-120 my-1;
+  @apply my-1;
 }
+
 .select {
-  @apply w-120 my-2 h-16 text-sm;
+  @apply my-2 h-16 text-sm;
 }
+
 .multi-select {
-  @apply w-120 my-2 text-sm;
+  @apply my-2 text-sm;
   min-height: 3rem;
 }
 </style>
