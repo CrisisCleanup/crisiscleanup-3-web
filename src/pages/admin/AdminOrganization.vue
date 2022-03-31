@@ -50,8 +50,8 @@
         </div>
       </div>
       <div>
-        <div class="flex">
-          <div class="w-1/2 bg-white p-3 shadow text-sm mr-4">
+        <div class="flex flex-col sm:flex-row">
+          <div class="sm:mb-0 mb-7 sm:w-1/2 bg-white p-3 shadow text-sm mr-4">
             <div class="flex items-center justify-between">
               <base-text variant="h2" :weight="600"> Info</base-text>
             </div>
@@ -164,6 +164,22 @@
               label="label"
             />
             <form-select
+              :value="currentRole"
+              :placeholder="$t('adminOrganization.role')"
+              class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
+              :options="roles"
+              @input="
+            (e) => {
+              roleToAdd = e;
+              currentRole = e;
+            }
+          "
+              select-classes="p-1"
+              item-key="id"
+              label="name_t"
+              searchable
+            />
+            <form-select
               :placeholder="$t('orgApprovalTable.give_approve_reason')"
               class="
                 w-auto
@@ -246,7 +262,7 @@
               </div>
             </div>
           </div>
-          <div class="w-1/2 bg-white p-3 shadow text-sm">
+          <div class="sm:w-1/2 bg-white p-3 shadow text-sm">
             <base-text variant="h3">
               {{ $t('adminOrganization.primary_contacts') }}
             </base-text>
@@ -410,25 +426,6 @@
         </div>
       </div>
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
-        <base-text variant="h2" :weight="600"> Roles</base-text>
-        <form-select
-          :value="currentRole"
-          :placeholder="$t('adminOrganization.role')"
-          class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
-          :options="roles"
-          @input="
-            (e) => {
-              roleToAdd = e;
-              currentRole = e;
-            }
-          "
-          select-classes="p-1"
-          item-key="id"
-          label="name_t"
-          searchable
-        />
-      </div>
-      <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
         <base-text variant="h2" :weight="600">
           {{ $t('adminOrganization.capabilities') }}
         </base-text>
@@ -578,12 +575,12 @@
 
       <div class="bg-white p-3 shadow text-sm mr-4 mt-6">
         <base-text variant="h2" :weight="600"> Groups</base-text>
-        <div class="flex item-start">
+        <div class="flex flex-col sm:flex-row item-start">
           <div>
             <div class="flex items-center justify-start">
               <GroupSearchInput
                 @selectedGroup="groupToAdd = $event"
-                class="w-108"
+                class="sm:w-108"
                 size="large"
               />
               <base-button
@@ -700,8 +697,8 @@
         <modal
           v-if="showingLocationModal"
           :title="$t('profileOrg.select_location')"
-          modal-style="height: 70%"
-          modal-classes="w-3/5"
+          :modal-style="`height: ${$mq !== 'sm' ? '70%' : '100%'}`"
+          :modal-classes="`w-${$mq !== 'sm' ? '3/5' : 'full'}`"
           @close="showingLocationModal = false"
           @ok="saveCurrentLocation"
         >
