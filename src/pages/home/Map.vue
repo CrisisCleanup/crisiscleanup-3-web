@@ -159,7 +159,22 @@ export default {
     }
   }
 }
-
+@media only screen and (max-width: 640px) {
+  .homegrid {
+    height: 100vh;
+    &.grid-container {
+      grid:
+        [r1] 'logo survivors' [r1end]
+        [r2] 'nav nav' [r2end]
+        [r3] 'actions actions' [r3end]
+        [r4] 'footer footer' [r4end]
+        [r5] 'main main' [r5end]
+        [r6] 'main main' [r6end]
+        / auto;
+      grid-template-rows: 1fr 1fr 1fr 1fr;
+    }
+  }
+}
 .input {
   @apply m-2;
 }
