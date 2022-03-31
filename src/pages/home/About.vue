@@ -1,11 +1,11 @@
 <template>
   <HomeLayout class="overflow-auto">
     <template #grid-overlay>
-      <div class="grid--overlay homegrid-backdrop" />
+      <div class="grid--overlay homegrid-backdrop"/>
     </template>
     <template #grid-content>
-      <home-nav />
-      <home-actions />
+      <home-nav/>
+      <home-actions/>
       <div class="grid--main h-screen">
         <!--- Title --->
         <div class="flex flex-col m-5">
@@ -102,7 +102,8 @@
               weight="300"
               variant="body"
               class="crisiscleanup-grey-500"
-              >{{ $t('about.organizations') }}</base-text
+            >{{ $t('about.organizations') }}
+            </base-text
             >
           </div>
           <div class="flex flex-col">
@@ -129,8 +130,9 @@
         <!-- View Details Button -->
         <div class="flex justify-around py-2">
           <base-button variant="solid" class="py-2 px-3">{{
-            $t('about.view_details')
-          }}</base-button>
+              $t('about.view_details')
+            }}
+          </base-button>
         </div>
         <!-- Info Card w/ Sketch -->
         <div
@@ -164,22 +166,31 @@
               </div>
             </div>
             <div class="flex-col m-5 w-1/4">
-              <img src="@/assets/aboutussketchss.jpg" class="h-1/2" />
+              <img src="@/assets/aboutussketchss.jpg" class="h-1/2"/>
             </div>
           </div>
         </div>
 
         <!-- The People of Crisis Cleanup -->
-        <h1 class="text-4xl px-5 sm:px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
+        <h1
+          class="
+            text-4xl
+            px-5
+            sm:px-0.5
+            text-crisiscleanup-dark-500
+            font-bold
+            py-8
+          "
+        >
           {{ $t('about.people_of_ccu') }}
         </h1>
 
         <div class="images-grid sm:grid-cols-3">
           <!-- Headshots -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/aarontitus.jpg" class="m-5" />
+            <img src="@/assets/headshots/aarontitus.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Aaron Titus</span><br />
+              <span class="font-bold">Aaron Titus</span><br/>
               {{ $t('about.aaron_titus_title') }}
             </p>
             <base-text
@@ -193,9 +204,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/rossarroyo.jpeg" class="m-5" />
+            <img src="@/assets/headshots/rossarroyo.jpeg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Ross Arroyo</span><br />
+              <span class="font-bold">Ross Arroyo</span><br/>
               {{ $t('about.ross_arroyo_title') }}
             </p>
             <base-text
@@ -209,9 +220,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/tobiabiodun.jpg" class="m-5" />
+            <img src="@/assets/headshots/tobiabiodun.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Tobi Abiodun</span><br />
+              <span class="font-bold">Tobi Abiodun</span><br/>
               {{ $t('about.tobi_abiodun_title') }}
             </p>
             <base-text
@@ -223,9 +234,9 @@
           </div>
 
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/olgauzhykova.jpg" class="m-5" />
+            <img src="@/assets/headshots/olgauzhykova.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Olga Uzhykova</span><br />
+              <span class="font-bold">Olga Uzhykova</span><br/>
               {{ $t('about.olga_uzhykova_title') }}
             </p>
             <base-text
@@ -239,9 +250,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/mariiafilatova.jpg" class="m-5" />
+            <img src="@/assets/headshots/mariiafilatova.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Mariia Filatova</span><br />
+              <span class="font-bold">Mariia Filatova</span><br/>
               {{ $t('about.mariia_filatova_title') }}
             </p>
             <base-text
@@ -255,9 +266,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/bradenmars.jpg" class="m-5" />
+            <img src="@/assets/headshots/bradenmars.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Braden Mars</span><br />
+              <span class="font-bold">Braden Mars</span><br/>
               {{ $t('about.braden_mars_title') }}
             </p>
             <base-text
@@ -270,9 +281,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/dankaupilla.jpg" class="m-5" />
+            <img src="@/assets/headshots/dankaupilla.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Dan Kaupilla</span><br />
+              <span class="font-bold">Dan Kaupilla</span><br/>
               {{ $t('about.dan_kaupilla_title') }}
             </p>
             <base-text
@@ -286,9 +297,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/ginanewby.jpg" class="m-5" />
+            <img src="@/assets/headshots/ginanewby.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Gina Newby</span><br />
+              <span class="font-bold">Gina Newby</span><br/>
               {{ $t('about.gina_newby_title') }}
             </p>
             <base-text
@@ -302,9 +313,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/tylersanders.png" class="m-5" />
+            <img src="@/assets/headshots/tylersanders.png" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Tyler Sanders</span><br />
+              <span class="font-bold">Tyler Sanders</span><br/>
               {{ $t('about.tyler_sanders_title') }}
             </p>
             <base-text
@@ -318,9 +329,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/marktregellas.jpg" class="m-5" />
+            <img src="@/assets/headshots/marktregellas.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Mark Tregellas</span><br />
+              <span class="font-bold">Mark Tregellas</span><br/>
               {{ $t('about.mark_tregellas_title') }}
             </p>
             <base-text
@@ -341,9 +352,9 @@
         <div class="images-grid sm:grid-cols-3">
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/andygimma.jpg" class="m-5" />
+            <img src="@/assets/headshots/andygimma.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Andy Gimma</span><br />
+              <span class="font-bold">Andy Gimma</span><br/>
               {{ $t('about.andy_gimma_title') }}
             </p>
             <base-text
@@ -357,9 +368,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/zacharystraub.jpg" class="m-5" />
+            <img src="@/assets/headshots/zacharystraub.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Zachary Straub</span><br />
+              <span class="font-bold">Zachary Straub</span><br/>
               {{ $t('about.zachary_straub_title') }}
             </p>
             <base-text
@@ -373,9 +384,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/dhruvmehrotra.jpg" class="m-5" />
+            <img src="@/assets/headshots/dhruvmehrotra.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Dhruv Mehrotra</span><br />
+              <span class="font-bold">Dhruv Mehrotra</span><br/>
               {{ $t('about.dhruv_mehrotra_title') }}
             </p>
             <base-text
@@ -389,9 +400,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/chriswood.jpg" class="m-5" />
+            <img src="@/assets/headshots/chriswood.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Chris Wood</span><br />
+              <span class="font-bold">Chris Wood</span><br/>
               {{ $t('about.chris_wood_title') }}
             </p>
             <base-text
@@ -405,9 +416,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/karissaphelps.jpg" class="m-5" />
+            <img src="@/assets/headshots/karissaphelps.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Karissa Phelps</span><br />
+              <span class="font-bold">Karissa Phelps</span><br/>
               {{ $t('about.karissa_phelps_title') }}
             </p>
             <base-text
@@ -421,9 +432,9 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/jeremypack.jpg" class="m-5" />
+            <img src="@/assets/headshots/jeremypack.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Jeremy Pack</span><br />
+              <span class="font-bold">Jeremy Pack</span><br/>
               {{ $t('about.jeremy_pack_title') }}
             </p>
             <base-text
@@ -436,9 +447,9 @@
           <!-- End Card -->
 
           <div class="flex flex-col items-center px-5 sm:px-0">
-            <img src="@/assets/headshots/brucechristensen.jpg" class="m-5" />
+            <img src="@/assets/headshots/brucechristensen.jpg" class="m-5"/>
             <p class="text-3xl px-0.5 pb-5">
-              <span class="font-bold">Bruce Christensen</span><br />
+              <span class="font-bold">Bruce Christensen</span><br/>
               {{ $t('about.bruce_christensen_title') }}
             </p>
             <base-text
@@ -457,8 +468,9 @@
           {{ $t('about.major_supporters') }}
         </h1>
         <base-text variant="body" class="pt-2">{{
-          $t('about.in_kind_supporter_intro')
-        }}</base-text>
+            $t('about.in_kind_supporter_intro')
+          }}
+        </base-text>
 
         <!-- Logos -->
         <div class="partners-grid sm:grid-cols-6">
@@ -471,9 +483,9 @@
             />
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a href="https://aws.amazon.com/" target="_blank"
-                  >Amazon Web Services</a
-                ></span
+              ><a href="https://aws.amazon.com/" target="_blank"
+              >Amazon Web Services</a
+              ></span
               >
             </p>
           </div>
@@ -481,12 +493,12 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
-            <img src="@/assets/partners/arc_logo.jpg" class="m-5" />
+            <img src="@/assets/partners/arc_logo.jpg" class="m-5"/>
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a href="http://www.redcross.org/" target="_blank"
-                  >The American Red Cross</a
-                ></span
+              ><a href="http://www.redcross.org/" target="_blank"
+              >The American Red Cross</a
+              ></span
               >
             </p>
           </div>
@@ -494,12 +506,12 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
-            <img src="@/assets/partners/houston_logo.png" class="m-5" />
+            <img src="@/assets/partners/houston_logo.png" class="m-5"/>
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a href="http://www.houstontx.gov/housing/" target="_blank"
-                  >The City of Houston</a
-                ></span
+              ><a href="http://www.houstontx.gov/housing/" target="_blank"
+              >The City of Houston</a
+              ></span
               >
             </p>
           </div>
@@ -507,14 +519,14 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
-            <img src="@/assets/partners/ldscharities_logo.jpg" class="m-5" />
+            <img src="@/assets/partners/ldscharities_logo.jpg" class="m-5"/>
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a
-                  href="https://www.latterdaysaintcharities.org/"
-                  target="_blank"
-                  >Latter-day Saint Charities</a
-                ></span
+              ><a
+                href="https://www.latterdaysaintcharities.org/"
+                target="_blank"
+              >Latter-day Saint Charities</a
+              ></span
               >
             </p>
           </div>
@@ -522,12 +534,12 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
-            <img src="@/assets/partners/visionlink_logo.jpg" class="m-5" />
+            <img src="@/assets/partners/visionlink_logo.jpg" class="m-5"/>
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a href="http://visionlink.org/" target="_blank"
-                  >VisionLink</a
-                ></span
+              ><a href="http://visionlink.org/" target="_blank"
+              >VisionLink</a
+              ></span
               >
             </p>
           </div>
@@ -535,12 +547,12 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
-            <img src="@/assets/partners/connectfirst_logo.png" class="m-5" />
+            <img src="@/assets/partners/connectfirst_logo.png" class="m-5"/>
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a href="http://www.connectfirst.com/" target="_blank"
-                  >Connect First</a
-                ></span
+              ><a href="http://www.connectfirst.com/" target="_blank"
+              >Connect First</a
+              ></span
               >
             </p>
           </div>
@@ -548,12 +560,12 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
-            <img src="@/assets/partners/umcor_logo.jpg" class="m-5" />
+            <img src="@/assets/partners/umcor_logo.jpg" class="m-5"/>
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a href="https://www.umcor.org/" target="_blank"
-                  >UMCOR</a
-                ></span
+              ><a href="https://www.umcor.org/" target="_blank"
+              >UMCOR</a
+              ></span
               >
             </p>
           </div>
@@ -567,9 +579,9 @@
             />
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a href="https://www.volunteerflorida.org/" target="_blank"
-                  >Volunteer Florida</a
-                ></span
+              ><a href="https://www.volunteerflorida.org/" target="_blank"
+              >Volunteer Florida</a
+              ></span
               >
             </p>
           </div>
@@ -577,14 +589,14 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
-            <img src="@/assets/partners/h2prep_logo.jpg" class="m-5" />
+            <img src="@/assets/partners/h2prep_logo.jpg" class="m-5"/>
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a
-                  href="https://www.amazon.com/How-Prepare-Everything-Aaron-Titus/dp/1525505947/"
-                  target="_blank"
-                  >How to Prepare for Everything</a
-                ></span
+              ><a
+                href="https://www.amazon.com/How-Prepare-Everything-Aaron-Titus/dp/1525505947/"
+                target="_blank"
+              >How to Prepare for Everything</a
+              ></span
               >
             </p>
           </div>
@@ -592,12 +604,12 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
-            <img src="@/assets/partners/nj211_logo.jpg" class="m-5" />
+            <img src="@/assets/partners/nj211_logo.jpg" class="m-5"/>
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a href="http://www.nj211.org/" target="_blank"
-                  >NJ 2-1-1</a
-                ></span
+              ><a href="http://www.nj211.org/" target="_blank"
+              >NJ 2-1-1</a
+              ></span
               >
             </p>
           </div>
@@ -605,12 +617,12 @@
 
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
-            <img src="@/assets/partners/thinkso_logo.png" class="m-5" />
+            <img src="@/assets/partners/thinkso_logo.png" class="m-5"/>
             <p class="text-xl text-center px-0.5 pb-5">
               <span class="font-bold"
-                ><a href="https://thinkso.com/" target="_blank"
-                  >ThinkSo</a
-                ></span
+              ><a href="https://thinkso.com/" target="_blank"
+              >ThinkSo</a
+              ></span
               >
             </p>
           </div>
@@ -622,7 +634,7 @@
         </h1>
         <div class="flex flex-row">
           <div class="flex flex-col">
-            <img src="@/assets/foundationalphilosophiessketchss.jpg" />
+            <img src="@/assets/foundationalphilosophiessketchss.jpg"/>
           </div>
           <div class="flex flex-col m-5">
             <ul class="text-xl text-crisiscleanup-dark-400 font-hairline">
@@ -632,19 +644,19 @@
               <li>
                 {{ $t('about.tech_enhance_relationships') }}
               </li>
-              <br />
+              <br/>
               <li>
                 {{ $t('about.no_pyramid') }}
               </li>
-              <br />
+              <br/>
               <li>
                 {{ $t('about.collab_comm_convenient_required') }}
               </li>
-              <br />
+              <br/>
               <li>
                 {{ $t('about.one_app_rule_all') }}
               </li>
-              <br />
+              <br/>
               <li>
                 {{ $t('about.property_not_people') }}
               </li>
@@ -668,7 +680,7 @@
         >
           <div class="flex flex-row justify-around">
             <div class="flex-col w-1/4">
-              <img src="@/assets/supportteamsketchss.jpg" class="m-5" />
+              <img src="@/assets/supportteamsketchss.jpg" class="m-5"/>
             </div>
             <div class="flex-col w-3/4 m-7">
               <h1
@@ -687,7 +699,16 @@
         </div>
         <!-- End Foundational Philosophies -->
         <!-- Corporate and Legal Stuff -->
-        <h1 class="text-4xl px-5 sm:px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
+        <h1
+          class="
+            text-4xl
+            px-5
+            sm:px-0.5
+            text-crisiscleanup-dark-500
+            font-bold
+            py-8
+          "
+        >
           {{ $t('about.corporate_legal_stuff') }}
         </h1>
 
@@ -700,7 +721,16 @@
         <!-- End Corporate and Legal Stuff -->
 
         <!-- Helpful Links -->
-        <h1 class="text-4xl px-5 sm:px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
+        <h1
+          class="
+            text-4xl
+            px-5
+            sm:px-0.5
+            text-crisiscleanup-dark-500
+            font-bold
+            py-8
+          "
+        >
           {{ $t('about.helpful_links') }}
         </h1>
         <div class="flex flex-row pb-20 sm:pb-0">
@@ -711,48 +741,48 @@
                   href="https://app.dev.crisiscleanup.io/"
                   target="_blank"
                   :title="$t('about.ccu_demo')"
-                  >{{ $t('about.ccu_demo') }}</a
+                >{{ $t('about.ccu_demo') }}</a
                 >
               </li>
-              <br />
+              <br/>
               <li>
                 <a
                   href="/training"
                   target="_blank"
                   :title="$t('about.mandatory_training')"
-                  >{{ $t('about.mandatory_training') }}</a
+                >{{ $t('about.mandatory_training') }}</a
                 >
               </li>
-              <br />
+              <br/>
               <li>
                 <a
                   href="https://crisiscleanup.zendesk.com/hc/en-us/articles/200603007"
                   target="_blank"
                   :title="$t('about.req_for_participation')"
-                  >{{ $t('about.req_for_participation') }}</a
+                >{{ $t('about.req_for_participation') }}</a
                 >
               </li>
-              <br />
+              <br/>
               <li>
                 <a
                   href="https://crisiscleanup.zendesk.com/hc/en-us/articles/200596493-Is-Crisis-Cleanup-a-Good-Fit-"
                   target="_blank"
                   :title="$t('about.good_fit')"
-                  >{{ $t('about.good_fit') }}</a
+                >{{ $t('about.good_fit') }}</a
                 >
               </li>
-              <br />
+              <br/>
               <li v-html="$t('about.contribute')"></li>
-              <br />
+              <br/>
               <li>
                 <a
                   href="https://crisiscleanup.zendesk.com/hc/en-us/"
                   target="_blank"
                   :title="$t('about.helpdesk')"
-                  >{{ $t('about.helpdesk') }}</a
+                >{{ $t('about.helpdesk') }}</a
                 >
               </li>
-              <br />
+              <br/>
               <li v-html="$t('about.ccu_story')"></li>
             </ul>
           </div>
@@ -764,7 +794,7 @@
 </template>
 
 <script>
-import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
+import HomeLayout, {HomeNav, HomeActions} from '@/layouts/Home';
 
 export default {
   name: 'AboutPage',
@@ -780,6 +810,7 @@ export default {
 @media only screen and (max-width: 640px) {
   .homegrid {
     height: 100vh;
+
     &.grid-container {
       grid:
         [r1] 'logo survivors' [r1end]
@@ -791,18 +822,21 @@ export default {
     }
   }
 }
+
 .resp-video {
   position: absolute;
   top: 0;
   left: 0;
   border: 0;
 }
+
 .video-container {
   position: relative;
   overflow: hidden;
   padding-top: 56.25%;
   justify-content: right;
 }
+
 .images-grid {
   display: grid;
   grid-gap: 5px;
