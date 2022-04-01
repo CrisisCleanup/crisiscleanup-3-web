@@ -166,14 +166,19 @@
             <form-select
               :value="currentRole"
               :placeholder="$t('adminOrganization.role')"
-              class="w-auto flex-grow border border-crisiscleanup-dark-100 select"
+              class="
+                w-auto
+                flex-grow
+                border border-crisiscleanup-dark-100
+                select
+              "
               :options="roles"
               @input="
-            (e) => {
-              roleToAdd = e;
-              currentRole = e;
-            }
-          "
+                (e) => {
+                  roleToAdd = e;
+                  currentRole = e;
+                }
+              "
               select-classes="p-1"
               item-key="id"
               label="name_t"
@@ -450,14 +455,15 @@
         <base-text variant="h2" :weight="600">
           {{ $t('adminOrganization.incidents') }}
         </base-text>
-        <div class="flex item-start">
+        <div class="flex flex-col sm:flex-row item-start">
           <div>
             <div class="flex items-center justify-start">
               <form-select
                 :placeholder="$t('adminOrganization.incident')"
                 :value="incidentToAdd"
                 class="
-                  w-auto
+                  w-full
+                  sm:w-auto
                   border border-crisiscleanup-dark-100
                   multi-select
                   mr-1
