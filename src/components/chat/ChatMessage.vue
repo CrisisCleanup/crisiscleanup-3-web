@@ -1,8 +1,12 @@
 <template>
-  <div class="chat-message w-full">
+  <div
+    class="chat-message w-full"
+    @mouseenter="showFavorite = true"
+    @mouseleave="showFavorite = false"
+  >
     <div class="flex items-start justify-start w-full">
       <div class="flex flex-col space-y-2 text-sm mx-2 w-full">
-        <div class="flex flex-col w-full">
+        <div class="flex flex-col w-full relative">
           <div class="ml-1">
             <span>{{ message.full_name }}</span>
             <span
@@ -50,6 +54,19 @@
           >
             {{ message.content }}
           </div>
+          <font-awesome-icon
+            v-if="showFavorite"
+            :icon="['far', 'star']"
+            class="absolute top-1/2 right-2 mt-0.5"
+            @click="$emit('onFavorite', message)"
+          />
+          <font-awesome-icon
+            v-if="message.is_favorite"
+            @mouseover="showFavorite"
+            :icon="['fa', 'star']"
+            class="absolute top-1/2 right-2 mt-0.5"
+            @click="$emit('onUnfavorite', message)"
+          />
         </div>
       </div>
       <img
@@ -71,6 +88,11 @@ import { UserMixin } from '@/mixins';
 export default {
   name: 'ChatMessage',
   mixins: [UserMixin],
+  data() {
+    return {
+      showFavorite: false,
+    };
+  },
   props: {
     message: {
       type: Object,

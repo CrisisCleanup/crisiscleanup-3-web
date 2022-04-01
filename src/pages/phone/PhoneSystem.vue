@@ -314,9 +314,11 @@
               </template>
               <template v-slot:component>
                 <Chat
+                  v-if="selectedChat"
                   @unreadCount="unreadChatCount = $event"
                   class="h-108"
                   @onNewMessage="unreadChatCount += 1"
+                  :chat="selectedChat"
                 />
               </template>
             </PhoneComponentButton>
@@ -528,6 +530,8 @@ export default {
       showHistory: false,
       showFlags: false,
       searchWorksites: [],
+      chatGroups: [],
+      selectedChat: null,
       searchingWorksites: false,
       dialing: false,
       serveOutbounds: true,
@@ -626,6 +630,10 @@ export default {
       this.$phoneService.apiGetQueueStats().then((response) => {
         this.setGeneralStats({ ...response.data });
       });
+      await this.getChatGroups();
+      const { chatGroups } = this;
+      const [group] = chatGroups;
+      this.selectedChat = group;
       const markers = await this.getWorksites();
       this.loadMap(markers);
     },
@@ -830,6 +838,17 @@ export default {
       } else {
         this.worksiteId = null;
       }
+    },
+    async getChatGroups() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/chat_groups`,
+        {
+          params: {
+            channel: 'phone',
+          },
+        },
+      );
+      this.chatGroups = response.data.results;
     },
   },
   watch: {
