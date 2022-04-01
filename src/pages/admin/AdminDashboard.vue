@@ -5,11 +5,11 @@
   >
     <template #content>
       <div class="flex flex-col">
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row items-center justify-between">
           <base-input
             :value="globalSearch"
             icon="search"
-            class="w-72 mx-4"
+            class="w-full sm:w-72 mx-4"
             :placeholder="$t('actions.search_everywhere')"
             @input="
               (value) => {
@@ -18,7 +18,7 @@
               }
             "
           ></base-input>
-          <div class="flex items-center mr-4">
+          <div class="flex flex-wrap mt-4 sm:mt-0 items-center mr-4">
             <InviteUsers class="px-3" is-admin />
             <MergeOrganizations is-admin />
             <FileUpload class="mx-3 my-1" />

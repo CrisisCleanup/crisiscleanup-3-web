@@ -206,15 +206,21 @@
     </div>
     <div
       v-if="enablePagination"
-      class="footer flex items-center justify-between p-4"
+      class="
+        footer
+        flex flex-col
+        sm:flex-row sm:items-center
+        justify-between
+        p-4
+      "
     >
-      <div class="flex items-center">
+      <div class="flex items-center mb-4 sm:mb-0">
         <span class="mr-2">{{ $t('tableVue.per_page') }}</span>
         <form-select
           :value="pagination.pageSize"
           :options="pageSizes"
           :clearable="false"
-          select-classes="w-24 bg-white border vue-select-up"
+          select-classes="sm:w-24 bg-white border vue-select-up"
           @input="onSelectPageSize"
         />
       </div>

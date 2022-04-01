@@ -135,18 +135,18 @@
               size="large"
             />
             <base-checkbox
-              class="mb-1 sm:mb-0"
+              class="mb-4 sm:mb-0"
               v-model="organization.is_active"
             >
               Is Active
             </base-checkbox>
             <base-checkbox
-              class="mb-1 sm:mb-0"
+              class="mb-4 sm:mb-0"
               v-model="organization.org_verified"
             >
               Org Verified
             </base-checkbox>
-            <base-checkbox v-model="organization.publish">
+            <base-checkbox class="mb-4 sm:mb-0" v-model="organization.publish">
               Publish
             </base-checkbox>
             <form-select
