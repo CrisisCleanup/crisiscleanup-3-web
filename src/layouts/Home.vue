@@ -143,8 +143,10 @@ $areas: main nav logo actions overlay survivors globe footer top;
         button {
           @apply text-h1;
         }
-        display: inline-grid;
+        display: flex;
+        flex-direction: column;
         margin-left: 2.8rem;
+        margin-right: 2.8rem;
         align-content: center;
         letter-spacing: 0.35px;
         justify-content: start;

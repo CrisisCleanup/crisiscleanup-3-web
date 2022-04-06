@@ -13,7 +13,7 @@
         >
       </div>
       <home-nav />
-      <home-actions />
+      <home-actions class="mt-10" />
       <div class="grid--main">
         <LoginForm />
       </div>
@@ -22,7 +22,7 @@
           <img src="@/assets/globe.png" :alt="$t('loginForm.globe')" />
         </div>
       </div>
-      <home-footer />
+      <home-footer :class="$mq === 'sm' ? 'mb-24 ml-20' : ''" />
     </template>
   </HomeLayout>
 </template>
@@ -71,10 +71,14 @@ export default {
   .homegrid {
     height: 100vh;
     &.grid-container {
-      grid-template-areas:
-        'logo'
-        'main'
-        'actions';
+      grid:
+        [r1] 'logo survivors' [r1end]
+        [r2] 'main main' [r2end]
+        [r3] 'actions actions' [r3end]
+        [r4] 'nav nav' [r4end]
+        [r5] 'globe globe' [r5end]
+        [r6] 'footer footer' [r6end]
+        / auto;
       grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
     }
   }
