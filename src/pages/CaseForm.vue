@@ -8,7 +8,7 @@
     :style="formStyle"
   >
     <resize-observer @notify="calcFormStyle" />
-    <div class="intake-form" :class="(noGrid || $mq === 'sm') && 'no-grid'">
+    <div class="intake-form mb-20 sm:mb-0" :class="(noGrid || $mq === 'sm') && 'no-grid'">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
@@ -365,9 +365,11 @@
         border border-r-0 border-gray-300
         card-footer
         flex
+        sm:flex-row
+        flex-col
         justify-between
       "
-      :class="$mq === 'sm' ? 'absolute w-2/3 bottom-0 mb-36 right-0' : ''"
+      :class="$mq === 'sm' ? 'absolute w-60 bottom-0 right-0' : ''"
     >
       <base-button
         size="medium"

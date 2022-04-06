@@ -1,11 +1,8 @@
 <template>
   <div
     class="flex h-full overflow-hidden cases-container-grid"
-    :class="{
-      'cases-container-grid--full': $mq === 'sm',
-    }"
   >
-    <div v-if="isCasesOnly || $mq !== 'sm'">
+    <div>
       <div class="cases-grid">
         <div class="p-3 border border-gray-300 card-header bg-white">
           <div class="flex items-center flex-wrap justify-between">
@@ -2000,6 +1997,12 @@ export default {
   grid-template-columns: 4fr minmax(360px, 1fr);
 }
 
+@media only screen and (max-width: 640px) {
+  .cases-container-grid {
+    display: grid;
+    grid-template-columns: 4fr minmax(150px, 1fr);
+  }
+}
 .cases-container-grid--full {
   display: grid;
   grid-template-columns: auto;
