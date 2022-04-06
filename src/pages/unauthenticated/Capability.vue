@@ -66,6 +66,7 @@
             <div
               :key="`${capability.id}:${child.id}`"
               class="border-b p-2 py-4"
+              :class="$mq === 'sm' ? 'w-60' : ''"
             >
               {{ child.name_t }}
             </div>
