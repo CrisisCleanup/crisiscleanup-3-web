@@ -48,13 +48,20 @@
           </div>
         </div>
       </div>
-
+      <div v-if="this.$can('development_mode')">
+        <base-button
+          class="p-1.5"
+          variant="solid"
+          :text="$t('~~Debug User')"
+          :action="showCurrentUser"
+        />
+      </div>
       <div class="flex h-full">
         <div
           v-if="$can && $can('phone_agent')"
           class="flex items-center header-item h-full"
         >
-          <PhoneStatus />
+          <PhoneIndicator />
         </div>
 
         <UserProfileMenu
@@ -76,18 +83,20 @@
 import VueTypes from 'vue-types';
 import DisasterIcon from '@/components/DisasterIcon.vue';
 import useUser from '@/use/user/useUser';
-import PhoneStatus from '@/components/header/PhoneStatus.vue';
+import { DialogsMixin } from '@/mixins';
 import UserProfileMenu from '@/components/header/UserProfileMenu.vue';
 import RedeployRequest from '@/pages/RedeployRequest';
+import PhoneIndicator from '@/components/phone/PhoneIndicator';
 
 export default {
   name: 'Header',
   components: {
+    PhoneIndicator,
     RedeployRequest,
     UserProfileMenu,
     DisasterIcon,
-    PhoneStatus,
   },
+  mixins: [DialogsMixin],
   props: {
     incidents: VueTypes.array,
     currentIncident: VueTypes.object,
@@ -101,6 +110,18 @@ export default {
     return {
       ...useUser(),
     };
+  },
+  methods: {
+    async showCurrentUser() {
+      await this.$component({
+        title: `User: ${this.currentUser.id} | ${this.currentUser.first_name} ${this.currentUser.last_name}`,
+        component: 'JsonWrapper',
+        classes: 'w-full h-96',
+        props: {
+          jsonData: this.currentUser,
+        },
+      });
+    },
   },
 };
 </script>

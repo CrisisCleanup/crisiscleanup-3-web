@@ -12,7 +12,7 @@
             [tabActiveClasses]: tab.isActive,
             [tabDefaultClasses]: true,
           }"
-          class=""
+          class="cursor-pointer"
           @click="selectTab(tab)"
         >
           <div>{{ tab.name }}</div>

@@ -68,6 +68,29 @@
           {{ String(incident.active_phone_number) | formatNationalNumber }}
         </div>
       </div>
+      <div class="flex">
+        <div class="flex-grow">
+          <Agent
+            @onLoggedIn="onLoggedIn"
+            @onToggleOutbounds="onToggleOutbounds"
+          />
+          <tabs
+            :details="false"
+            v-if="caller"
+            class="w-96 absolute bg-white -mt-0.5"
+            style="z-index: 1004"
+            ref="tabs"
+            @mounted="setTabs"
+          >
+            <tab :name="$t('phoneDashboard.active_call')">
+              <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
+            </tab>
+            <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
+              <UpdateStatus class="p-2" @onCompleteCall="completeCall" />
+            </tab>
+          </tabs>
+        </div>
+      </div>
       <div class="flex-grow">
         <div v-show="showingMap" class="relative h-full select-none">
           <PhoneMap :map-loading="mapLoading" />
@@ -199,59 +222,10 @@
         />
         <transition name="slide-fade">
           <div
-            class="absolute flex flex-col"
+            class="absolute flex flex-col mt-12"
             :class="$mq === 'sm' ? 'right-0' : '-ml-12'"
             style="z-index: 1003"
           >
-            <PhoneComponentButton
-              class="phone-button"
-              name="agent"
-              :keep-open="isOnCall"
-            >
-              <template v-slot:button>
-                <div class="w-full h-full flex items-center justify-center">
-                  <div class="flex items-center justify-center relative">
-                    <object
-                      :key="isTakingCalls"
-                      class="cursor-pointer"
-                      ref="icon"
-                      type="image/svg+xml"
-                      :data="ICON_MAP[ICONS.phone]"
-                      @loadeddata="setSvgStyle"
-                      @load="setSvgStyle"
-                    />
-                  </div>
-                </div>
-              </template>
-              <template v-slot:component>
-                <div>
-                  <Agent
-                    @onLoggedIn="onLoggedIn"
-                    @onToggleOutbounds="onToggleOutbounds"
-                  />
-                  <tabs
-                    :details="false"
-                    v-if="caller"
-                    class="w-full"
-                    ref="tabs"
-                    @mounted="setTabs"
-                  >
-                    <tab :name="$t('phoneDashboard.active_call')">
-                      <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
-                    </tab>
-                    <tab
-                      :name="$t('phoneDashboard.call_status')"
-                      ref="statusTab"
-                    >
-                      <UpdateStatus
-                        class="p-2"
-                        @onCompleteCall="completeCall"
-                      />
-                    </tab>
-                  </tabs>
-                </div>
-              </template>
-            </PhoneComponentButton>
             <PhoneComponentButton
               name="dialer"
               class="phone-button"
@@ -487,8 +461,6 @@ import { EventBus } from '@/event-bus';
 import GeneralStats from '@/components/phone/GeneralStats';
 import CallHistory from '@/components/phone/Widgets/CallHistory';
 import PhoneMap from '@/pages/phone/PhoneMap';
-import { ICONS, ICON_MAP } from '@/constants';
-import { theme } from '@/../tailwind.config';
 import Leaderboard from '@/components/phone/Leaderboard';
 import Incident from '@/models/Incident';
 import Chat from '@/components/chat/Chat';
@@ -540,8 +512,6 @@ export default {
       remainingCallbacks: 0,
       unreadNewsCount: 0,
       unreadChatCount: 0,
-      ICONS,
-      ICON_MAP,
     };
   },
   async mounted() {
@@ -814,22 +784,6 @@ export default {
     },
     onToggleOutbounds(value) {
       this.serveOutbounds = value;
-    },
-    setSvgStyle() {
-      const svgDoc = this.$refs.icon.getSVGDocument();
-      const iconColor = this.isTakingCalls
-        ? theme.extend.colors['crisiscleanup-green']['500']
-        : theme.extend.colors['crisiscleanup-red']['500'];
-      if (svgDoc) {
-        svgDoc.getElementsByTagName('path')[0].style.fill = iconColor;
-        if (svgDoc.activeElement) {
-          svgDoc.activeElement.attributes.width.nodeValue = 14 * 1.8;
-          svgDoc.activeElement.attributes.height.nodeValue = 19 * 1.8;
-        }
-        svgDoc.addEventListener('click', () => {
-          EventBus.$emit('phone_component:open', 'agent');
-        });
-      }
     },
     selectCase(worksite) {
       if (worksite) {
