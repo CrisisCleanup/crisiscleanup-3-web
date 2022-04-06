@@ -68,29 +68,14 @@
           {{ String(incident.active_phone_number) | formatNationalNumber }}
         </div>
       </div>
-      <div class="flex">
-        <div class="flex-grow">
-          <Agent
-            @onLoggedIn="onLoggedIn"
-            @onToggleOutbounds="onToggleOutbounds"
-          />
-          <tabs
-            :details="false"
-            v-if="caller"
-            class="w-96 absolute bg-white -mt-0.5"
-            style="z-index: 1004"
-            ref="tabs"
-            @mounted="setTabs"
-          >
-            <tab :name="$t('phoneDashboard.active_call')">
-              <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
-            </tab>
-            <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
-              <UpdateStatus class="p-2" @onCompleteCall="completeCall" />
-            </tab>
-          </tabs>
-        </div>
-      </div>
+      <PhoneToolBar
+        :complete-call="completeCall"
+        :on-logged-in="onLoggedIn"
+        :on-toggle-outbounds="onToggleOutbounds"
+        :select-case="selectCase"
+        :set-tabs="setTabs"
+        :worksite-id="worksiteId"
+      />
       <div class="flex-grow">
         <div v-show="showingMap" class="relative h-full select-none">
           <PhoneMap :map-loading="mapLoading" />
@@ -134,6 +119,15 @@
         </div>
       </div>
     </div>
+    <PhoneToolBar
+      v-else
+      :complete-call="completeCall"
+      :on-logged-in="onLoggedIn"
+      :on-toggle-outbounds="onToggleOutbounds"
+      :select-case="selectCase"
+      :set-tabs="setTabs"
+      :worksite-id="worksiteId"
+    />
     <div>
       <CaseHeader
         v-if="worksite"
@@ -465,23 +459,22 @@ import Leaderboard from '@/components/phone/Leaderboard';
 import Incident from '@/models/Incident';
 import Chat from '@/components/chat/Chat';
 import PhoneNews from '@/components/phone/PhoneNews';
+import PhoneToolBar from '@/pages/phone/PhoneToolBar';
 
 export default {
   name: 'PhoneSysyem',
   components: {
+    PhoneToolBar,
     PhoneNews,
     Chat,
     Leaderboard,
     PhoneMap,
     CallHistory,
     GeneralStats,
-    UpdateStatus,
-    ActiveCall,
     WorksiteSearchInput,
     CaseHistory,
     CaseHeader,
     AjaxTable,
-    Agent,
     ManualDialer,
     PhoneComponentButton,
     CaseForm,
