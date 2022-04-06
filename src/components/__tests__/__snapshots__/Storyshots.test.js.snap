@@ -90,7 +90,7 @@ exports[`Storyshots Basics/BaseButton With Icon 1`] = `
    
   <svg
     aria-hidden="true"
-    class="m-1 svg-inline--fa fa-file fa-w-12 fa-sm"
+    class="m-1 svg-inline--fa fa-file fa-sm"
     data-icon="file"
     data-prefix="fas"
     focusable="false"
@@ -100,7 +100,7 @@ exports[`Storyshots Basics/BaseButton With Icon 1`] = `
   >
     <path
       class=""
-      d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm160-14.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"
+      d="M0 64C0 28.65 28.65 0 64 0H224V128C224 145.7 238.3 160 256 160H384V448C384 483.3 355.3 512 320 512H64C28.65 512 0 483.3 0 448V64zM256 128V0L384 128H256z"
       fill="currentColor"
     />
   </svg>
@@ -3034,7 +3034,7 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
                 <svg
                   alt="actions.show_details"
                   aria-hidden="true"
-                  class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                  class="svg-inline--fa fa-chevron-down fa-sm ccu-icon cursor-pointer small text"
                   data-icon="chevron-down"
                   data-prefix="fas"
                   focusable="false"
@@ -3044,7 +3044,7 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
                 >
                   <path
                     class=""
-                    d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                    d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                     fill="currentColor"
                   />
                 </svg>
@@ -3088,7 +3088,7 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
                 <svg
                   alt="actions.show_details"
                   aria-hidden="true"
-                  class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                  class="svg-inline--fa fa-chevron-down fa-sm ccu-icon cursor-pointer small text"
                   data-icon="chevron-down"
                   data-prefix="fas"
                   focusable="false"
@@ -3098,7 +3098,7 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
                 >
                   <path
                     class=""
-                    d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                    d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                     fill="currentColor"
                   />
                 </svg>
@@ -3221,7 +3221,7 @@ exports[`Storyshots Elements/Accordion With Components 1`] = `
                 <svg
                   alt="actions.show_details"
                   aria-hidden="true"
-                  class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+                  class="svg-inline--fa fa-chevron-down fa-sm ccu-icon cursor-pointer small text"
                   data-icon="chevron-down"
                   data-prefix="fas"
                   focusable="false"
@@ -3231,7 +3231,7 @@ exports[`Storyshots Elements/Accordion With Components 1`] = `
                 >
                   <path
                     class=""
-                    d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                    d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                     fill="currentColor"
                   />
                 </svg>
@@ -3287,7 +3287,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
       <svg
         alt="actions.show_details"
         aria-hidden="true"
-        class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+        class="svg-inline--fa fa-chevron-down fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
         data-prefix="fas"
         focusable="false"
@@ -3297,7 +3297,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
       >
         <path
           class=""
-          d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+          d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
           fill="currentColor"
         />
       </svg>
@@ -3341,7 +3341,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
       <svg
         alt="actions.show_details"
         aria-hidden="true"
-        class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+        class="svg-inline--fa fa-chevron-down fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
         data-prefix="fas"
         focusable="false"
@@ -3351,7 +3351,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
       >
         <path
           class=""
-          d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+          d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
           fill="currentColor"
         />
       </svg>
@@ -3395,7 +3395,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
       <svg
         alt="actions.show_details"
         aria-hidden="true"
-        class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+        class="svg-inline--fa fa-chevron-down fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
         data-prefix="fas"
         focusable="false"
@@ -3405,7 +3405,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
       >
         <path
           class=""
-          d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+          d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
           fill="currentColor"
         />
       </svg>
@@ -3449,7 +3449,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
       <svg
         alt="actions.show_details"
         aria-hidden="true"
-        class="svg-inline--fa fa-chevron-down fa-w-14 fa-sm ccu-icon cursor-pointer small text"
+        class="svg-inline--fa fa-chevron-down fa-sm ccu-icon cursor-pointer small text"
         data-icon="chevron-down"
         data-prefix="fas"
         focusable="false"
@@ -3459,7 +3459,7 @@ exports[`Storyshots Elements/Accordion With Dynamic Props 1`] = `
       >
         <path
           class=""
-          d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+          d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
           fill="currentColor"
         />
       </svg>
@@ -33173,7 +33173,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -33183,7 +33183,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
@@ -33306,7 +33306,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -33316,7 +33316,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
@@ -33439,7 +33439,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -33449,7 +33449,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
@@ -33572,7 +33572,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -33582,7 +33582,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
@@ -33705,7 +33705,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -33715,7 +33715,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
@@ -33878,7 +33878,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -33888,7 +33888,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
@@ -34011,7 +34011,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -34021,7 +34021,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
@@ -34144,7 +34144,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -34154,7 +34154,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
@@ -34277,7 +34277,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -34287,7 +34287,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
@@ -34410,7 +34410,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
                
               <svg
                 aria-hidden="true"
-                class="tooltip-target svg-inline--fa fa-chevron-down fa-w-14 fa-sm"
+                class="tooltip-target svg-inline--fa fa-chevron-down fa-sm"
                 data-icon="chevron-down"
                 data-prefix="fas"
                 focusable="false"
@@ -34420,7 +34420,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
               >
                 <path
                   class=""
-                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"
+                  d="M224 416c-8.188 0-16.38-3.125-22.62-9.375l-192-192c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L224 338.8l169.4-169.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-192 192C240.4 412.9 232.2 416 224 416z"
                   fill="currentColor"
                 />
               </svg>
