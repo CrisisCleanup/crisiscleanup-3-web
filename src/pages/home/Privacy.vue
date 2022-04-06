@@ -5,8 +5,8 @@
     </template>
     <template #grid-content>
       <home-nav />
-      <home-actions />
-      <div class="grid--main">
+      <home-actions class="pb-20 sm:pb-0" />
+      <div class="grid--main px-5 sm:px-0">
         <div class="text-4xl">
           {{ $t('privacy.privacy_and_security_policy') }}
         </div>
@@ -182,7 +182,20 @@ export default {
     }
   }
 }
-
+@media only screen and (max-width: 640px) {
+  .homegrid {
+    height: 100vh;
+    &.grid-container {
+      grid:
+        [r1] 'logo survivors' [r1end]
+        [r4] 'nav nav' [r4end]
+        [r2] 'main main' [r2end]
+        [r3] 'actions actions' [r3end]
+        / auto;
+      grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
+    }
+  }
+}
 .form-field {
   @apply w-2/5 m-3;
 }

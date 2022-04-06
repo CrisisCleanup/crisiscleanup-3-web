@@ -6,7 +6,7 @@
     <template #grid-content>
       <home-nav />
       <home-actions />
-      <div class="grid--main">
+      <div class="grid--main px-5 sm:px-0">
         <h1 class="text-4xl" v-html="$t('survivor.info_for_survivors')"></h1>
         <div class="row mb-6">
           <p v-html="$t('survivor.intro')"></p>
@@ -98,6 +98,21 @@ export default {
         grid-row: 1 / span 5;
         grid-column: 1 / span 3;
       }
+    }
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .homegrid {
+    height: 100vh;
+    &.grid-container {
+      grid:
+        [r1] 'logo survivors' [r1end]
+        [r4] 'nav nav' [r4end]
+        [r2] 'main main' [r2end]
+        [r3] 'actions actions' [r3end]
+        / auto;
+      grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
     }
   }
 }

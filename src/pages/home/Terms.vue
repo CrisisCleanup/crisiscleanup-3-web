@@ -5,8 +5,8 @@
     </template>
     <template #grid-content>
       <home-nav />
-      <home-actions />
-      <div class="grid--main">
+      <home-actions class="pb-20" />
+      <div class="grid--main px-5 sm:px-0">
         <h1 class="text-4xl" v-html="terms.terms_and_conditions"></h1>
         <div class="row mb-6">
           <h3>1. {{ $t('terms.preamble') }}</h3>
@@ -293,7 +293,20 @@ export default {
     }
   }
 }
-
+@media only screen and (max-width: 640px) {
+  .homegrid {
+    height: 100vh;
+    &.grid-container {
+      grid:
+        [r1] 'logo survivors' [r1end]
+        [r4] 'nav nav' [r4end]
+        [r2] 'main main' [r2end]
+        [r3] 'actions actions' [r3end]
+        / auto;
+      grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
+    }
+  }
+}
 .form-field {
   @apply w-2/5 m-3;
 }

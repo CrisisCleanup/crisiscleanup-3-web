@@ -102,8 +102,8 @@
               weight="300"
               variant="body"
               class="crisiscleanup-grey-500"
-              >{{ $t('about.organizations') }}</base-text
-            >
+              >{{ $t('about.organizations') }}
+            </base-text>
           </div>
           <div class="flex flex-col">
             <h1 class="text-3xl font-bold text-center">80,905+</h1>
@@ -128,9 +128,9 @@
         </div>
         <!-- View Details Button -->
         <div class="flex justify-around py-2">
-          <base-button variant="solid" class="py-2 px-3">{{
-            $t('about.view_details')
-          }}</base-button>
+          <base-button variant="solid" class="py-2 px-3"
+            >{{ $t('about.view_details') }}
+          </base-button>
         </div>
         <!-- Info Card w/ Sketch -->
         <div
@@ -170,13 +170,22 @@
         </div>
 
         <!-- The People of Crisis Cleanup -->
-        <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
+        <h1
+          class="
+            text-4xl
+            px-5
+            sm:px-0.5
+            text-crisiscleanup-dark-500
+            font-bold
+            py-8
+          "
+        >
           {{ $t('about.people_of_ccu') }}
         </h1>
 
-        <div class="images-grid">
+        <div class="images-grid sm:grid-cols-3">
           <!-- Headshots -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/aarontitus.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Aaron Titus</span><br />
@@ -192,7 +201,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/rossarroyo.jpeg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Ross Arroyo</span><br />
@@ -208,7 +217,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/tobiabiodun.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Tobi Abiodun</span><br />
@@ -222,7 +231,7 @@
             </base-text>
           </div>
 
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/olgauzhykova.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Olga Uzhykova</span><br />
@@ -238,7 +247,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/mariiafilatova.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Mariia Filatova</span><br />
@@ -254,7 +263,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/bradenmars.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Braden Mars</span><br />
@@ -269,7 +278,7 @@
           </div>
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/dankaupilla.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Dan Kaupilla</span><br />
@@ -285,7 +294,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/ginanewby.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Gina Newby</span><br />
@@ -301,7 +310,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/tylersanders.png" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Tyler Sanders</span><br />
@@ -317,7 +326,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/marktregellas.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Mark Tregellas</span><br />
@@ -338,9 +347,9 @@
           Major Contributors
         </h1>
 
-        <div class="images-grid">
+        <div class="images-grid sm:grid-cols-3">
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/andygimma.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Andy Gimma</span><br />
@@ -356,7 +365,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/zacharystraub.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Zachary Straub</span><br />
@@ -372,7 +381,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/dhruvmehrotra.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Dhruv Mehrotra</span><br />
@@ -388,7 +397,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/chriswood.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Chris Wood</span><br />
@@ -404,7 +413,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/karissaphelps.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Karissa Phelps</span><br />
@@ -420,7 +429,7 @@
           <!-- End Card -->
 
           <!-- StartCard -->
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/jeremypack.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Jeremy Pack</span><br />
@@ -435,7 +444,7 @@
           </div>
           <!-- End Card -->
 
-          <div class="flex flex-col">
+          <div class="flex flex-col items-center px-5 sm:px-0">
             <img src="@/assets/headshots/brucechristensen.jpg" class="m-5" />
             <p class="text-3xl px-0.5 pb-5">
               <span class="font-bold">Bruce Christensen</span><br />
@@ -456,12 +465,12 @@
         <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
           {{ $t('about.major_supporters') }}
         </h1>
-        <base-text variant="body" class="pt-2">{{
-          $t('about.in_kind_supporter_intro')
-        }}</base-text>
+        <base-text variant="body" class="pt-2"
+          >{{ $t('about.in_kind_supporter_intro') }}
+        </base-text>
 
         <!-- Logos -->
-        <div class="partners-grid">
+        <div class="partners-grid sm:grid-cols-6">
           <!-- StartCard -->
           <div class="flex flex-col items-center justify-start">
             <img
@@ -687,23 +696,41 @@
         </div>
         <!-- End Foundational Philosophies -->
         <!-- Corporate and Legal Stuff -->
-        <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
+        <h1
+          class="
+            text-4xl
+            px-5
+            sm:px-0.5
+            text-crisiscleanup-dark-500
+            font-bold
+            py-8
+          "
+        >
           {{ $t('about.corporate_legal_stuff') }}
         </h1>
 
         <div>
           <p
-            class="text-xl px-0.5 pb-5"
+            class="text-xl px-5 sm:px-0.5 pb-5"
             v-html="$t('about.ccu_llc_open_source')"
           ></p>
         </div>
         <!-- End Corporate and Legal Stuff -->
 
         <!-- Helpful Links -->
-        <h1 class="text-4xl px-0.5 text-crisiscleanup-dark-500 font-bold py-8">
+        <h1
+          class="
+            text-4xl
+            px-5
+            sm:px-0.5
+            text-crisiscleanup-dark-500
+            font-bold
+            py-8
+          "
+        >
           {{ $t('about.helpful_links') }}
         </h1>
-        <div class="flex flex-row">
+        <div class="flex flex-row pb-20 sm:pb-0">
           <div class="flex flex-col m-5">
             <ul class="text-xl text-crisiscleanup-dark-400 font-hairline">
               <li>
@@ -777,21 +804,38 @@ export default {
 </script>
 
 <style scoped>
+@media only screen and (max-width: 640px) {
+  .homegrid {
+    height: 100vh;
+
+    &.grid-container {
+      grid:
+        [r1] 'logo survivors' [r1end]
+        [r4] 'nav nav' [r4end]
+        [r3] 'actions actions' [r3end]
+        [r2] 'main main' [r2end]
+        / auto;
+      grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
+    }
+  }
+}
+
 .resp-video {
   position: absolute;
   top: 0;
   left: 0;
   border: 0;
 }
+
 .video-container {
   position: relative;
   overflow: hidden;
   padding-top: 56.25%;
   justify-content: right;
 }
+
 .images-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 5px;
 }
 
@@ -802,7 +846,6 @@ export default {
 
 .partners-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-gap: 15px;
 }
 
