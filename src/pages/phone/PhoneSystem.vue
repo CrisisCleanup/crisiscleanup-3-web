@@ -237,7 +237,6 @@
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
-              v-if="$can('beta_feature.phone_chat')"
               name="chat"
               class="phone-button"
               @open="
