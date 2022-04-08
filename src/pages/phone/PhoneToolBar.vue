@@ -1,13 +1,17 @@
 <template>
   <div class="flex">
     <div class="flex-grow">
-      <Agent @onLoggedIn="onLoggedIn" @onToggleOutbounds="onToggleOutbounds" />
+      <Agent
+        @onLoggedIn="onLoggedIn"
+        @onToggleOutbounds="onToggleOutbounds"
+        class="border-b shadow"
+      />
       <tabs
         :details="false"
         v-if="caller"
-        class="bg-white -mt-0.5"
+        class="bg-white"
         :class="$mq === 'sm' ? '' : 'absolute w-96'"
-        style="z-index: 1004"
+        style="z-index: 1003"
         ref="tabs"
         @mounted="setTabs"
       >
@@ -31,6 +35,23 @@ export default {
   name: 'PhoneToolBar',
   components: { ActiveCall, Agent, UpdateStatus },
   mixins: [ConnectFirstMixin],
+  methods: {
+    setTabs(tabs) {
+      this.tabs = tabs;
+    },
+  },
+  watch: {
+    isOnCall(newValue, oldValue) {
+      if (oldValue && !newValue) {
+        this.tabs.selectTab(this.$refs.statusTab);
+      }
+    },
+  },
+  data() {
+    return {
+      tabs: null,
+    };
+  },
   props: {
     completeCall: {
       type: Function,
@@ -45,10 +66,6 @@ export default {
       default: () => {},
     },
     selectCase: {
-      type: Function,
-      default: () => {},
-    },
-    setTabs: {
       type: Function,
       default: () => {},
     },

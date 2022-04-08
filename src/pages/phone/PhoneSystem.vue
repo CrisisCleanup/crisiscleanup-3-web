@@ -73,7 +73,6 @@
         :on-logged-in="onLoggedIn"
         :on-toggle-outbounds="onToggleOutbounds"
         :select-case="selectCase"
-        :set-tabs="setTabs"
         :worksite-id="worksiteId"
       />
       <div class="flex-grow">
@@ -125,7 +124,6 @@
       :on-logged-in="onLoggedIn"
       :on-toggle-outbounds="onToggleOutbounds"
       :select-case="selectCase"
-      :set-tabs="setTabs"
       :worksite-id="worksiteId"
     />
     <div>
@@ -243,6 +241,7 @@
                 () => {
                   updateUserState({ chat_last_seen: $moment().toISOString() });
                   unreadChatCount = 0;
+                  unreadUrgentChatCount = 0;
                 }
               "
             >
@@ -269,11 +268,33 @@
                         text-xs
                         font-bold
                         leading-none
+                        text-black
+                        bg-primary-light
+                        rounded-full
+                      "
+                      >{{ unreadChatCount }}</span
+                    >
+                  </div>
+                  <div
+                    v-if="unreadUrgentChatCount"
+                    class="absolute top-0 right-0 my-1 -mx-1"
+                  >
+                    <span
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        px-1
+                        py-0.5
+                        mr-2
+                        text-xs
+                        font-bold
+                        leading-none
                         text-red-100
                         bg-red-600
                         rounded-full
                       "
-                      >{{ unreadChatCount }}</span
+                      >{{ unreadUrgentChatCount }}</span
                     >
                   </div>
                   <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
@@ -283,8 +304,10 @@
                 <Chat
                   v-if="selectedChat"
                   @unreadCount="unreadChatCount = $event"
+                  @unreadUrgentCount="unreadUrgentChatCount = $event"
                   class="h-108"
                   @onNewMessage="unreadChatCount += 1"
+                  @onNewUrgentMessage="unreadUrgentChatCount += 1"
                   :chat="selectedChat"
                 />
               </template>
@@ -501,6 +524,7 @@ export default {
       remainingCallbacks: 0,
       unreadNewsCount: 0,
       unreadChatCount: 0,
+      unreadUrgentChatCount: 0,
     };
   },
   async mounted() {
@@ -628,12 +652,16 @@ export default {
         }
 
         if (this.$phoneService.callInfo.callType === 'INBOUND') {
+          let data = {
+            status,
+            notes,
+          };
+          if (this.worksiteId) {
+            data = { ...data, cases: [this.worksiteId] };
+          }
           await this.$http.post(
             `${process.env.VUE_APP_API_BASE_URL}/phone_inbound/${this.call.id}/update_status`,
-            {
-              status,
-              notes,
-            },
+            data,
           );
         }
 
@@ -808,11 +836,6 @@ export default {
     call(newValue, oldValue) {
       if (!oldValue && newValue) {
         EventBus.$emit('phone_component:open', 'agent');
-      }
-    },
-    isOnCall(newValue, oldValue) {
-      if (oldValue && !newValue) {
-        this.tabs.selectTab(this.$refs.statusTab);
       }
     },
     currentIncidentId(value) {

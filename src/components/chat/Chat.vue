@@ -127,6 +127,7 @@ export default {
   },
   async mounted() {
     await this.getUnreadMessagesCount();
+    await this.getUnreadUrgentMessagesCount();
     await this.getMessages();
     await this.getFavorites();
     const { socket, send } = useWebSockets(
@@ -135,7 +136,11 @@ export default {
       (data) => {
         this.messages = [data, ...this.messages];
         if (data.created_by !== this.currentUser.id) {
-          this.$emit('onNewMessage');
+          if (data.is_urgent) {
+            this.$emit('onNewUrgentMessage');
+          } else {
+            this.$emit('onNewMessage');
+          }
         }
 
         this.$nextTick(() => {
@@ -210,6 +215,7 @@ export default {
       const params = {
         message_group: this.chat.id,
         limit: 1,
+        is_urgent: false,
       };
       if (this.currentUser.states.chat_last_seen) {
         params.created_at__gte = this.currentUser.states.chat_last_seen;
@@ -219,6 +225,22 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/chat_messages?${queryString}`,
       );
       this.$emit('unreadCount', response.data.count);
+    },
+    async getUnreadUrgentMessagesCount() {
+      this.loadingMessages = true;
+      const params = {
+        message_group: this.chat.id,
+        limit: 1,
+        is_urgent: true,
+      };
+      if (this.currentUser.states.chat_last_seen) {
+        params.created_at__gte = this.currentUser.states.chat_last_seen;
+      }
+      const queryString = getQueryString(params);
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/chat_messages?${queryString}`,
+      );
+      this.$emit('unreadUrgentCount', response.data.count);
     },
     sendMessage() {
       this.send({
