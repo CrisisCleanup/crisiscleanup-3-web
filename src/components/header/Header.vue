@@ -52,7 +52,7 @@
         <base-button
           class="p-1.5"
           variant="solid"
-          :text="$t('~~Debug User')"
+          :text="$t('actions.debug_user')"
           :action="showCurrentUser"
         />
       </div>

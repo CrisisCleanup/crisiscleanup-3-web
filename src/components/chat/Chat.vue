@@ -4,7 +4,7 @@
       <div class="text-lg">{{ chat.name }}</div>
     </div>
     <tabs tab-details-classes="">
-      <tab :name="$t('~~Chat')">
+      <tab :name="$t('chat.chat')">
         <div class="flex flex-col h-84">
           <div
             id="messages"
@@ -42,12 +42,12 @@
               class="text-crisiscleanup-chat-red flex items-center mb-1"
             >
               <ccu-icon
-                :alt="$t('~~Urgent')"
+                :alt="$t('chat.urgent')"
                 size="small"
                 type="attention-red"
                 class="mr-1"
               />
-              {{ $t('~~URGENT') }}
+              {{ $t('chat.urgent') }}
             </div>
             <div class="flex flex-col">
               <base-input
@@ -57,11 +57,11 @@
               />
               <div class="flex items-center justify-between py-2">
                 <base-link href="" text-variant="bodysm" class="px-2"
-                  >{{ $t('~~Need help?') }}
+                  >{{ $t('chat.need_help') }}
                 </base-link>
                 <div class="flex">
                   <ccu-icon
-                    :alt="$t('~~Urgent')"
+                    :alt="$t('chat.urgent')"
                     size="small"
                     type="attention"
                     class="mx-1 w-8 h-8"
@@ -80,7 +80,7 @@
           </div>
         </div>
       </tab>
-      <tab :name="$t('~~Favorites')">
+      <tab :name="$t('chat.favorites')">
         <div class="flex flex-col h-84">
           <div
             class="

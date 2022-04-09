@@ -80,8 +80,8 @@
         <base-button
           class="cursor-pointer px-3 py-1"
           variant="solid"
-          :text="$t('~~Upload Thumbnail')"
-          :alt="$t('~~Upload Thumbnail')"
+          :text="$t('actions.upload_thumbnail')"
+          :alt="$t('actions.upload_thumbnail')"
           :show-spinner="uploading"
           :disabled="uploading"
         />
@@ -144,7 +144,7 @@
                 }
               }
             "
-            >{{ $t('~~Active Only') }}
+            >{{ $t('adminCMS.active_only') }}
           </base-checkbox>
         </div>
       </template>

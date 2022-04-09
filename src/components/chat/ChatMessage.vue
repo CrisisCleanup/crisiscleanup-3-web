@@ -32,12 +32,12 @@
           >
             <div class="text-crisiscleanup-chat-red flex items-center">
               <ccu-icon
-                :alt="$t('~~Urgent')"
+                :alt="$t('chat.urgent')"
                 size="small"
                 type="attention-red"
                 class="mr-1"
               />
-              {{ $t('~~URGENT') }}
+              {{ $t('chat.urgent') }}
             </div>
             {{ message.content }}
           </div>

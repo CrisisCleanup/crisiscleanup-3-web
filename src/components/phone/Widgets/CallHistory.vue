@@ -1,5 +1,5 @@
 <template>
-  <TitledCard :loading="!callHistoryReady && !calls" :title="$t('~~My Calls')">
+  <TitledCard :loading="!callHistoryReady && !calls" :title="$t('phoneDashboard.last_10_calls')">
     <div class="card-container overflow-auto h-full">
       <AgentStats />
       <Table

@@ -25,7 +25,7 @@
             type="edit"
             size="small"
             class="mx-1"
-            :alt="$t('~~Edit')"
+            :alt="$t('actions.edit')"
             @click.native="editingAgent = true"
           />
         </div>
