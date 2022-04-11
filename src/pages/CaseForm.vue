@@ -8,7 +8,10 @@
     :style="formStyle"
   >
     <resize-observer @notify="calcFormStyle" />
-    <div class="intake-form mb-20 sm:mb-0" :class="(noGrid || $mq === 'sm') && 'no-grid'">
+    <div
+      class="intake-form mb-20 sm:mb-0"
+      :class="(noGrid || $mq === 'sm') && 'no-grid'"
+    >
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
