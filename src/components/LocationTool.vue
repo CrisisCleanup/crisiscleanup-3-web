@@ -206,7 +206,10 @@
           </base-checkbox>
         </div>
       </div>
-      <div id="map" :style="$mq === 'sm' ? 'height: 80vh' : 'height: 100%'"></div>
+      <div
+        id="map"
+        :style="$mq === 'sm' ? 'height: 80vh' : 'height: 100%'"
+      ></div>
     </div>
     <div
       v-show="showingPopup"
