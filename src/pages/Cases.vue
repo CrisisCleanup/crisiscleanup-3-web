@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="flex h-full overflow-hidden cases-container-grid"
-  >
+  <div class="flex h-full overflow-hidden cases-container-grid">
     <div>
       <div class="cases-grid">
         <div class="p-3 border border-gray-300 card-header bg-white">
@@ -65,9 +63,8 @@
                   class="pb-2"
                   :value="showingHeatMap"
                   @input="toggleHeatMap"
-                >{{ $t('casesVue.show_damaged_areas') }}
-                </base-checkbox
-                >
+                  >{{ $t('casesVue.show_damaged_areas') }}
+                </base-checkbox>
               </div>
             </div>
             <div class="flex worksite-actions" style="color: #4c4c4d">
@@ -92,9 +89,8 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{
-                            $t('locationTypes.boundary_political_us_state')
-                          }}
+                        <template slot="btn"
+                          >{{ $t('locationTypes.boundary_political_us_state') }}
                         </template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
@@ -111,9 +107,8 @@
                                     applyLocation(state.id, value);
                                   }
                                 "
-                              >{{ state.name }}
-                              </base-checkbox
-                              >
+                                >{{ state.name }}
+                              </base-checkbox>
                             </li>
                           </ul>
                         </template>
@@ -125,7 +120,8 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{
+                        <template slot="btn"
+                          >{{
                             $t('locationTypes.boundary_political_us_congress')
                           }}
                         </template>
@@ -147,9 +143,8 @@
                                     applyLocation(district.id, value);
                                   }
                                 "
-                              >{{ district.name }}
-                              </base-checkbox
-                              >
+                                >{{ district.name }}
+                              </base-checkbox>
                             </li>
                           </ul>
                         </template>
@@ -161,7 +156,8 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{
+                        <template slot="btn"
+                          >{{
                             $t('locationTypes.boundary_political_us_county')
                           }}
                         </template>
@@ -183,9 +179,8 @@
                                     ? 'user_ui-turn-off_layer'
                                     : 'user_ui-turn-on_layer'
                                 "
-                              >{{ county.name }}
-                              </base-checkbox
-                              >
+                                >{{ county.name }}
+                              </base-checkbox>
                             </li>
                           </ul>
                         </template>
@@ -197,9 +192,8 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{
-                            $t('casesVue.teams')
-                          }}
+                        <template slot="btn"
+                          >{{ $t('casesVue.teams') }}
                         </template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
@@ -216,9 +210,8 @@
                                     applyTeamGeoJson(team, value);
                                   }
                                 "
-                              >{{ team.name }}
-                              </base-checkbox
-                              >
+                                >{{ team.name }}
+                              </base-checkbox>
                             </li>
                           </ul>
                         </template>
@@ -230,9 +223,8 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{
-                            $t('casesVue.incident')
-                          }}
+                        <template slot="btn"
+                          >{{ $t('casesVue.incident') }}
                         </template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
@@ -252,9 +244,8 @@
                                     ? 'user_ui-turn-off_layer'
                                     : 'user_ui-turn-on_layer'
                                 "
-                              >{{ location.name }}
-                              </base-checkbox
-                              >
+                                >{{ location.name }}
+                              </base-checkbox>
                             </li>
                             <li
                               v-if="
@@ -283,11 +274,8 @@
                                     );
                                   }
                                 "
-                              >{{
-                                  $t('casesVue.primary_response_area')
-                                }}
-                              </base-checkbox
-                              >
+                                >{{ $t('casesVue.primary_response_area') }}
+                              </base-checkbox>
                             </li>
                             <li
                               v-if="
@@ -316,11 +304,8 @@
                                     );
                                   }
                                 "
-                              >{{
-                                  $t('casesVue.secondary_response_area')
-                                }}
-                              </base-checkbox
-                              >
+                                >{{ $t('casesVue.secondary_response_area') }}
+                              </base-checkbox>
                             </li>
                           </ul>
                         </template>
@@ -332,9 +317,8 @@
                         :role="'sublist'"
                         :align="'right'"
                       >
-                        <template slot="btn">{{
-                            $t('casesVue.my_layers')
-                          }}
+                        <template slot="btn"
+                          >{{ $t('casesVue.my_layers') }}
                         </template>
                         <template slot="body">
                           <ul class="h-64 overflow-auto">
@@ -354,9 +338,8 @@
                                     applyLocation(location.id, value);
                                   }
                                 "
-                              >{{ location.name }}
-                              </base-checkbox
-                              >
+                                >{{ location.name }}
+                              </base-checkbox>
                             </li>
                           </ul>
                         </template>
@@ -380,7 +363,7 @@
                 <span
                   v-if="filtersCount > 0"
                   class="rounded-full mx-2 px-1 bg-yellow-500 text-xs"
-                >{{ filtersCount }}</span
+                  >{{ filtersCount }}</span
                 >
               </base-button>
               <base-button
@@ -622,9 +605,8 @@
                             updateStatusOnUnclaim = !unchangedStatusOnUnclaim;
                           }
                         "
-                      >{{ $t('casesVue.no_change') }}
-                      </base-checkbox
-                      >
+                        >{{ $t('casesVue.no_change') }}
+                      </base-checkbox>
                       <base-checkbox
                         class="mb-5"
                         :value="updateStatusOnUnclaim"
@@ -634,9 +616,8 @@
                             unchangedStatusOnUnclaim = !updateStatusOnUnclaim;
                           }
                         "
-                      >{{ $t('status.open_unassigned') }}
-                      </base-checkbox
-                      >
+                        >{{ $t('status.open_unassigned') }}
+                      </base-checkbox>
                     </div>
                     <div
                       slot="footer"
@@ -739,7 +720,7 @@
           :class="{ 'tab-active': isNewWorksite }"
           @click="createNewWorksite"
         >
-          <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small"/>
+          <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
           <span class="px-2">{{ $t('casesVue.new_case') }}</span>
         </div>
         <div
@@ -788,7 +769,7 @@
             type="history"
           >
             <span class="ml-1 mt-1"
-            >{{ currentWorksite && currentWorksite.case_number }}
+              >{{ currentWorksite && currentWorksite.case_number }}
               {{ $t('actions.history') }}</span
             >
           </ccu-icon>
@@ -807,7 +788,7 @@
             type="flag"
           >
             <span v-if="currentWorksite" class="ml-1 mt-1"
-            >{{ currentWorksite && currentWorksite.case_number }}
+              >{{ currentWorksite && currentWorksite.case_number }}
               {{ $t('actions.flag') }}</span
             >
           </ccu-icon>
@@ -884,7 +865,7 @@
       />
       <div v-else class="h-full w-full items-center justify-center">
         <div class="flex flex-col items-center">
-          <spinner/>
+          <spinner />
         </div>
       </div>
     </div>
@@ -965,9 +946,9 @@
 </template>
 
 <script>
-import {gmapApi} from 'vue2-google-maps';
-import {mapState} from 'vuex';
-import {debounce} from 'lodash';
+import { gmapApi } from 'vue2-google-maps';
+import { mapState } from 'vuex';
+import { debounce } from 'lodash';
 import * as L from 'leaflet';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
@@ -977,14 +958,14 @@ import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import WorksiteMap from '@/components/WorksiteMap';
 import WorksiteFilters from '@/components/WorksiteFilters';
-import {getQueryString} from '@/utils/urls';
-import {getColorForStatus} from '@/filters';
-import {forceFileDownload} from '@/utils/downloads';
-import {getErrorMessage} from '@/utils/errors';
+import { getQueryString } from '@/utils/urls';
+import { getColorForStatus } from '@/filters';
+import { forceFileDownload } from '@/utils/downloads';
+import { getErrorMessage } from '@/utils/errors';
 import Team from '@/models/Team';
-import {templates} from '@/icons/icons_templates';
+import { templates } from '@/icons/icons_templates';
 import SviSlider from '@/components/SviSlider';
-import {EventBus} from '@/event-bus';
+import { EventBus } from '@/event-bus';
 import WorksiteTable from './WorksiteTable';
 import WorksiteSearchInput from '../components/WorksiteSearchInput';
 import StatusDropdown from '../components/StatusDropdown';
@@ -1110,7 +1091,7 @@ export default {
           title: this.$t('casesVue.work_type'),
           dataIndex: 'work_types',
           key: 'work_types',
-          scopedSlots: {customRender: 'work_types'},
+          scopedSlots: { customRender: 'work_types' },
           width: '1.5fr',
         },
         {
@@ -1339,7 +1320,7 @@ export default {
         const response = await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/pdas`,
           {
-            params: {incident: this.currentIncidentId},
+            params: { incident: this.currentIncidentId },
           },
         );
         this.pdas = response.data;
@@ -1357,7 +1338,7 @@ export default {
       );
       this.organizationLocations = response.data.results;
     },
-    handleTableChange({pagination, filters, sorter}) {
+    handleTableChange({ pagination, filters, sorter }) {
       this.fetch({
         pageSize: pagination.pageSize,
         page: pagination.current,
@@ -1493,14 +1474,14 @@ export default {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/worksites`,
         {
-          params: {...queryParams, incident: this.currentIncidentId},
+          params: { ...queryParams, incident: this.currentIncidentId },
         },
       );
       this.tableLoading = false;
 
       this.data = response.data.results.map((result) => {
         // eslint-disable-next-line camelcase
-        let {form_data} = result;
+        let { form_data } = result;
         if (!form_data) {
           form_data = [];
         }
@@ -1626,8 +1607,7 @@ export default {
           this.fetch({
             pageSize: this.pagination.pageSize,
             page: this.pagination.current,
-          }).then(() => {
-          });
+          }).then(() => {});
         }
       },
       250,
@@ -1694,8 +1674,7 @@ export default {
         await this.downloadCsv({
           id__in: siteIds.join(','),
         });
-        this.reloadTable().then(() => {
-        });
+        this.reloadTable().then(() => {});
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
@@ -1705,13 +1684,13 @@ export default {
     async downloadCsv(query) {
       this.spinning = true;
       try {
-        const params = query || {...this.currentQuery};
+        const params = query || { ...this.currentQuery };
         delete params.fields;
         const response = await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/worksites_download/download_csv`,
           {
             params,
-            headers: {Accept: 'text/csv'},
+            headers: { Accept: 'text/csv' },
             responseType: 'blob',
           },
         );
@@ -1731,7 +1710,7 @@ export default {
             [this.currentWorksite.latitude, this.currentWorksite.longitude],
             18,
           );
-          const popup = L.popup({className: 'pixi-popup'});
+          const popup = L.popup({ className: 'pixi-popup' });
           popup
             .setLatLng([
               this.currentWorksite.latitude,
@@ -1757,7 +1736,7 @@ export default {
       }
 
       this.$refs.worksiteMap.markerLayer.clearLayers();
-      const marker = new L.marker(markerLocation, {draggable: 'true'}).addTo(
+      const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
         this.$refs.worksiteMap.markerLayer,
       );
       marker.on('dragend', function (event) {
