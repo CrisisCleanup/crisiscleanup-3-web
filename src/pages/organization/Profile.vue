@@ -134,7 +134,12 @@
             <form-select
               :placeholder="$t('profileOrg.organization_type')"
               select-classes="h-12"
-              class="w-full sm:w-84 flex-grow border border-crisiscleanup-dark-100"
+              class="
+                w-full
+                sm:w-84
+                flex-grow
+                border border-crisiscleanup-dark-100
+              "
               :options="organizationTypes"
               :value="currentOrganization.type_t"
               item-key="key"
