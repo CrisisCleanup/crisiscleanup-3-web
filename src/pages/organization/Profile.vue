@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-3/4 m-auto">
+  <div class="flex flex-col sm:w-3/4 w-11/12 m-auto">
     <base-button
       variant="solid"
       class="px-4 py-2 self-end mt-6"
@@ -20,7 +20,14 @@
             <div class="flex">
               <div v-if="!logoUrl">
                 <DragDrop
-                  class="w-84 h-16 text-center mr-6 border border-dashed"
+                  class="
+                    w-full
+                    sm:w-84
+                    h-16
+                    text-center
+                    mr-6
+                    border border-dashed
+                  "
                   container-class="flex-row items-center justify-center"
                   :choose-title="$t('profileOrg.upload_org_logo')"
                   :drag-title="$t('profileOrg.logo_specs')"
@@ -34,7 +41,7 @@
               </div>
               <div v-else>
                 <img
-                  class="w-84"
+                  class="w-full sm:w-84"
                   :src="logoUrl"
                   :alt="$t('profileOrg.organization_logo')"
                 />
@@ -60,7 +67,7 @@
           </div>
           <div class="form-row">
             <FloatingInput
-              class="mr-2 w-84"
+              class="mr-2 w-full sm:w-84"
               :placeholder="$t('profileOrg.organization_name')"
               :value="currentOrganization.name"
               required
@@ -73,7 +80,7 @@
           </div>
           <div class="form-row">
             <FloatingInput
-              class="mr-2 w-84"
+              class="mr-2 w-full sm:w-84"
               :placeholder="$t('profileOrg.address')"
               :value="currentOrganization.address"
               required
@@ -86,7 +93,7 @@
           </div>
           <div class="form-row">
             <FloatingInput
-              class="mr-2 w-84"
+              class="mr-2 w-full sm:w-84"
               :placeholder="$t('profileOrg.url')"
               :value="currentOrganization.url"
               required
@@ -99,7 +106,7 @@
           </div>
           <div class="form-row">
             <FloatingInput
-              class="mr-2 w-84"
+              class="mr-2 w-full sm:w-84"
               :placeholder="$t('profileOrg.email')"
               :value="currentOrganization.email"
               required
@@ -112,7 +119,7 @@
           </div>
           <div class="form-row">
             <FloatingInput
-              class="mr-2 w-84"
+              class="mr-2 w-full sm:w-84"
               :placeholder="$t('profileOrg.phone')"
               :value="currentOrganization.phone1"
               required
@@ -127,7 +134,7 @@
             <form-select
               :placeholder="$t('profileOrg.organization_type')"
               select-classes="h-12"
-              class="w-84 flex-grow border border-crisiscleanup-dark-100"
+              class="w-full sm:w-84 flex-grow border border-crisiscleanup-dark-100"
               :options="organizationTypes"
               :value="currentOrganization.type_t"
               item-key="key"
@@ -200,7 +207,7 @@
             </div>
 
             <UserSearchInput
-              class="h-12 w-84"
+              class="h-12 w-full sm:w-84"
               :placeholder="$t('profileOrg.add_primary_contacts')"
               :key="JSON.stringify(organization.primary_contacts)"
               @selectedUser="
@@ -220,7 +227,7 @@
                 }}</label>
               </div>
               <base-input
-                class="w-84"
+                class="w-full sm:w-84"
                 size="small"
                 :value="currentOrganization.facebook"
                 :placeholder="$t('profileOrg.facebook')"
@@ -239,7 +246,7 @@
                 }}</label>
               </div>
               <base-input
-                class="w-84"
+                class="w-full sm:w-84"
                 size="small"
                 :value="currentOrganization.twitter"
                 :placeholder="$t('profileOrg.twitter')"
@@ -253,7 +260,7 @@
           </div>
           <div class="form-row">
             <FloatingInput
-              class="mr-2 w-84"
+              class="mr-2 w-full sm:w-84"
               :placeholder="$t('profileOrg.donation_url')"
               :value="currentOrganization.donate_url"
               required
