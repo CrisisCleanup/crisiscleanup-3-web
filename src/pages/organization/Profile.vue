@@ -7,7 +7,7 @@
       :alt="$t('actions.save')"
       :action="saveOrganization"
     />
-    <div class="mt-6 grid grid-cols-2 gap-x-6">
+    <div class="mt-6 grid sm:grid-cols-2 gap-x-6">
       <Card>
         <template #header>
           <base-text class="px-5 py-3">{{
@@ -286,7 +286,7 @@
         />
       </Card>
     </div>
-    <div class="mt-6 grid grid-cols-2 gap-x-6">
+    <div class="mt-6 grid sm:grid-cols-2 gap-x-6">
       <Card>
         <template #header>
           <base-text class="px-5 py-3">
@@ -325,7 +325,7 @@
         </div>
       </Card>
     </div>
-    <div class="mt-6 grid grid-cols-2 gap-x-6">
+    <div class="mt-6 grid sm:grid-cols-2 gap-x-6">
       <Card>
         <template #header>
           <base-text class="px-5 py-3">

@@ -3,36 +3,38 @@
     <LayerUploadTool :key="locations" @addedLayer="getLocations" />
     <div class="mb-24">
       <div class="flex justify-between mb-2">
-        <div class="flex items-center">
+        <div class="flex flex-col sm:flex-row items-center">
           <base-input
             v-model="currentSearch"
             icon="search"
-            class="w-72 mr-4"
+            class="sm:w-72 w-full sm:mr-4"
             :placeholder="$t('actions.search')"
             @input="getLocations"
           ></base-input>
-          <form-select
-            v-model="locationTypeFilter"
-            :options="locationTypes"
-            class="w-64 border border-crisiscleanup-dark-100"
-            item-key="id"
-            label="name_t"
-            :placeholder="$t('locationVue.location_type')"
-            select-classes="bg-white border text-xs location-select p-1"
-            @input="getLocations"
-          />
+          <div class="flex w-full">
+            <form-select
+              v-model="locationTypeFilter"
+              :options="locationTypes"
+              class="w-full sm:w-64 border border-crisiscleanup-dark-100"
+              item-key="id"
+              label="name_t"
+              :placeholder="$t('locationVue.location_type')"
+              select-classes="bg-white border text-xs location-select p-1"
+              @input="getLocations"
+            />
+            <base-button
+              :text="$t('actions.create_location')"
+              :alt="$t('actions.create_location')"
+              variant="solid"
+              size="small"
+              :action="
+                () => {
+                  $router.push('/locations/new');
+                }
+              "
+            />
+          </div>
         </div>
-        <base-button
-          :text="$t('actions.create_location')"
-          :alt="$t('actions.create_location')"
-          variant="solid"
-          size="small"
-          :action="
-            () => {
-              $router.push('/locations/new');
-            }
-          "
-        />
       </div>
       <LocationTable
         :locations="locations"
