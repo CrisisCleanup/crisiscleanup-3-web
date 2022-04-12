@@ -487,7 +487,8 @@
             outline-none
             p-1
             resize-none
-            w-72
+            w-full
+            sm:w-72
           "
         />
       </div>
@@ -502,7 +503,7 @@
           />
           <base-input
             size="small"
-            class="w-64 mr-2"
+            class="w-full sm:w-64 mr-2"
             input-classes="text-xs"
             disabled
             :value="termsOfService ? termsOfService.filename_original : ''"
@@ -521,7 +522,7 @@
           />
         </div>
         <DragDrop
-          class="cursor-pointer w-64 py-2"
+          class="cursor-pointer w-full sm:w-64 py-2"
           container-class="items-start"
           :disabled="
             uploading || (!currentUser.isPrimaryContact && !currentUser.isAdmin)
@@ -562,7 +563,8 @@
             outline-none
             p-1
             resize-none
-            w-72
+            w-full
+            sm:w-72
           "
         />
       </div>
@@ -577,7 +579,7 @@
           />
           <base-input
             size="small"
-            class="w-64 mr-2"
+            class="w-full sm:w-64 mr-2"
             input-classes="text-xs"
             disabled
             :value="liabilityWaiver ? liabilityWaiver.filename_original : ''"
@@ -596,7 +598,7 @@
           />
         </div>
         <DragDrop
-          class="cursor-pointer w-64 py-2"
+          class="cursor-pointer w-full sm:w-64 py-2"
           container-class="items-start"
           :disabled="
             uploading || (!currentUser.isPrimaryContact && !currentUser.isAdmin)
@@ -640,7 +642,8 @@
             outline-none
             p-1
             resize-none
-            w-72
+            w-full
+            sm:w-72
           "
         />
       </div>
