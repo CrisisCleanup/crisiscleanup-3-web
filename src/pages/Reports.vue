@@ -21,7 +21,7 @@
       </modal>
       <!-- Report Library -->
       <h1 class="text-xl font-bold m-2 ml-3 pt-5">Report Library</h1>
-      <div class="report-grid">
+      <div class="grid grid-cols-1 sm:grid-cols-3">
         <div v-for="r in reports" :key="`${r.id}`">
           <div
             class="
@@ -129,10 +129,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.report-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-}
-</style>
