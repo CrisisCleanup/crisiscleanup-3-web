@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full w-3/4 m-auto">
+  <div class="flex h-full w-11/12 sm:w-3/4 m-auto">
     <div class="mt-6 w-full">
       <div class="flex justify-between items-center my-6">
         <div>
@@ -106,7 +106,7 @@
         ref="invitationsTable"
       >
         <template #actions="slotProps">
-          <div class="flex mr-2 justify-center w-full">
+          <div class="flex mr-2 justify-center">
             <base-button
               size="small"
               variant="solid"
@@ -122,7 +122,7 @@
           </div>
         </template>
         <template #delete="slotProps">
-          <div class="flex mr-2 justify-center">
+          <div class="flex ml-auto sm:ml-0 mr-2 -mt-16 sm:mt-0 justify-center">
             <ccu-icon
               :alt="$t('actions.delete_invitation')"
               type="trash"
