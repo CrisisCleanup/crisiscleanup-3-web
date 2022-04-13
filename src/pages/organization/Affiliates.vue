@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-3/4 m-auto">
+  <div class="flex sm:w-3/4 w-11/12 m-auto">
     <div class="mt-6 px-12 pb-6 w-full bg-white shadow">
       <div class="flex justify-between my-4">
         {{ $t('affiliatesVue.affiliates') }}
