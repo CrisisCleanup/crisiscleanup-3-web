@@ -290,7 +290,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="p-4"
         >
           <div
-            class="table-grid w-full"
+            class="table-grid w-full relative"
           >
             <div
               class="header text-crisiscleanup-grey-700 bg-white"
@@ -1057,7 +1057,7 @@ exports[`Dashboard should render correctly and match snapshot 1`] = `
           class="p-4"
         >
           <div
-            class="table-grid w-full"
+            class="table-grid w-full relative"
           >
             <div
               class="header text-crisiscleanup-grey-700 bg-white"
