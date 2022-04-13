@@ -161,7 +161,7 @@
               });
             }
           "
-          :text="$t('~~Show Map')"
+          :text="$t('casesVue.show_map')"
         />
       </div>
       <div v-if="showingDetails" class="flex items-center justify-between px-2">

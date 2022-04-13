@@ -1,6 +1,6 @@
 <template>
   <TitledCard
-    :title="$t('~~Leaderboard')"
+    :title="$t('phoneDashboard.leaderboard')"
     :dropdown="dropdownProps"
     @update:dropdown="onDropdownUpdate"
   >
@@ -62,9 +62,9 @@
         </div>
         <div class="grid grid-cols-3 gap-x-4">
           <template v-if="true">
-            <div>{{ $t('~~Inbound') }}</div>
-            <div>{{ $t('~~Outbound') }}</div>
-            <div>{{ $t('~~Total') }}</div>
+            <div>{{ $t('phoneDashboard.inbound') }}</div>
+            <div>{{ $t('phoneDashboard.outbound') }}</div>
+            <div>{{ $t('phoneDashboard.total') }}</div>
           </template>
           <div
             class="metric"
