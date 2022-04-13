@@ -14,7 +14,7 @@
           class="sidebar--grid"
           :key="JSON.stringify(currentUser && currentUser.permissions)"
         />
-        <Slide width="125" :closeOnNavigation="true" v-else>
+        <Slide width="125" :close-on-navigation="true" v-else>
           <NavMenu
             :routes="routes"
             :logo-route="logoRoute"
