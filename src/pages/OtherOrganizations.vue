@@ -1,16 +1,7 @@
 <template>
   <div class="p-10">
     <div
-      class="
-        sm:w-3/5
-        border-primary-dark
-        h-20
-        border-2
-        my-4
-        flex
-        items-center
-        p-2
-      "
+      class="sm:w-3/5 w-full border-primary-dark h-20 border-2 my-4 flex items-center p-2"
     >
       <span class="text-5xl text-primary-dark mr-4">&#9888;</span>
       <div>
@@ -26,7 +17,7 @@
     <base-input
       :value="organizations.search"
       icon="search"
-      class="sm:w-84 my-2"
+      class="w-full sm:w-84 my-2"
       :placeholder="$t('actions.search')"
       @input="
         (value) => {
@@ -166,7 +157,7 @@ export default {
           title: this.$t('otherOrganizations.name'),
           dataIndex: 'name',
           key: 'name',
-          width: this.isLandscape() ? '2fr' : '350px',
+          width: '350px',
         },
         {
           title: this.$t('otherOrganizations.access_level'),
@@ -247,11 +238,6 @@ export default {
     await this.getOrganizations(this.organizations.meta);
   },
   methods: {
-    isLandscape() {
-      return window.matchMedia(
-        'only screen and (max-device-width: 1223px) and (orientation: landscape)',
-      ).matches;
-    },
     async getOrganizations(data = {}) {
       this.loading = true;
       const pagination = data.pagination || this.organizations.meta.pagination;
