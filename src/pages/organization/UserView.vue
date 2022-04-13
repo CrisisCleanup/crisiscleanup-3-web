@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="p-8">
-      <div class="flex">
+      <div class="flex sm:flex-row flex-col">
         <img
           class="rounded-full profile-image mr-16"
           :src="selectedUser.profilePictureUrl"

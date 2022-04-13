@@ -24,7 +24,7 @@
                 p-1
                 px-4
                 cursor-pointer
-                mr-64
+                sm:mr-64
                 h-10
               "
               @click="() => {}"
@@ -149,7 +149,7 @@
         <InviteUsers />
       </div>
       <div class="user-grid">
-        <div class="w-96 flex flex-col h-full">
+        <div class="sm:w-96 w-full flex flex-col h-full">
           <Table
             class="border text-xs flex-grow"
             :data="users"
