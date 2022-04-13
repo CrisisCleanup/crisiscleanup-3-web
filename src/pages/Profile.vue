@@ -1,6 +1,6 @@
 <template>
   <div style="height: 85%" class="h-full flex justify-center">
-    <div class="h-full flex flex-col w-3/4 shadow my-6">
+    <div class="h-full flex flex-col w-11/12 sm:w-3/4 shadow my-6">
       <div class="h-full w-full bg-white flex flex-col">
         <div
           class="
@@ -26,8 +26,8 @@
           </div>
         </div>
         <div class="overflow-auto">
-          <div class="flex">
-            <div class="flex flex-col p-8 w-64 items-center">
+          <div class="flex sm:flex-row flex-col">
+            <div class="flex flex-col p-8 w-full sm:w-64 items-center">
               <Avatar
                 :initials="currentUser.first_name"
                 :url="currentUser.profilePictureUrl"
@@ -51,7 +51,7 @@
                 >{{ $t('actions.view_id_badge') }}
               </base-button>
             </div>
-            <div class="user-form p-8">
+            <div class="w-full sm:w-[48rem] p-8">
               <form ref="form" @submit.prevent="handleSubmit">
                 <div class="user-details">
                   <div class="flex pb-4">
@@ -538,9 +538,6 @@ export default {
 </script>
 
 <style scoped>
-.user-form {
-  width: 48rem;
-}
 .profile-image {
   height: 175px;
   width: 175px;
