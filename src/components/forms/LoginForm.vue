@@ -93,6 +93,12 @@ export default {
       acceptedInvite: Boolean(this.$route.query.accepted),
     };
   },
+  props: {
+    redirect: {
+      type: Boolean,
+      default: true,
+    },
+  },
   methods: {
     ...mapActions('auth', ['login']),
     async userLogin() {
@@ -101,10 +107,14 @@ export default {
       } catch (e) {
         await this.$toasted.error(this.lang.invalidCreds);
       }
-      if (this.$route.query.from) {
-        await this.$router.replace(this.$route.query.from);
+      if (this.redirect) {
+        if (this.$route.query.from) {
+          await this.$router.replace(this.$route.query.from);
+        } else {
+          await this.$router.push('/dashboard');
+        }
       } else {
-        await this.$router.push('/dashboard');
+        this.$store.commit('auth/setShowLoginModal', false);
       }
     },
   },

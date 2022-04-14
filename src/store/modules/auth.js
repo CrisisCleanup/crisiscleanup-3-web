@@ -8,6 +8,7 @@ import { AuthService } from '@/services/auth.service';
 
 const AuthState = {
   user: AuthService.getUser(),
+  showLoginModal: false,
 };
 
 // getters
@@ -89,6 +90,9 @@ const mutations = {
       },
       { router },
     );
+  },
+  setShowLoginModal(state, toggle) {
+    state.showLoginModal = toggle;
   },
 };
 

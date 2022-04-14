@@ -57,6 +57,15 @@
             "
           />
         </div>
+        <div v-if="showLoginModal">
+          <modal
+            modal-classes="bg-white max-w-lg shadow p-5"
+            :closeable="false"
+          >
+            <LoginForm :redirect="false" />
+            <div slot="footer"></div>
+          </modal>
+        </div>
       </div>
     </template>
   </Loader>
@@ -81,12 +90,14 @@ import Header from '@/components/header/Header.vue';
 import PhoneStatus from '../models/PhoneStatus';
 import CompletedTransferModal from '../components/CompletedTransferModal';
 import { AuthService } from '../services/auth.service';
+import LoginForm from '@/components/forms/LoginForm';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
 export default {
   name: 'Authenticated',
   components: {
+    LoginForm,
     CompletedTransferModal,
     NavMenu,
     Loader,
@@ -194,7 +205,7 @@ export default {
       };
     },
     ...mapState('incident', ['currentIncidentId']),
-    ...mapState('auth', ['user']),
+    ...mapState('auth', ['user', 'showLoginModal']),
     ...mapState('enums', ['portal']),
   },
   watch: {

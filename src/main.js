@@ -241,8 +241,7 @@ axios.interceptors.response.use(
   },
   function (error) {
     if (error.response && error.response.status === 401) {
-      store.dispatch('auth/logout');
-      router.push('/login');
+      store.commit('auth/setShowLoginModal', true);
     }
     return Promise.reject(error);
   },
