@@ -13,8 +13,12 @@
       </slot>
     </div>
     <div
-      class="phone-component absolute"
-      :class="[componentClass, $mq === 'sm' ? 'w-120 -ml-120' : 'w-84 -ml-84']"
+      class="phone-component fixed mt-12 ml-12"
+      :style="{ top: top }"
+      :class="[
+        componentClass,
+        $mq === 'sm' ? 'w-120 md:-ml-120' : 'w-84 md:-ml-84',
+      ]"
       v-show="showComponent"
     >
       <div class="w-full relative mb-2">
@@ -53,6 +57,7 @@ export default {
   data() {
     return {
       showComponent: false,
+      top: 0,
     };
   },
   props: {
@@ -83,6 +88,9 @@ export default {
     showComponent(newValue, oldValue) {
       if (newValue && !oldValue) {
         this.$emit('open');
+        const el = this.$parent.$refs.phoneButtons;
+        const rect = el.getBoundingClientRect();
+        this.top = `${parseInt(rect.top + window.scrollY)}px`;
       }
     },
   },

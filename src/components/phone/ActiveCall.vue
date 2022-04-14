@@ -30,11 +30,11 @@
     </div>
 
     <div class="flex items-start justify-between w-full py-1 px-2">
-      <div>
+      <div class="flex items-center">
         <base-text variant="h2">
           {{ caller.dnis }}
         </base-text>
-        <div class="text-xs text-crisiscleanup-dark-200 p-1">
+        <div class="text-xs text-crisiscleanup-dark-200 ml-2">
           {{ caller.location_name }} {{ caller.state_name }}
         </div>
       </div>
@@ -45,17 +45,46 @@
         {{
           `${caller.number_of_inbound_calls} ${$t(
             'phoneDashboard.calls',
-          )} | ${$moment().diff($moment(caller.created_at), 'days')} | ${$t(
+          )} | ${$moment().diff($moment(caller.created_at), 'days')} ${$t(
             'phoneDashboard.days',
           )}`
         }}
       </div>
     </div>
     <div v-if="cards.length">{{ $t('phoneDashboard.existing_cases') }}</div>
-    <div class="grid grid-cols-2 p-2 gap-2 w-full">
-      <div class="" v-for="c in cards" :key="`${c.id}`">
+    <div class="flex overflow-x-auto overflow-y-hidden w-full">
+      <div
+        class="
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+          p-1
+          flex-grow-0 flex-shrink-0
+          w-32
+          h-24
+          m-1
+        "
+        @click="() => setCase(null)"
+        :class="Boolean(caseId) ? '' : 'border'"
+      >
+        <div class="flex flex-col items-center justify-center h-full">
+          <ccu-icon
+            :alt="$t('actions.create_new')"
+            type="add-orange"
+            size="xl"
+            class="pb-1"
+          />
+          <base-text variant="h3" class="text-crisiscleanup-dark-400"
+            >{{ $t('~~New Case') }}
+          </base-text>
+        </div>
+      </div>
+      <div
+        class="flex-grow-0 flex-shrink-0 w-56 m-1 h-24"
+        v-for="c in cards"
+        :key="`${c.id}`"
+      >
         <div
-          class="cursor-pointer bg-crisiscleanup-light-grey p-1"
+          class="cursor-pointer bg-crisiscleanup-light-grey p-1 h-full w-full"
           @click="() => setCase(c)"
           :class="c.id === caseId ? 'border' : ''"
         >
@@ -70,23 +99,6 @@
           <div class="text-xs text-crisiscleanup-dark-200 p-1">
             {{ c.address }} {{ c.state }}
           </div>
-        </div>
-      </div>
-      <div
-        class="cursor-pointer bg-crisiscleanup-light-grey p-1"
-        @click="() => setCase(null)"
-        :class="Boolean(caseId) ? '' : 'border'"
-      >
-        <div class="flex flex-col items-center justify-center h-full">
-          <ccu-icon
-            :alt="$t('actions.create_new')"
-            type="add-orange"
-            size="xl"
-            class="pb-1"
-          />
-          <base-text variant="h3" class="text-crisiscleanup-dark-400"
-            >{{ $t('~~New Case') }}
-          </base-text>
         </div>
       </div>
     </div>

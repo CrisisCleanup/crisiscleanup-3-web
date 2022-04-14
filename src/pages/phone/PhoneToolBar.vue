@@ -6,22 +6,6 @@
         @onToggleOutbounds="onToggleOutbounds"
         class="border-b shadow"
       />
-      <tabs
-        :details="false"
-        v-if="caller"
-        class="bg-white"
-        :class="$mq === 'sm' ? '' : 'absolute w-96'"
-        style="z-index: 1003"
-        ref="tabs"
-        @mounted="setTabs"
-      >
-        <tab :name="$t('phoneDashboard.active_call')">
-          <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
-        </tab>
-        <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
-          <UpdateStatus class="p-2" @onCompleteCall="completeCall" />
-        </tab>
-      </tabs>
     </div>
   </div>
 </template>
