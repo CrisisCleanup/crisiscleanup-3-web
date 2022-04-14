@@ -17,6 +17,12 @@
         {{ lang[item.key] }}
       </router-link>
     </span>
+    <a
+      class="w-32 ml-9"
+      target="_blank"
+      href="https://aws.amazon.com/government-education/nonprofits/disaster-response/"
+      ><img src="@/assets/powered_by_aws.png"
+    /></a>
   </div>
 </template>
 

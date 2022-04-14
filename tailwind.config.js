@@ -190,5 +190,6 @@ module.exports = {
       addUtilities(utilities, variants('borderColor'));
     },
     require('@tailwindcss/line-clamp'),
+    require('tailwindcss-safe-area'),
   ],
 };
