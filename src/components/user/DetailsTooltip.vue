@@ -1,13 +1,14 @@
 <template>
   <v-popover
     :popover-class="['popover', dark && 'dark']"
-    trigger="hover click"
+    trigger="click"
     popover-inner-class="popover-inner max-w-sm"
   >
     <base-text :style="[nameStyle]" class="details-name" variant="body">
-      <span :class="`${nameClass} tooltip-target cursor-pointer`">{{
-        userItem.full_name
-      }}</span>
+      <span
+        :class="`${nameClass} tooltip-target cursor-pointer hover:text-primary-dark`"
+        >{{ userItem.full_name }}</span
+      >
       <slot
     /></base-text>
     <template #popover>
@@ -34,10 +35,22 @@
 <script>
 import VueTypes from 'vue-types';
 import { UserMixin } from '@/mixins';
+import User from '@/models/User';
 
 export default {
   name: 'UserDetailsTooltip',
   mixins: [UserMixin],
+  data() {
+    return {
+      asyncUser: null,
+    };
+  },
+  mounted() {
+    const user = this.getUser(this.user);
+    if (!user) {
+      User.api().get(`/users/${this.user}`, {});
+    }
+  },
   props: {
     user: VueTypes.number,
     nameClass: VueTypes.string.def('text-yellow-600'),

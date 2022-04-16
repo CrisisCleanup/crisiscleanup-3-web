@@ -8,7 +8,11 @@
       <div class="flex flex-col space-y-2 text-sm mx-2 w-full">
         <div class="flex flex-col w-full relative">
           <div class="ml-1">
-            <span>{{ message.full_name }}</span>
+            <UserDetailsTooltip
+              :dark="false"
+              :name-class="'text-h3 font-h3 text-crisiscleanup-dark-500 name-tooltip'"
+              :user="message.created_by"
+            />
             <span
               v-if="$moment(message.created_at).isSame($moment(), 'day')"
               class="opacity-40 text-xs ml-1"
@@ -57,14 +61,14 @@
           <font-awesome-icon
             v-if="showFavorite"
             :icon="['far', 'star']"
-            class="absolute top-1/2 right-2 mt-0.5"
+            class="absolute top-1/2 right-2 mt-2"
             @click="$emit('onFavorite', message)"
           />
           <font-awesome-icon
             v-if="message.is_favorite"
             @mouseover="showFavorite"
             :icon="['fa', 'star']"
-            class="absolute top-1/2 right-2 mt-0.5"
+            class="absolute top-1/2 right-2 mt-2"
             @click="$emit('onUnfavorite', message)"
           />
         </div>
@@ -84,9 +88,11 @@
 
 <script>
 import { UserMixin } from '@/mixins';
+import UserDetailsTooltip from '@/components/user/DetailsTooltip';
 
 export default {
   name: 'ChatMessage',
+  components: { UserDetailsTooltip },
   mixins: [UserMixin],
   data() {
     return {
