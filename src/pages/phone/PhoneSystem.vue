@@ -429,7 +429,7 @@
                 <template v-slot:button>
                   <div class="w-full h-full flex items-center justify-center">
                     <div class="text-xl">
-                      {{ Number(stats.inQueue) + remainingCallbacks || 0 }}
+                      {{ callsWaiting }}
                     </div>
                   </div>
                 </template>
@@ -588,6 +588,13 @@ export default {
         };
       }
       return {};
+    },
+    callsWaiting() {
+      return (
+        Number(this.stats.inQueue) +
+          Number(this.stats.active) +
+          this.remainingCallbacks || 0
+      );
     },
     showingDetails() {
       return this.showHistory || this.showFlags;

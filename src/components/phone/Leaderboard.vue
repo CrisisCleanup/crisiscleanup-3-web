@@ -237,7 +237,7 @@ export default {
       if (agents) {
         EventBus.$emit(
           'phone:agents_online',
-          agents.filter((agent) => agent.state !== 'OFFLINE').length,
+          agents.filter((agent) => agent.state === 'AVAILABLE').length,
         );
       }
     },
