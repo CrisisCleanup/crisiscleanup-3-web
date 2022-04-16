@@ -64,8 +64,8 @@
           :key="incident.id"
           class="ml-2"
         >
-          {{ incident.name }}:
-          {{ String(incident.active_phone_number) | formatNationalNumber }}
+          {{ incident.short_name }}:
+          {{ getIncidentPhoneNumbers(incident) }}
         </div>
       </div>
       <PhoneToolBar
@@ -673,6 +673,14 @@ export default {
       this.selectedChat = group;
       const markers = await this.getWorksites();
       this.loadMap(markers);
+    },
+    getIncidentPhoneNumbers(incident) {
+      if (Array.isArray(incident.active_phone_number)) {
+        return incident.active_phone_number
+          .map((number) => formatNationalNumber(String(number)))
+          .join(', ');
+      }
+      return formatNationalNumber(String(incident.active_phone_number));
     },
     async completeCall({ status, notes }) {
       if (this.$refs.worksiteForm.dirtyFields.size) {

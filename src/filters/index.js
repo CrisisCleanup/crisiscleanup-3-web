@@ -1,4 +1,4 @@
-import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import { parsePhoneNumber } from 'libphonenumber-js';
 import { RRule } from 'rrule';
 import _ from 'lodash';
 import * as moment from 'moment';
@@ -135,7 +135,7 @@ export const startCase = (value) => _.startCase(value);
 export const snakeCase = (value) => _.snakeCase(value);
 
 export const formatNationalNumber = (mobile) => {
-  const _number = parsePhoneNumberFromString(mobile);
+  const _number = parsePhoneNumber(mobile, 'US');
   if (_number) {
     return _number.formatNational();
   }
