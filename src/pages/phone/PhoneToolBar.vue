@@ -10,9 +10,7 @@
   </div>
 </template>
 <script>
-import ActiveCall from '@/components/phone/ActiveCall';
 import Agent from '@/components/phone/Agent';
-import UpdateStatus from '@/components/phone/UpdateStatus';
 import { ConnectFirstMixin } from '@/mixins';
 
 export default {
