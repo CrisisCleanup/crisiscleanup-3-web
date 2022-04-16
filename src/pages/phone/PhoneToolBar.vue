@@ -17,7 +17,7 @@ import { ConnectFirstMixin } from '@/mixins';
 
 export default {
   name: 'PhoneToolBar',
-  components: { ActiveCall, Agent, UpdateStatus },
+  components: { Agent },
   mixins: [ConnectFirstMixin],
   methods: {
     setTabs(tabs) {
