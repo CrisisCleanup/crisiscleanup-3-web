@@ -2,7 +2,7 @@
 
 exports[`NavMenu should render correctly and match snapshot 1`] = `
 <div
-  class="sidebar"
+  class="sidebar overflow-y-scroll"
 >
   <!---->
    
