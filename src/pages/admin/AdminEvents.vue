@@ -16,7 +16,7 @@
           </div>
         </TitledCard>
       </div>
-      <div class="events__build">
+      <div class="sm:events__build">
         <TitledCard
           class="build__input"
           :title="$t('adminDashboard.event_builder')"
