@@ -390,13 +390,13 @@ export default {
           'profileUser.notification_incident_access',
         ),
         user_role_approval: this.$t(
-          'profileUser.notification_user_roles',
+        'profileUser.notification_user_roles',
         ),
         organization_role_approval: this.$t(
           'profileUser.notification_org_roles',
         ),
         phone_volunteer_needs: this.$t(
-          'profileUser.notification_phone_needs',
+        'profileUser.notification_phone_needs',
         ),
       },
       nav: {
