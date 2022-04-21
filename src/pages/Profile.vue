@@ -4,14 +4,15 @@
       <div class="h-full w-full bg-white flex flex-col">
         <div
           class="
-          border-b 
-          px-4 
-          py-2 
-          font-semibold 
-          flex 
-          justify-between 
-          items-center 
-          h-16"
+          border-b
+          px-4
+          py-2
+          font-semibold
+          flex
+          justify-between
+          items-center
+          h-16
+          "
         >
           {{ currentUser.full_name }}
           <div class="flex justify-end">
@@ -123,10 +124,10 @@
                 <div class="flex pb-4">
                   <UserRolesSelect
                     class="
-                    w-1/2 
-                    flex-grow 
-                    mr-2 
-                    border 
+                    w-1/2
+                    flex-grow
+                    mr-2
+                    border
                     border-crisiscleanup-dark-100
                     "
                     :user="currentUser"
@@ -244,11 +245,12 @@
                 <div class="py-3 flex items-center">
                   <div
                     class="
-                    w-8
-                    h-8
-                    rounded-full
-                    bg-crisiscleanup-grey-300
-                    border"
+                      w-8
+                      h-8
+                      rounded-full
+                      bg-crisiscleanup-grey-300
+                      border
+                      "
                   />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
@@ -377,26 +379,26 @@ export default {
         periodic_reports: this.$t('profileUser.notification_periodic_reports'),
         custom_reports: this.$t('profileUser.notification_custom_reports'),
         organization_registration: this.$t(
-          'profileUser.notification_org_registration'
+        'profileUser.notification_org_registration'
           ),
         location_approval: this.$t(
-          'profileUser.notification_location_approval'
-          ),
+          'profileUser.notification_location_approval',
+        ),
         move_user_to_organization: this.$t(
-          'profileUser.notification_moving_users'
-          ),
+          'profileUser.notification_moving_users',
+        ),
         incident_access_approval: this.$t(
-          'profileUser.notification_incident_access'
-          ),
+          'profileUser.notification_incident_access',
+        ),
         user_role_approval: this.$t(
-          'profileUser.notification_user_roles'
-          ),
+          'profileUser.notification_user_roles',
+        ),
         organization_role_approval: this.$t(
-          'profileUser.notification_org_roles'
-          ),
+          'profileUser.notification_org_roles',
+        ),
         phone_volunteer_needs: this.$t(
-          'profileUser.notification_phone_needs'
-          ),
+          'profileUser.notification_phone_needs',
+        ),
       },
       nav: {
         request_reset_password: '/password/new',
@@ -514,11 +516,11 @@ export default {
           if (size(translations) > 0) {
             this.$i18n.setLocaleMessage(currentLanguage, translations);
             this.$i18n.locale = currentLanguage;
-            this.$http.defaults.headers.common['Accept-Language'] = 
-            currentLanguage;
+            this.$http.defaults.headers.common['Accept-Language'] =
+              currentLanguage;
             document
-            .querySelector('html')
-            .setAttribute('lang', currentLanguage);
+              .querySelector('html')
+              .setAttribute('lang', currentLanguage);
           }
         } catch (e) {
           this.$log.error(e);
