@@ -34,12 +34,12 @@
                   class="text-center pb-4 cursor-pointer"
                   :show-spinner="uploading"
                   :disabled="uploading"
-                  >{{ $t("actions.change_photo") }}
+                  >{{ $t('actions.change_photo') }}
                 </base-button>
               </DragDrop>
 
               <base-button variant="solid" class="py-2 px-4"
-                >{{ $t("actions.view_id_badge") }}
+                >{{ $t('actions.view_id_badge') }}
               </base-button>
             </div>
             <div class="w-full sm:w-[48rem] p-8">
@@ -158,14 +158,14 @@
                   />
                 </div>
                 <div class="mt-3">
-                  <h3 class="text-base">{{ $t("profileUser.linkedin") }}</h3>
+                  <h3 class="text-base">{{ $t('profileUser.linkedin') }}</h3>
                   <div class="flex pb-4">
                     <div class="w-32 flex items-center">
                       <img
                         src="https://simpleicons.org/icons/facebook.svg"
                         class="w-8 mr-4"
                       />
-                      <label class="pr-3">{{ $t("profileUser.facebook") }}</label>
+                      <label class="pr-3">{{ $t('profileUser.facebook') }}</label>
                     </div>
                     <base-input
                       :value="currentUser.facebook"
@@ -188,7 +188,7 @@
                         src="https://simpleicons.org/icons/twitter.svg"
                         class="w-8 mr-2"
                       />
-                      <label class="pr-3">{{ $t("profileUser.twitter") }}</label>
+                      <label class="pr-3">{{ $t('profileUser.twitter') }}</label>
                     </div>
                     <base-input
                       :value="currentUser.twitter"
@@ -218,11 +218,11 @@
                     }
                   "
                 >
-                  {{ $t("actions.change_password") }}
+                  {{ $t('actions.change_password') }}
                 </base-button>
               </div>
               <div class="mt-6">
-                <h3>{{ $t("profileUser.your_organization") }}</h3>
+                <h3>{{ $t('profileUser.your_organization') }}</h3>
                 <div class="py-3 flex items-center">
                   <div
                     class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300 border border-black"
@@ -239,7 +239,7 @@
                       }
                     "
                   >
-                    {{ $t("profileUser.change_organization") }}
+                    {{ $t('profileUser.change_organization') }}
                   </base-button>
                   <ChangeOrganizationModal
                     v-if="showChangeOrganizationModal"
@@ -248,7 +248,7 @@
                 </div>
               </div>
               <div class="mt-6">
-                <h3>{{ $t("profileUser.notification_settings") }}</h3>
+                <h3>{{ $t('profileUser.notification_settings') }}</h3>
                 <div class="flex flex-col py-3">
                   <base-radio
                     class="mb-2"
@@ -285,7 +285,7 @@
                 </div>
               </div>
               <div class="mt-2">
-                <h3 class="pb-4">{{ $t("profileUser.troubleshooting") }}</h3>
+                <h3 class="pb-4">{{ $t('profileUser.troubleshooting') }}</h3>
                 <base-button
                   :text="$t('profileUser.reset_user_states')"
                   variant="solid"
@@ -293,7 +293,7 @@
                   :action="resetStates"
                 />
                 <p class="my-3">
-                  {{ $t("profileUser.clear_map_settings_viewport") }}
+                  {{ $t('profileUser.clear_map_settings_viewport') }}
                 </p>
                 <base-button
                   :text="$t('profileUser.reset_user_preferences')"
@@ -302,7 +302,7 @@
                   :action="resetPreferences"
                 />
                 <p class="my-3">
-                  {{ $t("profileUser.clear_favorites_user_settings") }}
+                  {{ $t('profileUser.clear_favorites_user_settings') }}
                 </p>
               </div>
             </div>
