@@ -4,14 +4,14 @@
       <div class="h-full w-full bg-white flex flex-col">
         <div
           class="
-          border-b
-          px-4
-          py-2
-          font-semibold
-          flex
-          justify-between
-          items-center
-          h-16
+            border-b
+            px-4
+            py-2
+            font-semibold
+            flex
+            justify-between
+            items-center
+            h-16
           "
         >
           {{ currentUser.full_name }}
@@ -124,10 +124,10 @@
                 <div class="flex pb-4">
                   <UserRolesSelect
                     class="
-                    w-1/2
-                    flex-grow
-                    mr-2
-                    border
+                      w-1/2
+                      flex-grow
+                      mr-2
+                      border
                     border-crisiscleanup-dark-100
                     "
                     :user="currentUser"
@@ -250,7 +250,7 @@
                       rounded-full
                       bg-crisiscleanup-grey-300
                       border
-                      "
+                    "
                   />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
@@ -379,8 +379,8 @@ export default {
         periodic_reports: this.$t('profileUser.notification_periodic_reports'),
         custom_reports: this.$t('profileUser.notification_custom_reports'),
         organization_registration: this.$t(
-        'profileUser.notification_org_registration'
-          ),
+          'profileUser.notification_org_registration'
+        ),
         location_approval: this.$t(
           'profileUser.notification_location_approval',
         ),
@@ -391,13 +391,13 @@ export default {
           'profileUser.notification_incident_access',
         ),
         user_role_approval: this.$t(
-          'profileUser.notification_user_roles',
+        'profileUser.notification_user_roles',
         ),
         organization_role_approval: this.$t(
           'profileUser.notification_org_roles',
         ),
         phone_volunteer_needs: this.$t(
-          'profileUser.notification_phone_needs',
+        'profileUser.notification_phone_needs',
         ),
       },
       nav: {
