@@ -3,7 +3,15 @@
     <div class="h-full flex flex-col w-11/12 sm:w-3/4 shadow my-6">
       <div class="h-full w-full bg-white flex flex-col">
         <div
-          class="border-b px-4 py-2 font-semibold flex justify-between items-center h-16"
+          class="
+          border-b 
+          px-4 
+          py-2 
+          font-semibold 
+          flex 
+          justify-between 
+          items-center 
+          h-16"
         >
           {{ currentUser.full_name }}
           <div class="flex justify-end">
@@ -46,8 +54,8 @@
               <form ref="form" @submit.prevent="handleSubmit">
                 <div class="user-details">
                   <div class="flex pb-4">
-                  <base-text class="mr-2 w-1/2">First Name</base-text>
-                  <base-text class="mr-2 w-1/2">Phone Number</base-text>
+                    <base-text class="mr-2 w-1/2">First Name</base-text>
+                    <base-text class="mr-2 w-1/2">Phone Number</base-text>
                   </div>
                   <div class="flex pb-4">
                     <base-input
@@ -77,8 +85,8 @@
                     />
                   </div>
                   <div class="flex pb-4">
-                  <base-text class="mr-2 w-1/2">Last Name</base-text>
-                  <base-text class="mr-2 w-1/2">Email</base-text>
+                    <base-text class="mr-2 w-1/2">Last Name</base-text>
+                    <base-text class="mr-2 w-1/2">Email</base-text>
                   </div>
                   <div class="flex pb-4">
                     <base-input
@@ -111,10 +119,14 @@
                 <div class="flex pb-4">
                   <base-text class="mr-2 w-1/2">Roles</base-text>
                   <base-text class="mr-2 w-1/2">Equipment</base-text>
-                  </div>
+                </div>
                 <div class="flex pb-4">
                   <UserRolesSelect
-                    class="w-1/2 flex-grow mr-2 border border-crisiscleanup-dark-100"
+                    class="w-1/2 
+                    flex-grow 
+                    mr-2 
+                    border 
+                    border-crisiscleanup-dark-100"
                     :user="currentUser"
                   />
                   <form-select
@@ -130,7 +142,7 @@
                 </div>
                 <div class="flex pb-4">
                   <base-text class="mr-2 w-1/2">Languages</base-text>
-                  </div>
+                </div>
                 <div class="flex pb-4">
                   <form-select
                     class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
@@ -165,7 +177,9 @@
                         src="https://simpleicons.org/icons/facebook.svg"
                         class="w-8 mr-4"
                       />
-                      <label class="pr-3">{{ $t('profileUser.facebook') }}</label>
+                      <label class="pr-3">{{ 
+                        $t('profileUser.facebook') 
+                        }}</label>
                     </div>
                     <base-input
                       :value="currentUser.facebook"
@@ -188,7 +202,9 @@
                         src="https://simpleicons.org/icons/twitter.svg"
                         class="w-8 mr-2"
                       />
-                      <label class="pr-3">{{ $t('profileUser.twitter') }}</label>
+                      <label class="pr-3">{{ 
+                        $t('profileUser.twitter') 
+                        }}</label>
                     </div>
                     <base-input
                       :value="currentUser.twitter"
@@ -225,7 +241,13 @@
                 <h3>{{ $t('profileUser.your_organization') }}</h3>
                 <div class="py-3 flex items-center">
                   <div
-                    class="w-8 h-8 rounded-full bg-crisiscleanup-grey-300 border border-black"
+                    class="
+                    w-8 
+                    h-8 
+                    rounded-full 
+                    bg-crisiscleanup-grey-300 
+                    border 
+                    border-black"
                   />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
@@ -255,14 +277,18 @@
                     name="Yes"
                     type="boolean"
                     :value="currentUser.notificationSettings.has_notifications"
-                    @click.native="() => setNotifications('has_notifications', true)"
+                    @click.native="
+                    () => setNotifications('has_notifications', true)
+                    "
                   />
                   <base-radio
                     class="mb-2"
                     name="No"
                     type="boolean"
                     :value="!currentUser.notificationSettings.has_notifications"
-                    @click.native="() => setNotifications('has_notifications', false)"
+                    @click.native="
+                    () => setNotifications('has_notifications', false)
+                    "
                   />
                   <div
                     v-if="currentUser.notificationSettings.has_notifications"
@@ -314,22 +340,22 @@
 </template>
 
 <script>
-import { size } from "lodash";
-import { mapMutations } from "vuex";
-import detectBrowserLanguage from "detect-browser-language";
-import User from "@/models/User";
-import Role from "@/models/Role";
-import Language from "@/models/Language";
-import { i18nService } from "@/services/i18n.service";
-import DragDrop from "@/components/DragDrop";
-import UserRolesSelect from "@/components/UserRolesSelect";
-import { ValidateMixin } from "@/mixins";
-import { getErrorMessage } from "../utils/errors";
-import ChangeOrganizationModal from "../components/ChangeOrganizationModal";
-import Avatar from "../components/Avatar";
+import { size } from 'lodash';
+import { mapMutations } from 'vuex';
+import detectBrowserLanguage from 'detect-browser-language';
+import User from '@/models/User';
+import Role from '@/models/Role';
+import Language from '@/models/Language';
+import { i18nService } from '@/services/i18n.service';
+import DragDrop from '@/components/DragDrop';
+import UserRolesSelect from '@/components/UserRolesSelect';
+import { ValidateMixin } from '@/mixins';
+import { getErrorMessage } from '../utils/errors';
+import ChangeOrganizationModal from '../components/ChangeOrganizationModal';
+import Avatar from '../components/Avatar';
 
 export default {
-  name: "Profile",
+  name: 'Profile',
   components: { Avatar, ChangeOrganizationModal, DragDrop, UserRolesSelect },
   mixins: [ValidateMixin],
   mounted() {
@@ -339,26 +365,26 @@ export default {
   },
   data() {
     return {
-      mode: "view",
+      mode: 'view',
       uploading: false,
       showChangeOrganizationModal: false,
       notifications: {
-        new_incident: this.$t("profileUser.notification_new_incident"),
-        request_work_type: this.$t("profileUser.notification_request_work"),
-        new_or_move_user: this.$t("profileUser.notification_new_moving_user"),
-        affiliate_requests: this.$t("profileUser.notification_affiliate"),
-        periodic_reports: this.$t("profileUser.notification_periodic_reports"),
-        custom_reports: this.$t("profileUser.notification_custom_reports"),
-        organization_registration: this.$t("profileUser.notification_org_registration"),
-        location_approval: this.$t("profileUser.notification_location_approval"),
-        move_user_to_organization: this.$t("profileUser.notification_moving_users"),
-        incident_access_approval: this.$t("profileUser.notification_incident_access"),
-        user_role_approval: this.$t("profileUser.notification_user_roles"),
-        organization_role_approval: this.$t("profileUser.notification_org_roles"),
-        phone_volunteer_needs: this.$t("profileUser.notification_phone_needs"),
+        new_incident: this.$t('profileUser.notification_new_incident'),
+        request_work_type: this.$t('profileUser.notification_request_work'),
+        new_or_move_user: this.$t('profileUser.notification_new_moving_user'),
+        affiliate_requests: this.$t('profileUser.notification_affiliate'),
+        periodic_reports: this.$t('profileUser.notification_periodic_reports'),
+        custom_reports: this.$t('profileUser.notification_custom_reports'),
+        organization_registration: this.$t('profileUser.notification_org_registration'),
+        location_approval: this.$t('profileUser.notification_location_approval'),
+        move_user_to_organization: this.$t('profileUser.notification_moving_users'),
+        incident_access_approval: this.$t('profileUser.notification_incident_access'),
+        user_role_approval: this.$t('profileUser.notification_user_roles'),
+        organization_role_approval: this.$t('profileUser.notification_org_roles'),
+        phone_volunteer_needs: this.$t('profileUser.notification_phone_needs'),
       },
       nav: {
-        request_reset_password: "/password/new",
+        request_reset_password: '/password/new',
       },
     };
   },
@@ -367,13 +393,13 @@ export default {
       if (this.currentUser) {
         return `${this.currentUser.first_name} ${this.currentUser.last_name}`;
       }
-      return "";
+      return '';
     },
     roles() {
       return Role.all();
     },
     currentUser() {
-      return User.find(this.$store.getters["auth/userId"]);
+      return User.find(this.$store.getters['auth/userId']);
     },
     userRoles() {
       return Role.query().whereIdIn(this.currentUser.roles).get();
@@ -395,7 +421,7 @@ export default {
             [key]: value,
           },
         };
-        this.updateUser(preferences, "preferences");
+        this.updateUser(preferences, 'preferences');
       } else {
         this.updateUser(
           {
@@ -403,7 +429,7 @@ export default {
               [key]: value,
             },
           },
-          "preferences"
+          'preferences'
         );
       }
     },
@@ -413,8 +439,8 @@ export default {
         return;
       }
       const formData = new FormData();
-      formData.append("upload", fileList[0]);
-      formData.append("type_t", "fileTypes.user_profile_picture");
+      formData.append('upload', fileList[0]);
+      formData.append('type_t', 'fileTypes.user_profile_picture');
       this.uploading = true;
       try {
         const result = await this.$http.post(
@@ -422,15 +448,15 @@ export default {
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data",
-              Accept: "application/json",
+              'Content-Type': 'multipart/form-data',
+              Accept: 'application/json',
             },
           }
         );
         const file = result.data.id;
 
         const profilePictures = this.currentUser.files.filter(
-          (picture) => picture.file_type_t === "fileTypes.user_profile_picture"
+          (picture) => picture.file_type_t === 'fileTypes.user_profile_picture'
         );
 
         const oldImages = profilePictures.map((picture) =>
@@ -439,7 +465,7 @@ export default {
         await Promise.all(oldImages);
 
         await User.api().addFile(this.currentUser.id, file);
-        await User.api().get("/users/me", {});
+        await User.api().get('/users/me', {});
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
@@ -473,15 +499,15 @@ export default {
           if (size(translations) > 0) {
             this.$i18n.setLocaleMessage(currentLanguage, translations);
             this.$i18n.locale = currentLanguage;
-            this.$http.defaults.headers.common["Accept-Language"] = currentLanguage;
-            document.querySelector("html").setAttribute("lang", currentLanguage);
+            this.$http.defaults.headers.common['Accept-Language'] = currentLanguage;
+            document.querySelector('html').setAttribute('lang', currentLanguage);
           }
         } catch (e) {
           this.$log.error(e);
         }
       }
     },
-    ...mapMutations("locale", ["setLanguage"]),
+    ...mapMutations('locale', ['setLanguage']),
     async saveUser() {
       const isValid = this.$refs.form.reportValidity();
       if (!isValid) {
@@ -493,8 +519,8 @@ export default {
           preferences: { ...this.currentUser.preferences, ...{} },
           states: { ...this.currentUser.states, ...{} },
         });
-        await this.$toasted.success(this.$t("profileUser.save_user_success"));
-        this.mode = "view";
+        await this.$toasted.success(this.$t('profileUser.save_user_success'));
+        this.mode = 'view';
         await this.updateUserLanguage();
         window.location.reload();
       } catch (error) {
