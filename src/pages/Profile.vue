@@ -122,11 +122,13 @@
                 </div>
                 <div class="flex pb-4">
                   <UserRolesSelect
-                    class="w-1/2 
+                    class="
+                    w-1/2 
                     flex-grow 
                     mr-2 
                     border 
-                    border-crisiscleanup-dark-100"
+                    border-crisiscleanup-dark-100
+                    "
                     :user="currentUser"
                   />
                   <form-select
@@ -177,9 +179,9 @@
                         src="https://simpleicons.org/icons/facebook.svg"
                         class="w-8 mr-4"
                       />
-                      <label class="pr-3">{{ 
-                        $t('profileUser.facebook') 
-                        }}</label>
+                      <label class="pr-3">{{
+                        $t('profileUser.facebook')
+                      }}</label>
                     </div>
                     <base-input
                       :value="currentUser.facebook"
@@ -202,9 +204,9 @@
                         src="https://simpleicons.org/icons/twitter.svg"
                         class="w-8 mr-2"
                       />
-                      <label class="pr-3">{{ 
-                        $t('profileUser.twitter') 
-                        }}</label>
+                      <label class="pr-3">{{
+                        $t('profileUser.twitter')
+                      }}</label>
                     </div>
                     <base-input
                       :value="currentUser.twitter"
@@ -242,12 +244,11 @@
                 <div class="py-3 flex items-center">
                   <div
                     class="
-                    w-8 
-                    h-8 
-                    rounded-full 
-                    bg-crisiscleanup-grey-300 
-                    border 
-                    border-black"
+                    w-8
+                    h-8
+                    rounded-full
+                    bg-crisiscleanup-grey-300
+                    border"
                   />
                   <span class="px-4">{{ currentUser.organization.name }}</span>
                 </div>
@@ -278,7 +279,7 @@
                     type="boolean"
                     :value="currentUser.notificationSettings.has_notifications"
                     @click.native="
-                    () => setNotifications('has_notifications', true)
+                      () => setNotifications('has_notifications', true)
                     "
                   />
                   <base-radio
@@ -287,7 +288,7 @@
                     type="boolean"
                     :value="!currentUser.notificationSettings.has_notifications"
                     @click.native="
-                    () => setNotifications('has_notifications', false)
+                      () => setNotifications('has_notifications', false)
                     "
                   />
                   <div
@@ -375,13 +376,27 @@ export default {
         affiliate_requests: this.$t('profileUser.notification_affiliate'),
         periodic_reports: this.$t('profileUser.notification_periodic_reports'),
         custom_reports: this.$t('profileUser.notification_custom_reports'),
-        organization_registration: this.$t('profileUser.notification_org_registration'),
-        location_approval: this.$t('profileUser.notification_location_approval'),
-        move_user_to_organization: this.$t('profileUser.notification_moving_users'),
-        incident_access_approval: this.$t('profileUser.notification_incident_access'),
-        user_role_approval: this.$t('profileUser.notification_user_roles'),
-        organization_role_approval: this.$t('profileUser.notification_org_roles'),
-        phone_volunteer_needs: this.$t('profileUser.notification_phone_needs'),
+        organization_registration: this.$t(
+          'profileUser.notification_org_registration'
+          ),
+        location_approval: this.$t(
+          'profileUser.notification_location_approval'
+          ),
+        move_user_to_organization: this.$t(
+          'profileUser.notification_moving_users'
+          ),
+        incident_access_approval: this.$t(
+          'profileUser.notification_incident_access'
+          ),
+        user_role_approval: this.$t(
+          'profileUser.notification_user_roles'
+          ),
+        organization_role_approval: this.$t(
+          'profileUser.notification_org_roles'
+          ),
+        phone_volunteer_needs: this.$t(
+          'profileUser.notification_phone_needs'
+          ),
       },
       nav: {
         request_reset_password: '/password/new',
@@ -429,7 +444,7 @@ export default {
               [key]: value,
             },
           },
-          'preferences'
+          'preferences',
         );
       }
     },
@@ -451,16 +466,16 @@ export default {
               'Content-Type': 'multipart/form-data',
               Accept: 'application/json',
             },
-          }
+          },
         );
         const file = result.data.id;
 
         const profilePictures = this.currentUser.files.filter(
-          (picture) => picture.file_type_t === 'fileTypes.user_profile_picture'
+          (picture) => picture.file_type_t === 'fileTypes.user_profile_picture',
         );
 
         const oldImages = profilePictures.map((picture) =>
-          User.api().deleteFile(this.currentUser.id, picture.file)
+          User.api().deleteFile(this.currentUser.id, picture.file),
         );
         await Promise.all(oldImages);
 
@@ -499,8 +514,11 @@ export default {
           if (size(translations) > 0) {
             this.$i18n.setLocaleMessage(currentLanguage, translations);
             this.$i18n.locale = currentLanguage;
-            this.$http.defaults.headers.common['Accept-Language'] = currentLanguage;
-            document.querySelector('html').setAttribute('lang', currentLanguage);
+            this.$http.defaults.headers.common['Accept-Language'] = 
+            currentLanguage;
+            document
+            .querySelector('html')
+            .setAttribute('lang', currentLanguage);
           }
         } catch (e) {
           this.$log.error(e);
