@@ -389,15 +389,11 @@ export default {
         incident_access_approval: this.$t(
           'profileUser.notification_incident_access',
         ),
-        user_role_approval: this.$t(
-        'profileUser.notification_user_roles',
-        ),
+        user_role_approval: this.$t('profileUser.notification_user_roles'),
         organization_role_approval: this.$t(
           'profileUser.notification_org_roles',
         ),
-        phone_volunteer_needs: this.$t(
-        'profileUser.notification_phone_needs',
-        ),
+        phone_volunteer_needs: this.$t('profileUser.notification_phone_needs'),
       },
       nav: {
         request_reset_password: '/password/new',
