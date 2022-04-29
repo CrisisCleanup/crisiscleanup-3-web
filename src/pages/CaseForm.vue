@@ -1219,7 +1219,6 @@ export default {
 }
 
 .intake-form {
-  height: 120%;
   overflow: auto;
 }
 
