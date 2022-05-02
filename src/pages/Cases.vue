@@ -8,7 +8,10 @@
     <div v-if="isCasesOnly || $mq !== 'sm'">
       <div class="cases-grid">
         <div class="p-3 border border-gray-300 card-header bg-white">
-          <div class="flex items-center flex-wrap justify-between">
+          <div
+            v-show="showLegend"
+            class="flex items-center flex-wrap justify-between"
+          >
             <div class="flex items-center">
               <div class="flex" style="min-width: 80px">
                 <ccu-icon
@@ -437,7 +440,10 @@
               />
             </div>
           </div>
-          <div class="flex items-center flex-wrap justify-center">
+          <div
+            v-show="showLegend"
+            class="flex items-center flex-wrap justify-center"
+          >
             <svi-slider
               v-if="showSviSlider"
               @input="filterSvi"
@@ -466,6 +472,18 @@
                 'days',
               )} days ago`"
             ></Slider>
+          </div>
+          <div class="text-crisiscleanup-lightblue-400 underline">
+            <div
+              class="w-10 ml-auto"
+              @click="showLegend = !showLegend"
+              v-if="showLegend"
+            >
+              {{ 'Hide' }}
+            </div>
+            <div class="w-10 ml-auto" @click="showLegend = !showLegend" v-else>
+              {{ 'Show' }}
+            </div>
           </div>
         </div>
         <div class="flex-grow bg-crisiscleanup-light-grey">
@@ -1039,6 +1057,7 @@ export default {
       organizationLocations: [],
       pdas: [],
       showingHeatMap: false,
+      showLegend: true,
     };
   },
   computed: {

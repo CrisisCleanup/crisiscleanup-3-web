@@ -357,46 +357,45 @@
           @photosChanged="reloadWorksite"
         />
       </template>
-    </div>
-    <div
-      class="
-        bg-white
-        p-3
-        border border-r-0 border-gray-300
-        card-footer
-        flex
-        justify-between
-      "
-      :class="$mq === 'sm' ? 'absolute w-2/3 bottom-0 mb-36 right-0' : ''"
-    >
-      <base-button
-        size="medium"
-        class="flex-grow m-1 border-2 border-black"
-        variant="text"
-        :action="
-          () => {
-            clearWorksiteStorage();
-            $emit('closeWorksite');
-          }
+      <div
+        class="
+          bg-white
+          p-3
+          border border-r-0 border-gray-300
+          card-footer
+          flex
+          justify-between
         "
-        :text="$t('actions.cancel')"
-      />
-      <base-button
-        size="medium"
-        variant="solid"
-        data-cy="worksite-formaction-save"
-        class="flex-grow m-1 text-black"
-        :action="saveWorksite"
-        :text="$t('actions.save')"
-      />
-      <base-button
-        v-if="!disableClaimAndSave"
-        size="medium"
-        variant="solid"
-        class="flex-grow m-1 text-black"
-        :action="claimAndSaveWorksite"
-        :text="$t('actions.save_claim')"
-      />
+      >
+        <base-button
+          size="medium"
+          class="flex-grow m-1 border-2 border-black"
+          variant="text"
+          :action="
+            () => {
+              clearWorksiteStorage();
+              $emit('closeWorksite');
+            }
+          "
+          :text="$t('actions.cancel')"
+        />
+        <base-button
+          size="medium"
+          variant="solid"
+          data-cy="worksite-formaction-save"
+          class="flex-grow m-1 text-black"
+          :action="saveWorksite"
+          :text="$t('actions.save')"
+        />
+        <base-button
+          v-if="!disableClaimAndSave"
+          size="medium"
+          variant="solid"
+          class="flex-grow m-1 text-black"
+          :action="claimAndSaveWorksite"
+          :text="$t('actions.save_claim')"
+        />
+      </div>
     </div>
   </form>
   <div v-else class="flex items-center justify-center h-full w-full">
@@ -1220,8 +1219,13 @@ export default {
 }
 
 .intake-form {
-  /*height: 600px;*/
   overflow: auto;
+}
+
+@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+  .intake-form {
+    height: 145%;
+  }
 }
 
 .card-footer {
