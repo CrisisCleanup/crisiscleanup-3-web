@@ -2,7 +2,7 @@
   <div class="localeform">
     <Accordion :cards="accordionCards" :active-card.sync="currentCard_">
       <template v-for="ln in accordionCards" v-slot:[ln.key]>
-        <div :key="ln.key" class="localeform__card">
+        <div :key="ln.key" class="sm:localeform__card">
           <div v-for="fieldKey in Object.keys(fields)" :key="fieldKey">
             <base-text variant="h4" class="pb-1">{{
               fieldKey | startCase
