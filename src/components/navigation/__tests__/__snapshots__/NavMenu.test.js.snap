@@ -5,7 +5,7 @@ exports[`NavMenu should render correctly and match snapshot 1`] = `
   class="sidebar overflow-y-auto"
 >
   <!---->
-
+   
   <div
     class="menu"
   >
