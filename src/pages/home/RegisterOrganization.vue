@@ -8,7 +8,7 @@
       <home-actions />
       <div class="grid--main">
         <div class="text-4xl">{{ $t('registerOrg.register_org') }}</div>
-        <div class="text-2xl w-full sm:w-3/4">
+        <div class="text-2xl w-3/4">
           {{ $t('registerOrg.please_create_profile') }}
         </div>
         <form
