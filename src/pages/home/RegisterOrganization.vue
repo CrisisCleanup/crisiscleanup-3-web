@@ -11,7 +11,11 @@
         <div class="text-2xl w-3/4">
           {{ $t('registerOrg.please_create_profile') }}
         </div>
-        <form ref="form" class="form w-4/5 mt-6" @submit.prevent="register">
+        <form
+          ref="form"
+          class="form w-full sm:w-4/5 mt-6"
+          @submit.prevent="register"
+        >
           <ol class="">
             <li class="text-xl form-item">
               {{ $t('registerOrg.choose_a_disaster') }}
@@ -323,7 +327,7 @@ export default {
 }
 
 .form-field {
-  @apply w-2/5 m-3;
+  @apply w-full sm:w-2/5 m-3;
 }
 
 .form-item {
@@ -340,7 +344,10 @@ export default {
     &.grid-container {
       grid-template-areas:
         'logo'
-        'main';
+        'main'
+        'survivors'
+        'nav'
+        'actions';
       grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
     }
   }
