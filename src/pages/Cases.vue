@@ -729,9 +729,11 @@
         w-7
         text-center
         bg-white
+        transform
       "
+      :class="showCaseForm ? 'rotate-0' : 'rotate-180'"
     >
-      {{ showCaseForm ? '>' : '<' }}
+      >
     </div>
     <div
       v-if="
@@ -765,7 +767,7 @@
         </div>
         <div
           v-if="currentWorksite && currentWorksite.id"
-          class="w-1/2 h-full p-3 flex items-center justify-center"
+          class="h-full p-3 flex items-center justify-center"
           :class="{
             'tab-active':
               isEditingWorksite ||
