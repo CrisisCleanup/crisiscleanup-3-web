@@ -1,14 +1,17 @@
 <template>
   <Loader :loading="loading" :class="loading && 'flex layout h-full'">
     <template #content>
-      <div class="layout" :class="{ 'layout--mobile': $mq === 'sm' }">
-        <router-link v-if="$mq !== 'sm'" :to="logoRoute.to" class="logo--grid">
+      <div
+        class="layout"
+        :class="{ 'layout--mobile': $mq === 'sm' || isLandscape() }"
+      >
+        <router-link v-if="$mq !== 'sm' && !isLandscape()" :to="logoRoute.to" class="logo--grid">
           <div class="logo flex justify-center p-3">
             <img src="@/assets/crisiscleanup_logo.png" style="height: 53px" />
           </div>
         </router-link>
         <NavMenu
-          v-if="$mq !== 'sm'"
+          v-if="$mq !== 'sm' && !isLandscape()"
           :routes="routes"
           :logo-route="logoRoute"
           class="sidebar--grid"
@@ -23,7 +26,7 @@
           />
         </Slide>
         <Header
-          :class="$mq === 'sm' ? 'ml-6' : ''"
+          :class="$mq === 'sm' ? 'ml-6' : isLandscape() ? 'ml-16' : ''"
           :current-incident="currentIncident"
           :incidents="incidents"
           @update:incident="handleChange"
@@ -307,6 +310,11 @@ export default {
     this.ready = true;
   },
   methods: {
+    isLandscape() {
+      return window.matchMedia(
+        'only screen and (max-device-width: 1223px) and (orientation: landscape)',
+      ).matches;
+    },
     async handleChange(value) {
       await Incident.api().fetchById(value);
       await User.api().updateUserState({

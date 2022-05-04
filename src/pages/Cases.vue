@@ -497,7 +497,7 @@
               :style="showCaseForm ? '' : 'width: 220%'"
               :key="JSON.stringify(currentQuery)"
               ref="worksiteMap"
-              class="w-full h-full"
+              class="h-full"
               :query="currentQuery"
               :new-marker="newMarker"
               :current-filters="filters"
@@ -743,7 +743,7 @@
           isNewWorksite) &&
         showCaseForm
       "
-      class="flex flex-col h-full shadow-2xl md:max-w-lg"
+      class="flex flex-col h-full shadow-2xl"
       data-cy="worksiteview"
     >
       <div
