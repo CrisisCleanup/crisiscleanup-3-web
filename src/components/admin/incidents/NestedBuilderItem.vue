@@ -21,7 +21,7 @@
     group="fields"
     :list="list"
     handle=".handle"
-    @change="$emit('change')"
+    @change="onListChange"
   >
     <div
       class="item-group bg-white"

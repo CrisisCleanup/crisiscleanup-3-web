@@ -46,7 +46,10 @@
     </div>
 
     <div class="h-108 flex-grow overflow-auto my-4">
-      <slot></slot>
+      <div v-show="!loading">
+        <slot></slot>
+      </div>
+      <Loader v-if="loading" :loading="true" class="h-full" />
     </div>
 
     <div class="p-6 h-12 bg-white flex items-center justify-between">
@@ -71,9 +74,11 @@
 
 <script>
 import { getErrorMessage } from '@/utils/errors';
+import Loader from '@/components/Loader';
 
 export default {
   name: 'Wizard',
+  components: { Loader },
   props: {
     stepDefaultClasses: {
       type: String,
@@ -91,9 +96,9 @@ export default {
       type: String,
       default: 'steps-details mt-2',
     },
-    details: {
+    loading: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   data() {

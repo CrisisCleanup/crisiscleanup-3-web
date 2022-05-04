@@ -30,6 +30,7 @@
         v-model="currentIncident.start_at"
         mode="dateTime"
         :timezone="currentIncident.timezone"
+        :popover="{ placement: 'bottom', visibility: 'click' }"
       >
         <template v-slot="{ inputValue, inputEvents }">
           <input
@@ -96,10 +97,27 @@
       {{ $t('~~Use Hotline') }}
     </base-checkbox>
 
+    <div class="my-4">
+      <div
+        v-for="aniIncident in aniIncidents"
+        :key="aniIncident.ani"
+        class="flex"
+      >
+        {{ aniIncident.phone_number }}
+        <ccu-icon
+          :alt="$t('actions.delete')"
+          size="small"
+          type="trash"
+          class="ml-2"
+          @click.native="$emit('onDeleteAniIncident', aniIncident.id)"
+        />
+      </div>
+    </div>
+
     <template v-if="currentAni.use_hotline">
       <div class="form-row flex w-full">
         <form-select
-          :value="currentAni.phoneNumbers"
+          :value="currentAni.anis"
           :options="aniList"
           searchable
           multiple
@@ -108,8 +126,8 @@
           label="number"
           @input="
             (value) => {
-              currentAni.phoneNumbers = [];
-              currentAni.phoneNumbers = [...value];
+              currentAni.anis = [];
+              currentAni.anis = [...value];
             }
           "
           select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
@@ -130,6 +148,7 @@
           v-model="currentAni.start_at"
           mode="dateTime"
           :timezone="currentAni.timezone"
+          :popover="{ placement: 'bottom', visibility: 'click' }"
         >
           <template v-slot="{ inputValue, inputEvents }">
             <input
@@ -170,6 +189,7 @@
           v-model="currentAni.end_at"
           mode="dateTime"
           :timezone="currentAni.timezone"
+          :popover="{ placement: 'bottom', visibility: 'click' }"
         >
           <template v-slot="{ inputValue, inputEvents }">
             <input
@@ -236,7 +256,7 @@ export default {
         start_at: null,
       },
       currentAni: {
-        phoneNumbers: [],
+        anis: [],
         start_at: null,
         end_at: null,
         timezone: '',
@@ -250,10 +270,18 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    aniIncidents: {
+      type: Array,
+      default: () => [],
+    },
   },
   async mounted() {
     if (this.incident) {
       this.currentIncident = { ...this.incident };
+      if (this.aniIncidents.length > 0) {
+        this.currentAni.use_hotline = true;
+        this.currentAni = { ...this.currentAni };
+      }
     }
     const aniResponse = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/ani`,
@@ -269,6 +297,13 @@ export default {
     currentIncident: {
       handler(value) {
         this.$emit('onIncidentChange', value);
+      },
+      deep: true,
+      immediate: true,
+    },
+    currentAni: {
+      handler(value) {
+        this.$emit('onAniChange', value);
       },
       deep: true,
       immediate: true,

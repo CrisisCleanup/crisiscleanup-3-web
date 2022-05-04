@@ -11,17 +11,26 @@
       step-details-classes="p-2 pt-16"
       step-default-classes="flex items-center justify-center h-8 cursor-pointer px-2"
       step-active-classes=""
+      :loading="loading"
     >
       <Step name="General Incident Info" :on-save="saveIncident">
         <div class="grid grid-cols-2 gap-2">
           <Card>
             <IncidentForm
               @onIncidentChange="currentIncident = $event"
+              @onAniChange="currentAni = $event"
+              @onDeleteAniIncident="deleteAniIncident"
               :incident="savedIncident"
+              :ani-incidents="savedAniIncidents"
               :key="savedIncident"
             />
           </Card>
           <IncidentLocationEditor
+            :location="
+              savedIncident &&
+              savedIncident.locations.length &&
+              savedIncident.locations[savedIncident.locations.length - 1]
+            "
             @onLocationChange="currentLocation = $event"
           />
         </div>
@@ -91,7 +100,7 @@ export default {
         start_at: null,
       },
       currentAni: {
-        phoneNumbers: [],
+        anis: [],
         start_at: null,
         end_at: null,
         timezone: '',
@@ -100,21 +109,40 @@ export default {
       currentLocation: null,
       formFieldTree: null,
       savedIncident: null,
+      savedAniIncidents: [],
+      loading: false,
     };
   },
   async mounted() {
     if (this.$route.params.incident_id) {
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.$route.params.incident_id}`,
-      );
-      this.savedIncident = response.data;
-      this.currentIncident = {
-        ...this.savedIncident,
-      };
+      await this.loadIncident(this.$route.params.incident_id);
     }
   },
 
   methods: {
+    async loadIncident(id) {
+      this.loading = true;
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/incidents/${id}`,
+      );
+
+      const aniIncidentResponse = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/ani_incidents`,
+        {
+          params: {
+            incident: id,
+          },
+        },
+      );
+
+      this.savedAniIncidents = aniIncidentResponse.data.results;
+      this.savedIncident = response.data;
+      this.currentIncident = {
+        ...this.savedIncident,
+      };
+      this.loading = false;
+    },
+
     async saveIncidentFields() {
       const result = [];
       const stack = [...this.formFieldTree];
@@ -127,18 +155,26 @@ export default {
           [...current.children].forEach((child, index) => {
             child.field_parent_key = current.field_key;
             child.list_order = index;
+            if (!child.phase) {
+              child.phase = 4;
+            }
             return stack.push(child);
           });
         }
       }
+      this.loading = true;
 
-      await this.$http.post(
-        `${process.env.VUE_APP_API_BASE_URL}/incident_forms`,
-        {
-          fields: result,
-          incident: this.savedIncident.id,
-        },
-      );
+      try {
+        await this.$http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/incident_forms`,
+          {
+            fields: result,
+            incident: this.savedIncident.id,
+          },
+        );
+      } finally {
+        this.loading = false;
+      }
     },
     updateIncident(value, key) {
       Incident.update({
@@ -167,14 +203,39 @@ export default {
           },
         );
       }
-      this.savedIncident = response.data;
+      const incidentId = response.data.id;
 
       if (this.currentLocation?.id) {
-        await Incident.api().addLocation(
-          this.savedIncident.id,
-          this.currentLocation.id,
-        );
+        await Incident.api().addLocation(incidentId, this.currentLocation.id);
       }
+
+      if (this.currentAni.anis.length) {
+        const promises = [];
+        this.currentAni.anis.forEach((ani) => {
+          promises.push(
+            this.$http.post(
+              `${process.env.VUE_APP_API_BASE_URL}/ani_incidents`,
+              {
+                ani,
+                incident: incidentId,
+                start_at: this.$moment(this.currentAni.start_at),
+                end_at: this.$moment(this.currentAni.end_at),
+              },
+            ),
+          );
+        });
+        await Promise.all(promises);
+      }
+
+      await this.loadIncident(incidentId);
+    },
+    async deleteAniIncident(id) {
+      await this.$http.delete(
+        `${process.env.VUE_APP_API_BASE_URL}/ani_incidents/${id}`,
+      );
+      this.savedAniIncidents = this.savedAniIncidents.filter(
+        (aniIncident) => aniIncident.id !== id,
+      );
     },
   },
 };

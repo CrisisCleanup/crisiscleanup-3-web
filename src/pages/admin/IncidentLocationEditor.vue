@@ -67,9 +67,23 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    location: {
+      type: Object,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      currentLocation: {
+        name: '',
+        shared: '',
+        notes: '',
+      },
+      locationLayer: L.layerGroup(),
+    };
   },
   async mounted() {
-    this.$nextTick(() => {
+    this.$nextTick(async () => {
       this.map = L.map('incident-map', {
         zoomControl: false,
       }).setView([35.7465122599185, -96.41150963125656], 3);
@@ -78,6 +92,25 @@ export default {
         // zoomOffset: -1,
         maxZoom: 19,
       }).addTo(this.map);
+
+      this.locationLayer.addTo(this.map);
+
+      if (this.location) {
+        // this.currentLocation = { ...this.currentLocation, ...this.location };
+
+        await Location.api().fetchById(this.location.location);
+        const location = Location.find(this.location.location);
+        const geojsonFeature = {
+          type: 'Feature',
+          properties: location.attr,
+          geometry: location.poly || location.geom || location.point,
+        };
+        L.geoJSON(geojsonFeature, {
+          weight: '1',
+        }).addTo(this.locationLayer);
+
+        this.currentLocation = location;
+      }
     });
   },
   methods: {
@@ -132,20 +165,12 @@ export default {
         const locationId = response.response.data.id;
         await Location.api().fetchById(locationId);
         this.$emit('onLocationChange', response.response.data);
-        polygon.addTo(this.map);
+        this.locationLayer.clearLayers();
+        polygon.addTo(this.locationLayer);
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
     },
-  },
-  data() {
-    return {
-      currentLocation: {
-        name: '',
-        shared: '',
-        notes: '',
-      },
-    };
   },
 };
 </script>
