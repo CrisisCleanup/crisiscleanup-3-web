@@ -1,13 +1,18 @@
 <template>
   <div
-    class="flex h-full overflow-hidden cases-container-grid"
+    class="flex h-full overflow-hidden grid"
     :class="{
       'cases-container-grid--full': $mq === 'sm',
+      'grid-cols-1': !showCaseForm,
+      'grid-cols-2': showCaseForm,
     }"
   >
     <div v-if="isCasesOnly || $mq !== 'sm'">
       <div class="cases-grid">
-        <div class="p-3 border border-gray-300 card-header bg-white">
+        <div
+          class="p-3 border border-gray-300 bg-white"
+          :class="showLegend ? 'card-header' : 'w-16'"
+        >
           <div
             v-show="showLegend"
             class="flex items-center flex-wrap justify-between"
@@ -486,9 +491,10 @@
             </div>
           </div>
         </div>
-        <div class="flex-grow bg-crisiscleanup-light-grey">
+        <div class="bg-crisiscleanup-light-grey">
           <template v-if="showingMap">
             <WorksiteMap
+              :style="showCaseForm ? '' : 'width: 220%'"
               :key="JSON.stringify(currentQuery)"
               ref="worksiteMap"
               class="w-full h-full"
@@ -710,15 +716,34 @@
       </div>
     </div>
     <div
+      v-if="$mq !== 'sm'"
+      @click="showCaseForm = !showCaseForm"
+      class="
+        absolute
+        top-20
+        right-5
+        text-h1
+        rounded-full
+        border-2
+        h-7
+        w-7
+        text-center
+        bg-white
+      "
+    >
+      {{ showCaseForm ? '>' : '<' }}
+    </div>
+    <div
       v-if="
         currentIncident &&
         (isEditingWorksite ||
           isViewingWorksite ||
           isViewingWorksiteHistory ||
           isViewingWorksiteFlag ||
-          isNewWorksite)
+          isNewWorksite) &&
+        showCaseForm
       "
-      class="flex flex-col h-full shadow-2xl md:max-w-lg lg:max-w-lg"
+      class="flex flex-col h-full shadow-2xl md:max-w-lg"
       data-cy="worksiteview"
     >
       <div
@@ -1058,6 +1083,7 @@ export default {
       pdas: [],
       showingHeatMap: false,
       showLegend: true,
+      showCaseForm: true,
     };
   },
   computed: {
@@ -1964,6 +1990,12 @@ export default {
 }
 .card-header {
   min-height: 60px;
+}
+
+@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+  .card-header {
+    min-height: 10px;
+  }
 }
 
 .ant-table-row {

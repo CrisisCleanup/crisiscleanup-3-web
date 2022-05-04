@@ -317,7 +317,6 @@
         :key="worksite.files"
         class="px-3 pb-3"
       />
-    </div>
     <div
       class="
         bg-white
@@ -376,6 +375,7 @@
           }
         "
       />
+    </div>
     </div>
 
     <modal v-if="showingClaimModal" modal-classes="bg-white max-w-lg shadow">
@@ -744,6 +744,12 @@ export default {
 <style scoped>
 .intake-view {
   overflow: auto;
+}
+
+@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+  .intake-view {
+    height: 200%;
+  }
 }
 
 .work_type_section {
