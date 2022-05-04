@@ -914,6 +914,35 @@ exports[`Storyshots Basics/BaseIcon All Icons 1`] = `
     </button>
      
     <p>
+      completed
+    </p>
+  </div>
+  <div
+    class="flex flex-col border-2 text-center"
+  >
+    <button
+      alt=""
+      class="m-8 align-self-center flex items-center justify-center base-button undefined js- flex items-center base-icon js-  "
+      data-cy="js-"
+      title=""
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       
+      <img
+        alt=""
+        class="ccu-icon cursor-pointer xl"
+        src="IMAGE_MOCK"
+      />
+        
+      <!---->
+    </button>
+     
+    <p>
       training
     </p>
   </div>
@@ -35399,148 +35428,7 @@ exports[`Storyshots Elements/Cards/TabbedCard Basic 1`] = `
 <div
   class="flex flex-grow w-full h-full"
 >
-  <div
-    class="relative"
-    overlay="true"
-  >
-    <!---->
-     
-    <div
-      class="bg-white shadow-crisiscleanup-card card h-full"
-    >
-      <div
-        class="header"
-        slot="header"
-      >
-        <div
-          class="header--inner"
-        >
-          <div
-            class="left tabs card__tabbar"
-          >
-            <div
-              class="card__tab tab-item tab-0 active"
-            >
-              <p
-                class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
-                style="font-weight: 600;"
-              >
-                
-          [
-  "First"
-]
-        
-              </p>
-            </div>
-            <div
-              class="card__tab tab-item tab-1 "
-            >
-              <p
-                class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
-                style="font-weight: 600;"
-              >
-                
-          [
-  "Another Page"
-]
-        
-              </p>
-            </div>
-            <div
-              class="card__tab tab-item tab-2 "
-            >
-              <p
-                class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
-                style="font-weight: 600;"
-              >
-                
-          [
-  "A Third Tab For You"
-]
-        
-              </p>
-            </div>
-            <div
-              class="card__tab tab-item tab-3 "
-            >
-              <p
-                class="text-h3 font-h3 text-crisiscleanup-dark-500 font-sans subpixel-antialiased"
-                style="font-weight: 600;"
-              >
-                
-          [
-  "Last Tab"
-]
-        
-              </p>
-            </div>
-             
-            <div
-              class="card__selector"
-              style="transform: translateX(0px) scaleX(0);"
-            />
-          </div>
-        </div>
-      </div>
-       
-      <div
-        class="body"
-      >
-        <div
-          class="body--inner h-full"
-        >
-           
-          <div
-            class="flex flex-grow flex-col"
-          >
-            <div
-              class="m-12"
-            >
-              <p>
-                Tab Page One
-              </p>
-            </div>
-          </div>
-          <div
-            class="flex flex-grow flex-col"
-            style="display: none;"
-          >
-            <div
-              class="m-12"
-            >
-              <p>
-                Tab Page Two
-              </p>
-            </div>
-          </div>
-          <div
-            class="flex flex-grow flex-col"
-            style="display: none;"
-          >
-            <div
-              class="m-12"
-            >
-              <p>
-                A Third Tab
-              </p>
-            </div>
-          </div>
-          <div
-            class="flex flex-grow flex-col"
-            style="display: none;"
-          >
-            <div
-              class="m-12"
-            >
-              <p>
-                A Final Larger Tab
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!---->
 </div>
 `;
 
@@ -36081,7 +35969,7 @@ exports[`Storyshots Layouts/Loader With Layout 1`] = `
 
 exports[`Storyshots Layouts/Page With Defaults 1`] = `
 <div
-  class="relative p-6 bg-crisiscleanup-light-grey h-full overflow-auto"
+  class="relative pt-6 bg-crisiscleanup-light-grey h-full overflow-auto"
 >
   <!---->
    
@@ -36095,7 +35983,7 @@ exports[`Storyshots Layouts/Page With Defaults 1`] = `
 
 exports[`Storyshots Layouts/Page With Tabs 1`] = `
 <div
-  class="relative p-6 bg-crisiscleanup-light-grey h-full overflow-auto"
+  class="relative pt-6 bg-crisiscleanup-light-grey h-full overflow-auto"
 >
   <!---->
    
