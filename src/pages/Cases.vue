@@ -756,15 +756,7 @@
         "
       >
         <div
-          class="
-            w-1/2
-            h-full
-            p-3
-            flex
-            items-center
-            justify-center
-            cursor-pointer
-          "
+          class="h-full p-3 flex items-center justify-center cursor-pointer"
           :class="{ 'tab-active': isNewWorksite }"
           @click="createNewWorksite"
         >
