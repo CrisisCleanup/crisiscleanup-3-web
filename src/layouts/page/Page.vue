@@ -1,7 +1,7 @@
 <template>
   <Loader
     :loading="isLoading"
-    class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto"
+    class="pt-6 bg-crisiscleanup-light-grey h-full overflow-auto"
   >
     <template #content>
       <template v-if="tabs">

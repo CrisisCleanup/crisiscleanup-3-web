@@ -72,6 +72,7 @@ export default {
 
 <style scoped lang="postcss">
 $neg-top-space: calc(0rem - theme('spacing.6'));
+$neg-left-space: calc(0rem - theme('spacing.0'));
 $neg-y-pad: calc(0rem - theme('spacing.4'));
 $neg-x-pad: calc(0rem - theme('spacing.5'));
 $tab-x-pad: calc(theme('spacing.5') * 4);
@@ -80,7 +81,7 @@ $tab-x-pad: calc(theme('spacing.5') * 4);
   &__tabbar {
     display: flex;
     @apply bg-white;
-    margin: $neg-top-space $neg-top-space $neg-top-space;
+    margin: $neg-top-space $neg-left-space $neg-top-space;
     position: fixed;
     z-index: 99;
     width: 100%;

@@ -52,7 +52,7 @@ export default {
       ...useTabs({
         tabSelector,
         tabContainer,
-        tabs: props.tabs,
+        steps: props.tabs,
         routes: props.routes,
       }),
     };

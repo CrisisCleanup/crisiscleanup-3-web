@@ -44,6 +44,7 @@ import VueNumberInput from '@chenfengyuan/vue-number-input';
 import VueEasyLightbox from 'vue-easy-lightbox';
 import VuePhoneNumberInput from 'vue-phone-number-input';
 import ToggleButton from 'vue-js-toggle-button';
+import VCalendar from 'v-calendar';
 import { has, padStart } from 'lodash';
 import { getModule } from 'vuex-module-decorators';
 import Logger from '@/utils/log';
@@ -149,6 +150,10 @@ Vue.use(VueMq, {
     xl: 1280,
   },
   defaultBreakpoint: 'sm',
+});
+
+Vue.use(VCalendar, {
+  componentPrefix: 'vc',
 });
 
 library.add(fas);

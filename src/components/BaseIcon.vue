@@ -12,12 +12,14 @@
     <img
       v-if="!fa"
       :class="[iconClasses, styles]"
+      :style="cssVars"
       :src="iconMap[type]"
       :alt="alt || title"
     />
     <font-awesome-icon
       v-else
       :class="[iconClasses, styles]"
+      :style="cssVars"
       :icon="type"
       :alt="alt || title"
       :size="size"
@@ -52,6 +54,14 @@ export default {
     linked: VueTypes.bool.def(false),
     iconClasses: VueTypes.string.def(''),
     action: VueTypes.func,
+    width: {
+      type: String,
+      default: '',
+    },
+    height: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -75,14 +85,27 @@ export default {
     iconSelector() {
       return this.selector || `js-${kebabCase(this.alt)}`;
     },
+    cssVars() {
+      const style = {};
+
+      if (this.width) {
+        style['--width'] = `${this.width}px`;
+      }
+
+      if (this.height) {
+        style['--height'] = `${this.height}px`;
+      }
+
+      return style;
+    },
   },
 };
 </script>
 
 <style scoped>
 .ccu-icon {
-  height: 30px;
-  width: 30px;
+  width: var(--width, 30px);
+  height: var(--height, 30px);
 }
 .ccu-icon.medium {
   height: 20px;

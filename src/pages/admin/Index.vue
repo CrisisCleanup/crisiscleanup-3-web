@@ -29,6 +29,9 @@ export default {
       reactive({
         key: 'nav.cms',
       }),
+      reactive({
+        key: 'nav.incident_wizard',
+      }),
     ]);
     return { tabs };
   },

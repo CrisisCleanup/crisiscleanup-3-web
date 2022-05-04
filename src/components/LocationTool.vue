@@ -47,12 +47,12 @@
       />
     </div>
     <div
-      class="layers-tool flex-grow"
+      class="layers-tool flex-grow relative"
       style="position: relative; min-height: 400px"
     >
       <div
         ref="buttons"
-        class="w-full h-8 ml-4 mt-4 mb-8 flex"
+        class="absolute w-full h-8 ml-4 mt-4 flex"
         style="z-index: 1001"
       >
         <div class="flex mr-4">
@@ -77,6 +77,7 @@
             button-class="border bg-white"
             icon="map-rect"
             :title="$t('locationTool.draw_rectangle')"
+            :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Rectangle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Rectangle'"
             @changed="
@@ -90,6 +91,7 @@
             button-class="border bg-white"
             :title="$t('locationTool.draw_polygon')"
             icon="map-poly"
+            :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Polygon'"
             :selected="Boolean(currentDraw) && currentDraw === 'Polygon'"
             @changed="
@@ -103,6 +105,7 @@
             button-class="border bg-white"
             :title="$t('locationTool.draw_circle')"
             icon="map-circle"
+            :actions="[{ id: 'cancel', text: $t('actions.cancel') }]"
             :disabled="Boolean(!currentDraw) || currentDraw !== 'Circle'"
             :selected="Boolean(currentDraw) && currentDraw === 'Circle'"
             @changed="
@@ -206,7 +209,7 @@
           </base-checkbox>
         </div>
       </div>
-      <div id="map" class="h-screen sm:h-full"></div>
+      <div id="map" class="h-full"></div>
     </div>
     <div
       v-show="showingPopup"

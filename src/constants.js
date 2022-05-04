@@ -26,6 +26,7 @@ export const ICON_MAP = {
   cases: require('@/assets/icons/cases.svg'),
   'current-disasters': require('@/assets/icons/current-disaster.svg'),
   contact: require('@/assets/icons/contact-us.svg'),
+  completed: require('@/assets/icons/completed.svg'),
   training: require('@/assets/icons/training.svg'),
   notepad: require('@/assets/icons/notepad.svg'),
   terms: require('@/assets/icons/terms.svg'),
