@@ -284,7 +284,7 @@ export default {
       }
     }
     const aniResponse = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/ani`,
+      `${process.env.VUE_APP_API_BASE_URL}/ani?limit=200`,
     );
     this.aniList = aniResponse.data.results.map((ani) => {
       return {
