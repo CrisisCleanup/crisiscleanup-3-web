@@ -89,12 +89,14 @@
               </span>
               <form-select
                 :options="
-                  field.values.map((item) => {
-                    return {
-                      value: item.value,
-                      name_t: $t(item.name_t),
-                    };
-                  }) || getSelectValuesList(field.values_default_t)
+                  (field.values &&
+                    field.values.map((item) => {
+                      return {
+                        value: item.value,
+                        name_t: $t(item.name_t),
+                      };
+                    })) ||
+                  getSelectValuesList(field.values_default_t)
                 "
                 item-key="value"
                 label="name_t"
@@ -121,12 +123,14 @@
               <form-select
                 multiple
                 :options="
-                  field.values.map((item) => {
-                    return {
-                      value: item.value,
-                      name_t: $t(item.name_t),
-                    };
-                  }) || getSelectValuesList(field.values_default_t)
+                  (field.values &&
+                    field.values.map((item) => {
+                      return {
+                        value: item.value,
+                        name_t: $t(item.name_t),
+                      };
+                    })) ||
+                  getSelectValuesList(field.values_default_t)
                 "
                 item-key="value"
                 label="name_t"
@@ -237,6 +241,7 @@
         "
         @update="$emit('update', $event)"
         @change="$emit('change')"
+        :key="JSON.stringify(list)"
       />
       <ItemEditor @close="editing = false" v-if="editing" :item="field" />
     </div>
@@ -296,6 +301,13 @@ export default {
           item: field,
         },
       });
+    },
+    onListChange(change) {
+      if (change.added) {
+        change.added.element.phase = 4;
+        change.added.element.children = [];
+      }
+      this.$emit('change');
     },
   },
   computed: {

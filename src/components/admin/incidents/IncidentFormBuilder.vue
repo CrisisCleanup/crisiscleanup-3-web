@@ -24,12 +24,12 @@
         @update="updateField"
         @change="
           () => {
+            list = [...list];
             list.forEach((field) => {
               if (!field.children) {
                 field.children = [];
               }
             });
-            list = [...list];
             $emit('onUpdateForm', list);
           }
         "
@@ -75,7 +75,7 @@
                     type="drag"
                   />
                 </div>
-                {{ $t(field.label_t) }}
+                {{ $t(field.label_t) }} ({{ field.html_type }})
               </div>
             </div>
           </draggable>
@@ -127,7 +127,9 @@ export default {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/incidents/${value}/template`,
       );
-      this.formFields = response.data;
+      this.formFields = response.data.filter(
+        (field) => !['hidden', 'divend'].includes(field.html_type),
+      );
     },
     async getAvailableFields() {
       const response = await this.$http.get(
