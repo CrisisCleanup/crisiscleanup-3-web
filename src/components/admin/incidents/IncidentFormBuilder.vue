@@ -8,7 +8,7 @@
         select-classes="bg-white border border-crisiscleanup-dark-100 h-9 mb-3"
         item-key="id"
         label="name"
-        :placeholder="$t('~~Select an incident as a template')"
+        :placeholder="$t('incidentBuilder.select_template')"
         @input="
           (value) => {
             selectedIncidentTemplate = value;
@@ -38,7 +38,7 @@
     <div class="flex-1 mx-1">
       <base-input
         icon="search"
-        :placeholder="$t('~~Search through elements')"
+        :placeholder="$t('incidentBuilder.search_elements')"
         class="mb-2"
         :value="elementSearch"
         @input="search"

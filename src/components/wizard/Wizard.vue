@@ -29,7 +29,7 @@
           >
             <div v-if="step.isCompleted">
               <ccu-icon
-                :alt="$t('~~Completed')"
+                :alt="$t('incidentBuilder.completed')"
                 type="completed"
                 size="small"
               />
@@ -55,15 +55,15 @@
     <div class="p-6 h-12 bg-white flex items-center justify-between">
       <base-button
         :disabled="isFirst"
-        :text="$t('~~Previous Step')"
-        :alt="$t('~~Previous Step')"
+        :text="$t('actions.previous_step')"
+        :alt="$t('actions.previous_step')"
         variant="outline"
         class="p-2"
         :action="previousStep"
       />
       <base-button
-        :text="isLast ? $t('Done') : $t('~~Save & Next')"
-        :alt="isLast ? $t('Done') : $t('~~Save & Next')"
+        :text="isLast ? $t('Done') : $t('actions.save_next')"
+        :alt="isLast ? $t('Done') : $t('actions.save_next')"
         variant="solid"
         class="p-2 w-24"
         :action="nextStep"

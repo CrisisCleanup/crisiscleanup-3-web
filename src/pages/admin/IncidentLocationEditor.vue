@@ -10,7 +10,7 @@
           :placeholder="$t('locationVue.location_name')"
         />
         <base-button
-          :text="$t('~~Add Layer on Map')"
+          :text="$t('profileOrg.add_response_area')"
           :alt="$t('profileOrg.edit_response_area')"
           variant="solid"
           class="px-2 py-1"
@@ -117,9 +117,9 @@ export default {
     async addLayer() {
       let polygon;
       const response = await this.$component({
-        title: this.$t('~~Edit Item'),
+        title: this.$t('actions.edit'),
         component: 'LocationTool',
-        actionText: this.$t('~~Save'),
+        actionText: this.$t('actions.save'),
         classes: 'w-full h-144 overflow-auto p-3',
         modalClasses: 'bg-white max-w-3xl shadow',
         listeners: {

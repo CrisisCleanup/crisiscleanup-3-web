@@ -45,7 +45,7 @@
         variant="solid"
         size="large"
         :action="() => updateUserNeeded()"
-        >{{ $t('Confirm') }}</base-button
+        >{{ $t('~~Save') }}</base-button
       >
     </div>
   </modal>
