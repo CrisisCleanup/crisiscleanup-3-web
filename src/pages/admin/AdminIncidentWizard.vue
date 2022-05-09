@@ -13,7 +13,10 @@
       step-active-classes=""
       :loading="loading"
     >
-      <Step :name="$t('incidentBuilder.general_incident_info')" :on-save="saveIncident">
+      <Step
+        :name="$t('incidentBuilder.general_incident_info')"
+        :on-save="saveIncident"
+      >
         <div class="grid grid-cols-2 gap-2">
           <Card>
             <IncidentForm
@@ -35,7 +38,10 @@
           />
         </div>
       </Step>
-      <Step :name="$t('incidentBuilder.create_intake_form')" :on-save="saveIncidentFields">
+      <Step
+        :name="$t('incidentBuilder.create_intake_form')"
+        :on-save="saveIncidentFields"
+      >
         <IncidentFormBuilder
           @onUpdateForm="formFieldTree = $event"
           :incident="savedIncident"

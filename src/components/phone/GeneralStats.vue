@@ -87,7 +87,11 @@ export default {
           columns: makeTableColumns([
             ['id', '0.5fr', this.$t('phoneDashboard.id')],
             ['phone_number', '1fr', this.$t('phoneDashboard.phone_number')],
-            ['number_of_inbound_calls', '0.5fr', this.$t('phoneDashboard.calls')],
+            [
+              'number_of_inbound_calls',
+              '0.5fr',
+              this.$t('phoneDashboard.calls'),
+            ],
             [
               'location',
               '1fr',
