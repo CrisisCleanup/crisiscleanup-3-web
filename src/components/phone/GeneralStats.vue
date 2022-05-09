@@ -6,7 +6,7 @@
     <hr />
     <div class="flex flex-col bg-crisiscleanup-light-grey">
       <div class="flex p-2 items-center justify-between">
-        <base-text>{{ $t('~~On Phone Now') }}</base-text>
+        <base-text>{{ $t('phoneDashboard.on_phone_now') }}</base-text>
         {{ stats.active || 0 }}
       </div>
       <div class="flex p-2 items-center justify-between">
@@ -23,7 +23,7 @@
         0
       </div>
       <div class="flex p-2 items-center justify-between">
-        <base-text>{{ $t('~~Agents Online') }}</base-text>
+        <base-text>{{ $t('phoneDashboard.agents_online') }}</base-text>
         {{ agentsOnline || 0 }}
       </div>
       <div class="flex p-2 items-center justify-between">
@@ -85,13 +85,13 @@ export default {
         },
         props: {
           columns: makeTableColumns([
-            ['id', '0.5fr', this.$t('~~ID')],
-            ['phone_number', '1fr', this.$t('~~Phone Number')],
-            ['number_of_inbound_calls', '0.5fr', this.$t('~~Calls')],
+            ['id', '0.5fr', this.$t('phoneDashboard.id')],
+            ['phone_number', '1fr', this.$t('phoneDashboard.phone_number')],
+            ['number_of_inbound_calls', '0.5fr', this.$t('phoneDashboard.calls')],
             [
               'location',
               '1fr',
-              this.$t('~~Location'),
+              this.$t('phoneDashboard.location'),
               {
                 transformer: (_, item) => {
                   return `${item.location_name || ''} ${item.state_name}`;
@@ -101,7 +101,7 @@ export default {
             [
               'incident_id',
               '1fr',
-              this.$t('~~Incident'),
+              this.$t('phoneDashboard.incident'),
               {
                 transformer: (field) => {
                   const incident = Incident.find(field[0]);
@@ -115,7 +115,7 @@ export default {
             [
               'updated_at',
               '1fr',
-              this.$t('~~Last Called At'),
+              this.$t('phoneDashboard.last_called_at'),
               {
                 transformer: (field) => {
                   return this.$moment(field).fromNow();

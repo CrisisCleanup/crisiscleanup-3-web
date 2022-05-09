@@ -5,13 +5,13 @@
     @close="$emit('cancel')"
   >
     <div slot="header" class="text-lg border-b p-3">
-      {{ $t('~~Update Agent') }}
+      {{ $t('editAgentModal.update_agent') }}
     </div>
     <div class="p-5">
       <div class="section flex flex-col justify-around">
         <!-- Phone # -->
         <base-text :weight="200" class="section-header">
-          {{ $t('~~Phone Number') }}
+          {{ $t('editAgentModal.phone_number') }}
         </base-text>
         <base-input
           :value="phoneNumber"
@@ -23,7 +23,7 @@
       </div>
       <div class="section flex flex-col">
         <base-text :weight="200" class="section-header">
-          {{ $t('~~Languages') }}
+          {{ $t('editAgentModal.languages') }}
         </base-text>
         <!-- Language -->
         <form-select
@@ -45,7 +45,7 @@
         variant="solid"
         size="large"
         :action="() => updateUserNeeded()"
-        >{{ $t('~~Save') }}</base-button
+        >{{ $t('actions.save') }}</base-button
       >
     </div>
   </modal>
