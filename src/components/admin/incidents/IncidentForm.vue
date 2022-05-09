@@ -3,7 +3,7 @@
     <div class="form-row flex w-full">
       <FloatingInput
         class="mr-2 flex-grow"
-        :placeholder="$t('~~Incident Name')"
+        :placeholder="$t('incidentBuilder.incident_name')"
         v-model="currentIncident.name"
         required
       />
@@ -11,7 +11,7 @@
     <div class="form-row flex w-full">
       <FloatingInput
         class="mr-2 flex-grow"
-        :placeholder="$t('~~Incident Short Name')"
+        :placeholder="$t('incidentBuilder.incident_short_name')"
         v-model="currentIncident.short_name"
         required
       />
@@ -19,7 +19,7 @@
         v-model="currentIncident.timezone"
         :options="timezoneNames"
         class="w-44 mt-0.5"
-        :placeholder="$t('~~Timezone')"
+        :placeholder="$t('incidentBuilder.timezone')"
         searchable
         select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
       />
@@ -48,14 +48,14 @@
               text-base
               px-3
             "
-            :placeholder="$t('~~Start')"
+            :placeholder="$t('actions.start')"
             :value="inputValue"
             v-on="inputEvents"
           />
         </template>
       </vc-date-picker>
       <base-button
-        :text="$t('~~Start Now')"
+        :text="$t('actions.start_now')"
         class="min-w-max px-3"
         variant="solid"
         :action="
@@ -74,27 +74,27 @@
         select-classes="h-12 border border-crisiscleanup-dark-100"
         item-key="value"
         label="name_t"
-        :placeholder="$t('~~Incident Type')"
+        :placeholder="$t('incidentBuilder.incident_type')"
       />
     </div>
 
     <div class="form-row">
       <base-checkbox v-model="currentIncident.auto_contact" class="mb-3">
-        {{ $t('~~Auto Contact') }}
+        {{ $t('incidentBuilder.auto_contact') }}
       </base-checkbox>
 
       <base-checkbox v-model="currentAni.turn_on_release" class="mb-3">
-        {{ $t('~~Turn On Release') }}
+        {{ $t('incidentBuilder.turn_on_release') }}
       </base-checkbox>
 
       <base-checkbox v-model="currentAni.is_archived" class="mb-3">
-        {{ $t('~~Archived') }}
+        {{ $t('incidentBuilder.archived') }}
       </base-checkbox>
     </div>
 
     <hr class="mb-4" />
     <base-checkbox v-model="currentAni.use_hotline" class="mb-3">
-      {{ $t('~~Use Hotline') }}
+      {{ $t('incidentBuilder.use_hotline') }}
     </base-checkbox>
 
     <div class="my-4">
@@ -131,13 +131,13 @@
             }
           "
           select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
-          :placeholder="$t('~~Phone Numbers')"
+          :placeholder="$t('incidentBuilder.phone_numbers')"
         />
         <form-select
           v-model="currentIncident.timezone"
           :options="timezoneNames"
           class="w-44"
-          :placeholder="$t('~~Timezone')"
+          :placeholder="$t('incidentBuilder.timezone')"
           searchable
           select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
         />
@@ -166,14 +166,14 @@
                 text-base
                 px-3
               "
-              :placeholder="$t('~~Start')"
+              :placeholder="$t('actions.start')"
               :value="inputValue"
               v-on="inputEvents"
             />
           </template>
         </vc-date-picker>
         <base-button
-          :text="$t('~~Start Now')"
+          :text="$t('actions.start_now')"
           class="min-w-max px-3"
           variant="solid"
           :action="
@@ -207,7 +207,7 @@
                 text-base
                 px-3
               "
-              :placeholder="$t('~~End')"
+              :placeholder="$t('actions.end')"
               :value="inputValue"
               v-on="inputEvents"
             />

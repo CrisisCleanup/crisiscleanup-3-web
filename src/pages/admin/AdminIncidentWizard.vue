@@ -13,7 +13,10 @@
       step-active-classes=""
       :loading="loading"
     >
-      <Step name="General Incident Info" :on-save="saveIncident">
+      <Step
+        :name="$t('incidentBuilder.general_incident_info')"
+        :on-save="saveIncident"
+      >
         <div class="grid grid-cols-2 gap-2">
           <Card>
             <IncidentForm
@@ -35,23 +38,26 @@
           />
         </div>
       </Step>
-      <Step name="Create Intake Form" :on-save="saveIncidentFields">
+      <Step
+        :name="$t('incidentBuilder.create_intake_form')"
+        :on-save="saveIncidentFields"
+      >
         <IncidentFormBuilder
           @onUpdateForm="formFieldTree = $event"
           :incident="savedIncident"
           :key="savedIncident"
         />
       </Step>
-      <Step name="Assets">
+      <Step :name="$t('incidentBuilder.assets')">
         <Card>
           <template #header>
             <div class="flex items-center justify-between w-full mr-4">
               <base-text class="px-5 py-3">
-                {{ $t('~~Handbill') }}
+                {{ $t('incidentBuilder.handbill') }}
               </base-text>
               <base-button
-                :text="$t('~~Create')"
-                :alt="$t('~~Create')"
+                :text="$t('actions.create')"
+                :alt="$t('actions.create')"
                 variant="solid"
                 class="px-2 py-1"
                 :action="() => {}"
@@ -65,7 +71,7 @@
           />
         </Card>
       </Step>
-      <Step name="Notifications"></Step>
+      <Step :name="$t('incidentBuilder.notifications')"></Step>
     </Wizard>
   </div>
 </template>

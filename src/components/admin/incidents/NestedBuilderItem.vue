@@ -289,9 +289,9 @@ export default {
     },
     async editField(field) {
       await this.$component({
-        title: this.$t('~~Edit Item'),
+        title: this.$t('actions.edit'),
         component: ItemEditor,
-        actionText: this.$t('~~Done'),
+        actionText: this.$t('actions.done'),
         listeners: {
           update: (payload) => {
             this.$emit('update', payload);
