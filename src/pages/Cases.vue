@@ -1,443 +1,472 @@
 <template>
   <div
-    class="flex h-full overflow-hidden cases-container-grid"
+    class="flex h-full overflow-hidden grid"
     :class="{
       'cases-container-grid--full': $mq === 'sm',
+      'grid-cols-1': !showCaseForm,
+      'grid-cols-2': showCaseForm,
     }"
   >
     <div v-if="isCasesOnly || $mq !== 'sm'">
-      <div class="cases-grid">
-        <div class="p-3 border border-gray-300 card-header bg-white">
-          <div
-            v-show="showLegend"
-            class="flex items-center flex-wrap justify-between"
-          >
-            <div class="flex items-center">
-              <div class="flex" style="min-width: 80px">
-                <ccu-icon
-                  :alt="$t('casesVue.map_view')"
-                  size="medium"
-                  class="mr-4 cursor-pointer"
-                  :class="showingMap ? 'filter-yellow' : 'filter-gray'"
-                  type="map"
-                  ccu-event="user_ui-view-map"
-                  @click.native="toggleView('showingMap')"
-                  data-cy="cases.mapButton"
-                />
-                <ccu-icon
-                  :alt="$t('casesVue.table_view')"
-                  size="medium"
-                  class="mr-4 cursor-pointer"
-                  :class="showingTable ? 'filter-yellow' : 'filter-gray'"
-                  type="table"
-                  ccu-event="user_ui-view-table"
-                  @click.native="toggleView('showingTable')"
-                  data-cy="cases.tableButton"
-                />
-              </div>
-              <span v-if="totalWorksites" class="font-thin">
-                <span v-if="pagination.total === totalWorksites">
-                  {{ $t('casesVue.cases') }}
-                  {{ pagination.total | numeral('0,0') }}
+      <div class="cases-grid relative">
+        <div
+          class="p-3 border border-gray-300 bg-white"
+          :class="showLegend ? 'card-header' : 'w-16'"
+        >
+          <div class="flex">
+            <div
+              v-show="showLegend"
+              class="flex items-center flex-wrap justify-between"
+            >
+              <div class="flex items-center">
+                <div class="flex" style="min-width: 80px">
+                  <ccu-icon
+                    :alt="$t('casesVue.map_view')"
+                    size="medium"
+                    class="mr-4 cursor-pointer"
+                    :class="showingMap ? 'filter-yellow' : 'filter-gray'"
+                    type="map"
+                    ccu-event="user_ui-view-map"
+                    @click.native="toggleView('showingMap')"
+                    data-cy="cases.mapButton"
+                  />
+                  <ccu-icon
+                    :alt="$t('casesVue.table_view')"
+                    size="medium"
+                    class="mr-4 cursor-pointer"
+                    :class="showingTable ? 'filter-yellow' : 'filter-gray'"
+                    type="table"
+                    ccu-event="user_ui-view-table"
+                    @click.native="toggleView('showingTable')"
+                    data-cy="cases.tableButton"
+                  />
+                </div>
+                <span v-if="totalWorksites" class="font-thin">
+                  <span v-if="pagination.total === totalWorksites">
+                    {{ $t('casesVue.cases') }}
+                    {{ pagination.total | numeral('0,0') }}
+                  </span>
+                  <span v-else>
+                    {{ $t('casesVue.cases') }}
+                    {{ pagination.total | numeral('0,0') }} of
+                    {{ totalWorksites | numeral('0,0') }}
+                  </span>
                 </span>
-                <span v-else>
-                  {{ $t('casesVue.cases') }}
-                  {{ pagination.total | numeral('0,0') }} of
-                  {{ totalWorksites | numeral('0,0') }}
-                </span>
-              </span>
-              <div class="flex justify-start w-auto">
-                <WorksiteSearchInput
-                  width="300px"
-                  icon="search"
-                  :suggestions="[
-                    {
-                      name: 'worksites',
-                      data: searchWorksites || [],
-                      key: 'name',
-                    },
-                  ]"
-                  display-property="name"
-                  :placeholder="$t('actions.search')"
-                  size="medium"
-                  class="mx-2"
-                  @selectedExisting="handleChange"
-                  @search="onSearch"
-                  @clear="onSearch"
-                />
+                <div class="flex justify-start w-auto">
+                  <WorksiteSearchInput
+                    width="300px"
+                    icon="search"
+                    :suggestions="[
+                      {
+                        name: 'worksites',
+                        data: searchWorksites || [],
+                        key: 'name',
+                      },
+                    ]"
+                    display-property="name"
+                    :placeholder="$t('actions.search')"
+                    size="medium"
+                    class="mx-2"
+                    @selectedExisting="handleChange"
+                    @search="onSearch"
+                    @clear="onSearch"
+                  />
+                </div>
+                <div class="mt-2" v-if="pdas.length > 0">
+                  <base-checkbox
+                    class="pb-2"
+                    :value="showingHeatMap"
+                    @input="toggleHeatMap"
+                    >{{ $t('casesVue.show_damaged_areas') }}</base-checkbox
+                  >
+                </div>
               </div>
-              <div class="mt-2" v-if="pdas.length > 0">
-                <base-checkbox
-                  class="pb-2"
-                  :value="showingHeatMap"
-                  @input="toggleHeatMap"
-                  >{{ $t('casesVue.show_damaged_areas') }}</base-checkbox
-                >
-              </div>
-            </div>
-            <div class="flex worksite-actions" style="color: #4c4c4d">
-              <base-dropdown class-name="borderless">
-                <base-button
-                  slot="btn"
-                  variant="text"
-                  class="text-base font-thin mx-2"
-                  :text="$t('casesVue.layers')"
-                  :alt="$t('casesVue.layers')"
-                  ccu-icon="layers"
-                  icon-size="medium"
-                />
-                <template slot="body">
-                  <ul class="text-base">
-                    {{
-                      $t('casesVue.standard_layers')
-                    }}
-                    <li class="py-2">
-                      <base-dropdown
-                        :trigger="'hover'"
-                        :role="'sublist'"
-                        :align="'right'"
-                      >
-                        <template slot="btn">{{
-                          $t('locationTypes.boundary_political_us_state')
-                        }}</template>
-                        <template slot="body">
-                          <ul class="h-64 overflow-auto">
-                            <li v-for="state in usStates" :key="`${state.id}`">
-                              <base-checkbox
-                                :value="appliedLocations.has(state.id)"
-                                :ccu-event="
-                                  appliedLocations.has(state.id)
-                                    ? 'user_ui-turn-off_layer'
-                                    : 'user_ui-turn-on_layer'
-                                "
-                                @input="
-                                  (value) => {
-                                    applyLocation(state.id, value);
-                                  }
-                                "
-                                >{{ state.name }}</base-checkbox
-                              >
-                            </li>
-                          </ul>
-                        </template>
-                      </base-dropdown>
-                    </li>
-                    <li class="py-2">
-                      <base-dropdown
-                        :trigger="'hover'"
-                        :role="'sublist'"
-                        :align="'right'"
-                      >
-                        <template slot="btn">{{
-                          $t('locationTypes.boundary_political_us_congress')
-                        }}</template>
-                        <template slot="body">
-                          <ul class="h-64 overflow-auto">
-                            <li
-                              v-for="district in districts"
-                              :key="district.id"
-                            >
-                              <base-checkbox
-                                :value="appliedLocations.has(district.id)"
-                                :ccu-event="
-                                  appliedLocations.has(district.id)
-                                    ? 'user_ui-turn-off_layer'
-                                    : 'user_ui-turn-on_layer'
-                                "
-                                @input="
-                                  (value) => {
-                                    applyLocation(district.id, value);
-                                  }
-                                "
-                                >{{ district.name }}</base-checkbox
-                              >
-                            </li>
-                          </ul>
-                        </template>
-                      </base-dropdown>
-                    </li>
-                    <li class="py-2">
-                      <base-dropdown
-                        :trigger="'hover'"
-                        :role="'sublist'"
-                        :align="'right'"
-                      >
-                        <template slot="btn">{{
-                          $t('locationTypes.boundary_political_us_county')
-                        }}</template>
-                        <template slot="body">
-                          <ul class="h-64 overflow-auto">
-                            <li
-                              v-for="county in counties"
-                              :key="`${county.id}`"
-                            >
-                              <base-checkbox
-                                :value="appliedLocations.has(county.id)"
-                                @input="
-                                  (value) => {
-                                    applyLocation(county.id, value);
-                                  }
-                                "
-                                :ccu-event="
-                                  appliedLocations.has(county.id)
-                                    ? 'user_ui-turn-off_layer'
-                                    : 'user_ui-turn-on_layer'
-                                "
-                                >{{ county.name }}</base-checkbox
-                              >
-                            </li>
-                          </ul>
-                        </template>
-                      </base-dropdown>
-                    </li>
-                    <li class="py-2">
-                      <base-dropdown
-                        :trigger="'hover'"
-                        :role="'sublist'"
-                        :align="'right'"
-                      >
-                        <template slot="btn">{{
-                          $t('casesVue.teams')
-                        }}</template>
-                        <template slot="body">
-                          <ul class="h-64 overflow-auto">
-                            <li v-for="team in teams" :key="`${team.id}`">
-                              <base-checkbox
-                                :value="appliedLocations.has(team.id)"
-                                :ccu-event="
-                                  appliedLocations.has(team.id)
-                                    ? 'user_ui-turn-off_layer'
-                                    : 'user_ui-turn-on_layer'
-                                "
-                                @input="
-                                  (value) => {
-                                    applyTeamGeoJson(team, value);
-                                  }
-                                "
-                                >{{ team.name }}</base-checkbox
-                              >
-                            </li>
-                          </ul>
-                        </template>
-                      </base-dropdown>
-                    </li>
-                    <li class="py-2">
-                      <base-dropdown
-                        :trigger="'hover'"
-                        :role="'sublist'"
-                        :align="'right'"
-                      >
-                        <template slot="btn">{{
-                          $t('casesVue.incident')
-                        }}</template>
-                        <template slot="body">
-                          <ul class="h-64 overflow-auto">
-                            <li
-                              v-for="location in currentIncident.locationModels"
-                              :key="location.id"
-                            >
-                              <base-checkbox
-                                :value="appliedLocations.has(location.id)"
-                                @input="
-                                  (value) => {
-                                    applyLocation(location.id, value);
-                                  }
-                                "
-                                :ccu-event="
-                                  appliedLocations.has(location.id)
-                                    ? 'user_ui-turn-off_layer'
-                                    : 'user_ui-turn-on_layer'
-                                "
-                                >{{ location.name }}</base-checkbox
-                              >
-                            </li>
-                            <li
-                              v-if="
-                                currentOrganization &&
-                                currentOrganization.primary_location
-                              "
-                            >
-                              <base-checkbox
-                                :value="
-                                  appliedLocations.has(
-                                    currentOrganization.primary_location,
-                                  )
-                                "
-                                :ccu-event="
-                                  appliedLocations.has(
-                                    currentOrganization.primary_location,
-                                  )
-                                    ? 'user_ui-turn-off_layer'
-                                    : 'user_ui-turn-on_layer'
-                                "
-                                @input="
-                                  (value) => {
-                                    applyLocation(
-                                      currentOrganization.primary_location,
-                                      value,
-                                    );
-                                  }
-                                "
-                                >{{
-                                  $t('casesVue.primary_response_area')
-                                }}</base-checkbox
-                              >
-                            </li>
-                            <li
-                              v-if="
-                                currentOrganization &&
-                                currentOrganization.secondary_location
-                              "
-                            >
-                              <base-checkbox
-                                :value="
-                                  appliedLocations.has(
-                                    currentOrganization.secondary_location,
-                                  )
-                                "
-                                :ccu-event="
-                                  appliedLocations.has(
-                                    currentOrganization.secondary_location,
-                                  )
-                                    ? 'user_ui-turn-off_layer'
-                                    : 'user_ui-turn-on_layer'
-                                "
-                                @input="
-                                  (value) => {
-                                    applyLocation(
-                                      currentOrganization.secondary_location,
-                                      value,
-                                    );
-                                  }
-                                "
-                                >{{
-                                  $t('casesVue.secondary_response_area')
-                                }}</base-checkbox
-                              >
-                            </li>
-                          </ul>
-                        </template>
-                      </base-dropdown>
-                    </li>
-                    <li class="py-2">
-                      <base-dropdown
-                        :trigger="'hover'"
-                        :role="'sublist'"
-                        :align="'right'"
-                      >
-                        <template slot="btn">{{
-                          $t('casesVue.my_layers')
-                        }}</template>
-                        <template slot="body">
-                          <ul class="h-64 overflow-auto">
-                            <li
-                              v-for="location in organizationLocations"
-                              :key="`${location.id}`"
-                            >
-                              <base-checkbox
-                                :value="appliedLocations.has(location.id)"
-                                :ccu-event="
-                                  appliedLocations.has(location.id)
-                                    ? 'user_ui-turn-off_layer'
-                                    : 'user_ui-turn-on_layer'
-                                "
-                                @input="
-                                  (value) => {
-                                    applyLocation(location.id, value);
-                                  }
-                                "
-                                >{{ location.name }}</base-checkbox
-                              >
-                            </li>
-                          </ul>
-                        </template>
-                      </base-dropdown>
-                    </li>
-                  </ul>
-                </template>
-              </base-dropdown>
-              <base-button
-                class="text-base font-thin mx-2"
-                ccu-icon="filters"
-                icon-size="medium"
-                :alt="$t('casesVue.filters')"
-                :action="
-                  () => {
-                    showingFilters = true;
-                  }
-                "
-              >
-                {{ $t('casesVue.filters') }}
-                <span
-                  v-if="filtersCount > 0"
-                  class="rounded-full mx-2 px-1 bg-yellow-500 text-xs"
-                  >{{ filtersCount }}</span
-                >
-              </base-button>
-              <base-button
-                class="text-base font-thin mx-2"
-                ccu-icon="download"
-                icon-size="medium"
-                :alt="$t('actions.download')"
-                :text="$t('actions.download')"
-                :action="downloadCsv"
-              />
-              <base-dropdown
-                v-if="showingTable"
-                class-name="borderless"
-                class="flex justify-center"
-              >
-                <template slot="icon">
+              <div class="flex worksite-actions" style="color: #4c4c4d">
+                <base-dropdown class-name="borderless">
                   <base-button
                     slot="btn"
+                    variant="text"
                     class="text-base font-thin mx-2"
-                    icon="ellipsis-h"
-                    data-cy="worksiteview_actionContext"
+                    :text="$t('casesVue.layers')"
+                    :alt="$t('casesVue.layers')"
+                    ccu-icon="layers"
+                    icon-size="medium"
                   />
-                </template>
-                <template slot="body">
-                  <ul class="text-base">
-                    <li class="py-1">
-                      <base-button
-                        class="text-base font-thin mx-2"
-                        :text="$t('actions.download')"
-                        :alt="$t('actions.download')"
-                        :action="downloadCsv"
-                        data-cy="worksiteview_actionBatchDownload"
-                      />
-                    </li>
-                    <li class="py-1">
-                      <base-button
-                        class="text-base font-thin mx-2"
-                        :text="$t('actions.print')"
-                        :alt="$t('actions.print')"
-                        :action="
-                          (e) => {
-                            printWorksite(e, selectedTableItems);
-                          }
-                        "
-                        data-cy="worksiteview_actionBatchPrint"
-                      />
-                    </li>
-                    <li class="py-1">
-                      <base-button
-                        class="text-base font-thin mx-2"
-                        :text="$t('actions.share')"
-                        :alt="$t('actions.share')"
-                      />
-                    </li>
-                  </ul>
-                </template>
-              </base-dropdown>
-              <WorksiteFilters
-                ref="worksiteFilter"
-                :show="showingFilters"
-                :current-filters="filters"
-                :incident="currentIncident"
-                :locations="organizationLocations"
-                @closedFilters="showingFilters = false"
-                @updatedFilters="onUpdatedFilters"
-              />
+                  <template slot="body">
+                    <ul class="text-base">
+                      {{
+                        $t('casesVue.standard_layers')
+                      }}
+                      <li class="py-2">
+                        <base-dropdown
+                          :trigger="'hover'"
+                          :role="'sublist'"
+                          :align="'right'"
+                        >
+                          <template slot="btn">{{
+                            $t('locationTypes.boundary_political_us_state')
+                          }}</template>
+                          <template slot="body">
+                            <ul class="h-64 overflow-auto">
+                              <li
+                                v-for="state in usStates"
+                                :key="`${state.id}`"
+                              >
+                                <base-checkbox
+                                  :value="appliedLocations.has(state.id)"
+                                  :ccu-event="
+                                    appliedLocations.has(state.id)
+                                      ? 'user_ui-turn-off_layer'
+                                      : 'user_ui-turn-on_layer'
+                                  "
+                                  @input="
+                                    (value) => {
+                                      applyLocation(state.id, value);
+                                    }
+                                  "
+                                  >{{ state.name }}</base-checkbox
+                                >
+                              </li>
+                            </ul>
+                          </template>
+                        </base-dropdown>
+                      </li>
+                      <li class="py-2">
+                        <base-dropdown
+                          :trigger="'hover'"
+                          :role="'sublist'"
+                          :align="'right'"
+                        >
+                          <template slot="btn">{{
+                            $t('locationTypes.boundary_political_us_congress')
+                          }}</template>
+                          <template slot="body">
+                            <ul class="h-64 overflow-auto">
+                              <li
+                                v-for="district in districts"
+                                :key="district.id"
+                              >
+                                <base-checkbox
+                                  :value="appliedLocations.has(district.id)"
+                                  :ccu-event="
+                                    appliedLocations.has(district.id)
+                                      ? 'user_ui-turn-off_layer'
+                                      : 'user_ui-turn-on_layer'
+                                  "
+                                  @input="
+                                    (value) => {
+                                      applyLocation(district.id, value);
+                                    }
+                                  "
+                                  >{{ district.name }}</base-checkbox
+                                >
+                              </li>
+                            </ul>
+                          </template>
+                        </base-dropdown>
+                      </li>
+                      <li class="py-2">
+                        <base-dropdown
+                          :trigger="'hover'"
+                          :role="'sublist'"
+                          :align="'right'"
+                        >
+                          <template slot="btn">{{
+                            $t('locationTypes.boundary_political_us_county')
+                          }}</template>
+                          <template slot="body">
+                            <ul class="h-64 overflow-auto">
+                              <li
+                                v-for="county in counties"
+                                :key="`${county.id}`"
+                              >
+                                <base-checkbox
+                                  :value="appliedLocations.has(county.id)"
+                                  @input="
+                                    (value) => {
+                                      applyLocation(county.id, value);
+                                    }
+                                  "
+                                  :ccu-event="
+                                    appliedLocations.has(county.id)
+                                      ? 'user_ui-turn-off_layer'
+                                      : 'user_ui-turn-on_layer'
+                                  "
+                                  >{{ county.name }}</base-checkbox
+                                >
+                              </li>
+                            </ul>
+                          </template>
+                        </base-dropdown>
+                      </li>
+                      <li class="py-2">
+                        <base-dropdown
+                          :trigger="'hover'"
+                          :role="'sublist'"
+                          :align="'right'"
+                        >
+                          <template slot="btn">{{
+                            $t('casesVue.teams')
+                          }}</template>
+                          <template slot="body">
+                            <ul class="h-64 overflow-auto">
+                              <li v-for="team in teams" :key="`${team.id}`">
+                                <base-checkbox
+                                  :value="appliedLocations.has(team.id)"
+                                  :ccu-event="
+                                    appliedLocations.has(team.id)
+                                      ? 'user_ui-turn-off_layer'
+                                      : 'user_ui-turn-on_layer'
+                                  "
+                                  @input="
+                                    (value) => {
+                                      applyTeamGeoJson(team, value);
+                                    }
+                                  "
+                                  >{{ team.name }}</base-checkbox
+                                >
+                              </li>
+                            </ul>
+                          </template>
+                        </base-dropdown>
+                      </li>
+                      <li class="py-2">
+                        <base-dropdown
+                          :trigger="'hover'"
+                          :role="'sublist'"
+                          :align="'right'"
+                        >
+                          <template slot="btn">{{
+                            $t('casesVue.incident')
+                          }}</template>
+                          <template slot="body">
+                            <ul class="h-64 overflow-auto">
+                              <li
+                                v-for="location in currentIncident.locationModels"
+                                :key="location.id"
+                              >
+                                <base-checkbox
+                                  :value="appliedLocations.has(location.id)"
+                                  @input="
+                                    (value) => {
+                                      applyLocation(location.id, value);
+                                    }
+                                  "
+                                  :ccu-event="
+                                    appliedLocations.has(location.id)
+                                      ? 'user_ui-turn-off_layer'
+                                      : 'user_ui-turn-on_layer'
+                                  "
+                                  >{{ location.name }}</base-checkbox
+                                >
+                              </li>
+                              <li
+                                v-if="
+                                  currentOrganization &&
+                                  currentOrganization.primary_location
+                                "
+                              >
+                                <base-checkbox
+                                  :value="
+                                    appliedLocations.has(
+                                      currentOrganization.primary_location,
+                                    )
+                                  "
+                                  :ccu-event="
+                                    appliedLocations.has(
+                                      currentOrganization.primary_location,
+                                    )
+                                      ? 'user_ui-turn-off_layer'
+                                      : 'user_ui-turn-on_layer'
+                                  "
+                                  @input="
+                                    (value) => {
+                                      applyLocation(
+                                        currentOrganization.primary_location,
+                                        value,
+                                      );
+                                    }
+                                  "
+                                  >{{
+                                    $t('casesVue.primary_response_area')
+                                  }}</base-checkbox
+                                >
+                              </li>
+                              <li
+                                v-if="
+                                  currentOrganization &&
+                                  currentOrganization.secondary_location
+                                "
+                              >
+                                <base-checkbox
+                                  :value="
+                                    appliedLocations.has(
+                                      currentOrganization.secondary_location,
+                                    )
+                                  "
+                                  :ccu-event="
+                                    appliedLocations.has(
+                                      currentOrganization.secondary_location,
+                                    )
+                                      ? 'user_ui-turn-off_layer'
+                                      : 'user_ui-turn-on_layer'
+                                  "
+                                  @input="
+                                    (value) => {
+                                      applyLocation(
+                                        currentOrganization.secondary_location,
+                                        value,
+                                      );
+                                    }
+                                  "
+                                  >{{
+                                    $t('casesVue.secondary_response_area')
+                                  }}</base-checkbox
+                                >
+                              </li>
+                            </ul>
+                          </template>
+                        </base-dropdown>
+                      </li>
+                      <li class="py-2">
+                        <base-dropdown
+                          :trigger="'hover'"
+                          :role="'sublist'"
+                          :align="'right'"
+                        >
+                          <template slot="btn">{{
+                            $t('casesVue.my_layers')
+                          }}</template>
+                          <template slot="body">
+                            <ul class="h-64 overflow-auto">
+                              <li
+                                v-for="location in organizationLocations"
+                                :key="`${location.id}`"
+                              >
+                                <base-checkbox
+                                  :value="appliedLocations.has(location.id)"
+                                  :ccu-event="
+                                    appliedLocations.has(location.id)
+                                      ? 'user_ui-turn-off_layer'
+                                      : 'user_ui-turn-on_layer'
+                                  "
+                                  @input="
+                                    (value) => {
+                                      applyLocation(location.id, value);
+                                    }
+                                  "
+                                  >{{ location.name }}</base-checkbox
+                                >
+                              </li>
+                            </ul>
+                          </template>
+                        </base-dropdown>
+                      </li>
+                    </ul>
+                  </template>
+                </base-dropdown>
+                <base-button
+                  class="text-base font-thin mx-2"
+                  ccu-icon="filters"
+                  icon-size="medium"
+                  :alt="$t('casesVue.filters')"
+                  :action="
+                    () => {
+                      showingFilters = true;
+                    }
+                  "
+                >
+                  {{ $t('casesVue.filters') }}
+                  <span
+                    v-if="filtersCount > 0"
+                    class="rounded-full mx-2 px-1 bg-yellow-500 text-xs"
+                    >{{ filtersCount }}</span
+                  >
+                </base-button>
+                <base-button
+                  class="text-base font-thin mx-2"
+                  ccu-icon="download"
+                  icon-size="medium"
+                  :alt="$t('actions.download')"
+                  :text="$t('actions.download')"
+                  :action="downloadCsv"
+                />
+                <base-dropdown
+                  v-if="showingTable"
+                  class-name="borderless"
+                  class="flex justify-center"
+                >
+                  <template slot="icon">
+                    <base-button
+                      slot="btn"
+                      class="text-base font-thin mx-2"
+                      icon="ellipsis-h"
+                      data-cy="worksiteview_actionContext"
+                    />
+                  </template>
+                  <template slot="body">
+                    <ul class="text-base">
+                      <li class="py-1">
+                        <base-button
+                          class="text-base font-thin mx-2"
+                          :text="$t('actions.download')"
+                          :alt="$t('actions.download')"
+                          :action="downloadCsv"
+                          data-cy="worksiteview_actionBatchDownload"
+                        />
+                      </li>
+                      <li class="py-1">
+                        <base-button
+                          class="text-base font-thin mx-2"
+                          :text="$t('actions.print')"
+                          :alt="$t('actions.print')"
+                          :action="
+                            (e) => {
+                              printWorksite(e, selectedTableItems);
+                            }
+                          "
+                          data-cy="worksiteview_actionBatchPrint"
+                        />
+                      </li>
+                      <li class="py-1">
+                        <base-button
+                          class="text-base font-thin mx-2"
+                          :text="$t('actions.share')"
+                          :alt="$t('actions.share')"
+                        />
+                      </li>
+                    </ul>
+                  </template>
+                </base-dropdown>
+                <WorksiteFilters
+                  ref="worksiteFilter"
+                  :show="showingFilters"
+                  :current-filters="filters"
+                  :incident="currentIncident"
+                  :locations="organizationLocations"
+                  @closedFilters="showingFilters = false"
+                  @updatedFilters="onUpdatedFilters"
+                />
+              </div>
+            </div>
+            <div
+              class="text-crisiscleanup-lightblue-400 underline"
+              :class="showCaseForm ? (showLegend ? 'legend-toggle' : '') : ''"
+            >
+              <div
+                class="w-10 ml-auto"
+                @click="showLegend = !showLegend"
+                v-if="showLegend"
+              >
+                {{ 'Hide' }}
+              </div>
+              <div
+                class="w-10 ml-auto"
+                @click="showLegend = !showLegend"
+                v-else
+              >
+                {{ 'Show' }}
+              </div>
             </div>
           </div>
           <div
@@ -473,25 +502,14 @@
               )} days ago`"
             ></Slider>
           </div>
-          <div class="text-crisiscleanup-lightblue-400 underline">
-            <div
-              class="w-10 ml-auto"
-              @click="showLegend = !showLegend"
-              v-if="showLegend"
-            >
-              {{ 'Hide' }}
-            </div>
-            <div class="w-10 ml-auto" @click="showLegend = !showLegend" v-else>
-              {{ 'Show' }}
-            </div>
-          </div>
         </div>
-        <div class="flex-grow bg-crisiscleanup-light-grey">
+        <div class="bg-crisiscleanup-light-grey">
           <template v-if="showingMap">
             <WorksiteMap
+              :style="showCaseForm ? '' : 'width: 220%'"
               :key="JSON.stringify(currentQuery)"
               ref="worksiteMap"
-              class="w-full h-full"
+              class="h-full"
               :query="currentQuery"
               :new-marker="newMarker"
               :current-filters="filters"
@@ -710,15 +728,36 @@
       </div>
     </div>
     <div
+      v-if="$mq !== 'sm'"
+      @click="showCaseForm = !showCaseForm"
+      class="
+        absolute
+        top-20
+        right-5
+        text-h1
+        rounded-full
+        border-2
+        h-7
+        w-7
+        text-center
+        bg-white
+        transform
+      "
+      :class="showCaseForm ? 'rotate-0' : 'rotate-180'"
+    >
+      >
+    </div>
+    <div
       v-if="
         currentIncident &&
         (isEditingWorksite ||
           isViewingWorksite ||
           isViewingWorksiteHistory ||
           isViewingWorksiteFlag ||
-          isNewWorksite)
+          isNewWorksite) &&
+        showCaseForm
       "
-      class="flex flex-col h-full shadow-2xl md:max-w-lg lg:max-w-lg"
+      class="flex flex-col h-full shadow-2xl"
       data-cy="worksiteview"
     >
       <div
@@ -731,15 +770,7 @@
         "
       >
         <div
-          class="
-            w-1/2
-            h-full
-            p-3
-            flex
-            items-center
-            justify-center
-            cursor-pointer
-          "
+          class="h-full p-3 flex items-center justify-center cursor-pointer"
           :class="{ 'tab-active': isNewWorksite }"
           @click="createNewWorksite"
         >
@@ -748,7 +779,7 @@
         </div>
         <div
           v-if="currentWorksite && currentWorksite.id"
-          class="w-1/2 h-full p-3 flex items-center justify-center"
+          class="h-full p-3 flex items-center justify-center"
           :class="{
             'tab-active':
               isEditingWorksite ||
@@ -1058,6 +1089,7 @@ export default {
       pdas: [],
       showingHeatMap: false,
       showLegend: true,
+      showCaseForm: true,
     };
   },
   computed: {
@@ -1964,6 +1996,14 @@ export default {
 }
 .card-header {
   min-height: 60px;
+}
+.legend-toggle {
+  @apply absolute right-4 top-4;
+}
+@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+  .card-header {
+    min-height: 10px;
+  }
 }
 
 .ant-table-row {
