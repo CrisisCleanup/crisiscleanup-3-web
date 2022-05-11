@@ -29,11 +29,8 @@
             />
           </Card>
           <IncidentLocationEditor
-            :location="
-              savedIncident &&
-              savedIncident.locations.length &&
-              savedIncident.locations[savedIncident.locations.length - 1]
-            "
+            :location="currentIncidentLocation"
+            :key="currentIncidentLocation"
             @onLocationChange="currentLocation = $event"
           />
         </div>
@@ -64,11 +61,7 @@
               ></base-button>
             </div>
           </template>
-          <iframe
-            v-if="savedIncident"
-            class="h-64 m-5"
-            :src="`http://localhost:5000/incidents/${savedIncident.id}/handbill`"
-          />
+          <iframe v-if="savedIncident" class="h-64 m-5" :src="handBillUrl" />
         </Card>
       </Step>
       <Step :name="$t('incidentBuilder.notifications')"></Step>
@@ -242,6 +235,22 @@ export default {
       this.savedAniIncidents = this.savedAniIncidents.filter(
         (aniIncident) => aniIncident.id !== id,
       );
+    },
+  },
+  computed: {
+    handBillUrl() {
+      if (this.savedIncident) {
+        return `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.savedIncident.id}/handbill`;
+      }
+      return null;
+    },
+    currentIncidentLocation() {
+      if (this.savedIncident && this.savedIncident.locations.length) {
+        return this.savedIncident.locations[
+          this.savedIncident.locations.length - 1
+        ];
+      }
+      return null;
     },
   },
 };

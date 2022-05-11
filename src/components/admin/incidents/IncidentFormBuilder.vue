@@ -23,14 +23,14 @@
         @deleteItem="list = list.filter((f) => f.field_key !== $event)"
         @update="updateField"
         @change="
-          () => {
-            list = [...list];
+          (value) => {
+            list = [...value];
             list.forEach((field) => {
               if (!field.children) {
                 field.children = [];
               }
             });
-            $emit('onUpdateForm', list);
+            $emit('onUpdateForm', value);
           }
         "
       />

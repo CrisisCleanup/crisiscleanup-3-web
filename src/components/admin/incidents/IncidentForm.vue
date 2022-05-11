@@ -83,11 +83,11 @@
         {{ $t('incidentBuilder.auto_contact') }}
       </base-checkbox>
 
-      <base-checkbox v-model="currentAni.turn_on_release" class="mb-3">
+      <base-checkbox v-model="currentIncident.turn_on_release" class="mb-3">
         {{ $t('incidentBuilder.turn_on_release') }}
       </base-checkbox>
 
-      <base-checkbox v-model="currentAni.is_archived" class="mb-3">
+      <base-checkbox v-model="currentIncident.is_archived" class="mb-3">
         {{ $t('incidentBuilder.archived') }}
       </base-checkbox>
     </div>
@@ -119,6 +119,7 @@
         <form-select
           :value="currentAni.anis"
           :options="aniList"
+          :key="aniList"
           searchable
           multiple
           class="bg-white flex-grow mr-2"
@@ -134,12 +135,19 @@
           :placeholder="$t('incidentBuilder.phone_numbers')"
         />
         <form-select
-          v-model="currentIncident.timezone"
+          v-model="currentAni.timezone"
           :options="timezoneNames"
           class="w-44"
           :placeholder="$t('incidentBuilder.timezone')"
           searchable
           select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
+        />
+        <ccu-icon
+          :alt="$t('~~Add ani')"
+          type="active"
+          size="medium"
+          class="ml-3 min-w-max"
+          @click.native="addNewAni"
         />
       </div>
       <div class="form-row flex">
@@ -218,8 +226,11 @@
   </form>
 </template>
 <script>
+import { parsePhoneNumber } from 'libphonenumber-js';
 import FloatingInput from '@/components/FloatingInput';
 import { formatNationalNumber } from '@/filters';
+import { DialogsMixin } from '@/mixins';
+import { getErrorMessage } from '@/utils/errors';
 
 const INCIDENT_TYPES = [
   'contaminated_water',
@@ -243,6 +254,7 @@ const INCIDENT_TYPES = [
 export default {
   name: 'IncidentForm',
   components: { FloatingInput },
+  mixins: [DialogsMixin],
   data() {
     return {
       currentIncident: {
@@ -292,6 +304,46 @@ export default {
         number: formatNationalNumber(String(ani.ani)),
       };
     });
+  },
+  methods: {
+    async addNewAni() {
+      const result = await this.$prompt({
+        title: this.$t('~~Add New Ani'),
+        content: this.$t(
+          '~~Please enter a new phone number with country and area code',
+        ),
+      });
+
+      if (result) {
+        let parsedPhoneNumber;
+        try {
+          parsedPhoneNumber = parsePhoneNumber(result);
+        } catch (e) {
+          await this.$toasted.error(e.message);
+          return;
+        }
+        try {
+          const { data } = await this.$http.post(
+            `${process.env.VUE_APP_API_BASE_URL}/ani`,
+            {
+              ani: parsedPhoneNumber.nationalNumber,
+              area_code: parsedPhoneNumber.nationalNumber.slice(0, 3),
+            },
+          );
+
+          this.aniList = [
+            {
+              id: data.id,
+              number: formatNationalNumber(String(data.ani)),
+            },
+            ...this.aniList,
+          ];
+          this.currentAni.anis = [data.id, ...this.currentAni.anis];
+        } catch (error) {
+          await this.$toasted.error(getErrorMessage(error));
+        }
+      }
+    },
   },
   watch: {
     currentIncident: {

@@ -19,14 +19,14 @@
     tag="div"
     class="item-container min-w-max"
     group="fields"
-    :list="list"
+    :list="internalList"
     handle=".handle"
     @change="onListChange"
   >
     <div
       class="item-group bg-white"
       :key="field.field_key"
-      v-for="field in list"
+      v-for="field in internalList"
     >
       <div
         class="flex items-center p-1 w-full mb-1 border bg-white"
@@ -236,12 +236,10 @@
         "
         class="item-sub"
         :list="field.children"
-        @deleteItem="
-          field.children = field.children.filter((f) => f.field_key !== $event)
-        "
+        @deleteItem="(value) => deleteItem(field, value)"
+        @change="(value) => onChildChange(field, value)"
         @update="$emit('update', $event)"
-        @change="$emit('change')"
-        :key="JSON.stringify(list)"
+        :key="JSON.stringify(field.children)"
       />
       <ItemEditor @close="editing = false" v-if="editing" :item="field" />
     </div>
@@ -265,17 +263,28 @@ export default {
   },
   mounted() {
     if (this.list) {
-      this.list.forEach((field) => {
+      this.internalList = [...this.list];
+      this.internalList.forEach((field) => {
         if (!field.children) {
           field.children = [];
         }
       });
     }
   },
+  watch: {
+    list: {
+      handler(value) {
+        this.internalList = [...value];
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   data() {
     return {
       showChildren: {},
       editing: false,
+      internalList: [],
     };
   },
   methods: {
@@ -307,7 +316,22 @@ export default {
         change.added.element.phase = 4;
         change.added.element.children = [];
       }
-      this.$emit('change');
+      this.internalList = [...this.internalList];
+      this.$nextTick(() => {
+        this.$emit('change', this.internalList);
+      });
+    },
+    deleteItem(field, key) {
+      field.children = field.children.filter((f) => f.field_key !== key);
+      this.$nextTick(() => {
+        this.$emit('change', this.internalList);
+      });
+    },
+    onChildChange(field, value) {
+      field.children = [...value];
+      this.$nextTick(() => {
+        this.$emit('change', this.internalList);
+      });
     },
   },
   computed: {
@@ -329,7 +353,7 @@ export default {
     list: {
       required: false,
       type: Array,
-      default: null,
+      default: () => [],
     },
   },
 };

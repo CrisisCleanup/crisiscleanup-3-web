@@ -83,6 +83,23 @@ export default {
     };
   },
   async mounted() {
+    if (this.location) {
+      // this.currentLocation = { ...this.currentLocation, ...this.location };
+
+      await Location.api().fetchById(this.location.location);
+      const location = Location.find(this.location.location);
+      const geojsonFeature = {
+        type: 'Feature',
+        properties: location.attr,
+        geometry: location.poly || location.geom || location.point,
+      };
+      L.geoJSON(geojsonFeature, {
+        weight: '1',
+      }).addTo(this.locationLayer);
+
+      this.currentLocation = location;
+    }
+
     this.$nextTick(async () => {
       this.map = L.map('incident-map', {
         zoomControl: false,
@@ -94,23 +111,6 @@ export default {
       }).addTo(this.map);
 
       this.locationLayer.addTo(this.map);
-
-      if (this.location) {
-        // this.currentLocation = { ...this.currentLocation, ...this.location };
-
-        await Location.api().fetchById(this.location.location);
-        const location = Location.find(this.location.location);
-        const geojsonFeature = {
-          type: 'Feature',
-          properties: location.attr,
-          geometry: location.poly || location.geom || location.point,
-        };
-        L.geoJSON(geojsonFeature, {
-          weight: '1',
-        }).addTo(this.locationLayer);
-
-        this.currentLocation = location;
-      }
     });
   },
   methods: {
