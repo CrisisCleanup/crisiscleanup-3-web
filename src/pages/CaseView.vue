@@ -317,12 +317,7 @@
         :key="worksite.files"
         class="px-3 pb-3"
       />
-      <div
-        class="
-        case-action
-
-        "
-      >
+      <div class="case-action">
         <base-button
           v-if="workTypesClaimedByOrganization.length > 0"
           size="medium"
@@ -374,15 +369,15 @@
     </div>
     <div
       class="
-          bottom-action
-          bg-white
-          p-3
-          border border-r-0 border-gray-300
-          card-footer
-          flex
-          justify-center
-          items-center
-        "
+        bottom-action
+        bg-white
+        p-3
+        border border-r-0 border-gray-300
+        card-footer
+        flex
+        justify-center
+        items-center
+      "
     >
       <base-button
         v-if="workTypesClaimedByOrganization.length > 0"
@@ -390,10 +385,10 @@
         class="m-1 text-black p-3 px-4 border-2 border-black"
         :text="$t('actions.unclaim')"
         :action="
-            () => {
-              return unclaimWorkType();
-            }
-          "
+          () => {
+            return unclaimWorkType();
+          }
+        "
       />
       <base-button
         v-if="workTypesUnclaimed.length > 0"
@@ -402,10 +397,10 @@
         class="m-1 text-black p-3 px-4"
         :text="$t('actions.claim')"
         :action="
-            () => {
-              showingClaimModal = true;
-            }
-          "
+          () => {
+            showingClaimModal = true;
+          }
+        "
       />
       <base-button
         v-if="workTypesClaimedByOthersUnrequested.length > 0"
@@ -413,11 +408,11 @@
         class="m-1 text-black p-3 px-4 border-2 border-black"
         :text="$t('actions.request')"
         :action="
-            () => {
-              requestingWorkTypes = true;
-              initialWorkTypeRequestSelection = [];
-            }
-          "
+          () => {
+            requestingWorkTypes = true;
+            initialWorkTypeRequestSelection = [];
+          }
+        "
       />
       <base-button
         size="medium"
@@ -426,10 +421,10 @@
         data-cy="caseview-actions-done"
         :text="$t('actions.done')"
         :action="
-            () => {
-              $emit('closeWorksite');
-            }
-          "
+          () => {
+            $emit('closeWorksite');
+          }
+        "
       />
     </div>
 
