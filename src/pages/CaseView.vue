@@ -319,13 +319,8 @@
       />
       <div
         class="
-          bg-white
-          p-3
-          border border-r-0 border-gray-300
-          card-footer
-          flex
-          justify-center
-          items-center
+        case-action
+
         "
       >
         <base-button
@@ -376,6 +371,66 @@
           "
         />
       </div>
+    </div>
+    <div
+      class="
+          bottom-action
+          bg-white
+          p-3
+          border border-r-0 border-gray-300
+          card-footer
+          flex
+          justify-center
+          items-center
+        "
+    >
+      <base-button
+        v-if="workTypesClaimedByOrganization.length > 0"
+        size="medium"
+        class="m-1 text-black p-3 px-4 border-2 border-black"
+        :text="$t('actions.unclaim')"
+        :action="
+            () => {
+              return unclaimWorkType();
+            }
+          "
+      />
+      <base-button
+        v-if="workTypesUnclaimed.length > 0"
+        size="medium"
+        variant="solid"
+        class="m-1 text-black p-3 px-4"
+        :text="$t('actions.claim')"
+        :action="
+            () => {
+              showingClaimModal = true;
+            }
+          "
+      />
+      <base-button
+        v-if="workTypesClaimedByOthersUnrequested.length > 0"
+        size="medium"
+        class="m-1 text-black p-3 px-4 border-2 border-black"
+        :text="$t('actions.request')"
+        :action="
+            () => {
+              requestingWorkTypes = true;
+              initialWorkTypeRequestSelection = [];
+            }
+          "
+      />
+      <base-button
+        size="medium"
+        variant="solid"
+        class="m-1 text-black p-3 px-4"
+        data-cy="caseview-actions-done"
+        :text="$t('actions.done')"
+        :action="
+            () => {
+              $emit('closeWorksite');
+            }
+          "
+      />
     </div>
 
     <modal v-if="showingClaimModal" modal-classes="bg-white max-w-lg shadow">
@@ -746,9 +801,22 @@ export default {
   overflow: auto;
 }
 
+.case-action {
+  @apply hidden;
+}
+
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .intake-view {
     height: 200%;
+  }
+  .bottom-action {
+    @apply hidden;
+  }
+  .case-action {
+    @apply block bg-white p-3
+    border border-r-0 border-gray-300
+    flex
+    justify-between;
   }
 }
 

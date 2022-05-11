@@ -357,16 +357,7 @@
           @photosChanged="reloadWorksite"
         />
       </template>
-      <div
-        class="
-          bg-white
-          p-3
-          border border-r-0 border-gray-300
-          card-footer
-          flex
-          justify-between
-        "
-      >
+      <div class="case-action">
         <base-button
           size="medium"
           class="flex-grow m-1 border-2 border-black"
@@ -396,6 +387,46 @@
           :text="$t('actions.save_claim')"
         />
       </div>
+    </div>
+    <div
+      class="
+        bottom-action
+        bg-white
+        p-3
+        border border-r-0 border-gray-300
+        card-footer
+        flex
+        justify-between
+      "
+    >
+      <base-button
+        size="medium"
+        class="flex-grow m-1 border-2 border-black"
+        variant="text"
+        :action="
+          () => {
+            clearWorksiteStorage();
+            $emit('closeWorksite');
+          }
+        "
+        :text="$t('actions.cancel')"
+      />
+      <base-button
+        size="medium"
+        variant="solid"
+        data-cy="worksite-formaction-save"
+        class="flex-grow m-1 text-black"
+        :action="saveWorksite"
+        :text="$t('actions.save')"
+      />
+      <base-button
+        v-if="!disableClaimAndSave"
+        size="medium"
+        variant="solid"
+        class="flex-grow m-1 text-black"
+        :action="claimAndSaveWorksite"
+        :text="$t('actions.save_claim')"
+      />
     </div>
   </form>
   <div v-else class="flex items-center justify-center h-full w-full">
@@ -1222,9 +1253,23 @@ export default {
   overflow: auto;
 }
 
+.case-action {
+  @apply hidden;
+}
+
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .intake-form {
     height: 145%;
+  }
+  .bottom-action {
+    @apply hidden;
+  }
+  .case-action {
+    @apply block bg-white p-3
+    border border-r-0 border-gray-300
+    card-footer
+    flex
+    justify-between;
   }
 }
 
