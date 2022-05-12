@@ -4,18 +4,14 @@
     :class="{
       'cases-container-grid--full': $mq === 'sm',
       'grid-cols-1': !showCaseForm,
-      'cases-container-grid': showCaseForm,
+      'grid-cols-2': showCaseForm,
     }"
   >
     <div v-if="isCasesOnly || $mq !== 'sm'">
       <div class="cases-grid relative">
         <div
           class="p-3 border border-gray-300 bg-white"
-          :class="
-            showLegend
-              ? 'card-header'
-              : `w-16 ml-auto ${showCaseForm ? '' : 'mr-16'}`
-          "
+          :class="showLegend ? 'card-header' : 'w-16'"
         >
           <div class="flex">
             <div
@@ -455,15 +451,7 @@
             </div>
             <div
               class="text-crisiscleanup-lightblue-400 underline"
-              :class="
-                showCaseForm
-                  ? showLegend
-                    ? 'legend-toggle'
-                    : ''
-                  : showLegend
-                  ? 'absolute right-16'
-                  : ''
-              "
+              :class="showCaseForm ? (showLegend ? 'legend-toggle' : '') : ''"
             >
               <div
                 class="w-10 ml-auto"
