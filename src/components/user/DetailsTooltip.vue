@@ -6,6 +6,7 @@
   >
     <base-text :style="[nameStyle]" class="details-name" variant="body">
       <span
+        v-if="userItem"
         :class="`${nameClass} tooltip-target cursor-pointer hover:text-primary-dark`"
         >{{ userItem.full_name }}</span
       >
@@ -13,7 +14,7 @@
     /></base-text>
     <template #popover>
       <div class="tooltip-content">
-        <div class="text-base">{{ userItem.full_name }}</div>
+        <div class="text-base" v-if="userItem">{{ userItem.full_name }}</div>
         <div class="text-xs">{{ userItem.organization.name }}</div>
         <div class="mt-2">
           <font-awesome-icon icon="envelope" />

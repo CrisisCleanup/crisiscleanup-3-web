@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <div v-if="this.$can('development_mode')">
+      <div v-if="$can && $can('development_mode')">
         <base-button
           class="p-1.5"
           variant="solid"

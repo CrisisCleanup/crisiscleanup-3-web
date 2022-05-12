@@ -59,7 +59,7 @@
           @submit.prevent="acceptInvite"
           v-else
         >
-          <div class="text-2xl font-light">
+          <div class="text-2xl font-light" v-if="invitation">
             {{
               $t('invitationSignup.user_invited_join_ccu', {
                 user: invitation.inviter,
