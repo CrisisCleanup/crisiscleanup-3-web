@@ -228,7 +228,7 @@
           @geocoded="addMarkerToMap"
         />
         <transition name="slide-fade">
-          <div class="absolute mt-12" style="z-index: 1004">
+          <div class="absolute mt-12" :class="$mq === 'sm' ? 'right-0' : ''" style="z-index: 1004">
             <tabs
               :details="false"
               v-if="caller && $mq !== 'sm'"
@@ -929,6 +929,6 @@ export default {
 }
 
 .phone-button {
-  @apply shadow w-12 h-12 my-1 bg-white cursor-pointer;
+  @apply shadow w-20 h-20 sm:w-12 sm:h-12 my-2 sm:my-1 bg-white cursor-pointer;
 }
 </style>
