@@ -414,7 +414,7 @@
                 icon="phone-history"
                 icon-size="large"
                 icon-class="p-1"
-                component-class="sm:w-156 sm:-ml-156"
+                component-class="sm:w-156"
                 v-if="callHistory"
               >
                 <template v-slot:component>

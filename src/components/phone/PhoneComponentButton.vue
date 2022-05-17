@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-full h-full" @click="toggleComponent">
+    <div class="w-full h-full z-40" @click="toggleComponent">
       <slot name="button">
         <div class="w-full h-full flex items-center justify-center">
           <ccu-icon
@@ -13,11 +13,11 @@
       </slot>
     </div>
     <div
-      class="phone-component fixed mt-12 ml-12"
+      class="phone-component fixed -mt-48 sm:mt-12 ml-12 z-30"
       :style="{ top: top }"
       :class="[
         componentClass,
-        $mq === 'sm' ? 'w-120 -ml-120' : 'w-84 md:-ml-84',
+        $mq === 'sm' ? '-ml-144 h-screen w-144' : 'w-84 md:-ml-84',
       ]"
       v-show="showComponent"
     >
