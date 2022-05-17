@@ -1997,7 +1997,7 @@ export default {
 }
 
 .small-font {
-  font-size: 11px;
+  @apply sm:text-xs text-lg;
 }
 
 .map-svg-container svg {

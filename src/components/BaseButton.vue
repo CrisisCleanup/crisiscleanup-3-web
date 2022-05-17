@@ -62,7 +62,7 @@ export default {
     styles() {
       const styles = {
         'large text-h3 font-h3': ['large', 'lg'].includes(this.size),
-        'medium text-sans text-h4 font-h4': ['medium', 'md'].includes(
+        'medium text-sans sm:text-h4 font-h4': ['medium', 'md'].includes(
           this.size,
         ),
         'small text-bodysm font-bodysm': ['small', 'sm'].includes(this.size),
