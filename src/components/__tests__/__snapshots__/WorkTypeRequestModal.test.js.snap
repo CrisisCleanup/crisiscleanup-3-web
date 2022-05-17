@@ -1,0 +1,127 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WorkTypeRequestModal show modal with options 1`] = `
+<modal-stub
+  modal-body-classes="h-72 overflow-scroll border-b"
+  modal-classes="w-2/3"
+  title="workTypeRequestModal.work_type_request"
+>
+  <div
+    class="px-6 py-3"
+  >
+    <div
+      class="font-xs my-2"
+    >
+      <span>
+        workTypeRequestModal.request_modal_instructions
+      </span>
+       
+      <span>
+        workTypeRequestModal.please_add_respectful_note
+      </span>
+       
+      <ul
+        class="my-2 list-disc list-inside"
+      >
+        <li>
+          
+          workTypeRequestModal.reason_member_of_faith_community
+        
+        </li>
+         
+        <li>
+          
+          workTypeRequestModal.reason_working_next_door
+        
+        </li>
+         
+        <li>
+          
+          workTypeRequestModal.reason_we_did_the_work
+        
+        </li>
+      </ul>
+    </div>
+     
+    <div
+      class="font-xs my-2 font-bold"
+    >
+      
+      workTypeRequestModal.contacts
+    
+    </div>
+      
+    <div
+      class="font-xs my-2 font-bold"
+    >
+      
+      workTypeRequestModal.choose_work_types
+    
+    </div>
+      
+    <div
+      class="font-xs my-2 font-bold"
+    >
+      
+      workTypeRequestModal.reason_requested
+    
+    </div>
+     
+    <textarea
+      class="block w-full border outline-none"
+      rows="4"
+    />
+  </div>
+   
+  <div
+    class="p-3 flex justify-end"
+  >
+    <button
+      alt="actions.cancel"
+      class="ml-2 p-3 px-6 mr-1 text-xs border border-black flex items-center justify-center base-button undefined js-actions-cancel"
+      data-cy="js-actions-cancel"
+      title="actions.cancel"
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       actions.cancel 
+      <!---->
+    </button>
+     
+    <button
+      alt="actions.request"
+      class="ml-2 p-3 px-6 text-xs flex items-center justify-center base-button solid js-actions-request"
+      data-cy="js-actions-request"
+      title="actions.request"
+      type="submit"
+    >
+      <!---->
+       
+      <!---->
+       
+      <!---->
+       actions.request 
+      <!---->
+    </button>
+  </div>
+</modal-stub>
+`;
+
+exports[`WorkTypeRequestModal show modal with options 2`] = `Set {}`;
+
+exports[`WorkTypeRequestModal show modal with options and initial selection 1`] = `
+Set {
+  "muck_out",
+}
+`;
+
+exports[`WorkTypeRequestModal show modal with options and multi initial selection 1`] = `
+Set {
+  "muck_out",
+  "tarp",
+}
+`;

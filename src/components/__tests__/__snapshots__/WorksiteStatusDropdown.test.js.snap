@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WorksiteStatusDropdown should render correctly and match snapshot 1`] = `
+<v-popover-stub
+  class="text-xs"
+  placement="bottom-end"
+  popover-class="popover menu"
+>
+  <div
+    class="badge-holder rounded-lg px-2"
+    style="color: rgb(208, 2, 27);"
+  >
+    <!---->
+     
+    <div
+      class="tooltip-target"
+    >
+      
+      status.open_unassigned
+    
+    </div>
+     
+    <font-awesome-icon-stub
+      class="tooltip-target mx-1"
+      icon="chevron-down"
+      size="sm"
+    />
+  </div>
+</v-popover-stub>
+`;
+
+exports[`WorksiteStatusDropdown should render correctly and match snapshot when using icons 1`] = `
+<v-popover-stub
+  class="text-xs"
+  placement="bottom-end"
+  popover-class="popover menu"
+>
+  <div
+    class="badge-holder rounded-lg px-2"
+    style="color: rgb(208, 2, 27);"
+  >
+    <div
+      class="case-svg-container mr-1 flex"
+    />
+     
+    <div
+      class="tooltip-target"
+    >
+      
+      status.open_unassigned
+    
+    </div>
+     
+    <font-awesome-icon-stub
+      class="tooltip-target mx-1"
+      icon="chevron-down"
+      size="sm"
+    />
+  </div>
+</v-popover-stub>
+`;

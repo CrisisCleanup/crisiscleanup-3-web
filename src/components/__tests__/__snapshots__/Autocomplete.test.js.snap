@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Autocomplete should render correctly and match snapshot 1`] = `
+<div
+  class="flex items-center justify-start autocomplete"
+>
+  <vue-autosuggest-stub
+    class="flex-grow relative text-base font-light base"
+    componentattridautosuggest="autosuggest"
+    componentattrprefix="autosuggest"
+    getsuggestionvalue="[Function]"
+    inputprops="[object Object]"
+    limit="Infinity"
+    sectionconfigs="[object Object]"
+    shouldrendersuggestions="[Function]"
+    suggestions="[object Object]"
+  />
+   
+  <!---->
+   
+  <!---->
+</div>
+`;

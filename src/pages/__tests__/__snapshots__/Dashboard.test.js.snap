@@ -1,0 +1,1231 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard should render correctly and match snapshot 1`] = `
+<loader-stub
+  class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto"
+>
+  <div
+    class="flex flex-col"
+  >
+    <div
+      class="flex self-end mr-4"
+    >
+      <redeployrequest-stub />
+       
+      <inviteusers-stub
+        class="mx-1"
+      />
+    </div>
+     
+    <div
+      class="flex flex-wrap"
+    >
+      <div
+        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
+      >
+        <div
+          class="bg-crisiscleanup-lightblue-100 rounded-lg shadow-lg p-5"
+        >
+          <div
+            class="flex flex-row items-center"
+          >
+            <div
+              class="flex-shrink pr-4"
+            >
+              <div
+                class="rounded-full p-1 bg-crisiscleanup-lightblue-900"
+              >
+                <img
+                  src="@/assets/icons/cases.svg"
+                  style="height: 50px;"
+                />
+              </div>
+            </div>
+             
+            <div
+              class="flex-1 text-right md:text-center"
+            >
+              <h5
+                class="uppercase text-grey-900"
+              >
+                
+                  dashboard.my_claimed_cases (Texas Flooding, Oct 2018)
+                
+              </h5>
+               
+              <h3
+                class="text-3xl"
+              >
+                
+                  
+                  
+                <span
+                  class="text-green"
+                >
+                  <i
+                    class="fas fa-caret-up"
+                  />
+                </span>
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+       
+      <div
+        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
+      >
+        <div
+          class="bg-crisiscleanup-yellow-100 rounded-lg shadow-lg"
+        >
+          <div
+            class="flex flex-row items-center p-5"
+          >
+            <div
+              class="flex-shrink pr-4"
+            >
+              <div
+                class="rounded-full p-1 bg-crisiscleanup-yellow-900"
+              >
+                <img
+                  src="@/assets/icons/cases.svg"
+                  style="height: 50px;"
+                />
+              </div>
+            </div>
+             
+            <div
+              class="flex-1 text-right md:text-center"
+            >
+              <h5
+                class="uppercase text-grey-900"
+              >
+                
+                  dashboard.total_claimed (Texas Flooding, Oct 2018)
+                
+              </h5>
+               
+              <h3
+                class="text-3xl"
+              >
+                
+                  0
+                  
+                <span
+                  class="text-base"
+                >
+                  
+                    (NaN
+                    dashboard.of_total)
+                  
+                </span>
+                 
+                <span
+                  class="text-orange"
+                >
+                  <i
+                    class="fas fa-exchange-alt"
+                  />
+                </span>
+              </h3>
+            </div>
+          </div>
+           
+          <div
+            class="
+                bottom-0
+                left-0
+                border-b-4
+                rounded-b-lg
+                border-yellow-600
+              "
+          />
+        </div>
+      </div>
+       
+      <div
+        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
+      >
+        <div
+          class="bg-orange-400 rounded-lg shadow-lg"
+        >
+          <div
+            class="flex flex-row items-center p-5"
+          >
+            <div
+              class="flex-shrink pr-4"
+            >
+              <div
+                class="rounded-full p-1 bg-orange-600"
+              >
+                <img
+                  src="@/assets/icons/cases.svg"
+                  style="height: 50px;"
+                />
+              </div>
+            </div>
+             
+            <div
+              class="flex-1 text-right md:text-center"
+            >
+              <h5
+                class="uppercase text-grey-900"
+              >
+                
+                  dashboard.in_progress (Texas Flooding, Oct 2018)
+                
+              </h5>
+               
+              <h3
+                class="text-3xl"
+              >
+                
+                  0
+                  
+                <span
+                  class="text-base"
+                >
+                  
+                    (NaN
+                    dashboard.of_total)
+                  
+                </span>
+                 
+                <span
+                  class="text-yellow-900"
+                >
+                  <i
+                    class="fas fa-caret-up"
+                  />
+                </span>
+              </h3>
+            </div>
+          </div>
+           
+          <div
+            class="
+                bottom-0
+                left-0
+                border-b-4
+                rounded-b-lg
+                border-orange-600
+              "
+          />
+        </div>
+      </div>
+       
+      <div
+        class="w-full md:w-1/2 xl:w-1/4 p-3 cursor-pointer"
+      >
+        <div
+          class="bg-crisiscleanup-green-100 rounded-lg shadow-lg"
+        >
+          <div
+            class="flex flex-row items-center p-5"
+          >
+            <div
+              class="flex-shrink pr-4"
+            >
+              <div
+                class="rounded-full p-1 bg-crisiscleanup-green-900"
+              >
+                <img
+                  src="@/assets/icons/cases.svg"
+                  style="height: 50px;"
+                />
+              </div>
+            </div>
+             
+            <div
+              class="flex-1 text-right md:text-center"
+            >
+              <h5
+                class="uppercase text-grey-900"
+              >
+                
+                  dashboard.closed (Texas Flooding, Oct 2018)
+                
+              </h5>
+               
+              <h3
+                class="text-3xl"
+              >
+                
+                  0
+                  
+                <span
+                  class="text-base"
+                >
+                  
+                    (NaN
+                    dashboard.of_total)
+                  
+                </span>
+              </h3>
+            </div>
+          </div>
+           
+          <div
+            class="bottom-0 left-0 border-b-4 rounded-b-lg border-green-600"
+          />
+        </div>
+      </div>
+    </div>
+     
+    <div
+      class="flex"
+    >
+      <div
+        class="m-4 pt-2 shadow bg-white w-full"
+      >
+        <div
+          class="py-4 px-4 text-gray-500 border-b"
+        >
+          
+            dashboard.my_cases
+          
+        </div>
+         
+        <div
+          class="p-4"
+        >
+          <div
+            class="table-grid w-full"
+          >
+            <div
+              class="header text-crisiscleanup-grey-700 bg-white"
+              style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
+            >
+              <!---->
+               
+              <!---->
+               
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.no
+        
+                </base-text-stub>
+                 
+                <div>
+                  <ccu-icon-stub
+                    alt="actions.sortable"
+                    size="small"
+                    type="updown"
+                  />
+                </div>
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.work_type
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.name
+        
+                </base-text-stub>
+                 
+                <div>
+                  <ccu-icon-stub
+                    alt="actions.sortable"
+                    size="small"
+                    type="updown"
+                  />
+                </div>
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.full_address
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.phone
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+               
+              <div
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
+              >
+                <base-input-stub
+                  input-style="width: 100%"
+                  placeholder="dashboard.no"
+                />
+              </div>
+              <div
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
+              >
+                <form-select-stub
+                  class="w-64 bg-white border h-10 border-crisiscleanup-dark-100"
+                  item-key="value"
+                  label="name_t"
+                  options=""
+                />
+              </div>
+              <div
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
+              >
+                <base-input-stub
+                  input-style="width: 100%"
+                  placeholder="dashboard.name"
+                />
+              </div>
+              <div
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
+              >
+                <base-input-stub
+                  input-style="width: 100%"
+                  placeholder="dashboard.full_address"
+                />
+              </div>
+              <div
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
+              >
+                <base-input-stub
+                  input-style="width: 100%"
+                  placeholder="dashboard.phone"
+                />
+              </div>
+              <div
+                class="
+          p-2
+          border-b
+          flex
+          items-center
+          cursor-pointer
+          bg-crisiscleanup-light-grey
+        "
+              >
+                <!---->
+              </div>
+            </div>
+             
+            <div
+              class="body bg-white relative"
+              style="max-height: 600px; overflow: auto; height: 300px;"
+            >
+              <!---->
+               
+              <div
+                class="hover:bg-crisiscleanup-light-grey"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-wrap w-full"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        linked="true"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+                 
+                <!---->
+              </div>
+              <div
+                class="hover:bg-crisiscleanup-light-grey"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-wrap w-full"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        linked="true"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+                 
+                <!---->
+              </div>
+              <div
+                class="hover:bg-crisiscleanup-light-grey"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-wrap w-full"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        linked="true"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+                 
+                <!---->
+              </div>
+              <div
+                class="hover:bg-crisiscleanup-light-grey"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-wrap w-full"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        linked="true"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+                 
+                <!---->
+              </div>
+              <div
+                class="hover:bg-crisiscleanup-light-grey"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-wrap w-full"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        linked="true"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+                 
+                <!---->
+              </div>
+              <div
+                class="hover:bg-crisiscleanup-light-grey"
+                style="display: grid; grid-template-columns: 0.75fr 2fr 1fr 1fr 1fr 1fr;"
+              >
+                <!---->
+                 
+                <!---->
+                 
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex flex-wrap w-full"
+                  />
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <router-link-stub
+                    tag="div"
+                    to="/incident/99/cases/undefined?showOnMap=true"
+                  >
+                    
+                  
+                
+                  </router-link-stub>
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <!---->
+                   
+                  <!---->
+                </div>
+                <div
+                  class="flex items-center p-2 lg:border-b md:border-b cursor-pointer"
+                >
+                  <div
+                    class="flex"
+                  >
+                    <router-link-stub
+                      tag="div"
+                      to="/incident/99/cases/undefined?showOnMap=true"
+                    >
+                      <ccu-icon-stub
+                        alt="actions.jump_to_case"
+                        class="p-1 py-2 w-8"
+                        linked="true"
+                        size="medium"
+                        type="go-case"
+                      />
+                    </router-link-stub>
+                     
+                    <ccu-icon-stub
+                      alt="actions.print"
+                      class="p-1 py-2 w-8"
+                      size="medium"
+                      type="print"
+                    />
+                  </div>
+                </div>
+                 
+                <!---->
+              </div>
+               
+              <div
+                class="p-2 text-crisiscleanup-grey-700 italic"
+              >
+                
+      info.no_items_found
+    
+              </div>
+            </div>
+             
+            <!---->
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <div
+      class="flex"
+    >
+      <div
+        class="w-full m-4 pt-2 shadow bg-white flex-shrink"
+      >
+        <div
+          class="py-4 px-4 text-gray-500 border-b"
+        >
+          
+            dashboard.case_transfer_requests
+          
+        </div>
+         
+        <div
+          class="py-4 px-4 border-b flex items-center"
+        >
+          <base-button-stub
+            class="mr-2 border-r pr-2 text-primary-dark"
+            size="medium"
+            text="dashboard.inbound_requests"
+            variant="text"
+          />
+           
+          <base-button-stub
+            class="mr-2 border-r pr-2"
+            size="medium"
+            text="dashboard.outbound_requests"
+            variant="text"
+          />
+           
+          <base-button-stub
+            class="mr-2"
+            size="medium"
+            text="dashboard.archived_requests"
+            variant="text"
+          />
+        </div>
+         
+        <div
+          class="p-4"
+        >
+          <div
+            class="table-grid w-full"
+          >
+            <div
+              class="header text-crisiscleanup-grey-700 bg-white"
+              style="display: grid; grid-template-columns: 80px 10% 0.5fr 1fr 1fr 1fr 1fr;"
+            >
+              <!---->
+               
+              <!---->
+               
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.no
+        
+                </base-text-stub>
+                 
+                <div>
+                  <ccu-icon-stub
+                    alt="actions.sortable"
+                    size="small"
+                    type="updown"
+                  />
+                </div>
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.work_type
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.status
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.org_label
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.last_action
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          dashboard.next_action
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+              <div
+                class="p-2 border-b flex items-center cursor-pointer header-column"
+              >
+                <base-text-stub
+                  class="text-crisiscleanup-grey-700"
+                  regular=""
+                  variant="h3"
+                >
+                  
+          
+        
+                </base-text-stub>
+                 
+                <!---->
+              </div>
+               
+              <!---->
+            </div>
+             
+            <div
+              class="body bg-white relative"
+              style="max-height: 600px; overflow: auto; height: 300px;"
+            >
+              <!---->
+                
+              <div
+                class="p-2 text-crisiscleanup-grey-700 italic"
+              >
+                
+      info.no_items_found
+    
+              </div>
+            </div>
+             
+            <!---->
+          </div>
+        </div>
+      </div>
+    </div>
+     
+    <div
+      class="flex"
+    >
+      <div
+        class="w-full m-4 pt-2 shadow bg-white flex-shrink"
+      >
+        <div
+          class="py-4 px-4 text-gray-500 border-b"
+        >
+          
+            dashboard.user_transfer_requests
+          
+        </div>
+         
+        <div
+          class="p-4"
+        >
+          <usertransferrequesttable-stub
+            requests=""
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</loader-stub>
+`;

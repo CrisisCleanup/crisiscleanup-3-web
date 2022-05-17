@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseCheckbox should match snapshot with props 1`] = `
+<label
+  class="checkbox-container"
+  style="display: block; padding-left: 30px;"
+>
+   
+  <input
+    class="checkmark-input"
+    type="checkbox"
+  />
+   
+  <span
+    class="checkmark"
+    style="top: 0px; left: 0px;"
+  />
+</label>
+`;
+
+exports[`BaseCheckbox should render correctly and match snapshot 1`] = `
+<label
+  class="checkbox-container"
+  style="display: block; padding-left: 30px;"
+>
+   
+  <input
+    class="checkmark-input"
+    type="checkbox"
+  />
+   
+  <span
+    class="checkmark"
+    style="top: 0px; left: 0px;"
+  />
+</label>
+`;

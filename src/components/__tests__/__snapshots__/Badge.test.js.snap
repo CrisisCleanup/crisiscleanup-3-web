@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Badge should match snapshot with props 1`] = `
+<div
+  class="badge flex items-center justify-center rounded-full"
+  style="background-color: red; width: 20px; height: 20px;"
+>
+  <div />
+</div>
+`;
+
+exports[`Badge should render correctly and match snapshot 1`] = `
+<div
+  class="badge flex items-center justify-center rounded-full"
+  style="width: 10px; height: 10px;"
+>
+  <div />
+</div>
+`;
