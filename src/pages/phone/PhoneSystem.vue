@@ -228,7 +228,11 @@
           @geocoded="addMarkerToMap"
         />
         <transition name="slide-fade">
-          <div class="absolute mt-12" :class="$mq === 'sm' ? 'right-0' : ''" style="z-index: 1004">
+          <div
+            class="absolute mt-12"
+            :class="$mq === 'sm' ? 'right-0' : ''"
+            style="z-index: 1004"
+          >
             <tabs
               :details="false"
               v-if="caller && $mq !== 'sm'"
