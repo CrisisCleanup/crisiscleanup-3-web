@@ -17,7 +17,7 @@
       :style="{ top: top }"
       :class="[
         componentClass,
-        $mq === 'sm' ? 'w-120 md:-ml-120' : 'w-84 md:-ml-84',
+        $mq === 'sm' ? 'w-120 -ml-120' : 'w-84 md:-ml-84',
       ]"
       v-show="showComponent"
     >
