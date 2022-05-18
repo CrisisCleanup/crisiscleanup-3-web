@@ -13,7 +13,7 @@
       </slot>
     </div>
     <div
-      class="phone-component fixed -mt-48 sm:mt-12 ml-12 z-30"
+      class="phone-component fixed ml-12 z-30"
       :style="{ top: top }"
       :class="[
         componentClass,
@@ -103,6 +103,11 @@ export default {
 .phone-component {
   transform: translateY(-3rem);
   min-height: 10rem;
-  @apply shadow bg-gray-200;
+  @apply shadow bg-gray-200 sm:mt-24;
+}
+@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+  .phone-component {
+    @apply mt-16;
+  }
 }
 </style>
