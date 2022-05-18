@@ -34,7 +34,9 @@
           "
         />
       </div>
-      <slot name="component"></slot>
+      <div class="mt-10 sm:mt-0">
+        <slot name="component"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -100,6 +102,7 @@ export default {
 <style scoped>
 .phone-component {
   transform: translateY(-3rem);
-  @apply shadow bg-white;
+  min-height: 10rem;
+  @apply shadow bg-gray-200;
 }
 </style>

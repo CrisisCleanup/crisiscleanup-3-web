@@ -263,7 +263,7 @@
               >
                 <template v-slot:component>
                   <ManualDialer
-                    class="bg-white p-2"
+                    class="p-2"
                     style="z-index: 1002"
                     @onDial="dialManualOutbound"
                     :dialing="dialing"
@@ -414,7 +414,7 @@
                 icon="phone-history"
                 icon-size="large"
                 icon-class="p-1"
-                component-class="sm:w-156"
+                component-class="w-120 md:-ml-120"
                 v-if="callHistory"
               >
                 <template v-slot:component>
