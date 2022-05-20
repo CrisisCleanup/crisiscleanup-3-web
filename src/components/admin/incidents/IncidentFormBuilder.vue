@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="flex flex-col sm:flex-row">
     <div class="flex flex-col flex-1 mx-1">
       <form-select
         :value="selectedIncidentTemplate"
