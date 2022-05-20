@@ -24,21 +24,21 @@
         <div class="mt-8 text-base">{{ $t('locationVue.access') }}</div>
         <div class="flex flex-wrap mt-2">
           <base-radio
-            class="mr-4"
+            class="m-4"
             label="shared"
             :name="$t('locationVue.shared')"
             :value="currentLocation.shared"
             @change="currentLocation.shared = $event"
           />
           <base-radio
-            class="mr-4"
+            class="m-4"
             label="private"
             :name="$t('locationVue.private')"
             :value="currentLocation.shared"
             @change="currentLocation.shared = $event"
           />
           <base-radio
-            class="mr-4"
+            class="m-4"
             label="public"
             :name="$t('locationVue.public')"
             :value="currentLocation.shared"
