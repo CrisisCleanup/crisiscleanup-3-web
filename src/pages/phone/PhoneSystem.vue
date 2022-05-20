@@ -126,7 +126,7 @@
       :select-case="selectCase"
       :worksite-id="worksiteId"
     />
-    <div class="call-status">
+    <div :class="caller ? 'call-status' : ''">
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
@@ -183,7 +183,6 @@
         <tabs
           :details="false"
           v-if="caller && $mq === 'sm'"
-          class="status"
           style="z-index: 1003"
           ref="tabs"
           @mounted="setTabs"

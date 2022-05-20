@@ -19,7 +19,7 @@
           <div v-for="(item, idx) in section.values" :key="idx">
             <div
               class="m-1 p-1 rounded cursor-pointer"
-              :class="item.value === status ? '' : 'opacity-75'"
+              :class="item.value === status ? '' : 'opacity-70'"
               :style="`background: ${section.color}`"
               @click="status = item.value"
             >
