@@ -693,12 +693,9 @@ export default {
 .leaflet-heatmap-layer {
   opacity: 0.5;
 }
-.legend-lanscape {
-  @apply h-24;
-}
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .legend-landscape {
-    @apply right-0 h-12;
+    @apply right-0;
   }
 }
 </style>
