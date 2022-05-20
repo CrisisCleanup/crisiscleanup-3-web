@@ -15,10 +15,7 @@
     <div
       class="phone-component fixed ml-12 z-30"
       :style="{ top: top }"
-      :class="[
-        componentClass,
-        $mq === 'sm' ? '-ml-144 h-screen w-144' : 'w-84 md:-ml-84',
-      ]"
+      :class="[componentClass, 'w-144 -ml-144 sm:w-180 sm:-ml-180']"
       v-show="showComponent"
     >
       <div class="w-full relative mb-2">
@@ -103,7 +100,8 @@ export default {
 .phone-component {
   transform: translateY(-3rem);
   min-height: 10rem;
-  @apply shadow bg-gray-200 sm:mt-24;
+  max-height: 50rem;
+  @apply shadow-lg bg-white sm:mt-24;
 }
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .phone-component {
