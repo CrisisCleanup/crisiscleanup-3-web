@@ -437,7 +437,7 @@
       <modal
         v-if="showingLocationModal"
         :title="$t('profileOrg.select_location')"
-        modal-style="height: 70%"
+        modal-style="height: 90%"
         modal-classes="w-3/5"
         @close="showingLocationModal = false"
         @ok="saveCurrentLocation"

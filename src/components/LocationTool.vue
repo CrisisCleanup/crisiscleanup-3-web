@@ -46,10 +46,7 @@
         "
       />
     </div>
-    <div
-      class="layers-tool flex-grow relative"
-      style="position: relative; min-height: 400px"
-    >
+    <div class="layers-tool flex-grow relative map-item">
       <div
         ref="buttons"
         class="absolute w-full h-8 ml-4 mt-4 flex"
@@ -791,5 +788,16 @@ export default {
 
 .select__container {
   @apply w-full;
+}
+
+.map-item {
+  position: relative;
+  min-height: 400px;
+}
+
+@media only screen and (max-width: 1223px) and (orientation: landscape) {
+  .map-item {
+    min-height: 200px;
+  }
 }
 </style>
