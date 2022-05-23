@@ -150,4 +150,13 @@ export default {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
 }
+
+@media only screen and (max-width: 1223px) and (orientation: landscape) {
+  .modal-container {
+    height: 95vh;
+  }
+  .modal-footer {
+    @apply -mt-16;
+  }
+}
 </style>

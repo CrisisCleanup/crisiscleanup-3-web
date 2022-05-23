@@ -159,8 +159,7 @@
           </div>
         </div>
         <div
-          class="w-3/4 ml-4 mt-2 flex-grow"
-          style="height: 450px; overflow: auto"
+          class="w-3/4 ml-4 mt-2 flex-grow modal-item"
         >
           <div v-if="currentSection === 'general'" class="flex flex-col">
             <div class="claim-status mb-2">
@@ -836,4 +835,14 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.modal-item {
+  height: 450px;
+  overflow: auto;
+}
+@media only screen and (max-width: 1223px) and (orientation: landscape) {
+  .modal-item {
+    height: 68vh;
+  }
+}
+</style>
