@@ -126,7 +126,7 @@
       :select-case="selectCase"
       :worksite-id="worksiteId"
     />
-    <div>
+    <div :class="caller ? 'call-status' : ''">
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
@@ -183,7 +183,6 @@
         <tabs
           :details="false"
           v-if="caller && $mq === 'sm'"
-          class="bg-white md:w-96 md:-ml-96 mt-1 h-84"
           style="z-index: 1003"
           ref="tabs"
           @mounted="setTabs"
@@ -228,11 +227,15 @@
           @geocoded="addMarkerToMap"
         />
         <transition name="slide-fade">
-          <div class="absolute mt-12" style="z-index: 1004">
+          <div
+            class="absolute mt-12"
+            :class="$mq === 'sm' ? 'right-0' : ''"
+            style="z-index: 1004"
+          >
             <tabs
               :details="false"
               v-if="caller && $mq !== 'sm'"
-              class="bg-white md:w-96 md:-ml-96 mt-1 h-84"
+              class="bg-white tabs mt-1 h-180"
               style="z-index: 1003"
               ref="tabs"
               @mounted="setTabs"
@@ -259,7 +262,7 @@
               >
                 <template v-slot:component>
                   <ManualDialer
-                    class="bg-white p-2"
+                    class="p-2"
                     style="z-index: 1002"
                     @onDial="dialManualOutbound"
                     :dialing="dialing"
@@ -410,7 +413,6 @@
                 icon="phone-history"
                 icon-size="large"
                 icon-class="p-1"
-                component-class="w-156 md:-ml-156"
                 v-if="callHistory"
               >
                 <template v-slot:component>
@@ -445,7 +447,6 @@
                 icon="leaderboard"
                 icon-size="medium"
                 icon-class="p-1"
-                component-class="w-120 md:-ml-120"
               >
                 <template v-slot:component>
                   <Leaderboard />
@@ -929,6 +930,22 @@ export default {
 }
 
 .phone-button {
-  @apply shadow w-12 h-12 my-1 bg-white cursor-pointer;
+  @apply shadow w-20 h-20 sm:w-12 sm:h-12 my-2 sm:my-1 bg-white cursor-pointer;
+}
+.tabs {
+  width: 57rem;
+  margin-left: -57rem;
+}
+.status {
+  @apply bg-white sm:w-96 sm:-ml-96 mt-1 h-84;
+}
+@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+  .tabs {
+    width: 38rem;
+    margin-left: -38rem;
+  }
+  .call-status {
+    @apply -mt-40;
+  }
 }
 </style>

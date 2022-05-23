@@ -1,7 +1,16 @@
 <template>
   <div class="p-10">
     <div
-      class="w-3/5 border-primary-dark h-20 border-2 my-4 flex items-center p-2"
+      class="
+        sm:w-3/5
+        border-primary-dark
+        h-20
+        border-2
+        my-4
+        flex
+        items-center
+        p-2
+      "
     >
       <span class="text-5xl text-primary-dark mr-4">&#9888;</span>
       <div>
@@ -17,7 +26,7 @@
     <base-input
       :value="organizations.search"
       icon="search"
-      class="w-84 my-2"
+      class="sm:w-84 my-2"
       :placeholder="$t('actions.search')"
       @input="
         (value) => {

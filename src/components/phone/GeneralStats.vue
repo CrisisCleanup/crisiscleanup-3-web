@@ -4,7 +4,7 @@
       $t('phoneDashboard.general_statistics')
     }}</base-text>
     <hr />
-    <div class="flex flex-col bg-crisiscleanup-light-grey">
+    <div class="flex flex-col">
       <div class="flex p-2 items-center justify-between">
         <base-text>{{ $t('phoneDashboard.on_phone_now') }}</base-text>
         {{ stats.active || 0 }}

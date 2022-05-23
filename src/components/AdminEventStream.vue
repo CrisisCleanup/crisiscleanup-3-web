@@ -19,7 +19,7 @@
       <li :key="stream.event_key" v-for="stream in eventStream" class="mb-2">
         <div v-if="stream.attr" class="grid grid-flow-col auto-cols-max">
           <div class="bg-gray-500 rounded-full h-4 w-4 mr-2"></div>
-          <span class=""
+          <span class="w-72 sm:w-full"
             ><span v-if="showUser"
               ><span
                 @click="

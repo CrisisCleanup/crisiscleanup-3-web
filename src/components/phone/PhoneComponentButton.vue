@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-full h-full" @click="toggleComponent">
+    <div class="w-full h-full z-40" @click="toggleComponent">
       <slot name="button">
         <div class="w-full h-full flex items-center justify-center">
           <ccu-icon
@@ -13,12 +13,9 @@
       </slot>
     </div>
     <div
-      class="phone-component fixed mt-12 ml-12"
+      class="phone-component fixed ml-12 z-30"
       :style="{ top: top }"
-      :class="[
-        componentClass,
-        $mq === 'sm' ? 'w-120 md:-ml-120' : 'w-84 md:-ml-84',
-      ]"
+      :class="[componentClass, 'w-144 -ml-144 sm:w-180 sm:-ml-180']"
       v-show="showComponent"
     >
       <div class="w-full relative mb-2">
@@ -34,7 +31,9 @@
           "
         />
       </div>
-      <slot name="component"></slot>
+      <div class="mt-10 sm:mt-0">
+        <slot name="component"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -100,6 +99,13 @@ export default {
 <style scoped>
 .phone-component {
   transform: translateY(-3rem);
-  @apply shadow bg-white;
+  min-height: 10rem;
+  max-height: 50rem;
+  @apply shadow-lg bg-white sm:mt-24;
+}
+@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+  .phone-component {
+    @apply mt-16;
+  }
 }
 </style>

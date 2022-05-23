@@ -1641,6 +1641,7 @@ export default {
     },
 
     async displayWorksite(record) {
+      this.showCaseForm = true;
       await this.$router.push(
         `/incident/${this.currentIncidentId}/cases/${record.id}`,
       );

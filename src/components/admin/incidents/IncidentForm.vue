@@ -2,15 +2,15 @@
   <form class="p-4">
     <div class="form-row flex w-full">
       <FloatingInput
-        class="mr-2 flex-grow"
+        class="mr-2 w-3/4 sm:w-full"
         :placeholder="$t('incidentBuilder.incident_name')"
         v-model="currentIncident.name"
         required
       />
     </div>
-    <div class="form-row flex w-full">
+    <div class="form-row flex flex-col sm:flex-row w-full">
       <FloatingInput
-        class="mr-2 flex-grow"
+        class="mr-2 w-3/4 sm:w-full"
         :placeholder="$t('incidentBuilder.incident_short_name')"
         v-model="currentIncident.short_name"
         required
@@ -18,7 +18,7 @@
       <form-select
         v-model="currentIncident.timezone"
         :options="timezoneNames"
-        class="w-44 mt-0.5"
+        class="w-3/4 sm:w-44 mt-0.5"
         :placeholder="$t('incidentBuilder.timezone')"
         searchable
         select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
@@ -71,7 +71,7 @@
         :options="incidentTypeOptions"
         searchable
         class="bg-white"
-        select-classes="h-12 border border-crisiscleanup-dark-100"
+        select-classes="w-3/4 sm:w-full h-12 border border-crisiscleanup-dark-100"
         item-key="value"
         label="name_t"
         :placeholder="$t('incidentBuilder.incident_type')"
