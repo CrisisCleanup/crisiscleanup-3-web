@@ -39,4 +39,9 @@ export default {
 .sidebar {
   background-color: #2d2d2d;
 }
+@media only screen and (max-width: 1223px) and (orientation: landscape) {
+  .sidebar {
+    @apply mb-20;
+  }
+}
 </style>
