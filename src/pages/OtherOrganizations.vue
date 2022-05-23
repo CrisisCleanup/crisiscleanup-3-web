@@ -157,7 +157,7 @@ export default {
           title: this.$t('otherOrganizations.name'),
           dataIndex: 'name',
           key: 'name',
-          width: '350px',
+          width: this.isLandscape() ? '2fr' : '350px',
         },
         {
           title: this.$t('otherOrganizations.access_level'),
@@ -238,6 +238,11 @@ export default {
     await this.getOrganizations(this.organizations.meta);
   },
   methods: {
+    isLandscape() {
+      return window.matchMedia(
+        'only screen and (max-device-width: 1223px) and (orientation: landscape)',
+      ).matches;
+    },
     async getOrganizations(data = {}) {
       this.loading = true;
       const pagination = data.pagination || this.organizations.meta.pagination;
