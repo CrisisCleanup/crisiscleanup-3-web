@@ -29,7 +29,7 @@
             </slot>
           </div>
 
-          <div class="modal-body flex-grow relative">
+          <div class="modal-body">
             <ccu-icon
               v-if="closeable && !title"
               :alt="$t('actions.cancel')"
@@ -151,12 +151,19 @@ export default {
   transform: scale(1.1);
 }
 
+.modal-body {
+  @apply flex-grow;
+}
+
 @media only screen and (max-width: 1223px) and (orientation: landscape) {
   .modal-container {
     height: 95vh;
   }
   .modal-footer {
     @apply -mt-16;
+  }
+  .modal-body {
+    @apply h-full;
   }
 }
 </style>

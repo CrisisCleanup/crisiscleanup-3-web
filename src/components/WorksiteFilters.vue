@@ -158,9 +158,7 @@
             >
           </div>
         </div>
-        <div
-          class="w-3/4 ml-4 mt-2 flex-grow modal-item"
-        >
+        <div class="w-3/4 ml-4 mt-2 flex-grow modal-item">
           <div v-if="currentSection === 'general'" class="flex flex-col">
             <div class="claim-status mb-2">
               <div class="my-1 text-base">
