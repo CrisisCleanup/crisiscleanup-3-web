@@ -206,14 +206,11 @@
           </base-checkbox>
         </div>
       </div>
-<<<<<<< HEAD
       <div id="map" class="h-full"></div>
-=======
       <div
         id="map"
         :style="$mq === 'sm' ? 'height: 175%' : 'height: 70%'"
       ></div>
->>>>>>> fix(mapModal): fix issue with map overlay
     </div>
     <div
       v-show="showingPopup"
