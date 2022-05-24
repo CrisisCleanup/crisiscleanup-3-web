@@ -15,7 +15,7 @@
     <div
       class="phone-component fixed ml-12 z-30"
       :style="{ top: top }"
-      :class="[componentClass, 'w-144 -ml-144 sm:w-180 sm:-ml-180']"
+      :class="[componentClass, 'w-144 -ml-144 sm:w-132 sm:-ml-132']"
       v-show="showComponent"
     >
       <div class="w-full relative mb-2">
