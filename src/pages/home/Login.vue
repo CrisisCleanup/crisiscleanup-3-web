@@ -89,13 +89,17 @@ export default {
     &.grid-container {
       grid:
         [r1] 'logo survivors' [r1end]
-        [r2] 'main main' [r2end]
+        [r2] '. main' [r2end]
         [r3] 'actions actions' [r3end]
         [r4] 'nav nav' [r4end]
         [r5] 'globe globe' [r5end]
         [r6] 'footer footer' [r6end]
         / auto;
-      grid-template-rows: 0.5fr 0.5fr 4fr 1fr;
+      .grid {
+        &--main {
+          @apply -ml-20 w-20;
+        }
+      }
     }
   }
 }
