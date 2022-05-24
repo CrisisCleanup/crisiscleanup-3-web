@@ -124,6 +124,9 @@ export function getWorksiteLayer(
           prevZoom = zoom;
           prevCenter = center;
           worksites.forEach(function (marker) {
+            if (marker.work_types.length === 0) {
+              return;
+            }
             const coords = project([
               marker.location.coordinates[1],
               marker.location.coordinates[0],
