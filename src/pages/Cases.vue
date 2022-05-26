@@ -466,18 +466,37 @@
               "
             >
               <div
-                class="w-10 ml-auto"
+                class="
+                  ml-auto
+                  border-2
+                  rounded-full
+                  w-7
+                  flex
+                  justify-center
+                  cursor-pointer
+                "
                 @click="showLegend = !showLegend"
                 v-if="showLegend"
               >
-                {{ 'Hide' }}
+                <font-awesome-icon class="h-4 m-1 text-black" icon="angle-up" />
               </div>
               <div
-                class="w-10 ml-auto"
+                class="
+                  ml-auto
+                  border-2
+                  rounded-full
+                  w-7
+                  flex
+                  justify-center
+                  cursor-pointer
+                "
                 @click="showLegend = !showLegend"
                 v-else
               >
-                {{ 'Show' }}
+                <font-awesome-icon
+                  class="h-4 m-1 text-black"
+                  icon="angle-down"
+                />
               </div>
             </div>
           </div>
@@ -744,7 +763,6 @@
       @click="showCaseForm = !showCaseForm"
       class="
         absolute
-        top-20
         right-5
         text-h1
         rounded-full
@@ -753,11 +771,12 @@
         w-7
         text-center
         bg-white
-        transform
+        cursor-pointer
       "
-      :class="showCaseForm ? 'rotate-0' : 'rotate-180'"
+      style="top: 5.3rem"
     >
-      >
+      <font-awesome-icon class="h-4" icon="angle-right" v-if="showCaseForm" />
+      <font-awesome-icon class="h-4" icon="angle-left" v-else />
     </div>
     <div
       v-if="
@@ -1641,6 +1660,7 @@ export default {
     },
 
     async displayWorksite(record) {
+      this.showCaseForm = true;
       await this.$router.push(
         `/incident/${this.currentIncidentId}/cases/${record.id}`,
       );
@@ -2068,7 +2088,7 @@ export default {
 
 .cases-container-grid {
   display: grid;
-  grid-template-columns: 4fr minmax(360px, 1fr);
+  grid-template-columns: 4fr minmax(400px, 1fr);
 }
 
 .cases-container-grid--full {

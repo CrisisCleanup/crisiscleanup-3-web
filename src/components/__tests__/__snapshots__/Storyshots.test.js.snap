@@ -3259,7 +3259,7 @@ exports[`Storyshots Elements/Accordion With Card 1`] = `
   <!---->
    
   <div
-    class="bg-white shadow-crisiscleanup-card card h-full"
+    class="shadow-crisiscleanup-card card h-full"
   >
     <div
       class="header"
@@ -3427,7 +3427,7 @@ exports[`Storyshots Elements/Accordion With Components 1`] = `
   <!---->
    
   <div
-    class="bg-white shadow-crisiscleanup-card card h-full"
+    class="shadow-crisiscleanup-card card h-full"
   >
     <div
       class="header"
@@ -35442,7 +35442,7 @@ exports[`Storyshots Elements/Cards/TitledCard Basic 1`] = `
     <!---->
      
     <div
-      class="bg-white shadow-crisiscleanup-card card h-full"
+      class="shadow-crisiscleanup-card card h-full"
     >
       <div
         class="header"
@@ -35505,7 +35505,7 @@ exports[`Storyshots Elements/Cards/TitledCard With Dropdown 1`] = `
     <!---->
      
     <div
-      class="bg-white shadow-crisiscleanup-card card h-full"
+      class="shadow-crisiscleanup-card card h-full"
     >
       <div
         class="header"

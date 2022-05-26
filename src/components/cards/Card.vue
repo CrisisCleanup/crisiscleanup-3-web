@@ -1,7 +1,7 @@
 <template>
   <Loader :overlay="true" :loading="loading">
     <template #content>
-      <div class="bg-white shadow-crisiscleanup-card card h-full">
+      <div class="shadow-crisiscleanup-card card h-full">
         <div class="header" slot="header">
           <div class="header--inner">
             <slot name="header"></slot>

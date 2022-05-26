@@ -175,7 +175,16 @@
     <template v-if="!mapLoading">
       <div
         style="z-index: 1001"
-        class="legend absolute left-0 bottom-0 w-72 bg-white border-2 p-2"
+        class="
+          legend
+          absolute
+          legend-landscape
+          bottom-0
+          w-72
+          bg-white
+          border-2
+          p-2
+        "
         v-if="showingLegend"
       >
         <div class="flex items-center justify-between">
@@ -233,13 +242,12 @@
         class="
           legend
           absolute
-          left-0
+          legend-landscape
           bottom-0
           w-16
           bg-white
           border-2
           p-2
-          h-24
           flex
           justify-center
         "
@@ -684,5 +692,10 @@ export default {
 }
 .leaflet-heatmap-layer {
   opacity: 0.5;
+}
+@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+  .legend-landscape {
+    @apply right-0;
+  }
 }
 </style>
