@@ -191,7 +191,10 @@
             <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
           </tab>
           <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
-            <UpdateStatus class="p-2" @onCompleteCall="completeCall" />
+            <UpdateStatus
+              class="p-2 pr-8 sm:pr-0 w-11/12 sm:w-full"
+              @onCompleteCall="completeCall"
+            />
           </tab>
         </tabs>
         <CaseHistory
