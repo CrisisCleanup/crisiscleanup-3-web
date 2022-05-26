@@ -936,8 +936,8 @@ export default {
   @apply shadow w-20 h-20 sm:w-12 sm:h-12 my-2 sm:my-1 bg-white cursor-pointer;
 }
 .tabs {
-  width: 57rem;
-  margin-left: -57rem;
+  width: 29rem;
+  margin-left: -29rem;
 }
 .status {
   @apply bg-white sm:w-96 sm:-ml-96 mt-1 h-84;
