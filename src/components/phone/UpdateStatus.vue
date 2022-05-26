@@ -13,7 +13,7 @@
     <div class="flex flex-col flex-wrap h-60 text-center">
       <div v-for="(section, index) in sortedValues" :key="index">
         <div>
-          <div :style="`color: ${section.color}`" class="font-bold">
+          <div class="font-bold">
             {{ section.name }}
           </div>
           <div v-for="(item, idx) in section.values" :key="idx">
