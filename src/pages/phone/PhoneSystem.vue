@@ -126,7 +126,7 @@
       :select-case="selectCase"
       :worksite-id="worksiteId"
     />
-    <div :class="caller ? 'call-status' : ''">
+    <div>
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
@@ -231,7 +231,7 @@
         />
         <transition name="slide-fade">
           <div
-            class="absolute mt-12"
+            class="absolute"
             :class="$mq === 'sm' ? 'right-0' : ''"
             style="z-index: 1004"
           >
@@ -251,7 +251,7 @@
               </tab>
             </tabs>
             <div
-              class="flex flex-col mt-1"
+              class="flex flex-col sm:mt-12"
               :class="$mq === 'sm' ? 'right-0' : '-ml-12'"
               style="z-index: 1003"
               ref="phoneButtons"
@@ -946,12 +946,9 @@ export default {
   .tabs {
     width: 38rem;
     margin-left: -38rem;
-    margin-top: 57px;
+    margin-top: -3rem;
     height: 350px;
     @apply overflow-auto;
-  }
-  .call-status {
-    @apply -mt-40;
   }
 }
 </style>
