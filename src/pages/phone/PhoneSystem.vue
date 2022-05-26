@@ -238,7 +238,7 @@
             <tabs
               :details="false"
               v-if="caller && $mq !== 'sm'"
-              class="bg-white tabs mt-1 h-180"
+              class="bg-white tabs mt-1"
               style="z-index: 1003"
               ref="tabs"
               @mounted="setTabs"
