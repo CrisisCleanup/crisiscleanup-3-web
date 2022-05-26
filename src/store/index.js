@@ -4,7 +4,6 @@ import VuexORMAxios from '@vuex-orm/plugin-axios';
 import axios from 'axios';
 import Vue from 'vue';
 import Vuex from 'vuex';
-import WebsocketStore from '@/store/modules/websocket';
 import database from './database';
 import auth from './modules/auth';
 import events from './modules/events';
@@ -47,7 +46,6 @@ export default new Vuex.Store({
     map,
     ui,
     'phone.streams': ConnectStores.StreamsStore,
-    websocket: WebsocketStore,
   },
   plugins: [VuexORM.install(database)],
   strict: debug,

@@ -13,7 +13,7 @@ const getters = {
 
 // actions
 const actions = {
-  async pushEvents({ commit, getters: { getEvents } }) {
+  async pushEvents({ commit, getters: { getEvents } }): Object | null {
     const events = getEvents;
     if (events.length === 0 || process.env.NODE_ENV !== 'development') {
       return null;

@@ -149,7 +149,7 @@ export function getWorksiteLayer(
               );
 
             if (context.displayedWorkTypes) {
-              context.displayedWorkTypes[workType.work_type] = true;
+              context.displayedWorkTypes[workType?.work_type] = true;
             }
 
             const colorsKey = `${workType.status}_${

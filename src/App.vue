@@ -13,22 +13,23 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { defineComponent } from '@vue/composition-api';
 import CCP from '@/components/phone/CCP.vue';
 import Version from '@/components/Version.vue';
-import BannerOverlay from '@/components/notifications/BannerOverlay';
+import BannerOverlay from '@/components/notifications/BannerOverlay.vue';
 import { cachedGet, hash } from '@/utils/promise';
-import PhoneLegacy from './pages/phone_legacy/Index';
+import PhoneLegacy from './pages/phone_legacy/Index.vue';
 
 const defaultLayout = 'authenticated';
-export default {
+export default defineComponent({
   name: 'App',
   components: { PhoneLegacy, CCP, Version, BannerOverlay },
   computed: {
     ...mapGetters('ui', ['currentBanner']),
     layout() {
-      return `${this.$route.meta.layout || defaultLayout}-layout`;
+      return `${this.$route.meta?.layout || defaultLayout}-layout`;
     },
   },
   watch: {
@@ -42,7 +43,7 @@ export default {
       },
     },
   },
-  created() {
+  created(): void {
     if (process.env.NODE_ENV === 'development') {
       this.eventsInterval = setInterval(this.pushCurrentEvents, 2000);
     }
@@ -52,7 +53,7 @@ export default {
       return config;
     });
   },
-  beforeDestroy() {
+  beforeDestroy(): void {
     if (this.eventsInterval) {
       clearInterval(this.eventsInterval);
       this.eventsInterval = undefined;
@@ -70,7 +71,7 @@ export default {
       'setPhases',
       'setPortal',
     ]),
-    async getEnums() {
+    async getEnums(): Promise<void> {
       const enums = await hash({
         statuses: cachedGet(
           `${process.env.VUE_APP_API_BASE_URL}/statuses`,
@@ -124,24 +125,23 @@ export default {
       this.setPhases(enums.phases.data.results);
       this.setPortal(enums.portal.data);
     },
-    async pushCurrentEvents() {
+    async pushCurrentEvents(): Promise<void> {
       if (this.isLoggedIn()) {
         await this.pushEvents();
       }
     },
   },
-  async mounted() {
+  async mounted(): Promise<void> {
     await this.validateBrowser();
     await this.getEnums();
   },
-  data() {
+  data(): any {
     return {
-      eventsInterval: null,
+      eventsInterval: null as any,
     };
   },
-};
+});
 </script>
-
 <style>
 @import '~vue-resize/dist/vue-resize.css';
 @import '~vue-phone-number-input/dist/vue-phone-number-input.css';

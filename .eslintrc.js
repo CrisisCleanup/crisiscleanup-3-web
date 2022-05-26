@@ -7,6 +7,7 @@ const prettierOptions = JSON.parse(
 
 module.exports = {
   parser: 'vue-eslint-parser',
+
   env: {
     jest: true,
     browser: true,
@@ -14,7 +15,9 @@ module.exports = {
     node: true,
     'cypress/globals': true,
   },
+
   plugins: ['vue', 'flowtype', 'cypress'],
+
   extends: [
     'eslint:recommended',
     'airbnb-base',
@@ -26,16 +29,19 @@ module.exports = {
     'plugin:vue-types/recommended',
     'plugin:flowtype/recommended',
   ],
+
   globals: {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
     connect: 'readonly',
   },
+
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@typescript-eslint/parser',
     ecmaVersion: 2018,
     sourceType: 'module',
   },
+
   rules: {
     'import/imports-first': 0,
     'import/extensions': 0,
@@ -61,6 +67,7 @@ module.exports = {
     // Vue specific rules
     'vue/max-attributes-per-line': 'off',
   },
+
   settings: {
     'import/resolver': {
       webpack: {
@@ -68,4 +75,17 @@ module.exports = {
       },
     },
   },
+
+  'extends': [
+    'eslint:recommended',
+    'airbnb-base',
+    'plugin:vue/strongly-recommended',
+    'plugin:prettier/recommended',
+    'prettier/babel',
+    'prettier/vue',
+    'plugin:cypress/recommended',
+    'plugin:vue-types/recommended',
+    'plugin:flowtype/recommended',
+    '@vue/typescript'
+  ]
 };

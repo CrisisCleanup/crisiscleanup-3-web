@@ -18,9 +18,10 @@ import Contact, { ContactActions } from '@/models/phone/Contact';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import Logger from '@/utils/log';
 import * as ACS from '@/services/connect.service';
-import { ACTIONS } from '@/store/modules/websocket';
 import User from '@/models/User';
 import Language from '@/models/Language';
+
+const ACTIONS = {};
 
 /**
  * Enum of states that represent whether a client is currently

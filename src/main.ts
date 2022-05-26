@@ -7,7 +7,6 @@ import VueHooks from '@u3u/vue-hooks';
 import VueCompositionApi from '@vue/composition-api';
 import Vue from 'vue';
 import JsonViewer from 'vue-json-viewer';
-// import '@crisiscleanup/connect-rtc';
 import VueTimers from 'vue-timers';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -49,13 +48,13 @@ import { has, padStart } from 'lodash';
 import { getModule } from 'vuex-module-decorators';
 import Logger from '@/utils/log';
 import PhoneService from '@/services/phone.service';
-import Tab from '@/components/tabs/Tab';
-import Tabs from '@/components/tabs/Tabs';
+import Tab from '@/components/tabs/Tab.vue';
+import Tabs from '@/components/tabs/Tabs.vue';
 import { i18nService } from '@/services/i18n.service';
 import { AuthService } from '@/services/auth.service';
 import { LangOverrideMixin } from '@/mixins';
-import Unauthenticated from '@/layouts/Unauthenticated';
-import Authenticated from '@/layouts/Authenticated';
+import Unauthenticated from '@/layouts/Unauthenticated.vue';
+import Authenticated from '@/layouts/Authenticated.vue';
 import {
   capitalize,
   getColorForStatus,
@@ -74,23 +73,22 @@ import {
   formatNationalNumber,
   formatSeconds,
 } from '@/filters';
-import Tag from '@/components/Tag';
-import Spinner from '@/components/Spinner';
-import Modal from '@/components/Modal';
-import TreeMenu from '@/components/TreeMenu';
-import FormTree from '@/components/FormTree';
-import FormSelect from '@/components/FormSelect';
-import BaseText from '@/components/BaseText';
-import BaseRadio from '@/components/BaseRadio';
-import BaseLink from '@/components/BaseLink';
-import BaseInput from '@/components/BaseInput';
-import BaseIcon from '@/components/BaseIcon';
-import BaseCheckbox from '@/components/BaseCheckbox';
-import BaseButton from '@/components/BaseButton';
-import Badge from '@/components/Badge';
-import Autocomplete from '@/components/Autocomplete';
-import AssessmentTree from '@/components/AssessmentTree';
-import WebsocketStore from '@/store/modules/websocket';
+import Tag from '@/components/Tag.vue';
+import Spinner from '@/components/Spinner.vue';
+import Modal from '@/components/Modal.vue';
+import TreeMenu from '@/components/TreeMenu.vue';
+import FormTree from '@/components/FormTree.vue';
+import FormSelect from '@/components/FormSelect.vue';
+import BaseText from '@/components/BaseText.vue';
+import BaseRadio from '@/components/BaseRadio.vue';
+import BaseLink from '@/components/BaseLink.vue';
+import BaseInput from '@/components/BaseInput.vue';
+import BaseIcon from '@/components/BaseIcon.vue';
+import BaseCheckbox from '@/components/BaseCheckbox.vue';
+import BaseButton from '@/components/BaseButton.vue';
+import Badge from '@/components/Badge.vue';
+import Autocomplete from '@/components/Autocomplete.vue';
+import AssessmentTree from '@/components/AssessmentTree.vue';
 import App from './App.vue';
 import router from './router';
 import store from './store/index';
@@ -252,50 +250,10 @@ axios.interceptors.response.use(
   },
 );
 
-// Setup websocket
-const WS_URL =
-  process.env.VUE_APP_WS_URL || 'wss://socket.dev.crisiscleanup.io';
-Vue.use(VueNativeSocket, WS_URL, {
-  store,
-  format: 'json',
-  reconnection: true, // auto reconnect (after initial connection)
-  reconnectionAttempts: 5,
-  passToStoreHandler: (eventName, event) => {
-    if (!eventName.startsWith('SOCKET_')) return;
-    const Log = Logger({ name: 'WS' });
-    if (!has(window, 'vue.$store')) {
-      Log.debug('store is not ready yet!');
-      return;
-    }
-    let method = 'commit';
-    let target = eventName.toUpperCase();
-    if (target === 'SOCKET_ONOPEN') {
-      window.vue.$store.dispatch('socket/setConnected', { connected: true });
-    }
-    const wsStore = getModule(WebsocketStore, window.vue.$store);
-    if (!wsStore.isConnected) {
-      wsStore.setConnected(true).then(() => Log.debug('recv connection event'));
-    }
-    if (event.data) {
-      const { data, namespace, action } = JSON.parse(event.data);
-      if (!action || Object.keys('action').includes('type')) {
-        Log.debug('Incoming message did not define an action!', event);
-        return;
-      }
-      target = `${namespace}/${action.name}`;
-      Log.debug(`mapped target => ${target}`);
-      if (action.type === 'action') {
-        method = 'dispatch';
-      }
-      window.vue.$store[method](target, data);
-    }
-  },
-});
-
 Vue.prototype.$phoneService = new PhoneService();
 
 // Setup i18n
-const getLanguages = async (tags) => {
+const getLanguages = async (tags: any) => {
   const messages = {};
 
   // eslint-disable-next-line no-restricted-syntax
