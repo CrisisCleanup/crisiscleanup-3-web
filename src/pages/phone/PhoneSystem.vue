@@ -946,6 +946,9 @@ export default {
   .tabs {
     width: 38rem;
     margin-left: -38rem;
+    margin-top: 57px;
+    height: 350px;
+    @apply overflow-auto;
   }
   .call-status {
     @apply -mt-40;
