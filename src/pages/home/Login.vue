@@ -83,4 +83,24 @@ export default {
     }
   }
 }
+@media only screen and (max-width: 1223px) and (orientation: landscape) {
+  .homegrid {
+    height: 100vh;
+    &.grid-container {
+      grid:
+        [r1] 'logo survivors' [r1end]
+        [r2] '. main' [r2end]
+        [r3] 'actions actions' [r3end]
+        [r4] 'nav nav' [r4end]
+        [r5] 'globe globe' [r5end]
+        [r6] 'footer footer' [r6end]
+        / auto;
+      .grid {
+        &--main {
+          @apply -ml-20 w-20;
+        }
+      }
+    }
+  }
+}
 </style>

@@ -8,7 +8,7 @@
         {{ eventName }}
       </base-text>
     </div>
-    <div :class="$mq === 'sm' ? '' : 'epreview__section'">
+    <div :class="$mq !== 'xl' ? '' : 'epreview__section'">
       <div class="relative">
         <base-text variant="h3" class="pb-1">
           {{ $t('eventBuilder.key') }}
