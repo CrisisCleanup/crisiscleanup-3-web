@@ -15,7 +15,7 @@
   </label>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'BaseRadio',
   props: {
@@ -24,7 +24,7 @@ export default {
       default: '',
     },
     value: {
-      type: null,
+      type: String,
       default: '',
     },
     label: {
@@ -49,7 +49,7 @@ export default {
         this.$emit('input', this.label);
         this.$emit('change', this.label);
       },
-    },
+    } as any,
   },
 };
 </script>

@@ -923,31 +923,44 @@
           />
         </template>
       </div>
-      <router-view
-        v-if="!spinning"
-        :key="$route.params.id"
-        :incident-id="`${currentIncidentId}`"
-        :worksite-id="$route.params.id"
-        :incident="currentIncident"
-        :is-editing="isEditingWorksite"
-        @closeWorksite="closeWorksite"
-        @clearWorksite="clearWorksite"
-        @geocoded="addMarkerToMap"
-        @clearMarkers="removeMarkerFromMap"
-        @savedWorksite="savedWorksite"
-        @switchIncident="switchIncident"
-        @navigateToWorksite="
-          (id) => {
-            $router.push(
-              `/incident/${currentIncidentId}/cases/${id}/edit?showOnMap=true`,
-            );
-          }
-        "
-        @reloadTable="reloadTable"
-        @changed="loadWorksite"
-        @reloadMap="reloadMap"
-        @jumpToCase="jumpToCase"
-      />
+      <div v-if="!spinning">
+        <WorksiteMap
+          :key="JSON.stringify(currentQuery)"
+          ref="worksiteMap"
+          class="h-72 p-2"
+          :query="currentQuery"
+          :new-marker="newMarker"
+          :current-filters="filters"
+          @mapMoved="onMapMoved"
+          @onSelectmarker="displayWorksite"
+          @onLoadedMarkers="onLoadedMarkers"
+          v-if="$mq === 'sm'"
+        />
+        <router-view
+          :key="$route.params.id"
+          :incident-id="`${currentIncidentId}`"
+          :worksite-id="$route.params.id"
+          :incident="currentIncident"
+          :is-editing="isEditingWorksite"
+          @closeWorksite="closeWorksite"
+          @clearWorksite="clearWorksite"
+          @geocoded="addMarkerToMap"
+          @clearMarkers="removeMarkerFromMap"
+          @savedWorksite="savedWorksite"
+          @switchIncident="switchIncident"
+          @navigateToWorksite="
+            (id) => {
+              $router.push(
+                `/incident/${currentIncidentId}/cases/${id}/edit?showOnMap=true`,
+              );
+            }
+          "
+          @reloadTable="reloadTable"
+          @changed="loadWorksite"
+          @reloadMap="reloadMap"
+          @jumpToCase="jumpToCase"
+        />
+      </div>
       <div v-else class="h-full w-full items-center justify-center">
         <div class="flex flex-col items-center">
           <spinner />

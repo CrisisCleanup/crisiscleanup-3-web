@@ -14,6 +14,12 @@ export default {
       dialing: false,
     };
   },
+  async mounted() {
+    const callHistoryResponse = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/phone_agents/call_history`,
+    );
+    this.setCallHistory(callHistoryResponse.data);
+  },
   computed: {
     ...mapGetters('phone_legacy', [
       'isTakingCalls',
@@ -72,11 +78,6 @@ export default {
         const { data } = await this.$phoneService.createAgent();
         this.currentAgent = data;
       }
-
-      const callHistoryResponse = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/phone_agents/call_history`,
-      );
-      this.setCallHistory(callHistoryResponse.data);
     },
     async loginPhone(retry = true) {
       await this.loadAgent();
