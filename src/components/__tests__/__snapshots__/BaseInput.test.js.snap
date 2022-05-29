@@ -21,6 +21,7 @@ exports[`BaseInput should render correctly and match snapshot 1`] = `
     pattern=".*"
     placeholder=""
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -47,6 +48,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     placeholder=""
     required="required"
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -73,6 +75,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     placeholder=""
     required="required"
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -99,6 +102,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     placeholder=""
     required="required"
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -125,6 +129,7 @@ exports[`BaseInput should render correctly and match snapshot when required and 
     placeholder=""
     required="required"
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -154,6 +159,7 @@ exports[`BaseInput should render correctly and match snapshot with label 1`] = `
     pattern=".*"
     placeholder=""
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    

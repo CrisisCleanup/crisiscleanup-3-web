@@ -2698,6 +2698,7 @@ exports[`Storyshots Basics/BaseInput Disabled 1`] = `
     pattern=".*"
     placeholder=""
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -2724,6 +2725,7 @@ exports[`Storyshots Basics/BaseInput Disabled Break Glass 1`] = `
     pattern=".*"
     placeholder=""
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -2773,6 +2775,7 @@ exports[`Storyshots Basics/BaseInput Simple 1`] = `
     pattern=".*"
     placeholder=""
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -2798,6 +2801,7 @@ exports[`Storyshots Basics/BaseInput With Icon 1`] = `
     pattern=".*"
     placeholder=""
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -2847,6 +2851,7 @@ exports[`Storyshots Basics/BaseInput With Placeholder 1`] = `
     pattern=".*"
     placeholder="Some placeholder"
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -2877,6 +2882,7 @@ exports[`Storyshots Basics/BaseInput With Sizes 1`] = `
         pattern=".*"
         placeholder=""
         rows="0"
+        style="--height: 40px; --width: 300px;"
         type="search"
       />
        
@@ -2904,6 +2910,7 @@ exports[`Storyshots Basics/BaseInput With Sizes 1`] = `
         pattern=".*"
         placeholder=""
         rows="0"
+        style="--height: 40px; --width: 300px;"
         type="search"
       />
        
@@ -2931,6 +2938,7 @@ exports[`Storyshots Basics/BaseInput With Tooltip 1`] = `
     pattern=".*"
     placeholder=""
     rows="0"
+    style="--height: 40px; --width: 300px;"
     type="search"
   />
    
@@ -34037,7 +34045,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(208, 2, 27);"
+              style="color: rgb(208, 2, 27); background-color: rgba(208, 2, 27, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -34170,7 +34178,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(208, 2, 27);"
+              style="color: rgb(208, 2, 27); background-color: rgba(208, 2, 27, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -34303,7 +34311,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(15, 163, 85);"
+              style="color: rgb(15, 163, 85); background-color: rgba(15, 163, 85, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -34436,7 +34444,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(15, 163, 85);"
+              style="color: rgb(15, 163, 85); background-color: rgba(15, 163, 85, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -34569,7 +34577,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(15, 163, 85);"
+              style="color: rgb(15, 163, 85); background-color: rgba(15, 163, 85, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -34742,7 +34750,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(208, 2, 27);"
+              style="color: rgb(208, 2, 27); background-color: rgba(208, 2, 27, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -34875,7 +34883,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(208, 2, 27);"
+              style="color: rgb(208, 2, 27); background-color: rgba(208, 2, 27, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -35008,7 +35016,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(15, 163, 85);"
+              style="color: rgb(15, 163, 85); background-color: rgba(15, 163, 85, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -35141,7 +35149,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(15, 163, 85);"
+              style="color: rgb(15, 163, 85); background-color: rgba(15, 163, 85, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -35274,7 +35282,7 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
           >
             <div
               class="badge-holder rounded-lg px-1"
-              style="color: rgb(15, 163, 85);"
+              style="color: rgb(15, 163, 85); background-color: rgba(15, 163, 85, 0.239);"
             >
               <div
                 class="case-svg-container mr-1 flex"
@@ -35421,14 +35429,6 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
       </p>
     </div>
   </div>
-</div>
-`;
-
-exports[`Storyshots Elements/Cards/TabbedCard Basic 1`] = `
-<div
-  class="flex flex-grow w-full h-full"
->
-  <!---->
 </div>
 `;
 
@@ -35964,31 +35964,6 @@ exports[`Storyshots Layouts/Loader With Layout 1`] = `
   </div>
    
   <!---->
-</div>
-`;
-
-exports[`Storyshots Layouts/Page With Defaults 1`] = `
-<div
-  class="relative pt-6 bg-crisiscleanup-light-grey h-full overflow-auto"
->
-  <!---->
-   
-  <!---->
-   
-  <h1>
-    Hi
-  </h1>
-</div>
-`;
-
-exports[`Storyshots Layouts/Page With Tabs 1`] = `
-<div
-  class="relative pt-6 bg-crisiscleanup-light-grey h-full overflow-auto"
->
-  <!---->
-   
-  <!---->
-   
 </div>
 `;
 
