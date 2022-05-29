@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts">
+// @ts-nocheck TODO(tabiodun): Fix this file
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { defineComponent } from '@vue/composition-api';
 import CCP from '@/components/phone/CCP.vue';

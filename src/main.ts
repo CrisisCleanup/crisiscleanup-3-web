@@ -1,3 +1,4 @@
+// @ts-nocheck TODO(tabiodun): Fix this file
 // eslint-disable-next-line import/order
 import { version } from '@/../package.json';
 import '@/assets/css/tailwind.css';

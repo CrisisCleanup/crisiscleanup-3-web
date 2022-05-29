@@ -24,8 +24,6 @@
 </template>
 
 <script>
-// @flow
-
 import { computed } from '@vue/composition-api';
 import useSearchEvents from '@/use/events/useSearchEvents';
 import { makeTableColumns } from '@/utils/table';
@@ -49,9 +47,7 @@ export default {
         ['total_uses', '0.3fr'],
       ]),
     );
-    const tableData = computed(() =>
-      items.value.map((e) => e.withTrans<Event>()),
-    );
+    const tableData = computed(() => items.value.map((e) => e.withTrans()));
     const onKeyClick = (key) => {
       context.root.$copyText(key);
       context.root.$toasted.success(

@@ -19,18 +19,18 @@ import VueRouter, { Route } from 'vue-router';
 import { useOnResize } from 'vue-composable';
 import Logger from '@/utils/log';
 
-export type Tab = {|
-  key: string,
-  title?: string,
-  route: string | {},
-|};
+interface Tab {
+  key: string;
+  title?: string;
+  route: string | {};
+}
 
-export type UseTabProps = {|
-  tabs: Tab[],
-  tabContainer: Ref<null | HTMLElement>,
-  tabSelector: Ref<null | HTMLElement>,
-  useRoutes?: boolean,
-|};
+interface UseTabProps {
+  tabs: Tab[];
+  tabContainer: Ref<null | HTMLElement>;
+  tabSelector: Ref<null | HTMLElement>;
+  useRoutes?: boolean;
+}
 
 /**
  * Hook for using a dynamically resizing tab bar.
@@ -74,7 +74,8 @@ export default ({
     // get scale multiplier (ratio of active tab to tab container width)
     const scaleMulti = activeTab.clientWidth / tabContainer.value.clientWidth;
     // selector displacement from left edge
-    const selectOffsetLeft = tabSelector.value.offsetWidth / 2;
+    const selectOffsetLeft =
+      (tabSelector.value && tabSelector.value.offsetWidth / 2) || 0;
     // find the scaled offset and determine distance to left edge of container.
     const selectScaledOffsetDiff = selectOffsetLeft * scaleMulti;
     const selectDistToEdge = selectOffsetLeft - selectScaledOffsetDiff;
@@ -92,7 +93,7 @@ export default ({
   }));
 
   // grab router in case tabs are using routes.
-  let route: null | Ref<Route>;
+  let route: null | Ref<Route> = null;
   let router: null | VueRouter;
   if (useRoutes) {
     const routerHook = useRouter();
@@ -100,7 +101,7 @@ export default ({
     router = routerHook.router;
   }
 
-  const setTab = async (idx: number, newRoute?: Route) => {
+  const setTab = async (idx: number, newRoute?: any) => {
     activeIndex.value = idx;
     if (useRoutes && router && newRoute) {
       try {

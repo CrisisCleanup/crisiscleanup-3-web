@@ -23,17 +23,10 @@
   </div>
 </template>
 
-<script>
-// @flow
+<script lang="ts">
 import VueTypes from 'vue-types';
 import { ref } from '@vue/composition-api';
 import useTabs from '@/use/useTabs';
-
-export type Tab = {|
-  key: string,
-  title?: string,
-  route: string | {},
-|};
 
 /**
  * PageTabBar
@@ -44,13 +37,11 @@ export default {
   name: 'PageTabBar',
   props: {
     tabs: VueTypes.arrayOf(
-      VueTypes.shape(
-        ({
-          key: VueTypes.string.isRequired,
-          title: VueTypes.string,
-          route: VueTypes.oneOfType([VueTypes.string, VueTypes.object]),
-        }: Tab),
-      ),
+      VueTypes.shape({
+        key: VueTypes.string.isRequired,
+        title: VueTypes.string,
+        route: VueTypes.oneOfType([VueTypes.string, VueTypes.object]),
+      }),
     ),
   },
   setup({ tabs }) {
