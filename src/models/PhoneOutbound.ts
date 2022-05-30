@@ -1,38 +1,47 @@
 import { isArray, isNil, omitBy } from 'lodash';
 import CCUModel from '@/models/model';
 
-export default class PhoneOutbound extends CCUModel {
+export default class PhoneOutbound extends CCUModel<PhoneOutbound> {
   static entity = 'phone_outbound';
+
+  phone_number!: string;
+
+  incident_id!: string;
+
+  id!: string;
+
+  dnis1!: string;
 
   static fields() {
     return {
-      id: this.attr(),
-      phone_number: this.attr(),
-      vm_url: this.attr(),
-      call_type: this.attr(),
-      completion: this.attr(),
-      incident_id: this.attr(),
-      inbound_at: this.attr(),
-      created_at: this.attr(),
-      updated_at: this.attr(),
-      locked_at: this.attr(),
-      locked_by: this.attr(),
-      dnis1: this.attr(),
-      dnis2: this.attr(),
-      ani: this.attr(),
-      worksite: this.attr(),
-      pda: this.attr(),
-      language: this.attr(),
-      created_by: this.attr(),
-      updated_by: this.attr(),
-      latest_status: this.attr(),
-      location_name: this.attr(),
-      priority: this.attr(),
-      external_id: this.attr(),
+      id: this.attr(''),
+      phone_number: this.attr(''),
+      vm_url: this.attr(''),
+      call_type: this.attr(''),
+      completion: this.attr(''),
+      incident_id: this.attr(''),
+      inbound_at: this.attr(''),
+      created_at: this.attr(''),
+      updated_at: this.attr(''),
+      locked_at: this.attr(''),
+      locked_by: this.attr(''),
+      dnis1: this.attr(''),
+      dnis2: this.attr(''),
+      ani: this.attr(''),
+      worksite: this.attr(''),
+      pda: this.attr(''),
+      language: this.attr(''),
+      created_by: this.attr(''),
+      updated_by: this.attr(''),
+      latest_status: this.attr(''),
+      location_name: this.attr(''),
+      priority: this.attr(''),
+      external_id: this.attr(''),
     };
   }
 
   async skipOutbound() {
+    // @ts-ignore
     await this.api().post(`/phone_outbound/${this.id}/unlock`, {
       skipped: true,
     });
@@ -130,6 +139,6 @@ export default class PhoneOutbound extends CCUModel {
         const [outbound] = resp.entities.phone_outbound || [];
         return outbound;
       },
-    },
+    } as any,
   };
 }

@@ -1,4 +1,3 @@
-// @flow
 /**
  * useAgentState Hook
  */
@@ -23,9 +22,9 @@ export default ({
   context,
   isTrained,
 }: {
-  agent: AgentClient,
-  context: any,
-  isTrained: boolean,
+  agent: AgentClient;
+  context: any;
+  isTrained: boolean;
 }) => {
   const _agent = ref<AgentClient>(agent);
   const _acwElapsed = ref(0);
@@ -90,7 +89,9 @@ export default ({
    */
   const toggleAgentState = async ({
     userInitiated = false,
-  }: { userInitiated: boolean } = {}) => {
+  }: {
+    userInitiated: boolean;
+  }) => {
     if (!_agent.value) {
       context.root.$log.error(
         'tried to change agent state, but no agent available!',
@@ -106,7 +107,7 @@ export default ({
       }
       return;
     }
-    _agent.value.toggleOnline(null, userInitiated);
+    _agent.value.toggleOnline(undefined, userInitiated);
   };
 
   const acwTimer = useIntervalFn(() => {

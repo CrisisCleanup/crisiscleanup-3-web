@@ -1,4 +1,3 @@
-// @flow
 /**
  * Use Incident Hook
  */
@@ -20,7 +19,7 @@ export default () => {
   );
 
   const setCurrentIncident = async (id: number | string) => {
-    if (parseInt(id) !== parseInt(currentIncidentId.value)) {
+    if (parseInt(id.toString()) !== parseInt(currentIncidentId.value)) {
       await Incident.fetchById(id);
       await User.api().updateUserState({
         incident: id,

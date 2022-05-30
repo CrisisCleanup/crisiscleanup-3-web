@@ -1,11 +1,8 @@
-// @flow
-
 /**
  * AWS Connect Service
  */
 
 import _ from 'lodash';
-import type { ACSEventTopic, ACSCallback, ACSConfig } from '@/services/types';
 import Logger from '@/utils/log';
 
 const Log = Logger({ name: 'connect.service' });
@@ -79,10 +76,7 @@ export const CoreEvents = Object.freeze({
  * @param topic - Topic to bind to.
  * @param handler - Object of handlers.
  */
-export const bindEvents = <T>(
-  topic: ACSEventTopic,
-  handler: { [T]: ACSCallback },
-) => {
+export const bindEvents = (topic, handler) => {
   Object.keys(handler).forEach((key) => {
     if (topic === EventTopics.CORE) {
       connect[topic][key](connect.hitch(handler, handler[key]));
@@ -92,7 +86,7 @@ export const bindEvents = <T>(
   });
 };
 
-const ConfigDefaults: ACSConfig = {
+const ConfigDefaults = {
   ccpUrl: process.env.VUE_APP_AWS_CCP_URL || '',
   region: process.env.VUE_APP_AWS_CCP_REGION || 'us-east-1',
   softphone: {
@@ -118,10 +112,10 @@ export const initConnect = ({
   htmlEl,
   config = {},
 }: {
-  htmlEl: HTMLElement,
-  config?: $Shape<ACSConfig>,
+  htmlEl: HTMLElement;
+  config;
 }): void => {
-  let finalConfig: ACSConfig = ConfigDefaults;
+  let finalConfig = ConfigDefaults;
   if (config !== null) {
     finalConfig = { ...finalConfig, ...config };
   }
@@ -133,16 +127,14 @@ export const initConnect = ({
  * @param contactId - ID of contact to retrieve.
  * @returns {null|connect.Contact}
  */
-export const getContactById = (
-  contactId: string,
-): typeof connect.Contact | null => {
-  const agent: typeof connect.Agent = new connect.Agent();
-  const contacts: typeof connect.Contact[] = agent.getContacts();
+export const getContactById = (contactId: string): connect.Contact | null => {
+  const agent: connect.Agent = new connect.Agent();
+  const contacts: connect.Contact[] = agent.getContacts();
   if (_.isEmpty(contacts)) {
     return null;
   }
   let targContact = contacts.find(
-    (c: typeof connect.Contact) => c.getInitialContactId() === contactId,
+    (c: connect.Contact) => c.getInitialContactId() === contactId,
   );
   if (!targContact) {
     // In the case of an outbound call,
@@ -151,7 +143,7 @@ export const getContactById = (
     // So we will need the current contact ID, rather than the
     // initial.
     targContact = contacts.find(
-      (c: typeof connect.Contact) => c.getContactId() === contactId,
+      (c: connect.Contact) => c.getContactId() === contactId,
     );
     if (targContact) {
       return targContact;
@@ -159,7 +151,7 @@ export const getContactById = (
     // Finally, if the contact ID is provided over websocket
     // before connect (and its an outbound), then just use
     // the current contact who is an outbound.
-    targContact = contacts.find((c: typeof connect.Contact) => {
+    targContact = contacts.find((c: connect.Contact) => {
       const con = c.getInitialConnection();
       return con && con.getType() === 'outbound';
     });
@@ -178,12 +170,10 @@ export const getContactById = (
  * @param contactId
  * @returns {null|void|connect.ConnectionType}
  */
-export const getConnectionByContactId = (
-  contactId: string,
-): typeof connect.Connection | null => {
+export const getConnectionByContactId = (contactId) => {
   const targContact = getContactById(contactId);
   if (targContact === null) return null;
-  const targConnection: typeof connect.ConnectionType =
+  const targConnection: connect.BaseConnection =
     targContact.getInitialConnection();
   return targConnection || null;
 };
@@ -195,17 +185,22 @@ export const getConnectionByContactId = (
  * @returns {Promise<void>}
  */
 export const initAuthGateway = async ({ open = true, loginUrl = '' } = {}) => {
+  const { core }: { core: any } = connect;
   if (!open) {
-    connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
-    if (connect.core.loginWindow) {
-      connect.core.loginWindow.close();
-      connect.core.loginWindow = null;
+    // @ts-ignore
+    core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
+    if (core.loginWindow) {
+      core.loginWindow.close();
+      core.loginWindow = null;
     }
     return;
   }
-  connect.core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
-  connect.core.loginWindow = connect.core
+  // @ts-ignore
+  core.getPopupManager().clear(connect.MasterTopics.LOGIN_POPUP);
+
+  core.loginWindow = core
     .getPopupManager()
+    // @ts-ignore
     .open(loginUrl, connect.MasterTopics.LOGIN_POPUP);
 };
 
@@ -223,16 +218,18 @@ export const setAgentState = (online: boolean = true) => {
     return;
   }
   const connectState = agent.getAgentStates().find((s) => s.type === stateType);
-  agent.setState(connectState, {
-    success: () => {
-      Log.debug(`agent state successfully updated!`);
-      Log.debug(connectState);
-    },
-    failure: () => {
-      Log.error('failed to update agent state!');
-      Log.error(connectState);
-    },
-  });
+  if (connectState) {
+    agent.setState(connectState, {
+      success: () => {
+        Log.debug(`agent state successfully updated!`);
+        Log.debug(connectState);
+      },
+      failure: () => {
+        Log.error('failed to update agent state!');
+        Log.error(connectState);
+      },
+    });
+  }
 };
 
 /**
@@ -247,12 +244,16 @@ export const connectEndpoint = (phoneNumber: string) => {
     return;
   }
 
+  // @ts-ignore
   const client = connect.core.getClient();
-  const endpointOut = new connect.Endpoint(endpoint);
+  const endpointOut = new connect.Endpoint();
+  // @ts-ignore
   delete endpointOut.endpointId;
   const resp = client.call(
+    // @ts-ignore
     connect.ClientMethods.CREATE_OUTBOUND_CONTACT,
     {
+      // @ts-ignore
       endpoint: connect.assertNotNull(endpointOut, 'endpoint'),
       queueARN: agent.getRoutingProfile().defaultOutboundQueue.queueARN,
     },
@@ -274,22 +275,20 @@ export const connectEndpoint = (phoneNumber: string) => {
  * @param contact - contact of current connection.
  * @returns {*}
  */
-export const getAgentVerificationEndpoint = (
-  contact: typeof connect.Contact,
-) => {
+export const getAgentVerificationEndpoint = (contact: connect.Contact) => {
   const agent = new connect.Agent();
   let eps;
   agent.getEndpoints(agent.getAllQueueARNs(), {
     success: (data) => {
       Log.info('retrieved agent endpoints!', data);
       Log.info('queues:', agent.getAllQueueARNs());
-      contact.addConnection(
-        data.endpoints.find((e) => e.name === 'VERIFYQUEUE'),
-        {
+      const endpoint = data.endpoints.find((e) => e.name === 'VERIFYQUEUE');
+      if (endpoint) {
+        contact.addConnection(endpoint, {
           success: () => Log.info('successfully transferred!'),
           failure: () => Log.error('failed to transfer!'),
-        },
-      );
+        });
+      }
 
       eps = data.endpoints;
     },

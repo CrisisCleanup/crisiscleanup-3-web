@@ -1,4 +1,3 @@
-// @flow
 /**
  * Use Contact Hook
  */
@@ -90,7 +89,7 @@ export default () => {
 
   const syncDuration = useIntervalFn(() => {
     if (callConnected.value) {
-      currentContact.value.getCallDuration().then((time) => {
+      currentContact?.value?.getCallDuration().then((time) => {
         if (time > callDuration.value) {
           callDuration.value = time;
         }
@@ -104,7 +103,7 @@ export default () => {
       currentContact.value &&
       !currentContact.value.isReady
     ) {
-      Contact.syncAttributes(currentContact.value.contactId);
+      Contact.syncAttributes(currentContact.value.contactId, null);
     }
   }, 2500);
 

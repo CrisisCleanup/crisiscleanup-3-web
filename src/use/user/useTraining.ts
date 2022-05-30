@@ -1,4 +1,3 @@
-// @flow
 /**
  * Use Training Hook
  */
@@ -14,9 +13,9 @@ import axios from 'axios';
 import { hash } from '@/utils/promise';
 import { TrainingApi, UserTrainingApi } from '@/utils/api';
 
-export type UseTrainingProps = {
-  tests?: number[],
-};
+interface UseTrainingProps {
+  tests?: number[];
+}
 
 /**
  * Use User Training Modules.
@@ -36,19 +35,21 @@ export default ({ tests }: UseTrainingProps = {}) => {
       trainings: axios.get(TrainingApi()),
       userTrainings: axios.get(UserTrainingApi()),
     });
-    pageData.userTrainings.data.results.map((v) =>
+    pageData.userTrainings.data.results.map((v: never) =>
       state.trainings.push(ref(v)),
     );
     const selectedTests = pageData.trainings.data.results.filter((tr) =>
       _tests.includes(tr.id),
     );
-    selectedTests.map((t) => state.userTrainings.push(ref(t)));
+    selectedTests.map((t: never) => state.userTrainings.push(ref(t)));
   };
 
-  const outstandingTrainings = () =>
+  const outstandingTrainings: any = () =>
     computed(() =>
-      state.trainings.filter((tr) => {
-        return !state.userTrainings.find((uTr) => uTr.value.id === tr.value.id);
+      state.trainings.filter((tr: any) => {
+        return !state.userTrainings.find(
+          (uTr: any) => uTr.value.id === tr.value.id,
+        );
       }),
     );
 

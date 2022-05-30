@@ -1,4 +1,3 @@
-// @flow
 /**
  * Use Controller Hook
  */

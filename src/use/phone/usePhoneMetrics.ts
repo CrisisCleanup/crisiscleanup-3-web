@@ -1,4 +1,3 @@
-// @flow
 /**
  * Use Phone Metrics Hook
  */

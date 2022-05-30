@@ -1,40 +1,40 @@
-// @flow
 /**
  * Language Model
  */
-
 import detectBrowserLanguage from 'detect-browser-language';
 import _ from 'lodash';
 import CCUModel from '@/models/model';
 
-export type LanguageType = {|
-  id: number,
-  subtag: string,
-  name_t: string,
-|};
-
-type LanguageTranslationResponse = {|
-  text: string,
-  translated_text: string,
-  source_subtag: string,
-  target_subtag: string,
-|};
+interface LanguageTranslationResponse {
+  text: string;
+  translated_text: string;
+  source_subtag: string;
+  target_subtag: string;
+}
 
 export default class Language extends CCUModel<Language> {
   static entity = 'languages';
 
+  id!: string;
+
+  name_t!: string;
+
+  subtag!: string;
+
   static state() {
-    return ({
+    return {
       _browserLanguage: detectBrowserLanguage(),
-    }: { _browserLanguage: null | string });
+    } as {
+      _browserLanguage: null | string;
+    };
   }
 
   static fields() {
-    return ({
-      id: this.attr(),
+    return {
+      id: this.attr(''),
       subtag: this.attr(null),
       name_t: this.attr(null),
-    }: LanguageType);
+    };
   }
 
   static get browserLanguage() {
@@ -46,12 +46,15 @@ export default class Language extends CCUModel<Language> {
       .first();
   }
 
-  static async fetchBySubtags(subtags: string | string[]) {
-    const _subtags = _.castArray(subtags);
-    const resolved = await _subtags.filter((s) =>
+  static async fetchBySubtags(subtags: string[]) {
+    const _subtags: string[] = _.castArray(subtags);
+
+    const resolved = _subtags.filter((s) =>
       this.query().where('subtag', s).exists(),
     );
+
     const unresolved = _.difference(_subtags, resolved);
+
     if (!_.isEmpty(unresolved)) {
       await this.api().get('/languages', {
         params: {
@@ -60,6 +63,7 @@ export default class Language extends CCUModel<Language> {
         dataKey: 'results',
       });
     }
+
     return subtags.map((s) => this.query().where('subtag', s).first());
   }
 
@@ -75,13 +79,17 @@ export default class Language extends CCUModel<Language> {
     const {
       response: { data },
     }: {
-      response: { data: LanguageTranslationResponse },
+      response: {
+        data: LanguageTranslationResponse;
+      };
     } = await this.api().post(
       `/languages/${locale.subtag}/translate`,
       {
         text,
       },
-      { save: false },
+      {
+        save: false,
+      },
     );
     return data;
   }

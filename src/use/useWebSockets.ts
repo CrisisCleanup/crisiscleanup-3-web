@@ -1,7 +1,7 @@
 import { AuthService } from '@/services/auth.service';
 
 export function useWebSockets(url, name, cb) {
-  const endpoint = process.env.VUE_APP_API_BASE_URL.replace('http', 'ws');
+  const endpoint = process?.env?.VUE_APP_API_BASE_URL?.replace('http', 'ws');
   let socket;
   let send;
 

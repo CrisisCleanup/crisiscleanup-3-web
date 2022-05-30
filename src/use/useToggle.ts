@@ -1,13 +1,12 @@
-// @flow
 /**
  * useToggle Hook
  */
 
 import { ref } from '@vue/composition-api';
 
-export type UseToggleOpts = {
-  state?: boolean,
-};
+interface UseToggleOpts {
+  state?: boolean;
+}
 
 /**
  * Use Toggle Hook.

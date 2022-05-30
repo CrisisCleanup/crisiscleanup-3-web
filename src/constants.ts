@@ -1,10 +1,7 @@
-// @flow
 /**
  * Various Constants
  */
-
 import { snakeCase } from 'lodash';
-
 export const TEXT_VARIANTS = [
   'h1',
   'h2',
@@ -14,7 +11,6 @@ export const TEXT_VARIANTS = [
   'bodysm',
   'bodyxsm',
 ];
-
 export const ICON_MAP = {
   'attention-red': require('@/assets/icons/attention-red.svg'),
   about: require('@/assets/icons/about-us.svg'),
@@ -88,12 +84,11 @@ export const ICON_MAP = {
   plane: require('@/assets/icons/plane.svg'),
   news: require('@/assets/icons/news.svg'),
 };
-/* eslint-enable global-require */
 
+/* eslint-enable global-require */
 export const ICONS = Object.fromEntries(
   Object.entries(ICON_MAP).map(([key]) => [snakeCase(key), key]),
 );
-
 export const ICON_SIZES = [
   'xxs',
   'xs',
@@ -106,22 +101,15 @@ export const ICON_SIZES = [
   'large',
   'xl',
 ];
-
 export const BUTTON_STYLES = ['primary', 'danger', 'warning', 'link', 'bare'];
-
 export const BUTTON_SIZES = {
   SM: 'small',
   MD: 'medium',
   LG: 'large',
 };
-
 export const BUTTON_VARIANTS = {
   SOLID: 'solid',
   OUTLINE: 'outline',
   OUTLINE_DARK: 'outline-dark',
   TEXT: 'text',
 };
-
-export type ButtonVariant = $Values<BUTTON_VARIANTS>;
-export type ButtonSize = $Values<BUTTON_SIZES>;
-export type Icon = $Values<Icons>;

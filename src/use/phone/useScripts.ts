@@ -1,5 +1,4 @@
-// @flow
-
+// @ts-nocheck TODO(tabiodun): Fix this file
 /**
  * Hook for Phone Scripts
  */
@@ -13,17 +12,13 @@ import useUser from '@/use/user/useUser';
 import Incident from '@/models/Incident';
 import Worksite from '@/models/Worksite';
 
-export type UseScriptsProps = {|
-  callType: $Values<typeof CallType>,
-  incident: typeof Incident,
-  recentWorksite?: typeof Worksite,
-|};
+interface UseScriptsProps {
+  callType: typeof CallType;
+  incident: typeof Incident;
+  recentWorksite?: typeof Worksite;
+}
 
-export default ({
-  callType,
-  incident,
-  recentWorksite,
-}: UseScriptsProps = {}) => {
+export default ({ callType, incident, recentWorksite }: UseScriptsProps) => {
   const _callType = wrap(callType);
   const _incident = wrap(incident);
   const _recentWorksite = wrap(recentWorksite);

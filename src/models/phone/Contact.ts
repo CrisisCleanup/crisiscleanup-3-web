@@ -1,10 +1,8 @@
-// @flow
-
 /**
  * Phone Contact model.
  */
 
-import { Fields, Model } from '@vuex-orm/core';
+import { Fields, InstanceOf, Item, Model } from '@vuex-orm/core';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
 import _ from 'lodash';
 import * as Sentry from '@sentry/browser';
@@ -19,7 +17,10 @@ import type {
   RawContactAttributes,
 } from '@/models/phone/types';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
-import * as ACS from '@/services/connect.service';
+import {
+  getContactById,
+  getConnectionByContactId,
+} from '@/services/connect.service';
 import Logger from '@/utils/log';
 import Worksite from '@/models/Worksite';
 import CCUModel from '@/models/model';
@@ -30,6 +31,7 @@ import Language from '@/models/Language';
 import PhoneInbound from '@/models/PhoneInbound';
 import type { CaseType } from '@/store/modules/phone/types';
 import Incident from '@/models/Incident';
+import AgentClient from '@/models/phone/AgentClient';
 
 /**
  * Enum of possible contact states.
@@ -102,9 +104,7 @@ export const ContactAttributes = Object.freeze({
   PROMPT_STATUS: 'PROMPT_STATUS',
 });
 
-export const ContactConnectionMap: {
-  [ContactAction]: ConnectionState,
-} = Object.freeze({
+export const ContactConnectionMap = Object.freeze({
   [ContactActions.PENDING]: ConnectionStates.AGENT_CALLING,
   [ContactActions.CONNECTING]: ConnectionStates.PENDING_CALL,
   [ContactActions.CONNECTED]: ConnectionStates.BUSY,
@@ -124,15 +124,27 @@ export default class Contact extends Model {
 
   static primaryKey: string = 'contactId';
 
-  static fields(): typeof Fields {
-    return ({
-      contactId: this.string(),
-      agentId: this.string(),
-      state: this.string(),
-      action: this.string(),
+  contactId!: string;
+
+  agentId!: string;
+
+  state!: string;
+
+  action!: string;
+
+  connection!: Connection;
+
+  attributes!: any;
+
+  static fields() {
+    return {
+      contactId: this.string(''),
+      agentId: this.string(''),
+      state: this.string(''),
+      action: this.string(''),
       connection: this.hasOne(Connection, 'contactId'),
       attributes: this.attr(null),
-    }: ContactType);
+    };
   }
 
   static state() {
@@ -165,7 +177,7 @@ export default class Contact extends Model {
     return inbound;
   }
 
-  get dnis(): typeof PhoneDnis {
+  get dnis() {
     const { dnis } = Contact.store().state.entities['phone/contact'];
     return dnis;
   }
@@ -184,7 +196,7 @@ export default class Contact extends Model {
     return callType.toLowerCase() === CallType.INBOUND.toLowerCase();
   }
 
-  get callType(): $Values<typeof CallType> {
+  get callType() {
     const _ctype = _.get(
       this.contactAttributes,
       ContactAttributes.CALL_TYPE,
@@ -217,9 +229,7 @@ export default class Contact extends Model {
 
   static syncAttributes(contactId: string, externalAttrs: any) {
     Log.info('syncing contact attributes!');
-    const contact: typeof Contact = Contact.query()
-      .withAllRecursive()
-      .find(contactId);
+    const contact = Contact.query().withAllRecursive().find(contactId);
     if (!contact) {
       Log.info('no contact found! cannot sync attributes.');
       return externalAttrs || {};
@@ -229,7 +239,7 @@ export default class Contact extends Model {
         contact.attributes = _.merge(contact.attributes, externalAttrs);
       });
     }
-    const connectContact = ACS.getContactById(contact.contactId);
+    const connectContact = getContactById(contact.contactId);
     if (connectContact) {
       const attrs = connectContact.getAttributes();
       Log.info('got connect attributes:', attrs);
@@ -292,7 +302,7 @@ export default class Contact extends Model {
         },
       });
     }
-    Contact.syncAttributes(model.contactId);
+    Contact.syncAttributes(model.contactId, null);
     Sentry.setContext(Contact.entity, model.$toJson());
   }
 
@@ -331,7 +341,7 @@ export default class Contact extends Model {
       .withAllRecursive()
       .where('contactId', model.contactId)
       .get();
-    const connectContact = ACS.getContactById(model.contactId);
+    const connectContact = getContactById(model.contactId);
     if (connectContact) {
       connectContact.clear({
         success: () => Log.info('successfully cleared contact!'),
@@ -339,6 +349,7 @@ export default class Contact extends Model {
       });
     }
     if (connection) {
+      // @ts-ignore
       Connection.delete(connection.connectionId)
         .then(() => Log.info('Connection => DELETED'))
         .catch((e) => Log.error('failed to delete connection!', e));
@@ -349,7 +360,7 @@ export default class Contact extends Model {
     // connect will already auto-put the agent back into a routable
     // state, but we also do it to trigger an upstream update.
     const agentModel = Contact.store().$db().model('phone/agent');
-    const agentClient = agentModel
+    const agentClient: Item<InstanceOf<AgentClient>> = agentModel
       .query()
       .withAllRecursive()
       .find(model.agentId);
@@ -404,11 +415,11 @@ export default class Contact extends Model {
       );
       return false;
     }
-    const connection: Connection = Connection.query()
+    const connection = Connection.query()
       .where('contactId', model.contactId)
       .withAllRecursive()
       .first();
-    const voiceConnection = ACS.getConnectionByContactId(model.contactId);
+    const voiceConnection = getConnectionByContactId(model.contactId);
     // Handle agent pending -> contact connecting
     if (
       voiceConnection !== null &&
@@ -418,19 +429,19 @@ export default class Contact extends Model {
       // This occurs post verification, since we now have a 'real' connection.
       Log.info('Agent verified connection, updating!');
       Log.info(
-        `${connection.connectionId} ==> ${voiceConnection.getConnectionId()}`,
+        `${connection?.connectionId} ==> ${voiceConnection.getConnectionId()}`,
       );
       const isNew = model.action === ContactActions.ENTER;
       Connection.update({
-        where: connection.connectionId,
-        data: ({
-          connectionId: connection.connectionId,
+        where: connection?.connectionId,
+        data: {
+          connectionId: connection?.connectionId,
           streamsConnectionId: voiceConnection.getConnectionId(),
           contactId: model.contactId,
           state: isNew
             ? model.initConnectionState
             : ContactConnectionMap[model.action],
-        }: ConnectionType),
+        },
       }).then((c) => Log.debug('connection updated => ', c));
     }
     model
@@ -443,22 +454,25 @@ export default class Contact extends Model {
       );
     // Handle connection states on and after actual connection.
     if (
-      (model.action !== ContactActions.DESTROYED &&
+      (connection &&
+        model.action !== ContactActions.DESTROYED &&
         model.state === ContactStates.ROUTED &&
-        !_.isEmpty(connection.streamsConnectionId)) ||
+        !_.isEmpty(connection?.streamsConnectionId)) ||
       (model.action === ContactActions.CONNECTED && !model.isInbound)
     ) {
       const newState = _.get(
         ContactConnectionMap,
         model.action,
-        connection.state,
+        connection?.state,
       );
-      connection
-        .$update({
-          state: newState,
-        })
-        .then(() => Log.info(`Connection state => ${newState}`))
-        .catch((e) => Log.error(`failed to update connection state!`, e));
+      if (connection) {
+        connection
+          .$update({
+            state: newState,
+          })
+          .then(() => Log.info(`Connection state => ${newState}`))
+          .catch((e) => Log.error(`failed to update connection state!`, e));
+      }
     }
     Sentry.setContext(Contact.entity, model.$toJson());
     return true;
@@ -548,16 +562,14 @@ export default class Contact extends Model {
     });
   }
 
-  static resolveAttributes(contact: typeof Contact) {
-    const {
-      currentOutbound,
-    }: { currentOutbound: null | typeof PhoneOutbound } =
+  static resolveAttributes(contact) {
+    const { currentOutbound }: { currentOutbound: null | PhoneOutbound } =
       Contact.store().state['phone.controller'];
     const { resolveRequested, resolveTask } =
       Contact.store().state.entities['phone/contact'];
     if (resolveRequested) {
       Log.debug('case resolution already requested, checking for updates...');
-      const connectContact = ACS.getContactById(contact.contactId);
+      const connectContact = getContactById(contact.contactId);
       if (connectContact) {
         const attrs = connectContact.getAttributes();
         Log.debug('got resolved attributes!', attrs);
@@ -599,14 +611,17 @@ export default class Contact extends Model {
       return {};
     }
     if (!resolveRequested) {
+      // @ts-ignore
+      const { contactAttributes } = this;
       let payload = {
         phone_number: _.get(
-          this.contactAttributes,
+          contactAttributes,
           ContactAttributes.INBOUND_NUMBER,
           currentOutbound ? currentOutbound.phone_number : null,
         ),
       };
       if (contact.isInbound) {
+        // @ts-ignore
         payload = { ...payload, contact_id: contact.contactId };
         if (payload.phone_number === null && contact.dnis) {
           payload.phone_number = contact.dnis.dnis;
@@ -657,22 +672,19 @@ export default class Contact extends Model {
     return stateMap[this.state];
   }
 
-  get contactAttributes(): ContactAttributesType {
+  get contactAttributes(): any {
     return Contact.parseAttributes(this.attributes);
   }
 
   get connectContactId(): string | null {
-    const connectContact = ACS.getContactById(this.contactId);
+    const connectContact = getContactById(this.contactId);
     if (connectContact) {
       return connectContact.getContactId();
     }
     return null;
   }
 
-  resolveAttributeModels<T>(
-    attribute: ContactAttribute,
-    model: CCUModel<T>,
-  ): Promise<T[]> {
+  resolveAttributeModels(attribute, model) {
     const itemIds = _.filter(
       _.get(this.contactAttributes, attribute, []),
       _.negate(_.isNil),
@@ -688,22 +700,19 @@ export default class Contact extends Model {
   }
 
   async getCallDuration() {
-    const connectContact = ACS.getContactById(this.contactId);
+    const connectContact = getContactById(this.contactId);
     if (connectContact) {
       return connectContact.getStateDuration();
     }
     return 0;
   }
 
-  async getWorksites(): Promise<typeof Worksite[]> {
-    return this.resolveAttributeModels<typeof Worksite>(
-      ContactAttributes.WORKSITES,
-      Worksite,
-    );
+  async getWorksites() {
+    return this.resolveAttributeModels(ContactAttributes.WORKSITES, Worksite);
   }
 
   async getPdas(): Promise<typeof Pda[]> {
-    return this.resolveAttributeModels<typeof Pda>(ContactAttributes.PDAS, Pda);
+    return this.resolveAttributeModels(ContactAttributes.PDAS, Pda);
   }
 
   async getOutbounds(): Promise<typeof PhoneOutbound[]> {
@@ -714,34 +723,31 @@ export default class Contact extends Model {
     if (currentOutbound) {
       return [currentOutbound];
     }
-    return this.resolveAttributeModels<typeof PhoneOutbound>(
+    return this.resolveAttributeModels(
       ContactAttributes.OUTBOUND_IDS,
       PhoneOutbound,
     );
   }
 
-  async getInbound(): Promise<typeof PhoneInbound> {
-    return this.resolveAttributeModels<typeof PhoneInbound>(
+  async getInbound() {
+    return this.resolveAttributeModels(
       ContactAttributes.INBOUND_ID,
       PhoneInbound,
     );
   }
 
-  async getIncidents(): Promise<typeof Incident[]> {
-    return this.resolveAttributeModels<typeof Incident>(
-      ContactAttributes.INCIDENT,
-      Incident,
-    );
+  async getIncidents() {
+    return this.resolveAttributeModels(ContactAttributes.INCIDENT, Incident);
   }
 
   async getDnis({
     inbound,
     outbound,
   }: {
-    inbound: typeof PhoneInbound | null,
-    outbound: typeof PhoneOutbound | null,
-  } = {}): Promise<PhoneDnis | null> {
-    const _dnis = await this.resolveAttributeModels<typeof PhoneDnis>(
+    inbound: PhoneInbound | null;
+    outbound: PhoneOutbound | null;
+  }) {
+    const _dnis = await this.resolveAttributeModels(
       ContactAttributes.CALLER_DNIS_ID,
       PhoneDnis,
     );
@@ -777,16 +783,18 @@ export default class Contact extends Model {
     if (!parsed) return null;
     let rawNumber = String(parsed.number);
     if (rawNumber.startsWith('+')) {
-      rawNumber = Number(rawNumber.slice(1));
+      rawNumber = Number(rawNumber.slice(1)).toString();
     }
     const noCountry = Number(String(rawNumber).slice(1));
     let dnis = await PhoneDnis.query()
       .where('dnis', rawNumber)
       .orWhere('dnis', noCountry);
     if (dnis.exists()) {
+      // @ts-ignore
       dnis = dnis.first();
     } else {
-      await PhoneDnis.fetchByDnis(parsed.number);
+      await PhoneDnis.fetchByDnis(Number(parsed.number));
+      // @ts-ignore
       dnis = await PhoneDnis.query()
         .where('dnis', rawNumber)
         .orWhere('dnis', noCountry)
@@ -795,7 +803,7 @@ export default class Contact extends Model {
     return dnis;
   }
 
-  async getLocale(): Promise<Language> {
+  async getLocale() {
     let _locale = _.get(
       this.contactAttributes,
       ContactAttributes.LOCALE,
@@ -828,7 +836,7 @@ export default class Contact extends Model {
   async disconnect() {
     if (this.action === ContactActions.CONNECTED) {
       Log.debug('agent still in call, hanging up...');
-      const connection = ACS.getConnectionByContactId(this.contactId);
+      const connection = getConnectionByContactId(this.contactId);
       if (connection) {
         connection.destroy({
           success: () => Log.info('connection has been destroyed!'),

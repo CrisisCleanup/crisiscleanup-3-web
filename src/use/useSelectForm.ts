@@ -1,4 +1,3 @@
-// @flow
 /**
  *  Use Select Form for Model.
  */
@@ -7,15 +6,15 @@ import { ref, watchEffect, computed, reactive } from '@vue/composition-api';
 import _ from 'lodash';
 import CCUModel from '@/models/model';
 
-export type SelectFormProps<T> = {|
-  context: any,
-  multi?: boolean,
-  model: T,
-  resolveFetch?: [Function, $Rest<SelectFormProps<T>, mixed>],
-  resolveFromId?: Function,
-  translate?: boolean,
-  sortKey?: string,
-|};
+interface SelectFormProps<T> {
+  context: any;
+  multi?: boolean;
+  model: CCUModel<any>;
+  resolveFetch?: never[];
+  resolveFromId?: Function;
+  translate?: boolean;
+  sortKey?: string;
+}
 
 /**
  * Use Select Form Hook
@@ -30,7 +29,7 @@ export type SelectFormProps<T> = {|
  * @param sortKey - Key to sort by.
  * @returns {{onSelected: onSelected, items: T[] extends Ref ? T[] : Ref<UnwrapRef<T[]>>, value: *, selected: T[] extends Ref ? T[] : Ref<UnwrapRef<T[]>>}}
  */
-export default <T: typeof CCUModel>({
+export default <T extends CCUModel<any>>({
   context,
   multi,
   model,
@@ -38,7 +37,7 @@ export default <T: typeof CCUModel>({
   resolveFromId,
   translate,
   sortKey,
-}: SelectFormProps<T> = {}) => {
+}: SelectFormProps<T>) => {
   const items = ref<T[]>([]);
   const selected = ref<T[]>([]);
   const _value = ref(null);
@@ -60,7 +59,7 @@ export default <T: typeof CCUModel>({
   watchEffect(async () => {
     let results = await debouncedFetch(...resolveArgs);
     if (translate) {
-      results = results.map((r) => reactive(r.withTrans<T>()));
+      results = results.map((r) => reactive(r.withTrans()));
     }
     if (sortKey) {
       results = _.sortBy(results, sortKey);
@@ -79,12 +78,12 @@ export default <T: typeof CCUModel>({
       return;
     }
     if (itemId === -1) {
-      selected.value.push(itemId);
+      selected.value.push(itemId as any);
       _value.value = multi ? selected.value : _.last(selected.value);
       context.root.$log.debug('selected: ', itemId);
       return;
     }
-    const _resolveFromId = resolveFromId || model.fetchOrFindId;
+    const _resolveFromId = resolveFromId || CCUModel.fetchOrFindId;
     const item = await _.bind(_resolveFromId, model)(itemId);
     selected.value.push(translate ? item.withTrans() : item);
     _value.value = multi ? selected.value : _.last(selected.value);

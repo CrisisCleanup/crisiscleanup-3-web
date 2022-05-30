@@ -1,4 +1,3 @@
-// @flow
 /**
  * useResizeObserver Hook
  */
@@ -16,8 +15,11 @@
 export function useResizeObserver(
   target: HTMLElement | Element,
   callback: () => void,
-  options: { [string]: mixed } = {},
-): { isSupported: boolean, stop: () => void } {
+  options: Record<string, unknown> = {},
+): {
+  isSupported: boolean;
+  stop: () => void;
+} {
   let observer;
   const isSupported = window && 'ResizeObserver' in window;
 
@@ -42,7 +44,6 @@ export function useResizeObserver(
   };
 
   start(target);
-
   return {
     isSupported,
     stop,

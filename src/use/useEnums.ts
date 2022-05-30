@@ -1,4 +1,3 @@
-// @flow
 /**
  * Enums Hook
  */

@@ -1,4 +1,3 @@
-// @flow
 import { ref, onUnmounted, getCurrentInstance } from '@vue/composition-api';
 
 /**
@@ -11,7 +10,7 @@ import { ref, onUnmounted, getCurrentInstance } from '@vue/composition-api';
  * @param immediate
  */
 export function useIntervalFn(cb: Function, interval = 1000, immediate = true) {
-  let timer = null;
+  let timer: number | null = null;
   const isActive = ref(false);
 
   function clean() {

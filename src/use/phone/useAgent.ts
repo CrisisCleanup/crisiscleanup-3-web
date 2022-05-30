@@ -1,4 +1,3 @@
-// @flow
 /**
  * useAgent Hook
  */
@@ -13,7 +12,7 @@ import AgentClient from '@/models/phone/AgentClient';
  */
 export default () => {
   const loading = ref(true);
-  const _agent = ref(null);
+  const _agent = ref<AgentClient | null>(null);
   const getters = {
     ...useGetters('phone.streams', ['agentClientId']),
   };

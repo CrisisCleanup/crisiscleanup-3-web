@@ -1,13 +1,11 @@
-// @flow
-
 /**
  * Connection model.
  */
 
 import { Model } from '@vuex-orm/core';
 import _ from 'lodash';
-import type { ConnectionType } from '@/models/phone/types';
-import * as ACS from '@/services/connect.service';
+// @ts-ignore
+import { getConnectionByContactId } from '@/services/connect.service';
 import Logger from '@/utils/log';
 
 /**
@@ -35,13 +33,21 @@ export default class Connection extends Model {
 
   static primaryKey: string = 'connectionId';
 
+  connectionId!: string;
+
+  contactId!: string;
+
+  state!: string;
+
+  streamsConnectionId!: string;
+
   static fields() {
-    return ({
-      connectionId: this.string(),
-      contactId: this.string(),
-      state: this.string(),
+    return {
+      connectionId: this.string(''),
+      contactId: this.string(''),
+      state: this.string(''),
       streamsConnectionId: this.string(''),
-    }: ConnectionType);
+    };
   }
 
   static beforeCreate(model: Connection): void | boolean {
@@ -54,7 +60,7 @@ export default class Connection extends Model {
 
   static afterUpdate(model: Connection) {
     if (_.isNil(model.streamsConnectionId)) {
-      const voiceConnection = ACS.getConnectionByContactId(model.contactId);
+      const voiceConnection = getConnectionByContactId(model.contactId);
       if (voiceConnection) {
         Log.info('recv streams connection ID during connection update!');
         model.streamsConnectionId = voiceConnection.getConnectionId();

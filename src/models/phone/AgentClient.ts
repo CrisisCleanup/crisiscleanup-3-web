@@ -1,19 +1,10 @@
-// @flow
-
 /**
  * AgentClient model
  */
 
-import { Model } from '@vuex-orm/core';
+import { InstanceOf, Item, Model } from '@vuex-orm/core';
 import _ from 'lodash';
 import * as Sentry from '@sentry/browser';
-import type {
-  AgentClientType,
-  AgentState,
-  ConnectionState,
-  ConnectionType,
-  RouteState,
-} from '@/models/phone/types';
 import Contact, { ContactActions } from '@/models/phone/Contact';
 import Connection, { ConnectionStates } from '@/models/phone/Connection';
 import Logger from '@/utils/log';
@@ -21,7 +12,10 @@ import * as ACS from '@/services/connect.service';
 import User from '@/models/User';
 import Language from '@/models/Language';
 
-const ACTIONS = {};
+const ACTIONS = {
+  CLIENT_HEARTBEAT: 'CLIENT_HEARTBEAT',
+  SET_AGENT_STATE: 'SET_AGENT_STATE',
+};
 
 /**
  * Enum of states that represent whether a client is currently
@@ -55,12 +49,28 @@ export default class AgentClient extends Model {
 
   static primaryKey: string = 'agentId';
 
+  userId!: string | number;
+
+  agentId!: string;
+
+  state!: string;
+
+  routeState!: string;
+
+  contacts!: Contact[];
+
+  connections!: Connection[];
+
+  localeIds!: any[];
+
+  locale!: Language[];
+
   static fields() {
-    return ({
-      userId: this.number(),
-      agentId: this.string(),
-      state: this.string(),
-      routeState: this.string(),
+    return {
+      userId: this.number(0),
+      agentId: this.string('0'),
+      state: this.string(''),
+      routeState: this.string(''),
       contacts: this.hasMany(Contact, 'agentId'),
       connections: this.hasManyThrough(
         Connection,
@@ -70,22 +80,22 @@ export default class AgentClient extends Model {
       ),
       localeIds: this.attr([]),
       locale: this.hasManyBy(Language, 'localeIds'),
-    }: AgentClientType);
+    };
   }
 
   static beforeCreate(model: AgentClient): void {
     const user = User.find(model.userId);
     if (user) {
-      model.localeIds = user.languages.map((l) => l.id);
+      model.localeIds = user.languages.map((l) => l?.id);
     }
   }
 
   static beforeUpdate(model: AgentClient): void {
     const user = User.find(model.userId);
     if (user) {
-      model.localeIds = user.languages.map((l) => l.id);
+      model.localeIds = user.languages.map((l) => l?.id);
     }
-    const contactQ = Contact.query()
+    const contactQ: Item<InstanceOf<Contact>> = Contact.query()
       .withAllRecursive()
       .where('agentId', model.agentId);
     if (contactQ.exists()) {
@@ -100,38 +110,38 @@ export default class AgentClient extends Model {
 
   static afterUpdate(model: AgentClient): void {
     Log.info('publishing agent client state update!');
-    const client: AgentClient = AgentClient.query()
+    const client = AgentClient.query()
       .withAllRecursive()
       .where('agentId', model.agentId)
       .first();
-    if (!model.isOnline && model.isRoutable) {
+    if (client && !model.isOnline && model.isRoutable) {
       client
         .$update({ routeState: RouteStates.NOT_ROUTABLE })
         .then(() =>
           Log.info('client went offline, forcing not_routable route state'),
         );
     }
-    Log.info(`Agent => ${client.contactState}`);
+    Log.info(`Agent => ${client?.contactState}`);
     Log.info(client);
-    let curContactId = null;
-    if (client.currentContact) {
+    let curContactId: string | null = null;
+    if (client?.currentContact) {
       curContactId = client.currentContact.connectContactId
         ? client.currentContact.connectContactId
         : client.currentContact.contactId;
     }
     const payload = {
-      agentId: client.agentId,
-      state: client.state,
-      routeState: client.routeState,
-      contactState: client.contactState,
-      locale: client.localeMap,
+      agentId: client?.agentId,
+      state: client?.state,
+      routeState: client?.routeState,
+      contactState: client?.contactState,
+      locale: client?.localeMap,
       currentContactId: curContactId,
     };
     const isInbound =
-      client.currentContact === null ? true : client.currentContact.isInbound;
+      client?.currentContact === null ? true : client?.currentContact.isInbound;
     if (
       !isInbound ||
-      ![ConnectionStates.AGENT_PENDING].includes(client.contactState)
+      ![ConnectionStates.AGENT_PENDING].includes(client?.contactState || '')
     ) {
       AgentClient.store()
         .dispatch('websocket/send', {
@@ -140,13 +150,18 @@ export default class AgentClient extends Model {
         })
         .then(() => Log.debug('agent state pushed'));
     }
-    client
-      .heartbeat()
-      .then(() => Log.debug('client heartbeat triggered by update'));
-    Sentry.setContext(AgentClient.entity, client.$toJson());
+    if (client) {
+      client
+        .heartbeat()
+        .then(() => Log.debug('client heartbeat triggered by update'));
+    }
+    Sentry.setContext(
+      AgentClient.entity,
+      client?.$toJson() as Record<any, any>,
+    );
   }
 
-  static isStateOnline(state: AgentState): AgentState {
+  static isStateOnline(state) {
     if (Object.values(ConnectionStates).includes(state)) {
       return AgentStates.ONLINE;
     }
@@ -155,7 +170,7 @@ export default class AgentClient extends Model {
       : AgentStates.OFFLINE;
   }
 
-  static isStateRoutable(state: ConnectionState | RouteState): RouteState {
+  static isStateRoutable(state) {
     if (Object.values(RouteStates).includes(state)) {
       return state;
     }
@@ -173,9 +188,7 @@ export default class AgentClient extends Model {
     [ConnectionStates.AGENT_PENDING]: 'connecting',
   };
 
-  static getFriendlyState(
-    state: AgentState | RouteState | ConnectionState,
-  ): string {
+  static getFriendlyState(state): string {
     let contactState = state;
     if (state.includes('#')) {
       [, , contactState] = state.split('#');
@@ -183,13 +196,13 @@ export default class AgentClient extends Model {
     return _.get(AgentClient.friendlyStateMap, contactState, 'offline');
   }
 
-  get contactState(): ConnectionState | RouteState {
+  get contactState(): string {
     if (
       !_.isEmpty(this.connections) &&
       !_.isNil(this.currentContact) &&
       _.get(this.currentContact, 'action', null) !== ContactActions.DESTROYED
     ) {
-      const initConnection: ConnectionType = this.connections[0];
+      const initConnection = this.connections[0];
       return initConnection.state;
     }
     return this.routeState;
@@ -224,7 +237,7 @@ export default class AgentClient extends Model {
     return AgentClient.isStateOnline(this.state) === AgentStates.ONLINE;
   }
 
-  get user(): typeof User {
+  get user() {
     return User.query().whereId(this.userId).first();
   }
 
@@ -309,14 +322,14 @@ export default class AgentClient extends Model {
       action: ACTIONS.CLIENT_HEARTBEAT,
       data: {
         userId: this.userId,
-        type: this.user.isAdmin ? 'admin' : 'user',
+        type: this.user?.isAdmin ? 'admin' : 'user',
         agentId: this.agentId,
       },
     });
     await AgentClient.store().dispatch('phone.streams/setHeartbeatTime');
     if (this.currentContact) {
       if (!this.currentContact.isReady) {
-        Contact.syncAttributes(this.currentContact.contactId);
+        Contact.syncAttributes(this.currentContact.contactId, null);
       }
     }
   }

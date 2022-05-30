@@ -1,4 +1,4 @@
-// @flow
+// @ts-nocheck TODO(tabiodun): Fix this file
 /**
  * CrisisCleanup Base Vuex-ORM model.
  */
@@ -7,7 +7,7 @@ import { Model } from '@vuex-orm/core';
 import _ from 'lodash';
 import { QueryResult } from 'aws-sdk/clients/kendra';
 
-export interface BaseFieldsT {
+interface BaseFieldsT {
   id: number;
   invalidated_at?: Date;
   created_at: Date;
@@ -25,10 +25,10 @@ export default class CCUModel<T> extends Model {
     updated_by: this.number(),
   };
 
-  static baseFields = (omit: string[] = []): $Shape<BaseFieldsT> =>
+  static baseFields = (omit: string[] = []): BaseFieldsT =>
     _.omit(
       {
-        id: this.number(),
+        id: this.number(''),
         ...this.historyFields,
       },
       omit,
@@ -45,7 +45,7 @@ export default class CCUModel<T> extends Model {
   static fetchById(
     id: number | number[] | string | string[],
     save: boolean = true,
-  ): T {
+  ) {
     if (typeof id === 'number' || typeof id === 'string') {
       return this.api().get(`/${this.entity}/${id}`, { save });
     }
@@ -65,13 +65,10 @@ export default class CCUModel<T> extends Model {
    * @param save - save item to database.
    * @returns {T}
    */
-  static async fetchOrFindId(
-    id: number | number[],
-    save: boolean = true,
-  ): Promise<T> {
+  static async fetchOrFindId(id: number | number[], save: boolean = true) {
     const _ids = _.castArray(id);
-    const ids = _ids.map((_id) => this.fields().id.make(_id));
-    const resolvedIds = await ids.filter((itemId) =>
+    const ids = _ids.map((_id) => this.fields().id.make(_id, {}, ''));
+    const resolvedIds = ids.filter((itemId) =>
       this.query().whereId(itemId).exists(),
     );
     const unresolved = _.difference(ids, resolvedIds);
@@ -92,10 +89,10 @@ export default class CCUModel<T> extends Model {
    */
   static async fetchAll(
     params?: {
-      [key: string]: string,
+      [key: string]: string;
     },
     dataKey?: string,
-  ): Promise<QueryResult<T>> {
+  ) {
     const _dataKey = dataKey || 'results';
     const _params = params || {};
     await this.api().get(`/${this.entity}`, {

@@ -1,21 +1,23 @@
 import { isNil, omitBy } from 'lodash';
 import CCUModel from '@/models/model';
 
-export default class PhoneInbound extends CCUModel {
+export default class PhoneInbound extends CCUModel<PhoneInbound> {
   static entity = 'phone_inbound';
+
+  dnis!: string;
 
   static fields() {
     return {
-      id: this.attr(),
-      dnis: this.attr(),
-      ani: this.attr(),
-      session_id: this.attr(),
-      incident_id: this.attr(),
-      language: this.attr(),
+      id: this.attr(''),
+      dnis: this.attr(''),
+      ani: this.attr(''),
+      session_id: this.attr(''),
+      incident_id: this.attr(''),
+      language: this.attr(''),
     };
   }
 
-  static apiConfig = {
+  static apiConfig: any = {
     actions: {
       async acceptCall(id) {
         await this.post(`/phone_inbound/${id}/accept`, {}, { save: false });
@@ -72,6 +74,6 @@ export default class PhoneInbound extends CCUModel {
           save: false,
         });
       },
-    },
+    } as any,
   };
 }
