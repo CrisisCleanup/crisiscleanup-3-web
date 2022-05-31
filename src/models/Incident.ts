@@ -2,12 +2,26 @@ import moment from 'moment';
 import Location from '@/models/Location';
 import CCUModel from '@/models/model';
 
-export default class Incident extends CCUModel {
+export default class Incident extends CCUModel<Incident> {
   static entity = 'incidents';
+
+  id!: string;
+
+  name!: string;
+
+  short_name!: string;
+
+  incident_type!: string;
+
+  start_at!: string;
+
+  locations!: any[];
+
+  form_fields!: any[];
 
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       case_label: this.string(''),
       form_fields: this.attr(null),
       geofence: this.attr(null),
@@ -111,6 +125,6 @@ export default class Incident extends CCUModel {
           { save: false },
         );
       },
-    },
+    } as any,
   };
 }

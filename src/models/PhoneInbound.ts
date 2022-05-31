@@ -4,6 +4,8 @@ import CCUModel from '@/models/model';
 export default class PhoneInbound extends CCUModel<PhoneInbound> {
   static entity = 'phone_inbound';
 
+  id!: string;
+
   dnis!: string;
 
   static fields() {

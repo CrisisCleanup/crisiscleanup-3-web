@@ -5,12 +5,36 @@ import enums from '@/store/modules/enums';
 import { getQueryString } from '@/utils/urls';
 import CCUModel from '@/models/model';
 
-export default class Worksite extends CCUModel {
+export default class Worksite extends CCUModel<Worksite> {
   static entity = 'worksites';
+
+  id!: string;
+
+  name!: string;
+
+  address!: string;
+
+  city!: string;
+
+  postal_code!: string;
+
+  state!: string;
+
+  location!: any;
+
+  incident!: any;
+
+  time!: any[];
+
+  form_data!: any[];
+
+  flags!: any[];
+
+  favorite!: boolean;
 
   static fields() {
     return {
-      id: this.string(),
+      id: this.string(''),
       address: this.string(''),
       location: this.attr(null),
       case_number: this.attr(null),
@@ -97,7 +121,7 @@ export default class Worksite extends CCUModel {
 
   static getWorkType(workTypes, filters, organization) {
     // TODO: Unit Test
-    let currentFilteredTypes = [];
+    let currentFilteredTypes: string[] = [];
     if (filters && filters.fields) {
       currentFilteredTypes = Object.keys(filters.fields).filter((fieldKey) =>
         Boolean(filters.fields[fieldKey]),
@@ -147,7 +171,7 @@ export default class Worksite extends CCUModel {
     if (workTypesInFilter.length === 1) {
       return workTypesInFilter[0];
     }
-    if (workTypesInFilter > 1) {
+    if (workTypesInFilter.length > 1) {
       if (filterByClaimedOrg(workTypesInFilter).length) {
         return filterByClaimedOrg(workTypesInFilter)[0];
       }
@@ -170,7 +194,7 @@ export default class Worksite extends CCUModel {
   static apiConfig = {
     actions: {
       async fetch(id, incident = null) {
-        const worksiteParams = {};
+        const worksiteParams: any = {};
         if (incident) {
           worksiteParams.incident = incident;
         }
@@ -221,7 +245,7 @@ export default class Worksite extends CCUModel {
         );
       },
       unclaimWorksite(id, workTypes, status = null) {
-        const data = {
+        const data: Record<string, any> = {
           work_types: workTypes,
         };
         if (status) {
@@ -230,7 +254,7 @@ export default class Worksite extends CCUModel {
         return this.post(`/worksites/${id}/unclaim`, data, { save: false });
       },
       releaseWorkType(id, workTypes, unclaimReason = '') {
-        const data = {
+        const data: Record<string, any> = {
           work_types: workTypes,
         };
         if (unclaimReason) {
@@ -373,7 +397,7 @@ export default class Worksite extends CCUModel {
       // eslint-disable-next-line consistent-return
       printWorksite(id, noClaimReason = null) {
         try {
-          const data = {};
+          const data: Record<string, any> = {};
           if (noClaimReason) {
             data.no_claim_reason_text = noClaimReason;
           }
@@ -423,6 +447,6 @@ export default class Worksite extends CCUModel {
         } = results;
         return data;
       },
-    },
+    } as any,
   };
 }

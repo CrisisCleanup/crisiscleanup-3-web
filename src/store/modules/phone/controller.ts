@@ -7,14 +7,12 @@ import * as Sentry from '@sentry/browser';
 import {
   Action,
   getModule,
-  Module,
   Mutation,
-  MutationAction,
   VuexModule,
 } from 'vuex-module-decorators';
 import _ from 'lodash';
 import AgentClient from '@/models/phone/AgentClient';
-import type {
+import {
   CaseType,
   MetricsStateT,
   PhoneMetric,
@@ -103,7 +101,7 @@ export const Metrics = Object.freeze({
   ],
 });
 
-export const Scripts: { [$Values<typeof CallType>]: string } = Object.freeze({
+export const Scripts = Object.freeze({
   [CallType.INBOUND]: 'phoneDashboard.inbound_script',
   [CallType.OUTBOUND]: 'phoneDashboard.outbound_script',
   [CallType.CALLDOWN]: 'phoneDashboard.calldown_script',
@@ -111,13 +109,6 @@ export const Scripts: { [$Values<typeof CallType>]: string } = Object.freeze({
 
 const Log = Logger({ name: 'phone.controller' });
 
-@Module({
-  store,
-  dynamic: true,
-  name: 'phone.controller',
-  persist: true,
-  namespaced: true,
-})
 class ControllerStore extends VuexModule {
   // active case
   currentCase: CaseType | null = null;
@@ -164,13 +155,15 @@ class ControllerStore extends VuexModule {
   isServingOutbounds: boolean = true;
 
   // current outbound
-  currentOutbound: typeof PhoneOutbound | null = null;
+  currentOutbound: PhoneOutbound | null = null;
 
   // historic call metrics
   historicMetrics = {
     daily: [],
     aggregates: {},
   };
+
+  currentCaseId: any;
 
   get historicMetricsReady() {
     return !this.loading.historicMetrics;
@@ -239,7 +232,7 @@ class ControllerStore extends VuexModule {
   }
 
   get modifiedCaseIds() {
-    return this.status.modified.map((c) => c.id);
+    return this.status?.modified?.map((c) => c.id);
   }
 
   get isCallActive() {
@@ -258,13 +251,11 @@ class ControllerStore extends VuexModule {
     Sentry.setContext('phone.controller.outbound', this.currentOutbound);
   }
 
-  @MutationAction({ mutate: ['isServingOutbounds'] })
   setServingOutbounds(serving: boolean) {
     return { isServingOutbounds: serving };
   }
 
-  @MutationAction({ mutate: ['contactMetrics'] })
-  updateContactMetrics({ contacts } = {}) {
+  updateContactMetrics({ contacts }) {
     if (!_.isNull(contacts)) {
       return { contactMetrics: contacts };
     }
@@ -272,7 +263,7 @@ class ControllerStore extends VuexModule {
   }
 
   @Action
-  updateStatus({ statusId, notes, modified }: $Shape<StatusStateT> = {}) {
+  updateStatus({ statusId, notes, modified }: StatusStateT) {
     Log.debug('updating call status!');
     this.setStatus({
       statusId: statusId === null ? statusId : statusId || this.status.statusId,
@@ -284,13 +275,7 @@ class ControllerStore extends VuexModule {
   }
 
   @Action
-  async addCase({
-    contact,
-    newCase,
-  }: {
-    contact: Contact,
-    newCase: typeof Worksite,
-  }) {
+  async addCase({ contact, newCase }: { contact: Contact; newCase: Worksite }) {
     Log.info('adding new case:', contact, newCase);
     if (this.activeCaseType === Pda) {
       Log.info('associating worksite to pda...');
@@ -321,7 +306,7 @@ class ControllerStore extends VuexModule {
       cases: this.modifiedCaseIds,
       dnisMeta: {
         caller_name: dnisMetaName,
-        cases: this.modifiedCaseIds.join(', '),
+        cases: this.modifiedCaseIds && this.modifiedCaseIds.join(', '),
       },
     };
     Sentry.setContext('phone.controller.status', callStatus);
@@ -334,7 +319,7 @@ class ControllerStore extends VuexModule {
       Log.info('updating inbound status with:', callStatus);
       await PhoneInbound.api().updateStatus(contact.inbound.id, callStatus);
     }
-    if (this.status.notes) {
+    if (this.status.notes && this.modifiedCaseIds) {
       await Promise.all(
         this.modifiedCaseIds.map((id) =>
           Worksite.api().addNote(id, this.status.notes),
@@ -351,7 +336,7 @@ class ControllerStore extends VuexModule {
   }
 
   @Action
-  async clearState({ agentId }: { agentId: string } = {}) {
+  async clearState({ agentId }: { agentId: string }) {
     Sentry.setContext('phone.controller.status', null);
     Log.info('clearing controller state!');
     this.setOutbound(null);
@@ -369,10 +354,10 @@ class ControllerStore extends VuexModule {
     incident,
     manual = false,
   }: {
-    agent: typeof AgentClient,
-    incident: typeof Incident,
-    manual: boolean,
-  } = {}) {
+    agent: AgentClient;
+    incident: Incident;
+    manual: boolean;
+  }) {
     if (this.isServingOutbounds) {
       Log.info('attempting to serve outbound call for:', incident);
       let outbound;
@@ -419,7 +404,7 @@ class ControllerStore extends VuexModule {
   }
 
   @Action
-  async skipOutbound({ agent }: { agent: typeof AgentClient }) {
+  async skipOutbound({ agent }: { agent: AgentClient }) {
     if (this.currentOutbound !== null) {
       Log.info('skipping current outbound call...', this.currentOutbound);
       await this.currentOutbound.skipOutbound();
@@ -463,7 +448,7 @@ class ControllerStore extends VuexModule {
   }
 
   @Mutation
-  setMetrics(newMetrics: $Shape<MetricsStateT>) {
+  setMetrics(newMetrics: MetricsStateT) {
     const _metrics = _.merge(this.metrics, newMetrics);
     this.metrics = _metrics;
   }
@@ -486,6 +471,7 @@ class ControllerStore extends VuexModule {
       await User.fetchOrFindId(userIds);
     }
     await Promise.all(
+      // @ts-ignore
       agents.map(async ({ state, entered_timestamp, ...metrics }) => {
         const agent_id = _.get(metrics, 'agent_id', _.get(metrics, 'agent'));
         if (metrics.user) {
@@ -591,6 +577,7 @@ class ControllerStore extends VuexModule {
       let metricName = name;
       let metricLocale = 'all';
       if (name.includes('#')) {
+        // @ts-ignore
         [metricName, metricLocale] = name.split('#');
       }
       const subState = _.get(this.metrics, metricLocale, {});
@@ -663,13 +650,11 @@ class ControllerStore extends VuexModule {
     this.setLoading({ generalMetrics: false });
   }
 
-  @MutationAction({ mutate: ['view'] })
-  setView(newView: $Shape<ViewStateT>) {
+  setView(newView: ViewStateT) {
     return { view: { ...this.view, ...newView } };
   }
 
-  @MutationAction({ mutate: ['currentCase'] })
-  setCase(newCase: $Shape<CaseType> | null) {
+  setCase(newCase: CaseType | null) {
     Log.debug('updating active case:', newCase);
     return { currentCase: newCase };
   }
@@ -677,10 +662,13 @@ class ControllerStore extends VuexModule {
   @Action
   async init() {
     Log.debug('init controller!');
+    // @ts-ignore
     const streamsStore = getModule(StreamsStore, this.$store);
     if (!streamsStore.connected) {
       const htmlEl = document.getElementById('ccp-embed');
-      await streamsStore.init(htmlEl);
+      if (htmlEl) {
+        await streamsStore.init({ element: htmlEl });
+      }
     }
   }
 }

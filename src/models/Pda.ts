@@ -1,10 +1,30 @@
 import CCUModel from '@/models/model';
-export default class Pda extends CCUModel {
+export default class Pda extends CCUModel<Pda> {
   static entity = 'pdas';
+
+  id!: string;
+
+  name!: string;
+
+  address!: string;
+
+  city!: string;
+
+  postal_code!: string;
+
+  state!: string;
+
+  location!: any;
+
+  worksite!: any;
+
+  incident!: any;
+
+  form_data!: any[];
 
   static fields() {
     return {
-      id: this.string(),
+      id: this.string(''),
       address: this.string(''),
       location: this.attr(null),
       city: this.attr(null),
@@ -63,6 +83,6 @@ export default class Pda extends CCUModel {
           worksite,
         });
       },
-    },
+    } as any,
   };
 }

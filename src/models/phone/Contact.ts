@@ -162,17 +162,17 @@ export default class Contact extends Model {
     };
   }
 
-  get worksites(): typeof Worksite[] {
+  get worksites(): Worksite[] {
     const { worksites } = Contact.store().state.entities['phone/contact'];
     return worksites;
   }
 
-  get outbound(): typeof PhoneOutbound {
+  get outbound(): PhoneOutbound {
     const { outbound } = Contact.store().state.entities['phone/contact'];
     return outbound;
   }
 
-  get inbound(): typeof PhoneInbound {
+  get inbound(): PhoneInbound {
     const { inbound } = Contact.store().state.entities['phone/contact'];
     return inbound;
   }
@@ -182,7 +182,7 @@ export default class Contact extends Model {
     return dnis;
   }
 
-  get incident(): typeof Incident {
+  get incident(): Incident {
     const { incident } = Contact.store().state.entities['phone/contact'];
     return incident;
   }
