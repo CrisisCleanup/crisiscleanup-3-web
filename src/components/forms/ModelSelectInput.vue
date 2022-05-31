@@ -58,33 +58,16 @@
 </template>
 
 <script>
-// @flow
 import VueTypes from 'vue-types';
 import { toRefs, watchEffect } from '@vue/composition-api';
 import useSelectForm from '@/use/useSelectForm';
-import type { SelectFormProps } from '@/use/useSelectForm';
 import FormSelect from '@/components/FormSelect.vue';
-
-export type ModelSelectInputProps = {|
-  name: string,
-  description?: string,
-  model: any,
-  multi?: boolean,
-  translate?: boolean,
-  resolveFetch?: $ElementType<SelectFormProps, 'resolveFetch'>,
-  resolveFromId?: $ElementType<SelectFormProps, 'resolveFromId'>,
-  floatLabel?: string,
-  errorDetail?: string,
-  value?: any[],
-  sortKey?: string,
-  options?: Function,
-|};
 
 // Select model item(s) from a form select.
 export default {
   name: 'ModelSelectInput',
   components: { FormSelect },
-  props: ({
+  props: {
     // Form name, converted to start case for label.
     name: VueTypes.string.def(''),
     // Description to add to float label.
@@ -109,7 +92,7 @@ export default {
     sortKey: VueTypes.string,
     // Custom Options callback.
     options: VueTypes.func.def((opts) => opts),
-  }: ModelSelectInputProps),
+  },
   setup(props, context) {
     const {
       name,
@@ -126,15 +109,18 @@ export default {
       _model = context.root.$store.$db().model(_model);
     }
 
-    const { items, onSelected, value } = useSelectForm<model>({
-      context,
-      multi: multi.value,
-      model: _model,
-      translate: translate.value,
-      resolveFetch: resolveFetch.value,
-      resolveFromId: resolveFromId.value,
-      sortKey: sortKey.value,
-    });
+    const { items, onSelected, value } =
+      useSelectForm <
+      model >
+      {
+        context,
+        multi: multi.value,
+        model: _model,
+        translate: translate.value,
+        resolveFetch: resolveFetch.value,
+        resolveFromId: resolveFromId.value,
+        sortKey: sortKey.value,
+      };
 
     watchEffect(() => {
       context.emit('update:value', [name, value]);

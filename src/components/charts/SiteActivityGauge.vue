@@ -3,7 +3,6 @@
 </template>
 
 <script>
-// @flow
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
@@ -39,11 +38,11 @@ export default {
   },
 
   methods: {
-    getInnerRadius(): number {
+    getInnerRadius() {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) / 2;
     },
 
-    getFontSize(): number {
+    getFontSize() {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) * 0.065;
     },
 

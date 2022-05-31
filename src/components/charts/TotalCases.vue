@@ -3,15 +3,10 @@
 </template>
 
 <script>
-// @flow
 import * as d3 from 'd3';
 import _ from 'lodash';
 import VueTypes from 'vue-types';
 import { D3BaseChartMixin } from '@/mixins';
-
-export type TotalCaseDataT = {|
-  [key: string]: number,
-|};
 
 export default {
   name: 'TotalCases',

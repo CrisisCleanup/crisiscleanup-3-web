@@ -3,18 +3,10 @@
 </template>
 
 <script>
-// @flow
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
 import { D3BaseChartMixin } from '@/mixins';
-
-export type CallVolumeDataT = {|
-  name: string,
-  timestamp: number,
-  calls: number,
-  missed: number,
-|};
 
 export default {
   name: 'CircularBarplot',
@@ -23,7 +15,7 @@ export default {
     /**
      * Data for Donut chart
      */
-    chartData: VueTypes.arrayOf(VueTypes.object).def((): CallVolumeDataT =>
+    chartData: VueTypes.arrayOf(VueTypes.object).def(() =>
       Array.from({ length: 24 * 2 }, (v, i) => ({
         name: `id=${i}`,
         timestamp: new Date(),
@@ -70,15 +62,15 @@ export default {
   },
 
   methods: {
-    getInnerRadius(): number {
+    getInnerRadius() {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) / 5;
     },
 
-    getOuterRadius(): number {
+    getOuterRadius() {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) / 2;
     },
 
-    getFontSize(): number {
+    getFontSize() {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) * 0.026;
     },
 

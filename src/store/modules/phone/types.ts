@@ -11,8 +11,8 @@ import {
 import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
 
-type AuthState = typeof AuthStates;
-type InboundAction = typeof InboundActions;
+type AuthState = typeof AuthStates[keyof typeof AuthStates];
+type InboundAction = typeof InboundActions[keyof typeof InboundActions];
 
 type ControllerPage = typeof ControllerPages[keyof typeof ControllerPages];
 type ControllerActionTab =
@@ -47,4 +47,6 @@ export {
   PhoneMetricUpdate,
   StatusStateT,
   ViewStateT,
+  AuthState,
+  InboundAction,
 };

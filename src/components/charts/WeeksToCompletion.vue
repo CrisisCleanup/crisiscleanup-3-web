@@ -3,15 +3,9 @@
 </template>
 
 <script>
-// @flow
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import { D3BaseChartMixin } from '@/mixins';
-
-export type WeeksToCompletionDataT = {|
-  date: Date,
-  velocity: number,
-|};
 
 export default {
   name: 'WeeksToCompletion',

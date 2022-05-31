@@ -31,25 +31,16 @@
 </template>
 
 <script>
-// @flow
 import VueTypes from 'vue-types';
 import _ from 'lodash';
 import Accordion from '@/components/accordion/Accordion.vue';
 import Language from '@/models/Language';
 
-export type LocaleFormFieldsT = {
-  [key: string]: {
-    locale: string | null,
-    value: string | null,
-    key: string | null,
-  },
-};
-
 export default {
   name: 'LocaleForm',
   components: { Accordion },
   props: {
-    fields: VueTypes.shape<LocaleFormFieldsT>({
+    fields: VueTypes.shape({
       [VueTypes.string]: {
         locale: VueTypes.string,
         value: VueTypes.string,
@@ -58,20 +49,20 @@ export default {
     }).loose,
   },
   data() {
-    return ({
+    return {
       currentCard_: null,
       fieldData: {},
-    }: { currentCard: number | null });
+    };
   },
   methods: {
-    getValue(localeId: number, fieldKey: string) {
+    getValue(localeId, fieldKey) {
       return _.get(this.fieldData, `${localeId}.${fieldKey}`, '');
     },
-    setValue(localeId: number, fieldKey: string, value: string) {
+    setValue(localeId, fieldKey, value) {
       _.set(this.fieldData, `${localeId}.${fieldKey}`, value);
       this.$emit('update:fields', this.fieldData);
     },
-    async onFocusLost(localeId: number, fieldKey: string) {
+    async onFocusLost(localeId, fieldKey) {
       this.$log.debug('focus lost on initial card input item!');
       if (localeId === 2) {
         const value = this.getValue(localeId, fieldKey);
@@ -81,7 +72,7 @@ export default {
         this.$log.debug('auto translating:', value);
         await _.mapValues(
           this.allLocales.slice(1, this.allLocales.length),
-          async (ln: Language) => {
+          async (ln) => {
             const resp = await Language.translateText(ln.id, value);
             this.$log.debug(
               `translated: [${value}] -> (${ln.subtag}) [${resp.translated_text}]`,

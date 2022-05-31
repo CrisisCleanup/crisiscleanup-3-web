@@ -1,4 +1,3 @@
-// @flow
 import _ from 'lodash';
 import { useResizeObserver } from '@/use/useResizeObserver';
 
@@ -78,8 +77,8 @@ export const D3BaseChartMixin = {
          * @see https://developer.mozilla.org/en-US/docs/Web/API/Resize_Observer_API
          */
         this.resizeObserver = useResizeObserver(
-          ((this.chartContainer: any): HTMLElement),
-          _.debounce((entries: any) => {
+          this.chartContainer,
+          _.debounce((entries) => {
             const [first] = entries;
             this.dimensions = first;
             this.doRerender();
@@ -112,7 +111,7 @@ export const D3BaseChartMixin = {
       this.renderChart();
     },
 
-    getWidth(): number {
+    getWidth() {
       const chartContainer = this.d3.select(`#${this.chartId}`);
       try {
         if (chartContainer) {
@@ -124,7 +123,7 @@ export const D3BaseChartMixin = {
       return 0;
     },
 
-    getHeight(): number {
+    getHeight() {
       const chartContainer = this.d3.select(`#${this.chartId}`);
       if (chartContainer) {
         return +chartContainer.style('height').slice(0, -2) || 0;
@@ -132,11 +131,11 @@ export const D3BaseChartMixin = {
       return 0;
     },
 
-    getInnerWidth(): number {
+    getInnerWidth() {
       return this.getWidth() - this.margin.left - this.margin.right;
     },
 
-    getInnerHeight(): number {
+    getInnerHeight() {
       return this.getHeight() - this.margin.top - this.margin.bottom;
     },
 

@@ -3,25 +3,16 @@
 </template>
 
 <script>
-// @flow
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
-
-export type GaugeT = {|
-  radius: number,
-  fillPercent: number,
-  gradients?: string[],
-  leftLabel: string,
-  rightLabel: string,
-|};
 
 export default {
   name: 'GaugeChart',
   components: {},
   props: {
     gauges: VueTypes.arrayOf(
-      VueTypes.shape<GaugeT>({
+      VueTypes.shape({
         radius: VueTypes.number.isRequired,
         fillPercent: VueTypes.oneOfType([VueTypes.number, VueTypes.string])
           .isRequired,
@@ -73,7 +64,7 @@ export default {
   watch: {
     gauges: {
       deep: true,
-      handler(data: GaugeT[]) {
+      handler(data) {
         this.redrawKnob(data);
       },
     },
@@ -136,7 +127,7 @@ export default {
         .range([-Math.PI / 2, Math.PI / 2])
         .clamp(true); // prevent values from going out of domain
 
-      this.gauges.forEach((gauge: GaugeT, index: number) => {
+      this.gauges.forEach((gauge, index) => {
         this.svg
           .append('path')
           .attr('transform', 'scale(0)')
@@ -160,7 +151,7 @@ export default {
       this.redrawKnob(this.gauges);
     },
 
-    getInnerSemiCircle(radius: number) {
+    getInnerSemiCircle(radius) {
       return d3
         .arc()
         .outerRadius(radius)
@@ -170,7 +161,7 @@ export default {
         .endAngle(Math.PI / 2);
     },
 
-    redrawKnob(data: GaugeT[]) {
+    redrawKnob(data) {
       const knobs = this.svg
         .selectAll('path.gauge-knob')
         .data(data)
@@ -179,8 +170,8 @@ export default {
         .attr('fill', '#fff')
         .transition()
         .duration(1000)
-        .delay((d: GaugeT) => d.radius * 5)
-        .attr('d', (d: GaugeT) =>
+        .delay((d) => d.radius * 5)
+        .attr('d', (d) =>
           d3
             .arc()
             .outerRadius(d.radius + 4)
@@ -197,7 +188,7 @@ export default {
     addDefs() {
       const defs = this.svg.append('defs');
 
-      this.gauges.forEach((gauge: GaugeT, index: number) => {
+      this.gauges.forEach((gauge, index) => {
         const linGradient = defs
           .append('linearGradient')
           .attr('id', `gauge-gradient-${index}`)
@@ -247,7 +238,7 @@ export default {
         })
         .on('start', function repeat() {
           d3.active(this)
-            .attr('d', (d: GaugeT) =>
+            .attr('d', (d) =>
               d3
                 .arc()
                 .outerRadius(d.radius + 4)
@@ -260,7 +251,7 @@ export default {
             .transition()
             .duration(1000)
             .delay(Math.random() * 5000)
-            .attr('d', (d: GaugeT) =>
+            .attr('d', (d) =>
               d3
                 .arc()
                 .outerRadius(d.radius + 4)
@@ -273,7 +264,7 @@ export default {
             .transition()
             .duration(1000)
             .delay(Math.random() * 5000)
-            .attr('d', (d: GaugeT) =>
+            .attr('d', (d) =>
               d3
                 .arc()
                 .outerRadius(d.radius + 4)

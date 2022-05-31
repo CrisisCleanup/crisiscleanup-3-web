@@ -3,18 +3,11 @@
 </template>
 
 <script>
-// @flow
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
 import { D3BaseChartMixin } from '@/mixins';
 import { nFormatter } from '@/utils/helpers';
-
-export type DonutChartDataT = {|
-  reportedCases: number,
-  completedCases: number,
-  claimedCases: number,
-|};
 
 export default {
   name: 'CaseDonutChart',
@@ -23,11 +16,11 @@ export default {
     /**
      * Data for Donut chart
      */
-    chartData: VueTypes.shape<DonutChartDataT>({
+    chartData: VueTypes.shape({
       reportedCases: VueTypes.number,
       completedCases: VueTypes.number,
       claimedCases: VueTypes.number,
-    }).def((): DonutChartDataT => ({
+    }).def(() => ({
       reportedCases: 10,
       completedCases: 20,
       claimedCases: 10,
@@ -51,11 +44,11 @@ export default {
   },
 
   methods: {
-    getInnerRadius(): number {
+    getInnerRadius() {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) / 2;
     },
 
-    getFontSize(): number {
+    getFontSize() {
       return Math.min(this.getInnerWidth(), this.getInnerHeight()) * 0.25;
     },
 

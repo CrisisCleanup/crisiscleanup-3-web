@@ -74,8 +74,6 @@
 </template>
 
 <script>
-// @flow
-
 import VueTypes from 'vue-types';
 import { toRefs, reactive, computed, watch } from '@vue/composition-api';
 import _ from 'lodash';
@@ -126,7 +124,7 @@ export default {
 
     const relatedCols = computed(() => makeTableColumns([['name_t'], ['key']]));
     const relatedEvents = computed(() =>
-      items.value !== null ? items.value.map((e) => e.withTrans<Event>()) : [],
+      items.value !== null ? items.value.map((e) => e.withTrans()) : [],
     );
 
     const eventName = computed(() => _.get(eventLocale.value, '2.name', ''));

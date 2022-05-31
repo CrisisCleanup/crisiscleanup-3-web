@@ -44,7 +44,6 @@
 </template>
 
 <script>
-// @flow
 import VueTypes from 'vue-types';
 import _ from 'lodash';
 import Card from './Card.vue';
@@ -54,15 +53,11 @@ export default {
   components: {
     Card,
   },
-  props: ({
+  props: {
     title: VueTypes.string,
     loading: VueTypes.bool.def(false),
     dropdown: VueTypes.object.def({}),
-  }: {
-    title: string,
-    loading: boolean,
-    dropdown: any,
-  }),
+  },
   data() {
     return {
       dropdownWidth_: 0,

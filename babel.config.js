@@ -1,10 +1,5 @@
 module.exports = {
-  presets: [
-    '@babel/preset-flow',
-    ['@babel/preset-env'],
-    'vca-jsx',
-    '@vue/cli-plugin-babel/preset',
-  ],
+  presets: [['@babel/preset-env'], 'vca-jsx', '@vue/cli-plugin-babel/preset'],
   plugins: [
     // @compat: decorators needs to come
     // before class properties
@@ -20,7 +15,7 @@ module.exports = {
   ],
   env: {
     storybook: {
-      presets: ['@babel/preset-flow', ['@babel/preset-env']],
+      presets: [['@babel/preset-env']],
       plugins: [
         // @compat: decorators needs to come
         // before class properties

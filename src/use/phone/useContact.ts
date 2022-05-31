@@ -89,6 +89,7 @@ export default () => {
 
   const syncDuration = useIntervalFn(() => {
     if (callConnected.value) {
+      // eslint-disable-next-line no-unused-expressions
       currentContact?.value?.getCallDuration().then((time) => {
         if (time > callDuration.value) {
           callDuration.value = time;

@@ -35432,6 +35432,14 @@ exports[`Storyshots Elements/Cards/CaseCard With Work Types 1`] = `
 </div>
 `;
 
+exports[`Storyshots Elements/Cards/TabbedCard Basic 1`] = `
+<div
+  class="flex flex-grow w-full h-full"
+>
+  <!---->
+</div>
+`;
+
 exports[`Storyshots Elements/Cards/TitledCard Basic 1`] = `
 <div
   class="flex flex-grow w-full h-full"
@@ -35964,6 +35972,31 @@ exports[`Storyshots Layouts/Loader With Layout 1`] = `
   </div>
    
   <!---->
+</div>
+`;
+
+exports[`Storyshots Layouts/Page With Defaults 1`] = `
+<div
+  class="relative pt-6 bg-crisiscleanup-light-grey h-full overflow-auto"
+>
+  <!---->
+   
+  <!---->
+   
+  <h1>
+    Hi
+  </h1>
+</div>
+`;
+
+exports[`Storyshots Layouts/Page With Tabs 1`] = `
+<div
+  class="relative pt-6 bg-crisiscleanup-light-grey h-full overflow-auto"
+>
+  <!---->
+   
+  <!---->
+   
 </div>
 `;
 

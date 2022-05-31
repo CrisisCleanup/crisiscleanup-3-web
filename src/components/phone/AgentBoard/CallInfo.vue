@@ -83,8 +83,6 @@
 </template>
 
 <script>
-// @flow
-
 import VueTypes from 'vue-types';
 import { onMounted } from '@vue/composition-api';
 import { useStore } from '@u3u/vue-hooks';
@@ -116,7 +114,7 @@ export default {
 
     const { actions, getters } = useController();
 
-    const setActiveCase = async (caseId: number, type: string) => {
+    const setActiveCase = async (caseId, type) => {
       if (type === 'new') {
         await actions.setCase(null);
         return;

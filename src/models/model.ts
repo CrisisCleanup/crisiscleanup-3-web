@@ -17,19 +17,19 @@ interface BaseFieldsT {
 }
 
 export default class CCUModel<T> extends Model {
-  static historyFields = {
-    invalidated_at: this.attr('', (value) => Date.parse(value)),
-    created_at: this.attr('', (value) => Date.parse(value)),
-    updated_at: this.attr('', (value) => Date.parse(value)),
-    created_by: this.number(),
-    updated_by: this.number(),
-  };
+  // static historyFields = {
+  //   invalidated_at: this.attr('', (value) => Date.parse(value)),
+  //   created_at: this.attr('', (value) => Date.parse(value)),
+  //   updated_at: this.attr('', (value) => Date.parse(value)),
+  //   created_by: this.number(),
+  //   updated_by: this.number(),
+  // };
 
   static baseFields = (omit: string[] = []): BaseFieldsT =>
     _.omit(
       {
-        id: this.number(''),
-        ...this.historyFields,
+        // id: this.number(''),
+        // ...this.historyFields,
       },
       omit,
     );

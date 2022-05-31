@@ -42,7 +42,6 @@
 </template>
 
 <script>
-// @flow
 import {
   reactive,
   ref,
@@ -102,7 +101,7 @@ export default {
       }
     });
 
-    const updateValue = ([part: string, value: EventComponent | UserBadge]) => {
+    const updateValue = ([part, value]) => {
       inputs[unwrap(part)] = unwrap(value);
     };
 
@@ -138,7 +137,7 @@ export default {
       const { errors, data } = await Event.validate(eventKeys.value);
       context.root.$log.debug(errors);
       context.root.$log.debug(data);
-      _.mapValues(fieldErrors, (invalidations, key: string) => {
+      _.mapValues(fieldErrors, (invalidations, key) => {
         const _key = key === 'key' ? key : `${key}_key`;
         const err = _.get(errors, _key, null);
         fieldErrors[key] = err === null ? err : _.first(err);
@@ -154,10 +153,7 @@ export default {
         const _reqAttr = [];
         reqAttr.map((attr) => {
           _reqAttr.push(
-            EventComponent.query()
-              .where('key', attr)
-              .first()
-              .withTrans<Event>(),
+            EventComponent.query().where('key', attr).first().withTrans(),
           );
           return _reqAttr;
         });

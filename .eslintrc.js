@@ -16,7 +16,7 @@ module.exports = {
     'cypress/globals': true,
   },
 
-  plugins: ['vue', 'flowtype', 'cypress'],
+  plugins: ['vue', 'cypress'],
 
   extends: [
     'eslint:recommended',
@@ -27,7 +27,6 @@ module.exports = {
     'prettier/vue',
     'plugin:cypress/recommended',
     'plugin:vue-types/recommended',
-    'plugin:flowtype/recommended',
   ],
 
   globals: {
@@ -85,7 +84,6 @@ module.exports = {
     'prettier/vue',
     'plugin:cypress/recommended',
     'plugin:vue-types/recommended',
-    'plugin:flowtype/recommended',
     '@vue/typescript'
   ]
 };

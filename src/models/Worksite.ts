@@ -30,6 +30,8 @@ export default class Worksite extends CCUModel<Worksite> {
 
   flags!: any[];
 
+  work_types!: any[];
+
   favorite!: boolean;
 
   static fields() {

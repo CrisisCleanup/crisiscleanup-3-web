@@ -3,17 +3,10 @@
 </template>
 
 <script>
-// @flow
 import * as d3 from 'd3';
 import VueTypes from 'vue-types';
 import _ from 'lodash';
 import { D3BaseChartMixin } from '@/mixins';
-
-export type BarChartT = {|
-  group: Date,
-  newCases: number,
-  closedCases: number,
-|};
 
 export default {
   name: 'D3BarChart',
@@ -23,7 +16,7 @@ export default {
     /**
      * Data for Bar chart
      */
-    chartData: VueTypes.arrayOf(VueTypes.object).def((): BarChartT[] => [
+    chartData: VueTypes.arrayOf(VueTypes.object).def(() => [
       { group: new Date('2021-08-15'), newCases: 28, closedCases: 30 },
       { group: new Date('2021-08-16'), newCases: 43, closedCases: 38 },
       { group: new Date('2021-08-17'), newCases: 81, closedCases: 30 },
@@ -57,7 +50,7 @@ export default {
   },
 
   methods: {
-    getFontSize(): number {
+    getFontSize() {
       return (this.getWidth() + this.getHeight()) * 0.012;
     },
 
@@ -136,9 +129,9 @@ export default {
     },
 
     renderUnstackedChart() {
-      const newCases = this.chartData.map((d: BarChartT) => d.newCases);
-      const closedCases = this.chartData.map((d: BarChartT) => d.closedCases);
-      const groups = this.chartData.map((d: BarChartT) => d.group);
+      const newCases = this.chartData.map((d) => d.newCases);
+      const closedCases = this.chartData.map((d) => d.closedCases);
+      const groups = this.chartData.map((d) => d.group);
       const subgroups = _.filter(this.chartData.columns, (c) => c !== 'group');
       const { addHoverEffects } = this;
 
@@ -179,12 +172,12 @@ export default {
         .duration(1000)
         .delay((d, i) => i * 50)
         .ease(d3.easeCubicInOut)
-        .attr('x', (d: BarChartT) => this.x(d.group))
-        .attr('y', (d: BarChartT) => this.y(d.closedCases))
+        .attr('x', (d) => this.x(d.group))
+        .attr('y', (d) => this.y(d.closedCases))
         .attr('width', this.x.bandwidth())
         .attr('height', (d) => this.getInnerHeight() - this.y(d.closedCases))
         .attr('fill', this.colorScale('closedCases'))
-        .on('end', function (d: BarChartT) {
+        .on('end', function (d) {
           addHoverEffects(this, d.closedCases);
         });
 
@@ -201,12 +194,12 @@ export default {
         .duration(1000)
         .delay((d, i) => i * 50)
         .ease(d3.easeCubicInOut)
-        .attr('x', (d: BarChartT) => this.x(d.group))
-        .attr('y', (d: BarChartT) => this.y(d.newCases))
+        .attr('x', (d) => this.x(d.group))
+        .attr('y', (d) => this.y(d.newCases))
         .attr('width', this.x.bandwidth())
         .attr('height', (d) => this.getInnerHeight() - this.y(d.newCases))
         .attr('fill', this.colorScale('newCases'))
-        .on('end', function (d: BarChartT) {
+        .on('end', function (d) {
           addHoverEffects(this, d.newCases);
         });
 
@@ -221,13 +214,11 @@ export default {
       const { addHoverEffects } = this;
 
       // normalize data to filter out falsy values
-      const normalizedData = this.chartData.map(
-        (item: BarChartT): BarChartT => ({
-          group: new Date(item.group) ? item.group : '',
-          newCases: item.newCases ?? 0,
-          closedCases: item.closedCases ?? 0,
-        }),
-      );
+      const normalizedData = this.chartData.map((item) => ({
+        group: new Date(item.group) ? item.group : '',
+        newCases: item.newCases ?? 0,
+        closedCases: item.closedCases ?? 0,
+      }));
 
       // stack per subgroup
       const stackedData = d3.stack().keys(subgroups)(normalizedData);
@@ -244,9 +235,7 @@ export default {
         .scaleLinear()
         .domain([
           0,
-          d3.max(
-            this.chartData.map((c: BarChartT) => c.newCases + c.closedCases),
-          ),
+          d3.max(this.chartData.map((c) => c.newCases + c.closedCases)),
         ])
         .range([this.getInnerHeight(), this.margin.top])
         .nice();

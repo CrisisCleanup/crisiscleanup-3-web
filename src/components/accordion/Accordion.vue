@@ -44,35 +44,25 @@
 </template>
 
 <script>
-// @flow
 import VueTypes from 'vue-types';
 import _ from 'lodash';
 import { theme } from '@/../tailwind.config';
 
-export type AccordionCardT = {|
-  title: string,
-  key?: string,
-|};
-
 export default {
   name: 'Accordion',
-  props: ({
+  props: {
     /** Keep the active card highlighted. */
     highlightActive: VueTypes.bool,
     /** Set default card to be open by key. */
     defaultCard: VueTypes.string.def(null),
     /** Card definitions. */
-    cards: VueTypes.arrayOf<AccordionCardT[]>(
-      VueTypes.shape<AccordionCardT>({
+    cards: VueTypes.arrayOf(
+      VueTypes.shape({
         title: VueTypes.string.isRequired,
         key: VueTypes.oneOfType([VueTypes.string, VueTypes.number]),
       }).isRequired,
     ),
-  }: {
-    highlightActive: boolean,
-    defaultCard: string | null,
-    cards: AccordionCardT[],
-  }),
+  },
   data() {
     return {
       activeCard_: this.defaultCard ? this.defaultCard : null,
@@ -92,7 +82,7 @@ export default {
     });
   },
   methods: {
-    toggleCard(key: string) {
+    toggleCard(key) {
       this.activeCard_ = key;
       this.$emit('update:active-card', key);
     },
@@ -121,7 +111,7 @@ export default {
         : this.activeCard_;
     },
     accordionCards() {
-      return this.cards.map(({ title, key }: AccordionCardT = {}) => ({
+      return this.cards.map(({ title, key } = {}) => ({
         title,
         key: _.defaultTo(key, _.kebabCase(title)),
       }));
@@ -129,8 +119,8 @@ export default {
   },
   watch: {
     activeCard(newKey, oldKey) {
-      const newCard: HTMLElement = this.$refs[`icon-${newKey}`][0].$el;
-      const oldCard: HTMLElement = this.$refs[`icon-${oldKey}`][0].$el;
+      const newCard = this.$refs[`icon-${newKey}`][0].$el;
+      const oldCard = this.$refs[`icon-${oldKey}`][0].$el;
       this.$log.debug('new card:', newCard, oldCard);
       this.animateIndicator(newCard.firstChild, 'normal');
       this.animateIndicator(oldCard.firstChild, 'reverse');

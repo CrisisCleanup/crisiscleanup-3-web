@@ -2,7 +2,7 @@
  * Connect Service Tests
  */
 
-import * as ACS from '../connect.service.js';
+import * as ACS from '../connect.service';
 
 describe('connect service tests', () => {
   it('should bind agent events', () => {

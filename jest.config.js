@@ -10,7 +10,7 @@ module.exports = {
   // cypress tests
   modulePathIgnorePatterns: ['<rootDir>/tests'],
 
-  moduleFileExtensions: ['js', 'json', 'vue', 'node'],
+  moduleFileExtensions: ['js', 'json', 'vue', 'node', 'ts'],
 
   moduleNameMapper: {
     '.*\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|xml)$':
@@ -22,6 +22,7 @@ module.exports = {
   transform: {
     // *.js => babel
     '^.+\\.js$': 'babel-jest',
+    '^.+\\.ts$': 'ts-jest',
     // compile any *.vue files with jest vue preprocessor
     '^.+\\.vue$': '<rootDir>/node_modules/jest-vue-preprocessor',
   },

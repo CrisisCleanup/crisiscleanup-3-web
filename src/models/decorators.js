@@ -1,4 +1,3 @@
-// @flow
 /**
  * Decorators for Vuex-ORM Models.
  */
@@ -11,10 +10,10 @@ export const Localized = mixin({
    * Returns event object with pre-translated values.
    * @returns {T}
    */
-  withTrans<T>(): T {
+  withTrans() {
     return _.transform(
       this,
-      (result, value, key: string) => {
+      (result, value, key) => {
         result[key] = value;
         if (key.includes('_t')) {
           // set key AND key_t set to localized value for flexibility
