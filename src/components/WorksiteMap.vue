@@ -274,6 +274,7 @@ import 'leaflet.gridlayer.googlemutant';
 import 'leaflet-pixi-overlay';
 import 'leaflet.heat';
 import { mapState } from 'vuex';
+import { unionWith } from 'lodash';
 import {
   averageGeolocation,
   getWorksiteLayer,
@@ -409,10 +410,14 @@ export default {
     );
 
     const filtered = response.data.results;
-    await this.loadMap(
+
+    const allMergedCases = unionWith(
+      filtered,
       allCases.data.results,
-      new Set(filtered.map((f) => f.id)),
+      (a, b) => a.id === b.id,
     );
+
+    await this.loadMap(allMergedCases, new Set(filtered.map((f) => f.id)));
 
     const sviList = this.markers.map((marker) => {
       return {
