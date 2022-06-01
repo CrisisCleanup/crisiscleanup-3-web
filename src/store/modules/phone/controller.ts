@@ -207,7 +207,7 @@ class ControllerStore extends VuexModule {
   get currentAgentMetrics() {
     if (this.loading.agentMetrics) return null;
     return this.agentRankings.find(
-      (a) => a.user.id === this.context.rootGetters['auth/userId'],
+      (a: any) => a.user.id === this.context.rootGetters['auth/userId'],
     );
   }
 
@@ -372,7 +372,7 @@ class ControllerStore extends VuexModule {
       }
       Log.info('outbound received! calling...', outbound);
       const outboundObj = await PhoneOutbound.fetchOrFindId(outbound.id);
-      this.setOutbound(outboundObj);
+      this.setOutbound(outboundObj as PhoneOutbound);
       try {
         await PhoneOutbound.api().callOutbound(outbound.id, {
           isManual: manual,
@@ -475,7 +475,11 @@ class ControllerStore extends VuexModule {
         if (metrics.user) {
           metrics.user = await User.fetchOrFindId(metrics.user.id);
         } else {
-          const currentAgentMetrics = _.get(this.agentMetrics, agent_id, null);
+          const currentAgentMetrics: any = _.get(
+            this.agentMetrics,
+            agent_id,
+            null,
+          );
           if (!currentAgentMetrics) {
             return;
           }
@@ -542,7 +546,7 @@ class ControllerStore extends VuexModule {
     Log.debug('updating caller history:', recentContacts);
     this.setCallerHistory(recentContacts);
     this.setLoading({ callerHistory: false });
-    const currentAgentMetrics = _.get(this.agentMetrics, agent_id, null);
+    const currentAgentMetrics: any = _.get(this.agentMetrics, agent_id, null);
     if (!currentAgentMetrics) {
       return;
     }
@@ -582,6 +586,7 @@ class ControllerStore extends VuexModule {
       const parsedValue = parseFloat(value) || 0;
       // prevents 'fake' realtime values from going negative
       // till the true metrics come in
+      // @ts-ignore
       subState[_.camelCase(metricName)] = parsedValue >= 0 ? parsedValue : 0;
       newState[metricLocale] = subState;
 

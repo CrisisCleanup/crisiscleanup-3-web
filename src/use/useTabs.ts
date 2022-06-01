@@ -1,7 +1,7 @@
 /**
  * Use Tabs Hook
  */
-
+// @ts-nocheck TODO(tabiodun): Fix this file
 import {
   ref,
   computed,

@@ -223,7 +223,7 @@ export default class Contact extends Model {
     return this.hasResolvedCases && !_.isNil(target) && !_.isNil(this.dnis);
   }
 
-  get mostRecentWorksite(): typeof Worksite | null {
+  get mostRecentWorksite(): Worksite | undefined {
     return _.maxBy(this.worksites, (wk) => Date.parse(wk.updated_at));
   }
 
@@ -506,7 +506,7 @@ export default class Contact extends Model {
           }
         }
         if (_.isNumber(_val) && !_.isArray(result[key])) {
-          result[key] = _.parseInt(_val); // number values
+          result[key] = _.parseInt(_val.toString()); // number values
         }
       },
       {},

@@ -20,6 +20,8 @@ export default class Worksite extends CCUModel<Worksite> {
 
   state!: string;
 
+  updated_at!: string;
+
   location!: any;
 
   incident!: any;

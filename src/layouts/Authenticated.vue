@@ -36,8 +36,7 @@
           @update:incident="handleChange"
           @auth:logout="
             () => {
-              logoutByPhoneNumber();
-              $store.dispatch('auth/logout');
+              logoutApp();
             }
           "
         />
@@ -78,26 +77,27 @@
   </Loader>
 </template>
 
-<script>
-import { mapActions, mapMutations, mapState } from 'vuex';
+<script lang="ts">
 import detectBrowserLanguage from 'detect-browser-language';
 import { size } from 'lodash';
 import { Slide } from 'vue-burger-menu';
 import { parsePhoneNumber } from 'libphonenumber-js';
+import { ref, computed, watch, onMounted } from '@vue/composition-api';
+import { useState, useGetters, useMutations, useActions } from '@u3u/vue-hooks';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
 import Language from '@/models/Language';
 import Role from '@/models/Role';
 import { i18nService } from '@/services/i18n.service';
-import NavMenu from '@/components/navigation/NavMenu';
-import Loader from '@/components/Loader';
-import TermsandConditionsModal from '@/components/TermsandConditionsModal';
+import NavMenu from '@/components/navigation/NavMenu.vue';
+import Loader from '@/components/Loader.vue';
+import TermsandConditionsModal from '@/components/TermsandConditionsModal.vue';
 import Header from '@/components/header/Header.vue';
-import PhoneStatus from '../models/PhoneStatus';
-import CompletedTransferModal from '../components/CompletedTransferModal';
-import { AuthService } from '../services/auth.service';
-import LoginForm from '@/components/forms/LoginForm';
+import PhoneStatus from '@/models/PhoneStatus';
+import CompletedTransferModal from '@/components/CompletedTransferModal.vue';
+import { AuthService } from '@/services/auth.service';
+import LoginForm from '@/components/forms/LoginForm.vue';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
@@ -112,283 +112,204 @@ export default {
     Slide,
     Header,
   },
-  data() {
-    return {
-      loading: false,
-      ready: false,
-      showAcceptTermsModal: false,
-      transferRequest: null,
-    };
-  },
-  computed: {
-    currentUser() {
-      return User.find(this.$store.getters['auth/userId']);
-    },
-    currentOrganization() {
-      return Organization.find(this.currentUser.organization.id);
-    },
-    incidents() {
-      return Incident.query().orderBy('id', 'desc').get();
-    },
-    currentIncident() {
-      return Incident.find(this.currentIncidentId);
-    },
-    routes() {
-      return [
-        {
-          key: 'dashboard',
-          text: this.$t('nav.dashboard'),
-          to: `/incident/${this.currentIncidentId}/dashboard`,
-        },
-        {
-          key: 'cases',
-          to: `/incident/${this.currentIncidentId}/cases/new`,
-        },
-        {
-          key: 'phone',
-          icon: 'phone',
-          text: this.$t('nav.phone'),
-          to: '/phone',
-          disabled: !this.$can || !this.$can('phone_agent'),
-        },
-        {
-          key: 'caller',
-          icon: 'phone',
-          text: this.$t('nav.phone_beta'),
-          to: '/caller',
-          disabled: true,
-        },
-        {
-          key: 'connect_first',
-          icon: 'phone',
-          text: this.$t('nav.phone_alpha'),
-          to: '/connect_first',
-          disabled:
-            !this.$can ||
-            !this.$can('phone_agent') ||
-            !this.$can('beta_feature.connect_first_integration'),
-        },
-        {
-          key: 'my_organization',
-          icon: 'organization',
-          iconSize: 'large',
-          to: '/organization/invitations',
-        },
-        {
-          key: 'other_organizations',
-          icon: 'otherorg',
-          iconSize: 'xl',
-          to: '/other_organizations',
-        },
-        {
-          key: 'reports',
-          icon: 'reports',
-          text: this.$t('nav.reports'),
-          to: '/reports',
-        },
-        {
-          key: 'training',
-          text: this.$t('nav.training'),
-          icon: {
-            type: 'info',
-            invertColor: true,
-          },
-          to: '/training',
-        },
-        {
-          key: 'admin',
-          icon: 'admin',
-          text: this.$t('nav.admin'),
-          to: '/admin',
-          disabled: !(this.currentUser && this.currentUser.isAdmin),
-        },
-      ];
-    },
-    logoRoute() {
-      return {
-        key: 'pew',
-        text: this.$t('nav.pew'),
-        to: '/pew-pew',
-      };
-    },
-    ...mapState('incident', ['currentIncidentId']),
-    ...mapState('auth', ['user', 'showLoginModal']),
-    ...mapState('enums', ['portal']),
-  },
-  watch: {
-    '$route.params.incident_id': {
-      handler(value) {
-        if (value && Number(this.currentIncidentId) !== Number(value)) {
-          this.handleChange(value);
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
-  async mounted() {
-    this.loading = true;
-    this.setCurrentIncidentId(null);
-    let user;
-    try {
-      await User.api().get('/users/me', {});
-      user = User.find(this.$store.getters['auth/userId']);
-      AuthService.updateUser(user.$toJson());
-    } catch {
-      await AuthService.removeUser();
-      await this.$store.dispatch('auth/logout');
-      return;
-    }
-    await Promise.all([
-      Incident.api().get(
-        '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
-        {
-          dataKey: 'results',
-        },
-      ),
-      Organization.api().get(
-        `/organizations/${this.user.user_claims.organization.id}`,
-      ),
-      Language.api().get('/languages', {
-        dataKey: 'results',
-      }),
+  setup(props, context) {
+    const { currentIncidentId } = useState('incident', ['currentIncidentId']);
+    const { user, showLoginModal } = useState('auth', [
+      'user',
+      'showLoginModal',
     ]);
-    try {
-      Role.api().get('/roles', {
-        dataKey: 'results',
-      });
-      PhoneStatus.api().get('/phone_statuses', {
-        dataKey: 'results',
-      });
-    } catch (e) {
-      // TODO(tobi): Empty for now make this better
-    }
-    await this.getUserTransferRequests();
-    await this.setupLanguage();
-    this.setAcl(this.$router);
+    const { portal } = useState('enums', ['portal']);
+    const { userId } = useGetters('auth', ['userId']);
 
-    let incidentId = this.$route.params.incident_id;
-    if (!incidentId) {
-      const incident = Incident.query().orderBy('id', 'desc').first();
-      if (incident) {
-        incidentId = incident.id;
-      }
-    }
+    const loading = ref(false);
+    const ready = ref(false);
+    const showAcceptTermsModal = ref(false);
+    const transferRequest = ref(null);
 
-    if (this.currentUser.states && this.currentUser.states.incident) {
-      incidentId = this.currentUser.states.incident;
-    }
+    const currentUser = computed(() => User.find(userId.value));
 
-    if (incidentId) {
-      this.setCurrentIncidentId(incidentId);
-    }
+    const currentOrganization = computed(() =>
+      Organization.find(currentUser?.value?.organization?.id),
+    );
 
-    if (
-      !this.currentUser.accepted_terms_timestamp ||
-      this.$moment(VERSION_3_LAUNCH_DATE).isAfter(
-        this.$moment(this.currentUser.accepted_terms_timestamp),
-      ) ||
-      (this.portal.tos_updated_at &&
-        this.$moment(this.portal.tos_updated_at).isAfter(
-          this.currentUser.accepted_terms_timestamp,
-        ))
-    ) {
-      this.showAcceptTermsModal = true;
-    }
+    const incidents = computed(() =>
+      Incident.query().orderBy('id', 'desc').get(),
+    );
 
-    try {
-      await Incident.api().fetchById(incidentId);
-    } catch (e) {
-      this.setCurrentIncidentId(null);
-      User.api().updateUserState({
-        incident: null,
-      });
-      const incident = Incident.query().orderBy('id', 'desc').first();
-      if (incident) {
-        this.setCurrentIncidentId(incident.id);
-      }
-      await this.$router.push(`/`).catch(() => {});
-    }
+    const logoRoute = computed(() => ({
+      key: 'pew',
+      text: context.root.$t('nav.pew'),
+      to: '/pew-pew',
+    }));
 
-    this.loading = false;
-    this.ready = true;
-  },
-  methods: {
-    isLandscape() {
-      return window.matchMedia(
-        'only screen and (max-device-width: 1223px) and (orientation: landscape)',
-      ).matches;
-    },
-    async handleChange(value) {
+    const currentIncident = computed(() =>
+      Incident.find(currentIncidentId.value),
+    );
+
+    const routes = computed(() => [
+      {
+        key: 'dashboard',
+        text: context.root.$t('nav.dashboard'),
+        to: `/incident/${currentIncidentId.value}/dashboard`,
+      },
+      {
+        key: 'cases',
+        to: `/incident/${currentIncidentId.value}/cases/new`,
+      },
+      {
+        key: 'phone',
+        icon: 'phone',
+        text: context.root.$t('nav.phone'),
+        to: '/phone',
+        disabled: !context.root.$can || !context.root.$can('phone_agent'),
+      },
+      {
+        key: 'caller',
+        icon: 'phone',
+        text: context.root.$t('nav.phone_beta'),
+        to: '/caller',
+        disabled: true,
+      },
+      {
+        key: 'connect_first',
+        icon: 'phone',
+        text: context.root.$t('nav.phone_alpha'),
+        to: '/connect_first',
+        disabled:
+          !context.root.$can ||
+          !context.root.$can('phone_agent') ||
+          !context.root.$can('beta_feature.connect_first_integration'),
+      },
+      {
+        key: 'my_organization',
+        icon: 'organization',
+        iconSize: 'large',
+        to: '/organization/invitations',
+      },
+      {
+        key: 'other_organizations',
+        icon: 'otherorg',
+        iconSize: 'xl',
+        to: '/other_organizations',
+      },
+      {
+        key: 'reports',
+        icon: 'reports',
+        text: context.root.$t('nav.reports'),
+        to: '/reports',
+      },
+      {
+        key: 'training',
+        text: context.root.$t('nav.training'),
+        icon: {
+          type: 'info',
+          invertColor: true,
+        },
+        to: '/training',
+      },
+      {
+        key: 'admin',
+        icon: 'admin',
+        text: context.root.$t('nav.admin'),
+        to: '/admin',
+        disabled: !(currentUser.value && currentUser.value.isAdmin),
+      },
+    ]);
+
+    const { setAcl } = useMutations('auth', ['setAcl']);
+    const { setCurrentIncidentId } = useMutations('incident', [
+      'setCurrentIncidentId',
+    ]);
+    const { setWorksitesLoading } = useMutations('loading', [
+      'setWorksitesLoading',
+    ]);
+    const { setLanguage } = useMutations('locale', ['setLanguage']);
+    const { setStatuses, setWorkTypes } = useMutations('enums', [
+      'setStatuses',
+      'setWorkTypes',
+    ]);
+
+    const { login, logout } = useActions('auth', ['login', 'logout']);
+
+    const handleChange = async (value) => {
       await Incident.api().fetchById(value);
       await User.api().updateUserState({
         incident: value,
       });
-      this.setCurrentIncidentId(value);
-      await this.$router.push({
-        name: this.$route.name,
-        params: { ...this.$route.params, incident_id: value },
-        query: { ...this.$route.query },
+      setCurrentIncidentId(value);
+      await context.root.$router.push({
+        name: context.root.$route.name,
+        params: { ...context.root.$route.params, incident_id: value },
+        query: { ...context.root.$route.query },
       });
-    },
-    async setupLanguage() {
+    };
+
+    const isLandscape = () => {
+      return window.matchMedia(
+        'only screen and (max-device-width: 1223px) and (orientation: landscape)',
+      ).matches;
+    };
+
+    const setupLanguage = async () => {
       let currentLanguage = detectBrowserLanguage();
-      const userLanguage =
-        Language.find(this.currentUser.primary_language) ||
-        Language.find(this.currentUser.secondary_language);
-      if (userLanguage) {
-        currentLanguage = userLanguage.subtag;
+      if (
+        currentUser?.value?.primary_language ||
+        currentUser?.value?.secondary_language
+      ) {
+        const userLanguage =
+          Language.find(currentUser?.value?.primary_language) ||
+          Language.find(currentUser?.value?.secondary_language);
+
+        if (userLanguage) {
+          currentLanguage = userLanguage.subtag;
+        }
       }
 
-      this.setLanguage(currentLanguage);
-      if (currentLanguage !== this.$i18n.locale) {
+      setLanguage(currentLanguage);
+      if (currentLanguage !== context.root.$i18n.locale) {
         try {
           const data = await i18nService.getLanguage(currentLanguage);
           const { translations } = data;
           if (size(translations) > 0) {
-            this.$i18n.setLocaleMessage(currentLanguage, translations);
-            this.$i18n.locale = currentLanguage;
-            this.$http.defaults.headers.common['Accept-Language'] =
+            context.root.$i18n.setLocaleMessage(currentLanguage, translations);
+            context.root.$i18n.locale = currentLanguage;
+            context.root.$http.defaults.headers.common['Accept-Language'] =
               currentLanguage;
-            document
-              .querySelector('html')
-              .setAttribute('lang', currentLanguage);
+            const htmlHtmlElement = document.querySelector('html');
+            if (htmlHtmlElement) {
+              htmlHtmlElement.setAttribute('lang', currentLanguage);
+            }
           }
         } catch (e) {
-          this.$log.error(e);
+          context.root.$log.error(e);
         }
       }
+      context.root.$moment.locale(currentLanguage.split('-')[0]);
+    };
 
-      this.$moment.locale(currentLanguage.split('-')[0]);
-    },
-    ...mapActions('auth', ['login']),
-    ...mapMutations('auth', ['setAcl']),
-    ...mapMutations('incident', ['setCurrentIncidentId']),
-    ...mapMutations('loading', ['setWorksitesLoading']),
-    ...mapMutations('locale', ['setLanguage']),
-    ...mapMutations('enums', ['setStatuses', 'setWorkTypes']),
-    async acceptTermsAndConditions() {
+    const acceptTermsAndConditions = async () => {
       await User.api().acceptTerms();
-      this.showAcceptTermsModal = false;
-    },
-    async getUserTransferRequests() {
-      const response = await this.$http.get(
+      showAcceptTermsModal.value = false;
+    };
+
+    const getUserTransferRequests = async () => {
+      const response = await context.root.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/transfer_requests`,
       );
-      this.transferRequest = response.data.results.find((request) => {
-        return request.user === this.currentUser.id;
+      transferRequest.value = response.data.results.find((request) => {
+        return request.user === currentUser?.value?.id;
       });
-    },
-    async logout() {
-      await this.logoutByPhoneNumber();
-      await this.$store.dispatch('auth/logout');
-    },
-    async logoutByPhoneNumber() {
-      const parsedNumber = parsePhoneNumber(this.currentUser.mobile, 'US');
-      if (this.currentUser && this.currentUser.mobile) {
+    };
+
+    const logoutByPhoneNumber = async () => {
+      const parsedNumber = parsePhoneNumber(
+        currentUser?.value?.mobile || '',
+        'US',
+      );
+      if (currentUser.value && currentUser?.value?.mobile) {
         await Promise.all(
-          this.$phoneService.queueIds.map((queueId) =>
-            this.$phoneService
+          context.root.$phoneService.queueIds.map((queueId) =>
+            context.root.$phoneService
               .apiLoginsByPhone(
                 parsedNumber.formatNational().replace(/[^\d.]/g, ''),
                 queueId,
@@ -396,8 +317,10 @@ export default {
               .then(async ({ data }) => {
                 if (data.length) {
                   await Promise.all(
-                    data.map((login) =>
-                      this.$phoneService.apiLogoutAgent(login.agentId),
+                    data.map((phoneLogin) =>
+                      context.root.$phoneService.apiLogoutAgent(
+                        phoneLogin.agentId,
+                      ),
                     ),
                   );
                 }
@@ -407,7 +330,141 @@ export default {
           ),
         );
       }
-    },
+    };
+
+    const logoutApp = async () => {
+      await logoutByPhoneNumber();
+      await logout();
+    };
+
+    watch(
+      () => context.root.$route.params.incident_id,
+      (value) => {
+        if (value && Number(currentIncidentId.value) !== Number(value)) {
+          handleChange(value);
+        }
+      },
+    );
+
+    onMounted(async () => {
+      loading.value = true;
+      setCurrentIncidentId(null);
+      let u;
+      try {
+        await User.api().get('/users/me', {});
+        u = User.find(userId.value);
+        AuthService.updateUser(u.$toJson());
+      } catch {
+        await AuthService.removeUser();
+        await logout();
+        return;
+      }
+      await Promise.all([
+        Incident.api().get(
+          '/incidents?fields=id,name,short_name,geofence,locations,turn_on_release,active_phone_number&limit=250&ordering=-start_at',
+          {
+            dataKey: 'results',
+          },
+        ),
+        Organization.api().get(
+          `/organizations/${user.value.user_claims.organization.id}`,
+        ),
+        Language.api().get('/languages', {
+          dataKey: 'results',
+        }),
+      ]);
+      try {
+        Role.api().get('/roles', {
+          dataKey: 'results',
+        });
+        PhoneStatus.api().get('/phone_statuses', {
+          dataKey: 'results',
+        });
+      } catch (e) {
+        // TODO(tobi): Empty for now make this better
+      }
+      await getUserTransferRequests();
+      await setupLanguage();
+      setAcl(context.root.$router);
+
+      let incidentId = context.root.$route.params.incident_id;
+      if (!incidentId) {
+        const incident = Incident.query().orderBy('id', 'desc').first();
+        if (incident) {
+          incidentId = incident.id;
+        }
+      }
+
+      if (currentUser?.value?.states && currentUser.value.states.incident) {
+        incidentId = currentUser.value.states.incident;
+      }
+
+      if (incidentId) {
+        setCurrentIncidentId(incidentId);
+      }
+
+      if (
+        !currentUser?.value?.accepted_terms_timestamp ||
+        context.root
+          .$moment(VERSION_3_LAUNCH_DATE)
+          .isAfter(
+            context.root.$moment(currentUser.value.accepted_terms_timestamp),
+          ) ||
+        (portal.value.tos_updated_at &&
+          context.root
+            .$moment(portal.value.tos_updated_at)
+            .isAfter(currentUser.value.accepted_terms_timestamp))
+      ) {
+        showAcceptTermsModal.value = true;
+      }
+
+      try {
+        await Incident.api().fetchById(incidentId);
+      } catch (e) {
+        setCurrentIncidentId(null);
+        User.api().updateUserState({
+          incident: null,
+        });
+        const incident = Incident.query().orderBy('id', 'desc').first();
+        if (incident) {
+          setCurrentIncidentId(incident.id);
+        }
+        await context.root.$router.push(`/`).catch(() => {});
+      }
+
+      loading.value = false;
+      ready.value = true;
+    });
+
+    return {
+      user,
+      showLoginModal,
+      currentIncidentId,
+      portal,
+      userId,
+      loading,
+      ready,
+      showAcceptTermsModal,
+      transferRequest,
+
+      currentUser,
+      currentOrganization,
+      currentIncident,
+      incidents,
+
+      routes,
+      logoRoute,
+
+      setWorksitesLoading,
+      login,
+      setStatuses,
+      setWorkTypes,
+      acceptTermsAndConditions,
+      logoutApp,
+      logoutByPhoneNumber,
+      handleChange,
+      isLandscape,
+    };
   },
 };
 </script>

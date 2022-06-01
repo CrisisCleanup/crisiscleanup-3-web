@@ -6,12 +6,40 @@ import Language from '@/models/Language';
 import Role from '@/models/Role';
 import CCUModel from '@/models/model';
 
-export default class User extends CCUModel {
+export default class User extends CCUModel<User> {
   static entity = 'users';
+
+  id!: string;
+
+  primary_language!: string;
+
+  secondary_language!: string;
+
+  organization!: any;
+
+  active_roles!: any[];
+
+  referring_user!: string;
+
+  preferences!: Record<string, any>;
+
+  first_name!: string;
+
+  last_name!: string;
+
+  mobile!: string;
+
+  accepted_terms_timestamp!: string;
+
+  states!: Record<string, any>;
+
+  social!: Record<string, any>;
+
+  files!: any[];
 
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       first_name: this.string(''),
       last_name: this.string(''),
       email: this.string(''),
@@ -75,7 +103,7 @@ export default class User extends CCUModel {
   }
 
   get languages() {
-    const languageList = [];
+    const languageList: any[] = [];
     if (this.primary_language) {
       languageList.push(Language.find(this.primary_language));
     }
@@ -142,7 +170,7 @@ export default class User extends CCUModel {
         );
       },
       inviteUser(email, organization = null) {
-        const data = {
+        const data: Record<string, any> = {
           invitee_email: email,
         };
         if (organization) {
@@ -189,7 +217,7 @@ export default class User extends CCUModel {
       async clearUserStates() {
         const currentUser = User.find(User.store().getters['auth/userId']);
         await this.patch(
-          `/users/${currentUser.id}`,
+          `/users/${currentUser?.id}`,
           {
             states: {},
           },
@@ -200,7 +228,7 @@ export default class User extends CCUModel {
       async clearUserPreferences() {
         const currentUser = User.find(User.store().getters['auth/userId']);
         await this.patch(
-          `/users/${currentUser.id}`,
+          `/users/${currentUser?.id}`,
           {
             preferences: {},
           },
@@ -248,7 +276,7 @@ export default class User extends CCUModel {
         });
         currentUser = User.find(AuthService.getUser().user_claims.id);
         await this.patch(
-          `/users/${currentUser.id}`,
+          `/users/${currentUser?.id}`,
           {
             states: updatedStates,
           },
@@ -280,11 +308,11 @@ export default class User extends CCUModel {
       },
       async acceptTerms() {
         const currentUser = User.find(AuthService.getUser().user_claims.id);
-        await this.patch(`/users/${currentUser.id}`, {
+        await this.patch(`/users/${currentUser?.id}`, {
           accepted_terms: true,
           accepted_terms_timestamp: moment().toISOString(),
         });
       },
-    },
+    } as any,
   };
 }

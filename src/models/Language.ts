@@ -75,7 +75,7 @@ export default class Language extends CCUModel<Language> {
    * @returns {Promise<LanguageTranslationResponse>}
    */
   static async translateText(id: number, text: string) {
-    const locale = await this.fetchOrFindId(id);
+    const locale: any = await this.fetchOrFindId(id);
     const {
       response: { data },
     }: {
@@ -83,7 +83,7 @@ export default class Language extends CCUModel<Language> {
         data: LanguageTranslationResponse;
       };
     } = await this.api().post(
-      `/languages/${locale.subtag}/translate`,
+      `/languages/${locale?.subtag}/translate`,
       {
         text,
       },

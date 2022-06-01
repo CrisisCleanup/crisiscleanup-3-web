@@ -24,9 +24,9 @@ export default ({ context }: { context: any }) => {
     async () => {
       loading.value = true;
       items.value = [];
-      await _.mapValues(results.value, async ({ id }) => {
+      _.mapValues(results.value, async ({ id }: any) => {
         const event = await Event.fetchOrFindId(id);
-        items.value.push(event);
+        items.value.push(event as Event);
       });
       context.emit('update:event-items', items.value);
       loading.value = false;
