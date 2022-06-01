@@ -23,7 +23,7 @@
               :style="`background: ${section.color}`"
               @click="status = item.value"
             >
-              {{ $t(`~~${item.name_t}`) }}
+              {{ $t(item.name_t) }}
             </div>
           </div>
         </div>
