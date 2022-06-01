@@ -37,7 +37,6 @@ export default class User extends CCUModel<User> {
 
   files!: any[];
 
-
   static fields() {
     return {
       id: this.attr(''),
