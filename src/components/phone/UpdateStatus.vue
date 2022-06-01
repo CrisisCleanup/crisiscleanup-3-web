@@ -14,7 +14,7 @@
       <div v-for="(section, index) in sortedValues" :key="index">
         <div>
           <div class="font-bold">
-            {{ $t(`~~${section.name}`) }}
+            {{ section.name }}
           </div>
           <div v-for="(item, idx) in section.values" :key="idx">
             <div
