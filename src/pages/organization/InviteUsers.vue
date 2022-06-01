@@ -93,7 +93,7 @@ export default {
       return User.find(this.$store.getters['auth/userId']);
     },
     currentOrganization() {
-      return Organization.find(this.currentUser.organization.id);
+      return Organization.find(this.currentUser?.organization.id);
     },
   },
   data() {
