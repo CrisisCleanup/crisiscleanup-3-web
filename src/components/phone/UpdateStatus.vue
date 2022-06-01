@@ -92,7 +92,9 @@ export default {
               value: 1,
             },
             {
-              name_t: this.$t('phoneStatus.answered_duplicate-or-updated-existing'),
+              name_t: this.$t(
+                'phoneStatus.answered_duplicate-or-updated-existing',
+              ),
               value: 2,
             },
             {
