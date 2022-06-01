@@ -77,7 +77,7 @@
             variant="h3"
             class="text-crisiscleanup-dark-400"
             :style="$mq === 'sm' ? '' : 'margin-top: 16px;'"
-            >{{ $t('~~New Case') }}
+            >{{ $t('phoneDashboard.new_case') }}
           </base-text>
         </div>
       </div>
