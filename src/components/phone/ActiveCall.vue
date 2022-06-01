@@ -73,7 +73,10 @@
             size="xl"
             class="pb-1"
           />
-          <base-text variant="h3" class="text-crisiscleanup-dark-400"
+          <base-text
+            variant="h3"
+            class="text-crisiscleanup-dark-400"
+            :style="$mq === 'sm' ? '' : 'margin-top: 16px;'"
             >{{ $t('~~New Case') }}
           </base-text>
         </div>
