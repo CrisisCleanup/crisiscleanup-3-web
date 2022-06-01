@@ -143,7 +143,7 @@
           select-classes="bg-white border border-crisiscleanup-dark-100 w-full h-12"
         />
         <ccu-icon
-          :alt="$t('~~Add ani')"
+          :alt="$t('incidentBuilder.add_ani')"
           type="active"
           size="medium"
           class="ml-3 min-w-max"
@@ -308,10 +308,8 @@ export default {
   methods: {
     async addNewAni() {
       const result = await this.$prompt({
-        title: this.$t('~~Add New Ani'),
-        content: this.$t(
-          '~~Please enter a new phone number with country and area code',
-        ),
+        title: this.$t('incidentBuilder.add_new_ani'),
+        content: this.$t('incidentBuilder.enter_new_ani'),
       });
 
       if (result) {

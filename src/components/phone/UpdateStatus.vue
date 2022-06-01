@@ -85,70 +85,72 @@ export default {
     sortedValues() {
       const values = {
         answered: {
-          name: 'Answered',
+          name: this.$t('phoneState.answered'),
           values: [
             {
-              name_t: 'added case',
+              name_t: this.$t('phoneStatus.answered_added'),
               value: 1,
             },
             {
-              name_t: 'already had case',
+              name_t: this.$t(
+                'phoneStatus.answered_duplicate-or-updated-existing',
+              ),
               value: 2,
             },
             {
-              name_t: 'no help needed',
+              name_t: this.$t('phoneStatus.answered_no-help-wanted'),
               value: 3,
             },
             {
-              name_t: 'hung up',
+              name_t: this.$t('phoneStatus.answered_hung-up'),
               value: 5,
             },
             {
-              name_t: 'out of scope',
+              name_t: this.$t('phoneStatus.answered_out-of-scope'),
               value: 7,
             },
             {
-              name_t: 'will call us back',
+              name_t: this.$t('phoneStatus.answered_will-call-back'),
               value: 4,
             },
             {
-              name_t: 'other see notes',
+              name_t: this.$t('phoneStatus.answered_other'),
               value: 8,
             },
           ],
           color: '#0FA355',
         },
         noAnswer: {
-          name: 'No Answer',
+          name: this.$t('phoneState.no-answer'),
           values: [
             {
-              name_t: 'left voicemail',
+              name_t: this.$t('phoneStatus.no-answer_voicemail'),
               value: 15,
             },
             {
-              name_t: 'voicemail full or n/a',
+              name_t: this.$t('phoneStatus.no-answer_voicemail-full-or-none'),
               value: 16,
             },
             {
-              name_t: 'technical difficulty',
+              name_t: this.$t('phoneStatus.no-answer_technical-difficulty'),
               value: 17,
             },
             {
-              name_t: 'buziness, fax, bad #',
-              value: 18,
+              name_t: this.$t('phoneStatus.either_bad-number'),
+              value: 19,
             },
           ],
           color: '#FAB92E',
         },
         skipped: {
-          name: 'Skipped',
+          name: this.$t('phoneState.skipped'),
           values: [
             {
-              name_t: 'no outbound call',
+              name_t: this.$t('phoneStatus.skipped_did-not-outbound'),
               value: 20,
             },
             {
-              name_t: 'no inbound call',
+              name_t: this.$t('phoneStatus.skipped_did-not-inbound'),
               value: 22,
             },
           ],
