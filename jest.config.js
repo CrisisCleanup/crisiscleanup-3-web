@@ -36,6 +36,7 @@ module.exports = {
     'jest-canvas-mock',
     '<rootDir>/.jest/register-context.js',
     '<rootDir>/.jest/mocks/globals.js',
+    '<rootDir>/.jest/setup.js',
   ],
 
   snapshotSerializers: ['jest-serializer-vue'],

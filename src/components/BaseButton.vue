@@ -22,91 +22,150 @@
   </button>
 </template>
 
-<script>
+<script lang="ts">
 import { kebabCase } from 'lodash';
-import VueTypes from 'vue-types';
+import { ref, computed, defineComponent, PropType } from '@vue/composition-api';
 import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from '@/constants';
 import { EventsMixin } from '@/mixins';
 import { delay } from '@/utils/promise';
+import useLogEvent from '@/use/events/useLogEvent';
 
-export default {
+type ButtonSize = 'small' | 'medium' | 'large' | 'sm' | 'md' | 'lg';
+type IconSize = typeof ICON_SIZES[number];
+
+export default defineComponent({
   name: 'BaseButton',
   mixins: [EventsMixin],
+
   props: {
-    action: VueTypes.func,
-    disabled: VueTypes.bool.def(false),
-    showSpinner: VueTypes.bool.def(false),
-    text: VueTypes.string,
-    alt: VueTypes.string.def('button'),
-    title: VueTypes.string.def('Button'),
-    size: VueTypes.oneOf(['small', 'medium', 'large', 'sm', 'md', 'lg']),
-    icon: VueTypes.string,
-    ccuIcon: VueTypes.oneOf(Object.values(ICONS)),
-    iconSize: VueTypes.oneOf(ICON_SIZES).def('sm'),
-    suffixIcon: VueTypes.oneOf(Object.values(ICONS)),
-    selector: VueTypes.string,
-    variant: VueTypes.oneOf(Object.values(VARIANTS)),
-  },
-  data() {
-    return {
-      loading: false,
-    };
-  },
-  computed: {
-    buttonSelector() {
-      return this.selector || `js-${kebabCase(this.buttonTitle)}`;
+    action: {
+      type: Function as PropType<() => any>,
+      default: () => {},
     },
-    buttonTitle() {
-      return this.text || this.alt || this.title;
+    disabled: {
+      type: Boolean,
+      default: false,
     },
-    styles() {
-      const styles = {
-        'large text-h3 font-h3': ['large', 'lg'].includes(this.size),
+    showSpinner: {
+      type: Boolean,
+      default: false,
+    },
+    text: {
+      type: String,
+      default: 'button',
+    },
+    alt: {
+      type: String,
+      default: 'button',
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    ccuEvent: {
+      type: String,
+      default: '',
+    },
+    size: {
+      type: String as PropType<ButtonSize>,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    ccuIcon: {
+      type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
+      default: '',
+    },
+    iconSize: {
+      type: String as PropType<IconSize>,
+      default: '',
+    },
+    suffixIcon: {
+      type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
+      default: '',
+    },
+    selector: {
+      type: String,
+      default: '',
+    },
+    variant: {
+      type: String as PropType<typeof VARIANTS[keyof typeof VARIANTS]>,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+  },
+
+  setup(props) {
+    const loading = ref(false);
+
+    const buttonTitle = computed(() => props.text || props.alt || props.title);
+
+    const buttonSelector = computed(
+      () => props.selector || `js-${kebabCase(buttonTitle.value)}`,
+    );
+
+    const styles = computed(() => {
+      const styleObject = {
+        'large text-h3 font-h3': ['large', 'lg'].includes(props.size),
         'medium text-sans text-h4 font-h4': ['medium', 'md'].includes(
-          this.size,
+          props.size,
         ),
-        'small text-bodysm font-bodysm': ['small', 'sm'].includes(this.size),
-        disabled: this.disabled,
+        'small text-bodysm font-bodysm': ['small', 'sm'].includes(props.size),
+        disabled: props.disabled,
         // **** DEPRECATED ****
-        primary: this.type === 'primary',
-        danger: this.type === 'danger',
-        warning: this.type === 'warning',
-        link: this.type === 'link',
-        bare: this.type === 'bare',
+        primary: props.type === 'primary',
+        danger: props.type === 'danger',
+        warning: props.type === 'warning',
+        link: props.type === 'link',
+        bare: props.type === 'bare',
         // **************
         flex: true,
         'items-center': true,
         'justify-center': true,
         'base-button': true,
       };
-      if (this.variant) {
-        styles[this.variant] = true;
+      if (props.variant) {
+        styleObject[props.variant] = true;
       }
-      styles[this.variant] = true;
-      return styles;
-    },
-  },
-  methods: {
-    async timeout() {
+      styleObject[props.variant] = true;
+      return styleObject;
+    });
+
+    const timeout = async () => {
       await delay(5000);
       return Promise.reject();
-    },
-    async performAction() {
-      this.loading = true;
+    };
+
+    const performAction = async () => {
+      loading.value = true;
 
       try {
-        if (this.action) {
-          await Promise.race([this.action(), this.timeout()]);
+        if (props.action) {
+          await Promise.race([props.action(), timeout()]);
         }
       } catch (e) {
         // TODO: expose method for handling button exceptions
       } finally {
-        this.logEvent();
-        this.loading = false;
+        const { logEvent } = useLogEvent();
+        logEvent(props.ccuEvent);
+        loading.value = false;
       }
-    },
+    };
+
+    return {
+      loading,
+      styles,
+      buttonSelector,
+      buttonTitle,
+      performAction,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

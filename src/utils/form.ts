@@ -37,6 +37,7 @@ export const nest = (
   excluded = [],
 ) =>
   items
+    .filter((item: { field_key: string }) => Boolean(item.field_key))
     .filter(
       (item: { field_key: string }) =>
         // @ts-ignore

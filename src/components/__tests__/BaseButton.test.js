@@ -8,9 +8,9 @@
 import { mount } from '@vue/test-utils';
 import BaseButton from '../BaseButton';
 
-const mountWithOptions = ({ props } = {}) =>
+const mountWithOptions = (props = {}) =>
   mount(BaseButton, {
-    stubs: ['font-awesome-icon'],
+    stubs: ['font-awesome-icon', 'ccu-icon'],
     propsData: {
       text: 'button',
       alt: 'alt-text',
@@ -31,28 +31,24 @@ describe('BaseButton', () => {
 
   it('should perform action', async () => {
     expect.assertions(1);
-    const mockAction = () => true;
-    const props = { action: mockAction };
-    const wrapper = mountWithOptions(BaseButton, { props });
-    wrapper.vm.loading = true;
-    await wrapper.vm.performAction();
-    expect(wrapper.vm.loading).toBe(false);
+    const mockAction = jest.fn();
+    const wrapper = mountWithOptions({ action: mockAction });
+    await wrapper.find('button').trigger('click');
+    expect(mockAction).toHaveBeenCalled();
   });
 
-  it('should perform action', async () => {
+  it('should raise error', async () => {
     expect.assertions(1);
     const mockAction = () => {
       throw new Error();
     };
-    const props = { action: mockAction };
-    const wrapper = mountWithOptions(BaseButton, { props });
-    wrapper.vm.loading = true;
-    await wrapper.vm.performAction();
-    expect(wrapper.vm.loading).toBe(false);
+    const wrapper = mountWithOptions({ action: mockAction });
+    await wrapper.find('button').trigger('click');
+    expect(mockAction).toThrow(Error);
   });
 
   it('should render correctly and match snapshot', () => {
-    const wrapper = mountWithOptions();
+    const wrapper = mountWithOptions({ action: () => true });
     expect(wrapper.element).toMatchSnapshot();
   });
 });
