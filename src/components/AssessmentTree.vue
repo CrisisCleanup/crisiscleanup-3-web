@@ -163,52 +163,61 @@
     />
   </div>
 </template>
-<script>
-import RecurringSchedule from '@/components/RecurringSchedule';
+<script lang="ts">
+import { defineComponent, onMounted, ref } from '@vue/composition-api';
+import RecurringSchedule from '@/components/RecurringSchedule.vue';
+import usei18n from '@/use/usei18n';
 
-export default {
+export default defineComponent({
+  name: 'AssessmentTree',
   props: ['field', 'children', 'pda'],
   components: { RecurringSchedule },
-  name: 'AssessmentTree',
-  data() {
-    return {
-      showChildren: true,
-    };
-  },
-  mounted() {
-    if (this.field.if_selected_then_work_type) {
-      this.showChildren = Boolean(this.pda.formFields[this.field.field_key]);
-    }
-  },
-  methods: {
-    getValue(fieldKey) {
-      if (!this.pda || !this.pda.form_data) {
+
+  setup(props) {
+    const showChildren = ref(true);
+    const { $t } = usei18n();
+
+    onMounted(async () => {
+      if (props.field.if_selected_then_work_type) {
+        showChildren.value = Boolean(
+          props.pda.formFields[props.field.field_key],
+        );
+      }
+    });
+
+    const getValue = (fieldKey) => {
+      if (!props.pda || !props.pda.form_data) {
         return '';
       }
 
-      const key = this.pda.form_data.find((element) => {
+      const key = props.pda.form_data.find((element) => {
         return element.field_key === fieldKey;
       });
       if (key) {
-        this.$log.debug(`${fieldKey}:${key.field_value}`);
-
         return key.field_value;
       }
       return '';
-    },
-    getSectionCount(currentField) {
+    };
+    const getSectionCount = (currentField) => {
       return currentField.order_label;
-    },
-    getSelectValuesList(defaultValues) {
+    };
+    const getSelectValuesList = (defaultValues) => {
       return Object.keys(defaultValues).map((key) => {
         return {
           value: key,
-          name_t: this.$t(defaultValues[key]),
+          name_t: $t(defaultValues[key]),
         };
       });
-    },
+    };
+
+    return {
+      showChildren,
+      getValue,
+      getSectionCount,
+      getSelectValuesList,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

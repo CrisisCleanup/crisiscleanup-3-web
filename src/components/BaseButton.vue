@@ -52,7 +52,7 @@ export default defineComponent({
     },
     text: {
       type: String,
-      default: 'button',
+      default: '',
     },
     alt: {
       type: String,

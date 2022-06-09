@@ -56,9 +56,11 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
+export default defineComponent({
   name: 'Autocomplete',
+
   props: {
     suggestions: {
       type: Array,
@@ -91,56 +93,69 @@ export default {
     loading: Boolean,
     clearOnSelected: Boolean,
   },
-  data() {
-    return {
-      selected: '',
-      filteredOptions: [],
-      inputProps: {
-        id: 'autosuggest__input',
-        onInputChange: this.onInputChange,
-        placeholder: "Type 'e'",
-      },
-      classes: {
-        'flex-grow': true,
-        relative: true,
-        'text-base': true,
-        'font-light': true,
-        large: this.size === 'large',
-        base: this.size !== 'large',
-        'has-icon': Boolean(this.icon),
-        'has-tooltip': Boolean(this.tooltip),
-        full: Boolean(this.full),
-      },
-      iconClasses: {
-        large: this.size === 'large',
-        base: this.size !== 'large',
-        'has-tooltip': Boolean(this.tooltip),
-      },
-    };
-  },
-  methods: {
-    onSelected(option) {
-      this.selected = option.item;
-      this.$emit('selected', option.item);
-      if (this.clearOnSelected) {
-        this.selected = '';
-        this.value = '';
-      }
-    },
-    getSuggestionValue(suggestion) {
-      return suggestion.item[this.displayProperty];
-    },
-    onInputChange(text) {
+
+  setup(props, { emit }) {
+    const onInputChange = (text) => {
       if (text === '' || text === undefined) {
         return;
       }
-      this.$emit('search', text);
-    },
-    shouldRenderSuggestions(size, loading) {
+      emit('search', text);
+    };
+
+    const selected = ref('');
+    const inputProps = ref({
+      id: 'autosuggest__input',
+      onInputChange,
+      placeholder: "Type 'e'",
+    });
+    const classes = ref({
+      'flex-grow': true,
+      relative: true,
+      'text-base': true,
+      'font-light': true,
+      large: props.size === 'large',
+      base: props.size !== 'large',
+      'has-icon': Boolean(props.icon),
+      'has-tooltip': Boolean(props.tooltip),
+      full: Boolean(props.full),
+    });
+
+    const iconClasses = ref({
+      large: props.size === 'large',
+      base: props.size !== 'large',
+      'has-tooltip': Boolean(props.tooltip),
+    });
+
+    const filteredOptions = ref<any[]>([]);
+
+    const onSelected = (option) => {
+      selected.value = option.item;
+      emit('selected', option.item);
+      if (props.clearOnSelected) {
+        selected.value = '';
+        // this.value = '';
+      }
+    };
+    const getSuggestionValue = (suggestion) => {
+      return suggestion.item[props.displayProperty];
+    };
+    const shouldRenderSuggestions = (size, loading) => {
       return size > 0 && !loading;
-    },
+    };
+
+    return {
+      selected,
+      onInputChange,
+      onSelected,
+      getSuggestionValue,
+      shouldRenderSuggestions,
+      inputProps,
+      classes,
+      iconClasses,
+      filteredOptions,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

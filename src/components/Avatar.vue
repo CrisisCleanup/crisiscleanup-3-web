@@ -32,10 +32,12 @@
   </div>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
+<script lang="ts">
+import { computed, defineComponent, PropType } from '@vue/composition-api';
 
-export default {
+type AvatarSize = 'xsmall' | 'small' | 'medium' | 'large' | 'xl';
+
+export default defineComponent({
   name: 'Avatar',
   props: {
     initials: {
@@ -46,19 +48,27 @@ export default {
       type: String,
       default: '',
     },
-    size: VueTypes.oneOf(['xsmall', 'small', 'medium', 'large', 'xl']).def(
-      'small',
-    ),
-    innerClasses: VueTypes.string.def('shadow-inner'),
-  },
-  computed: {
-    classes() {
-      return {
-        [this.size]: true,
-      };
+    size: {
+      type: String as PropType<AvatarSize>,
+      default: '',
+    },
+    innerClasses: {
+      type: String,
+      default: 'shadow-inner',
     },
   },
-};
+  setup(props) {
+    const classes = computed(() => {
+      return {
+        [props.size]: true,
+      };
+    });
+
+    return {
+      classes,
+    };
+  },
+});
 </script>
 
 <style scoped>

@@ -34,12 +34,44 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { throttle } from 'lodash';
-import Table from '@/components/Table';
+import {
+  defineComponent,
+  onMounted,
+  PropType,
+  ref,
+  watch,
+} from '@vue/composition-api';
+import Table from '@/components/Table.vue';
 import { getQueryString } from '@/utils/urls';
+import useHttp from '@/use/useHttp';
 
-export default {
+interface TablePagination {
+  pageSize: number;
+  page: number;
+  current: number;
+  total?: number;
+}
+
+interface TableSorter {
+  key?: string | null;
+  direction?: string | null;
+}
+
+interface TableMeta {
+  pagination?: TablePagination;
+  sorter?: TableSorter;
+}
+
+interface TableApiParameters {
+  search?: string;
+  sort?: string;
+  offset?: number;
+  limit?: number;
+}
+
+export default defineComponent({
   name: 'AjaxTable',
   components: { Table },
   props: {
@@ -58,7 +90,7 @@ export default {
       },
     },
     query: {
-      type: Object,
+      type: Object as PropType<TableApiParameters>,
       default: () => {
         return {};
       },
@@ -70,34 +102,70 @@ export default {
       },
     },
   },
-  async mounted() {
-    await this.getData();
-  },
-  methods: {
-    async getData(data = {}) {
-      const pagination = data.pagination || this.meta.pagination;
-      const sorter = data.sorter || this.meta.sorter;
+  setup(props) {
+    const { $http } = useHttp();
+
+    const defaultColumns = ref<any[]>([]);
+    const data = ref<any[]>([]);
+    const search = ref<string>('');
+    const visible = ref(false);
+    const meta = ref<TableMeta>({
+      pagination: {
+        pageSize: 10,
+        page: 1,
+        current: 1,
+      },
+      sorter: {
+        key: null,
+        direction: null,
+      },
+    });
+
+    const getData = async (tableMeta: TableMeta = {}) => {
+      const pagination = tableMeta.pagination || meta.value.pagination;
+      const sorter = tableMeta.sorter || meta.value.sorter;
       const params = {
-        offset: pagination.pageSize * (pagination.page - 1),
-        limit: pagination.pageSize,
-        ...this.query,
+        offset: pagination ? pagination.pageSize * (pagination.page - 1) : 0,
+        limit: pagination ? pagination.pageSize : 10,
+        ...props.query,
       };
-      params.search = this.search;
+      params.search = search.value;
       if (sorter && sorter.key) {
         params.sort = `${sorter.direction === 'desc' ? '-' : ''}${sorter.key}`;
       }
       const queryString = getQueryString(params);
 
-      const response = await this.$http.get(`${this.url}?${queryString}`);
-      this.data = response.data.results;
-      this.meta.pagination = {
+      const response = await $http.get(`${props.url}?${queryString}`);
+      data.value = response.data.results;
+      meta.value.pagination = {
         ...pagination,
         total: response.data.count,
-      };
-      this.meta.sorter = {
+      } as any;
+      meta.value.sorter = {
         ...sorter,
       };
-    },
+    };
+
+    onMounted(async () => {
+      await getData();
+    });
+
+    watch(
+      () => props.query,
+      () => {
+        throttle(getData, 1000)();
+      },
+    );
+
+    return {
+      defaultColumns,
+      data,
+      meta,
+      search,
+      visible,
+      throttle,
+      getData,
+    };
   },
   watch: {
     query: {
@@ -106,27 +174,7 @@ export default {
       },
     },
   },
-  data() {
-    return {
-      defaultColumns: [],
-      data: [],
-      meta: {
-        pagination: {
-          pageSize: 10,
-          page: 1,
-          current: 1,
-        },
-        sorter: {
-          key: null,
-          direction: null,
-        },
-      },
-      search: '',
-      visible: true,
-      throttle,
-    };
-  },
-};
+});
 </script>
 
 <style scoped></style>

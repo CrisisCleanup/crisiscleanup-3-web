@@ -79,66 +79,68 @@
   </div>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
+<script lang="ts">
+import { ref, defineComponent, onMounted } from '@vue/composition-api';
 import { DialogsMixin } from '@/mixins';
 import { getQueryString } from '@/utils/urls';
+import useDialogs from '@/use/useDialogs';
+import usei18n from '@/use/usei18n';
+import useHttp from '@/use/useHttp';
 
-export default {
+export default defineComponent({
   props: {
-    user: VueTypes.number,
-    limit: VueTypes.number.def(100),
+    user: {
+      type: Number,
+      default: null,
+    },
+    limit: {
+      type: Number,
+      default: 100,
+    },
   },
-  data() {
-    return {
-      eventStream: [],
-      events: [],
-      filterEvents: [],
-      showUser: true,
-      loading: false,
-    };
-  },
-  mixins: [DialogsMixin],
-  async mounted() {
-    this.loading = true;
-    await this.getEvents();
-    await this.getEventLogs();
-    this.loading = false;
-  },
-  methods: {
-    getTranslation(tag, attr) {
+  setup(props) {
+    const { component } = useDialogs();
+    const { $t } = usei18n();
+    const { $http } = useHttp();
+    const eventStream = ref<any[]>([]);
+    const events = ref<any[]>([]);
+    const filterEvents = ref([]);
+    const showUser = ref(true);
+    const loading = ref(false);
+
+    const getTranslation = (tag, attr) => {
       const translated_attrs = Object.fromEntries(
         Object.entries(attr).map(([key, value]) => [
           key,
-          key.endsWith('_t') ? this.$t(value) : value,
+          key.endsWith('_t') ? $t(value as string) : value,
         ]),
       );
-      return this.$t(tag, translated_attrs);
-    },
-    async getEvents() {
-      const response = await this.$http.get(
+      return $t(tag, translated_attrs);
+    };
+    const getEvents = async () => {
+      const response = await $http.get(
         `${process.env.VUE_APP_API_BASE_URL}/events?limit=500`,
       );
-      this.events = [...response.data.results];
-    },
-    async getEventLogs() {
-      this.eventStream = [];
-      const query = {
-        limit: this.limit,
-        event_key__in: this.filterEvents.join(','),
+      events.value = [...response.data.results];
+    };
+    const getEventLogs = async () => {
+      eventStream.value = [];
+      const query: Record<any, any> = {
+        limit: props.limit,
+        event_key__in: filterEvents.value.join(','),
       };
-      if (this.user) {
-        query.created_by = this.user;
+      if (props.user) {
+        query.created_by = props.user;
       }
-      const response = await this.$http.get(
+      const response = await $http.get(
         `${process.env.VUE_APP_API_BASE_URL}/all_events?${getQueryString(
           query,
         )}`,
       );
-      this.eventStream = [...response.data.results];
-    },
-    async showUserEvents(userId, name) {
-      await this.$component({
+      eventStream.value = [...response.data.results];
+    };
+    const showUserEvents = async (userId, name) => {
+      await component({
         title: `Events for User ${userId}: ${name}`,
         component: 'AdminEventStream',
         classes: 'w-full h-96 overflow-auto',
@@ -146,34 +148,54 @@ export default {
         props: {
           user: userId,
           limit: 200,
-        },
+        } as any,
       });
-    },
-    async showEventAttrs(stream) {
-      await this.$component({
+    };
+    const showEventAttrs = async (stream) => {
+      await component({
         title: `Event Attributes for Log: ${stream.id} | Key: ${stream.event_key}`,
         component: 'JsonWrapper',
         classes: 'w-full h-96',
         props: {
           jsonData: stream.attr,
-        },
+        } as any,
       });
-    },
-    async showAll(stream) {
-      const response = await this.$http.get(
+    };
+    const showAll = async (stream) => {
+      const response = await $http.get(
         `${process.env.VUE_APP_API_BASE_URL}/event_stream/${stream.id}`,
       );
-      await this.$component({
+      await component({
         title: `All Fields for Log: ${stream.id} | Key: ${stream.event_key}`,
         component: 'JsonWrapper',
         classes: 'w-full h-96',
         props: {
           jsonData: response.data,
-        },
+        } as any,
       });
-    },
+    };
+
+    onMounted(async () => {
+      loading.value = true;
+      await getEvents();
+      await getEventLogs();
+      loading.value = false;
+    });
+
+    return {
+      eventStream,
+      events,
+      filterEvents,
+      showUser,
+      loading,
+      getTranslation,
+      showUserEvents,
+      showEventAttrs,
+      showAll,
+    };
   },
-};
+  mixins: [DialogsMixin],
+});
 </script>
 
 <style>

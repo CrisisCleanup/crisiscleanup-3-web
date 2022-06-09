@@ -32,44 +32,51 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { computed, defineComponent, ref } from '@vue/composition-api';
 import Incident from '@/models/Incident';
 import { getErrorMessage } from '@/utils/errors';
+import usei18n from '@/use/usei18n';
+import useHttp from '@/use/useHttp';
+import useToasted from '@/use/useToasted';
 
-export default {
+export default defineComponent({
   name: 'ArcGisUploader',
-  computed: {
-    incidents() {
-      return Incident.query().orderBy('id', 'desc').get();
-    },
-  },
-  methods: {
-    async importGis() {
+
+  setup() {
+    const { $t } = usei18n();
+    const { $http } = useHttp();
+    const { $toasted } = useToasted();
+
+    const url = ref<string>('');
+    const prefix = ref<string>('');
+    const incident = ref('');
+    const incidents = computed(() =>
+      Incident.query().orderBy('id', 'desc').get(),
+    );
+
+    const importGis = async () => {
       try {
-        await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/arcgis_import`,
-          {
-            url: this.url,
-            prefix: this.prefix,
-            incident: this.incident,
-          },
-        );
-        await this.$toasted.success(
-          this.$t('arcGisUploader.gis_import_success'),
-        );
+        await $http.post(`${process.env.VUE_APP_API_BASE_URL}/arcgis_import`, {
+          url,
+          prefix,
+          incident,
+        });
+        await $toasted.success($t('arcGisUploader.gis_import_success'));
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
-    },
-  },
-  data() {
+    };
+
     return {
-      url: '',
-      prefix: '',
-      incident: null,
+      url,
+      prefix,
+      incident,
+      incidents,
+      importGis,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>
