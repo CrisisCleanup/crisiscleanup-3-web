@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve --mode production",
     "build": "vue-cli-service build",
-    "test:unit": "cross-env VUE_CLI_BABEL_TARGET_NODE=true VUE_CLI_BABEL_TRANSPILE_MODULES=true NODE_ENV=test vue-cli-service test:unit --coverage",
+    "test:unit": "cross-env VUE_CLI_BABEL_TARGET_NODE=true VUE_CLI_BABEL_TRANSPILE_MODULES=true NODE_ENV=test jest --coverage",
     "test:e2e": "cross-env NODE_ENV=test vue-cli-service test:e2e",
     "lint": "vue-cli-service lint --no-fix  .",
     "build-storybook": "cross-env NODE_ENV=storybook build-storybook",
