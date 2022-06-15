@@ -16,7 +16,8 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent, computed } from '@vue/composition-api';
+export default defineComponent({
   name: 'BaseRadio',
   props: {
     name: {
@@ -40,18 +41,21 @@ export default {
       default: 'text',
     },
   },
-  computed: {
-    radioButtonValue: {
+  setup(props, context) {
+    const radioButtonValue = computed({
       get() {
-        return this.value;
+        return props.value;
       },
       set() {
-        this.$emit('input', this.label);
-        this.$emit('change', this.label);
+        context.emit('input', props.label);
+        context.emit('change', props.label);
       },
-    } as any,
+    });
+    return {
+      radioButtonValue,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

@@ -4,66 +4,76 @@
   </p>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
+<script lang="ts">
+import { defineComponent, PropType, computed } from '@vue/composition-api';
 import { TEXT_VARIANTS as VARIANTS } from '@/constants';
 
-export default {
+type Variant = typeof VARIANTS[number];
+type Font = 'sans' | 'display';
+
+export default defineComponent({
   name: 'BaseText',
   props: {
-    variant: VueTypes.oneOf(VARIANTS).def('body'),
-    font: VueTypes.oneOf(['sans', 'display']).def('sans'),
-    bold: VueTypes.bool.def(false),
-    regular: VueTypes.bool.def(false),
-    semiBold: VueTypes.bool.def(false),
-    weight: VueTypes.oneOf([
-      100,
-      200,
-      300,
-      400,
-      500,
-      600,
-      700,
-      '100',
-      '200',
-      '300',
-      '400',
-      '500',
-      '600',
-      '700',
-    ]),
-  },
-  computed: {
-    styles() {
-      return {
-        'text-h1 font-h1 text-crisiscleanup-dark-400': this.variant === 'h1',
-        'text-h2 font-h2 text-crisiscleanup-dark-500': this.variant === 'h2',
-        'text-h3 font-h3 text-crisiscleanup-dark-500': this.variant === 'h3',
-        'text-h4 font-h4 text-crisiscleanup-dark-400': this.variant === 'h4',
-        'text-body font-body text-crisiscleanup-dark-500':
-          this.variant === 'body',
-        'text-bodysm font-bodysm': this.variant === 'bodysm',
-        'text-bodyxsm font-bodyxsm': this.variant === 'bodyxsm',
-        'font-sans': this.font === 'sans',
-        'font-display': this.font === 'display',
-      };
+    variant: {
+      type: String as PropType<Variant>,
+      default: 'body',
     },
-    weights() {
-      if (this.weight) {
+    font: {
+      type: String as PropType<Font>,
+      default: 'sans',
+    },
+    bold: {
+      type: Boolean,
+      default: false,
+    },
+    regular: {
+      type: Boolean,
+      default: false,
+    },
+    semiBold: {
+      type: Boolean,
+      default: false,
+    },
+    weight: {
+      type: [String, Number],
+      default: null,
+    },
+  },
+  setup(props) {
+    const styles = computed(() => ({
+      'text-h1 font-h1 text-crisiscleanup-dark-400': props.variant === 'h1',
+      'text-h2 font-h2 text-crisiscleanup-dark-500': props.variant === 'h2',
+      'text-h3 font-h3 text-crisiscleanup-dark-500': props.variant === 'h3',
+      'text-h4 font-h4 text-crisiscleanup-dark-400': props.variant === 'h4',
+      'text-body font-body text-crisiscleanup-dark-500':
+        props.variant === 'body',
+      'text-bodysm font-bodysm': props.variant === 'bodysm',
+      'text-bodyxsm font-bodyxsm': props.variant === 'bodyxsm',
+      'font-sans': props.font === 'sans',
+      'font-display': props.font === 'display',
+    }));
+
+    const weights = computed(() => {
+      if (props.weight) {
         // weight prop takes priority.
-        return { fontWeight: this.weight };
+        return { fontWeight: props.weight };
       }
-      if (this.bold) {
+      if (props.bold) {
         return { fontWeight: 700 };
       }
-      if (this.semiBold) {
+      if (props.semiBold) {
         return { fontWeight: 600 };
       }
-      if (this.regular) {
+      if (props.regular) {
         return { fontWeight: 400 };
       }
       return {};
-    },
+    });
+
+    return {
+      weights,
+      styles,
+    };
   },
-};
+});
 </script>

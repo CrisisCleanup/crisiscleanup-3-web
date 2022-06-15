@@ -12,23 +12,34 @@
   </component>
 </template>
 
-<script>
-import VueTypes from 'vue-types';
+<script lang="ts">
+import { computed, defineComponent } from '@vue/composition-api';
 
-export default {
+export default defineComponent({
   name: 'BaseLink',
   props: {
-    href: VueTypes.string,
-    textVariant: VueTypes.string.def('body'),
-    to: VueTypes.any,
-    target: VueTypes.string,
-  },
-  computed: {
-    linkComponent() {
-      return this.to ? 'router-link' : 'a';
+    href: {
+      type: String,
+      default: '',
+    },
+    textVariant: {
+      type: String,
+      default: 'body',
+    },
+    to: null,
+    target: {
+      type: String,
+      default: '',
     },
   },
-};
+  setup(props) {
+    const linkComponent = computed(() => (props.to ? 'router-link' : 'a'));
+
+    return {
+      linkComponent,
+    };
+  },
+});
 </script>
 
 <style scoped lang="scss">
