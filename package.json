@@ -64,7 +64,7 @@
     "@vuex-orm/plugin-axios": "^0.9.4",
     "@vuex-orm/plugin-change-flags": "^1.2.3",
     "amazon-connect-streams": "^1.6.11",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "bowser": "^2.11.0",
     "cf-agent-library": "git+https://git@github.com/CrisisCleanup/cf-agent-library.git",
     "chart.js": "^2.9.4",
