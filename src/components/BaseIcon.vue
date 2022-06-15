@@ -28,32 +28,64 @@
   </component>
 </template>
 
-<script>
+<script lang="ts">
 /* eslint-disable global-require */
 import { kebabCase } from 'lodash';
-import VueTypes from 'vue-types';
-import { ICON_MAP, ICONS, ICON_SIZES } from '@/constants';
+import { computed, defineComponent, PropType, ref } from '@vue/composition-api';
+import { ICON_MAP, ICON_SIZES, ICONS } from '@/constants';
 import { EventsMixin } from '@/mixins';
 
-export default {
+type IconSize = typeof ICON_SIZES[number];
+
+export default defineComponent({
   name: 'BaseIcon',
   mixins: [EventsMixin],
 
   props: {
-    type: VueTypes.oneOfType([
-      VueTypes.oneOf(Object.values(ICONS)),
-      VueTypes.string,
-    ]),
-    fa: VueTypes.bool.def(false),
-    alt: VueTypes.string,
-    title: VueTypes.string,
-    size: VueTypes.oneOf(ICON_SIZES).def('large'),
-    selector: VueTypes.string,
-    withText: VueTypes.bool.def(false),
-    invertColor: VueTypes.bool.def(false),
-    linked: VueTypes.bool.def(false),
-    iconClasses: VueTypes.string.def(''),
-    action: VueTypes.func,
+    type: {
+      type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
+      default: '',
+    },
+    fa: {
+      type: Boolean,
+      default: false,
+    },
+    alt: {
+      type: String,
+      default: 'button',
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    size: {
+      type: String as PropType<IconSize>,
+      default: '',
+    },
+    selector: {
+      type: String,
+      default: '',
+    },
+    withText: {
+      type: Boolean,
+      default: false,
+    },
+    invertColor: {
+      type: Boolean,
+      default: false,
+    },
+    linked: {
+      type: Boolean,
+      default: false,
+    },
+    iconClasses: {
+      type: String,
+      default: '',
+    },
+    action: {
+      type: Function as PropType<() => any>,
+      default: () => {},
+    },
     width: {
       type: String,
       default: '',
@@ -63,43 +95,52 @@ export default {
       default: '',
     },
   },
-  data() {
-    return {
-      iconMap: ICON_MAP,
-      styles: {
+
+  setup(props) {
+    const iconSelector = computed(
+      () => props.selector || `js-${kebabCase(props.alt)}`,
+    );
+
+    const iconMap = ref(ICON_MAP);
+
+    const styles = computed(() => {
+      return {
         'ccu-icon': true,
         'cursor-pointer': true,
-        large: ['lg', 'large'].includes(this.size),
-        medium: ['md', 'medium'].includes(this.size),
-        small: ['sm', 'small'].includes(this.size),
-        tiny: this.size === 'tiny',
-        xs: this.size === 'xs',
-        xxs: this.size === 'xxs',
-        xl: this.size === 'xl',
-        text: this.withText === true,
-        inverted: this.invertColor === true,
-      },
-    };
-  },
-  computed: {
-    iconSelector() {
-      return this.selector || `js-${kebabCase(this.alt)}`;
-    },
-    cssVars() {
+        large: ['lg', 'large'].includes(props.size),
+        medium: ['md', 'medium'].includes(props.size),
+        small: ['sm', 'small'].includes(props.size),
+        tiny: props.size === 'tiny',
+        xs: props.size === 'xs',
+        xxs: props.size === 'xxs',
+        xl: props.size === 'xl',
+        text: props.withText === true,
+        inverted: props.invertColor === true,
+      };
+    });
+
+    const cssVars = computed(() => {
       const style = {};
 
-      if (this.width) {
-        style['--width'] = `${this.width}px`;
+      if (props.width) {
+        style['--width'] = `${props.width}px`;
       }
 
-      if (this.height) {
-        style['--height'] = `${this.height}px`;
+      if (props.height) {
+        style['--height'] = `${props.height}px`;
       }
 
       return style;
-    },
+    });
+
+    return {
+      iconSelector,
+      iconMap,
+      styles,
+      cssVars,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

@@ -19,10 +19,10 @@ export const buildForm = (key, dict, array) => {
   // TODO: refactor after writing unit tests
   // eslint-disable-next-line no-restricted-syntax
   for (const item of dict[key]) {
-    if (item.label_t) {
+    if (item.label_t && Boolean(item.field_key)) {
       array.push(item);
     }
-    if (item.field_key in dict) {
+    if (item.field_key in dict && Boolean(item.field_key)) {
       buildForm(item.field_key, dict, array);
     }
   }

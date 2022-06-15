@@ -75,7 +75,7 @@ module.exports = {
     },
   },
 
-  'extends': [
+  extends: [
     'eslint:recommended',
     'airbnb-base',
     'plugin:vue/strongly-recommended',
@@ -84,6 +84,6 @@ module.exports = {
     'prettier/vue',
     'plugin:cypress/recommended',
     'plugin:vue-types/recommended',
-    '@vue/typescript'
-  ]
+    '@vue/typescript',
+  ],
 };

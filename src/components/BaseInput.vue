@@ -22,6 +22,7 @@
       @change="change"
       @blur="$emit('blur')"
       @keyup.enter="$emit('enter')"
+      @invalid="isInvalid = true"
       :rows="rows"
     />
     <div
@@ -75,7 +76,13 @@
 </template>
 
 <script>
-export default {
+import {
+  ref,
+  computed,
+  defineComponent,
+} from '@vue/composition-api';
+
+export default defineComponent({
   name: 'BaseInput',
   props: {
     size: {
@@ -171,82 +178,83 @@ export default {
       default: '40',
     },
   },
-  data() {
-    return {
-      id: null,
-      isInvalid: false,
-      passwordView: this.type === 'password' ? 'password' : '',
-      iconClasses: {
-        large: this.size === 'large',
-        small: this.size === 'small',
-        base: this.size !== 'large' && this.size !== 'small',
-        'has-tooltip': Boolean(this.tooltip),
-      },
-      glassBroken: false,
-    };
-  },
-  computed: {
-    classes() {
+
+  setup(props, context) {
+    const id = ref(null);
+    const isInvalid = ref(false);
+    const input = ref(null);
+    const passwordView = ref(props.type === 'password' ? 'password' : '');
+    const iconClasses = ref({
+      large: props.size === 'large',
+      small: props.size === 'small',
+      base: props.size !== 'large' && props.size !== 'small',
+      'has-tooltip': Boolean(props.tooltip),
+    });
+    const glassBroken = ref(false);
+
+    const cssVars = computed(() => {
       return {
-        'border-crisiscleanup-red-100': this.topLabel && this.isInvalid,
-        'flex-col items-start border': Boolean(this.topLabel),
-        'items-center': !this.topLabel,
+        '--height': `${props.height}px`,
+        '--width': `${props.width}px`,
       };
-    },
-    cssVars() {
-      return {
-        '--height': `${this.height}px`,
-        '--width': `${this.width}px`,
-      };
-    },
-    defaultInputClasses() {
-      return {
-        'flex-grow': true,
-        'p-1': true,
-        'text-base': !this.inputClasses,
-        xlarge: this.size === 'xlarge',
-        large: this.size === 'large',
-        medium: this.size === 'medium',
-        small: this.size === 'small',
-        base: !this.size,
-        'has-icon': Boolean(this.icon),
-        'has-tooltip': Boolean(this.tooltip),
-        invalid: Boolean(this.isInvalid),
-        'border-none': Boolean(this.topLabel),
-      };
-    },
-  },
-  mounted() {
-    this.id = this._uid;
-    this.$refs.input.addEventListener(
-      'invalid',
-      () => {
-        this.isInvalid = true;
-      },
-      true,
-    );
-  },
-  methods: {
-    update(e) {
+    });
+
+    const classes = computed(() => ({
+      'border-crisiscleanup-red-100': props.topLabel && isInvalid.value,
+      'flex-col items-start border': Boolean(props.topLabel),
+      'items-center': !props.topLabel,
+    }));
+
+    const defaultInputClasses = computed(() => ({
+      'flex-grow': true,
+      'p-1': true,
+      'text-base': !props.inputClasses,
+      xlarge: props.size === 'xlarge',
+      large: props.size === 'large',
+      medium: props.size === 'medium',
+      small: props.size === 'small',
+      base: !props.size,
+      'has-icon': Boolean(props.icon),
+      'has-tooltip': Boolean(props.tooltip),
+      invalid: Boolean(isInvalid.value),
+      'border-none': Boolean(props.topLabel),
+    }));
+
+    function update(e) {
       const { value } = e.target;
-      if (this.validator) {
-        const { newValue, valid } = this.validator(value);
-        this.isInvalid = valid;
+      if (props.validator) {
+        const { newValue, valid } = props.validator(value);
+        isInvalid.value = valid;
         if (newValue) {
-          this.$refs.input.value = newValue;
-          return this.$emit('input', newValue);
+          input.value = newValue;
+          return context.emit('input', newValue);
         }
       }
-      this.$emit('input', value);
-      this.isInvalid = !this.$refs.input.checkValidity();
+      context.emit('input', value);
+      isInvalid.value = !input?.value?.checkValidity();
       return value;
-    },
-    change(e) {
-      this.$emit('change', e.target.value);
-      this.isInvalid = !this.$refs.input.checkValidity();
-    },
+    }
+
+    function change(e) {
+      context.emit('change', e.target.value);
+      isInvalid.value = !input?.value?.checkValidity();
+    }
+
+    return {
+      input,
+      id,
+      isInvalid,
+      passwordView,
+      iconClasses,
+      glassBroken,
+      classes,
+      cssVars,
+      defaultInputClasses,
+      update,
+      change,
+    };
   },
-};
+});
 </script>
 
 <style scoped>

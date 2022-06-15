@@ -18,12 +18,12 @@ const actions = {
     if (events.length === 0 || process.env.NODE_ENV !== 'development') {
       return null;
     }
-    const response = await axios.post(
-      `${process.env.VUE_APP_API_BASE_URL}/events_new`,
-      events,
-    );
+    // const response = await axios.post(
+    //   `${process.env.VUE_APP_API_BASE_URL}/events_new`,
+    //   events,
+    // );
     commit('setEvents', []);
-    return response;
+    return {};
   },
 };
 

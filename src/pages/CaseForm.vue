@@ -636,7 +636,6 @@ export default {
             ...this.dataPrefill,
           };
         }
-
         this.worksite.incident = this.incidentId;
 
         if (this.pdaId) {
@@ -1002,7 +1001,6 @@ export default {
           notesToSave.push(this.currentNote);
           this.currentNote = '';
         }
-
         if (this.worksite.id) {
           const data = { ...this.worksite };
           delete data.flags;

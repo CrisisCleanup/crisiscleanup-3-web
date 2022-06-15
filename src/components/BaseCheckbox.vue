@@ -15,26 +15,47 @@
     <span class="checkmark" :style="checkmarkStyle"></span>
   </label>
 </template>
-<script>
+<script lang="ts">
+import { ref, defineComponent, onMounted } from '@vue/composition-api';
 import { EventsMixin } from '@/mixins';
+import useLogEvent from '@/use/events/useLogEvent';
 
-export default {
+export default defineComponent({
   name: 'BaseCheckbox',
   mixins: [EventsMixin],
-  data() {
+
+  setup(props, context) {
+    const { logEvent } = useLogEvent();
+
+    const isInvalid = ref(false);
+    const input = ref<HTMLInputElement | null>(null);
+
+    onMounted(async () => {
+      input?.value?.addEventListener(
+        'invalid',
+        () => {
+          isInvalid.value = true;
+        },
+        true,
+      );
+    });
+
+    function update(e) {
+      context.emit('input', e.target.checked);
+      isInvalid.value = input?.value?.checkValidity() || false;
+      logEvent(props.ccuEvent);
+    }
+
+    function change(e) {
+      context.emit('change', e.target.checked);
+      isInvalid.value = input?.value?.checkValidity() || false;
+    }
+
     return {
-      isInvalid: false,
+      isInvalid,
+      update,
+      change,
     };
-  },
-  mounted() {
-    this.id = this._uid;
-    this.$refs.input.addEventListener(
-      'invalid',
-      () => {
-        this.isInvalid = true;
-      },
-      true,
-    );
   },
   props: {
     value: {
@@ -49,6 +70,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    ccuEvent: {
+      type: String,
+      default: '',
+    },
     checkmarkStyle: {
       type: String,
       default: 'top: 0;left: 0;',
@@ -58,18 +83,7 @@ export default {
       default: 'display: block; padding-left: 30px;',
     },
   },
-  methods: {
-    update(e) {
-      this.$emit('input', e.target.checked);
-      this.isInvalid = !this.$refs.input.checkValidity();
-      this.logEvent();
-    },
-    change(e) {
-      this.$emit('change', e.target.checked);
-      this.isInvalid = !this.$refs.input.checkValidity();
-    },
-  },
-};
+});
 </script>
 
 <style scoped>

@@ -3,8 +3,8 @@ import VueLog from '@dreipol/vue-log';
 import moment from 'moment';
 import { Toasted } from 'vue-toasted';
 import { AxiosStatic } from 'axios';
-import Router from '@/router';
 import { ComponentInstance } from '@vue/composition-api';
+import Router from '@/router';
 
 declare global {
   interface CustomVue extends Vue {
