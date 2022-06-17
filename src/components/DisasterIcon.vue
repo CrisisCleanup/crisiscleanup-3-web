@@ -8,7 +8,8 @@
     @load="setStyle"
   ></object>
 </template>
-<script>
+<script lang="ts">
+import { ref, computed } from '@vue/composition-api';
 import Incident from '@/models/Incident';
 
 export default {
@@ -29,54 +30,71 @@ export default {
       },
     },
   },
-  data() {
+
+  setup(props) {
+    const ready = ref(false);
+    const width_ = ref(null);
+    const height_ = ref(null);
+    const icon = ref<HTMLObjectElement | null>(null);
+
+    const style = computed(() => ({
+      visibility: ready.value ? 'visible' : 'hidden',
+      pointerEvents: 'none',
+    }));
+
+    const incidentImage = computed(() => {
+      if (props.currentIncident && props.currentIncident.incidentImage) {
+        return props.currentIncident.incidentImage;
+      }
+      return Incident.getIncidentImage(props.currentIncident.incident_type);
+    });
+
+    const svgDocument = computed(() => {
+      return icon?.value?.getSVGDocument();
+    });
+
+    function setColor() {
+      if (svgDocument.value) {
+        const { value } = svgDocument;
+        value.getElementsByTagName('path')[0].style.fill =
+          props.currentIncident.color;
+      }
+    }
+
+    function setSize() {
+      if (svgDocument.value) {
+        const svg = svgDocument.value.activeElement;
+        if (svg) {
+          // @ts-ignore
+          svg.attributes.width.nodeValue = width_.value;
+          // @ts-ignore
+          svg.attributes.height.nodeValue = height_.value;
+        }
+      }
+    }
+
+    function setStyle() {
+      setColor();
+      if (props.width !== null || props.height !== null) {
+        width_.value = props.width === null ? props.height : props.width;
+        height_.value = props.height === null ? props.width : props.height;
+        setSize();
+      }
+      ready.value = true;
+    }
+
     return {
-      ready: false,
-      width_: null,
-      height_: null,
+      ready,
+      width_,
+      height_,
+      icon,
+      style,
+      incidentImage,
+      svgDocument,
+      setColor,
+      setSize,
+      setStyle,
     };
-  },
-  computed: {
-    style() {
-      return {
-        visibility: this.ready ? 'visible' : 'hidden',
-        pointerEvents: 'none',
-      };
-    },
-    incidentImage() {
-      if (this.currentIncident && this.currentIncident.incidentImage) {
-        return this.currentIncident.incidentImage;
-      }
-      return Incident.getIncidentImage(this.currentIncident.incident_type);
-    },
-    svgDocument() {
-      if (!this.$refs.icon) return null;
-      const svgDoc = this.$refs.icon.getSVGDocument();
-      if (!svgDoc) return null;
-      return svgDoc;
-    },
-  },
-  methods: {
-    setStyle() {
-      this.setColor();
-      if (this.width !== null || this.height !== null) {
-        this.width_ = this.width === null ? this.height : this.width;
-        this.height_ = this.height === null ? this.width : this.height;
-        this.setSize();
-      }
-      this.ready = true;
-    },
-    setColor() {
-      if (!this.svgDocument) return;
-      this.svgDocument.getElementsByTagName('path')[0].style.fill =
-        this.currentIncident.color;
-    },
-    setSize() {
-      if (!this.svgDocument) return;
-      const svg = this.svgDocument.activeElement;
-      svg.attributes.width.nodeValue = this.width_;
-      svg.attributes.height.nodeValue = this.height_;
-    },
   },
 };
 </script>

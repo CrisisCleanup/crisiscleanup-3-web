@@ -37,35 +37,45 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { ref, defineComponent } from '@vue/composition-api';
 import { getErrorMessage } from '../utils/errors';
+import useHttp from '@/use/useHttp';
+import useToasted from '@/use/useToasted';
 
-export default {
+export default defineComponent({
   name: 'DatabaseAccess',
-  data() {
-    return {
-      showingModal: null,
-      addresses: '',
-      addressesToAdd: [],
-    };
-  },
-  methods: {
-    async saveAccess() {
+  setup() {
+    const { $http } = useHttp();
+    const { $toasted } = useToasted();
+
+    const showingModal = ref(null);
+    const addresses = ref('');
+    const addressesToAdd = ref([]);
+
+    async function saveAccess() {
       try {
-        await this.$http.post(
+        await $http.post(
           `${process.env.VUE_APP_API_BASE_URL}/admins/ip_addresses`,
           {
-            addresses: this.addressesToAdd.map((a) => a.text),
+            addresses: addressesToAdd.value.map((a: any) => a.text),
           },
         );
-        this.addressesToAdd = [];
-        this.addresses = '';
+        addressesToAdd.value = [];
+        addresses.value = '';
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       }
-    },
+    }
+
+    return {
+      showingModal,
+      addresses,
+      addressesToAdd,
+      saveAccess,
+    };
   },
-};
+});
 </script>
 
 <style>

@@ -21,48 +21,62 @@
   </div>
 </template>
 
-<script>
-import EventCard from '@/components/EventCard';
+<script lang="ts">
+import { defineComponent, ref } from '@vue/composition-api';
+import EventCard from '@/components/EventCard.vue';
 import { getNearestColor } from '@/utils/colors';
-export default {
+import usei18n from '@/use/usei18n';
+
+interface Event {
+  past_tense_t: string;
+  attr: Record<any, any>;
+}
+
+interface EventCardType {
+  event: Event;
+}
+
+export default defineComponent({
   name: 'CardStack',
   components: { EventCard },
-  data() {
-    return {
-      cards: [],
-      getNearestColor,
-    };
-  },
-  methods: {
-    addCardComponent(card) {
-      if (this.cards.length) {
-        const currentCardText = this.getTranslation(
+  setup() {
+    const { $t } = usei18n();
+    const cards = ref<EventCardType[]>([]);
+    function clearCards() {
+      cards.value = [];
+    }
+    function getTranslation(tag, attr) {
+      const translated_attrs = Object.fromEntries(
+        Object.entries(attr).map(([key, value]): [any, any] => [
+          key,
+          key.endsWith('_t') ? $t(value as string) : value,
+        ]),
+      );
+      return $t(tag, translated_attrs);
+    }
+    function addCardComponent(card: EventCardType) {
+      if (cards.value.length) {
+        const currentCardText = getTranslation(
           card.event.past_tense_t,
           card.event.attr,
         );
-        const previousCardText = this.getTranslation(
-          this.cards[0].event.past_tense_t,
-          this.cards[0].event.attr,
+        const previousCardText = getTranslation(
+          cards.value[0].event.past_tense_t,
+          cards.value[0].event.attr,
         );
 
         if (currentCardText === previousCardText) return;
       }
-      this.cards.unshift(card);
-    },
-    getTranslation(tag, attr) {
-      const translated_attrs = Object.fromEntries(
-        Object.entries(attr).map(([key, value]) => [
-          key,
-          key.endsWith('_t') ? this.$t(value) : value,
-        ]),
-      );
-      return this.$t(tag, translated_attrs);
-    },
-    clearCards() {
-      this.cards = [];
-    },
+      cards.value.unshift(card);
+    }
+    return {
+      cards,
+      getNearestColor,
+      addCardComponent,
+      clearCards,
+    };
   },
-};
+});
 </script>
 
 <style scoped lang="scss">

@@ -238,130 +238,161 @@
   </modal>
 </template>
 
-<script>
-import { UserMixin } from '@/mixins';
-import OrganizationSearchInput from './OrganizationSearchInput';
+<script lang="ts">
+import { defineComponent, ref, onMounted } from '@vue/composition-api';
+import OrganizationSearchInput from './OrganizationSearchInput.vue';
 import { hash } from '../utils/promise';
 import { nestUsers } from '../utils/form';
-import Loader from './Loader';
+import Loader from './Loader.vue';
 import User from '../models/User';
 import { groupBy } from '../utils/array';
 import { getColorForStatus } from '../filters';
+import useUser from '@/use/user/useUser';
+import useHttp from '@/use/useHttp';
 
-export default {
+export default defineComponent({
   name: 'ChangeOrganizationModal',
   components: { Loader, OrganizationSearchInput },
-  mixins: [UserMixin],
-  filters: {
-    getIncidentName(value, incidents) {
-      return (
-        incidents.length && incidents.find((c) => c.id === Number(value)).name
-      );
-    },
-  },
-  async mounted() {
-    this.loading = true;
-    await this.loadPageData();
-    this.loading = false;
-    this.isMounted = true;
-  },
-  methods: {
-    async loadPageData() {
+
+  setup(props, context) {
+    const { currentUser } = useUser();
+    const { $http } = useHttp();
+
+    const page = ref('start');
+    const lineageUsers = ref([]);
+    const incidents = ref([]);
+    const nestedUsers = ref([]);
+    const claimedCases = ref({});
+    const selectedOrganization = ref<any | null>(null);
+    const tabs = ref(null);
+    const loading = ref(false);
+    const isMounted = ref(false);
+    const selectedUsers = ref<any | null>([]);
+    const selectedCases = ref<any | null>([]);
+
+    async function loadPageData() {
       const pageData = await hash({
         lineageUsers: User.api().get(
-          `/users?lineage=${this.currentUser.id}&limit=1000&fields=id,referring_user,first_name,last_name,files,lineage&organization=${this.currentUser.organization.id}`,
+          `/users?lineage=${currentUser?.value?.id}&limit=1000&fields=id,referring_user,first_name,last_name,files,lineage&organization=${currentUser?.value?.organization?.id}`,
           {
             dataKey: 'results',
           },
         ),
-        incidents: await this.$http.get(
+        incidents: await $http.get(
           `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,geofence,locations,turn_on_release&limit=200&sort=-start_at`,
         ),
       });
-      this.lineageUsers = pageData.lineageUsers.entities.users;
-      this.incidents = pageData.incidents.data.results;
-      if (this.lineageUsers && this.lineageUsers.length) {
-        this.nestedUsers = nestUsers(this.lineageUsers, this.currentUser.id);
+      lineageUsers.value = pageData.lineageUsers.entities.users;
+      incidents.value = pageData.incidents.data.results;
+      if (lineageUsers.value && lineageUsers.value.length) {
+        nestedUsers.value = nestUsers(
+          lineageUsers.value,
+          currentUser?.value?.id,
+        );
 
-        const user_ids = this.lineageUsers.map((user) => user.id);
-        user_ids.push(this.currentUser.id);
+        const user_ids = lineageUsers.value.map((user: User) => user.id);
+        if (currentUser.value?.id) {
+          user_ids.push(currentUser.value?.id);
+        }
       }
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types?claimed_by=${this.currentUser.organization.id}&limit=150`,
+      const response = await $http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/worksite_work_types?claimed_by=${currentUser.value?.organization.id}&limit=150`,
       );
-      this.claimedCases = groupBy(response.data.results, 'incident');
-    },
-    setTabs(tabs) {
-      this.tabs = tabs;
-    },
-    async transferRequest() {
-      await this.$http.post(
+      claimedCases.value = groupBy(response.data.results, 'incident');
+    }
+    function setTabs(newTabs) {
+      tabs.value = newTabs;
+    }
+    async function transferRequest() {
+      await $http.post(
         `${process.env.VUE_APP_API_BASE_URL}/transfer_requests`,
         {
-          transfering_user_ids: [...this.selectedUsers],
-          transfering_wwwtsp_ids: this.selectedCases,
-          origin_organization: this.currentUser.organization.id,
-          target_organization: this.selectedOrganization.id,
+          transfering_user_ids: [...selectedUsers.value],
+          transfering_wwwtsp_ids: selectedCases.value,
+          origin_organization: currentUser.value?.organization.id,
+          target_organization: selectedOrganization.value?.id,
           user_notes: '',
         },
       );
-      this.$emit('cancel');
-    },
-    setAllUsers(value) {
+      context.emit('cancel');
+    }
+    function setAllUsers(value) {
       if (value) {
-        const user_ids = this.lineageUsers.map((user) => user.id);
-        this.selectedUsers = [...user_ids];
+        const user_ids = lineageUsers.value.map((user: User) => user.id);
+        selectedUsers.value = [...user_ids];
       } else {
-        this.selectedUsers = [];
+        selectedUsers.value = [];
       }
-    },
-    setCases(value, cases) {
+    }
+    function setCases(value, cases) {
       const caseIds = cases.map((c) => c.id);
       if (value) {
-        this.selectedCases = [...this.selectedCases, ...caseIds];
+        selectedCases.value = [...selectedCases.value, ...caseIds];
       } else {
-        this.selectedCases = this.selectedCases.filter(
+        selectedCases.value = selectedCases.value.filter(
           (id) => !caseIds.includes(id),
         );
       }
-    },
-    addUser(userId) {
-      this.selectedUsers.push(userId);
-    },
-    removeUser(userId) {
-      this.selectedUsers = this.selectedUsers.filter((id) => id !== userId);
-    },
-    addUserTree(userId) {
-      const userLineage = this.lineageUsers.filter((user) =>
+    }
+    function addUser(userId) {
+      selectedUsers.value.push(userId);
+    }
+    function removeUser(userId) {
+      selectedUsers.value = selectedUsers.value.filter((id) => id !== userId);
+    }
+    function addUserTree(userId) {
+      const userLineage = lineageUsers.value.filter((user: User) =>
         user.lineage.includes(userId),
       );
-      this.selectedUsers.push(...userLineage.map((user) => user.id));
-    },
-    removeUserTree(userId) {
-      const userLineageIds = this.lineageUsers
-        .filter((user) => user.lineage.includes(userId))
-        .map((user) => user.id);
-      this.selectedUsers = this.selectedUsers.filter(
+      selectedUsers.value.push(...userLineage.map((user: User) => user.id));
+    }
+    function removeUserTree(userId) {
+      const userLineageIds = lineageUsers.value
+        .filter((user: User) => user.lineage.includes(userId))
+        .map((user: User) => user.id);
+      selectedUsers.value = selectedUsers.value.filter(
         (id) => !userLineageIds.includes(id),
       );
-    },
-  },
-  data() {
+    }
+    function getIncidentName(value, incident_list) {
+      return (
+        incident_list.length &&
+        incident_list.find((c) => c.id === Number(value)).name
+      );
+    }
+    onMounted(async () => {
+      loading.value = true;
+      await loadPageData();
+      loading.value = false;
+      isMounted.value = true;
+    });
+
     return {
-      page: 'start',
-      lineageUsers: [],
-      nestedUsers: [],
-      claimedCases: [],
-      selectedOrganization: null,
-      tabs: null,
-      loading: false,
-      isMounted: false,
-      selectedUsers: [],
-      selectedCases: [],
+      page,
+      tabs,
+      lineageUsers,
+      incidents,
+      nestedUsers,
+      claimedCases,
+      selectedOrganization,
+      loading,
+      isMounted,
+      selectedUsers,
+      selectedCases,
+      loadPageData,
+      setTabs,
+      transferRequest,
+      setAllUsers,
+      setCases,
+      addUser,
+      removeUser,
+      addUserTree,
+      removeUserTree,
       getColorForStatus,
+      getIncidentName,
     };
   },
-};
+});
 </script>
 
 <style scoped></style>

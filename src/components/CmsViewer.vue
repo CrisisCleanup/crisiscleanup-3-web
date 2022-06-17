@@ -8,8 +8,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from '@vue/composition-api';
+
+export default defineComponent({
   name: 'CmsViewer',
   props: {
     title: {
@@ -25,7 +27,7 @@ export default {
       default: '',
     },
   },
-};
+});
 </script>
 
 <style scoped></style>

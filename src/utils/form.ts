@@ -45,7 +45,7 @@ export const nest = (
     )
     .map((item) => ({ ...item, children: nest(items, item.field_key) }));
 
-export const nestUsers = (items, key = null) => {
+export const nestUsers = (items, key: string | null = null) => {
   return items
     .filter((item) => {
       if (item.referring_user) {

@@ -34,50 +34,67 @@
   </modal>
 </template>
 
-<script>
-import { UserMixin } from '@/mixins';
+<script lang="ts">
+import { computed, defineComponent, onMounted } from '@vue/composition-api';
+import moment from 'moment';
+import { useRouter } from '@u3u/vue-hooks';
 import User from '../models/User';
+import useUser from '@/use/user/useUser';
+import useHttp from '@/use/useHttp';
 
-export default {
+export default defineComponent({
   name: 'CompletedTransferModal',
-  mixins: [UserMixin],
-  async mounted() {
-    await this.getRequestingUser();
-  },
-  methods: {
-    async getRequestingUser() {
-      await User.api().get(`/users/${this.transferRequest.requested_by}`);
-    },
-    async markAsSeen() {
-      await this.$http.patch(
-        `${process.env.VUE_APP_API_BASE_URL}/transfer_requests/${this.transferRequest.id}`,
-        {
-          user_approved_at: this.$moment().toISOString(),
-        },
-      );
-    },
-    async stay() {
-      await this.markAsSeen();
-      this.$emit('close');
-    },
-    async goBack() {
-      await this.markAsSeen();
-      await this.$router.push('/profile?move=true');
-      this.$emit('close');
-    },
-  },
-  computed: {
-    requestingUser() {
-      return User.find(this.transferRequest.requested_by);
-    },
-  },
   props: {
     transferRequest: {
       type: Object,
       required: true,
     },
   },
-};
+
+  setup(props, context) {
+    const { currentUser } = useUser();
+    const { $http } = useHttp();
+    const { router } = useRouter();
+
+    const requestingUser = computed(() =>
+      User.find(props.transferRequest.requested_by),
+    );
+
+    async function getRequestingUser() {
+      await User.api().get(`/users/${props.transferRequest.requested_by}`);
+    }
+    async function markAsSeen() {
+      await $http.patch(
+        `${process.env.VUE_APP_API_BASE_URL}/transfer_requests/${props.transferRequest.id}`,
+        {
+          user_approved_at: moment().toISOString(),
+        },
+      );
+    }
+    async function stay() {
+      await markAsSeen();
+      context.emit('close');
+    }
+    async function goBack() {
+      await markAsSeen();
+      await router.push('/profile?move=true');
+      context.emit('close');
+    }
+
+    onMounted(async () => {
+      await getRequestingUser();
+    });
+
+    return {
+      currentUser,
+      requestingUser,
+      getRequestingUser,
+      markAsSeen,
+      stay,
+      goBack,
+    };
+  },
+});
 </script>
 
 <style scoped></style>

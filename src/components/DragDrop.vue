@@ -22,8 +22,10 @@
   </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { ref, defineComponent, onMounted } from '@vue/composition-api';
+
+export default defineComponent({
   name: 'DragDrop',
   props: {
     chooseTitle: {
@@ -47,84 +49,97 @@ export default {
       default: false,
     },
   },
-  data() {
-    return {
-      dragAndDropCapable: false,
-      defaultClasses:
-        'items-center justify-center relative w-full h-full flex flex-col',
-    };
-  },
-  mounted() {
-    this.dragAndDropCapable = this.determineDragAndDropCapable();
-    if (this.dragAndDropCapable) {
-      [
-        'drag',
-        'dragstart',
-        'dragend',
-        'dragover',
-        'dragenter',
-        'dragleave',
-        'drop',
-      ].forEach((evt) => {
-        this.$refs.fileform.addEventListener(
-          evt,
-          (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          },
-          false,
-        );
-      });
 
-      const addDragOverClass = () => {
-        this.$refs.fileform.classList.add('is-dragover');
-      };
+  setup(props, context) {
+    const dragAndDropCapable = ref(false);
+    const fileform = ref<HTMLFormElement | null>(null);
+    const fileinput = ref<HTMLInputElement | null>(null);
+    const defaultClasses = ref(
+      'items-center justify-center relative w-full h-full flex flex-col',
+    );
 
-      const removeDragOverClass = () => {
-        this.$refs.fileform.classList.remove('is-dragover');
-      };
-
-      this.$refs.fileform.addEventListener('drop', (e) => {
-        for (let i = 0; i < e.dataTransfer.files.length; i++) {
-          this.$emit('files', e.dataTransfer.files);
-        }
-        removeDragOverClass();
-      });
-
-      this.$refs.fileinput.addEventListener('change', (e) => {
-        for (let i = 0; i < e.target.files.length; i++) {
-          this.$emit('files', e.target.files);
-        }
-      });
-
-      this.$refs.fileform.addEventListener('dragover', addDragOverClass, false);
-      this.$refs.fileform.addEventListener(
-        'dragenter',
-        addDragOverClass,
-        false,
-      );
-      this.$refs.fileform.addEventListener(
-        'dragend',
-        removeDragOverClass,
-        false,
-      );
-      this.$refs.fileform.addEventListener(
-        'dragleave',
-        removeDragOverClass,
-        false,
-      );
-    }
-  },
-  methods: {
-    determineDragAndDropCapable() {
+    function determineDragAndDropCapable() {
       const div = document.createElement('div');
       return (
         ('draggable' in div || ('ondragstart' in div && 'ondrop' in div)) &&
         'FormData' in window
       );
-    },
+    }
+
+    onMounted(async () => {
+      dragAndDropCapable.value = determineDragAndDropCapable();
+      if (dragAndDropCapable.value && fileform.value) {
+        [
+          'drag',
+          'dragstart',
+          'dragend',
+          'dragover',
+          'dragenter',
+          'dragleave',
+          'drop',
+        ].forEach((evt) => {
+          if (fileform.value) {
+            fileform.value.addEventListener(
+              evt,
+              (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              },
+              false,
+            );
+          }
+        });
+
+        const addDragOverClass = () => {
+          if (fileform.value) {
+            fileform.value.classList.add('is-dragover');
+          }
+        };
+
+        const removeDragOverClass = () => {
+          if (fileform.value) {
+            fileform.value.classList.remove('is-dragover');
+          }
+        };
+
+        fileform.value.addEventListener('drop', (e) => {
+          if (e.dataTransfer?.files) {
+            for (let i = 0; i < e.dataTransfer.files.length; i++) {
+              context.emit('files', e.dataTransfer.files);
+            }
+            removeDragOverClass();
+          }
+        });
+
+        if (fileinput.value) {
+          fileinput.value.addEventListener('change', (e) => {
+            const target = e.target as HTMLInputElement;
+            if (target?.files) {
+              for (let i = 0; i < target.files.length; i++) {
+                context.emit('files', target.files);
+              }
+            }
+          });
+        }
+
+        fileform.value.addEventListener('dragover', addDragOverClass, false);
+        fileform.value.addEventListener('dragenter', addDragOverClass, false);
+        fileform.value.addEventListener('dragend', removeDragOverClass, false);
+        fileform.value.addEventListener(
+          'dragleave',
+          removeDragOverClass,
+          false,
+        );
+      }
+    });
+
+    return {
+      defaultClasses,
+      fileform,
+      fileinput,
+    };
   },
-};
+});
 </script>
 
 <style>

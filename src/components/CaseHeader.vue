@@ -113,78 +113,87 @@
   </div>
 </template>
 
-<script>
-import { mapState } from 'vuex';
+<script lang="ts">
+import { useState } from '@u3u/vue-hooks';
+import { defineComponent, computed } from '@vue/composition-api';
 import { templates } from '@/icons/icons_templates';
 import Worksite from '@/models/Worksite';
 
-export default {
+export default defineComponent({
   name: 'CaseHeader',
-  computed: {
-    ...mapState('incident', ['currentIncidentId']),
-    highPrioritySvgInactive() {
+  setup(props) {
+    const { currentIncidentId } = useState('incident', ['currentIncidentId']);
+    const highPrioritySvgInactive = computed(() => {
       const template = templates.important;
       return template
         .replace('{{fillColor}}', 'grey')
         .replace('{{strokeColor}}', 'white')
         .replace('{{multiple}}', '');
-    },
-    highPrioritySvgActive() {
+    });
+    const highPrioritySvgActive = computed(() => {
       const template = templates.important;
-      const svg = template
+      return template
         .replace('{{fillColor}}', 'red')
         .replace('{{strokeColor}}', 'white')
         .replace('{{multiple}}', '');
-      return svg;
-    },
-    favoriteSvgInactive() {
+    });
+    const favoriteSvgInactive = computed(() => {
       const template = templates.favorite;
       return template
         .replace('{{fillColor}}', 'grey')
         .replace('{{strokeColor}}', 'white')
         .replace('{{multiple}}', '');
-    },
-    favoriteSvgActive() {
+    });
+
+    const favoriteSvgActive = computed(() => {
       const template = templates.favorite;
-      const svg = template
+      return template
         .replace('{{fillColor}}', 'red')
         .replace('{{strokeColor}}', 'white')
         .replace('{{multiple}}', '');
-      return svg;
-    },
-  },
-  methods: {
-    async toggleFavorite(toggle) {
+    });
+
+    async function toggleFavorite(toggle) {
       if (toggle) {
-        await Worksite.api().favorite(this.worksite.id);
+        await Worksite.api().favorite(props.worksite.id);
       } else {
         await Worksite.api().unfavorite(
-          this.worksite.id,
-          this.worksite.favorite.id,
+          props.worksite.id,
+          props.worksite.favorite.id,
         );
       }
-      await Worksite.api().fetch(this.worksite.id);
-    },
-    async toggleHighPriority(isHighPriority) {
+      await Worksite.api().fetch(props.worksite.id);
+    }
+    async function toggleHighPriority(isHighPriority) {
       if (isHighPriority) {
-        await Worksite.api().addFlag(this.worksite.id, {
+        await Worksite.api().addFlag(props.worksite.id, {
           reason_t: 'flag.worksite_high_priority',
           is_high_priority: true,
           notes: '',
           requested_action: '',
         });
       } else {
-        const highPriorityFlags = this.worksite.flags.filter(
+        const highPriorityFlags = props.worksite.flags.filter(
           (flag) => flag.is_high_priority,
         );
         await Promise.all(
           highPriorityFlags.map((f) =>
-            Worksite.api().deleteFlag(this.worksite.id, f),
+            Worksite.api().deleteFlag(props.worksite.id, f),
           ),
         );
       }
-      await Worksite.api().fetch(this.worksite.id);
-    },
+      await Worksite.api().fetch(props.worksite.id);
+    }
+
+    return {
+      currentIncidentId,
+      highPrioritySvgInactive,
+      highPrioritySvgActive,
+      favoriteSvgInactive,
+      favoriteSvgActive,
+      toggleFavorite,
+      toggleHighPriority,
+    };
   },
   props: {
     worksite: {
@@ -201,7 +210,7 @@ export default {
     },
     isViewingWorksite: { type: Boolean, default: null, required: false },
   },
-};
+});
 </script>
 
 <style scoped></style>

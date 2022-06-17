@@ -18,7 +18,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import usei18n from '@/use/usei18n';
+
 export default {
   name: 'EventCard',
   props: {
@@ -29,27 +31,29 @@ export default {
       },
     },
   },
-  methods: {
-    getEventTitle(event_key) {
+  setup() {
+    const { $t } = usei18n();
+
+    function getEventTitle(event_key) {
       if (event_key) {
-        return this.$t(`events.${event_key.replace(':', '_')}`);
+        return $t(`events.${event_key.replace(':', '_')}`);
       }
       return event_key;
-    },
-    getTranslation(tag, attr) {
+    }
+    function getTranslation(tag, attr) {
       const translated_attrs = Object.fromEntries(
         Object.entries(attr).map(([key, value]) => [
           key,
-          key.endsWith('_t') ? this.$t(value) : value,
+          key.endsWith('_t') ? $t(value as string) : value,
         ]),
       );
-      return this.$t(tag, translated_attrs);
-    },
-  },
-  computed: {
-    name() {
-      return this.data;
-    },
+      return $t(tag, translated_attrs);
+    }
+
+    return {
+      getEventTitle,
+      getTranslation,
+    };
   },
 };
 </script>
