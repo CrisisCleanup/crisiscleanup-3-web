@@ -511,7 +511,7 @@
               :title="sviTitle"
             ></svi-slider>
             <Slider
-              v-if="datesList.length"
+              v-if="datesList.length && datesList.length > 1000"
               track-size="8px"
               handle-size="12px"
               primary-color="#dadada"
@@ -2002,13 +2002,17 @@ export default {
       this.$refs.worksiteMap.filterSvi(new Set(filteredSvi.map((w) => w.id)));
     },
     filterDates(value) {
-      this.dateLevel = Number(value);
-      const count = Math.floor((this.datesList.length * Number(value)) / 1000);
-      const filteredDates = this.datesList.slice(0, count);
-      const date = this.$moment(
-        filteredDates[filteredDates.length - 1].updated_at,
-      );
-      this.$refs.worksiteMap.filterDates(date);
+      if (this.datesList.length > 1000) {
+        this.dateLevel = Number(value);
+        const count = Math.floor(
+          (this.datesList.length * Number(value)) / 1000,
+        );
+        const filteredDates = this.datesList.slice(0, count);
+        const date = this.$moment(
+          filteredDates[filteredDates.length - 1].updated_at,
+        );
+        this.$refs.worksiteMap.filterDates(date);
+      }
     },
     setHeatMap() {
       this.$refs.worksiteMap.addHeatMap(
