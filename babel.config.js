@@ -1,10 +1,5 @@
 module.exports = {
-  presets: [
-    ['@babel/preset-env'],
-    'vca-jsx',
-    '@vue/cli-plugin-babel/preset',
-    '@vue/babel-preset-jsx',
-  ],
+  presets: [['@babel/preset-env'], 'vca-jsx', '@vue/cli-plugin-babel/preset'],
   plugins: [
     // @compat: decorators needs to come
     // before class properties

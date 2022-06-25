@@ -15,14 +15,14 @@
     <template #popover>
       <div class="tooltip-content">
         <div class="text-base" v-if="userItem">{{ userItem.full_name }}</div>
-        <div class="text-xs">{{ userItem.organization.name }}</div>
-        <div class="mt-2">
+        <div class="text-xs" v-if="userItem">{{ userItem.organization.name }}</div>
+        <div class="mt-2" v-if="userItem">
           <font-awesome-icon icon="envelope" />
           <a :href="`mailto:${userItem.email}`" class="ml-1">{{
             userItem.email
           }}</a>
         </div>
-        <div v-if="userItem.mobile">
+        <div v-if="userItem && userItem.mobile">
           <font-awesome-icon icon="phone" />
           <a :href="`tel:${userItem.mobile}`" class="ml-1">{{
             userItem.mobile
