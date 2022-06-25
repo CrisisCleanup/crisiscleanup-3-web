@@ -175,7 +175,7 @@ export default {
         icon: 'phone',
         text: $t('nav.phone'),
         to: '/phone',
-        disabled: !$can || !$can('phone_agent', {}),
+        disabled: !$can || !$can('phone_agent'),
       },
       {
         key: 'caller',
@@ -191,8 +191,8 @@ export default {
         to: '/connect_first',
         disabled:
           !$can ||
-          !$can('phone_agent', {}) ||
-          !$can('beta_feature.connect_first_integration', {}),
+          !$can('phone_agent') ||
+          !$can('beta_feature.connect_first_integration'),
       },
       {
         key: 'my_organization',
