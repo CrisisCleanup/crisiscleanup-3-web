@@ -18,7 +18,7 @@
 
         <form-select
           :value="uploadType"
-          :options="FILE_TYPES"
+          :options="fileTypes"
           class="bg-white border border-crisiscleanup-dark-100 h-12 mb-3 w-full"
           @input="(value) => (uploadType = value)"
           item-key="value"
@@ -71,13 +71,22 @@
   </div>
 </template>
 
-<script>
-import DragDrop from './DragDrop';
+<script lang="ts">
+import {
+  ref,
+  defineComponent,
+  onMounted,
+  computed,
+} from '@vue/composition-api';
+import DragDrop from './DragDrop.vue';
 import { getErrorMessage } from '../utils/errors';
 import Report from '../models/Report';
 import Organization from '../models/Organization';
-import OrganizationSearchInput from './OrganizationSearchInput';
-import Loader from './Loader';
+import OrganizationSearchInput from './OrganizationSearchInput.vue';
+import Loader from './Loader.vue';
+import usei18n from '@/use/usei18n';
+import useHttp from '@/use/useHttp';
+import useToasted from '@/use/useToasted';
 
 const FILE_TYPES = [
   'fileTypes.logo',
@@ -98,47 +107,46 @@ const FILE_TYPES = [
   'fileTypes.report_sample',
 ];
 
-export default {
+export default defineComponent({
   name: 'FileUpload',
   components: { Loader, OrganizationSearchInput, DragDrop },
-  data() {
-    return {
-      uploading: false,
-      showingUploadModal: false,
-      selectedModel: null,
-      uploadType: '',
-      entityId: null,
-      FILE_TYPES: FILE_TYPES.map((key) => {
-        return {
-          value: key,
-          name_t: this.$t(key),
-        };
-      }),
-      fileAwareModels: { Report, Organization },
-    };
-  },
-  async mounted() {
-    await Report.api().get('/reports', {
-      dataKey: 'results',
+  setup() {
+    const { $t } = usei18n();
+    const { $http } = useHttp();
+    const { $toasted } = useToasted();
+
+    const uploading = ref(false);
+    const showingUploadModal = ref(false);
+    const selectedModel = ref('');
+    const entityId = ref<Report | Organization | null>(null);
+    const uploadType = ref('');
+    const fileAwareModels = ref({ Report, Organization });
+    const fileTypes = FILE_TYPES.map((key) => {
+      return {
+        value: key,
+        name_t: $t(key),
+      };
     });
-  },
-  computed: {
-    reports() {
-      return Report.all();
-    },
-  },
-  methods: {
-    async handleFileUpload(fileList) {
+
+    const reports = computed(() => Report.all());
+
+    onMounted(async () => {
+      await Report.api().get('/reports', {
+        dataKey: 'results',
+      });
+    });
+
+    async function handleFileUpload(fileList) {
       if (fileList.length === 0) {
-        this.uploading = false;
+        uploading.value = false;
         return;
       }
       const formData = new FormData();
       formData.append('upload', fileList[fileList.length - 1]);
-      formData.append('type_t', this.uploadType);
-      this.uploading = true;
+      formData.append('type_t', uploadType.value);
+      uploading.value = true;
       try {
-        const result = await this.$http.post(
+        const result = await $http.post(
           `${process.env.VUE_APP_API_BASE_URL}/files`,
           formData,
           {
@@ -149,19 +157,31 @@ export default {
           },
         );
         const file = result.data.id;
-        await this.fileAwareModels[this.selectedModel]
+        await fileAwareModels.value[selectedModel.value]
           .api()
-          .addFile(this.entityId, file);
-        await this.$toasted.success(this.$t('info.upload_file_successful'));
-        this.entityId = null;
+          .addFile(entityId.value?.id, file);
+        await $toasted.success($t('info.upload_file_successful'));
+        entityId.value = null;
       } catch (error) {
-        await this.$toasted.error(getErrorMessage(error));
+        await $toasted.error(getErrorMessage(error));
       } finally {
-        this.uploading = false;
+        uploading.value = false;
       }
-    },
+    }
+
+    return {
+      uploading,
+      showingUploadModal,
+      selectedModel,
+      entityId,
+      uploadType,
+      fileAwareModels,
+      fileTypes,
+      reports,
+      handleFileUpload,
+    };
   },
-};
+});
 </script>
 
 <style scoped></style>

@@ -83,7 +83,14 @@ import { size } from 'lodash';
 import { Slide } from 'vue-burger-menu';
 import { parsePhoneNumber } from 'libphonenumber-js';
 import { ref, computed, watch, onMounted } from '@vue/composition-api';
-import { useState, useGetters, useMutations, useActions } from '@u3u/vue-hooks';
+import {
+  useState,
+  useGetters,
+  useMutations,
+  useActions,
+  useRouter,
+} from '@u3u/vue-hooks';
+import moment from 'moment';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
@@ -113,6 +120,13 @@ export default {
     Header,
   },
   setup(props, context) {
+    const { $t } = context.root;
+    const { $log } = context.root;
+    const { router, route } = useRouter();
+    const { $http } = context.root;
+    const { $can } = context.root;
+    const { $phoneService } = context.root;
+
     const { currentIncidentId } = useState('incident', ['currentIncidentId']);
     const { user, showLoginModal } = useState('auth', [
       'user',
@@ -138,7 +152,7 @@ export default {
 
     const logoRoute = computed(() => ({
       key: 'pew',
-      text: context.root.$t('nav.pew'),
+      text: $t('nav.pew'),
       to: '/pew-pew',
     }));
 
@@ -149,7 +163,7 @@ export default {
     const routes = computed(() => [
       {
         key: 'dashboard',
-        text: context.root.$t('nav.dashboard'),
+        text: $t('nav.dashboard'),
         to: `/incident/${currentIncidentId.value}/dashboard`,
       },
       {
@@ -159,26 +173,26 @@ export default {
       {
         key: 'phone',
         icon: 'phone',
-        text: context.root.$t('nav.phone'),
+        text: $t('nav.phone'),
         to: '/phone',
-        disabled: !context.root.$can || !context.root.$can('phone_agent'),
+        disabled: !$can || !$can('phone_agent', {}),
       },
       {
         key: 'caller',
         icon: 'phone',
-        text: context.root.$t('nav.phone_beta'),
+        text: $t('nav.phone_beta'),
         to: '/caller',
         disabled: true,
       },
       {
         key: 'connect_first',
         icon: 'phone',
-        text: context.root.$t('nav.phone_alpha'),
+        text: $t('nav.phone_alpha'),
         to: '/connect_first',
         disabled:
-          !context.root.$can ||
-          !context.root.$can('phone_agent') ||
-          !context.root.$can('beta_feature.connect_first_integration'),
+          !$can ||
+          !$can('phone_agent', {}) ||
+          !$can('beta_feature.connect_first_integration', {}),
       },
       {
         key: 'my_organization',
@@ -195,12 +209,12 @@ export default {
       {
         key: 'reports',
         icon: 'reports',
-        text: context.root.$t('nav.reports'),
+        text: $t('nav.reports'),
         to: '/reports',
       },
       {
         key: 'training',
-        text: context.root.$t('nav.training'),
+        text: $t('nav.training'),
         icon: {
           type: 'info',
           invertColor: true,
@@ -210,7 +224,7 @@ export default {
       {
         key: 'admin',
         icon: 'admin',
-        text: context.root.$t('nav.admin'),
+        text: $t('nav.admin'),
         to: '/admin',
         disabled: !(currentUser.value && currentUser.value.isAdmin),
       },
@@ -237,10 +251,10 @@ export default {
         incident: value,
       });
       setCurrentIncidentId(value);
-      await context.root.$router.push({
-        name: context.root.$route.name,
-        params: { ...context.root.$route.params, incident_id: value },
-        query: { ...context.root.$route.query },
+      await router.push({
+        name: route.value.name as string,
+        params: { ...route.value.params, incident_id: value },
+        query: { ...route.value.query },
       });
     };
 
@@ -273,18 +287,17 @@ export default {
           if (size(translations) > 0) {
             context.root.$i18n.setLocaleMessage(currentLanguage, translations);
             context.root.$i18n.locale = currentLanguage;
-            context.root.$http.defaults.headers.common['Accept-Language'] =
-              currentLanguage;
+            $http.defaults.headers.common['Accept-Language'] = currentLanguage;
             const htmlHtmlElement = document.querySelector('html');
             if (htmlHtmlElement) {
               htmlHtmlElement.setAttribute('lang', currentLanguage);
             }
           }
         } catch (e) {
-          context.root.$log.error(e);
+          $log.error(e);
         }
       }
-      context.root.$moment.locale(currentLanguage.split('-')[0]);
+      moment.locale(currentLanguage.split('-')[0]);
     };
 
     const acceptTermsAndConditions = async () => {
@@ -293,7 +306,7 @@ export default {
     };
 
     const getUserTransferRequests = async () => {
-      const response = await context.root.$http.get(
+      const response = await $http.get(
         `${process.env.VUE_APP_API_BASE_URL}/transfer_requests`,
       );
       transferRequest.value = response.data.results.find((request) => {
@@ -306,10 +319,14 @@ export default {
         currentUser?.value?.mobile || '',
         'US',
       );
-      if (currentUser.value && currentUser?.value?.mobile) {
+      if (
+        currentUser.value &&
+        currentUser?.value?.mobile &&
+        $phoneService.queueIds
+      ) {
         await Promise.all(
-          context.root.$phoneService.queueIds.map((queueId) =>
-            context.root.$phoneService
+          $phoneService.queueIds.map((queueId) =>
+            $phoneService
               .apiLoginsByPhone(
                 parsedNumber.formatNational().replace(/[^\d.]/g, ''),
                 queueId,
@@ -318,9 +335,7 @@ export default {
                 if (data.length) {
                   await Promise.all(
                     data.map((phoneLogin) =>
-                      context.root.$phoneService.apiLogoutAgent(
-                        phoneLogin.agentId,
-                      ),
+                      $phoneService.apiLogoutAgent(phoneLogin.agentId),
                     ),
                   );
                 }
@@ -338,13 +353,19 @@ export default {
     };
 
     watch(
-      () => context.root.$route.params.incident_id,
+      () => route.value.params.incident_id,
       (value) => {
         if (value && Number(currentIncidentId.value) !== Number(value)) {
           handleChange(value);
         }
       },
     );
+
+    onMounted(() => {
+      if (route.value.params.incident_id) {
+        handleChange(route.value.params.incident_id);
+      }
+    });
 
     onMounted(async () => {
       loading.value = true;
@@ -385,9 +406,9 @@ export default {
       }
       await getUserTransferRequests();
       await setupLanguage();
-      setAcl(context.root.$router);
+      setAcl(router);
 
-      let incidentId = context.root.$route.params.incident_id;
+      let incidentId = route.value.params.incident_id;
       if (!incidentId) {
         const incident = Incident.query().orderBy('id', 'desc').first();
         if (incident) {
@@ -407,9 +428,7 @@ export default {
         !currentUser?.value?.accepted_terms_timestamp ||
         context.root
           .$moment(VERSION_3_LAUNCH_DATE)
-          .isAfter(
-            context.root.$moment(currentUser.value.accepted_terms_timestamp),
-          ) ||
+          .isAfter(moment(currentUser.value.accepted_terms_timestamp)) ||
         (portal.value.tos_updated_at &&
           context.root
             .$moment(portal.value.tos_updated_at)
@@ -429,7 +448,7 @@ export default {
         if (incident) {
           setCurrentIncidentId(incident.id);
         }
-        await context.root.$router.push(`/`).catch(() => {});
+        await router.push(`/`).catch(() => {});
       }
 
       loading.value = false;

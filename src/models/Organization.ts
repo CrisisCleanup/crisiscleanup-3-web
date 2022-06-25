@@ -4,9 +4,17 @@ import Incident from '@/models/Incident';
 export default class Organization extends Model {
   static entity = 'organizations';
 
+  id!: string;
+
+  name!: string;
+
+  incidents!: any[];
+
+  files!: any[];
+
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       name: this.string(''),
       url: this.string(''),
       facebook: this.string(''),
@@ -83,12 +91,12 @@ export default class Organization extends Model {
       },
 
       reject(id, reason, note = null) {
-        const data = { approve_reject_reason_t: reason };
+        const data: Record<string, any> = { approve_reject_reason_t: reason };
         if (note) {
           data.rejection_note = note;
         }
         return this.post(`/organizations/${id}/reject`, data, { save: false });
       },
-    },
+    } as any,
   };
 }

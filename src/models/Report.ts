@@ -3,9 +3,11 @@ import { Model } from '@vuex-orm/core';
 export default class Report extends Model {
   static entity = 'reports';
 
+  id!: string;
+
   static fields() {
     return {
-      id: this.attr(),
+      id: this.attr(''),
       name_t: this.attr(null),
       description_t: this.attr(null),
       report_key: this.attr(null),
@@ -36,6 +38,6 @@ export default class Report extends Model {
           { save: false },
         );
       },
-    },
+    } as any,
   };
 }

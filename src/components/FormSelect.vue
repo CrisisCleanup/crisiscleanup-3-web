@@ -63,9 +63,22 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { xor, kebabCase, isEmpty } from 'lodash';
-export default {
+import {
+  ref,
+  defineComponent,
+  onMounted,
+  computed,
+  nextTick,
+  h,
+} from '@vue/composition-api';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import usei18n from '@/use/usei18n';
+import useLog from '@/use/useLog';
+import BaseIcon from '@/components/BaseIcon.vue';
+
+export default defineComponent({
   name: 'FormSelect',
   props: {
     searchable: {
@@ -131,131 +144,145 @@ export default {
       default: '',
     },
   },
-  data() {
-    const iconSize = this.multiple ? 'xxs' : 'medium';
-    const { indicatorIcon } = this;
-    const cancelText = this.$t('actions.cancel');
-    return {
-      isFloated_: false,
-      isEmpty_: true,
-      isInvalid: false,
-      baseHeight_: 0.0,
-      currentHeight_: 0.0,
-      floatDisplacement: 0,
-      Deselect: {
-        render() {
-          return (
-            <ccu-icon
-              alt={cancelText}
-              size={iconSize}
-              class="mx-1 opacity-50"
-              type="cancel"
-            />
-          );
-        },
-      },
-      OpenIndicator: {
-        render() {
-          return (
-            <font-awesome-icon
-              size="sm"
-              icon={indicatorIcon}
-              class="mx-1 text-crisiscleanup-dark-400"
-            />
-          );
-        },
+  setup(props, context) {
+    const { $t } = usei18n();
+    const { $log } = useLog();
+
+    const iconSize = props.multiple ? 'xxs' : 'medium';
+    const { indicatorIcon } = props;
+    const cancelText = $t('actions.cancel');
+    const input = ref<HTMLInputElement | null>(null);
+    const inputLabel = ref<HTMLLabelElement | null>(null);
+
+    const isFloated_ = ref(false);
+    const isEmpty_ = ref(true);
+    const isInvalid = ref(false);
+    const baseHeight_ = ref(0.0);
+    const currentHeight_ = ref(0.0);
+    const floatDisplacement = ref(0);
+
+    const Deselect = {
+      setup: () => {
+        return () => {
+          return h(BaseIcon, {
+            attrs: {
+              alt: cancelText,
+              size: iconSize,
+              type: 'cancel',
+              class: 'mx-1 opacity-50',
+            },
+          } as any);
+        };
       },
     };
-  },
-  computed: {
-    inputIdSelector() {
-      const idSpec = this.floatLabel ? this.floatLabel : '';
+
+    const OpenIndicator = {
+      setup: () => {
+        return () => {
+          return h(FontAwesomeIcon, {
+            attrs: {
+              icon: indicatorIcon,
+              size: 'sm',
+              class: 'mx-1 text-crisiscleanup-dark-400',
+            },
+          } as any);
+        };
+      },
+    };
+
+    const inputIdSelector = computed(() => {
+      const idSpec = props.floatLabel ? props.floatLabel : '';
       return `select-id-${kebabCase(idSpec)}`;
-    },
-    inputRef() {
-      if (this.$refs.input) return this.$refs.input;
-      return document.getElementById(this.inputIdSelector);
-    },
-    heightMultiplier() {
-      if (this.currentHeight_ === 0.0) return 1;
-      this.$log.debug('current container height:', this.currentHeight_);
-      const multi = this.currentHeight_ / this.baseHeight_;
-      this.$log.debug('height multiplier change: ', multi);
+    });
+
+    const inputRef = computed(() => {
+      if (input.value) return input.value;
+      return document.getElementById(inputIdSelector.value);
+    });
+
+    const heightMultiplier = computed(() => {
+      if (currentHeight_.value === 0.0) return 1;
+      $log.debug('current container height:', currentHeight_.value);
+      const multi = currentHeight_.value / baseHeight_.value;
+      $log.debug('height multiplier change: ', multi);
       return multi;
-    },
-    floatStyle() {
-      const displace = this.heightMultiplier * -12;
+    });
+
+    const floatStyle = computed(() => {
+      const displace = heightMultiplier.value * -12;
       return { transform: `translateY(${displace}px)` };
-    },
-    isEmpty() {
-      if (this.value !== null) {
-        return isEmpty(this.value);
+    });
+
+    const empty = computed(() => {
+      if (props.value !== null) {
+        return isEmpty(props.value);
       }
-      return this.isEmpty_;
-    },
-    isFloated() {
-      if (this.isFloated_ === true) {
+      return isEmpty_.value;
+    });
+
+    const isFloated = computed(() => {
+      if (isFloated_.value === true) {
         return true;
       }
-      if (this.isEmpty === false) {
+      if (!empty.value) {
         return true;
       }
-      return this.isFloated_;
-    },
-  },
-  mounted() {
-    this.id = this._uid;
-    if (this.required) {
-      this.$refs.input.addEventListener(
-        'invalid',
-        () => {
-          this.isInvalid = true;
-        },
-        true,
-      );
-    }
-    if (this.floatLabel) {
-      this.inputRef.parentElement.classList.add('has-float');
-      this.baseHeight_ = this.inputRef.parentElement.clientHeight;
-    }
-  },
-  methods: {
-    onInput(value) {
-      this.$emit('input', value);
-      this.isEmpty_ = value === null;
-      if (value === null && this.floatLabel) {
-        this.isFloated_ = false;
-        this.$refs.inputLabel.classList.remove('focused');
+      return isFloated_.value;
+    });
+
+    onMounted(async () => {
+      // this.id = this._uid;
+      if (props.required && input) {
+        input.value?.addEventListener(
+          'invalid',
+          () => {
+            isInvalid.value = true;
+          },
+          true,
+        );
       }
-      if (this.multiple) {
-        const current = this.value || [];
-        this.$emit(
+      if (props.floatLabel) {
+        inputRef.value?.parentElement?.classList.add('has-float');
+        baseHeight_.value = inputRef.value?.parentElement?.clientHeight || 0;
+      }
+    });
+
+    function onInput(value) {
+      context.emit('input', value);
+      isEmpty_.value = value === null;
+      if (value === null && props.floatLabel) {
+        isFloated_.value = false;
+        inputLabel.value?.classList.remove('focused');
+      }
+      if (props.multiple) {
+        const current = props.value || [];
+        context.emit(
           'changed',
           xor(
             value,
-            current.map((item) => (this.itemKey ? item[this.itemKey] : item)),
+            current.map((item) => (props.itemKey ? item[props.itemKey] : item)),
           ),
         );
       }
-      if (this.required) {
-        if (this.$refs.input.checkValidity()) {
-          this.isInvalid = false;
+      if (props.required) {
+        if (input.value?.checkValidity()) {
+          isInvalid.value = false;
         }
       }
-    },
-    onBlur() {
-      if (this.floatLabel && this.isEmpty) {
-        this.isFloated_ = false;
-        this.$refs.inputLabel.classList.remove('focused');
+    }
+    function onBlur() {
+      if (props.floatLabel && empty.value) {
+        isFloated_.value = false;
+        inputLabel.value?.classList.remove('focused');
       }
-    },
-    open() {
-      if (this.floatLabel) {
-        this.isFloated_ = true;
-        this.$refs.inputLabel.classList.add('focused');
+    }
+    function open() {
+      if (props.floatLabel) {
+        isFloated_.value = true;
+        inputLabel.value?.classList.add('focused');
       }
-      this.$nextTick(() => {
-        const items = [].slice.call(
+      nextTick(() => {
+        const items: HTMLElement[] = [].slice.call(
           document.querySelectorAll('.vs__dropdown-option'),
         );
 
@@ -264,28 +291,51 @@ export default {
         });
 
         const selected = items.find((item) => {
-          if (this.value) {
-            const currentLabel = this.label
-              ? this.value[this.label]
-              : this.value;
-            return item.textContent.trim() === currentLabel;
+          if (props.value) {
+            const currentLabel = props.label
+              ? props.value[props.label]
+              : props.value;
+            return item.textContent?.trim() === currentLabel;
           }
           return false;
         });
 
         if (selected) {
           selected.classList.add('vs__dropdown-option--highlight');
-          document.querySelector('.vs__dropdown-menu').scrollTop =
-            selected.offsetTop;
+          const element = document.querySelector('.vs__dropdown-menu');
+          if (element) {
+            element.scrollTop = selected.offsetTop;
+          }
         }
       });
-    },
-    handleResize() {
-      this.currentHeight_ = this.inputRef.parentElement.clientHeight;
-      this.$emit('resize', this.currentHeight_);
-    },
+    }
+    function handleResize() {
+      currentHeight_.value = inputRef.value?.parentElement?.clientHeight || 0;
+      context.emit('resize', currentHeight_.value);
+    }
+
+    return {
+      isFloated_,
+      isEmpty_,
+      isInvalid,
+      baseHeight_,
+      currentHeight_,
+      floatDisplacement,
+      Deselect,
+      OpenIndicator,
+      inputIdSelector,
+      inputRef,
+      heightMultiplier,
+      floatStyle,
+      isEmpty: empty,
+      isFloated,
+      onInput,
+      onBlur,
+      open,
+      handleResize,
+    };
   },
-};
+});
 </script>
 
 <style>
