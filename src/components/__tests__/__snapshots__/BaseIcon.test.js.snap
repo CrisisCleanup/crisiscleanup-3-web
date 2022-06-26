@@ -2,14 +2,17 @@
 
 exports[`BaseIcon should render correctly and match snapshot 1`] = `
 <base-button
-  action="function func() {}"
-  alt=""
+  action="() => {
+        /* istanbul ignore next */
+        cov_3cekvzqye().f[0]++;
+      }"
+  alt="button"
   ccu-event=""
-  class="flex items-center base-icon js-  "
-  title=""
+  class="flex items-center base-icon js-button  "
+  title="button"
 >
   <img
-    alt=""
+    alt="button"
     class="ccu-icon cursor-pointer small"
     src="IMAGE_MOCK"
   />

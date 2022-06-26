@@ -3,14 +3,14 @@ import VueLog from '@dreipol/vue-log';
 import moment from 'moment';
 import { Toasted } from 'vue-toasted';
 import { AxiosStatic } from 'axios';
+// import { AclHelper } from 'vue-browser-acl/types';
 import Router from '@/router';
-import { AclHelper } from 'vue-browser-acl/types';
 import PhoneService from '@/services/phone.service';
 
 declare global {
   interface CustomVue extends Vue {
     $log: VueLog;
-    $can: AclHelper;
+    // $can: AclHelper;
     $phoneService: PhoneService;
     $router: Router;
     $moment: moment;
