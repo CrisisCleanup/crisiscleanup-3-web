@@ -10,7 +10,7 @@ import PhoneService from '@/services/phone.service';
 declare global {
   interface CustomVue extends Vue {
     $log: VueLog;
-    // $can: AclHelper;
+    $can: any;
     $phoneService: PhoneService;
     $router: Router;
     $moment: moment;
