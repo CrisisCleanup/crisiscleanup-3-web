@@ -120,12 +120,8 @@ export default {
     Header,
   },
   setup(props, context) {
-    const { $t } = context.root;
-    const { $log } = context.root;
     const { router, route } = useRouter();
-    const { $http } = context.root;
-    const { $can } = context.root;
-    const { $phoneService } = context.root;
+    const { $http, $log, $t, $phoneService } = context.root;
 
     const { currentIncidentId } = useState('incident', ['currentIncidentId']);
     const { user, showLoginModal } = useState('auth', [
@@ -175,7 +171,7 @@ export default {
         icon: 'phone',
         text: $t('nav.phone'),
         to: '/phone',
-        disabled: !$can || !$can('phone_agent'),
+        disabled: !context.root.$can || !context.root.$can('phone_agent'),
       },
       {
         key: 'caller',
@@ -190,9 +186,9 @@ export default {
         text: $t('nav.phone_alpha'),
         to: '/connect_first',
         disabled:
-          !$can ||
-          !$can('phone_agent') ||
-          !$can('beta_feature.connect_first_integration'),
+          !context.root.$can ||
+          !context.root.$can('phone_agent') ||
+          !context.root.$can('beta_feature.connect_first_integration'),
       },
       {
         key: 'my_organization',
