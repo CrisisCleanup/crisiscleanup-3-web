@@ -333,6 +333,9 @@ export default class Worksite extends CCUModel<Worksite> {
           { save: false },
         );
       },
+      getHistory(id) {
+        return this.get(`/worksites/${id}/history`, {}, { save: false });
+      },
       deleteFile(id, file) {
         return this.delete(
           `/worksites/${id}/files`,

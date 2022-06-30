@@ -15,7 +15,9 @@
     <template #popover>
       <div class="tooltip-content">
         <div class="text-base" v-if="userItem">{{ userItem.full_name }}</div>
-        <div class="text-xs" v-if="userItem">{{ userItem.organization.name }}</div>
+        <div class="text-xs" v-if="userItem">
+          {{ userItem.organization.name }}
+        </div>
         <div class="mt-2" v-if="userItem">
           <font-awesome-icon icon="envelope" />
           <a :href="`mailto:${userItem.email}`" class="ml-1">{{

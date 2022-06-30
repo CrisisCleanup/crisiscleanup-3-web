@@ -27,7 +27,8 @@
           {{ getOrganizationName(org) }}
         </div>
       </div>
-      <Timeline :events="worksite.events" />
+      <EventTimeline v-if="worksiteHistory.length > 0" :events="worksiteHistory"/>
+      <Timeline v-else :events="worksite.events" />
     </div>
   </div>
   <div v-else class="flex items-center justify-center h-full">
@@ -36,15 +37,17 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
 import { groupBy } from '@/utils/array';
 import Worksite from '@/models/Worksite';
 import Timeline from '@/components/Timeline';
+import EventTimeline from '@/components/EventTimeline';
 
 export default {
   name: 'CaseHistory',
-  components: { Timeline },
+  components: { EventTimeline, Timeline },
   props: {
     worksiteId: {
       type: Number,
@@ -58,6 +61,7 @@ export default {
   data() {
     return {
       worksite: {},
+      worksiteHistory: [],
       ready: false,
     };
   },
@@ -83,6 +87,10 @@ export default {
         this.worksiteId || this.$route.params.id,
         this.incidentId || this.$route.params.incident_id,
       );
+
+      const result = await Worksite.api().getHistory(this.worksiteId);
+      this.worksiteHistory = result.response.data;
+
     } catch (e) {
       await this.$router.push(
         `/incident/${
