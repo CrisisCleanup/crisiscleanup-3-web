@@ -149,6 +149,7 @@
                           hover:bg-crisiscleanup-light-grey
                         "
                       >
+                        <font-awesome-icon icon="envelope"></font-awesome-icon>
                         <a :href="`mailto:${slotProps.item.email}`">{{
                           $t('teams.send_email')
                         }}</a>
@@ -160,6 +161,7 @@
                           hover:bg-crisiscleanup-light-grey
                         "
                       >
+                        <font-awesome-icon icon="user"></font-awesome-icon>
                         <a :href="`/organization/users/${slotProps.item.id}`">
                           {{ $t('teams.view_full_profile') }}
                         </a>
@@ -176,6 +178,7 @@
                           }
                         "
                       >
+                        <font-awesome-icon icon="pen"></font-awesome-icon>
                         {{ $t('teams.move_to_another_team') }}
                       </li>
                       <li
@@ -190,6 +193,7 @@
                           }
                         "
                       >
+                        <font-awesome-icon icon="trash"></font-awesome-icon>
                         {{ $t('teams.remove_from_team') }}
                       </li>
                     </ul>
@@ -664,7 +668,7 @@ export default {
         },
       });
       await this.updateCurrentTeam();
-      this.showRenameModal = false
+      this.showRenameModal = false;
     },
     async getClaimedWorksites() {
       const params = {
