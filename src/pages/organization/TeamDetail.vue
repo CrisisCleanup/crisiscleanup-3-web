@@ -8,24 +8,51 @@
         {{ team.name }}
       </div>
       <div class="flex flex-wrap items-center justify-end">
-        <ccu-icon
-          :alt="$t('actions.jump_to_case')"
-          size="small"
-          class="p-1 py-2"
-          type="go-case"
-          @click.native="showAllOnMap"
-        />
-        <ccu-icon
-          :alt="$t('actions.delete')"
-          type="trash"
-          class="mx-2"
-          size="small"
-          @click.native="
-            () => {
-              deleteCurrentTeam();
-            }
-          "
-        />
+        <base-dropdown
+          :trigger="'click'"
+          class-name="team-detail-user"
+          :x="-10"
+        >
+          <ccu-icon
+            slot="icon"
+            :alt="$t('teams.settings')"
+            size="medium"
+            type="settings"
+          />
+          <template slot="body">
+            <ul>
+              <li>
+                <ccu-icon
+                  :alt="$t('actions.jump_to_case')"
+                  size="small"
+                  class="pl-1 py-2"
+                  type="go-case"
+                  @click.native="showAllOnMap"
+                />
+              </li>
+              <li>
+                <ccu-icon
+                  :alt="$t('actions.delete')"
+                  type="trash"
+                  class="pl-1 py-2"
+                  size="small"
+                  @click.native="
+                    () => {
+                      deleteCurrentTeam();
+                    }
+                  "
+                />
+              </li>
+              <li>
+                <img
+                  :alt="$t('Rename')"
+                  src="@/assets/icons/edit.svg"
+                  class="cursor-pointer p-1 py-2"
+                />
+              </li>
+            </ul>
+          </template>
+        </base-dropdown>
       </div>
     </div>
     <tabs class="w-full" ref="tabs">
@@ -633,6 +660,15 @@ export default {
     },
   },
   methods: {
+    async renameTeam(name) {
+      Team.update({
+        where: this.team.id,
+        data: {
+          name,
+        },
+      });
+      await this.updateCurrentTeam();
+    },
     async getClaimedWorksites() {
       const params = {
         incident: this.currentIncidentId,
