@@ -27,7 +27,10 @@
           {{ getOrganizationName(org) }}
         </div>
       </div>
-      <EventTimeline v-if="worksiteHistory.length > 0" :events="worksiteHistory"/>
+      <EventTimeline
+        v-if="worksiteHistory.length > 0"
+        :events="worksiteHistory"
+      />
       <Timeline v-else :events="worksite.events" />
     </div>
   </div>
@@ -37,7 +40,6 @@
 </template>
 
 <script>
-import _ from 'lodash';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
 import { groupBy } from '@/utils/array';
@@ -90,7 +92,6 @@ export default {
 
       const result = await Worksite.api().getHistory(this.worksiteId);
       this.worksiteHistory = result.response.data;
-
     } catch (e) {
       await this.$router.push(
         `/incident/${
