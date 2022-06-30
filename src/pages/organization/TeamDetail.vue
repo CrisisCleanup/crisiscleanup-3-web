@@ -8,51 +8,34 @@
         {{ team.name }}
       </div>
       <div class="flex flex-wrap items-center justify-end">
-        <base-dropdown
-          :trigger="'click'"
-          class-name="team-detail-user"
-          :x="-10"
-        >
-          <ccu-icon
-            slot="icon"
-            :alt="$t('teams.settings')"
-            size="medium"
-            type="settings"
-          />
-          <template slot="body">
-            <ul>
-              <li>
-                <ccu-icon
-                  :alt="$t('actions.jump_to_case')"
-                  size="small"
-                  class="pl-1 py-2"
-                  type="go-case"
-                  @click.native="showAllOnMap"
-                />
-              </li>
-              <li>
-                <ccu-icon
-                  :alt="$t('actions.delete')"
-                  type="trash"
-                  class="pl-1 py-2"
-                  size="small"
-                  @click.native="
-                    () => {
-                      deleteCurrentTeam();
-                    }
-                  "
-                />
-              </li>
-              <li>
-                <img
-                  :alt="$t('Rename')"
-                  src="@/assets/icons/edit.svg"
-                  class="cursor-pointer p-1 py-2"
-                />
-              </li>
-            </ul>
-          </template>
-        </base-dropdown>
+        <ccu-icon
+          :alt="$t('actions.jump_to_case')"
+          size="small"
+          class="p-2"
+          type="go-case"
+          @click.native="showAllOnMap"
+        />
+        <ccu-icon
+          :alt="$t('actions.delete')"
+          type="trash"
+          class="p-2"
+          size="small"
+          @click.native="
+            () => {
+              deleteCurrentTeam();
+            }
+          "
+        />
+        <img
+          :alt="$t('Rename')"
+          src="@/assets/icons/edit.svg"
+          class="cursor-pointer p-2"
+          @click="
+            () => {
+              showRenameModal = true;
+            }
+          "
+        />
       </div>
     </div>
     <tabs class="w-full" ref="tabs">
@@ -579,6 +562,18 @@
         />
       </div>
     </modal>
+    <modal
+      v-if="showRenameModal"
+      closeable
+      @close="renameTeam()"
+      modal-classes="max-w-xl"
+    >
+      <base-input
+        v-model="team.name"
+        :placeholder="$t('name')"
+        class="w-64 m-6"
+      />
+    </modal>
   </div>
 </template>
 
@@ -644,6 +639,7 @@ export default {
       selectedWorksites: [],
       showAddMembersModal: false,
       showAddCasesModal: false,
+      showRenameModal: false,
       showingWorksiteTable: true,
       showingWorksiteMap: false,
       caseArea: null,
@@ -660,14 +656,15 @@ export default {
     },
   },
   methods: {
-    async renameTeam(name) {
+    async renameTeam() {
       Team.update({
         where: this.team.id,
         data: {
-          name,
+          name: this.team.name,
         },
       });
       await this.updateCurrentTeam();
+      this.showRenameModal = false
     },
     async getClaimedWorksites() {
       const params = {
@@ -827,7 +824,7 @@ export default {
         content: this.$t('teams.delete_team_confirm'),
         actions: {
           no: {
-            text: this.$t('teams.no'),
+            text: this.$t('Cancel'),
             type: 'outline',
             buttonClass: 'border border-black',
           },
