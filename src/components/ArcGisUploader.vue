@@ -58,9 +58,9 @@ export default defineComponent({
     const importGis = async () => {
       try {
         await $http.post(`${process.env.VUE_APP_API_BASE_URL}/arcgis_import`, {
-          url,
-          prefix,
-          incident,
+          url: url.value,
+          prefix: prefix.value,
+          incident: incident.value,
         });
         await $toasted.success($t('arcGisUploader.gis_import_success'));
       } catch (error) {
