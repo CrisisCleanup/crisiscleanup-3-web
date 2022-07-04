@@ -37,6 +37,14 @@
           :title="$t('adminOrganization.org_active')"
           >A</badge
         >
+        <badge
+          v-if="slotProps.item.is_auto_request"
+          width="18px"
+          height="18px"
+          class="text-white bg-blue-500 mx-1"
+          :title="$t('~~Automatically created')"
+          >A</badge
+        >
       </div>
     </template>
     <template #actions="slotProps">

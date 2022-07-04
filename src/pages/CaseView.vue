@@ -628,6 +628,11 @@ export default {
         );
       }
     } catch (e) {
+      if (e.response?.status === 404) {
+        await this.$toasted.error(
+          this.$t('~~Worksite does not exist, or has been deleted'),
+        );
+      }
       await this.$router.push(
         `/incident/${this.$route.params.incident_id}/cases/new`,
       );

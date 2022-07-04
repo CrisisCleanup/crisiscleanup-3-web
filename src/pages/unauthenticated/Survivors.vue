@@ -1,5 +1,15 @@
 <template>
   <div class="h-full overflow-auto main">
+    <div
+      class="bg-red-300 text-2xl"
+      v-if="survivorToken.worksite.invalidated_at"
+    >
+      {{
+        $t(
+          '~~This order has been deleted, probably because it was a duplicate or at the request of the survivor."',
+        )
+      }}
+    </div>
     <div class="logo flex justify-center p-3 border border-b">
       <img src="@/assets/ccu-logo-black-500w.png" style="height: 53px" />
     </div>
