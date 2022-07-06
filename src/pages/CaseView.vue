@@ -630,7 +630,7 @@ export default {
     } catch (e) {
       if (e.response?.status === 404) {
         await this.$toasted.error(
-          this.$t('~~Worksite does not exist, or has been deleted'),
+          this.$t('caseView.deleted_notice'),
         );
       }
       await this.$router.push(

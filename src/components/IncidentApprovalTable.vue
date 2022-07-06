@@ -42,7 +42,7 @@
           width="18px"
           height="18px"
           class="text-white bg-blue-500 mx-1"
-          :title="$t('~~Automatically created')"
+          :title="$t('adminOrganization.auto_request_new_case')"
           >A</badge
         >
       </div>

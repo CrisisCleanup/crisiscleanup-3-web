@@ -74,7 +74,7 @@
             class="pb-1"
           />
           <base-text variant="h3" class="text-crisiscleanup-dark-400"
-            >{{ $t('~~New Case') }}
+            >{{ $t('phoneDashboard.new_case') }}
           </base-text>
         </div>
       </div>
