@@ -225,6 +225,11 @@ export default {
   async mounted() {
     const incidentsResponse = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/incidents_list?fields=id,name&limit=200&sort=-start_at`,
+      {
+        headers: {
+          Authorization: null,
+        },
+      },
     );
     this.incidents = incidentsResponse.data.results;
   },
@@ -303,7 +308,10 @@ export default {
       await this.$router.push('/');
     },
     updateOrganizationIncident(value) {
-      this.organization.incident = value;
+      this.$nextTick(() => {
+        this.organization.incident = value;
+        this.organization = { ...this.organization };
+      });
     },
   },
 };
