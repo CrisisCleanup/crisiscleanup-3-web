@@ -28,7 +28,7 @@
                 item-key="id"
                 label="name"
                 :placeholder="$t('registerOrg.disaster')"
-                @input="organization.incident = $event"
+                @input="updateOrganizationIncident"
               />
             </li>
 
@@ -301,6 +301,9 @@ export default {
         return;
       }
       await this.$router.push('/');
+    },
+    updateOrganizationIncident(value) {
+      this.organization.incident = value;
     },
   },
 };
