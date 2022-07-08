@@ -375,6 +375,7 @@ export default {
       try {
         const teamResult = await Team.api().post('/teams', {
           ...this.team,
+          incident: this.currentIncidentId,
           users: this.team.users.map((u) => u.id),
         });
         const [team] = await teamResult.entities.teams;

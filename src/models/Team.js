@@ -11,6 +11,7 @@ export default class Team extends Model {
       users: this.attr([]),
       assigned_work_types: this.attr([]),
       cases_area: this.attr({}),
+      incident: this.attr(null),
     };
   }
 

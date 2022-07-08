@@ -125,7 +125,9 @@ export default {
     },
     async getTeams() {
       const results = await Team.api().get(
-        `/teams?search=${this.currentSearch || ''}&limit=500`,
+        `/teams?search=${this.currentSearch || ''}&limit=500&incident=${
+          this.currentIncidentId
+        }`,
         {
           dataKey: 'results',
         },
@@ -169,7 +171,7 @@ export default {
         },
       );
       const usersWithoutTeamsResults = await User.api().get(
-        `/users?organization=${this.currentUser.organization.id}&has_team=false&limit=500`,
+        `/users?organization=${this.currentUser.organization.id}&no_team_incident=${this.currentIncidentId}&limit=500`,
         {
           dataKey: 'results',
         },
@@ -231,6 +233,13 @@ export default {
     },
     ...mapState('incident', ['currentIncidentId']),
     ...mapState('enums', ['statuses']),
+  },
+  watch: {
+    currentIncidentId(newState, oldState) {
+      if (String(newState) !== String(oldState)) {
+        this.getData().then(() => {});
+      }
+    },
   },
   async mounted() {
     await this.getData();
