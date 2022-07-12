@@ -151,10 +151,13 @@ export default {
     },
   },
   async mounted() {
-    const capabilities = await cachedGet(
+    const capabilities = await this.$http.get(
       `${process.env.VUE_APP_API_BASE_URL}/organization_capabilities?limit=200`,
-      {},
-      'organization_capabilities',
+      {
+        headers: {
+          Authorization: null,
+        },
+      },
     );
     this.capabilitiesTree = childrenBy(
       groupBy(capabilities.data.results, 'parent_id'),

@@ -89,7 +89,6 @@ export default class Organization extends Model {
           { save: false },
         );
       },
-
       reject(id, reason, note = null) {
         const data: Record<string, any> = { approve_reject_reason_t: reason };
         if (note) {

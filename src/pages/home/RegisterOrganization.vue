@@ -144,9 +144,10 @@
 
             <li class="text-xl form-item">
               {{ $t('registerOrg.org_roles') }}
-              <div class="text-base w-3/5">
-                {{ $t('registerOrg.capability_explanation') }}
-              </div>
+              <div
+                class="text-base w-3/5"
+                v-html="$t('registerOrg.capability_explanation')"
+              ></div>
               <capability
                 @updated="
                   (matrix) => {

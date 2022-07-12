@@ -82,6 +82,9 @@ export default {
       const results = await Organization.api().get(
         `/organizations?${getQueryString(params)}`,
         {
+          headers: {
+            Authorization: null,
+          },
           dataKey: 'results',
         },
       );
