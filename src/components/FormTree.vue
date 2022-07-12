@@ -28,7 +28,7 @@
             </div>
           </base-checkbox>
           <WorksiteStatusDropdown
-            v-if="worksite.id && canChangeStatus && currentWorkType"
+            v-if="worksite.id && currentWorkType"
             class="block"
             :phase="incident.phase"
             :current-work-type="currentWorkType"
@@ -292,12 +292,6 @@ export default {
     },
     currentUser() {
       return User.find(this.$store.getters['auth/userId']);
-    },
-    canChangeStatus() {
-      return (
-        !this.currentWorkType?.claimed_by ||
-        this.currentWorkType?.claimed_by === this.currentUser.organization.id
-      );
     },
     currentWorkType() {
       return this.worksite.work_types.find(
