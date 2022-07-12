@@ -133,7 +133,6 @@
 <script>
 import { mapState } from 'vuex';
 import { childrenBy, groupBy } from '@/utils/array';
-import { cachedGet } from '@/utils/promise';
 
 export default {
   name: 'Capability',

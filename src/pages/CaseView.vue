@@ -629,9 +629,7 @@ export default {
       }
     } catch (e) {
       if (e.response?.status === 404) {
-        await this.$toasted.error(
-          this.$t('caseView.deleted_notice'),
-        );
+        await this.$toasted.error(this.$t('caseView.deleted_notice'));
       }
       await this.$router.push(
         `/incident/${this.$route.params.incident_id}/cases/new`,
