@@ -5,7 +5,8 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from '@vue/composition-api';
+export default defineComponent({
   name: 'JsonWrapper',
   props: {
     jsonData: {
@@ -13,7 +14,7 @@ export default {
       required: true,
     },
   },
-};
+});
 </script>
 
 <style scoped></style>
