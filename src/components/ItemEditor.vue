@@ -14,28 +14,21 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 // import the styles somewhere
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref, onMounted } from '@vue/composition-api';
 const beautify = require('js-beautify').js;
 
 export default defineComponent({
   name: 'ItemEditor',
-  mounted() {
-    this.currentObject = this.mergeObjects(this.item, this.initialObject);
-    Object.keys(this.currentObject).forEach((key) => {
-      this.updateProperty(key, this.currentObject[key]);
-    });
-    delete this.currentObject.children;
-  },
   props: {
     item: {
       type: Object,
       default: () => ({}),
     },
   },
-  setup(props, emit) {
-    const currentObject = ref({});
+  setup(props, { emit }) {
+    const currentObject = ref();
     const initialObject = ref({
       values: null,
       is_required: false,
@@ -63,7 +56,7 @@ export default defineComponent({
       try {
         currentObject.value[prop] = JSON.parse(value);
         emit('update', {
-          field_key: this.item.field_key,
+          field_key: props.item.field_key,
           prop,
           value: JSON.parse(value),
         });
@@ -72,6 +65,13 @@ export default defineComponent({
         currentObject.value[prop] = currentValue;
       }
     };
+    onMounted(() => {
+      currentObject.value = mergeObjects(props.item, initialObject.value);
+      Object.keys(currentObject.value).forEach((key) => {
+        updateProperty(key, currentObject.value[key]);
+      });
+      delete currentObject.value.children;
+    });
     return {
       beautify,
       currentObject,

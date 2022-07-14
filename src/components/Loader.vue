@@ -33,15 +33,20 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import VueTypes from 'vue-types';
 
 export default defineComponent({
   name: 'Loader',
   props: {
-    loading: VueTypes.bool.def(true),
-    overlay: VueTypes.bool.def(false),
+    loading: {
+      type: Boolean,
+      default: true,
+    },
+    overlay: {
+      type: Boolean,
+      default: false,
+    },
   },
 });
 </script>
