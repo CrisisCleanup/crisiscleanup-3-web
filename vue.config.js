@@ -73,6 +73,22 @@ module.exports = {
     const vueRule = config.module.rule('vue');
     const jsRule = config.module.rule('js');
 
+    // for vue2 -> vue3 migration
+    config.resolve.alias.set('vue', '@vue/compat');
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap((options) => {
+        return {
+          ...options,
+          compilerOptions: {
+            compatConfig: {
+              MODE: 2,
+            },
+          },
+        };
+      });
+
     const useBasicTPool = (rule, loader) => {
       rule.uses.clear();
       rule
