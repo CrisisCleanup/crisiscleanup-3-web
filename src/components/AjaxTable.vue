@@ -167,13 +167,6 @@ export default defineComponent({
       getData,
     };
   },
-  watch: {
-    query: {
-      handler() {
-        throttle(this.getData, 1000)();
-      },
-    },
-  },
 });
 </script>
 
