@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import { createRouter } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import * as moment from 'moment';
 import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
@@ -190,7 +190,7 @@ const routes = [
   ...HomeRoutes,
   ...unAuthedRoutes,
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: NotFound,
     meta: { layout: 'unauthenticated', noAuth: true },
@@ -200,6 +200,7 @@ const routes = [
 const router = createRouter({
   mode: 'history',
   routes,
+  history: createWebHistory(),
 });
 
 router.beforeEach((to, from, next) => {
