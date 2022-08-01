@@ -1,6 +1,5 @@
 import Vue from 'vue';
-import VueCookies from 'vue-cookies';
-import VueRouter from 'vue-router';
+import { createRouter } from 'vue-router';
 import * as moment from 'moment';
 import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
@@ -30,9 +29,6 @@ import OtherOrganizations from '@/pages/OtherOrganizations';
 import Teams from '@/pages/organization/Teams';
 import TeamDetail from '@/pages/organization/TeamDetail';
 import * as UITypes from '@/store/modules/ui/types';
-
-Vue.use(VueRouter);
-Vue.use(VueCookies);
 
 const routes = [
   {
@@ -201,7 +197,7 @@ const routes = [
   },
 ];
 
-const router = new VueRouter({
+const router = createRouter({
   mode: 'history',
   routes,
 });
