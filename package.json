@@ -158,7 +158,7 @@
     "vue2-google-maps": "^0.10.7",
     "vuedraggable": "^2.24.3",
     "vuejs-datepicker": "^1.6.2",
-    "vuex": "^3.6.2",
+    "vuex": "^4.0.2",
     "vuex-module-decorators": "^0.17.0",
     "vuex-persist": "^3.1.3"
   },
