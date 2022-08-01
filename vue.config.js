@@ -106,8 +106,8 @@ module.exports = {
 
     jsRule.test(/\.js$/).exclude.add(/node_modules/);
     if (process.env.NODE_ENV !== 'storybook') {
-      useBasicTPool(jsRule, 'babel-loader');
-      useBasicTPool(vueRule, 'vue-loader');
+      // useBasicTPool(jsRule, 'babel-loader');
+      // useBasicTPool(vueRule, 'vue-loader');
     }
     // config.plugin('lodash').use(LodashPlugin);
     if (
