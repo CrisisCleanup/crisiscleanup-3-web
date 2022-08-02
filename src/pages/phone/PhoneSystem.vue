@@ -904,6 +904,11 @@ export default {
         EventBus.$emit('phone_component:open', 'agent');
       }
     },
+    isOnCall(newValue, oldValue) {
+      if (oldValue && !newValue) {
+        this.tabs.selectTab(this.$refs.statusTab);
+      }
+    },
     currentIncidentId(value) {
       if (value) {
         if (this.map) {
