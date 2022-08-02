@@ -37,7 +37,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted } from 'vue';
 import moment from 'moment';
-import { useRouter } from '@u3u/vue-hooks';
+import { useRouter } from 'vue-router';
 import User from '../models/User';
 import useUser from '@/use/user/useUser';
 import useHttp from '@/use/useHttp';
@@ -54,7 +54,7 @@ export default defineComponent({
   setup(props, context) {
     const { currentUser } = useUser();
     const { $http } = useHttp();
-    const { router } = useRouter();
+    const router = useRouter();
 
     const requestingUser = computed(() =>
       User.find(props.transferRequest.requested_by),

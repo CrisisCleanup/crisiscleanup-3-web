@@ -88,14 +88,9 @@
 
 <script>
 import { create } from 'vue-modal-dialogs';
-import {
-  reactive,
-  ref,
-  onMounted,
-  watch,
-  computed,
-} from 'vue';
-import { useStore, useRouter } from '@u3u/vue-hooks';
+import { reactive, ref, onMounted, watch, computed } from 'vue';
+import { useStore } from '@u3u/vue-hooks';
+import { useRouter } from 'vue-router';
 import { getModule } from 'vuex-module-decorators';
 import VueTypes from 'vue-types';
 import ComponentDialog from '@/components/dialogs/ComponentDialog';

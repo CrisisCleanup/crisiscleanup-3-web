@@ -83,13 +83,8 @@ import { size } from 'lodash';
 import { Slide } from 'vue-burger-menu';
 import { parsePhoneNumber } from 'libphonenumber-js';
 import { ref, computed, watch, onMounted } from 'vue';
-import {
-  useState,
-  useGetters,
-  useMutations,
-  useActions,
-  useRouter,
-} from '@u3u/vue-hooks';
+import { useState, useGetters, useMutations, useActions } from '@u3u/vue-hooks';
+import { useRouter, useRoute } from 'vue-router';
 import moment from 'moment';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
@@ -120,7 +115,8 @@ export default {
     Header,
   },
   setup(props, context) {
-    const { router, route } = useRouter();
+    const route = useRoute();
+    const router = useRouter();
     const { $http, $log, $t, $phoneService } = context.root;
 
     const { currentIncidentId } = useState('incident', ['currentIncidentId']);
@@ -248,9 +244,9 @@ export default {
       });
       setCurrentIncidentId(value);
       await router.push({
-        name: route.value.name as string,
-        params: { ...route.value.params, incident_id: value },
-        query: { ...route.value.query },
+        name: route.name as string,
+        params: { ...route.params, incident_id: value },
+        query: { ...route.query },
       });
     };
 
@@ -349,7 +345,7 @@ export default {
     };
 
     watch(
-      () => route.value.params.incident_id,
+      () => route.params.incident_id,
       (value) => {
         if (value && Number(currentIncidentId.value) !== Number(value)) {
           handleChange(value);
@@ -358,8 +354,8 @@ export default {
     );
 
     onMounted(() => {
-      if (route.value.params.incident_id) {
-        handleChange(route.value.params.incident_id);
+      if (route.params.incident_id) {
+        handleChange(route.params.incident_id);
       }
     });
 
@@ -404,7 +400,7 @@ export default {
       await setupLanguage();
       setAcl(router);
 
-      let incidentId = route.value.params.incident_id;
+      let incidentId = route.params.incident_id;
       if (!incidentId) {
         const incident = Incident.query().orderBy('id', 'desc').first();
         if (incident) {

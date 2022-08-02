@@ -42,7 +42,7 @@ import {
   watch,
   onBeforeUnmount,
 } from 'vue';
-import { useRouter } from '@u3u/vue-hooks';
+import { useRouter } from 'vue-router';
 import useEnums from '@/use/useEnums';
 import { theme } from '@/../tailwind.config';
 import useAgentState from '@/use/phone/useAgentState';
@@ -58,7 +58,7 @@ export default {
       isTrained: true,
     });
 
-    const { router } = useRouter();
+    const router = useRouter();
 
     const StateColorMap = {
       online: theme.extend.colors['crisiscleanup-green']['500'],
