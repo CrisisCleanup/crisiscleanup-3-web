@@ -1,16 +1,14 @@
 <template>
   <div class="p-4 h-108 overflow-auto">
-    <template v-for="prop in Object.keys(currentObject)">
-      <div :key="prop">
-        <div>{{ prop }}</div>
-        <pre
-          contenteditable="true"
-          class="my-editor"
-          @input="({ target }) => updateProperty(prop, target.innerHTML)"
-          v-html="beautify(JSON.stringify(currentObject[prop]))"
-        ></pre>
-      </div>
-    </template>
+    <div v-for="prop in Object.keys(currentObject)" :key="prop">
+      <div>{{ prop }}</div>
+      <pre
+        contenteditable="true"
+        class="my-editor"
+        @input="({ target }) => updateProperty(prop, target.innerHTML)"
+        v-html="beautify(JSON.stringify(currentObject[prop]))"
+      ></pre>
+    </div>
   </div>
 </template>
 
