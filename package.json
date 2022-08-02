@@ -140,7 +140,7 @@
     "vue-marquee-text-component": "^1.2.0",
     "vue-modal-dialogs": "^3.0.0",
     "vue-moment": "^4.1.0",
-    "vue-mq": "^1.0.1",
+    "vue3-mq": "^3.1.0",
     "vue-native-websocket": "^2.0.14",
     "vue-numeral-filter": "^2.0.0",
     "vue-phone-number-input": "^1.1.10",
