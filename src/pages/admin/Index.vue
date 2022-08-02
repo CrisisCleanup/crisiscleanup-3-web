@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { reactive } from '@vue/composition-api';
+import { reactive } from 'vue';
 import PageLayout from '@/layouts/page/Page.vue';
 
 export default {

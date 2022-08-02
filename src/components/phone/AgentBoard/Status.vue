@@ -38,7 +38,7 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { ref } from '@vue/composition-api';
+import { ref } from 'vue';
 import _ from 'lodash';
 import { create } from 'vue-modal-dialogs';
 import { unwrap } from '@/utils/wrap';

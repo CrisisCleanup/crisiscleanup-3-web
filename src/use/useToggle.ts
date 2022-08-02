@@ -2,7 +2,7 @@
  * useToggle Hook
  */
 
-import { ref } from '@vue/composition-api';
+import { ref } from 'vue';
 
 interface UseToggleOpts {
   state?: boolean;

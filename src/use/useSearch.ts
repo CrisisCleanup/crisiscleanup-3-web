@@ -2,7 +2,7 @@
  * Search Hook
  */
 import _ from 'lodash';
-import { ref, watch } from '@vue/composition-api';
+import { ref, watch } from 'vue';
 interface useSearchProps {
   context: any;
   resolveSearch: (...args: Array<any>) => any;

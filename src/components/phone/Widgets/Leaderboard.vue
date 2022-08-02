@@ -87,7 +87,7 @@
 
 <script>
 import { useGetters } from '@u3u/vue-hooks';
-import { reactive, ref } from '@vue/composition-api';
+import { reactive, ref } from 'vue';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 import AgentClient from '@/models/phone/AgentClient';

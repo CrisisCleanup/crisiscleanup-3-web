@@ -84,7 +84,7 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { onMounted } from '@vue/composition-api';
+import { onMounted } from 'vue';
 import { useStore } from '@u3u/vue-hooks';
 import CaseCard from '@/components/cards/Case.vue';
 import useEnums from '@/use/useEnums';

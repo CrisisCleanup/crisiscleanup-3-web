@@ -15,7 +15,7 @@ import Quill from 'quill';
 import 'quill/dist/quill.core.css';
 import 'quill/dist/quill.snow.css';
 import 'quill/dist/quill.bubble.css';
-import { ref, defineComponent, onMounted } from '@vue/composition-api';
+import { ref, defineComponent, onMounted } from 'vue';
 import { getErrorMessage } from '@/utils/errors';
 import usei18n from '@/use/usei18n';
 import useHttp from '@/use/useHttp';

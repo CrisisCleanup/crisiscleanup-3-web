@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref } from 'vue';
 import EventCard from '@/components/EventCard.vue';
 import { getNearestColor } from '@/utils/colors';
 import usei18n from '@/use/usei18n';

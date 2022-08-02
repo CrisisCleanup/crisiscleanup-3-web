@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, onMounted } from '@vue/composition-api';
+import { ref, defineComponent, onMounted } from 'vue';
 import { DialogsMixin } from '@/mixins';
 import { getQueryString } from '@/utils/urls';
 import useDialogs from '@/use/useDialogs';

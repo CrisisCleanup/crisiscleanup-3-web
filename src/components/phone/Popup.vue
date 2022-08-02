@@ -171,7 +171,7 @@
 
 <script>
 import { useActions, useMutations } from '@u3u/vue-hooks';
-import { ref, watch, watchEffect } from '@vue/composition-api';
+import { ref, watch, watchEffect } from 'vue';
 import VueTypes from 'vue-types';
 import CaseCard from '@/components/cards/Case.vue';
 import useCaseCards from '@/use/worksites/useCaseCards';

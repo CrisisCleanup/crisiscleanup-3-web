@@ -2,7 +2,7 @@
  * Use Phone Metrics Hook
  */
 
-import { computed, ref } from '@vue/composition-api';
+import { computed, ref } from 'vue';
 import { getModule } from 'vuex-module-decorators';
 import { useStore } from '@u3u/vue-hooks';
 import _ from 'lodash';

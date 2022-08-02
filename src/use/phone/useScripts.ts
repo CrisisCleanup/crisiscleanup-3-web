@@ -3,7 +3,7 @@
  * Hook for Phone Scripts
  */
 
-import { computed } from '@vue/composition-api';
+import { computed } from 'vue';
 import { Scripts } from '@/store/modules/phone/controller';
 import { CallType } from '@/models/phone/Contact';
 import { wrap } from '@/utils/wrap';

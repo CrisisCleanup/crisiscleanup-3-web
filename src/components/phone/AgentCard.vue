@@ -94,7 +94,7 @@ import {
   onMounted,
   watch,
   computed,
-} from '@vue/composition-api';
+} from 'vue';
 import { useStore, useRouter } from '@u3u/vue-hooks';
 import { getModule } from 'vuex-module-decorators';
 import VueTypes from 'vue-types';

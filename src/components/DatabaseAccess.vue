@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from '@vue/composition-api';
+import { ref, defineComponent } from 'vue';
 import { getErrorMessage } from '../utils/errors';
 import useHttp from '@/use/useHttp';
 import useToasted from '@/use/useToasted';

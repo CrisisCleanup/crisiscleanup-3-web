@@ -11,7 +11,7 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { computed, watch, ref } from '@vue/composition-api';
+import { computed, watch, ref } from 'vue';
 
 export default {
   name: 'ProgressButton',

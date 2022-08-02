@@ -2,7 +2,7 @@
  * useAgentState Hook
  */
 
-import { computed, ref, watch } from '@vue/composition-api';
+import { computed, ref, watch } from 'vue';
 import _ from 'lodash';
 import { useState, useGetters } from '@u3u/vue-hooks';
 import AgentClient, { RouteStates } from '@/models/phone/AgentClient';

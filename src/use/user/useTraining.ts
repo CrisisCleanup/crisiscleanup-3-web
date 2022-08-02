@@ -8,7 +8,7 @@ import {
   onMounted,
   computed,
   toRefs,
-} from '@vue/composition-api';
+} from 'vue';
 import axios from 'axios';
 import { hash } from '@/utils/promise';
 import { TrainingApi, UserTrainingApi } from '@/utils/api';

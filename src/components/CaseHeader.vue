@@ -115,7 +115,7 @@
 
 <script lang="ts">
 import { useState } from '@u3u/vue-hooks';
-import { defineComponent, computed } from '@vue/composition-api';
+import { defineComponent, computed } from 'vue';
 import { templates } from '@/icons/icons_templates';
 import Worksite from '@/models/Worksite';
 

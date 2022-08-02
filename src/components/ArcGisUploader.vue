@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api';
+import { computed, defineComponent, ref } from 'vue';
 import Incident from '@/models/Incident';
 import { getErrorMessage } from '@/utils/errors';
 import usei18n from '@/use/usei18n';

@@ -2,7 +2,7 @@
  * Use Contact Hook
  */
 
-import { ref, computed, watch } from '@vue/composition-api';
+import { ref, computed, watch } from 'vue';
 import { useState, useGetters } from '@u3u/vue-hooks';
 import _ from 'lodash';
 import Contact, { CallType, ContactActions } from '@/models/phone/Contact';

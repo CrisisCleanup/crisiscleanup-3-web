@@ -43,7 +43,7 @@
 <script>
 import VueTypes from 'vue-types';
 import { useGetters } from '@u3u/vue-hooks';
-import { computed } from '@vue/composition-api';
+import { computed } from 'vue';
 import _ from 'lodash';
 import useEnums from '@/use/useEnums';
 import useUser from '@/use/user/useUser';

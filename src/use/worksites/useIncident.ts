@@ -3,7 +3,7 @@
  */
 
 import { useGetters, useMutations } from '@u3u/vue-hooks';
-import { computed } from '@vue/composition-api';
+import { computed } from 'vue';
 import User from '@/models/User';
 import Incident from '@/models/Incident';
 

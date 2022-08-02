@@ -82,7 +82,7 @@ import detectBrowserLanguage from 'detect-browser-language';
 import { size } from 'lodash';
 import { Slide } from 'vue-burger-menu';
 import { parsePhoneNumber } from 'libphonenumber-js';
-import { ref, computed, watch, onMounted } from '@vue/composition-api';
+import { ref, computed, watch, onMounted } from 'vue';
 import {
   useState,
   useGetters,

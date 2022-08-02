@@ -76,7 +76,7 @@
 </template>
 
 <script>
-import { ref, computed, defineComponent } from '@vue/composition-api';
+import { ref, computed, defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'BaseInput',

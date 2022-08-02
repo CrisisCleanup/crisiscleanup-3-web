@@ -2,7 +2,7 @@
  * Use Search Events Hook
  */
 
-import { ref, watch } from '@vue/composition-api';
+import { ref, watch } from 'vue';
 import _ from 'lodash';
 import useSearch from '@/use/useSearch';
 import Event from '@/models/Event';

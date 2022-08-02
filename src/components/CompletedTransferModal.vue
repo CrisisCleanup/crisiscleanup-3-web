@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from '@vue/composition-api';
+import { computed, defineComponent, onMounted } from 'vue';
 import moment from 'moment';
 import { useRouter } from '@u3u/vue-hooks';
 import User from '../models/User';

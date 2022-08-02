@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from 'vue';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 import usei18n from '@/use/usei18n';
 export default defineComponent({

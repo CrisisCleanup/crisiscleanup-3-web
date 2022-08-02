@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { computed, ref, watch } from '@vue/composition-api';
+import { computed, ref, watch } from 'vue';
 import _ from 'lodash';
 import { useState } from '@u3u/vue-hooks';
 import { useLocalStorage } from 'vue-composable';

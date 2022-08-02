@@ -42,7 +42,7 @@ import {
   PropType,
   ref,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import Table from '@/components/Table.vue';
 import { getQueryString } from '@/utils/urls';
 import useHttp from '@/use/useHttp';

@@ -11,7 +11,7 @@ import {
   onMounted,
   onBeforeUnmount,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import _ from 'lodash';
 import { useRouter } from '@u3u/vue-hooks';
 import VueRouter, { Route } from 'vue-router';

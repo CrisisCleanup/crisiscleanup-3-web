@@ -48,7 +48,7 @@ import {
   watchEffect,
   onMounted,
   computed,
-} from '@vue/composition-api';
+} from 'vue';
 import _ from 'lodash';
 import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
 import UserBadge from '@/models/UserBadge';

@@ -41,7 +41,7 @@ import {
   onMounted,
   watch,
   onBeforeUnmount,
-} from '@vue/composition-api';
+} from 'vue';
 import { useRouter } from '@u3u/vue-hooks';
 import useEnums from '@/use/useEnums';
 import { theme } from '@/../tailwind.config';

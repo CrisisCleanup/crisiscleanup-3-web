@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from '@vue/composition-api';
+import { computed, defineComponent, PropType } from 'vue';
 
 type AvatarSize = 'xsmall' | 'small' | 'medium' | 'large' | 'xl';
 

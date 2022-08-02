@@ -66,14 +66,7 @@
 </template>
 
 <script>
-import {
-  ref,
-  onMounted,
-  reactive,
-  set,
-  watch,
-  computed,
-} from '@vue/composition-api';
+import { ref, onMounted, reactive, watch, computed } from 'vue';
 import { useState } from '@u3u/vue-hooks';
 import _ from 'lodash';
 import useUser from '@/use/user/useUser';
@@ -108,13 +101,13 @@ export default {
       () => locales.value,
       () => {
         if (dropdownProps.options.length === 1) {
-          set(dropdownProps, 'options', [
+          dropdownProps.options = [
             ...dropdownProps.options,
             ...locales.value.map((l) => ({
               id: l.id,
               shortName: l.shortName,
             })),
-          ]);
+          ];
         }
       },
     );

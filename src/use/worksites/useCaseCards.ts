@@ -2,7 +2,7 @@
  * Hook for generating case cards.
  */
 
-import { ref, computed, watch, onMounted } from '@vue/composition-api';
+import { ref, computed, watch, onMounted } from 'vue';
 import _ from 'lodash';
 import { wrap } from '@/utils/wrap';
 import { CaseType } from '@/store/modules/phone/types';
