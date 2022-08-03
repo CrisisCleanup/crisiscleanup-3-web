@@ -1,5 +1,9 @@
+import type { AxiosInstance } from 'axios';
+import { inject } from 'vue';
+
 export default () => {
+  const axios = inject<AxiosInstance>('axios');
   return {
-    $http: window.vue.$http,
+    $http: axios as AxiosInstance,
   };
 };
