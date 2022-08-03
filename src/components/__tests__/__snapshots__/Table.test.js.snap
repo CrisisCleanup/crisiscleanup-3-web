@@ -104,7 +104,7 @@ exports[`Table should render correctly and match snapshot 1`] = `
    
   <div
     class="body bg-white relative"
-    style="max-height: 600px; overflow: auto;"
+    style="overflow: auto;"
   >
     <!---->
      

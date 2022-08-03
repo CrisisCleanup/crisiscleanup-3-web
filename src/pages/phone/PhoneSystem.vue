@@ -404,9 +404,7 @@
                   </div>
                 </template>
                 <template v-slot:component>
-                  <PhoneNews
-                    @unreadCount="unreadNewsCount = $event"
-                  />
+                  <PhoneNews @unreadCount="unreadNewsCount = $event" />
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
