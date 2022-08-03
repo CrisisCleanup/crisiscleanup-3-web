@@ -5,7 +5,7 @@
         <li
           v-for="newItem in news"
           :key="newItem.id"
-          class="hover:bg-crisiscleanup-light-grey cursor-pointer"
+          class="hover:bg-crisiscleanup-light-grey cursor-pointer border-b-2"
           @click="() => showDetails(newItem)"
         >
           <div class="p-2 flex">
@@ -23,10 +23,11 @@
             />
             <div>
               <div
-                class="text-sm my-1 font-bold"
+                class="text-xl sm:text-sm my-1 font-bold"
                 v-html="$t(formatCmsItem(newItem.title))"
               ></div>
               <p
+                v-if="$mq !== 'sm'"
                 class="text-xs line-clamp-3"
                 v-html="$t(formatCmsItem(newItem.content))"
               ></p>

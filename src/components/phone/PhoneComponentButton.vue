@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div class="w-full h-full z-40" :class="showComponent ? 'bg-gray-200' : ''" @click="toggleComponent">
+    <div
+      class="w-full h-full z-40"
+      :class="showComponent ? 'bg-gray-200' : ''"
+      @click="toggleComponent"
+    >
       <slot name="button">
         <div class="w-full h-full flex items-center justify-center">
           <ccu-icon
