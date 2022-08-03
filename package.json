@@ -3,6 +3,7 @@
   "version": "3.2.15",
   "private": true,
   "scripts": {
+    "prepare": "is-ci || husky install",
     "serve": "vue-cli-service serve --mode production",
     "build": "vue-cli-service build",
     "test:unit": "cross-env VUE_CLI_BABEL_TARGET_NODE=true VUE_CLI_BABEL_TRANSPILE_MODULES=true NODE_ENV=test jest --coverage",
@@ -230,6 +231,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "eslint-plugin-vue-types": "^2.0.0",
     "husky": "^7.0.2",
+    "is-ci": "^3.0.1",
     "istanbul-lib-coverage": "^3.0.0",
     "jest": "^28.0.3",
     "jest-canvas-mock": "^2.2.0",
