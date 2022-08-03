@@ -24,7 +24,6 @@ import {
 } from '@/filters';
 import Authenticated from '@/layouts/Authenticated';
 import Unauthenticated from '@/layouts/Unauthenticated';
-import VueLog from '@dreipol/vue-log';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -49,7 +48,9 @@ import Toasted from 'vue-toasted';
 // Import Vue plugins
 import Vuex from 'vuex';
 import { getOrganizationName } from '../src/filters';
+import Logger from 'js-logger';
 
+Logger.useDefaults();
 library.add(fas);
 
 // Base Components
@@ -90,7 +91,6 @@ Vue.use(Toasted, {
 });
 
 Vue.use(VueI18n);
-Vue.use(VueLog);
 Vue.use(Popover);
 Vue.version = '2.0';
 Vue.use(VueCompositionApi);
