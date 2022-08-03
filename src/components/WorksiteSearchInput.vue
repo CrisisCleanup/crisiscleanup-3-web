@@ -267,8 +267,8 @@ export default {
 
 .autosuggest__results {
   font-weight: 300;
-  min-width: 120%;
-  max-width: 100vw;
+  min-width: 10vw;
+  max-width: 50vw;
   position: absolute;
   z-index: 10000001;
   border: 1px solid #e0e0e0;
