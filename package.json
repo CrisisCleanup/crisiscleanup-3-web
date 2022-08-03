@@ -230,7 +230,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-vue": "^6.2.2",
     "eslint-plugin-vue-types": "^2.0.0",
-    "husky": "^7.0.2",
+    "husky": "^8.0.1",
     "is-ci": "^3.0.1",
     "istanbul-lib-coverage": "^3.0.0",
     "jest": "^28.0.3",
