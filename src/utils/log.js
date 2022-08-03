@@ -1,6 +1,5 @@
-import VueLog from '@dreipol/vue-log';
+import Logger from 'js-logger';
 import * as Sentry from '@sentry/browser';
-import Vue from 'vue';
 
 const SentryLevelMap = {
   debug: Sentry.Severity.Debug,
@@ -22,9 +21,7 @@ const SentryMiddleware = (name) => {
 };
 
 export default ({ name, ...params }) => {
-  if (!('log' in Vue)) {
-    Vue.use(VueLog);
-  }
+  // eslint-disable-next-line no-unused-vars
   const opts = {
     name,
     proxy: false,
@@ -38,5 +35,5 @@ export default ({ name, ...params }) => {
     ...params,
   };
 
-  return Vue.log(opts);
+  return Logger.get(name);
 };
