@@ -132,13 +132,13 @@
         v-for="item of data"
         :key="item.id"
         :style="gridStyleRow"
-        class="hover:bg-crisiscleanup-light-grey"
+        class="hover:bg-crisiscleanup-light-grey border-b"
         :class="{ 'bg-crisiscleanup-light-grey': selectedItems.has(item.id) }"
         @click="rowClick(item, $event)"
       >
         <div
           v-if="enableSelection && $mq !== 'sm'"
-          class="flex items-center p-2 lg:border-b md:border-b"
+          class="flex items-center p-2 border-b"
         >
           <base-checkbox
             :value="selectedItems.has(item.id)"

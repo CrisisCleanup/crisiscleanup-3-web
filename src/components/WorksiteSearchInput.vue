@@ -266,9 +266,9 @@ export default {
 }
 
 .autosuggest__results {
-  font-weight: 300;
+  font-weight: 200;
   min-width: 10vw;
-  max-width: 50vw;
+  max-width: 100vw;
   position: absolute;
   z-index: 10000001;
   border: 1px solid #e0e0e0;
@@ -302,5 +302,11 @@ export default {
 
 .autosuggest__results-before {
   @apply text-gray-400 text-sm font-bold px-1;
+}
+
+@media screen and (max-width: 640px) {
+  .autosuggest__results {
+    min-width: 97vw;
+  }
 }
 </style>
