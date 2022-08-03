@@ -1,5 +1,5 @@
 <template>
-  <tabs class="" ref="tabs" tab-details-classes="h-96 overflow-auto">
+  <tabs class="" ref="tabs" tab-details-classes="h-full overflow-auto">
     <tab :name="$t('phoneDashboard.news')">
       <ul>
         <li

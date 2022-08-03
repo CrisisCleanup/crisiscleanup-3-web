@@ -4,7 +4,7 @@
     :title="$t('phoneDashboard.last_10_calls')"
   >
     <div class="card-container overflow-auto h-full">
-      <AgentStats />
+      <AgentStats/>
       <Table
         :body-style="{ overflow: 'auto', ...tableBodyStyle }"
         :columns="historyCols"
@@ -13,13 +13,16 @@
       >
         <template #incident="{ item }">
           <div
-            class="justify-center flex flex-grow"
+            class="sm:justify-center flex flex-grow"
             :title="item.incident && item.incident.name"
           >
             <DisasterIcon
               v-if="item.incident"
               :current-incident="item.incident"
             />
+            <div class="block sm:hidden flex items-center ml-2 text-lg">
+              {{ toStartCase(item.incident.incident_type) }}
+            </div>
           </div>
         </template>
         <template #mobile="{ item }">
@@ -73,19 +76,20 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { get } from 'lodash';
+import {mapGetters} from 'vuex';
+import {get} from 'lodash';
 import Color from 'color';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import Table from '@/components/Table.vue';
-import { UserMixin, ValidateMixin, WorksitesMixin } from '@/mixins';
+import {UserMixin, ValidateMixin, WorksitesMixin} from '@/mixins';
 import PhoneStatus from '@/models/PhoneStatus';
 import DisasterIcon from '@/components/DisasterIcon.vue';
 import AgentStats from '@/components/phone/AgentStats';
+import _ from 'lodash'
 
 export default {
   name: 'CallHistory',
-  components: { AgentStats, TitledCard, Table, DisasterIcon },
+  components: {AgentStats, TitledCard, Table, DisasterIcon},
   mixins: [UserMixin, ValidateMixin, WorksitesMixin],
   props: {
     calls: {
@@ -101,7 +105,7 @@ export default {
   },
   methods: {
     getWorkTypeStyle(worktype) {
-      const { fillColor } = this.getWorktypeColors(worktype);
+      const {fillColor} = this.getWorktypeColors(worktype);
       const _color = Color(fillColor);
       return {
         backgroundColor: _color.fade(0.8).string(),
@@ -109,6 +113,9 @@ export default {
     },
     getWorkTypeImg(worktype) {
       return this.getWorktypeSVG(worktype, '26');
+    },
+    toStartCase(word) {
+      return _.startCase(word);
     },
   },
   computed: {
@@ -121,7 +128,7 @@ export default {
       if (!this.callHistoryReady && !this.calls) return [];
       const calls = this.calls || this.callHistory;
       return calls.map(
-        ({ phone_number, caller_name, status, notes, ...metrics }) => ({
+        ({phone_number, caller_name, status, notes, ...metrics}) => ({
           name: caller_name,
           mobile: this.validatePhoneNumber(phone_number).newValue,
           status: get(PhoneStatus.find(status), 'substatus_name_t', 'Unknown'),

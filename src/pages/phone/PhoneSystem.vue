@@ -348,7 +348,7 @@
                     v-if="selectedChat"
                     @unreadCount="unreadChatCount = $event"
                     @unreadUrgentCount="unreadUrgentChatCount = $event"
-                    class="h-108"
+                    class="h-full"
                     @onNewMessage="unreadChatCount += 1"
                     @onNewUrgentMessage="unreadUrgentChatCount += 1"
                     :chat="selectedChat"
@@ -406,7 +406,6 @@
                 <template v-slot:component>
                   <PhoneNews
                     @unreadCount="unreadNewsCount = $event"
-                    class="h-108"
                   />
                 </template>
               </PhoneComponentButton>
@@ -420,7 +419,6 @@
               >
                 <template v-slot:component>
                   <CallHistory
-                    :table-body-style="{ height: '300px' }"
                     :calls="callHistory"
                     @rowClick="
                       ({ mobile }) => {
@@ -453,7 +451,7 @@
                 icon-class="p-1"
               >
                 <template v-slot:component>
-                  <Leaderboard />
+                  <Leaderboard class="h-full" />
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton

@@ -4,7 +4,7 @@
     :dropdown="dropdownProps"
     @update:dropdown="onDropdownUpdate"
   >
-    <div class="h-56 overflow-y-scroll">
+    <div class="h-full overflow-y-scroll">
       <div
         class="flex items-center justify-between p-2"
         v-for="rank in leaderboard"

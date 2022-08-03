@@ -15,10 +15,10 @@
     <div
       class="phone-component fixed ml-12 z-30"
       :style="{ top: top }"
-      :class="[componentClass, 'w-144 -ml-144 sm:w-108 sm:-ml-108']"
+      :class="[componentClass, 'w-144 -ml-144']"
       v-show="showComponent"
     >
-      <div class="w-full relative mb-2">
+      <div class="w-full relative mb-2 z-40">
         <ccu-icon
           :alt="$t('actions.cancel')"
           size="xs"
@@ -31,7 +31,7 @@
           "
         />
       </div>
-      <div class="mt-10 sm:mt-0">
+      <div class="mt-10 sm:mt-0 h-full">
         <slot name="component"></slot>
       </div>
     </div>
@@ -101,7 +101,7 @@ export default {
   transform: translateY(-3rem);
   min-height: 10rem;
   max-height: 50rem;
-  @apply shadow-lg bg-white sm:mt-24;
+  @apply shadow-lg bg-white sm:mt-24 h-full overflow-auto;
 }
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .phone-component {

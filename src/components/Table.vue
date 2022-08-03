@@ -420,7 +420,6 @@ export default {
     },
     gridStyleBody() {
       return {
-        'max-height': '600px',
         overflow: 'auto',
         ...this.bodyStyle,
       };
