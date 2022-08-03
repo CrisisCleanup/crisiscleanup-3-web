@@ -99,8 +99,8 @@ export default {
 <style scoped>
 .phone-component {
   transform: translateY(-3rem);
-  min-height: 10rem;
-  max-height: 50rem;
+  min-height: 10vh;
+  max-height: 70vh;
   @apply shadow-lg bg-white sm:mt-24 h-full overflow-auto;
 }
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
