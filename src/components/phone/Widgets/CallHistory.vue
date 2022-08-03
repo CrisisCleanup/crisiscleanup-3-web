@@ -10,6 +10,11 @@
         :columns="historyCols"
         :data="historyData"
         v-if="callHistoryReady || calls"
+        @rowClick="
+          (item) => {
+            if ($mq === 'sm') $emit('rowClick', item);
+          }
+        "
       >
         <template #incident="{ item }">
           <div
