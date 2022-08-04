@@ -1,6 +1,6 @@
 import axios from 'axios';
 import moment from 'moment';
-import Vue from 'vue';
+import { getCurrentInstance } from 'vue';
 import Acl from 'vue-browser-acl';
 import * as Sentry from '@sentry/browser';
 import User from '@/models/User';
@@ -68,13 +68,14 @@ const mutations = {
   },
   setAcl(state, router) {
     const user = User.find(state.user.user_claims.id);
+    const ctx = getCurrentInstance();
     Sentry.setUser({
       ...state.user,
       id: user.id,
       username: user.email,
       email: user.email,
     });
-    Vue.use(
+    ctx.root.appContext.app.use(
       Acl,
       user,
       (acl) => {
@@ -90,6 +91,7 @@ const mutations = {
       },
       { router },
     );
+    console.log('ctx', ctx.root);
   },
   setShowLoginModal(state, toggle) {
     state.showLoginModal = toggle;
