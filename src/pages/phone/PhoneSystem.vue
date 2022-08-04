@@ -937,7 +937,7 @@ export default {
 }
 
 .phone-button {
-  @apply shadow w-20 h-20 sm:w-12 sm:h-12 my-2 sm:my-1 bg-white cursor-pointer;
+  @apply shadow w-20 h-20 sm:w-12 sm:h-12 my-2 sm:my-1 bg-white cursor-pointer z-50;
 }
 .tabs {
   width: 29rem;

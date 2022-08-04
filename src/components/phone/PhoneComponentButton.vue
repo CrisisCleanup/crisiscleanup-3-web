@@ -19,7 +19,7 @@
     <div
       class="phone-component fixed ml-12 z-30"
       :style="{ top: top }"
-      :class="[componentClass, 'w-144 -ml-144']"
+      :class="[componentClass]"
       v-show="showComponent"
     >
       <div class="w-full relative mb-2 z-40">
@@ -35,7 +35,7 @@
           "
         />
       </div>
-      <div class="mt-10 sm:mt-0 h-full">
+      <div class="mt-10 sm:mt-0">
         <slot name="component"></slot>
       </div>
     </div>
@@ -104,8 +104,18 @@ export default {
 .phone-component {
   transform: translateY(-3rem);
   min-height: 10vh;
-  max-height: 70vh;
-  @apply shadow-lg bg-white sm:mt-24 h-full overflow-auto;
+  max-height: 60vh;
+  width: 60vw;
+  margin-left: -60vw;
+  height: 90%;
+  @apply shadow-lg bg-white sm:mt-12 overflow-auto;
+}
+@media (max-width: 640px) {
+  .phone-component {
+    width: 87vw;
+    margin-left: -87vw;
+    max-height: 85vh;
+  }
 }
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .phone-component {
