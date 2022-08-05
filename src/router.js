@@ -26,6 +26,7 @@ import Chat from '@/components/chat/Chat';
 import unAuthedRoutes from '@/pages/unauthenticated/routes';
 import store from '@/store/index';
 import Reports from '@/pages/Reports';
+import Report from '@/pages/Report';
 import OtherOrganizations from '@/pages/OtherOrganizations';
 import Teams from '@/pages/organization/Teams';
 import TeamDetail from '@/pages/organization/TeamDetail';
@@ -180,6 +181,12 @@ const routes = [
     path: '/Reports',
     component: Reports,
     name: 'nav.reports',
+    meta: { layout: 'authenticated' },
+  },
+  {
+    path: '/report/:id',
+    component: Report,
+    name: 'nav.report',
     meta: { layout: 'authenticated' },
   },
   {
