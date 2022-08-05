@@ -5,18 +5,14 @@
  * Components
  */
 
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import vSelect from 'vue-select';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import CompositionApi from '@vue/composition-api';
-import BaseIcon from '@/components/BaseIcon';
-import FormSelect from '../FormSelect';
+import BaseIcon from '@/components/BaseIcon.vue';
+import FormSelect from '../FormSelect.vue';
 library.add(fas);
-
-const localVue = createLocalVue();
-localVue.use(CompositionApi);
 
 const mountWithOptions = (options) =>
   mount(FormSelect, {

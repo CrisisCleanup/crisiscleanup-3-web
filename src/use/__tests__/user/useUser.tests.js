@@ -2,20 +2,15 @@
  * Use User Hook Tests
  */
 
-import { createLocalVue } from '@vue/test-utils';
-import VueCompositionApi from '@vue/composition-api';
-import { useGetters } from '@u3u/vue-hooks';
+import { mapGetters } from 'vuex';
 import useUser from '@/use/user/useUser';
 
 jest.mock('@/models/User');
-jest.mock('@u3u/vue-hooks');
-
-const localVue = createLocalVue();
-localVue.use(VueCompositionApi);
+jest.mock('vuex');
 
 describe('useUser', () => {
   it('retrieves current user', () => {
-    useGetters.mockReturnValue({
+    mapGetters.mockReturnValue({
       userId: {
         value: 1,
       },

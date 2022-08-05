@@ -2,12 +2,7 @@
  * Use Toggle Hook Tests
  */
 
-import { createLocalVue } from '@vue/test-utils';
-import VueCompositionApi from '@vue/composition-api';
 import useToggle from '../useToggle';
-
-const localVue = createLocalVue();
-localVue.use(VueCompositionApi);
 
 describe('useToggle', () => {
   it('sets defaults correctly', () => {

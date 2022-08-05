@@ -86,16 +86,17 @@
 </template>
 
 <script>
-import { useGetters } from '@u3u/vue-hooks';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
+import { useStore } from 'vuex';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 import AgentClient from '@/models/phone/AgentClient';
 import LanguageTag from '@/components/tags/LanguageTag.vue';
 import useUser from '@/use/user/useUser';
-import Avatar from '@/components/Avatar';
+import Avatar from '@/components/Avatar.vue';
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Leaderboard',
   components: {
     TitledCard,
@@ -104,9 +105,13 @@ export default {
     Avatar,
   },
   setup(props, context) {
-    const getters = {
-      ...useGetters('phone.controller', ['agentRankings', 'agentMetricsReady']),
-    };
+    const store = useStore();
+    const agentRankings = computed(
+      () => store.getters['phone.controller'].agentRankings,
+    );
+    const agentMetricsReady = computed(
+      () => store.getters['phone.controller'].agentMetricsReady,
+    );
 
     const { currentUser } = useUser();
 
@@ -187,7 +192,8 @@ export default {
     };
 
     return {
-      ...getters,
+      agentRankings,
+      agentMetricsReady,
       dropdownProps,
       rankFilter,
       onDropdownUpdate,

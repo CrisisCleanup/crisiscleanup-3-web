@@ -89,11 +89,11 @@
 <script>
 import { create } from 'vue-modal-dialogs';
 import { reactive, ref, onMounted, watch, computed } from 'vue';
-import { useStore } from '@u3u/vue-hooks';
 import { useRouter } from 'vue-router';
 import { getModule } from 'vuex-module-decorators';
 import VueTypes from 'vue-types';
-import ComponentDialog from '@/components/dialogs/ComponentDialog';
+import { useStore } from 'vuex';
+import ComponentDialog from '@/components/dialogs/ComponentDialog.vue';
 import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
 import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
 import useAgentState from '@/use/phone/useAgentState';
@@ -109,7 +109,7 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import useIncident from '@/use/worksites/useIncident';
 import { EventBus } from '@/event-bus';
 import ControllerStore from '@/store/modules/phone/controller';
-import Avatar from '@/components/Avatar';
+import Avatar from '@/components/Avatar.vue';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();
@@ -185,7 +185,7 @@ export default {
   setup(props, context) {
     const showMoreState = useToggle({ state: true });
     const store = useStore();
-    const ctrlStore = getModule(ControllerStore, store.value);
+    const ctrlStore = getModule(ControllerStore, store);
     const trainingState = useToggle();
 
     const { onTrainingComplete } = useTraining({

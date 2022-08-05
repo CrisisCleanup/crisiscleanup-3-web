@@ -170,9 +170,9 @@
 </template>
 
 <script>
-import { useActions, useMutations } from '@u3u/vue-hooks';
 import { ref, watch, watchEffect } from 'vue';
 import VueTypes from 'vue-types';
+import { mapActions, mapMutations } from 'vuex';
 import CaseCard from '@/components/cards/Case.vue';
 import useCaseCards from '@/use/worksites/useCaseCards';
 import useUser from '@/use/user/useUser';
@@ -206,10 +206,10 @@ export default {
       activeIncident,
       ...contact
     } = useContact();
-    const { setNextInboundAction } = useMutations('phone.streams', [
+    const { setNextInboundAction } = mapMutations('phone.streams', [
       'setNextInboundAction',
     ]);
-    const { updateContact } = useActions('phone.streams', ['updateContact']);
+    const { updateContact } = mapActions('phone.streams', ['updateContact']);
     const dismissState = useToggle();
     const { currentIncident } = useIncident();
 

@@ -3,7 +3,7 @@
  */
 
 import { computed, ref, watch } from 'vue';
-import { useGetters } from '@u3u/vue-hooks';
+import { useStore } from 'vuex';
 import AgentClient from '@/models/phone/AgentClient';
 
 /**
@@ -13,9 +13,10 @@ import AgentClient from '@/models/phone/AgentClient';
 export default () => {
   const loading = ref(true);
   const _agent = ref<AgentClient | null>(null);
-  const getters = {
-    ...useGetters('phone.streams', ['agentClientId']),
-  };
+  const store = useStore();
+  const agentClientId = computed(
+    () => store.getters['phone.streams'].agentClientId,
+  );
 
   const _agentClient = computed(() =>
     AgentClient.query().withAllRecursive().first(),
@@ -25,9 +26,9 @@ export default () => {
   }
 
   watch(
-    () => getters.agentClientId.value,
+    () => agentClientId.value,
     () => {
-      if (getters.agentClientId.value && loading.value) {
+      if (agentClientId.value && loading.value) {
         _agent.value = AgentClient.query().withAllRecursive().first();
         loading.value = false;
       }

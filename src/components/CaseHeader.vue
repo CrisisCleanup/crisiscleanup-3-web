@@ -114,7 +114,7 @@
 </template>
 
 <script lang="ts">
-import { useState } from '@u3u/vue-hooks';
+import { useStore } from 'vuex';
 import { defineComponent, computed } from 'vue';
 import { templates } from '@/icons/icons_templates';
 import Worksite from '@/models/Worksite';
@@ -122,7 +122,10 @@ import Worksite from '@/models/Worksite';
 export default defineComponent({
   name: 'CaseHeader',
   setup(props) {
-    const { currentIncidentId } = useState('incident', ['currentIncidentId']);
+    const store = useStore();
+    const currentIncidentId = computed(
+      () => store.state.incident.currentIncidentId,
+    );
     const highPrioritySvgInactive = computed(() => {
       const template = templates.important;
       return template
@@ -204,9 +207,7 @@ export default defineComponent({
     },
     canEdit: {
       type: Boolean,
-      default: () => {
-        return {};
-      },
+      default: () => false,
     },
     isViewingWorksite: { type: Boolean, default: null, required: false },
   },

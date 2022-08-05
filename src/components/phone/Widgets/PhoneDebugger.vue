@@ -82,11 +82,11 @@
   </div>
 </template>
 
-<script>
-import { computed, ref, watch } from 'vue';
+<script lang="ts">
+import { computed, ref, watch, ComputedRef } from 'vue';
 import _ from 'lodash';
-import { useState } from '@u3u/vue-hooks';
 import { useLocalStorage } from 'vue-composable';
+import { useStore } from 'vuex';
 import useController from '@/use/phone/useController';
 import useAgent from '@/use/phone/useAgent';
 import useContact from '@/use/phone/useContact';
@@ -105,20 +105,24 @@ export default {
     const currentPage = ref('contact');
     const pageError = ref('');
     const scriptStorage = useLocalStorage('ccu-ivr-hide-script', false);
-    const contactState = {
-      ...useState('entities/phone/contact', [
-        'dnis',
-        'worksites',
-        'pdas',
-        'locale',
-        'outbounds',
-        'inbound',
-        'outbound',
-        'incident',
-        'resolveTask',
-        'resolveRequested',
-      ]),
-    };
+    const store = useStore();
+
+    const items = [
+      'dnis',
+      'worksites',
+      'pdas',
+      'locale',
+      'outbounds',
+      'inbound',
+      'outbound',
+      'incident',
+      'resolveTask',
+      'resolveRequested',
+    ] as const;
+    const contactState = items.reduce((acc, key) => {
+      acc[key] = computed(() => store.state['entities/phone/contact'][key]);
+      return acc;
+    }, {} as Record<typeof items[number], ComputedRef>);
 
     const contactStateInfo = computed(() => {
       return _.map(contactState, (stateItem, key) => {
@@ -141,8 +145,8 @@ export default {
 
     const isIAMUser = computed(() => {
       if (agent.value) {
-        const conUsername = agent.value.connectConfig.username;
-        return conUsername !== currentUser.value.email;
+        const conUsername = agent.value?.connectConfig?.username;
+        return conUsername !== currentUser.value?.email;
       }
       return false;
     });
@@ -196,7 +200,7 @@ export default {
         currentContact.value
           ? Object.keys(currentContact.value.contactAttributes).map((k) => ({
               title: k,
-              value: currentContact.value.contactAttributes[k],
+              value: currentContact.value?.contactAttributes[k],
             }))
           : [],
       ),
@@ -262,7 +266,7 @@ export default {
       ],
       config: agent.value
         ? [
-            ...Object.keys(agent.value.connectConfig).map(
+            ...Object.keys(agent.value?.connectConfig ?? {}).map(
               (k) =>
                 configParams.includes(k) && {
                   title: _.startCase(k),

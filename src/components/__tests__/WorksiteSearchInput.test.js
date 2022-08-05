@@ -7,12 +7,10 @@
 
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import CompositionApi from '@vue/composition-api';
 import { MockWorksites } from '@/utils/testing';
-import WorksiteSearchInput from '../WorksiteSearchInput';
+import WorksiteSearchInput from '../WorksiteSearchInput.vue';
 
 const localVue = createLocalVue();
-localVue.use(CompositionApi);
 localVue.use(Vuex);
 
 jest.mock('@/models/Worksite');

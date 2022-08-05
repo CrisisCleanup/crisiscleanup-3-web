@@ -67,7 +67,7 @@
 
 <script>
 import { ref, onMounted, reactive, watch, computed } from 'vue';
-import { useState } from '@u3u/vue-hooks';
+import { useStore } from 'vuex';
 import _ from 'lodash';
 import useUser from '@/use/user/useUser';
 import usePhoneMetrics from '@/use/phone/usePhoneMetrics';
@@ -78,6 +78,7 @@ export default {
   name: 'GeneralStatistics',
   components: { TitledCard },
   setup(props, context) {
+    const store = useStore();
     const category = ref('all');
     const isCritical = ref(false);
     const { updateGenMetrics, locales, loading } = usePhoneMetrics();
@@ -113,7 +114,8 @@ export default {
     );
 
     const state = {
-      ...useState('phone.controller', ['metrics', 'loading']),
+      metrics: computed(() => store.state['phone.controller'].metrics),
+      loading: computed(() => store.state['phone.controller'].loading),
     };
 
     const metricOrder = [
@@ -140,6 +142,7 @@ export default {
         });
         const needed = _.get(metrics, Metrics.NEEDED[0], 0);
         if (needed > 5) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           isCritical.value = true;
         }
         return _metrics;
