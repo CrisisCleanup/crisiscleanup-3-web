@@ -21,13 +21,12 @@
               class="w-20 h-20 mr-2"
               alt="crisis-cleanup-logo"
             />
-            <div>
+            <div class="h-20 overflow-y-hidden">
               <div
-                class="text-xl sm:text-sm my-1 font-bold"
+                class="text-xl sm:text-sm my-1 font-bold truncate"
                 v-html="$t(formatCmsItem(newItem.title))"
               ></div>
               <p
-                v-if="$mq !== 'sm'"
                 class="text-xs line-clamp-3"
                 v-html="$t(formatCmsItem(newItem.content))"
               ></p>
