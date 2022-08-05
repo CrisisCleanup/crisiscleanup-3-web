@@ -581,7 +581,8 @@ body {
 
 .bm-menu {
   z-index: 1005;
-  padding-top: 0;
-  background-color: #2d2d2d;
+  padding-top: 0 !important;
+  background-color: #2d2d2d !important;
+  height: 100%;
 }
 </style>
