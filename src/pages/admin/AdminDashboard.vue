@@ -267,21 +267,21 @@
 import { mapState } from 'vuex';
 import { throttle } from 'lodash';
 import User from '@/models/User';
-import InvitationRequestTable from '@/components/admin/InvitationRequestTable';
-import InvitationTable from '@/components/admin/InvitationTable';
-import IncidentApprovalTable from '../../components/IncidentApprovalTable';
-import OrganizationApprovalTable from '../../components/OrganizationApprovalTable';
-import InviteUsers from '../organization/InviteUsers';
-import { getQueryString } from '../../utils/urls';
-import { getErrorMessage } from '../../utils/errors';
-import Loader from '../../components/Loader';
-import WorksiteImport from '../../components/WorksiteImport';
-import FileUpload from '../../components/FileUpload';
-import OrganizationsTable from '../../components/admin/OrganizationsTable';
-import UsersTable from '../../components/admin/UsersTable';
-import GhostUsersTable from '../../components/admin/GhostUsersTable';
-import MergeOrganizations from '../../components/MergeOrganizations';
-import DatabaseAccess from '../../components/DatabaseAccess';
+import InvitationRequestTable from '@/components/admin/InvitationRequestTable.vue';
+import InvitationTable from '@/components/admin/InvitationTable.vue';
+import IncidentApprovalTable from '@/components/IncidentApprovalTable.vue';
+import OrganizationApprovalTable from '@/components/OrganizationApprovalTable.vue';
+import InviteUsers from '../organization/InviteUsers.vue';
+import { getQueryString } from '@/utils/urls';
+import { getErrorMessage } from '@/utils/errors';
+import Loader from '@/components/Loader.vue';
+import WorksiteImport from '@/components/WorksiteImport.vue';
+import FileUpload from '@/components/FileUpload.vue';
+import OrganizationsTable from '@/components/admin/OrganizationsTable.vue';
+import UsersTable from '@/components/admin/UsersTable.vue';
+import GhostUsersTable from '@/components/admin/GhostUsersTable.vue';
+import MergeOrganizations from '@/components/MergeOrganizations.vue';
+import DatabaseAccess from '@/components/DatabaseAccess.vue';
 import { DialogsMixin } from '@/mixins';
 
 export default {

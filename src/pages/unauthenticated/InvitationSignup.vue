@@ -133,10 +133,10 @@ import User from '@/models/User';
 import PasswordResetRequest from '@/models/PasswordResetRequest';
 import Organization from '@/models/Organization';
 import Invitation from '../../models/Invitation';
-import HomeLayout from '../../layouts/Home';
-import { DialogsMixin } from '../../mixins';
-import { getErrorMessage } from '../../utils/errors';
-import { getOrganizationName } from '../../filters';
+import HomeLayout from '@/layouts/Home.vue';
+import { DialogsMixin } from '@/mixins';
+import { getErrorMessage } from '@/utils/errors';
+import { getOrganizationName } from '@/filters';
 
 export default {
   name: 'InvitationSignup',

@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home';
+import HomeLayout from '@/layouts/Home.vue';
 import PasswordResetRequest from '@/models/PasswordResetRequest';
 import { getErrorMessage } from '@/utils/errors';
 

@@ -238,10 +238,10 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import SectionHeading from './SectionHeading';
-import RecurringSchedule from './RecurringSchedule';
+import SectionHeading from './SectionHeading.vue';
+import RecurringSchedule from './RecurringSchedule.vue';
 import Incident from '@/models/Incident';
-import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
 import User from '@/models/User';
 
 export default {

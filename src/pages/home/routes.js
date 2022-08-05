@@ -4,7 +4,7 @@ import Map from './Map.vue';
 import Privacy from './Privacy.vue';
 import RegisterOrganization from './RegisterOrganization.vue';
 import RequestAccess from './RequestAccess.vue';
-import RequestPasswordReset from './RequestPasswordReset';
+import RequestPasswordReset from './RequestPasswordReset.vue';
 import Terms from './Terms.vue';
 import Training from './Training.vue';
 import Contributions from './Contributions.vue';

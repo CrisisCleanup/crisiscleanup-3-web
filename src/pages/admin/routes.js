@@ -5,8 +5,8 @@ import AdminEvents from '@/pages/admin/AdminEvents.vue';
 import AdminEventStream from '@/components/AdminEventStream.vue';
 import AdminTicketDashboard from '@/pages/admin/AdminTicketDashboard.vue';
 import AdminCosts from '@/pages/admin/AdminCosts.vue';
-import AdminCms from '@/pages/admin/AdminCms';
-import AdminIncidentWizard from '@/pages/admin/AdminIncidentWizard';
+import AdminCms from '@/pages/admin/AdminCms.vue';
+import AdminIncidentWizard from '@/pages/admin/AdminIncidentWizard.vue';
 const routes = [
   {
     path: '/admin',

@@ -416,8 +416,8 @@ import User from '@/models/User';
 import Pda from '@/models/Pda';
 import { WorksitesMixin, DialogsMixin } from '@/mixins';
 import Logger from '@/utils/log';
-import CaseForm from '../CaseForm';
-import EditCallerID from '../../components/phone/CallerIDEditCard';
+import CaseForm from '../CaseForm.vue';
+import EditCallerID from '../../components/phone/CallerIDEditCard.vue';
 import { getErrorMessage } from '../../utils/errors';
 
 const Log = Logger({

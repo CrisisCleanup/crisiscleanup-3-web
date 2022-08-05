@@ -1,8 +1,8 @@
 import { useRouter } from 'vue-router';
-import Index from '@/pages/phone_legacy/Index';
-import ConnectFirstIntegration from '@/pages/phone_legacy/ConnectFirstIntegration';
+import Index from '@/pages/phone_legacy/Index.vue';
+import ConnectFirstIntegration from '@/pages/phone_legacy/ConnectFirstIntegration.vue';
 import { BannerTypes } from '@/store/modules/ui/types';
-import BetaBanner from '@/components/notifications/BetaBanner';
+import BetaBanner from '@/components/notifications/BetaBanner.vue';
 
 const LegacyBetaBanner = () => {
   const router = useRouter();

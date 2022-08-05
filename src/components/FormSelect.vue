@@ -63,7 +63,7 @@
   </div>
 </template>
 
-<script>
+<script lang="jsx">
 import { xor, kebabCase, isEmpty } from 'lodash';
 export default {
   name: 'FormSelect',
