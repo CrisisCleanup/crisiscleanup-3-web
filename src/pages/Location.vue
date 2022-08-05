@@ -274,18 +274,19 @@
 </template>
 
 <script>
-import { create } from 'vue-modal-dialogs';
 import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
 import Organization from '@/models/Organization';
 import Incident from '@/models/Incident';
-import LocationTool from '@/components/LocationTool';
+import LocationTool from '@/components/LocationTool.vue';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
-import MessageBox from '@/components/dialogs/MessageBox';
-const messageBox = create(MessageBox);
+import MessageBox from '@/components/dialogs/MessageBox.vue';
+import { useDialog } from '@/use/useDialogs';
+const messageBox = useDialog({ component: MessageBox });
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Location',
   components: { LocationTool },
   data() {
@@ -414,7 +415,7 @@ export default {
         this.currentLocation.name = `${this.selectedOrganization.name} ${this.currentLocation.location_type.name_t}`;
       }
       if (this.isPrimaryResponseArea && value.primary_location) {
-        const result = await messageBox({
+        const result = await messageBox.reveal({
           title: this.$t('locationVue.existing_location'),
           content: this.$t('locationVue.location_already_exists_organization', {
             organization: value.name,
@@ -452,7 +453,7 @@ export default {
           (location) => location.type === this.currentLocation.type,
         );
         if (existingLocation) {
-          const result = await messageBox({
+          const result = await messageBox.reveal({
             title: this.$t('locationVue.existing_location'),
             content: this.$t('locationVue.location_already_exists_incident', {
               incident: incident.name,

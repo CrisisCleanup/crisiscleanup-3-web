@@ -437,25 +437,25 @@
 <script>
 import * as turf from '@turf/turf';
 import * as moment from 'moment';
-import { create } from 'vue-modal-dialogs';
 import { sortBy, uniqueId } from 'lodash';
 import Worksite from '@/models/Worksite';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
 import { getErrorMessage } from '@/utils/errors';
-import WorksiteSearchInput from '@/components/WorksiteSearchInput';
+import WorksiteSearchInput from '@/components/WorksiteSearchInput.vue';
 import Incident from '@/models/Incident';
 import { buildForm, groupBy, nest } from '@/utils/form';
-import MessageBox from '@/components/dialogs/MessageBox';
-import WorksiteImageSection from '@/components/WorksiteImageSection';
-import WorksiteReportSection from '@/components/WorksiteReportSection';
+import MessageBox from '@/components/dialogs/MessageBox.vue';
+import WorksiteImageSection from '@/components/WorksiteImageSection.vue';
+import WorksiteReportSection from '@/components/WorksiteReportSection.vue';
 import { StorageService } from '@/services/storage.service';
-import SectionHeading from '../components/SectionHeading';
+import SectionHeading from '../components/SectionHeading.vue';
 import { EventBus } from '../event-bus';
 import { ValidateMixin } from '../mixins';
-import WorksiteNotes from './WorksiteNotes';
+import WorksiteNotes from './WorksiteNotes.vue';
+import { useDialog } from '@/use/useDialogs';
 
-const messageBox = create(MessageBox);
+const messageBox = useDialog(MessageBox);
 
 const AUTO_CONTACT_FREQUENCY_OPTIONS = [
   'formOptions.often',
@@ -778,7 +778,7 @@ export default {
       const incidents = response.response.data.results;
       let result;
       if (incidents.length > 0) {
-        result = await messageBox({
+        result = await messageBox.reveal({
           title: this.$t('caseForm.incorrect_location'),
           content: this.$t('caseForm.suggested_incident', {
             incident: incidents[0].name,
@@ -796,7 +796,7 @@ export default {
           },
         });
       } else {
-        result = await messageBox({
+        result = await messageBox.reveal({
           title: this.$t('caseForm.case_outside_incident'),
           content: this.$t('caseForm.warning_case_outside_incident', {
             incident: this.currentIncident.name,

@@ -99,15 +99,13 @@
   </div>
 </template>
 <script>
-import { create } from 'vue-modal-dialogs';
 import User from '@/models/User';
 import Role from '@/models/Role';
-import MessageBox from '@/components/dialogs/MessageBox';
-import UserEditModal from './UserEditModal';
+import MessageBox from '@/components/dialogs/MessageBox.vue';
+import UserEditModal from './UserEditModal.vue';
 import { getErrorMessage } from '../../utils/errors';
-import UserRolesSelect from '../../components/UserRolesSelect';
-
-const messageBox = create(MessageBox);
+import UserRolesSelect from '@/components/UserRolesSelect.vue';
+import { useDialog } from '@/use/useDialogs';
 
 export default {
   name: 'UserView',
@@ -141,20 +139,24 @@ export default {
       }
     },
     async orphanUser() {
-      const result = await messageBox({
-        title: this.$t('actions.remove_user'),
-        content: this.$t('userView.remove_user_warning'),
-        actions: {
-          cancel: {
-            text: this.$t('actions.cancel'),
-            buttonClass: 'px-2 py-1 mx-2 border border-black',
-          },
-          delete: {
-            text: this.$t('actions.delete'),
-            buttonClass: 'px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white',
+      const messageBox = useDialog({
+        component: MessageBox,
+        props: {
+          title: this.$t('actions.remove_user'),
+          content: this.$t('userView.remove_user_warning'),
+          actions: {
+            cancel: {
+              text: this.$t('actions.cancel'),
+              buttonClass: 'px-2 py-1 mx-2 border border-black',
+            },
+            delete: {
+              text: this.$t('actions.delete'),
+              buttonClass: 'px-2 py-1 mx-2 bg-crisiscleanup-red-700 text-white',
+            },
           },
         },
       });
+      const result = await messageBox();
       if (result === 'delete') {
         await User.api().orphan(this.selectedUser.id);
         await this.$router.push(`/organization/users`);

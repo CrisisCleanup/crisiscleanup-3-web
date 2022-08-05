@@ -81,21 +81,22 @@
 </template>
 
 <script>
-import { create } from 'vue-modal-dialogs';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
-import OrganizationApprovalDialog from '@/components/dialogs/OrganizationApprovalDialog';
-import MessageBox from '@/components/dialogs/MessageBox';
+import OrganizationApprovalDialog from '@/components/dialogs/OrganizationApprovalDialog.vue';
+import MessageBox from '@/components/dialogs/MessageBox.vue';
 import { DialogsMixin } from '../mixins';
 import Incident from '../models/Incident';
+import { useDialog } from '@/use/useDialogs';
 
-const messageBox = create(MessageBox);
-const responseDialog = create(OrganizationApprovalDialog);
+const messageBox = useDialog({ component: MessageBox });
+const responseDialog = useDialog({ component: OrganizationApprovalDialog });
 
 export default {
   name: 'OrganizationApprovalTable',
   mixins: [DialogsMixin],
+  // eslint-disable-next-line vue/no-reserved-component-names
   components: { Table },
   props: {
     organizations: {
@@ -139,7 +140,7 @@ export default {
     async showContacts(organization) {
       const contacts = await this.getOrganizationContacts(organization.id);
       const contact = contacts.length ? contacts[0] : null;
-      await messageBox({
+      await messageBox.reveal({
         title: this.$t('adminOrganization.organization_contact'),
         content: `
           <div>${contact.first_name} ${contact.last_name}</div>
@@ -151,7 +152,7 @@ export default {
       });
     },
     async approveOrganization(organizationId) {
-      const result = await responseDialog({
+      const result = await responseDialog.reveal({
         title: this.$t('actions.approve_organization'),
         content: this.$t('orgApprovalTable.give_approve_reason'),
       });
@@ -161,7 +162,7 @@ export default {
       }
     },
     async rejectOrganization(organizationId) {
-      const result = await responseDialog({
+      const result = await responseDialog.reveal({
         title: this.$t('actions.reject_organization'),
         content: this.$t('orgApprovalTable.give_reject_reason'),
       });
