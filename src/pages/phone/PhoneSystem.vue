@@ -457,7 +457,7 @@
               </PhoneComponentButton>
               <PhoneComponentButton
                 name="reset"
-                class="phone-button hidden"
+                class="phone-button"
                 icon="logout"
                 icon-size="small"
                 icon-class="p-1"

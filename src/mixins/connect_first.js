@@ -131,12 +131,7 @@ export default {
       return this.$phoneService.changeState('AWAY');
     },
     async resetPhoneSystem() {
-      await this.$phoneService
-        .apiLogoutAgent(this.currentAgent?.agent_id)
-        .then(() => {
-          this.clearCall();
-          this.resetState();
-        });
+      await this.logoutByPhoneNumber();
     },
     async logoutPhone() {
       // await this.$phoneService.changeState('AWAY');
