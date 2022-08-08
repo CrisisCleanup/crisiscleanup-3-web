@@ -19,11 +19,15 @@
     <div
       class="phone-component absolute top-10 ml-12 z-30"
       :style="
-        componentWidth === 'LG'
-          ? 'width: 60vw; margin-left: -60vw'
-          : componentWidth === 'MD'
-          ? 'width: 40vw; margin-left: -40vw'
-          : 'width: 30vw; margin-left: -30vw'
+        $mq !== 'sm'
+          ? componentWidth === 'LG'
+            ? 'width: 60vw; margin-left: -60vw; height: 60vh;'
+            : componentWidth === 'MD'
+            ? 'width: 40vw; margin-left: -40vw'
+            : 'width: 30vw; margin-left: -30vw'
+          : componentWidth === 'LG'
+          ? 'height: 75vh;'
+          : ''
       "
       :class="[componentClass]"
       v-show="showComponent"
@@ -111,7 +115,6 @@ export default {
 .phone-component {
   transform: translateY(-3rem);
   min-height: 10vh;
-  max-height: 60vh;
   height: 90%;
   @apply shadow-lg bg-white sm:mt-12 overflow-auto;
 }
@@ -119,7 +122,6 @@ export default {
   .phone-component {
     width: 87vw;
     margin-left: -87vw;
-    max-height: 85vh;
   }
 }
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
