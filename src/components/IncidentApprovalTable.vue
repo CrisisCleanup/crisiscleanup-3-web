@@ -87,13 +87,14 @@
 </template>
 
 <script>
-import { create } from 'vue-modal-dialogs';
-import Table from '@/components/Table';
-import MessageBox from '@/components/dialogs/MessageBox';
+import Table from '@/components/Table.vue';
+import MessageBox from '@/components/dialogs/MessageBox.vue';
+import { useDialog } from '@/use/useDialogs';
 
-const messageBox = create(MessageBox);
+const messageBox = useDialog({ component: MessageBox });
 export default {
   name: 'IncidentApprovalTable',
+  // eslint-disable-next-line vue/no-reserved-component-names
   components: { Table },
   props: {
     requests: {
@@ -111,7 +112,7 @@ export default {
   methods: {
     async showContacts(request) {
       const contact = request.requested_by_contact;
-      await messageBox({
+      await messageBox.reveal({
         title: this.$t('incidentApprovalTable.requester'),
         content: `
           <div>${contact.first_name} ${contact.last_name}</div>

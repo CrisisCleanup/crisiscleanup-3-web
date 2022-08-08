@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { computed } from '@vue/composition-api';
+import { computed } from 'vue';
 import useSearchEvents from '@/use/events/useSearchEvents';
 import { makeTableColumns } from '@/utils/table';
 import Table from '@/components/Table.vue';

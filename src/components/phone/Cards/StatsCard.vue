@@ -42,9 +42,9 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { useGetters } from '@u3u/vue-hooks';
-import { computed } from '@vue/composition-api';
+import { computed } from 'vue';
 import _ from 'lodash';
+import { useStore } from 'vuex';
 import useEnums from '@/use/useEnums';
 import useUser from '@/use/user/useUser';
 import TitledCard from '../../cards/TitledCard.vue';
@@ -57,9 +57,12 @@ export default {
     metrics: VueTypes.any,
   },
   setup(props, context) {
-    const { currentAgentMetrics, agentMetricsReady } = useGetters(
-      'phone.controller',
-      ['currentAgentMetrics', 'agentMetricsReady'],
+    const store = useStore();
+    const currentAgentMetrics = computed(
+      () => store.getters['phone.controller'].currentAgentMetrics,
+    );
+    const agentMetricsReady = computed(
+      () => store.getters['phone.controller'].agentMetricsReady,
     );
 
     const stats = computed(() => {

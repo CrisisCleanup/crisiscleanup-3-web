@@ -77,12 +77,13 @@
 </template>
 
 <script>
-import Table from './Table';
-import { hash } from '../utils/promise';
-import { forceFileDownload } from '../utils/downloads';
-import DragDrop from './DragDrop';
+import Table from './Table.vue';
+import { hash } from '@/utils/promise';
+import { forceFileDownload } from '@/utils/downloads';
+import DragDrop from './DragDrop.vue';
 export default {
   name: 'WorksiteImport',
+  // eslint-disable-next-line vue/no-reserved-component-names
   components: { DragDrop, Table },
   data() {
     return {

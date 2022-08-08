@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import { kebabCase } from 'lodash';
-import { ref, computed, defineComponent, PropType } from '@vue/composition-api';
+import { ref, computed, defineComponent, PropType } from 'vue';
 import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from '@/constants';
 import { EventsMixin } from '@/mixins';
 import { delay } from '@/utils/promise';

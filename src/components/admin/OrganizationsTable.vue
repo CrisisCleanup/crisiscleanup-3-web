@@ -81,17 +81,18 @@
 </template>
 
 <script>
-import { create } from 'vue-modal-dialogs';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
-import OrganizationApprovalDialog from '@/components/dialogs/OrganizationApprovalDialog';
+import OrganizationApprovalDialog from '@/components/dialogs/OrganizationApprovalDialog.vue';
 import { cachedGet } from '@/utils/promise';
+import { useDialog } from '@/use/useDialogs';
 
-const responseDialog = create(OrganizationApprovalDialog);
+const responseDialog = useDialog({ component: OrganizationApprovalDialog });
 
 export default {
   name: 'OrganizationsTable',
+  // eslint-disable-next-line vue/no-reserved-component-names
   components: { Table },
   props: {
     organizations: {
@@ -135,7 +136,7 @@ export default {
       return response.data.results;
     },
     async approveOrganization(organizationId) {
-      const result = await responseDialog({
+      const result = await responseDialog.reveal({
         title: this.$t('actions.approve_organization'),
         content: this.$t('orgTable.give_approve_reason'),
       });
@@ -145,7 +146,7 @@ export default {
       }
     },
     async rejectOrganization(organizationId) {
-      const result = await responseDialog({
+      const result = await responseDialog.reveal({
         title: this.$t('actions.reject_organization'),
         content: this.$t('orgTable.give_reject_reason'),
       });

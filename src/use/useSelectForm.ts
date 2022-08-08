@@ -2,7 +2,7 @@
  *  Use Select Form for Model.
  */
 // @ts-nocheck TODO(tabiodun): Fix this file
-import { ref, watchEffect, computed, reactive } from '@vue/composition-api';
+import { ref, watchEffect, computed, reactive } from 'vue';
 import _ from 'lodash';
 import CCUModel from '@/models/model';
 

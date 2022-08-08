@@ -77,7 +77,7 @@ import {
   defineComponent,
   onMounted,
   computed,
-} from '@vue/composition-api';
+} from 'vue';
 import DragDrop from './DragDrop.vue';
 import { getErrorMessage } from '../utils/errors';
 import Report from '../models/Report';

@@ -3,7 +3,7 @@
  */
 
 import _ from 'lodash';
-import { ref, computed, reactive } from '@vue/composition-api';
+import { ref, computed, reactive } from 'vue';
 import { EventParts } from '@/models/EventComponent';
 
 /**

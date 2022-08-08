@@ -3,21 +3,18 @@
  */
 
 import { createLocalVue } from '@vue/test-utils';
-import VueCompositionApi from '@vue/composition-api';
-import { useGetters } from '@u3u/vue-hooks';
 import VuexORM, { Database } from '@vuex-orm/core';
-import Vuex from 'vuex';
+import Vuex, { mapGetters } from 'vuex';
 import AgentClient from '@/models/phone/AgentClient';
 import useAgent from '@/use/phone/useAgent';
 
 // jest.mock('@/models/phone/AgentClient');
-jest.mock('@u3u/vue-hooks');
+jest.mock('vuex');
 
 const database = new Database();
 database.register(AgentClient, {});
 
 const localVue = createLocalVue();
-localVue.use(VueCompositionApi);
 localVue.use(Vuex);
 
 // eslint-disable-next-line no-unused-vars
@@ -27,7 +24,7 @@ const mockStore = new Vuex.Store({
 
 describe('useAgent', () => {
   it('loads until ready', () => {
-    useGetters.mockReturnValue({
+    mapGetters.mockReturnValue({
       agentClientId: {
         value: null,
       },
@@ -44,7 +41,7 @@ describe('useAgent', () => {
         first: firstMock,
       }),
     });
-    useGetters.mockReturnValue({
+    mapGetters.mockReturnValue({
       agentClientId: {
         value: null,
       },
@@ -52,7 +49,7 @@ describe('useAgent', () => {
     firstMock.mockReturnValue({ agentId: 'abc' });
 
     const { agent, loading } = useAgent();
-    useGetters.mockReturnValue({
+    mapGetters.mockReturnValue({
       agentClientId: {
         value: 'abc',
       },

@@ -82,15 +82,24 @@ import detectBrowserLanguage from 'detect-browser-language';
 import { size } from 'lodash';
 import { Slide } from 'vue-burger-menu';
 import { parsePhoneNumber } from 'libphonenumber-js';
-import { ref, computed, watch, onMounted } from '@vue/composition-api';
 import {
-  useState,
-  useGetters,
-  useMutations,
-  useActions,
-  useRouter,
-} from '@u3u/vue-hooks';
+  ref,
+  computed,
+  watch,
+  onMounted,
+  inject,
+  getCurrentInstance,
+} from 'vue';
+import {
+  mapState as useState,
+  mapMutations as useMutations,
+  mapGetters as useGetters,
+  mapActions as useActions,
+  useStore,
+} from 'vuex';
+import { useRouter, useRoute } from 'vue-router';
 import moment from 'moment';
+import { useI18n } from 'vue-i18n';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
@@ -105,6 +114,10 @@ import PhoneStatus from '@/models/PhoneStatus';
 import CompletedTransferModal from '@/components/CompletedTransferModal.vue';
 import { AuthService } from '@/services/auth.service';
 import LoginForm from '@/components/forms/LoginForm.vue';
+import useHttp from '@/use/useHttp';
+import { useLogger } from '@/use/useLog';
+import usePhoneService from '@/use/usePhoneService';
+import useCan from '@/use/useCan';
 
 const VERSION_3_LAUNCH_DATE = '2020-03-25';
 
@@ -120,16 +133,40 @@ export default {
     Header,
   },
   setup(props, context) {
-    const { router, route } = useRouter();
-    const { $http, $log, $t, $phoneService } = context.root;
+    console.log('CONTEXT', context);
+    const root = getCurrentInstance();
+    console.log('ROOT', root);
+    const route = useRoute();
+    const router = useRouter();
+    const { $http } = useHttp();
+    const { $phoneService } = usePhoneService();
+    const { $can } = useCan();
+    const { t: $t } = useI18n();
+    const $log = useLogger('Authenticated');
+    const store = useStore();
 
-    const { currentIncidentId } = useState('incident', ['currentIncidentId']);
-    const { user, showLoginModal } = useState('auth', [
-      'user',
-      'showLoginModal',
-    ]);
-    const { portal } = useState('enums', ['portal']);
-    const { userId } = useGetters('auth', ['userId']);
+    const currentIncidentId = computed(
+      () => store.state.incident.currentIncidentId,
+    );
+    console.log('CURRENT INCIDENT ID', currentIncidentId);
+
+    const user = computed(() => store.state.auth.user);
+    const showLoginModal = computed(() => store.state.auth.showLoginModal);
+    const portal = computed(() => store.state.auth.portal);
+    const userId = computed(() => store.state.auth.userId);
+
+    // const { currentIncidentId } = useState('incident', ['currentIncidentId']);
+    // const { user, showLoginModal } = useState('auth', [
+    //   'user',
+    //   'showLoginModal',
+    // ]);
+    // const { portal } = useState('enums', ['portal']);
+    // const { userId } = useGetters('auth', ['userId']);
+
+    console.log('USER', user);
+    console.log('USER ID', userId);
+    console.log('SHOW LOGIN MODAL', showLoginModal);
+    console.log('PORTAL', portal);
 
     const loading = ref(false);
     const ready = ref(false);
@@ -171,7 +208,7 @@ export default {
         icon: 'phone',
         text: $t('nav.phone'),
         to: '/phone',
-        disabled: !context.root.$can || !context.root.$can('phone_agent'),
+        disabled: !$can || !$can('phone_agent'),
       },
       {
         key: 'caller',
@@ -186,9 +223,9 @@ export default {
         text: $t('nav.phone_alpha'),
         to: '/connect_first',
         disabled:
-          !context.root.$can ||
-          !context.root.$can('phone_agent') ||
-          !context.root.$can('beta_feature.connect_first_integration'),
+          !$can ||
+          !$can('phone_agent') ||
+          !$can('beta_feature.connect_first_integration'),
       },
       {
         key: 'my_organization',
@@ -248,9 +285,9 @@ export default {
       });
       setCurrentIncidentId(value);
       await router.push({
-        name: route.value.name as string,
-        params: { ...route.value.params, incident_id: value },
-        query: { ...route.value.query },
+        name: route.name as string,
+        params: { ...route.params, incident_id: value },
+        query: { ...route.query },
       });
     };
 
@@ -290,7 +327,7 @@ export default {
             }
           }
         } catch (e) {
-          $log.error(e);
+          $log.value.error(e);
         }
       }
       moment.locale(currentLanguage.split('-')[0]);
@@ -349,7 +386,7 @@ export default {
     };
 
     watch(
-      () => route.value.params.incident_id,
+      () => route.params.incident_id,
       (value) => {
         if (value && Number(currentIncidentId.value) !== Number(value)) {
           handleChange(value);
@@ -358,8 +395,8 @@ export default {
     );
 
     onMounted(() => {
-      if (route.value.params.incident_id) {
-        handleChange(route.value.params.incident_id);
+      if (route.params.incident_id) {
+        handleChange(route.params.incident_id);
       }
     });
 
@@ -404,7 +441,7 @@ export default {
       await setupLanguage();
       setAcl(router);
 
-      let incidentId = route.value.params.incident_id;
+      let incidentId = route.params.incident_id;
       if (!incidentId) {
         const incident = Incident.query().orderBy('id', 'desc').first();
         if (incident) {

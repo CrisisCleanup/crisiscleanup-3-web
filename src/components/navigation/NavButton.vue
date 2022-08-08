@@ -1,3 +1,39 @@
+<script lang="ts" setup>
+import { computed, defineProps } from 'vue';
+import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
+interface NavButtonProps {
+  route: {
+    key: string;
+    text?: string;
+    to?: string;
+    disabled?: boolean;
+    icon: string | Record<string, unknown>;
+    iconSize?: string;
+  };
+}
+
+const route = useRoute();
+const { t: $t } = useI18n();
+const props = defineProps<NavButtonProps>();
+
+// eslint-disable-next-line no-unused-vars
+const iconProps = computed(() =>
+  typeof props.route.icon === 'object'
+    ? props.route.icon
+    : {
+        type: props.route.icon || props.route.key,
+        size: 'xl',
+      },
+);
+
+// eslint-disable-next-line no-unused-vars
+const isActive = computed(() =>
+  $t(route.name as string).includes(props.route.key?.toLowerCase()),
+);
+</script>
+
 <template>
   <router-link
     :to="route.to"
@@ -18,37 +54,6 @@
     </div>
   </router-link>
 </template>
-
-<script>
-import VueTypes from 'vue-types';
-
-export default {
-  name: 'NavButton',
-  props: {
-    route: VueTypes.shape({
-      key: VueTypes.string,
-      text: VueTypes.string,
-      to: VueTypes.string,
-      icon: VueTypes.oneOfType([VueTypes.string, VueTypes.object]),
-      iconSize: VueTypes.string,
-      disabled: VueTypes.bool,
-    }),
-  },
-  computed: {
-    iconProps() {
-      return typeof this.route.icon === 'object'
-        ? this.route.icon
-        : {
-            type: this.route.icon || this.route.key,
-            size: 'xl',
-          };
-    },
-    isActive() {
-      return this.$t(this.$route.name).includes(this.route.key.toLowerCase());
-    },
-  },
-};
-</script>
 
 <style scoped>
 a:hover,

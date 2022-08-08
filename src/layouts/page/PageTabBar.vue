@@ -25,7 +25,7 @@
 
 <script lang="ts">
 import VueTypes from 'vue-types';
-import { ref } from '@vue/composition-api';
+import { ref } from 'vue';
 import useTabs from '@/use/useTabs';
 
 /**

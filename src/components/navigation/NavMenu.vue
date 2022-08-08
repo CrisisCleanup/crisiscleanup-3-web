@@ -14,7 +14,7 @@
 
 <script>
 import VueTypes from 'vue-types';
-import NavButton from './NavButton';
+import NavButton from './NavButton.vue';
 
 const routeShape = VueTypes.shape({
   key: VueTypes.string,

@@ -2,9 +2,9 @@
  * useAgentState Hook
  */
 
-import { computed, ref, watch } from '@vue/composition-api';
+import { computed, ref, watch } from 'vue';
 import _ from 'lodash';
-import { useState, useGetters } from '@u3u/vue-hooks';
+import { useStore } from 'vuex';
 import AgentClient, { RouteStates } from '@/models/phone/AgentClient';
 import { ConnectionStates } from '@/models/phone/Connection';
 import { unwrap } from '@/utils/wrap';
@@ -28,12 +28,11 @@ export default ({
 }) => {
   const _agent = ref<AgentClient>(agent);
   const _acwElapsed = ref(0);
-  const streamsState = {
-    ...useState('phone.streams', ['connected']),
-  };
-  const ctrlGetters = {
-    ...useGetters('phone.controller', ['isCallActive']),
-  };
+  const store = useStore();
+  const streamsState = computed(() => store.state['phone.streams']);
+  const isCallActive = computed(
+    () => store.getters['phone.controller'].isCallActive,
+  );
 
   // UI friendly 'action' string to enact state change.
   const _stateAction = {
@@ -47,7 +46,7 @@ export default ({
 
   // Computed UI friendly values from current state.
   const agentState = computed(() => {
-    if (!streamsState.connected.value) {
+    if (!streamsState.value.connected) {
       return {
         text: _stateAction.DISCONNECTED,
         enabled: false,
@@ -99,7 +98,7 @@ export default ({
       context.root.$log.error(_agent);
       return;
     }
-    if (ctrlGetters.isCallActive.value) {
+    if (isCallActive.value) {
       if (userInitiated) {
         context.root.$toasted.error(
           context.root.$t('phoneDashboard.call_status_required_before_next'),
@@ -141,6 +140,6 @@ export default ({
     agentState,
     toggleAgentState,
     acwDuration,
-    connected: streamsState.connected,
+    connected: streamsState.value.connected,
   };
 };

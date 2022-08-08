@@ -9,7 +9,7 @@
   ></object>
 </template>
 <script lang="ts">
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed } from 'vue';
 import Incident from '@/models/Incident';
 
 export default {

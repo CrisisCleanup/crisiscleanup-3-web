@@ -11,9 +11,9 @@ import {
   onMounted,
   onBeforeUnmount,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import _ from 'lodash';
-import { useRouter } from '@u3u/vue-hooks';
+import { useRouter } from 'vue-router';
 import VueRouter, { Route } from 'vue-router';
 import { useOnResize } from 'vue-composable';
 import Logger from '@/utils/log';

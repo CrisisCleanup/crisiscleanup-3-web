@@ -73,6 +73,22 @@ module.exports = {
     const vueRule = config.module.rule('vue');
     const jsRule = config.module.rule('js');
 
+    // for vue2 -> vue3 migration
+    config.resolve.alias.set('vue', '@vue/compat');
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap((options) => {
+        return {
+          ...options,
+          compilerOptions: {
+            compatConfig: {
+              MODE: 2,
+            },
+          },
+        };
+      });
+
     const useBasicTPool = (rule, loader) => {
       rule.uses.clear();
       rule
@@ -90,8 +106,8 @@ module.exports = {
 
     jsRule.test(/\.js$/).exclude.add(/node_modules/);
     if (process.env.NODE_ENV !== 'storybook') {
-      useBasicTPool(jsRule, 'babel-loader');
-      useBasicTPool(vueRule, 'vue-loader');
+      // useBasicTPool(jsRule, 'babel-loader');
+      // useBasicTPool(vueRule, 'vue-loader');
     }
     // config.plugin('lodash').use(LodashPlugin);
     if (

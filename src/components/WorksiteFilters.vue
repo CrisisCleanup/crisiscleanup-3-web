@@ -33,20 +33,19 @@
           "
         >
           <template v-for="(filter, key) in filters">
-            <template v-for="(label, identifier) in filter.labels">
-              <tag
-                :key="key + identifier"
-                closeable
-                class="m-1"
-                @closed="
-                  () => {
-                    filter.removeField(identifier);
-                  }
-                "
-              >
-                {{ label }}
-              </tag>
-            </template>
+            <tag
+              v-for="(label, identifier) in filter.labels"
+              :key="key + identifier"
+              closeable
+              class="m-1"
+              @closed="
+                () => {
+                  filter.removeField(identifier);
+                }
+              "
+            >
+              {{ label }}
+            </tag>
           </template>
         </div>
         <div>
@@ -339,68 +338,70 @@
                 />
               </div>
               <div v-if="expanded[f.key]">
-                <template v-for="field in getFieldsForType(f.key)">
-                  <div :key="field.field_key" class="border-b py-3">
-                    <template v-if="field.html_type === 'select'">
-                      <div class="font-bold">
-                        {{ field.label_t }}
-                      </div>
+                <div
+                  v-for="field in getFieldsForType(f.key)"
+                  :key="field.field_key"
+                  class="border-b py-3"
+                >
+                  <template v-if="field.html_type === 'select'">
+                    <div class="font-bold">
+                      {{ field.label_t }}
+                    </div>
+                    <div>
                       <div>
-                        <div>
-                          <div
-                            v-for="option in field.values.filter((option) =>
-                              Boolean(option.value),
-                            )"
-                            :key="option.value"
-                            :span="8"
-                          >
-                            <base-checkbox :value="option.value">
-                              {{ option.name_t }}
-                            </base-checkbox>
-                          </div>
+                        <div
+                          v-for="option in field.values.filter((option) =>
+                            Boolean(option.value),
+                          )"
+                          :key="option.value"
+                          :span="8"
+                        >
+                          <base-checkbox :value="option.value">
+                            {{ option.name_t }}
+                          </base-checkbox>
                         </div>
                       </div>
-                    </template>
-                    <template v-if="field.html_type === 'multiselect'">
-                      <div class="font-bold">
-                        {{ field.label_t }}
-                      </div>
+                    </div>
+                  </template>
+                  <template v-if="field.html_type === 'multiselect'">
+                    <div class="font-bold">
+                      {{ field.label_t }}
+                    </div>
+                    <div>
                       <div>
-                        <div>
-                          <div
-                            v-for="option in field.values.filter((option) =>
-                              Boolean(option.value),
-                            )"
-                            :key="option.value"
-                            :span="8"
-                          >
-                            <base-checkbox :value="option.value">
-                              {{ option.name_t }}
-                            </base-checkbox>
-                          </div>
+                        <div
+                          v-for="option in field.values.filter((option) =>
+                            Boolean(option.value),
+                          )"
+                          :key="option.value"
+                          :span="8"
+                        >
+                          <base-checkbox :value="option.value">
+                            {{ option.name_t }}
+                          </base-checkbox>
                         </div>
                       </div>
-                    </template>
-                    <template v-if="field.html_type === 'checkbox'">
-                      <div class="flex">
-                        <span class="font-bold w-1/2">
-                          {{ field.label_t }}
-                        </span>
-                        <div class="flex justify-around w-1/2">
-                          <base-checkbox>{{
-                            $t('worksiteFilters.yes')
-                          }}</base-checkbox>
-                          <base-checkbox>{{
-                            $t('worksiteFilters.no')
-                          }}</base-checkbox>
-                          <base-checkbox>{{
-                            $t('worksiteFilters.maybe')
-                          }}</base-checkbox>
-                        </div>
+                    </div>
+                  </template>
+                  <template v-if="field.html_type === 'checkbox'">
+                    <div class="flex">
+                      <span class="font-bold w-1/2">
+                        {{ field.label_t }}
+                      </span>
+                      <div class="flex justify-around w-1/2">
+                        <base-checkbox>{{
+                          $t('worksiteFilters.yes')
+                        }}</base-checkbox>
+                        <base-checkbox>{{
+                          $t('worksiteFilters.no')
+                        }}</base-checkbox>
+                        <base-checkbox>{{
+                          $t('worksiteFilters.maybe')
+                        }}</base-checkbox>
                       </div>
-                    </template>
-                  </div>
-                </template>
+                    </div>
+                  </template>
+                </div>
               </div>
             </div>
             <div class="status-group mb-2">

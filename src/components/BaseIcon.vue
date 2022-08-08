@@ -31,7 +31,7 @@
 <script lang="ts">
 /* eslint-disable global-require */
 import { kebabCase } from 'lodash';
-import { computed, defineComponent, PropType, ref } from '@vue/composition-api';
+import { computed, defineComponent, PropType, ref } from 'vue';
 import { ICON_MAP, ICON_SIZES, ICONS } from '@/constants';
 import { EventsMixin } from '@/mixins';
 

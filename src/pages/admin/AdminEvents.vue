@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { ref, computed, unref } from '@vue/composition-api';
+import { ref, computed, unref } from 'vue';
 import _ from 'lodash';
 import EventSearchTable from '@/components/admin/events/EventSearchTable.vue';
 import TitledCard from '@/components/cards/TitledCard.vue';

@@ -38,14 +38,14 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { ref } from '@vue/composition-api';
+import { ref } from 'vue';
 import _ from 'lodash';
-import { create } from 'vue-modal-dialogs';
 import { unwrap } from '@/utils/wrap';
 import useController from '@/use/phone/useController';
 import useContact from '@/use/phone/useContact';
 import ModelSelectInput from '@/components/forms/ModelSelectInput.vue';
 import MessageBox from '@/components/dialogs/MessageBox.vue';
+import { useDialog } from '@/use/useDialogs';
 
 export default {
   name: 'BoardStatus',
@@ -67,8 +67,8 @@ export default {
         context.root.$log.debug(
           'agent tried to end contact w/o making any changes!',
         );
-        const confirmDialog = create(MessageBox);
-        const resp = await confirmDialog({
+        const confirmDialog = useDialog({ component: MessageBox });
+        const resp = await confirmDialog.reveal({
           title: context.root.$t('phoneDashboard.are_you_sure'),
           content: context.root.$t(
             'phoneDashboard.confirm_changes_to_worksite',

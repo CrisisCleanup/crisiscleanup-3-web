@@ -42,7 +42,7 @@ import {
   PropType,
   ref,
   watch,
-} from '@vue/composition-api';
+} from 'vue';
 import Table from '@/components/Table.vue';
 import { getQueryString } from '@/utils/urls';
 import useHttp from '@/use/useHttp';
@@ -166,13 +166,6 @@ export default defineComponent({
       throttle,
       getData,
     };
-  },
-  watch: {
-    query: {
-      handler() {
-        throttle(this.getData, 1000)();
-      },
-    },
   },
 });
 </script>

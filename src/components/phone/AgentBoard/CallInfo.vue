@@ -84,8 +84,8 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { onMounted } from '@vue/composition-api';
-import { useStore } from '@u3u/vue-hooks';
+import { onMounted } from 'vue';
+import { useStore } from 'vuex';
 import CaseCard from '@/components/cards/Case.vue';
 import useEnums from '@/use/useEnums';
 import useContact from '@/use/phone/useContact';
@@ -119,7 +119,7 @@ export default {
         await actions.setCase(null);
         return;
       }
-      const model = await store.value.$db().model(type);
+      const model = await store.$db().model(type);
       const caseItem = await model.fetchOrFindId(caseId);
       await actions.setCase(caseItem);
       await setCurrentIncident(caseItem.incident);

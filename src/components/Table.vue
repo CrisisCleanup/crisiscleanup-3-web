@@ -239,22 +239,21 @@
             class="mr-3 text-base"
           />
           <div>
-            <template v-for="trigger in paginationTriggers">
-              <span
-                :key="trigger"
-                :class="{
-                  'rounded-full border px-3 py-1 bg-white shadow-inner':
-                    trigger === pagination.current,
-                }"
-                class="cursor-pointer mx-4 text-base"
-                @click="
-                  () => {
-                    pageChangeHandle(trigger);
-                  }
-                "
-                >{{ trigger }}</span
-              >
-            </template>
+            <span
+              v-for="trigger in paginationTriggers"
+              :key="trigger"
+              :class="{
+                'rounded-full border px-3 py-1 bg-white shadow-inner':
+                  trigger === pagination.current,
+              }"
+              class="cursor-pointer mx-4 text-base"
+              @click="
+                () => {
+                  pageChangeHandle(trigger);
+                }
+              "
+              >{{ trigger }}
+            </span>
           </div>
           <base-button
             :disabled="isNextButtonDisabled"

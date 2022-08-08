@@ -1,4 +1,4 @@
-import { ref, Ref } from '@vue/composition-api';
+import { ref, Ref } from 'vue';
 import axios from 'axios';
 import { getErrorMessage } from '@/utils/errors';
 

@@ -44,9 +44,9 @@
 </template>
 <script>
 import VueTypes from 'vue-types';
-import DragDrop from '@/components/DragDrop';
+import DragDrop from '@/components/DragDrop.vue';
 import Worksite from '@/models/Worksite';
-import { getErrorMessage } from '../utils/errors';
+import { getErrorMessage } from '@/utils/errors';
 
 export default {
   name: 'WorksiteImageSection',

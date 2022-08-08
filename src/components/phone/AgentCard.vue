@@ -87,18 +87,12 @@
 </template>
 
 <script>
-import { create } from 'vue-modal-dialogs';
-import {
-  reactive,
-  ref,
-  onMounted,
-  watch,
-  computed,
-} from '@vue/composition-api';
-import { useStore, useRouter } from '@u3u/vue-hooks';
+import { reactive, ref, onMounted, watch, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import { getModule } from 'vuex-module-decorators';
 import VueTypes from 'vue-types';
-import ComponentDialog from '@/components/dialogs/ComponentDialog';
+import { useStore } from 'vuex';
+import ComponentDialog from '@/components/dialogs/ComponentDialog.vue';
 import ContactMoreInfo from '@/components/phone/ContactMoreInfo.vue';
 import CallerIDEditCard from '@/components/phone/CallerIDEditCard.vue';
 import useAgentState from '@/use/phone/useAgentState';
@@ -114,7 +108,8 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import useIncident from '@/use/worksites/useIncident';
 import { EventBus } from '@/event-bus';
 import ControllerStore from '@/store/modules/phone/controller';
-import Avatar from '@/components/Avatar';
+import Avatar from '@/components/Avatar.vue';
+import { useDialog } from '@/use/useDialogs';
 
 const useValidations = ({ currentUser }) => {
   const editCardState = useToggle();
@@ -190,7 +185,7 @@ export default {
   setup(props, context) {
     const showMoreState = useToggle({ state: true });
     const store = useStore();
-    const ctrlStore = getModule(ControllerStore, store.value);
+    const ctrlStore = getModule(ControllerStore, store);
     const trainingState = useToggle();
 
     const { onTrainingComplete } = useTraining({
@@ -227,8 +222,8 @@ export default {
       if (wasOnline) {
         await agent.value.toggleOnline(false);
       }
-      const compDialog = create(ComponentDialog);
-      const modalAction = await compDialog({
+      const compDialog = useDialog({ component: ComponentDialog });
+      const modalAction = await compDialog.reveal({
         title: context.root.$t('phoneDashboard.enter_phone_number'),
         component: OutboundDialer,
         actionText: context.root.$t('actions.dial'),

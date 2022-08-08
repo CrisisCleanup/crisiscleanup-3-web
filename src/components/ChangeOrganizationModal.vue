@@ -239,7 +239,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from '@vue/composition-api';
+import { defineComponent, ref, onMounted } from 'vue';
 import OrganizationSearchInput from './OrganizationSearchInput.vue';
 import { hash } from '../utils/promise';
 import { nestUsers } from '../utils/form';

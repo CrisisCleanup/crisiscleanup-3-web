@@ -59,7 +59,7 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { toRefs, watchEffect } from '@vue/composition-api';
+import { toRefs, watchEffect } from 'vue';
 import useSelectForm from '@/use/useSelectForm';
 import FormSelect from '@/components/FormSelect.vue';
 

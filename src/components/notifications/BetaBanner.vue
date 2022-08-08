@@ -19,7 +19,7 @@
 
 <script>
 import VueTypes from 'vue-types';
-import { onMounted, watch, ref } from '@vue/composition-api';
+import { onMounted, watch, ref } from 'vue';
 import * as Sentry from '@sentry/browser';
 import BetaFeature from '@/models/BetaFeature';
 import useUser from '@/use/user/useUser';

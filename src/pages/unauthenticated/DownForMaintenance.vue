@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from '@vue/composition-api';
+import { ref, computed, onMounted } from 'vue';
 
 export default {
   name: 'DownForMaintenance',

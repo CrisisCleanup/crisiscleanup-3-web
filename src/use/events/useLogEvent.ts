@@ -1,8 +1,10 @@
-import { useMutations } from '@u3u/vue-hooks';
+import { mapMutations } from 'vuex';
 import moment from 'moment';
 
 export default () => {
-  const { addEvent } = useMutations('events', ['addEvent']);
+  // maybe replaced by:
+  // const addEvent = (event: Record<string, unknown>) => store.commit('events/addEvent', event);
+  const { addEvent } = mapMutations('events', ['addEvent']);
 
   const logEvent = (eventKey: string) => {
     addEvent({

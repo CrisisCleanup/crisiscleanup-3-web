@@ -2,8 +2,8 @@
  * Use Contact Hook
  */
 
-import { ref, computed, watch } from '@vue/composition-api';
-import { useState, useGetters } from '@u3u/vue-hooks';
+import { ref, computed, watch, ComputedRef } from 'vue';
+import { mapState, mapGetters, useStore } from 'vuex';
 import _ from 'lodash';
 import Contact, { CallType, ContactActions } from '@/models/phone/Contact';
 import { useIntervalFn } from '@/use/useIntervalFn';
@@ -29,19 +29,30 @@ export default () => {
     currentContact.value ? currentContact.value.isReady : false,
   );
 
-  const { currentCase } = useState('phone.controller', ['currentCase']);
-  const { activeCaseId } = useGetters('phone.controller', ['activeCaseId']);
-  const state = {
-    ...useState('entities/phone/contact', [
-      'dnis',
-      'worksites',
-      'pdas',
-      'locale',
-      'outbounds',
-      'inbound',
-      'outbound',
-    ]),
-  };
+  const store = useStore();
+  const currentCase = computed(
+    () => store.state['phone.controller'].currentCase,
+  );
+  const activeCaseId = computed(
+    () => store.getters['phone.controller'].activeCaseId,
+  );
+  const phoneContactStore = computed(
+    () => store.state['entities/phone/contact'],
+  );
+
+  const items = [
+    'dnis',
+    'worksites',
+    'pdas',
+    'locale',
+    'outbounds',
+    'inbound',
+    'outbound',
+  ] as const;
+  const state = items.reduce((acc, key) => {
+    acc[key] = computed(() => phoneContactStore.value[key]);
+    return acc;
+  }, {} as Record<typeof items[number], ComputedRef>);
 
   const callType = computed(() => {
     if (currentContact.value) {

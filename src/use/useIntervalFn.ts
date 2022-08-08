@@ -1,4 +1,4 @@
-import { ref, onUnmounted, getCurrentInstance } from '@vue/composition-api';
+import { ref, onUnmounted, getCurrentInstance } from 'vue';
 
 /**
  * Wrapper for `setInterval` with controls

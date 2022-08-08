@@ -1,9 +1,7 @@
-import VueLog from '@dreipol/vue-log';
 import VuexORM from '@vuex-orm/core';
 import VuexORMAxios from '@vuex-orm/plugin-axios';
 import axios from 'axios';
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createStore } from 'vuex';
 import database from './database';
 import auth from './modules/auth';
 import events from './modules/events';
@@ -27,12 +25,9 @@ VuexORM.use(VuexORMAxios, {
   baseURL: `${process.env.VUE_APP_API_BASE_URL}`,
 });
 
-Vue.use(Vuex);
-Vue.use(VueLog);
-
 const debug = process.env.NODE_ENV !== 'production';
 
-export default new Vuex.Store({
+export default createStore({
   modules: {
     auth,
     events,

@@ -1,17 +1,17 @@
 import '@/assets/css/tailwind.css';
-import Autocomplete from '@/components/Autocomplete';
-import Badge from '@/components/Badge';
-import BaseButton from '@/components/BaseButton';
-import BaseCheckbox from '@/components/BaseCheckbox';
-import BaseIcon from '@/components/BaseIcon';
-import BaseInput from '@/components/BaseInput';
-import BaseLink from '@/components/BaseLink';
-import BaseRadio from '@/components/BaseRadio';
-import BaseText from '@/components/BaseText';
-import FormSelect from '@/components/FormSelect';
-import Modal from '@/components/Modal';
-import Spinner from '@/components/Spinner';
-import Tag from '@/components/Tag';
+import Autocomplete from '@/components/Autocomplete.vue';
+import Badge from '@/components/Badge.vue';
+import BaseButton from '@/components/BaseButton.vue';
+import BaseCheckbox from '@/components/BaseCheckbox.vue';
+import BaseIcon from '@/components/BaseIcon.vue';
+import BaseInput from '@/components/BaseInput.vue';
+import BaseLink from '@/components/BaseLink.vue';
+import BaseRadio from '@/components/BaseRadio.vue';
+import BaseText from '@/components/BaseText.vue';
+import FormSelect from '@/components/FormSelect.vue';
+import Modal from '@/components/Modal.vue';
+import Spinner from '@/components/Spinner.vue';
+import Tag from '@/components/Tag.vue';
 import VueCompositionApi from '@vue/composition-api';
 import VueI18n from 'vue-i18n';
 import {
@@ -22,9 +22,8 @@ import {
   secondsToHm,
   snakeToTitleCase,
 } from '@/filters';
-import Authenticated from '@/layouts/Authenticated';
-import Unauthenticated from '@/layouts/Unauthenticated';
-import VueLog from '@dreipol/vue-log';
+import Authenticated from '@/layouts/Authenticated.vue';
+import Unauthenticated from '@/layouts/Unauthenticated.vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -43,13 +42,14 @@ import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 import VueAxios from 'vue-axios';
 import Popover from 'vue-js-popover';
-import * as ModalDialogs from 'vue-modal-dialogs';
 import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 // Import Vue plugins
 import Vuex from 'vuex';
 import { getOrganizationName } from '../src/filters';
+import Logger from 'js-logger';
 
+Logger.useDefaults();
 library.add(fas);
 
 // Base Components
@@ -79,7 +79,6 @@ Vue.config.productionTip = false;
 Vue.use(VueResize);
 Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
-Vue.use(ModalDialogs);
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'), { moment });
 
@@ -90,7 +89,6 @@ Vue.use(Toasted, {
 });
 
 Vue.use(VueI18n);
-Vue.use(VueLog);
 Vue.use(Popover);
 Vue.version = '2.0';
 Vue.use(VueCompositionApi);

@@ -2,8 +2,8 @@
  * Use User Hook
  */
 
-import { computed } from '@vue/composition-api';
-import { useGetters } from '@u3u/vue-hooks';
+import { computed } from 'vue';
+import { mapGetters, useStore } from 'vuex';
 import User from '@/models/User';
 
 /**
@@ -11,11 +11,9 @@ import User from '@/models/User';
  * @returns {{currentUser: ComputedRef<User | null>}}
  */
 export default () => {
-  const getters = {
-    ...useGetters('auth', ['userId']),
-  };
-
-  const currentUser = computed(() => User.find(getters.userId.value));
+  const store = useStore();
+  const userId = computed(() => store.getters['auth/userId']);
+  const currentUser = computed(() => User.find(userId.value));
   return {
     currentUser,
   };

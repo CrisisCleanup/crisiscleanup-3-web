@@ -16,7 +16,7 @@
   </label>
 </template>
 <script lang="ts">
-import { ref, defineComponent, onMounted } from '@vue/composition-api';
+import { ref, defineComponent, onMounted } from 'vue';
 import { EventsMixin } from '@/mixins';
 import useLogEvent from '@/use/events/useLogEvent';
 

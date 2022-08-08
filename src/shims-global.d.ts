@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import VueLog from '@dreipol/vue-log';
+import type { ILogger } from 'js-logger';
 import moment from 'moment';
 import { Toasted } from 'vue-toasted';
 import { AxiosStatic } from 'axios';
@@ -9,7 +9,7 @@ import PhoneService from '@/services/phone.service';
 
 declare global {
   interface CustomVue extends Vue {
-    $log: VueLog;
+    $log: ILogger;
     $can: any;
     $phoneService: PhoneService;
     $router: Router;
