@@ -44,7 +44,6 @@
       "
       :placeholder="$t('phoneDashboard.notes')"
       @input="updateNotes"
-      required
     ></textarea>
     <base-button
       class="self-end"
