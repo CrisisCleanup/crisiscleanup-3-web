@@ -275,6 +275,7 @@
               <PhoneComponentButton
                 name="chat"
                 class="phone-button"
+                component-width="MD"
                 @open="
                   () => {
                     updateUserState({
@@ -356,6 +357,7 @@
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
+                component-width="LG"
                 name="news"
                 class="phone-button"
                 @open="
@@ -413,6 +415,7 @@
                 icon="phone-history"
                 icon-size="large"
                 icon-class="p-1"
+                component-width="LG"
                 v-if="callHistory"
               >
                 <template v-slot:component>
@@ -442,6 +445,7 @@
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
+                component-width="LG"
                 name="leaderboard"
                 class="phone-button"
                 icon="leaderboard"

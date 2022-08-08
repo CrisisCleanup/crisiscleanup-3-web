@@ -51,6 +51,7 @@
             </div>
             <div class="flex flex-col">
               <base-input
+                text-area
                 @enter="sendMessage"
                 class=""
                 v-model="currentMessage"

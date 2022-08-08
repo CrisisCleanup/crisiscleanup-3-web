@@ -17,8 +17,14 @@
       </slot>
     </div>
     <div
-      class="phone-component fixed ml-12 z-30"
-      :style="{ top: top }"
+      class="phone-component absolute top-10 ml-12 z-30"
+      :style="
+        componentWidth === 'LG'
+          ? 'width: 60vw; margin-left: -60vw'
+          : componentWidth === 'MD'
+          ? 'width: 40vw; margin-left: -40vw'
+          : 'width: 30vw; margin-left: -30vw'
+      "
       :class="[componentClass]"
       v-show="showComponent"
     >
@@ -70,6 +76,7 @@ export default {
     componentClass: { type: String, default: null, required: false },
     iconSize: { type: String, default: null, required: false },
     keepOpen: { type: Boolean, default: false, required: false },
+    componentWidth: { type: String, default: 'SM' },
   },
   methods: {
     mounted() {
@@ -105,8 +112,6 @@ export default {
   transform: translateY(-3rem);
   min-height: 10vh;
   max-height: 60vh;
-  width: 60vw;
-  margin-left: -60vw;
   height: 90%;
   @apply shadow-lg bg-white sm:mt-12 overflow-auto;
 }
