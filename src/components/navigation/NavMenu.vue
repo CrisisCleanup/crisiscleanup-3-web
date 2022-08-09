@@ -6,8 +6,13 @@
       </div>
     </router-link>
 
-    <div class="menu">
-      <NavButton v-for="r in routes" :key="r.key" :route="r" />
+    <div class="menu overflow-y-auto">
+      <NavButton
+        class="overflow-y-auto"
+        v-for="r in routes"
+        :key="r.key"
+        :route="r"
+      />
     </div>
   </div>
 </template>
