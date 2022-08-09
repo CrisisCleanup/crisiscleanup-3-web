@@ -42,7 +42,6 @@ import Vue from 'vue';
 import VueAutosuggest from 'vue-autosuggest';
 import VueAxios from 'vue-axios';
 import Popover from 'vue-js-popover';
-import * as ModalDialogs from 'vue-modal-dialogs';
 import vSelect from 'vue-select';
 import Toasted from 'vue-toasted';
 // Import Vue plugins
@@ -80,7 +79,6 @@ Vue.config.productionTip = false;
 Vue.use(VueResize);
 Vue.use(VueAutosuggest);
 Vue.use(VTooltip);
-Vue.use(ModalDialogs);
 Vue.use(VueAxios, axios);
 Vue.use(require('vue-moment'), { moment });
 
