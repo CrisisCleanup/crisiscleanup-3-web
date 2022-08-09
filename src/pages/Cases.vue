@@ -939,7 +939,6 @@
       </div>
       <div v-if="!spinning && $mq === 'sm'">
         <WorksiteSearchInput
-          width="300px"
           icon="search"
           :suggestions="[
             {
@@ -951,7 +950,6 @@
           display-property="name"
           :placeholder="$t('actions.search')"
           size="medium"
-          class="mx-2"
           @selectedExisting="handleChange"
           @search="onSearch"
           @clear="onSearch"
