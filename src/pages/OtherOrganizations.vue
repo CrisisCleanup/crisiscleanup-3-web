@@ -147,9 +147,9 @@
 <script>
 import { mapState } from 'vuex';
 import { throttle } from 'lodash';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import User from '@/models/User';
-import { getQueryString } from '../utils/urls';
+import { getQueryString } from '@/utils/urls';
 import enums from '../store/modules/enums';
 import { cachedGet } from '@/utils/promise';
 

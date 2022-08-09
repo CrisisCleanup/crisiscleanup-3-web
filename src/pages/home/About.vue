@@ -791,7 +791,7 @@
 </template>
 
 <script>
-import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
+import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home.vue';
 
 export default {
   name: 'AboutPage',

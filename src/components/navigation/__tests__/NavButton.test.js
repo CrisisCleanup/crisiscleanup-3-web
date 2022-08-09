@@ -6,7 +6,7 @@
  */
 
 import { mount } from '@vue/test-utils';
-import NavButton from '../NavButton';
+import NavButton from '../NavButton.vue';
 
 const $route = {
   path: '/mockroute',

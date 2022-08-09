@@ -1054,21 +1054,21 @@ import Incident from '@/models/Incident';
 import Organization from '@/models/Organization';
 import Location from '@/models/Location';
 import LocationType from '@/models/LocationType';
-import WorksiteMap from '@/components/WorksiteMap';
-import WorksiteFilters from '@/components/WorksiteFilters';
+import WorksiteMap from '@/components/WorksiteMap.vue';
+import WorksiteFilters from '@/components/WorksiteFilters.vue';
 import { getQueryString } from '@/utils/urls';
 import { getColorForStatus } from '@/filters';
 import { forceFileDownload } from '@/utils/downloads';
 import { getErrorMessage } from '@/utils/errors';
 import Team from '@/models/Team';
 import { templates } from '@/icons/icons_templates';
-import SviSlider from '@/components/SviSlider';
+import SviSlider from '@/components/SviSlider.vue';
 import { EventBus } from '@/event-bus';
-import WorksiteTable from './WorksiteTable';
-import WorksiteSearchInput from '../components/WorksiteSearchInput';
-import StatusDropdown from '../components/StatusDropdown';
-import Slider from '@/components/Slider';
-import CaseHeader from '@/components/CaseHeader';
+import WorksiteTable from './WorksiteTable.vue';
+import WorksiteSearchInput from '../components/WorksiteSearchInput.vue';
+import StatusDropdown from '../components/StatusDropdown.vue';
+import Slider from '@/components/Slider.vue';
+import CaseHeader from '@/components/CaseHeader.vue';
 
 export default {
   name: 'Cases',

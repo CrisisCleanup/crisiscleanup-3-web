@@ -1,4 +1,4 @@
-import BaseIcon from '@/components/BaseIcon';
+import BaseIcon from '@/components/BaseIcon.vue';
 import { ICONS, ICON_SIZES } from '@/constants';
 
 export default {

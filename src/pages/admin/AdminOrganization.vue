@@ -749,16 +749,16 @@ import Location from '@/models/Location';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
 import LocationType from '@/models/LocationType';
-import Capability from '@/pages/unauthenticated/Capability';
-import DragDrop from '@/components/DragDrop';
-import Loader from '../../components/Loader';
-import { getErrorMessage } from '../../utils/errors';
-import LocationTool from '../../components/LocationTool';
-import { hash, cachedGet } from '../../utils/promise';
-import { DialogsMixin, CapabilityMixin } from '../../mixins';
-import { mapTileLayer } from '../../utils/map';
-import GroupSearchInput from '../../components/GroupSearchInput';
-import FloatingInput from '@/components/FloatingInput';
+import Capability from '@/pages/unauthenticated/Capability.vue';
+import DragDrop from '@/components/DragDrop.vue';
+import Loader from '@/components/Loader.vue';
+import { getErrorMessage } from '@/utils/errors';
+import LocationTool from '@/components/LocationTool.vue';
+import { hash, cachedGet } from '@/utils/promise';
+import { DialogsMixin, CapabilityMixin } from '@/mixins';
+import { mapTileLayer } from '@/utils/map';
+import GroupSearchInput from '@/components/GroupSearchInput.vue';
+import FloatingInput from '@/components/FloatingInput.vue';
 
 export default {
   name: 'AdminOrganization',

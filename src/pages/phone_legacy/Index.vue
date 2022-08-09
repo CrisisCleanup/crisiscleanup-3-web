@@ -200,9 +200,9 @@ import PhoneStatus from '@/models/PhoneStatus';
 import Worksite from '@/models/Worksite';
 import Pda from '@/models/Pda';
 import { WorksitesMixin } from '@/mixins';
-import CaseCard from '@/components/cards/case/CaseCard';
+import CaseCard from '@/components/cards/case/CaseCard.vue';
 // eslint-disable-next-line no-unused-vars
-import CaseForm from '../CaseForm';
+import CaseForm from '../CaseForm.vue';
 
 export default {
   name: 'PhoneLegacy',

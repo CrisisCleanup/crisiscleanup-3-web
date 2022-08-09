@@ -1,5 +1,5 @@
 import { text, withKnobs } from '@storybook/addon-knobs';
-import Spinner from '@/components/Spinner';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
   title: 'Elements/Spinner',

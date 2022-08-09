@@ -1,4 +1,4 @@
-import NotFoundPage from '@/pages/NotFound';
+import NotFoundPage from '@/pages/NotFound.vue';
 
 export default {
   title: 'Pages/NotFound',

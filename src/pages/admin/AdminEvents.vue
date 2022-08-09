@@ -66,7 +66,7 @@ import TitledCard from '@/components/cards/TitledCard.vue';
 import EventForm from '@/components/admin/events/EventForm.vue';
 import EventPreview from '@/components/admin/events/EventPreview.vue';
 import useEventPreview from '@/use/events/useEventPreview';
-import LocaleForm from '@/components/forms/LocaleForm';
+import LocaleForm from '@/components/forms/LocaleForm.vue';
 import { makeLocaleInputs } from '@/utils/form';
 import Event from '@/models/Event';
 import { unwrap } from '@/utils/wrap';

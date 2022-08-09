@@ -206,11 +206,11 @@
 
 <script>
 import Organization from '@/models/Organization';
-import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home';
+import HomeLayout, { HomeNav, HomeActions } from '@/layouts/Home.vue';
 import { getErrorMessage } from '@/utils/errors';
-import OrganizationSearchInput from '@/components/OrganizationSearchInput';
+import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
 import { CapabilityMixin, ValidateMixin } from '@/mixins';
-import Capability from '@/pages/unauthenticated/Capability';
+import Capability from '@/pages/unauthenticated/Capability.vue';
 
 export default {
   name: 'Register',

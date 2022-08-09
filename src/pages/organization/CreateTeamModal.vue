@@ -289,11 +289,11 @@ import { mapState } from 'vuex';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
 import { UserMixin } from '@/mixins';
-import Avatar from '../../components/Avatar';
-import { getColorForStatus } from '../../filters';
-import { getErrorMessage } from '../../utils/errors';
-import { getQueryString } from '../../utils/urls';
-import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
+import Avatar from '@/components/Avatar.vue';
+import { getColorForStatus } from '@/filters';
+import { getErrorMessage } from '@/utils/errors';
+import { getQueryString } from '@/utils/urls';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
 
 export default {
   name: 'CreateTeamModal',

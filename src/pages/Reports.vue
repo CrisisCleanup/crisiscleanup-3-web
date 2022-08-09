@@ -73,7 +73,7 @@ import User from '@/models/User';
 import Loader from '@/components/Loader.vue';
 import EventLog from '../models/EventLog';
 import Report from '../models/Report';
-import ExampleReports from '../components/reports/ExampleReports';
+import ExampleReports from '../components/reports/ExampleReports.vue';
 
 export default {
   name: 'Reports',

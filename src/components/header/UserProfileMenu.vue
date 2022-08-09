@@ -45,8 +45,9 @@
     </v-popover>
   </div>
 </template>
+
 <script>
-import Avatar from '@/components/Avatar';
+import Avatar from '@/components/Avatar.vue';
 import { UserMixin } from '@/mixins';
 
 export default {

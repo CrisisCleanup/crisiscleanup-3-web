@@ -74,8 +74,8 @@ import { createTags } from '@johmun/vue-tags-input';
 import _ from 'lodash';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
-import OrganizationSearchInput from '@/components/OrganizationSearchInput';
-import { getErrorMessage } from '../../utils/errors';
+import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
+import { getErrorMessage } from '@/utils/errors';
 
 const EMAIL_REGEX = /[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+/;
 

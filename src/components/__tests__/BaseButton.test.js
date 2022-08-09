@@ -6,7 +6,7 @@
  */
 
 import { mount } from '@vue/test-utils';
-import BaseButton from '../BaseButton';
+import BaseButton from '../BaseButton.vue';
 
 const mountWithOptions = (props = {}) =>
   mount(BaseButton, {

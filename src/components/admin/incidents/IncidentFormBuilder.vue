@@ -84,13 +84,14 @@
     </div>
   </div>
 </template>
+
 <script>
 import Draggable from 'vuedraggable';
 import { sortBy } from 'lodash/collection';
 import { debounce } from 'lodash';
 import { groupBy } from '@/utils/array';
 import { nest } from '@/utils/form';
-import NestedBuilderItem from '@/components/admin/incidents/NestedBuilderItem';
+import NestedBuilderItem from '@/components/admin/incidents/NestedBuilderItem.vue';
 
 export default {
   name: 'IncidentFormBuilder',

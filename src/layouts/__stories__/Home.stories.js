@@ -1,4 +1,4 @@
-import HomeLayout from '@/layouts/Home';
+import HomeLayout from '@/layouts/Home.vue';
 
 export default {
   title: 'Layouts/HomeLayout',

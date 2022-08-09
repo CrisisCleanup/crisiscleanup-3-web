@@ -1,10 +1,10 @@
-import EmbedMap from '@/pages/unauthenticated/EmbedMap';
+import EmbedMap from '@/pages/unauthenticated/EmbedMap.vue';
 import InvitationSignup from './InvitationSignup.vue';
 import PreliminaryAssessment from './PreliminaryAssessment.vue';
 import PrintToken from './PrintToken.vue';
 import Survivors from './Survivors.vue';
-import ResetPassword from './ResetPassword';
-import PewPew from './PewPew';
+import ResetPassword from './ResetPassword.vue';
+import PewPew from './PewPew.vue';
 import DownForMaintenance from './DownForMaintenance.vue';
 
 const routes = [

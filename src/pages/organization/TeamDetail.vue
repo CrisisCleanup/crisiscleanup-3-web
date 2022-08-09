@@ -558,13 +558,13 @@ import * as L from 'leaflet';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
 import { UserMixin, DialogsMixin } from '@/mixins';
-import Avatar from '../../components/Avatar';
-import { getColorForStatus } from '../../filters';
-import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
-import { getErrorMessage } from '../../utils/errors';
-import WorkTypeMap from '../../components/WorkTypeMap';
-import { getQueryString } from '../../utils/urls';
-import Table from '../../components/Table';
+import Avatar from '@/components/Avatar.vue';
+import { getColorForStatus } from '@/filters';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
+import { getErrorMessage } from '@/utils/errors';
+import WorkTypeMap from '@/components/WorkTypeMap.vue';
+import { getQueryString } from '@/utils/urls';
+import Table from '@/components/Table.vue';
 
 export default {
   name: 'TeamDetail',

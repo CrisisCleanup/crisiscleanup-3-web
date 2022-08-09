@@ -137,10 +137,10 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import InvitationRequest from '@/models/InvitationRequest';
 import Invitation from '@/models/Invitation';
-import InviteUsers from './InviteUsers';
+import InviteUsers from './InviteUsers.vue';
 
 export default {
   name: 'Invitations',

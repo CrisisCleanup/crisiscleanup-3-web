@@ -7,9 +7,9 @@
 
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import BaseButton from '@/components/BaseButton';
+import BaseButton from '@/components/BaseButton.vue';
 import { snakeToTitleCase } from '@/filters';
-import WorksiteFilters from '../WorksiteFilters';
+import WorksiteFilters from '../WorksiteFilters.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

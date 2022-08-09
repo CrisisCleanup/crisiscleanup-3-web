@@ -111,7 +111,7 @@
 import { uniqWith } from 'lodash/array';
 import { isEqual } from 'lodash/lang';
 import { UserMixin } from '@/mixins';
-import ChatMessage from '@/components/chat/ChatMessage';
+import ChatMessage from '@/components/chat/ChatMessage.vue';
 import { useWebSockets } from '@/use/useWebSockets';
 import { getQueryString } from '@/utils/urls';
 import { getErrorMessage } from '@/utils/errors';

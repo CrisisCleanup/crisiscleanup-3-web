@@ -109,9 +109,9 @@ import { UserMixin } from '@/mixins';
 import User from '@/models/User';
 import Team from '@/models/Team';
 import Worksite from '@/models/Worksite';
-import Avatar from '../../components/Avatar';
-import CreateTeamModal from './CreateTeamModal';
-import { getQueryString } from '../../utils/urls';
+import Avatar from '@/components/Avatar.vue';
+import CreateTeamModal from './CreateTeamModal.vue';
+import { getQueryString } from '@/utils/urls';
 import enums from '../../store/modules/enums';
 
 export default {

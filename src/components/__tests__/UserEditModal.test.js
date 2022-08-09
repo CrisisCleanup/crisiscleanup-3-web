@@ -8,7 +8,7 @@
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
 import User from '@/models/__mocks__/User';
-import UserEditModal from '@/pages/organization/UserEditModal';
+import UserEditModal from '@/pages/organization/UserEditModal.vue';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

@@ -180,9 +180,9 @@
 
 <script>
 import Layer from '@/models/Layer';
-import DragDrop from '@/components/DragDrop';
+import DragDrop from '@/components/DragDrop.vue';
 import LocationType from '@/models/LocationType';
-import { getErrorMessage } from '../utils/errors';
+import { getErrorMessage } from '@/utils/errors';
 
 export default {
   name: 'LayerUploadTool',

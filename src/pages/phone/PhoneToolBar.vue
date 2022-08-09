@@ -9,8 +9,9 @@
     </div>
   </div>
 </template>
+
 <script>
-import Agent from '@/components/phone/Agent';
+import Agent from '@/components/phone/Agent.vue';
 import { ConnectFirstMixin } from '@/mixins';
 
 export default {

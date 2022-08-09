@@ -285,10 +285,10 @@ import Organization from '@/models/Organization';
 import LocationType from '@/models/LocationType';
 import User from '@/models/User';
 import { getWorksiteLayer, mapAttribution, mapTileLayer } from '@/utils/map';
-import LayerUploadTool from '@/components/LayerUploadTool';
+import LayerUploadTool from '@/components/LayerUploadTool.vue';
 import { EventsMixin } from '@/mixins';
-import MapButton from './MapButton';
-import { getQueryString } from '../utils/urls';
+import MapButton from './MapButton.vue';
+import { getQueryString } from '@/utils/urls';
 
 export default {
   name: 'LocationTool',

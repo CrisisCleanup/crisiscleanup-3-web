@@ -21,7 +21,7 @@
 
 <script>
 import { makeTableColumns } from '@/utils/table';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 
 export default {
   name: 'TicketDashboard',

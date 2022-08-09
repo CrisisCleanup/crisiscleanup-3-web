@@ -76,7 +76,7 @@ export default {
   computed: {
     dynamicComponent() {
       if (typeof this.component === 'string') {
-        return () => import(`@/components/${this.component}`);
+        return () => import(`@/components/${this.component}.vue`);
       }
       return this.component;
     },

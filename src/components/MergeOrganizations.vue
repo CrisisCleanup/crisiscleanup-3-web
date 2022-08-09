@@ -73,8 +73,9 @@
     </modal>
   </div>
 </template>
+
 <script>
-import OrganizationSearchInput from '@/components/OrganizationSearchInput';
+import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
 import { getErrorMessage } from '@/utils/errors';
 
 export default {

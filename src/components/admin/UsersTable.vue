@@ -52,7 +52,7 @@
 <script>
 import axios from 'axios';
 import { mapMutations } from 'vuex';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import User from '@/models/User';
 import Role from '@/models/Role';
 import { DialogsMixin } from '@/mixins';

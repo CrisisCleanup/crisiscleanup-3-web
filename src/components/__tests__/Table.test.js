@@ -8,8 +8,8 @@
 import { shallowMount } from '@vue/test-utils';
 import { Store } from 'vuex-mock-store';
 import moment from 'moment';
-import BaseCheckbox from '../BaseCheckbox';
-import Table from '../Table';
+import BaseCheckbox from '../BaseCheckbox.vue';
+import Table from '../Table.vue';
 
 const TestColumns = [
   {

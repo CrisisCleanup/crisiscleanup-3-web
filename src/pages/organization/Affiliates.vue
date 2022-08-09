@@ -154,7 +154,8 @@
 import Affiliate from '@/models/Affiliate';
 import Organization from '@/models/Organization';
 import User from '@/models/User';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
+
 export default {
   name: 'Affiliates',
   components: { Table },

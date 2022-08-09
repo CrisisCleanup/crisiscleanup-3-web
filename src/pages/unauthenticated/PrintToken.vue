@@ -107,11 +107,11 @@
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home';
-import WorksiteStatusDropdown from '../../components/WorksiteStatusDropdown';
-import Loader from '../../components/Loader';
-import { getErrorMessage } from '../../utils/errors';
-import WorksiteImageSection from '@/components/WorksiteImageSection';
+import HomeLayout from '@/layouts/Home.vue';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
+import Loader from '@/components/Loader.vue';
+import { getErrorMessage } from '@/utils/errors';
+import WorksiteImageSection from '@/components/WorksiteImageSection.vue';
 
 export default {
   components: {

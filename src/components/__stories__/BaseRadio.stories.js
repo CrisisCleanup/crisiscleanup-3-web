@@ -1,4 +1,4 @@
-import BaseRadio from '@/components/BaseRadio';
+import BaseRadio from '@/components/BaseRadio.vue';
 
 export default {
   title: 'Basics/BaseRadio',

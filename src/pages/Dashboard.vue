@@ -437,19 +437,19 @@ import { getErrorMessage } from '@/utils/errors';
 import { colors } from '@/icons/icons_templates';
 import Incident from '@/models/Incident';
 import WorksiteRequest from '@/models/WorksiteRequest';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import {
   getColorForStatus,
   getWorkTypeImage,
   getWorkTypeName,
 } from '@/filters';
-import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
 import { forceFileDownload } from '@/utils/downloads';
-import Loader from '@/components/Loader';
-import InviteUsers from './organization/InviteUsers';
-import RedeployRequest from './RedeployRequest';
-import { DialogsMixin } from '../mixins';
-import UserTransferRequestTable from '../components/UserTransferRequestTable';
+import Loader from '@/components/Loader.vue';
+import InviteUsers from './organization/InviteUsers.vue';
+import RedeployRequest from './RedeployRequest.vue';
+import { DialogsMixin } from '@/mixins';
+import UserTransferRequestTable from '../components/UserTransferRequestTable.vue';
 
 export default {
   name: 'Dashboard',

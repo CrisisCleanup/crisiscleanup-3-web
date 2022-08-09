@@ -48,13 +48,13 @@
 </template>
 
 <script>
-import LayerUploadTool from '@/components/LayerUploadTool';
-import LocationTable from '../../components/LocationTable';
-import User from '../../models/User';
-import Location from '../../models/Location';
-import LocationType from '../../models/LocationType';
-import { getQueryString } from '../../utils/urls';
-import { getErrorMessage } from '../../utils/errors';
+import LayerUploadTool from '@/components/LayerUploadTool.vue';
+import LocationTable from '@/components/LocationTable.vue';
+import User from '@/models/User';
+import Location from '@/models/Location';
+import LocationType from '@/models/LocationType';
+import { getQueryString } from '@/utils/urls';
+import { getErrorMessage } from '@/utils/errors';
 
 export default {
   name: 'Layers',

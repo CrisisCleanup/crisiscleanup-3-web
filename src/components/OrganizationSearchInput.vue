@@ -33,9 +33,10 @@
     </template>
   </autocomplete>
 </template>
+
 <script>
 import Organization from '@/models/Organization';
-import { getQueryString } from '../utils/urls';
+import { getQueryString } from '@/utils/urls';
 export default {
   name: 'OrganizationSearchInput',
   props: {

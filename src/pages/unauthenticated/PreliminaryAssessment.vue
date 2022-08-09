@@ -254,7 +254,7 @@ import Pda from '@/models/Pda';
 import GeocoderService from '@/services/geocoder.service';
 import { What3wordsService } from '@/services/what3words.service';
 import { getErrorMessage } from '@/utils/errors';
-import WorksiteSearchInput from '@/components/WorksiteSearchInput';
+import WorksiteSearchInput from '@/components/WorksiteSearchInput.vue';
 import Incident from '@/models/Incident';
 import { buildForm, groupBy, nest } from '@/utils/form';
 import { LangMixin } from '@/mixins';

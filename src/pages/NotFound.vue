@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home';
+import HomeLayout from '@/layouts/Home.vue';
 
 export default {
   name: 'NotFound',

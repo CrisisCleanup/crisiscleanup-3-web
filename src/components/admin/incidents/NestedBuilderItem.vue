@@ -248,9 +248,9 @@
 
 <script>
 import draggable from 'vuedraggable';
-import SectionHeading from '@/components/SectionHeading';
-import RecurringSchedule from '@/components/RecurringSchedule';
-import ItemEditor from '@/components/ItemEditor';
+import SectionHeading from '@/components/SectionHeading.vue';
+import RecurringSchedule from '@/components/RecurringSchedule.vue';
+import ItemEditor from '@/components/ItemEditor.vue';
 import { DialogsMixin } from '@/mixins';
 export default {
   name: 'NestedBuilderItem',

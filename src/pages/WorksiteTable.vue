@@ -54,7 +54,7 @@
 </template>
 <script>
 import VueTypes from 'vue-types';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import { getColorForStatus } from '@/filters';
 
 export default {

@@ -74,7 +74,7 @@
 
 <script>
 import { getErrorMessage } from '@/utils/errors';
-import Loader from '@/components/Loader';
+import Loader from '@/components/Loader.vue';
 
 export default {
   name: 'Wizard',

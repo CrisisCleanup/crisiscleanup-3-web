@@ -44,8 +44,8 @@ import User from '@/models/User';
 import Organization from '@/models/Organization';
 import { groupBy } from '@/utils/array';
 import Worksite from '@/models/Worksite';
-import Timeline from '@/components/Timeline';
-import EventTimeline from '@/components/EventTimeline';
+import Timeline from '@/components/Timeline.vue';
+import EventTimeline from '@/components/EventTimeline.vue';
 
 export default {
   name: 'CaseHistory',

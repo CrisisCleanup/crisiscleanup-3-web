@@ -6,7 +6,7 @@
  */
 
 import { mount } from '@vue/test-utils';
-import LineChart from '../LineChart';
+import LineChart from '../LineChart.vue';
 
 describe('LineChart', () => {
   it('should not log any errors', () => {

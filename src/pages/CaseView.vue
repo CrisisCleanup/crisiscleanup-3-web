@@ -492,22 +492,22 @@
 
 <script>
 import { getErrorMessage } from '@/utils/errors';
-import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
 import User from '@/models/User';
 import Worksite from '@/models/Worksite';
 import Incident from '@/models/Incident';
 import WorksiteRequest from '@/models/WorksiteRequest';
 import { groupBy } from '@/utils/array';
 import Organization from '@/models/Organization';
-import WorkTypeRequestModal from '@/components/WorkTypeRequestModal';
+import WorkTypeRequestModal from '@/components/WorkTypeRequestModal.vue';
 import { getQueryString } from '@/utils/urls';
 import { LocaleMixin } from '@/mixins/locale';
-import SectionHeading from '@/components/SectionHeading';
-import WorksiteImageSection from '@/components/WorksiteImageSection';
-import WorksiteReportSection from '@/components/WorksiteReportSection';
+import SectionHeading from '@/components/SectionHeading.vue';
+import WorksiteImageSection from '@/components/WorksiteImageSection.vue';
+import WorksiteReportSection from '@/components/WorksiteReportSection.vue';
 import { DialogsMixin } from '@/mixins';
-import Flag from './Flag';
-import WorksiteNotes from './WorksiteNotes';
+import Flag from './Flag.vue';
+import WorksiteNotes from './WorksiteNotes.vue';
 
 export default {
   name: 'CaseView',

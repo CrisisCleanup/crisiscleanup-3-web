@@ -1,4 +1,4 @@
-import ProgressButton from '@/components/buttons/ProgressButton';
+import ProgressButton from '@/components/buttons/ProgressButton.vue';
 
 export default {
   title: 'Elements/Buttons/ProgressButton',

@@ -1,4 +1,4 @@
-import BaseText from '@/components/BaseText';
+import BaseText from '@/components/BaseText.vue';
 import { TEXT_VARIANTS as TextVariants } from '@/constants';
 
 export default {

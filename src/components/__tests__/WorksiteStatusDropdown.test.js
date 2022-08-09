@@ -7,7 +7,7 @@
 
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Vuex from 'vuex';
-import WorksiteStatusDropdown from '../WorksiteStatusDropdown';
+import WorksiteStatusDropdown from '../WorksiteStatusDropdown.vue';
 const statuses = [
   {
     id: 1,

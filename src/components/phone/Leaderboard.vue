@@ -104,10 +104,10 @@
 
 <script>
 import User from '@/models/User';
-import Avatar from '@/components/Avatar';
-import UserDetailsTooltip from '@/components/user/DetailsTooltip';
-import LanguageTag from '@/components/tags/LanguageTag';
-import TitledCard from '@/components/cards/TitledCard';
+import Avatar from '@/components/Avatar.vue';
+import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
+import LanguageTag from '@/components/tags/LanguageTag.vue';
+import TitledCard from '@/components/cards/TitledCard.vue';
 import { useWebSockets } from '@/use/useWebSockets';
 import { EventBus } from '@/event-bus';
 

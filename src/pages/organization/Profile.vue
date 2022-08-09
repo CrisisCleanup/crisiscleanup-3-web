@@ -665,16 +665,16 @@ import Location from '@/models/Location';
 import Incident from '@/models/Incident';
 import User from '@/models/User';
 import { getErrorMessage } from '@/utils/errors';
-import UserSearchInput from '@/components/UserSearchInput';
+import UserSearchInput from '@/components/UserSearchInput.vue';
 import LocationType from '@/models/LocationType';
 import { ValidateMixin, CapabilityMixin } from '@/mixins';
-import FloatingInput from '@/components/FloatingInput';
-import Card from '@/components/cards/Card';
-import Capability from '@/pages/unauthenticated/Capability';
-import RequestRedeploy from '@/components/RequestRedeploy';
-import DragDrop from '../../components/DragDrop';
-import LocationTool from '../../components/LocationTool';
-import { mapTileLayer } from '../../utils/map';
+import FloatingInput from '@/components/FloatingInput.vue';
+import Card from '@/components/cards/Card.vue';
+import Capability from '@/pages/unauthenticated/Capability.vue';
+import RequestRedeploy from '@/components/RequestRedeploy.vue';
+import DragDrop from '@/components/DragDrop.vue';
+import LocationTool from '@/components/LocationTool.vue';
+import { mapTileLayer } from '@/utils/map';
 
 export default {
   name: 'Profile',

@@ -1,6 +1,6 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-await-in-loop */
-import Loader from '@/components/Loader';
+import Loader from '@/components/Loader.vue';
 
 export default {
   title: 'Layouts/Loader',

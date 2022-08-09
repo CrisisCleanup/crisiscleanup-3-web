@@ -362,11 +362,11 @@
 
 <script>
 import { getErrorMessage } from '@/utils/errors';
-import WorksiteSearchInput from '@/components/WorksiteSearchInput';
+import WorksiteSearchInput from '@/components/WorksiteSearchInput.vue';
 import GeocoderService from '@/services/geocoder.service';
-import LocationViewer from '@/components/LocationViewer';
-import WorksiteImageSection from '@/components/WorksiteImageSection';
-import WorksiteNotes from '@/pages/WorksiteNotes';
+import LocationViewer from '@/components/LocationViewer.vue';
+import WorksiteImageSection from '@/components/WorksiteImageSection.vue';
+import WorksiteNotes from '@/pages/WorksiteNotes.vue';
 import { getWorkTypeImage } from '@/filters';
 import { formatCmsItem } from '@/utils/helpers';
 

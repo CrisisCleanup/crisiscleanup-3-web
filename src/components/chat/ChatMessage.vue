@@ -88,7 +88,7 @@
 
 <script>
 import { UserMixin } from '@/mixins';
-import UserDetailsTooltip from '@/components/user/DetailsTooltip';
+import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 
 export default {
   name: 'ChatMessage',

@@ -323,7 +323,7 @@
 import { orderBy } from 'lodash';
 import User from '@/models/User';
 import Worksite from '@/models/Worksite';
-import OrganizationSearchInput from '@/components/OrganizationSearchInput';
+import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
 import Organization from '@/models/Organization';
 import { getGoogleMapsLocation } from '@/utils/map';
 import GeocoderService from '@/services/geocoder.service';

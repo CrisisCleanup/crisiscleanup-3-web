@@ -6,7 +6,7 @@
  */
 
 import { shallowMount } from '@vue/test-utils';
-import NavMenu from '../NavMenu';
+import NavMenu from '../NavMenu.vue';
 
 const shallowMountWithOptions = () =>
   shallowMount(NavMenu, {

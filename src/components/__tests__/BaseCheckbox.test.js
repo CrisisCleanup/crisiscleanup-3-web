@@ -6,7 +6,7 @@
  */
 
 import { mount } from '@vue/test-utils';
-import BaseCheckbox from '../BaseCheckbox';
+import BaseCheckbox from '../BaseCheckbox.vue';
 
 describe('BaseCheckbox', () => {
   it('should not log any errors', () => {

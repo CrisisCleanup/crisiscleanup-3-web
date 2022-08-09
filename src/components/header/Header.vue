@@ -85,8 +85,8 @@ import DisasterIcon from '@/components/DisasterIcon.vue';
 import useUser from '@/use/user/useUser';
 import { DialogsMixin } from '@/mixins';
 import UserProfileMenu from '@/components/header/UserProfileMenu.vue';
-import RedeployRequest from '@/pages/RedeployRequest';
-import PhoneIndicator from '@/components/phone/PhoneIndicator';
+import RedeployRequest from '@/pages/RedeployRequest.vue';
+import PhoneIndicator from '@/components/phone/PhoneIndicator.vue';
 
 export default {
   name: 'Header',

@@ -6,7 +6,7 @@
  */
 
 import { mount } from '@vue/test-utils';
-import Tag from '../Tag';
+import Tag from '../Tag.vue';
 
 describe('Tag', () => {
   it('should not log any errors', () => {

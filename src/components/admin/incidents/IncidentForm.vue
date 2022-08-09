@@ -227,7 +227,7 @@
 </template>
 <script>
 import { parsePhoneNumber } from 'libphonenumber-js';
-import FloatingInput from '@/components/FloatingInput';
+import FloatingInput from '@/components/FloatingInput.vue';
 import { formatNationalNumber } from '@/filters';
 import { DialogsMixin } from '@/mixins';
 import { getErrorMessage } from '@/utils/errors';

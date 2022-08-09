@@ -181,11 +181,11 @@
 <script>
 import { getErrorMessage } from '@/utils/errors';
 import { makeTableColumns } from '@/utils/table';
-import AjaxTable from '@/components/AjaxTable';
-import Editor from '@/components/Editor';
+import AjaxTable from '@/components/AjaxTable.vue';
+import Editor from '@/components/Editor.vue';
 import { DialogsMixin } from '@/mixins';
 import { formatCmsItem } from '@/utils/helpers';
-import DragDrop from '@/components/DragDrop';
+import DragDrop from '@/components/DragDrop.vue';
 
 export default {
   data() {

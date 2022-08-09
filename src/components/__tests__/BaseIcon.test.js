@@ -6,7 +6,7 @@
  */
 
 import { mount } from '@vue/test-utils';
-import BaseIcon from '../BaseIcon';
+import BaseIcon from '../BaseIcon.vue';
 
 describe('BaseIcon', () => {
   it('should not log any errors', () => {

@@ -334,12 +334,12 @@ import User from '@/models/User';
 import Role from '@/models/Role';
 import Language from '@/models/Language';
 import { i18nService } from '@/services/i18n.service';
-import DragDrop from '@/components/DragDrop';
-import UserRolesSelect from '@/components/UserRolesSelect';
+import DragDrop from '@/components/DragDrop.vue';
+import UserRolesSelect from '@/components/UserRolesSelect.vue';
 import { ValidateMixin } from '@/mixins';
-import { getErrorMessage } from '../utils/errors';
-import ChangeOrganizationModal from '../components/ChangeOrganizationModal';
-import Avatar from '../components/Avatar';
+import { getErrorMessage } from '@/utils/errors';
+import ChangeOrganizationModal from '@/components/ChangeOrganizationModal.vue';
+import Avatar from '../components/Avatar.vue';
 
 export default {
   name: 'Profile',

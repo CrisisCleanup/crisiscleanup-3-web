@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import Loader from '@/components/Loader';
-import BarChart from '@/components/charts/BarChart';
+import Loader from '@/components/Loader.vue';
+import BarChart from '@/components/charts/BarChart.vue';
 import { stringToColor } from '@/utils/colors';
 export default {
   name: 'AdminCosts',

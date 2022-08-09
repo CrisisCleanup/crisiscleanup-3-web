@@ -1,4 +1,4 @@
-import BaseCheckbox from '@/components/BaseCheckbox';
+import BaseCheckbox from '@/components/BaseCheckbox.vue';
 
 export default { title: 'Basics/BaseCheckbox', component: BaseCheckbox };
 

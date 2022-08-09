@@ -251,9 +251,9 @@
 import _ from 'lodash';
 import Capability from '@/components/Capability.vue';
 import { makeTableColumns } from '@/utils/table';
-import CaseDonutChart from '@/components/charts/CaseDonutChart';
+import CaseDonutChart from '@/components/charts/CaseDonutChart.vue';
 import { nFormatter } from '@/utils/helpers';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import { cachedGet } from '@/utils/promise';
 
 export default {

@@ -73,9 +73,9 @@
 
 <script>
 import { ConnectFirstMixin } from '@/mixins';
-import LanguageTag from '@/components/tags/LanguageTag';
-import EditAgentModal from '@/components/phone/EditAgentModal';
-import PhoneIndicator from '@/components/phone/PhoneIndicator';
+import LanguageTag from '@/components/tags/LanguageTag.vue';
+import EditAgentModal from '@/components/phone/EditAgentModal.vue';
+import PhoneIndicator from '@/components/phone/PhoneIndicator.vue';
 
 export default {
   name: 'Agent',

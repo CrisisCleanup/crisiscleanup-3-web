@@ -185,7 +185,7 @@
 </template>
 
 <script>
-import HomeLayout from '@/layouts/Home';
+import HomeLayout from '@/layouts/Home.vue';
 import InvitationRequest from '@/models/InvitationRequest';
 import Language from '@/models/Language';
 import { getErrorMessage } from '@/utils/errors';

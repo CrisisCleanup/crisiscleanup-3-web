@@ -7,7 +7,7 @@
 
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import VueAutosuggest from 'vue-autosuggest';
-import Autocomplete from '../Autocomplete';
+import Autocomplete from '../Autocomplete.vue';
 
 const localVue = createLocalVue();
 localVue.use(VueAutosuggest);

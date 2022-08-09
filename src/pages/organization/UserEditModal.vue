@@ -85,7 +85,7 @@
 <script>
 import User from '@/models/User';
 import Role from '@/models/Role';
-import UserRolesSelect from '@/components/UserRolesSelect';
+import UserRolesSelect from '@/components/UserRolesSelect.vue';
 
 export default {
   name: 'UserEditModal',

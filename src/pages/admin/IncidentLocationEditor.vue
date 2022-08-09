@@ -49,6 +49,7 @@
     </div>
   </Card>
 </template>
+
 <script>
 import * as L from 'leaflet';
 import { DialogsMixin } from '@/mixins';
@@ -56,7 +57,7 @@ import LocationType from '@/models/LocationType';
 import Location from '@/models/Location';
 import { getErrorMessage } from '@/utils/errors';
 import { mapTileLayer } from '@/utils/map';
-import Card from '@/components/cards/Card';
+import Card from '@/components/cards/Card.vue';
 
 export default {
   name: 'IncidentLocationEditor',

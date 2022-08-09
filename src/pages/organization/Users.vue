@@ -216,12 +216,12 @@
 import { throttle } from 'lodash';
 import User from '@/models/User';
 import Role from '@/models/Role';
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import { getQueryString } from '@/utils/urls';
-import UserSearchInput from '@/components/UserSearchInput';
+import UserSearchInput from '@/components/UserSearchInput.vue';
 import UserRoleFilter from '@/utils/data_filters/UserRoleFilter';
 import UserInvitedByFilter from '@/utils/data_filters/UserInvitedByFilter';
-import InviteUsers from './InviteUsers';
+import InviteUsers from './InviteUsers.vue';
 
 export default {
   name: 'Users',

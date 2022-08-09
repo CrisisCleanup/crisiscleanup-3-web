@@ -726,25 +726,25 @@ import {
   mapTileLayer,
   randomIntFromInterval,
 } from '@/utils/map';
-import { HomeNavigation } from '@/components/home/SideNav';
-import Table from '@/components/Table';
+import { HomeNavigation } from '@/components/home/SideNav.vue';
+import Table from '@/components/Table.vue';
 import { getQueryString } from '@/utils/urls';
 import Incident from '@/models/Incident';
-import Slider from '@/components/Slider';
-import DisasterIcon from '@/components/DisasterIcon';
+import Slider from '@/components/Slider.vue';
+import DisasterIcon from '@/components/DisasterIcon.vue';
 import OrganizationActivityModal from '@/components/OrganizationActivityModal.vue';
-import LightTab from '@/components/tabs/LightTab';
-import SiteActivityGauge from '@/components/charts/SiteActivityGauge';
-import CircularBarplot from '@/components/charts/CircularBarplot';
-import D3BarChart from '@/components/charts/D3BarChart';
-import CardStack from '@/components/CardStack';
+import LightTab from '@/components/tabs/LightTab.vue';
+import SiteActivityGauge from '@/components/charts/SiteActivityGauge.vue';
+import CircularBarplot from '@/components/charts/CircularBarplot.vue';
+import D3BarChart from '@/components/charts/D3BarChart.vue';
+import CardStack from '@/components/CardStack.vue';
 import { getNearestColor } from '@/utils/colors';
-import CaseDonutChart from '@/components/charts/CaseDonutChart';
-import Toggle from '@/components/Toggle';
-import TotalCases from '@/components/charts/TotalCases';
-import PewPewNavBar from '@/components/navigation/PewPewNavBar';
+import CaseDonutChart from '@/components/charts/CaseDonutChart.vue';
+import Toggle from '@/components/Toggle.vue';
+import TotalCases from '@/components/charts/TotalCases.vue';
+import PewPewNavBar from '@/components/navigation/PewPewNavBar.vue';
 import { UserMixin } from '@/mixins';
-import UserProfileMenu from '@/components/header/UserProfileMenu';
+import UserProfileMenu from '@/components/header/UserProfileMenu.vue';
 
 export default {
   name: 'PewPew',

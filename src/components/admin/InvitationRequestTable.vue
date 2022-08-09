@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
+import Table from '@/components/Table.vue';
 import User from '@/models/User';
 import InvitationRequest from '@/models/InvitationRequest';
 

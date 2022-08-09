@@ -6,7 +6,7 @@
  */
 
 import { mount } from '@vue/test-utils';
-import BaseInput from '../BaseInput';
+import BaseInput from '../BaseInput.vue';
 
 describe('BaseInput', () => {
   it('should not log any errors', () => {

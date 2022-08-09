@@ -504,30 +504,30 @@
 <script>
 import * as L from 'leaflet';
 import { debounce } from 'lodash';
-import CaseForm from '@/pages/CaseForm';
+import CaseForm from '@/pages/CaseForm.vue';
 import { getWorksiteLayer, mapAttribution, mapTileLayer } from '@/utils/map';
-import PhoneComponentButton from '@/components/phone/PhoneComponentButton';
-import ManualDialer from '@/components/phone/ManualDialer';
+import PhoneComponentButton from '@/components/phone/PhoneComponentButton.vue';
+import ManualDialer from '@/components/phone/ManualDialer.vue';
 import { ConnectFirstMixin, DialogsMixin, UserMixin } from '@/mixins';
-import AjaxTable from '@/components/AjaxTable';
+import AjaxTable from '@/components/AjaxTable.vue';
 import { formatNationalNumber, getColorForStatus } from '@/filters';
-import CaseHeader from '@/components/CaseHeader';
+import CaseHeader from '@/components/CaseHeader.vue';
 import Worksite from '@/models/Worksite';
-import CaseHistory from '@/pages/CaseHistory';
-import WorksiteSearchInput from '@/components/WorksiteSearchInput';
+import CaseHistory from '@/pages/CaseHistory.vue';
+import WorksiteSearchInput from '@/components/WorksiteSearchInput.vue';
 import { getErrorMessage } from '@/utils/errors';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import { EventBus } from '@/event-bus';
-import GeneralStats from '@/components/phone/GeneralStats';
-import CallHistory from '@/components/phone/Widgets/CallHistory';
-import PhoneMap from '@/pages/phone/PhoneMap';
-import Leaderboard from '@/components/phone/Leaderboard';
+import GeneralStats from '@/components/phone/GeneralStats.vue';
+import CallHistory from '@/components/phone/Widgets/CallHistory.vue';
+import PhoneMap from '@/pages/phone/PhoneMap.vue';
+import Leaderboard from '@/components/phone/Leaderboard.vue';
 import Incident from '@/models/Incident';
-import Chat from '@/components/chat/Chat';
-import PhoneNews from '@/components/phone/PhoneNews';
-import PhoneToolBar from '@/pages/phone/PhoneToolBar';
-import ActiveCall from '@/components/phone/ActiveCall';
-import UpdateStatus from '@/components/phone/UpdateStatus';
+import Chat from '@/components/chat/Chat.vue';
+import PhoneNews from '@/components/phone/PhoneNews.vue';
+import PhoneToolBar from '@/pages/phone/PhoneToolBar.vue';
+import ActiveCall from '@/components/phone/ActiveCall.vue';
+import UpdateStatus from '@/components/phone/UpdateStatus.vue';
 
 export default {
   name: 'PhoneSysyem',

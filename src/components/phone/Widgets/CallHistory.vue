@@ -81,7 +81,7 @@ import Table from '@/components/Table.vue';
 import { UserMixin, ValidateMixin, WorksitesMixin } from '@/mixins';
 import PhoneStatus from '@/models/PhoneStatus';
 import DisasterIcon from '@/components/DisasterIcon.vue';
-import AgentStats from '@/components/phone/AgentStats';
+import AgentStats from '@/components/phone/AgentStats.vue';
 
 export default {
   name: 'CallHistory',

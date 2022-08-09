@@ -70,13 +70,13 @@
 </template>
 
 <script>
-import Wizard from '@/components/wizard/Wizard';
-import Step from '@/components/wizard/Step';
-import Card from '@/components/cards/Card';
+import Wizard from '@/components/wizard/Wizard.vue';
+import Step from '@/components/wizard/Step.vue';
+import Card from '@/components/cards/Card.vue';
 import Incident from '@/models/Incident';
-import IncidentForm from '@/components/admin/incidents/IncidentForm';
-import IncidentFormBuilder from '@/components/admin/incidents/IncidentFormBuilder';
-import IncidentLocationEditor from '@/pages/admin/IncidentLocationEditor';
+import IncidentForm from '@/components/admin/incidents/IncidentForm.vue';
+import IncidentFormBuilder from '@/components/admin/incidents/IncidentFormBuilder.vue';
+import IncidentLocationEditor from '@/pages/admin/IncidentLocationEditor.vue';
 
 export default {
   name: 'AdminIncidentWizard',

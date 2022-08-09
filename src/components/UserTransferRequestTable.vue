@@ -37,11 +37,11 @@
 </template>
 
 <script>
-import Table from '@/components/Table';
-import { DialogsMixin } from '../mixins';
-import Organization from '../models/Organization';
-import User from '../models/User';
-import { getStatusName, getWorkTypeName } from '../filters';
+import Table from '@/components/Table.vue';
+import { DialogsMixin } from '@/mixins';
+import Organization from '@/models/Organization';
+import User from '@/models/User';
+import { getStatusName, getWorkTypeName } from '@/filters';
 
 export default {
   name: 'UserTransferRequestTable',

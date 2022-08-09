@@ -56,7 +56,7 @@
 <script>
 import VueTypes from 'vue-types';
 import { IconsMixin } from '@/mixins';
-import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown';
+import WorksiteStatusDropdown from '@/components/WorksiteStatusDropdown.vue';
 
 export default {
   name: 'CaseTile',

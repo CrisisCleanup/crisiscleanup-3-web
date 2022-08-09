@@ -6,7 +6,7 @@
  */
 
 import { mount } from '@vue/test-utils';
-import Badge from '../Badge';
+import Badge from '../Badge.vue';
 
 describe('Badge', () => {
   it('should not log any errors', () => {

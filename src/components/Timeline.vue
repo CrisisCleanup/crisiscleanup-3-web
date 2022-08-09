@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import UserDetailsTooltip from '@/components/user/DetailsTooltip';
+import UserDetailsTooltip from '@/components/user/DetailsTooltip.vue';
 export default {
   name: 'Timeline',
   components: { UserDetailsTooltip },
