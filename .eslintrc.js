@@ -72,9 +72,12 @@ module.exports = {
 
   settings: {
     'import/resolver': {
-      webpack: {
-        config: './node_modules/@vue/cli-service/webpack.config.js',
+      node: {
+        paths: ['src'],
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        moduleDirectory: ['node_modules', 'src/'],
       },
+      typescript: {},
     },
   },
 };
