@@ -112,7 +112,7 @@ export default {
 </script>
 
 <style>
-@import '~leaflet/dist/leaflet.css';
+@import 'leaflet/dist/leaflet.css';
 
 .leaflet-data-marker svg {
   width: 30px;

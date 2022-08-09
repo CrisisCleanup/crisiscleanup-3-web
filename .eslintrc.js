@@ -68,6 +68,8 @@ module.exports = {
     'vue/max-attributes-per-line': 'off',
     'vue/multi-word-component-names': 'warn',
     'vue/no-reserved-component-names': 'warn',
+    // turn off this rule for vue3. see: https://eslint.vuejs.org/rules/no-v-for-template-key.html
+    'vue/no-v-for-template-key': 'off',
   },
 
   settings: {

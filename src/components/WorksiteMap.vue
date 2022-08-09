@@ -689,7 +689,7 @@ export default {
 </script>
 
 <style>
-@import '~leaflet/dist/leaflet.css';
+@import 'leaflet/dist/leaflet.css';
 
 .map-svg-container svg {
   width: 25px;

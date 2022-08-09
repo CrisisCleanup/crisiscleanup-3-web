@@ -132,8 +132,12 @@
                 >{{ $t('caseView.claimed_by') }}
                 {{ getOrganizationName(organization) }}</label
               >
-              <template v-for="work_type in work_types">
-                <div :key="work_type.id" class="work_type_section">
+              <template>
+                <div
+                  v-for="work_type in work_types"
+                  :key="work_type.id"
+                  class="work_type_section"
+                >
                   <span class="text-sm">{{
                     work_type.work_type | getWorkTypeName
                   }}</span>
@@ -211,8 +215,12 @@
             <label class="text-xs font-bold text-crisiscleanup-grey-700">{{
               $t('caseView.claimed_by_my_org')
             }}</label>
-            <template v-for="work_type in workTypesClaimedByOrganization">
-              <div :key="work_type.id" class="work_type_section">
+            <template>
+              <div
+                v-for="work_type in workTypesClaimedByOrganization"
+                :key="work_type.id"
+                class="work_type_section"
+              >
                 <span class="text-sm">{{
                   work_type.work_type | getWorkTypeName
                 }}</span>
@@ -259,8 +267,12 @@
             <label class="text-xs font-bold text-crisiscleanup-grey-700">{{
               $t('caseView.unclaimed_work_types')
             }}</label>
-            <template v-for="work_type in workTypesUnclaimed">
-              <div :key="work_type.id" class="work_type_section">
+            <template>
+              <div
+                v-for="work_type in workTypesUnclaimed"
+                :key="work_type.id"
+                class="work_type_section"
+              >
                 <span class="text-sm">{{
                   work_type.work_type | getWorkTypeName
                 }}</span>

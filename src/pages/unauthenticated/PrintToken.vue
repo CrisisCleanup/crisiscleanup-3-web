@@ -1,8 +1,9 @@
 <template>
   <HomeLayout>
-    <template #grid-overlay>
-      <div class="grid--overlay homegrid-backdrop" />
-    </template>
+    <!-- duplicate slot names?? -->
+    <!-- <template #grid-overlay>-->
+    <!--   <div class="grid&#45;&#45;overlay homegrid-backdrop" />-->
+    <!-- </template>-->
     <template #grid-overlay>
       <div class="grid--top">
         <div class="text-5xl">

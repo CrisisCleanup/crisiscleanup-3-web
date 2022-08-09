@@ -1960,7 +1960,7 @@ export default {
 </script>
 
 <style lang="postcss">
-@import '~leaflet/dist/leaflet.css';
+@import 'leaflet/dist/leaflet.css';
 
 .show-enter-active,
 .show-leave-enter {

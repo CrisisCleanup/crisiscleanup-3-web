@@ -63,7 +63,7 @@
   </div>
 </template>
 
-<script>
+<script lang="tsx">
 import { xor, kebabCase, isEmpty } from 'lodash';
 export default {
   name: 'FormSelect',
@@ -289,7 +289,7 @@ export default {
 </script>
 
 <style>
-@import '~vue-select/dist/vue-select.css';
+@import 'vue-select/dist/vue-select.css';
 .form-select .vs__dropdown-menu {
   border-radius: 0;
 }

@@ -32,7 +32,7 @@
         :timezone="currentIncident.timezone"
         :popover="{ placement: 'bottom', visibility: 'click' }"
       >
-        <template v-slot="{ inputValue, inputEvents }">
+        <template #default="{ inputValue, inputEvents }">
           <input
             class="
               h-12
@@ -158,7 +158,7 @@
           :timezone="currentAni.timezone"
           :popover="{ placement: 'bottom', visibility: 'click' }"
         >
-          <template v-slot="{ inputValue, inputEvents }">
+          <template #default="{ inputValue, inputEvents }">
             <input
               class="
                 h-12
@@ -199,7 +199,7 @@
           :timezone="currentAni.timezone"
           :popover="{ placement: 'bottom', visibility: 'click' }"
         >
-          <template v-slot="{ inputValue, inputEvents }">
+          <template #default="{ inputValue, inputEvents }">
             <input
               class="
                 h-12

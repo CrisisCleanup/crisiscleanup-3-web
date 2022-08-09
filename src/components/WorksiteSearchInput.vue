@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<script>
+<script lang="tsx">
 import Highlighter from 'vue-highlight-words';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';

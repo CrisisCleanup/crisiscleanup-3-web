@@ -263,7 +263,7 @@
                 icon-size="small"
                 icon-class="bg-black p-1"
               >
-                <template v-slot:component>
+                <template #component>
                   <ManualDialer
                     class="p-2"
                     style="z-index: 1002"
@@ -285,7 +285,7 @@
                   }
                 "
               >
-                <template v-slot:button>
+                <template #button>
                   <div
                     class="
                       w-full
@@ -343,7 +343,7 @@
                     <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
                   </div>
                 </template>
-                <template v-slot:component>
+                <template #component>
                   <Chat
                     v-if="selectedChat"
                     @unreadCount="unreadChatCount = $event"
@@ -367,7 +367,7 @@
                   }
                 "
               >
-                <template v-slot:button>
+                <template #button>
                   <div
                     class="
                       w-full
@@ -403,7 +403,7 @@
                     <ccu-icon type="news" class="p-1 ml-1.5" size="large" />
                   </div>
                 </template>
-                <template v-slot:component>
+                <template #component>
                   <PhoneNews
                     @unreadCount="unreadNewsCount = $event"
                     class="h-108"
@@ -418,7 +418,7 @@
                 icon-class="p-1"
                 v-if="callHistory"
               >
-                <template v-slot:component>
+                <template #component>
                   <CallHistory
                     :table-body-style="{ height: '300px' }"
                     :calls="callHistory"
@@ -431,14 +431,14 @@
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton name="stats" class="phone-button">
-                <template v-slot:button>
+                <template #button>
                   <div class="w-full h-full flex items-center justify-center">
                     <div class="text-xl">
                       {{ callsWaiting }}
                     </div>
                   </div>
                 </template>
-                <template v-slot:component>
+                <template #component>
                   <GeneralStats
                     @onRemainingCallbacks="remainingCallbacks = $event"
                   />
@@ -451,7 +451,7 @@
                 icon-size="medium"
                 icon-class="p-1"
               >
-                <template v-slot:component>
+                <template #component>
                   <Leaderboard />
                 </template>
               </PhoneComponentButton>
@@ -462,7 +462,7 @@
                 icon-size="small"
                 icon-class="p-1"
               >
-                <template v-slot:component>
+                <template #component>
                   <div class="flex items-center justify-center p-3">
                     <base-button
                       size="medium"

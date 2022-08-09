@@ -279,17 +279,20 @@
               "
               class="border px-2 py-1"
             >
-              <template v-for="contact in organization.primary_contacts">
-                <span class="inline-block" :key="contact.email">
+              <template
+                v-for="contact in organization.primary_contacts"
+                :key="contact.email"
+              >
+                <span class="inline-block">
                   {{ contact.first_name }} {{ contact.last_name }}
                 </span>
-                <span class="inline-block" :key="contact.email">
+                <span class="inline-block">
                   {{ contact.title ? contact.title : '' }}
                 </span>
-                <span class="inline-block" :key="contact.email">
+                <span class="inline-block">
                   {{ contact.email }}
                 </span>
-                <span class="inline-block" :key="contact.email">
+                <span class="inline-block">
                   {{ contact.mobile }}
                 </span>
               </template>
@@ -305,17 +308,17 @@
               "
               class="max-h-xl overflow-auto border px-2 py-1"
             >
-              <template v-for="contact in ghostUsers">
-                <span class="inline-block" :key="contact.email">
+              <template v-for="contact in ghostUsers" :key="contact.email">
+                <span class="inline-block">
                   {{ contact.first_name }} {{ contact.last_name }}
                 </span>
-                <span class="inline-block" :key="contact.email">
+                <span class="inline-block">
                   {{ contact.title ? contact.title : '' }}
                 </span>
-                <span class="inline-block" :key="contact.email">
+                <span class="inline-block">
                   {{ contact.email }}
                 </span>
-                <span class="inline-block" :key="contact.email">
+                <span class="inline-block">
                   {{ contact.mobile }}
                 </span>
               </template>
@@ -339,21 +342,20 @@
               "
               class="max-h-xl overflow-auto border px-2 py-1"
             >
-              <template v-for="user in users">
-                <span class="inline-block" :key="`${user.id}`">
+              <template v-for="user in users" :key="`${user.id}`">
+                <span class="inline-block">
                   {{ user.first_name }} {{ user.last_name }}
                 </span>
-                <span class="inline-block" :key="`${user.id}`">
+                <span class="inline-block">
                   {{ user.title ? user.title : '' }}
                 </span>
-                <span class="inline-block" :key="`${user.id}`">
+                <span class="inline-block">
                   {{ user.email }}
                 </span>
-                <span class="inline-block" :key="`${user.id}`">
+                <span class="inline-block">
                   {{ user.mobile }}
                 </span>
                 <base-link
-                  :key="`${user.id}`"
                   target="_blank"
                   :href="`${apiUrl}/ccadmin/users/user/${user.id}/change/`"
                 >
@@ -509,8 +511,11 @@
                 grid-row-gap: 5px;
               "
             >
-              <template v-for="request in incidentRequests">
-                <div class="flex items-center" :key="`${request.id}`">
+              <template
+                v-for="request in incidentRequests"
+                :key="`${request.id}`"
+              >
+                <div class="flex items-center">
                   <div
                     v-tooltip="{
                       content: getContactView(request),
@@ -527,7 +532,7 @@
                   </div>
                   {{ request.incident | getIncidentName(incidents) }}
                 </div>
-                <div class="flex" :key="`${request.id}`">
+                <div class="flex">
                   <base-button
                     v-if="request.org_verified"
                     :text="$t('actions.approve')"

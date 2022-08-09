@@ -57,21 +57,20 @@
               >
                 {{ $t('usersVue.filters') }}
                 <template v-for="(filter, key) in filters">
-                  <template v-for="(label, identifier) in filter.labels">
-                    <tag
-                      :key="key + identifier"
-                      closeable
-                      class="m-1"
-                      @closed="
-                        () => {
-                          filter.removeField(identifier);
-                          onFilter();
-                        }
-                      "
-                    >
-                      {{ label }}
-                    </tag>
-                  </template>
+                  <tag
+                    v-for="(label, identifier) in filter.labels"
+                    :key="key + identifier"
+                    closeable
+                    class="m-1"
+                    @closed="
+                      () => {
+                        filter.removeField(identifier);
+                        onFilter();
+                      }
+                    "
+                  >
+                    {{ label }}
+                  </tag>
                 </template>
               </div>
               <div class="flex h-64">

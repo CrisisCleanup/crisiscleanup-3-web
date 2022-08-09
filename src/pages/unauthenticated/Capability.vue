@@ -3,7 +3,7 @@
     class="grid"
     :style="`grid-template-columns: max-content repeat(${phases.length}, [col-start] minmax(auto, 200px) [col-end])`"
   >
-    <template v-for="capability in capabilitiesTree">
+    <template v-for="capability in capabilitiesTree" :key="capability.id">
       <template v-if="capability.children && capability.children.length > 0">
         <div
           class="
@@ -62,15 +62,17 @@
           }}</span>
         </div>
         <template v-if="capability.showChildren">
-          <template v-for="child in capability.children">
-            <div
-              :key="`${capability.id}:${child.id}`"
-              class="border-b p-2 py-4"
-              :class="$mq === 'sm' ? 'w-60' : ''"
-            >
+          <template
+            v-for="child in capability.children"
+            :key="`${capability.id}:${child.id}`"
+          >
+            <div class="border-b p-2 py-4" :class="$mq === 'sm' ? 'w-60' : ''">
               {{ child.name_t }}
             </div>
-            <template v-for="phase in phases">
+            <template
+              v-for="phase in phases"
+              :key="`${capability.id}:${child.id}:${phase.phase_key}`"
+            >
               <base-checkbox
                 draggable="true"
                 @dragstart.native="
@@ -107,7 +109,6 @@
                     ? 'bg-crisiscleanup-grid-blue border-2 border-white'
                     : ''
                 "
-                :key="`${capability.id}:${child.id}:${phase.phase_key}`"
                 @input="
                   (value) => {
                     setMatrixValue(value, phase.id, child.id);

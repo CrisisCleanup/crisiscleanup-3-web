@@ -13,139 +13,138 @@
   </div>
 </template>
 
-<script lang="ts">
-// @ts-nocheck TODO(tabiodun): Fix this file
+<script lang="ts" setup>
+import { computed, watch, onBeforeUnmount, ref, onMounted } from 'vue';
 import { mapActions, mapGetters, mapMutations } from 'vuex';
-import { defineComponent } from '@vue/composition-api';
+import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import CCP from '@/components/phone/CCP.vue';
-import Version from '@/components/Version.vue';
 import BannerOverlay from '@/components/notifications/BannerOverlay.vue';
 import { cachedGet, hash } from '@/utils/promise';
-import PhoneLegacy from './pages/phone_legacy/Index.vue';
+import useHttp from '@/use/useHttp';
 
+const { t: $t } = useI18n();
+const route = useRoute();
 const defaultLayout = 'authenticated';
-export default defineComponent({
-  name: 'App',
-  components: { PhoneLegacy, CCP, Version, BannerOverlay },
-  computed: {
-    ...mapGetters('ui', ['currentBanner']),
-    layout() {
-      return `${this.$route.meta?.layout || defaultLayout}-layout`;
-    },
+// const $t = (s: any) => s;
+const { $http } = useHttp();
+
+const eventsInterval = ref<any>(null);
+const layout = computed(() => `${route.meta?.layout || defaultLayout}-layout`);
+const currentBanner = computed(() => {
+  const { currentBanner: _currentBanner } = mapGetters('ui', ['currentBanner']);
+  return _currentBanner;
+});
+
+const { login, logout } = mapActions('auth', ['login', 'logout']);
+const { pushEvents } = mapActions('events', ['pushEvents']);
+const { validateBrowser } = mapActions('ui', ['validateBrowser']);
+const { isLoggedIn } = mapGetters('auth', ['isLoggedIn']);
+const { setStatuses, setWorkTypes, setLocationTypes, setPhases, setPortal } =
+  mapMutations('enums', [
+    'setStatuses',
+    'setWorkTypes',
+    'setLocationTypes',
+    'setPhases',
+    'setPortal',
+  ]);
+
+watch(
+  () => route,
+  (to) => {
+    const newTitle = `${$t(to.name)}: Crisis Cleanup`;
+    if (document.title !== newTitle) {
+      document.title = newTitle;
+    }
   },
-  watch: {
-    $route: {
-      immediate: true,
-      handler(to) {
-        const newTitle = `${this.$t(to.name)}: Crisis Cleanup`;
-        if (document.title !== newTitle) {
-          document.title = newTitle;
-        }
+  { immediate: true },
+);
+
+async function getEnums(): Promise<void> {
+  const enums = await hash({
+    statuses: cachedGet(
+      `${process.env.VUE_APP_API_BASE_URL}/statuses`,
+      {
+        headers: {
+          Authorization: null,
+        },
       },
-    },
-  },
-  created(): void {
-    if (process.env.NODE_ENV === 'development') {
-      this.eventsInterval = setInterval(this.pushCurrentEvents, 2000);
-    }
-    this.$http.interceptors.request.use(function (config) {
-      config.headers.CCU_WEB_URL = window.location.href;
-      config.headers.CCU_PORTAL_KEY = process.env.VUE_APP_PORTAL_KEY;
-      return config;
-    });
-  },
-  beforeDestroy(): void {
-    if (this.eventsInterval) {
-      clearInterval(this.eventsInterval);
-      this.eventsInterval = undefined;
-    }
-  },
-  methods: {
-    ...mapActions('auth', ['login', 'logout']),
-    ...mapActions('events', ['pushEvents']),
-    ...mapActions('ui', ['validateBrowser']),
-    ...mapGetters('auth', ['isLoggedIn']),
-    ...mapMutations('enums', [
-      'setStatuses',
-      'setWorkTypes',
-      'setLocationTypes',
-      'setPhases',
-      'setPortal',
-    ]),
-    async getEnums(): Promise<void> {
-      const enums = await hash({
-        statuses: cachedGet(
-          `${process.env.VUE_APP_API_BASE_URL}/statuses`,
-          {
-            headers: {
-              Authorization: null,
-            },
-          },
-          'statuses',
-        ),
-        workTypes: cachedGet(
-          `${process.env.VUE_APP_API_BASE_URL}/work_types`,
-          {
-            headers: {
-              Authorization: null,
-            },
-          },
-          'work_types',
-        ),
-        phases: cachedGet(
-          `${process.env.VUE_APP_API_BASE_URL}/incidents_phases`,
-          {
-            headers: {
-              Authorization: null,
-            },
-          },
-          'incidents_phases',
-        ),
-        locationTypes: cachedGet(
-          `${process.env.VUE_APP_API_BASE_URL}/location_types`,
-          {
-            headers: {
-              Authorization: null,
-            },
-          },
-          'location_types',
-        ),
-        portal: cachedGet(
-          `${process.env.VUE_APP_API_BASE_URL}/portals/current`,
-          {
-            headers: {
-              Authorization: null,
-            },
-          },
-          'portal',
-        ),
-      });
-      this.setStatuses(enums.statuses.data.results);
-      this.setWorkTypes(enums.workTypes.data.results);
-      this.setLocationTypes(enums.locationTypes.data.results);
-      this.setPhases(enums.phases.data.results);
-      this.setPortal(enums.portal.data);
-    },
-    async pushCurrentEvents(): Promise<void> {
-      if (this.isLoggedIn()) {
-        await this.pushEvents();
-      }
-    },
-  },
-  async mounted(): Promise<void> {
-    await this.validateBrowser();
-    await this.getEnums();
-  },
-  data(): any {
-    return {
-      eventsInterval: null as any,
-    };
-  },
+      'statuses',
+    ),
+    workTypes: cachedGet(
+      `${process.env.VUE_APP_API_BASE_URL}/work_types`,
+      {
+        headers: {
+          Authorization: null,
+        },
+      },
+      'work_types',
+    ),
+    phases: cachedGet(
+      `${process.env.VUE_APP_API_BASE_URL}/incidents_phases`,
+      {
+        headers: {
+          Authorization: null,
+        },
+      },
+      'incidents_phases',
+    ),
+    locationTypes: cachedGet(
+      `${process.env.VUE_APP_API_BASE_URL}/location_types`,
+      {
+        headers: {
+          Authorization: null,
+        },
+      },
+      'location_types',
+    ),
+    portal: cachedGet(
+      `${process.env.VUE_APP_API_BASE_URL}/portals/current`,
+      {
+        headers: {
+          Authorization: null,
+        },
+      },
+      'portal',
+    ),
+  });
+  setStatuses(enums.statuses.data.results);
+  setWorkTypes(enums.workTypes.data.results);
+  setLocationTypes(enums.locationTypes.data.results);
+  setPhases(enums.phases.data.results);
+  setPortal(enums.portal.data);
+}
+
+async function pushCurrentEvents(): Promise<void> {
+  if (isLoggedIn()) {
+    await pushEvents();
+  }
+}
+
+if (process.env.NODE_ENV === 'development') {
+  eventsInterval.value = setInterval(pushCurrentEvents, 2000);
+}
+$http.interceptors.request.use(function (config) {
+  config.headers.CCU_WEB_URL = window.location.href;
+  config.headers.CCU_PORTAL_KEY = process.env.VUE_APP_PORTAL_KEY;
+  return config;
+});
+
+onMounted(async () => {
+  await validateBrowser();
+  await getEnums();
+});
+
+onBeforeUnmount(() => {
+  if (eventsInterval.value) {
+    clearInterval(eventsInterval.value);
+    eventsInterval.value = undefined;
+  }
 });
 </script>
 <style>
-@import '~vue-resize/dist/vue-resize.css';
-@import '~vue-phone-number-input/dist/vue-phone-number-input.css';
+@import 'vue-resize/dist/vue-resize.css';
+@import 'vue-phone-number-input/dist/vue-phone-number-input.css';
 @lost flexbox flex;
 
 html {

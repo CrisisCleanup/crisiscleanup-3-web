@@ -152,13 +152,7 @@
             <li v-html="terms.no_waiver"></li>
             <li v-html="terms.headings"></li>
             <li v-html="terms.assignment"></li>
-            <li v-html="terms.address_intro">
-              <br />
-              Crisis Cleanup, LLC<br />
-              Attn: Aaron Titus<br />
-              5905 Blue Mountain Cir.<br />
-              Longmont, CO 80503
-            </li>
+            <li v-html="terms.address_intro"></li>
 
             <li v-html="terms.entire_agreement"></li>
             <li v-html="terms.updated"></li>

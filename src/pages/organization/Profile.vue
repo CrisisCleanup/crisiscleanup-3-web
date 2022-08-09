@@ -173,8 +173,11 @@
               "
               class="py-1"
             >
-              <template v-for="contact in organization.primary_contacts">
-                <span class="inline-block" :key="contact.id">
+              <div
+                v-for="contact in organization.primary_contacts"
+                :key="contact.id"
+              >
+                <span class="inline-block">
                   {{ contact.first_name }} {{ contact.last_name }}
                 </span>
                 <div :key="contact.email">
@@ -208,7 +211,7 @@
                     }
                   "
                 />
-              </template>
+              </div>
             </div>
 
             <UserSearchInput

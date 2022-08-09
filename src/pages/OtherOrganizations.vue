@@ -60,8 +60,12 @@
                 grid-column-gap: 10px;
               "
             >
-              <template v-for="contact in slotProps.item.primary_contacts">
-                <div :key="contact.email" class="my-1">
+              <template>
+                <div
+                  v-for="contact in slotProps.item.primary_contacts"
+                  :key="contact.email"
+                  class="my-1"
+                >
                   <strong class="font-bold"
                     >{{ contact.first_name }} {{ contact.last_name }}</strong
                   >
@@ -86,18 +90,17 @@
               {{ $t('otherOrganizations.incident_primary_contacts') }}
             </base-text>
             <div>
-              <template
+              <div
                 v-for="contact in slotProps.item.incident_primary_contacts"
+                :key="contact.email"
               >
-                <div :key="contact.email">
-                  <strong class="font-bold"
-                    >{{ contact.first_name }} {{ contact.last_name }}</strong
-                  >
-                  <div>{{ contact.title ? contact.title : '' }}</div>
-                  <div>{{ contact.email }}</div>
-                  <div>{{ contact.mobile }}</div>
-                </div>
-              </template>
+                <strong class="font-bold"
+                  >{{ contact.first_name }} {{ contact.last_name }}</strong
+                >
+                <div>{{ contact.title ? contact.title : '' }}</div>
+                <div>{{ contact.email }}</div>
+                <div>{{ contact.mobile }}</div>
+              </div>
             </div>
           </div>
         </div>
