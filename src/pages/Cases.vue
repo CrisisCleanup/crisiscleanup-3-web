@@ -937,7 +937,25 @@
           />
         </template>
       </div>
-      <div v-if="!spinning">
+      <div v-if="!spinning && $mq === 'sm'">
+        <WorksiteSearchInput
+          width="300px"
+          icon="search"
+          :suggestions="[
+            {
+              name: 'worksites',
+              data: searchWorksites || [],
+              key: 'name',
+            },
+          ]"
+          display-property="name"
+          :placeholder="$t('actions.search')"
+          size="medium"
+          class="mx-2"
+          @selectedExisting="handleChange"
+          @search="onSearch"
+          @clear="onSearch"
+        />
         <WorksiteMap
           :key="JSON.stringify(currentQuery)"
           ref="worksiteMap"
@@ -948,7 +966,6 @@
           @mapMoved="onMapMoved"
           @onSelectmarker="displayWorksite"
           @onLoadedMarkers="onLoadedMarkers"
-          v-if="$mq === 'sm'"
         />
         <router-view
           :key="$route.params.id"
@@ -1155,9 +1172,9 @@ export default {
     highPrioritySvgInactive() {
       const template = templates.important;
       return template
-        .replaceAll('{{fillColor}}', 'grey')
-        .replaceAll('{{strokeColor}}', 'white')
-        .replaceAll('{{multiple}}', '');
+        .replace('{{fillColor}}', 'grey')
+        .replace('{{strokeColor}}', 'white')
+        .replace('{{multiple}}', '');
     },
     heatMapEnabled() {
       return true;
@@ -1165,24 +1182,24 @@ export default {
     highPrioritySvgActive() {
       const template = templates.important;
       const svg = template
-        .replaceAll('{{fillColor}}', 'red')
-        .replaceAll('{{strokeColor}}', 'white')
-        .replaceAll('{{multiple}}', '');
+        .replace('{{fillColor}}', 'red')
+        .replace('{{strokeColor}}', 'white')
+        .replace('{{multiple}}', '');
       return svg;
     },
     favoriteSvgInactive() {
       const template = templates.favorite;
       return template
-        .replaceAll('{{fillColor}}', 'grey')
-        .replaceAll('{{strokeColor}}', 'white')
-        .replaceAll('{{multiple}}', '');
+        .replace('{{fillColor}}', 'grey')
+        .replace('{{strokeColor}}', 'white')
+        .replace('{{multiple}}', '');
     },
     favoriteSvgActive() {
       const template = templates.favorite;
       const svg = template
-        .replaceAll('{{fillColor}}', 'red')
-        .replaceAll('{{strokeColor}}', 'white')
-        .replaceAll('{{multiple}}', '');
+        .replace('{{fillColor}}', 'red')
+        .replace('{{strokeColor}}', 'white')
+        .replace('{{multiple}}', '');
       return svg;
     },
     columns() {
