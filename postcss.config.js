@@ -12,6 +12,7 @@ module.exports = {
     require('postcss-preset-env')({
       stage: 1,
     }),
+    require('postcss-import'),
     require('postcss-atroot'),
     require('postcss-property-lookup'),
     require('postcss-nested-ancestors'),
