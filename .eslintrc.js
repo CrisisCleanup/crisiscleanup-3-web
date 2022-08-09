@@ -66,6 +66,8 @@ module.exports = {
     'func-names': 0,
     // Vue specific rules
     'vue/max-attributes-per-line': 'off',
+    'vue/multi-word-component-names': 'warn',
+    'vue/no-reserved-component-names': 'warn',
   },
 
   settings: {
