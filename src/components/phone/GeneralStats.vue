@@ -20,7 +20,12 @@
       </div>
       <div class="flex p-2 items-center justify-between">
         <base-text>{{ $t('phoneDashboard.remaining_calldowns') }}</base-text>
-        0
+        <base-button
+          type="link"
+          class="text-primary-dark underline"
+          :text="remainingCalldowns || 0"
+          :action="() => showOutboundsModal('calldown')"
+        ></base-button>
       </div>
       <div class="flex p-2 items-center justify-between">
         <base-text>{{ $t('phoneDashboard.agents_online') }}</base-text>
@@ -50,6 +55,7 @@ export default {
   data() {
     return {
       remainingCallbacks: 0,
+      remainingCalldowns: 0,
       agentsOnline: 0,
     };
   },
@@ -65,7 +71,7 @@ export default {
     await this.updateCallbacks();
   },
   methods: {
-    async showOutboundsModal() {
+    async showOutboundsModal(type = 'callback') {
       await this.$component({
         title: this.$t(`phoneDashboard.remaining_outbounds`),
         component: 'AjaxTable',
@@ -132,6 +138,7 @@ export default {
             completion__lt: 1,
             filter_ani: 1,
             locked_at__isnull: true,
+            call_type: type,
           },
         },
       });
@@ -140,7 +147,10 @@ export default {
     async updateCallbacks() {
       this.remainingCallbacks =
         await PhoneOutbound.api().getRemainingCallbackCount('');
+      this.remainingCalldowns =
+        await PhoneOutbound.api().getRemainingCalldownCount('');
       this.$emit('onRemainingCallbacks', this.remainingCallbacks);
+      this.$emit('onRemainingCalldowns', this.remainingCalldowns);
     },
   },
 };

@@ -441,6 +441,7 @@
                 <template v-slot:component>
                   <GeneralStats
                     @onRemainingCallbacks="remainingCallbacks = $event"
+                    @onRemainingCalldowns="remainingCalldowns = $event"
                   />
                 </template>
               </PhoneComponentButton>
@@ -573,6 +574,7 @@ export default {
       tabs: null,
       showMobileMap: false,
       remainingCallbacks: 0,
+      remainingCalldowns: 0,
       unreadNewsCount: 0,
       unreadChatCount: 0,
       unreadUrgentChatCount: 0,
@@ -595,9 +597,10 @@ export default {
     },
     callsWaiting() {
       return (
-        Number(this.stats.inQueue) +
-          Number(this.stats.active) +
-          this.remainingCallbacks || 0
+        Number(this.stats.inQueue || 0) +
+        Number(this.stats.active || 0) +
+        Number(this.remainingCallbacks || 0) +
+        Number(this.remainingCalldowns || 0)
       );
     },
     showingDetails() {

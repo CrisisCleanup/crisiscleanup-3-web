@@ -102,6 +102,13 @@
         </div>
       </div>
     </div>
+    <ccu-icon
+      @click.native="$phoneService.hangup"
+      v-if="(isOnCall || caller) && isOutboundCall"
+      size="lg"
+      class="ml-2"
+      type="hangup"
+    ></ccu-icon>
   </div>
 </template>
 <script>
