@@ -14,7 +14,17 @@
         <div class="homegrid-survivors">
           <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
           <base-text font="display" variant="h2" class="help-contact">
-            <span v-html="$t('homeVue.phone_or_website')"></span>
+            <div v-if="incidentList.length">
+              <div
+                v-for="incident in incidentList"
+                :key="incident.id"
+                class="ml-2"
+              >
+                {{ incident.short_name }}:
+                {{ getIncidentPhoneNumbers(incident) }}
+              </div>
+            </div>
+            <span v-else v-html="$t('homeVue.phone_or_website')"></span>
           </base-text>
         </div>
       </div>
@@ -27,6 +37,8 @@
 import SideNav from '@/components/home/SideNav.vue';
 import Footer from '@/components/home/Footer.vue';
 import Actions from '@/components/home/Actions.vue';
+import Incident from '@/models/Incident';
+import { formatNationalNumber } from '@/filters';
 
 export const HomeNav = SideNav;
 export const HomeFooter = Footer;
@@ -40,6 +52,23 @@ export default {
         survive: this.$t('homeVue.survivors_call'),
       },
     };
+  },
+  computed: {
+    incidentList() {
+      return Incident.query()
+        .where('active_phone_number', (number) => Boolean(number))
+        .get();
+    },
+  },
+  methods: {
+    getIncidentPhoneNumbers(incident) {
+      if (Array.isArray(incident.active_phone_number)) {
+        return incident.active_phone_number
+          .map((number) => formatNationalNumber(String(number)))
+          .join(', ');
+      }
+      return formatNationalNumber(String(incident.active_phone_number));
+    },
   },
 };
 </script>

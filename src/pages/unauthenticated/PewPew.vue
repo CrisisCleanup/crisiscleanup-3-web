@@ -156,7 +156,15 @@
               ribbon-gradient
             "
           >
-            {{ $t('homeVue.pew_pew_banner') }}
+            <div v-if="incidentList.length">
+              <div v-for="incident in incidentList" :key="incident.id">
+                {{ incident.short_name }}:
+                {{ getIncidentPhoneNumbers(incident) }}
+              </div>
+            </div>
+            <div v-else>
+              {{ $t('homeVue.pew_pew_banner') }}
+            </div>
           </div>
           <div class="col-span-2 flex items-center justify-center">
             <Toggle v-model="isDarkMode" v-if="false" />
@@ -714,6 +722,8 @@ import { orderBy, throttle, shuffle } from 'lodash';
 import { colors, templates } from '@/icons/icons_templates';
 import { makeTableColumns } from '@/utils/table';
 import { nFormatter } from '@/utils/helpers';
+import Incident from '@/models/Incident';
+import { formatNationalNumber } from '@/filters';
 
 import {
   calcWaypoints,
@@ -729,7 +739,6 @@ import {
 import { HomeNavigation } from '@/components/home/SideNav';
 import Table from '@/components/Table';
 import { getQueryString } from '@/utils/urls';
-import Incident from '@/models/Incident';
 import Slider from '@/components/Slider';
 import DisasterIcon from '@/components/DisasterIcon';
 import OrganizationActivityModal from '@/components/OrganizationActivityModal.vue';
@@ -847,6 +856,14 @@ export default {
     this.startTabCirculationTimer(10000);
   },
   methods: {
+    getIncidentPhoneNumbers(incident) {
+      if (Array.isArray(incident.active_phone_number)) {
+        return incident.active_phone_number
+          .map((number) => formatNationalNumber(String(number)))
+          .join(', ');
+      }
+      return formatNationalNumber(String(incident.active_phone_number));
+    },
     async loadPageData() {
       this.incidentId = this.$route.query.incident;
 
@@ -1871,6 +1888,11 @@ export default {
     },
   },
   computed: {
+    incidentList() {
+      return Incident.query()
+        .where('active_phone_number', (number) => Boolean(number))
+        .get();
+    },
     colorMode() {
       return this.isDarkMode ? 'dark' : 'light';
     },
