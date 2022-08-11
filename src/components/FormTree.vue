@@ -6,8 +6,8 @@
           :count="getSectionCount(field)"
           :tooltip="field.help_t"
           class="mb-3"
-          >{{ field.label_t }}</SectionHeading
-        >
+          >{{ field.label_t }}
+        </SectionHeading>
       </template>
       <template v-if="['h5'].includes(field.html_type)">
         <div class="form-field flex items-center justify-between">
