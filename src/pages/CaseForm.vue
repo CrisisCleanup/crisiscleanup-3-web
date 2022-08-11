@@ -311,6 +311,11 @@
           :worksite="worksite"
           @input="currentNote = $event"
         />
+        <div class="my-1 py-1" v-if="!worksite.hasAddressProblems">
+          <base-checkbox v-model="hasAddressProblems" class="text-primary-dark">
+            {{ $t('caseForm.address_problems') }}
+          </base-checkbox>
+        </div>
         <div class="my-1 py-1" v-if="!worksite.isHighPriority">
           <base-checkbox v-model="isHighPriority" class="text-primary-dark">
             {{ $t('flag.flag_high_priority') }}
@@ -537,6 +542,7 @@ export default {
       ready: false,
       isHighPriority: false,
       isFavorite: false,
+      hasAddressProblems: false,
       gettingLocation: false,
       location: null,
       what3words: null,
