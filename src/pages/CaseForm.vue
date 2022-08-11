@@ -312,18 +312,12 @@
           @input="currentNote = $event"
         />
         <div class="my-1 py-1" v-if="!worksite.isHighPriority">
-          <base-checkbox
-            v-model="isHighPriority"
-            class="text-crisiscleanup-red-700"
-          >
+          <base-checkbox v-model="isHighPriority" class="text-primary-dark">
             {{ $t('flag.flag_high_priority') }}
           </base-checkbox>
         </div>
         <div class="my-1 py-1" v-if="!worksite.isFavorite">
-          <base-checkbox
-            v-model="isFavorite"
-            class="text-crisiscleanup-red-700"
-          >
+          <base-checkbox v-model="isFavorite" class="text-primary-dark">
             {{ $t('actions.member_of_my_org') }}
           </base-checkbox>
         </div>
