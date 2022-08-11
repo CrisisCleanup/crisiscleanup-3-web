@@ -27,12 +27,8 @@
           display-property="name"
           :placeholder="$t('formLabels.name')"
           size="large"
-          :required="true"
-          @input="
-            (value) => {
-              updateWorksite(value, 'name');
-            }
-          "
+          required
+          @input="(value) => updateWorksite(value, 'name')"
           @selectedExisting="onWorksiteSelect"
           @search="worksitesSearch"
         />
@@ -42,12 +38,9 @@
           :value="worksite.phone1"
           selector="js-worksite-phone1"
           size="large"
+          required
           :placeholder="$t('formLabels.phone1')"
-          @input="
-            (value) => {
-              updateWorksite(value, 'phone1');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'phone1')"
         />
       </div>
       <div class="form-field" v-if="worksite.phone2 || addAdditionalPhone">
@@ -56,11 +49,7 @@
           selector="js-worksite-phone2"
           size="large"
           :placeholder="$t('formLabels.phone2')"
-          @input="
-            (value) => {
-              updateWorksite(value, 'phone2');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'phone2')"
         />
       </div>
       <base-button
@@ -69,11 +58,7 @@
         type="link"
         :text="$t('caseView.add_phone')"
         :alt="$t('caseView.add_phone')"
-        :action="
-          () => {
-            addAdditionalPhone = true;
-          }
-        "
+        :action="() => (addAdditionalPhone = true)"
       />
       <div class="form-field">
         <base-input
@@ -81,11 +66,7 @@
           selector="js-worksite-email"
           size="large"
           :placeholder="$t('formLabels.email')"
-          @input="
-            (value) => {
-              updateWorksite(value, 'email');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'email')"
         />
       </div>
       <div class="form-field" v-if="currentIncident.auto_contact">
@@ -106,11 +87,7 @@
           :value="worksite.auto_contact_frequency_t"
           :options="contactFrequencyOptions"
           class="bg-white"
-          @input="
-            (value) => {
-              updateWorksite(value, 'auto_contact_frequency_t');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'auto_contact_frequency_t')"
           select-classes="h-12 border"
           item-key="value"
           label="name_t"
@@ -140,6 +117,7 @@
           size="large"
         />
       </div>
+
       <div class="form-field">
         <div
           v-if="addressSet"
@@ -209,12 +187,8 @@
               : $t('formLabels.address')
           "
           size="large"
-          :required="true"
-          @input="
-            (value) => {
-              updateWorksite(value, 'address');
-            }
-          "
+          required
+          @input="(v) => updateWorksite(v, 'address')"
           @selectedExisting="onWorksiteSelect"
           @selectedGeocode="onGeocodeSelect"
           @search="geocoderSearch"
@@ -283,11 +257,7 @@
           :placeholder="$t('formLabels.what3words')"
           :required="!worksite.location"
           disabled
-          @input="
-            (value) => {
-              updateWorksite(value, 'what3words');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'what3words')"
         />
 
         <div class="flex justify-around items-center">
@@ -596,7 +566,6 @@ export default {
     },
     worksiteAddress() {
       if (this.worksite) {
-        // eslint-disable-next-line camelcase
         const {
           address,
           city,
