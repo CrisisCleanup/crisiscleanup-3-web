@@ -182,9 +182,9 @@
           "
           display-property="description"
           :placeholder="
-            hideDetailedAddressFields
-              ? $t('caseView.full_address')
-              : $t('formLabels.address')
+            showAddressDetails
+              ? $t('formLabels.address')
+              : $t('caseView.full_address')
           "
           size="large"
           required
@@ -194,62 +194,50 @@
           @search="geocoderSearch"
         />
       </div>
-      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
-        <base-input
-          :value="worksite.city"
-          selector="js-worksite-city"
-          size="large"
-          :placeholder="$t('formLabels.city')"
-          required
-          :hidden="hideDetailedAddressFields"
-          @input="
-            (value) => {
-              updateWorksite(value, 'city');
-            }
-          "
-        />
-      </div>
-      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
-        <base-input
-          :value="worksite.county"
-          selector="js-worksite-county"
-          size="large"
-          :hidden="hideDetailedAddressFields"
-          :placeholder="$t('formLabels.county')"
-          :break-glass="true"
-          required
-          @input="
-            (value) => {
-              updateWorksite(value, 'county');
-            }
-          "
-        />
-      </div>
-      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
-        <base-input
-          :value="worksite.state"
-          :hidden="hideDetailedAddressFields"
-          selector="js-worksite-state"
-          size="large"
-          :placeholder="$t('formLabels.state')"
-          required
-          @input="
-            (value) => {
-              updateWorksite(value, 'state');
-            }
-          "
-        />
-      </div>
-      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
-        <base-input
-          :value="worksite.postal_code"
-          selector="js-worksite-postal-code"
-          size="large"
-          :placeholder="$t('formLabels.postal_code')"
-          required
-          :hidden="hideDetailedAddressFields"
-        />
-      </div>
+      <template v-if="showAddressDetails">
+        <div class="form-field">
+          <base-input
+            :value="worksite.city"
+            selector="js-worksite-city"
+            size="large"
+            :placeholder="$t('formLabels.city')"
+            required
+            @input="(v) => updateWorksite(v, 'city')"
+          />
+        </div>
+        <div class="form-field">
+          <base-input
+            :value="worksite.county"
+            name="county"
+            selector="js-worksite-county"
+            size="large"
+            :placeholder="$t('formLabels.county')"
+            required
+            @input="(v) => updateWorksite(v, 'county')"
+          />
+        </div>
+        <div class="form-field">
+          <base-input
+            name="state"
+            :value="worksite.state"
+            selector="js-worksite-state"
+            size="large"
+            :placeholder="$t('formLabels.state')"
+            required
+            @input="(v) => updateWorksite(v, 'state')"
+          />
+        </div>
+        <div class="form-field">
+          <base-input
+            name="zip"
+            :value="worksite.postal_code"
+            selector="js-worksite-postal-code"
+            size="large"
+            :placeholder="$t('formLabels.postal_code')"
+            required
+          />
+        </div>
+      </template>
       <div class="form-field">
         <base-input
           :value="worksite.what3words"
@@ -281,8 +269,8 @@
           :worksite="worksite"
           @input="currentNote = $event"
         />
-        <div class="my-1 py-1" v-if="!worksite.hasAddressProblems">
-          <base-checkbox v-model="hasAddressProblems" class="text-primary-dark">
+        <div class="my-1 py-1" v-if="!worksite.isWrongLocation">
+          <base-checkbox v-model="isWrongLocation" class="text-primary-dark">
             {{ $t('caseForm.address_problems') }}
           </base-checkbox>
         </div>
@@ -512,7 +500,8 @@ export default {
       ready: false,
       isHighPriority: false,
       isFavorite: false,
-      hasAddressProblems: false,
+      isWrongLocation: false,
+      shouldSelectOnMap: false,
       gettingLocation: false,
       location: null,
       what3words: null,
@@ -579,6 +568,26 @@ export default {
       }
       return '';
     },
+    isAddressValid() {
+      const {
+        address,
+        city,
+        state,
+        postal_code: postalCode,
+        county,
+        location: { coordinates } = {},
+      } = this.worksite;
+      const hasLatLon = Boolean(coordinates && coordinates.length === 2);
+      const hasValidAddress = Boolean(
+        address && city && state && county && postalCode,
+      );
+      const isValid = hasLatLon && hasValidAddress;
+      console.log('isAddressValid', isValid);
+      return isValid;
+    },
+    showAddressDetails() {
+      return this.isWrongLocation || !this.hideDetailedAddressFields;
+    },
   },
   async mounted() {
     await this.initForm();
@@ -634,7 +643,6 @@ export default {
       this.ready = true;
       this.$nextTick(() => this.calcFormStyle());
     },
-
     async saveNote(currentNote) {
       const notes = [...this.worksite.notes];
       notes.push({
@@ -676,9 +684,7 @@ export default {
       if (this.worksite.id) {
         Worksite.update({
           where: this.worksite.id,
-          data: {
-            [key]: value,
-          },
+          data: { [key]: value },
         });
         this.worksite = Worksite.find(this.worksite.id);
       } else {
@@ -817,13 +823,11 @@ export default {
       this.$emit('geocoded', geocode.location);
       this.addressSet = true;
     },
-
     unlockLocationFields() {
       this.hideDetailedAddressFields = false;
       this.addressSet = false;
       this.$emit('clearMarkers');
     },
-
     clearLocationFields() {
       const geocodeKeys = [
         'address',
@@ -838,7 +842,6 @@ export default {
       this.$emit('clearMarkers');
       this.addressSet = false;
     },
-
     async onGeocodeSelect(value) {
       const geocode = await GeocoderService.getPlaceDetails(
         value.description,
@@ -913,12 +916,17 @@ export default {
       this.overlayMapLocation = value;
     },
     async saveWorksite(reload = true) {
-      const isValid = this.$refs.form.reportValidity();
+      const isValid = this.$refs.form.reportValidity() && this.isAddressValid;
+      if (!this.isAddressValid) {
+        this.$toasted.error(this.$t('caseForm.no_lat_lon_error'));
+        this.$log.debug('Failed to save worksite. Invalid address');
+        return;
+      }
       if (!isValid) {
+        this.$toasted.error(this.$t('caseForm.invalid_form'));
         this.$log.debug('worksite failed to save, invalid.');
         return;
       }
-
       if (this.beforeSave) {
         const beforeSaveCheck = await this.beforeSave();
         if (!beforeSaveCheck) {
@@ -1024,6 +1032,14 @@ export default {
           }
           if (this.isFavorite) {
             await Worksite.api().favorite(worksiteId);
+          }
+          if (this.isWrongLocation) {
+            await Worksite.api().addFlag(worksiteId, {
+              reason_t: 'flag.worksite_wrong_location',
+              is_wrong_location: true,
+              notes: '',
+              requested_action: '',
+            });
           }
           this.worksite = Worksite.find(worksiteId);
         }
@@ -1168,6 +1184,7 @@ export default {
       return geocode;
     },
     async selectOnMap() {
+      this.shouldSelectOnMap = !this.shouldSelectOnMap;
       this.$emit('geocoded', null);
     },
     async locateMe() {
@@ -1205,6 +1222,17 @@ export default {
   watch: {
     dataPrefill(newValue) {
       this.worksite = { ...this.worksite, ...newValue };
+    },
+    // keep flags in sync
+    shouldSelectOnMap(newValue) {
+      if (newValue !== this.isWrongLocation) {
+        this.isWrongLocation = newValue;
+      }
+    },
+    hasAddressProblems(newValue) {
+      if (newValue !== this.shouldSelectOnMap) {
+        this.shouldSelectOnMap = newValue;
+      }
     },
   },
 };
