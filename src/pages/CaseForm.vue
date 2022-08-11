@@ -129,6 +129,16 @@
         "
       >
         {{ $t('formLabels.location') }}
+        <ccu-icon
+          v-tooltip="{
+            content: $t('caseForm.location_instructions'),
+            trigger: 'hover',
+            classes: 'interactive-tooltip w-72',
+          }"
+          :alt="$t('actions.help_alt')"
+          type="help"
+          size="large"
+        />
       </div>
       <div class="form-field">
         <div
