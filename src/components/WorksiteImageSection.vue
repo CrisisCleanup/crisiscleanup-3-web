@@ -10,13 +10,41 @@
         <font-awesome-icon v-else size="lg" icon="camera" />
       </div>
     </DragDrop>
-
-    <vue-easy-lightbox
-      :visible="viewingImage"
-      :imgs="worksite.files.map((file) => file.large_thumbnail_url)"
-      :index="index"
-      @hide="handleHide"
-    ></vue-easy-lightbox>
+    <div v-if="showModal" class="modal">
+      <font-awesome-icon
+        @click="showModal = false"
+        icon="times"
+        class="
+          text-white
+          h-7
+          w-7
+          absolute
+          top-3
+          right-7
+          cursor-pointer
+          hover:text-primary-dark
+        "
+      />
+      <font-awesome-icon
+        class="
+          text-white
+          w-7
+          h-7
+          absolute
+          right-7
+          top-12
+          hover:text-primary-dark
+          cursor-pointer
+        "
+        icon="fa-solid fa-rotate"
+        @click="rotateImg"
+      />
+      <img
+        :src="worksite.files[index].large_thumbnail_url"
+        class="modal-content"
+        id="modal-content"
+      />
+    </div>
 
     <div class="flex flex-wrap">
       <div
@@ -56,6 +84,8 @@ export default {
       uploading: false,
       viewingImage: false,
       index: null,
+      showModal: false,
+      numClicks: 0,
     };
   },
   props: {
@@ -64,7 +94,13 @@ export default {
     isSurvivorToken: VueTypes.bool.def(false),
   },
   methods: {
+    rotateImg() {
+      this.numClicks++;
+      const img = document.getElementById('modal-content');
+      img.style.transform = `rotate(${this.numClicks * 90}deg)`;
+    },
     showImg(index) {
+      this.numClicks = 0;
       this.index = index;
       this.viewingImage = true;
     },
@@ -131,5 +167,42 @@ export default {
 
 .image-close {
   display: none;
+}
+
+.modal {
+  position: fixed;
+  z-index: 1;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+}
+
+.close {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
 }
 </style>
