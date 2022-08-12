@@ -248,21 +248,30 @@
           @input="(v) => updateWorksite(v, 'what3words')"
         />
 
-        <div class="flex justify-around items-center">
+        <div class="flex justify-around items-center p-2 text-gray-700">
           <base-button
             type="bare"
             icon="street-view"
-            class="text-gray-700 pt-2"
+            class=""
             :action="locateMe"
             :text="$t('caseForm.use_my_location')"
           />
-          <base-button
-            type="bare"
-            icon="map"
-            class="text-gray-700 pt-2"
-            :action="selectOnMap"
-            :text="$t('caseForm.select_on_map')"
-          />
+          <span
+            class="p-1"
+            :class="
+              shouldSelectOnMap
+                ? 'border border-primary-light bg-primary-light bg-opacity-40'
+                : ''
+            "
+          >
+            <base-button
+              type="bare"
+              icon="map"
+              class=""
+              :action="selectOnMap"
+              :text="$t('caseForm.select_on_map')"
+            />
+          </span>
         </div>
         <WorksiteNotes
           @saveNote="saveNote"
