@@ -158,6 +158,20 @@
             />
           </div>
         </div>
+        <base-input
+          v-else-if="shouldSelectOnMap"
+          :value="worksite.address"
+          name="worksite.address"
+          selector="js-worksite-address"
+          size="large"
+          :placeholder="
+            showAddressDetails
+              ? $t('formLabels.address')
+              : $t('caseView.full_address')
+          "
+          @input="(v) => updateWorksite(v, 'address')"
+          required
+        />
         <WorksiteSearchInput
           v-else
           :value="worksite.address"
