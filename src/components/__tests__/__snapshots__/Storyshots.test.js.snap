@@ -35692,6 +35692,7 @@ exports[`Storyshots Elements/Cards/TitledCard With Dropdown 1`] = `
                         aria-labelledby="vs1__combobox"
                         autocomplete="off"
                         class="vs__search"
+                        id="select-id-"
                         readonly="readonly"
                         type="search"
                       />
