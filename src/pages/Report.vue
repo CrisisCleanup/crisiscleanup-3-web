@@ -15,7 +15,7 @@
         <ReportPieChart
           v-for="[reportKey, reportValue] in Object.entries(value.data)"
           :key="reportKey"
-          :titleKey="reportKey"
+          :title-key="reportKey"
           :data="reportValue"
           :id="`${reportKey}-${key}`"
           class="first:ml-auto last:mr-auto"
