@@ -283,7 +283,7 @@
               type="bare"
               icon="map"
               class=""
-              :action="selectOnMap"
+              :action="toggleSelectOnMap"
               :text="$t('caseForm.select_on_map')"
             />
           </span>
@@ -1243,9 +1243,11 @@ export default {
       this.updateWorksite(what3words, 'what3words');
       return geocode;
     },
-    async selectOnMap() {
+    async toggleSelectOnMap() {
       this.shouldSelectOnMap = !this.shouldSelectOnMap;
-      this.$emit('geocoded', null);
+      if (this.shouldSelectOnMap) {
+        this.$emit('geocoded', null);
+      }
     },
     async locateMe() {
       this.gettingLocation = true;
