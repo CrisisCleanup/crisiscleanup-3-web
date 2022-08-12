@@ -10,7 +10,7 @@
         <font-awesome-icon v-else size="lg" icon="camera" />
       </div>
     </DragDrop>
-    <div v-if="showModal" class="modal">
+    <div v-if="showModal" class="modal flex">
       <font-awesome-icon
         @click="showModal = false"
         icon="times"
@@ -23,6 +23,7 @@
           right-7
           cursor-pointer
           hover:text-primary-dark
+          z-50
         "
       />
       <font-awesome-icon
@@ -35,14 +36,47 @@
           top-12
           hover:text-primary-dark
           cursor-pointer
+          z-50
         "
         icon="fa-solid fa-rotate"
-        @click="rotateImg"
+        @click="numClicks++"
+      />
+      <font-awesome-icon
+        class="
+          text-white
+          w-7
+          h-7
+          absolute
+          right-7
+          top-24
+          hover:text-primary-dark
+          cursor-pointer
+          z-50
+        "
+        icon="fa-solid fa-plus"
+        @click="scale += 0.25"
+      />
+      <font-awesome-icon
+        class="
+          text-white
+          w-7
+          h-7
+          absolute
+          right-7
+          top-32
+          hover:text-primary-dark
+          cursor-pointer
+          z-50
+        "
+        icon="fa-solid fa-minus"
+        @click="scale -= 0.25"
       />
       <img
         :src="worksite.files[index].large_thumbnail_url"
         class="modal-content"
         id="modal-content"
+        @click="isZoomed = !isZoomed"
+        :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
       />
     </div>
 
@@ -167,7 +201,6 @@ export default {
 .modal {
   position: fixed;
   z-index: 1;
-  padding-top: 100px;
   left: 0;
   top: 0;
   width: 100%;
