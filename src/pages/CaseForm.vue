@@ -109,8 +109,8 @@
         <ccu-icon
           v-tooltip="{
             content: $t('caseForm.location_instructions'),
-            trigger: 'hover',
-            classes: 'interactive-tooltip w-72',
+            trigger: 'click',
+            classes: 'interactive-tooltip w-auto',
           }"
           :alt="$t('actions.help_alt')"
           type="help"
