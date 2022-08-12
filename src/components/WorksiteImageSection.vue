@@ -82,7 +82,6 @@ export default {
   data() {
     return {
       uploading: false,
-      viewingImage: false,
       index: null,
       showModal: false,
       numClicks: 0,
@@ -102,10 +101,6 @@ export default {
     showImg(index) {
       this.numClicks = 0;
       this.index = index;
-      this.viewingImage = true;
-    },
-    handleHide() {
-      this.viewingImage = false;
     },
     async handleFileUpload(fileList) {
       if (fileList.length === 0) {
