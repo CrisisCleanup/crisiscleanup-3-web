@@ -108,7 +108,7 @@
         {{ $t('formLabels.location') }}
         <ccu-icon
           v-tooltip="{
-            content: $t('~~caseForm.location_instructions'),
+            content: $t('caseForm.location_instructions'),
             trigger: 'click',
             classes: 'interactive-tooltip w-auto',
           }"
@@ -295,7 +295,7 @@
         />
         <div class="my-1 py-1" v-if="!worksite.isWrongLocation">
           <base-checkbox v-model="isWrongLocation" class="text-primary-dark">
-            {{ $t('~~caseForm.address_problems') }}
+            {{ $t('caseForm.address_problems') }}
           </base-checkbox>
         </div>
         <div class="my-1 py-1" v-if="!worksite.isHighPriority">
@@ -614,13 +614,13 @@ export default {
     },
     fieldToErrorMsgMap() {
       return {
-        name: this.$t('~~caseForm.name_required'),
-        phone1: this.$t('~~caseForm.phone_required'),
-        address: this.$t('~~caseForm.address_required'),
-        city: this.$t('~~caseForm.city_required'),
-        county: this.$t('~~caseForm.county_required'),
-        state: this.$t('~~caseForm.state_required'),
-        postal_code: this.$t('~~caseForm.postal_code_required'),
+        name: this.$t('caseForm.name_required'),
+        phone1: this.$t('caseForm.phone_required'),
+        address: this.$t('caseForm.address_required'),
+        city: this.$t('caseForm.city_required'),
+        county: this.$t('caseForm.county_required'),
+        state: this.$t('caseForm.state_required'),
+        postal_code: this.$t('caseForm.postal_code_required'),
       };
     },
     showAddressDetails() {
@@ -981,7 +981,7 @@ export default {
         validationErrors.length === 0;
       if (!isValid) {
         if (!this.isAddressValid) {
-          this.$toasted.error(this.$t('~~caseForm.no_lat_lon_error'));
+          this.$toasted.error(this.$t('caseForm.no_lat_lon_error'));
         }
         validationErrors.forEach((e) => this.$toasted.error(e));
         this.$log.debug('Failed to save worksite. Invalid form.');
