@@ -247,6 +247,10 @@ export default {
   @apply text-sm;
 }
 
+#autosuggest__input[required] {
+  @apply border-crisiscleanup-red-100;
+}
+
 .large #autosuggest__input {
   height: 50px;
   @apply text-base;
