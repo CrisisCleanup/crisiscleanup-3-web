@@ -108,7 +108,7 @@
         {{ $t('formLabels.location') }}
         <ccu-icon
           v-tooltip="{
-            content: $t('caseForm.location_instructions'),
+            content: $t('~~caseForm.location_instructions'),
             trigger: 'click',
             classes: 'interactive-tooltip w-auto',
           }"
@@ -275,7 +275,7 @@
             class="p-1"
             :class="
               shouldSelectOnMap
-                ? 'border border-primary-light bg-primary-light bg-opacity-40'
+                ? 'border-2 border-primary-light bg-primary-light bg-opacity-40'
                 : ''
             "
           >
@@ -295,7 +295,7 @@
         />
         <div class="my-1 py-1" v-if="!worksite.isWrongLocation">
           <base-checkbox v-model="isWrongLocation" class="text-primary-dark">
-            {{ $t('caseForm.address_problems') }}
+            {{ $t('~~caseForm.address_problems') }}
           </base-checkbox>
         </div>
         <div class="my-1 py-1" v-if="!worksite.isHighPriority">
@@ -504,7 +504,7 @@ export default {
     },
     dataPrefill: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     resizeMethod: {
       // one of:
@@ -592,6 +592,9 @@ export default {
       }
       return '';
     },
+    advancedAddressFields() {
+      return ['city', 'county', 'state', 'postal_code'];
+    },
     isAddressValid() {
       const {
         address,
@@ -609,8 +612,23 @@ export default {
       console.log('isAddressValid', isValid);
       return isValid;
     },
+    fieldToErrorMsgMap() {
+      return {
+        name: this.$t('~~caseForm.name_required'),
+        phone1: this.$t('~~caseForm.phone_required'),
+        address: this.$t('~~caseForm.address_required'),
+        city: this.$t('~~caseForm.city_required'),
+        county: this.$t('~~caseForm.county_required'),
+        state: this.$t('~~caseForm.state_required'),
+        postal_code: this.$t('~~caseForm.postal_code_required'),
+      };
+    },
     showAddressDetails() {
-      return this.isWrongLocation || !this.hideDetailedAddressFields;
+      return (
+        this.shouldSelectOnMap ||
+        this.isWrongLocation ||
+        !this.hideDetailedAddressFields
+      );
     },
   },
   async mounted() {
@@ -864,6 +882,7 @@ export default {
       ];
       geocodeKeys.forEach((key) => this.updateWorksite('', key));
       this.$emit('clearMarkers');
+      this.shouldSelectOnMap = false;
       this.addressSet = false;
     },
     async onGeocodeSelect(value) {
@@ -940,15 +959,32 @@ export default {
       this.overlayMapLocation = value;
     },
     async saveWorksite(reload = true) {
-      const isValid = this.$refs.form.reportValidity() && this.isAddressValid;
-      if (!this.isAddressValid) {
-        this.$toasted.error(this.$t('caseForm.no_lat_lon_error'));
-        this.$log.debug('Failed to save worksite. Invalid address');
-        return;
-      }
+      const validationErrors = Object.entries(this.fieldToErrorMsgMap).reduce(
+        (errors, [field, errorMsg]) => {
+          if (!this.worksite[field]) {
+            // enable select on map to show hidden advanced fields
+            if (
+              !this.shouldSelectOnMap &&
+              this.advancedAddressFields.includes(field)
+            ) {
+              this.shouldSelectOnMap = true;
+            }
+            errors.push(errorMsg);
+          }
+          return errors;
+        },
+        [],
+      );
+      const isValid =
+        this.$refs.form.reportValidity() &&
+        this.isAddressValid &&
+        validationErrors.length === 0;
       if (!isValid) {
-        this.$toasted.error(this.$t('caseForm.invalid_form'));
-        this.$log.debug('worksite failed to save, invalid.');
+        if (!this.isAddressValid) {
+          this.$toasted.error(this.$t('~~caseForm.no_lat_lon_error'));
+        }
+        validationErrors.forEach((e) => this.$toasted.error(e));
+        this.$log.debug('Failed to save worksite. Invalid form.');
         return;
       }
       if (this.beforeSave) {
@@ -1247,13 +1283,7 @@ export default {
     dataPrefill(newValue) {
       this.worksite = { ...this.worksite, ...newValue };
     },
-    // keep flags in sync
-    shouldSelectOnMap(newValue) {
-      if (newValue !== this.isWrongLocation) {
-        this.isWrongLocation = newValue;
-      }
-    },
-    hasAddressProblems(newValue) {
+    isWrongLocation(newValue) {
       if (newValue !== this.shouldSelectOnMap) {
         this.shouldSelectOnMap = newValue;
       }
