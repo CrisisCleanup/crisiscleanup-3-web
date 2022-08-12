@@ -248,6 +248,7 @@
             selector="js-worksite-postal-code"
             size="large"
             :placeholder="$t('formLabels.postal_code')"
+            @input="(v) => updateWorksite(v, 'postal_code')"
             required
           />
         </div>
