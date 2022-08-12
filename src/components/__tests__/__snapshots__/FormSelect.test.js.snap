@@ -49,7 +49,8 @@ exports[`FormSelect should match snapshot with props 1`] = `
             action="() => {
         /* istanbul ignore next */
         cov_3cekvzqye().f[0]++;
-      }"
+        cov_2p7532qv77().f[0]++;
+        }"
             alt="actions.cancel"
             ccu-event=""
             class="flex items-center base-icon js-actions-cancel   mx-1 opacity-50"

@@ -4,7 +4,7 @@ exports[`BaseIcon should render correctly and match snapshot 1`] = `
 <base-button
   action="() => {
         /* istanbul ignore next */
-        cov_3cekvzqye().f[0]++;
+        cov_2p7532qv77().f[0]++;
       }"
   alt="button"
   ccu-event=""
