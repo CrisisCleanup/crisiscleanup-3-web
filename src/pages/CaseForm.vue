@@ -27,12 +27,8 @@
           display-property="name"
           :placeholder="$t('formLabels.name')"
           size="large"
-          :required="true"
-          @input="
-            (value) => {
-              updateWorksite(value, 'name');
-            }
-          "
+          required
+          @input="(value) => updateWorksite(value, 'name')"
           @selectedExisting="onWorksiteSelect"
           @search="worksitesSearch"
         />
@@ -42,12 +38,9 @@
           :value="worksite.phone1"
           selector="js-worksite-phone1"
           size="large"
+          required
           :placeholder="$t('formLabels.phone1')"
-          @input="
-            (value) => {
-              updateWorksite(value, 'phone1');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'phone1')"
         />
       </div>
       <div class="form-field" v-if="worksite.phone2 || addAdditionalPhone">
@@ -56,11 +49,7 @@
           selector="js-worksite-phone2"
           size="large"
           :placeholder="$t('formLabels.phone2')"
-          @input="
-            (value) => {
-              updateWorksite(value, 'phone2');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'phone2')"
         />
       </div>
       <base-button
@@ -69,11 +58,7 @@
         type="link"
         :text="$t('caseView.add_phone')"
         :alt="$t('caseView.add_phone')"
-        :action="
-          () => {
-            addAdditionalPhone = true;
-          }
-        "
+        :action="() => (addAdditionalPhone = true)"
       />
       <div class="form-field">
         <base-input
@@ -81,11 +66,7 @@
           selector="js-worksite-email"
           size="large"
           :placeholder="$t('formLabels.email')"
-          @input="
-            (value) => {
-              updateWorksite(value, 'email');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'email')"
         />
       </div>
       <div class="form-field" v-if="currentIncident.auto_contact">
@@ -106,11 +87,7 @@
           :value="worksite.auto_contact_frequency_t"
           :options="contactFrequencyOptions"
           class="bg-white"
-          @input="
-            (value) => {
-              updateWorksite(value, 'auto_contact_frequency_t');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'auto_contact_frequency_t')"
           select-classes="h-12 border"
           item-key="value"
           label="name_t"
@@ -129,7 +106,18 @@
         "
       >
         {{ $t('formLabels.location') }}
+        <ccu-icon
+          v-tooltip="{
+            content: $t('caseForm.location_instructions'),
+            trigger: 'click',
+            classes: 'interactive-tooltip w-auto',
+          }"
+          :alt="$t('actions.help_alt')"
+          type="help"
+          size="large"
+        />
       </div>
+
       <div class="form-field">
         <div
           v-if="addressSet"
@@ -170,6 +158,20 @@
             />
           </div>
         </div>
+        <base-input
+          v-else-if="shouldSelectOnMap"
+          :value="worksite.address"
+          name="worksite.address"
+          selector="js-worksite-address"
+          size="large"
+          :placeholder="
+            showAddressDetails
+              ? $t('formLabels.address')
+              : $t('caseView.full_address')
+          "
+          @input="(v) => updateWorksite(v, 'address')"
+          required
+        />
         <WorksiteSearchInput
           v-else
           :value="worksite.address"
@@ -194,78 +196,63 @@
           "
           display-property="description"
           :placeholder="
-            hideDetailedAddressFields
-              ? $t('caseView.full_address')
-              : $t('formLabels.address')
+            showAddressDetails
+              ? $t('formLabels.address')
+              : $t('caseView.full_address')
           "
           size="large"
-          :required="true"
-          @input="
-            (value) => {
-              updateWorksite(value, 'address');
-            }
-          "
+          required
+          @input="(v) => updateWorksite(v, 'address')"
           @selectedExisting="onWorksiteSelect"
           @selectedGeocode="onGeocodeSelect"
           @search="geocoderSearch"
         />
       </div>
-      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
-        <base-input
-          :value="worksite.city"
-          selector="js-worksite-city"
-          size="large"
-          :placeholder="$t('formLabels.city')"
-          required
-          :hidden="hideDetailedAddressFields"
-          @input="
-            (value) => {
-              updateWorksite(value, 'city');
-            }
-          "
-        />
-      </div>
-      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
-        <base-input
-          :value="worksite.county"
-          selector="js-worksite-county"
-          size="large"
-          :hidden="hideDetailedAddressFields"
-          :placeholder="$t('formLabels.county')"
-          :break-glass="true"
-          required
-          @input="
-            (value) => {
-              updateWorksite(value, 'county');
-            }
-          "
-        />
-      </div>
-      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
-        <base-input
-          :value="worksite.state"
-          :hidden="hideDetailedAddressFields"
-          selector="js-worksite-state"
-          size="large"
-          :placeholder="$t('formLabels.state')"
-          required
-          @input="
-            (value) => {
-              updateWorksite(value, 'state');
-            }
-          "
-        />
-      </div>
-      <div :class="hideDetailedAddressFields ? '' : 'form-field'">
-        <base-input
-          :value="worksite.postal_code"
-          selector="js-worksite-postal-code"
-          size="large"
-          :placeholder="$t('formLabels.postal_code')"
-          required
-          :hidden="hideDetailedAddressFields"
-        />
-      </div>
+      <template v-if="showAddressDetails">
+        <div class="form-field">
+          <base-input
+            :value="worksite.city"
+            selector="js-worksite-city"
+            size="large"
+            :placeholder="$t('formLabels.city')"
+            required
+            @input="(v) => updateWorksite(v, 'city')"
+          />
+        </div>
+        <div class="form-field">
+          <base-input
+            :value="worksite.county"
+            name="county"
+            selector="js-worksite-county"
+            size="large"
+            :placeholder="$t('formLabels.county')"
+            required
+            @input="(v) => updateWorksite(v, 'county')"
+          />
+        </div>
+        <div class="form-field">
+          <base-input
+            name="state"
+            :value="worksite.state"
+            selector="js-worksite-state"
+            size="large"
+            :placeholder="$t('formLabels.state')"
+            required
+            @input="(v) => updateWorksite(v, 'state')"
+          />
+        </div>
+        <div class="form-field">
+          <base-input
+            name="zip"
+            :value="worksite.postal_code"
+            selector="js-worksite-postal-code"
+            size="large"
+            :placeholder="$t('formLabels.postal_code')"
+            @input="(v) => updateWorksite(v, 'postal_code')"
+            required
+          />
+        </div>
+      </template>
       <div class="form-field">
         <base-input
           :value="worksite.what3words"
@@ -273,47 +260,51 @@
           :placeholder="$t('formLabels.what3words')"
           :required="!worksite.location"
           disabled
-          @input="
-            (value) => {
-              updateWorksite(value, 'what3words');
-            }
-          "
+          @input="(v) => updateWorksite(v, 'what3words')"
         />
 
-        <div class="flex justify-around items-center">
+        <div class="flex justify-around items-center p-2 text-gray-700">
           <base-button
             type="bare"
             icon="street-view"
-            class="text-gray-700 pt-2"
+            class=""
             :action="locateMe"
             :text="$t('caseForm.use_my_location')"
           />
-          <base-button
-            type="bare"
-            icon="map"
-            class="text-gray-700 pt-2"
-            :action="selectOnMap"
-            :text="$t('caseForm.select_on_map')"
-          />
+          <span
+            class="p-1"
+            :class="
+              shouldSelectOnMap
+                ? 'border-2 border-primary-light bg-primary-light bg-opacity-40'
+                : ''
+            "
+          >
+            <base-button
+              type="bare"
+              icon="map"
+              class=""
+              :action="toggleSelectOnMap"
+              :text="$t('caseForm.select_on_map')"
+            />
+          </span>
         </div>
         <WorksiteNotes
           @saveNote="saveNote"
           :worksite="worksite"
           @input="currentNote = $event"
         />
+        <div class="my-1 py-1" v-if="!worksite.isWrongLocation">
+          <base-checkbox v-model="isWrongLocation" class="text-primary-dark">
+            {{ $t('caseForm.address_problems') }}
+          </base-checkbox>
+        </div>
         <div class="my-1 py-1" v-if="!worksite.isHighPriority">
-          <base-checkbox
-            v-model="isHighPriority"
-            class="text-crisiscleanup-red-700"
-          >
+          <base-checkbox v-model="isHighPriority" class="text-primary-dark">
             {{ $t('flag.flag_high_priority') }}
           </base-checkbox>
         </div>
         <div class="my-1 py-1" v-if="!worksite.isFavorite">
-          <base-checkbox
-            v-model="isFavorite"
-            class="text-crisiscleanup-red-700"
-          >
+          <base-checkbox v-model="isFavorite" class="text-primary-dark">
             {{ $t('actions.member_of_my_org') }}
           </base-checkbox>
         </div>
@@ -513,7 +504,7 @@ export default {
     },
     dataPrefill: {
       type: Object,
-      default: () => {},
+      default: () => ({}),
     },
     resizeMethod: {
       // one of:
@@ -533,6 +524,8 @@ export default {
       ready: false,
       isHighPriority: false,
       isFavorite: false,
+      isWrongLocation: false,
+      shouldSelectOnMap: false,
       gettingLocation: false,
       location: null,
       what3words: null,
@@ -586,7 +579,6 @@ export default {
     },
     worksiteAddress() {
       if (this.worksite) {
-        // eslint-disable-next-line camelcase
         const {
           address,
           city,
@@ -599,6 +591,44 @@ export default {
         } <br> ${postalCode}`;
       }
       return '';
+    },
+    advancedAddressFields() {
+      return ['city', 'county', 'state', 'postal_code'];
+    },
+    isAddressValid() {
+      const {
+        address,
+        city,
+        state,
+        postal_code: postalCode,
+        county,
+        location: { coordinates } = {},
+      } = this.worksite;
+      const hasLatLon = Boolean(coordinates && coordinates.length === 2);
+      const hasValidAddress = Boolean(
+        address && city && state && county && postalCode,
+      );
+      const isValid = hasLatLon && hasValidAddress;
+      console.log('isAddressValid', isValid);
+      return isValid;
+    },
+    fieldToErrorMsgMap() {
+      return {
+        name: this.$t('caseForm.name_required'),
+        phone1: this.$t('caseForm.phone_required'),
+        address: this.$t('caseForm.address_required'),
+        city: this.$t('caseForm.city_required'),
+        county: this.$t('caseForm.county_required'),
+        state: this.$t('caseForm.state_required'),
+        postal_code: this.$t('caseForm.postal_code_required'),
+      };
+    },
+    showAddressDetails() {
+      return (
+        this.shouldSelectOnMap ||
+        this.isWrongLocation ||
+        !this.hideDetailedAddressFields
+      );
     },
   },
   async mounted() {
@@ -655,7 +685,6 @@ export default {
       this.ready = true;
       this.$nextTick(() => this.calcFormStyle());
     },
-
     async saveNote(currentNote) {
       const notes = [...this.worksite.notes];
       notes.push({
@@ -697,9 +726,7 @@ export default {
       if (this.worksite.id) {
         Worksite.update({
           where: this.worksite.id,
-          data: {
-            [key]: value,
-          },
+          data: { [key]: value },
         });
         this.worksite = Worksite.find(this.worksite.id);
       } else {
@@ -838,13 +865,11 @@ export default {
       this.$emit('geocoded', geocode.location);
       this.addressSet = true;
     },
-
     unlockLocationFields() {
       this.hideDetailedAddressFields = false;
       this.addressSet = false;
       this.$emit('clearMarkers');
     },
-
     clearLocationFields() {
       const geocodeKeys = [
         'address',
@@ -857,9 +882,9 @@ export default {
       ];
       geocodeKeys.forEach((key) => this.updateWorksite('', key));
       this.$emit('clearMarkers');
+      this.shouldSelectOnMap = false;
       this.addressSet = false;
     },
-
     async onGeocodeSelect(value) {
       const geocode = await GeocoderService.getPlaceDetails(
         value.description,
@@ -934,12 +959,34 @@ export default {
       this.overlayMapLocation = value;
     },
     async saveWorksite(reload = true) {
-      const isValid = this.$refs.form.reportValidity();
+      const validationErrors = Object.entries(this.fieldToErrorMsgMap).reduce(
+        (errors, [field, errorMsg]) => {
+          if (!this.worksite[field]) {
+            // enable select on map to show hidden advanced fields
+            if (
+              !this.shouldSelectOnMap &&
+              this.advancedAddressFields.includes(field)
+            ) {
+              this.shouldSelectOnMap = true;
+            }
+            errors.push(errorMsg);
+          }
+          return errors;
+        },
+        [],
+      );
+      const isValid =
+        this.$refs.form.reportValidity() &&
+        this.isAddressValid &&
+        validationErrors.length === 0;
       if (!isValid) {
-        this.$log.debug('worksite failed to save, invalid.');
+        if (!this.isAddressValid) {
+          this.$toasted.error(this.$t('caseForm.no_lat_lon_error'));
+        }
+        validationErrors.forEach((e) => this.$toasted.error(e));
+        this.$log.debug('Failed to save worksite. Invalid form.');
         return;
       }
-
       if (this.beforeSave) {
         const beforeSaveCheck = await this.beforeSave();
         if (!beforeSaveCheck) {
@@ -1045,6 +1092,14 @@ export default {
           }
           if (this.isFavorite) {
             await Worksite.api().favorite(worksiteId);
+          }
+          if (this.isWrongLocation) {
+            await Worksite.api().addFlag(worksiteId, {
+              reason_t: 'flag.worksite_wrong_location',
+              is_wrong_location: true,
+              notes: '',
+              requested_action: '',
+            });
           }
           this.worksite = Worksite.find(worksiteId);
         }
@@ -1188,8 +1243,11 @@ export default {
       this.updateWorksite(what3words, 'what3words');
       return geocode;
     },
-    async selectOnMap() {
-      this.$emit('geocoded', null);
+    async toggleSelectOnMap() {
+      this.shouldSelectOnMap = !this.shouldSelectOnMap;
+      if (this.shouldSelectOnMap) {
+        this.$emit('geocoded', null);
+      }
     },
     async locateMe() {
       this.gettingLocation = true;
@@ -1226,6 +1284,11 @@ export default {
   watch: {
     dataPrefill(newValue) {
       this.worksite = { ...this.worksite, ...newValue };
+    },
+    isWrongLocation(newValue) {
+      if (newValue !== this.shouldSelectOnMap) {
+        this.shouldSelectOnMap = newValue;
+      }
     },
   },
 };

@@ -122,17 +122,17 @@ export default {
         .style('fill', function (d) {
           return color(d.grpName);
         })
-        .attr('y', function (d) {
+        .attr('y', function () {
           return y(0);
         })
-        .attr('height', function (d) {
+        .attr('height', function () {
           return height - y(0);
         });
 
       slice
         .selectAll('rect')
         .transition()
-        .delay(function (d) {
+        .delay(function () {
           return Math.random() * 1000;
         })
         .duration(1000)

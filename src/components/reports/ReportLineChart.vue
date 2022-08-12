@@ -60,23 +60,23 @@ export default {
           .append('g')
           .attr('transform', `translate(${margin.left},${margin.top})`);
 
-        function render(data) {
+        function render(chartData) {
           color.domain(
-            Object.keys(data[0]).filter((key) => key !== props.groupBy),
+            Object.keys(chartData[0]).filter((key) => key !== props.groupBy),
           );
 
-          data.forEach(function (d) {
+          chartData.forEach(function (d) {
             d[props.groupBy] = parseDate(d[props.groupBy]);
           });
 
-          data.sort(function (a, b) {
+          chartData.sort(function (a, b) {
             return a[props.groupBy] - b[props.groupBy];
           });
 
           const metricsData = color.domain().map(function (name) {
             return {
               name,
-              values: data.map(function (d) {
+              values: chartData.map(function (d) {
                 return {
                   date: d[props.groupBy],
                   amount: +d[name],
@@ -86,7 +86,7 @@ export default {
           });
 
           x.domain(
-            d3.extent(data, function (d) {
+            d3.extent(chartData, function (d) {
               return d[props.groupBy];
             }),
           );
