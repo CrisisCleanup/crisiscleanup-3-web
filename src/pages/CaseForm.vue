@@ -110,9 +110,9 @@
           v-tooltip="{
             content: $t('caseForm.location_instructions'),
             trigger: 'click',
-            classes: 'interactive-tooltip w-auto',
+            classes: 'interactive-tooltip w-72',
           }"
-          :alt="$t('actions.help_alt')"
+          :alt="$t('caseForm.location_instructions')"
           type="help"
           size="large"
         />
