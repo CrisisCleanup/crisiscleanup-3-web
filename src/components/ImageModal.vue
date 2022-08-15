@@ -82,7 +82,6 @@
             }
           "
         />
-        test
         <ccu-icon
           :alt="$t('actions.delete')"
           size="xs"
