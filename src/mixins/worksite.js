@@ -6,10 +6,10 @@ export const WorksitesMixin = {
       const template = templates[worktype.work_type] || templates.unknown;
       const { fillColor, strokeColor } = this.getWorktypeColors(worktype);
       const svg = template
-        .replace('{{fillColor}}', fillColor)
-        .replace('{{strokeColor}}', strokeColor)
-        .replace(/(width="[1-99]+")/g, `width="${size}"`)
-        .replace(/(height="[1-99]+")/g, `height="${size}"`);
+        .replaceAll('{{fillColor}}', fillColor)
+        .replaceAll('{{strokeColor}}', strokeColor)
+        .replaceAll(/(width="[1-99]+")/g, `width="${size}"`)
+        .replaceAll(/(height="[1-99]+")/g, `height="${size}"`);
       return svg;
     },
     getWorktypeColors(worktype) {

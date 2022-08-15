@@ -133,9 +133,9 @@ export default {
         this.displayedWorkTypeSvgs = Object.keys(val).map((workType) => {
           const template = templates[workType] || templates.unknown;
           const svg = template
-            .replace('{{fillColor}}', 'black')
-            .replace('{{strokeColor}}', 'black')
-            .replace('{{multiple}}', '');
+            .replaceAll('{{fillColor}}', 'black')
+            .replaceAll('{{strokeColor}}', 'black')
+            .replaceAll('{{multiple}}', '');
           return {
             svg,
             key: workType,

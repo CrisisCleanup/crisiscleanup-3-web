@@ -1141,9 +1141,9 @@ export default {
     highPrioritySvgInactive() {
       const template = templates.important;
       return template
-        .replace('{{fillColor}}', 'grey')
-        .replace('{{strokeColor}}', 'white')
-        .replace('{{multiple}}', '');
+        .replaceAll('{{fillColor}}', 'grey')
+        .replaceAll('{{strokeColor}}', 'white')
+        .replaceAll('{{multiple}}', '');
     },
     heatMapEnabled() {
       return true;
@@ -1151,24 +1151,24 @@ export default {
     highPrioritySvgActive() {
       const template = templates.important;
       const svg = template
-        .replace('{{fillColor}}', 'red')
-        .replace('{{strokeColor}}', 'white')
-        .replace('{{multiple}}', '');
+        .replaceAll('{{fillColor}}', 'red')
+        .replaceAll('{{strokeColor}}', 'white')
+        .replaceAll('{{multiple}}', '');
       return svg;
     },
     favoriteSvgInactive() {
       const template = templates.favorite;
       return template
-        .replace('{{fillColor}}', 'grey')
-        .replace('{{strokeColor}}', 'white')
-        .replace('{{multiple}}', '');
+        .replaceAll('{{fillColor}}', 'grey')
+        .replaceAll('{{strokeColor}}', 'white')
+        .replaceAll('{{multiple}}', '');
     },
     favoriteSvgActive() {
       const template = templates.favorite;
       const svg = template
-        .replace('{{fillColor}}', 'red')
-        .replace('{{strokeColor}}', 'white')
-        .replace('{{multiple}}', '');
+        .replaceAll('{{fillColor}}', 'red')
+        .replaceAll('{{strokeColor}}', 'white')
+        .replaceAll('{{multiple}}', '');
       return svg;
     },
     columns() {

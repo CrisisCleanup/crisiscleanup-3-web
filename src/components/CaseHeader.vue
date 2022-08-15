@@ -126,31 +126,31 @@ export default defineComponent({
     const highPrioritySvgInactive = computed(() => {
       const template = templates.important;
       return template
-        .replace('{{fillColor}}', 'grey')
-        .replace('{{strokeColor}}', 'white')
-        .replace('{{multiple}}', '');
+        .replaceAll('{{fillColor}}', 'grey')
+        .replaceAll('{{strokeColor}}', 'white')
+        .replaceAll('{{multiple}}', '');
     });
     const highPrioritySvgActive = computed(() => {
       const template = templates.important;
       return template
-        .replace('{{fillColor}}', 'red')
-        .replace('{{strokeColor}}', 'white')
-        .replace('{{multiple}}', '');
+        .replaceAll('{{fillColor}}', 'red')
+        .replaceAll('{{strokeColor}}', 'white')
+        .replaceAll('{{multiple}}', '');
     });
     const favoriteSvgInactive = computed(() => {
       const template = templates.favorite;
       return template
-        .replace('{{fillColor}}', 'grey')
-        .replace('{{strokeColor}}', 'white')
-        .replace('{{multiple}}', '');
+        .replaceAll('{{fillColor}}', 'grey')
+        .replaceAll('{{strokeColor}}', 'white')
+        .replaceAll('{{multiple}}', '');
     });
 
     const favoriteSvgActive = computed(() => {
       const template = templates.favorite;
       return template
-        .replace('{{fillColor}}', 'red')
-        .replace('{{strokeColor}}', 'white')
-        .replace('{{multiple}}', '');
+        .replaceAll('{{fillColor}}', 'red')
+        .replaceAll('{{strokeColor}}', 'white')
+        .replaceAll('{{multiple}}', '');
     });
 
     async function toggleFavorite(toggle) {
