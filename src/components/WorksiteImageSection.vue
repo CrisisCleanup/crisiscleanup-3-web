@@ -10,97 +10,15 @@
         <font-awesome-icon v-else size="lg" icon="camera" />
       </div>
     </DragDrop>
-    <div v-if="showModal" class="modal flex">
-      <font-awesome-icon
-        @click="showModal = false"
-        icon="times"
-        class="
-          text-white
-          h-7
-          w-7
-          absolute
-          top-3
-          right-7
-          cursor-pointer
-          hover:text-primary-dark
-          z-50
-        "
-      />
-      <font-awesome-icon
-        class="
-          text-white
-          w-7
-          h-7
-          absolute
-          right-7
-          top-12
-          hover:text-primary-dark
-          cursor-pointer
-          z-50
-        "
-        icon="fa-solid fa-rotate"
-        @click="numClicks++"
-      />
-      <font-awesome-icon
-        class="
-          text-white
-          w-7
-          h-7
-          absolute
-          right-7
-          top-24
-          hover:text-primary-dark
-          cursor-pointer
-          z-50
-        "
-        icon="fa-solid fa-plus"
-        @click="scale += 0.25"
-      />
-      <font-awesome-icon
-        class="
-          text-white
-          w-7
-          h-7
-          absolute
-          right-7
-          top-32
-          hover:text-primary-dark
-          cursor-pointer
-          z-50
-        "
-        icon="fa-solid fa-minus"
-        @click="scale -= 0.25"
-      />
-      <img
-        :src="worksite.files[index].large_thumbnail_url"
-        class="modal-content"
-        id="modal-content"
-        @click="isZoomed = !isZoomed"
-        :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
-      />
-    </div>
 
     <div class="flex flex-wrap">
-      <div
+      <ImageModal
         v-for="(file, idx) in worksite.files"
         :key="idx"
-        class="relative image-container mb-2"
-      >
-        <img
-          class="image-box w-20 h-20 mx-2 cursor-pointer"
-          :src="file.small_thumbnail_url"
-          :alt="file.filename_original"
-          :title="file.filename_original"
-          @click="() => showImg(idx)"
-        />
-        <ccu-icon
-          :alt="$t('actions.delete')"
-          size="xs"
-          type="trash"
-          class="absolute right-0 top-0 m-1 mr-3 p-1 image-close bg-white"
-          @click.native="deleteFile(file.file)"
-        />
-      </div>
+        :img-src="file.small_thumbnail_url"
+        :modal-img="file.large_thumbnail_url"
+        @removeImage="deleteFile(file.file)"
+      />
     </div>
   </section>
 </template>
@@ -109,16 +27,14 @@ import VueTypes from 'vue-types';
 import DragDrop from '@/components/DragDrop';
 import Worksite from '@/models/Worksite';
 import { getErrorMessage } from '../utils/errors';
+import ImageModal from '@/components/ImageModal';
 
 export default {
   name: 'WorksiteImageSection',
-  components: { DragDrop },
+  components: { DragDrop, ImageModal },
   data() {
     return {
       uploading: false,
-      index: null,
-      showModal: false,
-      numClicks: 0,
     };
   },
   props: {
@@ -127,15 +43,6 @@ export default {
     isSurvivorToken: VueTypes.bool.def(false),
   },
   methods: {
-    rotateImg() {
-      this.numClicks++;
-      const img = document.getElementById('modal-content');
-      img.style.transform = `rotate(${this.numClicks * 90}deg)`;
-    },
-    showImg(index) {
-      this.numClicks = 0;
-      this.index = index;
-    },
     async handleFileUpload(fileList) {
       if (fileList.length === 0) {
         this.uploading = false;
@@ -189,31 +96,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.image-container:hover .image-close {
-  display: flex;
-}
-
-.image-close {
-  display: none;
-}
-
-.modal {
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.9);
-}
-
-.modal-content {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
-}
-</style>
