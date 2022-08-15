@@ -82,9 +82,9 @@ export default {
         const spriteColors = colors[colorsKey];
         const template = templates[wt.work_type] || templates.unknown;
         const typeSvg = template
-          .replace('{{fillColor}}', spriteColors.fillColor)
-          .replace('{{strokeColor}}', spriteColors.strokeColor)
-          .replace('{{multiple}}', '');
+          .replaceAll('{{fillColor}}', spriteColors.fillColor)
+          .replaceAll('{{strokeColor}}', spriteColors.strokeColor)
+          .replaceAll('{{multiple}}', '');
 
         const iconSettings = {
           mapIconUrl: typeSvg,

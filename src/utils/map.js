@@ -165,9 +165,9 @@ export function getWorksiteLayer(
                 strokeColor = 'white';
               }
               const svg = worksiteTemplate
-                .replace('{{fillColor}}', fillColor)
-                .replace('{{strokeColor}}', strokeColor)
-                .replace(
+                .replaceAll('{{fillColor}}', fillColor)
+                .replaceAll('{{strokeColor}}', strokeColor)
+                .replaceAll(
                   '{{multiple}}',
                   marker.work_types.length > 1 ? templates.plus : '',
                 );
@@ -317,9 +317,9 @@ export function getWorksiteLayer(
                     fillColor = 'white';
                   }
                   const typeSvg = detailedTemplate
-                    .replace('{{fillColor}}', fillColor)
-                    .replace('{{strokeColor}}', strokeColor)
-                    .replace(
+                    .replaceAll('{{fillColor}}', fillColor)
+                    .replaceAll('{{strokeColor}}', strokeColor)
+                    .replaceAll(
                       '{{multiple}}',
                       markerSprite.work_types.length > 1 ? templates.plus : '',
                     );
@@ -339,9 +339,9 @@ export function getWorksiteLayer(
                 }
                 const template = templates.circle;
                 const typeSvg = template
-                  .replace('{{fillColor}}', fillColor)
-                  .replace('{{strokeColor}}', strokeColor)
-                  .replace(
+                  .replaceAll('{{fillColor}}', fillColor)
+                  .replaceAll('{{strokeColor}}', strokeColor)
+                  .replaceAll(
                     '{{multiple}}',
                     markerSprite.work_types.length > 1 ? templates.plus : '',
                   );

@@ -83,7 +83,7 @@ export default defineComponent({
           },
           'statuses',
         ),
-        workTypes: cachedGet(
+        workTypes: this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/work_types`,
           {
             headers: {

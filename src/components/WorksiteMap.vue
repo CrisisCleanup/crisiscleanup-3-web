@@ -325,11 +325,11 @@ export default {
       displayedWorkTypeSvgs: [],
       defaultWorkTypeSvgs: [
         {
-          svg: templates.important.replace('{{fillColor}}', 'black'),
+          svg: templates.important.replaceAll('{{fillColor}}', 'black'),
           name: this.$t(`worksiteMap.high_priority`),
         },
         {
-          svg: templates.favorite.replace('{{fillColor}}', 'black'),
+          svg: templates.favorite.replaceAll('{{fillColor}}', 'black'),
           name: this.$t(`worksiteMap.member_of_my_organization`),
         },
       ],
@@ -377,9 +377,9 @@ export default {
         this.displayedWorkTypeSvgs = Object.keys(val).map((workType) => {
           const template = templates[workType] || templates.unknown;
           const svg = template
-            .replace('{{fillColor}}', 'black')
-            .replace('{{strokeColor}}', 'black')
-            .replace('{{multiple}}', '');
+            .replaceAll('{{fillColor}}', 'black')
+            .replaceAll('{{strokeColor}}', 'black')
+            .replaceAll('{{multiple}}', '');
           return {
             svg,
             key: workType,
@@ -571,9 +571,9 @@ export default {
 
         if (spriteColors) {
           const svg = worksiteTemplate
-            .replace('{{fillColor}}', spriteColors.fillColor)
-            .replace('{{strokeColor}}', spriteColors.strokeColor)
-            .replace(
+            .replaceAll('{{fillColor}}', spriteColors.fillColor)
+            .replaceAll('{{strokeColor}}', spriteColors.strokeColor)
+            .replaceAll(
               '{{multiple}}',
               markerSprite.work_types.length > 1 ? templates.plus : '',
             );

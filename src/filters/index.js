@@ -89,9 +89,9 @@ export const getWorkTypeImage = (workType) => {
 
   if (svgColors) {
     return worksiteTemplate
-      .replace('{{fillColor}}', svgColors.fillColor)
-      .replace('{{strokeColor}}', svgColors.strokeColor)
-      .replace('{{multiple}}', '');
+      .replaceAll('{{fillColor}}', svgColors.fillColor)
+      .replaceAll('{{strokeColor}}', svgColors.strokeColor)
+      .replaceAll('{{multiple}}', '');
   }
   return '';
 };

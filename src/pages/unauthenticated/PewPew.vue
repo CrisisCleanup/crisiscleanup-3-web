@@ -886,8 +886,8 @@ export default {
         });
       });
       const svg = templates.orb
-        .replace('{{fillColor}}', '#61D5F8')
-        .replace('{{strokeColor}}', 'black');
+        .replaceAll('{{fillColor}}', '#61D5F8')
+        .replaceAll('{{strokeColor}}', 'black');
       this.orbTexture = Texture.from(svg);
     },
     async clearMap() {
@@ -909,9 +909,9 @@ export default {
       this.displayedWorkTypeSvgs = workTypes.map((workType) => {
         const template = templates[workType] || templates.unknown;
         const svg = template
-          .replace('{{fillColor}}', '#61D5F8')
-          .replace('{{strokeColor}}', 'black')
-          .replace('{{multiple}}', '');
+          .replaceAll('{{fillColor}}', '#61D5F8')
+          .replaceAll('{{strokeColor}}', 'black')
+          .replaceAll('{{multiple}}', '');
         return {
           svg,
           key: workType,
@@ -1392,8 +1392,8 @@ export default {
             patientMarkerSprite.interactive = false;
             patientMarkerSprite.anchor.set(0.5, 0.5);
             const svg = markerTemplate
-              .replace('{{fillColor}}', color)
-              .replace('{{strokeColor}}', 'black');
+              .replaceAll('{{fillColor}}', color)
+              .replaceAll('{{strokeColor}}', 'black');
             let texture = this.textureMap[color];
             if (!texture) {
               this.textureMap[color] = Texture.from(svg);
@@ -1412,8 +1412,8 @@ export default {
             const detailedTemplate =
               templates[workTypeKey] || templates.unknown;
             const typeSvg = detailedTemplate
-              .replace('{{fillColor}}', color)
-              .replace('{{strokeColor}}', 'black');
+              .replaceAll('{{fillColor}}', color)
+              .replaceAll('{{strokeColor}}', 'black');
 
             patientMarkerSprite.basicTexture = texture;
             patientMarkerSprite.detailedTexture = Texture.from(typeSvg);
@@ -1572,8 +1572,8 @@ export default {
             patientMarkerSprite.anchor.set(0.5, 0.5);
             patientMarkerSprite.live = true;
             const svg = markerTemplate
-              .replace('{{fillColor}}', color)
-              .replace('{{strokeColor}}', 'black');
+              .replaceAll('{{fillColor}}', color)
+              .replaceAll('{{strokeColor}}', 'black');
             let texture = this.textureMap[color];
             if (!texture) {
               this.textureMap[color] = Texture.from(svg);
@@ -1589,8 +1589,8 @@ export default {
             const detailedTemplate =
               templates[workTypeKey] || templates.unknown;
             const typeSvg = detailedTemplate
-              .replace('{{fillColor}}', color)
-              .replace('{{strokeColor}}', 'black');
+              .replaceAll('{{fillColor}}', color)
+              .replaceAll('{{strokeColor}}', 'black');
 
             patientMarkerSprite.basicTexture = texture;
             patientMarkerSprite.detailedTexture = Texture.from(typeSvg);
