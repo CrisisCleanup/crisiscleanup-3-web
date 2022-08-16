@@ -132,6 +132,7 @@ export default {
     },
     async resetPhoneSystem() {
       await this.logoutByPhoneNumber();
+      this.clearCall();
     },
     async logoutPhone() {
       // await this.$phoneService.changeState('AWAY');

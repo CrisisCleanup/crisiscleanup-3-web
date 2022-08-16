@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center justify-between">
     <div
       class="px-2 py-1 w-full text-white bg-crisiscleanup-lightblue-800"
-      v-if="isTransitioning || (isTakingCalls && !isOnCall)"
+      v-if="isConnecting"
     >
       {{ $t('phoneDashboard.connecting') }}
     </div>
@@ -115,6 +115,7 @@
 import { ConnectFirstMixin, WorksitesMixin } from '@/mixins';
 import useScripts from '@/use/phone/useScripts';
 import Worksite from '@/models/Worksite';
+import * as Sentry from '@sentry/browser';
 
 export default {
   name: 'ActiveCall',
@@ -128,10 +129,38 @@ export default {
   data() {
     return {
       cards: [],
+      connectingTimeout: null,
     };
   },
   async mounted() {
     await this.createCards();
+    this.$watch(
+      'isConnecting',
+      (newValue) => {
+        if (newValue) {
+          const startedConnecting = this.$moment().toISOString();
+          this.connectingTimeout = setTimeout(() => {
+            const context = {
+              user: this.currentUser.$toJson(),
+              caller: this.caller,
+              callState: this.callState,
+              isInboundCall: this.isInboundCall,
+              isOutboundCall: this.isOutboundCall,
+              startedConnecting,
+              connectingTimedOut: this.$moment().toISOString(),
+            };
+            Sentry.setContext('call_info', context);
+            Sentry.captureException(
+              'Call is stuck connecting state for 45 seconds',
+            );
+            this.resetPhoneSystem();
+          }, 45000);
+        } else {
+          clearTimeout(this.connectingTimeout);
+        }
+      },
+      { immediate: true },
+    );
   },
   methods: {
     getSVG(worktype) {
@@ -161,6 +190,9 @@ export default {
     },
   },
   computed: {
+    isConnecting() {
+      return this.isTransitioning || (this.isTakingCalls && !this.isOnCall);
+    },
     scripts() {
       return useScripts({
         callType: this.callType,
