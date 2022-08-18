@@ -275,6 +275,7 @@
               <PhoneComponentButton
                 name="chat"
                 class="phone-button"
+                component-width="MD"
                 @open="
                   () => {
                     updateUserState({
@@ -348,7 +349,7 @@
                     v-if="selectedChat"
                     @unreadCount="unreadChatCount = $event"
                     @unreadUrgentCount="unreadUrgentChatCount = $event"
-                    class="h-108"
+                    class="h-full"
                     @onNewMessage="unreadChatCount += 1"
                     @onNewUrgentMessage="unreadUrgentChatCount += 1"
                     :chat="selectedChat"
@@ -356,6 +357,7 @@
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
+                component-width="LG"
                 name="news"
                 class="phone-button"
                 @open="
@@ -404,10 +406,7 @@
                   </div>
                 </template>
                 <template v-slot:component>
-                  <PhoneNews
-                    @unreadCount="unreadNewsCount = $event"
-                    class="h-108"
-                  />
+                  <PhoneNews @unreadCount="unreadNewsCount = $event" />
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
@@ -416,11 +415,11 @@
                 icon="phone-history"
                 icon-size="large"
                 icon-class="p-1"
+                component-width="LG"
                 v-if="callHistory"
               >
                 <template v-slot:component>
                   <CallHistory
-                    :table-body-style="{ height: '300px' }"
                     :calls="callHistory"
                     @rowClick="
                       ({ mobile }) => {
@@ -446,6 +445,7 @@
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
+                component-width="LG"
                 name="leaderboard"
                 class="phone-button"
                 icon="leaderboard"
@@ -453,7 +453,7 @@
                 icon-class="p-1"
               >
                 <template v-slot:component>
-                  <Leaderboard />
+                  <Leaderboard class="h-full" />
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
@@ -941,7 +941,7 @@ export default {
 }
 
 .phone-button {
-  @apply shadow w-20 h-20 sm:w-12 sm:h-12 my-2 sm:my-1 bg-white cursor-pointer;
+  @apply shadow w-20 h-20 sm:w-12 sm:h-12 my-2 sm:my-1 bg-white cursor-pointer z-50;
 }
 .tabs {
   width: 29rem;

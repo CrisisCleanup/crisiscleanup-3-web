@@ -67,12 +67,12 @@
         :class="Boolean(caseId) ? '' : 'border'"
       >
         <div class="flex flex-col items-center justify-center h-full">
-          <ccu-icon
-            :alt="$t('actions.create_new')"
-            type="add-orange"
-            size="xl"
-            class="pb-1"
-          />
+          <!--          <ccu-icon-->
+          <!--            :alt="$t('actions.create_new')"-->
+          <!--            type="add-orange"-->
+          <!--            size="xl"-->
+          <!--            class="pb-1"-->
+          <!--          />-->
           <base-text variant="h3" class="text-crisiscleanup-dark-400"
             >{{ $t('phoneDashboard.new_case') }}
           </base-text>

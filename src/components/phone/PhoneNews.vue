@@ -1,11 +1,11 @@
 <template>
-  <tabs class="" ref="tabs" tab-details-classes="h-96 overflow-auto">
+  <tabs class="" ref="tabs" tab-details-classes="h-full overflow-auto">
     <tab :name="$t('phoneDashboard.news')">
       <ul>
         <li
           v-for="newItem in news"
           :key="newItem.id"
-          class="hover:bg-crisiscleanup-light-grey cursor-pointer"
+          class="hover:bg-crisiscleanup-light-grey cursor-pointer border-b-2"
           @click="() => showDetails(newItem)"
         >
           <div class="p-2 flex">
@@ -21,9 +21,9 @@
               class="w-20 h-20 mr-2"
               alt="crisis-cleanup-logo"
             />
-            <div>
+            <div class="h-20 overflow-y-hidden">
               <div
-                class="text-sm my-1 font-bold"
+                class="text-xl sm:text-sm my-1 font-bold truncate"
                 v-html="$t(formatCmsItem(newItem.title))"
               ></div>
               <p

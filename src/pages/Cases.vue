@@ -81,8 +81,22 @@
                     class="pb-2"
                     :value="showingHeatMap"
                     @input="toggleHeatMap"
-                    >{{ $t('casesVue.show_damaged_areas') }}</base-checkbox
                   >
+                    <div class="flex">
+                      <img class="w-5 h-5" src="@/assets/red-cross-logo.jpg" />
+                      <ccu-icon
+                        v-tooltip="{
+                          content: $t('casesVue.damage_assessment_help'),
+                          trigger: 'hover',
+                          classes: 'interactive-tooltip w-72',
+                        }"
+                        :alt="$t('casesVue.damage_assessment_help')"
+                        type="help"
+                        size="large"
+                      />
+                      {{ $t('casesVue.show_damaged_areas') }}
+                    </div>
+                  </base-checkbox>
                 </div>
               </div>
               <div class="flex worksite-actions" style="color: #4c4c4d">

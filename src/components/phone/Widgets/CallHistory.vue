@@ -10,16 +10,24 @@
         :columns="historyCols"
         :data="historyData"
         v-if="callHistoryReady || calls"
+        @rowClick="
+          (item) => {
+            if ($mq === 'sm') $emit('rowClick', item);
+          }
+        "
       >
         <template #incident="{ item }">
           <div
-            class="justify-center flex flex-grow"
+            class="sm:justify-center flex flex-grow"
             :title="item.incident && item.incident.name"
           >
             <DisasterIcon
               v-if="item.incident"
               :current-incident="item.incident"
             />
+            <div class="block sm:hidden flex items-center ml-2 text-lg">
+              {{ toStartCase(item.incident.incident_type) }}
+            </div>
           </div>
         </template>
         <template #mobile="{ item }">
@@ -74,7 +82,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { get } from 'lodash';
+import _, { get } from 'lodash';
 import Color from 'color';
 import TitledCard from '@/components/cards/TitledCard.vue';
 import Table from '@/components/Table.vue';
@@ -109,6 +117,9 @@ export default {
     },
     getWorkTypeImg(worktype) {
       return this.getWorktypeSVG(worktype, '26');
+    },
+    toStartCase(word) {
+      return _.startCase(word);
     },
   },
   computed: {

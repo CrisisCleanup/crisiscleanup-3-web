@@ -104,12 +104,12 @@ exports[`Table should render correctly and match snapshot 1`] = `
    
   <div
     class="body bg-white relative"
-    style="max-height: 600px; overflow: auto;"
+    style="overflow: auto;"
   >
     <!---->
      
     <div
-      class="hover:bg-crisiscleanup-light-grey"
+      class="hover:bg-crisiscleanup-light-grey border-b"
       style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
     >
       <!---->
@@ -134,7 +134,7 @@ exports[`Table should render correctly and match snapshot 1`] = `
       <!---->
     </div>
     <div
-      class="hover:bg-crisiscleanup-light-grey"
+      class="hover:bg-crisiscleanup-light-grey border-b"
       style="display: grid; grid-template-columns: 0.5fr 1.5fr;"
     >
       <!---->

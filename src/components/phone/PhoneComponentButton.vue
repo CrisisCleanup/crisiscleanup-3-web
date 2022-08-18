@@ -1,6 +1,10 @@
 <template>
   <div>
-    <div class="w-full h-full z-40" @click="toggleComponent">
+    <div
+      class="w-full h-full z-40"
+      :class="showComponent ? 'bg-gray-200' : ''"
+      @click="toggleComponent"
+    >
       <slot name="button">
         <div class="w-full h-full flex items-center justify-center">
           <ccu-icon
@@ -13,12 +17,22 @@
       </slot>
     </div>
     <div
-      class="phone-component fixed ml-12 z-30"
-      :style="{ top: top }"
-      :class="[componentClass, 'w-144 -ml-144 sm:w-108 sm:-ml-108']"
+      class="phone-component absolute top-10 ml-12 z-30"
+      :style="
+        $mq !== 'sm'
+          ? componentWidth === 'LG'
+            ? 'width: 60vw; margin-left: -60vw; height: 60vh;'
+            : componentWidth === 'MD'
+            ? 'width: 40vw; margin-left: -40vw'
+            : 'width: 30vw; margin-left: -30vw'
+          : componentWidth === 'LG'
+          ? 'height: 75vh;'
+          : ''
+      "
+      :class="[componentClass]"
       v-show="showComponent"
     >
-      <div class="w-full relative mb-2">
+      <div class="w-full relative mb-2 z-40">
         <ccu-icon
           :alt="$t('actions.cancel')"
           size="xs"
@@ -66,6 +80,7 @@ export default {
     componentClass: { type: String, default: null, required: false },
     iconSize: { type: String, default: null, required: false },
     keepOpen: { type: Boolean, default: false, required: false },
+    componentWidth: { type: String, default: 'SM' },
   },
   methods: {
     mounted() {
@@ -99,9 +114,15 @@ export default {
 <style scoped>
 .phone-component {
   transform: translateY(-3rem);
-  min-height: 10rem;
-  max-height: 50rem;
-  @apply shadow-lg bg-white sm:mt-24;
+  min-height: 10vh;
+  height: 90%;
+  @apply shadow-lg bg-white sm:mt-12 overflow-auto;
+}
+@media (max-width: 640px) {
+  .phone-component {
+    width: 87vw;
+    margin-left: -87vw;
+  }
 }
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .phone-component {
