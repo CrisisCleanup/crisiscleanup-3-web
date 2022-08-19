@@ -84,16 +84,35 @@
                   >
                     <div class="flex">
                       <img class="w-5 h-5" src="@/assets/red-cross-logo.jpg" />
-                      <ccu-icon
-                        v-tooltip="{
-                          content: $t('casesVue.damage_assessment_help'),
-                          trigger: 'hover',
-                          classes: 'interactive-tooltip w-72',
-                        }"
-                        :alt="$t('casesVue.damage_assessment_help')"
-                        type="help"
-                        size="large"
-                      />
+                      <!--                      <ccu-icon-->
+                      <!--                        v-tooltip="{-->
+                      <!--                          content: $t('casesVue.damage_assessment_help'),-->
+                      <!--                          trigger: 'hover',-->
+                      <!--                          classes: 'w-72',-->
+                      <!--                        }"-->
+                      <!--                        :alt="$t('casesVue.damage_assessment_help')"-->
+                      <!--                        type="help"-->
+                      <!--                        size="large"-->
+                      <!--                      />-->
+                      <div
+                        class="
+                          rounded-full
+                          w-5
+                          h-5
+                          text-center
+                          border border-crisiscleanup-dark-500
+                          mx-1
+                        "
+                      >
+                        <font-awesome-icon
+                          icon="question"
+                          v-tooltip="{
+                            content: $t('casesVue.damage_assessment_help'),
+                            trigger: 'hover',
+                            classes: 'w-72',
+                          }"
+                        />
+                      </div>
                       {{ $t('casesVue.show_damaged_areas') }}
                     </div>
                   </base-checkbox>
@@ -121,9 +140,11 @@
                           :role="'sublist'"
                           :align="'right'"
                         >
-                          <template slot="btn">{{
-                            $t('locationTypes.boundary_political_us_state')
-                          }}</template>
+                          <template slot="btn"
+                            >{{
+                              $t('locationTypes.boundary_political_us_state')
+                            }}
+                          </template>
                           <template slot="body">
                             <ul class="h-64 overflow-auto">
                               <li
@@ -142,8 +163,8 @@
                                       applyLocation(state.id, value);
                                     }
                                   "
-                                  >{{ state.name }}</base-checkbox
-                                >
+                                  >{{ state.name }}
+                                </base-checkbox>
                               </li>
                             </ul>
                           </template>
@@ -155,9 +176,11 @@
                           :role="'sublist'"
                           :align="'right'"
                         >
-                          <template slot="btn">{{
-                            $t('locationTypes.boundary_political_us_congress')
-                          }}</template>
+                          <template slot="btn"
+                            >{{
+                              $t('locationTypes.boundary_political_us_congress')
+                            }}
+                          </template>
                           <template slot="body">
                             <ul class="h-64 overflow-auto">
                               <li
@@ -176,8 +199,8 @@
                                       applyLocation(district.id, value);
                                     }
                                   "
-                                  >{{ district.name }}</base-checkbox
-                                >
+                                  >{{ district.name }}
+                                </base-checkbox>
                               </li>
                             </ul>
                           </template>
@@ -189,9 +212,11 @@
                           :role="'sublist'"
                           :align="'right'"
                         >
-                          <template slot="btn">{{
-                            $t('locationTypes.boundary_political_us_county')
-                          }}</template>
+                          <template slot="btn"
+                            >{{
+                              $t('locationTypes.boundary_political_us_county')
+                            }}
+                          </template>
                           <template slot="body">
                             <ul class="h-64 overflow-auto">
                               <li
@@ -210,8 +235,8 @@
                                       ? 'user_ui-turn-off_layer'
                                       : 'user_ui-turn-on_layer'
                                   "
-                                  >{{ county.name }}</base-checkbox
-                                >
+                                  >{{ county.name }}
+                                </base-checkbox>
                               </li>
                             </ul>
                           </template>
@@ -223,9 +248,9 @@
                           :role="'sublist'"
                           :align="'right'"
                         >
-                          <template slot="btn">{{
-                            $t('casesVue.teams')
-                          }}</template>
+                          <template slot="btn"
+                            >{{ $t('casesVue.teams') }}
+                          </template>
                           <template slot="body">
                             <ul class="h-64 overflow-auto">
                               <li v-for="team in teams" :key="`${team.id}`">
@@ -241,8 +266,8 @@
                                       applyTeamGeoJson(team, value);
                                     }
                                   "
-                                  >{{ team.name }}</base-checkbox
-                                >
+                                  >{{ team.name }}
+                                </base-checkbox>
                               </li>
                             </ul>
                           </template>
@@ -254,9 +279,9 @@
                           :role="'sublist'"
                           :align="'right'"
                         >
-                          <template slot="btn">{{
-                            $t('casesVue.incident')
-                          }}</template>
+                          <template slot="btn"
+                            >{{ $t('casesVue.incident') }}
+                          </template>
                           <template slot="body">
                             <ul class="h-64 overflow-auto">
                               <li
@@ -275,8 +300,8 @@
                                       ? 'user_ui-turn-off_layer'
                                       : 'user_ui-turn-on_layer'
                                   "
-                                  >{{ location.name }}</base-checkbox
-                                >
+                                  >{{ location.name }}
+                                </base-checkbox>
                               </li>
                               <li
                                 v-if="
@@ -305,10 +330,8 @@
                                       );
                                     }
                                   "
-                                  >{{
-                                    $t('casesVue.primary_response_area')
-                                  }}</base-checkbox
-                                >
+                                  >{{ $t('casesVue.primary_response_area') }}
+                                </base-checkbox>
                               </li>
                               <li
                                 v-if="
@@ -337,10 +360,8 @@
                                       );
                                     }
                                   "
-                                  >{{
-                                    $t('casesVue.secondary_response_area')
-                                  }}</base-checkbox
-                                >
+                                  >{{ $t('casesVue.secondary_response_area') }}
+                                </base-checkbox>
                               </li>
                             </ul>
                           </template>
@@ -352,9 +373,9 @@
                           :role="'sublist'"
                           :align="'right'"
                         >
-                          <template slot="btn">{{
-                            $t('casesVue.my_layers')
-                          }}</template>
+                          <template slot="btn"
+                            >{{ $t('casesVue.my_layers') }}
+                          </template>
                           <template slot="body">
                             <ul class="h-64 overflow-auto">
                               <li
@@ -373,8 +394,8 @@
                                       applyLocation(location.id, value);
                                     }
                                   "
-                                  >{{ location.name }}</base-checkbox
-                                >
+                                  >{{ location.name }}
+                                </base-checkbox>
                               </li>
                             </ul>
                           </template>
@@ -691,8 +712,8 @@
                             updateStatusOnUnclaim = !unchangedStatusOnUnclaim;
                           }
                         "
-                        >{{ $t('casesVue.no_change') }}</base-checkbox
-                      >
+                        >{{ $t('casesVue.no_change') }}
+                      </base-checkbox>
                       <base-checkbox
                         class="mb-5"
                         :value="updateStatusOnUnclaim"
@@ -702,8 +723,8 @@
                             unchangedStatusOnUnclaim = !updateStatusOnUnclaim;
                           }
                         "
-                        >{{ $t('status.open_unassigned') }}</base-checkbox
-                      >
+                        >{{ $t('status.open_unassigned') }}
+                      </base-checkbox>
                     </div>
                     <div
                       slot="footer"
@@ -2057,12 +2078,15 @@ export default {
 .ant-spin-container {
   height: 100%;
 }
+
 .card-header {
   min-height: 60px;
 }
+
 .legend-toggle {
   @apply absolute right-4 top-4;
 }
+
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .card-header {
     min-height: 10px;
@@ -2107,6 +2131,7 @@ export default {
 .filters-modal {
   width: 750px !important;
 }
+
 .highlight {
   font-weight: bold;
   background-color: white;
@@ -2126,6 +2151,7 @@ export default {
   display: grid;
   grid-template-columns: auto;
 }
+
 .cases-grid {
   display: grid;
   grid-auto-rows: min-content auto;
