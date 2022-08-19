@@ -72,19 +72,15 @@
           </vc-date-picker>
         </div>
         <div v-if="input.filter === 'location'" :key="input" class="my-1">
-          <autocomplete
-            icon="search"
-            :suggestions="locations"
-            display-property="name"
-            size="large"
-            :placeholder="$t('locationTool.search_several_area_types')"
+          <form-select
+            searchable
+            :key="input"
             v-model="filters[input.field]"
-            @selected="
-              (value) => {
-                filters[input.field] = value.id;
-              }
-            "
-            @search="onLocationSearch"
+            item-key="id"
+            label="name"
+            :placeholder="$t('locationTool.search_several_area_types')"
+            :options="locations"
+            select-classes="bg-white border text-xs h-12 role-select p-1 form-multiselect"
           />
         </div>
       </template>
@@ -95,11 +91,17 @@
       :text="$t('actions.apply')"
       class="ml-2 p-3 px-6 text-xs"
     />
+    <base-button
+      variant="solid"
+      :action="downloadCSV"
+      :text="$t('~~Download CSV')"
+      class="ml-2 p-3 px-6 text-xs"
+    />
   </div>
 </template>
 
 <script lang="ts">
-import { ref } from '@vue/composition-api';
+import { onMounted, ref } from '@vue/composition-api';
 import { useGetters, useState } from '@u3u/vue-hooks';
 import moment from 'moment';
 import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
@@ -121,7 +123,7 @@ export default {
     const locations = ref<any[]>([]);
     const { currentIncidentId } = useState('incident', ['currentIncidentId']);
 
-    const applyFilters = () => {
+    const buildQuery = () => {
       const query = {};
       Object.keys(filters.value).forEach((key) => {
         if (filters.value[key].start && filters.value[key].end) {
@@ -134,14 +136,24 @@ export default {
           query[key] = filters.value[key];
         }
       });
+      return query;
+    };
+
+    const applyFilters = () => {
+      const query = buildQuery();
       emit('onFilter', query);
     };
 
-    const onLocationSearch = async (value) => {
+    const downloadCSV = () => {
+      const query = buildQuery();
+      emit('onCSV', query);
+    };
+
+    const onLocationSearch = async () => {
       const params = {
-        search: value,
         type__key__in: 'boundary_political_us_county',
         incident_area: currentIncidentId.value,
+        limit: 500,
       };
 
       const queryString = getQueryString(params);
@@ -151,7 +163,11 @@ export default {
       locations.value = results.response.data.results;
     };
 
-    return { filters, workTypes, onLocationSearch, locations, applyFilters };
+    onMounted(async () => {
+      await onLocationSearch();
+    });
+
+    return { filters, workTypes, locations, applyFilters, downloadCSV };
   },
 };
 </script>

@@ -1,6 +1,10 @@
 <template>
   <div class="reports">
-    <ReportFilters :inputs="report.inputs" @onFilter="runReport" />
+    <ReportFilters
+      :inputs="report.inputs"
+      @onFilter="runReport"
+      @onCSV="runCsvReport"
+    />
     <Loader
       v-if="loading"
       class="p-6 bg-crisiscleanup-light-grey h-full overflow-auto"
@@ -9,37 +13,21 @@
       v-else
       v-for="[key, value] in Object.entries(transformedData)"
       :key="key"
-      class="items-center justify-center flex my-10 ml-8"
+      class="items-center justify-center my-10 ml-8"
     >
-      <div v-if="value.type === 'pie'" class="grid grid-flow-col">
-        <ReportPieChart
-          v-for="[reportKey, reportValue] in Object.entries(value.data)"
-          :key="reportKey"
-          :title-key="reportKey"
-          :data="reportValue"
-          :id="`${reportKey}-${key}`"
-          class="first:ml-auto last:mr-auto"
-        />
-      </div>
-      <div
-        v-if="value.type === 'multiline'"
-        class="flex items-center justify-center"
-      >
-        <ReportLineChart
-          :data="value.data"
-          :group-by="value.group_by"
-          :key="JSON.stringify(currentFilters)"
-        />
-      </div>
-      <div
-        v-if="value.type === 'barstack'"
-        class="flex items-center justify-center"
-      >
-        <ReportStackedBarChart
-          :data="value.data"
-          :key="JSON.stringify(currentFilters)"
-        />
-      </div>
+      <base-button
+        :action="() => downloadWidgetCsv(key)"
+        :text="$t('~~Download')"
+      />
+      <base-button
+        :action="() => addWidgetToDashboard(key, currentFilters)"
+        :text="$t('~~Add to dashboard')"
+      />
+      <ReportWidget
+        :current-filters="currentFilters"
+        :widget-key="key"
+        :value="value"
+      />
     </div>
   </div>
 </template>
@@ -52,7 +40,6 @@ import {
   ref,
 } from '@vue/composition-api';
 import { useRouter, useState } from '@u3u/vue-hooks';
-import moment from 'moment';
 import useHttp from '@/use/useHttp';
 import ReportPieChart from '@/components/reports/ReportPieChart.vue';
 import ReportLineChart from '@/components/reports/ReportLineChart.vue';
@@ -61,6 +48,9 @@ import ReportFilters from '@/components/reports/ReportFilters.vue';
 import useToasted from '@/use/useToasted';
 import { getErrorMessage } from '@/utils/errors';
 import Loader from '@/components/Loader.vue';
+import { forceFileDownload } from '@/utils/downloads';
+import { transformGraphData } from '@/utils/reports';
+import ReportWidget from '@/components/reports/ReportWidget.vue';
 
 interface Input {
   field: string;
@@ -76,6 +66,7 @@ interface Report {
 export default defineComponent({
   name: 'Report',
   components: {
+    ReportWidget,
     Loader,
     ReportFilters,
     ReportLineChart,
@@ -100,60 +91,7 @@ export default defineComponent({
     });
 
     const transformedData = computed(() => {
-      const transformedGraphData = {};
-      if (graphData.value) {
-        graphData.value.forEach(([graphKey, graphValue]) => {
-          if (graphValue.definition.type === 'pie') {
-            const result = {};
-            graphValue.data.forEach((graph) => {
-              result[graph[graphValue.definition.group_by[0]]] = [];
-
-              Object.keys(graph).forEach((key) => {
-                if (key !== graphValue.definition.group_by[0]) {
-                  result[graph[graphValue.definition.group_by[0]]].push({
-                    name: key,
-                    value: graph[key],
-                  });
-                }
-              });
-            });
-            transformedGraphData[graphKey] = {
-              data: result,
-              group_by: graphValue.definition.group_by[0],
-              type: graphValue.definition.type,
-            };
-          }
-          if (graphValue.definition.type === 'multiline') {
-            transformedGraphData[graphKey] = {
-              data: graphValue.data,
-              group_by: graphValue.definition.group_by[0],
-              type: graphValue.definition.type,
-            };
-          }
-          if (graphValue.definition.type === 'barstack') {
-            transformedGraphData[graphKey] = {
-              data: graphValue.data.map((entry) => {
-                return {
-                  key: moment(
-                    entry[graphValue.definition.group_by[0]],
-                  ).toDate(),
-                  values: Object.keys(entry)
-                    .filter((key) => key !== graphValue.definition.group_by[0])
-                    .map((key) => {
-                      return {
-                        grpName: key,
-                        grpValue: entry[key],
-                      };
-                    }),
-                };
-              }),
-              group_by: graphValue.definition.group_by[0],
-              type: graphValue.definition.type,
-            };
-          }
-        });
-      }
-      return transformedGraphData;
+      return transformGraphData(graphData.value);
     });
 
     const runReport = async (filters = {}) => {
@@ -178,15 +116,71 @@ export default defineComponent({
       }
     };
 
+    const runCsvReport = async (filters = {}) => {
+      loading.value = true;
+      graphData.value = [];
+      currentFilters.value = filters;
+      try {
+        const response = await $http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/reports/${route.value.params.id}/data`,
+          {
+            params: {
+              incident_id: currentIncidentId.value,
+              ...filters,
+            },
+            headers: { Accept: 'application/x-zip-compressed' },
+            responseType: 'blob',
+          },
+        );
+        graphData.value = Object.entries(response.data);
+        forceFileDownload(response);
+      } catch (error) {
+        await $toasted.error(getErrorMessage(error));
+      } finally {
+        loading.value = false;
+      }
+    };
+
+    const downloadWidgetCsv = async (key) => {
+      try {
+        const response = await $http.get(
+          `${process.env.VUE_APP_API_BASE_URL}/report_widgets/${key}/data`,
+          {
+            params: {
+              incident_id: currentIncidentId.value,
+              ...currentFilters.value,
+            },
+            headers: { Accept: 'text/csv' },
+            responseType: 'blob',
+          },
+        );
+        forceFileDownload(response);
+      } catch (error) {
+        await $toasted.error(getErrorMessage(error));
+      }
+    };
+
+    const addWidgetToDashboard = async (key, filters) => {
+      try {
+        await $http.post(`${process.env.VUE_APP_API_BASE_URL}/user_widgets`, {
+          widget: key,
+          filters,
+        });
+      } catch (error) {
+        await $toasted.error(getErrorMessage(error));
+      }
+    };
+
     return {
       transformedData,
       report,
       runReport,
+      runCsvReport,
+      downloadWidgetCsv,
+      addWidgetToDashboard,
       currentFilters,
       loading,
     };
   },
 });
 </script>
-
-<style scoped></style>

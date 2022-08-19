@@ -423,6 +423,20 @@
             </div>
           </div>
         </div>
+
+        <div>
+          <div
+            v-for="[key, value] in Object.entries(widgetsData)"
+            :key="key"
+            class="items-center justify-center my-10 ml-8"
+          >
+            <ReportWidget
+              :current-filters="{}"
+              :widget-key="key"
+              :value="value"
+            />
+          </div>
+        </div>
       </div>
     </template>
   </Loader>
@@ -450,11 +464,14 @@ import InviteUsers from './organization/InviteUsers';
 import RedeployRequest from './RedeployRequest';
 import { DialogsMixin } from '../mixins';
 import UserTransferRequestTable from '../components/UserTransferRequestTable';
+import { transformWidgetData } from '@/utils/reports';
+import ReportWidget from '@/components/reports/ReportWidget';
 
 export default {
   name: 'Dashboard',
   mixins: [DialogsMixin],
   components: {
+    ReportWidget,
     UserTransferRequestTable,
     RedeployRequest,
     InviteUsers,
@@ -472,6 +489,8 @@ export default {
       organizations: [],
       incident_requests: [],
       transferRequests: [],
+      reportWidgets: [],
+      widgetsData: {},
       loading: false,
       datacollection: null,
       pendingViewLoading: false,
@@ -758,6 +777,7 @@ export default {
         this.getInProgessCount(),
         this.getClosedCount(),
         this.getUserTransferRequests(),
+        this.getUserReportWidgets(),
       ]);
     },
     async statusValueChange(value, workType, worksiteId) {
@@ -858,6 +878,34 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/transfer_requests`,
       );
       this.transferRequests = response.data.results;
+    },
+    async getUserReportWidgets() {
+      const response = await this.$http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/user_widgets`,
+      );
+      this.reportWidgets = response.data.results;
+
+      const widgetPromises = [];
+      this.reportWidgets.forEach((widget) => {
+        widgetPromises.push(
+          this.$http.get(
+            `${process.env.VUE_APP_API_BASE_URL}/report_widgets/${widget.widget}/data`,
+            {
+              params: {
+                incident_id: this.currentIncidentId,
+                ...widget.filters,
+              },
+            },
+          ),
+        );
+      });
+      Promise.all(widgetPromises).then((results) => {
+        const graphData = {};
+        results.forEach(({ data }) => {
+          graphData[data.key] = transformWidgetData(data);
+        });
+        this.widgetsData = graphData;
+      });
     },
     async getWorksiteCount() {
       const response = await this.$http.get(

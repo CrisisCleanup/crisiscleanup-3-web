@@ -5,6 +5,7 @@
 <script>
 import { onMounted } from '@vue/composition-api';
 import * as d3 from 'd3';
+import usei18n from '@/use/usei18n';
 
 export default {
   name: 'ReportPieChart',
@@ -21,8 +22,14 @@ export default {
       type: String,
       default: '',
     },
+    reportName: {
+      type: String,
+      default: '',
+    },
   },
   setup(props) {
+    const { $t } = usei18n();
+
     onMounted(() => {
       const { data } = props;
 
@@ -69,7 +76,10 @@ export default {
         .append('div')
         .attr('class', 'title');
 
-      title.append('div').attr('class', 'name').text(props.titleKey);
+      title
+        .append('div')
+        .attr('class', 'name')
+        .text($t(`reports.${props.reportName}.${props.titleKey}`));
 
       const legend = d3
         .select(`#${props.id}`)
@@ -98,7 +108,9 @@ export default {
       keys
         .append('div')
         .attr('class', 'name')
-        .text((d) => `${d.name} (${d.value})`);
+        .text(
+          (d) => `${$t(`reports.${props.reportName}.${d.name}`)} (${d.value})`,
+        );
 
       keys.exit().remove();
     });

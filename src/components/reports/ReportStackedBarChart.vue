@@ -5,6 +5,7 @@
 <script>
 import { onMounted } from '@vue/composition-api';
 import * as d3 from 'd3';
+import usei18n from '@/use/usei18n';
 
 export default {
   name: 'ReportStackedBarChart',
@@ -17,8 +18,14 @@ export default {
       type: String,
       default: '',
     },
+    reportName: {
+      type: String,
+      default: '',
+    },
   },
   setup(props) {
+    const { $t } = usei18n();
+
     onMounted(() => {
       const groupData = props.data;
 
@@ -120,7 +127,7 @@ export default {
           return x1(d.grpName);
         })
         .style('fill', function (d) {
-          return color(d.grpName);
+          return color($t(`reports.${props.reportName}.${d.grpName}`));
         })
         .attr('y', function () {
           return y(0);
@@ -149,7 +156,7 @@ export default {
         .data(
           groupData[0].values
             .map(function (d) {
-              return d.grpName;
+              return $t(`reports.${props.reportName}.${d.grpName}`);
             })
             .reverse(),
         )

@@ -5,6 +5,7 @@
 <script>
 import { onMounted } from '@vue/composition-api';
 import * as d3 from 'd3';
+import usei18n from '@/use/usei18n';
 
 export default {
   name: 'ReportLineChart',
@@ -17,11 +18,16 @@ export default {
       type: String,
       default: '',
     },
+    reportName: {
+      type: String,
+      default: '',
+    },
   },
   setup(props) {
+    const { $t } = usei18n();
+
     onMounted(() => {
       const { data } = props;
-
       //
       //  Multi-line Chart
       //
@@ -142,7 +148,7 @@ export default {
             })
             .style('fill', 'none')
             .style('stroke', function (d) {
-              return color(d.name);
+              return color($t(`reports.${props.reportName}.${d.name}`));
             });
 
           metrics
@@ -159,7 +165,7 @@ export default {
             .attr('x', 3)
             .attr('dy', '.35em')
             .text(function (d) {
-              return d.name;
+              return $t(`reports.${props.reportName}.${d.name}`);
             });
         }
 
