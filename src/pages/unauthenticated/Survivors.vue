@@ -6,7 +6,7 @@
     >
       {{ $t('survivorContact.deleted_notice') }}
     </div>
-    <div class="logo flex justify-center p-3 border border-b">
+    <div id="top" class="logo flex justify-center p-3 border border-b">
       <img
         id="header"
         src="@/assets/ccu-logo-black-500w.png"

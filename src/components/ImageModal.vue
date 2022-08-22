@@ -1,84 +1,84 @@
 <template>
   <div>
-    <div v-if="showModal" class="modal flex">
-      <font-awesome-icon
-        @click="showModal = false"
-        icon="times"
-        class="
-          text-white
-          h-7
-          w-7
-          absolute
-          top-3
-          right-7
-          cursor-pointer
-          hover:text-primary-dark
-          z-50
-        "
-      />
-      <font-awesome-icon
-        class="
-          text-white
-          w-7
-          h-7
-          absolute
-          right-7
-          top-12
-          hover:text-primary-dark
-          cursor-pointer
-          z-50
-        "
-        icon="fa-solid fa-rotate"
-        @click="numClicks++"
-      />
-      <font-awesome-icon
-        class="
-          text-white
-          w-7
-          h-7
-          absolute
-          right-7
-          top-24
-          hover:text-primary-dark
-          cursor-pointer
-          z-50
-        "
-        icon="fa-solid fa-plus"
-        @click="scale += 0.25"
-      />
-      <font-awesome-icon
-        class="
-          text-white
-          w-7
-          h-7
-          absolute
-          right-7
-          top-32
-          hover:text-primary-dark
-          cursor-pointer
-          z-50
-        "
-        icon="fa-solid fa-minus"
-        @click="scale -= 0.25"
-      />
-      <slot name="modal-content">
-        <img
-          :src="modalImg ? modalImg : imgSrc"
-          class="modal-content"
-          id="modal-content"
-          :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
+    <div v-show="showModal" class="modal">
+      <div id="modal-content" class="modal-content">
+        <font-awesome-icon
+          @click="showModal = false"
+          icon="times"
+          class="
+            text-white
+            h-7
+            w-7
+            fixed
+            top-3
+            right-7
+            cursor-pointer
+            hover:text-primary-dark
+            z-50
+          "
         />
-      </slot>
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-12
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-rotate"
+          @click="numClicks++"
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-24
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-plus"
+          @click="scale += 0.25"
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-32
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-minus"
+          @click="scale -= 0.25"
+        />
+        <slot name="modal-content">
+          <img
+            :src="modalImg ? modalImg : imgSrc"
+            :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
+          />
+        </slot>
+      </div>
     </div>
     <slot name="image">
       <div class="relative image-container w-24 h-24 mb-2">
         <img
-          class="image-box w-20 h-20 mx-2 cursor-pointer"
+          class="w-20 h-20 mx-2 cursor-pointer"
           :src="imgSrc"
           @click="
             () => {
               $emit('image-click');
-              showModal = true;
+              appearModal();
             }
           "
         />
@@ -113,6 +113,12 @@ export default {
       scale: 1,
     };
   },
+  methods: {
+    appearModal() {
+      this.showModal = true;
+      document.getElementById('top').scrollIntoView();
+    },
+  },
 };
 </script>
 <style scoped>
@@ -123,8 +129,9 @@ export default {
   display: none;
 }
 .modal {
-  position: fixed;
-  z-index: 1;
+  @apply relative;
+  z-index: 10000;
+  position: absolute;
   left: 0;
   top: 0;
   width: 100%;
@@ -135,9 +142,6 @@ export default {
 }
 
 .modal-content {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
+  @apply w-full flex items-center justify-center mt-80;
 }
 </style>
