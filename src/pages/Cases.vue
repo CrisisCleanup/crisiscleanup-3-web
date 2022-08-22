@@ -83,6 +83,7 @@
                     @input="toggleHeatMap"
                   >
                     <div class="flex">
+                      {{ $t('casesVue.show_damaged_areas') }}
                       <img
                         class="w-5 h-5"
                         src="@/assets/red-cross-logo.jpg"
@@ -92,7 +93,6 @@
                           classes: 'w-72',
                         }"
                       />
-                      {{ $t('casesVue.show_damaged_areas') }}
                     </div>
                   </base-checkbox>
                 </div>
