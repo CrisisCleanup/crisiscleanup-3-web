@@ -83,36 +83,15 @@
                     @input="toggleHeatMap"
                   >
                     <div class="flex">
-                      <img class="w-5 h-5" src="@/assets/red-cross-logo.jpg" />
-                      <!--                      <ccu-icon-->
-                      <!--                        v-tooltip="{-->
-                      <!--                          content: $t('casesVue.damage_assessment_help'),-->
-                      <!--                          trigger: 'hover',-->
-                      <!--                          classes: 'w-72',-->
-                      <!--                        }"-->
-                      <!--                        :alt="$t('casesVue.damage_assessment_help')"-->
-                      <!--                        type="help"-->
-                      <!--                        size="large"-->
-                      <!--                      />-->
-                      <div
-                        class="
-                          rounded-full
-                          w-5
-                          h-5
-                          text-center
-                          border border-crisiscleanup-dark-500
-                          mx-1
-                        "
-                      >
-                        <font-awesome-icon
-                          icon="question"
-                          v-tooltip="{
-                            content: $t('casesVue.damage_assessment_help'),
-                            trigger: 'hover',
-                            classes: 'w-72',
-                          }"
-                        />
-                      </div>
+                      <img
+                        class="w-5 h-5"
+                        src="@/assets/red-cross-logo.jpg"
+                        v-tooltip="{
+                          content: $t('casesVue.damage_assessment_help'),
+                          trigger: 'hover',
+                          classes: 'w-72',
+                        }"
+                      />
                       {{ $t('casesVue.show_damaged_areas') }}
                     </div>
                   </base-checkbox>
