@@ -2158,7 +2158,7 @@ export default {
   height: 18px;
 }
 .search-input {
-  z-index: 10000;
+  z-index: 900;
   width: 90%;
 }
 </style>

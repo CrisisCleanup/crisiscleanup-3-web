@@ -1313,24 +1313,26 @@ export default {
 .intake-form {
   overflow: auto;
 }
-
 .case-action {
-  @apply hidden;
+  @apply block bg-white p-3
+    border border-r-0 border-gray-300
+    flex
+    justify-between;
 }
 
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .intake-form {
     height: 145%;
   }
-  .bottom-action {
-    @apply hidden;
+}
+
+@media (max-width: 640px) {
+  .intake-form {
+    height: 75%;
   }
   .case-action {
-    @apply block bg-white p-3
-    border border-r-0 border-gray-300
-    card-footer
-    flex
-    justify-between;
+    @apply fixed bottom-0 w-full;
+    height: 8%;
   }
 }
 
