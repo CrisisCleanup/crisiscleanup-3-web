@@ -11,34 +11,14 @@
       </div>
     </DragDrop>
 
-    <vue-easy-lightbox
-      :visible="viewingImage"
-      :imgs="worksite.files.map((file) => file.large_thumbnail_url)"
-      :index="index"
-      @hide="handleHide"
-    ></vue-easy-lightbox>
-
     <div class="flex flex-wrap">
-      <div
+      <ImageModal
         v-for="(file, idx) in worksite.files"
         :key="idx"
-        class="relative image-container mb-2"
-      >
-        <img
-          class="image-box w-20 h-20 mx-2 cursor-pointer"
-          :src="file.small_thumbnail_url"
-          :alt="file.filename_original"
-          :title="file.filename_original"
-          @click="() => showImg(idx)"
-        />
-        <ccu-icon
-          :alt="$t('actions.delete')"
-          size="xs"
-          type="trash"
-          class="absolute right-0 top-0 m-1 mr-3 p-1 image-close bg-white"
-          @click.native="deleteFile(file.file)"
-        />
-      </div>
+        :img-src="file.small_thumbnail_url"
+        :modal-img="file.large_thumbnail_url"
+        @removeImage="deleteFile(file.file)"
+      />
     </div>
   </section>
 </template>
@@ -47,15 +27,14 @@ import VueTypes from 'vue-types';
 import DragDrop from '@/components/DragDrop';
 import Worksite from '@/models/Worksite';
 import { getErrorMessage } from '../utils/errors';
+import ImageModal from '@/components/ImageModal';
 
 export default {
   name: 'WorksiteImageSection',
-  components: { DragDrop },
+  components: { DragDrop, ImageModal },
   data() {
     return {
       uploading: false,
-      viewingImage: false,
-      index: null,
     };
   },
   props: {
@@ -64,13 +43,6 @@ export default {
     isSurvivorToken: VueTypes.bool.def(false),
   },
   methods: {
-    showImg(index) {
-      this.index = index;
-      this.viewingImage = true;
-    },
-    handleHide() {
-      this.viewingImage = false;
-    },
     async handleFileUpload(fileList) {
       if (fileList.length === 0) {
         this.uploading = false;
@@ -124,12 +96,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.image-container:hover .image-close {
-  display: flex;
-}
-
-.image-close {
-  display: none;
-}
-</style>

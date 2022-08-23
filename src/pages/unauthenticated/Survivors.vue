@@ -6,8 +6,12 @@
     >
       {{ $t('survivorContact.deleted_notice') }}
     </div>
-    <div class="logo flex justify-center p-3 border border-b">
-      <img src="@/assets/ccu-logo-black-500w.png" style="height: 53px" />
+    <div id="top" class="logo flex justify-center p-3 border border-b">
+      <img
+        id="header"
+        src="@/assets/ccu-logo-black-500w.png"
+        style="height: 53px"
+      />
     </div>
     <section class="main p-8" v-if="survivorToken">
       <div class="text-2xl text-center mb-3 font-bold">
@@ -548,6 +552,7 @@ export default {
       }
     },
     async saveSurvivorToken() {
+      document.getElementById('header').scrollIntoView();
       this.loading = true;
       try {
         await this.$http.put(
@@ -596,11 +601,15 @@ export default {
 </style>
 
 <style>
-.privacy > a {
+a {
   @apply text-primary-dark;
   text-decoration: underline !important;
   &:hover {
     text-decoration: none;
   }
+}
+li {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 </style>
