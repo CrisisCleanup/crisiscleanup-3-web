@@ -99,4 +99,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+p {
+  max-width: 400px;
+}
+</style>
