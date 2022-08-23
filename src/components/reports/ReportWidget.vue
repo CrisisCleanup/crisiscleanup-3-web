@@ -43,9 +43,18 @@ export default {
   name: 'ReportWidget',
   components: { ReportLineChart, ReportPieChart, ReportStackedBarChart },
   props: {
-    currentFilters: {},
-    widgetKey: {},
-    value: {},
+    currentFilters: {
+      type: Object,
+      default: () => ({}),
+    },
+    widgetKey: {
+      type: String,
+      default: '',
+    },
+    value: {
+      type: Object,
+      default: () => ({}),
+    },
   },
 };
 </script>
