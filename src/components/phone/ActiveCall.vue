@@ -112,10 +112,10 @@
   </div>
 </template>
 <script>
+import * as Sentry from '@sentry/browser';
 import { ConnectFirstMixin, WorksitesMixin } from '@/mixins';
 import useScripts from '@/use/phone/useScripts';
 import Worksite from '@/models/Worksite';
-import * as Sentry from '@sentry/browser';
 
 export default {
   name: 'ActiveCall',
