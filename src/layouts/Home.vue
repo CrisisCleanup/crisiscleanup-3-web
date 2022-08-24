@@ -14,17 +14,17 @@
         <div class="homegrid-survivors">
           <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
           <base-text font="display" variant="h2" class="help-contact">
-            <div v-if="incidentList.length">
-              <div
-                v-for="incident in incidentList"
-                :key="incident.id"
-                class="ml-2"
-              >
-                {{ incident.short_name }}:
-                {{ getIncidentPhoneNumbers(incident) }}
-              </div>
+            <div v-if="incidentList.length === 0">
+              <spinner />
             </div>
-            <span v-else v-html="$t('homeVue.phone_or_website')"></span>
+            <div
+              v-for="incident in incidentList"
+              :key="incident.id"
+              class="ml-2"
+            >
+              {{ incident.short_name }}:
+              {{ getIncidentPhoneNumbers(incident) }}
+            </div>
           </base-text>
         </div>
       </div>
@@ -37,7 +37,6 @@
 import SideNav from '@/components/home/SideNav.vue';
 import Footer from '@/components/home/Footer.vue';
 import Actions from '@/components/home/Actions.vue';
-import Incident from '@/models/Incident';
 import { formatNationalNumber } from '@/filters';
 
 export const HomeNav = SideNav;
@@ -51,14 +50,8 @@ export default {
       lang: {
         survive: this.$t('homeVue.survivors_call'),
       },
+      incidentList: [],
     };
-  },
-  computed: {
-    incidentList() {
-      return Incident.query()
-        .where('active_phone_number', (number) => Boolean(number))
-        .get();
-    },
   },
   methods: {
     getIncidentPhoneNumbers(incident) {
@@ -69,6 +62,11 @@ export default {
       }
       return formatNationalNumber(String(incident.active_phone_number));
     },
+  },
+  async mounted() {
+    await fetch('https://api.staging.crisiscleanup.io/incidents')
+      .then((response) => response.json())
+      .then((data) => this.incidentList.push(data.results[0]));
   },
 };
 </script>
