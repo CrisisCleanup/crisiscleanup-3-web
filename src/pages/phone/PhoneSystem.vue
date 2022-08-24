@@ -506,7 +506,7 @@
 import * as L from 'leaflet';
 import { debounce } from 'lodash';
 import CaseForm from '@/pages/CaseForm';
-import { getWorksiteLayer, mapAttribution, mapTileLayer } from '@/utils/map';
+import { getWorksiteLayer } from '@/utils/map';
 import PhoneComponentButton from '@/components/phone/PhoneComponentButton';
 import ManualDialer from '@/components/phone/ManualDialer';
 import { ConnectFirstMixin, DialogsMixin, UserMixin } from '@/mixins';
@@ -830,14 +830,7 @@ export default {
           [50.792047064406866, -69.87298845293874],
         ]);
 
-        L.tileLayer(mapTileLayer, {
-          // tileSize: 512,
-          // zoomOffset: -1,
-          attribution: mapAttribution,
-          detectRetina: false,
-          maxZoom: 18,
-          noWrap: false,
-        }).addTo(this.map);
+        L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(this.map);
       }
       const worksiteLayer = getWorksiteLayer(markers, this.map, this, true);
       worksiteLayer.addTo(this.map);
