@@ -381,13 +381,14 @@
     </div>
     <div
       class="
-        bottom-action
         bg-white
         p-3
         border border-r-0 border-gray-300
         card-footer
         flex
         justify-between
+        sm:fixed
+        bottom-0
       "
     >
       <base-button
@@ -1311,18 +1312,23 @@ export default {
 }
 
 .intake-form {
+  height: 71vh;
   overflow: auto;
 }
 .case-action {
-  @apply block bg-white p-3
+  @apply bg-white p-3
     border border-r-0 border-gray-300
     flex
     justify-between;
+  display: none;
 }
 
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .intake-form {
     height: 145%;
+  }
+  .case-action {
+    display: flex;
   }
 }
 
@@ -1331,13 +1337,16 @@ export default {
     height: 75%;
   }
   .case-action {
-    @apply fixed bottom-0 w-full;
-    height: 8%;
+    @apply fixed bottom-0 right-0;
+    height: 9%;
+    width: 80%;
+    display: flex;
   }
 }
 
 .card-footer {
   min-height: 80px;
+  width: 23%;
 }
 
 .form-field {
