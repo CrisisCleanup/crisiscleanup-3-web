@@ -1,5 +1,5 @@
 <template>
-  <div id="d3GroupedBar"></div>
+  <div :id="id"></div>
 </template>
 
 <script>
@@ -29,9 +29,9 @@ export default {
     onMounted(() => {
       const groupData = props.data;
 
-      const margin = { top: 20, right: 20, bottom: 100, left: 40 };
+      const margin = { top: 40, right: 20, bottom: 100, left: 40 };
       const width = 1000 - margin.left - margin.right;
-      const height = 500 - margin.top - margin.bottom;
+      const height = 600 - margin.top - margin.bottom;
 
       const x0 = d3.scaleBand().rangeRound([0, width], 0.5);
       const x1 = d3.scaleBand();
@@ -48,7 +48,7 @@ export default {
       const color = d3.scaleOrdinal(d3.schemeCategory10);
 
       const svg = d3
-        .select('#d3GroupedBar')
+        .select(`#${props.id}`)
         .append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
@@ -97,6 +97,14 @@ export default {
         .style('text-anchor', 'end')
         .style('font-weight', 'bold')
         .text('Value');
+
+      svg
+        .append('text')
+        .attr('x', width / 2)
+        .attr('y', 0 - margin.top / 2)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '20px')
+        .text($t(`reports.${props.reportName}`));
 
       svg
         .select('.y')

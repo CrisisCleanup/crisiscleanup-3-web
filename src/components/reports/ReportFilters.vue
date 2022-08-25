@@ -1,13 +1,18 @@
 <template>
   <div class="p-1">
-    <div class="text-base">{{ $t('~~Filters') }}</div>
+    <div class="text-base">{{ $t('reports.filters') }}</div>
     <div class="grid grid-cols-3 gap-3">
       <template v-for="input in inputs">
         <div v-if="input.filter === 'organizations'" :key="input" class="my-1">
-          <OrganizationSearchInput
-            @selectedOrganization="filters[input.field] = $event.id"
-            class="h-12"
-            size="large"
+          <form-select
+            searchable
+            :key="input"
+            v-model="filters[input.field]"
+            item-key="id"
+            label="name"
+            :placeholder="$t('reports.organizations_optional')"
+            :options="organizations"
+            select-classes="bg-white border text-xs h-12 role-select p-1 form-multiselect"
           />
         </div>
         <div v-if="input.filter === 'work_types'" :key="input" class="my-1">
@@ -18,7 +23,7 @@
             item-key="key"
             label="name_t"
             :placeholder="$t('~~Filter by work type')"
-            :options="workTypes"
+            :options="filteredWorkTypes"
             select-classes="bg-white border text-xs h-12 role-select p-1 form-multiselect"
           />
         </div>
@@ -88,29 +93,28 @@
     <base-button
       variant="solid"
       :action="applyFilters"
-      :text="$t('actions.apply')"
+      :text="$t('actions.run_report')"
       class="ml-2 p-3 px-6 text-xs"
     />
     <base-button
       variant="solid"
       :action="downloadCSV"
-      :text="$t('~~Download CSV')"
+      :text="$t('actions.download_csv')"
       class="ml-2 p-3 px-6 text-xs"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { onMounted, ref } from '@vue/composition-api';
+import { onMounted, ref, computed } from '@vue/composition-api';
 import { useGetters, useState } from '@u3u/vue-hooks';
 import moment from 'moment';
-import OrganizationSearchInput from '@/components/OrganizationSearchInput.vue';
 import Location from '@/models/Location';
+import Organization from '@/models/Organization';
 import { getQueryString } from '@/utils/urls';
 
 export default {
   name: 'ReportFilters',
-  components: { OrganizationSearchInput },
   props: {
     inputs: {
       type: Array,
@@ -119,9 +123,20 @@ export default {
   },
   setup(props, { emit }) {
     const { workTypes } = useGetters('enums', ['workTypes']);
+    const { currentIncident } = useGetters('incident', ['currentIncident']);
     const filters = ref<any>({});
     const locations = ref<any[]>([]);
+    const organizations = ref<any[]>([]);
     const { currentIncidentId } = useState('incident', ['currentIncidentId']);
+
+    props.inputs?.forEach((input) => {
+      if (input.filter === 'timerange') {
+        filters.value[input.field] = {
+          start: moment(currentIncident.value.start_at).toDate(),
+          end: new Date(),
+        };
+      }
+    });
 
     const buildQuery = () => {
       const query = {};
@@ -163,11 +178,44 @@ export default {
       locations.value = results.response.data.results;
     };
 
-    onMounted(async () => {
-      await onLocationSearch();
+    const onOrganizationSearch = async () => {
+      const params = {
+        incident: currentIncidentId.value,
+        limit: 500,
+      };
+
+      const queryString = getQueryString(params);
+      const results = await Organization.api().get(
+        `/organizations?${queryString}`,
+        {
+          dataKey: 'results',
+        },
+      );
+      organizations.value = results.response.data.results;
+    };
+
+    const filteredWorkTypes = computed(() => {
+      return (
+        currentIncident.value.created_work_types &&
+        workTypes.value.filter((wt) =>
+          currentIncident.value.created_work_types.includes(wt.key),
+        )
+      );
     });
 
-    return { filters, workTypes, locations, applyFilters, downloadCSV };
+    onMounted(async () => {
+      await onLocationSearch();
+      await onOrganizationSearch();
+    });
+
+    return {
+      filters,
+      filteredWorkTypes,
+      locations,
+      organizations,
+      applyFilters,
+      downloadCSV,
+    };
   },
 };
 </script>

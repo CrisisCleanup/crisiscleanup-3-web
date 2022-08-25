@@ -19,6 +19,8 @@ export default class Incident extends CCUModel<Incident> {
 
   form_fields!: any[];
 
+  created_work_types!: any[];
+
   static fields() {
     return {
       id: this.attr(''),

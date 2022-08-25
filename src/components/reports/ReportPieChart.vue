@@ -18,10 +18,6 @@ export default {
       type: String,
       default: '',
     },
-    titleKey: {
-      type: String,
-      default: '',
-    },
     reportName: {
       type: String,
       default: '',
@@ -30,27 +26,25 @@ export default {
   setup(props) {
     const { $t } = usei18n();
 
-    onMounted(() => {
-      const { data } = props;
-
+    function renderPie(data, svg, index) {
       const width = 80;
       const height = 80;
       const padding = 5;
       const opacity = 0.8;
 
-      const radius = Math.min(width - padding, height - padding) / 2;
-      const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-      const svg = d3
-        .select(`#${props.id}`)
-        .append('svg')
-        .attr('class', 'pie')
-        .attr('width', width)
-        .attr('height', height);
-
       const g = svg
         .append('g')
-        .attr('transform', `translate(${width / 2},${height / 2})`);
+        .attr(
+          'transform',
+          `translate(${(index % 3) * width * 5.5 + width},${
+            height * Math.ceil((index + 1) / 3) +
+            Math.floor(index / 3) * (height * 2)
+          })`,
+        )
+        .style('margin-left', `${index * width}px`);
+
+      const radius = Math.min(width - padding, height - padding) / 2;
+      const color = d3.scaleOrdinal(d3.schemeCategory10);
 
       const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
@@ -62,57 +56,90 @@ export default {
         .sort(null);
 
       g.selectAll('path')
-        .data(pie(data))
+        .data(pie(data.data))
         .enter()
         .append('g')
         .append('path')
         .attr('d', arc)
         .attr('fill', (d, i) => color(i))
         .style('opacity', opacity)
-        .style('stroke', 'white');
+        .style('stroke', 'white')
+        .attr('transform', `translate(${width / 2},${0})`);
 
-      const title = d3
-        .select(`#${props.id}`)
-        .append('div')
+      g.append('g')
+        .attr('transform', `translate(${-width},${height})`)
+        .append('text')
+        .text($t(`reports.${props.reportName}.${data.titleKey}`))
         .attr('class', 'title');
 
-      title
-        .append('div')
-        .attr('class', 'name')
-        .text($t(`reports.${props.reportName}.${props.titleKey}`));
-
-      const legend = d3
-        .select(`#${props.id}`)
-        .append('div')
-        .attr('class', 'legend')
-        .style('margin-top', '30px');
-
-      const keys = legend
-        .selectAll('.key')
-        .data(data)
+      const legend = g
+        .append('g')
+        .attr('transform', `translate(${-width * 2.8},${-height / 1.5})`)
+        .selectAll('.legend')
+        .data(
+          data.data.map(function (d) {
+            return `${$t(
+              `reports.${props.reportName}.${d.name}`,
+            )} (${d.value})`;
+          }),
+        )
         .enter()
-        .append('div')
-        .attr('class', 'key')
-        .style('display', 'flex')
-        .style('align-items', 'center')
-        .style('margin-right', '20px');
+        .append('g')
+        .attr('class', 'legend')
+        .attr('transform', function (d, i) {
+          return `translate(${width},${height * 2 + i * 20})`;
+        })
+        .style('opacity', '0');
 
-      keys
-        .append('div')
-        .attr('class', 'symbol')
-        .style('height', '10px')
-        .style('width', '10px')
-        .style('margin', '5px 5px')
-        .style('background-color', (d, i) => color(i));
+      legend
+        .append('text')
+        .attr('x', width + 5)
+        .attr('y', 9)
+        .attr('dy', '.35em')
+        .style('text-anchor', 'start')
+        .text(function (d) {
+          return d;
+        });
 
-      keys
-        .append('div')
-        .attr('class', 'name')
-        .text(
-          (d) => `${$t(`reports.${props.reportName}.${d.name}`)} (${d.value})`,
-        );
+      legend
+        .append('rect')
+        .attr('x', width - 18)
+        .attr('width', 18)
+        .attr('height', 18)
+        .style('fill', function (d, i) {
+          return color(i);
+        });
 
-      keys.exit().remove();
+      legend
+        .transition()
+        .duration(500)
+        .delay(function (d, i) {
+          return 1300 + 100 * i;
+        })
+        .style('opacity', '1');
+    }
+
+    onMounted(() => {
+      const { data } = props;
+      const width = 80 * 6 * 3;
+      const height = 250 * Math.ceil(data.length / 3);
+      const svg = d3
+        .select(`#${props.id}`)
+        .append('svg')
+        .attr('class', 'pie')
+        .attr('width', width)
+        .attr('height', height);
+
+      svg
+        .append('text')
+        .attr('x', width / 2)
+        .attr('y', 20)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '20px')
+        .text($t(`reports.${props.reportName}`));
+
+      data.forEach((pieData, index) => renderPie(pieData, svg, index));
+      renderPie(data);
     });
   },
 };

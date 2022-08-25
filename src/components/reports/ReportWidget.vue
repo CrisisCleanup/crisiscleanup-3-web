@@ -1,12 +1,34 @@
 <template>
   <div>
+    <div class="actions flex my-4">
+      <base-button
+        :action="() => $emit('downloadWidgetCsv', widgetKey)"
+        :text="$t('~~Download')"
+        class="mx-2"
+      />
+      <base-button
+        :action="
+          () => $emit('printWidget', getWidgetSvg(`d3Chart-${widgetKey}`))
+        "
+        :text="$t('~~Print')"
+        class="mx-2"
+      />
+      <base-button
+        :action="() => $emit('addWidgetToDashboard', widgetKey)"
+        :text="$t('~~Add to dashboard')"
+        class="mx-2"
+      />
+    </div>
     <div v-if="value.type === 'pie'" class="grid grid-flow-col">
       <ReportPieChart
-        v-for="[reportKey, reportValue] in Object.entries(value.data)"
-        :key="reportKey"
-        :title-key="reportKey"
-        :data="reportValue"
-        :id="`${reportKey}-${key}`"
+        :key="JSON.stringify(currentFilters)"
+        :data="
+          Object.entries(value.data).map(([reportKey, reportValue]) => ({
+            titleKey: reportKey,
+            data: reportValue,
+          }))
+        "
+        :id="`d3Chart-${widgetKey}`"
         class="first:ml-auto last:mr-auto"
         :report-name="widgetKey"
       />
@@ -20,6 +42,7 @@
         :group-by="value.group_by"
         :key="JSON.stringify(currentFilters)"
         :report-name="widgetKey"
+        :id="`d3Chart-${widgetKey}`"
       />
     </div>
     <div
@@ -30,6 +53,7 @@
         :data="value.data"
         :report-name="widgetKey"
         :key="JSON.stringify(currentFilters)"
+        :id="`d3Chart-${widgetKey}`"
       />
     </div>
   </div>
@@ -46,6 +70,14 @@ export default {
     currentFilters: {},
     widgetKey: {},
     value: {},
+  },
+  setup(props) {
+    function getWidgetSvg() {
+      return document.querySelector(`#d3Chart-${props.widgetKey} > svg`)
+        ?.outerHTML;
+    }
+
+    return { getWidgetSvg };
   },
 };
 </script>

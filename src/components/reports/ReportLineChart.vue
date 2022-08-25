@@ -1,5 +1,5 @@
 <template>
-  <div id="d3LineChart2"></div>
+  <div :id="id"></div>
 </template>
 
 <script>
@@ -22,6 +22,10 @@ export default {
       type: String,
       default: '',
     },
+    id: {
+      type: String,
+      default: '',
+    },
   },
   setup(props) {
     const { $t } = usei18n();
@@ -32,9 +36,9 @@ export default {
       //  Multi-line Chart
       //
       function d3LineChart2(data1) {
-        const margin = { top: 20, right: 200, bottom: 100, left: 40 };
+        const margin = { top: 40, right: 200, bottom: 100, left: 80 };
         const width = 1000 - margin.left - margin.right;
-        const height = 500 - margin.top - margin.bottom;
+        const height = 600 - margin.top - margin.bottom;
 
         const parseDate = d3.timeParse('%Y-%m-%d');
 
@@ -59,7 +63,7 @@ export default {
           });
 
         const svg = d3
-          .select('#d3LineChart2')
+          .select(`#${props.id}`)
           .append('svg')
           .attr('width', width + margin.left + margin.right)
           .attr('height', height + margin.top + margin.bottom)
@@ -132,6 +136,14 @@ export default {
             .attr('dy', '.71em')
             .style('text-anchor', 'end')
             .text('Amount ($)');
+
+          svg
+            .append('text')
+            .attr('x', width / 2)
+            .attr('y', 0 - margin.top / 2)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '20px')
+            .text($t(`reports.${props.reportName}`));
 
           const metrics = svg
             .selectAll('.metrics')

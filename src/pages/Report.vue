@@ -1,5 +1,8 @@
 <template>
   <div class="reports">
+    <div class="text-center text-base py-5 px-2">
+      {{ report.paid_for_statement }}
+    </div>
     <ReportFilters
       :inputs="report.inputs"
       @onFilter="runReport"
@@ -13,20 +16,15 @@
       v-else
       v-for="[key, value] in Object.entries(transformedData)"
       :key="key"
-      class="items-center justify-center my-10 ml-8"
+      class="flex flex-col justify-center my-10 ml-8"
     >
-      <base-button
-        :action="() => downloadWidgetCsv(key)"
-        :text="$t('~~Download')"
-      />
-      <base-button
-        :action="() => addWidgetToDashboard(key, currentFilters)"
-        :text="$t('~~Add to dashboard')"
-      />
       <ReportWidget
         :current-filters="currentFilters"
         :widget-key="key"
         :value="value"
+        @printWidget="printWidget"
+        @downloadWidgetCsv="downloadWidgetCsv"
+        @addWidgetToDashboard="addWidgetToDashboard"
       />
     </div>
   </div>
@@ -51,6 +49,8 @@ import Loader from '@/components/Loader.vue';
 import { forceFileDownload } from '@/utils/downloads';
 import { transformGraphData } from '@/utils/reports';
 import ReportWidget from '@/components/reports/ReportWidget.vue';
+import usei18n from '@/use/usei18n';
+import Accordion from '@/components/accordion/Accordion.vue';
 
 interface Input {
   field: string;
@@ -61,11 +61,14 @@ interface Input {
 
 interface Report {
   inputs: Input[];
+  name_t: string;
+  paid_for_statement: string;
 }
 
 export default defineComponent({
   name: 'Report',
   components: {
+    Accordion,
     ReportWidget,
     Loader,
     ReportFilters,
@@ -77,6 +80,7 @@ export default defineComponent({
     const { $http } = useHttp();
     const { route } = useRouter();
     const { $toasted } = useToasted();
+    const { $t } = usei18n();
     const { currentIncidentId } = useState('incident', ['currentIncidentId']);
     const graphData = ref<Array<any> | null>(null);
     const report = ref<Report | null>(null);
@@ -88,6 +92,7 @@ export default defineComponent({
         `${process.env.VUE_APP_API_BASE_URL}/reports/${route.value.params.id}`,
       );
       report.value = reportResponse.data;
+      document.title = $t(report.value?.name_t || document.title);
     });
 
     const transformedData = computed(() => {
@@ -160,11 +165,28 @@ export default defineComponent({
       }
     };
 
-    const addWidgetToDashboard = async (key, filters) => {
+    const printWidget = async (svg) => {
+      try {
+        const response = await $http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/reports_print`,
+          {
+            svg,
+          },
+          {
+            responseType: 'blob',
+          },
+        );
+        forceFileDownload(response);
+      } catch (error) {
+        await $toasted.error(getErrorMessage(error));
+      }
+    };
+
+    const addWidgetToDashboard = async (key) => {
       try {
         await $http.post(`${process.env.VUE_APP_API_BASE_URL}/user_widgets`, {
           widget: key,
-          filters,
+          filters: currentFilters,
         });
       } catch (error) {
         await $toasted.error(getErrorMessage(error));
@@ -177,6 +199,7 @@ export default defineComponent({
       runReport,
       runCsvReport,
       downloadWidgetCsv,
+      printWidget,
       addWidgetToDashboard,
       currentFilters,
       loading,

@@ -27,6 +27,9 @@ export const mapTileLayerDark =
 export const mapTileLayerSatellite =
   'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png';
 
+export const googleMapsLayer =
+  'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
+
 export const mapAttribution =
   '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
