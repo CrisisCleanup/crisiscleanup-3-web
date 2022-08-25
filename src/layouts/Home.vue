@@ -14,11 +14,11 @@
         <div class="homegrid-survivors">
           <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
           <base-text font="display" variant="h2" class="help-contact">
-            <div v-if="incidentList.length === 0">
+            <div v-if="!incidentList">
               <spinner />
             </div>
             <div
-              v-for="incident in incidentList"
+              v-for="incident in filterNumbers(incidentList.data.results)"
               :key="incident.id"
               class="ml-2"
             >
@@ -62,11 +62,14 @@ export default {
       }
       return formatNationalNumber(String(incident.active_phone_number));
     },
+    filterNumbers(item) {
+      return item.filter((filterItem) => filterItem.active_phone_number);
+    },
   },
   async mounted() {
-    await fetch('https://api.staging.crisiscleanup.io/incidents')
-      .then((response) => response.json())
-      .then((data) => this.incidentList.push(data.results[0]));
+    this.incidentList = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,active_phone_number&limit=200&sort=-start_at`,
+    );
   },
 };
 </script>
