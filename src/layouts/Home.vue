@@ -14,16 +14,18 @@
         <div class="homegrid-survivors">
           <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
           <base-text font="display" variant="h2" class="help-contact">
-            <div v-if="!incidentList">
-              <spinner />
+            <div v-if="incidentList && incidentList.data">
+              <div
+                v-for="incident in filterNumbers(incidentList.data.results)"
+                :key="incident.id"
+                class="ml-2"
+              >
+                {{ incident.short_name }}:
+                {{ getIncidentPhoneNumbers(incident) }}
+              </div>
             </div>
-            <div
-              v-for="incident in filterNumbers(incidentList.data.results)"
-              :key="incident.id"
-              class="ml-2"
-            >
-              {{ incident.short_name }}:
-              {{ getIncidentPhoneNumbers(incident) }}
+            <div v-else>
+              <spinner />
             </div>
           </base-text>
         </div>
