@@ -937,24 +937,30 @@
           />
         </template>
       </div>
-      <div v-if="!spinning && $mq === 'sm'">
-        <WorksiteSearchInput
-          icon="search"
-          :suggestions="[
-            {
-              name: 'worksites',
-              data: searchWorksites || [],
-              key: 'name',
-            },
-          ]"
-          display-property="name"
-          :placeholder="$t('actions.search')"
-          size="medium"
-          @selectedExisting="handleChange"
-          @search="onSearch"
-          @clear="onSearch"
-        />
+      <div class="relative" v-if="!spinning">
+        <div
+          :class="$mq == 'sm' ? 'mt-2 ml-14 bg-white fixed search-input' : ''"
+        >
+          <WorksiteSearchInput
+            v-if="$mq === 'sm'"
+            icon="search"
+            :suggestions="[
+              {
+                name: 'worksites',
+                data: searchWorksites || [],
+                key: 'name',
+              },
+            ]"
+            display-property="name"
+            :placeholder="$t('actions.search')"
+            size="medium"
+            @selectedExisting="handleChange"
+            @search="onSearch"
+            @clear="onSearch"
+          />
+        </div>
         <WorksiteMap
+          v-if="$mq === 'sm'"
           :key="JSON.stringify(currentQuery)"
           ref="worksiteMap"
           class="h-72 p-2"
@@ -2150,5 +2156,9 @@ export default {
 .svg-container svg {
   width: 18px;
   height: 18px;
+}
+.search-input {
+  z-index: 900;
+  width: 90%;
 }
 </style>

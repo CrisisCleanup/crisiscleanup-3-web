@@ -14,9 +14,9 @@
         <div class="homegrid-survivors">
           <base-text font="display" variant="h1">{{ lang.survive }}</base-text>
           <base-text font="display" variant="h2" class="help-contact">
-            <div v-if="incidentList.length">
+            <div v-if="incidentList && incidentList.data">
               <div
-                v-for="incident in incidentList"
+                v-for="incident in filterNumbers(incidentList.data.results)"
                 :key="incident.id"
                 class="ml-2"
               >
@@ -24,7 +24,9 @@
                 {{ getIncidentPhoneNumbers(incident) }}
               </div>
             </div>
-            <span v-else v-html="$t('homeVue.phone_or_website')"></span>
+            <div v-else>
+              <spinner />
+            </div>
           </base-text>
         </div>
       </div>
@@ -37,7 +39,6 @@
 import SideNav from '@/components/home/SideNav.vue';
 import Footer from '@/components/home/Footer.vue';
 import Actions from '@/components/home/Actions.vue';
-import Incident from '@/models/Incident';
 import { formatNationalNumber } from '@/filters';
 
 export const HomeNav = SideNav;
@@ -51,14 +52,8 @@ export default {
       lang: {
         survive: this.$t('homeVue.survivors_call'),
       },
+      incidentList: [],
     };
-  },
-  computed: {
-    incidentList() {
-      return Incident.query()
-        .where('active_phone_number', (number) => Boolean(number))
-        .get();
-    },
   },
   methods: {
     getIncidentPhoneNumbers(incident) {
@@ -69,6 +64,14 @@ export default {
       }
       return formatNationalNumber(String(incident.active_phone_number));
     },
+    filterNumbers(item) {
+      return item.filter((filterItem) => filterItem.active_phone_number);
+    },
+  },
+  async mounted() {
+    this.incidentList = await this.$http.get(
+      `${process.env.VUE_APP_API_BASE_URL}/incidents?fields=id,name,short_name,active_phone_number&limit=200&sort=-start_at`,
+    );
   },
 };
 </script>
