@@ -24,7 +24,52 @@
             z-50
           "
         />
-        <img :src="imageUrl" />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-12
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-rotate"
+          @click="numClicks++"
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-24
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-plus"
+          @click="scale += 0.25"
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-32
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-minus"
+          @click="scale -= 0.25"
+        />
+        <img :src="imageUrl" :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`" />
       </div>
     </div>
     <div v-if="isCasesOnly || $mq !== 'sm'">
@@ -1140,6 +1185,8 @@ export default {
   },
   data() {
     return {
+      numClicks: 0,
+      scale: 1,
       showImgModal: false,
       imageUrl: '',
       formLayout: 'inline',
