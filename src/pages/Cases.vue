@@ -83,18 +83,16 @@
                     @input="toggleHeatMap"
                   >
                     <div class="flex">
-                      <img class="w-5 h-5" src="@/assets/red-cross-logo.jpg" />
-                      <ccu-icon
+                      {{ $t('casesVue.show_damaged_areas') }}
+                      <img
+                        class="w-5 h-5"
+                        src="@/assets/red-cross-logo.jpg"
                         v-tooltip="{
                           content: $t('casesVue.damage_assessment_help'),
                           trigger: 'hover',
                           classes: 'interactive-tooltip w-72',
                         }"
-                        :alt="$t('casesVue.damage_assessment_help')"
-                        type="help"
-                        size="large"
                       />
-                      {{ $t('casesVue.show_damaged_areas') }}
                     </div>
                   </base-checkbox>
                 </div>
