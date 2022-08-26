@@ -639,7 +639,7 @@ export default {
   },
   methods: {
     showImg(image) {
-      this.$emit('imageClick', image)
+      this.$emit('imageClick', image);
     },
     async initForm() {
       this.ready = false;
