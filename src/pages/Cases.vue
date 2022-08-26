@@ -69,7 +69,10 @@
           icon="fa-solid fa-minus"
           @click="scale -= 0.25"
         />
-        <img :src="imageUrl" :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`" />
+        <img
+          :src="imageUrl"
+          :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
+        />
       </div>
     </div>
     <div v-if="isCasesOnly || $mq !== 'sm'">
