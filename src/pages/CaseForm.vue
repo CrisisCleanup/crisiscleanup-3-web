@@ -346,6 +346,8 @@
           :worksite="worksite"
           :key="worksite.files"
           @photosChanged="reloadWorksite"
+          @image-click="showImg"
+          disable-modal
         />
       </template>
       <div class="case-action">
@@ -636,6 +638,9 @@ export default {
     await this.initForm();
   },
   methods: {
+    showImg(image) {
+      this.$emit('imageClick', image)
+    },
     async initForm() {
       this.ready = false;
       if (this.worksiteId) {
@@ -1346,7 +1351,7 @@ export default {
 
 .card-footer {
   min-height: 80px;
-  width: 23%;
+  width: 400px;
 }
 
 .form-field {

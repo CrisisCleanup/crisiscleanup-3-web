@@ -7,6 +7,26 @@
       'cases-container-grid': showCaseForm,
     }"
   >
+    <div class="modal" v-if="showImgModal">
+      <div class="modal-content">
+        <font-awesome-icon
+          @click="showImgModal = false"
+          icon="times"
+          class="
+            text-white
+            h-7
+            w-7
+            fixed
+            top-3
+            right-7
+            cursor-pointer
+            hover:text-primary-dark
+            z-50
+          "
+        />
+        <img :src="imageUrl" />
+      </div>
+    </div>
     <div v-if="isCasesOnly || $mq !== 'sm'">
       <div class="cases-grid relative">
         <div
@@ -994,6 +1014,7 @@
           @changed="loadWorksite"
           @reloadMap="reloadMap"
           @jumpToCase="jumpToCase"
+          @imageClick="showImage"
         />
       </div>
       <div v-else class="h-full w-full items-center justify-center">
@@ -1119,6 +1140,8 @@ export default {
   },
   data() {
     return {
+      showImgModal: false,
+      imageUrl: '',
       formLayout: 'inline',
       isEditing: true,
       showingMap: true,
@@ -1437,6 +1460,11 @@ export default {
     this.isMounted = JSON.stringify(this.appliedFilters);
   },
   methods: {
+    showImage(image) {
+      console.log(image);
+      this.imageUrl = image;
+      this.showImgModal = true;
+    },
     async getLocations() {
       const locationParams = {
         limit: 200,
@@ -2075,6 +2103,22 @@ export default {
 </script>
 
 <style>
+.modal {
+  @apply relative;
+  z-index: 10001;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+  @apply w-full flex items-center justify-center mt-80;
+}
 .ant-spin-container {
   height: 100%;
 }

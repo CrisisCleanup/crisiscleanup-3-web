@@ -17,7 +17,9 @@
         :key="idx"
         :img-src="file.small_thumbnail_url"
         :modal-img="file.large_thumbnail_url"
+        :disable-modal="disableModal"
         @removeImage="deleteFile(file.file)"
+        @image-click="$emit('image-click', file.large_thumbnail_url)"
       />
     </div>
   </section>
@@ -41,6 +43,10 @@ export default {
     worksite: VueTypes.object,
     isPrintToken: VueTypes.bool.def(false),
     isSurvivorToken: VueTypes.bool.def(false),
+    disableModal: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     async handleFileUpload(fileList) {
