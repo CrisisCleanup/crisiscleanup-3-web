@@ -3,7 +3,12 @@
     <div v-show="showModal" class="modal">
       <div id="modal-content" class="modal-content">
         <font-awesome-icon
-          @click="showModal = false"
+          @click="
+            () => {
+              $emit('onClose');
+              showModal = false;
+            }
+          "
           icon="times"
           class="
             text-white
@@ -75,12 +80,7 @@
         <img
           class="w-20 h-20 mx-2 cursor-pointer"
           :src="imgSrc"
-          @click="
-            () => {
-              $emit('image-click');
-              appearModal();
-            }
-          "
+          @click="appearModal"
         />
         <ccu-icon
           :alt="$t('actions.delete')"
@@ -105,6 +105,10 @@ export default {
       type: String,
       default: null,
     },
+    disableModal: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -115,8 +119,11 @@ export default {
   },
   methods: {
     appearModal() {
-      this.showModal = true;
-      document.getElementById('top').scrollIntoView();
+      this.$emit('image-click');
+      if (!this.disableModal) {
+        this.showModal = true;
+        document.getElementById('top').scrollIntoView();
+      }
     },
   },
 };

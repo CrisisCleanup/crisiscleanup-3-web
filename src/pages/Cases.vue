@@ -7,6 +7,74 @@
       'cases-container-grid': showCaseForm,
     }"
   >
+    <div class="modal" v-if="showImgModal">
+      <div class="modal-content">
+        <font-awesome-icon
+          @click="showImgModal = false"
+          icon="times"
+          class="
+            text-white
+            h-7
+            w-7
+            fixed
+            top-3
+            right-7
+            cursor-pointer
+            hover:text-primary-dark
+            z-50
+          "
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-12
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-rotate"
+          @click="numClicks++"
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-24
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-plus"
+          @click="scale += 0.25"
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-32
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-minus"
+          @click="scale -= 0.25"
+        />
+        <img
+          :src="imageUrl"
+          :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
+        />
+      </div>
+    </div>
     <div v-if="isCasesOnly || $mq !== 'sm'">
       <div class="cases-grid relative">
         <div
@@ -992,6 +1060,7 @@
           @changed="loadWorksite"
           @reloadMap="reloadMap"
           @jumpToCase="jumpToCase"
+          @imageClick="showImage"
         />
       </div>
       <div v-else class="h-full w-full items-center justify-center">
@@ -1117,6 +1186,10 @@ export default {
   },
   data() {
     return {
+      numClicks: 0,
+      scale: 1,
+      showImgModal: false,
+      imageUrl: '',
       formLayout: 'inline',
       isEditing: true,
       showingMap: true,
@@ -1435,6 +1508,11 @@ export default {
     this.isMounted = JSON.stringify(this.appliedFilters);
   },
   methods: {
+    showImage(image) {
+      console.log(image);
+      this.imageUrl = image;
+      this.showImgModal = true;
+    },
     async getLocations() {
       const locationParams = {
         limit: 200,
@@ -2073,6 +2151,22 @@ export default {
 </script>
 
 <style>
+.modal {
+  @apply relative;
+  z-index: 10001;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+  @apply w-full flex items-center justify-center mt-80;
+}
 .ant-spin-container {
   height: 100%;
 }
