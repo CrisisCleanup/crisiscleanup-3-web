@@ -6,6 +6,7 @@
         <div v-if="input.filter === 'organizations'" :key="input" class="my-1">
           <form-select
             searchable
+            multiple
             :key="input"
             v-model="filters[input.field]"
             item-key="id"

@@ -1,5 +1,5 @@
 <template>
-  <div :id="id"></div>
+  <div :id="id" class="relative"></div>
 </template>
 
 <script>
@@ -51,6 +51,10 @@ export default {
         const xAxis = d3.axisBottom(x).tickFormat(d3.timeFormat('%B %d, %Y'));
 
         const yAxis = d3.axisLeft(y);
+
+        const bisect = d3.bisector(function (d) {
+          return d.date;
+        }).left;
 
         const line = d3
           .line()
@@ -123,7 +127,7 @@ export default {
             .attr('y', 0)
             .attr('x', 9)
             .attr('dy', '.35em')
-            .attr('transform', 'rotate(90)')
+            .attr('transform', 'rotate(45)')
             .style('text-anchor', 'start');
 
           svg
@@ -145,6 +149,82 @@ export default {
             .style('font-size', '20px')
             .text($t(`reports.${props.reportName}`));
 
+          //* * Hover line & invisible rect
+          const hoverLineGroup = svg.append('g').attr('class', 'hover-line');
+
+          //* * Add the line to the group
+          const hoverLine = hoverLineGroup
+            .append('line')
+            .attr('id', 'hover-line')
+            .attr('x1', 0)
+            .attr('x2', 0)
+            .attr('y1', 0)
+            .attr('y2', height)
+            .style('stroke-opacity', 0)
+            .style('stroke', 'black');
+
+          const toolTip = d3
+            .select(`#${props.id}`)
+            .append('div')
+            .attr('class', 'chart-tooltip');
+
+          // What happens when the mouse move -> show the annotations at the right positions.
+          function mouseover() {
+            // focus.style('opacity', 1);
+            // focusText.style('opacity', 1);
+          }
+
+          function mousemove(e) {
+            const mouse = d3.pointer(e);
+            const mouseX = mouse[0];
+            const mouseY = mouse[1];
+            const timeStamp = x.invert(mouseX);
+
+            const i = bisect(metricsData[0].values, timeStamp);
+
+            let displaytext = '';
+            metricsData.forEach((metric) => {
+              displaytext += `${$t(
+                `reports.${props.reportName}.${metric.name}`,
+              )}: ${metric.values[i].amount}\n`;
+            });
+
+            hoverLine
+              .attr('x1', mouseX)
+              .attr('x2', mouseX)
+              .style('stroke-opacity', 1);
+
+            toolTip
+              .style('visibility', 'visible')
+              .style('left', `${mouseX + 60}px`)
+              .style('top', `${mouseY}px`)
+              .text(`${timeStamp}\n${displaytext}`);
+
+            // focus.attr('cx', x(selectedData.x)).attr('cy', y(selectedData.y));
+            // focusText
+            //   .html(`x:${selectedData.x}  -  ` + `y:${selectedData.y}`)
+            //   .attr('x', x(selectedData.x) + 15)
+            //   .attr('y', y(selectedData.y));
+          }
+          function mouseout() {
+            hoverLine.style('stroke-opacity', 0);
+            toolTip.style('visibility', 'hidden');
+
+            // focus.style('opacity', 0);
+            // focusText.style('opacity', 0);
+          }
+
+          svg
+            .append('rect')
+            .style('fill', 'none')
+            .style('pointer-events', 'all')
+            .style('cursor', 'pointer')
+            .attr('width', width)
+            .attr('height', height)
+            .on('mouseover', mouseover)
+            .on('mousemove', mousemove)
+            .on('mouseout', mouseout);
+
           const metrics = svg
             .selectAll('.metrics')
             .data(metricsData)
@@ -158,6 +238,7 @@ export default {
             .attr('d', function (d) {
               return line(d.values);
             })
+            .attr('stroke-width', 1.5)
             .style('fill', 'none')
             .style('stroke', function (d) {
               return color($t(`reports.${props.reportName}.${d.name}`));
@@ -190,4 +271,44 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.chart-tooltip {
+  line-height: 1.5;
+  visibility: hidden;
+  padding: 10px;
+  position: absolute;
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  font-size: 13px;
+  text-align: left;
+  pointer-events: none;
+  z-index: 1060;
+  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+}
+
+.chart-tooltip > h4 {
+  font-size: 16px;
+}
+
+.chart-tooltip > p {
+  padding: 10px 0;
+  font-weight: 400;
+}
+
+.chart-tooltip > p > span {
+  float: right;
+}
+
+.chart-tooltip > p > span > em {
+  font-size: 85%;
+}
+
+.chart-tooltip > p:last-child {
+  padding-bottom: 0;
+}
+</style>

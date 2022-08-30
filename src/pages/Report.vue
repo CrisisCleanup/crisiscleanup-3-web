@@ -19,6 +19,7 @@
       class="flex flex-col justify-center my-10 ml-8"
     >
       <ReportWidget
+        v-if="value.data.length > 0 || Object.keys(value.data).length > 0"
         :current-filters="currentFilters"
         :widget-key="key"
         :value="value"

@@ -49,9 +49,10 @@
       v-if="value.type === 'barstack'"
       class="flex items-center justify-center"
     >
-      <ReportStackedBarChart
+      <ReportBarChart
         :data="value.data"
         :report-name="widgetKey"
+        :group-by="value.group_by"
         :key="JSON.stringify(currentFilters)"
         :id="`d3Chart-${widgetKey}`"
       />
@@ -61,15 +62,24 @@
 <script lang="ts">
 import ReportLineChart from '@/components/reports/ReportLineChart.vue';
 import ReportPieChart from '@/components/reports/ReportPieChart.vue';
-import ReportStackedBarChart from '@/components/reports/ReportStackedBarChart.vue';
+import ReportBarChart from '@/components/reports/ReportBarChart.vue';
 
 export default {
   name: 'ReportWidget',
-  components: { ReportLineChart, ReportPieChart, ReportStackedBarChart },
+  components: { ReportLineChart, ReportPieChart, ReportBarChart },
   props: {
-    currentFilters: {},
-    widgetKey: {},
-    value: {},
+    currentFilters: {
+      type: Object,
+      default: () => ({}),
+    },
+    widgetKey: {
+      type: String,
+      default: '',
+    },
+    value: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   setup(props) {
     function getWidgetSvg() {

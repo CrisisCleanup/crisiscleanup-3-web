@@ -1,5 +1,5 @@
 <template>
-  <div :id="id"></div>
+  <div :id="id" class="relative"></div>
 </template>
 
 <script>
@@ -43,6 +43,11 @@ export default {
         )
         .style('margin-left', `${index * width}px`);
 
+      const toolTip = d3
+        .select(`#${props.id}`)
+        .append('div')
+        .attr('class', 'chart-tooltip');
+
       const radius = Math.min(width - padding, height - padding) / 2;
       const color = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -64,7 +69,28 @@ export default {
         .attr('fill', (d, i) => color(i))
         .style('opacity', opacity)
         .style('stroke', 'white')
-        .attr('transform', `translate(${width / 2},${0})`);
+        .attr('transform', `translate(${width / 2},${0})`)
+        .on('mouseover', function (e, d) {
+          // Get this bar's x/y values, then augment for the tooltip
+          const mouse = d3.pointer(e);
+          const mouseX = mouse[0];
+          const mouseY = mouse[1];
+
+          let displaytext = '';
+          displaytext += `${$t(
+            `reports.${props.reportName}.${d.data.name}`,
+          )}: ${d.data.value}\n`;
+
+          toolTip
+            .style('visibility', 'visible')
+            .style('left', `${mouseX}px`)
+            .style('top', `${mouseY}px`)
+            .text(`${displaytext}\n`);
+        })
+        // hide tooltip
+        .on('mouseout', function () {
+          toolTip.style('visibility', 'hidden');
+        });
 
       g.append('g')
         .attr('transform', `translate(${-width},${height})`)
