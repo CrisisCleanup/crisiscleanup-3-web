@@ -1951,6 +1951,7 @@ export default {
       const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
         this.$refs.worksiteMap.markerLayer,
       );
+      EventBus.$emit('updatedWorksiteLocation', markerLocation);
       marker.on('dragend', function (event) {
         EventBus.$emit('updatedWorksiteLocation', event.target.getLatLng());
       });
