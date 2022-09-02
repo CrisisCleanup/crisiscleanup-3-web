@@ -1,10 +1,11 @@
 <template>
-  <div :id="id" class="relative"></div>
+  <div :id="id"></div>
 </template>
 
 <script>
 import { onMounted } from '@vue/composition-api';
 import * as d3 from 'd3';
+import { sumBy } from 'lodash';
 import usei18n from '@/use/usei18n';
 
 export default {
@@ -22,11 +23,28 @@ export default {
       type: String,
       default: '',
     },
+    displayOptions: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   setup(props) {
     const { $t } = usei18n();
-
-    function renderPie(data, svg, index) {
+    let formatter = new Intl.NumberFormat('en-US');
+    if (props.displayOptions.number_format === 'currency') {
+      formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      });
+    }
+    if (props.displayOptions.number_format === 'percentage') {
+      formatter = new Intl.NumberFormat('en-US', {
+        style: 'percent',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    }
+    function renderPie(data, svg, index, toolTip) {
       const width = 80;
       const height = 80;
       const padding = 5;
@@ -43,13 +61,7 @@ export default {
         )
         .style('margin-left', `${index * width}px`);
 
-      const toolTip = d3
-        .select(`#${props.id}`)
-        .append('div')
-        .attr('class', 'chart-tooltip');
-
       const radius = Math.min(width - padding, height - padding) / 2;
-      const color = d3.scaleOrdinal(d3.schemeCategory10);
 
       const arc = d3.arc().innerRadius(0).outerRadius(radius);
 
@@ -66,25 +78,26 @@ export default {
         .append('g')
         .append('path')
         .attr('d', arc)
-        .attr('fill', (d, i) => color(i))
+        .attr('fill', (d) => {
+          return props.displayOptions.colors[
+            `reports.${props.reportName}.${d.data.name}`
+          ];
+        })
         .style('opacity', opacity)
         .style('stroke', 'white')
+        .style('cursor', 'pointer')
         .attr('transform', `translate(${width / 2},${0})`)
         .on('mouseover', function (e, d) {
           // Get this bar's x/y values, then augment for the tooltip
-          const mouse = d3.pointer(e);
-          const mouseX = mouse[0];
-          const mouseY = mouse[1];
-
           let displaytext = '';
           displaytext += `${$t(
             `reports.${props.reportName}.${d.data.name}`,
-          )}: ${d.data.value}\n`;
+          )}: ${formatter.format(d.data.value)}\n`;
 
           toolTip
             .style('visibility', 'visible')
-            .style('left', `${mouseX}px`)
-            .style('top', `${mouseY}px`)
+            .style('left', `${e.pageX}px`)
+            .style('top', `${e.pageY}px`)
             .text(`${displaytext}\n`);
         })
         // hide tooltip
@@ -104,9 +117,7 @@ export default {
         .selectAll('.legend')
         .data(
           data.data.map(function (d) {
-            return `${$t(
-              `reports.${props.reportName}.${d.name}`,
-            )} (${d.value})`;
+            return d;
           }),
         )
         .enter()
@@ -124,7 +135,9 @@ export default {
         .attr('dy', '.35em')
         .style('text-anchor', 'start')
         .text(function (d) {
-          return d;
+          return `${$t(
+            `reports.${props.reportName}.${d.name}`,
+          )} (${formatter.format(d.value)})`;
         });
 
       legend
@@ -132,8 +145,9 @@ export default {
         .attr('x', width - 18)
         .attr('width', 18)
         .attr('height', 18)
-        .style('fill', function (d, i) {
-          return color(i);
+        .style('fill', function (d) {
+          return props
+            .displayOptions.colors[`reports.${props.reportName}.${d.name}`];
         });
 
       legend
@@ -146,7 +160,10 @@ export default {
     }
 
     onMounted(() => {
-      const { data } = props;
+      const data = props.data.filter((entry) => {
+        const totalChartData = sumBy(entry.data, (d) => d.value);
+        return totalChartData > 0;
+      });
       const width = 80 * 6 * 3;
       const height = 250 * Math.ceil(data.length / 3);
       const svg = d3
@@ -164,7 +181,12 @@ export default {
         .style('font-size', '20px')
         .text($t(`reports.${props.reportName}`));
 
-      data.forEach((pieData, index) => renderPie(pieData, svg, index));
+      const toolTip = d3
+        .select(`#${props.id}`)
+        .append('div')
+        .attr('class', 'chart-tooltip');
+
+      data.forEach((pieData, index) => renderPie(pieData, svg, index, toolTip));
       renderPie(data);
     });
   },

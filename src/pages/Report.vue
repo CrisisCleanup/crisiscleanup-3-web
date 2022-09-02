@@ -1,7 +1,7 @@
 <template>
   <div class="reports">
     <div class="text-center text-base py-5 px-2">
-      {{ report.paid_for_statement }}
+      {{ $t('reports.paid_for_statement') }}
     </div>
     <ReportFilters
       :inputs="report.inputs"
@@ -26,6 +26,7 @@
         @printWidget="printWidget"
         @downloadWidgetCsv="downloadWidgetCsv"
         @addWidgetToDashboard="addWidgetToDashboard"
+        allow-add
       />
     </div>
   </div>

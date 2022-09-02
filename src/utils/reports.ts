@@ -63,11 +63,13 @@ export function transformWidgetData(graphValue) {
       data: result,
       group_by: graphValue.definition.group_by[0],
       type: graphValue.definition.type,
+      display_options: graphValue.display_options,
     };
   } else if (graphValue.definition.type === 'multiline') {
     data = {
       data: graphValue.data,
       group_by: graphValue.definition.group_by[0],
+      display_options: graphValue.display_options,
       type: graphValue.definition.type,
     };
   } else if (graphValue.definition.type === 'barstack') {
@@ -82,6 +84,7 @@ export function transformWidgetData(graphValue) {
       }),
       group_by: graphValue.definition.group_by[0],
       type: graphValue.definition.type,
+      display_options: graphValue.display_options,
     };
   }
   return data;

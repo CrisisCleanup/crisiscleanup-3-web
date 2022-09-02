@@ -11,7 +11,7 @@ export default {
   name: 'ReportBarChart',
   props: {
     data: {
-      type: Object,
+      type: Array,
       default: () => [],
     },
     id: {
@@ -26,20 +26,20 @@ export default {
       type: String,
       default: '',
     },
+    displayOptions: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   setup(props) {
     const { $t } = usei18n();
 
     onMounted(() => {
-      // const data = [
-      //   { category: new Date('2021-08-15'), A: 10, B: 20, C: 30, D: 40, E: 50 },
-      //   { category: new Date('2021-08-16'), A: 50, B: 40, C: 30, D: 20, E: 10 },
-      // ];
       const { data } = props;
       const keys = Object.keys(data[0]).filter((key) => key !== props.groupBy);
 
-      const margin = { top: 40, right: 200, bottom: 50, left: 80 };
-      const width = 1000 - margin.left - margin.right;
+      const margin = { top: 80, right: 200, bottom: 50, left: 80 };
+      const width = 1200 - margin.left - margin.right;
       const height = 600 - margin.top - margin.bottom;
 
       let svg = d3
@@ -74,11 +74,18 @@ export default {
 
       x.domain(data.map((d) => d[props.groupBy]));
 
+      const xAxis = d3
+        .axisBottom()
+        .scale(x)
+        .tickFormat(d3.timeFormat('%B %d, %Y'))
+        .ticks(20)
+        .tickValues(props.data.map((d) => d[props.groupBy]));
+
       svg
         .append('g')
         .attr('class', 'axis')
         .attr('transform', `translate(0,${height})`)
-        .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%B %d, %Y')))
+        .call(xAxis)
         .selectAll('text')
         .attr('y', 0)
         .attr('x', 9)
@@ -96,6 +103,32 @@ export default {
             .tickFormat((d) => d),
         );
 
+      svg
+        .append('text')
+        .attr('class', 'x label')
+        .attr('text-anchor', 'start')
+        .attr('x', width / 2)
+        .attr('y', height + margin.bottom / 2 + 50)
+        .text($t(props.displayOptions.axes.x.name));
+
+      svg
+        .append('text')
+        .attr('class', 'y label')
+        .attr('text-anchor', 'start')
+        .attr('y', -margin.left / 2 - 20)
+        .attr('x', -height / 2)
+        .attr('dy', '.75em')
+        .attr('transform', 'rotate(-90)')
+        .text($t(props.displayOptions.axes.y.name));
+
+      svg
+        .append('text')
+        .attr('x', width / 2)
+        .attr('y', -20)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '20px')
+        .text($t(`reports.${props.reportName}`));
+
       const toolTip = d3
         .select(`#${props.id}`)
         .append('div')
@@ -109,7 +142,9 @@ export default {
         .append('g')
         .attr('class', 'stack')
         .style('fill', (d) => {
-          return color($t(`reports.${props.reportName}.${d.key}`));
+          return props.displayOptions.colors[
+            `reports.${props.reportName}.${d.key}`
+          ];
         });
 
       layer
@@ -122,7 +157,7 @@ export default {
         })
         .attr('y', (d) => y(d[1]))
         .attr('height', (d) => y(d[0]) - y(d[1]))
-        .attr('width', 25)
+        .attr('width', x.bandwidth())
         .style('cursor', 'pointer')
         .on('mouseover', function (e, d) {
           // Get this bar's x/y values, then augment for the tooltip

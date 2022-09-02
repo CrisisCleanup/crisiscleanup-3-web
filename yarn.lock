@@ -18804,6 +18804,11 @@ listr@^0.14.3:
     p-map "^2.0.0"
     rxjs "^6.3.3"
 
+litepie-datepicker@^1.0.14:
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/litepie-datepicker/-/litepie-datepicker-1.0.14.tgz#8c6fd91e574bbd6d26692133568992510ef80790"
+  integrity sha512-u1BAsvLv5r7grMrKbRXKXPfk5okiYJBF247PWr5MGmbVxxWmDCoqQWtMdaHrQUzA/BQiU6J6L1nri0QkJISjyA==
+
 load-json-file@^1.0.0, load-json-file@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-1.1.0.tgz#956905708d58b4bab4c2261b04f59f31c99374c0"
@@ -27548,6 +27553,11 @@ vue2-google-maps@^0.10.2, vue2-google-maps@^0.10.7:
   dependencies:
     babel-runtime "^6.26.0"
     marker-clusterer-plus "^2.1.4"
+
+vue2-litepie-datepicker@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vue2-litepie-datepicker/-/vue2-litepie-datepicker-1.0.0.tgz#c8df8a06048df1c8a9b62b499423245fd1ec36b7"
+  integrity sha512-qYBWg/wmAU/fEM3GZwZzvDlwLrKzPlIiPNfV0h4TGLPMwiz+tt0sLlatCV46wLcWewHOnEHU09CrsEDwnBaGWg==
 
 vue@2.6.12:
   version "2.6.12"

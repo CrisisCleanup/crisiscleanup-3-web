@@ -26,9 +26,27 @@ export default {
       type: String,
       default: '',
     },
+    displayOptions: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   setup(props) {
     const { $t } = usei18n();
+    let formatter = new Intl.NumberFormat('en-US');
+    if (props.displayOptions.number_format === 'currency') {
+      formatter = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      });
+    }
+    if (props.displayOptions.number_format === 'percentage') {
+      formatter = new Intl.NumberFormat('en-US',{
+        style: 'percent',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+    }
 
     onMounted(() => {
       const { data } = props;
@@ -36,8 +54,8 @@ export default {
       //  Multi-line Chart
       //
       function d3LineChart2(data1) {
-        const margin = { top: 40, right: 200, bottom: 100, left: 80 };
-        const width = 1000 - margin.left - margin.right;
+        const margin = { top: 40, right: 100, bottom: 100, left: 100 };
+        const width = 1100 - margin.left - margin.right;
         const height = 600 - margin.top - margin.bottom;
 
         const parseDate = d3.timeParse('%Y-%m-%d');
@@ -58,7 +76,7 @@ export default {
 
         const line = d3
           .line()
-          // .interpolate('cardinal')
+          .curve(d3.curveBasis)
           .x(function (d) {
             return x(d.date);
           })
@@ -130,16 +148,25 @@ export default {
             .attr('transform', 'rotate(45)')
             .style('text-anchor', 'start');
 
+          svg.append('g').attr('class', 'y axis').call(yAxis);
+
           svg
-            .append('g')
-            .attr('class', 'y axis')
-            .call(yAxis)
             .append('text')
+            .attr('class', 'x label')
+            .attr('text-anchor', 'start')
+            .attr('x', width / 2)
+            .attr('y', height + margin.bottom / 2 + 40)
+            .text($t(props.displayOptions.axes.x.name));
+
+          svg
+            .append('text')
+            .attr('class', 'y label')
+            .attr('text-anchor', 'start')
+            .attr('y', -margin.left / 2 - 30)
+            .attr('x', -height / 2)
+            .attr('dy', '.75em')
             .attr('transform', 'rotate(-90)')
-            .attr('y', 6)
-            .attr('dy', '.71em')
-            .style('text-anchor', 'end')
-            .text('Amount ($)');
+            .text($t(props.displayOptions.axes.y.name));
 
           svg
             .append('text')
@@ -168,12 +195,6 @@ export default {
             .append('div')
             .attr('class', 'chart-tooltip');
 
-          // What happens when the mouse move -> show the annotations at the right positions.
-          function mouseover() {
-            // focus.style('opacity', 1);
-            // focusText.style('opacity', 1);
-          }
-
           function mousemove(e) {
             const mouse = d3.pointer(e);
             const mouseX = mouse[0];
@@ -186,7 +207,7 @@ export default {
             metricsData.forEach((metric) => {
               displaytext += `${$t(
                 `reports.${props.reportName}.${metric.name}`,
-              )}: ${metric.values[i].amount}\n`;
+              )}: ${formatter.format(metric.values[i].amount)}\n`;
             });
 
             hoverLine
@@ -199,19 +220,10 @@ export default {
               .style('left', `${mouseX + 60}px`)
               .style('top', `${mouseY}px`)
               .text(`${timeStamp}\n${displaytext}`);
-
-            // focus.attr('cx', x(selectedData.x)).attr('cy', y(selectedData.y));
-            // focusText
-            //   .html(`x:${selectedData.x}  -  ` + `y:${selectedData.y}`)
-            //   .attr('x', x(selectedData.x) + 15)
-            //   .attr('y', y(selectedData.y));
           }
           function mouseout() {
             hoverLine.style('stroke-opacity', 0);
             toolTip.style('visibility', 'hidden');
-
-            // focus.style('opacity', 0);
-            // focusText.style('opacity', 0);
           }
 
           svg
@@ -221,7 +233,6 @@ export default {
             .style('cursor', 'pointer')
             .attr('width', width)
             .attr('height', height)
-            .on('mouseover', mouseover)
             .on('mousemove', mousemove)
             .on('mouseout', mouseout);
 
@@ -241,7 +252,8 @@ export default {
             .attr('stroke-width', 1.5)
             .style('fill', 'none')
             .style('stroke', function (d) {
-              return color($t(`reports.${props.reportName}.${d.name}`));
+              return props
+                .displayOptions.colors[`reports.${props.reportName}.${d.name}`];
             });
 
           metrics
@@ -273,42 +285,6 @@ export default {
 
 <style>
 .chart-tooltip {
-  line-height: 1.5;
-  visibility: hidden;
-  padding: 10px;
-  position: absolute;
-  background-color: white;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  font-size: 13px;
-  text-align: left;
-  pointer-events: none;
-  z-index: 1060;
-  -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-}
-
-.chart-tooltip > h4 {
-  font-size: 16px;
-}
-
-.chart-tooltip > p {
-  padding: 10px 0;
-  font-weight: 400;
-}
-
-.chart-tooltip > p > span {
-  float: right;
-}
-
-.chart-tooltip > p > span > em {
-  font-size: 85%;
-}
-
-.chart-tooltip > p:last-child {
-  padding-bottom: 0;
+  @apply border bg-white p-2 max-w-lg absolute z-50 pointer-events-none shadow whitespace-pre-wrap;
 }
 </style>

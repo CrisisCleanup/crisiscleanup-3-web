@@ -3,6 +3,15 @@
     <div class="text-base">{{ $t('reports.filters') }}</div>
     <div class="grid grid-cols-3 gap-3">
       <template v-for="input in inputs">
+        <div v-if="input.filter === 'timerange'" :key="input" class="my-1">
+          <litepie-datepicker
+            v-model="filters[input.field]"
+            :formatter="{
+              date: 'YYYY-MM-DD',
+              month: 'MMM',
+            }"
+          />
+        </div>
         <div v-if="input.filter === 'organizations'" :key="input" class="my-1">
           <form-select
             searchable
@@ -28,55 +37,6 @@
             select-classes="bg-white border text-xs h-12 role-select p-1 form-multiselect"
           />
         </div>
-        <div v-if="input.filter === 'timerange'" :key="input" class="my-1">
-          <vc-date-picker v-model="filters[input.field]" is-range :key="input">
-            <template v-slot="{ inputValue, inputEvents }">
-              <div class="flex items-center">
-                <input
-                  :value="inputValue.start"
-                  v-on="inputEvents.start"
-                  class="
-                    border
-                    px-2
-                    py-1
-                    w-32
-                    h-12
-                    focus:outline-none
-                    text-base
-                  "
-                  :placeholder="$t('~~Start Date')"
-                />
-                <svg
-                  class="w-4 h-4 mx-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M14 5l7 7m0 0l-7 7m7-7H3"
-                  />
-                </svg>
-                <input
-                  :value="inputValue.end"
-                  v-on="inputEvents.end"
-                  class="
-                    border
-                    px-2
-                    py-1
-                    w-32
-                    h-12
-                    focus:outline-none
-                    text-base
-                  "
-                  :placeholder="$t('~~End Date')"
-                />
-              </div>
-            </template>
-          </vc-date-picker>
-        </div>
         <div v-if="input.filter === 'location'" :key="input" class="my-1">
           <form-select
             searchable
@@ -91,18 +51,20 @@
         </div>
       </template>
     </div>
-    <base-button
-      variant="solid"
-      :action="applyFilters"
-      :text="$t('actions.run_report')"
-      class="ml-2 p-3 px-6 text-xs"
-    />
-    <base-button
-      variant="solid"
-      :action="downloadCSV"
-      :text="$t('actions.download_csv')"
-      class="ml-2 p-3 px-6 text-xs"
-    />
+    <div class="flex mt-4 justify-end">
+      <base-button
+        variant="solid"
+        :action="downloadCSV"
+        :text="$t('actions.download_csv')"
+        class="p-3 px-6 text-xs"
+      />
+      <base-button
+        variant="solid"
+        :action="applyFilters"
+        :text="$t('actions.run_report')"
+        class="ml-2 p-3 px-6 text-xs"
+      />
+    </div>
   </div>
 </template>
 
@@ -110,12 +72,16 @@
 import { onMounted, ref, computed } from '@vue/composition-api';
 import { useGetters, useState } from '@u3u/vue-hooks';
 import moment from 'moment';
+import LitepieDatepicker from 'vue2-litepie-datepicker';
 import Location from '@/models/Location';
 import Organization from '@/models/Organization';
 import { getQueryString } from '@/utils/urls';
 
 export default {
   name: 'ReportFilters',
+  components: {
+    LitepieDatepicker,
+  },
   props: {
     inputs: {
       type: Array,
@@ -132,19 +98,19 @@ export default {
 
     props.inputs?.forEach((input) => {
       if (input.filter === 'timerange') {
-        filters.value[input.field] = {
-          start: moment(currentIncident.value.start_at).toDate(),
-          end: new Date(),
-        };
+        filters.value[input.field] = [
+          moment(currentIncident.value.start_at).toDate(),
+          new Date(),
+        ];
       }
     });
 
     const buildQuery = () => {
       const query = {};
       Object.keys(filters.value).forEach((key) => {
-        if (filters.value[key].start && filters.value[key].end) {
-          const start = moment(filters.value[key].start).format('YYYY-MM-DD');
-          const end = moment(filters.value[key].end).format('YYYY-MM-DD');
+        if (moment(filters.value[key][0], 'YYYY-MM-DD', true).isValid()) {
+          const start = moment(filters.value[key][0]).format('YYYY-MM-DD');
+          const end = moment(filters.value[key][1]).format('YYYY-MM-DD');
           query[key] = `${start}|${end}`;
         } else if (Array.isArray(filters.value[key])) {
           query[key] = filters.value[key].join(',');

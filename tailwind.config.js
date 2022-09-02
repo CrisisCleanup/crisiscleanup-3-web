@@ -1,10 +1,16 @@
 const _ = require('lodash');
+const colors = require('tailwindcss/colors');
 const flattenColorPalette =
   require('tailwindcss/lib/util/flattenColorPalette').default;
 
 module.exports = {
+  darkMode: 'class',
   purge: {
-    content: ['./src/**/*.html', './src/**/*.vue'],
+    content: [
+      './src/**/*.html',
+      './src/**/*.vue',
+      './node_modules/vue2-litepie-datepicker/**/*.js',
+    ],
     // These options are passed through directly to PurgeCSS
     options: {
       safelist: {
@@ -134,6 +140,8 @@ module.exports = {
           800: '#A3A3A3',
           900: '#9B9B9B',
         },
+        'litepie-primary': colors.lightBlue, // color system for light mode
+        'litepie-secondary': colors.coolGray, // color system for dark mode
         'crisiscleanup-teal': '#4fbdb0',
         'crisiscleanup-dark-red': '#ed4747',
         'crisiscleanup-dark-blue': '#009bff',
