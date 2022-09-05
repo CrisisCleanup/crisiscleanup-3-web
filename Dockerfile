@@ -86,6 +86,8 @@ ENV SENTRY_PROPERTIES=${SENTRY_PROPERTIES:-"sentry.properties"}
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
 
+ENV NODE_OPTIONS='--max_old_space_size=4096'
+
 RUN yarn build --mode=${VUE_APP_STAGE}
 
 
