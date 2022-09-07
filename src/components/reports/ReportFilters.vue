@@ -108,7 +108,11 @@ export default {
     const buildQuery = () => {
       const query = {};
       Object.keys(filters.value).forEach((key) => {
-        if (moment(filters.value[key][0], 'YYYY-MM-DD', true).isValid()) {
+        if (filters.value[key] === null) {
+          query[key] = filters.value[key];
+        } else if (
+          moment(filters.value[key][0], 'YYYY-MM-DD', true).isValid()
+        ) {
           const start = moment(filters.value[key][0]).format('YYYY-MM-DD');
           const end = moment(filters.value[key][1]).format('YYYY-MM-DD');
           query[key] = `${start}|${end}`;
