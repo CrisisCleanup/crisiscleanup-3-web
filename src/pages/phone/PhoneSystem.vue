@@ -452,6 +452,9 @@
                 icon-size="medium"
                 icon-class="p-1"
               >
+                <template v-slot:button>
+                  <font-awesome-icon icon="fa-users" class="w-full h-1/2 py-3" />
+                </template>
                 <template v-slot:component>
                   <Leaderboard class="h-full" />
                 </template>
