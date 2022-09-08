@@ -448,12 +448,16 @@
                 component-width="LG"
                 name="leaderboard"
                 class="phone-button"
-                icon="leaderboard"
-                icon-size="medium"
-                icon-class="p-1"
               >
                 <template v-slot:button>
-                  <font-awesome-icon icon="fa-users" class="w-full h-1/2 py-3" />
+                  <div class="w-full h-full flex items-center justify-center">
+                    <ccu-icon
+                      :fa="true"
+                      type="users"
+                      class="p-1"
+                      size="medium"
+                    />
+                  </div>
                 </template>
                 <template v-slot:component>
                   <Leaderboard class="h-full" />
