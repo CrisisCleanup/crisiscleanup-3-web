@@ -316,6 +316,8 @@
         :worksite="worksite"
         :key="worksite.files"
         class="px-3 pb-3"
+        @image-click="showImg"
+        disable-modal
       />
       <div class="case-action">
         <base-button
@@ -640,6 +642,9 @@ export default {
     }
   },
   methods: {
+    showImg(image) {
+      this.$emit('imageClick', image);
+    },
     updateWorkTypesToClaim(value, workTypeToClaim) {
       if (value) {
         this.workTypesToClaim.add(workTypeToClaim.work_type);
