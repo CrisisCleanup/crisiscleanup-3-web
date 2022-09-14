@@ -17,13 +17,13 @@
       </slot>
     </div>
     <div
-      class="phone-component absolute top-10 ml-12 z-30"
+      class="phone-component absolute top-10 ml-12 z-30 h-auto"
       :style="
         $mq !== 'sm'
           ? componentWidth === 'LG'
             ? 'width: 60vw; margin-left: -60vw; height: 60vh;'
             : componentWidth === 'MD'
-            ? 'width: 40vw; margin-left: -40vw'
+            ? 'width: 40vw; margin-left: -40vw;'
             : 'width: 30vw; margin-left: -30vw'
           : componentWidth === 'LG'
           ? 'height: 75vh;'
