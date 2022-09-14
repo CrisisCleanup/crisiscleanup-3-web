@@ -23,13 +23,13 @@
         :href="r.route"
         target="_blank"
       >
-        <div class="pewpew__navlink">
+        <div class="pewpew__navlink text-white">
           <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
         </div>
       </a>
       <router-link v-else :key="r.title" :to="r.routeProps">
-        <div class="pewpew__navlink">
+        <div class="pewpew__navlink text-white">
           <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
         </div>
@@ -145,6 +145,9 @@ export default {
 };
 </script>
 <style lang="postcss">
+a {
+  text-decoration: none !important;
+}
 .pewpew {
   &__nav {
     @apply col-span-2 flex flex-col text-xs text-center break-words;
