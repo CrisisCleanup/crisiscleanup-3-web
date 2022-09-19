@@ -7,6 +7,7 @@
       :inputs="report.inputs"
       @onFilter="runReport"
       @onCSV="runCsvReport"
+      @onPrint="printReport"
     />
     <Loader
       v-if="loading"
@@ -172,7 +173,24 @@ export default defineComponent({
         const response = await $http.post(
           `${process.env.VUE_APP_API_BASE_URL}/reports_print`,
           {
-            svg,
+            svg: [svg],
+          },
+          {
+            responseType: 'blob',
+          },
+        );
+        forceFileDownload(response);
+      } catch (error) {
+        await $toasted.error(getErrorMessage(error));
+      }
+    };
+
+    const printAllWidgets = async (svgs) => {
+      try {
+        const response = await $http.post(
+          `${process.env.VUE_APP_API_BASE_URL}/reports_print`,
+          {
+            svg: svgs,
           },
           {
             responseType: 'blob',
@@ -195,6 +213,16 @@ export default defineComponent({
       }
     };
 
+    async function printReport() {
+      const svgs = [] as any;
+      Object.entries(transformedData.value).forEach(([key, value]) => {
+        if (value.data.length > 0 || Object.keys(value.data).length > 0) {
+          svgs.push(document.querySelector(`#d3Chart-${key} > svg`)?.outerHTML);
+        }
+      });
+      await printAllWidgets(svgs);
+    }
+
     return {
       transformedData,
       report,
@@ -205,6 +233,7 @@ export default defineComponent({
       addWidgetToDashboard,
       currentFilters,
       loading,
+      printReport,
     };
   },
 });

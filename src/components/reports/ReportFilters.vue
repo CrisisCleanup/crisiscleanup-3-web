@@ -54,9 +54,15 @@
     <div class="flex mt-4 justify-end">
       <base-button
         variant="solid"
+        :action="printReport"
+        :text="$t('actions.print')"
+        class="ml-2 p-3 px-6 text-xs"
+      />
+      <base-button
+        variant="solid"
         :action="downloadCSV"
         :text="$t('actions.download_csv')"
-        class="p-3 px-6 text-xs"
+        class="ml-2 p-3 px-6 text-xs"
       />
       <base-button
         variant="solid"
@@ -70,7 +76,7 @@
 
 <script lang="ts">
 import { onMounted, ref, computed } from '@vue/composition-api';
-import { useGetters, useState } from '@u3u/vue-hooks';
+import { useGetters, useRouter, useState } from '@u3u/vue-hooks';
 import moment from 'moment';
 import LitepieDatepicker from 'vue2-litepie-datepicker';
 import Location from '@/models/Location';
@@ -95,15 +101,15 @@ export default {
     const locations = ref<any[]>([]);
     const organizations = ref<any[]>([]);
     const { currentIncidentId } = useState('incident', ['currentIncidentId']);
+    const { route, router } = useRouter();
 
-    props.inputs?.forEach((input) => {
-      if (input.filter === 'timerange') {
-        filters.value[input.field] = [
-          moment(currentIncident.value.start_at).toDate(),
-          new Date(),
-        ];
+    const queryParmToFilter = (queryParam, filterType) => {
+      if (filterType === 'timerange') {
+        const [start, end] = queryParam.split('|');
+        return [moment(start).toDate(), moment(end).toDate()];
       }
-    });
+      return queryParam.split(',');
+    };
 
     const buildQuery = () => {
       const query = {};
@@ -127,19 +133,55 @@ export default {
 
     const applyFilters = () => {
       const query = buildQuery();
+      // eslint-disable-next-line no-restricted-syntax
+      for (const key in query) {
+        if (query[key] === null || query[key] === undefined) {
+          delete query[key];
+        }
+      }
+      router.replace({ ...router.currentRoute, query } as any);
       emit('onFilter', query);
     };
+
+    props.inputs?.forEach((input) => {
+      if (input.filter === 'timerange') {
+        filters.value[input.field] = [
+          moment(currentIncident.value.start_at).toDate(),
+          new Date(),
+        ];
+      }
+
+      let runReport = false;
+      if (route.value.query[input.field]) {
+        runReport = true;
+        filters.value[input.field] = queryParmToFilter(
+          route.value.query[input.field],
+          input.filter,
+        );
+      }
+
+      if (runReport) {
+        applyFilters();
+      }
+    });
 
     const downloadCSV = () => {
       const query = buildQuery();
       emit('onCSV', query);
     };
 
+    const printReport = () => {
+      const query = buildQuery();
+      emit('onPrint', query);
+    };
+
     const onLocationSearch = async () => {
       const params = {
-        type__key__in: 'boundary_political_us_county',
+        type__key__in:
+          'boundary_political_us_county,boundary_political_us_state,boundary_political_us_city,boundary_political_us_zip_code,boundary_political_us_fema_region',
         incident_area: currentIncidentId.value,
-        limit: 500,
+        limit: 2000,
+        sort: 'name',
       };
 
       const queryString = getQueryString(params);
@@ -153,6 +195,8 @@ export default {
       const params = {
         incident: currentIncidentId.value,
         limit: 500,
+        fields: 'id,name',
+        sort: 'name',
       };
 
       const queryString = getQueryString(params);
@@ -186,6 +230,7 @@ export default {
       organizations,
       applyFilters,
       downloadCSV,
+      printReport,
     };
   },
 };

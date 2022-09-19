@@ -54,9 +54,9 @@ export default {
       //  Multi-line Chart
       //
       function d3LineChart2(data1) {
-        const margin = { top: 40, right: 100, bottom: 100, left: 100 };
+        const margin = { top: 150, right: 100, bottom: 100, left: 100 };
         const width = 1100 - margin.left - margin.right;
-        const height = 600 - margin.top - margin.bottom;
+        const height = 700 - margin.top - margin.bottom;
 
         const parseDate = d3.timeParse('%Y-%m-%d');
 
@@ -175,6 +175,14 @@ export default {
             .attr('text-anchor', 'middle')
             .style('font-size', '20px')
             .text($t(`reports.${props.reportName}`));
+
+          // svg
+          //   .append('text')
+          //   .attr('x', width / 2)
+          //   .attr('y', 0 - margin.top / 2 + 50)
+          //   .attr('text-anchor', 'middle')
+          //   .style('font-size', '15px')
+          //   .text($t(`reports.${props.reportName}_description`));
 
           //* * Hover line & invisible rect
           const hoverLineGroup = svg.append('g').attr('class', 'hover-line');

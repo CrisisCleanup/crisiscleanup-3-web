@@ -45,7 +45,7 @@ export default {
       });
     }
     function renderPie(data, svg, index, toolTip) {
-      const width = 80;
+      const width = 100;
       const height = 80;
       const padding = 5;
       const opacity = 0.8;
