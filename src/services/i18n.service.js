@@ -5,8 +5,12 @@ const BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 const i18nService = {
   async getLanguage(subtag) {
-    const cachedLocalizations = StorageService.getItem('cachedLocalizations');
-    const localizationsUpdated = StorageService.getItem('localizationsUpdated');
+    const cachedLocalizations = StorageService.getItem(
+      `cachedLocalizations:${subtag}`,
+    );
+    const localizationsUpdated = StorageService.getItem(
+      `localizationsUpdated:${subtag}`,
+    );
     if (cachedLocalizations) {
       const response = await fetch(
         `${BASE_URL}/localizations/count?updated_at__gt=${localizationsUpdated}`,
@@ -17,8 +21,11 @@ const i18nService = {
       }
     }
     const localizations = await this.getLocalizations(subtag);
-    StorageService.setItem('cachedLocalizations', localizations);
-    StorageService.setItem('localizationsUpdated', moment().toISOString());
+    StorageService.setItem(`cachedLocalizations:${subtag}`, localizations);
+    StorageService.setItem(
+      `localizationsUpdated:${subtag}`,
+      moment().toISOString(),
+    );
     return localizations;
   },
   async getLocalizations(subtag) {
