@@ -5,6 +5,7 @@
 <script>
 import { onMounted } from '@vue/composition-api';
 import * as d3 from 'd3';
+import moment from 'moment';
 import usei18n from '@/use/usei18n';
 
 export default {
@@ -38,7 +39,7 @@ export default {
       const { data } = props;
       const keys = Object.keys(data[0]).filter((key) => key !== props.groupBy);
 
-      const margin = { top: 80, right: 200, bottom: 50, left: 80 };
+      const margin = { top: 80, right: 200, bottom: 150, left: 80 };
       const width = 1200 - margin.left - margin.right;
       const height = 600 - margin.top - margin.bottom;
 
@@ -52,8 +53,6 @@ export default {
       svg = svg
         .append('g')
         .attr('transform', `translate(${margin.left},${margin.top - 30})`);
-
-      const color = d3.scaleOrdinal(d3.schemeCategory10);
 
       const x = d3.scaleBand().rangeRound([0, width]).padding(0.1);
 
@@ -116,7 +115,7 @@ export default {
         .attr('class', 'y label')
         .attr('text-anchor', 'start')
         .attr('y', -margin.left / 2 - 20)
-        .attr('x', -height / 2)
+        .attr('x', -height / 2 - 80)
         .attr('dy', '.75em')
         .attr('transform', 'rotate(-90)')
         .text($t(props.displayOptions.axes.y.name));
@@ -128,6 +127,14 @@ export default {
         .attr('text-anchor', 'middle')
         .style('font-size', '20px')
         .text($t(`reports.${props.reportName}`));
+
+      svg
+        .append('text')
+        .attr('x', width / 2)
+        .attr('y', height + margin.bottom - 50)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '15px')
+        .text($t(`reports.paid_for_statement`));
 
       const toolTip = d3
         .select(`#${props.id}`)
@@ -167,9 +174,9 @@ export default {
 
           let displaytext = '';
           Object.keys(d.data).forEach((key) => {
-            displaytext += `${$t(`reports.${props.reportName}.${key}`)}: ${
-              d.data[key]
-            }\n`;
+            displaytext += `${$t(
+              `reports.${props.reportName}.${key}`,
+            )}: ${moment(d.data[key]).format('ddd MMMM Do YYYY')}\n`;
           });
 
           // update the tooltip position and value

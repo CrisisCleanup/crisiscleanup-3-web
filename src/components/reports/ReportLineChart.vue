@@ -5,6 +5,7 @@
 <script>
 import { onMounted } from '@vue/composition-api';
 import * as d3 from 'd3';
+import moment from 'moment';
 import usei18n from '@/use/usei18n';
 
 export default {
@@ -38,6 +39,8 @@ export default {
       formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       });
     }
     if (props.displayOptions.number_format === 'percentage') {
@@ -54,7 +57,7 @@ export default {
       //  Multi-line Chart
       //
       function d3LineChart2(data1) {
-        const margin = { top: 150, right: 100, bottom: 100, left: 100 };
+        const margin = { top: 150, right: 100, bottom: 200, left: 100 };
         const width = 1100 - margin.left - margin.right;
         const height = 700 - margin.top - margin.bottom;
 
@@ -155,7 +158,7 @@ export default {
             .attr('class', 'x label')
             .attr('text-anchor', 'start')
             .attr('x', width / 2)
-            .attr('y', height + margin.bottom / 2 + 40)
+            .attr('y', height + margin.bottom / 2)
             .text($t(props.displayOptions.axes.x.name));
 
           svg
@@ -163,7 +166,7 @@ export default {
             .attr('class', 'y label')
             .attr('text-anchor', 'start')
             .attr('y', -margin.left / 2 - 30)
-            .attr('x', -height / 2)
+            .attr('x', -height / 2 - 80)
             .attr('dy', '.75em')
             .attr('transform', 'rotate(-90)')
             .text($t(props.displayOptions.axes.y.name));
@@ -176,13 +179,13 @@ export default {
             .style('font-size', '20px')
             .text($t(`reports.${props.reportName}`));
 
-          // svg
-          //   .append('text')
-          //   .attr('x', width / 2)
-          //   .attr('y', 0 - margin.top / 2 + 50)
-          //   .attr('text-anchor', 'middle')
-          //   .style('font-size', '15px')
-          //   .text($t(`reports.${props.reportName}_description`));
+          svg
+            .append('text')
+            .attr('x', width / 2)
+            .attr('y', height + margin.bottom - 50)
+            .attr('text-anchor', 'middle')
+            .style('font-size', '15px')
+            .text($t(`reports.paid_for_statement`));
 
           //* * Hover line & invisible rect
           const hoverLineGroup = svg.append('g').attr('class', 'hover-line');
@@ -227,7 +230,11 @@ export default {
               .style('visibility', 'visible')
               .style('left', `${mouseX + 60}px`)
               .style('top', `${mouseY}px`)
-              .text(`${timeStamp}\n${displaytext}`);
+              .text(
+                `${moment(timeStamp).format(
+                  'ddd MMMM Do YYYY',
+                )}\n${displaytext}`,
+              );
           }
           function mouseout() {
             hoverLine.style('stroke-opacity', 0);

@@ -35,6 +35,8 @@ export default {
       formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
+        maximumFractionDigits: 0,
+        minimumFractionDigits: 0,
       });
     }
     if (props.displayOptions.number_format === 'percentage') {
@@ -165,7 +167,7 @@ export default {
         return totalChartData > 0;
       });
       const width = 80 * 6 * 3;
-      const height = 250 * Math.ceil(data.length / 3);
+      const height = 260 * Math.ceil(data.length / 3);
       const svg = d3
         .select(`#${props.id}`)
         .append('svg')
@@ -180,6 +182,14 @@ export default {
         .attr('text-anchor', 'middle')
         .style('font-size', '20px')
         .text($t(`reports.${props.reportName}`));
+
+      svg
+        .append('text')
+        .attr('x', width / 2)
+        .attr('y', height - 10)
+        .attr('text-anchor', 'middle')
+        .style('font-size', '15px')
+        .text($t(`reports.paid_for_statement`));
 
       const toolTip = d3
         .select(`#${props.id}`)
