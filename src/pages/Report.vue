@@ -98,7 +98,7 @@ export default defineComponent({
       document.title = $t(report.value?.name_t || document.title);
     });
 
-    const transformedData = computed(() => {
+    const transformedData = computed<Record<any, any>>(() => {
       return transformGraphData(graphData.value);
     });
 
