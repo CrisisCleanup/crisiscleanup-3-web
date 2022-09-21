@@ -1317,7 +1317,7 @@ export default {
 }
 
 .intake-form {
-  height: 71vh;
+  height: 100%;
   overflow: auto;
 }
 .case-action {
