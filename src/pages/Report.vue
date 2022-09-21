@@ -5,6 +5,7 @@
       v-html="$t('reports.paid_for_statement')"
     ></div>
     <ReportFilters
+      :key="currentIncidentId"
       :inputs="report.inputs"
       @onFilter="runReport"
       @onCSV="runCsvReport"
@@ -175,6 +176,9 @@ export default defineComponent({
           `${process.env.VUE_APP_API_BASE_URL}/reports_print`,
           {
             svg: [svg],
+            incident: currentIncidentId.value,
+            filters: currentFilters.value,
+            report: report.value?.name_t,
           },
           {
             responseType: 'blob',
@@ -192,6 +196,9 @@ export default defineComponent({
           `${process.env.VUE_APP_API_BASE_URL}/reports_print`,
           {
             svg: svgs,
+            incident: currentIncidentId.value,
+            filters: currentFilters.value,
+            report: report.value?.name_t,
           },
           {
             responseType: 'blob',
@@ -235,6 +242,7 @@ export default defineComponent({
       currentFilters,
       loading,
       printReport,
+      currentIncidentId,
     };
   },
 });

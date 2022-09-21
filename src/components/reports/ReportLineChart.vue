@@ -58,7 +58,7 @@ export default {
       //
       function d3LineChart2(data1) {
         const margin = { top: 150, right: 100, bottom: 200, left: 100 };
-        const width = 1100 - margin.left - margin.right;
+        const width = 1200 - margin.left - margin.right;
         const height = 700 - margin.top - margin.bottom;
 
         const parseDate = d3.timeParse('%Y-%m-%d');

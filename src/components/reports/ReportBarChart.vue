@@ -5,7 +5,6 @@
 <script>
 import { onMounted } from '@vue/composition-api';
 import * as d3 from 'd3';
-import moment from 'moment';
 import usei18n from '@/use/usei18n';
 
 export default {
@@ -39,9 +38,9 @@ export default {
       const { data } = props;
       const keys = Object.keys(data[0]).filter((key) => key !== props.groupBy);
 
-      const margin = { top: 80, right: 200, bottom: 150, left: 80 };
+      const margin = { top: 150, right: 200, bottom: 150, left: 80 };
       const width = 1200 - margin.left - margin.right;
-      const height = 600 - margin.top - margin.bottom;
+      const height = 700 - margin.top - margin.bottom;
 
       let svg = d3
         .select(`#${props.id}`)
@@ -175,9 +174,9 @@ export default {
 
           let displaytext = '';
           Object.keys(d.data).forEach((key) => {
-            displaytext += `${$t(
-              `reports.${props.reportName}.${key}`,
-            )}: ${moment(d.data[key]).format('ddd MMMM Do YYYY')}\n`;
+            displaytext += `${$t(`reports.${props.reportName}.${key}`)}: ${
+              d.data[key]
+            }\n`;
           });
 
           // update the tooltip position and value
