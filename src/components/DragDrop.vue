@@ -105,7 +105,7 @@ export default defineComponent({
         fileform.value.addEventListener('drop', (e) => {
           if (e.dataTransfer?.files) {
             for (let i = 0; i < e.dataTransfer.files.length; i++) {
-              context.emit('files', e.dataTransfer.files);
+              context.emit('files', [e.dataTransfer.files[i]]);
             }
             removeDragOverClass();
           }
@@ -116,7 +116,7 @@ export default defineComponent({
             const target = e.target as HTMLInputElement;
             if (target?.files) {
               for (let i = 0; i < target.files.length; i++) {
-                context.emit('files', target.files);
+                context.emit('files', [target.files[i]]);
               }
             }
           });
