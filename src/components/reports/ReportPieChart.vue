@@ -189,7 +189,7 @@ export default {
         .attr('y', height - 10)
         .attr('text-anchor', 'middle')
         .style('font-size', '15px')
-        .text($t(`reports.paid_for_statement`));
+        .html($t(`reports.paid_for_statement`));
 
       const toolTip = d3
         .select(`#${props.id}`)

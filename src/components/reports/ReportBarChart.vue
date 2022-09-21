@@ -134,11 +134,12 @@ export default {
         .attr('y', height + margin.bottom - 50)
         .attr('text-anchor', 'middle')
         .style('font-size', '15px')
-        .text($t(`reports.paid_for_statement`));
+        .html($t(`reports.paid_for_statement`));
 
       const toolTip = d3
         .select(`#${props.id}`)
         .append('div')
+        .style('visibility', 'hidden')
         .attr('class', 'chart-tooltip');
 
       const dataStackLayout = d3.stack().keys(keys)(data);

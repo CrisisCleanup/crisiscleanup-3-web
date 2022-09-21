@@ -5,7 +5,7 @@
         class="text-base font-thin mx-1"
         ccu-icon="download"
         icon-size="small"
-        variant="solid"
+        variant="outline"
         size="small"
         :alt="$t('actions.download')"
         :text="$t('actions.download')"
@@ -15,7 +15,7 @@
         class="text-base font-thin mx-1"
         ccu-icon="print"
         icon-size="small"
-        variant="solid"
+        variant="outline"
         size="small"
         :alt="$t('actions.print')"
         :text="$t('actions.print')"
@@ -81,6 +81,18 @@
         :id="`d3Chart-${widgetKey}`"
       />
     </div>
+    <div
+      @click="showDescription = !showDescription"
+      class="underline text-primary-dark cursor-pointer mb-2"
+    >
+      {{
+        showDescription ? $t('~~Hide Description') : $t('~~Show Description')
+      }}
+    </div>
+    <div
+      v-if="showDescription"
+      v-html="$t(`reports.${widgetKey}_description`)"
+    ></div>
   </div>
 </template>
 <script lang="ts">
@@ -113,6 +125,7 @@ export default {
   setup(props) {
     const { $http } = useHttp();
     const availableWidgets = ref<any[]>([]);
+    const showDescription = ref<boolean>(false);
 
     function getWidgetSvg() {
       return document.querySelector(`#d3Chart-${props.widgetKey} > svg`)
@@ -132,7 +145,12 @@ export default {
       }
     });
 
-    return { getWidgetSvg, availableWidgets, reloadUserWidgets };
+    return {
+      getWidgetSvg,
+      availableWidgets,
+      reloadUserWidgets,
+      showDescription,
+    };
   },
 };
 </script>

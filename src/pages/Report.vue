@@ -1,8 +1,9 @@
 <template>
   <div class="reports">
-    <div class="text-center text-base py-5 px-2">
-      {{ $t('reports.paid_for_statement') }}
-    </div>
+    <div
+      class="text-center text-base py-5 px-2"
+      v-html="$t('reports.paid_for_statement')"
+    ></div>
     <ReportFilters
       :inputs="report.inputs"
       @onFilter="runReport"

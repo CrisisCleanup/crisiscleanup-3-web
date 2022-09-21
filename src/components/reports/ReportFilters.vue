@@ -53,7 +53,7 @@
     </div>
     <div class="flex mt-4 justify-end">
       <base-button
-        variant="solid"
+        variant="outline"
         :action="printReport"
         :text="$t('actions.print')"
         class="ml-2 p-3 px-6 text-xs"
