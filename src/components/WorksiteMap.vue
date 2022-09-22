@@ -682,7 +682,10 @@ export default {
       this.heatMapLayer.addTo(this.map);
     },
     removeHeatMap() {
-      this.map.removeLayer(this.heatMapLayer);
+      if (this.heatMapLayer) {
+        this.map.removeLayer(this.heatMapLayer);
+        this.heatMapLayer = null;
+      }
     },
   },
 };

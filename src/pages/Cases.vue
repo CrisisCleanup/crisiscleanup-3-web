@@ -144,7 +144,7 @@
                     @clear="onSearch"
                   />
                 </div>
-                <div class="mt-2" v-if="pdas.length > 0">
+                <div class="mt-2" v-if="hasPDAs">
                   <base-checkbox
                     class="pb-2"
                     :value="showingHeatMap"
@@ -1253,6 +1253,9 @@ export default {
     },
     heatMapEnabled() {
       return true;
+    },
+    hasPDAs() {
+      return this.pdas?.length > 0;
     },
     highPrioritySvgActive() {
       const template = templates.important;
