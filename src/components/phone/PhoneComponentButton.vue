@@ -29,7 +29,7 @@
           ? 'height: 75vh;'
           : ''
       "
-      :class="[componentClass]"
+      :class="[`--${componentWidth}`, ...componentClass]"
       v-show="showComponent"
     >
       <div class="w-full relative mb-2 z-40">
@@ -117,6 +117,20 @@ export default {
   min-height: 10vh;
   height: 90%;
   @apply shadow-lg bg-white sm:mt-12 overflow-auto;
+  &--LG {
+    width: 60vw;
+    margin-left: -60vw;
+    height: 60vh;
+  }
+  &--MD {
+    width: 40vw;
+    margin-left: -40vw;
+    height: auto;
+  }
+  &--SM {
+    width: 30vw;
+    margin-left: -30vw;
+  }
 }
 @media (max-width: 640px) {
   .phone-component {

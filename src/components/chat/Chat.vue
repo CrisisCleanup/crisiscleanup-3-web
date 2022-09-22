@@ -57,23 +57,12 @@
                 v-model="currentMessage"
               />
               <div class="flex justify-between py-2">
-                <!--                <base-link href="" text-variant="bodysm" class="px-2"-->
-                <!--                  >{{ $t('chat.need_help') }}-->
-                <!--                </base-link>-->
                 <div class="mx-1 w-8 h-8">
                   <base-checkbox v-model="urgent">
                     {{ $t('chat.urgent') }}
                   </base-checkbox>
                 </div>
                 <div class="flex">
-                  <!--                  <ccu-icon-->
-                  <!--                    :alt="$t('chat.urgent')"-->
-                  <!--                    size="small"-->
-                  <!--                    type="attention"-->
-                  <!--                    class="mx-1 w-8 h-8"-->
-                  <!--                    :class="urgent ? 'bg-crisiscleanup-light-smoke' : ''"-->
-                  <!--                    @click.native="urgent = !urgent"-->
-                  <!--                  />-->
                   <base-button
                     class="h-8 w-8 bg-crisiscleanup-dark-blue"
                     :disabled="!Boolean(currentMessage)"
