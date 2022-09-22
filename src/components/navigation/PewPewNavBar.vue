@@ -23,7 +23,7 @@
         :href="r.route"
         target="_blank"
       >
-        <div class="pewpew__navlink text-white">
+        <div class="pewpew__navlink">
           <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
         </div>
@@ -145,12 +145,9 @@ export default {
 };
 </script>
 <style lang="postcss">
-a {
-  text-decoration: none !important;
-}
 .pewpew {
   &__nav {
-    @apply col-span-2 flex flex-col text-xs text-center break-words;
+    @apply col-span-2 flex flex-col text-xs text-center break-words text-white no-underline;
     background: #242c36;
   }
 
@@ -163,7 +160,7 @@ a {
   }
 
   &__navlink {
-    @apply flex flex-col justify-center items-center m-1 p-2 rounded-lg;
+    @apply flex flex-col justify-center items-center m-1 p-2 rounded-lg text-white;
     /** this is against accessiblity standards. */
     font-size: 0.55rem;
     transition: background-color 300ms;
