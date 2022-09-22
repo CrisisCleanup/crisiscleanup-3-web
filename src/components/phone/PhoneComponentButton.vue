@@ -18,18 +18,7 @@
     </div>
     <div
       class="phone-component absolute top-10 ml-12 z-30"
-      :style="
-        $mq !== 'sm'
-          ? componentWidth === 'LG'
-            ? 'width: 60vw; margin-left: -60vw; height: 60vh;'
-            : componentWidth === 'MD'
-            ? 'width: 40vw; margin-left: -40vw; height: auto;'
-            : 'width: 30vw; margin-left: -30vw'
-          : componentWidth === 'LG'
-          ? 'height: 75vh;'
-          : ''
-      "
-      :class="[`--${componentWidth}`, ...componentClass]"
+      :class="[`phone-component--${componentWidth}`, ...componentClass]"
       v-show="showComponent"
     >
       <div class="w-full relative mb-2 z-40">

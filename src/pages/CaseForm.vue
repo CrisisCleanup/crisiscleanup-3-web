@@ -1350,8 +1350,8 @@ export default {
 }
 
 .card-footer {
-  min-height: 80px;
-  width: 350px;
+  min-height: 5rem;
+  width: 21rem;
 }
 
 .form-field {
