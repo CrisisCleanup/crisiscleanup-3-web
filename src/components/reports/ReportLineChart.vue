@@ -34,7 +34,10 @@ export default {
   },
   setup(props) {
     const { $t } = usei18n();
-    let formatter = new Intl.NumberFormat('en-US');
+    let formatter = new Intl.NumberFormat('en-US', {
+      maximumFractionDigits: 1,
+      minimumFractionDigits: 0,
+    });
     if (props.displayOptions.number_format === 'currency') {
       formatter = new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -44,10 +47,10 @@ export default {
       });
     }
     if (props.displayOptions.number_format === 'percentage') {
-      formatter = new Intl.NumberFormat('en-US',{
+      formatter = new Intl.NumberFormat('en-US', {
         style: 'percent',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
       });
     }
 
@@ -232,9 +235,9 @@ export default {
               .style('left', `${mouseX + 60}px`)
               .style('top', `${mouseY}px`)
               .text(
-                `${moment(timeStamp).format(
-                  'ddd MMMM Do YYYY',
-                )}\n${displaytext}`,
+                `${$t(`reports.${props.reportName}.${props.groupBy}`)} ${moment(
+                  timeStamp,
+                ).format('ddd MMMM Do YYYY')}\n${displaytext}`,
               );
           }
           function mouseout() {

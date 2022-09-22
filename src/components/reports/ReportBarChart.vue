@@ -5,6 +5,7 @@
 <script>
 import { onMounted } from '@vue/composition-api';
 import * as d3 from 'd3';
+import moment from 'moment';
 import usei18n from '@/use/usei18n';
 
 export default {
@@ -174,9 +175,15 @@ export default {
 
           let displaytext = '';
           Object.keys(d.data).forEach((key) => {
-            displaytext += `${$t(`reports.${props.reportName}.${key}`)}: ${
-              d.data[key]
-            }\n`;
+            if (d.data[key] instanceof Date) {
+              displaytext += `${$t(`reports.${props.reportName}.${key}`)}: ${moment(d.data[key]).format(
+                'ddd MMMM Do YYYY',
+              )}\n`;
+            } else {
+              displaytext += `${$t(`reports.${props.reportName}.${key}`)}: ${
+                d.data[key]
+              }\n`;
+            }
           });
 
           // update the tooltip position and value
