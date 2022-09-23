@@ -656,8 +656,8 @@ export default {
     await this.initForm();
   },
   methods: {
-    showImg(image) {
-      this.$emit('imageClick', image);
+    showImg(image, index, fileList) {
+      this.$emit('imageClick', image, index, fileList);
     },
     async initForm() {
       this.ready = false;

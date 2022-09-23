@@ -69,8 +69,40 @@
           icon="fa-solid fa-minus"
           @click="scale -= 0.25"
         />
+        <font-awesome-icon
+          v-if="imageIndex < imageList.length - 1"
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-108
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-chevron-right"
+          @click="imageIndex += 1"
+        />
+        <font-awesome-icon
+          v-if="imageIndex > 0"
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            left-7
+            top-108
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-chevron-left"
+          @click="imageIndex -= 1"
+        />
         <img
-          :src="imageUrl"
+          :src="imageList[imageIndex].large_thumbnail_url"
           :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
         />
       </div>
@@ -1186,6 +1218,8 @@ export default {
   },
   data() {
     return {
+      imageList: [],
+      imageIndex: 0,
       numClicks: 0,
       scale: 1,
       showImgModal: false,
@@ -1511,8 +1545,10 @@ export default {
     this.isMounted = JSON.stringify(this.appliedFilters);
   },
   methods: {
-    showImage(image) {
-      console.log(image);
+    showImage(image, index, fileList) {
+      console.log(image, index, fileList);
+      this.imageIndex = index;
+      this.imageList = fileList;
       this.imageUrl = image;
       this.showImgModal = true;
     },

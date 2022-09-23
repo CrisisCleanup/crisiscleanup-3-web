@@ -109,6 +109,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    imgIndex: {
+      type: Number,
+      default: -1,
+    },
+    imgListLength: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {

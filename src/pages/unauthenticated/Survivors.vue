@@ -233,11 +233,113 @@
         <div class="text-lg my-2 font-bold">
           {{ $t('survivorContact.upload_photos') }}
         </div>
+        <div class="modal" v-if="showImgModal">
+          <div class="modal-content">
+            <font-awesome-icon
+              @click="showImgModal = false"
+              icon="times"
+              class="
+            text-white
+            h-7
+            w-7
+            fixed
+            top-3
+            right-7
+            cursor-pointer
+            hover:text-primary-dark
+            z-50
+          "
+            />
+            <font-awesome-icon
+              class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-12
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+              icon="fa-solid fa-rotate"
+              @click="numClicks++"
+            />
+            <font-awesome-icon
+              class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-24
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+              icon="fa-solid fa-plus"
+              @click="scale += 0.25"
+            />
+            <font-awesome-icon
+              class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-32
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+              icon="fa-solid fa-minus"
+              @click="scale -= 0.25"
+            />
+            <font-awesome-icon
+              v-if="imageIndex < imageList.length - 1"
+              class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-108
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+              icon="fa-solid fa-chevron-right"
+              @click="imageIndex += 1"
+            />
+            <font-awesome-icon
+              v-if="imageIndex > 0"
+              class="
+            text-white
+            w-7
+            h-7
+            fixed
+            left-7
+            top-108
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+              icon="fa-solid fa-chevron-left"
+              @click="imageIndex -= 1"
+            />
+            <img
+              :src="imageList[imageIndex].large_thumbnail_url"
+              :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
+            />
+          </div>
+        </div>
         <WorksiteImageSection
           :worksite="survivorToken"
           :key="JSON.stringify(survivorToken)"
           :is-survivor-token="true"
           @photosChanged="() => getSurvivorToken(true)"
+          disable-modal
+          @image-click="showImage"
         />
       </div>
       <hr class="my-4" />
@@ -389,6 +491,11 @@ export default {
   },
   data() {
     return {
+      scale: 1,
+      numClicks: 0,
+      imageIndex: 0,
+      imageList: [],
+      showImgModal: false,
       loading: false,
       gettingLocation: false,
       addressSet: true,
@@ -435,6 +542,11 @@ export default {
     },
   },
   methods: {
+    showImage(image, index, fileList) {
+      this.imageIndex = index;
+      this.imageList = fileList;
+      this.showImgModal = true;
+    },
     updateWorkTypesHelpNeeded(value, workTypeToClaim) {
       if (value) {
         this.workTypeHelpNeeded.add(workTypeToClaim.id);
@@ -598,6 +710,22 @@ export default {
 .svg-container svg {
   width: 26px !important;
   height: 26px !important;
+}
+.modal {
+  @apply relative;
+  z-index: 10001;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+  @apply w-full flex items-center justify-center mt-80;
 }
 </style>
 
