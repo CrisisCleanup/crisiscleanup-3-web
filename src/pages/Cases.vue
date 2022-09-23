@@ -1846,6 +1846,7 @@ export default {
       });
 
       this.showingFilters = false;
+      this.currentSearch = ''; // don't include search query in filters
       this.fetch({
         pageSize: this.pagination.pageSize,
         page: this.pagination.current,
