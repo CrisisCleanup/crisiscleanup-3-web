@@ -142,7 +142,7 @@
             </base-checkbox>
             <base-checkbox
               class="mb-4 sm:mb-0"
-              v-model="organization.org_verified"
+              v-model="organization.is_verified"
             >
               Org Verified
             </base-checkbox>
@@ -529,7 +529,7 @@
                 </div>
                 <div class="flex" :key="`${request.id}`">
                   <base-button
-                    v-if="request.org_verified"
+                    v-if="request.is_verified"
                     :text="$t('actions.approve')"
                     variant="solid"
                     size="small"
@@ -545,7 +545,7 @@
                     variant="outline"
                     size="small"
                     class="mx-2 w-24"
-                    v-if="request.org_verified"
+                    v-if="request.is_verified"
                     :action="
                       () => {
                         rejectIncidentRequest(request.id);

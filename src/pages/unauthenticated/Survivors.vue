@@ -198,6 +198,7 @@
           :key="JSON.stringify(survivorToken.worksite.location)"
           class="h-84 mt-4 w-full"
           @updatedLocation="(latLng) => geocodeWorksite(latLng.lat, latLng.lng)"
+          use-google-maps
         />
       </div>
 

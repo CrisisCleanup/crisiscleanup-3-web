@@ -17,7 +17,7 @@
           v-if="slotProps.item.profile_completed"
         />
         <badge
-          v-if="slotProps.item.org_verified"
+          v-if="slotProps.item.is_verified"
           width="18px"
           height="18px"
           class="text-white bg-green-500 mx-1"

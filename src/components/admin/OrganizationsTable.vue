@@ -17,7 +17,7 @@
           v-if="slotProps.item.profile_completed"
         />
         <badge
-          v-if="slotProps.item.org_verified"
+          v-if="slotProps.item.is_verified"
           :title="$t('adminOrganization.org_verified')"
           width="18px"
           height="18px"

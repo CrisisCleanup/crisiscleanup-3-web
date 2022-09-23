@@ -21,6 +21,9 @@ export default {
         return {};
       },
     },
+    useGoogleMaps: {
+      type: Boolean,
+    },
   },
   methods: {
     createTileLayer() {
@@ -58,7 +61,11 @@ export default {
       this.map = L.map('map', {
         zoomControl: false,
       }).setView([35.7465122599185, -96.41150963125656], 3);
-      this.createTileLayer().addTo(this.map);
+      if (this.useGoogleMaps) {
+        L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(this.map);
+      } else {
+        this.createTileLayer().addTo(this.map);
+      }
       this.markerLayer.addTo(this.map);
       this.addMarkerToMap();
     });

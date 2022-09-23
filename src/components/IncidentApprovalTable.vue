@@ -22,7 +22,7 @@
           v-if="slotProps.item.organization_profile_completed"
         />
         <badge
-          v-if="slotProps.item.org_verified"
+          v-if="slotProps.item.is_verified"
           width="18px"
           height="18px"
           class="text-white bg-green-500 mx-1"
@@ -52,7 +52,7 @@
         <base-button
           :text="$t('actions.approve')"
           :alt="$t('actions.approve')"
-          v-if="slotProps.item.org_verified"
+          v-if="slotProps.item.is_verified"
           variant="solid"
           size="small"
           class="mx-2"
@@ -68,7 +68,7 @@
           variant="outline"
           size="small"
           class="mx-2"
-          v-if="slotProps.item.org_verified"
+          v-if="slotProps.item.is_verified"
           :action="
             () => {
               rejectRequest(slotProps.item.id);
