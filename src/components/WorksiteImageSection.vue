@@ -18,8 +18,12 @@
         :img-src="file.small_thumbnail_url"
         :modal-img="file.large_thumbnail_url"
         :disable-modal="disableModal"
+        :img-index="idx"
+        :img-list-length="worksite.files.length"
         @removeImage="deleteFile(file.file)"
-        @image-click="$emit('image-click', file.large_thumbnail_url)"
+        @image-click="
+          $emit('image-click', file.large_thumbnail_url, idx, worksite.files)
+        "
       />
     </div>
   </section>
