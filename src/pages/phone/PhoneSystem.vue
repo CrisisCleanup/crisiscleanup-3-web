@@ -259,6 +259,8 @@
               <PhoneComponentButton
                 name="dialer"
                 class="phone-button"
+                component-class="right-12"
+                component-style="width: 30rem;"
                 icon="dialer"
                 icon-size="small"
                 icon-class="bg-black p-1"
@@ -275,7 +277,8 @@
               <PhoneComponentButton
                 name="chat"
                 class="phone-button"
-                component-width="MD"
+                component-class="right-12 h-auto"
+                component-style="width: 30rem; height: auto;"
                 @open="
                   () => {
                     updateUserState({
@@ -357,9 +360,10 @@
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
-                component-width="LG"
                 name="news"
                 class="phone-button"
+                component-class="right-12 h-auto"
+                component-style="width: 50rem;"
                 @open="
                   () => {
                     updateUserState({
@@ -412,10 +416,11 @@
               <PhoneComponentButton
                 name="history"
                 class="phone-button"
+                component-class="right-12 h-auto"
+                component-style="width: 50rem;"
                 icon="phone-history"
                 icon-size="large"
                 icon-class="p-1"
-                component-width="LG"
                 v-if="callHistory"
               >
                 <template v-slot:component>
@@ -429,7 +434,12 @@
                   />
                 </template>
               </PhoneComponentButton>
-              <PhoneComponentButton name="stats" class="phone-button">
+              <PhoneComponentButton
+                name="stats"
+                class="phone-button"
+                component-class="right-12 h-auto"
+                component-style="width: 30rem;"
+              >
                 <template v-slot:button>
                   <div class="w-full h-full flex items-center justify-center">
                     <div class="text-xl">
@@ -445,9 +455,13 @@
                 </template>
               </PhoneComponentButton>
               <PhoneComponentButton
-                component-width="LG"
                 name="leaderboard"
                 class="phone-button"
+                component-class="right-12 h-auto"
+                component-style="width: 50rem;"
+                icon="leaderboard"
+                icon-size="medium"
+                icon-class="p-1"
               >
                 <template v-slot:button>
                   <div class="w-full h-full flex items-center justify-center">
@@ -466,6 +480,8 @@
               <PhoneComponentButton
                 name="reset"
                 class="phone-button"
+                component-class="right-12 h-auto"
+                component-style="width: 30rem;"
                 icon="logout"
                 icon-size="small"
                 icon-class="p-1"
@@ -930,7 +946,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .page-grid {
   display: grid;
   grid-template-columns: auto 350px;

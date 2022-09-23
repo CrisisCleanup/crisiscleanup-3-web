@@ -18,7 +18,8 @@
     </div>
     <div
       class="phone-component absolute top-10 ml-12 z-30"
-      :class="[`phone-component--${componentWidth}`, ...componentClass]"
+      :class="componentClass"
+      :style="componentStyle"
       v-show="showComponent"
     >
       <div class="w-full relative mb-2 z-40">
@@ -67,9 +68,9 @@ export default {
     icon: { type: String, default: null, required: false },
     iconClass: { type: String, default: null, required: false },
     componentClass: { type: String, default: null, required: false },
+    componentStyle: { type: String, default: null, required: false },
     iconSize: { type: String, default: null, required: false },
     keepOpen: { type: Boolean, default: false, required: false },
-    componentWidth: { type: String, default: 'SM' },
   },
   methods: {
     mounted() {
@@ -100,26 +101,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .phone-component {
   transform: translateY(-3rem);
   min-height: 10vh;
   height: 90%;
   @apply shadow-lg bg-white sm:mt-12 overflow-auto;
-  &--LG {
-    width: 60vw;
-    margin-left: -60vw;
-    height: 60vh;
-  }
-  &--MD {
-    width: 40vw;
-    margin-left: -40vw;
-    height: auto;
-  }
-  &--SM {
-    width: 30vw;
-    margin-left: -30vw;
-  }
 }
 @media (max-width: 640px) {
   .phone-component {
