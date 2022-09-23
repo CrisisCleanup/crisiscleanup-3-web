@@ -2003,7 +2003,8 @@ export default {
 }
 
 .live-tab {
-  @apply flex items-center justify-center h-12 cursor-pointer;
+  @apply flex items-center justify-center h-12 cursor-pointer text-white no-underline;
+  text-decoration: none !important;
 }
 
 .live-tab--selected {
