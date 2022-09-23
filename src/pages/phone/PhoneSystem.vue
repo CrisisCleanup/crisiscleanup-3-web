@@ -3,6 +3,106 @@
     class="flex-grow h-full"
     :class="$mq === 'sm' ? 'page-grid-mobile' : 'page-grid'"
   >
+    <div class="modal" v-if="showImgModal">
+      <div class="modal-content">
+        <font-awesome-icon
+          @click="showImgModal = false"
+          icon="times"
+          class="
+            text-white
+            h-7
+            w-7
+            fixed
+            top-3
+            right-7
+            cursor-pointer
+            hover:text-primary-dark
+            z-50
+          "
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-12
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-rotate"
+          @click="numClicks++"
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-24
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-plus"
+          @click="scale += 0.25"
+        />
+        <font-awesome-icon
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-32
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-minus"
+          @click="scale -= 0.25"
+        />
+        <font-awesome-icon
+          v-if="imageIndex < imageList.length - 1"
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-108
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-chevron-right"
+          @click="imageIndex += 1"
+        />
+        <font-awesome-icon
+          v-if="imageIndex > 0"
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            left-7
+            top-108
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-chevron-left"
+          @click="imageIndex -= 1"
+        />
+        <img
+          :src="imageList[imageIndex].large_thumbnail_url"
+          :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
+        />
+      </div>
+    </div>
     <div v-if="$mq !== 'sm'" class="flex flex-col">
       <div class="flex items-center">
         <div class="flex py-3 px-2" style="min-width: 80px">
@@ -228,6 +328,7 @@
             }
           "
           @geocoded="addMarkerToMap"
+          @imageClick="showImage"
         />
         <transition name="slide-fade">
           <div
@@ -576,6 +677,11 @@ export default {
   mixins: [ConnectFirstMixin, DialogsMixin, UserMixin],
   data() {
     return {
+      imageList: [],
+      imageIndex: 0,
+      numClicks: 0,
+      scale: 1,
+      showImgModal: false,
       worksiteId: null,
       isEditing: false,
       mapLoading: false,
@@ -693,6 +799,13 @@ export default {
     },
   },
   methods: {
+    showImage(image, index, fileList) {
+      console.log("test", image);
+      this.imageIndex = index;
+      this.imageList = fileList;
+      this.imageUrl = image;
+      this.showImgModal = true;
+    },
     async init() {
       this.$phoneService.apiGetQueueStats().then((response) => {
         this.setGeneralStats({ ...response.data });
