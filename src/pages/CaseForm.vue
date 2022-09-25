@@ -41,6 +41,15 @@
           required
           :placeholder="$t('formLabels.phone1')"
           @input="(v) => updateWorksite(v, 'phone1')"
+          @iconClicked="() => sendSms(worksite.phone1)"
+          :fa-icon="
+            currentIncident.auto_contact && worksite.id ? 'comment' : null
+          "
+          :tooltip="
+            currentIncident.auto_contact && worksite.id
+              ? $t('caseForm.sms')
+              : null
+          "
         />
       </div>
       <div class="form-field" v-if="worksite.phone2 || addAdditionalPhone">
@@ -50,6 +59,15 @@
           size="large"
           :placeholder="$t('formLabels.phone2')"
           @input="(v) => updateWorksite(v, 'phone2')"
+          @iconClicked="() => sendSms(worksite.phone2)"
+          :fa-icon="
+            currentIncident.auto_contact && worksite.id ? 'comment' : null
+          "
+          :tooltip="
+            currentIncident.auto_contact && worksite.id
+              ? $t('caseForm.sms')
+              : null
+          "
         />
       </div>
       <base-button
@@ -743,6 +761,14 @@ export default {
     },
     reloadWorksite() {
       this.worksite = Worksite.find(this.worksite.id);
+    },
+    async sendSms(phone) {
+      try {
+        await Worksite.api().sendSurvivorSms(this.worksite.id, phone);
+        await this.$toasted.success(this.$t('caseForm.sms_sent'));
+      } catch (error) {
+        await this.$toasted.error(getErrorMessage(error));
+      }
     },
     async findPotentialGeocode() {
       const geocodeKeys = ['address', 'city', 'county', 'state', 'postal_code'];

@@ -382,6 +382,15 @@ export default class Worksite extends CCUModel<Worksite> {
           { save: false },
         );
       },
+      sendSurvivorSms(id, phone) {
+        return this.post(
+          `/worksites/${id}/send_survivor_sms`,
+          {
+            phone,
+          },
+          { save: false },
+        );
+      },
       searchWorksites(search, incident) {
         return this.get(
           `/worksites?fields=id,name,address,case_number,postal_code,city,state,incident,work_types&limit=5&search=${search}&incident=${incident}`,

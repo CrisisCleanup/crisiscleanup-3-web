@@ -40,7 +40,24 @@
       />
     </div>
     <div
-      v-if="icon || tooltip"
+      v-if="faIcon"
+      class="icon-container flex items-center justify-center"
+      :class="iconClasses"
+    >
+      <ccu-icon
+        :fa="true"
+        size="medium"
+        :type="faIcon"
+        :alt="tooltip"
+        :action="
+          () => {
+            $emit('iconClicked');
+          }
+        "
+      />
+    </div>
+    <div
+      v-else-if="icon || tooltip"
       v-tooltip="{
         content: tooltip,
         trigger: 'hover',
@@ -77,15 +94,21 @@
 
 <script>
 import { ref, computed, defineComponent } from '@vue/composition-api';
+import BaseIcon from '@/components/BaseIcon';
 
 export default defineComponent({
   name: 'BaseInput',
+  components: { BaseIcon },
   props: {
     size: {
       type: String,
       default: '',
     },
     icon: {
+      type: String,
+      default: '',
+    },
+    faIcon: {
       type: String,
       default: '',
     },
