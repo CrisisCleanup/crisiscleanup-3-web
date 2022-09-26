@@ -102,7 +102,7 @@
           @click="imageIndex -= 1"
         />
         <img
-          :src="imageList[imageIndex].large_thumbnail_url"
+          :src="imageUrl"
           :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
         />
       </div>
@@ -1092,7 +1092,7 @@
           @changed="loadWorksite"
           @reloadMap="reloadMap"
           @jumpToCase="jumpToCase"
-          @imageClick="showImage"
+          @image-click="showImage"
         />
       </div>
       <div v-else class="h-full w-full items-center justify-center">
@@ -1545,11 +1545,9 @@ export default {
     this.isMounted = JSON.stringify(this.appliedFilters);
   },
   methods: {
-    showImage(image, index, fileList) {
-      console.log(image, index, fileList);
-      this.imageIndex = index;
-      this.imageList = fileList;
-      this.imageUrl = image;
+    showImage(image) {
+      console.log(image);
+      this.imageUrl = image.large_thumbnail_url;
       this.showImgModal = true;
     },
     async getLocations() {

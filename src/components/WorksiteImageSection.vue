@@ -13,17 +13,10 @@
 
     <div class="flex flex-wrap">
       <ImageModal
-        v-for="(file, idx) in worksite.files"
-        :key="idx"
-        :img-src="file.small_thumbnail_url"
-        :modal-img="file.large_thumbnail_url"
+        :image-list="worksite.files"
         :disable-modal="disableModal"
-        :img-index="idx"
-        :img-list-length="worksite.files.length"
-        @removeImage="deleteFile(file.file)"
-        @image-click="
-          $emit('image-click', file.large_thumbnail_url, idx, worksite.files)
-        "
+        @removeImage="deleteFile"
+        @image-click="imageClick"
       />
     </div>
   </section>
@@ -53,6 +46,10 @@ export default {
     },
   },
   methods: {
+    imageClick(image) {
+      console.log(image);
+      this.$emit('image-click', image);
+    },
     async handleFileUpload(fileList) {
       if (fileList.length === 0) {
         this.uploading = false;

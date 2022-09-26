@@ -642,8 +642,9 @@ export default {
     }
   },
   methods: {
-    showImg(image, index, fileList) {
-      this.$emit('imageClick', image, index, fileList);
+    showImg(image) {
+      console.log(image);
+      this.$emit('image-click', image);
     },
     updateWorkTypesToClaim(value, workTypeToClaim) {
       if (value) {

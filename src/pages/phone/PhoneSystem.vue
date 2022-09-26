@@ -98,7 +98,7 @@
           @click="imageIndex -= 1"
         />
         <img
-          :src="imageList[imageIndex].large_thumbnail_url"
+          :src="imageUrl"
           :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
         />
       </div>
@@ -328,7 +328,7 @@
             }
           "
           @geocoded="addMarkerToMap"
-          @imageClick="showImage"
+          @image-click="showImage"
         />
         <transition name="slide-fade">
           <div
@@ -799,11 +799,9 @@ export default {
     },
   },
   methods: {
-    showImage(image, index, fileList) {
-      console.log("test", image);
-      this.imageIndex = index;
-      this.imageList = fileList;
-      this.imageUrl = image;
+    showImage(image) {
+      console.log(image)
+      this.imageUrl = image.large_thumbnail_url;
       this.showImgModal = true;
     },
     async init() {

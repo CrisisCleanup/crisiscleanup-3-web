@@ -67,55 +67,81 @@
           icon="fa-solid fa-minus"
           @click="scale -= 0.25"
         />
+        <font-awesome-icon
+          v-if="imageIndex < imageList.length - 1"
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            right-7
+            top-108
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-chevron-right"
+          @click="moveImage(1)"
+        />
+        <font-awesome-icon
+          v-if="imageIndex > 0"
+          class="
+            text-white
+            w-7
+            h-7
+            fixed
+            left-7
+            top-108
+            hover:text-primary-dark
+            cursor-pointer
+            z-50
+          "
+          icon="fa-solid fa-chevron-left"
+          @click="moveImage(-1)"
+        />
         <slot name="modal-content">
           <img
-            :src="modalImg ? modalImg : imgSrc"
+            :src="selectedImage.large_thumbnail_url"
             :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
           />
         </slot>
       </div>
     </div>
-    <slot name="image">
-      <div class="relative image-container w-24 h-24 mb-2">
-        <img
-          class="w-20 h-20 mx-2 cursor-pointer"
-          :src="imgSrc"
-          @click="appearModal"
-        />
-        <ccu-icon
-          :alt="$t('actions.delete')"
-          size="xs"
-          type="trash"
-          class="absolute right-0 top-0 m-1 mr-3 p-1 image-close bg-white"
-          @click.native="$emit('removeImage')"
-        />
-      </div>
-    </slot>
+    <div class="flex flex-wrap">
+      <slot name="image-list">
+        <div v-for="(image, idx) in imageList" :key="idx">
+          <slot name="image">
+            <div class="relative image-container w-24 h-24 mb-2">
+              <img
+                class="w-20 h-20 mx-2 cursor-pointer"
+                :src="image.small_thumbnail_url"
+                @click="appearModal(image, idx)"
+              />
+              <ccu-icon
+                :alt="$t('actions.delete')"
+                size="xs"
+                type="trash"
+                class="absolute right-0 top-0 m-1 mr-3 p-1 image-close bg-white"
+                @click.native="$emit('removeImage', image.file)"
+              />
+            </div>
+          </slot>
+        </div>
+      </slot>
+    </div>
   </div>
 </template>
 <script>
 export default {
   name: 'ImageModal',
   props: {
-    imgSrc: {
-      type: String,
-      required: true,
-    },
-    modalImg: {
-      type: String,
-      default: null,
+    imageList: {
+      type: Array,
+      default: () => [],
     },
     disableModal: {
       type: Boolean,
       default: false,
-    },
-    imgIndex: {
-      type: Number,
-      default: -1,
-    },
-    imgListLength: {
-      type: Number,
-      default: 0,
     },
   },
   data() {
@@ -123,15 +149,24 @@ export default {
       showModal: false,
       numClicks: 0,
       scale: 1,
+      selectedImage: '',
+      imageIndex: -1,
     };
   },
   methods: {
-    appearModal() {
-      this.$emit('image-click');
+    appearModal(image, idx) {
+      this.selectedImage = image;
+      this.imageIndex = idx;
+      this.$emit('image-click', image);
       if (!this.disableModal) {
         this.showModal = true;
         document.getElementById('top').scrollIntoView();
       }
+    },
+    moveImage(updateAmount) {
+      this.imageIndex += updateAmount;
+      this.selectedImage = this.$props.imageList[this.imageIndex];
+      this.$emit('change-image', this.selectedImage);
     },
   },
 };
