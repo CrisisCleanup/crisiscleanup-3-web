@@ -365,7 +365,9 @@
           :key="worksite.files"
           @photosChanged="reloadWorksite"
           @image-click="showImg"
+          @changeImage="changeImg"
           disable-modal
+          ref="worksiteImageSection"
         />
       </template>
       <div class="case-action">
@@ -656,6 +658,13 @@ export default {
     await this.initForm();
   },
   methods: {
+    changeImg(image) {
+      console.log('in case form');
+      this.$emit('changeImg', image);
+    },
+    moveImage(updateAmount) {
+      this.$refs.worksiteImageSection.moveImage(updateAmount);
+    },
     showImg(image) {
       this.$emit('image-click', image);
     },

@@ -17,6 +17,8 @@
         :disable-modal="disableModal"
         @removeImage="deleteFile"
         @image-click="imageClick"
+        @change-image="changeImage"
+        ref="imageModal"
       />
     </div>
   </section>
@@ -46,6 +48,12 @@ export default {
     },
   },
   methods: {
+    changeImage(image) {
+      this.$emit('changeImage', image);
+    },
+    moveImage(updateAmount) {
+      this.$refs.imageModal.moveImage(updateAmount);
+    },
     imageClick(image) {
       console.log(image);
       this.$emit('image-click', image);

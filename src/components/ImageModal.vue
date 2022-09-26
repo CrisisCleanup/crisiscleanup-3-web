@@ -132,6 +132,8 @@
   </div>
 </template>
 <script>
+import _ from 'lodash';
+
 export default {
   name: 'ImageModal',
   props: {
@@ -164,7 +166,11 @@ export default {
       }
     },
     moveImage(updateAmount) {
-      this.imageIndex += updateAmount;
+      this.imageIndex = _.clamp(
+        this.imageIndex + updateAmount,
+        0,
+        this.imageList.length - 1,
+      );
       this.selectedImage = this.$props.imageList[this.imageIndex];
       this.$emit('change-image', this.selectedImage);
     },

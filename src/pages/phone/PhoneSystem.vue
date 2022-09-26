@@ -66,7 +66,6 @@
           @click="scale -= 0.25"
         />
         <font-awesome-icon
-          v-if="imageIndex < imageList.length - 1"
           class="
             text-white
             w-7
@@ -79,10 +78,9 @@
             z-50
           "
           icon="fa-solid fa-chevron-right"
-          @click="imageIndex += 1"
+          @click="moveImage"
         />
         <font-awesome-icon
-          v-if="imageIndex > 0"
           class="
             text-white
             w-7
@@ -95,7 +93,7 @@
             z-50
           "
           icon="fa-solid fa-chevron-left"
-          @click="imageIndex -= 1"
+          @click="moveImage"
         />
         <img
           :src="imageUrl"
@@ -329,6 +327,7 @@
           "
           @geocoded="addMarkerToMap"
           @image-click="showImage"
+          @changeImg="changeImage"
         />
         <transition name="slide-fade">
           <div
@@ -677,8 +676,7 @@ export default {
   mixins: [ConnectFirstMixin, DialogsMixin, UserMixin],
   data() {
     return {
-      imageList: [],
-      imageIndex: 0,
+      imageUrl: '',
       numClicks: 0,
       scale: 1,
       showImgModal: false,
@@ -799,8 +797,14 @@ export default {
     },
   },
   methods: {
+    changeImage(image) {
+      this.imageUrl = image.large_thumbnail_url;
+    },
+    moveImage(updateAmount) {
+      this.$refs.worksiteForm.moveImage(updateAmount);
+    },
     showImage(image) {
-      console.log(image)
+      console.log(image);
       this.imageUrl = image.large_thumbnail_url;
       this.showImgModal = true;
     },

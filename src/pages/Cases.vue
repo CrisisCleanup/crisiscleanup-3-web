@@ -70,7 +70,6 @@
           @click="scale -= 0.25"
         />
         <font-awesome-icon
-          v-if="imageIndex < imageList.length - 1"
           class="
             text-white
             w-7
@@ -83,10 +82,9 @@
             z-50
           "
           icon="fa-solid fa-chevron-right"
-          @click="imageIndex += 1"
+          @click="moveImage(1)"
         />
         <font-awesome-icon
-          v-if="imageIndex > 0"
           class="
             text-white
             w-7
@@ -99,7 +97,7 @@
             z-50
           "
           icon="fa-solid fa-chevron-left"
-          @click="imageIndex -= 1"
+          @click="moveImage(-1)"
         />
         <img
           :src="imageUrl"
@@ -1093,6 +1091,8 @@
           @reloadMap="reloadMap"
           @jumpToCase="jumpToCase"
           @image-click="showImage"
+          @changeImg="changeImage"
+          ref="cases"
         />
       </div>
       <div v-else class="h-full w-full items-center justify-center">
@@ -1545,6 +1545,13 @@ export default {
     this.isMounted = JSON.stringify(this.appliedFilters);
   },
   methods: {
+    changeImage(image) {
+      console.log(image);
+      this.imageUrl = image.large_thumbnail_url;
+    },
+    moveImage(updateAmount) {
+      this.$refs.cases.moveImage(updateAmount);
+    },
     showImage(image) {
       console.log(image);
       this.imageUrl = image.large_thumbnail_url;
