@@ -1033,7 +1033,7 @@
           />
         </template>
       </div>
-      <div class="relative" v-if="!spinning">
+      <div class="relative" style="height: 95%" v-if="!spinning">
         <div
           :class="$mq == 'sm' ? 'mt-2 ml-14 bg-white fixed search-input' : ''"
         >
