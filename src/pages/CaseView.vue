@@ -317,7 +317,9 @@
         :key="worksite.files"
         class="px-3 pb-3"
         @image-click="showImg"
+        @changeImage="changeImg"
         disable-modal
+        ref="worksiteImageSection"
       />
       <div class="case-action">
         <base-button
@@ -642,8 +644,13 @@ export default {
     }
   },
   methods: {
+    changeImg(image) {
+      this.$emit('changeImg', image);
+    },
+    moveImage(updateAmount) {
+      this.$refs.worksiteImageSection.moveImage(updateAmount);
+    },
     showImg(image) {
-      console.log(image);
       this.$emit('image-click', image);
     },
     updateWorkTypesToClaim(value, workTypeToClaim) {
