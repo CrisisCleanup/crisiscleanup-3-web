@@ -370,36 +370,6 @@
           ref="worksiteImageSection"
         />
       </template>
-      <div class="case-action">
-        <base-button
-          size="medium"
-          class="flex-grow m-1 border-2 border-black"
-          variant="text"
-          :action="
-            () => {
-              clearWorksiteStorage();
-              $emit('closeWorksite');
-            }
-          "
-          :text="$t('actions.cancel')"
-        />
-        <base-button
-          size="medium"
-          variant="solid"
-          data-cy="worksite-formaction-save"
-          class="flex-grow m-1 text-black"
-          :action="saveWorksite"
-          :text="$t('actions.save')"
-        />
-        <base-button
-          v-if="!disableClaimAndSave"
-          size="medium"
-          variant="solid"
-          class="flex-grow m-1 text-black"
-          :action="claimAndSaveWorksite"
-          :text="$t('actions.save_claim')"
-        />
-      </div>
     </div>
     <div
       class="
@@ -1334,7 +1304,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .ant-form-item {
   padding-top: 10px;
   margin: 0;
@@ -1354,32 +1324,16 @@ export default {
   height: 100%;
   overflow: auto;
 }
-.case-action {
-  @apply bg-white p-3
-    border border-r-0 border-gray-300
-    flex
-    justify-between;
-  display: none;
-}
 
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
   .intake-form {
     height: 145%;
-  }
-  .case-action {
-    display: flex;
   }
 }
 
 @media (max-width: 640px) {
   .intake-form {
     height: 75%;
-  }
-  .case-action {
-    @apply fixed bottom-0 right-0;
-    height: 9%;
-    width: 80%;
-    display: flex;
   }
 }
 
