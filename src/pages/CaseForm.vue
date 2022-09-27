@@ -659,7 +659,6 @@ export default {
   },
   methods: {
     changeImg(image) {
-      console.log('in case form');
       this.$emit('changeImg', image);
     },
     moveImage(updateAmount) {
