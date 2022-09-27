@@ -14,18 +14,27 @@ import { i18nService } from '@/services/i18n.service';
 
 export default {
   setup(props, context) {
-    const { $t, $log, $http } = context.root;
+    const { $log, $http } = context.root;
     const i18nLocale = context.root.$i18n.locale;
     const { setLanguage } = useMutations('locale', ['setLanguage']);
-    const currentLanguage = detectBrowserLanguage() as string;
+    let currentLanguage = detectBrowserLanguage() as string;
     console.log('current lang', currentLanguage);
 
     const setupLanguage = async () => {
-      if (currentLanguage.startsWith('es')) {
-        setLanguage('es-MX'); // if browser language is spanish, set to spanish (mexico)
-      } else {
-        setLanguage(currentLanguage);
+      const response = await $http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/languages`,
+      );
+      const _availableLanguages: Array<{
+        id: string;
+        name_t: string;
+        subtag: string;
+      }> = response?.data?.results ?? [];
+      const availableLanguages = _availableLanguages.map((l) => l.subtag);
+      const isSpanish = currentLanguage.startsWith('es');
+      if (isSpanish && !availableLanguages.includes(currentLanguage)) {
+        currentLanguage = 'es';
       }
+      setLanguage(currentLanguage);
       if (currentLanguage !== i18nLocale) {
         try {
           const data = await i18nService.getLanguage(currentLanguage);
