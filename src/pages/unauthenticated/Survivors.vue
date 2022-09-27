@@ -628,7 +628,7 @@ export default {
 }
 </style>
 
-<style>
+<style lang="scss" scoped>
 a {
   @apply text-primary-dark;
   text-decoration: underline !important;
