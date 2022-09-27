@@ -7,7 +7,9 @@ import { CallType } from '@/models/phone/Contact';
 
 const LANGUAGE_ID_MAPPING = {
   2: process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
+  6: process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
   7: process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
+  76: process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
 };
 
 const Log = Logger({
