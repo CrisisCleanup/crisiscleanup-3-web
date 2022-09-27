@@ -78,7 +78,7 @@
             z-50
           "
           icon="fa-solid fa-chevron-right"
-          @click="moveImage"
+          @click="moveImage(1)"
         />
         <font-awesome-icon
           class="
@@ -93,7 +93,7 @@
             z-50
           "
           icon="fa-solid fa-chevron-left"
-          @click="moveImage"
+          @click="moveImage(-1)"
         />
         <img
           :src="imageUrl"
