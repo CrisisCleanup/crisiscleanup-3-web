@@ -29,7 +29,7 @@
         </div>
       </a>
       <router-link v-else :key="r.title" :to="r.routeProps">
-        <div class="pewpew__navlink text-white">
+        <div class="pewpew__navlink">
           <ccu-icon :linked="true" v-bind="r.iconProps" />
           {{ r.title }}
         </div>
@@ -144,11 +144,16 @@ export default {
   },
 };
 </script>
-<style lang="postcss">
+<style lang="scss">
 .pewpew {
   &__nav {
-    @apply col-span-2 flex flex-col text-xs text-center break-words text-white no-underline;
+    @apply col-span-2 flex flex-col text-xs text-center break-words no-underline;
+    color: white;
     background: #242c36;
+
+    a {
+      @apply no-underline;
+    }
   }
 
   &__navheader {
@@ -160,7 +165,8 @@ export default {
   }
 
   &__navlink {
-    @apply flex flex-col justify-center items-center m-1 p-2 rounded-lg text-white;
+    @apply flex flex-col justify-center items-center m-1 p-2 rounded-lg;
+    color: white;
     /** this is against accessiblity standards. */
     font-size: 0.55rem;
     transition: background-color 300ms;
