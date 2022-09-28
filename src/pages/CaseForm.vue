@@ -371,18 +371,7 @@
         />
       </template>
     </div>
-    <div
-      class="
-        bg-white
-        p-3
-        border border-r-0 border-gray-300
-        card-footer
-        flex
-        justify-between
-        sm:fixed
-        bottom-0
-      "
-    >
+    <div class="card-footer">
       <base-button
         size="medium"
         class="flex-grow m-1 border-2 border-black"
@@ -1331,15 +1320,26 @@ export default {
   }
 }
 
+.card-footer {
+  @apply bg-white
+      p-3
+      border border-r-0 border-gray-300
+      flex
+      justify-between
+      fixed
+      bottom-0;
+  min-height: 5rem;
+  width: 21rem;
+}
+
 @media (max-width: 640px) {
   .intake-form {
     height: 75%;
   }
-}
-
-.card-footer {
-  min-height: 5rem;
-  width: 21rem;
+  
+  .card-footer {
+    width: 100%;
+  }
 }
 
 .form-field {
