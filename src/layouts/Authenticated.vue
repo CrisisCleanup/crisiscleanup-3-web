@@ -95,6 +95,7 @@ import Incident from '@/models/Incident';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
 import Language from '@/models/Language';
+import Report from '@/models/Report';
 import Role from '@/models/Role';
 import { i18nService } from '@/services/i18n.service';
 import NavMenu from '@/components/navigation/NavMenu.vue';
@@ -207,6 +208,16 @@ export default {
         icon: 'reports',
         text: $t('nav.reports'),
         to: '/reports',
+        newBadge: Report.query()
+          .where('created_at', (created_at) => {
+            const reportsAccessed =
+              currentUser?.value?.states &&
+              currentUser.value.states.reports_last_accessed;
+            return reportsAccessed
+              ? moment(created_at).isAfter(moment(reportsAccessed))
+              : true;
+          })
+          .exists(),
       },
       {
         key: 'training',
@@ -387,6 +398,9 @@ export default {
           `/organizations/${user.value.user_claims.organization.id}`,
         ),
         Language.api().get('/languages', {
+          dataKey: 'results',
+        }),
+        Report.api().get('/reports', {
           dataKey: 'results',
         }),
       ]);

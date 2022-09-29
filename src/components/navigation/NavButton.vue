@@ -6,7 +6,23 @@
     :data-cy="`navigation.${route.key}`"
     v-if="!route.disabled"
   >
-    <div :key="route.key" class="flex flex-col items-center">
+    <div :key="route.key" class="flex flex-col items-center relative">
+      <badge
+        v-if="route.newBadge"
+        width="2rem"
+        height="1rem"
+        class="
+          text-white
+          bg-crisiscleanup-red-700
+          mx-1
+          absolute
+          -top-0.5
+          -right-8
+          p-3
+        "
+        :title="$t('~~New Badge')"
+        >{{ $t('~~New') }}</badge
+      >
       <ccu-icon
         :alt="$t(`nav.${route.key}`)"
         v-bind="iconProps"

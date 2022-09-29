@@ -21,42 +21,61 @@
       </modal>
       <!-- Report Library -->
       <h1 class="text-xl font-bold m-2 ml-3 pt-5">Report Library</h1>
-      <div class="grid grid-cols-1 sm:grid-cols-3">
-        <div v-for="r in reports" :key="`${r.id}`">
-          <div
-            class="
-              my-4
-              mx-2
-              bg-white
-              shadow
-              h-auto
-              content-center
-              flex-wrap
-              cursor-pointer
-            "
-            @click="() => requestReport(r.name_t)"
-          >
-            <div class="flex flex-col justify-around">
-              <div class="m-5">
-                <div class="flex flex-row items-center">
-                  <base-text variant="body" weight="700"
-                    >{{ r.name_t }}
+      <div v-for="sponsored in reportsKeys" :key="sponsored">
+        <div
+          class="text-lg font-bold m-2 ml-3 pt-1"
+          v-if="sponsored === 'true'"
+        >
+          {{ $t('~~Sponsored Reports') }}
+        </div>
+        <div class="text-lg font-bold m-2 ml-3 pt-1" v-else>
+          {{ $t('~~Other Reports') }}
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3">
+          <div v-for="r in reportsGrouped[sponsored]" :key="`${r.id}`">
+            <div
+              class="
+                my-4
+                mx-2
+                bg-white
+                shadow
+                h-auto
+                content-center
+                flex-wrap
+                cursor-pointer
+              "
+              @click="() => requestReport(r, null, sponsored)"
+            >
+              <div class="flex flex-col justify-around">
+                <div class="m-5">
+                  <div class="flex flex-row items-center justify-between">
+                    <base-text variant="body" weight="700"
+                      >{{ r.name_t }}
+                    </base-text>
+                    <badge
+                      v-if="newReportIds.has(r.id) && sponsored === 'true'"
+                      width="2.5rem"
+                      height="1rem"
+                      class="text-white bg-crisiscleanup-red-700 mx-1 p-4"
+                      :title="$t('~~New Badge')"
+                      >{{ $t('~~New') }}</badge
+                    >
+                    <img
+                      v-else-if="sponsored !== 'true'"
+                      src="@/assets/greylockss.jpg"
+                      class="h-8 px-3"
+                    />
+                  </div>
+                  <base-text variant="bodysm">
+                    {{ r.description_t }}
                   </base-text>
-                  <img src="@/assets/greylockss.jpg" class="h-8 px-3" />
+                  <ExampleReports
+                    v-if="false"
+                    :formats="r.output_formats"
+                    :files="r.files"
+                    @download="(download) => requestReport(r, download)"
+                  />
                 </div>
-                <base-text variant="bodysm">
-                  {{ r.description_t }}
-                </base-text>
-                <ExampleReports
-                  v-if="
-                    $can('app_stage.development') ||
-                    $can('app_stage.staging') ||
-                    (currentUser && currentUser.isAdmin)
-                  "
-                  :formats="r.output_formats"
-                  :files="r.files"
-                  @download="(download) => requestReport(r.name_t, download)"
-                />
               </div>
             </div>
           </div>
@@ -74,6 +93,7 @@ import Loader from '@/components/Loader.vue';
 import EventLog from '../models/EventLog';
 import Report from '../models/Report';
 import ExampleReports from '../components/reports/ExampleReports';
+import { groupBy } from '@/utils/array';
 
 export default {
   name: 'Reports',
@@ -84,6 +104,7 @@ export default {
   data() {
     return {
       loading: false,
+      newReportIds: [],
     };
   },
   props: {
@@ -96,10 +117,19 @@ export default {
     reports() {
       return Report.all();
     },
+    reportsGrouped() {
+      return groupBy(this.reports, 'isSponsored');
+    },
+    reportsKeys() {
+      return [...Object.keys(this.reportsGrouped)].reverse();
+    },
     ...mapState('incident', ['currentIncidentId']),
   },
   methods: {
-    requestReport(reportType = null, downloadType = null) {
+    requestReport(report = null, downloadType = null, sponsored = false) {
+      if (sponsored === 'true') {
+        return this.$router.push(`/report/${report.id}`);
+      }
       if (!downloadType) {
         this.showRequestAccessModal = true;
       }
@@ -108,24 +138,28 @@ export default {
         this.currentIncidentId,
         this.$route.query.page,
         {
-          report_type: reportType,
+          report_type: report.name_t,
           download_type: downloadType,
         },
       );
+      return false;
     },
   },
   async mounted() {
-    this.loading = true;
-    await Report.api().get('/reports', {
-      dataKey: 'results',
+    const newReports = Report.query()
+      .where('created_at', (created_at) => {
+        const reportsAccessed =
+          this.currentUser?.states &&
+          this.currentUser?.states.reports_last_accessed;
+        return reportsAccessed
+          ? this.$moment(created_at).isAfter(this.$moment(reportsAccessed))
+          : true;
+      })
+      .get();
+    this.newReportIds = new Set(newReports.map((r) => r.id));
+    User.api().updateUserState({
+      reports_last_accessed: this.$moment().toISOString(),
     });
-    EventLog.api().create(
-      'list_report',
-      this.currentIncidentId,
-      this.$route.query.page,
-      {},
-    );
-    this.loading = false;
   },
 };
 </script>
