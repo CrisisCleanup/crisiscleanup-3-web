@@ -5,7 +5,7 @@
     </div>
     <tabs tab-details-classes="">
       <tab :name="$t('chat.chat')">
-        <div class="flex flex-col h-84">
+        <div class="message-container">
           <div
             id="messages"
             ref="messages"
@@ -289,5 +289,9 @@ export default {
 
 .scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
   border-radius: 0.25rem;
+}
+.message-container {
+  @apply flex flex-col;
+  height: 65vh;
 }
 </style>
