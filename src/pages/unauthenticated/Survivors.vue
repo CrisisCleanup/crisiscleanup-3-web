@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full overflow-auto main">
+  <div class="survivors-page h-full overflow-auto main">
     <div
       class="bg-red-300 text-2xl"
       v-if="survivorToken.worksite.invalidated_at"
@@ -628,16 +628,19 @@ export default {
 }
 </style>
 
-<style lang="scss" scoped>
-a {
-  @apply text-primary-dark;
-  text-decoration: underline !important;
-  &:hover {
-    text-decoration: none;
+<style lang="postcss">
+.survivors-page {
+  a {
+    @apply text-primary-dark;
+    text-decoration: underline !important;
+    &:hover {
+      text-decoration: none;
+    }
   }
-}
-li {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+
+  li {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
 }
 </style>
