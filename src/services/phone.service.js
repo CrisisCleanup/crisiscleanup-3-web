@@ -216,6 +216,7 @@ export default class PhoneService {
   login(
     username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME,
     password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD,
+    state = 'AVAILABLE',
   ) {
     const currentUser = User.find(this.store.getters['auth/userId']);
     return new Promise((resolve, reject) => {
@@ -277,7 +278,7 @@ export default class PhoneService {
                 }
               } else {
                 Log.debug('AgentLibrary successfully logged in');
-                this.changeState('AVAILABLE')
+                this.changeState(state)
                   .then(() => resolve())
                   .catch(() => reject());
               }

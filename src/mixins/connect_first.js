@@ -79,7 +79,7 @@ export default {
         this.currentAgent = data;
       }
     },
-    async loginPhone(retry = true) {
+    async loginPhone(retry = true, status = 'AVAILABLE') {
       await this.loadAgent();
       if (!this.languages.length) {
         await this.$toasted.error(
@@ -107,13 +107,14 @@ export default {
           await this.$phoneService.login(
             this.currentAgent.agent_username,
             password,
+            status,
           );
           this.$emit('onLoggedIn');
         } catch (e) {
           this.$log.debug(e);
           if (retry) {
             await this.logoutPhone();
-            await this.loginPhone(false);
+            await this.loginPhone(false, status);
           }
         }
       } else {
@@ -183,7 +184,7 @@ export default {
       );
     },
     async dialManualOutbound(number) {
-      await this.loginPhone();
+      await this.loginPhone(true, 'AWAY');
       this.dialing = true;
       try {
         const outbound = await PhoneOutbound.api().createManual({

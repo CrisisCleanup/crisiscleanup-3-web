@@ -1336,7 +1336,7 @@ export default {
   .intake-form {
     height: 75%;
   }
-  
+
   .card-footer {
     width: 100%;
   }

@@ -176,9 +176,9 @@ export default {
           let displaytext = '';
           Object.keys(d.data).forEach((key) => {
             if (d.data[key] instanceof Date) {
-              displaytext += `${$t(`reports.${props.reportName}.${key}`)}: ${moment(d.data[key]).format(
-                'ddd MMMM Do YYYY',
-              )}\n`;
+              displaytext += `${$t(
+                `reports.${props.reportName}.${key}`,
+              )}: ${moment(d.data[key]).format('ddd MMMM Do YYYY')}\n`;
             } else {
               displaytext += `${$t(`reports.${props.reportName}.${key}`)}: ${
                 d.data[key]
