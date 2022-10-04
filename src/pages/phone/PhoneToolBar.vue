@@ -24,7 +24,7 @@ export default {
   },
   watch: {
     isOnCall(newValue, oldValue) {
-      if (oldValue && !newValue) {
+      if (oldValue && !newValue && this.tabs) {
         this.tabs.selectTab(this.$refs.statusTab);
       }
     },
