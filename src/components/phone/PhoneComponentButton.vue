@@ -110,8 +110,8 @@ export default {
 }
 @media (max-width: 640px) {
   .phone-component {
-    width: 87vw;
-    margin-left: -87vw;
+    width: 87vw !important;
+    right: 5rem !important;
   }
 }
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
