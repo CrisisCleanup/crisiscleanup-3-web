@@ -360,7 +360,9 @@
                 name="dialer"
                 class="phone-button"
                 component-class="right-12"
-                component-style="width: 30rem;"
+                :component-style="
+                  $mq === 'sm' ? 'width: 87vw; right 5rem;' : 'width: 30rem;'
+                "
                 icon="dialer"
                 icon-size="small"
                 icon-class="bg-black p-1"
@@ -378,7 +380,11 @@
                 name="chat"
                 class="phone-button"
                 component-class="right-12 h-auto"
-                component-style="width: 30rem; height: auto;"
+                :component-style="
+                  $mq === 'sm'
+                    ? 'width: 87vw; right 5rem;'
+                    : 'width: 30rem; height: auto;'
+                "
                 @open="
                   () => {
                     updateUserState({
@@ -463,7 +469,9 @@
                 name="news"
                 class="phone-button"
                 component-class="right-12 h-auto"
-                component-style="width: 50rem;"
+                :component-style="
+                  $mq === 'sm' ? 'width: 87vw; right 5rem;' : 'width: 50rem;'
+                "
                 @open="
                   () => {
                     updateUserState({
@@ -517,7 +525,9 @@
                 name="history"
                 class="phone-button"
                 component-class="right-12 h-auto"
-                component-style="width: 50rem;"
+                :component-style="
+                  $mq === 'sm' ? 'width: 87vw; right 5rem;' : 'width: 50rem;'
+                "
                 icon="phone-history"
                 icon-size="large"
                 icon-class="p-1"
@@ -538,7 +548,9 @@
                 name="stats"
                 class="phone-button"
                 component-class="right-12 h-auto"
-                component-style="width: 30rem;"
+                :component-style="
+                  $mq === 'sm' ? 'width: 87vw; right 5rem;' : 'width: 30rem;'
+                "
               >
                 <template v-slot:button>
                   <div class="w-full h-full flex items-center justify-center">
@@ -558,7 +570,9 @@
                 name="leaderboard"
                 class="phone-button"
                 component-class="right-12 h-auto"
-                component-style="width: 50rem;"
+                :component-style="
+                  $mq === 'sm' ? 'width: 87vw; right 5rem;' : 'width: 50rem;'
+                "
                 icon="leaderboard"
                 icon-size="medium"
                 icon-class="p-1"
@@ -581,7 +595,9 @@
                 name="reset"
                 class="phone-button"
                 component-class="right-12 h-auto"
-                component-style="width: 30rem;"
+                :component-style="
+                  $mq === 'sm' ? 'width: 87vw; right 5rem;' : 'width: 30rem;'
+                "
                 icon="logout"
                 icon-size="small"
                 icon-class="p-1"
