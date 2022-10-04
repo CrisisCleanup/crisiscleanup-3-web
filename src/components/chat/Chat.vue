@@ -144,7 +144,9 @@ export default {
         }
 
         this.$nextTick(() => {
-          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+          if (this.$refs.messages) {
+            this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+          }
         });
       },
     );
@@ -199,7 +201,9 @@ export default {
       this.messages = [...this.messages, ...response.data.results];
       if (scroll) {
         this.$nextTick(() => {
-          this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+          if (this.$refs.messages) {
+            this.$refs.messages.scrollTop = this.$refs.messages.scrollHeight;
+          }
         });
       }
       this.loadingMessages = false;
