@@ -1314,12 +1314,6 @@ export default {
   overflow: auto;
 }
 
-@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
-  .intake-form {
-    height: 145%;
-  }
-}
-
 .card-footer {
   @apply bg-white
       p-3
@@ -1331,7 +1325,15 @@ export default {
   min-height: 5rem;
   width: 21rem;
 }
-
+@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+  .intake-form {
+    height: 10rem;
+  }
+  .card-footer {
+    margin-bottom: 3rem;
+    width: 28rem;
+  }
+}
 @media (max-width: 640px) {
   .intake-form {
     height: 75%;
