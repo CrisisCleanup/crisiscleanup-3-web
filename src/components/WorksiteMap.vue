@@ -123,7 +123,7 @@
       style="z-index: 1001; top: 10px; right: 10px"
       v-show="false"
     >
-      <div class="zoom-control flex flex-col mb-5">
+      <div class="zoom-control flex flex-col mb-5" v-if="map">
         <base-button
           text=""
           icon="map"
