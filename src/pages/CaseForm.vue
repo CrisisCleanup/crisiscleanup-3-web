@@ -1339,6 +1339,8 @@ export default {
 
   .card-footer {
     width: 100%;
+    min-height: 10rem;
+    margin-bottom: 6rem;
   }
 }
 
