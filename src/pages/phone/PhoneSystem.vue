@@ -654,7 +654,7 @@ import ActiveCall from '@/components/phone/ActiveCall';
 import UpdateStatus from '@/components/phone/UpdateStatus';
 
 export default {
-  name: 'PhoneSysyem',
+  name: 'PhoneSystem',
   components: {
     UpdateStatus,
     ActiveCall,
