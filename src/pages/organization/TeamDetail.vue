@@ -2,7 +2,7 @@
   <div class="bg-white h-full h-84">
     <div class="flex justify-between">
       <div class="font-semibold flex justify-between items-center h-12 px-3">
-        {{ team.name }}
+        {{ team?.name }}
       </div>
       <div class="flex flex-wrap items-center justify-end">
         <ccu-icon
