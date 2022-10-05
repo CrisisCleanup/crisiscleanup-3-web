@@ -1,14 +1,17 @@
 <template>
   <form
+    class="case-form case-form__container"
     v-if="ready"
     ref="form"
-    class="bg-white flex flex-col flex-grow w-full intake-form-container"
     :class="noGrid && 'no-grid'"
     @submit.prevent
-    :style="formStyle"
   >
-    <resize-observer @notify="calcFormStyle" />
-    <div class="intake-form" :class="(noGrid || $mq === 'sm') && 'no-grid'">
+    <!--    :style="formStyle"-->
+    <div class="case-form__header">
+      <!-- maybe not required -->
+      <!-- <resize-observer @notify="calcFormStyle" /> -->
+    </div>
+    <div class="case-form__body">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
@@ -371,10 +374,10 @@
         />
       </template>
     </div>
-    <div class="card-footer">
+    <div class="case-form__footer">
       <base-button
         size="medium"
-        class="flex-grow m-1 border-2 border-black"
+        class="case-form__actions case-form__actions--cancel"
         variant="text"
         :action="
           () => {
@@ -388,7 +391,7 @@
         size="medium"
         variant="solid"
         data-cy="worksite-formaction-save"
-        class="flex-grow m-1 text-black"
+        class="case-form__actions case-form__actions--save"
         :action="saveWorksite"
         :text="$t('actions.save')"
       />
@@ -396,7 +399,7 @@
         v-if="!disableClaimAndSave"
         size="medium"
         variant="solid"
-        class="flex-grow m-1 text-black"
+        class="case-form__actions case-form__actions--save-claim"
         :action="claimAndSaveWorksite"
         :text="$t('actions.save_claim')"
       />
@@ -1294,58 +1297,55 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ant-form-item {
-  padding-top: 10px;
-  margin: 0;
-}
+.case-form {
+  /* flex-grow needed to take full space from parent */
+  @apply bg-white
+    flex-grow
+    flex
+    flex-col
+    w-full
+    absolute
+    top-0
+    left-0
+    right-0
+    bottom-16 /* don't let buttons hide under url bar on some mobile browsers */
+    sm:bottom-0;
 
-.intake-form-container {
-  --safe-area-inset-bottom: env(safe-area-inset-bottom);
-  grid-template-columns: 1fr;
-  grid-template-rows: calc(100vh - 240px - var(--safe-area-inset-bottom));
-  display: grid;
-  &.no-grid {
-    display: inherit;
+  &__header {
   }
-}
 
-.intake-form {
-  height: 100%;
-  overflow: auto;
+  &__body {
+    @apply flex-1 overflow-auto;
+  }
+
+  &__footer {
+    @apply flex justify-between p-3 gap-2;
+  }
+
+  &__actions {
+    @apply text-black w-full;
+    &--cancel {
+      @apply border-2 border-black;
+    }
+    &--save {
+    }
+    &--claim-save {
+    }
+  }
+
+  .form-field {
+    @apply py-1 mx-3;
+  }
 }
 
 @media only screen and (max-device-width: 1223px) and (orientation: landscape) {
-  .intake-form {
-    height: 145%;
+  .case-form {
+    bottom: env(safe-area-inset-bottom, 30px);
   }
-}
-
-.card-footer {
-  @apply bg-white
-      p-3
-      border border-r-0 border-gray-300
-      flex
-      justify-between
-      fixed
-      bottom-0;
-  min-height: 5rem;
-  width: 21rem;
 }
 
 @media (max-width: 640px) {
-  .intake-form {
-    height: 75%;
-  }
-
-  .card-footer {
-    width: 100%;
-  }
 }
-
-.form-field {
-  @apply py-1 mx-3;
-}
-
 h4 {
   font-size: 16px;
   font-weight: bold;
