@@ -1296,7 +1296,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
 .case-form {
   /* flex-grow needed to take full space from parent */
   @apply bg-white
@@ -1342,17 +1342,5 @@ export default {
   .case-form {
     bottom: env(safe-area-inset-bottom, 30px);
   }
-}
-
-@media (max-width: 640px) {
-}
-h4 {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-h5 {
-  font-size: 14px;
-  font-weight: bold;
 }
 </style>
