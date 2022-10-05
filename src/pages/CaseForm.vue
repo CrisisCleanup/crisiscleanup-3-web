@@ -1323,7 +1323,7 @@ export default {
   }
 
   &__actions {
-    @apply text-black w-full;
+    @apply text-black w-full sm:py-2;
     &--cancel {
       @apply border-2 border-black;
     }
