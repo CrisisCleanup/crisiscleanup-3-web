@@ -3,10 +3,8 @@
     class="case-form case-form__container"
     v-if="ready"
     ref="form"
-    :class="noGrid && 'no-grid'"
     @submit.prevent
   >
-    <!--    :style="formStyle"-->
     <div class="case-form__header">
       <!-- maybe not required -->
       <!-- <resize-observer @notify="calcFormStyle" /> -->
@@ -491,17 +489,6 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    resizeMethod: {
-      // one of:
-      // parent: resize based on intake container.
-      // screen: resize based on scrollable screen.
-      type: String,
-      default: 'parent',
-    },
-    noGrid: {
-      type: Boolean,
-      default: false,
-    },
   },
   data() {
     return {
@@ -526,7 +513,6 @@ export default {
       sectionCounter: 2,
       addAdditionalPhone: false,
       currentNote: '',
-      formStyle: {},
       hideDetailedAddressFields: true,
       addressSet: false,
     };
@@ -1266,21 +1252,6 @@ export default {
     },
     logFormdata() {
       this.$log.debug(new FormData(this.$refs.form));
-    },
-    calcFormStyle() {
-      if (!this.$refs.form) return;
-      if (this.resizeMethod === 'none' || this.resizeMethod === null) return;
-      const topOffset = this.$refs.form.offsetTop;
-      let parentHeight = this.$refs.form.offsetParent.clientHeight;
-      if (this.resizeMethod === 'screen') {
-        parentHeight = window.screen.availHeight;
-      }
-      const formHeight = parentHeight - topOffset;
-      this.formStyle = {
-        'grid-template-rows': `calc(${
-          formHeight - 80
-        }px - var(--safe-area-inset-bottom)) 80px`,
-      };
     },
   },
   watch: {
