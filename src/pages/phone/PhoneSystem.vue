@@ -224,7 +224,7 @@
       :select-case="selectCase"
       :worksite-id="worksiteId"
     />
-    <div>
+    <div class="flex flex-col">
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
@@ -277,7 +277,7 @@
         <span class="text-base">{{ $t('actions.history') }}</span>
         <div></div>
       </div>
-      <div class="flex flex-col md:flex-row">
+      <div class="flex-grow relative h-full flex flex-col md:flex-row">
         <tabs
           :details="false"
           v-if="caller && $mq === 'sm'"
