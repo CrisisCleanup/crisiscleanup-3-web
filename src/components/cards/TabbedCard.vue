@@ -77,14 +77,14 @@ export default {
     bottom: 0;
     width: 100%;
     display: inline-block;
-    transition: transform 300ms easeInOutCirc;
+    transition: transform 300ms ease-in-out;
   }
 
   &__tab {
     @apply py-4 px-6 text-crisiscleanup-dark-400;
     position: relative;
     cursor: pointer;
-    transition: opacity 300ms easeInOutCirc;
+    transition: opacity 300ms ease-in-out;
     opacity: 0.5;
     &:hover,
     &.active {
