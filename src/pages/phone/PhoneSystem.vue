@@ -1,8 +1,6 @@
 <template>
-  <div
-    class="flex-grow h-full"
-    :class="$mq === 'sm' ? 'page-grid-mobile' : 'page-grid'"
-  >
+  <div class="phone-system">
+    <!-- TODO: Move this (doesn't belong here) -->
     <div class="modal" v-if="showImgModal">
       <div class="modal-content">
         <font-awesome-icon
@@ -101,8 +99,8 @@
         />
       </div>
     </div>
-    <div class="flex flex-col" :class="$mq === 'sm' ? 'h-1/3' : ''">
-      <div class="flex items-center">
+    <div class="phone-system__main">
+      <div class="phone-system__main-header">
         <div class="flex py-3 px-2" style="min-width: 80px">
           <ccu-icon
             :alt="$t('casesVue.map_view')"
@@ -173,14 +171,14 @@
         :select-case="selectCase"
         :worksite-id="worksiteId"
       />
-      <div class="flex-grow">
-        <div v-show="showingMap" class="relative h-full select-none">
+      <div class="phone-system__main-content">
+        <div v-show="showingMap" class="phone-system__main-content--map">
           <PhoneMap :map-loading="mapLoading" />
           <div class="phone-system__actions" ref="phoneButtons">
             <PhoneComponentButton
               v-show="caller"
               name="caller"
-              class="phone-button"
+              class="phone-system__action--caller"
               component-class="right-12 h-auto"
               component-style="width: 30rem;"
             >
@@ -204,7 +202,7 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="dialer"
-              class="phone-button"
+              class="phone-system__action"
               component-class="right-12"
               component-style="width: 30rem;"
               icon="dialer"
@@ -222,7 +220,7 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="chat"
-              class="phone-button"
+              class="phone-system__action"
               component-class="right-12 h-auto"
               component-style="width: 30rem; height: auto;"
               @open="
@@ -304,7 +302,7 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="news"
-              class="phone-button"
+              class="phone-system__action"
               component-class="right-12 h-auto"
               component-style="width: 50rem;"
               @open="
@@ -354,14 +352,14 @@
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
+              v-if="callHistory"
               name="history"
-              class="phone-button"
+              class="phone-system__action"
               component-class="right-12 h-auto"
               component-style="width: 50rem;"
               icon="phone-history"
               icon-size="large"
               icon-class="p-1"
-              v-if="callHistory"
             >
               <template v-slot:component>
                 <CallHistory
@@ -376,7 +374,7 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="stats"
-              class="phone-button"
+              class="phone-system__action"
               component-class="right-12 h-auto"
               component-style="width: 30rem;"
             >
@@ -396,7 +394,7 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="leaderboard"
-              class="phone-button"
+              class="phone-system__action"
               component-class="right-12 h-auto"
               component-style="width: 50rem;"
               icon="leaderboard"
@@ -414,7 +412,7 @@
             </PhoneComponentButton>
             <PhoneComponentButton
               name="reset"
-              class="phone-button"
+              class="phone-system__action"
               component-class="right-12 h-auto"
               component-style="width: 30rem;"
               icon="logout"
@@ -434,7 +432,7 @@
             </PhoneComponentButton>
           </div>
         </div>
-        <div v-show="showingTable" class="p-2 h-full shadow">
+        <div v-show="showingTable" class="phone-system__main-content--table">
           <AjaxTable
             :columns="columns"
             :url="tableUrl"
@@ -473,15 +471,7 @@
         </div>
       </div>
     </div>
-    <PhoneToolBar
-      v-if="false"
-      :complete-call="completeCall"
-      :on-logged-in="onLoggedIn"
-      :on-toggle-outbounds="onToggleOutbounds"
-      :select-case="selectCase"
-      :worksite-id="worksiteId"
-    />
-    <div class="flex flex-col" :class="$mq === 'sm' ? 'h-2/3' : ''">
+    <div class="phone-system__form">
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
@@ -493,7 +483,7 @@
         @onPrintWorksite="() => {}"
         @onShowHistory="showHistory = true"
       />
-      <div v-else class="h-12 px-2 border flex items-center justify-between">
+      <div v-else class="phone-system__form-header">
         <div class="flex items-center cursor-pointer">
           <ccu-icon
             :alt="$t('casesVue.new_case')"
@@ -519,7 +509,7 @@
           :text="$t('casesVue.show_map')"
         />
       </div>
-      <div v-if="showingDetails" class="flex items-center justify-between px-2">
+      <div v-if="showingDetails" class="phone-system__form-toggler">
         <base-button
           icon="arrow-left"
           :icon-size="medium"
@@ -533,7 +523,7 @@
         <span class="text-base">{{ $t('actions.history') }}</span>
         <div></div>
       </div>
-      <div class="flex-grow relative h-full flex flex-col md:flex-row">
+      <div class="phone-system__form-body">
         <CaseHistory
           v-if="showHistory"
           :incident-id="currentIncidentId"
@@ -1015,22 +1005,78 @@ export default {
 
 <style lang="postcss" scoped>
 .phone-system {
+  @apply grid flex-grow h-full;
+  grid-template-columns: auto 350px;
+
   &__actions {
     @apply absolute top-0 right-0 flex flex-col;
     z-index: 1004;
   }
+
+  &__action {
+    @apply shadow
+      w-20
+      h-20
+      sm:w-12
+      sm:h-12
+      my-2
+      sm:my-1
+      bg-white
+      cursor-pointer
+      z-50;
+  }
+
+  /* Container for map */
+  &__main {
+    @apply flex flex-col;
+
+    &-header {
+      @apply flex items-center;
+    }
+
+    &-content {
+      @apply flex-grow;
+
+      &--map {
+        @apply relative h-full select-none;
+      }
+
+      &--table {
+        @apply p-2 h-full shadow;
+      }
+    }
+  }
+
+  /* Container for case form */
+  &__form {
+    @apply flex flex-col;
+
+    &-header {
+      @apply h-12 px-2 border flex items-center justify-between;
+    }
+
+    &-toggler {
+      @apply flex items-center justify-between px-2;
+    }
+
+    &-body {
+      @apply flex-grow relative h-full flex flex-col md:flex-row;
+    }
+  }
 }
 
-.page-grid {
-  display: grid;
-  grid-template-columns: auto 350px;
-}
+/* Mobile styles */
+@media screen and (max-width: theme('screens.sm')) {
+  .phone-system {
+    @apply flex flex-col;
 
-.page-grid-mobile {
-  grid-template-columns: auto;
-}
+    &__main {
+      @apply h-1/3;
+    }
 
-.phone-button {
-  @apply shadow w-20 h-20 sm:w-12 sm:h-12 my-2 sm:my-1 bg-white cursor-pointer z-50;
+    &__form {
+      @apply h-2/3;
+    }
+  }
 }
 </style>
