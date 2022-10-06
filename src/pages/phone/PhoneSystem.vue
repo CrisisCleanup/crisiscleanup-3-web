@@ -572,26 +572,6 @@
           @changeImg="changeImage"
         />
       </div>
-      <div
-        v-show="$mq === 'sm' && showMobileMap"
-        class="absolute right-0 top-0 left-0 bottom-0"
-      >
-        <PhoneMap></PhoneMap>
-        <div class="absolute w-full flex items-center justify-center bottom-0">
-          <base-button
-            class="mb-12"
-            variant="solid"
-            size="lg"
-            style="z-index: 1002"
-            :text="$t('phoneDashboard.close_map')"
-            :action="
-              () => {
-                showMobileMap = false;
-              }
-            "
-          />
-        </div>
-      </div>
     </div>
   </div>
 </template>
