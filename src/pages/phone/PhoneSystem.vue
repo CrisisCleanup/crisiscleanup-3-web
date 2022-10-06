@@ -176,6 +176,266 @@
       <div class="flex-grow">
         <div v-show="showingMap" class="relative h-full select-none">
           <PhoneMap :map-loading="mapLoading" />
+          <div class="phone-system__actions" ref="phoneButtons">
+            <PhoneComponentButton
+              v-if="caller"
+              name="call-info"
+              class="phone-button"
+              component-class="right-12 h-auto"
+              component-style="width: 30rem;"
+              icon="phone"
+              icon-size="small"
+              icon-class="bg-black p-1"
+            >
+              <template v-slot:button>
+                <div class="w-full h-full relative">
+                  <PhoneIndicator class="w-full h-full" />
+                  <!-- add invisible layer over svg to allow pointer events / onClicks -->
+                  <span class="absolute inset-0 bg-transparent"></span>
+                </div>
+              </template>
+              <template v-slot:component>
+                <tabs :details="false" ref="tabs" @mounted="setTabs">
+                  <tab :name="$t('phoneDashboard.active_call')">
+                    <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
+                  </tab>
+                  <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
+                    <UpdateStatus class="p-2" @onCompleteCall="completeCall" />
+                  </tab>
+                </tabs>
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              name="dialer"
+              class="phone-button"
+              component-class="right-12"
+              component-style="width: 30rem;"
+              icon="dialer"
+              icon-size="small"
+              icon-class="bg-black p-1"
+            >
+              <template v-slot:component>
+                <ManualDialer
+                  class="p-2"
+                  style="z-index: 1002"
+                  @onDial="dialManualOutbound"
+                  :dialing="dialing"
+                ></ManualDialer>
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              name="chat"
+              class="phone-button"
+              component-class="right-12 h-auto"
+              component-style="width: 30rem; height: auto;"
+              @open="
+                () => {
+                  updateUserState({
+                    chat_last_seen: $moment().toISOString(),
+                  });
+                  unreadChatCount = 0;
+                  unreadUrgentChatCount = 0;
+                }
+              "
+            >
+              <template v-slot:button>
+                <div
+                  class="
+                    w-full
+                    h-full
+                    flex
+                    items-center
+                    justify-center
+                    relative
+                  "
+                >
+                  <div v-if="unreadChatCount" class="absolute top-0 left-0 m-1">
+                    <span
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        px-1
+                        py-0.5
+                        mr-2
+                        text-xs
+                        font-bold
+                        leading-none
+                        text-black
+                        bg-primary-light
+                        rounded-full
+                      "
+                      >{{ unreadChatCount }}</span
+                    >
+                  </div>
+                  <div
+                    v-if="unreadUrgentChatCount"
+                    class="absolute top-0 right-0 my-1 -mx-1"
+                  >
+                    <span
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        px-1
+                        py-0.5
+                        mr-2
+                        text-xs
+                        font-bold
+                        leading-none
+                        text-red-100
+                        bg-red-600
+                        rounded-full
+                      "
+                      >{{ unreadUrgentChatCount }}</span
+                    >
+                  </div>
+                  <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
+                </div>
+              </template>
+              <template v-slot:component>
+                <Chat
+                  v-if="selectedChat"
+                  @unreadCount="unreadChatCount = $event"
+                  @unreadUrgentCount="unreadUrgentChatCount = $event"
+                  class="h-full"
+                  @onNewMessage="unreadChatCount += 1"
+                  @onNewUrgentMessage="unreadUrgentChatCount += 1"
+                  :chat="selectedChat"
+                />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              name="news"
+              class="phone-button"
+              component-class="right-12 h-auto"
+              component-style="width: 50rem;"
+              @open="
+                () => {
+                  updateUserState({
+                    news_last_seen: $moment().toISOString(),
+                  });
+                  unreadNewsCount = 0;
+                }
+              "
+            >
+              <template v-slot:button>
+                <div
+                  class="
+                    w-full
+                    h-full
+                    flex
+                    items-center
+                    justify-center
+                    relative
+                  "
+                >
+                  <div v-if="unreadNewsCount" class="absolute top-0 left-0 m-1">
+                    <span
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        px-1
+                        py-0.5
+                        mr-2
+                        text-xs
+                        font-bold
+                        leading-none
+                        text-red-100
+                        bg-red-600
+                        rounded-full
+                      "
+                      >{{ unreadNewsCount }}</span
+                    >
+                  </div>
+                  <ccu-icon type="news" class="p-1 ml-1.5" size="large" />
+                </div>
+              </template>
+              <template v-slot:component>
+                <PhoneNews @unreadCount="unreadNewsCount = $event" />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              name="history"
+              class="phone-button"
+              component-class="right-12 h-auto"
+              component-style="width: 50rem;"
+              icon="phone-history"
+              icon-size="large"
+              icon-class="p-1"
+              v-if="callHistory"
+            >
+              <template v-slot:component>
+                <CallHistory
+                  :calls="callHistory"
+                  @rowClick="
+                    ({ mobile }) => {
+                      setManualOutbound(mobile);
+                    }
+                  "
+                />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              name="stats"
+              class="phone-button"
+              component-class="right-12 h-auto"
+              component-style="width: 30rem;"
+            >
+              <template v-slot:button>
+                <div class="w-full h-full flex items-center justify-center">
+                  <div class="text-xl">
+                    {{ callsWaiting }}
+                  </div>
+                </div>
+              </template>
+              <template v-slot:component>
+                <GeneralStats
+                  @onRemainingCallbacks="remainingCallbacks = $event"
+                  @onRemainingCalldowns="remainingCalldowns = $event"
+                />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              name="leaderboard"
+              class="phone-button"
+              component-class="right-12 h-auto"
+              component-style="width: 50rem;"
+              icon="leaderboard"
+              icon-size="medium"
+              icon-class="p-1"
+            >
+              <template v-slot:button>
+                <div class="w-full h-full flex items-center justify-center">
+                  <ccu-icon :fa="true" type="users" class="p-1" size="medium" />
+                </div>
+              </template>
+              <template v-slot:component>
+                <Leaderboard class="h-full" />
+              </template>
+            </PhoneComponentButton>
+            <PhoneComponentButton
+              name="reset"
+              class="phone-button"
+              component-class="right-12 h-auto"
+              component-style="width: 30rem;"
+              icon="logout"
+              icon-size="small"
+              icon-class="p-1"
+            >
+              <template v-slot:component>
+                <div class="flex items-center justify-center p-3">
+                  <base-button
+                    size="medium"
+                    :text="$t('phoneDashboard.reset_phone_system')"
+                    :action="resetPhoneSystem"
+                    class="text-white bg-crisiscleanup-red-200"
+                  ></base-button>
+                </div>
+              </template>
+            </PhoneComponentButton>
+          </div>
         </div>
         <div v-show="showingTable" class="p-2 h-full shadow">
           <AjaxTable
@@ -278,23 +538,6 @@
         <div></div>
       </div>
       <div class="flex-grow relative h-full flex flex-col md:flex-row">
-        <tabs
-          :details="false"
-          v-if="caller && $mq === 'sm'"
-          style="z-index: 1003"
-          ref="tabs"
-          @mounted="setTabs"
-        >
-          <tab :name="$t('phoneDashboard.active_call')">
-            <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
-          </tab>
-          <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
-            <UpdateStatus
-              class="p-2 pr-8 sm:pr-0 w-11/12 sm:w-full"
-              @onCompleteCall="completeCall"
-            />
-          </tab>
-        </tabs>
         <CaseHistory
           v-if="showHistory"
           :incident-id="currentIncidentId"
@@ -329,277 +572,6 @@
           @image-click="showImage"
           @changeImg="changeImage"
         />
-        <transition name="slide-fade">
-          <div
-            class="absolute"
-            :class="$mq === 'sm' ? 'right-0' : ''"
-            style="z-index: 1004"
-          >
-            <tabs
-              :details="false"
-              v-if="caller && $mq !== 'sm'"
-              class="bg-white tabs mt-1"
-              style="z-index: 1003"
-              ref="tabs"
-              @mounted="setTabs"
-            >
-              <tab :name="$t('phoneDashboard.active_call')">
-                <ActiveCall :case-id="worksiteId" @setCase="selectCase" />
-              </tab>
-              <tab :name="$t('phoneDashboard.call_status')" ref="statusTab">
-                <UpdateStatus class="p-2" @onCompleteCall="completeCall" />
-              </tab>
-            </tabs>
-            <div
-              class="flex flex-col sm:mt-12"
-              :class="$mq === 'sm' ? 'right-0' : '-ml-12'"
-              style="z-index: 1003"
-              ref="phoneButtons"
-            >
-              <PhoneComponentButton
-                name="dialer"
-                class="phone-button"
-                component-class="right-12"
-                component-style="width: 30rem;"
-                icon="dialer"
-                icon-size="small"
-                icon-class="bg-black p-1"
-              >
-                <template v-slot:component>
-                  <ManualDialer
-                    class="p-2"
-                    style="z-index: 1002"
-                    @onDial="dialManualOutbound"
-                    :dialing="dialing"
-                  ></ManualDialer>
-                </template>
-              </PhoneComponentButton>
-              <PhoneComponentButton
-                name="chat"
-                class="phone-button"
-                component-class="right-12 h-auto"
-                component-style="width: 30rem; height: auto;"
-                @open="
-                  () => {
-                    updateUserState({
-                      chat_last_seen: $moment().toISOString(),
-                    });
-                    unreadChatCount = 0;
-                    unreadUrgentChatCount = 0;
-                  }
-                "
-              >
-                <template v-slot:button>
-                  <div
-                    class="
-                      w-full
-                      h-full
-                      flex
-                      items-center
-                      justify-center
-                      relative
-                    "
-                  >
-                    <div
-                      v-if="unreadChatCount"
-                      class="absolute top-0 left-0 m-1"
-                    >
-                      <span
-                        class="
-                          inline-flex
-                          items-center
-                          justify-center
-                          px-1
-                          py-0.5
-                          mr-2
-                          text-xs
-                          font-bold
-                          leading-none
-                          text-black
-                          bg-primary-light
-                          rounded-full
-                        "
-                        >{{ unreadChatCount }}</span
-                      >
-                    </div>
-                    <div
-                      v-if="unreadUrgentChatCount"
-                      class="absolute top-0 right-0 my-1 -mx-1"
-                    >
-                      <span
-                        class="
-                          inline-flex
-                          items-center
-                          justify-center
-                          px-1
-                          py-0.5
-                          mr-2
-                          text-xs
-                          font-bold
-                          leading-none
-                          text-red-100
-                          bg-red-600
-                          rounded-full
-                        "
-                        >{{ unreadUrgentChatCount }}</span
-                      >
-                    </div>
-                    <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
-                  </div>
-                </template>
-                <template v-slot:component>
-                  <Chat
-                    v-if="selectedChat"
-                    @unreadCount="unreadChatCount = $event"
-                    @unreadUrgentCount="unreadUrgentChatCount = $event"
-                    class="h-full"
-                    @onNewMessage="unreadChatCount += 1"
-                    @onNewUrgentMessage="unreadUrgentChatCount += 1"
-                    :chat="selectedChat"
-                  />
-                </template>
-              </PhoneComponentButton>
-              <PhoneComponentButton
-                name="news"
-                class="phone-button"
-                component-class="right-12 h-auto"
-                component-style="width: 50rem;"
-                @open="
-                  () => {
-                    updateUserState({
-                      news_last_seen: $moment().toISOString(),
-                    });
-                    unreadNewsCount = 0;
-                  }
-                "
-              >
-                <template v-slot:button>
-                  <div
-                    class="
-                      w-full
-                      h-full
-                      flex
-                      items-center
-                      justify-center
-                      relative
-                    "
-                  >
-                    <div
-                      v-if="unreadNewsCount"
-                      class="absolute top-0 left-0 m-1"
-                    >
-                      <span
-                        class="
-                          inline-flex
-                          items-center
-                          justify-center
-                          px-1
-                          py-0.5
-                          mr-2
-                          text-xs
-                          font-bold
-                          leading-none
-                          text-red-100
-                          bg-red-600
-                          rounded-full
-                        "
-                        >{{ unreadNewsCount }}</span
-                      >
-                    </div>
-                    <ccu-icon type="news" class="p-1 ml-1.5" size="large" />
-                  </div>
-                </template>
-                <template v-slot:component>
-                  <PhoneNews @unreadCount="unreadNewsCount = $event" />
-                </template>
-              </PhoneComponentButton>
-              <PhoneComponentButton
-                name="history"
-                class="phone-button"
-                component-class="right-12 h-auto"
-                component-style="width: 50rem;"
-                icon="phone-history"
-                icon-size="large"
-                icon-class="p-1"
-                v-if="callHistory"
-              >
-                <template v-slot:component>
-                  <CallHistory
-                    :calls="callHistory"
-                    @rowClick="
-                      ({ mobile }) => {
-                        setManualOutbound(mobile);
-                      }
-                    "
-                  />
-                </template>
-              </PhoneComponentButton>
-              <PhoneComponentButton
-                name="stats"
-                class="phone-button"
-                component-class="right-12 h-auto"
-                component-style="width: 30rem;"
-              >
-                <template v-slot:button>
-                  <div class="w-full h-full flex items-center justify-center">
-                    <div class="text-xl">
-                      {{ callsWaiting }}
-                    </div>
-                  </div>
-                </template>
-                <template v-slot:component>
-                  <GeneralStats
-                    @onRemainingCallbacks="remainingCallbacks = $event"
-                    @onRemainingCalldowns="remainingCalldowns = $event"
-                  />
-                </template>
-              </PhoneComponentButton>
-              <PhoneComponentButton
-                name="leaderboard"
-                class="phone-button"
-                component-class="right-12 h-auto"
-                component-style="width: 50rem;"
-                icon="leaderboard"
-                icon-size="medium"
-                icon-class="p-1"
-              >
-                <template v-slot:button>
-                  <div class="w-full h-full flex items-center justify-center">
-                    <ccu-icon
-                      :fa="true"
-                      type="users"
-                      class="p-1"
-                      size="medium"
-                    />
-                  </div>
-                </template>
-                <template v-slot:component>
-                  <Leaderboard class="h-full" />
-                </template>
-              </PhoneComponentButton>
-              <PhoneComponentButton
-                name="reset"
-                class="phone-button"
-                component-class="right-12 h-auto"
-                component-style="width: 30rem;"
-                icon="logout"
-                icon-size="small"
-                icon-class="p-1"
-              >
-                <template v-slot:component>
-                  <div class="flex items-center justify-center p-3">
-                    <base-button
-                      size="medium"
-                      :text="$t('phoneDashboard.reset_phone_system')"
-                      :action="resetPhoneSystem"
-                      class="text-white bg-crisiscleanup-red-200"
-                    ></base-button>
-                  </div>
-                </template>
-              </PhoneComponentButton>
-            </div>
-          </div>
-        </transition>
       </div>
       <div
         v-show="$mq === 'sm' && showMobileMap"
@@ -652,10 +624,12 @@ import PhoneNews from '@/components/phone/PhoneNews';
 import PhoneToolBar from '@/pages/phone/PhoneToolBar';
 import ActiveCall from '@/components/phone/ActiveCall';
 import UpdateStatus from '@/components/phone/UpdateStatus';
+import PhoneIndicator from '@/components/phone/PhoneIndicator';
 
 export default {
   name: 'PhoneSystem',
   components: {
+    PhoneIndicator,
     UpdateStatus,
     ActiveCall,
     PhoneToolBar,
@@ -1061,7 +1035,14 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="postcss" scoped>
+.phone-system {
+  &__actions {
+    @apply absolute top-0 right-0 flex flex-col;
+    z-index: 1004;
+  }
+}
+
 .page-grid {
   display: grid;
   grid-template-columns: auto 350px;
