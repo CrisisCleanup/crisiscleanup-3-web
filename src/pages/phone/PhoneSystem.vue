@@ -101,7 +101,7 @@
         />
       </div>
     </div>
-    <div v-if="$mq !== 'sm'" class="flex flex-col">
+    <div class="flex flex-col" :class="$mq === 'sm' ? 'h-1/3' : ''">
       <div class="flex items-center">
         <div class="flex py-3 px-2" style="min-width: 80px">
           <ccu-icon
@@ -477,14 +477,14 @@
       </div>
     </div>
     <PhoneToolBar
-      v-else
+      v-if="false"
       :complete-call="completeCall"
       :on-logged-in="onLoggedIn"
       :on-toggle-outbounds="onToggleOutbounds"
       :select-case="selectCase"
       :worksite-id="worksiteId"
     />
-    <div class="flex flex-col">
+    <div class="flex flex-col" :class="$mq === 'sm' ? 'h-2/3' : ''">
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
@@ -533,7 +533,6 @@
             }
           "
         />
-
         <span class="text-base">{{ $t('actions.history') }}</span>
         <div></div>
       </div>
