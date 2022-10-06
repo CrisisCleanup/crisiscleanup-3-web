@@ -178,9 +178,8 @@
             <PhoneComponentButton
               v-show="caller"
               name="caller"
-              class="phone-system__action--caller"
-              component-class="right-12 h-auto"
-              component-style="width: 30rem;"
+              class="phone-system__action"
+              component-class="phone-system__action-content phone-system__action-content--caller"
             >
               <template v-slot:button>
                 <div class="w-full h-full relative">
@@ -203,8 +202,7 @@
             <PhoneComponentButton
               name="dialer"
               class="phone-system__action"
-              component-class="right-12"
-              component-style="width: 30rem;"
+              component-class="phone-system__action-content phone-system__action-content--dialer"
               icon="dialer"
               icon-size="small"
               icon-class="bg-black p-1"
@@ -221,8 +219,7 @@
             <PhoneComponentButton
               name="chat"
               class="phone-system__action"
-              component-class="right-12 h-auto"
-              component-style="width: 30rem; height: auto;"
+              component-class="phone-system__action-content phone-system__action-content--chat"
               @open="
                 () => {
                   updateUserState({
@@ -303,8 +300,7 @@
             <PhoneComponentButton
               name="news"
               class="phone-system__action"
-              component-class="right-12 h-auto"
-              component-style="width: 50rem;"
+              component-class="phone-system__action-content phone-system__action-content--news"
               @open="
                 () => {
                   updateUserState({
@@ -355,8 +351,7 @@
               v-if="callHistory"
               name="history"
               class="phone-system__action"
-              component-class="right-12 h-auto"
-              component-style="width: 50rem;"
+              component-class="phone-system__action-content phone-system__action-content--history"
               icon="phone-history"
               icon-size="large"
               icon-class="p-1"
@@ -375,8 +370,7 @@
             <PhoneComponentButton
               name="stats"
               class="phone-system__action"
-              component-class="right-12 h-auto"
-              component-style="width: 30rem;"
+              component-class="phone-system__action-content phone-system__action-content--stats"
             >
               <template v-slot:button>
                 <div class="w-full h-full flex items-center justify-center">
@@ -395,8 +389,7 @@
             <PhoneComponentButton
               name="leaderboard"
               class="phone-system__action"
-              component-class="right-12 h-auto"
-              component-style="width: 50rem;"
+              component-class="phone-system__action-content phone-system__action-content--leaderboard"
               icon="leaderboard"
               icon-size="medium"
               icon-class="p-1"
@@ -413,8 +406,7 @@
             <PhoneComponentButton
               name="reset"
               class="phone-system__action"
-              component-class="right-12 h-auto"
-              component-style="width: 30rem;"
+              component-class="phone-system__action-content phone-system__action-content--reset"
               icon="logout"
               icon-size="small"
               icon-class="p-1"
@@ -1002,6 +994,70 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss">
+.phone-system {
+  &__action {
+    &-content {
+      @apply right-20 sm:right-12 h-auto;
+      width: 35vw;
+
+      &--caller {
+        @apply h-full;
+      }
+      &--dialer {
+        @apply h-full;
+      }
+      &--chat {
+      }
+      &--news {
+        @apply h-full;
+        width: 50vw;
+      }
+      &--history {
+        @apply h-full;
+        width: 50vw;
+      }
+      &--stats {
+      }
+      &--leaderboard {
+        @apply h-full;
+        width: 50vw;
+      }
+      &--reset {
+        @apply h-full;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: theme('screens.sm')) {
+  .phone-system {
+    &__action {
+      &-content {
+        width: 80vw;
+
+        &--caller {
+        }
+        &--dialer {
+        }
+        &--chat {
+        }
+        &--news {
+        }
+        &--history {
+        }
+        &--stats {
+        }
+        &--leaderboard {
+        }
+        &--reset {
+        }
+      }
+    }
+  }
+}
+</style>
 
 <style lang="postcss" scoped>
 .phone-system {
