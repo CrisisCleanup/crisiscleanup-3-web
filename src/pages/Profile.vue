@@ -55,81 +55,103 @@
               <form ref="form" @submit.prevent="handleSubmit">
                 <div class="user-details">
                   <div class="flex pb-4">
-                    <base-input
-                      class="mr-2 w-1/2"
-                      size="large"
-                      :value="currentUser.first_name"
-                      :placeholder="$t('profileUser.first_name_placeholder')"
-                      required
-                      @input="
-                        (value) => {
-                          updateUser(value, 'first_name');
-                        }
-                      "
-                    />
-                    <base-input
-                      class="w-1/2"
-                      size="large"
-                      :value="currentUser.mobile"
-                      :placeholder="$t('profileUser.mobile_placeholder')"
-                      required
-                      :validator="validatePhoneNumber"
-                      @input="
-                        (value) => {
-                          updateUser(value, 'mobile');
-                        }
-                      "
-                    />
+                    <div class="form-field mr-2 w-1/2">
+                      <label for="first_name">First Name</label>
+                      <base-input
+                        name="first_name"
+                        size="large"
+                        :value="currentUser.first_name"
+                        :placeholder="$t('profileUser.first_name_placeholder')"
+                        required
+                        @input="
+                          (value) => {
+                            updateUser(value, 'first_name');
+                          }
+                        "
+                      />
+                    </div>
+                    <div class="form-field w-1/2">
+                      <label for="mobile">Last Name</label>
+                      <base-input
+                        name="mobile"
+                        size="large"
+                        :value="currentUser.mobile"
+                        :placeholder="$t('profileUser.mobile_placeholder')"
+                        required
+                        :validator="validatePhoneNumber"
+                        @input="
+                          (value) => {
+                            updateUser(value, 'mobile');
+                          }
+                        "
+                      />
+                    </div>
                   </div>
                   <div class="flex pb-4">
-                    <base-input
-                      class="mr-2 w-1/2"
-                      size="large"
-                      :value="currentUser.last_name"
-                      :placeholder="$t('profileUser.last_name_placeholder')"
-                      required
-                      @input="
-                        (value) => {
-                          updateUser(value, 'last_name');
-                        }
-                      "
-                    />
-                    <base-input
-                      class="w-1/2"
-                      :value="currentUser.email"
-                      size="large"
-                      :placeholder="$t('profileUser.email_placeholder ')"
-                      required
-                      @input="
-                        (value) => {
-                          updateUser(value, 'email');
-                        }
-                      "
-                    />
+                    <div class="form-field mr-2 w-1/2">
+                      <label for="last_name">Last Name</label>
+                      <base-input
+                        name="last_name"
+                        size="large"
+                        :value="currentUser.last_name"
+                        :placeholder="$t('profileUser.last_name_placeholder')"
+                        required
+                        @input="
+                          (value) => {
+                            updateUser(value, 'last_name');
+                          }
+                        "
+                      />
+                    </div>
+                    <div class="form-field w-1/2">
+                      <label for="email">Email</label>
+                      <base-input
+                        name="email"
+                        :value="currentUser.email"
+                        size="large"
+                        :placeholder="$t('profileUser.email_placeholder ')"
+                        required
+                        @input="
+                          (value) => {
+                            updateUser(value, 'email');
+                          }
+                        "
+                      />
+                    </div>
                   </div>
                 </div>
                 <hr class="p-2 m-auto" />
                 <div class="flex pb-4">
-                  <UserRolesSelect
-                    class="
-                      w-1/2
-                      flex-grow
-                      mr-2
-                      border border-crisiscleanup-dark-100
-                    "
-                    :user="currentUser"
-                  />
-                  <form-select
-                    v-model="currentUser.equipment"
-                    class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
-                    :value="currentUser.equipment"
-                    :options="[]"
-                    item-key="value"
-                    label="name_t"
-                    size="large"
-                    select-classes="bg-white border text-xs"
-                  />
+                  <div class="w-1/2 mr-2">
+                    <p>User Roles</p>
+                    <UserRolesSelect
+                      class="
+                        w-full
+                        flex-grow
+                        border border-crisiscleanup-dark-100
+                      "
+                      :user="currentUser"
+                    />
+                  </div>
+                  <div class="w-1/2">
+                    <p>Equipment</p>
+                    <form-select
+                      v-model="currentUser.equipment"
+                      class="
+                        w-full
+                        flex-grow
+                        border border-crisiscleanup-dark-100
+                      "
+                      :value="currentUser.equipment"
+                      :options="[]"
+                      item-key="value"
+                      label="name_t"
+                      size="large"
+                      select-classes="bg-white border text-xs"
+                    />
+                  </div>
                 </div>
+                <div>Languages</div>
                 <div class="flex pb-4">
                   <form-select
                     class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
@@ -548,6 +570,9 @@ export default {
 <style scoped>
 .user-form {
   width: 48rem;
+  .form-field {
+    @apply flex flex-col;
+  }
 }
 .profile-image {
   height: 175px;
