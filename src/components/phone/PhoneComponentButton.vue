@@ -111,7 +111,6 @@ export default {
     absolute top-1 mr-1 z-30
     overflow-auto;
     min-height: 10vh;
-    height: 100%;
   }
 
   &__icon {
