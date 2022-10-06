@@ -1,14 +1,12 @@
 <template>
-  <div>
+  <div class="phone-system-action">
     <div
-      class="w-full h-full cursor-pointer z-40"
-      :class="
-        showComponent ? 'bg-gray-100 border-l-2 border-l-primary-light' : ''
-      "
+      class="phone-system-action__button"
+      :class="showComponent ? 'phone-system-action__button--active' : ''"
       @click="toggleComponent"
     >
       <slot name="button">
-        <div class="w-full h-full flex items-center justify-center">
+        <div class="phone-system-action__icon">
           <ccu-icon
             v-if="icon"
             :type="icon"
@@ -19,17 +17,17 @@
       </slot>
     </div>
     <div
-      class="phone-component absolute top-1 mr-1 z-30"
+      class="phone-system-action__content"
       :class="componentClass"
       :style="componentStyle"
       v-show="showComponent"
     >
-      <div class="w-full relative mb-2 z-40">
+      <div class="phone-system-action__close">
         <ccu-icon
           :alt="$t('actions.cancel')"
           size="xs"
           type="cancel"
-          class="absolute right-0 p-2 cursor-pointer"
+          class="phone-system-action__close-icon"
           @click.native="() => (showComponent = false)"
         />
       </div>
@@ -97,10 +95,34 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.phone-component {
-  @apply shadow-lg bg-white overflow-auto;
-  min-height: 10vh;
-  height: 100%;
+<style lang="postcss" scoped>
+.phone-system-action {
+  &__button {
+    @apply w-full h-full cursor-pointer z-40;
+    &--active {
+      @apply bg-gray-100 border-l-2 border-l-primary-light;
+    }
+  }
+
+  &__content {
+    @apply shadow-lg
+    bg-white
+    shadow-md
+    absolute top-1 mr-1 z-30
+    overflow-auto;
+    min-height: 10vh;
+    height: 100%;
+  }
+
+  &__icon {
+    @apply w-full h-full flex items-center justify-center;
+  }
+
+  &__close {
+    @apply w-full relative mb-2 z-40;
+    &-icon {
+      @apply absolute right-0 p-2 cursor-pointer;
+    }
+  }
 }
 </style>
