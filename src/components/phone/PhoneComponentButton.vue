@@ -1,8 +1,10 @@
 <template>
   <div>
     <div
-      class="w-full h-full z-40"
-      :class="showComponent ? 'bg-gray-200' : ''"
+      class="w-full h-full cursor-pointer z-40"
+      :class="
+        showComponent ? 'bg-gray-100 border-l-2 border-l-primary-light' : ''
+      "
       @click="toggleComponent"
     >
       <slot name="button">
@@ -17,7 +19,7 @@
       </slot>
     </div>
     <div
-      class="phone-component absolute top-10 ml-12 z-30"
+      class="phone-component absolute top-1 mr-1 z-30"
       :class="componentClass"
       :style="componentStyle"
       v-show="showComponent"
@@ -27,17 +29,11 @@
           :alt="$t('actions.cancel')"
           size="xs"
           type="cancel"
-          class="absolute right-0 p-2"
-          @click.native="
-            () => {
-              showComponent = false;
-            }
-          "
+          class="absolute right-0 p-2 cursor-pointer"
+          @click.native="() => (showComponent = false)"
         />
       </div>
-      <div class="mt-10 sm:mt-0">
-        <slot name="component"></slot>
-      </div>
+      <slot name="component"></slot>
     </div>
   </div>
 </template>
@@ -103,20 +99,8 @@ export default {
 
 <style lang="scss" scoped>
 .phone-component {
-  transform: translateY(-3rem);
+  @apply shadow-lg bg-white overflow-auto;
   min-height: 10vh;
-  height: 90%;
-  @apply shadow-lg bg-white sm:mt-12 overflow-auto;
-}
-@media (max-width: 640px) {
-  .phone-component {
-    width: 87vw;
-    margin-left: -87vw;
-  }
-}
-@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
-  .phone-component {
-    @apply mt-16;
-  }
+  height: 100%;
 }
 </style>
