@@ -1034,20 +1034,4 @@ export default {
 .phone-button {
   @apply shadow w-20 h-20 sm:w-12 sm:h-12 my-2 sm:my-1 bg-white cursor-pointer z-50;
 }
-.tabs {
-  width: 29rem;
-  margin-left: -29rem;
-}
-.status {
-  @apply bg-white sm:w-96 sm:-ml-96 mt-1 h-84;
-}
-@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
-  .tabs {
-    width: 38rem;
-    margin-left: -38rem;
-    margin-top: -3rem;
-    height: 350px;
-    @apply overflow-auto;
-  }
-}
 </style>
