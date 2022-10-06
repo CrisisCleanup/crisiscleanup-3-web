@@ -178,14 +178,11 @@
           <PhoneMap :map-loading="mapLoading" />
           <div class="phone-system__actions" ref="phoneButtons">
             <PhoneComponentButton
-              v-if="caller"
-              name="call-info"
+              v-show="caller"
+              name="caller"
               class="phone-button"
               component-class="right-12 h-auto"
               component-style="width: 30rem;"
-              icon="phone"
-              icon-size="small"
-              icon-class="bg-black p-1"
             >
               <template v-slot:button>
                 <div class="w-full h-full relative">
@@ -984,6 +981,8 @@ export default {
     caller(newValue, oldValue) {
       if (!oldValue && newValue) {
         EventBus.$emit('phone_component:close');
+        // open the active call PhoneComponentButton
+        EventBus.$emit('phone_component:open', 'caller');
       }
     },
     call(newValue, oldValue) {
