@@ -29,6 +29,7 @@ import DragDrop from '@/components/DragDrop';
 import Worksite from '@/models/Worksite';
 import { getErrorMessage } from '../utils/errors';
 import ImageModal from '@/components/ImageModal';
+import { uploadFile } from '@/utils/file';
 
 export default {
   name: 'WorksiteImageSection',
@@ -67,16 +68,7 @@ export default {
       formData.append('upload', fileList[0]);
       this.uploading = true;
       try {
-        const result = await this.$http.post(
-          `${process.env.VUE_APP_API_BASE_URL}/files`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-              Accept: 'application/json',
-            },
-          },
-        );
+        const result = await uploadFile(formData);
         const file = result.data.id;
         if (this.isPrintToken) {
           await Worksite.api().addFileWithToken(this.worksite.token, file);
