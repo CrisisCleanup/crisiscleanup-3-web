@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-1 p:2 sm:p-6 flex flex-col w-full">
+  <div class="flex-1 p-2 sm:p-3 flex flex-col w-full">
     <div class="flex sm:items-center py-1 border-b border-gray-200">
       <div class="text-lg">{{ chat.name }}</div>
     </div>
@@ -292,6 +292,6 @@ export default {
 }
 .message-container {
   @apply flex flex-col;
-  height: 65vh;
+  height: 60vh;
 }
 </style>
