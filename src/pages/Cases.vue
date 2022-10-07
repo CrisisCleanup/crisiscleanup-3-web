@@ -1368,8 +1368,8 @@ export default {
     },
     workTypesClaimedByOrganization() {
       if (this.currentWorksite) {
-        return this.currentWorksite.work_types.filter(
-          (type) => type.claimed_by === this.currentUser.organization.id,
+        return this.currentWorksite.work_types.filter((type) =>
+          this.currentUser.organization.affiliates.includes(type.claimed_by),
         );
       }
       return [];

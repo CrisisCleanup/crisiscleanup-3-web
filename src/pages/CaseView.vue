@@ -554,8 +554,8 @@ export default {
     },
     workTypesClaimedByOrganization() {
       if (this.worksite) {
-        return this.worksite.work_types.filter(
-          (type) => type.claimed_by === this.currentUser.organization.id,
+        return this.worksite.work_types.filter((type) =>
+          this.currentUser.organization.affiliates.includes(type.claimed_by),
         );
       }
       return [];
@@ -565,7 +565,7 @@ export default {
         const list = this.worksite.work_types.filter(
           (type) =>
             type.claimed_by &&
-            type.claimed_by !== this.currentUser.organization.id,
+            !this.currentUser.organization.affiliates.includes(type.claimed_by),
         );
         return groupBy(list, 'claimed_by');
       }
