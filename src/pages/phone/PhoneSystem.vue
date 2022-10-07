@@ -290,7 +290,6 @@
                   v-if="selectedChat"
                   @unreadCount="unreadChatCount = $event"
                   @unreadUrgentCount="unreadUrgentChatCount = $event"
-                  class="h-full"
                   @onNewMessage="unreadChatCount += 1"
                   @onNewUrgentMessage="unreadUrgentChatCount += 1"
                   :chat="selectedChat"
@@ -1011,7 +1010,7 @@ export default {
       &--chat {
       }
       &--news {
-        @apply h-full;
+        height: 60vh;
         width: 50vw;
       }
       &--history {
@@ -1021,7 +1020,7 @@ export default {
       &--stats {
       }
       &--leaderboard {
-        @apply h-full;
+        height: 60vh;
         width: 50vw;
       }
       &--reset {
