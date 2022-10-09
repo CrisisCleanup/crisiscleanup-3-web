@@ -86,6 +86,9 @@ export default {
       type: String,
       default: '',
     },
+    skipValidation: {
+      type: Boolean,
+    },
   },
   created() {
     window.addEventListener('keydown', (e) => {
@@ -115,6 +118,7 @@ export default {
         'has-icon': Boolean(this.icon),
         'has-tooltip': Boolean(this.tooltip),
         full: Boolean(this.full),
+        invalid: !this.skipValidation,
       },
       iconClasses: {
         large: this.size === 'large',
@@ -247,7 +251,7 @@ export default {
   @apply text-sm;
 }
 
-#autosuggest__input[required] {
+.invalid #autosuggest__input[required] {
   @apply border-crisiscleanup-red-100;
 }
 

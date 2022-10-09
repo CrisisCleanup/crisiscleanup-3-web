@@ -53,6 +53,7 @@ const routes = [
     component: Chat,
     name: 'nav.chat',
     meta: { layout: 'authenticated' },
+    props: { chat: { id: 1 } },
   },
   {
     path: '/incident/:incident_id/dashboard',

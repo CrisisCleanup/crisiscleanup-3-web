@@ -32,6 +32,7 @@
           @input="(value) => updateWorksite(value, 'name')"
           @selectedExisting="onWorksiteSelect"
           @search="worksitesSearch"
+          skip-validation
         />
       </section>
       <div class="form-field">

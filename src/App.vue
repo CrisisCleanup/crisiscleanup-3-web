@@ -17,11 +17,13 @@
 // @ts-nocheck TODO(tabiodun): Fix this file
 import { mapActions, mapGetters, mapMutations } from 'vuex';
 import { defineComponent } from '@vue/composition-api';
+import moment from 'moment';
 import CCP from '@/components/phone/CCP.vue';
 import Version from '@/components/Version.vue';
 import BannerOverlay from '@/components/notifications/BannerOverlay.vue';
 import { cachedGet, hash } from '@/utils/promise';
 import PhoneLegacy from './pages/phone_legacy/Index.vue';
+import { AuthService } from '@/services/auth.service';
 
 const defaultLayout = 'authenticated';
 export default defineComponent({
@@ -45,6 +47,9 @@ export default defineComponent({
     },
   },
   created(): void {
+    if (moment().isAfter(AuthService.getExpiry())) {
+      AuthService.removeUser();
+    }
     if (process.env.NODE_ENV === 'development') {
       this.eventsInterval = setInterval(this.pushCurrentEvents, 2000);
     }
