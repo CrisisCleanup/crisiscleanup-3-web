@@ -1309,9 +1309,13 @@ export default {
   }
 }
 
-@media only screen and (max-device-width: 1223px) and (orientation: landscape) {
+/* set style for mobile in landscape mode */
+@media only screen and (max-device-width: theme('screens.sm')),
+  (max-device-height: theme('screens.sm')) {
   .case-form {
-    bottom: env(safe-area-inset-bottom, 30px);
+    bottom: 2rem;
+    /* The bottom style should be used but doesn't work for some reason. */
+    /* bottom: env(safe-area-inset-bottom, 2rem); */
   }
 }
 </style>
