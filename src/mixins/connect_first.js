@@ -104,6 +104,13 @@ export default {
         }
 
         try {
+          this.$phoneService.username = this.currentAgent.agent_username;
+          this.$phoneService.password = password;
+          this.$phoneService.agent_id = this.currentAgent.agent_id;
+          if (!this.$phoneService.cf) {
+            const result = await this.$phoneService.getAccessToken();
+            this.$phoneService.initPhoneService(result.accessToken);
+          }
           await this.$phoneService.login(
             this.currentAgent.agent_username,
             password,

@@ -18,7 +18,6 @@ const Log = Logger({
 export default class PhoneService {
   constructor() {
     this.store = store;
-    this.initPhoneService();
     this.loggedInAgentId = null;
     this.callInfo = {};
   }
