@@ -582,6 +582,7 @@ import PhoneToolBar from '@/pages/phone/PhoneToolBar';
 import ActiveCall from '@/components/phone/ActiveCall';
 import UpdateStatus from '@/components/phone/UpdateStatus';
 import PhoneIndicator from '@/components/phone/PhoneIndicator';
+import { loadCasesCached } from '@/utils/worksite';
 
 export default {
   name: 'PhoneSystem',
@@ -910,17 +911,12 @@ export default {
     },
     async getWorksites() {
       this.mapLoading = true;
-      const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
-        {
-          params: {
-            incident: this.currentIncidentId,
-          },
-        },
-      );
+      const response = await loadCasesCached({
+        incident: this.currentIncidentId,
+      });
       this.mapLoading = false;
-      this.allWorksiteCount = response.data.results.length;
-      return response.data.results;
+      this.allWorksiteCount = response.results.length;
+      return response.results;
     },
     async onLoggedIn() {
       if (

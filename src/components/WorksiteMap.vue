@@ -286,6 +286,7 @@ import { groupBy } from '@/utils/array';
 import Worksite from '@/models/Worksite';
 import User from '@/models/User';
 import Incident from '@/models/Incident';
+import { loadCasesCached } from '@/utils/worksite';
 
 PixiSettings.SPRITE_MAX_TEXTURES = Math.min(
   PixiSettings.SPRITE_MAX_TEXTURES,
@@ -394,26 +395,19 @@ export default {
       return;
     }
     this.mapLoading = true;
-    const allCases = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
-      {
-        params: { incident: this.query.incident },
-      },
-    );
 
-    this.markers = allCases.data.results;
-    const response = await this.$http.get(
-      `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
-      {
-        params: { ...this.query },
-      },
-    );
+    const allCases = await loadCasesCached({
+      incident: this.query.incident,
+    });
 
-    const filtered = response.data.results;
+    this.markers = allCases.results;
+    const response = await loadCasesCached(this.query);
+
+    const filtered = response.results;
 
     const allMergedCases = unionWith(
       filtered,
-      allCases.data.results,
+      allCases.results,
       (a, b) => a.id === b.id,
     );
 
