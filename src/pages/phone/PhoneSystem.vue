@@ -292,6 +292,7 @@
                   @unreadUrgentCount="unreadUrgentChatCount = $event"
                   @onNewMessage="unreadChatCount += 1"
                   @onNewUrgentMessage="unreadUrgentChatCount += 1"
+                  @focusNewsTab="focusNewsTab"
                   :chat="selectedChat"
                 />
               </template>
@@ -947,6 +948,11 @@ export default {
         },
       );
       this.chatGroups = response.data.results;
+    },
+    focusNewsTab() {
+      EventBus.$emit('phone_component:close');
+      // open the active call PhoneComponentButton
+      EventBus.$emit('phone_component:open', 'news');
     },
   },
   watch: {
