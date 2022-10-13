@@ -23,16 +23,22 @@ export default class PhoneService {
     this.callInfo = {};
   }
 
-  initPhoneService() {
+  initPhoneService(accessToken = null) {
     this.queueIds = Array.from(
       new Set([
         process.env.VUE_APP_ENGLISH_PHONE_GATEWAY,
         process.env.VUE_APP_SPANISH_PHONE_GATEWAY,
       ]),
     );
+    let socketDest;
+    if (accessToken && this.agent_id) {
+      socketDest = `wss://c01-con.vacd.biz:8080/?access_token=${accessToken}&agent_id=${this.agent_id}`;
+    } else {
+      socketDest = `wss://c01-con.vacd.biz:8080/`;
+    }
     this.cf = new AgentLibrary({
       // Caution, this is prod
-      socketDest: 'wss://c01-con.vacd.biz:8080/', // 'ws://d01-test.cf.dev:8080',
+      socketDest, // 'ws://d01-test.cf.dev:8080',
       callbacks: {
         closeResponse: this.onCloseFunction.bind(this),
         openResponse: this.onOpenFunction,
@@ -152,11 +158,40 @@ export default class PhoneService {
     this.store.commit('phone_legacy/setCaller', caller);
   }
 
+  getAccessToken() {
+    const myHeaders = new Headers();
+    myHeaders.append('accept', '*/*');
+    myHeaders.append('accept-language', 'en-US,en;q=0.9,es;q=0.8,es-MX;q=0.7');
+    myHeaders.append(
+      'content-type',
+      'application/x-www-form-urlencoded;charset=UTF-8',
+    );
+
+    const raw = `username=${this.username}&password=${this.password}&platformId=aws80&redirectToApp=true`;
+
+    const requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow',
+    };
+
+    return fetch(
+      'https://engage.ringcentral.com/api/auth/login/agent',
+      requestOptions,
+    )
+      .then((response) => response.json())
+      .catch((error) => console.log('error', error));
+  }
+
   onCloseFunction() {
     Log.debug('AgentLibrary closed');
     this.loggedInAgentId = null;
     this.store.commit('phone_legacy/resetState');
-    this.initPhoneService();
+
+    this.getAccessToken().then((result) => {
+      this.initPhoneService(result.accessToken);
+    });
   }
 
   async onNewSession(info) {
@@ -217,7 +252,11 @@ export default class PhoneService {
     username = process.env.VUE_APP_PHONE_DEFAULT_USERNAME,
     password = process.env.VUE_APP_PHONE_DEFAULT_PASSWORD,
     state = 'AVAILABLE',
+    agentId = null,
   ) {
+    this.username = username;
+    this.password = password;
+    this.agent_id = agentId;
     const currentUser = User.find(this.store.getters['auth/userId']);
     return new Promise((resolve, reject) => {
       if (!currentUser.mobile) {

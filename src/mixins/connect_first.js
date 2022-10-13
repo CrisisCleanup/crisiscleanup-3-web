@@ -108,6 +108,7 @@ export default {
             this.currentAgent.agent_username,
             password,
             status,
+            this.currentAgent.agent_id,
           );
           this.$emit('onLoggedIn');
         } catch (e) {
