@@ -56,12 +56,13 @@
                 class=""
                 v-model="currentMessage"
               />
-              <div class="flex justify-between py-2">
-                <div class="mx-1 w-8 h-8">
-                  <base-checkbox v-model="urgent">
-                    {{ $t('chat.urgent') }}
-                  </base-checkbox>
-                </div>
+              <div class="flex items-center justify-between py-2">
+                <base-checkbox v-model="urgent">
+                  {{ $t('chat.urgent') }}
+                </base-checkbox>
+                <span class="italic cursor-pointer" @click="focusNewsTab">{{
+                  $t('~~chat.read_faq_first')
+                }}</span>
                 <div class="flex">
                   <base-button
                     class="h-8 w-8 bg-crisiscleanup-dark-blue"
@@ -264,6 +265,9 @@ export default {
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
+    },
+    focusNewsTab() {
+      this.$emit('focusNewsTab');
     },
   },
 };
