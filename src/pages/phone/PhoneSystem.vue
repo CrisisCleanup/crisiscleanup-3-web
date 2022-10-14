@@ -176,7 +176,6 @@
           <SimpleMap :map-loading="mapLoading" />
           <div class="phone-system__actions" ref="phoneButtons">
             <PhoneComponentButton
-              v-show="caller"
               name="caller"
               class="phone-system__action"
               component-class="phone-system__action-content phone-system__action-content--caller"
