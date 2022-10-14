@@ -272,16 +272,16 @@
       icon-size="medium"
       :alt="$t('casesVue.filters')"
       :action="
-                    () => {
-                      showingFilters = true;
-                    }
-                  "
+        () => {
+          showingFilters = true;
+        }
+      "
     >
       {{ $t('casesVue.filters') }}
       <span
         v-if="filtersCount > 0"
         class="rounded-full mx-2 px-1 bg-yellow-500 text-xs"
-      >{{ filtersCount }}</span
+        >{{ filtersCount }}</span
       >
     </base-button>
     <WorksiteFilters
@@ -296,9 +296,15 @@
   </div>
 </template>
 
-<script lang='ts'>
-import { defineComponent, computed, ref, onMounted } from '@vue/composition-api';
+<script lang="ts">
+import {
+  defineComponent,
+  computed,
+  ref,
+  onMounted,
+} from '@vue/composition-api';
 import * as L from 'leaflet';
+import { useGetters } from '@u3u/vue-hooks';
 import WorksiteFilters from '@/components/WorksiteFilters.vue';
 import LocationType from '@/models/LocationType';
 import Location from '@/models/Location';
@@ -306,7 +312,6 @@ import Team from '@/models/Team';
 import Incident from '@/models/Incident';
 import { getQueryString } from '@/utils/urls';
 import useHttp from '@/use/useHttp';
-import { useGetters } from '@u3u/vue-hooks';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
 
@@ -344,7 +349,7 @@ export default defineComponent({
     async function applyLocation(locationId, value) {
       if (value && props.map) {
         await Location.api().fetchById(locationId);
-        const location = Location.find(locationId);
+        const location = Location.find(locationId) as any;
         const geojsonFeature = {
           type: 'Feature',
           properties: location?.attr,
@@ -358,17 +363,17 @@ export default defineComponent({
         });
         polygon.addTo(props.map);
         props.map.fitBounds(polygon.getBounds());
-        appliedLocations.value = new Set(appliedLocations.value.add(locationId));
+        appliedLocations.value = new Set(
+          appliedLocations.value.add(locationId),
+        );
       } else {
         props.map.eachLayer((layer) => {
           if (layer.location_id && layer.location_id === locationId) {
             props.map.removeLayer(layer);
           }
         });
-        appliedLocations.value.delete(locationId)
-        appliedLocations.value = new Set(
-          appliedLocations.value,
-        );
+        appliedLocations.value.delete(locationId);
+        appliedLocations.value = new Set(appliedLocations.value);
       }
     }
     async function applyTeamGeoJson(team, value) {
@@ -392,17 +397,17 @@ export default defineComponent({
         });
         polygon.addTo(props.map);
         props.map.fitBounds(polygon.getBounds());
-        appliedLocations.value = new Set(appliedLocations.value.add(locationId));
+        appliedLocations.value = new Set(
+          appliedLocations.value.add(locationId),
+        );
       } else {
         props.map.eachLayer((layer) => {
           if (layer.location_id && layer.location_id === locationId) {
             props.map.removeLayer(layer);
           }
         });
-        appliedLocations.value.delete(locationId)
-        appliedLocations.value = new Set(
-          appliedLocations.value,
-        );
+        appliedLocations.value.delete(locationId);
+        appliedLocations.value = new Set(appliedLocations.value);
       }
     }
 
@@ -411,24 +416,28 @@ export default defineComponent({
         limit: 200,
         fields: 'id,name,type',
         incident_area: props.currentIncidentId,
-      }
-      const promiseArray: any = []
+      };
+      const promiseArray: any = [];
 
       const locationTypesMap = {
-        'boundary_political_us_congress': districts,
-        'boundary_political_us_state': usStates,
-        'boundary_political_us_county': counties
-      }
+        boundary_political_us_congress: districts,
+        boundary_political_us_state: usStates,
+        boundary_political_us_county: counties,
+      };
 
       Object.keys(locationTypesMap).forEach((type) => {
-        const promise = $http.get(`${process.env.VUE_APP_API_BASE_URL}/locations`, {
-          params: {
-            ...locationParams,
-            type__key: type
-          }
-        }).then((response) => locationTypesMap[type].value = response.data.results);
-        promiseArray.push(promise)
-      })
+        const promise = $http
+          .get(`${process.env.VUE_APP_API_BASE_URL}/locations`, {
+            params: {
+              ...locationParams,
+              type__key: type,
+            },
+          })
+          .then((response) => {
+            locationTypesMap[type].value = response.data.results;
+          });
+        promiseArray.push(promise);
+      });
 
       return Promise.any(promiseArray);
     }
@@ -455,10 +464,10 @@ export default defineComponent({
           ...filter.packFunction(),
         };
       });
-      filtersCount.value = f.count
+      filtersCount.value = f.count;
 
       showingFilters.value = false;
-      emit('updatedQuery', appliedFilters.value)
+      emit('updatedQuery', appliedFilters.value);
       // this.updateUserState();
     }
 
@@ -476,11 +485,27 @@ export default defineComponent({
       ]);
     });
 
-    return { handleFilters, filters, currentIncident, currentOrganization, organizationLocations, showingFilters, usStates, districts, counties, applyLocation, applyTeamGeoJson, appliedLocations, teams, locations, filtersCount };
+    return {
+      handleFilters,
+      filters,
+      currentIncident,
+      currentOrganization,
+      organizationLocations,
+      showingFilters,
+      usStates,
+      districts,
+      counties,
+      applyLocation,
+      applyTeamGeoJson,
+      appliedLocations,
+      teams,
+      locations,
+      filtersCount,
+    };
   },
   props: {
     map: { type: Object, default: null, required: false },
-    currentIncidentId: { type: String, default: null, required: false }
+    currentIncidentId: { type: String, default: null, required: false },
   },
 });
 </script>
