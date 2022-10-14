@@ -83,6 +83,7 @@ export const ICON_MAP = {
   logout: require('@/assets/icons/logout.svg'),
   plane: require('@/assets/icons/plane.svg'),
   news: require('@/assets/icons/news.svg'),
+  'sticky-note-solid': require('@/assets/icons/sticky-note-solid.svg'),
 };
 
 /* eslint-enable global-require */
