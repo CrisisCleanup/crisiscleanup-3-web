@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="worksite-notes">
     <div class="flex items-center justify-between">
       <label
         v-if="worksite.notes && worksite.notes.length > 0"
@@ -54,12 +54,15 @@
         type="link"
         :text="$t('caseView.add_note')"
         :alt="$t('caseView.add_note_alt')"
-        :action="
-          () => {
-            addingNotes = true;
-          }
-        "
-      />
+        :action="() => (addingNotes = true)"
+      >
+        <ccu-icon
+          type="sticky-note-solid"
+          class="text-primary-dark filter-yellow mr-1"
+          size="sm"
+        />
+        <span>{{ $t('caseView.add_note') }}</span>
+      </base-button>
 
       <div class="flex my-1">
         <badge
@@ -154,8 +157,13 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="postcss" scoped>
 .notes-time {
   color: #848f99;
+}
+
+.worksite-notes {
+  &__button {
+  }
 }
 </style>
