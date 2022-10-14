@@ -372,19 +372,21 @@ export default {
     this.ready = false;
     try {
       await Worksite.api().fetch(
-        this.$route.params.id,
-        this.$route.params.incident_id,
+        this.worksiteId || this.$route.params.id,
+        this.incidentId || this.$route.params.incident_id,
       );
     } catch (e) {
       await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/new`,
+        `/incident/${
+          this.incidentId || this.$route.params.incident_id
+        }/cases/new`,
       );
     } finally {
       this.ready = true;
     }
-    this.worksite = Worksite.find(this.$route.params.id);
+    this.worksite = Worksite.find(this.worksiteId || this.$route.params.id);
     if (this.$route.query.showOnMap) {
-      this.$emit('jumpToCase', this.$route.params.id);
+      this.$emit('jumpToCase', this.worksiteId || this.$route.params.id);
     }
     const organizationResults = await Organization.api().get(
       `/organizations?nearby_claimed=${this.worksite.longitude},${this.worksite.latitude}`,
@@ -409,22 +411,36 @@ export default {
         this.currentFlag.reason_t === 'flag.worksite_wrong_incident' &&
         this.newIncident
       ) {
-        await Worksite.api().patch(`/worksites/${this.$route.params.id}`, {
-          incident: this.newIncident,
-          skip_duplicate_check: true,
-        });
-        await this.$toasted.success(this.$t('flag.case_moved_success'));
-        this.$emit('reloadMap', this.$route.params.id);
-        await this.$router.push(
-          `/incident/${this.$route.params.incident_id}/cases/new`,
+        await Worksite.api().patch(
+          `/worksites/${this.worksiteId || this.$route.params.id}`,
+          {
+            incident: this.newIncident,
+            skip_duplicate_check: true,
+          },
         );
+        await this.$toasted.success(this.$t('flag.case_moved_success'));
+        this.$emit('reloadMap', this.worksiteId || this.$route.params.id);
+        if (!this.incidentId) {
+          await this.$router.push(
+            `/incident/${this.$route.params.incident_id}/cases/new`,
+          );
+        } else {
+          this.$emit('clearCase');
+        }
         return;
       }
 
-      await Worksite.api().addFlag(this.$route.params.id, this.currentFlag);
-      await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}`,
+      await Worksite.api().addFlag(
+        this.worksiteId || this.$route.params.id,
+        this.currentFlag,
       );
+      if (!this.incidentId) {
+        await this.$router.push(
+          `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}`,
+        );
+      } else {
+        this.$emit('reloadCase');
+      }
     },
     updateWorksite(value, key) {
       Worksite.update({
@@ -433,7 +449,7 @@ export default {
           [key]: value,
         },
       });
-      this.worksite = Worksite.find(this.$route.params.id);
+      this.worksite = Worksite.find(this.worksiteId || this.$route.params.id);
     },
     async updateWorksiteLocation() {
       const latLng = getGoogleMapsLocation(this.currentFlag.requested_action);
@@ -448,16 +464,34 @@ export default {
       );
       const what3words = await What3wordsService.getWords(lat, lng);
       const { location } = this.worksite;
-      this.$emit('jumpToCase', this.$route.params.id);
-      await Worksite.api().patch(`/worksites/${this.$route.params.id}`, {
-        location,
-        what3words,
-        skip_duplicate_check: true,
-      });
-      this.$emit('reloadMap');
-      await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}`,
+      this.$emit('jumpToCase', this.worksiteId || this.$route.params.id);
+      await Worksite.api().patch(
+        `/worksites/${this.worksiteId || this.$route.params.id}`,
+        {
+          location,
+          what3words,
+          skip_duplicate_check: true,
+        },
       );
+      this.$emit('reloadMap');
+
+      if (!this.incidentId) {
+        await this.$router.push(
+          `/incident/${this.$route.params.incident_id}/cases/${this.$route.params.id}`,
+        );
+      } else {
+        this.$emit('reloadCase');
+      }
+    },
+  },
+  props: {
+    worksiteId: {
+      type: String,
+      default: null,
+    },
+    incidentId: {
+      type: String,
+      default: null,
     },
   },
 };

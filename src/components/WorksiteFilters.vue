@@ -766,7 +766,10 @@ export default {
   methods: {
     updateFilters() {
       this.$emit('updatedFilters', {
-        ...this.filters,
+        filters: {
+          ...this.filters,
+        },
+        count: this.filtersCount,
       });
 
       // eslint-disable-next-line no-restricted-syntax
@@ -829,6 +832,11 @@ export default {
         ),
       };
     },
+  },
+  mounted() {
+    if (Object.keys(this.currentFilters).length === 0) {
+      this.clearAllFilters();
+    }
   },
 };
 </script>

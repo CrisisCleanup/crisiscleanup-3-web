@@ -24,8 +24,10 @@
       :pagination="meta.pagination"
       :sorter="meta.sorter"
       enable-pagination
+      :enable-selection="enableSelection"
       @change="getData"
       @rowClick="(payload) => $emit('rowClick', payload)"
+      @selectionChanged="(payload) => $emit('selectionChanged', payload)"
     >
       <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope"
         ><slot :name="slot" v-bind="scope"
@@ -81,6 +83,9 @@ export default defineComponent({
       required: true,
     },
     enableSearch: {
+      type: Boolean,
+    },
+    enableSelection: {
       type: Boolean,
     },
     columns: {

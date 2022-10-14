@@ -64,13 +64,19 @@ export default {
   async mounted() {
     await this.getNews();
   },
+  props: {
+    cmsTag: {
+      type: String,
+      default: 'phone-news',
+    },
+  },
   methods: {
     async getNews() {
       if (this.currentUser.states.news_last_seen) {
         const response = await this.$http.get(
-          `${
-            process.env.VUE_APP_API_BASE_URL
-          }/cms?tags=phone-news&publish_at__gt=${
+          `${process.env.VUE_APP_API_BASE_URL}/cms?tags=${
+            this.cmsTag
+          }&publish_at__gt=${
             this.currentUser.states.news_last_seen
           }&publish_at__lt=${this.$moment().toISOString()}&limit=1`,
         );
@@ -78,7 +84,7 @@ export default {
         this.$emit('unreadCount', response.data.count);
       }
       const response = await this.$http.get(
-        `${process.env.VUE_APP_API_BASE_URL}/cms?tags=phone-news&sort=-publish_at&limit=10`,
+        `${process.env.VUE_APP_API_BASE_URL}/cms?tags=${this.cmsTag}&sort=-publish_at&limit=10`,
       );
       this.news = response.data.results;
     },

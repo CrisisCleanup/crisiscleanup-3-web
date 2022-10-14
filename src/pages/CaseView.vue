@@ -539,18 +539,36 @@ export default {
       workTypesToClaim: new Set(),
     };
   },
+  props: {
+    worksiteId: {
+      type: String,
+      default: null,
+    },
+    incidentId: {
+      type: String,
+      default: null,
+    },
+    topHeight: {
+      type: Number,
+      default: 300,
+    },
+  },
   computed: {
     cssVars() {
-      const formHeight = `${this.worksite.flags.length ? '325' : '300'}px`;
+      let { topHeight } = this;
+      if (this.worksite.flags.length) {
+        topHeight += 25;
+      }
+      const formHeight = `${topHeight}px`;
       return {
         'grid-template-rows': `auto calc(100vh - ${formHeight} - var(--safe-area-inset-bottom)) 80px`,
       };
     },
     worksite() {
-      return Worksite.find(this.$route.params.id);
+      return Worksite.find(this.worksiteId || this.$route.params.id);
     },
     incident() {
-      return Incident.find(this.$route.params.incident_id);
+      return Incident.find(this.incidentId || this.$route.params.incident_id);
     },
     workTypesClaimedByOrganization() {
       if (this.worksite) {
@@ -605,7 +623,7 @@ export default {
     },
     worksiteRequests() {
       return WorksiteRequest.query()
-        .where('worksite', parseInt(this.$route.params.id))
+        .where('worksite', parseInt(this.worksiteId || this.$route.params.id))
         .get();
     },
     worksiteRequestWorkTypeIds() {
@@ -617,30 +635,38 @@ export default {
   async mounted() {
     try {
       await Worksite.api().fetch(
-        this.$route.params.id,
-        this.$route.params.incident_id,
+        this.worksiteId || this.$route.params.id,
+        this.incidentId || this.$route.params.incident_id,
       );
-
       await this.getWorksiteRequests();
+      this.$emit('caseLoaded');
 
       if (
         Number(this.worksite.incident) !==
-        Number(this.$route.params.incident_id)
+        Number(this.incidentId || this.$route.params.incident_id)
       ) {
-        await this.$router.push(
-          `/incident/${this.$route.params.incident_id}/cases/new`,
-        );
+        if (!this.incidentId) {
+          await this.$router.push(
+            `/incident/${this.$route.params.incident_id}/cases/new`,
+          );
+        } else {
+          this.$emit('onResetForm');
+        }
       }
     } catch (e) {
       if (e.response?.status === 404) {
         await this.$toasted.error(this.$t('caseView.deleted_notice'));
       }
-      await this.$router.push(
-        `/incident/${this.$route.params.incident_id}/cases/new`,
-      );
+      if (!this.incidentId) {
+        await this.$router.push(
+          `/incident/${this.$route.params.incident_id}/cases/new`,
+        );
+      } else {
+        this.$emit('onResetForm');
+      }
     }
     if (this.$route.query.showOnMap) {
-      this.$emit('jumpToCase', this.$route.params.id);
+      this.$emit('jumpToCase', this.worksiteId || this.$route.params.id);
     }
   },
   methods: {
@@ -668,7 +694,7 @@ export default {
     },
     async getWorksiteRequests() {
       const worksiteRequestParams = {
-        worksite_work_type__worksite: this.$route.params.id,
+        worksite_work_type__worksite: this.worksiteId || this.$route.params.id,
       };
 
       await WorksiteRequest.api().get(

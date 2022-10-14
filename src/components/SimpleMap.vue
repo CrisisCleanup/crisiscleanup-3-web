@@ -1,0 +1,146 @@
+<template>
+  <div id="map" ref="map" class="absolute top-0 left-0 right-0 bottom-0">
+    <div
+      v-if="mapLoading"
+      style="z-index: 1001"
+      class="
+        absolute
+        top-0
+        left-0
+        right-0
+        bottom-0
+        flex
+        items-center
+        justify-center
+      "
+    >
+      <spinner />
+    </div>
+    <div
+      v-if="showZoomButtons"
+      class="flex flex-col absolute"
+      style="z-index: 1001; top: 10px; left: 10px"
+    >
+      <div class="zoom-control flex flex-col mb-5">
+        <base-button
+          text=""
+          icon="plus"
+          icon-size="xs"
+          ccu-event="user_ui-zoom-in"
+          :title="$t('worksiteMap.zoom_in')"
+          :alt="$t('worksiteMap.zoom_in')"
+          :action="
+            () => {
+              $emit('onZoomIn');
+            }
+          "
+          class="
+            w-8
+            h-8
+            border-crisiscleanup-dark-100 border-t border-l border-r
+            bg-white
+            shadow-xl
+            text-xl text-crisiscleanup-dark-400
+          "
+        />
+        <base-button
+          text=""
+          icon="minus"
+          icon-size="xs"
+          ccu-event="user_ui-zoom-out"
+          :title="$t('worksiteMap.zoom_out')"
+          :alt="$t('worksiteMap.zoom_out')"
+          :action="
+            () => {
+              $emit('onZoomOut');
+            }
+          "
+          class="
+            w-8
+            h-8
+            border border-crisiscleanup-dark-100
+            bg-white
+            shadow-xl
+            text-xl text-crisiscleanup-dark-400
+          "
+        />
+      </div>
+      <base-button
+        v-tooltip="{
+          content: this.$t('worksiteMap.zoom_to_make_interactive'),
+          // show: showInteractivePopover,
+          trigger: 'hover',
+          classes: 'interactive-tooltip',
+          placement: 'right-start',
+        }"
+        text=""
+        :title="$t('worksiteMap.zoom_to_interactive')"
+        :alt="$t('worksiteMap.zoom_to_interactive')"
+        ccu-event="user_ui-zoom-details"
+        :action="
+          () => {
+            $emit('onZoomInteractive');
+          }
+        "
+        icon="tree"
+        icon-size="lg"
+        class="
+          w-8
+          h-8
+          border
+          my-1
+          border-crisiscleanup-dark-100
+          bg-white
+          shadow-xl
+          text-crisiscleanup-dark-400
+        "
+      />
+      <base-button
+        text=""
+        :title="$t('worksiteMap.zoom_to_incident')"
+        :alt="$t('worksiteMap.zoom_to_incident')"
+        icon="search-minus"
+        ccu-event="user_ui-zoom-all"
+        icon-size="lg"
+        :action="
+          () => {
+            $emit('onZoomIncidentCenter');
+          }
+        "
+        class="
+          w-8
+          h-8
+          border border-crisiscleanup-dark-100
+          my-1
+          bg-white
+          shadow-xl
+          text-crisiscleanup-dark-400
+        "
+      />
+    </div>
+    <WorksiteLegend
+      :available-work-types="availableWorkTypes"
+      :key="availableWorkTypes"
+      v-if="showZoomButtons"
+    />
+  </div>
+</template>
+<script>
+import WorksiteLegend from '@/components/WorksiteLegend';
+export default {
+  name: 'SimpleMap',
+  components: { WorksiteLegend },
+  props: {
+    mapLoading: {
+      type: Boolean,
+    },
+    showZoomButtons: {
+      type: Boolean,
+    },
+    availableWorkTypes: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+};
+</script>

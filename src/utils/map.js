@@ -100,6 +100,7 @@ export function getWorksiteLayer(
 ) {
   const pixiContainer = new Container();
   context.pixiContainer = pixiContainer;
+  context.$emit('setContainer', pixiContainer);
 
   const layer = (function () {
     let firstDraw = true;
@@ -111,6 +112,7 @@ export function getWorksiteLayer(
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     return L.pixiOverlay(
       function (utils) {
+        const displayedWorkTypes = {};
         const zoom = utils.getMap().getZoom();
         const center = utils.getMap().getCenter();
         if (frame) {
@@ -154,6 +156,7 @@ export function getWorksiteLayer(
             if (context.displayedWorkTypes) {
               context.displayedWorkTypes[workType?.work_type] = true;
             }
+            displayedWorkTypes[workType?.work_type] = true;
 
             const colorsKey = `${workType.status}_${
               workType.claimed_by ? 'claimed' : 'unclaimed'
@@ -201,6 +204,8 @@ export function getWorksiteLayer(
             // markerSprite.alpha = getOpacity(marker.updated_at);
           });
           context.displayedWorkTypes = { ...context.displayedWorkTypes };
+          context.$emit('onAvailableWorkTypes', displayedWorkTypes);
+
           const quadTrees = {};
           if (interactive) {
             for (let z = INTERACTIVE_ZOOM_LEVEL; z <= map.getMaxZoom(); z++) {

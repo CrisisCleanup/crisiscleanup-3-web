@@ -12,6 +12,8 @@ export default class Worksite extends CCUModel<Worksite> {
 
   name!: string;
 
+  case_number!: string;
+
   address!: string;
 
   city!: string;

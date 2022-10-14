@@ -45,7 +45,10 @@
           </div>
 
           <div class="modal-footer flex-shrink">
-            <div class="flex items-center justify-center py-2 border-t">
+            <div
+              class="flex items-center justify-center py-2 border-t"
+              v-if="Object.keys(actions).length === 0"
+            >
               <base-button
                 :alt="$t('actions.ok')"
                 variant="solid"
@@ -70,6 +73,29 @@
                 {{ $t('actions.cancel') }}
               </base-button>
             </div>
+            <div
+              class="flex items-center justify-end w-full"
+              v-if="Object.keys(actions).length > 0"
+            >
+              <base-button
+                v-for="(value, key) in actions"
+                :key="key"
+                :alt="value.text"
+                :variant="value.type"
+                class="px-6 p-3 mx-2"
+                :class="value.buttonClass"
+                :action="
+                  () => {
+                    $close({
+                      key,
+                      response,
+                    });
+                  }
+                "
+              >
+                {{ value.text }}
+              </base-button>
+            </div>
           </div>
         </div>
       </div>
@@ -88,6 +114,12 @@ export default {
     content: {
       type: String,
       default: '',
+    },
+    actions: {
+      type: Object,
+      default: () => {
+        return {};
+      },
     },
   },
   data() {

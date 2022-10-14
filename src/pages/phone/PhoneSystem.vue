@@ -173,7 +173,7 @@
       />
       <div class="phone-system__main-content">
         <div v-show="showingMap" class="phone-system__main-content--map">
-          <PhoneMap :map-loading="mapLoading" />
+          <SimpleMap :map-loading="mapLoading" />
           <div class="phone-system__actions" ref="phoneButtons">
             <PhoneComponentButton
               v-show="caller"
@@ -573,7 +573,7 @@ import PhoneOutbound from '@/models/PhoneOutbound';
 import { EventBus } from '@/event-bus';
 import GeneralStats from '@/components/phone/GeneralStats';
 import CallHistory from '@/components/phone/Widgets/CallHistory';
-import PhoneMap from '@/pages/phone/PhoneMap';
+import SimpleMap from '@/components/SimpleMap';
 import Leaderboard from '@/components/phone/Leaderboard';
 import Incident from '@/models/Incident';
 import Chat from '@/components/chat/Chat';
@@ -594,7 +594,7 @@ export default {
     PhoneNews,
     Chat,
     Leaderboard,
-    PhoneMap,
+    SimpleMap,
     CallHistory,
     GeneralStats,
     WorksiteSearchInput,

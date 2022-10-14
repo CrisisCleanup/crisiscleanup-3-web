@@ -1013,6 +1013,20 @@
             can-edit
             :is-viewing-worksite="isViewingWorksite"
             @onJumpToCase="jumpToCase"
+            @onFlagCase="
+          () => {
+            $router.push(
+              `/incident/${currentIncidentId}/cases/${$route.params.id}/flag`,
+            );
+          }
+        "
+            @onEditCase="
+          () => {
+            $router.push(
+              `/incident/${currentIncidentId}/cases/${$route.params.id}/edit`,
+            );
+          }
+        "
             @onDownloadWorksite="downloadWorksite"
             @onShowHistory="
               () => {
@@ -1630,7 +1644,7 @@ export default {
     },
 
     onUpdatedFilters(filters) {
-      this.handleFilters(filters);
+      this.handleFilters(filters.filters);
     },
 
     onMapMoved(bounds) {

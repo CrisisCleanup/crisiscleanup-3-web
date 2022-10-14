@@ -6,6 +6,7 @@ import CaseFlag from '@/pages/CaseFlag';
 import CaseForm from '@/pages/CaseForm';
 import CaseHistory from '@/pages/CaseHistory';
 import Cases from '@/pages/Cases';
+import Work from '@/pages/Work';
 import CaseView from '@/pages/CaseView';
 import Dashboard from '@/pages/Dashboard';
 import HomeRoutes from '@/pages/home/routes';
@@ -102,6 +103,24 @@ const routes = [
         component: CaseFlag,
         name: 'nav.case_flag',
         meta: { id: 'case_flag', noscroll: true },
+      },
+    ],
+  },
+  {
+    path: '/work',
+    component: Work,
+    name: 'nav.work',
+    meta: { id: 'work', layout: 'authenticated', noscroll: true },
+    children: [
+      {
+        path: ':id',
+        name: 'nav.work_view_case',
+        meta: { id: 'work_case_view', noscroll: true },
+      },
+      {
+        path: ':id/edit',
+        name: 'nav.work_edit_case',
+        meta: { id: 'work_case_edit', noscroll: true },
       },
     ],
   },

@@ -52,13 +52,7 @@
         size="small"
         class="p-1 py-2"
         type="flag"
-        @click.native="
-          () => {
-            $router.push(
-              `/incident/${currentIncidentId}/cases/${$route.params.id}/flag`,
-            );
-          }
-        "
+        @click.native="$emit('onFlagCase')"
       />
       <ccu-icon
         :alt="$t('actions.jump_to_case')"
@@ -97,18 +91,14 @@
         @click.native="$emit('onPrintWorksite')"
         data-cy="cases.icons.print"
       />
-      <router-link
+      <ccu-icon
         v-if="isViewingWorksite && canEdit"
-        :to="`/incident/${currentIncidentId}/cases/${$route.params.id}/edit`"
-      >
-        <ccu-icon
-          :alt="$t('actions.edit')"
-          class="border p-2 bg-primary-light"
-          size="small"
-          type="edit"
-          :linked="true"
-        />
-      </router-link>
+        :alt="$t('actions.edit')"
+        class="border p-2 bg-primary-light"
+        size="small"
+        type="edit"
+        @click.native="$emit('onEditCase')"
+      />
     </div>
   </div>
 </template>
