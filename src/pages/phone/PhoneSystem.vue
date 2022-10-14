@@ -144,13 +144,7 @@
             :placeholder="$t('actions.search')"
             size="medium"
             class="mx-2"
-            @selectedExisting="
-              (w) => {
-                $router.push({ query: { showOnMap: true } });
-                worksiteId = w.id;
-                isEditing = true;
-              }
-            "
+            @selectedExisting="onSelectExistingWorksite"
             @search="onSearch"
             @clear="onSearch"
           />
@@ -828,6 +822,21 @@ export default {
       this.showingTable = false;
       this[view] = true;
     },
+    onSelectExistingWorksite(worksite) {
+      // only show worksite on map if on map view
+      if (this.showingMap && !this.showingTable) {
+        console.log('pushing worksite to map', worksite);
+        this.$router.push({
+          query: { showOnMap: true },
+        });
+      } else {
+        this.$router.push({
+          query: {}, // clear query params
+        });
+      }
+      this.worksiteId = worksite.id;
+      this.isEditing = true;
+    },
     onSearch: debounce(
       async function (search) {
         this.searchingWorksites = true;
@@ -886,7 +895,6 @@ export default {
         }, 5000);
       }
     },
-
     onSelectMarker(marker) {
       this.isEditing = true;
       this.worksiteId = marker.id;
