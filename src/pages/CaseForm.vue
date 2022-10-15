@@ -664,7 +664,6 @@ export default {
 
       StorageService.removeItem('currentWorksite');
       this.ready = true;
-      this.$nextTick(() => this.calcFormStyle());
     },
     async saveNote(currentNote) {
       const notes = [...this.worksite.notes];
