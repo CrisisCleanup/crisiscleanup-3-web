@@ -135,7 +135,7 @@ export default {
   async mounted() {
     await this.createCards();
     this.$watch(
-      'isConnecting',
+      'isTransitioning',
       (newValue) => {
         if (newValue) {
           const startedConnecting = this.$moment().toISOString();
@@ -153,7 +153,11 @@ export default {
             Sentry.captureException(
               'Call is stuck connecting state for 45 seconds',
             );
-            this.resetPhoneSystem();
+            this.$toasted.error(
+              this.$t(
+                '~~We could not connect this call. It’s ok. We will try another shortly',
+              ),
+            );
           }, 45000);
         } else {
           clearTimeout(this.connectingTimeout);
