@@ -26,10 +26,10 @@
           class="text-lg font-bold m-2 ml-3 pt-1"
           v-if="sponsored === 'true'"
         >
-          {{ $t('~~Sponsored Reports') }}
+          {{ $t('reportsVue.sponsored_reports') }}
         </div>
         <div class="text-lg font-bold m-2 ml-3 pt-1" v-else>
-          {{ $t('~~Other Reports') }}
+          {{ $t('reportsVue.other_reports') }}
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-3">
           <div v-for="r in reportsGrouped[sponsored]" :key="`${r.id}`">
@@ -57,8 +57,8 @@
                       width="2.5rem"
                       height="1rem"
                       class="text-white bg-crisiscleanup-red-700 mx-1 p-4"
-                      :title="$t('~~New Badge')"
-                      >{{ $t('~~New') }}</badge
+                      :title="$t('reportsVue.new_badge')"
+                      >{{ $t('reportsVue.new') }}</badge
                     >
                     <img
                       v-else-if="sponsored !== 'true'"

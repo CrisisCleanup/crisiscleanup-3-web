@@ -154,9 +154,7 @@ export default {
               'Call is stuck connecting state for 45 seconds',
             );
             this.$toasted.error(
-              this.$t(
-                '~~We could not connect this call. It’s ok. We will try another shortly',
-              ),
+              this.$t('phoneDashboard.could_not_connect'),
             );
           }, 45000);
         } else {

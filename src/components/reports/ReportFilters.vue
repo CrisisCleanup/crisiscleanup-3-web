@@ -32,7 +32,7 @@
             multiple
             item-key="key"
             label="name_t"
-            :placeholder="$t('~~Filter by work type')"
+            :placeholder="$t('reports.filter_by_work_type')"
             :options="filteredWorkTypes"
             select-classes="bg-white border text-xs h-12 role-select p-1 form-multiselect"
           />

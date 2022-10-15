@@ -322,7 +322,7 @@
                   <base-checkbox
                     v-model="currentUser.preferences.enable_worksite_caching"
                   >
-                    {{ $t('~~Enable Worksite Caching') }}
+                    {{ $t('profileUser.enable_worksite_caching') }}
                   </base-checkbox>
                 </div>
               </div>

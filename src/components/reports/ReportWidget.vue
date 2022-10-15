@@ -37,7 +37,7 @@
             reloadUserWidgets();
           }
         "
-        >{{ $t('~~Add to dashboard') }}</base-checkbox
+        >{{ $t('reports.add_to_dashboard') }}</base-checkbox
       >
     </div>
     <div v-if="value.type === 'pie'" class="grid grid-flow-col">
@@ -86,7 +86,7 @@
       class="underline text-primary-dark cursor-pointer mb-2"
     >
       {{
-        showDescription ? $t('~~Hide Description') : $t('~~Show Description')
+        showDescription ? $t('actions.hide_description') : $t('actions.show_description')
       }}
     </div>
     <div
