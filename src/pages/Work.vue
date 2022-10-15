@@ -236,7 +236,7 @@
           :worksite-id="worksiteId"
         ></CaseHistory>
         <CaseFlag
-          v-if="showFlags"
+          v-else-if="showFlags"
           :incident-id="currentIncidentId"
           :worksite-id="worksiteId"
           @reloadCase="
