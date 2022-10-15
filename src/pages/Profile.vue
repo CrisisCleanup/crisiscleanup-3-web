@@ -317,6 +317,14 @@
                 <p class="my-3">
                   {{ $t('profileUser.clear_favorites_user_settings') }}
                 </p>
+
+                <div class="extra-settings">
+                  <base-checkbox
+                    v-model="currentUser.preferences.enable_worksite_caching"
+                  >
+                    {{ $t('~~Enable Worksite Caching') }}
+                  </base-checkbox>
+                </div>
               </div>
             </div>
           </div>

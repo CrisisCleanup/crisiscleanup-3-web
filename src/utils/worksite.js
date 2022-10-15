@@ -1,8 +1,26 @@
 import moment from 'moment';
 import axios from 'axios';
 import { DbService } from '@/services/db.service';
+import useUser from '@/use/user/useUser';
+
+const loadCases = async (query) => {
+  const response = await axios.get(
+    `${process.env.VUE_APP_API_BASE_URL}/worksites_all`,
+    {
+      params: {
+        ...query,
+      },
+    },
+  );
+  return response.data;
+};
 
 const loadCasesCached = async (query) => {
+  const { currentUser } = useUser();
+  if (!currentUser?.value?.preferences.enable_worksite_caching) {
+    return loadCases(query);
+  }
+
   const hashCode = (str) =>
     str
       .split('')
@@ -58,4 +76,5 @@ const loadCasesCached = async (query) => {
   await DbService.setItem(`casesUpdated:${queryHash}`, moment().toISOString());
   return response.data;
 };
-export { loadCasesCached };
+
+export { loadCasesCached, loadCases };
