@@ -1,20 +1,24 @@
 const { openDB } = require('idb');
 const dbPromise = openDB('crisiscleanup', 1, {
   upgrade(db) {
-    db.createObjectStore('worksite');
+    db.createObjectStore('keyval');
   },
 });
 
 const DbService = {
   async setItem(key, val) {
     const idbpDatabase = await dbPromise;
-    return idbpDatabase.put('worksite', val, key);
+    return idbpDatabase.put('keyval', val, key);
   },
   async getItem(key) {
     const idbpDatabase = await dbPromise;
-    const entry = await idbpDatabase.get('worksite', key);
+    const entry = await idbpDatabase.get('keyval', key);
     if (entry) {
-      return entry;
+      try {
+        return JSON.parse(entry);
+      } catch (e) {
+        return entry;
+      }
     }
     return null;
   },
