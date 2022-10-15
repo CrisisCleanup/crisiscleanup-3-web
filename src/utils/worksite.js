@@ -16,6 +16,7 @@ const loadCases = async (query) => {
 };
 
 const loadCasesCached = async (query) => {
+  await DbService.init();
   const { currentUser } = useUser();
   if (!currentUser?.value?.preferences.enable_worksite_caching) {
     return loadCases(query);

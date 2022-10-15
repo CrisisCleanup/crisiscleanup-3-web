@@ -174,7 +174,9 @@
           () => {
             isViewing = false;
             isEditing = true;
-            router.push(`/work/${worksite.id}/edit`);
+            router.push(
+              `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
+            );
           }
         "
         @onShowHistory="
@@ -269,7 +271,9 @@
             (worksite) => {
               worksiteId = worksite.id;
               isEditing = true;
-              router.push(`/work/${worksite.id}/edit`);
+              router.push(
+                `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
+              );
             }
           "
           @closeWorksite="clearCase"
@@ -278,7 +282,9 @@
             (id) => {
               worksiteId = id;
               isEditing = true;
-              router.push(`/work/${worksite.id}/edit`);
+              router.push(
+                `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
+              );
             }
           "
           @geocoded="addMarkerToMap"
@@ -659,7 +665,7 @@ export default defineComponent({
     function loadCase(data) {
       isViewing.value = true;
       worksiteId.value = data.id;
-      router.push(`/work/${data.id}`);
+      router.push(`/incident/${currentIncidentId.value}/work/${data.id}`);
     }
 
     function loadMap(markers) {
@@ -739,12 +745,15 @@ export default defineComponent({
           worksiteId.value = null;
           isEditing.value = false;
           isViewing.value = false;
-          router.push(`/work`);
+          router.push(`/incident/${currentIncidentId.value}/work`);
         }
       },
     );
 
     onMounted(async () => {
+      if (route.value.params.incident_id) {
+        setCurrentIncidentId(route.value.params.incident_id);
+      }
       if (route.value.params.id) {
         worksiteId.value = route.value.params.id;
         if (route?.value?.meta?.id === 'work_case_edit') {

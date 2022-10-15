@@ -107,7 +107,7 @@ const routes = [
     ],
   },
   {
-    path: '/work',
+    path: '/incident/:incident_id/work',
     component: Work,
     name: 'nav.work',
     meta: { id: 'work', layout: 'authenticated', noscroll: true },
@@ -283,6 +283,7 @@ function patchRouterMethod(r, methodName) {
       if (
         error.message.includes(
           'Avoided redundant navigation to current location',
+          'Navigation cancelled',
         )
       ) {
         return this.currentRoute;

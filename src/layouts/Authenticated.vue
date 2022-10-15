@@ -168,6 +168,12 @@ export default {
         to: `/incident/${currentIncidentId.value}/cases/new`,
       },
       {
+        key: 'work',
+        to: `/incident/${currentIncidentId.value}/work`,
+        icon: 'cases',
+        text: $t('~~Work (Simplified)'),
+      },
+      {
         key: 'phone',
         icon: 'phone',
         text: $t('nav.phone'),
