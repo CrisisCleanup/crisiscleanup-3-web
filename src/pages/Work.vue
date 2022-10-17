@@ -265,7 +265,7 @@
           :worksite-id="worksiteId"
           :key="worksiteId"
           @jumpToCase="jumpToCase"
-          disable-claim-and-save
+          :disable-claim-and-save="false"
           :is-editing="isEditing"
           @savedWorksite="
             (worksite) => {
