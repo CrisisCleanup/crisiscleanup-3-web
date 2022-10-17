@@ -203,33 +203,11 @@
             can-edit
             :is-viewing-worksite="isViewing"
             @onJumpToCase="jumpToCase"
-            @onDownloadWorksite="
-              () => {
-                downloadWorksites([worksite.id]);
-              }
-            "
+            @onDownloadWorksite="downloadWorksites([worksite.id])"
             @onPrintWorksite="printWorksite"
-            @onFlagCase="
-              () => {
-                showFlags = true;
-                showHistory = false;
-              }
-            "
-            @onEditCase="
-              () => {
-                isViewing = false;
-                isEditing = true;
-                router.push(
-                  `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
-                );
-              }
-            "
-            @onShowHistory="
-              () => {
-                showFlags = false;
-                showHistory = true;
-              }
-            "
+            @onFlagCase="handleFlagCase"
+            @onEditCase="handleEditCase"
+            @onShowHistory="handleShowHistory"
           />
           <CaseView
             :worksite-id="worksiteId"
@@ -735,6 +713,28 @@ export default defineComponent({
       }
     }
 
+    function handleFlagCase() {
+      showFlags.value = true;
+      showHistory.value = false;
+    }
+
+    function handleEditCase() {
+      if (!worksite.value) {
+        console.error('No worksite to edit');
+        return;
+      }
+      isViewing.value = false;
+      isEditing.value = true;
+      router.push(
+        `/incident/${currentIncidentId.value}/work/${worksite.value.id}/edit`,
+      );
+    }
+
+    function handleShowHistory() {
+      showFlags.value = false;
+      showHistory.value = true;
+    }
+
     watch(
       () => worksiteQuery.value,
       (value) => {
@@ -812,6 +812,9 @@ export default defineComponent({
       goToInteractive,
       reloadCase,
       availableWorkTypes,
+      handleFlagCase,
+      handleEditCase,
+      handleShowHistory,
     };
   },
 });
