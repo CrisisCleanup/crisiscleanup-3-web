@@ -6,6 +6,7 @@ import Incident from '@/models/Incident';
 import PhoneOutbound from '@/models/PhoneOutbound';
 import { getErrorMessage } from '@/utils/errors';
 import { CallType } from '@/models/phone/Contact';
+import Worksite from '@/models/Worksite';
 
 export default {
   data() {
@@ -182,7 +183,11 @@ export default {
         `${process.env.VUE_APP_API_BASE_URL}/phone_dnis/${outbound.dnis1}`,
       );
       const caller = dnisResponse.data;
-      this.setCallType(CallType.OUTBOUND);
+      let callType = outbound.call_type.toUpperCase();
+      if (callType !== 'CALLDOWN') {
+        callType = CallType.OUTBOUND;
+      }
+      this.setCallType(callType);
       this.setOutgoingCall(outbound);
       this.setCurrentCall(outbound);
       this.setCaller(caller);
@@ -214,6 +219,9 @@ export default {
         const outbound = await PhoneOutbound.api().getNextOutbound({
           incidentId: this.currentIncidentId,
         });
+        if (outbound.worksite) {
+          await Worksite.api().fetch(outbound.worksite);
+        }
         await this.createOutboundCall(outbound, outbound.phone_number);
       } finally {
         this.dialing = false;

@@ -133,7 +133,6 @@ export default {
     };
   },
   async mounted() {
-    await this.createCards();
     this.$watch(
       'isTransitioning',
       (newValue) => {
@@ -171,12 +170,13 @@ export default {
     setCase(caseObject) {
       this.$emit('setCase', caseObject);
     },
-    async createCards() {
-      if (this.caller) {
-        const cases = this.caller.worksites;
-        this.cards = cases.map((w) => {
-          const c = new Worksite(w);
-          return {
+  },
+  watch: {
+    call(newValue) {
+      if (newValue && newValue.worksite) {
+        const c = Worksite.find(newValue.worksite);
+        this.cards = [
+          {
             name: c.name,
             caseNumber: c.case_number ? c.case_number : `PDA-${c.id}`,
             address: c.short_address,
@@ -186,8 +186,9 @@ export default {
             id: c.id,
             type: c.case_number ? 'worksite' : 'pda',
             incident: c.incident,
-          };
-        });
+            updated_at: c.updated_at,
+          },
+        ];
       }
     },
   },
@@ -199,7 +200,7 @@ export default {
       return useScripts({
         callType: this.callType,
         incident: this.currentIncident,
-        recentWorksite: null,
+        recentWorksite: this.cards[0],
       });
     },
   },
