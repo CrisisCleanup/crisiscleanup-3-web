@@ -151,13 +151,14 @@
     </div>
     <div class="work-page__form">
       <tabs
+        ref="formTabs"
         class="absolute inset-0 flex flex-col"
         classes=""
         tab-classes="py-3"
         tab-active-classes="bg-gray-100 border-b-2 border-yellow-500"
         tab-details-classes="flex-grow relative"
       >
-        <tab :name="$t('~~work.case_new')">
+        <tab :name="$t('~~work.case_new')" ref="newCaseTab">
           <CaseForm
             ref="worksiteForm"
             :incident-id="String(currentIncidentId)"
@@ -192,7 +193,8 @@
           />
         </tab>
         <tab
-          v-if="isViewing"
+          v-if="worksite"
+          ref="caseInfoTab"
           :name="$t('~~work.case_view')"
           class="overflow-auto absolute inset-0"
         >
@@ -209,54 +211,6 @@
             @onEditCase="handleEditCase"
             @onShowHistory="handleShowHistory"
           />
-          <CaseView
-            :worksite-id="worksiteId"
-            :incident-id="currentIncidentId"
-            :key="worksiteId"
-            :top-height="225"
-            @closeWorksite="clearCase"
-            @onResetForm="clearCase"
-            @image-click="showImage"
-            @changeImg="changeImage"
-          />
-        </tab>
-        <tab v-if="showHistory || showFlags" :name="$t('~~work.case_history')">
-          <CaseHeader
-            v-if="worksite"
-            :worksite="worksite"
-            class="p-2 border-l border-r"
-            can-edit
-            :is-viewing-worksite="isViewing"
-            @onJumpToCase="jumpToCase"
-            @onDownloadWorksite="
-              () => {
-                downloadWorksites([worksite.id]);
-              }
-            "
-            @onPrintWorksite="printWorksite"
-            @onFlagCase="
-              () => {
-                showFlags = true;
-                showHistory = false;
-              }
-            "
-            @onEditCase="
-              () => {
-                isViewing = false;
-                isEditing = true;
-                router.push(
-                  `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
-                );
-              }
-            "
-            @onShowHistory="
-              () => {
-                showFlags = false;
-                showHistory = true;
-              }
-            "
-          />
-
           <CaseHistory
             v-if="showHistory"
             :incident-id="currentIncidentId"
@@ -274,6 +228,17 @@
             "
             @clearCase="clearCase"
           ></CaseFlag>
+          <CaseView
+            v-else-if="isViewing"
+            :worksite-id="worksiteId"
+            :incident-id="currentIncidentId"
+            :key="worksiteId"
+            :top-height="225"
+            @closeWorksite="clearCase"
+            @onResetForm="clearCase"
+            @image-click="showImage"
+            @changeImg="changeImage"
+          />
         </tab>
       </tabs>
     </div>
@@ -375,6 +340,11 @@ export default defineComponent({
     const filters = ref<any>({});
     const selectedTableItems = ref([]);
     const availableWorkTypes = ref({});
+
+    // tab refs
+    const formTabs = ref<any>(null);
+    const caseInfoTab = ref<any>(null);
+    const newCaseTab = ref<any>(null);
 
     const showTable = () => {
       showingTable.value = true;
@@ -745,6 +715,15 @@ export default defineComponent({
     );
 
     watch(
+      () => worksite.value,
+      (value, oldValue) => {
+        if (value && value.id !== oldValue?.id) {
+          formTabs.value.selectTab(caseInfoTab.value);
+        }
+      },
+    );
+
+    watch(
       () => currentIncidentId.value,
       (value) => {
         if (value) {
@@ -787,6 +766,9 @@ export default defineComponent({
       selectedChat,
       showingMap,
       mapLoading,
+      formTabs,
+      caseInfoTab,
+      newCaseTab,
       showMap,
       showTable,
       router,
