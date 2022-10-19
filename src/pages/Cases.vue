@@ -1014,19 +1014,19 @@
             :is-viewing-worksite="isViewingWorksite"
             @onJumpToCase="jumpToCase"
             @onFlagCase="
-          () => {
-            $router.push(
-              `/incident/${currentIncidentId}/cases/${$route.params.id}/flag`,
-            );
-          }
-        "
+              () => {
+                $router.push(
+                  `/incident/${currentIncidentId}/cases/${$route.params.id}/flag`,
+                );
+              }
+            "
             @onEditCase="
-          () => {
-            $router.push(
-              `/incident/${currentIncidentId}/cases/${$route.params.id}/edit`,
-            );
-          }
-        "
+              () => {
+                $router.push(
+                  `/incident/${currentIncidentId}/cases/${$route.params.id}/edit`,
+                );
+              }
+            "
             @onDownloadWorksite="downloadWorksite"
             @onShowHistory="
               () => {

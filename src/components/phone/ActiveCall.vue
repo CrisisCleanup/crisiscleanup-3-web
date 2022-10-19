@@ -152,9 +152,7 @@ export default {
             Sentry.captureException(
               'Call is stuck connecting state for 45 seconds',
             );
-            this.$toasted.error(
-              this.$t('phoneDashboard.could_not_connect'),
-            );
+            this.$toasted.error(this.$t('phoneDashboard.could_not_connect'));
           }, 45000);
         } else {
           clearTimeout(this.connectingTimeout);

@@ -88,6 +88,7 @@
     "idb": "^7.1.0",
     "jest-environment-jsdom": "^28.1.1",
     "jwt-decode": "^2.2.0",
+    "kdbush": "^3.0.0",
     "leaflet": "^1.7.1",
     "leaflet-draw": "^1.0.4",
     "leaflet-loading": "^0.1.24",

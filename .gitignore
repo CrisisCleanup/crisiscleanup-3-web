@@ -136,3 +136,4 @@ modules.xml
 
 # Quokka
 .quokka
+/deploy.sh

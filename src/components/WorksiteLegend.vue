@@ -92,14 +92,7 @@
 </template>
 
 <script>
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  ref,
-  watch,
-  nextTick,
-} from '@vue/composition-api';
+import { computed, ref } from '@vue/composition-api';
 import usei18n from '@/use/usei18n';
 import { colors, templates } from '@/icons/icons_templates';
 

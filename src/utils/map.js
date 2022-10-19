@@ -475,8 +475,6 @@ export function getMarkerLayer(markers, map, context) {
           frame = requestAnimationFrame(animate);
         }
         firstDraw = false;
-        // prevZoom = zoom;
-        // prevCenter = center;
         renderer.render(container);
       },
       pixiContainer,

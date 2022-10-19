@@ -86,7 +86,9 @@
       class="underline text-primary-dark cursor-pointer mb-2"
     >
       {{
-        showDescription ? $t('actions.hide_description') : $t('actions.show_description')
+        showDescription
+          ? $t('actions.hide_description')
+          : $t('actions.show_description')
       }}
     </div>
     <div

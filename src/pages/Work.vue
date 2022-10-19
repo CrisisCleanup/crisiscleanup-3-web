@@ -324,7 +324,7 @@ import CaseForm from '@/pages/CaseForm.vue';
 import { loadCasesCached } from '@/utils/worksite';
 import {
   averageGeolocation,
-  getWorksiteLayer,
+  getMarkerLayer,
   mapAttribution,
   mapTileLayer,
 } from '@/utils/map';
@@ -338,6 +338,9 @@ import Loader from '@/components/Loader.vue';
 import Incident from '@/models/Incident';
 import CaseFlag from '@/pages/CaseFlag.vue';
 import PhoneNews from '@/components/phone/PhoneNews.vue';
+import useRenderedMarkers from '@/use/worksites/useRenderedMarkers';
+
+const INTERACTIVE_ZOOM_LEVEL = 12;
 
 export default defineComponent({
   name: 'Work',
@@ -521,13 +524,16 @@ export default defineComponent({
 
       if (locationModels.length) {
         goToIncidentCenter();
-        map.value.setZoom(12);
+        map.value.setZoom(INTERACTIVE_ZOOM_LEVEL);
       } else {
         const center = averageGeolocation(
           pixiContainer?.value?.children.map((marker) => [marker.x, marker.y]),
         );
         if (center.latitude && center.longitude) {
-          map.value.setView([center.latitude, center.longitude], 12);
+          map.value.setView(
+            [center.latitude, center.longitude],
+            INTERACTIVE_ZOOM_LEVEL,
+          );
         }
       }
     }
@@ -632,9 +638,6 @@ export default defineComponent({
       const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
         map.value,
       );
-      // marker.on('dragend', function (event) {
-      //   EventBus.$emit('updatedWorksiteLocation', event.target.getLatLng());
-      // });
       map.value.setView([markerLocation.lat, markerLocation.lng], 15);
       marker
         .bindTooltip($t('casesVue.drag_pin_to_correct_location'), {
@@ -668,6 +671,14 @@ export default defineComponent({
       router.push(`/incident/${currentIncidentId.value}/work/${data.id}`);
     }
 
+    function removeLayer(key) {
+      map.value.eachLayer((layer) => {
+        if (layer.key === key) {
+          map.value.removeLayer(layer);
+        }
+      });
+    }
+
     function loadMap(markers) {
       if (!map.value) {
         map.value = L.map('map', {
@@ -684,27 +695,34 @@ export default defineComponent({
           noWrap: false,
         }).addTo(map.value);
       }
-      const worksiteLayer = getWorksiteLayer(
-        markers,
-        map.value,
-        {
-          $emit(event, data) {
-            if (event === 'setContainer') {
-              pixiContainer.value = data;
-            }
-            if (event === 'onSelectmarker') {
-              loadCase(data);
-            }
-            if (event === 'onAvailableWorkTypes') {
-              availableWorkTypes.value = { ...data };
-            }
-          },
-          map: map.value,
-        },
-        true,
-      );
+
+      removeLayer('marker_layer');
+      const worksiteLayer = getMarkerLayer([], map, {});
       worksiteLayer.addTo(map.value);
-      worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
+
+      const { workTypes, findMarker } = useRenderedMarkers(map.value, markers);
+      availableWorkTypes.value = workTypes.value;
+
+      map.value.on('click', function (e) {
+        const marker = findMarker(e.latlng);
+        if (marker) {
+          loadCase(marker);
+        }
+      });
+
+      map.value.on(
+        'mousemove',
+        L.Util.throttle((e) => {
+          const marker = findMarker(e.latlng) as any;
+          if (marker) {
+            L.DomUtil.addClass(worksiteLayer._container, 'cursor-pointer');
+            worksiteLayer._container.setAttribute('title', marker.case_number);
+          } else {
+            L.DomUtil.removeClass(worksiteLayer._container, 'cursor-pointer');
+            worksiteLayer._container.setAttribute('title', '');
+          }
+        }, 32),
+      );
 
       nextTick(() => {
         // Add this slight pan to re-render map
@@ -718,11 +736,7 @@ export default defineComponent({
 
     function reloadMap() {
       if (map.value) {
-        map.value.eachLayer((layer) => {
-          if (layer.key === 'worksite_layer') {
-            map.value.removeLayer(layer);
-          }
-        });
+        removeLayer('marker_layer');
         getWorksites().then((markers) => {
           loadMap(markers);
         });
