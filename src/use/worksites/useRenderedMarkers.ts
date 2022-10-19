@@ -96,11 +96,11 @@ export default (map, markers) => {
   }
 
   function calcDist(a, b) {
-    const p1 = map.value.latLngToContainerPoint([
+    const p1 = map.latLngToContainerPoint([
       a.geometry.coordinates[1],
       a.geometry.coordinates[0],
     ]);
-    const p2 = map.value.latLngToContainerPoint([
+    const p2 = map.latLngToContainerPoint([
       b.geometry.coordinates[1],
       b.geometry.coordinates[0],
     ]);
