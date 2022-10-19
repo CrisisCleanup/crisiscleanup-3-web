@@ -1070,7 +1070,7 @@ export default {
 <style lang="postcss" scoped>
 .phone-system {
   @apply grid flex-grow h-full;
-  grid-template-columns: auto 350px;
+  grid-template-columns: auto 450px;
 
   &__actions {
     @apply absolute top-0 right-0 flex flex-col;

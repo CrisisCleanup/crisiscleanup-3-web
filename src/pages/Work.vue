@@ -1,6 +1,5 @@
 <template>
   <div class="work-page">
-    <!-- TODO: Move this (doesn't belong here) -->
     <div class="work-page__main">
       <div class="work-page__main-header">
         <div class="flex py-3 px-2" style="min-width: 80px">
@@ -151,147 +150,97 @@
       </div>
     </div>
     <div class="work-page__form">
-      <CaseHeader
-        v-if="worksite"
-        :worksite="worksite"
-        class="p-2 border-l border-r"
-        can-edit
-        :is-viewing-worksite="isViewing"
-        @onJumpToCase="jumpToCase"
-        @onDownloadWorksite="
-          () => {
-            downloadWorksites([worksite.id]);
-          }
-        "
-        @onPrintWorksite="printWorksite"
-        @onFlagCase="
-          () => {
-            showFlags = true;
-            showHistory = false;
-          }
-        "
-        @onEditCase="
-          () => {
-            isViewing = false;
-            isEditing = true;
-            router.push(
-              `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
-            );
-          }
-        "
-        @onShowHistory="
-          () => {
-            showFlags = false;
-            showHistory = true;
-          }
-        "
-      />
-      <div v-else class="work-page__form-header">
-        <div class="flex items-center cursor-pointer">
-          <ccu-icon
-            :alt="$t('casesVue.new_case')"
-            type="active"
-            size="small"
-            :action="() => selectCase(null)"
+      <tabs
+        ref="formTabs"
+        class="absolute inset-0 flex flex-col"
+        classes=""
+        tab-classes="py-3"
+        tab-active-classes="bg-gray-100 border-b-2 border-yellow-500"
+        tab-details-classes="flex-grow relative"
+      >
+        <tab :name="$t('~~work.case_new')" ref="newCaseTab">
+          <CaseForm
+            ref="worksiteForm"
+            :incident-id="String(currentIncidentId)"
+            :worksite-id="worksiteId"
+            :key="worksiteId"
+            @jumpToCase="jumpToCase"
+            :disable-claim-and-save="false"
+            :is-editing="isEditing"
+            @savedWorksite="
+              (worksite) => {
+                worksiteId = worksite.id;
+                isEditing = true;
+                router.push(
+                  `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
+                );
+              }
+            "
+            @closeWorksite="clearCase"
+            class="border shadow"
+            @navigateToWorksite="
+              (id) => {
+                worksiteId = id;
+                isEditing = true;
+                router.push(
+                  `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
+                );
+              }
+            "
+            @geocoded="addMarkerToMap"
+            @image-click="showImage"
+            @changeImg="changeImage"
           />
-          <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
-        </div>
-        <base-button
-          v-if="$mq === 'sm'"
-          type="bare"
-          icon="map"
-          class="text-gray-700 pt-2"
-          :action="
-            () => {
-              showMobileMap = true;
-              $nextTick(() => {
-                map.invalidateSize();
-              });
-            }
-          "
-          :text="$t('casesVue.show_map')"
-        />
-      </div>
-      <div v-if="showingDetails" class="work-page__form-toggler">
-        <base-button
-          icon="arrow-left"
-          icon-size="medium"
-          :action="
-            () => {
-              showHistory = false;
-              showFlags = false;
-            }
-          "
-        />
-        <span class="text-base" v-if="showHistory">{{
-          $t('actions.history')
-        }}</span>
-        <span class="text-base" v-if="showFlags">{{ $t('actions.flag') }}</span>
-        <div></div>
-      </div>
-      <div class="work-page__form-body">
-        <CaseHistory
-          v-if="showHistory"
-          :incident-id="currentIncidentId"
-          :worksite-id="worksiteId"
-        ></CaseHistory>
-        <CaseFlag
-          v-else-if="showFlags"
-          :incident-id="currentIncidentId"
-          :worksite-id="worksiteId"
-          @reloadCase="
-            () => {
-              reloadCase();
-              showFlags = false;
-            }
-          "
-          @clearCase="clearCase"
-        ></CaseFlag>
-        <CaseView
-          v-else-if="isViewing"
-          :worksite-id="worksiteId"
-          :incident-id="currentIncidentId"
-          :key="worksiteId"
-          :top-height="225"
-          @closeWorksite="clearCase"
-          @onResetForm="clearCase"
-          @image-click="showImage"
-          @changeImg="changeImage"
-        />
-        <CaseForm
-          v-else
-          ref="worksiteForm"
-          :incident-id="String(currentIncidentId)"
-          :worksite-id="worksiteId"
-          :key="worksiteId"
-          @jumpToCase="jumpToCase"
-          disable-claim-and-save
-          :is-editing="isEditing"
-          @savedWorksite="
-            (worksite) => {
-              worksiteId = worksite.id;
-              isEditing = true;
-              router.push(
-                `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
-              );
-            }
-          "
-          @closeWorksite="clearCase"
-          class="border shadow"
-          @navigateToWorksite="
-            (id) => {
-              worksiteId = id;
-              isEditing = true;
-              router.push(
-                `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
-              );
-            }
-          "
-          @geocoded="addMarkerToMap"
-          @image-click="showImage"
-          @changeImg="changeImage"
-        />
-      </div>
+        </tab>
+        <tab
+          v-if="worksite"
+          ref="caseInfoTab"
+          :name="$t('~~work.case_view')"
+          class="overflow-auto absolute inset-0"
+        >
+          <CaseHeader
+            v-if="worksite"
+            :worksite="worksite"
+            class="p-2 border-l border-r"
+            can-edit
+            :is-viewing-worksite="isViewing"
+            @onJumpToCase="jumpToCase"
+            @onDownloadWorksite="downloadWorksites([worksite.id])"
+            @onPrintWorksite="printWorksite"
+            @onFlagCase="handleFlagCase"
+            @onEditCase="handleEditCase"
+            @onShowHistory="handleShowHistory"
+          />
+          <CaseHistory
+            v-if="showHistory"
+            :incident-id="currentIncidentId"
+            :worksite-id="worksiteId"
+          ></CaseHistory>
+          <CaseFlag
+            v-else-if="showFlags"
+            :incident-id="currentIncidentId"
+            :worksite-id="worksiteId"
+            @reloadCase="
+              () => {
+                reloadCase();
+                showFlags = false;
+              }
+            "
+            @clearCase="clearCase"
+          ></CaseFlag>
+          <CaseView
+            v-else-if="isViewing"
+            :worksite-id="worksiteId"
+            :incident-id="currentIncidentId"
+            :key="worksiteId"
+            :top-height="225"
+            @closeWorksite="clearCase"
+            @onResetForm="clearCase"
+            @image-click="showImage"
+            @changeImg="changeImage"
+          />
+        </tab>
+      </tabs>
     </div>
   </div>
 </template>
@@ -394,6 +343,11 @@ export default defineComponent({
     const filters = ref<any>({});
     const selectedTableItems = ref([]);
     const availableWorkTypes = ref({});
+
+    // tab refs
+    const formTabs = ref<any>(null);
+    const caseInfoTab = ref<any>(null);
+    const newCaseTab = ref<any>(null);
 
     const showTable = () => {
       showingTable.value = true;
@@ -743,11 +697,42 @@ export default defineComponent({
       }
     }
 
+    function handleFlagCase() {
+      showFlags.value = true;
+      showHistory.value = false;
+    }
+
+    function handleEditCase() {
+      if (!worksite.value) {
+        console.error('No worksite to edit');
+        return;
+      }
+      isViewing.value = false;
+      isEditing.value = true;
+      router.push(
+        `/incident/${currentIncidentId.value}/work/${worksite.value.id}/edit`,
+      );
+    }
+
+    function handleShowHistory() {
+      showFlags.value = false;
+      showHistory.value = true;
+    }
+
     watch(
       () => worksiteQuery.value,
       (value) => {
         if (value) {
           reloadMap();
+        }
+      },
+    );
+
+    watch(
+      () => worksite.value,
+      (value, oldValue) => {
+        if (value && value.id !== oldValue?.id) {
+          formTabs.value.selectTab(caseInfoTab.value);
         }
       },
     );
@@ -795,6 +780,9 @@ export default defineComponent({
       selectedChat,
       showingMap,
       mapLoading,
+      formTabs,
+      caseInfoTab,
+      newCaseTab,
       showMap,
       showTable,
       router,
@@ -820,6 +808,9 @@ export default defineComponent({
       goToInteractive,
       reloadCase,
       availableWorkTypes,
+      handleFlagCase,
+      handleEditCase,
+      handleShowHistory,
     };
   },
 });
@@ -935,7 +926,7 @@ export default defineComponent({
 
   /* Container for case form */
   &__form {
-    @apply flex flex-col;
+    @apply flex flex-col relative;
 
     &-header {
       @apply h-12 px-2 border flex items-center justify-between;
