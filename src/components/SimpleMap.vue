@@ -18,7 +18,7 @@
     </div>
     <div
       v-if="showZoomButtons"
-      class="flex flex-col absolute"
+      class="flex flex-col absolute zoom-control-container"
       style="z-index: 1001; top: 10px; left: 10px"
     >
       <div class="zoom-control flex flex-col mb-5">

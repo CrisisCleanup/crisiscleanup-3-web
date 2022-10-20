@@ -7,10 +7,10 @@ import { templates, colors } from '@/icons/icons_templates';
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
 export default (map, markers) => {
-  const textureMap = ref({});
-  const workTypes = ref({});
-  const points = ref([]);
-  const kdBushIndex = ref<KDBush | null>();
+  const textureMap = {};
+  let workTypes = {};
+  let points = [];
+  let kdBushIndex: KDBush = null;
 
   function renderMarkerSprite(marker, index) {
     map.eachLayer((layer) => {
@@ -42,10 +42,10 @@ export default (map, markers) => {
         const svg = markerTemplate
           .replaceAll('{{fillColor}}', fillColor)
           .replaceAll('{{strokeColor}}', 'white');
-        let texture = textureMap.value[fillColor];
+        let texture = textureMap[fillColor];
         if (!texture) {
-          textureMap.value[fillColor] = Texture.from(svg);
-          texture = textureMap.value[fillColor];
+          textureMap[fillColor] = Texture.from(svg);
+          texture = textureMap[fillColor];
         }
         sprite.texture = texture;
         sprite.visible = true;
@@ -54,8 +54,8 @@ export default (map, markers) => {
         sprite.workTypeKey = workType?.work_type;
 
         if (workType?.work_type) {
-          workTypes.value[workType?.work_type] = true;
-          workTypes.value = { ...workTypes.value };
+          workTypes[workType?.work_type] = true;
+          workTypes = { ...workTypes };
         }
 
         const detailedTemplate =
@@ -73,7 +73,7 @@ export default (map, markers) => {
   }
 
   function calculateKdBushIndex() {
-    points.value = markers.map(function (marker) {
+    points = markers.map(function (marker) {
       return {
         x: parseFloat(marker.location.coordinates[1]),
         y: parseFloat(marker.location.coordinates[0]),
@@ -82,8 +82,8 @@ export default (map, markers) => {
       };
     });
 
-    kdBushIndex.value = new KDBush(
-      points.value,
+    kdBushIndex = new KDBush(
+      points,
       function (p) {
         return p.x;
       },
@@ -114,9 +114,9 @@ export default (map, markers) => {
     if (map.getZoom() < INTERACTIVE_ZOOM_LEVEL) {
       return null;
     }
-    const results = kdBushIndex.value
-      .within(latlng.lat, latlng.lng, 5)
-      .map((id) => points.value[id]);
+    const results = kdBushIndex
+      ?.within(latlng.lat, latlng.lng, 5)
+      .map((id) => points[id]);
     let minDist = Number.MAX_VALUE;
     let minpxDist = 0;
     let minDistItem = null;

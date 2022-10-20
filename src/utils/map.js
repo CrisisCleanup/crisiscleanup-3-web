@@ -412,7 +412,6 @@ export function getMarkerLayer(markers, map, context) {
 
   const layer = (function () {
     let firstDraw = true;
-    // let prevZoom;
     // let prevCenter;
     let frame = null;
     const doubleBuffering =
@@ -438,7 +437,6 @@ export function getMarkerLayer(markers, map, context) {
         const delta = 250;
 
         container.children.forEach(function (markerSprite) {
-          // if (!markerSprite.type === 'line') return;
           if (firstDraw) {
             markerSprite.scale.set(invScale);
           } else {

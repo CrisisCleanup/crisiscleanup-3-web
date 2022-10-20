@@ -347,65 +347,37 @@ export default defineComponent({
     });
 
     async function applyLocation(locationId, value) {
-      if (value && props.map) {
-        await Location.api().fetchById(locationId);
-        const location = Location.find(locationId) as any;
-        const geojsonFeature = {
-          type: 'Feature',
-          properties: location?.attr,
-          geometry: location?.poly || location?.geom || location?.point,
-        };
-        const polygon = L.geoJSON(geojsonFeature, {
-          weight: '1',
-          onEachFeature(feature, layer) {
-            layer.location_id = locationId;
-          },
-        });
-        polygon.addTo(props.map);
-        props.map.fitBounds(polygon.getBounds());
+      emit('applyLocation', {
+        locationId,
+        value,
+      });
+      if (value) {
         appliedLocations.value = new Set(
           appliedLocations.value.add(locationId),
         );
       } else {
-        props.map.eachLayer((layer) => {
-          if (layer.location_id && layer.location_id === locationId) {
-            props.map.removeLayer(layer);
-          }
-        });
         appliedLocations.value.delete(locationId);
         appliedLocations.value = new Set(appliedLocations.value);
       }
     }
     async function applyTeamGeoJson(team, value) {
-      const feature = await Team.api().getCasesArea(
+      const { response } = await Team.api().getCasesArea(
         team.id,
         props.currentIncidentId,
       );
       const locationId = team.id;
 
-      if (value && props.map) {
-        const geojsonFeature = {
-          type: 'Feature',
-          properties: {},
-          geometry: feature.response.data,
-        };
-        const polygon = L.geoJSON(geojsonFeature, {
-          weight: '1',
-          onEachFeature(_, layer) {
-            layer.location_id = locationId;
-          },
-        });
-        polygon.addTo(props.map);
-        props.map.fitBounds(polygon.getBounds());
+      emit('applyTeamGeoJson', {
+        teamId: team.id,
+        value,
+        geom: response.data,
+      });
+
+      if (value) {
         appliedLocations.value = new Set(
           appliedLocations.value.add(locationId),
         );
       } else {
-        props.map.eachLayer((layer) => {
-          if (layer.location_id && layer.location_id === locationId) {
-            props.map.removeLayer(layer);
-          }
-        });
         appliedLocations.value.delete(locationId);
         appliedLocations.value = new Set(appliedLocations.value);
       }

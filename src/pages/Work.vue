@@ -60,6 +60,8 @@
             :current-incident-id="currentIncidentId"
             :filters="{}"
             @updatedQuery="onUpdateQuery"
+            @applyLocation="applyLocation"
+            @applyTeamGeoJson="applyTeamGeoJson"
           />
         </div>
         <Loader v-if="loading" class="ml-10" />
@@ -204,9 +206,6 @@
           :action="
             () => {
               showMobileMap = true;
-              $nextTick(() => {
-                map.invalidateSize();
-              });
             }
           "
           :text="$t('casesVue.show_map')"
@@ -322,12 +321,7 @@ import Worksite from '@/models/Worksite';
 import CaseHistory from '@/pages/CaseHistory.vue';
 import CaseForm from '@/pages/CaseForm.vue';
 import { loadCasesCached } from '@/utils/worksite';
-import {
-  averageGeolocation,
-  getMarkerLayer,
-  mapAttribution,
-  mapTileLayer,
-} from '@/utils/map';
+import { averageGeolocation } from '@/utils/map';
 import WorksiteActions from '@/WorksiteActions.vue';
 import CaseView from '@/pages/CaseView.vue';
 import useDialogs from '@/use/useDialogs';
@@ -338,7 +332,7 @@ import Loader from '@/components/Loader.vue';
 import Incident from '@/models/Incident';
 import CaseFlag from '@/pages/CaseFlag.vue';
 import PhoneNews from '@/components/phone/PhoneNews.vue';
-import useRenderedMarkers from '@/use/worksites/useRenderedMarkers';
+import useWorksiteMap from '@/use/worksites/useWorksiteMap';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
@@ -388,12 +382,11 @@ export default defineComponent({
     const searchWorksites = ref<any[]>([]);
     const worksiteId = ref<any>(null);
     const imageUrl = ref<string>('');
-    const map = ref<any>(null);
-    const pixiContainer = ref<Container | null>(null);
     const selectedChat = ref<any>({ id: 2 });
     const filters = ref<any>({});
     const selectedTableItems = ref([]);
     const availableWorkTypes = ref({});
+    let mapUtils;
 
     const showTable = () => {
       showingTable.value = true;
@@ -456,24 +449,16 @@ export default defineComponent({
 
     const jumpToCase = async () => {
       showMap();
-
-      if (map.value && worksite.value) {
-        map.value.setView(
-          [worksite.value.latitude, worksite.value.longitude],
-          18,
-        );
-        const popup = L.popup({ className: 'pixi-popup' });
-        popup
-          .setLatLng([worksite.value.latitude, worksite.value.longitude])
-          .setContent(
-            `<b>${worksite.value.name} (${worksite.value.case_number}</b>)`,
-          )
-          .openOn(map.value);
-        setTimeout(() => {
-          map.value.closePopup();
-        }, 5000);
-      }
+      mapUtils.jumpToCase(worksite.value);
     };
+
+    function applyTeamGeoJson(data) {
+      mapUtils.applyTeamGeoJson(data.teamId, data.value, data.geom);
+    }
+
+    function applyLocation(data) {
+      mapUtils.applyLocation(data.locationId, data.value);
+    }
 
     async function reloadCase() {
       return Worksite.api().fetch(
@@ -483,20 +468,7 @@ export default defineComponent({
     }
 
     function fitLocation(location) {
-      if (map.value) {
-        const geojsonFeature = {
-          type: 'Feature',
-          properties: location.attr,
-          geometry: location.poly || location.geom || location.point,
-        };
-        const polygon = L.geoJSON(geojsonFeature, {
-          weight: '1',
-          onEachFeature(feature, layer) {
-            layer.location_id = location.id;
-          },
-        });
-        map.value.fitBounds(polygon.getBounds());
-      }
+      mapUtils.fitLocation(location);
     }
 
     function goToIncidentCenter() {
@@ -509,10 +481,12 @@ export default defineComponent({
         });
       } else {
         const center = averageGeolocation(
-          pixiContainer?.value?.children.map((marker) => [marker.x, marker.y]),
+          mapUtils
+            .getPixiContainer()
+            ?.children.map((marker) => [marker.x, marker.y]),
         );
         if (center.latitude && center.longitude) {
-          map.value.setView([center.latitude, center.longitude], 6);
+          mapUtils.getMap().setView([center.latitude, center.longitude], 6);
         }
       }
     }
@@ -524,16 +498,20 @@ export default defineComponent({
 
       if (locationModels.length) {
         goToIncidentCenter();
-        map.value.setZoom(INTERACTIVE_ZOOM_LEVEL);
+        mapUtils.getMap().setZoom(INTERACTIVE_ZOOM_LEVEL);
       } else {
         const center = averageGeolocation(
-          pixiContainer?.value?.children.map((marker) => [marker.x, marker.y]),
+          mapUtils
+            .getPixiContainer()
+            ?.children.map((marker) => [marker.x, marker.y]),
         );
         if (center.latitude && center.longitude) {
-          map.value.setView(
-            [center.latitude, center.longitude],
-            INTERACTIVE_ZOOM_LEVEL,
-          );
+          mapUtils
+            .getMap()
+            .setView(
+              [center.latitude, center.longitude],
+              INTERACTIVE_ZOOM_LEVEL,
+            );
         }
       }
     }
@@ -630,20 +608,7 @@ export default defineComponent({
     }
 
     async function addMarkerToMap(location) {
-      let markerLocation = location;
-      if (!markerLocation) {
-        markerLocation = map.value.getCenter();
-      }
-
-      const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
-        map.value,
-      );
-      map.value.setView([markerLocation.lat, markerLocation.lng], 15);
-      marker
-        .bindTooltip($t('casesVue.drag_pin_to_correct_location'), {
-          direction: 'top',
-        })
-        .openTooltip();
+      mapUtils.addMarkerToMap(location);
       showMap();
     }
 
@@ -671,76 +636,13 @@ export default defineComponent({
       router.push(`/incident/${currentIncidentId.value}/work/${data.id}`);
     }
 
-    function removeLayer(key) {
-      map.value.eachLayer((layer) => {
-        if (layer.key === key) {
-          map.value.removeLayer(layer);
-        }
-      });
-    }
-
-    function loadMap(markers) {
-      if (!map.value) {
-        map.value = L.map('map', {
-          zoomControl: false,
-        }).fitBounds([
-          [17.644022027872726, -122.78314470293876],
-          [50.792047064406866, -69.87298845293874],
-        ]);
-
-        L.tileLayer(mapTileLayer, {
-          attribution: mapAttribution,
-          detectRetina: false,
-          maxZoom: 18,
-          noWrap: false,
-        }).addTo(map.value);
-      }
-
-      removeLayer('marker_layer');
-      const worksiteLayer = getMarkerLayer([], map, {});
-      worksiteLayer.addTo(map.value);
-
-      const { workTypes, findMarker } = useRenderedMarkers(map.value, markers);
-      availableWorkTypes.value = workTypes.value;
-
-      map.value.on('click', function (e) {
-        const marker = findMarker(e.latlng);
-        if (marker) {
-          loadCase(marker);
-        }
-      });
-
-      map.value.on(
-        'mousemove',
-        L.Util.throttle((e) => {
-          const marker = findMarker(e.latlng) as any;
-          if (marker) {
-            L.DomUtil.addClass(worksiteLayer._container, 'cursor-pointer');
-            worksiteLayer._container.setAttribute('title', marker.case_number);
-          } else {
-            L.DomUtil.removeClass(worksiteLayer._container, 'cursor-pointer');
-            worksiteLayer._container.setAttribute('title', '');
-          }
-        }, 32),
-      );
-
-      nextTick(() => {
-        // Add this slight pan to re-render map
-        map.value.panBy([1, 0]);
-      });
-    }
-
     function onUpdateQuery(query) {
       filters.value = query;
     }
 
-    function reloadMap() {
-      if (map.value) {
-        removeLayer('marker_layer');
-        getWorksites().then((markers) => {
-          loadMap(markers);
-        });
-      }
+    async function reloadMap() {
+      const markers = await getWorksites();
+      mapUtils.reloadMap(markers);
     }
 
     watch(
@@ -777,7 +679,20 @@ export default defineComponent({
         }
       }
       const markers = await getWorksites();
-      loadMap(markers);
+      mapUtils = useWorksiteMap(
+        markers,
+        (m) => {
+          loadCase(m);
+        },
+        ({ workTypes }) => {
+          availableWorkTypes.value = workTypes;
+          nextTick(() => {
+            const worksiteLayer = mapUtils.getCurrentMarkerLayer();
+            worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
+            worksiteLayer.redraw();
+          });
+        },
+      );
     });
 
     return {
@@ -803,7 +718,6 @@ export default defineComponent({
       worksiteQuery,
       jumpToCase,
       showHistory,
-      map,
       showFlags,
       selectCase,
       showingDetails,
@@ -820,6 +734,8 @@ export default defineComponent({
       goToInteractive,
       reloadCase,
       availableWorkTypes,
+      applyLocation,
+      applyTeamGeoJson,
     };
   },
 });
