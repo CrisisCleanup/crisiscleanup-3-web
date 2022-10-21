@@ -120,17 +120,19 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
     }
   }
 
-  const jumpToCase = async (worksite) => {
+  const jumpToCase = async (worksite, showPopup = true) => {
     if (map && worksite) {
       map.setView([worksite.latitude, worksite.longitude], 18);
-      const popup = L.popup({ className: 'pixi-popup' });
-      popup
-        .setLatLng([worksite.latitude, worksite.longitude])
-        .setContent(`<b>${worksite.name} (${worksite.case_number}</b>)`)
-        .openOn(map);
-      setTimeout(() => {
-        map.closePopup();
-      }, 5000);
+      if (showPopup) {
+        const popup = L.popup({ className: 'pixi-popup' });
+        popup
+          .setLatLng([worksite.latitude, worksite.longitude])
+          .setContent(`<b>${worksite.name} (${worksite.case_number}</b>)`)
+          .openOn(map);
+        setTimeout(() => {
+          map.closePopup();
+        }, 5000);
+      }
     }
   };
 

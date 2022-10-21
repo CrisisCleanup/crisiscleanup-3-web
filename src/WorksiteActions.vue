@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center worksite-actions" style="color: #4c4c4d">
-    <div class="mt-2" v-if="pdas.length > 0">
+    <div class="mt-2" v-if="pdas && pdas.length > 0">
       <base-checkbox
         class="pb-2"
         :value="showingHeatMap"
@@ -310,11 +310,12 @@
     <WorksiteFilters
       ref="worksiteFilter"
       :show="showingFilters"
-      :current-filters="filters"
+      :current-filters="initalFilters"
       :incident="currentIncident"
       :locations="organizationLocations"
       @closedFilters="showingFilters = false"
       @updatedFilters="handleFilters"
+      @updateFiltersCount="filtersCount = $event"
     />
     <base-button
       class="text-base font-thin mx-2"
@@ -472,6 +473,7 @@ export default defineComponent({
 
       showingFilters.value = false;
       emit('updatedQuery', appliedFilters.value);
+      emit('updatedFilters', filters.value);
       // this.updateUserState();
     }
 
@@ -488,6 +490,9 @@ export default defineComponent({
     }
 
     onMounted(async () => {
+      if (props.initalFilters) {
+        filters.value = props.initalFilters;
+      }
       await Promise.any([
         getLocations(),
         getOrganizationLocations(),
@@ -522,6 +527,7 @@ export default defineComponent({
     };
   },
   props: {
+    initalFilters: { type: Object, default: null, required: false },
     map: { type: Object, default: null, required: false },
     currentIncidentId: { type: String, default: null, required: false },
   },

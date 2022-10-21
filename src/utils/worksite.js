@@ -20,7 +20,7 @@ const loadCasesCached = async (query) => {
   if (!currentUser?.value?.preferences.enable_worksite_caching) {
     return loadCases(query);
   }
-  await DbService.init();
+  // await DbService.init();
   const hashCode = (str) =>
     str
       .split('')

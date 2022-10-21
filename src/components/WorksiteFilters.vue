@@ -761,6 +761,7 @@ export default {
             {},
         ),
       };
+      this.$emit('updateFiltersCount', this.filtersCount);
     },
   },
   methods: {

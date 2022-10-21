@@ -35,6 +35,7 @@ export default (map, markers) => {
         sprite.index = index;
         sprite.id = marker.id;
         sprite.svi = marker.svi;
+        sprite.work_types = marker.work_types;
         sprite.updated_at = marker.updated_at;
         sprite.x = patientCoords.x;
         sprite.y = patientCoords.y;

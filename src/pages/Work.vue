@@ -51,16 +51,20 @@
                 (w) => {
                   worksiteId = w.id;
                   isViewing = true;
+                  router.push({
+                    query: { showOnMap: true },
+                  });
                 }
               "
               @search="onSearch"
               @clear="onSearch"
             />
             <WorksiteActions
-              :current-incident-id="currentIncidentId"
-              :filters="{}"
-              :key="worksiteQuery"
+              :current-incident-id="String(currentIncidentId)"
+              :inital-filters="filters"
+              :key="currentIncidentId"
               @updatedQuery="onUpdateQuery"
+              @updatedFilters="onUpdateFilters"
               @applyLocation="applyLocation"
               @applyTeamGeoJson="applyTeamGeoJson"
               @downloadCsv="downloadWorksites"
@@ -194,7 +198,6 @@
               data-cy="worksiteview_actionBatchDownload"
             />
             <base-button
-              v-if="false"
               class="ml-3 my-3 border p-1 px-4 bg-white"
               :class="
                 selectedTableItems.size === 0
@@ -202,13 +205,12 @@
                   : ''
               "
               :disabled="selectedTableItems.size === 0"
-              :action="() => {}"
+              :action="showUnclaimModal"
               :text="$t('actions.unclaim')"
               :alt="$t('actions.unclaim')"
             >
             </base-button>
             <base-button
-              v-if="false"
               icon="sync"
               class="ml-3 my-3 border p-1 px-4 bg-white"
               :class="
@@ -219,7 +221,7 @@
               :disabled="selectedTableItems.size === 0"
               :text="$t('actions.update_status')"
               :alt="$t('actions.update_status')"
-              :action="() => {}"
+              :action="showUpdateStatusModal"
             />
           </div>
           <WorksiteTable
@@ -234,9 +236,11 @@
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
-        class="p-2 border-l border-r"
+        class="border-l border-r"
         can-edit
+        show-case-tabs
         :is-viewing-worksite="isViewing"
+        @closeWorksite="clearCase"
         @onJumpToCase="jumpToCase"
         @onDownloadWorksite="
           () => {
@@ -267,7 +271,16 @@
         "
       />
       <div v-else class="work-page__form-header">
-        <div class="flex items-center cursor-pointer">
+        <div
+          class="
+            flex
+            h-full
+            items-center
+            cursor-pointer
+            border-b-2 border-primary-light
+            p-3
+          "
+        >
           <ccu-icon
             :alt="$t('casesVue.new_case')"
             type="active"
@@ -309,12 +322,12 @@
       <div class="work-page__form-body">
         <CaseHistory
           v-if="showHistory"
-          :incident-id="currentIncidentId"
+          :incident-id="Number(currentIncidentId)"
           :worksite-id="worksiteId"
         ></CaseHistory>
         <CaseFlag
           v-else-if="showFlags"
-          :incident-id="currentIncidentId"
+          :incident-id="String(currentIncidentId)"
           :worksite-id="worksiteId"
           @reloadCase="
             () => {
@@ -327,13 +340,20 @@
         <CaseView
           v-else-if="isViewing"
           :worksite-id="worksiteId"
-          :incident-id="currentIncidentId"
+          :incident-id="String(currentIncidentId)"
           :key="worksiteId"
-          :top-height="225"
+          :top-height="300"
           @closeWorksite="clearCase"
           @onResetForm="clearCase"
           @image-click="showImage"
           @changeImg="changeImage"
+          @caseLoaded="
+            () => {
+              if (route && route.query.showOnMap) {
+                jumpToCase();
+              }
+            }
+          "
         />
         <CaseForm
           v-else
@@ -383,7 +403,7 @@ import {
   nextTick,
 } from '@vue/composition-api';
 import { useGetters, useMutations, useRouter, useState } from '@u3u/vue-hooks';
-import { debounce, get } from 'lodash';
+import { debounce } from 'lodash';
 import useHttp from '@/use/useHttp';
 import useToasted from '@/use/useToasted';
 import usei18n from '@/use/usei18n';
@@ -435,7 +455,7 @@ export default defineComponent({
     const { $http } = useHttp();
     const { route, router } = useRouter();
     const { $toasted } = useToasted();
-    const { prompt } = useDialogs();
+    const { prompt, component } = useDialogs();
     const { $t } = usei18n();
 
     const { currentIncidentId } = useState('incident', ['currentIncidentId']);
@@ -461,19 +481,71 @@ export default defineComponent({
     const worksiteId = ref<any>(null);
     const imageUrl = ref<string>('');
     const selectedChat = ref<any>({ id: 2 });
+    const filterQuery = ref<any>({});
     const filters = ref<any>({});
     const selectedTableItems = ref([]);
     const availableWorkTypes = ref({});
     const sviSliderValue = ref(100);
     let mapUtils;
 
+    function loadStatesForUser() {
+      const states = currentUser?.value?.getStatesForIncident(
+        currentIncidentId.value,
+        true,
+      );
+      if (states) {
+        if (states.showingMap) {
+          showingMap.value = true;
+          showingTable.value = false;
+        }
+        if (states.showingTable) {
+          showingTable.value = true;
+          showingMap.value = false;
+        }
+        if (states.appliedFilters) {
+          filterQuery.value = states.appliedFilters;
+        }
+        if (states.sviLevel) {
+          sviSliderValue.value = states.sviLevel;
+        }
+        if (states.filters) {
+          filters.value = {
+            ...states.filters,
+          };
+        }
+      }
+    }
+
+    function updateUserState(incomingData) {
+      let data = incomingData;
+      if (!data) {
+        data = {};
+      }
+      User.api().updateUserState(
+        {
+          incident: currentIncidentId.value,
+        },
+        {
+          appliedFilters: filterQuery.value,
+          filters: filters.value,
+          showingMap: showingMap.value,
+          showingTable: showingTable.value,
+          sviLevel: sviSliderValue.value,
+          ...data,
+        },
+      );
+    }
+
     const showTable = () => {
       showingTable.value = true;
       showingMap.value = false;
+      updateUserState({});
     };
+
     const showMap = () => {
       showingTable.value = false;
       showingMap.value = true;
+      updateUserState({});
     };
 
     const searchCases = (search, incident) => {
@@ -502,7 +574,7 @@ export default defineComponent({
     const worksiteQuery = computed<Record<any, any>>(() => {
       return {
         incident: currentIncidentId.value,
-        ...filters.value,
+        ...filterQuery.value,
       };
     });
 
@@ -526,10 +598,86 @@ export default defineComponent({
       return [];
     });
 
-    const jumpToCase = async () => {
+    const jumpToCase = async (showPopup = true) => {
       showMap();
-      mapUtils.jumpToCase(worksite.value);
+      mapUtils.jumpToCase(worksite.value, showPopup);
     };
+
+    function reloadTable() {
+      filterQuery.value = { ...filterQuery.value };
+      updateUserState({});
+    }
+
+    async function showUpdateStatusModal() {
+      let status;
+      const response = await component({
+        title: $t('actions.update_status'),
+        component: 'UpdateCaseStatus',
+        classes: 'w-full h-48 overflow-auto p-3',
+        modalClasses: 'bg-white max-w-3xl shadow',
+        listeners: {
+          updatedStatus: (payload) => {
+            status = payload;
+          },
+        },
+      });
+
+      if (response === 'ok' && status) {
+        loading.value = true;
+        const promises = [] as any;
+        const layer = mapUtils.getCurrentMarkerLayer();
+        const container = layer._pixiContainer;
+
+        selectedTableItems.value.forEach((id) => {
+          const sprite = container.children.find((w) => {
+            return Number(w.id) === Number(id);
+          });
+
+          sprite.work_types.forEach((workType) => {
+            promises.push(
+              Worksite.api().updateWorkTypeStatus(workType.id, status),
+            );
+          });
+        });
+        await Promise.allSettled(promises);
+      }
+      loading.value = false;
+      reloadTable();
+    }
+
+    async function showUnclaimModal() {
+      let options;
+      const response = await component({
+        title: $t('actions.unclaim_cases'),
+        component: 'UnclaimCases',
+        classes: 'w-full h-48 overflow-auto p-3',
+        modalClasses: 'bg-white max-w-3xl shadow',
+        props: {
+          selectedTableItems,
+        },
+        listeners: {
+          onUnclaimSelect: (payload) => {
+            options = payload;
+          },
+        },
+      });
+
+      if (response === 'ok' && options) {
+        const promises = [] as any;
+        selectedTableItems.value.forEach((id) => {
+          promises.push(
+            Worksite.api().unclaimWorksite(
+              id,
+              [],
+              options?.updateStatusOnUnclaim ? 'open_unassigned' : null,
+            ),
+          );
+        });
+        await Promise.allSettled(promises);
+      }
+      loading.value = false;
+      reloadTable();
+    }
 
     function toggleHeatMap(points) {
       if (points) {
@@ -561,6 +709,8 @@ export default defineComponent({
 
       layer._renderer.render(container);
       layer.redraw();
+
+      updateUserState({});
     }
 
     function zoomIn() {
@@ -774,12 +924,19 @@ export default defineComponent({
     }
 
     function onUpdateQuery(query) {
-      filters.value = query;
+      filterQuery.value = query;
+      updateUserState({});
+    }
+
+    function onUpdateFilters(f) {
+      filters.value = f;
+      updateUserState({});
     }
 
     async function reloadMap() {
       const markers = await getWorksites();
       mapUtils.reloadMap(markers);
+      updateUserState({});
     }
 
     watch(
@@ -815,6 +972,7 @@ export default defineComponent({
           isViewing.value = true;
         }
       }
+      loadStatesForUser();
       const markers = await getWorksites();
       mapUtils = useWorksiteMap(
         markers,
@@ -824,9 +982,7 @@ export default defineComponent({
         ({ workTypes }) => {
           availableWorkTypes.value = workTypes;
           nextTick(() => {
-            const worksiteLayer = mapUtils.getCurrentMarkerLayer();
-            worksiteLayer._renderer.render(worksiteLayer._pixiContainer);
-            worksiteLayer.redraw();
+            filterSvi(sviSliderValue.value);
           });
         },
       );
@@ -849,6 +1005,7 @@ export default defineComponent({
       mapLoading,
       showMap,
       showTable,
+      route,
       router,
       worksite,
       worksiteId,
@@ -860,6 +1017,7 @@ export default defineComponent({
       showingDetails,
       showMobileMap,
       onUpdateQuery,
+      onUpdateFilters,
       loadCase,
       workTypesClaimedByOrganization,
       printWorksite,
@@ -879,6 +1037,11 @@ export default defineComponent({
       filterSvi,
       sviSliderValue,
       toggleHeatMap,
+      showUpdateStatusModal,
+      showUnclaimModal,
+      reloadTable,
+      filters,
+      filterQuery,
     };
   },
 });
@@ -997,7 +1160,7 @@ export default defineComponent({
     @apply flex flex-col;
 
     &-header {
-      @apply h-12 px-2 border flex items-center justify-between;
+      @apply h-12 border flex items-center justify-between;
     }
 
     &-toggler {

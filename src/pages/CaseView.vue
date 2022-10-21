@@ -638,9 +638,8 @@ export default {
         this.worksiteId || this.$route.params.id,
         this.incidentId || this.$route.params.incident_id,
       );
-      await this.getWorksiteRequests();
       this.$emit('caseLoaded');
-
+      await this.getWorksiteRequests();
       if (
         Number(this.worksite.incident) !==
         Number(this.incidentId || this.$route.params.incident_id)
