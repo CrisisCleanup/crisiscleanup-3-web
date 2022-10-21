@@ -143,7 +143,7 @@
             display-property="name"
             :placeholder="$t('actions.search')"
             size="medium"
-            class="mx-2"
+            class="mx-2 w-full"
             @selectedExisting="onSelectExistingWorksite"
             @search="onSearch"
             @clear="onSearch"

@@ -2,77 +2,95 @@
   <div class="work-page">
     <!-- TODO: Move this (doesn't belong here) -->
     <div class="work-page__main">
-      <div class="work-page__main-header">
-        <div class="flex py-3 px-2" style="min-width: 80px">
-          <ccu-icon
-            :alt="$t('casesVue.map_view')"
-            size="medium"
-            class="mr-4 cursor-pointer"
-            :class="showingMap ? 'filter-yellow' : 'filter-gray'"
-            type="map"
-            ccu-event="user_ui-view-map"
-            @click.native="showMap"
-            data-cy="cases.mapButton"
-          />
-          <ccu-icon
-            :alt="$t('casesVue.table_view')"
-            size="medium"
-            class="mr-4 cursor-pointer"
-            :class="showingTable ? 'filter-yellow' : 'filter-gray'"
-            type="table"
-            ccu-event="user_ui-view-table"
-            @click.native="showTable"
-            data-cy="cases.tableButton"
-          />
-        </div>
-        <span v-if="allWorksiteCount" class="font-thin">
-          <span>
-            {{ $t('casesVue.cases') }}
-            {{ allWorksiteCount | numeral('0,0') }}
+      <div class="">
+        <div class="flex items-center h-16">
+          <div class="flex py-3 px-2" style="min-width: 80px">
+            <ccu-icon
+              :alt="$t('casesVue.map_view')"
+              size="medium"
+              class="mr-4 cursor-pointer"
+              :class="showingMap ? 'filter-yellow' : 'filter-gray'"
+              type="map"
+              ccu-event="user_ui-view-map"
+              @click.native="showMap"
+              data-cy="cases.mapButton"
+            />
+            <ccu-icon
+              :alt="$t('casesVue.table_view')"
+              size="medium"
+              class="mr-4 cursor-pointer"
+              :class="showingTable ? 'filter-yellow' : 'filter-gray'"
+              type="table"
+              ccu-event="user_ui-view-table"
+              @click.native="showTable"
+              data-cy="cases.tableButton"
+            />
+          </div>
+          <span v-if="allWorksiteCount" class="font-thin">
+            <span>
+              {{ $t('casesVue.cases') }}
+              {{ allWorksiteCount | numeral('0,0') }}
+            </span>
           </span>
-        </span>
-        <div class="flex justify-start w-auto">
-          <WorksiteSearchInput
-            width="300px"
-            icon="search"
-            :suggestions="[
-              {
-                name: 'worksites',
-                data: searchWorksites || [],
-                key: 'name',
-              },
-            ]"
-            display-property="name"
-            :placeholder="$t('actions.search')"
-            size="medium"
-            class="mx-2"
-            @selectedExisting="
-              (w) => {
-                worksiteId = w.id;
-                isViewing = true;
-              }
-            "
-            @search="onSearch"
-            @clear="onSearch"
-          />
-          <WorksiteActions
-            :map="map"
-            :current-incident-id="currentIncidentId"
-            :filters="{}"
-            @updatedQuery="onUpdateQuery"
-            @applyLocation="applyLocation"
-            @applyTeamGeoJson="applyTeamGeoJson"
+          <div class="flex justify-start w-auto">
+            <WorksiteSearchInput
+              width="300px"
+              icon="search"
+              :suggestions="[
+                {
+                  name: 'worksites',
+                  data: searchWorksites || [],
+                  key: 'name',
+                },
+              ]"
+              display-property="name"
+              :placeholder="$t('actions.search')"
+              size="medium"
+              class="mx-2 w-48"
+              @selectedExisting="
+                (w) => {
+                  worksiteId = w.id;
+                  isViewing = true;
+                }
+              "
+              @search="onSearch"
+              @clear="onSearch"
+            />
+            <WorksiteActions
+              :current-incident-id="currentIncidentId"
+              :filters="{}"
+              :key="worksiteQuery"
+              @updatedQuery="onUpdateQuery"
+              @applyLocation="applyLocation"
+              @applyTeamGeoJson="applyTeamGeoJson"
+              @downloadCsv="downloadWorksites"
+              @toggleHeatMap="toggleHeatMap"
+            />
+          </div>
+          <Loader v-if="loading || mapLoading" class="ml-10" />
+        </div>
+        <div class="flex justify-center items-center">
+          <Slider
+            primary-color="#dadada"
+            secondary-color="white"
+            :value="sviSliderValue"
+            @input="filterSvi"
+            :from="$t('svi.most_vulnerable')"
+            :to="$t('svi.everyone')"
+            :from-tooltip="$t(`svi.svi_more_info_link`)"
+            handle-size="12px"
+            track-size="8px"
+            slider-class="w-64"
           />
         </div>
-        <Loader v-if="loading" class="ml-10" />
       </div>
       <div class="work-page__main-content">
         <div v-show="showingMap" class="work-page__main-content--map">
           <SimpleMap
             :map-loading="mapLoading"
             show-zoom-buttons
-            @onZoomIn="() => map.zoomIn()"
-            @onZoomOut="() => map.zoomOut()"
+            @onZoomIn="zoomIn"
+            @onZoomOut="zoomOut"
             @onZoomIncidentCenter="goToIncidentCenter"
             @onZoomInteractive="goToInteractive"
             :available-work-types="availableWorkTypes"
@@ -144,6 +162,66 @@
           </div>
         </div>
         <div v-show="showingTable" class="work-page__main-content--table">
+          <div class="flex items-center justify-end">
+            <base-button
+              class="ml-3 my-3 border p-1 px-4 bg-white"
+              :class="
+                selectedTableItems.size === 0
+                  ? 'text-crisiscleanup-grey-700'
+                  : ''
+              "
+              :disabled="selectedTableItems.size === 0"
+              :text="$t('actions.print')"
+              :alt="$t('actions.print')"
+              :action="printSelectedWorksites"
+              data-cy="worksiteview_actionBatchPrint"
+            />
+            <base-button
+              class="ml-3 my-3 border p-1 px-4 bg-white"
+              :class="
+                selectedTableItems.size === 0
+                  ? 'text-crisiscleanup-grey-700'
+                  : ''
+              "
+              :disabled="selectedTableItems.size === 0"
+              :text="$t('actions.download')"
+              :alt="$t('actions.download')"
+              :action="
+                () => {
+                  downloadWorksites(Array.from(selectedTableItems));
+                }
+              "
+              data-cy="worksiteview_actionBatchDownload"
+            />
+            <base-button
+              v-if="false"
+              class="ml-3 my-3 border p-1 px-4 bg-white"
+              :class="
+                selectedTableItems.size === 0
+                  ? 'text-crisiscleanup-grey-700'
+                  : ''
+              "
+              :disabled="selectedTableItems.size === 0"
+              :action="() => {}"
+              :text="$t('actions.unclaim')"
+              :alt="$t('actions.unclaim')"
+            >
+            </base-button>
+            <base-button
+              v-if="false"
+              icon="sync"
+              class="ml-3 my-3 border p-1 px-4 bg-white"
+              :class="
+                selectedTableItems.size === 0
+                  ? 'text-crisiscleanup-grey-700'
+                  : ''
+              "
+              :disabled="selectedTableItems.size === 0"
+              :text="$t('actions.update_status')"
+              :alt="$t('actions.update_status')"
+              :action="() => {}"
+            />
+          </div>
           <WorksiteTable
             :worksite-query="worksiteQuery"
             @rowClick="loadCase"
@@ -305,9 +383,7 @@ import {
   nextTick,
 } from '@vue/composition-api';
 import { useGetters, useMutations, useRouter, useState } from '@u3u/vue-hooks';
-import { debounce } from 'lodash';
-import * as L from 'leaflet';
-import { Container } from 'pixi.js';
+import { debounce, get } from 'lodash';
 import useHttp from '@/use/useHttp';
 import useToasted from '@/use/useToasted';
 import usei18n from '@/use/usei18n';
@@ -333,12 +409,14 @@ import Incident from '@/models/Incident';
 import CaseFlag from '@/pages/CaseFlag.vue';
 import PhoneNews from '@/components/phone/PhoneNews.vue';
 import useWorksiteMap from '@/use/worksites/useWorksiteMap';
+import Slider from '@/components/Slider.vue';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
 export default defineComponent({
   name: 'Work',
   components: {
+    Slider,
     PhoneNews,
     CaseFlag,
     Loader,
@@ -386,6 +464,7 @@ export default defineComponent({
     const filters = ref<any>({});
     const selectedTableItems = ref([]);
     const availableWorkTypes = ref({});
+    const sviSliderValue = ref(100);
     let mapUtils;
 
     const showTable = () => {
@@ -451,6 +530,46 @@ export default defineComponent({
       showMap();
       mapUtils.jumpToCase(worksite.value);
     };
+
+    function toggleHeatMap(points) {
+      if (points) {
+        mapUtils.addHeatMap(points);
+      } else {
+        mapUtils.removeHeatMap();
+      }
+    }
+
+    function filterSvi(value) {
+      sviSliderValue.value = value;
+      const layer = mapUtils.getCurrentMarkerLayer();
+      const container = layer._pixiContainer;
+      const sviList = container.children.map((marker) => {
+        return {
+          id: marker.id,
+          svi: marker.svi,
+        };
+      });
+      sviList.sort((a, b) => {
+        return (b.svi || 1) - (a.svi || 1);
+      });
+      const count = Math.floor((sviList.length * Number(value)) / 100);
+      const filteredSvi = sviList.slice(0, count);
+      const minSvi = filteredSvi[filteredSvi.length - 1].svi;
+      container.children.forEach((markerSprite) => {
+        markerSprite.visible = markerSprite.svi > minSvi;
+      });
+
+      layer._renderer.render(container);
+      layer.redraw();
+    }
+
+    function zoomIn() {
+      mapUtils.getMap().zoomIn();
+    }
+
+    function zoomOut() {
+      mapUtils.getMap().zoomOut();
+    }
 
     function applyTeamGeoJson(data) {
       mapUtils.applyTeamGeoJson(data.teamId, data.value, data.geom);
@@ -571,15 +690,33 @@ export default defineComponent({
       await reloadCase();
     }
 
+    async function printSelectedWorksites() {
+      const file = await Worksite.api().downloadWorksite(
+        Array.from(selectedTableItems.value),
+        'application/pdf',
+      );
+      forceFileDownload(file.response);
+    }
+
     async function downloadWorksites(ids) {
       loading.value = true;
       try {
+        let params;
+
+        if (ids) {
+          params = {
+            id__in: ids.join(','),
+          };
+        } else {
+          params = {
+            ...worksiteQuery.value,
+          };
+        }
+
         const response = await $http.get(
           `${process.env.VUE_APP_API_BASE_URL}/worksites_download/download_csv`,
           {
-            params: {
-              id__in: ids.join(','),
-            },
+            params,
             headers: { Accept: 'text/csv' },
             responseType: 'blob',
           },
@@ -726,6 +863,7 @@ export default defineComponent({
       loadCase,
       workTypesClaimedByOrganization,
       printWorksite,
+      printSelectedWorksites,
       downloadWorksites,
       onSelectionChanged,
       selectedTableItems,
@@ -736,6 +874,11 @@ export default defineComponent({
       availableWorkTypes,
       applyLocation,
       applyTeamGeoJson,
+      zoomIn,
+      zoomOut,
+      filterSvi,
+      sviSliderValue,
+      toggleHeatMap,
     };
   },
 });
@@ -808,7 +951,7 @@ export default defineComponent({
 <style lang="postcss" scoped>
 .work-page {
   @apply grid flex-grow h-full;
-  grid-template-columns: auto 450px;
+  grid-template-columns: auto 420px;
 
   &__actions {
     @apply absolute top-0 right-0 flex flex-col;

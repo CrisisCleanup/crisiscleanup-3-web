@@ -168,7 +168,7 @@
                     display-property="name"
                     :placeholder="$t('actions.search')"
                     size="medium"
-                    class="mx-2"
+                    class="mx-2 w-full"
                     @selectedExisting="handleChange"
                     @search="onSearch"
                     @clear="onSearch"
@@ -1071,6 +1071,7 @@
             @selectedExisting="handleChange"
             @search="onSearch"
             @clear="onSearch"
+
           />
         </div>
         <WorksiteMap

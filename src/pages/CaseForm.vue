@@ -33,6 +33,7 @@
           @selectedExisting="onWorksiteSelect"
           @search="worksitesSearch"
           skip-validation
+          class="w-full"
         />
       </section>
       <div class="form-field">
@@ -226,6 +227,7 @@
           @selectedExisting="onWorksiteSelect"
           @selectedGeocode="onGeocodeSelect"
           @search="geocoderSearch"
+          class="w-full"
         />
       </div>
       <template v-if="showAddressDetails">

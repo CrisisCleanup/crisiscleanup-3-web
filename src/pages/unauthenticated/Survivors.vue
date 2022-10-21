@@ -184,6 +184,7 @@
             @input="() => {}"
             @selectedGeocode="onGeocodeSelect"
             @search="geocoderSearch"
+            class="w-full"
           />
         </div>
         <base-button

@@ -149,6 +149,7 @@
           "
           @selectedGeocode="onGeocodeSelect"
           @search="geocoderSearch"
+          class="w-full"
         />
       </div>
       <div class="form-field">

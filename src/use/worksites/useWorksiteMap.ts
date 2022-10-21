@@ -1,4 +1,5 @@
 import * as L from 'leaflet';
+import 'leaflet.heat';
 import useRenderedMarkers from '@/use/worksites/useRenderedMarkers';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '@/utils/map';
 import Location from '@/models/Location';
@@ -183,6 +184,15 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
     }
   }
 
+  function addHeatMap(points) {
+    const heatLayer = L.heatLayer(points, { radius: 35 }).addTo(map);
+    heatLayer.key = 'heat_layer';
+  }
+
+  function removeHeatMap() {
+    removeLayer('heat_layer');
+  }
+
   return {
     getMap,
     getPixiContainer,
@@ -194,5 +204,7 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
     jumpToCase,
     applyLocation,
     applyTeamGeoJson,
+    addHeatMap,
+    removeHeatMap,
   };
 };

@@ -1,5 +1,28 @@
 <template>
-  <div class="flex worksite-actions" style="color: #4c4c4d">
+  <div class="flex items-center worksite-actions" style="color: #4c4c4d">
+    <div class="mt-2" v-if="pdas.length > 0">
+      <base-checkbox
+        class="pb-2"
+        :value="showingHeatMap"
+        @input="
+          showingHeatMap = $event;
+          $emit('toggleHeatMap', $event ? pdas : null);
+        "
+      >
+        <div class="flex">
+          {{ $t('casesVue.show_damaged_areas') }}
+          <img
+            class="w-5 h-5"
+            src="@/assets/red-cross-logo.jpg"
+            v-tooltip="{
+              content: $t('casesVue.damage_assessment_help'),
+              trigger: 'hover',
+              classes: 'interactive-tooltip w-72',
+            }"
+          />
+        </div>
+      </base-checkbox>
+    </div>
     <base-dropdown class-name="borderless">
       <base-button
         slot="btn"
@@ -293,6 +316,14 @@
       @closedFilters="showingFilters = false"
       @updatedFilters="handleFilters"
     />
+    <base-button
+      class="text-base font-thin mx-2"
+      ccu-icon="download"
+      icon-size="medium"
+      :alt="$t('actions.download')"
+      :text="$t('actions.download')"
+      :action="() => $emit('downloadCsv')"
+    />
   </div>
 </template>
 
@@ -303,11 +334,9 @@ import {
   ref,
   onMounted,
 } from '@vue/composition-api';
-import * as L from 'leaflet';
-import { useGetters } from '@u3u/vue-hooks';
+import { useGetters, useState } from '@u3u/vue-hooks';
 import WorksiteFilters from '@/components/WorksiteFilters.vue';
 import LocationType from '@/models/LocationType';
-import Location from '@/models/Location';
 import Team from '@/models/Team';
 import Incident from '@/models/Incident';
 import { getQueryString } from '@/utils/urls';
@@ -323,6 +352,7 @@ export default defineComponent({
 
     const { userId } = useGetters('auth', ['userId']);
     const currentUser = computed(() => User.find(userId.value));
+    const { currentIncidentId } = useState('incident', ['currentIncidentId']);
     const currentOrganization = computed(() =>
       Organization.find(currentUser?.value?.organization?.id),
     );
@@ -338,6 +368,8 @@ export default defineComponent({
     const districts = ref<any[]>([]);
     const counties = ref<any[]>([]);
     const organizationLocations = ref<any[]>([]);
+    const pdas = ref(null);
+    const showingHeatMap = ref(false);
 
     const teams = computed(() => {
       return Team.all();
@@ -443,6 +475,18 @@ export default defineComponent({
       // this.updateUserState();
     }
 
+    async function getPdas() {
+      const response = await $http.get(
+        `${process.env.VUE_APP_API_BASE_URL}/pdas`,
+        {
+          params: { incident: currentIncidentId.value },
+        },
+      );
+      pdas.value = response.data
+        .filter((p) => Boolean(p.location))
+        .map((p) => [p.location.coordinates[1], p.location.coordinates[0]]);
+    }
+
     onMounted(async () => {
       await Promise.any([
         getLocations(),
@@ -453,7 +497,7 @@ export default defineComponent({
         Team.api().get('/teams', {
           dataKey: 'results',
         }),
-        // this.getPdas(),
+        getPdas(),
       ]);
     });
 
@@ -473,6 +517,8 @@ export default defineComponent({
       teams,
       locations,
       filtersCount,
+      pdas,
+      showingHeatMap,
     };
   },
   props: {

@@ -1,7 +1,28 @@
 <template>
   <div class="flex flex-col" :style="[cssVars]">
     <div class="flex justify-between">
-      <span class="text-crisiscleanup-grey-900 text-sm mx-1">{{ from }} </span>
+      <span
+        class="
+          text-crisiscleanup-grey-900 text-sm
+          mx-1
+          flex
+          items-center
+          justify-start
+        "
+      >
+        {{ from }}
+        <ccu-icon
+          v-if="fromTooltip"
+          v-tooltip="{
+            content: fromTooltip,
+            trigger: 'click',
+            classes: 'interactive-tooltip w-auto',
+          }"
+          :alt="$t('actions.help_alt')"
+          type="help"
+          size="medium"
+        />
+      </span>
       <div>
         <span
           class="text-crisiscleanup-grey-900 text-sm mx-1 font-bold"
@@ -85,6 +106,11 @@ export default {
     title: {
       type: String,
       default: '',
+    },
+    fromTooltip: {
+      type: String,
+      default: null,
+      required: false,
     },
   },
   methods: {

@@ -2,7 +2,7 @@
   <AjaxTable
     :columns="columns"
     :url="tableUrl"
-    :body-style="{ height: '600px' }"
+    :body-style="{ height: '24rem' }"
     ref="table"
     class="mt-6 shadow-lg"
     :query="worksiteQuery"
