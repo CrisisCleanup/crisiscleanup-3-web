@@ -1100,6 +1100,7 @@ export default {
       }
     },
     async claimAndSaveWorksite() {
+      const isNewCase = !this.worksite.id;
       await this.saveWorksite(false);
       const isValid = this.$refs.form.reportValidity();
       if (!isValid) {
@@ -1116,8 +1117,10 @@ export default {
       this.$emit('reloadTable');
       this.$emit('reloadMap', this.worksite.id);
       this.$emit('savedWorksite', this.worksite);
-      await this.initForm();
-      this.clearLocationFields();
+      if (isNewCase) {
+        await this.initForm();
+        this.clearLocationFields();
+      }
     },
     resetForm() {
       this.worksite = new Worksite({
