@@ -106,11 +106,12 @@
               component-class="work-page__action-content work-page__action-content--chat"
               @open="
                 () => {
-                  // updateUserState({
-                  //   chat_last_seen: $moment().toISOString(),
-                  // });
-                  // unreadChatCount = 0;
-                  // unreadUrgentChatCount = 0;
+                  updateUserState({
+                    [`chat_${selectedChat.id}_last_seen`]:
+                      $moment().toISOString(),
+                  });
+                  unreadChatCount = 0;
+                  unreadUrgentChatCount = 0;
                 }
               "
             >
@@ -125,11 +126,60 @@
                     relative
                   "
                 >
+                  <div v-if="unreadChatCount" class="absolute top-0 left-0 m-1">
+                    <span
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        px-1
+                        py-0.5
+                        mr-2
+                        text-xs
+                        font-bold
+                        leading-none
+                        text-black
+                        bg-primary-light
+                        rounded-full
+                      "
+                      >{{ unreadChatCount }}</span
+                    >
+                  </div>
+                  <div
+                    v-if="unreadUrgentChatCount"
+                    class="absolute top-0 right-0 my-1 -mx-1"
+                  >
+                    <span
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        px-1
+                        py-0.5
+                        mr-2
+                        text-xs
+                        font-bold
+                        leading-none
+                        text-red-100
+                        bg-red-600
+                        rounded-full
+                      "
+                      >{{ unreadUrgentChatCount }}</span
+                    >
+                  </div>
                   <ccu-icon type="chat" class="p-1 ml-1.5" size="large" />
                 </div>
               </template>
               <template v-slot:component>
-                <Chat v-if="selectedChat" :chat="selectedChat" />
+                <Chat
+                  v-if="selectedChat"
+                  :chat="selectedChat"
+                  @unreadCount="unreadChatCount = $event"
+                  @unreadUrgentCount="unreadUrgentChatCount = $event"
+                  @onNewMessage="unreadChatCount += 1"
+                  @onNewUrgentMessage="unreadUrgentChatCount += 1"
+                  :state-key="`chat_${selectedChat.id}_last_seen`"
+                />
               </template>
             </PhoneComponentButton>
             <PhoneComponentButton
@@ -138,10 +188,10 @@
               component-class="work-page__action-content work-page__action-content--news"
               @open="
                 () => {
-                  // updateUserState({
-                  //   news_last_seen: $moment().toISOString(),
-                  // });
-                  // unreadNewsCount = 0;
+                  updateUserState({
+                    work_news_last_seen: $moment().toISOString(),
+                  });
+                  unreadNewsCount = 0;
                 }
               "
             >
@@ -156,11 +206,34 @@
                     relative
                   "
                 >
+                  <div v-if="unreadNewsCount" class="absolute top-0 left-0 m-1">
+                    <span
+                      class="
+                        inline-flex
+                        items-center
+                        justify-center
+                        px-1
+                        py-0.5
+                        mr-2
+                        text-xs
+                        font-bold
+                        leading-none
+                        text-red-100
+                        bg-red-600
+                        rounded-full
+                      "
+                      >{{ unreadNewsCount }}</span
+                    >
+                  </div>
                   <ccu-icon type="news" class="p-1 ml-1.5" size="large" />
                 </div>
               </template>
               <template v-slot:component>
-                <PhoneNews :cms-tag="'work-news'" />
+                <PhoneNews
+                  @unreadCount="unreadNewsCount = $event"
+                  :cms-tag="'work-news'"
+                  state-key="work_news_last_seen"
+                />
               </template>
             </PhoneComponentButton>
           </div>
@@ -510,6 +583,9 @@ export default defineComponent({
     const availableWorkTypes = ref({});
     const sviSliderValue = ref(100);
     let mapUtils;
+    const unreadChatCount = ref(0);
+    const unreadUrgentChatCount = ref(0);
+    const unreadNewsCount = ref(0);
 
     function loadStatesForUser() {
       const states = currentUser?.value?.getStatesForIncident(
@@ -1071,6 +1147,10 @@ export default defineComponent({
       filterQuery,
       mostRecentlySavedWorksite,
       reloadMap,
+      updateUserState,
+      unreadChatCount,
+      unreadUrgentChatCount,
+      unreadNewsCount,
     };
   },
 });

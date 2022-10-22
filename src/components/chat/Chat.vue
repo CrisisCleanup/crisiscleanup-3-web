@@ -120,6 +120,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    stateKey: {
+      type: String,
+      default: 'chat_last_seen',
+    },
   },
   async mounted() {
     await this.getUnreadMessagesCount();
@@ -213,8 +217,8 @@ export default {
         limit: 1,
         is_urgent: false,
       };
-      if (this.currentUser.states.chat_last_seen) {
-        params.created_at__gte = this.currentUser.states.chat_last_seen;
+      if (this.currentUser.states[this.stateKey]) {
+        params.created_at__gte = this.currentUser.states[this.stateKey];
       }
       const queryString = getQueryString(params);
       const response = await this.$http.get(
@@ -229,8 +233,8 @@ export default {
         limit: 1,
         is_urgent: true,
       };
-      if (this.currentUser.states.chat_last_seen) {
-        params.created_at__gte = this.currentUser.states.chat_last_seen;
+      if (this.currentUser.states[this.stateKey]) {
+        params.created_at__gte = this.currentUser.states[this.stateKey];
       }
       const queryString = getQueryString(params);
       const response = await this.$http.get(
@@ -245,7 +249,7 @@ export default {
       });
       this.currentMessage = '';
       this.urgent = false;
-      this.updateUserState({ chat_last_seen: this.$moment().toISOString() });
+      this.updateUserState({ [this.stateKey]: this.$moment().toISOString() });
     },
     async toggleFavorite(message, state) {
       try {

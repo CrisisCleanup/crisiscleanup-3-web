@@ -69,15 +69,19 @@ export default {
       type: String,
       default: 'phone-news',
     },
+    stateKey: {
+      type: String,
+      default: 'news_last_seen',
+    },
   },
   methods: {
     async getNews() {
-      if (this.currentUser.states.news_last_seen) {
+      if (this.currentUser.states[this.stateKey]) {
         const response = await this.$http.get(
           `${process.env.VUE_APP_API_BASE_URL}/cms?tags=${
             this.cmsTag
           }&publish_at__gt=${
-            this.currentUser.states.news_last_seen
+            this.currentUser.states[this.stateKey]
           }&publish_at__lt=${this.$moment().toISOString()}&limit=1`,
         );
         this.unreadCount = response.data.count;
