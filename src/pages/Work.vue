@@ -517,14 +517,14 @@ export default defineComponent({
         true,
       );
       if (states) {
-        if (states.showingMap) {
-          showingMap.value = true;
-          showingTable.value = false;
-        }
-        if (states.showingTable) {
-          showingTable.value = true;
-          showingMap.value = false;
-        }
+        // if (states.showingMap) {
+        //   showingMap.value = true;
+        //   showingTable.value = false;
+        // }
+        // if (states.showingTable) {
+        //   showingTable.value = true;
+        //   showingMap.value = false;
+        // }
         if (states.appliedFilters) {
           filterQuery.value = states.appliedFilters;
         }

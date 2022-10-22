@@ -1031,7 +1031,7 @@ export default {
       }
 
       try {
-        const isNewCase = !Boolean(this.worksite.id);
+        const isNewCase = !this.worksite.id;
         const notesToSave = this.worksite.notes
           .filter((n) => Boolean(n.pending))
           .map((n) => n.note);
