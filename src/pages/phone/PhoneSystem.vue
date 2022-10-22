@@ -1,104 +1,5 @@
 <template>
   <div class="phone-system">
-    <!-- TODO: Move this (doesn't belong here) -->
-    <div class="modal" v-if="showImgModal">
-      <div class="modal-content">
-        <font-awesome-icon
-          @click="showImgModal = false"
-          icon="times"
-          class="
-            text-white
-            h-7
-            w-7
-            fixed
-            top-3
-            right-7
-            cursor-pointer
-            hover:text-primary-dark
-            z-50
-          "
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-12
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-rotate"
-          @click="numClicks++"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-24
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-plus"
-          @click="scale += 0.25"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-32
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-minus"
-          @click="scale -= 0.25"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-108
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-chevron-right"
-          @click="moveImage(1)"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            left-7
-            top-108
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-chevron-left"
-          @click="moveImage(-1)"
-        />
-        <img
-          :src="imageUrl"
-          :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
-        />
-      </div>
-    </div>
     <div class="phone-system__main">
       <div class="phone-system__main-header">
         <div class="flex py-3 px-2" style="min-width: 80px">
@@ -540,8 +441,6 @@
             }
           "
           @geocoded="addMarkerToMap"
-          @image-click="showImage"
-          @changeImg="changeImage"
         />
       </div>
     </div>
@@ -605,7 +504,6 @@ export default {
       imageUrl: '',
       numClicks: 0,
       scale: 1,
-      showImgModal: false,
       worksiteId: null,
       isEditing: false,
       mapLoading: false,
@@ -723,17 +621,6 @@ export default {
     },
   },
   methods: {
-    changeImage(image) {
-      this.imageUrl = image.large_thumbnail_url;
-    },
-    moveImage(updateAmount) {
-      this.$refs.worksiteForm.moveImage(updateAmount);
-    },
-    showImage(image) {
-      console.log(image);
-      this.imageUrl = image.large_thumbnail_url;
-      this.showImgModal = true;
-    },
     async init() {
       this.$phoneService.apiGetQueueStats().then((response) => {
         this.setGeneralStats({ ...response.data });

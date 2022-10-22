@@ -316,9 +316,6 @@
         :worksite="worksite"
         :key="worksite.files"
         class="px-3 pb-3"
-        @image-click="showImg"
-        @changeImage="changeImg"
-        disable-modal
         ref="worksiteImageSection"
       />
       <div class="case-action">
@@ -669,15 +666,6 @@ export default {
     }
   },
   methods: {
-    changeImg(image) {
-      this.$emit('changeImg', image);
-    },
-    moveImage(updateAmount) {
-      this.$refs.worksiteImageSection.moveImage(updateAmount);
-    },
-    showImg(image) {
-      this.$emit('image-click', image);
-    },
     updateWorkTypesToClaim(value, workTypeToClaim) {
       if (value) {
         this.workTypesToClaim.add(workTypeToClaim.work_type);

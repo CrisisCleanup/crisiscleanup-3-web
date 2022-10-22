@@ -367,10 +367,6 @@
           class="px-3 pb-3"
           :worksite="worksite"
           :key="worksite.files"
-          @photosChanged="reloadWorksite"
-          @image-click="showImg"
-          @changeImage="changeImg"
-          disable-modal
           ref="worksiteImageSection"
         />
       </template>
@@ -609,15 +605,6 @@ export default {
     await this.initForm();
   },
   methods: {
-    changeImg(image) {
-      this.$emit('changeImg', image);
-    },
-    moveImage(updateAmount) {
-      this.$refs.worksiteImageSection.moveImage(updateAmount);
-    },
-    showImg(image) {
-      this.$emit('image-click', image);
-    },
     async initForm() {
       this.ready = false;
       if (this.worksiteId) {
@@ -666,7 +653,9 @@ export default {
 
       StorageService.removeItem('currentWorksite');
       this.ready = true;
-      this.$refs.formtree.scrollTop = 0;
+      if (this.$refs.formtree) {
+        this.$refs.formtree.scrollTop = 0;
+      }
     },
     async saveNote(currentNote) {
       const notes = [...this.worksite.notes];

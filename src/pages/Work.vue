@@ -436,8 +436,6 @@
           @reloadCase="reloadMap"
           @closeWorksite="clearCase"
           @onResetForm="clearCase"
-          @image-click="showImage"
-          @changeImg="changeImage"
           @caseLoaded="
             () => {
               if (route && route.query.showOnMap) {
@@ -480,8 +478,6 @@
             }
           "
           @geocoded="addMarkerToMap"
-          @image-click="showImage"
-          @changeImg="changeImage"
         />
       </div>
     </div>
@@ -574,7 +570,6 @@ export default defineComponent({
     const allWorksiteCount = ref<Number>(0);
     const searchWorksites = ref<any[]>([]);
     const worksiteId = ref<any>(null);
-    const imageUrl = ref<string>('');
     const selectedChat = ref<any>({ id: 2 });
     const filterQuery = ref<any>({});
     const filters = ref<any>({});
@@ -1018,14 +1013,6 @@ export default defineComponent({
       showMap();
     }
 
-    function showImage(image) {
-      imageUrl.value = image.large_thumbnail_url;
-    }
-
-    function changeImage(image) {
-      imageUrl.value = image.large_thumbnail_url;
-    }
-
     function loadCase(data) {
       isViewing.value = true;
       worksiteId.value = data.id;
@@ -1092,8 +1079,6 @@ export default defineComponent({
     });
 
     return {
-      showImage,
-      changeImage,
       addMarkerToMap,
       clearCase,
       currentIncidentId,

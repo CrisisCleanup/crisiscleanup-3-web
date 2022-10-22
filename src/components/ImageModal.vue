@@ -1,112 +1,5 @@
 <template>
   <div>
-    <div v-show="showModal" class="modal">
-      <div id="modal-content" class="modal-content">
-        <font-awesome-icon
-          @click="
-            () => {
-              $emit('onClose');
-              showModal = false;
-            }
-          "
-          icon="times"
-          class="
-            text-white
-            h-7
-            w-7
-            fixed
-            top-3
-            right-7
-            cursor-pointer
-            hover:text-primary-dark
-            z-50
-          "
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-12
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-rotate"
-          @click="numClicks++"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-24
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-plus"
-          @click="scale += 0.25"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-32
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-minus"
-          @click="scale -= 0.25"
-        />
-        <font-awesome-icon
-          v-if="imageIndex < imageList.length - 1"
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-108
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-chevron-right"
-          @click="moveImage(1)"
-        />
-        <font-awesome-icon
-          v-if="imageIndex > 0"
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            left-7
-            top-108
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-chevron-left"
-          @click="moveImage(-1)"
-        />
-        <slot name="modal-content">
-          <img
-            :src="selectedImage.large_thumbnail_url"
-            :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
-          />
-        </slot>
-      </div>
-    </div>
     <div class="flex flex-wrap">
       <slot name="image-list">
         <div v-for="(image, idx) in imageList" :key="idx">
@@ -132,7 +25,9 @@
   </div>
 </template>
 <script>
+import 'viewerjs/dist/viewer.css';
 import _ from 'lodash';
+import { api as viewerApi } from 'v-viewer';
 
 export default {
   name: 'ImageModal',
@@ -146,6 +41,16 @@ export default {
       default: false,
     },
   },
+  computed: {
+    images() {
+      return this.imageList.map((image) => {
+        return {
+          src: image.small_thumbnail_url,
+          'data-source': image.large_thumbnail_url,
+        };
+      });
+    },
+  },
   data() {
     return {
       showModal: false,
@@ -157,13 +62,14 @@ export default {
   },
   methods: {
     appearModal(image, idx) {
-      this.selectedImage = image;
-      this.imageIndex = idx;
-      this.$emit('image-click', image);
-      if (!this.disableModal) {
-        this.showModal = true;
-        document.getElementById('top').scrollIntoView();
-      }
+      const $viewer = viewerApi({
+        options: {
+          toolbar: true,
+          url: 'data-source',
+          initialViewIndex: idx,
+        },
+        images: this.images,
+      });
     },
     moveImage(updateAmount) {
       this.imageIndex = _.clamp(

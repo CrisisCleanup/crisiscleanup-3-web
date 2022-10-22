@@ -46,8 +46,7 @@ import VuePhoneNumberInput from 'vue-phone-number-input';
 import ToggleButton from 'vue-js-toggle-button';
 import VCalendar from 'v-calendar';
 import { has, padStart } from 'lodash';
-import { getModule } from 'vuex-module-decorators';
-import Logger from '@/utils/log';
+import VueViewer from 'v-viewer';
 import PhoneService from '@/services/phone.service';
 import Tab from '@/components/tabs/Tab.vue';
 import Tabs from '@/components/tabs/Tabs.vue';
@@ -139,6 +138,7 @@ Vue.use(ModalDialogs);
 Vue.use(VueClipboard);
 Vue.use(VueEasyLightbox);
 Vue.use(VueAxios, axios);
+Vue.use(VueViewer);
 momentWithDurations(moment);
 Vue.use(require('vue-moment'), { moment });
 Vue.use(VueMq, {
