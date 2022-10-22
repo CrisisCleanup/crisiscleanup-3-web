@@ -5,6 +5,7 @@ import { getMarkerLayer, mapTileLayer, mapAttribution } from '@/utils/map';
 import Location from '@/models/Location';
 
 export default (markers, onMarkerClick, onLoadMarkers) => {
+  let loadMarker;
   const map = L.map('map', {
     zoomControl: false,
   }).fitBounds([
@@ -29,8 +30,11 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
     removeLayer('marker_layer');
     const worksiteLayer = getMarkerLayer([], map, {});
     worksiteLayer.addTo(map);
-    const { workTypes, findMarker } = useRenderedMarkers(map, worksiteMarkers);
-
+    const { workTypes, findMarker, renderMarkerSprite } = useRenderedMarkers(
+      map,
+      worksiteMarkers,
+    );
+    loadMarker = renderMarkerSprite;
     map.on('click', (e) => {
       const marker = findMarker(e.latlng);
       if (marker) {
@@ -208,5 +212,6 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
     applyTeamGeoJson,
     addHeatMap,
     removeHeatMap,
+    loadMarker,
   };
 };

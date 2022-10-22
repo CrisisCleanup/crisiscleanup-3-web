@@ -156,5 +156,6 @@ export default (map, markers) => {
   return {
     workTypes,
     findMarker,
+    renderMarkerSprite,
   };
 };

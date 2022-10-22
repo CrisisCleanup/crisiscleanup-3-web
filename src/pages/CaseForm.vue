@@ -9,7 +9,7 @@
       <!-- maybe not required -->
       <!-- <resize-observer @notify="calcFormStyle" /> -->
     </div>
-    <div class="case-form__body">
+    <div class="case-form__body" ref="formtree">
       <SectionHeading :count="1" class="mb-3">{{
         $t('caseForm.property_information')
       }}</SectionHeading>
@@ -666,6 +666,7 @@ export default {
 
       StorageService.removeItem('currentWorksite');
       this.ready = true;
+      this.$refs.formtree.scrollTop = 0;
     },
     async saveNote(currentNote) {
       const notes = [...this.worksite.notes];
@@ -1030,6 +1031,7 @@ export default {
       }
 
       try {
+        const isNewCase = !Boolean(this.worksite.id);
         const notesToSave = this.worksite.notes
           .filter((n) => Boolean(n.pending))
           .map((n) => n.note);
@@ -1099,6 +1101,10 @@ export default {
           this.$emit('reloadTable');
           this.$emit('reloadMap', this.worksite.id);
           this.$emit('savedWorksite', this.worksite);
+          if (isNewCase) {
+            await this.initForm();
+            this.clearLocationFields();
+          }
         }
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
@@ -1121,6 +1127,8 @@ export default {
       this.$emit('reloadTable');
       this.$emit('reloadMap', this.worksite.id);
       this.$emit('savedWorksite', this.worksite);
+      await this.initForm();
+      this.clearLocationFields();
     },
     resetForm() {
       this.worksite = new Worksite({
@@ -1259,6 +1267,11 @@ export default {
   watch: {
     dataPrefill(newValue) {
       this.worksite = { ...this.worksite, ...newValue };
+    },
+    worksiteId(newValue) {
+      if (!newValue) {
+        this.worksite = {};
+      }
     },
     isWrongLocation(newValue) {
       if (newValue !== this.shouldSelectOnMap) {

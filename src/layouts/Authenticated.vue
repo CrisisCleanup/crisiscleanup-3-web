@@ -164,14 +164,14 @@ export default {
         to: `/incident/${currentIncidentId.value}/dashboard`,
       },
       {
-        key: 'cases',
-        to: `/incident/${currentIncidentId.value}/cases/new`,
-      },
-      {
         key: 'work',
         to: `/incident/${currentIncidentId.value}/work`,
         icon: 'cases',
         text: $t('nav.work'),
+      },
+      {
+        key: 'cases',
+        to: `/incident/${currentIncidentId.value}/cases/new`,
       },
       {
         key: 'phone',

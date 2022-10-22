@@ -259,7 +259,7 @@
             isViewing = false;
             isEditing = true;
             router.push(
-              `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
+              `/incident/${currentIncidentId}/work/${worksite.id}/edit`,
             );
           }
         "
@@ -272,6 +272,7 @@
       />
       <div v-else class="work-page__form-header">
         <div
+          @click.native="() => clearCase()"
           class="
             flex
             h-full
@@ -281,13 +282,29 @@
             p-3
           "
         >
-          <ccu-icon
-            :alt="$t('casesVue.new_case')"
-            type="active"
-            size="small"
-            :action="() => selectCase(null)"
-          />
+          <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
           <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
+        </div>
+        <div
+          v-if="mostRecentlySavedWorksite && mostRecentlySavedWorksite.id"
+          class="h-full p-3 flex items-center justify-center"
+          @click="() => loadCase(mostRecentlySavedWorksite)"
+        >
+          Case
+          {{
+            mostRecentlySavedWorksite && mostRecentlySavedWorksite.case_number
+          }}
+          <ccu-icon
+            :alt="$t('actions.cancel')"
+            size="xs"
+            type="cancel"
+            class="ml-2"
+            :action="
+              () => {
+                mostRecentlySavedWorksite = null;
+              }
+            "
+          />
         </div>
         <base-button
           v-if="$mq === 'sm'"
@@ -343,6 +360,7 @@
           :incident-id="String(currentIncidentId)"
           :key="worksiteId"
           :top-height="300"
+          @reloadCase="reloadMap"
           @closeWorksite="clearCase"
           @onResetForm="clearCase"
           @image-click="showImage"
@@ -362,15 +380,19 @@
           :worksite-id="worksiteId"
           :key="worksiteId"
           @jumpToCase="jumpToCase"
-          disable-claim-and-save
           :is-editing="isEditing"
           @savedWorksite="
             (worksite) => {
-              worksiteId = worksite.id;
-              isEditing = true;
-              router.push(
-                `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
-              );
+              if (!isEditing) {
+                clearCase();
+                mostRecentlySavedWorksite = worksite;
+              } else {
+                isEditing = true;
+                router.push(
+                  `/incident/${currentIncidentId}/work/${worksite.id}/edit`,
+                );
+              }
+              reloadMap();
             }
           "
           @closeWorksite="clearCase"
@@ -380,7 +402,7 @@
               worksiteId = id;
               isEditing = true;
               router.push(
-                `/incident/${currentIncidentId.value}/work/${worksite.id}/edit`,
+                `/incident/${currentIncidentId}/work/${worksite.id}/edit`,
               );
             }
           "
@@ -483,6 +505,7 @@ export default defineComponent({
     const selectedChat = ref<any>({ id: 2 });
     const filterQuery = ref<any>({});
     const filters = ref<any>({});
+    const mostRecentlySavedWorksite = ref<any>(null);
     const selectedTableItems = ref([]);
     const availableWorkTypes = ref({});
     const sviSliderValue = ref(100);
@@ -536,6 +559,29 @@ export default defineComponent({
       );
     }
 
+    const worksiteQuery = computed<Record<any, any>>(() => {
+      return {
+        incident: currentIncidentId.value,
+        ...filterQuery.value,
+      };
+    });
+
+    async function getWorksites() {
+      mapLoading.value = true;
+      const response = await loadCasesCached({
+        ...worksiteQuery.value,
+      });
+      mapLoading.value = false;
+      allWorksiteCount.value = response.results.length;
+      return response.results;
+    }
+
+    async function reloadMap() {
+      const markers = await getWorksites();
+      mapUtils.reloadMap(markers);
+      updateUserState({});
+    }
+
     const showTable = () => {
       showingTable.value = true;
       showingMap.value = false;
@@ -545,6 +591,9 @@ export default defineComponent({
     const showMap = () => {
       showingTable.value = false;
       showingMap.value = true;
+      reloadMap().then(() => {
+        updateUserState({});
+      });
       updateUserState({});
     };
 
@@ -570,13 +619,6 @@ export default defineComponent({
         trailing: true,
       },
     );
-
-    const worksiteQuery = computed<Record<any, any>>(() => {
-      return {
-        incident: currentIncidentId.value,
-        ...filterQuery.value,
-      };
-    });
 
     const showingDetails = computed<Boolean>(() => {
       return showHistory.value || showFlags.value;
@@ -892,6 +934,7 @@ export default defineComponent({
       worksiteId.value = null;
       isEditing.value = false;
       isViewing.value = false;
+      router.push(`/incident/${currentIncidentId.value}/work`);
     }
 
     async function addMarkerToMap(location) {
@@ -907,16 +950,6 @@ export default defineComponent({
       imageUrl.value = image.large_thumbnail_url;
     }
 
-    async function getWorksites() {
-      mapLoading.value = true;
-      const response = await loadCasesCached({
-        ...worksiteQuery.value,
-      });
-      mapLoading.value = false;
-      allWorksiteCount.value = response.results.length;
-      return response.results;
-    }
-
     function loadCase(data) {
       isViewing.value = true;
       worksiteId.value = data.id;
@@ -930,12 +963,6 @@ export default defineComponent({
 
     function onUpdateFilters(f) {
       filters.value = f;
-      updateUserState({});
-    }
-
-    async function reloadMap() {
-      const markers = await getWorksites();
-      mapUtils.reloadMap(markers);
       updateUserState({});
     }
 
@@ -1042,6 +1069,8 @@ export default defineComponent({
       reloadTable,
       filters,
       filterQuery,
+      mostRecentlySavedWorksite,
+      reloadMap,
     };
   },
 });
@@ -1160,7 +1189,7 @@ export default defineComponent({
     @apply flex flex-col;
 
     &-header {
-      @apply h-12 border flex items-center justify-between;
+      @apply h-12 border flex items-center justify-start;
     }
 
     &-toggler {

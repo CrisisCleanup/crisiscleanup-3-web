@@ -709,6 +709,7 @@ export default {
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
+        this.$emit('reloadCase', this.worksite);
         this.showingClaimModal = false;
         this.workTypesToClaim = new Set();
       } catch (error) {
@@ -733,6 +734,7 @@ export default {
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
+        this.$emit('reloadCase', this.worksite);
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -743,6 +745,7 @@ export default {
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
+        this.$emit('reloadCase', this.worksite);
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
@@ -759,6 +762,7 @@ export default {
         await this.getWorksiteRequests();
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
+        this.$emit('reloadCase', this.worksite);
         await this.$toasted.success(
           this.$t('Successfully requested work types'),
         );
@@ -794,6 +798,7 @@ export default {
         await Worksite.api().fetch(this.worksite.id);
         this.$emit('reloadMap', this.worksite.id);
         this.$emit('reloadTable');
+        this.$emit('reloadCase', this.worksite);
       }
     },
 

@@ -318,7 +318,7 @@
                   {{ $t('profileUser.clear_favorites_user_settings') }}
                 </p>
 
-                <div class="extra-settings">
+                <div class="extra-settings" v-if="false">
                   <base-checkbox
                     v-model="currentUser.preferences.enable_worksite_caching"
                   >

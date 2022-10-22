@@ -16,11 +16,6 @@ const loadCases = async (query) => {
 };
 
 const loadCasesCached = async (query) => {
-  const { currentUser } = useUser();
-  if (!currentUser?.value?.preferences.enable_worksite_caching) {
-    return loadCases(query);
-  }
-  // await DbService.init();
   const hashCode = (str) =>
     str
       .split('')

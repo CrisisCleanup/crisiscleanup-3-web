@@ -1,13 +1,11 @@
 <template>
   <div>
     <div v-if="showCaseTabs" class="h-12 flex items-center justify-start px-2">
-      <div class="flex items-center cursor-pointer">
-        <ccu-icon
-          :alt="$t('casesVue.new_case')"
-          type="active"
-          size="small"
-          @click.native="$emit('closeWorksite')"
-        />
+      <div
+        class="flex items-center cursor-pointer"
+        @click="() => $emit('closeWorksite')"
+      >
+        <ccu-icon :alt="$t('casesVue.new_case')" type="active" size="small" />
         <span class="px-1 mt-0.5">{{ $t('casesVue.new_case') }}</span>
       </div>
       <div
