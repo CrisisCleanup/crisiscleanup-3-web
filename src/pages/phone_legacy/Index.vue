@@ -96,7 +96,7 @@
                 {{ nextOutbound.state_name }}
               </base-text>
               <base-text variant="bodysm" v-if="outboundLocalTime">
-                {{ $t('~~Local Time:') }} {{ outboundLocalTime }}
+                {{ $t('Local Time:') }} {{ outboundLocalTime }}
               </base-text>
             </div>
             <base-button
@@ -167,23 +167,23 @@
         />
         <div class="flex flex-col bg-crisiscleanup-light-grey p-2">
           <div class="flex items-center justify-between">
-            <base-text variant="h2">{{ $t('~~Callback Stats') }}</base-text>
+            <base-text variant="h2">{{ $t('Callback Stats') }}</base-text>
             <base-button icon="sync" :action="getStats" />
           </div>
           <div class="flex py-2 items-center justify-between">
-            <base-text>{{ $t('~~Callbacks') }}</base-text>
+            <base-text>{{ $t('Callbacks') }}</base-text>
             {{ stats.callbacks }}
           </div>
           <div class="flex py-2 items-center justify-between">
-            <base-text>{{ $t('~~Calldowns') }}</base-text>
+            <base-text>{{ $t('Calldowns') }}</base-text>
             {{ stats.calldowns }}
           </div>
           <div class="flex py-2 items-center justify-between">
-            <base-text>{{ $t('~~In Progess') }}</base-text>
+            <base-text>{{ $t('In Progess') }}</base-text>
             {{ stats.in_progress }}
           </div>
           <div class="flex py-2 items-center justify-between">
-            <base-text>{{ $t('~~Pending') }}</base-text>
+            <base-text>{{ $t('Pending') }}</base-text>
             {{ stats.pending }}
           </div>
         </div>

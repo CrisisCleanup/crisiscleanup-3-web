@@ -320,7 +320,7 @@ export default {
             .style('opacity', 1)
             .style('left', `${event.pageX + 10}px`)
             .style('top', `${event.pageY + 10}px`)
-            .text($t(`~~${tooltipText}`));
+            .text($t(`${tooltipText}`));
         })
         .on('mouseout', function () {
           d3.select('#bar-chart-tooltip').style('opacity', 0);
@@ -333,7 +333,7 @@ export default {
             .style('opacity', 1)
             .style('left', `${event.pageX + 10}px`)
             .style('top', `${event.pageY + 10}px`)
-            .text($t(`~~${tooltipText}`));
+            .text($t(`${tooltipText}`));
         });
     },
 

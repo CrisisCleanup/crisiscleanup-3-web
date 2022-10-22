@@ -9,8 +9,8 @@
       :width="85"
       :font-size="14"
       :labels="{
-        checked: $t(translations.labelChecked || '~~Opt Out'),
-        unchecked: $t(translations.labelUnchecked || '~~Try it!'),
+        checked: $t(translations.labelChecked || 'Opt Out'),
+        unchecked: $t(translations.labelUnchecked || 'Try it!'),
       }"
       @input="handleToggle"
     />

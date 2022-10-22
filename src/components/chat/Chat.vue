@@ -61,7 +61,7 @@
                   {{ $t('chat.urgent') }}
                 </base-checkbox>
                 <span class="italic cursor-pointer" @click="focusNewsTab">{{
-                  $t('~~chat.read_faq_first')
+                  $t('chat.read_faq_first')
                 }}</span>
                 <div class="flex">
                   <base-button
