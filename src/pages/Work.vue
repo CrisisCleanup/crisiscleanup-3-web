@@ -12,7 +12,7 @@
               :class="showingMap ? 'filter-yellow' : 'filter-gray'"
               type="map"
               ccu-event="user_ui-view-map"
-              @click.native="showMap"
+              @click.native="() => showMap(true)"
               data-cy="cases.mapButton"
             />
             <ccu-icon
@@ -453,10 +453,13 @@
           @jumpToCase="jumpToCase"
           :is-editing="isEditing"
           @savedWorksite="
-            (worksite) => {
+            (w) => {
               if (!isEditing) {
-                clearCase();
+                worksiteId = w.id;
                 mostRecentlySavedWorksite = worksite;
+                $nextTick(() => {
+                  clearCase();
+                });
               } else {
                 isEditing = true;
                 router.push(
@@ -659,12 +662,14 @@ export default defineComponent({
       updateUserState({});
     };
 
-    const showMap = () => {
+    const showMap = (reload = false) => {
       showingTable.value = false;
       showingMap.value = true;
-      reloadMap().then(() => {
-        updateUserState({});
-      });
+      if (reload) {
+        reloadMap().then(() => {
+          updateUserState({});
+        });
+      }
       updateUserState({});
     };
 

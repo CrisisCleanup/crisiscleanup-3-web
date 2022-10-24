@@ -1020,7 +1020,6 @@ export default {
       }
 
       try {
-        const isNewCase = !this.worksite.id;
         const notesToSave = this.worksite.notes
           .filter((n) => Boolean(n.pending))
           .map((n) => n.note);
@@ -1090,17 +1089,12 @@ export default {
           this.$emit('reloadTable');
           this.$emit('reloadMap', this.worksite.id);
           this.$emit('savedWorksite', this.worksite);
-          if (isNewCase) {
-            await this.initForm();
-            this.clearLocationFields();
-          }
         }
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       }
     },
     async claimAndSaveWorksite() {
-      const isNewCase = !this.worksite.id;
       await this.saveWorksite(false);
       const isValid = this.$refs.form.reportValidity();
       if (!isValid) {
@@ -1117,10 +1111,6 @@ export default {
       this.$emit('reloadTable');
       this.$emit('reloadMap', this.worksite.id);
       this.$emit('savedWorksite', this.worksite);
-      if (isNewCase) {
-        await this.initForm();
-        this.clearLocationFields();
-      }
     },
     resetForm() {
       this.worksite = new Worksite({
