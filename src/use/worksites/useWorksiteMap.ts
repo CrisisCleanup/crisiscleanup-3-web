@@ -93,6 +93,7 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
 
   async function addMarkerToMap(location) {
     let markerLocation = location;
+    const container = getPixiContainer() as any;
     if (!markerLocation) {
       markerLocation = map.getCenter();
     }
@@ -100,12 +101,17 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
     const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
       map,
     );
+    container.visible = false;
     map.setView([markerLocation.lat, markerLocation.lng], 15);
     marker
       .bindTooltip(window.vue.$t('casesVue.drag_pin_to_correct_location'), {
         direction: 'top',
       })
       .openTooltip();
+    setTimeout(() => {
+      container.visible = true;
+      map.panBy([1, 0]);
+    }, 400);
   }
 
   function fitLocation(location) {
