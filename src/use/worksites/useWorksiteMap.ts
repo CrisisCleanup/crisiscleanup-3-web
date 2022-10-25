@@ -3,6 +3,7 @@ import 'leaflet.heat';
 import useRenderedMarkers from '@/use/worksites/useRenderedMarkers';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '@/utils/map';
 import Location from '@/models/Location';
+import { Container } from 'pixi.js';
 
 export default (markers, onMarkerClick, onLoadMarkers) => {
   let loadMarker;
@@ -70,7 +71,7 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
     return map;
   }
 
-  function getPixiContainer() {
+  function getPixiContainer(): Container | null {
     let container = null;
     map.eachLayer((layer) => {
       if (layer.key === 'marker_layer') {
@@ -125,7 +126,9 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
   }
 
   const jumpToCase = async (worksite, showPopup = true) => {
-    if (map && worksite) {
+    const container = getPixiContainer();
+    if (map && worksite && container) {
+      container.visible = false;
       map.setView([worksite.latitude, worksite.longitude], 18);
       if (showPopup) {
         const popup = L.popup({ className: 'pixi-popup' });
@@ -137,6 +140,10 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
           map.closePopup();
         }, 5000);
       }
+      setTimeout(() => {
+        container.visible = true;
+        map.panBy([1, 0]);
+      }, 400);
     }
   };
 
