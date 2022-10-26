@@ -1213,7 +1213,7 @@ export default defineComponent({
 <style lang="postcss" scoped>
 .work-page {
   @apply grid flex-grow h-full;
-  grid-template-columns: auto 420px;
+  grid-template-columns: minmax(0, auto) 400px;
 
   &__actions {
     @apply absolute top-0 right-0 flex flex-col;

@@ -92,9 +92,11 @@
 </template>
 
 <script>
-import { computed, ref } from '@vue/composition-api';
+import { computed, ref, onMounted } from '@vue/composition-api';
+import { useGetters } from '@u3u/vue-hooks';
 import usei18n from '@/use/usei18n';
 import { colors, templates } from '@/icons/icons_templates';
+import User from '@/models/User';
 
 export default {
   name: 'WorksiteLegend',
@@ -106,6 +108,8 @@ export default {
   },
   setup(props) {
     const { $t } = usei18n();
+    const { userId } = useGetters('auth', ['userId']);
+    const currentUser = computed(() => User.find(userId.value));
 
     const showingLegend = ref(true);
     const displayedWorkTypeSvgs = computed(() => {
@@ -149,7 +153,13 @@ export default {
 
     function toggleLegend(status) {
       showingLegend.value = status;
+      User.api().updateUserState({ showingLegend: status });
     }
+
+    onMounted(() => {
+      showingLegend.value = currentUser.value.states.showingLegend;
+    });
+
     return {
       showingLegend,
       toggleLegend,

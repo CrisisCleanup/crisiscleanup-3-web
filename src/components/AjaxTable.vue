@@ -26,6 +26,7 @@
       enable-pagination
       :enable-selection="enableSelection"
       @change="getData"
+      :loading="loading"
       @rowClick="(payload) => $emit('rowClick', payload)"
       @selectionChanged="(payload) => $emit('selectionChanged', payload)"
     >
@@ -114,6 +115,7 @@ export default defineComponent({
     const data = ref<any[]>([]);
     const search = ref<string>('');
     const visible = ref(false);
+    const loading = ref(false);
     const meta = ref<TableMeta>({
       pagination: {
         pageSize: 10,
@@ -127,6 +129,7 @@ export default defineComponent({
     });
 
     const getData = async (tableMeta: TableMeta = {}) => {
+      loading.value = true;
       const pagination = tableMeta.pagination || meta.value.pagination;
       const sorter = tableMeta.sorter || meta.value.sorter;
       const params = {
@@ -149,6 +152,7 @@ export default defineComponent({
       meta.value.sorter = {
         ...sorter,
       };
+      loading.value = false;
     };
 
     onMounted(async () => {
@@ -170,6 +174,7 @@ export default defineComponent({
       visible,
       throttle,
       getData,
+      loading,
     };
   },
   watch: {
