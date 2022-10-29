@@ -137,7 +137,7 @@ export default defineComponent({
         limit: pagination ? pagination.pageSize : 10,
         ...props.query,
       };
-      params.search = search.value;
+      params.search = props.query.search || search.value;
       if (sorter && sorter.key) {
         params.sort = `${sorter.direction === 'desc' ? '-' : ''}${sorter.key}`;
       }

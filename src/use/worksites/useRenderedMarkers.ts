@@ -6,7 +6,7 @@ import { templates, colors } from '@/icons/icons_templates';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
-export default (map, markers) => {
+export default (map, markers, visibleMarkerIds) => {
   const textureMap = {};
   let workTypes = {};
   let points = [];
@@ -34,6 +34,10 @@ export default (map, markers) => {
         sprite = new Sprite();
         sprite.index = index;
         sprite.id = marker.id;
+        if (!visibleMarkerIds.includes(marker.id)) {
+          sprite.zIndex = 0;
+          sprite.alpha = 0.3;
+        }
         sprite.svi = marker.svi;
         sprite.work_types = marker.work_types;
         sprite.updated_at = marker.updated_at;

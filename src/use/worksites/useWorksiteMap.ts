@@ -5,7 +5,7 @@ import useRenderedMarkers from '@/use/worksites/useRenderedMarkers';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '@/utils/map';
 import Location from '@/models/Location';
 
-export default (markers, onMarkerClick, onLoadMarkers) => {
+export default (markers, visibleMarkerIds, onMarkerClick, onLoadMarkers) => {
   let loadMarker;
   const map = L.map('map', {
     zoomControl: false,
@@ -27,13 +27,14 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
       }
     });
   };
-  function setupMap(worksiteMarkers) {
+  function setupMap(worksiteMarkers, visibleIds) {
     removeLayer('marker_layer');
     const worksiteLayer = getMarkerLayer([], map, {});
     worksiteLayer.addTo(map);
     const { workTypes, findMarker, renderMarkerSprite } = useRenderedMarkers(
       map,
       worksiteMarkers,
+      visibleIds,
     );
     loadMarker = renderMarkerSprite;
     map.on('click', (e) => {
@@ -59,11 +60,11 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
     return { workTypes };
   }
 
-  onLoadMarkers(setupMap(markers));
+  onLoadMarkers(setupMap(markers, visibleMarkerIds));
 
-  const reloadMap = (newMarkers) => {
+  const reloadMap = (newMarkers, visibleIds) => {
     if (map) {
-      onLoadMarkers(setupMap(newMarkers));
+      onLoadMarkers(setupMap(newMarkers, visibleIds));
     }
   };
 

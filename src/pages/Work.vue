@@ -27,8 +27,13 @@
             />
           </div>
           <span v-if="allWorksiteCount" class="font-thin">
-            <span>
+            <span v-if="allWorksiteCount === filteredWorksiteCount">
               {{ $t('casesVue.cases') }}
+              {{ allWorksiteCount | numeral('0,0') }}
+            </span>
+            <span v-else>
+              {{ $t('casesVue.cases') }}
+              {{ filteredWorksiteCount | numeral('0,0') }} of
               {{ allWorksiteCount | numeral('0,0') }}
             </span>
           </span>
@@ -51,9 +56,11 @@
                 (w) => {
                   worksiteId = w.id;
                   isViewing = true;
-                  router.push({
-                    query: { showOnMap: true },
-                  });
+                  if (showingMap) {
+                    router.push({
+                      query: { showOnMap: true },
+                    });
+                  }
                 }
               "
               @search="onSearch"
@@ -593,7 +600,9 @@ export default defineComponent({
     const collapsedForm = ref<Boolean>(false);
     const loading = ref<Boolean>(false);
     const allWorksiteCount = ref<Number>(0);
+    const filteredWorksiteCount = ref<Number>(0);
     const searchWorksites = ref<any[]>([]);
+    const currentSearch = ref<string>('');
     const worksiteId = ref<any>(null);
     const selectedChat = ref<any>({ id: 2 });
     const filterQuery = ref<any>({});
@@ -659,6 +668,7 @@ export default defineComponent({
       return {
         incident: currentIncidentId.value,
         ...filterQuery.value,
+        search: currentSearch.value,
       };
     });
 
@@ -668,14 +678,28 @@ export default defineComponent({
         ...worksiteQuery.value,
       });
       mapLoading.value = false;
+      filteredWorksiteCount.value = response.results.length;
+      return response.results;
+    }
+
+    async function getAllWorksites() {
+      mapLoading.value = true;
+      const response = await loadCasesCached({
+        incident: currentIncidentId.value,
+      });
+      mapLoading.value = false;
       allWorksiteCount.value = response.results.length;
       return response.results;
     }
 
     async function reloadMap() {
       mapUtils.removeLayer('temp_markers');
+      const allWorksites = await getAllWorksites();
       const markers = await getWorksites();
-      mapUtils.reloadMap(markers);
+      mapUtils.reloadMap(
+        allWorksites,
+        markers.map((m) => m.id),
+      );
       updateUserState({});
     }
 
@@ -704,6 +728,7 @@ export default defineComponent({
 
     const onSearch = debounce(
       async function (search) {
+        currentSearch.value = search;
         searchingWorksites.value = true;
         if (!search) {
           searchWorksites.value = [];
@@ -1091,9 +1116,11 @@ export default defineComponent({
         }
       }
       loadStatesForUser();
+      const allWorksites = await getAllWorksites();
       const markers = await getWorksites();
       mapUtils = useWorksiteMap(
-        markers,
+        allWorksites,
+        markers.map((m) => m.id),
         (m) => {
           loadCase(m);
         },
@@ -1111,6 +1138,7 @@ export default defineComponent({
       clearCase,
       currentIncidentId,
       allWorksiteCount,
+      filteredWorksiteCount,
       isEditing,
       isViewing,
       onSearch,
@@ -1165,6 +1193,7 @@ export default defineComponent({
       unreadChatCount,
       unreadUrgentChatCount,
       unreadNewsCount,
+      currentSearch,
     };
   },
 });
