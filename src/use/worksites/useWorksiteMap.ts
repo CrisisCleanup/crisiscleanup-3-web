@@ -1,9 +1,9 @@
 import * as L from 'leaflet';
 import 'leaflet.heat';
+import { Container } from 'pixi.js';
 import useRenderedMarkers from '@/use/worksites/useRenderedMarkers';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '@/utils/map';
 import Location from '@/models/Location';
-import { Container } from 'pixi.js';
 
 export default (markers, onMarkerClick, onLoadMarkers) => {
   let loadMarker;
@@ -98,9 +98,13 @@ export default (markers, onMarkerClick, onLoadMarkers) => {
       markerLocation = map.getCenter();
     }
 
-    const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
-      map,
-    );
+    const markerGroup = L.layerGroup();
+    markerGroup.key = 'temp_markers';
+
+    const marker = new L.marker(markerLocation, { draggable: 'true' });
+    markerGroup.addTo(map);
+    markerGroup.addLayer(marker);
+
     container.visible = false;
     map.setView([markerLocation.lat, markerLocation.lng], 15);
     marker

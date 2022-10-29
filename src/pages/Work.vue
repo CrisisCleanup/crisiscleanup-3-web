@@ -673,6 +673,7 @@ export default defineComponent({
     }
 
     async function reloadMap() {
+      mapUtils.removeLayer('temp_markers');
       const markers = await getWorksites();
       mapUtils.reloadMap(markers);
       updateUserState({});
