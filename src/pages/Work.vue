@@ -1,5 +1,5 @@
 <template>
-  <div class="work-page">
+  <div class="work-page" :class="{ collapsedForm }">
     <!-- TODO: Move this (doesn't belong here) -->
     <div class="work-page__main">
       <div class="">
@@ -100,6 +100,27 @@
             :available-work-types="availableWorkTypes"
           />
           <div class="work-page__actions" ref="phoneButtons">
+            <div
+              class="
+                w-full
+                h-full
+                flex
+                items-center
+                justify-center
+                relative
+                p-0.5
+                mt-1
+                bg-white
+                cursor-pointer
+              "
+            >
+              <font-awesome-icon
+                @click="collapsedForm = !collapsedForm"
+                :icon="collapsedForm ? 'chevron-left' : 'chevron-right'"
+                class="px-0.5 py-2 ml-1.5"
+                size="large"
+              />
+            </div>
             <PhoneComponentButton
               name="chat"
               class="work-page__action"
@@ -569,6 +590,7 @@ export default defineComponent({
     const isViewing = ref<Boolean>(false);
     const searchingWorksites = ref<Boolean>(false);
     const mapLoading = ref<Boolean>(false);
+    const collapsedForm = ref<Boolean>(false);
     const loading = ref<Boolean>(false);
     const allWorksiteCount = ref<Number>(0);
     const searchWorksites = ref<any[]>([]);
@@ -1119,6 +1141,7 @@ export default defineComponent({
       onSelectionChanged,
       selectedTableItems,
       loading,
+      collapsedForm,
       goToIncidentCenter,
       goToInteractive,
       reloadCase,
@@ -1211,9 +1234,16 @@ export default defineComponent({
 </style>
 
 <style lang="postcss" scoped>
+.collapsedForm.work-page {
+  grid-template-columns: minmax(0, auto);
+}
+
+.collapsedForm.work-page .work-page__form {
+  display: none;
+}
 .work-page {
   @apply grid flex-grow h-full;
-  grid-template-columns: minmax(0, auto) 400px;
+  grid-template-columns: minmax(0, auto) minmax(auto, 400px);
 
   &__actions {
     @apply absolute top-0 right-0 flex flex-col;
