@@ -2,85 +2,106 @@
   <div class="work-page" :class="{ collapsedForm }">
     <!-- TODO: Move this (doesn't belong here) -->
     <div class="work-page__main">
-      <div class="">
-        <div class="flex items-center h-16">
-          <div class="flex py-3 px-2" style="min-width: 80px">
-            <ccu-icon
-              :alt="$t('casesVue.map_view')"
-              size="medium"
-              class="mr-4 cursor-pointer"
-              :class="showingMap ? 'filter-yellow' : 'filter-gray'"
-              type="map"
-              ccu-event="user_ui-view-map"
-              @click.native="() => showMap(true)"
-              data-cy="cases.mapButton"
-            />
-            <ccu-icon
-              :alt="$t('casesVue.table_view')"
-              size="medium"
-              class="mr-4 cursor-pointer"
-              :class="showingTable ? 'filter-yellow' : 'filter-gray'"
-              type="table"
-              ccu-event="user_ui-view-table"
-              @click.native="showTable"
-              data-cy="cases.tableButton"
-            />
-          </div>
-          <span v-if="allWorksiteCount" class="font-thin">
-            <span v-if="allWorksiteCount === filteredWorksiteCount">
-              {{ $t('casesVue.cases') }}
-              {{ allWorksiteCount | numeral('0,0') }}
+      <div class="relative">
+        <div class="flex items-center justify-between">
+          <div v-if="!collapsedUtilityBar" class="flex items-center h-16">
+            <div class="flex py-3 px-2" style="min-width: 80px">
+              <ccu-icon
+                :alt="$t('casesVue.map_view')"
+                size="medium"
+                class="mr-4 cursor-pointer"
+                :class="showingMap ? 'filter-yellow' : 'filter-gray'"
+                type="map"
+                ccu-event="user_ui-view-map"
+                @click.native="() => showMap(true)"
+                data-cy="cases.mapButton"
+              />
+              <ccu-icon
+                :alt="$t('casesVue.table_view')"
+                size="medium"
+                class="mr-4 cursor-pointer"
+                :class="showingTable ? 'filter-yellow' : 'filter-gray'"
+                type="table"
+                ccu-event="user_ui-view-table"
+                @click.native="showTable"
+                data-cy="cases.tableButton"
+              />
+            </div>
+            <span v-if="allWorksiteCount" class="font-thin">
+              <span v-if="allWorksiteCount === filteredWorksiteCount">
+                {{ $t('casesVue.cases') }}
+                {{ allWorksiteCount | numeral('0,0') }}
+              </span>
+              <span v-else>
+                {{ $t('casesVue.cases') }}
+                {{ filteredWorksiteCount | numeral('0,0') }} of
+                {{ allWorksiteCount | numeral('0,0') }}
+              </span>
             </span>
-            <span v-else>
-              {{ $t('casesVue.cases') }}
-              {{ filteredWorksiteCount | numeral('0,0') }} of
-              {{ allWorksiteCount | numeral('0,0') }}
-            </span>
-          </span>
-          <div class="flex justify-start w-auto">
-            <WorksiteSearchInput
-              width="300px"
-              icon="search"
-              :suggestions="[
-                {
-                  name: 'worksites',
-                  data: searchWorksites || [],
-                  key: 'name',
-                },
-              ]"
-              display-property="name"
-              :placeholder="$t('actions.search')"
-              size="medium"
-              class="mx-2 w-48"
-              @selectedExisting="
-                (w) => {
-                  worksiteId = w.id;
-                  isViewing = true;
-                  if (showingMap) {
-                    router.push({
-                      query: { showOnMap: true },
-                    });
+            <div class="flex justify-start w-auto">
+              <WorksiteSearchInput
+                width="300px"
+                icon="search"
+                :suggestions="[
+                  {
+                    name: 'worksites',
+                    data: searchWorksites || [],
+                    key: 'name',
+                  },
+                ]"
+                display-property="name"
+                :placeholder="$t('actions.search')"
+                size="medium"
+                class="mx-2 w-48"
+                @selectedExisting="
+                  (w) => {
+                    worksiteId = w.id;
+                    isViewing = true;
+                    if (showingMap) {
+                      router.push({
+                        query: { showOnMap: true },
+                      });
+                    }
                   }
-                }
+                "
+                @search="onSearch"
+                @clear="onSearch"
+              />
+              <WorksiteActions
+                :current-incident-id="String(currentIncidentId)"
+                :inital-filters="filters"
+                :key="currentIncidentId"
+                @updatedQuery="onUpdateQuery"
+                @updatedFilters="onUpdateFilters"
+                @applyLocation="applyLocation"
+                @applyTeamGeoJson="applyTeamGeoJson"
+                @downloadCsv="downloadWorksites"
+                @toggleHeatMap="toggleHeatMap"
+              />
+            </div>
+            <Loader v-if="loading || mapLoading" class="ml-10" />
+          </div>
+          <div class="flex justify-end items-center w-full">
+            <font-awesome-icon
+              @click="collapsedUtilityBar = !collapsedUtilityBar"
+              :icon="collapsedUtilityBar ? 'chevron-down' : 'chevron-up'"
+              class="
+                rounded-full
+                border
+                p-1
+                mx-1
+                mb-1
+                cursor-pointer
+                justify-end
               "
-              @search="onSearch"
-              @clear="onSearch"
-            />
-            <WorksiteActions
-              :current-incident-id="String(currentIncidentId)"
-              :inital-filters="filters"
-              :key="currentIncidentId"
-              @updatedQuery="onUpdateQuery"
-              @updatedFilters="onUpdateFilters"
-              @applyLocation="applyLocation"
-              @applyTeamGeoJson="applyTeamGeoJson"
-              @downloadCsv="downloadWorksites"
-              @toggleHeatMap="toggleHeatMap"
+              size="xl"
             />
           </div>
-          <Loader v-if="loading || mapLoading" class="ml-10" />
         </div>
-        <div class="flex justify-center items-center">
+        <div
+          v-if="!collapsedUtilityBar"
+          class="flex justify-center items-center"
+        >
           <Slider
             primary-color="#dadada"
             secondary-color="white"
@@ -598,6 +619,7 @@ export default defineComponent({
     const searchingWorksites = ref<Boolean>(false);
     const mapLoading = ref<Boolean>(false);
     const collapsedForm = ref<Boolean>(false);
+    const collapsedUtilityBar = ref<Boolean>(false);
     const loading = ref<Boolean>(false);
     const allWorksiteCount = ref<Number>(0);
     const filteredWorksiteCount = ref<Number>(0);
@@ -665,11 +687,14 @@ export default defineComponent({
     }
 
     const worksiteQuery = computed<Record<any, any>>(() => {
-      return {
+      const query = {
         incident: currentIncidentId.value,
         ...filterQuery.value,
-        search: currentSearch.value,
       };
+      if (currentSearch.value) {
+        query.search = currentSearch.value;
+      }
+      return query;
     });
 
     async function getWorksites() {
@@ -693,7 +718,9 @@ export default defineComponent({
     }
 
     async function reloadMap() {
-      mapUtils.removeLayer('temp_markers');
+      if (mapUtils) {
+        mapUtils.removeLayer('temp_markers');
+      }
       const allWorksites = await getAllWorksites();
       const markers = await getWorksites();
       mapUtils.reloadMap(
@@ -1171,6 +1198,7 @@ export default defineComponent({
       selectedTableItems,
       loading,
       collapsedForm,
+      collapsedUtilityBar,
       goToIncidentCenter,
       goToInteractive,
       reloadCase,

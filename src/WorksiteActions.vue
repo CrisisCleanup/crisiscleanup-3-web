@@ -32,6 +32,7 @@
         :alt="$t('casesVue.layers')"
         ccu-icon="layers"
         icon-size="medium"
+        icon-classes="w-4"
       />
       <template slot="body">
         <ul class="text-base">
@@ -293,6 +294,7 @@
       class="text-base font-thin mx-2"
       ccu-icon="filters"
       icon-size="medium"
+      icon-classes="w-4"
       :alt="$t('casesVue.filters')"
       :action="
         () => {
@@ -321,6 +323,7 @@
       class="text-base font-thin mx-2"
       ccu-icon="download"
       icon-size="medium"
+      icon-classes="w-4"
       :alt="$t('actions.download')"
       :text="$t('actions.download')"
       :action="() => $emit('downloadCsv')"

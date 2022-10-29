@@ -15,10 +15,27 @@
       icon="spinner"
       spin
     />
-    <font-awesome-icon v-if="icon" class="m-1" :icon="icon" :size="iconSize" />
-    <ccu-icon v-if="ccuIcon" class="m-1" :type="ccuIcon" :size="iconSize" />
+    <font-awesome-icon
+      v-if="icon"
+      class="m-1"
+      :icon="icon"
+      :size="iconSize"
+      :class="iconClasses"
+    />
+    <ccu-icon
+      v-if="ccuIcon"
+      class="m-1"
+      :type="ccuIcon"
+      :size="iconSize"
+      :class="iconClasses"
+    />
     <slot>{{ text }}</slot>
-    <font-awesome-icon v-if="suffixIcon" class="m-1" :icon="suffixIcon" />
+    <font-awesome-icon
+      v-if="suffixIcon"
+      class="m-1"
+      :icon="suffixIcon"
+      :class="iconClasses"
+    />
   </button>
 </template>
 
@@ -79,6 +96,10 @@ export default defineComponent({
       default: '',
     },
     iconSize: {
+      type: String as PropType<IconSize>,
+      default: '',
+    },
+    iconClasses: {
       type: String as PropType<IconSize>,
       default: '',
     },
