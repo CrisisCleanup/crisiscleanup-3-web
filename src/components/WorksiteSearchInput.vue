@@ -273,6 +273,10 @@ export default {
   @apply text-crisiscleanup-dark-200;
 }
 
+#autosuggest__input {
+  -webkit-appearance: none;
+}
+
 .autosuggest__results {
   font-weight: 200;
   min-width: 10vw;

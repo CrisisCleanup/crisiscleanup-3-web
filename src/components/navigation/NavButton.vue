@@ -28,7 +28,7 @@
         v-bind="iconProps"
         :linked="true"
       />
-      <div class="menu-text mt-1">
+      <div class="menu-text mt-1 text-center">
         {{ route.text || $t(`nav.${route.key}`) }}
       </div>
     </div>

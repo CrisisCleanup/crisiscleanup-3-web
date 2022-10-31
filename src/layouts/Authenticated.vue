@@ -1,80 +1,72 @@
 <template>
-  <Loader :loading="loading" :class="loading && 'flex layout h-full'">
-    <template #content>
-      <div
-        class="layout"
-        :class="{ 'layout--mobile': $mq === 'sm' || isLandscape() }"
-      >
-        <router-link
-          v-if="$mq !== 'sm' && !isLandscape()"
-          :to="logoRoute.to"
-          class="logo--grid"
-        >
-          <div class="logo flex justify-center p-3">
-            <img src="@/assets/crisiscleanup_logo.png" style="height: 53px" />
-          </div>
-        </router-link>
-        <NavMenu
-          v-if="$mq !== 'sm' && !isLandscape()"
-          :routes="routes"
-          :logo-route="logoRoute"
-          class="sidebar--grid"
-          :key="JSON.stringify(currentUser && currentUser.permissions)"
+  <div class="layout" v-if="!loading">
+    <div
+      class="sidebar h-full overflow-auto"
+      :class="{ 'slide-over': slideOverVisible }"
+    >
+      <div v-if="slideOverVisible" class="flex items-center justify-end p-1.5">
+        <font-awesome-icon
+          icon="times"
+          class="menu-button mx-2 cursor-pointer text-white self-end"
+          size="2xl"
+          @click="toggle"
         />
-        <Slide width="125" :close-on-navigation="true" v-else>
-          <NavMenu
-            :routes="routes"
-            :logo-route="logoRoute"
-            class="flex flex-col text-sm"
-            :key="JSON.stringify(currentUser && currentUser.permissions)"
-          />
-        </Slide>
-        <Header
-          :class="$mq === 'sm' ? 'ml-6' : isLandscape() ? 'ml-16' : ''"
-          :current-incident="currentIncident"
-          :incidents="incidents"
-          @update:incident="handleChange"
-          @auth:logout="
-            () => {
-              logoutApp();
-            }
-          "
-        />
-        <div
-          v-if="ready"
-          class="main--grid"
-          :class="!$route.meta.noscroll ? 'overflow-auto' : ''"
-        >
-          <slot />
-        </div>
-        <div v-if="showAcceptTermsModal">
-          <TermsandConditionsModal
-            @acceptedTerms="acceptTermsAndConditions"
-            :organization="currentOrganization"
-          />
-        </div>
-        <div v-if="transferRequest">
-          <CompletedTransferModal
-            :transfer-request="transferRequest"
-            @close="
-              () => {
-                transferRequest = null;
-              }
-            "
-          />
-        </div>
-        <div v-if="showLoginModal">
-          <modal
-            modal-classes="bg-white max-w-lg shadow p-5"
-            :closeable="false"
-          >
-            <LoginForm :redirect="false" />
-            <div slot="footer"></div>
-          </modal>
-        </div>
       </div>
-    </template>
-  </Loader>
+      <NavMenu
+        :routes="routes"
+        :logo-route="logoRoute"
+        class="flex flex-col text-sm"
+        :key="JSON.stringify(currentUser && currentUser.permissions)"
+      />
+    </div>
+    <div class="header p-1 flex items-center">
+      <font-awesome-icon
+        icon="bars"
+        class="menu-button mx-3 cursor-pointer"
+        size="2xl"
+        @click="toggle"
+      />
+      <Header
+        :class="$mq === 'sm' ? '' : isLandscape() ? 'ml-16' : ''"
+        :current-incident="currentIncident"
+        :incidents="incidents"
+        @update:incident="handleChange"
+        @auth:logout="
+          () => {
+            logoutApp();
+          }
+        "
+      />
+    </div>
+    <div class="main">
+      <div class="h-full overflow-scroll">
+        <slot />
+      </div>
+    </div>
+    <div v-if="showAcceptTermsModal">
+      <TermsandConditionsModal
+        @acceptedTerms="acceptTermsAndConditions"
+        :organization="currentOrganization"
+      />
+    </div>
+    <div v-if="transferRequest">
+      <CompletedTransferModal
+        :transfer-request="transferRequest"
+        @close="
+          () => {
+            transferRequest = null;
+          }
+        "
+      />
+    </div>
+    <div v-if="showLoginModal">
+      <modal modal-classes="bg-white max-w-lg shadow p-5" :closeable="false">
+        <LoginForm :redirect="false" />
+        <div slot="footer"></div>
+      </modal>
+    </div>
+  </div>
+  <Loader v-else :loading="loading" class="flex layout h-full" />
 </template>
 
 <script lang="ts">
@@ -131,6 +123,11 @@ export default {
     ]);
     const { portal } = useState('enums', ['portal']);
     const { userId } = useGetters('auth', ['userId']);
+
+    const slideOverVisible = ref(false);
+    const toggle = () => {
+      slideOverVisible.value = !slideOverVisible.value;
+    };
 
     const loading = ref(false);
     const ready = ref(false);
@@ -499,110 +496,75 @@ export default {
       logoutByPhoneNumber,
       handleChange,
       isLandscape,
+
+      slideOverVisible,
+      toggle,
     };
   },
 };
 </script>
 
-<style>
-body {
-  font-family: 'Nunito Sans', sans-serif;
-  overflow: hidden;
-}
-
-.content {
-  max-height: 100%;
-}
-
-#app .router-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.router-link:hover {
-  text-decoration: none !important;
-}
-
-.router-link:active {
-  text-decoration: none !important;
-}
-
-.router-link {
-  text-decoration: none !important;
-}
-
-.incident-select .ant-select-selection {
-  border: 0;
-  box-shadow: none;
-}
-
-.menu-popover {
-  @apply bg-white text-black outline-none border mt-4 shadow w-48;
-  left: 0.75rem !important;
-  z-index: 100;
-}
-
+<style scoped>
 .layout {
+  width: 100vw;
   height: 100vh;
-  min-height: 100vh;
   display: grid;
-  grid-template-columns: 8rem auto;
-  grid-template-rows: 4.5rem auto;
-  grid-template-areas:
-    'logo header'
-    'sidebar main';
-}
-
-.layout.layout--mobile {
-  grid-template-columns: auto !important;
-  grid-template-rows: 4.5rem auto 1px;
+  grid-template-rows: 80px 1fr;
+  grid-auto-columns: 1fr;
+  grid-auto-rows: 1fr;
+  grid-auto-flow: row;
   grid-template-areas:
     'header'
     'main';
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
-.logo--grid {
-  grid-area: logo;
+.sidebar {
+  grid-area: sidebar;
+  border: 1px solid #dfdfdf;
+  display: none;
+  z-index: 10000;
   background-color: #2d2d2d;
 }
 
-.sidebar--grid {
-  grid-area: sidebar;
+.sidebar.slide-over {
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 150px;
+  height: 100%;
 }
 
-.header--grid {
+.header {
   grid-area: header;
 }
 
-.main--grid {
+.main {
   grid-area: main;
+  min-height: 0;
+  min-width: 0;
 }
 
-.bm-burger-button {
-  cursor: pointer;
-  height: 20px;
-  left: 15px;
-  position: absolute;
-  top: 15px;
-  width: 25px;
-}
+@media (min-width: 768px) {
+  .layout {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    grid-template-rows: 80px 1fr;
+    grid-auto-columns: 1fr;
+    grid-auto-rows: 1fr;
+    grid-auto-flow: row;
+    grid-template-areas:
+      'sidebar header'
+      'sidebar main';
+  }
 
-.bm-item-list > * {
-  display: flex;
-  padding: 0;
-  text-decoration: none;
-}
+  .sidebar {
+    display: block;
+  }
 
-.bm-item-list {
-  margin-left: 0;
-}
-
-.bm-menu {
-  z-index: 1005;
-  padding-top: 0 !important;
-  background-color: #2d2d2d !important;
-  height: 100%;
+  .menu-button {
+    display: none;
+  }
 }
 </style>

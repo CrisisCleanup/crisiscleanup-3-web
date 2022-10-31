@@ -1,12 +1,12 @@
 <template>
-  <div class="sidebar overflow-y-auto">
-    <router-link v-if="$mq === 'sm'" :to="logoRoute.to" class="logo--grid">
+  <div class="navbar overflow-y-auto">
+    <router-link :to="logoRoute.to" class="logo--grid">
       <div class="logo flex justify-center p-3">
         <img src="@/assets/crisiscleanup_logo.png" style="height: 53px" />
       </div>
     </router-link>
 
-    <div class="menu overflow-y-auto">
+    <div class="menu overflow-y-auto grid">
       <NavButton
         class="overflow-y-auto"
         v-for="r in routes"
@@ -41,11 +41,8 @@ export default {
 </script>
 
 <style>
-.sidebar {
-  background-color: #2d2d2d;
-}
 @media only screen and (max-width: 1223px) and (orientation: landscape) {
-  .sidebar {
+  .navbar {
     @apply mb-20;
   }
 }

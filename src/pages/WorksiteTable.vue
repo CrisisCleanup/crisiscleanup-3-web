@@ -8,7 +8,7 @@
     :pagination="pagination"
     :sorter="sorter"
     :loading="tableLoading"
-    :body-style="{ height: '60vh' }"
+    :body-style="{ height: '24rem' }"
     @change="handleTableChange"
     @rowClick="displayWorksite"
     @selectionChanged="

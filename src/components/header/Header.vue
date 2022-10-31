@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow header header--grid bg-white">
+  <div class="header header--grid bg-white w-full">
     <div class="flex justify-between h-full items-center">
       <div class="flex items-center ml-2">
         <div class="h-10 w-10 flex items-center">
@@ -56,7 +56,7 @@
           :action="showCurrentUser"
         />
       </div>
-      <div class="flex h-full">
+      <div class="flex h-full items-center">
         <div
           v-if="$can && $can('phone_agent')"
           class="flex items-center header-item h-full"
@@ -127,14 +127,14 @@ export default {
 </script>
 
 <style scoped lang="postcss">
-.header {
-  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);
-  border: 1px solid #efefef;
-}
+/*.header {*/
+/*  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);*/
+/*  border: 1px solid #efefef;*/
+/*}*/
 
-.header-item {
-  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);
-  border: 1px solid rgba(151, 151, 151, 0.1);
-  @apply px-2;
-}
+/*.header-item {*/
+/*  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.0649858);*/
+/*  border: 1px solid rgba(151, 151, 151, 0.1);*/
+/*  @apply px-2;*/
+/*}*/
 </style>

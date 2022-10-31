@@ -1,5 +1,5 @@
 <template>
-  <div class="work-page" :class="{ collapsedForm }">
+  <div class="work-page h-full" :class="{ collapsedForm }">
     <!-- TODO: Move this (doesn't belong here) -->
     <div class="work-page__main">
       <div class="relative">
@@ -292,11 +292,11 @@
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
               :class="
-                selectedTableItems.size === 0
+                selectedTableItems && selectedTableItems.size === 0
                   ? 'text-crisiscleanup-grey-700'
                   : ''
               "
-              :disabled="selectedTableItems.size === 0"
+              :disabled="selectedTableItems && selectedTableItems.size === 0"
               :text="$t('actions.print')"
               :alt="$t('actions.print')"
               :action="printSelectedWorksites"
@@ -305,11 +305,11 @@
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
               :class="
-                selectedTableItems.size === 0
+                selectedTableItems && selectedTableItems.size === 0
                   ? 'text-crisiscleanup-grey-700'
                   : ''
               "
-              :disabled="selectedTableItems.size === 0"
+              :disabled="selectedTableItems && selectedTableItems.size === 0"
               :text="$t('actions.download')"
               :alt="$t('actions.download')"
               :action="
@@ -322,11 +322,11 @@
             <base-button
               class="ml-3 my-3 border p-1 px-4 bg-white"
               :class="
-                selectedTableItems.size === 0
+                selectedTableItems && selectedTableItems.size === 0
                   ? 'text-crisiscleanup-grey-700'
                   : ''
               "
-              :disabled="selectedTableItems.size === 0"
+              :disabled="selectedTableItems && selectedTableItems.size === 0"
               :action="showUnclaimModal"
               :text="$t('actions.unclaim')"
               :alt="$t('actions.unclaim')"
@@ -336,11 +336,11 @@
               icon="sync"
               class="ml-3 my-3 border p-1 px-4 bg-white"
               :class="
-                selectedTableItems.size === 0
+                selectedTableItems && selectedTableItems.size === 0
                   ? 'text-crisiscleanup-grey-700'
                   : ''
               "
-              :disabled="selectedTableItems.size === 0"
+              :disabled="selectedTableItems &&selectedTableItems.size === 0"
               :text="$t('actions.update_status')"
               :alt="$t('actions.update_status')"
               :action="showUpdateStatusModal"
@@ -354,7 +354,7 @@
         </div>
       </div>
     </div>
-    <div class="work-page__form">
+    <div class="work-page__form h-full min-h-0">
       <CaseHeader
         v-if="worksite"
         :worksite="worksite"
@@ -458,7 +458,7 @@
         <span class="text-base" v-if="showFlags">{{ $t('actions.flag') }}</span>
         <div></div>
       </div>
-      <div class="work-page__form-body">
+      <div class="h-auto min-h-0">
         <CaseHistory
           v-if="showHistory"
           :incident-id="Number(currentIncidentId)"
@@ -493,7 +493,7 @@
             }
           "
         />
-        <CaseForm
+        <WorksiteForm
           v-else
           ref="worksiteForm"
           :incident-id="String(currentIncidentId)"
@@ -573,12 +573,14 @@ import CaseFlag from '@/pages/CaseFlag.vue';
 import PhoneNews from '@/components/phone/PhoneNews.vue';
 import useWorksiteMap from '@/use/worksites/useWorksiteMap';
 import Slider from '@/components/Slider.vue';
+import WorksiteForm from '@/components/WorksiteForm.vue';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
 export default defineComponent({
   name: 'Work',
   components: {
+    WorksiteForm,
     Slider,
     PhoneNews,
     CaseFlag,
