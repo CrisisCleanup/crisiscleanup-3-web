@@ -476,7 +476,7 @@
           "
           @clearCase="clearCase"
         ></CaseFlag>
-        <CaseView
+        <WorksiteView
           v-else-if="isViewing"
           :worksite-id="worksiteId"
           :incident-id="String(currentIncidentId)"
@@ -574,12 +574,14 @@ import PhoneNews from '@/components/phone/PhoneNews.vue';
 import useWorksiteMap from '@/use/worksites/useWorksiteMap';
 import Slider from '@/components/Slider.vue';
 import WorksiteForm from '@/components/WorksiteForm.vue';
+import WorksiteView from '@/components/WorksiteView.vue';
 
 const INTERACTIVE_ZOOM_LEVEL = 12;
 
 export default defineComponent({
   name: 'Work',
   components: {
+    WorksiteView,
     WorksiteForm,
     Slider,
     PhoneNews,
