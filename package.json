@@ -99,6 +99,7 @@
     "libphonenumber-js": "^1.7.57",
     "lodash": "^4.17.21",
     "marker-clusterer-plus": "^2.1.4",
+    "mitt": "^3.0.0",
     "moment-duration-format": "^2.3.2",
     "moment-timezone": "^0.5.33",
     "nearest-tailwind-color": "^1.0.0",
