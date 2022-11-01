@@ -528,7 +528,6 @@ export default {
         sorter.direction === 'asc' ? 'user_ui-sort-asc' : 'user_ui-sort-desc',
       );
       this.$emit('sort', { pagination, filter, sorter, columnSearch });
-      this.$emit('change', { pagination, filter, sorter, columnSearch });
     },
     onSearch() {
       const columnSearch = { ...this.columnSearch };
