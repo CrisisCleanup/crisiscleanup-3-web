@@ -30,7 +30,7 @@
         :loading="false"
         ref="invitationRequestsTable"
         :sorter="invitationRequestsSorter"
-        @change="handleInvitationRequestsTableChange"
+        @sort="handleInvitationRequestsTableChange"
       >
         <template #actions="slotProps">
           <div class="flex mr-2 justify-end w-full">
@@ -101,7 +101,7 @@
         :data="invitations"
         :columns="invitationsColumns"
         :loading="false"
-        @change="handleInvitationsTableChange"
+        @sort="handleInvitationsTableChange"
         :sorter="invitationSorter"
         ref="invitationsTable"
       >
