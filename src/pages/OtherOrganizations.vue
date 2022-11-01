@@ -334,14 +334,15 @@ export default {
   },
   methods: {
     handleSorter({ sorter }) {
-      console.log(sorter);
-      this.tableSorter = { ...sorter };
-      if (sorter)
+      this.tableSorter = sorter;
+      if (this.tableSorter) {
         this.organizations.data = _.orderBy(
           this.organizations.data,
-          [sorter.key],
-          [sorter.direction],
+          [(o) => { return o[this.tableSorter.key] || 0}],
+          [this.tableSorter.direction],
         );
+      }
+      console.log(sorter, this.tableSorter, this.organizations.data)
     },
     isLandscape() {
       return window.matchMedia(
