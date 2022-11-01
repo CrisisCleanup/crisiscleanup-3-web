@@ -1,5 +1,5 @@
 <template>
-  <div class="table-grid w-full">
+  <div class="table-grid w-full" :style="gridStyleTable">
     <div
       v-if="!hideHeader && $mq !== 'sm'"
       class="header text-crisiscleanup-grey-700 bg-white"
@@ -336,6 +336,12 @@ export default {
         return {};
       },
     },
+    tableStyle: {
+      type: Object,
+      default: () => {
+        return {};
+      },
+    },
   },
   data() {
     return {
@@ -431,6 +437,11 @@ export default {
         ...this.rowStyle,
       };
     },
+    gridStyleTable() {
+      return {
+        ...this.tableStyle,
+      };
+    },
   },
   mounted() {},
   methods: {
@@ -516,7 +527,7 @@ export default {
       this.logEvent(
         sorter.direction === 'asc' ? 'user_ui-sort-asc' : 'user_ui-sort-desc',
       );
-      this.$emit('change', { pagination, filter, sorter, columnSearch });
+      this.$emit('sort', { pagination, filter, sorter, columnSearch });
     },
     onSearch() {
       const columnSearch = { ...this.columnSearch };
