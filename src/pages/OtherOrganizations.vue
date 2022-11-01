@@ -1,5 +1,5 @@
 <template>
-  <div class="p-10">
+  <div class="p-10" style="height: inherit">
     <div
       class="
         sm:w-3/5
@@ -23,27 +23,43 @@
       </div>
     </div>
 
-    <base-input
-      :value="organizations.search"
-      icon="search"
-      class="sm:w-84 my-2"
-      :placeholder="$t('actions.search')"
-      @input="
-        (value) => {
-          organizations.search = value;
-          throttle(getOrganizations, 1000)();
-        }
-      "
-    ></base-input>
+    <div class="flex justify-between">
+      <base-input
+        :value="organizations.search"
+        icon="search"
+        class="sm:w-84 my-2"
+        :placeholder="$t('actions.search')"
+        @input="
+          (value) => {
+            organizations.search = value;
+            throttle(getOrganizations, 1000)();
+          }
+        "
+      ></base-input>
 
+      <base-button
+        v-if="$refs.table"
+        :action="$refs.table.exportTableCSV"
+        size="small"
+        :text="$t('actions.download')"
+        :alt="$t('actions.download')"
+        class="table-action-button"
+        ccu-icon="download"
+        icon-size="small"
+      />
+    </div>
     <Table
+      ref="table"
+      :sorter="tableSorter"
       :columns="columns"
       :data="organizations.data"
-      :body-style="{ height: '300px' }"
+      :body-style="{ height: '100%' }"
+      :table-style="{ height: '75%' }"
       enable-pagination
       :pagination="organizations.meta.pagination"
       :loading="loading"
       @change="getOrganizations"
+      @sort="handleSorter"
       class="bg-white border"
       has-row-details
     >
@@ -102,6 +118,46 @@
           </div>
         </div>
       </template>
+      <template #url="slotProps">
+        <base-button
+          class="text-primary-dark underline"
+          icon="globe"
+          :style="slotProps.item.url === '' ? 'opacity: .5' : ''"
+          :action="
+            () => {
+              if (slotProps.item.url != '') $router.push(slotProps.item.url);
+            }
+          "
+        />
+      </template>
+      <template #facebook="slotProps">
+        <img
+          src="@/assets/facebook.svg"
+          class="ml-1"
+          :style="slotProps.item.facebook === '' ? 'opacity: .5' : ''"
+          @click="
+            () => {
+              if (slotProps.item.facebook != '')
+                $router.push(slotProps.item.facebook);
+            }
+          "
+          alt="facebook"
+        />
+      </template>
+      <template #twitter="slotProps">
+        <img
+          src="@/assets/twitter.svg"
+          class="w-6"
+          :style="slotProps.item.twitter === '' ? 'opacity: .5' : ''"
+          @click="
+            () => {
+              if (slotProps.item.twitter != '')
+                $router.push(slotProps.item.twitter);
+            }
+          "
+          alt="facebook"
+        />
+      </template>
       <template #approved_roles="slotProps">
         <v-popover popover-class="org-role-popover">
           <base-text class="details-name" variant="body">
@@ -147,6 +203,7 @@
 <script>
 import { mapState } from 'vuex';
 import { throttle } from 'lodash';
+import * as _ from 'lodash';
 import Table from '@/components/Table';
 import User from '@/models/User';
 import { getQueryString } from '../utils/urls';
@@ -166,13 +223,36 @@ export default {
           title: this.$t('otherOrganizations.name'),
           dataIndex: 'name',
           key: 'name',
-          width: this.isLandscape() ? '2fr' : '350px',
+          width: this.isLandscape() ? '2fr' : '200px',
+          sortable: true,
+        },
+        {
+          // TODO: change title to show url within the $t()
+          title: this.$t('Links'),
+          dataIndex: 'url',
+          key: 'url',
+          width: '30px',
+        },
+        {
+          // TODO: change title to show url within the $t()
+          title: '',
+          dataIndex: 'facebook',
+          key: 'facebook',
+          width: '50px',
+        },
+        {
+          // TODO: change title to show url within the $t()
+          title: '',
+          dataIndex: 'twitter',
+          key: 'twitter',
+          width: '50px',
         },
         {
           title: this.$t('otherOrganizations.access_level'),
           dataIndex: 'approved_roles',
           key: 'approved_roles',
-          width: '150px',
+          width: '100px',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.incidents'),
@@ -183,6 +263,7 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_reported'),
@@ -193,6 +274,7 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_claimed'),
@@ -203,6 +285,7 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_closed'),
@@ -213,6 +296,7 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_overdue'),
@@ -220,6 +304,7 @@ export default {
           key: 'overdue_count',
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.last_login'),
@@ -231,6 +316,7 @@ export default {
           transformer: (item) => {
             return this.$moment(item).fromNow();
           },
+          sortable: true,
         },
       ];
     },
@@ -247,6 +333,16 @@ export default {
     await this.getOrganizations(this.organizations.meta);
   },
   methods: {
+    handleSorter({ sorter }) {
+      console.log(sorter);
+      this.tableSorter = { ...sorter };
+      if (sorter)
+        this.organizations.data = _.orderBy(
+          this.organizations.data,
+          [sorter.key],
+          [sorter.direction],
+        );
+    },
     isLandscape() {
       return window.matchMedia(
         'only screen and (max-device-width: 1223px) and (orientation: landscape)',
@@ -254,6 +350,7 @@ export default {
     },
     async getOrganizations(data = {}) {
       this.loading = true;
+      this.handleSorter(data);
       const pagination = data.pagination || this.organizations.meta.pagination;
       const params = {
         offset: pagination.pageSize * (pagination.page - 1),
@@ -316,6 +413,7 @@ export default {
         visible: true,
       },
       organizationRoles: [],
+      tableSorter: {},
     };
   },
 };
