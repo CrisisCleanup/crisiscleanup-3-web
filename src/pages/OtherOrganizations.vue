@@ -4,7 +4,7 @@
       class="
         sm:w-3/5
         border-primary-dark
-        h-20
+        sm:h-20
         border-2
         my-4
         flex
@@ -23,7 +23,7 @@
       </div>
     </div>
 
-    <div class="flex justify-between">
+    <div class="flex sm:flex-row flex-col justify-between mb-2">
       <base-input
         :value="organizations.search"
         icon="search"
@@ -40,7 +40,8 @@
       <base-button
         v-if="$refs.table"
         :action="$refs.table.exportTableCSV"
-        size="small"
+        type="primary"
+        :size="$mq === 'sm' ? 'lg' : 'small'"
         :text="$t('actions.download')"
         :alt="$t('actions.download')"
         class="table-action-button"
@@ -54,7 +55,7 @@
       :columns="columns"
       :data="organizations.data"
       :body-style="{ height: '100%' }"
-      :table-style="{ height: '75%' }"
+      :table-style="{ height: '70%' }"
       enable-pagination
       :pagination="organizations.meta.pagination"
       :loading="loading"
@@ -120,7 +121,8 @@
       </template>
       <template #url="slotProps">
         <base-button
-          class="text-primary-dark underline"
+          class="text-primary-dark underline sm:ml-0 ml-1"
+          :icon-classes="$mq === 'sm' ? 'fa-2x' : 'fa-lg'"
           icon="globe"
           :style="slotProps.item.url === '' ? 'opacity: .5' : ''"
           :action="
@@ -129,11 +131,17 @@
             }
           "
         />
+        <a
+          v-if="$mq === 'sm'"
+          class="text-primary-dark underline ml-2"
+          :href="slotProps.item.url"
+          >{{ slotProps.item.url }}</a
+        >
       </template>
       <template #facebook="slotProps">
         <img
           src="@/assets/facebook.svg"
-          class="ml-1"
+          class="sm:ml-1 sm:w-16 w-12"
           :style="slotProps.item.facebook === '' ? 'opacity: .5' : ''"
           @click="
             () => {
@@ -143,11 +151,17 @@
           "
           alt="facebook"
         />
+        <a
+          v-if="$mq === 'sm'"
+          class="text-primary-dark underline ml-1"
+          :href="slotProps.item.facebook"
+          >{{ slotProps.item.facebook }}</a
+        >
       </template>
       <template #twitter="slotProps">
         <img
           src="@/assets/twitter.svg"
-          class="w-6"
+          class="sm:w-6 w-10 sm:ml-0 ml-1"
           :style="slotProps.item.twitter === '' ? 'opacity: .5' : ''"
           @click="
             () => {
@@ -155,8 +169,14 @@
                 $router.push(slotProps.item.twitter);
             }
           "
-          alt="facebook"
+          alt="twitter"
         />
+        <a
+          v-if="$mq === 'sm'"
+          class="text-primary-dark underline ml-2"
+          :href="slotProps.item.twitter"
+          >{{ slotProps.item.twitter }}</a
+        >
       </template>
       <template #approved_roles="slotProps">
         <v-popover popover-class="org-role-popover">
@@ -223,8 +243,9 @@ export default {
           title: this.$t('otherOrganizations.name'),
           dataIndex: 'name',
           key: 'name',
-          width: this.isLandscape() ? '2fr' : '200px',
+          width: this.isLandscape() ? '2fr' : '250px',
           sortable: true,
+          class: 'sm:text-sm text-xl',
         },
         {
           // TODO: change title to show url within the $t()
@@ -251,8 +272,9 @@ export default {
           title: this.$t('otherOrganizations.access_level'),
           dataIndex: 'approved_roles',
           key: 'approved_roles',
-          width: '100px',
+          width: '150px',
           sortable: true,
+          class: 'justify-center',
         },
         {
           title: this.$t('otherOrganizations.incidents'),
@@ -312,11 +334,17 @@ export default {
           key: 'last_login',
           class: 'justify-center',
           headerClass: 'justify-center',
-          width: '150px',
+          width: '200px',
           transformer: (item) => {
             return this.$moment(item).fromNow();
           },
           sortable: true,
+        },
+        {
+          title: this.$t('primary_contacts'),
+          dataIndex: 'primary_contacts',
+          key: 'primary_contacts',
+          hidden: true,
         },
       ];
     },
@@ -338,11 +366,14 @@ export default {
       if (this.tableSorter) {
         this.organizations.data = _.orderBy(
           this.organizations.data,
-          [(o) => { return o[this.tableSorter.key] || 0}],
+          [
+            (o) => {
+              return o[this.tableSorter.key] || 0;
+            },
+          ],
           [this.tableSorter.direction],
         );
       }
-      console.log(sorter, this.tableSorter, this.organizations.data)
     },
     isLandscape() {
       return window.matchMedia(
