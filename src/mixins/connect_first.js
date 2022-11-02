@@ -137,6 +137,9 @@ export default {
     async setAvailable() {
       return this.$phoneService.changeState('AVAILABLE');
     },
+    async setWorking() {
+      return this.$phoneService.changeState('WORKING');
+    },
     async setAway() {
       return this.$phoneService.changeState('AWAY');
     },
@@ -197,7 +200,7 @@ export default {
       );
     },
     async dialManualOutbound(number) {
-      await this.loginPhone(true, 'AWAY');
+      await this.loginPhone(true, 'WORKING');
       this.dialing = true;
       try {
         const outbound = await PhoneOutbound.api().createManual({

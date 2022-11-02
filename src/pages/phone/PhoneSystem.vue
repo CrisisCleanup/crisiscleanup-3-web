@@ -818,6 +818,9 @@ export default {
         this.serveOutbounds &&
         Number(this.stats.inQueue || this.stats.routing || 0) === 0
       ) {
+        if (this.remainingCallbacks + this.remainingCalldowns > 0) {
+          await this.setWorking();
+        }
         await this.dialNextOutbound();
       }
     },
