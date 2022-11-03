@@ -822,6 +822,8 @@ export default {
           await this.setWorking();
         }
         await this.dialNextOutbound();
+      } else {
+        await this.setAvailable();
       }
     },
     onToggleOutbounds(value) {

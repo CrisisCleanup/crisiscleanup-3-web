@@ -80,7 +80,7 @@ export default {
         this.currentAgent = data;
       }
     },
-    async loginPhone(retry = true, status = 'AVAILABLE') {
+    async loginPhone(retry = true, status = 'WORKING') {
       await this.loadAgent();
       if (!this.languages.length) {
         await this.$toasted.error(
@@ -127,7 +127,7 @@ export default {
           }
         }
       } else {
-        await this.setAvailable();
+        await this.setWorking();
         this.$emit('onLoggedIn');
       }
       this.$phoneService
