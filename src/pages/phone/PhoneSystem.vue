@@ -965,7 +965,7 @@ export default {
   grid-template-columns: auto 350px;
 
   &__actions {
-    @apply absolute top-0 right-0 flex flex-col;
+    @apply absolute top-0 right-0 flex flex-col select-text;
     z-index: 1004;
   }
 
