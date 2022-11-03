@@ -60,7 +60,6 @@
       :pagination="organizations.meta.pagination"
       :loading="loading"
       @change="getOrganizations"
-      @sort="handleSorter"
       class="bg-white border"
       has-row-details
     >
@@ -361,20 +360,6 @@ export default {
     await this.getOrganizations(this.organizations.meta);
   },
   methods: {
-    handleSorter({ sorter }) {
-      this.tableSorter = sorter;
-      if (this.tableSorter) {
-        this.organizations.data = _.orderBy(
-          this.organizations.data,
-          [
-            (o) => {
-              return o[this.tableSorter.key] || 0;
-            },
-          ],
-          [this.tableSorter.direction],
-        );
-      }
-    },
     isLandscape() {
       return window.matchMedia(
         'only screen and (max-device-width: 1223px) and (orientation: landscape)',
@@ -382,11 +367,12 @@ export default {
     },
     async getOrganizations(data = {}) {
       this.loading = true;
-      this.handleSorter(data);
       const pagination = data.pagination || this.organizations.meta.pagination;
       const params = {
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
+        order_by: data.sorter?.direction ?? 'desc',
+        sort_by: data.sorter?.key ?? 'name',
       };
       if (this.organizations.search) {
         params.search = this.organizations.search;
@@ -396,6 +382,7 @@ export default {
       const response = await this.$http.get(
         `${process.env.VUE_APP_API_BASE_URL}/incidents/${this.currentIncidentId}/organizations?${queryString}`,
       );
+      console.log(response.data);
       this.organizations.data = response.data.results;
       const newPagination = {
         ...pagination,
@@ -440,6 +427,10 @@ export default {
             page: 1,
             current: 1,
           },
+        },
+        sorter: {
+          key: 'name',
+          direction: 'asc',
         },
         search: '',
         visible: true,
