@@ -1,3 +1,4 @@
+<!-- THIS IS OUTDATED. See WorksiteView -->
 <template>
   <div
     v-if="worksite"
