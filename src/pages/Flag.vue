@@ -3,9 +3,13 @@
     class="text-center text-white rounded-full px-2"
     :style="{
       backgroundColor: getColor(flagReason),
+      color: 'white',
     }"
-    >{{ $t(flagReason) }}</tag
+    :closeable="removable"
+    @closed="onRemove"
   >
+    {{ $t(flagReason) }}
+  </tag>
 </template>
 <script>
 const colorsDicts = {
@@ -25,10 +29,17 @@ export default {
       type: String,
       default: '',
     },
+    removable: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     getColor() {
       return colorsDicts[this.flagReason];
+    },
+    onRemove() {
+      this.$emit('onRemove');
     },
   },
 };
