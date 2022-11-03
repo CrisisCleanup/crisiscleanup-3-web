@@ -22,13 +22,13 @@ export function getErrorMessage(error) {
 
   if (error.response.status === 400) {
     // Show the error field, unless it is 'non_field_errors'
-    let respone = '';
+    let response = '';
     error.response.data.errors.forEach((e) => {
       let { field } = e;
       field = field === 'non_field_errors' ? '' : `${field}: `;
-      respone = `${respone}${field}${e.message}<br>`;
+      response = `${response}${field}${e.message}<br>`;
     });
-    return respone;
+    return response;
   }
   return message;
 }
