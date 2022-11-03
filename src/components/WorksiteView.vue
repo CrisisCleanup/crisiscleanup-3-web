@@ -6,6 +6,8 @@
           v-for="flag in worksite.flags"
           :key="flag.reason_t"
           :flag-reason="flag.reason_t"
+          removable
+          @onRemove="removeFlag(flag)"
         />
       </div>
     </div>
@@ -689,6 +691,20 @@ export default {
       return [];
     }
 
+    async function removeFlag(flag) {
+      if (worksite.value) {
+        try {
+          await Worksite.api().deleteFlag(worksite.value.id, flag);
+          await Worksite.api().fetch(worksite.value.id);
+        } catch (error) {
+          console.error(error);
+          await $toasted.error(getErrorMessage(error));
+        }
+      } else {
+        console.error('Worksite not found. Cannot remove flag');
+      }
+    }
+
     onMounted(async () => {
       try {
         await Worksite.api().fetch(props.worksiteId, props.incidentId);
@@ -753,6 +769,7 @@ export default {
       getOrganizationName,
       statusValueChange,
       getFieldsForType,
+      removeFlag,
     };
   },
 };
