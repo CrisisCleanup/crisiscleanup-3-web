@@ -340,7 +340,7 @@
                   ? 'text-crisiscleanup-grey-700'
                   : ''
               "
-              :disabled="selectedTableItems &&selectedTableItems.size === 0"
+              :disabled="selectedTableItems && selectedTableItems.size === 0"
               :text="$t('actions.update_status')"
               :alt="$t('actions.update_status')"
               :action="showUpdateStatusModal"
@@ -1308,7 +1308,7 @@ export default defineComponent({
   grid-template-columns: minmax(0, auto) minmax(auto, 400px);
 
   &__actions {
-    @apply absolute top-0 right-0 flex flex-col;
+    @apply absolute top-0 right-0 flex flex-col select-text;
     z-index: 1004;
   }
 
