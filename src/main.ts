@@ -27,7 +27,6 @@ import VueAutosuggest from 'vue-autosuggest';
 import VueResize from 'vue-resize';
 import VueAxios from 'vue-axios';
 import VueClipboard from 'vue-clipboard2';
-import VueGtag from 'vue-gtag';
 import Hotjar from 'vue-hotjar';
 import VueI18n from 'vue-i18n';
 import Popover from 'vue-js-popover';
@@ -216,12 +215,6 @@ if (!process.env.VUE_APP_IS_LOCAL) {
         logErrors: process.env.NODE_ENV !== 'production',
       }),
     ],
-  });
-  // Google GTag
-  Vue.use(VueGtag, {
-    config: {
-      id: 'UA-42924421-1',
-    },
   });
 
   // Hotjar Analytics
