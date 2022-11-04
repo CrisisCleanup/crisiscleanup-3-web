@@ -48,7 +48,7 @@
             </div>
           </div>
 
-          <div class="modal-footer flex-shrink">
+          <div class="modal-footer flex-shrink bg-white">
             <slot name="footer">
               <div class="flex items-center justify-center py-2 border-t">
                 <base-button
