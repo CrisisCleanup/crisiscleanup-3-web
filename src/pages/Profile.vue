@@ -1,6 +1,6 @@
 <template>
   <div style="height: 85%" class="h-full flex justify-center">
-    <div class="h-full flex flex-col w-3/4 shadow my-6">
+    <div class="h-full flex flex-col w-11/12 sm:w-3/4 shadow my-6">
       <div class="h-full w-full bg-white flex flex-col">
         <div
           class="
@@ -26,8 +26,8 @@
           </div>
         </div>
         <div class="overflow-auto">
-          <div class="flex">
-            <div class="flex flex-col p-8 w-64 items-center">
+          <div class="flex sm:flex-row flex-col">
+            <div class="flex flex-col p-8 sm:w-64 items-center">
               <Avatar
                 :initials="currentUser.first_name"
                 :url="currentUser.profilePictureUrl"
@@ -51,11 +51,11 @@
                 >{{ $t('actions.view_id_badge') }}
               </base-button>
             </div>
-            <div class="user-form p-8">
+            <div class="user-form p-10 sm:p-8">
               <form ref="form" @submit.prevent="handleSubmit">
                 <div class="user-details">
                   <div class="flex pb-4">
-                    <div class="form-field mr-2 w-1/2">
+                    <div class="form-field mr-2">
                       <label for="first_name">First Name</label>
                       <base-input
                         name="first_name"
@@ -70,8 +70,8 @@
                         "
                       />
                     </div>
-                    <div class="form-field w-1/2">
-                      <label for="mobile">Last Name</label>
+                    <div class="form-field">
+                      <label for="mobile">Mobile Number</label>
                       <base-input
                         name="mobile"
                         size="large"
@@ -88,7 +88,7 @@
                     </div>
                   </div>
                   <div class="flex pb-4">
-                    <div class="form-field mr-2 w-1/2">
+                    <div class="form-field mr-2">
                       <label for="last_name">Last Name</label>
                       <base-input
                         name="last_name"
@@ -103,7 +103,7 @@
                         "
                       />
                     </div>
-                    <div class="form-field w-1/2">
+                    <div class="form-field">
                       <label for="email">Email</label>
                       <base-input
                         name="email"
@@ -121,8 +121,8 @@
                   </div>
                 </div>
                 <hr class="p-2 m-auto" />
-                <div class="flex pb-4">
-                  <div class="w-1/2 mr-2">
+                <div class="flex flex-col sm:flex-row pb-4">
+                  <div class="sm:w-1/2 mr-2">
                     <p>User Roles</p>
                     <UserRolesSelect
                       class="
@@ -569,9 +569,8 @@ export default {
 
 <style scoped>
 .user-form {
-  width: 48rem;
   .form-field {
-    @apply flex flex-col;
+    @apply flex flex-col w-1/2 ml-0;
   }
 }
 .profile-image {
