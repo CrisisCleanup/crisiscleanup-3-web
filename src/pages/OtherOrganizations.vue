@@ -243,7 +243,6 @@ export default {
           dataIndex: 'name',
           key: 'name',
           width: this.isLandscape() ? '2fr' : '250px',
-          sortable: true,
           class: 'sm:text-sm text-xl',
         },
         {
@@ -272,7 +271,6 @@ export default {
           dataIndex: 'approved_roles',
           key: 'approved_roles',
           width: '150px',
-          sortable: true,
           class: 'justify-center',
         },
         {
@@ -284,7 +282,6 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
-          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_reported'),
@@ -295,7 +292,6 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
-          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_claimed'),
@@ -306,7 +302,6 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
-          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_closed'),
@@ -317,7 +312,6 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
-          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_overdue'),
@@ -325,7 +319,6 @@ export default {
           key: 'overdue_count',
           class: 'justify-center',
           headerClass: 'justify-center',
-          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.last_login'),
@@ -337,7 +330,6 @@ export default {
           transformer: (item) => {
             return this.$moment(item).fromNow();
           },
-          sortable: true,
         },
         {
           title: this.$t('primary_contacts'),
@@ -371,8 +363,6 @@ export default {
       const params = {
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
-        order_by: data.sorter?.direction ?? 'desc',
-        sort_by: data.sorter?.key ?? 'name',
       };
       if (this.organizations.search) {
         params.search = this.organizations.search;
@@ -427,10 +417,6 @@ export default {
             page: 1,
             current: 1,
           },
-        },
-        sorter: {
-          key: 'name',
-          direction: 'asc',
         },
         search: '',
         visible: true,
