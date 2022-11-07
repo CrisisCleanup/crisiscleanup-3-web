@@ -158,12 +158,14 @@ export default {
           dataIndex: 'name',
           key: 'name',
           width: '350px',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.access_level'),
           dataIndex: 'approved_roles',
           key: 'approved_roles',
           width: '150px',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.incidents'),
@@ -174,6 +176,7 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_reported'),
@@ -184,6 +187,7 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_claimed'),
@@ -194,6 +198,7 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_closed'),
@@ -204,6 +209,7 @@ export default {
           },
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.cases_overdue'),
@@ -211,6 +217,7 @@ export default {
           key: 'overdue_count',
           class: 'justify-center',
           headerClass: 'justify-center',
+          sortable: true,
         },
         {
           title: this.$t('otherOrganizations.last_login'),
@@ -222,6 +229,7 @@ export default {
           transformer: (item) => {
             return this.$moment(item).fromNow();
           },
+          sortable: true,
         },
       ];
     },
@@ -242,6 +250,8 @@ export default {
       this.loading = true;
       const pagination = data.pagination || this.organizations.meta.pagination;
       const params = {
+        sort_by: data.sorter.key,
+        order_by: data.sorter.direction,
         offset: pagination.pageSize * (pagination.page - 1),
         limit: pagination.pageSize,
       };
@@ -297,6 +307,10 @@ export default {
             page: 1,
             current: 1,
           },
+        },
+        sorter: {
+          key: 'name',
+          direction: 'asc',
         },
         search: '',
         visible: true,
