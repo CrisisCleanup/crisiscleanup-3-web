@@ -15,7 +15,7 @@
                 size="xs"
                 type="trash"
                 class="absolute right-0 top-0 m-1 mr-3 p-1 image-close bg-white"
-                @click.native="$emit('removeImage', image.file)"
+                @click.native="$emit('removeImage', image.file, image.id)"
               />
             </div>
           </slot>

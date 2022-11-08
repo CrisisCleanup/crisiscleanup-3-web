@@ -25,6 +25,7 @@
 </template>
 <script>
 import VueTypes from 'vue-types';
+import _ from 'lodash';
 import DragDrop from '@/components/DragDrop';
 import Worksite from '@/models/Worksite';
 import { getErrorMessage } from '../utils/errors';
@@ -98,15 +99,24 @@ export default {
         await Worksite.api().fetch(id);
       }
     },
-    async deleteFile(fileId) {
-      if (this.isSurvivorToken) {
-        await Worksite.api().deleteFileWithSurvivorToken(
-          this.worksite.token,
-          fileId,
-        );
+    async deleteFile(fileId, id) {
+      if (this.worksite.id) {
+        if (this.isSurvivorToken) {
+          await Worksite.api().deleteFileWithSurvivorToken(
+            this.worksite.token,
+            fileId,
+          );
+        } else {
+          await Worksite.api().deleteFile(this.worksite.id, fileId);
+          await Worksite.api().fetch(this.worksite.id);
+        }
       } else {
-        await Worksite.api().deleteFile(this.worksite.id, fileId);
-        await Worksite.api().fetch(this.worksite.id);
+        console.log(this.imageList);
+        const i = _.findIndex(this.imageList, (c) => {
+          return c.id === id;
+        });
+        this.imageList.splice(i, 1);
+        this.$emit('popLocal', this.imageList);
       }
       this.$emit('photosChanged');
     },

@@ -360,6 +360,7 @@
           :key="worksite.files"
           ref="worksiteImageSection"
           @updateFiles="updateImage"
+          @popLocal="onRemoveFile"
         />
       </template>
     </div>
@@ -885,6 +886,10 @@ export default {
       addressSet.value = false;
     }
 
+    function onRemoveFile(imageList) {
+      updatedFiles.value = imageList;
+    }
+
     async function saveWorksite(reload = true) {
       const validationErrors = Object.entries(fieldToErrorMsgMap).reduce(
         (errors, [field, errorMsg]) => {
@@ -1347,6 +1352,7 @@ export default {
       updateDirtyFields,
       addAdditionalPhone,
       form,
+      onRemoveFile,
     };
   },
 };
