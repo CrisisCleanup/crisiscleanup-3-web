@@ -342,7 +342,7 @@
         "
       ></form-tree>
 
-      <template v-if="isEditing">
+      <template>
         <SectionHeading :count="5" class="mb-3"
           >{{ $t('caseView.report') }}
         </SectionHeading>
@@ -359,6 +359,7 @@
           :worksite="worksite"
           :key="worksite.files"
           ref="worksiteImageSection"
+          @updateFiles="updateImage"
         />
       </template>
     </div>
@@ -472,6 +473,10 @@ export default {
     const { emitter } = useEmitter();
     const dirtyFields = ref(new Set());
     const worksite = ref({});
+    const updatedFiles = ref([]);
+    const updateImage = (formData) => {
+      updatedFiles.value.push(formData.id);
+    };
     const contactFrequencyOptions = AUTO_CONTACT_FREQUENCY_OPTIONS.map(
       (key) => {
         return {
@@ -1003,6 +1008,9 @@ export default {
           await Promise.all(
             notesToSave.map((n) => Worksite.api().addNote(worksiteId, n)),
           );
+          updatedFiles.value.forEach((file) => {
+            this.$refs.worksiteImageSection.saveToWorkSite(file, worksiteId);
+          });
           if (isHighPriority.value) {
             await Worksite.api().addFlag(worksiteId, {
               reason_t: 'flag.worksite_high_priority',
@@ -1274,6 +1282,8 @@ export default {
     });
 
     return {
+      updatedFiles,
+      updateImage,
       advancedAddressFields,
       contactFrequencyOptions,
       dirtyFields,

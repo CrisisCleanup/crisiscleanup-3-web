@@ -13,7 +13,7 @@
 
     <div class="flex flex-wrap">
       <ImageModal
-        :image-list="worksite.files"
+        :image-list="worksite.id ? worksite.files : imageList"
         :disable-modal="disableModal"
         @removeImage="deleteFile"
         @image-click="imageClick"
@@ -37,6 +37,7 @@ export default {
   data() {
     return {
       uploading: false,
+      imageList: [],
     };
   },
   props: {
@@ -70,22 +71,31 @@ export default {
       try {
         const result = await uploadFile(formData);
         const file = result.data.id;
-        if (this.isPrintToken) {
-          await Worksite.api().addFileWithToken(this.worksite.token, file);
-        } else if (this.isSurvivorToken) {
-          await Worksite.api().addFileWithSurvivorToken(
-            this.worksite.token,
+        this.$emit('updateFiles', result.data);
+        if (this.worksite.id) {
+          await this.saveToWorkSite(
             file,
+            this.worksite.id,
+            this.worksite.token,
           );
         } else {
-          await Worksite.api().addFile(this.worksite.id, file);
-          await Worksite.api().fetch(this.worksite.id);
+          this.imageList.push(result.data);
         }
         this.$emit('photosChanged');
       } catch (error) {
         await this.$toasted.error(getErrorMessage(error));
       } finally {
         this.uploading = false;
+      }
+    },
+    async saveToWorkSite(file, id, token) {
+      if (this.isPrintToken) {
+        await Worksite.api().addFileWithToken(token, file);
+      } else if (this.isSurvivorToken) {
+        await Worksite.api().addFileWithSurvivorToken(token, file);
+      } else {
+        await Worksite.api().addFile(id, file);
+        await Worksite.api().fetch(id);
       }
     },
     async deleteFile(fileId) {
