@@ -1,5 +1,5 @@
 <template>
-  <div class="survivors-page h-full overflow-auto main">
+  <div v-if="survivorToken" class="survivors-page h-full overflow-auto main">
     <div
       class="bg-red-300 text-2xl"
       v-if="survivorToken.worksite && survivorToken.worksite.invalidated_at"
