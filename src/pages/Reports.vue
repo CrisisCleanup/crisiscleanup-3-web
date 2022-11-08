@@ -53,7 +53,11 @@
                       >{{ r.name_t }}
                     </base-text>
                     <badge
-                      v-if="newReportIds.has(r.id) && sponsored === 'true'"
+                      v-if="
+                        newReportIds.length &&
+                        newReportIds.has(r.id) &&
+                        sponsored === 'true'
+                      "
                       width="2.5rem"
                       height="1rem"
                       class="text-white bg-crisiscleanup-red-700 mx-1 p-4"
