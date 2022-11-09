@@ -30,11 +30,7 @@
           :alt="$t('Rename')"
           src="@/assets/icons/edit.svg"
           class="cursor-pointer p-2"
-          @click="
-            () => {
-              showRenameModal = true;
-            }
-          "
+          @click="showRenameModal = true"
         />
       </div>
     </div>
@@ -569,7 +565,7 @@
     <modal
       v-if="showRenameModal"
       closeable
-      @close="renameTeam()"
+      @close="renameTeam"
       modal-classes="max-w-xl"
     >
       <base-input
