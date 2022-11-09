@@ -151,6 +151,7 @@
           <base-input
             v-model="currentFlag.requested_action"
             :placeholder="$t('flag.google_map_url')"
+            @input="spliceUrl"
           />
           <p class="mt-5 mb-3">
             {{ $t('flag.click_if_location_unknown') }}
@@ -406,6 +407,10 @@ export default {
     this.incidents = orderBy(response.data.results, ['id'], ['desc']);
   },
   methods: {
+    spliceUrl(url) {
+      // eslint-disable-next-line prefer-destructuring
+      this.currentFlag.requested_action = url.split('data')[0];
+    },
     async flagWorksite() {
       if (
         this.currentFlag.reason_t === 'flag.worksite_wrong_incident' &&
