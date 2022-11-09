@@ -13,7 +13,7 @@
 
     <div class="flex flex-wrap">
       <ImageModal
-        :image-list="worksite.id ? worksite.files : imageList"
+        :image-list="worksite.files ? worksite.files : imageList"
         :disable-modal="disableModal"
         @removeImage="deleteFile"
         @image-click="imageClick"
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       uploading: false,
-      imageList: [],
+      imageList: this.worksite.files ?? [],
     };
   },
   props: {
@@ -53,9 +53,6 @@ export default {
   methods: {
     changeImage(image) {
       this.$emit('changeImage', image);
-    },
-    moveImage(updateAmount) {
-      this.$refs.imageModal.moveImage(updateAmount);
     },
     imageClick(image) {
       console.log(image);
@@ -73,7 +70,7 @@ export default {
         const result = await uploadFile(formData);
         const file = result.data.id;
         this.$emit('updateFiles', result.data);
-        if (this.worksite.id) {
+        if (this.worksite.id || this.worksite.token) {
           await this.saveToWorkSite(
             file,
             this.worksite.id,
