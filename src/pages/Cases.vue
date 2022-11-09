@@ -7,104 +7,6 @@
       'cases-container-grid': showCaseForm,
     }"
   >
-    <div class="modal" v-if="showImgModal">
-      <div class="modal-content">
-        <font-awesome-icon
-          @click="showImgModal = false"
-          icon="times"
-          class="
-            text-white
-            h-7
-            w-7
-            fixed
-            top-3
-            right-7
-            cursor-pointer
-            hover:text-primary-dark
-            z-50
-          "
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-12
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-rotate"
-          @click="numClicks++"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-24
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-plus"
-          @click="scale += 0.25"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-32
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-minus"
-          @click="scale -= 0.25"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            right-7
-            top-108
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-chevron-right"
-          @click="moveImage(1)"
-        />
-        <font-awesome-icon
-          class="
-            text-white
-            w-7
-            h-7
-            fixed
-            left-7
-            top-108
-            hover:text-primary-dark
-            cursor-pointer
-            z-50
-          "
-          icon="fa-solid fa-chevron-left"
-          @click="moveImage(-1)"
-        />
-        <img
-          :src="imageUrl"
-          :style="`transform: scale(${scale}) rotate(${numClicks * 90}deg)`"
-        />
-      </div>
-    </div>
     <div v-if="isCasesOnly || $mq !== 'sm'">
       <div class="cases-grid relative">
         <div
@@ -1110,7 +1012,6 @@
             @changed="loadWorksite"
             @reloadMap="reloadMap"
             @jumpToCase="jumpToCase"
-            @image-click="showImage"
             @changeImg="changeImage"
             ref="cases"
           />
@@ -1569,14 +1470,6 @@ export default {
     changeImage(image) {
       console.log(image);
       this.imageUrl = image.large_thumbnail_url;
-    },
-    moveImage(updateAmount) {
-      this.$refs.cases.moveImage(updateAmount);
-    },
-    showImage(image) {
-      console.log(image);
-      this.imageUrl = image.large_thumbnail_url;
-      this.showImgModal = true;
     },
     async getLocations() {
       const locationParams = {
