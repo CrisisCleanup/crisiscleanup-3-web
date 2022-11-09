@@ -27,7 +27,7 @@
           "
         />
         <img
-          :alt="$t('Rename')"
+          :alt="$t('~~Rename')"
           src="@/assets/icons/edit.svg"
           class="cursor-pointer p-2"
           @click="showRenameModal = true"
@@ -565,12 +565,13 @@
     <modal
       v-if="showRenameModal"
       closeable
+      :title="$t('~~Rename Team')"
       @close="renameTeam"
       modal-classes="max-w-xl"
     >
       <base-input
         v-model="team.name"
-        :placeholder="$t('name')"
+        :placeholder="$t('~~Name')"
         class="w-64 m-6"
       />
     </modal>
@@ -824,7 +825,7 @@ export default {
         content: this.$t('teams.delete_team_confirm'),
         actions: {
           no: {
-            text: this.$t('Cancel'),
+            text: this.$t('actions.cancel'),
             type: 'outline',
             buttonClass: 'border border-black',
           },
