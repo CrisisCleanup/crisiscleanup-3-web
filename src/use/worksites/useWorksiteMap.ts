@@ -5,7 +5,13 @@ import useRenderedMarkers from '@/use/worksites/useRenderedMarkers';
 import { getMarkerLayer, mapTileLayer, mapAttribution } from '@/utils/map';
 import Location from '@/models/Location';
 
-export default (markers, visibleMarkerIds, onMarkerClick, onLoadMarkers) => {
+export default (
+  markers,
+  visibleMarkerIds,
+  onMarkerClick,
+  onLoadMarkers,
+  useGoogleMaps = false,
+) => {
   let loadMarker;
   const map = L.map('map', {
     zoomControl: false,
@@ -13,12 +19,16 @@ export default (markers, visibleMarkerIds, onMarkerClick, onLoadMarkers) => {
     [17.644022027872726, -122.78314470293876],
     [50.792047064406866, -69.87298845293874],
   ]);
-  L.tileLayer(mapTileLayer, {
-    attribution: mapAttribution,
-    detectRetina: false,
-    maxZoom: 18,
-    noWrap: false,
-  }).addTo(map);
+  if (useGoogleMaps) {
+    L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(map);
+  } else {
+    L.tileLayer(mapTileLayer, {
+      attribution: mapAttribution,
+      detectRetina: false,
+      maxZoom: 18,
+      noWrap: false,
+    }).addTo(map);
+  }
 
   const removeLayer = (key) => {
     map.eachLayer((layer) => {
@@ -57,6 +67,7 @@ export default (markers, visibleMarkerIds, onMarkerClick, onLoadMarkers) => {
         }
       }, 32),
     );
+    map.panBy([1, 0]);
     return { workTypes };
   }
 

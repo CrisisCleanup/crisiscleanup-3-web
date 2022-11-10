@@ -448,10 +448,8 @@
 </template>
 
 <script>
-import * as L from 'leaflet';
 import { debounce } from 'lodash';
 import CaseForm from '@/pages/CaseForm';
-import { getWorksiteLayer } from '@/utils/map';
 import PhoneComponentButton from '@/components/phone/PhoneComponentButton';
 import ManualDialer from '@/components/phone/ManualDialer';
 import { ConnectFirstMixin, DialogsMixin, UserMixin } from '@/mixins';
@@ -476,6 +474,7 @@ import ActiveCall from '@/components/phone/ActiveCall';
 import UpdateStatus from '@/components/phone/UpdateStatus';
 import PhoneIndicator from '@/components/phone/PhoneIndicator';
 import { loadCasesCached } from '@/utils/worksite';
+import useWorksiteMap from '@/use/worksites/useWorksiteMap';
 
 export default {
   name: 'PhoneSystem',
@@ -529,6 +528,7 @@ export default {
       unreadNewsCount: 0,
       unreadChatCount: 0,
       unreadUrgentChatCount: 0,
+      mapUtils: null,
     };
   },
   async mounted() {
@@ -630,7 +630,15 @@ export default {
       const [group] = chatGroups;
       this.selectedChat = group;
       const markers = await this.getWorksites();
-      this.loadMap(markers);
+      this.mapUtils = useWorksiteMap(
+        markers,
+        markers.map((m) => m.id),
+        (m) => {
+          this.onSelectMarker(m);
+        },
+        () => {},
+        true,
+      );
     },
     getIncidentPhoneNumbers(incident) {
       if (Array.isArray(incident.active_phone_number)) {
@@ -746,63 +754,15 @@ export default {
       );
     },
     async addMarkerToMap(location) {
-      let markerLocation = location;
-      if (!markerLocation) {
-        markerLocation = this.map.getCenter();
-      }
-
-      const marker = new L.marker(markerLocation, { draggable: 'true' }).addTo(
-        this.map,
-      );
-      marker.on('dragend', function (event) {
-        EventBus.$emit('updatedWorksiteLocation', event.target.getLatLng());
-      });
-      this.map.setView([markerLocation.lat, markerLocation.lng], 15);
-      marker
-        .bindTooltip(this.$t('casesVue.drag_pin_to_correct_location'), {
-          direction: 'top',
-        })
-        .openTooltip();
-      this.toggleView('showingMap');
+      this.mapUtils.addMarkerToMap(location);
     },
     async jumpToCase() {
       this.toggleView('showingMap');
-
-      if (this.map) {
-        this.map.setView([this.worksite.latitude, this.worksite.longitude], 18);
-        const popup = L.popup({ className: 'pixi-popup' });
-        popup
-          .setLatLng([this.worksite.latitude, this.worksite.longitude])
-          .setContent(
-            `<b>${this.worksite.name} (${this.worksite.case_number}</b>)`,
-          )
-          .openOn(this.map);
-        setTimeout(() => {
-          this.map.closePopup();
-        }, 5000);
-      }
+      this.mapUtils.jumpToCase(this.worksite, true);
     },
     onSelectMarker(marker) {
       this.isEditing = true;
       this.worksiteId = marker.id;
-    },
-    loadMap(markers) {
-      if (!this.map) {
-        this.map = L.map('map', {
-          zoomControl: false,
-        }).fitBounds([
-          [17.644022027872726, -122.78314470293876],
-          [50.792047064406866, -69.87298845293874],
-        ]);
-
-        L.gridLayer.googleMutant({ type: 'roadmap' }).addTo(this.map);
-      }
-      const worksiteLayer = getWorksiteLayer(markers, this.map, this, true);
-      worksiteLayer.addTo(this.map);
-      this.$nextTick(() => {
-        // Add this slight pan to re-render map
-        this.map.panBy([1, 0]);
-      });
     },
     async getWorksites() {
       this.mapLoading = true;
@@ -879,16 +839,12 @@ export default {
     },
     currentIncidentId(value) {
       if (value) {
-        if (this.map) {
-          this.map.eachLayer((layer) => {
-            if (layer.key === 'worksite_layer') {
-              this.map.removeLayer(layer);
-            }
-          });
-          this.getWorksites().then((markers) => {
-            this.loadMap(markers);
-          });
-        }
+        this.getWorksites().then((markers) => {
+          this.mapUtils.reloadMap(
+            markers,
+            markers.map((m) => m.id),
+          );
+        });
       }
     },
   },
