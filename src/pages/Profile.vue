@@ -56,7 +56,7 @@
                 <div class="user-details">
                   <div class="flex pb-4">
                     <div class="form-field mr-2">
-                      <label for="first_name">$t('profileUser.first_name_placeholder')</label>
+                      <label for="first_name">{{ $t('profileUser.first_name_placeholder') }}</label>
                       <base-input
                         name="first_name"
                         size="large"
@@ -71,7 +71,7 @@
                       />
                     </div>
                     <div class="form-field">
-                      <label for="mobile">$t('profileUser.mobile_placeholder')</label>
+                      <label for="mobile">{{$t('profileUser.mobile_placeholder')}}</label>
                       <base-input
                         name="mobile"
                         size="large"
@@ -89,7 +89,7 @@
                   </div>
                   <div class="flex pb-4">
                     <div class="form-field mr-2">
-                      <label for="last_name">$t('profileUser.last_name_placeholder')</label>
+                      <label for="last_name">{{ $t('profileUser.last_name_placeholder') }}</label>
                       <base-input
                         name="last_name"
                         size="large"
@@ -104,7 +104,7 @@
                       />
                     </div>
                     <div class="form-field">
-                      <label for="email">$t('profileUser.email_placeholder')</label>
+                      <label for="email">{{ $t('profileUser.email_placeholder') }}</label>
                       <base-input
                         name="email"
                         :value="currentUser.email"
@@ -123,7 +123,7 @@
                 <hr class="p-2 m-auto" />
                 <div class="flex flex-col sm:flex-row pb-4">
                   <div class="sm:w-1/2 mr-2">
-                    <p>$t('~~User Roles')</p>
+                    <p>{{ $t('~~User Roles') }}</p>
                     <UserRolesSelect
                       class="
                         w-full
@@ -151,7 +151,7 @@
                     />
                   </div>
                 </div>
-                <div>$t('~~Languages')</div>
+                <div>{{$t('~~Languages')}}</div>
                 <div class="flex pb-4">
                   <form-select
                     class="w-1/2 flex-grow border border-crisiscleanup-dark-100"
