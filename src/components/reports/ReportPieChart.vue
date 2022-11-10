@@ -169,8 +169,8 @@ export default {
       const width = 80 * 6 * 3;
       const height = 260 * Math.ceil(data.length / 3);
       const svg = d3
-        ?.select(`#${props.id}`)
-        .append('svg')
+        .select(`#${props.id}`)
+        ?.append('svg')
         .attr('class', 'pie')
         .attr('width', width)
         .attr('height', height);
@@ -192,8 +192,8 @@ export default {
         .html($t(`reports.paid_for_statement`));
 
       const toolTip = d3
-        ?.select(`#${props.id}`)
-        .append('div')
+        .select(`#${props.id}`)
+        ?.append('div')
         .attr('class', 'chart-tooltip');
 
       data.forEach((pieData, index) => renderPie(pieData, svg, index, toolTip));
