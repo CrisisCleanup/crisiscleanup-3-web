@@ -134,7 +134,7 @@
                     />
                   </div>
                   <div class="w-1/2">
-                    <p>$t('~~Equipment')</p>
+                    <p>{{ $t('~~Equipment') }}</p>
                     <form-select
                       v-model="currentUser.equipment"
                       class="
