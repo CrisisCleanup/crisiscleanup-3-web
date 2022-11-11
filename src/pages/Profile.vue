@@ -123,7 +123,7 @@
                 <hr class="p-2 m-auto" />
                 <div class="flex flex-col sm:flex-row pb-4">
                   <div class="sm:w-1/2 mr-2">
-                    <p>{{ $t('~~User Roles') }}</p>
+                    <p>{{ $t('profileUser.user_roles') }}</p>
                     <UserRolesSelect
                       class="
                         w-full
@@ -134,7 +134,7 @@
                     />
                   </div>
                   <div class="w-1/2">
-                    <p>{{ $t('~~Equipment') }}</p>
+                    <p>{{ $t('profileUser.equipment') }}</p>
                     <form-select
                       v-model="currentUser.equipment"
                       class="
@@ -151,7 +151,7 @@
                     />
                   </div>
                 </div>
-                <div>{{$t('~~Languages')}}</div>
+                <div>{{$t('profileUser.languages')}}</div>
                 <div class="flex pb-4">
                   <form-select
                     class="w-1/2 flex-grow border border-crisiscleanup-dark-100"

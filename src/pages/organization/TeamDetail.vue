@@ -27,7 +27,7 @@
           "
         />
         <img
-          :alt="$t('~~Rename')"
+          :alt="$t('actions.rename_team')"
           src="@/assets/icons/edit.svg"
           class="cursor-pointer p-2"
           @click="showRenameModal = true"
@@ -393,7 +393,7 @@
 
     <modal
       v-if="showAddMembersModal"
-      title="Add Members"
+      :title="$t('teams.add_members')"
       closeable
       @close="showAddMembersModal = false"
       modal-classes="max-w-xl"
@@ -565,13 +565,13 @@
     <modal
       v-if="showRenameModal"
       closeable
-      :title="$t('~~Rename Team')"
+      :title="$t('actions.rename_team')"
       @close="renameTeam"
       modal-classes="max-w-xl"
     >
       <base-input
         v-model="team.name"
-        :placeholder="$t('~~Name')"
+        :placeholder="$t('teams.name')"
         class="w-64 m-6"
       />
     </modal>
