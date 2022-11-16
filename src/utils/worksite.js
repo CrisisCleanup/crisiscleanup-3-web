@@ -1,7 +1,6 @@
 import moment from 'moment';
 import axios from 'axios';
 import { DbService } from '@/services/db.service';
-import useUser from '@/use/user/useUser';
 
 const loadCases = async (query) => {
   const response = await axios.get(

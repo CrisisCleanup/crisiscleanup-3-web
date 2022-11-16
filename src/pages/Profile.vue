@@ -56,7 +56,9 @@
                 <div class="user-details">
                   <div class="flex pb-4">
                     <div class="form-field mr-2">
-                      <label for="first_name">{{ $t('profileUser.first_name_placeholder') }}</label>
+                      <label for="first_name">{{
+                        $t('profileUser.first_name_placeholder')
+                      }}</label>
                       <base-input
                         name="first_name"
                         size="large"
@@ -71,7 +73,9 @@
                       />
                     </div>
                     <div class="form-field">
-                      <label for="mobile">{{$t('profileUser.mobile_placeholder')}}</label>
+                      <label for="mobile">{{
+                        $t('profileUser.mobile_placeholder')
+                      }}</label>
                       <base-input
                         name="mobile"
                         size="large"
@@ -89,7 +93,9 @@
                   </div>
                   <div class="flex pb-4">
                     <div class="form-field mr-2">
-                      <label for="last_name">{{ $t('profileUser.last_name_placeholder') }}</label>
+                      <label for="last_name">{{
+                        $t('profileUser.last_name_placeholder')
+                      }}</label>
                       <base-input
                         name="last_name"
                         size="large"
@@ -104,7 +110,9 @@
                       />
                     </div>
                     <div class="form-field">
-                      <label for="email">{{ $t('profileUser.email_placeholder') }}</label>
+                      <label for="email">{{
+                        $t('profileUser.email_placeholder')
+                      }}</label>
                       <base-input
                         name="email"
                         :value="currentUser.email"
@@ -151,7 +159,7 @@
                     />
                   </div>
                 </div>
-                <div>{{$t('profileUser.languages')}}</div>
+                <div>{{ $t('profileUser.languages') }}</div>
                 <div class="flex pb-4">
                   <form-select
                     class="w-1/2 flex-grow border border-crisiscleanup-dark-100"

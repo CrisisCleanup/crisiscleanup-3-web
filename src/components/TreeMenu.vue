@@ -62,7 +62,28 @@
 import Avatar from './Avatar';
 export default {
   components: { Avatar },
-  props: ['label', 'children', 'indent', 'data', 'selectedUsers'],
+  props: {
+    label: {
+      type: String,
+      default: '',
+    },
+    children: {
+      type: Array,
+      default: () => [],
+    },
+    indent: {
+      type: Number,
+      default: 0,
+    },
+    data: {
+      type: Object,
+      default: () => {},
+    },
+    selectedUsers: {
+      type: Array,
+      default: () => [],
+    },
+  },
   name: 'TreeMenu',
   computed: {
     profilePictureUrl() {

@@ -27,7 +27,7 @@ const Basic = (args, { argTypes }) => ({
     </div>
   `,
   async mounted() {
-    while (true) {
+    while (this.currentVal < 100) {
       // eslint-disable-next-line no-await-in-loop
       await new Promise((resolve) => setTimeout(resolve, 1000));
       if (this.currentVal >= 100) {

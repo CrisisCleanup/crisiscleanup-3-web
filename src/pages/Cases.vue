@@ -973,7 +973,6 @@
             @selectedExisting="handleChange"
             @search="onSearch"
             @clear="onSearch"
-
           />
         </div>
         <WorksiteMap
