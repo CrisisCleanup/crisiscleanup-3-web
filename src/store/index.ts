@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import auth from './modules/auth';
 import VuexORM from '@vuex-orm/core';
 import database from "./database";
+import acl from "./modules/acl";
 
 // import events from './modules/events';
 // import phone_legacy from './modules/phone_legacy';
@@ -19,6 +20,7 @@ const debug = process.env.NODE_ENV !== 'production';
 export const store = createStore({
     modules: {
         auth,
+        acl,
         // events,
         // incident,
         // loading,

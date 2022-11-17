@@ -5,7 +5,7 @@ import { omit } from 'lodash';
 
 const AuthService = {
     getUser() {
-        return JSON.parse(localStorage.getItem('user') || '');
+        return JSON.parse(localStorage.getItem('user'));
     },
     getToken() {
         const user = localStorage.getItem('user');

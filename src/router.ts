@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import Authenticated from './layouts/Authenticated.vue'
 
-const Home = { template: '<div>Home</div>' }
-const About = { template: '<div>About</div>' }
+import HomeRoutes from './pages/home/routes'
+
 
 const routes = [
     { path: '/', component: HelloWorld, name: 'Home' },
-    { path: '/about', component: About, name: 'About' },
+    { path: '/auth', component: Authenticated, name: 'About' },
+    ...HomeRoutes,
 ]
 
 const router = createRouter({

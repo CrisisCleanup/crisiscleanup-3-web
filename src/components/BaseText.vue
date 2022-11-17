@@ -5,8 +5,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed } from '@vue/composition-api';
-import { TEXT_VARIANTS as VARIANTS } from '@/constants';
+import { defineComponent, PropType, computed } from 'vue';
+import { TEXT_VARIANTS as VARIANTS } from '.././constants';
 
 type Variant = typeof VARIANTS[number];
 type Font = 'sans' | 'display';

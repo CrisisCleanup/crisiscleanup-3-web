@@ -10,7 +10,7 @@
       :data-cy="selector"
       :style="[cssVars, inputStyle]"
       :type="passwordView || type || 'search'"
-      :value.prop="value"
+      :value.prop="modelValue"
       :disabled="disabled || (breakGlass && !glassBroken)"
       :placeholder="placeholder"
       :required="required"
@@ -93,12 +93,10 @@
 </template>
 
 <script>
-import { ref, computed, defineComponent } from '@vue/composition-api';
-import BaseIcon from '@/components/BaseIcon';
+import { ref, computed, defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'BaseInput',
-  components: { BaseIcon },
   props: {
     size: {
       type: String,
@@ -116,7 +114,7 @@ export default defineComponent({
       type: String,
       default: 'small',
     },
-    value: {
+    modelValue: {
       type: null,
       default: null,
     },
@@ -246,10 +244,10 @@ export default defineComponent({
         isInvalid.value = valid;
         if (newValue) {
           input.value = newValue;
-          return context.emit('input', newValue);
+          return context.emit('update:modelValue', newValue);
         }
       }
-      context.emit('input', value);
+      context.emit('update:modelValue', value);
       isInvalid.value = !input?.value?.checkValidity();
       return value;
     }

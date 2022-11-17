@@ -1,10 +1,29 @@
-<script setup lang="ts">
-import { ref } from 'vue'
+<script lang="ts">
+import {defineComponent, ref} from 'vue'
+import { useStore } from 'vuex';
 import BaseButton from "./BaseButton.vue";
 
-defineProps<{ msg: string }>()
+export default defineComponent({
+  components: { BaseButton },
+  setup() {
+    const store = useStore()
 
-const count = ref(0)
+    const loginUser = async () => {
+      try {
+        const response = await store.dispatch('auth/login', {email: 'tobi@tobiabiodun.com', password: 'admin123'});
+        console.log(response);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    const count = ref(0)
+    return {
+      count,
+      loginUser,
+    }
+  }
+})
 </script>
 
 <template>
@@ -29,7 +48,7 @@ const count = ref(0)
     <a href="https://github.com/johnsoncodehk/volar" target="_blank">Volar</a>
     in your IDE for a better DX
   </p>
-  <BaseButton text="Test" variant="solid" ccu-icon="trash"></BaseButton>
+  <BaseButton text="Test" variant="solid" ccu-icon="trash" :action="loginUser"></BaseButton>
   <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
 </template>
 

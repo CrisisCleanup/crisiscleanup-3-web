@@ -40,6 +40,10 @@ export default class User extends CCUModel<User> {
 
   lineage!: any[];
 
+  permissions!: Record<string, boolean>;
+
+  beta_features!: string[];
+
   static fields() {
     return {
       id: this.attr(''),
