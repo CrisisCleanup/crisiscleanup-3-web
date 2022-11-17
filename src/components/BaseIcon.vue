@@ -31,15 +31,15 @@
 <script lang="ts">
 /* eslint-disable global-require */
 import { kebabCase } from 'lodash';
-import { computed, defineComponent, PropType, ref } from '@vue/composition-api';
-import { ICON_MAP, ICON_SIZES, ICONS } from '@/constants';
-import { EventsMixin } from '@/mixins';
+import { computed, defineComponent, PropType, ref } from 'vue';
+import { ICON_MAP, ICON_SIZES, ICONS } from '../constants';
+// import { EventsMixin } from '@/mixins';
 
 type IconSize = typeof ICON_SIZES[number];
 
 export default defineComponent({
   name: 'BaseIcon',
-  mixins: [EventsMixin],
+  // mixins: [EventsMixin],
 
   props: {
     type: {

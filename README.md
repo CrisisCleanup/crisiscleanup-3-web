@@ -1,117 +1,16 @@
-<img src=".github/img/ccu-ballons.png" align="right" width="20%"  />
+# Vue 3 + TypeScript + Vite
 
-# Crisis Cleanup
+This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-Crisis Cleanup is a collaboratative disaster relief platform that connects relief organization volunteers with people who need help. The Crisis Cleanup platform has been used to connected 631,620 volunteers from 1,919 organizations with 128,080 households in 55 states/provinces and 157 disasters in 7 countries; a new disaster every two weeks.
+## Recommended IDE Setup
 
-Crisis Cleanup works best in a collaborative environment where multiple voluntary organizations and agencies work together and coordinate efforts. Because these organizations do not take orders from one another, Crisis Cleanup is designed to facilitate Collaborative Accountability models of inter-agency interaction, rather than command-and-control operations, or or heirarchical accountability models of interaction. 
+- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 
-Other Project Stats (As of 2020-10-17)
--------------
+## Type Support For `.vue` Imports in TS
 
- - 25%: Increase in volunteer efficiency through re-engagement and elimination of time spent on travel, coordination, collaboration, and management.
- - 32,020: Households that could not have been helped without Crisis Cleanup.
- - 7.7 Million: Number of volunteer hours facilitated.
- - 1,920,000: Volunteer hours that would have otherwise been wasted in management, travel, and overhead without Crisis Cleanup.
- - $733.2 Million: Minimum total market value of services to survivors.
- - $1,161: Value of each cleanup volunteer to his/her community.
- - $183.3 Million: Market value of services to survivors that would have otherwise been wasted in travel, management, overhead, and standing in lines.
- - $60,839: Money Crisis Cleanup has saved survivors every single day since July 18, 2012.
- - $9,052: Average commercial value of service to each homeowner.
- - $157: Return on investment to survivors, for every $1 invested in Crisis Cleanup.
-How we calculate these statistics: http://blog.crisiscleanup.org/2017/10/how-we-calculate-value-of-services.html
+Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
 
-# Contributing
-To preserve our ability to provide open source humanitarian disaster software, all contributions are subject to the terms of the relevant [Contributor License Agreement (CLA)](http://en.wikipedia.org/wiki/Contributor_License_Agreement) downloadable at [crisiscleanup.org/contributions](https://www.crisiscleanup.org/contributions).
+1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
+2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
 
-Please read [CONTRIBUTING.md](https://github.com/CrisisCleanup/crisiscleanup-3-web/blob/master/CONTRIBUTING.md) for important details.
-
-# Getting Started
-
-## Project Setup
-
-Clone the repository to your machine and install the dependencies via:
-
-```sh
- $ git clone https://github.com/CrisisCleanup/crisiscleanup-3-web.git
- $ cd ./crisiscleanup-3-web
- $ yarn install
-```
-
-## Configuration
-
-To enable all of Crisis Cleanup's features, you must create and populate a `.env` file.
-
-A sample of what this should look like can be found [here](.env.sample).
-
-## Running Locally
-
-When modifying Crisis Cleanup, you can begin serving it via:
-
-```sh
-  $ yarn serve-dev
-  $ sensible-browser http://localhost:8080 # defaults to port 8080
-```
-
-> You can also serve the site via a docker service:
-> ```sh
->  $ docker-compose build
->  $ docker-compose up dev # or prod for production
-> ```
-
-This will enable hot module reloading among other developer tools to aid you.
-
-To preview a production build locally, execute:
-```sh
- $ yarn serve
- $ sensible-browser http://localhost:8080 # default port
-```
-
-This will enable the code optimizations that would be present in a live environment.
-
-Finally, you can compile a production-ready, minified version via:
-```sh
-  $ yarn build
-  $ npx http-server ./dist
-  $ sensible-browser http://localhost:8080
-```
-
-### Testing
-
-For unit tests, Crisis Cleanup uses [Jest](https://jestjs.io/). You can run the full test suite via:
-
-```sh
-  $ yarn test:unit
-```
-
-For end-to-end testing, Cypress is utilized. You can run all e2e specs via:
-
-```sh
-  $ yarn serve
-  $ yarn test:e2e  # or test:e2e:hl to run headlessly
-```
-
-Any recorded e2e test sessions can be found at: http://cypress.crisiscleanup.io
-
-### Linting
-
-Utilizing [prettier](https://prettier.io/) and [ESLint](https://eslint.org/), CrisisCleanup enforces strict code style guidelines.
-
-You can automagically format your code to comply with:
-
-```sh
-  $ yarn format  # executes eslint --fix and prettier --write
-```
-
-### Storybook
-
-We use [Storybook](https://storybook.js.org/) for building our components in isolation and for documentation.
-
-You can run our storybook locally and add additional ones via:
-
-```sh
-  $ yarn storybook
-  $ sensible-browser http://localhost:6006 # port defaults to 6006
-```
-
-The live storybook can be found at: https://storybook.crisiscleanup.io
+You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).

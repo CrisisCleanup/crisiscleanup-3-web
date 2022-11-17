@@ -1,58 +1,37 @@
 <template>
   <button
-    :class="[styles, buttonSelector]"
-    :alt="alt || text"
-    :disabled="disabled || loading"
-    type="submit"
-    :size="size"
-    :title="buttonTitle"
-    :data-cy="buttonSelector"
-    @click.prevent="performAction"
+      :class="[styles, buttonSelector]"
+      :alt="alt || text"
+      :disabled="disabled || loading"
+      type="submit"
+      :size="size"
+      :title="buttonTitle"
+      :data-cy="buttonSelector"
+      @click.prevent="performAction"
   >
     <font-awesome-icon
-      v-if="loading || showSpinner"
-      size="sm"
-      icon="spinner"
-      spin
+        v-if="loading || showSpinner"
+        size="sm"
+        icon="spinner"
+        spin
     />
-    <font-awesome-icon
-      v-if="icon"
-      class="m-1"
-      :icon="icon"
-      :size="iconSize"
-      :class="iconClasses"
-    />
-    <ccu-icon
-      v-if="ccuIcon"
-      class="m-1"
-      :type="ccuIcon"
-      :size="iconSize"
-      :class="iconClasses"
-    />
+    <font-awesome-icon v-if="icon" class="m-1" :icon="icon" :size="iconSize" />
+    <ccu-icon v-if="ccuIcon" class="m-1" :type="ccuIcon" :size="iconSize" />
     <slot>{{ text }}</slot>
-    <font-awesome-icon
-      v-if="suffixIcon"
-      class="m-1"
-      :icon="suffixIcon"
-      :class="iconClasses"
-    />
+    <font-awesome-icon v-if="suffixIcon" class="m-1" :icon="suffixIcon" />
   </button>
 </template>
 
 <script lang="ts">
 import { kebabCase } from 'lodash';
-import { ref, computed, defineComponent, PropType } from '@vue/composition-api';
-import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from '@/constants';
-import { EventsMixin } from '@/mixins';
-import { delay } from '@/utils/promise';
-import useLogEvent from '@/use/events/useLogEvent';
+import { ref, computed, defineComponent, PropType } from 'vue';
+import { BUTTON_VARIANTS as VARIANTS, ICON_SIZES, ICONS } from '../constants';
 
 type ButtonSize = 'small' | 'medium' | 'large' | 'sm' | 'md' | 'lg';
 type IconSize = typeof ICON_SIZES[number];
 
 export default defineComponent({
   name: 'BaseButton',
-  mixins: [EventsMixin],
 
   props: {
     action: {
@@ -99,10 +78,6 @@ export default defineComponent({
       type: String as PropType<IconSize>,
       default: '',
     },
-    iconClasses: {
-      type: String as PropType<IconSize>,
-      default: '',
-    },
     suffixIcon: {
       type: String as PropType<typeof ICONS[keyof typeof ICONS]>,
       default: '',
@@ -122,19 +97,20 @@ export default defineComponent({
   },
 
   setup(props) {
+    const delay = async (ms) => new Promise((res) => setTimeout(res, ms));
     const loading = ref(false);
 
     const buttonTitle = computed(() => props.text || props.alt || props.title);
 
     const buttonSelector = computed(
-      () => props.selector || `js-${kebabCase(buttonTitle.value)}`,
+        () => props.selector || `js-${kebabCase(buttonTitle.value)}`,
     );
 
     const styles = computed(() => {
       const styleObject = {
         'large text-h3 font-h3': ['large', 'lg'].includes(props.size),
         'medium text-sans text-h4 font-h4': ['medium', 'md'].includes(
-          props.size,
+            props.size,
         ),
         'small text-bodysm font-bodysm': ['small', 'sm'].includes(props.size),
         disabled: props.disabled,
@@ -172,8 +148,8 @@ export default defineComponent({
       } catch (e) {
         // TODO: expose method for handling button exceptions
       } finally {
-        const { logEvent } = useLogEvent();
-        logEvent(props.ccuEvent);
+        // const { logEvent } = useLogEvent();
+        // logEvent(props.ccuEvent);
         loading.value = false;
       }
     };

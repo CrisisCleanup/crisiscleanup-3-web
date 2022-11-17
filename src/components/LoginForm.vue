@@ -4,7 +4,7 @@ $END$
 
 <script>
 export default {
-name: "Login"
+name: "LoginForm"
 }
 </script>
 

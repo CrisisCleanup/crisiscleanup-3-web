@@ -1,10 +1,10 @@
 import axios from 'axios';
 import moment from 'moment';
 import Vue from 'vue';
-import Acl from 'vue-browser-acl';
+// import Acl from 'vue-browser-acl';
 import * as Sentry from '@sentry/browser';
 import User from '@/models/User';
-import { AuthService } from '@/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 const AuthState = {
   user: AuthService.getUser(),
@@ -66,31 +66,31 @@ const mutations = {
       });
     }
   },
-  setAcl(state, router) {
-    const user = User.find(state.user.user_claims.id);
-    Sentry.setUser({
-      ...state.user,
-      id: user.id,
-      username: user.email,
-      email: user.email,
-    });
-    Vue.use(
-      Acl,
-      user,
-      (acl) => {
-        const { permissions, beta_features } = user;
-        Object.keys(permissions).forEach((permissionKey) => {
-          acl.rule(permissionKey, user.permissions[permissionKey]);
-        });
-        beta_features.forEach((feature) => {
-          acl.rule(`beta_feature.${feature}`, true);
-        });
-        acl.rule(`development_mode`, process.env.NODE_ENV !== 'production');
-        acl.rule(`app_stage.${process.env.VUE_APP_STAGE}`, true);
-      },
-      { router },
-    );
-  },
+  // setAcl(state, router) {
+  //   const user = User.find(state.user.user_claims.id);
+  //   Sentry.setUser({
+  //     ...state.user,
+  //     id: user.id,
+  //     username: user.email,
+  //     email: user.email,
+  //   });
+  //   Vue.use(
+  //     Acl,
+  //     user,
+  //     (acl) => {
+  //       const { permissions, beta_features } = user;
+  //       Object.keys(permissions).forEach((permissionKey) => {
+  //         acl.rule(permissionKey, user.permissions[permissionKey]);
+  //       });
+  //       beta_features.forEach((feature) => {
+  //         acl.rule(`beta_feature.${feature}`, true);
+  //       });
+  //       acl.rule(`development_mode`, process.env.NODE_ENV !== 'production');
+  //       acl.rule(`app_stage.${process.env.VUE_APP_STAGE}`, true);
+  //     },
+  //     { router },
+  //   );
+  // },
   setShowLoginModal(state, toggle) {
     state.showLoginModal = toggle;
   },

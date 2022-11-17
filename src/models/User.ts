@@ -1,10 +1,11 @@
 import moment from 'moment';
 import Bowser from 'bowser';
-import * as Sentry from '@sentry/browser';
-import { AuthService } from '@/services/auth.service';
-import Language from '@/models/Language';
-import Role from '@/models/Role';
-import CCUModel from '@/models/model';
+// import * as Sentry from '@sentry/browser';
+import { AuthService } from '../services/auth.service';
+// import Language from '@/models/Language';
+// import Role from '@/models/Role';
+import CCUModel from './model';
+import {useRouter} from "vue-router";
 
 export default class User extends CCUModel<User> {
   static entity = 'users';
@@ -67,10 +68,10 @@ export default class User extends CCUModel<User> {
   static afterUpdate(model) {
     if (model.id === User.store().getters['auth/userId']) {
       AuthService.updateUser(model.$toJson());
-      Sentry.setUser(model.$toJson());
-      Sentry.setContext('user_states', model.states);
-      Sentry.setContext('user_preferences', model.preferences);
-      User.store().commit('auth/setAcl', window.vue.$router);
+      // Sentry.setUser(model.$toJson());
+      // Sentry.setContext('user_states', model.states);
+      // Sentry.setContext('user_preferences', model.preferences);
+      User.store().commit('auth/setAcl', useRouter());
     }
   }
 
@@ -96,9 +97,9 @@ export default class User extends CCUModel<User> {
     return `https://avatars.dicebear.com/api/bottts/${this.full_name}.svg`;
   }
 
-  get currentRole() {
-    return Role.query().whereIdIn(this.active_roles).get()[0];
-  }
+  // get currentRole() {
+  //   return Role.query().whereIdIn(this.active_roles).get()[0];
+  // }
 
   get referringUser() {
     return User.find(this.referring_user);
@@ -106,12 +107,12 @@ export default class User extends CCUModel<User> {
 
   get languages() {
     const languageList: any[] = [];
-    if (this.primary_language) {
-      languageList.push(Language.find(this.primary_language));
-    }
-    if (this.secondary_language) {
-      languageList.push(Language.find(this.secondary_language));
-    }
+    // if (this.primary_language) {
+    //   languageList.push(Language.find(this.primary_language));
+    // }
+    // if (this.secondary_language) {
+    //   languageList.push(Language.find(this.secondary_language));
+    // }
     return languageList;
   }
 
